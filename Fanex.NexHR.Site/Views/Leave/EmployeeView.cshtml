@@ -1,0 +1,201 @@
+﻿@using Fanex.NexHR.Core
+@using Fanex.NexHR.Core.Constants
+@using Fanex.NexHR.Core.Enums
+@using Fanex.NexHR.Resources
+@using Fanex.NexHR.Models
+@using Fanex.NexHR.Models.Request
+@model IList<LeaveRequest>
+@{
+    ViewBag.Title = Labels.MyLeaveRequest;
+    var emmployeeBalance = ViewBag.EmployeeBalance == null ? null : (EmployeeLeaveBalance)ViewBag.EmployeeBalance;
+    decimal annualBalance = emmployeeBalance == null ? 0 : emmployeeBalance.AnnualBalance;
+    decimal keepInViewBalance = emmployeeBalance == null ? 0 : emmployeeBalance.KeepInViewBalance;
+}
+@section css{
+    <link href="~/wwwroot/dist/styles/leave.myrequest.css" rel="stylesheet" />
+}
+@section js{
+    <script src="~/wwwroot/dist/js/leave.myrequest.js"></script>
+}
+@section Breadcrumb {
+    <a class="step">@Labels.Personal</a> <a class="step">@ViewBag.Title</a>
+}
+<h2 class="page-title">@ViewBag.Title</h2>
+
+<div class="filter-wrapper">
+    @using (Html.BeginForm("employeeview", "leave", FormMethod.Get, new { @class = "filter" }))
+    {
+        <div class="form-horizontal clearfix">
+            <div class="form-group year">
+                <div class="label-form">
+                    @Html.Label(Labels.Year, new { @class = "control-label" })
+                </div>
+                <div class="select-form">
+                    @Html.YearPicker("Year", 2010, (int)ViewBag.Year)
+                </div>
+            </div>
+            <div class="form-group">
+                <button type="submit" id="btnSearch" class="btn btn-primary">@Labels.Search</button>
+                <a class="btn btn-request" href="@Url.Action("create", "leave")">
+                    <span class="fa fa-plus"></span> @Labels.NewRequest
+                </a>
+            </div>
+        </div>
+    }
+    <div class="leave-balance">
+        <div>@Labels.AnualLeaveBalance:<strong> @annualBalance.ToString("0.#") day(s)</strong></div>
+        <hr />
+        <div>Compensation Leave Balance:<strong> @keepInViewBalance.ToString("0.#") day(s)</strong></div>
+    </div>
+</div>
+<table class="table table-custom" id="data">
+    <thead>
+        <tr>
+            <th>@Labels.SymbolCount</th>
+            <th>@Labels.RefNo1</th>
+            <th>@Labels.LeaveType</th>
+            <th>@Labels.From</th>
+            <th>@Labels.To</th>
+            <th>@Labels.Total</th>
+            <th>@Labels.Remark</th>
+            <th>@Labels.FileAttach</th>
+            <th>@Labels.Verifier</th>
+            <th>@Labels.Approver</th>
+            <th>@Labels.CreatedDate</th>
+            <th>@Labels.Status</th>
+            <th>@Labels.History</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{int index = 1;}
+        @if (Model != null && Model.Count > 0)
+        {
+            var verifiedStatus = VerifiedStatus.Pending;
+            var approvedStatus = ApprovedStatus.Pending;
+            var processedStatus = HRStatus.Pending;
+
+            foreach (LeaveRequest request in Model)
+            {
+                verifiedStatus = (VerifiedStatus)request.VerifiedStatus;
+                approvedStatus = (ApprovedStatus)request.ApprovedStatus;
+                processedStatus = (HRStatus)request.ProcessedStatus;
+                <tr id="row@(request.RequestId)">
+                    <td>@(index++)</td>
+                    <td>@request.RefNO</td>
+                    <td>
+                        <a href="@Url.Action("detail", "leave", new { id = request.RequestId })">@request.LeaveType.Name</a>
+                    </td>
+                    <td>@request.FromDate.ToDateMonthYearFormatedDate()</td>
+                    <td>
+                        @if ((request.TotalDays - Constants.HalfDayOffValue) == 0)
+                        {
+                            @request.FromDate.ToDateMonthYearFormatedDate()
+                        }
+                        else
+                        {
+                            @request.ToDate.ToDateMonthYearFormatedDate()
+                        }
+                    </td>
+                    <td>
+                        @{ var totaldays = string.Empty; }
+                        @switch (request.LeaveType.Id)
+                        {
+                            case (ushort)LeaveTypes.KeepInViewByHour:
+                            case (ushort)LeaveTypes.BusinessDuringWorking:
+                                LeaveRequestDetail detail = request.LeaveDetail.FirstOrDefault();
+                                if (detail != null)
+                                {
+                                    var minutes = (detail.ToTime - detail.FromTime).TotalMinutes;
+                                    totaldays = (minutes / Constants.TotalMinuteInHour).ToString("0.#") + " hour(s)";
+                                }
+                                break;
+                            default:
+                                totaldays = request.TotalDays.ToString("0.0");
+                                break;
+                        }
+                        @totaldays
+                    </td>
+                    <td>
+                        @if (!string.IsNullOrWhiteSpace(request.Remark))
+                        {
+                            <span class="fa fa-comment tooltip-tipsy" title="@request.Remark" />
+                        }
+                        else
+                        {
+                            <span>-</span>
+                        }
+                    </td>
+                    <td>
+                        @foreach (var file in request.AttachFiles)
+                        {
+                            <a href="@file.Path" class="attach-file">
+                                <span class="file-name">@file.FileNameWithoutExtension</span><span class="file-extension">@file.Extension</span>
+                            </a>
+                        }
+                    </td>
+                    <td>
+                        @if (request.Verifier != null)
+                        {
+                            @request.Verifier.Nickname
+                        }
+                    </td>
+                    <td>
+                        @if (request.Approver != null)
+                        {
+                            @request.Approver.Nickname
+                        }
+                    </td>
+                    <td>@request.CreatedDate.ToShortFormatedDate()</td>
+                    <td>@RenderStatus(request)</td>
+                    <td>
+                        <a class="viewhistory" href="javascript:;" requestid="@request.RequestId">@Labels.View</a>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            @RazorHelper.DisplayNoInformation(colspan: 13)
+        }
+    </tbody>
+</table>
+<div id="dialoghistorycontent"></div>
+@helper RenderStatus(LeaveRequest request)
+{
+    var verifier = request.Verifier != null ? request.Verifier.Nickname : string.Empty;
+    var approver = request.ApprovedBy != null ? request.ApprovedBy.Nickname : string.Empty;
+    var processor = request.HR != null ? request.HR.Nickname : string.Empty;
+    switch (request.Status.Id)
+    {
+        case (byte)CurrentRequestStatus.Pending:
+            <a requestid="@request.RequestId" class="menu-actions" href="javascript:;">
+                @request.Status.ToString()
+                <span class="caret"></span>
+            </a>
+            break;
+        case (byte)CurrentRequestStatus.Verified:
+        case (byte)CurrentRequestStatus.NotVerified:
+            <a requestid="@request.RequestId" href="javascript:;" class="tooltip-tipsy"
+                title="@request.Status.Name by @verifier (@request.VerifiedDate.ToShortFormatedDate())">
+                @request.Status.ToString()
+            </a>
+            break;
+        case (byte)CurrentRequestStatus.Approved:
+        case (byte)CurrentRequestStatus.Rejected:
+            <a requestid="@request.RequestId" href="javascript:;" class="tooltip-tipsy"
+                title="@request.Status.Name by @approver (@request.ApprovedDate.ToShortFormatedDate())">
+                @request.Status.ToString()
+            </a>
+            break;
+        case (byte)CurrentRequestStatus.Processed:
+        case (byte)CurrentRequestStatus.Void:
+            <a requestid="@request.RequestId" href="javascript:;" class="tooltip-tipsy"
+                title="@request.Status.Name by @processor (@request.ProcessedDate.ToShortFormatedDate())">
+                @request.Status.ToString()
+            </a>
+            break;
+        default:
+            <a href="javascript:;">@request.Status.ToString()</a>
+            break;
+    }
+}

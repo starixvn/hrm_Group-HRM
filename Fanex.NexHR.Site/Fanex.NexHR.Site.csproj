@@ -1,0 +1,1419 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{87EAA63C-1227-4656-A2CB-79614E8284D8}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Fanex.NexHR.Site</RootNamespace>
+    <AssemblyName>Fanex.NexHR.Site</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>true</UseIISExpress>
+    <Use64BitIISExpress />
+    <IISExpressSSLPort>44353</IISExpressSSLPort>
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Dapper, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Dapper.2.0.30\lib\net461\Dapper.dll</HintPath>
+    </Reference>
+    <Reference Include="Fanex.Common, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Fanex.Common.1.1.0.1\lib\net40\Fanex.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Fanex.Data, Version=4.2.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Fanex.Data.4.2.2\lib\net461\Fanex.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Fanex.Data.SqlServer, Version=4.2.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Fanex.Data.SqlServer.4.2.2\lib\net461\Fanex.Data.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Fanex.Logging, Version=2.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Fanex.Logging.2.0.1\lib\net461\Fanex.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Fanex.Logging.Extensions, Version=1.0.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Fanex.Logging.Extensions.1.0.6\lib\net461\Fanex.Logging.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Fanex.Logging.Extensions.Database, Version=1.0.8.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Fanex.Logging.Extensions.Database.1.0.8\lib\net461\Fanex.Logging.Extensions.Database.dll</HintPath>
+    </Reference>
+    <Reference Include="Fanex.Logging.Extensions.Web, Version=1.0.8.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Fanex.Logging.Extensions.Web.1.0.8\lib\net461\Fanex.Logging.Extensions.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="Fanex.Logging.Sentry.RavenClient, Version=1.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Fanex.Logging.Sentry.RavenClient.1.0.1\lib\net461\Fanex.Logging.Sentry.RavenClient.dll</HintPath>
+    </Reference>
+    <Reference Include="GO.UserControl.Client.AspNetMvc, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\GO.UserControl.Client.AspNetMvc.1.0.1\lib\net472\GO.UserControl.Client.AspNetMvc.dll</HintPath>
+    </Reference>
+    <Reference Include="GO.UserControl.Client.Core, Version=1.0.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\GO.UserControl.Client.Core.1.0.2\lib\netstandard2.0\GO.UserControl.Client.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Hangfire.Core, Version=1.8.17.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Hangfire.Core.1.8.17\lib\net46\Hangfire.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Hangfire.SqlServer, Version=1.8.17.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Hangfire.SqlServer.1.8.17\lib\net451\Hangfire.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="jose-jwt, Version=5.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\jose-jwt.5.0.0\lib\net472\jose-jwt.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net, Version=2.0.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.2.0.15\lib\net45\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.Owin, Version=4.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.4.2.2\lib\net45\Microsoft.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Host.SystemWeb, Version=4.2.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Host.SystemWeb.4.2.2\lib\net45\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.2.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json.Bson, Version=1.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.Bson.1.0.2\lib\net45\Newtonsoft.Json.Bson.dll</HintPath>
+    </Reference>
+    <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
+      <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpRaven, Version=2.4.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpRaven.2.4.0\lib\net471\SharpRaven.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Buffers, Version=4.0.4.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Buffers.4.6.0\lib\net462\System.Buffers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Memory, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Memory.4.6.0\lib\net462\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.Formatting, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.6.0.0\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.5.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Numerics.Vectors.4.6.0\lib\net462\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=6.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.6.1.0\lib\net462\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Security" />
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.6.0\lib\net462\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.3.0\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http, Version=5.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.3.0\lib\net45\System.Web.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=5.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.3.0\lib\net45\System.Web.Http.WebHost.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.3.0\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc.Html5, Version=1.8.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MVCHtml5Toolkit.1.8\lib\System.Web.Mvc.Html5.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.3.0\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.3.0\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.3.0\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.3.0\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Net.Http">
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest">
+    </Reference>
+    <Reference Include="System.Web.Optimization">
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Abstractions, Version=5.11.7.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unity.5.11.10\lib\net47\Unity.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Container, Version=5.11.11.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unity.5.11.10\lib\net47\Unity.Container.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.Mvc5, Version=1.4.0.0, Culture=neutral, PublicKeyToken=43da31bc42a85347, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unity.Mvc5.1.4.0\lib\net45\Unity.Mvc5.dll</HintPath>
+    </Reference>
+    <Reference Include="Unity.WebApi, Version=5.4.0.0, Culture=neutral, PublicKeyToken=43da31bc42a85347, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unity.WebAPI.5.4.0\lib\net45\Unity.WebApi.dll</HintPath>
+    </Reference>
+    <Reference Include="WebGrease">
+      <Private>True</Private>
+      <HintPath>..\packages\WebGrease.1.6.0\lib\WebGrease.dll</HintPath>
+    </Reference>
+    <Reference Include="Antlr3.Runtime">
+      <Private>True</Private>
+      <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\HangfireAuthorization.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\UnityConfig.cs" />
+    <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Index.aspx.cs">
+      <DependentUpon>Index.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Index.aspx.designer.cs">
+      <DependentUpon>Index.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Startup.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_Data\SpNames.xml" />
+    <Content Include="Avatars\avatar.jpg" />
+    <Content Include="favicon.ico" />
+    <Content Include="Global.asax" />
+    <Content Include="Index.aspx" />
+    <Content Include="SystemLog\logfile.txt" />
+    <Content Include="Web.config" />
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Views\Web.config" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="wwwroot\dist\js\account.changepwd.js" />
+    <Content Include="wwwroot\dist\js\account.edit.profile.js" />
+    <Content Include="wwwroot\dist\js\account.index.js" />
+    <Content Include="wwwroot\dist\js\addtimerecord.js" />
+    <Content Include="wwwroot\dist\js\annual.leavebalance.employee.create.edit.js" />
+    <Content Include="wwwroot\dist\js\annual.leavebalance.index.js" />
+    <Content Include="wwwroot\dist\js\auth.index.js" />
+    <Content Include="wwwroot\dist\js\changeshift.create.js" />
+    <Content Include="wwwroot\dist\js\changeshift.edit.js" />
+    <Content Include="wwwroot\dist\js\changeshift.myrequest.js" />
+    <Content Include="wwwroot\dist\js\checkinout.create.js" />
+    <Content Include="wwwroot\dist\js\checkinout.edit.js" />
+    <Content Include="wwwroot\dist\js\checkinout.myrequest.js" />
+    <Content Include="wwwroot\dist\js\department.create.js" />
+    <Content Include="wwwroot\dist\js\department.edit.js" />
+    <Content Include="wwwroot\dist\js\department.home.js" />
+    <Content Include="wwwroot\dist\js\discipline.detail.js" />
+    <Content Include="wwwroot\dist\js\discipline.summary.js" />
+    <Content Include="wwwroot\dist\js\discipline.summary.per.year.js" />
+    <Content Include="wwwroot\dist\js\employee.create.js" />
+    <Content Include="wwwroot\dist\js\employee.edit.discipline.manager.js" />
+    <Content Include="wwwroot\dist\js\employee.edit.js" />
+    <Content Include="wwwroot\dist\js\employee.edit.shift.manager.js" />
+    <Content Include="wwwroot\dist\js\employee.edit.supervisor.js" />
+    <Content Include="wwwroot\dist\js\employee.index.js" />
+    <Content Include="wwwroot\dist\js\employee.paternity.js" />
+    <Content Include="wwwroot\dist\js\employee.postnatal.js" />
+    <Content Include="wwwroot\dist\js\employee.request.js" />
+    <Content Include="wwwroot\dist\js\employee.user.management.js" />
+    <Content Include="wwwroot\dist\js\employee.workfromhome.js" />
+    <Content Include="wwwroot\dist\js\extensionno.create.js" />
+    <Content Include="wwwroot\dist\js\extensionno.edit.js" />
+    <Content Include="wwwroot\dist\js\extensionno.home.js" />
+    <Content Include="wwwroot\dist\js\external.group.js" />
+    <Content Include="wwwroot\dist\js\function.index.js" />
+    <Content Include="wwwroot\dist\js\holiday.edit.js" />
+    <Content Include="wwwroot\dist\js\holiday.index.js" />
+    <Content Include="wwwroot\dist\js\home.index.js" />
+    <Content Include="wwwroot\dist\js\hospitalization.leave.balance.index.js" />
+    <Content Include="wwwroot\dist\js\joblevel.index.js" />
+    <Content Include="wwwroot\dist\js\jobtitle.index.js" />
+    <Content Include="wwwroot\dist\js\keepinview.create.js" />
+    <Content Include="wwwroot\dist\js\keepinview.edit.js" />
+    <Content Include="wwwroot\dist\js\keepinview.myrequest.js" />
+    <Content Include="wwwroot\dist\js\lateinearlyout.create.js" />
+    <Content Include="wwwroot\dist\js\lateinearlyout.edit.js" />
+    <Content Include="wwwroot\dist\js\lateinearlyout.myrequest.js" />
+    <Content Include="wwwroot\dist\js\leave.create.js" />
+    <Content Include="wwwroot\dist\js\leave.myrequest.js" />
+    <Content Include="wwwroot\dist\js\leave.request.detail.js" />
+    <Content Include="wwwroot\dist\js\main.js" />
+    <Content Include="wwwroot\dist\js\memo.edit.js" />
+    <Content Include="wwwroot\dist\js\memo.js" />
+    <Content Include="wwwroot\dist\js\menu.edit.js" />
+    <Content Include="wwwroot\dist\js\menu.index.js" />
+    <Content Include="wwwroot\dist\js\message.create.js" />
+    <Content Include="wwwroot\dist\js\message.js" />
+    <Content Include="wwwroot\dist\js\my.working.schedule.js" />
+    <Content Include="wwwroot\dist\js\overtime.edit.js" />
+    <Content Include="wwwroot\dist\js\overtime.hr.details.js" />
+    <Content Include="wwwroot\dist\js\overtime.hr.index.js" />
+    <Content Include="wwwroot\dist\js\overtime.member.details.js" />
+    <Content Include="wwwroot\dist\js\overtime.member.index.js" />
+    <Content Include="wwwroot\dist\js\overtime.myrequest.js" />
+    <Content Include="wwwroot\dist\js\report.attendance.js" />
+    <Content Include="wwwroot\dist\js\report.dailyovertime.js" />
+    <Content Include="wwwroot\dist\js\report.dailyworkinghours.js" />
+    <Content Include="wwwroot\dist\js\report.employee.supervisor.js" />
+    <Content Include="wwwroot\dist\js\report.manpower.category.js" />
+    <Content Include="wwwroot\dist\js\report.manpower.js" />
+    <Content Include="wwwroot\dist\js\report.meal.allowance.report.details.js" />
+    <Content Include="wwwroot\dist\js\report.meal.allowance.report.js" />
+    <Content Include="wwwroot\dist\js\report.monthlyovertime.js" />
+    <Content Include="wwwroot\dist\js\report.monthlyworkinghours.js" />
+    <Content Include="wwwroot\dist\js\report.shiftstatistic.details.js" />
+    <Content Include="wwwroot\dist\js\report.shiftstatistic.js" />
+    <Content Include="wwwroot\dist\js\report.team.supervisor.js" />
+    <Content Include="wwwroot\dist\js\report.time.record.js" />
+    <Content Include="wwwroot\dist\js\report.timesheet.js" />
+    <Content Include="wwwroot\dist\js\report.unpaid.leave.summary.js" />
+    <Content Include="wwwroot\dist\js\report.weekendleave.detail.js" />
+    <Content Include="wwwroot\dist\js\report.weekendleave.summary.js" />
+    <Content Include="wwwroot\dist\js\report.weeklyworkinghours.js" />
+    <Content Include="wwwroot\dist\js\report.workingcalendar.summary.js" />
+    <Content Include="wwwroot\dist\js\report.workinghours.summary.js" />
+    <Content Include="wwwroot\dist\js\report.yearlyovertime.js" />
+    <Content Include="wwwroot\dist\js\schedule.arrange.iframe.js" />
+    <Content Include="wwwroot\dist\js\schedule.arrange.js" />
+    <Content Include="wwwroot\dist\js\section.create.js" />
+    <Content Include="wwwroot\dist\js\section.edit.js" />
+    <Content Include="wwwroot\dist\js\section.home.js" />
+    <Content Include="wwwroot\dist\js\shift.edit.js" />
+    <Content Include="wwwroot\dist\js\sick.leave.balance.index.js" />
+    <Content Include="wwwroot\dist\js\team.discipline.rule.js" />
+    <Content Include="wwwroot\dist\js\team.edit.discipline.manager.js" />
+    <Content Include="wwwroot\dist\js\team.edit.js" />
+    <Content Include="wwwroot\dist\js\team.edit.shift.manager.js" />
+    <Content Include="wwwroot\dist\js\team.edit.supervisor.js" />
+    <Content Include="wwwroot\dist\js\team.index.js" />
+    <Content Include="wwwroot\dist\js\time.checkinout.js" />
+    <Content Include="wwwroot\dist\js\unit.create.js" />
+    <Content Include="wwwroot\dist\js\unit.edit.js" />
+    <Content Include="wwwroot\dist\js\unit.home.js" />
+    <Content Include="wwwroot\dist\js\workingcalendar.js" />
+    <Content Include="wwwroot\dist\styles\account.changepwd.css" />
+    <Content Include="wwwroot\dist\styles\account.changepwd.js" />
+    <Content Include="wwwroot\dist\styles\account.edit.profile.css" />
+    <Content Include="wwwroot\dist\styles\account.edit.profile.js" />
+    <Content Include="wwwroot\dist\styles\account.index.css" />
+    <Content Include="wwwroot\dist\styles\account.index.js" />
+    <Content Include="wwwroot\dist\styles\addtimerecord.css" />
+    <Content Include="wwwroot\dist\styles\addtimerecord.js" />
+    <Content Include="wwwroot\dist\styles\annual.leave.balance.index.css" />
+    <Content Include="wwwroot\dist\styles\annual.leave.balance.index.js" />
+    <Content Include="wwwroot\dist\styles\annual.leavebalance.employee.create.edit.css" />
+    <Content Include="wwwroot\dist\styles\annual.leavebalance.employee.create.edit.js" />
+    <Content Include="wwwroot\dist\styles\annual.leavebalance.employee.css" />
+    <Content Include="wwwroot\dist\styles\annual.leavebalance.employee.js" />
+    <Content Include="wwwroot\dist\styles\annual.leavebalance.index.css" />
+    <Content Include="wwwroot\dist\styles\annual.leavebalance.index.js" />
+    <Content Include="wwwroot\dist\styles\changeshift.create.css" />
+    <Content Include="wwwroot\dist\styles\changeshift.create.js" />
+    <Content Include="wwwroot\dist\styles\changeshift.myrequest.css" />
+    <Content Include="wwwroot\dist\styles\changeshift.myrequest.js" />
+    <Content Include="wwwroot\dist\styles\checkinout.create.css" />
+    <Content Include="wwwroot\dist\styles\checkinout.create.js" />
+    <Content Include="wwwroot\dist\styles\department.create.css" />
+    <Content Include="wwwroot\dist\styles\department.create.js" />
+    <Content Include="wwwroot\dist\styles\department.index.css" />
+    <Content Include="wwwroot\dist\styles\department.index.js" />
+    <Content Include="wwwroot\dist\styles\discipline.details.css" />
+    <Content Include="wwwroot\dist\styles\discipline.details.js" />
+    <Content Include="wwwroot\dist\styles\discipline.summary.css" />
+    <Content Include="wwwroot\dist\styles\discipline.summary.js" />
+    <Content Include="wwwroot\dist\styles\discipline.summary.per.year.css" />
+    <Content Include="wwwroot\dist\styles\discipline.summary.per.year.js" />
+    <Content Include="wwwroot\dist\styles\employee.create.css" />
+    <Content Include="wwwroot\dist\styles\employee.create.js" />
+    <Content Include="wwwroot\dist\styles\employee.details.css" />
+    <Content Include="wwwroot\dist\styles\employee.details.js" />
+    <Content Include="wwwroot\dist\styles\employee.edit.css" />
+    <Content Include="wwwroot\dist\styles\employee.edit.js" />
+    <Content Include="wwwroot\dist\styles\employee.index.css" />
+    <Content Include="wwwroot\dist\styles\employee.index.js" />
+    <Content Include="wwwroot\dist\styles\employee.log.details.css" />
+    <Content Include="wwwroot\dist\styles\employee.log.details.js" />
+    <Content Include="wwwroot\dist\styles\employee.postnatal.css" />
+    <Content Include="wwwroot\dist\styles\employee.postnatal.js" />
+    <Content Include="wwwroot\dist\styles\employee.request.css" />
+    <Content Include="wwwroot\dist\styles\employee.request.js" />
+    <Content Include="wwwroot\dist\styles\employee.workfromhome.css" />
+    <Content Include="wwwroot\dist\styles\employee.workfromhome.js" />
+    <Content Include="wwwroot\dist\styles\error.css" />
+    <Content Include="wwwroot\dist\styles\error.js" />
+    <Content Include="wwwroot\dist\styles\extensionno.create.css" />
+    <Content Include="wwwroot\dist\styles\extensionno.create.js" />
+    <Content Include="wwwroot\dist\styles\extensionno.index.css" />
+    <Content Include="wwwroot\dist\styles\extensionno.index.js" />
+    <Content Include="wwwroot\dist\styles\external.group.css" />
+    <Content Include="wwwroot\dist\styles\external.group.js" />
+    <Content Include="wwwroot\dist\styles\fonts\fontawesome-webfont.svg" />
+    <Content Include="wwwroot\dist\styles\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="wwwroot\dist\styles\fonts\pantone.svg" />
+    <Content Include="wwwroot\dist\styles\fonts\short-seal.svg" />
+    <Content Include="wwwroot\dist\styles\function.index.css" />
+    <Content Include="wwwroot\dist\styles\function.index.js" />
+    <Content Include="wwwroot\dist\styles\holiday.create.css" />
+    <Content Include="wwwroot\dist\styles\holiday.create.js" />
+    <Content Include="wwwroot\dist\styles\holiday.index.css" />
+    <Content Include="wwwroot\dist\styles\holiday.index.js" />
+    <Content Include="wwwroot\dist\styles\home.index.css" />
+    <Content Include="wwwroot\dist\styles\home.index.js" />
+    <Content Include="wwwroot\dist\styles\images\checkinout.jpg" />
+    <Content Include="wwwroot\dist\styles\images\icons.png" />
+    <Content Include="wwwroot\dist\styles\images\sprite_btn.png" />
+    <Content Include="wwwroot\dist\styles\images\sprite_ico_2012-05-15.png" />
+    <Content Include="wwwroot\dist\styles\joblevel.css" />
+    <Content Include="wwwroot\dist\styles\joblevel.js" />
+    <Content Include="wwwroot\dist\styles\jobtitle.css" />
+    <Content Include="wwwroot\dist\styles\jobtitle.js" />
+    <Content Include="wwwroot\dist\styles\keepinview.create.css" />
+    <Content Include="wwwroot\dist\styles\keepinview.create.js" />
+    <Content Include="wwwroot\dist\styles\lateinearlyout.create.css" />
+    <Content Include="wwwroot\dist\styles\lateinearlyout.create.js" />
+    <Content Include="wwwroot\dist\styles\leave.create.css" />
+    <Content Include="wwwroot\dist\styles\leave.create.js" />
+    <Content Include="wwwroot\dist\styles\leave.myrequest.css" />
+    <Content Include="wwwroot\dist\styles\leave.myrequest.js" />
+    <Content Include="wwwroot\dist\styles\main.css" />
+    <Content Include="wwwroot\dist\styles\main.js" />
+    <Content Include="wwwroot\dist\styles\memo.css" />
+    <Content Include="wwwroot\dist\styles\memo.edit.css" />
+    <Content Include="wwwroot\dist\styles\memo.edit.js" />
+    <Content Include="wwwroot\dist\styles\memo.js" />
+    <Content Include="wwwroot\dist\styles\menu.edit.css" />
+    <Content Include="wwwroot\dist\styles\menu.edit.js" />
+    <Content Include="wwwroot\dist\styles\menu.index.css" />
+    <Content Include="wwwroot\dist\styles\menu.index.js" />
+    <Content Include="wwwroot\dist\styles\message.create.css" />
+    <Content Include="wwwroot\dist\styles\message.create.js" />
+    <Content Include="wwwroot\dist\styles\message.css" />
+    <Content Include="wwwroot\dist\styles\message.js" />
+    <Content Include="wwwroot\dist\styles\my.working.schedule.css" />
+    <Content Include="wwwroot\dist\styles\my.working.schedule.js" />
+    <Content Include="wwwroot\dist\styles\overtime.details.css" />
+    <Content Include="wwwroot\dist\styles\overtime.details.js" />
+    <Content Include="wwwroot\dist\styles\overtime.edit.css" />
+    <Content Include="wwwroot\dist\styles\overtime.edit.js" />
+    <Content Include="wwwroot\dist\styles\overtime.member.details.css" />
+    <Content Include="wwwroot\dist\styles\overtime.member.details.js" />
+    <Content Include="wwwroot\dist\styles\overtime.member.index.css" />
+    <Content Include="wwwroot\dist\styles\overtime.member.index.js" />
+    <Content Include="wwwroot\dist\styles\overtime.myrequest.css" />
+    <Content Include="wwwroot\dist\styles\overtime.myrequest.js" />
+    <Content Include="wwwroot\dist\styles\report.attendance.css" />
+    <Content Include="wwwroot\dist\styles\report.attendance.js" />
+    <Content Include="wwwroot\dist\styles\report.dailyovertime.css" />
+    <Content Include="wwwroot\dist\styles\report.dailyovertime.js" />
+    <Content Include="wwwroot\dist\styles\report.employee.supervisor.css" />
+    <Content Include="wwwroot\dist\styles\report.employee.supervisor.js" />
+    <Content Include="wwwroot\dist\styles\report.manpower.css" />
+    <Content Include="wwwroot\dist\styles\report.manpower.js" />
+    <Content Include="wwwroot\dist\styles\report.meal.allowance.css" />
+    <Content Include="wwwroot\dist\styles\report.meal.allowance.js" />
+    <Content Include="wwwroot\dist\styles\report.monthlyovertime.css" />
+    <Content Include="wwwroot\dist\styles\report.monthlyovertime.js" />
+    <Content Include="wwwroot\dist\styles\report.monthlyworkinghours.css" />
+    <Content Include="wwwroot\dist\styles\report.monthlyworkinghours.js" />
+    <Content Include="wwwroot\dist\styles\report.shiftstatistic.css" />
+    <Content Include="wwwroot\dist\styles\report.shiftstatistic.js" />
+    <Content Include="wwwroot\dist\styles\report.time.record.css" />
+    <Content Include="wwwroot\dist\styles\report.time.record.js" />
+    <Content Include="wwwroot\dist\styles\report.timesheet.css" />
+    <Content Include="wwwroot\dist\styles\report.timesheet.js" />
+    <Content Include="wwwroot\dist\styles\report.unpaid.leave.summary.css" />
+    <Content Include="wwwroot\dist\styles\report.unpaid.leave.summary.js" />
+    <Content Include="wwwroot\dist\styles\report.weekendleave.detail.css" />
+    <Content Include="wwwroot\dist\styles\report.weekendleave.detail.js" />
+    <Content Include="wwwroot\dist\styles\report.weeklyworkinghours.css" />
+    <Content Include="wwwroot\dist\styles\report.weeklyworkinghours.js" />
+    <Content Include="wwwroot\dist\styles\report.yearlyovertime.css" />
+    <Content Include="wwwroot\dist\styles\report.yearlyovertime.js" />
+    <Content Include="wwwroot\dist\styles\schedule.arrange.css" />
+    <Content Include="wwwroot\dist\styles\schedule.arrange.js" />
+    <Content Include="wwwroot\dist\styles\section.create.css" />
+    <Content Include="wwwroot\dist\styles\section.create.js" />
+    <Content Include="wwwroot\dist\styles\section.index.css" />
+    <Content Include="wwwroot\dist\styles\section.index.js" />
+    <Content Include="wwwroot\dist\styles\shift.edit.css" />
+    <Content Include="wwwroot\dist\styles\shift.edit.js" />
+    <Content Include="wwwroot\dist\styles\shift.index.css" />
+    <Content Include="wwwroot\dist\styles\shift.index.js" />
+    <Content Include="wwwroot\dist\styles\team.discipline.rule.css" />
+    <Content Include="wwwroot\dist\styles\team.discipline.rule.js" />
+    <Content Include="wwwroot\dist\styles\team.edit.css" />
+    <Content Include="wwwroot\dist\styles\team.edit.discipline.manager.css" />
+    <Content Include="wwwroot\dist\styles\team.edit.discipline.manager.js" />
+    <Content Include="wwwroot\dist\styles\team.edit.js" />
+    <Content Include="wwwroot\dist\styles\team.edit.supervisor.css" />
+    <Content Include="wwwroot\dist\styles\team.edit.supervisor.js" />
+    <Content Include="wwwroot\dist\styles\team.index.css" />
+    <Content Include="wwwroot\dist\styles\team.index.js" />
+    <Content Include="wwwroot\dist\styles\team.supervisor.index.css" />
+    <Content Include="wwwroot\dist\styles\team.supervisor.index.js" />
+    <Content Include="wwwroot\dist\styles\time.checkinout.css" />
+    <Content Include="wwwroot\dist\styles\time.checkinout.js" />
+    <Content Include="wwwroot\dist\styles\unit.create.css" />
+    <Content Include="wwwroot\dist\styles\unit.create.js" />
+    <Content Include="wwwroot\dist\styles\unit.index.css" />
+    <Content Include="wwwroot\dist\styles\unit.index.js" />
+    <Content Include="wwwroot\dist\styles\user.management.css" />
+    <Content Include="wwwroot\dist\styles\user.management.js" />
+    <Content Include="wwwroot\dist\styles\workingcalendars.css" />
+    <Content Include="wwwroot\dist\styles\workingcalendars.js" />
+    <Content Include="wwwroot\dist\vendors\chosen.css" />
+    <Content Include="wwwroot\dist\vendors\chosen.js" />
+    <Content Include="wwwroot\dist\vendors\react.js" />
+    <Content Include="wwwroot\parts\constant.js" />
+    <Content Include="wwwroot\parts\entry.js" />
+    <Content Include="wwwroot\sources\js\date.js" />
+    <Content Include="wwwroot\sources\js\jquery-weekpicker.js" />
+    <Content Include="wwwroot\sources\js\main.js" />
+    <Content Include="wwwroot\sources\js\pages\account\changepwd.js" />
+    <Content Include="wwwroot\sources\js\pages\account\edit.profile.js" />
+    <Content Include="wwwroot\sources\js\pages\account\index.js" />
+    <Content Include="wwwroot\sources\js\pages\addtimerecord.js" />
+    <Content Include="wwwroot\sources\js\pages\annual-leave-balance\employee.create.edit.js" />
+    <Content Include="wwwroot\sources\js\pages\annual-leave-balance\index.js" />
+    <Content Include="wwwroot\sources\js\pages\auth\index.jsx" />
+    <Content Include="wwwroot\sources\js\pages\auth\Login.jsx" />
+    <Content Include="wwwroot\sources\js\pages\calendar\my.working.schedule.js" />
+    <Content Include="wwwroot\sources\js\pages\calendar\workingcalendar.js" />
+    <Content Include="wwwroot\sources\js\pages\department\common.functions.js" />
+    <Content Include="wwwroot\sources\js\pages\department\create\AppContainer.jsx" />
+    <Content Include="wwwroot\sources\js\pages\department\create\index.jsx" />
+    <Content Include="wwwroot\sources\js\pages\department\edit\AppContainer.jsx" />
+    <Content Include="wwwroot\sources\js\pages\department\edit\index.jsx" />
+    <Content Include="wwwroot\sources\js\pages\department\home\components\AppContainer.jsx" />
+    <Content Include="wwwroot\sources\js\pages\department\home\components\Filter.jsx" />
+    <Content Include="wwwroot\sources\js\pages\department\home\components\Row.jsx" />
+    <Content Include="wwwroot\sources\js\pages\department\home\components\Table.jsx" />
+    <Content Include="wwwroot\sources\js\pages\department\home\index.jsx" />
+    <Content Include="wwwroot\sources\js\pages\discipline\details.js" />
+    <Content Include="wwwroot\sources\js\pages\discipline\summary.js" />
+    <Content Include="wwwroot\sources\js\pages\employeeworkfromhome\index.js" />
+    <Content Include="wwwroot\sources\js\pages\employee\create.js" />
+    <Content Include="wwwroot\sources\js\pages\employee\discipline-manager\index.jsx" />
+    <Content Include="wwwroot\sources\js\pages\employee\edit.js" />
+    <Content Include="wwwroot\sources\js\pages\employee\index.js" />
+    <Content Include="wwwroot\sources\js\pages\employee\shift-manager\index.jsx" />
+    <Content Include="wwwroot\sources\js\pages\employee\supervisor\index.jsx" />
+    <Content Include="wwwroot\sources\js\pages\employee\user.management.js" />
+    <Content Include="wwwroot\sources\js\pages\extension-no\create\components\AppContainer.jsx" />
+    <Content Include="wwwroot\sources\js\pages\extension-no\create\index.jsx" />
+    <Content Include="wwwroot\sources\js\pages\extension-no\edit\components\AppContainer.jsx" />
+    <Content Include="wwwroot\sources\js\pages\extension-no\edit\index.jsx" />
+    <Content Include="wwwroot\sources\js\pages\extension-no\EmployeeAutocomplete.jsx" />
+    <Content Include="wwwroot\sources\js\pages\extension-no\group\common.functions.js" />
+    <Content Include="wwwroot\sources\js\pages\extension-no\group\conponents\AppContainer.jsx" />
+    <Content Include="wwwroot\sources\js\pages\extension-no\group\conponents\CreateEdit.jsx" />
+    <Content Include="wwwroot\sources\js\pages\extension-no\group\conponents\Row.jsx" />
+    <Content Include="wwwroot\sources\js\pages\extension-no\group\conponents\Table.jsx" />
+    <Content Include="wwwroot\sources\js\pages\extension-no\group\index.jsx" />
+    <Content Include="wwwroot\sources\js\pages\extension-no\home\components\AppContainer.jsx" />
+    <Content Include="wwwroot\sources\js\pages\extension-no\home\components\ExtensionControl.jsx" />
+    <Content Include="wwwroot\sources\js\pages\extension-no\home\components\Row.jsx" />
+    <Content Include="wwwroot\sources\js\pages\extension-no\home\components\Table.jsx" />
+    <Content Include="wwwroot\sources\js\pages\extension-no\home\index.jsx" />
+    <Content Include="wwwroot\sources\js\pages\extension-no\RenderForm.jsx" />
+    <Content Include="wwwroot\sources\js\pages\function\components\AppContainer.jsx" />
+    <Content Include="wwwroot\sources\js\pages\function\components\Filter.jsx" />
+    <Content Include="wwwroot\sources\js\pages\function\components\Table.jsx" />
+    <Content Include="wwwroot\sources\js\pages\function\index.jsx" />
+    <Content Include="wwwroot\sources\js\pages\holiday\edit.js" />
+    <Content Include="wwwroot\sources\js\pages\holiday\index.js" />
+    <Content Include="wwwroot\sources\js\pages\home.index.js" />
+    <Content Include="wwwroot\sources\js\pages\hospitalization-leave-balance\index.js" />
+    <Content Include="wwwroot\sources\js\pages\joblevel\common.functions.js" />
+    <Content Include="wwwroot\sources\js\pages\joblevel\components\AppContainer.jsx" />
+    <Content Include="wwwroot\sources\js\pages\joblevel\components\CreateEdit.jsx" />
+    <Content Include="wwwroot\sources\js\pages\joblevel\components\Row.jsx" />
+    <Content Include="wwwroot\sources\js\pages\joblevel\components\Table.jsx" />
+    <Content Include="wwwroot\sources\js\pages\joblevel\index.jsx" />
+    <Content Include="wwwroot\sources\js\pages\jobtitle\common.functions.js" />
+    <Content Include="wwwroot\sources\js\pages\jobtitle\components\AppContainer.jsx" />
+    <Content Include="wwwroot\sources\js\pages\jobtitle\components\CreateEdit.jsx" />
+    <Content Include="wwwroot\sources\js\pages\jobtitle\components\Filter.jsx" />
+    <Content Include="wwwroot\sources\js\pages\jobtitle\components\Row.jsx" />
+    <Content Include="wwwroot\sources\js\pages\jobtitle\components\Table.jsx" />
+    <Content Include="wwwroot\sources\js\pages\jobtitle\index.jsx" />
+    <Content Include="wwwroot\sources\js\pages\memo\memo.edit.js" />
+    <Content Include="wwwroot\sources\js\pages\memo\memo.js" />
+    <Content Include="wwwroot\sources\js\pages\memo\tinymce.plugins.js" />
+    <Content Include="wwwroot\sources\js\pages\menu\edit.js" />
+    <Content Include="wwwroot\sources\js\pages\menu\index.js" />
+    <Content Include="wwwroot\sources\js\pages\message\message.create.js" />
+    <Content Include="wwwroot\sources\js\pages\message\message.js" />
+    <Content Include="wwwroot\sources\js\pages\overtime\edit.js" />
+    <Content Include="wwwroot\sources\js\pages\overtime\hr.details.js" />
+    <Content Include="wwwroot\sources\js\pages\overtime\hr.index.js" />
+    <Content Include="wwwroot\sources\js\pages\overtime\member.details.js" />
+    <Content Include="wwwroot\sources\js\pages\overtime\member.index.js" />
+    <Content Include="wwwroot\sources\js\pages\overtime\myrequest.js" />
+    <Content Include="wwwroot\sources\js\pages\paternity\index.js" />
+    <Content Include="wwwroot\sources\js\pages\postnatal\index.js" />
+    <Content Include="wwwroot\sources\js\pages\report\attendance.js" />
+    <Content Include="wwwroot\sources\js\pages\report\dailyovertime.js" />
+    <Content Include="wwwroot\sources\js\pages\report\dailyworkinghours.js" />
+    <Content Include="wwwroot\sources\js\pages\report\discipline.summary.per.year.js" />
+    <Content Include="wwwroot\sources\js\pages\report\employee.supervisor.js" />
+    <Content Include="wwwroot\sources\js\pages\report\manpower.category.js" />
+    <Content Include="wwwroot\sources\js\pages\report\manpower.js" />
+    <Content Include="wwwroot\sources\js\pages\report\meal.allowance.report.details.js" />
+    <Content Include="wwwroot\sources\js\pages\report\meal.allowance.report.js" />
+    <Content Include="wwwroot\sources\js\pages\report\monthlyovertime.js" />
+    <Content Include="wwwroot\sources\js\pages\report\monthlyworkinghours.js" />
+    <Content Include="wwwroot\sources\js\pages\report\shiftstatistic.details.js" />
+    <Content Include="wwwroot\sources\js\pages\report\shiftstatistic.js" />
+    <Content Include="wwwroot\sources\js\pages\report\team.supervisor.js" />
+    <Content Include="wwwroot\sources\js\pages\report\timerecord.js" />
+    <Content Include="wwwroot\sources\js\pages\report\timesheet.js" />
+    <Content Include="wwwroot\sources\js\pages\report\unpaid.leave.summary.js" />
+    <Content Include="wwwroot\sources\js\pages\report\weekendleave.detail.js" />
+    <Content Include="wwwroot\sources\js\pages\report\weekendleave.summary.js" />
+    <Content Include="wwwroot\sources\js\pages\report\weeklyworkinghours.js" />
+    <Content Include="wwwroot\sources\js\pages\report\workingcalendar.summary.js" />
+    <Content Include="wwwroot\sources\js\pages\report\workinghours.summary.js" />
+    <Content Include="wwwroot\sources\js\pages\report\yearlyovertime.js" />
+    <Content Include="wwwroot\sources\js\pages\request\change-shift\create.js" />
+    <Content Include="wwwroot\sources\js\pages\request\change-shift\edit.js" />
+    <Content Include="wwwroot\sources\js\pages\request\change-shift\myrequest.js" />
+    <Content Include="wwwroot\sources\js\pages\request\checkinout\create.js" />
+    <Content Include="wwwroot\sources\js\pages\request\checkinout\edit.js" />
+    <Content Include="wwwroot\sources\js\pages\request\checkinout\myrequest.js" />
+    <Content Include="wwwroot\sources\js\pages\request\date.filter.js" />
+    <Content Include="wwwroot\sources\js\pages\request\employee.request.js" />
+    <Content Include="wwwroot\sources\js\pages\request\keepinview\create.js" />
+    <Content Include="wwwroot\sources\js\pages\request\keepinview\edit.js" />
+    <Content Include="wwwroot\sources\js\pages\request\keepinview\myrequest.js" />
+    <Content Include="wwwroot\sources\js\pages\request\latein-earlyout\create.js" />
+    <Content Include="wwwroot\sources\js\pages\request\latein-earlyout\edit.js" />
+    <Content Include="wwwroot\sources\js\pages\request\latein-earlyout\myrequest.js" />
+    <Content Include="wwwroot\sources\js\pages\request\leave\create.js" />
+    <Content Include="wwwroot\sources\js\pages\request\leave\myrequest.js" />
+    <Content Include="wwwroot\sources\js\pages\request\leave\request.detail.js" />
+    <Content Include="wwwroot\sources\js\pages\schedule-arrange\common.functions.js" />
+    <Content Include="wwwroot\sources\js\pages\schedule-arrange\iframe\index.jsx" />
+    <Content Include="wwwroot\sources\js\pages\schedule-arrange\iframe\table\ColDefaultShift.jsx" />
+    <Content Include="wwwroot\sources\js\pages\schedule-arrange\iframe\table\ColNickname.jsx" />
+    <Content Include="wwwroot\sources\js\pages\schedule-arrange\iframe\table\ColShift.jsx" />
+    <Content Include="wwwroot\sources\js\pages\schedule-arrange\iframe\table\Row.jsx" />
+    <Content Include="wwwroot\sources\js\pages\schedule-arrange\iframe\table\table.jsx" />
+    <Content Include="wwwroot\sources\js\pages\schedule-arrange\iframe\table\THead.jsx" />
+    <Content Include="wwwroot\sources\js\pages\schedule-arrange\index.jsx" />
+    <Content Include="wwwroot\sources\js\pages\schedule-arrange\Search.jsx" />
+    <Content Include="wwwroot\sources\js\pages\schedule-arrange\ShiftAutocomplete.jsx" />
+    <Content Include="wwwroot\sources\js\pages\schedule-arrange\ShiftMultipleModal.jsx" />
+    <Content Include="wwwroot\sources\js\pages\schedule-arrange\table\ColDefaultShift.jsx" />
+    <Content Include="wwwroot\sources\js\pages\schedule-arrange\table\ColIndex.jsx" />
+    <Content Include="wwwroot\sources\js\pages\schedule-arrange\table\ColNickname.jsx" />
+    <Content Include="wwwroot\sources\js\pages\schedule-arrange\table\ColorDescription.jsx" />
+    <Content Include="wwwroot\sources\js\pages\schedule-arrange\table\ColShift.jsx" />
+    <Content Include="wwwroot\sources\js\pages\schedule-arrange\table\DroppableMember.jsx" />
+    <Content Include="wwwroot\sources\js\pages\schedule-arrange\table\DroppableTeam.jsx" />
+    <Content Include="wwwroot\sources\js\pages\schedule-arrange\table\Row.jsx" />
+    <Content Include="wwwroot\sources\js\pages\schedule-arrange\table\RowTeam.jsx" />
+    <Content Include="wwwroot\sources\js\pages\schedule-arrange\table\table.jsx" />
+    <Content Include="wwwroot\sources\js\pages\schedule-arrange\table\THead.jsx" />
+    <Content Include="wwwroot\sources\js\pages\schedule-arrange\table\TooltipRequestInfo.jsx" />
+    <Content Include="wwwroot\sources\js\pages\schedule-arrange\WeeklyDefaultShiftModal.jsx" />
+    <Content Include="wwwroot\sources\js\pages\section\common.functions.js" />
+    <Content Include="wwwroot\sources\js\pages\section\create\AppContainer.jsx" />
+    <Content Include="wwwroot\sources\js\pages\section\create\index.jsx" />
+    <Content Include="wwwroot\sources\js\pages\section\edit\AppContainer.jsx" />
+    <Content Include="wwwroot\sources\js\pages\section\edit\index.jsx" />
+    <Content Include="wwwroot\sources\js\pages\section\home\components\AppContainer.jsx" />
+    <Content Include="wwwroot\sources\js\pages\section\home\components\Filter.jsx" />
+    <Content Include="wwwroot\sources\js\pages\section\home\components\Row.jsx" />
+    <Content Include="wwwroot\sources\js\pages\section\home\components\Table.jsx" />
+    <Content Include="wwwroot\sources\js\pages\section\home\index.jsx" />
+    <Content Include="wwwroot\sources\js\pages\shift\edit.js" />
+    <Content Include="wwwroot\sources\js\pages\sick-leave-balance\index.js" />
+    <Content Include="wwwroot\sources\js\pages\team\discipline-manager\DisciplineManager.jsx" />
+    <Content Include="wwwroot\sources\js\pages\team\discipline-manager\index.jsx" />
+    <Content Include="wwwroot\sources\js\pages\team\discipline-manager\table\Row.jsx" />
+    <Content Include="wwwroot\sources\js\pages\team\discipline-manager\table\table.jsx" />
+    <Content Include="wwwroot\sources\js\pages\team\discipline-manager\table\THead.jsx" />
+    <Content Include="wwwroot\sources\js\pages\team\discipline.rule.js" />
+    <Content Include="wwwroot\sources\js\pages\team\edit.js" />
+    <Content Include="wwwroot\sources\js\pages\team\index.js" />
+    <Content Include="wwwroot\sources\js\pages\team\shift-manager\index.jsx" />
+    <Content Include="wwwroot\sources\js\pages\team\shift-manager\ShiftManager.jsx" />
+    <Content Include="wwwroot\sources\js\pages\team\supervisor\common.functions.js" />
+    <Content Include="wwwroot\sources\js\pages\team\supervisor\index.jsx" />
+    <Content Include="wwwroot\sources\js\pages\team\supervisor\Supervisor.jsx" />
+    <Content Include="wwwroot\sources\js\pages\team\supervisor\table\EmployeeAutocomplete.jsx" />
+    <Content Include="wwwroot\sources\js\pages\team\supervisor\table\Row.jsx" />
+    <Content Include="wwwroot\sources\js\pages\team\supervisor\table\table.jsx" />
+    <Content Include="wwwroot\sources\js\pages\team\supervisor\table\THead.jsx" />
+    <Content Include="wwwroot\sources\js\pages\time\checkinout\index.jsx" />
+    <Content Include="wwwroot\sources\js\pages\time\checkinout\AppContainer.jsx" />
+    <Content Include="wwwroot\sources\js\pages\unit\common.functions.js" />
+    <Content Include="wwwroot\sources\js\pages\unit\create\AppContainer.jsx" />
+    <Content Include="wwwroot\sources\js\pages\unit\create\index.jsx" />
+    <Content Include="wwwroot\sources\js\pages\unit\edit\AppContainer.jsx" />
+    <Content Include="wwwroot\sources\js\pages\unit\edit\index.jsx" />
+    <Content Include="wwwroot\sources\js\pages\unit\home\components\AppContainer.jsx" />
+    <Content Include="wwwroot\sources\js\pages\unit\home\components\Filter.jsx" />
+    <Content Include="wwwroot\sources\js\pages\unit\home\components\Row.jsx" />
+    <Content Include="wwwroot\sources\js\pages\unit\home\components\Table.jsx" />
+    <Content Include="wwwroot\sources\js\pages\unit\home\index.jsx" />
+    <Content Include="wwwroot\sources\js\shared\common.functions.js" />
+    <Content Include="wwwroot\sources\js\shared\components\Autocomplete.jsx" />
+    <Content Include="wwwroot\sources\js\shared\components\DropdownOrder.jsx" />
+    <Content Include="wwwroot\sources\js\shared\components\Errors.jsx" />
+    <Content Include="wwwroot\sources\js\shared\components\react-tree-multiselect\buildData.js" />
+    <Content Include="wwwroot\sources\js\shared\components\react-tree-multiselect\TreeMultiselect.js" />
+    <Content Include="wwwroot\sources\js\shared\components\react-tree-multiselect\TreeNode.js" />
+    <Content Include="wwwroot\sources\js\shared\components\SweetModalDialog.jsx" />
+    <Content Include="wwwroot\sources\js\shared\components\WeekPicker.jsx" />
+    <Content Include="wwwroot\sources\js\shared\constants.js" />
+    <Content Include="wwwroot\sources\js\shared\employee.search.in.team.js" />
+    <Content Include="wwwroot\sources\js\shared\layouts\ToastLayout.jsx" />
+    <Content Include="wwwroot\sources\js\shared\multiselect-tree-view.js" />
+    <Content Include="wwwroot\sources\libs\birthdaypicker.js" />
+    <Content Include="wwwroot\sources\libs\monthPicker\monPickr-0.0.3.css" />
+    <Content Include="wwwroot\sources\libs\monthPicker\monPickr-0.0.3.js" />
+    <Content Include="wwwroot\sources\libs\SimplePagination\jquery.simplePagination.js" />
+    <Content Include="wwwroot\sources\libs\SimplePagination\LICENSE.txt" />
+    <Content Include="wwwroot\sources\libs\SimplePagination\simplePagination.css" />
+    <Content Include="wwwroot\sources\styles\fonts\font.css" />
+    <Content Include="wwwroot\sources\styles\images\404\404.svg" />
+    <Content Include="wwwroot\sources\styles\images\404\balloon.svg" />
+    <Content Include="wwwroot\sources\styles\images\404\cloud-big.svg" />
+    <Content Include="wwwroot\sources\styles\images\404\cloud-small.svg" />
+    <Content Include="wwwroot\sources\styles\images\404\wind.svg" />
+    <Content Include="wwwroot\sources\styles\images\405\door.svg" />
+    <Content Include="wwwroot\sources\styles\images\405\seal.svg" />
+    <Content Include="wwwroot\sources\styles\images\405\short-seal.svg" />
+    <Content Include="wwwroot\sources\styles\images\405\signage.svg" />
+    <Content Include="wwwroot\sources\styles\images\500\bluscreen.svg" />
+    <Content Include="wwwroot\sources\styles\images\500\desktop.svg" />
+    <Content Include="wwwroot\sources\styles\images\500\Error.svg" />
+    <Content Include="wwwroot\sources\styles\images\500\leave.svg" />
+    <Content Include="wwwroot\sources\styles\images\bgLogin.png" />
+    <Content Include="wwwroot\sources\styles\images\breadcrumb_bg.png" />
+    <Content Include="wwwroot\sources\styles\images\checkinout.jpg" />
+    <Content Include="wwwroot\sources\styles\images\Hongma-logo.png" />
+    <Content Include="wwwroot\sources\styles\images\icons.png" />
+    <Content Include="wwwroot\sources\styles\images\panel_bg.png" />
+    <Content Include="wwwroot\sources\styles\images\pantone.svg" />
+    <Content Include="wwwroot\sources\styles\images\picon.png" />
+    <Content Include="wwwroot\sources\styles\images\signin_icon.png" />
+    <Content Include="wwwroot\sources\styles\images\SMS-logo.png" />
+    <Content Include="wwwroot\sources\styles\images\sprite_btn.png" />
+    <Content Include="wwwroot\sources\styles\images\sprite_ico_2012-05-15.png" />
+    <Content Include="wwwroot\sources\styles\images\sprite_v.png" />
+    <Content Include="wwwroot\sources\styles\images\titlebg.png" />
+    <Content Include="wwwroot\sources\styles\images\uicon.png" />
+    <Content Include="wwwroot\sources\styles\login.css" />
+    <Content Include="wwwroot\dist\js\time.checkinout.js.map" />
+    <Content Include="wwwroot\dist\styles\time.checkinout.js.map" />
+    <None Include="wwwroot\sources\styles\pages\time\checkinout.scss" />
+    <Content Include="wwwroot\webpack.config.dev.js" />
+    <Content Include="wwwroot\webpack.config.js" />
+    <Content Include="wwwroot\webpack.config.vendor.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="file\uploads\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_Code\RazorHelper.cshtml" />
+    <Content Include="App_Data\Emails\ChangeShift.Approval.cshtml" />
+    <Content Include="App_Data\Emails\ChangeShift.Cancel.cshtml" />
+    <Content Include="App_Data\Emails\ChangeShift.Request.cshtml" />
+    <Content Include="App_Data\Emails\CheckInOut.Approval.cshtml" />
+    <Content Include="App_Data\Emails\CheckInOut.Cancel.cshtml" />
+    <Content Include="App_Data\Emails\CheckInOut.Request.cshtml" />
+    <Content Include="App_Data\Emails\EditMemoNotification.cshtml" />
+    <Content Include="App_Data\Emails\KeepInView.Approval.cshtml" />
+    <Content Include="App_Data\Emails\KeepInView.Cancel.cshtml" />
+    <Content Include="App_Data\Emails\KeepInView.Request.cshtml" />
+    <Content Include="App_Data\Emails\LateInEarlyOut.Approval.cshtml" />
+    <Content Include="App_Data\Emails\LateInEarlyOut.Cancel.cshtml" />
+    <Content Include="App_Data\Emails\LateInEarlyOut.Request.cshtml" />
+    <Content Include="App_Data\Emails\Leave.Approval.cshtml" />
+    <Content Include="App_Data\Emails\Leave.Cancel.cshtml" />
+    <Content Include="App_Data\Emails\Leave.Request.cshtml" />
+    <Content Include="App_Data\Emails\MemoNotification.cshtml" />
+    <Content Include="App_Data\Emails\MessageNotification.cshtml" />
+    <Content Include="App_Data\Emails\RemindUseAL.cshtml" />
+    <Content Include="App_Data\Emails\StatisticALBalance.cshtml" />
+    <Content Include="App_Data\Emails\UpdateInfoNotification.cshtml" />
+    <Content Include="ExcelTemplates\AttendanceReport.xlsx" />
+    <Content Include="ExcelTemplates\DailyOvertimeDetails.xlsx" />
+    <Content Include="ExcelTemplates\DailyWorkingHours.xlsx" />
+    <Content Include="ExcelTemplates\DisciplineDetailReport.xls" />
+    <Content Include="ExcelTemplates\DisciplineSummaryPerYear.xlsx" />
+    <Content Include="ExcelTemplates\DisciplineSummaryReport.xls" />
+    <Content Include="ExcelTemplates\DriverPickup.xlsx" />
+    <Content Include="ExcelTemplates\EmployeeBasicInfoTemplate.xls" />
+    <Content Include="ExcelTemplates\EmployeeDetailsInfoTemplate.xls" />
+    <Content Include="ExcelTemplates\EmployeeFullProfileInfoTemplate.xls" />
+    <Content Include="ExcelTemplates\EmployeeOvertimeTemplate.xlsx" />
+    <Content Include="ExcelTemplates\EmployeeSupervisor.xlsx" />
+    <Content Include="ExcelTemplates\EmployeeWorkFromHome.xls" />
+    <Content Include="ExcelTemplates\HospitalizationLeaveSummary.xls" />
+    <Content Include="ExcelTemplates\JobTitleSummary.xlsx" />
+    <Content Include="ExcelTemplates\LeaveSummaryTemplate.xls" />
+    <Content Include="ExcelTemplates\Manpower.xlsx" />
+    <Content Include="ExcelTemplates\ManpowerCategory.xlsx" />
+    <Content Include="ExcelTemplates\MealAllowanceSummary.xlsx" />
+    <Content Include="ExcelTemplates\MonthlyOvertime.xlsx" />
+    <Content Include="ExcelTemplates\MonthlyWorkingHours.xlsx" />
+    <Content Include="ExcelTemplates\ShiftStatisticDetailTemplate.xlsx" />
+    <Content Include="ExcelTemplates\ShiftStatisticTemplate.xlsx" />
+    <Content Include="ExcelTemplates\SickLeaveSummary.xls" />
+    <Content Include="ExcelTemplates\TeamSupervisor.xlsx" />
+    <Content Include="ExcelTemplates\TimeRecordTemplate.xlsx" />
+    <Content Include="ExcelTemplates\UnpaidLeaveSummaryH1Template.xls" />
+    <Content Include="ExcelTemplates\UnpaidLeaveSummaryH2Template.xls" />
+    <Content Include="ExcelTemplates\UnpaidLeaveSummaryTemplate.xls" />
+    <Content Include="ExcelTemplates\WeekendLeaveDetailTemplate.xls" />
+    <Content Include="ExcelTemplates\WeekendLeaveSummaryTemplate.xls" />
+    <Content Include="ExcelTemplates\WeeklyWorkingHours.xlsx" />
+    <Content Include="ExcelTemplates\WorkingCalendar.xlsx" />
+    <Content Include="ExcelTemplates\WorkingCalendarSummary.xlsx" />
+    <Content Include="ExcelTemplates\WorkingHoursSummary.xlsx" />
+    <Content Include="ExcelTemplates\WorkingTimeRequestTemplate.xls" />
+    <Content Include="ExcelTemplates\YearlyOvertime.xlsx" />
+    <Content Include="Deployment.ignore" />
+    <Content Include="Dockerfile" />
+    <Content Include="package-lock.json" />
+    <Content Include="package.json" />
+    <None Include="packages.config" />
+    <Content Include="Views\Account\ChangePwd.cshtml" />
+    <Content Include="Views\Account\Index.cshtml" />
+    <Content Include="Views\Account\_HistoryDetail.cshtml" />
+    <Content Include="Views\AnnualLeaveBalance\Create.cshtml" />
+    <Content Include="Views\AnnualLeaveBalance\Edit.cshtml" />
+    <Content Include="Views\AnnualLeaveBalance\Employee.cshtml" />
+    <Content Include="Views\AnnualLeaveBalance\Index.cshtml" />
+    <Content Include="Views\AnnualLeaveBalance\MultipleInsert.cshtml" />
+    <Content Include="Views\AnnualLeaveBalance\MultipleReset.cshtml" />
+    <Content Include="Views\Auth\Login.cshtml" />
+    <Content Include="Views\Calendar\MyWorkingSchedule.cshtml" />
+    <Content Include="Views\Calendar\WorkingCalendars.cshtml" />
+    <Content Include="Views\Calendar\_WorkingCalendarDetails.cshtml" />
+    <Content Include="Views\ChangeShift\Create.cshtml" />
+    <Content Include="Views\ChangeShift\Details.cshtml" />
+    <Content Include="Views\ChangeShift\Edit.cshtml" />
+    <Content Include="Views\ChangeShift\EmployeeView.cshtml" />
+    <Content Include="Views\ChangeShift\_ChangeShiftDetail.cshtml" />
+    <Content Include="Views\ChangeShift\_ViewHistory.cshtml" />
+    <Content Include="Views\CheckInOut\Create.cshtml" />
+    <Content Include="Views\CheckInOut\Edit.cshtml" />
+    <Content Include="Views\CheckInOut\EmployeeView.cshtml" />
+    <Content Include="Views\CheckInOut\_ViewHistory.cshtml" />
+    <Content Include="Views\Department\Create.cshtml" />
+    <Content Include="Views\Department\Edit.cshtml" />
+    <Content Include="Views\Department\Index.cshtml" />
+    <Content Include="Views\Discipline\DisciplineDetail.cshtml" />
+    <Content Include="Views\Discipline\DisciplineSummary.cshtml" />
+    <Content Include="Views\Discipline\_AddOtherDiscipline.cshtml" />
+    <Content Include="Views\Discipline\_DisciplineDetailGrid.cshtml" />
+    <Content Include="Views\Discipline\_DisciplineSummaryGrid.cshtml" />
+    <Content Include="Views\Discipline\_ViewOtherDiscipline.cshtml" />
+    <Content Include="Views\EmployeeWorkFromHome\Index.cshtml" />
+    <Content Include="Views\EmployeeWorkFromHome\_Create.cshtml" />
+    <Content Include="Views\EmployeeWorkFromHome\_Edit.cshtml" />
+    <Content Include="Views\EmployeeWorkFromHome\_EmployeeWorkFromHomeGrid.cshtml" />
+    <Content Include="Views\Employee\ActivityLog.cshtml" />
+    <Content Include="Views\Employee\Create.cshtml" />
+    <Content Include="Views\Employee\Detail.cshtml" />
+    <Content Include="Views\Employee\DisciplineManager.cshtml" />
+    <Content Include="Views\Employee\Edit.cshtml" />
+    <Content Include="Views\Employee\Index.cshtml" />
+    <Content Include="Views\Employee\ManageSupervisor.cshtml" />
+    <Content Include="Views\Employee\ShiftManager.cshtml" />
+    <Content Include="Views\Employee\UserManagement.cshtml" />
+    <Content Include="Views\Employee\_ContactList.cshtml" />
+    <Content Include="Views\Employee\_ListEmployee.cshtml" />
+    <Content Include="Views\Error\AccessDenied.cshtml" />
+    <Content Include="Views\Error\InternalError.cshtml" />
+    <Content Include="Views\Error\PageNotFound.cshtml" />
+    <Content Include="Views\ExtensionNo\Create.cshtml" />
+    <Content Include="Views\ExtensionNo\Edit.cshtml" />
+    <Content Include="Views\ExtensionNo\ExternalGroup.cshtml" />
+    <Content Include="Views\ExtensionNo\Index.cshtml" />
+    <Content Include="Views\Function\Index.cshtml" />
+    <Content Include="Views\Holiday\Create.cshtml" />
+    <Content Include="Views\Holiday\Edit.cshtml" />
+    <Content Include="Views\Holiday\Index.cshtml" />
+    <Content Include="Views\Home\_MemberRequest.cshtml" />
+    <Content Include="Views\HospitalizationLeaveBalance\Create.cshtml" />
+    <Content Include="Views\HospitalizationLeaveBalance\Edit.cshtml" />
+    <Content Include="Views\HospitalizationLeaveBalance\Employee.cshtml" />
+    <Content Include="Views\HospitalizationLeaveBalance\Index.cshtml" />
+    <Content Include="Views\HospitalizationLeaveBalance\MultipleInsert.cshtml" />
+    <Content Include="Views\HospitalizationLeaveBalance\MultipleReset.cshtml" />
+    <Content Include="Views\Information\UpdateInformation.cshtml" />
+    <Content Include="Views\Information\_AddRelationship.cshtml" />
+    <Content Include="Views\Information\_EditRelationship.cshtml" />
+    <Content Include="Views\Information\_ListFileUploaded.cshtml" />
+    <Content Include="Views\Information\_ListRelationship.cshtml" />
+    <Content Include="Views\JobLevel\Index.cshtml" />
+    <Content Include="Views\JobTitle\JobTitleManagement.cshtml" />
+    <Content Include="Views\KeepInView\Create.cshtml" />
+    <Content Include="Views\KeepInView\Edit.cshtml" />
+    <Content Include="Views\KeepInView\EmployeeView.cshtml" />
+    <Content Include="Views\KeepInView\_ViewHistory.cshtml" />
+    <Content Include="Views\LateInEarlyOut\Create.cshtml" />
+    <Content Include="Views\LateInEarlyOut\Edit.cshtml" />
+    <Content Include="Views\LateInEarlyOut\EmployeeView.cshtml" />
+    <Content Include="Views\LateInEarlyOut\_ViewHistory.cshtml" />
+    <Content Include="Views\Leave\Create.cshtml" />
+    <Content Include="Views\Leave\Detail.cshtml" />
+    <Content Include="Views\Leave\EmployeeView.cshtml" />
+    <Content Include="Views\Leave\LeaveRequestDetail.cshtml" />
+    <Content Include="Views\Leave\Update.cshtml" />
+    <Content Include="Views\Leave\_ViewHistory.cshtml" />
+    <Content Include="Views\Memo\Create.cshtml" />
+    <Content Include="Views\Memo\Detail.cshtml" />
+    <Content Include="Views\Memo\Edit.cshtml" />
+    <Content Include="Views\Memo\Index.cshtml" />
+    <Content Include="Views\Message\Create.cshtml" />
+    <Content Include="Views\Message\Detail.cshtml" />
+    <Content Include="Views\Message\DetailByEmployee.cshtml" />
+    <Content Include="Views\Message\Edit.cshtml" />
+    <Content Include="Views\Message\Index.cshtml" />
+    <Content Include="Views\Message\ViewMessageOfEmployee.cshtml" />
+    <Content Include="Views\Overtime\Details.cshtml" />
+    <Content Include="Views\Overtime\Edit.cshtml" />
+    <Content Include="Views\Overtime\EmployeeDetails.cshtml" />
+    <Content Include="Views\Overtime\EmployeeOvertime.cshtml" />
+    <Content Include="Views\Overtime\EmployeeView.cshtml" />
+    <Content Include="Views\Overtime\MemberDetails.cshtml" />
+    <Content Include="Views\Overtime\MemberOvertime.cshtml" />
+    <Content Include="Views\Overtime\_ListEmployeeOvertime.cshtml" />
+    <Content Include="Views\Overtime\_ListMemberOvertime.cshtml" />
+    <Content Include="Views\Paternity\Index.cshtml" />
+    <Content Include="Views\Paternity\_Create.cshtml" />
+    <Content Include="Views\Paternity\_Edit.cshtml" />
+    <Content Include="Views\Paternity\_ListPaternity.cshtml" />
+    <Content Include="Views\Postnatal\Index.cshtml" />
+    <Content Include="Views\Postnatal\_Create.cshtml" />
+    <Content Include="Views\Postnatal\_Edit.cshtml" />
+    <Content Include="Views\Postnatal\_PostnatalGrid.cshtml" />
+    <Content Include="Views\Report\Attendance\Index.cshtml" />
+    <Content Include="Views\Report\Attendance\_Details.cshtml" />
+    <Content Include="Views\Report\DailyWorkingHours\Index.cshtml" />
+    <Content Include="Views\Report\DailyWorkingHours\_DailyWorkingHoursDetails.cshtml" />
+    <Content Include="Views\Report\DisciplineSummaryPerYear\Index.cshtml" />
+    <Content Include="Views\Report\DisciplineSummaryPerYear\_Grid.cshtml" />
+    <Content Include="Views\Report\EmployeeSupervisor.cshtml" />
+    <Content Include="Views\Report\Index.cshtml" />
+    <Content Include="Views\Report\Manpower.cshtml" />
+    <Content Include="Views\Report\ManpowerCategory.cshtml" />
+    <Content Include="Views\Report\MealAllowance\Index.cshtml" />
+    <Content Include="Views\Report\MealAllowance\MealAllowanceDetails.cshtml" />
+    <Content Include="Views\Report\MealAllowance\_MealAllowanceDetailsGrid.cshtml" />
+    <Content Include="Views\Report\MealAllowance\_MealAllowanceSummary.cshtml" />
+    <Content Include="Views\Report\MonthlyWorkingHours\Index.cshtml" />
+    <Content Include="Views\Report\MonthlyWorkingHours\_MonthlyWorkingHoursDetails.cshtml" />
+    <Content Include="Views\Report\Overtime\DailyOvertime.cshtml" />
+    <Content Include="Views\Report\Overtime\MonthlyOvertime.cshtml" />
+    <Content Include="Views\Report\Overtime\MonthlyOvertimeDetails.cshtml" />
+    <Content Include="Views\Report\Overtime\YearlyOvertime.cshtml" />
+    <Content Include="Views\Report\Overtime\_ListMonthlyOvertimeDetails.cshtml" />
+    <Content Include="Views\Report\ShiftStatistic\Details.cshtml" />
+    <Content Include="Views\Report\ShiftStatistic\Index.cshtml" />
+    <Content Include="Views\Report\ShiftStatistic\_ShiftStatistic.cshtml" />
+    <Content Include="Views\Report\ShiftStatistic\_ShiftStatisticDetails.cshtml" />
+    <Content Include="Views\Report\TeamSupervisor.cshtml" />
+    <Content Include="Views\Report\TimeRecord.cshtml" />
+    <Content Include="Views\Report\Timesheet.cshtml" />
+    <Content Include="Views\Report\UnpaidLeaveSummary.cshtml" />
+    <Content Include="Views\Report\WeekendLeaveDetail.cshtml" />
+    <Content Include="Views\Report\WeekendLeaveSummary.cshtml" />
+    <Content Include="Views\Report\WeeklyWorkingHours\Index.cshtml" />
+    <Content Include="Views\Report\WeeklyWorkingHours\_WeeklyWorkingHoursDetails.cshtml" />
+    <Content Include="Views\Report\WorkingCalendarSummary.cshtml" />
+    <Content Include="Views\Report\WorkingHoursSummary.cshtml" />
+    <Content Include="Views\Report\_EmployeeSupervisorDetails.cshtml" />
+    <Content Include="Views\Report\_ListWeekendLeaveDetail.cshtml" />
+    <Content Include="Views\Report\_ListWeekendLeaveSummary.cshtml" />
+    <Content Include="Views\Report\_TeamSupervisorDetails.cshtml" />
+    <Content Include="Views\Report\_TimeRecordDetail.cshtml" />
+    <Content Include="Views\Report\_TimesheetDetails.cshtml" />
+    <Content Include="Views\Report\_UnpaidLeaveSummaryDetails.cshtml" />
+    <Content Include="Views\Report\_WorkingCalendarSummaryDetail.cshtml" />
+    <Content Include="Views\Request\EmployeeRequest.cshtml" />
+    <Content Include="Views\Request\ProcessRequest\_ChangeShiftRequestDetail.cshtml" />
+    <Content Include="Views\Request\ProcessRequest\_CheckInOutRequestDetail.cshtml" />
+    <Content Include="Views\Request\ProcessRequest\_LateInEarlyOutRequestDetail.cshtml" />
+    <Content Include="Views\Request\ProcessRequest\_LeaveRequestDetail.cshtml" />
+    <Content Include="Views\Request\_ProcessRequest.cshtml" />
+    <Content Include="Views\Request\_SearchForm.cshtml" />
+    <Content Include="Views\ScheduleArrange\IFrame.cshtml" />
+    <Content Include="Views\ScheduleArrange\Index.cshtml" />
+    <Content Include="Views\Section\Create.cshtml" />
+    <Content Include="Views\Section\Edit.cshtml" />
+    <Content Include="Views\Section\Index.cshtml" />
+    <Content Include="Views\Shared\_ConfirmModal.cshtml" />
+    <Content Include="Views\Shared\_IFrame.cshtml" />
+    <Content Include="Views\Shift\Create.cshtml" />
+    <Content Include="Views\Shift\Edit.cshtml" />
+    <Content Include="Views\Shift\Index.cshtml" />
+    <Content Include="Views\SickLeaveBalance\Create.cshtml" />
+    <Content Include="Views\SickLeaveBalance\Edit.cshtml" />
+    <Content Include="Views\SickLeaveBalance\Employee.cshtml" />
+    <Content Include="Views\SickLeaveBalance\Index.cshtml" />
+    <Content Include="Views\SickLeaveBalance\MultipleInsert.cshtml" />
+    <Content Include="Views\SickLeaveBalance\MultipleReset.cshtml" />
+    <Content Include="Views\Team\Create.cshtml" />
+    <Content Include="Views\Team\DisciplineManager.cshtml" />
+    <Content Include="Views\Team\DisciplineRule.cshtml" />
+    <Content Include="Views\Team\Edit.cshtml" />
+    <Content Include="Views\Team\Index.cshtml" />
+    <Content Include="Views\Team\ManageSupervisor.cshtml" />
+    <Content Include="Views\Team\ShiftManager.cshtml" />
+    <Content Include="Views\Team\TeamSupervisor.cshtml" />
+    <Content Include="Views\Time\AddTimeRecord.cshtml" />
+    <Content Include="Views\UI\GlobalScript.cshtml" />
+    <Content Include="Views\UI\_Header.cshtml" />
+    <Content Include="Views\UI\_NavBar.cshtml" />
+    <Content Include="Views\Unit\Create.cshtml" />
+    <Content Include="Views\Unit\Edit.cshtml" />
+    <Content Include="Views\Unit\Index.cshtml" />
+    <Content Include="Views\Time\CheckInOut.cshtml" />
+    <Content Include="WebConfigs\Web.HM_PROD.config" />
+    <Content Include="WebConfigs\Web.LOCAL.config" />
+    <Content Include="WebConfigs\Web.SMS_PROD.config" />
+    <Content Include="wwwroot\.babelrc" />
+    <Content Include="wwwroot\dist\js\account.changepwd.js.map" />
+    <Content Include="wwwroot\dist\js\account.edit.profile.js.map" />
+    <Content Include="wwwroot\dist\js\account.index.js.map" />
+    <Content Include="wwwroot\dist\js\addtimerecord.js.map" />
+    <Content Include="wwwroot\dist\js\annual.leavebalance.employee.create.edit.js.map" />
+    <Content Include="wwwroot\dist\js\annual.leavebalance.index.js.map" />
+    <Content Include="wwwroot\dist\js\changeshift.create.js.map" />
+    <Content Include="wwwroot\dist\js\changeshift.edit.js.map" />
+    <Content Include="wwwroot\dist\js\changeshift.myrequest.js.map" />
+    <Content Include="wwwroot\dist\js\checkinout.create.js.map" />
+    <Content Include="wwwroot\dist\js\checkinout.edit.js.map" />
+    <Content Include="wwwroot\dist\js\checkinout.myrequest.js.map" />
+    <Content Include="wwwroot\dist\js\department.edit.js.map" />
+    <Content Include="wwwroot\dist\js\discipline.detail.js.map" />
+    <Content Include="wwwroot\dist\js\discipline.summary.js.map" />
+    <Content Include="wwwroot\dist\js\discipline.summary.per.year.js.map" />
+    <Content Include="wwwroot\dist\js\employee.create.js.map" />
+    <Content Include="wwwroot\dist\js\employee.edit.discipline.manager.js.map" />
+    <Content Include="wwwroot\dist\js\employee.edit.js.map" />
+    <Content Include="wwwroot\dist\js\employee.edit.shift.manager.js.map" />
+    <Content Include="wwwroot\dist\js\employee.edit.supervisor.js.map" />
+    <Content Include="wwwroot\dist\js\employee.index.js.map" />
+    <Content Include="wwwroot\dist\js\employee.paternity.js.map" />
+    <Content Include="wwwroot\dist\js\employee.postnatal.js.map" />
+    <Content Include="wwwroot\dist\js\employee.request.js.map" />
+    <Content Include="wwwroot\dist\js\employee.user.management.js.map" />
+    <Content Include="wwwroot\dist\js\employee.workfromhome.js.map" />
+    <Content Include="wwwroot\dist\js\extensionno.create.js.map" />
+    <Content Include="wwwroot\dist\js\external.group.js.map" />
+    <Content Include="wwwroot\dist\js\function.index.js.map" />
+    <Content Include="wwwroot\dist\js\holiday.edit.js.map" />
+    <Content Include="wwwroot\dist\js\holiday.index.js.map" />
+    <Content Include="wwwroot\dist\js\home.index.js.map" />
+    <Content Include="wwwroot\dist\js\hospitalization.leave.balance.index.js.map" />
+    <Content Include="wwwroot\dist\js\keepinview.create.js.map" />
+    <Content Include="wwwroot\dist\js\keepinview.edit.js.map" />
+    <Content Include="wwwroot\dist\js\keepinview.myrequest.js.map" />
+    <Content Include="wwwroot\dist\js\lateinearlyout.create.js.map" />
+    <Content Include="wwwroot\dist\js\lateinearlyout.edit.js.map" />
+    <Content Include="wwwroot\dist\js\lateinearlyout.myrequest.js.map" />
+    <Content Include="wwwroot\dist\js\leave.create.js.map" />
+    <Content Include="wwwroot\dist\js\leave.myrequest.js.map" />
+    <Content Include="wwwroot\dist\js\leave.request.detail.js.map" />
+    <Content Include="wwwroot\dist\js\main.js.map" />
+    <Content Include="wwwroot\dist\js\memo.edit.js.map" />
+    <Content Include="wwwroot\dist\js\memo.js.map" />
+    <Content Include="wwwroot\dist\js\menu.edit.js.map" />
+    <Content Include="wwwroot\dist\js\menu.index.js.map" />
+    <Content Include="wwwroot\dist\js\message.create.js.map" />
+    <Content Include="wwwroot\dist\js\message.js.map" />
+    <Content Include="wwwroot\dist\js\my.working.schedule.js.map" />
+    <Content Include="wwwroot\dist\js\overtime.edit.js.map" />
+    <Content Include="wwwroot\dist\js\overtime.hr.details.js.map" />
+    <Content Include="wwwroot\dist\js\overtime.hr.index.js.map" />
+    <Content Include="wwwroot\dist\js\overtime.member.details.js.map" />
+    <Content Include="wwwroot\dist\js\overtime.member.index.js.map" />
+    <Content Include="wwwroot\dist\js\overtime.myrequest.js.map" />
+    <Content Include="wwwroot\dist\js\report.attendance.js.map" />
+    <Content Include="wwwroot\dist\js\report.dailyovertime.js.map" />
+    <Content Include="wwwroot\dist\js\report.dailyworkinghours.js.map" />
+    <Content Include="wwwroot\dist\js\report.employee.supervisor.js.map" />
+    <Content Include="wwwroot\dist\js\report.manpower.category.js.map" />
+    <Content Include="wwwroot\dist\js\report.manpower.js.map" />
+    <Content Include="wwwroot\dist\js\report.meal.allowance.report.details.js.map" />
+    <Content Include="wwwroot\dist\js\report.meal.allowance.report.js.map" />
+    <Content Include="wwwroot\dist\js\report.monthlyovertime.js.map" />
+    <Content Include="wwwroot\dist\js\report.monthlyworkinghours.js.map" />
+    <Content Include="wwwroot\dist\js\report.shiftstatistic.details.js.map" />
+    <Content Include="wwwroot\dist\js\report.shiftstatistic.js.map" />
+    <Content Include="wwwroot\dist\js\report.team.supervisor.js.map" />
+    <Content Include="wwwroot\dist\js\report.time.record.js.map" />
+    <Content Include="wwwroot\dist\js\report.timesheet.js.map" />
+    <Content Include="wwwroot\dist\js\report.unpaid.leave.summary.js.map" />
+    <Content Include="wwwroot\dist\js\report.weekendleave.detail.js.map" />
+    <Content Include="wwwroot\dist\js\report.weekendleave.summary.js.map" />
+    <Content Include="wwwroot\dist\js\report.weeklyworkinghours.js.map" />
+    <Content Include="wwwroot\dist\js\report.workingcalendar.summary.js.map" />
+    <Content Include="wwwroot\dist\js\report.workinghours.summary.js.map" />
+    <Content Include="wwwroot\dist\js\report.yearlyovertime.js.map" />
+    <Content Include="wwwroot\dist\js\schedule.arrange.iframe.js.map" />
+    <Content Include="wwwroot\dist\js\schedule.arrange.js.map" />
+    <Content Include="wwwroot\dist\js\section.edit.js.map" />
+    <Content Include="wwwroot\dist\js\shift.edit.js.map" />
+    <Content Include="wwwroot\dist\js\sick.leave.balance.index.js.map" />
+    <Content Include="wwwroot\dist\js\team.discipline.rule.js.map" />
+    <Content Include="wwwroot\dist\js\team.edit.discipline.manager.js.map" />
+    <Content Include="wwwroot\dist\js\team.edit.js.map" />
+    <Content Include="wwwroot\dist\js\team.edit.shift.manager.js.map" />
+    <Content Include="wwwroot\dist\js\team.edit.supervisor.js.map" />
+    <Content Include="wwwroot\dist\js\team.index.js.map" />
+    <Content Include="wwwroot\dist\js\unit.edit.js.map" />
+    <Content Include="wwwroot\dist\js\workingcalendar.js.map" />
+    <Content Include="wwwroot\dist\styles\account.changepwd.js.map" />
+    <Content Include="wwwroot\dist\styles\account.edit.profile.js.map" />
+    <Content Include="wwwroot\dist\styles\account.index.js.map" />
+    <Content Include="wwwroot\dist\styles\addtimerecord.js.map" />
+    <Content Include="wwwroot\dist\styles\annual.leave.balance.index.js.map" />
+    <Content Include="wwwroot\dist\styles\annual.leavebalance.employee.create.edit.js.map" />
+    <Content Include="wwwroot\dist\styles\annual.leavebalance.employee.js.map" />
+    <Content Include="wwwroot\dist\styles\annual.leavebalance.index.js.map" />
+    <Content Include="wwwroot\dist\styles\changeshift.create.js.map" />
+    <Content Include="wwwroot\dist\styles\changeshift.myrequest.js.map" />
+    <Content Include="wwwroot\dist\styles\checkinout.create.js.map" />
+    <Content Include="wwwroot\dist\styles\department.create.js.map" />
+    <Content Include="wwwroot\dist\styles\department.index.js.map" />
+    <Content Include="wwwroot\dist\styles\discipline.details.js.map" />
+    <Content Include="wwwroot\dist\styles\discipline.summary.js.map" />
+    <Content Include="wwwroot\dist\styles\discipline.summary.per.year.js.map" />
+    <Content Include="wwwroot\dist\styles\employee.create.js.map" />
+    <Content Include="wwwroot\dist\styles\employee.details.js.map" />
+    <Content Include="wwwroot\dist\styles\employee.edit.js.map" />
+    <Content Include="wwwroot\dist\styles\employee.index.js.map" />
+    <Content Include="wwwroot\dist\styles\employee.log.details.js.map" />
+    <Content Include="wwwroot\dist\styles\employee.postnatal.js.map" />
+    <Content Include="wwwroot\dist\styles\employee.request.js.map" />
+    <Content Include="wwwroot\dist\styles\employee.workfromhome.js.map" />
+    <Content Include="wwwroot\dist\styles\error.js.map" />
+    <Content Include="wwwroot\dist\styles\extensionno.create.js.map" />
+    <Content Include="wwwroot\dist\styles\extensionno.index.js.map" />
+    <Content Include="wwwroot\dist\styles\external.group.js.map" />
+    <Content Include="wwwroot\dist\styles\fonts\context-menu-icons.eot" />
+    <Content Include="wwwroot\dist\styles\fonts\context-menu-icons.ttf" />
+    <Content Include="wwwroot\dist\styles\fonts\context-menu-icons.woff" />
+    <Content Include="wwwroot\dist\styles\fonts\context-menu-icons.woff2" />
+    <Content Include="wwwroot\dist\styles\fonts\fontawesome-webfont.eot" />
+    <Content Include="wwwroot\dist\styles\fonts\fontawesome-webfont.ttf" />
+    <Content Include="wwwroot\dist\styles\fonts\fontawesome-webfont.woff" />
+    <Content Include="wwwroot\dist\styles\fonts\fontawesome-webfont.woff2" />
+    <Content Include="wwwroot\dist\styles\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="wwwroot\dist\styles\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="wwwroot\dist\styles\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="wwwroot\dist\styles\fonts\glyphicons-halflings-regular.woff2" />
+    <Content Include="wwwroot\dist\styles\function.index.js.map" />
+    <Content Include="wwwroot\dist\styles\holiday.create.js.map" />
+    <Content Include="wwwroot\dist\styles\holiday.index.js.map" />
+    <Content Include="wwwroot\dist\styles\home.index.js.map" />
+    <Content Include="wwwroot\dist\styles\joblevel.js.map" />
+    <Content Include="wwwroot\dist\styles\jobtitle.js.map" />
+    <Content Include="wwwroot\dist\styles\keepinview.create.js.map" />
+    <Content Include="wwwroot\dist\styles\lateinearlyout.create.js.map" />
+    <Content Include="wwwroot\dist\styles\leave.create.js.map" />
+    <Content Include="wwwroot\dist\styles\leave.myrequest.js.map" />
+    <Content Include="wwwroot\dist\styles\main.js.map" />
+    <Content Include="wwwroot\dist\styles\memo.edit.js.map" />
+    <Content Include="wwwroot\dist\styles\memo.js.map" />
+    <Content Include="wwwroot\dist\styles\menu.edit.js.map" />
+    <Content Include="wwwroot\dist\styles\menu.index.js.map" />
+    <Content Include="wwwroot\dist\styles\message.create.js.map" />
+    <Content Include="wwwroot\dist\styles\message.js.map" />
+    <Content Include="wwwroot\dist\styles\my.working.schedule.js.map" />
+    <Content Include="wwwroot\dist\styles\overtime.details.js.map" />
+    <Content Include="wwwroot\dist\styles\overtime.edit.js.map" />
+    <Content Include="wwwroot\dist\styles\overtime.member.details.js.map" />
+    <Content Include="wwwroot\dist\styles\overtime.member.index.js.map" />
+    <Content Include="wwwroot\dist\styles\overtime.myrequest.js.map" />
+    <Content Include="wwwroot\dist\styles\report.attendance.js.map" />
+    <Content Include="wwwroot\dist\styles\report.dailyovertime.js.map" />
+    <Content Include="wwwroot\dist\styles\report.employee.supervisor.js.map" />
+    <Content Include="wwwroot\dist\styles\report.manpower.js.map" />
+    <Content Include="wwwroot\dist\styles\report.meal.allowance.js.map" />
+    <Content Include="wwwroot\dist\styles\report.monthlyovertime.js.map" />
+    <Content Include="wwwroot\dist\styles\report.monthlyworkinghours.js.map" />
+    <Content Include="wwwroot\dist\styles\report.shiftstatistic.js.map" />
+    <Content Include="wwwroot\dist\styles\report.time.record.js.map" />
+    <Content Include="wwwroot\dist\styles\report.timesheet.js.map" />
+    <Content Include="wwwroot\dist\styles\report.unpaid.leave.summary.js.map" />
+    <Content Include="wwwroot\dist\styles\report.weekendleave.detail.js.map" />
+    <Content Include="wwwroot\dist\styles\report.weeklyworkinghours.js.map" />
+    <Content Include="wwwroot\dist\styles\report.yearlyovertime.js.map" />
+    <Content Include="wwwroot\dist\styles\schedule.arrange.js.map" />
+    <Content Include="wwwroot\dist\styles\section.create.js.map" />
+    <Content Include="wwwroot\dist\styles\section.index.js.map" />
+    <Content Include="wwwroot\dist\styles\shift.edit.js.map" />
+    <Content Include="wwwroot\dist\styles\shift.index.js.map" />
+    <Content Include="wwwroot\dist\styles\team.discipline.rule.js.map" />
+    <Content Include="wwwroot\dist\styles\team.edit.discipline.manager.js.map" />
+    <Content Include="wwwroot\dist\styles\team.edit.js.map" />
+    <Content Include="wwwroot\dist\styles\team.edit.supervisor.js.map" />
+    <Content Include="wwwroot\dist\styles\team.index.js.map" />
+    <Content Include="wwwroot\dist\styles\team.supervisor.index.js.map" />
+    <Content Include="wwwroot\dist\styles\unit.create.js.map" />
+    <Content Include="wwwroot\dist\styles\unit.index.js.map" />
+    <Content Include="wwwroot\dist\styles\user.management.js.map" />
+    <Content Include="wwwroot\dist\styles\workingcalendars.js.map" />
+    <Content Include="wwwroot\dist\vendors\chosen-manifest.json" />
+    <Content Include="wwwroot\dist\vendors\react-manifest.json" />
+    <Content Include="wwwroot\package-lock.json" />
+    <Content Include="wwwroot\package.json" />
+    <Content Include="wwwroot\sources\libs\SimplePagination\.gitignore" />
+    <Content Include="wwwroot\sources\libs\SimplePagination\bower.json" />
+    <Content Include="wwwroot\sources\libs\SimplePagination\README.md" />
+    <Content Include="wwwroot\sources\styles\abstracts\_mixins.scss" />
+    <Content Include="wwwroot\sources\styles\abstracts\_variables.scss" />
+    <Content Include="wwwroot\sources\styles\base\_common.scss" />
+    <Content Include="wwwroot\sources\styles\base\_typo.scss" />
+    <Content Include="wwwroot\sources\styles\components\_birthday-picker.scss" />
+    <Content Include="wwwroot\sources\styles\components\_breadcrumb.scss" />
+    <Content Include="wwwroot\sources\styles\components\_buttons-new.scss" />
+    <Content Include="wwwroot\sources\styles\components\_buttons.scss" />
+    <Content Include="wwwroot\sources\styles\components\_card.scss" />
+    <Content Include="wwwroot\sources\styles\components\_checbox-switch.scss" />
+    <Content Include="wwwroot\sources\styles\components\_checkbox.scss" />
+    <Content Include="wwwroot\sources\styles\components\_context-menu.scss" />
+    <Content Include="wwwroot\sources\styles\components\_form-filter.scss" />
+    <Content Include="wwwroot\sources\styles\components\_form-horizontal.scss" />
+    <Content Include="wwwroot\sources\styles\components\_icon.scss" />
+    <Content Include="wwwroot\sources\styles\components\_jquery-ui-dialog.scss" />
+    <Content Include="wwwroot\sources\styles\components\_modal.scss" />
+    <Content Include="wwwroot\sources\styles\components\_monpickr.scss" />
+    <Content Include="wwwroot\sources\styles\components\_multiselect-treeview.scss" />
+    <Content Include="wwwroot\sources\styles\components\_panels.scss" />
+    <Content Include="wwwroot\sources\styles\components\_popupAvatar.scss" />
+    <Content Include="wwwroot\sources\styles\components\_react-autocomplete-wrapper.scss" />
+    <Content Include="wwwroot\sources\styles\components\_sweet-modal.scss" />
+    <Content Include="wwwroot\sources\styles\components\_validation.scss" />
+    <Content Include="wwwroot\sources\styles\layout\_filter.scss" />
+    <Content Include="wwwroot\sources\styles\layout\_forms.scss" />
+    <Content Include="wwwroot\sources\styles\layout\_grid.scss" />
+    <Content Include="wwwroot\sources\styles\layout\_header.scss" />
+    <Content Include="wwwroot\sources\styles\layout\_navbar.scss" />
+    <Content Include="wwwroot\sources\styles\layout\_shift.color.scss" />
+    <Content Include="wwwroot\sources\styles\layout\_table.scss" />
+    <Content Include="wwwroot\sources\styles\layout\_toastify.scss" />
+    <Content Include="wwwroot\sources\styles\layout\_toastr.scss" />
+    <Content Include="wwwroot\sources\styles\main.scss" />
+    <Content Include="wwwroot\sources\styles\pages\account\changepwd.scss" />
+    <Content Include="wwwroot\sources\styles\pages\account\edit.profile.scss" />
+    <Content Include="wwwroot\sources\styles\pages\account\index.scss" />
+    <Content Include="wwwroot\sources\styles\pages\addtimerecord.scss" />
+    <Content Include="wwwroot\sources\styles\pages\annual-leave-balance\employee.create.edit.scss" />
+    <Content Include="wwwroot\sources\styles\pages\annual-leave-balance\employee.scss" />
+    <Content Include="wwwroot\sources\styles\pages\annual-leave-balance\index.scss" />
+    <Content Include="wwwroot\sources\styles\pages\calendar\my.working.schedule.scss" />
+    <Content Include="wwwroot\sources\styles\pages\calendar\schedulearrange.scss" />
+    <Content Include="wwwroot\sources\styles\pages\calendar\workingcalendars.scss" />
+    <Content Include="wwwroot\sources\styles\pages\department\create.scss" />
+    <Content Include="wwwroot\sources\styles\pages\department\index.scss" />
+    <Content Include="wwwroot\sources\styles\pages\discipline\details.scss" />
+    <Content Include="wwwroot\sources\styles\pages\discipline\summary.scss" />
+    <Content Include="wwwroot\sources\styles\pages\employee\create.scss" />
+    <Content Include="wwwroot\sources\styles\pages\employee\details.scss" />
+    <Content Include="wwwroot\sources\styles\pages\employee\edit.scss" />
+    <Content Include="wwwroot\sources\styles\pages\employee\index.scss" />
+    <Content Include="wwwroot\sources\styles\pages\employee\log.details.scss" />
+    <Content Include="wwwroot\sources\styles\pages\employee\user.management.scss" />
+    <Content Include="wwwroot\sources\styles\pages\error.scss" />
+    <Content Include="wwwroot\sources\styles\pages\extension-no\create.scss" />
+    <Content Include="wwwroot\sources\styles\pages\extension-no\external.group.scss" />
+    <Content Include="wwwroot\sources\styles\pages\extension-no\index.scss" />
+    <Content Include="wwwroot\sources\styles\pages\function.index.scss" />
+    <Content Include="wwwroot\sources\styles\pages\holiday\create.scss" />
+    <Content Include="wwwroot\sources\styles\pages\holiday\index.scss" />
+    <Content Include="wwwroot\sources\styles\pages\home.index.scss" />
+    <Content Include="wwwroot\sources\styles\pages\joblevel\joblevel.scss" />
+    <Content Include="wwwroot\sources\styles\pages\jobtitle\jobtitle.scss" />
+    <Content Include="wwwroot\sources\styles\pages\memo\memo.edit.scss" />
+    <Content Include="wwwroot\sources\styles\pages\memo\memo.scss" />
+    <Content Include="wwwroot\sources\styles\pages\menu\edit.scss" />
+    <Content Include="wwwroot\sources\styles\pages\menu\index.scss" />
+    <Content Include="wwwroot\sources\styles\pages\message\create.scss" />
+    <Content Include="wwwroot\sources\styles\pages\message\message.scss" />
+    <Content Include="wwwroot\sources\styles\pages\overtime\details.scss" />
+    <Content Include="wwwroot\sources\styles\pages\overtime\edit.scss" />
+    <Content Include="wwwroot\sources\styles\pages\overtime\member.details.scss" />
+    <Content Include="wwwroot\sources\styles\pages\overtime\member.index.scss" />
+    <Content Include="wwwroot\sources\styles\pages\overtime\myrequest.scss" />
+    <Content Include="wwwroot\sources\styles\pages\postnatal\postnatal.scss" />
+    <Content Include="wwwroot\sources\styles\pages\report\attendance.scss" />
+    <Content Include="wwwroot\sources\styles\pages\report\dailyovertime.scss" />
+    <Content Include="wwwroot\sources\styles\pages\report\discipline.summary.per.year.scss" />
+    <Content Include="wwwroot\sources\styles\pages\report\employee.supervisor.scss" />
+    <Content Include="wwwroot\sources\styles\pages\report\manpower.scss" />
+    <Content Include="wwwroot\sources\styles\pages\report\meal.allowance.scss" />
+    <Content Include="wwwroot\sources\styles\pages\report\monthlyovertime.scss" />
+    <Content Include="wwwroot\sources\styles\pages\report\monthlyworkinghours.scss" />
+    <Content Include="wwwroot\sources\styles\pages\report\shiftstatistic.scss" />
+    <Content Include="wwwroot\sources\styles\pages\report\time.record.scss" />
+    <Content Include="wwwroot\sources\styles\pages\report\timesheet.scss" />
+    <Content Include="wwwroot\sources\styles\pages\report\unpaid.leave.summary.scss" />
+    <Content Include="wwwroot\sources\styles\pages\report\weekendleave.detail.scss" />
+    <Content Include="wwwroot\sources\styles\pages\report\weeklyworkinghours.scss" />
+    <Content Include="wwwroot\sources\styles\pages\report\yearlyovertime.scss" />
+    <Content Include="wwwroot\sources\styles\pages\request\change-shift\create.scss" />
+    <Content Include="wwwroot\sources\styles\pages\request\change-shift\myrequest.scss" />
+    <Content Include="wwwroot\sources\styles\pages\request\checkinout\create.scss" />
+    <Content Include="wwwroot\sources\styles\pages\request\employee.request.scss" />
+    <Content Include="wwwroot\sources\styles\pages\request\keepinview\create.scss" />
+    <Content Include="wwwroot\sources\styles\pages\request\latein-earlyout\create.scss" />
+    <Content Include="wwwroot\sources\styles\pages\request\leave\create.scss" />
+    <Content Include="wwwroot\sources\styles\pages\request\leave\myrequest.scss" />
+    <Content Include="wwwroot\sources\styles\pages\section\create.scss" />
+    <Content Include="wwwroot\sources\styles\pages\section\index.scss" />
+    <Content Include="wwwroot\sources\styles\pages\shift\edit.scss" />
+    <Content Include="wwwroot\sources\styles\pages\shift\index.scss" />
+    <Content Include="wwwroot\sources\styles\pages\team\discipline.rule.scss" />
+    <Content Include="wwwroot\sources\styles\pages\team\edit.discipline.manager.scss" />
+    <Content Include="wwwroot\sources\styles\pages\team\edit.scss" />
+    <Content Include="wwwroot\sources\styles\pages\team\edit.supervisor.scss" />
+    <Content Include="wwwroot\sources\styles\pages\team\index.scss" />
+    <Content Include="wwwroot\sources\styles\pages\team\supervisor.index.scss" />
+    <Content Include="wwwroot\sources\styles\pages\unit\create.scss" />
+    <Content Include="wwwroot\sources\styles\pages\unit\index.scss" />
+    <Content Include="wwwroot\sources\styles\pages\workfromhome\index.scss" />
+    <Content Include="wwwroot\sources\styles\vendors\_autocomplete.scss" />
+    <Content Include="wwwroot\sources\styles\vendors\_dataTables.scss" />
+    <Content Include="wwwroot\sources\styles\vendors\_jqueryUI.scss" />
+    <Content Include="wwwroot\sources\styles\vendors\_multiselect.scss" />
+    <Content Include="wwwroot\sources\styles\vendors\_weekpicker.scss" />
+    <Content Include="wwwroot\dist\js\auth.index.js.map" />
+    <Content Include="wwwroot\dist\js\department.create.js.map" />
+    <Content Include="wwwroot\dist\js\department.home.js.map" />
+    <Content Include="wwwroot\dist\js\extensionno.edit.js.map" />
+    <Content Include="wwwroot\dist\js\extensionno.home.js.map" />
+    <Content Include="wwwroot\dist\js\joblevel.index.js.map" />
+    <Content Include="wwwroot\dist\js\jobtitle.index.js.map" />
+    <Content Include="wwwroot\dist\js\section.create.js.map" />
+    <Content Include="wwwroot\dist\js\section.home.js.map" />
+    <Content Include="wwwroot\dist\js\unit.create.js.map" />
+    <Content Include="wwwroot\dist\js\unit.home.js.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Fanex.NexHR.Controllers\Fanex.NexHR.Controllers.csproj">
+      <Project>{1c658966-bb83-46a1-b7ab-7cb368058e7e}</Project>
+      <Name>Fanex.NexHR.Controllers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Fanex.NexHR.Core\Fanex.NexHR.Core.csproj">
+      <Project>{245f4ded-6e59-453e-be42-2efb1f4648d3}</Project>
+      <Name>Fanex.NexHR.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Fanex.NexHR.Models\Fanex.NexHR.Models.csproj">
+      <Project>{89f85e0d-f859-4780-b21b-bd3f3976388b}</Project>
+      <Name>Fanex.NexHR.Models</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Fanex.NexHR.Resources\Fanex.NexHR.Resources.csproj">
+      <Project>{2024da01-8438-47c4-b0cf-e1a93d78d624}</Project>
+      <Name>Fanex.NexHR.Resources</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Fanex.NexHR.Services\Fanex.NexHR.Services.csproj">
+      <Project>{8e5744b4-0732-4997-a5fb-7623f5f694da}</Project>
+      <Name>Fanex.NexHR.Services</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Fanex.NexHR.ViewModels\Fanex.NexHR.ViewModels.csproj">
+      <Project>{f77b7464-3729-47c5-a240-7f21b3a0b23d}</Project>
+      <Name>Fanex.NexHR.ViewModels</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>55196</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>https://localhost:44353/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+</Project>

@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Functions>
+    <Function Name="Auto Jobs">
+        <Setting Key="TimeRecord_ImportData" SpName="TimeRecord_ImportData" DbName="nexhrx" Plain="0" />
+        <Setting Key="Auto_EmployeeCalendar_UpdateIsPublic" SpName="Auto_EmployeeCalendar_UpdateIsPublic" DbName="nexhrx" Plain="0" />
+        <Setting Key="Auto_EmployeeCalendar_InsertDefaultShift" SpName="Auto_EmployeeCalendar_InsertDefaultShift" DbName="nexhrx" Plain="0" />
+        <Setting Key="Auto_EmployeeCalendar_InsertWeeklyDefaultShift" SpName="Auto_EmployeeCalendar_InsertWeeklyDefaultShift" DbName="nexhrx" Plain="0" />
+        <Setting Key="Auto_Postnatal_UpdateWorkingHour" SpName="Auto_Postnatal_UpdateWorkingHour" DbName="nexhrx" Plain="0" />
+        <Setting Key="Auto_AnnualLeaveBalance_Update" SpName="Auto_AnnualLeaveBalance_Update" DbName="nexhrx" Plain="0" />
+        <Setting Key="Auto_AnnualLeaveBalance_UpdateForNewEmployee" SpName="Auto_AnnualLeaveBalance_UpdateForNewEmployee" DbName="nexhrx" Plain="0" />
+        <Setting Key="Auto_AnnualLeaveBalance_Get" SpName="Auto_AnnualLeaveBalance_Get" DbName="nexhrx" Plain="0" />
+        <Setting Key="Holiday_AutoGenerate" SpName="Holiday_AutoGenerate" DbName="nexhrx" Plain="0" />
+    </Function>
+    <Function Name="MailDeliver">
+        <Setting Key="MailRecorder_GetSetting" SpName="MailRecorder_GetSetting" DbName="DBMA.bodb_Maintenance.bodbAdminNet">
+            <Mapping DataField="SettingID" ObjectProperty="AppId" />
+        </Setting>
+        <Setting Key="MailRecorder_InsError" SpName="MailRecorder_InsError" DbName="DBMA.bodb_Maintenance.bodbAdminNet" />
+        <Setting Key="MailRecorder_InsRecord" SpName="MailRecorder_InsRecord" DbName="DBMA.bodb_Maintenance.bodbAdminNet" />
+        <Setting Key="MailRecorder_UpdateMailStatus" SpName="MailRecorder_UpdateMailStatus" DbName="DBMA.bodb_Maintenance.bodbAdminNet" />
+    </Function>
+    <Function Name="Sync Data">
+        <Setting Key="Sync_WorkingShift_GetLastModifiedDate" SpName="Sync_WorkingShift_GetLastModifiedDate" DbName="nexhrx" Plain="0" />
+        <Setting Key="Sync_WorkingShift_Import" SpName="Sync_WorkingShift_Import" DbName="nexhrx" Plain="0" />
+        <Setting Key="HRM_SyncData_GroupReport_GetEmployeeInfo" SpName="HRM_SyncData_GroupReport_GetEmployeeInfo" DbName="nexhrx" Plain="0" />
+    </Function>
+</Functions>

@@ -1,0 +1,13 @@
+﻿namespace Fanex.NexHR.Criteria.Overtime
+{
+    using Fanex.Data.Repository;
+
+    public class GetMonthlyOvertimeRequestDetailsByIdCriteria : CriteriaBase
+    {
+        public long RequestId { get; set; }
+
+        public override string GetSettingKey() => "Overtime_GetMonthlyRequestDetailsById";
+
+        public override bool IsValid() => RequestId > 0;
+    }
+}

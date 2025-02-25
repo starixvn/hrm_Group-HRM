@@ -1,0 +1,19 @@
+﻿@using Fanex.NexHR.Resources
+@model int
+@{
+    ViewBag.Title = @Labels.EditSection;
+}
+@section css{
+    <link href="~/wwwroot/dist/styles/section.create.css" rel="stylesheet" />
+}
+@section js{
+    <script>window.sectionId = @Model;</script>
+    <script src="~/wwwroot/dist/js/section.edit.js"></script>
+}
+@section Breadcrumb {
+    <a class="step">@Labels.SASpace</a>
+    <a class="step" href="@Url.Action("index", "section")">@Labels.SectionManagement</a>
+    <span class="step">@ViewBag.Title</span>
+}
+<h2 class="page-title">@Labels.Edit</h2>
+<div id="edit-section"></div>

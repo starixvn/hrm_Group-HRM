@@ -1,0 +1,100 @@
+﻿@import '../../../abstracts/variables';
+@import '../../../abstracts/mixins';
+@import '../../../components/buttons-new';
+@import '../../../components/card';
+@import '../../../components/form-horizontal';
+@import '../../../components/validation';
+@import '../../../components/jquery-ui-dialog';
+@import '../../../layout/table';
+@import '../../../vendors/autocomplete';
+
+.card {
+    min-width: 800px;
+
+    .leave-info {
+        padding: 7px;
+        background-color: #edf1dc;
+        border: 1px solid;
+        border-color: #a5a0a0;
+        color: #f30c0c;
+        line-height: 2;
+        margin-bottom: 15px;
+
+        .infobalance {
+            color: #232222;
+            font-style: italic;
+            font-weight: bold;
+        }
+
+        .numberbalance {
+            color: Red;
+        }
+    }
+
+    .leavetype-info {
+        margin-left: 5px;
+        cursor: pointer;
+        color: #337ab7;
+    }
+
+    .totaldays {
+        width: 50px;
+        text-align: center;
+    }
+
+    .time-businesstrip {
+        display: flex;
+        align-items: center;
+
+        input.form-control {
+            width: 70px;
+        }
+    }
+
+    .time-isafterday {
+        margin-left: 10px;
+
+        input[type="checkbox"] {
+            margin: 0;
+        }
+
+        .control-label {
+            padding: 0;
+            font-weight: normal;
+        }
+    }
+
+    .leave-details {
+        width: 100%;
+        margin-left: 10px;
+    }
+
+    .table {
+        margin: 0 !important;
+
+        .timehalfday {
+            display: flex;
+            align-items: center;
+
+            select {
+                min-width: 70px;
+            }
+
+            input[type="checkbox"] {
+                margin: 0 5px;
+            }
+        }
+
+        .footleavedetail {
+            background: #EDF1DC;
+
+            td {
+                font-weight: bold;
+            }
+        }
+    }
+}
+
+.success ul {
+    margin: 0;
+}

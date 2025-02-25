@@ -1,0 +1,45 @@
+﻿namespace Fanex.NexHR.ViewModels.AnnualLeave
+{
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
+    using System.Web.Mvc;
+    using Fanex.NexHR.Core.Constants;
+    using Fanex.NexHR.Resources;
+
+#pragma warning disable S109 // Magic numbers should not be used
+    public class BaseAnnualLeaveBalanceViewModel : IValidatableObject
+    {
+        [Required(ErrorMessageResourceType = typeof(Messages), ErrorMessageResourceName = nameof(Messages.RequiredErrorMessage))]
+        [Display(ResourceType = typeof(Labels), Name = nameof(Labels.TotalDays))]
+        public decimal? TotalDays { get; set; }
+
+        [AllowHtml]
+        [StringLength(4000, ErrorMessageResourceType = typeof(Messages), ErrorMessageResourceName = nameof(Messages.StringLengthErrorMessage))]
+        [Display(ResourceType = typeof(Labels), Name = nameof(Labels.Description))]
+        public string Description { get; set; }
+
+        [Required]
+        [DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:MMM dd, yyyy}", ApplyFormatInEditMode = true)]
+        [Display(ResourceType = typeof(Labels), Name = nameof(Labels.AffectFrom))]
+        public DateTime AffectedFrom { get; set; }
+
+        public decimal DeductDays => TotalDays.HasValue && TotalDays.Value < 0 ? -TotalDays.Value : 0;
+
+        public decimal CreditDays => TotalDays.HasValue && TotalDays.Value > 0 ? TotalDays.Value : 0;
+
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            IList<ValidationResult> result = new List<ValidationResult>();
+
+            if (TotalDays == 0 || TotalDays % Constants.HalfDayOffValue != 0)
+            {
+                var validation = new ValidationResult($"{Labels.TotalDays} is invalid.", new[] { "TotalDays" });
+                result.Add(validation);
+            }
+
+            return result;
+        }
+    }
+}

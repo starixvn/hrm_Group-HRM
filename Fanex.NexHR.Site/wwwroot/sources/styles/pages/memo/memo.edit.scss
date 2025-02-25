@@ -1,0 +1,65 @@
+﻿@import '~tinymce/skins/ui/oxide/skin.min.css';
+@import '~tinymce/skins/ui/oxide/content.min.css';
+
+@import '../../abstracts/_variables.scss';
+@import '../../abstracts/mixins';
+@import '../../components/buttons-new';
+@import '../../components/_validation.scss';
+@import '../../components/_form-horizontal.scss';
+@import '../../components/_card.scss';
+@import '../../components/_checkbox.scss';
+
+.card {
+    width: 800px;
+}
+
+.icon-delete {
+    color: #da5350;
+}
+
+.form-horizontal {
+    display: flex;
+    flex-wrap: wrap;
+
+    .form-group--m {
+        width: 300px;
+        margin-right: 50px;
+
+        label-form {
+            width: 12rem;
+        }
+
+        .input-form,
+        .calendar-form {
+            width: calc(100% - 12rem);
+        }
+    }
+
+    .form-group--l {
+        width: 700px;
+
+        label-form {
+            width: 10rem;
+        }
+
+        .input-form {
+            width: calc(100% - 12rem);
+
+            textarea {
+                height: 15rem;
+            }
+        }
+    }
+
+    .input-form {
+        .radioButton {
+            display: inline;
+            margin-right: 25px;
+
+            label {
+                padding: 5px;
+                font-weight: normal;
+            }
+        }
+    }
+}

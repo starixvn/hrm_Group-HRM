@@ -1,0 +1,19 @@
+﻿@using Fanex.NexHR.Resources
+@model ExtensionNoModel
+@{
+    ViewBag.Title = Labels.Create;
+}
+@section css{
+    <link href="~/wwwroot/dist/styles/extensionno.create.css" rel="stylesheet" />
+}
+@section js{
+    <script src="~/wwwroot/dist/js/extensionno.create.js"></script>
+}
+@section Breadcrumb {
+    <a class="step">@Labels.CompanySpace</a>
+    <a class="step" href="@Url.Action("index", "ExtensionNo")">@Labels.ExtensionNumber</a>
+    <span class="step">@ViewBag.Title</span>
+}
+<h2 class="page-title">@ViewBag.Title</h2>
+
+<div id="create-extension-no"></div>

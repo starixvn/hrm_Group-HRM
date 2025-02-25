@@ -1,0 +1,43 @@
+﻿@using Fanex.NexHR.Core
+@using Fanex.NexHR.Core.Enums
+@using Fanex.NexHR.Resources
+@using Fanex.NexHR.Models.Request.ChangeShift
+@model List<ChangeShiftDetail>
+<table class="table table-custom">
+    <thead>
+        <tr>
+            <th>@Labels.Date</th>
+            <th>@Labels.Schedule</th>
+            <th>@Labels.ChangeTo</th>
+            <th>@Labels.Remark</th>
+            <th>@Labels.Waive</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (ChangeShiftDetail item in Model)
+        {
+            var disciplineTypeId = (byte)DisciplineType.ChangeShift;
+            <tr>
+                <td>@item.OnDate.ToDayOfWeekFormatedDate()</td>
+                <td>@(item.FromShiftId.Equals(-1) ? Labels.Off : item.FromShift)</td>
+                <td>
+                    @(item.ToShiftId.Equals(-1) ? Labels.Off : item.ToShift)
+                </td>
+                <td>
+                    @if (!string.IsNullOrWhiteSpace(item.Remark))
+                    {
+                        <span class="fa fa-comment tooltip-tipsy" title="@item.Remark"></span>
+                    }
+                    else
+                    {
+                        <span>-</span>
+                    }
+                </td>
+                <td class="violationIgnored">
+                    <input type="radio" class="chk-ignore"
+                           data-workdate="@item.OnDate.Date.ToString("d")" data-disciplinetypeid="@disciplineTypeId" />
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

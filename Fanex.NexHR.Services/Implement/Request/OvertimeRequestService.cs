@@ -1,0 +1,261 @@
+﻿namespace Fanex.NexHR.Services
+{
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using Core.Services;
+    using Fanex.NexHR.Core;
+    using Fanex.NexHR.Core.Constants;
+    using Fanex.NexHR.Core.Enums;
+    using Fanex.NexHR.Core.Models;
+    using Fanex.NexHR.Core.XMLExtensions;
+    using Fanex.NexHR.Criteria.Overtime;
+    using Fanex.NexHR.Models.Overtime;
+    using Fanex.NexHR.Models.Supervisor;
+    using Fanex.NexHR.Repositories;
+    using Fanex.NexHR.Services.Interfaces;
+    using Hangfire;
+
+    public class OvertimeRequestService : IOvertimeRequestService
+    {
+        private const byte FromDay = 21;
+        private const byte ToDay = 20;
+
+        private readonly IOvertimeRequestRepository overtimeRepository;
+        private readonly IBaseService baseService;
+        private readonly IEmailService emailService;
+        private readonly ILetstalkService letstalkService;
+
+        public OvertimeRequestService(
+            IOvertimeRequestRepository overtimeRepository,
+            IBaseService baseService,
+            IEmailService emailService,
+            ILetstalkService letstalkService)
+        {
+            this.overtimeRepository = overtimeRepository;
+            this.baseService = baseService;
+            this.emailService = emailService;
+            this.letstalkService = letstalkService;
+        }
+
+        public IEnumerable<MonthlyOvertimeRequest> GetMonthlyRequestByEmployeeId(int employeeId, int year)
+        {
+            var today = DateTimeOffset.Now;
+            var fromDate = new DateTimeOffset(year, 1, 1, 0, 0, 0, TimeSpan.Zero);
+            var toDate = today;
+
+            if (today.Year != year)
+            {
+                toDate = new DateTimeOffset(year, Constants.December, 1, 0, 0, 0, TimeSpan.Zero);
+            }
+
+            if (today.Day > ToDay)
+            {
+                toDate = toDate.AddMonths(1);
+            }
+
+            if(toDate.Year > year)
+            {
+                toDate = new DateTimeOffset(year, Constants.December, 1, 0, 0, 0, TimeSpan.Zero);
+            }
+
+            var criteria = new GetMonthlyOvertimeRequestByEmployeeIdCriteria
+            {
+                EmployeeId = employeeId,
+                FromDate = fromDate.Date,
+                ToDate = toDate.Date
+            };
+            IEnumerable<MonthlyOvertimeRequest> monthlyRequests = overtimeRepository.GetMonthlyRequestByEmployeeId(criteria);
+
+            return monthlyRequests;
+        }
+
+        public MonthlyOvertimeRequest GetMonthlyRequestDetailsByEmployeeId(int employeeId, DateTime month)
+        {
+            (var fromDate, var toDate) = GetDateRange(month.FirstDayOfMonth());
+            var criteria = new GetMonthlyOvertimeRequestDetailsByEmployeeIdCriteria
+            {
+                EmployeeId = employeeId,
+                Month = month.FirstDayOfMonth(),
+                FromDate = fromDate,
+                ToDate = toDate
+            };
+            MonthlyOvertimeRequest monthlyRequest = overtimeRepository.GetMonthlyRequestDetailsByEmployeeId(criteria);
+
+            return monthlyRequest ?? new MonthlyOvertimeRequest();
+        }
+
+        public IEnumerable<MonthlyOvertimeRequest> GetMemberMonthlyRequest(GetMonthlyOvertimeRequestParam param)
+        {
+            var criteria = new GetMemberMonthlyOvertimeRequestCriteria
+            {
+                ActorId = param.ActorId,
+                Month = param.Month,
+                StatusIds = param.StatusIds,
+                TeamIds = param.TeamIds,
+                EmployeeId = param.EmployeeId,
+                IsProcessor = param.IsProcessor,
+                OvertimeType = param.OvertimeType,
+                IsLocal = param.IsLocal
+            };
+            IEnumerable<MonthlyOvertimeRequest> memberRequests = overtimeRepository.GetMemberMonthlyRequest(criteria);
+            return memberRequests;
+        }
+
+        public MonthlyOvertimeRequest GetMonthlyRequestDetailsById(long requestId)
+        {
+            var criteria = new GetMonthlyOvertimeRequestDetailsByIdCriteria
+            {
+                RequestId = requestId
+            };
+            MonthlyOvertimeRequest monthlyRequest = overtimeRepository.GetMonthlyRequestDetailsByEmployeeId(criteria);
+
+            return monthlyRequest ?? new MonthlyOvertimeRequest();
+        }
+
+        public void SendMailToReminderClaimOvertime(string subject, string content)
+        {
+            var criteria = new GetEmployeeToRemindClaimOvertimeCriteria();
+            var employees = baseService.GetData<SupervisorNameModel>(criteria).ToList();
+
+            if (employees != null)
+            {
+                List<string> emailList = employees.Where(t => !string.IsNullOrWhiteSpace(t.Email)).Select(t => t.Email).ToList();
+                List<string> letstalkList = employees.Where(t => !string.IsNullOrWhiteSpace(t.LetsTalk)).Select(t => t.LetsTalk).ToList();
+                var emails = SplitList(emailList, 100);
+                var letstalks = SplitList(letstalkList, 100);
+
+                foreach (List<string> list in emails)
+                {
+                    var mailTo = string.Join(";", list);
+                    emailService.SendEmail(ConfigSettings.EmailSetting, mailTo, string.Empty, subject, content);
+                }
+
+                foreach (List<string> letstalk in letstalks)
+                {
+                    var letstalkJoin = string.Join(";", letstalk);
+                    BackgroundJob.Enqueue(() => letstalkService.SendNotification(letstalkJoin, subject, content));
+                }
+            }
+        }
+
+        public bool CheckInvalidOvertimes(string requestIds)
+        {
+            var isInvalid = false;
+            var criteria = new GetOvertimeDetailsByRequestIdsCriteria { RequestIds = requestIds };
+            var overtimes = baseService.GetData<DailyOvertimeRequest>(criteria).ToList();
+            if (overtimes != null && overtimes.Any())
+            {
+                var index = 0;
+                while (!isInvalid && index < overtimes.Count)
+                {
+                    isInvalid = CheckInvalidOvertimes(overtimes[index]);
+                    index++;
+                }
+            }
+
+            return isInvalid;
+        }
+
+        public CommandResult EditMonthlyRequest(int actorId, EditMonthlyOvertimeRequest model)
+        {
+            var criteria = new EditMonthlyOvertimeRequestCriteria
+            {
+                ActorId = actorId,
+                EmployeeId = model.EmployeeId,
+                Month = model.Month.FirstDayOfMonth(),
+                VerifierId = model.VerifierId,
+                ApproverId = model.ApproverId,
+                DailyDetailsXml = model.DailyOvertimes.ToXML().ToString()
+            };
+            return baseService.ExecuteNonQuery(criteria);
+        }
+
+        public CommandResult EditMonthlyRequestStatus(int actorId, string requestIds, RequestCommand command, byte roleId)
+        {
+            var criteria = new EditMonthlyOvertimeRequestStatusCriteria
+            {
+                RequestCommand = command,
+                RequestIds = requestIds,
+                ActorId = actorId,
+                RoleId = roleId
+            };
+            return baseService.ExecuteNonQuery(criteria);
+        }
+
+        private static bool CheckInvalidOvertimes(DailyOvertimeRequest overtime)
+        {
+            var isInvalid = false;
+            if ((!overtime.IsHoliday && !overtime.IsOffDay) || overtime.IsKeepInView)
+            {
+                isInvalid |= IsInvalidKeepInView(overtime);
+            }
+
+            if (overtime.IsOffDay)
+            {
+                isInvalid |= IsInvalidOffDay(overtime);
+            }
+
+            if (overtime.IsHoliday)
+            {
+                isInvalid |= IsInvalidHoliday(overtime);
+            }
+
+            return isInvalid;
+        }
+
+        private static bool IsInvalidKeepInView(DailyOvertimeRequest overtime)
+        {
+            return (!overtime.OffHours.Equals(0)
+                || !overtime.PublicHours.Equals(0)
+                || overtime.ActualWorkingHours < (overtime.TotalShiftHours + overtime.NormalHours)
+                || overtime.ActualWorkingHours < (overtime.TotalShiftHours + overtime.SpecialHours));
+        }
+
+        private static bool IsInvalidOffDay(DailyOvertimeRequest overtime)
+        {
+            return (!overtime.NormalHours.Equals(0)
+                || !overtime.PublicHours.Equals(0)
+                || overtime.ActualWorkingHours < overtime.OffHours);
+        }
+
+        private static bool IsInvalidHoliday(DailyOvertimeRequest overtime)
+        {
+            return (!overtime.NormalHours.Equals(0)
+                || !overtime.OffHours.Equals(0)
+                || overtime.ActualWorkingHours < overtime.PublicHours);
+        }
+
+        private static List<List<string>> SplitList(List<string> locations, int size)
+        {
+            var emails = new List<List<string>>();
+            for (int i = 0; i < locations.Count; i += size)
+            {
+                emails.Add(locations.GetRange(i, Math.Min(size, locations.Count - i)));
+            }
+
+            return emails;
+        }
+
+        private static ValueTuple<DateTime, DateTime> GetDateRange(DateTime month)
+        {
+            var newRuleApplyFromMonth = new DateTimeOffset(2020, 5, 1, 0, 0, 0, TimeSpan.Zero);
+            var lastMonth = month.AddMonths(-1);
+            var fromDate = new DateTimeOffset(lastMonth.Year, lastMonth.Month, 10, 0, 0, 0, TimeSpan.Zero);
+            var toDate = new DateTimeOffset(month.Year, month.Month, 9, 0, 0, 0, TimeSpan.Zero);
+
+            if(month == newRuleApplyFromMonth)
+            {
+                toDate = new DateTimeOffset(month.Year, month.Month, ToDay, 0, 0, 0, TimeSpan.Zero);
+            }
+
+            if (month > newRuleApplyFromMonth)
+            {
+                fromDate = new DateTimeOffset(lastMonth.Year, lastMonth.Month, FromDay, 0, 0, 0, TimeSpan.Zero);
+                toDate = new DateTimeOffset(month.Year, month.Month, ToDay, 0, 0, 0, TimeSpan.Zero);
+            }
+
+            return (fromDate.Date, toDate.Date);
+        }
+    }
+}

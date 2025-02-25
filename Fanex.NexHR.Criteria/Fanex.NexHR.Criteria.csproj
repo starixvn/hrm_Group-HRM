@@ -1,0 +1,348 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{CB7D5BFC-72C1-487B-BC31-EB850CEDE998}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Fanex.NexHR.Criteria</RootNamespace>
+    <AssemblyName>Fanex.NexHR.Criteria</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Dapper, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Dapper.2.0.30\lib\net461\Dapper.dll</HintPath>
+    </Reference>
+    <Reference Include="Fanex.Data, Version=4.2.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Fanex.Data.4.2.2\lib\net461\Fanex.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Fanex.Data.Repository, Version=4.2.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Fanex.Data.Repository.4.2.2\lib\net461\Fanex.Data.Repository.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net47\System.ValueTuple.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AnnualLeave\AdjustEmployeeAnnualLeaveCriteria.cs" />
+    <Compile Include="AnnualLeave\DeleteAnnualLeaveTransactionCriteria.cs" />
+    <Compile Include="AnnualLeave\GetAnnualLeaveBalanceCriteria.cs" />
+    <Compile Include="AnnualLeave\GetAnnualLeaveTransactionByIdCriteria.cs" />
+    <Compile Include="AnnualLeave\GetAnnualLeaveTransactionCriteria.cs" />
+    <Compile Include="AnnualLeave\InsertAnnualLeaveTransactionCriteria.cs" />
+    <Compile Include="AnnualLeave\ResetAnnualLeaveCriteria.cs" />
+    <Compile Include="AnnualLeave\UpdateAnnualLeaveTransactionCriteria.cs" />
+    <Compile Include="API\Request\GetPendingRequestByUserIdCriteria.cs" />
+    <Compile Include="Auth\GetEmployeeLoginByUserIdCriteria.cs" />
+    <Compile Include="BackgroundJob\GetAnnualLeaveBalanceCriteria.cs" />
+    <Compile Include="BackgroundJob\ImportTimeRecordCriteria.cs" />
+    <Compile Include="BackgroundJob\InsertScheduleByDefaultShiftCriteria.cs" />
+    <Compile Include="BackgroundJob\InsertScheduleByWeeklyDefaultShiftCriteria.cs" />
+    <Compile Include="BackgroundJob\PublishScheduleCriteria.cs" />
+    <Compile Include="BackgroundJob\UpdateAnnualLeaveBalanceCriteria.cs" />
+    <Compile Include="BackgroundJob\UpdateAnnualLeaveBalanceForNewEmployeeCriteria.cs" />
+    <Compile Include="BackgroundJob\UpdateWorkingHourPerDayCriteria.cs" />
+    <Compile Include="Calendar\GetEmployeeCalendarByMonthCriteria.cs" />
+    <Compile Include="Calendar\GetWorkingCalendarWeeklyCriteria.cs" />
+    <Compile Include="Country\GetAllCountryCriteria.cs" />
+    <Compile Include="Dashboard\GetMemberRequestCriteria.cs" />
+    <Compile Include="Dashboard\GetMySpaceCriteria.cs" />
+    <Compile Include="Department\DeleteDepartmentCriteria.cs" />
+    <Compile Include="Department\GetDepartmentByActiveCriteria.cs" />
+    <Compile Include="Department\GetDepartmentByIdCriteria.cs" />
+    <Compile Include="Department\InsertDepartmentCriteria.cs" />
+    <Compile Include="Department\UpdateDepartmentCriteria.cs" />
+    <Compile Include="Discipline\DeleteOtherDisciplineCriteria.cs" />
+    <Compile Include="Discipline\DeleteWeekendLeaveCriteria.cs" />
+    <Compile Include="Discipline\GetDisciplineDetailCriteria.cs" />
+    <Compile Include="Discipline\GetDisciplineSummaryCriteria.cs" />
+    <Compile Include="Discipline\GetDisciplineTypeCriteria.cs" />
+    <Compile Include="Discipline\GetMemberToAddOtherDiscipineBySupervisorIdCriteria.cs" />
+    <Compile Include="Discipline\GetOtherDisciplineOfEmployeeCriteria.cs" />
+    <Compile Include="Discipline\GetOtherDisciplineTypeCriteria.cs" />
+    <Compile Include="Discipline\InsertOtherDisciplineCriteria.cs" />
+    <Compile Include="Discipline\UpdateIgnoredDisciplineCriteria.cs" />
+    <Compile Include="EmployeeRelationship\DeleteRelationshipCriteria.cs" />
+    <Compile Include="EmployeeRelationship\EditRelationshipCriteria.cs" />
+    <Compile Include="EmployeeRelationship\GetRelationshipByEmployeeIdCriteria.cs" />
+    <Compile Include="EmployeeRelationship\GetRelationshipByIdCriteria.cs" />
+    <Compile Include="EmployeeRelationship\InsertRelationshipCriteria.cs" />
+    <Compile Include="EmployeeWorkFromHome\DeleteEmployeeWorkFromHomeCriteria.cs" />
+    <Compile Include="EmployeeWorkFromHome\GetEmployeeWorkFromHomeByIdCriteria.cs" />
+    <Compile Include="EmployeeWorkFromHome\GetEmployeeWorkFromHomeCriteria.cs" />
+    <Compile Include="EmployeeWorkFromHome\InsertEmployeeWorkFromHomeCriteria.cs" />
+    <Compile Include="EmployeeWorkFromHome\UpdateEmployeeWorkFromHomeCriteria.cs" />
+    <Compile Include="Employee\DeleteEmployeeCriteria.cs" />
+    <Compile Include="Employee\EditEmployeeSupervisorCriteria.cs" />
+    <Compile Include="Employee\EditPasswordCriteria.cs" />
+    <Compile Include="Employee\GenerateEmployeeCodeCriteria.cs" />
+    <Compile Include="Employee\GetAllEmployeeCriteria.cs" />
+    <Compile Include="Employee\GetEmployeeByIdCriteria.cs" />
+    <Compile Include="Employee\GetEmployeeByRoleCriteria.cs" />
+    <Compile Include="Employee\GetEmployeeFullProfileCriteria.cs" />
+    <Compile Include="Employee\GetHRAndSupervisorByEmpIdCriteria.cs" />
+    <Compile Include="Employee\GetMemberByGenderCriteria.cs" />
+    <Compile Include="Employee\GetMemberByManagerCriteria.cs" />
+    <Compile Include="Employee\GetUploadedFileCriteria.cs" />
+    <Compile Include="Employee\GetUserLoginByDomainUserNameCriteria.cs" />
+    <Compile Include="Employee\InsertEmployeeCriteria.cs" />
+    <Compile Include="Employee\UpdateEmployeeCriteria.cs" />
+    <Compile Include="Employee\UpdateEmployeePersonalInformationCriteria.cs" />
+    <Compile Include="Employee\UpdateUserIdCommand.cs" />
+    <Compile Include="ExtensionNumber\CreateExternalGroupCriteria.cs" />
+    <Compile Include="ExtensionNumber\DeleteExtensionNumberMemberCriteria.cs" />
+    <Compile Include="ExtensionNumber\DeleteExternalGroupCriteria.cs" />
+    <Compile Include="ExtensionNumber\GetAllExtensionNumberCriteria.cs" />
+    <Compile Include="ExtensionNumber\GetExtensionNumberGroupInfoCriteria.cs" />
+    <Compile Include="ExtensionNumber\GetExtensionNumberMemberByIdCriteria.cs" />
+    <Compile Include="ExtensionNumber\InsertExtensionNumberCriteria.cs" />
+    <Compile Include="ExtensionNumber\UpdateExtensionNumberMemberCriteria.cs" />
+    <Compile Include="ExtensionNumber\UpdateExternalNumberCriteria.cs" />
+    <Compile Include="Group\CreateTeamCriteria.cs" />
+    <Compile Include="Group\DeleteTeamCriteria.cs" />
+    <Compile Include="Group\EditDisciplineRuleCriteria.cs" />
+    <Compile Include="Group\EditTeamCriteria.cs" />
+    <Compile Include="Group\EditTeamSupervisorCriteria.cs" />
+    <Compile Include="Group\GetAllGroupCriteria.cs" />
+    <Compile Include="Group\GetDisciplineManagerByTeamIdCriteria.cs" />
+    <Compile Include="Group\GetDisciplineRuleByTeamCriteria.cs" />
+    <Compile Include="Group\GetGroupByIdCriteria.cs" />
+    <Compile Include="Group\GetGroupBySupervisorCriteria.cs" />
+    <Compile Include="Group\GetTeamSupervisorByRoleIdCriteria.cs" />
+    <Compile Include="Holidays\AutoGenerateHoliDayCriteria.cs" />
+    <Compile Include="Holidays\CreateHolidayCriteria.cs" />
+    <Compile Include="Holidays\DeleteHolidayCriteria.cs" />
+    <Compile Include="Holidays\EditHolidayCriteria.cs" />
+    <Compile Include="Holidays\GetHolidayByIdCriteria.cs" />
+    <Compile Include="Holidays\GetHolidaysCriteria.cs" />
+    <Compile Include="HospitalizationLeave\DeleteTransactionCriteria.cs" />
+    <Compile Include="HospitalizationLeave\GetSummaryReportCriteria.cs" />
+    <Compile Include="HospitalizationLeave\GetTransactionByEmployeeIdCriteria.cs" />
+    <Compile Include="HospitalizationLeave\GetTransactionByIdCriteria.cs" />
+    <Compile Include="HospitalizationLeave\InsertMultipleTransactionCriteria.cs" />
+    <Compile Include="HospitalizationLeave\InsertTransactionCriteria.cs" />
+    <Compile Include="HospitalizationLeave\ResetMultipleTransactionCriteria.cs" />
+    <Compile Include="HospitalizationLeave\UpdateTransactionCriteria.cs" />
+    <Compile Include="JobLevel\DeleteJobLevelCriteria.cs" />
+    <Compile Include="JobLevel\GetJobLevelCriteria.cs" />
+    <Compile Include="JobLevel\InsertJobLevelCriteria.cs" />
+    <Compile Include="JobLevel\UpdateJobLevelCriteria.cs" />
+    <Compile Include="LeaveType\GetLeaveTypeCriteria.cs" />
+    <Compile Include="Log\GetLogObjectByIdCriteria.cs" />
+    <Compile Include="Lookup\DeleteLookupDataCriteria.cs" />
+    <Compile Include="Lookup\GetAllLookupDataCriteria.cs" />
+    <Compile Include="Lookup\GetJobTitleCriteria.cs" />
+    <Compile Include="Lookup\InsertLookupDataCriteria.cs" />
+    <Compile Include="Lookup\UpdateLookupDataCriteria.cs" />
+    <Compile Include="Memo\CreateMemoCriteria.cs" />
+    <Compile Include="Memo\DeleteMemoCriteria.cs" />
+    <Compile Include="Memo\EditMemoCriteria.cs" />
+    <Compile Include="Memo\GetAllMemoCriteria.cs" />
+    <Compile Include="Memo\GetMemoByIdCriteria.cs" />
+    <Compile Include="Message\CreateMessageCriteria.cs" />
+    <Compile Include="Message\DeleteMessageByEmployeeCriteria.cs" />
+    <Compile Include="Message\DeleteMessageCriteria.cs" />
+    <Compile Include="Message\EditMessageCriteria.cs" />
+    <Compile Include="Message\EditMessageStatusCriteria.cs" />
+    <Compile Include="Message\GetMessageByCreatorCriteria.cs" />
+    <Compile Include="Message\GetMessageByEmployeeCriteria.cs" />
+    <Compile Include="Message\GetMessageByIdCriteria.cs" />
+    <Compile Include="Message\GetMessageOfEmployeeByIdCriteria.cs" />
+    <Compile Include="Message\GetUnreadMessageOfEmployeeCriteria.cs" />
+    <Compile Include="Overtime\EditMonthlyOvertimeRequestCriteria.cs" />
+    <Compile Include="Overtime\EditMonthlyOvertimeRequestStatusCriteria.cs" />
+    <Compile Include="Overtime\GetEmployeeToRemindClaimOvertimeCriteria.cs" />
+    <Compile Include="Overtime\GetMemberMonthlyOvertimeRequestCriteria.cs" />
+    <Compile Include="Overtime\GetMonthlyOvertimeRequestByEmployeeIdCriteria.cs" />
+    <Compile Include="Overtime\GetMonthlyOvertimeRequestDetailsByEmployeeIdCriteria.cs" />
+    <Compile Include="Overtime\GetMonthlyOvertimeRequestDetailsByIdCriteria.cs" />
+    <Compile Include="Overtime\GetOvertimeDetailsByRequestIdsCriteria.cs" />
+    <Compile Include="Paternity\DeletePaternityCriteria.cs" />
+    <Compile Include="Paternity\GetPaternityByIdCriteria.cs" />
+    <Compile Include="Paternity\GetPaternityCriteria.cs" />
+    <Compile Include="Paternity\InsertPaternityCriteria.cs" />
+    <Compile Include="Paternity\UpdatePaternityCriteria.cs" />
+    <Compile Include="Postnatal\DeletePostnatalCriteria.cs" />
+    <Compile Include="Postnatal\GetPostnatalByIdCriteria.cs" />
+    <Compile Include="Postnatal\GetPostnatalCriteria.cs" />
+    <Compile Include="Postnatal\InsertPostnatalCriteria.cs" />
+    <Compile Include="Postnatal\UpdatePostnatalCriteria.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Report\GetDisciplineSummaryPerYearCriteria.cs" />
+    <Compile Include="Report\GetEmployeeAttendanceCriteria.cs" />
+    <Compile Include="Report\GetEmployeeWorkingCalendarByDateCriteria.cs" />
+    <Compile Include="Report\GetManpowerCategoryCriteria.cs" />
+    <Compile Include="Report\GetManpowerCriteria.cs" />
+    <Compile Include="Report\GetUnpaidLeaveCriteria.cs" />
+    <Compile Include="Report\GetWeekendLeaveDetailCriteria.cs" />
+    <Compile Include="Report\GetWeekendLeaveSummaryCriteria.cs" />
+    <Compile Include="Report\GetWorkingHoursSummaryReportCriteria.cs" />
+    <Compile Include="Report\MealAllowance\GetMealAllowanceDetailReportCriteria.cs" />
+    <Compile Include="Report\MealAllowance\GetMealAllowanceSummaryReportCriteria.cs" />
+    <Compile Include="Report\MonthlyWorkingHours\GetEmployeeRequestCriteria.cs" />
+    <Compile Include="Report\MonthlyWorkingHours\GetMonthlyWorkingHoursCriteria.cs" />
+    <Compile Include="Report\Overtime\GetDailyOvertimeReportCriteria.cs" />
+    <Compile Include="Report\Overtime\GetMonthlyOvertimeDetailsReportCriteria.cs" />
+    <Compile Include="Report\Overtime\GetMonthlyOvertimeReportCriteria.cs" />
+    <Compile Include="Report\Overtime\GetYearlyOvertimeReportCriteria.cs" />
+    <Compile Include="Report\ShiftStatistic\GetShiftStatisticCriteria.cs" />
+    <Compile Include="Report\ShiftStatistic\GetShiftStatisticDetailCriteria.cs" />
+    <Compile Include="Request\ApproveMultipleRequestsCriteria.cs" />
+    <Compile Include="Request\ApproveRequestCriteria.cs" />
+    <Compile Include="Request\ChangeShift\CreateChangeShiftRequestCriteria.cs" />
+    <Compile Include="Request\ChangeShift\DeleteChangeShiftRequestCriteria.cs" />
+    <Compile Include="Request\ChangeShift\EditChangeShiftRequestCriteria.cs" />
+    <Compile Include="Request\ChangeShift\GetChangeShiftDetailToReviewDisciplineCriteria.cs" />
+    <Compile Include="Request\ChangeShift\GetChangeShiftRequestByEmployeeCriteria.cs" />
+    <Compile Include="Request\ChangeShift\GetChangeShiftRequestByIdCriteria.cs" />
+    <Compile Include="Request\ChangeShift\GetChangeShiftRequestDetailByIdCriteria.cs" />
+    <Compile Include="Request\ChangeShift\GetChangeShiftRequestHistoryByIdCriteria.cs" />
+    <Compile Include="Request\ChangeShift\GetDisableDateForMoveOffDayRequestCriteria.cs" />
+    <Compile Include="Request\ChangeShift\GetNumberOfRequestCriteria.cs" />
+    <Compile Include="Request\ChangeShift\GetWorkingCalendarForRequestCriteria.cs" />
+    <Compile Include="Request\CheckInOut\CreateCheckInOutRequestCriteria.cs" />
+    <Compile Include="Request\CheckInOut\DeleteCheckInOutRequestCriteria.cs" />
+    <Compile Include="Request\CheckInOut\EditCheckInOutRequestCriteria.cs" />
+    <Compile Include="Request\CheckInOut\GetCheckInOutDetailToReviewDisciplineCriteria.cs" />
+    <Compile Include="Request\CheckInOut\GetCheckInOutRequestByDateCriteria.cs" />
+    <Compile Include="Request\CheckInOut\GetCheckInOutRequestByIdCriteria.cs" />
+    <Compile Include="Request\CheckInOut\GetCheckInOutRequestHistoryByIdCriteria.cs" />
+    <Compile Include="Request\CheckInOut\GetDisabledDateCriteria.cs" />
+    <Compile Include="Request\GetLeaveBalanceCriteria.cs" />
+    <Compile Include="Request\GetLeaveRequestDetailToIgnoreByIdCriteria.cs" />
+    <Compile Include="Request\GetNumberRequestInMonthCriteria.cs" />
+    <Compile Include="Request\GetRequestCriteria.cs" />
+    <Compile Include="Request\GetRequestRelatedPeopleCriteria.cs" />
+    <Compile Include="Request\GetVerifierAndApproverCriteria.cs" />
+    <Compile Include="Request\KeepInView\CreateKeepInViewRequestCriteria.cs" />
+    <Compile Include="Request\KeepInView\DeleteKeepInViewRequestCriteria.cs" />
+    <Compile Include="Request\KeepInView\EditKeepInViewRequestCriteria.cs" />
+    <Compile Include="Request\KeepInView\GetDisabledDateCriteria.cs" />
+    <Compile Include="Request\KeepInView\GetKeepInViewRequestByDateCriteria.cs" />
+    <Compile Include="Request\KeepInView\GetKeepInViewRequestByIdCriteria.cs" />
+    <Compile Include="Request\KeepInView\GetKeepInViewRequestHistoryByIdCriteria.cs" />
+    <Compile Include="Request\LateInEarlyOut\DeleteLateInEarlyOutRequestCriteria.cs" />
+    <Compile Include="Request\LateInEarlyOut\GetActualLateInEarlyOutCriteria.cs" />
+    <Compile Include="Request\LateInEarlyOut\GetDisabledDateCriteria.cs" />
+    <Compile Include="Request\LateInEarlyOut\GetLateInEarlyOutDetailToReviewDisciplineCriteria.cs" />
+    <Compile Include="Request\LateInEarlyOut\GetLateInEarlyOutRequestByDateCriteria.cs" />
+    <Compile Include="Request\LateInEarlyOut\GetLateInEarlyOutRequestByIdCriteria.cs" />
+    <Compile Include="Request\LateInEarlyOut\GetLateInEarlyOutRequestHistoryByIdCriteria.cs" />
+    <Compile Include="Request\LateInEarlyOut\InsertLateInEarlyOutRequestCriteria.cs" />
+    <Compile Include="Request\LateInEarlyOut\UpdateLateInEarlyOutRequestCriteria.cs" />
+    <Compile Include="Request\Leave\BaseLeaveRequestCriteria.cs" />
+    <Compile Include="Request\Leave\DeleteLeaveRequestCriteria.cs" />
+    <Compile Include="Request\Leave\GetDisabledDateCriteria.cs" />
+    <Compile Include="Request\Leave\GetEmployeeCalendarCriteria.cs" />
+    <Compile Include="Request\Leave\GetLeaveRequestByDateCriteria.cs" />
+    <Compile Include="Request\Leave\GetLeaveRequestByIdCriteria.cs" />
+    <Compile Include="Request\Leave\GetLeaveRequestDetailByIdCriteria.cs" />
+    <Compile Include="Request\Leave\GetLeaveRequestDetailToReviewDisciplineCriteria.cs" />
+    <Compile Include="Request\Leave\GetLeaveRequestHistoryByIdCriteria.cs" />
+    <Compile Include="Request\Leave\GetTotalLeaveDayCriteria.cs" />
+    <Compile Include="Request\Leave\InsertLeaveRequestCriteria.cs" />
+    <Compile Include="Request\Leave\UpdateLeaveRequestCriteria.cs" />
+    <Compile Include="Request\RejectRequestCriteria.cs" />
+    <Compile Include="Request\ResetRequestCriteria.cs" />
+    <Compile Include="Request\VoidRequestCriteria.cs" />
+    <Compile Include="ScheduleArrange\EditDisplayOrderCriteria.cs" />
+    <Compile Include="ScheduleArrange\EditGroupOrderCriteria.cs" />
+    <Compile Include="ScheduleArrange\EditRemarkCriteria.cs" />
+    <Compile Include="ScheduleArrange\EditWeeklyDefaultShiftCriteria.cs" />
+    <Compile Include="ScheduleArrange\EditWeeklyScheduleCriteria.cs" />
+    <Compile Include="ScheduleArrange\GetEmployeeCriteria.cs" />
+    <Compile Include="ScheduleArrange\GetWeeklyScheduleCriteria.cs" />
+    <Compile Include="ScheduleArrange\SyncWorkingShiftCommand.cs" />
+    <Compile Include="Section\DeleteSectionCriteria.cs" />
+    <Compile Include="Section\GetParentBySectionCriteria.cs" />
+    <Compile Include="Section\GetSectionByIdCriteria.cs" />
+    <Compile Include="Section\GetSectionCriteria.cs" />
+    <Compile Include="Section\InsertSectionCriteria.cs" />
+    <Compile Include="Section\UpdateSectionCriteria.cs" />
+    <Compile Include="Shift\CreateShiftCriteria.cs" />
+    <Compile Include="Shift\DeleteShiftCriteria.cs" />
+    <Compile Include="Shift\EditShiftCriteria.cs" />
+    <Compile Include="Shift\GetAllShiftCriteria.cs" />
+    <Compile Include="Shift\GetEmployeeShiftByDateCriteria.cs" />
+    <Compile Include="Shift\GetShiftByEmployeeIdCriteria.cs" />
+    <Compile Include="Shift\GetShiftByIdCriteria.cs" />
+    <Compile Include="SickLeave\DeleteTransactionCriteria.cs" />
+    <Compile Include="SickLeave\GetSummaryReportCriteria.cs" />
+    <Compile Include="SickLeave\GetTransactionByEmployeeIdCriteria.cs" />
+    <Compile Include="SickLeave\GetTransactionByIdCriteria.cs" />
+    <Compile Include="SickLeave\InsertMultipleTransactionCriteria.cs" />
+    <Compile Include="SickLeave\InsertTransactionCriteria.cs" />
+    <Compile Include="SickLeave\ResetMultipleTransactionCriteria.cs" />
+    <Compile Include="SickLeave\UpdateTransactionCriteria.cs" />
+    <Compile Include="Supervisor\GetAllTeamSupervisorCriteria.cs" />
+    <Compile Include="Supervisor\GetDisciplineSettingByEmployeeId.cs" />
+    <Compile Include="Supervisor\GetEmployeeSupervisorByQueryCriteria.cs" />
+    <Compile Include="Supervisor\GetEmployeeSupervisorCriteria.cs" />
+    <Compile Include="Supervisor\GetListSupervisorNameCriteria.cs" />
+    <Compile Include="Supervisor\GetSupervisorByRequestTypeCriteria.cs" />
+    <Compile Include="Supervisor\GetSupervisorByTeamIdCriteria.cs" />
+    <Compile Include="Supervisor\GetSupervisorReportCriteria.cs" />
+    <Compile Include="SyncData\GetLastModifiedDateCriteria.cs" />
+    <Compile Include="SyncData\ImportWorkingShiftCommand.cs" />
+    <Compile Include="SystemSetting\GetSystemConfigsByKeyCriteria.cs" />
+    <Compile Include="SystemSetting\GetSystemSettingCriteria.cs" />
+    <Compile Include="Time\GetCheckInOutOnlineRecordCriteria.cs" />
+    <Compile Include="Time\GetPrivilegeCreateCheckInOutRecordCriteria.cs" />
+    <Compile Include="Time\GetTimeRecordCriteria.cs" />
+    <Compile Include="Time\InsertCheckInOutRecordCriteria.cs" />
+    <Compile Include="Time\InsertTimeRecordCriteria.cs" />
+    <Compile Include="Time\UpdateTypeTimeRecordCriteria.cs" />
+    <Compile Include="Unit\DeleteUnitCriteria.cs" />
+    <Compile Include="Unit\GetUnitByIdCriteria.cs" />
+    <Compile Include="Unit\GetUnitsCriteria.cs" />
+    <Compile Include="Unit\InsertUnitCriteria.cs" />
+    <Compile Include="Unit\UpdateUnitCriteria.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Fanex.NexHR.Core\Fanex.NexHR.Core.csproj">
+      <Project>{245f4ded-6e59-453e-be42-2efb1f4648d3}</Project>
+      <Name>Fanex.NexHR.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Fanex.NexHR.Models\Fanex.NexHR.Models.csproj">
+      <Project>{89f85e0d-f859-4780-b21b-bd3f3976388b}</Project>
+      <Name>Fanex.NexHR.Models</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

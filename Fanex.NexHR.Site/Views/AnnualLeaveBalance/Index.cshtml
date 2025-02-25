@@ -1,0 +1,263 @@
+﻿@using Fanex.NexHR.Models
+@using Fanex.NexHR.Resources
+@model LeaveSummaryViewModel
+@{
+    ViewBag.Title = Labels.AnualLeaveBalance;
+    var hasPermissionToEdit = (bool)ViewBag.HasPermissionToEdit;
+}
+@section css{
+    <link href="~/wwwroot/dist/styles/annual.leavebalance.index.css" rel="stylesheet" />
+}
+@section js{
+    <script src="~/wwwroot/dist/js/annual.leavebalance.index.js"></script>
+}
+@section Breadcrumb {
+    <a class="step">@Labels.CompanySpace</a> <a class="step">@ViewBag.Title</a>
+}
+<h2 class="page-title">@ViewBag.Title</h2>
+@if (hasPermissionToEdit)
+{
+    <div class="filter">
+        @using (Html.BeginForm())
+        {
+            <div class="form-horizontal clearfix">
+                @Html.HiddenFor(model => model.TeamIds)
+                <div class="form-group form-group--m">
+                    <div class="label-form">
+                        <label class="control-label">@Labels.Category</label>
+                    </div>
+                    <div class="select-form">
+                        <select id="Category" name="Category" class="category form-control">
+                            <option value="">-- All --</option>
+                            <option selected="@(Model.Category == 1)" value="1">@Labels.Local</option>
+                            <option selected="@(Model.Category == 0)" value="0">@Labels.Expat</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group form-group--m">
+                    <div class="label-form">
+                        @Html.LabelFor(model => model.Year, new { @class = "control-label" })
+                    </div>
+                    <div class="select-form">
+                        @Html.YearPickerFor(model => model.Year, 2010)
+                    </div>
+                </div>
+
+                <div class="form-group form-group--m">
+                    <div class="label-form">
+                        @Html.LabelFor(model => model.Employee, new { @class = "control-label" })
+                    </div>
+                    <div class="input-form">
+                        @Html.TextBox("Employee", Model.Employee,
+                            new { placeholder = Messages.SearchEmployeeWatermark, @class = "form-control" })
+                        @Html.HiddenFor(model => model.EmployeeId)
+                    </div>
+                </div>
+
+                <div class="form-group form-group--m">
+                    <div class="label-form">
+                        <label class="control-label">@Labels.SectionTeam</label>
+                    </div>
+                    <div class="input-form" id="Team"></div>
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">@Labels.Submit</button>
+                    <button type="button" class="btn btn-excel" id="btnExcel">@Labels.Excel</button>
+                    @if (Model.IsShowCloseBalance)
+                    {
+                        <a href="javascript:;" class="btn btn-request" id="resetblc">
+                            <span class="fa fa-plus"></span>
+                            @Labels.CloseBalance
+                        </a>
+                    }
+                    @if (hasPermissionToEdit)
+                    {
+                        <a href="javascript:;" class="btn btn-request" id="addadj">
+                            <span class="fa fa-plus"></span>
+                            @Labels.Adjustment
+                        </a>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+}
+
+<table class="table table-custom" id="data">
+    <thead>
+        <tr>
+            @if (hasPermissionToEdit)
+            {
+                <th rowspan="2">
+                    <input type="checkbox" class="checkbox-custom" id="checkuncheckall" name="checkuncheckall" />
+                    <label for="checkuncheckall"></label>
+                </th>
+            }
+            <th rowspan="2">@Labels.Department</th>
+            <th rowspan="2">@Labels.Section</th>
+            <th rowspan="2">@Labels.Team</th>
+            <th rowspan="2">@Labels.FullName</th>
+            <th rowspan="2">@Labels.NickName</th>
+            <th rowspan="2">@Labels.CompensationLeave</th>
+            <th rowspan="2">@Labels.AnnualLeave</th>
+            <th colspan="12">Leave in @Model.Year</th>
+            <th rowspan="2">Balance of AL @Model.Year</th>
+            <th rowspan="2">Balance of CL @Model.Year</th>
+            @if (hasPermissionToEdit)
+            {
+                <th rowspan="2">@Labels.Edit</th>
+            }
+        </tr>
+        <tr>
+            <th>@Labels.Jan</th>
+            <th>@Labels.Feb</th>
+            <th>@Labels.Mar</th>
+            <th>@Labels.Apr</th>
+            <th>@Labels.May</th>
+            <th>@Labels.Jun</th>
+            <th>@Labels.Jul</th>
+            <th>@Labels.Aug</th>
+            <th>@Labels.Sep</th>
+            <th>@Labels.Oct</th>
+            <th>@Labels.Nov</th>
+            <th>@Labels.Dec</th>
+        </tr>
+    </thead>
+    @*Check if exists*@
+
+    @if (Model.LeaveSumaries != null)
+    {
+        <tbody>
+
+            @foreach (LeaveSummary leave in Model.LeaveSumaries)
+            {
+                <tr>
+                    @if (hasPermissionToEdit)
+                    {
+                        <td>
+                            <input type="checkbox" class="aba checkbox-custom" id="checkbox-@leave.EmpId" data-id="@leave.EmpId" />
+                            <label for="checkbox-@leave.EmpId"></label>
+                        </td>
+                    }
+                    <td>@leave.Department</td>
+                    <td>@leave.Section</td>
+                    <td>@leave.Team</td>
+                    <td>@leave.FullName</td>
+                    <td>@leave.Nickname</td>
+                    <td>
+                        @if (leave.CreditKIV > 0)
+                        {
+                            <span>@leave.CreditKIV.ToString("0.0")</span>
+                        }
+                    </td>
+                    <td>
+                        @if (leave.AnnualLeaveCurrentYear != 0)
+                        {
+                            <span class="@(leave.AnnualLeaveCurrentYear < 0 ? "red" : string.Empty)">@leave.AnnualLeaveCurrentYear.ToString("0.0")</span>
+                        }
+                    </td>
+                    <td>
+                        @if (leave.Jan != 0)
+                        {
+                            <span class="@(leave.Jan < 0 ? "red" : string.Empty)">@leave.Jan.ToString("0.0")</span>
+                        }
+                    </td>
+                    <td>
+                        @if (leave.Feb != 0)
+                        {
+                            <span class="@(leave.Feb < 0 ? "red" : string.Empty)">@leave.Feb.ToString("0.0")</span>
+                        }
+                    </td>
+                    <td>
+                        @if (leave.Mar != 0)
+                        {
+                            <span class="@(leave.Mar < 0 ? "red" : string.Empty)">@leave.Mar.ToString("0.0")</span>
+                        }
+                    </td>
+                    <td>
+                        @if (leave.Apr != 0)
+                        {
+                            <span class="@(leave.Apr < 0 ? "red" : string.Empty)">@leave.Apr.ToString("0.0")</span>
+                        }
+                    </td>
+                    <td>
+                        @if (leave.May != 0)
+                        {
+                            <span class="@(leave.May < 0 ? "red" : string.Empty)">@leave.May.ToString("0.0")</span>
+                        }
+                    </td>
+                    <td>
+                        @if (leave.Jun != 0)
+                        {
+                            <span class="@(leave.Jun < 0 ? "red" : string.Empty)">@leave.Jun.ToString("0.0")</span>
+                        }
+                    </td>
+                    <td>
+                        @if (leave.Jul != 0)
+                        {
+                            <span class="@(leave.Jul < 0 ? "red" : string.Empty)">@leave.Jul.ToString("0.0")</span>
+                        }
+                    </td>
+                    <td>
+                        @if (leave.Aug != 0)
+                        {
+                            <span class="@(leave.Aug < 0 ? "red" : string.Empty)">@leave.Aug.ToString("0.0")</span>
+                        }
+                    </td>
+                    <td>
+                        @if (leave.Sep != 0)
+                        {
+                            <span class="@(leave.Sep < 0 ? "red" : string.Empty)">@leave.Sep.ToString("0.0")</span>
+                        }
+                    </td>
+                    <td>
+                        @if (leave.Oct != 0)
+                        {
+                            <span class="@(leave.Oct < 0 ? "red" : string.Empty)">@leave.Oct.ToString("0.0")</span>
+                        }
+                    </td>
+                    <td>
+                        @if (leave.Nov != 0)
+                        {
+                            <span class="@(leave.Nov < 0 ? "red" : string.Empty)">@leave.Nov.ToString("0.0")</span>
+                        }
+                    </td>
+                    <td>
+                        @if (leave.Dec != 0)
+                        {
+                            <span class="@(leave.Dec < 0 ? "red" : string.Empty)">@leave.Dec.ToString("0.0")</span>
+                        }
+                    </td>
+                    <td>
+                        <span class="@(leave.LeaveBalance < 0 ? "red" : string.Empty)">@leave.LeaveBalance.ToString("0.0")</span>
+                    </td>
+                    <td>
+                        <span class="@(leave.KIVBalance < 0 ? "red" : string.Empty)">@leave.KIVBalance.ToString("0.0")</span>
+                    </td>
+                    @if (hasPermissionToEdit)
+                    {
+                        <td>
+                            <a href="~/annualleavebalance/employee/@leave.EmpId">
+                                <i class="fa fa-pencil fa-lg icon-edit"></i>
+                            </a>
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    }
+    else
+    {
+        @RazorHelper.DisplayNoInformation(19)
+    }
+</table>
+<div class="hide">
+    <div id="insertform" title="Adjust annual leave balance">
+        @Html.Action("MultipleInsert")
+    </div>
+    <div id="resetform" title="Close balance for year @DateTime.Now.AddYears(-1).Year">
+        @Html.Action("MultipleReset")
+    </div>
+</div>

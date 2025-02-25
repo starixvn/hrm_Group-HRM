@@ -1,0 +1,146 @@
+﻿@model Memo
+@{
+    ViewBag.Title = Labels.Edit;
+}
+@section css{
+    <link href="~/wwwroot/dist/styles/memo.edit.css" rel="stylesheet" />
+}
+@section js{
+    <script src="~/wwwroot/dist/js/memo.edit.js"></script>
+}
+@section Breadcrumb {
+    <a class="step">Company Space</a>
+    <a class="step" href="@Url.Action("Index", "memo")">Memo</a>
+    <span class="step">Edit Memo "@Model.Subject"</span>
+}
+<h2 class="page-title">@Labels.EditMemo</h2>
+<div class="card">
+    <form class="form-horizontal clearfix" method="post" action="Edit" id="editForm">
+        @Html.ValidationSummary()
+        @Html.HiddenFor(model => model.Id)
+        @Html.HiddenFor(model => model.TotalPages)
+        @Html.HiddenFor(model => model.AttachFile)
+        @Html.HiddenFor(model => model.MemoType)
+        @Html.Hidden("pathName", Model.Contents)
+        <div class="form-group form-group--l">
+            <div class="label-form">
+                @Html.LabelFor(model => model.Subject, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.TextBoxFor(model => model.Subject, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.LabelFor(model => model.RefNo, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.TextBoxFor(model => model.RefNo, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.LabelFor(model => model.Category, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.DropDownListFor(model => model.Category, new SelectList(ViewBag.MemoCategories, "Id", "Name"), new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.LabelFor(model => model.ForInfo, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.TextBoxFor(model => model.ForInfo, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.LabelFor(model => model.SentDate, new { @class = "control-label" })
+            </div>
+            <div class="calendar-form">
+                @Html.TextBox(Html.NameFor(model => model.SentDate).ToString(), Model.SentDate.ToString("dd MMM, yyyy"), new { @class = "datepicker form-control", mindate = (new DateTime(2010, 1, 1)).ToString("yyyy/MM/dd"), maxdate = "null", disabledDate = "" })
+                <i class="icon-calendar fa fa-calendar"></i>
+            </div>
+        </div>
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.LabelFor(model => model.SentTo, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.TextBoxFor(model => model.SentTo, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.LabelFor(model => model.SentFrom, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.TextBoxFor(model => model.SentFrom, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group form-group--l">
+            <div class="label-form">
+                @Html.LabelFor(model => model.SendMail, new { @class = "control-label" })
+            </div>
+            <div class="input">
+                @Html.CheckBoxCustomFor(model => model.SendMail)
+            </div>
+        </div>
+        <div class="form-group form-group--l">
+            <div class="label-form">
+            </div>
+            <div class="input-form">
+                @{
+                    var types = new List<SelectListItem>{
+                    new SelectListItem() {Text = "Upload", Value = "1", Selected = true},
+                    new SelectListItem() {Text = "FCK Editor", Value = "0"},
+                    };
+                }
+                @Html.RadioButtonList(model => model.MemoType, types)
+            </div>
+        </div>
+        <div id="upload" class="form-group">
+            <div class="label-form">
+            </div>
+            <div class="input-form">
+                <input type="file" id="fileName" size="55" multiple />
+            </div>
+        </div>
+        <div class="form-group form-group--l">
+            <div class="label-form">
+                <label for="override" class="control-label">@Labels.Override</label>
+            </div>
+            <div class="input-form">
+                @Html.CheckBoxCustom("override")
+            </div>
+        </div>
+        <div id="attach" class="form-group form-group--l">
+            <div class="label-form">
+            </div>
+            <div class="input-form">
+                <div id="allAttachFile">
+                </div>
+            </div>
+        </div>
+        <div id="content" style="display: none">
+            <div class="form-group">
+                <div class="label-form">
+                    @Html.LabelFor(model => model.Contents, new { @class = "control-label" })
+                </div>
+                <div class="input-field">
+                    @Html.TextAreaFor(model => model.Contents, new { @class = "form-control" })
+                </div>
+            </div>
+        </div>
+        <div class="form-group form-group--l">
+            <div class="label-form">
+            </div>
+            <div class="input-form">
+                @Html.AntiForgeryToken()
+                <input type="button" id="btnSubmit" value="Save" class="btn btn-primary" />
+                <a class="btn btn-default" onclick="parent.history.back()">@Labels.Back</a>
+            </div>
+        </div>
+    </form>
+</div>

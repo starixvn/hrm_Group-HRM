@@ -1,0 +1,128 @@
+﻿@using Fanex.NexHR.Models.Message
+@model Message
+@{
+    ViewBag.Title = @Labels.CreateMessage;
+}
+@section css{
+    <link href="~/wwwroot/dist/styles/message.create.css" rel="stylesheet" />
+}
+@section js{
+    <script>
+        var GroupsCollection = @Html.Raw(Json.Encode(@ViewBag.Groups));
+    </script>
+    <script src="~/wwwroot/dist/js//message.create.js"></script>
+}
+@section Breadcrumb {
+    <a class="step">@Labels.HRSpace</a>
+    <a class="step" href="@Url.Action("Index", "message")">@Labels.Message</a>
+    <a class="step">@Labels.CreateMessage</a>
+}
+
+<h2 class="page-title">@Labels.CreateMessage</h2>
+
+<div class="card">
+    <form class="form-horizontal clearfix" method="post" id="CreateForm">
+        @Html.ValidationSummary()
+        <div id="messageInfo" class="success" style="display:none;">@Messages.CreatedSuccessfully</div>
+
+        @Html.HiddenFor(model => model.EmployeeIds)
+        @Html.HiddenFor(model => model.TeamIds)
+        @Html.HiddenFor(model => model.SendToEmail)
+        <div class="form-group form-group--l">
+            <div class="label-form">
+                @Html.LabelFor(model => model.Subject, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.TextBoxFor(model => model.Subject, new { @class = "form-control", @autocomplete = "off" })
+            </div>
+        </div>
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.LabelFor(model => model.Category, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @{
+                    var categories = new List<SelectListItem>
+                                                                                    {
+                        new SelectListItem() {Text = "Notification", Value = "0"},
+                        new SelectListItem() {Text = "Warning", Value = "1"},
+                        new SelectListItem() {Text = "Discipline", Value = "2"},
+                    };
+                }
+                @Html.DropDownListFor(model => model.Category, categories, new { @class = "category form-control" })
+            </div>
+        </div>
+        <div class="form-group form-group--l">
+            <div class="label-form">
+                @Html.Label(@Labels.SendToEmployee, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.HiddenFor(model => model.EmployeeIds)
+                <select id="Employees" data-placeholder="Choose employees..." multiple class="form-control">
+                    @foreach (var employee in ViewBag.Employees)
+                    {
+                        <option value="@employee.Id" email="@employee.Email">@(employee.NickName + " (" + employee.FullName + ")")</option>
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.Label(@Labels.SendToTeam, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                <div class="multi-select" id="Groups"></div>
+            </div>
+        </div>
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.LabelFor(model => model.HasSendEmail, @Labels.SendEmail, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.CheckBoxCustomFor(model => model.HasSendEmail)
+            </div>
+        </div>
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.Label(@Labels.FromDate, new { @class = "control-label" })
+            </div>
+            <div class="calendar-form">
+                @{
+                    DateTime defaultFromdDate = Model.FromDate ?? new DateTime();
+                }
+                @Html.TextBox(Html.NameFor(model => model.FromDate).ToString(), defaultFromdDate.ToString("dd MMM, yyyy"), new { @class = "datepicker form-control", mindate = (new DateTime(2010, 1, 1)).ToString("yyyy/MM/dd"), maxdate = "null", disabledDate = "" })
+                <i class="icon-calendar fa fa-calendar"></i>
+            </div>
+        </div>
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.Label(@Labels.ToDate, new { @class = "control-label" })
+            </div>
+            <div class="calendar-form">
+                @{
+                    DateTime defaultToDate = Model.ToDate ?? new DateTime();
+                }
+                @Html.TextBox(Html.NameFor(model => model.ToDate).ToString(), defaultToDate.ToString("dd MMM, yyyy"), new { @class = "datepicker form-control", mindate = (new DateTime(2010, 1, 1)).ToString("yyyy/MM/dd"), maxdate = "null", disabledDate = "" })
+                <i class="icon-calendar fa fa-calendar"></i>
+            </div>
+        </div>
+        <div class="form-group form-group--l">
+            <div class="label-form">
+                @Html.LabelFor(model => model.Contents, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.TextAreaFor(model => model.Contents, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                <div class="label">&nbsp</div>
+            </div>
+            <div class="input-form">
+                @Html.AntiForgeryToken()
+                <input type="button" value="Save" id="btnSubmit" class="btn btn-primary" />
+                <a href="javascript:;" class="btn btn-default" onclick="parent.history.back()">@Labels.Back</a>
+            </div>
+        </div>
+    </form>
+</div>

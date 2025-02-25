@@ -1,0 +1,65 @@
+﻿@{
+    var title = string.Empty;
+    byte siteId = ConfigSettings.SiteId;
+}
+
+<!DOCTYPE html>
+<html xml:lang="en" lang="en">
+<head>
+    <meta charset="utf-8" />
+
+    @switch (siteId)
+    {
+        case (byte)SiteId.SMS:
+            title = "SMS HRMS";
+            break;
+        case (byte)SiteId.HM:
+            title = "HM HRM";
+            break;
+    }
+
+    <title>@title - @ViewBag.Title</title>
+    <meta name="viewport" content="width=device-width" />
+    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <link href="~/wwwroot/dist/styles/main.css" rel="stylesheet" />
+    @RenderSection("css", false)
+</head>
+<body>
+    <section id="section_content" class="team-content iframe">
+        <div id="content-wrapper" class="content_wrap">
+            <section id="section_body" class="section_body">
+                <div class="content_scroll">
+                    @RenderBody()
+                </div>
+
+                <div id="loadingProcess" class="loading-process" style="display: none;">
+                    <svg class="icon-loading" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="64" height="64" fill="#439ff0">
+                        <circle transform="translate(8 0)" cx="0" cy="16" r="0">
+                            <animate attributeName="r" values="0; 4; 0; 0" dur="1.2s" repeatCount="indefinite" begin="0"
+                                     keytimes="0;0.2;0.7;1" keySplines="0.2 0.2 0.4 0.8;0.2 0.6 0.4 0.8;0.2 0.6 0.4 0.8" calcMode="spline" />
+                        </circle>
+                        <circle transform="translate(16 0)" cx="0" cy="16" r="0">
+                            <animate attributeName="r" values="0; 4; 0; 0" dur="1.2s" repeatCount="indefinite" begin="0.3"
+                                     keytimes="0;0.2;0.7;1" keySplines="0.2 0.2 0.4 0.8;0.2 0.6 0.4 0.8;0.2 0.6 0.4 0.8" calcMode="spline" />
+                        </circle>
+                        <circle transform="translate(24 0)" cx="0" cy="16" r="0">
+                            <animate attributeName="r" values="0; 4; 0; 0" dur="1.2s" repeatCount="indefinite" begin="0.6"
+                                     keytimes="0;0.2;0.7;1" keySplines="0.2 0.2 0.4 0.8;0.2 0.6 0.4 0.8;0.2 0.6 0.4 0.8" calcMode="spline" />
+                        </circle>
+                    </svg>
+                </div>
+            </section>
+        </div>
+    </section>
+
+    <script>
+        var _global = {
+            root: '/'
+        };
+    </script>
+    @Html.Hidden("RootURL", Url.Content("~/"))
+    <script src="~/wwwroot/dist/vendors/react.js"></script>
+    <script src="~/wwwroot/dist/js/main.js"></script>
+    @RenderSection("js", false)
+</body>
+</html>

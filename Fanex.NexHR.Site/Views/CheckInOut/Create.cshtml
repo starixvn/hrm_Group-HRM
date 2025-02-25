@@ -1,0 +1,167 @@
+﻿@using Fanex.NexHR.Core
+@using Fanex.NexHR.Models
+@using Fanex.NexHR.Resources
+@using System.Web.Mvc.Html5
+@using Fanex.NexHR.ViewModels.Request
+@model CheckInOutRequestViewModel
+@{
+    ViewBag.Title = Labels.Create;
+    var today = DateTime.Today;
+    var shift = (Shift)ViewBag.Shift;
+    var isTopManager = (bool)ViewBag.IsTopManager;
+    var hasOnBehalfRequestPermission = (bool)ViewBag.HasOnBehalfRequestPermission;
+}
+@section css{
+    <link href="~/wwwroot/dist/styles/checkinout.create.css" rel="stylesheet" />
+}
+@section js{
+    <script src="~/wwwroot/dist/js/checkinout.create.js"></script>
+}
+@section Breadcrumb {
+    <a class="step">@Labels.Personal</a>
+    <a class="step" href="@Url.Action("employeeview", "checkinout", new { })">@Labels.MyCheckInOutRequests</a>
+    <a class="step">@ViewBag.Title</a>
+}
+<h2 class="page-title">@ViewBag.Title</h2>
+<div class="card">
+    <input type="checkbox" id="IsTopManager" hidden @(isTopManager ? "checked" : string.Empty) />
+    @using (Html.BeginForm("Create", "checkinout", FormMethod.Post, new { @class = "form-horizontal" }))
+    {
+        @Html.ValidationSummary()
+        <div class="validation-summary-errors" style="display: none;"></div>
+        @Html.HiddenFor(model => model.EmployeeId)
+        @Html.Hidden("InTime", shift != null ? shift.BeginCheckInTime : string.Empty)
+        @Html.Hidden("OutTime", shift != null ? shift.BeginCheckOutTime : string.Empty)
+        @Html.Hidden("CrossDay", shift != null ? shift.CrossDay.ToString().ToLower() : string.Empty)
+        @Html.Hidden("IsInAfterDay", shift != null ? shift.IsInAfterDay.ToString().ToLower() : string.Empty)
+        @Html.Hidden("IsOutAfterDay", shift != null ? shift.IsOutAfterDay.ToString().ToLower() : string.Empty)
+
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.RefNO, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.TextBoxFor(model => model.RefNO, new { @class = "form-control", @autocomplete = "off" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.RequestTypeId, new { @class = "control-label" })
+            </div>
+            <div class="input-form request-type">
+                @Html.RadioButtonList(model => model.RequestTypeId, Utilities.CheckInOutTypes)
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.Employee, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @if (hasOnBehalfRequestPermission)
+                {
+                    @Html.TextBoxFor(model => model.Employee, new { @class = "form-control", @autocomplete = "off" })
+                }
+                else
+                {
+                    <strong>@Html.DisplayFor(model => model.Employee)</strong>
+                }
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.AttendantDate, Labels.ScheduleDate, new { @class = "control-label" })
+            </div>
+            <div class="calendar-form">
+                @Html.TextBox("AttendantDate", Model.AttendantDate.ToDateMonthYearFormatedDate(),
+                    new {
+                        @class = "datepicker form-control",
+                        @readonly = "readonly",
+                        mindate = today.FirstDayOfMonth().AddMonths(-6).ToString("yyyy/MM/dd"),
+                        maxdate = today.ToString("yyyy/MM/dd")
+                    })
+                <i class="icon-calendar fa fa-calendar"></i>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="label-form">@Labels.ActualRequestTime</div>
+            <div class="calendar-form">
+                @Html.TextBox("ForDate", Model.ForDate.ToDateMonthYearFormatedDate(),
+                    new {
+                        @class = "datepicker form-control",
+                        @readonly = "readonly",
+                        mindate = today.FirstDayOfMonth().AddMonths(-6).ToString("yyyy/MM/dd"),
+                        maxdate = today.ToString("yyyy/MM/dd")
+                    })
+                <i class="icon-calendar fa fa-calendar"></i>
+            </div>
+            <div class="request-time">
+                @Html.Html5Number(0, 23, 1, Model.Hour, new { Name = "Hour", MaxLength = "2", id = "Hour", @class = "form-control" })
+                :
+                @Html.Html5Number(0, 59, 1, Model.Minute, new { Name = "Minute", MaxLength = "2", id = "Minute", @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="label-form">@Labels.Shift</div>
+            <div class="input-form bold" id="shiftname">@Model.Shift</div>
+        </div>
+        <div class="form-group">
+            <div class="label-form">@Labels.Reason</div>
+            <div class="select-form">
+                @RazorHelper.CheckInOutReasonDropDownList(htmlClass: "form-control")
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.VerifierId, new { @class = "control-label" })
+            </div>
+            <div class="select-form">
+                @if (Model.Verifiers.Count() > 1)
+                {
+                    @Html.DropDownListFor(x => x.VerifierId, new SelectList(Model.Verifiers, "OwnerId", "DisplayName"), Labels.SelectVerifier, new { @class = "form-control" })
+                }
+                else
+                {
+                    @Html.DropDownListFor(x => x.VerifierId, new SelectList(Model.Verifiers, "OwnerId", "DisplayName"), new { @class = "form-control" })
+                }
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.ApproverId, new { @class = "control-label" })
+            </div>
+            <div class="select-form">
+                @if (Model.Approvers.Count() > 1)
+                {
+                    @Html.DropDownListFor(x => x.ApproverId, new SelectList(Model.Approvers, "OwnerId", "DisplayName"), Labels.SelectApprover, new { @class = "form-control" })
+                }
+                else
+                {
+                    @Html.DropDownListFor(x => x.ApproverId, new SelectList(Model.Approvers, "OwnerId", "DisplayName"), new { @class = "form-control" })
+                }
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.Remark, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.TextAreaFor(model => model.Remark, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.Files, Labels.UploadFile, new { @class = "control-label" })
+            </div>
+            <div class="left input--m" id="upload">
+                <input type="file" id="file" name="file" size="55" multiple />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="label-form"></div>
+            <div>
+                <button type="button" class="btn btn-primary" id="btnSubmit">@Labels.Request</button>
+                <button type="button" class="btn btn-default" onclick="window.history.back()">@Labels.Back</button>
+            </div>
+        </div>
+    }
+</div>

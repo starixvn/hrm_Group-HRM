@@ -1,0 +1,18 @@
+﻿@using Fanex.NexHR.Resources
+
+@{
+    ViewBag.Title = Labels.MyWorkingSchedule;
+}
+@section css{
+    <link href="~/wwwroot/dist/styles/my.working.schedule.css" rel="stylesheet" />
+}
+@section js{
+    <script src="~/wwwroot/dist/js/my.working.schedule.js"></script>
+}
+@section Breadcrumb {
+    <a class="step">@Labels.Personal</a>
+    <span class="step">@ViewBag.Title</span>
+}
+
+<h2 class="page-title">@Labels.MyWorkingSchedule</h2>
+<div id="calendar" class="fullcalendar-container"></div>

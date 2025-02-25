@@ -1,0 +1,33 @@
+﻿@import '../../abstracts/variables';
+@import '../../abstracts/mixins';
+@import '../../components/buttons-new';
+@import '../../layout/filter';
+@import '../../layout/table';
+@import '../../layout/shift.color';
+@import '../../layout/toastr';
+
+.header-control {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .form-horizontal {
+        .status {
+            width: 100%;
+        }
+    }
+}
+
+.table {
+    .cell-overtime {
+        width: 100px;
+        min-width: 100px;
+        max-width: 100px;
+
+        input {
+            text-align: center;
+            padding: 3px 6px;
+            height: unset;
+        }
+    }
+}

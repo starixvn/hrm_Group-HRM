@@ -1,0 +1,84 @@
+﻿@import '../../abstracts/variables';
+@import '../../abstracts/mixins';
+@import '../../layout/toastr';
+@import '../../layout/table';
+@import '../../components/form-horizontal';
+@import '../../components/buttons-new';
+@import '../../components/validation';
+@import '../../components/modal';
+@import '../../components/jquery-ui-dialog';
+@import '../../components/_checkbox.scss';
+
+.clear {
+    clear: both;
+    display: block;
+    overflow: hidden;
+    visibility: hidden;
+    width: 0;
+    height: 0;
+}
+
+.leftpersonal {
+    width: 400px;
+    float: left;
+    padding: 5px;
+    margin-right: 10px;
+
+    .form-horizontal {
+        .list-group {
+            .list-group-item {
+                padding-top: 7px;
+                padding-bottom: 7px;
+            }
+        }
+    }
+}
+
+.rightjob {
+    float: left;
+    padding: 5px 10px 5px 5px;
+    min-width: calc(100% - 600px);
+
+    .pcontent {
+        float: left;
+        text-align: left;
+    }
+
+    .relationship {
+        padding: 10px;
+        text-align: right;
+    }
+
+    .note {
+        margin: 5px 0;
+        line-height: 4px;
+        padding: 5px;
+        font-style: italic;
+        color: #2f2e2e;
+        font-weight: 500;
+        font-size: 11px;
+    }
+
+    ul.upload-file-list {
+        padding: 10px;
+        text-align: left;
+
+        li {
+            list-style: none;
+            padding: 5px;
+
+            .icon-delete {
+                float: right;
+                color: #da5350;
+            }
+        }
+    }
+}
+
+.table {
+    .action-column {
+        a {
+            cursor: pointer;
+        }
+    }
+}

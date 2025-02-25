@@ -1,0 +1,136 @@
+﻿@using Fanex.NexHR.Core
+@using Fanex.NexHR.Resources
+@using Fanex.NexHR.ViewModels.Report
+@model DisciplineSummaryPerYearViewModel
+@{
+    ViewBag.Title = "5 Years Discipline Summary";
+    bool enableGroupDate = ViewBag.EnableGroupDate;
+}
+@section css{
+    <link href="~/wwwroot/dist/styles/discipline.summary.per.year.css" rel="stylesheet" />
+}
+@section js{
+    <script src="~/wwwroot/dist/js/discipline.summary.per.year.js"></script>
+}
+@section Breadcrumb {
+    <a class="step">@Labels.Personal</a>
+    <a class="step" href="@Url.Action("index", "report")">@Labels.Reports</a>
+    <a class="step">@ViewBag.Title</a>
+}
+<h2 class="page-title">@ViewBag.Title</h2>
+<form class="form-filter filter">
+    @Html.HiddenFor(model => model.TeamId)
+    <div class="form-horizontal clearfix">
+        <div class="form-group form-group--m">
+            @{
+                var fromYears = new List<SelectListItem>();
+                for (var i = Model.FromYear; i >= 2010; i--)
+                {
+                    fromYears.Add(new SelectListItem
+                    {
+                        Text = i.ToString(),
+                        Value = i.ToString()
+                    });
+                }
+            }
+            <div class="label-form">
+                @Html.LabelFor(model => model.FromYear, new { @class = "control-label" })
+            </div>
+            <div class="select-form">
+                @Html.DropDownListFor(model => model.FromYear, fromYears, new { @class = "yearpicker form-control" })
+            </div>
+        </div>
+        <div class="form-group form-group--m">
+            @{
+                var toYears = new List<SelectListItem>();
+                for (var i = Model.ToYear; i >= 2014; i--)
+                {
+                    toYears.Add(new SelectListItem
+                    {
+                        Text = i.ToString(),
+                        Value = i.ToString()
+                    });
+                }
+            }
+            <div class="label-form">
+                @Html.LabelFor(model => model.ToYear, new { @class = "control-label" })
+            </div>
+            <div class="select-form">
+                @Html.DropDownListFor(model => model.ToYear, toYears, new { @class = "yearpicker form-control" })
+            </div>
+        </div>
+
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                <label class="control-label">@Labels.SectionTeam</label>
+            </div>
+            <div class="input-form" id="Team"></div>
+        </div>
+
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                <label class="control-label">@Labels.Category</label>
+            </div>
+            <div class="select-form">
+                @{
+                    var category = new List<SelectListItem>
+                                    {
+                        new SelectListItem() {Text = Labels.All, Value = string.Empty},
+                        new SelectListItem() {Text = Labels.Expat, Value = "false"},
+                        new SelectListItem() {Text = Labels.Local, Value = "true"}
+                    };
+                }
+                @Html.DropDownListFor(model => model.IsLocal, category, new { @class = "category form-control" })
+            </div>
+        </div>
+
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.LabelFor(model => model.Employee, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.TextBoxFor(model => model.Employee,
+                    new { placeholder = Messages.SearchEmployeeWatermark, @class = "form-control", autocomplete = "off" })
+                @Html.HiddenFor(model => model.EmployeeId)
+            </div>
+        </div>
+
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                <label class="control-label field-length-service">@Labels.LengthOfService</label>
+            </div>
+            <div class="select-form">
+                @{
+                    var lengOfService = new List<SelectListItem>();
+
+                    if (enableGroupDate)
+                    {
+                        lengOfService.Add(new SelectListItem { Text = "By Group Date", Value = "false" });
+                    }
+
+                    lengOfService.Add(new SelectListItem { Text = "By Company Date", Value = "true" });
+                }
+
+                @Html.DropDownListFor(model => model.LengthOfService, lengOfService, new { @class = "category form-control" })
+            </div>
+        </div>
+
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.LabelFor(model => model.IsShowAll, "Show all", new { @class = "control-label" })
+            </div>
+            <div class="input-form" style="padding-top: 5px;">
+                <input type="checkbox" class="checkbox-custom" id="IsShowAll" name="IsShowAll" value="true" />
+                <label for="IsShowAll"></label>
+            </div>
+        </div>
+
+        <div class="form-group form-group--m">
+            <div class="select-form">
+                <input type="button" id="submit" class="btn btn-primary" value="@Labels.Submit" />
+                <input type="button" class="btn btn-excel" id="btnExcel" value="@Labels.Excel" />
+            </div>
+        </div>
+    </div>
+</form>
+<div id="discipline-summary-table"></div>

@@ -1,0 +1,210 @@
+﻿@using Fanex.NexHR.Resources
+@model Employee
+
+@{
+    ViewBag.Title = "Update information";
+}
+@section css{
+    <link href="~/wwwroot/dist/styles/account.edit.profile.css" rel="stylesheet" />
+}
+@section js{
+    <script src="~/wwwroot/dist/js/account.edit.profile.js"></script>
+}
+@section Breadcrumb {
+    <a class="step">@Labels.Personal</a>
+    <a class="step" href="@Url.Action("Index", "Account")">@Labels.MyProfile</a>
+    <span class="step">@ViewBag.Title</span>
+}
+
+<div class="leftpersonal">
+    @using (Html.BeginForm("UpdateInformation", "Information", FormMethod.Post, new { @id = "info-update", @class = "form-horizontal" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary()
+        <div class="panel panel-default">
+            <div class="panel-heading">PERSONAL INFORMATION</div>
+            <ul class="list-group">
+                <li class="list-group-item form-group">
+                    <div class="label-form">@Labels.FullName</div>
+                    <div class="bold">@Model.FullName</div>
+                </li>
+                <li class="list-group-item form-group">
+                    <div class="label-form">@Labels.NickName</div>
+                    <div class="bold">@Model.NickName</div>
+                </li>
+                <li class="list-group-item form-group">
+                    <div class="label-form">@Labels.ChineseName</div>
+                    <div class="input-form">
+                        @Html.TextBoxFor(model => model.ChineseName, new { @class = "form-control" })
+                    </div>
+                </li>
+                <li class="list-group-item form-group">
+                    <div class="label-form">D.O.B</div>
+                    <div class="calendar-form">
+                        @Html.TextBox("DateOfBirth", Model.DateOfBirth.ToDateMonthYearFormatedDate(), new { @class = "datepicker form-control" })
+                        <i class="icon-calendar fa fa-calendar"></i>
+                    </div>
+                </li>
+                <li class="list-group-item form-group">
+                    <div class="label-form">@Labels.PlaceOfBirth</div>
+                    <div class="input-form">
+                        @Html.TextBoxFor(model => model.PlaceOfBirth, new { @class = "form-control" })
+                    </div>
+                </li>
+                <li class="list-group-item form-group">
+                    <div class="label-form">@Labels.Ethnic</div>
+                    <div class="input-form">
+                        @Html.TextBoxFor(model => model.Ethnic, new { @class = "form-control" })
+                    </div>
+                </li>
+                <li class="list-group-item form-group">
+                    <div class="label-form">@Labels.Native</div>
+                    <div class="input-form">
+                        @Html.TextBoxFor(model => model.Native, new { @class = "form-control" })
+                    </div>
+                </li>
+                <li class="list-group-item form-group">
+                    <div class="label-form">@Labels.Religion</div>
+                    <div class="input-form">
+                        @Html.TextBoxFor(model => model.Religion, new { @class = "form-control" })
+                    </div>
+                </li>
+                <li class="list-group-item form-group">
+                    <div class="label-form">@Labels.Gender</div>
+                    <div class="select-form">
+                        @Html.DropDownListFor(model => model.Gender, (IList<SelectListItem>)ViewBag.Genders, new { @class = "form-control" })
+                    </div>
+                </li>
+                <li class="list-group-item form-group">
+                    <div class="label-form">@Labels.Nationality</div>
+                    <div class="select-form">
+                        @Html.DropDownListFor(model => model.CountryCode, (IList<SelectListItem>)ViewBag.Countries, new { @class = "form-control" })
+                    </div>
+                </li>
+                <li class="list-group-item form-group">
+                    <div class="label-form">@Labels.Marriage</div>
+                    <div class="select-form">
+                        @Html.DropDownListFor(model => model.Marriage, (IList<SelectListItem>)ViewBag.Marriages, new { @class = "form-control" })
+                    </div>
+                </li>
+                <li class="list-group-item form-group">
+                    <div class="label-form">@Labels.CardNo</div>
+                    <div class="input-form">
+                        @Html.TextBoxFor(model => model.CardNo, new { @class = "form-control" })
+                    </div>
+                </li>
+                <li class="list-group-item form-group">
+                    <div class="label-form">@Labels.IDCardIssueDate</div>
+                    <div class="calendar-form">
+                        @{ var dateOfIdCard = Model.DateOfIdCard.HasValue ? Model.DateOfIdCard.ToDateMonthYearFormatedDate() : string.Empty; }
+                        @Html.TextBox("DateOfIdCard", dateOfIdCard, new { @class = "datepicker form-control" })
+                        <i class="icon-calendar fa fa-calendar"></i>
+                    </div>
+                </li>
+                <li class="list-group-item form-group">
+                    <div class="label-form">@Labels.IDCardPlaceOfIssue</div>
+                    <div class="input-form">
+                        @Html.TextBoxFor(model => model.PlaceOfIdCard, new { @class = "form-control" })
+                    </div>
+                </li>
+                <li class="list-group-item form-group">
+                    <div class="label-form">@Labels.PassportNo</div>
+                    <div class="input-form">
+                        @Html.TextBoxFor(model => model.PassportNo, new { @class = "form-control" })
+                    </div>
+                </li>
+                <li class="list-group-item form-group">
+                    <div class="label-form">@Labels.PassportExp</div>
+                    <div class="calendar-form">
+                        @{ var passportExp = Model.PassportExp.HasValue ? Model.PassportExp.ToDateMonthYearFormatedDate() : string.Empty; }
+                        @Html.TextBox("PassportExp", passportExp, new { @class = "datepicker form-control" })
+                        <i class="icon-calendar fa fa-calendar"></i>
+                    </div>
+                </li>
+                <li class="list-group-item form-group">
+                    <div class="label-form">@Labels.Qualification</div>
+                    <div class="input-form">
+                        @Html.TextBoxFor(model => model.Qualification, new { @class = "form-control" })
+                    </div>
+                </li>
+                <li class="list-group-item form-group">
+                    <div class="label-form">@Labels.Major</div>
+                    <div class="input-form">
+                        @Html.TextBoxFor(model => model.Major, new { @class = "form-control" })
+                    </div>
+                </li>
+                <li class="list-group-item form-group">
+                    <div class="label-form">@Labels.Email</div>
+                    <div class="input-form">
+                        @Html.TextBoxFor(model => model.Email, new { @class = "form-control" })
+                    </div>
+                </li>
+                <li class="list-group-item form-group">
+                    <div class="label-form">@Labels.Phone</div>
+                    <div class="input-form">
+                        @Html.TextBoxFor(model => model.Phone, new { @class = "form-control" })
+                    </div>
+                </li>
+                <li class="list-group-item form-group">
+                    <div class="label-form">@Labels.Skype</div>
+                    <div class="input-form">
+                        @Html.TextBoxFor(model => model.Skype, new { @class = "form-control" })
+                    </div>
+                </li>
+                <li class="list-group-item form-group">
+                    <div class="label-form">@Labels.LetsTalk</div>
+                    <div class="input-form">
+                        @Html.TextBoxFor(model => model.LetsTalk, new { @class = "form-control" })
+                    </div>
+                </li>
+                <li class="list-group-item form-group">
+                    <div class="label-form">@Labels.Address</div>
+                    <div class="input-form">
+                        @Html.TextAreaFor(model => model.Address, new { @class = "form-control" })
+                    </div>
+                </li>
+                <li class="list-group-item form-group">
+                    <div class="label-form">@Labels.CurrentAddress</div>
+                    <div class="input-form">
+                        @Html.TextAreaFor(model => model.CurrentAddress, new { @class = "form-control" })
+                    </div>
+                </li>
+                <li class="list-group-item form-group">
+                    <button type="submit" class="btn btn-primary">@Labels.Save</button>
+                </li>
+            </ul>
+        </div>
+    }
+</div>
+<div class="rightjob">
+    <div class="panel panel-default">
+        <div class="panel-heading">RELATIONSHIP</div>
+        <div class="relationship">
+            <button class="btn btn-primary" id="btn-add-relationship" title="Add Relationship" data-url="/Information/InsertRelationship">
+                <span class="fa fa-plus"></span> @Labels.Add
+            </button>
+            <div id="relationship"></div>
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">LIST FILE(S) UPLOAD</div>
+        <ul class="list-group">
+            <li class="list-group-item">
+                <div class="label label-edit">Attachments</div>
+                <div class="pcontent">
+                    @Html.TextBox("Attachments", null, new { @type = "file", @multiple = "multiple" })
+                    <p class="note">* The file(s) upload must be less than 5 MB</p>
+                    <p class="note">* Accept file type: .jpg; .png; .jpeg; .pdf, .doc, .docx, .xls, .xlxs</p>
+                    <p class="note">* Rename the file to meaningful name before upload</p>
+                </div>
+                <div class="clear"></div>
+            </li>
+            <li class="list-group-item">
+                <ul class="upload-file-list" id="upload-list" data-base-url="@ViewBag.BaseFileLocation"></ul>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div id="create-form"></div>

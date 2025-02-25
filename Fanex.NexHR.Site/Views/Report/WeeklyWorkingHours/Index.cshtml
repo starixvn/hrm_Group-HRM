@@ -1,0 +1,72 @@
+﻿@using Fanex.NexHR.Resources
+@using Fanex.NexHR.ViewModels.Report.WorkingHours
+@model WeeklyFilterViewModel
+@{
+    ViewBag.Title = Labels.AttendanceWeeklyDetail;
+}
+@section css{
+    <link href="~/wwwroot/dist/styles/report.weeklyworkinghours.css" rel="stylesheet" />
+}
+@section js{
+    <script src="~/wwwroot/dist/js/report.weeklyworkinghours.js"></script>
+}
+@section Breadcrumb {
+    <a class="step">@Labels.Personal</a>
+    <a class="step" href="@Url.Action("index", "report")">@Labels.Reports</a>
+    <a class="step">@ViewBag.Title</a>
+}
+<h2 class="page-title">@ViewBag.Title</h2>
+<form class="filter">
+    @Html.HiddenFor(model => model.TeamIds)
+    <div class="form-horizontal clearfix">
+        <div class="form-group form-group--l">
+            <div class="label-form">
+                @Html.Label(Labels.Week, new { @class = "control-label" })
+            </div>
+            <div class="calendar-form weekpicker-wrapper">
+                @Html.TextBoxFor(model => model.FromDate, new { @class = "fromDate form-control", @readonly = true })
+                @Html.TextBoxFor(model => model.ToDate, new { @class = "toDate form-control", @readonly = true })
+                <i class="icon-calendar fa fa-calendar"></i>
+                <div id="week-picker"></div>
+            </div>
+        </div>
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.Label(Labels.Category, new { @class = "control-label" })
+            </div>
+            <div class="select-form">
+                @RazorHelper.CategoryDropDownList("IsLocal", classHTML: "form-control", selectedId: string.Empty)
+            </div>
+        </div>
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                <label class="control-label">@Labels.SectionTeam</label>
+            </div>
+            <div class="select-form" id="Team"></div>
+        </div>
+    </div>
+    <div class="form-horizontal clearfix">
+        <div class="form-group form-group--l">
+            <div class="label-form">
+                @Html.Label(Labels.Keyword, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.TextBoxFor(model => model.Employee,
+                    new { placeholder = Messages.SearchEmployeeWatermark, @class = "form-control", @maxlength = 200, autocomplete = "off" })
+            </div>
+        </div>
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.Label(Labels.UserStatus, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @RazorHelper.UserStatusDropDownList("EmployeeStatusId", classHTML: "form-control", selectedId: Model.EmployeeStatusId)
+            </div>
+        </div>
+        <div class="form-group form-group--m">
+            <button type="button" class="btn btn-primary" id="btnSearch">@Labels.Search</button>
+            <button type="button" class="btn btn-excel" id="btnExcel">@Labels.Excel</button>
+        </div>
+    </div>
+</form>
+<div id="WeeklyWorkingHoursDetails"></div>

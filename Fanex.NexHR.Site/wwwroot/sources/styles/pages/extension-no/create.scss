@@ -1,0 +1,13 @@
+﻿@import '../../abstracts/variables';
+@import '../../abstracts/mixins';
+@import '../../components/buttons-new';
+@import '../../components/card';
+@import '../../components/checkbox';
+@import '../../components/form-horizontal';
+@import '../../components/react-autocomplete-wrapper';
+@import '../../components/validation';
+@import '../../layout/_toastr.scss';
+
+.react-autocomplete-wrapper{
+    width :auto;
+}

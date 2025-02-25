@@ -1,0 +1,53 @@
+﻿@import '../../abstracts/mixins';
+@import '../../vendors/multiselect';
+@import '../../layout/filter';
+@import '../../layout/table';
+@import '../../components/validation';
+@import '../../components/buttons-new';
+@import '../../components/jquery-ui-dialog';
+
+.table {
+    .action-column {
+        a {
+            cursor: pointer;
+        }
+    }
+}
+
+.dialog-form {
+    .form-horizontal {
+        .label-form {
+            width: 90px;
+
+            label {
+                text-align: left;
+            }
+        }
+
+        .form-group--m {
+            width: 400px;
+
+            .input-form {
+                width: calc(100% - 90px);
+            }
+        }
+
+        .calendar-form {
+            position: relative;
+            width: 150px !important;
+
+            .form-control {
+                width: 130px !important;
+            }
+        }
+
+        textarea.form-control {
+            height: 100px;
+            resize: vertical;
+        }
+
+        .workinghours {
+            width: 150px;
+        }
+    }
+}

@@ -1,0 +1,71 @@
+﻿@using Fanex.NexHR.Models
+@using System.Web.Mvc.Html5
+@model CreateShiftModel
+@{
+    ViewBag.Title = @Labels.Shift;
+}
+@section css{
+    <link href="~/wwwroot/dist/styles/shift.edit.css" rel="stylesheet" />
+}
+@section js{
+    <script src="~/wwwroot/dist/js/shift.edit.js"></script>
+}
+@section Breadcrumb {
+    <a class="step">@Labels.CompanySpace</a>
+    <a class="step" href="@Url.Action("index", "shift")">@Labels.ShiftManagement</a>
+    <span class="step">@Labels.Create</span>
+}
+<h2 class="page-title">@Labels.Create</h2>
+<div class="card">
+    <form class="form-horizontal clearfix" method="post">
+        @Html.ValidationSummary()
+
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.Name, new { @class = "control-label" })*
+            </div>
+            <div class="input-form input-form-custom">
+                @Html.TextBoxFor(model => model.Name, new { maxlength = "20", @class = "form-control shift-name" })
+            </div>
+        </div>
+
+        <div class="form-group input-time">
+            <div class="label-form">
+                @Html.LabelFor(model => model.HourTimeIn, @Labels.TimeIn, new { @class = "control-label" })*
+            </div>
+            <div class="input-form input-form-custom">
+                @Html.Html5Number(0, 23, 1, Model.HourTimeIn, new { Name = "HourTimeIn", MaxLength = "2", id = "HourTimeIn", @class = "form-control" })
+                :
+                @Html.Html5Number(0, 59, 1, Model.MinuteTimeIn, new { Name = "MinuteTimeIn", MaxLength = "2", id = "MinuteTimeIn", @class = "form-control" })
+                <div class="checkbox-group">
+                    @Html.CheckBoxCustomFor(model => model.IsInAfterDay)
+                    @Html.LabelFor(model => model.IsInAfterDay, new { @class = "checkbox-label" })
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group input-time">
+            <div class="label-form">
+                @Html.LabelFor(model => model.HourTimeOut, @Labels.TimeOut, new { @class = "control-label" })*
+            </div>
+            <div class="input-form">
+                @Html.Html5Number(0, 23, 1, Model.HourTimeOut, new { Name = "HourTimeOut", MaxLength = "2", id = "HourTimeOut", @class = "form-control" })
+                :
+                @Html.Html5Number(0, 59, 1, Model.MinuteTimeOut, new { Name = "MinuteTimeOut", MaxLength = "2", id = "MinuteTimeOut", @class = "form-control" })
+                <div class="checkbox-group">
+                    @Html.CheckBoxCustomFor(model => model.IsOutAfterDay)
+                    @Html.LabelFor(model => model.IsOutAfterDay, new { @class = "checkbox-label" })
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="label-form">
+            </div>
+            <div class="input-form">
+                <input type="submit" class="btn btn-primary" value="@Labels.Save" />
+                <a href="@Url.Action("index", "shift")" class="btn btn-default">@Labels.Back</a>
+            </div>
+        </div>
+    </form>
+</div>

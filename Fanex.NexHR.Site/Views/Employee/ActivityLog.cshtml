@@ -1,0 +1,62 @@
+﻿@using Fanex.NexHR.Core
+@using Fanex.NexHR.Resources
+@using Fanex.NexHR.Models.Log
+@model IEnumerable<LogObjectDetail>
+@{
+    ViewBag.Title = Labels.ActivityLog;
+}
+@section css{
+    <link href="~/wwwroot/dist/styles/employee.log.details.css" rel="stylesheet" />
+}
+@section js{
+}
+@section Breadcrumb
+{
+    <a class="step" href="javascript:;">@Labels.HRSpace</a>
+    <a class="step" href="@Url.Action("usermanagement", "employee")">@Labels.EmployeeManagement</a>
+    <span class="step">@ViewBag.Title</span>
+}
+<h2 class="page-title">@Labels.Employee: @ViewBag.Employee</h2>
+<table class="table table-custom">
+    <thead>
+        <tr>
+            <th>@Labels.LogDate</th>
+            <th>@Labels.Actor</th>
+            <th>@Labels.Field</th>
+            <th>@Labels.OldValue</th>
+            <th>@Labels.NewValue</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Any())
+        {
+            var rowIndex = 1;
+            foreach (LogObjectDetail item in Model)
+            {
+                var rowClass = rowIndex % 2 == 0 ? "odd" : "even";
+                var childRowIndex = 1;
+                foreach (FieldValue field in item.Fields)
+                {
+                    <tr class="@rowClass">
+                        @if (childRowIndex == 1)
+                        {
+                            var mergeRow = item.Fields.Count();
+                            <td class="align-left" rowspan="@mergeRow">@item.LogDate.ToDetailFormatedDate()</td>
+                            <td rowspan="@mergeRow">@item.Nickname</td>
+                        }
+                        <td class="align-left">@field.DisplayName</td>
+                        <td class="align-left">@field.OldValue</td>
+                        <td class="align-left">@field.Value</td>
+                    </tr>
+                    childRowIndex++;
+                }
+
+                rowIndex++;
+            }
+        }
+        else
+        {
+            @RazorHelper.DisplayNoInformation(5)
+        }
+    </tbody>
+</table>

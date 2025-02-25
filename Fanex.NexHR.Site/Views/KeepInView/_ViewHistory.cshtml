@@ -1,0 +1,73 @@
+﻿@using Fanex.NexHR.Core
+@using Fanex.NexHR.Core.Enums
+@using Fanex.NexHR.Resources
+@using Fanex.NexHR.Models.Request
+@model IList<KeepInViewRequest>
+    <table class="table table-custom">
+        <thead>
+            <tr>
+                <th>@Labels.SymbolCount</th>
+                <th>@Labels.Team</th>
+                <th>@Labels.Employee</th>
+                <th>@Labels.Type</th>
+                <th>@Labels.RequestDate</th>
+                <th>@Labels.FromTime</th>
+                <th>@Labels.ToTime</th>
+                <th>@Labels.Remark</th>
+                <th>@Labels.Verifier</th>
+                <th>@Labels.Approver</th>
+                <th>@Labels.Status</th>
+                <th>@Labels.LogDate</th>
+            </tr>
+        </thead>
+        @if (Model != null && Model.Any())
+        {
+            <tbody>
+                @{int index = 1;}
+                @foreach (KeepInViewRequest request in Model)
+                {
+                    var fromTime = request.KeepInViewTypeId == (int)KeepInViewTypes.KeepInViewByDay && !request.IsHalfDay ? "-" : request.FromTime.ToString("HH:mm");
+                    var toTime = request.KeepInViewTypeId == (int)KeepInViewTypes.KeepInViewByDay && !request.IsHalfDay ? "-" : request.ToTime.ToString("HH:mm");
+                    <tr>
+                        <td>@(index++)</td>
+                        <td>@request.Requester.Team</td>
+                        <td>
+                            <span class="tooltip-tipsy" title="@request.Requester.FullName">@request.Requester.Nickname</span>
+                        </td>
+                        <td>@request.KeepInViewTypeName</td>
+                        <td>@request.OnDate.ToDayOfWeekFormatedDate()</td>
+                        <td>@fromTime</td>
+                        <td>@toTime</td>
+                        <td>
+                            @if (!string.IsNullOrWhiteSpace(request.Remark))
+                            {
+                                <span class="fa fa-comment tooltip-tipsy" title="@request.Remark" />
+                            }
+                            else
+                            {
+                                <span>-</span>
+                            }
+                        </td>
+                        <td>
+                            @if (request.Verifier != null)
+                            {
+                                @request.Verifier.Nickname
+                            }
+                        </td>
+                        <td>
+                            @if (request.Approver != null)
+                            {
+                                @request.Approver.Nickname
+                            }
+                        </td>
+                        <td>@request.Status.ToString()</td>
+                        <td class="align-left">@string.Format(Messages.LogDate, @request.Modifier.Nickname, @request.InsertedDate.ToShortFormatedDate())</td>
+                    </tr>
+                }
+            </tbody>
+        }
+        else
+        {
+            @RazorHelper.DisplayNoInformation(colspan: 13);
+        }
+    </table>

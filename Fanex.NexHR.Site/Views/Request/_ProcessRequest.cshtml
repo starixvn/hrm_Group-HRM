@@ -1,0 +1,52 @@
+﻿@using Fanex.NexHR.Core.Enums
+@using Fanex.NexHR.Resources
+@model ProcessRequestViewModel
+@{ 
+    var showTableDiscipline = Model.ViewType == RequestViewType.HRSpace ? "hidden" : "";
+}
+<form>
+    @Html.HiddenFor(model => model.RequestId)
+    @Html.HiddenFor(model => model.EmployeeId)
+    @Html.HiddenFor(model => model.RoleId)
+    @Html.HiddenFor(model => model.Command)
+    <div class="formrow" @showTableDiscipline>
+        <div class="validation-summary-valid validation-summary-errors" style="display: none;"></div>
+        @switch (Model.RequestTypeId)
+        {
+            case (byte)RequestType.CheckIn:
+            case (byte)RequestType.CheckOut:
+                if (Model.CheckInOutDetail != null)
+                {
+                    Html.RenderPartial("ProcessRequest/_CheckInOutRequestDetail", Model.CheckInOutDetail);
+                }
+                break;
+            case (byte)RequestType.LateIn:
+            case (byte)RequestType.EarlyOut:
+                if (Model.LateInEarlyOutDetail != null)
+                {
+                    Html.RenderPartial("ProcessRequest/_LateInEarlyOutRequestDetail", Model.LateInEarlyOutDetail);
+                }
+                break;
+            case (byte)RequestType.ChangeShift:
+                if (Model.ChangeShiftDetails != null && Model.ChangeShiftDetails.Any())
+                {
+                    Html.RenderPartial("ProcessRequest/_ChangeShiftRequestDetail", Model.ChangeShiftDetails);
+                }
+                break;
+            case (byte)RequestType.Leave:
+                if (Model.LeaveDisciplines != null && Model.LeaveDisciplines.Any())
+                {
+                    Html.RenderPartial("ProcessRequest/_LeaveRequestDetail", Model.LeaveDisciplines);
+                }
+                break;
+        }
+    </div>
+    <div class="formrow">
+        <div class="label approver-comment">
+            @Html.LabelFor(model => model.Comment, @Labels.Comment):
+        </div>
+        <div class="input">
+            @Html.TextAreaFor(model => model.Comment, new { @class = "form-control", maxlength = 500 })
+        </div>
+    </div>
+</form>

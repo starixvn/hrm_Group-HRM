@@ -1,0 +1,53 @@
+﻿@using Fanex.NexHR.Core
+@using Fanex.NexHR.Core.Enums
+@model Fanex.NexHR.ViewModels.Employee.LoginViewModel
+@{
+    Layout = null;
+    var title = string.Empty;
+    byte siteId = ConfigSettings.SiteId;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>
+        @switch (siteId)
+        {
+            case (byte)SiteId.SMS:
+                title = "Welcome to SMS HRM";
+                break;
+            case (byte)SiteId.HM:
+                title = "Welcome to HM HRM";
+                break;
+        }
+        @title
+    </title>
+    <link href="~/wwwroot/sources/styles/login.css" rel="stylesheet" />
+</head>
+<body>
+    <div id="panel-login">
+        <div class="header-login">
+            <div class="header-container">
+                <div>
+                    @switch (siteId)
+                    {
+                        case (byte)SiteId.SMS:
+                            <img src="~/wwwroot/sources/styles/images/SMS-logo.png" />
+                            break;
+                        case (byte)SiteId.HM:
+                            <img src="~/wwwroot/sources/styles/images/Hongma-logo.png" />
+                            break;
+                    }
+                </div>
+                <div>
+                    <img src="~/wwwroot/sources/styles/images/signin_icon.png" alt="" />
+                </div>
+            </div>
+        </div>
+        <div id="login-page"></div>
+    </div>
+    
+    @Html.Hidden("RootURL", Url.Content("~/"))
+    <script src="~/wwwroot/dist/js/auth.index.js" defer></script>
+</body>
+</html>

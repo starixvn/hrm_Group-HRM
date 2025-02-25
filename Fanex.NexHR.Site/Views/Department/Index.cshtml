@@ -1,0 +1,19 @@
+﻿@using Fanex.NexHR.Resources
+@model bool
+@{
+    ViewBag.Title = @Labels.DepartmentManagement;
+}
+@section css{
+    <link href="~/wwwroot/dist/styles/department.index.css" rel="stylesheet" />
+}
+@section js{
+    <script type="text/javascript">
+        window.hasPermission = "@Model";
+    </script>
+    <script src="~/wwwroot/dist/js/department.home.js"></script>
+}
+@section Breadcrumb {
+    <a class="step">@Labels.SASpace</a><span class="step">@ViewBag.Title</span>
+}
+<h2 class="page-title">@ViewBag.Title</h2>
+<div id="department"></div>

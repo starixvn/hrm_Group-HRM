@@ -1,0 +1,96 @@
+﻿@using Fanex.NexHR.Resources
+@using Fanex.NexHR.ViewModels.EmployeeWorkFromHome
+@model EmployeeWorkFromHomeViewModel
+@{
+    var today = DateTime.Today;
+    var maxDate = new DateTime(today.Year + 2, 1, 1).AddDays(-1);
+}
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "edit-form", @class = "dialog-form" }))
+{
+    @Html.ValidationSummary()
+    @Html.HiddenFor(model => model.EmployeeWorkFromHomeId)
+    <div class="form-horizontal clearfix">
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.LabelFor(model => model.Employee, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.TextBox("Employee", Model.Employee, new { @class = "form-control", placeholder = Messages.SearchEmployeeWatermark })
+                @Html.HiddenFor(model => model.EmployeeId)
+            </div>
+        </div>
+    </div>
+
+    <div class="form-horizontal clearfix">
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.LabelFor(model => model.FromDate, new { @class = "control-label" })
+            </div>
+            <div class="calendar-form">
+                @Html.TextBox("FromDate", Model.FromDate.ToDateMonthYearFormatedDate(),
+                    new
+                    {
+                        @class = "datepicker form-control",
+                        @readonly = "readonly",
+                        maxdate = maxDate.ToString("yyyy/MM/dd")
+                    })
+                <i class="icon-calendar fa fa-calendar"></i>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-horizontal clearfix">
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.LabelFor(model => model.ToDate, new { @class = "control-label" })
+            </div>
+            <div class="calendar-form">
+                @Html.TextBox("ToDate", Model.ToDate.ToDateMonthYearFormatedDate(),
+                    new
+                    {
+                        @class = "datepicker form-control",
+                        @readonly = "readonly",
+                        maxdate = maxDate.ToString("yyyy/MM/dd")
+                    })
+                <i class="icon-calendar fa fa-calendar"></i>
+            </div>
+        </div>
+    </div>
+    <div class="form-horizontal clearfix">
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.LabelFor(model => model.Remark, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.TextAreaFor(model => model.Remark, new { @class = "form-control" })
+            </div>
+        </div>
+    </div>
+    <div class="form-horizontal clearfix">
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.LabelFor(model => model.Files, Labels.UploadFile, new { @class = "control-label" })
+            </div>
+            <div class="left input--m" id="upload">
+                <input type="file" id="file_emp_wfh" name="file_emp_wfh" size="55" multiple />
+            </div>
+        </div>
+    </div>
+    <div class="form-horizontal clearfix">
+        <div class="form-group form-group--m">
+            <div class="label-form">&nbsp;</div>
+            <div class="input-form" id="@Model.EmployeeWorkFromHomeId">
+                @if (Model.Files != null)
+                {
+                    foreach (string file in Model.Files)
+                    {
+                        <a href="javascript:;" class="delete-file" id="@file" data-id="@file">
+                            <i class="fa fa-close"></i>@file
+                        </a>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+}
