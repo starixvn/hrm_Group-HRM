@@ -1,9 +1,0 @@
-﻿.card {
-    background-color: #f4f4f4;
-    border: 1px solid #c8c8c8;
-    padding: 15px 10px;
-    @include border-radius(2px);
-    @include box-shadow(1px 1px 5px #888);
-    min-width: 600px;
-    max-width: 1150px;
-}
