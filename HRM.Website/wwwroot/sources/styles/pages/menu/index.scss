@@ -1,0 +1,17 @@
+﻿@import '../../abstracts/variables';
+@import '../../abstracts/mixins';
+@import '../../layout/table';
+@import '../../components/buttons-new';
+@import '../../components/_jquery-ui-dialog.scss';
+@import '../../components/_checkbox.scss';
+
+.checkbox-custom {
+
+    & + label:before {
+        content: none;
+    }
+
+    & + label:after {
+        border-color: mediumseagreen;
+    }
+}

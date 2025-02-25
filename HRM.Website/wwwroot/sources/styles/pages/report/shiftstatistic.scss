@@ -1,0 +1,14 @@
+﻿@import '../../abstracts/variables';
+@import '../../abstracts/mixins';
+@import '../../components/buttons-new';
+@import '../../components/checkbox';
+@import '../../components/multiselect-treeview';
+@import '../../layout/filter';
+@import '../../layout/table';
+@import '../../vendors/autocomplete';
+
+.multiselect-treeview {
+    .multiselect-treeview-dropdown-list {
+        width: 220px;
+    }
+}

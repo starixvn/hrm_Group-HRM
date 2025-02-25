@@ -1,0 +1,130 @@
+﻿@using HRM.Core
+@using HRM.Resources
+@using HRM.ViewModels.Overtime
+@model MemberMonthlyOvertimeRequestViewModel
+@{
+    ViewBag.Title = "Employee's overtime";
+}
+@section css{
+    <link href="~/wwwroot/dist/styles/overtime.member.index.css" rel="stylesheet" />
+}
+@section js{
+    <script src="~/wwwroot/dist/js/overtime.hr.index.js"></script>
+}
+@section Breadcrumb {
+    <a class="step">@Labels.Personal</a> <a class="step">@ViewBag.Title</a>
+}
+
+<div class="title">
+    <h2 class="page-title">@ViewBag.Title →&nbsp;</h2>
+    <a href="javascript:;" id="lkSendMail">Send mail to reminder claim OT</a>
+</div>
+
+@Html.Hidden("MinDate", new DateTime(2010, 1, 1).ToDateMonthYearFormatedDate())
+@Html.Hidden("MaxDate", DateTime.Now.AddYears(1).ToDateMonthYearFormatedDate())
+<form class="filter">
+    @Html.HiddenFor(model => model.TeamIds)
+    @Html.HiddenFor(model => model.Month)
+    <div class="form-horizontal clearfix">
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.Label(Labels.Month, new { @class = "control-label" })
+            </div>
+            <div class="select-form">
+                <div id="MonthControl"></div>
+            </div>
+        </div>
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.Label(Labels.Status, new { @class = "control-label" })
+            </div>
+            <div class="select-form">
+                @RazorHelper.StatusDropDownList(Model.StatusId, controlName: "StatusId", htmlClass: "form-control")
+            </div>
+        </div>
+
+        <div class="form-group form-group-sm">
+            <div class="label-form">
+                @Html.LabelFor(model => model.OvertimeType, "Overtime Type", new { @class = "control-label" })
+            </div>
+            <div class="select-form">
+                @{
+                    var types = new List<SelectListItem>
+                    {
+                        new SelectListItem() { Text = Labels.All, Value = ((short)OvertimeType.All).ToString() },
+                        new SelectListItem() { Text = Labels.NormalDay, Value = ((short)OvertimeType.Normal).ToString() },
+                        new SelectListItem() { Text = Labels.OffDay, Value = ((short)OvertimeType.Off).ToString() },
+                        new SelectListItem() { Text = Labels.PublicHoliday, Value = ((short)OvertimeType.Holiday).ToString() },
+                        new SelectListItem() { Text = Labels.SpecialOT, Value = ((short)OvertimeType.Special).ToString() },
+                    };
+                }
+                @Html.DropDownListFor(model => model.OvertimeType, types, new { @class = "form-control" })
+            </div>
+        </div>
+
+    </div>
+    <div class="form-horizontal clearfix">
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.Label(Labels.Category, new { @class = "control-label" })
+            </div>
+            <div class="select-form">
+                @RazorHelper.CategoryDropDownList("IsLocal",
+                    classHTML: "form-control",
+                    selectedId: Model.IsLocal.HasValue ? Model.IsLocal.Value.ToString() : string.Empty)
+            </div>
+        </div>
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                <label class="control-label">@Labels.SectionTeam</label>
+            </div>
+            <div class="select-form" id="Team"></div>
+        </div>
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.Label(Labels.Employee, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.TextBoxFor(model => model.Employee, new { placeholder = Messages.SearchEmployeeWatermark, @class = "form-control" })
+                @Html.Hidden("EmployeeId", Model.EmployeeId, new { data_val = "false" })
+            </div>
+        </div>
+        <div class="form-group form-group--m">
+            <button type="button" class="btn btn-primary" id="btnSearch">@Labels.Search</button>
+            <button id="btnExcel" type="button" class="btn btn-excel">@Labels.Excel</button>
+        </div>
+    </div>
+</form>
+<div id="listEmployeeOvertime"></div>
+@Html.Partial("_ConfirmModal")
+<div id="reminderMailModal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog-centered modal-dialog reminder-modal" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">@Labels.TitleReminderClaimOT</h4>
+            </div>
+            <div class="modal-body">
+                <p>@Messages.ReminderClaimOT</p>
+                <div class="form-horizontal clearfix">
+                    <div class="form-group">
+                        <label for="txtSubject" class="col-sm-2 control-label">@Labels.Subject:</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="txtSubject" maxlength="200" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="txtContent" class="col-sm-2 control-label">@Labels.Content:</label>
+                        <div class="col-sm-10">
+                            <textarea class="form-control" id="txtContent" maxlength="5000"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btnSendMail" class="btn btn-primary">Send</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">@Labels.Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>

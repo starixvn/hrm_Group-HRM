@@ -1,0 +1,174 @@
+﻿@using HRM.Resources
+@using HRM.Models.Overtime
+@model MonthlyOvertimeRequest
+@{
+    var verifier = string.Empty;
+    var approver = string.Empty;
+    ViewBag.Title = Labels.MemberOvertime + " of " + Model.Requester.Nickname + " (" + (Model.Month).ToString("MMM-yyyy") + ")";
+    verifier = string.Format("{0} ({1})", Model.Verifier.Nickname, Model.Verifier.FullName);
+    approver = string.Format("{0} ({1})", Model.Approver.Nickname, Model.Approver.FullName);
+}
+
+@section css{
+    <link href="~/wwwroot/dist/styles/overtime.member.details.css" rel="stylesheet" />
+}
+@section js{
+    <script src="~/wwwroot/dist/js/overtime.hr.details.js"></script>
+}
+@section Breadcrumb {
+    <a class="step">@Labels.Personal</a> <a class="step">@ViewBag.Title</a>
+}
+
+<h2 class="page-title">@ViewBag.Title</h2>
+
+<div class="header-control">
+    @Html.Hidden("RequestId", Model.RequestId)
+    @Html.Hidden("StatusId", Model.Status.Id)
+    <div class="form-horizontal clearfix">
+        <span>
+            ※ @Html.Label(Labels.VerifiedBy + ": ", new { @class = "control-label" })
+            @verifier
+        </span>
+        <span>
+            ※ @Html.Label(Labels.ApprovedBy + ": ", new { @class = "control-label" })
+            @approver
+        </span>
+        <span>
+            ※ @Html.Label(Labels.Status + ": ", new { @class = "control-label" })
+            @Model.Status
+        </span>
+    </div>
+
+    <div>
+        @switch (Model.Status.Id)
+        {
+            case (byte)CurrentRequestStatus.Approved:
+                <input type="button" class="btn btn-primary" id="btnProcess" value="@Labels.Process" />
+                <input type="button" class="btn btn-primary" id="btnVoid" value="@Labels.Void" />
+                break;
+            case (byte)CurrentRequestStatus.Processed:
+            case (byte)CurrentRequestStatus.Void:
+                <input type="button" class="btn btn-primary" id="btnReset" value="@Labels.Reset" />
+                break;
+        }
+
+        <button type="button" class="btn btn-default" onclick="window.history.back()">@Labels.Back</button>
+    </div>
+</div>
+<table class="table table-custom" id="data">
+    <thead>
+        <tr>
+            <th>@Labels.Date</th>
+            <th>@Labels.Shift</th>
+            <th>@Labels.TimeIn</th>
+            <th>@Labels.TimeOut</th>
+            <th>@Labels.TotalHours</th>
+            <th>@Labels.NormalDay</th>
+            <th>@Labels.OffDay</th>
+            <th>@Labels.PublicHoliday</th>
+            <th>@Labels.SpecialOT</th>
+            <th>@Labels.Remark</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.DailyOvertimes.Any())
+        {
+            foreach (DailyOvertimeRequest request in Model.DailyOvertimes)
+            {
+                <tr>
+                    @{
+                        var className = string.Empty;
+                        if (request.IsHoliday)
+                        {
+                            className = "holiday";
+                        }
+                        else if (request.WorkDate.DayOfWeek == DayOfWeek.Saturday || request.WorkDate.DayOfWeek == DayOfWeek.Sunday)
+                        {
+                            className = "weekend";
+                        }
+                    }
+                    <td class="@className">
+                        @request.WorkDate.ToString("dd-MMM-yyyy (ddd)")
+                    </td>
+                    <td>
+                        @if (!string.IsNullOrWhiteSpace(request.ShiftCode))
+                        {
+                            @request.ShiftCode
+                        }
+                        else if (request.IsHoliday)
+                        {
+                            @Labels.Holiday
+                        }
+                        else if (request.IsOffDay)
+                        {
+                            @Labels.Off
+                        }
+                    </td>
+                    <td>@request.TimeIn</td>
+                    <td>@request.TimeOut</td>
+                    <td>
+                        @if (request.ActualWorkingHours > 0)
+                        {
+                            @request.ActualWorkingHours
+                        }
+                    </td>
+                    <td>
+                        @if (request.NormalHours > 0)
+                        {
+                            @request.NormalHours
+                        }
+                    </td>
+                    <td>
+                        @if (request.OffHours > 0)
+                        {
+                            @request.OffHours
+                        }
+                    </td>
+                    <td>
+                        @if (request.PublicHours > 0)
+                        {
+                            @request.PublicHours
+                        }
+                    </td>
+                    <td>
+                        @if (request.SpecialHours > 0)
+                        {
+                            @request.SpecialHours
+                        }
+                    </td>
+                    <td class="align-left">@request.Remark</td>
+                    @if (request.TotalShiftHours != 0 && ((request.ActualWorkingHours >= request.TotalShiftHours + 1)
+                        || ((request.NormalHours > request.ActualWorkingHours - Model.Requester.WorkingHours)
+                            && request.ActualWorkingHours >= Model.Requester.WorkingHours)))
+                    {
+                        var tooltip = "[Total Working Hours]/[Shift Hours]: " + request.ActualWorkingHours + " / " + request.TotalShiftHours;
+                        <td class="tooltip-tipsy" title="@tooltip">
+                            <i class="fa fa-exclamation-triangle"></i>
+                        </td>
+                    }
+                    else
+                    {
+                        <td></td>
+                    }
+                </tr>
+            }
+        }
+        else
+        {
+            @RazorHelper.DisplayNoInformation(colspan: 11)
+        }
+    </tbody>
+    <tfoot>
+        <tr class="summary">
+            <td class="align-right" colspan="5">@Labels.TotalOvertimeHours:</td>
+            <td>@Model.DailyOvertimes.Sum(t => t.NormalHours).ToString("0.00")</td>
+            <td>@Model.DailyOvertimes.Sum(t => t.OffHours).ToString("0.00")</td>
+            <td>@Model.DailyOvertimes.Sum(t => t.PublicHours).ToString("0.00")</td>
+            <td>@Model.DailyOvertimes.Sum(t => t.SpecialHours).ToString("0.00")</td>
+            <td></td>
+            <td></td>
+        </tr>
+    </tfoot>
+</table>
+@Html.Partial("_ConfirmModal")

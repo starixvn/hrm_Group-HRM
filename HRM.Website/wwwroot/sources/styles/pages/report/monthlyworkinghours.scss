@@ -1,0 +1,32 @@
+﻿@import '../../abstracts/variables';
+@import '../../abstracts/mixins';
+@import '../../components/buttons-new';
+@import '../../components/multiselect-treeview';
+@import '../../layout/filter';
+@import '../../layout/table';
+
+.multiselect-treeview {
+    .multiselect-treeview-dropdown-list {
+        width: 220px;
+    }
+}
+
+.table {
+    .cell-section {
+        width: 120px;
+        min-width: 120px;
+    }
+
+    .cell-fullname {
+        width: 150px;
+        min-width: 150px;
+    }
+
+    .pending {
+        color: red;
+    }
+
+    .unpaidleave {
+        background-color: #f8f89c;
+    }
+}

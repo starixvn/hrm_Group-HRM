@@ -1,0 +1,36 @@
+﻿@{
+    ViewBag.Title = "Edit Employee Supervisor";
+    var employeeId = (int)ViewBag.EmployeeId;
+    var roleId = (short)ViewBag.RoleId;
+    var breadcrumb = string.Empty;
+}
+@section css{
+    <link href="~/wwwroot/dist/styles/team.edit.supervisor.css" rel="stylesheet" />
+}
+@section js{
+    <script src="~/wwwroot/dist/js/employee.edit.supervisor.js"></script>
+}
+@section Breadcrumb
+{
+    <a class="step" href="javascript:;">@Labels.HRSpace</a>
+    <a class="step" href="@Url.Action("usermanagement", "employee")">@Labels.EmployeeManagement</a>
+    <a class="step" href="@Url.Action("edit", "employee", new { id = employeeId })">@Labels.EmployeePersonalInformation</a>
+    <a class="step">
+        @switch (roleId)
+        {
+            case (short)RoleSystem.Verifier:
+                breadcrumb = Labels.Verifier;
+                break;
+            case (short)RoleSystem.Approver:
+                breadcrumb = Labels.Approver;
+                break;
+            case (short)RoleSystem.OnBehalfRequest:
+                breadcrumb = Labels.OnBehalfRequest;
+                break;
+        }
+        @breadcrumb
+    </a>
+}
+@Html.Hidden("EmployeeId", employeeId)
+@Html.Hidden("RoleId", roleId)
+<div id="supervisor-wrapper"></div>

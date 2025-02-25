@@ -1,0 +1,24 @@
+﻿@using HRM.Resources
+@model ExtensionNoModel
+@{
+    ViewBag.Title = Labels.Edit;
+}
+@section css{
+    <link href="~/wwwroot/dist/styles/extensionno.create.css" rel="stylesheet" />
+}
+@section js{
+    <script>
+        window.id = '@ViewBag.Id';
+        window.isInternal = '@ViewBag.isInternal';
+    </script>
+    
+    <script src="~/wwwroot/dist/js/extensionno.edit.js"></script>
+}
+@section Breadcrumb {
+    <a class="step">@Labels.CompanySpace</a>
+    <a class="step" href="@Url.Action("index", "ExtensionNo")">@Labels.ExtensionNumber</a>
+    <span class="step">@ViewBag.Title</span>
+}
+<h2 class="page-title">@ViewBag.Title</h2>
+
+<div id="edit-extension-no"></div>

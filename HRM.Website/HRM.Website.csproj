@@ -1,0 +1,77 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Remove="App_Data\SpNames.xml" />
+    <None Remove="logs\log.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_Data\SpNames.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="ExcelTemplates\AttendanceReport.xlsx" />
+    <Content Include="ExcelTemplates\DailyOvertimeDetails.xlsx" />
+    <Content Include="ExcelTemplates\DailyWorkingHours.xlsx" />
+    <Content Include="ExcelTemplates\DisciplineDetailReport.xls" />
+    <Content Include="ExcelTemplates\DisciplineSummaryPerYear.xlsx" />
+    <Content Include="ExcelTemplates\DisciplineSummaryReport.xls" />
+    <Content Include="ExcelTemplates\DriverPickup.xlsx" />
+    <Content Include="ExcelTemplates\EmployeeBasicInfoTemplate.xls" />
+    <Content Include="ExcelTemplates\EmployeeDetailsInfoTemplate.xls" />
+    <Content Include="ExcelTemplates\EmployeeFullProfileInfoTemplate.xls" />
+    <Content Include="ExcelTemplates\EmployeeOvertimeTemplate.xlsx" />
+    <Content Include="ExcelTemplates\EmployeeSupervisor.xlsx" />
+    <Content Include="ExcelTemplates\EmployeeWorkFromHome.xls" />
+    <Content Include="ExcelTemplates\HospitalizationLeaveSummary.xls" />
+    <Content Include="ExcelTemplates\JobTitleSummary.xlsx" />
+    <Content Include="ExcelTemplates\LeaveSummaryTemplate.xls" />
+    <Content Include="ExcelTemplates\Manpower.xlsx" />
+    <Content Include="ExcelTemplates\ManpowerCategory.xlsx" />
+    <Content Include="ExcelTemplates\MealAllowanceSummary.xlsx" />
+    <Content Include="ExcelTemplates\MonthlyOvertime.xlsx" />
+    <Content Include="ExcelTemplates\MonthlyWorkingHours.xlsx" />
+    <Content Include="ExcelTemplates\ShiftStatisticDetailTemplate.xlsx" />
+    <Content Include="ExcelTemplates\ShiftStatisticTemplate.xlsx" />
+    <Content Include="ExcelTemplates\SickLeaveSummary.xls" />
+    <Content Include="ExcelTemplates\TeamSupervisor.xlsx" />
+    <Content Include="ExcelTemplates\TimeRecordTemplate.xlsx" />
+    <Content Include="ExcelTemplates\UnpaidLeaveSummaryH1Template.xls" />
+    <Content Include="ExcelTemplates\UnpaidLeaveSummaryH2Template.xls" />
+    <Content Include="ExcelTemplates\UnpaidLeaveSummaryTemplate.xls" />
+    <Content Include="ExcelTemplates\WeekendLeaveDetailTemplate.xls" />
+    <Content Include="ExcelTemplates\WeekendLeaveSummaryTemplate.xls" />
+    <Content Include="ExcelTemplates\WeeklyWorkingHours.xlsx" />
+    <Content Include="ExcelTemplates\WorkingCalendar.xlsx" />
+    <Content Include="ExcelTemplates\WorkingCalendarSummary.xlsx" />
+    <Content Include="ExcelTemplates\WorkingHoursSummary.xlsx" />
+    <Content Include="ExcelTemplates\WorkingTimeRequestTemplate.xls" />
+    <Content Include="ExcelTemplates\YearlyOvertime.xlsx" />
+    <Content Include="logs\log.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\HRM.Controllers\HRM.Controllers.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Fanex.Common" Version="1.1.2.1" />
+    <PackageReference Include="Fanex.Data" Version="4.2.2" />
+    <PackageReference Include="Fanex.Data.SqlServer" Version="4.2.2" />
+    <PackageReference Include="Fanex.Logging" Version="2.0.1" />
+    <PackageReference Include="Fanex.Logging.Extensions" Version="1.0.6" />
+    <PackageReference Include="Fanex.Logging.Extensions.Database" Version="1.0.8" />
+    <PackageReference Include="GO.UserControl.Client.AspNetCore" Version="1.0.1" />
+    <PackageReference Include="GO.UserControl.Client.Core" Version="1.0.2" />
+    <PackageReference Include="Hangfire" Version="1.8.17" />
+    <PackageReference Include="Hangfire.Core" Version="1.8.17" />
+    <PackageReference Include="Hangfire.SqlServer" Version="1.8.17" />
+    <PackageReference Include="jose-jwt" Version="5.0.0" />
+    <PackageReference Include="log4net" Version="2.0.15" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Antlr4" Version="4.6.6" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Update="nlog.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+</Project>

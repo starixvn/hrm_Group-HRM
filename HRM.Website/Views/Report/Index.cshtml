@@ -1,0 +1,137 @@
+﻿@using HRM.Resources
+@using HRM.Core.Constants
+@using GO.UserControl.Client.Core.Models
+@model IEnumerable<FunctionPermission>
+@{
+    ViewBag.Title = Labels.Reports;
+}
+@section css{
+    <link href="~/wwwroot/dist/styles/home.index.css" rel="stylesheet" />
+}
+@section js{
+}
+@section Breadcrumb {
+    <a class="step">@Labels.Personal</a>
+    <a class="step">@ViewBag.Title</a>
+}
+<h2 class="page-title">@Labels.Reports</h2>
+<table class="table table-custom" id="reports">
+    <thead>
+        <tr>
+            <th>@Labels.SymbolCount</th>
+            <th>@Labels.ReportType</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Count() > 0)
+        {
+            var rowIndex = 1;
+            foreach (FunctionPermission function in Model)
+            {
+                switch (function.FunctionKey)
+                {
+                    case FunctionKey.AttendanceMonthlyReport:
+                        <tr>
+                            <td>@(rowIndex++)</td>
+                            <td class="align-left">
+                                @Html.ActionLink(Labels.AttendanceMonthlyDetail, "index", "MonthlyWorkingHours")
+                            </td>
+                        </tr>
+                        break;
+                    case FunctionKey.AttendanceWeeklyReport:
+                        <tr>
+                            <td>@(rowIndex++)</td>
+                            <td class="align-left">
+                                @Html.ActionLink(Labels.AttendanceWeeklyDetail, "index", "WeeklyWorkingHours")
+                            </td>
+                        </tr>
+                        break;
+                    case FunctionKey.AttendanceDailyReport:
+                        <tr>
+                            <td>@(rowIndex++)</td>
+                            <td class="align-left">
+                                @Html.ActionLink(Labels.AttendanceDailyDetail, "index", "DailyWorkingHours")
+                            </td>
+                        </tr>
+                        break;
+                    case FunctionKey.MonthlyOvertimeReport:
+                        <tr>
+                            <td>@(rowIndex++)</td>
+                            <td class="align-left">
+                                @Html.ActionLink("Monthly OT Summary", "MonthlyOvertime", "OvertimeReport")
+                            </td>
+                        </tr>
+                        break;
+                    case FunctionKey.YearlyOvertimeReport:
+                        <tr>
+                            <td>@(rowIndex++)</td>
+                            <td class="align-left">
+                                @Html.ActionLink("Yearly OT Summary", "YearlyOvertime", "OvertimeReport")
+                            </td>
+                        </tr>
+                        break;
+                    case FunctionKey.OvertimeReport:
+                        <tr>
+                            <td>@(rowIndex++)</td>
+                            <td class="align-left">
+                                @Html.ActionLink("OT Data", "DailyOvertime", "OvertimeReport")
+                            </td>
+                        </tr>
+                        break;
+                    case FunctionKey.AttendanceStatisticReport:
+                        <tr>
+                            <td>@(rowIndex++)</td>
+                            <td class="align-left">
+                                @Html.ActionLink("Attendance Statistic for Payroll", "index", "WorkingHoursSummaryReport")
+                            </td>
+                        </tr>
+                        break;
+                    case FunctionKey.WorkingCalendarReport:
+                        <tr>
+                            <td>@(rowIndex++)</td>
+                            <td class="align-left">
+                                @Html.ActionLink(Labels.WorkingCalendarSummary, "index", "WorkingCalendarSummaryReport")
+                            </td>
+                        </tr>
+                        break;
+                    case FunctionKey.ManpowerReport:
+                        <tr>
+                            <td>@(rowIndex++)</td>
+                            <td class="align-left">
+                                @Html.ActionLink(Labels.Manpower, "Manpower", "ManpowerReport")
+                            </td>
+                        </tr>
+                        break;
+                    case FunctionKey.ManpowerCategoryReport:
+                        <tr>
+                            <td>@(rowIndex++)</td>
+                            <td class="align-left">
+                                @Html.ActionLink(Labels.ManpowerCategory, "ManpowerCategory", "ManpowerReport")
+                            </td>
+                        </tr>
+                        break;
+                    case FunctionKey.MealAllowanceReport:
+                        <tr>
+                            <td>@(rowIndex++)</td>
+                            <td class="align-left">
+                                @Html.ActionLink(Labels.MealAllowanceReport, "Index", "MealAllowanceReport")
+                            </td>
+                        </tr>
+                        break;
+                    case FunctionKey.DisciplineSummaryPerYear:
+                        <tr>
+                            <td>@(rowIndex++)</td>
+                            <td class="align-left">
+                                @Html.ActionLink("5 Years Discipline Summary", "Index", "DisciplineSummaryPerYear")
+                            </td>
+                        </tr>
+                        break;
+                }
+            }
+        }
+        else
+        {
+            @RazorHelper.DisplayNoInformation(colspan: 2)
+        }
+    </tbody>
+</table>

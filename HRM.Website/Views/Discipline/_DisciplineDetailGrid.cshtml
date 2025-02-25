@@ -1,0 +1,269 @@
+﻿@using HRM.Core
+@using HRM.Core.Enums
+@using HRM.Models.Discipline
+@using HRM.Resources
+@model IList<DisciplineDetailModel>
+@{
+    var hasPermissionToEdit = (bool)ViewBag.HasPermissionToEdit;
+    var hasPermissionToUpdateOutOfControlReason = (bool)ViewBag.HasPermissionToUpdateOutOfControlReason;
+}
+@helper RenderTooltipLog(DisciplineModel detail)
+{
+    if (!string.IsNullOrWhiteSpace(detail.IgnoreBy))
+    {
+        <span>@string.Format(Messages.IgnoreDisciplineDetail, detail.IgnoreBy, detail.IgnoreDate.ToShortFormatedDate())</span>
+    }
+}
+@helper RenderDisciplineCell(int employeeId, DateTime workDate, DisciplineModel detail, string value, short disciplineTypeId, string checkboxId)
+{
+    if (detail.Value > 0)
+    {
+        <span class="float-left">@value</span>
+        if (detail.HasViolated)
+        {
+            <input class="float-right ignoredDiscipline checkbox-custom" type="checkbox"
+                   id="@checkboxId" name="@checkboxId"
+                   checked="@detail.HasIgnored"
+                   disabled="@detail.HasApprovedBy.Equals(false)"
+                   data-workdate="@workDate.Date.ToString("d")" data-employee-id="@employeeId"
+                   data-discipline-type-id="@disciplineTypeId" data-discipline-score="@detail.Score"
+                   data-has-ignored="@detail.HasIgnored" data-changed="false" />
+            <label for="@checkboxId"></label>
+        }
+    }
+    else
+    {
+        <span class="float-left">-</span>
+    }
+}
+<table id="data" class="table table-custom discipline-detail">
+    <thead>
+        @if (Model != null & Model.Any() && hasPermissionToEdit)
+        {
+            <tr>
+                <th colspan="24" style="text-align: left;">
+                    <input type="button" class="btn btn-primary" id="saveChange" value="@Labels.Save" />
+                </th>
+            </tr>
+        }
+        <tr>
+            <th>@Labels.SymbolCount</th>
+            @if (hasPermissionToUpdateOutOfControlReason)
+            {
+                <th>
+                    <input type="checkbox" class="checkbox-custom" id="checkAll"
+                           name="checkAll" value="true" />
+                    <label for="checkAll" class="header-label">@Labels.OutOfControlReason</label>
+                </th>
+            }
+            <th>@Labels.Date</th>
+            <th>@Labels.Team</th>
+            <th>@Labels.Nick</th>
+            <th>@Labels.Shift</th>
+            <th>@Labels.CheckIn</th>
+            <th>@Labels.CheckOut</th>
+            <th>@Labels.TotalHours</th>
+            <th class="width-80">@Labels.MissingCheckInOut</th>
+            <th class="width-80">@Labels.WorkingUnderTime</th>
+            <th>@Labels.LateIn</th>
+            <th>@Labels.EarlyOut</th>
+            <th>@Labels.Absent</th>
+            <th>@Labels.UPL</th>
+            <th>@Labels.UPLAbsent</th>
+            <th>@Labels.ChangeShift</th>
+            <th>@Labels.LateRequestLeave</th>
+            <th>@Labels.WeekendLeave</th>
+            <th>@Labels.SevenDaysLeave</th>
+            <th class="width-80">@Labels.DisciplinePoint</th>
+            <th class="width-80">@Labels.DisciplineByApprover</th>
+            <th class="width-80">@Labels.ApproverComment</th>
+            <th class="width-80">@Labels.EmployeeComment</th>
+        </tr>
+    </thead>
+    @if (Model != null && Model.Any())
+    {
+        int rowIndex = 0;
+        <tbody>
+            @foreach (DisciplineDetailModel item in Model)
+            {
+                short colIndex = 1;
+                rowIndex++;
+                var checkboxId = string.Format("checkbox-{0}-{1}", rowIndex, colIndex++);
+                <tr>
+                    <td>@rowIndex</td>
+                    @if (hasPermissionToUpdateOutOfControlReason)
+                    {
+                        <td>
+                            <input type="checkbox" class="checkbox-custom outOfControlReason" id="@checkboxId"
+                                   name="@checkboxId" checked="@item.IsOutOfControlReason" data-changed="false"
+                                   data-originchecked="@item.IsOutOfControlReason" />
+                            <label for="@checkboxId"></label>
+                        </td>
+                    }
+                    <td class="@(item.IsWeekend ? "weekend" : string.Empty)">@item.WorkDate.ToDayOfWeekFormatedDate()</td>
+                    <td>@item.Employee.TeamName</td>
+                    <td class="tooltip-tipsy" title="@item.Employee.FullName">@item.Employee.NickName</td>
+                    <td>@item.ShiftName</td>
+                    <td>
+                        @if (item.CheckIn.HasValue)
+                        {
+                            @item.CheckIn.Value.ToString("HH:mm")
+                        }
+                        else
+                        {
+                            <span>-</span>
+                        }
+                    </td>
+                    <td>
+                        @if (item.CheckOut.HasValue)
+                        {
+                            @item.CheckOut.Value.ToString("HH:mm")
+                        }
+                        else
+                        {
+                            <span>-</span>
+                        }
+                    </td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(item.TotalHours))
+                        {
+                            @item.TotalHours
+                        }
+                        else
+                        {
+                            <span>-</span>
+                        }
+                    </td>
+                    <td class="tooltip-tipsy" title="@RenderTooltipLog(item.MissingCheckInOut)">
+                        @{
+                            checkboxId = string.Format("checkbox-{0}-{1}", rowIndex, colIndex++);
+                        }
+                        @RenderDisciplineCell(item.Employee.EmployeeId, item.WorkDate, item.MissingCheckInOut,
+                            item.MissingCheckInOut.Value.ToString(), (short)DisciplineType.MissingCheckInOut, checkboxId)
+                    </td>
+                    <td class="tooltip-tipsy" title="@RenderTooltipLog(item.WorkingUnderTime)">
+                        @{
+                            checkboxId = string.Format("checkbox-{0}-{1}", rowIndex, colIndex++);
+                        }
+                        @RenderDisciplineCell(item.Employee.EmployeeId, item.WorkDate, item.WorkingUnderTime,
+                            item.WorkingUnderTime.Value.ToString(), (short)DisciplineType.WorkingUnderTime, checkboxId)
+                    </td>
+                    <td class="tooltip-tipsy" title="@RenderTooltipLog(item.LateIn)">
+                        @{
+                            checkboxId = string.Format("checkbox-{0}-{1}", rowIndex, colIndex++);
+                        }
+                        @RenderDisciplineCell(item.Employee.EmployeeId, item.WorkDate, item.LateIn,
+                            item.MinutesLateIn, (short)DisciplineType.LateIn, checkboxId)
+                    </td>
+                    <td class="tooltip-tipsy" title="@RenderTooltipLog(item.EarlyOut)">
+                        @{
+                            checkboxId = string.Format("checkbox-{0}-{1}", rowIndex, colIndex++);
+                        }
+                        @RenderDisciplineCell(item.Employee.EmployeeId, item.WorkDate, item.EarlyOut,
+                            item.MinutesEarlyOut, (short)DisciplineType.EarlyOut, checkboxId)
+                    </td>
+                    <td class="tooltip-tipsy" title="@RenderTooltipLog(item.Absent)">
+                        @{
+                            checkboxId = string.Format("checkbox-{0}-{1}", rowIndex, colIndex++);
+                        }
+                        @RenderDisciplineCell(item.Employee.EmployeeId, item.WorkDate, item.Absent,
+                            item.Absent.Value.ToString(), (short)DisciplineType.Absent, checkboxId)
+                    </td>
+                    <td class="tooltip-tipsy" title="@RenderTooltipLog(item.UnpaidLeave)">
+                        @{
+                            checkboxId = string.Format("checkbox-{0}-{1}", rowIndex, colIndex++);
+                        }
+                        @RenderDisciplineCell(item.Employee.EmployeeId, item.WorkDate, item.UnpaidLeave,
+                            item.UnpaidLeave.Value.ToString(), (short)DisciplineType.UnpaidLeave, checkboxId)
+                    </td>
+                    <td class="tooltip-tipsy" title="@RenderTooltipLog(item.UnpaidLeaveAbsent)">
+                        @{
+                            checkboxId = string.Format("checkbox-{0}-{1}", rowIndex, colIndex++);
+                        }
+                        @RenderDisciplineCell(item.Employee.EmployeeId, item.WorkDate, item.UnpaidLeaveAbsent,
+                            item.UnpaidLeaveAbsent.Value.ToString(), (short)DisciplineType.UnpaidLeaveAbsent, checkboxId)
+                    </td>
+                    <td class="tooltip-tipsy" title="@RenderTooltipLog(item.ChangeShift)">
+                        @{
+                            checkboxId = string.Format("checkbox-{0}-{1}", rowIndex, colIndex++);
+                        }
+                        @RenderDisciplineCell(item.Employee.EmployeeId, item.WorkDate, item.ChangeShift,
+                            item.ChangeShift.Value.ToString(), (short)DisciplineType.ChangeShift, checkboxId)
+                    </td>
+                    <td class="tooltip-tipsy" title="@RenderTooltipLog(item.UnplannedLeave)">
+                        @{
+                            checkboxId = string.Format("checkbox-{0}-{1}", rowIndex, colIndex++);
+                        }
+                        @RenderDisciplineCell(item.Employee.EmployeeId, item.WorkDate, item.UnplannedLeave,
+                            item.UnplannedLeave.Value.ToString(), (short)DisciplineType.UnplannedLeave, checkboxId)
+                    </td>
+                    <td class="tooltip-tipsy" title="@RenderTooltipLog(item.WeekendLeave)">
+                        @{
+                            checkboxId = string.Format("checkbox-{0}-{1}", rowIndex, colIndex++);
+                        }
+                        @RenderDisciplineCell(item.Employee.EmployeeId, item.WorkDate, item.WeekendLeave,
+                            item.WeekendLeave.Value.ToString(), (short)DisciplineType.WeekendLeave, checkboxId)
+                    </td>
+                    <td class="tooltip-tipsy" title="@RenderTooltipLog(item.SevenDaysLeave)">
+                        @{
+                            checkboxId = string.Format("checkbox-{0}-{1}", rowIndex, colIndex++);
+                        }
+                        @RenderDisciplineCell(item.Employee.EmployeeId, item.WorkDate, item.SevenDaysLeave,
+                            item.SevenDaysLeave.Value.ToString(), (short)DisciplineType.SevenDaysLeave, checkboxId)
+                    </td>
+                    <td>
+                        @if (item.SystemSubtractScore > 0)
+                        {
+                            <span style="color: red">-@item.SystemSubtractScore.ToString("0.0")</span>
+                        }
+                        else
+                        {
+                            <span>@item.SystemSubtractScore.ToString("0.0")</span>
+                        }
+                    </td>
+                    <td class="approverSubtractScore">
+                        @if (item.ApproverSubtractScore > 0)
+                        {
+                            if (item.ApproverSubtractScore <= item.SystemSubtractScore)
+                            {
+                                <span style="color: red">-@item.ApproverSubtractScore.ToString("0.0")</span>
+                            }
+                            else
+                            {
+                                <span style="color: red">-@item.SystemSubtractScore.ToString("0.0")</span>
+                            }
+                        }
+                        else
+                        {
+                            <span>@item.ApproverSubtractScore.ToString("0.0")</span>
+                        }
+                    </td>
+                    @if (!string.IsNullOrEmpty(item.ApproverComment))
+                    {
+                        <td>
+                            <span class="fa fa-comment tooltip-tipsy" title="@item.ApproverComment"></span>
+                        </td>
+                    }
+                    else
+                    {
+                        <td></td>
+                    }
+                    @if (!string.IsNullOrEmpty(item.EmployeeComment))
+                    {
+                        <td>
+                            <span class="fa fa-comment tooltip-tipsy" title="@item.EmployeeComment"></span>
+                        </td>
+                    }
+                    else
+                    {
+                        <td></td>
+                    }
+                </tr>
+            }
+        </tbody>
+    }
+    else
+    {
+        @RazorHelper.DisplayNoInformation(colspan: 24);
+    }
+</table>

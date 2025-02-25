@@ -1,0 +1,38 @@
+﻿@using HRM.Core
+@using HRM.Models.Report
+@using HRM.Resources
+@model IEnumerable<ShiftStatisticDetail>
+
+<table id="data" class="table table-custom">
+    <thead>
+        <tr>
+            <th>@Labels.SymbolCount</th>
+            <th>@Labels.Date</th>
+            <th>@Labels.NickName</th>
+            <th>@Labels.FullName</th>
+            <th>@Labels.Team</th>
+            <th>@Labels.Shift</th>
+        </tr>
+    </thead>
+    @if (Model.Any())
+    {
+        int i = 1;
+        <tbody>
+            @foreach (ShiftStatisticDetail item in Model)
+            {
+                <tr>
+                    <td>@(i++)</td>
+                    <td>@item.WorkDate.ToDateMonthYearFormatedDate()</td>
+                    <td>@item.Nickname</td>
+                    <td class="align-left">@item.FullName</td>
+                    <td class="align-left">@item.Team</td>
+                    <td>@item.Shift</td>
+                </tr>
+            }
+        </tbody>
+    }
+    else
+    {
+        @RazorHelper.DisplayNoInformation(colspan: 6);
+    }
+</table>

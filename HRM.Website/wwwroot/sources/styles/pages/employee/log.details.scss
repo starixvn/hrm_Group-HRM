@@ -1,0 +1,15 @@
+﻿@import '../../abstracts/variables';
+@import '../../abstracts/mixins';
+@import '../../layout/table';
+
+.table-custom {
+    tbody tr {
+        &.odd {
+            background: #ececec !important;
+        }
+
+        &.even {
+            background: unset !important;
+        }
+    }
+}

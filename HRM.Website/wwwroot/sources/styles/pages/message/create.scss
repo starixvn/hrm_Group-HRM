@@ -1,0 +1,51 @@
+﻿@import '~chosen-js/chosen.css';
+@import '../../abstracts/_variables.scss';
+@import '../../abstracts/_mixins.scss';
+@import '../../components/_buttons-new.scss';
+@import '../../components/_card.scss';
+@import '../../components/_form-horizontal.scss';
+@import '../../components/_validation.scss';
+@import '../../components/_checkbox.scss';
+@import '../../components/multiselect-treeview';
+
+.success {
+    background: none repeat scroll 0 0 #cae3bf !important;
+    border: 1px solid #9DB886 !important;
+    color: #3C763D !important;
+    padding: 0.8em 0.8em 0.8em 1.8em !important;
+}
+
+.form-horizontal {
+    .form-group--m {
+        width: 400px;
+
+        label-form {
+            width: 10rem;
+        }
+
+        .input-form,
+        .calendar-form {
+            width: calc(100% - 10rem);
+        }
+    }
+
+    .form-group--l {
+        width: 600px;
+
+        label-form {
+            width: 10rem;
+        }
+
+        .input-form {
+            width: calc(100% - 10rem);
+
+            textarea {
+                height: 15rem;
+            }
+        }
+    }
+
+    .multi-select {
+        width: 100%;
+    }
+}

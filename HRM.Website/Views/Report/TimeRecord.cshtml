@@ -1,0 +1,107 @@
+﻿@using HRM.Core
+@using HRM.Resources
+@model TimeRecordViewModel
+@{
+    ViewBag.Title = @Labels.TimeRecord;
+    var hasPermission = (bool)ViewBag.HasPermission;
+}
+@section css{
+    <link href="~/wwwroot/dist/styles/report.time.record.css" rel="stylesheet" />
+}
+@section js{
+    <script src="~/wwwroot/dist/js/report.time.record.js"></script>
+}
+@section Breadcrumb {
+    <a class="step">@Labels.HRSpace</a> <span class="step">@ViewBag.Title</span>
+}
+<h2 class="page-title">@ViewBag.Title</h2>
+<form class="filter">
+    <div class="form-horizontal clearfix">
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.LabelFor(model => model.FromDate, new { @class = "control-label" })
+            </div>
+            <div class="calendar-form">
+                @Html.TextBox(Html.NameFor(model => model.FromDate).ToString(),
+                    Model.FromDate.ToDateMonthYearFormatedDate(),
+                    new {
+                        @class = "datepicker form-control",
+                        mindate = (new DateTime(2010, 1, 1)).ToString("yyyy/MM/dd")
+                    })
+                <i class="icon-calendar fa fa-calendar"></i>
+            </div>
+        </div>
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.LabelFor(model => model.ToDate, new { @class = "control-label" })
+            </div>
+            <div class="calendar-form">
+                @Html.TextBox(Html.NameFor(model => model.ToDate).ToString(),
+                    Model.ToDate.ToDateMonthYearFormatedDate(),
+                    new {
+                        @class = "datepicker form-control",
+                        mindate = (new DateTime(2010, 1, 1)).ToString("yyyy/MM/dd")
+                    })
+                <i class="icon-calendar fa fa-calendar"></i>
+            </div>
+        </div>
+        <div class="form-group form-group--m @(!hasPermission ? "hidden" : string.Empty)">
+            <div class="label-form">
+                <label class="control-label">@Labels.SectionTeam</label>
+            </div>
+            <div class="input-form" id="Team"></div>
+        </div>
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.LabelFor(model => model.Employee, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @if (hasPermission)
+                {
+                    @Html.TextBox("Employee", Model.Employee,
+                        new { placeholder = Messages.SearchEmployeeWatermark, @class = "form-control" })
+                }
+                else
+                {
+                    @Html.TextBox("Employee", Model.Employee,
+                        new { placeholder = Messages.SearchEmployeeWatermark, @class = "form-control", @disabled = "disabled" })
+                }
+                @Html.HiddenFor(model => model.EmployeeId)
+            </div>
+        </div>
+    </div>
+    <div class="form-horizontal clearfix">
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                <label class="control-label">@Labels.Category</label>
+            </div>
+            <div class="input-form">
+                @{
+                    var category = new List<SelectListItem>
+                    {
+                        new SelectListItem() {Text = "-- All --", Value = string.Empty},
+                        new SelectListItem() {Text = "Expat", Value = "0"},
+                        new SelectListItem() {Text = "Local", Value = "1"}
+                    };
+                }
+                @if (hasPermission)
+                {
+                    @Html.DropDownListFor(model => model.IsLocal, category, new { @class = "category form-control" })
+                }
+                else
+                {
+                    @Html.DropDownListFor(model => model.IsLocal, category, new { @class = "category form-control", @disabled = "disabled" })
+                }
+            </div>
+        </div>
+        <div class="form-group form-group--m">
+            <button id="btnSubmit" type="button" class="btn btn-primary">@Labels.Submit</button>
+            <button id="btnExcel" type="button" class="btn btn-excel @(!hasPermission ? "hidden" : string.Empty)">@Labels.Excel</button>
+        </div>
+    </div>
+    @Html.HiddenFor(model => model.ItemsPerPage)
+    @Html.HiddenFor(model => model.CurrentPage)
+    @Html.HiddenFor(model => model.TeamIds)
+</form>
+
+<div id="TimeRecordContent"></div>

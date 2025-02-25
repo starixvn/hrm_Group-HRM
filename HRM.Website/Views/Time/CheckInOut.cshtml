@@ -1,0 +1,20 @@
+﻿@using HRM.Core
+@model HRM.ViewModels.Employee.LoginViewModel
+@{
+    Layout = null;
+    byte siteId = ConfigSettings.SiteId;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Check in/out</title>
+    <link href="~/wwwroot/dist/styles/time.checkinout.css" rel="stylesheet" />
+</head>
+<body>
+    <div id="app"></div>
+    <input type="hidden" id="currentDateTime" value="@DateTime.Now.ToString("dd MMM, yyyy HH:mm:ss")" />
+    @Html.Hidden("RootURL", Url.Content("~/"))
+    <script src="~/wwwroot/dist/js/time.checkinout.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+﻿@import '../../../abstracts/variables';
+@import '../../../abstracts/mixins';
+@import '../../../components/buttons-new';
+@import '../../../components/card';
+@import '../../../components/form-horizontal';
+@import '../../../components/validation';
+@import '../../../layout/table';
+@import '../../../layout/toastr';
+@import '../../../vendors/autocomplete';
+
+.card {
+    width: 800px;
+}
+
+.change-shift-details {
+    width: 100%;
+    margin-left: 15px;
+}
+
+.table-custom {
+    .calendar-form {
+        width: 100% !important;
+        justify-content: center;
+    }
+}

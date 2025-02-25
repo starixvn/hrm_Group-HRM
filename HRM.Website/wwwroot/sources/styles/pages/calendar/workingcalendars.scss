@@ -1,0 +1,70 @@
+﻿@import '../../abstracts/variables';
+@import '../../abstracts/mixins';
+@import '../../components/buttons-new';
+@import '../../components/multiselect-treeview';
+@import '../../layout/filter';
+@import '../../layout/table';
+@import '../../layout/shift.color';
+@import '../../vendors/autocomplete';
+
+.toolbar {
+    background: #343c4e;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .quick-search {
+        min-width: 220px;
+        font-size: 1.3rem;
+        height: 27px;
+        padding: 0 5px;
+    }
+
+    .dropdown-color .btn {
+        background-color: #f1f1f1;
+        color: #000;
+        margin-right: 5px;
+        padding: 0 6px;
+        height: 25px;
+        line-height: 25px;
+        @include box-shadow(0 2px 2px 0 rgba(0, 0, 0, 0.1), 0 3px 2px -2px rgba(0, 0, 0, 0.1), 0 1px 5px 0 rgba(0, 0, 0, 0.1));
+    }
+
+    .dropdown-color {
+        margin-left: 5px;
+
+        .btn {
+            margin-right: 0;
+            padding: 0 4px;
+        }
+
+        .dropdown-menu {
+            left: unset;
+            right: 0;
+
+            li a {
+                line-height: normal;
+                color: #808080 !important;
+
+                span {
+                    width: 15px;
+                    height: 12px;
+                    margin-right: 10px;
+                    display: inline-block;
+                    border: 1px solid #d2d2d2;
+                }
+            }
+        }
+    }
+
+    .label-week {
+        padding: 4px 12px;
+        vertical-align: middle;
+        @include border-radius(40px);
+        color: #fff;
+        background-color: #1e88e5;
+    }
+}
+div.floatThead-container {
+    overflow-x: visible !important;
+}

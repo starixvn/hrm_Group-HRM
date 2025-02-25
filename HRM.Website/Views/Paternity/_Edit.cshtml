@@ -1,0 +1,56 @@
+﻿@using HRM.Resources
+@using HRM.ViewModels.Paternity
+@model PaternityViewModel
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "edit-form", @class = "dialog-form" }))
+{
+    @Html.ValidationSummary()
+    <div class="form-horizontal clearfix">
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.LabelFor(model => model.Employee, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.TextBox("Employee", Model.Employee, new { @class = "form-control", placeholder = Messages.SearchEmployeeWatermark })
+                @Html.HiddenFor(model => model.EmployeeId)
+            </div>
+        </div>
+    </div>
+    <div class="form-horizontal clearfix">
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.LabelFor(model => model.ChildBornDate, new { @class = "control-label" })
+            </div>
+            <div class="calendar-form">
+                @Html.TextBox("ChildBornDate", Model.ChildBornDate.ToDateMonthYearFormatedDate(),
+                    new {
+                        @class = "datepicker form-control",
+                        mindate = new DateTime(2010, 1, 1).ToString("yyyy/MM/dd"),
+                        maxdate = DateTime.Now.ToString("yyyy/MM/dd"),
+                        @readonly = "readonly"
+                    })
+                <i class="icon-calendar fa fa-calendar"></i>
+            </div>
+        </div>
+    </div>
+    <div class="form-horizontal clearfix">
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.LabelFor(model => model.LeaveDay, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.TextBox("LeaveDay", Model.LeaveDay, new { @class = "form-control", type = "number", min = 1 })
+            </div>
+        </div>
+    </div>
+    <div class="form-horizontal clearfix">
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.LabelFor(model => model.Remark, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.TextAreaFor(model => model.Remark, new { @class = "form-control" })
+            </div>
+        </div>
+    </div>
+}

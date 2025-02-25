@@ -1,0 +1,39 @@
+﻿.btn {
+    font-size: inherit;
+    padding-top: 4px;
+    padding-bottom: 4px;
+
+    &.btn-default {
+        background-color: #e6e6e6;
+    }
+
+    &.btn-request {
+        background-color: #f4783d;
+        color: #fff;
+        border: 1px solid #f4783d;
+        transition: all .2s ease-in;
+
+        &:hover, &:focus, &:active {
+            color: #fff;
+            background: lighten(#f4783d, 10%);
+            border-color: lighten(#f4783d, 10%);
+        }
+    }
+
+    &.btn-excel {
+        background: #549f3b;
+        color: #fff;
+        border: 1px solid #549f3b;
+        transition: all .2s ease-in;
+
+        &:hover, &:focus, &:active {
+            color: #fff;
+            background: lighten(#549f3b, 10%);
+            border-color: lighten(#549f3b, 10%);
+        }
+    }
+}
+.gap-btn {
+    display : flex;
+    gap : 5px;
+}

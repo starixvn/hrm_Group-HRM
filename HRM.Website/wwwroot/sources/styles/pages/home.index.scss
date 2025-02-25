@@ -1,0 +1,14 @@
+﻿@import '../abstracts/variables';
+@import '../abstracts/mixins';
+@import '../layout/table';
+@import '../components/checkbox';
+@import '../components/modal';
+
+table.table.table-custom {
+    width: 500px;
+
+    .pending {
+        color: red;
+        font-weight: bold;
+    }
+}

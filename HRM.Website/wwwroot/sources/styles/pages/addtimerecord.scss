@@ -1,0 +1,36 @@
+﻿@import '../abstracts/variables';
+@import '../abstracts/mixins';
+@import '../components/buttons-new';
+@import '../components/card';
+@import '../components/form-horizontal';
+@import '../components/validation';
+@import '../vendors/autocomplete';
+
+.card {
+    width: 800px;
+
+    .request-type {
+        display: flex;
+
+        .radioButton {
+            margin-right: 10px;
+
+            input, label {
+                cursor: pointer;
+            }
+
+            label {
+                font-weight: normal;
+                margin-left: 5px;
+            }
+        }
+    }
+
+    .request-time {
+        display: flex;
+        align-items: center;
+        .form-control {
+            margin: 0 4px;
+        }
+    }
+}

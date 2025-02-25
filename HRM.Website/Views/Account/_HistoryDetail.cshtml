@@ -1,0 +1,72 @@
+﻿@using HRM.Core
+@using HRM.Models.Log
+@model IEnumerable<LogObjectDetail>
+@if (Model.Any())
+{
+    IEnumerable<LogObjectDetail> teams = Model.Where(x => x.Fields.Any(y => y.DisplayName == Labels.Team));
+    IEnumerable<LogObjectDetail> jobTitles = Model.Where(x => x.Fields.Any(y => y.DisplayName == Labels.JobTitle));
+    if (teams.Any() || jobTitles.Any())
+    {
+        <div class="panel panel-default">
+            <div class="panel-heading">HISTORY</div>
+            <table class="table table-custom" id="data">
+                <thead>
+                    <tr>
+                        <th>@Labels.Date</th>
+                        <th>@Labels.Actor</th>
+                        <th>@Labels.OldValue</th>
+                        <th>@Labels.NewValue</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (teams.Any())
+                    {
+                        <tr>
+                            <td class="rowdivider align-left" colspan="5">
+                                <b>@Labels.Team.ToUpper()</b>
+                            </td>
+                        </tr>
+                    }
+                    @foreach (LogObjectDetail item in teams)
+                    {
+                        foreach (FieldValue field in item.Fields)
+                        {
+                            if (field.DisplayName == Labels.Team)
+                            {
+                                <tr>
+                                    <td>@item.LogDate.ToDetailFormatedDate()</td>
+                                    <td>@item.Nickname</td>
+                                    <td class="align-left">@field.OldValue</td>
+                                    <td class="align-left">@field.Value</td>
+                                </tr>
+                            }
+                        }
+                    }
+                    @if (jobTitles.Any())
+                    {
+                        <tr>
+                            <td class="rowdivider align-left" colspan="5">
+                                <b>@Labels.JobTitle.ToUpper()</b>
+                            </td>
+                        </tr>
+                    }
+                    @foreach (LogObjectDetail item in jobTitles)
+                    {
+                        foreach (FieldValue field in item.Fields)
+                        {
+                            if (field.DisplayName == Labels.JobTitle)
+                            {
+                                <tr>
+                                    <td>@item.LogDate.ToDetailFormatedDate()</td>
+                                    <td>@item.Nickname</td>
+                                    <td class="align-left">@field.OldValue</td>
+                                    <td class="align-left">@field.Value</td>
+                                </tr>
+                            }
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+}
