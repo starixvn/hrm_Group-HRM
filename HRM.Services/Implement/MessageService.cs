@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
     using HRM.Core;
@@ -9,12 +10,14 @@
     using HRM.Core.Services;
     using HRM.Criteria.Message;
     using HRM.Models.Message;
+    using Microsoft.AspNetCore.Hosting;
 
     public class MessageService(
+        IWebHostEnvironment env,
         IBaseService baseService,
         IEmailService emailService) : IMessageService
     {
-        private readonly string messageEmailTemplate = "~/app_data/emails/MessageNotification.txt";
+        private readonly string messageEmailTemplate = "EmailTemplates/MessageNotification.txt";
 
         public IList<Message> GetMessageByCreator(GetMessageByCreatorParam param)
         {
@@ -130,7 +133,7 @@
 
         public void SendMailToStaff(Message model)
         {
-            var bodyTemplate = Utilities.ReadTextFile(HttpContext.Current.Server.MapPath(messageEmailTemplate));
+            var bodyTemplate = Utilities.ReadTextFile(Path.Combine(env.ContentRootPath, messageEmailTemplate));
             Task.Run(() => SendEmail(model.Subject, model.Contents, model.SendToEmail, bodyTemplate));
         }
 

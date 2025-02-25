@@ -2,16 +2,12 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
     using System.Drawing;
     using System.IO;
     using System.Linq;
-    using System.Web;
     using HRM.Core.Constants;
     using HRM.Core.Enums;
-    using HRM.Core.Services;
     using HRM.Models.Report.MonthlyWorkingHours;
-    using HRM.Repositories;
     using HRM.Resources;
     using OfficeOpenXml;
     using OfficeOpenXml.Style;
@@ -23,30 +19,15 @@
         byte[] ExportDailyWorkingHours(DateTime date, IEnumerable<MonthlyWorking> monthlyWorkings);
     }
 
-    [SuppressMessage("Major Code Smell", "S109:Magic numbers should not be used", Justification = "Pending")]
     public partial class EmployeeWorkingHoursService : IEmployeeWorkingHoursService
     {
-        private readonly IEmployeeWorkingHoursRepository repository;
-        private readonly ICommonDataService commonDataService;
-        private readonly IBaseService baseService;
-
         private const string ShortDateFormat = "dd MMM yyyy";
         private readonly Color RedColor = ColorTranslator.FromHtml(Constants.RedColor);
         private int TotalColumns { get; set; }
 
-        public EmployeeWorkingHoursService(
-            IEmployeeWorkingHoursRepository repository,
-            IBaseService baseService,
-            ICommonDataService commonDataService)
-        {
-            this.repository = repository;
-            this.baseService = baseService;
-            this.commonDataService = commonDataService;
-        }
-
         public byte[] ExportWeeklyWorkingHours(DateTime fromDate, DateTime toDate, IEnumerable<MonthlyWorking> monthlyWorkings)
         {
-            var templatePath = HttpContext.Current.Server.MapPath(@"~/ExcelTemplates/WeeklyWorkingHours.xlsx");
+            var templatePath = Path.Combine(env.ContentRootPath, "ExcelTemplates/WeeklyWorkingHours.xlsx");
             const ushort StartDateColumn = 9;
             TotalColumns = 15;
 
@@ -55,8 +36,8 @@
                 using (var xlPackage = new ExcelPackage())
                 {
                     var redColor = ColorTranslator.FromHtml(Constants.RedColor);
-                    ExcelWorksheet templateWorksheet = templatePackage.Workbook.Worksheets[1];
-                    ExcelWorksheet worksheet = xlPackage.Workbook.Worksheets.Add(Labels.AttendanceWeeklyDetail);
+                    var templateWorksheet = templatePackage.Workbook.Worksheets[1];
+                    var worksheet = xlPackage.Workbook.Worksheets.Add(Labels.AttendanceWeeklyDetail);
                     var rowIndex = 1;
                     var colIndex = 1;
 
@@ -113,7 +94,7 @@
 
         public byte[] ExportDailyWorkingHours(DateTime date, IEnumerable<MonthlyWorking> monthlyWorkings)
         {
-            var templatePath = HttpContext.Current.Server.MapPath(@"~/ExcelTemplates/DailyWorkingHours.xlsx");
+            var templatePath = Path.Combine(env.ContentRootPath, "/ExcelTemplates/DailyWorkingHours.xlsx");
             TotalColumns = 15;
 
             using (var templatePackage = new ExcelPackage(new FileInfo(templatePath)))

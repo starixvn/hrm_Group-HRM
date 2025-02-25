@@ -2,13 +2,13 @@
 {
     using System.Collections.Generic;
     using System.IO;
-    using System.Web;
     using HRM.Core;
     using HRM.Core.Enums;
     using HRM.Core.Services;
     using HRM.Criteria.Report;
     using HRM.Models.Report;
     using HRM.Models.Report.Overtime;
+    using Microsoft.AspNetCore.Hosting;
     using OfficeOpenXml;
 
     public interface IWorkingHoursSummaryReportService
@@ -18,16 +18,12 @@
         byte[] Export(GetWorkingHoursSummaryParam param, IEnumerable<WorkingHoursSummary> workingHours, IEnumerable<DailyOvertimeDetails> overtimes);
     }
 
-    public class WorkingHoursSummaryReportService : IWorkingHoursSummaryReportService
+    public class WorkingHoursSummaryReportService(
+        IWebHostEnvironment env,
+        IBaseService baseService) : IWorkingHoursSummaryReportService
     {
         private const byte MinimumWidth = 5;
         private const byte MaximumWidth = 50;
-        private readonly IBaseService baseService;
-
-        public WorkingHoursSummaryReportService(IBaseService baseService)
-        {
-            this.baseService = baseService;
-        }
 
         public IEnumerable<WorkingHoursSummary> GetWorkingHoursSummary(GetWorkingHoursSummaryParam param)
         {
@@ -49,13 +45,13 @@
             IEnumerable<WorkingHoursSummary> workingHours,
             IEnumerable<DailyOvertimeDetails> overtimes)
         {
-            var templatePath = HttpContext.Current.Server.MapPath(@"~/ExcelTemplates/WorkingHoursSummary.xlsx");
+            var templatePath = Path.Combine(env.ContentRootPath, "ExcelTemplates/WorkingHoursSummary.xlsx");
             using (var templatePackage = new ExcelPackage(new FileInfo(templatePath)))
             {
                 using (var xlPackage = new ExcelPackage())
                 {
-                    ExcelWorksheet template = templatePackage.Workbook.Worksheets[1];
-                    ExcelWorksheet worksheet = xlPackage.Workbook.Worksheets.Add("Total Working Hours");
+                    var template = templatePackage.Workbook.Worksheets[1];
+                    var worksheet = xlPackage.Workbook.Worksheets.Add("Total Working Hours");
                     WriteWorkingHours(template, worksheet, param, workingHours);
 
                     const byte OvertimeSheetIndex = 2;
@@ -94,7 +90,7 @@
 
             // data
             var rowNum = 1;
-            foreach (WorkingHoursSummary item in workingHours)
+            foreach (var item in workingHours)
             {
                 colIndex = 1;
                 template.Cells[StartBodyRow, 1, StartBodyRow, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
@@ -167,7 +163,7 @@
 
             // data
             var rowNum = 1;
-            foreach (DailyOvertimeDetails overtime in dailyOvertimes)
+            foreach (var overtime in dailyOvertimes)
             {
                 var status = (CurrentRequestStatus)overtime.StatusId;
                 colIndex = 1;

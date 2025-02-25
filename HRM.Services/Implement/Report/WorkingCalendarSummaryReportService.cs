@@ -3,11 +3,11 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
-    using System.Web;
     using HRM.Core;
     using HRM.Criteria.Report;
     using HRM.Models.Report;
     using HRM.Repositories;
+    using Microsoft.AspNetCore.Hosting;
     using OfficeOpenXml;
 
     public interface IWorkingCalendarSummaryReportService
@@ -17,16 +17,12 @@
         byte[] Export(GetWorkingHoursSummaryParam param, IEnumerable<WorkingCalendarSummary> calendars);
     }
 
-    public class WorkingCalendarSummaryReportService : IWorkingCalendarSummaryReportService
+    public class WorkingCalendarSummaryReportService(
+        IWebHostEnvironment env,
+        IReportRepository repository) : IWorkingCalendarSummaryReportService
     {
         private const byte MinimumWidth = 5;
         private const byte MaximumWidth = 50;
-        private readonly IReportRepository repository;
-
-        public WorkingCalendarSummaryReportService(IReportRepository repository)
-        {
-            this.repository = repository;
-        }
 
         public IEnumerable<WorkingCalendarSummary> GetWorkingCalendarSummary(GetWorkingHoursSummaryParam param)
         {
@@ -46,13 +42,13 @@
             GetWorkingHoursSummaryParam param,
             IEnumerable<WorkingCalendarSummary> calendars)
         {
-            var templatePath = HttpContext.Current.Server.MapPath(@"~/ExcelTemplates/WorkingCalendarSummary.xlsx");
+            var templatePath = Path.Combine(env.ContentRootPath, "ExcelTemplates/WorkingCalendarSummary.xlsx");
             using (var templatePackage = new ExcelPackage(new FileInfo(templatePath)))
             {
                 using (var xlPackage = new ExcelPackage())
                 {
-                    ExcelWorksheet template = templatePackage.Workbook.Worksheets[1];
-                    ExcelWorksheet worksheet = xlPackage.Workbook.Worksheets.Add("Working Calendar Summary");
+                    var template = templatePackage.Workbook.Worksheets[1];
+                    var worksheet = xlPackage.Workbook.Worksheets.Add("Working Calendar Summary");
                     const byte StartBodyRow = 3;
                     const byte TotalFixedColumns = 7;
                     const byte StartDateColumn = 8;
@@ -80,10 +76,10 @@
                     // data
                     rowIndex++;
                     var rowNum = 1;
-                    IEnumerable<WorkingCalendarSummary> employees = calendars.GroupBy(x => x.EmployeeId).Select(x => x.First()).OrderBy(x => x.Nickname);
-                    foreach (WorkingCalendarSummary employee in employees)
+                    var employees = calendars.GroupBy(x => x.EmployeeId).Select(x => x.First()).OrderBy(x => x.Nickname);
+                    foreach (var employee in employees)
                     {
-                        IEnumerable<WorkingCalendarSummary> items = calendars.Where(x => x.EmployeeId == employee.EmployeeId);
+                        var items = calendars.Where(x => x.EmployeeId == employee.EmployeeId);
                         colIndex = 1;
                         template.Cells[StartBodyRow, 1, StartBodyRow, TotalFixedColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalFixedColumns]);
 
@@ -97,7 +93,7 @@
 
                         for (var day = param.FromDate.Date; day.Date <= param.ToDate.Date; day = day.AddDays(1))
                         {
-                            WorkingCalendarSummary item = items.FirstOrDefault(x => x.WorkDate.Date == day.Date);
+                            var item = items.FirstOrDefault(x => x.WorkDate.Date == day.Date);
                             template.Cells[StartBodyRow, StartDateColumn].Copy(worksheet.Cells[rowIndex, colIndex]);
                             worksheet.Cells[rowIndex, colIndex].Value = item != null ? GetShift(item) : string.Empty;
                             colIndex++;

@@ -4,10 +4,10 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
-    using System.Web;
     using HRM.Core.Services;
     using HRM.Criteria.Report;
     using HRM.Models.Report;
+    using Microsoft.AspNetCore.Hosting;
     using OfficeOpenXml;
 
     public interface IManpowerReportService
@@ -21,15 +21,10 @@
         byte[] ExportManpowerCategory(IEnumerable<ManpowerCategoryModel> manpowers, int year);
     }
 
-    public class ManpowerReportService : IManpowerReportService
+    public class ManpowerReportService(
+        IWebHostEnvironment env,
+        IBaseService baseService) : IManpowerReportService
     {
-        private readonly IBaseService baseService;
-
-        public ManpowerReportService(IBaseService baseService)
-        {
-            this.baseService = baseService;
-        }
-
         public IEnumerable<ManpowerModel> GetManpower(int year)
         {
             var criteria = new GetManpowerCriteria
@@ -50,13 +45,13 @@
 
         public byte[] ExportManpower(IEnumerable<ManpowerModel> manpowers, int year)
         {
-            var templatePath = HttpContext.Current.Server.MapPath(@"~/ExcelTemplates/Manpower.xlsx");
+            var templatePath = Path.Combine(env.ContentRootPath, "ExcelTemplates/Manpower.xlsx");
             using (var templatePackage = new ExcelPackage(new FileInfo(templatePath)))
             {
                 using (var xlPackage = new ExcelPackage())
                 {
-                    ExcelWorksheet template = templatePackage.Workbook.Worksheets[1];
-                    ExcelWorksheet worksheet = xlPackage.Workbook.Worksheets.Add("Manpower");
+                    var template = templatePackage.Workbook.Worksheets[1];
+                    var worksheet = xlPackage.Workbook.Worksheets.Add("Manpower");
                     const byte TotalColumns = 56;
                     const byte TotalHeaderRows = 2;
                     const byte StartBodyRow = 4;
@@ -75,7 +70,7 @@
                     // data
                     rowIndex += TotalHeaderRows;
                     var rowNum = 1;
-                    foreach (ManpowerModel manpower in manpowers)
+                    foreach (var manpower in manpowers)
                     {
                         colIndex = 1;
                         template.Cells[StartBodyRow, 1, StartBodyRow, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
@@ -99,13 +94,13 @@
 
         public byte[] ExportManpowerCategory(IEnumerable<ManpowerCategoryModel> manpowers, int year)
         {
-            var templatePath = HttpContext.Current.Server.MapPath(@"~/ExcelTemplates/ManpowerCategory.xlsx");
+            var templatePath = Path.Combine(env.ContentRootPath, "ExcelTemplates/ManpowerCategory.xlsx");
             using (var templatePackage = new ExcelPackage(new FileInfo(templatePath)))
             {
                 using (var xlPackage = new ExcelPackage())
                 {
-                    ExcelWorksheet template = templatePackage.Workbook.Worksheets[1];
-                    ExcelWorksheet worksheet = xlPackage.Workbook.Worksheets.Add("Manpower Category");
+                    var template = templatePackage.Workbook.Worksheets[1];
+                    var worksheet = xlPackage.Workbook.Worksheets.Add("Manpower Category");
                     const byte TotalColumns = 17;
                     const byte TotalHeaderRows = 2;
                     const byte StartBodyRow = 4;
@@ -124,7 +119,7 @@
                     // data
                     rowIndex += TotalHeaderRows;
                     var rowNum = 1;
-                    foreach (ManpowerCategoryModel manpower in manpowers)
+                    foreach (var manpower in manpowers)
                     {
                         colIndex = 1;
                         template.Cells[StartBodyRow, 1, StartBodyRow, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
@@ -324,12 +319,12 @@
 
         private static void WriteSummaryRow(ExcelWorksheet worksheet, int rowIndex, IEnumerable<ManpowerCategoryModel> manpowers)
         {
-            int total = manpowers.Sum(t => t.Total);
-            int management = manpowers.Sum(t => t.Management);
-            int executiveWithPosition = manpowers.Sum(t => t.ExecutiveWithPosition);
-            int executive = manpowers.Sum(t => t.Executive);
-            int staff = manpowers.Sum(t => t.Staff);
-            int worker = manpowers.Sum(t => t.Worker);
+            var total = manpowers.Sum(t => t.Total);
+            var management = manpowers.Sum(t => t.Management);
+            var executiveWithPosition = manpowers.Sum(t => t.ExecutiveWithPosition);
+            var executive = manpowers.Sum(t => t.Executive);
+            var staff = manpowers.Sum(t => t.Staff);
+            var worker = manpowers.Sum(t => t.Worker);
 
             var colIndex = 5;
             worksheet.Cells[rowIndex, colIndex++].Value = manpowers.Sum(x => x.TotalExpat);

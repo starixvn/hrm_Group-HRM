@@ -2,17 +2,18 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
     using System.IO;
     using System.Linq;
-    using System.Web;
     using HRM.Core;
     using HRM.Core.Constants;
     using HRM.Core.Enums;
+    using HRM.Core.Services;
     using HRM.Criteria.Report;
     using HRM.Models;
     using HRM.Models.Report.MonthlyWorkingHours;
     using HRM.Models.Request;
+    using HRM.Repositories;
+    using Microsoft.AspNetCore.Hosting;
     using OfficeOpenXml;
 
     public partial interface IEmployeeWorkingHoursService
@@ -24,8 +25,11 @@
         byte[] ExportMonthlyWorkingHours(GetMonthlyWorkingHoursParam param);
     }
 
-    [SuppressMessage("Major Code Smell", "S109:Magic numbers should not be used", Justification = "Pending")]
-    public partial class EmployeeWorkingHoursService : IEmployeeWorkingHoursService
+    public partial class EmployeeWorkingHoursService(
+        IWebHostEnvironment env,
+        IEmployeeWorkingHoursRepository repository,
+        IBaseService baseService,
+        ICommonDataService commonDataService) : IEmployeeWorkingHoursService
     {
         private const ushort TotalFixedColumns = 21;
         private const ushort TotalUPLColumns = 4;
@@ -72,16 +76,16 @@
 
         public byte[] ExportMonthlyWorkingHours(GetMonthlyWorkingHoursParam param)
         {
-            var templatePath = HttpContext.Current.Server.MapPath(@"~/ExcelTemplates/MonthlyWorkingHours.xlsx");
+            var templatePath = Path.Combine(env.ContentRootPath, "ExcelTemplates/MonthlyWorkingHours.xlsx");
             using (var templatePackage = new ExcelPackage(new FileInfo(templatePath)))
             {
                 using (var xlPackage = new ExcelPackage())
                 {
-                    IEnumerable<MonthlyWorking> monthlyWorkings = GetMonthlyWorkingHours(param);
+                    var monthlyWorkings = GetMonthlyWorkingHours(param);
                     LeaveTypes = commonDataService.GetLeaveType();
 
-                    ExcelWorksheet template = templatePackage.Workbook.Worksheets[1];
-                    ExcelWorksheet worksheet = xlPackage.Workbook.Worksheets.Add("Details");
+                    var template = templatePackage.Workbook.Worksheets[1];
+                    var worksheet = xlPackage.Workbook.Worksheets.Add("Details");
                     WriteDetailsSheet(template, worksheet, monthlyWorkings, param);
 
                     const byte SummarySheetIndex = 2;
@@ -105,7 +109,7 @@
             IEnumerable<MonthlyWorking> monthlyWorkings,
             GetMonthlyWorkingHoursParam param)
         {
-            IEnumerable<DateTime> months = GetMonthsBetween(param.FromDate, param.ToDate);
+            var months = GetMonthsBetween(param.FromDate, param.ToDate);
             var totalDays = (int)(param.ToDate - param.FromDate).TotalDays;
             TotalColumns = TotalFixedColumns + months.Count() * TotalUPLColumns + (totalDays > 0 ? totalDays + 1 : 0);
 
@@ -146,9 +150,9 @@
             template.Cells[StartHeaderRowIndex, 1, EndHeaderRowIndex, TotalFixedColumns]
                 .Copy(worksheet.Cells[StartHeaderRowIndex, 1, EndHeaderRowIndex, TotalFixedColumns]);
 
-            IEnumerable<DateTime> months = GetMonthsBetween(param.FromDate, param.ToDate);
+            var months = GetMonthsBetween(param.FromDate, param.ToDate);
             var colIndex = (int)StartUPLColumnIndex;
-            foreach (DateTime month in months)
+            foreach (var month in months)
             {
                 template.Cells[StartHeaderRowIndex, StartUPLColumnIndex, EndHeaderRowIndex, EndUPLColumnIndex]
                     .Copy(worksheet.Cells[StartHeaderRowIndex, colIndex, EndHeaderRowIndex, colIndex + TotalUPLColumns - 1]);
@@ -180,7 +184,7 @@
             GetMonthlyWorkingHoursParam param)
         {
             var rowNum = 1;
-            foreach (MonthlyWorking monthlyWorking in monthlyWorkings)
+            foreach (var monthlyWorking in monthlyWorkings)
             {
                 var colIndex = 1;
                 template.Cells[StartBodyRowIndex, 1, StartBodyRowIndex, TotalFixedColumns]
@@ -196,7 +200,7 @@
                 worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.WorkingDays;
                 worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.ActualWorkingDays + monthlyWorking.DailyWorkings.Count(x => IsHoliday(x));
 
-                IEnumerable<DateTime> months = GetMonthsBetween(param.FromDate, param.ToDate);
+                var months = GetMonthsBetween(param.FromDate, param.ToDate);
                 var dailyColumnIndex = TotalFixedColumns + months.Count() * TotalUPLColumns + 1;
                 const string CountLeaveFormula = "COUNTIF({0},\"{1}\")+(COUNTIF({0},\"{1}½\")/2)+(COUNTIF({0},\"{1}½/*\")/2)+(COUNTIF({0},\"*/{1}½\")/2)";
 
@@ -274,7 +278,7 @@
                     startColumnIndex = endColumnIndex + 1;
                 }
 
-                foreach (DailyWorking dailyWorking in monthlyWorking.DailyWorkings)
+                foreach (var dailyWorking in monthlyWorking.DailyWorkings)
                 {
                     template.Cells[StartBodyRowIndex, StartDateColumnIndex].Copy(worksheet.Cells[rowIndex, colIndex]);
                     WriteDailyCells(worksheet.Cells[rowIndex, colIndex++], dailyWorking);
@@ -301,7 +305,7 @@
                 companyEventColumn = 15,
                 unpaidLeaveColumn = 16
             };
-            IEnumerable<DateTime> months = GetMonthsBetween(param.FromDate, param.ToDate);
+            var months = GetMonthsBetween(param.FromDate, param.ToDate);
             TotalColumns = DefaultColumns + months.Count();
             var rowIndex = 1;
 
@@ -348,7 +352,7 @@
             var colIndex = templateIndex.companyEventColumn;
             template.Cells[rowIndex, 1, rowIndex, colIndex].Copy(worksheet.Cells[rowIndex, 1, rowIndex, colIndex]);
             colIndex++;
-            foreach (DateTime month in months)
+            foreach (var month in months)
             {
                 template.Cells[rowIndex, templateIndex.unpaidLeaveColumn].Copy(worksheet.Cells[rowIndex, colIndex]);
                 worksheet.Cells[rowIndex, colIndex].Value = string.Format(worksheet.Cells[rowIndex, colIndex].Value.ToString(), month.ToString("MMM-yyyy"));
@@ -402,7 +406,7 @@
                 worksheet.Cells[rowIndex, colIndex++].Value =
                     team.Members.Sum(x => SummaryLeaveDay(x.DailyWorkings, Core.Enums.LeaveTypes.CompanyEvent));
 
-                foreach (DateTime month in months)
+                foreach (var month in months)
                 {
                     template.Cells[templateIndex.bodyRow, templateIndex.unpaidLeaveColumn].Copy(worksheet.Cells[rowIndex, colIndex]);
                     worksheet.Cells[rowIndex, colIndex++].Value =
@@ -426,7 +430,7 @@
             ExcelWorksheet worksheet,
             GetMonthlyWorkingHoursParam param)
         {
-            IEnumerable<EmployeeRequest> requests = GetEmployeeRequests(param);
+            var requests = GetEmployeeRequests(param);
             var templateIndex = new
             {
                 headerRow = 2,
@@ -446,7 +450,7 @@
             // data
             var rowNum = 1;
             rowIndex++;
-            foreach (EmployeeRequest request in requests)
+            foreach (var request in requests)
             {
                 colIndex = 1;
                 var status = (CurrentRequestStatus)request.RequestStatusId;
@@ -500,7 +504,7 @@
         private static decimal SummaryLeaveDay(IEnumerable<DailyWorking> dailyWorkings, LeaveTypes leaveType)
         {
             decimal totals = 0;
-            foreach (DailyWorking dailyWorking in dailyWorkings)
+            foreach (var dailyWorking in dailyWorkings)
             {
                 if (dailyWorking.IsLeaveDay
                     && (dailyWorking.LeaveType.Id == (short)leaveType

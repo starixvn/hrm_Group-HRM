@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
     using HRM.Core;
@@ -15,19 +16,20 @@
     using HRM.Models.Request;
     using HRM.Repositories;
     using HRM.Resources;
-    using HRM.Services.Interfaces;
+    using Microsoft.AspNetCore.Hosting;
 
     public class LeaveRequestService(
         AppSettings appSettings,
+        IWebHostEnvironment env,
         ILeaveRequestRepository leaveRequestRepository,
         IRequestMailService requestMailService,
         IBaseService baseService,
         IEmailService emailService,
         ILetstalkService letstalkService) : ILeaveRequestService
     {
-        private const string EmailTemplatePathForRequest = "~/app_data/emails/Leave.Request.txt";
-        private const string EmailTemplatePathForCancel = "~/app_data/emails/Leave.Cancel.txt";
-        private const string EmailTemplatePathForApproval = "~/app_data/emails/Leave.Approval.txt";
+        private const string EmailTemplatePathForRequest = "EmailTemplates/Leave.Request.txt";
+        private const string EmailTemplatePathForCancel = "EmailTemplates/Leave.Cancel.txt";
+        private const string EmailTemplatePathForApproval = "EmailTemplates/Leave.Approval.txt";
 
         public IList<LeaveRequest> GetByDate(GetLeaveRequestByDateCriteria criteria)
         {
@@ -109,13 +111,13 @@
 
         public void SendMailAndSendLetstalkCreateRequest(InsertLeaveRequestCriteria criteria)
         {
-            var templateEmailPath = HttpContext.Current.Server.MapPath(EmailTemplatePathForRequest);
+            var templateEmailPath = Path.Combine(env.ContentRootPath, EmailTemplatePathForRequest);
             Task.Run(() => SendMailForInsertSuccessfully(criteria, templateEmailPath));
         }
 
         public void SendMailEditRequest(UpdateLeaveRequestCriteria criteria)
         {
-            var templateEmailPath = HttpContext.Current.Server.MapPath(EmailTemplatePathForRequest);
+            var templateEmailPath = Path.Combine(env.ContentRootPath, EmailTemplatePathForRequest);
             Task.Run(() => SendMailForUpdateSuccessfully(criteria, templateEmailPath));
         }
 
@@ -139,7 +141,7 @@
             var request = GetById(requestId);
             if (request != null)
             {
-                var emailTemplatePath = HttpContext.Current.Server.MapPath(EmailTemplatePathForCancel);
+                var emailTemplatePath = Path.Combine(env.ContentRootPath, EmailTemplatePathForCancel);
                 var email = requestMailService.GetMailToMailCCAndLetstalk(requestId, (byte)SettingsSendMail.Cancel);
                 var fromDate = request.TotalDays == Constants.HalfDayOffValue ? GetFromTimeHalfDay(request.LeaveDetail) : request.FromDate;
                 var toDate = request.TotalDays == Constants.HalfDayOffValue ? GetToTimeHalfDay(request.LeaveDetail) : request.ToDate;
@@ -170,7 +172,7 @@
             var request = GetById(requestId);
             if (request != null)
             {
-                var emailTemplatePath = HttpContext.Current.Server.MapPath(EmailTemplatePathForApproval);
+                var emailTemplatePath = Path.Combine(env.ContentRootPath, EmailTemplatePathForApproval);
                 var action = requestMailService.GetActionProcessRequest(request.Status.Id, command);
                 var commandMessage = requestMailService.GetCommandMessage(command);
                 var fromDate = request.TotalDays == Constants.HalfDayOffValue ? GetFromTimeHalfDay(request.LeaveDetail) : request.FromDate;

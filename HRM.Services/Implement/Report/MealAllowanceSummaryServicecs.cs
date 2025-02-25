@@ -2,34 +2,32 @@
 {
     using System.Collections.Generic;
     using System.IO;
-    using System.Web;
     using HRM.Core;
     using HRM.Core.Constants;
     using HRM.Core.Services;
     using HRM.Criteria.Report.MealAllowance;
     using HRM.Models.Report.MealAllowance;
     using HRM.ViewModels.Report;
+    using Microsoft.AspNetCore.Hosting;
     using OfficeOpenXml;
 
     public interface IMealAllowanceSummaryService
     {
         IEnumerable<MealAllowanceSummary> GetMealAllowanceSummary(GetMealAllowanceSummaryReportCriteria criteria);
+
         IEnumerable<MealAllowanceDetail> GetMealAllowanceDetails(GetMealAllowanceDetailReportCriteria criteria);
-        byte[] Export(MealAllowanceReportViewModel param, 
+
+        byte[] Export(MealAllowanceReportViewModel param,
             IEnumerable<MealAllowanceSummary> summaries,
             IEnumerable<MealAllowanceDetail> details);
     }
 
-    public class MealAllowanceSummaryService : IMealAllowanceSummaryService
+    public class MealAllowanceSummaryService(
+        IWebHostEnvironment env,
+        IBaseService baseService) : IMealAllowanceSummaryService
     {
         private const byte MinimumWidth = 10;
         private const byte MaximumWidth = 50;
-        private readonly IBaseService baseService;
-
-        public MealAllowanceSummaryService(IBaseService baseService)
-        {
-            this.baseService = baseService;
-        }
 
         public IEnumerable<MealAllowanceSummary> GetMealAllowanceSummary(GetMealAllowanceSummaryReportCriteria criteria)
         {
@@ -46,13 +44,13 @@
             IEnumerable<MealAllowanceSummary> summaries,
             IEnumerable<MealAllowanceDetail> details)
         {
-            var templatePath = HttpContext.Current.Server.MapPath(@"~/ExcelTemplates/MealAllowanceSummary.xlsx");
+            var templatePath = Path.Combine(env.ContentRootPath, "ExcelTemplates/MealAllowanceSummary.xlsx");
             using (var templatePackage = new ExcelPackage(new FileInfo(templatePath)))
             {
                 using (var xlPackage = new ExcelPackage())
                 {
-                    ExcelWorksheet template = templatePackage.Workbook.Worksheets[1];
-                    ExcelWorksheet worksheet = xlPackage.Workbook.Worksheets.Add("Summary");
+                    var template = templatePackage.Workbook.Worksheets[1];
+                    var worksheet = xlPackage.Workbook.Worksheets.Add("Summary");
                     WriteMealAllowanceSummary(template, worksheet, param, summaries);
 
                     const byte DetailSheetIndex = 2;
@@ -92,7 +90,7 @@
             // data
             rowIndex++;
             var rowNum = 1;
-            foreach (MealAllowanceSummary summary in summaries)
+            foreach (var summary in summaries)
             {
                 colIndex = 1;
                 template.Cells[StartBodyRow, 1, StartBodyRow, TotalFixedColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalFixedColumns]);
@@ -126,7 +124,7 @@
             const byte TotalFixedColumnsDetail = 13;
             const byte SumColumn = 13;
             const byte StartSumRow = 4;
-           var rowIndex = 1;
+            var rowIndex = 1;
             var colIndex = 1;
 
             // title
@@ -143,7 +141,7 @@
             // data
             rowIndex++;
             var rowNum = 1;
-            foreach (MealAllowanceDetail detail in details)
+            foreach (var detail in details)
             {
                 colIndex = 1;
                 template.Cells[StartBodyRow, 1, StartBodyRow, TotalFixedColumnsDetail].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalFixedColumnsDetail]);

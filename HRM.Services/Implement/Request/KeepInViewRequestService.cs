@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Threading.Tasks;
     using HRM.Core;
     using HRM.Core.Enums;
@@ -12,18 +13,20 @@
     using HRM.Repositories;
     using HRM.Resources;
     using HRM.Services.Interfaces;
+    using Microsoft.AspNetCore.Hosting;
 
     public class KeepInViewRequestService(
         AppSettings appSettings,
+        IWebHostEnvironment env,
         IKeepInViewRequestRepository keepInViewRequestRepository,
         IBaseService baseService,
         IRequestMailService requestMailService,
         IEmailService emailService,
         ILetstalkService letstalkService) : IKeepInViewRequestService
     {
-        private const string EmailTemplatePathForRequest = "~/app_data/emails/KeepInView.Request.txt";
-        private const string EmailTemplatePathForCancel = "~/app_data/emails/KeepInView.Cancel.txt";
-        private const string EmailTemplatePathForApproval = "~/app_data/emails/KeepInView.Approval.txt";
+        private const string EmailTemplatePathForRequest = "EmailTemplates/KeepInView.Request.txt";
+        private const string EmailTemplatePathForCancel = "EmailTemplates/KeepInView.Cancel.txt";
+        private const string EmailTemplatePathForApproval = "EmailTemplates/KeepInView.Approval.txt";
 
         public IList<KeepInViewRequest> GetByDate(GetKeepInViewRequestByDateCriteria criteria)
         {
@@ -81,7 +84,7 @@
             var request = GetById(requestId);
             if (request != null)
             {
-                var emailTemplatePath = HttpContext.Current.Server.MapPath(EmailTemplatePathForRequest);
+                var emailTemplatePath = Path.Combine(env.ContentRootPath, EmailTemplatePathForRequest);
                 var email = requestMailService.GetMailToMailCCAndLetstalk(requestId, (byte)SettingsSendMail.New);
 
                 email.Subject = string.Format(
@@ -114,7 +117,7 @@
             var request = GetById(requestId);
             if (request != null)
             {
-                var emailTemplatePath = HttpContext.Current.Server.MapPath(EmailTemplatePathForRequest);
+                var emailTemplatePath = Path.Combine(env.ContentRootPath, EmailTemplatePathForRequest);
                 var email = requestMailService.GetMailToMailCCAndLetstalk(requestId, (byte)SettingsSendMail.Edit);
                 email.Subject = string.Format(
                     "{0} {1} on {2}",
@@ -146,7 +149,7 @@
             var request = GetById(requestId);
             if (request != null)
             {
-                var emailTemplatePath = HttpContext.Current.Server.MapPath(EmailTemplatePathForCancel);
+                var emailTemplatePath = Path.Combine(env.ContentRootPath, EmailTemplatePathForCancel);
                 var email = requestMailService.GetMailToMailCCAndLetstalk(requestId, (byte)SettingsSendMail.Cancel);
                 email.Subject = string.Format(Messages.MessageCompensationLeaveRequest, request.Requester.Nickname);
                 email.Body = Utilities.ReadTextFile(emailTemplatePath);
@@ -172,7 +175,7 @@
             var request = GetById(requestId);
             if (request != null)
             {
-                var emailTemplatePath = HttpContext.Current.Server.MapPath(EmailTemplatePathForApproval);
+                var emailTemplatePath = Path.Combine(env.ContentRootPath, EmailTemplatePathForApproval);
                 var action = requestMailService.GetActionProcessRequest(request.Status.Id, command);
                 var commandMessage = requestMailService.GetCommandMessage(command);
                 var email = requestMailService.GetMailToMailCCAndLetstalk(requestId, action);

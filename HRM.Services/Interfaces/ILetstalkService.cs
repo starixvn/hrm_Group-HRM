@@ -1,4 +1,4 @@
-﻿namespace HRM.Services.Interfaces
+﻿namespace HRM.Services
 {
     public interface ILetstalkService
     {

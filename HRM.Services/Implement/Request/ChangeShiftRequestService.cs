@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
     using HRM.Core;
@@ -15,19 +16,20 @@
     using HRM.Models.ScheduleArrange;
     using HRM.Repositories;
     using HRM.Resources;
-    using HRM.Services.Interfaces;
+    using Microsoft.AspNetCore.Hosting;
 
     public class ChangeShiftRequestService(
         AppSettings appSettings,
+        IWebHostEnvironment env,
         IChangeShiftRequestRepository changeShiftRepository,
         IBaseService baseService,
         IEmailService emailService,
         IRequestMailService requestMailService,
         ILetstalkService letstalkService) : IChangeShiftRequestService
     {
-        private const string EmailTemplatePathForRequest = "~/app_data/emails/ChangeShift.Request.txt";
-        private const string EmailTemplatePathForCancel = "~/app_data/emails/ChangeShift.Cancel.txt";
-        private const string EmailTemplatePathForApproval = "~/app_data/emails/ChangeShift.Approval.txt";
+        private const string EmailTemplatePathForRequest = "EmailTemplates/ChangeShift.Request.txt";
+        private const string EmailTemplatePathForCancel = "EmailTemplates/ChangeShift.Cancel.txt";
+        private const string EmailTemplatePathForApproval = "EmailTemplates/ChangeShift.Approval.txt";
 
         public int GetNumberOfRequest(int employeeId, DateTime fromDate, DateTime toDate)
         {
@@ -180,7 +182,7 @@
             var request = GetById(requestId);
             if (request != null)
             {
-                var emailTemplatePath = HttpContext.Current.Server.MapPath(EmailTemplatePathForRequest);
+                var emailTemplatePath = Path.Combine(env.ContentRootPath, EmailTemplatePathForRequest);
                 var email = requestMailService.GetMailToMailCCAndLetstalk(requestId, (byte)SettingsSendMail.New);
                 var forDate = Utilities.GetMessageDateString(request.FromDate, request.ToDate);
                 email.Subject = string.Format(
@@ -213,7 +215,7 @@
             var request = GetById(requestId);
             if (request != null)
             {
-                var emailTemplatePath = HttpContext.Current.Server.MapPath(EmailTemplatePathForRequest);
+                var emailTemplatePath = Path.Combine(env.ContentRootPath, EmailTemplatePathForRequest);
                 var email = requestMailService.GetMailToMailCCAndLetstalk(requestId, (byte)SettingsSendMail.Edit);
                 var forDate = Utilities.GetMessageDateString(request.FromDate, request.ToDate);
                 email.Subject = string.Format(
@@ -246,7 +248,7 @@
             var request = GetById(requestId);
             if (request != null)
             {
-                var emailTemplatePath = HttpContext.Current.Server.MapPath(EmailTemplatePathForCancel);
+                var emailTemplatePath = Path.Combine(env.ContentRootPath, EmailTemplatePathForCancel);
                 var email = requestMailService.GetMailToMailCCAndLetstalk(requestId, (byte)SettingsSendMail.Cancel);
                 var forDate = Utilities.GetMessageDateString(request.FromDate, request.ToDate);
 
@@ -274,7 +276,7 @@
             var request = GetById(requestId);
             if (request != null)
             {
-                var emailTemplatePath = HttpContext.Current.Server.MapPath(EmailTemplatePathForApproval);
+                var emailTemplatePath = Path.Combine(env.ContentRootPath, EmailTemplatePathForApproval);
                 var action = requestMailService.GetActionProcessRequest(request.Status.Id, command);
                 var commandMessage = requestMailService.GetCommandMessage(command);
                 var email = requestMailService.GetMailToMailCCAndLetstalk(requestId, action);

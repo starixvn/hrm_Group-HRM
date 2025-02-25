@@ -7,27 +7,27 @@
     <None Remove="logs\log.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Data\Emails\ChangeShift.Approval.txt" />
-    <Content Include="App_Data\Emails\ChangeShift.Cancel.txt" />
-    <Content Include="App_Data\Emails\ChangeShift.Request.txt" />
-    <Content Include="App_Data\Emails\CheckInOut.Approval.txt" />
-    <Content Include="App_Data\Emails\CheckInOut.Cancel.txt" />
-    <Content Include="App_Data\Emails\CheckInOut.Request.txt" />
-    <Content Include="App_Data\Emails\EditMemoNotification.txt" />
-    <Content Include="App_Data\Emails\KeepInView.Approval.txt" />
-    <Content Include="App_Data\Emails\KeepInView.Cancel.txt" />
-    <Content Include="App_Data\Emails\KeepInView.Request.txt" />
-    <Content Include="App_Data\Emails\LateInEarlyOut.Approval.txt" />
-    <Content Include="App_Data\Emails\LateInEarlyOut.Cancel.txt" />
-    <Content Include="App_Data\Emails\LateInEarlyOut.Request.txt" />
-    <Content Include="App_Data\Emails\Leave.Approval.txt" />
-    <Content Include="App_Data\Emails\Leave.Cancel.txt" />
-    <Content Include="App_Data\Emails\Leave.Request.txt" />
-    <Content Include="App_Data\Emails\MemoNotification.txt" />
-    <Content Include="App_Data\Emails\MessageNotification.txt" />
-    <Content Include="App_Data\Emails\RemindUseAL.txt" />
-    <Content Include="App_Data\Emails\StatisticALBalance.txt" />
-    <Content Include="App_Data\Emails\UpdateInfoNotification.txt" />
+    <Content Include="EmailTemplates\ChangeShift.Approval.txt" />
+    <Content Include="EmailTemplates\ChangeShift.Cancel.txt" />
+    <Content Include="EmailTemplates\ChangeShift.Request.txt" />
+    <Content Include="EmailTemplates\CheckInOut.Approval.txt" />
+    <Content Include="EmailTemplates\CheckInOut.Cancel.txt" />
+    <Content Include="EmailTemplates\CheckInOut.Request.txt" />
+    <Content Include="EmailTemplates\EditMemoNotification.txt" />
+    <Content Include="EmailTemplates\KeepInView.Approval.txt" />
+    <Content Include="EmailTemplates\KeepInView.Cancel.txt" />
+    <Content Include="EmailTemplates\KeepInView.Request.txt" />
+    <Content Include="EmailTemplates\LateInEarlyOut.Approval.txt" />
+    <Content Include="EmailTemplates\LateInEarlyOut.Cancel.txt" />
+    <Content Include="EmailTemplates\LateInEarlyOut.Request.txt" />
+    <Content Include="EmailTemplates\Leave.Approval.txt" />
+    <Content Include="EmailTemplates\Leave.Cancel.txt" />
+    <Content Include="EmailTemplates\Leave.Request.txt" />
+    <Content Include="EmailTemplates\MemoNotification.txt" />
+    <Content Include="EmailTemplates\MessageNotification.txt" />
+    <Content Include="EmailTemplates\RemindUseAL.txt" />
+    <Content Include="EmailTemplates\StatisticALBalance.txt" />
+    <Content Include="EmailTemplates\UpdateInfoNotification.txt" />
     <Content Include="App_Data\SpNames.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

@@ -2,11 +2,11 @@
 {
     using System.Collections.Generic;
     using System.IO;
-    using System.Web;
     using HRM.Core;
     using HRM.Criteria.Calendar;
     using HRM.Models.Report;
     using HRM.Models.ScheduleArrange;
+    using Microsoft.AspNetCore.Hosting;
     using OfficeOpenXml;
 
     public interface IWorkingCalendarReportService
@@ -14,7 +14,7 @@
         byte[] Export(GetWorkingCalendarWeeklyCriteria param, IEnumerable<WorkingCalendar> calendars);
     }
 
-    public class WorkingCalendarReportService : IWorkingCalendarReportService
+    public class WorkingCalendarReportService(IWebHostEnvironment env) : IWorkingCalendarReportService
     {
         private const byte MaximumWidth = 50;
         private const byte MinimumWidth = 5;
@@ -23,13 +23,13 @@
         GetWorkingCalendarWeeklyCriteria param,
         IEnumerable<WorkingCalendar> calendars)
         {
-            var templatePath = HttpContext.Current.Server.MapPath(@"~/ExcelTemplates/WorkingCalendar.xlsx");
+            var templatePath = Path.Combine(env.ContentRootPath, "ExcelTemplates/WorkingCalendar.xlsx");
             using (var templatePackage = new ExcelPackage(new FileInfo(templatePath)))
             {
                 using (var xlPackage = new ExcelPackage())
                 {
-                    ExcelWorksheet template = templatePackage.Workbook.Worksheets[1];
-                    ExcelWorksheet worksheet = xlPackage.Workbook.Worksheets.Add("Working Calendar");
+                    var template = templatePackage.Workbook.Worksheets[1];
+                    var worksheet = xlPackage.Workbook.Worksheets.Add("Working Calendar");
                     const byte StartBodyRow = 3;
                     const byte TotalFixedColumns = 7;
                     const byte StartDateColumn = 8;
@@ -57,7 +57,7 @@
                     // data
                     rowIndex++;
                     var rowNum = 1;
-                    foreach (WorkingCalendar employee in calendars)
+                    foreach (var employee in calendars)
                     {
                         colIndex = 1;
                         template.Cells[StartBodyRow, 1, StartBodyRow, TotalFixedColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalFixedColumns]);
@@ -70,7 +70,7 @@
                         worksheet.Cells[rowIndex, colIndex++].Value = employee.FullName;
                         worksheet.Cells[rowIndex, colIndex++].Value = employee.Nickname;
 
-                        foreach (DailySchedule daily in employee.Schedules)
+                        foreach (var daily in employee.Schedules)
                         {
                             template.Cells[StartBodyRow, StartDateColumn].Copy(worksheet.Cells[rowIndex, colIndex]);
                             worksheet.Cells[rowIndex, colIndex].Value = GetShift(daily);
