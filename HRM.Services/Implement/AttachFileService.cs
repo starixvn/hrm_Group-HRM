@@ -5,15 +5,22 @@
     using System.Linq;
     using System.Web;
     using HRM.Models;
+    using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
 
     public class AttachFileService : IAttachFileService
     {
+        private readonly IWebHostEnvironment hostingEnvironment;
+
+        public AttachFileService(IWebHostEnvironment hostingEnvironment)
+        {
+            this.hostingEnvironment = hostingEnvironment;
+        }
         public void UploadFile(IList<IFormFile> files, long fileId, string pathFolder)
         {
             if (files != null && files.Any(x => x.Length > 0))
             {
-                string dir = HttpContext.Current.Server.MapPath(pathFolder + fileId);
+                string dir = Path.Combine(hostingEnvironment.ContentRootPath, pathFolder + fileId);
                 if (!Directory.Exists(dir))
                 {
                     Directory.CreateDirectory(dir);
@@ -25,7 +32,8 @@
                     {
                         var fileName = Path.GetFileName(file.FileName);
                         var path = Path.Combine(dir, fileName);
-                        file.SaveAs(path);
+                        using (FileStream output = File.Create(path))
+                             file.CopyTo(output);
                     }
                 }
             }
@@ -34,7 +42,7 @@
         public List<string> GetAttachFile(long fileId, string pathFolder)
         {
             var files = new List<string>();
-            string dir = HttpContext.Current.Server.MapPath(pathFolder + fileId);
+            string dir = Path.Combine(hostingEnvironment.ContentRootPath, pathFolder + fileId); 
             if (Directory.Exists(dir))
             {
                 string[] filePaths = Directory.GetFiles(dir);
@@ -51,7 +59,7 @@
         {
             foreach (string file in files)
             {
-                string dir = HttpContext.Current.Server.MapPath(pathFolder + fileId + '/' + file);
+                string dir = Path.Combine(hostingEnvironment.ContentRootPath, pathFolder + fileId + '/' + file);
                 File.Delete(dir);
             }
         }
@@ -60,7 +68,7 @@
         {
             var attachFiles = new List<AttachFile>();
             string path = pathFolder + fileId;
-            string dir = HttpContext.Current.Server.MapPath(path);
+            string dir = Path.Combine(hostingEnvironment.ContentRootPath, path);
             if (Directory.Exists(dir))
             {
                 string[] files = Directory.GetFiles(dir);
@@ -81,7 +89,7 @@
 
         public void DeleteFolderAttachFile(long id, string pathFolder)
         {
-            string dir = HttpContext.Current.Server.MapPath(pathFolder + id);
+            string dir = Path.Combine(hostingEnvironment.ContentRootPath, pathFolder + id);
 
             if (Directory.Exists(dir))
             {
