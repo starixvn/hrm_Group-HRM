@@ -1,0 +1,113 @@
+﻿namespace HRM.Models.Request
+{
+    using System;
+    using System.Collections.Generic;
+    using HRM.Models.Request.ChangeShift;
+
+    public class RequestEntity : EntityBase<long>
+    {
+        public Employee Requester { get; set; }
+
+        public DateTime RequestedDate { get; set; }
+
+        public RequestTypeModel RequestType { get; set; }
+
+        public RequestStatus Status { get; set; }
+
+        public Employee CreatedBy { get; set; }
+
+        public DateTime CreatedDate { get; set; }
+
+        public Employee ModifiedBy { get; set; }
+
+        public Employee VerifiedBy { get; set; }
+
+        public Employee ApprovedBy { get; set; }
+
+        public Employee Approver { get; set; }
+
+        public Employee ProcessedBy { get; set; }
+
+        public DateTime? ModifiedDate { get; set; }
+
+        public DateTime? ApprovedDate { get; set; }
+
+        public DateTime? VerifiedDate { get; set; }
+
+        public DateTime? ProcessedDate { get; set; }
+
+        public bool IsPlanned { get; set; }
+
+        public string Remark { get; set; }
+
+        public IList<AttachFile> AttachFiles { get; set; }
+
+        public string RefNO { get; set; }
+
+        public decimal TotalDaysRequestInMonth { get; set; }
+
+        public int VerifiedStatus { get; set; }
+
+        public int ApprovedStatus { get; set; }
+
+        public int ProcessedStatus { get; set; }
+
+        public bool IsWarning { get; set; }
+
+        // Leave
+        public DateTime FromDate { get; set; }
+
+        public DateTime ToDate { get; set; }
+
+        public decimal TotalDays { get; set; }
+
+        public LeaveType LeaveType { get; set; }
+
+        public int ReworkCount { get; set; }
+
+        public string LeaveCountDetails { get; set; }
+
+        public decimal AnnualLeaveBalance { get; set; }
+
+        // ChangeShift
+        public Shift FromShift { get; set; }
+
+        public Shift ToShift { get; set; }
+
+        public byte ChangeShiftType { get; set; }
+
+        public IEnumerable<ChangeShiftDetail> ChangeShiftDetails { get; set; }
+
+        // LateIn-EarlyOut
+        public int TotalMins { get; set; }
+
+        public int ActualLateInEarlyOut { get; set; }
+        public byte ReasonId { get; set; }
+
+        // Overtime
+        public short OvertimeType { get; set; }
+
+        public bool IsOvertimeHours { get; set; }
+
+        public decimal NormalHours { get; set; }
+
+        public decimal OffHours { get; set; }
+
+        public decimal PublicHours { get; set; }
+
+        public decimal ToTalHours { get; set; }
+
+        public bool IsShowWarning { get; set; }
+
+        // Keep In View
+        public DateTime FromTime { get; set; }
+
+        public DateTime ToTime { get; set; }
+
+        public bool IsHalfDay { get; set; }
+
+        public bool CrossDay { get; set; }
+
+        public byte KeepInViewType { get; set; }
+    }
+}
