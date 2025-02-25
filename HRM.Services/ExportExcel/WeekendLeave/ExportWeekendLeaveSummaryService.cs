@@ -1,9 +1,12 @@
 ﻿namespace HRM.Services
 {
     using System.Collections.Generic;
+    using System.IO;
     using System.Web;
     using Core;
     using Criteria.Report;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Http;
     using Models.Report;
     using Resources;
 
@@ -14,14 +17,20 @@
 
     public class ExportWeekendLeaveSummaryService : IExportWeekendLeaveSummaryService
     {
-        private const string WeekendLeaveSummaryTemplatePath = @"~\ExcelTemplates\WeekendLeaveSummaryTemplate.xls";
+        private const string WeekendLeaveSummaryTemplatePath = @"ExcelTemplates\WeekendLeaveSummaryTemplate.xls";
         private const int HeaderRow = 3;
         private const int BodyRow = 4;
         private const int TotalCol = 7;
+        private readonly IWebHostEnvironment hostingEnvironment;
+
+        public ExportWeekendLeaveSummaryService(IWebHostEnvironment hostingEnvironment)
+        {
+            this.hostingEnvironment = hostingEnvironment;
+        }
 
         public void Export(GetWeekendLeaveSummaryCriteria criteria, IList<WeekendLeaveSummary> weekendLeaves)
         {
-            string templatePath = HttpContext.Current.Server.MapPath(WeekendLeaveSummaryTemplatePath);
+            string templatePath = Path.Combine(hostingEnvironment.ContentRootPath, WeekendLeaveSummaryTemplatePath); 
             string reportName = Labels.WeekendLeaveSummary;
             string reportTitle;
             string startDate = criteria.FromDate.ToDateMonthYearFormatedDate();

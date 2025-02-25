@@ -8,6 +8,8 @@
     using System.Linq;
     using System.Web;
     using HRM.Models.Report;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Http;
     using OfficeOpenXml;
 
     public interface IExportExcelShiftStatisticService
@@ -20,6 +22,12 @@
     [SuppressMessage("Major Code Smell", "S109:Magic numbers should not be used", Justification = "Pending")]
     public class ExportExcelShiftStatisticService : IExportExcelShiftStatisticService
     {
+        private readonly IWebHostEnvironment hostingEnvironment;
+
+        public ExportExcelShiftStatisticService(IWebHostEnvironment hostingEnvironment)
+        {
+            this.hostingEnvironment = hostingEnvironment;
+        }
         public byte[] Export(IEnumerable<ShiftStatistic> shiftStatistics)
         {
             const int FirstDataTableRow = 4;
@@ -35,7 +43,7 @@
             int totalTableRow = tableShifts.Count();
             int lastTableRow = totalTableRow + FirstDataTableRow;
 
-            string templatePath = HttpContext.Current.Server.MapPath(@"~/ExcelTemplates/ShiftStatisticTemplate.xlsx");
+            string templatePath = Path.Combine(hostingEnvironment.ContentRootPath, "ExcelTemplates/ShiftStatisticTemplate.xlsx");
 
             using (var excelPackage = new ExcelPackage(new FileInfo(templatePath)))
             {
@@ -99,7 +107,7 @@
             const int FirstDataTableRow = 3;
             const int TotalDataTableCol = 6;
 
-            string templatePath = HttpContext.Current.Server.MapPath(@"~/ExcelTemplates/ShiftStatisticDetailTemplate.xlsx");
+            string templatePath = Path.Combine(hostingEnvironment.ContentRootPath, "ExcelTemplates/ShiftStatisticDetailTemplate.xlsx");
 
             using (var excelPackage = new ExcelPackage(new FileInfo(templatePath)))
             {

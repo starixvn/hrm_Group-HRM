@@ -4,6 +4,8 @@
     using System.IO;
     using System.Web;
     using HRM.Models;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Http;
     using OfficeOpenXml;
 
     public interface IExportExcelTimeRecordService
@@ -13,12 +15,18 @@
 
     public class ExportExcelTimeRecordService : IExportExcelTimeRecordService
     {
+        private readonly IWebHostEnvironment hostingEnvironment;
+
+        public ExportExcelTimeRecordService(IWebHostEnvironment hostingEnvironment)
+        {
+            this.hostingEnvironment = hostingEnvironment;
+        }
         public byte[] Export(IList<TimeRecordModel> timeRecords)
         {
             const byte startBodyRow = 4;
             const byte totalColumns = 10;
             const byte headerAndTitleRow = 2;
-            var templatePath = HttpContext.Current.Server.MapPath(@"~/ExcelTemplates/TimeRecordTemplate.xlsx");
+            var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, "ExcelTemplates/TimeRecordTemplate.xlsx"); 
 
             using (var templatePackage = new ExcelPackage(new FileInfo(templatePath)))
             {

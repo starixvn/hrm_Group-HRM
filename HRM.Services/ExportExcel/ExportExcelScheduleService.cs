@@ -12,6 +12,7 @@
     using HRM.Core.Constants;
     using HRM.Models;
     using HRM.Models.ScheduleArrange;
+    using Microsoft.AspNetCore.Hosting;
     using OfficeOpenXml;
     using OfficeOpenXml.Style;
 
@@ -28,6 +29,13 @@
         private const int DefaultRowHeight = 14;
         private const string DateFormat = "dd-MMM-yyyy";
         private const string DateTimeFormat = "MMM dd, yyyy HH:mm:ss";
+
+        private readonly IWebHostEnvironment hostingEnvironment;
+
+        public ExportExcelScheduleService(IWebHostEnvironment hostingEnvironment)
+        {
+            this.hostingEnvironment = hostingEnvironment;
+        }
 
         public byte[] Export(WeeklyScheduleFilter filter, IEnumerable<WeeklySchedule> weeklySchedules)
         {
@@ -99,7 +107,7 @@
 
         public byte[] ExportDriverPickup(Actor actor, WeeklyScheduleFilter filter, IEnumerable<WeeklySchedule> weeklySchedules)
         {
-            var templatePath = HttpContext.Current.Server.MapPath(@"~/ExcelTemplates/DriverPickup.xlsx");
+            var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, @"ExcelTemplates/DriverPickup.xlsx");
             const int totalColumns = 10;
             using (var templatePackage = new ExcelPackage(new FileInfo(templatePath)))
             {

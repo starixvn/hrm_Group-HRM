@@ -7,6 +7,8 @@
     using HRM.Core.Enums;
     using HRM.Models.Supervisor;
     using HRM.Resources;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Http;
     using OfficeOpenXml;
 
     public interface IExportSupervisorService
@@ -26,9 +28,16 @@
         private const byte MinimumWidth = 10;
         private const byte MaximumWidth = 50;
 
+        private readonly IWebHostEnvironment hostingEnvironment;
+
+        public ExportSupervisorService(IWebHostEnvironment hostingEnvironment)
+        {
+            this.hostingEnvironment = hostingEnvironment;
+        }
+
         public byte[] ExportEmployeeSupervisor(IList<SupervisorReportModel> supervisors)
         {
-            string templatePath = HttpContext.Current.Server.MapPath(@"~/ExcelTemplates/EmployeeSupervisor.xlsx");
+            string templatePath = Path.Combine(hostingEnvironment.ContentRootPath, "ExcelTemplates/EmployeeSupervisor.xlsx");  
             using (var templatePackage = new ExcelPackage(new FileInfo(templatePath)))
             {
                 using (var xlPackage = new ExcelPackage())
@@ -84,7 +93,7 @@
 
         public byte[] ExportTeamSupervisor(IList<TeamSupervisorReportModel> supervisors)
         {
-            string templatePath = HttpContext.Current.Server.MapPath(@"~/ExcelTemplates/TeamSupervisor.xlsx");
+            string templatePath = Path.Combine(hostingEnvironment.ContentRootPath, "ExcelTemplates/TeamSupervisor.xlsx");
             using (var templatePackage = new ExcelPackage(new FileInfo(templatePath)))
             {
                 using (var xlPackage = new ExcelPackage())

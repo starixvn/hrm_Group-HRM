@@ -9,6 +9,8 @@
     using HRM.Core;
     using HRM.Core.Enums;
     using HRM.ViewModels;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Http;
     using Models;
     using Models.Request;
     using OfficeOpenXml;
@@ -28,10 +30,17 @@
         private const byte TotalColumns = 17;
         private const byte MinimumWidth = 5;
         private const byte MaximumWidth = 50;
+        private readonly IWebHostEnvironment hostingEnvironment;
+
+        public ExportExcelAttendanceReportService(IWebHostEnvironment hostingEnvironment)
+        {
+            this.hostingEnvironment = hostingEnvironment;
+        }
 
         public byte[] Export(IList<EmployeeAttendanceModel> attendances, DateTime fromDate, DateTime toDate)
         {
-            var templatePath = HttpContext.Current.Server.MapPath(@"~/ExcelTemplates/AttendanceReport.xlsx");
+            var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, @"ExcelTemplates\AttendanceReport.xlsx");
+
             using (var templatePackage = new ExcelPackage(new FileInfo(templatePath)))
             {
                 using (var xlPackage = new ExcelPackage())

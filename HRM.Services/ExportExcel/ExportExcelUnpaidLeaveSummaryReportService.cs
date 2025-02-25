@@ -3,10 +3,13 @@
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
+    using System.IO;
     using System.Linq;
     using System.Web;
     using HRM.Core;
     using HRM.Models;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Http;
 
     public interface IExportExcelUnpaidLeaveSummaryReportService
     {
@@ -17,16 +20,19 @@
     public class ExportExcelUnpaidLeaveSummaryReportService : IExportExcelUnpaidLeaveSummaryReportService
     {
         private readonly ICommonDataService commonDataService;
+        private readonly IWebHostEnvironment hostingEnvironment;
 
         private const int RowStartHeader = 2;
         private const int RowStartBody = 4;
-        private const string UnpaidLeaveSummaryTemplatePath = @"~\ExcelTemplates\UnpaidLeaveSummaryTemplate.xls";
-        private const string UnpaidLeaveSummaryH1TemplatePath = @"~\ExcelTemplates\UnpaidLeaveSummaryH1Template.xls";
-        private const string UnpaidLeaveSummaryH2TemplatePath = @"~\ExcelTemplates\UnpaidLeaveSummaryH2Template.xls";
+        private const string UnpaidLeaveSummaryTemplatePath = @"ExcelTemplates\UnpaidLeaveSummaryTemplate.xls";
+        private const string UnpaidLeaveSummaryH1TemplatePath = @"ExcelTemplates\UnpaidLeaveSummaryH1Template.xls";
+        private const string UnpaidLeaveSummaryH2TemplatePath = @"ExcelTemplates\UnpaidLeaveSummaryH2Template.xls";
 
-        public ExportExcelUnpaidLeaveSummaryReportService(ICommonDataService commonDataService)
+
+        public ExportExcelUnpaidLeaveSummaryReportService(ICommonDataService commonDataService, IWebHostEnvironment hostingEnvironment)
         {
             this.commonDataService = commonDataService;
+            this.hostingEnvironment = hostingEnvironment;
         }
 
         public void Export(IList<LeaveSummary> leaveSummaries, int year, string leaveType, string period)
@@ -48,7 +54,7 @@
                 path = UnpaidLeaveSummaryTemplatePath;
                 range = 6;
             }
-            string templatePath = HttpContext.Current.Server.MapPath(path);
+            string templatePath = Path.Combine(hostingEnvironment.ContentRootPath, path); 
             string fileName = "UnpaidLeaveSummary_" + DateTimeOffset.Now.ToString("yyyyMMdd");
 
             var leaveTypeIds = !string.IsNullOrWhiteSpace(leaveType) ? leaveType.Split(',').ToList() : new List<string>();

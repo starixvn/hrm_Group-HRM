@@ -2,24 +2,33 @@
 {
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
+    using System.IO;
     using Core;
     using Criteria.Discipline;
     using HRM.Core.Constants;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Http;
     using Models.Discipline;
     using Resources;
 
     [SuppressMessage("Major Code Smell", "S109:Magic numbers should not be used", Justification = "Pending")]
     public class ExportDisciplineDetailService : IExportDisciplineDetailService
     {
-        private const string TemplatePath = @"~\ExcelTemplates\DisciplineDetailReport.xls";
+        private const string TemplatePath = @"ExcelTemplates\DisciplineDetailReport.xls";
         private const int HeaderRow = 2;
         private const int BodyRow = 3;
         private const int WeekendRow = 4;
         private const int TotalCol = 26;
+        private readonly IWebHostEnvironment hostingEnvironment;
+
+        public ExportDisciplineDetailService(IWebHostEnvironment hostingEnvironment)
+        {
+            this.hostingEnvironment = hostingEnvironment;
+        }
 
         public void Export(GetDisciplineDetailCriteria criteria, IList<DisciplineDetailModel> disciplines)
         {
-            string templatePath = HttpContext.Current.Server.MapPath(TemplatePath);
+            string templatePath = Path.Combine(hostingEnvironment.ContentRootPath, TemplatePath); 
             string reportName = Labels.DisciplineDetailReportName;
             string reportTitle;
             string startDate = criteria.FromDate.ToDateMonthYearFormatedDate();

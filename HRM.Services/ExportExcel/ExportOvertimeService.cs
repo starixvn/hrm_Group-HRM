@@ -7,6 +7,8 @@
     using System.Web;
     using HRM.Core.Constants;
     using HRM.Models.Overtime;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Http;
     using OfficeOpenXml;
 
     public interface IExportOvertimeService
@@ -17,6 +19,12 @@
     [SuppressMessage("Major Code Smell", "S109:Magic numbers should not be used", Justification = "Pending")]
     public class ExportOvertimeService : IExportOvertimeService
     {
+        private readonly IWebHostEnvironment hostingEnvironment;
+
+        public ExportOvertimeService(IWebHostEnvironment hostingEnvironment)
+        {
+            this.hostingEnvironment = hostingEnvironment;
+        }
         public byte[] Export(IEnumerable<MonthlyOvertimeRequest> memberRequests, bool isMemberOvertime)
         {
             const byte TotalColumns = 14;
@@ -25,7 +33,7 @@
             const byte LineOfTotal = 4;
 
             string sheetName = "Employee Overtime Report";
-            string templatePath = HttpContext.Current.Server.MapPath(@"~/ExcelTemplates/EmployeeOverTimeTemplate.xlsx");
+            string templatePath = Path.Combine(hostingEnvironment.ContentRootPath, @"~/ExcelTemplates/EmployeeOverTimeTemplate.xlsx"); 
 
             if (isMemberOvertime)
             {

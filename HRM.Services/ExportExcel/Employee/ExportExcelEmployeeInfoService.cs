@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
+    using System.IO;
     using System.Linq;
     using System.Web;
     using HRM.Core;
@@ -11,22 +12,27 @@
     using HRM.Models.EmployeeInformation;
     using HRM.Models.Supervisor;
     using HRM.Resources;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Http;
 
     [SuppressMessage("Major Code Smell", "S109:Magic numbers should not be used", Justification = "Pending")]
     public class ExportExcelEmployeeInfoService : IExportExcelEmployeeInfoService
     {
-        private const string EmployeeBasicInfoTemplatePath = @"~\ExcelTemplates\EmployeeBasicInfoTemplate.xls";
-        private const string EmployeeDetailsInfoTemplatePath = @"~\ExcelTemplates\EmployeeDetailsInfoTemplate.xls";
-        private const string EmployeeFullInfoTemplatePath = @"~\ExcelTemplates\EmployeeFullProfileInfoTemplate.xls";
+        private const string EmployeeBasicInfoTemplatePath = @"ExcelTemplates\EmployeeBasicInfoTemplate.xls";
+        private const string EmployeeDetailsInfoTemplatePath = @"ExcelTemplates\EmployeeDetailsInfoTemplate.xls";
+        private const string EmployeeFullInfoTemplatePath = @"ExcelTemplates\EmployeeFullProfileInfoTemplate.xls";
         private readonly IEmployeeService employeeService;
         private readonly ICommonDataService commonDataService;
+        private readonly IWebHostEnvironment hostingEnvironment;
 
         public ExportExcelEmployeeInfoService(
             IEmployeeService employeeService,
-            ICommonDataService commonDataService)
+            ICommonDataService commonDataService,
+            IWebHostEnvironment hostingEnvironment)
         {
             this.employeeService = employeeService;
             this.commonDataService = commonDataService;
+            this.hostingEnvironment = hostingEnvironment;
         }
 
         private enum BasicInfo
@@ -38,7 +44,7 @@
 
         public void ExportEmployeeBasicInfo(IList<Employee> employees)
         {
-            string templatePath = HttpContext.Current.Server.MapPath(EmployeeBasicInfoTemplatePath);
+            string templatePath = Path.Combine(hostingEnvironment.ContentRootPath, EmployeeBasicInfoTemplatePath);
             string fileName = "EmployeeBasicInfo_" + DateTimeOffset.Now.ToString("yyyyMMdd");
             const string sheetName = "Employee Basic Info";
             var writer = new ExcelTemplateWriter(templatePath, fileName, sheetName);
@@ -64,7 +70,7 @@
 
         public void ExportEmployeeDetailsInfo(IList<Employee> employees)
         {
-            string templatePath = HttpContext.Current.Server.MapPath(EmployeeDetailsInfoTemplatePath);
+            string templatePath = Path.Combine(hostingEnvironment.ContentRootPath, EmployeeDetailsInfoTemplatePath); 
             string fileName = "EmployeeDetailsInfo_" + DateTimeOffset.Now.ToString("yyyyMMdd");
             const string sheetName = "Employee Details Info";
             var writer = new ExcelTemplateWriter(templatePath, fileName, sheetName);
@@ -219,7 +225,7 @@
 
         public void ExportEmployeeFullProfile(IList<EmployeeFullProfile> profiles)
         {
-            string templatePath = HttpContext.Current.Server.MapPath(EmployeeFullInfoTemplatePath);
+            string templatePath = Path.Combine(hostingEnvironment.ContentRootPath, EmployeeFullInfoTemplatePath); 
             string fileName = "EmployeeFullInfo_" + DateTimeOffset.Now.ToString("yyyyMMdd");
             const string sheetName = "Employee Full Information";
             var writer = new ExcelTemplateWriter(templatePath, fileName, sheetName);

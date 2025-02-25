@@ -9,6 +9,8 @@
     using HRM.Models;
     using HRM.Models.HospitalizationLeave;
     using HRM.Models.Request;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Http;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
 
@@ -20,17 +22,24 @@
         private const int _RowStartBodyWorkingTimeRequest = 3;
         private const int _RowStartBodyWorkingCalendar = 5;
 
-        private const string _LeaveSummaryFilePathExcelTemplate = "~\\ExcelTemplates\\LeaveSummaryTemplate.xls";
-        private const string _EmployeeWFH = "~\\ExcelTemplates\\EmployeeWorkFromHome.xls";
-        private const string _WorkingTimeRequestFilePathExcelTemplate = "~\\ExcelTemplates\\WorkingTimeRequestTemplate.xls";
-        private const string HospitalizationLeaveSummaryTemplatePath = "~\\ExcelTemplates\\HospitalizationLeaveSummary.xls";
-        private const string SickLeaveSummaryTemplatePath = "~\\ExcelTemplates\\SickLeaveSummary.xls";
+        private const string _LeaveSummaryFilePathExcelTemplate = "ExcelTemplates\\LeaveSummaryTemplate.xls";
+        private const string _EmployeeWFH = "ExcelTemplates\\EmployeeWorkFromHome.xls";
+        private const string _WorkingTimeRequestFilePathExcelTemplate = "ExcelTemplates\\WorkingTimeRequestTemplate.xls";
+        private const string HospitalizationLeaveSummaryTemplatePath = "ExcelTemplates\\HospitalizationLeaveSummary.xls";
+        private const string SickLeaveSummaryTemplatePath = "ExcelTemplates\\SickLeaveSummary.xls";
+
+        private readonly IWebHostEnvironment hostingEnvironment;
+
+        public ExportExcelService(IWebHostEnvironment hostingEnvironment)
+        {
+            this.hostingEnvironment = hostingEnvironment;
+        }
 
         public HSSFWorkbook ExportEmployeeWfh(IEnumerable<EmployeeWorkFromHome> employeeWfhList)
         {
             HSSFWorkbook hssfworkbook;
 
-            var templatePath = HttpContext.Current.Server.MapPath(_EmployeeWFH);
+            var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, _EmployeeWFH); 
             using (FileStream template = new FileStream(templatePath, FileMode.Open, FileAccess.Read))
             {
                 hssfworkbook = new HSSFWorkbook(template);
@@ -78,7 +87,7 @@
         {
             HSSFWorkbook hssfworkbook;
 
-            var templatePath = HttpContext.Current.Server.MapPath(_LeaveSummaryFilePathExcelTemplate);
+            var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, _LeaveSummaryFilePathExcelTemplate);
             using (FileStream template = new FileStream(templatePath, FileMode.Open, FileAccess.Read))
             {
                 hssfworkbook = new HSSFWorkbook(template);
@@ -148,7 +157,7 @@
         public HSSFWorkbook ExportWorkingTimeRequest(IList<RequestEntity> requestList, string title)
         {
             HSSFWorkbook hssfworkbook;
-            var templatePath = HttpContext.Current.Server.MapPath(_WorkingTimeRequestFilePathExcelTemplate);
+            var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, _WorkingTimeRequestFilePathExcelTemplate); 
             using (FileStream template = new FileStream(templatePath, FileMode.Open, FileAccess.Read))
             {
                 hssfworkbook = new HSSFWorkbook(template);
@@ -181,7 +190,7 @@
         {
             HSSFWorkbook hssfworkbook;
 
-            var templatePath = HttpContext.Current.Server.MapPath(HospitalizationLeaveSummaryTemplatePath);
+            var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, HospitalizationLeaveSummaryTemplatePath); 
             using (FileStream template = new FileStream(templatePath, FileMode.Open, FileAccess.Read))
             {
                 hssfworkbook = new HSSFWorkbook(template);
@@ -245,7 +254,7 @@
         {
             HSSFWorkbook hssfworkbook;
 
-            var templatePath = HttpContext.Current.Server.MapPath(SickLeaveSummaryTemplatePath);
+            var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, SickLeaveSummaryTemplatePath); 
             using (FileStream template = new FileStream(templatePath, FileMode.Open, FileAccess.Read))
             {
                 hssfworkbook = new HSSFWorkbook(template);

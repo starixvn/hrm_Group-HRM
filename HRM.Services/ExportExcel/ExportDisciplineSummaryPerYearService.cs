@@ -8,6 +8,8 @@
     using System.Web;
     using HRM.Models.Report;
     using HRM.Resources;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Http;
     using OfficeOpenXml;
 
     public interface IExportDisciplineSummaryPerYearService
@@ -17,6 +19,13 @@
 
     public class ExportDisciplineSummaryPerYearService : IExportDisciplineSummaryPerYearService
     {
+
+        private readonly IWebHostEnvironment hostingEnvironment;
+
+        public ExportDisciplineSummaryPerYearService(IWebHostEnvironment hostingEnvironment)
+        {
+            this.hostingEnvironment = hostingEnvironment;
+        }
         public byte[] Export(int fromYear, int toYear, IList<DisciplineSummaryPerYear> employees, bool enableGroupDate)
         {
             const byte LengthOfServiceColIndex = 9;
@@ -26,7 +35,7 @@
             const byte MaximumWidth = 50;
             const byte columnGroupDate = 8;
 
-            var templatePath = HttpContext.Current.Server.MapPath(@"~/ExcelTemplates/DisciplineSummaryPerYear.xlsx");
+            var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, @"ExcelTemplates\DisciplineSummaryPerYear.xlsx");
             using (var templatePackage = new ExcelPackage(new FileInfo(templatePath)))
             {
                 using (var xlPackage = new ExcelPackage())

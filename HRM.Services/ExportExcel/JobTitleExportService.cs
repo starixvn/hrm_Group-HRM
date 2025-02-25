@@ -5,6 +5,7 @@
     using System.Web;
     using HRM.Models;
     using HRM.Resources;
+    using Microsoft.AspNetCore.Hosting;
     using OfficeOpenXml;
 
     public interface IJobTitleExportService
@@ -22,10 +23,16 @@
         private const byte MinimumWidth = 10;
         private const byte MaximumWidth = 50;
         private const int TotalColumns = 6;
+        private readonly IWebHostEnvironment hostingEnvironment;
+
+        public JobTitleExportService(IWebHostEnvironment hostingEnvironment)
+        {
+            this.hostingEnvironment = hostingEnvironment;
+        }
 
         public byte[] Export(IEnumerable<LookupData> jobtitles)
         {
-            string templatePath = HttpContext.Current.Server.MapPath(@"~/ExcelTemplates/JobTitleSummary.xlsx");
+            string templatePath = Path.Combine(hostingEnvironment.ContentRootPath, "ExcelTemplates/JobTitleSummary.xlsx");
             using (var templatePackage = new ExcelPackage(new FileInfo(templatePath)))
             {
                 using (var xlPackage = new ExcelPackage())
