@@ -5,8 +5,8 @@
   <ItemGroup>
     <PackageReference Include="Fanex.Data" Version="4.3.3" />
     <PackageReference Include="Fanex.Data.Repository" Version="4.3.3" />
-    <PackageReference Include="MailKit" Version="4.9.0" />
-    <PackageReference Include="MimeKit" Version="4.9.0" />
+    <PackageReference Include="MailKit" Version="4.10.0" />
+    <PackageReference Include="MimeKit" Version="4.10.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\HRM.Core\HRM.Core.csproj" />

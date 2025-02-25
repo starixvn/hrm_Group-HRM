@@ -2,43 +2,28 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Web;
+    using System.Threading.Tasks;
     using HRM.Core;
     using HRM.Core.Enums;
     using HRM.Core.Models;
     using HRM.Core.Services;
     using HRM.Criteria.Request.KeepInView;
-    using HRM.Models;
     using HRM.Models.Request;
     using HRM.Repositories;
     using HRM.Resources;
     using HRM.Services.Interfaces;
-    using Hangfire;
 
-    public class KeepInViewRequestService : IKeepInViewRequestService
+    public class KeepInViewRequestService(
+        AppSettings appSettings,
+        IKeepInViewRequestRepository keepInViewRequestRepository,
+        IBaseService baseService,
+        IRequestMailService requestMailService,
+        IEmailService emailService,
+        ILetstalkService letstalkService) : IKeepInViewRequestService
     {
-        private const string EmailTemplatePathForRequest = "~/app_data/emails/KeepInView.Request.cshtml";
-        private const string EmailTemplatePathForCancel = "~/app_data/emails/KeepInView.Cancel.cshtml";
-        private const string EmailTemplatePathForApproval = "~/app_data/emails/KeepInView.Approval.cshtml";
-        private readonly IKeepInViewRequestRepository keepInViewRequestRepository;
-        private readonly IBaseService baseService;
-        private readonly IRequestMailService requestMailService;
-        private readonly IEmailService emailService;
-        private readonly ILetstalkService letstalkService;
-
-        public KeepInViewRequestService(
-            IKeepInViewRequestRepository keepInViewRequestRepository,
-            IBaseService baseService,
-            IRequestMailService requestMailService,
-            IEmailService emailService,
-            ILetstalkService letstalkService)
-        {
-            this.keepInViewRequestRepository = keepInViewRequestRepository;
-            this.baseService = baseService;
-            this.requestMailService = requestMailService;
-            this.emailService = emailService;
-            this.letstalkService = letstalkService;
-        }
+        private const string EmailTemplatePathForRequest = "~/app_data/emails/KeepInView.Request.txt";
+        private const string EmailTemplatePathForCancel = "~/app_data/emails/KeepInView.Cancel.txt";
+        private const string EmailTemplatePathForApproval = "~/app_data/emails/KeepInView.Approval.txt";
 
         public IList<KeepInViewRequest> GetByDate(GetKeepInViewRequestByDateCriteria criteria)
         {
@@ -93,11 +78,11 @@
 
         public void SendMailAndSendLetstalkCreateRequest(long requestId)
         {
-            KeepInViewRequest request = GetById(requestId);
+            var request = GetById(requestId);
             if (request != null)
             {
                 var emailTemplatePath = HttpContext.Current.Server.MapPath(EmailTemplatePathForRequest);
-                EmailModel email = requestMailService.GetMailToMailCCAndLetstalk(requestId, (byte)SettingsSendMail.New);
+                var email = requestMailService.GetMailToMailCCAndLetstalk(requestId, (byte)SettingsSendMail.New);
 
                 email.Subject = string.Format(
                     "{0} {1} on {2}",
@@ -112,26 +97,25 @@
                     request.Requester.Nickname,
                     request.OnDate.ToDateMonthYearFormatedDate(),
                     request.Remark,
-                    ConfigSettings.ApplicationDomain);
+                    appSettings.Domain);
 
-                BackgroundJob.Enqueue(() => emailService.SendEmail(
-                    ConfigSettings.EmailSetting,
+                Task.Run(() => emailService.SendEmail(
                     email.SendTo,
                     email.SendCC,
                     email.Subject,
                     email.Body));
 
-                BackgroundJob.Enqueue(() => letstalkService.SendNotification(email.LetsTalk, email.Subject, email.Body));
+                Task.Run(() => letstalkService.SendNotification(email.LetsTalk, email.Subject, email.Body));
             }
         }
 
         public void SendMailEditRequest(long requestId)
         {
-            KeepInViewRequest request = GetById(requestId);
+            var request = GetById(requestId);
             if (request != null)
             {
                 var emailTemplatePath = HttpContext.Current.Server.MapPath(EmailTemplatePathForRequest);
-                EmailModel email = requestMailService.GetMailToMailCCAndLetstalk(requestId, (byte)SettingsSendMail.Edit);
+                var email = requestMailService.GetMailToMailCCAndLetstalk(requestId, (byte)SettingsSendMail.Edit);
                 email.Subject = string.Format(
                     "{0} {1} on {2}",
                     Messages.UpdatedCompensationLeaveEmailSubject,
@@ -145,26 +129,25 @@
                     request.Requester.Nickname,
                     request.OnDate.ToDateMonthYearFormatedDate(),
                     request.Remark,
-                    ConfigSettings.ApplicationDomain);
+                    appSettings.Domain);
 
-                BackgroundJob.Enqueue(() => emailService.SendEmail(
-                    ConfigSettings.EmailSetting,
+                Task.Run(() => emailService.SendEmail(
                     email.SendTo,
                     email.SendCC,
                     email.Subject,
                     email.Body));
 
-                BackgroundJob.Enqueue(() => letstalkService.SendNotification(email.LetsTalk, email.Subject, email.Body));
+                Task.Run(() => letstalkService.SendNotification(email.LetsTalk, email.Subject, email.Body));
             }
         }
 
         public void SendMailDeleteRequest(long requestId)
         {
-            KeepInViewRequest request = GetById(requestId);
+            var request = GetById(requestId);
             if (request != null)
             {
                 var emailTemplatePath = HttpContext.Current.Server.MapPath(EmailTemplatePathForCancel);
-                EmailModel email = requestMailService.GetMailToMailCCAndLetstalk(requestId, (byte)SettingsSendMail.Cancel);
+                var email = requestMailService.GetMailToMailCCAndLetstalk(requestId, (byte)SettingsSendMail.Cancel);
                 email.Subject = string.Format(Messages.MessageCompensationLeaveRequest, request.Requester.Nickname);
                 email.Body = Utilities.ReadTextFile(emailTemplatePath);
                 email.Body = string.Format(
@@ -174,26 +157,25 @@
                     request.OnDate.ToDateMonthYearFormatedDate(),
                     request.Remark);
 
-                BackgroundJob.Enqueue(() => emailService.SendEmail(
-                    ConfigSettings.EmailSetting,
+                Task.Run(() => emailService.SendEmail(
                     email.SendTo,
                     email.SendCC,
                     email.Subject,
                     email.Body));
 
-                BackgroundJob.Enqueue(() => letstalkService.SendNotification(email.LetsTalk, email.Subject, email.Body));
+                Task.Run(() => letstalkService.SendNotification(email.LetsTalk, email.Subject, email.Body));
             }
         }
 
         public void SendMailProcessRequest(long requestId, EmployeeSession actor, RequestCommand command)
         {
-            KeepInViewRequest request = GetById(requestId);
+            var request = GetById(requestId);
             if (request != null)
             {
                 var emailTemplatePath = HttpContext.Current.Server.MapPath(EmailTemplatePathForApproval);
-                byte action = requestMailService.GetActionProcessRequest(request.Status.Id, command);
-                string commandMessage = requestMailService.GetCommandMessage(command);
-                EmailModel email = requestMailService.GetMailToMailCCAndLetstalk(requestId, action);
+                var action = requestMailService.GetActionProcessRequest(request.Status.Id, command);
+                var commandMessage = requestMailService.GetCommandMessage(command);
+                var email = requestMailService.GetMailToMailCCAndLetstalk(requestId, action);
                 email.Subject = string.Format(Messages.ApprovalNotificationCompensationLeaveSubject, request.Requester.Nickname, commandMessage, actor.Nickname);
                 email.Body = Utilities.ReadTextFile(emailTemplatePath);
                 email.Body = string.Format(
@@ -207,14 +189,13 @@
                     request.ShiftName,
                     request.Remark);
 
-                BackgroundJob.Enqueue(() => emailService.SendEmail(
-                    ConfigSettings.EmailSetting,
+                Task.Run(() => emailService.SendEmail(
                     email.SendTo,
                     email.SendCC,
                     email.Subject,
                     email.Body));
 
-                BackgroundJob.Enqueue(() => letstalkService.SendNotification(email.LetsTalk, email.Subject, email.Body));
+                Task.Run(() => letstalkService.SendNotification(email.LetsTalk, email.Subject, email.Body));
             }
         }
     }

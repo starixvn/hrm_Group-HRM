@@ -7,6 +7,27 @@
     <None Remove="logs\log.txt" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\Emails\ChangeShift.Approval.txt" />
+    <Content Include="App_Data\Emails\ChangeShift.Cancel.txt" />
+    <Content Include="App_Data\Emails\ChangeShift.Request.txt" />
+    <Content Include="App_Data\Emails\CheckInOut.Approval.txt" />
+    <Content Include="App_Data\Emails\CheckInOut.Cancel.txt" />
+    <Content Include="App_Data\Emails\CheckInOut.Request.txt" />
+    <Content Include="App_Data\Emails\EditMemoNotification.txt" />
+    <Content Include="App_Data\Emails\KeepInView.Approval.txt" />
+    <Content Include="App_Data\Emails\KeepInView.Cancel.txt" />
+    <Content Include="App_Data\Emails\KeepInView.Request.txt" />
+    <Content Include="App_Data\Emails\LateInEarlyOut.Approval.txt" />
+    <Content Include="App_Data\Emails\LateInEarlyOut.Cancel.txt" />
+    <Content Include="App_Data\Emails\LateInEarlyOut.Request.txt" />
+    <Content Include="App_Data\Emails\Leave.Approval.txt" />
+    <Content Include="App_Data\Emails\Leave.Cancel.txt" />
+    <Content Include="App_Data\Emails\Leave.Request.txt" />
+    <Content Include="App_Data\Emails\MemoNotification.txt" />
+    <Content Include="App_Data\Emails\MessageNotification.txt" />
+    <Content Include="App_Data\Emails\RemindUseAL.txt" />
+    <Content Include="App_Data\Emails\StatisticALBalance.txt" />
+    <Content Include="App_Data\Emails\UpdateInfoNotification.txt" />
     <Content Include="App_Data\SpNames.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -57,12 +78,10 @@
     <PackageReference Include="Fanex.Data.SqlServer" Version="4.3.3" />
     <PackageReference Include="GO.UserControl.Client.AspNetCore" Version="1.0.1" />
     <PackageReference Include="GO.UserControl.Client.Core" Version="1.0.2" />
-    <PackageReference Include="Hangfire" Version="1.8.17" />
-    <PackageReference Include="Hangfire.Core" Version="1.8.17" />
-    <PackageReference Include="Hangfire.SqlServer" Version="1.8.17" />
-    <PackageReference Include="log4net" Version="2.0.15" />
-    <PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="9.0.1" />
-    <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="9.0.1" />
+    <PackageReference Include="log4net" Version="3.0.4" />
+    <PackageReference Include="MailKit" Version="4.10.0" />
+    <PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="9.0.2" />
+    <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="9.0.2" />
   </ItemGroup>
   <ItemGroup>
     <Content Update="nlog.config">

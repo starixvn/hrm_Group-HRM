@@ -6,23 +6,15 @@
     using GO.UserControl.Client.Core;
     using GO.UserControl.Client.Core.Enumerables;
     using GO.UserControl.Client.Core.Session;
-    using HRM.Core.Constants;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Filters;
 
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
-    public class HrmPermissionAttribute : Attribute, IAuthorizationFilter
+    public class HrmPermissionAttribute(Policy policy, params string[] functionKeys) : Attribute, IAuthorizationFilter
     {
-        private readonly IUserControlSession session;
-        public HrmPermissionAttribute(Policy policy, params string[] functionKeys)
-        {
-            Policy = policy;
-            FunctionKeys = functionKeys;
-        }
-
-        public string[] FunctionKeys { get; set; }
-        public Policy Policy { get; set; }
+        public string[] FunctionKeys { get; set; } = functionKeys;
+        public Policy Policy { get; set; } = policy;
 
         public void OnAuthorization(AuthorizationFilterContext context)
         {
@@ -40,11 +32,11 @@
             }
             else
             {
-                CheckUserPermission(context);
+                CheckUserPermission(context, session);
             }
         }
 
-        private void CheckUserPermission(AuthorizationFilterContext context)
+        private void CheckUserPermission(AuthorizationFilterContext context, IUserControlSession session)
         {
             var hasPermission = false;
 

@@ -3,6 +3,7 @@
     using System;
     using System.Threading.Tasks;
     using Fanex.Caching.Redis;
+    using HRM.Core.Models;
     using Microsoft.AspNetCore.Authentication.Cookies;
     using Microsoft.AspNetCore.DataProtection;
     using Microsoft.AspNetCore.Http;
@@ -63,6 +64,14 @@
                 options.IdleTimeout = TimeSpan.FromMinutes(int.Parse(configuration.GetSection("AuthSettings:SessionTimeOut").Value));
                 options.Cookie.Name = "HRM.Website.Session";
             });
+
+            return services;
+        }
+
+        public static IServiceCollection AddDIServices(this IServiceCollection services, IConfiguration configuration)
+        {
+            var appSettings = configuration.GetSection("AppSettings").Get<AppSettings>();
+            services.AddSingleton(appSettings);
 
             return services;
         }

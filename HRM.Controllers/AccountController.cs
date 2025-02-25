@@ -89,7 +89,7 @@ namespace HRM.Controllers
         {
             if (ModelState.IsValid)
             {
-                int retCode = authService.Validate(EmployeeSession, model.Password);
+                var retCode = authService.Validate(EmployeeSession, model.Password);
                 if (retCode == (short)ValidateUserStatus.Success)
                 {
                     var param = new EditPassword

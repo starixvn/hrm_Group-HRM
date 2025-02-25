@@ -20,30 +20,18 @@ namespace HRM.Controllers
     using HRM.ViewModels.Information;
     using GO.UserControl.Client.Core.Session;
 
-    public class InformationController : BaseController
+    public class InformationController(
+        IUserControlSession userControlSession,
+        IBaseService baseService,
+        ICommonDataService commonDataService,
+        IEmployeeService employeeService,
+        IEmailService emailService) : BaseController(userControlSession)
     {
-        private readonly IBaseService baseService;
-        private readonly ICommonDataService commonDataService;
-        private readonly IEmployeeService employeeService;
-        private readonly IEmailService emailService;
-        private const string UpdateInfoNotificationTemplate = "~/app_data/emails/UpdateInfoNotification.cshtml";
-
-        public InformationController(
-            IUserControlSession userControlSession,
-            IBaseService baseService,
-            ICommonDataService commonDataService,
-            IEmployeeService employeeService,
-            IEmailService emailService) : base(userControlSession)
-        {
-            this.baseService = baseService;
-            this.commonDataService = commonDataService;
-            this.employeeService = employeeService;
-            this.emailService = emailService;
-        }
+        private const string UpdateInfoNotificationTemplate = "~/app_data/emails/UpdateInfoNotification.txt";
 
         public ActionResult UpdateInformation()
         {
-            Employee employee = employeeService.GetEmployeeById(EmployeeSession.EmpId);
+            var employee = employeeService.GetEmployeeById(EmployeeSession.EmpId);
             DisplayDefaultValuesOfDropDownListsForPersonalInformation();
             ViewBag.BaseFileLocation = Constants.ProfileUploadPath + "/" + EmployeeSession.Code + "/";
             return View(employee);
@@ -56,7 +44,7 @@ namespace HRM.Controllers
             ModelState.Clear();
             model.Id = EmployeeSession.EmpId;
             var criteria = SetUpdatePersonalInfoCriteria(model);
-            Employee employee = employeeService.GetEmployeeById(EmployeeSession.EmpId);
+            var employee = employeeService.GetEmployeeById(EmployeeSession.EmpId);
 
             var result = baseService.ExecuteNonQuery(criteria);
 
@@ -70,7 +58,7 @@ namespace HRM.Controllers
 
         private void DisplayDefaultValuesOfDropDownListsForPersonalInformation()
         {
-            IList<Country> countries = commonDataService.GetAllCountry();
+            var countries = commonDataService.GetAllCountry();
             ViewBag.Countries = countries.Select(c => new SelectListItem { Text = c.CountryName, Value = c.CountryCode }).ToList();
 
             ViewBag.Genders = new List<SelectListItem>

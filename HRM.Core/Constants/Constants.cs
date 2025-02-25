@@ -8,8 +8,6 @@
         public const byte December = 12;
         public const byte NumberMonthsInFutureCanLeaveRequest = 7;
 
-        public const string PassWordAdmin = "@dm!nhrms";
-
         public const string DateFormat = "dd MMM, yyyy";
         public const string TimeFormat = "HH:mm";
 

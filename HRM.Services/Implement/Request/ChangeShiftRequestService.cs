@@ -3,7 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Web;
+    using System.Threading.Tasks;
     using HRM.Core;
     using HRM.Core.Constants;
     using HRM.Core.Enums;
@@ -11,39 +11,23 @@
     using HRM.Core.Services;
     using HRM.Core.XMLExtensions;
     using HRM.Criteria.Request.ChangeShift;
-    using HRM.Models;
     using HRM.Models.Request.ChangeShift;
     using HRM.Models.ScheduleArrange;
     using HRM.Repositories;
     using HRM.Resources;
     using HRM.Services.Interfaces;
-    using Hangfire;
 
-    public class ChangeShiftRequestService : IChangeShiftRequestService
+    public class ChangeShiftRequestService(
+        AppSettings appSettings,
+        IChangeShiftRequestRepository changeShiftRepository,
+        IBaseService baseService,
+        IEmailService emailService,
+        IRequestMailService requestMailService,
+        ILetstalkService letstalkService) : IChangeShiftRequestService
     {
-        private const string EmailTemplatePathForRequest = "~/app_data/emails/ChangeShift.Request.cshtml";
-        private const string EmailTemplatePathForCancel = "~/app_data/emails/ChangeShift.Cancel.cshtml";
-        private const string EmailTemplatePathForApproval = "~/app_data/emails/ChangeShift.Approval.cshtml";
-
-        private readonly IChangeShiftRequestRepository changeShiftRepository;
-        private readonly IBaseService baseService;
-        private readonly IEmailService emailService;
-        private readonly IRequestMailService requestMailService;
-        private readonly ILetstalkService letstalkService;
-
-        public ChangeShiftRequestService(
-            IChangeShiftRequestRepository changeShiftRepository,
-            IBaseService baseService,
-            IEmailService emailService,
-            IRequestMailService requestMailService,
-            ILetstalkService letstalkService)
-        {
-            this.changeShiftRepository = changeShiftRepository;
-            this.baseService = baseService;
-            this.emailService = emailService;
-            this.requestMailService = requestMailService;
-            this.letstalkService = letstalkService;
-        }
+        private const string EmailTemplatePathForRequest = "~/app_data/emails/ChangeShift.Request.txt";
+        private const string EmailTemplatePathForCancel = "~/app_data/emails/ChangeShift.Cancel.txt";
+        private const string EmailTemplatePathForApproval = "~/app_data/emails/ChangeShift.Approval.txt";
 
         public int GetNumberOfRequest(int employeeId, DateTime fromDate, DateTime toDate)
         {
@@ -79,7 +63,7 @@
                 ToDate = fromDate.AddYears(1).AddDays(-1),
                 RequestId = requestId
             };
-            IList<DateTime> dates = baseService.GetData<DateTime>(criteria).ToList();
+            var dates = baseService.GetData<DateTime>(criteria).ToList();
             for (var day = requestDate.FirstDayOfWeek().Date; day.Date <= requestDate.LastDayOfWeek().Date; day = day.AddDays(1))
             {
                 if (!dates.Any(x => x.Date == day.Date))
@@ -127,7 +111,7 @@
                 RequestId = requestId
             };
             var details = baseService.GetData<ChangeShiftDetail>(criteria);
-            foreach (ChangeShiftDetail detail in details)
+            foreach (var detail in details)
             {
                 if (detail.FromShiftId == Constants.OffDayShiftId)
                 {
@@ -157,7 +141,7 @@
                 DetailXml = model.Details.ToXML().ToString(),
                 ActorId = actorId
             };
-            CommandResult commandResult = baseService.ExecuteNonQuery(criteria);
+            var commandResult = baseService.ExecuteNonQuery(criteria);
             commandResult.OutputId = criteria.RequestId;
 
             return commandResult;
@@ -193,11 +177,11 @@
 
         public void SendMailAndSendLetstalkCreateRequest(long requestId)
         {
-            ChangeShiftRequest request = GetById(requestId);
+            var request = GetById(requestId);
             if (request != null)
             {
                 var emailTemplatePath = HttpContext.Current.Server.MapPath(EmailTemplatePathForRequest);
-                EmailModel email = requestMailService.GetMailToMailCCAndLetstalk(requestId, (byte)SettingsSendMail.New);
+                var email = requestMailService.GetMailToMailCCAndLetstalk(requestId, (byte)SettingsSendMail.New);
                 var forDate = Utilities.GetMessageDateString(request.FromDate, request.ToDate);
                 email.Subject = string.Format(
                     "{0} {1} {2}",
@@ -212,27 +196,25 @@
                     request.Requester.Nickname,
                     forDate,
                     request.Remark,
-                    ConfigSettings.ApplicationDomain);
+                    appSettings.Domain);
 
-                BackgroundJob.Enqueue(() => emailService.SendEmail(
-                    ConfigSettings.EmailSetting,
+                Task.Run(() => emailService.SendEmail(
                     email.SendTo,
                     email.SendCC,
                     email.Subject,
                     email.Body));
 
-
-                BackgroundJob.Enqueue(() => letstalkService.SendNotification(email.LetsTalk, email.Subject, email.Body));
+                Task.Run(() => letstalkService.SendNotification(email.LetsTalk, email.Subject, email.Body));
             }
         }
 
         public void SendMailEditRequest(long requestId)
         {
-            ChangeShiftRequest request = GetById(requestId);
+            var request = GetById(requestId);
             if (request != null)
             {
                 var emailTemplatePath = HttpContext.Current.Server.MapPath(EmailTemplatePathForRequest);
-                EmailModel email = requestMailService.GetMailToMailCCAndLetstalk(requestId, (byte)SettingsSendMail.Edit);
+                var email = requestMailService.GetMailToMailCCAndLetstalk(requestId, (byte)SettingsSendMail.Edit);
                 var forDate = Utilities.GetMessageDateString(request.FromDate, request.ToDate);
                 email.Subject = string.Format(
                     "{0} {1} {2}",
@@ -247,26 +229,25 @@
                     request.Requester.Nickname,
                     forDate,
                     request.Remark,
-                    ConfigSettings.ApplicationDomain);
+                    appSettings.Domain);
 
-                BackgroundJob.Enqueue(() => emailService.SendEmail(
-                    ConfigSettings.EmailSetting,
+                Task.Run(() => emailService.SendEmail(
                     email.SendTo,
                     email.SendCC,
                     email.Subject,
                     email.Body));
 
-                BackgroundJob.Enqueue(() => letstalkService.SendNotification(email.LetsTalk, email.Subject, email.Body));
+                Task.Run(() => letstalkService.SendNotification(email.LetsTalk, email.Subject, email.Body));
             }
         }
 
         public void SendMailDeleteRequest(long requestId)
         {
-            ChangeShiftRequest request = GetById(requestId);
+            var request = GetById(requestId);
             if (request != null)
             {
                 var emailTemplatePath = HttpContext.Current.Server.MapPath(EmailTemplatePathForCancel);
-                EmailModel email = requestMailService.GetMailToMailCCAndLetstalk(requestId, (byte)SettingsSendMail.Cancel);
+                var email = requestMailService.GetMailToMailCCAndLetstalk(requestId, (byte)SettingsSendMail.Cancel);
                 var forDate = Utilities.GetMessageDateString(request.FromDate, request.ToDate);
 
                 email.Subject = string.Format(Messages.MessageChangeShiftRequest, request.Requester.Nickname);
@@ -278,26 +259,25 @@
                     forDate,
                     request.Remark);
 
-                BackgroundJob.Enqueue(() => emailService.SendEmail(
-                    ConfigSettings.EmailSetting,
+                Task.Run(() => emailService.SendEmail(
                     email.SendTo,
                     email.SendCC,
                     email.Subject,
                     email.Body));
 
-                BackgroundJob.Enqueue(() => letstalkService.SendNotification(email.LetsTalk, email.Subject, email.Body));
+                Task.Run(() => letstalkService.SendNotification(email.LetsTalk, email.Subject, email.Body));
             }
         }
 
         public void SendMailProcessRequest(long requestId, EmployeeSession actor, RequestCommand command)
         {
-            ChangeShiftRequest request = GetById(requestId);
+            var request = GetById(requestId);
             if (request != null)
             {
                 var emailTemplatePath = HttpContext.Current.Server.MapPath(EmailTemplatePathForApproval);
-                byte action = requestMailService.GetActionProcessRequest(request.Status.Id, command);
-                string commandMessage = requestMailService.GetCommandMessage(command);
-                EmailModel email = requestMailService.GetMailToMailCCAndLetstalk(requestId, action);
+                var action = requestMailService.GetActionProcessRequest(request.Status.Id, command);
+                var commandMessage = requestMailService.GetCommandMessage(command);
+                var email = requestMailService.GetMailToMailCCAndLetstalk(requestId, action);
                 var forDate = Utilities.GetMessageDateString(request.FromDate, request.ToDate);
 
                 email.Subject = string.Format(Messages.ApprovalNotificationChangeShiftSubject, request.Requester.Nickname, commandMessage, actor.Nickname);
@@ -312,14 +292,13 @@
                     forDate,
                     request.Remark);
 
-                BackgroundJob.Enqueue(() => emailService.SendEmail(
-                    ConfigSettings.EmailSetting,
+                Task.Run(() => emailService.SendEmail(
                     email.SendTo,
                     email.SendCC,
                     email.Subject,
                     email.Body));
 
-                BackgroundJob.Enqueue(() => letstalkService.SendNotification(email.LetsTalk, email.Subject, email.Body));
+                Task.Run(() => letstalkService.SendNotification(email.LetsTalk, email.Subject, email.Body));
             }
         }
     }

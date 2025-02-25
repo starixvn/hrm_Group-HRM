@@ -9,22 +9,12 @@
     using HRM.Core.Services;
     using HRM.Criteria.Message;
     using HRM.Models.Message;
-    using Hangfire;
 
-    public class MessageService : IMessageService
+    public class MessageService(
+        IBaseService baseService,
+        IEmailService emailService) : IMessageService
     {
-        private readonly string messageEmailTemplate = "~/app_data/emails/MessageNotification.cshtml";
-
-        private readonly IBaseService baseService;
-        private readonly IEmailService emailService;
-
-        public MessageService(
-            IBaseService baseService,
-            IEmailService emailService)
-        {
-            this.baseService = baseService;
-            this.emailService = emailService;
-        }
+        private readonly string messageEmailTemplate = "~/app_data/emails/MessageNotification.txt";
 
         public IList<Message> GetMessageByCreator(GetMessageByCreatorParam param)
         {

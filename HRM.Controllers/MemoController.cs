@@ -13,25 +13,14 @@ namespace HRM.Controllers
     using GO.UserControl.Client.Core.Enumerables;
     using GO.UserControl.Client.Core.Session;
 
-    public class MemoController : BaseController
+    public class MemoController(
+        IUserControlSession userControlSession,
+        IMemoService memoService,
+        ICommonDataService commonDataService,
+        IEmailService emailService) : BaseController(userControlSession)
     {
         private const int UploadMemoType = 1;
-        private readonly IUserControlSession userControlSession;
-        private readonly IMemoService memoService;
-        private readonly ICommonDataService commonDataService;
-        private readonly IEmailService emailService;
-
-        public MemoController(
-            IUserControlSession userControlSession,
-            IMemoService memoService,
-            ICommonDataService commonDataService,
-            IEmailService emailService) : base(userControlSession)
-        {
-            this.userControlSession = userControlSession;
-            this.memoService = memoService;
-            this.commonDataService = commonDataService;
-            this.emailService = emailService;
-        }
+        private readonly IUserControlSession userControlSession = userControlSession;
 
         [HrmPermission(Policy.Read, FunctionKey.Memo)]
         public ActionResult Index(int? year, int category = -1)
@@ -182,7 +171,7 @@ namespace HRM.Controllers
             var groupSd = ConfigurationManager.AppSettings["EmailSD"];
             var groupGo = ConfigurationManager.AppSettings["EmailGo"];
 
-            var bodyTemplate = Utilities.ReadTextFile(Server.MapPath("~/app_data/emails/MemoNotification.cshtml"));
+            var bodyTemplate = Utilities.ReadTextFile(Server.MapPath("~/app_data/emails/MemoNotification.txt"));
             var body = string.Format(bodyTemplate, subject, link + "memo/detail/" + result);
 
             emailService.SendEmail(

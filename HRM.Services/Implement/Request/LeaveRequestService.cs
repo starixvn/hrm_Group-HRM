@@ -3,7 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Web;
+    using System.Threading.Tasks;
     using HRM.Core;
     using HRM.Core.Constants;
     using HRM.Core.Enums;
@@ -16,32 +16,18 @@
     using HRM.Repositories;
     using HRM.Resources;
     using HRM.Services.Interfaces;
-    using Hangfire;
 
-    public class LeaveRequestService : ILeaveRequestService
+    public class LeaveRequestService(
+        AppSettings appSettings,
+        ILeaveRequestRepository leaveRequestRepository,
+        IRequestMailService requestMailService,
+        IBaseService baseService,
+        IEmailService emailService,
+        ILetstalkService letstalkService) : ILeaveRequestService
     {
-        private const string EmailTemplatePathForRequest = "~/app_data/emails/Leave.Request.cshtml";
-        private const string EmailTemplatePathForCancel = "~/app_data/emails/Leave.Cancel.cshtml";
-        private const string EmailTemplatePathForApproval = "~/app_data/emails/Leave.Approval.cshtml";
-        private readonly ILeaveRequestRepository leaveRequestRepository;
-        private readonly IRequestMailService requestMailService;
-        private readonly IEmailService emailService;
-        private readonly IBaseService baseService;
-        private readonly ILetstalkService letstalkService;
-
-        public LeaveRequestService(
-            ILeaveRequestRepository leaveRequestRepository,
-            IRequestMailService requestMailService,
-            IBaseService baseService,
-            IEmailService emailService,
-            ILetstalkService letstalkService)
-        {
-            this.leaveRequestRepository = leaveRequestRepository;
-            this.requestMailService = requestMailService;
-            this.baseService = baseService;
-            this.emailService = emailService;
-            this.letstalkService = letstalkService;
-        }
+        private const string EmailTemplatePathForRequest = "~/app_data/emails/Leave.Request.txt";
+        private const string EmailTemplatePathForCancel = "~/app_data/emails/Leave.Cancel.txt";
+        private const string EmailTemplatePathForApproval = "~/app_data/emails/Leave.Approval.txt";
 
         public IList<LeaveRequest> GetByDate(GetLeaveRequestByDateCriteria criteria)
         {
@@ -111,6 +97,7 @@
             leaveBalance.KeepInViewByHourBalance = Math.Round(leaveBalance.KeepInViewByHourBalance / Constants.TotalMinuteInHour, 1);
             return leaveBalance;
         }
+
         public CommandResult Delete(long requestId)
         {
             var criteria = new DeleteLeaveRequestCriteria
@@ -123,25 +110,25 @@
         public void SendMailAndSendLetstalkCreateRequest(InsertLeaveRequestCriteria criteria)
         {
             var templateEmailPath = HttpContext.Current.Server.MapPath(EmailTemplatePathForRequest);
-            BackgroundJob.Enqueue(() => SendMailForInsertSuccessfully(criteria, templateEmailPath));
+            Task.Run(() => SendMailForInsertSuccessfully(criteria, templateEmailPath));
         }
 
         public void SendMailEditRequest(UpdateLeaveRequestCriteria criteria)
         {
             var templateEmailPath = HttpContext.Current.Server.MapPath(EmailTemplatePathForRequest);
-            BackgroundJob.Enqueue(() => SendMailForUpdateSuccessfully(criteria, templateEmailPath));
+            Task.Run(() => SendMailForUpdateSuccessfully(criteria, templateEmailPath));
         }
 
         public void SendMailForInsertSuccessfully(InsertLeaveRequestCriteria criteria, string templateEmailPath)
         {
-            EmailModel email = requestMailService.GetMailToMailCCAndLetstalk(criteria.RequestId, (int)SettingsSendMail.New);
+            var email = requestMailService.GetMailToMailCCAndLetstalk(criteria.RequestId, (int)SettingsSendMail.New);
             email.Subject = Messages.LeaveEmailSubject + " " + criteria.EmployeeName;
             SendMailForSuccessfully(criteria, templateEmailPath, email);
         }
 
         public void SendMailForUpdateSuccessfully(UpdateLeaveRequestCriteria criteria, string templateEmailPath)
         {
-            EmailModel email = requestMailService.GetMailToMailCCAndLetstalk(criteria.RequestId, (int)SettingsSendMail.Edit);
+            var email = requestMailService.GetMailToMailCCAndLetstalk(criteria.RequestId, (int)SettingsSendMail.Edit);
             email.Subject = Messages.UpdatedLeaveEmailSubject + " " + criteria.EmployeeName;
 
             SendMailForSuccessfully(criteria, templateEmailPath, email);
@@ -149,11 +136,11 @@
 
         public void SendMailDeleteRequest(long requestId)
         {
-            LeaveRequest request = GetById(requestId);
+            var request = GetById(requestId);
             if (request != null)
             {
                 var emailTemplatePath = HttpContext.Current.Server.MapPath(EmailTemplatePathForCancel);
-                EmailModel email = requestMailService.GetMailToMailCCAndLetstalk(requestId, (byte)SettingsSendMail.Cancel);
+                var email = requestMailService.GetMailToMailCCAndLetstalk(requestId, (byte)SettingsSendMail.Cancel);
                 var fromDate = request.TotalDays == Constants.HalfDayOffValue ? GetFromTimeHalfDay(request.LeaveDetail) : request.FromDate;
                 var toDate = request.TotalDays == Constants.HalfDayOffValue ? GetToTimeHalfDay(request.LeaveDetail) : request.ToDate;
                 var forDate = requestMailService.GetStringDateForLeaveRequest(request.FromDate, fromDate, toDate, request.TotalDays);
@@ -168,30 +155,29 @@
                     request.LeaveType.Name,
                     request.Remark);
 
-                BackgroundJob.Enqueue(() => emailService.SendEmail(
-                    ConfigSettings.EmailSetting,
+                Task.Run(() => emailService.SendEmail(
                     email.SendTo,
                     email.SendCC,
                     email.Subject,
                     email.Body));
 
-                BackgroundJob.Enqueue(() => letstalkService.SendNotification(email.LetsTalk, email.Subject, email.Body));
+                Task.Run(() => letstalkService.SendNotification(email.LetsTalk, email.Subject, email.Body));
             }
         }
 
         public void SendMailProcessRequest(long requestId, EmployeeSession actor, RequestCommand command)
         {
-            LeaveRequest request = GetById(requestId);
+            var request = GetById(requestId);
             if (request != null)
             {
                 var emailTemplatePath = HttpContext.Current.Server.MapPath(EmailTemplatePathForApproval);
-                byte action = requestMailService.GetActionProcessRequest(request.Status.Id, command);
-                string commandMessage = requestMailService.GetCommandMessage(command);
+                var action = requestMailService.GetActionProcessRequest(request.Status.Id, command);
+                var commandMessage = requestMailService.GetCommandMessage(command);
                 var fromDate = request.TotalDays == Constants.HalfDayOffValue ? GetFromTimeHalfDay(request.LeaveDetail) : request.FromDate;
                 var toDate = request.TotalDays == Constants.HalfDayOffValue ? GetToTimeHalfDay(request.LeaveDetail) : request.ToDate;
                 var forDate = requestMailService.GetStringDateForLeaveRequest(request.FromDate, fromDate, toDate, request.TotalDays);
 
-                EmailModel email = requestMailService.GetMailToMailCCAndLetstalk(requestId, action);
+                var email = requestMailService.GetMailToMailCCAndLetstalk(requestId, action);
                 email.Subject = string.Format(Messages.ApprovalNotificationLeaveSubject,
                     request.Requester.Nickname,
                     commandMessage,
@@ -208,14 +194,13 @@
                     request.LeaveType.Name,
                     request.Remark);
 
-                BackgroundJob.Enqueue(() => emailService.SendEmail(
-                    ConfigSettings.EmailSetting,
+                Task.Run(() => emailService.SendEmail(
                     email.SendTo,
                     email.SendCC,
                     email.Subject,
                     email.Body));
 
-                BackgroundJob.Enqueue(() => letstalkService.SendNotification(email.LetsTalk, email.Subject, email.Body));
+                Task.Run(() => letstalkService.SendNotification(email.LetsTalk, email.Subject, email.Body));
             }
         }
 
@@ -260,18 +245,17 @@
                 forDate,
                 criteria.LeaveTypeName,
                 criteria.Remark,
-                ConfigSettings.ApplicationDomain);
+                appSettings.Domain);
             if (!string.IsNullOrWhiteSpace(email.SendTo))
             {
                 emailService.SendEmail(
-                    ConfigSettings.EmailSetting,
                     email.SendTo,
                     email.SendCC,
                     email.Subject,
                     email.Body);
             }
 
-            BackgroundJob.Enqueue(() => letstalkService.SendNotification(email.LetsTalk, email.Subject, email.Body));
+            Task.Run(() => letstalkService.SendNotification(email.LetsTalk, email.Subject, email.Body));
         }
     }
 }

@@ -2,43 +2,28 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Web;
+    using System.Threading.Tasks;
     using HRM.Core;
     using HRM.Core.Enums;
     using HRM.Core.Models;
     using HRM.Core.Services;
     using HRM.Criteria.Request.LateInEarlyOut;
-    using HRM.Models;
     using HRM.Models.Request;
     using HRM.Repositories;
     using HRM.Resources;
     using HRM.Services.Interfaces;
-    using Hangfire;
 
-    public class LateInEarlyOutRequestService : ILateInEarlyOutRequestService
+    public class LateInEarlyOutRequestService(
+        AppSettings appSettings,
+        ILateInEarlyOutRequestRepository lateInEarlyOutRequestRepository,
+        IRequestMailService requestMailService,
+        IEmailService emailService,
+        IBaseService baseService,
+        ILetstalkService letstalkService) : ILateInEarlyOutRequestService
     {
-        private const string EmailTemplatePathForRequest = "~/app_data/emails/LateInEarlyOut.Request.cshtml";
-        private const string EmailTemplatePathForCancel = "~/app_data/emails/LateInEarlyOut.Cancel.cshtml";
-        private const string EmailTemplatePathForApproval = "~/app_data/emails/LateInEarlyOut.Approval.cshtml";
-        private readonly ILateInEarlyOutRequestRepository lateInEarlyOutRequestRepository;
-        private readonly IRequestMailService requestMailService;
-        private readonly IEmailService emailService;
-        private readonly IBaseService baseService;
-        private readonly ILetstalkService letstalkService;
-
-        public LateInEarlyOutRequestService(
-            ILateInEarlyOutRequestRepository lateInEarlyOutRequestRepository,
-            IRequestMailService requestMailService,
-            IEmailService emailService,
-            IBaseService baseService,
-            ILetstalkService letstalkService)
-        {
-            this.lateInEarlyOutRequestRepository = lateInEarlyOutRequestRepository;
-            this.requestMailService = requestMailService;
-            this.emailService = emailService;
-            this.baseService = baseService;
-            this.letstalkService = letstalkService;
-        }
+        private const string EmailTemplatePathForRequest = "~/app_data/emails/LateInEarlyOut.Request.txt";
+        private const string EmailTemplatePathForCancel = "~/app_data/emails/LateInEarlyOut.Cancel.txt";
+        private const string EmailTemplatePathForApproval = "~/app_data/emails/LateInEarlyOut.Approval.txt";
 
         public IList<LateInEarlyOutRequest> GetByDate(GetLateInEarlyOutRequestByDateCriteria criteria)
         {
@@ -98,11 +83,11 @@
 
         public void SendMailAndSendLetstalkCreateRequest(long requestId)
         {
-            LateInEarlyOutRequest request = GetById(requestId);
+            var request = GetById(requestId);
             if (request != null)
             {
                 var emailTemplatePath = HttpContext.Current.Server.MapPath(EmailTemplatePathForRequest);
-                EmailModel email = requestMailService.GetMailToMailCCAndLetstalk(requestId, (byte)SettingsSendMail.New);
+                var email = requestMailService.GetMailToMailCCAndLetstalk(requestId, (byte)SettingsSendMail.New);
                 email.Subject = string.Format(
                     "{0} {1} on {2}",
                     Messages.LateInEarlyOutEmailSubject,
@@ -118,16 +103,15 @@
                     request.OnDate.ToDateMonthYearFormatedDate(),
                     request.RequestTypeId == (short)RequestType.LateIn ? request.LateInMins : request.EarlyOutMins,
                     request.Remark,
-                    ConfigSettings.ApplicationDomain);
+                    appSettings.Domain);
 
-                BackgroundJob.Enqueue(() => emailService.SendEmail(
-                    ConfigSettings.EmailSetting,
+                Task.Run(() => emailService.SendEmail(
                     email.SendTo,
                     email.SendCC,
                     email.Subject,
                     email.Body));
 
-                BackgroundJob.Enqueue(() => letstalkService.SendNotification(email.LetsTalk, email.Subject, email.Body));
+                Task.Run(() => letstalkService.SendNotification(email.LetsTalk, email.Subject, email.Body));
             }
         }
 
@@ -137,7 +121,7 @@
             if (request != null)
             {
                 var emailTemplatePath = HttpContext.Current.Server.MapPath(EmailTemplatePathForRequest);
-                EmailModel email = requestMailService.GetMailToMailCCAndLetstalk(requestId, (byte)SettingsSendMail.Edit);
+                var email = requestMailService.GetMailToMailCCAndLetstalk(requestId, (byte)SettingsSendMail.Edit);
                 email.Subject = string.Format(
                     "{0} {1} on {2}",
                     Messages.UpdatedLateInEarlyOutEmailSubject,
@@ -153,26 +137,25 @@
                     request.OnDate.ToDateMonthYearFormatedDate(),
                     request.RequestTypeId == (short)RequestType.LateIn ? request.LateInMins : request.EarlyOutMins,
                     request.Remark,
-                    ConfigSettings.ApplicationDomain);
+                    appSettings.Domain);
 
-                BackgroundJob.Enqueue(() => emailService.SendEmail(
-                    ConfigSettings.EmailSetting,
+                Task.Run(() => emailService.SendEmail(
                     email.SendTo,
                     email.SendCC,
                     email.Subject,
                     email.Body));
 
-                BackgroundJob.Enqueue(() => letstalkService.SendNotification(email.LetsTalk, email.Subject, email.Body));
+                Task.Run(() => letstalkService.SendNotification(email.LetsTalk, email.Subject, email.Body));
             }
         }
 
         public void SendMailDeleteRequest(long requestId)
         {
-            LateInEarlyOutRequest request = GetById(requestId);
+            var request = GetById(requestId);
             if (request != null)
             {
                 var emailTemplatePath = HttpContext.Current.Server.MapPath(EmailTemplatePathForCancel);
-                EmailModel email = requestMailService.GetMailToMailCCAndLetstalk(requestId, (byte)SettingsSendMail.Cancel);
+                var email = requestMailService.GetMailToMailCCAndLetstalk(requestId, (byte)SettingsSendMail.Cancel);
                 email.Subject = string.Format(Messages.MessageLateInEarlyOutRequest, request.RequestTypeName, request.Requester.Nickname);
                 email.Body = Utilities.ReadTextFile(emailTemplatePath);
                 email.Body = string.Format(
@@ -184,26 +167,25 @@
                     request.RequestTypeId == (short)RequestType.LateIn ? ("+" + request.LateInMins) : ("-" + request.EarlyOutMins),
                     request.Remark);
 
-                BackgroundJob.Enqueue(() => emailService.SendEmail(
-                    ConfigSettings.EmailSetting,
+                Task.Run(() => emailService.SendEmail(
                     email.SendTo,
                     email.SendCC,
                     email.Subject,
                     email.Body));
 
-                BackgroundJob.Enqueue(() => letstalkService.SendNotification(email.LetsTalk, email.Subject, email.Body));
+                Task.Run(() => letstalkService.SendNotification(email.LetsTalk, email.Subject, email.Body));
             }
         }
 
         public void SendMailProcessRequest(long requestId, EmployeeSession actor, RequestCommand command)
         {
-            LateInEarlyOutRequest request = GetById(requestId);
+            var request = GetById(requestId);
             if (request != null)
             {
                 var emailTemplatePath = HttpContext.Current.Server.MapPath(EmailTemplatePathForApproval);
-                byte action = requestMailService.GetActionProcessRequest(request.Status.Id, command);
-                string commandMessage = requestMailService.GetCommandMessage(command);
-                EmailModel email = requestMailService.GetMailToMailCCAndLetstalk(requestId, action);
+                var action = requestMailService.GetActionProcessRequest(request.Status.Id, command);
+                var commandMessage = requestMailService.GetCommandMessage(command);
+                var email = requestMailService.GetMailToMailCCAndLetstalk(requestId, action);
 
                 email.Subject = request.RequestTypeId == (byte)RequestType.LateIn
                     ? string.Format(Messages.ApprovalNotificationLateInSubject, request.Requester.Nickname, commandMessage, actor.Nickname)
@@ -220,14 +202,13 @@
                     request.RequestTypeId == (byte)RequestType.LateIn ? ("+" + request.LateInMins) : ("-" + request.EarlyOutMins),
                     request.Remark);
 
-                BackgroundJob.Enqueue(() => emailService.SendEmail(
-                    ConfigSettings.EmailSetting,
+                Task.Run(() => emailService.SendEmail(
                     email.SendTo,
                     email.SendCC,
                     email.Subject,
                     email.Body));
 
-                BackgroundJob.Enqueue(() => letstalkService.SendNotification(email.LetsTalk, email.Subject, email.Body));
+                Task.Run(() => letstalkService.SendNotification(email.LetsTalk, email.Subject, email.Body));
             }
         }
     }

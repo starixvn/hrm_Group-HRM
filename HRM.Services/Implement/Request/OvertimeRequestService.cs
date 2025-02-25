@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
     using Core.Services;
     using HRM.Core;
     using HRM.Core.Constants;
@@ -14,29 +15,15 @@
     using HRM.Models.Supervisor;
     using HRM.Repositories;
     using HRM.Services.Interfaces;
-    using Hangfire;
 
-    public class OvertimeRequestService : IOvertimeRequestService
+    public class OvertimeRequestService(
+        IOvertimeRequestRepository overtimeRepository,
+        IBaseService baseService,
+        IEmailService emailService,
+        ILetstalkService letstalkService) : IOvertimeRequestService
     {
         private const byte FromDay = 21;
         private const byte ToDay = 20;
-
-        private readonly IOvertimeRequestRepository overtimeRepository;
-        private readonly IBaseService baseService;
-        private readonly IEmailService emailService;
-        private readonly ILetstalkService letstalkService;
-
-        public OvertimeRequestService(
-            IOvertimeRequestRepository overtimeRepository,
-            IBaseService baseService,
-            IEmailService emailService,
-            ILetstalkService letstalkService)
-        {
-            this.overtimeRepository = overtimeRepository;
-            this.baseService = baseService;
-            this.emailService = emailService;
-            this.letstalkService = letstalkService;
-        }
 
         public IEnumerable<MonthlyOvertimeRequest> GetMonthlyRequestByEmployeeId(int employeeId, int year)
         {
@@ -54,7 +41,7 @@
                 toDate = toDate.AddMonths(1);
             }
 
-            if(toDate.Year > year)
+            if (toDate.Year > year)
             {
                 toDate = new DateTimeOffset(year, Constants.December, 1, 0, 0, 0, TimeSpan.Zero);
             }
@@ -65,7 +52,7 @@
                 FromDate = fromDate.Date,
                 ToDate = toDate.Date
             };
-            IEnumerable<MonthlyOvertimeRequest> monthlyRequests = overtimeRepository.GetMonthlyRequestByEmployeeId(criteria);
+            var monthlyRequests = overtimeRepository.GetMonthlyRequestByEmployeeId(criteria);
 
             return monthlyRequests;
         }
@@ -80,7 +67,7 @@
                 FromDate = fromDate,
                 ToDate = toDate
             };
-            MonthlyOvertimeRequest monthlyRequest = overtimeRepository.GetMonthlyRequestDetailsByEmployeeId(criteria);
+            var monthlyRequest = overtimeRepository.GetMonthlyRequestDetailsByEmployeeId(criteria);
 
             return monthlyRequest ?? new MonthlyOvertimeRequest();
         }
@@ -98,7 +85,7 @@
                 OvertimeType = param.OvertimeType,
                 IsLocal = param.IsLocal
             };
-            IEnumerable<MonthlyOvertimeRequest> memberRequests = overtimeRepository.GetMemberMonthlyRequest(criteria);
+            var memberRequests = overtimeRepository.GetMemberMonthlyRequest(criteria);
             return memberRequests;
         }
 
@@ -108,7 +95,7 @@
             {
                 RequestId = requestId
             };
-            MonthlyOvertimeRequest monthlyRequest = overtimeRepository.GetMonthlyRequestDetailsByEmployeeId(criteria);
+            var monthlyRequest = overtimeRepository.GetMonthlyRequestDetailsByEmployeeId(criteria);
 
             return monthlyRequest ?? new MonthlyOvertimeRequest();
         }
@@ -120,21 +107,21 @@
 
             if (employees != null)
             {
-                List<string> emailList = employees.Where(t => !string.IsNullOrWhiteSpace(t.Email)).Select(t => t.Email).ToList();
-                List<string> letstalkList = employees.Where(t => !string.IsNullOrWhiteSpace(t.LetsTalk)).Select(t => t.LetsTalk).ToList();
+                var emailList = employees.Where(t => !string.IsNullOrWhiteSpace(t.Email)).Select(t => t.Email).ToList();
+                var letstalkList = employees.Where(t => !string.IsNullOrWhiteSpace(t.LetsTalk)).Select(t => t.LetsTalk).ToList();
                 var emails = SplitList(emailList, 100);
                 var letstalks = SplitList(letstalkList, 100);
 
-                foreach (List<string> list in emails)
+                foreach (var list in emails)
                 {
                     var mailTo = string.Join(";", list);
-                    emailService.SendEmail(ConfigSettings.EmailSetting, mailTo, string.Empty, subject, content);
+                    emailService.SendEmail(mailTo, string.Empty, subject, content);
                 }
 
-                foreach (List<string> letstalk in letstalks)
+                foreach (var letstalk in letstalks)
                 {
                     var letstalkJoin = string.Join(";", letstalk);
-                    BackgroundJob.Enqueue(() => letstalkService.SendNotification(letstalkJoin, subject, content));
+                    Task.Run(() => letstalkService.SendNotification(letstalkJoin, subject, content));
                 }
             }
         }
@@ -244,7 +231,7 @@
             var fromDate = new DateTimeOffset(lastMonth.Year, lastMonth.Month, 10, 0, 0, 0, TimeSpan.Zero);
             var toDate = new DateTimeOffset(month.Year, month.Month, 9, 0, 0, 0, TimeSpan.Zero);
 
-            if(month == newRuleApplyFromMonth)
+            if (month == newRuleApplyFromMonth)
             {
                 toDate = new DateTimeOffset(month.Year, month.Month, ToDay, 0, 0, 0, TimeSpan.Zero);
             }

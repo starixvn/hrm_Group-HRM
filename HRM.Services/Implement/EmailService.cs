@@ -1,25 +1,14 @@
 ﻿namespace HRM.Services
 {
     using HRM.Core;
+    using HRM.Core.Models;
     using MailDeliver;
 
-    public class EmailService : IEmailService
+    public class EmailService(AppSettings appSettings, IBaseMailService mailService) : IEmailService
     {
-        private readonly IBaseMailService mailService;
-
-        public EmailService(IBaseMailService mailService)
+        public void SendEmail(string receiverEmail, string mailCc, string subject, string body)
         {
-            this.mailService = mailService;
-        }
-
-        public void SendEmail(string senderEmail, string receiverEmail, string mailCC, string subject, string body)
-        {
-            SendEmail(senderEmail, senderName: senderEmail, receiverEmail: receiverEmail, mailCC: mailCC, subject: subject, body: body);
-        }
-
-        public void SendEmail(string senderEmail, string senderName, string receiverEmail, string mailCC, string subject, string body)
-        {
-            if (!Utilities.IsValidEmail(senderEmail) || !Utilities.IsValidEmail(receiverEmail) || ConfigSettings.IsDisabledSendMail)
+            if (!Utilities.IsValidEmail(receiverEmail) || !appSettings.EnableSendMail)
             {
                 return;
             }
@@ -27,7 +16,7 @@
             var mailItem = new MailRecord
             {
                 MailTo = receiverEmail,
-                MailCc = mailCC,
+                MailCc = mailCc,
                 Subject = subject,
                 Body = body
             };

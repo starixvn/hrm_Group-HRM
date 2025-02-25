@@ -2,43 +2,28 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Web;
+    using System.Threading.Tasks;
     using HRM.Core;
     using HRM.Core.Enums;
     using HRM.Core.Models;
     using HRM.Core.Services;
     using HRM.Criteria.Request.CheckInOut;
-    using HRM.Models;
     using HRM.Models.Request;
     using HRM.Repositories;
     using HRM.Resources;
     using HRM.Services.Interfaces;
-    using Hangfire;
 
-    public class CheckInOutRequestService : ICheckInOutRequestService
+    public class CheckInOutRequestService(
+        AppSettings appSettings,
+        ICheckInOutRequestRepository checkInOutRequestRepository,
+        IBaseService baseService,
+        IRequestMailService requestMailService,
+        IEmailService emailService,
+        ILetstalkService letstalkService) : ICheckInOutRequestService
     {
-        private const string EmailTemplatePathForRequest = "~/app_data/emails/CheckInOut.Request.cshtml";
-        private const string EmailTemplatePathForCancel = "~/app_data/emails/CheckInOut.Cancel.cshtml";
-        private const string EmailTemplatePathForApproval = "~/app_data/emails/CheckInOut.Approval.cshtml";
-        private readonly ICheckInOutRequestRepository checkInOutRequestRepository;
-        private readonly IBaseService baseService;
-        private readonly IRequestMailService requestMailService;
-        private readonly IEmailService emailService;
-        private readonly ILetstalkService letstalkService;
-
-        public CheckInOutRequestService(
-            ICheckInOutRequestRepository checkInOutRequestRepository,
-            IBaseService baseService,
-            IRequestMailService requestMailService,
-            IEmailService emailService,
-            ILetstalkService letstalkService)
-        {
-            this.checkInOutRequestRepository = checkInOutRequestRepository;
-            this.baseService = baseService;
-            this.requestMailService = requestMailService;
-            this.emailService = emailService;
-            this.letstalkService = letstalkService;
-        }
+        private const string EmailTemplatePathForRequest = "~/app_data/emails/CheckInOut.Request.txt";
+        private const string EmailTemplatePathForCancel = "~/app_data/emails/CheckInOut.Cancel.txt";
+        private const string EmailTemplatePathForApproval = "~/app_data/emails/CheckInOut.Approval.txt";
 
         public IList<CheckInOutRequest> GetByDate(GetCheckInOutRequestByDateCriteria criteria)
         {
@@ -93,11 +78,11 @@
 
         public void SendMailAndSendLetstalkCreateRequest(long requestId)
         {
-            CheckInOutRequest request = GetById(requestId);
+            var request = GetById(requestId);
             if (request != null)
             {
                 var emailTemplatePath = HttpContext.Current.Server.MapPath(EmailTemplatePathForRequest);
-                EmailModel email = requestMailService.GetMailToMailCCAndLetstalk(requestId, (byte)SettingsSendMail.New);
+                var email = requestMailService.GetMailToMailCCAndLetstalk(requestId, (byte)SettingsSendMail.New);
                 email.Subject = string.Format(
                     "{0} {1} on {2}",
                     Messages.CheckInOutEmailSubject,
@@ -114,26 +99,25 @@
                         request.ShiftName,
                         request.RequestTime.ToShortTime(),
                         request.Remark,
-                    ConfigSettings.ApplicationDomain);
+                        appSettings.Domain);
 
-                BackgroundJob.Enqueue(() => emailService.SendEmail(
-                    ConfigSettings.EmailSetting,
+                Task.Run(() => emailService.SendEmail(
                     email.SendTo,
                     email.SendCC,
                     email.Subject,
                     email.Body));
 
-                BackgroundJob.Enqueue(() => letstalkService.SendNotification(email.LetsTalk, email.Subject, email.Body));
+                Task.Run(() => letstalkService.SendNotification(email.LetsTalk, email.Subject, email.Body));
             }
         }
 
         public void SendMailEditRequest(long requestId)
         {
             var emailTemplatePath = HttpContext.Current.Server.MapPath(EmailTemplatePathForRequest);
-            CheckInOutRequest request = GetById(requestId);
+            var request = GetById(requestId);
             if (request != null)
             {
-                EmailModel email = requestMailService.GetMailToMailCCAndLetstalk(requestId, (byte)SettingsSendMail.Edit);
+                var email = requestMailService.GetMailToMailCCAndLetstalk(requestId, (byte)SettingsSendMail.Edit);
                 email.Subject = string.Format(
                     "{0} {1} on {2}",
                     Messages.UpdatedCheckInOutEmailSubject,
@@ -150,26 +134,25 @@
                         request.ShiftName,
                         request.RequestTime.ToShortTime(),
                         request.Remark,
-                    ConfigSettings.ApplicationDomain);
+                        appSettings.Domain);
 
-                BackgroundJob.Enqueue(() => emailService.SendEmail(
-                    ConfigSettings.EmailSetting,
+                Task.Run(() => emailService.SendEmail(
                     email.SendTo,
                     email.SendCC,
                     email.Subject,
                     email.Body));
 
-                BackgroundJob.Enqueue(() => letstalkService.SendNotification(email.LetsTalk, email.Subject, email.Body));
+                Task.Run(() => letstalkService.SendNotification(email.LetsTalk, email.Subject, email.Body));
             }
         }
 
         public void SendMailDeleteRequest(long requestId)
         {
-            CheckInOutRequest request = GetById(requestId);
+            var request = GetById(requestId);
             if (request != null)
             {
                 var templateEmailPath = HttpContext.Current.Server.MapPath(EmailTemplatePathForCancel);
-                EmailModel email = requestMailService.GetMailToMailCCAndLetstalk(requestId, (byte)SettingsSendMail.Cancel);
+                var email = requestMailService.GetMailToMailCCAndLetstalk(requestId, (byte)SettingsSendMail.Cancel);
                 email.Subject = string.Format(Messages.MessageCheckInOutRequest, request.RequestTypeName, request.Requester.Nickname);
                 email.Body = Utilities.ReadTextFile(templateEmailPath);
                 email.Body = string.Format(
@@ -182,26 +165,25 @@
                     request.RequestTime.ToShortTime(),
                     request.Remark);
 
-                BackgroundJob.Enqueue(() => emailService.SendEmail(
-                    ConfigSettings.EmailSetting,
+                Task.Run(() => emailService.SendEmail(
                     email.SendTo,
                     email.SendCC,
                     email.Subject,
                     email.Body));
 
-                BackgroundJob.Enqueue(() => letstalkService.SendNotification(email.LetsTalk, email.Subject, email.Body));
+                Task.Run(() => letstalkService.SendNotification(email.LetsTalk, email.Subject, email.Body));
             }
         }
 
         public void SendMailProcessRequest(long requestId, EmployeeSession actor, RequestCommand command)
         {
-            CheckInOutRequest request = GetById(requestId);
+            var request = GetById(requestId);
             if (request != null)
             {
                 var emailTemplatePath = HttpContext.Current.Server.MapPath(EmailTemplatePathForApproval);
-                byte action = requestMailService.GetActionProcessRequest(request.Status.Id, command);
-                string commandMessage = requestMailService.GetCommandMessage(command);
-                EmailModel email = requestMailService.GetMailToMailCCAndLetstalk(requestId, action);
+                var action = requestMailService.GetActionProcessRequest(request.Status.Id, command);
+                var commandMessage = requestMailService.GetCommandMessage(command);
+                var email = requestMailService.GetMailToMailCCAndLetstalk(requestId, action);
 
                 email.Subject = request.RequestTypeId == (byte)RequestType.CheckIn
                     ? string.Format(Messages.ApprovalNotificationCheckInSubject, request.Requester.Nickname, commandMessage, actor.Nickname)
@@ -219,14 +201,13 @@
                     request.RequestTime.ToShortTime(),
                     request.Remark);
 
-                BackgroundJob.Enqueue(() => emailService.SendEmail(
-                    ConfigSettings.EmailSetting,
+                Task.Run(() => emailService.SendEmail(
                     email.SendTo,
                     email.SendCC,
                     email.Subject,
                     email.Body));
 
-                BackgroundJob.Enqueue(() => letstalkService.SendNotification(email.LetsTalk, email.Subject, email.Body));
+                Task.Run(() => letstalkService.SendNotification(email.LetsTalk, email.Subject, email.Body));
             }
         }
     }

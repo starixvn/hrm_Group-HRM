@@ -2,7 +2,6 @@
 {
     using System;
     using System.ComponentModel;
-    using System.Configuration;
     using System.Net;
     using System.Net.Mail;
     using System.Net.Security;
@@ -10,19 +9,20 @@
     using System.Text;
     using Criteria;
     using HRM.Core;
+    using HRM.Core.Models;
     using HRM.Core.Services;
     using MailKit.Net.Smtp;
     using MailKit.Security;
     using MimeKit;
 
-    public class BaseMailService(BaseService baseService) : IBaseMailService
+    public class BaseMailService(AppSettings appSettings, BaseService baseService) : IBaseMailService
     {
         public bool SendEmailAsync(MailRecord email)
         {
             var isSucessfull = false;
             if (email != null && Utilities.IsValidEmail(email.MailTo))
             {
-                email.MailConfig = GetMailConfigById(int.Parse(ConfigurationManager.AppSettings["app_mail_id"]));
+                email.MailConfig = GetMailConfigById(appSettings.AppMailId);
                 InsertMailRecord(email);
                 isSucessfull = Send(email);
             }

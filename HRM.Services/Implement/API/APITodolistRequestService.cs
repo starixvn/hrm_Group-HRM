@@ -599,7 +599,7 @@
 
         private static void AppendStatus(StringBuilder builder, byte statusId)
         {
-            builder.AppendFormat("<div><strong>Status</strong>: {0}</div>", EnumHelper.GetStringValue((CurrentRequestStatus)statusId));
+            builder.AppendFormat("<div><strong>Status</strong>: {0}</div>", EnumHelper.GetDescription((CurrentRequestStatus)statusId));
         }
 
         private static void AppendRemark(StringBuilder builder, string remark)
