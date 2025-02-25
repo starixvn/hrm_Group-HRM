@@ -1,5 +1,7 @@
 ﻿@using HRM.Models
 @using HRM.Resources
+@using HRM.ViewModels
+@using HRM.Core
 @model LeaveSummaryViewModel
 @{
     ViewBag.Title = Labels.AnualLeaveBalance;
@@ -40,7 +42,15 @@
                         @Html.LabelFor(model => model.Year, new { @class = "control-label" })
                     </div>
                     <div class="select-form">
-                        @Html.YearPickerFor(model => model.Year, 2010)
+                        @{
+                            var yearPicker = Extensions.YearPickerFor(2010);
+                            <select name="year" id="year">
+                                @foreach (var item in yearPicker)
+                                {
+                                    <option value="@item.Value" @(item.Selected ? "selected" : "")>@item.Value</option>
+                                }
+                            </select>
+                        }
                     </div>
                 </div>
 
@@ -250,14 +260,14 @@
     }
     else
     {
-        @RazorHelper.DisplayNoInformation(19)
+        @Html.Raw(RazorHelpers.DisplayNoInformation(19))
     }
 </table>
 <div class="hide">
     <div id="insertform" title="Adjust annual leave balance">
-        @Html.Action("MultipleInsert")
+        @await Html.PartialAsync("_MultipleInsert", Model)
     </div>
     <div id="resetform" title="Close balance for year @DateTime.Now.AddYears(-1).Year">
-        @Html.Action("MultipleReset")
+        @await Html.PartialAsync("MultipleReset", Model)
     </div>
 </div>

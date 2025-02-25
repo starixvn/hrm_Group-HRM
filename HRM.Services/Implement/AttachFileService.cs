@@ -16,6 +16,7 @@
         {
             this.hostingEnvironment = hostingEnvironment;
         }
+
         public void UploadFile(IList<IFormFile> files, long fileId, string pathFolder)
         {
             if (files != null && files.Any(x => x.Length > 0))
@@ -32,8 +33,10 @@
                     {
                         var fileName = Path.GetFileName(file.FileName);
                         var path = Path.Combine(dir, fileName);
-                        using (FileStream output = File.Create(path))
-                             file.CopyTo(output);
+                        using (var stream = new FileStream(path, FileMode.Create))
+                        {
+                            file.CopyTo(stream);
+                        }
                     }
                 }
             }
@@ -42,7 +45,7 @@
         public List<string> GetAttachFile(long fileId, string pathFolder)
         {
             var files = new List<string>();
-            string dir = Path.Combine(hostingEnvironment.ContentRootPath, pathFolder + fileId); 
+            string dir = Path.Combine(hostingEnvironment.ContentRootPath, pathFolder + fileId);
             if (Directory.Exists(dir))
             {
                 string[] filePaths = Directory.GetFiles(dir);

@@ -3,6 +3,8 @@
 @using HRM.Models.Report
 @using HRM.Models.ScheduleArrange
 @using HRM.Resources
+@using HRM.ViewModels
+
 @model WorkingCalendarViewModel
 @{
     var fromDay = Model.FromDate;
@@ -106,94 +108,97 @@
                     <td class="align-left">@calendar.Nickname</td>
                     @foreach (DailySchedule daily in calendar.Schedules)
                     {
-                        @RenderColShift(daily);
+                        RenderColShift(daily);
                     }
                 </tr>
             }
         }
         else
         {
-            @RazorHelper.DisplayNoInformation(colspan: colspanHeader);
+            @Html.Raw(RazorHelpers.DisplayNoInformation(colspanHeader));
         }
     </tbody>
 </table>
 
-@helper RenderColShift(DailySchedule schedule)
-{
-    var shift = string.Empty;
-    var className = string.Empty;
-    if (schedule.IsLeaveOffDay)
+@{
+    void RenderColShift(DailySchedule schedule)  
     {
-        shift = Labels.Off;
-        className = "leave offday";
-    }
-    else if (schedule.IsLeaveDay)
-    {
-        if (schedule.IsHoliday)
-        {
-            shift = Labels.PH;
-            className = "holiday";
-        }
-        else if (schedule.IsOffDay)
+        var shift = string.Empty;
+        var className = string.Empty;
+        if (schedule.IsLeaveOffDay)
         {
             shift = Labels.Off;
-            className = "offday";
+            className = "leave offday";
         }
-        else
+        else if (schedule.IsLeaveDay)
         {
-            if (schedule.LeaveType != null && (schedule.LeaveType2 == null || schedule.LeaveType.Code == schedule.LeaveType2.Code))
+            if (schedule.IsHoliday)
             {
-                switch (schedule.LeaveType.Id)
-                {
-                    case (byte)LeaveTypes.AnnualLeave:
-                        className = "annualleave";
-                        break;
-                    case (byte)LeaveTypes.UnpaidLeave:
-                        className = "unpaidleave";
-                        break;
-                    case (byte)LeaveTypes.BusinessTrip:
-                        className = "businesstrip";
-                        break;
-                    case (byte)LeaveTypes.WeddingLeave:
-                    case (byte)LeaveTypes.WeddingOfEmployeeChildren:
-                        className = "weddingleave";
-                        break;
-                    default:
-                        className = "leaveday";
-                        break;
-                }
+                shift = Labels.PH;
+                className = "holiday";
             }
-
-            if (schedule.IsLeaveHalfDay)
+            else if (schedule.IsOffDay)
             {
-                shift = string.Format("{0} ½", schedule.LeaveType.Code);
+                shift = Labels.Off;
+                className = "offday";
             }
             else
             {
-                shift = schedule.LeaveType.Code;
-
-                if (schedule.LeaveType2 != null && schedule.LeaveType.Code != schedule.LeaveType2.Code)
+                if (schedule.LeaveType != null && (schedule.LeaveType2 == null || schedule.LeaveType.Code == schedule.LeaveType2.Code))
                 {
-                    className = "leaveday leavehalfday2";
-                    shift = string.Format("{0} / {1}", schedule.LeaveType.Code, schedule.LeaveType2.Code);
+                    switch (schedule.LeaveType.Id)
+                    {
+                        case (byte)LeaveTypes.AnnualLeave:
+                            className = "annualleave";
+                            break;
+                        case (byte)LeaveTypes.UnpaidLeave:
+                            className = "unpaidleave";
+                            break;
+                        case (byte)LeaveTypes.BusinessTrip:
+                            className = "businesstrip";
+                            break;
+                        case (byte)LeaveTypes.WeddingLeave:
+                        case (byte)LeaveTypes.WeddingOfEmployeeChildren:
+                            className = "weddingleave";
+                            break;
+                        default:
+                            className = "leaveday";
+                            break;
+                    }
+                }
+
+                if (schedule.IsLeaveHalfDay)
+                {
+                    shift = string.Format("{0} ½", schedule.LeaveType.Code);
+                }
+                else
+                {
+                    shift = schedule.LeaveType.Code;
+
+                    if (schedule.LeaveType2 != null && schedule.LeaveType.Code != schedule.LeaveType2.Code)
+                    {
+                        className = "leaveday leavehalfday2";
+                        shift = string.Format("{0} / {1}", schedule.LeaveType.Code, schedule.LeaveType2.Code);
+                    }
                 }
             }
         }
-    }
-    else if (schedule.IsHoliday)
-    {
-        className = "holiday";
-        shift = schedule.Shift != null ? schedule.Shift.Code : Labels.PH;
-    }
-    else if (schedule.IsOffDay)
-    {
-        className = "offday";
-        shift = schedule.Shift != null ? schedule.Shift.Code : Labels.Off;
-    }
-    else
-    {
-        shift = schedule.Shift != null ? schedule.Shift.Code : string.Empty;
-    }
+        else if (schedule.IsHoliday)
+        {
+            className = "holiday";
+            shift = schedule.Shift != null ? schedule.Shift.Code : Labels.PH;
+        }
+        else if (schedule.IsOffDay)
+        {
+            className = "offday";
+            shift = schedule.Shift != null ? schedule.Shift.Code : Labels.Off;
+        }
+        else
+        {
+            shift = schedule.Shift != null ? schedule.Shift.Code : string.Empty;
+        }
 
-    <td class="@className">@shift</td>
+        <td class="@className">@shift</td>
+    }
+    
 }

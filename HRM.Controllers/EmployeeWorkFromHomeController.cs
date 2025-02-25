@@ -16,6 +16,8 @@ namespace HRM.Controllers
     using HRM.ViewModels.EmployeeWorkFromHome;
     using GO.UserControl.Client.Core.Enumerables;
     using GO.UserControl.Client.Core.Session;
+    using Newtonsoft.Json;
+    using Microsoft.AspNetCore.Http;
 
     public class EmployeeWorkFromHomeController : BaseController
     {
@@ -78,9 +80,9 @@ namespace HRM.Controllers
 
         [HttpPost]
         [HrmPermission(Policy.Host, FunctionKey.EmployeeManagement)]
-        public ActionResult Create(string requestModel, IList<HttpPostedFileBase> files)
+        public ActionResult Create(string requestModel, IList<IFormFile> files)
         {
-            var model = JsonConverter.FromJson<EmployeeWorkFromHomeViewModel>(requestModel);
+            var model = JsonConvert.DeserializeObject<EmployeeWorkFromHomeViewModel>(requestModel);
             var result = new CommandResult();
 
             if (model != null && ModelState.IsValid)
@@ -127,9 +129,9 @@ namespace HRM.Controllers
 
         [HttpPost]
         [HrmPermission(Policy.Host, FunctionKey.EmployeeManagement)]
-        public ActionResult Edit(string requestModel, IList<HttpPostedFileBase> files, string filesRemove)
+        public ActionResult Edit(string requestModel, IList<IFormFile> files, string filesRemove)
         {
-            var model = JsonConverter.FromJson<EmployeeWorkFromHomeViewModel>(requestModel);
+            var model = JsonConvert.DeserializeObject<EmployeeWorkFromHomeViewModel>(requestModel);
             var result = new CommandResult();
 
             if (model != null && ModelState.IsValid)
@@ -149,7 +151,7 @@ namespace HRM.Controllers
                 {
                     if (!string.IsNullOrWhiteSpace(filesRemove))
                     {
-                        attachFileService.DeleteFile(JsonConverter.FromJsonArray<string>(filesRemove), criteria.EmployeeWorkFromHomeId, UploadFolderPath);
+                        attachFileService.DeleteFile(JsonConvert.DeserializeObject<List<string>>(filesRemove), criteria.EmployeeWorkFromHomeId, UploadFolderPath);
                     }
                     attachFileService.UploadFile(files, criteria.EmployeeWorkFromHomeId, UploadFolderPath);
                 }

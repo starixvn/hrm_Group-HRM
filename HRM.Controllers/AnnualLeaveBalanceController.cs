@@ -18,6 +18,8 @@
     using GO.UserControl.Client.Core.Enumerables;
     using GO.UserControl.Client.Core.Session;
     using Microsoft.AspNetCore.Mvc;
+    using Newtonsoft.Json;
+    using Microsoft.AspNetCore.Http;
 
     public class AnnualLeaveBalanceController : BaseController
     {
@@ -78,11 +80,10 @@
             return View(model);
         }
 
-        [ValidateInput(false)]
         [HttpPost]
-        public JsonResult Adjust(string annualLeaveJson)
+        public JsonResult Adjust([FromBody] string annualLeaveJson)
         {
-            var model = JsonConverter.FromJson<AnnualLeaveBalanceMultiViewModel>(annualLeaveJson);
+            var model = JsonConvert.DeserializeObject<AnnualLeaveBalanceMultiViewModel>(annualLeaveJson);
             var annualLeave = new AdjustAnnualLeaveBalance
             {
                 EmployeeIds = model.EmpIds,
@@ -124,8 +125,7 @@
             return Json(result);
         }
 
-        [ChildActionOnly]
-        public PartialViewResult MultipleInsert()
+        public IActionResult MultipleInsert()
         {
             var model = new AnnualLeaveBalanceMultiViewModel
             {
@@ -134,8 +134,7 @@
             return PartialView("MultipleInsert", model);
         }
 
-        [ChildActionOnly]
-        public PartialViewResult MultipleReset()
+        public IActionResult MultipleReset()
         {
             var model = new AnnualLeaveBalanceMultiViewModel
             {
@@ -178,10 +177,9 @@
             return View(model);
         }
 
-        [ValidateInput(false)]
         [HttpPost]
         [HrmPermission(Policy.Host, FunctionKey.AnnualLeaveBalance)]
-        public ActionResult Edit(FormCollection formCollection, AnnualLeaveTransactionViewModel model)
+        public ActionResult Edit(IFormCollection formCollection, AnnualLeaveTransactionViewModel model)
         {
             ViewBag.Employee = employeeService.GetEmployeeById(model.EmpId);
             if (formCollection["command"].Equals(Labels.Delete))
