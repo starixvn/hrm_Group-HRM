@@ -7,11 +7,10 @@
     using HRM.Criteria.Request;
     using HRM.Models;
     using HRM.Models.Request;
-    using HRM.Models.Supervisor;
     using HRM.Repositories;
     using HRM.Resources;
 
-    public class RequestMailService : IRequestMailService
+    public class RequestMailService(IRequestRepository requestRepository) : IRequestMailService
     {
         #region constant
 
@@ -21,13 +20,6 @@
 
         #endregion constant
 
-        private readonly IRequestRepository requestRepository;
-
-        public RequestMailService(IRequestRepository requestRepository)
-        {
-            this.requestRepository = requestRepository;
-        }
-
         public EmailModel GetMailToMailCCAndLetstalk(long requestId, int action)
         {
             var criteria = new GetRequestRelatedPeopleCriteria
@@ -35,9 +27,9 @@
                 RequestId = requestId,
                 Action = action
             };
-            RequestRelatedPeopleModel relatedPeople = requestRepository.GetRequestRelatedPeople(criteria);
+            var relatedPeople = requestRepository.GetRequestRelatedPeople(criteria);
 
-            EmailModel emailModel = GetMailAndLetstalkApprover(relatedPeople);
+            var emailModel = GetMailAndLetstalkApprover(relatedPeople);
 
             GetMailAndLetstalkVerifier(relatedPeople, emailModel);
 
@@ -52,7 +44,7 @@
             }
 
             emailModel.IsAllowSendRequester = relatedPeople.EmailSetting.AllowSendUser;
-            emailModel.Sender = ConfigSettings.EmailSetting;
+
             return emailModel;
         }
 
@@ -86,105 +78,46 @@
 
         public byte GetActionProcessRequest(byte requestStatusId, RequestCommand command)
         {
-            byte action;
-            switch (command)
+            var action = command switch
             {
-                case RequestCommand.Accept:
-                    action = (byte)SettingsSendMail.Verify;
-                    break;
-
-                case RequestCommand.NotAccept:
-                    action = (byte)SettingsSendMail.NotVerify;
-                    break;
-
-                case RequestCommand.Approve:
-                    action = (byte)SettingsSendMail.Approve;
-                    break;
-
-                case RequestCommand.Reject:
-                    action = (byte)SettingsSendMail.Reject;
-                    break;
-
-                case RequestCommand.Process:
-                    action = (byte)SettingsSendMail.Process;
-                    break;
-
-                case RequestCommand.Void:
-                    action = (byte)SettingsSendMail.Void;
-                    break;
-
-                case RequestCommand.Reset:
-                    action = GetActionResetRequest(requestStatusId);
-                    break;
-
-                default:
-                    action = (byte)SettingsSendMail.New;
-                    break;
-            }
+                RequestCommand.Accept => (byte)SettingsSendMail.Verify,
+                RequestCommand.NotAccept => (byte)SettingsSendMail.NotVerify,
+                RequestCommand.Approve => (byte)SettingsSendMail.Approve,
+                RequestCommand.Reject => (byte)SettingsSendMail.Reject,
+                RequestCommand.Process => (byte)SettingsSendMail.Process,
+                RequestCommand.Void => (byte)SettingsSendMail.Void,
+                RequestCommand.Reset => GetActionResetRequest(requestStatusId),
+                _ => (byte)SettingsSendMail.New
+            };
 
             return action;
         }
 
         public string GetCommandMessage(RequestCommand command)
         {
-            string message;
-            switch (command)
+            var message = command switch
             {
-                case RequestCommand.Accept:
-                    message = string.Format(Messages.HasBeen, Labels.Accepted.ToLowerInvariant());
-                    break;
-
-                case RequestCommand.NotAccept:
-                    message = string.Format(Messages.HasNotBeen, Labels.Accepted.ToLowerInvariant());
-                    break;
-
-                case RequestCommand.Approve:
-                    message = string.Format(Messages.HasBeen, Labels.Approved.ToLowerInvariant());
-                    break;
-
-                case RequestCommand.Reject:
-                    message = string.Format(Messages.HasBeen, Labels.Rejected.ToLowerInvariant());
-                    break;
-
-                case RequestCommand.Process:
-                    message = string.Format(Messages.HasBeen, Labels.Processed.ToLowerInvariant());
-                    break;
-
-                case RequestCommand.Void:
-                    message = string.Format(Messages.HasBeen, Labels.Void.ToLowerInvariant());
-                    break;
-
-                case RequestCommand.Reset:
-                    message = string.Format(Messages.HasBeen, Labels.Reseted.ToLowerInvariant());
-                    break;
-
-                default:
-                    message = string.Format(Messages.HasBeen, Labels.Void.ToLowerInvariant());
-                    break;
-            }
+                RequestCommand.Accept => string.Format(Messages.HasBeen, Labels.Accepted.ToLowerInvariant()),
+                RequestCommand.NotAccept => string.Format(Messages.HasNotBeen, Labels.Accepted.ToLowerInvariant()),
+                RequestCommand.Approve => string.Format(Messages.HasBeen, Labels.Approved.ToLowerInvariant()),
+                RequestCommand.Reject => string.Format(Messages.HasBeen, Labels.Rejected.ToLowerInvariant()),
+                RequestCommand.Process => string.Format(Messages.HasBeen, Labels.Processed.ToLowerInvariant()),
+                RequestCommand.Void => string.Format(Messages.HasBeen, Labels.Void.ToLowerInvariant()),
+                RequestCommand.Reset => string.Format(Messages.HasBeen, Labels.Reseted.ToLowerInvariant()),
+                _ => string.Format(Messages.HasBeen, Labels.Void.ToLowerInvariant())
+            };
 
             return message;
         }
 
         private static byte GetActionResetRequest(byte statusId)
         {
-            byte action;
-            switch (statusId)
+            var action = statusId switch
             {
-                case (byte)CurrentRequestStatus.Verified:
-                case (byte)CurrentRequestStatus.NotVerified:
-                    action = (byte)SettingsSendMail.Reset1;
-                    break;
-
-                case (byte)CurrentRequestStatus.Approved:
-                case (byte)CurrentRequestStatus.Rejected:
-                    action = (byte)SettingsSendMail.Reset2;
-                    break;
-
-                default:
-                    action = (byte)SettingsSendMail.Reset3;
-                    break;
-            }
+                (byte)CurrentRequestStatus.Verified or (byte)CurrentRequestStatus.NotVerified => (byte)SettingsSendMail.Reset1,
+                (byte)CurrentRequestStatus.Approved or (byte)CurrentRequestStatus.Rejected => (byte)SettingsSendMail.Reset2,
+                _ => (byte)SettingsSendMail.Reset3
+            };
 
             return action;
         }
@@ -192,7 +125,7 @@
         private static EmailModel GetMailAndLetstalkApprover(RequestRelatedPeopleModel relatedPeople)
         {
             var emailModel = new EmailModel();
-            SupervisorNameModel approver = relatedPeople.Approver;
+            var approver = relatedPeople.Approver;
             if (approver != null && relatedPeople.EmailSetting.AllowSendApprover)
             {
                 emailModel.SendTo = approver.Email;
@@ -205,8 +138,8 @@
 
         private static void GetMailAndLetstalkVerifier(RequestRelatedPeopleModel relatedPeople, EmailModel emailModel)
         {
-            bool isValidVerifier = relatedPeople.Verifier != null;
-            bool isValidApprover = relatedPeople.Approver != null;
+            var isValidVerifier = relatedPeople.Verifier != null;
+            var isValidApprover = relatedPeople.Approver != null;
 
             if (relatedPeople.EmailSetting.AllowSendVerifier && isValidVerifier)
             {
@@ -217,7 +150,7 @@
                 }
                 else
                 {
-                    bool isValidEmail = isValidApprover
+                    var isValidEmail = isValidApprover
                         && !string.IsNullOrWhiteSpace(relatedPeople.Verifier.Email)
                         && !relatedPeople.Verifier.Email.Equals(relatedPeople.Approver.Email, StringComparison.OrdinalIgnoreCase);
                     if (isValidEmail)
@@ -238,7 +171,7 @@
             }
             else
             {
-                bool isValidLetalk = relatedPeople.Approver != null
+                var isValidLetalk = relatedPeople.Approver != null
                        && !string.IsNullOrWhiteSpace(relatedPeople.Verifier.LetsTalk)
                        && !relatedPeople.Verifier.LetsTalk.Equals(relatedPeople.Approver.LetsTalk, StringComparison.OrdinalIgnoreCase);
                 if (isValidLetalk)

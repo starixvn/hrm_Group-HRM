@@ -73,6 +73,12 @@
             var appSettings = configuration.GetSection("AppSettings").Get<AppSettings>();
             services.AddSingleton(appSettings);
 
+            var letstalkSettings = configuration.GetSection("LetstalkSettings").Get<LetstalkSettings>();
+            services.AddSingleton(letstalkSettings);
+
+            var syncWorkingShiftSettings = configuration.GetSection("SyncWorkingShiftSettings").Get<SyncWorkingShiftSettings>();
+            services.AddSingleton(syncWorkingShiftSettings);
+
             return services;
         }
     }

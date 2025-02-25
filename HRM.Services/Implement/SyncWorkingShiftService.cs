@@ -3,12 +3,10 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Net;
     using System.Net.Http;
     using System.Text;
     using System.Threading.Tasks;
     using Fanex.Logging;
-    using HRM.Core;
     using HRM.Core.Models;
     using HRM.Core.Services;
     using HRM.Core.XMLExtensions;
@@ -21,31 +19,14 @@
         Task<CommandResult> SyncWorkingShiftAsync(SyncWorkingShiftCommand command);
     }
 
-    public class SyncWorkingShiftService : ISyncWorkingShiftService, IDisposable
+    public class SyncWorkingShiftService(
+        SyncWorkingShiftSettings syncWorkingShiftSettings,
+        ILogger logger,
+        IBaseService baseService) : ISyncWorkingShiftService, IDisposable
     {
         private bool isDisposed;
         private const int BatchSize = 1000;
-        private readonly IBaseService baseService;
-        private readonly HttpClient _httpClient;
-
-        public SyncWorkingShiftService(IBaseService baseService)
-        {
-            this.baseService = baseService;
-
-            if (ConfigSettings.IsEnableProxy)
-            {
-                var proxy = new WebProxy(ConfigSettings.Proxy_Address, ConfigSettings.Proxy_BypassOnLocal);
-                var httpClientHandler = new HttpClientHandler
-                {
-                    Proxy = proxy
-                };
-                _httpClient = new HttpClient(handler: httpClientHandler, disposeHandler: true);
-            }
-            else
-            {
-                _httpClient = new HttpClient();
-            }
-        }
+        private readonly HttpClient _httpClient = new();
 
         public async Task<CommandResult> SyncWorkingShiftAsync(SyncWorkingShiftCommand command)
         {
@@ -69,12 +50,9 @@
         {
             var commandResult = new CommandResult { Code = 0, Message = string.Empty };
 
-            var builder = new StringBuilder(ConfigSettings.SyncWorkingShift_Url);
-            builder.AppendFormat("?locationCode={0}&fromDate={1}&toDate={2}&timezone={3}",
-                ConfigSettings.SyncWorkingShift_LocationCode,
-                date.ToString("yyyy-MM-dd"),
-                date.ToString("yyyy-MM-dd"),
-                ConfigSettings.SyncWorkingShift_Timezone);
+            var builder = new StringBuilder(syncWorkingShiftSettings.ApiUrl);
+            builder.AppendFormat("?locationCode={0}&fromDate={1:yyyy-MM-dd}&toDate={2:yyyy-MM-dd}&timezone={3}",
+                syncWorkingShiftSettings.LocationCode, date, date, syncWorkingShiftSettings.Timezone);
 
             var url = new Uri(builder.ToString());
             var response = await _httpClient.GetAsync(url);
@@ -90,8 +68,8 @@
                         ProcessData(shift);
                     }
 
-                    int totalBatch = (int)Math.Ceiling((double)workingShifts.Count() / BatchSize);
-                    for (int i = 0; i < totalBatch; i++)
+                    var totalBatch = (int)Math.Ceiling((double)workingShifts.Count / BatchSize);
+                    for (var i = 0; i < totalBatch; i++)
                     {
                         commandResult = baseService.ExecuteNonQuery(new SyncWorkingShiftCommand
                         {
@@ -107,7 +85,7 @@
             else
             {
                 var message = await response.Content.ReadAsStringAsync();
-                LogService.Error(string.Format("StatusCode: {0}\r\nMessage: {1}", response.StatusCode, message));
+                logger.Error($"StatusCode: {response.StatusCode}\r\nMessage: {message}");
                 commandResult.Code = (int)response.StatusCode;
                 commandResult.Message = message;
             }

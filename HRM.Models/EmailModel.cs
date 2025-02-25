@@ -10,8 +10,6 @@
 
         public string SendCC { get; set; }
 
-        public string Sender { get; set; }
-
         public string SendToNickName { get; set; }
 
         public bool IsAllowSendRequester { get; set; }

@@ -1,39 +1,33 @@
 ﻿namespace HRM.Services.Implement
 {
     using System.Collections.Generic;
-    using HRM.Core;
-    using HRM.Services.Interfaces;
+    using HRM.Core.Models;
     using HRM.Letstalk.Core.Services;
+    using HRM.Services.Interfaces;
 
-    public class LetstalkService : ILetstalkService
+    public class LetstalkService(
+        LetstalkSettings letstalkSettings,
+        ISendNotificationService sendNotificationService) : ILetstalkService
     {
-        private readonly ISendNotificationService sendNotificationService;
         private readonly string templateContent = "<strong>{0}</strong><br /> {1}";
-
-        public LetstalkService(ISendNotificationService sendNotificationService)
-        {
-            this.sendNotificationService = sendNotificationService;
-        }
 
         public void SendNotification(string letstalkId, string subject, string message)
         {
-            var letstalk = !string.IsNullOrWhiteSpace(ConfigSettings.Letstalk_TestingAccountId) ? ConfigSettings.Letstalk_TestingAccountId : letstalkId;
-            if (ConfigSettings.IsEnableSendLetstalk && !string.IsNullOrWhiteSpace(letstalk))
+            var letstalk = !string.IsNullOrWhiteSpace(letstalkSettings.TestingAccountId) ? letstalkSettings.TestingAccountId : letstalkId;
+            if (letstalkSettings.Enable && !string.IsNullOrWhiteSpace(letstalk))
             {
-                var jwtToken = sendNotificationService.GetToken(ConfigSettings.Letstalk_API_BaseUrl,
-                    ConfigSettings.Letstalk_Token_Username,
-                    ConfigSettings.Letstalk_Token_Password);
+                var jwtToken = sendNotificationService.GetToken(letstalkSettings.BaseUrl, letstalkSettings.Username, letstalkSettings.Password);
                 if (jwtToken != null)
                 {
                     var content = string.Format(templateContent, subject, message);
                     var data = new Dictionary<string, object>
                     {
-                        { "BotId", ConfigSettings.Letstalk_BotId },
+                        { "BotId", letstalkSettings.BotId },
                         { "ConversationId", letstalk },
                         { "Message", content }
                     };
 
-                    sendNotificationService.SendNotificationToLetstalk(ConfigSettings.Letstalk_API_BaseUrl, jwtToken.Token, data);
+                    sendNotificationService.SendNotificationToLetstalk(letstalkSettings.BaseUrl, jwtToken.Token, data);
                 }
             }
         }

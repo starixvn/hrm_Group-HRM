@@ -3,7 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Web;
+    using System.Threading.Tasks;
     using HRM.Core;
     using HRM.Core.Models;
     using HRM.Core.Services;
@@ -131,7 +131,7 @@
         public void SendMailToStaff(Message model)
         {
             var bodyTemplate = Utilities.ReadTextFile(HttpContext.Current.Server.MapPath(messageEmailTemplate));
-            BackgroundJob.Enqueue(() => SendEmail(model.Subject, model.Contents, model.SendToEmail, bodyTemplate));
+            Task.Run(() => SendEmail(model.Subject, model.Contents, model.SendToEmail, bodyTemplate));
         }
 
         public void SendEmail(string subject, string content, string sendToEmail, string emailTemplatePath)
@@ -139,7 +139,6 @@
             var body = string.Format(emailTemplatePath, subject, content);
 
             emailService.SendEmail(
-                ConfigSettings.EmailSetting,
                 sendToEmail,
                 string.Empty,
                 Resources.Messages.MessageSubject + " " + subject,
