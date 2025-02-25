@@ -1,25 +1,25 @@
 ﻿namespace HRM.Core.Enums
 {
-    using Fanex.Common.Extensions;
+    using System.ComponentModel;
 
     public enum JobTitleCategory
     {
-        [StringValue("Default")]
+        [Description("Default")]
         Default = 0,
 
-        [StringValue("Worker")]
+        [Description("Worker")]
         Worker = 1,
 
-        [StringValue("Staff")]
+        [Description("Staff")]
         Staff = 2,
 
-        [StringValue("Executive")]
+        [Description("Executive")]
         Executive = 3,
 
-        [StringValue("Executive With Position")]
+        [Description("Executive With Position")]
         ExecutiveWithPosition = 4,
 
-        [StringValue("Management")]
+        [Description("Management")]
         Management = 5
     }
 }

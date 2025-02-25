@@ -1,16 +1,16 @@
 ﻿namespace HRM.Core.Enums
 {
-    using Fanex.Common.Extensions;
+    using System.ComponentModel;
 
     public enum ShiftStatus
     {
-        [StringValue("All")]
+        [Description("All")]
         All = 0,
 
-        [StringValue("Active")]
+        [Description("Active")]
         Active = 1,
 
-        [StringValue("Disabled")]
+        [Description("Disabled")]
         Disabled = 2
     }
 }

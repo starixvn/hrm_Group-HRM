@@ -1,19 +1,19 @@
 ﻿namespace HRM.Core.Enums
 {
-    using Fanex.Common.Extensions;
+    using System.ComponentModel;
 
     public enum CheckInOutReason
     {
-        [StringValue("Van Late")]
+        [Description("Van Late")]
         VanLate = 1,
 
-        [StringValue("Business Trip")]
+        [Description("Business Trip")]
         BusinessTrip = 2,
 
-        [StringValue("Forgot")]
+        [Description("Forgot")]
         Forgot = 3,
 
-        [StringValue("Other")]
+        [Description("Other")]
         Other = 4
     }
 }

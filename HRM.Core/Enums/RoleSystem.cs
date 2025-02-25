@@ -1,40 +1,40 @@
 ﻿namespace HRM.Core.Enums
 {
-    using Fanex.Common.Extensions;
+    using System.ComponentModel;
 
     public enum RoleSystem
     {
-        [StringValue("Member")]
+        [Description("Member")]
         Member = 1,
 
-        [StringValue("Verifier")]
+        [Description("Verifier")]
         Verifier = 2,
 
-        [StringValue("Approver")]
+        [Description("Approver")]
         Approver = 3,
 
-        [StringValue("Shift Current Week Editor")]
+        [Description("Shift Current Week Editor")]
         ShiftManager = 4,
 
-        [StringValue("On Behalf Request")]
+        [Description("On Behalf Request")]
         OnBehalfRequest = 5,
 
-        [StringValue("HR")]
+        [Description("HR")]
         HR = 6,
 
-        [StringValue("System Admin")]
+        [Description("System Admin")]
         SystemAdmin = 7,
 
-        [StringValue("Discipline Manager")]
+        [Description("Discipline Manager")]
         DisciplineManager = 8,
 
-        [StringValue("Shift Arrange")]
+        [Description("Shift Arrange")]
         ShiftManager2 = 9,
 
-        [StringValue("Local HR")]
+        [Description("Local HR")]
         LocalHR = 10,
 
-        [StringValue("Expat HR")]
+        [Description("Expat HR")]
         ExpatHR = 11
     }
 }

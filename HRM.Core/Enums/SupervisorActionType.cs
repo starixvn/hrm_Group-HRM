@@ -1,22 +1,22 @@
 ﻿namespace HRM.Core.Enums
 {
-    using Fanex.Common.Extensions;
+    using System.ComponentModel;
 
     public enum SupervisorActionType
     {
-        [StringValue("Verified by")]
+        [Description("Verified by")]
         Verifier = 2,
 
-        [StringValue("Approved by")]
+        [Description("Approved by")]
         Approver = 3,
 
-        [StringValue("Shift Arrangement")]
+        [Description("Shift Arrangement")]
         ShiftArrangement = 4,
 
-        [StringValue("On Behalf Request")]
+        [Description("On Behalf Request")]
         OnBehalfRequest = 5,
 
-        [StringValue("Discipline Manager")]
+        [Description("Discipline Manager")]
         DisciplineManager = 8
     }
 }

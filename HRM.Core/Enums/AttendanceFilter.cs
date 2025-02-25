@@ -1,25 +1,25 @@
 ﻿namespace HRM.Core.Enums
 {
-    using Fanex.Common.Extensions;
+    using System.ComponentModel;
 
     public enum AttendanceFilter
     {
-        [StringValue("All")]
+        [Description("All")]
         All = 0,
 
-        [StringValue("MissingCheckIn")]
+        [Description("MissingCheckIn")]
         MissingCheckIn = 1,
 
-        [StringValue("MissingCheckOut")]
+        [Description("MissingCheckOut")]
         MissingCheckOut = 2,
 
-        [StringValue("LateIn")]
+        [Description("LateIn")]
         LateIn = 3,
 
-        [StringValue("EarlyOut")]
+        [Description("EarlyOut")]
         EarlyOut = 4,
 
-        [StringValue("NotWork")]
+        [Description("NotWork")]
         NotWork = 5
     }
 }

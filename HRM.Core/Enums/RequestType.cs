@@ -1,31 +1,31 @@
 ﻿namespace HRM.Core.Enums
 {
-    using Fanex.Common.Extensions;
+    using System.ComponentModel;
 
     public enum RequestType
     {
-        [StringValue("Check In")]
+        [Description("Check In")]
         CheckIn = 1,
 
-        [StringValue("Check Out")]
+        [Description("Check Out")]
         CheckOut = 2,
 
-        [StringValue("Late In")]
+        [Description("Late In")]
         LateIn = 3,
 
-        [StringValue("Early Out")]
+        [Description("Early Out")]
         EarlyOut = 4,
 
-        [StringValue("Change Shift")]
+        [Description("Change Shift")]
         ChangeShift = 5,
 
-        [StringValue("Leave")]
+        [Description("Leave")]
         Leave = 6,
 
-        [StringValue("Compensation Leave")]
+        [Description("Compensation Leave")]
         KeepInView = 7,
 
-        [StringValue("Overtime")]
+        [Description("Overtime")]
         Overtime = 8
     }
 }

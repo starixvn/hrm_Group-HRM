@@ -1,49 +1,49 @@
 ﻿namespace HRM.Core.Enums
 {
-    using Fanex.Common.Extensions;
+    using System.ComponentModel;
 
     public enum SettingsSendMail
     {
-        [StringValue("New")]
+        [Description("New")]
         New = 1,
 
-        [StringValue("Verify")]
+        [Description("Verify")]
         Verify = 2,
 
-        [StringValue("NotVerify")]
+        [Description("NotVerify")]
         NotVerify = 3,
 
-        [StringValue("Approve")]
+        [Description("Approve")]
         Approve = 4,
 
-        [StringValue("Reject")]
+        [Description("Reject")]
         Reject = 5,
 
-        [StringValue("Process")]
+        [Description("Process")]
         Process = 6,
 
-        [StringValue("Void")]
+        [Description("Void")]
         Void = 7,
 
-        [StringValue("Reset1")]
+        [Description("Reset1")]
         Reset1 = 8,
 
-        [StringValue("Reset2")]
+        [Description("Reset2")]
         Reset2 = 9,
 
-        [StringValue("Reset3")]
+        [Description("Reset3")]
         Reset3 = 10,
 
-        [StringValue("Edit")]
+        [Description("Edit")]
         Edit = 11,
 
-        [StringValue("Cancel")]
+        [Description("Cancel")]
         Cancel = 12,
 
-        [StringValue("Reedit")]
+        [Description("Reedit")]
         Reedit = 13,
 
-        [StringValue("Delete")]
+        [Description("Delete")]
         Delete = 14
     }
 }

@@ -1,13 +1,13 @@
 ﻿namespace HRM.Core.Enums
 {
-    using Fanex.Common.Extensions;
+    using System.ComponentModel;
 
     public enum Relationship
     {
-        [StringValue("Emergency")]
+        [Description("Emergency")]
         Emergency = 1,
 
-        [StringValue("Child")]
+        [Description("Child")]
         Children
     }
 }

@@ -1,58 +1,58 @@
 ﻿namespace HRM.Core.Enums
 {
-    using Fanex.Common.Extensions;
+    using System.ComponentModel;
 
     public enum LeaveTypes
     {
-        [StringValue("General Leave")]
+        [Description("General Leave")]
         GeneralLeave = 0,
 
-        [StringValue("Annual Leave")]
+        [Description("Annual Leave")]
         AnnualLeave = 2,
 
-        [StringValue("Suspend Work")]
+        [Description("Suspend Work")]
         SuspendWork = 3,
 
-        [StringValue("Employee Wedding (3 Days)")]
+        [Description("Employee Wedding (3 Days)")]
         WeddingLeave = 6,
 
-        [StringValue("Business Trip")]
+        [Description("Business Trip")]
         BusinessTrip = 9,
 
-        [StringValue("Compensation Leave (by Day)")]
+        [Description("Compensation Leave (by Day)")]
         KeepInViewByDay = 10,
 
-        [StringValue("Maternity Leave")]
+        [Description("Maternity Leave")]
         MaternityLeave = 12,
 
-        [StringValue("Paternity Leave")]
+        [Description("Paternity Leave")]
         PaternityLeave = 14,
 
-        [StringValue("Bereavement Leave")]
+        [Description("Bereavement Leave")]
         BereavementLeave = 21,
 
-        [StringValue("Unpaid Leave")]
+        [Description("Unpaid Leave")]
         UnpaidLeave = 25,
 
-        [StringValue("Business during working")]
+        [Description("Business during working")]
         BusinessDuringWorking = 26,
 
-        [StringValue("Offset Leave")]
+        [Description("Offset Leave")]
         OffsetLeave = 27,
 
-        [StringValue("Wedding of Employee's Children")]
+        [Description("Wedding of Employee's Children")]
         WeddingOfEmployeeChildren = 34,
 
-        [StringValue("Company Event")]
+        [Description("Company Event")]
         CompanyEvent = 38,
 
-        [StringValue("Hospitalization Leave")]
+        [Description("Hospitalization Leave")]
         HospitalizationLeave = 39,
 
-        [StringValue("Unpaid Leave (Insurance)")]
+        [Description("Unpaid Leave (Insurance)")]
         UnpaidLeaveInsurance = 41,
 
-        [StringValue("Compensation Leave (by Hour)")]
+        [Description("Compensation Leave (by Hour)")]
         KeepInViewByHour = 48
     }
 }

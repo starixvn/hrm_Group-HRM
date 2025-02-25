@@ -1,22 +1,22 @@
 ﻿namespace HRM.Core.Enums
 {
-    using Fanex.Common.Extensions;
+    using System.ComponentModel;
 
     public enum OvertimeType
     {
-        [StringValue("All")]
+        [Description("All")]
         All = 0,
 
-        [StringValue("Normal")]
+        [Description("Normal")]
         Normal = 1,
 
-        [StringValue("Off")]
+        [Description("Off")]
         Off = 2,
 
-        [StringValue("Holiday")]
+        [Description("Holiday")]
         Holiday = 3,
 
-        [StringValue("Special")]
+        [Description("Special")]
         Special = 4,
     }
 }

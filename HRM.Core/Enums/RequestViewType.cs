@@ -1,19 +1,19 @@
 ﻿namespace HRM.Core.Enums
 {
-    using Fanex.Common.Extensions;
+    using System.ComponentModel;
 
     public enum RequestViewType
     {
-        [StringValue("Personal")]
+        [Description("Personal")]
         PersonalSpace = 1,
 
-        [StringValue("HR Space")]
+        [Description("HR Space")]
         HRSpace = 2,
 
-        [StringValue("Company Space")]
+        [Description("Company Space")]
         CompanySpace = 3,
 
-        [StringValue("SA Space")]
+        [Description("SA Space")]
         SASpace = 4
     }
 }

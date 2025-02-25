@@ -1,16 +1,16 @@
 ﻿namespace HRM.Core.Enums
 {
-    using Fanex.Common.Extensions;
+    using System.ComponentModel;
 
     public enum VerifiedStatus
     {
-        [StringValue("Pending")]
+        [Description("Pending")]
         Pending = 1,
 
-        [StringValue("Verified")]
+        [Description("Verified")]
         Verified = 2,
 
-        [StringValue("NotVerified")]
+        [Description("NotVerified")]
         NotVerified = 3
     }
 }

@@ -1,16 +1,16 @@
 ﻿namespace HRM.Core.Enums
 {
-    using Fanex.Common.Extensions;
+    using System.ComponentModel;
 
     public enum ApprovedStatus
     {
-        [StringValue("Pending")]
+        [Description("Pending")]
         Pending = 1,
 
-        [StringValue("Approved")]
+        [Description("Approved")]
         Approved = 2,
 
-        [StringValue("Rejected")]
+        [Description("Rejected")]
         Rejected = 3
     }
 }

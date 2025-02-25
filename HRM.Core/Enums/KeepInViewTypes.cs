@@ -1,13 +1,13 @@
 ﻿namespace HRM.Core.Enums
 {
-    using Fanex.Common.Extensions;
+    using System.ComponentModel;
 
     public enum KeepInViewTypes
     {
-        [StringValue("Compensation Leave By Day")]
+        [Description("Compensation Leave By Day")]
         KeepInViewByDay = 1,
 
-        [StringValue("Compensation Leave By Hour")]
+        [Description("Compensation Leave By Hour")]
         KeepInViewByHour = 2
     }
 }

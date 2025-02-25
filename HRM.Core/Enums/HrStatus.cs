@@ -1,16 +1,16 @@
 ﻿namespace HRM.Core.Enums
 {
-    using Fanex.Common.Extensions;
+    using System.ComponentModel;
 
     public enum HRStatus
     {
-        [StringValue("Pending")]
+        [Description("Pending")]
         Pending = 1,
 
-        [StringValue("Processed")]
+        [Description("Processed")]
         Processed = 2,
 
-        [StringValue("Void")]
+        [Description("Void")]
         Void = 3
     }
 }

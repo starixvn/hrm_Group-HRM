@@ -1,16 +1,16 @@
 ﻿namespace HRM.Core.Enums
 {
-    using Fanex.Common.Extensions;
+    using System.ComponentModel;
 
     public enum MessageCategory
     {
-        [StringValue("Notification")]
+        [Description("Notification")]
         Notification = 0,
 
-        [StringValue("Warning")]
+        [Description("Warning")]
         Warning = 1,
 
-        [StringValue("Violation")]
+        [Description("Violation")]
         Violation = 2
     }
 }

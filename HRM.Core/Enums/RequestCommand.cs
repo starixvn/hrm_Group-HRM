@@ -1,28 +1,28 @@
 ﻿namespace HRM.Core.Enums
 {
-    using Fanex.Common.Extensions;
+    using System.ComponentModel;
 
     public enum RequestCommand
     {
-        [StringValue("Accept")]
+        [Description("Accept")]
         Accept = 1,
 
-        [StringValue("NotAccept")]
+        [Description("NotAccept")]
         NotAccept = 2,
 
-        [StringValue("Approve")]
+        [Description("Approve")]
         Approve = 3,
 
-        [StringValue("Reject")]
+        [Description("Reject")]
         Reject = 4,
 
-        [StringValue("Process")]
+        [Description("Process")]
         Process = 5,
 
-        [StringValue("Void")]
+        [Description("Void")]
         Void = 6,
 
-        [StringValue("Reset")]
+        [Description("Reset")]
         Reset = 7
     }
 }

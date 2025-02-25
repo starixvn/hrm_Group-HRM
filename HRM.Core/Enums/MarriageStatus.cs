@@ -1,22 +1,22 @@
 ﻿namespace HRM.Core.Enums
 {
-    using Fanex.Common.Extensions;
+    using System.ComponentModel;
 
     public enum MarriageStatus
     {
-        [StringValue("Unknown")]
+        [Description("Unknown")]
         Default = 0,
 
-        [StringValue("Married")]
+        [Description("Married")]
         Married = 1,
 
-        [StringValue("Divorced")]
+        [Description("Divorced")]
         Divorced = 2,
 
-        [StringValue("Single")]
+        [Description("Single")]
         Single = 3,
 
-        [StringValue("Widow")]
+        [Description("Widow")]
         Widow = 4
     }
 }

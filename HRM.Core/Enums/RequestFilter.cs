@@ -1,25 +1,25 @@
 ﻿namespace HRM.Core.Enums
 {
-    using Fanex.Common.Extensions;
+    using System.ComponentModel;
 
     public enum RequestFilter
     {
-        [StringValue("All")]
+        [Description("All")]
         All = 0,
 
-        [StringValue("Check In/Check Out")]
+        [Description("Check In/Check Out")]
         CheckInOut = 1,
 
-        [StringValue("Late In/Early Out")]
+        [Description("Late In/Early Out")]
         LateInEarlyOut = 2,
 
-        [StringValue("Change Shift")]
+        [Description("Change Shift")]
         ChangeShift = 3,
 
-        [StringValue("Leave")]
+        [Description("Leave")]
         Leave = 4,
 
-        [StringValue("Compensation Leave")]
+        [Description("Compensation Leave")]
         KeepInView = 5
     }
 }

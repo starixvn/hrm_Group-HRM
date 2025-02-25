@@ -5,7 +5,6 @@
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
     using System.Reflection;
-    using Fanex.Common.Extensions;
 
     public static class EnumHelper
     {
@@ -14,7 +13,7 @@
             var description = string.Empty;
             if (enumType != null)
             {
-                FieldInfo fi = enumType.GetType().GetField(enumType.ToString());
+                var fi = enumType.GetType().GetField(enumType.ToString());
                 var attributes = (DescriptionAttribute[])fi.GetCustomAttributes(typeof(DescriptionAttribute), false);
                 description = attributes.Length > 0 ? attributes[0].Description : enumType.ToString();
             }
@@ -27,19 +26,6 @@
             return val.GetType().GetMember(val.ToString())
                 .FirstOrDefault()?.GetCustomAttribute<DisplayAttribute>()?.GetName()
                 ?? val.ToString();
-        }
-
-        public static string GetStringValue(Enum enumType)
-        {
-            var description = string.Empty;
-            if (enumType != null)
-            {
-                FieldInfo fi = enumType.GetType().GetField(enumType.ToString());
-                var attributes = (StringValueAttribute[])fi.GetCustomAttributes(typeof(StringValueAttribute), false);
-                description = attributes.Length > 0 ? attributes[0].Value : enumType.ToString();
-            }
-
-            return description;
         }
     }
 }

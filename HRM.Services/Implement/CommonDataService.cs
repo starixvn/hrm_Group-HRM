@@ -34,19 +34,10 @@
         bool IsEnableGroupDate();
     }
 
-    public class CommonDataService : ICommonDataService
+    public class CommonDataService(
+        IBaseService baseService,
+        ITeamService teamService) : ICommonDataService
     {
-        private readonly IBaseService baseService;
-        private readonly ITeamService teamService;
-
-        public CommonDataService(
-            IBaseService baseService,
-            ITeamService teamService)
-        {
-            this.teamService = teamService;
-            this.baseService = baseService;
-        }
-
         public IList<LookupData> GetLookupDataByCode(string code)
         {
             var criteria = new GetAllLookupDataCriteria
@@ -71,7 +62,7 @@
             {
                 ExcludeNotShown = excludeNotShown
             };
-            IList<LeaveType> leaveTypes = baseService.GetData<LeaveType>(criteria).ToList();
+            var leaveTypes = baseService.GetData<LeaveType>(criteria).ToList();
             leaveTypes.Insert(0, new LeaveType { Id = (ushort)LeaveTypes.GeneralLeave, Name = Labels.GeneralLeave });
 
             return leaveTypes;
@@ -95,27 +86,27 @@
                 new EntityBase<byte>
                 {
                     Id = (byte)MarriageStatus.Default,
-                    Name = EnumHelper.GetStringValue(MarriageStatus.Default)
+                    Name = EnumHelper.GetDescription(MarriageStatus.Default)
                 },
                 new EntityBase<byte>
                 {
                     Id = (byte)MarriageStatus.Married,
-                    Name = EnumHelper.GetStringValue(MarriageStatus.Married)
+                    Name = EnumHelper.GetDescription(MarriageStatus.Married)
                 },
                 new EntityBase<byte>
                 {
                     Id = (byte)MarriageStatus.Divorced,
-                    Name = EnumHelper.GetStringValue(MarriageStatus.Divorced)
+                    Name = EnumHelper.GetDescription(MarriageStatus.Divorced)
                 },
                 new EntityBase<byte>
                 {
                     Id = (byte)MarriageStatus.Single,
-                    Name = EnumHelper.GetStringValue(MarriageStatus.Single)
+                    Name = EnumHelper.GetDescription(MarriageStatus.Single)
                 },
                 new EntityBase<byte>
                 {
                     Id = (byte)MarriageStatus.Widow,
-                    Name = EnumHelper.GetStringValue(MarriageStatus.Widow)
+                    Name = EnumHelper.GetDescription(MarriageStatus.Widow)
                 }
             };
         }

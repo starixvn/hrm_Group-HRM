@@ -1,16 +1,16 @@
 ﻿namespace HRM.Core.Enums
 {
-    using Fanex.Common.Extensions;
+    using System.ComponentModel;
 
     public enum WorkType
     {
-        [StringValue("Off")]
+        [Description("Off")]
         Off = 1,
 
-        [StringValue("Leave")]
+        [Description("Leave")]
         Leave = 2,
 
-        [StringValue("Work")]
+        [Description("Work")]
         Work = 3
     }
 }

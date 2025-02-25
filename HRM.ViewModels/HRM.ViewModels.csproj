@@ -4,8 +4,6 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="GO.UserControl.Client.Core" Version="1.0.2" />
-    <PackageReference Include="jose-jwt" Version="5.0.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\HRM.Models\HRM.Models.csproj" />

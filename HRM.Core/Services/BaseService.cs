@@ -7,19 +7,10 @@
     using HRM.Core.Models;
     using HRM.Core.Repositories;
 
-    public class BaseService : IBaseService
+    public class BaseService(
+        IDynamicRepository dynamicRepository,
+        IBaseRepository baseRepository) : IBaseService
     {
-        private readonly IDynamicRepository dynamicRepository;
-        private readonly IBaseRepository baseRepository;
-
-        public BaseService(
-            IDynamicRepository dynamicRepository,
-            IBaseRepository baseRepository)
-        {
-            this.dynamicRepository = dynamicRepository;
-            this.baseRepository = baseRepository;
-        }
-
         public virtual IEnumerable<T> GetData<T>(ICriteria criteria)
         {
             if (criteria != null && criteria.IsValid())

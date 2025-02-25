@@ -1,31 +1,31 @@
 ﻿namespace HRM.Core.Enums
 {
-    using Fanex.Common.Extensions;
+    using System.ComponentModel;
 
     public enum CurrentRequestStatus
     {
-        [StringValue("N/A")]
+        [Description("N/A")]
         NA = 0,
 
-        [StringValue("Pending")]
+        [Description("Pending")]
         Pending,
 
-        [StringValue("Verified")]
+        [Description("Verified")]
         Verified,
 
-        [StringValue("Not Verified")]
+        [Description("Not Verified")]
         NotVerified,
 
-        [StringValue("Approved")]
+        [Description("Approved")]
         Approved,
 
-        [StringValue("Rejected")]
+        [Description("Rejected")]
         Rejected,
 
-        [StringValue("Processed")]
+        [Description("Processed")]
         Processed,
 
-        [StringValue("Void")]
+        [Description("Void")]
         Void
     }
 }

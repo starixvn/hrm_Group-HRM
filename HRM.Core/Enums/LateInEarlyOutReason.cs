@@ -1,13 +1,13 @@
 ﻿namespace HRM.Core.Enums
 {
-    using Fanex.Common.Extensions;
+    using System.ComponentModel;
 
     public enum LateInEarlyOutReason
     {
-        [StringValue("Management Allow")]
+        [Description("Management Allow")]
         ManagementAllow = 1,
 
-        [StringValue("Other")]
+        [Description("Other")]
         Other
     }
 }

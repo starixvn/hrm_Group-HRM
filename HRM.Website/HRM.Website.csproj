@@ -53,21 +53,16 @@
     <ProjectReference Include="..\HRM.Controllers\HRM.Controllers.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Fanex.Common" Version="1.1.2.1" />
-    <PackageReference Include="Fanex.Data" Version="4.2.2" />
-    <PackageReference Include="Fanex.Data.SqlServer" Version="4.2.2" />
-    <PackageReference Include="Fanex.Logging" Version="2.0.1" />
-    <PackageReference Include="Fanex.Logging.Extensions" Version="1.0.6" />
-    <PackageReference Include="Fanex.Logging.Extensions.Database" Version="1.0.8" />
+    <PackageReference Include="Fanex.Data" Version="4.3.3" />
+    <PackageReference Include="Fanex.Data.SqlServer" Version="4.3.3" />
     <PackageReference Include="GO.UserControl.Client.AspNetCore" Version="1.0.1" />
     <PackageReference Include="GO.UserControl.Client.Core" Version="1.0.2" />
     <PackageReference Include="Hangfire" Version="1.8.17" />
     <PackageReference Include="Hangfire.Core" Version="1.8.17" />
     <PackageReference Include="Hangfire.SqlServer" Version="1.8.17" />
-    <PackageReference Include="jose-jwt" Version="5.0.0" />
     <PackageReference Include="log4net" Version="2.0.15" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="Antlr4" Version="4.6.6" />
+    <PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="9.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="9.0.1" />
   </ItemGroup>
   <ItemGroup>
     <Content Update="nlog.config">
