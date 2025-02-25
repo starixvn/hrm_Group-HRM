@@ -6,6 +6,7 @@
     using GO.UserControl.Client.Core;
     using GO.UserControl.Client.Core.Enumerables;
     using GO.UserControl.Client.Core.Session;
+    using HRM.Core.Constants;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Filters;
@@ -14,22 +15,19 @@
     public class HrmPermissionAttribute : Attribute, IAuthorizationFilter
     {
         private readonly IUserControlSession session;
-
-        public HrmPermissionAttribute() : this(null)
+        public HrmPermissionAttribute(Policy policy, params string[] functionKeys)
         {
+            Policy = policy;
+            FunctionKeys = functionKeys;
         }
 
-        internal HrmPermissionAttribute(IUserControlSession session)
-        {
-            this.session = session ?? UserControlClientManager.UserControlSession;
-        }
-
-        public string FunctionKey { get; set; }
+        public string[] FunctionKeys { get; set; }
         public Policy Policy { get; set; }
 
         public void OnAuthorization(AuthorizationFilterContext context)
         {
-            if (session.UserId <= 0 || session.JwtToken == null || session.JwtToken.IsExpired)
+            var session = UserControlClientManager.UserControlSession;
+            if (!FunctionKeys.Select(functionKey => session.HasPermissionOnFunction(functionKey, Policy)).Any())
             {
                 if (IsAjaxRequest(context.HttpContext.Request))
                 {
@@ -48,13 +46,11 @@
 
         private void CheckUserPermission(AuthorizationFilterContext context)
         {
-            var attributes = context.ActionDescriptor.FilterDescriptors.Where(x => x.Filter is HrmPermissionAttribute)
-                    .Select(x => x.Filter as HrmPermissionAttribute).ToList();
             var hasPermission = false;
 
-            foreach (var attribute in attributes)
+            foreach (var functionKey in FunctionKeys)
             {
-                if (session.HasPermissionOnFunction(attribute.FunctionKey, attribute.Policy))
+                if (session.HasPermissionOnFunction(functionKey, Policy))
                 {
                     hasPermission = true;
                 }
@@ -64,7 +60,7 @@
             {
                 if (IsAjaxRequest(context.HttpContext.Request))
                 {
-                    context.Result = new StatusCodeResult((int)HttpStatusCode.MethodNotAllowed);
+                    context.Result = new StatusCodeResult((int)HttpStatusCode.Forbidden);
                 }
                 else
                 {
