@@ -1,10 +1,11 @@
 ﻿namespace HRM.Services
 {
-    using System;
-    using System.Collections.Generic;
     using HRM.Core.Services;
     using HRM.Criteria.Dashboard;
     using HRM.Models.Dashboard;
+    using System;
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
 
     public class DashboardService : IDashboardService
     {
@@ -25,7 +26,7 @@
             return baseService.GetData<SummaryRequest>(criteria);
         }
 
-        public IEnumerable<MemberRequest> GetMemberRequest(int employeeId, DateTime date)
+        public async Task<IEnumerable<MemberRequest>> GetMemberRequestAsync(int employeeId, DateTime date)
         {
             var criteria = new GetMemberRequestCriteria
             {
