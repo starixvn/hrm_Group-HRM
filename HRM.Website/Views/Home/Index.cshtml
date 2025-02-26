@@ -1,28 +1,11 @@
-@using HRM.Resources
-@using HRM.Core.Enums
-@using HRM.Models.Dashboard
-@model IEnumerable<SummaryRequest>
 @{
     ViewBag.Title = Labels.Dashboard;
-    var isResetPassword = (bool)ViewBag.IsResetPassword;
-
-    byte siteId = ConfigSettings.SiteId;
-    var modalTitle = string.Empty;
-    switch (siteId)
-    {
-        case (byte)SiteId.SMS:
-            modalTitle = "SMS HRM";
-            break;
-        case (byte)SiteId.HM:
-            modalTitle = "HM HRM";
-            break;
-    }
 }
 @section css{
-    <link href="~/wwwroot/dist/styles/home.index.css" rel="stylesheet" />
+    <link href="~/dist/styles/home.index.css" rel="stylesheet" />
 }
 @section js{
-    <script src="~/wwwroot/dist/js/home.index.js"></script>
+    <script src="~/dist/js/home.index.js"></script>
 }
 @section Breadcrumb {
     <a class="step">@Labels.Personal</a> <span class="step">@ViewBag.Title</span>
@@ -39,100 +22,5 @@
         </tr>
     </thead>
     <tbody>
-        @foreach (SummaryRequest item in Model)
-        {
-            <tr>
-                <td class="align-left">
-                    @item.RequestType
-                </td>
-                <td>
-                    @RazorHelper.DisplayZeroCell(item.TotalRequest)
-                </td>
-                <td>
-                    @if (item.TotalPending > 0)
-                    {
-                        switch (item.RequestTypeId)
-                        {
-                            case (ushort)RequestType.CheckIn:
-                            case (ushort)RequestType.CheckOut:
-                                @Html.ActionLink(item.TotalPending.ToString(), "employeeView", "checkinout", new { }, new { @class = "pending" })
-                                break;
-                            case (ushort)RequestType.LateIn:
-                            case (ushort)RequestType.EarlyOut:
-                                @RazorHelper.DisplayZeroCell(item.TotalPending)
-                                break;
-                            case (ushort)RequestType.ChangeShift:
-                                @Html.ActionLink(item.TotalPending.ToString(), "employeeView", "changeshift", new { }, new { @class = "pending" })
-                                break;
-                            case (ushort)RequestType.Leave:
-                                @Html.ActionLink(item.TotalPending.ToString(), "employeeView", "leave", new { }, new { @class = "pending" })
-                                break;
-                            case (ushort)RequestType.KeepInView:
-                                @Html.ActionLink(item.TotalPending.ToString(), "employeeView", "KeepInView", new { }, new { @class = "pending" })
-                                break;
-                            case (ushort)RequestType.Overtime:
-                                @Html.ActionLink(item.TotalPending.ToString(), "employeeview", "overtime", new { }, new { @class = "pending" })
-                                break;
-                        }
-                    }
-                    else
-                    {
-                        <span>-</span>
-                    }
-                </td>
-                <td>
-                    @switch (item.RequestTypeId)
-                    {
-                        case (ushort)RequestType.CheckIn:
-                        case (ushort)RequestType.CheckOut:
-                            @Html.ActionLink(Labels.Request, "create", "checkinout")
-                            break;
-                        case (ushort)RequestType.LateIn:
-                        case (ushort)RequestType.EarlyOut:
-                            @Html.ActionLink(Labels.Request, "create", "lateinearlyout")
-                            break;
-                        case (ushort)RequestType.ChangeShift:
-                            @Html.ActionLink(Labels.Request, "create", "changeshift")
-                            break;
-                        case (ushort)RequestType.Leave:
-                            @Html.ActionLink(Labels.Request, "create", "leave")
-                            break;
-                        case (ushort)RequestType.KeepInView:
-                            @Html.ActionLink(Labels.Request, "create", "KeepInView")
-                            break;
-                        case (ushort)RequestType.Overtime:
-                            @Html.ActionLink(Labels.Request, "employeeView", "overtime")
-                            break;
-                    }
-                </td>
-            </tr>
-        }
     </tbody>
 </table>
-@if ((bool)ViewBag.IsVerifierApprover)
-{
-    @Html.Action("MemberRequest")
-}
-<input type="checkbox" class="hidden" id="IsResetPassword" @(isResetPassword ? "checked" : string.Empty) />
-<div id="changePasswordModal" class="modal" tabindex="-1" role="dialog">
-    <div class="modal-dialog-centered modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">@modalTitle</h4>
-            </div>
-            <div class="modal-body">
-                <p>
-                    <strong>
-                        The password for your account has been recently reset.
-                        For security reasons please change it now.
-                    </strong>
-                </p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" id="btnSubmit" class="btn btn-primary">OK</button>
-                <button type="button" id="btnCancel" class="btn btn-default">Cancel</button>
-            </div>
-        </div>
-    </div>
-</div>

@@ -3,13 +3,24 @@
     using System;
     using System.Threading.Tasks;
     using Fanex.Caching.Redis;
+    using Fanex.Data.Repository;
+    using GO.UserControl.Client.AspNetCore.Session;
+    using GO.UserControl.Client.AspNetCore;
+    using GO.UserControl.Client.Core.Services;
+    using GO.UserControl.Client.Core.Session;
+    using GO.UserControl.Client.Core;
     using HRM.Core.Models;
+    using HRM.Core.Repositories;
+    using HRM.Core.Services;
+    using HRM.MailDeliver;
     using Microsoft.AspNetCore.Authentication.Cookies;
     using Microsoft.AspNetCore.DataProtection;
     using Microsoft.AspNetCore.Http;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using StackExchange.Redis;
+    using Fanex.Logging;
+    using HRM.Services;
 
     public static class ServiceCollectionExtensions
     {
@@ -78,6 +89,25 @@
 
             var syncWorkingShiftSettings = configuration.GetSection("SyncWorkingShiftSettings").Get<SyncWorkingShiftSettings>();
             services.AddSingleton(syncWorkingShiftSettings);
+
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddSingleton<IUserControlSettings>(new UserControlSettings(configuration));
+            services.AddSingleton<ILogger, Logger>();
+            services.AddSingleton<IDynamicRepository, DynamicRepository>();
+
+            services.AddSingleton<IUserControlSession, UserControlSession>();
+            services.AddSingleton<IAuthService, AuthService>();
+            services.AddSingleton<ICryptoService, CryptoService>();
+            services.AddSingleton<IUserService, UserService>();
+            services.AddSingleton<IRoleService, RoleService>();
+            services.AddSingleton<IFunctionService, FunctionService>();
+
+            services.AddSingleton<IBaseRepository, BaseRepository>();
+            services.AddSingleton<IBaseService, BaseService>();
+            services.AddSingleton<IBaseMailService, BaseMailService>();
+
+            services.AddSingleton<IHRMAuthService, HRMAuthService>();
+            services.AddSingleton<IDashboardService, DashboardService>();
 
             return services;
         }

@@ -3,12 +3,12 @@
     using System;
     using System.Linq;
     using System.Net;
-    using GO.UserControl.Client.Core;
     using GO.UserControl.Client.Core.Enumerables;
     using GO.UserControl.Client.Core.Session;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Filters;
+    using Microsoft.Extensions.DependencyInjection;
 
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
     public class HrmPermissionAttribute(Policy policy, params string[] functionKeys) : Attribute, IAuthorizationFilter
@@ -18,7 +18,7 @@
 
         public void OnAuthorization(AuthorizationFilterContext context)
         {
-            var session = UserControlClientManager.UserControlSession;
+            var session = context.HttpContext.RequestServices.GetRequiredService<IUserControlSession>();
             if (!FunctionKeys.Select(functionKey => session.HasPermissionOnFunction(functionKey, Policy)).Any())
             {
                 if (IsAjaxRequest(context.HttpContext.Request))

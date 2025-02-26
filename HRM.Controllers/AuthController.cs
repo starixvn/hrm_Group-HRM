@@ -1,58 +1,40 @@
-﻿using Microsoft.AspNetCore.Mvc;
-namespace HRM.Controllers
+﻿namespace HRM.Controllers
 {
     using System;
-    using System.Globalization;
+    using System.Collections.Generic;
+    using System.Security.Claims;
     using System.Text;
-    using System.Web.Security;
-    using Fanex.Data;
-    using HRM.Core;
-    using HRM.Core.Constants;
-    using HRM.Core.Models;
-    using HRM.Services;
-    using HRM.ViewModels.Employee;
+    using System.Threading.Tasks;
     using GO.UserControl.Client.Core;
     using GO.UserControl.Client.Core.Models.Auth;
     using GO.UserControl.Client.Core.Services;
     using GO.UserControl.Client.Core.Session;
+    using HRM.Core.Constants;
+    using HRM.Services;
+    using HRM.ViewModels.Employee;
+    using Microsoft.AspNetCore.Authentication;
+    using Microsoft.AspNetCore.Authentication.Cookies;
+    using Microsoft.AspNetCore.Mvc;
 
-    public class AuthController : Controller
+    public class AuthController(
+        IHRMAuthService hrmAuthService,
+        IUserControlSettings userControlSettings,
+        IUserControlSession userControlSession,
+        IUserService userService,
+        IAuthService authService,
+        ICryptoService cryptoService) : Controller
     {
-        private readonly IHRMAuthService hrmAuthService;
-        private readonly IUserControlSettings userControlSettings;
-        private readonly IUserControlSession userControlSession;
-        private readonly IUserService userService;
-        private readonly IAuthService authService;
-        private readonly ICryptoService cryptoService;
-
-        public AuthController(
-            IHRMAuthService hrmAuthService,
-            IUserControlSettings userControlSettings,
-            IUserControlSession userControlSession,
-            IUserService userService,
-            IAuthService authService,
-            ICryptoService cryptoService)
-        {
-            this.hrmAuthService = hrmAuthService;
-            this.userControlSettings = userControlSettings;
-            this.userControlSession = userControlSession;
-            this.userService = userService;
-            this.authService = authService;
-            this.cryptoService = cryptoService;
-        }
-
-        [HttpGet]
-        public ActionResult Login()
+        public IActionResult Login()
         {
             return View();
         }
 
         [HttpPost]
-        public ActionResult Login(LoginViewModel model)
+        public async Task<IActionResult> Login([FromBody] LoginViewModel model)
         {
             model.Password = Encoding.UTF8.GetString(Convert.FromBase64String(model.Password));
             var token = cryptoService.GenerateRijndaelKeyIV();
-            string[] keyiv = token.Split(':');
+            var keyiv = token.Split(':');
             var rijndaelKey = keyiv[0];
             var rijndaelIV = keyiv[1];
             var loginParam = new LoginParam
@@ -61,117 +43,60 @@ namespace HRM.Controllers
                 Password = cryptoService.Encrypt(model.Password, rijndaelKey, rijndaelIV),
                 Token = token,
                 IP = GetClientIP(),
-                Platform = Request.Browser.Platform,
-                BrowserName = Request.Browser.Browser,
-                NetSessionId = Session.SessionID
+                Platform = HttpContext.Request?.Headers["User-Agent"].ToString(),
+                BrowserName = HttpContext.Request?.Headers["User-Agent"].ToString(),
+                NetSessionId = HttpContext.Session.Id
             };
-            var loginResult = authService.Login(loginParam);
+            var loginResult = await authService.LoginAsync(loginParam);
             if (loginResult.IsSuccessfull)
             {
-                EmployeeSession employee = hrmAuthService.GetByUserId(loginResult.UserId);
+                var employee = hrmAuthService.GetByUserId(loginResult.UserId);
                 if (employee == null)
                 {
                     loginResult = new LoginResult { IsSuccessfull = false, ErrorMessage = "User has not been mapped." };
-                    return new CustomJsonResult { Data = loginResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+                    return new JsonResult(loginResult);
                 }
 
                 userControlSession.UserId = loginResult.UserId;
                 userControlSession.SiteId = userControlSettings.SiteId;
                 userControlSession.JwtToken = loginResult.JwtToken;
                 userControlSession.OnUserId = loginResult.OnUserId;
-                userControlSession.MenuItems = userService.GetMenuItem();
-                userControlSession.Functions = userService.GetFunctionPermission(userControlSession.SiteId, userControlSession.UserId);
+                userControlSession.MenuItems = await userService.GetMenuItemAsync();
+                userControlSession.Functions = await userService.GetFunctionPermissionAsync(userControlSession.SiteId, userControlSession.UserId);
                 userControlSession.Set(SessionKey.IsShowLeftNavigation, true);
 
                 userControlSession.Set(SessionKey.Employee, employee);
-                // TODO ASP.NET membership should be replaced with ASP.NET Core identity. For more details see https://docs.microsoft.com/aspnet/core/migration/proper-to-2x/membership-to-core-identity.
-                FormsAuthentication.SetAuthCookie(employee.EmpId.ToString(), false);
-                return new CustomJsonResult { Data = loginResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
+
+                await DoLoginAsync(loginResult.UserId);
             }
-            else
-            {
-                return new CustomJsonResult { Data = loginResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
-            }
+
+            return new JsonResult(loginResult);
         }
 
         [HttpGet]
-        public ActionResult Logout()
+        public async Task<IActionResult> Logout()
         {
-            authService.Logout(userControlSession.OnUserId);
+            await authService.LogoutAsync(userControlSession.OnUserId);
             userControlSession.ClearAll();
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
-            // TODO ASP.NET membership should be replaced with ASP.NET Core identity. For more details see https://docs.microsoft.com/aspnet/core/migration/proper-to-2x/membership-to-core-identity.
-            FormsAuthentication.SignOut();
             return RedirectToAction("Login");
         }
 
-        public ActionResult SSO(string userId, string onUserId, string time, string redirectUrl = null)
+        private async Task DoLoginAsync(int userId)
         {
-            const string DateTimeFormat = "yyyy-MM-dd HH:mm:ss.fff";
-            var userIdValue = Cryptography.DecryptPassword(userId.Replace(" ", "+"));
-            var onUserIdValue = Cryptography.DecryptPassword(onUserId.Replace(" ", "+"));
-            var timeValue = Cryptography.DecryptPassword(time.Replace(" ", "+"));
-            var currentTime = authService.SSOGetTime();
-            TimeSpan expiration = DateTime.ParseExact(currentTime, DateTimeFormat, new CultureInfo("en-US")) - DateTime.ParseExact(timeValue, DateTimeFormat, new CultureInfo("en-US"));
-            const byte TimeExpiration = 30;
-            if (expiration.TotalSeconds <= TimeExpiration)
+            var claims = new List<Claim>
             {
-                var ssoParam = new SSOLoginParam
-                {
-                    UserId = Convert.ToInt32(userIdValue),
-                    CheckOnUserId = Convert.ToInt64(onUserIdValue),
-                    OnUserId = 0,
-                    IP = GetClientIP(),
-                    Platform = Request.Browser.Platform,
-                    BrowserName = Request.Browser.Browser,
-                    NetSessionId = Session.SessionID
-                };
-                LoginResult loginResult = authService.SSOLogin(ssoParam);
-                if (loginResult.IsSuccessfull)
-                {
-                    EmployeeSession employee = hrmAuthService.GetByUserId(Convert.ToInt32(userIdValue));
-                    if (employee == null)
-                    {
-                        return RedirectToAction("Login");
-                    }
+                new (ClaimTypes.NameIdentifier, userId.ToString())
+            };
 
-                    userControlSession.UserId = Convert.ToInt32(userIdValue);
-                    userControlSession.SiteId = userControlSettings.SiteId;
-                    userControlSession.JwtToken = loginResult.JwtToken;
-                    userControlSession.OnUserId = loginResult.OnUserId;
-                    userControlSession.MenuItems = userService.GetMenuItem();
-                    userControlSession.Functions = userService.GetFunctionPermission(userControlSession.SiteId, userControlSession.UserId);
-                    userControlSession.Set(SessionKey.IsShowLeftNavigation, true);
-
-                    userControlSession.Set(SessionKey.Employee, employee);
-                    // TODO ASP.NET membership should be replaced with ASP.NET Core identity. For more details see https://docs.microsoft.com/aspnet/core/migration/proper-to-2x/membership-to-core-identity.
-                    FormsAuthentication.SetAuthCookie(employee.EmpId.ToString(), false);
-                    return !string.IsNullOrWhiteSpace(redirectUrl) && Url.IsLocalUrl(redirectUrl) ? Redirect(redirectUrl) : Redirect("~/Home/Index");
-                }
-            }
-
-            return RedirectToAction("Login");
+            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
         }
 
         private string GetClientIP()
         {
-            var clientIp = Request.ServerVariables["HTTP_X_FORWARDED_FOR"];
-            if (!string.IsNullOrWhiteSpace(clientIp))
-            {
-                var forwardedIps = clientIp.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
-                clientIp = forwardedIps[forwardedIps.Length - 1];
-            }
-            else
-            {
-                clientIp = Request.ServerVariables["REMOTE_ADDR"];
-            }
-
-            if (clientIp == "::1")
-            {
-                clientIp = "127.0.0.1";
-            }
-
-            return clientIp;
+            return HttpContext.Connection?.RemoteIpAddress?.ToString();
         }
     }
 }

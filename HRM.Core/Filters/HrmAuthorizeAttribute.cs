@@ -1,29 +1,19 @@
 ﻿namespace HRM.Core.Filters
 {
     using System;
-    using GO.UserControl.Client.Core;
     using GO.UserControl.Client.Core.Session;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Filters;
+    using Microsoft.Extensions.DependencyInjection;
 
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = false)]
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
     public class HrmAuthorizeAttribute : AuthorizeAttribute, IAuthorizationFilter
     {
-        private readonly IUserControlSession session;
-
-        public HrmAuthorizeAttribute() : this(null)
-        {
-        }
-
-        internal HrmAuthorizeAttribute(IUserControlSession session)
-        {
-            this.session = session ?? UserControlClientManager.UserControlSession;
-        }
-
         public void OnAuthorization(AuthorizationFilterContext context)
         {
+            var session = context.HttpContext.RequestServices.GetRequiredService<IUserControlSession>();
             if (session.UserId <= 0 || session.JwtToken == null || session.JwtToken.IsExpired)
             {
                 if (IsAjaxRequest(context.HttpContext.Request))

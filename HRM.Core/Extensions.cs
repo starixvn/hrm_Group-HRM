@@ -1,16 +1,10 @@
 ﻿namespace HRM.Core
 {
+    using System;
+    using System.Collections.Generic;
     using HRM.Core.Enums;
     using HRM.Resources;
-
-    using System.Linq.Expressions;
-    using System;
-    using System.Web.Mvc;
-    using System.Collections.Generic;
-    using System.Web.Mvc.Html;
-    using Microsoft.AspNetCore.Html;
-    using System.IO;
-    using System.Text.Encodings.Web;
+    using Microsoft.AspNetCore.Mvc.Rendering;
 
     public static class Extensions
     {
@@ -57,7 +51,6 @@
                 });
             }
 
-           
             return list;
         }
 
@@ -69,7 +62,5 @@
 
             return YearPicker(fromYear, currentYear, isShowAll);
         }
-
-
     }
 }

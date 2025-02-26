@@ -15,7 +15,7 @@
     using MailKit.Security;
     using MimeKit;
 
-    public class BaseMailService(AppSettings appSettings, BaseService baseService) : IBaseMailService
+    public class BaseMailService(AppSettings appSettings, IBaseService baseService) : IBaseMailService
     {
         public bool SendEmailAsync(MailRecord email)
         {

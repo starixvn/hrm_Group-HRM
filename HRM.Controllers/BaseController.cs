@@ -4,18 +4,12 @@
     using HRM.Core.Constants;
     using HRM.Core.Filters;
     using HRM.Core.Models;
+    using Microsoft.AspNetCore.Authentication.Cookies;
     using Microsoft.AspNetCore.Mvc;
 
-    [HrmAuthorize]
-    public class BaseController : Controller
+    [HrmAuthorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
+    public class BaseController(IUserControlSession userControlSession) : Controller
     {
-        private readonly IUserControlSession userControlSession;
-
-        public BaseController(IUserControlSession userControlSession)
-        {
-            this.userControlSession = userControlSession;
-        }
-
         public EmployeeSession EmployeeSession => userControlSession.Get<EmployeeSession>(SessionKey.Employee);
     }
 }
