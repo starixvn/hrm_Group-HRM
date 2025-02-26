@@ -16,6 +16,8 @@
                 Employee = userControlSession.Get<EmployeeSession>(SessionKey.Employee),
                 IsShowSearchBox = userControlSession.HasPermissionOnFunction(FunctionKey.ContactList, Policy.Read)
             };
+            ViewBag.IsShowLeftNavigation = userControlSession.Get<bool>(SessionKey.IsShowLeftNavigation);
+
             return View("Header", viewModel);
         }
     }

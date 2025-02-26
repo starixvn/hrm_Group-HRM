@@ -8,14 +8,15 @@
     using HRM.Models.EmployeeInformation;
     using HRM.Models.Supervisor;
     using GO.UserControl.Client.Core.Models.Role;
+    using System.Threading.Tasks;
 
     public class EmployeeRepository : IEmployeeRepository
     {
-        public Employee GetEmployeeById(ICriteria criteria)
+        public async Task<Employee> GetEmployeeByIdAsync(ICriteria criteria)
         {
-            using (IObjectDb db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                return db.QueryEntity<Employee, Team, Employee>(
+                return await db.QueryEntityAsync<Employee, Team, Employee>(
                         (e, t) =>
                         {
                             e.Team = t;

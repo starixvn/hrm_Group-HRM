@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
     using HRM.Core.Models;
     using HRM.Core.Services;
     using HRM.Core.XMLExtensions;
@@ -13,19 +14,10 @@
     using HRM.Models.Supervisor;
     using HRM.Repositories;
 
-    public class TeamService : ITeamService
+    public class TeamService(
+        ITeamRepository teamRepository,
+        IBaseService baseService) : ITeamService
     {
-        private readonly ITeamRepository teamRepository;
-        private readonly IBaseService baseService;
-
-        public TeamService(
-            ITeamRepository teamRepository,
-            IBaseService baseService)
-        {
-            this.teamRepository = teamRepository;
-            this.baseService = baseService;
-        }
-
         public Team GetById(int id)
         {
             var criteria = new GetGroupByIdCriteria
@@ -57,13 +49,13 @@
             return baseService.ExecuteNonQuery(criteria);
         }
 
-        public IList<Team> GetBySupervisor(int supervisorId)
+        public async Task<IEnumerable<Team>> GetBySupervisorAsync(int supervisorId)
         {
             var criteria = new GetGroupBySupervisorCriteria
             {
                 SupervisorId = supervisorId
             };
-            return baseService.GetData<Team>(criteria).ToList();
+            return await baseService.GetDataAsync<Team>(criteria);
         }
 
         public IList<SupervisorModel> GetTeamSupervisorByRoleId(int teamId, short roleId)

@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Threading.Tasks;
     using HRM.Core.Models;
     using HRM.Criteria.AnnualLeave;
     using HRM.Criteria.Employee;
@@ -20,7 +21,7 @@
 
         IList<SupervisorModel> GetEmployeeSupervisorByRoleId(int employeeId, short roleId);
 
-        Employee GetEmployeeById(int id);
+        Task<Employee> GetEmployeeByIdAsync(int id);
 
         IList<Employee> GetEmployees(GetAllEmployeeCriteria criteria);
 
@@ -30,9 +31,9 @@
 
         EmployeeShift GetShiftByEmployeeId(int id);
 
-        IList<AnnualLeaveTransactionViewModel> GetAnnualLeaveTransactions(GetAnnualLeaveTransactionCriteria criteria);
+        Task<IEnumerable<AnnualLeaveTransactionViewModel>> GetAnnualLeaveTransactionAsync(GetAnnualLeaveTransactionCriteria criteria);
 
-        AnnualLeaveTransactionViewModel GetAnnualLeaveTransaction(int leaveTransId);
+        Task<AnnualLeaveTransactionViewModel> GetAnnualLeaveTransactionAsync(int leaveTransId);
 
         IList<SupervisorNameModel> GetSupervisorByRequestType(GetSupervisorByRequestTypeCriteria criteria);
 

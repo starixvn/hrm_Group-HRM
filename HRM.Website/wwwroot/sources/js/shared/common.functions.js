@@ -24,9 +24,8 @@ function fadeOutMessage() {
 }
 
 function confirm(message, callback, options) {
-    const title = "HRM";
     const defaults = {
-        title: title,
+        title: 'HRM',
         modal: true,
         resizable: false,
         buttons: [
@@ -94,9 +93,8 @@ function getParam(name) {
 }
 
 function alert(message, callback) {
-    const title = "HRM";
     const defaults = {
-        title: title,
+        title: 'HRM',
         modal: true,
         resizable: false,
         buttons: [
@@ -172,7 +170,7 @@ function axiosError(error) {
                 break;
         }
 
-        window.location = resolveClientUrl(url);
+        //window.location = resolveClientUrl(url);
     }
 }
 

@@ -6,7 +6,7 @@
     public class LeaveSummaryViewModel
     {
         public int Year { get; set; }
-        public IList<Models.Team> Teams { get; set; }
+        public IEnumerable<Models.Team> Teams { get; set; }
 
         public string TeamIds { get; set; }
         public string Employee { get; set; }

@@ -4,28 +4,28 @@ using System;
 using System.Threading.Tasks;
 using Fanex.Caching.Redis;
 using Fanex.Data.Repository;
-using GO.UserControl.Client.AspNetCore.Session;
+using Fanex.Logging;
 using GO.UserControl.Client.AspNetCore;
+using GO.UserControl.Client.AspNetCore.Session;
+using GO.UserControl.Client.Core;
 using GO.UserControl.Client.Core.Services;
 using GO.UserControl.Client.Core.Session;
-using GO.UserControl.Client.Core;
 using HRM.Core.Models;
 using HRM.Core.Repositories;
 using HRM.Core.Services;
+using HRM.Letstalk.Core.Services;
 using MailDeliver;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using StackExchange.Redis;
-using Fanex.Logging;
-using Services;
 using Repositories;
 using Repositories.Interfaces;
+using Services;
 using Services.Implement;
 using Services.Interfaces;
-using HRM.Letstalk.Core.Services;
+using StackExchange.Redis;
 
 public static class ServiceCollectionExtensions
 {
@@ -113,14 +113,21 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IFunctionService, FunctionService>();
 
         services.AddSingleton<IBaseRepository, BaseRepository>();
+        services.AddSingleton<IEmployeeRepository, EmployeeRepository>();
+        services.AddSingleton<IReportRepository, ReportRepository>();
+
         services.AddSingleton<IBaseService, BaseService>();
         services.AddSingleton<IBaseMailService, BaseMailService>();
         services.AddSingleton<IHttpClientService, HttpClientService>();
+
+        services.AddDIExcelServices(configuration);
 
         services.AddSingleton<IHRMAuthService, HRMAuthService>();
         services.AddSingleton<IEmailService, EmailService>();
         services.AddSingleton<IMessageService, MessageService>();
         services.AddSingleton<IDashboardService, DashboardService>();
+        services.AddSingleton<IReportService, ReportService>();
+        services.AddSingleton<IAnnualLeaveBalanceService, AnnualLeaveBalanceService>();
         services.AddSingleton<IEmployeeService, EmployeeService>();
         services.AddSingleton<IUnitService, UnitService>();
         services.AddSingleton<IDepartmentService, DepartmentService>();
@@ -145,7 +152,14 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IChangeShiftRequestRepository, ChangeShiftRequestRepository>();
         services.AddSingleton<IKeepInViewRequestService, KeepInViewRequestService>();
         services.AddSingleton<IKeepInViewRequestRepository, KeepInViewRequestRepository>();
-            services.AddScoped<IShiftService, ShiftService>();
+        services.AddScoped<IShiftService, ShiftService>();
+        return services;
+    }
+
+    public static IServiceCollection AddDIExcelServices(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddSingleton<IExportExcelService, ExportExcelService>();
+        services.AddSingleton<IExportExcelUnpaidLeaveSummaryReportService, ExportExcelUnpaidLeaveSummaryReportService>();
 
         return services;
     }

@@ -8,7 +8,7 @@
 
     public interface IExportExcelService
     {
-        HSSFWorkbook ExportLeaveSummary(IList<LeaveSummary> leaveSummaryList, int year);
+        HSSFWorkbook ExportLeaveSummary(IEnumerable<LeaveSummary> leaveSummaryList, int year);
         HSSFWorkbook ExportEmployeeWfh(IEnumerable<EmployeeWorkFromHome> employeeWfhList);
 
         HSSFWorkbook ExportWorkingTimeRequest(IList<RequestEntity> requestList, string title);

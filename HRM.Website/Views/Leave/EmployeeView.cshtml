@@ -1,7 +1,5 @@
-﻿@using HRM.Core
-@using HRM.Core.Constants
+﻿@using HRM.Core.Constants
 @using HRM.Core.Enums
-@using HRM.Resources
 @using HRM.Models
 @using HRM.Models.Request
 @using HRM.Website.Helper
@@ -9,8 +7,8 @@
 @{
     ViewBag.Title = Labels.MyLeaveRequest;
     var emmployeeBalance = ViewBag.EmployeeBalance == null ? null : (EmployeeLeaveBalance)ViewBag.EmployeeBalance;
-    decimal annualBalance = emmployeeBalance == null ? 0 : emmployeeBalance.AnnualBalance;
-    decimal keepInViewBalance = emmployeeBalance == null ? 0 : emmployeeBalance.KeepInViewBalance;
+    var annualBalance = emmployeeBalance?.AnnualBalance ?? 0;
+    var keepInViewBalance = emmployeeBalance?.KeepInViewBalance ?? 0;
 }
 @section css{
     <link href="~/dist/styles/leave.myrequest.css" rel="stylesheet" />

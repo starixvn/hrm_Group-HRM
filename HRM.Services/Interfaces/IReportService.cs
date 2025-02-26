@@ -1,6 +1,7 @@
 ﻿namespace HRM.Services
 {
     using System.Collections.Generic;
+    using System.Threading.Tasks;
     using HRM.Criteria;
     using HRM.Criteria.AnnualLeave;
     using HRM.Criteria.Report;
@@ -15,9 +16,9 @@
     {
         IList<EmployeeAttendanceModel> GetEmployeeAttendanceReport(GetEmployeeAttendanceCriteria criteria);
 
-        IList<LeaveSummary> GetAnnualLeaveBalanceReport(GetAnnualLeaveBalanceCriteria criteria);
+        Task<IEnumerable<LeaveSummary>> GetAnnualLeaveBalanceReportAsync(GetAnnualLeaveBalanceCriteria criteria);
 
-        IList<LeaveSummary> GetUnpaidLeave(GetUnpaidLeaveCriteria criteria);
+        Task<IEnumerable<LeaveSummary>> GetUnpaidLeaveAsync(GetUnpaidLeaveCriteria criteria);
 
         IList<TimeRecordModel> GetTimeRecords(GetTimeRecordCriteria criteria);
 

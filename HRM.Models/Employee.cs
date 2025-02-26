@@ -182,7 +182,7 @@
 
         public bool PasswordReset { get; set; }
 
-        public List<Role> Roles { get; set; }
+        public IList<Role> Roles { get; set; }
 
         public string[] Roles2Array
         {

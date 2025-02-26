@@ -13,7 +13,7 @@
         [Display(Name = "Include employee's request")]
         public bool ExcludedRequestTrans { get; set; }
 
-        public IList<AnnualLeaveTransactionViewModel> AnnualLeaveBalances { get; set; }
+        public IEnumerable<AnnualLeaveTransactionViewModel> AnnualLeaveBalances { get; set; }
 
         public Employee Employee { get; set; }
     }

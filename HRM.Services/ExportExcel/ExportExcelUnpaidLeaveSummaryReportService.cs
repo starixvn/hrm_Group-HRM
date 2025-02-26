@@ -2,43 +2,31 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
     using System.IO;
     using System.Linq;
-    using System.Web;
     using HRM.Core;
     using HRM.Models;
     using Microsoft.AspNetCore.Hosting;
-    using Microsoft.AspNetCore.Http;
 
     public interface IExportExcelUnpaidLeaveSummaryReportService
     {
-        void Export(IList<LeaveSummary> leaveSummaries, int year, string leaveType, string period);
+        void Export(IEnumerable<LeaveSummary> leaveSummaries, int year, string leaveType, string period);
     }
 
-    [SuppressMessage("Major Code Smell", "S109:Magic numbers should not be used", Justification = "Pending")]
-    public class ExportExcelUnpaidLeaveSummaryReportService : IExportExcelUnpaidLeaveSummaryReportService
+    public class ExportExcelUnpaidLeaveSummaryReportService(
+        ICommonDataService commonDataService,
+        IWebHostEnvironment hostingEnvironment) : IExportExcelUnpaidLeaveSummaryReportService
     {
-        private readonly ICommonDataService commonDataService;
-        private readonly IWebHostEnvironment hostingEnvironment;
-
         private const int RowStartHeader = 2;
         private const int RowStartBody = 4;
         private const string UnpaidLeaveSummaryTemplatePath = @"ExcelTemplates\UnpaidLeaveSummaryTemplate.xls";
         private const string UnpaidLeaveSummaryH1TemplatePath = @"ExcelTemplates\UnpaidLeaveSummaryH1Template.xls";
         private const string UnpaidLeaveSummaryH2TemplatePath = @"ExcelTemplates\UnpaidLeaveSummaryH2Template.xls";
 
-
-        public ExportExcelUnpaidLeaveSummaryReportService(ICommonDataService commonDataService, IWebHostEnvironment hostingEnvironment)
-        {
-            this.commonDataService = commonDataService;
-            this.hostingEnvironment = hostingEnvironment;
-        }
-
         public async void Export(IList<LeaveSummary> leaveSummaries, int year, string leaveType, string period)
         {
-            string path = "";
-            int range = 0;
+            var path = "";
+            var range = 0;
             if (period == "1")
             {
                 path = UnpaidLeaveSummaryH1TemplatePath;
@@ -54,12 +42,12 @@
                 path = UnpaidLeaveSummaryTemplatePath;
                 range = 6;
             }
-            string templatePath = Path.Combine(hostingEnvironment.ContentRootPath, path); 
-            string fileName = "UnpaidLeaveSummary_" + DateTimeOffset.Now.ToString("yyyyMMdd");
+            var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, path);
+            var fileName = "UnpaidLeaveSummary_" + DateTimeOffset.Now.ToString("yyyyMMdd");
 
             var leaveTypeIds = !string.IsNullOrWhiteSpace(leaveType) ? leaveType.Split(',').ToList() : new List<string>();
             IList<LeaveType> leaveTypes = await commonDataService.GetLeaveTypeAsync();
-            string type = string.Join(", ", leaveTypes.Where(x => leaveTypeIds.Exists(y => x.Id.ToString() == y)).Select(x => x.Name));
+            var type = string.Join(", ", leaveTypes.Where(x => leaveTypeIds.Exists(y => x.Id.ToString() == y)).Select(x => x.Name));
 
             var writer = new ExcelTemplateWriter(templatePath, fileName, "Unpaid Leave Summary Report");
             /// Fill report title.
@@ -78,10 +66,10 @@
             writer.Render();
         }
 
-        private void FillContentRowReport(IList<LeaveSummary> leaveSummaries, ref ExcelTemplateWriter writer, string period)
+        private void FillContentRowReport(IEnumerable<LeaveSummary> leaveSummaries, ref ExcelTemplateWriter writer, string period)
         {
             int rowIndex = 0;
-            foreach (LeaveSummary leaveSummary in leaveSummaries)
+            foreach (var leaveSummary in leaveSummaries)
             {
                 FillRowReport(leaveSummary, ref writer, ref rowIndex, period);
             }

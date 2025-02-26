@@ -21,42 +21,30 @@
     using HRM.ViewModels.AnnualLeave;
     using GO.UserControl.Client.Core;
     using GO.UserControl.Client.Core.Services;
+    using System.Threading.Tasks;
 
-    public class EmployeeService : IEmployeeService
+    public class EmployeeService(
+        IUserControlSettings userControlSettings,
+        IEmployeeRepository employeeRepository,
+        IBaseService baseService,
+        IRoleService roleService) : IEmployeeService
     {
-        private readonly IUserControlSettings userControlSettings;
-        private readonly IEmployeeRepository employeeRepository;
-        private readonly IBaseService baseService;
-        private readonly IRoleService roleService;
-
-        public EmployeeService(
-            IUserControlSettings userControlSettings,
-            IEmployeeRepository employeeRepository,
-            IBaseService baseService,
-            IRoleService roleService)
-        {
-            this.userControlSettings = userControlSettings;
-            this.employeeRepository = employeeRepository;
-            this.roleService = roleService;
-            this.baseService = baseService;
-        }
-
         public string GenerateEmployeeCode()
         {
             var criteria = new GenerateEmployeeCodeCriteria();
             return baseService.GetDataEntity<string>(criteria);
         }
 
-        public Employee GetEmployeeById(int id)
+        public async Task<Employee> GetEmployeeByIdAsync(int id)
         {
             var criteria = new GetEmployeeByIdCriteria
             {
                 EmpId = id
             };
-            Employee employee = employeeRepository.GetEmployeeById(criteria);
+            var employee = await employeeRepository.GetEmployeeByIdAsync(criteria);
             if (employee != null)
             {
-                employee.Roles = roleService.GetByUserId(employee.UserId).ToList();
+                employee.Roles = await roleService.GetByUserIdAsync(employee.UserId);
             }
 
             return employee;
@@ -74,7 +62,7 @@
                 {
                     if (employee.Roles != null && employee.Roles.Any())
                     {
-                        employee.Roles = roles.Where(x => employee.Roles.Exists(y => y.RoleId == x.RoleId)).ToList();
+                        employee.Roles = roles.Where(x => employee.Roles.Any(y => y.RoleId == x.RoleId)).ToList();
                     }
                 }
             }
@@ -98,7 +86,7 @@
                 {
                     if (employee.Roles != null && employee.Roles.Any())
                     {
-                        employee.Roles = roles.Where(x => employee.Roles.Exists(y => y.RoleId == x.RoleId)).ToList();
+                        employee.Roles = roles.Where(x => employee.Roles.Any(y => y.RoleId == x.RoleId)).ToList();
                     }
                 }
             }
@@ -115,18 +103,18 @@
             return baseService.GetDataEntity<EmployeeShift>(criteria);
         }
 
-        public IList<AnnualLeaveTransactionViewModel> GetAnnualLeaveTransactions(GetAnnualLeaveTransactionCriteria criteria)
+        public async Task<IEnumerable<AnnualLeaveTransactionViewModel>> GetAnnualLeaveTransactionAsync(GetAnnualLeaveTransactionCriteria criteria)
         {
-            return baseService.GetData<AnnualLeaveTransactionViewModel>(criteria).ToList();
+            return await baseService.GetDataAsync<AnnualLeaveTransactionViewModel>(criteria);
         }
 
-        public AnnualLeaveTransactionViewModel GetAnnualLeaveTransaction(int leaveTransId)
+        public async Task<AnnualLeaveTransactionViewModel> GetAnnualLeaveTransactionAsync(int leaveTransId)
         {
             var criteria = new GetAnnualLeaveTransactionByIdCriteria
             {
                 LeaveTransId = leaveTransId
             };
-            return baseService.GetDataEntity<AnnualLeaveTransactionViewModel>(criteria);
+            return await baseService.GetDataEntityAsync<AnnualLeaveTransactionViewModel>(criteria);
         }
 
         public IList<SupervisorModel> GetEmployeeSupervisorByRoleId(int employeeId, short roleId)

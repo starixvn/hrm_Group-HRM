@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
     using HRM.Core.Services;
     using HRM.Criteria;
     using HRM.Criteria.AnnualLeave;
@@ -14,19 +15,10 @@
     using HRM.Repositories;
     using HRM.ViewModels;
 
-    public class ReportService : IReportService
+    public class ReportService(
+        IReportRepository reportRepository,
+        IBaseService baseService) : IReportService
     {
-        private readonly IReportRepository reportRepository;
-        private readonly IBaseService baseService;
-
-        public ReportService(
-            IReportRepository reportRepository,
-            IBaseService baseService)
-        {
-            this.reportRepository = reportRepository;
-            this.baseService = baseService;
-        }
-
         public IList<EmployeeAttendanceModel> GetEmployeeAttendanceReport(GetEmployeeAttendanceCriteria criteria)
         {
             IList<EmployeeAttendanceModel> employeeAttendance = null;
@@ -38,14 +30,14 @@
             return employeeAttendance;
         }
 
-        public IList<LeaveSummary> GetAnnualLeaveBalanceReport(GetAnnualLeaveBalanceCriteria criteria)
+        public async Task<IEnumerable<LeaveSummary>> GetAnnualLeaveBalanceReportAsync(GetAnnualLeaveBalanceCriteria criteria)
         {
-            return baseService.GetData<LeaveSummary>(criteria).ToList();
+            return await baseService.GetDataAsync<LeaveSummary>(criteria);
         }
 
-        public IList<LeaveSummary> GetUnpaidLeave(GetUnpaidLeaveCriteria criteria)
+        public async Task<IEnumerable<LeaveSummary>> GetUnpaidLeaveAsync(GetUnpaidLeaveCriteria criteria)
         {
-            return baseService.GetData<LeaveSummary>(criteria).ToList();
+            return await baseService.GetDataAsync<LeaveSummary>(criteria);
         }
 
         public IList<TimeRecordModel> GetTimeRecords(GetTimeRecordCriteria criteria)

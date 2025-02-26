@@ -108,27 +108,25 @@ const annualLeaveBalance = (function ($) {
                         let $form = $(this);
                         if (validateInputInsertForm($form)) {
                             removeMsg($form);
-                            var annualLeaveMuiltiple = {
-                                EmpIds: $("#EmpIds").val(),
-                                Description: $form.find("#Description").val(),
-                                AffectedFrom: $form.find("#AffectedFrom").val(),
-                                TotalDays: parseInt($form.find("#TotalDays").val(), 10)
+                            var model = {
+                                empIds: $("#EmpIds").val(),
+                                description: $form.find("#Description").val(),
+                                affectedFrom: $form.find("#AffectedFrom").val(),
+                                totalDays: parseInt($form.find("#TotalDays").val(), 10)
                             };
                             axios({
                                 method: 'POST',
                                 url: resolveClientUrl('AnnualLeaveBalance/Adjust'),
                                 headers: { 'X-Requested-With': 'XMLHttpRequest' },
-                                data: {
-                                    annualLeaveJson: JSON.stringify(annualLeaveMuiltiple)
-                                }
+                                data: model
                             }).then(response => {
-                                if (response.data.IsSuccessful) {
+                                if (response.data.isSuccessful) {
                                     alert('Adjust successfully.');
                                     setInterval(function () {
                                         document.location = resolveClientUrl('annualleavebalance/index');
                                     }, 2000);
                                 } else {
-                                    showErrorMsg($form, response.data.Message);
+                                    showErrorMsg($form, response.data.message);
                                 }
                             }).catch(axiosError);
                         }
@@ -167,11 +165,11 @@ const annualLeaveBalance = (function ($) {
                                 headers: { 'X-Requested-With': 'XMLHttpRequest' },
                                 data: $form.serialize()
                             }).then(response => {
-                                if (response.data.IsSuccessful) {
+                                if (response.data.isSuccessful) {
                                     alert('Close balance successful!');
                                     $('#resetform').dialog('close');
                                 } else {
-                                    alert(response.data.Message);
+                                    alert(response.data.message);
                                 }
                             }).catch(axiosError);
                         }

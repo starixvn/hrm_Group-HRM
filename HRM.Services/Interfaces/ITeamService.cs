@@ -1,6 +1,7 @@
 ﻿namespace HRM.Services
 {
     using System.Collections.Generic;
+    using System.Threading.Tasks;
     using HRM.Core.Models;
     using HRM.Models;
     using HRM.Models.Group;
@@ -14,7 +15,7 @@
 
         CommandResult Delete(int actorId, int id);
 
-        IList<Team> GetBySupervisor(int supervisorId);
+        Task<IEnumerable<Team>> GetBySupervisorAsync(int supervisorId);
 
         IList<SupervisorModel> GetTeamSupervisorByRoleId(int teamId, short roleId);
 

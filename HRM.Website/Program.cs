@@ -6,6 +6,7 @@ using HRM.Website;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,7 +14,11 @@ var services = builder.Services;
 var configuration = builder.Configuration;
 
 // Add services to the container.
-services.AddControllersWithViews();
+services.AddControllersWithViews()
+    .AddNewtonsoftJson(options =>
+    {
+        options.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Unspecified;
+    });
 
 services.AddFanexLogSentry(configuration);
 services.AddFanexSql(configuration);

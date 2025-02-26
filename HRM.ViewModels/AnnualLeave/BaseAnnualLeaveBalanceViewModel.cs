@@ -6,7 +6,6 @@
     using HRM.Core.Constants;
     using HRM.Resources;
 
-#pragma warning disable S109 // Magic numbers should not be used
     public class BaseAnnualLeaveBalanceViewModel : IValidatableObject
     {
         [Required(ErrorMessageResourceType = typeof(Messages), ErrorMessageResourceName = nameof(Messages.RequiredErrorMessage))]

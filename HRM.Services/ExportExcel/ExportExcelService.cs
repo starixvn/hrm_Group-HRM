@@ -1,59 +1,48 @@
 ﻿namespace HRM.Services
 {
     using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
     using System.IO;
-    using System.Web;
     using HRM.Core;
     using HRM.Core.Enums;
     using HRM.Models;
     using HRM.Models.HospitalizationLeave;
     using HRM.Models.Request;
     using Microsoft.AspNetCore.Hosting;
-    using Microsoft.AspNetCore.Http;
     using NPOI.HSSF.UserModel;
     using NPOI.SS.UserModel;
 
-    [SuppressMessage("Major Code Smell", "S109:Magic numbers should not be used", Justification = "Pending")]
-    public class ExportExcelService : IExportExcelService
+    public class ExportExcelService(IWebHostEnvironment hostingEnvironment) : IExportExcelService
     {
         private const string DefaultSheetName = "sheet1";
-        private const int _RowStartBodyLeaveSummary = 4;
-        private const int _RowStartBodyWorkingTimeRequest = 3;
-        private const int _RowStartBodyWorkingCalendar = 5;
+        private const int RowStartBodyLeaveSummary = 4;
+        private const int RowStartBodyWorkingTimeRequest = 3;
+        private const int RowStartBodyWorkingCalendar = 5;
 
-        private const string _LeaveSummaryFilePathExcelTemplate = "ExcelTemplates\\LeaveSummaryTemplate.xls";
-        private const string _EmployeeWFH = "ExcelTemplates\\EmployeeWorkFromHome.xls";
-        private const string _WorkingTimeRequestFilePathExcelTemplate = "ExcelTemplates\\WorkingTimeRequestTemplate.xls";
-        private const string HospitalizationLeaveSummaryTemplatePath = "ExcelTemplates\\HospitalizationLeaveSummary.xls";
-        private const string SickLeaveSummaryTemplatePath = "ExcelTemplates\\SickLeaveSummary.xls";
-
-        private readonly IWebHostEnvironment hostingEnvironment;
-
-        public ExportExcelService(IWebHostEnvironment hostingEnvironment)
-        {
-            this.hostingEnvironment = hostingEnvironment;
-        }
+        private const string LeaveSummaryFilePathExcelTemplate = "ExcelTemplates/LeaveSummaryTemplate.xls";
+        private const string EmployeeWFHTemplate = "ExcelTemplates/EmployeeWorkFromHome.xls";
+        private const string WorkingTimeRequestFilePathExcelTemplate = "ExcelTemplates/WorkingTimeRequestTemplate.xls";
+        private const string HospitalizationLeaveSummaryTemplatePath = "ExcelTemplates/HospitalizationLeaveSummary.xls";
+        private const string SickLeaveSummaryTemplatePath = "ExcelTemplates/SickLeaveSummary.xls";
 
         public HSSFWorkbook ExportEmployeeWfh(IEnumerable<EmployeeWorkFromHome> employeeWfhList)
         {
-            HSSFWorkbook hssfworkbook;
+            HSSFWorkbook workbook;
 
-            var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, _EmployeeWFH); 
-            using (FileStream template = new FileStream(templatePath, FileMode.Open, FileAccess.Read))
+            var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, EmployeeWFHTemplate);
+            using (var template = new FileStream(templatePath, FileMode.Open, FileAccess.Read))
             {
-                hssfworkbook = new HSSFWorkbook(template);
+                workbook = new HSSFWorkbook(template);
             }
 
-            var templateSheet = hssfworkbook.GetSheet(DefaultSheetName);
-            var sheet = hssfworkbook.CloneSheet(DefaultSheetName, "EmployeeWorkFromHome");
+            var templateSheet = workbook.GetSheet(DefaultSheetName);
+            var sheet = workbook.CloneSheet(DefaultSheetName, "EmployeeWorkFromHome");
 
-            #region render body
+            //// render body
 
             var rowIndex = 4;
             var index = 0;
 
-            foreach (EmployeeWorkFromHome item in employeeWfhList)
+            foreach (var item in employeeWfhList)
             {
                 var rowCopy = 4 + (index % 2);
                 sheet.CopyRow(templateSheet, rowCopy, rowIndex);
@@ -75,28 +64,25 @@
                 rowIndex++;
             }
 
-            #endregion render body
+            workbook.RemoveSheetAt(0);
 
-            // remove sheet & row template
-            hssfworkbook.RemoveSheetAt(0);
-
-            return hssfworkbook;
+            return workbook;
         }
 
-        public HSSFWorkbook ExportLeaveSummary(IList<LeaveSummary> leaveSummaryList, int year)
+        public HSSFWorkbook ExportLeaveSummary(IEnumerable<LeaveSummary> leaveSummaryList, int year)
         {
-            HSSFWorkbook hssfworkbook;
+            HSSFWorkbook workbook;
 
-            var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, _LeaveSummaryFilePathExcelTemplate);
-            using (FileStream template = new FileStream(templatePath, FileMode.Open, FileAccess.Read))
+            var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, LeaveSummaryFilePathExcelTemplate);
+            using (var template = new FileStream(templatePath, FileMode.Open, FileAccess.Read))
             {
-                hssfworkbook = new HSSFWorkbook(template);
+                workbook = new HSSFWorkbook(template);
             }
 
-            var templateSheet = hssfworkbook.GetSheet(DefaultSheetName);
-            var sheet = hssfworkbook.CloneSheet(DefaultSheetName, "LeaveSummary");
+            var templateSheet = workbook.GetSheet(DefaultSheetName);
+            var sheet = workbook.CloneSheet(DefaultSheetName, "LeaveSummary");
 
-            //// render hearder
+            //// render header
             var rowTakeLeave = sheet.GetRow(2);
             var cellTakeLeave = rowTakeLeave.GetCell(8);
             cellTakeLeave.SetCellValue("Leave in " + year);
@@ -109,13 +95,13 @@
             cellKIVBalance.SetCellValue("Balance Of CL " + year);
 
             //// render body
-            var rowIndex = _RowStartBodyLeaveSummary;
-            var height = sheet.GetRow(_RowStartBodyLeaveSummary).Height;
+            var rowIndex = RowStartBodyLeaveSummary;
+            var height = sheet.GetRow(RowStartBodyLeaveSummary).Height;
             var index = 0;
 
-            foreach (LeaveSummary item in leaveSummaryList)
+            foreach (var item in leaveSummaryList)
             {
-                var rowCopy = _RowStartBodyWorkingCalendar + (index % 2);
+                var rowCopy = RowStartBodyWorkingCalendar + (index % 2);
                 sheet.CopyRow(templateSheet, rowCopy, rowIndex);
                 var row = sheet.GetRow(rowIndex);
                 row.Height = height;
@@ -146,34 +132,32 @@
                 index++;
                 rowIndex++;
             }
-            //// end render body
 
-            //// remove sheet & row template
-            hssfworkbook.RemoveSheetAt(0);
+            workbook.RemoveSheetAt(0);
 
-            return hssfworkbook;
+            return workbook;
         }
 
         public HSSFWorkbook ExportWorkingTimeRequest(IList<RequestEntity> requestList, string title)
         {
-            HSSFWorkbook hssfworkbook;
-            var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, _WorkingTimeRequestFilePathExcelTemplate); 
-            using (FileStream template = new FileStream(templatePath, FileMode.Open, FileAccess.Read))
+            HSSFWorkbook workbook;
+            var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, WorkingTimeRequestFilePathExcelTemplate);
+            using (var template = new FileStream(templatePath, FileMode.Open, FileAccess.Read))
             {
-                hssfworkbook = new HSSFWorkbook(template);
+                workbook = new HSSFWorkbook(template);
             }
 
-            var templateSheet = hssfworkbook.GetSheet(DefaultSheetName);
-            var sheet = hssfworkbook.CloneSheet(DefaultSheetName, title);
-            var rowIndex = _RowStartBodyWorkingTimeRequest;
-            var height = sheet.GetRow(_RowStartBodyWorkingTimeRequest).Height;
+            var templateSheet = workbook.GetSheet(DefaultSheetName);
+            var sheet = workbook.CloneSheet(DefaultSheetName, title);
+            var rowIndex = RowStartBodyWorkingTimeRequest;
+            var height = sheet.GetRow(RowStartBodyWorkingTimeRequest).Height;
 
             var rowTitle = sheet.GetRow(0);
             var cellTitle = rowTitle.GetCell(0);
             cellTitle.SetCellValue(title);
             foreach (var item in requestList)
             {
-                var rowCopy = _RowStartBodyWorkingTimeRequest + (rowIndex % 2);
+                var rowCopy = RowStartBodyWorkingTimeRequest + (rowIndex % 2);
                 sheet.CopyRow(templateSheet, rowCopy, rowIndex);
                 var row = sheet.GetRow(rowIndex);
                 row.Height = height;
@@ -181,25 +165,25 @@
                 rowIndex++;
             }
 
-            hssfworkbook.RemoveSheetAt(0);
+            workbook.RemoveSheetAt(0);
 
-            return hssfworkbook;
+            return workbook;
         }
 
         public HSSFWorkbook ExportHospitalizationLeaveSummary(IEnumerable<HospitalizationLeaveBalanceSummaryReport> employees, int year)
         {
-            HSSFWorkbook hssfworkbook;
+            HSSFWorkbook workbook;
 
-            var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, HospitalizationLeaveSummaryTemplatePath); 
-            using (FileStream template = new FileStream(templatePath, FileMode.Open, FileAccess.Read))
+            var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, HospitalizationLeaveSummaryTemplatePath);
+            using (var template = new FileStream(templatePath, FileMode.Open, FileAccess.Read))
             {
-                hssfworkbook = new HSSFWorkbook(template);
+                workbook = new HSSFWorkbook(template);
             }
 
-            var templateSheet = hssfworkbook.GetSheet(DefaultSheetName);
-            var sheet = hssfworkbook.CloneSheet(DefaultSheetName, "Summary");
+            var templateSheet = workbook.GetSheet(DefaultSheetName);
+            var sheet = workbook.CloneSheet(DefaultSheetName, "Summary");
 
-            // render hearder
+            // render header
             var rowTakeLeave = sheet.GetRow(2);
             var cellTakeLeave = rowTakeLeave.GetCell(7);
             cellTakeLeave.SetCellValue("Leave in " + year);
@@ -213,7 +197,7 @@
             var height = sheet.GetRow(4).Height;
             var index = 0;
 
-            foreach (HospitalizationLeaveBalanceSummaryReport employee in employees)
+            foreach (var employee in employees)
             {
                 var rowCopy = 4 + (index % 2);
                 sheet.CopyRow(templateSheet, rowCopy, rowIndex);
@@ -245,25 +229,25 @@
                 rowIndex++;
             }
 
-            hssfworkbook.RemoveSheetAt(0);
+            workbook.RemoveSheetAt(0);
 
-            return hssfworkbook;
+            return workbook;
         }
 
         public HSSFWorkbook ExportSickLeaveSummary(IEnumerable<HospitalizationLeaveBalanceSummaryReport> employees, int year)
         {
-            HSSFWorkbook hssfworkbook;
+            HSSFWorkbook workbook;
 
-            var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, SickLeaveSummaryTemplatePath); 
-            using (FileStream template = new FileStream(templatePath, FileMode.Open, FileAccess.Read))
+            var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, SickLeaveSummaryTemplatePath);
+            using (var template = new FileStream(templatePath, FileMode.Open, FileAccess.Read))
             {
-                hssfworkbook = new HSSFWorkbook(template);
+                workbook = new HSSFWorkbook(template);
             }
 
-            var templateSheet = hssfworkbook.GetSheet(DefaultSheetName);
-            var sheet = hssfworkbook.CloneSheet(DefaultSheetName, "Summary");
+            var templateSheet = workbook.GetSheet(DefaultSheetName);
+            var sheet = workbook.CloneSheet(DefaultSheetName, "Summary");
 
-            // render hearder
+            // render header
             var rowTakeLeave = sheet.GetRow(2);
             var cellTakeLeave = rowTakeLeave.GetCell(7);
             cellTakeLeave.SetCellValue("Leave in " + year);
@@ -277,7 +261,7 @@
             var height = sheet.GetRow(4).Height;
             var index = 0;
 
-            foreach (HospitalizationLeaveBalanceSummaryReport employee in employees)
+            foreach (var employee in employees)
             {
                 var rowCopy = 4 + (index % 2);
                 sheet.CopyRow(templateSheet, rowCopy, rowIndex);
@@ -309,9 +293,9 @@
                 rowIndex++;
             }
 
-            hssfworkbook.RemoveSheetAt(0);
+            workbook.RemoveSheetAt(0);
 
-            return hssfworkbook;
+            return workbook;
         }
 
         private static void RenderBodyWorkingTimeRequest(
@@ -331,7 +315,7 @@
             ICell cellRemarks = row.GetCell(9);
             ICell cellCreateDate = row.GetCell(10);
             ICell cellStatus = row.GetCell(11);
-            cellNo.SetCellValue(rowIndex - _RowStartBodyLeaveSummary + 2);
+            cellNo.SetCellValue(rowIndex - RowStartBodyLeaveSummary + 2);
             cellDepartment.SetCellValue(item.Requester.Team.Section.Department.Code);
             cellSection.SetCellValue(item.Requester.Team.Section.Code);
             cellTeam.SetCellValue(item.Requester.Team.Code);

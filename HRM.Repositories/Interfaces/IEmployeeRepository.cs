@@ -1,13 +1,14 @@
 ﻿namespace HRM.Repositories
 {
     using System.Collections.Generic;
+    using System.Threading.Tasks;
     using Fanex.Data.Repository;
     using HRM.Models;
     using HRM.Models.EmployeeInformation;
 
     public interface IEmployeeRepository
     {
-        Employee GetEmployeeById(ICriteria criteria);
+        Task<Employee> GetEmployeeByIdAsync(ICriteria criteria);
 
         Employee GetEmployeeByCode(ICriteria criteria);
 
