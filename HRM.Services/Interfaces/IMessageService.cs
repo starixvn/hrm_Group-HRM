@@ -1,6 +1,7 @@
 ﻿namespace HRM.Services
 {
     using System.Collections.Generic;
+    using System.Threading.Tasks;
     using HRM.Core.Models;
     using HRM.Models.Message;
 
@@ -24,7 +25,7 @@
 
         Message GetDetailMessageByEmployee(int messageId);
 
-        IList<Message> GetUnreadMessageOfEmployee(int employeeId);
+        Task<IEnumerable<Message>> GetUnreadMessageOfEmployeeAsync(int employeeId);
 
         void SendMailToStaff(Message model);
     }

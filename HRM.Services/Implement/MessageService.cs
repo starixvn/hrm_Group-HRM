@@ -17,7 +17,7 @@
         IBaseService baseService,
         IEmailService emailService) : IMessageService
     {
-        private readonly string messageEmailTemplate = "EmailTemplates/MessageNotification.txt";
+        private const string MessageEmailTemplate = "EmailTemplates/MessageNotification.txt";
 
         public IList<Message> GetMessageByCreator(GetMessageByCreatorParam param)
         {
@@ -122,18 +122,18 @@
             return baseService.GetDataEntity<Message>(criteria);
         }
 
-        public IList<Message> GetUnreadMessageOfEmployee(int employeeId)
+        public async Task<IEnumerable<Message>> GetUnreadMessageOfEmployeeAsync(int employeeId)
         {
             var criteria = new GetUnreadMessageOfEmployeeCriteria
             {
                 EmployeeId = employeeId
             };
-            return baseService.GetData<Message>(criteria).ToList();
+            return await baseService.GetDataAsync<Message>(criteria);
         }
 
         public void SendMailToStaff(Message model)
         {
-            var bodyTemplate = Utilities.ReadTextFile(Path.Combine(env.ContentRootPath, messageEmailTemplate));
+            var bodyTemplate = Utilities.ReadTextFile(Path.Combine(env.ContentRootPath, MessageEmailTemplate));
             Task.Run(() => SendEmail(model.Subject, model.Contents, model.SendToEmail, bodyTemplate));
         }
 

@@ -14,6 +14,7 @@
     using HRM.ViewModels.Employee;
     using Microsoft.AspNetCore.Authentication;
     using Microsoft.AspNetCore.Authentication.Cookies;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
 
     public class AuthController(
@@ -42,7 +43,7 @@
                 Username = cryptoService.Encrypt(model.Username, rijndaelKey, rijndaelIV),
                 Password = cryptoService.Encrypt(model.Password, rijndaelKey, rijndaelIV),
                 Token = token,
-                IP = GetClientIP(),
+                IP = GetClientIP(HttpContext),
                 Platform = HttpContext.Request?.Headers["User-Agent"].ToString(),
                 BrowserName = HttpContext.Request?.Headers["User-Agent"].ToString(),
                 NetSessionId = HttpContext.Session.Id
@@ -94,9 +95,22 @@
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
         }
 
-        private string GetClientIP()
+        private static string GetClientIP(HttpContext httpContext)
         {
-            return HttpContext.Connection?.RemoteIpAddress?.ToString();
+            var clientIp = httpContext.Request.Headers["x-forwarded-for"].ToString();
+            if (string.IsNullOrEmpty(clientIp))
+            {
+                clientIp = httpContext.Connection.RemoteIpAddress.MapToIPv4().ToString();
+            }
+            else
+            {
+                var forwardedIps = clientIp.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+
+                clientIp = forwardedIps[0];
+            }
+
+            return clientIp;
         }
+
     }
 }

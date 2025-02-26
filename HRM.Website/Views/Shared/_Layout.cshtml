@@ -10,11 +10,11 @@
 </head>
 <body class="locale_en production">
     <header>
-        @* @Html.Action("Header", "UI") *@
+        @await Component.InvokeAsync("Header")
     </header>
     <div id="container">
         <nav id="left-navigation" class="left-navigation">
-            @* @Html.Action("NavBar", "UI") *@
+            @await Component.InvokeAsync("NavBar")
         </nav>
         <section id="section_content" class="section-content">
             <div id="content-wrapper" class="content_wrap">

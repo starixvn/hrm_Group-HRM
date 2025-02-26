@@ -111,29 +111,30 @@
             services.AddSingleton<IHttpClientService, HttpClientService>();
 
             services.AddSingleton<IHRMAuthService, HRMAuthService>();
+            services.AddSingleton<IEmailService, EmailService>();
+            services.AddSingleton<IMessageService, MessageService>();
             services.AddSingleton<IDashboardService, DashboardService>();
 
-            services.AddScoped<IRequestRepository, RequestRepository>();
-            services.AddScoped<IRequestService, RequestService>();
-            services.AddScoped<IAttachFileService, AttachFileService>();
-            services.AddScoped<ICommonDataService, CommonDataService>();
-            services.AddScoped<IRequestMailService, RequestMailService>();
-            services.AddScoped<IEmailService, EmailService>();
-            services.AddScoped<ILetstalkService, LetstalkService>();
-            services.AddScoped<ISendNotificationService, SendNotificationService>();
-            services.AddScoped<ILeaveRequestRepository, LeaveRequestRepository>();
-            services.AddScoped<ILeaveRequestService, LeaveRequestService>();
-            services.AddScoped<ICheckInOutRequestService, CheckInOutRequestService>();
-            services.AddScoped<ICheckInOutRequestRepository, CheckInOutRequestRepository>();
-            services.AddScoped<ICheckInOutRequestService, CheckInOutRequestService>();
-            services.AddScoped<ITeamService, TeamService>();
-            services.AddScoped<ILateInEarlyOutRequestService, LateInEarlyOutRequestService>();
-            services.AddScoped<ITeamRepository, TeamRepository>();
-            services.AddScoped<ILateInEarlyOutRequestRepository, LateInEarlyOutRequestRepository>();
-            services.AddScoped<IChangeShiftRequestService, ChangeShiftRequestService>();
-            services.AddScoped<IChangeShiftRequestRepository, ChangeShiftRequestRepository>();
-            services.AddScoped<IKeepInViewRequestService, KeepInViewRequestService>();
-            services.AddScoped<IKeepInViewRequestRepository, KeepInViewRequestRepository>();
+            services.AddSingleton<IRequestRepository, RequestRepository>();
+            services.AddSingleton<IRequestService, RequestService>();
+            services.AddSingleton<IAttachFileService, AttachFileService>();
+            services.AddSingleton<ICommonDataService, CommonDataService>();
+            services.AddSingleton<IRequestMailService, RequestMailService>();
+            services.AddSingleton<ILetstalkService, LetstalkService>();
+            services.AddSingleton<ISendNotificationService, SendNotificationService>();
+            services.AddSingleton<ILeaveRequestRepository, LeaveRequestRepository>();
+            services.AddSingleton<ILeaveRequestService, LeaveRequestService>();
+            services.AddSingleton<ICheckInOutRequestService, CheckInOutRequestService>();
+            services.AddSingleton<ICheckInOutRequestRepository, CheckInOutRequestRepository>();
+            services.AddSingleton<ICheckInOutRequestService, CheckInOutRequestService>();
+            services.AddSingleton<ITeamService, TeamService>();
+            services.AddSingleton<ILateInEarlyOutRequestService, LateInEarlyOutRequestService>();
+            services.AddSingleton<ITeamRepository, TeamRepository>();
+            services.AddSingleton<ILateInEarlyOutRequestRepository, LateInEarlyOutRequestRepository>();
+            services.AddSingleton<IChangeShiftRequestService, ChangeShiftRequestService>();
+            services.AddSingleton<IChangeShiftRequestRepository, ChangeShiftRequestRepository>();
+            services.AddSingleton<IKeepInViewRequestService, KeepInViewRequestService>();
+            services.AddSingleton<IKeepInViewRequestRepository, KeepInViewRequestRepository>();
 
             return services;
         }

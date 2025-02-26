@@ -1,0 +1,38 @@
+﻿@using GO.UserControl.Client.Core.Models
+@model IEnumerable<MenuItem>
+@{
+    var menus = Model.GroupBy(i => i.MenuItemName).Select(g => g.First()).ToList();
+    var unreadMessage = (int)ViewBag.UnreadMessage;
+    var selectedMenu = (MenuItem)ViewBag.SelectedMenu;
+    var idSelected = selectedMenu != null
+        ? selectedMenu.MenuItemName.ToLowerInvariant().Replace(" ", string.Empty).Replace("'", string.Empty) + "_" + selectedMenu.MenuItemId
+        : string.Empty;
+}
+
+<div class="nav_links">
+    @foreach (var parentMenu in menus.Where(i => !i.ParentId.HasValue).OrderBy(i => i.DisplayOrder))
+    {
+        if (menus.Any(i => i.ParentId == parentMenu.MenuItemId))
+        {
+            <div class="overview_section togglable_section" id="@parentMenu.MenuItemId">
+                <div class="separator">
+                    <strong>@parentMenu.MenuItemName</strong>
+                </div>
+            </div>
+                <div class="navItem">
+                    @foreach (var childMenu in menus.Where(i => i.ParentId == parentMenu.MenuItemId).OrderBy(i => i.DisplayOrder))
+                    {
+                        var menuText = childMenu.MenuItemName.Equals("My Message", StringComparison.CurrentCultureIgnoreCase) && unreadMessage > 0
+                            ? childMenu.MenuItemName + " (" + unreadMessage + ")" : childMenu.MenuItemName;
+                        var icon = childMenu.MenuItemName.ToLowerInvariant().Replace(" ", string.Empty).Replace("'", string.Empty);
+                        <div id="@(icon + "_" + childMenu.MenuItemId)" class="el">
+                            <span class="xicon icon-@icon"></span>
+                            <a href="@childMenu.URL">@menuText</a>
+                        </div>
+                    }
+                </div>
+        }
+    }
+</div>
+
+@Html.Hidden("CurrentUrlSelected", idSelected)
