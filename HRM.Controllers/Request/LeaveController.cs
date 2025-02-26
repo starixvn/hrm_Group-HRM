@@ -25,7 +25,7 @@
 
     public class LeaveController : BaseController
     {
-        private const string UploadFolderPath = "/file/uploads/request/";
+        private const string UploadFolderPath = "file/uploads/request/";
         private readonly IUserControlSession userControlSession;
         private readonly ILeaveRequestService leaveRequestService;
         private readonly IRequestService requestService;

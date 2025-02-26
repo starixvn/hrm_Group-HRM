@@ -63,7 +63,7 @@ function GetFormData(leaveRequest, requestDetails, tempFile) {
     var files = document.getElementById('file').files;
     var fd = new FormData();
     for (var i = 0; i < files.length; i++) {
-        fd.append('files[' + i + ']', files[i]);
+        fd.append('files', files[0]);
     }
     fd.append('request', JSON.stringify(leaveRequest));
     fd.append('requestDetails', JSON.stringify(requestDetails));

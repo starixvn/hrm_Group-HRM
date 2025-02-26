@@ -21,7 +21,7 @@
         {
             if (files != null && files.Any(x => x.Length > 0))
             {
-                string dir = Path.Combine(hostingEnvironment.ContentRootPath, pathFolder + fileId);
+                string dir = Path.Combine(hostingEnvironment.ContentRootPath, RemoveFirstSlash(pathFolder) + fileId);
                 if (!Directory.Exists(dir))
                 {
                     Directory.CreateDirectory(dir);
@@ -45,7 +45,7 @@
         public List<string> GetAttachFile(long fileId, string pathFolder)
         {
             var files = new List<string>();
-            string dir = Path.Combine(hostingEnvironment.ContentRootPath, pathFolder + fileId);
+            string dir = Path.Combine(hostingEnvironment.ContentRootPath, RemoveFirstSlash(pathFolder) + fileId);
             if (Directory.Exists(dir))
             {
                 string[] filePaths = Directory.GetFiles(dir);
@@ -62,7 +62,7 @@
         {
             foreach (string file in files)
             {
-                string dir = Path.Combine(hostingEnvironment.ContentRootPath, pathFolder + fileId + '/' + file);
+                string dir = Path.Combine(hostingEnvironment.ContentRootPath, RemoveFirstSlash(pathFolder) + fileId + '/' + file);
                 File.Delete(dir);
             }
         }
@@ -70,7 +70,7 @@
         public IList<AttachFile> GetInfoAttachFile(long fileId, string pathFolder)
         {
             var attachFiles = new List<AttachFile>();
-            string path = pathFolder + fileId;
+            string path = RemoveFirstSlash(pathFolder) + fileId;
             string dir = Path.Combine(hostingEnvironment.ContentRootPath, path);
             if (Directory.Exists(dir))
             {
@@ -98,6 +98,15 @@
             {
                 Directory.Delete(dir, true);
             }
+        }
+
+        private string RemoveFirstSlash(string path)
+        {
+            if (path.StartsWith("/"))
+            {
+                path = path.Substring(1);
+            }
+            return path;
         }
     }
 }
