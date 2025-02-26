@@ -154,11 +154,11 @@ $(document).ready(function () {
     }).catch(axiosError);
 
     $('#postform').click(function () {
-        var isCheckedTopManager = $("input[name='IsTopManager']").prop('checked');
+        const isCheckedTopManager = $("input[name='IsTopManager']").prop('checked');
         if (isCheckedTopManager === true) {
             $('#formEditUser')[0].submit();
         } else {
-            var verifier = $('#lstVerifier').text(),
+            const verifier = $('#lstVerifier').text(),
                 approver = $('#lstApprover').text();
             if (verifier === null || verifier === '') {
                 if (approver === null || approver === '') {
