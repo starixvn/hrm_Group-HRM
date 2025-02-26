@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
     using HRM.Core.Enums;
     using HRM.Core.Helpers;
     using HRM.Core.Models;
@@ -19,7 +20,7 @@
 
         IList<LookupData> GetJobTitle(string jobTitle);
 
-        IList<LeaveType> GetLeaveType(bool excludeNotShown = true);
+        Task<IList<LeaveType>> GetLeaveTypeAsync(bool excludeNotShown = true);
 
         IList<Team> GetAllTeam(bool isDeleted = false);
 
@@ -29,7 +30,7 @@
 
         IEnumerable<EntityBase<byte>> GetGender();
 
-        SystemSetting GetSystemSetting();
+        Task<SystemSetting> GetSystemSettingAsync();
 
         bool IsEnableGroupDate();
     }
@@ -56,13 +57,13 @@
             return baseService.GetData<LookupData>(criteria).ToList();
         }
 
-        public IList<LeaveType> GetLeaveType(bool excludeNotShown = true)
+        public async Task<IList<LeaveType>> GetLeaveTypeAsync(bool excludeNotShown = true)
         {
             var criteria = new GetLeaveTypeCriteria
             {
                 ExcludeNotShown = excludeNotShown
             };
-            var leaveTypes = baseService.GetData<LeaveType>(criteria).ToList();
+            var leaveTypes = (await baseService.GetDataAsync<LeaveType>(criteria)).ToList();
             leaveTypes.Insert(0, new LeaveType { Id = (ushort)LeaveTypes.GeneralLeave, Name = Labels.GeneralLeave });
 
             return leaveTypes;
@@ -133,10 +134,10 @@
             };
         }
 
-        public SystemSetting GetSystemSetting()
+        public async Task<SystemSetting> GetSystemSettingAsync()
         {
             var criteria = new GetSystemSettingCriteria();
-            return baseService.GetDataEntity<SystemSetting>(criteria);
+            return await baseService.GetDataEntityAsync<SystemSetting>(criteria);
         }
 
         public bool IsEnableGroupDate()

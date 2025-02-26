@@ -98,7 +98,8 @@ namespace HRM.Website.Helper
             var options = "";
             foreach (var leaveType in leaveTypes)
             {
-                options += $"<option value='{leaveType.Id}' selected='{leaveType.Id.ToString() == value}' title='{leaveType.Description}'>{leaveType.Name}</option>";
+                var selected = leaveType.Id.ToString() == value ? "selected" : "";
+                options += $"<option value='{leaveType.Id}' {selected} title='{leaveType.Description}'>{leaveType.Name}</option>";
             }
             return $@"
                 <select id='{id}' class='{className}'>

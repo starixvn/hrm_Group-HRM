@@ -35,7 +35,7 @@
             this.hostingEnvironment = hostingEnvironment;
         }
 
-        public void Export(IList<LeaveSummary> leaveSummaries, int year, string leaveType, string period)
+        public async void Export(IList<LeaveSummary> leaveSummaries, int year, string leaveType, string period)
         {
             string path = "";
             int range = 0;
@@ -58,7 +58,7 @@
             string fileName = "UnpaidLeaveSummary_" + DateTimeOffset.Now.ToString("yyyyMMdd");
 
             var leaveTypeIds = !string.IsNullOrWhiteSpace(leaveType) ? leaveType.Split(',').ToList() : new List<string>();
-            IList<LeaveType> leaveTypes = commonDataService.GetLeaveType();
+            IList<LeaveType> leaveTypes = await commonDataService.GetLeaveTypeAsync();
             string type = string.Join(", ", leaveTypes.Where(x => leaveTypeIds.Exists(y => x.Id.ToString() == y)).Select(x => x.Name));
 
             var writer = new ExcelTemplateWriter(templatePath, fileName, "Unpaid Leave Summary Report");

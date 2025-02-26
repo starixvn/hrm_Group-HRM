@@ -20,6 +20,8 @@
     using HRM.ViewModels.Request;
     using Microsoft.AspNetCore.Mvc;
     using System.Threading.Tasks;
+    using Microsoft.AspNetCore.Http;
+    using Newtonsoft.Json;
 
     public class LeaveController : BaseController
     {
@@ -69,168 +71,166 @@
             return View(leaves);
         }
 
-        //public ActionResult Create()
-        //{
-        //    var supervisor = requestService.GetVerifierAndApprover(EmployeeSession.EmpId, RequestType.Leave);
-        //    var setting = commonDataService.GetSystemSetting();
-        //    var today = DateTimeOffset.Now.Date;
-        //    var model = new LeaveRequestViewModel
-        //    {
-        //        LeaveTypeId = (ushort)LeaveTypes.GeneralLeave,
-        //        Employee = EmployeeSession.DisplayName,
-        //        EmployeeId = EmployeeSession.EmpId,
-        //        FromDate = today,
-        //        ToDate = today,
-        //        TotalDays = 1,
-        //        LeaveTypeList = commonDataService.GetLeaveType(),
-        //        EmployeeLeaveBalance = GetLeaveBalance(null, null),
-        //        Verifiers = supervisor.Verifiers,
-        //        Approvers = supervisor.Approvers,
-        //        MinDate = today.FirstDayOfMonth().AddMonths(-5),
-        //        EnableHospitalizationLeaveBalance = setting.EnableHospitalizationLeaveBalance,
-        //        EnableSickLeaveBalance = setting.EnableSickLeaveBalance
-        //    };
-        //    ViewBag.IsTopManager = EmployeeSession.IsTopManager;
-        //    ViewBag.HasOnBehalfOthersPermission = userControlSession.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
-        //        || userControlSession.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);
+        public async Task<ActionResult> Create()
+        {
+            var supervisor = await requestService.GetVerifierAndApproverAsync(EmployeeSession.EmpId, RequestType.Leave);
+            var setting = await commonDataService.GetSystemSettingAsync();
+            var today = DateTimeOffset.Now.Date;
+            var model = new LeaveRequestViewModel
+            {
+                LeaveTypeId = (ushort)LeaveTypes.GeneralLeave,
+                Employee = EmployeeSession.DisplayName,
+                EmployeeId = EmployeeSession.EmpId,
+                FromDate = today,
+                ToDate = today,
+                TotalDays = 1,
+                LeaveTypeList = await commonDataService.GetLeaveTypeAsync(),
+                EmployeeLeaveBalance = await GetLeaveBalance(null, null),
+                Verifiers = supervisor.Verifiers,
+                Approvers = supervisor.Approvers,
+                MinDate = today.FirstDayOfMonth().AddMonths(-5),
+                EnableHospitalizationLeaveBalance = setting.EnableHospitalizationLeaveBalance,
+                EnableSickLeaveBalance = setting.EnableSickLeaveBalance
+            };
+            ViewBag.IsTopManager = EmployeeSession.IsTopManager;
+            ViewBag.HasOnBehalfOthersPermission = userControlSession.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
+                || userControlSession.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);
 
-        //    return View(model);
-        //}
+            return View(model);
+        }
 
-        //[HttpPost]
-        //[ValidateInput(false)]
-        //public ActionResult Create(string request, string requestDetails, IList<HttpPostedFileBase> files)
-        //{
-        //    var criteria = JsonConverter.FromJson<InsertLeaveRequestCriteria>(request);
-        //    var leaveRequestDetail = JsonConverter.FromJsonArray<LeaveRequestDetail>(requestDetails);
-        //    if (leaveRequestDetail != null && leaveRequestDetail.Any())
-        //    {
-        //        criteria.TotalDays = leaveRequestDetail.Where(x => x.WorkType == (byte)WorkType.Leave)
-        //                .Sum(x => x.IsHalfDay ? Constants.HalfDayOffValue : 1);
-        //    }
+        [HttpPost]
+        public async Task<IActionResult> Create(string request, string requestDetails, IList<IFormFile> files)
+        {
+            var criteria = JsonConvert.DeserializeObject<InsertLeaveRequestCriteria>(request);
+            var leaveRequestDetail = JsonConvert.DeserializeObject<List<LeaveRequestDetail>>(requestDetails);
+            if (leaveRequestDetail != null && leaveRequestDetail.Any())
+            {
+                criteria.TotalDays = leaveRequestDetail.Where(x => x.WorkType == (byte)WorkType.Leave)
+                        .Sum(x => x.IsHalfDay ? Constants.HalfDayOffValue : 1);
+            }
 
-        //    criteria.RequestDetail = leaveRequestDetail;
-        //    criteria.CreatedBy = EmployeeSession.EmpId;
+            criteria.RequestDetail = leaveRequestDetail;
+            criteria.CreatedBy = EmployeeSession.EmpId;
 
-        //    CommandResult result = baseService.ExecuteNonQuery(criteria);
-        //    if (result.IsSuccessful)
-        //    {
-        //        leaveRequestService.SendMailAndSendLetstalkCreateRequest(criteria);
-        //        attachFileService.UploadFile(files, criteria.RequestId, UploadFolderPath);
-        //    }
+            CommandResult result = await baseService.ExecuteNonQueryAsync(criteria);
+            if (result.IsSuccessful)
+            {
+                leaveRequestService.SendMailAndSendLetstalkCreateRequest(criteria);
+                attachFileService.UploadFile(files, criteria.RequestId, UploadFolderPath);
+            }
 
-        //    return Json(result);
-        //}
+            return new JsonResult(result);
+        }
 
-        //public ActionResult Update(long id)
-        //{
-        //    LeaveRequest request = leaveRequestService.GetById(id);
-        //    if (request == null
-        //        || !Utilities.CheckUserCanEditRequest(EmployeeSession.EmpId, request.Requester.EmpId)
-        //        || request.Status.Id != (byte)CurrentRequestStatus.Pending)
-        //    {
-        //        return RedirectToAction("AccessDenied", "Error");
-        //    }
+        public async Task<ActionResult> Update(long id)
+        {
+            var request = await leaveRequestService.GetByIdAsync(id);
+            if (request == null
+                || !Utilities.CheckUserCanEditRequest(EmployeeSession.EmpId, request.Requester.EmpId)
+                || request.Status.Id != (byte)CurrentRequestStatus.Pending)
+            {
+                return RedirectToAction("AccessDenied", "Error");
+            }
 
-        //    LeaveRequestViewModel model = ConvertRequestToModel(request);
-        //    model.DisabledDates = leaveRequestService.GetDisabledDate(new GetDisabledDateParam
-        //    {
-        //        EmployeeId = model.EmployeeId,
-        //        FromDate = model.MinDate,
-        //        ToDate = model.MaxDate,
-        //        RequestId = model.RequestId,
-        //        LeaveTypeId = model.LeaveTypeId
-        //    });
-        //    model.LeaveTypeList = commonDataService.GetLeaveType();
-        //    model.EmployeeLeaveBalance = GetLeaveBalance(id, null);
+            var model = ConvertRequestToModel(request);
+            model.DisabledDates = await leaveRequestService.GetDisabledDateAsync(new GetDisabledDateParam
+            {
+                EmployeeId = model.EmployeeId,
+                FromDate = model.MinDate,
+                ToDate = model.MaxDate,
+                RequestId = model.RequestId,
+                LeaveTypeId = model.LeaveTypeId
+            });
+            model.LeaveTypeList = await commonDataService.GetLeaveTypeAsync();
+            model.EmployeeLeaveBalance = await GetLeaveBalance(id, null);
 
-        //    VerifierAndApproverForRequest supervisor = requestService.GetVerifierAndApprover(model.EmployeeId, RequestType.Leave);
-        //    SystemSetting setting = commonDataService.GetSystemSetting();
-        //    model.Verifiers = supervisor.Verifiers;
-        //    model.Approvers = supervisor.Approvers;
-        //    model.Files = attachFileService.GetAttachFile(id, UploadFolderPath);
-        //    model.EnableHospitalizationLeaveBalance = setting.EnableHospitalizationLeaveBalance;
-        //    model.EnableSickLeaveBalance = setting.EnableSickLeaveBalance;
+            var supervisor = await requestService.GetVerifierAndApproverAsync(model.EmployeeId, RequestType.Leave);
+            var setting = await commonDataService.GetSystemSettingAsync();
+            model.Verifiers = supervisor.Verifiers;
+            model.Approvers = supervisor.Approvers;
+            model.Files = attachFileService.GetAttachFile(id, UploadFolderPath);
+            model.EnableHospitalizationLeaveBalance = setting.EnableHospitalizationLeaveBalance;
+            model.EnableSickLeaveBalance = setting.EnableSickLeaveBalance;
 
-        //    ViewBag.IsView = false;
-        //    ViewBag.IsTopManager = request.Requester.IsTopManager;
-        //    ViewBag.HasOnBehalfOthersPermission = userControlSession.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
-        //        || userControlSession.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);
+            ViewBag.IsView = false;
+            ViewBag.IsTopManager = request.Requester.IsTopManager;
+            ViewBag.HasOnBehalfOthersPermission = userControlSession.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
+                || userControlSession.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);
 
-        //    return View(model);
-        //}
+            return View(model);
+        }
 
-        //[HttpPost]
-        //[ValidateInput(false)]
-        //public ActionResult Update(string request, string requestDetails, IList<HttpPostedFileBase> files, string filesRemove)
-        //{
-        //    var criteria = JsonConverter.FromJson<UpdateLeaveRequestCriteria>(request);
-        //    var leaveRequestDetail = JsonConverter.FromJsonArray<LeaveRequestDetail>(requestDetails);
-        //    criteria.RequestDetail = leaveRequestDetail;
-        //    if (leaveRequestDetail != null && leaveRequestDetail.Any())
-        //    {
-        //        criteria.TotalDays = leaveRequestDetail.Where(x => x.WorkType == (byte)WorkType.Leave)
-        //                .Sum(x => x.IsHalfDay ? Constants.HalfDayOffValue : 1);
-        //    }
+        [HttpPost]
+        public async Task<IActionResult> Update(string request, string requestDetails, IList<IFormFile> files, string filesRemove)
+        {
+            var criteria = JsonConvert.DeserializeObject<UpdateLeaveRequestCriteria>(request);
+            var leaveRequestDetail = JsonConvert.DeserializeObject<List<LeaveRequestDetail>>(requestDetails);
+            criteria.RequestDetail = leaveRequestDetail;
+            if (leaveRequestDetail != null && leaveRequestDetail.Any())
+            {
+                criteria.TotalDays = leaveRequestDetail.Where(x => x.WorkType == (byte)WorkType.Leave)
+                        .Sum(x => x.IsHalfDay ? Constants.HalfDayOffValue : 1);
+            }
 
-        //    criteria.ModifiedBy = EmployeeSession.EmpId;
+            criteria.ModifiedBy = EmployeeSession.EmpId;
 
-        //    CommandResult result = baseService.ExecuteNonQuery(criteria);
-        //    if (result.IsSuccessful)
-        //    {
-        //        leaveRequestService.SendMailEditRequest(criteria);
-        //        attachFileService.UploadFile(files, criteria.RequestId, UploadFolderPath);
-        //        if (!string.IsNullOrWhiteSpace(filesRemove))
-        //        {
-        //            attachFileService.DeleteFile(JsonConverter.FromJsonArray<string>(filesRemove), criteria.RequestId, UploadFolderPath);
-        //        }
-        //    }
+            var result = await baseService.ExecuteNonQueryAsync(criteria);
+            if (result.IsSuccessful)
+            {
+                leaveRequestService.SendMailEditRequest(criteria);
+                attachFileService.UploadFile(files, criteria.RequestId, UploadFolderPath);
+                if (!string.IsNullOrWhiteSpace(filesRemove))
+                {
+                    attachFileService.DeleteFile(JsonConvert.DeserializeObject<List<string>>(filesRemove), criteria.RequestId, UploadFolderPath);
+                }
+            }
 
-        //    return Json(result);
-        //}
+            return Json(result);
+        }
 
-        //public ActionResult Detail(long id)
-        //{
-        //    LeaveRequest request = leaveRequestService.GetById(id);
-        //    if (request == null)
-        //    {
-        //        return RedirectToAction("PageNotFound", "Error");
-        //    }
+        public async Task<ActionResult> Detail(long id)
+        {
+            var request = await leaveRequestService.GetByIdAsync(id);
+            if (request == null)
+            {
+                return RedirectToAction("PageNotFound", "Error");
+            }
 
-        //    LeaveRequestViewModel model = ConvertRequestToModel(request);
-        //    model.LeaveTypeList = commonDataService.GetLeaveType();
-        //    model.Files = attachFileService.GetAttachFile(id, UploadFolderPath);
+            var model = ConvertRequestToModel(request);
+            model.LeaveTypeList = await commonDataService.GetLeaveTypeAsync();
+            model.Files = attachFileService.GetAttachFile(id, UploadFolderPath);
 
-        //    VerifierAndApproverForRequest supervisor = requestService.GetVerifierAndApprover(request.Requester.EmpId, RequestType.Leave);
-        //    model.Verifiers = supervisor.Verifiers;
-        //    model.Approvers = supervisor.Approvers;
+            var supervisor = await requestService.GetVerifierAndApproverAsync(request.Requester.EmpId, RequestType.Leave);
+            model.Verifiers = supervisor.Verifiers;
+            model.Approvers = supervisor.Approvers;
 
-        //    ViewBag.IsView = true;
-        //    ViewBag.HasOnBehalfOthersPermission = userControlSession.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
-        //        || userControlSession.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);
+            ViewBag.IsView = true;
+            ViewBag.HasOnBehalfOthersPermission = userControlSession.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
+                || userControlSession.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);
 
-        //    return View(model);
-        //}
+            return View(model);
+        }
 
-        //[HttpPost]
-        //public CustomJsonResult Delete(long id)
-        //{
-        //    leaveRequestService.SendMailDeleteRequest(id);
-        //    CommandResult commandResult = leaveRequestService.Delete(id);
+        [HttpPost]
+        public async Task<IActionResult> Delete(long id)
+        {
+            await leaveRequestService.SendMailDeleteRequest(id);
+            var commandResult = await leaveRequestService.DeleteAsync(id);
 
-        //    if (commandResult.IsSuccessful)
-        //    {
-        //        attachFileService.DeleteFolderAttachFile(id, UploadFolderPath);
-        //    }
+            if (commandResult.IsSuccessful)
+            {
+                attachFileService.DeleteFolderAttachFile(id, UploadFolderPath);
+            }
 
-        //    return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
-        //}
+            return Json(commandResult);
+        }
 
-        //public ActionResult ViewHistory(long id)
-        //{
-        //    IEnumerable<LeaveRequest> requests = leaveRequestService.GetHistoryById(id);
-        //    return PartialView("_ViewHistory", requests);
-        //}
+        public async Task<ActionResult> ViewHistory(long id)
+        {
+            var requests = await leaveRequestService.GetHistoryByIdAsync(id);
+            return PartialView("_ViewHistory", requests);
+        }
 
         public async Task<IActionResult> GetLeaveBalance(int employeeId, long? requestId, DateTime? toDate)
         {
@@ -244,235 +244,233 @@
             return new JsonResult(employeeLeaveBalance);
         }
 
-        //public ActionResult LeaveRequestDetail(int employeeId, DateTime fromDate, DateTime toDate, long requestId = -1)
-        //{
-        //    IEnumerable<Models.ScheduleArrange.DailySchedule> calendars = leaveRequestService.GetEmployeeCalendar(employeeId, fromDate, toDate);
-        //    IList<LeaveRequestDetail> leaveRequestDetail = new List<LeaveRequestDetail>();
-        //    if (requestId != -1)
-        //    {
-        //        leaveRequestDetail = leaveRequestService.GetLeaveRequestDetailById(requestId);
-        //    }
+        public async Task<ActionResult> LeaveRequestDetail(int employeeId, DateTime fromDate, DateTime toDate, long requestId = -1)
+        {
+            var calendars = await leaveRequestService.GetEmployeeCalendarAsync(employeeId, fromDate, toDate);
+            var leaveRequestDetail = requestId != -1
+            ? await leaveRequestService.GetLeaveRequestDetailByIdAsync(requestId)
+            : [];
 
-        //    leaveRequestDetail = ConvertToLeaveRequestDetail(calendars, leaveRequestDetail, fromDate, toDate);
-        //    IList<LeaveType> leaveTypes = commonDataService.GetLeaveType();
-        //    var model = new LeaveDetailViewModel
-        //    {
-        //        LeaveRequestDetail = leaveRequestDetail,
-        //        LeaveTypeList = leaveTypes.Where(x => x.Id != (int)LeaveTypes.GeneralLeave
-        //                                && x.Id != (int)LeaveTypes.KeepInViewByHour
-        //                                && x.Id != (int)LeaveTypes.BusinessDuringWorking).ToList()
-        //    };
+            leaveRequestDetail = ConvertToLeaveRequestDetail(calendars, leaveRequestDetail, fromDate, toDate);
+            IList<LeaveType> leaveTypes = await commonDataService.GetLeaveTypeAsync();
+            var model = new LeaveDetailViewModel
+            {
+                LeaveRequestDetail = leaveRequestDetail,
+                LeaveTypeList = leaveTypes.Where(x => x.Id != (int)LeaveTypes.GeneralLeave
+                                        && x.Id != (int)LeaveTypes.KeepInViewByHour
+                                        && x.Id != (int)LeaveTypes.BusinessDuringWorking).ToList()
+            };
 
-        //    return View(model);
-        //}
+            return View(model);
+        }
 
-        //public CustomJsonResult GetDisableDate(int leaveTypeId, int employeeId, DateTime date, long? requestId = null)
-        //{
-        //    var fromDate = new DateTimeOffset(date.AddMonths(-5).Year, date.AddMonths(-5).Month, 1, 0, 0, 0, TimeSpan.Zero).Date;
-        //    var tempDate = date.AddMonths(Constants.NumberMonthsInFutureCanLeaveRequest);
-        //    var toDate = new DateTimeOffset(tempDate.Year, tempDate.Month, DateTime.DaysInMonth(tempDate.Year, tempDate.Month), 0, 0, 0, TimeSpan.Zero).Date;
-        //    var param = new GetDisabledDateParam
-        //    {
-        //        LeaveTypeId = leaveTypeId,
-        //        RequestId = requestId,
-        //        EmployeeId = employeeId,
-        //        FromDate = fromDate,
-        //        ToDate = toDate
-        //    };
-        //    IEnumerable<DateTime> dates = leaveRequestService.GetDisabledDate(param);
-        //    return new CustomJsonResult { Data = dates.Select(t => t.Date.ToString("yyyy/MM/dd")), JsonRequestBehavior = JsonRequestBehavior.AllowGet };
-        //}
+        public async Task<IActionResult> GetDisableDate(int leaveTypeId, int employeeId, DateTime date, long? requestId = null)
+        {
+            var fromDate = new DateTimeOffset(date.AddMonths(-5).Year, date.AddMonths(-5).Month, 1, 0, 0, 0, TimeSpan.Zero).Date;
+            var tempDate = date.AddMonths(Constants.NumberMonthsInFutureCanLeaveRequest);
+            var toDate = new DateTimeOffset(tempDate.Year, tempDate.Month, DateTime.DaysInMonth(tempDate.Year, tempDate.Month), 0, 0, 0, TimeSpan.Zero).Date;
+            var param = new GetDisabledDateParam
+            {
+                LeaveTypeId = leaveTypeId,
+                RequestId = requestId,
+                EmployeeId = employeeId,
+                FromDate = fromDate,
+                ToDate = toDate
+            };
+            IEnumerable<DateTime> dates = await leaveRequestService.GetDisabledDateAsync(param);
+            return Json(dates.Select(t => t.Date.ToString("yyyy/MM/dd")));
+        }
 
-        //public CustomJsonResult GetTotalLeaveDay(GetDisabledDateParam param)
-        //{
-        //    var criteria = new GetTotalLeaveDayCriteria
-        //    {
-        //        LeaveTypeId = param.LeaveTypeId,
-        //        EmployeeId = param.EmployeeId,
-        //        FromDate = param.FromDate,
-        //        ToDate = param.ToDate,
-        //        RequestId = param.RequestId
-        //    };
-        //    IEnumerable<DateTime> dates = baseService.GetData<DateTime>(criteria);
-        //    var totalDays = (param.ToDate - param.FromDate).Days + 1 - dates.Count();
+        public ActionResult GetTotalLeaveDay(GetDisabledDateParam param)
+        {
+            var criteria = new GetTotalLeaveDayCriteria
+            {
+                LeaveTypeId = param.LeaveTypeId,
+                EmployeeId = param.EmployeeId,
+                FromDate = param.FromDate,
+                ToDate = param.ToDate,
+                RequestId = param.RequestId
+            };
+            IEnumerable<DateTime> dates = baseService.GetData<DateTime>(criteria);
+            var totalDays = (param.ToDate - param.FromDate).Days + 1 - dates.Count();
+            return Json(totalDays);
 
-        //    return new CustomJsonResult { Data = totalDays, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
-        //}
+        }
 
-        //private List<LeaveRequestDetail> ConvertToLeaveRequestDetail(
-        //    IEnumerable<Models.ScheduleArrange.DailySchedule> calendars,
-        //    IList<LeaveRequestDetail> leaveDetails,
-        //    DateTime fromDate,
-        //    DateTime toDate)
-        //{
-        //    var details = new List<LeaveRequestDetail>();
-        //    if (fromDate <= toDate)
-        //    {
-        //        var numberDays = (toDate - fromDate).Days + 1;
-        //        DateTime tempDate;
+        private List<LeaveRequestDetail> ConvertToLeaveRequestDetail(
+            IEnumerable<HRM.Models.ScheduleArrange.DailySchedule> calendars,
+            IList<LeaveRequestDetail> leaveDetails,
+            DateTime fromDate,
+            DateTime toDate)
+        {
+            var details = new List<LeaveRequestDetail>();
+            if (fromDate <= toDate)
+            {
+                var numberDays = (toDate - fromDate).Days + 1;
+                DateTime tempDate;
 
-        //        for (int i = 0; i < numberDays; i++)
-        //        {
-        //            tempDate = fromDate.AddDays(i);
-        //            IEnumerable<LeaveRequestDetail> tempLeaveDetailModels = leaveDetails.Where(t => (t.OnDate == tempDate));
-        //            Models.ScheduleArrange.DailySchedule calendar = calendars.FirstOrDefault(t => t.WorkDate.Date == tempDate);
+                for (int i = 0; i < numberDays; i++)
+                {
+                    tempDate = fromDate.AddDays(i);
+                    var tempLeaveDetailModels = leaveDetails.Where(t => (t.OnDate == tempDate));
+                    HRM.Models.ScheduleArrange.DailySchedule calendar = calendars.FirstOrDefault(t => t.WorkDate.Date == tempDate);
 
-        //            if (calendar != null)
-        //            {
-        //                AddLeaveRequestExistCalendar(details, tempLeaveDetailModels, calendar);
-        //            }
-        //            else
-        //            {
-        //                AddLeaveRequestNotExistCalendar(details, tempLeaveDetailModels, tempDate);
-        //            }
-        //        }
-        //    }
+                    if (calendar != null)
+                    {
+                        AddLeaveRequestExistCalendar(details, tempLeaveDetailModels, calendar);
+                    }
+                    else
+                    {
+                        AddLeaveRequestNotExistCalendar(details, tempLeaveDetailModels, tempDate);
+                    }
+                }
+            }
 
-        //    return details.OrderBy(t => t.OnDate).ThenBy(t => t.FromTime).ToList();
-        //}
+            return details.OrderBy(t => t.OnDate).ThenBy(t => t.FromTime).ToList();
+        }
 
-        //private void AddLeaveRequestExistCalendar(
-        //   List<LeaveRequestDetail> leaveRequestDetailOutput,
-        //   IEnumerable<LeaveRequestDetail> leaveDetails,
-        //   Models.ScheduleArrange.DailySchedule calendar)
-        //{
-        //    string tempScheduleStatus = string.Empty;
-        //    LeaveRequestDetail tempLeaveDetailModel;
-        //    var isOffOrHoliday = calendar.IsOffDay || calendar.IsHoliday;
+        private void AddLeaveRequestExistCalendar(
+           List<LeaveRequestDetail> leaveRequestDetailOutput,
+           IEnumerable<LeaveRequestDetail> leaveDetails,
+           HRM.Models.ScheduleArrange.DailySchedule calendar)
+        {
+            string tempScheduleStatus = string.Empty;
+            LeaveRequestDetail tempLeaveDetailModel;
+            var isOffOrHoliday = calendar.IsOffDay || calendar.IsHoliday;
 
-        //    if (!calendar.IsLeaveDay)
-        //    {
-        //        tempScheduleStatus = Labels.NA;
-        //    }
+            if (!calendar.IsLeaveDay)
+            {
+                tempScheduleStatus = Labels.NA;
+            }
 
-        //    if (calendar.IsOffDay)
-        //    {
-        //        tempScheduleStatus = Labels.OffDay;
-        //    }
+            if (calendar.IsOffDay)
+            {
+                tempScheduleStatus = Labels.OffDay;
+            }
 
-        //    if (calendar.IsHoliday)
-        //    {
-        //        tempScheduleStatus = Labels.Holiday;
-        //    }
+            if (calendar.IsHoliday)
+            {
+                tempScheduleStatus = Labels.Holiday;
+            }
 
-        //    if (calendar.Shift != null)
-        //    {
-        //        tempScheduleStatus = calendar.Shift.Name;
-        //    }
+            if (calendar.Shift != null)
+            {
+                tempScheduleStatus = calendar.Shift.Name;
+            }
 
-        //    if (leaveDetails != null && leaveDetails.Any())
-        //    {
-        //        foreach (LeaveRequestDetail leaveDetail in leaveDetails)
-        //        {
-        //            tempLeaveDetailModel = leaveDetail;
-        //            tempLeaveDetailModel.IsOffOrHoliday = isOffOrHoliday;
-        //            tempLeaveDetailModel.ScheduleStatus = tempScheduleStatus;
-        //            tempLeaveDetailModel.IsFromAfterday = leaveDetail.FromTime.Date > leaveDetail.OnDate.Date;
-        //            tempLeaveDetailModel.IsToAfterday = leaveDetail.ToTime.Date > leaveDetail.OnDate.Date;
-        //            leaveRequestDetailOutput.Add(tempLeaveDetailModel);
-        //        }
-        //    }
-        //    else
-        //    {
-        //        tempLeaveDetailModel = new LeaveRequestDetail
-        //        {
-        //            OnDate = calendar.WorkDate,
-        //            ScheduleStatus = tempScheduleStatus,
-        //            IsOffOrHoliday = isOffOrHoliday,
-        //            LeaveTypeId = (ushort)LeaveTypes.AnnualLeave,
-        //            WorkType = (byte)WorkType.Leave
-        //        };
-        //        leaveRequestDetailOutput.Add(tempLeaveDetailModel);
-        //    }
-        //}
+            if (leaveDetails != null && leaveDetails.Any())
+            {
+                foreach (LeaveRequestDetail leaveDetail in leaveDetails)
+                {
+                    tempLeaveDetailModel = leaveDetail;
+                    tempLeaveDetailModel.IsOffOrHoliday = isOffOrHoliday;
+                    tempLeaveDetailModel.ScheduleStatus = tempScheduleStatus;
+                    tempLeaveDetailModel.IsFromAfterday = leaveDetail.FromTime.Date > leaveDetail.OnDate.Date;
+                    tempLeaveDetailModel.IsToAfterday = leaveDetail.ToTime.Date > leaveDetail.OnDate.Date;
+                    leaveRequestDetailOutput.Add(tempLeaveDetailModel);
+                }
+            }
+            else
+            {
+                tempLeaveDetailModel = new LeaveRequestDetail
+                {
+                    OnDate = calendar.WorkDate,
+                    ScheduleStatus = tempScheduleStatus,
+                    IsOffOrHoliday = isOffOrHoliday,
+                    LeaveTypeId = (ushort)LeaveTypes.AnnualLeave,
+                    WorkType = (byte)WorkType.Leave
+                };
+                leaveRequestDetailOutput.Add(tempLeaveDetailModel);
+            }
+        }
 
-        //private void AddLeaveRequestNotExistCalendar(
-        //    List<LeaveRequestDetail> leaveRequestDetailOutput,
-        //    IEnumerable<LeaveRequestDetail> tempLeaveDetailModels,
-        //    DateTime workDate)
-        //{
-        //    string tempScheduleStatus = Labels.NA;
-        //    LeaveRequestDetail tempLeaveDetailModel;
+        private void AddLeaveRequestNotExistCalendar(
+            List<LeaveRequestDetail> leaveRequestDetailOutput,
+            IEnumerable<LeaveRequestDetail> tempLeaveDetailModels,
+            DateTime workDate)
+        {
+            string tempScheduleStatus = Labels.NA;
+            LeaveRequestDetail tempLeaveDetailModel;
 
-        //    if (tempLeaveDetailModels != null && tempLeaveDetailModels.Any())
-        //    {
-        //        foreach (LeaveRequestDetail leaveDetail in tempLeaveDetailModels)
-        //        {
-        //            tempLeaveDetailModel = leaveDetail;
-        //            tempLeaveDetailModel.ScheduleStatus = tempScheduleStatus;
-        //            tempLeaveDetailModel.IsFromAfterday = leaveDetail.FromTime.Date > leaveDetail.OnDate.Date;
-        //            tempLeaveDetailModel.IsToAfterday = leaveDetail.ToTime.Date > leaveDetail.OnDate.Date;
-        //            leaveRequestDetailOutput.Add(tempLeaveDetailModel);
-        //        }
-        //    }
-        //    else
-        //    {
-        //        tempLeaveDetailModel = new LeaveRequestDetail
-        //        {
-        //            OnDate = workDate,
-        //            ScheduleStatus = Labels.NA,
-        //            LeaveTypeId = (ushort)LeaveTypes.AnnualLeave,
-        //            WorkType = (byte)WorkType.Leave
-        //        };
-        //        leaveRequestDetailOutput.Add(tempLeaveDetailModel);
-        //    }
-        //}
+            if (tempLeaveDetailModels != null && tempLeaveDetailModels.Any())
+            {
+                foreach (LeaveRequestDetail leaveDetail in tempLeaveDetailModels)
+                {
+                    tempLeaveDetailModel = leaveDetail;
+                    tempLeaveDetailModel.ScheduleStatus = tempScheduleStatus;
+                    tempLeaveDetailModel.IsFromAfterday = leaveDetail.FromTime.Date > leaveDetail.OnDate.Date;
+                    tempLeaveDetailModel.IsToAfterday = leaveDetail.ToTime.Date > leaveDetail.OnDate.Date;
+                    leaveRequestDetailOutput.Add(tempLeaveDetailModel);
+                }
+            }
+            else
+            {
+                tempLeaveDetailModel = new LeaveRequestDetail
+                {
+                    OnDate = workDate,
+                    ScheduleStatus = Labels.NA,
+                    LeaveTypeId = (ushort)LeaveTypes.AnnualLeave,
+                    WorkType = (byte)WorkType.Leave
+                };
+                leaveRequestDetailOutput.Add(tempLeaveDetailModel);
+            }
+        }
 
-        //private LeaveRequestViewModel ConvertRequestToModel(LeaveRequest request)
-        //{
-        //    var model = new LeaveRequestViewModel
-        //    {
-        //        RequestId = request.RequestId,
-        //        LeaveTypeId = request.LeaveType.Id,
-        //        Employee = request.Requester.DisplayName,
-        //        EmployeeId = request.Requester.EmpId,
-        //        FromDate = request.FromDate,
-        //        ToDate = request.ToDate,
-        //        TotalDays = request.TotalDays,
-        //        HalfDayOff = request.IsHalfDay,
-        //        IsHospitalApplication = request.IsHospitalApplication,
-        //        VerifierId = request.Verifier != null ? request.Verifier.EmpId : 0,
-        //        ApproverId = request.Approver != null ? request.Approver.EmpId : 0,
-        //        RefNo = request.RefNO,
-        //        Remark = request.Remark,
-        //        Status = request.Status
-        //    };
+        private LeaveRequestViewModel ConvertRequestToModel(LeaveRequest request)
+        {
+            var model = new LeaveRequestViewModel
+            {
+                RequestId = request.RequestId,
+                LeaveTypeId = request.LeaveType.Id,
+                Employee = request.Requester.DisplayName,
+                EmployeeId = request.Requester.EmpId,
+                FromDate = request.FromDate,
+                ToDate = request.ToDate,
+                TotalDays = request.TotalDays,
+                HalfDayOff = request.IsHalfDay,
+                IsHospitalApplication = request.IsHospitalApplication,
+                VerifierId = request.Verifier != null ? request.Verifier.EmpId : 0,
+                ApproverId = request.Approver != null ? request.Approver.EmpId : 0,
+                RefNo = request.RefNO,
+                Remark = request.Remark,
+                Status = request.Status
+            };
 
-        //    if (request.IsHalfDay && request.LeaveType.Id != (short)LeaveTypes.GeneralLeave)
-        //    {
-        //        GetTimeForHalfDayRequest(request, model);
-        //    }
+            if (request.IsHalfDay && request.LeaveType.Id != (short)LeaveTypes.GeneralLeave)
+            {
+                GetTimeForHalfDayRequest(request, model);
+            }
 
-        //    var today = DateTimeOffset.Now.Date;
-        //    var minDate = today.FirstDayOfMonth().AddMonths(-5);
-        //    var maxDate = today.FirstDayOfMonth().AddMonths(Constants.NumberMonthsInFutureCanLeaveRequest).AddDays(-1);
-        //    if (model.LeaveTypeId == (ushort)LeaveTypes.MaternityLeave)
-        //    {
-        //        //// rule: user can make maternity leave for 6 months.
-        //        const byte ExtraMonthsCanRequest = 2;
-        //        maxDate = maxDate.AddMonths(ExtraMonthsCanRequest);
-        //    }
+            var today = DateTimeOffset.Now.Date;
+            var minDate = today.FirstDayOfMonth().AddMonths(-5);
+            var maxDate = today.FirstDayOfMonth().AddMonths(Constants.NumberMonthsInFutureCanLeaveRequest).AddDays(-1);
+            if (model.LeaveTypeId == (ushort)LeaveTypes.MaternityLeave)
+            {
+                // rule: user can make maternity leave for 6 months.
+                const byte ExtraMonthsCanRequest = 2;
+                maxDate = maxDate.AddMonths(ExtraMonthsCanRequest);
+            }
 
-        //    model.MinDate = minDate > model.FromDate ? model.FromDate : minDate;
-        //    model.MaxDate = maxDate;
+            model.MinDate = minDate > model.FromDate ? model.FromDate : minDate;
+            model.MaxDate = maxDate;
 
-        //    return model;
-        //}
+            return model;
+        }
 
-        //private void GetTimeForHalfDayRequest(LeaveRequest request, LeaveRequestViewModel model)
-        //{
-        //    var fromTime = leaveRequestService.GetFromTimeHalfDay(request.LeaveDetail);
-        //    var toTime = leaveRequestService.GetToTimeHalfDay(request.LeaveDetail);
+        private void GetTimeForHalfDayRequest(LeaveRequest request, LeaveRequestViewModel model)
+        {
+            var fromTime = leaveRequestService.GetFromTimeHalfDay(request.LeaveDetail);
+            var toTime = leaveRequestService.GetToTimeHalfDay(request.LeaveDetail);
 
-        //    model.FromTime = fromTime.ToString("HH:mm");
-        //    model.ToTime = toTime.ToString("HH:mm");
-        //    model.FromTimeHour = fromTime.Hour;
-        //    model.FromTimeMinute = fromTime.Minute;
-        //    model.ToTimeHour = toTime.Hour;
-        //    model.ToTimeMinute = toTime.Minute;
-        //    model.IsFromTimeAfterDay = request.FromDate.Date != fromTime.Date;
-        //    model.IsToTimeAfterDay = fromTime.Date != toTime.Date || request.ToDate.Date != toTime.Date;
-        //}
+            model.FromTime = fromTime.ToString("HH:mm");
+            model.ToTime = toTime.ToString("HH:mm");
+            model.FromTimeHour = fromTime.Hour;
+            model.FromTimeMinute = fromTime.Minute;
+            model.ToTimeHour = toTime.Hour;
+            model.ToTimeMinute = toTime.Minute;
+            model.IsFromTimeAfterDay = request.FromDate.Date != fromTime.Date;
+            model.IsToTimeAfterDay = fromTime.Date != toTime.Date || request.ToDate.Date != toTime.Date;
+        }
 
         private async Task<EmployeeLeaveBalance> GetLeaveBalance(long? requestId, int? year)
         {

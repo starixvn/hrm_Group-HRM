@@ -1,6 +1,7 @@
 ﻿namespace HRM.Services
 {
     using System.Collections.Generic;
+    using System.Threading.Tasks;
     using HRM.Core.Enums;
     using HRM.Core.Models;
     using HRM.Criteria.Request;
@@ -11,7 +12,7 @@
     {
         IList<RequestEntity> GetRequests(GetRequestCriteria criteria);
 
-        VerifierAndApproverForRequest GetVerifierAndApprover(int employeeId, RequestType requestType);
+        Task<VerifierAndApproverForRequest> GetVerifierAndApproverAsync(int employeeId, RequestType requestType);
 
         RequestEntity GetCheckInOutDetailToReviewDiscipline(long requestId);
 

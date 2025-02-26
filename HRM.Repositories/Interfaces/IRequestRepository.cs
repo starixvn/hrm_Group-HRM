@@ -1,6 +1,7 @@
 ﻿namespace HRM.Repositories
 {
     using System.Collections.Generic;
+    using System.Threading.Tasks;
     using Fanex.Data.Repository;
     using HRM.Criteria.Request;
     using HRM.Models.Request;
@@ -11,7 +12,7 @@
 
         RequestRelatedPeopleModel GetRequestRelatedPeople(GetRequestRelatedPeopleCriteria criteria);
 
-        VerifierAndApproverForRequest GetVerifierAndApprover(ICriteria criteria);
+        Task<VerifierAndApproverForRequest> GetVerifierAndApproverAsync(ICriteria criteria);
 
         RequestEntity GetRequestToIgnoreById(ICriteria criteria);
 

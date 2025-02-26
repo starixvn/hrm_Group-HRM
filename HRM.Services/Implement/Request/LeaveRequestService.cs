@@ -42,34 +42,34 @@
             return requests ?? [];
         }
 
-        public LeaveRequest GetById(long requestId)
+        public async Task<LeaveRequest> GetByIdAsync(long requestId)
         {
             var criteria = new GetLeaveRequestByIdCriteria
             {
                 RequestId = requestId
             };
-            return leaveRequestRepository.GetById(criteria);
+            return await leaveRequestRepository.GetByIdAsync(criteria);
         }
 
-        public IList<LeaveRequestDetail> GetLeaveRequestDetailById(long requestId)
+        public async Task<IList<LeaveRequestDetail>> GetLeaveRequestDetailByIdAsync(long requestId)
         {
             var criteria = new GetLeaveRequestDetailByIdCriteria
             {
                 RequestId = requestId
             };
-            return baseService.GetData<LeaveRequestDetail>(criteria).ToList();
+            return (await baseService.GetDataAsync<LeaveRequestDetail>(criteria)).ToList();
         }
 
-        public IEnumerable<LeaveRequest> GetHistoryById(long requestId)
+        public async Task<IEnumerable<LeaveRequest>> GetHistoryByIdAsync(long requestId)
         {
             var criteria = new GetLeaveRequestHistoryByIdCriteria
             {
                 RequestId = requestId
             };
-            return leaveRequestRepository.GetHistoryById(criteria);
+            return await leaveRequestRepository.GetHistoryByIdAsync(criteria);
         }
 
-        public IEnumerable<DateTime> GetDisabledDate(GetDisabledDateParam param)
+        public async Task<IEnumerable<DateTime>> GetDisabledDateAsync(GetDisabledDateParam param)
         {
             var criteria = new GetDisabledDateCriteria
             {
@@ -79,10 +79,10 @@
                 ToDate = param.ToDate,
                 RequestId = param.RequestId
             };
-            return baseService.GetData<DateTime>(criteria);
+            return await baseService.GetDataAsync<DateTime>(criteria);
         }
 
-        public IEnumerable<Models.ScheduleArrange.DailySchedule> GetEmployeeCalendar(int employeeId, DateTime fromDate, DateTime toDate)
+        public async Task<IEnumerable<Models.ScheduleArrange.DailySchedule>> GetEmployeeCalendarAsync(int employeeId, DateTime fromDate, DateTime toDate)
         {
             var criteria = new GetEmployeeCalendarCriteria
             {
@@ -90,7 +90,7 @@
                 FromDate = fromDate,
                 ToDate = toDate
             };
-            return leaveRequestRepository.GetEmployeeCalendar(criteria);
+            return await leaveRequestRepository.GetEmployeeCalendarAsync(criteria);
         }
 
         public async Task<EmployeeLeaveBalance> GetLeaveBalanceAsync(GetLeaveBalanceCriteria criteria)
@@ -100,13 +100,13 @@
             return leaveBalance;
         }
 
-        public CommandResult Delete(long requestId)
+        public async Task<CommandResult> DeleteAsync(long requestId)
         {
             var criteria = new DeleteLeaveRequestCriteria
             {
                 RequestId = requestId
             };
-            return baseService.ExecuteNonQuery(criteria);
+            return await baseService.ExecuteNonQueryAsync(criteria);
         }
 
         public void SendMailAndSendLetstalkCreateRequest(InsertLeaveRequestCriteria criteria)
@@ -136,9 +136,9 @@
             SendMailForSuccessfully(criteria, templateEmailPath, email);
         }
 
-        public void SendMailDeleteRequest(long requestId)
+        public async Task SendMailDeleteRequest(long requestId)
         {
-            var request = GetById(requestId);
+            var request = await GetByIdAsync(requestId);
             if (request != null)
             {
                 var emailTemplatePath = Path.Combine(env.ContentRootPath, EmailTemplatePathForCancel);
@@ -167,9 +167,9 @@
             }
         }
 
-        public void SendMailProcessRequest(long requestId, EmployeeSession actor, RequestCommand command)
+        public async Task SendMailProcessRequest(long requestId, EmployeeSession actor, RequestCommand command)
         {
-            var request = GetById(requestId);
+            var request = await GetByIdAsync(requestId);
             if (request != null)
             {
                 var emailTemplatePath = Path.Combine(env.ContentRootPath, EmailTemplatePathForApproval);

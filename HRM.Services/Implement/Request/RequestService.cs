@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
+    using System.Threading.Tasks;
     using HRM.Core;
     using HRM.Core.Constants;
     using HRM.Core.Enums;
@@ -146,14 +147,14 @@
             return entityList;
         }
 
-        public VerifierAndApproverForRequest GetVerifierAndApprover(int employeeId, RequestType requestType)
+        public async Task<VerifierAndApproverForRequest> GetVerifierAndApproverAsync(int employeeId, RequestType requestType)
         {
             var criteria = new GetVerifierAndApproverCriteria
             {
                 EmpId = employeeId,
                 RequestType = (byte)requestType
             };
-            VerifierAndApproverForRequest supervisor = requestRepository.GetVerifierAndApprover(criteria);
+            var supervisor = await requestRepository.GetVerifierAndApproverAsync(criteria);
             return supervisor;
         }
 

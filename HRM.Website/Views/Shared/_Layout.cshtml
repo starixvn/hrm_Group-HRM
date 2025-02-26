@@ -1,7 +1,25 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.Extensions.Configuration;
+@inject IConfiguration configuration
+@using HRM.Core.Enums
+@{
+    var title = string.Empty;
+    var siteId = configuration.GetValue<byte>("GO.UserControl.Client:SiteId");
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
+
+    @switch (siteId)
+    {
+        case (byte)SiteId.SMS:
+            title = "SMS HRM";
+            break;
+        case (byte)SiteId.HM:
+            title = "HM HRM";
+            break;
+    }
 
     <title>HRM - @ViewBag.Title</title>
     <meta name="viewport" content="width=device-width" />
@@ -62,6 +80,10 @@
     </div>
     <footer></footer>
     <div id="message"></div>
+    <script type="text/javascript">
+        var siteId = @siteId;
+        window.siteId = @siteId;
+    </script>
     @Html.Hidden("RootURL", Url.Content("~/"))
     <script src="~/dist/vendors/react.js"></script>
     <script src="~/dist/js/main.js"></script>

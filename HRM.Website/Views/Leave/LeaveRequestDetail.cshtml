@@ -1,0 +1,168 @@
+﻿@using HRM.Core
+@using HRM.Core.Constants
+@using HRM.Core.Enums
+@using HRM.Models.Request
+@using HRM.Resources
+@using HRM.ViewModels.Request
+@model LeaveDetailViewModel
+@{
+    Layout = null;
+}
+<table class="tabledata table table-custom">
+    <thead>
+        <tr>
+            <th>@Labels.Date</th>
+            <th>@Labels.ScheduleStatus</th>
+            <th>@Labels.WorkType</th>
+            <th>@Labels.LeaveType</th>
+            <th>@Labels.HalfDay</th>
+            <th>@Labels.LeaveCount</th>
+            <th>@Labels.FromTime</th>
+            <th>@Labels.ToTime</th>
+            <th class="tdhalfday"></th>
+        </tr>
+    </thead>
+    @if (Model != null && Model.LeaveRequestDetail != null && Model.LeaveRequestDetail.Any())
+    {
+        double totalAnnualLeave = 0;
+        double totalUnpaidLeave = 0;
+        <tbody>
+            @foreach (LeaveRequestDetail item in Model.LeaveRequestDetail)
+            {
+                if (!item.IsOffOrHoliday)
+                {
+                    if (item.LeaveTypeId == (ushort)LeaveTypes.AnnualLeave)
+                    {
+                        if (item.IsHalfDay)
+                        {
+                            totalAnnualLeave += 0.5;
+                        }
+                        else
+                        {
+                            totalAnnualLeave += 1;
+                        }
+                    }
+                    if (item.LeaveTypeId == (ushort)LeaveTypes.UnpaidLeave)
+                    {
+                        if (item.IsHalfDay)
+                        {
+                            totalUnpaidLeave += 0.5;
+                        }
+                        else
+                        {
+                            totalUnpaidLeave += 1;
+                        }
+                    }
+                }
+                <tr>
+                    <td class="tdleavedate" data-date="@item.OnDate.ToDateMonthYearFormatedDate()">
+                        @(item.OnDate.ToDateMonthYearFormatedDate() + " (" + item.OnDate.ToString("ddd") + ")")
+                    </td>
+                    <td class="tdschedulestatus">
+                        @item.ScheduleStatus
+                    </td>
+                    @if (!item.IsOffOrHoliday)
+                    {
+                        var leaveSelected = string.Empty;
+                        var offSelected = string.Empty;
+                        var workSelected = string.Empty;
+                        if (item.WorkType == (int)WorkType.Leave)
+                        {
+                            leaveSelected = "selected";
+                        }
+                        else if (item.WorkType == (int)WorkType.Off)
+                        {
+                            offSelected = "selected";
+                        }
+                        else
+                        {
+                            workSelected = "selected";
+                        }
+                        <td>
+                            <select class="ddlWorkType form-control">
+                                <!option value="2" @leaveSelected>@Labels.Leave</!option>
+                                <!option value="3" @workSelected>@Labels.OnDuty</!option>
+                                @if (item.ScheduleStatus.ToUpper() == Labels.NA.ToUpper() || item.WorkType == (int)WorkType.Off)
+                                {
+                                    <!option value="1" @offSelected>@Labels.Off</!option>
+                                }
+                            </select>
+                        </td>
+                        <td>
+                            @Html.DropDownListFor(m => item.LeaveTypeId, new SelectList(Model.LeaveTypeList, "Id", "Name", item.LeaveTypeId),
+                                new { @class = "ddlleavetype form-control" })
+                        </td>
+                        <td>
+                            @Html.CheckBoxFor(m => item.IsHalfDay, new { @class = "chkhalfday" })
+                        </td>
+                        <td>
+                            <span class="tdnumberleaves">@(item.IsHalfDay ? "0.5" : "1")</span>
+                        </td>
+                        <td>
+                            <div class="timehalfday">
+                                @{
+                                    var fromTime = Utilities.TimeSteps(30, item.FromTime.ToShortTime());
+                                    <select class="ddlfromtime form-control" name="item.FromTime" id="item.FromTime">
+                                        @foreach (var time in fromTime)
+                                        {
+                                            <!option value="@time.Value" @(time.Selected ? "selected" : "")>@time.Value</!option>
+                                        }
+                                    </select>
+                                }
+                                @Html.CheckBoxFor(m => item.IsFromAfterday, new { @class = "chkIsFromAfterday", @title = "Is after day" })
+                                *
+                            </div>
+                        </td>
+                        <td>
+                            <div class="timehalfday">
+                                @{
+                                    var toTime = Utilities.TimeSteps(30, item.ToTime.ToShortTime());
+                                    <select class="ddltotime form-control" name="item.ToTime" id="item.ToTime">
+                                        @foreach (var time in toTime)
+                                        {
+                                            <!option value="@time.Value" @(time.Selected ? "selected" : "")>@time.Value</!option>
+                                        }
+                                    </select>
+                                }
+                                @Html.CheckBoxFor(m => item.IsToAfterday, new { @class = "chkIsToAfterday", @title = "Is after day" })
+                                *
+                            </div>
+                        </td>
+                        <td class="tdhalfday"><a class="addhalfday" href="javascript:;"></a></td>
+                    }
+                    else
+                    {
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td class="tdhalfday">-</td>
+                    }
+                </tr>
+            }
+        </tbody>
+        <tfoot class="footleavedetail">
+            <tr>
+                <td colspan="5" class="align-right">@Labels.TotalAnnualLeave: </td>
+                <td colspan="1" id="totalAnnualLeave">@totalAnnualLeave</td>
+                <td colspan="3"></td>
+            </tr>
+            <tr>
+                <td colspan="5" class="align-right">@Labels.TotalUnpaidLeave: </td>
+                <td colspan="1" id="totalUnpaidLeave">@totalUnpaidLeave</td>
+                <td colspan="3"></td>
+            </tr>
+        </tfoot>
+    }
+    else
+    {
+        <tbody>
+            <tr>
+                <td colspan="9">@Labels.NoInfo</td>
+            </tr>
+        </tbody>
+    }
+</table>
+<script src="~/dist/js/leave.request.detail.js"></script>

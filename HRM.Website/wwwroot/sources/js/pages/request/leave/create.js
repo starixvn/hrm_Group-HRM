@@ -48,13 +48,14 @@ const RequestCommon = {
 
 function uploadComplete(evt) {
     const data = JSON.parse(evt.target.response);
-    if (data.IsSuccessful) {
+    if (data.isSuccessful) {
+        console.log(321);
         $('form').removeClass('dirty');
         confirm('Successfull!\nPress OK to continue', function () {
             location.href = resolveClientUrl('Leave/EmployeeView');
         });
     } else {
-        RequestCommon.showErrorMsg(data.Message, LeaveRequest.employee);
+        RequestCommon.showErrorMsg(data.message, LeaveRequest.employee);
     }
 }
 
@@ -408,20 +409,19 @@ const LeaveRequest = (function ($) {
             }).then(response => {
                 const data = response.data;
                 if (data !== null) {
-                    const arrTimeIn = data.BeginCheckInTime.split(':'),
-                        arrTimeOut = data.BeginCheckOutTime.split(':');
+                    const arrTimeIn = data.beginCheckInTime.split(':'),
+                        arrTimeOut = data.beginCheckOutTime.split(':');
 
                     let minuteFrom = parseInt(arrTimeIn[0], 10) * 60 + parseInt(arrTimeIn[1], 10),
                         minuteTo = parseInt(arrTimeOut[0], 10) * 60 + parseInt(arrTimeOut[1], 10),
-                        isFromAfterday = data.IsInAfterDay,
-                        isToAfterday = data.IsOutAfterDay;
+                        isFromAfterday = data.isInAfterDay,
+                        isToAfterday = data.isOutAfterDay;
                     $('.time-isafterday').show();
-
-                    if (data.IsInAfterDay) {
+                    if (data.isInAfterDay) {
                         minuteFrom += 1440; //60*24
                     }
 
-                    if (data.IsOutAfterDay) {
+                    if (data.isOutAfterDay) {
                         minuteTo += 1440;
                     }
 
@@ -439,6 +439,7 @@ const LeaveRequest = (function ($) {
                     if (hour < 10) {
                         hour = '0' + hour;
                     }
+                    console.log(arrTimeIn);
 
                     LeaveRequest.fromTimeHour.val(arrTimeIn[0]);
                     LeaveRequest.fromTimeMinute.val(arrTimeIn[1]);
@@ -474,9 +475,9 @@ const LeaveRequest = (function ($) {
                     }).then(res => {
                         response($.map(res.data, function (item) {
                             return {
-                                label: item.NickName + ' (' + item.FullName + ')',
-                                value: item.OwnerId,
-                                isTopManager: item.IsTopManager
+                                label: item.nickName + ' (' + item.fullName + ')',
+                                value: item.ownerId,
+                                isTopManager: item.isTopManager
                             };
                         }));
                     }).catch(axiosError);
@@ -706,13 +707,13 @@ const LeaveRequest = (function ($) {
             }).then(response => {
                 const data = response.data;
                 if (data !== null) {
-                    LeaveRequest.annualBalance.html(data.AnnualBalance);
-                    LeaveRequest.keepInViewBalance.html(data.KeepInViewBalance);
-                    LeaveRequest.keepInViewByHourBalance.html(data.KeepInViewByHourBalance);
-                    LeaveRequest.currentLeaveBalance.html(data.CurrentLeaveBalanceDay);
-                    LeaveRequest.weekendLeaveTaken.html(data.WeekedLeaveDayTaken);
-                    $('#lblHospitalizationLeaveBalance').html(data.HospitalizationLeaveBalance);
-                    $('#lblSickLeaveBalance').html(data.SickLeaveBalance);
+                    LeaveRequest.annualBalance.html(data.annualBalance);
+                    LeaveRequest.keepInViewBalance.html(data.keepInViewBalance);
+                    LeaveRequest.keepInViewByHourBalance.html(data.keepInViewByHourBalance);
+                    LeaveRequest.currentLeaveBalance.html(data.currentLeaveBalanceDay);
+                    LeaveRequest.weekendLeaveTaken.html(data.weekedLeaveDayTaken);
+                    $('#lblHospitalizationLeaveBalance').html(data.hospitalizationLeaveBalance);
+                    $('#lblSickLeaveBalance').html(data.sickLeaveBalance);
                 }
             }).catch(axiosError);
         },

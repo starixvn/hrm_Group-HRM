@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using System.Threading.Tasks;
     using HRM.Core;
     using HRM.Core.Constants;
     using HRM.Core.Enums;
@@ -22,7 +23,7 @@
 
         IEnumerable<EmployeeRequest> GetEmployeeRequests(GetMonthlyWorkingHoursParam param);
 
-        byte[] ExportMonthlyWorkingHours(GetMonthlyWorkingHoursParam param);
+        Task<byte[]> ExportMonthlyWorkingHours(GetMonthlyWorkingHoursParam param);
     }
 
     public partial class EmployeeWorkingHoursService(
@@ -74,7 +75,7 @@
             return baseService.GetData<EmployeeRequest>(criteria);
         }
 
-        public byte[] ExportMonthlyWorkingHours(GetMonthlyWorkingHoursParam param)
+        public async Task<byte[]> ExportMonthlyWorkingHours(GetMonthlyWorkingHoursParam param)
         {
             var templatePath = Path.Combine(env.ContentRootPath, "ExcelTemplates/MonthlyWorkingHours.xlsx");
             using (var templatePackage = new ExcelPackage(new FileInfo(templatePath)))
@@ -82,7 +83,7 @@
                 using (var xlPackage = new ExcelPackage())
                 {
                     var monthlyWorkings = GetMonthlyWorkingHours(param);
-                    LeaveTypes = commonDataService.GetLeaveType();
+                    LeaveTypes = await commonDataService.GetLeaveTypeAsync();
 
                     var template = templatePackage.Workbook.Worksheets[1];
                     var worksheet = xlPackage.Workbook.Worksheets.Add("Details");

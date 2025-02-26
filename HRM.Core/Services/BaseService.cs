@@ -54,6 +54,17 @@
             return commandResult;
         }
 
+        public async Task<CommandResult> ExecuteNonQueryAsync(ICriteria command)
+        {
+            var commandResult = new CommandResult();
+            if (command != null && command.IsValid())
+            {
+                commandResult = await baseRepository.ExecuteNonQueryAsync(command);
+            }
+
+            return commandResult;
+        }
+
         public async Task<T> GetDataEntityAsync<T>(ICriteria criteria)
         {
             if (criteria != null && criteria.IsValid())

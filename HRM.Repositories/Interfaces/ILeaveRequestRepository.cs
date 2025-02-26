@@ -9,10 +9,10 @@
     {
         Task<IList<LeaveRequest>> GetByDateAsync(ICriteria criteria);
 
-        LeaveRequest GetById(ICriteria criteria);
+        Task<LeaveRequest> GetByIdAsync(ICriteria criteria);
 
-        IEnumerable<LeaveRequest> GetHistoryById(ICriteria criteria);
+        Task<IEnumerable<LeaveRequest>> GetHistoryByIdAsync(ICriteria criteria);
 
-        IEnumerable<Models.ScheduleArrange.DailySchedule> GetEmployeeCalendar(ICriteria criteria);
+        Task<IEnumerable<Models.ScheduleArrange.DailySchedule>> GetEmployeeCalendarAsync(ICriteria criteria);
     }
 }

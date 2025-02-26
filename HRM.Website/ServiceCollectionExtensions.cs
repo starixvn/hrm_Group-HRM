@@ -145,6 +145,7 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IChangeShiftRequestRepository, ChangeShiftRequestRepository>();
         services.AddSingleton<IKeepInViewRequestService, KeepInViewRequestService>();
         services.AddSingleton<IKeepInViewRequestRepository, KeepInViewRequestRepository>();
+            services.AddScoped<IShiftService, ShiftService>();
 
         return services;
     }

@@ -33,7 +33,7 @@
                 </div>
                 <div class="select-form">
                     @{
-                        var yearPicker = Extensions.YearPickerFor(2010);
+                        var yearPicker = Extensions.YearPicker(2010, (int)ViewBag.Year);
                         <select class="yearpicker form-control" name="year" id="year">
                         @foreach(var item in yearPicker)
                         {
@@ -177,35 +177,35 @@
         switch (request.Status.Id)
         {
             case (byte)CurrentRequestStatus.Pending:
-            <a requestid="@request.RequestId" class="menu-actions" href="javascript:;">
-                @request.Status.ToString()
-                <span class="caret"></span>
-            </a>
-                        break;
-                    case (byte)CurrentRequestStatus.Verified:
-                    case (byte)CurrentRequestStatus.NotVerified:
-            <a requestid="@request.RequestId" href="javascript:;" class="tooltip-tipsy"
-               title="@request.Status.Name by @verifier (@request.VerifiedDate.ToShortFormatedDate())">
-                @request.Status.ToString()
-            </a>
-                        break;
-                    case (byte)CurrentRequestStatus.Approved:
-                    case (byte)CurrentRequestStatus.Rejected:
-            <a requestid="@request.RequestId" href="javascript:;" class="tooltip-tipsy"
-               title="@request.Status.Name by @approver (@request.ApprovedDate.ToShortFormatedDate())">
-                @request.Status.ToString()
-            </a>
-                        break;
-                    case (byte)CurrentRequestStatus.Processed:
-                    case (byte)CurrentRequestStatus.Void:
-            <a requestid="@request.RequestId" href="javascript:;" class="tooltip-tipsy"
-               title="@request.Status.Name by @processor (@request.ProcessedDate.ToShortFormatedDate())">
-                @request.Status.ToString()
-            </a>
-                        break;
-                    default:
-            <a href="javascript:;">@request.Status.ToString()</a>
-                        break;
+                <a requestid="@request.RequestId" class="menu-actions" href="javascript:;">
+                    @request.Status.ToString()
+                    <span class="caret"></span>
+                </a>
+                break;
+            case (byte)CurrentRequestStatus.Verified:
+            case (byte)CurrentRequestStatus.NotVerified:
+                <a requestid="@request.RequestId" href="javascript:;" class="tooltip-tipsy"
+                   title="@request.Status.Name by @verifier (@request.VerifiedDate.ToShortFormatedDate())">
+                    @request.Status.ToString()
+                </a>
+                break;
+            case (byte)CurrentRequestStatus.Approved:
+            case (byte)CurrentRequestStatus.Rejected:
+                <a requestid="@request.RequestId" href="javascript:;" class="tooltip-tipsy"
+                   title="@request.Status.Name by @approver (@request.ApprovedDate.ToShortFormatedDate())">
+                    @request.Status.ToString()
+                </a>
+                break;
+            case (byte)CurrentRequestStatus.Processed:
+            case (byte)CurrentRequestStatus.Void:
+                <a requestid="@request.RequestId" href="javascript:;" class="tooltip-tipsy"
+                   title="@request.Status.Name by @processor (@request.ProcessedDate.ToShortFormatedDate())">
+                    @request.Status.ToString()
+                </a>
+                break;
+            default:
+                <a href="javascript:;">@request.Status.ToString()</a>
+                break;
         }
     }
     

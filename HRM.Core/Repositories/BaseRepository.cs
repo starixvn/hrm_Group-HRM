@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections;
+    using System.Threading.Tasks;
     using Fanex.Data;
     using Fanex.Data.Repository;
     using Models;
@@ -22,6 +23,17 @@
                 Hashtable hash = db.GetOutputParams();
 
                 return GetCommandResult(hash);
+            }
+        }
+
+        public async Task<CommandResult> ExecuteNonQueryAsync(ICriteria command)
+        {
+            using (var db = ObjectDbFactory.CreateInstance(command.GetSettingKey()))
+            {
+                await db.ExecuteNonQueryAsync(command);
+                CommandResult commandResult = GetCommandResult(db.GetOutputParams());
+
+                return commandResult;
             }
         }
 

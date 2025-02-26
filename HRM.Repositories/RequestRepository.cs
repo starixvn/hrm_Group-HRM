@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
     using System.Linq;
+    using System.Threading.Tasks;
     using Fanex.Data;
     using Fanex.Data.Repository;
     using HRM.Core.Enums;
@@ -55,12 +56,12 @@
             return relatedPeople;
         }
 
-        public VerifierAndApproverForRequest GetVerifierAndApprover(ICriteria criteria)
+        public async Task<VerifierAndApproverForRequest> GetVerifierAndApproverAsync(ICriteria criteria)
         {
             VerifierAndApproverForRequest supervisor = null;
-            using (IObjectDb db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            using (IObjectDb db =  ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                using (var multi = db.QueryMultiple(criteria))
+                using (var multi = await db.QueryMultipleAsync(criteria))
                 {
                     supervisor = new VerifierAndApproverForRequest
                     {

@@ -14,15 +14,15 @@
     {
         Task<IList<LeaveRequest>> GetByDateAsync(GetLeaveRequestByDateCriteria criteria);
 
-        LeaveRequest GetById(long requestId);
+        Task<LeaveRequest> GetByIdAsync(long requestId);
 
-        IList<LeaveRequestDetail> GetLeaveRequestDetailById(long requestId);
+        Task<IList<LeaveRequestDetail>> GetLeaveRequestDetailByIdAsync(long requestId);
 
-        IEnumerable<LeaveRequest> GetHistoryById(long requestId);
+        Task<IEnumerable<LeaveRequest>> GetHistoryByIdAsync(long requestId);
 
-        IEnumerable<DateTime> GetDisabledDate(GetDisabledDateParam param);
+        Task<IEnumerable<DateTime>> GetDisabledDateAsync(GetDisabledDateParam param);
 
-        IEnumerable<Models.ScheduleArrange.DailySchedule> GetEmployeeCalendar(int employeeId, DateTime fromDate, DateTime toDate);
+        Task<IEnumerable<Models.ScheduleArrange.DailySchedule>> GetEmployeeCalendarAsync(int employeeId, DateTime fromDate, DateTime toDate);
 
         Task<EmployeeLeaveBalance> GetLeaveBalanceAsync(GetLeaveBalanceCriteria criteria);
 
@@ -30,14 +30,14 @@
 
         DateTime GetToTimeHalfDay(IList<LeaveRequestDetail> leaveDetails);
 
-        CommandResult Delete(long requestId);
+        Task<CommandResult> DeleteAsync(long requestId);
 
         void SendMailAndSendLetstalkCreateRequest(InsertLeaveRequestCriteria criteria);
 
         void SendMailEditRequest(UpdateLeaveRequestCriteria criteria);
 
-        void SendMailDeleteRequest(long requestId);
+        Task SendMailDeleteRequest(long requestId);
 
-        void SendMailProcessRequest(long requestId, EmployeeSession actor, RequestCommand command);
+        Task SendMailProcessRequest(long requestId, EmployeeSession actor, RequestCommand command);
     }
 }

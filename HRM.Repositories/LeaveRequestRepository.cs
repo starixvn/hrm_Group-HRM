@@ -53,11 +53,11 @@
             return leaves;
         }
 
-        public LeaveRequest GetById(ICriteria criteria)
+        public async Task<LeaveRequest> GetByIdAsync(ICriteria criteria)
         {
             using (IObjectDb db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                using (var multi = db.QueryMultiple(criteria))
+                using (var multi = await db.QueryMultipleAsync(criteria))
                 {
                     var leave = multi.Read<LeaveRequest, LeaveType, Requester, Requester, Requester, Requester, LeaveRequest>(
                         (request, leaveType, employee, verifier, approver, hr) =>
@@ -81,11 +81,11 @@
             }
         }
 
-        public IEnumerable<LeaveRequest> GetHistoryById(ICriteria criteria)
+        public async Task<IEnumerable<LeaveRequest>> GetHistoryByIdAsync(ICriteria criteria)
         {
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                using (var multi = db.QueryMultiple(criteria))
+                using (var multi = await db.QueryMultipleAsync(criteria))
                 {
                     var leaves = multi.Read<LeaveRequest, LeaveType, Requester, Requester, Requester, Requester, Requester, LeaveRequest >(
                         (request, leaveType, employee, verifier, approver, hr, modifier) =>
@@ -111,11 +111,11 @@
             }
         }
 
-        public IEnumerable<Models.ScheduleArrange.DailySchedule> GetEmployeeCalendar(ICriteria criteria)
+        public async Task<IEnumerable<Models.ScheduleArrange.DailySchedule>> GetEmployeeCalendarAsync(ICriteria criteria)
         {
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                return db.Query<Models.ScheduleArrange.DailySchedule,
+                return await db.QueryAsync<Models.ScheduleArrange.DailySchedule,
                     Models.ScheduleArrange.ShiftBase,
                     Models.ScheduleArrange.LeaveRequest,
                     Models.ScheduleArrange.LeaveRequest,

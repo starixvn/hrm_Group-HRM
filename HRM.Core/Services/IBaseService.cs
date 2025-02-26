@@ -14,6 +14,7 @@
         T GetDataEntity<T>(ICriteria criteria);
 
         CommandResult ExecuteNonQuery(ICriteria criteria);
+        Task<CommandResult> ExecuteNonQueryAsync(ICriteria command);
 
         Task<T> GetDataEntityAsync<T>(ICriteria criteria);
 
