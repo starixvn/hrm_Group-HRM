@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Threading.Tasks;
     using HRM.Core.Enums;
     using HRM.Core.Models;
     using HRM.Criteria.Request;
@@ -11,7 +12,7 @@
 
     public interface ILeaveRequestService
     {
-        IList<LeaveRequest> GetByDate(GetLeaveRequestByDateCriteria criteria);
+        Task<IList<LeaveRequest>> GetByDateAsync(GetLeaveRequestByDateCriteria criteria);
 
         LeaveRequest GetById(long requestId);
 
@@ -23,7 +24,7 @@
 
         IEnumerable<Models.ScheduleArrange.DailySchedule> GetEmployeeCalendar(int employeeId, DateTime fromDate, DateTime toDate);
 
-        EmployeeLeaveBalance GetLeaveBalance(GetLeaveBalanceCriteria criteria);
+        Task<EmployeeLeaveBalance> GetLeaveBalanceAsync(GetLeaveBalanceCriteria criteria);
 
         DateTime GetFromTimeHalfDay(IList<LeaveRequestDetail> leaveDetails);
 

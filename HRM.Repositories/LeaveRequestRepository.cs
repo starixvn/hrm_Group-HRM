@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
     using Fanex.Data;
     using Fanex.Data.Repository;
     using HRM.Core.Constants;
@@ -11,11 +12,11 @@
 
     public class LeaveRequestRepository : ILeaveRequestRepository
     {
-        public IList<LeaveRequest> GetByDate(ICriteria criteria)
+        public async Task<IList<LeaveRequest>> GetByDateAsync(ICriteria criteria)
         {
             using (IObjectDb db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                using (var multi = db.QueryMultiple(criteria))
+                using (var multi = await db.QueryMultipleAsync(criteria))
                 {
                     var leaves = multi.Read<LeaveRequest, LeaveType, Requester, Requester, Requester, Requester, Requester, LeaveRequest >(
                         (request, leaveType, employee, verifier, approver, hr,approvedBy) =>

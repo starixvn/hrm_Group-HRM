@@ -21,6 +21,17 @@
             return new List<T>();
         }
 
+        public async Task<IEnumerable<T>> GetDataAsync<T>(ICriteria criteria)
+        {
+            if (criteria != null && criteria.IsValid())
+            {
+                var result = await dynamicRepository.FetchAsync<T>(criteria);
+                return result;
+            }
+
+            return new List<T>();
+        }
+
         public virtual T GetDataEntity<T>(ICriteria criteria)
         {
             if (criteria != null && criteria.IsValid())

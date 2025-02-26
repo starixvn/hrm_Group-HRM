@@ -21,6 +21,9 @@
     using StackExchange.Redis;
     using Fanex.Logging;
     using HRM.Services;
+    using HRM.Repositories;
+    using HRM.Services.Implement;
+    using HRM.Letstalk.Core.Services;
 
     public static class ServiceCollectionExtensions
     {
@@ -105,9 +108,32 @@
             services.AddSingleton<IBaseRepository, BaseRepository>();
             services.AddSingleton<IBaseService, BaseService>();
             services.AddSingleton<IBaseMailService, BaseMailService>();
+            services.AddSingleton<IHttpClientService, HttpClientService>();
 
             services.AddSingleton<IHRMAuthService, HRMAuthService>();
             services.AddSingleton<IDashboardService, DashboardService>();
+
+            services.AddScoped<IRequestRepository, RequestRepository>();
+            services.AddScoped<IRequestService, RequestService>();
+            services.AddScoped<IAttachFileService, AttachFileService>();
+            services.AddScoped<ICommonDataService, CommonDataService>();
+            services.AddScoped<IRequestMailService, RequestMailService>();
+            services.AddScoped<IEmailService, EmailService>();
+            services.AddScoped<ILetstalkService, LetstalkService>();
+            services.AddScoped<ISendNotificationService, SendNotificationService>();
+            services.AddScoped<ILeaveRequestRepository, LeaveRequestRepository>();
+            services.AddScoped<ILeaveRequestService, LeaveRequestService>();
+            services.AddScoped<ICheckInOutRequestService, CheckInOutRequestService>();
+            services.AddScoped<ICheckInOutRequestRepository, CheckInOutRequestRepository>();
+            services.AddScoped<ICheckInOutRequestService, CheckInOutRequestService>();
+            services.AddScoped<ITeamService, TeamService>();
+            services.AddScoped<ILateInEarlyOutRequestService, LateInEarlyOutRequestService>();
+            services.AddScoped<ITeamRepository, TeamRepository>();
+            services.AddScoped<ILateInEarlyOutRequestRepository, LateInEarlyOutRequestRepository>();
+            services.AddScoped<IChangeShiftRequestService, ChangeShiftRequestService>();
+            services.AddScoped<IChangeShiftRequestRepository, ChangeShiftRequestRepository>();
+            services.AddScoped<IKeepInViewRequestService, KeepInViewRequestService>();
+            services.AddScoped<IKeepInViewRequestRepository, KeepInViewRequestRepository>();
 
             return services;
         }

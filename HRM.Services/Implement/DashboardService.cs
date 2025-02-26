@@ -33,7 +33,7 @@
                 EmployeeId = employeeId,
                 Date = date
             };
-            return baseService.GetData<MemberRequest>(criteria);
+            return await baseService.GetDataAsync<MemberRequest>(criteria);
         }
     }
 }

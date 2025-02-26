@@ -31,15 +31,15 @@
         private const string EmailTemplatePathForCancel = "EmailTemplates/Leave.Cancel.txt";
         private const string EmailTemplatePathForApproval = "EmailTemplates/Leave.Approval.txt";
 
-        public IList<LeaveRequest> GetByDate(GetLeaveRequestByDateCriteria criteria)
+        public async Task<IList<LeaveRequest>> GetByDateAsync(GetLeaveRequestByDateCriteria criteria)
         {
             IList<LeaveRequest> requests = null;
             if (criteria != null && criteria.IsValid())
             {
-                requests = leaveRequestRepository.GetByDate(criteria);
+                requests = await leaveRequestRepository.GetByDateAsync(criteria);
             }
 
-            return requests ?? new List<LeaveRequest>();
+            return requests ?? [];
         }
 
         public LeaveRequest GetById(long requestId)
@@ -93,9 +93,9 @@
             return leaveRequestRepository.GetEmployeeCalendar(criteria);
         }
 
-        public EmployeeLeaveBalance GetLeaveBalance(GetLeaveBalanceCriteria criteria)
+        public async Task<EmployeeLeaveBalance> GetLeaveBalanceAsync(GetLeaveBalanceCriteria criteria)
         {
-            var leaveBalance = baseService.GetDataEntity<EmployeeLeaveBalance>(criteria);
+            var leaveBalance = await baseService.GetDataEntityAsync<EmployeeLeaveBalance>(criteria);
             leaveBalance.KeepInViewByHourBalance = Math.Round(leaveBalance.KeepInViewByHourBalance / Constants.TotalMinuteInHour, 1);
             return leaveBalance;
         }

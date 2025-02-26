@@ -9,6 +9,7 @@
     public interface IBaseService
     {
         IEnumerable<T> GetData<T>(ICriteria criteria);
+        Task<IEnumerable<T>> GetDataAsync<T>(ICriteria criteria);
 
         T GetDataEntity<T>(ICriteria criteria);
 

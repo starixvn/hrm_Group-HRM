@@ -1,12 +1,13 @@
 ﻿namespace HRM.Repositories
 {
     using System.Collections.Generic;
+    using System.Threading.Tasks;
     using Fanex.Data.Repository;
     using HRM.Models.Request;
 
     public interface ILeaveRequestRepository
     {
-        IList<LeaveRequest> GetByDate(ICriteria criteria);
+        Task<IList<LeaveRequest>> GetByDateAsync(ICriteria criteria);
 
         LeaveRequest GetById(ICriteria criteria);
 
