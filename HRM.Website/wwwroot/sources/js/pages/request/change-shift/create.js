@@ -176,9 +176,9 @@ $(document).ready(function () {
             }).then(rs => {
                 response($.map(rs.data, function (item) {
                     return {
-                        label: item.NickName + ' (' + item.FullName + ')',
-                        value: item.OwnerId,
-                        isTopManager: item.IsTopManager
+                        label: item.nickName + ' (' + item.fullName + ')',
+                        value: item.ownerId,
+                        isTopManager: item.isTopManager
                     };
                 }));
             }).catch(axiosError);
@@ -251,7 +251,7 @@ $(document).ready(function () {
             var files = document.getElementById('file').files;
             var fd = new FormData();
             for (var i = 0; i < files.length; i++) {
-                fd.append('files[' + i + ']', files[i]);
+                fd.append('files', files[i]);
             }
             fd.append('model', JSON.stringify(model));
             fd.append('details', JSON.stringify(details));

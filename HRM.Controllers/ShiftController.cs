@@ -133,7 +133,7 @@
 
         public async Task<IActionResult> GetShiftByDate(int employeeId, DateTime date)
         {
-            var shift = shiftService.GetByDate(employeeId, date);
+            var shift = await shiftService.GetByDateAsync(employeeId, date);
             return Json(shift);
         }
 

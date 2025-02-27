@@ -157,13 +157,13 @@
                     request.LeaveType.Name,
                     request.Remark);
 
-                Task.Run(() => emailService.SendEmail(
+                await emailService.SendEmailAsync(
                     email.SendTo,
                     email.SendCC,
                     email.Subject,
-                    email.Body));
+                    email.Body);
 
-                Task.Run(() => letstalkService.SendNotification(email.LetsTalk, email.Subject, email.Body));
+                await letstalkService.SendNotificationAsync(email.LetsTalk, email.Subject, email.Body);
             }
         }
 
@@ -196,13 +196,13 @@
                     request.LeaveType.Name,
                     request.Remark);
 
-                Task.Run(() => emailService.SendEmail(
+                await emailService.SendEmailAsync(
                     email.SendTo,
                     email.SendCC,
                     email.Subject,
-                    email.Body));
+                    email.Body);
 
-                Task.Run(() => letstalkService.SendNotification(email.LetsTalk, email.Subject, email.Body));
+                 await letstalkService.SendNotificationAsync(email.LetsTalk, email.Subject, email.Body);
             }
         }
 

@@ -1,0 +1,126 @@
+﻿@* @using Fanex.NexHR.Core.Enums
+@using Fanex.NexHR.Resources
+@model ChangeShiftViewModel
+@{
+    ViewBag.Title = Labels.Details;
+}
+@section css{
+    <link href="~/wwwroot/dist/styles/changeshift.create.css" rel="stylesheet" />
+}
+@section js{
+}
+@section Breadcrumb {
+    <a class="step">@Labels.Personal</a>
+    <a class="step" href="@Url.Action("employeeview", "changeshift", new { })">@Labels.MyChangeShiftRequest</a>
+    <a class="step">@ViewBag.Title</a>
+}
+
+<h2 class="page-title">@Labels.Details</h2>
+<div class="card">
+    <form class="form-horizontal">
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.Employee, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                <strong>@Html.DisplayFor(model => model.Employee)</strong>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.TypeId, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @{
+                    var types = new List<SelectListItem>
+                    {
+                        new SelectListItem() { Text = Labels.ChangeShift, Value = ((byte)ChangeShiftType.ChangeShift).ToString() },
+                        new SelectListItem() { Text = Labels.MoveOffDayToAnotherWeek, Value = ((byte)ChangeShiftType.MoveOffDay).ToString() }
+                    };
+                }
+                @Html.DropDownListFor(model => model.TypeId, types, new { @class = "form-control", @disabled = "disabled" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.FromDate, new { @class = "control-label" })
+            </div>
+            <div class="calendar-form">
+                @Html.TextBox("ToDate", Model.FromDate.ToDateMonthYearFormatedDate(),
+                    new { @class = "form-control", @disabled = "disabled" })
+                <i class="icon-calendar fa fa-calendar"></i>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.ToDate, new { @class = "control-label" })
+            </div>
+            <div class="calendar-form">
+                @Html.TextBox("ToDate", Model.ToDate.ToDateMonthYearFormatedDate(),
+                    new { @class = "form-control", @disabled = "disabled" })
+                <i class="icon-calendar fa fa-calendar"></i>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.VerifierId, new { @class = "control-label" })
+            </div>
+            <div class="select-form">
+                @Html.DropDownListFor(x => x.VerifierId, new SelectList(Model.Verifiers, "OwnerId", "DisplayName"),
+                    new { @class = "form-control", @disabled = "disabled" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.ApproverId, new { @class = "control-label" })
+            </div>
+            <div class="select-form">
+                @Html.DropDownListFor(x => x.ApproverId, new SelectList(Model.Approvers, "OwnerId", "DisplayName"),
+                    new { @class = "form-control", @disabled = "disabled" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.Remark, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.TextAreaFor(model => model.Remark, new { @class = "form-control", @disabled = "disabled" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="label-form">
+                <label class="control-label">@Labels.Status</label>
+            </div>
+            <div class="input-form">
+                <strong>@Html.DisplayFor(model => model.Status.Name)</strong>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.Files, Labels.UploadFile, new { @class = "control-label" })
+            </div>
+            @if (Model.Files != null)
+            {
+                foreach (string file in Model.Files)
+                {
+                    @file<br>
+                }
+            }
+            else
+            {
+                @Labels.NoFileChoose
+            }
+        </div>
+        <div class="form-group">
+            <div class="label-form">@Labels.Details</div>
+            <div id="changeShiftDetails" class="change-shift-details">
+                @Html.Partial("_ChangeShiftDetail", Model.Details)
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="label-form"></div>
+            <button type="button" class="btn btn-default" onclick="window.history.back()">@Labels.Back</button>
+        </div>
+    </form>
+</div> *@

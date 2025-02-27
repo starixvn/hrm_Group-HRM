@@ -92,7 +92,7 @@
 
         public void DeleteFolderAttachFile(long id, string pathFolder)
         {
-            string dir = Path.Combine(hostingEnvironment.ContentRootPath, pathFolder + id);
+            string dir = Path.Combine(hostingEnvironment.ContentRootPath, RemoveFirstSlash(pathFolder) + id);
 
             if (Directory.Exists(dir))
             {

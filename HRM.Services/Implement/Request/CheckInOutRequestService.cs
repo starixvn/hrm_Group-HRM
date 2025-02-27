@@ -103,13 +103,13 @@
                         request.Remark,
                         appSettings.Domain);
 
-                Task.Run(() => emailService.SendEmail(
+                Task.Run(() => emailService.SendEmailAsync(
                     email.SendTo,
                     email.SendCC,
                     email.Subject,
                     email.Body));
 
-                Task.Run(() => letstalkService.SendNotification(email.LetsTalk, email.Subject, email.Body));
+                Task.Run(() => letstalkService.SendNotificationAsync(email.LetsTalk, email.Subject, email.Body));
             }
         }
 
@@ -138,13 +138,13 @@
                         request.Remark,
                         appSettings.Domain);
 
-                Task.Run(() => emailService.SendEmail(
+                Task.Run(() => emailService.SendEmailAsync(
                     email.SendTo,
                     email.SendCC,
                     email.Subject,
                     email.Body));
 
-                Task.Run(() => letstalkService.SendNotification(email.LetsTalk, email.Subject, email.Body));
+                Task.Run(() => letstalkService.SendNotificationAsync(email.LetsTalk, email.Subject, email.Body));
             }
         }
 
@@ -167,13 +167,13 @@
                     request.RequestTime.ToShortTime(),
                     request.Remark);
 
-                Task.Run(() => emailService.SendEmail(
+                Task.Run(() => emailService.SendEmailAsync(
                     email.SendTo,
                     email.SendCC,
                     email.Subject,
                     email.Body));
 
-                Task.Run(() => letstalkService.SendNotification(email.LetsTalk, email.Subject, email.Body));
+                Task.Run(() => letstalkService.SendNotificationAsync(email.LetsTalk, email.Subject, email.Body));
             }
         }
 
@@ -203,13 +203,13 @@
                     request.RequestTime.ToShortTime(),
                     request.Remark);
 
-                Task.Run(() => emailService.SendEmail(
+                Task.Run(() => emailService.SendEmailAsync(
                     email.SendTo,
                     email.SendCC,
                     email.Subject,
                     email.Body));
 
-                Task.Run(() => letstalkService.SendNotification(email.LetsTalk, email.Subject, email.Body));
+                Task.Run(() => letstalkService.SendNotificationAsync(email.LetsTalk, email.Subject, email.Body));
             }
         }
     }

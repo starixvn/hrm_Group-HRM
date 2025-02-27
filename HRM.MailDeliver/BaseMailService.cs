@@ -7,6 +7,7 @@
     using System.Net.Security;
     using System.Security.Cryptography.X509Certificates;
     using System.Text;
+    using System.Threading.Tasks;
     using Criteria;
     using HRM.Core;
     using HRM.Core.Models;
@@ -17,22 +18,73 @@
 
     public class BaseMailService(AppSettings appSettings, IBaseService baseService) : IBaseMailService
     {
-        public bool SendEmailAsync(MailRecord email)
+        public async Task<bool> SendEmailAsync(MailRecord email)
         {
             var isSucessfull = false;
             if (email != null && Utilities.IsValidEmail(email.MailTo))
             {
                 email.MailConfig = GetMailConfigById(appSettings.AppMailId);
                 InsertMailRecord(email);
-                isSucessfull = Send(email);
+                isSucessfull = email.MailConfig.Port == 465 ? await SendByMailKitAsync(email) : SendByMailNet(email);
             }
 
             return isSucessfull;
         }
 
-        private bool Send(MailRecord email)
+        public bool SendEmail(MailRecord email)
         {
-            var isSucessfull = email.MailConfig.Port == 465 ? SendByMailKit(email) : SendByMailNet(email);
+            var isSucessfull = false;
+            if (email != null && Utilities.IsValidEmail(email.MailTo))
+            {
+                email.MailConfig = GetMailConfigById(appSettings.AppMailId);
+                InsertMailRecord(email);
+                isSucessfull = email.MailConfig.Port == 465 ? SendByMailKit(email) : SendByMailNet(email);
+            }
+
+            return isSucessfull;
+        }
+
+
+
+        private async Task<bool> SendByMailKitAsync(MailRecord email)
+        {
+            MimeMessage message = GetMessageContent(email);
+            var isSucessfull = false;
+
+            using (var mailclient = new MailKit.Net.Smtp.SmtpClient())
+            {
+                mailclient.Connect(email.MailConfig.Server, email.MailConfig.Port, email.MailConfig.IsAuth);
+                if (email.MailConfig.IsAuth)
+                {
+                    mailclient.Authenticate(email.MailConfig.Username, email.MailConfig.Password);
+                }
+
+                try
+                {
+                    await mailclient.SendAsync(message);
+                    isSucessfull = true;
+                    UpdateMailStatus(email, isSucessfull);
+                }
+                catch (AuthenticationException ex)
+                {
+                    HandleMailError(email, ex.Message, ex.StackTrace);
+                }
+                catch (SmtpCommandException ex)
+                {
+                    HandleMailError(email, ex.Message, ex.StackTrace);
+                }
+                catch (SmtpProtocolException ex)
+                {
+                    HandleMailError(email, ex.Message, ex.StackTrace);
+                }
+                catch (Exception ex)
+                {
+                    HandleMailError(email, ex.Message, ex.StackTrace);
+                }
+
+                mailclient.Disconnect(true);
+            }
+
             return isSucessfull;
         }
 

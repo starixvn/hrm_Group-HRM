@@ -1,6 +1,7 @@
 ﻿namespace HRM.Repositories
 {
     using System.Collections.Generic;
+    using System.Threading.Tasks;
     using Fanex.Data;
     using Fanex.Data.Repository;
     using HRM.Models.Request;
@@ -9,26 +10,25 @@
 
     public interface IChangeShiftRequestRepository
     {
-        IEnumerable<DailySchedule> GetWorkingCalendarForRequest(ICriteria criteria);
+        Task<IEnumerable<DailySchedule>> GetWorkingCalendarForRequestAsync(ICriteria criteria);
 
-        IEnumerable<ChangeShiftRequest> GetByEmployee(ICriteria criteria);
+        Task<IEnumerable<ChangeShiftRequest>> GetByEmployeeAsync(ICriteria criteria);
 
-        ChangeShiftRequest GetById(ICriteria criteria);
+        Task<ChangeShiftRequest> GetByIdAsync(ICriteria criteria);
 
-        IEnumerable<ChangeShiftRequest> GetHistoryById(ICriteria criteria);
+        Task<IEnumerable<ChangeShiftRequest>> GetHistoryByIdAsync(ICriteria criteria);
     }
 
     public class ChangeShiftRequestRepository : IChangeShiftRequestRepository
     {
-        public IEnumerable<DailySchedule> GetWorkingCalendarForRequest(ICriteria criteria)
+        public async Task<IEnumerable<DailySchedule>> GetWorkingCalendarForRequestAsync(ICriteria criteria)
         {
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                return db.Query<DailySchedule, ShiftBase, DailySchedule>(
+                return await db.QueryAsync<DailySchedule, ShiftBase, DailySchedule>(
                     (dailySchedule, shift) =>
                     {
                         dailySchedule.Shift = shift;
-
                         return dailySchedule;
                     },
                     splitOn: "ShiftId",
@@ -36,11 +36,11 @@
             }
         }
 
-        public IEnumerable<ChangeShiftRequest> GetByEmployee(ICriteria criteria)
+        public async Task<IEnumerable<ChangeShiftRequest>> GetByEmployeeAsync(ICriteria criteria)
         {
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                return db.Query<ChangeShiftRequest, Requester, Requester, Requester, Requester, Requester, ChangeShiftRequest>(
+                return await db.QueryAsync<ChangeShiftRequest, Requester, Requester, Requester, Requester, Requester, ChangeShiftRequest>(
                     (request, employee, verifier, approver, hr, approvedBy) =>
                     {
                         request.Requester = employee;
@@ -48,7 +48,6 @@
                         request.Approver = approver;
                         request.HR = hr;
                         request.ApprovedBy = approvedBy;
-
                         return request;
                     },
                     splitOn: "EmpId, VerifierId, ApproverId, HRId, ApprovedById",
@@ -56,17 +55,16 @@
             }
         }
 
-        public ChangeShiftRequest GetById(ICriteria criteria)
+        public async Task<ChangeShiftRequest> GetByIdAsync(ICriteria criteria)
         {
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                return db.QueryEntity<ChangeShiftRequest, Requester, Requester, Requester, ChangeShiftRequest>(
+                return await db.QueryEntityAsync<ChangeShiftRequest, Requester, Requester, Requester, ChangeShiftRequest>(
                     (request, employee, verifier, approver) =>
                     {
                         request.Requester = employee;
                         request.Verifier = verifier;
                         request.Approver = approver;
-
                         return request;
                     },
                     splitOn: "EmpId, VerifierId, ApproverId",
@@ -74,11 +72,11 @@
             }
         }
 
-        public IEnumerable<ChangeShiftRequest> GetHistoryById(ICriteria criteria)
+        public async Task<IEnumerable<ChangeShiftRequest>> GetHistoryByIdAsync(ICriteria criteria)
         {
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                return db.Query<ChangeShiftRequest, Requester, Requester, Requester, Requester, ChangeShiftRequest>(
+                return await db.QueryAsync<ChangeShiftRequest, Requester, Requester, Requester, Requester, ChangeShiftRequest>(
                     (request, employee, verifier, approver, modifier) =>
                     {
                         request.Requester = employee;

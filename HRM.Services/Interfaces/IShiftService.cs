@@ -2,26 +2,27 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Threading.Tasks;
     using HRM.Core.Models;
     using HRM.Models;
     using Microsoft.AspNetCore.Mvc.Rendering;
 
     public interface IShiftService
     {
-        IList<Shift> GetAll(int statusId = 1, bool isShowOff = false);
+        Task<IList<Shift>> GetAllAsync(int statusId = 1, bool isShowOff = false);
 
-        IList<Shift> GetByQuery(string query, bool isShowOff);
+        Task<IList<Shift>> GetByQueryAsync(string query, bool isShowOff);
 
-        IList<SelectListItem> GetSelectList(int statusId = 1, bool isShowOff = false);
+        Task<IList<SelectListItem>> GetSelectListAsync(int statusId = 1, bool isShowOff = false);
 
-        Shift GetByDate(int employeeId, DateTime date);
+        Task<Shift> GetByDateAsync(int employeeId, DateTime date);
 
-        Shift GetById(int shiftId);
+        Task<Shift> GetByIdAsync(int shiftId);
 
-        CommandResult Create(int actorId, CreateShiftModel model);
+        Task<CommandResult> CreateAsync(int actorId, CreateShiftModel model);
 
-        CommandResult Edit(int actorId, EditShiftModel model);
+        Task<CommandResult> EditAsync(int actorId, EditShiftModel model);
 
-        CommandResult Delete(int shiftId);
+        Task<CommandResult> DeleteAsync(int shiftId);
     }
 }

@@ -57,9 +57,9 @@
             };
 
             IEnumerable<WeeklySchedule> weeklySchedules = scheduleArrangeRepository.GetWeeklySchedule(criteria);
-            IList<Shift> shifts = shiftService.GetAll(isShowOff: true);
-            MappingWeeklyDefaultShift(weeklySchedules, shifts);
-            MappingDefaultShift(weeklySchedules);
+            //IList<Shift> shifts = shiftService.GetAll(isShowOff: true);
+            //MappingWeeklyDefaultShift(weeklySchedules, shifts);
+            //MappingDefaultShift(weeklySchedules);
 
             return weeklySchedules;
         }

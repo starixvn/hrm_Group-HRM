@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
     using HRM.Core.Enums;
     using HRM.Core.Models;
     using HRM.Core.Services;
@@ -19,9 +20,9 @@
             this.baseService = baseService;
         }
 
-        public IList<Shift> GetAll(int statusId = 1, bool isShowOff = false)
+        public async Task<IList<Shift>> GetAllAsync(int statusId = 1, bool isShowOff = false)
         {
-            IList<Shift> shifts = baseService.GetData<Shift>(new GetAllShiftCriteria()).ToList();
+            var shifts = (await baseService.GetDataAsync<Shift>(new GetAllShiftCriteria())).ToList();
 
             if (statusId == (int)ShiftStatus.Active)
             {
@@ -41,9 +42,9 @@
             return shifts;
         }
 
-        public IList<Shift> GetByQuery(string query, bool isShowOff)
+        public async Task<IList<Shift>> GetByQueryAsync(string query, bool isShowOff)
         {
-            IList<Shift> shifts = GetAll(isShowOff: isShowOff);
+            var shifts = await GetAllAsync(isShowOff: isShowOff);
             IList<Shift> queriedShifts = null;
 
             if (shifts != null && shifts.Any())
@@ -54,10 +55,10 @@
             return queriedShifts ?? new List<Shift>();
         }
 
-        public IList<SelectListItem> GetSelectList(int statusId = 1, bool isShowOff = false)
+        public async Task<IList<SelectListItem>> GetSelectListAsync(int statusId = 1, bool isShowOff = false)
         {
-            IList<SelectListItem> list = new List<SelectListItem>();
-            IList<Shift> shifts = GetAll(statusId, isShowOff);
+            var list = new List<SelectListItem>();
+            var shifts = await GetAllAsync(statusId, isShowOff);
 
             if (shifts.Any())
             {
@@ -67,23 +68,23 @@
             return list;
         }
 
-        public Shift GetByDate(int employeeId, DateTime date)
+        public async Task<Shift> GetByDateAsync(int employeeId, DateTime date)
         {
             var criteria = new GetEmployeeShiftByDateCriteria
             {
                 EmployeeId = employeeId,
                 Date = date
             };
-            return baseService.GetDataEntity<Shift>(criteria);
+            return await baseService.GetDataEntityAsync<Shift>(criteria);
         }
 
-        public Shift GetById(int shiftId)
+        public async Task<Shift> GetByIdAsync(int shiftId)
         {
             var criteria = new GetShiftByIdCriteria { ShiftId = shiftId };
-            return baseService.GetDataEntity<Shift>(criteria);
+            return await baseService.GetDataEntityAsync<Shift>(criteria);
         }
 
-        public CommandResult Create(int actorId, CreateShiftModel model)
+        public async Task<CommandResult> CreateAsync(int actorId, CreateShiftModel model)
         {
             var criteria = new CreateShiftCriteria
             {
@@ -94,10 +95,10 @@
                 IsOutAfterDay = model.IsOutAfterDay,
                 ActorId = actorId
             };
-            return baseService.ExecuteNonQuery(criteria);
+            return await baseService.ExecuteNonQueryAsync(criteria);
         }
 
-        public CommandResult Edit(int actorId, EditShiftModel model)
+        public async Task<CommandResult> EditAsync(int actorId, EditShiftModel model)
         {
             var criteria = new EditShiftCriteria
             {
@@ -110,13 +111,13 @@
                 IsDisabled = model.IsDisabled,
                 ActorId = actorId
             };
-            return baseService.ExecuteNonQuery(criteria);
+            return await baseService.ExecuteNonQueryAsync(criteria);
         }
 
-        public CommandResult Delete(int shiftId)
+        public async Task<CommandResult> DeleteAsync(int shiftId)
         {
             var criteria = new DeleteShiftCriteria { ShiftId = shiftId };
-            return baseService.ExecuteNonQuery(criteria);
+            return await baseService.ExecuteNonQueryAsync(criteria);
         }
     }
 }

@@ -107,13 +107,13 @@
                     request.Remark,
                     appSettings.Domain);
 
-                Task.Run(() => emailService.SendEmail(
+                Task.Run(() => emailService.SendEmailAsync(
                     email.SendTo,
                     email.SendCC,
                     email.Subject,
                     email.Body));
 
-                Task.Run(() => letstalkService.SendNotification(email.LetsTalk, email.Subject, email.Body));
+                Task.Run(() => letstalkService.SendNotificationAsync(email.LetsTalk, email.Subject, email.Body));
             }
         }
 
@@ -141,13 +141,13 @@
                     request.Remark,
                     appSettings.Domain);
 
-                Task.Run(() => emailService.SendEmail(
+                Task.Run(() => emailService.SendEmailAsync(
                     email.SendTo,
                     email.SendCC,
                     email.Subject,
                     email.Body));
 
-                Task.Run(() => letstalkService.SendNotification(email.LetsTalk, email.Subject, email.Body));
+                Task.Run(() => letstalkService.SendNotificationAsync(email.LetsTalk, email.Subject, email.Body));
             }
         }
 
@@ -169,13 +169,13 @@
                     request.RequestTypeId == (short)RequestType.LateIn ? ("+" + request.LateInMins) : ("-" + request.EarlyOutMins),
                     request.Remark);
 
-                Task.Run(() => emailService.SendEmail(
+                Task.Run(() => emailService.SendEmailAsync(
                     email.SendTo,
                     email.SendCC,
                     email.Subject,
                     email.Body));
 
-                Task.Run(() => letstalkService.SendNotification(email.LetsTalk, email.Subject, email.Body));
+                Task.Run(() => letstalkService.SendNotificationAsync(email.LetsTalk, email.Subject, email.Body));
             }
         }
 
@@ -204,13 +204,13 @@
                     request.RequestTypeId == (byte)RequestType.LateIn ? ("+" + request.LateInMins) : ("-" + request.EarlyOutMins),
                     request.Remark);
 
-                Task.Run(() => emailService.SendEmail(
+                Task.Run(() => emailService.SendEmailAsync(
                     email.SendTo,
                     email.SendCC,
                     email.Subject,
                     email.Body));
 
-                Task.Run(() => letstalkService.SendNotification(email.LetsTalk, email.Subject, email.Body));
+                Task.Run(() => letstalkService.SendNotificationAsync(email.LetsTalk, email.Subject, email.Body));
             }
         }
     }

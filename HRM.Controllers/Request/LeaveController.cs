@@ -23,31 +23,15 @@
     using Microsoft.AspNetCore.Http;
     using Newtonsoft.Json;
 
-    public class LeaveController : BaseController
+    public class LeaveController(
+        IUserControlSession userControlSession,
+        ILeaveRequestService leaveRequestService,
+        IRequestService requestService,
+        IBaseService baseService,
+        ICommonDataService commonDataService,
+        IAttachFileService attachFileService) : BaseController(userControlSession)
     {
         private const string UploadFolderPath = "file/uploads/request/";
-        private readonly IUserControlSession userControlSession;
-        private readonly ILeaveRequestService leaveRequestService;
-        private readonly IRequestService requestService;
-        private readonly IBaseService baseService;
-        private readonly ICommonDataService commonDataService;
-        private readonly IAttachFileService attachFileService;
-
-        public LeaveController(
-            IUserControlSession userControlSession,
-            ILeaveRequestService leaveRequestService,
-            IRequestService requestService,
-            IBaseService baseService,
-            ICommonDataService commonDataService,
-            IAttachFileService attachFileService) : base(userControlSession)
-        {
-            this.userControlSession = userControlSession;
-            this.leaveRequestService = leaveRequestService;
-            this.requestService = requestService;
-            this.baseService = baseService;
-            this.commonDataService = commonDataService;
-            this.attachFileService = attachFileService;
-        }
 
         [HttpGet]
         public async Task<IActionResult> EmployeeView(int? year)

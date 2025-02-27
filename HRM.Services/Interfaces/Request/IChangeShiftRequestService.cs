@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Threading.Tasks;
     using HRM.Core.Enums;
     using HRM.Core.Models;
     using HRM.Models.Request.ChangeShift;
@@ -9,32 +10,32 @@
 
     public interface IChangeShiftRequestService
     {
-        int GetNumberOfRequest(int employeeId, DateTime fromDate, DateTime toDate);
+        Task<int> GetNumberOfRequestAsync(int employeeId, DateTime fromDate, DateTime toDate);
 
-        IEnumerable<DailySchedule> GetWorkingCalendarForRequest(GetWorkingCalendarForRequestParam param);
+        Task<IEnumerable<DailySchedule>> GetWorkingCalendarForRequestAsync(GetWorkingCalendarForRequestParam param);
 
-        IEnumerable<DateTime> GetDisableDateForMoveOffDayRequest(int employeeId, DateTime requestDate, long? requestId = null);
+        Task<IEnumerable<DateTime>> GetDisableDateForMoveOffDayRequestAsync(int employeeId, DateTime requestDate, long? requestId = null);
 
-        IEnumerable<ChangeShiftRequest> GetByEmployee(int employeeId, DateTime fromDate, DateTime toDate);
+        Task<IEnumerable<ChangeShiftRequest>> GetByEmployeeAsync(int employeeId, DateTime fromDate, DateTime toDate);
 
-        IEnumerable<ChangeShiftRequest> GetHistoryById(long requestId);
+        Task<IEnumerable<ChangeShiftRequest>> GetHistoryByIdAsync(long requestId);
 
-        ChangeShiftRequest GetById(long requestId);
+        Task<ChangeShiftRequest> GetByIdAsync(long requestId);
 
-        IEnumerable<ChangeShiftDetail> GetDetailById(long requestId);
+        Task<IEnumerable<ChangeShiftDetail>> GetDetailByIdAsync(long requestId);
 
-        CommandResult Create(int actorId, CreateChangeShift model);
+        Task<CommandResult> CreateAsync(int actorId, CreateChangeShift model);
 
-        CommandResult Edit(int actorId, EditChangeShift model);
+        Task<CommandResult> EditAsync(int actorId, EditChangeShift model);
 
-        CommandResult Delete(int actorId, long requestId);
+        Task<CommandResult> DeleteAsync(int actorId, long requestId);
 
-        void SendMailAndSendLetstalkCreateRequest(long requestId);
+        Task SendMailAndSendLetstalkCreateRequestAsync(long requestId);
 
-        void SendMailEditRequest(long requestId);
+        Task SendMailEditRequestAsync(long requestId);
 
-        void SendMailDeleteRequest(long requestId);
+        Task SendMailDeleteRequestAsync(long requestId);
 
-        void SendMailProcessRequest(long requestId, EmployeeSession actor, RequestCommand command);
+        Task SendMailProcessRequestAsync(long requestId, EmployeeSession actor, RequestCommand command);
     }
 }

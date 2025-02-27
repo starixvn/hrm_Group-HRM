@@ -274,9 +274,9 @@
                     break;
 
                 case RequestType.ChangeShift:
-                    changeShiftRequestService.SendMailProcessRequest(param.RequestId, actor, command);
+                    changeShiftRequestService.SendMailProcessRequestAsync(param.RequestId, actor, command);
                     break;
-
+                    
                 case RequestType.Leave:
                     leaveRequestService.SendMailProcessRequest(param.RequestId, actor, command);
                     break;
@@ -304,7 +304,7 @@
                         break;
 
                     case (int)RequestType.ChangeShift:
-                        changeShiftRequestService.SendMailProcessRequest(request.RequestId, actor, command);
+                        changeShiftRequestService.SendMailProcessRequestAsync(request.RequestId, actor, command);
                         break;
 
                     case (int)RequestType.Leave:

@@ -115,13 +115,13 @@
                 foreach (var list in emails)
                 {
                     var mailTo = string.Join(";", list);
-                    emailService.SendEmail(mailTo, string.Empty, subject, content);
+                    emailService.SendEmailAsync(mailTo, string.Empty, subject, content);
                 }
 
                 foreach (var letstalk in letstalks)
                 {
                     var letstalkJoin = string.Join(";", letstalk);
-                    Task.Run(() => letstalkService.SendNotification(letstalkJoin, subject, content));
+                    Task.Run(() => letstalkService.SendNotificationAsync(letstalkJoin, subject, content));
                 }
             }
         }

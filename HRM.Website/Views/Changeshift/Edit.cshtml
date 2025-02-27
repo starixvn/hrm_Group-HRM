@@ -1,0 +1,142 @@
+﻿@using HRM.Core
+@using HRM.Core.Enums
+@using HRM.Resources
+@using HRM.ViewModels.Request
+@model ChangeShiftViewModel
+@{
+    ViewBag.Title = Labels.Edit;
+    var isTopManager = (bool)ViewBag.IsTopManager;
+    var today = DateTime.Today;
+}
+@section css{
+    <link href="~/dist/styles/changeshift.create.css" rel="stylesheet" />
+}
+@section js{
+    <script src="~/dist/js/changeshift.edit.js"></script>
+}
+@section Breadcrumb {
+    <a class="step">@Labels.Personal</a>
+    <a class="step" href="@Url.Action("employeeview", "changeshift", new { })">@Labels.MyChangeShiftRequest</a>
+    <a class="step">@ViewBag.Title</a>
+}
+
+<h2 class="page-title">@Labels.Edit</h2>
+<div class="card">
+    @using (Html.BeginForm("Edit", "ChangeShift", FormMethod.Post, new { @class = "form-horizontal" }))
+    {
+        @Html.ValidationSummary()
+        <div class="validation-summary-errors" style="display: none;"></div>
+        <input type="checkbox" id="IsTopManager" hidden @(isTopManager ? "checked" : string.Empty) />
+        @Html.HiddenFor(model => model.EmployeeId)
+        @Html.HiddenFor(model => model.Employee)
+        @Html.HiddenFor(model => model.RequestId)
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.Employee, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                <strong>@Html.DisplayFor(model => model.Employee)</strong>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.TypeId, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                <select class="ddlWorkType form-control" name="TypeId" id="TypeId">
+                    <!option value="@((byte)ChangeShiftType.ChangeShift)"  @((byte)ViewBag.TypeId == (byte)ChangeShiftType.ChangeShift ? "selected" : "")>@Labels.ChangeShift</!option>
+                    <!option value="@((byte)ChangeShiftType.MoveOffDay)" @((byte)ViewBag.TypeId == (byte)ChangeShiftType.MoveOffDay ? "selected" : "")>@Labels.MoveOffDayToAnotherWeek</!option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.FromDate, new { @class = "control-label" })
+            </div>
+            <div class="calendar-form">
+                @Html.TextBox("FromDate", Model.FromDate.ToDateMonthYearFormatedDate(),
+                    new {
+                        @class = "datepicker form-control",
+                        mindate = today.FirstDayOfMonth().AddMonths(-1).ToString("yyyy/MM/dd"),
+                        maxdate = today.FirstDayOfMonth().AddMonths(2).AddDays(-1).ToString("yyyy/MM/dd")
+                    })
+                <i class="icon-calendar fa fa-calendar"></i>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.ToDate, new { @class = "control-label" })
+            </div>
+            <div class="calendar-form">
+                @Html.TextBox("ToDate", Model.ToDate.ToDateMonthYearFormatedDate(),
+                    new {
+                        @class = "datepicker form-control",
+                        mindate = today.FirstDayOfMonth().AddMonths(-1).ToString("yyyy/MM/dd"),
+                        maxdate = today.FirstDayOfMonth().AddMonths(2).AddDays(-1).ToString("yyyy/MM/dd")
+                    })
+                <i class="icon-calendar fa fa-calendar"></i>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.VerifierId, new { @class = "control-label" })
+            </div>
+            <div class="select-form">
+                @Html.DropDownListFor(model => model.VerifierId, new SelectList(Model.Verifiers, "OwnerId", "DisplayName"), new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.ApproverId, new { @class = "control-label" })
+            </div>
+            <div class="select-form">
+                @Html.DropDownListFor(model => model.ApproverId, new SelectList(Model.Approvers, "OwnerId", "DisplayName"), new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.Remark, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.TextAreaFor(model => model.Remark, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.Files, Labels.UploadFile, new { @class = "control-label" })
+            </div>
+            <div class="left input--m" id="upload">
+                <input type="file" id="file" name="file" size="55" multiple />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="label-form">
+            </div>
+            <div class="input-form" id="@Model.RequestId">
+                @if (Model.Files != null)
+                {
+                    foreach (string file in Model.Files)
+                    {
+                        <a href="javascript:;" class="delete-file" id="@file" data-id="@file">
+                            <i class=" fa fa-close">@file</i><br>
+                        </a>
+                    }
+                }
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="label-form">@Labels.Details</div>
+            <div id="changeShiftDetails" class="change-shift-details">
+                @Html.Partial("_ChangeShiftDetail", Model.Details)
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="label-form"></div>
+            <div>
+                <button type="button" class="btn btn-primary" id="btnSubmit">@Labels.Update</button>
+                <button type="button" class="btn btn-default" onclick="window.history.back()">@Labels.Back</button>
+            </div>
+        </div>
+    }
+</div>

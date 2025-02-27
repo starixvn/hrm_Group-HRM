@@ -172,7 +172,7 @@ $(document).ready(function () {
             var files = document.getElementById('file').files;
             var fd = new FormData();
             for (var i = 0; i < files.length; i++) {
-                fd.append('files[' + i + ']', files[i]);
+                fd.append('files', files[i]);
             }
             fd.append('model', JSON.stringify(model));
             fd.append('details', JSON.stringify(details));

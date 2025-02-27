@@ -18,20 +18,39 @@
     using HRM.Resources;
     using Microsoft.AspNetCore.Hosting;
 
-    public class ChangeShiftRequestService(
-        AppSettings appSettings,
-        IWebHostEnvironment env,
-        IChangeShiftRequestRepository changeShiftRepository,
-        IBaseService baseService,
-        IEmailService emailService,
-        IRequestMailService requestMailService,
-        ILetstalkService letstalkService) : IChangeShiftRequestService
+    public class ChangeShiftRequestService : IChangeShiftRequestService
     {
         private const string EmailTemplatePathForRequest = "EmailTemplates/ChangeShift.Request.txt";
         private const string EmailTemplatePathForCancel = "EmailTemplates/ChangeShift.Cancel.txt";
         private const string EmailTemplatePathForApproval = "EmailTemplates/ChangeShift.Approval.txt";
 
-        public int GetNumberOfRequest(int employeeId, DateTime fromDate, DateTime toDate)
+        private readonly AppSettings appSettings;
+        private readonly IWebHostEnvironment env;
+        private readonly IChangeShiftRequestRepository changeShiftRepository;
+        private readonly IBaseService baseService;
+        private readonly IEmailService emailService;
+        private readonly IRequestMailService requestMailService;
+        private readonly ILetstalkService letstalkService;
+
+        public ChangeShiftRequestService(
+            AppSettings appSettings,
+            IWebHostEnvironment env,
+            IChangeShiftRequestRepository changeShiftRepository,
+            IBaseService baseService,
+            IEmailService emailService,
+            IRequestMailService requestMailService,
+            ILetstalkService letstalkService)
+        {
+            this.appSettings = appSettings;
+            this.env = env;
+            this.changeShiftRepository = changeShiftRepository;
+            this.baseService = baseService;
+            this.emailService = emailService;
+            this.requestMailService = requestMailService;
+            this.letstalkService = letstalkService;
+        }
+
+        public async Task<int> GetNumberOfRequestAsync(int employeeId, DateTime fromDate, DateTime toDate)
         {
             var criteria = new GetNumberOfRequestCriteria
             {
@@ -39,10 +58,10 @@
                 FromDate = fromDate,
                 ToDate = toDate
             };
-            return baseService.GetDataEntity<int>(criteria);
+            return await baseService.GetDataEntityAsync<int>(criteria);
         }
 
-        public IEnumerable<DailySchedule> GetWorkingCalendarForRequest(GetWorkingCalendarForRequestParam param)
+        public async Task<IEnumerable<DailySchedule>> GetWorkingCalendarForRequestAsync(GetWorkingCalendarForRequestParam param)
         {
             var criteria = new GetWorkingCalendarForRequestCriteria
             {
@@ -52,10 +71,10 @@
                 TypeId = param.TypeId,
                 RequestId = param.RequestId
             };
-            return changeShiftRepository.GetWorkingCalendarForRequest(criteria);
+            return await changeShiftRepository.GetWorkingCalendarForRequestAsync(criteria);
         }
 
-        public IEnumerable<DateTime> GetDisableDateForMoveOffDayRequest(int employeeId, DateTime requestDate, long? requestId = null)
+        public async Task<IEnumerable<DateTime>> GetDisableDateForMoveOffDayRequestAsync(int employeeId, DateTime requestDate, long? requestId = null)
         {
             var fromDate = new DateTimeOffset(requestDate.Year, 1, 1, 0, 0, 0, TimeSpan.Zero).Date;
             var criteria = new GetDisableDateForMoveOffDayRequestCriteria
@@ -65,7 +84,7 @@
                 ToDate = fromDate.AddYears(1).AddDays(-1),
                 RequestId = requestId
             };
-            var dates = baseService.GetData<DateTime>(criteria).ToList();
+            var dates = (await baseService.GetDataAsync<DateTime>(criteria)).ToList();
             for (var day = requestDate.FirstDayOfWeek().Date; day.Date <= requestDate.LastDayOfWeek().Date; day = day.AddDays(1))
             {
                 if (!dates.Any(x => x.Date == day.Date))
@@ -77,7 +96,7 @@
             return dates;
         }
 
-        public IEnumerable<ChangeShiftRequest> GetByEmployee(int employeeId, DateTime fromDate, DateTime toDate)
+        public async Task<IEnumerable<ChangeShiftRequest>> GetByEmployeeAsync(int employeeId, DateTime fromDate, DateTime toDate)
         {
             var criteria = new GetChangeShiftRequestByEmployeeCriteria
             {
@@ -85,34 +104,34 @@
                 FromDate = fromDate,
                 ToDate = toDate
             };
-            return changeShiftRepository.GetByEmployee(criteria);
+            return await changeShiftRepository.GetByEmployeeAsync(criteria);
         }
 
-        public IEnumerable<ChangeShiftRequest> GetHistoryById(long requestId)
+        public async Task<IEnumerable<ChangeShiftRequest>> GetHistoryByIdAsync(long requestId)
         {
             var criteria = new GetChangeShiftRequestHistoryByIdCriteria
             {
                 RequestId = requestId
             };
-            return changeShiftRepository.GetHistoryById(criteria);
+            return await changeShiftRepository.GetHistoryByIdAsync(criteria);
         }
 
-        public ChangeShiftRequest GetById(long requestId)
+        public async Task<ChangeShiftRequest> GetByIdAsync(long requestId)
         {
             var criteria = new GetChangeShiftRequestByIdCriteria
             {
                 RequestId = requestId
             };
-            return changeShiftRepository.GetById(criteria);
+            return await changeShiftRepository.GetByIdAsync(criteria);
         }
 
-        public IEnumerable<ChangeShiftDetail> GetDetailById(long requestId)
+        public async Task<IEnumerable<ChangeShiftDetail>> GetDetailByIdAsync(long requestId)
         {
             var criteria = new GetChangeShiftRequestDetailByIdCriteria
             {
                 RequestId = requestId
             };
-            var details = baseService.GetData<ChangeShiftDetail>(criteria);
+            var details = await baseService.GetDataAsync<ChangeShiftDetail>(criteria);
             foreach (var detail in details)
             {
                 if (detail.FromShiftId == Constants.OffDayShiftId)
@@ -129,7 +148,7 @@
             return details;
         }
 
-        public CommandResult Create(int actorId, CreateChangeShift model)
+        public async Task<CommandResult> CreateAsync(int actorId, CreateChangeShift model)
         {
             var criteria = new CreateChangeShiftRequestCriteria
             {
@@ -143,13 +162,13 @@
                 DetailXml = model.Details.ToXML().ToString(),
                 ActorId = actorId
             };
-            var commandResult = baseService.ExecuteNonQuery(criteria);
+            var commandResult = await baseService.ExecuteNonQueryAsync(criteria);
             commandResult.OutputId = criteria.RequestId;
 
             return commandResult;
         }
 
-        public CommandResult Edit(int actorId, EditChangeShift model)
+        public async Task<CommandResult> EditAsync(int actorId, EditChangeShift model)
         {
             var criteria = new EditChangeShiftRequestCriteria
             {
@@ -164,22 +183,22 @@
                 DetailXml = model.Details.ToXML().ToString(),
                 ActorId = actorId
             };
-            return baseService.ExecuteNonQuery(criteria);
+            return await baseService.ExecuteNonQueryAsync(criteria);
         }
 
-        public CommandResult Delete(int actorId, long requestId)
+        public async Task<CommandResult> DeleteAsync(int actorId, long requestId)
         {
             var criteria = new DeleteChangeShiftRequestCriteria
             {
                 RequestId = requestId,
                 ActorId = actorId
             };
-            return baseService.ExecuteNonQuery(criteria);
+            return await baseService.ExecuteNonQueryAsync(criteria);
         }
 
-        public void SendMailAndSendLetstalkCreateRequest(long requestId)
+        public async Task SendMailAndSendLetstalkCreateRequestAsync(long requestId)
         {
-            var request = GetById(requestId);
+            var request = await GetByIdAsync(requestId);
             if (request != null)
             {
                 var emailTemplatePath = Path.Combine(env.ContentRootPath, EmailTemplatePathForRequest);
@@ -200,19 +219,16 @@
                     request.Remark,
                     appSettings.Domain);
 
-                Task.Run(() => emailService.SendEmail(
-                    email.SendTo,
-                    email.SendCC,
-                    email.Subject,
-                    email.Body));
-
-                Task.Run(() => letstalkService.SendNotification(email.LetsTalk, email.Subject, email.Body));
+                 await Task.WhenAll(
+                    emailService.SendEmailAsync(email.SendTo, email.SendCC, email.Subject, email.Body),
+                    letstalkService.SendNotificationAsync(email.LetsTalk, email.Subject, email.Body)
+                );
             }
         }
 
-        public void SendMailEditRequest(long requestId)
+        public async Task SendMailEditRequestAsync(long requestId)
         {
-            var request = GetById(requestId);
+            var request = await GetByIdAsync(requestId);
             if (request != null)
             {
                 var emailTemplatePath = Path.Combine(env.ContentRootPath, EmailTemplatePathForRequest);
@@ -233,19 +249,16 @@
                     request.Remark,
                     appSettings.Domain);
 
-                Task.Run(() => emailService.SendEmail(
-                    email.SendTo,
-                    email.SendCC,
-                    email.Subject,
-                    email.Body));
-
-                Task.Run(() => letstalkService.SendNotification(email.LetsTalk, email.Subject, email.Body));
+                await Task.WhenAll(
+                    emailService.SendEmailAsync(email.SendTo, email.SendCC, email.Subject, email.Body),
+                    letstalkService.SendNotificationAsync(email.LetsTalk, email.Subject, email.Body)
+                );
             }
         }
 
-        public void SendMailDeleteRequest(long requestId)
+        public async Task SendMailDeleteRequestAsync(long requestId)
         {
-            var request = GetById(requestId);
+            var request = await GetByIdAsync(requestId);
             if (request != null)
             {
                 var emailTemplatePath = Path.Combine(env.ContentRootPath, EmailTemplatePathForCancel);
@@ -261,19 +274,16 @@
                     forDate,
                     request.Remark);
 
-                Task.Run(() => emailService.SendEmail(
-                    email.SendTo,
-                    email.SendCC,
-                    email.Subject,
-                    email.Body));
-
-                Task.Run(() => letstalkService.SendNotification(email.LetsTalk, email.Subject, email.Body));
+                await Task.WhenAll(
+                    emailService.SendEmailAsync(email.SendTo, email.SendCC, email.Subject, email.Body),
+                    letstalkService.SendNotificationAsync(email.LetsTalk, email.Subject, email.Body)
+                );
             }
         }
 
-        public void SendMailProcessRequest(long requestId, EmployeeSession actor, RequestCommand command)
+        public async Task SendMailProcessRequestAsync(long requestId, EmployeeSession actor, RequestCommand command)
         {
-            var request = GetById(requestId);
+            var request = await GetByIdAsync(requestId);
             if (request != null)
             {
                 var emailTemplatePath = Path.Combine(env.ContentRootPath, EmailTemplatePathForApproval);
@@ -294,13 +304,10 @@
                     forDate,
                     request.Remark);
 
-                Task.Run(() => emailService.SendEmail(
-                    email.SendTo,
-                    email.SendCC,
-                    email.Subject,
-                    email.Body));
-
-                Task.Run(() => letstalkService.SendNotification(email.LetsTalk, email.Subject, email.Body));
+                await Task.WhenAll(
+                    emailService.SendEmailAsync(email.SendTo, email.SendCC, email.Subject, email.Body),
+                    letstalkService.SendNotificationAsync(email.LetsTalk, email.Subject, email.Body)
+                    );
             }
         }
     }

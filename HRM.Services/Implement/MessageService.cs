@@ -141,7 +141,7 @@
         {
             var body = string.Format(emailTemplatePath, subject, content);
 
-            emailService.SendEmail(
+            emailService.SendEmailAsync(
                 sendToEmail,
                 string.Empty,
                 Resources.Messages.MessageSubject + " " + subject,
