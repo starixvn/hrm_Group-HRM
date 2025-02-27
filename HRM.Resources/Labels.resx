@@ -1998,4 +1998,7 @@
   <data name="ExpertGrade" xml:space="preserve">
     <value>Expert Grade</value>
   </data>
+  <data name="ManagementGrade" xml:space="preserve">
+    <value>Management Grade</value>
+  </data>
 </root>

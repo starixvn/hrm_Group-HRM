@@ -36,10 +36,10 @@ export default class DisciplineManager extends Component {
             getSupervisors(query, this.roleId, excludeIds).then(response => {
                 const employeeOptions = response.data.map(item => {
                     return {
-                        id: item.Id,
-                        nickname: item.NickName,
-                        fullName: item.FullName,
-                        value: item.DisplayName
+                        id: item.id,
+                        nickname: item.nickName,
+                        fullName: item.fullName,
+                        value: item.displayName
                     };
                 });
 

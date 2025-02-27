@@ -43,10 +43,10 @@ export default class ShiftManager extends Component {
             }).then(response => {
                 const employeeOptions = response.data.map(item => {
                     return {
-                        id: item.Id,
-                        nickname: item.NickName,
-                        fullName: item.FullName,
-                        value: item.DisplayName
+                        id: item.id,
+                        nickname: item.nickName,
+                        fullName: item.fullName,
+                        value: item.displayName
                     };
                 });
 

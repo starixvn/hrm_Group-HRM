@@ -67,7 +67,7 @@
             </li>
             <li class="list-group-item form-group">
                 <div class="label-form">
-                    @Html.LabelFor(model => model.EmployeeCard, new { @class = "control-label" })
+                    @Html.LabelFor(model => model.EmployeeCard, Labels.EmployeeCard, new { @class = "control-label" })
                 </div>
                 <div class="input-form">
                     @Html.TextBoxFor(model => model.EmployeeCard, new { @class = "form-control", maxlength = "10" })
@@ -75,7 +75,7 @@
             </li>
             <li class="list-group-item form-group">
                 <div class="label-form">
-                    @Html.LabelFor(model => model.DomainUsername, new { @class = "control-label" })
+                    @Html.LabelFor(model => model.DomainUsername, Labels.DomainUsername, new { @class = "control-label" })
                 </div>
                 <div class="input-form">
                     @Html.TextBoxFor(model => model.DomainUsername, new { @class = "form-control" })
@@ -99,7 +99,7 @@
             </li>
             <li class="list-group-item form-group">
                 <div class="label-form">
-                    @Html.LabelFor(model => model.DateOfBirth, new { @class = "control-label" })
+                    @Html.LabelFor(model => model.DateOfBirth, Labels.DateOfBirth, new { @class = "control-label" })
                 </div>
                 <div class="input-form">
                     <div id="DOBPicker"></div>
@@ -108,7 +108,7 @@
             </li>
             <li class="list-group-item form-group">
                 <div class="label-form">
-                    @Html.LabelFor(model => model.PlaceOfBirth, new { @class = "control-label" })
+                    @Html.LabelFor(model => model.PlaceOfBirth, Labels.PlaceOfBirth, new { @class = "control-label" })
                 </div>
                 <div class="input-form">
                     @Html.TextBoxFor(model => model.PlaceOfBirth, new { @class = "form-control" })
@@ -200,7 +200,7 @@
             </li>
             <li class="list-group-item form-group">
                 <div class="label-form">
-                    @Html.LabelFor(model => model.PassportNo, new { @class = "control-label" })
+                    @Html.LabelFor(model => model.PassportNo, Labels.PassportNo, new { @class = "control-label" })
                 </div>
                 <div class="input-form">
                     @Html.TextBoxFor(model => model.PassportNo, new { @class = "form-control" })
@@ -208,7 +208,7 @@
             </li>
             <li class="list-group-item form-group">
                 <div class="label-form">
-                    @Html.LabelFor(model => model.PassportExp, new { @class = "control-label" })
+                    @Html.LabelFor(model => model.PassportExp, Labels.PassportExp, new { @class = "control-label" })
                 </div>
                 <div class="calendar-form">
                     @{
@@ -308,7 +308,7 @@
             </li>
             <li class="list-group-item form-group">
                 <div class="label-form">
-                    @Html.LabelFor(model => model.CurrentAddress, new { @class = "control-label" })
+                    @Html.LabelFor(model => model.CurrentAddress, Labels.CurrentAddress, new { @class = "control-label" })
                 </div>
                 <div class="input-form">
                     @Html.TextAreaFor(model => model.CurrentAddress, new { @class = "form-control" })
@@ -355,7 +355,7 @@
 			</li>
 			<li class="list-group-item form-group">
 				<div class="label-form">
-					@Html.LabelFor(model => model.TeamDate, new { @class = "control-label" })
+					@Html.LabelFor(model => model.TeamDate, Labels.TeamDate, new { @class = "control-label" })
 				</div>
 				<div class="calendar-form">
 					@{
@@ -367,7 +367,7 @@
 			</li>
 			<li class="list-group-item form-group">
 				<div class="label-form">
-					@Html.LabelFor(model => model.JobTitleId, new { @class = "control-label" })
+					@Html.LabelFor(model => model.JobTitleId, Labels.JobTitle, new { @class = "control-label" })
 				</div>
 				<div class="select-form">
 					@Html.DropDownListFor(model => model.JobTitleId, new SelectList(ViewBag.JobTitles, "Id", "Name"), "--Select a Job Title--", new { @class = "form-control" })
@@ -375,7 +375,7 @@
 			</li>
 			<li class="list-group-item form-group">
 				<div class="label-form">
-					@Html.LabelFor(model => model.JobLevelId, new { @class = "control-label" })
+                    @Html.LabelFor(model => model.JobLevelId, Labels.JobLevel, new { @class = "control-label" })
 				</div>
 				<div class="select-form">
 					@Html.DropDownListFor(model => model.JobLevelId, new SelectList(ViewBag.JobLevel, "Id", "Name"), "--Select a Job Level--", new { @class = "form-control" })
@@ -383,15 +383,15 @@
 			</li>
 			<li class="list-group-item form-group">
 				<div class="label-form">
-					@Html.LabelFor(model => model.ExpertGradeId, new { @class = "control-label" })
+					@Html.LabelFor(model => model.ManagementLevelId, Labels.ManagementGrade, new { @class = "control-label" })
 				</div>
 				<div class="select-form">
-					@Html.DropDownListFor(model => model.ExpertGradeId, new SelectList(ViewBag.Grades, "Id", "Name"), "--Select an Expert Grade--", new { @class = "form-control" })
+                    @Html.DropDownListFor(model => model.ManagementLevelId, new SelectList(ViewBag.Grades, "Id", "Name"), "--Select an Management Grade--", new { @class = "form-control" })
 				</div>
 			</li>
 			<li class="list-group-item form-group">
 				<div class="label-form">
-					@Html.LabelFor(model => model.PromotionDate, new { @class = "control-label" })
+					@Html.LabelFor(model => model.PromotionDate, Labels.PromotionDate, new { @class = "control-label" })
 				</div>
 				<div class="calendar-form">
 					@{
@@ -427,7 +427,7 @@
 			</li>
 			<li class="list-group-item form-group">
 				<div class="label-form">
-					@Html.LabelFor(model => model.ConfirmedDate, new { @class = "control-label" })
+					@Html.LabelFor(model => model.ConfirmedDate, Labels.ConfirmedDate, new { @class = "control-label" })
 				</div>
 				<div class="calendar-form">
 					@{
@@ -439,7 +439,7 @@
 			</li>
 			<li class="list-group-item form-group">
 				<div class="label-form">
-					@Html.LabelFor(model => model.ResignedDate, new { @class = "control-label" })
+					@Html.LabelFor(model => model.ResignedDate, Labels.ResignedDate, new { @class = "control-label" })
 				</div>
 				<div class="calendar-form">
 					@{

@@ -44,11 +44,12 @@ export default class Supervisor extends Component {
             }).then(response => {
                 const employeeOptions = response.data.map(item => {
                     return {
-                        id: item.Id,
-                        nickname: item.NickName,
-                        fullName: item.FullName,
-                        teamCode: item.TeamCode !== null ? item.Team.Code : '',
-                        value: item.DisplayName
+                        key: item.id,
+                        id: item.id,
+                        nickname: item.nickName,
+                        fullName: item.fullName,
+                        teamCode: item.teamCode !== null ? item.team.code : '',
+                        value: item.displayName
                     };
                 });
 

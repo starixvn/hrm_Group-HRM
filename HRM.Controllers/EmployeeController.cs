@@ -22,6 +22,16 @@ using HRM.ViewModels.Employee;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Linq;
+using Microsoft.AspNetCore.Hosting;
+using System.IO;
+using HRM.Core.Models;
+using GO.UserControl.Client.Core.Models.Role;
+using HRM.Models.Group;
+using Microsoft.AspNetCore.Http;
+using SixLabors.ImageSharp.Processing.Processors;
+using System.Drawing;
 
 namespace HRM.Controllers;
 
@@ -100,7 +110,7 @@ public class EmployeeController(IUserControlSession userControlSession,
     {
         if (ModelState.IsValid)
         {
-            EditEmployeeParam param = MappingEditEmployeeParam(model);
+            var param = MappingEditEmployeeParam(model);
             var commandResult = employeeService.Edit(EmployeeSession.EmpId, param);
             if (commandResult.IsSuccessful)
             {
@@ -114,7 +124,7 @@ public class EmployeeController(IUserControlSession userControlSession,
         }
 
         model.Coutries = commonDataService.GetAllCountry();
-        IList<SupervisorNameModel> supervisors = GetSupervisors(model.Id);
+        var supervisors = GetSupervisors(model.Id);
         model.Verifier = GetVerifiers(supervisors);
         model.Approver = GetApprovers(supervisors);
         model.Disciplinarian = GetDisciplineSupervisors(supervisors);
@@ -131,20 +141,25 @@ public class EmployeeController(IUserControlSession userControlSession,
     [HrmPermission(Policy.Host, FunctionKey.EmployeeManagement)]
     public ActionResult Delete(DeleteEmployeeParam param)
     {
-        CommandResult commandResult = employeeService.Delete(EmployeeSession.EmpId, param);
-        if (commandResult.IsSuccessful)
-        {
-            var result = userService.Delete(param.UserId);
-            return Json(result);
-        }
+        var commandResult = employeeService.Delete(EmployeeSession.EmpId, param);
+        if (!commandResult.IsSuccessful) return Json(commandResult);
+        var result = userService.Delete(param.UserId);
+        return Json(result);
 
-        return Json(commandResult);
     }
 
     public JsonResult GenerateEmployeeCode()
     {
         var newCode = employeeService.GenerateEmployeeCode();
         return Json(newCode);
+    }
+
+    [HttpPost]
+    public CustomJsonResult EditEmployeeSupervisor(int employeeId, short roleId, IEnumerable<EditTeamSupervisor> supervisors)
+    {
+        var commandResult = employeeService.EditEmployeeSupervisor(EmployeeSession.EmpId, employeeId, roleId, supervisors);
+
+        return new CustomJsonResult(commandResult);
     }
 
     [HrmPermission(Policy.Host, FunctionKey.EmployeeManagement)]
@@ -189,6 +204,12 @@ public class EmployeeController(IUserControlSession userControlSession,
         return Json(employees);
     }
 
+    public CustomJsonResult GetEmployeeSupervisorByRoleId(int employeeId, short roleId)
+    {
+        IEnumerable<SupervisorModel> supervisors = employeeService.GetEmployeeSupervisorByRoleId(employeeId, roleId);
+        return new CustomJsonResult(supervisors);
+    }
+
     [AllowAnonymous]
     public FileResult Avatar(string id)
     {
@@ -199,6 +220,96 @@ public class EmployeeController(IUserControlSession userControlSession,
 
         var defaultImgPath = Path.Combine(env.ContentRootPath, "avatars/avatar.jpg");
         return PhysicalFile(defaultImgPath, "image/jpeg");
+    }
+
+    [HttpGet]
+    public ActionResult ManageSupervisor(int id, short roleId)
+    {
+        ViewBag.EmployeeId = id;
+        ViewBag.RoleId = roleId;
+        return View();
+    }
+
+    public JsonResult GetEmployees(
+        string query,
+        string teamIds = "",
+        bool? enable = null,
+        bool? isDelete = null,
+        int? titleId = null,
+        bool? isLocal = null)
+    {
+        var criteria = new GetAllEmployeeCriteria
+        {
+            Query = query,
+            TeamIds = teamIds,
+            EnableUser = enable,
+            IsDeleteUser = isDelete,
+            TitleId = titleId,
+            IsLocalUser = isLocal
+        };
+        var employees = employeeService.GetEmployees(criteria);
+
+        return Json(employees);
+    }
+
+    [HrmPermission(Policy.Read, FunctionKey.EmployeeManagement)]
+    public ActionResult DisciplineManager(int id)
+    {
+        ViewBag.EmployeeId = id;
+        ViewBag.RoleId = (short)RoleSystem.DisciplineManager;
+        return View();
+    }
+
+    public CustomJsonResult GetDisciplineManagerByEmployeeId(int employeeId)
+    {
+        var supervisors = employeeService.GetDisciplineSettingByEmployeeId(employeeId);
+        return new CustomJsonResult(supervisors);
+    }
+
+    [HttpGet]
+    public ActionResult ShiftManager(int id)
+    {
+        ViewBag.EmployeeId = id;
+        ViewBag.RoleId = (short)RoleSystem.ShiftManager;
+
+        return View();
+    }
+
+    [HttpPost]
+    [HrmPermission(Policy.Host, FunctionKey.EmployeeManagement)]
+    public JsonResult UploadAvatar(string code, IFormFile file)
+    {
+        if (file == null || file.Length <= 0) return Json(null);
+        using var memoryStream = new MemoryStream();
+        file.CopyTo(memoryStream);
+
+        memoryStream.Position = 0;
+
+        using var image = Image.FromStream(memoryStream);
+        var avatarsFolderPath = Path.Combine(env.WebRootPath, "avatars");
+        if (!Directory.Exists(avatarsFolderPath))
+        {
+            Directory.CreateDirectory(avatarsFolderPath);
+        }
+
+        var filePath = Path.Combine(avatarsFolderPath, $"{code}.jpg");
+
+        image.Save(filePath);
+
+        return Json(true);
+    }
+
+    public CustomJsonResult GetShiftManagerByEmployeeId(int employeeId)
+    {
+        IEnumerable<SupervisorModel> supervisors = employeeService.GetEmployeeSupervisorByRoleId(employeeId, (short)RoleSystem.ShiftManager);
+        var data = supervisors
+            .Select(x => new Supervisor
+            {
+                OwnerId = x.OwnerId, 
+                Nickname = x.NickName, 
+                FullName = x.FullName
+            });
+        return new CustomJsonResult(data);
     }
 
     private IList<SupervisorNameModel> GetSupervisors(int empId)
@@ -227,7 +338,7 @@ public class EmployeeController(IUserControlSession userControlSession,
             Email = model.Email,
             JobTitleId = model.JobTitleId,
             JobLevelId = model.JobLevelId,
-            ExpertGradeId = model.ExpertGradeId,
+            ManagementLevelId = model.ManagementLevelId,
             Enabled = model.Enabled,
             Phone = model.Phone,
             Gender = model.Gender,
