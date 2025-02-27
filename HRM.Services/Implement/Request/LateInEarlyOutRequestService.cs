@@ -27,41 +27,41 @@
         private const string EmailTemplatePathForCancel = "EmailTemplates/LateInEarlyOut.Cancel.txt";
         private const string EmailTemplatePathForApproval = "EmailTemplates/LateInEarlyOut.Approval.txt";
 
-        public IList<LateInEarlyOutRequest> GetByDate(GetLateInEarlyOutRequestByDateCriteria criteria)
+        public async Task<IList<LateInEarlyOutRequest>> GetByDateAsync(GetLateInEarlyOutRequestByDateCriteria criteria)
         {
             IList<LateInEarlyOutRequest> requests = null;
             if (criteria != null && criteria.IsValid())
             {
-                requests = lateInEarlyOutRequestRepository.GetByDate(criteria);
+                requests = await lateInEarlyOutRequestRepository.GetByDateAsync(criteria);
             }
 
             return requests ?? new List<LateInEarlyOutRequest>();
         }
 
-        public LateInEarlyOutRequest GetById(long requestId)
+        public async Task<LateInEarlyOutRequest> GetByIdAsync(long requestId)
         {
             var criteria = new GetLateInEarlyOutRequestByIdCriteria
             {
                 RequestId = requestId
             };
-            return lateInEarlyOutRequestRepository.GetById(criteria);
+            return await lateInEarlyOutRequestRepository.GetByIdAsync(criteria);
         }
 
-        public IList<LateInEarlyOutRequest> GetHistoryById(long requestId)
+        public async Task<IList<LateInEarlyOutRequest>> GetHistoryByIdAsync(long requestId)
         {
             var criteria = new GetLateInEarlyOutRequestHistoryByIdCriteria
             {
                 RequestId = requestId
             };
-            return lateInEarlyOutRequestRepository.GetHistoryById(criteria);
+            return await lateInEarlyOutRequestRepository.GetHistoryByIdAsync(criteria);
         }
 
-        public EmployeeLateInEarlyOutModel GetActualLateInEarlyOut(GetActualLateInEarlyOutCriteria criteria)
+        public async Task<EmployeeLateInEarlyOutModel> GetActualLateInEarlyOutAsync(GetActualLateInEarlyOutCriteria criteria)
         {
-            return baseService.GetDataEntity<EmployeeLateInEarlyOutModel>(criteria);
+            return await baseService.GetDataEntityAsync<EmployeeLateInEarlyOutModel>(criteria);
         }
 
-        public IEnumerable<DateTime> GetDisabledDate(GetDisabledDateParam param)
+        public async Task<IEnumerable<DateTime>> GetDisabledDateAsync(GetDisabledDateParam param)
         {
             var criteria = new GetDisabledDateCriteria
             {
@@ -71,21 +71,21 @@
                 RequestId = param.RequestId,
                 RequestTypeId = param.RequestTypeId,
             };
-            return baseService.GetData<DateTime>(criteria);
+            return await baseService.GetDataAsync<DateTime>(criteria);
         }
 
-        public CommandResult Delete(long requestId)
+        public async Task<CommandResult> DeleteAsync(long requestId)
         {
             var criteria = new DeleteLateInEarlyOutRequestCriteria
             {
                 RequestId = requestId
             };
-            return baseService.ExecuteNonQuery(criteria);
+            return await baseService.ExecuteNonQueryAsync(criteria);
         }
 
-        public void SendMailAndSendLetstalkCreateRequest(long requestId)
+        public async Task SendMailAndSendLetstalkCreateRequestAsync(long requestId)
         {
-            var request = GetById(requestId);
+            var request = await GetByIdAsync(requestId);
             if (request != null)
             {
                 var emailTemplatePath = Path.Combine(env.ContentRootPath, EmailTemplatePathForRequest);
@@ -107,19 +107,19 @@
                     request.Remark,
                     appSettings.Domain);
 
-                Task.Run(() => emailService.SendEmailAsync(
+                await emailService.SendEmailAsync(
                     email.SendTo,
                     email.SendCC,
                     email.Subject,
-                    email.Body));
+                    email.Body);
 
-                Task.Run(() => letstalkService.SendNotificationAsync(email.LetsTalk, email.Subject, email.Body));
+                await letstalkService.SendNotificationAsync(email.LetsTalk, email.Subject, email.Body);
             }
         }
 
-        public void SendMailEditRequest(long requestId)
+        public async Task SendMailEditRequestAsync(long requestId)
         {
-            var request = GetById(requestId);
+            var request = await GetByIdAsync(requestId);
             if (request != null)
             {
                 var emailTemplatePath = Path.Combine(env.ContentRootPath, EmailTemplatePathForRequest);
@@ -141,19 +141,19 @@
                     request.Remark,
                     appSettings.Domain);
 
-                Task.Run(() => emailService.SendEmailAsync(
+                await emailService.SendEmailAsync(
                     email.SendTo,
                     email.SendCC,
                     email.Subject,
-                    email.Body));
+                    email.Body);
 
-                Task.Run(() => letstalkService.SendNotificationAsync(email.LetsTalk, email.Subject, email.Body));
+                await letstalkService.SendNotificationAsync(email.LetsTalk, email.Subject, email.Body);
             }
         }
 
-        public void SendMailDeleteRequest(long requestId)
+        public async Task SendMailDeleteRequestAsync(long requestId)
         {
-            var request = GetById(requestId);
+            var request = await GetByIdAsync(requestId);
             if (request != null)
             {
                 var emailTemplatePath = Path.Combine(env.ContentRootPath, EmailTemplatePathForCancel);
@@ -169,19 +169,19 @@
                     request.RequestTypeId == (short)RequestType.LateIn ? ("+" + request.LateInMins) : ("-" + request.EarlyOutMins),
                     request.Remark);
 
-                Task.Run(() => emailService.SendEmailAsync(
+                await emailService.SendEmailAsync(
                     email.SendTo,
                     email.SendCC,
                     email.Subject,
-                    email.Body));
+                    email.Body);
 
-                Task.Run(() => letstalkService.SendNotificationAsync(email.LetsTalk, email.Subject, email.Body));
+                await letstalkService.SendNotificationAsync(email.LetsTalk, email.Subject, email.Body);
             }
         }
 
-        public void SendMailProcessRequest(long requestId, EmployeeSession actor, RequestCommand command)
+        public async Task SendMailProcessRequestAsync(long requestId, EmployeeSession actor, RequestCommand command)
         {
-            var request = GetById(requestId);
+            var request = await GetByIdAsync(requestId);
             if (request != null)
             {
                 var emailTemplatePath = Path.Combine(env.ContentRootPath, EmailTemplatePathForApproval);
@@ -204,13 +204,13 @@
                     request.RequestTypeId == (byte)RequestType.LateIn ? ("+" + request.LateInMins) : ("-" + request.EarlyOutMins),
                     request.Remark);
 
-                Task.Run(() => emailService.SendEmailAsync(
+                await emailService.SendEmailAsync(
                     email.SendTo,
                     email.SendCC,
                     email.Subject,
-                    email.Body));
+                    email.Body);
 
-                Task.Run(() => letstalkService.SendNotificationAsync(email.LetsTalk, email.Subject, email.Body));
+                await letstalkService.SendNotificationAsync(email.LetsTalk, email.Subject, email.Body);
             }
         }
     }

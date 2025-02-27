@@ -1,15 +1,14 @@
 ﻿namespace HRM.Repositories
 {
     using System.Collections.Generic;
+    using System.Threading.Tasks;
     using Fanex.Data.Repository;
     using HRM.Models.Request;
 
     public interface ILateInEarlyOutRequestRepository
     {
-        IList<LateInEarlyOutRequest> GetByDate(ICriteria criteria);
-
-        LateInEarlyOutRequest GetById(ICriteria criteria);
-
-        IList<LateInEarlyOutRequest> GetHistoryById(ICriteria criteria);
+        Task<IList<LateInEarlyOutRequest>> GetByDateAsync(ICriteria criteria);
+        Task<LateInEarlyOutRequest> GetByIdAsync(ICriteria criteria);
+        Task<IList<LateInEarlyOutRequest>> GetHistoryByIdAsync(ICriteria criteria);
     }
 }

@@ -127,8 +127,8 @@ namespace HRM.Website.Helper
         {
             return $@"
                 <select name='{controlName}' id='{controlName}' class='{htmlClass}'>
-                    <option selected='{reasonId == (byte)LateInEarlyOutReason.ManagementAllow}' value='{(byte)LateInEarlyOutReason.ManagementAllow}'>{Labels.ManagementAllow}</option>
-                    <option selected='{reasonId == (byte)LateInEarlyOutReason.Other}' value='{(byte)LateInEarlyOutReason.Other}'>{Labels.Other}</option>
+                    <option {(reasonId == (byte)LateInEarlyOutReason.ManagementAllow ? "selected" : "")} value='{(byte)LateInEarlyOutReason.ManagementAllow}'>{Labels.ManagementAllow}</option>
+                    <option {(reasonId == (byte)LateInEarlyOutReason.Other ? "selected" : "")} value='{(byte)LateInEarlyOutReason.Other}'>{Labels.Other}</option>
                 </select>";
         }
     }

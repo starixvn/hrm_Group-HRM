@@ -270,7 +270,7 @@
 
                 case RequestType.LateIn:
                 case RequestType.EarlyOut:
-                    lateInEarlyOutRequestService.SendMailProcessRequest(param.RequestId, actor, command);
+                    lateInEarlyOutRequestService.SendMailProcessRequestAsync(param.RequestId, actor, command);
                     break;
 
                 case RequestType.ChangeShift:
@@ -300,7 +300,7 @@
 
                     case (int)RequestType.LateIn:
                     case (int)RequestType.EarlyOut:
-                        lateInEarlyOutRequestService.SendMailProcessRequest(request.RequestId, actor, command);
+                        lateInEarlyOutRequestService.SendMailProcessRequestAsync(request.RequestId, actor, command);
                         break;
 
                     case (int)RequestType.ChangeShift:
