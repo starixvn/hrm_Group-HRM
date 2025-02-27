@@ -1,0 +1,158 @@
+﻿@using HRM.Core
+@using HRM.Resources
+@using HRM.ViewModels.Request
+@using HRM.Website.Helper
+@using HRM.Core.Enums
+@model CheckInOutRequestViewModel
+@{
+    ViewBag.Title = Labels.Edit;
+    var today = DateTime.Today;
+    var isTopManager = (bool)ViewBag.IsTopManager;
+}
+@section css{
+    <link href="~/dist/styles/checkinout.create.css" rel="stylesheet" />
+}
+@section js{
+    <script src="~/dist/js/checkinout.edit.js"></script>
+}
+@section Breadcrumb {
+    <a class="step">@Labels.Personal</a>
+    <a class="step" href="@Url.Action("employeeview", "checkinout", new { })">@Labels.MyCheckInOutRequests</a>
+    <a class="step">@ViewBag.Title</a>
+}
+<h2 class="page-title">@Labels.Edit</h2>
+<div class="card">
+    @using (Html.BeginForm("Edit", "checkinout", FormMethod.Post, new { @class = "form-horizontal" }))
+    {
+        @Html.ValidationSummary()
+        <div class="validation-summary-errors" style="display: none;"></div>
+        @Html.HiddenFor(model => model.RequestId)
+        @Html.HiddenFor(model => model.RequestTypeId)
+        @Html.HiddenFor(model => model.EmployeeId)
+        @Html.Hidden("InTime")
+        @Html.Hidden("OutTime")
+        @Html.Hidden("CrossDay")
+        @Html.Hidden("IsInAfterDay")
+        @Html.Hidden("IsOutAfterDay")
+
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.RefNO, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.TextBoxFor(model => model.RefNO, new { @class = "form-control", @autocomplete = "off" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.RequestTypeId, new { @class = "control-label" })
+            </div>
+            <div class="input-form bold">@Model.RequestTypeName</div>
+        </div>
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.Employee, new { @class = "control-label" })
+            </div>
+            <div class="input-form bold">@Html.DisplayFor(model => model.Employee)</div>
+        </div>
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.AttendantDate, Labels.ScheduleDate, new { @class = "control-label" })
+            </div>
+            <div class="calendar-form">
+                @Html.TextBox("AttendantDate", Model.AttendantDate.ToDateMonthYearFormatedDate(),
+                    new {
+                        @class = "datepicker form-control",
+                        mindate = Model.AttendantDate.AddMonths(-1).ToString("yyyy/MM/dd"),
+                        maxdate = today.ToString("yyyy/MM/dd"),
+                        disabledDate = string.Join(",", Model.DisabledDates.Select(x => x.ToString("yyyy/MM/dd")))
+                    })
+                <i class="icon-calendar fa fa-calendar"></i>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="label-form">@Labels.ActualRequestTime</div>
+            <div class="calendar-form">
+                @Html.TextBox("ForDate", Model.ForDate.ToDateMonthYearFormatedDate(),
+                    new {
+                        @class = "datepicker form-control",
+                        mindate = Model.AttendantDate.ToString("yyyy/MM/dd"),
+                        maxdate = today.ToString("yyyy/MM/dd"),
+                        disabledDate = string.Join(",", Model.DisabledDates.Select(x => x.ToString("yyyy/MM/dd")))
+                    })
+                <i class="icon-calendar fa fa-calendar"></i>
+            </div>
+            <div class="request-time">
+                <input type="number" name="Hour" id="Hour" class="form-control"
+                       min="0" max="23" step="1" maxlength="2" value="@Model.Hour" />
+                :
+                <input type="number" name="Minute" id="Minute" class="form-control"
+                       min="0" max="59" step="1" maxlength="2" value="@Model.Minute" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="label-form">@Labels.Shift</div>
+            <div class="input-form bold" id="shiftname">@Model.Shift</div>
+        </div>
+        <div class="form-group">
+            <div class="label-form">@Labels.Reason</div>
+            <div class="select-form">
+                @Html.Raw(RazorHelpers.CheckInOutReasonDropDownList(Model.ReasonId, htmlClass: "form-control"))
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.VerifierId, new { @class = "control-label" })
+            </div>
+            <div class="select-form">
+                @Html.DropDownListFor(x => x.VerifierId, new SelectList(Model.Verifiers, "OwnerId", "DisplayName"), new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.ApproverId, new { @class = "control-label" })
+            </div>
+            <div class="select-form">
+                @Html.DropDownListFor(x => x.ApproverId, new SelectList(Model.Approvers, "OwnerId", "DisplayName"), new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.Remark, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.TextAreaFor(model => model.Remark, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.Files, Labels.UploadFile, new { @class = "control-label" })
+            </div>
+            <div class="left input--m" id="upload">
+                <input type="file" id="file" name="file" size="55" multiple />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="label-form">
+            </div>
+            <div class="input-form" id="@Model.RequestId">
+                @if (Model.Files != null)
+                {
+                    foreach (string file in Model.Files)
+                    {
+                        <a href="javascript:;" class="delete-file" id="@file" data-id="@file">
+                            <i class=" fa fa-close">@file</i><br>
+                        </a>
+                    }
+                }
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="label-form"></div>
+            <div>
+                <button type="button" class="btn btn-primary" id="btnSubmit">@Labels.Update</button>
+                <button type="button" class="btn btn-default" onclick="window.history.back()">@Labels.Back</button>
+            </div>
+        </div>
+    }
+</div>

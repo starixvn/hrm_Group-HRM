@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Threading.Tasks;
     using HRM.Core.Enums;
     using HRM.Core.Models;
     using HRM.Criteria.Request.CheckInOut;
@@ -9,22 +10,14 @@
 
     public interface ICheckInOutRequestService
     {
-        IList<CheckInOutRequest> GetByDate(GetCheckInOutRequestByDateCriteria criteria);
-
-        CheckInOutRequest GetById(long requestId);
-
-        IList<CheckInOutRequest> GetHistoryById(long requestId);
-
-        IEnumerable<DateTime> GetDisabledDate(GetDisabledDateParam param);
-
-        CommandResult Delete(long requestId);
-
-        void SendMailAndSendLetstalkCreateRequest(long requestId);
-
-        void SendMailEditRequest(long requestId);
-
-        void SendMailDeleteRequest(long requestId);
-
-        void SendMailProcessRequest(long requestId, EmployeeSession actor, RequestCommand command);
+        Task<IList<CheckInOutRequest>> GetByDateAsync(GetCheckInOutRequestByDateCriteria criteria);
+        Task<CheckInOutRequest> GetByIdAsync(long requestId);
+        Task<IList<CheckInOutRequest>> GetHistoryByIdAsync(long requestId);
+        Task<IEnumerable<DateTime>> GetDisabledDateAsync(GetDisabledDateParam param);
+        Task<CommandResult> DeleteAsync(long requestId);
+        Task SendMailAndSendLetstalkCreateRequestAsync(long requestId);
+        Task SendMailEditRequestAsync(long requestId);
+        Task SendMailDeleteRequestAsync(long requestId);
+        Task SendMailProcessRequestAsync(long requestId, EmployeeSession actor, RequestCommand command);
     }
 }

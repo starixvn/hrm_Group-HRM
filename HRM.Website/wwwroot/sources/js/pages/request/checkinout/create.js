@@ -202,9 +202,9 @@ $(document).ready(function () {
             }).then(rs => {
                 response($.map(rs.data, function (item) {
                     return {
-                        label: item.NickName + ' (' + item.FullName + ')',
-                        value: item.OwnerId,
-                        isTopManager: item.IsTopManager
+                        label: item.nickName + ' (' + item.fullName + ')',
+                        value: item.ownerId,
+                        isTopManager: item.isTopManager
                     };
                 }));
             }).catch(axiosError);
@@ -258,12 +258,12 @@ $(document).ready(function () {
         }).then(response => {
             const shift = response.data;
             if (shift !== null) {
-                $('#shiftname').text(shift.Name);
-                $('#InTime').val(shift.BeginCheckInTime);
-                $('#OutTime').val(shift.BeginCheckOutTime);
-                $('#CrossDay').val(shift.CrossDay);
-                $('#IsInAfterDay').val(shift.IsInAfterDay);
-                $('#IsOutAfterDay').val(shift.IsOutAfterDay);
+                $('#shiftname').text(shift.name);
+                $('#InTime').val(shift.beginCheckInTime);
+                $('#OutTime').val(shift.beginCheckOutTime);
+                $('#CrossDay').val(shift.crossDay);
+                $('#IsInAfterDay').val(shift.isInAfterDay);
+                $('#IsOutAfterDay').val(shift.isOutAfterDay);
                 bindingHourAndMinute();
                 checkCrossDay();
             }
@@ -293,7 +293,7 @@ $(document).ready(function () {
             var files = document.getElementById('file').files;
             var fd = new FormData();
             for (var i = 0; i < files.length; i++) {
-                fd.append('files[' + i + ']', files[i]);
+                fd.append('files', files[i]);
             }
             fd.append('requestModel', JSON.stringify(model));
             var xhr = new XMLHttpRequest();

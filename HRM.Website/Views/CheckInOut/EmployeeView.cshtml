@@ -1,0 +1,164 @@
+﻿@using HRM.Core
+@using HRM.Core.Enums
+@using HRM.Resources
+@using HRM.Models.Request
+@using HRM.Website.Helper
+@model IList<CheckInOutRequest>
+@{
+    ViewBag.Title = Labels.MyCheckInOutRequests;
+}
+@section css{
+    <link href="~/dist/styles/changeshift.myrequest.css" rel="stylesheet" />
+}
+@section js{
+    <script src="~/dist/js/checkinout.myrequest.js"></script>
+}
+@section Breadcrumb {
+    <a class="step">@Labels.Personal</a> <a class="step">@ViewBag.Title</a>
+}
+<h2 class="page-title">@ViewBag.Title</h2>
+@using (Html.BeginForm("employeeview", "checkinout", FormMethod.Get, new { @class = "filter" }))
+{
+    <div class="form-horizontal clearfix">
+        <div class="form-group year">
+            <div class="label-form">
+                <label class="control-label">@Labels.Year</label>
+            </div>
+            <div class="select-form">
+                @{
+                    var yearPicker = Extensions.YearPicker(2010, (int)ViewBag.Year);
+                    <select class="yearpicker form-control" name="year" id="year">
+                        @foreach (var item in yearPicker)
+                        {
+                            <!option value="@item.Value" @(item.Selected ? "selected" : "")>@item.Value</!option>
+                        }
+                    </select>
+                }
+            </div>
+        </div>
+        <div class="form-group form-group--m">
+            <button type="submit" id="btnSearch" class="btn btn-primary">@Labels.Search</button>
+            <a class="btn btn-request" href="@Url.Action("create", "checkinout")">
+                <span class="fa fa-plus"></span> @Labels.NewRequest
+            </a>
+        </div>
+    </div>
+}
+<table class="table table-custom">
+    <thead>
+        <tr>
+            <th>@Labels.SymbolCount</th>
+            <th>@Labels.Request</th>
+            <th>@Labels.Shift</th>
+            <th>@Labels.ScheduleDate</th>
+            <th>@Labels.ActualRequestTime</th>
+            <th>@Labels.Reason</th>
+            <th>@Labels.Remark</th>
+            <th>@Labels.FileAttach</th>
+            <th>@Labels.Verifier</th>
+            <th>@Labels.Approver</th>
+            <th>@Labels.CreatedDate</th>
+            <th>@Labels.Status</th>
+            <th>@Labels.History</th>
+        </tr>
+    </thead>
+    @if (Model != null && Model.Any())
+    {
+        <tbody>
+            @{int index = 1;}
+            @foreach (CheckInOutRequest request in Model)
+            {
+            <tr>
+                <td>@(index++)</td>
+                <td>@request.RequestTypeName</td>
+                <td>@request.ShiftName</td>
+                <td>@request.OnDate.ToDateMonthYearFormatedDate()</td>
+                <td>@request.RequestTime.ToShortFormatedDate()</td>
+                <td>@request.ReasonName</td>
+                <td>
+                    @if (!string.IsNullOrWhiteSpace(request.Remark))
+                    {
+                        <span class="fa fa-comment tooltip-tipsy" title="@request.Remark" />
+                    }
+                    else
+                    {
+                        <span>-</span>
+                    }
+                </td>
+                <td>
+                    @foreach (var file in request.AttachFiles)
+                    {
+                        <a href="@file.Path" class="attach-file">
+                            <span class="file-name">@file.FileNameWithoutExtension</span><span class="file-extension">@file.Extension</span>
+                        </a>
+                    }
+                </td>
+                <td>
+                    @if (request.Verifier != null)
+                    {
+                        @request.Verifier.Nickname
+                    }
+                </td>
+                <td>
+                    @if (request.Approver != null)
+                    {
+                        @request.Approver.Nickname
+                    }
+                </td>
+                <td>@request.CreatedDate.ToShortFormatedDate()</td>
+                <td>@{RenderStatus(request);}</td>
+                <td>
+                    <a class="viewhistory" href="javascript:;" requestid="@request.RequestId">@Labels.View</a>
+                </td>
+            </tr>
+            }
+        </tbody>
+    }
+    else
+    {
+        @Html.Raw(RazorHelpers.DisplayNoInformation(colspan: 13))
+    }
+</table>
+<div id="dialoghistorycontent" />
+@{
+    void RenderStatus(CheckInOutRequest request) 
+    {
+        var verifier = request.Verifier != null ? request.Verifier.Nickname : string.Empty;
+        var approver = request.ApprovedBy != null ? request.ApprovedBy.Nickname : string.Empty;
+        var processor = request.HR != null ? request.HR.Nickname : string.Empty;
+        switch (request.Status.Id)
+        {
+            case (byte)CurrentRequestStatus.Pending:
+                <a requestid="@request.RequestId" class="menu-actions" href="javascript:;">
+                    @request.Status.ToString()
+                    <span class="caret"></span>
+                </a>
+                break;
+            case (byte)CurrentRequestStatus.Verified:
+            case (byte)CurrentRequestStatus.NotVerified:
+                <a requestid="@request.RequestId" href="javascript:;" class="tooltip-tipsy"
+                   title="@request.Status.Name by @verifier (@request.VerifiedDate.ToShortFormatedDate())">
+                    @request.Status.ToString()
+                </a>
+                break;
+            case (byte)CurrentRequestStatus.Approved:
+            case (byte)CurrentRequestStatus.Rejected:
+                <a requestid="@request.RequestId" href="javascript:;" class="tooltip-tipsy"
+                   title="@request.Status.Name by @approver (@request.ApprovedDate.ToShortFormatedDate())">
+                    @request.Status.ToString()
+                </a>
+                break;
+            case (byte)CurrentRequestStatus.Processed:
+            case (byte)CurrentRequestStatus.Void:
+                <a requestid="@request.RequestId" href="javascript:;" class="tooltip-tipsy"
+                   title="@request.Status.Name by @processor (@request.ProcessedDate.ToShortFormatedDate())">
+                    @request.Status.ToString()
+                </a>
+                break;
+            default:
+                <a href="javascript:;">@request.Status.ToString()</a>
+                break;
+        }
+    }
+    
+}

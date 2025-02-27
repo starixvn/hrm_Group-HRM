@@ -116,10 +116,10 @@ namespace HRM.Website.Helper
         {
             return $@"
                 <select name='{controlName}' id='{controlName}' class='{htmlClass}'>
-                    <option selected='{reasonId == (byte)CheckInOutReason.VanLate}' value='{(byte)CheckInOutReason.VanLate}'>{Labels.VanLate}</option>
-                    <option selected='{reasonId == (byte)CheckInOutReason.BusinessTrip}' value='{(byte)CheckInOutReason.BusinessTrip}'>{Labels.BusinessTrip}</option>
-                    <option selected='{reasonId == (byte)CheckInOutReason.Forgot}' value='{(byte)CheckInOutReason.Forgot}'>{Labels.Forgot}</option>
-                    <option selected='{reasonId == (byte)CheckInOutReason.Other}' value='{(byte)CheckInOutReason.Other}'>{Labels.Other}</option>
+                    <option {(reasonId == (byte)CheckInOutReason.VanLate ? "selected" : "")} value='{(byte)CheckInOutReason.VanLate}'>{Labels.VanLate}</option>
+                    <option {(reasonId == (byte)CheckInOutReason.BusinessTrip ? "selected" : "")} value='{(byte)CheckInOutReason.BusinessTrip}'>{Labels.BusinessTrip}</option>
+                    <option {(reasonId == (byte)CheckInOutReason.Forgot ? "selected" : "")} value='{(byte)CheckInOutReason.Forgot}'>{Labels.Forgot}</option>
+                    <option {(reasonId == (byte)CheckInOutReason.Other ? "selected" : "")} value='{(byte)CheckInOutReason.Other}'>{Labels.Other}</option>
                 </select>";
         }
 

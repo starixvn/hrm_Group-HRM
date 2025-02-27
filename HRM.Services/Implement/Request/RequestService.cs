@@ -265,7 +265,7 @@
             {
                 case RequestType.CheckIn:
                 case RequestType.CheckOut:
-                    checkInOutRequestService.SendMailProcessRequest(param.RequestId, actor, command);
+                    checkInOutRequestService.SendMailProcessRequestAsync(param.RequestId, actor, command);
                     break;
 
                 case RequestType.LateIn:
@@ -295,7 +295,7 @@
                 {
                     case (int)RequestType.CheckIn:
                     case (int)RequestType.CheckOut:
-                        checkInOutRequestService.SendMailProcessRequest(request.RequestId, actor, command);
+                        checkInOutRequestService.SendMailProcessRequestAsync(request.RequestId, actor, command);
                         break;
 
                     case (int)RequestType.LateIn:
