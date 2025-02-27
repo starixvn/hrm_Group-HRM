@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,6 +16,7 @@ using HRM.Core.Models;
 using HRM.Criteria.Employee;
 using HRM.Criteria.Supervisor;
 using HRM.Models;
+using HRM.Models.Group;
 using HRM.Models.Supervisor;
 using HRM.Services;
 using HRM.Services.Interfaces;
@@ -22,17 +24,8 @@ using HRM.ViewModels;
 using HRM.ViewModels.Employee;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.AspNetCore.Hosting;
-using System.IO;
-using HRM.Core.Models;
-using GO.UserControl.Client.Core.Models.Role;
-using HRM.Models.Group;
 using Microsoft.AspNetCore.Http;
-using SixLabors.ImageSharp.Processing.Processors;
-using System.Drawing;
+using Microsoft.AspNetCore.Mvc;
 
 namespace HRM.Controllers;
 
@@ -197,7 +190,6 @@ public class EmployeeController(
         if (!commandResult.IsSuccessful) return Json(commandResult);
         var result = userService.Delete(param.UserId);
         return Json(result);
-
     }
 
     public JsonResult GenerateEmployeeCode()
@@ -282,7 +274,7 @@ public class EmployeeController(
         return View();
     }
 
-    public JsonResult GetEmployees(
+    public async Task<IActionResult> GetEmployees(
         string query,
         string teamIds = "",
         bool? enable = null,
@@ -299,7 +291,7 @@ public class EmployeeController(
             TitleId = titleId,
             IsLocalUser = isLocal
         };
-        var employees = employeeService.GetEmployees(criteria);
+        var employees = await employeeService.GetEmployeeAsync(criteria);
 
         return Json(employees);
     }
@@ -357,8 +349,8 @@ public class EmployeeController(
         var data = supervisors
             .Select(x => new Supervisor
             {
-                OwnerId = x.OwnerId, 
-                Nickname = x.NickName, 
+                OwnerId = x.OwnerId,
+                Nickname = x.NickName,
                 FullName = x.FullName
             });
         return new CustomJsonResult(data);
