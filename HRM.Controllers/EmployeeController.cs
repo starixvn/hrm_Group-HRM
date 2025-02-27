@@ -18,6 +18,7 @@ using HRM.Models;
 using HRM.Models.Supervisor;
 using HRM.Services;
 using HRM.Services.Interfaces;
+using HRM.ViewModels;
 using HRM.ViewModels.Employee;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
@@ -35,7 +36,8 @@ using System.Drawing;
 
 namespace HRM.Controllers;
 
-public class EmployeeController(IUserControlSession userControlSession,
+public class EmployeeController(
+    IUserControlSession userControlSession,
     IEmployeeService employeeService,
     ICryptoService cryptoService,
     IUserService userService,
@@ -45,6 +47,56 @@ public class EmployeeController(IUserControlSession userControlSession,
     IWebHostEnvironment env,
     IHRMAuthService hrmService) : BaseController(userControlSession)
 {
+    [HrmPermission(Policy.Read, FunctionKey.ContactList)]
+    public async Task<IActionResult> Index()
+    {
+        var teams = await commonDataService.GetAllTeamAsync();
+        var model = new UserManagementViewModel
+        {
+            IsEnable = true,
+            CurrentPage = Constants.CurrentPage,
+            ItemsPerPage = Constants.ItemsPerPage,
+            TeamIds = string.Join(",", teams.Select(x => x.Id))
+        };
+
+        return View(model);
+    }
+
+    [HttpPost]
+    [HrmPermission(Policy.Read, FunctionKey.ContactList)]
+    public async Task<IActionResult> ContactList(UserManagementViewModel model)
+    {
+        IEnumerable<Employee> employees = new List<Employee>();
+        if (model != null)
+        {
+            var criteria = new GetAllEmployeeCriteria
+            {
+                Query = model.Keyword,
+                TeamIds = model.TeamIds,
+                EnableUser = model.IsEnable,
+                IsLocalUser = model.IsLocal,
+                PageNumber = model.CurrentPage,
+                PageSize = model.ItemsPerPage
+            };
+
+            employees = await employeeService.GetEmployeeAsync(criteria);
+
+            var pagerOption = new PagerOptionModel
+            {
+                CurrentPage = model.CurrentPage,
+                ItemsPerPage = model.ItemsPerPage,
+                TotalItem = (int)criteria.TotalRow
+            };
+            ViewBag.PagerOption = pagerOption;
+
+            var roles = await roleService.GetByUserIdAsync(userControlSession.UserId);
+            ViewBag.IsShowJobtitle = roles.Any(r => r.RoleId is (short)RoleSystem.HR or (short)RoleSystem.SystemAdmin);
+            ViewBag.EnableGroupDate = commonDataService.IsEnableGroupDate();
+        }
+
+        return PartialView("_ContactList", employees);
+    }
+
     [HrmPermission(Policy.Host, FunctionKey.CreateAccount)]
     public ActionResult Create()
     {

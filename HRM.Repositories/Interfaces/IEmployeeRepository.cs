@@ -12,7 +12,7 @@
 
         Employee GetEmployeeByCode(ICriteria criteria);
 
-        IList<Employee> GetEmployees(ICriteria criteria);
+        Task<IEnumerable<Employee>> GetEmployeeAsync(ICriteria criteria);
 
         IList<Employee> GetEmployeesByRole(ICriteria criteria);
 

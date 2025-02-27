@@ -50,14 +50,14 @@
             return employee;
         }
 
-        public IList<Employee> GetEmployees(GetAllEmployeeCriteria criteria)
+        public async Task<IEnumerable<Employee>> GetEmployeeAsync(GetAllEmployeeCriteria criteria)
         {
-            IList<Employee> employees = null;
+            IEnumerable<Employee> employees = null;
             if (criteria != null && criteria.IsValid())
             {
-                employees = employeeRepository.GetEmployees(criteria);
+                employees = await employeeRepository.GetEmployeeAsync(criteria);
 
-                var roles = roleService.GetBySiteId(userControlSettings.SiteId);
+                var roles = await roleService.GetBySiteIdAsync(userControlSettings.SiteId);
                 foreach (var employee in employees)
                 {
                     if (employee.Roles != null && employee.Roles.Any())

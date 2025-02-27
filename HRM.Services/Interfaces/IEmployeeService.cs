@@ -23,7 +23,7 @@
 
         Task<Employee> GetEmployeeByIdAsync(int id);
 
-        IList<Employee> GetEmployees(GetAllEmployeeCriteria criteria);
+        Task<IEnumerable<Employee>> GetEmployeeAsync(GetAllEmployeeCriteria criteria);
 
         IList<Employee> GetMemberByManager(GetMemberByManagerCriteria criteria);
 

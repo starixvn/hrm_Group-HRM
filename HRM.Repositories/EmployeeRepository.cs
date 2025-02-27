@@ -42,11 +42,11 @@
             }
         }
 
-        public IList<Employee> GetEmployees(ICriteria criteria)
+        public async Task<IEnumerable<Employee>> GetEmployeeAsync(ICriteria criteria)
         {
-            using (IObjectDb db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
+            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                using (var multi = db.QueryMultiple(criteria))
+                using (var multi = await db.QueryMultipleAsync(criteria))
                 {
                     var employees = multi.Read<Employee, dynamic, Employee>(
                         (e, t) =>
