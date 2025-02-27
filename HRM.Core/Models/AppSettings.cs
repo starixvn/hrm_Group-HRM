@@ -6,5 +6,7 @@
         public string Domain { get; set; }
         public bool EnableSendMail { get; set; }
         public bool IsShowCloseBalance { get; set; }
+        public string EmailSD { get; set; }
+        public string EmailGo { get; set; }
     }
 }

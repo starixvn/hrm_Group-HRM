@@ -1,0 +1,89 @@
+﻿@using HRM.Models
+@model Memo
+@{
+    var memoSubject = Model != null ? Model.Subject : Labels.NoData;
+    ViewBag.Title = memoSubject + " - " + Labels.Memo;
+}
+@section css{
+    <link href="~/dist/styles/memo.css" rel="stylesheet"/>
+}
+@section Breadcrumb {
+    <a class="step">Company Space</a>
+    <a class="step" href="@Url.Action("Index", "memo")">Memo</a>
+    <a class="step">Memo "@memoSubject" Details</a>
+}
+@if (!ReferenceEquals(Model, null))
+{
+    <table class="table table-custom">
+        <thead>
+            <tr>
+                <th colspan="4">@Model.Subject</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="align-left">
+                    <b>@Labels.To</b>
+                </td>
+                <td class="align-left">
+                    @Model.SentTo
+                </td>
+                <td class="align-left">
+                    <b>@Labels.RefNo</b>
+                </td>
+                <td class="align-left">
+                    <b>@Model.RefNo</b>
+                </td>
+            </tr>
+            <tr>
+                <td class="align-left">
+                    <b>@Labels.ForInfo</b>
+                </td>
+                <td class="align-left">
+                    @Model.ForInfo
+                </td>
+                <td class="align-left">
+                    <b>@Labels.TotalPages</b>
+                </td>
+                <td class="align-left">
+                    @Model.TotalPages
+                </td>
+            </tr>
+            <tr>
+                <td class="align-left">
+                    <b>@Labels.From</b>
+                </td>
+                <td class="align-left">
+                    @Model.SentFrom
+                </td>
+                <td class="align-left">
+                    <b>@Labels.Date</b>
+                </td>
+                <td class="ddMMyyyyhhmm align-left">
+                    @Model.SentDate.ToDateMonthYearFormatedDate()
+                </td>
+            </tr>
+            <tr>
+                <td class="align-left">
+                    <b>Category</b>
+                </td>
+                <td class="align-left" colspan="3">
+                    <b>@Model.CategoryName</b>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" class="memoContents align-left">
+                    @foreach (var item in Model.MemoDetailLink)
+                    {
+                        @Html.Raw(item)
+                    }
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <a href="javascript:;" class="btn btn-primary" onclick="parent.history.back()">@Labels.Back</a>
+}
+else
+{
+    <h2>@Messages.ThisContentHasAlreadyBeenDeleted</h2>
+}

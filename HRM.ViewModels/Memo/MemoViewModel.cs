@@ -1,8 +1,8 @@
 ﻿namespace HRM.ViewModels.Memo
 {
-    using HRM.Models;
     using System;
     using System.Collections.Generic;
+    using HRM.Models;
 
     public class MemoViewModel
     {
@@ -12,6 +12,6 @@
 
         public IList<LookupData> MemoCategories { get; set; } = new List<LookupData>();
 
-        public IList<Memo> Memos { get; set; } = new List<Memo>();
+        public IEnumerable<Memo> Memos { get; set; } = new List<Memo>();
     }
 }

@@ -132,6 +132,7 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IDepartmentService, DepartmentService>();
         services.AddSingleton<ISectionService, SectionService>();
         services.AddSingleton<IJobLevelService, JobLevelService>();
+        services.AddSingleton<IMemoService, MemoService>();
 
         services.AddSingleton<IRequestService, RequestService>();
         services.AddSingleton<IAttachFileService, AttachFileService>();

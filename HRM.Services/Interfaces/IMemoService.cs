@@ -1,19 +1,20 @@
 ﻿namespace HRM.Services
 {
     using System.Collections.Generic;
+    using System.Threading.Tasks;
     using HRM.Core.Models;
     using HRM.Models;
 
     public interface IMemoService
     {
-        IList<Memo> GetAll(int year, int category);
+        Task<IEnumerable<Memo>> GetAllAsync(int year, int category);
 
-        Memo GetById(int id);
+        Task<Memo> GetByIdAsync(int id);
 
-        CommandResult Create(Memo model);
+        Task<CommandResult> CreateAsync(Memo model);
 
-        CommandResult Edit(Memo model);
+        Task<CommandResult> EditAsync(Memo model);
 
-        CommandResult Delete(int id);
+        Task<CommandResult> DeleteAsync(int id);
     }
 }

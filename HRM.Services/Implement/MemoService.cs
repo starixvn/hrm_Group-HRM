@@ -1,38 +1,31 @@
 ﻿namespace HRM.Services
 {
     using System.Collections.Generic;
-    using System.Linq;
+    using System.Threading.Tasks;
     using HRM.Core.Models;
     using HRM.Core.Services;
     using HRM.Criteria.Memo;
     using HRM.Models;
 
-    public class MemoService : IMemoService
+    public class MemoService(IBaseService baseService) : IMemoService
     {
-        private readonly IBaseService baseService;
-
-        public MemoService(IBaseService baseService)
-        {
-            this.baseService = baseService;
-        }
-
-        public IList<Memo> GetAll(int year, int category)
+        public async Task<IEnumerable<Memo>> GetAllAsync(int year, int category)
         {
             var criteria = new GetAllMemoCriteria
             {
                 Year = year,
                 Category = category
             };
-            return baseService.GetData<Memo>(criteria).ToList();
+            return await baseService.GetDataAsync<Memo>(criteria);
         }
 
-        public Memo GetById(int id)
+        public async Task<Memo> GetByIdAsync(int id)
         {
             var criteria = new GetMemoByIdCriteria
             {
                 Id = id
             };
-            var memo = baseService.GetDataEntity<Memo>(criteria);
+            var memo = await baseService.GetDataEntityAsync<Memo>(criteria);
             if (memo != null && memo.MemoType == 1)
             {
                 memo.AttachFile = memo.Contents;
@@ -41,7 +34,7 @@
             return memo ?? new Memo();
         }
 
-        public CommandResult Create(Memo model)
+        public async Task<CommandResult> CreateAsync(Memo model)
         {
             var criteria = new CreateMemoCriteria
             {
@@ -57,10 +50,10 @@
                 MemoType = model.MemoType,
                 SendMail = model.SendMail
             };
-            return baseService.ExecuteNonQuery(criteria);
+            return await baseService.ExecuteNonQueryAsync(criteria);
         }
 
-        public CommandResult Edit(Memo model)
+        public async Task<CommandResult> EditAsync(Memo model)
         {
             var criteria = new EditMemoCriteria
             {
@@ -76,13 +69,13 @@
                 Category = model.Category,
                 MemoType = model.MemoType
             };
-            return baseService.ExecuteNonQuery(criteria);
+            return await baseService.ExecuteNonQueryAsync(criteria);
         }
 
-        public CommandResult Delete(int id)
+        public async Task<CommandResult> DeleteAsync(int id)
         {
             var criteria = new DeleteMemoCriteria { Id = id };
-            return baseService.ExecuteNonQuery(criteria);
+            return await baseService.ExecuteNonQueryAsync(criteria);
         }
     }
 }
