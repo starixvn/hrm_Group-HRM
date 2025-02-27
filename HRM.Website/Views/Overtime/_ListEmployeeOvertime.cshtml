@@ -1,0 +1,200 @@
+﻿@using HRM.Core.Enums
+@using HRM.Models.Overtime
+@using HRM.Website.Helper
+@model HRM.ViewModels.Overtime.MemberMonthlyOvertimeRequestViewModel
+
+<table class="table table-custom" id="data">
+    <thead>
+        <tr>
+            <th colspan="15">
+                <div style="float:right;">
+                    <input type="button" class="btn btn-primary" id="btnProcess" value="@Labels.Process" />
+                    <input type="button" class="btn btn-primary" id="btnVoid" value="@Labels.Void" />
+                </div>
+            </th>
+        </tr>
+        <tr>
+            <th>
+                <div class="checkbox">
+                    <input type="checkbox" class="checkbox-custom" id="ckbAll" />
+                    <label for="ckbAll"></label>
+                </div>
+            </th>
+            <th class="col-sorter">
+                <div class="cell-control-wrapper">
+                    @Labels.Department
+                    <div class="fa fa-sort cell-right-div"></div>
+                </div>
+            </th>
+            <th class="col-sorter">
+                <div class="cell-control-wrapper">
+                    @Labels.Section
+                    <div class="fa fa-sort cell-right-div"></div>
+                </div>
+            </th>
+            <th class="col-sorter">
+                <div class="cell-control-wrapper">
+                    @Labels.Team
+                    <div class="fa fa-sort cell-right-div"></div>
+                </div>
+            </th>
+            <th class="col-sorter">
+                <div class="cell-control-wrapper">
+                    @Labels.FullName
+                    <div class="fa fa-sort cell-right-div"></div>
+                </div>
+            </th>
+            <th class="col-sorter">
+                <div class="cell-control-wrapper">
+                    @Labels.NickName
+                    <div class="fa fa-sort cell-right-div"></div>
+                </div>
+            </th>
+            <th class="col-sorter">
+                <div class="cell-control-wrapper">
+                    @Labels.Month
+                    <div class="fa fa-sort cell-right-div"></div>
+                </div>
+            </th>
+            <th class="col-sorter">
+                <div class="cell-control-wrapper">
+                    @Labels.NormalDay
+                    <div class="fa fa-sort cell-right-div"></div>
+                </div>
+            </th>
+            <th class="col-sorter">
+                <div class="cell-control-wrapper">
+                    @Labels.OffDay
+                    <div class="fa fa-sort cell-right-div"></div>
+                </div>
+            </th>
+            <th class="col-sorter">
+                <div class="cell-control-wrapper">
+                    @Labels.PublicHoliday
+                    <div class="fa fa-sort cell-right-div"></div>
+                </div>
+            </th>
+            <th class="col-sorter">
+                <div class="cell-control-wrapper">
+                    @Labels.SpecialOT
+                    <div class="fa fa-sort cell-right-div"></div>
+                </div>
+            </th>
+            <th class="col-sorter">
+                <div class="cell-control-wrapper">
+                    @Labels.Verifier
+                    <div class="fa fa-sort cell-right-div"></div>
+                </div>
+            </th>
+            <th class="col-sorter">
+                <div class="cell-control-wrapper">
+                    @Labels.Approver
+                    <div class="fa fa-sort cell-right-div"></div>
+                </div>
+            </th>
+            <th class="col-sorter">
+                <div class="cell-control-wrapper">
+                    @Labels.Status
+                    <div class="fa fa-sort cell-right-div"></div>
+                </div>
+            </th>
+            <th>@Labels.Details</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.MemberRequests.Any())
+        {
+            foreach (MonthlyOvertimeRequest request in Model.MemberRequests)
+            {
+                <tr>
+                    <td>
+                        <div class="checkbox">
+                            <input type="checkbox" class="checkbox-custom" id="ckb@(request.RequestId)"
+                                   data-requestid="@request.RequestId" data-statusid="@request.Status.Id"
+                                   data-verifierid="@request.Verifier.EmpId" data-approverid="@request.Approver.EmpId" />
+                            <label for="ckb@(request.RequestId)"></label>
+                        </div>
+                    </td>
+                    <td>@request.Requester.Department</td>
+                    <td>@request.Requester.Section</td>
+                    <td>@request.Requester.Team</td>
+                    <td class="align-left">@request.Requester.FullName</td>
+                    <td>@request.Requester.Nickname</td>
+                    <td data-datetime="@request.Month">@request.Month.ToString("MMM-yyyy")</td>
+                    <td>
+                        @if (request.NormalHours > 0)
+                        {
+                            @request.NormalHours
+                        }
+                    </td>
+                    <td>
+                        @if (request.OffHours > 0)
+                        {
+                            @request.OffHours
+                        }
+                    </td>
+                    <td>
+                        @if (request.PublicHours > 0)
+                        {
+                            @request.PublicHours
+                        }
+                    </td>
+                    <td>
+                        @if (request.SpecialHours > 0)
+                        {
+                            @request.SpecialHours
+                        }
+                    </td>
+                    <td>@request.Verifier.Nickname</td>
+                    <td>@request.Approver.Nickname</td>
+                    <td>
+                        @switch (request.Status.Id)
+                        {
+                            case (byte)CurrentRequestStatus.Approved:
+                                <a requestid="@request.RequestId" href="javascript:;" class="hr-pending">
+                                    @request.Status
+                                    <span class="caret"></span>
+                                </a>
+                                break;
+                            case (byte)CurrentRequestStatus.Processed:
+                                <a requestid="@request.RequestId" href="javascript:;" class="hr-processed">
+                                    @request.Status
+                                    <span class="caret"></span>
+                                </a>
+                                break;
+                            case (byte)CurrentRequestStatus.Void:
+                                <a requestid="@request.RequestId" href="javascript:;" class="hr-void">
+                                    @request.Status
+                                    <span class="caret"></span>
+                                </a>
+                                break;
+                            default:
+                                @request.Status
+                                break;
+                        }
+                    </td>
+                    <td>
+                        <a href="@Url.Action("EmployeeDetails", "Overtime", new { id = request.RequestId })">@Labels.View</a>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            @Html.Raw(RazorHelpers.DisplayNoInformation(colspan: 15))
+        }
+    </tbody>
+    @if (Model.MemberRequests.Any())
+    {
+        <tfoot>
+            <tr class="summary">
+                <td colspan="7" class="align-right">@Labels.TotalOvertimeHours:</td>
+                <td>@Model.MemberRequests.Sum(t => t.NormalHours).ToString("0.00")</td>
+                <td>@Model.MemberRequests.Sum(t => t.OffHours).ToString("0.00")</td>
+                <td>@Model.MemberRequests.Sum(t => t.PublicHours).ToString("0.00")</td>
+                <td>@Model.MemberRequests.Sum(t => t.SpecialHours).ToString("0.00")</td>
+                <td colspan="4"></td>
+            </tr>
+        </tfoot>
+    }
+</table>

@@ -1,6 +1,9 @@
-﻿namespace HRM.Website;
+﻿using HRM.Services.ExportExcel;
+
+namespace HRM.Website;
 
 using System;
+using System.ComponentModel;
 using System.Threading.Tasks;
 using Fanex.Caching.Redis;
 using Fanex.Data.Repository;
@@ -153,6 +156,9 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IKeepInViewRequestRepository, KeepInViewRequestRepository>();
         services.AddSingleton<IShiftService, ShiftService>();
 
+        services.AddSingleton<IOvertimeRequestService, OvertimeRequestService>();
+        services.AddSingleton<IOvertimeRequestRepository, OvertimeRequestRepository>();
+
         return services;
     }
 
@@ -161,7 +167,9 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IExportExcelService, ExportExcelService>();
         services.AddSingleton<IExportExcelUnpaidLeaveSummaryReportService, ExportExcelUnpaidLeaveSummaryReportService>();
         services.AddSingleton<IExportExcelAttendanceReportService, ExportExcelAttendanceReportService>();
-
+        services.AddSingleton<IExportExcelTimeRecordService, ExportExcelTimeRecordService>();
+        services.AddSingleton<IExportOvertimeService, ExportOvertimeService>();
+        services.AddSingleton<IExportOvertimeService, ExportOvertimeService>();
         return services;
     }
 }

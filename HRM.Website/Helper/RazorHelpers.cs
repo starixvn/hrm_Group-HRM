@@ -11,9 +11,9 @@ namespace HRM.Website.Helper
         {
             return $@"
                 <select id='{id}' name='{id}' class='{classHTML}'>
-                    <option selected='{string.IsNullOrWhiteSpace(selectedId)}' value=''>-- All --</option>
-                    <option selected='{selectedId == "1"}' value='1'>{Labels.Local}</option>
-                    <option selected='{selectedId == "0"}' value='0'>{Labels.Expat}</option>
+                    <option value='' {(string.IsNullOrWhiteSpace(selectedId) ? "selected" : "")}>-- All --</option>
+                    <option value='1' {(selectedId == "1" ? "selected" : "")}>{Labels.Local}</option>
+                    <option value='0' {(selectedId == "0" ? "selected" : "")}>{Labels.Expat}</option>
                 </select>";
         }
 
@@ -42,15 +42,15 @@ namespace HRM.Website.Helper
         {
             return $@"
                 <select name='{controlName}' id='{controlName}' class='{htmlClass}'>
-                    {(isShowAll ? $"<option selected='{status == 0}' value='0'>All</option>" : "")}
-                    {(isShowPendingAndVerified ? $"<option selected='{status == -1}' value='-1'>Pending & Verified</option>" : "")}
-                    <option selected='{status == (byte)CurrentRequestStatus.Pending}' value='{(byte)CurrentRequestStatus.Pending}'>{Labels.Pending}</option>
-                    <option selected='{status == (byte)CurrentRequestStatus.Verified}' value='{(byte)CurrentRequestStatus.Verified}'>{Labels.Verified}</option>
-                    <option selected='{status == (byte)CurrentRequestStatus.NotVerified}' value='{(byte)CurrentRequestStatus.NotVerified}'>{Labels.NotVerified}</option>
-                    <option selected='{status == (byte)CurrentRequestStatus.Approved}' value='{(byte)CurrentRequestStatus.Approved}'>{Labels.Approved}</option>
-                    <option selected='{status == (byte)CurrentRequestStatus.Rejected}' value='{(byte)CurrentRequestStatus.Rejected}'>{Labels.Rejected}</option>
-                    <option selected='{status == (byte)CurrentRequestStatus.Processed}' value='{(byte)CurrentRequestStatus.Processed}'>{Labels.Processed}</option>
-                    <option selected='{status == (byte)CurrentRequestStatus.Void}' value='{(byte)CurrentRequestStatus.Void}'>{Labels.Void}</option>
+                    {(isShowAll ? $@"<option selected='{(status == 0 ? "selected" : "")}' value='0'>All</option>" : "")}
+                    {(isShowPendingAndVerified ? $@"<option selected='{(status == -1 ? "selected" : "")}' value='-1'>Pending & Verified</option>" : "")}
+                    <option {(status == (byte)CurrentRequestStatus.Pending ? "selected" : "")} value='{(byte)CurrentRequestStatus.Pending}'>Pending</option>
+                    <option {(status == (byte)CurrentRequestStatus.Verified ? "selected" : "")} value='{(byte)CurrentRequestStatus.Verified}'>Verified</option>
+                    <option {(status == (byte)CurrentRequestStatus.NotVerified ? "selected" : "")} value='{(byte)CurrentRequestStatus.NotVerified}'>Not Verified</option>
+                    <option {(status == (byte)CurrentRequestStatus.Approved ? "selected" : "")} value='{(byte)CurrentRequestStatus.Approved}'>Approved</option>
+                    <option {(status == (byte)CurrentRequestStatus.Rejected ? "selected" : "")} value='{(byte)CurrentRequestStatus.Rejected}'>Rejected</option>
+                    <option {(status == (byte)CurrentRequestStatus.Processed ? "selected" : "")} value='{(byte)CurrentRequestStatus.Processed}'>Processed</option>
+                    <option {(status == (byte)CurrentRequestStatus.Void ? "selected" : "")} value='{(byte)CurrentRequestStatus.Void}'>Void</option>
                 </select>";
         }
 

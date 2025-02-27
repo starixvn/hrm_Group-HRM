@@ -1,106 +1,94 @@
-﻿namespace HRM.Services
+﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.IO;
+using System.Linq;
+using HRM.Core.Constants;
+using HRM.Models.Overtime;
+using Microsoft.AspNetCore.Hosting;
+using OfficeOpenXml;
+
+namespace HRM.Services.ExportExcel;
+
+public interface IExportOvertimeService
 {
-    using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
-    using System.IO;
-    using System.Linq;
-    using System.Web;
-    using HRM.Core.Constants;
-    using HRM.Models.Overtime;
-    using Microsoft.AspNetCore.Hosting;
-    using Microsoft.AspNetCore.Http;
-    using OfficeOpenXml;
+    byte[] Export(IEnumerable<MonthlyOvertimeRequest> memberRequests, bool isMemberOvertime);
+}
 
-    public interface IExportOvertimeService
+[SuppressMessage("Major Code Smell", "S109:Magic numbers should not be used", Justification = "Pending")]
+public class ExportOvertimeService(IWebHostEnvironment hostingEnvironment) : IExportOvertimeService
+{
+    public byte[] Export(IEnumerable<MonthlyOvertimeRequest> memberRequests, bool isMemberOvertime)
     {
-        byte[] Export(IEnumerable<MonthlyOvertimeRequest> memberRequests, bool isMemberOvertime);
-    }
+        const byte totalColumns = 14;
+        const byte startBodyRow = 3;
+        const byte startTotal = 8;
+        const byte lineOfTotal = 4;
 
-    [SuppressMessage("Major Code Smell", "S109:Magic numbers should not be used", Justification = "Pending")]
-    public class ExportOvertimeService : IExportOvertimeService
-    {
-        private readonly IWebHostEnvironment hostingEnvironment;
+        var sheetName = "Employee Overtime Report";
+        var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, "ExcelTemplates/EmployeeOverTimeTemplate.xlsx"); 
 
-        public ExportOvertimeService(IWebHostEnvironment hostingEnvironment)
+        if (isMemberOvertime)
         {
-            this.hostingEnvironment = hostingEnvironment;
+            sheetName = "Member Overtime Report";
         }
-        public byte[] Export(IEnumerable<MonthlyOvertimeRequest> memberRequests, bool isMemberOvertime)
+
+        using var templatePackage = new ExcelPackage(new FileInfo(templatePath));
+        using var xlPackage = new ExcelPackage();
+        var templateWorksheet = templatePackage.Workbook.Worksheets[0];
+        var workSheet = xlPackage.Workbook.Worksheets.Add(sheetName);
+
+        var rowIndex = 1;
+        var colIndex = 1;
+        var count = 1;
+
+        // title
+        templateWorksheet.Cells[rowIndex, colIndex, rowIndex, totalColumns].Copy(workSheet.Cells[rowIndex, colIndex, rowIndex, totalColumns]);
+        workSheet.Cells[rowIndex, colIndex].Value = string.Format(sheetName);
+        rowIndex++;
+
+        // header
+        templateWorksheet.Cells[rowIndex, colIndex, rowIndex + 1, totalColumns].Copy(workSheet.Cells[rowIndex, colIndex, rowIndex + 1, totalColumns]);
+        rowIndex++;
+
+        var monthlyOvertimeRequests = memberRequests.ToList();
+        foreach (var detail in monthlyOvertimeRequests)
         {
-            const byte TotalColumns = 14;
-            const byte StartBodyRow = 3;
-            const byte StartTotal = 8;
-            const byte LineOfTotal = 4;
+            templateWorksheet.Cells[startBodyRow, 1, startBodyRow, totalColumns].Copy(workSheet.Cells[rowIndex, colIndex, rowIndex, totalColumns]);
 
-            string sheetName = "Employee Overtime Report";
-            string templatePath = Path.Combine(hostingEnvironment.ContentRootPath, @"~/ExcelTemplates/EmployeeOverTimeTemplate.xlsx"); 
+            workSheet.Cells[rowIndex, colIndex++].Value = count;
+            workSheet.Cells[rowIndex, colIndex++].Value = detail.Requester.Department;
+            workSheet.Cells[rowIndex, colIndex++].Value = detail.Requester.Section;
+            workSheet.Cells[rowIndex, colIndex++].Value = detail.Team;
+            workSheet.Cells[rowIndex, colIndex++].Value = detail.FullName;
+            workSheet.Cells[rowIndex, colIndex++].Value = detail.Nickname;
+            workSheet.Cells[rowIndex, colIndex++].Value = detail.Month.ToString("MMM-yyyy");
+            workSheet.Cells[rowIndex, colIndex++].Value = detail.NormalHours;
+            workSheet.Cells[rowIndex, colIndex++].Value = detail.OffHours;
+            workSheet.Cells[rowIndex, colIndex++].Value = detail.PublicHours;
+            workSheet.Cells[rowIndex, colIndex++].Value = detail.SpecialHours;
+            workSheet.Cells[rowIndex, colIndex++].Value = detail.Verifier.Nickname;
+            workSheet.Cells[rowIndex, colIndex++].Value = detail.Approver.Nickname;
+            workSheet.Cells[rowIndex, colIndex].Value = detail.Status;
 
-            if (isMemberOvertime)
+            rowIndex++;
+            colIndex = 1;
+            count++;
+        }
+
+        // summary
+        if (monthlyOvertimeRequests.Any())
+        {
+            templateWorksheet.Cells[lineOfTotal, 1, lineOfTotal, totalColumns].Copy(workSheet.Cells[rowIndex, 1, rowIndex, totalColumns]);
+            const byte total = 3;
+            for (var i = 0; i <= total; i++)
             {
-                sheetName = "Member Overtime Report";
-            }
-
-            using (var templatePackage = new ExcelPackage(new FileInfo(templatePath)))
-            {
-                using (var xlPackage = new ExcelPackage())
-                {
-                    ExcelWorksheet templateWorksheet = templatePackage.Workbook.Worksheets[1];
-                    ExcelWorksheet workSheet = xlPackage.Workbook.Worksheets.Add(sheetName);
-
-                    int rowIndex = 1;
-                    int colIndex = 1;
-                    int count = 1;
-
-                    // title
-                    templateWorksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns].Copy(workSheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
-                    workSheet.Cells[rowIndex, colIndex].Value = string.Format(sheetName);
-                    rowIndex++;
-
-                    // header
-                    templateWorksheet.Cells[rowIndex, colIndex, rowIndex + 1, TotalColumns].Copy(workSheet.Cells[rowIndex, colIndex, rowIndex + 1, TotalColumns]);
-                    rowIndex++;
-
-                    foreach (var detail in memberRequests)
-                    {
-                        templateWorksheet.Cells[StartBodyRow, 1, StartBodyRow, TotalColumns].Copy(workSheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
-
-                        workSheet.Cells[rowIndex, colIndex++].Value = count;
-                        workSheet.Cells[rowIndex, colIndex++].Value = detail.Requester.Department;
-                        workSheet.Cells[rowIndex, colIndex++].Value = detail.Requester.Section;
-                        workSheet.Cells[rowIndex, colIndex++].Value = detail.Team;
-                        workSheet.Cells[rowIndex, colIndex++].Value = detail.FullName;
-                        workSheet.Cells[rowIndex, colIndex++].Value = detail.Nickname;
-                        workSheet.Cells[rowIndex, colIndex++].Value = detail.Month.ToString("MMM-yyyy");
-                        workSheet.Cells[rowIndex, colIndex++].Value = detail.NormalHours;
-                        workSheet.Cells[rowIndex, colIndex++].Value = detail.OffHours;
-                        workSheet.Cells[rowIndex, colIndex++].Value = detail.PublicHours;
-                        workSheet.Cells[rowIndex, colIndex++].Value = detail.SpecialHours;
-                        workSheet.Cells[rowIndex, colIndex++].Value = detail.Verifier.Nickname;
-                        workSheet.Cells[rowIndex, colIndex++].Value = detail.Approver.Nickname;
-                        workSheet.Cells[rowIndex, colIndex].Value = detail.Status;
-
-                        rowIndex++;
-                        colIndex = 1;
-                        count++;
-                    }
-
-                    // summary
-                    if (memberRequests.Any())
-                    {
-                        templateWorksheet.Cells[LineOfTotal, 1, LineOfTotal, TotalColumns].Copy(workSheet.Cells[rowIndex, 1, rowIndex, TotalColumns]);
-                        const byte Total = 3;
-                        for (var i = 0; i <= Total; i++)
-                        {
-                            colIndex = StartTotal + i;
-                            var excelAddress = $"{workSheet.Cells[StartBodyRow, colIndex].Address}:{workSheet.Cells[rowIndex - 1, colIndex].Address}";
-                            workSheet.Cells[rowIndex, colIndex].Formula = string.Format(Constants.SummaryFormula, excelAddress);
-                        }
-                    }
-
-                    workSheet.Cells.AutoFitColumns();
-                    return xlPackage.GetAsByteArray();
-                }
+                colIndex = startTotal + i;
+                var excelAddress = $"{workSheet.Cells[startBodyRow, colIndex].Address}:{workSheet.Cells[rowIndex - 1, colIndex].Address}";
+                workSheet.Cells[rowIndex, colIndex].Formula = string.Format(Constants.SummaryFormula, excelAddress);
             }
         }
+
+        workSheet.Cells.AutoFitColumns();
+        return xlPackage.GetAsByteArray();
     }
 }

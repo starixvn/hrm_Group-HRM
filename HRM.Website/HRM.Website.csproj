@@ -3,6 +3,13 @@
     <TargetFramework>net9.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
+    <Content Remove="Views\Overtime\Details.cshtml" />
+    <Content Remove="Views\Overtime\Edit.cshtml" />
+    <Content Remove="Views\Overtime\MemberDetails.cshtml" />
+    <Content Remove="Views\Overtime\MemberOvertime.cshtml" />
+    <Content Remove="Views\Overtime\_ListMemberOvertime.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
     <None Remove="App_Data\SpNames.xml" />
     <None Remove="logs\log.txt" />
   </ItemGroup>
@@ -31,44 +38,118 @@
     <Content Include="App_Data\SpNames.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="ExcelTemplates\AttendanceReport.xlsx" />
-    <Content Include="ExcelTemplates\DailyOvertimeDetails.xlsx" />
-    <Content Include="ExcelTemplates\DailyWorkingHours.xlsx" />
-    <Content Include="ExcelTemplates\DisciplineDetailReport.xls" />
-    <Content Include="ExcelTemplates\DisciplineSummaryPerYear.xlsx" />
-    <Content Include="ExcelTemplates\DisciplineSummaryReport.xls" />
-    <Content Include="ExcelTemplates\DriverPickup.xlsx" />
-    <Content Include="ExcelTemplates\EmployeeBasicInfoTemplate.xls" />
-    <Content Include="ExcelTemplates\EmployeeDetailsInfoTemplate.xls" />
-    <Content Include="ExcelTemplates\EmployeeFullProfileInfoTemplate.xls" />
-    <Content Include="ExcelTemplates\EmployeeOvertimeTemplate.xlsx" />
-    <Content Include="ExcelTemplates\EmployeeSupervisor.xlsx" />
-    <Content Include="ExcelTemplates\EmployeeWorkFromHome.xls" />
-    <Content Include="ExcelTemplates\HospitalizationLeaveSummary.xls" />
-    <Content Include="ExcelTemplates\JobTitleSummary.xlsx" />
-    <Content Include="ExcelTemplates\LeaveSummaryTemplate.xls" />
-    <Content Include="ExcelTemplates\Manpower.xlsx" />
-    <Content Include="ExcelTemplates\ManpowerCategory.xlsx" />
-    <Content Include="ExcelTemplates\MealAllowanceSummary.xlsx" />
-    <Content Include="ExcelTemplates\MonthlyOvertime.xlsx" />
-    <Content Include="ExcelTemplates\MonthlyWorkingHours.xlsx" />
-    <Content Include="ExcelTemplates\ShiftStatisticDetailTemplate.xlsx" />
-    <Content Include="ExcelTemplates\ShiftStatisticTemplate.xlsx" />
-    <Content Include="ExcelTemplates\SickLeaveSummary.xls" />
-    <Content Include="ExcelTemplates\TeamSupervisor.xlsx" />
-    <Content Include="ExcelTemplates\TimeRecordTemplate.xlsx" />
-    <Content Include="ExcelTemplates\UnpaidLeaveSummaryH1Template.xls" />
-    <Content Include="ExcelTemplates\UnpaidLeaveSummaryH2Template.xls" />
-    <Content Include="ExcelTemplates\UnpaidLeaveSummaryTemplate.xls" />
-    <Content Include="ExcelTemplates\WeekendLeaveDetailTemplate.xls" />
-    <Content Include="ExcelTemplates\WeekendLeaveSummaryTemplate.xls" />
-    <Content Include="ExcelTemplates\WeeklyWorkingHours.xlsx" />
-    <Content Include="ExcelTemplates\WorkingCalendar.xlsx" />
-    <Content Include="ExcelTemplates\WorkingCalendarSummary.xlsx" />
-    <Content Include="ExcelTemplates\WorkingHoursSummary.xlsx" />
-    <Content Include="ExcelTemplates\WorkingTimeRequestTemplate.xls" />
-    <Content Include="ExcelTemplates\YearlyOvertime.xlsx" />
-    <Content Include="logs\log.txt" />
+	  <Content Include="ExcelTemplates\AttendanceReport.xlsx">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="ExcelTemplates\DailyOvertimeDetails.xlsx">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="ExcelTemplates\DailyWorkingHours.xlsx">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="ExcelTemplates\DisciplineDetailReport.xls">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="ExcelTemplates\DisciplineSummaryPerYear.xlsx">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="ExcelTemplates\DisciplineSummaryReport.xls">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="ExcelTemplates\DriverPickup.xlsx">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="ExcelTemplates\EmployeeBasicInfoTemplate.xls">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="ExcelTemplates\EmployeeDetailsInfoTemplate.xls">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="ExcelTemplates\EmployeeFullProfileInfoTemplate.xls">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="ExcelTemplates\EmployeeOvertimeTemplate.xlsx">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="ExcelTemplates\EmployeeSupervisor.xlsx">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="ExcelTemplates\EmployeeWorkFromHome.xls">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="ExcelTemplates\HospitalizationLeaveSummary.xls">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="ExcelTemplates\JobTitleSummary.xlsx">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="ExcelTemplates\LeaveSummaryTemplate.xls">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="ExcelTemplates\Manpower.xlsx">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="ExcelTemplates\ManpowerCategory.xlsx">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="ExcelTemplates\MealAllowanceSummary.xlsx">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="ExcelTemplates\MonthlyOvertime.xlsx">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="ExcelTemplates\MonthlyWorkingHours.xlsx">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="ExcelTemplates\ShiftStatisticDetailTemplate.xlsx">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="ExcelTemplates\ShiftStatisticTemplate.xlsx">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="ExcelTemplates\SickLeaveSummary.xls">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="ExcelTemplates\TeamSupervisor.xlsx">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="ExcelTemplates\TimeRecordTemplate.xlsx">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="ExcelTemplates\UnpaidLeaveSummaryH1Template.xls">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="ExcelTemplates\UnpaidLeaveSummaryH2Template.xls">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="ExcelTemplates\UnpaidLeaveSummaryTemplate.xls">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="ExcelTemplates\WeekendLeaveDetailTemplate.xls">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="ExcelTemplates\WeekendLeaveSummaryTemplate.xls">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="ExcelTemplates\WeeklyWorkingHours.xlsx">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="ExcelTemplates\WorkingCalendar.xlsx">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="ExcelTemplates\WorkingCalendarSummary.xlsx">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="ExcelTemplates\WorkingHoursSummary.xlsx">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="ExcelTemplates\WorkingTimeRequestTemplate.xls">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="ExcelTemplates\YearlyOvertime.xlsx">
+		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="logs\log.txt" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\HRM.Controllers\HRM.Controllers.csproj" />
@@ -88,5 +169,8 @@
     <Content Update="nlog.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Controllers\" />
   </ItemGroup>
 </Project>
