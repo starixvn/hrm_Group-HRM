@@ -67,7 +67,7 @@ function initTooltip() {
 function query() {
     blockUI();
     axios({
-        url: resolveClientUrl('report/AttendanceDetails'),
+        url: resolveClientUrl('report/attendance/details'),
         method: 'POST',
         headers: { 'X-Requested-With': 'XMLHttpRequest' },
         params: parse($('form.filter').serialize()),
@@ -125,13 +125,13 @@ $(document).ready(function () {
         $('#TeamIds').val($('#Team').multiSelectTreeView('getSelectedItems'));
         blockUI();
         axios({
-            url: resolveClientUrl('AttendanceReport/ExportExcel'),
+            url: resolveClientUrl('report/attendance/exportExcel'),
             method: 'GET',
             headers: { 'X-Requested-With': 'XMLHttpRequest' },
             params: parse($('form.filter').serialize()),
             responseType: 'blob'
         }).then(response => {
-            const fileName = response.headers['content-disposition'].match(/filename=(.+)/)[1];
+            const fileName = response.headers['content-disposition'].split(';')[1].split('filename=')[1];
             downloadFile(response.data, fileName);
         }).catch(axiosError).then(() => unblockUI());
     });

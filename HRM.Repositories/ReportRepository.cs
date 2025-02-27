@@ -2,24 +2,25 @@
 {
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
     using Fanex.Data;
     using Fanex.Data.Repository;
+    using GO.UserControl.Client.Core.Models.Role;
     using HRM.Models;
     using HRM.Models.Group;
     using HRM.Models.Request;
     using HRM.Models.Supervisor;
     using HRM.ViewModels;
-    using GO.UserControl.Client.Core.Models.Role;
 
     public partial class ReportRepository : IReportRepository
     {
-        public IList<EmployeeAttendanceModel> GetEmployeeAttendanceReport(ICriteria criteria)
+        public async Task<IEnumerable<EmployeeAttendanceModel>> GetEmployeeAttendanceReportAsync(ICriteria criteria)
         {
             using (var objectDb = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                using (var multi = objectDb.QueryMultiple(criteria))
+                using (var multi = await objectDb.QueryMultipleAsync(criteria))
                 {
-                    var attendances = multi.Read<EmployeeAttendanceModel>().ToList();
+                    var attendances = await multi.ReadAsync<EmployeeAttendanceModel>();
                     var requests = multi.Read<EmployeeAttendanceRequest, RequestTypeModel, LeaveType, EmployeeAttendanceRequest>(
                         (request, requestType, leaveType) =>
                         {

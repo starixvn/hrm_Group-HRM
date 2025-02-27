@@ -1,6 +1,7 @@
 ﻿namespace HRM.Repositories
 {
     using System.Collections.Generic;
+    using System.Threading.Tasks;
     using Fanex.Data.Repository;
     using HRM.Models;
 
@@ -8,6 +9,6 @@
     {
         Team GetById(ICriteria criteria);
 
-        IList<Team> GetAll(ICriteria criteria);
+        Task<IEnumerable<Team>> GetAllAsync(ICriteria criteria);
     }
 }

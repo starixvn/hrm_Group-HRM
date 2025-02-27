@@ -1,11 +1,11 @@
-﻿using HRM.Models;
-using HRM.Services;
-using HRM.ViewModels;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using GO.UserControl.Client.Core.Session;
-using HRM.Core;
+using HRM.Models;
+using HRM.Services;
 using HRM.Services.Interfaces;
+using HRM.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HRM.Controllers;
@@ -18,22 +18,22 @@ public class SectionController(
     ISectionService sectionService) : BaseController(userControlSession)
 {
     [HttpGet]
-    public CustomJsonResult GetOrgChart()
+    public async Task<IActionResult> GetOrgChart()
     {
         var units = unitService.GetUnit();
         var department = departmentService.GetDepartment();
-        var teams = commonDataService.GetAllTeam();
+        var teams = await commonDataService.GetAllTeamAsync();
         var sections = sectionService.GetSection();
 
         var orgchart = GetOrgChart(units, department, teams, sections);
 
-        return new CustomJsonResult(orgchart);
+        return Json(orgchart);
     }
 
-    private IEnumerable<MultiSelectViewModel> GetOrgChart(
+    private static IEnumerable<MultiSelectViewModel> GetOrgChart(
         IList<Unit> units,
         IList<Department> department,
-        IList<Team> teams,
+        IEnumerable<Team> teams,
         IList<Section> sections)
     {
         var orgCharts = units.Select(u => new MultiSelectViewModel

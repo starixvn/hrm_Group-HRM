@@ -3,7 +3,6 @@
     using System;
     using System.Threading.Tasks;
     using Core.Constants;
-    using GO.UserControl.Client.Core;
     using GO.UserControl.Client.Core.Enumerables;
     using GO.UserControl.Client.Core.Services;
     using GO.UserControl.Client.Core.Session;
@@ -12,7 +11,6 @@
     using Microsoft.AspNetCore.Mvc;
 
     public class HomeController(
-        IUserControlSettings userControlSettings,
         IUserControlSession userControlSession,
         IDashboardService dashboardService,
         IUserService userService) : BaseController(userControlSession)
@@ -26,7 +24,6 @@
             };
             var isVerifierApprover = userControlSession.HasPermissionOnFunction(FunctionKey.VerifyRequest, Policy.Host)
                 || userControlSession.HasPermissionOnFunction(FunctionKey.ApproveRequest, Policy.Host);
-            ViewBag.SiteId = userControlSettings.SiteId;
             ViewBag.IsResetPassword = user.IsResetPassword;
             ViewBag.IsVerifierApprover = isVerifierApprover;
             if (isVerifierApprover)

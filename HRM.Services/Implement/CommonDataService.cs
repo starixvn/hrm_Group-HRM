@@ -22,7 +22,7 @@
 
         Task<IList<LeaveType>> GetLeaveTypeAsync(bool excludeNotShown = true);
 
-        IList<Team> GetAllTeam(bool isDeleted = false);
+        Task<IEnumerable<Team>> GetAllTeamAsync(bool isDeleted = false);
 
         IList<Country> GetAllCountry();
 
@@ -69,9 +69,9 @@
             return leaveTypes;
         }
 
-        public IList<Team> GetAllTeam(bool isDeleted = false)
+        public async Task<IEnumerable<Team>> GetAllTeamAsync(bool isDeleted = false)
         {
-            return teamService.GetAll(isDeleted);
+            return await teamService.GetAllAsync(isDeleted);
         }
 
         public IList<Country> GetAllCountry()

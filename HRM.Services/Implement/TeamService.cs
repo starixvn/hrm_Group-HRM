@@ -27,14 +27,14 @@
             return teamRepository.GetById(criteria);
         }
 
-        public IList<Team> GetAll(bool isDeleted = false, string keyword = null)
+        public async Task<IEnumerable<Team>> GetAllAsync(bool isDeleted = false, string keyword = null)
         {
             var criteria = new GetAllGroupCriteria
             {
                 IsDeleted = isDeleted,
                 Keyword = keyword
             };
-            IList<Team> teams = teamRepository.GetAll(criteria);
+            var teams = await teamRepository.GetAllAsync(criteria);
 
             return teams ?? new List<Team>();
         }

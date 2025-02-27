@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
     using Fanex.Data;
     using Fanex.Data.Repository;
     using HRM.Models;
@@ -13,7 +14,7 @@
         {
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                using (IMultiResultReader multi = db.QueryMultiple(criteria))
+                using (var multi = db.QueryMultiple(criteria))
                 {
                     var team = multi.Read<Team, Section, Team>(
                             (t, sec) =>
@@ -33,11 +34,11 @@
             }
         }
 
-        public IList<Team> GetAll(ICriteria criteria)
+        public async Task<IEnumerable<Team>> GetAllAsync(ICriteria criteria)
         {
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                using (var multi = db.QueryMultiple(criteria))
+                using (var multi = await db.QueryMultipleAsync(criteria))
                 {
                     var teams = multi.Read<Team, Section , Team>(
                             (t, sec) =>
@@ -47,7 +48,7 @@
                             },
                              "SectionId"
                             ).ToList();
-                    var employees = multi.Read<TeamManager>();
+                    var employees = await multi.ReadAsync<TeamManager>();
 
                     foreach (var team in teams)
                     {

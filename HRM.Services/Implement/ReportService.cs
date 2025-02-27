@@ -19,12 +19,12 @@
         IReportRepository reportRepository,
         IBaseService baseService) : IReportService
     {
-        public IList<EmployeeAttendanceModel> GetEmployeeAttendanceReport(GetEmployeeAttendanceCriteria criteria)
+        public async Task<IEnumerable<EmployeeAttendanceModel>> GetEmployeeAttendanceReportAsync(GetEmployeeAttendanceCriteria criteria)
         {
-            IList<EmployeeAttendanceModel> employeeAttendance = null;
+            IEnumerable<EmployeeAttendanceModel> employeeAttendance = null;
             if (criteria != null && criteria.IsValid())
             {
-                employeeAttendance = reportRepository.GetEmployeeAttendanceReport(criteria);
+                employeeAttendance = await reportRepository.GetEmployeeAttendanceReportAsync(criteria);
             }
 
             return employeeAttendance;

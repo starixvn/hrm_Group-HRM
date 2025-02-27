@@ -159,6 +159,7 @@ public static class ServiceCollectionExtensions
     {
         services.AddSingleton<IExportExcelService, ExportExcelService>();
         services.AddSingleton<IExportExcelUnpaidLeaveSummaryReportService, ExportExcelUnpaidLeaveSummaryReportService>();
+        services.AddSingleton<IExportExcelAttendanceReportService, ExportExcelAttendanceReportService>();
 
         return services;
     }

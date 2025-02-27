@@ -1,0 +1,149 @@
+﻿@using HRM.Core.Enums
+@using HRM.ViewModels
+@using HRM.Website.Helper
+@model EmployeeAttendanceViewModel
+@{
+    ViewBag.Title = @Labels.AttendanceReport;
+    var today = DateTime.Today;
+}
+@section css{
+    <link href="~/dist/styles/report.attendance.css" rel="stylesheet" />
+}
+@section js{
+    <script src="~/dist/js/report.attendance.js"></script>
+}
+@section Breadcrumb {
+    <a class="step">@Labels.CompanySpace</a> <span class="step">@ViewBag.Title</span>
+}
+<h2 class="page-title">@ViewBag.Title</h2>
+<form class="filter">
+    <div class="form-horizontal clearfix">
+        @Html.Hidden("DateTime-Now", DateTime.Now.ToString("MMMM dd, yyyy"))
+        @Html.HiddenFor(model => model.SupervisorId)
+        @Html.HiddenFor(model => model.TeamIds)
+        @Html.HiddenFor(model => model.IsLocal)
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                <label class="control-label">@Labels.DateRange</label>
+            </div>
+            <div class="select-form">
+                <select id="Date" name="Date" class="form-control">
+                    <option value="0">@Labels.DateRange</option>
+                    <option value="1">@Labels.ToDay</option>
+                    <option value="2">@Labels.Yesterday</option>
+                    <option value="3">@Labels.CurrentWeek</option>
+                    <option value="4">@Labels.LastWeek</option>
+                    <option value="5">@Labels.CurrentMonth</option>
+                    <option value="6">@Labels.LastMonth</option>
+                    <option value="7">@Labels.SinceLastMonth</option>
+                </select>
+                @Html.Hidden("DateOption", Model.DateOption)
+            </div>
+        </div>
+
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                <label class="control-label">@Labels.FromDate</label>
+            </div>
+            <div class="calendar-form">
+                @Html.TextBox(Html.NameFor(model => model.FromDate).ToString(),
+                    Model.FromDate.ToDateMonthYearFormatedDate(),
+                    new {
+                        @class = "datepicker form-control",
+                        mindate = (new DateTime(2010, 1, 1)).ToString("yyyy/MM/dd"),
+                        maxdate = today.ToString("yyyy/MM/dd")
+                    })
+                <i class="icon-calendar fa fa-calendar"></i>
+            </div>
+        </div>
+
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                <label class="control-label">@Labels.ToDate</label>
+            </div>
+            <div class="calendar-form">
+                @Html.TextBox(Html.NameFor(model => model.ToDate).ToString(),
+                    Model.ToDate.ToDateMonthYearFormatedDate(),
+                    new {
+                        @class = "datepicker form-control",
+                        mindate = (new DateTime(2010, 1, 1)).ToString("yyyy/MM/dd"),
+                        maxdate = today.ToString("yyyy/MM/dd")
+                    })
+                <i class="icon-calendar fa fa-calendar"></i>
+            </div>
+        </div>
+
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.LabelFor(model => model.AttendanceType, "Request", new { @class = "control-label" })
+            </div>
+            <div class="select-form">
+                @{
+                    var types = new List<SelectListItem>
+                    {
+                        new () { Text = Labels.All, Value = ((short)AttendanceFilter.All).ToString() },
+                        new () { Text = Labels.MissingCheckIn, Value = ((short)AttendanceFilter.MissingCheckIn).ToString() },
+                        new () { Text = Labels.MissingCheckOut, Value = ((short)AttendanceFilter.MissingCheckOut).ToString() },
+                        new () { Text = Labels.LateIn, Value = ((short)AttendanceFilter.LateIn).ToString() },
+                        new () { Text = Labels.EarlyOut, Value = ((short)AttendanceFilter.EarlyOut).ToString() },
+                        new () { Text = Labels.NotWork, Value = ((short)AttendanceFilter.NotWork).ToString() },
+                    };
+                }
+                @Html.DropDownListFor(model => model.AttendanceType, types, new { @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                <label class="control-label">@Labels.SectionTeam</label>
+            </div>
+            <div class="input-form" id="Team"></div>
+        </div>
+
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.LabelFor(model => model.Employee, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.TextBox("Employee", Model.Employee,
+                    new { placeholder = Messages.SearchEmployeeWatermark, @class = "form-control" })
+                @Html.HiddenFor(model => model.EmployeeId)
+            </div>
+        </div>
+
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                <label class="control-label">@Labels.Category</label>
+            </div>
+            <div class="input-form">
+                <select id="category" name="category" class="category form-control">
+                    <option value="">-- All --</option>
+                    <option value="1">@Labels.Local</option>
+                    <option value="0">@Labels.Expat</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group form-group--m" style="margin-top: 5px;">
+            <input type="checkbox" class="checkbox-custom" id="ExcludeDeletedUsers"
+                   name="ExcludeDeletedUsers" value="true" checked />
+            <label for="ExcludeDeletedUsers">@Labels.ExcludeDeletedUsers</label>
+        </div>
+        <div class="clearfix"></div>
+
+        <div class="form-group form-group--m" style="margin-top: 5px;">
+            <input type="checkbox" class="checkbox-custom" id="IsRealDate"
+                   name="IsRealDate" value="true" />
+            <label for="IsRealDate">@Labels.IsRealDate</label>
+        </div>
+
+        <div class="form-group form-group--m">
+            <button type="button" id="btnSubmit" class="btn btn-primary">@Labels.Submit</button>
+            <button type="button" id="btnExcel" class="btn btn-excel">@Labels.Excel</button>
+        </div>
+    </div>
+</form>
+
+<div id="attendance-report"></div>
+
+<div id="tippy-request" class="tippy-request"></div>

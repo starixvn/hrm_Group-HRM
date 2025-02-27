@@ -11,7 +11,7 @@
     {
         Team GetById(int id);
 
-        IList<Team> GetAll(bool isDeleted = false, string keyword = null);
+        Task<IEnumerable<Team>> GetAllAsync(bool isDeleted = false, string keyword = null);
 
         CommandResult Delete(int actorId, int id);
 

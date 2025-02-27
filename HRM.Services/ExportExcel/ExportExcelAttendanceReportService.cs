@@ -5,23 +5,22 @@
     using System.IO;
     using System.Linq;
     using System.Text;
-    using System.Web;
     using HRM.Core;
     using HRM.Core.Enums;
     using HRM.ViewModels;
     using Microsoft.AspNetCore.Hosting;
-    using Microsoft.AspNetCore.Http;
     using Models;
     using Models.Request;
     using OfficeOpenXml;
 
     public interface IExportExcelAttendanceReportService
     {
-        byte[] Export(IList<EmployeeAttendanceModel> attendances, DateTime fromDate, DateTime toDate);
+        byte[] Export(IEnumerable<EmployeeAttendanceModel> attendances, DateTime fromDate, DateTime toDate);
     }
 
 #pragma warning disable S109 // Magic numbers should not be used
-    public class ExportExcelAttendanceReportService : IExportExcelAttendanceReportService
+
+    public class ExportExcelAttendanceReportService(IWebHostEnvironment hostingEnvironment) : IExportExcelAttendanceReportService
     {
         private const byte RowStartBody = 3;
         private const byte RowHighlight = 4;
@@ -30,14 +29,8 @@
         private const byte TotalColumns = 17;
         private const byte MinimumWidth = 5;
         private const byte MaximumWidth = 50;
-        private readonly IWebHostEnvironment hostingEnvironment;
 
-        public ExportExcelAttendanceReportService(IWebHostEnvironment hostingEnvironment)
-        {
-            this.hostingEnvironment = hostingEnvironment;
-        }
-
-        public byte[] Export(IList<EmployeeAttendanceModel> attendances, DateTime fromDate, DateTime toDate)
+        public byte[] Export(IEnumerable<EmployeeAttendanceModel> attendances, DateTime fromDate, DateTime toDate)
         {
             var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, @"ExcelTemplates\AttendanceReport.xlsx");
 
@@ -45,8 +38,8 @@
             {
                 using (var xlPackage = new ExcelPackage())
                 {
-                    ExcelWorksheet template = templatePackage.Workbook.Worksheets[1];
-                    ExcelWorksheet worksheet = xlPackage.Workbook.Worksheets.Add("Attendance Report");
+                    var template = templatePackage.Workbook.Worksheets[0];
+                    var worksheet = xlPackage.Workbook.Worksheets.Add("Attendance Report");
                     var rowIndex = 1;
                     var colIndex = 1;
 
@@ -60,13 +53,13 @@
 
                     // data
                     var rowNum = 1;
-                    foreach (EmployeeAttendanceModel attendance in attendances)
+                    foreach (var attendance in attendances)
                     {
                         colIndex = 1;
-                        byte templateRowIndex = GetTemplateRowIndex(attendance);
+                        var templateRowIndex = GetTemplateRowIndex(attendance);
                         template.Cells[templateRowIndex, 1, templateRowIndex, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
 
-                        string requests = RequestsRemark(attendance);
+                        var requests = RequestsRemark(attendance);
                         var shiftCode = !string.IsNullOrEmpty(attendance.ShiftCode) ? attendance.ShiftCode : string.Empty;
                         var totalWorkHours = attendance.TotalWorkHours != 0 ? Utilities.TotalHoursToTime((float)attendance.TotalWorkHours) : string.Empty;
                         var overtime = attendance.IsOvertime ? attendance.FormattedOvertimeStatus + " (" + attendance.OvertimeHours.ToString() + ")" : string.Empty;
@@ -130,7 +123,7 @@
             var requestsBuilder = new StringBuilder();
             if (attendance.RequestList != null && attendance.RequestList.Any())
             {
-                foreach (EmployeeAttendanceRequest item in attendance.RequestList)
+                foreach (var item in attendance.RequestList)
                 {
                     var actualLateInErlyOut = item.RequestType.Id == (byte)RequestType.LateIn ? attendance.LateIn : attendance.EarlyOut;
                     var request = GetRequestEntity(item, actualLateInErlyOut);

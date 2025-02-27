@@ -11,13 +11,19 @@
     using GO.UserControl.Client.Core.Models.Role;
     using GO.UserControl.Client.Core.Services;
     using GO.UserControl.Client.Core.Session;
+    using System.Threading.Tasks;
 
     public interface IEmployeeLogService
     {
-        IEnumerable<LogObjectDetail> GetLogDetailById(int employeeId);
+        Task<IEnumerable<LogObjectDetail>> GetLogDetailByIdAsync(int employeeId);
     }
 
-    public class EmployeeLogService : IEmployeeLogService
+    public class EmployeeLogService(
+        IUserControlSession userControlSession,
+        ICommonDataService commonDataService,
+        IActionLogService actionLogService,
+        IJobLevelService jobLevelService,
+        IRoleService roleService) : IEmployeeLogService
     {
         private readonly IEnumerable<MappingFieldConfig> mappingFields = new List<MappingFieldConfig>
         {
@@ -78,12 +84,6 @@
             new MappingFieldConfig { FieldName = "WorkingHoursbyWeek", DisplayName = Labels.WorkingHoursPerWeek }
         };
 
-        private readonly IUserControlSession userControlSession;
-        private readonly ICommonDataService commonDataService;
-        private readonly IActionLogService actionLogService;
-        private readonly IJobLevelService jobLevelService;
-        private readonly IRoleService roleService;
-
         private IEnumerable<Team> Teams { get; set; }
         private IEnumerable<LookupData> JobTitles { get; set; }
         private IEnumerable<JobLevel> JobLevel { get; set; }
@@ -92,30 +92,16 @@
         private IEnumerable<EntityBase<byte>> Genders { get; set; }
         private IEnumerable<EntityBase<byte>> MarriageStatuses { get; set; }
 
-        public EmployeeLogService(
-            IUserControlSession userControlSession,
-            ICommonDataService commonDataService,
-            IActionLogService actionLogService,
-            IJobLevelService jobLevelService,
-            IRoleService roleService)
+        public async Task<IEnumerable<LogObjectDetail>> GetLogDetailByIdAsync(int employeeId)
         {
-            this.userControlSession = userControlSession;
-            this.commonDataService = commonDataService;
-            this.actionLogService = actionLogService;
-            this.jobLevelService = jobLevelService;
-            this.roleService = roleService;
-        }
-
-        public IEnumerable<LogObjectDetail> GetLogDetailById(int employeeId)
-        {
-            Teams = commonDataService.GetAllTeam();
+            Teams = await commonDataService.GetAllTeamAsync();
             JobTitles = commonDataService.GetLookupDataByCode(Constants.JobTitle);
             JobLevel = jobLevelService.GetJobLevel();
             Countries = commonDataService.GetAllCountry();
-            SystemRoles = roleService.GetBySiteId(userControlSession.SiteId);
+            SystemRoles = await roleService.GetBySiteIdAsync(userControlSession.SiteId);
             Genders = commonDataService.GetGender();
             MarriageStatuses = commonDataService.GetMarriageStatus();
-            IEnumerable<LogObjectDetail> logs = actionLogService.GetLogDetailById(LogObjectType.Employee, employeeId);
+            var logs = actionLogService.GetLogDetailById(LogObjectType.Employee, employeeId);
             MappingField(logs);
 
             return logs;
@@ -123,9 +109,9 @@
 
         private void MappingField(IEnumerable<LogObjectDetail> logs)
         {
-            foreach (LogObjectDetail log in logs)
+            foreach (var log in logs)
             {
-                foreach (FieldValue field in log.Fields)
+                foreach (var field in log.Fields)
                 {
                     var mappingField = mappingFields.FirstOrDefault(x => string.Equals(x.FieldName, field.FieldName, StringComparison.OrdinalIgnoreCase));
                     if (mappingField != null)
