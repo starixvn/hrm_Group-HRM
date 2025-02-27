@@ -1,10 +1,11 @@
 ﻿namespace HRM.Services
 {
+    using System.Threading.Tasks;
     using HRM.Core.Models;
     using HRM.Models.AnnualLeaveBalance;
 
     public interface IAnnualLeaveBalanceService
     {
-        CommandResult Adjust(int actorId, AdjustAnnualLeaveBalance model);
+        Task<CommandResult> AdjustAsync(int actorId, AdjustAnnualLeaveBalance model);
     }
 }

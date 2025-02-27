@@ -124,7 +124,7 @@ const annualLeaveBalance = (function ($) {
                                     alert('Adjust successfully.');
                                     setInterval(function () {
                                         document.location = resolveClientUrl('annualleavebalance/index');
-                                    }, 2000);
+                                    }, 3000);
                                 } else {
                                     showErrorMsg($form, response.data.message);
                                 }

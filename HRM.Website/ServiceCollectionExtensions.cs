@@ -100,10 +100,13 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<ILogger, Logger>();
         services.AddSingleton<IDynamicRepository, DynamicRepository>();
 
+        services.AddSingleton<IBaseRepository, BaseRepository>();
         services.AddSingleton<IEmployeeRepository, EmployeeRepository>();
+        services.AddSingleton<IReportRepository, ReportRepository>();
         services.AddSingleton<IDepartmentRepository, DepartmentRepository>();
         services.AddSingleton<ITeamRepository, TeamRepository>();
         services.AddSingleton<ISectionRepository, SectionRepository>();
+        services.AddSingleton<IRequestRepository, RequestRepository>();
 
         services.AddSingleton<IUserControlSession, UserControlSession>();
         services.AddSingleton<IAuthService, AuthService>();
@@ -112,15 +115,11 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IRoleService, RoleService>();
         services.AddSingleton<IFunctionService, FunctionService>();
 
-        services.AddSingleton<IBaseRepository, BaseRepository>();
-        services.AddSingleton<IEmployeeRepository, EmployeeRepository>();
-        services.AddSingleton<IReportRepository, ReportRepository>();
-
         services.AddSingleton<IBaseService, BaseService>();
         services.AddSingleton<IBaseMailService, BaseMailService>();
         services.AddSingleton<IHttpClientService, HttpClientService>();
 
-        services.AddDIExcelServices(configuration);
+        services.AddDIExcelServices();
 
         services.AddSingleton<IHRMAuthService, HRMAuthService>();
         services.AddSingleton<IEmailService, EmailService>();
@@ -134,7 +133,6 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<ISectionService, SectionService>();
         services.AddSingleton<IJobLevelService, JobLevelService>();
 
-        services.AddSingleton<IRequestRepository, RequestRepository>();
         services.AddSingleton<IRequestService, RequestService>();
         services.AddSingleton<IAttachFileService, AttachFileService>();
         services.AddSingleton<ICommonDataService, CommonDataService>();
@@ -152,11 +150,12 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IChangeShiftRequestRepository, ChangeShiftRequestRepository>();
         services.AddSingleton<IKeepInViewRequestService, KeepInViewRequestService>();
         services.AddSingleton<IKeepInViewRequestRepository, KeepInViewRequestRepository>();
-        services.AddScoped<IShiftService, ShiftService>();
+        services.AddSingleton<IShiftService, ShiftService>();
+
         return services;
     }
 
-    public static IServiceCollection AddDIExcelServices(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddDIExcelServices(this IServiceCollection services)
     {
         services.AddSingleton<IExportExcelService, ExportExcelService>();
         services.AddSingleton<IExportExcelUnpaidLeaveSummaryReportService, ExportExcelUnpaidLeaveSummaryReportService>();

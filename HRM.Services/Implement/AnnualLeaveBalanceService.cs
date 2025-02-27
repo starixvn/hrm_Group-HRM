@@ -1,5 +1,6 @@
 ﻿namespace HRM.Services
 {
+    using System.Threading.Tasks;
     using HRM.Core.Models;
     using HRM.Core.Services;
     using HRM.Criteria.AnnualLeave;
@@ -7,7 +8,7 @@
 
     public class AnnualLeaveBalanceService(IBaseService baseService) : IAnnualLeaveBalanceService
     {
-        public CommandResult Adjust(int actorId, AdjustAnnualLeaveBalance model)
+        public async Task<CommandResult> AdjustAsync(int actorId, AdjustAnnualLeaveBalance model)
         {
             var criteria = new AdjustEmployeeAnnualLeaveCriteria
             {
@@ -19,7 +20,7 @@
                 ActorId = actorId
             };
 
-            return baseService.ExecuteNonQuery(criteria);
+            return await baseService.ExecuteNonQueryAsync(criteria);
         }
     }
 }

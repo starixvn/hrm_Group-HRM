@@ -4,13 +4,14 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using System.Threading.Tasks;
     using HRM.Core;
     using HRM.Models;
     using Microsoft.AspNetCore.Hosting;
 
     public interface IExportExcelUnpaidLeaveSummaryReportService
     {
-        void Export(IEnumerable<LeaveSummary> leaveSummaries, int year, string leaveType, string period);
+        Task Export(IEnumerable<LeaveSummary> leaveSummaries, int year, string leaveType, string period);
     }
 
     public class ExportExcelUnpaidLeaveSummaryReportService(
@@ -23,7 +24,7 @@
         private const string UnpaidLeaveSummaryH1TemplatePath = @"ExcelTemplates\UnpaidLeaveSummaryH1Template.xls";
         private const string UnpaidLeaveSummaryH2TemplatePath = @"ExcelTemplates\UnpaidLeaveSummaryH2Template.xls";
 
-        public async void Export(IList<LeaveSummary> leaveSummaries, int year, string leaveType, string period)
+        public async Task Export(IEnumerable<LeaveSummary> leaveSummaries, int year, string leaveType, string period)
         {
             var path = "";
             var range = 0;
@@ -46,14 +47,14 @@
             var fileName = "UnpaidLeaveSummary_" + DateTimeOffset.Now.ToString("yyyyMMdd");
 
             var leaveTypeIds = !string.IsNullOrWhiteSpace(leaveType) ? leaveType.Split(',').ToList() : new List<string>();
-            IList<LeaveType> leaveTypes = await commonDataService.GetLeaveTypeAsync();
+            var leaveTypes = await commonDataService.GetLeaveTypeAsync();
             var type = string.Join(", ", leaveTypes.Where(x => leaveTypeIds.Exists(y => x.Id.ToString() == y)).Select(x => x.Name));
 
             var writer = new ExcelTemplateWriter(templatePath, fileName, "Unpaid Leave Summary Report");
-            /// Fill report title.
+            //// Fill report title.
             writer.CopyRows(0, 2);
 
-            /// Fill report header.
+            //// Fill report header.
             writer.CopyRows(RowStartHeader, 2);
             writer.WriteCellValue(RowStartHeader, 6, $"Take {type} {year}");
             writer.WriteCellValue(RowStartHeader, 12 + range, $"Total Of {type} {year}");

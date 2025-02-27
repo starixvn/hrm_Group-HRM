@@ -1,4 +1,9 @@
-﻿using GO.UserControl.Client.Core.Enumerables;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
+using GO.UserControl.Client.Core.Enumerables;
+using GO.UserControl.Client.Core.Models.Role;
 using GO.UserControl.Client.Core.Models.User;
 using GO.UserControl.Client.Core.Services;
 using GO.UserControl.Client.Core.Session;
@@ -6,22 +11,17 @@ using HRM.Core;
 using HRM.Core.Constants;
 using HRM.Core.Enums;
 using HRM.Core.Filters;
+using HRM.Core.Models;
 using HRM.Criteria.Employee;
 using HRM.Criteria.Supervisor;
 using HRM.Models;
 using HRM.Models.Supervisor;
 using HRM.Services;
-using HRM.Services.Implement;
 using HRM.Services.Interfaces;
 using HRM.ViewModels.Employee;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Linq;
 using Microsoft.AspNetCore.Hosting;
-using System.IO;
-using HRM.Core.Models;
-using GO.UserControl.Client.Core.Models.Role;
+using Microsoft.AspNetCore.Mvc;
 
 namespace HRM.Controllers;
 
@@ -148,14 +148,14 @@ public class EmployeeController(IUserControlSession userControlSession,
     }
 
     [HrmPermission(Policy.Host, FunctionKey.EmployeeManagement)]
-    public ActionResult Edit(int id)
+    public async Task<IActionResult> Edit(int id)
     {
-        var employee = employeeService.GetEmployeeById(id);
+        var employee = await employeeService.GetEmployeeByIdAsync(id);
         if (employee == null) return RedirectToAction("PageNotFound", "Error");
 
-        if (userControlSession.HasPermissionOnFunction(FunctionKey.ManageLocalEmployee, Policy.Host) 
+        if (userControlSession.HasPermissionOnFunction(FunctionKey.ManageLocalEmployee, Policy.Host)
             && !employee.IsLocal
-            && userControlSession.HasPermissionOnFunction(FunctionKey.ManageExpatEmployee, Policy.Host) 
+            && userControlSession.HasPermissionOnFunction(FunctionKey.ManageExpatEmployee, Policy.Host)
             && employee.IsLocal)
         {
             return RedirectToAction("AccessDenied", "Error");
@@ -347,7 +347,7 @@ public class EmployeeController(IUserControlSession userControlSession,
 
         if (supervisors == null) return supervisorsName;
 
-        var  supervisorsFilter = supervisors
+        var supervisorsFilter = supervisors
             .Where(x => x.ActionType == roleId)
             .Take(maxDisplayItems)
             .ToList();

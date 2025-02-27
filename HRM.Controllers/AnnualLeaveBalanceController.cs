@@ -66,7 +66,7 @@
 
         [HttpPost]
         [HrmPermission(Policy.Host, FunctionKey.AnnualLeaveBalance)]
-        public IActionResult Adjust(AnnualLeaveBalanceMultiViewModel model)
+        public async Task<IActionResult> Adjust([FromBody] AnnualLeaveBalanceMultiViewModel model)
         {
             var annualLeave = new AdjustAnnualLeaveBalance
             {
@@ -76,14 +76,14 @@
                 DeductDays = model.DeductDays,
                 AffectedFrom = model.AffectedFrom
             };
-            var commandResult = annualLeaveBalanceService.Adjust(EmployeeSession.EmpId, annualLeave);
+            var commandResult = await annualLeaveBalanceService.AdjustAsync(EmployeeSession.EmpId, annualLeave);
 
             return Json(commandResult);
         }
 
         [HttpPost]
         [HrmPermission(Policy.Host, FunctionKey.AnnualLeaveBalance)]
-        public async Task<IActionResult> Reset(int minbalance, string descriptionReset)
+        public async Task<IActionResult> Reset(int minBalance, string descriptionReset)
         {
             var date = new DateTimeOffset(DateTimeOffset.Now.Year, 1, 1, 0, 0, 0, TimeSpan.Zero).AddDays(-1).DateTime;
             var teams = await teamService.GetBySupervisorAsync(EmployeeSession.EmpId);
@@ -101,11 +101,11 @@
             {
                 ActorId = EmployeeSession.EmpId,
                 Description = descriptionReset,
-                AnnualLeaves = entityList.Where(m => m.LeaveBalance > minbalance).ToList(),
+                AnnualLeaves = entityList.Where(m => m.LeaveBalance > minBalance).ToList(),
                 FromDate = date,
-                ResetDays = minbalance
+                ResetDays = minBalance
             };
-            var result = baseService.ExecuteNonQuery(resetAnnualLeaveCriteria);
+            var result = await baseService.ExecuteNonQueryAsync(resetAnnualLeaveCriteria);
 
             return Json(result);
         }
@@ -146,15 +146,16 @@
 
         [HttpPost]
         [HrmPermission(Policy.Host, FunctionKey.AnnualLeaveBalance)]
-        public async Task<IActionResult> Edit(FormCollection formCollection, AnnualLeaveTransactionViewModel model)
+        public async Task<IActionResult> Edit(AnnualLeaveTransactionViewModel model)
         {
+            var formCollection = Request.Form;
             ViewBag.Employee = await employeeService.GetEmployeeByIdAsync(model.EmpId);
             if (formCollection["command"].Equals(Labels.Delete))
             {
-                return Delete(model);
+                return await DeleteAsync(model);
             }
 
-            return Edit(model);
+            return await EditAsync(model);
         }
 
         [HrmPermission(Policy.Host, FunctionKey.AnnualLeaveBalance)]
@@ -187,7 +188,7 @@
                     CreatedDate = DateTimeOffset.Now.DateTime,
                     CreatedBy = EmployeeSession.EmpId
                 };
-                var result = baseService.ExecuteNonQuery(criteria);
+                var result = await baseService.ExecuteNonQueryAsync(criteria);
 
                 if (result.IsSuccessful)
                 {
@@ -228,7 +229,7 @@
             return await employeeService.GetAnnualLeaveTransactionAsync(criteria);
         }
 
-        private ActionResult Edit(AnnualLeaveTransactionViewModel model)
+        private async Task<IActionResult> EditAsync(AnnualLeaveTransactionViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -242,7 +243,7 @@
                     ModifiedDate = DateTimeOffset.Now.DateTime,
                     ModifiedBy = EmployeeSession.EmpId
                 };
-                var result = baseService.ExecuteNonQuery(criteria);
+                var result = await baseService.ExecuteNonQueryAsync(criteria);
 
                 if (result.IsSuccessful)
                 {
@@ -261,7 +262,7 @@
             return View(model);
         }
 
-        private IActionResult Delete(AnnualLeaveTransactionViewModel model)
+        private async Task<IActionResult> DeleteAsync(AnnualLeaveTransactionViewModel model)
         {
             var criteria = new DeleteAnnualLeaveTransactionCriteria
             {
@@ -269,7 +270,7 @@
                 ModifiedDate = DateTimeOffset.Now.DateTime,
                 ModifiedBy = EmployeeSession.EmpId
             };
-            var result = baseService.ExecuteNonQuery(criteria);
+            var result = await baseService.ExecuteNonQueryAsync(criteria);
 
             if (result.IsSuccessful)
             {
