@@ -6,9 +6,11 @@ using HRM.Services;
 using HRM.ViewModels.Request;
 using System.Collections.Generic;
 using System;
+using System.Threading.Tasks;
 using GO.UserControl.Client.Core.Session;
 using HRM.Controllers;
 using HRM.Core;
+using HRM.Services.Interfaces.Request;
 using Microsoft.AspNetCore.Mvc;
 using NPOI.HSSF.UserModel;
 
@@ -18,7 +20,7 @@ public class ExportRequestController(IUserControlSession userControlSession,
     IRequestService requestService,
     IExportExcelService exportExcelService) : BaseExportController(userControlSession)
 {
-    public IActionResult VoidRequestWorkingTimeRequest(RequestViewModel request)
+    public async Task<IActionResult> VoidRequestWorkingTimeRequest(RequestViewModel request)
     {
         request.ToDate = request.ToDate.ToEndOfDay();
         int? employeeId = null;
@@ -42,7 +44,7 @@ public class ExportRequestController(IUserControlSession userControlSession,
             IsLocal = request.IsLocal.HasValue ? (request.IsLocal.Value == 1) : isLocal
         };
 
-        var requestList = requestService.GetRequests(criteria);
+        var requestList = await requestService.GetRequests(criteria);
         var hssfworkbook = exportExcelService.ExportWorkingTimeRequest(requestList, Labels.VoidRequest);
         var fileName = "EmployeeVoidRequest_" + DateTimeOffset.Now.ToString("yyyyMMdd") + ".xls";
 

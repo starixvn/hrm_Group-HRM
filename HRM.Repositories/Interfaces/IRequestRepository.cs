@@ -1,21 +1,20 @@
-﻿namespace HRM.Repositories
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using Fanex.Data.Repository;
+using HRM.Criteria.Request;
+using HRM.Models.Request;
+
+namespace HRM.Repositories.Interfaces;
+
+public interface IRequestRepository
 {
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
-    using Fanex.Data.Repository;
-    using HRM.Criteria.Request;
-    using HRM.Models.Request;
+    Task<IList<RequestEntity>> GetRequests(ICriteria criteria);
 
-    public interface IRequestRepository
-    {
-        IList<RequestEntity> GetRequests(ICriteria criteria);
+    Task<RequestRelatedPeopleModel> GetRequestRelatedPeople(GetRequestRelatedPeopleCriteria criteria);
 
-        RequestRelatedPeopleModel GetRequestRelatedPeople(GetRequestRelatedPeopleCriteria criteria);
+    Task<VerifierAndApproverForRequest> GetVerifierAndApproverAsync(ICriteria criteria);
 
-        Task<VerifierAndApproverForRequest> GetVerifierAndApproverAsync(ICriteria criteria);
+    Task<RequestEntity> GetRequestToIgnoreById(ICriteria criteria);
 
-        RequestEntity GetRequestToIgnoreById(ICriteria criteria);
-
-        IList<LeaveDisciplineModel> GetLeaveRequestToReviewDiscipline(ICriteria criteria);
-    }
+    Task<List<LeaveDisciplineModel>> GetLeaveRequestToReviewDiscipline(ICriteria criteria);
 }

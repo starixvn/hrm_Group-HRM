@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using HRM.Services.Interfaces;
+using HRM.Services.Interfaces.Request;
 
 namespace Fanex.NexHR.Controllers.Request
 {
@@ -182,27 +183,27 @@ namespace Fanex.NexHR.Controllers.Request
                 case RequestCommand.Accept:
                 case RequestCommand.Approve:
                 case RequestCommand.Process:
-                    commandResult = requestService.ApproveRequest(EmployeeSession.EmpId, model);
+                    commandResult = await requestService.ApproveRequest(EmployeeSession.EmpId, model);
                     break;
 
                 case RequestCommand.Reset:
-                    commandResult = requestService.ResetRequest(EmployeeSession.EmpId, model);
+                    commandResult = await requestService.ResetRequest(EmployeeSession.EmpId, model);
                     break;
 
                 case RequestCommand.NotAccept:
                 case RequestCommand.Reject:
                 case RequestCommand.Void:
-                    commandResult = requestService.RejectRequest(EmployeeSession.EmpId, model);
+                    commandResult = await requestService.RejectRequest(EmployeeSession.EmpId, model);
                     break;
 
                 default:
-                    commandResult = await requestService.VoidRequestAsync(EmployeeSession.EmpId, model);
+                    commandResult = await requestService.VoidRequest(EmployeeSession.EmpId, model);
                     break;
             }
 
             if (commandResult.IsSuccessful)
             {
-                requestService.SendMailProcessRequest(model, EmployeeSession, model.Command);
+                 await requestService.SendMailProcessRequest(model, EmployeeSession, model.Command);
             }
 
             return new CustomJsonResult(commandResult);
@@ -225,26 +226,26 @@ namespace Fanex.NexHR.Controllers.Request
         //    return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         //}
 
-        private void HandleProcessRequest(ProcessRequestViewModel model)
+        private async Task HandleProcessRequest(ProcessRequestViewModel model)
         {
             switch (model.RequestTypeId)
             {
                 case (byte)RequestType.CheckIn:
                 case (byte)RequestType.CheckOut:
-                    model.CheckInOutDetail = requestService.GetCheckInOutDetailToReviewDiscipline(model.RequestId);
+                    model.CheckInOutDetail = await requestService.GetCheckInOutDetailToReviewDiscipline(model.RequestId);
                     break;
 
                 case (byte)RequestType.LateIn:
                 case (byte)RequestType.EarlyOut:
-                    model.LateInEarlyOutDetail = requestService.GetLateInEarlyOutDetailToReviewDiscipline(model.RequestId);
+                    model.LateInEarlyOutDetail = await requestService.GetLateInEarlyOutDetailToReviewDiscipline(model.RequestId);
                     break;
 
                 case (byte)RequestType.ChangeShift:
-                    model.ChangeShiftDetails = requestService.GetChangeShiftDetailToReviewDiscipline(model.RequestId);
+                    model.ChangeShiftDetails = await requestService.GetChangeShiftDetailToReviewDiscipline(model.RequestId);
                     break;
 
                 case (byte)RequestType.Leave:
-                    model.LeaveDisciplines = requestService.GetLeaveRequestDetailToReviewDiscipline(model.RequestId);
+                    model.LeaveDisciplines = await requestService.GetLeaveRequestDetailToReviewDiscipline(model.RequestId);
                     break;
             }
         }
@@ -276,7 +277,7 @@ namespace Fanex.NexHR.Controllers.Request
                 LeaveTypeId = request.LeaveType
             };
 
-            var requestList = requestService.GetRequests(criteria);
+            var requestList = await requestService.GetRequests(criteria);
             request.CurrentUserId = EmployeeSession.EmpId;
             request.Requests = request.ViewType == RequestViewType.PersonalSpace ? SortRequest(requestList) : requestList;
         }

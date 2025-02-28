@@ -1,4 +1,6 @@
-﻿namespace HRM.Website;
+﻿using HRM.Services.Interfaces.Request;
+
+namespace HRM.Website;
 
 using System;
 using System.Threading.Tasks;

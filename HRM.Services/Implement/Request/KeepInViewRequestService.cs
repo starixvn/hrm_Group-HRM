@@ -1,4 +1,6 @@
-﻿namespace HRM.Services
+﻿using HRM.Services.Interfaces.Request;
+
+namespace HRM.Services
 {
     using System;
     using System.Collections.Generic;
@@ -15,37 +17,19 @@
     using HRM.Services.Interfaces;
     using Microsoft.AspNetCore.Hosting;
 
-    public class KeepInViewRequestService : IKeepInViewRequestService
+    public class KeepInViewRequestService(
+        AppSettings appSettings,
+        IWebHostEnvironment env,
+        IKeepInViewRequestRepository keepInViewRequestRepository,
+        IBaseService baseService,
+        IRequestMailService requestMailService,
+        IEmailService emailService,
+        ILetstalkService letstalkService)
+        : IKeepInViewRequestService
     {
         private const string EmailTemplatePathForRequest = "EmailTemplates/KeepInView.Request.txt";
         private const string EmailTemplatePathForCancel = "EmailTemplates/KeepInView.Cancel.txt";
         private const string EmailTemplatePathForApproval = "EmailTemplates/KeepInView.Approval.txt";
-
-        private readonly AppSettings appSettings;
-        private readonly IWebHostEnvironment env;
-        private readonly IKeepInViewRequestRepository keepInViewRequestRepository;
-        private readonly IBaseService baseService;
-        private readonly IRequestMailService requestMailService;
-        private readonly IEmailService emailService;
-        private readonly ILetstalkService letstalkService;
-
-        public KeepInViewRequestService(
-            AppSettings appSettings,
-            IWebHostEnvironment env,
-            IKeepInViewRequestRepository keepInViewRequestRepository,
-            IBaseService baseService,
-            IRequestMailService requestMailService,
-            IEmailService emailService,
-            ILetstalkService letstalkService)
-        {
-            this.appSettings = appSettings;
-            this.env = env;
-            this.keepInViewRequestRepository = keepInViewRequestRepository;
-            this.baseService = baseService;
-            this.requestMailService = requestMailService;
-            this.emailService = emailService;
-            this.letstalkService = letstalkService;
-        }
 
         public async Task<IList<KeepInViewRequest>> GetByDateAsync(GetKeepInViewRequestByDateCriteria criteria)
         {
@@ -104,7 +88,7 @@
             if (request != null)
             {
                 var emailTemplatePath = Path.Combine(env.ContentRootPath, EmailTemplatePathForRequest);
-                var email = requestMailService.GetMailToMailCCAndLetstalk(requestId, (byte)SettingsSendMail.New);
+                var email = await requestMailService.GetMailToMailCcAndLetStalk(requestId, (byte)SettingsSendMail.New);
 
                 email.Subject = string.Format(
                     "{0} {1} on {2}",
@@ -137,7 +121,7 @@
             if (request != null)
             {
                 var emailTemplatePath = Path.Combine(env.ContentRootPath, EmailTemplatePathForRequest);
-                var email = requestMailService.GetMailToMailCCAndLetstalk(requestId, (byte)SettingsSendMail.Edit);
+                var email = await requestMailService.GetMailToMailCcAndLetStalk(requestId, (byte)SettingsSendMail.Edit);
                 email.Subject = string.Format(
                     "{0} {1} on {2}",
                     Messages.UpdatedCompensationLeaveEmailSubject,
@@ -169,7 +153,7 @@
             if (request != null)
             {
                 var emailTemplatePath = Path.Combine(env.ContentRootPath, EmailTemplatePathForCancel);
-                var email = requestMailService.GetMailToMailCCAndLetstalk(requestId, (byte)SettingsSendMail.Cancel);
+                var email = await requestMailService.GetMailToMailCcAndLetStalk(requestId, (byte)SettingsSendMail.Cancel);
                 email.Subject = string.Format(Messages.MessageCompensationLeaveRequest, request.Requester.Nickname);
                 email.Body = Utilities.ReadTextFile(emailTemplatePath);
                 email.Body = string.Format(
@@ -197,7 +181,7 @@
                 var emailTemplatePath = Path.Combine(env.ContentRootPath, EmailTemplatePathForApproval);
                 var action = requestMailService.GetActionProcessRequest(request.Status.Id, command);
                 var commandMessage = requestMailService.GetCommandMessage(command);
-                var email = requestMailService.GetMailToMailCCAndLetstalk(requestId, action);
+                var email = await  requestMailService.GetMailToMailCcAndLetStalk(requestId, action);
                 email.Subject = string.Format(Messages.ApprovalNotificationCompensationLeaveSubject, request.Requester.Nickname, commandMessage, actor.Nickname);
                 email.Body = Utilities.ReadTextFile(emailTemplatePath);
                 email.Body = string.Format(

@@ -1,17 +1,17 @@
-﻿namespace HRM.Services
+﻿using System;
+using System.Threading.Tasks;
+using HRM.Core.Enums;
+using HRM.Models;
+
+namespace HRM.Services.Interfaces.Request;
+
+public interface IRequestMailService
 {
-    using System;
-    using HRM.Core.Enums;
-    using HRM.Models;
+    Task<EmailModel> GetMailToMailCcAndLetStalk(long requestId, int action);
 
-    public interface IRequestMailService
-    {
-        EmailModel GetMailToMailCCAndLetstalk(long requestId, int action);
+    byte GetActionProcessRequest(byte requestStatusId, RequestCommand command);
 
-        byte GetActionProcessRequest(byte requestStatusId, RequestCommand command);
+    string GetCommandMessage(RequestCommand command);
 
-        string GetCommandMessage(RequestCommand command);
-
-        string GetStringDateForLeaveRequest(DateTime requestedDate, DateTime fromDate, DateTime toDate, decimal totalDays);
-    }
+    string GetStringDateForLeaveRequest(DateTime requestedDate, DateTime fromDate, DateTime toDate, decimal totalDays);
 }

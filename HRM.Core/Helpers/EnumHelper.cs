@@ -1,4 +1,6 @@
-﻿namespace HRM.Core.Helpers
+﻿using Fanex.Common.Extensions;
+
+namespace HRM.Core.Helpers
 {
     using System;
     using System.ComponentModel;
@@ -26,6 +28,24 @@
             return val.GetType().GetMember(val.ToString())
                 .FirstOrDefault()?.GetCustomAttribute<DisplayAttribute>()?.GetName()
                 ?? val.ToString();
+        }
+
+        public static string GetStringValue(Enum enumType)
+        {
+            var description = string.Empty;
+            if (enumType == null)
+            {
+                return description;
+            }
+            var fi = enumType.GetType().GetField(enumType.ToString());
+            if (fi == null)
+            {
+                return description;
+            }
+            var attributes = (StringValueAttribute[])fi.GetCustomAttributes(typeof(StringValueAttribute), false);
+            description = attributes.Length > 0 ? attributes[0].Value : enumType.ToString();
+
+            return description;
         }
     }
 }

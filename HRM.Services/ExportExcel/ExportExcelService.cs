@@ -1,4 +1,6 @@
-﻿namespace HRM.Services
+﻿using HRM.Services.Implement.Request;
+
+namespace HRM.Services
 {
     using System.Collections.Generic;
     using System.IO;

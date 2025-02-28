@@ -1,4 +1,6 @@
-﻿namespace Fanex.NexHR.Controllers.Request
+﻿using HRM.Services.Interfaces.Request;
+
+namespace Fanex.NexHR.Controllers.Request
 {
     using System;
     using System.Collections.Generic;
