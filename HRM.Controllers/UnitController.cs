@@ -8,7 +8,6 @@ using HRM.Services;
 using HRM.ViewModels.Unit;
 using Microsoft.AspNetCore.Mvc;
 using HRM.Core.Models;
-using HRM.Models;
 namespace HRM.Controllers;
 
 public class UnitController(IUserControlSession userControlSession,
@@ -25,7 +24,7 @@ public class UnitController(IUserControlSession userControlSession,
 
     [HttpPost]
     [HrmPermission(Policy.Read, FunctionKey.UnitManagement)]
-    public IActionResult GetUnits(UnitViewModel model)
+    public IActionResult GetUnits([FromBody] UnitViewModel model)
     {
         var units = unitService.GetUnit(model.IsActive);
         return new CustomJsonResult(units);
@@ -39,7 +38,7 @@ public class UnitController(IUserControlSession userControlSession,
 
     [HttpPost]
     [HrmPermission(Policy.Host, FunctionKey.UnitManagement)]
-    public IActionResult Create(AddUnitViewModel model)
+    public IActionResult Create([FromBody] AddUnitViewModel model)
     {
         var commandResult = new CommandResult();
         if (model == null || !ModelState.IsValid) return new CustomJsonResult(commandResult);
@@ -70,7 +69,7 @@ public class UnitController(IUserControlSession userControlSession,
 
     [HttpPost]
     [HrmPermission(Policy.Host, FunctionKey.UnitManagement)]
-    public IActionResult Edit(EditUnitViewModel model)
+    public IActionResult Edit([FromBody] EditUnitViewModel model)
     {
         var commandResult = new CommandResult();
         if (model == null || !ModelState.IsValid) return new CustomJsonResult(commandResult);
@@ -89,7 +88,7 @@ public class UnitController(IUserControlSession userControlSession,
 
     [HttpPost]
     [HrmPermission(Policy.Host, FunctionKey.UnitManagement)]
-    public IActionResult Delete(DeleteUnitCriteria criteria)
+    public IActionResult Delete([FromBody] DeleteUnitCriteria criteria)
     {
         criteria.ModifiedBy = EmployeeSession.EmpId;
         var commandResult = unitService.Delete(criteria);

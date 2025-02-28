@@ -1,6 +1,7 @@
 ﻿namespace HRM.ViewModels.Unit
 {
     using System.ComponentModel.DataAnnotations;
+    using System.Text.Json.Serialization;
     using HRM.Resources;
 
     public class AddUnitViewModel
@@ -11,6 +12,7 @@
         [Required(ErrorMessageResourceName = nameof(Messages.RequiredErrorMessage), ErrorMessageResourceType = typeof(Messages))]
         [StringLength(MaxSizeCode, ErrorMessageResourceType = typeof(Messages), ErrorMessageResourceName = nameof(Messages.StringLengthErrorMessage))]
         [Display(Name = nameof(Labels.Code), ResourceType = typeof(Labels))]
+        [JsonPropertyName("code")]
         public string Code { get; set; }
 
         [Required(ErrorMessageResourceName = nameof(Messages.RequiredErrorMessage), ErrorMessageResourceType = typeof(Messages))]
