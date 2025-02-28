@@ -282,7 +282,7 @@
                     break;
 
                 default:
-                    keepInViewRequestService.SendMailProcessRequest(param.RequestId, actor, command);
+                    keepInViewRequestService.SendMailProcessRequestAsync(param.RequestId, actor, command);
                     break;
             }
         }
@@ -312,7 +312,7 @@
                         break;
 
                     default:
-                        keepInViewRequestService.SendMailProcessRequest(request.RequestId, actor, command);
+                        keepInViewRequestService.SendMailProcessRequestAsync(request.RequestId, actor, command);
                         break;
                 }
             }

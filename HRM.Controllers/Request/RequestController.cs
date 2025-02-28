@@ -22,6 +22,7 @@ namespace Fanex.NexHR.Controllers.Request
     using GO.UserControl.Client.Core.Session;
     using HRM.Controllers;
     using Microsoft.AspNetCore.Mvc;
+    using System.Threading.Tasks;
 
     public class RequestController(
         IUserControlSession userControlSession,
@@ -113,7 +114,7 @@ namespace Fanex.NexHR.Controllers.Request
         //    return View(EmployeeRequestViewName, request);
         //}
 
-        public async Task<JsonResult> GetEmployeesByActingUser(byte role, string query = "", byte? requestType = null)
+        public async Task<IActionResult> GetEmployeesByActingUser(byte role, string query = "", byte? requestType = null)
         {
             var criteria = new GetEmployeeSupervisorByQueryCriteria
             {

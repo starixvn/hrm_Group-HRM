@@ -139,7 +139,7 @@ namespace HRM.Services
             return baseService.GetData<SupervisorNameModel>(criteria).ToList();
         }
 
-        public async Task<IList<SupervisorNameModel>> GetSupervisorByQuery(GetEmployeeSupervisorByQueryCriteria criteria)
+        public async Task<IList<SupervisorNameModel>> GetSupervisorByQueryAsync(GetEmployeeSupervisorByQueryCriteria criteria)
         {
             return (await baseService.GetDataAsync<SupervisorNameModel>(criteria)).ToList();
         }

@@ -2,17 +2,18 @@
 {
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
     using Fanex.Data;
     using Fanex.Data.Repository;
     using HRM.Models.Request;
 
     public class KeepInViewRequestRepository : IKeepInViewRequestRepository
     {
-        public IList<KeepInViewRequest> GetByDate(ICriteria criteria)
+        public async Task<IList<KeepInViewRequest>> GetByDateAsync(ICriteria criteria)
         {
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                var entity = db.Query<KeepInViewRequest, Requester, Requester, Requester, Requester, Requester, KeepInViewRequest>(
+                var entity = await db.QueryAsync<KeepInViewRequest, Requester, Requester, Requester, Requester, Requester, KeepInViewRequest>(
                         (request, employee, verifier, approver, hr, approvedBy) =>
                         {
                             request.Requester = employee;
@@ -29,11 +30,11 @@
             }
         }
 
-        public KeepInViewRequest GetById(ICriteria criteria)
+        public async Task<KeepInViewRequest> GetByIdAsync(ICriteria criteria)
         {
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                var entity = db.QueryEntity<KeepInViewRequest, Requester, Requester, Requester, Requester, KeepInViewRequest>(
+                var entity = await db.QueryEntityAsync<KeepInViewRequest, Requester, Requester, Requester, Requester, KeepInViewRequest>(
                         (request, employee, verifier, approver, hr) =>
                         {
                             request.Requester = employee;
@@ -49,11 +50,11 @@
             }
         }
 
-        public IList<KeepInViewRequest> GetHistoryById(ICriteria criteria)
+        public async Task<IList<KeepInViewRequest>> GetHistoryByIdAsync(ICriteria criteria)
         {
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                var entity = db.Query<KeepInViewRequest, Requester, Requester, Requester, Requester, Requester, KeepInViewRequest >(
+                var entity = await db.QueryAsync<KeepInViewRequest, Requester, Requester, Requester, Requester, Requester, KeepInViewRequest>(
                         (request, employee, verifier, approver, hr, modifier) =>
                         {
                             request.Requester = employee;

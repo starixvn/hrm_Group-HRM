@@ -2,6 +2,7 @@
 
 using System.Collections.Generic;
 using System.Linq;
+    using System.Threading.Tasks;
 using Fanex.Data;
 using Fanex.Data.Repository;
 using Models.Overtime;
@@ -11,10 +12,11 @@ using HRM.Repositories.Interfaces;
 
 public class OvertimeRequestRepository : IOvertimeRequestRepository
 {
-    public async Task<IEnumerable<MonthlyOvertimeRequest>> GetMonthlyRequestByEmployeeId(ICriteria criteria)
+        public async Task<IEnumerable<MonthlyOvertimeRequest>> GetMonthlyRequestByEmployeeIdAsync(ICriteria criteria)
     {
         using var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey());
         return await db.QueryAsync<MonthlyOvertimeRequest, RequestStatus, Requester, Requester, MonthlyOvertimeRequest>(
+                var entity = await db.QueryAsync<MonthlyOvertimeRequest, RequestStatus, Requester, Requester, MonthlyOvertimeRequest>(
             (re, stt, verifier, approver) =>
             {
                 re.Status = stt;
@@ -24,13 +26,16 @@ public class OvertimeRequestRepository : IOvertimeRequestRepository
             },
             "StatusId, VerifierId, ApproverId",
             criteria);
+
+                return entity;
     }
 
-    public async Task<MonthlyOvertimeRequest> GetMonthlyRequestDetailsByEmployeeId(ICriteria criteria)
+        public async Task<MonthlyOvertimeRequest> GetMonthlyRequestDetailsByEmployeeIdAsync(ICriteria criteria)
     {
         using var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey());
         using var multi = await db.QueryMultipleAsync(criteria);
-        var monthlyRequest = multi.Read<MonthlyOvertimeRequest, RequestStatus, Requester, Requester, Requester, MonthlyOvertimeRequest>(
+                using (var multi = await db.QueryMultipleAsync(criteria))
+                    var monthlyRequest = (multi.Read<MonthlyOvertimeRequest, RequestStatus, Requester, Requester, Requester, MonthlyOvertimeRequest>(
             (re, stt, requester, verifier, approver) =>
             {
                 re.Requester = requester;
@@ -39,7 +44,7 @@ public class OvertimeRequestRepository : IOvertimeRequestRepository
                 re.Approver = approver;
                 return re;
             },
-            "StatusId, EmpId, VerifierId, ApproverId").FirstOrDefault();
+                    "StatusId, EmpId, VerifierId, ApproverId")).FirstOrDefault();
 
         if (monthlyRequest != null)
         {
@@ -49,10 +54,11 @@ public class OvertimeRequestRepository : IOvertimeRequestRepository
         return monthlyRequest;
     }
 
-    public async Task<IEnumerable<MonthlyOvertimeRequest>> GetMemberMonthlyRequest(ICriteria criteria)
+        public async Task<IEnumerable<MonthlyOvertimeRequest>> GetMemberMonthlyRequestAsync(ICriteria criteria)
     {
         using var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey());
         return await db.QueryAsync<MonthlyOvertimeRequest, RequestStatus, Requester, Requester, Requester, MonthlyOvertimeRequest>(
+                var entity = await db.QueryAsync<MonthlyOvertimeRequest, RequestStatus, Requester, Requester, Requester, MonthlyOvertimeRequest>(
             (req, stt, requester, verifier, approver) =>
             {
                 req.Status = stt;
@@ -63,5 +69,7 @@ public class OvertimeRequestRepository : IOvertimeRequestRepository
             },
             "StatusId, EmpId, VerifierId, ApproverId",
             criteria);
+
+                return entity;
     }
 }

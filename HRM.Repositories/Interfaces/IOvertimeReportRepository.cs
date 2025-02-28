@@ -2,11 +2,12 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Threading.Tasks;
     using Fanex.Data.Repository;
     using HRM.Models.Report.Overtime;
 
     public interface IOvertimeReportRepository
     {
-        Tuple<IEnumerable<DateRange>, IEnumerable<DailyOvertimeDetails>> GetMonthlyOvertime(ICriteria criteria);
+        Task<Tuple<IEnumerable<DateRange>, IEnumerable<DailyOvertimeDetails>>> GetMonthlyOvertimeAsync(ICriteria criteria);
     }
 }

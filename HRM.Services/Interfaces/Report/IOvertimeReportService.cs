@@ -2,15 +2,16 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Threading.Tasks;
     using HRM.Models.Report.Overtime;
 
     public interface IOvertimeReportService
     {
         IEnumerable<YearlyOvertime> GetYearlyOvertime(GetYearlyOvertimeParam param);
 
-        IEnumerable<DailyOvertimeDetails> GetMonthlyOvertimeDetails(GetMonthlyOvertimeDetailParam param);
+        Task<IEnumerable<DailyOvertimeDetails>> GetMonthlyOvertimeDetailsAsync(GetMonthlyOvertimeDetailParam param);
 
-        Tuple<IEnumerable<DateRange>, IEnumerable<DailyOvertimeDetails>> GetMonthlyOvertime(GetMonthlyOvertimeParam param);
+        Task<Tuple<IEnumerable<DateRange>, IEnumerable<DailyOvertimeDetails>>> GetMonthlyOvertimeAsync(GetMonthlyOvertimeParam param);
 
         IEnumerable<DailyOvertimeDetails> GetDailyOvertimeDetails(GetDailyOvertimeDetailsParam param);
 

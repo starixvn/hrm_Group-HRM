@@ -37,7 +37,7 @@ public interface IEmployeeService
 
     IList<SupervisorNameModel> GetSupervisorByRequestType(GetSupervisorByRequestTypeCriteria criteria);
 
-    Task<IList<SupervisorNameModel>> GetSupervisorByQuery(GetEmployeeSupervisorByQueryCriteria criteria);
+        Task<IList<SupervisorNameModel>> GetSupervisorByQueryAsync(GetEmployeeSupervisorByQueryCriteria criteria);
 
     IEnumerable<Supervisor> GetDisciplineSettingByEmployeeId(int employeeId);
 

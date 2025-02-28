@@ -15,49 +15,68 @@
     using HRM.Services.Interfaces;
     using Microsoft.AspNetCore.Hosting;
 
-    public class KeepInViewRequestService(
-        AppSettings appSettings,
-        IWebHostEnvironment env,
-        IKeepInViewRequestRepository keepInViewRequestRepository,
-        IBaseService baseService,
-        IRequestMailService requestMailService,
-        IEmailService emailService,
-        ILetstalkService letstalkService) : IKeepInViewRequestService
+    public class KeepInViewRequestService : IKeepInViewRequestService
     {
         private const string EmailTemplatePathForRequest = "EmailTemplates/KeepInView.Request.txt";
         private const string EmailTemplatePathForCancel = "EmailTemplates/KeepInView.Cancel.txt";
         private const string EmailTemplatePathForApproval = "EmailTemplates/KeepInView.Approval.txt";
 
-        public IList<KeepInViewRequest> GetByDate(GetKeepInViewRequestByDateCriteria criteria)
+        private readonly AppSettings appSettings;
+        private readonly IWebHostEnvironment env;
+        private readonly IKeepInViewRequestRepository keepInViewRequestRepository;
+        private readonly IBaseService baseService;
+        private readonly IRequestMailService requestMailService;
+        private readonly IEmailService emailService;
+        private readonly ILetstalkService letstalkService;
+
+        public KeepInViewRequestService(
+            AppSettings appSettings,
+            IWebHostEnvironment env,
+            IKeepInViewRequestRepository keepInViewRequestRepository,
+            IBaseService baseService,
+            IRequestMailService requestMailService,
+            IEmailService emailService,
+            ILetstalkService letstalkService)
+        {
+            this.appSettings = appSettings;
+            this.env = env;
+            this.keepInViewRequestRepository = keepInViewRequestRepository;
+            this.baseService = baseService;
+            this.requestMailService = requestMailService;
+            this.emailService = emailService;
+            this.letstalkService = letstalkService;
+        }
+
+        public async Task<IList<KeepInViewRequest>> GetByDateAsync(GetKeepInViewRequestByDateCriteria criteria)
         {
             IList<KeepInViewRequest> requests = null;
             if (criteria != null && criteria.IsValid())
             {
-                requests = keepInViewRequestRepository.GetByDate(criteria);
+                requests = await keepInViewRequestRepository.GetByDateAsync(criteria);
             }
 
             return requests ?? new List<KeepInViewRequest>();
         }
 
-        public KeepInViewRequest GetById(long requestId)
+        public async Task<KeepInViewRequest> GetByIdAsync(long requestId)
         {
             var criteria = new GetKeepInViewRequestByIdCriteria
             {
                 RequestId = requestId
             };
-            return keepInViewRequestRepository.GetById(criteria);
+            return await keepInViewRequestRepository.GetByIdAsync(criteria);
         }
 
-        public IList<KeepInViewRequest> GetHistoryById(long requestId)
+        public async Task<IList<KeepInViewRequest>> GetHistoryByIdAsync(long requestId)
         {
             var criteria = new GetKeepInViewRequestHistoryByIdCriteria
             {
                 RequestId = requestId
             };
-            return keepInViewRequestRepository.GetHistoryById(criteria);
+            return await keepInViewRequestRepository.GetHistoryByIdAsync(criteria);
         }
 
-        public IEnumerable<DateTime> GetDisabledDate(GetDisabledDateParam param)
+        public async Task<IEnumerable<DateTime>> GetDisabledDateAsync(GetDisabledDateParam param)
         {
             var criteria = new GetDisabledDateCriteria
             {
@@ -67,21 +86,21 @@
                 RequestId = param.RequestId,
                 TypeId = param.RequestTypeId
             };
-            return baseService.GetData<DateTime>(criteria);
+            return await baseService.GetDataAsync<DateTime>(criteria);
         }
 
-        public CommandResult Delete(long requestId)
+        public async Task<CommandResult> DeleteAsync(long requestId)
         {
             var criteria = new DeleteKeepInViewRequestCriteria
             {
                 RequestId = requestId
             };
-            return baseService.ExecuteNonQuery(criteria);
+            return await baseService.ExecuteNonQueryAsync(criteria);
         }
 
-        public void SendMailAndSendLetstalkCreateRequest(long requestId)
+        public async Task SendMailAndSendLetstalkCreateRequestAsync(long requestId)
         {
-            var request = GetById(requestId);
+            var request = await GetByIdAsync(requestId);
             if (request != null)
             {
                 var emailTemplatePath = Path.Combine(env.ContentRootPath, EmailTemplatePathForRequest);
@@ -102,19 +121,19 @@
                     request.Remark,
                     appSettings.Domain);
 
-                Task.Run(() => emailService.SendEmailAsync(
+                await emailService.SendEmailAsync(
                     email.SendTo,
                     email.SendCC,
                     email.Subject,
-                    email.Body));
+                    email.Body);
 
-                Task.Run(() => letstalkService.SendNotificationAsync(email.LetsTalk, email.Subject, email.Body));
+                await letstalkService.SendNotificationAsync(email.LetsTalk, email.Subject, email.Body);
             }
         }
 
-        public void SendMailEditRequest(long requestId)
+        public async Task SendMailEditRequestAsync(long requestId)
         {
-            var request = GetById(requestId);
+            var request = await GetByIdAsync(requestId);
             if (request != null)
             {
                 var emailTemplatePath = Path.Combine(env.ContentRootPath, EmailTemplatePathForRequest);
@@ -134,19 +153,19 @@
                     request.Remark,
                     appSettings.Domain);
 
-                Task.Run(() => emailService.SendEmailAsync(
+                await emailService.SendEmailAsync(
                     email.SendTo,
                     email.SendCC,
                     email.Subject,
-                    email.Body));
+                    email.Body);
 
-                Task.Run(() => letstalkService.SendNotificationAsync(email.LetsTalk, email.Subject, email.Body));
+                await letstalkService.SendNotificationAsync(email.LetsTalk, email.Subject, email.Body);
             }
         }
 
-        public void SendMailDeleteRequest(long requestId)
+        public async Task SendMailDeleteRequestAsync(long requestId)
         {
-            var request = GetById(requestId);
+            var request = await GetByIdAsync(requestId);
             if (request != null)
             {
                 var emailTemplatePath = Path.Combine(env.ContentRootPath, EmailTemplatePathForCancel);
@@ -160,19 +179,19 @@
                     request.OnDate.ToDateMonthYearFormatedDate(),
                     request.Remark);
 
-                Task.Run(() => emailService.SendEmailAsync(
+                await emailService.SendEmailAsync(
                     email.SendTo,
                     email.SendCC,
                     email.Subject,
-                    email.Body));
+                    email.Body);
 
-                Task.Run(() => letstalkService.SendNotificationAsync(email.LetsTalk, email.Subject, email.Body));
+                await letstalkService.SendNotificationAsync(email.LetsTalk, email.Subject, email.Body);
             }
         }
 
-        public void SendMailProcessRequest(long requestId, EmployeeSession actor, RequestCommand command)
+        public async Task SendMailProcessRequestAsync(long requestId, EmployeeSession actor, RequestCommand command)
         {
-            var request = GetById(requestId);
+            var request = await GetByIdAsync(requestId);
             if (request != null)
             {
                 var emailTemplatePath = Path.Combine(env.ContentRootPath, EmailTemplatePathForApproval);
@@ -192,13 +211,13 @@
                     request.ShiftName,
                     request.Remark);
 
-                Task.Run(() => emailService.SendEmailAsync(
+                await emailService.SendEmailAsync(
                     email.SendTo,
                     email.SendCC,
                     email.Subject,
-                    email.Body));
+                    email.Body);
 
-                Task.Run(() => letstalkService.SendNotificationAsync(email.LetsTalk, email.Subject, email.Body));
+                await letstalkService.SendNotificationAsync(email.LetsTalk, email.Subject, email.Body);
             }
         }
     }

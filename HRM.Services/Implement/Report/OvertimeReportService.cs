@@ -5,6 +5,7 @@
     using System.IO;
     using System.Linq;
     using System.Text;
+    using System.Threading.Tasks;
     using HRM.Core;
     using HRM.Core.Constants;
     using HRM.Core.Enums;
@@ -54,7 +55,7 @@
             return baseService.GetData<YearlyOvertime>(criteria);
         }
 
-        public IEnumerable<DailyOvertimeDetails> GetMonthlyOvertimeDetails(GetMonthlyOvertimeDetailParam param)
+        public async Task<IEnumerable<DailyOvertimeDetails>> GetMonthlyOvertimeDetailsAsync(GetMonthlyOvertimeDetailParam param)
         {
             var fromDate = new DateTimeOffset(param.Year, param.Month, 1, 0, 0, 0, TimeSpan.Zero).Date;
             var toDate = fromDate.LastDayOfMonth();
@@ -70,10 +71,10 @@
                 FromDate = fromDate,
                 ToDate = toDate
             };
-            return baseService.GetData<DailyOvertimeDetails>(criteria);
+            return await baseService.GetDataAsync<DailyOvertimeDetails>(criteria);
         }
 
-        public Tuple<IEnumerable<DateRange>, IEnumerable<DailyOvertimeDetails>> GetMonthlyOvertime(GetMonthlyOvertimeParam param)
+        public async Task<Tuple<IEnumerable<DateRange>, IEnumerable<DailyOvertimeDetails>>> GetMonthlyOvertimeAsync(GetMonthlyOvertimeParam param)
         {
             var criteria = new GetMonthlyOvertimeReportCriteria
             {
@@ -85,7 +86,7 @@
                 TeamIds = param.TeamIds,
                 IsLocal = param.IsLocal
             };
-            return overtimeReportRepository.GetMonthlyOvertime(criteria);
+            return await overtimeReportRepository.GetMonthlyOvertimeAsync(criteria);
         }
 
         public IEnumerable<DailyOvertimeDetails> GetDailyOvertimeDetails(GetDailyOvertimeDetailsParam param)
