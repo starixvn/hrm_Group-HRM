@@ -93,11 +93,11 @@ $(document).ready(function () {
             }
         }).then(response => {
             let data = response.data;
-            if (data.IsSuccessful) {
+            if (data.isSuccessful) {
                 toastr.success('Updated successfully!', '', toastOptions());
                 setTimeout(function () { $('#btnSearch').trigger('click'); }, 1000);
             } else {
-                toastr.error(data.Message, '', toastOptions());
+                toastr.error(data.nessage, '', toastOptions());
             }
         }).catch(axiosError);
     };

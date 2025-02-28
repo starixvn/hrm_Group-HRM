@@ -1,0 +1,182 @@
+﻿@using HRM.Core
+@using HRM.Resources
+@using HRM.ViewModels.Overtime
+@using HRM.Website.Helper
+@model MemberMonthlyOvertimeRequestViewModel
+@{
+    ViewBag.Title = "Members' overtime";
+    var showCheckAll = Model.MemberRequests.Any(x => x.IsHost);
+    var currentUserId = (int)ViewBag.CurrentUserId;
+    var isVerifier = (bool)ViewBag.IsVerifier;
+    var isApprover = (bool)ViewBag.IsApprover;
+    var hasCheckBoxColumn = showCheckAll ? "has-check-box-column" : "";
+}
+@section css{
+    <link href="~/dist/styles/overtime.member.index.css" rel="stylesheet" />
+}
+@section js{
+    <script src="~/dist/js/overtime.member.index.js"></script>
+}
+@section Breadcrumb {
+    <a class="step">@Labels.Personal</a> <a class="step">@ViewBag.Title</a>
+}
+<h2 class="page-title">@ViewBag.Title</h2>
+@Html.Hidden("CurrentUserId", currentUserId)
+@Html.Hidden("MinDate", new DateTime(2010, 1, 1).ToDateMonthYearFormatedDate())
+@Html.Hidden("MaxDate", DateTime.Now.AddYears(1).ToDateMonthYearFormatedDate())
+<form class="filter">
+    @Html.HiddenFor(model => model.TeamIds)
+    @Html.HiddenFor(model => model.Month)
+    <div class="form-horizontal clearfix">
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.Label(Labels.Month, Labels.Month, new { @class = "control-label" })
+            </div>
+            <div class="select-form">
+                <div id="MonthControl"></div>
+            </div>
+        </div>
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.Label(Labels.Status, Labels.Status, new { @class = "control-label" })
+            </div>
+            <div class="select-form">
+                @Html.Raw(RazorHelpers.StatusDropDownList(Model.StatusId, controlName: "StatusId", htmlClass: "form-control"))
+            </div>
+        </div>
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.Label(Labels.Category, Labels.Category, new { @class = "control-label" })
+            </div>
+            <div class="select-form">
+                @Html.Raw(RazorHelpers.CategoryDropDownList("IsLocal",
+                    classHTML: "form-control",
+                    selectedId: Model.IsLocal.HasValue ? Model.IsLocal.Value.ToString() : string.Empty))
+            </div>
+        </div>
+    </div>
+    <div class="form-horizontal clearfix">
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                <label class="control-label">@Labels.SectionTeam</label>
+            </div>
+            <div class="select-form" id="Team"></div>
+        </div>
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.Label(Labels.Employee, Labels.Employee, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.TextBoxFor(model => model.Employee, new { placeholder = Messages.SearchEmployeeWatermark, @class = "form-control" })
+                @Html.Hidden("EmployeeId", Model.EmployeeId, new { data_val = "false" })
+            </div>
+        </div>
+        <div class="form-group form-group--m">
+            <button type="button" class="btn btn-primary" id="btnSearch">@Labels.Search</button>
+            <button id="btnExcel" type="button" class="btn btn-excel">@Labels.Excel</button>
+        </div>
+    </div>
+</form>
+<table class="table table-custom" id="data">
+    <thead>
+        @if (showCheckAll && (isVerifier || isApprover))
+        {
+            <tr>
+                <th colspan="17">
+                    <div style="float:right;">
+                        @if (isVerifier)
+                        {
+                            <input type="button" class="btn btn-primary" id="btnVerify" value="@Labels.Verify" />
+                            <input type="button" class="btn btn-primary" id="btnNotVerify" value="@Labels.NotVerify" />
+                        }
+                        @if (isApprover)
+                        {
+                            <input type="button" class="btn btn-primary" id="btnApprove" value="@Labels.Approve" />
+                            <input type="button" class="btn btn-primary" id="btnReject" value="@Labels.Reject" />
+                        }
+                    </div>
+                </th>
+            </tr>
+        }
+            <tr>
+                @if (showCheckAll)
+                {
+                    <th>
+                        <div class="checkbox">
+                            <input type="checkbox" class="checkbox-custom" id="ckbAll" />
+                            <label for="ckbAll"></label>
+                        </div>
+                    </th>
+                }
+                <th>@Labels.SymbolCount</th>
+                <th class="col-sorter">
+                    @Labels.Department
+                    <div class="fa fa-sort"></div>
+                </th>
+                <th class="col-sorter">
+                    @Labels.Section
+                    <div class="fa fa-sort"></div>
+                </th>
+                <th class="col-sorter">
+                    @Labels.Team
+                    <div class="fa fa-sort"></div>
+                </th>
+                <th class="col-sorter">
+                    @Labels.FullName
+                    <div class="fa fa-sort"></div>
+                </th>
+                <th class="col-sorter">
+                    @Labels.NickName
+                    <div class="fa fa-sort"></div>
+                </th>
+                <th class="col-sorter">
+                    @Labels.Month
+                    <div class="fa fa-sort"></div>
+                </th>
+                <th class="col-sorter">
+                    @Labels.NormalDay
+                    <div class="fa fa-sort"></div>
+                </th>
+                <th class="col-sorter">
+                    @Labels.OffDay
+                    <div class="fa fa-sort"></div>
+                </th>
+                <th class="col-sorter">
+                    @Labels.PublicHoliday
+                    <div class="fa fa-sort"></div>
+                </th>
+                <th class="col-sorter">
+                    @Labels.SpecialOT
+                    <div class="fa fa-sort"></div>
+                </th>
+                <th class="col-sorter">
+                    @Labels.Verifier
+                    <div class="fa fa-sort"></div>
+                </th>
+                <th class="col-sorter">
+                    @Labels.Approver
+                    <div class="fa fa-sort"></div>
+                </th>
+                <th class="col-sorter">
+                    @Labels.Status
+                    <div class="fa fa-sort"></div>
+                </th>
+                <th>@Labels.Details</th>
+                <th></th>
+            </tr>
+    </thead>
+    <tbody id="listMemberOvertime" class="@hasCheckBoxColumn">
+        @Html.Partial("_ListMemberOvertime", Model.MemberRequests)
+    </tbody>
+    <tfoot>
+        <tr class="summary">
+            <td colspan="@(showCheckAll ? 8 : 7)" class="align-right">@Labels.TotalOvertimeHours:</td>
+            <td>@Model.MemberRequests.Sum(t => t.NormalHours).ToString("0.00")</td>
+            <td>@Model.MemberRequests.Sum(t => t.OffHours).ToString("0.00")</td>
+            <td>@Model.MemberRequests.Sum(t => t.PublicHours).ToString("0.00")</td>
+            <td>@Model.MemberRequests.Sum(t => t.SpecialHours).ToString("0.00")</td>
+            <td colspan="7"></td>
+        </tr>
+    </tfoot>
+</table>
+@Html.Partial("_ConfirmModal")

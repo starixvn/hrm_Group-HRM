@@ -42,8 +42,8 @@ namespace HRM.Website.Helper
         {
             return $@"
                 <select name='{controlName}' id='{controlName}' class='{htmlClass}'>
-                    {(isShowAll ? $@"<option selected='{(status == 0 ? "selected" : "")}' value='0'>All</option>" : "")}
-                    {(isShowPendingAndVerified ? $@"<option selected='{(status == -1 ? "selected" : "")}' value='-1'>Pending & Verified</option>" : "")}
+                    {(isShowAll ? $@"<option {(status == 0 ? "selected" : "")} value='0'>All</option>" : "")}
+                    {(isShowPendingAndVerified ? $@"<option {(status == -1 ? "selected" : "")} value='-1'>Pending & Verified</option>" : "")}
                     <option {(status == (byte)CurrentRequestStatus.Pending ? "selected" : "")} value='{(byte)CurrentRequestStatus.Pending}'>Pending</option>
                     <option {(status == (byte)CurrentRequestStatus.Verified ? "selected" : "")} value='{(byte)CurrentRequestStatus.Verified}'>Verified</option>
                     <option {(status == (byte)CurrentRequestStatus.NotVerified ? "selected" : "")} value='{(byte)CurrentRequestStatus.NotVerified}'>Not Verified</option>

@@ -30,11 +30,11 @@ $(document).ready(function () {
             }
         }).then(response => {
             let data = response.data;
-            if (data.IsSuccessful) {
+            if (data.isSuccessful) {
                 toastr.success('Updated Successfully!', '', toastOptions());
                 setTimeout(function () { window.location.reload(); }, 1000);
             } else {
-                toastr.error(data.Message, '', toastOptions());
+                toastr.error(data.message, '', toastOptions());
             }
         }).catch(axiosError);
     };

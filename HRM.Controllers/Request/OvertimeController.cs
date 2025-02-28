@@ -225,19 +225,19 @@
             return Json(isInvalid);
         }
 
-        //[HttpPost]
-        //[HrmPermission(Policy.Host, FunctionKey.ProcessOvertime)]
-        //public async Task<IActionResult> ReminderClaimOvertime(string subject, string content)
-        //{
-        //    BackgroundJob.Enqueue(() => overtimeService.SendMailToReminderClaimOvertime(subject, content));
-        //}
+        [HttpPost]
+        [HrmPermission(Policy.Host, FunctionKey.ProcessOvertime)]
+        public async Task ReminderClaimOvertime(string subject, string content)
+        {
+            await Task.Run(() => overtimeService.SendMailToReminderClaimOvertime(subject, content));
+        }
 
         public async Task<IActionResult> Export(MemberMonthlyOvertimeRequestViewModel model)
         {
             var fileName = $"{Labels.EmployeeOvertimeReport}.xlsx";
-            const bool ismemberOvetime = false;
+            const bool isMemberOvertime = false;
             model.MemberRequests = await GetEmployeeOvertimeRequest(model);
-            byte[] exportData = exportOvertimeService.Export(model.MemberRequests, ismemberOvetime);
+            byte[] exportData = exportOvertimeService.Export(model.MemberRequests, isMemberOvertime);
 
             return File(exportData, MimeType.XLSX, fileName);
         }
@@ -245,10 +245,10 @@
         public async Task<IActionResult> ExportMemberOvertime(MemberMonthlyOvertimeRequestViewModel model)
         {
             var fileName = $"{Labels.MemberOvertimeReport}.xlsx";
-            const bool ismemberOvetime = true;
+            const bool isMemberOvertime = true;
 
             model.MemberRequests = await GetMemberOvertimeRequest(model);
-            byte[] exportData = exportOvertimeService.Export(model.MemberRequests, ismemberOvetime);
+            byte[] exportData = exportOvertimeService.Export(model.MemberRequests, isMemberOvertime);
 
             return File(exportData, MimeType.XLSX, fileName);
         }
