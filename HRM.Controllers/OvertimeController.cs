@@ -179,7 +179,7 @@ public class OvertimeController(
             IncludeLoginUser = true
         };
 
-        var employees = await employeeService.GetSupervisorByQuery(criteria);
+        var employees = await employeeService.GetSupervisorByQueryAsync(criteria);
         return Json(employees);
     }
 

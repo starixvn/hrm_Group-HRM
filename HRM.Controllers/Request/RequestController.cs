@@ -124,7 +124,7 @@ namespace Fanex.NexHR.Controllers.Request
                 Query = query.Trim(),
                 IncludeLoginUser = true
             };
-            var supervisors = await employeeService.GetSupervisorByQuery(criteria);
+            var supervisors = await employeeService.GetSupervisorByQueryAsync(criteria);
 
             return Json(supervisors);
         }
