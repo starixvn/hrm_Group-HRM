@@ -1,10 +1,6 @@
-﻿using HRM.Services.ExportExcel;
-using HRM.Services.Implement.Request;
-
-namespace HRM.Website;
+﻿namespace HRM.Website;
 
 using System;
-using System.ComponentModel;
 using System.Threading.Tasks;
 using Fanex.Caching.Redis;
 using Fanex.Data.Repository;
@@ -20,6 +16,8 @@ using HRM.Core.Repositories;
 using HRM.Core.Services;
 using HRM.Letstalk.Core.Services;
 using HRM.Repositories.Interfaces;
+using HRM.Services.ExportExcel;
+using HRM.Services.Implement.Request;
 using MailDeliver;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.DataProtection;
@@ -27,7 +25,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Repositories;
-using Repositories.Interfaces;
 using Services;
 using Services.Implement;
 using Services.Interfaces;
@@ -158,6 +155,7 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IKeepInViewRequestService, KeepInViewRequestService>();
         services.AddSingleton<IKeepInViewRequestRepository, KeepInViewRequestRepository>();
         services.AddSingleton<IShiftService, ShiftService>();
+        services.AddSingleton<IExtensionNumberService, ExtensionNumberService>();
 
         services.AddSingleton<IOvertimeRequestService, OvertimeRequestService>();
         services.AddSingleton<IOvertimeRequestRepository, OvertimeRequestRepository>();
@@ -172,7 +170,7 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IExportExcelAttendanceReportService, ExportExcelAttendanceReportService>();
         services.AddSingleton<IExportExcelTimeRecordService, ExportExcelTimeRecordService>();
         services.AddSingleton<IExportOvertimeService, ExportOvertimeService>();
-        services.AddSingleton<IExportOvertimeService, ExportOvertimeService>();
+
         return services;
     }
 }

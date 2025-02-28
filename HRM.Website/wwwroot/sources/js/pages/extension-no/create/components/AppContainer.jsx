@@ -5,7 +5,7 @@ import * as Yup from 'yup';
 import axios from 'axios';
 import toastr from 'toastr';
 
-import RenderFrom from '../../RenderForm';
+import RenderForm from '../../RenderForm';
 
 import { axiosError, resolveClientUrl, toastOptions } from '../../../../shared/common.functions';
 
@@ -36,10 +36,10 @@ const AppContainer = () => {
                 const { data } = response;
                 const employeeOptions = data.map(item => {
                     return {
-                        id: item.Id,
-                        value: `${item.NickName} (${item.FullName})`,
-                        fullName: item.FullName,
-                        nickName: item.NickName
+                        id: item.id,
+                        value: `${item.nickName} (${item.fullName})`,
+                        fullName: item.fullName,
+                        nickName: item.nickName
                     };
                 });
 
@@ -70,28 +70,25 @@ const AppContainer = () => {
         setSelectEmployee(selectedItem);
     };
 
-    const handleChangeInternal = () => {
+    const handleChangeInternal = event => {
         setIsInternal(event.target.checked);
     };
 
     const handleSubmit = (values, { setSubmitting }) => {
         setSubmitting(true);
-        axios.post(
-            resolveClientUrl('ExtensionNo/Create'),
-            {
-                FullName: values.FullName,
-                NickName: values.NickName,
-                ExtensionNo: values.ExtensionNo,
-                IsInternal: values.IsInternal,
-                EmpId: values.EmpId,
-                TeamId: values.TeamId
-            },
-            {
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest'
-                }
+        axios({
+            method: 'POST',
+            url: resolveClientUrl('ExtensionNo/Create'),
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
+            data: {
+                fullName: values.FullName,
+                nickName: values.NickName,
+                extensionNo: values.ExtensionNo,
+                isInternal: values.IsInternal,
+                empId: values.EmpId,
+                teamId: values.TeamId
             }
-        ).then(response => {
+        }).then(response => {
             const { data } = response;
             if (data.isSuccessful) {
                 toastr.success('Created successfully!', '', toastOptions());
@@ -133,7 +130,7 @@ const AppContainer = () => {
             onSubmit={handleSubmit}
         >
             {({ errors, isSubmitting }) => (
-                <RenderFrom
+                <RenderForm
                     errors={errors}
                     isInternal={isInternal}
                     onChangeInternal={handleChangeInternal}

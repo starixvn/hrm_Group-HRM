@@ -1,23 +1,19 @@
-﻿namespace HRM.Services
+﻿namespace HRM.Services;
+
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using HRM.Core.Models;
+using HRM.Models;
+
+public interface IExtensionNumberService
 {
-    using System.Collections.Generic;
-    using HRM.Core.Models;
-    using HRM.Models;
+    Task<IEnumerable<ExtensionNoModel>> GetAllExtensionNoAsync();
 
-    public interface IExtensionNumberService
-    {
-        IEnumerable<ExtensionNoModel> GetAllExtensionNo();
+    Task<IEnumerable<ExtensionNoModel>> GetAllExtensionGroupInfoAsync(int? teamId = null, bool? isInternal = null);
 
-        IList<ExtensionNoModel> GetAllExtensionGroupInfo(int? teamId = null, bool? isInternal = null);
+    Task<ExtensionNoModel> GetEmployeeExtensionNoByIdAsync(int employeeExtensionNoId, bool isInternal);
 
-        ExtensionNoModel GetEmployeeExtensionNoById(int employeeExtensionNoId, bool isInternal);
+    Task<CommandResult> DeleteExtensionNumberAsync(int extensionNoId);
 
-        CommandResult DeleteExtensionNumber(int extensionNoId);
-
-        CommandResult CreateExternalGroup(string teamName);
-
-        CommandResult EditExternalGroup(int teamId, string teamName);
-
-        CommandResult DeleteExternalGroup(int teamId);
-    }
+    Task<CommandResult> DeleteExternalGroupAsync(int teamId);
 }

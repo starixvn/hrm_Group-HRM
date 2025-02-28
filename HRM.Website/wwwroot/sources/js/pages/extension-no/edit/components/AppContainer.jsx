@@ -5,7 +5,7 @@ import axios from 'axios';
 import toastr from 'toastr';
 import { Formik } from 'formik';
 
-import RenderFrom from '../../RenderForm';
+import RenderForm from '../../RenderForm';
 
 import { axiosError, resolveClientUrl, toastOptions } from '../../../../shared/common.functions';
 
@@ -52,9 +52,9 @@ const AppContainer = () => {
                 const employeeOptions = data.map(item => {
                     return {
                         id: item.Id,
-                        value: `${item.NickName} (${item.FullName})`,
-                        fullName: item.FullName,
-                        nickName: item.NickName
+                        value: `${item.nickName} (${item.fullName})`,
+                        fullName: item.fullName,
+                        nickName: item.nickName
                     };
                 });
 
@@ -88,7 +88,7 @@ const AppContainer = () => {
         getGroupExtension(isInternal);
     }, []);
 
-    const handleChangeInternal = () => {
+    const handleChangeInternal = event => {
         setIsInternal(event.target.checked);
         axios({
             url: resolveClientUrl('ExtensionNo/GetGroupExtension'),
@@ -112,21 +112,20 @@ const AppContainer = () => {
 
     const handleSubmit = (values, { setSubmitting }) => {
         setSubmitting(true);
-        axios.post(
-            resolveClientUrl('ExtensionNo/Edit'),
-            {
-                FullName: values.FullName,
-                NickName: values.NickName,
-                ExtensionNo: values.ExtensionNo,
-                IsInternal: values.IsInternal,
-                EmpId: values.EmpId,
-                EmployeeExtensionId: extensionDetail.employeeExtensionId,
-                TeamId: values.TeamId
-            },
-            {
-                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        axios({
+            method: 'POST',
+            url: resolveClientUrl('ExtensionNo/Edit'),
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
+            data: {
+                fullName: values.FullName,
+                nickName: values.NickName,
+                extensionNo: values.ExtensionNo,
+                isInternal: values.IsInternal,
+                empId: values.EmpId,
+                employeeExtensionId: extensionDetail.employeeExtensionId,
+                teamId: values.TeamId
             }
-        ).then(response => {
+        }).then(response => {
             const { data } = response;
             if (data.isSuccessful) {
                 toastr.success('Updated successfully!', '', toastOptions());
@@ -168,7 +167,7 @@ const AppContainer = () => {
             onSubmit={handleSubmit}
         >
             {({ errors, isSubmitting }) => (
-                <RenderFrom
+                <RenderForm
                     errors={errors}
                     isInternal={isInternal}
                     onChangeInternal={handleChangeInternal}

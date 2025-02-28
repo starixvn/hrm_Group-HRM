@@ -36,15 +36,14 @@ const AppContainer = () => {
 
     const handleCreate = external => {
         setModalDialog({ create: false });
-        axios.post(
-            resolveClientUrl('ExtensionNo/CreateExternalGroup'),
-            {
-                teamName: external.TeamName.trim()
-            },
-            {
-                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        axios({
+            method: 'POST',
+            url: resolveClientUrl('ExtensionNo/CreateExternalGroup'),
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
+            data: {
+                fullName: external.TeamName.trim()
             }
-        ).then(response => {
+        }).then(response => {
             const { data } = response;
             if (data.isSuccessful) {
                 getAllEnternalGroup();
@@ -91,16 +90,15 @@ const AppContainer = () => {
 
     const handleEdit = external => {
         setModalDialog({ edit: false });
-        axios.post(
-            resolveClientUrl('ExtensionNo/EditExternalGroup'),
-            {
-                teamName: external.TeamName.trim(),
-                teamId: external.TeamId
-            },
-            {
-                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        axios({
+            method: 'POST',
+            url: resolveClientUrl('ExtensionNo/EditExternalGroup'),
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
+            data: {
+                externalId: external.TeamId,
+                fullName: external.TeamName.trim()
             }
-        ).then(response => {
+        }).then(response => {
             const { data } = response;
             if (data.isSuccessful) {
                 toastr.success('Updated successfully!', '', toastOptions());

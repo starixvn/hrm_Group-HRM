@@ -1,76 +1,49 @@
-﻿namespace HRM.Services
+﻿namespace HRM.Services;
+
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Core.Services;
+using HRM.Core.Models;
+using HRM.Criteria.ExtensionNumber;
+using HRM.Models;
+
+public class ExtensionNumberService(IBaseService baseService) : IExtensionNumberService
 {
-    using System.Collections.Generic;
-    using System.Linq;
-    using Core.Services;
-    using HRM.Core.Models;
-    using HRM.Criteria.ExtensionNumber;
-    using HRM.Models;
-
-    public class ExtensionNumberService : IExtensionNumberService
+    public async Task<IEnumerable<ExtensionNoModel>> GetAllExtensionNoAsync()
     {
-        private readonly IBaseService baseService;
+        var criteria = new GetAllExtensionNumberCriteria();
+        return await baseService.GetDataAsync<ExtensionNoModel>(criteria);
+    }
 
-        public ExtensionNumberService(IBaseService baseService)
+    public async Task<IEnumerable<ExtensionNoModel>> GetAllExtensionGroupInfoAsync(int? teamId = null, bool? isInternal = null)
+    {
+        var criteria = new GetExtensionNumberGroupInfoCriteria
         {
-            this.baseService = baseService;
-        }
+            TeamId = teamId,
+            IsInternal = isInternal
+        };
+        return await baseService.GetDataAsync<ExtensionNoModel>(criteria);
+    }
 
-        public IEnumerable<ExtensionNoModel> GetAllExtensionNo()
+    public async Task<ExtensionNoModel> GetEmployeeExtensionNoByIdAsync(int employeeExtensionNoId, bool isInternal)
+    {
+        var criteria = new GetExtensionNumberMemberByIdCriteria
         {
-            var criteria = new GetAllExtensionNumberCriteria();
-            return baseService.GetData<ExtensionNoModel>(criteria);
-        }
+            EmployeeExtensionNoId = employeeExtensionNoId,
+            IsInternal = isInternal
+        };
+        return await baseService.GetDataEntityAsync<ExtensionNoModel>(criteria);
+    }
 
-        public IList<ExtensionNoModel> GetAllExtensionGroupInfo(int? teamId = null, bool? isInternal = null)
-        {
-            var criteria = new GetExtensionNumberGroupInfoCriteria
-            {
-                TeamId = teamId,
-                IsInternal = isInternal
-            };
-            return baseService.GetData<ExtensionNoModel>(criteria).ToList();
-        }
+    public async Task<CommandResult> DeleteExtensionNumberAsync(int extensionNoId)
+    {
+        var criteria = new DeleteExtensionNumberMemberCriteria { ExtensionNumberId = extensionNoId };
+        return await baseService.ExecuteNonQueryAsync(criteria);
+    }
 
-        public ExtensionNoModel GetEmployeeExtensionNoById(int employeeExtensionNoId, bool isInternal)
-        {
-            var criteria = new GetExtensionNumberMemberByIdCriteria
-            {
-                EmployeeExtensionNoId = employeeExtensionNoId,
-                IsInternal = isInternal
-            };
-            return baseService.GetDataEntity<ExtensionNoModel>(criteria);
-        }
-
-        public CommandResult DeleteExtensionNumber(int extensionNoId)
-        {
-            var criteria = new DeleteExtensionNumberMemberCriteria { ExtensionNumberId = extensionNoId };
-            return baseService.ExecuteNonQuery(criteria);
-        }
-
-        public CommandResult CreateExternalGroup(string teamName)
-        {
-            var criteria = new CreateExternalGroupCriteria
-            {
-                FullName = teamName
-            };
-            return baseService.ExecuteNonQuery(criteria);
-        }
-
-        public CommandResult EditExternalGroup(int teamId, string teamName)
-        {
-            var criteria = new UpdateExternalNumberCriteria
-            {
-                ExternalId = teamId,
-                FullName = teamName
-            };
-            return baseService.ExecuteNonQuery(criteria);
-        }
-
-        public CommandResult DeleteExternalGroup(int teamId)
-        {
-            var criteria = new DeleteExternalGroupCriteria { ExternalId = teamId };
-            return baseService.ExecuteNonQuery(criteria);
-        }
+    public async Task<CommandResult> DeleteExternalGroupAsync(int teamId)
+    {
+        var criteria = new DeleteExternalGroupCriteria { ExternalId = teamId };
+        return await baseService.ExecuteNonQueryAsync(criteria);
     }
 }
