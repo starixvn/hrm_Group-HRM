@@ -16,7 +16,7 @@ const AppContainer = () => {
 
     const getDepartments = () => {
         axios({
-            url: resolveClientUrl('Section/GetDeparments'),
+            url: resolveClientUrl('Section/GetDepartments'),
             method: 'GET',
             headers: { 'X-Requested-With': 'XMLHttpRequest' }
         }).then(response => {
