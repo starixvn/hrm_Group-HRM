@@ -538,7 +538,7 @@ public class EmployeeController(
 
     private async Task ComposeViewBagsForEditEmployee()
     {
-        var jobLevels = jobLevelService.GetJobLevel();
+        var jobLevels = await jobLevelService.GetJobLevel();
         ViewBag.JobTitles = await commonDataService.GetLookupDataByCodeAsync(Constants.JobTitle);
         ViewBag.JobLevel = jobLevels;
         ViewBag.Grades = jobLevels?.Where(jl => jl.Name.StartsWith("E")).ToList();

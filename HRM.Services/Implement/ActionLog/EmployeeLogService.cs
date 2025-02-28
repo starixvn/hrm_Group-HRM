@@ -96,7 +96,7 @@
         {
             Teams = await commonDataService.GetAllTeamAsync();
             JobTitles = await commonDataService.GetLookupDataByCodeAsync(Constants.JobTitle);
-            JobLevel = jobLevelService.GetJobLevel();
+            JobLevel = await jobLevelService.GetJobLevel();
             Countries = commonDataService.GetAllCountry();
             SystemRoles = await roleService.GetBySiteIdAsync(userControlSession.SiteId);
             Genders = commonDataService.GetGender();

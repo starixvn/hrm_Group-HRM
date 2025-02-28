@@ -1,18 +1,19 @@
-﻿namespace HRM.Services.Interfaces
+﻿using System.Threading.Tasks;
+
+namespace HRM.Services.Interfaces;
+
+using HRM.Core.Models;
+using HRM.Criteria.JobLevel;
+using HRM.Models;
+using System.Collections.Generic;
+
+public interface IJobLevelService
 {
-    using HRM.Core.Models;
-    using HRM.Criteria.JobLevel;
-    using HRM.Models;
-    using System.Collections.Generic;
+    Task<IList<JobLevel>> GetJobLevel();
 
-    public interface IJobLevelService
-    {
-        IList<JobLevel> GetJobLevel();
+    Task<CommandResult> Insert(InsertJobLevelCriteria criteria);
 
-        CommandResult Insert(InsertJobLevelCriteria criteria);
+    Task<CommandResult> Update(UpdateJobLevelCriteria criteria);
 
-        CommandResult Update(UpdateJobLevelCriteria criteria);
-
-        CommandResult Delete(int id, int actorId);
-    }
+    Task<CommandResult> Delete(int id, int actorId);
 }
