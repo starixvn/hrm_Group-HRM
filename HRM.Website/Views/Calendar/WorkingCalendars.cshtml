@@ -1,0 +1,83 @@
+﻿@using HRM.Resources
+@using HRM.ViewModels
+@using HRM.Website.Helper
+@model WorkingCalendarFilterViewModel
+@{
+    ViewBag.Title = Labels.WorkingCalendars;
+}
+@section css{
+    <link href="~/dist/styles/workingcalendars.css" rel="stylesheet" />
+}
+@section js{
+    <script src="~/dist/js/workingcalendar.js"></script>
+}
+@section Breadcrumb {
+    <a class="step">@Labels.CompanySpace</a>
+    <span class="step">@ViewBag.Title</span>
+}
+
+<h2 class="page-title">@ViewBag.Title</h2>
+
+<form class="filter">
+    @Html.HiddenFor(model => model.TeamIds)
+    @Html.HiddenFor(model => model.JobTitleIds)
+    @Html.HiddenFor(model => model.EmployeeId)
+    <div class="form-horizontal clearfix">
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.LabelFor(model => model.FromDate, new { @class = "control-label" })
+            </div>
+            <div class="calendar-form">
+                @Html.TextBox(Html.NameFor(model => model.FromDate).ToString(), Model.FromDate.ToDateMonthYearFormatedDate(),
+                    new { @class = "datepicker form-control", mindate = (new DateTime(2010, 1, 1)).ToString("yyyy/MM/dd") })
+                <i class="icon-calendar fa fa-calendar"></i>
+            </div>
+        </div>
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.LabelFor(model => model.ToDate, new { @class = "control-label" })
+            </div>
+            <div class="calendar-form">
+                @Html.TextBox(Html.NameFor(model => model.ToDate).ToString(), Model.ToDate.ToDateMonthYearFormatedDate(),
+                    new { @class = "datepicker form-control", mindate = (new DateTime(2010, 1, 1)).ToString("yyyy/MM/dd") })
+                <i class="icon-calendar fa fa-calendar"></i>
+            </div>
+        </div>
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                <label class="control-label">@Labels.SectionTeam</label>
+            </div>
+            <div class="select-form" id="Team"></div>
+        </div>
+    </div>
+    <div class="form-horizontal clearfix">
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                <label class="control-label">@Labels.JobTitle</label>
+            </div>
+            <div class="select-form" id="JobTitle"></div>
+        </div>
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.Label(Labels.Employee, Labels.Employee, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.TextBox("Employee", string.Empty,
+                    new { placeholder = Messages.SearchEmployeeWatermark, @class = "form-control", @maxlength = 200, autocomplete = "off" })
+            </div>
+        </div>
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.Label(Labels.Category, Labels.Employee, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.Raw(RazorHelpers.CategoryDropDownList("IsLocal", "form-control", ""))
+            </div>
+        </div>
+        <div class="form-group form-group--m">
+            <button type="button" class="btn btn-primary" id="btnSearch">@Labels.Search</button>
+            <button type="button" class="btn btn-excel" id="btnExcel">@Labels.Excel</button>
+        </div>
+    </div>
+</form>
+<div id="workingCalendarDetails"></div>

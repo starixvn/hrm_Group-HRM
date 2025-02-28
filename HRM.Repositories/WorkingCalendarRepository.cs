@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
     using Fanex.Data;
     using Fanex.Data.Repository;
     using HRM.Models.Report;
@@ -9,11 +10,11 @@
 
     public class WorkingCalendarRepository : IWorkingCalendarRepository
     {
-        public IEnumerable<DailySchedule> GetWorkingSchedule(ICriteria criteria)
+        public async Task<IEnumerable<DailySchedule>> GetWorkingScheduleAsync(ICriteria criteria)
         {
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                return db.Query<DailySchedule, ShiftBase, LeaveRequest, LeaveRequest, DailySchedule>(
+                return await db.QueryAsync<DailySchedule, ShiftBase, LeaveRequest, LeaveRequest, DailySchedule>(
                     (dailySchedule, shift, leave, leave2) =>
                     {
                         dailySchedule.Shift = shift;
@@ -27,11 +28,11 @@
             }
         }
 
-        public IEnumerable<WorkingCalendar> GetWorkingCalendars(ICriteria criteria)
+        public async Task<IEnumerable<WorkingCalendar>> GetWorkingCalendarsAsync(ICriteria criteria)
         {
             using (IObjectDb db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                using (var multi = db.QueryMultiple(criteria))
+                using (var multi = await db.QueryMultipleAsync(criteria))
                 {
                     var calendars = multi.Read<WorkingCalendar>();
                     var dailySchedules = multi.Read<DailySchedule, ShiftBase, LeaveRequest, LeaveRequest, DailySchedule>(

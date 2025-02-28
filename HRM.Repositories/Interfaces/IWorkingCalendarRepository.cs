@@ -1,14 +1,15 @@
 ﻿namespace HRM.Repositories
 {
     using System.Collections.Generic;
+    using System.Threading.Tasks;
     using Fanex.Data.Repository;
     using HRM.Models.Report;
     using HRM.Models.ScheduleArrange;
 
     public interface IWorkingCalendarRepository
     {
-        IEnumerable<DailySchedule> GetWorkingSchedule(ICriteria criteria);
+        Task<IEnumerable<DailySchedule>> GetWorkingScheduleAsync(ICriteria criteria);
 
-        IEnumerable<WorkingCalendar> GetWorkingCalendars(ICriteria criteria);
+        Task<IEnumerable<WorkingCalendar>> GetWorkingCalendarsAsync(ICriteria criteria);
     }
 }

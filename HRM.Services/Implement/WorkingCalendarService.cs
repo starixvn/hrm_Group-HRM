@@ -1,28 +1,22 @@
 ﻿namespace HRM.Services
 {
     using System.Collections.Generic;
+    using System.Threading.Tasks;
     using HRM.Criteria.Calendar;
     using HRM.Models.Report;
     using HRM.Models.ScheduleArrange;
     using HRM.Repositories;
 
-    public class WorkingCalendarService : IWorkingCalendarService
+    public class WorkingCalendarService(IWorkingCalendarRepository workingCalendarRepository) : IWorkingCalendarService
     {
-        private readonly IWorkingCalendarRepository workingCalendarRepository;
-
-        public WorkingCalendarService(IWorkingCalendarRepository workingCalendarRepository)
+        public async Task<IEnumerable<DailySchedule>> GetWorkingScheduleAsync(GetEmployeeCalendarByMonthCriteria criteria)
         {
-            this.workingCalendarRepository = workingCalendarRepository;
+            return await workingCalendarRepository.GetWorkingScheduleAsync(criteria);
         }
 
-        public IEnumerable<DailySchedule> GetWorkingSchedule(GetEmployeeCalendarByMonthCriteria criteria)
+        public async Task<IEnumerable<WorkingCalendar>> GetWorkingCalendarsAsync(GetWorkingCalendarWeeklyCriteria criteria)
         {
-            return workingCalendarRepository.GetWorkingSchedule(criteria);
-        }
-
-        public IEnumerable<WorkingCalendar> GetWorkingCalendars(GetWorkingCalendarWeeklyCriteria criteria)
-        {
-            return workingCalendarRepository.GetWorkingCalendars(criteria);
+            return await workingCalendarRepository.GetWorkingCalendarsAsync(criteria);
         }
     }
 }

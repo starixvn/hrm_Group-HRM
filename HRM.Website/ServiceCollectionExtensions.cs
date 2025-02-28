@@ -163,6 +163,8 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IOvertimeRequestRepository, OvertimeRequestRepository>();
         services.AddSingleton<IReportService, ReportService>();
         services.AddSingleton<IReportRepository, ReportRepository>();
+        services.AddSingleton<IWorkingCalendarService, WorkingCalendarService>();
+        services.AddSingleton<IWorkingCalendarRepository, WorkingCalendarRepository>();
 
         return services;
     }

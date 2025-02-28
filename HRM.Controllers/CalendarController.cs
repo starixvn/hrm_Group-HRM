@@ -1,113 +1,101 @@
-﻿//namespace Fanex.NexHR.Controllers
-//{
-//    using System;
-//    using System.Collections.Generic;
-//    using System.Linq;
-//    using HRM.Core;
-//    using HRM.Core.Constants;
-//    using HRM.Core.Filters;
-//    using HRM.Criteria.Calendar;
-//    using HRM.Models.Report;
-//    using HRM.Models.ScheduleArrange;
-//    using HRM.Services;
-//    using HRM.ViewModels;
-//    using GO.UserControl.Client.Core.Enumerables;
-//    using GO.UserControl.Client.Core.Session;
-//    using HRM.Controllers;
+﻿namespace Fanex.NexHR.Controllers
+{
+    using System;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using GO.UserControl.Client.Core.Enumerables;
+    using GO.UserControl.Client.Core.Session;
+    using HRM.Controllers;
+    using HRM.Core;
+    using HRM.Core.Constants;
+    using HRM.Core.Filters;
+    using HRM.Criteria.Calendar;
+    using HRM.Services;
+    using HRM.ViewModels;
+    using Microsoft.AspNetCore.Mvc;
 
-//    public class CalendarController : BaseController
-//    {
-//        private readonly IWorkingCalendarService workingCalendarService;
-//        private readonly IShiftService shiftService;
-//        private readonly ICommonDataService commonDataService;
-//        private readonly ITeamService teamService;
+    public class CalendarController(
+        IUserControlSession userControlSession,
+        IWorkingCalendarService workingCalendarService,
+        IShiftService shiftService,
+        ICommonDataService commonDataService,
+        ITeamService teamService) : BaseController(userControlSession)
+    {
+        public async Task<IActionResult> GetShift(string query, bool isShowOff = false)
+        {
+            var shifts = await shiftService.GetByQueryAsync(query.Trim(), isShowOff);
 
-//        public CalendarController(
-//            IUserControlSession userControlSession,
-//            IWorkingCalendarService workingCalendarService,
-//            IShiftService shiftService,
-//            ICommonDataService commonDataService,
-//            ITeamService teamService) : base(userControlSession)
-//        {
-//            this.workingCalendarService = workingCalendarService;
-//            this.shiftService = shiftService;
-//            this.commonDataService = commonDataService;
-//            this.teamService = teamService;
-//        }
+            return Json(shifts);
+        }
 
-//        public ActionResult GetShift(string query, bool isShowOff = false)
-//        {
-//            var shifts = shiftService.GetByQuery(query.Trim(), isShowOff);
+        public ActionResult MyWorkingSchedule()
+        {
+            return View();
+        }
 
-//            return Json(shifts, JsonRequestBehavior.AllowGet);
-//        }
+        public async Task<IActionResult> GetWorkingSchedule(DateTime date)
+        {
+            var criteria = new GetEmployeeCalendarByMonthCriteria
+            {
+                EmpId = EmployeeSession.EmpId,
+                FromDate = date.FirstDayOfMonth(),
+                ToDate = date.AddMonths(1).AddDays(-1).LastDayOfMonth()
+            };
+            var workingSchedule = await workingCalendarService.GetWorkingScheduleAsync(criteria);
 
-//        public ActionResult MyWorkingSchedule()
-//        {
-//            return View();
-//        }
+            return Json(workingSchedule);
+        }
 
-//        public ActionResult GetWorkingSchedule(DateTime date)
-//        {
-//            var criteria = new GetEmployeeCalendarByMonthCriteria
-//            {
-//                EmpId = EmployeeSession.EmpId,
-//                FromDate = date.FirstDayOfMonth(),
-//                ToDate = date.AddMonths(1).AddDays(-1).LastDayOfMonth()
-//            };
-//            IEnumerable<DailySchedule> workingSchedule = workingCalendarService.GetWorkingSchedule(criteria);
+        [HrmPermission(Policy.Read, FunctionKey.WorkingCalendars)]
+        public async Task<IActionResult> WorkingCalendars()
+        {
+            var currentDateTime = DateTimeOffset.Now.DateTime;
+            var teamIds = await teamService.GetAllAsync();
+            var model = new WorkingCalendarFilterViewModel
+            {
+                FromDate = currentDateTime.FirstDayOfWeek(),
+                ToDate = currentDateTime.LastDayOfWeek(),
+                TeamIds = string.Join(",", teamIds.Select(x => x.Id))
+            };
 
-//            return new CustomJsonResult { Data = workingSchedule, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
-//        }
+            return View(model);
+        }
 
-//        [HRMPermission(Policy.Read, FunctionKey.WorkingCalendars)]
-//        public ActionResult WorkingCalendars()
-//        {
-//            var currentDateTime = DateTimeOffset.Now.DateTime;
-//            var model = new WorkingCalendarFilterViewModel
-//            {
-//                FromDate = currentDateTime.FirstDayOfWeek(),
-//                ToDate = currentDateTime.LastDayOfWeek(),
-//                TeamIds = string.Join(",", teamService.GetAll().Select(x => x.Id))
-//            };
+        [HrmPermission(Policy.Read, FunctionKey.WorkingCalendars)]
+        public async Task<IActionResult> WorkingCalendarDetails(WorkingCalendarFilterViewModel model)
+        {
+            var criteria = new GetWorkingCalendarWeeklyCriteria
+            {
+                EmpId = model.EmployeeId,
+                Fromtime = model.FromDate,
+                Totime = model.ToDate,
+                TeamIds = model.TeamIds,
+                JobTitleId = model.JobTitleIds,
+                IsLocal = model.IsLocal
+            };
+            var workingCalendars = await workingCalendarService.GetWorkingCalendarsAsync(criteria);
 
-//            return View(model);
-//        }
+            var workingCalendarDetails = new WorkingCalendarViewModel
+            {
+                FromDate = model.FromDate,
+                ToDate = model.ToDate,
+                WorkingCalendars = workingCalendars
+            };
 
-//        [HRMPermission(Policy.Read, FunctionKey.WorkingCalendars)]
-//        public ActionResult WorkingCalendarDetails(WorkingCalendarFilterViewModel model)
-//        {
-//            var criteria = new GetWorkingCalendarWeeklyCriteria
-//            {
-//                EmpId = model.EmployeeId,
-//                Fromtime = model.FromDate,
-//                Totime = model.ToDate,
-//                TeamIds = model.TeamIds,
-//                JobTitleId = model.JobTitleIds,
-//                IsLocal = model.IsLocal
-//            };
-//            IEnumerable<WorkingCalendar> workingCalendars = workingCalendarService.GetWorkingCalendars(criteria);
+            return PartialView("_WorkingCalendarDetails", workingCalendarDetails);
+        }
 
-//            var workingCalendarDetails = new WorkingCalendarViewModel
-//            {
-//                FromDate = model.FromDate,
-//                ToDate = model.ToDate,
-//                WorkingCalendars = workingCalendars
-//            };
+        public async Task<IActionResult> GetJobTitle()
+        {
+            var data = await commonDataService.GetLookupDataByCodeAsync(Constants.JobTitle);
+            var jobTitles = data.Select(x => new MultiSelectViewModel
+            {
+                Id = x.Id,
+                Text = x.Name,
+                IsLeaf = true
+            }).ToList();
 
-//            return PartialView("_WorkingCalendarDetails", workingCalendarDetails);
-//        }
-
-//        public CustomJsonResult GetJobTitle()
-//        {
-//            IEnumerable<MultiSelectViewModel> jobTitles = commonDataService.GetLookupDataByCode(Constants.JobTitle).Select(x => new MultiSelectViewModel
-//            {
-//                Id = x.Id,
-//                Text = x.Name,
-//                IsLeaf = true
-//            }).ToList();
-
-//            return new CustomJsonResult { Data = jobTitles, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
-//        }
-//    }
-//}
+            return Json(jobTitles);
+        }
+    }
+}
