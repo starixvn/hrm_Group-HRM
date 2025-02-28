@@ -1,20 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
-using HRM.Core;
 using HRM.Core.Constants;
 using HRM.Core.Enums;
 using HRM.Core.Filters;
-using HRM.Core.Models;
 using HRM.Criteria.Supervisor;
 using HRM.Models.Overtime;
-using HRM.Models.Request;
-using HRM.Models.Supervisor;
 using HRM.Resources;
 using HRM.Services;
 using HRM.Services.ExportExcel;
+using HRM.Services.Interfaces;
 using HRM.ViewModels.Overtime;
 using Microsoft.AspNetCore.Mvc;
 
@@ -32,7 +30,7 @@ public class OvertimeController(
     private readonly IUserControlSession userControlSession = userControlSession;
 
     //[HttpGet]
-    //public ActionResult EmployeeView(MonthlyOvertimeRequestViewModel model)
+    //public async Task<IActionResult> EmployeeView(MonthlyOvertimeRequestViewModel model)
     //{
     //    model.Employee = model.Employee ?? EmployeeSession.DisplayName;
     //    model.EmployeeId = model.EmployeeId <= 0 ? EmployeeSession.EmpId : model.EmployeeId;
@@ -41,14 +39,14 @@ public class OvertimeController(
     //    return View(model);
     //}
 
-    //public ActionResult Details(int employeeId, DateTime month)
+    //public async Task<IActionResult> Details(int employeeId, DateTime month)
     //{
     //    MonthlyOvertimeRequest monthlyRequest = overtimeService.GetMonthlyRequestDetailsByEmployeeId(employeeId, month);
 
     //    return View(monthlyRequest);
     //}
 
-    //public ActionResult Edit(int employeeId, DateTime month)
+    //public async Task<IActionResult> Edit(int employeeId, DateTime month)
     //{
     //    MonthlyOvertimeRequest monthlyRequest = overtimeService.GetMonthlyRequestDetailsByEmployeeId(employeeId, month);
     //    VerifierAndApproverForRequest supervisor = requestService.GetVerifierAndApprover(employeeId, RequestType.Overtime);
@@ -73,7 +71,7 @@ public class OvertimeController(
     //}
 
     //[HrmPermission(Policy.Host, FunctionKey.VerifyOvertime, FunctionKey.ApproveOvertime)]
-    //public ActionResult MemberOvertime(MemberMonthlyOvertimeRequestViewModel model)
+    //public async Task<IActionResult> MemberOvertime(MemberMonthlyOvertimeRequestViewModel model)
     //{
     //    model.TeamIds = model.TeamIds ?? string.Join(",", teamService.GetAll().Select(x => x.Id));
     //    model.MemberRequests = GetMemberOvertimeRequest(model);
@@ -115,7 +113,7 @@ public class OvertimeController(
     //    return model.MemberRequests;
     //}
 
-    //public ActionResult MemberDetails(long id)
+    //public async Task<IActionResult> MemberDetails(long id)
     //{
     //    MonthlyOvertimeRequest monthlyRequest = overtimeService.GetMonthlyRequestDetailsById(id);
     //    ViewBag.CurrentUserId = EmployeeSession.EmpId;
@@ -123,21 +121,22 @@ public class OvertimeController(
     //}
 
     [HrmPermission(Policy.Host, FunctionKey.ProcessOvertime)]
-    public ActionResult EmployeeOvertime(MemberMonthlyOvertimeRequestViewModel model)
+    public async Task<IActionResult> EmployeeOvertime(MemberMonthlyOvertimeRequestViewModel model)
     {
-        model.TeamIds = model.TeamIds ?? string.Join(",", teamService.GetAll().Select(x => x.Id));
+        var team = await teamService.GetAllAsync();
+        model.TeamIds ??= string.Join(",", team.Select(x => x.Id));
 
         return View(model);
     }
 
-    public ActionResult ListEmployeeOvertime(MemberMonthlyOvertimeRequestViewModel model)
+    public async Task<IActionResult> ListEmployeeOvertime(MemberMonthlyOvertimeRequestViewModel model)
     {
-        model.MemberRequests = GetEmployeeOvertimeRequest(model);
+        model.MemberRequests = await GetEmployeeOvertimeRequest(model);
 
         return PartialView("_ListEmployeeOvertime", model);
     }
 
-    private IEnumerable<MonthlyOvertimeRequest> GetEmployeeOvertimeRequest(MemberMonthlyOvertimeRequestViewModel model)
+    private async Task<IEnumerable<MonthlyOvertimeRequest>> GetEmployeeOvertimeRequest(MemberMonthlyOvertimeRequestViewModel model)
     {
         var requestStatusIds = Enum.GetValues(typeof(CurrentRequestStatus)).Cast<int>().Where(x => x > 0);
         var statusIds = model.StatusId switch
@@ -158,18 +157,18 @@ public class OvertimeController(
             OvertimeType = model.OvertimeType,
             IsLocal = model.IsLocal
         };
-        model.MemberRequests = overtimeService.GetMemberMonthlyRequest(param);
+        model.MemberRequests = await overtimeService.GetMemberMonthlyRequest(param);
 
         return model.MemberRequests;
     }
 
-    public ActionResult EmployeeDetails(long id)
+    public async Task<IActionResult> EmployeeDetails(long id)
     {
-        var monthlyRequest = overtimeService.GetMonthlyRequestDetailsById(id);
+        var monthlyRequest = await overtimeService.GetMonthlyRequestDetailsById(id);
         return View(monthlyRequest);
     }
 
-    public ActionResult GetActingEmployees(string query)
+    public async Task<IActionResult> GetActingEmployees(string query)
     {
         var criteria = new GetEmployeeSupervisorByQueryCriteria
         {
@@ -180,23 +179,23 @@ public class OvertimeController(
             IncludeLoginUser = true
         };
 
-        var employees = employeeService.GetSupervisorByQuery(criteria);
+        var employees = await employeeService.GetSupervisorByQuery(criteria);
         return Json(employees);
     }
 
     [HttpPost]
     [HrmPermission(Policy.Host, FunctionKey.VerifyOvertime, FunctionKey.ApproveOvertime, FunctionKey.ProcessOvertime)]
-    public JsonResult EditMonthlyRequestStatus(string requestIds, RequestCommand command, byte roleId)
+    public async Task<JsonResult> EditMonthlyRequestStatus(string requestIds, RequestCommand command, byte roleId)
     {
-        var commandResult = overtimeService.EditMonthlyRequestStatus(EmployeeSession.EmpId, requestIds, command, roleId);
+        var commandResult = await overtimeService.EditMonthlyRequestStatus(EmployeeSession.EmpId, requestIds, command, roleId);
         return Json(commandResult);
     }
 
     [HttpPost]
     [HrmPermission(Policy.Read, FunctionKey.ProcessOvertime)]
-    public ActionResult CheckInvalidOvertime(string requestIds)
+    public async Task<IActionResult> CheckInvalidOvertime(string requestIds)
     {
-        var isInvalid = overtimeService.CheckInvalidOvertimes(requestIds);
+        var isInvalid = await overtimeService.CheckInvalidOvertimes(requestIds);
 
         return Json(isInvalid);
     }
@@ -208,17 +207,17 @@ public class OvertimeController(
     //    BackgroundJob.Enqueue(() => overtimeService.SendMailToReminderClaimOvertime(subject, content));
     //}
 
-    public ActionResult Export(MemberMonthlyOvertimeRequestViewModel model)
+    public async Task<IActionResult> Export(MemberMonthlyOvertimeRequestViewModel model)
     {
         var fileName = $"{Labels.EmployeeOvertimeReport}.xlsx";
         const bool isMemberOvertime = false;
-        model.MemberRequests = GetEmployeeOvertimeRequest(model);
+        model.MemberRequests = await GetEmployeeOvertimeRequest(model);
         var exportData = exportOvertimeService.Export(model.MemberRequests, isMemberOvertime);
 
         return File(exportData, MimeType.XLSX, fileName);
     }
 
-    //public ActionResult ExportMemberOvertime(MemberMonthlyOvertimeRequestViewModel model)
+    //public async Task<IActionResult> ExportMemberOvertime(MemberMonthlyOvertimeRequestViewModel model)
     //{
     //    var fileName = $"{Labels.MemberOvertimeReport}.xlsx";
     //    const bool ismemberOvetime = true;

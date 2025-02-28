@@ -3,6 +3,10 @@
     <TargetFramework>net9.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="OvertimeReportController.cs" />
+    <Compile Remove="RequestController.cs" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Fanex.Data" Version="4.3.3" />
     <PackageReference Include="Fanex.Data.Repository" Version="4.3.3" />
     <PackageReference Include="GO.UserControl.Client.AspNetCore" Version="1.0.1" />

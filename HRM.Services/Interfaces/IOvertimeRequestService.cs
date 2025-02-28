@@ -1,27 +1,27 @@
-﻿namespace HRM.Services
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using HRM.Core.Enums;
+using HRM.Core.Models;
+using HRM.Models.Overtime;
+
+namespace HRM.Services.Interfaces;
+
+public interface IOvertimeRequestService
 {
-    using System;
-    using System.Collections.Generic;
-    using HRM.Core.Enums;
-    using HRM.Core.Models;
-    using HRM.Models.Overtime;
+    Task<IEnumerable<MonthlyOvertimeRequest>> GetMonthlyRequestByEmployeeId(int employeeId, int year);
 
-    public interface IOvertimeRequestService
-    {
-        IEnumerable<MonthlyOvertimeRequest> GetMonthlyRequestByEmployeeId(int employeeId, int year);
+    Task<MonthlyOvertimeRequest> GetMonthlyRequestDetailsByEmployeeId(int employeeId, DateTime month);
 
-        MonthlyOvertimeRequest GetMonthlyRequestDetailsByEmployeeId(int employeeId, DateTime month);
+    Task<IEnumerable<MonthlyOvertimeRequest>> GetMemberMonthlyRequest(GetMonthlyOvertimeRequestParam param);
 
-        IEnumerable<MonthlyOvertimeRequest> GetMemberMonthlyRequest(GetMonthlyOvertimeRequestParam param);
+    Task<MonthlyOvertimeRequest> GetMonthlyRequestDetailsById(long requestId);
 
-        MonthlyOvertimeRequest GetMonthlyRequestDetailsById(long requestId);
+    Task SendMailToReminderClaimOvertime(string subject, string content);
 
-        void SendMailToReminderClaimOvertime(string subject, string content);
+    Task<bool> CheckInvalidOvertimes(string requestIds);
 
-        bool CheckInvalidOvertimes(string requestIds);
+    Task<CommandResult> EditMonthlyRequest(int actorId, EditMonthlyOvertimeRequest model);
 
-        CommandResult EditMonthlyRequest(int actorId, EditMonthlyOvertimeRequest model);
-
-        CommandResult EditMonthlyRequestStatus(int actorId, string requestIds, RequestCommand command, byte roleId);
-    }
+    Task<CommandResult> EditMonthlyRequestStatus(int actorId, string requestIds, RequestCommand command, byte roleId);
 }

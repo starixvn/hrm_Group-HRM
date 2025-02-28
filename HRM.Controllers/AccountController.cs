@@ -7,6 +7,7 @@ using HRM.Core.Filters;
 using HRM.Core.Security;
 using HRM.Models;
 using HRM.Services;
+using HRM.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 namespace HRM.Controllers;
 

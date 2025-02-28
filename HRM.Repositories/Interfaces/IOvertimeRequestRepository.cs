@@ -1,15 +1,15 @@
-﻿namespace HRM.Repositories
+﻿namespace HRM.Repositories.Interfaces;
+
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Fanex.Data.Repository;
+using Models.Overtime;
+
+public interface IOvertimeRequestRepository
 {
-    using System.Collections.Generic;
-    using Fanex.Data.Repository;
-    using HRM.Models.Overtime;
+    Task<IEnumerable<MonthlyOvertimeRequest>> GetMonthlyRequestByEmployeeId(ICriteria criteria);
 
-    public interface IOvertimeRequestRepository
-    {
-        IEnumerable<MonthlyOvertimeRequest> GetMonthlyRequestByEmployeeId(ICriteria criteria);
+    Task<MonthlyOvertimeRequest> GetMonthlyRequestDetailsByEmployeeId(ICriteria criteria);
 
-        MonthlyOvertimeRequest GetMonthlyRequestDetailsByEmployeeId(ICriteria criteria);
-
-        IEnumerable<MonthlyOvertimeRequest> GetMemberMonthlyRequest(ICriteria criteria);
-    }
+    Task<IEnumerable<MonthlyOvertimeRequest>> GetMemberMonthlyRequest(ICriteria criteria);
 }

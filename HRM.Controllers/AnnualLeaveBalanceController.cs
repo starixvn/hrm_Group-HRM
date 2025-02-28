@@ -1,4 +1,6 @@
-﻿namespace HRM.Controllers
+﻿using HRM.Services.Interfaces;
+
+namespace HRM.Controllers
 {
     using System;
     using System.Collections.Generic;

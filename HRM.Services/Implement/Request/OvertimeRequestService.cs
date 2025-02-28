@@ -1,248 +1,247 @@
-﻿namespace HRM.Services
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using HRM.Core;
+using HRM.Core.Constants;
+using HRM.Core.Enums;
+using HRM.Core.Models;
+using HRM.Core.Services;
+using HRM.Core.XMLExtensions;
+using HRM.Criteria.Overtime;
+using HRM.Models.Overtime;
+using HRM.Models.Supervisor;
+using HRM.Repositories.Interfaces;
+using HRM.Services.Interfaces;
+
+namespace HRM.Services.Implement.Request;
+
+public class OvertimeRequestService(
+    IOvertimeRequestRepository overtimeRepository,
+    IBaseService baseService,
+    IEmailService emailService,
+    ILetstalkService letStalkService) : IOvertimeRequestService
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
-    using Core.Services;
-    using HRM.Core;
-    using HRM.Core.Constants;
-    using HRM.Core.Enums;
-    using HRM.Core.Models;
-    using HRM.Core.XMLExtensions;
-    using HRM.Criteria.Overtime;
-    using HRM.Models.Overtime;
-    using HRM.Models.Supervisor;
-    using HRM.Repositories;
-    using HRM.Services.Interfaces;
+    private const byte FromDay = 21;
+    private const byte ToDay = 20;
 
-    public class OvertimeRequestService(
-        IOvertimeRequestRepository overtimeRepository,
-        IBaseService baseService,
-        IEmailService emailService,
-        ILetstalkService letstalkService) : IOvertimeRequestService
+    public async Task<IEnumerable<MonthlyOvertimeRequest>> GetMonthlyRequestByEmployeeId(int employeeId, int year)
     {
-        private const byte FromDay = 21;
-        private const byte ToDay = 20;
+        var today = DateTimeOffset.Now;
+        var fromDate = new DateTimeOffset(year, 1, 1, 0, 0, 0, TimeSpan.Zero);
+        var toDate = today;
 
-        public IEnumerable<MonthlyOvertimeRequest> GetMonthlyRequestByEmployeeId(int employeeId, int year)
+        if (today.Year != year)
         {
-            var today = DateTimeOffset.Now;
-            var fromDate = new DateTimeOffset(year, 1, 1, 0, 0, 0, TimeSpan.Zero);
-            var toDate = today;
+            toDate = new DateTimeOffset(year, Constants.December, 1, 0, 0, 0, TimeSpan.Zero);
+        }
 
-            if (today.Year != year)
+        if (today.Day > ToDay)
+        {
+            toDate = toDate.AddMonths(1);
+        }
+
+        if (toDate.Year > year)
+        {
+            toDate = new DateTimeOffset(year, Constants.December, 1, 0, 0, 0, TimeSpan.Zero);
+        }
+
+        var criteria = new GetMonthlyOvertimeRequestByEmployeeIdCriteria
+        {
+            EmployeeId = employeeId,
+            FromDate = fromDate.Date,
+            ToDate = toDate.Date
+        };
+        var monthlyRequests = await overtimeRepository.GetMonthlyRequestByEmployeeId(criteria);
+
+        return monthlyRequests;
+    }
+
+    public async Task<MonthlyOvertimeRequest> GetMonthlyRequestDetailsByEmployeeId(int employeeId, DateTime month)
+    {
+        var(fromDate, toDate) = GetDateRange(month.FirstDayOfMonth());
+        var criteria = new GetMonthlyOvertimeRequestDetailsByEmployeeIdCriteria
+        {
+            EmployeeId = employeeId,
+            Month = month.FirstDayOfMonth(),
+            FromDate = fromDate,
+            ToDate = toDate
+        };
+        var monthlyRequest = await overtimeRepository.GetMonthlyRequestDetailsByEmployeeId(criteria);
+
+        return monthlyRequest ?? new MonthlyOvertimeRequest();
+    }
+
+    public async Task<IEnumerable<MonthlyOvertimeRequest>> GetMemberMonthlyRequest(GetMonthlyOvertimeRequestParam param)
+    {
+        var criteria = new GetMemberMonthlyOvertimeRequestCriteria
+        {
+            ActorId = param.ActorId,
+            Month = param.Month,
+            StatusIds = param.StatusIds,
+            TeamIds = param.TeamIds,
+            EmployeeId = param.EmployeeId,
+            IsProcessor = param.IsProcessor,
+            OvertimeType = param.OvertimeType,
+            IsLocal = param.IsLocal
+        };
+        var memberRequests = await overtimeRepository.GetMemberMonthlyRequest(criteria);
+        return memberRequests;
+    }
+
+    public async Task<MonthlyOvertimeRequest> GetMonthlyRequestDetailsById(long requestId)
+    {
+        var criteria = new GetMonthlyOvertimeRequestDetailsByIdCriteria
+        {
+            RequestId = requestId
+        };
+        var monthlyRequest = await overtimeRepository.GetMonthlyRequestDetailsByEmployeeId(criteria);
+
+        return monthlyRequest ?? new MonthlyOvertimeRequest();
+    }
+
+    public async Task SendMailToReminderClaimOvertime(string subject, string content)
+    {
+        var criteria = new GetEmployeeToRemindClaimOvertimeCriteria();
+        var employees = (await baseService.GetDataAsync<SupervisorNameModel>(criteria)).ToList();
+
+        if (employees.Count == 0)
+        {
+            var emailList = employees.Where(t => !string.IsNullOrWhiteSpace(t.Email)).Select(t => t.Email).ToList();
+            var letStalkList = employees.Where(t => !string.IsNullOrWhiteSpace(t.LetsTalk)).Select(t => t.LetsTalk).ToList();
+            var emails = SplitList(emailList, 100);
+            var letStalks = SplitList(letStalkList, 100);
+
+            foreach (var list in emails)
             {
-                toDate = new DateTimeOffset(year, Constants.December, 1, 0, 0, 0, TimeSpan.Zero);
+                var mailTo = string.Join(";", list);
+                emailService.SendEmailAsync(mailTo, string.Empty, subject, content);
             }
 
-            if (today.Day > ToDay)
+            foreach (var letStalk in letStalks)
             {
-                toDate = toDate.AddMonths(1);
+                var letStalkJoin = string.Join(";", letStalk);
+                await Task.Run(() => letStalkService.SendNotificationAsync(letStalkJoin, subject, content));
             }
-
-            if (toDate.Year > year)
-            {
-                toDate = new DateTimeOffset(year, Constants.December, 1, 0, 0, 0, TimeSpan.Zero);
-            }
-
-            var criteria = new GetMonthlyOvertimeRequestByEmployeeIdCriteria
-            {
-                EmployeeId = employeeId,
-                FromDate = fromDate.Date,
-                ToDate = toDate.Date
-            };
-            var monthlyRequests = overtimeRepository.GetMonthlyRequestByEmployeeId(criteria);
-
-            return monthlyRequests;
         }
+    }
 
-        public MonthlyOvertimeRequest GetMonthlyRequestDetailsByEmployeeId(int employeeId, DateTime month)
+    public async Task<bool> CheckInvalidOvertimes(string requestIds)
+    {
+        var isInvalid = false;
+        var criteria = new GetOvertimeDetailsByRequestIdsCriteria { RequestIds = requestIds };
+        var overtimes = (await baseService.GetDataAsync<DailyOvertimeRequest>(criteria)).ToList();
+        if (overtimes.Any())
         {
-            (var fromDate, var toDate) = GetDateRange(month.FirstDayOfMonth());
-            var criteria = new GetMonthlyOvertimeRequestDetailsByEmployeeIdCriteria
+            var index = 0;
+            while (!isInvalid && index < overtimes.Count)
             {
-                EmployeeId = employeeId,
-                Month = month.FirstDayOfMonth(),
-                FromDate = fromDate,
-                ToDate = toDate
-            };
-            var monthlyRequest = overtimeRepository.GetMonthlyRequestDetailsByEmployeeId(criteria);
-
-            return monthlyRequest ?? new MonthlyOvertimeRequest();
-        }
-
-        public IEnumerable<MonthlyOvertimeRequest> GetMemberMonthlyRequest(GetMonthlyOvertimeRequestParam param)
-        {
-            var criteria = new GetMemberMonthlyOvertimeRequestCriteria
-            {
-                ActorId = param.ActorId,
-                Month = param.Month,
-                StatusIds = param.StatusIds,
-                TeamIds = param.TeamIds,
-                EmployeeId = param.EmployeeId,
-                IsProcessor = param.IsProcessor,
-                OvertimeType = param.OvertimeType,
-                IsLocal = param.IsLocal
-            };
-            var memberRequests = overtimeRepository.GetMemberMonthlyRequest(criteria);
-            return memberRequests;
-        }
-
-        public MonthlyOvertimeRequest GetMonthlyRequestDetailsById(long requestId)
-        {
-            var criteria = new GetMonthlyOvertimeRequestDetailsByIdCriteria
-            {
-                RequestId = requestId
-            };
-            var monthlyRequest = overtimeRepository.GetMonthlyRequestDetailsByEmployeeId(criteria);
-
-            return monthlyRequest ?? new MonthlyOvertimeRequest();
-        }
-
-        public void SendMailToReminderClaimOvertime(string subject, string content)
-        {
-            var criteria = new GetEmployeeToRemindClaimOvertimeCriteria();
-            var employees = baseService.GetData<SupervisorNameModel>(criteria).ToList();
-
-            if (employees != null)
-            {
-                var emailList = employees.Where(t => !string.IsNullOrWhiteSpace(t.Email)).Select(t => t.Email).ToList();
-                var letstalkList = employees.Where(t => !string.IsNullOrWhiteSpace(t.LetsTalk)).Select(t => t.LetsTalk).ToList();
-                var emails = SplitList(emailList, 100);
-                var letstalks = SplitList(letstalkList, 100);
-
-                foreach (var list in emails)
-                {
-                    var mailTo = string.Join(";", list);
-                    emailService.SendEmailAsync(mailTo, string.Empty, subject, content);
-                }
-
-                foreach (var letstalk in letstalks)
-                {
-                    var letstalkJoin = string.Join(";", letstalk);
-                    Task.Run(() => letstalkService.SendNotificationAsync(letstalkJoin, subject, content));
-                }
+                isInvalid = CheckInvalidOvertimes(overtimes[index]);
+                index++;
             }
         }
 
-        public bool CheckInvalidOvertimes(string requestIds)
-        {
-            var isInvalid = false;
-            var criteria = new GetOvertimeDetailsByRequestIdsCriteria { RequestIds = requestIds };
-            var overtimes = baseService.GetData<DailyOvertimeRequest>(criteria).ToList();
-            if (overtimes != null && overtimes.Any())
-            {
-                var index = 0;
-                while (!isInvalid && index < overtimes.Count)
-                {
-                    isInvalid = CheckInvalidOvertimes(overtimes[index]);
-                    index++;
-                }
-            }
+        return isInvalid;
+    }
 
-            return isInvalid;
+    public async Task<CommandResult> EditMonthlyRequest(int actorId, EditMonthlyOvertimeRequest model)
+    {
+        var criteria = new EditMonthlyOvertimeRequestCriteria
+        {
+            ActorId = actorId,
+            EmployeeId = model.EmployeeId,
+            Month = model.Month.FirstDayOfMonth(),
+            VerifierId = model.VerifierId,
+            ApproverId = model.ApproverId,
+            DailyDetailsXml = model.DailyOvertimes.ToXML().ToString()
+        };
+        return await baseService.ExecuteNonQueryAsync(criteria);
+    }
+
+    public async Task<CommandResult> EditMonthlyRequestStatus(int actorId, string requestIds, RequestCommand command, byte roleId)
+    {
+        var criteria = new EditMonthlyOvertimeRequestStatusCriteria
+        {
+            RequestCommand = command,
+            RequestIds = requestIds,
+            ActorId = actorId,
+            RoleId = roleId
+        };
+        return await baseService.ExecuteNonQueryAsync(criteria);
+    }
+
+    private static bool CheckInvalidOvertimes(DailyOvertimeRequest overtime)
+    {
+        var isInvalid = false;
+        if ((!overtime.IsHoliday && !overtime.IsOffDay) || overtime.IsKeepInView)
+        {
+            isInvalid |= IsInvalidKeepInView(overtime);
         }
 
-        public CommandResult EditMonthlyRequest(int actorId, EditMonthlyOvertimeRequest model)
+        if (overtime.IsOffDay)
         {
-            var criteria = new EditMonthlyOvertimeRequestCriteria
-            {
-                ActorId = actorId,
-                EmployeeId = model.EmployeeId,
-                Month = model.Month.FirstDayOfMonth(),
-                VerifierId = model.VerifierId,
-                ApproverId = model.ApproverId,
-                DailyDetailsXml = model.DailyOvertimes.ToXML().ToString()
-            };
-            return baseService.ExecuteNonQuery(criteria);
+            isInvalid |= IsInvalidOffDay(overtime);
         }
 
-        public CommandResult EditMonthlyRequestStatus(int actorId, string requestIds, RequestCommand command, byte roleId)
+        if (overtime.IsHoliday)
         {
-            var criteria = new EditMonthlyOvertimeRequestStatusCriteria
-            {
-                RequestCommand = command,
-                RequestIds = requestIds,
-                ActorId = actorId,
-                RoleId = roleId
-            };
-            return baseService.ExecuteNonQuery(criteria);
+            isInvalid |= IsInvalidHoliday(overtime);
         }
 
-        private static bool CheckInvalidOvertimes(DailyOvertimeRequest overtime)
-        {
-            var isInvalid = false;
-            if ((!overtime.IsHoliday && !overtime.IsOffDay) || overtime.IsKeepInView)
-            {
-                isInvalid |= IsInvalidKeepInView(overtime);
-            }
+        return isInvalid;
+    }
 
-            if (overtime.IsOffDay)
-            {
-                isInvalid |= IsInvalidOffDay(overtime);
-            }
-
-            if (overtime.IsHoliday)
-            {
-                isInvalid |= IsInvalidHoliday(overtime);
-            }
-
-            return isInvalid;
-        }
-
-        private static bool IsInvalidKeepInView(DailyOvertimeRequest overtime)
-        {
-            return (!overtime.OffHours.Equals(0)
+    private static bool IsInvalidKeepInView(DailyOvertimeRequest overtime)
+    {
+        return (!overtime.OffHours.Equals(0)
                 || !overtime.PublicHours.Equals(0)
                 || overtime.ActualWorkingHours < (overtime.TotalShiftHours + overtime.NormalHours)
                 || overtime.ActualWorkingHours < (overtime.TotalShiftHours + overtime.SpecialHours));
-        }
+    }
 
-        private static bool IsInvalidOffDay(DailyOvertimeRequest overtime)
-        {
-            return (!overtime.NormalHours.Equals(0)
+    private static bool IsInvalidOffDay(DailyOvertimeRequest overtime)
+    {
+        return (!overtime.NormalHours.Equals(0)
                 || !overtime.PublicHours.Equals(0)
                 || overtime.ActualWorkingHours < overtime.OffHours);
-        }
+    }
 
-        private static bool IsInvalidHoliday(DailyOvertimeRequest overtime)
-        {
-            return (!overtime.NormalHours.Equals(0)
+    private static bool IsInvalidHoliday(DailyOvertimeRequest overtime)
+    {
+        return (!overtime.NormalHours.Equals(0)
                 || !overtime.OffHours.Equals(0)
                 || overtime.ActualWorkingHours < overtime.PublicHours);
-        }
+    }
 
-        private static List<List<string>> SplitList(List<string> locations, int size)
+    private static List<List<string>> SplitList(List<string> locations, int size)
+    {
+        var emails = new List<List<string>>();
+        for (var i = 0; i < locations.Count; i += size)
         {
-            var emails = new List<List<string>>();
-            for (int i = 0; i < locations.Count; i += size)
-            {
-                emails.Add(locations.GetRange(i, Math.Min(size, locations.Count - i)));
-            }
-
-            return emails;
+            emails.Add(locations.GetRange(i, Math.Min(size, locations.Count - i)));
         }
 
-        private static ValueTuple<DateTime, DateTime> GetDateRange(DateTime month)
+        return emails;
+    }
+
+    private static ValueTuple<DateTime, DateTime> GetDateRange(DateTime month)
+    {
+        var newRuleApplyFromMonth = new DateTimeOffset(2020, 5, 1, 0, 0, 0, TimeSpan.Zero);
+        var lastMonth = month.AddMonths(-1);
+        var fromDate = new DateTimeOffset(lastMonth.Year, lastMonth.Month, 10, 0, 0, 0, TimeSpan.Zero);
+        var toDate = new DateTimeOffset(month.Year, month.Month, 9, 0, 0, 0, TimeSpan.Zero);
+
+        if (month == newRuleApplyFromMonth)
         {
-            var newRuleApplyFromMonth = new DateTimeOffset(2020, 5, 1, 0, 0, 0, TimeSpan.Zero);
-            var lastMonth = month.AddMonths(-1);
-            var fromDate = new DateTimeOffset(lastMonth.Year, lastMonth.Month, 10, 0, 0, 0, TimeSpan.Zero);
-            var toDate = new DateTimeOffset(month.Year, month.Month, 9, 0, 0, 0, TimeSpan.Zero);
-
-            if (month == newRuleApplyFromMonth)
-            {
-                toDate = new DateTimeOffset(month.Year, month.Month, ToDay, 0, 0, 0, TimeSpan.Zero);
-            }
-
-            if (month > newRuleApplyFromMonth)
-            {
-                fromDate = new DateTimeOffset(lastMonth.Year, lastMonth.Month, FromDay, 0, 0, 0, TimeSpan.Zero);
-                toDate = new DateTimeOffset(month.Year, month.Month, ToDay, 0, 0, 0, TimeSpan.Zero);
-            }
-
-            return (fromDate.Date, toDate.Date);
+            toDate = new DateTimeOffset(month.Year, month.Month, ToDay, 0, 0, 0, TimeSpan.Zero);
         }
+
+        if (month > newRuleApplyFromMonth)
+        {
+            fromDate = new DateTimeOffset(lastMonth.Year, lastMonth.Month, FromDay, 0, 0, 0, TimeSpan.Zero);
+            toDate = new DateTimeOffset(month.Year, month.Month, ToDay, 0, 0, 0, TimeSpan.Zero);
+        }
+
+        return (fromDate.Date, toDate.Date);
     }
 }

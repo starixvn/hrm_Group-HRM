@@ -1,4 +1,6 @@
-﻿namespace HRM.Services
+﻿using HRM.Services.Interfaces;
+
+namespace HRM.Services
 {
     using System;
     using System.Collections.Generic;
@@ -137,9 +139,9 @@
             return baseService.GetData<SupervisorNameModel>(criteria).ToList();
         }
 
-        public IList<SupervisorNameModel> GetSupervisorByQuery(GetEmployeeSupervisorByQueryCriteria criteria)
+        public async Task<IList<SupervisorNameModel>> GetSupervisorByQuery(GetEmployeeSupervisorByQueryCriteria criteria)
         {
-            return baseService.GetData<SupervisorNameModel>(criteria).ToList();
+            return (await baseService.GetDataAsync<SupervisorNameModel>(criteria)).ToList();
         }
 
         public IEnumerable<Supervisor> GetDisciplineSettingByEmployeeId(int employeeId)

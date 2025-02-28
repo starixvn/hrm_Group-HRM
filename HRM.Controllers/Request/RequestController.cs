@@ -1,4 +1,7 @@
-﻿namespace Fanex.NexHR.Controllers.Request
+﻿using System.Threading.Tasks;
+using HRM.Services.Interfaces;
+
+namespace Fanex.NexHR.Controllers.Request
 {
     using System;
     using System.Collections.Generic;
@@ -20,30 +23,21 @@
     using HRM.Controllers;
     using Microsoft.AspNetCore.Mvc;
 
-    public class RequestController : BaseController
+    public class RequestController(
+        IUserControlSession userControlSession,
+        IEmployeeService employeeService,
+        IRequestService requestService,
+        ICommonDataService commonDataService,
+        ITeamService teamService,
+        IAttachFileService attachFileService)
+        : BaseController(userControlSession)
     {
         private const string PathFolder = "/file/uploads/request/";
         private const string EmployeeRequestViewName = "EmployeeRequest";
-        private readonly IEmployeeService employeeService;
-        private readonly IRequestService requestService;
-        private readonly ICommonDataService commonDataService;
-        private readonly ITeamService teamService;
-        private readonly IAttachFileService attachFileService;
-
-        public RequestController(
-            IUserControlSession userControlSession,
-            IEmployeeService employeeService,
-            IRequestService requestService,
-            ICommonDataService commonDataService,
-            ITeamService teamService,
-            IAttachFileService attachFileService) : base(userControlSession)
-        {
-            this.employeeService = employeeService;
-            this.requestService = requestService;
-            this.commonDataService = commonDataService;
-            this.teamService = teamService;
-            this.attachFileService = attachFileService;
-        }
+        private readonly IRequestService requestService = requestService;
+        private readonly ICommonDataService commonDataService = commonDataService;
+        private readonly ITeamService teamService = teamService;
+        private readonly IAttachFileService attachFileService = attachFileService;
 
         //[HttpPost]
         //public string GetMessageDetailRequest(RequestEntity request, short requestType, string fromShiftCode, string toShiftCode)
@@ -119,7 +113,7 @@
         //    return View(EmployeeRequestViewName, request);
         //}
 
-        public JsonResult GetEmployeesByActingUser(byte role, string query = "", byte? requestType = null)
+        public async Task<JsonResult> GetEmployeesByActingUser(byte role, string query = "", byte? requestType = null)
         {
             var criteria = new GetEmployeeSupervisorByQueryCriteria
             {
@@ -129,14 +123,14 @@
                 Query = query.Trim(),
                 IncludeLoginUser = true
             };
-            IList<SupervisorNameModel> supervisors = employeeService.GetSupervisorByQuery(criteria);
+            var supervisors = await employeeService.GetSupervisorByQuery(criteria);
 
             return Json(supervisors);
         }
 
         public ActionResult GetVerifiers(int employeeId, byte requestType)
         {
-            IList<SupervisorNameModel> verifierList = GetSupervisorByRequestType(employeeId, (byte)RoleSystem.Verifier, requestType);
+            var verifierList = GetSupervisorByRequestType(employeeId, (byte)RoleSystem.Verifier, requestType);
 
             return Json(verifierList);
         }
@@ -157,7 +151,7 @@
                 Role = role,
                 RequestType = requestType
             };
-            IList<SupervisorNameModel> supervisors = employeeService.GetSupervisorByRequestType(criteria);
+            var supervisors = employeeService.GetSupervisorByRequestType(criteria);
 
             return supervisors;
         }
