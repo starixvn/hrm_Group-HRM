@@ -159,6 +159,8 @@ public static class ServiceCollectionExtensions
 
         services.AddSingleton<IOvertimeRequestService, OvertimeRequestService>();
         services.AddSingleton<IOvertimeRequestRepository, OvertimeRequestRepository>();
+        services.AddSingleton<IReportService, ReportService>();
+        services.AddSingleton<IReportRepository, ReportRepository>();
 
         return services;
     }

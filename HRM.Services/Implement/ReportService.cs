@@ -77,9 +77,9 @@
             return baseService.GetData<WeekendLeaveDetail>(criteria).ToList();
         }
 
-        public bool GetIsPrivilegeCreateCheckInOut(GetPrivilegeCreateCheckInOutRecordCriteria criteria)
+        public async Task<bool> GetIsPrivilegeCreateCheckInOutAsync(GetPrivilegeCreateCheckInOutRecordCriteria criteria)
         {
-            return baseService.GetDataEntity<bool>(criteria);
+            return await baseService.GetDataEntityAsync<bool>(criteria);
         }
     }
 }

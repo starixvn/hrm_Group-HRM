@@ -2,8 +2,12 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Text.Encodings.Web;
     using HRM.Core.Enums;
     using HRM.Resources;
+    using Microsoft.AspNetCore.Html;
     using Microsoft.AspNetCore.Mvc.Rendering;
 
     public static class Extensions
@@ -61,6 +65,72 @@
             var currentYear = DateTimeOffset.Now.DateTime.Year;
 
             return YearPicker(fromYear, currentYear, isShowAll);
+        }
+
+        public static DateTime GetMaxDate(this DateTime date)
+        {
+            if (date.AddMonths(1).Year > DateTimeOffset.Now.Year)
+            {
+                return DateTimeOffset.Now.AddYears(1).DateTime;
+            }
+
+            return date;
+        }
+
+        public static HtmlString AttendanceNoteHtml(string notes)
+        {
+            var htmlString = new StringBuilder();
+
+            if (!string.IsNullOrEmpty(notes))
+            {
+                string[] noteArray = notes.Split(',');
+
+                for (int i = 0; i < noteArray.Length; i++)
+                {
+                    if (noteArray[i] == "No Data" || noteArray[i] == "PH" || noteArray[i].Contains("Off day"))
+                    {
+                        htmlString.Append(noteArray[i]);
+                    }
+                    else
+                    {
+                        bool isLastElement = (i + 1 == noteArray.Length);
+                        SetLinkValue(noteArray[i], ref htmlString, isLastElement);
+                    }
+                }
+            }
+
+            return new HtmlString(htmlString.ToString());
+        }
+
+        private static void SetLinkValue(string noteValue, ref StringBuilder htmlString, bool isLastElement)
+        {
+            string link;
+
+            if (noteValue.Contains("Missing"))
+            {
+                link = "/checkinout/employeeview";
+            }
+            else if (noteValue.Contains("Late") || noteValue.Contains("Early"))
+            {
+                link = "/lateinearlyout/employeeview";
+            }
+            else if (noteValue.Contains("KIV"))
+            {
+                link = "/keepinview/employeeview";
+            }
+            else
+            {
+                link = "/leave/employeeview";
+            }
+
+            string safeNoteValue = HtmlEncoder.Default.Encode(noteValue);
+
+            htmlString.Append($"<a href='{link}'>{safeNoteValue}</a>");
+
+            if (!isLastElement)
+            {
+                htmlString.Append(", ");
+            }
         }
     }
 }
