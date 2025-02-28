@@ -3,13 +3,6 @@
     <TargetFramework>net9.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <Content Remove="Views\Overtime\Details.cshtml" />
-    <Content Remove="Views\Overtime\Edit.cshtml" />
-    <Content Remove="Views\Overtime\MemberDetails.cshtml" />
-    <Content Remove="Views\Overtime\MemberOvertime.cshtml" />
-    <Content Remove="Views\Overtime\_ListMemberOvertime.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <None Remove="App_Data\SpNames.xml" />
     <None Remove="logs\log.txt" />
   </ItemGroup>

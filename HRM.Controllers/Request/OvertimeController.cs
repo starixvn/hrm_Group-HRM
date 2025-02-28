@@ -157,7 +157,7 @@
         private async Task<IEnumerable<MonthlyOvertimeRequest>> GetEmployeeOvertimeRequest(MemberMonthlyOvertimeRequestViewModel model)
         {
             var statusIds = string.Empty;
-            IEnumerable<int> requestStatusIds = Enum.GetValues(typeof(CurrentRequestStatus)).Cast<int>().Where(x => x > 0);
+            var requestStatusIds = Enum.GetValues(typeof(CurrentRequestStatus)).Cast<int>().Where(x => x > 0);
             if (model.StatusId == -1)
             {
                 statusIds = string.Format("{0},{1}", (byte)CurrentRequestStatus.Pending, (byte)CurrentRequestStatus.Verified);

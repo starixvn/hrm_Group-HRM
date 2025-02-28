@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Fanex.Caching.Redis;
 using Fanex.Data.Repository;
 using Fanex.Logging;
+using Fanex.NexHR.Repositories;
 using GO.UserControl.Client.AspNetCore;
 using GO.UserControl.Client.AspNetCore.Session;
 using GO.UserControl.Client.Core;
