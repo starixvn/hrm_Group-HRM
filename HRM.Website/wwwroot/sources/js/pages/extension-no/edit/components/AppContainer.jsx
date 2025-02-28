@@ -51,7 +51,7 @@ const AppContainer = () => {
                 const { data } = response;
                 const employeeOptions = data.map(item => {
                     return {
-                        id: item.Id,
+                        id: item.id,
                         value: `${item.nickName} (${item.fullName})`,
                         fullName: item.fullName,
                         nickName: item.nickName
@@ -112,19 +112,21 @@ const AppContainer = () => {
 
     const handleSubmit = (values, { setSubmitting }) => {
         setSubmitting(true);
+
+        const model = {
+            fullName: values.FullName,
+            nickName: values.NickName,
+            extensionNo: values.ExtensionNo,
+            isInternal: values.IsInternal,
+            empId: isNaN(parseInt(values.EmpId, 10)) ? 0 : values.EmpId,
+            employeeExtensionId: extensionDetail.employeeExtensionId,
+            teamId: values.TeamId
+        };
         axios({
             method: 'POST',
             url: resolveClientUrl('ExtensionNo/Edit'),
             headers: { 'X-Requested-With': 'XMLHttpRequest' },
-            data: {
-                fullName: values.FullName,
-                nickName: values.NickName,
-                extensionNo: values.ExtensionNo,
-                isInternal: values.IsInternal,
-                empId: values.EmpId,
-                employeeExtensionId: extensionDetail.employeeExtensionId,
-                teamId: values.TeamId
-            }
+            data: model
         }).then(response => {
             const { data } = response;
             if (data.isSuccessful) {
