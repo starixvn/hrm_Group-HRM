@@ -70,13 +70,13 @@ namespace Fanex.NexHR.Controllers.Request
         //    return View(EmployeeRequestViewName, request);
         //}
 
-        //private void GetInfoAttachFile(IList<RequestEntity> requests)
-        //{
-        //    foreach (var request in requests)
-        //    {
-        //        request.AttachFiles = attachFileService.GetInfoAttachFile(request.Id, PathFolder);
-        //    }
-        //}
+        private void GetInfoAttachFile(IList<RequestEntity> requests)
+        {
+            foreach (var request in requests)
+            {
+                request.AttachFiles = attachFileService.GetInfoAttachFile(request.Id, PathFolder);
+            }
+        }
 
         //[HRMPermission(Policy.Host, FunctionKey.ProcessRequest)]
         //public ActionResult HRView(RequestViewModel request)
@@ -102,17 +102,18 @@ namespace Fanex.NexHR.Controllers.Request
         //    return View(EmployeeRequestViewName, request);
         //}
 
-        //[HRMPermission(Policy.Host, FunctionKey.VoidRequest)]
-        //public ActionResult VoidRequest(RequestViewModel request)
-        //{
-        //    request.StatusId = request.StatusId == Constants.DefaultRequestFilterStatusId ? 0 : request.StatusId;
-        //    request.ViewType = RequestViewType.SASpace;
-        //    request.TeamIds = request.TeamIds ?? string.Join(",", teamService.GetAll().Select(x => x.Id));
-        //    GetRequests(request);
-        //    GetInfoAttachFile(request.Requests);
+        [HrmPermission(Policy.Host, FunctionKey.VoidRequest)]
+        public async Task<ActionResult> VoidRequest(RequestViewModel request)
+        {
+            request.StatusId = request.StatusId == Constants.DefaultRequestFilterStatusId ? 0 : request.StatusId;
+            request.ViewType = RequestViewType.SASpace;
+            var teams = await teamService.GetAllAsync();
+            request.TeamIds ??= string.Join(",", teams.Select(x => x.Id));
+            await GetRequests(request);
+            GetInfoAttachFile(request.Requests);
 
-        //    return View(EmployeeRequestViewName, request);
-        //}
+            return View(EmployeeRequestViewName, request);
+        }
 
         public async Task<IActionResult> GetEmployeesByActingUser(byte role, string query = "", byte? requestType = null)
         {
@@ -157,56 +158,55 @@ namespace Fanex.NexHR.Controllers.Request
             return supervisors;
         }
 
-        //[HRMPermission(Policy.Host, FunctionKey.VerifyRequest, FunctionKey.ApproveRequest, FunctionKey.ProcessRequest, FunctionKey.VoidRequest)]
-        //public PartialViewResult PartialViewProcessRequest(ProcessRequestViewModel model)
-        //{
-        //    if (model != null
-        //        && model.RequestId > 0
-        //        && model.RoleId == (byte)RoleSystem.Approver
-        //        && model.Command == RequestCommand.Approve)
-        //    {
-        //        HandleProcessRequest(model);
-        //    }
+        [HrmPermission(Policy.Host, FunctionKey.VerifyRequest, FunctionKey.ApproveRequest, FunctionKey.ProcessRequest, FunctionKey.VoidRequest)]
+        public PartialViewResult PartialViewProcessRequest(ProcessRequestViewModel model)
+        {
+            if (model != null
+                && model.RequestId > 0
+                && model.RoleId == (byte)RoleSystem.Approver
+                && model.Command == RequestCommand.Approve)
+            {
+                HandleProcessRequest(model);
+            }
 
-        //    return PartialView("_ProcessRequest", model);
-        //}
+            return PartialView("_ProcessRequest", model);
+        }
 
-        //[HttpPost]
-        //[ValidateInput(false)]
-        //[HRMPermission(Policy.Host, FunctionKey.VerifyRequest, FunctionKey.ApproveRequest, FunctionKey.ProcessRequest, FunctionKey.VoidRequest)]
-        //public CustomJsonResult ProcessRequest(ProcessRequestParam model)
-        //{
-        //    CommandResult commandResult;
-        //    switch (model.Command)
-        //    {
-        //        case RequestCommand.Accept:
-        //        case RequestCommand.Approve:
-        //        case RequestCommand.Process:
-        //            commandResult = requestService.ApproveRequest(EmployeeSession.EmpId, model);
-        //            break;
+        [HttpPost]
+        [HrmPermission(Policy.Host, FunctionKey.VerifyRequest, FunctionKey.ApproveRequest, FunctionKey.ProcessRequest, FunctionKey.VoidRequest)]
+        public async Task<CustomJsonResult> ProcessRequest(ProcessRequestParam model)
+        {
+            CommandResult commandResult;
+            switch (model.Command)
+            {
+                case RequestCommand.Accept:
+                case RequestCommand.Approve:
+                case RequestCommand.Process:
+                    commandResult = requestService.ApproveRequest(EmployeeSession.EmpId, model);
+                    break;
 
-        //        case RequestCommand.Reset:
-        //            commandResult = requestService.ResetRequest(EmployeeSession.EmpId, model);
-        //            break;
+                case RequestCommand.Reset:
+                    commandResult = requestService.ResetRequest(EmployeeSession.EmpId, model);
+                    break;
 
-        //        case RequestCommand.NotAccept:
-        //        case RequestCommand.Reject:
-        //        case RequestCommand.Void:
-        //            commandResult = requestService.RejectRequest(EmployeeSession.EmpId, model);
-        //            break;
+                case RequestCommand.NotAccept:
+                case RequestCommand.Reject:
+                case RequestCommand.Void:
+                    commandResult = requestService.RejectRequest(EmployeeSession.EmpId, model);
+                    break;
 
-        //        default:
-        //            commandResult = requestService.VoidRequest(EmployeeSession.EmpId, model);
-        //            break;
-        //    }
+                default:
+                    commandResult = await requestService.VoidRequestAsync(EmployeeSession.EmpId, model);
+                    break;
+            }
 
-        //    if (commandResult.IsSuccessful)
-        //    {
-        //        requestService.SendMailProcessRequest(model, EmployeeSession, model.Command);
-        //    }
+            if (commandResult.IsSuccessful)
+            {
+                requestService.SendMailProcessRequest(model, EmployeeSession, model.Command);
+            }
 
-        //    return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
-        //}
+            return new CustomJsonResult(commandResult);
+        }
 
         //[HttpPost]
         //[ValidateInput(false)]
@@ -225,77 +225,73 @@ namespace Fanex.NexHR.Controllers.Request
         //    return new CustomJsonResult { Data = commandResult, JsonRequestBehavior = JsonRequestBehavior.AllowGet };
         //}
 
-        //private void HandleProcessRequest(ProcessRequestViewModel model)
-        //{
-        //    switch (model.RequestTypeId)
-        //    {
-        //        case (byte)RequestType.CheckIn:
-        //        case (byte)RequestType.CheckOut:
-        //            model.CheckInOutDetail = requestService.GetCheckInOutDetailToReviewDiscipline(model.RequestId);
-        //            break;
+        private void HandleProcessRequest(ProcessRequestViewModel model)
+        {
+            switch (model.RequestTypeId)
+            {
+                case (byte)RequestType.CheckIn:
+                case (byte)RequestType.CheckOut:
+                    model.CheckInOutDetail = requestService.GetCheckInOutDetailToReviewDiscipline(model.RequestId);
+                    break;
 
-        //        case (byte)RequestType.LateIn:
-        //        case (byte)RequestType.EarlyOut:
-        //            model.LateInEarlyOutDetail = requestService.GetLateInEarlyOutDetailToReviewDiscipline(model.RequestId);
-        //            break;
+                case (byte)RequestType.LateIn:
+                case (byte)RequestType.EarlyOut:
+                    model.LateInEarlyOutDetail = requestService.GetLateInEarlyOutDetailToReviewDiscipline(model.RequestId);
+                    break;
 
-        //        case (byte)RequestType.ChangeShift:
-        //            model.ChangeShiftDetails = requestService.GetChangeShiftDetailToReviewDiscipline(model.RequestId);
-        //            break;
+                case (byte)RequestType.ChangeShift:
+                    model.ChangeShiftDetails = requestService.GetChangeShiftDetailToReviewDiscipline(model.RequestId);
+                    break;
 
-        //        case (byte)RequestType.Leave:
-        //            model.LeaveDisciplines = requestService.GetLeaveRequestDetailToReviewDiscipline(model.RequestId);
-        //            break;
+                case (byte)RequestType.Leave:
+                    model.LeaveDisciplines = requestService.GetLeaveRequestDetailToReviewDiscipline(model.RequestId);
+                    break;
+            }
+        }
 
-        //        default:
-        //            // nothing
-        //            break;
-        //    }
-        //}
+        [NonAction]
+        private async Task GetRequests(RequestViewModel request)
+        {
+            request.ToDate = request.ToDate.ToEndOfDay();
+            request.LeaveTypes = await commonDataService.GetLeaveTypeAsync();
+            int? employeeId = null;
+            if (request.EmployeeId != -1 && !string.IsNullOrWhiteSpace(request.Employee))
+            {
+                employeeId = request.EmployeeId;
+            }
 
-        //[NonAction]
-        //private void GetRequests(RequestViewModel request)
-        //{
-        //    request.ToDate = request.ToDate.ToEndOfDay();
-        //    request.LeaveTypes = commonDataService.GetLeaveType();
-        //    int? employeeId = null;
-        //    if (request.EmployeeId != -1 && !string.IsNullOrWhiteSpace(request.Employee))
-        //    {
-        //        employeeId = request.EmployeeId;
-        //    }
+            bool? isLocal = null;
+            var criteria = new GetRequestCriteria
+            {
+                EmpId = employeeId,
+                FromDate = request.FromDate,
+                ToDate = request.ToDate,
+                TeamIds = request.TeamIds,
+                Status = request.StatusIds,
+                RequestType = request.RequestType,
+                IsQueryByCreatedDate = !request.IsFilterByAffectedDate,
+                RequestViewType = request.ViewType,
+                SupervisorId = EmployeeSession.EmpId,
+                IsLocal = request.IsLocal.HasValue ? (request.IsLocal.Value == 1) : isLocal,
+                LeaveTypeId = request.LeaveType
+            };
 
-        //    bool? isLocal = null;
-        //    var criteria = new GetRequestCriteria
-        //    {
-        //        EmpId = employeeId,
-        //        FromDate = request.FromDate,
-        //        ToDate = request.ToDate,
-        //        TeamIds = request.TeamIds,
-        //        Status = request.StatusIds,
-        //        RequestType = request.RequestType,
-        //        IsQueryByCreatedDate = !request.IsFilterByAffectedDate,
-        //        RequestViewType = request.ViewType,
-        //        SupervisorId = EmployeeSession.EmpId,
-        //        IsLocal = request.IsLocal.HasValue ? (request.IsLocal.Value == 1) : isLocal,
-        //        LeaveTypeId = request.LeaveType
-        //    };
+            var requestList = requestService.GetRequests(criteria);
+            request.CurrentUserId = EmployeeSession.EmpId;
+            request.Requests = request.ViewType == RequestViewType.PersonalSpace ? SortRequest(requestList) : requestList;
+        }
 
-        //    IList<RequestEntity> requestList = requestService.GetRequests(criteria);
-        //    request.CurrentUserId = EmployeeSession.EmpId;
-        //    request.Requests = request.ViewType == RequestViewType.PersonalSpace ? SortRequest(requestList) : requestList;
-        //}
+        private IList<RequestEntity> SortRequest(IList<RequestEntity> requests)
+        {
+            return requests.OrderByDescending(t => (SortRequestValidate(t))).ToList();
+        }
 
-        //private IList<RequestEntity> SortRequest(IList<RequestEntity> requests)
-        //{
-        //    return requests.OrderByDescending(t => (SortRequestValidate(t))).ToList();
-        //}
-
-        //private bool SortRequestValidate(RequestEntity t)
-        //{
-        //    bool pending = t.Status.Id == (byte)CurrentRequestStatus.Pending
-        //        && (t.ApprovedBy.Id == EmployeeSession.EmpId || t.VerifiedBy.Id == EmployeeSession.EmpId);
-        //    bool verified = (t.Status.Id == (byte)CurrentRequestStatus.Verified && t.ApprovedBy.Id == EmployeeSession.EmpId);
-        //    return pending || verified;
-        //}
+        private bool SortRequestValidate(RequestEntity t)
+        {
+            var pending = t.Status.Id == (byte)CurrentRequestStatus.Pending
+                && (t.ApprovedBy.Id == EmployeeSession.EmpId || t.VerifiedBy.Id == EmployeeSession.EmpId);
+            var verified = (t.Status.Id == (byte)CurrentRequestStatus.Verified && t.ApprovedBy.Id == EmployeeSession.EmpId);
+            return pending || verified;
+        }
     }
 }

@@ -1,0 +1,67 @@
+﻿@using HRM.Core.Enums
+@using HRM.Models.Request
+
+@model RequestEntity
+
+@{
+	var request = Model;
+	var annualBalance = string.Empty;
+	if (request.RequestType.Id == (byte)RequestType.Leave)
+	{
+		annualBalance = "AL Balance " + request.FromDate.Year + ": " + request.Requester.AnnualLeaveBalance + " && ";
+	}
+}
+
+@switch (request.Status.Id)
+{
+    case (byte)CurrentRequestStatus.Pending:
+        <a roleid="@Convert.ToInt32(RoleSystem.HR)" requestid="@request.Id" requesttypeid="@request.RequestType.Id" employeeid="@request.Requester.Id"
+           class="sa-void tooltip-tipsy" href="javascript:void(0);"
+           title="@annualBalance @request.Requester.NickName had @request.TotalDaysRequestInMonth.ToString("0.#") approved request(s) in @request.FromDate.ToMonthAndYearFormatedDate()">
+            @request.Status.ToString()
+            <span class="caret"></span>
+        </a>
+        break;
+    case (byte)CurrentRequestStatus.Verified:
+        <a roleid="@Convert.ToInt32(RoleSystem.HR)" requestid="@request.Id" requesttypeid="@request.RequestType.Id" employeeid="@request.Requester.Id"
+           class="sa-void tooltip-tipsy" href="javascript:void(0);"
+           title="@annualBalance @request.Status.Name by @request.VerifiedBy.NickName (@request.VerifiedDate.ToShortFormatedDate())">
+            @request.Status.ToString()
+            <span class="caret"></span>
+        </a>
+        break;
+    case (byte)CurrentRequestStatus.NotVerified:
+        <span class="tooltip-tipsy" title="@request.Status.Name by @request.VerifiedBy.NickName (@request.VerifiedDate.ToShortFormatedDate())">
+            @request.Status.ToString()
+        </span>
+        break;
+    case (byte)CurrentRequestStatus.Approved:
+        <a roleid="@Convert.ToInt32(RoleSystem.HR)" requestid="@request.Id" requesttypeid="@request.RequestType.Id" employeeid="@request.Requester.Id"
+           class="sa-void tooltip-tipsy" href="javascript:void(0);"
+           title="@request.Status.Name by @request.ApprovedBy.NickName (@request.ApprovedDate.ToShortFormatedDate())">
+            @request.Status.ToString()
+            <span class="caret"></span>
+        </a>
+        break;
+    case (byte)CurrentRequestStatus.Rejected:
+        <span class="tooltip-tipsy" title="@request.Status.Name by @request.Approver.NickName (@request.ApprovedDate.ToShortFormatedDate())">
+            @request.Status.ToString()
+        </span>
+        break;
+    case (byte)CurrentRequestStatus.Processed:
+        <a roleid="@Convert.ToInt32(RoleSystem.HR)" requestid="@request.Id" requesttypeid="@request.RequestType.Id" employeeid="@request.Requester.Id"
+           class="sa-void tooltip-tipsy" href="javascript:void(0);"
+           title="@request.Status.Name by @request.ProcessedBy.NickName (@request.ProcessedDate.ToShortFormatedDate())">
+            @request.Status.ToString()
+            <span class="caret"></span>
+        </a>
+        break;
+    case (byte)CurrentRequestStatus.Void:
+        <span class="tooltip-tipsy" title="@request.Status.Name by @request.ProcessedBy.NickName (@request.ProcessedDate.ToShortFormatedDate())">
+            @request.Status.ToString()
+        </span>
+        break;
+    default:
+        <span class="tooltip-tipsy">@request.Status.ToString()</span>
+        break;
+}

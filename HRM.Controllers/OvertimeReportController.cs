@@ -7,6 +7,7 @@ using HRM.ViewModels.Report.Overtime;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
 
@@ -48,9 +49,10 @@ public class OvertimeReportController(
     }
 
     [HrmPermission(Policy.Read, FunctionKey.YearlyOvertimeReport)]
-    public ActionResult YearlyOvertime(YearlyOvertimeViewModel model)
+    public async Task<ActionResult> YearlyOvertime(YearlyOvertimeViewModel model)
     {
-        model.TeamIds = model.TeamIds ?? string.Join(",", teamService.GetAll().Select(x => x.Id));
+        var teams = await teamService.GetAllAsync();
+        model.TeamIds = model.TeamIds ?? string.Join(",", teams.Select(x => x.Id));
         var param = new GetYearlyOvertimeParam
         {
             ActorId = EmployeeSession.EmpId,
@@ -76,9 +78,10 @@ public class OvertimeReportController(
     }
 
     [HrmPermission(Policy.Read, FunctionKey.OvertimeReport)]
-    public ActionResult DailyOvertime(DailyOvertimeDetailsViewModel model)
+    public async Task<ActionResult> DailyOvertime(DailyOvertimeDetailsViewModel model)
     {
-        model.TeamIds = model.TeamIds ?? string.Join(",", teamService.GetAll().Select(x => x.Id));
+        var teams = await teamService.GetAllAsync();
+        model.TeamIds = model.TeamIds ?? string.Join(",", teams.Select(x => x.Id));
         var param = new GetDailyOvertimeDetailsParam
         {
             ActorId = EmployeeSession.EmpId,

@@ -1,0 +1,83 @@
+﻿@using HRM.Core.Enums
+@using HRM.Models.Request
+@using HRM.ViewModels.Request
+
+@model (RequestViewModel requestViewModel, RequestEntity request)
+
+@{
+	var request = Model.request;
+    var requestViewModel = Model.requestViewModel;
+	var annualBalance = string.Empty;
+	if (request.RequestType.Id == (byte)RequestType.Leave)
+	{
+		annualBalance = "AL Balance " + request.FromDate.Year + ": " + request.Requester.AnnualLeaveBalance + " && ";
+	}
+}
+
+@switch (request.Status.Id)
+{
+    case (byte)CurrentRequestStatus.Pending:
+        <a roleid="@Convert.ToInt32(RoleSystem.Approver)" requestid="@request.Id" requesttypeid="@request.RequestType.Id" employeeid="@request.Requester.Id" viewType="@requestViewModel.ViewType"
+           href="javascript:void(0);" class="approver-actions tooltip-tipsy"
+           title="@annualBalance @request.Requester.NickName had @request.TotalDaysRequestInMonth.ToString("0.#") approved request(s) in @request.FromDate.ToMonthAndYearFormatedDate()">
+            @request.Status.ToString()
+            <span class="caret"></span>
+        </a>
+        break;
+    case (byte)CurrentRequestStatus.Verified:
+        <a roleid="@Convert.ToInt32(RoleSystem.Approver)" requestid="@request.Id" requesttypeid="@request.RequestType.Id" employeeid="@request.Requester.Id" viewType="@requestViewModel.ViewType"
+           href="javascript:void(0);" class="approver-actions tooltip-tipsy"
+           title="@annualBalance @request.Status.Name by @request.VerifiedBy.NickName (@request.VerifiedDate.ToShortFormatedDate())">
+            @request.Status.ToString()
+            <span class="caret"></span>
+        </a>
+        break;
+    case (byte)CurrentRequestStatus.NotVerified:
+        <span class="tooltip-tipsy" title="@annualBalance @request.Status.Name by @request.VerifiedBy.NickName (@request.VerifiedDate.ToShortFormatedDate())">
+            @request.Status.ToString()
+        </span>
+        break;
+    case (byte)CurrentRequestStatus.Approved:
+    case (byte)CurrentRequestStatus.Rejected:
+        if (requestViewModel.IsAllowChangeStatus && request.Status.Id == (byte)CurrentRequestStatus.Approved)
+        {
+            <a roleid="@Convert.ToInt32(RoleSystem.HR)" requestid="@request.Id" requesttypeid="@request.RequestType.Id" employeeid="@request.Requester.Id"
+               href="javascript:void(0);" class="hr-actions tooltip-tipsy"
+               title="@request.Status.Name by @request.ApprovedBy.NickName (@request.ApprovedDate.ToShortFormatedDate())">
+                @request.Status.ToString()
+                <span class="caret"></span>
+            </a>
+        }
+        else
+        {
+            <span class="tooltip-tipsy" title="@request.Status.Name by @request.ApprovedBy.NickName (@request.ApprovedDate.ToShortFormatedDate())">
+                @request.Status.ToString()
+            </span>
+        }
+        break;
+    case (byte)CurrentRequestStatus.Processed:
+        if (requestViewModel.IsAllowChangeStatus)
+        {
+            <a roleid="@Convert.ToInt32(RoleSystem.HR)" requestid="@request.Id" requesttypeid="@request.RequestType.Id" employeeid="@request.Requester.Id"
+               href="javascript:void(0);" class="hr-actions-reset tooltip-tipsy"
+               title="@request.Status.Name by @request.ProcessedBy.NickName (@request.ProcessedDate.ToShortFormatedDate())">
+                @request.Status.ToString()
+                <span class="caret"></span>
+            </a>
+        }
+        else
+        {
+            <span class="tooltip-tipsy" title="@request.Status.Name by @request.ProcessedBy.NickName (@request.ProcessedDate.ToShortFormatedDate())">
+                @request.Status.ToString()
+            </span>
+        }
+        break;
+    case (byte)CurrentRequestStatus.Void:
+        <span class="tooltip-tipsy" title="@request.Status.Name by @request.ProcessedBy.NickName (@request.ProcessedDate.ToShortFormatedDate())">
+            @request.Status.ToString()
+        </span>
+        break;
+    default:
+        <span>@request.Status.ToString()</span>
+        break;
+}

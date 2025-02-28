@@ -30,6 +30,8 @@
 
         CommandResult RejectRequest(int actorId, ProcessRequestParam param);
 
+        Task<CommandResult> VoidRequestAsync(int actorId, ProcessRequestParam param);
+
         CommandResult VoidRequest(int actorId, ProcessRequestParam param);
 
         void SendMailProcessRequest(ProcessRequestParam param, EmployeeSession actor, RequestCommand command);

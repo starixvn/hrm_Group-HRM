@@ -14,8 +14,8 @@
             if (enumType != null)
             {
                 var fi = enumType.GetType().GetField(enumType.ToString());
-                var attributes = (DescriptionAttribute[])fi.GetCustomAttributes(typeof(DescriptionAttribute), false);
-                description = attributes.Length > 0 ? attributes[0].Description : enumType.ToString();
+                var attributes = (DescriptionAttribute[])fi?.GetCustomAttributes(typeof(DescriptionAttribute), false);
+                description = attributes?.Length > 0 ? attributes[0].Description : enumType.ToString();
             }
 
             return description;

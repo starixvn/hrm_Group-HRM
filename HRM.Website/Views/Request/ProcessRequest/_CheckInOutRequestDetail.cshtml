@@ -1,0 +1,63 @@
+﻿@using HRM.Core.Enums
+@using HRM.Models.Request
+
+@model RequestEntity
+<table class="table table-custom">
+    <thead>
+        <tr>
+            <th>@Labels.RequestTime</th>
+            <th>@Labels.Shift</th>
+            <th>@Labels.Request</th>
+            <th>@Labels.CreatedDate</th>
+            <th>@Labels.Reason</th>
+            <th>@Labels.Remark</th>
+            <th>@Labels.Waive</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>@Model.RequestedDate.ToShortFormatedDate()</td>
+            <td>
+                @if (Model.FromShift != null)
+                {
+                    @Model.FromShift.Name
+                }
+            </td>
+            <td>@Model.RequestType.ToString()</td>
+            <td>@Model.CreatedDate.ToShortFormatedDate()</td>
+            <td>
+                @switch (Model.ReasonId)
+                {
+                    case (byte)CheckInOutReason.VanLate:
+                        @Labels.VanLate
+                        break;
+                    case (byte)CheckInOutReason.BusinessTrip:
+                        @Labels.BusinessTrip
+                        break;
+                    case (byte)CheckInOutReason.Forgot:
+                        @Labels.Forgot
+                        break;
+                    case (byte)CheckInOutReason.Other:
+                        @Labels.Other
+                        break;
+                }
+            </td>
+            <td>
+                @if (!string.IsNullOrWhiteSpace(Model.Remark))
+                {
+                    <span class="fa fa-comment tooltip-tipsy" title="@Model.Remark"></span>
+                }
+                else
+                {
+                    <span>-</span>
+                }
+            </td>
+            <td class="violationIgnored">
+                @{
+                    var disciplineTypeId = (byte)DisciplineType.MissingCheckInOut;
+                }
+                <input type="radio" class="chk-ignore" data-workdate="@Model.FromDate.Date.ToString("d")" data-disciplinetypeid="@disciplineTypeId" />
+            </td>
+        </tr>
+    </tbody>
+</table>

@@ -259,6 +259,18 @@
             return baseService.ExecuteNonQuery(criteria);
         }
 
+        public async Task<CommandResult> VoidRequestAsync(int actorId, ProcessRequestParam param)
+        {
+            var criteria = new VoidRequestCriteria
+            {
+                RequestId = param.RequestId,
+                RequestTypeId = param.RequestTypeId,
+                Comment = param.Comment,
+                ActorId = actorId
+            };
+            return await baseService.ExecuteNonQueryAsync(criteria);
+        }
+
         public void SendMailProcessRequest(ProcessRequestParam param, EmployeeSession actor, RequestCommand command)
         {
             switch (param.RequestTypeId)
