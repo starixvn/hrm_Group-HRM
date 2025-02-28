@@ -1,17 +1,16 @@
-﻿namespace HRM.ViewModels.Memo
+﻿namespace HRM.ViewModels.Memo;
+
+using System;
+using System.Collections.Generic;
+using HRM.Models;
+
+public class MemoViewModel
 {
-    using System;
-    using System.Collections.Generic;
-    using HRM.Models;
+    public int Year { get; set; } = DateTimeOffset.Now.Year;
 
-    public class MemoViewModel
-    {
-        public int Year { get; set; } = DateTimeOffset.Now.Year;
+    public int Category { get; set; } = -1;
 
-        public int Category { get; set; } = -1;
+    public IEnumerable<LookupData> MemoCategories { get; set; } = new List<LookupData>();
 
-        public IList<LookupData> MemoCategories { get; set; } = new List<LookupData>();
-
-        public IEnumerable<Memo> Memos { get; set; } = new List<Memo>();
-    }
+    public IEnumerable<Memo> Memos { get; set; } = new List<Memo>();
 }

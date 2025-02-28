@@ -16,7 +16,7 @@
 
     public interface ICommonDataService
     {
-        IList<LookupData> GetLookupDataByCode(string code);
+        Task<IEnumerable<LookupData>> GetLookupDataByCodeAsync(string code);
 
         IList<LookupData> GetJobTitle(string jobTitle);
 
@@ -39,13 +39,13 @@
         IBaseService baseService,
         ITeamService teamService) : ICommonDataService
     {
-        public IList<LookupData> GetLookupDataByCode(string code)
+        public async Task<IEnumerable<LookupData>> GetLookupDataByCodeAsync(string code)
         {
             var criteria = new GetAllLookupDataCriteria
             {
                 LookupCode = code
             };
-            return baseService.GetData<LookupData>(criteria).ToList();
+            return await baseService.GetDataAsync<LookupData>(criteria);
         }
 
         public IList<LookupData> GetJobTitle(string jobTitle)

@@ -95,7 +95,7 @@
         public async Task<IEnumerable<LogObjectDetail>> GetLogDetailByIdAsync(int employeeId)
         {
             Teams = await commonDataService.GetAllTeamAsync();
-            JobTitles = commonDataService.GetLookupDataByCode(Constants.JobTitle);
+            JobTitles = await commonDataService.GetLookupDataByCodeAsync(Constants.JobTitle);
             JobLevel = jobLevelService.GetJobLevel();
             Countries = commonDataService.GetAllCountry();
             SystemRoles = await roleService.GetBySiteIdAsync(userControlSession.SiteId);

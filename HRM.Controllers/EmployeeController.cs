@@ -536,13 +536,13 @@ public class EmployeeController(
         return GetSupervisors(supervisors, (short)RoleSystem.OnBehalfRequest);
     }
 
-    private void ComposeViewBagsForEditEmployee()
+    private async Task ComposeViewBagsForEditEmployee()
     {
         var jobLevels = jobLevelService.GetJobLevel();
-        ViewBag.JobTitles = commonDataService.GetLookupDataByCode(Constants.JobTitle);
+        ViewBag.JobTitles = await commonDataService.GetLookupDataByCodeAsync(Constants.JobTitle);
         ViewBag.JobLevel = jobLevels;
         ViewBag.Grades = jobLevels?.Where(jl => jl.Name.StartsWith("E")).ToList();
         ViewBag.Marriages = Utilities.Marriages;
-        ViewBag.Roles = roleService.GetBySiteId(userControlSession.SiteId);
+        ViewBag.Roles = await roleService.GetBySiteIdAsync(userControlSession.SiteId);
     }
 }
