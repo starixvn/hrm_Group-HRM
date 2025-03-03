@@ -549,14 +549,7 @@
             <li class="list-group-item form-group">
                 <div class="label-form">@Labels.Roles</div>
                 <div id="userRole" class="user-role">
-	                @foreach (var role in roleItems)
-	                {
-		                <div>
-			                <input type="checkbox" name="Roles2Array" value="@role.Value"
-			                       @(Model.Roles2Array.Contains(role.Value) ? "checked" : "") style="margin-left: 0;" />
-			                <label style="font-weight: unset">@role.Text</label>
-		                </div>
-	                }
+	                @Html.CheckBoxListFor(model => model.Roles2Array, roleItems)
                 </div>
             </li>
             <li class="list-group-item form-group">
@@ -564,7 +557,7 @@
                     @Html.LabelFor(model => model.IsTopManager, new { @class = "control-label" })
                 </div>
                 <div class="input-form">
-                    <div class="checkbox">@Html.CheckBoxFor(model => model.IsTopManager, new { @style = "margin-left: 0;" })</div>
+                    <div class="checkbox">@Html.CheckBoxCustomFor(model => model.IsTopManager)</div>
                 </div>
             </li>
             <li class="list-group-item form-group">
@@ -622,7 +615,7 @@
                     @Html.LabelFor(model => model.IsExpatUseHoliday, Labels.ExpatApplicableHoliday, new { @class = "control-label" })
                 </div>
                 <div class="input-form">
-                    <div class="checkbox">@Html.CheckBoxFor(model => model.IsExpatUseHoliday, new { @style = "margin-left: 0;" })</div>
+                    <div class="checkbox">@Html.CheckBoxCustomFor(model => model.IsExpatUseHoliday)</div>
                 </div>
             </li>
             <li class="list-group-item form-group">
@@ -630,7 +623,7 @@
                     @Html.LabelFor(model => model.Enabled, Labels.EnabledUser, new { @class = "control-label" })
                 </div>
                 <div class="input-form">
-                    <div class="checkbox">@Html.CheckBoxFor(model => model.Enabled, new { @style = "margin-left: 0;" })</div>
+                    <div class="checkbox">@Html.CheckBoxCustomFor(model => model.Enabled)</div>
                 </div>
             </li>
         </ul>
