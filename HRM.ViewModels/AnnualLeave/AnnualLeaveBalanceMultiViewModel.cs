@@ -1,10 +1,9 @@
-﻿namespace HRM.ViewModels.AnnualLeave
-{
-    using System.ComponentModel.DataAnnotations;
+﻿namespace HRM.ViewModels.AnnualLeave;
 
-    public class AnnualLeaveBalanceMultiViewModel : BaseAnnualLeaveBalanceViewModel
-    {
-        [Required]
-        public string EmpIds { get; set; }
-    }
+using System.ComponentModel.DataAnnotations;
+
+public class AnnualLeaveBalanceMultiViewModel : BaseAnnualLeaveBalanceViewModel
+{
+    [Required]
+    public string EmpIds { get; set; }
 }

@@ -1,0 +1,256 @@
+﻿@using HRM.ViewModels.AnnualLeave
+@using HRM.ViewModels.HospitalizationLeave
+@using HRM.Website.Helper
+@model HospitalizationLeaveBalanceViewModel
+@{
+    ViewBag.Title = Labels.HospitalizationLeaveBalance;
+}
+@section Breadcrumb {
+    <a class="step">@Labels.CompanySpace</a> <a class="step">@ViewBag.Title</a>
+}
+@section css{
+    <link href="~/dist/styles/annual.leavebalance.index.css" rel="stylesheet" />
+}
+@section js{
+    <script src="~/dist/js/hospitalization.leave.balance.index.js"></script>
+}
+
+<h2 class="page-title">@ViewBag.Title</h2>
+@if (Model.IsHost)
+{
+    <div class="filter">
+        @using (Html.BeginForm())
+        {
+            <div class="form-horizontal clearfix">
+                @Html.HiddenFor(model => model.TeamIds)
+                <div class="form-group form-group--m">
+                    <div class="label-form">
+                        <label class="control-label">@Labels.Category</label>
+                    </div>
+                    <div class="select-form">
+                        <select id="IsLocal" name="IsLocal" class="form-control">
+                            <option value="">-- All --</option>
+                            <option selected="@(Model.IsLocal.HasValue && Model.IsLocal.Value)" value="true">@Labels.Local</option>
+                            <option selected="@(Model.IsLocal.HasValue && !Model.IsLocal.Value)" value="false">@Labels.Expat</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group form-group--m">
+                    <div class="label-form">
+                        @Html.LabelFor(model => model.Year, new { @class = "control-label" })
+                    </div>
+                    <div class="select-form">
+                        @{
+                            var years = Extensions.YearPickerFor(2010);
+                            <select asp-items="years" asp-for="Year" class="yearpicker form-control"></select>
+                        }
+                    </div>
+                </div>
+
+                <div class="form-group form-group--m">
+                    <div class="label-form">
+                        @Html.LabelFor(model => model.Employee, new { @class = "control-label" })
+                    </div>
+                    <div class="input-form">
+                        @Html.TextBox("Employee", Model.Employee,
+                            new { placeholder = Messages.SearchEmployeeWatermark, @class = "form-control" })
+                        @Html.HiddenFor(model => model.EmployeeId)
+                    </div>
+                </div>
+
+                <div class="form-group form-group--m">
+                    <div class="label-form">
+                        <label class="control-label">@Labels.SectionTeam</label>
+                    </div>
+                    <div class="input-form" id="Team"></div>
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">@Labels.Submit</button>
+                    <button type="button" class="btn btn-excel" id="btnExcel">@Labels.Excel</button>
+                    <a href="javascript:;" class="btn btn-request" id="btnReset">
+                        <span class="fa fa-plus"></span>
+                        @Labels.CloseBalance
+                    </a>
+                    <a href="javascript:;" class="btn btn-request" id="btnAdjustment">
+                        <span class="fa fa-plus"></span>
+                        @Labels.Adjustment
+                    </a>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+<table class="table table-custom" id="data">
+    <thead>
+        <tr>
+            @if (Model.IsHost && Model.Employees != null && Model.Employees.Any())
+            {
+                <th rowspan="2">
+                    <input type="checkbox" class="checkbox-custom" id="checkboxAll" name="checkboxAll" />
+                    <label for="checkboxAll"></label>
+                </th>
+            }
+            <th rowspan="2">@Labels.Department</th>
+            <th rowspan="2">@Labels.Section</th>
+            <th rowspan="2">@Labels.Team</th>
+            <th rowspan="2">@Labels.FullName</th>
+            <th rowspan="2">@Labels.NickName</th>
+            <th rowspan="2">@Labels.HospitalizationLeave</th>
+            <th colspan="12">Leave in @Model.Year</th>
+            <th rowspan="2">Balance of @Model.Year</th>
+            @if (Model.IsHost)
+            {
+                <th rowspan="2">@Labels.Edit</th>
+            }
+        </tr>
+        <tr>
+            <th>@Labels.Jan</th>
+            <th>@Labels.Feb</th>
+            <th>@Labels.Mar</th>
+            <th>@Labels.Apr</th>
+            <th>@Labels.May</th>
+            <th>@Labels.Jun</th>
+            <th>@Labels.Jul</th>
+            <th>@Labels.Aug</th>
+            <th>@Labels.Sep</th>
+            <th>@Labels.Oct</th>
+            <th>@Labels.Nov</th>
+            <th>@Labels.Dec</th>
+        </tr>
+    </thead>
+
+    @if (Model.Employees != null && Model.Employees.Any())
+    {
+        <tbody>
+
+            @foreach (var employee in Model.Employees)
+            {
+                <tr>
+                    @if (Model.IsHost)
+                    {
+                        <td>
+                            <input type="checkbox" class="checkbox-custom" id="checkbox-@employee.EmpId" data-id="@employee.EmpId" />
+                            <label for="checkbox-@employee.EmpId"></label>
+                        </td>
+                    }
+                    <td>@employee.Department</td>
+                    <td>@employee.Section</td>
+                    <td>@employee.Team</td>
+                    <td class="align-left">@employee.FullName</td>
+                    <td>@employee.Nickname</td>
+                    <td>
+                        @if (employee.Balance != 0)
+                        {
+                            <span class="@(employee.Balance < 0 ? "red" : string.Empty)">@employee.Balance.ToString("0.0")</span>
+                        }
+                    </td>
+                    <td>
+                        @if (employee.Jan != 0)
+                        {
+                            <span class="@(employee.Jan < 0 ? "red" : string.Empty)">@employee.Jan.ToString("0.0")</span>
+                        }
+                    </td>
+                    <td>
+                        @if (employee.Feb != 0)
+                        {
+                            <span class="@(employee.Feb < 0 ? "red" : string.Empty)">@employee.Feb.ToString("0.0")</span>
+                        }
+                    </td>
+                    <td>
+                        @if (employee.Mar != 0)
+                        {
+                            <span class="@(employee.Mar < 0 ? "red" : string.Empty)">@employee.Mar.ToString("0.0")</span>
+                        }
+                    </td>
+                    <td>
+                        @if (employee.Apr != 0)
+                        {
+                            <span class="@(employee.Apr < 0 ? "red" : string.Empty)">@employee.Apr.ToString("0.0")</span>
+                        }
+                    </td>
+                    <td>
+                        @if (employee.May != 0)
+                        {
+                            <span class="@(employee.May < 0 ? "red" : string.Empty)">@employee.May.ToString("0.0")</span>
+                        }
+                    </td>
+                    <td>
+                        @if (employee.Jun != 0)
+                        {
+                            <span class="@(employee.Jun < 0 ? "red" : string.Empty)">@employee.Jun.ToString("0.0")</span>
+                        }
+                    </td>
+                    <td>
+                        @if (employee.Jul != 0)
+                        {
+                            <span class="@(employee.Jul < 0 ? "red" : string.Empty)">@employee.Jul.ToString("0.0")</span>
+                        }
+                    </td>
+                    <td>
+                        @if (employee.Aug != 0)
+                        {
+                            <span class="@(employee.Aug < 0 ? "red" : string.Empty)">@employee.Aug.ToString("0.0")</span>
+                        }
+                    </td>
+                    <td>
+                        @if (employee.Sep != 0)
+                        {
+                            <span class="@(employee.Sep < 0 ? "red" : string.Empty)">@employee.Sep.ToString("0.0")</span>
+                        }
+                    </td>
+                    <td>
+                        @if (employee.Oct != 0)
+                        {
+                            <span class="@(employee.Oct < 0 ? "red" : string.Empty)">@employee.Oct.ToString("0.0")</span>
+                        }
+                    </td>
+                    <td>
+                        @if (employee.Nov != 0)
+                        {
+                            <span class="@(employee.Nov < 0 ? "red" : string.Empty)">@employee.Nov.ToString("0.0")</span>
+                        }
+                    </td>
+                    <td>
+                        @if (employee.Dec != 0)
+                        {
+                            <span class="@(employee.Dec < 0 ? "red" : string.Empty)">@employee.Dec.ToString("0.0")</span>
+                        }
+                    </td>
+                    <td>
+                        <span class="@(employee.RemainingBalance < 0 ? "red" : string.Empty)">@employee.RemainingBalance.ToString("0.0")</span>
+                    </td>
+                    @if (Model.IsHost)
+                    {
+                        <td>
+                            <a href="~/HospitalizationLeaveBalance/Employee/@employee.EmpId">
+                                <i class="fa fa-pencil fa-lg icon-edit"></i>
+                            </a>
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    }
+    else
+    {
+        @Html.Raw(RazorHelpers.DisplayNoInformation(colspan: 22))
+    }
+</table>
+
+<div class="hide">
+    @{
+        var model = new AnnualLeaveBalanceMultiViewModel
+        {
+            AffectedFrom = DateTimeOffset.Now.DateTime
+        };
+    }
+    <div id="insertform" title="Adjust balance">
+        @await Html.PartialAsync("_MultipleInsert", model)
+    </div>
+    <div id="resetform" title="Close balance for year @DateTime.Now.AddYears(-1).Year">
+        @await Html.PartialAsync("_MultipleReset", model)
+    </div>
+</div>
