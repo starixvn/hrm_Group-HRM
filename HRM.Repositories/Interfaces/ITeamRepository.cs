@@ -1,14 +1,13 @@
-﻿namespace HRM.Repositories
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using Fanex.Data.Repository;
+using HRM.Models;
+
+namespace HRM.Repositories.Interfaces;
+
+public interface ITeamRepository
 {
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
-    using Fanex.Data.Repository;
-    using HRM.Models;
+    Task<Team> GetById(ICriteria criteria);
 
-    public interface ITeamRepository
-    {
-        Team GetById(ICriteria criteria);
-
-        Task<IEnumerable<Team>> GetAllAsync(ICriteria criteria);
-    }
+    Task<IEnumerable<Team>> GetAllAsync(ICriteria criteria);
 }

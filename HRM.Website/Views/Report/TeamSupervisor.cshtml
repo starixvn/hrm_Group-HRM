@@ -1,0 +1,34 @@
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model HRM.ViewModels.EmployeeAndTeamSupervisorViewModel
+@{
+    ViewBag.Title = Labels.TeamPermissionSummary;
+}
+@section css{
+    <link href="~/dist/styles/report.employee.supervisor.css" rel="stylesheet" />
+}
+@section js{
+    <script src="~/dist/js/report.team.supervisor.js"></script>
+}
+@section Breadcrumb {
+    <a class="step">@Labels.HRSpace</a>
+    <a class="step" href="@Url.Action("index", "team")">@Labels.Team</a>
+    <a class="step">@ViewBag.Title</a>
+}
+<h2 class="page-title">@ViewBag.Title</h2>
+<form class="filter">
+    <div class="form-horizontal clearfix">
+        @Html.HiddenFor(model => model.TeamIds)
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                <label class="control-label">@Labels.SectionTeam</label>
+            </div>
+            <div class="input-form" id="Team"></div>
+        </div>
+        <div class="form-group form-group--m">
+            <button id="btnSubmit" type="button" class="btn btn-primary">@Labels.Submit</button>
+            <button id="btnExcel" type="button" class="btn btn-excel">@Labels.Excel</button>
+        </div>
+        <div class="clear"></div>
+    </div>
+</form>
+<div id="TeamSupervisorDetails"></div>

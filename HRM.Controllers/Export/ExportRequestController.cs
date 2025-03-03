@@ -1,22 +1,17 @@
-﻿using HRM.Core.Models;
-using HRM.Criteria.Request;
-using HRM.Models.Request;
+﻿using HRM.Criteria.Request;
 using HRM.Resources;
-using HRM.Services;
 using HRM.ViewModels.Request;
-using System.Collections.Generic;
 using System;
 using System.Threading.Tasks;
 using GO.UserControl.Client.Core.Session;
-using HRM.Controllers;
 using HRM.Core;
 using HRM.Services.Interfaces.Request;
 using Microsoft.AspNetCore.Mvc;
-using NPOI.HSSF.UserModel;
 using HRM.Core.Constants;
 using HRM.Core.Enums;
 using HRM.Core.Filters;
 using GO.UserControl.Client.Core.Enumerables;
+using HRM.Services.ExportExcel;
 
 namespace HRM.Controllers.Export;
 
@@ -49,10 +44,10 @@ public class ExportRequestController(IUserControlSession userControlSession,
         };
 
         var requestList = await requestService.GetRequests(criteria);
-        var hssfworkbook = exportExcelService.ExportWorkingTimeRequest(requestList, Labels.VoidRequest);
+        var hssfWorkbook = exportExcelService.ExportWorkingTimeRequest(requestList, Labels.VoidRequest);
         var fileName = "EmployeeVoidRequest_" + DateTimeOffset.Now.ToString("yyyyMMdd") + ".xls";
 
-        return ExcelFile(hssfworkbook, fileName);
+        return ExcelFile(hssfWorkbook, fileName);
     }
 
     [HrmPermission(Policy.Host, FunctionKey.VerifyRequest)]
@@ -82,9 +77,9 @@ public class ExportRequestController(IUserControlSession userControlSession,
         };
 
         var requestList = await requestService.GetRequests(criteria);
-        HSSFWorkbook hssfworkbook = exportExcelService.ExportWorkingTimeRequest(requestList, model.PageTitle);
-        string fileName = "DailyRequest_" + DateTimeOffset.Now.ToString("yyyyMMdd") + ".xls";
+        var hssfWorkbook = exportExcelService.ExportWorkingTimeRequest(requestList, model.PageTitle);
+        var fileName = "DailyRequest_" + DateTimeOffset.Now.ToString("yyyyMMdd") + ".xls";
 
-        return ExcelFile(hssfworkbook, fileName);
+        return ExcelFile(hssfWorkbook, fileName);
     }
 }

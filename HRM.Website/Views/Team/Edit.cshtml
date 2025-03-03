@@ -1,0 +1,192 @@
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model HRM.ViewModels.EmployeeGroup.TeamViewModel
+
+@{
+    ViewBag.Title = Labels.Edit;
+}
+@section css{
+    <link href="~/dist/styles/team.edit.css" rel="stylesheet" />
+}
+@section js{
+    <script src="~/dist/js/team.edit.js"></script>
+}
+@section Breadcrumb {
+    <a class="step">@Labels.HRSpace</a>
+    <a class="step" href="@Url.Action("index", "team")">@Labels.TeamManagement</a>
+    <span class="step">@ViewBag.Title</span>
+}
+<h2 class="page-title">@Labels.Edit</h2>
+@using (Html.BeginForm())
+{
+    <div class="card form-horizontal" id="form">
+        @Html.ValidationSummary(true)
+        @if (ViewBag.Updated != null && (bool)ViewBag.Updated)
+        {
+            <div class="success flash">@Messages.UpdatedSuccessfully</div>
+        }
+
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.TeamCode, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.TextBoxFor(model => model.TeamCode, new { @class = "form-control", @autocomplete = "off" })
+            </div>
+            @Html.ValidationMessageFor(model => model.TeamCode)
+        </div>
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.TeamName, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.TextBoxFor(model => model.TeamName, new { @class = "form-control", @autocomplete = "off" })
+            </div>
+            @Html.ValidationMessageFor(model => model.TeamName)
+        </div>
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.SectionId, Labels.Section, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.DropDownListFor(model => model.SectionId, new SelectList(Model.Sections, "Id", "Name"), new { @class = "form-control" })
+            </div>
+            @Html.ValidationMessageFor(model => model.SectionId)
+        </div>
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.UnitHead, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.TextBoxFor(model => model.UnitHead, new { @class = "form-control", @autocomplete = "off", placeholder = Messages.SearchEmployeeWatermark })
+            </div>
+            @Html.TextBoxFor(model => model.HeadId, new { @class = "team-head" })
+            @Html.ValidationMessageFor(model => model.HeadId)
+        </div>
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.ManagerIds, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                <select id="Managers" data-placeholder="Choose managers..." multiple="multiple" class="form-control chosen-select">
+                    @foreach (var employee in Model.Employees)
+                    {
+                        <option value="@employee.Id">@employee.DisplayName</option>
+                    }
+                </select>
+            </div>
+            @Html.HiddenFor(model => model.ManagerIds)
+        </div>
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.SupervisorIds, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                <select id="Supervisors" data-placeholder="Choose supervisors..." multiple class="form-control">
+                    @foreach (var employee in Model.Employees)
+                    {
+                        <option value="@employee.Id">@employee.DisplayName</option>
+                    }
+                </select>
+            </div>
+            @Html.HiddenFor(model => model.SupervisorIds)
+        </div>
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.LeaderIds, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                <select id="Leaders" data-placeholder="Choose leaders..." multiple class="form-control">
+                    @foreach (var employee in Model.Employees)
+                    {
+                        <option value="@employee.Id">@employee.DisplayName</option>
+                    }
+                </select>
+            </div>
+            @Html.HiddenFor(model => model.LeaderIds)
+        </div>
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.MailGroup, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.TextBoxFor(model => model.MailGroup, new { @class = "form-control", @autocomplete = "off" })
+            </div>
+            @Html.ValidationMessageFor(model => model.MailGroup)
+        </div>
+        <div class="form-group">
+            <div class="local">LOCAL</div>
+            <div class="expat">EXPAT</div>
+        </div>
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.LocalBasicAnnualLeaveBalance, new { @class = "control-label" })
+            </div>
+            <div class="input-form input-number">
+                @Html.TextBoxFor(model => model.LocalBasicAnnualLeaveBalance, new { @class = "form-control", @type = "number" })
+            </div>
+            <div class="input-form input-number">
+                @Html.TextBoxFor(model => model.ExpatBasicAnnualLeaveBalance, new { @class = "form-control", @type = "number" })
+            </div>
+            @Html.ValidationMessageFor(model => model.LocalBasicAnnualLeaveBalance)
+            @Html.ValidationMessageFor(model => model.ExpatBasicAnnualLeaveBalance)
+        </div>
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.LocalWorkingDays, new { @class = "control-label" })
+            </div>
+            <div class="input-form input-number">
+                @Html.TextBoxFor(model => model.LocalWorkingDays, new { @class = "form-control", @type = "number" })
+            </div>
+            <div class="input-form input-number">
+                @Html.TextBoxFor(model => model.ExpatWorkingDays, new { @class = "form-control", @type = "number" })
+            </div>
+            @Html.ValidationMessageFor(model => model.LocalWorkingDays)
+            @Html.ValidationMessageFor(model => model.ExpatWorkingDays)
+        </div>
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.LocalWorkingHoursbyWeek, new { @class = "control-label" })
+            </div>
+            <div class="input-form input-number">
+                @Html.TextBoxFor(model => model.LocalWorkingHoursbyWeek, new { @class = "form-control", @type = "number" })
+            </div>
+            <div class="input-form input-number">
+                @Html.TextBoxFor(model => model.ExpatWorkingHoursbyWeek, new { @class = "form-control", @type = "number" })
+            </div>
+            @Html.ValidationMessageFor(model => model.LocalWorkingHoursbyWeek)
+            @Html.ValidationMessageFor(model => model.ExpatWorkingHoursbyWeek)
+        </div>
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.LocalWorkingHours, new { @class = "control-label" })
+            </div>
+            <div class="input-form input-number">
+                @Html.TextBoxFor(model => model.LocalWorkingHours, new { @class = "form-control", @type = "number" })
+            </div>
+            <div class="input-form input-number">
+                @Html.TextBoxFor(model => model.ExpatWorkingHours, new { @class = "form-control", @type = "number" })
+            </div>
+            @Html.ValidationMessageFor(model => model.LocalWorkingHours)
+            @Html.ValidationMessageFor(model => model.ExpatWorkingHours)
+        </div><div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.LocalOffDaysbyWeek, new { @class = "control-label" })
+            </div>
+            <div class="input-form input-number">
+                @Html.TextBoxFor(model => model.LocalOffDaysbyWeek, new { @class = "form-control", @type = "number" })
+            </div>
+            <div class="input-form input-number">
+                @Html.TextBoxFor(model => model.ExpatOffDaysbyWeek, new { @class = "form-control", @type = "number" })
+            </div>
+            @Html.ValidationMessageFor(model => model.LocalOffDaysbyWeek)
+            @Html.ValidationMessageFor(model => model.ExpatOffDaysbyWeek)
+        </div>
+        <div class="form-group">
+            <div class="label-form"></div>
+            <div>
+                <input type="submit" class="btn btn-primary" value="@Labels.Update" />
+                <a href="@Url.Action("index","team")" class="btn btn-default">@Labels.Back</a>
+            </div>
+        </div>
+    </div>
+}

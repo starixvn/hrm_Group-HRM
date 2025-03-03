@@ -10,6 +10,7 @@ using System.Linq;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
 using System.Threading.Tasks;
+using HRM.Services.Interfaces;
 
 namespace HRM.Controllers.Report;
 

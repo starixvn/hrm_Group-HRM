@@ -1,22 +1,22 @@
-﻿namespace HRM.Services
-{
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
-    using HRM.Core.Services;
-    using HRM.Criteria;
-    using HRM.Criteria.AnnualLeave;
-    using HRM.Criteria.Report;
-    using HRM.Criteria.Supervisor;
-    using HRM.Criteria.Time;
-    using HRM.Models;
-    using HRM.Models.Report;
-    using HRM.Models.Supervisor;
-    using HRM.Repositories;
-    using HRM.ViewModels;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using HRM.Core.Services;
+using HRM.Criteria;
+using HRM.Criteria.AnnualLeave;
+using HRM.Criteria.Report;
+using HRM.Criteria.Supervisor;
+using HRM.Criteria.Time;
+using HRM.Models;
+using HRM.Models.Report;
+using HRM.Models.Supervisor;
+using HRM.Services.Interfaces;
+using HRM.ViewModels;
 
+namespace HRM.Services.Implement
+{
     public class ReportService(
-        IReportRepository reportRepository,
+        Repositories.Interfaces.IReportRepository reportRepository,
         IBaseService baseService) : IReportService
     {
         public async Task<IEnumerable<EmployeeAttendanceModel>> GetEmployeeAttendanceReportAsync(GetEmployeeAttendanceCriteria criteria)
@@ -45,23 +45,23 @@
             return baseService.GetData<TimeRecordModel>(criteria).ToList();
         }
 
-        public IList<SupervisorReportModel> GetSupervisorReport(GetSupervisorReportCriteria criteria)
+        public async Task<IList<SupervisorReportModel>> GetSupervisorReport(GetSupervisorReportCriteria criteria)
         {
             IList<SupervisorReportModel> supervisors = null;
             if (criteria != null && criteria.IsValid())
             {
-                supervisors = reportRepository.GetSupervisorReport(criteria);
+                supervisors = await reportRepository.GetSupervisorReport(criteria);
             }
 
             return supervisors;
         }
 
-        public IList<TeamSupervisorReportModel> GetTeamSupervisor(GetTeamSupervisorCriteria criteria)
+        public async Task<IList<TeamSupervisorReportModel>> GetTeamSupervisor(GetTeamSupervisorCriteria criteria)
         {
             IList<TeamSupervisorReportModel> supervisors = null;
             if (criteria != null && criteria.IsValid())
             {
-                supervisors = reportRepository.GetTeamSupervisor(criteria);
+                supervisors = await reportRepository.GetTeamSupervisor(criteria);
             }
 
             return supervisors;

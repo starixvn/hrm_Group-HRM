@@ -1,20 +1,19 @@
-﻿namespace HRM.Services
+﻿using System.Collections.Generic;
+using HRM.Models;
+using HRM.Models.HospitalizationLeave;
+using HRM.Models.Request;
+using NPOI.HSSF.UserModel;
+
+namespace HRM.Services.ExportExcel;
+
+public interface IExportExcelService
 {
-    using System.Collections.Generic;
-    using HRM.Models;
-    using HRM.Models.HospitalizationLeave;
-    using HRM.Models.Request;
-    using NPOI.HSSF.UserModel;
+    HSSFWorkbook ExportLeaveSummary(IEnumerable<LeaveSummary> leaveSummaryList, int year);
+    HSSFWorkbook ExportEmployeeWfh(IEnumerable<EmployeeWorkFromHome> employeeWfhList);
 
-    public interface IExportExcelService
-    {
-        HSSFWorkbook ExportLeaveSummary(IEnumerable<LeaveSummary> leaveSummaryList, int year);
-        HSSFWorkbook ExportEmployeeWfh(IEnumerable<EmployeeWorkFromHome> employeeWfhList);
+    HSSFWorkbook ExportWorkingTimeRequest(IList<RequestEntity> requestList, string title);
 
-        HSSFWorkbook ExportWorkingTimeRequest(IList<RequestEntity> requestList, string title);
+    HSSFWorkbook ExportHospitalizationLeaveSummary(IEnumerable<HospitalizationLeaveBalanceSummaryReport> employees, int year);
 
-        HSSFWorkbook ExportHospitalizationLeaveSummary(IEnumerable<HospitalizationLeaveBalanceSummaryReport> employees, int year);
-
-        HSSFWorkbook ExportSickLeaveSummary(IEnumerable<HospitalizationLeaveBalanceSummaryReport> employees, int year);
-    }
+    HSSFWorkbook ExportSickLeaveSummary(IEnumerable<HospitalizationLeaveBalanceSummaryReport> employees, int year);
 }

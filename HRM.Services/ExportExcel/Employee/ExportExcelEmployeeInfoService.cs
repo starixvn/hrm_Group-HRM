@@ -1,4 +1,6 @@
-﻿namespace HRM.Services.ExportExcel.Employee;
+﻿using HRM.Core;
+
+namespace HRM.Services.ExportExcel.Employee;
 
 using System;
 using System.Collections.Generic;

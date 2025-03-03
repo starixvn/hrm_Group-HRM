@@ -1,4 +1,6 @@
-﻿namespace HRM.Controllers.Report;
+﻿using HRM.Services.Interfaces;
+
+namespace HRM.Controllers.Report;
 
 using System;
 using System.Linq;

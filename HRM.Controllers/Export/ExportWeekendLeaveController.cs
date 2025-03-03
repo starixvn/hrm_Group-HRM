@@ -1,4 +1,6 @@
-﻿namespace HRM.Controllers.Export
+﻿using HRM.Services.Interfaces;
+
+namespace HRM.Controllers.Export
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;

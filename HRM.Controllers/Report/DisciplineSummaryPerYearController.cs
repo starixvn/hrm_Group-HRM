@@ -1,4 +1,6 @@
-﻿namespace Fanex.NexHR.Controllers.Report
+﻿using HRM.Services.Implement;
+
+namespace Fanex.NexHR.Controllers.Report
 {
     using System;
     using System.Collections.Generic;

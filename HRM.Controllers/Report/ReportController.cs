@@ -1,4 +1,10 @@
-﻿namespace HRM.Controllers.Report;
+﻿using HRM.Core;
+using HRM.Criteria.Supervisor;
+using HRM.Models.Supervisor;
+using HRM.Services.Interfaces;
+using HRM.ViewModels.Report;
+
+namespace HRM.Controllers.Report;
 
 using System;
 using System.Collections.Generic;
@@ -21,7 +27,7 @@ using Services.Implement;
 
 public class ReportController(
     IUserControlSession userControlSession,
-    IReportService reportSevice,
+    IReportService reportService,
     ICommonDataService commonDataService,
     ITeamService teamService) : BaseController(userControlSession)
 {
@@ -30,7 +36,7 @@ public class ReportController(
     [HrmPermission(Policy.Read, FunctionKey.ReportHome)]
     public ActionResult Index()
     {
-        IEnumerable<FunctionPermission> functions = userControlSession.Functions.Where(x => x.IsRead || x.IsHost);
+        var functions = userControlSession.Functions.Where(x => x.IsRead || x.IsHost);
         return View(functions);
     }
 
@@ -64,7 +70,7 @@ public class ReportController(
             ExcludeUserDelete = 1
         };
 
-        var timesheets = await reportSevice.GetEmployeeAttendanceReportAsync(criteria);
+        var timesheets = await reportService.GetEmployeeAttendanceReportAsync(criteria);
 
         return PartialView("_TimesheetDetails", timesheets);
     }
@@ -212,7 +218,7 @@ public class ReportController(
         var leaveType = string.Join(", ", leaveTypes.Where(x => leaveTypeIds.Exists(y => x.Id.ToString() == y)).Select(x => x.Name));
         ViewBag.HeaderTitle = $"{leaveType} {model.Year}";
 
-        var leaveSumaries = await reportSevice.GetUnpaidLeaveAsync(criteria);
+        var leaveSumaries = await reportService.GetUnpaidLeaveAsync(criteria);
         if (model.Period.Equals("1"))
         {
             model.LeaveSumaries = leaveSumaries.Where(x => x.Jan > 0 || x.Feb > 0 || x.Mar > 0 || x.Apr > 0 || x.May > 0 || x.Jun > 0).ToList();
@@ -229,46 +235,48 @@ public class ReportController(
         return PartialView("_UnpaidLeaveSummaryDetails", model);
     }
 
-    //        public ActionResult EmployeeSupervisor()
-    //        {
-    //            var model = new EmployeeAndTeamSupervisorViewModel();
-    //            model.TeamIds = model.TeamIds ?? string.Join(",", teamService.GetAll().Select(x => x.Id));
+    public async Task<ViewResult> EmployeeSupervisor()
+    {
+        var model = new EmployeeAndTeamSupervisorViewModel();
+        var teams = await teamService.GetAllAsync();
+        model.TeamIds ??= string.Join(",", teams.Select(x => x.Id));
 
-    //            return View("EmployeeSupervisor", model);
-    //        }
+        return View("EmployeeSupervisor", model);
+    }
 
-    //        public ActionResult EmployeeSupervisorDetails(EmployeeAndTeamSupervisorViewModel model)
-    //        {
-    //            var criteria = new GetSupervisorReportCriteria
-    //            {
-    //                EmployeeId = model.EmployeeId,
-    //                TeamIds = model.TeamIds,
-    //                IsLocal = model.IsLocal,
-    //                ActionType = model.ActionType
-    //            };
-    //            IList<SupervisorReportModel> supervisors = reportService.GetSupervisorReport(criteria);
+    public async Task<PartialViewResult> EmployeeSupervisorDetails(EmployeeAndTeamSupervisorViewModel model)
+    {
+        var criteria = new GetSupervisorReportCriteria
+        {
+            EmployeeId = model.EmployeeId,
+            TeamIds = model.TeamIds,
+            IsLocal = model.IsLocal,
+            ActionType = model.ActionType
+        };
+        var supervisors = await reportService.GetSupervisorReport(criteria);
 
-    //            return PartialView("_EmployeeSupervisorDetails", supervisors);
-    //        }
+        return PartialView("_EmployeeSupervisorDetails", supervisors);
+    }
 
-    //        public ActionResult TeamSupervisor()
-    //        {
-    //            var model = new EmployeeAndTeamSupervisorViewModel();
-    //            model.TeamIds = model.TeamIds ?? string.Join(",", teamService.GetAll().Select(x => x.Id));
+    public async Task<ViewResult> TeamSupervisor()
+    {
+        var model = new EmployeeAndTeamSupervisorViewModel();
+        var teams = await teamService.GetAllAsync();
+        model.TeamIds ??= string.Join(",", teams.Select(x => x.Id));
 
-    //            return View("TeamSupervisor", model);
-    //        }
+        return View("TeamSupervisor", model);
+    }
 
-    //        public ActionResult TeamSupervisorDetails(EmployeeAndTeamSupervisorViewModel model)
-    //        {
-    //            var criteria = new GetTeamSupervisorCriteria
-    //            {
-    //                TeamIds = model.TeamIds,
-    //            };
-    //            IList<TeamSupervisorReportModel> supervisors = reportService.GetTeamSupervisor(criteria);
+    public async Task<PartialViewResult> TeamSupervisorDetails(EmployeeAndTeamSupervisorViewModel model)
+    {
+        var criteria = new GetTeamSupervisorCriteria
+        {
+            TeamIds = model.TeamIds,
+        };
+        var supervisors = await reportService.GetTeamSupervisor(criteria);
 
-    //            return PartialView("_TeamSupervisorDetails", supervisors);
-    //        }
+        return PartialView("_TeamSupervisorDetails", supervisors);
+    }
 
     public async Task<IActionResult> GetUnpaidLeaveType()
     {
@@ -293,7 +301,7 @@ public class ReportController(
             EmpId = EmployeeSession.EmpId
         };
 
-        var isPrivilegeCreateCheckInOut = await reportSevice.GetIsPrivilegeCreateCheckInOutAsync(criteria);
+        var isPrivilegeCreateCheckInOut = await reportService.GetIsPrivilegeCreateCheckInOutAsync(criteria);
         return isPrivilegeCreateCheckInOut;
     }
 }

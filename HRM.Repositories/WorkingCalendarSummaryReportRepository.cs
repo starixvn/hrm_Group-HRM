@@ -11,7 +11,7 @@
         IEnumerable<WorkingCalendarSummary> GetWorkingCalendarSummary(ICriteria criteria);
     }
 
-    public partial class ReportRepository : IReportRepository
+    public partial class ReportRepository : Interfaces.IReportRepository
     {
         public IEnumerable<WorkingCalendarSummary> GetWorkingCalendarSummary(ICriteria criteria)
         {

@@ -1,17 +1,16 @@
-﻿namespace HRM.Repositories
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using Fanex.Data.Repository;
+using HRM.Models.Supervisor;
+using HRM.ViewModels;
+
+namespace HRM.Repositories.Interfaces;
+
+public interface IReportRepository
 {
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
-    using Fanex.Data.Repository;
-    using HRM.Models.Supervisor;
-    using HRM.ViewModels;
+    Task<IEnumerable<EmployeeAttendanceModel>> GetEmployeeAttendanceReportAsync(ICriteria criteria);
 
-    public partial interface IReportRepository
-    {
-        Task<IEnumerable<EmployeeAttendanceModel>> GetEmployeeAttendanceReportAsync(ICriteria criteria);
+    Task<IList<SupervisorReportModel>> GetSupervisorReport(ICriteria criteria);
 
-        IList<SupervisorReportModel> GetSupervisorReport(ICriteria criteria);
-
-        IList<TeamSupervisorReportModel> GetTeamSupervisor(ICriteria criteria);
-    }
+    Task<IList<TeamSupervisorReportModel>> GetTeamSupervisor(ICriteria criteria);
 }

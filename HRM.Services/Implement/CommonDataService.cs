@@ -1,4 +1,6 @@
-﻿namespace HRM.Services.Implement;
+﻿using HRM.Services.Interfaces;
+
+namespace HRM.Services.Implement;
 
 using System.Collections.Generic;
 using System.Linq;

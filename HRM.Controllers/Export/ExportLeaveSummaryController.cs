@@ -1,4 +1,6 @@
-﻿namespace HRM.Controllers.Export;
+﻿using HRM.Services.Interfaces;
+
+namespace HRM.Controllers.Export;
 
 using System;
 using System.Linq;
@@ -54,20 +56,20 @@ public class ExportLeaveSummaryController(
             SupervisorId = EmployeeSession.EmpId,
             LeaveType = model.LeaveType
         };
-        var leaveSumaries = await reportService.GetUnpaidLeaveAsync(criteria);
+        var leaveSummaries = await reportService.GetUnpaidLeaveAsync(criteria);
         if (model.Period.Equals("1"))
         {
-            leaveSumaries = leaveSumaries.Where(x => x.Jan > 0 || x.Feb > 0 || x.Mar > 0 || x.Apr > 0 || x.Mar > 0 || x.Jun > 0).ToList();
+            leaveSummaries = leaveSummaries.Where(x => x.Jan > 0 || x.Feb > 0 || x.Mar > 0 || x.Apr > 0 || x.Mar > 0 || x.Jun > 0).ToList();
         }
         else
         {
             if (model.Period.Equals("2"))
             {
-                leaveSumaries = leaveSumaries.Where(x => x.Jul > 0 || x.Aug > 0 || x.Sep > 0 || x.Oct > 0 || x.Nov > 0 || x.Dec > 0).ToList();
+                leaveSummaries = leaveSummaries.Where(x => x.Jul > 0 || x.Aug > 0 || x.Sep > 0 || x.Oct > 0 || x.Nov > 0 || x.Dec > 0).ToList();
             }
         }
 
-        var data = await exportReportService.Export(leaveSumaries, model.Year, model.LeaveType, model.Period);
+        var data = await exportReportService.Export(leaveSummaries, model.Year, model.LeaveType, model.Period);
 
         var fileName = $"UnpaidLeaveSummary_{DateTimeOffset.Now:yyyyMMdd}.xls";
         return File(data, "application/vnd.ms-excel", fileName);

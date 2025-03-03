@@ -126,7 +126,6 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IEmailService, EmailService>();
         services.AddSingleton<IMessageService, MessageService>();
         services.AddSingleton<IDashboardService, DashboardService>();
-        services.AddSingleton<IReportService, ReportService>();
         services.AddSingleton<IAnnualLeaveBalanceService, AnnualLeaveBalanceService>();
         services.AddSingleton<IEmployeeService, EmployeeService>();
         services.AddSingleton<IUnitService, UnitService>();
@@ -171,7 +170,7 @@ public static class ServiceCollectionExtensions
 
     public static IServiceCollection AddDIReportServices(this IServiceCollection services)
     {
-        services.AddSingleton<IReportRepository, ReportRepository>();
+        services.AddSingleton<Repositories.Interfaces.IReportRepository, ReportRepository>();
 
         services.AddSingleton<IReportService, ReportService>();
         services.AddSingleton<IShiftStatisticReportService, ShiftStatisticReportService>();
@@ -192,6 +191,7 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IExportDisciplineSummaryService, ExportDisciplineSummaryService>();
         services.AddSingleton<IExportDisciplineDetailService, ExportDisciplineDetailService>();
         services.AddSingleton<IExportWeekendLeaveSummaryService, ExportWeekendLeaveSummaryService>();
+        services.AddSingleton<IExportSupervisorService, ExportSupervisorService>();
         services.AddSingleton<IExportWeekendLeaveDetailService, ExportWeekendLeaveDetailService>();
 
         return services;

@@ -1,4 +1,7 @@
-﻿namespace HRM.Services
+﻿using System.Threading.Tasks;
+using HRM.ViewModels;
+
+namespace HRM.Services
 {
     using System.Collections.Generic;
     using System.IO;
@@ -12,19 +15,19 @@
 
     public interface IWorkingCalendarSummaryReportService
     {
-        IEnumerable<WorkingCalendarSummary> GetWorkingCalendarSummary(GetWorkingHoursSummaryParam param);
+        Task<IEnumerable<EmployeeAttendanceModel>> GetWorkingCalendarSummary(GetWorkingHoursSummaryParam param);
 
         byte[] Export(GetWorkingHoursSummaryParam param, IEnumerable<WorkingCalendarSummary> calendars);
     }
 
     public class WorkingCalendarSummaryReportService(
         IWebHostEnvironment env,
-        IReportRepository repository) : IWorkingCalendarSummaryReportService
+        Repositories.Interfaces.IReportRepository repository) : IWorkingCalendarSummaryReportService
     {
         private const byte MinimumWidth = 5;
         private const byte MaximumWidth = 50;
 
-        public IEnumerable<WorkingCalendarSummary> GetWorkingCalendarSummary(GetWorkingHoursSummaryParam param)
+        public async Task<IEnumerable<EmployeeAttendanceModel>> GetWorkingCalendarSummary(GetWorkingHoursSummaryParam param)
         {
             var criteria = new GetEmployeeWorkingCalendarByDateCriteria
             {
@@ -35,7 +38,7 @@
                 TeamIds = param.TeamIds,
                 Employee = param.Employee
             };
-            return repository.GetWorkingCalendarSummary(criteria);
+            return await repository.GetEmployeeAttendanceReportAsync(criteria);
         }
 
         public byte[] Export(
