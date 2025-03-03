@@ -1,15 +1,15 @@
-﻿using GO.UserControl.Client.Core.Models;
+﻿namespace HRM.Controllers;
+
 using GO.UserControl.Client.Core.Services;
-using System.Collections.Generic;
+using System.Threading.Tasks;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
-using HRM.Core.Constants;
-using HRM.Core.Filters;
-using HRM.Core;
-using HRM.ViewModels.Function;
+using Core.Constants;
+using Core.Filters;
+using Core;
+using ViewModels.Function;
 using Microsoft.AspNetCore.Mvc;
 
-namespace HRM.Controllers;
 
 public class FunctionController(IUserControlSession userControlSession,
     IRoleService roleService,
@@ -22,33 +22,33 @@ public class FunctionController(IUserControlSession userControlSession,
     }
 
     [HrmPermission(Policy.Read, FunctionKey.FunctionManagement)]
-    public IActionResult GetRolePermission([FromBody] GetRolePermissionViewModel request)
+    public async Task<IActionResult> GetRolePermission([FromBody] GetRolePermissionViewModel request)
     {
-        var systemRoles = roleService.GetBySiteId(userControlSession.SiteId);
+        var systemRoles = await roleService.GetBySiteIdAsync(userControlSession.SiteId);
         var functionTrees = new TreeFunctionViewModel
         {
             RoleId = request.RoleId ?? systemRoles[0].RoleId,
             IsHost = userControlSession.HasPermissionOnFunction(FunctionKey.FunctionManagement, Policy.Host),
-            Functions = functionService.GetBySiteId(userControlSession.SiteId),
-            HierarchyFunctions = functionService.GetHierarchyBySiteId(userControlSession.SiteId),
-            Permissions = functionService.GetPermissionBySiteAndRoleId(userControlSession.SiteId, request.RoleId ?? systemRoles[0].RoleId)
+            Functions = await functionService.GetBySiteIdAsync(userControlSession.SiteId),
+            HierarchyFunctions = await functionService.GetHierarchyBySiteIdAsync(userControlSession.SiteId),
+            Permissions = await functionService.GetPermissionBySiteAndRoleIdAsync(userControlSession.SiteId, request.RoleId ?? systemRoles[0].RoleId)
         };
 
         return new CustomJsonResult(functionTrees);
     }
 
     [HrmPermission(Policy.Host, FunctionKey.FunctionManagement)]
-    public IActionResult GetSystemRoles()
+    public async Task<IActionResult> GetSystemRoles()
     {
-        var systemRoles = roleService.GetBySiteId(userControlSession.SiteId);
+        var systemRoles = await roleService.GetBySiteIdAsync(userControlSession.SiteId);
         return new CustomJsonResult(systemRoles);
     }
 
     [HttpPost]
     [HrmPermission(Policy.Host, FunctionKey.FunctionManagement)]
-    public CustomJsonResult AssignPermission([FromBody] TreeFunctionViewModel request)
+    public async Task<CustomJsonResult> AssignPermission([FromBody] TreeFunctionViewModel request)
     {
-        var commandResult = roleService.AssignPermission(userControlSession.SiteId, request.RoleId, request.Permissions);
+        var commandResult = await roleService.AssignPermissionAsync(userControlSession.SiteId, request.RoleId, request.Permissions);
         return new CustomJsonResult(commandResult);
     }
 }

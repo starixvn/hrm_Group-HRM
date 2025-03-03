@@ -33,6 +33,8 @@ public interface IEmployeeService
 
     IList<Employee> GetEmployeesByRole(GetEmployeeByRoleCriteria criteria);
 
+    Task<IList<Employee>> GetEmployeesByRoleAsync(GetEmployeeByRoleCriteria criteria);
+
     EmployeeShift GetShiftByEmployeeId(int id);
 
     Task<IEnumerable<AnnualLeaveTransactionViewModel>> GetAnnualLeaveTransactionAsync(GetAnnualLeaveTransactionCriteria criteria);
@@ -40,6 +42,8 @@ public interface IEmployeeService
     Task<AnnualLeaveTransactionViewModel> GetAnnualLeaveTransactionAsync(int leaveTransId);
 
     IList<SupervisorNameModel> GetSupervisorByRequestType(GetSupervisorByRequestTypeCriteria criteria);
+
+    Task<IList<SupervisorNameModel>> GetSupervisorByRequestTypeAsync(GetSupervisorByRequestTypeCriteria criteria);
 
     Task<IList<SupervisorNameModel>> GetSupervisorByQueryAsync(GetEmployeeSupervisorByQueryCriteria criteria);
 
@@ -54,6 +58,9 @@ public interface IEmployeeService
     IList<EmployeeFullProfile> GetEmployeeFullProfile(GetEmployeeFullProfileCriteria criteria);
 
     CommandResult EditEmployeeSupervisor(int actorId, int employeeId, short roleId, IEnumerable<EditTeamSupervisor> supervisors);
+
+    Task<CommandResult> EditEmployeeSupervisorAsync(int actorId, int employeeId, short roleId,
+        IEnumerable<EditTeamSupervisor> supervisors);
 
     CommandResult EditPassword(int actorId, EditPassword model);
 

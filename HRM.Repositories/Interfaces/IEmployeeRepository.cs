@@ -16,6 +16,8 @@
 
         IList<Employee> GetEmployeesByRole(ICriteria criteria);
 
+        Task<IList<Employee>> GetEmployeesByRoleAsync(ICriteria criteria);
+
         IList<EmployeeFullProfile> GetEmployeeFullInformation(ICriteria criteria);
     }
 }

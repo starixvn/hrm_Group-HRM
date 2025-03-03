@@ -116,6 +116,30 @@
                 }
             }
         }
+        public async Task<IList<Employee>> GetEmployeesByRoleAsync(ICriteria criteria)
+        {
+            using var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey());
+            using var multi = await db.QueryMultipleAsync(criteria);
+            var employees = multi.Read<Employee, dynamic, Employee>(
+                (e, t) =>
+                {
+                    e.Team = new Team { Id = t.TeamID, Name = t.Team };
+                    return e;
+                },
+                splitOn: "TeamID");
+
+            var roles = multi.Read<EmployeeRole, Role, EmployeeRole>(
+                (er, r) =>
+                {
+                    er.Role = r;
+                    return er;
+                },
+                "RoleId");
+
+            employees = GroupByRoles(employees, roles);
+
+            return employees.ToList();
+        }
 
         private static IEnumerable<Employee> GroupByRoles(IEnumerable<Employee> employees, IEnumerable<EmployeeRole> roles)
         {

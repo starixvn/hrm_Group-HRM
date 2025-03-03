@@ -155,11 +155,11 @@ public class EmployeeController(
     {
         if (ModelState.IsValid)
         {
-            var param = MappingEditEmployeeParam(model);
+            var param = await MappingEditEmployeeParam(model);
             var commandResult = await employeeService.EditAsync(EmployeeSession.EmpId, param);
             if (commandResult.IsSuccessful)
             {
-                UpdateUserInfo(model.UserId, param);
+                await UpdateUserInfoAsync(model.UserId, param);
             }
             else
             {
@@ -199,9 +199,9 @@ public class EmployeeController(
     }
 
     [HttpPost]
-    public CustomJsonResult EditEmployeeSupervisor(int employeeId, short roleId, IEnumerable<EditTeamSupervisor> supervisors)
+    public async Task<CustomJsonResult> EditEmployeeSupervisor(int employeeId, short roleId, IEnumerable<EditTeamSupervisor> supervisors)
     {
-        var commandResult = employeeService.EditEmployeeSupervisor(EmployeeSession.EmpId, employeeId, roleId, supervisors);
+        var commandResult = await employeeService.EditEmployeeSupervisorAsync(EmployeeSession.EmpId, employeeId, roleId, supervisors);
 
         return new CustomJsonResult(commandResult);
     }
@@ -235,7 +235,7 @@ public class EmployeeController(
         return View(employee);
     }
 
-    public JsonResult GetSupervisors(string roleIds, string query, string excludeIds)
+    public async Task<JsonResult> GetSupervisors(string roleIds, string query, string excludeIds)
     {
         var criteria = new GetEmployeeByRoleCriteria
         {
@@ -243,14 +243,14 @@ public class EmployeeController(
             Query = query.Trim(),
             RoleIds = roleIds
         };
-        var employees = employeeService.GetEmployeesByRole(criteria);
+        var employees = await employeeService.GetEmployeesByRoleAsync(criteria);
 
         return Json(employees);
     }
 
-    public CustomJsonResult GetEmployeeSupervisorByRoleId(int employeeId, short roleId)
+    public async Task<CustomJsonResult> GetEmployeeSupervisorByRoleId(int employeeId, short roleId)
     {
-        IEnumerable<SupervisorModel> supervisors = employeeService.GetEmployeeSupervisorByRoleId(employeeId, roleId);
+        IEnumerable<SupervisorModel> supervisors = await employeeService.GetEmployeeSupervisorByRoleIdAsync(employeeId, roleId);
         return new CustomJsonResult(supervisors);
     }
 
@@ -366,10 +366,10 @@ public class EmployeeController(
             Query = keyword,
             ExcludedManager = false
         };
-        IList<Employee> employees = await employeeService.GetMemberByManagerAsync(criteria);
-        const byte TotalItems = 10;
+        var employees = await employeeService.GetMemberByManagerAsync(criteria);
+        const byte totalItems = 10;
 
-        return Json(employees.Take(TotalItems));
+        return Json(employees.Take(totalItems));
     }
 
     private async Task<IList<SupervisorNameModel>> GetSupervisorsAsync(int empId)
@@ -384,7 +384,7 @@ public class EmployeeController(
         return supervisors;
     }
 
-    private EditEmployeeParam MappingEditEmployeeParam(Employee model)
+    private async Task<EditEmployeeParam> MappingEditEmployeeParam(Employee model)
     {
         return new EditEmployeeParam
         {
@@ -402,7 +402,7 @@ public class EmployeeController(
             Enabled = model.Enabled,
             Phone = model.Phone,
             Gender = model.Gender,
-            Roles = BuildRole(model.Roles),
+            Roles = await BuildRole(model.Roles),
             JoinedDate = model.JoinedDate,
             CompanyDate = model.CompanyDate,
             ConfirmedDate = model.ConfirmedDate,
@@ -444,7 +444,7 @@ public class EmployeeController(
         };
     }
 
-    private async Task UpdateUserInfo(int userId, EditEmployeeParam param)
+    private async Task UpdateUserInfoAsync(int userId, EditEmployeeParam param)
     {
         var result = await userService.UpdateInfoAsync(new UpdateUserInfoParam
         {
@@ -467,7 +467,7 @@ public class EmployeeController(
             if (result.IsSuccessful)
             {
                 ViewBag.Updated = true;
-                await UpdateUserSession(param.EmployeeId);
+                await UpdateUserSessionAsync(param.EmployeeId);
             }
             else
             {
@@ -482,7 +482,7 @@ public class EmployeeController(
         }
     }
 
-    private async Task UpdateUserSession(int employeeId)
+    private async Task UpdateUserSessionAsync(int employeeId)
     {
         if (EmployeeSession.EmpId == employeeId)
         {
@@ -491,9 +491,9 @@ public class EmployeeController(
         }
     }
 
-    private string BuildRole(IList<Role> roles)
+    private async Task<string> BuildRole(IList<Role> roles)
     {
-        var systemRoles = roleService.GetBySiteId(userControlSession.SiteId);
+        var systemRoles = await roleService.GetBySiteIdAsync(userControlSession.SiteId);
         var defaultRoles = systemRoles.Where(x => x.IsDefault).Select(x => x.RoleId);
 
         if (roles != null && roles.Count > 0)

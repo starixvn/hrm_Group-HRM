@@ -95,6 +95,24 @@ public class EmployeeService(
         return employees ?? new List<Employee>();
     }
 
+    public async Task<IList<Employee>> GetEmployeesByRoleAsync(GetEmployeeByRoleCriteria criteria)
+    {
+        IList<Employee> employees = null;
+        if (criteria == null || !criteria.IsValid()) return new List<Employee>();
+
+        employees = await employeeRepository.GetEmployeesByRoleAsync(criteria);
+        var roles = await roleService.GetBySiteIdAsync(userControlSettings.SiteId);
+        foreach (var employee in employees)
+        {
+            if (employee.Roles != null && employee.Roles.Any())
+            {
+                employee.Roles = roles.Where(x => employee.Roles.Any(y => y.RoleId == x.RoleId)).ToList();
+            }
+        }
+
+        return employees;
+    }
+
     public EmployeeShift GetShiftByEmployeeId(int id)
     {
         var criteria = new GetShiftByEmployeeIdCriteria
@@ -155,6 +173,12 @@ public class EmployeeService(
         return baseService.GetData<SupervisorNameModel>(criteria).ToList();
     }
 
+    public async Task<IList<SupervisorNameModel>> GetSupervisorByRequestTypeAsync(GetSupervisorByRequestTypeCriteria criteria)
+    {
+        var data = await baseService.GetDataAsync<SupervisorNameModel>(criteria);
+        return data.ToList();
+    }
+
     public async Task<IList<SupervisorNameModel>> GetSupervisorByQueryAsync(GetEmployeeSupervisorByQueryCriteria criteria)
     {
         return (await baseService.GetDataAsync<SupervisorNameModel>(criteria)).ToList();
@@ -199,6 +223,18 @@ public class EmployeeService(
             SupervisorXml = supervisors.ToXML().ToString()
         };
         return baseService.ExecuteNonQuery(criteria);
+    }
+
+    public async Task<CommandResult> EditEmployeeSupervisorAsync(int actorId, int employeeId, short roleId, IEnumerable<EditTeamSupervisor> supervisors)
+    {
+        var criteria = new EditEmployeeSupervisorCriteria
+        {
+            EmployeeId = employeeId,
+            ActorId = actorId,
+            RoleId = roleId,
+            SupervisorXml = supervisors.ToXML().ToString()
+        };
+        return await baseService.ExecuteNonQueryAsync(criteria);
     }
 
     public IList<Employee> GetEmployeeByGender(string query, int gender)

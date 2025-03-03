@@ -143,7 +143,7 @@ public class RequestController(
     }
 
     [NonAction]
-    public IList<SupervisorNameModel> GetSupervisorByRequestType(int employeeId, byte role, byte requestType)
+    public async Task<IList<SupervisorNameModel>> GetSupervisorByRequestType(int employeeId, byte role, byte requestType)
     {
         var criteria = new GetSupervisorByRequestTypeCriteria
         {
@@ -151,7 +151,7 @@ public class RequestController(
             Role = role,
             RequestType = requestType
         };
-        var supervisors = employeeService.GetSupervisorByRequestType(criteria);
+        var supervisors = await employeeService.GetSupervisorByRequestTypeAsync(criteria);
 
         return supervisors;
     }
