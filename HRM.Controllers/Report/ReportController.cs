@@ -149,7 +149,7 @@ public class ReportController(
             SupervisorId = EmployeeSession.EmpId
         };
 
-        var weekendLeaves = await reportSevice.GetWeekendLeaveSummaryAsync(criteria);
+        var weekendLeaves = await reportService.GetWeekendLeaveSummaryAsync(criteria);
 
         return PartialView("_ListWeekendLeaveSummary", weekendLeaves);
     }
@@ -180,7 +180,7 @@ public class ReportController(
             SupervisorId = EmployeeSession.EmpId
         };
 
-        var weekendLeaveDetails = await reportSevice.GetWeekendLeaveDetailAsync(criteria);
+        var weekendLeaveDetails = await reportService.GetWeekendLeaveDetailAsync(criteria);
 
         return PartialView("_ListWeekendLeaveDetail", weekendLeaveDetails);
     }
