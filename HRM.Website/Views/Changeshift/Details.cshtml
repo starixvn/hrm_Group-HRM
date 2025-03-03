@@ -1,10 +1,11 @@
-﻿@* @using HRM.Core.Enums
+﻿@using HRM.Core.Enums
+@using HRM.ViewModels.Request
 @model ChangeShiftViewModel
 @{
     ViewBag.Title = Labels.Details;
 }
 @section css{
-    <link href="~/wwwroot/dist/styles/changeshift.create.css" rel="stylesheet" />
+    <link href="~/dist/styles/changeshift.create.css" rel="stylesheet" />
 }
 @section js{
 }
@@ -122,4 +123,4 @@
             <button type="button" class="btn btn-default" onclick="window.history.back()">@Labels.Back</button>
         </div>
     </form>
-</div> *@
+</div>
