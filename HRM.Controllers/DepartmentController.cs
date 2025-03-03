@@ -1,18 +1,18 @@
-﻿using System.Threading.Tasks;
+﻿namespace HRM.Controllers;
+
+using System.Threading.Tasks;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
-using HRM.Core;
-using HRM.Core.Constants;
-using HRM.Core.Filters;
+using Core;
+using Core.Constants;
+using Core.Filters;
 using HRM.Core.Models;
 using HRM.Core.Services;
-using HRM.Criteria.Department;
-using HRM.Services;
-using HRM.Services.Interfaces;
-using HRM.ViewModels.Department;
+using Criteria.Department;
+using Services;
+using Services.Interfaces;
+using ViewModels.Department;
 using Microsoft.AspNetCore.Mvc;
-
-namespace HRM.Controllers;
 
 public class DepartmentController(IUserControlSession userControlSession,
     IDepartmentService departmentService,

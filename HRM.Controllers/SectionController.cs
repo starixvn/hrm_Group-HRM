@@ -1,23 +1,23 @@
-﻿using System.Collections.Generic;
+﻿namespace HRM.Controllers;
+
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
-using HRM.Core.Constants;
-using HRM.Core.Filters;
+using Core.Constants;
+using Core.Filters;
 using HRM.Core.Services;
-using HRM.Core;
+using Core;
 using HRM.Core.Models;
-using HRM.Criteria.Section;
-using HRM.Models;
-using HRM.Services;
-using HRM.Services.Implement;
-using HRM.Services.Interfaces;
-using HRM.ViewModels;
-using HRM.ViewModels.Section;
+using Criteria.Section;
+using Models;
+using Services;
+using Services.Implement;
+using Services.Interfaces;
+using ViewModels;
+using ViewModels.Section;
 using Microsoft.AspNetCore.Mvc;
-
-namespace HRM.Controllers;
 
 public class SectionController(
     IUserControlSession userControlSession,
@@ -37,16 +37,16 @@ public class SectionController(
 
     [HttpPost]
     [HrmPermission(Policy.Read, FunctionKey.SectionManagement)]
-    public IActionResult GetSections([FromBody] GetSectionViewModel request)
+    public async Task<IActionResult> GetSections([FromBody] GetSectionViewModel request)
     {
-        var sections = sectionService.GetSection(request.IsActive);
+        var sections = await sectionService.GetSectionAsync(request.IsActive);
         return new CustomJsonResult(sections);
     }
 
     [HrmPermission(Policy.Host, FunctionKey.SectionManagement)]
-    public IActionResult GetDepartments()
+    public async Task<IActionResult> GetDepartments()
     {
-        var departments = departmentService.GetDepartment();
+        var departments = await departmentService.GetDepartmentAsync();
         return new CustomJsonResult(departments);
     }
 
@@ -77,10 +77,10 @@ public class SectionController(
     }
 
     [HrmPermission(Policy.Host, FunctionKey.SectionManagement)]
-    public IActionResult GetById(int id)
+    public async Task<IActionResult> GetById(int id)
     {
-        var section = sectionService.GetById(id);
-        var departments = departmentService.GetDepartment();
+        var section = await sectionService.GetByIdAsync(id);
+        var departments = await departmentService.GetDepartmentAsync();
         var model = new EditSectionViewModel
         {
             SectionId = id,
@@ -101,7 +101,7 @@ public class SectionController(
 
     [HttpPost]
     [HrmPermission(Policy.Host, FunctionKey.SectionManagement)]
-    public IActionResult Edit([FromBody] EditSectionViewModel model)
+    public async Task<IActionResult> Edit([FromBody] EditSectionViewModel model)
     {
         var commandResult = new CommandResult();
         if (model == null || !ModelState.IsValid) return new CustomJsonResult(commandResult);
@@ -115,16 +115,16 @@ public class SectionController(
             DepartmentId = model.DepartmentId,
             ModifiedBy = EmployeeSession.EmpId
         };
-        commandResult = baseService.ExecuteNonQuery(criteria);
+        commandResult = await baseService.ExecuteNonQueryAsync(criteria);
 
         return new CustomJsonResult(commandResult);
     }
 
     [HttpPost]
     [HrmPermission(Policy.Host, FunctionKey.SectionManagement)]
-    public IActionResult Delete([FromRoute] DeleteSectionViewModel request)
+    public async Task<IActionResult> Delete([FromRoute] DeleteSectionViewModel request)
     {
-        var commandResult = sectionService.Delete(EmployeeSession.EmpId, request.Id);
+        var commandResult = await sectionService.DeleteAsync(EmployeeSession.EmpId, request.Id);
 
         return new CustomJsonResult(commandResult);
     }
@@ -132,10 +132,10 @@ public class SectionController(
     [HttpGet]
     public async Task<IActionResult> GetOrgChart()
     {
-        var units = unitService.GetUnit();
-        var department = departmentService.GetDepartment();
+        var units = await unitService.GetUnitAsync();
+        var department = await departmentService.GetDepartmentAsync();
         var teams = await commonDataService.GetAllTeamAsync();
-        var sections = sectionService.GetSection();
+        var sections = await sectionService.GetSectionAsync();
 
         var orgchart = GetOrgChart(units, department, teams, sections);
 

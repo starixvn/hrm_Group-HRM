@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿namespace HRM.Controllers;
+
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -8,26 +10,24 @@ using GO.UserControl.Client.Core.Models.Role;
 using GO.UserControl.Client.Core.Models.User;
 using GO.UserControl.Client.Core.Services;
 using GO.UserControl.Client.Core.Session;
-using HRM.Core;
-using HRM.Core.Constants;
-using HRM.Core.Enums;
-using HRM.Core.Filters;
-using HRM.Criteria.Employee;
-using HRM.Criteria.Supervisor;
-using HRM.Models;
+using Core;
+using Core.Constants;
+using Core.Enums;
+using Core.Filters;
+using Criteria.Employee;
+using Criteria.Supervisor;
+using Models;
 using HRM.Models.Group;
-using HRM.Models.Supervisor;
-using HRM.Services;
-using HRM.Services.Implement;
-using HRM.Services.Interfaces;
-using HRM.ViewModels;
-using HRM.ViewModels.Employee;
+using Models.Supervisor;
+using Services;
+using Services.Implement;
+using Services.Interfaces;
+using ViewModels;
+using ViewModels.Employee;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-
-namespace HRM.Controllers;
 
 public class EmployeeController(
     IUserControlSession userControlSession,

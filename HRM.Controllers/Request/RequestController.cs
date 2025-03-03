@@ -1,27 +1,27 @@
-﻿using System;
+﻿namespace HRM.Controllers.Request;
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
-using HRM.Core;
-using HRM.Core.Constants;
-using HRM.Core.Enums;
-using HRM.Core.Filters;
+using Core;
+using Core.Constants;
+using Core.Enums;
+using Core.Filters;
 using HRM.Criteria.Request;
-using HRM.Criteria.Supervisor;
-using HRM.Models;
+using Criteria.Supervisor;
+using Models;
 using HRM.Models.Request;
-using HRM.Models.Supervisor;
-using HRM.Services;
-using HRM.Services.Implement;
+using Models.Supervisor;
+using Services;
+using Services.Implement;
 using HRM.Services.Implement.Request;
-using HRM.Services.Interfaces;
+using Services.Interfaces;
 using HRM.Services.Interfaces.Request;
 using HRM.ViewModels.Request;
 using Microsoft.AspNetCore.Mvc;
-
-namespace HRM.Controllers.Request;
 
 public class RequestController(
     IUserControlSession userControlSession,

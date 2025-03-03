@@ -1,53 +1,76 @@
-﻿namespace HRM.Services
+﻿namespace HRM.Services.Implement;
+
+using System.Collections.Generic;
+using HRM.Core.Models;
+using HRM.Core.Services;
+using Criteria.Section;
+using Models;
+using Interfaces;
+using System.Threading.Tasks;
+using HRM.Repositories.Interfaces;
+
+public class SectionService(
+    ISectionRepository sectionRepository,
+    IBaseService baseService)
+    : ISectionService
 {
-    using System.Collections.Generic;
-    using HRM.Core.Models;
-    using HRM.Core.Services;
-    using HRM.Criteria.Section;
-    using HRM.Models;
-    using HRM.Repositories;
-
-    public class SectionService : ISectionService
+    public Section GetById(int id)
     {
-        private readonly ISectionRepository sectionRepository;
-        private readonly IBaseService baseService;
-
-        public SectionService(
-            ISectionRepository sectionRepository,
-            IBaseService baseService)
+        var criteria = new GetSectionByIdCriteria
         {
-            this.sectionRepository = sectionRepository;
-            this.baseService = baseService;
-        }
+            SectionId = id
+        };
+        return sectionRepository.GetById(criteria);
+    }
 
-        public Section GetById(int id)
+    public async Task<Section> GetByIdAsync(int id)
+    {
+        var criteria = new GetSectionByIdCriteria
         {
-            var criteria = new GetSectionByIdCriteria
-            {
-                SectionId = id
-            };
-            return sectionRepository.GetById(criteria);
-        }
+            SectionId = id
+        };
+        return await sectionRepository.GetByIdAsync(criteria);
+    }
 
-        public IList<Section> GetSection(bool? isActive = true)
+    public IList<Section> GetSection(bool? isActive = true)
+    {
+        var criteria = new GetSectionCriteria
         {
-            var criteria = new GetSectionCriteria
-            {
-                IsActive = isActive
-            };
-            IList<Section> sections = sectionRepository.GetSection(criteria);
+            IsActive = isActive
+        };
+        var sections = sectionRepository.GetSection(criteria);
 
-            return sections ?? new List<Section>();
-        }
+        return sections ?? new List<Section>();
+    }
 
-        public CommandResult Delete(int actorId, int id)
+    public async Task<IList<Section>> GetSectionAsync(bool? isActive = true)
+    {
+        var criteria = new GetSectionCriteria
         {
-            var criteria = new DeleteSectionCriteria
-            {
-                sectionId = id,
-                ModifiedBy = actorId
-            };
-            return baseService.ExecuteNonQuery(criteria);
-        }
+            IsActive = isActive
+        };
+        var sections = await sectionRepository.GetSectionAsync(criteria);
+
+        return sections ?? new List<Section>();
+    }
+
+    public CommandResult Delete(int actorId, int id)
+    {
+        var criteria = new DeleteSectionCriteria
+        {
+            sectionId = id,
+            ModifiedBy = actorId
+        };
+        return baseService.ExecuteNonQuery(criteria);
+    }
+
+    public async Task<CommandResult> DeleteAsync(int actorId, int id)
+    {
+        var criteria = new DeleteSectionCriteria
+        {
+            sectionId = id,
+            ModifiedBy = actorId
+        };
+        return await baseService.ExecuteNonQueryAsync(criteria);
     }
 }

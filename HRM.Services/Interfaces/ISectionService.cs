@@ -1,15 +1,21 @@
-﻿namespace HRM.Services
+﻿namespace HRM.Services.Interfaces;
+
+using System.Collections.Generic;
+using HRM.Core.Models;
+using Models;
+using System.Threading.Tasks;
+
+public interface ISectionService
 {
-    using System.Collections.Generic;
-    using HRM.Core.Models;
-    using HRM.Models;
+    Section GetById(int id);
 
-    public interface ISectionService
-    {
-        Section GetById(int id);
+    Task<Section> GetByIdAsync(int id);
 
-        IList<Section> GetSection(bool? isActive = true);
+    IList<Section> GetSection(bool? isActive = true);
 
-        CommandResult Delete(int actorId, int id);
-    }
+    Task<IList<Section>> GetSectionAsync(bool? isActive = true);
+
+    CommandResult Delete(int actorId, int id);
+
+    Task<CommandResult> DeleteAsync(int actorId, int id);
 }
