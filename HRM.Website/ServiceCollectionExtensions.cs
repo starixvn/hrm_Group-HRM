@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Fanex.Caching.Redis;
 using Fanex.Data.Repository;
 using Fanex.Logging;
-using Fanex.NexHR.Repositories;
 using GO.UserControl.Client.AspNetCore;
 using GO.UserControl.Client.AspNetCore.Session;
 using GO.UserControl.Client.Core;
@@ -15,6 +14,7 @@ using HRM.Core.Models;
 using HRM.Core.Repositories;
 using HRM.Core.Services;
 using HRM.Letstalk.Core.Services;
+using HRM.Repositories;
 using HRM.Repositories.Interfaces;
 using HRM.Services.ExportExcel;
 using HRM.Services.Implement.Request;
@@ -25,7 +25,6 @@ using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Repositories;
 using Services;
 using Services.Implement;
 using Services.Interfaces;
@@ -160,7 +159,6 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IWorkingCalendarRepository, WorkingCalendarRepository>();
         services.AddSingleton<IDisciplineService, DisciplineService>();
         services.AddSingleton<IDisciplineRepository, DisciplineRepository>();
-       
 
         services.AddDIReportServices();
         services.AddDIExcelServices();

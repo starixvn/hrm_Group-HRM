@@ -1,46 +1,31 @@
-﻿using HRM.Services.Implement;
-
-namespace Fanex.NexHR.Controllers.Report
+﻿namespace HRM.Controllers.Report
 {
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
+    using GO.UserControl.Client.Core.Enumerables;
+    using GO.UserControl.Client.Core.Session;
+    using HRM.Controllers;
     using HRM.Core.Constants;
     using HRM.Core.Filters;
     using HRM.Core.Services;
     using HRM.Criteria.Report;
     using HRM.Models.Report;
     using HRM.Services;
-    using HRM.ViewModels.Report;
-    using GO.UserControl.Client.Core.Enumerables;
-    using GO.UserControl.Client.Core.Session;
-    using HRM.Controllers;
-    using HRM.Services.Interfaces;
-    using Microsoft.AspNetCore.Mvc;
-    using System.Threading.Tasks;
     using HRM.Services.Implement;
+    using HRM.Services.Interfaces;
+    using HRM.ViewModels.Report;
+    using Microsoft.AspNetCore.Mvc;
 
     [HrmPermission(Policy.Read, FunctionKey.DisciplineSummaryPerYear)]
-    public class DisciplineSummaryPerYearController : BaseController
+    public class DisciplineSummaryPerYearController(
+        IUserControlSession userControlSession,
+        IBaseService baseService,
+        IEmployeeService employeeService,
+        IExportDisciplineSummaryPerYearService exportService,
+        ICommonDataService commonDataService) : BaseController(userControlSession)
     {
-        private readonly IBaseService baseService;
-        private readonly IEmployeeService employeeService;
-        private readonly IExportDisciplineSummaryPerYearService exportService;
-        private readonly ICommonDataService commonDataService;
-
-        public DisciplineSummaryPerYearController(
-            IUserControlSession userControlSession,
-            IBaseService baseService,
-            IEmployeeService employeeService,
-            IExportDisciplineSummaryPerYearService exportService,
-            ICommonDataService commonDataService) : base(userControlSession)
-        {
-            this.baseService = baseService;
-            this.employeeService = employeeService;
-            this.exportService = exportService;
-            this.commonDataService = commonDataService;
-        }
-
         public async Task<IActionResult> Index(DisciplineSummaryPerYearViewModel model)
         {
             const byte DateRange = 4;

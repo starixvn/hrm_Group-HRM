@@ -1,6 +1,4 @@
-﻿using HRM.Services.Interfaces.Request;
-
-namespace Fanex.NexHR.Controllers.Request
+﻿namespace HRM.Controllers.Request
 {
     using System;
     using System.Collections.Generic;
@@ -16,34 +14,21 @@ namespace Fanex.NexHR.Controllers.Request
     using HRM.Criteria.Request.LateInEarlyOut;
     using HRM.Models.Request;
     using HRM.Services;
+    using HRM.Services.Interfaces.Request;
     using HRM.ViewModels.Request;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Newtonsoft.Json;
 
-    public class LateInEarlyOutController : BaseController
+    public class LateInEarlyOutController(
+        IUserControlSession userControlSession,
+        ILateInEarlyOutRequestService lateInEarlyOutRequestService,
+        IRequestService requestService,
+        IBaseService baseService,
+        IAttachFileService attachFileService) : BaseController(userControlSession)
     {
         private const string UploadFolderPath = "/file/uploads/request/";
         private const int DefaultMinutes = 60;
-        private readonly IUserControlSession userControlSession;
-        private readonly ILateInEarlyOutRequestService lateInEarlyOutRequestService;
-        private readonly IRequestService requestService;
-        private readonly IBaseService baseService;
-        private readonly IAttachFileService attachFileService;
-
-        public LateInEarlyOutController(
-            IUserControlSession userControlSession,
-            ILateInEarlyOutRequestService lateInEarlyOutRequestService,
-            IRequestService requestService,
-            IBaseService baseService,
-            IAttachFileService attachFileService) : base(userControlSession)
-        {
-            this.userControlSession = userControlSession;
-            this.lateInEarlyOutRequestService = lateInEarlyOutRequestService;
-            this.requestService = requestService;
-            this.baseService = baseService;
-            this.attachFileService = attachFileService;
-        }
 
         [HttpGet]
         public async Task<IActionResult> EmployeeView(int? year)
@@ -220,7 +205,7 @@ namespace Fanex.NexHR.Controllers.Request
             var lateInEarlyOut = await lateInEarlyOutRequestService.GetActualLateInEarlyOutAsync(criteria);
             lateInEarlyOut = lateInEarlyOut ?? new EmployeeLateInEarlyOutModel();
 
-            return Json(new { lateInEarlyOut.LateIn, lateInEarlyOut.EarlyOut } );
+            return Json(new { lateInEarlyOut.LateIn, lateInEarlyOut.EarlyOut });
         }
 
         public async Task<IActionResult> GetDisabledDate(GetDisabledDateParam param)

@@ -1,21 +1,19 @@
-﻿using HRM.Services.Interfaces;
-
-namespace HRM.Services.Implement;
+﻿namespace HRM.Services.Implement;
 
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Core.Enums;
 using Core.Helpers;
-using HRM.Core.Models;
-using HRM.Core.Services;
 using Criteria.Country;
 using Criteria.LeaveType;
 using Criteria.Lookup;
 using Criteria.SystemSetting;
+using HRM.Core.Models;
+using HRM.Core.Services;
 using Models;
 using Resources;
-using MathNet.Numerics.RootFinding;
+using HRM.Services.Interfaces;
 
 public interface ICommonDataService
 {
@@ -38,6 +36,7 @@ public interface ICommonDataService
     Task<SystemSetting> GetSystemSettingAsync();
 
     Task<bool> IsEnableGroupDateAsync();
+
     bool IsEnableGroupDate();
 }
 
@@ -170,6 +169,6 @@ public class CommonDataService(
             Key = "EnableGroupDate"
         };
 
-        return  baseService.GetDataEntity<bool>(criteria);
+        return baseService.GetDataEntity<bool>(criteria);
     }
 }

@@ -1,6 +1,4 @@
-﻿using HRM.Services.Interfaces.Request;
-
-namespace Fanex.NexHR.Controllers.Request
+﻿namespace HRM.Controllers.Request
 {
     using System;
     using System.Collections.Generic;
@@ -17,36 +15,21 @@ namespace Fanex.NexHR.Controllers.Request
     using HRM.Models;
     using HRM.Models.Request;
     using HRM.Services;
+    using HRM.Services.Interfaces.Request;
     using HRM.ViewModels.Request;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
     using Newtonsoft.Json;
 
-    public class CheckInOutController : BaseController
+    public class CheckInOutController(
+        IUserControlSession userControlSession,
+        ICheckInOutRequestService checkInOutRequestService,
+        IRequestService requestService,
+        IBaseService baseService,
+        IShiftService shiftService,
+        IAttachFileService attachFileService) : BaseController(userControlSession)
     {
         private const string UploadFolderPath = "/file/uploads/request/";
-        private readonly IUserControlSession userControlSession;
-        private readonly ICheckInOutRequestService checkInOutRequestService;
-        private readonly IRequestService requestService;
-        private readonly IBaseService baseService;
-        private readonly IShiftService shiftService;
-        private readonly IAttachFileService attachFileService;
-
-        public CheckInOutController(
-            IUserControlSession userControlSession,
-            ICheckInOutRequestService checkInOutRequestService,
-            IRequestService requestService,
-            IBaseService baseService,
-            IShiftService shiftService,
-            IAttachFileService attachFileService) : base(userControlSession)
-        {
-            this.userControlSession = userControlSession;
-            this.checkInOutRequestService = checkInOutRequestService;
-            this.requestService = requestService;
-            this.baseService = baseService;
-            this.shiftService = shiftService;
-            this.attachFileService = attachFileService;
-        }
 
         [HttpGet]
         public async Task<IActionResult> EmployeeView(int? year)
@@ -201,7 +184,7 @@ namespace Fanex.NexHR.Controllers.Request
                 attachFileService.UploadFile(files, criteria.RequestId, UploadFolderPath);
                 if (!string.IsNullOrWhiteSpace(filesRemove))
                 {
-                    attachFileService.DeleteFile(JsonConvert.DeserializeObject<List<string>> (filesRemove), criteria.RequestId, UploadFolderPath);
+                    attachFileService.DeleteFile(JsonConvert.DeserializeObject<List<string>>(filesRemove), criteria.RequestId, UploadFolderPath);
                 }
             }
 

@@ -1,4 +1,4 @@
-﻿namespace Fanex.NexHR.Repositories
+﻿namespace HRM.Repositories
 {
     using System.Collections.Generic;
     using System.Linq;

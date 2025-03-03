@@ -1,6 +1,4 @@
-﻿using HRM.Services.Interfaces.Request;
-
-namespace Fanex.NexHR.Controllers.Request
+﻿namespace HRM.Controllers.Request
 {
     using System;
     using System.Collections.Generic;
@@ -19,6 +17,7 @@ namespace Fanex.NexHR.Controllers.Request
     using HRM.Models.Supervisor;
     using HRM.Resources;
     using HRM.Services;
+    using HRM.Services.Interfaces.Request;
     using HRM.ViewModels.Request;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;

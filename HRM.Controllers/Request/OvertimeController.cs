@@ -1,6 +1,4 @@
-﻿using HRM.Services.Interfaces.Request;
-
-namespace Fanex.NexHR.Controllers.Request
+﻿namespace HRM.Controllers.Request
 {
     using System;
     using System.Collections.Generic;
@@ -15,11 +13,10 @@ namespace Fanex.NexHR.Controllers.Request
     using HRM.Core.Models;
     using HRM.Criteria.Supervisor;
     using HRM.Models.Overtime;
-    using HRM.Models.Supervisor;
     using HRM.Resources;
-    using HRM.Services;
     using HRM.Services.ExportExcel;
     using HRM.Services.Interfaces;
+    using HRM.Services.Interfaces.Request;
     using HRM.ViewModels.Overtime;
     using Microsoft.AspNetCore.Mvc;
 
@@ -29,11 +26,8 @@ namespace Fanex.NexHR.Controllers.Request
         IRequestService requestService,
         IOvertimeRequestService overtimeService,
         IExportOvertimeService exportOvertimeService,
-        ITeamService teamService)
-        : BaseController(userControlSession)
+        ITeamService teamService) : BaseController(userControlSession)
     {
-        private readonly IUserControlSession userControlSession = userControlSession;
-
         [HttpGet]
         public async Task<IActionResult> EmployeeView(MonthlyOvertimeRequestViewModel model)
         {

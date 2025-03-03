@@ -1,32 +1,18 @@
-﻿namespace Fanex.NexHR.Controllers
+﻿namespace HRM.Controllers
 {
-    using System.Collections.Generic;
+    using System.Threading.Tasks;
+    using GO.UserControl.Client.Core.Session;
     using HRM.Criteria.Discipline;
-    using HRM.Models.Discipline;
     using HRM.Services;
     using HRM.ViewModels.Discipline;
-    using GO.UserControl.Client.Core.Session;
-    using HRM.Controllers;
     using Microsoft.AspNetCore.Mvc;
-    using System.Threading.Tasks;
 
-    public class ExportDisciplineController : BaseController
+    public class ExportDisciplineController(
+        IUserControlSession userControlSession,
+        IDisciplineService disciplineService,
+        IExportDisciplineSummaryService exportDisciplineSummaryService,
+        IExportDisciplineDetailService exportDisciplineDetailService) : BaseController(userControlSession)
     {
-        private readonly IDisciplineService disciplineService;
-        private readonly IExportDisciplineSummaryService exportDisciplineSummaryService;
-        private readonly IExportDisciplineDetailService exportDisciplineDetailService;
-
-        public ExportDisciplineController(
-            IUserControlSession userControlSession,
-            IDisciplineService disciplineService,
-            IExportDisciplineSummaryService exportDisciplineSummaryService,
-            IExportDisciplineDetailService exportDisciplineDetailService) : base(userControlSession)
-        {
-            this.disciplineService = disciplineService;
-            this.exportDisciplineSummaryService = exportDisciplineSummaryService;
-            this.exportDisciplineDetailService = exportDisciplineDetailService;
-        }
-
         public async Task<IActionResult> ExportDisciplineSummaryReport(DisciplineSummaryViewModel model)
         {
             var criteria = new GetDisciplineSummaryCriteria

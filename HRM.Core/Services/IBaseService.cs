@@ -1,26 +1,25 @@
-﻿namespace HRM.Core.Services
+﻿namespace HRM.Core.Services;
+
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Fanex.Data.Repository;
+using HRM.Core.Models;
+
+public interface IBaseService
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
-    using Fanex.Data.Repository;
-    using HRM.Core.Models;
+    IEnumerable<T> GetData<T>(ICriteria criteria);
 
-    public interface IBaseService
-    {
-        IEnumerable<T> GetData<T>(ICriteria criteria);
-        Task<IEnumerable<T>> GetDataAsync<T>(ICriteria criteria);
+    Task<IEnumerable<T>> GetDataAsync<T>(ICriteria criteria);
 
-        T GetDataEntity<T>(ICriteria criteria);
+    T GetDataEntity<T>(ICriteria criteria);
 
-        CommandResult ExecuteNonQuery(ICriteria criteria);
-        Task<CommandResult> ExecuteNonQueryAsync(ICriteria command);
+    CommandResult ExecuteNonQuery(ICriteria criteria);
 
-        Task<T> GetDataEntityAsync<T>(ICriteria criteria);
+    Task<CommandResult> ExecuteNonQueryAsync(ICriteria command);
 
-        ValueTuple<IEnumerable<TFirst>, IEnumerable<TSecond>> FetchMultiple<TFirst, TSecond>(ICriteria criteria);
-        Task<ValueTuple<IEnumerable<TFirst>, IEnumerable<TSecond>>> FetchMultipleAsync<TFirst, TSecond>(ICriteria criteria);
+    Task<T> GetDataEntityAsync<T>(ICriteria criteria);
 
-        ValueTuple<IEnumerable<TFirst>, IEnumerable<TSecond>, IEnumerable<TThird>> FetchMultiple<TFirst, TSecond, TThird>(ICriteria criteria);
-    }
+    Task<(IEnumerable<TFirst>, IEnumerable<TSecond>)> FetchMultipleAsync<TFirst, TSecond>(ICriteria criteria);
+
+    Task<(IEnumerable<TFirst>, IEnumerable<TSecond>, IEnumerable<TThird>)> FetchMultipleAsync<TFirst, TSecond, TThird>(ICriteria criteria);
 }

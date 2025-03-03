@@ -13,7 +13,7 @@ using HRM.Core.Services;
 using HRM.Criteria.SickLeave;
 using HRM.Models.HospitalizationLeave;
 using HRM.Resources;
-using HRM.Services;
+using HRM.Services.ExportExcel;
 using HRM.Services.Interfaces;
 using HRM.ViewModels.AnnualLeave;
 using HRM.ViewModels.HospitalizationLeave;

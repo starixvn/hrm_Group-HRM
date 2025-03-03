@@ -1,4 +1,4 @@
-﻿namespace Fanex.NexHR.Controllers
+﻿namespace HRM.Controllers
 {
     using System;
     using System.Collections.Generic;
@@ -6,8 +6,6 @@
     using System.Threading.Tasks;
     using GO.UserControl.Client.Core.Enumerables;
     using GO.UserControl.Client.Core.Session;
-    using HRM.Controllers;
-    using HRM.Core;
     using HRM.Core.Constants;
     using HRM.Core.Filters;
     using HRM.Core.Models;
@@ -21,22 +19,11 @@
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.AspNetCore.Mvc.Rendering;
 
-    public class DisciplineController : BaseController
+    public class DisciplineController(
+        IUserControlSession userControlSession,
+        IDisciplineService disciplineService,
+        IBaseService baseService) : BaseController(userControlSession)
     {
-        private readonly IUserControlSession userControlSession;
-        private readonly IDisciplineService disciplineService;
-        private readonly IBaseService baseService;
-
-        public DisciplineController(
-            IUserControlSession userControlSession,
-            IDisciplineService disciplineService,
-            IBaseService baseService) : base(userControlSession)
-        {
-            this.userControlSession = userControlSession;
-            this.disciplineService = disciplineService;
-            this.baseService = baseService;
-        }
-
         [HrmPermission(Policy.Read, FunctionKey.Discipline)]
         public async Task<IActionResult> DisciplineSummary(DisciplineSummaryViewModel model)
         {
@@ -312,7 +299,6 @@
                 IncludeOtherType = includeOtherType
             };
             var disciplineTypes = await disciplineService.GetDisciplineTypeAsync(criteria);
-
 
             return disciplineTypes;
         }
