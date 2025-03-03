@@ -61,10 +61,10 @@ namespace HRM.Website.Helper
 
         public static string MinTotalLeaveDropDownList(int minTotalLeave, string name = "MinTotalLeave")
         {
-            var options = "<option selected='{minTotalLeave == 0}' value='0'>All</option>";
+            var options = $"<option {(minTotalLeave == 0 ? "selected" : "")} value='0'>All</option>";
             for (int i = 14; i <= 20; i++)
             {
-                options += $"<option selected='{i == minTotalLeave}' value='{i}'>{i}</option>";
+                options += $"<option {(i == minTotalLeave ? "selected" : "")} value='{i}'>{i}</option>";
             }
             return $@"
                 <select id='{name}' name='{name}' class='minWidthDropdown form-control'>

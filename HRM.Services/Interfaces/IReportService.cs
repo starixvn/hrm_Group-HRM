@@ -26,9 +26,9 @@
 
         IList<TeamSupervisorReportModel> GetTeamSupervisor(GetTeamSupervisorCriteria criteria);
 
-        IList<WeekendLeaveSummary> GetWeekendLeaveSummary(GetWeekendLeaveSummaryCriteria criteria);
+        Task<IList<WeekendLeaveSummary>> GetWeekendLeaveSummaryAsync(GetWeekendLeaveSummaryCriteria criteria);
 
-        IList<WeekendLeaveDetail> GetWeekendLeaveDetail(GetWeekendLeaveDetailCriteria criteria);
+        Task<IList<WeekendLeaveDetail>> GetWeekendLeaveDetailAsync(GetWeekendLeaveDetailCriteria criteria);
 
         Task<bool> GetIsPrivilegeCreateCheckInOutAsync(GetPrivilegeCreateCheckInOutRecordCriteria criteria);
     }

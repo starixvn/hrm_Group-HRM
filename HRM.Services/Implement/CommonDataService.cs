@@ -34,7 +34,7 @@ public interface ICommonDataService
 
     Task<SystemSetting> GetSystemSettingAsync();
 
-    bool IsEnableGroupDate();
+        Task<bool> IsEnableGroupDateAsync();
 }
 
 public class CommonDataService(
@@ -149,13 +149,13 @@ public class CommonDataService(
         return await baseService.GetDataEntityAsync<SystemSetting>(criteria);
     }
 
-    public bool IsEnableGroupDate()
+        public async Task<bool> IsEnableGroupDateAsync()
     {
         var criteria = new GetSystemConfigsByKeyCriteria
         {
             Key = "EnableGroupDate"
         };
 
-        return baseService.GetDataEntity<bool>(criteria);
+            return await baseService.GetDataEntityAsync<bool>(criteria);
     }
 }

@@ -161,6 +161,7 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IWorkingCalendarRepository, WorkingCalendarRepository>();
         services.AddSingleton<IDisciplineService, DisciplineService>();
         services.AddSingleton<IDisciplineRepository, DisciplineRepository>();
+       
 
         services.AddDIReportServices();
         services.AddDIExcelServices();
@@ -190,6 +191,8 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IJobTitleExportService, JobTitleExportService>();
         services.AddSingleton<IExportDisciplineSummaryService, ExportDisciplineSummaryService>();
         services.AddSingleton<IExportDisciplineDetailService, ExportDisciplineDetailService>();
+        services.AddSingleton<IExportWeekendLeaveSummaryService, ExportWeekendLeaveSummaryService>();
+        services.AddSingleton<IExportWeekendLeaveDetailService, ExportWeekendLeaveDetailService>();
 
         return services;
     }

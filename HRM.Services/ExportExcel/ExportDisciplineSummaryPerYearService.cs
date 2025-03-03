@@ -35,60 +35,56 @@
             const byte MaximumWidth = 50;
             const byte columnGroupDate = 8;
 
-            var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, @"ExcelTemplates\DisciplineSummaryPerYear.xlsx");
-            using (var templatePackage = new ExcelPackage(new FileInfo(templatePath)))
+            var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, "ExcelTemplates/DisciplineSummaryPerYear.xlsx");
+            using var templatePackage = new ExcelPackage(new FileInfo(templatePath));
+            using var xlPackage = new ExcelPackage();
+            var template = templatePackage.Workbook.Worksheets[0];
+            var worksheet = xlPackage.Workbook.Worksheets.Add("5 Years Discipline Summary");
+            int rowIndex = 1;
+            var colIndex = 1;
+
+            // title & header
+            template.Cells[rowIndex, colIndex, BodyRowIndex - 1, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, BodyRowIndex - 1, TotalColumns]);
+            colIndex = LengthOfServiceColIndex + 1;
+            for (var i = toYear; i >= fromYear; i--)
             {
-                using (var xlPackage = new ExcelPackage())
-                {
-                    ExcelWorksheet template = templatePackage.Workbook.Worksheets[1];
-                    ExcelWorksheet worksheet = xlPackage.Workbook.Worksheets.Add("5 Years Discipline Summary");
-                    int rowIndex = 1;
-                    var colIndex = 1;
-
-                    // title & header
-                    template.Cells[rowIndex, colIndex, BodyRowIndex - 1, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, BodyRowIndex - 1, TotalColumns]);
-                    colIndex = LengthOfServiceColIndex + 1;
-                    for (var i = toYear; i >= fromYear; i--)
-                    {
-                        worksheet.Cells[BodyRowIndex - 1, colIndex++].Value = i;
-                    }
-
-                    // data
-                    var rowNum = 1;
-                    rowIndex = BodyRowIndex;
-                    foreach (DisciplineSummaryPerYear employee in employees)
-                    {
-                        colIndex = 1;
-                        template.Cells[BodyRowIndex, 1, BodyRowIndex, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
-
-                        worksheet.Cells[rowIndex, colIndex++].Value = rowNum++;
-                        worksheet.Cells[rowIndex, colIndex++].Value = employee.Section;
-                        worksheet.Cells[rowIndex, colIndex++].Value = employee.Team;
-                        worksheet.Cells[rowIndex, colIndex++].Value = employee.Code;
-                        worksheet.Cells[rowIndex, colIndex++].Value = employee.FullName;
-                        worksheet.Cells[rowIndex, colIndex++].Value = employee.Nickname;
-                        worksheet.Cells[rowIndex, colIndex++].Value = employee.IsLocal ? Labels.Local : Labels.Expat;
-                        worksheet.Cells[rowIndex, colIndex++].Value = employee.JoinedDate;
-                        worksheet.Cells[rowIndex, colIndex++].Value = employee.LengthOfService;
-                        for (var i = toYear; i >= fromYear; i--)
-                        {
-                            FillDisciplineCell(worksheet.Cells[rowIndex, colIndex++], employee, i);
-                        }
-
-                        rowIndex++;
-                    }
-
-                    worksheet.Cells.AutoFitColumns(MinimumWidth, MaximumWidth);
-                    worksheet.View.FreezePanes(BodyRowIndex, 1);
-
-                    if (!enableGroupDate)
-                    {
-                        worksheet.DeleteColumn(columnGroupDate);
-                    }
-
-                    return xlPackage.GetAsByteArray();
-                }
+                worksheet.Cells[BodyRowIndex - 1, colIndex++].Value = i;
             }
+
+            // data
+            var rowNum = 1;
+            rowIndex = BodyRowIndex;
+            foreach (DisciplineSummaryPerYear employee in employees)
+            {
+                colIndex = 1;
+                template.Cells[BodyRowIndex, 1, BodyRowIndex, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
+
+                worksheet.Cells[rowIndex, colIndex++].Value = rowNum++;
+                worksheet.Cells[rowIndex, colIndex++].Value = employee.Section;
+                worksheet.Cells[rowIndex, colIndex++].Value = employee.Team;
+                worksheet.Cells[rowIndex, colIndex++].Value = employee.Code;
+                worksheet.Cells[rowIndex, colIndex++].Value = employee.FullName;
+                worksheet.Cells[rowIndex, colIndex++].Value = employee.Nickname;
+                worksheet.Cells[rowIndex, colIndex++].Value = employee.IsLocal ? Labels.Local : Labels.Expat;
+                worksheet.Cells[rowIndex, colIndex++].Value = employee.JoinedDate;
+                worksheet.Cells[rowIndex, colIndex++].Value = employee.LengthOfService;
+                for (var i = toYear; i >= fromYear; i--)
+                {
+                    FillDisciplineCell(worksheet.Cells[rowIndex, colIndex++], employee, i);
+                }
+
+                rowIndex++;
+            }
+
+            worksheet.Cells.AutoFitColumns(MinimumWidth, MaximumWidth);
+            worksheet.View.FreezePanes(BodyRowIndex, 1);
+
+            if (!enableGroupDate)
+            {
+                worksheet.DeleteColumn(columnGroupDate);
+            }
+
+            return xlPackage.GetAsByteArray();
         }
 
         private static void FillDisciplineCell(ExcelRange cell, DisciplineSummaryPerYear employee, int year)

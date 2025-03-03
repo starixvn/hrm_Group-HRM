@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
-using Core;
+    using System.Threading.Tasks;
 using Core.Enums;
 using Models;
 using Models.EmployeeInformation;
@@ -42,13 +42,13 @@ public class ExportExcelEmployeeInfoService : IExportExcelEmployeeInfoService
         TotalColumns = 22
     }
 
-    public void ExportEmployeeBasicInfo(IList<Employee> employees)
+        public async Task ExportEmployeeBasicInfo(IList<Employee> employees)
     {
         string templatePath = Path.Combine(hostingEnvironment.ContentRootPath, EmployeeBasicInfoTemplatePath);
         string fileName = "EmployeeBasicInfo_" + DateTimeOffset.Now.ToString("yyyyMMdd");
         const string sheetName = "Employee Basic Info";
         var writer = new ExcelTemplateWriter(templatePath, fileName, sheetName);
-        bool enableGroupDate = commonDataService.IsEnableGroupDate();
+            bool enableGroupDate = await commonDataService.IsEnableGroupDateAsync();
         const byte colGroupDate = 8;
         const byte colLengthOfServiceGroupDate = 12;
 
@@ -223,13 +223,13 @@ public class ExportExcelEmployeeInfoService : IExportExcelEmployeeInfoService
 
     #region Employee Full Profile Information
 
-    public void ExportEmployeeFullProfile(IList<EmployeeFullProfile> profiles)
+        public async Task ExportEmployeeFullProfile(IList<EmployeeFullProfile> profiles)
     {
         string templatePath = Path.Combine(hostingEnvironment.ContentRootPath, EmployeeFullInfoTemplatePath); 
         string fileName = "EmployeeFullInfo_" + DateTimeOffset.Now.ToString("yyyyMMdd");
         const string sheetName = "Employee Full Information";
         var writer = new ExcelTemplateWriter(templatePath, fileName, sheetName);
-        bool enableGroupDate = commonDataService.IsEnableGroupDate();
+            bool enableGroupDate = await commonDataService.IsEnableGroupDateAsync();
         const byte colGroupDate = 10;
         const byte colLengthOfServiceGroupDate = 14;
 

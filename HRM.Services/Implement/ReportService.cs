@@ -67,14 +67,14 @@
             return supervisors;
         }
 
-        public IList<WeekendLeaveSummary> GetWeekendLeaveSummary(GetWeekendLeaveSummaryCriteria criteria)
+        public async Task<IList<WeekendLeaveSummary>> GetWeekendLeaveSummaryAsync(GetWeekendLeaveSummaryCriteria criteria)
         {
-            return baseService.GetData<WeekendLeaveSummary>(criteria).ToList();
+            return (await baseService.GetDataAsync<WeekendLeaveSummary>(criteria)).ToList();
         }
 
-        public IList<WeekendLeaveDetail> GetWeekendLeaveDetail(GetWeekendLeaveDetailCriteria criteria)
+        public async Task<IList<WeekendLeaveDetail>> GetWeekendLeaveDetailAsync(GetWeekendLeaveDetailCriteria criteria)
         {
-            return baseService.GetData<WeekendLeaveDetail>(criteria).ToList();
+            return (await baseService.GetDataAsync<WeekendLeaveDetail>(criteria)).ToList();
         }
 
         public async Task<bool> GetIsPrivilegeCreateCheckInOutAsync(GetPrivilegeCreateCheckInOutRecordCriteria criteria)

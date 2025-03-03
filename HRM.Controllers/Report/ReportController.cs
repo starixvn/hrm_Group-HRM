@@ -115,67 +115,67 @@ public class ReportController(
     //            return PartialView("_TimeRecordDetail", timeRecords);
     //        }
 
-    //        public ActionResult WeekendLeaveSummary(WeekendLeaveViewModel model)
-    //        {
-    //            if (model != null)
-    //            {
-    //                var currentYear = DateTimeOffset.Now.Year;
-    //                model.FromDate = new DateTimeOffset(currentYear, 1, 1, 0, 0, 0, TimeSpan.Zero).Date;
-    //                model.ToDate = model.FromDate.AddYears(1).AddDays(-1);
-    //                model.DateRange = Utilities.GetDateRangeByYear();
-    //            }
+        public ActionResult WeekendLeaveSummary(WeekendLeaveViewModel model)
+        {
+            if (model != null)
+            {
+                var currentYear = DateTimeOffset.Now.Year;
+                model.FromDate = new DateTimeOffset(currentYear, 1, 1, 0, 0, 0, TimeSpan.Zero).Date;
+                model.ToDate = model.FromDate.AddYears(1).AddDays(-1);
+                model.DateRange = Utilities.GetDateRangeByYear();
+            }
 
-    //            return View("WeekendLeaveSummary", model);
-    //        }
+            return View("WeekendLeaveSummary", model);
+        }
 
-    //        public ActionResult PartialListWeekendLeaveSummary(WeekendLeaveViewModel model)
-    //        {
-    //            var criteria = new GetWeekendLeaveSummaryCriteria
-    //            {
-    //                FromDate = model.FromDate,
-    //                ToDate = model.ToDate,
-    //                TeamId = model.TeamId,
-    //                IsLocal = model.IsLocal,
-    //                EmployeeId = model.EmployeeId,
-    //                MinTotalLeave = model.MinTotalLeave,
-    //                SupervisorId = EmployeeSession.EmpId
-    //            };
+        public async Task <IActionResult> PartialListWeekendLeaveSummary(WeekendLeaveViewModel model)
+        {
+            var criteria = new GetWeekendLeaveSummaryCriteria
+            {
+                FromDate = model.FromDate,
+                ToDate = model.ToDate,
+                TeamId = model.TeamId,
+                IsLocal = model.IsLocal,
+                EmployeeId = model.EmployeeId,
+                MinTotalLeave = model.MinTotalLeave,
+                SupervisorId = EmployeeSession.EmpId
+            };
 
-    //            IList<WeekendLeaveSummary> weekendLeaves = reportService.GetWeekendLeaveSummary(criteria);
+            var weekendLeaves = await reportService.GetWeekendLeaveSummaryAsync(criteria);
 
-    //            return PartialView("_ListWeekendLeaveSummary", weekendLeaves);
-    //        }
+            return PartialView("_ListWeekendLeaveSummary", weekendLeaves);
+        }
 
-    //        public ActionResult WeekendLeaveDetail(WeekendLeaveViewModel model)
-    //        {
-    //            if (model != null)
-    //            {
-    //                var today = DateTimeOffset.Now.Date;
-    //                model.FromDate = new DateTimeOffset(today.Year, 1, 1, 0, 0, 0, TimeSpan.Zero).Date;
-    //                model.ToDate = today;
-    //                model.DateRange = Utilities.GetDateRangeByYear();
-    //            }
+        public ActionResult WeekendLeaveDetail(WeekendLeaveViewModel model)
+        {
+            if (model != null)
+            {
+                var today = DateTimeOffset.Now.Date;
+                model.FromDate = new DateTimeOffset(today.Year, 1, 1, 0, 0, 0, TimeSpan.Zero).Date;
+                model.ToDate = today;
+                model.DateRange = Utilities.GetDateRangeByYear();
+            }
 
-    //            return View("WeekendLeaveDetail", model);
-    //        }
+            return View("WeekendLeaveDetail", model);
+        }
 
-    //        public ActionResult PartialListWeekendLeaveDetail(WeekendLeaveViewModel model)
-    //        {
-    //            var criteria = new GetWeekendLeaveDetailCriteria
-    //            {
-    //                FromDate = model.FromDate,
-    //                ToDate = model.ToDate,
-    //                TeamId = model.TeamId,
-    //                IsLocal = model.IsLocal,
-    //                EmployeeId = model.EmployeeId,
-    //                LeaveTypeId = model.LeaveTypeId,
-    //                SupervisorId = EmployeeSession.EmpId
-    //            };
+        public async Task<IActionResult> PartialListWeekendLeaveDetail(WeekendLeaveViewModel model)
+        {
+            var criteria = new GetWeekendLeaveDetailCriteria
+            {
+                FromDate = model.FromDate,
+                ToDate = model.ToDate,
+                TeamId = model.TeamId,
+                IsLocal = model.IsLocal,
+                EmployeeId = model.EmployeeId,
+                LeaveTypeId = model.LeaveTypeId,
+                SupervisorId = EmployeeSession.EmpId
+            };
 
-    //            IList<WeekendLeaveDetail> weekendLeaveDetails = reportService.GetWeekendLeaveDetail(criteria);
+            var weekendLeaveDetails = await reportService.GetWeekendLeaveDetailAsync(criteria);
 
-    //            return PartialView("_ListWeekendLeaveDetail", weekendLeaveDetails);
-    //        }
+            return PartialView("_ListWeekendLeaveDetail", weekendLeaveDetails);
+        }
 
     [HrmPermission(Policy.Read, FunctionKey.UnpaidLeaveSummary)]
     public async Task<IActionResult> UnpaidLeaveSummary()

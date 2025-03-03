@@ -1,0 +1,59 @@
+﻿@using HRM.Core
+@using HRM.Models.Report
+@using HRM.Resources
+@using HRM.Website.Helper
+@model IList<WeekendLeaveDetail>
+
+    <table id="data" class="table table-custom">
+        <thead>
+            <tr>
+                <th>@Labels.SymbolCount</th>
+                <th>@Labels.Team</th>
+                <th>@Labels.Code</th>
+                <th>@Labels.NickName</th>
+                <th>@Labels.FullName</th>
+                <th>@Labels.Category</th>
+                <th class="width120">@Labels.LeaveDate</th>
+                <th class="width120">@Labels.LeaveType</th>
+                <th>@Labels.LeaveDay</th>
+                <th>@Labels.EmployeeComment</th>
+                <th>@Labels.ApproverComment</th>
+            </tr>
+        </thead>
+        @if (Model != null && Model.Any())
+        {
+            int index = 0;
+            <tbody>
+                @foreach (WeekendLeaveDetail item in Model)
+                {
+                    index++;
+                    <tr>
+                        <td>@index</td>
+                        <td>@item.TeamName</td>
+                        <td>@item.Code</td>
+                        <td>@item.NickName</td>
+                        <td class="align-left">@item.FullName</td>
+                        <td>
+                            @if (item.IsLocal)
+                            {
+                                <span>@Labels.Local</span>
+                            }
+                            else
+                            {
+                                <span>@Labels.Expat</span>
+                            }
+                        </td>
+                        <td>@item.LeaveDate.ToDateMonthYearFormatedDate()</td>
+                        <td>@item.LeaveType</td>
+                        <td>@item.LeaveDay</td>
+                        <td class="align-left">@item.Remark</td>
+                        <td class="align-left">@item.ApproverComment</td>
+                    </tr>
+                }
+            </tbody>
+        }
+        else
+        {
+            @Html.Raw(RazorHelpers.DisplayNoInformation(colspan: 11));
+        }
+    </table>

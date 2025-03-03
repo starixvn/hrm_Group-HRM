@@ -85,7 +85,7 @@ public class EmployeeController(
 
         var roles = await roleService.GetByUserIdAsync(userControlSession.UserId);
         ViewBag.IsShowJobtitle = roles.Any(r => r.RoleId is (short)RoleSystem.HR or (short)RoleSystem.SystemAdmin);
-        ViewBag.EnableGroupDate = commonDataService.IsEnableGroupDate();
+            ViewBag.EnableGroupDate = await commonDataService.IsEnableGroupDateAsync();
 
         return PartialView("_ContactList", employees);
     }
@@ -151,7 +151,7 @@ public class EmployeeController(
     [HttpPost]
     [ValidateAntiForgeryToken]
     [HrmPermission(Policy.Host, FunctionKey.EmployeeManagement)]
-    public async Task<ActionResult> Edit(Employee model)
+    public async Task<IActionResult> Edit(Employee model)
     {
         if (ModelState.IsValid)
         {
@@ -175,7 +175,7 @@ public class EmployeeController(
         model.Disciplinarian = GetDisciplineSupervisors(supervisors);
         model.EmpShiftList = GetShiftMonitors(supervisors);
         model.ActingEmpList = GetActingSupervisors(supervisors);
-        ViewBag.EnableGroupDate = commonDataService.IsEnableGroupDate();
+        ViewBag.EnableGroupDate = await commonDataService.IsEnableGroupDateAsync();
 
         await ComposeViewBagsForEditEmployee();
 
@@ -229,7 +229,7 @@ public class EmployeeController(
         employee.ActingEmpList = GetActingSupervisors(supervisors);
         ViewBag.LengthOfServiceByGroupDate = employeeService.CaculateLengthOfService(employee.JoinedDate, employee.MilitaryFromDate, employee.MilitaryToDate);
         ViewBag.LengthOfServiceByCompanyDate = employeeService.CaculateLengthOfService(employee.CompanyDate, employee.MilitaryFromDate, employee.MilitaryToDate);
-        ViewBag.EnableGroupDate = commonDataService.IsEnableGroupDate();
+        ViewBag.EnableGroupDate = await commonDataService.IsEnableGroupDateAsync();
 
         await ComposeViewBagsForEditEmployee();
         return View(employee);
