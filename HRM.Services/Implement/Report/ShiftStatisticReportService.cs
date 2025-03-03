@@ -1,53 +1,46 @@
-﻿namespace HRM.Services
+﻿namespace HRM.Services;
+
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using HRM.Core.Services;
+using HRM.Criteria.Report;
+using HRM.Models.Report;
+
+public interface IShiftStatisticReportService
 {
-    using System.Collections.Generic;
-    using HRM.Core.Services;
-    using HRM.Criteria.Report;
-    using HRM.Models.Report;
+    Task<IEnumerable<ShiftStatistic>> GetShiftStatisticAsync(GetShiftStatisticParam param);
 
-    public interface IShiftStatisticReportService
+    Task<IEnumerable<ShiftStatisticDetail>> GetShiftStatisticDetailAsync(GetShiftStatisticDetailParam param);
+}
+
+public class ShiftStatisticReportService(IBaseService baseService) : IShiftStatisticReportService
+{
+    public async Task<IEnumerable<ShiftStatistic>> GetShiftStatisticAsync(GetShiftStatisticParam param)
     {
-        IEnumerable<ShiftStatistic> GetShiftStatistic(GetShiftStatisticParam param);
-
-        IEnumerable<ShiftStatisticDetail> GetShiftStatisticDetail(GetShiftStatisticDetailParam param);
+        var criteria = new GetShiftStatisticCriteria
+        {
+            SupervisorId = param.SupervisorId,
+            FromDate = param.FromDate,
+            ToDate = param.ToDate,
+            TeamIds = param.TeamIds,
+            IsLocal = param.IsLocal,
+            IsShowWholeCompany = param.IsShowWholeCompany
+        };
+        return await baseService.GetDataAsync<ShiftStatistic>(criteria);
     }
 
-    public class ShiftStatisticReportService : IShiftStatisticReportService
+    public async Task<IEnumerable<ShiftStatisticDetail>> GetShiftStatisticDetailAsync(GetShiftStatisticDetailParam param)
     {
-        private readonly IBaseService baseService;
-
-        public ShiftStatisticReportService(IBaseService baseService)
+        var criteria = new GetShiftStatisticDetailCriteria
         {
-            this.baseService = baseService;
-        }
-
-        public IEnumerable<ShiftStatistic> GetShiftStatistic(GetShiftStatisticParam param)
-        {
-            var criteria = new GetShiftStatisticCriteria
-            {
-                SupervisorId = param.SupervisorId,
-                FromDate = param.FromDate,
-                ToDate = param.ToDate,
-                TeamIds = param.TeamIds,
-                IsLocal = param.IsLocal,
-                IsShowWholeCompany = param.IsShowWholeCompany
-            };
-            return baseService.GetData<ShiftStatistic>(criteria);
-        }
-
-        public IEnumerable<ShiftStatisticDetail> GetShiftStatisticDetail(GetShiftStatisticDetailParam param)
-        {
-            var criteria = new GetShiftStatisticDetailCriteria
-            {
-                SupervisorId = param.SupervisorId,
-                EmployeeId = param.EmployeeId,
-                WorkDate = param.WorkDate,
-                ShiftId = param.ShiftId,
-                TeamIds = param.TeamIds,
-                IsLocal = param.IsLocal,
-                IsShowWholeCompany = param.IsShowWholeCompany
-            };
-            return baseService.GetData<ShiftStatisticDetail>(criteria);
-        }
+            SupervisorId = param.SupervisorId,
+            EmployeeId = param.EmployeeId,
+            WorkDate = param.WorkDate,
+            ShiftId = param.ShiftId,
+            TeamIds = param.TeamIds,
+            IsLocal = param.IsLocal,
+            IsShowWholeCompany = param.IsShowWholeCompany
+        };
+        return await baseService.GetDataAsync<ShiftStatisticDetail>(criteria);
     }
 }

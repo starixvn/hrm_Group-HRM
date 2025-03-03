@@ -1,0 +1,63 @@
+﻿@using HRM.ViewModels
+@using HRM.Website.Helper
+@model ShiftStatisticViewModel
+@{
+    var totalDays = (int)(Model.ToDate - Model.FromDate).TotalDays + 1;
+    var totals = new int[totalDays];
+    var i = 0;
+}
+
+<table class="table table-custom">
+    <thead>
+        <tr>
+            <th>@Labels.Shift</th>
+            @for (var day = Model.FromDate.Date; day.Date <= Model.ToDate.Date; day = day.AddDays(1))
+            {
+                <th class="@(day.DayOfWeek is DayOfWeek.Saturday or DayOfWeek.Sunday ? "weekend" : string.Empty)">
+                    @day.ToString("dd MMM, yyyy (ddd)")
+                </th>
+            }
+        </tr>
+    </thead>
+    @if (Model.ShiftStatistics.Any())
+    {
+        var shiftStatistics = Model.ShiftStatistics.GroupBy(x => new { x.ShiftId, x.Code }).Select(g => new { g.Key.ShiftId, g.Key.Code, Items = g.ToList() });
+        var url = string.Empty;
+        <tbody>
+            @foreach (var shiftStatistic in shiftStatistics)
+            {
+                i = 0;
+                url = "/ShiftStatisticReport/details?TeamIds=" + @Model.TeamIds + "&isLocal=" + @Model.IsLocal
+                      + "&isShowWholeCompany=" + @Model.IsShowWholeCompany + "&shiftId=" + shiftStatistic.ShiftId + "&workDate=";
+                <tr>
+                    <td>@shiftStatistic.Code</td>
+                    @for (var day = Model.FromDate.Date; day.Date <= Model.ToDate.Date; day = day.AddDays(1))
+                    {
+                        var shift = shiftStatistic.Items.FirstOrDefault(x => x.WorkDate.Date == day);
+                        var total = shift != null ? shift.Total : 0;
+                        totals[i++] += total;
+                        <td><a href="@(url + day.ToDateMonthYearFormatedDate())">@total</a></td>
+                    }
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr class="summary">
+                <td class="align-right">@Labels.Total:</td>
+                @{
+                    i = 0;
+                    url = "/ShiftStatisticReport/details?teamIds=" + @Model.TeamIds + "&isLocal=" + @Model.IsLocal
+                        + "&isShowWholeCompany=" + @Model.IsShowWholeCompany + "&shiftId=&workDate=";
+                }
+                @for (var day = Model.FromDate.Date; day.Date <= Model.ToDate.Date; day = day.AddDays(1))
+                {
+                    <td><a href="@(url + day.ToDateMonthYearFormatedDate())">@totals[i++]</a></td>
+                }
+            </tr>
+        </tfoot>
+    }
+    else
+    {
+        @Html.Raw(RazorHelpers.DisplayNoInformation(colspan: totalDays + 1))
+    }
+</table>

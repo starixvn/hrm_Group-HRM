@@ -107,7 +107,6 @@ public static class ServiceCollectionExtensions
 
         services.AddSingleton<IBaseRepository, BaseRepository>();
         services.AddSingleton<IEmployeeRepository, EmployeeRepository>();
-        services.AddSingleton<IReportRepository, ReportRepository>();
         services.AddSingleton<IDepartmentRepository, DepartmentRepository>();
         services.AddSingleton<ITeamRepository, TeamRepository>();
         services.AddSingleton<ISectionRepository, SectionRepository>();
@@ -123,8 +122,6 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IBaseService, BaseService>();
         services.AddSingleton<IBaseMailService, BaseMailService>();
         services.AddSingleton<IHttpClientService, HttpClientService>();
-
-        services.AddDIExcelServices();
 
         services.AddSingleton<IHRMAuthService, HRMAuthService>();
         services.AddSingleton<IEmailService, EmailService>();
@@ -161,10 +158,21 @@ public static class ServiceCollectionExtensions
 
         services.AddSingleton<IOvertimeRequestService, OvertimeRequestService>();
         services.AddSingleton<IOvertimeRequestRepository, OvertimeRequestRepository>();
-        services.AddSingleton<IReportService, ReportService>();
-        services.AddSingleton<IReportRepository, ReportRepository>();
         services.AddSingleton<IWorkingCalendarService, WorkingCalendarService>();
         services.AddSingleton<IWorkingCalendarRepository, WorkingCalendarRepository>();
+
+        services.AddDIReportServices();
+        services.AddDIExcelServices();
+
+        return services;
+    }
+
+    public static IServiceCollection AddDIReportServices(this IServiceCollection services)
+    {
+        services.AddSingleton<IReportRepository, ReportRepository>();
+
+        services.AddSingleton<IReportService, ReportService>();
+        services.AddSingleton<IShiftStatisticReportService, ShiftStatisticReportService>();
 
         return services;
     }
@@ -176,6 +184,7 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IExportExcelAttendanceReportService, ExportExcelAttendanceReportService>();
         services.AddSingleton<IExportExcelTimeRecordService, ExportExcelTimeRecordService>();
         services.AddSingleton<IExportOvertimeService, ExportOvertimeService>();
+        services.AddSingleton<IExportExcelShiftStatisticService, ExportExcelShiftStatisticService>();
 
         return services;
     }
