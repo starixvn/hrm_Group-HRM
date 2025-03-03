@@ -40,14 +40,14 @@ public class SectionController(
     public async Task<IActionResult> GetSections([FromBody] GetSectionViewModel request)
     {
         var sections = await sectionService.GetSectionAsync(request.IsActive);
-        return new CustomJsonResult(sections);
+        return new JsonResult(sections);
     }
 
     [HrmPermission(Policy.Host, FunctionKey.SectionManagement)]
     public async Task<IActionResult> GetDepartments()
     {
         var departments = await departmentService.GetDepartmentAsync();
-        return new CustomJsonResult(departments);
+        return new JsonResult(departments);
     }
 
     [HrmPermission(Policy.Host, FunctionKey.SectionManagement)]
@@ -61,7 +61,7 @@ public class SectionController(
     public async Task<IActionResult> Create([FromBody] AddSectionViewModel model)
     {
         var commandResult = new CommandResult();
-        if (model == null || !ModelState.IsValid) return new CustomJsonResult(commandResult);
+        if (model == null || !ModelState.IsValid) return new JsonResult(commandResult);
 
         var criteria = new InsertSectionCriteria
         {
@@ -73,7 +73,7 @@ public class SectionController(
         };
         commandResult = await baseService.ExecuteNonQueryAsync(criteria);
 
-        return new CustomJsonResult(commandResult);
+        return new JsonResult(commandResult);
     }
 
     [HrmPermission(Policy.Host, FunctionKey.SectionManagement)]
@@ -90,7 +90,7 @@ public class SectionController(
             DepartmentId = section.Department?.Id ?? 0,
             Departments = departments
         };
-        return new CustomJsonResult(model);
+        return new JsonResult(model);
     }
 
     [HrmPermission(Policy.Host, FunctionKey.SectionManagement)]
@@ -104,7 +104,7 @@ public class SectionController(
     public async Task<IActionResult> Edit([FromBody] EditSectionViewModel model)
     {
         var commandResult = new CommandResult();
-        if (model == null || !ModelState.IsValid) return new CustomJsonResult(commandResult);
+        if (model == null || !ModelState.IsValid) return new JsonResult(commandResult);
 
         var criteria = new UpdateSectionCriteria
         {
@@ -117,7 +117,7 @@ public class SectionController(
         };
         commandResult = await baseService.ExecuteNonQueryAsync(criteria);
 
-        return new CustomJsonResult(commandResult);
+        return new JsonResult(commandResult);
     }
 
     [HttpPost]
@@ -126,7 +126,7 @@ public class SectionController(
     {
         var commandResult = await sectionService.DeleteAsync(EmployeeSession.EmpId, request.Id);
 
-        return new CustomJsonResult(commandResult);
+        return new JsonResult(commandResult);
     }
 
     [HttpGet]

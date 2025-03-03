@@ -31,13 +31,13 @@ public class DepartmentController(IUserControlSession userControlSession,
     public async Task<IActionResult> GetDepartments([FromBody] GetDepartmentViewModel request)
     {
         var departments = await departmentService.GetDepartmentAsync(request.IsActive);
-        return new CustomJsonResult(departments);
+        return new JsonResult(departments);
     }
 
     public async Task<IActionResult> GetUnits()
     {
         var units = await unitService.GetUnitAsync();
-        return new CustomJsonResult(units);
+        return new JsonResult(units);
     }
 
     [HrmPermission(Policy.Host, FunctionKey.DepartmentManagement)]
@@ -51,7 +51,7 @@ public class DepartmentController(IUserControlSession userControlSession,
     public async Task<IActionResult> Create([FromBody] CreateDepartmentViewModel model)
     {
         var commandResult = new CommandResult();
-        if (model == null || !ModelState.IsValid) return new CustomJsonResult(commandResult);
+        if (model == null || !ModelState.IsValid) return new JsonResult(commandResult);
 
         var criteria = new InsertDepartmentCriteria
         {
@@ -63,7 +63,7 @@ public class DepartmentController(IUserControlSession userControlSession,
         };
         commandResult = await baseService.ExecuteNonQueryAsync(criteria);
 
-        return new CustomJsonResult(commandResult);
+        return new JsonResult(commandResult);
     }
 
     [HrmPermission(Policy.Host, FunctionKey.DepartmentManagement)]
@@ -81,7 +81,7 @@ public class DepartmentController(IUserControlSession userControlSession,
             Units = units
         };
 
-        return new CustomJsonResult(model);
+        return new JsonResult(model);
     }
 
     [HrmPermission(Policy.Host, FunctionKey.DepartmentManagement)]
@@ -95,7 +95,7 @@ public class DepartmentController(IUserControlSession userControlSession,
     public async Task<IActionResult> Edit([FromBody] EditDepartmentViewModel model)
     {
         var commandResult = new CommandResult();
-        if (model == null || !ModelState.IsValid) return new CustomJsonResult(commandResult);
+        if (model == null || !ModelState.IsValid) return new JsonResult(commandResult);
 
         var criteria = new UpdateDepartmentCriteria
         {
@@ -108,7 +108,7 @@ public class DepartmentController(IUserControlSession userControlSession,
         };
         commandResult = await baseService.ExecuteNonQueryAsync(criteria);
 
-        return new CustomJsonResult(commandResult);
+        return new JsonResult(commandResult);
     }
 
     [HttpPost]
@@ -117,6 +117,6 @@ public class DepartmentController(IUserControlSession userControlSession,
     {
         var commandResult = await departmentService.DeleteAsync(EmployeeSession.EmpId, request.Id);
 
-        return new CustomJsonResult(commandResult);
+        return new JsonResult(commandResult);
     }
 }

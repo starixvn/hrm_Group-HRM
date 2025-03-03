@@ -34,21 +34,21 @@ public class FunctionController(IUserControlSession userControlSession,
             Permissions = await functionService.GetPermissionBySiteAndRoleIdAsync(userControlSession.SiteId, request.RoleId ?? systemRoles[0].RoleId)
         };
 
-        return new CustomJsonResult(functionTrees);
+        return new JsonResult(functionTrees);
     }
 
     [HrmPermission(Policy.Host, FunctionKey.FunctionManagement)]
     public async Task<IActionResult> GetSystemRoles()
     {
         var systemRoles = await roleService.GetBySiteIdAsync(userControlSession.SiteId);
-        return new CustomJsonResult(systemRoles);
+        return new JsonResult(systemRoles);
     }
 
     [HttpPost]
     [HrmPermission(Policy.Host, FunctionKey.FunctionManagement)]
-    public async Task<CustomJsonResult> AssignPermission([FromBody] TreeFunctionViewModel request)
+    public async Task<JsonResult> AssignPermission([FromBody] TreeFunctionViewModel request)
     {
         var commandResult = await roleService.AssignPermissionAsync(userControlSession.SiteId, request.RoleId, request.Permissions);
-        return new CustomJsonResult(commandResult);
+        return new JsonResult(commandResult);
     }
 }

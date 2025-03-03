@@ -172,7 +172,7 @@ public class RequestController(
 
     [HttpPost]
     [HrmPermission(Policy.Host, FunctionKey.VerifyRequest, FunctionKey.ApproveRequest, FunctionKey.ProcessRequest, FunctionKey.VoidRequest)]
-    public async Task<CustomJsonResult> ProcessRequest(ProcessRequestParam model)
+    public async Task<JsonResult> ProcessRequest(ProcessRequestParam model)
     {
         var commandResult = model.Command switch
         {
@@ -189,12 +189,12 @@ public class RequestController(
             await requestService.SendMailProcessRequest(model, EmployeeSession, model.Command);
         }
 
-        return new CustomJsonResult(commandResult);
+        return new JsonResult(commandResult);
     }
 
     [HttpPost]
     [HrmPermission(Policy.Host, FunctionKey.ApproveRequest)]
-    public async Task<CustomJsonResult> ProcessMultipleRequests(ApproveRequestsParam model)
+    public async Task<JsonResult> ProcessMultipleRequests(ApproveRequestsParam model)
     {
         model.ActorId = EmployeeSession.EmpId;
 
@@ -205,7 +205,7 @@ public class RequestController(
             await requestService.SendMailProcessRequests(model, EmployeeSession, model.Command);
         }
 
-        return new CustomJsonResult(commandResult);
+        return new JsonResult(commandResult);
     }
 
     private async Task HandleProcessRequest(ProcessRequestViewModel model)

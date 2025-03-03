@@ -199,11 +199,11 @@ public class EmployeeController(
     }
 
     [HttpPost]
-    public async Task<CustomJsonResult> EditEmployeeSupervisor(int employeeId, short roleId, IEnumerable<EditTeamSupervisor> supervisors)
+    public async Task<JsonResult> EditEmployeeSupervisor(int employeeId, short roleId, IEnumerable<EditTeamSupervisor> supervisors)
     {
         var commandResult = await employeeService.EditEmployeeSupervisorAsync(EmployeeSession.EmpId, employeeId, roleId, supervisors);
 
-        return new CustomJsonResult(commandResult);
+        return new JsonResult(commandResult);
     }
 
     [HrmPermission(Policy.Host, FunctionKey.EmployeeManagement)]
@@ -248,10 +248,10 @@ public class EmployeeController(
         return Json(employees);
     }
 
-    public async Task<CustomJsonResult> GetEmployeeSupervisorByRoleId(int employeeId, short roleId)
+    public async Task<JsonResult> GetEmployeeSupervisorByRoleId(int employeeId, short roleId)
     {
         IEnumerable<SupervisorModel> supervisors = await employeeService.GetEmployeeSupervisorByRoleIdAsync(employeeId, roleId);
-        return new CustomJsonResult(supervisors);
+        return new JsonResult(supervisors);
     }
 
     [AllowAnonymous]
@@ -304,10 +304,10 @@ public class EmployeeController(
         return View();
     }
 
-    public async Task<CustomJsonResult> GetDisciplineManagerByEmployeeId(int employeeId)
+    public async Task<JsonResult> GetDisciplineManagerByEmployeeId(int employeeId)
     {
         var supervisors = await employeeService.GetDisciplineSettingByEmployeeIdAsync(employeeId);
-        return new CustomJsonResult(supervisors);
+        return new JsonResult(supervisors);
     }
 
     [HttpGet]
@@ -343,7 +343,7 @@ public class EmployeeController(
         return Json(true);
     }
 
-    public async Task<CustomJsonResult> GetShiftManagerByEmployeeId(int employeeId)
+    public async Task<JsonResult> GetShiftManagerByEmployeeId(int employeeId)
     {
         IEnumerable<SupervisorModel> supervisors = await employeeService
             .GetEmployeeSupervisorByRoleIdAsync(employeeId, (short)RoleSystem.ShiftManager);
@@ -355,7 +355,7 @@ public class EmployeeController(
                 Nickname = x.NickName,
                 FullName = x.FullName
             });
-        return new CustomJsonResult(data);
+        return new JsonResult(data);
     }
 
     public async Task<IActionResult> GetMemberByManager(string keyword)

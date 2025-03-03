@@ -28,7 +28,7 @@ public class UnitController(IUserControlSession userControlSession,
     public async Task<IActionResult> GetUnits([FromBody] UnitViewModel model)
     {
         var units = await unitService.GetUnitAsync(model.IsActive);
-        return new CustomJsonResult(units);
+        return new JsonResult(units);
     }
 
     [HrmPermission(Policy.Host, FunctionKey.UnitManagement)]
@@ -42,7 +42,7 @@ public class UnitController(IUserControlSession userControlSession,
     public async Task<IActionResult> Create([FromBody] AddUnitViewModel model)
     {
         var commandResult = new CommandResult();
-        if (model == null || !ModelState.IsValid) return new CustomJsonResult(commandResult);
+        if (model == null || !ModelState.IsValid) return new JsonResult(commandResult);
 
         var criteria = new InsertUnitCriteria
         {
@@ -52,14 +52,14 @@ public class UnitController(IUserControlSession userControlSession,
             CreatedBy = EmployeeSession.EmpId
         };
         commandResult = await unitService.CreateAsync(criteria);
-        return new CustomJsonResult(commandResult);
+        return new JsonResult(commandResult);
     }
 
     [HrmPermission(Policy.Host, FunctionKey.UnitManagement)]
     public async Task<IActionResult> GetById(int id)
     {
         var unit = await unitService.GetByIdAsync(id);
-        return new CustomJsonResult(unit);
+        return new JsonResult(unit);
     }
 
     [HrmPermission(Policy.Host, FunctionKey.UnitManagement)]
@@ -73,7 +73,7 @@ public class UnitController(IUserControlSession userControlSession,
     public async Task<IActionResult> Edit([FromBody] EditUnitViewModel model)
     {
         var commandResult = new CommandResult();
-        if (model == null || !ModelState.IsValid) return new CustomJsonResult(commandResult);
+        if (model == null || !ModelState.IsValid) return new JsonResult(commandResult);
 
         var criteria = new UpdateUnitCriteria
         {
@@ -84,7 +84,7 @@ public class UnitController(IUserControlSession userControlSession,
             ModifiedBy = EmployeeSession.EmpId
         };
         commandResult = await unitService.EditAsync(criteria);
-        return new CustomJsonResult(commandResult);
+        return new JsonResult(commandResult);
     }
 
     [HttpPost]
@@ -94,6 +94,6 @@ public class UnitController(IUserControlSession userControlSession,
         criteria.ModifiedBy = EmployeeSession.EmpId;
         var commandResult = await unitService.DeleteAsync(criteria);
 
-        return new CustomJsonResult(commandResult);
+        return new JsonResult(commandResult);
     }
 }
