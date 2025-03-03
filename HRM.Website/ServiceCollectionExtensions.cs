@@ -193,6 +193,7 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IExportWeekendLeaveSummaryService, ExportWeekendLeaveSummaryService>();
         services.AddSingleton<IExportSupervisorService, ExportSupervisorService>();
         services.AddSingleton<IExportWeekendLeaveDetailService, ExportWeekendLeaveDetailService>();
+        services.AddSingleton<IExportDisciplineSummaryPerYearService, ExportDisciplineSummaryPerYearService>();
 
         return services;
     }

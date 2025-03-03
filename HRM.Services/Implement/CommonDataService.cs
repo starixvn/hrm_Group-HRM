@@ -15,6 +15,7 @@ using Criteria.Lookup;
 using Criteria.SystemSetting;
 using Models;
 using Resources;
+using MathNet.Numerics.RootFinding;
 
 public interface ICommonDataService
 {
@@ -36,7 +37,8 @@ public interface ICommonDataService
 
     Task<SystemSetting> GetSystemSettingAsync();
 
-        Task<bool> IsEnableGroupDateAsync();
+    Task<bool> IsEnableGroupDateAsync();
+    bool IsEnableGroupDate();
 }
 
 public class CommonDataService(
@@ -151,13 +153,23 @@ public class CommonDataService(
         return await baseService.GetDataEntityAsync<SystemSetting>(criteria);
     }
 
-        public async Task<bool> IsEnableGroupDateAsync()
+    public async Task<bool> IsEnableGroupDateAsync()
     {
         var criteria = new GetSystemConfigsByKeyCriteria
         {
             Key = "EnableGroupDate"
         };
 
-            return await baseService.GetDataEntityAsync<bool>(criteria);
+        return await baseService.GetDataEntityAsync<bool>(criteria);
+    }
+
+    public bool IsEnableGroupDate()
+    {
+        var criteria = new GetSystemConfigsByKeyCriteria
+        {
+            Key = "EnableGroupDate"
+        };
+
+        return  baseService.GetDataEntity<bool>(criteria);
     }
 }

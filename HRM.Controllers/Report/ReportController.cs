@@ -10,20 +10,22 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using GO.UserControl.Client.Core.Enumerables;
-using GO.UserControl.Client.Core.Models;
-using GO.UserControl.Client.Core.Session;
 using Controllers;
 using Core.Constants;
 using Core.Enums;
 using Core.Filters;
 using Criteria;
-using HRM.Criteria.Report;
 using Criteria.Time;
-using Services;
-using ViewModels;
+using GO.UserControl.Client.Core.Enumerables;
+using GO.UserControl.Client.Core.Models;
+using GO.UserControl.Client.Core.Session;
+using HRM.Core;
+using HRM.Criteria.Report;
+using HRM.ViewModels.Report;
 using Microsoft.AspNetCore.Mvc;
+using Services;
 using Services.Implement;
+using ViewModels;
 
 public class ReportController(
     IUserControlSession userControlSession,
@@ -121,67 +123,67 @@ public class ReportController(
     //            return PartialView("_TimeRecordDetail", timeRecords);
     //        }
 
-        public ActionResult WeekendLeaveSummary(WeekendLeaveViewModel model)
+    public ActionResult WeekendLeaveSummary(WeekendLeaveViewModel model)
+    {
+        if (model != null)
         {
-            if (model != null)
-            {
-                var currentYear = DateTimeOffset.Now.Year;
-                model.FromDate = new DateTimeOffset(currentYear, 1, 1, 0, 0, 0, TimeSpan.Zero).Date;
-                model.ToDate = model.FromDate.AddYears(1).AddDays(-1);
-                model.DateRange = Utilities.GetDateRangeByYear();
-            }
-
-            return View("WeekendLeaveSummary", model);
+            var currentYear = DateTimeOffset.Now.Year;
+            model.FromDate = new DateTimeOffset(currentYear, 1, 1, 0, 0, 0, TimeSpan.Zero).Date;
+            model.ToDate = model.FromDate.AddYears(1).AddDays(-1);
+            model.DateRange = Utilities.GetDateRangeByYear();
         }
 
-        public async Task <IActionResult> PartialListWeekendLeaveSummary(WeekendLeaveViewModel model)
+        return View("WeekendLeaveSummary", model);
+    }
+
+    public async Task<IActionResult> PartialListWeekendLeaveSummary(WeekendLeaveViewModel model)
+    {
+        var criteria = new GetWeekendLeaveSummaryCriteria
         {
-            var criteria = new GetWeekendLeaveSummaryCriteria
-            {
-                FromDate = model.FromDate,
-                ToDate = model.ToDate,
-                TeamId = model.TeamId,
-                IsLocal = model.IsLocal,
-                EmployeeId = model.EmployeeId,
-                MinTotalLeave = model.MinTotalLeave,
-                SupervisorId = EmployeeSession.EmpId
-            };
+            FromDate = model.FromDate,
+            ToDate = model.ToDate,
+            TeamId = model.TeamId,
+            IsLocal = model.IsLocal,
+            EmployeeId = model.EmployeeId,
+            MinTotalLeave = model.MinTotalLeave,
+            SupervisorId = EmployeeSession.EmpId
+        };
 
-            var weekendLeaves = await reportService.GetWeekendLeaveSummaryAsync(criteria);
+        var weekendLeaves = await reportSevice.GetWeekendLeaveSummaryAsync(criteria);
 
-            return PartialView("_ListWeekendLeaveSummary", weekendLeaves);
+        return PartialView("_ListWeekendLeaveSummary", weekendLeaves);
+    }
+
+    public ActionResult WeekendLeaveDetail(WeekendLeaveViewModel model)
+    {
+        if (model != null)
+        {
+            var today = DateTimeOffset.Now.Date;
+            model.FromDate = new DateTimeOffset(today.Year, 1, 1, 0, 0, 0, TimeSpan.Zero).Date;
+            model.ToDate = today;
+            model.DateRange = Utilities.GetDateRangeByYear();
         }
 
-        public ActionResult WeekendLeaveDetail(WeekendLeaveViewModel model)
+        return View("WeekendLeaveDetail", model);
+    }
+
+    public async Task<IActionResult> PartialListWeekendLeaveDetail(WeekendLeaveViewModel model)
+    {
+        var criteria = new GetWeekendLeaveDetailCriteria
         {
-            if (model != null)
-            {
-                var today = DateTimeOffset.Now.Date;
-                model.FromDate = new DateTimeOffset(today.Year, 1, 1, 0, 0, 0, TimeSpan.Zero).Date;
-                model.ToDate = today;
-                model.DateRange = Utilities.GetDateRangeByYear();
-            }
+            FromDate = model.FromDate,
+            ToDate = model.ToDate,
+            TeamId = model.TeamId,
+            IsLocal = model.IsLocal,
+            EmployeeId = model.EmployeeId,
+            LeaveTypeId = model.LeaveTypeId,
+            SupervisorId = EmployeeSession.EmpId
+        };
 
-            return View("WeekendLeaveDetail", model);
-        }
+        var weekendLeaveDetails = await reportSevice.GetWeekendLeaveDetailAsync(criteria);
 
-        public async Task<IActionResult> PartialListWeekendLeaveDetail(WeekendLeaveViewModel model)
-        {
-            var criteria = new GetWeekendLeaveDetailCriteria
-            {
-                FromDate = model.FromDate,
-                ToDate = model.ToDate,
-                TeamId = model.TeamId,
-                IsLocal = model.IsLocal,
-                EmployeeId = model.EmployeeId,
-                LeaveTypeId = model.LeaveTypeId,
-                SupervisorId = EmployeeSession.EmpId
-            };
-
-            var weekendLeaveDetails = await reportService.GetWeekendLeaveDetailAsync(criteria);
-
-            return PartialView("_ListWeekendLeaveDetail", weekendLeaveDetails);
-        }
+        return PartialView("_ListWeekendLeaveDetail", weekendLeaveDetails);
+    }
 
     [HrmPermission(Policy.Read, FunctionKey.UnpaidLeaveSummary)]
     public async Task<IActionResult> UnpaidLeaveSummary()

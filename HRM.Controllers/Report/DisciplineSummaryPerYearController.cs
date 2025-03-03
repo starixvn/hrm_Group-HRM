@@ -18,6 +18,7 @@ namespace Fanex.NexHR.Controllers.Report
     using HRM.Services.Interfaces;
     using Microsoft.AspNetCore.Mvc;
     using System.Threading.Tasks;
+    using HRM.Services.Implement;
 
     [HrmPermission(Policy.Read, FunctionKey.DisciplineSummaryPerYear)]
     public class DisciplineSummaryPerYearController : BaseController
