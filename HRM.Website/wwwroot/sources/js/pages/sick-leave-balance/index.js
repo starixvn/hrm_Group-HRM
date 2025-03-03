@@ -112,17 +112,17 @@ const sickLeaveBalance = (function ($) {
                                 url: resolveClientUrl('SickLeaveBalance/Adjust'),
                                 headers: { 'X-Requested-With': 'XMLHttpRequest' },
                                 data: {
-                                    EmpIds: $("#EmpIds").val(),
-                                    Description: $form.find("#Description").val(),
-                                    AffectedFrom: $form.find("#AffectedFrom").val(),
-                                    TotalDays: parseInt($form.find("#TotalDays").val(), 10)
+                                    empIds: $("#EmpIds").val(),
+                                    description: $form.find("#Description").val(),
+                                    affectedFrom: $form.find("#AffectedFrom").val(),
+                                    totalDays: parseInt($form.find("#TotalDays").val(), 10)
                                 }
                             }).then(response => {
-                                if (response.data.IsSuccessful) {
+                                if (response.data.isSuccessful) {
                                     alert('Adjust successfully.');
                                     setInterval(function () {
                                         document.location = resolveClientUrl('SickLeaveBalance/index');
-                                    }, 2000);
+                                    }, 3000);
                                 } else {
                                     showErrorMsg($form, response.data.message);
                                 }
@@ -162,11 +162,11 @@ const sickLeaveBalance = (function ($) {
                                 url: resolveClientUrl('SickLeaveBalance/Reset'),
                                 headers: { 'X-Requested-With': 'XMLHttpRequest' },
                                 data: {
-                                    ResetDays: parseInt($form.find("#ResetDays").val(), 10),
-                                    Description: $form.find("#Description").val()
+                                    resetDays: parseInt($form.find("#ResetDays").val(), 10),
+                                    description: $form.find("#Description").val()
                                 }
                             }).then(response => {
-                                if (response.data.IsSuccessful) {
+                                if (response.data.isSuccessful) {
                                     alert('Close balance successful.');
                                     $('#resetform').dialog('close');
                                 } else {
