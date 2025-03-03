@@ -1,0 +1,65 @@
+﻿@model HRM.ViewModels.Time.TimeRecordViewModel
+@{
+    ViewBag.Title = "Timesheet record";
+}
+@section css{
+    <link href="~/dist/styles/addtimerecord.css" rel="stylesheet" />
+}
+@section js{
+    <script src="~/dist/js/addtimerecord.js"></script>
+}
+@section Breadcrumb {
+    <a class="step">Timesheet</a> <span class="step">@ViewBag.Title</span>
+}
+<div class="card">
+    @using (Html.BeginForm("addtimerecord", "time", FormMethod.Post, new { @class = "form-horizontal" }))
+    {
+        @Html.ValidationSummary()
+        if (ViewBag.Requested != null && (bool)ViewBag.Requested)
+        {
+            <div class="success">@Messages.RequestCreated</div>
+        }
+
+        @Html.HiddenFor(model => model.EmpId)
+        <div class="form-group">
+            <div class="label-form">@Labels.Employee</div>
+            <div class="input-form">
+                @Html.TextBoxFor(x => x.Employee, new { @class = "form-control", @autocomplete = "off" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.InOutType, new { @class = "control-label" })
+            </div>
+            <div class="input-form request-type">
+                <div class="radioButton">
+                    <input type="radio" id="InOutType_1" name="InOutType" value="1" />
+                    <label for="InOutType_1">Check in</label>
+                </div>
+                <div class="radioButton">
+                    <input type="radio" id="InOutType_2" name="InOutType" value="2" />
+                    <label for="InOutType_2">Check in</label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="label-form">@Labels.RequestTime</div>
+            <div class="calendar-form">
+                @Html.TextBox("ForDate", Model.ForDate.ToDateMonthYearFormatedDate(),
+                    new {
+                        @class = "datepicker form-control",
+                        @readonly = "readonly"
+                    })
+                <i class="icon-calendar fa fa-calendar"></i>
+            </div>
+            <div class="request-time">
+                <input type="number" asp-for="Hour" maxlenght="2" class="form-control" min="0" max="23" step="1" />
+                :
+                <input type="number" asp-for="Minute" maxlenght="2" class="form-control" min="0" max="23" step="1" />
+            </div>
+        </div>
+        <div class="form-group">
+            <input type="submit" class="btn btn-primary" value="Request" />
+        </div>
+    }
+</div>

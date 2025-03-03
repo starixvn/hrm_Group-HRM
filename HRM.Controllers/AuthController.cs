@@ -43,7 +43,7 @@ public class AuthController(
             Username = cryptoService.Encrypt(model.Username, rijndaelKey, rijndaelIV),
             Password = cryptoService.Encrypt(model.Password, rijndaelKey, rijndaelIV),
             Token = token,
-            IP = GetClientIP(HttpContext),
+            IP = GetClientIp(HttpContext),
             Platform = HttpContext.Request?.Headers["User-Agent"].ToString(),
             BrowserName = HttpContext.Request?.Headers["User-Agent"].ToString(),
             NetSessionId = HttpContext.Session.Id
@@ -51,7 +51,7 @@ public class AuthController(
         var loginResult = await authService.LoginAsync(loginParam);
         if (loginResult.IsSuccessfull)
         {
-            var employee = hrmAuthService.GetByUserId(loginResult.UserId);
+            var employee = await hrmAuthService.GetByUserIdAsync(loginResult.UserId);
             if (employee == null)
             {
                 loginResult = new LoginResult { IsSuccessfull = false, ErrorMessage = "User has not been mapped." };
@@ -95,7 +95,7 @@ public class AuthController(
         await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
     }
 
-    private static string GetClientIP(HttpContext httpContext)
+    private static string GetClientIp(HttpContext httpContext)
     {
         var clientIp = httpContext.Request.Headers["x-forwarded-for"].ToString();
         if (string.IsNullOrEmpty(clientIp))
@@ -111,5 +111,4 @@ public class AuthController(
 
         return clientIp;
     }
-
 }

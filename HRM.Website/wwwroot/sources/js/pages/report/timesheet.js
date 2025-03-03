@@ -98,7 +98,7 @@ const timesheetModule = (function ($) {
         $('#btnCreateCheckIn').click(function () {
             blockUI();
             axios({
-                url: resolveClientUrl('time/AddChekInTime'),
+                url: resolveClientUrl('time/AddCheckInTime'),
                 method: 'POST',
                 headers: { 'X-Requested-With': 'XMLHttpRequest' },
                 responseType: 'json'
@@ -116,7 +116,7 @@ const timesheetModule = (function ($) {
         $('#btnCreateCheckOut').click(function () {
             blockUI();
             axios({
-                url: resolveClientUrl('time/AddChekOutTime'),
+                url: resolveClientUrl('time/AddCheckOutTime'),
                 method: 'POST',
                 headers: { 'X-Requested-With': 'XMLHttpRequest' },
                 responseType: 'json'

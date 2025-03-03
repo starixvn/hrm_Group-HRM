@@ -22,8 +22,8 @@ $(document).ready(function () {
             }).then(rs => {
                 response($.map(rs.data, function (item) {
                     return {
-                        label: item.DisplayName,
-                        value: item.Id
+                        label: item.displayName,
+                        value: item.id
                     };
                 }));
             }).catch(axiosError);
