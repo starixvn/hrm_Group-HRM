@@ -26,7 +26,7 @@
         }
 
 
-        public void Export(GetDisciplineSummaryCriteria criteria, IList<DisciplineSummaryModel> disciplines)
+        public byte[] Export(GetDisciplineSummaryCriteria criteria, IList<DisciplineSummaryModel> disciplines)
         {
             string templatePath = Path.Combine(hostingEnvironment.ContentRootPath, TemplatePath); 
             string reportName = Labels.DisciplineSummaryReportName;
@@ -60,7 +60,7 @@
             writer.SyncColumnsWidth(TotalCol);
             writer.CreateFreezePane(6, 3);
 
-            writer.Render();
+            return writer.WriteContentToBytes();
         }
 
         private void FillContentRow(IList<DisciplineSummaryModel> disciplines, ref ExcelTemplateWriter writer)

@@ -6,6 +6,9 @@
     using HRM.Services;
     using HRM.ViewModels.Discipline;
     using Microsoft.AspNetCore.Mvc;
+    using NPOI.HPSF;
+    using HRM.Resources;
+    using System;
 
     public class ExportDisciplineController(
         IUserControlSession userControlSession,
@@ -29,9 +32,9 @@
             };
 
             var disciplines = await disciplineService.GetDisciplineSummaryAsync(criteria);
-            exportDisciplineSummaryService.Export(criteria, disciplines);
-
-            return new EmptyResult();
+            var data = exportDisciplineSummaryService.Export(criteria, disciplines);
+            var fileName = $"{Labels.DisciplineSummaryReportName}.xls";
+            return File(data, "application/vnd.ms-excel", fileName);
         }
 
         public async Task<ActionResult> ExportDisciplineDetailReport(DisciplineSummaryViewModel model)
@@ -49,10 +52,12 @@
                 TeamName = model.TeamName
             };
 
-            var disciplines = await disciplineService.GetDisciplineDetailAsync(criteria);
-            exportDisciplineDetailService.Export(criteria, disciplines);
 
-            return new EmptyResult();
+            var disciplines = await disciplineService.GetDisciplineDetailAsync(criteria);
+            var data = exportDisciplineDetailService.Export(criteria, disciplines);
+            var fileName = $"{Labels.DisciplineDetailReportName}.xls";
+
+            return File(data, "application/vnd.ms-excel", fileName);
         }
     }
 }

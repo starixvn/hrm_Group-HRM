@@ -12,7 +12,7 @@
 
     public interface IExportWeekendLeaveSummaryService
     {
-        void Export(GetWeekendLeaveSummaryCriteria criteria, IList<WeekendLeaveSummary> weekendLeaves);
+        byte[] Export(GetWeekendLeaveSummaryCriteria criteria, IList<WeekendLeaveSummary> weekendLeaves);
     }
 
     public class ExportWeekendLeaveSummaryService : IExportWeekendLeaveSummaryService
@@ -28,7 +28,7 @@
             this.hostingEnvironment = hostingEnvironment;
         }
 
-        public void Export(GetWeekendLeaveSummaryCriteria criteria, IList<WeekendLeaveSummary> weekendLeaves)
+        public byte[] Export(GetWeekendLeaveSummaryCriteria criteria, IList<WeekendLeaveSummary> weekendLeaves)
         {
             string templatePath = Path.Combine(hostingEnvironment.ContentRootPath, WeekendLeaveSummaryTemplatePath); 
             string reportName = Labels.WeekendLeaveSummary;
@@ -57,7 +57,7 @@
             writer.SyncColumnsWidth(TotalCol);
             writer.CreateFreezePane(0, BodyRow);
 
-            writer.Render();
+            return writer.WriteContentToBytes();
         }
 
         private void FillHeaderRows(ref ExcelTemplateWriter writer, GetWeekendLeaveSummaryCriteria criteria, string reportTitle)

@@ -6,6 +6,6 @@
 
     public interface IExportDisciplineSummaryService
     {
-        void Export(GetDisciplineSummaryCriteria criteria, IList<DisciplineSummaryModel> disciplines);
+        byte[] Export(GetDisciplineSummaryCriteria criteria, IList<DisciplineSummaryModel> disciplines);
     }
 }

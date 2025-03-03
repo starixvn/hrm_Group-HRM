@@ -7,8 +7,10 @@ namespace HRM.Controllers.Export
     using Criteria.Report;
     using GO.UserControl.Client.Core.Session;
     using HRM.Controllers;
+    using HRM.Resources;
     using Microsoft.AspNetCore.Mvc;
     using Models.Report;
+    using NPOI.HPSF;
     using Services;
     using ViewModels.Report;
 
@@ -43,9 +45,11 @@ namespace HRM.Controllers.Export
             };
 
             var weekendLeaves = await reportService.GetWeekendLeaveSummaryAsync(criteria);
-            exportWeekendLeaveSummaryService.Export(criteria, weekendLeaves);
+            var data = exportWeekendLeaveSummaryService.Export(criteria, weekendLeaves);
 
-            return new EmptyResult();
+            var fileName = $"{Labels.WeekendLeaveSummary}.xls";
+
+            return File(data, "application/vnd.ms-excel", fileName);
         }
 
         public async Task<ActionResult> ExportWeekendLeaveDetailReport(WeekendLeaveViewModel model)
@@ -61,9 +65,9 @@ namespace HRM.Controllers.Export
             };
 
             var weekendLeaveDetails = await reportService.GetWeekendLeaveDetailAsync(criteria);
-            exportWeekendLeaveDetailService.Export(criteria, weekendLeaveDetails);
-
-            return new EmptyResult();
+            var data = exportWeekendLeaveDetailService.Export(criteria, weekendLeaveDetails);
+            var fileName = $"{Labels.WeekendLeaveDetail}.xls";
+            return File(data, "application/vnd.ms-excel", fileName);
         }
     }
 }
