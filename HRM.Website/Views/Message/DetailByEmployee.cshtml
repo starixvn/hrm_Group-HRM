@@ -1,0 +1,69 @@
+﻿@model HRM.Models.Message.Message
+@{
+    var messageSubject = Model != null ? Model.Subject : Labels.NoData;
+    ViewBag.Title = messageSubject + " - " + Labels.Message;
+}
+@section css{
+    <link href="~/dist/styles/message.css" rel="stylesheet" />
+}
+@section js{
+}
+
+@section Breadcrumb {
+    <a class="step">@Labels.Personal</a>
+    <a class="step" href="@Url.Action("ViewMessageOfEmployee", "message")">@Labels.Message</a>
+    <a class="step">Details</a>
+}
+<h2 class="page-title">@Labels.Details</h2>
+
+@if (!ReferenceEquals(Model, null))
+{
+    <table class="table table-custom" style="width:50%;">
+        <thead>
+            <tr>
+                <th colspan="4">
+                    @Model.Subject
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="align-left">
+                    @Labels.Category
+                </td>
+                <td class="align-left">
+                    <b>@Model.CategoryName</b>
+                </td>
+            </tr>
+            <tr>
+                <td class="align-left" style="width:80px;">
+                    @Labels.FromDate
+                </td>
+                <td class="align-left">
+                    <b>@Model.FromDate.ToDateMonthYearFormatedDate()</b>
+                </td>
+            </tr>
+            <tr>
+                <td class="align-left">
+                    @Labels.ToDate
+                </td>
+                <td class="align-left">
+                    <b>@Model.ToDate.ToDateMonthYearFormatedDate()</b>
+                </td>
+            </tr>
+            <tr>
+                <td class="align-left">
+                    @Labels.Content
+                </td>
+                <td colspan="3" class="align-left">
+                    <b>@Model.Contents</b>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <a href="/Message/ViewMessageOfEmployee" class="btn btn-primary">@Labels.Back</a>
+}
+else
+{
+    <h2>@Messages.ThisContentHasAlreadyBeenDeleted</h2>
+}

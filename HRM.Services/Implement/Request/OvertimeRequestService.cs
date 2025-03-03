@@ -115,7 +115,7 @@ public class OvertimeRequestService(
             foreach (var list in emails)
             {
                 var mailTo = string.Join(";", list);
-                emailService.SendEmailAsync(mailTo, string.Empty, subject, content);
+                await emailService.SendEmailAsync(mailTo, string.Empty, subject, content);
             }
 
             foreach (var letStalk in letStalks)

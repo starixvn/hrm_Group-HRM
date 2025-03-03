@@ -1,4 +1,6 @@
-﻿namespace HRM.Services
+﻿using HRM.Services.Interfaces;
+
+namespace HRM.Services
 {
     using System.Threading.Tasks;
     using HRM.Core;

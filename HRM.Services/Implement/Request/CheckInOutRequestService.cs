@@ -10,6 +10,7 @@ using HRM.Criteria.Request.CheckInOut;
 using HRM.Models.Request;
 using HRM.Repositories;
 using HRM.Resources;
+using HRM.Services.Interfaces;
 using HRM.Services.Interfaces.Request;
 using Microsoft.AspNetCore.Hosting;
 

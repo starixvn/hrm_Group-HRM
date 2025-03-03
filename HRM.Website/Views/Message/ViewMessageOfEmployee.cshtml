@@ -1,0 +1,130 @@
+﻿@using HRM.Models.Message
+@using HRM.Website.Helper
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model HRM.Models.Message.GetMessageByEmployeeParam
+@{
+    ViewBag.Title = Labels.MyMessage;
+}
+@section css{
+    <link href="~/dist/styles/message.css" rel="stylesheet" />
+}
+@section js{
+    <script src="~/dist/js/message.js"></script>
+}
+@section Breadcrumb {
+    <a class="step">@Labels.Personal</a>
+    <a class="step">@ViewBag.Title</a>
+}
+@{
+    var messages = ViewBag.Messages as IList<Message>;
+}
+<h2 class="page-title">@ViewBag.Title</h2>
+<form class="filter" method="post">
+    <div class="form-horizontal clearfix">
+        @Html.HiddenFor(model => model.EmployeeId)
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.LabelFor(model => model.FromDate, new { @class = "control-label" })
+            </div>
+            <div class="calendar-form">
+                @Html.TextBox(Html.NameFor(model => model.FromDate).ToString(), Model.FromDate.ToString("dd MMM, yyyy"), new { @class = "datepicker form-control", mindate = (new DateTime(2010, 1, 1)).ToString("yyyy/MM/dd"), maxdate = "null", disabledDate = "" })
+                <i class="icon-calendar fa fa-calendar"></i>
+            </div>
+        </div>
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.LabelFor(model => model.ToDate, new { @class = "control-label" })
+            </div>
+            <div class="calendar-form">
+                @Html.TextBox(Html.NameFor(model => model.ToDate).ToString(), Model.ToDate.ToString("dd MMM, yyyy"), new { @class = "datepicker form-control", mindate = (new DateTime(2010, 1, 1)).ToString("yyyy/MM/dd"), maxdate = "null", disabledDate = "" })
+                <i class="icon-calendar fa fa-calendar"></i>
+            </div>
+        </div>
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                <label class="control-label">@Labels.Status</label>
+            </div>
+            <div class="input-form">
+                @{
+                    var status = new List<SelectListItem>
+                                    {
+                        new() {Text = "-- All --", Value = string.Empty},
+                        new() {Text = "Active", Value = "0"},
+                        new() {Text = "Disabled", Value = "1"},
+                    };
+                }
+                @Html.DropDownListFor(model => model.IsDisabled, status, new { @class = "category form-control" })
+            </div>
+        </div>
+        <div class="form-group form-group--m">
+            <input type="submit" id="submit" class="btn btn-primary" value="@Labels.Submit" />
+        </div>
+    </div>
+</form>
+<div class="clear"></div>
+<div class="space"></div>
+<table id="messageTable" class="table table-custom">
+    <thead>
+        <tr>
+            <th>@Labels.SymbolCount</th>
+            <th>@Labels.Subject</th>
+            <th>@Labels.Category</th>
+            <th>@Labels.FromDate</th>
+            <th>@Labels.ToDate</th>
+            <th>@Labels.IsRead</th>
+            <th>@Labels.Delete</th>
+        </tr>
+    </thead>
+    @if (messages is { Count: > 0 })
+    {
+        <tbody>
+            @{var index = 1;}
+            @foreach (var message in messages)
+            {
+                <tr id="row_@message.MessageId">
+                    <td>
+                        @(index++)
+                    </td>
+                    <td class="left">
+                        @if (message.IsRead)
+                        {
+                            <a href="/message/DetailByEmployee/@message.MessageId">
+                                <span style="color:rgb(66, 127, 204);">@message.Subject</span>
+                            </a>
+                        }
+                        else
+                        {
+                            <a href="javascript:;" class="message-detail" data-id="@message.MessageId">
+                                @message.Subject
+                            </a>
+                        }
+                    </td>
+                    <td>
+                        @message.CategoryName
+                    </td>
+                    <td>
+                        @message.FromDate.ToDateMonthYearFormatedDate()
+                    </td>
+                    <td>
+                        @message.ToDate.ToDateMonthYearFormatedDate()
+                    </td>
+                    <td>
+                        @if (message.IsRead)
+                        {
+                            <i class="fa fa-check fa-lg icon-check"></i>
+                        }
+                    </td>
+                    <td class="cmd" title="Delete">
+                        <a href="javascript:;">
+                            <i class="fa fa-times fa-lg icon-delete" data-id="@message.MessageId"></i>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    }
+    else
+    {
+        @RazorHelpers.DisplayNoInformation(7)
+    }
+</table>

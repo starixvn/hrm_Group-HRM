@@ -1,32 +1,31 @@
-﻿namespace HRM.Services
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using HRM.Core.Models;
+using HRM.Models.Message;
+
+namespace HRM.Services.Interfaces;
+
+public interface IMessageService
 {
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
-    using HRM.Core.Models;
-    using HRM.Models.Message;
+    Task<IList<Message>> GetMessageByCreator(GetMessageByCreatorParam param);
 
-    public interface IMessageService
-    {
-        IList<Message> GetMessageByCreator(GetMessageByCreatorParam param);
+    Task<Message> GetMessageById(int id);
 
-        Message GetMessageById(int id);
+    Task<CommandResult> Create(int actorId, Message model);
 
-        CommandResult Create(int actorId, Message model);
+    Task<CommandResult> Edit(int actorId, Message model);
 
-        CommandResult Edit(int actorId, Message model);
+    Task<CommandResult> Delete(int actorId, int id);
 
-        CommandResult Delete(int actorId, int id);
+    Task<CommandResult> EditStatus(int employeeId, int messageId);
 
-        CommandResult EditStatus(int employeeId, int messageId);
+    Task<CommandResult> DeleteMessageByEmployee(int employeeId, int messageId);
 
-        CommandResult DeleteMessageByEmployee(int employeeId, int messageId);
+    Task<IList<Message>> GetMessageByEmployee(GetMessageByEmployeeParam param);
 
-        IList<Message> GetMessageByEmployee(GetMessageByEmployeeParam param);
+    Task<Message> GetDetailMessageByEmployee(int messageId);
 
-        Message GetDetailMessageByEmployee(int messageId);
+    Task<IEnumerable<Message>> GetUnreadMessageOfEmployeeAsync(int employeeId);
 
-        Task<IEnumerable<Message>> GetUnreadMessageOfEmployeeAsync(int employeeId);
-
-        void SendMailToStaff(Message model);
-    }
+    Task SendMailToStaff(Message model);
 }

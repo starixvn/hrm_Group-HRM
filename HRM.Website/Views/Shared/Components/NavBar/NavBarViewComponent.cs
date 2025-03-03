@@ -1,4 +1,6 @@
-﻿namespace HRM.Website.Views.Shared.Components.NavBar
+﻿using HRM.Services.Interfaces;
+
+namespace HRM.Website.Views.Shared.Components.NavBar
 {
     using System;
     using System.Linq;

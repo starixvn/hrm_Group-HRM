@@ -1,151 +1,151 @@
-﻿namespace HRM.Services
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
+using HRM.Core;
+using HRM.Core.Models;
+using HRM.Core.Services;
+using HRM.Criteria.Message;
+using HRM.Models.Message;
+using HRM.Services.Interfaces;
+using Microsoft.AspNetCore.Hosting;
+
+namespace HRM.Services.Implement;
+
+public class MessageService(
+    IWebHostEnvironment env,
+    IBaseService baseService,
+    IEmailService emailService) : IMessageService
 {
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
-    using System.Threading.Tasks;
-    using HRM.Core;
-    using HRM.Core.Models;
-    using HRM.Core.Services;
-    using HRM.Criteria.Message;
-    using HRM.Models.Message;
-    using Microsoft.AspNetCore.Hosting;
+    private const string MessageEmailTemplate = "EmailTemplates/MessageNotification.txt";
 
-    public class MessageService(
-        IWebHostEnvironment env,
-        IBaseService baseService,
-        IEmailService emailService) : IMessageService
+    public async Task<IList<Message>> GetMessageByCreator(GetMessageByCreatorParam param)
     {
-        private const string MessageEmailTemplate = "EmailTemplates/MessageNotification.txt";
-
-        public IList<Message> GetMessageByCreator(GetMessageByCreatorParam param)
+        var criteria = new GetMessageByCreatorCriteria
         {
-            var criteria = new GetMessageByCreatorCriteria
-            {
-                FromDate = param.FromDate,
-                ToDate = param.ToDate,
-                IsDisabled = param.IsDisabled,
-                CreatedBy = param.CreatedBy
-            };
-            return baseService.GetData<Message>(criteria).ToList();
-        }
+            FromDate = param.FromDate,
+            ToDate = param.ToDate,
+            IsDisabled = param.IsDisabled,
+            CreatedBy = param.CreatedBy
+        };
+        return (await baseService.GetDataAsync<Message>(criteria)).ToList();
+    }
 
-        public Message GetMessageById(int id)
+    public async Task<Message> GetMessageById(int id)
+    {
+        var criteria = new GetMessageByIdCriteria { MessageId = id };
+        return await baseService.GetDataEntityAsync<Message>(criteria);
+    }
+
+    public async Task<CommandResult> Create(int actorId, Message model)
+    {
+        var criteria = new CreateMessageCriteria
         {
-            var criteria = new GetMessageByIdCriteria { MessageId = id };
-            return baseService.GetDataEntity<Message>(criteria);
-        }
+            Subject = model.Subject,
+            Contents = model.Contents,
+            Category = model.Category,
+            FromDate = model.FromDate,
+            ToDate = model.ToDate,
+            EmployeeIds = model.EmployeeIds,
+            TeamIds = model.TeamIds,
+            CreatedBy = actorId
+        };
+        return await baseService.ExecuteNonQueryAsync(criteria);
+    }
 
-        public CommandResult Create(int actorId, Message model)
+    public async Task<CommandResult> Edit(int actorId, Message model)
+    {
+        var criteria = new EditMessageCriteria
         {
-            var criteria = new CreateMessageCriteria
-            {
-                Subject = model.Subject,
-                Contents = model.Contents,
-                Category = model.Category,
-                FromDate = model.FromDate,
-                ToDate = model.ToDate,
-                EmployeeIds = model.EmployeeIds,
-                TeamIds = model.TeamIds,
-                CreatedBy = actorId
-            };
-            return baseService.ExecuteNonQuery(criteria);
-        }
+            MessageId = model.MessageId,
+            Subject = model.Subject,
+            Contents = model.Contents,
+            Category = model.Category,
+            FromDate = model.FromDate,
+            ToDate = model.ToDate,
+            EmployeeIds = model.EmployeeIds,
+            TeamIds = model.TeamIds,
+            ModifiedBy = actorId
+        };
+        return await baseService.ExecuteNonQueryAsync(criteria);
+    }
 
-        public CommandResult Edit(int actorId, Message model)
+    public async Task<CommandResult> Delete(int actorId, int id)
+    {
+        var criteria = new DeleteMessageCriteria
         {
-            var criteria = new EditMessageCriteria
-            {
-                MessageId = model.MessageId,
-                Subject = model.Subject,
-                Contents = model.Contents,
-                Category = model.Category,
-                FromDate = model.FromDate,
-                ToDate = model.ToDate,
-                EmployeeIds = model.EmployeeIds,
-                TeamIds = model.TeamIds,
-                ModifiedBy = actorId
-            };
-            return baseService.ExecuteNonQuery(criteria);
-        }
+            MessageId = id,
+            ModifiedBy = actorId,
+            ModifiedDate = DateTimeOffset.Now.DateTime
+        };
+        return await baseService.ExecuteNonQueryAsync(criteria);
+    }
 
-        public CommandResult Delete(int actorId, int id)
+    public async Task<CommandResult> EditStatus(int employeeId, int messageId)
+    {
+        var criteria = new EditMessageStatusCriteria
         {
-            var criteria = new DeleteMessageCriteria
-            {
-                MessageId = id,
-                ModifiedBy = actorId,
-                ModifiedDate = DateTimeOffset.Now.DateTime
-            };
-            return baseService.ExecuteNonQuery(criteria);
-        }
+            MessageId = messageId,
+            EmployeeId = employeeId
+        };
+        return await baseService.ExecuteNonQueryAsync(criteria);
+    }
 
-        public CommandResult EditStatus(int employeeId, int messageId)
+    public async Task<CommandResult> DeleteMessageByEmployee(int employeeId, int messageId)
+    {
+        var criteria = new DeleteMessageByEmployeeCriteria
         {
-            var criteria = new EditMessageStatusCriteria
-            {
-                MessageId = messageId,
-                EmployeeId = employeeId
-            };
-            return baseService.ExecuteNonQuery(criteria);
-        }
+            MessageId = messageId,
+            EmployeeId = employeeId
+        };
+        return await baseService.ExecuteNonQueryAsync(criteria);
+    }
 
-        public CommandResult DeleteMessageByEmployee(int employeeId, int messageId)
+    public async Task<IList<Message>> GetMessageByEmployee(GetMessageByEmployeeParam param)
+    {
+        var criteria = new GetMessageByEmployeeCriteria
         {
-            var criteria = new DeleteMessageByEmployeeCriteria
-            {
-                MessageId = messageId,
-                EmployeeId = employeeId
-            };
-            return baseService.ExecuteNonQuery(criteria);
-        }
+            FromDate = param.FromDate,
+            ToDate = param.ToDate,
+            IsDisabled = param.IsDisabled,
+            EmployeeId = param.EmployeeId
+        };
+        return (await baseService.GetDataAsync<Message>(criteria)).ToList();
+    }
 
-        public IList<Message> GetMessageByEmployee(GetMessageByEmployeeParam param)
+    public async Task<Message> GetDetailMessageByEmployee(int messageId)
+    {
+        var criteria = new GetMessageOfEmployeeByIdCriteria
         {
-            var criteria = new GetMessageByEmployeeCriteria
-            {
-                FromDate = param.FromDate,
-                ToDate = param.ToDate,
-                IsDisabled = param.IsDisabled,
-                EmployeeId = param.EmployeeId
-            };
-            return baseService.GetData<Message>(criteria).ToList();
-        }
+            MessageId = messageId
+        };
+        return await baseService.GetDataEntityAsync<Message>(criteria);
+    }
 
-        public Message GetDetailMessageByEmployee(int messageId)
+    public async Task<IEnumerable<Message>> GetUnreadMessageOfEmployeeAsync(int employeeId)
+    {
+        var criteria = new GetUnreadMessageOfEmployeeCriteria
         {
-            var criteria = new GetMessageOfEmployeeByIdCriteria
-            {
-                MessageId = messageId
-            };
-            return baseService.GetDataEntity<Message>(criteria);
-        }
+            EmployeeId = employeeId
+        };
+        return await baseService.GetDataAsync<Message>(criteria);
+    }
 
-        public async Task<IEnumerable<Message>> GetUnreadMessageOfEmployeeAsync(int employeeId)
-        {
-            var criteria = new GetUnreadMessageOfEmployeeCriteria
-            {
-                EmployeeId = employeeId
-            };
-            return await baseService.GetDataAsync<Message>(criteria);
-        }
+    public async Task SendMailToStaff(Message model)
+    {
+        var bodyTemplate = Utilities.ReadTextFile(Path.Combine(env.ContentRootPath, MessageEmailTemplate));
+        await Task.Run(() => SendEmail(model.Subject, model.Contents, model.SendToEmail, bodyTemplate));
+    }
 
-        public void SendMailToStaff(Message model)
-        {
-            var bodyTemplate = Utilities.ReadTextFile(Path.Combine(env.ContentRootPath, MessageEmailTemplate));
-            Task.Run(() => SendEmail(model.Subject, model.Contents, model.SendToEmail, bodyTemplate));
-        }
+    public async Task SendEmail(string subject, string content, string sendToEmail, string emailTemplatePath)
+    {
+        var body = string.Format(emailTemplatePath, subject, content);
 
-        public void SendEmail(string subject, string content, string sendToEmail, string emailTemplatePath)
-        {
-            var body = string.Format(emailTemplatePath, subject, content);
-
-            emailService.SendEmailAsync(
-                sendToEmail,
-                string.Empty,
-                Resources.Messages.MessageSubject + " " + subject,
-                body);
-        }
+        await emailService.SendEmailAsync(
+            sendToEmail,
+            string.Empty,
+            Resources.Messages.MessageSubject + " " + subject,
+            body);
     }
 }

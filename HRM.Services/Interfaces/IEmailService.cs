@@ -1,10 +1,9 @@
 ﻿using System.Threading.Tasks;
 
-namespace HRM.Services
+namespace HRM.Services.Interfaces;
+
+public interface IEmailService
 {
-    public interface IEmailService
-    {
-        Task SendEmailAsync(string receiverEmail, string mailCc, string subject, string body);
-        void SendEmail(string receiverEmail, string mailCc, string subject, string body);
-    }
+    Task SendEmailAsync(string receiverEmail, string mailCc, string subject, string body);
+    void SendEmail(string receiverEmail, string mailCc, string subject, string body);
 }
