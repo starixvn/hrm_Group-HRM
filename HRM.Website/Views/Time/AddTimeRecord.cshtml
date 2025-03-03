@@ -33,12 +33,12 @@
             </div>
             <div class="input-form request-type">
                 <div class="radioButton">
-                    <input type="radio" id="InOutType_1" name="InOutType" value="1" />
+                    <input type="radio" asp-for="InOutType" id="InOutType_1" value="1" />
                     <label for="InOutType_1">Check in</label>
                 </div>
                 <div class="radioButton">
-                    <input type="radio" id="InOutType_2" name="InOutType" value="2" />
-                    <label for="InOutType_2">Check in</label>
+                    <input type="radio" asp-for="InOutType" id="InOutType_2" value="2" />
+                    <label for="InOutType_2">Check out</label>
                 </div>
             </div>
         </div>
@@ -55,7 +55,7 @@
             <div class="request-time">
                 <input type="number" asp-for="Hour" maxlenght="2" class="form-control" min="0" max="23" step="1" />
                 :
-                <input type="number" asp-for="Minute" maxlenght="2" class="form-control" min="0" max="23" step="1" />
+                <input type="number" asp-for="Minute" maxlenght="2" class="form-control" min="0" max="59" step="1" />
             </div>
         </div>
         <div class="form-group">
