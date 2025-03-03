@@ -18,7 +18,7 @@
     {
         Task<IEnumerable<LookupData>> GetLookupDataByCodeAsync(string code);
 
-        IList<LookupData> GetJobTitle(string jobTitle);
+        Task<List<LookupData>> GetJobTitle(string jobTitle);
 
         Task<IList<LeaveType>> GetLeaveTypeAsync(bool excludeNotShown = true);
 
@@ -50,13 +50,13 @@
             return await baseService.GetDataAsync<LookupData>(criteria);
         }
 
-        public IList<LookupData> GetJobTitle(string jobTitle)
+        public async Task<List<LookupData>> GetJobTitle(string jobTitle)
         {
             var criteria = new GetJobTitleCriteria
             {
                 JobTitle = jobTitle
             };
-            return baseService.GetData<LookupData>(criteria).ToList();
+            return (await baseService.GetDataAsync<LookupData>(criteria)).ToList();
         }
 
         public async Task<IList<LeaveType>> GetLeaveTypeAsync(bool excludeNotShown = true)

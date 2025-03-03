@@ -189,6 +189,7 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IExportExcelTimeRecordService, ExportExcelTimeRecordService>();
         services.AddSingleton<IExportOvertimeService, ExportOvertimeService>();
         services.AddSingleton<IExportExcelShiftStatisticService, ExportExcelShiftStatisticService>();
+        services.AddSingleton<IJobTitleExportService, JobTitleExportService>();
 
         return services;
     }
