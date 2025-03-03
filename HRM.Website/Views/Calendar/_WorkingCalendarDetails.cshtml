@@ -1,15 +1,12 @@
-﻿@using HRM.Core
-@using HRM.Core.Enums
-@using HRM.Models.Report
+﻿@using HRM.Core.Enums
 @using HRM.Models.ScheduleArrange
-@using HRM.Resources
 @using HRM.ViewModels
 @using HRM.Website.Helper
 @model WorkingCalendarViewModel
 @{
     var fromDay = Model.FromDate;
     var toDay = Model.ToDate;
-    int colspanHeader = (int)((toDay - fromDay).TotalDays + 5);
+    var colspanHeader = (int)((toDay - fromDay).TotalDays + 5);
 }
 <table id="data" class="table table-custom" style="width:100%">
     <thead>
@@ -26,7 +23,7 @@
                         <span class="dropdown-color dropdown">
                             <button id="dropdownColorDescription" aria-haspopup="true" aria-expanded="false" data-toggle="dropdown"
                             type="button" class="btn dropdown-toggle btn-default">
-                                <img src="~/wwwroot/sources/styles/images/pantone.svg" width="17">
+                                <img src="~/sources/styles/images/pantone.svg" width="17" alt="" />
                             </button>
                             <ul role="menu" class="dropdown-menu" aria-labelledby="dropdownColorDescription">
                                 <li role="presentation">
@@ -88,7 +85,7 @@
             <th>@Labels.NickName</th>
             @for (var day = fromDay.Date; day.Date <= toDay.Date; day = day.AddDays(1))
             {
-                <th class="@(day.DayOfWeek == DayOfWeek.Saturday || day.DayOfWeek == DayOfWeek.Sunday ? "weekend" : string.Empty)">
+                <th class="@(day.DayOfWeek is DayOfWeek.Saturday or DayOfWeek.Sunday ? "weekend" : string.Empty)">
                     <div>
                         @day.ToString("dd MMM, yyyy (ddd)")
                     </div>
@@ -99,14 +96,14 @@
     <tbody>
         @if (Model.WorkingCalendars.Any())
         {
-            foreach (WorkingCalendar calendar in Model.WorkingCalendars)
+            foreach (var calendar in Model.WorkingCalendars)
             {
                 <tr>
                     <td class="align-left">@calendar.DepartmentCode</td>
                     <td class="align-left">@calendar.SectionCode</td>
                     <td class="align-left">@calendar.Team</td>
                     <td class="align-left">@calendar.Nickname</td>
-                    @foreach (DailySchedule daily in calendar.Schedules)
+                    @foreach (var daily in calendar.Schedules)
                     {
                         RenderColShift(daily);
                     }
@@ -146,30 +143,19 @@
             {
                 if (schedule.LeaveType != null && (schedule.LeaveType2 == null || schedule.LeaveType.Code == schedule.LeaveType2.Code))
                 {
-                    switch (schedule.LeaveType.Id)
+                    className = schedule.LeaveType.Id switch
                     {
-                        case (byte)LeaveTypes.AnnualLeave:
-                            className = "annualleave";
-                            break;
-                        case (byte)LeaveTypes.UnpaidLeave:
-                            className = "unpaidleave";
-                            break;
-                        case (byte)LeaveTypes.BusinessTrip:
-                            className = "businesstrip";
-                            break;
-                        case (byte)LeaveTypes.WeddingLeave:
-                        case (byte)LeaveTypes.WeddingOfEmployeeChildren:
-                            className = "weddingleave";
-                            break;
-                        default:
-                            className = "leaveday";
-                            break;
-                    }
+                        (byte)LeaveTypes.AnnualLeave => "annualleave",
+                        (byte)LeaveTypes.UnpaidLeave => "unpaidleave",
+                        (byte)LeaveTypes.BusinessTrip => "businesstrip",
+                        (byte)LeaveTypes.WeddingLeave or (byte)LeaveTypes.WeddingOfEmployeeChildren => "weddingleave",
+                        _ => "leaveday"
+                    };
                 }
 
                 if (schedule.IsLeaveHalfDay)
                 {
-                    shift = string.Format("{0} ½", schedule.LeaveType.Code);
+                    shift = $"{schedule.LeaveType.Code} ½";
                 }
                 else
                 {
@@ -178,7 +164,7 @@
                     if (schedule.LeaveType2 != null && schedule.LeaveType.Code != schedule.LeaveType2.Code)
                     {
                         className = "leaveday leavehalfday2";
-                        shift = string.Format("{0} / {1}", schedule.LeaveType.Code, schedule.LeaveType2.Code);
+                        shift = $"{schedule.LeaveType.Code} / {schedule.LeaveType2.Code}";
                     }
                 }
             }

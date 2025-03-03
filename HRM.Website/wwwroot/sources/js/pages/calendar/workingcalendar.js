@@ -91,7 +91,7 @@ const workingCalendarModule = (function ($) {
                 },
                 responseType: 'blob'
             }).then(response => {
-                const fileName = response.headers['content-disposition'].match(/filename=(.+)/)[1];
+                const fileName = response.headers['content-disposition'].split(';')[1].split('filename=')[1];
                 downloadFile(response.data, fileName);
             }).catch(axiosError).then(() => unblockUI());
         });

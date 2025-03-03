@@ -5,12 +5,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
-using Core;
-using Core.Constants;
-using Core.Filters;
-using Criteria.Calendar;
-using Services;
-using ViewModels;
+using HRM.Core;
+using HRM.Core.Constants;
+using HRM.Core.Filters;
+using HRM.Criteria.Calendar;
+using HRM.Services;
+using HRM.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Services.Implement;
 

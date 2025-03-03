@@ -1,6 +1,4 @@
-﻿using HRM.Services.Interfaces.Request;
-
-namespace HRM.Website;
+﻿namespace HRM.Website;
 
 using System;
 using System.Threading.Tasks;
@@ -20,6 +18,7 @@ using HRM.Letstalk.Core.Services;
 using HRM.Repositories.Interfaces;
 using HRM.Services.ExportExcel;
 using HRM.Services.Implement.Request;
+using HRM.Services.Interfaces.Request;
 using MailDeliver;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.DataProtection;
@@ -162,8 +161,6 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IWorkingCalendarRepository, WorkingCalendarRepository>();
         services.AddSingleton<IDisciplineService, DisciplineService>();
         services.AddSingleton<IDisciplineRepository, DisciplineRepository>();
-        services.AddSingleton<IExportDisciplineSummaryService, ExportDisciplineSummaryService>();
-        services.AddSingleton<IExportDisciplineDetailService, ExportDisciplineDetailService>();
 
         services.AddDIReportServices();
         services.AddDIExcelServices();
@@ -177,6 +174,7 @@ public static class ServiceCollectionExtensions
 
         services.AddSingleton<IReportService, ReportService>();
         services.AddSingleton<IShiftStatisticReportService, ShiftStatisticReportService>();
+        services.AddSingleton<IWorkingCalendarReportService, WorkingCalendarReportService>();
 
         return services;
     }
@@ -190,6 +188,8 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IExportOvertimeService, ExportOvertimeService>();
         services.AddSingleton<IExportExcelShiftStatisticService, ExportExcelShiftStatisticService>();
         services.AddSingleton<IJobTitleExportService, JobTitleExportService>();
+        services.AddSingleton<IExportDisciplineSummaryService, ExportDisciplineSummaryService>();
+        services.AddSingleton<IExportDisciplineDetailService, ExportDisciplineDetailService>();
 
         return services;
     }
