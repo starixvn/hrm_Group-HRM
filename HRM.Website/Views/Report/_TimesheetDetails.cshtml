@@ -1,13 +1,11 @@
-﻿@using HRM.Core
-@using HRM.Models
+﻿@using HRM.Models
 @using HRM.Models.Request
 @using HRM.Core.Enums
-@using HRM.Services
-@using HRM.Resources
 @using HRM.Services.Implement.Request
 @using HRM.ViewModels
 @using HRM.Website.Helper
-@model IList<EmployeeAttendanceModel>
+
+@model IEnumerable<EmployeeAttendanceModel>
 <table id="data" class="table table-custom">
     <thead>
         <tr>
@@ -28,11 +26,11 @@
         </tr>
     </thead>
     <tbody>
-        @if (Model != null && Model.Count > 0)
+        @if (Model != null && Model.Any())
         {
-            int index = 0;
+            var index = 0;
 
-            foreach (EmployeeAttendanceModel item in Model)
+            foreach (var item in Model)
             {
                 index++;
 
@@ -107,7 +105,7 @@
                     <td>
                         @if (item.RequestList != null && item.RequestList.Any())
                         {
-                            foreach (EmployeeAttendanceRequest request in item.RequestList)
+                            foreach (var request in item.RequestList)
                             {
                                 var statusClass = request.CurrentStatus == (byte)CurrentRequestStatus.Pending || request.CurrentStatus == (byte)CurrentRequestStatus.Verified
                                     ? " pending-request" : string.Empty;
@@ -155,7 +153,7 @@
                     <td class="td-warning">
                         @if (item.IsWarning)
                         {
-                            <span class="icon-warning" />
+                            <span class="icon-warning"></span>
                         }
                     </td>
                 </tr>

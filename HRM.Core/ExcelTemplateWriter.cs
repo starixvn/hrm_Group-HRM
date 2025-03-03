@@ -8,13 +8,13 @@
     using NPOI.SS.Util;
     using NPOIExtensions;
 
-    public class ExcelTemplateWriter
+    public class ExcelTemplateWriter(HSSFWorkbook template, string excelFileName, string sheetName)
     {
         #region Attributes
 
-        private readonly string _fileName;
-        private readonly ISheet _templateSheet;
-        private readonly ISheet _sheet;
+        private readonly string _fileName = excelFileName;
+        private readonly ISheet _templateSheet = template.GetSheetAt(0);
+        private readonly ISheet _sheet = template.CreateSheet(sheetName);
         private int _rowId;
 
         #endregion Attributes
@@ -35,13 +35,6 @@
             }
         }
 
-        public ExcelTemplateWriter(HSSFWorkbook template, string excelFileName, string sheetName)
-        {
-            _fileName = excelFileName;
-            _templateSheet = template.GetSheetAt(0);
-            _sheet = template.CreateSheet(sheetName);
-        }
-
         #endregion Constructors
 
         #region Properties
@@ -60,6 +53,15 @@
         {
             _sheet.Workbook.RemoveSheetAt(0);
             _sheet.Workbook.ToReponseStream(_fileName);
+        }
+
+        public byte[] WriteContentToBytes()
+        {
+            using var output = new MemoryStream();
+            _sheet.Workbook.RemoveSheetAt(0);
+            _sheet.Workbook.Write(output);
+
+            return output.ToArray();
         }
 
         public void WriteCellRange(int rowIndex, int totalRow, int colIndex, int totalCol, object value)
