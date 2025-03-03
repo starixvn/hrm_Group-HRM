@@ -9,18 +9,11 @@ using Interfaces;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-public class DepartmentService : IDepartmentService
+public class DepartmentService(
+    IDepartmentRepository departmentRepository,
+    IBaseService baseService)
+    : IDepartmentService
 {
-    private readonly IDepartmentRepository departmentRepository;
-    private readonly IBaseService baseService;
-
-    public DepartmentService(IDepartmentRepository departmentRepository,
-        IBaseService baseService)
-    {
-        this.departmentRepository = departmentRepository;
-        this.baseService = baseService;
-    }
-
     public CommandResult Delete(int actorId, int id)
     {
         var criteria = new DeleteDepartmentCriteria
@@ -47,7 +40,7 @@ public class DepartmentService : IDepartmentService
         {
             IsActive = isActive
         };
-        IList<Department> departments = departmentRepository.GetByActive(criteria);
+        var departments = departmentRepository.GetByActive(criteria);
 
         return departments ?? new List<Department>();
     }
@@ -78,6 +71,6 @@ public class DepartmentService : IDepartmentService
         {
             Id = departmentId
         };
-        return departmentRepository.GetById(criteria);
+        return await departmentRepository.GetByIdAsync(criteria);
     }
 }
