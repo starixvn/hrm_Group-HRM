@@ -12,7 +12,6 @@ using HRM.Core;
 using HRM.Core.Constants;
 using HRM.Core.Enums;
 using HRM.Core.Filters;
-using HRM.Core.Models;
 using HRM.Criteria.Employee;
 using HRM.Criteria.Supervisor;
 using HRM.Models;
@@ -40,6 +39,7 @@ public class EmployeeController(
     IWebHostEnvironment env,
     IHRMAuthService hrmService) : BaseController(userControlSession)
 {
+
     [HrmPermission(Policy.Read, FunctionKey.ContactList)]
     public async Task<IActionResult> Index()
     {
@@ -60,32 +60,31 @@ public class EmployeeController(
     public async Task<IActionResult> ContactList(UserManagementViewModel model)
     {
         IEnumerable<Employee> employees = new List<Employee>();
-        if (model != null)
+        if (model == null) return PartialView("_ContactList", employees);
+
+        var criteria = new GetAllEmployeeCriteria
         {
-            var criteria = new GetAllEmployeeCriteria
-            {
-                Query = model.Keyword,
-                TeamIds = model.TeamIds,
-                EnableUser = model.IsEnable,
-                IsLocalUser = model.IsLocal,
-                PageNumber = model.CurrentPage,
-                PageSize = model.ItemsPerPage
-            };
+            Query = model.Keyword,
+            TeamIds = model.TeamIds,
+            EnableUser = model.IsEnable,
+            IsLocalUser = model.IsLocal,
+            PageNumber = model.CurrentPage,
+            PageSize = model.ItemsPerPage
+        };
 
-            employees = await employeeService.GetEmployeeAsync(criteria);
+        employees = await employeeService.GetEmployeeAsync(criteria);
 
-            var pagerOption = new PagerOptionModel
-            {
-                CurrentPage = model.CurrentPage,
-                ItemsPerPage = model.ItemsPerPage,
-                TotalItem = (int)criteria.TotalRow
-            };
-            ViewBag.PagerOption = pagerOption;
+        var pagerOption = new PagerOptionModel
+        {
+            CurrentPage = model.CurrentPage,
+            ItemsPerPage = model.ItemsPerPage,
+            TotalItem = (int)criteria.TotalRow
+        };
+        ViewBag.PagerOption = pagerOption;
 
-            var roles = await roleService.GetByUserIdAsync(userControlSession.UserId);
-            ViewBag.IsShowJobtitle = roles.Any(r => r.RoleId is (short)RoleSystem.HR or (short)RoleSystem.SystemAdmin);
-            ViewBag.EnableGroupDate = commonDataService.IsEnableGroupDate();
-        }
+        var roles = await roleService.GetByUserIdAsync(userControlSession.UserId);
+        ViewBag.IsShowJobtitle = roles.Any(r => r.RoleId is (short)RoleSystem.HR or (short)RoleSystem.SystemAdmin);
+        ViewBag.EnableGroupDate = commonDataService.IsEnableGroupDate();
 
         return PartialView("_ContactList", employees);
     }
@@ -98,7 +97,7 @@ public class EmployeeController(
 
     [HttpPost]
     [HrmPermission(Policy.Host, FunctionKey.CreateAccount)]
-    public ActionResult Create(CreateEmployeeViewModel model)
+    public async Task<ActionResult> Create(CreateEmployeeViewModel model)
     {
         var param = new CreateEmployeeParam()
         {
@@ -109,7 +108,7 @@ public class EmployeeController(
             TeamId = model.TeamId
         };
 
-        var commandResult = employeeService.Create(EmployeeSession.EmpId, param);
+        var commandResult = await employeeService.CreateAsync(EmployeeSession.EmpId, param);
         if (!commandResult.IsSuccessful)
         {
             ModelState.AddModelError(string.Empty, commandResult.Message);
@@ -129,7 +128,7 @@ public class EmployeeController(
             BCryptPassword = cryptoService.Encrypt(param.Code, rijndaelKey, rijndaelIv),
             Token = token
         };
-        var result = userService.Create(userModel);
+        var result = await userService.CreateAsync(userModel);
 
         if (!result.IsSuccessful)
         {
@@ -144,19 +143,19 @@ public class EmployeeController(
             ModifiedBy = EmployeeSession.EmpId
         };
 
-        employeeService.UpdateUserId(updatedUserModel);
+        await employeeService.UpdateUserIdAsync(updatedUserModel);
         return RedirectToAction("Edit", new { id = commandResult.OutputId });
     }
 
     [HttpPost]
     [ValidateAntiForgeryToken]
     [HrmPermission(Policy.Host, FunctionKey.EmployeeManagement)]
-    public ActionResult Edit(Employee model)
+    public async Task<ActionResult> Edit(Employee model)
     {
         if (ModelState.IsValid)
         {
             var param = MappingEditEmployeeParam(model);
-            var commandResult = employeeService.Edit(EmployeeSession.EmpId, param);
+            var commandResult = await employeeService.EditAsync(EmployeeSession.EmpId, param);
             if (commandResult.IsSuccessful)
             {
                 UpdateUserInfo(model.UserId, param);
@@ -168,8 +167,8 @@ public class EmployeeController(
             }
         }
 
-        model.Coutries = commonDataService.GetAllCountry();
-        var supervisors = GetSupervisors(model.Id);
+        model.Coutries = await commonDataService.GetAllCountryAsync();
+        var supervisors = await GetSupervisorsAsync(model.Id);
         model.Verifier = GetVerifiers(supervisors);
         model.Approver = GetApprovers(supervisors);
         model.Disciplinarian = GetDisciplineSupervisors(supervisors);
@@ -177,18 +176,18 @@ public class EmployeeController(
         model.ActingEmpList = GetActingSupervisors(supervisors);
         ViewBag.EnableGroupDate = commonDataService.IsEnableGroupDate();
 
-        ComposeViewBagsForEditEmployee();
+        await ComposeViewBagsForEditEmployee();
 
         return View(model);
     }
 
     [HttpPost]
     [HrmPermission(Policy.Host, FunctionKey.EmployeeManagement)]
-    public ActionResult Delete(DeleteEmployeeParam param)
+    public async Task<ActionResult> Delete(DeleteEmployeeParam param)
     {
-        var commandResult = employeeService.Delete(EmployeeSession.EmpId, param);
+        var commandResult = await employeeService.DeleteAsync(EmployeeSession.EmpId, param);
         if (!commandResult.IsSuccessful) return Json(commandResult);
-        var result = userService.Delete(param.UserId);
+        var result = await userService.DeleteAsync(param.UserId);
         return Json(result);
     }
 
@@ -220,8 +219,8 @@ public class EmployeeController(
             return RedirectToAction("AccessDenied", "Error");
         }
 
-        employee.Coutries = commonDataService.GetAllCountry();
-        var supervisors = GetSupervisors(id);
+        employee.Coutries = await commonDataService.GetAllCountryAsync();
+        var supervisors = await GetSupervisorsAsync(id);
         employee.Verifier = GetVerifiers(supervisors);
         employee.Approver = GetApprovers(supervisors);
         employee.Disciplinarian = GetDisciplineSupervisors(supervisors);
@@ -231,7 +230,7 @@ public class EmployeeController(
         ViewBag.LengthOfServiceByCompanyDate = employeeService.CaculateLengthOfService(employee.CompanyDate, employee.MilitaryFromDate, employee.MilitaryToDate);
         ViewBag.EnableGroupDate = commonDataService.IsEnableGroupDate();
 
-        ComposeViewBagsForEditEmployee();
+        await ComposeViewBagsForEditEmployee();
         return View(employee);
     }
 
@@ -304,9 +303,9 @@ public class EmployeeController(
         return View();
     }
 
-    public CustomJsonResult GetDisciplineManagerByEmployeeId(int employeeId)
+    public async Task<CustomJsonResult> GetDisciplineManagerByEmployeeId(int employeeId)
     {
-        var supervisors = employeeService.GetDisciplineSettingByEmployeeId(employeeId);
+        var supervisors = await employeeService.GetDisciplineSettingByEmployeeIdAsync(employeeId);
         return new CustomJsonResult(supervisors);
     }
 
@@ -343,9 +342,11 @@ public class EmployeeController(
         return Json(true);
     }
 
-    public CustomJsonResult GetShiftManagerByEmployeeId(int employeeId)
+    public async Task<CustomJsonResult> GetShiftManagerByEmployeeId(int employeeId)
     {
-        IEnumerable<SupervisorModel> supervisors = employeeService.GetEmployeeSupervisorByRoleId(employeeId, (short)RoleSystem.ShiftManager);
+        IEnumerable<SupervisorModel> supervisors = await employeeService
+            .GetEmployeeSupervisorByRoleIdAsync(employeeId, (short)RoleSystem.ShiftManager);
+
         var data = supervisors
             .Select(x => new Supervisor
             {
@@ -370,7 +371,7 @@ public class EmployeeController(
         return Json(employees.Take(TotalItems));
     }
 
-    private IList<SupervisorNameModel> GetSupervisors(int empId)
+    private async Task<IList<SupervisorNameModel>> GetSupervisorsAsync(int empId)
     {
         var criteria = new GetListSupervisorNameCriteria
         {
@@ -378,7 +379,7 @@ public class EmployeeController(
             Role = null,
             RequestType = null
         };
-        var supervisors = employeeService.GetListSupervisorName(criteria);
+        var supervisors = await employeeService.GetListSupervisorNameAsync(criteria);
         return supervisors;
     }
 
@@ -442,9 +443,9 @@ public class EmployeeController(
         };
     }
 
-    private void UpdateUserInfo(int userId, EditEmployeeParam param)
+    private async Task UpdateUserInfo(int userId, EditEmployeeParam param)
     {
-        var result = userService.UpdateInfo(new UpdateUserInfoParam
+        var result = await userService.UpdateInfoAsync(new UpdateUserInfoParam
         {
             RefId = param.EmployeeId,
             UserId = userId,
@@ -456,7 +457,7 @@ public class EmployeeController(
         });
         if (result.IsSuccessful)
         {
-            result = userService.AssignRole(new AssignRoleParam
+            result = await userService.AssignRoleAsync(new AssignRoleParam
             {
                 UserId = userId,
                 RoleIds = param.Roles
@@ -465,7 +466,7 @@ public class EmployeeController(
             if (result.IsSuccessful)
             {
                 ViewBag.Updated = true;
-                UpdateUserSession(param.EmployeeId);
+                await UpdateUserSession(param.EmployeeId);
             }
             else
             {
@@ -480,11 +481,12 @@ public class EmployeeController(
         }
     }
 
-    private void UpdateUserSession(int employeeId)
+    private async Task UpdateUserSession(int employeeId)
     {
         if (EmployeeSession.EmpId == employeeId)
         {
-            userControlSession.Set<EmployeeSession>(SessionKey.Employee, hrmService.GetByUserId(userControlSession.UserId));
+            var user = await hrmService.GetByUserIdAsync(userControlSession.UserId);
+            userControlSession.Set(SessionKey.Employee, user);
         }
     }
 

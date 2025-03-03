@@ -129,9 +129,26 @@ namespace HRM.Services
             return baseService.GetData<SupervisorModel>(criteria).ToList();
         }
 
+        public async Task<IList<SupervisorModel>> GetEmployeeSupervisorByRoleIdAsync(int employeeId, short roleId)
+        {
+            var criteria = new GetEmployeeSupervisorCriteria
+            {
+                EmpId = employeeId,
+                Role = roleId
+            };
+            var data = await baseService.GetDataAsync<SupervisorModel>(criteria);
+            return data.ToList();
+        }
+
         public IList<SupervisorNameModel> GetListSupervisorName(GetListSupervisorNameCriteria criteria)
         {
             return baseService.GetData<SupervisorNameModel>(criteria).ToList();
+        }
+
+        public async Task<IList<SupervisorNameModel>> GetListSupervisorNameAsync(GetListSupervisorNameCriteria criteria)
+        {
+            var data = await baseService.GetDataAsync<SupervisorNameModel>(criteria);
+            return data.ToList();
         }
 
         public IList<SupervisorNameModel> GetSupervisorByRequestType(GetSupervisorByRequestTypeCriteria criteria)
@@ -151,6 +168,17 @@ namespace HRM.Services
                 EmpId = employeeId
             };
             return baseService.GetData<Supervisor>(criteria).ToList();
+        }
+
+
+        public async Task<IEnumerable<Supervisor>> GetDisciplineSettingByEmployeeIdAsync(int employeeId)
+        {
+            var criteria = new GetDisciplineSettingByEmployeeId
+            {
+                EmpId = employeeId
+            };
+            var data = await baseService.GetDataAsync<Supervisor>(criteria);
+            return data.ToList();
         }
 
         public IList<SupervisorNameModel> GetHRAndSupervisorByEmpId(int employeeId)
@@ -212,7 +240,7 @@ namespace HRM.Services
             return baseService.ExecuteNonQuery(criteria);
         }
 
-        public CommandResult Create(int actorId, CreateEmployeeParam param)
+        public async Task<CommandResult> CreateAsync(int actorId, CreateEmployeeParam param)
         {
             var criteria = new InsertEmployeeCriteria
             {
@@ -224,13 +252,13 @@ namespace HRM.Services
                 TeamId = param.TeamId,
                 Password = Encryptor.ComputeHash(param.Code)
             };
-            CommandResult commandResult = baseService.ExecuteNonQuery(criteria);
+            var commandResult = await baseService.ExecuteNonQueryAsync(criteria);
             commandResult.OutputId = criteria.EmpId;
 
             return commandResult;
         }
 
-        public CommandResult Edit(int actorId, EditEmployeeParam param)
+        public async Task<CommandResult> EditAsync(int actorId, EditEmployeeParam param)
         {
             var criteria = new UpdateEmployeeCriteria
             {
@@ -289,10 +317,10 @@ namespace HRM.Services
                 MilitaryFromDate = param.MilitaryFromDate,
                 MilitaryToDate = param.MilitaryToDate
             };
-            return baseService.ExecuteNonQuery(criteria);
+            return await baseService.ExecuteNonQueryAsync(criteria);
         }
 
-        public CommandResult Delete(int actorId, DeleteEmployeeParam param)
+        public async Task<CommandResult> DeleteAsync(int actorId, DeleteEmployeeParam param)
         {
             var criteria = new DeleteEmployeeCriteria
             {
@@ -300,12 +328,12 @@ namespace HRM.Services
                 EmpId = param.EmployeeId,
                 ResignedDate = param.ResignedDate
             };
-            return baseService.ExecuteNonQuery(criteria);
+            return await baseService.ExecuteNonQueryAsync(criteria);
         }
 
-        public CommandResult UpdateUserId(UpdateUserIdCommand command)
+        public async Task<CommandResult> UpdateUserIdAsync(UpdateUserIdCommand command)
         {
-            return baseService.ExecuteNonQuery(command);
+            return await baseService.ExecuteNonQueryAsync(command);
         }
 
         public string CaculateLengthOfService(DateTime? joinedDate, DateTime? militaryFromDate, DateTime? militaryToDate)

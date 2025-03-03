@@ -26,6 +26,8 @@
 
         IList<Country> GetAllCountry();
 
+        Task<IList<Country>> GetAllCountryAsync();
+
         IEnumerable<EntityBase<byte>> GetMarriageStatus();
 
         IEnumerable<EntityBase<byte>> GetGender();
@@ -78,6 +80,13 @@
         {
             var criteria = new GetAllCountryCriteria();
             return baseService.GetData<Country>(criteria).ToList();
+        }
+
+        public async Task<IList<Country>> GetAllCountryAsync()
+        {
+            var criteria = new GetAllCountryCriteria();
+            var data = await baseService.GetDataAsync<Country>(criteria);
+            return data.ToList();
         }
 
         public IEnumerable<EntityBase<byte>> GetMarriageStatus()

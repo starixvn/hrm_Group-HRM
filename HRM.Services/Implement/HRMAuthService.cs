@@ -1,4 +1,6 @@
-﻿namespace HRM.Services
+﻿using System.Threading.Tasks;
+
+namespace HRM.Services
 {
     using HRM.Core.Enums;
     using HRM.Core.Models;
@@ -15,6 +17,14 @@
                 UserId = userId
             };
             return baseService.GetDataEntity<EmployeeSession>(criteria);
+        }
+        public async Task<EmployeeSession> GetByUserIdAsync(int userId)
+        {
+            var criteria = new GetEmployeeLoginByUserIdCriteria
+            {
+                UserId = userId
+            };
+            return await baseService.GetDataEntityAsync<EmployeeSession>(criteria);
         }
 
         public int Validate(EmployeeSession employee, string password)

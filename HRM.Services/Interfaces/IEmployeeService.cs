@@ -19,7 +19,11 @@ public interface IEmployeeService
 
     IList<SupervisorNameModel> GetListSupervisorName(GetListSupervisorNameCriteria criteria);
 
+    Task<IList<SupervisorNameModel>> GetListSupervisorNameAsync(GetListSupervisorNameCriteria criteria);
+
     IList<SupervisorModel> GetEmployeeSupervisorByRoleId(int employeeId, short roleId);
+
+    Task<IList<SupervisorModel>> GetEmployeeSupervisorByRoleIdAsync(int employeeId, short roleId);
 
     Task<Employee> GetEmployeeByIdAsync(int id);
 
@@ -37,9 +41,11 @@ public interface IEmployeeService
 
     IList<SupervisorNameModel> GetSupervisorByRequestType(GetSupervisorByRequestTypeCriteria criteria);
 
-        Task<IList<SupervisorNameModel>> GetSupervisorByQueryAsync(GetEmployeeSupervisorByQueryCriteria criteria);
+    Task<IList<SupervisorNameModel>> GetSupervisorByQueryAsync(GetEmployeeSupervisorByQueryCriteria criteria);
 
     IEnumerable<Supervisor> GetDisciplineSettingByEmployeeId(int employeeId);
+
+    Task<IEnumerable<Supervisor>> GetDisciplineSettingByEmployeeIdAsync(int employeeId);
 
     IList<SupervisorNameModel> GetHRAndSupervisorByEmpId(int employeeId);
 
@@ -51,13 +57,13 @@ public interface IEmployeeService
 
     CommandResult EditPassword(int actorId, EditPassword model);
 
-    CommandResult Create(int actorId, CreateEmployeeParam param);
+    Task<CommandResult> CreateAsync(int actorId, CreateEmployeeParam param);
 
-    CommandResult Edit(int actorId, EditEmployeeParam param);
+    Task<CommandResult> EditAsync(int actorId, EditEmployeeParam param);
 
-    CommandResult Delete(int actorId, DeleteEmployeeParam param);
+    Task<CommandResult> DeleteAsync(int actorId, DeleteEmployeeParam param);
 
     string CaculateLengthOfService(DateTime? joinedDate, DateTime? militaryFromDate, DateTime? militaryToDate);
 
-    CommandResult UpdateUserId(UpdateUserIdCommand command);
+    Task<CommandResult> UpdateUserIdAsync(UpdateUserIdCommand command);
 }
