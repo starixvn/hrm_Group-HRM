@@ -24,7 +24,7 @@
 
 <h2 class="page-title">@ViewBag.Title</h2>
 <div class="filter">
-    @Html.Partial("_SearchForm", Model)
+    @await Html.PartialAsync("_SearchForm", Model)
 </div>
 
 <div class="table-data">
