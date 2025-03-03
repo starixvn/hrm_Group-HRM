@@ -1,4 +1,5 @@
-﻿using GO.UserControl.Client.Core.Enumerables;
+﻿using System.Threading.Tasks;
+using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
 using HRM.Core.Constants;
 using HRM.Core.Filters;
@@ -24,9 +25,9 @@ public class UnitController(IUserControlSession userControlSession,
 
     [HttpPost]
     [HrmPermission(Policy.Read, FunctionKey.UnitManagement)]
-    public IActionResult GetUnits([FromBody] UnitViewModel model)
+    public async Task<IActionResult> GetUnits([FromBody] UnitViewModel model)
     {
-        var units = unitService.GetUnit(model.IsActive);
+        var units = await unitService.GetUnitAsync(model.IsActive);
         return new CustomJsonResult(units);
     }
 
@@ -38,7 +39,7 @@ public class UnitController(IUserControlSession userControlSession,
 
     [HttpPost]
     [HrmPermission(Policy.Host, FunctionKey.UnitManagement)]
-    public IActionResult Create([FromBody] AddUnitViewModel model)
+    public async Task<IActionResult> Create([FromBody] AddUnitViewModel model)
     {
         var commandResult = new CommandResult();
         if (model == null || !ModelState.IsValid) return new CustomJsonResult(commandResult);
@@ -50,14 +51,14 @@ public class UnitController(IUserControlSession userControlSession,
             IsActive = model.IsActive,
             CreatedBy = EmployeeSession.EmpId
         };
-        commandResult = unitService.Create(criteria);
+        commandResult = await unitService.CreateAsync(criteria);
         return new CustomJsonResult(commandResult);
     }
 
     [HrmPermission(Policy.Host, FunctionKey.UnitManagement)]
-    public IActionResult GetById(int id)
+    public async Task<IActionResult> GetById(int id)
     {
-        var unit = unitService.GetById(id);
+        var unit = await unitService.GetByIdAsync(id);
         return new CustomJsonResult(unit);
     }
 
@@ -69,7 +70,7 @@ public class UnitController(IUserControlSession userControlSession,
 
     [HttpPost]
     [HrmPermission(Policy.Host, FunctionKey.UnitManagement)]
-    public IActionResult Edit([FromBody] EditUnitViewModel model)
+    public async Task<IActionResult> Edit([FromBody] EditUnitViewModel model)
     {
         var commandResult = new CommandResult();
         if (model == null || !ModelState.IsValid) return new CustomJsonResult(commandResult);
@@ -82,16 +83,16 @@ public class UnitController(IUserControlSession userControlSession,
             IsActive = model.IsActive,
             ModifiedBy = EmployeeSession.EmpId
         };
-        commandResult = unitService.Edit(criteria);
+        commandResult = await unitService.EditAsync(criteria);
         return new CustomJsonResult(commandResult);
     }
 
     [HttpPost]
     [HrmPermission(Policy.Host, FunctionKey.UnitManagement)]
-    public IActionResult Delete([FromBody] DeleteUnitCriteria criteria)
+    public async Task<IActionResult> Delete([FromBody] DeleteUnitCriteria criteria)
     {
         criteria.ModifiedBy = EmployeeSession.EmpId;
-        var commandResult = unitService.Delete(criteria);
+        var commandResult = await unitService.DeleteAsync(criteria);
 
         return new CustomJsonResult(commandResult);
     }
