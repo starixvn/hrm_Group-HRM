@@ -1,6 +1,4 @@
-﻿using HRM.Services.Implement.Request;
-
-namespace HRM.Services
+﻿namespace HRM.Services
 {
     using System;
     using System.Collections.Generic;
@@ -18,6 +16,8 @@ namespace HRM.Services
     using HRM.Repositories;
     using Microsoft.AspNetCore.Hosting;
     using OfficeOpenXml;
+    using HRM.Services.Implement;
+    using HRM.Services.Implement.Request;
 
     public partial interface IEmployeeWorkingHoursService
     {

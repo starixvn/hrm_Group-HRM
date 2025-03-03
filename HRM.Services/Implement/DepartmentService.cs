@@ -1,53 +1,83 @@
-﻿namespace HRM.Services.Implement
+﻿namespace HRM.Services.Implement;
+
+using HRM.Core.Models;
+using HRM.Core.Services;
+using Criteria.Department;
+using Models;
+using HRM.Repositories.Interfaces;
+using Interfaces;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+public class DepartmentService : IDepartmentService
 {
-    using HRM.Core.Models;
-    using HRM.Core.Services;
-    using HRM.Criteria.Department;
-    using HRM.Models;
-    using HRM.Repositories.Interfaces;
-    using HRM.Services.Interfaces;
-    using System.Collections.Generic;
+    private readonly IDepartmentRepository departmentRepository;
+    private readonly IBaseService baseService;
 
-    public class DepartmentService : IDepartmentService
+    public DepartmentService(IDepartmentRepository departmentRepository,
+        IBaseService baseService)
     {
-        private readonly IDepartmentRepository departmentRepository;
-        private readonly IBaseService baseService;
+        this.departmentRepository = departmentRepository;
+        this.baseService = baseService;
+    }
 
-        public DepartmentService(IDepartmentRepository departmentRepository,
-            IBaseService baseService)
+    public CommandResult Delete(int actorId, int id)
+    {
+        var criteria = new DeleteDepartmentCriteria
         {
-            this.departmentRepository = departmentRepository;
-            this.baseService = baseService;
-        }
+            departmentId = id,
+            ModifiedBy = actorId
+        };
+        return baseService.ExecuteNonQuery(criteria);
+    }
 
-        public CommandResult Delete(int actorId, int id)
+    public async Task<CommandResult> DeleteAsync(int actorId, int id)
+    {
+        var criteria = new DeleteDepartmentCriteria
         {
-            var criteria = new DeleteDepartmentCriteria
-            {
-                departmentId = id,
-                ModifiedBy = actorId
-            };
-            return baseService.ExecuteNonQuery(criteria);
-        }
+            departmentId = id,
+            ModifiedBy = actorId
+        };
+        return await baseService.ExecuteNonQueryAsync(criteria);
+    }
 
-        public IList<Department> GetDepartment(bool? isActive = true)
+    public IList<Department> GetDepartment(bool? isActive = true)
+    {
+        var criteria = new GetDepartmentByActiveCriteria
         {
-            var criteria = new GetDepartmentByActiveCriteria
-            {
-                IsActive = isActive
-            };
-            IList<Department> departments = departmentRepository.GetByActive(criteria);
+            IsActive = isActive
+        };
+        IList<Department> departments = departmentRepository.GetByActive(criteria);
 
-            return departments ?? new List<Department>();
-        }
+        return departments ?? new List<Department>();
+    }
 
-        public Department GetById(int departmentId)
+    public async Task<IList<Department>> GetDepartmentAsync(bool? isActive = true)
+    {
+        var criteria = new GetDepartmentByActiveCriteria
         {
-            var criteria = new GetDepartmentByIdCriteria
-            {
-                Id = departmentId
-            };
-            return departmentRepository.GetById(criteria);
-        }
+            IsActive = isActive
+        };
+        var departments = await departmentRepository.GetByActiveAsync(criteria);
+
+        return departments ?? new List<Department>();
+    }
+
+    public Department GetById(int departmentId)
+    {
+        var criteria = new GetDepartmentByIdCriteria
+        {
+            Id = departmentId
+        };
+        return departmentRepository.GetById(criteria);
+    }
+
+    public async Task<Department> GetByIdAsync(int departmentId)
+    {
+        var criteria = new GetDepartmentByIdCriteria
+        {
+            Id = departmentId
+        };
+        return departmentRepository.GetById(criteria);
     }
 }

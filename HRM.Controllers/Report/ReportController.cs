@@ -1,4 +1,4 @@
-﻿namespace Fanex.NexHR.Controllers;
+﻿namespace HRM.Controllers.Report;
 
 using System;
 using System.Collections.Generic;
@@ -7,16 +7,17 @@ using System.Threading.Tasks;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Models;
 using GO.UserControl.Client.Core.Session;
-using HRM.Controllers;
-using HRM.Core.Constants;
-using HRM.Core.Enums;
-using HRM.Core.Filters;
-using HRM.Criteria;
+using Controllers;
+using Core.Constants;
+using Core.Enums;
+using Core.Filters;
+using Criteria;
 using HRM.Criteria.Report;
-using HRM.Criteria.Time;
-using HRM.Services;
-using HRM.ViewModels;
+using Criteria.Time;
+using Services;
+using ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Services.Implement;
 
 public class ReportController(
     IUserControlSession userControlSession,

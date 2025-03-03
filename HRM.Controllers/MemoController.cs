@@ -5,15 +5,16 @@ using System.IO;
 using System.Threading.Tasks;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
-using HRM.Core;
-using HRM.Core.Constants;
-using HRM.Core.Filters;
+using Core;
+using Core.Constants;
+using Core.Filters;
 using HRM.Core.Models;
-using HRM.Models;
-using HRM.Services;
-using HRM.ViewModels.Memo;
+using Models;
+using Services;
+using ViewModels.Memo;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Services.Implement;
 
 public class MemoController(
     AppSettings appSettings,

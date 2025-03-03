@@ -1,22 +1,22 @@
-﻿using System;
+﻿namespace HRM.Controllers;
+
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
-using HRM.Core;
-using HRM.Core.Constants;
-using HRM.Core.Enums;
-using HRM.Core.Filters;
+using Core;
+using Core.Constants;
+using Core.Enums;
+using Core.Filters;
 using HRM.Core.Services;
-using HRM.Criteria.Lookup;
-using HRM.Models;
-using HRM.Resources;
-using HRM.Services;
-using HRM.Services.ExportExcel;
+using Criteria.Lookup;
+using Models;
+using Resources;
+using Services.ExportExcel;
+using Services.Implement;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-
-namespace HRM.Controllers;
 
 public class JobTitleController(
     IUserControlSession userControlSession,

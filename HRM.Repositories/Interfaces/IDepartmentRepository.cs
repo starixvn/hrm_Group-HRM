@@ -1,13 +1,18 @@
-﻿namespace HRM.Repositories.Interfaces
-{
-    using Fanex.Data.Repository;
-    using HRM.Criteria.Department;
-    using HRM.Models;
-    using System.Collections.Generic;
+﻿namespace HRM.Repositories.Interfaces;
 
-    public interface IDepartmentRepository
-    {
-        IList<Department> GetByActive(ICriteria criteria);
-        Department GetById(GetDepartmentByIdCriteria criteria);
-    }
+using Fanex.Data.Repository;
+using Criteria.Department;
+using Models;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+public interface IDepartmentRepository
+{
+    IList<Department> GetByActive(ICriteria criteria);
+
+    Task<IList<Department>> GetByActiveAsync(ICriteria criteria);
+
+    Department GetById(GetDepartmentByIdCriteria criteria);
+
+    Task<Department> GetByIdAsync(GetDepartmentByIdCriteria criteria);
 }

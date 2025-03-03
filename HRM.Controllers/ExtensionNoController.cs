@@ -7,15 +7,15 @@ using Core.Models;
 using Core.Services;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
-using HRM.Core.Constants;
-using HRM.Core.Filters;
-using HRM.Criteria.ExtensionNumber;
-using HRM.Models;
-using HRM.Services;
-using HRM.ViewModels.ExtensionNumber;
+using Core.Constants;
+using Core.Filters;
+using Criteria.ExtensionNumber;
+using Models;
+using Services;
+using ViewModels.ExtensionNumber;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-
+using Services.Implement;
 public class ExtensionNoController(
     IUserControlSession userControlSession,
     IExtensionNumberService extensionNumberService,

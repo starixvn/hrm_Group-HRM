@@ -1,4 +1,5 @@
-﻿using GO.UserControl.Client.Core.Enumerables;
+﻿using System.Threading.Tasks;
+using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
 using HRM.Core;
 using HRM.Core.Constants;
@@ -27,15 +28,15 @@ public class DepartmentController(IUserControlSession userControlSession,
 
     [HttpPost]
     [HrmPermission(Policy.Read, FunctionKey.DepartmentManagement)]
-    public IActionResult GetDepartments([FromBody] GetDepartmentViewModel request)
+    public async Task<IActionResult> GetDepartments([FromBody] GetDepartmentViewModel request)
     {
-        var departments = departmentService.GetDepartment(request.IsActive);
+        var departments = await departmentService.GetDepartmentAsync(request.IsActive);
         return new CustomJsonResult(departments);
     }
 
-    public IActionResult GetUnits()
+    public async Task<IActionResult> GetUnits()
     {
-        var units = unitService.GetUnit();
+        var units = await unitService.GetUnitAsync();
         return new CustomJsonResult(units);
     }
 
@@ -47,7 +48,7 @@ public class DepartmentController(IUserControlSession userControlSession,
 
     [HttpPost]
     [HrmPermission(Policy.Host, FunctionKey.DepartmentManagement)]
-    public IActionResult Create([FromBody] CreateDepartmentViewModel model)
+    public async Task<IActionResult> Create([FromBody] CreateDepartmentViewModel model)
     {
         var commandResult = new CommandResult();
         if (model == null || !ModelState.IsValid) return new CustomJsonResult(commandResult);
@@ -60,16 +61,16 @@ public class DepartmentController(IUserControlSession userControlSession,
             UnitId = model.UnitId,
             ModifiedBy = EmployeeSession.EmpId
         };
-        commandResult = baseService.ExecuteNonQuery(criteria);
+        commandResult = await baseService.ExecuteNonQueryAsync(criteria);
 
         return new CustomJsonResult(commandResult);
     }
 
     [HrmPermission(Policy.Host, FunctionKey.DepartmentManagement)]
-    public IActionResult GetById(int Id)
+    public async Task<IActionResult> GetById(int Id)
     {
-        var department = departmentService.GetById(Id);
-        var units = unitService.GetUnit();
+        var department = await departmentService.GetByIdAsync(Id);
+        var units = await unitService.GetUnitAsync();
         var model = new EditDepartmentViewModel
         {
             DepartmentId = Id,
@@ -91,7 +92,7 @@ public class DepartmentController(IUserControlSession userControlSession,
 
     [HttpPost]
     [HrmPermission(Policy.Host, FunctionKey.DepartmentManagement)]
-    public IActionResult Edit([FromBody] EditDepartmentViewModel model)
+    public async Task<IActionResult> Edit([FromBody] EditDepartmentViewModel model)
     {
         var commandResult = new CommandResult();
         if (model == null || !ModelState.IsValid) return new CustomJsonResult(commandResult);
@@ -105,16 +106,16 @@ public class DepartmentController(IUserControlSession userControlSession,
             UnitId = model.UnitId,
             ModifiedBy = EmployeeSession.EmpId
         };
-        commandResult = baseService.ExecuteNonQuery(criteria);
+        commandResult = await baseService.ExecuteNonQueryAsync(criteria);
 
         return new CustomJsonResult(commandResult);
     }
 
     [HttpPost]
     [HrmPermission(Policy.Host, FunctionKey.DepartmentManagement)]
-    public IActionResult Delete([FromBody] DeleteDepartmentViewModel request)
+    public async Task<IActionResult> Delete([FromBody] DeleteDepartmentViewModel request)
     {
-        var commandResult = departmentService.Delete(EmployeeSession.EmpId, request.Id);
+        var commandResult = await departmentService.DeleteAsync(EmployeeSession.EmpId, request.Id);
 
         return new CustomJsonResult(commandResult);
     }
