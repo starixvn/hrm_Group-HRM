@@ -82,8 +82,8 @@ import {
                 }).then(res => {
                     response($.map(res.data, function (item) {
                         return {
-                            label: item.NickName + ' (' + item.FullName + ')',
-                            value: item.EmployeeId
+                            label: item.nickName + ' (' + item.fullName + ')',
+                            value: item.employeeId
                         };
                     }));
                 }).catch(axiosError);
@@ -145,11 +145,11 @@ import {
                                 headers: { 'X-Requested-With': 'XMLHttpRequest' },
                                 data: $('#frmAddOtherDiscipline').serialize()
                             }).then(response => {
-                                if (response.data.IsSuccessful) {
+                                if (response.data.isSuccessful) {
                                     showSuccessMsg($dialogAddOtherDiscipline, 'Add other discipline successfully!');
                                     $('#frmAddOtherDiscipline').find('#IsSuccessful').prop('checked', true);
                                 } else {
-                                    showErrorMsg($dialogAddOtherDiscipline, '<li>' + response.data.Message + '</li>');
+                                    showErrorMsg($dialogAddOtherDiscipline, '<li>' + response.data.message + '</li>');
                                 }
                             }).catch(axiosError);
                         }

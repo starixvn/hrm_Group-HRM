@@ -72,9 +72,9 @@ namespace HRM.Services
             return employees ?? new List<Employee>();
         }
 
-        public IList<Employee> GetMemberByManager(GetMemberByManagerCriteria criteria)
+        public async Task<IList<Employee>> GetMemberByManagerAsync(GetMemberByManagerCriteria criteria)
         {
-            return baseService.GetData<Employee>(criteria).ToList();
+            return (await baseService.GetDataAsync<Employee>(criteria)).ToList();
         }
 
         public IList<Employee> GetEmployeesByRole(GetEmployeeByRoleCriteria criteria)

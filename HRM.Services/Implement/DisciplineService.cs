@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
     using Core.Services;
     using Criteria.Discipline;
     using HRM.Repositories;
@@ -20,53 +21,56 @@
             this.baseService = baseService;
         }
 
-        public IList<DisciplineSummaryModel> GetDisciplineSummary(GetDisciplineSummaryCriteria criteria)
+        public async Task<IList<DisciplineSummaryModel>> GetDisciplineSummaryAsync(GetDisciplineSummaryCriteria criteria)
         {
             IList<DisciplineSummaryModel> disciplines = new List<DisciplineSummaryModel>();
 
             if (criteria != null && criteria.IsValid())
             {
-                disciplines = disciplineRepository.GetDisciplineSummary(criteria);
+                disciplines = await disciplineRepository.GetDisciplineSummaryAsync(criteria);
             }
 
             return disciplines;
         }
 
-        public IList<DisciplineDetailModel> GetDisciplineDetail(GetDisciplineDetailCriteria criteria)
+        public async Task<IList<DisciplineDetailModel>> GetDisciplineDetailAsync(GetDisciplineDetailCriteria criteria)
         {
             IList<DisciplineDetailModel> disciplines = new List<DisciplineDetailModel>();
 
             if (criteria != null && criteria.IsValid())
             {
-                disciplines = disciplineRepository.GetDisciplineDetail(criteria);
+                disciplines = await disciplineRepository.GetDisciplineDetailAsync(criteria);
             }
 
             return disciplines;
         }
 
-        public IEnumerable<EmployeeInfoModel> GetMemberToAddOtherDiscipline(int supervisorId, string query = null)
+        public async Task<IEnumerable<EmployeeInfoModel>> GetMemberToAddOtherDisciplineAsync(int supervisorId, string query = null)
         {
             var criteria = new GetMemberToAddOtherDiscipineBySupervisorIdCriteria
             {
                 SupervisorId = supervisorId,
                 Query = query
             };
-            return baseService.GetData<EmployeeInfoModel>(criteria);
+            return await baseService.GetDataAsync<EmployeeInfoModel>(criteria);
         }
 
-        public IList<OtherDisciplineModel> GetOtherDiscipline(GetOtherDisciplineOfEmployeeCriteria criteria)
+        public async Task<IList<OtherDisciplineModel>> GetOtherDisciplineAsync(GetOtherDisciplineOfEmployeeCriteria criteria)
         {
-            return baseService.GetData<OtherDisciplineModel>(criteria).ToList();
+            var data = await baseService.GetDataAsync<OtherDisciplineModel>(criteria);
+            return data.ToList();
         }
 
-        public IList<DisciplineTypeModel> GetDisciplineType(GetDisciplineTypeCriteria criteria)
+        public async Task<IList<DisciplineTypeModel>> GetDisciplineTypeAsync(GetDisciplineTypeCriteria criteria)
         {
-            return baseService.GetData<DisciplineTypeModel>(criteria).ToList();
+            var data = await baseService.GetDataAsync<DisciplineTypeModel>(criteria);
+            return data.ToList();
         }
 
-        public IList<DisciplineTypeModel> GetOtherDisciplineType(GetOtherDisciplineTypeCriteria criteria)
+        public async Task<IList<DisciplineTypeModel>> GetOtherDisciplineTypeAsync(GetOtherDisciplineTypeCriteria criteria)
         {
-            return baseService.GetData<DisciplineTypeModel>(criteria).ToList();
+            var data = await baseService.GetDataAsync<DisciplineTypeModel>(criteria);
+            return data.ToList();
         }
     }
 }

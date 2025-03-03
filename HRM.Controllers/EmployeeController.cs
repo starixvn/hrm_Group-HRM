@@ -356,6 +356,20 @@ public class EmployeeController(
         return new CustomJsonResult(data);
     }
 
+    public async Task<IActionResult> GetMemberByManager(string keyword)
+    {
+        var criteria = new GetMemberByManagerCriteria
+        {
+            SupervisorId = EmployeeSession.EmpId,
+            Query = keyword,
+            ExcludedManager = false
+        };
+        IList<Employee> employees = await employeeService.GetMemberByManagerAsync(criteria);
+        const byte TotalItems = 10;
+
+        return Json(employees.Take(TotalItems));
+    }
+
     private IList<SupervisorNameModel> GetSupervisors(int empId)
     {
         var criteria = new GetListSupervisorNameCriteria

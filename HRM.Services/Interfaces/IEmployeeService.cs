@@ -25,7 +25,7 @@ public interface IEmployeeService
 
     Task<IEnumerable<Employee>> GetEmployeeAsync(GetAllEmployeeCriteria criteria);
 
-    IList<Employee> GetMemberByManager(GetMemberByManagerCriteria criteria);
+    Task<IList<Employee>> GetMemberByManagerAsync(GetMemberByManagerCriteria criteria);
 
     IList<Employee> GetEmployeesByRole(GetEmployeeByRoleCriteria criteria);
 

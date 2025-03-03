@@ -1,21 +1,22 @@
 ﻿namespace HRM.Services
 {
     using System.Collections.Generic;
+    using System.Threading.Tasks;
     using Criteria.Discipline;
     using Models.Discipline;
 
     public interface IDisciplineService
     {
-        IList<DisciplineSummaryModel> GetDisciplineSummary(GetDisciplineSummaryCriteria criteria);
+        Task<IList<DisciplineSummaryModel>> GetDisciplineSummaryAsync(GetDisciplineSummaryCriteria criteria);
 
-        IList<DisciplineDetailModel> GetDisciplineDetail(GetDisciplineDetailCriteria criteria);
+        Task<IList<DisciplineDetailModel>> GetDisciplineDetailAsync(GetDisciplineDetailCriteria criteria);
 
-        IList<OtherDisciplineModel> GetOtherDiscipline(GetOtherDisciplineOfEmployeeCriteria criteria);
+        Task<IList<OtherDisciplineModel>> GetOtherDisciplineAsync(GetOtherDisciplineOfEmployeeCriteria criteria);
 
-        IList<DisciplineTypeModel> GetDisciplineType(GetDisciplineTypeCriteria criteria);
+        Task<IList<DisciplineTypeModel>> GetDisciplineTypeAsync(GetDisciplineTypeCriteria criteria);
 
-        IList<DisciplineTypeModel> GetOtherDisciplineType(GetOtherDisciplineTypeCriteria criteria);
+        Task<IList<DisciplineTypeModel>> GetOtherDisciplineTypeAsync(GetOtherDisciplineTypeCriteria criteria);
 
-        IEnumerable<EmployeeInfoModel> GetMemberToAddOtherDiscipline(int supervisorId, string query = null);
+        Task<IEnumerable<EmployeeInfoModel>> GetMemberToAddOtherDisciplineAsync(int supervisorId, string query = null);
     }
 }

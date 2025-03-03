@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
     using System.Linq;
+    using System.Threading.Tasks;
     using Fanex.Data;
     using Fanex.Data.Repository;
     using HRM.Core.Enums;
@@ -11,11 +12,11 @@
 
     public class DisciplineRepository : IDisciplineRepository
     {
-        public IList<DisciplineSummaryModel> GetDisciplineSummary(ICriteria criteria)
+        public async Task<IList<DisciplineSummaryModel>> GetDisciplineSummaryAsync(ICriteria criteria)
         {
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                return db.Query<DisciplineSummaryModel, EmployeeInfoModel, DisciplineSummaryModel>(
+                var result = await db.QueryAsync<DisciplineSummaryModel, EmployeeInfoModel, DisciplineSummaryModel>(
                     (discipline, employee) =>
                     {
                         discipline.Employee = employee;
@@ -23,18 +24,19 @@
                         return discipline;
                     },
                     "EmployeeId",
-                    criteria).ToList();
+                    criteria);
+                return result.ToList();
             }
         }
 
-        public IList<DisciplineDetailModel> GetDisciplineDetail(ICriteria criteria)
+        public async Task<IList<DisciplineDetailModel>> GetDisciplineDetailAsync(ICriteria criteria)
         {
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                using (var multi = db.QueryMultiple(criteria))
+                using (var multi = await db.QueryMultipleAsync(criteria))
                 {
-                    IList<dynamic> disciplines = multi.Read<dynamic>().ToList();
-                    IList<IgnoredDisciplineDetailModel> ignoreDiciplines = multi.Read<IgnoredDisciplineDetailModel>().ToList();
+                    IList<dynamic> disciplines = (await multi.ReadAsync<dynamic>()).ToList();
+                    IList<IgnoredDisciplineDetailModel> ignoreDiciplines = (await multi.ReadAsync<IgnoredDisciplineDetailModel>()).ToList();
                     IList<DisciplineDetailModel> disciplineDetails = MappingObjectForDisciplineDetail(disciplines);
                     CalculateScore(disciplineDetails);
                     AddIgnoreDisciplineDetail(disciplineDetails, ignoreDiciplines);
@@ -319,19 +321,19 @@
         private static void CalculateSubtractScore(DisciplineDetailModel disciplineDetail)
         {
             var violations = new List<DisciplineModel>
-            {
-                disciplineDetail.MissingCheckInOut,
-                disciplineDetail.LateIn,
-                disciplineDetail.EarlyOut,
-                disciplineDetail.WorkingUnderTime,
-                disciplineDetail.Absent,
-                disciplineDetail.UnplannedLeave,
-                disciplineDetail.UnpaidLeave,
-                disciplineDetail.UnpaidLeaveAbsent,
-                disciplineDetail.ChangeShift,
-                disciplineDetail.WeekendLeave,
-                disciplineDetail.SevenDaysLeave
-            };
+                {
+                    disciplineDetail.MissingCheckInOut,
+                    disciplineDetail.LateIn,
+                    disciplineDetail.EarlyOut,
+                    disciplineDetail.WorkingUnderTime,
+                    disciplineDetail.Absent,
+                    disciplineDetail.UnplannedLeave,
+                    disciplineDetail.UnpaidLeave,
+                    disciplineDetail.UnpaidLeaveAbsent,
+                    disciplineDetail.ChangeShift,
+                    disciplineDetail.WeekendLeave,
+                    disciplineDetail.SevenDaysLeave
+                };
 
             foreach (DisciplineModel violation in violations.Where(violation => violation != null && violation.HasViolated))
             {

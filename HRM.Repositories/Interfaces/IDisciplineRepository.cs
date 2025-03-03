@@ -1,13 +1,14 @@
 ﻿namespace HRM.Repositories
 {
     using System.Collections.Generic;
+    using System.Threading.Tasks;
     using Fanex.Data.Repository;
     using HRM.Models.Discipline;
 
     public interface IDisciplineRepository
     {
-        IList<DisciplineSummaryModel> GetDisciplineSummary(ICriteria criteria);
+        Task<IList<DisciplineSummaryModel>> GetDisciplineSummaryAsync(ICriteria criteria);
 
-        IList<DisciplineDetailModel> GetDisciplineDetail(ICriteria criteria);
+        Task<IList<DisciplineDetailModel>> GetDisciplineDetailAsync(ICriteria criteria);
     }
 }

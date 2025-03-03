@@ -49,7 +49,6 @@ const RequestCommon = {
 function uploadComplete(evt) {
     const data = JSON.parse(evt.target.response);
     if (data.isSuccessful) {
-        console.log(321);
         $('form').removeClass('dirty');
         confirm('Successfull!\nPress OK to continue', function () {
             location.href = resolveClientUrl('Leave/EmployeeView');

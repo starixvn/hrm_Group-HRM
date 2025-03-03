@@ -1,0 +1,174 @@
+﻿@using HRM.Core
+@using HRM.Resources
+@using HRM.ViewModels.Discipline
+@model DisciplineSummaryViewModel
+@{
+    ViewBag.Title = Labels.DisciplineSummary;
+}
+@section css{
+    <link href="~/dist/styles/discipline.summary.css" rel="stylesheet" />
+}
+@section js{
+    <script src="~/dist/js/discipline.summary.js"></script>
+}
+@section Breadcrumb {
+    <a class="step">@ViewBag.Title</a>
+}
+<div class="title">
+    <h2 class="page-title">@Labels.DisciplineSummary</h2>
+</div>
+<form class="form-filter filter">
+    @Html.HiddenFor(model => model.TeamId)
+    @Html.HiddenFor(model => model.TeamName)
+    <div class="form-horizontal clearfix">
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                <label class="control-label">@Labels.DateRange</label>
+            </div>
+            <div class="select-form">
+                @Html.DropDownListFor(model => model.DateRange, Model.DateRange, new { @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.LabelFor(model => model.FromDate, Labels.FromDate , new { @class = "control-label" })
+            </div>
+            <div class="calendar-form">
+                @Html.TextBox(Html.NameFor(model => model.FromDate).ToString(),
+                    Model.FromDate.ToDateMonthYearFormatedDate(),
+                    new
+                         {
+                        @class = "datepicker form-control",
+                        mindate = (new DateTime(2010, 1, 1)).ToString("yyyy/MM/dd")
+                    })
+                <i class="icon-calendar fa fa-calendar"></i>
+            </div>
+        </div>
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.LabelFor(model => model.ToDate, Labels.ToDate, new { @class = "control-label" })
+            </div>
+            <div class="calendar-form">
+                @Html.TextBox(Html.NameFor(model => model.ToDate).ToString(),
+                Model.ToDate.ToDateMonthYearFormatedDate(),
+                new
+                     {
+                    @class = "datepicker form-control",
+                    mindate = (new DateTime(2010, 1, 1)).ToString("yyyy/MM/dd")
+                })
+                <i class="icon-calendar fa fa-calendar"></i>
+            </div>
+        </div>
+
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                <label class="control-label">@Labels.SectionTeam</label>
+            </div>
+            <div class="input-form" id="Team"></div>
+        </div>
+
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                <label class="control-label">@Labels.Category</label>
+            </div>
+            <div class="select-form">
+                @{
+                    var category = new List<SelectListItem>
+                                    {
+                        new SelectListItem() {Text = Labels.All, Value = string.Empty},
+                        new SelectListItem() {Text = Labels.Expat, Value = "false"},
+                        new SelectListItem() {Text = Labels.Local, Value = "true"}
+                    };
+                }
+                @Html.DropDownListFor(model => model.IsLocal, category, new { @class = "category form-control" })
+            </div>
+        </div>
+
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.LabelFor(model => model.Employee, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.TextBoxFor(model => model.Employee,
+               new { placeholder = Messages.SearchEmployeeWatermark, @class = "form-control", autocomplete = "off" })
+                @Html.HiddenFor(model => model.EmployeeId)
+            </div>
+        </div>
+
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.LabelFor(model => model.ReasonId, new { @class = "control-label" })
+            </div>
+            <div class="select-form">
+                @Html.DropDownListFor(model => model.ReasonId, new SelectList(Model.DisciplineTypes, "DisciplineTypeId", "Name"), Labels.All, new { @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.LabelFor(model => model.IsShowAll, "Show all", new { @class = "control-label" })
+            </div>
+            <div class="input-form" style="padding-top: 5px;">
+                <input type="checkbox" class="checkbox-custom" id="IsShowAll"
+                       name="IsShowAll" value="true" />
+                <label for="IsShowAll"></label>
+            </div>
+        </div>
+
+        <div class="clearfix"></div>
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                <label class="control-label"></label>
+            </div>
+            <div class="select-form">
+                <input type="button" id="submit" class="btn btn-primary" value="@Labels.Submit" />
+                <input type="button" class="btn btn-excel" id="btnExcel" value="@Labels.Excel" />
+            </div>
+        </div>
+        <div class="form-group form-group--m link-to-report">
+            <a href="@Url.Action("index", "DisciplineSummaryPerYear")">@Labels.View5YearsDisciplineSummary</a>
+        </div>
+    </div>
+</form>
+<div id="discipline-summary">
+    <table id="data" class="table table-custom discipline-summary">
+        <thead>
+            @if ((bool)ViewBag.IsHostOtherDiscipline)
+            {
+                <tr>
+                    <th colspan="19" class="align-left">
+                        <button class="btn btn-primary" id="btnAddOtherDiscipline">
+                            @Labels.AddOtherDiscipline
+                        </button>
+                    </th>
+                </tr>
+            }
+
+            <tr>
+                <th>@Labels.SymbolCount</th>
+                <th>@Labels.Team</th>
+                <th>@Labels.Code</th>
+                <th>@Labels.Nick</th>
+                <th>@Labels.MissingCheckInOut</th>
+                <th>@Labels.WorkingUnderTime</th>
+                <th>@Labels.LateIn</th>
+                <th>@Labels.EarlyOut</th>
+                <th>@Labels.Absent</th>
+                <th>@Labels.UPL</th>
+                <th>@Labels.UPLAbsent</th>
+                <th>@Labels.ChangeShift</th>
+                <th>@Labels.LateRequestLeave</th>
+                <th><a href="/report/weekendleavesummary">@Labels.WeekendLeave</a></th>
+                <th>@Labels.SevenDaysLeave</th>
+                <th>@Labels.OtherDiscipline</th>
+                <th>@Labels.TotalScore</th>
+                <th>@Labels.DisciplineByApprover</th>
+                <th>@Labels.Action</th>
+            </tr>
+        </thead>
+        <tbody id="disciplineTableBody"></tbody>
+    </table>
+</div>
+<div id="dialogAddOtherDiscipline"></div>
+<div id="dialogViewOtherDiscipline"></div>

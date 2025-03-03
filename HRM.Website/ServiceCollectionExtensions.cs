@@ -160,6 +160,10 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IOvertimeRequestRepository, OvertimeRequestRepository>();
         services.AddSingleton<IWorkingCalendarService, WorkingCalendarService>();
         services.AddSingleton<IWorkingCalendarRepository, WorkingCalendarRepository>();
+        services.AddSingleton<IDisciplineService, DisciplineService>();
+        services.AddSingleton<IDisciplineRepository, DisciplineRepository>();
+        services.AddSingleton<IExportDisciplineSummaryService, ExportDisciplineSummaryService>();
+        services.AddSingleton<IExportDisciplineDetailService, ExportDisciplineDetailService>();
 
         services.AddDIReportServices();
         services.AddDIExcelServices();
