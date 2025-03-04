@@ -1,5 +1,6 @@
 ﻿using HRM.Core;
 using HRM.Criteria.Supervisor;
+using HRM.Models;
 using HRM.Models.Supervisor;
 using HRM.Services.Interfaces;
 using HRM.ViewModels.Report;
@@ -77,51 +78,52 @@ public class ReportController(
         return PartialView("_TimesheetDetails", timesheets);
     }
 
-    //        public ActionResult TimeRecord(TimeRecordViewModel model)
-    //        {
-    //            model.CurrentPage = Constants.CurrentPage;
-    //            model.ItemsPerPage = Constants.ItemsPerPage;
-    //            model.TeamIds = string.Join(",", teamService.GetBySupervisor(EmployeeSession.EmpId).Select(x => x.Id));
+    public async Task<ViewResult> TimeRecord(TimeRecordViewModel model)
+    {
+        model.CurrentPage = Constants.CurrentPage;
+        model.ItemsPerPage = Constants.ItemsPerPage;
+        var supervisors = await teamService.GetBySupervisorAsync(EmployeeSession.EmpId);
+        model.TeamIds = string.Join(",", supervisors.Select(x => x.Id));
 
-    //            ViewBag.HasPermission = userControlSession.HasPermissionOnFunction(FunctionKey.TimeRecord, Policy.Read)
-    //                || userControlSession.HasPermissionOnFunction(FunctionKey.TimeRecord, Policy.Host);
+        ViewBag.HasPermission = userControlSession.HasPermissionOnFunction(FunctionKey.TimeRecord, Policy.Read)
+            || userControlSession.HasPermissionOnFunction(FunctionKey.TimeRecord, Policy.Host);
 
-    //            return View(model);
-    //        }
+        return View(model);
+    }
 
-    //        [HttpPost]
-    //        public ActionResult TimeRecordDetail(TimeRecordViewModel model)
-    //        {
-    //            int? employeeId = null;
-    //            if (!userControlSession.HasPermissionOnFunction(FunctionKey.TimeRecord, Policy.Read)
-    //                && !userControlSession.HasPermissionOnFunction(FunctionKey.TimeRecord, Policy.Host))
-    //            {
-    //                employeeId = EmployeeSession.EmpId;
-    //            }
-    //            var criteria = new GetTimeRecordCriteria
-    //            {
-    //                EmpId = model.EmployeeId == 0 ? employeeId : model.EmployeeId,
-    //                TeamIds = model.TeamIds,
-    //                FromDate = model.FromDate,
-    //                ToDate = model.ToDate,
-    //                IsLocal = model.IsLocal,
-    //                PageIndex = model.CurrentPage - 1,
-    //                ItemsPerPage = model.ItemsPerPage,
-    //                SupervisorId = EmployeeSession.EmpId
-    //            };
-    //            IList<TimeRecordModel> timeRecords = reportService.GetTimeRecords(criteria);
-    //            ViewBag.HasPermission = userControlSession.HasPermissionOnFunction(FunctionKey.TimeRecord, Policy.Host);
+    [HttpPost]
+    public async Task<PartialViewResult> TimeRecordDetail(TimeRecordViewModel model)
+    {
+        int? employeeId = null;
+        if (!userControlSession.HasPermissionOnFunction(FunctionKey.TimeRecord, Policy.Read)
+            && !userControlSession.HasPermissionOnFunction(FunctionKey.TimeRecord, Policy.Host))
+        {
+            employeeId = EmployeeSession.EmpId;
+        }
+        var criteria = new GetTimeRecordCriteria
+        {
+            EmpId = model.EmployeeId == 0 ? employeeId : model.EmployeeId,
+            TeamIds = model.TeamIds,
+            FromDate = model.FromDate,
+            ToDate = model.ToDate,
+            IsLocal = model.IsLocal,
+            PageIndex = model.CurrentPage - 1,
+            ItemsPerPage = model.ItemsPerPage,
+            SupervisorId = EmployeeSession.EmpId
+        };
+        var timeRecords = await reportService.GetTimeRecords(criteria);
+        ViewBag.HasPermission = userControlSession.HasPermissionOnFunction(FunctionKey.TimeRecord, Policy.Host);
 
-    //            var pagerOption = new PagerOptionModel
-    //            {
-    //                CurrentPage = model.CurrentPage,
-    //                ItemsPerPage = model.ItemsPerPage,
-    //                TotalItem = criteria.TotalItem ?? 0
-    //            };
-    //            ViewBag.PagerOption = pagerOption;
+        var pagerOption = new PagerOptionModel
+        {
+            CurrentPage = model.CurrentPage,
+            ItemsPerPage = model.ItemsPerPage,
+            TotalItem = criteria.TotalItem ?? 0
+        };
+        ViewBag.PagerOption = pagerOption;
 
-    //            return PartialView("_TimeRecordDetail", timeRecords);
-    //        }
+        return PartialView("_TimeRecordDetail", timeRecords);
+    }
 
     public ActionResult WeekendLeaveSummary(WeekendLeaveViewModel model)
     {

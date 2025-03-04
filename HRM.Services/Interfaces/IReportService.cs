@@ -20,15 +20,15 @@ public interface IReportService
 
     Task<IEnumerable<LeaveSummary>> GetUnpaidLeaveAsync(GetUnpaidLeaveCriteria criteria);
 
-    IList<TimeRecordModel> GetTimeRecords(GetTimeRecordCriteria criteria);
+    Task<IList<TimeRecordModel>> GetTimeRecords(GetTimeRecordCriteria criteria);
 
     Task<IList<SupervisorReportModel>> GetSupervisorReport(GetSupervisorReportCriteria criteria);
 
     Task<IList<TeamSupervisorReportModel>> GetTeamSupervisor(GetTeamSupervisorCriteria criteria);
 
-        Task<IList<WeekendLeaveSummary>> GetWeekendLeaveSummaryAsync(GetWeekendLeaveSummaryCriteria criteria);
+    Task<IList<WeekendLeaveSummary>> GetWeekendLeaveSummaryAsync(GetWeekendLeaveSummaryCriteria criteria);
 
-        Task<IList<WeekendLeaveDetail>> GetWeekendLeaveDetailAsync(GetWeekendLeaveDetailCriteria criteria);
+    Task<IList<WeekendLeaveDetail>> GetWeekendLeaveDetailAsync(GetWeekendLeaveDetailCriteria criteria);
 
     Task<bool> GetIsPrivilegeCreateCheckInOutAsync(GetPrivilegeCreateCheckInOutRecordCriteria criteria);
 }

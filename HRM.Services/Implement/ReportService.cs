@@ -13,73 +13,72 @@ using HRM.Models.Supervisor;
 using HRM.Services.Interfaces;
 using HRM.ViewModels;
 
-namespace HRM.Services.Implement
+namespace HRM.Services.Implement;
+
+public class ReportService(
+    Repositories.Interfaces.IReportRepository reportRepository,
+    IBaseService baseService) : IReportService
 {
-    public class ReportService(
-        Repositories.Interfaces.IReportRepository reportRepository,
-        IBaseService baseService) : IReportService
+    public async Task<IEnumerable<EmployeeAttendanceModel>> GetEmployeeAttendanceReportAsync(GetEmployeeAttendanceCriteria criteria)
     {
-        public async Task<IEnumerable<EmployeeAttendanceModel>> GetEmployeeAttendanceReportAsync(GetEmployeeAttendanceCriteria criteria)
+        IEnumerable<EmployeeAttendanceModel> employeeAttendance = null;
+        if (criteria != null && criteria.IsValid())
         {
-            IEnumerable<EmployeeAttendanceModel> employeeAttendance = null;
-            if (criteria != null && criteria.IsValid())
-            {
-                employeeAttendance = await reportRepository.GetEmployeeAttendanceReportAsync(criteria);
-            }
-
-            return employeeAttendance;
+            employeeAttendance = await reportRepository.GetEmployeeAttendanceReportAsync(criteria);
         }
 
-        public async Task<IEnumerable<LeaveSummary>> GetAnnualLeaveBalanceReportAsync(GetAnnualLeaveBalanceCriteria criteria)
+        return employeeAttendance;
+    }
+
+    public async Task<IEnumerable<LeaveSummary>> GetAnnualLeaveBalanceReportAsync(GetAnnualLeaveBalanceCriteria criteria)
+    {
+        return await baseService.GetDataAsync<LeaveSummary>(criteria);
+    }
+
+    public async Task<IEnumerable<LeaveSummary>> GetUnpaidLeaveAsync(GetUnpaidLeaveCriteria criteria)
+    {
+        return await baseService.GetDataAsync<LeaveSummary>(criteria);
+    }
+
+    public async Task<IList<TimeRecordModel>> GetTimeRecords(GetTimeRecordCriteria criteria)
+    {
+        return (await baseService.GetDataAsync<TimeRecordModel>(criteria)).ToList();
+    }
+
+    public async Task<IList<SupervisorReportModel>> GetSupervisorReport(GetSupervisorReportCriteria criteria)
+    {
+        IList<SupervisorReportModel> supervisors = null;
+        if (criteria != null && criteria.IsValid())
         {
-            return await baseService.GetDataAsync<LeaveSummary>(criteria);
+            supervisors = await reportRepository.GetSupervisorReport(criteria);
         }
 
-        public async Task<IEnumerable<LeaveSummary>> GetUnpaidLeaveAsync(GetUnpaidLeaveCriteria criteria)
+        return supervisors;
+    }
+
+    public async Task<IList<TeamSupervisorReportModel>> GetTeamSupervisor(GetTeamSupervisorCriteria criteria)
+    {
+        IList<TeamSupervisorReportModel> supervisors = null;
+        if (criteria != null && criteria.IsValid())
         {
-            return await baseService.GetDataAsync<LeaveSummary>(criteria);
+            supervisors = await reportRepository.GetTeamSupervisor(criteria);
         }
 
-        public IList<TimeRecordModel> GetTimeRecords(GetTimeRecordCriteria criteria)
-        {
-            return baseService.GetData<TimeRecordModel>(criteria).ToList();
-        }
+        return supervisors;
+    }
 
-        public async Task<IList<SupervisorReportModel>> GetSupervisorReport(GetSupervisorReportCriteria criteria)
-        {
-            IList<SupervisorReportModel> supervisors = null;
-            if (criteria != null && criteria.IsValid())
-            {
-                supervisors = await reportRepository.GetSupervisorReport(criteria);
-            }
+    public async Task<IList<WeekendLeaveSummary>> GetWeekendLeaveSummaryAsync(GetWeekendLeaveSummaryCriteria criteria)
+    {
+        return (await baseService.GetDataAsync<WeekendLeaveSummary>(criteria)).ToList();
+    }
 
-            return supervisors;
-        }
+    public async Task<IList<WeekendLeaveDetail>> GetWeekendLeaveDetailAsync(GetWeekendLeaveDetailCriteria criteria)
+    {
+        return (await baseService.GetDataAsync<WeekendLeaveDetail>(criteria)).ToList();
+    }
 
-        public async Task<IList<TeamSupervisorReportModel>> GetTeamSupervisor(GetTeamSupervisorCriteria criteria)
-        {
-            IList<TeamSupervisorReportModel> supervisors = null;
-            if (criteria != null && criteria.IsValid())
-            {
-                supervisors = await reportRepository.GetTeamSupervisor(criteria);
-            }
-
-            return supervisors;
-        }
-
-        public async Task<IList<WeekendLeaveSummary>> GetWeekendLeaveSummaryAsync(GetWeekendLeaveSummaryCriteria criteria)
-        {
-            return (await baseService.GetDataAsync<WeekendLeaveSummary>(criteria)).ToList();
-        }
-
-        public async Task<IList<WeekendLeaveDetail>> GetWeekendLeaveDetailAsync(GetWeekendLeaveDetailCriteria criteria)
-        {
-            return (await baseService.GetDataAsync<WeekendLeaveDetail>(criteria)).ToList();
-        }
-
-        public async Task<bool> GetIsPrivilegeCreateCheckInOutAsync(GetPrivilegeCreateCheckInOutRecordCriteria criteria)
-        {
-            return await baseService.GetDataEntityAsync<bool>(criteria);
-        }
+    public async Task<bool> GetIsPrivilegeCreateCheckInOutAsync(GetPrivilegeCreateCheckInOutRecordCriteria criteria)
+    {
+        return await baseService.GetDataEntityAsync<bool>(criteria);
     }
 }
