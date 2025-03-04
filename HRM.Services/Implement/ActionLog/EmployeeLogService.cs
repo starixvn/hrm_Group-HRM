@@ -97,7 +97,7 @@ public class EmployeeLogService(
         Teams = await commonDataService.GetAllTeamAsync();
         JobTitles = await commonDataService.GetLookupDataByCodeAsync(Constants.JobTitle);
         JobLevel = await jobLevelService.GetJobLevel();
-        Countries = commonDataService.GetAllCountry();
+        Countries = await commonDataService.GetAllCountry();
         SystemRoles = await roleService.GetBySiteIdAsync(userControlSession.SiteId);
         Genders = commonDataService.GetGender();
         MarriageStatuses = commonDataService.GetMarriageStatus();

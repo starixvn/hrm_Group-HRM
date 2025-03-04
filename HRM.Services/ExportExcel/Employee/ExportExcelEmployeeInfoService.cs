@@ -1,4 +1,5 @@
-﻿using HRM.Core;
+﻿using System.Threading.Tasks;
+using HRM.Core;
 
 namespace HRM.Services.ExportExcel.Employee;
 
@@ -18,24 +19,15 @@ using Implement;
 using Interfaces;
 
 [SuppressMessage("Major Code Smell", "S109:Magic numbers should not be used", Justification = "Pending")]
-public class ExportExcelEmployeeInfoService : IExportExcelEmployeeInfoService
+public class ExportExcelEmployeeInfoService(
+    IEmployeeService employeeService,
+    ICommonDataService commonDataService,
+    IWebHostEnvironment hostingEnvironment)
+    : IExportExcelEmployeeInfoService
 {
     private const string EmployeeBasicInfoTemplatePath = @"ExcelTemplates\EmployeeBasicInfoTemplate.xls";
     private const string EmployeeDetailsInfoTemplatePath = @"ExcelTemplates\EmployeeDetailsInfoTemplate.xls";
     private const string EmployeeFullInfoTemplatePath = @"ExcelTemplates\EmployeeFullProfileInfoTemplate.xls";
-    private readonly IEmployeeService employeeService;
-    private readonly ICommonDataService commonDataService;
-    private readonly IWebHostEnvironment hostingEnvironment;
-
-    public ExportExcelEmployeeInfoService(
-        IEmployeeService employeeService,
-        ICommonDataService commonDataService,
-        IWebHostEnvironment hostingEnvironment)
-    {
-        this.employeeService = employeeService;
-        this.commonDataService = commonDataService;
-        this.hostingEnvironment = hostingEnvironment;
-    }
 
     private enum BasicInfo
     {
@@ -44,19 +36,17 @@ public class ExportExcelEmployeeInfoService : IExportExcelEmployeeInfoService
         TotalColumns = 22
     }
 
-    public void ExportEmployeeBasicInfo(IList<Employee> employees)
+    public async Task ExportEmployeeBasicInfo(IList<Employee> employees)
     {
-        string templatePath = Path.Combine(hostingEnvironment.ContentRootPath, EmployeeBasicInfoTemplatePath);
-        string fileName = "EmployeeBasicInfo_" + DateTimeOffset.Now.ToString("yyyyMMdd");
+        var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, EmployeeBasicInfoTemplatePath);
+        var fileName = "EmployeeBasicInfo_" + DateTimeOffset.Now.ToString("yyyyMMdd");
         const string sheetName = "Employee Basic Info";
         var writer = new ExcelTemplateWriter(templatePath, fileName, sheetName);
-        bool enableGroupDate = commonDataService.IsEnableGroupDate();
+        var enableGroupDate = await commonDataService.IsEnableGroupDate();
         const byte colGroupDate = 8;
         const byte colLengthOfServiceGroupDate = 12;
 
-        /// Fill report title.
         writer.CopyRows(0, 2);
-        /// Fill report header.
         writer.CopyRows((byte)BasicInfo.RowStartHeader, 2);
 
         FillContentRowEmployeeBasicInfoReport(employees, ref writer);
@@ -72,14 +62,12 @@ public class ExportExcelEmployeeInfoService : IExportExcelEmployeeInfoService
 
     public void ExportEmployeeDetailsInfo(IList<Employee> employees)
     {
-        string templatePath = Path.Combine(hostingEnvironment.ContentRootPath, EmployeeDetailsInfoTemplatePath);
-        string fileName = "EmployeeDetailsInfo_" + DateTimeOffset.Now.ToString("yyyyMMdd");
+        var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, EmployeeDetailsInfoTemplatePath);
+        var fileName = "EmployeeDetailsInfo_" + DateTimeOffset.Now.ToString("yyyyMMdd");
         const string sheetName = "Employee Details Info";
         var writer = new ExcelTemplateWriter(templatePath, fileName, sheetName);
 
-        /// Fill report title.
         writer.CopyRows(0, 2);
-        /// Fill report header.
         writer.CopyRows(2, 1);
 
         FillContentRowEmployeeDetailsInfoReport(employees, ref writer);
@@ -92,9 +80,9 @@ public class ExportExcelEmployeeInfoService : IExportExcelEmployeeInfoService
 
     private void FillContentRowEmployeeBasicInfoReport(IList<Employee> employees, ref ExcelTemplateWriter writer)
     {
-        int rowIndex = 1;
+        var rowIndex = 1;
 
-        foreach (Employee employee in employees)
+        foreach (var employee in employees)
         {
             FillRowEmployeeBasicInfoReport(employee, ref writer, ref rowIndex);
         }
@@ -102,7 +90,7 @@ public class ExportExcelEmployeeInfoService : IExportExcelEmployeeInfoService
 
     private void FillRowEmployeeBasicInfoReport(Employee employee, ref ExcelTemplateWriter writer, ref int rowIndex)
     {
-        object record = CreateRecordEmployeeBasicInfoReport(employee, rowIndex);
+        var record = CreateRecordEmployeeBasicInfoReport(employee, rowIndex);
 
         var writeRowNumber = (rowIndex % 2 == 0) ? 5 : 4;
 
@@ -148,9 +136,9 @@ public class ExportExcelEmployeeInfoService : IExportExcelEmployeeInfoService
 
     private void FillContentRowEmployeeDetailsInfoReport(IList<Employee> employees, ref ExcelTemplateWriter writer)
     {
-        int rowIndex = 1;
+        var rowIndex = 1;
 
-        foreach (Employee employee in employees)
+        foreach (var employee in employees)
         {
             FillRowEmployeeDetailsInfoReport(employee, ref writer, ref rowIndex);
         }
@@ -158,7 +146,7 @@ public class ExportExcelEmployeeInfoService : IExportExcelEmployeeInfoService
 
     private void FillRowEmployeeDetailsInfoReport(Employee employee, ref ExcelTemplateWriter writer, ref int rowIndex)
     {
-        object record = CreateRecordEmployeeDetailsInfoReport(employee, rowIndex);
+        var record = CreateRecordEmployeeDetailsInfoReport(employee, rowIndex);
         var writeRowNumber = (rowIndex % 2 == 0) ? 4 : 3;
 
         writer.WriteRow(writeRowNumber, record);
@@ -225,13 +213,13 @@ public class ExportExcelEmployeeInfoService : IExportExcelEmployeeInfoService
 
     #region Employee Full Profile Information
 
-    public void ExportEmployeeFullProfile(IList<EmployeeFullProfile> profiles)
+    public async Task ExportEmployeeFullProfile(IList<EmployeeFullProfile> profiles)
     {
-        string templatePath = Path.Combine(hostingEnvironment.ContentRootPath, EmployeeFullInfoTemplatePath);
-        string fileName = "EmployeeFullInfo_" + DateTimeOffset.Now.ToString("yyyyMMdd");
+        var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, EmployeeFullInfoTemplatePath);
+        var fileName = "EmployeeFullInfo_" + DateTimeOffset.Now.ToString("yyyyMMdd");
         const string sheetName = "Employee Full Information";
         var writer = new ExcelTemplateWriter(templatePath, fileName, sheetName);
-        bool enableGroupDate = commonDataService.IsEnableGroupDate();
+        var enableGroupDate = await commonDataService.IsEnableGroupDate();
         const byte colGroupDate = 10;
         const byte colLengthOfServiceGroupDate = 14;
 

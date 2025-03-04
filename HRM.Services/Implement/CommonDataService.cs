@@ -25,7 +25,7 @@ public interface ICommonDataService
 
     Task<IEnumerable<Team>> GetAllTeamAsync(bool isDeleted = false);
 
-    IList<Country> GetAllCountry();
+    Task<List<Country>> GetAllCountry();
 
     Task<IList<Country>> GetAllCountryAsync();
 
@@ -37,7 +37,7 @@ public interface ICommonDataService
 
     Task<bool> IsEnableGroupDateAsync();
 
-    bool IsEnableGroupDate();
+    Task<bool> IsEnableGroupDate();
 }
 
 public class CommonDataService(
@@ -79,10 +79,10 @@ public class CommonDataService(
         return await teamService.GetAllAsync(isDeleted);
     }
 
-    public IList<Country> GetAllCountry()
+    public async Task<List<Country>> GetAllCountry()
     {
         var criteria = new GetAllCountryCriteria();
-        return baseService.GetData<Country>(criteria).ToList();
+        return (await baseService.GetDataAsync<Country>(criteria)).ToList();
     }
 
     public async Task<IList<Country>> GetAllCountryAsync()
@@ -162,13 +162,13 @@ public class CommonDataService(
         return await baseService.GetDataEntityAsync<bool>(criteria);
     }
 
-    public bool IsEnableGroupDate()
+    public async Task<bool> IsEnableGroupDate()
     {
         var criteria = new GetSystemConfigsByKeyCriteria
         {
             Key = "EnableGroupDate"
         };
 
-        return baseService.GetDataEntity<bool>(criteria);
+        return await baseService.GetDataEntityAsync<bool>(criteria);
     }
 }

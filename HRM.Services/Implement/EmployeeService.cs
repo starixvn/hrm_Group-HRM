@@ -1,4 +1,6 @@
-﻿namespace HRM.Services.Implement;
+﻿using HRM.Repositories.Interfaces;
+
+namespace HRM.Services.Implement;
 
 using System;
 using System.Collections.Generic;
@@ -30,10 +32,10 @@ public class EmployeeService(
     IBaseService baseService,
     IRoleService roleService) : IEmployeeService
 {
-    public string GenerateEmployeeCode()
+    public async Task<string> GenerateEmployeeCode()
     {
         var criteria = new GenerateEmployeeCodeCriteria();
-        return baseService.GetDataEntity<string>(criteria);
+        return await baseService.GetDataEntityAsync<string>(criteria);
     }
 
     public async Task<Employee> GetEmployeeByIdAsync(int id)
@@ -97,10 +99,9 @@ public class EmployeeService(
 
     public async Task<IList<Employee>> GetEmployeesByRoleAsync(GetEmployeeByRoleCriteria criteria)
     {
-        IList<Employee> employees = null;
         if (criteria == null || !criteria.IsValid()) return new List<Employee>();
 
-        employees = await employeeRepository.GetEmployeesByRoleAsync(criteria);
+        var employees = await employeeRepository.GetEmployeesByRoleAsync(criteria);
         var roles = await roleService.GetBySiteIdAsync(userControlSettings.SiteId);
         foreach (var employee in employees)
         {
@@ -113,13 +114,13 @@ public class EmployeeService(
         return employees;
     }
 
-    public EmployeeShift GetShiftByEmployeeId(int id)
+    public async Task<EmployeeShift> GetShiftByEmployeeId(int id)
     {
         var criteria = new GetShiftByEmployeeIdCriteria
         {
             EmpId = id
         };
-        return baseService.GetDataEntity<EmployeeShift>(criteria);
+        return await baseService.GetDataEntityAsync<EmployeeShift>(criteria);
     }
 
     public async Task<IEnumerable<AnnualLeaveTransactionViewModel>> GetAnnualLeaveTransactionAsync(GetAnnualLeaveTransactionCriteria criteria)
@@ -237,7 +238,7 @@ public class EmployeeService(
         return await baseService.ExecuteNonQueryAsync(criteria);
     }
 
-    public IList<Employee> GetEmployeeByGender(string query, int gender)
+    public async Task<IList<Employee>> GetEmployeeByGender(string query, int gender)
     {
         var criteria = new GetMemberByGenderCriteria
         {
@@ -245,13 +246,13 @@ public class EmployeeService(
             Gender = gender
         };
 
-        return baseService.GetData<Employee>(criteria).ToList();
+        return (await baseService.GetDataAsync<Employee>(criteria)).ToList();
     }
 
-    public IList<EmployeeFullProfile> GetEmployeeFullProfile(GetEmployeeFullProfileCriteria criteria)
+    public async Task<IList<EmployeeFullProfile>> GetEmployeeFullProfile(GetEmployeeFullProfileCriteria criteria)
     {
-        var employees = employeeRepository.GetEmployeeFullInformation(criteria);
-        var roles = roleService.GetBySiteId(userControlSettings.SiteId);
+        var employees = await employeeRepository.GetEmployeeFullInformation(criteria);
+        var roles = await roleService.GetBySiteIdAsync(userControlSettings.SiteId);
         foreach (var employee in employees)
         {
             if (employee.Roles != null && employee.Roles.Any())
@@ -373,39 +374,35 @@ public class EmployeeService(
 
     public string CaculateLengthOfService(DateTime? joinedDate, DateTime? militaryFromDate, DateTime? militaryToDate)
     {
-        const byte HalfMonth = 15;
-        const short DayOfYear = 365;
-        const byte DayOfMonth = 30;
-        const byte MonthOfYear = 12;
-        int totalDays;
-        int years;
-        int months;
-        int days;
-        string lengOfService = string.Empty;
+        const byte halfMonth = 15;
+        const short dayOfYear = 365;
+        const byte dayOfMonth = 30;
+        const byte monthOfYear = 12;
+        var lengthOfService = string.Empty;
         if (joinedDate.HasValue)
         {
-            totalDays = ((TimeSpan)(DateTimeOffset.Now.Date - joinedDate)).Days;
+            var totalDays = ((TimeSpan)(DateTimeOffset.Now.Date - joinedDate)).Days;
             if (militaryToDate.HasValue && militaryFromDate.HasValue)
             {
                 totalDays -= ((TimeSpan)(militaryToDate - militaryFromDate)).Days;
             }
-            years = totalDays / DayOfYear;
-            months = (totalDays - (years * DayOfYear)) / DayOfMonth;
-            days = totalDays - (years * DayOfYear) - (months * DayOfMonth);
-            if (days >= HalfMonth)
+            var years = totalDays / dayOfYear;
+            var months = (totalDays - (years * dayOfYear)) / dayOfMonth;
+            var days = totalDays - (years * dayOfYear) - (months * dayOfMonth);
+            if (days >= halfMonth)
             {
                 months++;
             }
 
-            if (months >= MonthOfYear)
+            if (months >= monthOfYear)
             {
                 years++;
                 months = 0;
             }
 
-            lengOfService = string.Format(Messages.LengthOfService, years, months);
+            lengthOfService = string.Format(Messages.LengthOfService, years, months);
         }
 
-        return lengOfService;
+        return lengthOfService;
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace HRM.Repositories
+﻿using HRM.Repositories.Interfaces;
+
+namespace HRM.Repositories
 {
     using System.Collections.Generic;
     using System.Linq;
@@ -14,107 +16,95 @@
     {
         public async Task<Employee> GetEmployeeByIdAsync(ICriteria criteria)
         {
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                return await db.QueryEntityAsync<Employee, Team, Employee>(
-                        (e, t) =>
-                        {
-                            e.Team = t;
-                            return e;
-                        },
-                        splitOn: "TeamId",
-                        parameterSet: criteria);
-            }
+            using var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey());
+            return await db.QueryEntityAsync<Employee, Team, Employee>(
+                (e, t) =>
+                {
+                    e.Team = t;
+                    return e;
+                },
+                splitOn: "TeamId",
+                parameterSet: criteria);
         }
 
         public Employee GetEmployeeByCode(ICriteria criteria)
         {
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                return db.QueryEntity<Employee, dynamic, Employee>(
-                        (e, t) =>
-                        {
-                            e.Team = new Team { Id = t.TeamID, Name = t.Team };
-                            return e;
-                        },
-                        splitOn: "TeamId",
-                        parameterSet: criteria);
-            }
+            using var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey());
+            return db.QueryEntity<Employee, dynamic, Employee>(
+                (e, t) =>
+                {
+                    e.Team = new Team { Id = t.TeamID, Name = t.Team };
+                    return e;
+                },
+                splitOn: "TeamId",
+                parameterSet: criteria);
         }
 
         public async Task<IEnumerable<Employee>> GetEmployeeAsync(ICriteria criteria)
         {
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                using (var multi = await db.QueryMultipleAsync(criteria))
+            using var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey());
+            using var multi = await db.QueryMultipleAsync(criteria);
+            var employees = multi.Read<Employee, dynamic, Employee>(
+                (e, t) =>
                 {
-                    var employees = multi.Read<Employee, dynamic, Employee>(
-                        (e, t) =>
+                    e.Team = new Team
+                    {
+                        Id = t.TeamId,
+                        Code = t.TeamCode,
+                        Name = t.TeamName,
+                        Section = new Section
                         {
-                            e.Team = new Team
+                            Id = t.SectionId,
+                            Code = t.SectionCode,
+                            Name = t.SectionName,
+                            Department = new Department
                             {
-                                Id = t.TeamId,
-                                Code = t.TeamCode,
-                                Name = t.TeamName,
-                                Section = new Section
-                                {
-                                    Id = t.SectionId,
-                                    Code = t.SectionCode,
-                                    Name = t.SectionName,
-                                    Department = new Department
-                                    {
-                                        Id = t.DepartmentId,
-                                        Code = t.DepartmentCode,
-                                        Name = t.DepartmentName
-                                    }
-                                }
-                            };
-                            return e;
-                        },
-                        splitOn: "TeamId");
+                                Id = t.DepartmentId,
+                                Code = t.DepartmentCode,
+                                Name = t.DepartmentName
+                            }
+                        }
+                    };
+                    return e;
+                },
+                splitOn: "TeamId");
 
-                    var roles = multi.Read<EmployeeRole, Role, EmployeeRole>(
-                        (er, r) =>
-                        {
-                            er.Role = r;
-                            return er;
-                        },
-                        "RoleId");
+            var roles = multi.Read<EmployeeRole, Role, EmployeeRole>(
+                (er, r) =>
+                {
+                    er.Role = r;
+                    return er;
+                },
+                "RoleId");
 
-                    employees = GroupByRoles(employees, roles);
+            employees = GroupByRoles(employees, roles);
 
-                    return employees.ToList();
-                }
-            }
+            return employees.ToList();
         }
 
         public IList<Employee> GetEmployeesByRole(ICriteria criteria)
         {
-            using (IObjectDb db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                using (var multi = db.QueryMultiple(criteria))
+            using var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey());
+            using var multi = db.QueryMultiple(criteria);
+            var employees = multi.Read<Employee, dynamic, Employee>(
+                (e, t) =>
                 {
-                    var employees = multi.Read<Employee, dynamic, Employee>(
-                        (e, t) =>
-                        {
-                            e.Team = new Team { Id = t.TeamID, Name = t.Team };
-                            return e;
-                        },
-                        splitOn: "TeamID");
+                    e.Team = new Team { Id = t.TeamID, Name = t.Team };
+                    return e;
+                },
+                splitOn: "TeamID");
 
-                    var roles = multi.Read<EmployeeRole, Role, EmployeeRole>(
-                            (er, r) =>
-                            {
-                                er.Role = r;
-                                return er;
-                            },
-                            "RoleId");
+            var roles = multi.Read<EmployeeRole, Role, EmployeeRole>(
+                (er, r) =>
+                {
+                    er.Role = r;
+                    return er;
+                },
+                "RoleId");
 
-                    employees = GroupByRoles(employees, roles);
+            employees = GroupByRoles(employees, roles);
 
-                    return employees.ToList();
-                }
-            }
+            return employees.ToList();
         }
         public async Task<IList<Employee>> GetEmployeesByRoleAsync(ICriteria criteria)
         {
@@ -151,28 +141,24 @@
             return employees;
         }
 
-        public IList<EmployeeFullProfile> GetEmployeeFullInformation(ICriteria criteria)
+        public async Task<List<EmployeeFullProfile>> GetEmployeeFullInformation(ICriteria criteria)
         {
-            using (IObjectDb db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                using (var multi = db.QueryMultiple(criteria))
+            using var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey());
+            using var multi = await db.QueryMultipleAsync(criteria);
+            var profiles = multi.Read<EmployeeFullProfile>();
+            var supervisors = multi.Read<SupervisorNameModel>();
+
+            var roles = multi.Read<EmployeeRole, Role, EmployeeRole>(
+                (er, r) =>
                 {
-                    var profiles = multi.Read<EmployeeFullProfile>();
-                    var supervisors = multi.Read<SupervisorNameModel>();
+                    er.Role = r;
+                    return er;
+                },
+                "RoleId");
 
-                    var roles = multi.Read<EmployeeRole, Role, EmployeeRole>(
-                            (er, r) =>
-                            {
-                                er.Role = r;
-                                return er;
-                            },
-                            "RoleId");
+            GroupData(profiles, supervisors, roles);
 
-                    GroupData(profiles, supervisors, roles);
-
-                    return profiles.ToList();
-                }
-            }
+            return profiles.ToList();
         }
 
         private static void GroupData(

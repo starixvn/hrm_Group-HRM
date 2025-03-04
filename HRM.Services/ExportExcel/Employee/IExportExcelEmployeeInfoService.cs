@@ -1,15 +1,15 @@
-﻿namespace HRM.Services
-{
-    using System.Collections.Generic;
-    using HRM.Models;
-    using HRM.Models.EmployeeInformation;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using HRM.Models.EmployeeInformation;
 
+namespace HRM.Services.ExportExcel.Employee
+{
     public interface IExportExcelEmployeeInfoService
     {
-        void ExportEmployeeBasicInfo(IList<Employee> employees);
+        Task ExportEmployeeBasicInfo(IList<Models.Employee> employees);
 
-        void ExportEmployeeDetailsInfo(IList<Employee> employees);
+        void ExportEmployeeDetailsInfo(IList<Models.Employee> employees);
 
-        void ExportEmployeeFullProfile(IList<EmployeeFullProfile> profiles);
+        Task ExportEmployeeFullProfile(IList<EmployeeFullProfile> profiles);
     }
 }

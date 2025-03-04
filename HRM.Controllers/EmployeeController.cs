@@ -1,6 +1,4 @@
-﻿namespace HRM.Controllers;
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -10,41 +8,75 @@ using GO.UserControl.Client.Core.Models.Role;
 using GO.UserControl.Client.Core.Models.User;
 using GO.UserControl.Client.Core.Services;
 using GO.UserControl.Client.Core.Session;
-using Core;
-using Core.Constants;
-using Core.Enums;
-using Core.Filters;
-using Criteria.Employee;
-using Criteria.Supervisor;
-using Models;
+using HRM.Core;
+using HRM.Core.Constants;
+using HRM.Core.Enums;
+using HRM.Core.Filters;
+using HRM.Core.Models;
+using HRM.Criteria.Employee;
+using HRM.Criteria.Supervisor;
+using HRM.Models;
 using HRM.Models.Group;
-using Models.Supervisor;
-using Services;
-using Services.Implement;
-using Services.Interfaces;
-using ViewModels;
-using ViewModels.Employee;
+using HRM.Models.Log;
+using HRM.Models.Supervisor;
+using HRM.Services;
+using HRM.Services.Implement;
+using HRM.Services.Implement.ActionLog;
+using HRM.Services.Interfaces;
+using HRM.ViewModels;
+using HRM.ViewModels.Employee;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using SixLabors.ImageSharp.Processing.Processors;
 
-public class EmployeeController(
-    IUserControlSession userControlSession,
-    IEmployeeService employeeService,
-    ICryptoService cryptoService,
-    IUserService userService,
-    ICommonDataService commonDataService,
-    IJobLevelService jobLevelService,
-    IRoleService roleService,
-    IWebHostEnvironment env,
-    IHRMAuthService hrmService) : BaseController(userControlSession)
+namespace HRM.Controllers;
+
+public class EmployeeController : BaseController
 {
+    private readonly IUserControlSession userControlSession;
+    private readonly ICommonDataService commonDataService;
+    private readonly IEmployeeService employeeService;
+    private readonly IHRMAuthService authService;
+    private readonly IEmployeeLogService employeeLogService;
+    private readonly ITeamService teamService;
+    private readonly IJobLevelService jobLevelService;
+    private readonly IManagementLevelService managementLevelService;
+    private readonly ICryptoService cryptoService;
+    private readonly IUserService userService;
+    private readonly IRoleService roleService;
+
+    public EmployeeController(
+        IUserControlSession userControlSession,
+        IEmployeeService employeeService,
+        ICommonDataService commonDataService,
+        IHRMAuthService authService,
+        IEmployeeLogService employeeLogService,
+        ITeamService teamService,
+        IJobLevelService jobLevelService,
+        IManagementLevelService managementLevelService,
+        ICryptoService cryptoService,
+        IUserService userService,
+        IRoleService roleService) : base(userControlSession)
+#pragma warning restore S107 // Methods should not have too many parameters
+    {
+        this.userControlSession = userControlSession;
+        this.employeeService = employeeService;
+        this.commonDataService = commonDataService;
+        this.authService = authService;
+        this.employeeLogService = employeeLogService;
+        this.teamService = teamService;
+        this.jobLevelService = jobLevelService;
+        this.managementLevelService = managementLevelService;
+        this.cryptoService = cryptoService;
+        this.userService = userService;
+        this.roleService = roleService;
+    }
 
     [HrmPermission(Policy.Read, FunctionKey.ContactList)]
     public async Task<IActionResult> Index()
     {
-        var teams = await commonDataService.GetAllTeamAsync();
+        var teams = await teamService.GetAllAsync();
         var model = new UserManagementViewModel
         {
             IsEnable = true,
@@ -60,92 +92,209 @@ public class EmployeeController(
     [HrmPermission(Policy.Read, FunctionKey.ContactList)]
     public async Task<IActionResult> ContactList(UserManagementViewModel model)
     {
-        IEnumerable<Employee> employees = new List<Employee>();
-        if (model == null) return PartialView("_ContactList", employees);
-
-        var criteria = new GetAllEmployeeCriteria
+        var employees = new List<Employee>();
+        if (model != null)
         {
-            Query = model.Keyword,
-            TeamIds = model.TeamIds,
-            EnableUser = model.IsEnable,
-            IsLocalUser = model.IsLocal,
-            PageNumber = model.CurrentPage,
-            PageSize = model.ItemsPerPage
-        };
+            var criteria = new GetAllEmployeeCriteria
+            {
+                Query = model.Keyword,
+                TeamIds = model.TeamIds,
+                EnableUser = model.IsEnable,
+                IsLocalUser = model.IsLocal,
+                PageNumber = model.CurrentPage,
+                PageSize = model.ItemsPerPage
+            };
 
-        employees = await employeeService.GetEmployeeAsync(criteria);
+            employees = (await employeeService.GetEmployeeAsync(criteria)).ToList();
 
-        var pagerOption = new PagerOptionModel
-        {
-            CurrentPage = model.CurrentPage,
-            ItemsPerPage = model.ItemsPerPage,
-            TotalItem = (int)criteria.TotalRow
-        };
-        ViewBag.PagerOption = pagerOption;
-
-        var roles = await roleService.GetByUserIdAsync(userControlSession.UserId);
-        ViewBag.IsShowJobtitle = roles.Any(r => r.RoleId is (short)RoleSystem.HR or (short)RoleSystem.SystemAdmin);
-            ViewBag.EnableGroupDate = await commonDataService.IsEnableGroupDateAsync();
+            var pagerOption = new PagerOptionModel
+            {
+                CurrentPage = model.CurrentPage,
+                ItemsPerPage = model.ItemsPerPage,
+                TotalItem = (int)criteria.TotalRow
+            };
+            ViewBag.PagerOption = pagerOption;
+            ViewBag.IsShowJobtitle = (await roleService.GetByUserIdAsync(userControlSession.UserId))
+                .Any(r => r.RoleId == (short)RoleSystem.HR || r.RoleId == (short)RoleSystem.SystemAdmin);
+            ViewBag.EnableGroupDate = await commonDataService.IsEnableGroupDate();
+        }
 
         return PartialView("_ContactList", employees);
     }
 
+    [HrmPermission(Policy.Read, FunctionKey.EmployeeManagement)]
+    public async Task<IActionResult> UserManagement(int? jobTitleId = null, string teamIds = null)
+    {
+        var teams = await teamService.GetAllAsync();
+        teamIds = teamIds ?? string.Join(",", teams.Select(x => x.Id));
+        var listJobTitle = await commonDataService.GetLookupDataByCodeAsync(Constants.JobTitle);
+        IList<SelectListItem> jobTitles = listJobTitle.Select(j => new SelectListItem
+        {
+            Text = j.Name,
+            Value = j.Id.ToString(),
+            Selected = j.Id.ToString() == (jobTitleId != null ? jobTitleId.ToString() : string.Empty)
+        }).ToList();
+
+        var model = new UserManagementViewModel
+        {
+            JobTitleId = jobTitleId,
+            TeamIds = teamIds,
+            IsEnable = true,
+            IsLocal = GetCategory(),
+            JobTitles = jobTitles,
+            CurrentPage = Constants.CurrentPage,
+            ItemsPerPage = Constants.ItemsPerPage,
+            IsShowDropdownCategory = userControlSession.HasPermissionOnFunction(FunctionKey.ManageAllEmployee, Policy.Read)
+        };
+
+        return View(model);
+    }
+
+    [HttpPost]
+    [HrmPermission(Policy.Read, FunctionKey.EmployeeManagement)]
+    public async Task<IActionResult> ListEmployee(UserManagementViewModel model)
+    {
+        var employees = new List<Employee>();
+        if (model != null)
+        {
+            var criteria = new GetAllEmployeeCriteria
+            {
+                Query = model.Keyword,
+                TeamIds = model.TeamIds,
+                EnableUser = model.IsEnable,
+                IsDeleteUser = model.IsDelete,
+                TitleId = model.JobTitleId,
+                IsLocalUser = GetCategory(model.IsLocal),
+                PageNumber = model.CurrentPage,
+                PageSize = model.ItemsPerPage
+            };
+            employees = (await employeeService.GetEmployeeAsync(criteria)).ToList();
+
+            var pagerOption = new PagerOptionModel
+            {
+                CurrentPage = model.CurrentPage,
+                ItemsPerPage = model.ItemsPerPage,
+                TotalItem = (int)criteria.TotalRow
+            };
+            ViewBag.PagerOption = pagerOption;
+        }
+
+        ViewBag.HasPermissionToEdit = userControlSession.HasPermissionOnFunction(FunctionKey.EmployeeManagement, Policy.Host);
+        ViewBag.EnableGroupDate = await commonDataService.IsEnableGroupDate();
+
+        return PartialView("_ListEmployee", employees);
+    }
+
+    public async Task<IActionResult> Detail(int id)
+    {
+        var model = await employeeService.GetEmployeeByIdAsync(id);
+        var employeeShift = await employeeService.GetShiftByEmployeeId(id);
+
+        ViewBag.Sun = employeeShift.SunShiftName;
+        ViewBag.Mon = employeeShift.MonShiftName;
+        ViewBag.Tue = employeeShift.TueShiftName;
+        ViewBag.Wed = employeeShift.WedShiftName;
+        ViewBag.Thu = employeeShift.ThuShiftName;
+        ViewBag.Fri = employeeShift.FriShiftName;
+        ViewBag.Sat = employeeShift.SatShiftName;
+        ViewBag.HasPermission = userControlSession.HasPermissionOnFunction(FunctionKey.EmployeeManagement, Policy.Host);
+        ViewBag.EnableGroupDate = await commonDataService.IsEnableGroupDate();
+
+        return View(model);
+    }
+
     [HrmPermission(Policy.Host, FunctionKey.CreateAccount)]
-    public ActionResult Create()
+    public IActionResult Create()
     {
         return View(new CreateEmployeeViewModel());
     }
 
     [HttpPost]
     [HrmPermission(Policy.Host, FunctionKey.CreateAccount)]
-    public async Task<ActionResult> Create(CreateEmployeeViewModel model)
+    public async Task<IActionResult> Create(CreateEmployeeViewModel model)
     {
-        var param = new CreateEmployeeParam()
+        if (model != null && ModelState.IsValid)
         {
-            Code = model.Code,
-            DomainUsername = model.DomainUsername,
-            FullName = model.FullName,
-            Nickname = model.Nickname,
-            TeamId = model.TeamId
-        };
+            var param = new CreateEmployeeParam
+            {
+                Code = model.Code,
+                DomainUsername = model.DomainUsername,
+                FullName = model.FullName,
+                Nickname = model.Nickname,
+                TeamId = model.TeamId
+            };
 
-        var commandResult = await employeeService.CreateAsync(EmployeeSession.EmpId, param);
-        if (!commandResult.IsSuccessful)
-        {
-            ModelState.AddModelError(string.Empty, commandResult.Message);
-            return View(model);
+            var commandResult = await employeeService.CreateAsync(EmployeeSession.EmpId, param);
+            if (commandResult.IsSuccessful)
+            {
+                var token = cryptoService.GenerateRijndaelKeyIV();
+                var keyIv = token.Split(':');
+                var rijndaelKey = keyIv[0];
+                var rijndaelIv = keyIv[1];
+                var result = await userService.CreateAsync(new CreateUserParam
+                {
+                    RefId = (int?)commandResult.OutputId,
+                    Code = param.Code,
+                    Nickname = param.Nickname,
+                    FullName = param.FullName,
+                    BCryptPassword = cryptoService.Encrypt(param.Code, rijndaelKey, rijndaelIv),
+                    Token = token
+                });
+
+                if (result.IsSuccessful)
+                {
+                    await employeeService.UpdateUserIdAsync(new UpdateUserIdCommand
+                    {
+                        EmpId = (int)commandResult.OutputId,
+                        UserId = result.ObjectId,
+                        ModifiedBy = EmployeeSession.EmpId
+                    });
+                    return RedirectToAction("Edit", new { id = commandResult.OutputId });
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, result.Message);
+                }
+            }
+            else
+            {
+                ModelState.AddModelError(string.Empty, commandResult.Message);
+            }
         }
 
-        var token = cryptoService.GenerateRijndaelKeyIV();
-        var keyIv = token.Split(':');
-        var rijndaelKey = keyIv[0];
-        var rijndaelIv = keyIv[1];
-        var userModel = new CreateUserParam
-        {
-            RefId = (int?)commandResult.OutputId,
-            Code = param.Code,
-            Nickname = param.Nickname,
-            FullName = param.FullName,
-            BCryptPassword = cryptoService.Encrypt(param.Code, rijndaelKey, rijndaelIv),
-            Token = token
-        };
-        var result = await userService.CreateAsync(userModel);
+        return View(model);
+    }
 
-        if (!result.IsSuccessful)
+    [HrmPermission(Policy.Host, FunctionKey.EmployeeManagement)]
+    public async Task<IActionResult> Edit(int id)
+    {
+        var employee = await employeeService.GetEmployeeByIdAsync(id);
+        if (employee != null)
         {
-            ModelState.AddModelError(string.Empty, result.Message);
-            return View(model);
+            if ((userControlSession.HasPermissionOnFunction(FunctionKey.ManageLocalEmployee, Policy.Host) && !employee.IsLocal)
+                && (userControlSession.HasPermissionOnFunction(FunctionKey.ManageExpatEmployee, Policy.Host) && employee.IsLocal))
+            {
+                return RedirectToAction("AccessDenied", "Error");
+            }
+
+            employee.Coutries = await commonDataService.GetAllCountry();
+            var supervisors = await GetSupervisors(id);
+            employee.Verifier = GetVerifiers(supervisors);
+            employee.Approver = GetApprovers(supervisors);
+            employee.Disciplinarian = GetDisciplineSupervisors(supervisors);
+            employee.EmpShiftList = GetShiftMonitors(supervisors);
+            employee.ActingEmpList = GetActingSupervisors(supervisors);
+            ViewBag.LengthOfServiceByGroupDate = employeeService.CaculateLengthOfService(employee.JoinedDate, employee.MilitaryFromDate, employee.MilitaryToDate);
+            ViewBag.LengthOfServiceByCompanyDate = employeeService.CaculateLengthOfService(employee.CompanyDate, employee.MilitaryFromDate, employee.MilitaryToDate);
+            ViewBag.EnableGroupDate = await commonDataService.IsEnableGroupDate();
+
+            await ComposeViewBagsForEditEmployee();
+            return View(employee);
         }
-
-        var updatedUserModel = new UpdateUserIdCommand
+        else
         {
-            EmpId = (int)commandResult.OutputId,
-            UserId = result.ObjectId,
-            ModifiedBy = EmployeeSession.EmpId
-        };
-
-        await employeeService.UpdateUserIdAsync(updatedUserModel);
-        return RedirectToAction("Edit", new { id = commandResult.OutputId });
+            return RedirectToAction("PageNotFound", "Error");
+        }
     }
 
     [HttpPost]
@@ -155,11 +304,11 @@ public class EmployeeController(
     {
         if (ModelState.IsValid)
         {
-            var param = await MappingEditEmployeeParam(model);
+            var param = MappingEditEmployeeParam(model);
             var commandResult = await employeeService.EditAsync(EmployeeSession.EmpId, param);
             if (commandResult.IsSuccessful)
             {
-                await UpdateUserInfoAsync(model.UserId, param);
+                await UpdateUserInfo(model.UserId, param);
             }
             else
             {
@@ -168,14 +317,14 @@ public class EmployeeController(
             }
         }
 
-        model.Coutries = await commonDataService.GetAllCountryAsync();
-        var supervisors = await GetSupervisorsAsync(model.Id);
+        model.Coutries = await commonDataService.GetAllCountry();
+        var supervisors = await GetSupervisors(model.Id);
         model.Verifier = GetVerifiers(supervisors);
         model.Approver = GetApprovers(supervisors);
         model.Disciplinarian = GetDisciplineSupervisors(supervisors);
         model.EmpShiftList = GetShiftMonitors(supervisors);
         model.ActingEmpList = GetActingSupervisors(supervisors);
-        ViewBag.EnableGroupDate = await commonDataService.IsEnableGroupDateAsync();
+        ViewBag.EnableGroupDate = await commonDataService.IsEnableGroupDate();
 
         await ComposeViewBagsForEditEmployee();
 
@@ -187,65 +336,59 @@ public class EmployeeController(
     public async Task<ActionResult> Delete(DeleteEmployeeParam param)
     {
         var commandResult = await employeeService.DeleteAsync(EmployeeSession.EmpId, param);
-        if (!commandResult.IsSuccessful) return Json(commandResult);
+        if (!commandResult.IsSuccessful)
+        {
+            Json(commandResult);
+        }
+
         var result = await userService.DeleteAsync(param.UserId);
         return Json(result);
     }
 
-    public JsonResult GenerateEmployeeCode()
+    //[AllowAnonymous]
+    //public FileResult Avatar(string id)
+    //{
+    //    var avatarName = string.IsNullOrEmpty(id) ? EmployeeSession.Code + ".jpg" : id + ".jpg";
+    //    if (System.IO.File.Exists(Server.MapPath("/avatars/" + avatarName)))
+    //    {
+    //        return File("/avatars/" + avatarName, "image/jpeg");
+    //    }
+
+    //    return File("/avatars/avatar.jpg", "image/jpeg");
+    //}
+
+    //[HttpPost]
+    //[HrmPermission(Policy.Host, FunctionKey.EmployeeManagement)]
+    //public async Task<JsonResult> UploadAvatar(string code, HttpPostedFileBase file)
+    //{
+    //    if (file != null && file.ContentLength > 0)
+    //    {
+    //        using (var stream = new MemoryStream())
+    //        {
+    //            using (var processor = new ImageProcessor<>())
+    //            {
+    //                const int JpegCompression = 100;
+    //                processor.OutputFormat = OutputFormat.Jpeg;
+    //                processor.JpegCompression = JpegCompression;
+    //                processor.ProcessImage(file.InputStream, stream);
+    //                var image = Image.FromStream(stream);
+    //                image.Save(Server.MapPath("/avatars/") + code + ".jpg");
+    //                image.Dispose();
+
+    //                return Json(true);
+    //            }
+    //        }
+    //    }
+
+    //    return Json(null);
+    //}
+
+    [HttpGet]
+    public IActionResult ManageSupervisor(int id, short roleId)
     {
-        var newCode = employeeService.GenerateEmployeeCode();
-        return Json(newCode);
-    }
-
-    [HttpPost]
-    public async Task<JsonResult> EditEmployeeSupervisor(int employeeId, short roleId, IEnumerable<EditTeamSupervisor> supervisors)
-    {
-        var commandResult = await employeeService.EditEmployeeSupervisorAsync(EmployeeSession.EmpId, employeeId, roleId, supervisors);
-
-        return new JsonResult(commandResult);
-    }
-
-    [HrmPermission(Policy.Host, FunctionKey.EmployeeManagement)]
-    public async Task<IActionResult> Edit(int id)
-    {
-        var employee = await employeeService.GetEmployeeByIdAsync(id);
-        if (employee == null) return RedirectToAction("PageNotFound", "Error");
-
-        if (userControlSession.HasPermissionOnFunction(FunctionKey.ManageLocalEmployee, Policy.Host)
-            && !employee.IsLocal
-            && userControlSession.HasPermissionOnFunction(FunctionKey.ManageExpatEmployee, Policy.Host)
-            && employee.IsLocal)
-        {
-            return RedirectToAction("AccessDenied", "Error");
-        }
-
-        employee.Coutries = await commonDataService.GetAllCountryAsync();
-        var supervisors = await GetSupervisorsAsync(id);
-        employee.Verifier = GetVerifiers(supervisors);
-        employee.Approver = GetApprovers(supervisors);
-        employee.Disciplinarian = GetDisciplineSupervisors(supervisors);
-        employee.EmpShiftList = GetShiftMonitors(supervisors);
-        employee.ActingEmpList = GetActingSupervisors(supervisors);
-        ViewBag.LengthOfServiceByGroupDate = employeeService.CaculateLengthOfService(employee.JoinedDate, employee.MilitaryFromDate, employee.MilitaryToDate);
-        ViewBag.LengthOfServiceByCompanyDate = employeeService.CaculateLengthOfService(employee.CompanyDate, employee.MilitaryFromDate, employee.MilitaryToDate);
-        ViewBag.EnableGroupDate = await commonDataService.IsEnableGroupDateAsync();
-
-        await ComposeViewBagsForEditEmployee();
-        return View(employee);
-    }
-
-    public async Task<JsonResult> GetSupervisors(string roleIds, string query, string excludeIds)
-    {
-        var criteria = new GetEmployeeByRoleCriteria
-        {
-            ExcludeIds = excludeIds ?? string.Empty,
-            Query = query.Trim(),
-            RoleIds = roleIds
-        };
-        var employees = await employeeService.GetEmployeesByRoleAsync(criteria);
-
-        return Json(employees);
+        ViewBag.EmployeeId = id;
+        ViewBag.RoleId = roleId;
+        return View();
     }
 
     public async Task<JsonResult> GetEmployeeSupervisorByRoleId(int employeeId, short roleId)
@@ -254,27 +397,65 @@ public class EmployeeController(
         return new JsonResult(supervisors);
     }
 
-    [AllowAnonymous]
-    public FileResult Avatar(string id)
+    [HttpPost]
+    public async Task<JsonResult> EditEmployeeSupervisor(int employeeId, short roleId, IEnumerable<EditTeamSupervisor> supervisors)
     {
-        var avatarName = string.IsNullOrEmpty(id) ? EmployeeSession.Code + ".jpg" : id + ".jpg";
-        var filePath = Path.Combine(env.WebRootPath, "avatars", avatarName);
+        var commandResult = await employeeService.EditEmployeeSupervisorAsync(EmployeeSession.EmpId, employeeId, roleId, supervisors);
 
-        if (System.IO.File.Exists(filePath)) return PhysicalFile(filePath, "image/jpeg");
-
-        var defaultImgPath = Path.Combine(env.ContentRootPath, "avatars/avatar.jpg");
-        return PhysicalFile(defaultImgPath, "image/jpeg");
+        return new JsonResult (commandResult);
     }
 
     [HttpGet]
-    public ActionResult ManageSupervisor(int id, short roleId)
+    public IActionResult ShiftManager(int id)
     {
         ViewBag.EmployeeId = id;
-        ViewBag.RoleId = roleId;
+        ViewBag.RoleId = (short)RoleSystem.ShiftManager;
+
         return View();
     }
 
-    public async Task<IActionResult> GetEmployees(
+    public async Task<JsonResult> GetShiftManagerByEmployeeId(int employeeId)
+    {
+        IEnumerable<SupervisorModel> supervisors = await employeeService.GetEmployeeSupervisorByRoleIdAsync(employeeId, (short)RoleSystem.ShiftManager);
+        return new JsonResult(supervisors.Select(x => new Supervisor
+            { OwnerId = x.OwnerId, Nickname = x.NickName, FullName = x.FullName }));
+    }
+
+    [HttpPost]
+    public void ToogleLeftNavigation(bool isShow)
+    {
+        userControlSession.Set<bool>(SessionKey.IsShowLeftNavigation, isShow);
+    }
+
+    [HrmPermission(Policy.Read, FunctionKey.EmployeeManagement)]
+    public IActionResult DisciplineManager(int id)
+    {
+        ViewBag.EmployeeId = id;
+        ViewBag.RoleId = (short)RoleSystem.DisciplineManager;
+        return View();
+    }
+
+    public async Task<JsonResult> GetDisciplineManagerByEmployeeId(int employeeId)
+    {
+        var supervisors = await employeeService.GetDisciplineSettingByEmployeeIdAsync(employeeId);
+        return new JsonResult (supervisors);
+    }
+
+    public async Task<JsonResult> GetMemberByManager(string keyword)
+    {
+        var criteria = new GetMemberByManagerCriteria
+        {
+            SupervisorId = EmployeeSession.EmpId,
+            Query = keyword,
+            ExcludedManager = false
+        };
+        var employees = await employeeService.GetMemberByManagerAsync(criteria);
+        const byte totalItems = 10;
+
+        return Json(employees.Take(totalItems));
+    }
+
+    public async Task<JsonResult> GetEmployees(
         string query,
         string teamIds = "",
         bool? enable = null,
@@ -296,83 +477,89 @@ public class EmployeeController(
         return Json(employees);
     }
 
-    [HrmPermission(Policy.Read, FunctionKey.EmployeeManagement)]
-    public ActionResult DisciplineManager(int id)
+    public async Task<JsonResult> GetSupervisors(string roleIds, string query, string excludeIds)
     {
-        ViewBag.EmployeeId = id;
-        ViewBag.RoleId = (short)RoleSystem.DisciplineManager;
-        return View();
-    }
-
-    public async Task<JsonResult> GetDisciplineManagerByEmployeeId(int employeeId)
-    {
-        var supervisors = await employeeService.GetDisciplineSettingByEmployeeIdAsync(employeeId);
-        return new JsonResult(supervisors);
-    }
-
-    [HttpGet]
-    public ActionResult ShiftManager(int id)
-    {
-        ViewBag.EmployeeId = id;
-        ViewBag.RoleId = (short)RoleSystem.ShiftManager;
-
-        return View();
-    }
-
-    [HttpPost]
-    [HrmPermission(Policy.Host, FunctionKey.EmployeeManagement)]
-    public JsonResult UploadAvatar(string code, IFormFile file)
-    {
-        if (file == null || file.Length <= 0) return Json(null);
-        using var memoryStream = new MemoryStream();
-        file.CopyTo(memoryStream);
-
-        memoryStream.Position = 0;
-
-        using var image = Image.FromStream(memoryStream);
-        var avatarsFolderPath = Path.Combine(env.WebRootPath, "avatars");
-        if (!Directory.Exists(avatarsFolderPath))
+        var criteria = new GetEmployeeByRoleCriteria
         {
-            Directory.CreateDirectory(avatarsFolderPath);
-        }
-
-        var filePath = Path.Combine(avatarsFolderPath, $"{code}.jpg");
-
-        image.Save(filePath);
-
-        return Json(true);
-    }
-
-    public async Task<JsonResult> GetShiftManagerByEmployeeId(int employeeId)
-    {
-        IEnumerable<SupervisorModel> supervisors = await employeeService
-            .GetEmployeeSupervisorByRoleIdAsync(employeeId, (short)RoleSystem.ShiftManager);
-
-        var data = supervisors
-            .Select(x => new Supervisor
-            {
-                OwnerId = x.OwnerId,
-                Nickname = x.NickName,
-                FullName = x.FullName
-            });
-        return new JsonResult(data);
-    }
-
-    public async Task<IActionResult> GetMemberByManager(string keyword)
-    {
-        var criteria = new GetMemberByManagerCriteria
-        {
-            SupervisorId = EmployeeSession.EmpId,
-            Query = keyword,
-            ExcludedManager = false
+            ExcludeIds = excludeIds ?? string.Empty,
+            Query = query.Trim(),
+            RoleIds = roleIds
         };
-        var employees = await employeeService.GetMemberByManagerAsync(criteria);
-        const byte totalItems = 10;
+        var employees = await employeeService.GetEmployeesByRoleAsync(criteria);
 
-        return Json(employees.Take(totalItems));
+        return Json(employees);
     }
 
-    private async Task<IList<SupervisorNameModel>> GetSupervisorsAsync(int empId)
+    public async Task<JsonResult> GetMemberByGender(string keyword, int gender)
+    {
+        var employees = await employeeService.GetEmployeeByGender(keyword, gender);
+        return Json(employees);
+    }
+
+    public async Task<JsonResult> GenerateEmployeeCode()
+    {
+        var newCode = await employeeService.GenerateEmployeeCode();
+        return Json(newCode);
+    }
+
+    [HrmPermission(Policy.Host, FunctionKey.EmployeeManagement)]
+    public async Task<IActionResult> ActivityLog(int id)
+    {
+        var employee = await employeeService.GetEmployeeByIdAsync(id);
+        var logs = await employeeLogService.GetLogDetailByIdAsync(id);
+        ViewBag.Employee = $"{employee.NickName} ({employee.FullName})";
+        ViewBag.EnableGroupDate = await commonDataService.IsEnableGroupDate();
+
+        return View("ActivityLog", logs);
+    }
+
+    private async Task UpdateUserInfo(int userId, EditEmployeeParam param)
+    {
+        var result = await userService.UpdateInfoAsync(new UpdateUserInfoParam
+        {
+            RefId = param.EmployeeId,
+            UserId = userId,
+            Code = param.Code,
+            Nickname = param.Nickname,
+            FullName = param.FullName,
+            Email = param.Email,
+            IsActive = param.Enabled
+        });
+        if (result.IsSuccessful)
+        {
+            result = await userService.AssignRoleAsync(new AssignRoleParam
+            {
+                UserId = userId,
+                RoleIds = param.Roles
+            });
+
+            if (result.IsSuccessful)
+            {
+                ViewBag.Updated = true;
+                await UpdateUserSession(param.EmployeeId);
+            }
+            else
+            {
+                ViewBag.Updated = false;
+                ModelState.AddModelError(string.Empty, result.Message);
+            }
+        }
+        else
+        {
+            ViewBag.Updated = false;
+            ModelState.AddModelError(string.Empty, result.Message);
+        }
+    }
+
+    private async Task UpdateUserSession(int employeeId)
+    {
+        if (EmployeeSession.EmpId == employeeId)
+        {
+            userControlSession.Set<EmployeeSession>(SessionKey.Employee, await authService.GetByUserIdAsync(userControlSession.UserId));
+        }
+    }
+
+    private async Task<IList<SupervisorNameModel>> GetSupervisors(int empId)
     {
         var criteria = new GetListSupervisorNameCriteria
         {
@@ -384,7 +571,62 @@ public class EmployeeController(
         return supervisors;
     }
 
-    private async Task<EditEmployeeParam> MappingEditEmployeeParam(Employee model)
+    private static string GetSupervisors(IList<SupervisorNameModel> supervisors, short roleId)
+    {
+        var supervisorsName = string.Empty;
+        const byte maxDisplayItems = 3;
+
+        if (supervisors != null)
+        {
+            IList<SupervisorNameModel> supervisorsFilter = supervisors.Where(x => x.ActionType == roleId).Take(maxDisplayItems).ToList();
+            supervisorsName = string.Join(", ", supervisorsFilter.Select(x => x.NickName));
+
+            if (supervisorsFilter.Count > maxDisplayItems)
+            {
+                supervisorsName += ",...";
+            }
+        }
+
+        return supervisorsName;
+    }
+
+    private static string GetVerifiers(IList<SupervisorNameModel> supervisors)
+    {
+        return GetSupervisors(supervisors, (short)RoleSystem.Verifier);
+    }
+
+    private static string GetApprovers(IList<SupervisorNameModel> supervisors)
+    {
+        return GetSupervisors(supervisors, (short)RoleSystem.Approver);
+    }
+
+    private static string GetShiftMonitors(IList<SupervisorNameModel> supervisors)
+    {
+        return GetSupervisors(supervisors, (short)RoleSystem.ShiftManager);
+    }
+
+    private static string GetActingSupervisors(IList<SupervisorNameModel> supervisors)
+    {
+        return GetSupervisors(supervisors, (short)RoleSystem.OnBehalfRequest);
+    }
+
+    private static string GetDisciplineSupervisors(IList<SupervisorNameModel> supervisors)
+    {
+        return GetSupervisors(supervisors, (short)RoleSystem.DisciplineManager);
+    }
+
+    private async Task ComposeViewBagsForEditEmployee()
+    {
+        var jobLevels = await jobLevelService.GetJobLevel();
+        var managementLevels = await managementLevelService.GetManagementLevel();
+        ViewBag.JobTitles = await commonDataService.GetLookupDataByCodeAsync(Constants.JobTitle);
+        ViewBag.JobLevel = jobLevels;
+        ViewBag.Grades = managementLevels;
+        ViewBag.Marriages = Utilities.Marriages;
+        ViewBag.Roles = await roleService.GetBySiteIdAsync(userControlSession.SiteId);
+    }
+
+    private EditEmployeeParam MappingEditEmployeeParam(Employee model)
     {
         return new EditEmployeeParam
         {
@@ -402,7 +644,7 @@ public class EmployeeController(
             Enabled = model.Enabled,
             Phone = model.Phone,
             Gender = model.Gender,
-            Roles = await BuildRole(model.Roles),
+            Roles = BuildRole(model.Roles),
             JoinedDate = model.JoinedDate,
             CompanyDate = model.CompanyDate,
             ConfirmedDate = model.ConfirmedDate,
@@ -444,56 +686,9 @@ public class EmployeeController(
         };
     }
 
-    private async Task UpdateUserInfoAsync(int userId, EditEmployeeParam param)
+    private string BuildRole(IList<Role> roles)
     {
-        var result = await userService.UpdateInfoAsync(new UpdateUserInfoParam
-        {
-            RefId = param.EmployeeId,
-            UserId = userId,
-            Code = param.Code,
-            Nickname = param.Nickname,
-            FullName = param.FullName,
-            Email = param.Email,
-            IsActive = param.Enabled
-        });
-        if (result.IsSuccessful)
-        {
-            result = await userService.AssignRoleAsync(new AssignRoleParam
-            {
-                UserId = userId,
-                RoleIds = param.Roles
-            });
-
-            if (result.IsSuccessful)
-            {
-                ViewBag.Updated = true;
-                await UpdateUserSessionAsync(param.EmployeeId);
-            }
-            else
-            {
-                ViewBag.Updated = false;
-                ModelState.AddModelError(string.Empty, result.Message);
-            }
-        }
-        else
-        {
-            ViewBag.Updated = false;
-            ModelState.AddModelError(string.Empty, result.Message);
-        }
-    }
-
-    private async Task UpdateUserSessionAsync(int employeeId)
-    {
-        if (EmployeeSession.EmpId == employeeId)
-        {
-            var user = await hrmService.GetByUserIdAsync(userControlSession.UserId);
-            userControlSession.Set(SessionKey.Employee, user);
-        }
-    }
-
-    private async Task<string> BuildRole(IList<Role> roles)
-    {
-        var systemRoles = await roleService.GetBySiteIdAsync(userControlSession.SiteId);
+        var systemRoles = roleService.GetBySiteId(userControlSession.SiteId);
         var defaultRoles = systemRoles.Where(x => x.IsDefault).Select(x => x.RoleId);
 
         if (roles != null && roles.Count > 0)
@@ -507,59 +702,24 @@ public class EmployeeController(
         }
     }
 
-    private static string GetVerifiers(IList<SupervisorNameModel> supervisors)
+    private bool? GetCategory(bool? isLocal = null)
     {
-        return GetSupervisors(supervisors, (short)RoleSystem.Verifier);
-    }
+        var category = isLocal;
+        if (!userControlSession.HasPermissionOnFunction(FunctionKey.ManageAllEmployee, Policy.Read))
+        {
+            if (userControlSession.HasPermissionOnFunction(FunctionKey.ManageLocalEmployee, Policy.Read))
+            {
+                category = true;
+            }
+            else
+            {
+                if (userControlSession.HasPermissionOnFunction(FunctionKey.ManageExpatEmployee, Policy.Read))
+                {
+                    category = false;
+                }
+            }
+        }
 
-    private static string GetSupervisors(IList<SupervisorNameModel> supervisors, short roleId)
-    {
-        var supervisorsName = string.Empty;
-        const byte maxDisplayItems = 3;
-
-        if (supervisors == null) return supervisorsName;
-
-        var supervisorsFilter = supervisors
-            .Where(x => x.ActionType == roleId)
-            .Take(maxDisplayItems)
-            .ToList();
-
-        supervisorsName = string
-            .Join(", ", supervisorsFilter
-            .Select(x => x.NickName));
-
-        if (supervisorsFilter.Count > maxDisplayItems) supervisorsName += ",...";
-
-        return supervisorsName;
-    }
-
-    private static string GetApprovers(IList<SupervisorNameModel> supervisors)
-    {
-        return GetSupervisors(supervisors, (short)RoleSystem.Approver);
-    }
-
-    private static string GetDisciplineSupervisors(IList<SupervisorNameModel> supervisors)
-    {
-        return GetSupervisors(supervisors, (short)RoleSystem.DisciplineManager);
-    }
-
-    private static string GetShiftMonitors(IList<SupervisorNameModel> supervisors)
-    {
-        return GetSupervisors(supervisors, (short)RoleSystem.ShiftManager);
-    }
-
-    private static string GetActingSupervisors(IList<SupervisorNameModel> supervisors)
-    {
-        return GetSupervisors(supervisors, (short)RoleSystem.OnBehalfRequest);
-    }
-
-    private async Task ComposeViewBagsForEditEmployee()
-    {
-        var jobLevels = await jobLevelService.GetJobLevel();
-        ViewBag.JobTitles = await commonDataService.GetLookupDataByCodeAsync(Constants.JobTitle);
-        ViewBag.JobLevel = jobLevels;
-        ViewBag.Grades = jobLevels?.Where(jl => jl.Name.StartsWith("E")).ToList();
-        ViewBag.Marriages = Utilities.Marriages;
-        ViewBag.Roles = await roleService.GetBySiteIdAsync(userControlSession.SiteId);
+        return category;
     }
 }

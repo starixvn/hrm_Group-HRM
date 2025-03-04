@@ -15,7 +15,7 @@ namespace HRM.Services.Interfaces;
 
 public interface IEmployeeService
 {
-    string GenerateEmployeeCode();
+    Task<string> GenerateEmployeeCode();
 
     IList<SupervisorNameModel> GetListSupervisorName(GetListSupervisorNameCriteria criteria);
 
@@ -35,7 +35,7 @@ public interface IEmployeeService
 
     Task<IList<Employee>> GetEmployeesByRoleAsync(GetEmployeeByRoleCriteria criteria);
 
-    EmployeeShift GetShiftByEmployeeId(int id);
+    Task<EmployeeShift> GetShiftByEmployeeId(int id);
 
     Task<IEnumerable<AnnualLeaveTransactionViewModel>> GetAnnualLeaveTransactionAsync(GetAnnualLeaveTransactionCriteria criteria);
 
@@ -53,9 +53,9 @@ public interface IEmployeeService
 
     Task<IList<SupervisorNameModel>> GetHRAndSupervisorByEmpIdAsync(int employeeId);
 
-    IList<Employee> GetEmployeeByGender(string query, int gender);
+    Task<IList<Employee>> GetEmployeeByGender(string query, int gender);
 
-    IList<EmployeeFullProfile> GetEmployeeFullProfile(GetEmployeeFullProfileCriteria criteria);
+    Task<IList<EmployeeFullProfile>> GetEmployeeFullProfile(GetEmployeeFullProfileCriteria criteria);
 
     CommandResult EditEmployeeSupervisor(int actorId, int employeeId, short roleId, IEnumerable<EditTeamSupervisor> supervisors);
 
