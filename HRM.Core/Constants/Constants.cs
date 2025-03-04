@@ -26,7 +26,7 @@
         public const short PendingAndVerifiedStatusId = -1;
         public const short OffDayShiftId = -1;
 
-        public const string ProfileUploadPath = "/file/uploads/profile/";
+        public const string ProfileUploadPath = "file/uploads/profile/";
 
         public const string RedColor = "#ff0000";
         public const string OffDayBackgroundColor = "#f8f89c";

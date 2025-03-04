@@ -204,13 +204,13 @@ public class EmployeeService(
         return data.ToList();
     }
 
-    public IList<SupervisorNameModel> GetHRAndSupervisorByEmpId(int employeeId)
+    public async Task<IList<SupervisorNameModel>> GetHRAndSupervisorByEmpIdAsync(int employeeId)
     {
         var criteria = new GetHRAndSupervisorByEmpIdCriteria
         {
             EmpId = employeeId
         };
-        return baseService.GetData<SupervisorNameModel>(criteria).ToList();
+        return (await baseService.GetDataAsync<SupervisorNameModel>(criteria)).ToList();
     }
 
     public CommandResult EditEmployeeSupervisor(int actorId, int employeeId, short roleId, IEnumerable<EditTeamSupervisor> supervisors)
@@ -263,7 +263,7 @@ public class EmployeeService(
         return employees;
     }
 
-    public CommandResult EditPassword(int actorId, EditPassword model)
+    public async Task<CommandResult> EditPasswordAsync(int actorId, EditPassword model)
     {
         var criteria = new EditPasswordCriteria
         {
@@ -272,7 +272,7 @@ public class EmployeeService(
             PasswordReset = model.IsReset,
             ModifiedBy = actorId
         };
-        return baseService.ExecuteNonQuery(criteria);
+        return await baseService.ExecuteNonQueryAsync(criteria);
     }
 
     public async Task<CommandResult> CreateAsync(int actorId, CreateEmployeeParam param)

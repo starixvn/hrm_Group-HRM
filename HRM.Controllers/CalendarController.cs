@@ -25,7 +25,8 @@ public class CalendarController(
 {
     public async Task<IActionResult> GetShift(string query, bool isShowOff = false)
     {
-        var shifts = await shiftService.GetByQueryAsync(query.Trim(), isShowOff);
+        var trimmedQuery = query?.Trim() ?? string.Empty;
+        var shifts = await shiftService.GetByQueryAsync(trimmedQuery, isShowOff);
 
         return Json(shifts);
     }

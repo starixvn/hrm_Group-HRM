@@ -83,7 +83,7 @@ export default class App extends Component {
             .then(([teamResponse, shiftResponse]) => {
                 this.teamOptions = teamResponse.data;
                 const { floatData } = buildData(teamResponse.data);
-                this.shiftOptions = shiftResponse.data.map(shift => { return { id: shift.Id, code: shift.Code, name: shift.Name }; });
+                this.shiftOptions = shiftResponse.data.map(shift => { return { id: shift.id, code: shift.code, name: shift.name }; });
                 const filter = { ...this.state.filter, teamIds: floatData.filter(item => item.isLeaf).map(item => item.id).join(',') };
 
                 this.getWeeklyShedules(filter);

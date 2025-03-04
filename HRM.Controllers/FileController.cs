@@ -1,12 +1,20 @@
 ﻿namespace HRM.Controllers;
 
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using GO.UserControl.Client.Core.Session;
+using HRM.Core.Constants;
+using HRM.Resources;
+using ICSharpCode.SharpZipLib.Core;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 
 public class FileController(
     IWebHostEnvironment env,
-    IUserControlSession userControlSession) : BaseController(userControlSession)
+    IUserControlSession userControlSession,
+    IWebHostEnvironment hostingEnvironment) : BaseController(userControlSession)
 {
     private const int MaxSizeFileUpload = 5 * 1024 * 1024;
 
@@ -75,77 +83,78 @@ public class FileController(
         return path;
     }
 
-    //[HttpPost]
-    //public ActionResult MyProfileUploadFile(IEnumerable<HttpPostedFileBase> files)
-    //{
-    //    if (!files.Any(file => file.ContentLength <= 0))
-    //    {
-    //        if (!IsValidFileUpload(files))
-    //        {
-    //            return Json(new { isSuccessful = false, message = "The file(s) uploaded invalid" });
-    //        }
+    [HttpPost]
+    public ActionResult MyProfileUploadFile(IEnumerable<IFormFile> files)
+    {
+        if (!files.Any(file => file.Length <= 0))
+        {
+            if (!IsValidFileUpload(files))
+            {
+                return Json(new { isSuccessful = false, message = "The file(s) uploaded invalid" });
+            }
 
-    //        foreach (var file in files)
-    //        {
-    //            var fileName = Path.GetFileName(file.FileName);
-    //            string basePath = HostingEnvironment.ApplicationPhysicalPath + Constants.ProfileUploadPath + EmployeeSession.Code;
-    //            if (!Directory.Exists(basePath))
-    //            {
-    //                Directory.CreateDirectory(basePath);
-    //            }
+            foreach (var file in files)
+            {
+                var fileName = Path.GetFileName(file.FileName);
+                string basePath = Path.Combine(hostingEnvironment.ContentRootPath, Constants.ProfileUploadPath + EmployeeSession.Code);
+                if (!Directory.Exists(basePath))
+                {
+                    Directory.CreateDirectory(basePath);
+                }
 
-    //            if (System.IO.File.Exists(basePath + "/" + file.FileName))
-    //            {
-    //                return Json(new { isSucessful = false, message = string.Format(Labels.UploadFileExists, file.FileName) });
-    //            }
-    //            else
-    //            {
-    //                var path = Path.Combine(Server.MapPath("~/file/uploads/profile/"), EmployeeSession.Code, fileName);
-    //                file.SaveAs(path);
-    //            }
-    //        }
+                if (System.IO.File.Exists(basePath + "/" + file.FileName))
+                {
+                    return Json(new { isSucessful = false, message = string.Format(Labels.UploadFileExists, file.FileName) });
+                }
+                else
+                {
+                    var path = Path.Combine(basePath, fileName);
+                    using var stream = new FileStream(path, FileMode.Create);
+                    file.CopyTo(stream);
+                }
+            }
 
-    //        return Json(new { isSuccessful = true, message = "File(s) uploaded sucessful." });
-    //    }
+            return Json(new { isSuccessful = true, message = "File(s) uploaded sucessful." });
+        }
 
-    //    return Json(new { isSuccessful = false, message = "File(s) uploaded failed." });
-    //}
+        return Json(new { isSuccessful = false, message = "File(s) uploaded failed." });
+    }
 
-    //private static bool IsValidFileUpload(IEnumerable<HttpPostedFileBase> files)
-    //{
-    //    string[] allowedExtentsions = new[] { ".jpg", ".png", ".jpeg", ".pdf", ".doc", ".docx", ".xls", ".xlsx", ".txt" };
-    //    foreach (var file in files)
-    //    {
-    //        if (file.ContentLength > MaxSizeFileUpload)
-    //        {
-    //            return false;
-    //        }
-    //        string extentsion = Path.GetExtension(file.FileName).ToLowerInvariant();
-    //        if (!allowedExtentsions.Contains(extentsion))
-    //        {
-    //            return false;
-    //        }
-    //    }
+    private static bool IsValidFileUpload(IEnumerable<IFormFile> files)
+    {
+        string[] allowedExtentsions = new[] { ".jpg", ".png", ".jpeg", ".pdf", ".doc", ".docx", ".xls", ".xlsx", ".txt" };
+        foreach (var file in files)
+        {
+            if (file.Length > MaxSizeFileUpload)
+            {
+                return false;
+            }
+            string extentsion = Path.GetExtension(file.FileName).ToLowerInvariant();
+            if (!allowedExtentsions.Contains(extentsion))
+            {
+                return false;
+            }
+        }
 
-    //    return true;
-    //}
+        return true;
+    }
 
-    //[HttpPost]
-    //public ActionResult DeleteMyProfileUploadedFile(string fileName)
-    //{
-    //    bool isSuccessful = false;
-    //    string message = string.Empty;
-    //    string path = HostingEnvironment.ApplicationPhysicalPath + Constants.ProfileUploadPath + EmployeeSession.Code + "/" + fileName;
-    //    if (System.IO.File.Exists(path))
-    //    {
-    //        System.IO.File.Delete(path);
-    //        isSuccessful = true;
-    //    }
-    //    else
-    //    {
-    //        message = Labels.FileDoesNotExists;
-    //    }
+    [HttpPost]
+    public ActionResult DeleteMyProfileUploadedFile(string fileName)
+    {
+        bool isSuccessful = false;
+        string message = string.Empty;
+        string path  = Path.Combine(hostingEnvironment.ContentRootPath, Constants.ProfileUploadPath + EmployeeSession.Code + "/" + fileName); ;
+        if (System.IO.File.Exists(path))
+        {
+            System.IO.File.Delete(path);
+            isSuccessful = true;
+        }
+        else
+        {
+            message = Labels.FileDoesNotExists;
+        }
 
-    //    return Json(new { isSuccessful, message });
-    //}
+        return Json(new { isSuccessful, message });
+    }
 }

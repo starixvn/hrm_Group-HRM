@@ -51,7 +51,7 @@ public interface IEmployeeService
 
     Task<IEnumerable<Supervisor>> GetDisciplineSettingByEmployeeIdAsync(int employeeId);
 
-    IList<SupervisorNameModel> GetHRAndSupervisorByEmpId(int employeeId);
+    Task<IList<SupervisorNameModel>> GetHRAndSupervisorByEmpIdAsync(int employeeId);
 
     IList<Employee> GetEmployeeByGender(string query, int gender);
 
@@ -62,7 +62,7 @@ public interface IEmployeeService
     Task<CommandResult> EditEmployeeSupervisorAsync(int actorId, int employeeId, short roleId,
         IEnumerable<EditTeamSupervisor> supervisors);
 
-    CommandResult EditPassword(int actorId, EditPassword model);
+    Task<CommandResult> EditPasswordAsync(int actorId, EditPassword model);
 
     Task<CommandResult> CreateAsync(int actorId, CreateEmployeeParam param);
 

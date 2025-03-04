@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
     using Fanex.Data;
     using Fanex.Data.Repository;
     using HRM.Models;
@@ -10,11 +11,11 @@
 
     public class ScheduleArrangeRepository : IScheduleArrangeRepository
     {
-        public IEnumerable<WeeklySchedule> GetWeeklySchedule(ICriteria criteria)
+        public async Task<IEnumerable<WeeklySchedule>> GetWeeklyScheduleAsync(ICriteria criteria)
         {
             using (IObjectDb db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                using (var multi = db.QueryMultiple(criteria))
+                using (var multi = await db.QueryMultipleAsync(criteria))
                 {
                     IEnumerable<WeeklySchedule> weeklySchedules = multi.Read<WeeklySchedule, EntityBase<int>, ShiftBase, WeeklySchedule>(
                         (weeklySchedule, team, defaultShift) =>

@@ -32,10 +32,10 @@ var editAccount = (function ($) {
                 headers: { 'X-Requested-With': 'XMLHttpRequest' },
                 data: $(domElement.EditInformationForm).serialize()
             }).then(response => {
-                if (response.data.IsSuccessful) {
+                if (response.data.isSuccessful) {
                     toastr.success('Updated information sucessfully!', '', toastOptions());
                 } else {
-                    showErrorMsg($(domElement.EditInformationForm), response.data.Message);
+                    showErrorMsg($(domElement.EditInformationForm), response.data.message);
                 }
             }).catch(axiosError);
         });
@@ -66,7 +66,7 @@ var editAccount = (function ($) {
                 return;
             }
 
-            fd.append('files[' + i + ']', file);
+            fd.append('files', file);
         }
 
         axios({
@@ -93,7 +93,10 @@ var editAccount = (function ($) {
                 axios({
                     method: 'POST',
                     url: resolveClientUrl('File/DeleteMyProfileUploadedFile'),
-                    headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                    headers: { 
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'Content-Type': 'application/x-www-form-urlencoded' 
+                    },
                     data: { fileName }
                 }).then(response => {
                     if (response.data.isSuccessful) {
@@ -179,14 +182,14 @@ var editAccount = (function ($) {
                                         headers: { 'X-Requested-With': 'XMLHttpRequest' },
                                         data: $(domElement.CreateForm).find('form').serialize()
                                     }).then(response => {
-                                        if (response.data.IsSuccessful) {
+                                        if (response.data.isSuccessful) {
                                             $(domElement.CreateForm).dialog('close');
                                             toastr.success('Updated successfully!', '', toastOptions());
                                             if (onEditSuccess) {
                                                 onEditSuccess();
                                             }
                                         } else {
-                                            showErrorMsg($(domElement.CreateForm), response.data.Message);
+                                            showErrorMsg($(domElement.CreateForm), response.data.message);
                                         }
                                     }).catch(axiosError);
                                 }
@@ -233,14 +236,14 @@ var editAccount = (function ($) {
                                     headers: { 'X-Requested-With': 'XMLHttpRequest' },
                                     data: $(domElement.CreateForm).find('form').serialize()
                                 }).then(response => {
-                                    if (response.data.IsSuccessful) {
+                                    if (response.data.isSuccessful) {
                                         $(domElement.CreateForm).dialog('close');
                                         if (onCreateSuccess) {
                                             onCreateSuccess();
                                         }
                                         toastr.success('Created successfully!', '', toastOptions());
                                     } else {
-                                        showErrorMsg($(domElement.CreateForm), response.data.Message);
+                                        showErrorMsg($(domElement.CreateForm), response.data.message);
                                     }
                                 }).catch(axiosError);
                             }
@@ -267,7 +270,7 @@ var editAccount = (function ($) {
                     url: url + id,
                     headers: { 'X-Requested-With': 'XMLHttpRequest' }
                 }).then(response => {
-                    if (response.data.IsSuccessful) {
+                    if (response.data.isSuccessful) {
                         onDeleteSuccess();
                         toastr.success('Deleted successfully!', '', toastOptions());
                     } else {

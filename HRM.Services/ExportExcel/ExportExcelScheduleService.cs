@@ -114,7 +114,7 @@
                 using (var xlPackage = new ExcelPackage())
                 {
                     var sheetName = $"{filter.FromDate.ToString(DateFormat)}-{filter.ToDate.ToString(DateFormat)}";
-                    ExcelWorksheet templateWorksheet = templatePackage.Workbook.Worksheets[1];
+                    ExcelWorksheet templateWorksheet = templatePackage.Workbook.Worksheets[0];
                     ExcelWorksheet worksheet = xlPackage.Workbook.Worksheets.Add(sheetName);
                     var rowIndex = 1;
                     var colIndex = 1;

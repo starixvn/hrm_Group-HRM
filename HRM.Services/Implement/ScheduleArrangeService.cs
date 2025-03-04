@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
     using HRM.Core;
     using HRM.Core.Constants;
     using HRM.Core.Models;
@@ -18,7 +19,7 @@
         private readonly IScheduleArrangeRepository scheduleArrangeRepository;
         private readonly IBaseService baseService;
         private readonly IShiftService shiftService;
-        
+
         public ScheduleArrangeService(
             IScheduleArrangeRepository scheduleArrangeRepository,
             IBaseService baseService,
@@ -29,7 +30,7 @@
             this.shiftService = shiftService;
         }
 
-        public IEnumerable<EmployeeSuggestion> GetEmployees(GetEmployeeFilter filter)
+        public async Task<IEnumerable<EmployeeSuggestion>> GetEmployeesAsync(GetEmployeeFilter filter)
         {
             var criteria = new GetEmployeeCriteria
             {
@@ -39,10 +40,10 @@
                 IsIFrame = filter.IsIFrame
             };
 
-            return baseService.GetData<EmployeeSuggestion>(criteria);
+            return await baseService.GetDataAsync<EmployeeSuggestion>(criteria);
         }
 
-        public IEnumerable<WeeklySchedule> GetWeeklySchedule(WeeklyScheduleFilter filter)
+        public async Task<IEnumerable<WeeklySchedule>> GetWeeklyScheduleAsync(WeeklyScheduleFilter filter)
         {
             bool? isLocal = null;
             var criteria = new GetWeeklyScheduleCriteria
@@ -56,15 +57,15 @@
                 IsLocal = filter.IsLocal.HasValue ? (filter.IsLocal.Value == 1) : isLocal
             };
 
-            IEnumerable<WeeklySchedule> weeklySchedules = scheduleArrangeRepository.GetWeeklySchedule(criteria);
-            //IList<Shift> shifts = shiftService.GetAll(isShowOff: true);
+            IEnumerable<WeeklySchedule> weeklySchedules = await scheduleArrangeRepository.GetWeeklyScheduleAsync(criteria);
+            //IList<Shift> shifts = await shiftService.GetAllAsync(isShowOff: true);
             //MappingWeeklyDefaultShift(weeklySchedules, shifts);
             //MappingDefaultShift(weeklySchedules);
 
             return weeklySchedules;
         }
 
-        public CommandResult EditWeekly(
+        public async Task<CommandResult> EditWeeklyAsync(
             int actorId,
             DateTime fromDate,
             DateTime toDate,
@@ -80,10 +81,10 @@
                 DefaultShiftXml = defaultShifts.ToXML().ToString()
             };
 
-            return baseService.ExecuteNonQuery(criteria);
+            return await baseService.ExecuteNonQueryAsync(criteria);
         }
 
-        public CommandResult EditRemark(int actorId, EditRemark model)
+        public async Task<CommandResult> EditRemarkAsync(int actorId, EditRemark model)
         {
             var criteria = new EditRemarkCriteria
             {
@@ -92,10 +93,10 @@
                 Remark = model.Remark
             };
 
-            return baseService.ExecuteNonQuery(criteria);
+            return await baseService.ExecuteNonQueryAsync(criteria);
         }
 
-        public CommandResult EditDisplayOrder(int actorId, IEnumerable<EditDisplayOrder> displayOrders)
+        public async Task<CommandResult> EditDisplayOrderAsync(int actorId, IEnumerable<EditDisplayOrder> displayOrders)
         {
             var criteria = new EditDisplayOrderCriteria
             {
@@ -103,10 +104,10 @@
                 DisplayOrderXml = displayOrders.ToXML().ToString()
             };
 
-            return baseService.ExecuteNonQuery(criteria);
+            return await baseService.ExecuteNonQueryAsync(criteria);
         }
 
-        public CommandResult EditTeamOrder(int actorId, IEnumerable<EditTeamOrder> displayOrders)
+        public async Task<CommandResult> EditTeamOrderAsync(int actorId, IEnumerable<EditTeamOrder> displayOrders)
         {
             var criteria = new EditTeamOrderCriteria
             {
@@ -114,10 +115,10 @@
                 DisplayOrderXml = displayOrders.ToXML().ToString()
             };
 
-            return baseService.ExecuteNonQuery(criteria);
+            return await baseService.ExecuteNonQueryAsync(criteria);
         }
 
-        public CommandResult EditWeeklyDefaultShift(int actorId, WeeklyDefaultShift weeklyDefaultShift, bool isUsedWeeklyDefaultShift)
+        public async Task<CommandResult> EditWeeklyDefaultShiftAsync(int actorId, WeeklyDefaultShift weeklyDefaultShift, bool isUsedWeeklyDefaultShift)
         {
             var criteria = new EditWeeklyDefaultShiftCriteria
             {
@@ -134,7 +135,7 @@
                 IsUsedWeeklyDefaultShift = isUsedWeeklyDefaultShift
             };
 
-            return baseService.ExecuteNonQuery(criteria);
+            return await baseService.ExecuteNonQueryAsync(criteria);
         }
 
         private static int? GetShiftId(int? shiftId)
