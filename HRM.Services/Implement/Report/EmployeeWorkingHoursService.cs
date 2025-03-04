@@ -36,7 +36,7 @@
                 using (var xlPackage = new ExcelPackage())
                 {
                     var redColor = ColorTranslator.FromHtml(Constants.RedColor);
-                    var templateWorksheet = templatePackage.Workbook.Worksheets[1];
+                    var templateWorksheet = templatePackage.Workbook.Worksheets[0];
                     var worksheet = xlPackage.Workbook.Worksheets.Add(Labels.AttendanceWeeklyDetail);
                     var rowIndex = 1;
                     var colIndex = 1;
@@ -94,7 +94,7 @@
 
         public byte[] ExportDailyWorkingHours(DateTime date, IEnumerable<MonthlyWorking> monthlyWorkings)
         {
-            var templatePath = Path.Combine(env.ContentRootPath, "/ExcelTemplates/DailyWorkingHours.xlsx");
+            var templatePath = Path.Combine(env.ContentRootPath, "ExcelTemplates/DailyWorkingHours.xlsx");
             TotalColumns = 15;
 
             using (var templatePackage = new ExcelPackage(new FileInfo(templatePath)))
@@ -102,7 +102,7 @@
                 using (var xlPackage = new ExcelPackage())
                 {
                     var redColor = ColorTranslator.FromHtml(Constants.RedColor);
-                    ExcelWorksheet templateWorksheet = templatePackage.Workbook.Worksheets[1];
+                    ExcelWorksheet templateWorksheet = templatePackage.Workbook.Worksheets[0];
                     ExcelWorksheet worksheet = xlPackage.Workbook.Worksheets.Add(Labels.AttendanceDailyDetail);
                     var rowIndex = 1;
                     var colIndex = 1;

@@ -21,7 +21,7 @@
 
     public partial interface IEmployeeWorkingHoursService
     {
-        IEnumerable<MonthlyWorking> GetMonthlyWorkingHours(GetMonthlyWorkingHoursParam param);
+        Task<IEnumerable<MonthlyWorking>> GetMonthlyWorkingHoursAsync(GetMonthlyWorkingHoursParam param);
 
         IEnumerable<EmployeeRequest> GetEmployeeRequests(GetMonthlyWorkingHoursParam param);
 
@@ -45,7 +45,7 @@
 
         private IEnumerable<LeaveType> LeaveTypes { get; set; }
 
-        public IEnumerable<MonthlyWorking> GetMonthlyWorkingHours(GetMonthlyWorkingHoursParam param)
+        public async Task<IEnumerable<MonthlyWorking>> GetMonthlyWorkingHoursAsync(GetMonthlyWorkingHoursParam param)
         {
             var criteria = new GetMonthlyWorkingHoursCriteria
             {
@@ -58,7 +58,7 @@
                 EmployeeStatusId = param.EmployeeStatusId
             };
 
-            return repository.GetMonthlyWorkingHours(criteria);
+            return await repository.GetMonthlyWorkingHoursAsync(criteria);
         }
 
         public IEnumerable<EmployeeRequest> GetEmployeeRequests(GetMonthlyWorkingHoursParam param)
@@ -84,19 +84,19 @@
             {
                 using (var xlPackage = new ExcelPackage())
                 {
-                    var monthlyWorkings = GetMonthlyWorkingHours(param);
+                    var monthlyWorkings = await GetMonthlyWorkingHoursAsync(param);
                     LeaveTypes = await commonDataService.GetLeaveTypeAsync();
 
-                    var template = templatePackage.Workbook.Worksheets[1];
+                    var template = templatePackage.Workbook.Worksheets[0];
                     var worksheet = xlPackage.Workbook.Worksheets.Add("Details");
                     WriteDetailsSheet(template, worksheet, monthlyWorkings, param);
 
-                    const byte SummarySheetIndex = 2;
+                    const byte SummarySheetIndex = 1;
                     template = templatePackage.Workbook.Worksheets[SummarySheetIndex];
                     worksheet = xlPackage.Workbook.Worksheets.Add("Summary");
                     WriteSummarySheet(template, worksheet, monthlyWorkings, param);
 
-                    const byte RequestSheetIndex = 3;
+                    const byte RequestSheetIndex = 2;
                     template = templatePackage.Workbook.Worksheets[RequestSheetIndex];
                     worksheet = xlPackage.Workbook.Worksheets.Add("Employee's request");
                     WriteRequestSheet(template, worksheet, param);

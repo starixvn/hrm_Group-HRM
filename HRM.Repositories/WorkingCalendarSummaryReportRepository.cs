@@ -1,23 +1,24 @@
 ﻿namespace HRM.Repositories
 {
     using System.Collections.Generic;
+    using System.Threading.Tasks;
     using Fanex.Data;
     using Fanex.Data.Repository;
     using HRM.Models.Report;
     using HRM.Models.ScheduleArrange;
 
-    public partial interface IReportRepository
+    public partial interface IWorkingCalendarSummaryReportRepository
     {
-        IEnumerable<WorkingCalendarSummary> GetWorkingCalendarSummary(ICriteria criteria);
+        Task<IEnumerable<WorkingCalendarSummary>> GetWorkingCalendarSummaryAsync(ICriteria criteria);
     }
 
-    public partial class ReportRepository : Interfaces.IReportRepository
+    public partial class WorkingCalendarSummaryReportRepository : IWorkingCalendarSummaryReportRepository
     {
-        public IEnumerable<WorkingCalendarSummary> GetWorkingCalendarSummary(ICriteria criteria)
+        public async Task<IEnumerable<WorkingCalendarSummary>> GetWorkingCalendarSummaryAsync(ICriteria criteria)
         {
             using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                return db.Query<WorkingCalendarSummary, ShiftBase, LeaveRequest, LeaveRequest, WorkingCalendarSummary>(
+                return await db.QueryAsync<WorkingCalendarSummary, ShiftBase, LeaveRequest, LeaveRequest, WorkingCalendarSummary>(
                     (dailySchedule, shift, leave, leave2) =>
                     {
                         dailySchedule.Shift = shift;

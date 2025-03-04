@@ -1,6 +1,7 @@
 ﻿@using HRM.Models.Message
 @using HRM.Website.Helper
 @using Microsoft.AspNetCore.Mvc.TagHelpers
+@using HRM.Resources
 @model HRM.Models.Message.GetMessageByEmployeeParam
 @{
     ViewBag.Title = Labels.MyMessage;
@@ -24,7 +25,7 @@
         @Html.HiddenFor(model => model.EmployeeId)
         <div class="form-group form-group--m">
             <div class="label-form">
-                @Html.LabelFor(model => model.FromDate, new { @class = "control-label" })
+                @Html.LabelFor(model => model.FromDate, Labels.FromDate, new { @class = "control-label" })
             </div>
             <div class="calendar-form">
                 @Html.TextBox(Html.NameFor(model => model.FromDate).ToString(), Model.FromDate.ToString("dd MMM, yyyy"), new { @class = "datepicker form-control", mindate = (new DateTime(2010, 1, 1)).ToString("yyyy/MM/dd"), maxdate = "null", disabledDate = "" })
@@ -33,7 +34,7 @@
         </div>
         <div class="form-group form-group--m">
             <div class="label-form">
-                @Html.LabelFor(model => model.ToDate, new { @class = "control-label" })
+                @Html.LabelFor(model => model.ToDate,  Labels.ToDate, new { @class = "control-label" })
             </div>
             <div class="calendar-form">
                 @Html.TextBox(Html.NameFor(model => model.ToDate).ToString(), Model.ToDate.ToString("dd MMM, yyyy"), new { @class = "datepicker form-control", mindate = (new DateTime(2010, 1, 1)).ToString("yyyy/MM/dd"), maxdate = "null", disabledDate = "" })
@@ -125,6 +126,6 @@
     }
     else
     {
-        @RazorHelpers.DisplayNoInformation(7)
+        @Html.Raw(RazorHelpers.DisplayNoInformation(7))
     }
 </table>

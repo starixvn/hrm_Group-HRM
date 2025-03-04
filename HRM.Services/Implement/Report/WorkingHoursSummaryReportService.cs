@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.IO;
+    using System.Threading.Tasks;
     using HRM.Core;
     using HRM.Core.Enums;
     using HRM.Core.Services;
@@ -13,7 +14,7 @@
 
     public interface IWorkingHoursSummaryReportService
     {
-        IEnumerable<WorkingHoursSummary> GetWorkingHoursSummary(GetWorkingHoursSummaryParam param);
+        Task<IEnumerable<WorkingHoursSummary>> GetWorkingHoursSummaryAsync(GetWorkingHoursSummaryParam param);
 
         byte[] Export(GetWorkingHoursSummaryParam param, IEnumerable<WorkingHoursSummary> workingHours, IEnumerable<DailyOvertimeDetails> overtimes);
     }
@@ -25,7 +26,7 @@
         private const byte MinimumWidth = 5;
         private const byte MaximumWidth = 50;
 
-        public IEnumerable<WorkingHoursSummary> GetWorkingHoursSummary(GetWorkingHoursSummaryParam param)
+        public async Task<IEnumerable<WorkingHoursSummary>> GetWorkingHoursSummaryAsync(GetWorkingHoursSummaryParam param)
         {
             var criteria = new GetWorkingHoursSummaryReportCriteria
             {
@@ -37,7 +38,7 @@
                 Employee = param.Employee,
                 EmployeeStatusId = param.EmployeeStatusId
             };
-            return baseService.GetData<WorkingHoursSummary>(criteria);
+            return await baseService.GetDataAsync<WorkingHoursSummary>(criteria);
         }
 
         public byte[] Export(
@@ -50,11 +51,11 @@
             {
                 using (var xlPackage = new ExcelPackage())
                 {
-                    var template = templatePackage.Workbook.Worksheets[1];
+                    var template = templatePackage.Workbook.Worksheets[0];
                     var worksheet = xlPackage.Workbook.Worksheets.Add("Total Working Hours");
                     WriteWorkingHours(template, worksheet, param, workingHours);
 
-                    const byte OvertimeSheetIndex = 2;
+                    const byte OvertimeSheetIndex = 1;
                     template = templatePackage.Workbook.Worksheets[OvertimeSheetIndex];
                     worksheet = xlPackage.Workbook.Worksheets.Add("Overtime Details Report");
                     WriteOvertimeDetails(template, worksheet, param, overtimes);

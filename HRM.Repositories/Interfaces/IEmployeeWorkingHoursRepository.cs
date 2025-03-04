@@ -1,11 +1,12 @@
 ﻿namespace HRM.Repositories
 {
     using System.Collections.Generic;
+    using System.Threading.Tasks;
     using Fanex.Data.Repository;
     using HRM.Models.Report.MonthlyWorkingHours;
 
     public interface IEmployeeWorkingHoursRepository
     {
-        IEnumerable<MonthlyWorking> GetMonthlyWorkingHours(ICriteria criteria);
+        Task<IEnumerable<MonthlyWorking>> GetMonthlyWorkingHoursAsync(ICriteria criteria);
     }
 }

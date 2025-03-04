@@ -1,0 +1,90 @@
+﻿@using HRM.ViewModels.Report;
+@using HRM.Resources
+@using HRM.ViewModels.Report;
+@using HRM.Website.Helper
+@model MealAllowanceReportViewModel
+@{
+    ViewBag.Title = Labels.MealAllowanceDetails;
+}
+
+@section css{
+    <link href="~/dist/styles/report.meal.allowance.css" rel="stylesheet" />
+}
+@section js{
+    <script src="~/dist/js/report.meal.allowance.report.details.js"></script>
+}
+@section Breadcrumb {
+    <a class="step">@Labels.Personal</a>
+    <a class="step" href="@Url.Action("index", "report")">@Labels.Reports</a>
+    <a class="step">@ViewBag.Title</a>
+}
+<form class="filter-detail">
+    @Html.HiddenFor(model => model.TeamIds)
+    <div class="form-horizontal clearfix">
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.Label(Labels.FromDate, Labels.FromDate, new { @class = "control-label" })
+            </div>
+            <div class="calendar-form">
+                @Html.TextBox("FromDate", Model.FromDate.ToDateMonthYearFormatedDate(),
+                    new
+                            {
+                        @class = "datepicker form-control",
+                        mindate = new DateTime(2010, 1, 1).ToString("yyyy/MM/dd"),
+                        maxdate = DateTime.Now.ToString("yyyy/MM/dd"),
+                        disabledDate = string.Empty
+                    })
+                <i class="icon-calendar fa fa-calendar"></i>
+            </div>
+        </div>
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.Label(Labels.ToDate, Labels.ToDate, new { @class = "control-label" })
+            </div>
+            <div class="calendar-form">
+                @Html.TextBox("ToDate", Model.ToDate.ToDateMonthYearFormatedDate(),
+                    new
+                    {
+                        @class = "datepicker form-control",
+                        mindate = new DateTime(2010, 1, 1).ToString("yyyy/MM/dd"),
+                        maxdate = DateTime.Now.ToString("yyyy/MM/dd"),
+                        disabledDate = string.Empty
+                    })
+                <i class="icon-calendar fa fa-calendar"></i>
+            </div>
+        </div>
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.Label(Labels.Category, Labels.Category, new { @class = "control-label" })
+            </div>
+            <div class="select-form">
+                @Html.Raw(RazorHelpers.CategoryDropDownList("IsLocal", classHTML: "form-control",
+                    selectedId: Model.IsLocal.HasValue ? Model.IsLocal.Value.ToString() : string.Empty))
+            </div>
+        </div>
+    </div>
+    <div class="form-horizontal clearfix">
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                <label class="control-label">@Labels.SectionTeam</label>
+            </div>
+            <div class="select-form" id="Team"></div>
+        </div>
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.LabelFor(model => model.Employee, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.TextBox("Employee", Model.Employee,
+                    new { placeholder = Messages.SearchEmployeeWatermark, @class = "form-control" })
+                @Html.HiddenFor(model => model.EmployeeId)
+            </div>
+        </div>
+        <div class="form-group form-group--m">
+            <button type="button" class="btn btn-primary" id="btnSearchDetails">@Labels.Search</button>
+            <button type="button" class="btn btn-excel" id="btnExcelDetails">@Labels.Excel</button>
+        </div>
+    </div>
+</form>
+
+<div id="MealAllowanceDetaills"></div>

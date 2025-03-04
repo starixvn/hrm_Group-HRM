@@ -15,19 +15,19 @@ namespace HRM.Services
 
     public interface IWorkingCalendarSummaryReportService
     {
-        Task<IEnumerable<EmployeeAttendanceModel>> GetWorkingCalendarSummary(GetWorkingHoursSummaryParam param);
+        Task<IEnumerable<WorkingCalendarSummary>> GetWorkingCalendarSummaryAsync(GetWorkingHoursSummaryParam param);
 
         byte[] Export(GetWorkingHoursSummaryParam param, IEnumerable<WorkingCalendarSummary> calendars);
     }
 
     public class WorkingCalendarSummaryReportService(
         IWebHostEnvironment env,
-        Repositories.Interfaces.IReportRepository repository) : IWorkingCalendarSummaryReportService
+        IWorkingCalendarSummaryReportRepository repository) : IWorkingCalendarSummaryReportService
     {
         private const byte MinimumWidth = 5;
         private const byte MaximumWidth = 50;
 
-        public async Task<IEnumerable<EmployeeAttendanceModel>> GetWorkingCalendarSummary(GetWorkingHoursSummaryParam param)
+        public async Task<IEnumerable<WorkingCalendarSummary>> GetWorkingCalendarSummaryAsync(GetWorkingHoursSummaryParam param)
         {
             var criteria = new GetEmployeeWorkingCalendarByDateCriteria
             {
@@ -38,7 +38,7 @@ namespace HRM.Services
                 TeamIds = param.TeamIds,
                 Employee = param.Employee
             };
-            return await repository.GetEmployeeAttendanceReportAsync(criteria);
+            return await repository.GetWorkingCalendarSummaryAsync(criteria);
         }
 
         public byte[] Export(
@@ -50,7 +50,7 @@ namespace HRM.Services
             {
                 using (var xlPackage = new ExcelPackage())
                 {
-                    var template = templatePackage.Workbook.Worksheets[1];
+                    var template = templatePackage.Workbook.Worksheets[0];
                     var worksheet = xlPackage.Workbook.Worksheets.Add("Working Calendar Summary");
                     const byte StartBodyRow = 3;
                     const byte TotalFixedColumns = 7;

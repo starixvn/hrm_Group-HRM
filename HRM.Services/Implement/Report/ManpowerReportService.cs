@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using System.Threading.Tasks;
     using HRM.Core.Services;
     using HRM.Criteria.Report;
     using HRM.Models.Report;
@@ -12,9 +13,9 @@
 
     public interface IManpowerReportService
     {
-        IEnumerable<ManpowerModel> GetManpower(int year);
+        Task<IEnumerable<ManpowerModel>> GetManpowerAsync(int year);
 
-        IEnumerable<ManpowerCategoryModel> GetManpowerCategory(int year);
+        Task<IEnumerable<ManpowerCategoryModel>> GetManpowerCategoryAsync(int year);
 
         byte[] ExportManpower(IEnumerable<ManpowerModel> manpowers, int year);
 
@@ -25,22 +26,22 @@
         IWebHostEnvironment env,
         IBaseService baseService) : IManpowerReportService
     {
-        public IEnumerable<ManpowerModel> GetManpower(int year)
+        public async Task<IEnumerable<ManpowerModel>> GetManpowerAsync(int year)
         {
             var criteria = new GetManpowerCriteria
             {
                 Year = year
             };
-            return baseService.GetData<ManpowerModel>(criteria);
+            return await baseService.GetDataAsync<ManpowerModel>(criteria);
         }
 
-        public IEnumerable<ManpowerCategoryModel> GetManpowerCategory(int year)
+        public async Task<IEnumerable<ManpowerCategoryModel>> GetManpowerCategoryAsync(int year)
         {
             var criteria = new GetManpowerCategoryCriteria
             {
                 Year = year
             };
-            return baseService.GetData<ManpowerCategoryModel>(criteria);
+            return await baseService.GetDataAsync<ManpowerCategoryModel>(criteria);
         }
 
         public byte[] ExportManpower(IEnumerable<ManpowerModel> manpowers, int year)
@@ -50,7 +51,7 @@
             {
                 using (var xlPackage = new ExcelPackage())
                 {
-                    var template = templatePackage.Workbook.Worksheets[1];
+                    var template = templatePackage.Workbook.Worksheets[0];
                     var worksheet = xlPackage.Workbook.Worksheets.Add("Manpower");
                     const byte TotalColumns = 56;
                     const byte TotalHeaderRows = 2;
@@ -99,7 +100,7 @@
             {
                 using (var xlPackage = new ExcelPackage())
                 {
-                    var template = templatePackage.Workbook.Worksheets[1];
+                    var template = templatePackage.Workbook.Worksheets[0];
                     var worksheet = xlPackage.Workbook.Worksheets.Add("Manpower Category");
                     const byte TotalColumns = 17;
                     const byte TotalHeaderRows = 2;

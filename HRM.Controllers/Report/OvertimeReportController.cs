@@ -93,7 +93,7 @@ public class OvertimeReportController(
             IsLocal = model.IsLocal,
             EmployeeStatusId = model.EmployeeStatusId
         };
-        model.Overtimes = overtimeReportService.GetDailyOvertimeDetails(param);
+        model.Overtimes = await overtimeReportService.GetDailyOvertimeDetailsAsync(param);
 
         return View("~/Views/Report/Overtime/DailyOvertime.cshtml", model);
     }
@@ -140,7 +140,7 @@ public class OvertimeReportController(
     }
 
     [HrmPermission(Policy.Read, FunctionKey.OvertimeReport)]
-    public ActionResult ExportDailyOvertime(DailyOvertimeDetailsViewModel model)
+    public async Task<ActionResult> ExportDailyOvertime(DailyOvertimeDetailsViewModel model)
     {
         var param = new GetDailyOvertimeDetailsParam
         {
@@ -152,7 +152,7 @@ public class OvertimeReportController(
             IsLocal = model.IsLocal,
             EmployeeStatusId = model.EmployeeStatusId
         };
-        var overtimes = overtimeReportService.GetDailyOvertimeDetails(param);
+        var overtimes = await overtimeReportService.GetDailyOvertimeDetailsAsync(param);
         var bytes = overtimeReportService.ExportDailyOvertimeDetails(overtimes, param);
 
         var fileName = $"Overtime Details Report from {param.FromDate:dd-MMM-yyyy} to {param.ToDate:dd-MMM-yyyy}.xlsx";

@@ -18,6 +18,7 @@ using HRM.Repositories;
 using HRM.Repositories.Interfaces;
 using HRM.Services.ExportExcel;
 using HRM.Services.Implement.ActionLog;
+using HRM.Services.Implement.Report;
 using HRM.Services.Implement.Request;
 using HRM.Services.Interfaces.Request;
 using MailDeliver;
@@ -165,7 +166,16 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<ISyncWorkingShiftService, SyncWorkingShiftService>();
         services.AddSingleton<IEmployeeLogService, EmployeeLogService>();
         services.AddSingleton<IActionLogService, ActionLogService>();
-
+        services.AddSingleton<IEmployeeWorkingHoursService, EmployeeWorkingHoursService>();
+        services.AddSingleton<IEmployeeWorkingHoursRepository, EmployeeWorkingHoursRepository>();
+        services.AddSingleton<IOvertimeReportService, OvertimeReportService>();
+        services.AddSingleton<IOvertimeReportRepository, OvertimeReportRepository>();
+        services.AddSingleton<IWorkingHoursSummaryReportService, WorkingHoursSummaryReportService>();
+        services.AddSingleton<IManpowerReportService, ManpowerReportService>();
+        services.AddSingleton<IWorkingCalendarSummaryReportService, WorkingCalendarSummaryReportService>();
+        services.AddSingleton<IWorkingCalendarSummaryReportRepository, WorkingCalendarSummaryReportRepository>();
+        services.AddSingleton<IMealAllowanceSummaryService, MealAllowanceSummaryService>();
+        
         services.AddDIReportServices();
         services.AddDIExcelServices();
 

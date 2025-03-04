@@ -1,9 +1,6 @@
-﻿using HRM.Core;
-using HRM.Criteria.Supervisor;
+﻿using HRM.Criteria.Supervisor;
 using HRM.Models;
-using HRM.Models.Supervisor;
 using HRM.Services.Interfaces;
-using HRM.ViewModels.Report;
 
 namespace HRM.Controllers.Report;
 
@@ -18,13 +15,11 @@ using Core.Filters;
 using Criteria;
 using Criteria.Time;
 using GO.UserControl.Client.Core.Enumerables;
-using GO.UserControl.Client.Core.Models;
 using GO.UserControl.Client.Core.Session;
 using HRM.Core;
 using HRM.Criteria.Report;
 using HRM.ViewModels.Report;
 using Microsoft.AspNetCore.Mvc;
-using Services;
 using Services.Implement;
 using ViewModels;
 

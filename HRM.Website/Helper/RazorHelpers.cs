@@ -21,10 +21,10 @@ namespace HRM.Website.Helper
         {
             return $@"
                 <select id='{id}' name='{id}' class='{classHTML}'>
-                    <option selected='{!selectedId.HasValue}' value=''>-- All --</option>
-                    <option selected='{selectedId == (byte)EmployeeStatus.Enabled}' value='{(byte)EmployeeStatus.Enabled}'>{Labels.Enable}</option>
-                    <option selected='{selectedId == (byte)EmployeeStatus.Disabled}' value='{(byte)EmployeeStatus.Disabled}'>{Labels.Disabled}</option>
-                    <option selected='{selectedId == (byte)EmployeeStatus.Deleted}' value='{(byte)EmployeeStatus.Deleted}'>{Labels.Deleted}</option>
+                    <option {(!selectedId.HasValue ? "selected" : "")} value=''>-- All --</option>
+                    <option {(selectedId == (byte)EmployeeStatus.Enabled ? "selected": "")} value='{(byte)EmployeeStatus.Enabled}'>{Labels.Enable}</option>
+                    <option {(selectedId == (byte)EmployeeStatus.Disabled ? "selected": "")} value='{(byte)EmployeeStatus.Disabled}'>{Labels.Disabled}</option>
+                    <option {(selectedId == (byte)EmployeeStatus.Deleted ? "selected" : "")} value='{(byte)EmployeeStatus.Deleted}'>{Labels.Deleted}</option>
                 </select>";
         }
 

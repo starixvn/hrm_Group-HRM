@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
     using Fanex.Data;
     using Fanex.Data.Repository;
     using HRM.Models;
@@ -9,11 +10,11 @@
 
     public class EmployeeWorkingHoursRepository : IEmployeeWorkingHoursRepository
     {
-        public IEnumerable<MonthlyWorking> GetMonthlyWorkingHours(ICriteria criteria)
+        public async Task<IEnumerable<MonthlyWorking>> GetMonthlyWorkingHoursAsync(ICriteria criteria)
         {
             using (IObjectDb db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
             {
-                using (var multi = db.QueryMultiple(criteria))
+                using (var multi = await db.QueryMultipleAsync(criteria))
                 {
                     IEnumerable<MonthlyWorking> monthlyWorkings = multi.Read<MonthlyWorking, EntityBase<int>, MonthlyWorking>(
                         (monthlyWorking, team) =>

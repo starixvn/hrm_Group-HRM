@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.IO;
+    using System.Threading.Tasks;
     using HRM.Core;
     using HRM.Core.Constants;
     using HRM.Core.Services;
@@ -13,9 +14,9 @@
 
     public interface IMealAllowanceSummaryService
     {
-        IEnumerable<MealAllowanceSummary> GetMealAllowanceSummary(GetMealAllowanceSummaryReportCriteria criteria);
+        Task<IEnumerable<MealAllowanceSummary>> GetMealAllowanceSummaryAsync(GetMealAllowanceSummaryReportCriteria criteria);
 
-        IEnumerable<MealAllowanceDetail> GetMealAllowanceDetails(GetMealAllowanceDetailReportCriteria criteria);
+        Task<IEnumerable<MealAllowanceDetail>> GetMealAllowanceDetailsAsync(GetMealAllowanceDetailReportCriteria criteria);
 
         byte[] Export(MealAllowanceReportViewModel param,
             IEnumerable<MealAllowanceSummary> summaries,
@@ -29,14 +30,14 @@
         private const byte MinimumWidth = 10;
         private const byte MaximumWidth = 50;
 
-        public IEnumerable<MealAllowanceSummary> GetMealAllowanceSummary(GetMealAllowanceSummaryReportCriteria criteria)
+        public async Task<IEnumerable<MealAllowanceSummary>> GetMealAllowanceSummaryAsync(GetMealAllowanceSummaryReportCriteria criteria)
         {
-            return baseService.GetData<MealAllowanceSummary>(criteria);
+            return await baseService.GetDataAsync<MealAllowanceSummary>(criteria);
         }
 
-        public IEnumerable<MealAllowanceDetail> GetMealAllowanceDetails(GetMealAllowanceDetailReportCriteria criteria)
+        public async Task<IEnumerable<MealAllowanceDetail>> GetMealAllowanceDetailsAsync(GetMealAllowanceDetailReportCriteria criteria)
         {
-            return baseService.GetData<MealAllowanceDetail>(criteria);
+            return await baseService.GetDataAsync<MealAllowanceDetail>(criteria);
         }
 
         public byte[] Export(
@@ -49,11 +50,11 @@
             {
                 using (var xlPackage = new ExcelPackage())
                 {
-                    var template = templatePackage.Workbook.Worksheets[1];
+                    var template = templatePackage.Workbook.Worksheets[0];
                     var worksheet = xlPackage.Workbook.Worksheets.Add("Summary");
                     WriteMealAllowanceSummary(template, worksheet, param, summaries);
 
-                    const byte DetailSheetIndex = 2;
+                    const byte DetailSheetIndex = 1;
                     template = templatePackage.Workbook.Worksheets[DetailSheetIndex];
                     worksheet = xlPackage.Workbook.Worksheets.Add("Details");
                     WriteMealAllowanceDetails(template, worksheet, param, details);

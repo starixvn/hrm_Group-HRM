@@ -89,7 +89,7 @@
             return await overtimeReportRepository.GetMonthlyOvertimeAsync(criteria);
         }
 
-        public IEnumerable<DailyOvertimeDetails> GetDailyOvertimeDetails(GetDailyOvertimeDetailsParam param)
+        public async Task<IEnumerable<DailyOvertimeDetails>> GetDailyOvertimeDetailsAsync(GetDailyOvertimeDetailsParam param)
         {
             var criteria = new GetDailyOvertimeReportCriteria
             {
@@ -101,7 +101,7 @@
                 IsLocal = param.IsLocal,
                 EmployeeStatusId = param.EmployeeStatusId
             };
-            return baseService.GetData<DailyOvertimeDetails>(criteria);
+            return await baseService.GetDataAsync<DailyOvertimeDetails>(criteria);
         }
 
         public byte[] ExportYearlyOvertime(IEnumerable<YearlyOvertime> overtimes, GetYearlyOvertimeParam param)
@@ -115,7 +115,7 @@
             {
                 using (var xlPackage = new ExcelPackage())
                 {
-                    var templateWorksheet = templatePackage.Workbook.Worksheets[1];
+                    var templateWorksheet = templatePackage.Workbook.Worksheets[0];
                     var worksheet = xlPackage.Workbook.Worksheets.Add("Yearly Overtime Report");
                     var rowIndex = 1;
                     var colIndex = 1;
@@ -185,16 +185,16 @@
             {
                 using (var xlPackage = new ExcelPackage())
                 {
-                    var template = templatePackage.Workbook.Worksheets[1];
+                    var template = templatePackage.Workbook.Worksheets[0];
                     var worksheet = xlPackage.Workbook.Worksheets.Add("Raw Data");
                     WriteRawData(template, worksheet, dateRanges, dailyOvertimes);
 
-                    const byte OvertimeSheetIndex = 2;
+                    const byte OvertimeSheetIndex = 1;
                     template = templatePackage.Workbook.Worksheets[OvertimeSheetIndex];
                     worksheet = xlPackage.Workbook.Worksheets.Add("Overtime Record");
                     WriteOvertimeRecord(template, worksheet, dateRanges, dailyOvertimes);
 
-                    const byte SummarySheetIndex = 3;
+                    const byte SummarySheetIndex = 2;
                     template = templatePackage.Workbook.Worksheets[SummarySheetIndex];
                     worksheet = xlPackage.Workbook.Worksheets.Add("Summary OT");
                     WriteSummaryOvertime(template, worksheet, dateRanges, dailyOvertimes);
@@ -213,7 +213,7 @@
             {
                 using (var xlPackage = new ExcelPackage())
                 {
-                    var templateWorksheet = templatePackage.Workbook.Worksheets[1];
+                    var templateWorksheet = templatePackage.Workbook.Worksheets[0];
                     var worksheet = xlPackage.Workbook.Worksheets.Add("Overtime Details Report");
                     var rowIndex = 1;
                     var colIndex = 1;

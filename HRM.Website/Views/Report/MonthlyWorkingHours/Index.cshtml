@@ -1,0 +1,97 @@
+﻿@using HRM.Resources
+@using HRM.ViewModels.Report.WorkingHours
+@using HRM.Website.Helper
+@model MonthlyFilterViewModel
+@{
+    ViewBag.Title = Labels.AttendanceMonthlyDetail;
+
+    var today = DateTime.Today;
+    var minDate = new DateTime(2010, 1, 1).ToString("yyyy/MM/dd");
+    var maxDate = new DateTime(today.Year, today.Month, DateTime.DaysInMonth(today.Year, today.Month)).ToString("yyyy/MM/dd");
+}
+@section css{
+    <link href="~/dist/styles/report.monthlyworkinghours.css" rel="stylesheet" />
+}
+@section js{
+    <script src="~/dist/js/report.monthlyworkinghours.js"></script>
+}
+@section Breadcrumb {
+    <a class="step">@Labels.Personal</a>
+    <a class="step" href="@Url.Action("index", "report")">@Labels.Reports</a>
+    <a class="step">@ViewBag.Title</a>
+}
+<h2 class="page-title">@ViewBag.Title</h2>
+
+<form class="filter">
+    @Html.HiddenFor(model => model.TeamIds)
+    <div class="form-horizontal clearfix">
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.Label(Labels.FromDate, Labels.FromDate, new { @class = "control-label" })
+            </div>
+            <div class="calendar-form">
+                @Html.TextBox("FromDate", Model.FromDate.ToDateMonthYearFormatedDate(),
+                    new {
+                        @class = "datepicker form-control",
+                        mindate = minDate,
+                        maxdate = maxDate,
+                        disabledDate = string.Empty
+                    })
+                <i class="icon-calendar fa fa-calendar"></i>
+            </div>
+        </div>
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.Label(Labels.ToDate, Labels.ToDate, new { @class = "control-label" })
+            </div>
+            <div class="calendar-form">
+                @Html.TextBox("ToDate", Model.ToDate.ToDateMonthYearFormatedDate(),
+                    new {
+                        @class = "datepicker form-control",
+                        mindate = minDate,
+                        maxdate = maxDate,
+                        disabledDate = string.Empty
+                    })
+                <i class="icon-calendar fa fa-calendar"></i>
+            </div>
+        </div>
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.Label(Labels.Category, Labels.Category, new { @class = "control-label" })
+            </div>
+            <div class="select-form">
+                @Html.Raw(RazorHelpers.CategoryDropDownList("IsLocal", classHTML: "form-control", selectedId: string.Empty))
+            </div>
+        </div>
+    </div>
+    <div class="form-horizontal clearfix">
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                <label class="control-label">@Labels.SectionTeam</label>
+            </div>
+            <div class="select-form" id="Team"></div>
+        </div>
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.Label(Labels.Keyword, Labels.Keyword, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.TextBoxFor(model => model.Employee,
+                    new { placeholder = Messages.SearchEmployeeWatermark, @class = "form-control", @maxlength = 200, autocomplete = "off" })
+            </div>
+        </div>
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.Label(Labels.UserStatus, Labels.UserStatus, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.Raw(RazorHelpers.UserStatusDropDownList("EmployeeStatusId", classHTML: "form-control", selectedId: Model.EmployeeStatusId))
+            </div>
+        </div>
+        <div class="form-group form-group--m">
+            <button type="button" class="btn btn-primary" id="btnSearch">@Labels.Search</button>
+            <button type="button" class="btn btn-excel" id="btnExcel">@Labels.Excel</button>
+        </div>
+    </div>
+</form>
+<div id="MonthlyWorkingHoursDetails"></div>

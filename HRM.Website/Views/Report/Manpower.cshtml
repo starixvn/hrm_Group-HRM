@@ -1,0 +1,246 @@
+﻿@using HRM.Resources
+@using HRM.Models.Report
+@using HRM.ViewModels.Report
+@using HRM.Website.Helper
+@model ManpowerViewModel
+@{
+    ViewBag.Title = @Labels.Manpower;
+}
+@section css{
+    <link href="~/dist/styles/report.manpower.css" rel="stylesheet" />
+}
+@section js{
+    <script src="~/dist/js/report.manpower.js"></script>
+}
+@section Breadcrumb {
+    <a class="step">@Labels.Personal</a>
+    <a class="step" href="@Url.Action("index", "report")">@Labels.Reports</a>
+    <a class="step">@ViewBag.Title</a>
+}
+<h2 class="page-title">@ViewBag.Title</h2>
+<form class="filter">
+    <div class="form-horizontal clearfix">
+        <div class="form-group year">
+            <div class="label-form">
+                @Html.Label(Labels.Year, Labels.Year, new { @class = "control-label" })
+            </div>
+            <div class="select-form">
+                @{
+                    var yearPicker = Extensions.YearPicker(2010, Model.Year);
+                    <select class="yearpicker form-control" name="year" id="year">
+                        @foreach (var item in yearPicker)
+                        {
+                            <!option value="@item.Value" @(item.Selected ? "selected" : "")>@item.Value</!option>
+                        }
+                    </select>
+                }
+            </div>
+        </div>
+        <div class="form-group form-group--m">
+            <button class="btn btn-primary">@Labels.Search</button>
+            <button type="button" class="btn btn-excel" id="btnExcel">@Labels.Excel</button>
+        </div>
+    </div>
+</form>
+<table id="data" class="table table-custom">
+    <thead>
+        <tr>
+            <th rowspan="2">@Labels.SymbolCount</th>
+            <th rowspan="2"  class="col-sorter">
+                <div class="cell-control-wrapper">
+                    <div>@Labels.Department</div>
+                    <div class="fa fa-sort"></div>
+                </div>
+            </th>
+            <th rowspan="2" class="col-sorter">
+                <div class="cell-control-wrapper">
+                    <div>@Labels.Section</div>
+                    <div class="fa fa-sort"></div>
+                </div>
+            </th>
+            <th rowspan="2">@Labels.Team</th>
+            <th colspan="4">@Labels.TotalManpower</th>
+            <th colspan="4">@Labels.Jan</th>
+            <th colspan="4">@Labels.Feb</th>
+            <th colspan="4">@Labels.Mar</th>
+            <th colspan="4">@Labels.Apr</th>
+            <th colspan="4">@Labels.May</th>
+            <th colspan="4">@Labels.Jun</th>
+            <th colspan="4">@Labels.Jul</th>
+            <th colspan="4">@Labels.Aug</th>
+            <th colspan="4">@Labels.Sep</th>
+            <th colspan="4">@Labels.Oct</th>
+            <th colspan="4">@Labels.Nov</th>
+            <th colspan="4">@Labels.Dec</th>
+        </tr>
+        <tr>
+            @for (int i = 0; i <= 12; i++)
+            {
+                <th>@Labels.ProbationResigned</th>
+                <th>@Labels.ConfirmedResigned</th>
+                <th>@Labels.NewHire</th>
+                <th>@Labels.Existing</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Manpowers != null && Model.Manpowers.Any())
+        {
+            int index = 1;
+            foreach (ManpowerModel manpower in Model.Manpowers)
+            {
+        <tr>
+            <td>@(index++)</td>
+            <td class="align-left">@manpower.DepartmentCode</td>
+            <td class="align-left">@manpower.Section</td>
+            <td class="align-left">@manpower.TeamName</td>
+            <td class="align-right">@manpower.ProbationResigned</td>
+            <td class="align-right">@manpower.ConfirmedResigned</td>
+            <td class="align-right">@manpower.NewHire</td>
+            <td class="align-right">@manpower.ActiveUser</td>
+            @{RenderCell(manpower.ProbationResignedJan, Model.Year, 1);}
+            @{RenderCell(manpower.ConfirmedResignedJan, Model.Year, 1);}
+            @{RenderCell(manpower.NewHireJan, Model.Year, 1);}
+            @{RenderCell(manpower.ActiveUserJan, Model.Year, 1);}
+            @{RenderCell(manpower.ProbationResignedFeb, Model.Year, 2);}
+            @{RenderCell(manpower.ConfirmedResignedFeb, Model.Year, 2);}
+            @{RenderCell(manpower.NewHireFeb, Model.Year, 2);}
+            @{RenderCell(manpower.ActiveUserFeb, Model.Year, 2);}
+            @{RenderCell(manpower.ProbationResignedMar, Model.Year, 3);}
+            @{RenderCell(manpower.ConfirmedResignedMar, Model.Year, 3);}
+            @{RenderCell(manpower.NewHireMar, Model.Year, 3);}
+            @{RenderCell(manpower.ActiveUserMar, Model.Year, 3);}
+            @{RenderCell(manpower.ProbationResignedApr, Model.Year, 4);}
+            @{RenderCell(manpower.ConfirmedResignedApr, Model.Year, 4);}
+            @{RenderCell(manpower.NewHireApr, Model.Year, 4);}
+            @{RenderCell(manpower.ActiveUserApr, Model.Year, 4);}
+            @{RenderCell(manpower.ProbationResignedMay, Model.Year, 5);}
+            @{RenderCell(manpower.ConfirmedResignedMay, Model.Year, 5);}
+            @{RenderCell(manpower.NewHireMay, Model.Year, 5);}
+            @{RenderCell(manpower.ActiveUserMay, Model.Year, 5);}
+            @{RenderCell(manpower.ProbationResignedJun, Model.Year, 6);}
+            @{RenderCell(manpower.ConfirmedResignedJun, Model.Year, 6);}
+            @{RenderCell(manpower.NewHireJun, Model.Year, 6);}
+            @{RenderCell(manpower.ActiveUserJun, Model.Year, 6);}
+            @{RenderCell(manpower.ProbationResignedJul, Model.Year, 7);}
+            @{RenderCell(manpower.ConfirmedResignedJul, Model.Year, 7);}
+            @{RenderCell(manpower.NewHireJul, Model.Year, 7);}
+            @{RenderCell(manpower.ActiveUserJul, Model.Year, 7);}
+            @{RenderCell(manpower.ProbationResignedAug, Model.Year, 8);}
+            @{RenderCell(manpower.ConfirmedResignedAug, Model.Year, 8);}
+            @{RenderCell(manpower.NewHireAug, Model.Year, 8);}
+            @{RenderCell(manpower.ActiveUserAug, Model.Year, 8);}
+            @{RenderCell(manpower.ProbationResignedSep, Model.Year, 9);}
+            @{RenderCell(manpower.ConfirmedResignedSep, Model.Year, 9);}
+            @{RenderCell(manpower.NewHireSep, Model.Year, 9);}
+            @{RenderCell(manpower.ActiveUserSep, Model.Year, 9);}
+            @{RenderCell(manpower.ProbationResignedOct, Model.Year, 10);}
+            @{RenderCell(manpower.ConfirmedResignedOct, Model.Year, 10);}
+            @{RenderCell(manpower.NewHireOct, Model.Year, 10);}
+            @{RenderCell(manpower.ActiveUserOct, Model.Year, 10);}
+            @{RenderCell(manpower.ProbationResignedNov, Model.Year, 11);}
+            @{RenderCell(manpower.ConfirmedResignedNov, Model.Year, 11);}
+            @{RenderCell(manpower.NewHireNov, Model.Year, 11);}
+            @{RenderCell(manpower.ActiveUserNov, Model.Year, 11);}
+            @{RenderCell(manpower.ProbationResignedDec, Model.Year, 12);}
+            @{RenderCell(manpower.ConfirmedResignedDec, Model.Year, 12);}
+            @{RenderCell(manpower.NewHireDec, Model.Year, 12);}
+            @{RenderCell(manpower.ActiveUserDec, Model.Year, 12);}
+        </tr>
+            }
+        }
+        else
+        {
+            @Html.Raw(RazorHelpers.DisplayNoInformation(colspan: 42))
+        }
+    </tbody>
+    <tfoot>
+        <tr class="footer summary">
+            <td colspan="4" class="align-right">
+                @Labels.Total
+            </td>
+            <td class="align-right">
+                @Model.Manpowers.Sum(t => t.ProbationResigned)
+            </td>
+            <td class="align-right">
+                @Model.Manpowers.Sum(t => t.ConfirmedResigned)
+            </td>
+            <td class="align-right">
+                @Model.Manpowers.Sum(t => t.NewHire)
+            </td>
+            <td class="align-right">
+                @Model.Manpowers.Sum(t => t.ActiveUser)
+            </td>
+            @{RenderCell(Model.Manpowers.Sum(t => t.ProbationResignedJan), Model.Year, 1);}
+            @{RenderCell(Model.Manpowers.Sum(t => t.ConfirmedResignedJan), Model.Year, 1);}
+            @{RenderCell(Model.Manpowers.Sum(t => t.NewHireJan), Model.Year, 1);}
+            @{RenderCell(Model.Manpowers.Sum(t => t.ActiveUserJan), Model.Year, 1);}
+            @{RenderCell(Model.Manpowers.Sum(t => t.ProbationResignedFeb), Model.Year, 2);}
+            @{RenderCell(Model.Manpowers.Sum(t => t.ConfirmedResignedFeb), Model.Year, 2);}
+            @{RenderCell(Model.Manpowers.Sum(t => t.NewHireFeb), Model.Year, 2);}
+            @{RenderCell(Model.Manpowers.Sum(t => t.ActiveUserJan), Model.Year, 2);}
+            @{RenderCell(Model.Manpowers.Sum(t => t.ProbationResignedMar), Model.Year, 3);}
+            @{RenderCell(Model.Manpowers.Sum(t => t.ConfirmedResignedMar), Model.Year, 3);}
+            @{RenderCell(Model.Manpowers.Sum(t => t.NewHireMar), Model.Year, 3);}
+            @{RenderCell(Model.Manpowers.Sum(t => t.ActiveUserMar), Model.Year, 3);}
+            @{RenderCell(Model.Manpowers.Sum(t => t.ProbationResignedApr), Model.Year, 4);}
+            @{RenderCell(Model.Manpowers.Sum(t => t.ConfirmedResignedApr), Model.Year, 4);}
+            @{RenderCell(Model.Manpowers.Sum(t => t.NewHireApr), Model.Year, 4);}
+            @{RenderCell(Model.Manpowers.Sum(t => t.ActiveUserApr), Model.Year, 4);}
+            @{RenderCell(Model.Manpowers.Sum(t => t.ProbationResignedMay), Model.Year, 5);}
+            @{RenderCell(Model.Manpowers.Sum(t => t.ConfirmedResignedMay), Model.Year, 5);}
+            @{RenderCell(Model.Manpowers.Sum(t => t.NewHireMay), Model.Year, 5);}
+            @{RenderCell(Model.Manpowers.Sum(t => t.ActiveUserMay), Model.Year, 5);}
+            @{RenderCell(Model.Manpowers.Sum(t => t.ProbationResignedJun), Model.Year, 6);}
+            @{RenderCell(Model.Manpowers.Sum(t => t.ConfirmedResignedJun), Model.Year, 6);}
+            @{RenderCell(Model.Manpowers.Sum(t => t.NewHireJun), Model.Year, 6);}
+            @{RenderCell(Model.Manpowers.Sum(t => t.ActiveUserJun), Model.Year, 6);}
+            @{RenderCell(Model.Manpowers.Sum(t => t.ProbationResignedJul), Model.Year, 7);}
+            @{RenderCell(Model.Manpowers.Sum(t => t.ConfirmedResignedJul), Model.Year, 7);}
+            @{RenderCell(Model.Manpowers.Sum(t => t.NewHireJul), Model.Year, 7);}
+            @{RenderCell(Model.Manpowers.Sum(t => t.ActiveUserJul), Model.Year, 7);}
+            @{RenderCell(Model.Manpowers.Sum(t => t.ProbationResignedAug), Model.Year, 8);}
+            @{RenderCell(Model.Manpowers.Sum(t => t.ConfirmedResignedAug), Model.Year, 8);}
+            @{RenderCell(Model.Manpowers.Sum(t => t.NewHireAug), Model.Year, 8);}
+            @{RenderCell(Model.Manpowers.Sum(t => t.ActiveUserAug), Model.Year, 8);}
+            @{RenderCell(Model.Manpowers.Sum(t => t.ProbationResignedSep), Model.Year, 9);}
+            @{RenderCell(Model.Manpowers.Sum(t => t.ConfirmedResignedSep), Model.Year, 9);}
+            @{RenderCell(Model.Manpowers.Sum(t => t.NewHireSep), Model.Year, 9);}
+            @{RenderCell(Model.Manpowers.Sum(t => t.ActiveUserSep), Model.Year, 9);}
+            @{RenderCell(Model.Manpowers.Sum(t => t.ProbationResignedOct), Model.Year, 10);}
+            @{RenderCell(Model.Manpowers.Sum(t => t.ConfirmedResignedOct), Model.Year, 10);}
+            @{RenderCell(Model.Manpowers.Sum(t => t.NewHireOct), Model.Year, 10);}
+            @{RenderCell(Model.Manpowers.Sum(t => t.ActiveUserOct), Model.Year, 10);}
+            @{RenderCell(Model.Manpowers.Sum(t => t.ProbationResignedNov), Model.Year, 11);}
+            @{RenderCell(Model.Manpowers.Sum(t => t.ConfirmedResignedNov), Model.Year, 11);}
+            @{RenderCell(Model.Manpowers.Sum(t => t.NewHireNov), Model.Year, 11);}
+            @{RenderCell(Model.Manpowers.Sum(t => t.ActiveUserNov), Model.Year, 11);}
+            @{RenderCell(Model.Manpowers.Sum(t => t.ProbationResignedDec), Model.Year, 12);}
+            @{RenderCell(Model.Manpowers.Sum(t => t.ConfirmedResignedDec), Model.Year, 12);}
+            @{RenderCell(Model.Manpowers.Sum(t => t.NewHireDec), Model.Year, 12);}
+            @{RenderCell(Model.Manpowers.Sum(t => t.ActiveUserDec), Model.Year, 12);}
+        </tr>
+    </tfoot>
+</table>
+@{
+    void RenderCell(int value, int year, int month)
+    {
+        string display = "-";
+        if (DateTime.Now.Year > year)
+        {
+            display = value.ToString();
+        }
+        else if (DateTime.Now.Year == year)
+        {
+            if (DateTime.Now.Month >= month)
+            {
+                display = value.ToString();
+            }
+        }
+
+        <td class="align-right">
+            @display
+        </td>
+    }
+    
+}
