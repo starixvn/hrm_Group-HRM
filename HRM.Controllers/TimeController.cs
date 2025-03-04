@@ -22,6 +22,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NetTools;
+using Newtonsoft.Json.Serialization;
+using Newtonsoft.Json;
 
 public class TimeController(
     AppSettings appSettings,
@@ -119,7 +121,7 @@ public class TimeController(
 
         var commandResult = await baseService.ExecuteNonQueryAsync(criteria);
 
-        return Json(commandResult);
+        return new JsonResult(commandResult, new JsonSerializerSettings { ContractResolver = new DefaultContractResolver() });
     }
 
     public ActionResult AddTimeRecord()
