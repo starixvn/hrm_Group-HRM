@@ -17,23 +17,17 @@ public interface IEmployeeService
 {
     Task<string> GenerateEmployeeCode();
 
-    IList<SupervisorNameModel> GetListSupervisorName(GetListSupervisorNameCriteria criteria);
+    Task<IEnumerable<SupervisorNameModel>> GetListSupervisorNameAsync(GetListSupervisorNameCriteria criteria);
 
-    Task<IList<SupervisorNameModel>> GetListSupervisorNameAsync(GetListSupervisorNameCriteria criteria);
-
-    IList<SupervisorModel> GetEmployeeSupervisorByRoleId(int employeeId, short roleId);
-
-    Task<IList<SupervisorModel>> GetEmployeeSupervisorByRoleIdAsync(int employeeId, short roleId);
+    Task<IEnumerable<SupervisorModel>> GetEmployeeSupervisorByRoleIdAsync(int employeeId, short roleId);
 
     Task<Employee> GetEmployeeByIdAsync(int id);
 
     Task<IEnumerable<Employee>> GetEmployeeAsync(GetAllEmployeeCriteria criteria);
 
-    Task<IList<Employee>> GetMemberByManagerAsync(GetMemberByManagerCriteria criteria);
+    Task<IEnumerable<Employee>> GetMemberByManagerAsync(GetMemberByManagerCriteria criteria);
 
-    IList<Employee> GetEmployeesByRole(GetEmployeeByRoleCriteria criteria);
-
-    Task<IList<Employee>> GetEmployeesByRoleAsync(GetEmployeeByRoleCriteria criteria);
+    Task<IEnumerable<Employee>> GetEmployeesByRoleAsync(GetEmployeeByRoleCriteria criteria);
 
     Task<EmployeeShift> GetShiftByEmployeeId(int id);
 
@@ -41,26 +35,19 @@ public interface IEmployeeService
 
     Task<AnnualLeaveTransactionViewModel> GetAnnualLeaveTransactionAsync(int leaveTransId);
 
-    IList<SupervisorNameModel> GetSupervisorByRequestType(GetSupervisorByRequestTypeCriteria criteria);
+    Task<IEnumerable<SupervisorNameModel>> GetSupervisorByRequestTypeAsync(GetSupervisorByRequestTypeCriteria criteria);
 
-    Task<IList<SupervisorNameModel>> GetSupervisorByRequestTypeAsync(GetSupervisorByRequestTypeCriteria criteria);
-
-    Task<IList<SupervisorNameModel>> GetSupervisorByQueryAsync(GetEmployeeSupervisorByQueryCriteria criteria);
-
-    IEnumerable<Supervisor> GetDisciplineSettingByEmployeeId(int employeeId);
+    Task<IEnumerable<SupervisorNameModel>> GetSupervisorByQueryAsync(GetEmployeeSupervisorByQueryCriteria criteria);
 
     Task<IEnumerable<Supervisor>> GetDisciplineSettingByEmployeeIdAsync(int employeeId);
 
-    Task<IList<SupervisorNameModel>> GetHRAndSupervisorByEmpIdAsync(int employeeId);
+    Task<IEnumerable<SupervisorNameModel>> GetHRAndSupervisorByEmpIdAsync(int employeeId);
 
-    Task<IList<Employee>> GetEmployeeByGender(string query, int gender);
+    Task<IEnumerable<Employee>> GetEmployeeByGender(string query, int gender);
 
-    Task<IList<EmployeeFullProfile>> GetEmployeeFullProfile(GetEmployeeFullProfileCriteria criteria);
+    Task<IEnumerable<EmployeeFullProfile>> GetEmployeeFullProfile(GetEmployeeFullProfileCriteria criteria);
 
-    CommandResult EditEmployeeSupervisor(int actorId, int employeeId, short roleId, IEnumerable<EditTeamSupervisor> supervisors);
-
-    Task<CommandResult> EditEmployeeSupervisorAsync(int actorId, int employeeId, short roleId,
-        IEnumerable<EditTeamSupervisor> supervisors);
+    Task<CommandResult> EditEmployeeSupervisorAsync(int actorId, int employeeId, short roleId, IEnumerable<EditTeamSupervisor> supervisors);
 
     Task<CommandResult> EditPasswordAsync(int actorId, EditPassword model);
 

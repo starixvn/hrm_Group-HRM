@@ -1,109 +1,102 @@
-﻿namespace HRM.Services
-{
-    using System;
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
-    using System.Xml;
-    using HRM.Core.Services;
-    using HRM.Criteria.Log;
-    using HRM.Models.Log;
+﻿namespace HRM.Services;
 
-    public interface IActionLogService
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Xml;
+using HRM.Core.Services;
+using HRM.Criteria.Log;
+using HRM.Models.Log;
+
+public interface IActionLogService
+{
+    Task<IEnumerable<LogObjectDetail>> GetLogDetailByIdAsync(byte objectTypeId, int objectId);
+}
+
+public class ActionLogService(IBaseService baseService) : IActionLogService
+{
+    public async Task<IEnumerable<LogObjectDetail>> GetLogDetailByIdAsync(byte objectTypeId, int objectId)
     {
-        IEnumerable<LogObjectDetail> GetLogDetailById(byte objectTypeId, int objectId);
+        var criteria = new GetLogObjectByIdCriteria
+        {
+            ObjectTypeId = objectTypeId,
+            ObjectId = objectId
+        };
+        var logs = await baseService.GetDataAsync<LogObjectDetail>(criteria);
+        GetFieldChanged(logs);
+
+        return logs;
     }
 
-    public class ActionLogService : IActionLogService
+    private void GetFieldChanged(IEnumerable<LogObjectDetail> logs)
     {
-        private readonly IBaseService baseService;
-
-        public ActionLogService(IBaseService baseService)
+        foreach (var log in logs)
         {
-            this.baseService = baseService;
-        }
+            var oldValues = ReadXmlString(log.OldData);
+            var newValues = ReadXmlString(log.Data);
+            var fieldNames = oldValues.Select(x => x.FieldName).Union(newValues.Select(x => x.FieldName));
 
-        public IEnumerable<LogObjectDetail> GetLogDetailById(byte objectTypeId, int objectId)
-        {
-            var criteria = new GetLogObjectByIdCriteria
+            foreach (var fieldName in fieldNames)
             {
-                ObjectTypeId = objectTypeId,
-                ObjectId = objectId
-            };
-            var logs = baseService.GetData<LogObjectDetail>(criteria);
-            GetFieldChanged(logs);
+                var oldValue = oldValues.FirstOrDefault(x => x.FieldName == fieldName)?.Value;
+                var newValue = newValues.FirstOrDefault(x => x.FieldName == fieldName)?.Value;
 
-            return logs;
-        }
-
-        private void GetFieldChanged(IEnumerable<LogObjectDetail> logs)
-        {
-            foreach (LogObjectDetail log in logs)
-            {
-                var oldValues = ReadXmlString(log.OldData);
-                var newValues = ReadXmlString(log.Data);
-                var fieldNames = oldValues.Select(x => x.FieldName).Union(newValues.Select(x => x.FieldName));
-
-                foreach (string fieldName in fieldNames)
+                if ((!string.IsNullOrWhiteSpace(oldValue) || !string.IsNullOrWhiteSpace(newValue))
+                    && !string.Equals(oldValue, newValue, StringComparison.OrdinalIgnoreCase))
                 {
-                    var oldValue = oldValues.FirstOrDefault(x => x.FieldName == fieldName)?.Value;
-                    var newValue = newValues.FirstOrDefault(x => x.FieldName == fieldName)?.Value;
-
-                    if ((!string.IsNullOrWhiteSpace(oldValue) || !string.IsNullOrWhiteSpace(newValue))
-                        && !string.Equals(oldValue, newValue, StringComparison.OrdinalIgnoreCase))
+                    log.Fields.Add(new FieldValue
                     {
-                        log.Fields.Add(new FieldValue
-                        {
-                            FieldName = fieldName,
-                            OldValue = oldValue,
-                            Value = newValue
-                        });
-                    }
+                        FieldName = fieldName,
+                        OldValue = oldValue,
+                        Value = newValue
+                    });
+                }
+            }
+        }
+    }
+
+    private static IEnumerable<FieldValue> ReadXmlString(string xml)
+    {
+        var results = new List<FieldValue>();
+        TextReader sr = new StringReader(xml);
+
+        using (var reader = XmlReader.Create(sr))
+        {
+            while (reader.Read())
+            {
+                if (reader.NodeType == XmlNodeType.Element)
+                {
+                    var fields = ReadXmlAttribute(reader);
+                    results.AddRange(fields);
                 }
             }
         }
 
-        private IEnumerable<FieldValue> ReadXmlString(string xml)
-        {
-            var results = new List<FieldValue>();
-            TextReader sr = new StringReader(xml);
+        return results;
+    }
 
-            using (var reader = XmlReader.Create(sr))
+    private static IEnumerable<FieldValue> ReadXmlAttribute(XmlReader reader)
+    {
+        var results = new List<FieldValue>();
+
+        if (reader.HasAttributes)
+        {
+            while (reader.MoveToNextAttribute())
             {
-                while (reader.Read())
+                var field = new FieldValue
                 {
-                    if (reader.NodeType == XmlNodeType.Element)
-                    {
-                        var fields = ReadXmlAttribute(reader);
-                        results.AddRange(fields);
-                    }
-                }
+                    FieldName = reader.Name,
+                    Value = reader.Value
+                };
+
+                results.Add(field);
             }
 
-            return results;
+            reader.MoveToElement();
         }
 
-        private IEnumerable<FieldValue> ReadXmlAttribute(XmlReader reader)
-        {
-            var results = new List<FieldValue>();
-
-            if (reader.HasAttributes)
-            {
-                while (reader.MoveToNextAttribute())
-                {
-                    var field = new FieldValue
-                    {
-                        FieldName = reader.Name,
-                        Value = reader.Value
-                    };
-
-                    results.Add(field);
-                }
-
-                reader.MoveToElement();
-            }
-
-            return results;
-        }
+        return results;
     }
 }

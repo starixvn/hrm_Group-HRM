@@ -1,5 +1,5 @@
 ﻿@using HRM.Website.Helper
-@model IList<HRM.Models.EmployeeWorkFromHome>
+@model IEnumerable<HRM.Models.EmployeeWorkFromHome>
 
 <table class="table table-custom" id="data">
     <thead>
@@ -25,7 +25,7 @@
     </thead>
     <tbody>
         @{var index = 1;}
-        @if (Model is { Count: > 0 })
+        @if (Model.Any())
         {
 
             foreach (var item in Model)

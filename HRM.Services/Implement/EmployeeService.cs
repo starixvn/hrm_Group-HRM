@@ -1,30 +1,28 @@
-﻿using HRM.Repositories.Interfaces;
-
-namespace HRM.Services.Implement;
+﻿namespace HRM.Services.Implement;
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using HRM.Core.Models;
+using System.Threading.Tasks;
 using Core.Security;
-using HRM.Core.Services;
 using Core.XMLExtensions;
 using Criteria;
 using Criteria.AnnualLeave;
 using Criteria.Employee;
 using Criteria.Shift;
 using Criteria.Supervisor;
-using Models;
-using Models.EmployeeInformation;
-using HRM.Models.Group;
-using Models.Supervisor;
-using Repositories;
-using Resources;
-using ViewModels.AnnualLeave;
 using GO.UserControl.Client.Core;
 using GO.UserControl.Client.Core.Services;
-using System.Threading.Tasks;
+using HRM.Core.Models;
+using HRM.Core.Services;
+using HRM.Models.Group;
+using HRM.Repositories.Interfaces;
 using Interfaces;
+using Models;
+using Models.EmployeeInformation;
+using Models.Supervisor;
+using Resources;
+using ViewModels.AnnualLeave;
 
 public class EmployeeService(
     IUserControlSettings userControlSettings,
@@ -73,31 +71,12 @@ public class EmployeeService(
         return employees ?? new List<Employee>();
     }
 
-    public async Task<IList<Employee>> GetMemberByManagerAsync(GetMemberByManagerCriteria criteria)
+    public async Task<IEnumerable<Employee>> GetMemberByManagerAsync(GetMemberByManagerCriteria criteria)
     {
-        return (await baseService.GetDataAsync<Employee>(criteria)).ToList();
+        return await baseService.GetDataAsync<Employee>(criteria);
     }
 
-    public IList<Employee> GetEmployeesByRole(GetEmployeeByRoleCriteria criteria)
-    {
-        IList<Employee> employees = null;
-        if (criteria != null && criteria.IsValid())
-        {
-            employees = employeeRepository.GetEmployeesByRole(criteria);
-            var roles = roleService.GetBySiteId(userControlSettings.SiteId);
-            foreach (var employee in employees)
-            {
-                if (employee.Roles != null && employee.Roles.Any())
-                {
-                    employee.Roles = roles.Where(x => employee.Roles.Any(y => y.RoleId == x.RoleId)).ToList();
-                }
-            }
-        }
-
-        return employees ?? new List<Employee>();
-    }
-
-    public async Task<IList<Employee>> GetEmployeesByRoleAsync(GetEmployeeByRoleCriteria criteria)
+    public async Task<IEnumerable<Employee>> GetEmployeesByRoleAsync(GetEmployeeByRoleCriteria criteria)
     {
         if (criteria == null || !criteria.IsValid()) return new List<Employee>();
 
@@ -137,63 +116,30 @@ public class EmployeeService(
         return await baseService.GetDataEntityAsync<AnnualLeaveTransactionViewModel>(criteria);
     }
 
-    public IList<SupervisorModel> GetEmployeeSupervisorByRoleId(int employeeId, short roleId)
+    public async Task<IEnumerable<SupervisorModel>> GetEmployeeSupervisorByRoleIdAsync(int employeeId, short roleId)
     {
         var criteria = new GetEmployeeSupervisorCriteria
         {
             EmpId = employeeId,
             Role = roleId
         };
-        return baseService.GetData<SupervisorModel>(criteria).ToList();
+        return await baseService.GetDataAsync<SupervisorModel>(criteria);
     }
 
-    public async Task<IList<SupervisorModel>> GetEmployeeSupervisorByRoleIdAsync(int employeeId, short roleId)
+    public async Task<IEnumerable<SupervisorNameModel>> GetListSupervisorNameAsync(GetListSupervisorNameCriteria criteria)
     {
-        var criteria = new GetEmployeeSupervisorCriteria
-        {
-            EmpId = employeeId,
-            Role = roleId
-        };
-        var data = await baseService.GetDataAsync<SupervisorModel>(criteria);
-        return data.ToList();
+        return await baseService.GetDataAsync<SupervisorNameModel>(criteria);
     }
 
-    public IList<SupervisorNameModel> GetListSupervisorName(GetListSupervisorNameCriteria criteria)
+    public async Task<IEnumerable<SupervisorNameModel>> GetSupervisorByRequestTypeAsync(GetSupervisorByRequestTypeCriteria criteria)
     {
-        return baseService.GetData<SupervisorNameModel>(criteria).ToList();
+        return await baseService.GetDataAsync<SupervisorNameModel>(criteria);
     }
 
-    public async Task<IList<SupervisorNameModel>> GetListSupervisorNameAsync(GetListSupervisorNameCriteria criteria)
+    public async Task<IEnumerable<SupervisorNameModel>> GetSupervisorByQueryAsync(GetEmployeeSupervisorByQueryCriteria criteria)
     {
-        var data = await baseService.GetDataAsync<SupervisorNameModel>(criteria);
-        return data.ToList();
+        return await baseService.GetDataAsync<SupervisorNameModel>(criteria);
     }
-
-    public IList<SupervisorNameModel> GetSupervisorByRequestType(GetSupervisorByRequestTypeCriteria criteria)
-    {
-        return baseService.GetData<SupervisorNameModel>(criteria).ToList();
-    }
-
-    public async Task<IList<SupervisorNameModel>> GetSupervisorByRequestTypeAsync(GetSupervisorByRequestTypeCriteria criteria)
-    {
-        var data = await baseService.GetDataAsync<SupervisorNameModel>(criteria);
-        return data.ToList();
-    }
-
-    public async Task<IList<SupervisorNameModel>> GetSupervisorByQueryAsync(GetEmployeeSupervisorByQueryCriteria criteria)
-    {
-        return (await baseService.GetDataAsync<SupervisorNameModel>(criteria)).ToList();
-    }
-
-    public IEnumerable<Supervisor> GetDisciplineSettingByEmployeeId(int employeeId)
-    {
-        var criteria = new GetDisciplineSettingByEmployeeId
-        {
-            EmpId = employeeId
-        };
-        return baseService.GetData<Supervisor>(criteria).ToList();
-    }
-
 
     public async Task<IEnumerable<Supervisor>> GetDisciplineSettingByEmployeeIdAsync(int employeeId)
     {
@@ -201,29 +147,16 @@ public class EmployeeService(
         {
             EmpId = employeeId
         };
-        var data = await baseService.GetDataAsync<Supervisor>(criteria);
-        return data.ToList();
+        return await baseService.GetDataAsync<Supervisor>(criteria);
     }
 
-    public async Task<IList<SupervisorNameModel>> GetHRAndSupervisorByEmpIdAsync(int employeeId)
+    public async Task<IEnumerable<SupervisorNameModel>> GetHRAndSupervisorByEmpIdAsync(int employeeId)
     {
         var criteria = new GetHRAndSupervisorByEmpIdCriteria
         {
             EmpId = employeeId
         };
-        return (await baseService.GetDataAsync<SupervisorNameModel>(criteria)).ToList();
-    }
-
-    public CommandResult EditEmployeeSupervisor(int actorId, int employeeId, short roleId, IEnumerable<EditTeamSupervisor> supervisors)
-    {
-        var criteria = new EditEmployeeSupervisorCriteria
-        {
-            EmployeeId = employeeId,
-            ActorId = actorId,
-            RoleId = roleId,
-            SupervisorXml = supervisors.ToXML().ToString()
-        };
-        return baseService.ExecuteNonQuery(criteria);
+        return await baseService.GetDataAsync<SupervisorNameModel>(criteria);
     }
 
     public async Task<CommandResult> EditEmployeeSupervisorAsync(int actorId, int employeeId, short roleId, IEnumerable<EditTeamSupervisor> supervisors)
@@ -238,7 +171,7 @@ public class EmployeeService(
         return await baseService.ExecuteNonQueryAsync(criteria);
     }
 
-    public async Task<IList<Employee>> GetEmployeeByGender(string query, int gender)
+    public async Task<IEnumerable<Employee>> GetEmployeeByGender(string query, int gender)
     {
         var criteria = new GetMemberByGenderCriteria
         {
@@ -246,10 +179,10 @@ public class EmployeeService(
             Gender = gender
         };
 
-        return (await baseService.GetDataAsync<Employee>(criteria)).ToList();
+        return await baseService.GetDataAsync<Employee>(criteria);
     }
 
-    public async Task<IList<EmployeeFullProfile>> GetEmployeeFullProfile(GetEmployeeFullProfileCriteria criteria)
+    public async Task<IEnumerable<EmployeeFullProfile>> GetEmployeeFullProfile(GetEmployeeFullProfileCriteria criteria)
     {
         var employees = await employeeRepository.GetEmployeeFullInformation(criteria);
         var roles = await roleService.GetBySiteIdAsync(userControlSettings.SiteId);

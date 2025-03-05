@@ -49,12 +49,6 @@
 
         #endregion Properties
 
-        public void Render()
-        {
-            _sheet.Workbook.RemoveSheetAt(0);
-            _sheet.Workbook.ToReponseStream(_fileName);
-        }
-
         public byte[] WriteContentToBytes()
         {
             using var output = new MemoryStream();

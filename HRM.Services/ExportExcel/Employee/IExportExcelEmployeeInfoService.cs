@@ -2,14 +2,13 @@
 using System.Threading.Tasks;
 using HRM.Models.EmployeeInformation;
 
-namespace HRM.Services.ExportExcel.Employee
+namespace HRM.Services.ExportExcel.Employee;
+
+public interface IExportExcelEmployeeInfoService
 {
-    public interface IExportExcelEmployeeInfoService
-    {
-        Task<byte[]> ExportEmployeeBasicInfo(IList<Models.Employee> employees);
+    Task<byte[]> ExportEmployeeBasicInfo(IList<Models.Employee> employees);
 
-        Task<byte[]> ExportEmployeeDetailsInfo(IList<Models.Employee> employees);
+    byte[] ExportEmployeeDetailsInfo(IList<Models.Employee> employees);
 
-        Task<byte[]> ExportEmployeeFullProfile(IList<EmployeeFullProfile> profiles);
-    }
+    Task<byte[]> ExportEmployeeFullProfile(IEnumerable<EmployeeFullProfile> profiles);
 }

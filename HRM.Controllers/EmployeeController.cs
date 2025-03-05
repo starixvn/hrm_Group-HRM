@@ -562,7 +562,7 @@ public class EmployeeController : BaseController
         }
     }
 
-    private async Task<IList<SupervisorNameModel>> GetSupervisors(int empId)
+    private async Task<IEnumerable<SupervisorNameModel>> GetSupervisors(int empId)
     {
         var criteria = new GetListSupervisorNameCriteria
         {
@@ -570,18 +570,17 @@ public class EmployeeController : BaseController
             Role = null,
             RequestType = null
         };
-        var supervisors = await employeeService.GetListSupervisorNameAsync(criteria);
-        return supervisors;
+        return await employeeService.GetListSupervisorNameAsync(criteria);
     }
 
-    private static string GetSupervisors(IList<SupervisorNameModel> supervisors, short roleId)
+    private static string GetSupervisors(IEnumerable<SupervisorNameModel> supervisors, short roleId)
     {
         var supervisorsName = string.Empty;
         const byte maxDisplayItems = 3;
 
         if (supervisors != null)
         {
-            IList<SupervisorNameModel> supervisorsFilter = supervisors.Where(x => x.ActionType == roleId).Take(maxDisplayItems).ToList();
+            var supervisorsFilter = supervisors.Where(x => x.ActionType == roleId).Take(maxDisplayItems).ToList();
             supervisorsName = string.Join(", ", supervisorsFilter.Select(x => x.NickName));
 
             if (supervisorsFilter.Count > maxDisplayItems)
@@ -593,27 +592,27 @@ public class EmployeeController : BaseController
         return supervisorsName;
     }
 
-    private static string GetVerifiers(IList<SupervisorNameModel> supervisors)
+    private static string GetVerifiers(IEnumerable<SupervisorNameModel> supervisors)
     {
         return GetSupervisors(supervisors, (short)RoleSystem.Verifier);
     }
 
-    private static string GetApprovers(IList<SupervisorNameModel> supervisors)
+    private static string GetApprovers(IEnumerable<SupervisorNameModel> supervisors)
     {
         return GetSupervisors(supervisors, (short)RoleSystem.Approver);
     }
 
-    private static string GetShiftMonitors(IList<SupervisorNameModel> supervisors)
+    private static string GetShiftMonitors(IEnumerable<SupervisorNameModel> supervisors)
     {
         return GetSupervisors(supervisors, (short)RoleSystem.ShiftManager);
     }
 
-    private static string GetActingSupervisors(IList<SupervisorNameModel> supervisors)
+    private static string GetActingSupervisors(IEnumerable<SupervisorNameModel> supervisors)
     {
         return GetSupervisors(supervisors, (short)RoleSystem.OnBehalfRequest);
     }
 
-    private static string GetDisciplineSupervisors(IList<SupervisorNameModel> supervisors)
+    private static string GetDisciplineSupervisors(IEnumerable<SupervisorNameModel> supervisors)
     {
         return GetSupervisors(supervisors, (short)RoleSystem.DisciplineManager);
     }

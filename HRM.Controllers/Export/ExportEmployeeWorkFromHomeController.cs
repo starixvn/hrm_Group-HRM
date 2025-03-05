@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using GO.UserControl.Client.Core.Session;
 using HRM.Core.Services;
 using HRM.Criteria.EmployeeWorkFromHome;
@@ -14,9 +15,9 @@ public class ExportEmployeeWorkFromHomeController(
     IBaseService baseService)
     : BaseExportController(userControlSession)
 {
-    public IActionResult EmployeeWorkFromHome(GetEmployeeWorkFromHomeCriteria criteria)
+    public async Task<IActionResult> EmployeeWorkFromHome(GetEmployeeWorkFromHomeCriteria criteria)
     {
-        var employees = baseService.GetData<EmployeeWorkFromHome>(criteria);
+        var employees = await baseService.GetDataAsync<EmployeeWorkFromHome>(criteria);
         var fileName = "EmployeeWorkFromHome_" + DateTimeOffset.Now.ToString("yyyyMMdd") + ".xls";
 
         var hssfWorkbook = exportExcelService.ExportEmployeeWfh(employees);

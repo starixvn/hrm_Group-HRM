@@ -1,29 +1,26 @@
-﻿using System.Threading.Tasks;
-using HRM.Core;
-
-namespace HRM.Services.ExportExcel.Employee;
+﻿namespace HRM.Services.ExportExcel.Employee;
 
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
-using Core;
+using System.Threading.Tasks;
 using Core.Enums;
+using HRM.Core;
+using Implement;
+using Interfaces;
+using Microsoft.AspNetCore.Hosting;
 using Models;
 using Models.EmployeeInformation;
 using Models.Supervisor;
 using Resources;
-using Microsoft.AspNetCore.Hosting;
-using Implement;
-using Interfaces;
 
 [SuppressMessage("Major Code Smell", "S109:Magic numbers should not be used", Justification = "Pending")]
 public class ExportExcelEmployeeInfoService(
     IEmployeeService employeeService,
     ICommonDataService commonDataService,
-    IWebHostEnvironment hostingEnvironment)
-    : IExportExcelEmployeeInfoService
+    IWebHostEnvironment hostingEnvironment) : IExportExcelEmployeeInfoService
 {
     private const string EmployeeBasicInfoTemplatePath = @"ExcelTemplates\EmployeeBasicInfoTemplate.xls";
     private const string EmployeeDetailsInfoTemplatePath = @"ExcelTemplates\EmployeeDetailsInfoTemplate.xls";
@@ -59,7 +56,7 @@ public class ExportExcelEmployeeInfoService(
         return writer.WriteContentToBytes();
     }
 
-    public async Task<byte[]> ExportEmployeeDetailsInfo(IList<Employee> employees)
+    public byte[] ExportEmployeeDetailsInfo(IList<Employee> employees)
     {
         var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, EmployeeDetailsInfoTemplatePath);
         var fileName = "EmployeeDetailsInfo_" + DateTimeOffset.Now.ToString("yyyyMMdd");
@@ -212,7 +209,7 @@ public class ExportExcelEmployeeInfoService(
 
     #region Employee Full Profile Information
 
-    public async Task<byte[]> ExportEmployeeFullProfile(IList<EmployeeFullProfile> profiles)
+    public async Task<byte[]> ExportEmployeeFullProfile(IEnumerable<EmployeeFullProfile> profiles)
     {
         var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, EmployeeFullInfoTemplatePath);
         const string sheetName = "Employee Full Information";
@@ -235,8 +232,7 @@ public class ExportExcelEmployeeInfoService(
         return writer.WriteContentToBytes();
     }
 
-    private void WriteFullProfileBody(ExcelTemplateWriter writer,
-        IList<EmployeeFullProfile> profiles)
+    private void WriteFullProfileBody(ExcelTemplateWriter writer, IEnumerable<EmployeeFullProfile> profiles)
     {
         var currentRow = 3;
         foreach (var p in profiles)

@@ -11,7 +11,6 @@ using HRM.Core.Models;
 using HRM.Core.Services;
 using HRM.Criteria.EmployeeWorkFromHome;
 using HRM.Models;
-using HRM.Services;
 using HRM.Services.Interfaces;
 using HRM.ViewModels.EmployeeWorkFromHome;
 using Microsoft.AspNetCore.Http;
@@ -23,8 +22,7 @@ public class EmployeeWorkFromHomeController(
     IUserControlSession userControlSession,
     IBaseService baseService,
     IAttachFileService attachFileService,
-    IEmployeeWorkFromHomeService employeeWorkFromHomeService)
-    : BaseController(userControlSession)
+    IEmployeeWorkFromHomeService employeeWorkFromHomeService) : BaseController(userControlSession)
 {
     private readonly IUserControlSession userControlSession = userControlSession;
     private const string UploadFolderPath = "/file/uploads/wfh/";
@@ -44,9 +42,9 @@ public class EmployeeWorkFromHomeController(
     }
 
     [HrmPermission(Policy.Read, FunctionKey.EmployeeManagement)]
-    public ActionResult GetEmployeeWorkFromHomeGrid(GetEmployeeWorkFromHomeCriteria criteria)
+    public async Task<IActionResult> GetEmployeeWorkFromHomeGrid(GetEmployeeWorkFromHomeCriteria criteria)
     {
-        var employees = baseService.GetData<EmployeeWorkFromHome>(criteria);
+        var employees = await baseService.GetDataAsync<EmployeeWorkFromHome>(criteria);
         foreach (var employee in employees)
         {
             employee.AttachFiles = attachFileService.GetInfoAttachFile(employee.EmployeeWorkFromHomeId, UploadFolderPath);

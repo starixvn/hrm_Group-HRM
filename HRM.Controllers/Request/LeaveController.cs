@@ -275,7 +275,7 @@ public class LeaveController(
         return Json(dates.Select(t => t.Date.ToString("yyyy/MM/dd")));
     }
 
-    public ActionResult GetTotalLeaveDay(GetDisabledDateParam param)
+    public async Task<IActionResult> GetTotalLeaveDay(GetDisabledDateParam param)
     {
         var criteria = new GetTotalLeaveDayCriteria
         {
@@ -285,7 +285,7 @@ public class LeaveController(
             ToDate = param.ToDate,
             RequestId = param.RequestId
         };
-        IEnumerable<DateTime> dates = baseService.GetData<DateTime>(criteria);
+        var dates = await baseService.GetDataAsync<DateTime>(criteria);
         var totalDays = (param.ToDate - param.FromDate).Days + 1 - dates.Count();
         return Json(totalDays);
 

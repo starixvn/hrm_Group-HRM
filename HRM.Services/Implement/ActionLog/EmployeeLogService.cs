@@ -101,7 +101,7 @@ public class EmployeeLogService(
         SystemRoles = await roleService.GetBySiteIdAsync(userControlSession.SiteId);
         Genders = commonDataService.GetGender();
         MarriageStatuses = commonDataService.GetMarriageStatus();
-        var logs = actionLogService.GetLogDetailById(LogObjectType.Employee, employeeId);
+        var logs = await actionLogService.GetLogDetailByIdAsync(LogObjectType.Employee, employeeId);
         MappingField(logs);
 
         return logs;
@@ -172,10 +172,10 @@ public class EmployeeLogService(
 
     private void MappingTeam(FieldValue field)
     {
-        int.TryParse(field.OldValue, out int teamId);
+        _ = int.TryParse(field.OldValue, out int teamId);
         field.OldValue = Teams.FirstOrDefault(x => x.Id == teamId)?.Name;
 
-        int.TryParse(field.Value, out teamId);
+        _ = int.TryParse(field.Value, out teamId);
         field.Value = Teams.FirstOrDefault(x => x.Id == teamId)?.Name;
     }
 
@@ -190,19 +190,19 @@ public class EmployeeLogService(
 
     private void MappingJobTitle(FieldValue field)
     {
-        int.TryParse(field.OldValue, out int jobTitleId);
+        _ = int.TryParse(field.OldValue, out int jobTitleId);
         field.OldValue = JobTitles.FirstOrDefault(x => x.Id == jobTitleId)?.Name;
 
-        int.TryParse(field.Value, out jobTitleId);
+        _ = int.TryParse(field.Value, out jobTitleId);
         field.Value = JobTitles.FirstOrDefault(x => x.Id == jobTitleId)?.Name;
     }
 
     private void MappingJobLevel(FieldValue field)
     {
-        int.TryParse(field.OldValue, out int jobLevelId);
+        _ = int.TryParse(field.OldValue, out int jobLevelId);
         field.OldValue = JobLevel.FirstOrDefault(x => x.Id == jobLevelId)?.Name;
 
-        int.TryParse(field.Value, out jobLevelId);
+        _ = int.TryParse(field.Value, out jobLevelId);
         field.Value = JobLevel.FirstOrDefault(x => x.Id == jobLevelId)?.Name;
     }
 
@@ -214,19 +214,19 @@ public class EmployeeLogService(
 
     private void MappingGender(FieldValue field)
     {
-        byte.TryParse(field.OldValue, out byte gender);
+        _ = byte.TryParse(field.OldValue, out byte gender);
         field.OldValue = Genders.FirstOrDefault(x => x.Id == gender)?.Name;
 
-        byte.TryParse(field.Value, out gender);
+        _ = byte.TryParse(field.Value, out gender);
         field.Value = Genders.FirstOrDefault(x => x.Id == gender)?.Name;
     }
 
     private void MappingMarriage(FieldValue field)
     {
-        byte.TryParse(field.OldValue, out byte gender);
+        _ = byte.TryParse(field.OldValue, out byte gender);
         field.OldValue = MarriageStatuses.FirstOrDefault(x => x.Id == gender)?.Name;
 
-        byte.TryParse(field.Value, out gender);
+        _ = byte.TryParse(field.Value, out gender);
         field.Value = MarriageStatuses.FirstOrDefault(x => x.Id == gender)?.Name;
     }
 

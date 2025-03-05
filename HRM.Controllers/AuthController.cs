@@ -12,6 +12,7 @@ using GO.UserControl.Client.Core.Session;
 using HRM.Core.Constants;
 using HRM.Core.Services;
 using HRM.Criteria.CompanySite;
+using HRM.Criteria.SystemSetting;
 using HRM.Models;
 using HRM.Services;
 using HRM.ViewModels.Employee;
@@ -39,6 +40,8 @@ public class AuthController(
 
         userControlSettings.SiteId = companySite.SiteId;
         userControlSettings.AccessToken = companySite.AccessToken;
+
+        userControlSession.Set(SessionKey.CurrentCompanyId, companySite.CompanyId);
 
         return View();
     }
@@ -68,7 +71,7 @@ public class AuthController(
             if (employee == null)
             {
                 loginResult = new LoginResult { IsSuccessfull = false, ErrorMessage = "User has not been mapped." };
-                return new JsonResult(loginResult);
+                return Json(loginResult);
             }
 
             userControlSession.UserId = loginResult.UserId;
@@ -78,13 +81,13 @@ public class AuthController(
             userControlSession.MenuItems = await userService.GetMenuItemAsync();
             userControlSession.Functions = await userService.GetFunctionPermissionAsync(userControlSession.SiteId, userControlSession.UserId);
             userControlSession.Set(SessionKey.IsShowLeftNavigation, true);
-
             userControlSession.Set(SessionKey.Employee, employee);
+            userControlSession.Set(SessionKey.ClientTimeZone, await GetClientTimeZoneAsync());
 
             await DoLoginAsync(loginResult.UserId);
         }
 
-        return new JsonResult(loginResult);
+        return Json(loginResult);
     }
 
     [HttpGet]
@@ -116,6 +119,18 @@ public class AuthController(
             Domain = domainName
         };
         return await baseService.GetDataEntityAsync<CompanySite>(criteria);
+    }
+
+    private async Task<short> GetClientTimeZoneAsync()
+    {
+        var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
+        var criteria = new GetSystemConfigsByKeyCriteria
+        {
+            CompanyId = companyId,
+            Key = SystemConfigKey.TimeZone
+        };
+
+        return await baseService.GetDataEntityAsync<short>(criteria);
     }
 
     private static string GetDomainName(HttpContext httpContext)

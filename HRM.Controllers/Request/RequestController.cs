@@ -142,7 +142,7 @@ public class RequestController(
     }
 
     [NonAction]
-    public async Task<IList<SupervisorNameModel>> GetSupervisorByRequestType(int employeeId, byte role, byte requestType)
+    public async Task<IEnumerable<SupervisorNameModel>> GetSupervisorByRequestType(int employeeId, byte role, byte requestType)
     {
         var criteria = new GetSupervisorByRequestTypeCriteria
         {
@@ -150,9 +150,7 @@ public class RequestController(
             Role = role,
             RequestType = requestType
         };
-        var supervisors = await employeeService.GetSupervisorByRequestTypeAsync(criteria);
-
-        return supervisors;
+        return await employeeService.GetSupervisorByRequestTypeAsync(criteria);
     }
 
     [HrmPermission(Policy.Host, FunctionKey.VerifyRequest, FunctionKey.ApproveRequest, FunctionKey.ProcessRequest, FunctionKey.VoidRequest)]
