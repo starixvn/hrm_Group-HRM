@@ -168,7 +168,7 @@ public static class DateTimeExtensions
 
     private static TimeSpan ParseTimeZoneOffsetString(string offset)
     {
-        offset += ":00";
+        if(!offset.Contains(':')) offset += ":00";
         return TimeSpan.Parse(offset);
     }
 }
