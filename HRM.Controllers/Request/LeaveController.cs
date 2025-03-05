@@ -39,7 +39,6 @@ public class LeaveController(
 {
     private const string UploadFolderPath = "/file/uploads/request/";
     private readonly string serverTimeZoneOffset = configuration["ServerTimeZoneOffset"];
-    private readonly string clientTimeZoneOffset = configuration["ClientTimeZoneOffset"];
 
     [HttpGet]
     public async Task<IActionResult> EmployeeView(int? year)
@@ -57,9 +56,9 @@ public class LeaveController(
         foreach (var request in leaves)
         {
             request.AttachFiles = attachFileService.GetInfoAttachFile(request.RequestId, UploadFolderPath);
-            request.CreatedDate = request.CreatedDate.ToClientTimeZone(serverTimeZoneOffset, clientTimeZoneOffset);
-            request.FromDate = request.FromDate.ToClientTimeZone(serverTimeZoneOffset, clientTimeZoneOffset);
-            request.ToDate = request.ToDate.ToClientTimeZone(serverTimeZoneOffset, clientTimeZoneOffset);
+            request.CreatedDate = request.CreatedDate.ToClientTimeZone(serverTimeZoneOffset);
+            request.FromDate = request.FromDate.ToClientTimeZone(serverTimeZoneOffset);
+            request.ToDate = request.ToDate.ToClientTimeZone(serverTimeZoneOffset);
         }
         ViewBag.Year = tempYear;
         ViewBag.EmployeeBalance = await GetLeaveBalance(null, year);
@@ -107,8 +106,8 @@ public class LeaveController(
 
         criteria.RequestDetail = leaveRequestDetail;
         criteria.CreatedBy = EmployeeSession.EmpId;
-        criteria.FromDate = criteria.FromDate.ToServerTimeZone(serverTimeZoneOffset, clientTimeZoneOffset);
-        criteria.ToDate = criteria.ToDate.ToServerTimeZone(serverTimeZoneOffset, clientTimeZoneOffset);
+        criteria.FromDate = criteria.FromDate.ToServerTimeZone(serverTimeZoneOffset);
+        criteria.ToDate = criteria.ToDate.ToServerTimeZone(serverTimeZoneOffset);
 
         CommandResult result = await baseService.ExecuteNonQueryAsync(criteria);
         if (result.IsSuccessful)
@@ -164,8 +163,8 @@ public class LeaveController(
         var criteria = JsonConvert.DeserializeObject<UpdateLeaveRequestCriteria>(request);
         var leaveRequestDetail = JsonConvert.DeserializeObject<List<LeaveRequestDetail>>(requestDetails);
         criteria.RequestDetail = leaveRequestDetail;
-        criteria.FromDate = criteria.FromDate.ToServerTimeZone(serverTimeZoneOffset, clientTimeZoneOffset);
-        criteria.ToDate = criteria.ToDate.ToServerTimeZone(serverTimeZoneOffset, clientTimeZoneOffset);
+        criteria.FromDate = criteria.FromDate.ToServerTimeZone(serverTimeZoneOffset);
+        criteria.ToDate = criteria.ToDate.ToServerTimeZone(serverTimeZoneOffset);
         if (leaveRequestDetail != null && leaveRequestDetail.Any())
         {
             criteria.TotalDays = leaveRequestDetail.Where(x => x.WorkType == (byte)WorkType.Leave)

@@ -144,44 +144,29 @@ public static class DateTimeExtensions
         return (sourceDate.Year == toDate.Year && sourceDate.Month == toDate.Month && sourceDate.Day == toDate.Day);
     }
 
-    public static DateTime ToServerTimeZone(this DateTime time, string serverTimeZoneOffset, string clientTimeZoneOffset)
+    public static DateTime ToServerTimeZone(this DateTime time, string serverTimeZoneOffset)
+    {
+        var utcTime = time.ToUniversalTime();
+        var serverOffsetSpan = ParseTimeZoneOffsetString(serverTimeZoneOffset);
+
+        var utcDateTimeOffset = new DateTimeOffset(utcTime, TimeSpan.Zero);
+
+        var serverTime = utcDateTimeOffset.ToOffset(serverOffsetSpan);
+
+        return serverTime.DateTime;
+    }
+
+    public static DateTime ToClientTimeZone(this DateTime time, string serverTimeZoneOffset)
     {
         var serverOffsetSpan = ParseTimeZoneOffsetString(serverTimeZoneOffset);
-        var clientOffsetSpan = ParseTimeZoneOffsetString(clientTimeZoneOffset);
-        var difference = clientOffsetSpan - serverOffsetSpan;
 
-        var clientDto = new DateTimeOffset(time.Subtract(difference), clientOffsetSpan);
-        return clientDto.DateTime;
+        var utcTime = time.Subtract(serverOffsetSpan);
+
+        return utcTime.ToLocalTime();
     }
 
-    public static DateTime ToClientTimeZone(this DateTime time, string serverTimeZoneOffset, string clientTimeZoneOffset)
+    private static TimeSpan ParseTimeZoneOffsetString(string offset)
     {
-        var serverOffsetSpan = ParseTimeZoneOffsetString(serverTimeZoneOffset);
-        var clientOffsetSpan = ParseTimeZoneOffsetString(clientTimeZoneOffset);
-        var difference = clientOffsetSpan - serverOffsetSpan;
-
-        var clientDto = new DateTimeOffset(time.Add(difference), clientOffsetSpan);
-        return clientDto.DateTime;
+        return TimeSpan.Parse(offset);
     }
-
-    private static TimeSpan ParseTimeZoneOffsetString(string offsetString)
-    {
-        if (!offsetString.Contains(':'))
-        {
-            offsetString = offsetString.Replace("+", "+0").Replace("-", "-0") + ":00";
-        }
-
-        if (offsetString.StartsWith('+'))
-        {
-            offsetString = offsetString.Substring(1);
-        }
-
-        if (TimeSpan.TryParse(offsetString, out TimeSpan result))
-        {
-            return result;
-        }
-
-        throw new FormatException($"Invalid time zone offset format: {offsetString}");
-    }
-
 }
