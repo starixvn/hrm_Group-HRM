@@ -1,4 +1,4 @@
-﻿namespace Fanex.NexHR.Controllers
+﻿namespace HRM.Controllers
 {
     using System;
     using System.Collections.Generic;
