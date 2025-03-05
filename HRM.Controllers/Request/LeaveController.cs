@@ -1,6 +1,4 @@
-﻿using HRM.Services.Interfaces;
-
-namespace HRM.Controllers.Request;
+﻿namespace HRM.Controllers.Request;
 
 using System;
 using System.Collections.Generic;
@@ -18,7 +16,6 @@ using HRM.Criteria.Request;
 using HRM.Models.Request;
 using Models;
 using Resources;
-using Services;
 using HRM.ViewModels.Request;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -26,6 +23,7 @@ using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using Services.Implement;
 using Microsoft.Extensions.Configuration;
+using Services.Interfaces;
 using HRM.Services.Interfaces.Request;
 
 public class LeaveController(
