@@ -40,7 +40,7 @@
                         }
                     </td>
                     <td>@postnatal.Creator</td>
-                    <td>@postnatal.CreatedDate.ToFormatedDate()</td>
+                    <td>@postnatal.CreatedDate.ToClientTimeZone().ToFormatedDate()</td>
                     @if (ViewBag.IsHost)
                     {
                         <td class="action-column">

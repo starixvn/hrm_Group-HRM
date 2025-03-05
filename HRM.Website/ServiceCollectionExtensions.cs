@@ -1,4 +1,6 @@
-﻿namespace HRM.Website;
+﻿using HRM.Core;
+
+namespace HRM.Website;
 
 using System;
 using System.Threading.Tasks;
@@ -93,6 +95,7 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddDIServices(this IServiceCollection services, IConfiguration configuration)
     {
         var appSettings = configuration.GetSection("AppSettings").Get<AppSettings>();
+        DateTimeExtensions.Initialize(appSettings.ServerTimeZoneOffset);
         services.AddSingleton(appSettings);
 
         var letstalkSettings = configuration.GetSection("LetstalkSettings").Get<LetstalkSettings>();

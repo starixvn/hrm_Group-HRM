@@ -6,6 +6,19 @@ using System.Diagnostics.CodeAnalysis;
 [SuppressMessage("Major Code Smell", "S109:Magic numbers should not be used", Justification = "Pending")]
 public static class DateTimeExtensions
 {
+    private static TimeSpan _serverTimeZoneOffset;
+    private static TimeSpan _clientTimeZoneOffset;
+
+    public static void Initialize(string serverTimeZoneOffset)
+    {
+        _serverTimeZoneOffset = TimeSpan.FromHours(int.Parse(serverTimeZoneOffset));
+    }
+
+    public static void SetClientTimezone(int clientTimeZoneOffset)
+    {
+        _clientTimeZoneOffset = TimeSpan.FromHours(clientTimeZoneOffset);
+    }
+
     public static DateTime FirstDayOfWeek(this DateTime dt)
     {
         int diff = (7 + (dt.DayOfWeek - DayOfWeek.Monday)) % 7;
@@ -170,5 +183,17 @@ public static class DateTimeExtensions
     {
         if(!offset.Contains(':')) offset += ":00";
         return TimeSpan.Parse(offset);
+    }
+
+    public static DateTime ToServerTimeZone(this DateTime time)
+    {
+        var offsetTime = new DateTimeOffset(time, _clientTimeZoneOffset);
+        return offsetTime.ToOffset(_serverTimeZoneOffset).DateTime;
+    }
+
+    public static DateTime ToClientTimeZone(this DateTime time)
+    {
+        var offsetTime = new DateTimeOffset(time, _serverTimeZoneOffset);
+        return offsetTime.ToOffset(_clientTimeZoneOffset).DateTime;
     }
 }
