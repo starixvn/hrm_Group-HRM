@@ -37,7 +37,7 @@ public class LeaveController(
     IAttachFileService attachFileService,
     IConfiguration configuration) : BaseController(userControlSession)
 {
-    private const string UploadFolderPath = "file/uploads/request/";
+    private const string UploadFolderPath = "/file/uploads/request/";
     private readonly string serverTimeZoneOffset = configuration["ServerTimeZoneOffset"];
     private readonly string clientTimeZoneOffset = configuration["ClientTimeZoneOffset"];
 
