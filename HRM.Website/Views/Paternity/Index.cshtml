@@ -1,0 +1,46 @@
+﻿@{
+    ViewBag.Title = "Employee Paternity";
+}
+@section css{
+    <link href="~/dist/styles/employee.postnatal.css" rel="stylesheet" />
+}
+@section js{
+    <script src="~/dist/js/employee.paternity.js"></script>
+}
+@section Breadcrumb {
+    <a class="step">@Labels.HRSpace</a>
+    <a class="step" href="/employee/usermanagement">@Labels.EmployeeManagement</a>
+    <a class="step">@ViewBag.Title</a>
+}
+<div class="filter">
+    @using (Html.BeginForm())
+    {
+        <div class="form-horizontal clearfix">
+            <div class="form-group year">
+                <div class="label-form">
+                    @Html.Label(null, @Labels.Year, new { @class = "control-label" })
+                </div>
+                <div class="select-form">
+                    @{
+                        var yearPicker = Extensions.YearPicker(2010, DateTime.Now.Year);
+                        <select class="yearpicker form-control" name="year" id="Year">
+                            @foreach (var item in yearPicker)
+                            {
+                                <!option value="@item.Value" @(item.Selected ? "selected" : "")>@item.Value</!option>
+                            }
+                        </select>
+                    }
+                </div>
+            </div>
+            <div class="form-group form-group--m">
+                <input class="btn btn-primary" type="submit" id="submit" value="@Labels.Submit" />
+                <button class="btn btn-request" id="add-paternity" type="button">
+                    <span class="fa fa-plus"></span>
+                    Add Paternity
+                </button>
+            </div>
+        </div>
+    }
+</div>
+<div id="list-paternity"></div>
+<div id="dialog"></div>

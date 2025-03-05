@@ -1,0 +1,78 @@
+﻿@using HRM.Website.Helper
+@model IList<HRM.Models.EmployeeWorkFromHome>
+
+<table class="table table-custom" id="data">
+    <thead>
+        <tr>
+            <th>@Labels.SymbolCount</th>
+            <th>@Labels.Department</th>
+            <th>@Labels.Section</th>
+            <th>@Labels.Team</th>
+            <th>@Labels.Code</th>
+            <th>@Labels.FullName</th>
+            <th>@Labels.NickName</th>
+            <th>@Labels.From</th>
+            <th>@Labels.To</th>
+            <th>@Labels.Remark</th>
+            <th>@Labels.FileAttach</th>
+            <th>@Labels.CreatedBy</th>
+            <th>@Labels.CreatedDate</th>
+            @if (ViewBag.IsHost)
+            {
+                <th>@Labels.Action</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @{var index = 1;}
+        @if (Model is { Count: > 0 })
+        {
+
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>@(index++)</td>
+                    <td class="align-left">@item.Department</td>
+                    <td class="align-left">@item.Section</td>
+                    <td class="align-left">@item.Team</td>
+                    <td>@item.Code</td>
+                    <td class="align-left">@item.FullName</td>
+                    <td>@item.Nickname</td>
+                    <td>@item.FromDate.ToDateMonthYearFormatedDate()</td>
+                    <td>@item.ToDate.ToDateMonthYearFormatedDate()</td>
+                    <td>
+                        @if (!string.IsNullOrWhiteSpace(item.Remark))
+                        {
+                            <span class="fa fa-comment tooltip-tipsy" original-title="@item.Remark"></span>
+                        }
+                    </td>
+                    <td>
+                        @foreach (var file in item.AttachFiles)
+                        {
+                            <a href="@file.Path" class="attach-file">
+                                <span class="file-name">@file.FileNameWithoutExtension</span><span class="file-extension">@file.Extension</span>
+                            </a>
+                        }
+                    </td>
+                    <td>@item.Modifier</td>
+                    <td>@item.ModifiedDate.ToFormatedDate()</td>
+                    @if (ViewBag.IsHost)
+                    {
+                        <td class="action-column">
+                            <a data-id="@item.EmployeeWorkFromHomeId" class="edit-employeeworkfromhome" title="@Labels.Edit">
+                                <i class="fa fa-pencil fa-lg icon-edit"></i>
+                            </a>
+                            <a data-id="@item.EmployeeWorkFromHomeId" class="delete-employeeworkfromhome" title="@Labels.Delete">
+                                <i class="fa fa-times fa-lg icon-delete"></i>
+                            </a>
+                        </td>
+                    }
+                </tr>
+            }
+        }
+        else
+        {
+            @Html.Raw(RazorHelpers.DisplayNoInformation(colspan: 14));
+        }
+    </tbody>
+</table>

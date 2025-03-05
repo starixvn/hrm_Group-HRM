@@ -77,7 +77,7 @@
 
         public string JobTitle { get; set; }
         public string JobLevel { get; set; }
-
+        public string ManagementLevel { get; set; }
         [DataType(DataType.Date)]
         public DateTime? TeamDate { get; set; }
 

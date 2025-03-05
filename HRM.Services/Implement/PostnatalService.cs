@@ -1,48 +1,42 @@
-﻿namespace HRM.Services
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using HRM.Core.Models;
+using HRM.Core.Services;
+using HRM.Criteria.Postnatal;
+using HRM.Models;
+using HRM.Services.Interfaces;
+
+namespace HRM.Services.Implement;
+
+public class PostnatalService(IBaseService baseService) : IPostnatalService
 {
-    using System.Collections.Generic;
-    using System.Linq;
-    using Core.Models;
-    using Core.Services;
-    using Criteria.Postnatal;
-    using Models;
-
-    public class PostnatalService : IPostnatalService
+    public async Task<IList<EmployeePostnatal>> GetAll(int year)
     {
-        private readonly IBaseService baseService;
+        var criteria = new GetPostnatalCriteria { Year = year };
+        return (await baseService.GetDataAsync<EmployeePostnatal>(criteria)).ToList();
+    }
 
-        public PostnatalService(IBaseService baseService)
-        {
-            this.baseService = baseService;
-        }
+    public async Task<EmployeePostnatal> GetById(int id)
+    {
+        var criteria = new GetPostnatalByIdCriteria { PostnatalId = id };
+        return await baseService.GetDataEntityAsync<EmployeePostnatal>(criteria);
+    }
 
-        public IList<EmployeePostnatal> GetAll(int year)
-        {
-            var criteria = new GetPostnatalCriteria { Year = year };
-            return baseService.GetData<EmployeePostnatal>(criteria).ToList();
-        }
+    public async Task<CommandResult> Insert(InsertPostnatalCriteria criteria)
+    {
+        return await baseService.ExecuteNonQueryAsync(criteria);
+    }
 
-        public EmployeePostnatal GetById(int id)
-        {
-            var criteria = new GetPostnatalByIdCriteria { PostnatalId = id };
-            return baseService.GetDataEntity<EmployeePostnatal>(criteria);
-        }
+    public async Task<CommandResult> Update(UpdatePostnatalCriteria criteria)
+    {
+        return await baseService.ExecuteNonQueryAsync(criteria);
+    }
 
-        public CommandResult Insert(InsertPostnatalCriteria criteria)
-        {
-            return baseService.ExecuteNonQuery(criteria);
-        }
+    public async Task<CommandResult> Delete(int id)
+    {
+        var criteria = new DeletePostnatalCriteria { PostnatalId = id };
 
-        public CommandResult Update(UpdatePostnatalCriteria criteria)
-        {
-            return baseService.ExecuteNonQuery(criteria);
-        }
-
-        public CommandResult Delete(int id)
-        {
-            var criteria = new DeletePostnatalCriteria { PostnatalId = id };
-
-            return baseService.ExecuteNonQuery(criteria);
-        }
+        return await baseService.ExecuteNonQueryAsync(criteria);
     }
 }

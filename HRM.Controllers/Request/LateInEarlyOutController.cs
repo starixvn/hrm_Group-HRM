@@ -1,4 +1,6 @@
-﻿namespace HRM.Controllers.Request
+﻿using HRM.Services.Interfaces;
+
+namespace HRM.Controllers.Request
 {
     using System;
     using System.Collections.Generic;

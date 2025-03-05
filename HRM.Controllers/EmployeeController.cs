@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using GO.UserControl.Client.Core.Enumerables;
+using GO.UserControl.Client.Core.Models;
 using GO.UserControl.Client.Core.Models.Role;
 using GO.UserControl.Client.Core.Models.User;
 using GO.UserControl.Client.Core.Services;
@@ -28,6 +29,8 @@ using HRM.ViewModels.Employee;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Newtonsoft.Json.Serialization;
+using Newtonsoft.Json;
 using SixLabors.ImageSharp.Processing.Processors;
 
 namespace HRM.Controllers;
@@ -493,7 +496,7 @@ public class EmployeeController : BaseController
     public async Task<JsonResult> GetMemberByGender(string keyword, int gender)
     {
         var employees = await employeeService.GetEmployeeByGender(keyword, gender);
-        return Json(employees);
+        return new JsonResult(employees, new JsonSerializerSettings { ContractResolver = new DefaultContractResolver() });
     }
 
     public async Task<JsonResult> GenerateEmployeeCode()

@@ -1914,6 +1914,9 @@
   <data name="JobLevel" xml:space="preserve">
     <value>Job Level</value>
   </data>
+  <data name="ManagementLevel" xml:space="preserve">
+    <value>Management Level</value>
+  </data>
   <data name="AddEmployeeWorkFromHome" xml:space="preserve">
     <value>Add WFH</value>
   </data>

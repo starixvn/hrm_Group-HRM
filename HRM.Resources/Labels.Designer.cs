@@ -2734,6 +2734,15 @@ namespace HRM.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Management Level.
+        /// </summary>
+        public static string ManagementLevel {
+            get {
+                return ResourceManager.GetString("ManagementLevel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Manager.
         /// </summary>
         public static string Manager {

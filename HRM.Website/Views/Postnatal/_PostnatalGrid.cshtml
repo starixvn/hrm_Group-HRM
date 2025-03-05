@@ -1,0 +1,63 @@
+﻿@using HRM.Website.Helper
+@model IList<HRM.Models.EmployeePostnatal>
+
+<table class="table table-custom" id="data">
+    <thead>
+        <tr>
+            <th>@Labels.SymbolCount</th>
+            <th>@Labels.NickName</th>
+            <th>@Labels.FullName</th>
+            <th>@Labels.From</th>
+            <th>@Labels.To</th>
+            <th>@Labels.WorkingHoursPerDay</th>
+            <th>@Labels.Remark</th>
+            <th>@Labels.CreatedBy</th>
+            <th>@Labels.CreatedDate</th>
+            @if (ViewBag.IsHost)
+            {
+                <th>@Labels.Action</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @{var index = 1;}
+        @if (Model is { Count: > 0 })
+        {
+
+            foreach (var postnatal in Model)
+            {
+                <tr>
+                    <td>@(index++)</td>
+                    <td>@postnatal.Nickname</td>
+                    <td class="align-left">@postnatal.Fullname</td>
+                    <td>@postnatal.FromDate.ToDateMonthYearFormatedDate()</td>
+                    <td>@postnatal.ToDate.ToDateMonthYearFormatedDate()</td>
+                    <td>@postnatal.WorkingHours</td>
+                    <td>
+                        @if (!string.IsNullOrWhiteSpace(postnatal.Remark))
+                        {
+                            <span class="fa fa-comment tooltip-tipsy" original-title="@postnatal.Remark"></span>
+                        }
+                    </td>
+                    <td>@postnatal.Creator</td>
+                    <td>@postnatal.CreatedDate.ToFormatedDate()</td>
+                    @if (ViewBag.IsHost)
+                    {
+                        <td class="action-column">
+                            <a data-id="@postnatal.PostnatalId" class="edit-postnatal" title="@Labels.Edit">
+                                <i class="fa fa-pencil fa-lg icon-edit"></i>
+                            </a>
+                            <a data-id="@postnatal.PostnatalId" class="delete-postnatal" title="@Labels.Delete">
+                                <i class="fa fa-times fa-lg icon-delete"></i>
+                            </a>
+                        </td>
+                    }
+                </tr>
+            }
+        }
+        else
+        {
+            @Html.Raw(RazorHelpers.DisplayNoInformation(colspan: 10))
+        }
+    </tbody>
+</table>

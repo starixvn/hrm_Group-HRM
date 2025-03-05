@@ -170,6 +170,10 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IEmployeeWorkingHoursRepository, EmployeeWorkingHoursRepository>();
         services.AddSingleton<IOvertimeReportService, OvertimeReportService>();
         services.AddSingleton<IOvertimeReportRepository, OvertimeReportRepository>();
+        services.AddSingleton<IManagementLevelService, ManagementLevelService>();
+        services.AddSingleton<IPaternityService, PaternityService>();
+        services.AddSingleton<IPostnatalService, PostnatalService>();
+        services.AddSingleton<IEmployeeWorkFromHomeService, EmployeeWorkFromHomeService>();
         services.AddSingleton<IWorkingHoursSummaryReportService, WorkingHoursSummaryReportService>();
         services.AddSingleton<IManpowerReportService, ManpowerReportService>();
         services.AddSingleton<IWorkingCalendarSummaryReportService, WorkingCalendarSummaryReportService>();

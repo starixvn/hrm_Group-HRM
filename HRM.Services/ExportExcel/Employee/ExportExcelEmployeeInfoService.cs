@@ -282,6 +282,7 @@ public class ExportExcelEmployeeInfoService(
             LengthOfServiceByCompanyDate = employeeService.CaculateLengthOfService(p.CompanyDate, p.MilitaryFromDate, p.MilitaryToDate),
             p.JobTitle,
             p.JobLevel,
+            p.ManagementLevel,
             TeamDate = FormatDate(p.TeamDate),
             DOB = FormatDate(p.DateOfBirth),
             p.PlaceOfBirth,

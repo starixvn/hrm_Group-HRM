@@ -1,20 +1,20 @@
-﻿namespace HRM.Services
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using HRM.Core.Models;
+using HRM.Criteria.Paternity;
+using HRM.Models;
+
+namespace HRM.Services.Interfaces;
+
+public interface IPaternityService
 {
-    using System.Collections.Generic;
-    using Core.Models;
-    using Criteria.Paternity;
-    using HRM.Models;
+    Task<IList<EmployeePaternity>> GetAll(int year);
 
-    public interface IPaternityService
-    {
-        IList<EmployeePaternity> GetAll(int year);
+    Task<CommandResult> Insert(InsertPaternityCriteria criteria);
 
-        CommandResult Insert(InsertPaternityCriteria criteria);
+    Task<CommandResult> Update(UpdatePaternityCriteria criteria);
 
-        CommandResult Update(UpdatePaternityCriteria criteria);
+    Task<CommandResult> Delete(int id);
 
-        CommandResult Delete(int id);
-
-        EmployeePaternity GetById(int id);
-    }
+    Task<EmployeePaternity> GetById(int id);
 }

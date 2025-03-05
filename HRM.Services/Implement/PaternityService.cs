@@ -1,60 +1,54 @@
-﻿namespace HRM.Services
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using HRM.Core.Models;
+using HRM.Core.Services;
+using HRM.Criteria.Paternity;
+using HRM.Models;
+using HRM.Services.Interfaces;
+
+namespace HRM.Services.Implement;
+
+public class PaternityService(IBaseService baseService) : IPaternityService
 {
-    using System.Collections.Generic;
-    using System.Linq;
-    using Core.Models;
-    using Core.Services;
-    using Criteria.Paternity;
-    using Models;
-
-    public class PaternityService : IPaternityService
+    public async Task<CommandResult> Delete(int id)
     {
-        private readonly IBaseService baseService;
+        var criteria = new DeletePaternityCriteria { PaternityId = id };
 
-        public PaternityService(IBaseService baseService)
+        return await baseService.ExecuteNonQueryAsync(criteria);
+    }
+
+    public async Task<IList<EmployeePaternity>> GetAll(int year)
+    {
+        var criteria = new GetPaternityCriteria { Year = year };
+        IList<EmployeePaternity> paternityList = null;
+        if (criteria.IsValid())
         {
-            this.baseService = baseService;
+            paternityList = (await baseService.GetDataAsync<EmployeePaternity>(criteria)).ToList();
         }
 
-        public CommandResult Delete(int id)
+        return paternityList ?? new List<EmployeePaternity>();
+    }
+
+    public async Task<EmployeePaternity> GetById(int id)
+    {
+        var criteria = new GetPaternityByIdCriteria { PaternityId = id };
+
+        EmployeePaternity postnatal = null;
+        if (criteria.IsValid())
         {
-            var criteria = new DeletePaternityCriteria { PaternityId = id };
-
-            return baseService.ExecuteNonQuery(criteria);
+            postnatal = await baseService.GetDataEntityAsync<EmployeePaternity>(criteria);
         }
+        return postnatal ?? new EmployeePaternity();
+    }
 
-        public IList<EmployeePaternity> GetAll(int year)
-        {
-            var criteria = new GetPaternityCriteria { Year = year };
-            IList<EmployeePaternity> paternities = null;
-            if (criteria.IsValid())
-            {
-                paternities = baseService.GetData<EmployeePaternity>(criteria).ToList();
-            }
+    public async Task<CommandResult> Insert(InsertPaternityCriteria criteria)
+    {
+        return await baseService.ExecuteNonQueryAsync(criteria);
+    }
 
-            return paternities ?? new List<EmployeePaternity>();
-        }
-
-        public EmployeePaternity GetById(int id)
-        {
-            var criteria = new GetPaternityByIdCriteria { PaternityId = id };
-
-            EmployeePaternity postnatal = null;
-            if (criteria.IsValid())
-            {
-                postnatal = baseService.GetDataEntity<EmployeePaternity>(criteria);
-            }
-            return postnatal ?? new EmployeePaternity();
-        }
-
-        public CommandResult Insert(InsertPaternityCriteria criteria)
-        {
-            return baseService.ExecuteNonQuery(criteria);
-        }
-
-        public CommandResult Update(UpdatePaternityCriteria criteria)
-        {
-            return baseService.ExecuteNonQuery(criteria);
-        }
+    public async Task<CommandResult> Update(UpdatePaternityCriteria criteria)
+    {
+        return await baseService.ExecuteNonQueryAsync(criteria);
     }
 }

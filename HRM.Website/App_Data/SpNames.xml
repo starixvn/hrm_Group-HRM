@@ -520,7 +520,14 @@
         <Setting Key="JobLevel_Update" SpName="JobLevel_Update" DbName="bodb_HRM" Plain="0"></Setting>
         <Setting Key="JobLevel_Delete" SpName="JobLevel_Delete" DbName="bodb_HRM" Plain="0"></Setting>
     </Function>
-
+	<Function Name="ManagementLevel">
+		<Setting Key="ManagementLevel_Get" SpName="ManagementLevel_Get" DbName="bodb_HRM" Plain="0">
+			<Mapping DataField="ManagementLevelId" ObjectProperty="Id" Class="ManagementLevel" />
+		</Setting>
+		<Setting Key="ManagementLevel_Insert" SpName="ManagementLevel_Insert" DbName="bodb_HRM" Plain="0"></Setting>
+		<Setting Key="ManagementLevel_Update" SpName="ManagementLevel_Update" DbName="bodb_HRM" Plain="0"></Setting>
+		<Setting Key="ManagementLevel_Delete" SpName="ManagementLevel_Delete" DbName="bodb_HRM" Plain="0"></Setting>
+	</Function>
     <Function Name="EmployeeWorkFromHome">
         <Setting Key="EmployeeWorkFromHome_Get" SpName="EmployeeWorkFromHome_Get" DbName="bodb_HRM" Plain="0"></Setting>
         <Setting Key="EmployeeWorkFromHome_GetById" SpName="EmployeeWorkFromHome_GetById" DbName="bodb_HRM" Plain="0"></Setting>
