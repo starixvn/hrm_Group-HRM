@@ -1,7 +1,5 @@
-﻿@using HRM.Core
-@using HRM.Core.Enums
+﻿@using HRM.Core.Enums
 @using HRM.ViewModels.Request
-@using HRM.Resources
 @model KeepInViewRequestViewModel
 @{
     ViewBag.Title = Labels.Create;
@@ -80,7 +78,7 @@
                     {
                         @class = "datepicker form-control",
                         @readonly = "readonly",
-                        mindate = Model.MinDate.ToString("yyyy/MM/dd"),
+                        mindate = new DateTime(Model.Date.Year, 1, 1).ToString("yyyy/MM/dd"),
                         maxdate = Model.MaxDate.ToString("yyyy/MM/dd")
                     })
                 <i class="icon-calendar fa fa-calendar"></i>

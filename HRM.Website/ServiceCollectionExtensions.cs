@@ -214,9 +214,8 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IExportWeekendLeaveDetailService, ExportWeekendLeaveDetailService>();
         services.AddSingleton<IExportDisciplineSummaryPerYearService, ExportDisciplineSummaryPerYearService>();
         services.AddSingleton<IExportExcelScheduleService, ExportExcelScheduleService>();
-        services.AddSingleton<IExportExcelTimeRecordService, ExportExcelTimeRecordService>();        
-        services.AddSingleton<IExportExcelEmployeeInfoService, ExportExcelEmployeeInfoService>();        
-
+        services.AddSingleton<IExportExcelTimeRecordService, ExportExcelTimeRecordService>();
+        services.AddSingleton<IExportExcelEmployeeInfoService, ExportExcelEmployeeInfoService>();
         return services;
     }
 }

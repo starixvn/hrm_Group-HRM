@@ -6,9 +6,6 @@
     using Fanex.Data.Repository;
     using Fanex.Data.SqlServer;
     using Fanex.Logging;
-    using Fanex.Logging.Extensions;
-    using Fanex.Logging.Extensions.AspNetCore;
-    using Fanex.Logging.Extensions.Database;
     using Fanex.Logging.Sentry;
     using HRM.AutoJobs.Constants;
     using HRM.AutoJobs.Middlewares;
@@ -21,37 +18,16 @@
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
-    using Sentry;
 
-    public class Startup
+    public class Startup(IConfiguration configuration)
     {
-        public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
-
-        public IConfiguration Configuration { get; }
+        public IConfiguration Configuration { get; } = configuration;
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddFanexLogSentry(Configuration);
             services.AddFanexSql(Configuration);
-
-            LogManager
-                .SetDefaultLogCategory(Configuration.GetSection("SentrySettings:LogCategory").Value)
-                .Use(new List<ILogEngine>
-                {
-                    new SentryLogging(new SentryEngineOptions
-                    {
-                        Dsn = new Dsn(Configuration.GetSection("SentrySettings:Dsn").Value)
-                    })
-                });
-
-            ExceptionHandler
-                .UseConfig(new LoggingConfiguration())
-                .GetHttpHeaderInfo()
-                .GetHttpSessionInfo()
-                .UseGetDbExceptionInfo(DatabaseInfoGetters.GetDbExceptionInfo);
 
             var proxySettings = Configuration.GetSection("ProxySettings").Get<ProxySettings>();
             services.AddHttpClient(NamedHttpClients.ProxiedClient)

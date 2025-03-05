@@ -10,6 +10,9 @@ using GO.UserControl.Client.Core.Models.Auth;
 using GO.UserControl.Client.Core.Services;
 using GO.UserControl.Client.Core.Session;
 using HRM.Core.Constants;
+using HRM.Core.Services;
+using HRM.Criteria.CompanySite;
+using HRM.Models;
 using HRM.Services;
 using HRM.ViewModels.Employee;
 using Microsoft.AspNetCore.Authentication;
@@ -23,10 +26,20 @@ public class AuthController(
     IUserControlSession userControlSession,
     IUserService userService,
     IAuthService authService,
-    ICryptoService cryptoService) : Controller
+    ICryptoService cryptoService,
+    IBaseService baseService) : Controller
 {
-    public IActionResult Login()
+    public async Task<IActionResult> Login()
     {
+        var companySite = await GetCompanySiteByDomainAsync();
+        if (companySite == null)
+        {
+            return RedirectToAction("AccessDenied", "Error");
+        }
+
+        userControlSettings.SiteId = companySite.SiteId;
+        userControlSettings.AccessToken = companySite.AccessToken;
+
         return View();
     }
 
@@ -93,6 +106,22 @@ public class AuthController(
 
         var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
         await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
+    }
+
+    private async Task<CompanySite> GetCompanySiteByDomainAsync()
+    {
+        var domainName = GetDomainName(HttpContext);
+        var criteria = new GetCompanySiteByDomainCriteria
+        {
+            Domain = domainName
+        };
+        return await baseService.GetDataEntityAsync<CompanySite>(criteria);
+    }
+
+    private static string GetDomainName(HttpContext httpContext)
+    {
+        var protocol = httpContext.Request.Headers["x-forwarded-proto"].ToString();
+        return $"{(!string.IsNullOrWhiteSpace(protocol) ? protocol : httpContext.Request.Scheme)}://{httpContext.Request.Host.Value}";
     }
 
     private static string GetClientIp(HttpContext httpContext)

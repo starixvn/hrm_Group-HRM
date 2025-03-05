@@ -3,7 +3,7 @@
     <TargetFramework>net9.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="GO.UserControl.Client.Core" Version="1.0.2" />
+    <PackageReference Include="GO.UserControl.Client.Core" Version="1.0.3" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\HRM.Models\HRM.Models.csproj" />

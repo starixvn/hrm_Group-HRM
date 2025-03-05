@@ -32,6 +32,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HRM.MailDeliver", "HRM.Mail
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HRM.Controllers", "HRM.Controllers\HRM.Controllers.csproj", "{27337011-8191-4B16-85BF-AC1F9E170730}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HRM.AutoJobs", "HRM.AutoJobs\HRM.AutoJobs.csproj", "{D025F74E-0978-4115-B6DF-8A7605500D9A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -174,6 +176,18 @@ Global
 		{27337011-8191-4B16-85BF-AC1F9E170730}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{27337011-8191-4B16-85BF-AC1F9E170730}.Release|x86.ActiveCfg = Release|Any CPU
 		{27337011-8191-4B16-85BF-AC1F9E170730}.Release|x86.Build.0 = Release|Any CPU
+		{D025F74E-0978-4115-B6DF-8A7605500D9A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D025F74E-0978-4115-B6DF-8A7605500D9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D025F74E-0978-4115-B6DF-8A7605500D9A}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{D025F74E-0978-4115-B6DF-8A7605500D9A}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{D025F74E-0978-4115-B6DF-8A7605500D9A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D025F74E-0978-4115-B6DF-8A7605500D9A}.Debug|x86.Build.0 = Debug|Any CPU
+		{D025F74E-0978-4115-B6DF-8A7605500D9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D025F74E-0978-4115-B6DF-8A7605500D9A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D025F74E-0978-4115-B6DF-8A7605500D9A}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{D025F74E-0978-4115-B6DF-8A7605500D9A}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{D025F74E-0978-4115-B6DF-8A7605500D9A}.Release|x86.ActiveCfg = Release|Any CPU
+		{D025F74E-0978-4115-B6DF-8A7605500D9A}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -192,9 +206,9 @@ Global
 		{27337011-8191-4B16-85BF-AC1F9E170730} = {4DFF8D32-1A49-4BC7-A4EC-2CEDB5AFC70C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.Common.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.Data.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.Logging.6.0.1304.0\lib\NET45
-		EnterpriseLibraryConfigurationToolBinariesPath = packages\Unity.2.1.505.2\lib\NET35;packages\Unity.Interception.2.1.505.2\lib\NET35;packages\EnterpriseLibrary.Common.5.0.505.0\lib\NET35;packages\EnterpriseLibrary.Logging.5.0.505.1\lib\NET35;packages\EnterpriseLibrary.Data.5.0.505.0\lib\NET35;packages\EnterpriseLibrary.Caching.5.0.505.0\lib\NET35;packages\Unity.2.1.505.0\lib\NET35;packages\Unity.Interception.2.1.505.0\lib\NET35
 		SolutionGuid = {B18C2D6B-E5BD-4918-B5BE-13471712599F}
+		EnterpriseLibraryConfigurationToolBinariesPath = packages\Unity.2.1.505.2\lib\NET35;packages\Unity.Interception.2.1.505.2\lib\NET35;packages\EnterpriseLibrary.Common.5.0.505.0\lib\NET35;packages\EnterpriseLibrary.Logging.5.0.505.1\lib\NET35;packages\EnterpriseLibrary.Data.5.0.505.0\lib\NET35;packages\EnterpriseLibrary.Caching.5.0.505.0\lib\NET35;packages\Unity.2.1.505.0\lib\NET35;packages\Unity.Interception.2.1.505.0\lib\NET35
+		EnterpriseLibraryConfigurationToolBinariesPathV6 = packages\EnterpriseLibrary.Common.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.Data.6.0.1304.0\lib\NET45;packages\EnterpriseLibrary.Logging.6.0.1304.0\lib\NET45
 	EndGlobalSection
 	GlobalSection(JSLint) = preSolution
 		SolutionConfigurationLocation = JSLintOptions.xml

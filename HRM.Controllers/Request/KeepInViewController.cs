@@ -198,7 +198,7 @@ public class KeepInViewController(
             attachFileService.DeleteFolderAttachFile(id, UploadFolderPath);
         }
 
-        return Json(commandResult) ;
+        return Json(commandResult);
     }
 
     public async Task<IActionResult> ViewHistory(long id)
@@ -209,7 +209,7 @@ public class KeepInViewController(
 
     public async Task<IActionResult> GetDisabledDate(GetDisabledDateParam param)
     {
-        var disabledDates =await  keepInViewRequestService.GetDisabledDateAsync(param);
+        var disabledDates = await keepInViewRequestService.GetDisabledDateAsync(param);
         return Json(disabledDates);
     }
 }
