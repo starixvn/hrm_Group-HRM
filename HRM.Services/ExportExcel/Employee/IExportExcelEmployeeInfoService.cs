@@ -6,10 +6,10 @@ namespace HRM.Services.ExportExcel.Employee
 {
     public interface IExportExcelEmployeeInfoService
     {
-        Task ExportEmployeeBasicInfo(IList<Models.Employee> employees);
+        Task<byte[]> ExportEmployeeBasicInfo(IList<Models.Employee> employees);
 
-        void ExportEmployeeDetailsInfo(IList<Models.Employee> employees);
+        Task<byte[]> ExportEmployeeDetailsInfo(IList<Models.Employee> employees);
 
-        Task ExportEmployeeFullProfile(IList<EmployeeFullProfile> profiles);
+        Task<byte[]> ExportEmployeeFullProfile(IList<EmployeeFullProfile> profiles);
     }
 }

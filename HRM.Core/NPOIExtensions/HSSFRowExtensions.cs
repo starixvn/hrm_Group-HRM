@@ -25,7 +25,7 @@
             {
                 foreach (var value in values)
                 {
-                    row.GetCell(id).SetCellValue(value);
+                    row.GetCell(id)?.SetCellValue(value);
                     id++;
                 }
             }

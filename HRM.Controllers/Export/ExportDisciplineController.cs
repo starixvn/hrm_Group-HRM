@@ -6,9 +6,7 @@
     using HRM.Services;
     using HRM.ViewModels.Discipline;
     using Microsoft.AspNetCore.Mvc;
-    using NPOI.HPSF;
     using HRM.Resources;
-    using System;
 
     public class ExportDisciplineController(
         IUserControlSession userControlSession,

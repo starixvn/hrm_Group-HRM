@@ -36,12 +36,11 @@ public class ExportExcelEmployeeInfoService(
         TotalColumns = 22
     }
 
-    public async Task ExportEmployeeBasicInfo(IList<Employee> employees)
+    public async Task<byte[]> ExportEmployeeBasicInfo(IList<Employee> employees)
     {
         var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, EmployeeBasicInfoTemplatePath);
-        var fileName = "EmployeeBasicInfo_" + DateTimeOffset.Now.ToString("yyyyMMdd");
         const string sheetName = "Employee Basic Info";
-        var writer = new ExcelTemplateWriter(templatePath, fileName, sheetName);
+        var writer = new ExcelTemplateWriter(templatePath, string.Empty, sheetName);
         var enableGroupDate = await commonDataService.IsEnableGroupDate();
         const byte colGroupDate = 8;
         const byte colLengthOfServiceGroupDate = 12;
@@ -57,10 +56,10 @@ public class ExportExcelEmployeeInfoService(
             writer.RemoveColumn(colGroupDate);
             writer.RemoveColumn(colLengthOfServiceGroupDate);
         }
-        writer.Render();
+        return writer.WriteContentToBytes();
     }
 
-    public void ExportEmployeeDetailsInfo(IList<Employee> employees)
+    public async Task<byte[]> ExportEmployeeDetailsInfo(IList<Employee> employees)
     {
         var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, EmployeeDetailsInfoTemplatePath);
         var fileName = "EmployeeDetailsInfo_" + DateTimeOffset.Now.ToString("yyyyMMdd");
@@ -73,7 +72,7 @@ public class ExportExcelEmployeeInfoService(
         FillContentRowEmployeeDetailsInfoReport(employees, ref writer);
         writer.SyncColumnsWidth(43);
         writer.CreateFreezePane(0, 3);
-        writer.Render();
+        return writer.WriteContentToBytes();
     }
 
     #region Employee Basic Info
@@ -213,19 +212,16 @@ public class ExportExcelEmployeeInfoService(
 
     #region Employee Full Profile Information
 
-    public async Task ExportEmployeeFullProfile(IList<EmployeeFullProfile> profiles)
+    public async Task<byte[]> ExportEmployeeFullProfile(IList<EmployeeFullProfile> profiles)
     {
         var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, EmployeeFullInfoTemplatePath);
-        var fileName = "EmployeeFullInfo_" + DateTimeOffset.Now.ToString("yyyyMMdd");
         const string sheetName = "Employee Full Information";
-        var writer = new ExcelTemplateWriter(templatePath, fileName, sheetName);
+        var writer = new ExcelTemplateWriter(templatePath, string.Empty, sheetName);
         var enableGroupDate = await commonDataService.IsEnableGroupDate();
         const byte colGroupDate = 10;
         const byte colLengthOfServiceGroupDate = 14;
 
-        /// Fill report title.
         writer.CopyRows(0, 2);
-        /// Fill report header.
         writer.CopyRows(2, 2);
 
         WriteFullProfileBody(writer, profiles);
@@ -236,7 +232,7 @@ public class ExportExcelEmployeeInfoService(
             writer.RemoveColumn(colGroupDate);
             writer.RemoveColumn(colLengthOfServiceGroupDate);
         }
-        writer.Render();
+        return writer.WriteContentToBytes();
     }
 
     private void WriteFullProfileBody(ExcelTemplateWriter writer,

@@ -17,6 +17,7 @@ using HRM.Letstalk.Core.Services;
 using HRM.Repositories;
 using HRM.Repositories.Interfaces;
 using HRM.Services.ExportExcel;
+using HRM.Services.ExportExcel.Employee;
 using HRM.Services.Implement.ActionLog;
 using HRM.Services.Implement.Report;
 using HRM.Services.Implement.Request;
@@ -213,7 +214,8 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IExportWeekendLeaveDetailService, ExportWeekendLeaveDetailService>();
         services.AddSingleton<IExportDisciplineSummaryPerYearService, ExportDisciplineSummaryPerYearService>();
         services.AddSingleton<IExportExcelScheduleService, ExportExcelScheduleService>();
-        
+        services.AddSingleton<IExportExcelTimeRecordService, ExportExcelTimeRecordService>();        
+        services.AddSingleton<IExportExcelEmployeeInfoService, ExportExcelEmployeeInfoService>();        
 
         return services;
     }
