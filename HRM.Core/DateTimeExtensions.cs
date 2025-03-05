@@ -149,26 +149,26 @@ public static class DateTimeExtensions
         var utcTime = time.ToUniversalTime();
         var serverOffsetSpan = ParseTimeZoneOffsetString(serverTimeZoneOffset);
 
-        var utcDateTimeOffset = new DateTimeOffset(utcTime, TimeSpan.Zero);
+        var serverTime = utcTime.Add(serverOffsetSpan);
 
-        var serverTime = utcDateTimeOffset.ToOffset(serverOffsetSpan);
-
-        return serverTime.DateTime;
+        return serverTime;
     }
 
-    public static DateTime ToClientTimeZone(this DateTime time, string serverTimeZoneOffset)
+    public static DateTime ToClientTimeZone(this DateTime serverTime, string serverTimeZoneOffset, string clientTimeZoneOffset = "7")
     {
         var serverOffsetSpan = ParseTimeZoneOffsetString(serverTimeZoneOffset);
 
-        var utcTime = time.Subtract(serverOffsetSpan);
+        var utcTime = serverTime.Subtract(serverOffsetSpan);
 
-        var localTime = utcTime.ToLocalTime();
+        var clientOffsetSpan = ParseTimeZoneOffsetString(clientTimeZoneOffset);
+        var clientTime = utcTime.Add(clientOffsetSpan);
 
-        return localTime;
+        return clientTime;
     }
 
     private static TimeSpan ParseTimeZoneOffsetString(string offset)
     {
+        offset += ":00";
         return TimeSpan.Parse(offset);
     }
 }

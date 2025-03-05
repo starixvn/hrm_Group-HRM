@@ -16,9 +16,9 @@ using HRM.Services.Interfaces.Request;
 using HRM.ViewModels.Request;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using HRM.Core.Models;
 using Newtonsoft.Json;
 using Services.Interfaces;
-using Microsoft.Extensions.Configuration;
 
 public class LateInEarlyOutController(
     IUserControlSession userControlSession,
@@ -26,11 +26,10 @@ public class LateInEarlyOutController(
     IRequestService requestService,
     IBaseService baseService,
     IAttachFileService attachFileService,
-    IConfiguration configuration) : BaseController(userControlSession)
+    AppSettings appSettings) : BaseController(userControlSession)
 {
     private const string UploadFolderPath = "/file/uploads/request/";
     private const int DefaultMinutes = 60;
-    private readonly string serverTimeZoneOffset = configuration[Constants.ServerTimeOffset];
 
     [HttpGet]
     public async Task<IActionResult> EmployeeView(int? year)
@@ -48,7 +47,7 @@ public class LateInEarlyOutController(
         foreach (var request in requests)
         {
             request.AttachFiles = attachFileService.GetInfoAttachFile(request.RequestId, UploadFolderPath);
-            request.CreatedDate = request.CreatedDate.ToClientTimeZone(serverTimeZoneOffset);
+            request.CreatedDate = request.CreatedDate.ToClientTimeZone(appSettings.ServerTimeZoneOffset);
         }
         return View(requests);
     }

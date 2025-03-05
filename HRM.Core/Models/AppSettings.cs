@@ -9,4 +9,6 @@ public class AppSettings
     public string EmailSD { get; set; }
     public string EmailGo { get; set; }
     public string WhitelistIPs { get; set; }
+
+    public string ServerTimeZoneOffset { get; set; }
 }
