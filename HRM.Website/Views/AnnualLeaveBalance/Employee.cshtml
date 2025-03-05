@@ -76,7 +76,7 @@
                         }
                         @item.Description
                     </td>
-                    <td>@item.ModifiedDate.ToShortFormatedDate()</td>
+                    <td>@item.ModifiedDate.ToClientTimeZone(Model.ServerTimeZone).ToShortFormatedDate()</td>
                     @if (item.RequestId == null)
                     {
                         <td>
