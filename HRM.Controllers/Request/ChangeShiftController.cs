@@ -1,4 +1,5 @@
 ﻿using HRM.Services.Interfaces;
+using Microsoft.Extensions.Configuration;
 
 namespace HRM.Controllers.Request
 {
@@ -30,9 +31,12 @@ namespace HRM.Controllers.Request
         IChangeShiftRequestService changeShiftService,
         IRequestService requestService,
         IShiftService shiftService,
-        IAttachFileService attachFileService) : BaseController(userControlSession)
+        IAttachFileService attachFileService,
+        IConfiguration configuration) : BaseController(userControlSession)
     {
         private const string UploadFolderPath = "/file/uploads/request/";
+
+        private readonly string serverTimeZoneOffset = configuration[Constants.ServerTimeOffset];
 
         [HttpGet]
         public async Task<IActionResult> EmployeeView(int? year)
@@ -44,6 +48,9 @@ namespace HRM.Controllers.Request
             foreach (var request in requests)
             {
                 request.AttachFiles = attachFileService.GetInfoAttachFile(request.RequestId, UploadFolderPath);
+                request.CreatedDate = request.CreatedDate.ToClientTimeZone(serverTimeZoneOffset);
+                request.FromDate = request.FromDate.ToClientTimeZone(serverTimeZoneOffset);
+                request.ToDate = request.ToDate.ToClientTimeZone(serverTimeZoneOffset);
             }
             ViewBag.Year = tempYear;
 
@@ -77,6 +84,8 @@ namespace HRM.Controllers.Request
             var criteria = JsonConvert.DeserializeObject<CreateChangeShift>(model);
             var requestDetail = JsonConvert.DeserializeObject<List<ChangeShiftDetail>>(details);
             criteria.Details = requestDetail;
+            criteria.FromDate = criteria.FromDate.ToServerTimeZone(serverTimeZoneOffset);
+            criteria.ToDate = criteria.ToDate.ToServerTimeZone(serverTimeZoneOffset);
 
             var commandResult = await changeShiftService.CreateAsync(EmployeeSession.EmpId, criteria);
 
@@ -137,6 +146,8 @@ namespace HRM.Controllers.Request
             var criteria = JsonConvert.DeserializeObject<EditChangeShift>(model);
             var requestDetail = JsonConvert.DeserializeObject<List<ChangeShiftDetail>>(details);
             criteria.Details = requestDetail;
+            criteria.FromDate = criteria.FromDate.ToServerTimeZone(serverTimeZoneOffset);
+            criteria.ToDate = criteria.ToDate.ToServerTimeZone(serverTimeZoneOffset);
 
             var commandResult = await changeShiftService.EditAsync(EmployeeSession.EmpId, criteria);
             if (commandResult.IsSuccessful)

@@ -38,7 +38,7 @@ public class LeaveController(
     IConfiguration configuration) : BaseController(userControlSession)
 {
     private const string UploadFolderPath = "/file/uploads/request/";
-    private readonly string serverTimeZoneOffset = configuration["ServerTimeZoneOffset"];
+    private readonly string serverTimeZoneOffset = configuration[Constants.ServerTimeOffset];
 
     [HttpGet]
     public async Task<IActionResult> EmployeeView(int? year)

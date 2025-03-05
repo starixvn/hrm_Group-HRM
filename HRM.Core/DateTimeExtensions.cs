@@ -162,7 +162,9 @@ public static class DateTimeExtensions
 
         var utcTime = time.Subtract(serverOffsetSpan);
 
-        return utcTime.ToLocalTime();
+        var localTime = utcTime.ToLocalTime();
+
+        return localTime;
     }
 
     private static TimeSpan ParseTimeZoneOffsetString(string offset)
