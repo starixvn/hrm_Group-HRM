@@ -17,10 +17,10 @@ function deleteHoliday(holidayId) {
             }
         }).then(response => {
             let data = response.data;
-            if (data.IsSuccessful) {
+            if (data.isSuccessful) {
                 location.reload();
             } else {
-                alert(data.Message);
+                alert(data.message);
             }
         }).catch(axiosError);
     });

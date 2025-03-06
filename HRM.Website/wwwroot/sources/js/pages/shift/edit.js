@@ -16,11 +16,11 @@ $(function () {
                     headers: { 'X-Requested-With': 'XMLHttpRequest' },
                     data: { shiftId: id }
                 }).then(response => {
-                    if (response.data.IsSuccessful) {
+                    if (response.data.isSuccessful) {
                         document.location = resolveClientUrl('shift/index');
                     }
                     else {
-                        alert(response.Message);
+                        alert(response.message);
                     }
                 }).catch(axiosError);
             });

@@ -2,117 +2,121 @@
 
 using System;
 using System.Threading.Tasks;
+using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
+using HRM.Core.Constants;
+using HRM.Core.Enums;
+using HRM.Core.Filters;
+using HRM.Models;
 using HRM.Services;
+using HRM.ViewModels.Shifts;
 using Microsoft.AspNetCore.Mvc;
 
 public class ShiftController(
     IUserControlSession userControlSession,
     IShiftService shiftService) : BaseController(userControlSession)
 {
-    //[HrmPermission(Policy.Read, FunctionKey.ShiftManagement)]
-    //public ActionResult Index(int? statusId = (int)ShiftStatus.Active)
-    //{
-    //    var model = new ShiftByStatusViewModel
-    //    {
-    //        StatusId = statusId.Value,
-    //        Shifts = shiftService.GetAll(statusId.Value)
-    //    };
-    //    ViewBag.IsHost = userControlSession.HasPermissionOnFunction(FunctionKey.ShiftManagement, Policy.Host);
+    [HrmPermission(Policy.Read, FunctionKey.ShiftManagement)]
+    public async Task<IActionResult> Index(int? statusId = (int)ShiftStatus.Active)
+    {
+        var model = new ShiftByStatusViewModel
+        {
+            StatusId = statusId.Value,
+            Shifts = await shiftService.GetAllAsync(statusId.Value)
+        };
+        ViewBag.IsHost = userControlSession.HasPermissionOnFunction(FunctionKey.ShiftManagement, Policy.Host);
 
-    //    return View(model);
-    //}
+        return View(model);
+    }
 
-    //[HRMPermission(Policy.Host, FunctionKey.ShiftManagement)]
-    //public ActionResult Create()
-    //{
-    //    var model = new CreateShiftModel();
-    //    ViewBag.Successed = false;
-    //    return View(model);
-    //}
+    [HrmPermission(Policy.Host, FunctionKey.ShiftManagement)]
+    public ActionResult Create()
+    {
+        var model = new CreateShiftModel();
+        ViewBag.Successed = false;
+        return View(model);
+    }
 
-    //[ValidateInput(false)]
-    //[HttpPost]
-    //[HRMPermission(Policy.Host, FunctionKey.ShiftManagement)]
-    //public ActionResult Create(CreateShiftModel model)
-    //{
-    //    if (model != null && ModelState.IsValid)
-    //    {
-    //        CommandResult commandResult = shiftService.Create(EmployeeSession.EmpId, model);
-    //        if (commandResult.IsSuccessful)
-    //        {
-    //            return RedirectToAction("Index", "Shift");
-    //        }
-    //        else
-    //        {
-    //            ModelState.AddModelError(string.Empty, commandResult.Message);
-    //        }
-    //    }
+    [HttpPost]
+    [HrmPermission(Policy.Host, FunctionKey.ShiftManagement)]
+    public async Task<IActionResult> Create(CreateShiftModel model)
+    {
+        if (model != null && ModelState.IsValid)
+        {
+            var commandResult = await shiftService.CreateAsync(EmployeeSession.EmpId, model);
+            if (commandResult.IsSuccessful)
+            {
+                return RedirectToAction("Index", "Shift");
+            }
+            else
+            {
+                ModelState.AddModelError(string.Empty, commandResult.Message);
+            }
+        }
 
-    //    return View(model);
-    //}
+        return View(model);
+    }
 
-    //[HRMPermission(Policy.Host, FunctionKey.ShiftManagement)]
-    //public ActionResult Edit(int id)
-    //{
-    //    const byte HourIndex = 0;
-    //    const byte MinutesIndex = 1;
-    //    Shift shift = shiftService.GetById(id);
-    //    EditShiftModel model = null;
+    [HrmPermission(Policy.Host, FunctionKey.ShiftManagement)]
+    public async Task<IActionResult> Edit(int id)
+    {
+        const byte HourIndex = 0;
+        const byte MinutesIndex = 1;
+        var shift = await shiftService.GetByIdAsync(id);
+        EditShiftModel model = null;
 
-    //    if (shift != null)
-    //    {
-    //        model = new EditShiftModel
-    //        {
-    //            ShiftId = shift.Id,
-    //            Name = shift.Name,
-    //            HourTimeIn = GetTime(shift.BeginCheckInTime, HourIndex),
-    //            MinuteTimeIn = GetTime(shift.BeginCheckInTime, MinutesIndex),
-    //            HourTimeOut = GetTime(shift.BeginCheckOutTime, HourIndex),
-    //            MinuteTimeOut = GetTime(shift.BeginCheckOutTime, MinutesIndex),
-    //            IsInAfterDay = shift.IsInAfterDay,
-    //            IsOutAfterDay = shift.IsOutAfterDay,
-    //            IsDisabled = shift.IsDisabled,
-    //            IsUsed = shift.IsUsed
-    //        };
-    //    }
+        if (shift != null)
+        {
+            model = new EditShiftModel
+            {
+                ShiftId = shift.Id,
+                Name = shift.Name,
+                HourTimeIn = GetTime(shift.BeginCheckInTime, HourIndex),
+                MinuteTimeIn = GetTime(shift.BeginCheckInTime, MinutesIndex),
+                HourTimeOut = GetTime(shift.BeginCheckOutTime, HourIndex),
+                MinuteTimeOut = GetTime(shift.BeginCheckOutTime, MinutesIndex),
+                IsInAfterDay = shift.IsInAfterDay,
+                IsOutAfterDay = shift.IsOutAfterDay,
+                IsDisabled = shift.IsDisabled,
+                IsUsed = shift.IsUsed
+            };
+        }
 
-    //    ViewBag.Successed = false;
-    //    ViewBag.IsHost = userControlSession.HasPermissionOnFunction(FunctionKey.ShiftManagement, Policy.Host);
+        ViewBag.Successed = false;
+        ViewBag.IsHost = userControlSession.HasPermissionOnFunction(FunctionKey.ShiftManagement, Policy.Host);
 
-    //    return View(model);
-    //}
+        return View(model);
+    }
 
-    //[ValidateInput(false)]
-    //[HttpPost]
-    //[HRMPermission(Policy.Host, FunctionKey.ShiftManagement)]
-    //public ActionResult Edit(EditShiftModel model)
-    //{
-    //    if (model != null && ModelState.IsValid)
-    //    {
-    //        CommandResult commandResult = shiftService.Edit(EmployeeSession.EmpId, model);
-    //        if (commandResult.IsSuccessful)
-    //        {
-    //            return RedirectToAction("Index", "Shift");
-    //        }
-    //        else
-    //        {
-    //            ModelState.AddModelError(string.Empty, commandResult.Message);
-    //        }
-    //    }
+    [HttpPost]
+    [HrmPermission(Policy.Host, FunctionKey.ShiftManagement)]
+    public async Task<IActionResult> Edit(EditShiftModel model)
+    {
+        if (model != null && ModelState.IsValid)
+        {
+            var commandResult = await shiftService.EditAsync(EmployeeSession.EmpId, model);
+            if (commandResult.IsSuccessful)
+            {
+                return RedirectToAction("Index", "Shift");
+            }
+            else
+            {
+                ModelState.AddModelError(string.Empty, commandResult.Message);
+            }
+        }
 
-    //    ViewBag.IsHost = userControlSession.HasPermissionOnFunction(FunctionKey.ShiftManagement, Policy.Host);
+        ViewBag.IsHost = userControlSession.HasPermissionOnFunction(FunctionKey.ShiftManagement, Policy.Host);
 
-    //    return View(model);
-    //}
+        return View(model);
+    }
 
-    //[HttpPost]
-    //[HRMPermission(Policy.Host, FunctionKey.ShiftManagement)]
-    //public JsonResult Delete(int shiftId)
-    //{
-    //    CommandResult commandResult = shiftService.Delete(shiftId);
-    //    return Json(commandResult);
-    //}
+    [HttpPost]
+    [HrmPermission(Policy.Host, FunctionKey.ShiftManagement)]
+    public async Task<IActionResult> Delete(int shiftId)
+    {
+        var commandResult = await shiftService.DeleteAsync(shiftId);
+        return Json(commandResult);
+    }
 
     public async Task<IActionResult> GetShiftByDate(int employeeId, DateTime date)
     {

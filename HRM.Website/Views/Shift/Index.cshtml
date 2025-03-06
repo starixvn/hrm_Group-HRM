@@ -1,0 +1,93 @@
+﻿@using HRM.ViewModels.Shifts
+@using HRM.Website.Helper
+@model ShiftByStatusViewModel
+@{
+    ViewBag.Title = Labels.ShiftInfo;
+    var isHost = (bool)ViewBag.IsHost;
+    var totalColumn = isHost ? 5 : 4;
+}
+@section css{
+    <link href="~/dist/styles/shift.index.css" rel="stylesheet" />
+}
+@section Breadcrumb {
+    <a class="step">@Labels.CompanySpace</a>
+    <a class="step" href="@Url.Action("workingcalendars", "calendar")">Working calendars</a>
+    <span class="step">@ViewBag.Title</span>
+}
+<h2 class="page-title">@ViewBag.Title</h2>
+
+<form class="filter">
+    <div class="form-horizontal clearfix">
+        <div class="form-group">
+            <div class="label-form">
+                @Html.Label(Labels.Status, Labels.Status, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.DropDownListFor(model => model.StatusId, new SelectList(Model.Status, "Value", "Text"), new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            <input type="submit" id="submit" class="btn btn-primary" value="@Labels.Submit" />
+            @if (isHost)
+            {
+                <a href="@Url.Action("Create")" class="btn btn-request">
+                    <span class="fa fa-plus"></span>
+                    @Labels.AddNewShift
+                </a>
+            }
+        </div>
+    </div>
+</form>
+
+<table id="tblShift" class="table table-custom table-shift">
+    <thead>
+        <tr>
+            <th>@Labels.SymbolCount</th>
+            <th class="left">@Labels.Shift</th>
+            <th>@Labels.In</th>
+            <th>@Labels.Out</th>
+			<th>@Labels.Status</th>
+            @if (isHost)
+            {
+                <th>@Labels.Edit</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Shifts != null && Model.Shifts.Any())
+        {
+            var i = 0;
+            foreach (var item in Model.Shifts)
+            {
+                i++;
+                <tr>
+                    <td>@i</td>
+					<td class="align-left">
+						@item.Name
+					</td>
+					<td>
+						@item.BeginCheckInTime@((item.BeginCheckInTime == item.EndCheckInTime) ? string.Empty : " - " + item.EndCheckInTime)@(item.IsInAfterDay ? "+" : "")
+					</td>
+					<td>
+						@item.BeginCheckOutTime@((item.BeginCheckOutTime == item.EndCheckOutTime) ? string.Empty : " - " + item.EndCheckOutTime)@(item.IsOutAfterDay ? "+" : "")
+					</td>
+					<td>
+						@(item.IsDisabled ? Labels.Disabled : Labels.Active)
+					</td>
+                    @if (isHost)
+                    {
+                        <td class="cmd">
+                            <a href="@Url.Action("Edit", "Shift", new { id = item.Id })">
+                                <i class="fa fa-pencil fa-lg icon-edit"></i>
+                            </a>
+                        </td>
+                    }
+                </tr>
+            }
+        }
+        else
+        {
+            @Html.Raw(RazorHelpers.DisplayNoInformation(colspan: totalColumn));
+        }
+    </tbody>
+</table>
