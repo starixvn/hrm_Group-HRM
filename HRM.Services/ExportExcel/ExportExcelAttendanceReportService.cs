@@ -75,8 +75,8 @@ namespace HRM.Services
                         worksheet.Cells[rowIndex, colIndex++].Value = attendance.FullName;
                         worksheet.Cells[rowIndex, colIndex++].Value = attendance.NickName;
                         worksheet.Cells[rowIndex, colIndex++].Value = shiftCode;
-                        worksheet.Cells[rowIndex, colIndex++].Value = attendance.InFixed;
-                        worksheet.Cells[rowIndex, colIndex++].Value = attendance.OutFixed;
+                        worksheet.Cells[rowIndex, colIndex++].Value = attendance.InFixed.HasValue ? attendance.InFixed.Value.ToClientTimeZone() : (object)"";
+                        worksheet.Cells[rowIndex, colIndex++].Value = attendance.OutFixed.HasValue ? attendance.OutFixed.Value.ToClientTimeZone() : (object)"";
                         worksheet.Cells[rowIndex, colIndex++].Value = totalWorkHours;
                         worksheet.Cells[rowIndex, colIndex++].Value = Utilities.MinuteToTime(attendance.LateIn);
                         worksheet.Cells[rowIndex, colIndex++].Value = attendance.IsOffDay == 1 && !string.IsNullOrWhiteSpace(shiftCode) ?
@@ -134,7 +134,7 @@ namespace HRM.Services
                     requestsBuilder.Append(": ");
                     requestsBuilder.Append(RequestService.ToRequestMessage(request, isNoFormat: true));
                     requestsBuilder.Append("\r\n- Create date: ");
-                    requestsBuilder.Append(request.CreatedDate.ToDateMonthYearFormatedDate());
+                    requestsBuilder.Append(request.CreatedDate.ToClientTimeZone().ToDateMonthYearFormatedDate());
                     requestsBuilder.Append((string.IsNullOrEmpty(request.Remark) ? string.Empty : "\r\n" + "- Remark: " + request.Remark));
                     requestsBuilder.Append("\r\n");
                 }
