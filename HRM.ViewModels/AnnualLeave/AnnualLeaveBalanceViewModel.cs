@@ -16,6 +16,5 @@
         public IEnumerable<AnnualLeaveTransactionViewModel> AnnualLeaveBalances { get; set; }
 
         public Employee Employee { get; set; }
-        public string ServerTimeZone { get; set; }
     }
 }

@@ -1,6 +1,4 @@
-﻿using HRM.Core;
-
-namespace HRM.Website;
+﻿namespace HRM.Website;
 
 using System;
 using System.Threading.Tasks;
@@ -12,6 +10,7 @@ using GO.UserControl.Client.AspNetCore.Session;
 using GO.UserControl.Client.Core;
 using GO.UserControl.Client.Core.Services;
 using GO.UserControl.Client.Core.Session;
+using HRM.Core;
 using HRM.Core.Models;
 using HRM.Core.Repositories;
 using HRM.Core.Services;
@@ -95,7 +94,7 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddDIServices(this IServiceCollection services, IConfiguration configuration)
     {
         var appSettings = configuration.GetSection("AppSettings").Get<AppSettings>();
-        DateTimeExtensions.Initialize(appSettings.ServerTimeZoneOffset);
+        DateTimeExtensions.Initialize(appSettings.ServerTimeZone);
         services.AddSingleton(appSettings);
 
         var letstalkSettings = configuration.GetSection("LetstalkSettings").Get<LetstalkSettings>();

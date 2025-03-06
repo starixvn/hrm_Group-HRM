@@ -1,25 +1,22 @@
-﻿using HRM.Services.Interfaces;
-
-namespace HRM.Controllers.Report;
+﻿namespace HRM.Controllers.Report;
 
 using System;
 using System.Linq;
 using System.Threading.Tasks;
 using GO.UserControl.Client.Core.Session;
 using HRM.Core.Constants;
-using HRM.Core.Models;
 using HRM.Criteria.Report;
 using HRM.Services;
+using HRM.Services.Interfaces;
 using HRM.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 [Route("report/attendance")]
 public class AttendanceReportController(
     IUserControlSession userControlSession,
-    IReportService reportSevice,
+    IReportService reportService,
     IExportExcelAttendanceReportService excelService,
-    ITeamService teamService,
-    AppSettings appSettings) : BaseController(userControlSession)
+    ITeamService teamService) : BaseController(userControlSession)
 {
     [HttpGet("")]
     [HttpGet("Index")]
@@ -55,10 +52,7 @@ public class AttendanceReportController(
             IsLocal = model.IsLocal,
             IsRealDate = model.IsRealDate
         };
-        var employeeAttendances = await reportSevice.GetEmployeeAttendanceReportAsync(criteria);
-        ViewBag.ServerTimezone = appSettings.ServerTimeZoneOffset;
-        ViewBag.ClientTimezone = "7";
-
+        var employeeAttendances = await reportService.GetEmployeeAttendanceReportAsync(criteria);
 
         return PartialView("~/Views/Report/Attendance/_Details.cshtml", employeeAttendances);
     }
@@ -78,7 +72,7 @@ public class AttendanceReportController(
             IsLocal = model.IsLocal,
             IsRealDate = model.IsRealDate
         };
-        var employeeAttendances = await reportSevice.GetEmployeeAttendanceReportAsync(criteria);
+        var employeeAttendances = await reportService.GetEmployeeAttendanceReportAsync(criteria);
         var bytes = excelService.Export(employeeAttendances, model.FromDate, model.ToDate);
 
         var fileName = $"AttendanceReport_{DateTimeOffset.Now:yyyyMMdd}.xlsx";

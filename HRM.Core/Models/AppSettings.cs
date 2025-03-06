@@ -10,5 +10,5 @@ public class AppSettings
     public string EmailGo { get; set; }
     public string WhitelistIPs { get; set; }
 
-    public string ServerTimeZoneOffset { get; set; }
+    public short ServerTimeZone { get; set; }
 }

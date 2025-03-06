@@ -120,8 +120,7 @@ public class AnnualLeaveBalanceController(
             Year = year,
             ExcludedRequestTrans = true,
             AnnualLeaveBalances = await GetAnnualLeaveTransactionAsync(id, false, year),
-            Employee = await employeeService.GetEmployeeByIdAsync(id),
-            ServerTimeZone = appSettings.ServerTimeZoneOffset
+            Employee = await employeeService.GetEmployeeByIdAsync(id)
         };
 
         return View(model);
@@ -133,7 +132,6 @@ public class AnnualLeaveBalanceController(
     {
         model.Employee = await employeeService.GetEmployeeByIdAsync(model.EmployeeId);
         model.AnnualLeaveBalances = await GetAnnualLeaveTransactionAsync(model.EmployeeId, !model.ExcludedRequestTrans, model.Year);
-        model.ServerTimeZone = appSettings.ServerTimeZoneOffset;
 
         return View(model);
     }
@@ -187,7 +185,7 @@ public class AnnualLeaveBalanceController(
                 FromDate = model.AffectedFrom,
                 DeductDays = model.DeductDays,
                 CreditDays = model.CreditDays,
-                CreatedDate = DateTimeOffset.Now.DateTime.ToServerTimeZone(appSettings.ServerTimeZoneOffset),
+                CreatedDate = DateTimeOffset.Now.DateTime.ToServerTimeZone(),
                 CreatedBy = EmployeeSession.EmpId
             };
             var result = await baseService.ExecuteNonQueryAsync(criteria);
@@ -242,7 +240,7 @@ public class AnnualLeaveBalanceController(
                 FromDate = model.AffectedFrom,
                 DeductDays = model.DeductDays,
                 CreditDays = model.CreditDays,
-                ModifiedDate = DateTimeOffset.Now.DateTime.ToServerTimeZone(appSettings.ServerTimeZoneOffset),
+                ModifiedDate = DateTimeOffset.Now.DateTime.ToServerTimeZone(),
                 ModifiedBy = EmployeeSession.EmpId
             };
             var result = await baseService.ExecuteNonQueryAsync(criteria);
@@ -269,7 +267,7 @@ public class AnnualLeaveBalanceController(
         var criteria = new DeleteAnnualLeaveTransactionCriteria
         {
             LeaveTransId = model.LeaveTransId,
-            ModifiedDate = DateTimeOffset.Now.DateTime.ToServerTimeZone(appSettings.ServerTimeZoneOffset),
+            ModifiedDate = DateTimeOffset.Now.DateTime.ToServerTimeZone(),
             ModifiedBy = EmployeeSession.EmpId
         };
         var result = await baseService.ExecuteNonQueryAsync(criteria);

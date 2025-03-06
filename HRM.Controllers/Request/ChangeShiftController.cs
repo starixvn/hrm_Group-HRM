@@ -44,9 +44,9 @@ public class ChangeShiftController(
         foreach (var request in requests)
         {
             request.AttachFiles = attachFileService.GetInfoAttachFile(request.RequestId, UploadFolderPath);
-            request.CreatedDate = request.CreatedDate.ToClientTimeZone(appSettings.ServerTimeZoneOffset);
-            request.FromDate = request.FromDate.ToClientTimeZone(appSettings.ServerTimeZoneOffset);
-            request.ToDate = request.ToDate.ToClientTimeZone(appSettings.ServerTimeZoneOffset);
+            request.CreatedDate = request.CreatedDate.ToClientTimeZone();
+            request.FromDate = request.FromDate.ToClientTimeZone();
+            request.ToDate = request.ToDate.ToClientTimeZone();
         }
         ViewBag.Year = tempYear;
 
@@ -80,8 +80,8 @@ public class ChangeShiftController(
         var criteria = JsonConvert.DeserializeObject<CreateChangeShift>(model);
         var requestDetail = JsonConvert.DeserializeObject<List<ChangeShiftDetail>>(details);
         criteria.Details = requestDetail;
-        criteria.FromDate = criteria.FromDate.ToServerTimeZone(appSettings.ServerTimeZoneOffset);
-        criteria.ToDate = criteria.ToDate.ToServerTimeZone(appSettings.ServerTimeZoneOffset);
+        criteria.FromDate = criteria.FromDate.ToServerTimeZone();
+        criteria.ToDate = criteria.ToDate.ToServerTimeZone();
 
         var commandResult = await changeShiftService.CreateAsync(EmployeeSession.EmpId, criteria);
 
@@ -142,8 +142,8 @@ public class ChangeShiftController(
         var criteria = JsonConvert.DeserializeObject<EditChangeShift>(model);
         var requestDetail = JsonConvert.DeserializeObject<List<ChangeShiftDetail>>(details);
         criteria.Details = requestDetail;
-        criteria.FromDate = criteria.FromDate.ToServerTimeZone(appSettings.ServerTimeZoneOffset);
-        criteria.ToDate = criteria.ToDate.ToServerTimeZone(appSettings.ServerTimeZoneOffset);
+        criteria.FromDate = criteria.FromDate.ToServerTimeZone();
+        criteria.ToDate = criteria.ToDate.ToServerTimeZone();
 
         var commandResult = await changeShiftService.EditAsync(EmployeeSession.EmpId, criteria);
         if (commandResult.IsSuccessful)

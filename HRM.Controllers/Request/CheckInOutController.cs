@@ -3,24 +3,23 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using GO.UserControl.Client.Core.Enumerables;
-using GO.UserControl.Client.Core.Session;
 using Controllers;
 using Core;
 using Core.Constants;
 using Core.Enums;
+using GO.UserControl.Client.Core.Enumerables;
+using GO.UserControl.Client.Core.Session;
 using HRM.Core.Services;
 using HRM.Criteria.Request.CheckInOut;
-using Models;
 using HRM.Models.Request;
-using Services;
 using HRM.Services.Interfaces.Request;
 using HRM.ViewModels.Request;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Services.Interfaces;
-using HRM.Core.Models;
+using Models;
 using Newtonsoft.Json;
+using Services;
+using Services.Interfaces;
 
 public class CheckInOutController(
     IUserControlSession userControlSession,
@@ -28,8 +27,7 @@ public class CheckInOutController(
     IRequestService requestService,
     IBaseService baseService,
     IShiftService shiftService,
-    IAttachFileService attachFileService,
-    AppSettings appSettings) : BaseController(userControlSession)
+    IAttachFileService attachFileService) : BaseController(userControlSession)
 {
     private const string UploadFolderPath = "/file/uploads/request/";
 
@@ -50,8 +48,8 @@ public class CheckInOutController(
         foreach (var request in requests)
         {
             request.AttachFiles = attachFileService.GetInfoAttachFile(request.RequestId, UploadFolderPath);
-            request.CreatedDate = request.CreatedDate.ToClientTimeZone(appSettings.ServerTimeZoneOffset);
-            request.RequestTime = request.RequestTime.ToClientTimeZone(appSettings.ServerTimeZoneOffset);
+            request.CreatedDate = request.CreatedDate.ToClientTimeZone();
+            request.RequestTime = request.RequestTime.ToClientTimeZone();
         }
 
         return View(requests);
@@ -94,7 +92,7 @@ public class CheckInOutController(
         {
             EmpId = model.EmployeeId,
             OnDate = model.AttendantDate,
-            RequestTime = requestTime.ToServerTimeZone(appSettings.ServerTimeZoneOffset),
+            RequestTime = requestTime.ToServerTimeZone(),
             RequestType = model.RequestTypeId,
             ReasonId = model.ReasonId,
             RefNo = model.RefNO,
@@ -136,7 +134,7 @@ public class CheckInOutController(
             };
             var disabledDates = await checkInOutRequestService.GetDisabledDateAsync(param);
             var shift = await shiftService.GetByDateAsync(EmployeeSession.EmpId, request.OnDate);
-            request.RequestTime = request.RequestTime.ToClientTimeZone(appSettings.ServerTimeZoneOffset);
+            request.RequestTime = request.RequestTime.ToClientTimeZone();
             var viewModel = new CheckInOutRequestViewModel
             {
                 RequestId = request.RequestId,
@@ -174,7 +172,7 @@ public class CheckInOutController(
             RequestId = model.RequestId,
             EmpId = model.EmployeeId,
             OnDate = model.AttendantDate,
-            RequestTime = requestTime.ToServerTimeZone(appSettings.ServerTimeZoneOffset),
+            RequestTime = requestTime.ToServerTimeZone(),
             RequestType = model.RequestTypeId,
             ReasonId = model.ReasonId,
             RefNo = model.RefNO,

@@ -6,17 +6,17 @@ using System.Diagnostics.CodeAnalysis;
 [SuppressMessage("Major Code Smell", "S109:Magic numbers should not be used", Justification = "Pending")]
 public static class DateTimeExtensions
 {
-    private static TimeSpan _serverTimeZoneOffset;
-    private static TimeSpan _clientTimeZoneOffset;
+    private static TimeSpan _serverTimeZone;
+    private static TimeSpan _clientTimeZone;
 
-    public static void Initialize(string serverTimeZoneOffset)
+    public static void Initialize(short serverTimeZone)
     {
-        _serverTimeZoneOffset = TimeSpan.FromHours(int.Parse(serverTimeZoneOffset));
+        _serverTimeZone = TimeSpan.FromHours(serverTimeZone);
     }
 
-    public static void SetClientTimezone(int clientTimeZoneOffset)
+    public static void SetClientTimeZone(short clientTimeZone)
     {
-        _clientTimeZoneOffset = TimeSpan.FromHours(clientTimeZoneOffset);
+        _clientTimeZone = TimeSpan.FromHours(clientTimeZone);
     }
 
     public static DateTime FirstDayOfWeek(this DateTime dt)
@@ -157,43 +157,15 @@ public static class DateTimeExtensions
         return (sourceDate.Year == toDate.Year && sourceDate.Month == toDate.Month && sourceDate.Day == toDate.Day);
     }
 
-    public static DateTime ToServerTimeZone(this DateTime time, string serverTimeZoneOffset)
-    {
-        var utcTime = time.ToUniversalTime();
-        var serverOffsetSpan = ParseTimeZoneOffsetString(serverTimeZoneOffset);
-
-        var serverTime = utcTime.Add(serverOffsetSpan);
-
-        return serverTime;
-    }
-
-    public static DateTime ToClientTimeZone(this DateTime serverTime, string serverTimeZoneOffset, string clientTimeZoneOffset = "7")
-    {
-        var serverOffsetSpan = ParseTimeZoneOffsetString(serverTimeZoneOffset);
-
-        var utcTime = serverTime.Subtract(serverOffsetSpan);
-
-        var clientOffsetSpan = ParseTimeZoneOffsetString(clientTimeZoneOffset);
-        var clientTime = utcTime.Add(clientOffsetSpan);
-
-        return clientTime;
-    }
-
-    private static TimeSpan ParseTimeZoneOffsetString(string offset)
-    {
-        if(!offset.Contains(':')) offset += ":00";
-        return TimeSpan.Parse(offset);
-    }
-
     public static DateTime ToServerTimeZone(this DateTime time)
     {
-        var offsetTime = new DateTimeOffset(time, _clientTimeZoneOffset);
-        return offsetTime.ToOffset(_serverTimeZoneOffset).DateTime;
+        var offsetTime = new DateTimeOffset(time, _clientTimeZone);
+        return offsetTime.ToOffset(_serverTimeZone).DateTime;
     }
 
     public static DateTime ToClientTimeZone(this DateTime time)
     {
-        var offsetTime = new DateTimeOffset(time, _serverTimeZoneOffset);
-        return offsetTime.ToOffset(_clientTimeZoneOffset).DateTime;
+        var offsetTime = new DateTimeOffset(time, _serverTimeZone);
+        return offsetTime.ToOffset(_clientTimeZone).DateTime;
     }
 }

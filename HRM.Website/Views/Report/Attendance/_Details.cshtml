@@ -1,11 +1,9 @@
 ﻿@using HRM.Core.Enums
 @using HRM.Models
 @using HRM.Models.Request
-@using HRM.Services
 @using HRM.Services.Implement.Request
 @using HRM.ViewModels
 @using HRM.Website.Helper
-@using HRM.Core.Helpers
 @model IEnumerable<EmployeeAttendanceModel>
 
 <table id="data" class="table table-custom">
@@ -145,8 +143,8 @@
                     <td>
                         @if (item.InFixed.HasValue)
                         {
-                            <span class="tooltip-tippy" data-tippy-content="@item.InFixed.Value.ToClientTimeZone((string)ViewBag.ServerTimeZone).ToString("ddd, dd MMM, yyyy HH:mm:ss")">
-                                @item.InFixed.Value.ToClientTimeZone((string)ViewBag.ServerTimeZone).ToString("HH:mm")
+                            <span class="tooltip-tippy" data-tippy-content="@item.InFixed.Value.ToClientTimeZone().ToString("ddd, dd MMM, yyyy HH:mm:ss")">
+                                @item.InFixed.Value.ToClientTimeZone().ToString("HH:mm")
                             </span>
                         }
                     </td>
@@ -154,8 +152,8 @@
                         @if (item.OutFixed.HasValue)
                         {
                             <span class="tooltip-tippy"
-                                  data-tippy-content="@item.OutFixed.Value.ToClientTimeZone((string)ViewBag.ServerTimeZone).ToString("ddd, dd MMM, yyyy HH:mm:ss")">
-                                @item.OutFixed.Value.ToClientTimeZone((string)ViewBag.ServerTimeZone).ToString("HH:mm")
+                                  data-tippy-content="@item.OutFixed.Value.ToClientTimeZone().ToString("ddd, dd MMM, yyyy HH:mm:ss")">
+                                @item.OutFixed.Value.ToClientTimeZone().ToString("HH:mm")
                             </span>
                         }
                     </td>
@@ -205,7 +203,7 @@
                                 <div class="@className"
                                      data-requestdetail="@Html.Encode(requestdetail)"
                                      data-leavetype="@(request.LeaveType != null ? request.LeaveType.Name : string.Empty)"
-                                     data-createddate="@(request.CreatedDate.ToClientTimeZone((string)ViewBag.ServerTimeZone))"
+                                     data-createddate="@(request.CreatedDate.ToClientTimeZone())"
                                      data-remark='@request.Remark'
                                      data-currentStatus="@request.CurrentStatus">
                                     @request.RequestType.Name

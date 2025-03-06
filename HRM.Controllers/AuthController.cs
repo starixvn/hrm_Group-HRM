@@ -9,6 +9,7 @@ using GO.UserControl.Client.Core;
 using GO.UserControl.Client.Core.Models.Auth;
 using GO.UserControl.Client.Core.Services;
 using GO.UserControl.Client.Core.Session;
+using HRM.Core;
 using HRM.Core.Constants;
 using HRM.Core.Services;
 using HRM.Criteria.CompanySite;
@@ -82,7 +83,8 @@ public class AuthController(
             userControlSession.Functions = await userService.GetFunctionPermissionAsync(userControlSession.SiteId, userControlSession.UserId);
             userControlSession.Set(SessionKey.IsShowLeftNavigation, true);
             userControlSession.Set(SessionKey.Employee, employee);
-            userControlSession.Set(SessionKey.ClientTimeZone, await GetClientTimeZoneAsync());
+
+            DateTimeExtensions.SetClientTimeZone(await GetClientTimeZoneAsync());
 
             await DoLoginAsync(loginResult.UserId);
         }

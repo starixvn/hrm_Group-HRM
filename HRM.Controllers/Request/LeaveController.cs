@@ -3,27 +3,27 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using GO.UserControl.Client.Core.Enumerables;
-using GO.UserControl.Client.Core.Session;
+using System.Threading.Tasks;
 using Controllers;
+using Core;
 using Core.Constants;
 using Core.Enums;
+using GO.UserControl.Client.Core.Enumerables;
+using GO.UserControl.Client.Core.Session;
 using HRM.Core.Models;
 using HRM.Core.Services;
-using Core;
-using HRM.Criteria.Request.Leave;
 using HRM.Criteria.Request;
+using HRM.Criteria.Request.Leave;
 using HRM.Models.Request;
-using Models;
-using Resources;
+using HRM.Services.Interfaces.Request;
 using HRM.ViewModels.Request;
-using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Models;
 using Newtonsoft.Json;
+using Resources;
 using Services.Implement;
 using Services.Interfaces;
-using HRM.Services.Interfaces.Request;
 
 public class LeaveController(
     IUserControlSession userControlSession,
@@ -31,8 +31,7 @@ public class LeaveController(
     IRequestService requestService,
     IBaseService baseService,
     ICommonDataService commonDataService,
-    IAttachFileService attachFileService,
-    AppSettings appSettings) : BaseController(userControlSession)
+    IAttachFileService attachFileService) : BaseController(userControlSession)
 {
     private const string UploadFolderPath = "/file/uploads/request/";
 
@@ -52,9 +51,9 @@ public class LeaveController(
         foreach (var request in leaves)
         {
             request.AttachFiles = attachFileService.GetInfoAttachFile(request.RequestId, UploadFolderPath);
-            request.CreatedDate = request.CreatedDate.ToClientTimeZone(appSettings.ServerTimeZoneOffset);
-            request.FromDate = request.FromDate.ToClientTimeZone(appSettings.ServerTimeZoneOffset);
-            request.ToDate = request.ToDate.ToClientTimeZone(appSettings.ServerTimeZoneOffset);
+            request.CreatedDate = request.CreatedDate.ToClientTimeZone();
+            request.FromDate = request.FromDate.ToClientTimeZone();
+            request.ToDate = request.ToDate.ToClientTimeZone();
         }
         ViewBag.Year = tempYear;
         ViewBag.EmployeeBalance = await GetLeaveBalance(null, year);
@@ -102,10 +101,10 @@ public class LeaveController(
 
         criteria.RequestDetail = leaveRequestDetail;
         criteria.CreatedBy = EmployeeSession.EmpId;
-        criteria.FromDate = criteria.FromDate.ToServerTimeZone(appSettings.ServerTimeZoneOffset);
-        criteria.ToDate = criteria.ToDate.ToServerTimeZone(appSettings.ServerTimeZoneOffset);
+        criteria.FromDate = criteria.FromDate.ToServerTimeZone();
+        criteria.ToDate = criteria.ToDate.ToServerTimeZone();
 
-        CommandResult result = await baseService.ExecuteNonQueryAsync(criteria);
+        var result = await baseService.ExecuteNonQueryAsync(criteria);
         if (result.IsSuccessful)
         {
             leaveRequestService.SendMailAndSendLetstalkCreateRequest(criteria);
@@ -159,8 +158,8 @@ public class LeaveController(
         var criteria = JsonConvert.DeserializeObject<UpdateLeaveRequestCriteria>(request);
         var leaveRequestDetail = JsonConvert.DeserializeObject<List<LeaveRequestDetail>>(requestDetails);
         criteria.RequestDetail = leaveRequestDetail;
-        criteria.FromDate = criteria.FromDate.ToServerTimeZone(appSettings.ServerTimeZoneOffset);
-        criteria.ToDate = criteria.ToDate.ToServerTimeZone(appSettings.ServerTimeZoneOffset);
+        criteria.FromDate = criteria.FromDate.ToServerTimeZone();
+        criteria.ToDate = criteria.ToDate.ToServerTimeZone();
         if (leaveRequestDetail != null && leaveRequestDetail.Any())
         {
             criteria.TotalDays = leaveRequestDetail.Where(x => x.WorkType == (byte)WorkType.Leave)
@@ -288,7 +287,6 @@ public class LeaveController(
         var dates = await baseService.GetDataAsync<DateTime>(criteria);
         var totalDays = (param.ToDate - param.FromDate).Days + 1 - dates.Count();
         return Json(totalDays);
-
     }
 
     private List<LeaveRequestDetail> ConvertToLeaveRequestDetail(
@@ -388,7 +386,7 @@ public class LeaveController(
 
         if (tempLeaveDetailModels != null && tempLeaveDetailModels.Any())
         {
-            foreach (LeaveRequestDetail leaveDetail in tempLeaveDetailModels)
+            foreach (var leaveDetail in tempLeaveDetailModels)
             {
                 tempLeaveDetailModel = leaveDetail;
                 tempLeaveDetailModel.ScheduleStatus = tempScheduleStatus;
