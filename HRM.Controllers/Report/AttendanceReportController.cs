@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using GO.UserControl.Client.Core.Session;
 using HRM.Core.Constants;
+using HRM.Core.Models;
 using HRM.Criteria.Report;
 using HRM.Services;
 using HRM.ViewModels;
@@ -17,7 +18,8 @@ public class AttendanceReportController(
     IUserControlSession userControlSession,
     IReportService reportSevice,
     IExportExcelAttendanceReportService excelService,
-    ITeamService teamService) : BaseController(userControlSession)
+    ITeamService teamService,
+    AppSettings appSettings) : BaseController(userControlSession)
 {
     [HttpGet("")]
     [HttpGet("Index")]
@@ -54,6 +56,9 @@ public class AttendanceReportController(
             IsRealDate = model.IsRealDate
         };
         var employeeAttendances = await reportSevice.GetEmployeeAttendanceReportAsync(criteria);
+        ViewBag.ServerTimezone = appSettings.ServerTimeZoneOffset;
+        ViewBag.ClientTimezone = "7";
+
 
         return PartialView("~/Views/Report/Attendance/_Details.cshtml", employeeAttendances);
     }
