@@ -1,5 +1,4 @@
-﻿@using HRM.Resources
-@using HRM.Models.Overtime
+﻿@using HRM.Models.Overtime
 @using HRM.Core.Enums
 @using HRM.Website.Helper
 @model MonthlyOvertimeRequest
@@ -100,7 +99,7 @@
     <tbody>
         @if (Model.DailyOvertimes.Any())
         {
-            foreach (DailyOvertimeRequest request in Model.DailyOvertimes)
+            foreach (var request in Model.DailyOvertimes)
             {
                 <tr>
                     @{
@@ -197,4 +196,4 @@
         </tr>
     </tfoot>
 </table>
-@Html.Partial("_ConfirmModal")
+@await Html.PartialAsync("_ConfirmModal")

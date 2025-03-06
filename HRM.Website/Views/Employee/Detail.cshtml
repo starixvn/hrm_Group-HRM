@@ -74,9 +74,9 @@
                     <div class="plabel">@Labels.Marriage:</div>
                     <div class="pcontent bold">
                         @{
-                            MarriageStatus status = (MarriageStatus)Model.Marriage;
+                            var status = (MarriageStatus)Model.Marriage;
                         }
-                        @(Model.Marriage == null ? "Unknown" : status.ToString())
+                        @status.ToString()
                     </div>
                 </li>
                 <li class="list-group-item">

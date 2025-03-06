@@ -3,55 +3,50 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using GO.UserControl.Client.Core.Enumerables;
-using GO.UserControl.Client.Core.Session;
-using Core;
 using Core.Constants;
 using Core.Enums;
 using Core.Filters;
-using HRM.Core.Services;
 using Criteria.Lookup;
-using Models;
+using GO.UserControl.Client.Core.Enumerables;
+using GO.UserControl.Client.Core.Session;
+using HRM.Core.Services;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Resources;
 using Services.ExportExcel;
 using Services.Implement;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 
 public class JobTitleController(
     IUserControlSession userControlSession,
     ICommonDataService commonDataService,
     IJobTitleExportService jobTitleExportService,
-    IBaseService baseService)
-    : BaseExportController(userControlSession)
+    IBaseService baseService) : BaseExportController(userControlSession)
 {
-    private readonly IUserControlSession userControlSession = userControlSession;
-
     [HrmPermission(Policy.Read, FunctionKey.JobTitleManagement)]
-    public ActionResult JobTitleManagement()
+    public IActionResult JobTitleManagement()
     {
         var hasPermission = userControlSession.HasPermissionOnFunction(FunctionKey.JobTitleManagement, Policy.Host);
         return View(hasPermission);
     }
 
     [HrmPermission(Policy.Host, FunctionKey.JobTitleManagement)]
-    public Task<CustomJsonResult> GetJobCategory()
+    public IActionResult GetJobCategory()
     {
         var jobCategories = GetJobCategories();
-        return Task.FromResult(new CustomJsonResult(jobCategories));
+        return Json(jobCategories);
     }
 
     [HrmPermission(Policy.Read, FunctionKey.JobTitleManagement)]
-    public async Task<CustomJsonResult> GetJobTitles(string jobTitle)
+    public async Task<IActionResult> GetJobTitles(string jobTitle)
     {
-        IList<LookupData> jobTitles = await commonDataService.GetJobTitle(jobTitle);
-        return new CustomJsonResult (jobTitles);
+        var jobTitles = await commonDataService.GetJobTitle(jobTitle);
+        return Json(jobTitles);
     }
 
     [HrmPermission(Policy.Host, FunctionKey.JobTitleManagement)]
-    public async Task<FileContentResult> ExportExcel(string jobTitle)
+    public async Task<IActionResult> ExportExcel(string jobTitle)
     {
-        IList<LookupData> jobTitles = await commonDataService.GetJobTitle(jobTitle);
+        var jobTitles = await commonDataService.GetJobTitle(jobTitle);
         var bytes = jobTitleExportService.Export(jobTitles);
 
         return File(bytes, MimeType.XLSX, $"JobTitle_{DateTimeOffset.Now:yyyyMMdd}.xlsx");
@@ -59,7 +54,7 @@ public class JobTitleController(
 
     [HttpPost]
     [HrmPermission(Policy.Host, FunctionKey.JobTitleManagement)]
-    public async Task<CustomJsonResult> Delete([FromBody]JobTitleDeleteModel model)
+    public async Task<IActionResult> Delete([FromBody] JobTitleDeleteModel model)
     {
         var criteria = new DeleteLookupDataCriteria
         {
@@ -67,12 +62,12 @@ public class JobTitleController(
         };
         var result = await baseService.ExecuteNonQueryAsync(criteria);
 
-        return new CustomJsonResult (result);
+        return Json(result);
     }
 
     [HttpPost]
     [HrmPermission(Policy.Host, FunctionKey.JobTitleManagement)]
-    public async Task<CustomJsonResult> Insert([FromBody]JobTitleInsertModel model)
+    public async Task<IActionResult> Insert([FromBody] JobTitleInsertModel model)
     {
         var criteria = new InsertLookupDataCriteria
         {
@@ -82,12 +77,12 @@ public class JobTitleController(
         };
         var result = await baseService.ExecuteNonQueryAsync(criteria);
 
-        return new CustomJsonResult (result);
+        return Json(result);
     }
 
     [HttpPost]
     [HrmPermission(Policy.Host, FunctionKey.JobTitleManagement)]
-    public async Task<CustomJsonResult> Update([FromBody] JobTitleUpdateModel model)
+    public async Task<IActionResult> Update([FromBody] JobTitleUpdateModel model)
     {
         var criteria = new UpdateLookupDataCriteria
         {
@@ -97,7 +92,7 @@ public class JobTitleController(
         };
         var result = await baseService.ExecuteNonQueryAsync(criteria);
 
-        return new CustomJsonResult (result);
+        return Json(result);
     }
 
     private static IList<SelectListItem> GetJobCategories() =>

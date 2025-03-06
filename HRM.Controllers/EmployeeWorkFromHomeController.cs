@@ -21,8 +21,7 @@ namespace HRM.Controllers;
 public class EmployeeWorkFromHomeController(
     IUserControlSession userControlSession,
     IBaseService baseService,
-    IAttachFileService attachFileService,
-    IEmployeeWorkFromHomeService employeeWorkFromHomeService) : BaseController(userControlSession)
+    IAttachFileService attachFileService) : BaseController(userControlSession)
 {
     private readonly IUserControlSession userControlSession = userControlSession;
     private const string UploadFolderPath = "/file/uploads/wfh/";
@@ -101,7 +100,9 @@ public class EmployeeWorkFromHomeController(
     [HrmPermission(Policy.Read, FunctionKey.EmployeeManagement)]
     public async Task<IActionResult> Edit(int id)
     {
-        var employeeWorkFromHome = await employeeWorkFromHomeService.GetByIdAsync(id);
+        var criteria = new GetEmployeeWorkFromHomeByIdCriteria { EmployeeWorkFromHomeId = id };
+        var employeeWorkFromHome = await baseService.GetDataEntityAsync<EmployeeWorkFromHome>(criteria);
+
         var model = new EmployeeWorkFromHomeViewModel
         {
             EmployeeWorkFromHomeId = employeeWorkFromHome.EmployeeWorkFromHomeId,

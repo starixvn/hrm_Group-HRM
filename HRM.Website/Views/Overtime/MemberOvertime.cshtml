@@ -1,6 +1,4 @@
-﻿@using HRM.Core
-@using HRM.Resources
-@using HRM.ViewModels.Overtime
+﻿@using HRM.ViewModels.Overtime
 @using HRM.Website.Helper
 @model MemberMonthlyOvertimeRequestViewModel
 @{
@@ -166,7 +164,7 @@
             </tr>
     </thead>
     <tbody id="listMemberOvertime" class="@hasCheckBoxColumn">
-        @Html.Partial("_ListMemberOvertime", Model.MemberRequests)
+        @await Html.PartialAsync("_ListMemberOvertime", Model.MemberRequests)
     </tbody>
     <tfoot>
         <tr class="summary">
@@ -179,4 +177,4 @@
         </tr>
     </tfoot>
 </table>
-@Html.Partial("_ConfirmModal")
+@await Html.PartialAsync("_ConfirmModal")

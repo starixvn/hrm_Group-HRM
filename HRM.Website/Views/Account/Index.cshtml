@@ -243,6 +243,6 @@
         </ul>
     </div>
     <div>
-        @Html.Partial("_HistoryDetail", Model.Logs)
+        @await Html.PartialAsync("_HistoryDetail", Model.Logs)
     </div>
 </div>

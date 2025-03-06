@@ -114,7 +114,7 @@
         <div class="form-group">
             <div class="label-form">@Labels.Details</div>
             <div id="changeShiftDetails" class="change-shift-details">
-                @Html.Partial("_ChangeShiftDetail", Model.Details)
+                @await Html.PartialAsync("_ChangeShiftDetail", Model.Details)
             </div>
         </div>
 

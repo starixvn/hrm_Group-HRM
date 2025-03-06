@@ -1,16 +1,15 @@
-﻿using HRM.Repositories.Interfaces;
-
-namespace HRM.Repositories;
+﻿namespace HRM.Repositories;
 
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
-using Fanex.Data;
-using Fanex.Data.Repository;
 using Core.Enums;
 using Criteria.Request;
+using Fanex.Data;
+using Fanex.Data.Repository;
+using HRM.Repositories.Interfaces;
 using Models;
 using Models.Request;
 using Models.Request.ChangeShift;
@@ -53,7 +52,7 @@ public class RequestRepository : IRequestRepository
     public async Task<VerifierAndApproverForRequest> GetVerifierAndApproverAsync(ICriteria criteria)
     {
         VerifierAndApproverForRequest supervisor = null;
-        using var db =  ObjectDbFactory.CreateInstance(criteria.GetSettingKey());
+        using var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey());
         using var multi = await db.QueryMultipleAsync(criteria);
         supervisor = new VerifierAndApproverForRequest
         {
@@ -94,7 +93,7 @@ public class RequestRepository : IRequestRepository
         return disciplines;
     }
 
-    private static IList<RequestEntity> FillData(dynamic data)
+    private static List<RequestEntity> FillData(dynamic data)
     {
         var entityList = new List<RequestEntity>();
         foreach (var request in data)

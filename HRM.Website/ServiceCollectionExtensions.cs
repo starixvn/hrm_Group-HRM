@@ -169,16 +169,9 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IActionLogService, ActionLogService>();
         services.AddSingleton<IEmployeeWorkingHoursService, EmployeeWorkingHoursService>();
         services.AddSingleton<IEmployeeWorkingHoursRepository, EmployeeWorkingHoursRepository>();
-        services.AddSingleton<IOvertimeReportService, OvertimeReportService>();
-        services.AddSingleton<IOvertimeReportRepository, OvertimeReportRepository>();
         services.AddSingleton<IManagementLevelService, ManagementLevelService>();
         services.AddSingleton<IPaternityService, PaternityService>();
         services.AddSingleton<IPostnatalService, PostnatalService>();
-        services.AddSingleton<IEmployeeWorkFromHomeService, EmployeeWorkFromHomeService>();
-        services.AddSingleton<IWorkingHoursSummaryReportService, WorkingHoursSummaryReportService>();
-        services.AddSingleton<IManpowerReportService, ManpowerReportService>();
-        services.AddSingleton<IWorkingCalendarSummaryReportService, WorkingCalendarSummaryReportService>();
-        services.AddSingleton<IWorkingCalendarSummaryReportRepository, WorkingCalendarSummaryReportRepository>();
         services.AddSingleton<IMealAllowanceSummaryService, MealAllowanceSummaryService>();
         
         services.AddDIReportServices();
@@ -189,11 +182,17 @@ public static class ServiceCollectionExtensions
 
     public static IServiceCollection AddDIReportServices(this IServiceCollection services)
     {
-        services.AddSingleton<Repositories.Interfaces.IReportRepository, ReportRepository>();
+        services.AddSingleton<IReportRepository, ReportRepository>();
+        services.AddSingleton<IOvertimeReportRepository, OvertimeReportRepository>();
 
         services.AddSingleton<IReportService, ReportService>();
         services.AddSingleton<IShiftStatisticReportService, ShiftStatisticReportService>();
         services.AddSingleton<IWorkingCalendarReportService, WorkingCalendarReportService>();
+        services.AddSingleton<IOvertimeReportService, OvertimeReportService>();
+        services.AddSingleton<IWorkingHoursSummaryReportService, WorkingHoursSummaryReportService>();
+        services.AddSingleton<IManpowerReportService, ManpowerReportService>();
+        services.AddSingleton<IWorkingCalendarSummaryReportService, WorkingCalendarSummaryReportService>();
+        services.AddSingleton<IWorkingCalendarSummaryReportRepository, WorkingCalendarSummaryReportRepository>();
 
         return services;
     }
@@ -216,6 +215,7 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IExportExcelScheduleService, ExportExcelScheduleService>();
         services.AddSingleton<IExportExcelTimeRecordService, ExportExcelTimeRecordService>();
         services.AddSingleton<IExportExcelEmployeeInfoService, ExportExcelEmployeeInfoService>();
+
         return services;
     }
 }

@@ -1,6 +1,4 @@
-﻿using HRM.Repositories.Interfaces;
-
-namespace HRM.Repositories;
+﻿namespace HRM.Repositories;
 
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +7,7 @@ using Fanex.Data;
 using Fanex.Data.Repository;
 using HRM.Models;
 using HRM.Models.Group;
+using HRM.Repositories.Interfaces;
 
 public class TeamRepository : ITeamRepository
 {
@@ -36,7 +35,7 @@ public class TeamRepository : ITeamRepository
     {
         using var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey());
         using var multi = await db.QueryMultipleAsync(criteria);
-        var teams = multi.Read<Team, Section , Team>(
+        var teams = multi.Read<Team, Section, Team>(
             (t, sec) =>
             {
                 t.Section = sec;

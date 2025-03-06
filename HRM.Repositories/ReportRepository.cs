@@ -40,7 +40,7 @@ public partial class ReportRepository : Interfaces.IReportRepository
     {
         using var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey());
         using var multi = await db.QueryMultipleAsync(criteria);
-        IList<SupervisorReportModel> supervisors = multi.Read<SupervisorReportModel, TeamModel, SupervisorReportModel>(
+        var supervisors = multi.Read<SupervisorReportModel, TeamModel, SupervisorReportModel>(
             (su, team) =>
             {
                 su.Team = team;
@@ -56,7 +56,7 @@ public partial class ReportRepository : Interfaces.IReportRepository
             },
             "RoleId");
 
-        IList<SupervisorModel> employees = multi.Read<SupervisorModel, Employee, SupervisorModel>(
+        var employees = multi.Read<SupervisorModel, Employee, SupervisorModel>(
             (su, e) =>
             {
                 su.Supervisor = e;
@@ -77,7 +77,7 @@ public partial class ReportRepository : Interfaces.IReportRepository
     {
         using var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey());
         using var multi = await db.QueryMultipleAsync(criteria);
-        IList<TeamSupervisorReportModel> supervisors = multi.Read<TeamSupervisorReportModel>().ToList();
+        var supervisors = await multi.ReadAsync<TeamSupervisorReportModel>();
 
         IList<SupervisorModel> employees = multi.Read<SupervisorModel, TeamModel, SupervisorModel>(
             (su, team) =>
@@ -92,6 +92,6 @@ public partial class ReportRepository : Interfaces.IReportRepository
             supervisor.Supervisors = employees.Where(x => x.Team.TeamId == supervisor.TeamId).ToList();
         }
 
-        return supervisors;
+        return supervisors.ToList();
     }
 }

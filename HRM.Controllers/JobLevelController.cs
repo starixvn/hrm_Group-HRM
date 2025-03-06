@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
-using HRM.Core;
 using HRM.Core.Constants;
 using HRM.Core.Filters;
 using HRM.Criteria.JobLevel;
@@ -12,28 +11,27 @@ namespace HRM.Controllers;
 
 public class JobLevelController(
     IUserControlSession userControlSession,
-    IJobLevelService jobLevelService)
-    : BaseController(userControlSession)
+    IJobLevelService jobLevelService) : BaseController(userControlSession)
 {
     private readonly IUserControlSession userControlSession = userControlSession;
 
     [HrmPermission(Policy.Read, FunctionKey.JobLevelManagement)]
-    public ActionResult Index()
+    public IActionResult Index()
     {
         var hasPermission = userControlSession.HasPermissionOnFunction(FunctionKey.JobLevelManagement, Policy.Host);
         return View(hasPermission);
     }
 
     [HrmPermission(Policy.Read, FunctionKey.JobLevelManagement)]
-    public async Task<CustomJsonResult> GetJobLevels()
+    public async Task<IActionResult> GetJobLevels()
     {
-        var jobLevel = await jobLevelService.GetJobLevel();
-        return new CustomJsonResult(jobLevel);
+        var jobLevels = await jobLevelService.GetJobLevel();
+        return Json(jobLevels);
     }
 
     [HttpPost]
     [HrmPermission(Policy.Host, FunctionKey.JobLevelManagement)]
-    public async Task<CustomJsonResult> Insert([FromBody]JobLevelInsertModel model)
+    public async Task<IActionResult> Insert([FromBody] JobLevelInsertModel model)
     {
         var criteria = new InsertJobLevelCriteria
         {
@@ -43,12 +41,12 @@ public class JobLevelController(
 
         var result = await jobLevelService.Insert(criteria);
 
-        return new CustomJsonResult(result);
+        return Json(result);
     }
 
     [HttpPost]
     [HrmPermission(Policy.Host, FunctionKey.JobLevelManagement)]
-    public async Task<CustomJsonResult> Update([FromBody]JobLevelUpdateModel model)
+    public async Task<IActionResult> Update([FromBody] JobLevelUpdateModel model)
     {
         var criteria = new UpdateJobLevelCriteria
         {
@@ -58,16 +56,16 @@ public class JobLevelController(
         };
         var result = await jobLevelService.Update(criteria);
 
-        return new CustomJsonResult (result);
+        return Json(result);
     }
 
     [HttpPost]
     [HrmPermission(Policy.Host, FunctionKey.JobLevelManagement)]
-    public async Task<CustomJsonResult> Delete([FromBody]JobLevelDeleteModel model)
+    public async Task<IActionResult> Delete([FromBody] JobLevelDeleteModel model)
     {
         var result = await jobLevelService.Delete(model.Id, EmployeeSession.EmpId);
 
-        return new CustomJsonResult(result);
+        return Json(result);
     }
 }
 
