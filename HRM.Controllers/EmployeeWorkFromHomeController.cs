@@ -55,7 +55,7 @@ public class EmployeeWorkFromHomeController(
     }
 
     [HrmPermission(Policy.Host, FunctionKey.EmployeeManagement)]
-    public ActionResult Create()
+    public IActionResult Create()
     {
         var currentDateTime = DateTimeOffset.Now.DateTime;
         var model = new EmployeeWorkFromHomeViewModel
@@ -68,7 +68,7 @@ public class EmployeeWorkFromHomeController(
 
     [HttpPost]
     [HrmPermission(Policy.Host, FunctionKey.EmployeeManagement)]
-    public ActionResult Create(string requestModel, IList<IFormFile> files)
+    public async Task<IActionResult> Create(string requestModel, IList<IFormFile> files)
     {
         var model = JsonSerializer.Deserialize<EmployeeWorkFromHomeViewModel>(requestModel);
         var result = new CommandResult();
@@ -84,7 +84,7 @@ public class EmployeeWorkFromHomeController(
                 Remark = model.Remark
             };
 
-            result = baseService.ExecuteNonQuery(criteria);
+            result = await baseService.ExecuteNonQueryAsync(criteria);
             if (result.IsSuccessful)
             {
                 attachFileService.UploadFile(files, criteria.RequestId, UploadFolderPath);
@@ -99,9 +99,9 @@ public class EmployeeWorkFromHomeController(
     }
 
     [HrmPermission(Policy.Read, FunctionKey.EmployeeManagement)]
-    public ActionResult Edit(int id)
+    public async Task<IActionResult> Edit(int id)
     {
-        var employeeWorkFromHome = employeeWorkFromHomeService.GetById(id);
+        var employeeWorkFromHome = await employeeWorkFromHomeService.GetByIdAsync(id);
         var model = new EmployeeWorkFromHomeViewModel
         {
             EmployeeWorkFromHomeId = employeeWorkFromHome.EmployeeWorkFromHomeId,
@@ -117,7 +117,7 @@ public class EmployeeWorkFromHomeController(
 
     [HttpPost]
     [HrmPermission(Policy.Host, FunctionKey.EmployeeManagement)]
-    public async Task<JsonResult> Edit(string requestModel, IList<IFormFile> files, string filesRemove)
+    public async Task<IActionResult> Edit(string requestModel, IList<IFormFile> files, string filesRemove)
     {
         var model = JsonSerializer.Deserialize<EmployeeWorkFromHomeViewModel>(requestModel);
         var result = new CommandResult();
@@ -154,7 +154,7 @@ public class EmployeeWorkFromHomeController(
 
     [HttpPost]
     [HrmPermission(Policy.Host, FunctionKey.EmployeeManagement)]
-    public async Task<JsonResult> Delete(int id)
+    public async Task<IActionResult> Delete(int id)
     {
         var criteria = new DeleteEmployeeWorkFromHomeCriteria { EmployeeWorkFromHomeId = id };
         var result = await baseService.ExecuteNonQueryAsync(criteria);

@@ -1,82 +1,70 @@
-﻿namespace HRM.Services
+﻿namespace HRM.Services;
+
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using HRM.Core.Models;
+using HRM.Core.Services;
+using HRM.Criteria.Holidays;
+using HRM.Models;
+
+public class HolidayService(IBaseService baseService) : IHolidayService
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using HRM.Core.Models;
-    using HRM.Core.Services;
-    using HRM.Criteria.Holidays;
-    using HRM.Models;
-
-    public class HolidayService : IHolidayService
+    public async Task<IEnumerable<Holiday>> GetByYearAsync(int year)
     {
-        private readonly IBaseService baseService;
-
-        public HolidayService(IBaseService baseService)
+        var criteria = new GetHolidaysCriteria
         {
-            this.baseService = baseService;
-        }
+            Year = year
+        };
+        return await baseService.GetDataAsync<Holiday>(criteria);
+    }
 
-        public IList<Holiday> GetByYear(int year)
+    public async Task<Holiday> GetByIdAsync(int holidayId)
+    {
+        var criteria = new GetHolidayByIdCriteria
         {
-            var criteria = new GetHolidaysCriteria
-            {
-                Year = year
-            };
-            IList<Holiday> holidays = baseService.GetData<Holiday>(criteria).ToList();
+            Id = holidayId
+        };
+        return await baseService.GetDataEntityAsync<Holiday>(criteria);
+    }
 
-            return holidays ?? new List<Holiday>();
-        }
-
-        public Holiday GetById(int holidayId)
+    public async Task<CommandResult> CreateAsync(int actorId, Holiday model)
+    {
+        var criteria = new CreateHolidayCriteria
         {
-            var criteria = new GetHolidayByIdCriteria
-            {
-                Id = holidayId
-            };
-            Holiday holiday = baseService.GetDataEntity<Holiday>(criteria);
+            HolidayName = model.HolidayName,
+            TypeId = model.TypeId,
+            FromDate = model.FromDate,
+            ToDate = model.ToDate,
+            ModifiedBy = actorId,
+            ModifiedDate = DateTimeOffset.Now.DateTime
+        };
+        return await baseService.ExecuteNonQueryAsync(criteria);
+    }
 
-            return holiday ?? new Holiday();
-        }
-
-        public CommandResult Create(int actorId, Holiday model)
+    public async Task<CommandResult> EditAsync(int actorId, Holiday model)
+    {
+        var criteria = new EditHolidayCriteria
         {
-            var criteria = new CreateHolidayCriteria
-            {
-                HolidayName = model.HolidayName,
-                TypeId = model.TypeId,
-                FromDate = model.FromDate,
-                ToDate = model.ToDate,
-                ModifiedBy = actorId,
-                ModifiedDate = DateTimeOffset.Now.DateTime
-            };
-            return baseService.ExecuteNonQuery(criteria);
-        }
+            Id = model.Id,
+            HolidayName = model.HolidayName,
+            TypeId = model.TypeId,
+            FromDate = model.FromDate,
+            ToDate = model.ToDate,
+            ModifiedBy = actorId,
+            ModifiedDate = DateTimeOffset.Now.DateTime
+        };
+        return await baseService.ExecuteNonQueryAsync(criteria);
+    }
 
-        public CommandResult Edit(int actorId, Holiday model)
+    public async Task<CommandResult> DeleteAsync(int actorId, int id)
+    {
+        var criteria = new DeleteHolidayCriteria
         {
-            var criteria = new EditHolidayCriteria
-            {
-                Id = model.Id,
-                HolidayName = model.HolidayName,
-                TypeId = model.TypeId,
-                FromDate = model.FromDate,
-                ToDate = model.ToDate,
-                ModifiedBy = actorId,
-                ModifiedDate = DateTimeOffset.Now.DateTime
-            };
-            return baseService.ExecuteNonQuery(criteria);
-        }
-
-        public CommandResult Delete(int actorId, int id)
-        {
-            var criteria = new DeleteHolidayCriteria
-            {
-                Id = id,
-                ModifiedBy = actorId,
-                ModifiedDate = DateTimeOffset.Now.DateTime
-            };
-            return baseService.ExecuteNonQuery(criteria);
-        }
+            Id = id,
+            ModifiedBy = actorId,
+            ModifiedDate = DateTimeOffset.Now.DateTime
+        };
+        return await baseService.ExecuteNonQueryAsync(criteria);
     }
 }

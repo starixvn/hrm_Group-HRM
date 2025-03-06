@@ -1,6 +1,6 @@
 ﻿@using HRM.Core.Enums
 @using HRM.Website.Helper
-@model IList<HRM.Models.Team>
+@model IEnumerable<HRM.Models.Team>
 @{
     ViewBag.Title = Labels.TeamManagement;
     var hasPermission = (bool)ViewBag.HasPermission;

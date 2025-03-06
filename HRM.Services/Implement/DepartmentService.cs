@@ -1,29 +1,18 @@
 ﻿namespace HRM.Services.Implement;
 
-using HRM.Core.Models;
-using HRM.Core.Services;
-using Criteria.Department;
-using Models;
-using HRM.Repositories.Interfaces;
-using Interfaces;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Criteria.Department;
+using HRM.Core.Models;
+using HRM.Core.Services;
+using HRM.Repositories.Interfaces;
+using Interfaces;
+using Models;
 
 public class DepartmentService(
     IDepartmentRepository departmentRepository,
-    IBaseService baseService)
-    : IDepartmentService
+    IBaseService baseService) : IDepartmentService
 {
-    public CommandResult Delete(int actorId, int id)
-    {
-        var criteria = new DeleteDepartmentCriteria
-        {
-            departmentId = id,
-            ModifiedBy = actorId
-        };
-        return baseService.ExecuteNonQuery(criteria);
-    }
-
     public async Task<CommandResult> DeleteAsync(int actorId, int id)
     {
         var criteria = new DeleteDepartmentCriteria
@@ -32,17 +21,6 @@ public class DepartmentService(
             ModifiedBy = actorId
         };
         return await baseService.ExecuteNonQueryAsync(criteria);
-    }
-
-    public IList<Department> GetDepartment(bool? isActive = true)
-    {
-        var criteria = new GetDepartmentByActiveCriteria
-        {
-            IsActive = isActive
-        };
-        var departments = departmentRepository.GetByActive(criteria);
-
-        return departments ?? new List<Department>();
     }
 
     public async Task<IList<Department>> GetDepartmentAsync(bool? isActive = true)
@@ -54,15 +32,6 @@ public class DepartmentService(
         var departments = await departmentRepository.GetByActiveAsync(criteria);
 
         return departments ?? new List<Department>();
-    }
-
-    public Department GetById(int departmentId)
-    {
-        var criteria = new GetDepartmentByIdCriteria
-        {
-            Id = departmentId
-        };
-        return departmentRepository.GetById(criteria);
     }
 
     public async Task<Department> GetByIdAsync(int departmentId)

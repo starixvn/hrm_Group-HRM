@@ -1,22 +1,21 @@
-﻿using HRM.Services.Interfaces;
-
-namespace HRM.Controllers;
+﻿namespace HRM.Controllers;
 
 using System;
 using System.IO;
 using System.Threading.Tasks;
-using GO.UserControl.Client.Core.Enumerables;
-using GO.UserControl.Client.Core.Session;
 using Core;
 using Core.Constants;
 using Core.Filters;
+using GO.UserControl.Client.Core.Enumerables;
+using GO.UserControl.Client.Core.Session;
 using HRM.Core.Models;
-using Models;
-using Services;
-using ViewModels.Memo;
+using HRM.Services.Interfaces;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Models;
+using Services;
 using Services.Implement;
+using ViewModels.Memo;
 
 public class MemoController(
     AppSettings appSettings,
@@ -76,7 +75,7 @@ public class MemoController(
 
             if (commandResult.IsSuccessful && model.SendMail)
             {
-                SendMail(model.Subject, commandResult);
+                await SendMailAsync(model.Subject, commandResult);
             }
 
             if (!commandResult.IsSuccessful)
@@ -125,7 +124,7 @@ public class MemoController(
 
             if (commandResult.IsSuccessful && model.SendMail)
             {
-                SendMail(model.Subject, commandResult);
+                await SendMailAsync(model.Subject, commandResult);
             }
 
             if (!commandResult.IsSuccessful)
@@ -173,17 +172,17 @@ public class MemoController(
         return View(memo);
     }
 
-    private void SendMail(string subject, CommandResult result)
+    private async Task SendMailAsync(string subject, CommandResult result)
     {
         var bodyTemplate = Utilities.ReadTextFile(Path.Combine(env.ContentRootPath, "EmailTemplates/MemoNotification.txt"));
         var body = string.Format(bodyTemplate, subject, appSettings.Domain + "memo/detail/" + result);
 
-        emailService.SendEmail(
+        await emailService.SendEmailAsync(
             appSettings.EmailGo,
             string.Empty,
             Resources.Messages.MemoSubject + " " + subject,
             body);
-        emailService.SendEmail(
+        await emailService.SendEmailAsync(
             appSettings.EmailSD,
             string.Empty,
             Resources.Messages.MemoSubject + " " + subject,

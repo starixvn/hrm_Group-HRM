@@ -1,4 +1,5 @@
-﻿using HRM.Core.Models;
+﻿using System.Threading.Tasks;
+using HRM.Core.Models;
 using HRM.Criteria.EmployeeWorkFromHome;
 using HRM.Models;
 
@@ -6,11 +7,11 @@ namespace HRM.Services.Interfaces;
 
 public interface IEmployeeWorkFromHomeService
 {
-    EmployeeWorkFromHome GetById(int id);
+    Task<EmployeeWorkFromHome> GetByIdAsync(int id);
 
-    CommandResult Insert(InsertEmployeeWorkFromHomeCriteria criteria);
+    Task<CommandResult> CreateAsync(InsertEmployeeWorkFromHomeCriteria criteria);
 
-    CommandResult Update(UpdateEmployeeWorkFromHomeCriteria criteria);
+    Task<CommandResult> UpdateAsync(UpdateEmployeeWorkFromHomeCriteria criteria);
 
-    CommandResult Delete(int id);
+    Task<CommandResult> DeleteAsync(int id);
 }

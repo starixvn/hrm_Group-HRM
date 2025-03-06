@@ -1,31 +1,20 @@
-﻿namespace HRM.Services
+﻿namespace HRM.Services;
+
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using HRM.Core.Models;
+using HRM.Criteria.Unit;
+using HRM.Models;
+
+public interface IUnitService
 {
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
-    using HRM.Core.Models;
-    using HRM.Criteria.Unit;
-    using HRM.Models;
+    Task<Unit> GetByIdAsync(int id);
 
-    public interface IUnitService
-    {
-        Unit GetById(int id);
-        Task<Unit> GetByIdAsync(int id);
+    Task<IList<Unit>> GetUnitAsync(bool? isActive = true);
 
-        IList<Unit> GetUnit(bool? isActive = true);
+    Task<CommandResult> CreateAsync(InsertUnitCriteria criteria);
 
-        Task<IList<Unit>> GetUnitAsync(bool? isActive = true);
+    Task<CommandResult> EditAsync(UpdateUnitCriteria criteria);
 
-        CommandResult Create(InsertUnitCriteria criteria);
-
-        Task<CommandResult> CreateAsync(InsertUnitCriteria criteria);
-
-        CommandResult Edit(UpdateUnitCriteria criteria);
-
-        Task<CommandResult> EditAsync(UpdateUnitCriteria criteria);
-
-        CommandResult Delete(DeleteUnitCriteria criteria);
-
-        Task<CommandResult> DeleteAsync(DeleteUnitCriteria criteria);
-
-    }
+    Task<CommandResult> DeleteAsync(DeleteUnitCriteria criteria);
 }

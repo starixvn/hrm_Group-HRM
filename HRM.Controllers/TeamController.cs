@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
-using HRM.Core;
 using HRM.Core.Constants;
 using HRM.Core.Enums;
 using HRM.Core.Filters;
@@ -14,7 +13,6 @@ using HRM.Models;
 using HRM.Models.Group;
 using HRM.Models.Supervisor;
 using HRM.Resources;
-using HRM.Services;
 using HRM.Services.Interfaces;
 using HRM.ViewModels.EmployeeGroup;
 using HRM.ViewModels.Team;
@@ -28,11 +26,8 @@ public class TeamController(
     ITeamService teamService,
     ISectionService sectionService,
     IBaseService baseService,
-    IEmployeeService employeeService)
-    : BaseController(userControlSession)
+    IEmployeeService employeeService) : BaseController(userControlSession)
 {
-    private readonly IUserControlSession userControlSession = userControlSession;
-
     public async Task<ActionResult> Index(string keyword = null)
     {
         var teams = await teamService.GetAllAsync(keyword: keyword);
@@ -46,7 +41,7 @@ public class TeamController(
     {
         var model = new TeamViewModel
         {
-            Sections = sectionService.GetSection(),
+            Sections = await sectionService.GetSectionAsync(),
             Employees = await GetAllEmployees()
         };
         return View(model);
@@ -57,7 +52,7 @@ public class TeamController(
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Critical Code Smell", "S1541:Methods and properties should not be too complex", Justification = "<Pending>")]
     public async Task<ActionResult> Create(TeamViewModel model)
     {
-        model.Sections = sectionService.GetSection();
+        model.Sections = await sectionService.GetSectionAsync();
         model.Employees = await GetAllEmployees();
         if (ModelState.IsValid)
         {
@@ -132,7 +127,7 @@ public class TeamController(
             SupervisorIds = string.Join(",", team.Managers.Where(x => x.RoleId == (byte)TeamManagerRole.Supervisor).Select(e => e.EmpId)),
             LeaderIds = string.Join(",", team.Managers.Where(x => x.RoleId == (byte)TeamManagerRole.Leader).Select(e => e.EmpId)),
             SectionId = team.Section != null ? team.Section.Id : 0,
-            Sections = sectionService.GetSection(),
+            Sections = await sectionService.GetSectionAsync(),
             Employees = await GetAllEmployees()
         };
 
@@ -146,7 +141,7 @@ public class TeamController(
     {
         if (model != null)
         {
-            model.Sections = sectionService.GetSection();
+            model.Sections = await sectionService.GetSectionAsync();
             model.Employees = await GetAllEmployees();
             if (ModelState.IsValid)
             {
@@ -195,14 +190,14 @@ public class TeamController(
 
     [HttpPost]
     [HrmPermission(Policy.Host, FunctionKey.TeamManagement)]
-    public async Task<CustomJsonResult> Delete(int id)
+    public async Task<IActionResult> Delete(int id)
     {
         var commandResult = await teamService.Delete(EmployeeSession.EmpId, id);
 
-        return new CustomJsonResult(commandResult);
+        return Json(commandResult);
     }
 
-    public async Task<ActionResult> TeamSupervisor(int id)
+    public async Task<IActionResult> TeamSupervisor(int id)
     {
         var supervisors = (await teamService.GetSupervisorByTeamId(id)).ToList();
         ViewBag.TeamId = id;
@@ -212,7 +207,7 @@ public class TeamController(
     }
 
     [HrmPermission(Policy.Host, FunctionKey.TeamManagement)]
-    public ActionResult ManageSupervisor(int id, short roleId)
+    public IActionResult ManageSupervisor(int id, short roleId)
     {
         ViewBag.TeamId = id;
         ViewBag.RoleId = roleId;
@@ -221,15 +216,15 @@ public class TeamController(
     }
 
     [HrmPermission(Policy.Host, FunctionKey.TeamManagement)]
-    public async Task<CustomJsonResult> GetTeamSupervisorByRoleId(int teamId, short roleId)
+    public async Task<IActionResult> GetTeamSupervisorByRoleId(int teamId, short roleId)
     {
         IEnumerable<SupervisorModel> supervisors = await teamService.GetTeamSupervisorByRoleId(teamId, roleId);
 
-        return new CustomJsonResult(supervisors);
+        return Json(supervisors);
     }
 
     [HrmPermission(Policy.Host, FunctionKey.TeamManagement)]
-    public ActionResult ShiftManager(int id)
+    public IActionResult ShiftManager(int id)
     {
         ViewBag.TeamId = id;
         ViewBag.RoleId = (short)RoleSystem.ShiftManager;
@@ -238,16 +233,16 @@ public class TeamController(
     }
 
     [HrmPermission(Policy.Host, FunctionKey.TeamManagement)]
-    public async Task<CustomJsonResult> GetShiftManagerByTeamId(int teamId)
+    public async Task<IActionResult> GetShiftManagerByTeamId(int teamId)
     {
         IEnumerable<SupervisorModel> supervisors = await teamService.GetTeamSupervisorByRoleId(teamId, (short)RoleSystem.ShiftManager);
         var result = supervisors.Select(x => new Supervisor
         { OwnerId = x.OwnerId, Nickname = x.NickName, FullName = x.FullName });
-        return new CustomJsonResult(result);
+        return Json(result);
     }
 
     [HrmPermission(Policy.Host, FunctionKey.TeamManagement)]
-    public ActionResult DisciplineManager(int id)
+    public IActionResult DisciplineManager(int id)
     {
         ViewBag.TeamId = id;
         ViewBag.RoleId = (short)RoleSystem.DisciplineManager;
@@ -255,23 +250,23 @@ public class TeamController(
     }
 
     [HttpGet]
-    public async Task<CustomJsonResult> GetDisciplineManagerByTeamId(int teamId)
+    public async Task<IActionResult> GetDisciplineManagerByTeamId(int teamId)
     {
         var supervisors = await teamService.GetDisciplineManagerByTeamId(teamId);
-        return new CustomJsonResult(supervisors);
+        return Json(supervisors);
     }
 
     [HttpPost]
     [HrmPermission(Policy.Host, FunctionKey.TeamManagement)]
-    public async Task<CustomJsonResult> EditTeamSupervisor(int teamId, short roleId, IEnumerable<EditTeamSupervisor> supervisors)
+    public async Task<IActionResult> EditTeamSupervisor(int teamId, short roleId, IEnumerable<EditTeamSupervisor> supervisors)
     {
         var commandResult = await teamService.EditTeamSupervisor(EmployeeSession.EmpId, teamId, roleId, supervisors);
 
-        return new CustomJsonResult(commandResult);
+        return Json(commandResult);
     }
 
     [HttpGet]
-    public async Task<ActionResult> DisciplineRule(int id)
+    public async Task<IActionResult> DisciplineRule(int id)
     {
         var team = await teamService.GetById(id);
         if (team == null)
@@ -291,11 +286,11 @@ public class TeamController(
 
     [HttpPost]
     [HrmPermission(Policy.Host, FunctionKey.TeamManagement)]
-    public async Task<CustomJsonResult> EditDisciplineRule(int teamId, IEnumerable<DisciplineRule> disciplineRules)
+    public async Task<IActionResult> EditDisciplineRule(int teamId, IEnumerable<DisciplineRule> disciplineRules)
     {
         var commandResult = await teamService.EditDisciplineRule(EmployeeSession.EmpId, teamId, disciplineRules);
 
-        return new CustomJsonResult(commandResult);
+        return Json(commandResult);
     }
 
     private async Task<IList<Employee>> GetAllEmployees()

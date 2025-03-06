@@ -1,42 +1,34 @@
-﻿using HRM.Services.Interfaces;
+﻿namespace HRM.Services;
 
-namespace HRM.Services
+using System.Threading.Tasks;
+using HRM.Core.Models;
+using HRM.Core.Services;
+using HRM.Criteria.EmployeeWorkFromHome;
+using HRM.Models;
+using HRM.Services.Interfaces;
+
+public class EmployeeWorkFromHomeService(IBaseService baseService) : IEmployeeWorkFromHomeService
 {
-    using HRM.Core.Models;
-    using HRM.Core.Services;
-    using HRM.Criteria.EmployeeWorkFromHome;
-    using HRM.Models;
-
-    public class EmployeeWorkFromHomeService : IEmployeeWorkFromHomeService
+    public async Task<EmployeeWorkFromHome> GetByIdAsync(int id)
     {
-        private readonly IBaseService baseService;
+        var criteria = new GetEmployeeWorkFromHomeByIdCriteria { EmployeeWorkFromHomeId = id };
+        return await baseService.GetDataEntityAsync<EmployeeWorkFromHome>(criteria);
+    }
 
-        public EmployeeWorkFromHomeService(IBaseService baseService)
-        {
-            this.baseService = baseService;
-        }
+    public async Task<CommandResult> CreateAsync(InsertEmployeeWorkFromHomeCriteria criteria)
+    {
+        return await baseService.ExecuteNonQueryAsync(criteria);
+    }
 
-        public EmployeeWorkFromHome GetById(int id)
-        {
-            var criteria = new GetEmployeeWorkFromHomeByIdCriteria { EmployeeWorkFromHomeId = id };
-            return baseService.GetDataEntity<EmployeeWorkFromHome>(criteria);
-        }
+    public async Task<CommandResult> UpdateAsync(UpdateEmployeeWorkFromHomeCriteria criteria)
+    {
+        return await baseService.ExecuteNonQueryAsync(criteria);
+    }
 
-        public CommandResult Insert(InsertEmployeeWorkFromHomeCriteria criteria)
-        {
-            return baseService.ExecuteNonQuery(criteria);
-        }
+    public async Task<CommandResult> DeleteAsync(int id)
+    {
+        var criteria = new DeleteEmployeeWorkFromHomeCriteria { EmployeeWorkFromHomeId = id };
 
-        public CommandResult Update(UpdateEmployeeWorkFromHomeCriteria criteria)
-        {
-            return baseService.ExecuteNonQuery(criteria);
-        }
-
-        public CommandResult Delete(int id)
-        {
-            var criteria = new DeleteEmployeeWorkFromHomeCriteria { EmployeeWorkFromHomeId = id };
-
-            return baseService.ExecuteNonQuery(criteria);
-        }
+        return await baseService.ExecuteNonQueryAsync(criteria);
     }
 }

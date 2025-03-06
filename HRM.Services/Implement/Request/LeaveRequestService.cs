@@ -127,7 +127,7 @@ public class LeaveRequestService(
     {
         var email = await requestMailService.GetMailToMailCcAndLetStalk(criteria.RequestId, (int)SettingsSendMail.New);
         email.Subject = Messages.LeaveEmailSubject + " " + criteria.EmployeeName;
-        SendMailForSuccessfully(criteria, templateEmailPath, email);
+        await SendMailForSuccessfully(criteria, templateEmailPath, email);
     }
 
     public async Task SendMailForUpdateSuccessfully(UpdateLeaveRequestCriteria criteria, string templateEmailPath)
@@ -135,7 +135,7 @@ public class LeaveRequestService(
         var email = await requestMailService.GetMailToMailCcAndLetStalk(criteria.RequestId, (int)SettingsSendMail.Edit);
         email.Subject = Messages.UpdatedLeaveEmailSubject + " " + criteria.EmployeeName;
 
-        SendMailForSuccessfully(criteria, templateEmailPath, email);
+        await SendMailForSuccessfully(criteria, templateEmailPath, email);
     }
 
     public async Task SendMailDeleteRequest(long requestId)
@@ -232,7 +232,7 @@ public class LeaveRequestService(
         return toTime.DateTime;
     }
 
-    private void SendMailForSuccessfully(BaseLeaveRequestCriteria criteria, string templateEmailPath, EmailModel email)
+    private async Task SendMailForSuccessfully(BaseLeaveRequestCriteria criteria, string templateEmailPath, EmailModel email)
     {
         email.Subject += criteria.TotalDays > 1
             ? " from " + criteria.FromDate.ToDateMonthYearFormatedDate() + " to " + criteria.ToDate.ToDateMonthYearFormatedDate()
@@ -252,7 +252,7 @@ public class LeaveRequestService(
             appSettings.Domain);
         if (!string.IsNullOrWhiteSpace(email.SendTo))
         {
-            emailService.SendEmail(
+            await emailService.SendEmailAsync(
                 email.SendTo,
                 email.SendCC,
                 email.Subject,

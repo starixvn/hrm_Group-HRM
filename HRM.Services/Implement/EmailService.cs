@@ -1,50 +1,28 @@
-﻿using HRM.Services.Interfaces;
+﻿namespace HRM.Services;
 
-namespace HRM.Services
+using System.Threading.Tasks;
+using HRM.Core;
+using HRM.Core.Models;
+using HRM.Services.Interfaces;
+using MailDeliver;
+
+public class EmailService(AppSettings appSettings, IBaseMailService mailService) : IEmailService
 {
-    using System.Threading.Tasks;
-    using HRM.Core;
-    using HRM.Core.Models;
-    using MailDeliver;
-
-    public class EmailService(AppSettings appSettings, IBaseMailService mailService) : IEmailService
+    public async Task SendEmailAsync(string receiverEmail, string mailCc, string subject, string body)
     {
-        public async Task SendEmailAsync(string receiverEmail, string mailCc, string subject, string body)
+        if (!Utilities.IsValidEmail(receiverEmail) || !appSettings.EnableSendMail)
         {
-            if (!Utilities.IsValidEmail(receiverEmail) || !appSettings.EnableSendMail)
-            {
-                return;
-            }
-
-            var mailItem = new MailRecord
-            {
-                MailTo = receiverEmail,
-                MailCc = mailCc,
-                Subject = subject,
-                Body = body
-            };
-
-            await mailService.SendEmailAsync(mailItem);
+            return;
         }
 
-        public void SendEmail(string receiverEmail, string mailCc, string subject, string body)
+        var mailItem = new MailRecord
         {
-            if (!Utilities.IsValidEmail(receiverEmail) || !appSettings.EnableSendMail)
-            {
-                return;
-            }
+            MailTo = receiverEmail,
+            MailCc = mailCc,
+            Subject = subject,
+            Body = body
+        };
 
-            var mailItem = new MailRecord
-            {
-                MailTo = receiverEmail,
-                MailCc = mailCc,
-                Subject = subject,
-                Body = body
-            };
-
-             mailService.SendEmail(mailItem);
-        }
-
-
+        await mailService.SendEmailAsync(mailItem);
     }
 }

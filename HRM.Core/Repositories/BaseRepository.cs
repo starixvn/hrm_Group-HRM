@@ -1,52 +1,32 @@
-﻿namespace HRM.Core.Repositories
+﻿namespace HRM.Core.Repositories;
+
+using System;
+using System.Collections;
+using System.Threading.Tasks;
+using Fanex.Data;
+using Fanex.Data.Repository;
+using Models;
+
+public class BaseRepository : IBaseRepository
 {
-    using System;
-    using System.Collections;
-    using System.Threading.Tasks;
-    using Fanex.Data;
-    using Fanex.Data.Repository;
-    using Models;
-
-    public class BaseRepository : IBaseRepository
+    public async Task<CommandResult> ExecuteNonQueryAsync(ICriteria command)
     {
-        public CommandResult ExecuteNonQuery(ICriteria criteria)
+        using var db = ObjectDbFactory.CreateInstance(command.GetSettingKey());
+        await db.ExecuteNonQueryAsync(command);
+        var commandResult = GetCommandResult(db.GetOutputParams());
+
+        return commandResult;
+    }
+
+    private static CommandResult GetCommandResult(Hashtable hash)
+    {
+        var errCode = hash["errcode"];
+        var errMsg = hash["errmsg"];
+
+        return new CommandResult
         {
-            using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-            {
-                const string ErrCode = "ErrCode";
-                const string ErrMsg = "ErrMsg";
-
-                db.SetParameterValue(ErrCode, 0);
-                db.SetParameterValue(ErrMsg, string.Empty);
-
-                db.ExecuteNonQuery(criteria);
-                Hashtable hash = db.GetOutputParams();
-
-                return GetCommandResult(hash);
-            }
-        }
-
-        public async Task<CommandResult> ExecuteNonQueryAsync(ICriteria command)
-        {
-            using (var db = ObjectDbFactory.CreateInstance(command.GetSettingKey()))
-            {
-                await db.ExecuteNonQueryAsync(command);
-                CommandResult commandResult = GetCommandResult(db.GetOutputParams());
-
-                return commandResult;
-            }
-        }
-
-        private CommandResult GetCommandResult(Hashtable hash)
-        {
-            var errCode = hash["errcode"];
-            var errMsg = hash["errmsg"];
-
-            return new CommandResult
-            {
-                Code = (errCode is DBNull) ? 0 : Convert.ToInt32(errCode),
-                Message = (errMsg is DBNull) ? string.Empty : Convert.ToString(errMsg)
-            };
-        }
+            Code = (errCode is DBNull) ? 0 : Convert.ToInt32(errCode),
+            Message = (errMsg is DBNull) ? string.Empty : Convert.ToString(errMsg)
+        };
     }
 }

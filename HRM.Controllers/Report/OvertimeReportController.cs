@@ -1,27 +1,26 @@
-﻿using HRM.Core.Constants;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
+using GO.UserControl.Client.Core.Enumerables;
+using GO.UserControl.Client.Core.Session;
+using HRM.Core.Constants;
 using HRM.Core.Enums;
 using HRM.Core.Filters;
 using HRM.Models.Report.Overtime;
 using HRM.Services;
+using HRM.Services.Interfaces;
 using HRM.ViewModels.Report.Overtime;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Linq;
-using GO.UserControl.Client.Core.Enumerables;
-using GO.UserControl.Client.Core.Session;
-using System.Threading.Tasks;
-using HRM.Services.Interfaces;
 
 namespace HRM.Controllers.Report;
 
 public class OvertimeReportController(
     IUserControlSession userControlSession,
     IOvertimeReportService overtimeReportService,
-    ITeamService teamService)
-    : BaseController(userControlSession)
+    ITeamService teamService) : BaseController(userControlSession)
 {
     [HrmPermission(Policy.Read, FunctionKey.MonthlyOvertimeReport)]
-    public ActionResult MonthlyOvertime()
+    public IActionResult MonthlyOvertime()
     {
         var model = new MonthlyFilterViewModel
         {
@@ -32,7 +31,7 @@ public class OvertimeReportController(
     }
 
     [HttpGet]
-    public async Task<ActionResult> ListMonthlyOvertimeDetails(MonthlyFilterViewModel model)
+    public async Task<IActionResult> ListMonthlyOvertimeDetails(MonthlyFilterViewModel model)
     {
         var param = new GetMonthlyOvertimeParam
         {
@@ -64,7 +63,7 @@ public class OvertimeReportController(
             EmployeeStatusId = model.EmployeeStatusId,
             IsLocal = model.IsLocal
         };
-        model.Overtimes = overtimeReportService.GetYearlyOvertime(param);
+        model.Overtimes = await overtimeReportService.GetYearlyOvertimeAsync(param);
 
         return View("~/Views/Report/Overtime/YearlyOvertime.cshtml", model);
     }
@@ -79,7 +78,7 @@ public class OvertimeReportController(
     }
 
     [HrmPermission(Policy.Read, FunctionKey.OvertimeReport)]
-    public async Task<ActionResult> DailyOvertime(DailyOvertimeDetailsViewModel model)
+    public async Task<IActionResult> DailyOvertime(DailyOvertimeDetailsViewModel model)
     {
         var teams = await teamService.GetAllAsync();
         model.TeamIds = model.TeamIds ?? string.Join(",", teams.Select(x => x.Id));
@@ -99,7 +98,7 @@ public class OvertimeReportController(
     }
 
     [HrmPermission(Policy.Read, FunctionKey.MonthlyOvertimeReport)]
-    public async Task<ActionResult> ExportMonthlyOvertime(MonthlyFilterViewModel model)
+    public async Task<IActionResult> ExportMonthlyOvertime(MonthlyFilterViewModel model)
     {
         var param = new GetMonthlyOvertimeParam
         {
@@ -120,7 +119,7 @@ public class OvertimeReportController(
     }
 
     [HrmPermission(Policy.Read, FunctionKey.YearlyOvertimeReport)]
-    public ActionResult ExportYearlyOvertime(YearlyOvertimeViewModel model)
+    public async Task<IActionResult> ExportYearlyOvertime(YearlyOvertimeViewModel model)
     {
         var param = new GetYearlyOvertimeParam
         {
@@ -132,7 +131,7 @@ public class OvertimeReportController(
             EmployeeStatusId = model.EmployeeStatusId,
             IsLocal = model.IsLocal
         };
-        var overtimes = overtimeReportService.GetYearlyOvertime(param);
+        var overtimes = await overtimeReportService.GetYearlyOvertimeAsync(param);
         var bytes = overtimeReportService.ExportYearlyOvertime(overtimes, param);
 
         var fileName = $"Yearly overtime report - {param.Year}.xlsx";
@@ -140,7 +139,7 @@ public class OvertimeReportController(
     }
 
     [HrmPermission(Policy.Read, FunctionKey.OvertimeReport)]
-    public async Task<ActionResult> ExportDailyOvertime(DailyOvertimeDetailsViewModel model)
+    public async Task<IActionResult> ExportDailyOvertime(DailyOvertimeDetailsViewModel model)
     {
         var param = new GetDailyOvertimeDetailsParam
         {

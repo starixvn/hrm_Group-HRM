@@ -1,10 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿namespace HRM.MailDeliver;
 
-namespace HRM.MailDeliver
+using System.Threading.Tasks;
+
+public interface IBaseMailService
 {
-    public interface IBaseMailService
-    {
-        Task<bool> SendEmailAsync(MailRecord email);
-        bool SendEmail(MailRecord email);
-    }
+    Task<bool> SendEmailAsync(MailRecord email);
 }
