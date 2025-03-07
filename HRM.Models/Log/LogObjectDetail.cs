@@ -1,11 +1,17 @@
 ﻿namespace HRM.Models.Log
 {
+    using HRM.Core;
     using System;
     using System.Collections.Generic;
 
     public class LogObjectDetail
     {
-        public DateTime LogDate { get; set; }
+        private DateTime serverLogDate;
+        public DateTime LogDate
+        {
+            get => serverLogDate;
+            set => serverLogDate = value.ToClientTimeZone();
+        }
         public int UserId { get; set; }
         public string FullName { get; set; }
         public string Nickname { get; set; }

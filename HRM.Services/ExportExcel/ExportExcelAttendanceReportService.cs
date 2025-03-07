@@ -134,7 +134,7 @@ namespace HRM.Services
                     requestsBuilder.Append(": ");
                     requestsBuilder.Append(RequestService.ToRequestMessage(request, isNoFormat: true));
                     requestsBuilder.Append("\r\n- Create date: ");
-                    requestsBuilder.Append(request.CreatedDate.ToClientTimeZone().ToDateMonthYearFormatedDate());
+                    requestsBuilder.Append(request.CreatedDate.ToDateMonthYearFormatedDate());
                     requestsBuilder.Append((string.IsNullOrEmpty(request.Remark) ? string.Empty : "\r\n" + "- Remark: " + request.Remark));
                     requestsBuilder.Append("\r\n");
                 }

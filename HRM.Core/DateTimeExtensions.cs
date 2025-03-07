@@ -6,12 +6,12 @@ using System.Diagnostics.CodeAnalysis;
 [SuppressMessage("Major Code Smell", "S109:Magic numbers should not be used", Justification = "Pending")]
 public static class DateTimeExtensions
 {
-    private static TimeSpan _serverTimeZone;
-    private static TimeSpan _clientTimeZone;
+    private static TimeSpan _serverTimeZone = TimeSpan.FromHours(-4);
+    private static TimeSpan _clientTimeZone = TimeSpan.FromHours(7);
 
     public static void Initialize(short serverTimeZone)
     {
-        _serverTimeZone = TimeSpan.FromHours(serverTimeZone);
+         _serverTimeZone = TimeSpan.FromHours(serverTimeZone);
     }
 
     public static void SetClientTimeZone(short clientTimeZone)

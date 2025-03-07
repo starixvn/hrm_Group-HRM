@@ -1,10 +1,12 @@
 ﻿namespace HRM.Models.Message
 {
+    using HRM.Core;
     using HRM.Core.Enums;
     using System;
 
     public class Message
     {
+        private DateTime serverCreatedDate;
         public int MessageId { get; set; }
 
         public string Subject { get; set; }
@@ -17,7 +19,11 @@
 
         public DateTime? ToDate { get; set; }
 
-        public DateTime CreatedDate { get; set; }
+        public DateTime CreatedDate
+        {
+            get => serverCreatedDate;
+            set => serverCreatedDate = value.ToClientTimeZone();
+        }
 
         public string SendToEmail { get; set; }
 

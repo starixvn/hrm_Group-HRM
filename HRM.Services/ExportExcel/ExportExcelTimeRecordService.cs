@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using HRM.Core;
 using HRM.Models;
 using Microsoft.AspNetCore.Hosting;
 using OfficeOpenXml;

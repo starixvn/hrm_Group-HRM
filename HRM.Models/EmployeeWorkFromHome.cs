@@ -1,10 +1,12 @@
 ﻿namespace HRM.Models
 {
+    using HRM.Core;
     using System;
     using System.Collections.Generic;
 
     public class EmployeeWorkFromHome
     {
+        private DateTime serverModifiedDate;
         public int EmployeeWorkFromHomeId { get; set; }
 
         public int EmpId { get; set; }
@@ -23,7 +25,11 @@
 
         public string Modifier { get; set; }
 
-        public DateTime ModifiedDate { get; set; }
+        public DateTime ModifiedDate
+        {
+            get => serverModifiedDate;
+            set => serverModifiedDate = value.ToClientTimeZone();
+        }
 
         public string Remark { get; set; }
         public IList<AttachFile> AttachFiles { get; set; }

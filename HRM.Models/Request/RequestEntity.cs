@@ -1,14 +1,23 @@
-﻿namespace HRM.Models.Request
+﻿using HRM.Core;
+
+namespace HRM.Models.Request
 {
     using System;
     using System.Collections.Generic;
-    using HRM.Models.Request.ChangeShift;
+    using ChangeShift;
 
     public class RequestEntity : EntityBase<long>
     {
+        private DateTime serverRequestDate;
+        private DateTime serverCreatedDate;
+
         public Employee Requester { get; set; }
 
-        public DateTime RequestedDate { get; set; }
+        public DateTime RequestedDate
+        {
+            get => serverRequestDate;
+            set => serverRequestDate = value.ToClientTimeZone();
+        }
 
         public RequestTypeModel RequestType { get; set; }
 
@@ -16,7 +25,11 @@
 
         public Employee CreatedBy { get; set; }
 
-        public DateTime CreatedDate { get; set; }
+        public DateTime CreatedDate
+        {
+            get => serverCreatedDate; 
+            set => serverCreatedDate = value.ToClientTimeZone();
+        }
 
         public Employee ModifiedBy { get; set; }
 
