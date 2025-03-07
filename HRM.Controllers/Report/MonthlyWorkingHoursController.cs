@@ -1,83 +1,74 @@
-﻿namespace HRM.Controllers
+﻿namespace HRM.Controllers;
+
+using System;
+using System.Threading.Tasks;
+using GO.UserControl.Client.Core.Enumerables;
+using GO.UserControl.Client.Core.Session;
+using HRM.Core;
+using HRM.Core.Constants;
+using HRM.Core.Enums;
+using HRM.Core.Filters;
+using HRM.Models.Report.MonthlyWorkingHours;
+using HRM.Resources;
+using HRM.Services;
+using HRM.ViewModels.Report.WorkingHours;
+using Microsoft.AspNetCore.Mvc;
+
+[HrmPermission(Policy.Read, FunctionKey.AttendanceMonthlyReport)]
+public class MonthlyWorkingHoursController(
+    IUserControlSession userControlSession,
+    IEmployeeWorkingHoursService workingHoursService) : BaseController(userControlSession)
 {
-    using System;
-    using System.Threading.Tasks;
-    using GO.UserControl.Client.Core.Enumerables;
-    using GO.UserControl.Client.Core.Session;
-    using HRM.Controllers;
-    using HRM.Core;
-    using HRM.Core.Constants;
-    using HRM.Core.Enums;
-    using HRM.Core.Filters;
-    using HRM.Models.Report.MonthlyWorkingHours;
-    using HRM.Resources;
-    using HRM.Services;
-    using HRM.ViewModels.Report.WorkingHours;
-    using Microsoft.AspNetCore.Mvc;
-
-    [HrmPermission(Policy.Read, FunctionKey.AttendanceMonthlyReport)]
-    public class MonthlyWorkingHoursController : BaseController
+    [HttpGet]
+    public ActionResult Index()
     {
-        private readonly IEmployeeWorkingHoursService workingHoursService;
-
-        public MonthlyWorkingHoursController(
-            IUserControlSession userControlSession,
-            IEmployeeWorkingHoursService workingHoursService) : base(userControlSession)
+        var today = DateTime.Now.ToClientTimeZone().Date;
+        var model = new MonthlyFilterViewModel
         {
-            this.workingHoursService = workingHoursService;
-        }
+            FromDate = today.FirstDayOfMonth(),
+            ToDate = today.LastDayOfMonth(),
+            EmployeeStatusId = (byte)EmployeeStatus.Enabled
+        };
 
-        [HttpGet]
-        public ActionResult Index()
+        return View("~/Views/Report/MonthlyWorkingHours/Index.cshtml", model);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetMonthlyWorkingHours(MonthlyFilterViewModel model)
+    {
+        var param = new GetMonthlyWorkingHoursParam
         {
-            var today = DateTimeOffset.Now.Date;
-            var model = new MonthlyFilterViewModel
-            {
-                FromDate = today.FirstDayOfMonth(),
-                ToDate = today.LastDayOfMonth(),
-                EmployeeStatusId = (byte)EmployeeStatus.Enabled
-            };
+            ActorId = EmployeeSession.EmpId,
+            FromDate = model.FromDate,
+            ToDate = model.ToDate,
+            TeamIds = model.TeamIds,
+            Employee = model.Employee,
+            IsLocal = model.IsLocal,
+            EmployeeStatusId = model.EmployeeStatusId
+        };
+        var monthlyWorkings = await workingHoursService.GetMonthlyWorkingHoursAsync(param);
+        ViewBag.FromDate = param.FromDate;
+        ViewBag.ToDate = param.ToDate;
 
-            return View("~/Views/Report/MonthlyWorkingHours/Index.cshtml", model);
-        }
+        return PartialView("~/Views/Report/MonthlyWorkingHours/_MonthlyWorkingHoursDetails.cshtml", monthlyWorkings);
+    }
 
-        [HttpGet]
-        public async Task<IActionResult> GetMonthlyWorkingHours(MonthlyFilterViewModel model)
+    [HttpGet]
+    public async Task<IActionResult> ExportExcel(MonthlyFilterViewModel model)
+    {
+        var param = new GetMonthlyWorkingHoursParam
         {
-            var param = new GetMonthlyWorkingHoursParam
-            {
-                ActorId = EmployeeSession.EmpId,
-                FromDate = model.FromDate,
-                ToDate = model.ToDate,
-                TeamIds = model.TeamIds,
-                Employee = model.Employee,
-                IsLocal = model.IsLocal,
-                EmployeeStatusId = model.EmployeeStatusId
-            };
-            var monthlyWorkings = await workingHoursService.GetMonthlyWorkingHoursAsync(param);
-            ViewBag.FromDate = param.FromDate;
-            ViewBag.ToDate = param.ToDate;
+            ActorId = EmployeeSession.EmpId,
+            FromDate = model.FromDate,
+            ToDate = model.ToDate,
+            TeamIds = model.TeamIds,
+            Employee = model.Employee,
+            IsLocal = model.IsLocal,
+            EmployeeStatusId = model.EmployeeStatusId
+        };
+        var bytes = await workingHoursService.ExportMonthlyWorkingHours(param);
 
-            return PartialView("~/Views/Report/MonthlyWorkingHours/_MonthlyWorkingHoursDetails.cshtml", monthlyWorkings);
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> ExportExcel(MonthlyFilterViewModel model)
-        {
-            var param = new GetMonthlyWorkingHoursParam
-            {
-                ActorId = EmployeeSession.EmpId,
-                FromDate = model.FromDate,
-                ToDate = model.ToDate,
-                TeamIds = model.TeamIds,
-                Employee = model.Employee,
-                IsLocal = model.IsLocal,
-                EmployeeStatusId = model.EmployeeStatusId
-            };
-            var bytes = await workingHoursService.ExportMonthlyWorkingHours(param);
-
-            var fileName = $"{Labels.AttendanceMonthlyDetail} {param.FromDate:dd MMM yyyy} - {param.ToDate:dd MMM yyyy}.xlsx";
-            return File(bytes, MimeType.XLSX, fileName);
-        }
+        var fileName = $"{Labels.AttendanceMonthlyDetail} {param.FromDate:dd MMM yyyy} - {param.ToDate:dd MMM yyyy}.xlsx";
+        return File(bytes, MimeType.XLSX, fileName);
     }
 }

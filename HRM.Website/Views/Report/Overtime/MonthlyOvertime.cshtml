@@ -1,6 +1,4 @@
-﻿@using HRM.Resources
-@using HRM.Core
-@using HRM.ViewModels.Report.Overtime
+﻿@using HRM.ViewModels.Report.Overtime
 @using HRM.Website.Helper
 @model MonthlyFilterViewModel
 @{
@@ -19,8 +17,8 @@
 }
 <h2 class="page-title">@ViewBag.Title</h2>
 
-@Html.Hidden("MinDate", DateTime.Now.AddYears(-2).ToDateMonthYearFormatedDate())
-@Html.Hidden("MaxDate", DateTime.Now.ToDateMonthYearFormatedDate())
+@Html.Hidden("MinDate", DateTime.Now.ToClientTimeZone().AddYears(-2).ToDateMonthYearFormatedDate())
+@Html.Hidden("MaxDate", DateTime.Now.ToClientTimeZone().ToDateMonthYearFormatedDate())
 <form class="filter">
     @Html.HiddenFor(model => model.TeamIds)
     <div class="form-horizontal clearfix">
@@ -30,8 +28,8 @@
             </div>
             <div class="calendar-form">
                 @Html.TextBox("FromDate", Model.FromDate.ToDateMonthYearFormatedDate(),
-                    new
-                         {
+        new
+                    {
                         @class = "datepicker form-control",
                         mindate = new DateTime(2010, 1, 1).ToString("yyyy/MM/dd"),
                         maxdate = string.Empty,
@@ -46,8 +44,8 @@
             </div>
             <div class="calendar-form">
                 @Html.TextBox("ToDate", Model.ToDate.ToDateMonthYearFormatedDate(),
-                    new
-                         {
+        new
+                    {
                         @class = "datepicker form-control",
                         mindate = new DateTime(2010, 1, 1).ToString("yyyy/MM/dd"),
                         maxdate = string.Empty,

@@ -1,7 +1,4 @@
-﻿@using HRM.Resources
-@using HRM.Core
-@using HRM.Core.Enums
-@using HRM.Models.Report.Overtime
+﻿@using HRM.Core.Enums
 @using HRM.ViewModels.Report.Overtime
 @using HRM.Website.Helper
 @model DailyOvertimeDetailsViewModel
@@ -203,7 +200,7 @@
     <tbody>
         @if (Model.Overtimes.Any())
         {
-            foreach (DailyOvertimeDetails request in Model.Overtimes)
+            foreach (var request in Model.Overtimes)
             {
                 <tr>
                     <td>@request.WorkDate.ToDateMonthYearFormatedDate()</td>
@@ -214,8 +211,8 @@
                     <td class="align-left">@request.FullName</td>
                     <td class="align-left">@request.Nickname</td>
                     <td>@request.ShiftCode</td>
-                    <td>@request.TimeIn</td>
-                    <td>@request.TimeOut</td>
+                    <td>@request.TimeIn.ToClientTimeZone().ToString("HH:mm")</td>
+                    <td>@request.TimeOut.ToClientTimeZone().ToString("HH:mm")</td>
                     <td>
                         @if (request.ActualWorkingHours > 0)
                         {

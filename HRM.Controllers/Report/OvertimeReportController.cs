@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
+using HRM.Core;
 using HRM.Core.Constants;
 using HRM.Core.Enums;
 using HRM.Core.Filters;
@@ -24,6 +25,8 @@ public class OvertimeReportController(
     {
         var model = new MonthlyFilterViewModel
         {
+            FromDate = DateTime.Now.ToClientTimeZone().Date.FirstDayOfMonth(),
+            ToDate = DateTime.Now.ToClientTimeZone().Date.LastDayOfMonth(),
             EmployeeStatusId = (byte)EmployeeStatus.Enabled
         };
 
@@ -43,9 +46,9 @@ public class OvertimeReportController(
             TeamIds = model.TeamIds,
             IsLocal = model.IsLocal
         };
-        var monthlyOvertime = await overtimeReportService.GetMonthlyOvertimeAsync(param);
+        var (_, details) = await overtimeReportService.GetMonthlyOvertimeAsync(param);
 
-        return PartialView("~/Views/Report/Overtime/_ListMonthlyOvertimeDetails.cshtml", monthlyOvertime.Item2);
+        return PartialView("~/Views/Report/Overtime/_ListMonthlyOvertimeDetails.cshtml", details);
     }
 
     [HrmPermission(Policy.Read, FunctionKey.YearlyOvertimeReport)]
@@ -72,7 +75,7 @@ public class OvertimeReportController(
     public async Task<IActionResult> MonthlyOvertimeDetails(GetMonthlyOvertimeDetailParam param)
     {
         var overtimes = await overtimeReportService.GetMonthlyOvertimeDetailsAsync(param);
-        ViewBag.Month = new DateTimeOffset(param.Year, param.Month, 1, 0, 0, 0, TimeSpan.Zero);
+        ViewBag.Month = new DateTimeOffset(param.Year, param.Month, 1, 0, 0, 0, TimeSpan.Zero).Date;
 
         return View("~/Views/Report/Overtime/MonthlyOvertimeDetails.cshtml", overtimes);
     }
@@ -110,8 +113,8 @@ public class OvertimeReportController(
             TeamIds = model.TeamIds,
             IsLocal = model.IsLocal
         };
-        var tuple = await overtimeReportService.GetMonthlyOvertimeAsync(param);
-        var bytes = overtimeReportService.ExportMonthlyOvertime(tuple.Item1, tuple.Item2);
+        var (dateRanges, details) = await overtimeReportService.GetMonthlyOvertimeAsync(param);
+        var bytes = overtimeReportService.ExportMonthlyOvertime(dateRanges, details);
 
         var fileName = $"Monthly Overtime Report {model.FromDate:dd MMM yyyy} - {model.ToDate:dd MMM yyyy}.xlsx";
 

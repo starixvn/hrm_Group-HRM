@@ -27,7 +27,7 @@ public class OvertimeReportService(
 
     public async Task<IEnumerable<YearlyOvertime>> GetYearlyOvertimeAsync(GetYearlyOvertimeParam param)
     {
-        var monthxml = new StringBuilder(Constants.BeginRootTag);
+        var monthXml = new StringBuilder(Constants.BeginRootTag);
         for (var month = 1; month <= Constants.December; month++)
         {
             var fromDate = new DateTimeOffset(param.Year, month, 1, 0, 0, 0, TimeSpan.Zero).Date;
@@ -38,10 +38,10 @@ public class OvertimeReportService(
                 (fromDate, toDate) = GetDateRange(fromDate);
             }
 
-            monthxml.AppendFormat("<Row Month='{0}' FromDate='{1}' ToDate='{2}' />", month, fromDate, toDate);
+            monthXml.Append($"<Row Month='{month}' FromDate='{fromDate}' ToDate='{toDate}' />");
         }
 
-        monthxml.Append(Constants.EndRootTag);
+        monthXml.Append(Constants.EndRootTag);
 
         var criteria = new GetYearlyOvertimeReportCriteria
         {
@@ -50,7 +50,7 @@ public class OvertimeReportService(
             Employee = param.Employee,
             EmployeeStatusId = param.EmployeeStatusId,
             IsLocal = param.IsLocal,
-            MonthXml = monthxml.ToString()
+            MonthXml = monthXml.ToString()
         };
         return await baseService.GetDataAsync<YearlyOvertime>(criteria);
     }
@@ -111,97 +111,89 @@ public class OvertimeReportService(
         const byte TotalHeaderRows = 2;
         const byte StartMonthColumn = 5;
         const byte StartBodyRow = 4;
-        using (var templatePackage = new ExcelPackage(new FileInfo(templatePath)))
+        using var templatePackage = new ExcelPackage(new FileInfo(templatePath));
+        using var xlPackage = new ExcelPackage();
+        var templateWorksheet = templatePackage.Workbook.Worksheets[0];
+        var worksheet = xlPackage.Workbook.Worksheets.Add("Yearly Overtime Report");
+        var rowIndex = 1;
+        var colIndex = 1;
+
+        // title
+        templateWorksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
+        rowIndex++;
+
+        // header
+        templateWorksheet.Cells[rowIndex, colIndex, rowIndex + 1, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex + 1, TotalColumns]);
+        var calendarType = param.Calendar == (byte)CalendarType.Fiscal ? "Fiscal Calendar" : "Normal Calendar";
+        worksheet.Cells[rowIndex, StartMonthColumn].Value = $"Overtime Summary In {param.Year} ({calendarType})";
+        rowIndex += TotalHeaderRows;
+
+        // data
+        var rowNum = 1;
+        foreach (var overtime in overtimes)
         {
-            using (var xlPackage = new ExcelPackage())
-            {
-                var templateWorksheet = templatePackage.Workbook.Worksheets[0];
-                var worksheet = xlPackage.Workbook.Worksheets.Add("Yearly Overtime Report");
-                var rowIndex = 1;
-                var colIndex = 1;
+            colIndex = 1;
+            templateWorksheet.Cells[StartBodyRow, 1, StartBodyRow, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
 
-                // title
-                templateWorksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
-                rowIndex++;
+            worksheet.Cells[rowIndex, colIndex++].Value = rowNum++;
+            worksheet.Cells[rowIndex, colIndex++].Value = overtime.DepartmentCode;
+            worksheet.Cells[rowIndex, colIndex++].Value = overtime.Section;
+            worksheet.Cells[rowIndex, colIndex++].Value = overtime.Team;
+            worksheet.Cells[rowIndex, colIndex++].Value = overtime.FullName;
+            worksheet.Cells[rowIndex, colIndex++].Value = overtime.Nickname;
+            worksheet.Cells[rowIndex, colIndex++].Value = overtime.Jan;
+            worksheet.Cells[rowIndex, colIndex++].Value = overtime.Feb;
+            worksheet.Cells[rowIndex, colIndex++].Value = overtime.Mar;
+            worksheet.Cells[rowIndex, colIndex++].Value = overtime.Apr;
+            worksheet.Cells[rowIndex, colIndex++].Value = overtime.May;
+            worksheet.Cells[rowIndex, colIndex++].Value = overtime.Jun;
+            worksheet.Cells[rowIndex, colIndex++].Value = overtime.Jul;
+            worksheet.Cells[rowIndex, colIndex++].Value = overtime.Aug;
+            worksheet.Cells[rowIndex, colIndex++].Value = overtime.Sep;
+            worksheet.Cells[rowIndex, colIndex++].Value = overtime.Oct;
+            worksheet.Cells[rowIndex, colIndex++].Value = overtime.Nov;
+            worksheet.Cells[rowIndex, colIndex++].Value = overtime.Dec;
+            worksheet.Cells[rowIndex, colIndex].Value = overtime.Total;
 
-                // header
-                templateWorksheet.Cells[rowIndex, colIndex, rowIndex + 1, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex + 1, TotalColumns]);
-                var calendarType = param.Calendar == (byte)CalendarType.Fiscal ? "Fiscal Calendar" : "Normal Calendar";
-                worksheet.Cells[rowIndex, StartMonthColumn].Value = string.Format("Overtime Summary In {0} ({1})", param.Year, calendarType);
-                rowIndex += TotalHeaderRows;
-
-                // data
-                var rowNum = 1;
-                foreach (var overtime in overtimes)
-                {
-                    colIndex = 1;
-                    templateWorksheet.Cells[StartBodyRow, 1, StartBodyRow, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
-
-                    worksheet.Cells[rowIndex, colIndex++].Value = rowNum++;
-                    worksheet.Cells[rowIndex, colIndex++].Value = overtime.DepartmentCode;
-                    worksheet.Cells[rowIndex, colIndex++].Value = overtime.Section;
-                    worksheet.Cells[rowIndex, colIndex++].Value = overtime.Team;
-                    worksheet.Cells[rowIndex, colIndex++].Value = overtime.FullName;
-                    worksheet.Cells[rowIndex, colIndex++].Value = overtime.Nickname;
-                    worksheet.Cells[rowIndex, colIndex++].Value = overtime.Jan;
-                    worksheet.Cells[rowIndex, colIndex++].Value = overtime.Feb;
-                    worksheet.Cells[rowIndex, colIndex++].Value = overtime.Mar;
-                    worksheet.Cells[rowIndex, colIndex++].Value = overtime.Apr;
-                    worksheet.Cells[rowIndex, colIndex++].Value = overtime.May;
-                    worksheet.Cells[rowIndex, colIndex++].Value = overtime.Jun;
-                    worksheet.Cells[rowIndex, colIndex++].Value = overtime.Jul;
-                    worksheet.Cells[rowIndex, colIndex++].Value = overtime.Aug;
-                    worksheet.Cells[rowIndex, colIndex++].Value = overtime.Sep;
-                    worksheet.Cells[rowIndex, colIndex++].Value = overtime.Oct;
-                    worksheet.Cells[rowIndex, colIndex++].Value = overtime.Nov;
-                    worksheet.Cells[rowIndex, colIndex++].Value = overtime.Dec;
-                    worksheet.Cells[rowIndex, colIndex].Value = overtime.Total;
-
-                    rowIndex++;
-                }
-
-                // summary
-                templateWorksheet.Cells[StartMonthColumn, 1, StartMonthColumn, TotalColumns].Copy(worksheet.Cells[rowIndex, 1, rowIndex, TotalColumns]);
-                const byte TotalMonths = 12;
-                for (var i = 0; i <= TotalMonths; i++)
-                {
-                    colIndex = StartMonthColumn + i;
-                    var excelAddress = $"{worksheet.Cells[StartBodyRow, colIndex].Address}:{worksheet.Cells[rowIndex - 1, colIndex].Address}";
-                    worksheet.Cells[rowIndex, colIndex].Formula = string.Format(Constants.SummaryFormula, excelAddress);
-                }
-
-                worksheet.Cells.AutoFitColumns(MinimumWidth, MaximumWidth);
-                worksheet.View.FreezePanes(StartBodyRow, 1);
-
-                return xlPackage.GetAsByteArray();
-            }
+            rowIndex++;
         }
+
+        // summary
+        templateWorksheet.Cells[StartMonthColumn, 1, StartMonthColumn, TotalColumns].Copy(worksheet.Cells[rowIndex, 1, rowIndex, TotalColumns]);
+        const byte TotalMonths = 12;
+        for (var i = 0; i <= TotalMonths; i++)
+        {
+            colIndex = StartMonthColumn + i;
+            var excelAddress = $"{worksheet.Cells[StartBodyRow, colIndex].Address}:{worksheet.Cells[rowIndex - 1, colIndex].Address}";
+            worksheet.Cells[rowIndex, colIndex].Formula = string.Format(Constants.SummaryFormula, excelAddress);
+        }
+
+        worksheet.Cells.AutoFitColumns(MinimumWidth, MaximumWidth);
+        worksheet.View.FreezePanes(StartBodyRow, 1);
+
+        return xlPackage.GetAsByteArray();
     }
 
     public byte[] ExportMonthlyOvertime(IEnumerable<DateRange> dateRanges, IEnumerable<DailyOvertimeDetails> dailyOvertimes)
     {
         var templatePath = Path.Combine(env.ContentRootPath, "ExcelTemplates/MonthlyOvertime.xlsx");
-        using (var templatePackage = new ExcelPackage(new FileInfo(templatePath)))
-        {
-            using (var xlPackage = new ExcelPackage())
-            {
-                var template = templatePackage.Workbook.Worksheets[0];
-                var worksheet = xlPackage.Workbook.Worksheets.Add("Raw Data");
-                WriteRawData(template, worksheet, dateRanges, dailyOvertimes);
+        using var templatePackage = new ExcelPackage(new FileInfo(templatePath));
+        using var xlPackage = new ExcelPackage();
+        var template = templatePackage.Workbook.Worksheets[0];
+        var worksheet = xlPackage.Workbook.Worksheets.Add("Raw Data");
+        WriteRawData(template, worksheet, dateRanges, dailyOvertimes);
 
-                const byte OvertimeSheetIndex = 1;
-                template = templatePackage.Workbook.Worksheets[OvertimeSheetIndex];
-                worksheet = xlPackage.Workbook.Worksheets.Add("Overtime Record");
-                WriteOvertimeRecord(template, worksheet, dateRanges, dailyOvertimes);
+        const byte OvertimeSheetIndex = 1;
+        template = templatePackage.Workbook.Worksheets[OvertimeSheetIndex];
+        worksheet = xlPackage.Workbook.Worksheets.Add("Overtime Record");
+        WriteOvertimeRecord(template, worksheet, dateRanges, dailyOvertimes);
 
-                const byte SummarySheetIndex = 2;
-                template = templatePackage.Workbook.Worksheets[SummarySheetIndex];
-                worksheet = xlPackage.Workbook.Worksheets.Add("Summary OT");
-                WriteSummaryOvertime(template, worksheet, dateRanges, dailyOvertimes);
+        const byte SummarySheetIndex = 2;
+        template = templatePackage.Workbook.Worksheets[SummarySheetIndex];
+        worksheet = xlPackage.Workbook.Worksheets.Add("Summary OT");
+        WriteSummaryOvertime(template, worksheet, dateRanges, dailyOvertimes);
 
-                return xlPackage.GetAsByteArray();
-            }
-        }
+        return xlPackage.GetAsByteArray();
     }
 
     public byte[] ExportDailyOvertimeDetails(IEnumerable<DailyOvertimeDetails> overtimes, GetDailyOvertimeDetailsParam param)
@@ -209,63 +201,57 @@ public class OvertimeReportService(
         var templatePath = Path.Combine(env.ContentRootPath, "ExcelTemplates/DailyOvertimeDetails.xlsx");
         const byte TotalColumns = 18;
         const byte StartBodyRow = 3;
-        using (var templatePackage = new ExcelPackage(new FileInfo(templatePath)))
+        using var templatePackage = new ExcelPackage(new FileInfo(templatePath));
+        using var xlPackage = new ExcelPackage();
+        var templateWorksheet = templatePackage.Workbook.Worksheets[0];
+        var worksheet = xlPackage.Workbook.Worksheets.Add("Overtime Details Report");
+        var rowIndex = 1;
+        var colIndex = 1;
+
+        // title
+        templateWorksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
+        worksheet.Cells[rowIndex, colIndex].Value =
+            $"Overtime Details Report from {param.FromDate.ToString(DateFormat)} to {param.ToDate.ToString(DateFormat)}";
+        rowIndex++;
+
+        // header
+        templateWorksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
+        rowIndex++;
+
+        // data
+        var rowNum = 1;
+        foreach (var overtime in overtimes)
         {
-            using (var xlPackage = new ExcelPackage())
-            {
-                var templateWorksheet = templatePackage.Workbook.Worksheets[0];
-                var worksheet = xlPackage.Workbook.Worksheets.Add("Overtime Details Report");
-                var rowIndex = 1;
-                var colIndex = 1;
+            var status = (CurrentRequestStatus)overtime.StatusId;
+            colIndex = 1;
+            templateWorksheet.Cells[StartBodyRow, 1, StartBodyRow, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
 
-                // title
-                templateWorksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
-                worksheet.Cells[rowIndex, colIndex].Value = string.Format(
-                    "Overtime Details Report from {0} to {1}",
-                    param.FromDate.ToString(DateFormat),
-                    param.ToDate.ToString(DateFormat));
-                rowIndex++;
+            worksheet.Cells[rowIndex, colIndex++].Value = rowNum++;
+            worksheet.Cells[rowIndex, colIndex++].Value = overtime.WorkDate;
+            worksheet.Cells[rowIndex, colIndex++].Value = overtime.DepartmentCode;
+            worksheet.Cells[rowIndex, colIndex++].Value = overtime.Section;
+            worksheet.Cells[rowIndex, colIndex++].Value = overtime.Team;
+            worksheet.Cells[rowIndex, colIndex++].Value = overtime.Code;
+            worksheet.Cells[rowIndex, colIndex++].Value = overtime.FullName;
+            worksheet.Cells[rowIndex, colIndex++].Value = overtime.Nickname;
+            worksheet.Cells[rowIndex, colIndex++].Value = overtime.ShiftCode;
+            worksheet.Cells[rowIndex, colIndex++].Value = overtime.TimeIn.ToClientTimeZone().ToString("HH:mm");
+            worksheet.Cells[rowIndex, colIndex++].Value = overtime.TimeOut.ToClientTimeZone().ToString("HH:mm");
+            worksheet.Cells[rowIndex, colIndex++].Value = overtime.ActualWorkingHours;
+            worksheet.Cells[rowIndex, colIndex++].Value = overtime.NormalHours;
+            worksheet.Cells[rowIndex, colIndex++].Value = overtime.OffHours;
+            worksheet.Cells[rowIndex, colIndex++].Value = overtime.PublicHours;
+            worksheet.Cells[rowIndex, colIndex++].Value = overtime.SpecialHours;
+            worksheet.Cells[rowIndex, colIndex++].Value = overtime.Remark;
+            worksheet.Cells[rowIndex, colIndex].Value = status.ToString();
 
-                // header
-                templateWorksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
-                rowIndex++;
-
-                // data
-                var rowNum = 1;
-                foreach (var overtime in overtimes)
-                {
-                    var status = (CurrentRequestStatus)overtime.StatusId;
-                    colIndex = 1;
-                    templateWorksheet.Cells[StartBodyRow, 1, StartBodyRow, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
-
-                    worksheet.Cells[rowIndex, colIndex++].Value = rowNum++;
-                    worksheet.Cells[rowIndex, colIndex++].Value = overtime.WorkDate;
-                    worksheet.Cells[rowIndex, colIndex++].Value = overtime.DepartmentCode;
-                    worksheet.Cells[rowIndex, colIndex++].Value = overtime.Section;
-                    worksheet.Cells[rowIndex, colIndex++].Value = overtime.Team;
-                    worksheet.Cells[rowIndex, colIndex++].Value = overtime.Code;
-                    worksheet.Cells[rowIndex, colIndex++].Value = overtime.FullName;
-                    worksheet.Cells[rowIndex, colIndex++].Value = overtime.Nickname;
-                    worksheet.Cells[rowIndex, colIndex++].Value = overtime.ShiftCode;
-                    worksheet.Cells[rowIndex, colIndex++].Value = overtime.TimeIn;
-                    worksheet.Cells[rowIndex, colIndex++].Value = overtime.TimeOut;
-                    worksheet.Cells[rowIndex, colIndex++].Value = overtime.ActualWorkingHours;
-                    worksheet.Cells[rowIndex, colIndex++].Value = overtime.NormalHours;
-                    worksheet.Cells[rowIndex, colIndex++].Value = overtime.OffHours;
-                    worksheet.Cells[rowIndex, colIndex++].Value = overtime.PublicHours;
-                    worksheet.Cells[rowIndex, colIndex++].Value = overtime.SpecialHours;
-                    worksheet.Cells[rowIndex, colIndex++].Value = overtime.Remark;
-                    worksheet.Cells[rowIndex, colIndex].Value = status.ToString();
-
-                    rowIndex++;
-                }
-
-                worksheet.Cells.AutoFitColumns(MinimumWidth, MaximumWidth);
-                worksheet.View.FreezePanes(StartBodyRow, 1);
-
-                return xlPackage.GetAsByteArray();
-            }
+            rowIndex++;
         }
+
+        worksheet.Cells.AutoFitColumns(MinimumWidth, MaximumWidth);
+        worksheet.View.FreezePanes(StartBodyRow, 1);
+
+        return xlPackage.GetAsByteArray();
     }
 
     private static void WriteRawData(
@@ -316,8 +302,8 @@ public class OvertimeReportService(
             worksheet.Cells[rowIndex, colIndex++].Value = overtime.FullName;
             worksheet.Cells[rowIndex, colIndex++].Value = overtime.Nickname;
             worksheet.Cells[rowIndex, colIndex++].Value = overtime.ShiftCode;
-            worksheet.Cells[rowIndex, colIndex++].Value = overtime.TimeIn;
-            worksheet.Cells[rowIndex, colIndex++].Value = overtime.TimeOut;
+            worksheet.Cells[rowIndex, colIndex++].Value = overtime.TimeIn.ToClientTimeZone().ToString("HH:mm");
+            worksheet.Cells[rowIndex, colIndex++].Value = overtime.TimeOut.ToClientTimeZone().ToString("HH:mm");
             worksheet.Cells[rowIndex, colIndex++].Value = overtime.ActualWorkingHours;
             worksheet.Cells[rowIndex, colIndex++].Value = overtime.NormalHours;
             worksheet.Cells[rowIndex, colIndex++].Value = overtime.OffHours;

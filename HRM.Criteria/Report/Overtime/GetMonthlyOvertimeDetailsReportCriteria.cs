@@ -1,16 +1,15 @@
-﻿namespace HRM.Criteria.Report
+﻿namespace HRM.Criteria.Report;
+
+using System;
+using Fanex.Data.Repository;
+
+public class GetMonthlyOvertimeDetailsReportCriteria : CriteriaBase
 {
-    using System;
-    using Fanex.Data.Repository;
+    public int EmployeeId { get; set; }
+    public DateTime FromDate { get; set; }
+    public DateTime ToDate { get; set; }
 
-    public class GetMonthlyOvertimeDetailsReportCriteria : CriteriaBase
-    {
-        public int EmployeeId { get; set; }
-        public DateTime FromDate { get; set; }
-        public DateTime ToDate { get; set; }
+    public override string GetSettingKey() => "Report_MonthlyOvertimeDetails";
 
-        public override string GetSettingKey() => "Report_MonthlyOvertimeDetails";
-
-        public override bool IsValid() => EmployeeId > 0;
-    }
+    public override bool IsValid() => EmployeeId > 0;
 }

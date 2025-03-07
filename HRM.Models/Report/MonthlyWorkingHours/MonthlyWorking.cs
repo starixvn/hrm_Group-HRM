@@ -1,41 +1,40 @@
-﻿namespace HRM.Models.Report.MonthlyWorkingHours
+﻿namespace HRM.Models.Report.MonthlyWorkingHours;
+
+using System.Collections.Generic;
+using HRM.Core.Constants;
+
+public class MonthlyWorking
 {
-    using System.Collections.Generic;
-    using HRM.Core.Constants;
+    public int EmployeeId { get; set; }
+    public string Code { get; set; }
+    public string Section { get; set; }
+    public string Department { get; set; }
+    public string Nickname { get; set; }
+    public string FullName { get; set; }
+    public int WorkingDays { get; set; }
 
-    public class MonthlyWorking
+    public decimal ActualWorkingDays
     {
-        public int EmployeeId { get; set; }
-        public string Code { get; set; }
-        public string Section { get; set; }
-        public string Department { get; set; }
-        public string Nickname { get; set; }
-        public string FullName { get; set; }
-        public int WorkingDays { get; set; }
-
-        public decimal ActualWorkingDays
+        get
         {
-            get
+            decimal workingDays = 0;
+
+            foreach (var dailyWorking in DailyWorkings)
             {
-                decimal workingDays = 0;
-
-                foreach (DailyWorking dailyWorking in DailyWorkings)
+                if (dailyWorking.IsLeaveDay)
                 {
-                    if (dailyWorking.IsLeaveDay)
-                    {
-                        workingDays += dailyWorking.IsLeaveHalfDay && dailyWorking.TotalWorkingHours > 0 ? Constants.HalfDayOffValue : 0;
-                    }
-                    else
-                    {
-                        workingDays += dailyWorking.TotalWorkingHours > 0 ? 1 : 0;
-                    }
+                    workingDays += dailyWorking.IsLeaveHalfDay && dailyWorking.TotalWorkingHours > 0 ? Constants.HalfDayOffValue : 0;
                 }
-
-                return workingDays;
+                else
+                {
+                    workingDays += dailyWorking.TotalWorkingHours > 0 ? 1 : 0;
+                }
             }
-        }
 
-        public EntityBase<int> Team { get; set; }
-        public IEnumerable<DailyWorking> DailyWorkings { get; set; }
+            return workingDays;
+        }
     }
+
+    public EntityBase<int> Team { get; set; }
+    public IEnumerable<DailyWorking> DailyWorkings { get; set; }
 }

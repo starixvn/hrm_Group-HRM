@@ -1,13 +1,11 @@
-﻿@using HRM.Resources
-@using HRM.Core
-@using HRM.Core.Enums
-@using HRM.Models.Report
+﻿@using HRM.Core.Enums
 @using HRM.ViewModels.Report
 @using HRM.ViewModels.Request
 @using HRM.Website.Helper
 @model WorkingHoursSummaryViewModel
 @{
     var isHR = (bool)ViewBag.IsHR;
+    var today = DateTime.Now.ToClientTimeZone();
     ViewBag.Title = "Attendance Statistic for Payroll";
 }
 @section css{
@@ -22,7 +20,7 @@
     <a class="step">@ViewBag.Title</a>
 }
 <h2 class="page-title">@ViewBag.Title</h2>
-@Html.Hidden("Today", DateTime.Now.ToString("MMMM dd, yyyy"))
+@Html.Hidden("Today", today.ToString("MMMM dd, yyyy"))
 <form class="filter">
     @Html.HiddenFor(model => model.TeamIds)
     @Html.Hidden("DateOption", Model.DateOption)
@@ -50,10 +48,10 @@
             </div>
             <div class="calendar-form">
                 @Html.TextBox("FromDate", Model.FromDate.ToDateMonthYearFormatedDate(),
-                    new {
+        new {
                         @class = "datepicker form-control",
                         mindate = new DateTime(2010, 1, 1).ToString("yyyy/MM/dd"),
-                        maxdate = DateTime.Now.ToString("yyyy/MM/dd"),
+                        maxdate = today.ToString("yyyy/MM/dd"),
                         disabledDate = string.Empty
                     })
                 <i class="icon-calendar fa fa-calendar"></i>
@@ -65,10 +63,10 @@
             </div>
             <div class="calendar-form">
                 @Html.TextBox("ToDate", Model.ToDate.ToDateMonthYearFormatedDate(),
-                    new {
+        new {
                         @class = "datepicker form-control",
                         mindate = new DateTime(2010, 1, 1).ToString("yyyy/MM/dd"),
-                        maxdate = DateTime.Now.ToString("yyyy/MM/dd"),
+                        maxdate = today.ToString("yyyy/MM/dd"),
                         disabledDate = string.Empty
                     })
                 <i class="icon-calendar fa fa-calendar"></i>
@@ -174,7 +172,7 @@
     {
         <tbody>
             @{int index = 1;}
-            @foreach (WorkingHoursSummary item in Model.WorkingHours)
+            @foreach (var item in Model.WorkingHours)
             {
                 var requestModel = new RequestViewModel
                 {
@@ -189,9 +187,7 @@
                     ViewType = RequestViewType.CompanySpace
                 };
                 <tr>
-                    <td>
-                        @(index++)
-                    </td>
+                    <td>@(index++)</td>
                     <td class="align-left">@item.DepartmentCode</td>
                     <td class="align-left">@item.Section</td>
                     <td class="align-left">@item.Team</td>

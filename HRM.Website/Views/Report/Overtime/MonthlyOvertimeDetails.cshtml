@@ -1,11 +1,10 @@
-﻿@using HRM.Resources
-@using HRM.Core.Enums
+﻿@using HRM.Core.Enums
 @using HRM.Models.Report.Overtime
 @using HRM.Website.Helper
 @model IEnumerable<DailyOvertimeDetails>
 @{
     var month = (DateTime)ViewBag.Month;
-    var employee = Model != null && Model.Any() ? string.Format("{0} ({1})", Model.First().Nickname, Model.First().FullName) : string.Empty;
+    var employee = Model != null && Model.Any() ? $"{Model.First().Nickname} ({Model.First().FullName})" : string.Empty;
     ViewBag.Title = employee + " 's " + Labels.OvertimeReport + " in " + month.ToString("MMM-yyyy");
 }
 @section css{
@@ -44,7 +43,7 @@
     <tbody>
         @if (Model != null && Model.Any())
         {
-            foreach (DailyOvertimeDetails request in Model)
+            foreach (var request in Model)
             {
                 <tr>
                     @{
@@ -53,7 +52,7 @@
                         {
                             className = "holiday";
                         }
-                        else if (request.WorkDate.DayOfWeek == DayOfWeek.Saturday || request.WorkDate.DayOfWeek == DayOfWeek.Sunday)
+                        else if (request.WorkDate.DayOfWeek is DayOfWeek.Saturday or DayOfWeek.Sunday)
                         {
                             className = "weekend";
                         }
@@ -62,8 +61,8 @@
                         @request.WorkDate.ToString("dd-MMM-yyyy (ddd)")
                     </td>
                     <td>@request.ShiftCode</td>
-                    <td>@request.TimeIn</td>
-                    <td>@request.TimeOut</td>
+                    <td>@request.TimeIn.ToClientTimeZone().ToString("HH:mm")</td>
+                    <td>@request.TimeOut.ToClientTimeZone().ToString("HH:mm")</td>
                     <td>
                         @if (request.ActualWorkingHours > 0)
                         {
@@ -98,7 +97,7 @@
                     <td>
                         @if (request.StatusId != 0)
                         {
-                            CurrentRequestStatus status = (CurrentRequestStatus)request.StatusId;
+                            var status = (CurrentRequestStatus)request.StatusId;
                             @status
                         }
                     </td>
