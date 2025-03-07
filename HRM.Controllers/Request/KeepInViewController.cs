@@ -46,6 +46,9 @@ public class KeepInViewController(
         foreach (var request in requests)
         {
             request.AttachFiles = attachFileService.GetInfoAttachFile(request.RequestId, UploadFolderPath);
+            request.CreatedDate = request.CreatedDate.ToClientTimeZone();
+            request.FromTime = request.FromTime.ToClientTimeZone();
+            request.ToTime = request.ToTime.ToClientTimeZone();
         }
 
         return View(requests);
@@ -81,6 +84,13 @@ public class KeepInViewController(
         var model = JsonConvert.DeserializeObject<KeepInViewRequestViewModel>(requestModel);
         var fromTime = DateTime.Parse(model.Date.ToDateMonthYearFormatedDate() + " " + model.FromTime, cultureInfo);
         var toTime = DateTime.Parse(model.Date.ToDateMonthYearFormatedDate() + " " + model.ToTime, cultureInfo);
+        var fromTimeCrossDay = (fromTime < toTime && model.CrossDay)
+            ? DateTime.Parse(model.Date.AddDays(1).ToDateMonthYearFormatedDate() + " " + model.FromTime, cultureInfo)
+            : DateTime.Parse(model.Date.ToDateMonthYearFormatedDate() + " " + model.FromTime, cultureInfo);
+        var toTimeCrossDay = model.CrossDay
+            ? DateTime.Parse(model.Date.AddDays(1).ToDateMonthYearFormatedDate() + " " + model.ToTime, cultureInfo)
+            : DateTime.Parse(model.Date.ToDateMonthYearFormatedDate() + " " + model.ToTime, cultureInfo);
+
         var criteria = new CreateKeepInViewRequestCriteria
         {
             EmpId = model.EmployeeId,
@@ -88,12 +98,8 @@ public class KeepInViewController(
             KeepInViewType = model.KeepInViewType,
             IsHalfDay = model.HalfDay,
             Remark = model.Remark,
-            FromTime = (fromTime < toTime && model.CrossDay)
-                ? DateTime.Parse(model.Date.AddDays(1).ToDateMonthYearFormatedDate() + " " + model.FromTime, cultureInfo)
-                : DateTime.Parse(model.Date.ToDateMonthYearFormatedDate() + " " + model.FromTime, cultureInfo),
-            ToTime = model.CrossDay
-                ? DateTime.Parse(model.Date.AddDays(1).ToDateMonthYearFormatedDate() + " " + model.ToTime, cultureInfo)
-                : DateTime.Parse(model.Date.ToDateMonthYearFormatedDate() + " " + model.ToTime, cultureInfo),
+            FromTime = fromTimeCrossDay.ToServerTimeZone(),
+            ToTime = toTimeCrossDay.ToServerTimeZone(),
             VerifierId = model.VerifierId,
             ApproverId = model.ApproverId,
             CreatedBy = EmployeeSession.EmpId,
@@ -155,6 +161,10 @@ public class KeepInViewController(
     {
         var cultureInfo = new CultureInfo("en-US");
         var model = JsonConvert.DeserializeObject<KeepInViewRequestViewModel>(requestModel);
+        var fromTime = DateTime.Parse(model.Date.ToDateMonthYearFormatedDate() + " " + model.FromTime, cultureInfo);
+        var toTimeCrossDay = model.CrossDay
+            ? DateTime.Parse(model.Date.AddDays(1).ToDateMonthYearFormatedDate() + " " + model.ToTime, cultureInfo)
+            : DateTime.Parse(model.Date.ToDateMonthYearFormatedDate() + " " + model.ToTime, cultureInfo);
         var criteria = new EditKeepInViewRequestCriteria
         {
             RequestId = model.RequestId,
@@ -163,10 +173,8 @@ public class KeepInViewController(
             KeepInViewType = model.KeepInViewType,
             Remark = model.Remark,
             IsHalfDay = model.HalfDay,
-            FromTime = DateTime.Parse(model.Date.ToDateMonthYearFormatedDate() + " " + model.FromTime, cultureInfo),
-            ToTime = model.CrossDay
-                ? DateTime.Parse(model.Date.AddDays(1).ToDateMonthYearFormatedDate() + " " + model.ToTime, cultureInfo)
-                : DateTime.Parse(model.Date.ToDateMonthYearFormatedDate() + " " + model.ToTime, cultureInfo),
+            FromTime = fromTime.ToServerTimeZone(),
+            ToTime = toTimeCrossDay.ToServerTimeZone(),
             VerifierId = model.VerifierId,
             ApproverId = model.ApproverId,
             ModifiedBy = EmployeeSession.EmpId,
