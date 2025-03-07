@@ -241,7 +241,7 @@
                                 }
                             </td>
                         }
-                        <td data-datetime="@request.CreatedDate">@request.CreatedDate.ToClientTimeZone().ToDetailFormatedDate()</td>
+                        <td data-datetime="@request.CreatedDate">@request.CreatedDate.ToDetailFormatedDate()</td>
                         <td class="status">@await Html.PartialAsync("_RenderStatus", (Model, request))</td>
                         <td>@await Html.PartialAsync("_RenderHistoryLink", request)</td>
                         <td class="td-warning">
