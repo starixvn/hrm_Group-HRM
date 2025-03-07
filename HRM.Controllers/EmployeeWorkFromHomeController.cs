@@ -23,7 +23,6 @@ public class EmployeeWorkFromHomeController(
     IBaseService baseService,
     IAttachFileService attachFileService) : BaseController(userControlSession)
 {
-    private readonly IUserControlSession userControlSession = userControlSession;
     private const string UploadFolderPath = "/file/uploads/wfh/";
 
     [HrmPermission(Policy.Read, FunctionKey.EmployeeManagement)]

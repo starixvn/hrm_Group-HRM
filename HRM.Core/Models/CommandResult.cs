@@ -1,26 +1,13 @@
-﻿namespace HRM.Core.Models
+﻿namespace HRM.Core.Models;
+
+using HRM.Resources;
+
+public class CommandResult
 {
-    using HRM.Resources;
+    public int Code { get; set; } = 1;
+    public string Message { get; set; } = Messages.InvalidInputData;
 
-    public class CommandResult
-    {
-        public CommandResult()
-        {
-            Code = 1;
-            Message = Messages.InvalidInputData;
-        }
+    public bool IsSuccessful => Code == 0;
 
-        public int Code { get; set; }
-        public string Message { get; set; }
-
-        public bool IsSuccessful
-        {
-            get
-            {
-                return Code == 0;
-            }
-        }
-
-        public long OutputId { get; set; }
-    }
+    public long OutputId { get; set; }
 }

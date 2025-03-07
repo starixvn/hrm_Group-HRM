@@ -1,23 +1,25 @@
-﻿using GO.UserControl.Client.Core.Enumerables;
+﻿using System.Threading.Tasks;
+using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Models.User;
 using GO.UserControl.Client.Core.Services;
 using GO.UserControl.Client.Core.Session;
 using HRM.Core.Constants;
+using HRM.Core.Enums;
 using HRM.Core.Filters;
 using HRM.Core.Security;
 using HRM.Models;
+using HRM.Resources;
 using HRM.Services;
-using HRM.Services.Implement.ActionLog;
 using HRM.Services.Implement;
+using HRM.Services.Implement.ActionLog;
 using HRM.Services.Interfaces;
 using HRM.ViewModels.Employee;
 using Microsoft.AspNetCore.Mvc;
-using HRM.Core.Enums;
-using HRM.Resources;
-using System.Threading.Tasks;
+
 namespace HRM.Controllers;
 
-public class AccountController(IUserControlSession userControlSession,
+public class AccountController(
+    IUserControlSession userControlSession,
     IEmployeeService employeeService,
     IEmployeeLogService employeeLogService,
     ICryptoService cryptoService,
@@ -114,7 +116,7 @@ public class AccountController(IUserControlSession userControlSession,
         string[] keyiv = token.Split(':');
         var rijndaelKey = keyiv[0];
         var rijndaelIV = keyiv[1];
-        var commandResult =await  userService.UpdatePasswordAsync(new UpdatePasswordParam
+        var commandResult = await userService.UpdatePasswordAsync(new UpdatePasswordParam
         {
             OldPassword = cryptoService.Encrypt(model.Password, rijndaelKey, rijndaelIV),
             Password = cryptoService.Encrypt(model.NewPassword, rijndaelKey, rijndaelIV),

@@ -15,11 +15,8 @@ namespace HRM.Controllers;
 
 public class PaternityController(
     IUserControlSession userControlSession,
-    IPaternityService paternityService)
-    : BaseController(userControlSession)
+    IPaternityService paternityService) : BaseController(userControlSession)
 {
-    private readonly IUserControlSession userControlSession = userControlSession;
-
     [HrmPermission(Policy.Read, FunctionKey.EmployeeManagement)]
     public ActionResult Index()
     {

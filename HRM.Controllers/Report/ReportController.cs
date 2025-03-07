@@ -1,8 +1,4 @@
-﻿using HRM.Criteria.Supervisor;
-using HRM.Models;
-using HRM.Services.Interfaces;
-
-namespace HRM.Controllers.Report;
+﻿namespace HRM.Controllers.Report;
 
 using System;
 using System.Collections.Generic;
@@ -18,6 +14,8 @@ using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
 using HRM.Core;
 using HRM.Criteria.Report;
+using HRM.Criteria.Supervisor;
+using HRM.Services.Interfaces;
 using HRM.ViewModels.Report;
 using Microsoft.AspNetCore.Mvc;
 using Services.Implement;
@@ -29,8 +27,6 @@ public class ReportController(
     ICommonDataService commonDataService,
     ITeamService teamService) : BaseController(userControlSession)
 {
-    private readonly IUserControlSession userControlSession = userControlSession;
-
     [HrmPermission(Policy.Read, FunctionKey.ReportHome)]
     public ActionResult Index()
     {

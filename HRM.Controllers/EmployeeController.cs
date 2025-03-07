@@ -1,10 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.Drawing;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using GO.UserControl.Client.Core.Enumerables;
-using GO.UserControl.Client.Core.Models;
 using GO.UserControl.Client.Core.Models.Role;
 using GO.UserControl.Client.Core.Models.User;
 using GO.UserControl.Client.Core.Services;
@@ -18,7 +15,6 @@ using HRM.Criteria.Employee;
 using HRM.Criteria.Supervisor;
 using HRM.Models;
 using HRM.Models.Group;
-using HRM.Models.Log;
 using HRM.Models.Supervisor;
 using HRM.Services;
 using HRM.Services.Implement;
@@ -26,56 +22,26 @@ using HRM.Services.Implement.ActionLog;
 using HRM.Services.Interfaces;
 using HRM.ViewModels;
 using HRM.ViewModels.Employee;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json;
-using SixLabors.ImageSharp.Processing.Processors;
+using Newtonsoft.Json.Serialization;
 
 namespace HRM.Controllers;
 
-public class EmployeeController : BaseController
+public class EmployeeController(
+    IUserControlSession userControlSession,
+    IEmployeeService employeeService,
+    ICommonDataService commonDataService,
+    IHRMAuthService authService,
+    IEmployeeLogService employeeLogService,
+    ITeamService teamService,
+    IJobLevelService jobLevelService,
+    IManagementLevelService managementLevelService,
+    ICryptoService cryptoService,
+    IUserService userService,
+    IRoleService roleService) : BaseController(userControlSession)
 {
-    private readonly IUserControlSession userControlSession;
-    private readonly ICommonDataService commonDataService;
-    private readonly IEmployeeService employeeService;
-    private readonly IHRMAuthService authService;
-    private readonly IEmployeeLogService employeeLogService;
-    private readonly ITeamService teamService;
-    private readonly IJobLevelService jobLevelService;
-    private readonly IManagementLevelService managementLevelService;
-    private readonly ICryptoService cryptoService;
-    private readonly IUserService userService;
-    private readonly IRoleService roleService;
-
-    public EmployeeController(
-        IUserControlSession userControlSession,
-        IEmployeeService employeeService,
-        ICommonDataService commonDataService,
-        IHRMAuthService authService,
-        IEmployeeLogService employeeLogService,
-        ITeamService teamService,
-        IJobLevelService jobLevelService,
-        IManagementLevelService managementLevelService,
-        ICryptoService cryptoService,
-        IUserService userService,
-        IRoleService roleService) : base(userControlSession)
-#pragma warning restore S107 // Methods should not have too many parameters
-    {
-        this.userControlSession = userControlSession;
-        this.employeeService = employeeService;
-        this.commonDataService = commonDataService;
-        this.authService = authService;
-        this.employeeLogService = employeeLogService;
-        this.teamService = teamService;
-        this.jobLevelService = jobLevelService;
-        this.managementLevelService = managementLevelService;
-        this.cryptoService = cryptoService;
-        this.userService = userService;
-        this.roleService = roleService;
-    }
-
     [HrmPermission(Policy.Read, FunctionKey.ContactList)]
     public async Task<IActionResult> Index()
     {
@@ -118,7 +84,7 @@ public class EmployeeController : BaseController
             };
             ViewBag.PagerOption = pagerOption;
             ViewBag.IsShowJobtitle = (await roleService.GetByUserIdAsync(userControlSession.UserId))
-                .Any(r => r.RoleId == (short)RoleSystem.HR || r.RoleId == (short)RoleSystem.SystemAdmin);
+                .Any(r => r.RoleId is (short)RoleSystem.HR or (short)RoleSystem.SystemAdmin);
             ViewBag.EnableGroupDate = await commonDataService.IsEnableGroupDate();
         }
 
@@ -216,55 +182,72 @@ public class EmployeeController : BaseController
     [HrmPermission(Policy.Host, FunctionKey.CreateAccount)]
     public async Task<IActionResult> Create(CreateEmployeeViewModel model)
     {
-        if (model != null && ModelState.IsValid)
+        if (ModelState.IsValid)
         {
             var param = new CreateEmployeeParam
             {
                 Code = model.Code,
-                DomainUsername = model.DomainUsername,
-                FullName = model.FullName,
-                Nickname = model.Nickname,
-                TeamId = model.TeamId
+                Nickname = model.Nickname
             };
 
-            var commandResult = await employeeService.CreateAsync(EmployeeSession.EmpId, param);
+            var commandResult = await employeeService.CheckExistAsync(param);
             if (commandResult.IsSuccessful)
             {
-                var token = cryptoService.GenerateRijndaelKeyIV();
-                var keyIv = token.Split(':');
-                var rijndaelKey = keyIv[0];
-                var rijndaelIv = keyIv[1];
-                var result = await userService.CreateAsync(new CreateUserParam
-                {
-                    RefId = (int?)commandResult.OutputId,
-                    Code = param.Code,
-                    Nickname = param.Nickname,
-                    FullName = param.FullName,
-                    BCryptPassword = cryptoService.Encrypt(param.Code, rijndaelKey, rijndaelIv),
-                    Token = token
-                });
+                return await CreateUserAsync(model);
+            }
 
-                if (result.IsSuccessful)
-                {
-                    await employeeService.UpdateUserIdAsync(new UpdateUserIdCommand
-                    {
-                        EmpId = (int)commandResult.OutputId,
-                        UserId = result.ObjectId,
-                        ModifiedBy = EmployeeSession.EmpId
-                    });
-                    return RedirectToAction("Edit", new { id = commandResult.OutputId });
-                }
-                else
-                {
-                    ModelState.AddModelError(string.Empty, result.Message);
-                }
-            }
-            else
-            {
-                ModelState.AddModelError(string.Empty, commandResult.Message);
-            }
+            ModelState.AddModelError(string.Empty, commandResult.Message);
         }
 
+        return View(model);
+    }
+
+    private async Task<IActionResult> CreateUserAsync(CreateEmployeeViewModel model)
+    {
+        var token = cryptoService.GenerateRijndaelKeyIV();
+        var keyIv = token.Split(':');
+        var rijndaelKey = keyIv[0];
+        var rijndaelIv = keyIv[1];
+
+        var param = new CreateUserParam
+        {
+            Code = model.Code,
+            Nickname = model.Nickname,
+            FullName = model.FullName,
+            BCryptPassword = cryptoService.Encrypt(model.Code, rijndaelKey, rijndaelIv),
+            Token = token
+        };
+        var commandResult = await userService.CreateAsync(param);
+
+        if (commandResult.IsSuccessful)
+        {
+            return await CreateEmployeeAsync(model, commandResult.ObjectId);
+        }
+
+        ModelState.AddModelError(string.Empty, commandResult.Message);
+        return View(model);
+    }
+
+    private async Task<IActionResult> CreateEmployeeAsync(CreateEmployeeViewModel model, int userId)
+    {
+        var param = new CreateEmployeeParam
+        {
+            CompanyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId),
+            UserId = userId,
+            Code = model.Code,
+            FullName = model.FullName,
+            Nickname = model.Nickname,
+            TeamId = model.TeamId,
+            DomainUsername = model.DomainUsername,
+            ActorId = EmployeeSession.EmpId
+        };
+        var commandResult = await employeeService.CreateAsync(param);
+        if (commandResult.IsSuccessful)
+        {
+            return RedirectToAction("Edit", new { id = userId });
+        }
+
+        ModelState.AddModelError(string.Empty, commandResult.Message);
         return View(model);
     }
 
@@ -396,7 +379,7 @@ public class EmployeeController : BaseController
 
     public async Task<JsonResult> GetEmployeeSupervisorByRoleId(int employeeId, short roleId)
     {
-        IEnumerable<SupervisorModel> supervisors = await employeeService.GetEmployeeSupervisorByRoleIdAsync(employeeId, roleId);
+        var supervisors = await employeeService.GetEmployeeSupervisorByRoleIdAsync(employeeId, roleId);
         return new JsonResult(supervisors);
     }
 
@@ -405,7 +388,7 @@ public class EmployeeController : BaseController
     {
         var commandResult = await employeeService.EditEmployeeSupervisorAsync(EmployeeSession.EmpId, employeeId, roleId, supervisors);
 
-        return new JsonResult (commandResult);
+        return new JsonResult(commandResult);
     }
 
     [HttpGet]
@@ -419,15 +402,16 @@ public class EmployeeController : BaseController
 
     public async Task<JsonResult> GetShiftManagerByEmployeeId(int employeeId)
     {
-        IEnumerable<SupervisorModel> supervisors = await employeeService.GetEmployeeSupervisorByRoleIdAsync(employeeId, (short)RoleSystem.ShiftManager);
+        var supervisors = await employeeService.GetEmployeeSupervisorByRoleIdAsync(employeeId, (short)RoleSystem.ShiftManager);
         return new JsonResult(supervisors.Select(x => new Supervisor
-            { OwnerId = x.OwnerId, Nickname = x.NickName, FullName = x.FullName }));
+        { OwnerId = x.OwnerId, Nickname = x.NickName, FullName = x.FullName }));
     }
 
     [HttpPost]
-    public void ToogleLeftNavigation(bool isShow)
+    public IActionResult ToogleLeftNavigation(bool isShow)
     {
         userControlSession.Set<bool>(SessionKey.IsShowLeftNavigation, isShow);
+        return Ok();
     }
 
     [HrmPermission(Policy.Read, FunctionKey.EmployeeManagement)]
@@ -441,7 +425,7 @@ public class EmployeeController : BaseController
     public async Task<JsonResult> GetDisciplineManagerByEmployeeId(int employeeId)
     {
         var supervisors = await employeeService.GetDisciplineSettingByEmployeeIdAsync(employeeId);
-        return new JsonResult (supervisors);
+        return new JsonResult(supervisors);
     }
 
     public async Task<JsonResult> GetMemberByManager(string keyword)

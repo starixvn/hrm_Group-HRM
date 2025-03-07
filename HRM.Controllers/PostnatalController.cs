@@ -15,11 +15,8 @@ namespace HRM.Controllers;
 
 public class PostnatalController(
     IUserControlSession userControlSession,
-    IPostnatalService postnatalService)
-    : BaseController(userControlSession)
+    IPostnatalService postnatalService) : BaseController(userControlSession)
 {
-    private readonly IUserControlSession userControlSession = userControlSession;
-
     [HrmPermission(Policy.Read, FunctionKey.EmployeeManagement)]
     public IActionResult Index()
     {

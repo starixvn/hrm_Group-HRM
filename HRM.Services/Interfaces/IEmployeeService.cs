@@ -51,7 +51,9 @@ public interface IEmployeeService
 
     Task<CommandResult> EditPasswordAsync(int actorId, EditPassword model);
 
-    Task<CommandResult> CreateAsync(int actorId, CreateEmployeeParam param);
+    Task<CommandResult> CheckExistAsync(CreateEmployeeParam param);
+
+    Task<CommandResult> CreateAsync(CreateEmployeeParam param);
 
     Task<CommandResult> EditAsync(int actorId, EditEmployeeParam param);
 

@@ -2,12 +2,12 @@
 using System.Threading.Tasks;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
+using HRM.Core;
 using HRM.Core.Constants;
 using HRM.Core.Filters;
 using HRM.Core.Models;
 using HRM.Criteria.Employee;
 using HRM.Models.Message;
-using HRM.Services;
 using HRM.Services.Implement;
 using HRM.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -18,15 +18,12 @@ public class MessageController(
     IUserControlSession userControlSession,
     IMessageService messageService,
     ICommonDataService commonDataService,
-    IEmployeeService employeeService)
-    : BaseController(userControlSession)
+    IEmployeeService employeeService) : BaseController(userControlSession)
 {
-    private readonly IUserControlSession userControlSession = userControlSession;
-
     [HrmPermission(Policy.Read, FunctionKey.Message)]
     public async Task<ActionResult> Index()
     {
-        var currentDateTime = DateTimeOffset.Now.DateTime;
+        var currentDateTime = DateTimeOffset.Now.DateTime.ToClientTimeZone();
         var param = new GetMessageByCreatorParam
         {
             ToDate = currentDateTime,
@@ -70,7 +67,7 @@ public class MessageController(
         };
         ViewBag.Employees = await employeeService.GetEmployeeAsync(criteria);
         ViewBag.Groups = await commonDataService.GetAllTeamAsync();
-        var currentDateTime = DateTimeOffset.Now.DateTime;
+        var currentDateTime = DateTimeOffset.Now.DateTime.ToClientTimeZone();
         var model = new Message { FromDate = currentDateTime, ToDate = currentDateTime };
 
         return View(model);
@@ -143,7 +140,7 @@ public class MessageController(
 
     public async Task<ActionResult> ViewMessageOfEmployee()
     {
-        var currentDateTime = DateTimeOffset.Now.DateTime;
+        var currentDateTime = DateTimeOffset.Now.DateTime.ToClientTimeZone();
         var param = new GetMessageByEmployeeParam
         {
             FromDate = currentDateTime,

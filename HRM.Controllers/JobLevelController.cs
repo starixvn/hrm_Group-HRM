@@ -13,8 +13,6 @@ public class JobLevelController(
     IUserControlSession userControlSession,
     IJobLevelService jobLevelService) : BaseController(userControlSession)
 {
-    private readonly IUserControlSession userControlSession = userControlSession;
-
     [HrmPermission(Policy.Read, FunctionKey.JobLevelManagement)]
     public IActionResult Index()
     {

@@ -209,22 +209,33 @@ public class EmployeeService(
         return await baseService.ExecuteNonQueryAsync(criteria);
     }
 
-    public async Task<CommandResult> CreateAsync(int actorId, CreateEmployeeParam param)
+    public async Task<CommandResult> CreateAsync(CreateEmployeeParam param)
     {
         var criteria = new InsertEmployeeCriteria
         {
+            CompanyId = param.CompanyId,
+            UserId = param.UserId,
             Code = param.Code,
-            CreateBy = actorId,
-            DomainUsername = param.DomainUsername,
+            CreateBy = param.ActorId,
             FullName = param.FullName,
             Nickname = param.Nickname,
             TeamId = param.TeamId,
-            Password = Encryptor.ComputeHash(param.Code)
+            Password = Encryptor.ComputeHash(param.Code),
+            DomainUsername = param.DomainUsername
         };
         var commandResult = await baseService.ExecuteNonQueryAsync(criteria);
-        commandResult.OutputId = criteria.EmpId;
 
         return commandResult;
+    }
+
+    public async Task<CommandResult> CheckExistAsync(CreateEmployeeParam param)
+    {
+        var criteria = new CheckExistEmployeeCriteria
+        {
+            Code = param.Code,
+            Nickname = param.Nickname
+        };
+        return await baseService.GetDataEntityAsync<CommandResult>(criteria);
     }
 
     public async Task<CommandResult> EditAsync(int actorId, EditEmployeeParam param)

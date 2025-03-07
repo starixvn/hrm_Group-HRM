@@ -10,5 +10,5 @@ using Microsoft.AspNetCore.Mvc;
 [HrmAuthorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
 public class BaseController(IUserControlSession userControlSession) : Controller
 {
-    public EmployeeSession EmployeeSession => userControlSession.Get<EmployeeSession>(SessionKey.Employee);
+    public EmployeeSession EmployeeSession => userControlSession.Get<EmployeeSession>(SessionKey.Employee) ?? new EmployeeSession();
 }

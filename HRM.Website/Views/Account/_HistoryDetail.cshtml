@@ -1,10 +1,9 @@
-﻿@using HRM.Core
-@using HRM.Models.Log
+﻿@using HRM.Models.Log
 @model IEnumerable<LogObjectDetail>
 @if (Model.Any())
 {
-    IEnumerable<LogObjectDetail> teams = Model.Where(x => x.Fields.Any(y => y.DisplayName == Labels.Team));
-    IEnumerable<LogObjectDetail> jobTitles = Model.Where(x => x.Fields.Any(y => y.DisplayName == Labels.JobTitle));
+    var teams = Model.Where(x => x.Fields.Any(y => y.DisplayName == Labels.Team));
+    var jobTitles = Model.Where(x => x.Fields.Any(y => y.DisplayName == Labels.JobTitle));
     if (teams.Any() || jobTitles.Any())
     {
         <div class="panel panel-default">
@@ -27,9 +26,9 @@
                             </td>
                         </tr>
                     }
-                    @foreach (LogObjectDetail item in teams)
+                    @foreach (var item in teams)
                     {
-                        foreach (FieldValue field in item.Fields)
+                        foreach (var field in item.Fields)
                         {
                             if (field.DisplayName == Labels.Team)
                             {
@@ -50,9 +49,9 @@
                             </td>
                         </tr>
                     }
-                    @foreach (LogObjectDetail item in jobTitles)
+                    @foreach (var item in jobTitles)
                     {
-                        foreach (FieldValue field in item.Fields)
+                        foreach (var field in item.Fields)
                         {
                             if (field.DisplayName == Labels.JobTitle)
                             {
