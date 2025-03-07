@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
+using HRM.Core;
 using HRM.Core.Constants;
 using HRM.Core.Filters;
 using HRM.Core.Models;
@@ -153,7 +154,7 @@ public class SickLeaveBalanceController(
                 FromDate = model.AffectedFrom,
                 DeductDays = model.DeductDays,
                 CreditDays = model.CreditDays,
-                CreatedDate = DateTimeOffset.Now.DateTime,
+                CreatedDate = DateTimeOffset.Now.DateTime.ToServerTimeZone(),
                 CreatedBy = EmployeeSession.EmpId
             };
             var commandResult = await baseService.ExecuteNonQueryAsync(criteria);
@@ -240,7 +241,7 @@ public class SickLeaveBalanceController(
             FromDate = model.AffectedFrom,
             DeductDays = model.DeductDays,
             CreditDays = model.CreditDays,
-            ModifiedDate = DateTimeOffset.Now.DateTime,
+            ModifiedDate = DateTimeOffset.Now.DateTime.ToServerTimeZone(),
             ModifiedBy = EmployeeSession.EmpId
         };
         var commandResult = await baseService.ExecuteNonQueryAsync(criteria);
@@ -261,7 +262,7 @@ public class SickLeaveBalanceController(
         var criteria = new DeleteTransactionCriteria
         {
             TransId = model.TransId,
-            ModifiedDate = DateTimeOffset.Now.DateTime,
+            ModifiedDate = DateTimeOffset.Now.DateTime.ToServerTimeZone(),
             ModifiedBy = EmployeeSession.EmpId
         };
         var commandResult = await baseService.ExecuteNonQueryAsync(criteria);

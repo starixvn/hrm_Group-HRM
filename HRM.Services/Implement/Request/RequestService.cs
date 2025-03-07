@@ -35,6 +35,11 @@ public class RequestService(
 {
     public static string ToRequestMessage(RequestEntity request, bool isNoFormat = false)
     {
+        request.FromDate = request.FromDate.ToClientTimeZone();
+        request.ToDate = request.ToDate.ToClientTimeZone();
+        request.RequestedDate = request.RequestedDate.ToClientTimeZone();
+        request.ToTime = request.ToTime.ToClientTimeZone();
+        request.FromTime = request.FromTime.ToClientTimeZone();
         var message = request.RequestType.Id switch
         {
             (byte)RequestType.Leave => GetMessageForLeave(request, isNoFormat),
@@ -272,15 +277,15 @@ public class RequestService(
 
     private static string GetDateTimeForLeaveRequest(RequestEntity request)
     {
-        var leaveDate = Utilities.GetMessageDateString(request.FromDate.ToClientTimeZone(), request.ToDate.ToClientTimeZone());
+        var leaveDate = Utilities.GetMessageDateString(request.FromDate, request.ToDate);
 
         if (request.TotalDays - Constants.HalfDayOffValue == 0)
         {
             leaveDate = string.Format(
                 RequestFormatConstants.MsgLeaveHalfDayWithNoFormat,
-                request.FromDate.ToClientTimeZone().ToDateMonthYearFormatedDate(),
-                request.FromTime.ToClientTimeZone().ToShortTime() + ((request.FromTime.ToClientTimeZone() - request.FromDate.ToClientTimeZone()).Days > 0 ? "+" : string.Empty),
-                request.ToTime.ToClientTimeZone().ToShortTime() + ((request.ToTime.ToClientTimeZone() - request.FromDate.ToClientTimeZone()).Days > 0 ? "+" : string.Empty));
+                request.FromDate.ToDateMonthYearFormatedDate(),
+                request.FromTime.ToShortTime() + ((request.FromTime - request.FromDate).Days > 0 ? "+" : string.Empty),
+                request.ToTime.ToShortTime() + ((request.ToTime - request.FromDate).Days > 0 ? "+" : string.Empty));
         }
 
         return leaveDate;
@@ -307,19 +312,19 @@ public class RequestService(
         }
         else
         {
-            if (request.FromDate.ToClientTimeZone().Date == request.ToDate.ToClientTimeZone().Date)
+            if (request.FromDate.Date == request.ToDate.Date)
             {
                 msgTemplate = isNoFormat ? RequestFormatConstants.MsgChangeShiftOneDayWithNoFormat : RequestFormatConstants.MsgChangeShiftOneDay;
                 messageDetail = string.Format(
                     msgTemplate,
                     request.FromShift.Name,
                     request.ToShift.Name,
-                    request.FromDate.ToClientTimeZone().ToDateMonthYearFormatedDate());
+                    request.FromDate.ToDateMonthYearFormatedDate());
             }
             else
             {
                 msgTemplate = isNoFormat ? RequestFormatConstants.MsgChangeShiftWithNoFormat : RequestFormatConstants.MsgChangeShift;
-                var date = Utilities.GetMessageDateString(request.FromDate.ToClientTimeZone(), request.ToDate.ToClientTimeZone());
+                var date = Utilities.GetMessageDateString(request.FromDate, request.ToDate);
                 messageDetail = string.Format(msgTemplate, date);
             }
         }
@@ -346,8 +351,8 @@ public class RequestService(
     private static string GetMessageForCheckInOut(RequestEntity request, bool isNoFormat)
     {
         var msgTemplate = isNoFormat ? RequestFormatConstants.MsgCheckInOutWithNoFormat : RequestFormatConstants.MsgCheckInOut;
-        var time = request.RequestedDate.ToClientTimeZone().Day == request.FromDate.ToClientTimeZone().Day ? request.RequestedDate.ToClientTimeZone().ToShortTime() : (request.RequestedDate.ToClientTimeZone().ToShortTime() + "+");
-        return string.Format(msgTemplate, time, request.FromShift.Name, request.FromDate.ToClientTimeZone().ToDateMonthYearFormatedDate());
+        var time = request.RequestedDate.Day == request.FromDate.Day ? request.RequestedDate.ToShortTime() : (request.RequestedDate.ToShortTime() + "+");
+        return string.Format(msgTemplate, time, request.FromShift.Name, request.FromDate.ToDateMonthYearFormatedDate());
     }
 
     private static string GetMessageForLateIn(RequestEntity request, bool isNoFormat)
@@ -355,7 +360,7 @@ public class RequestService(
         var msgTemplate = isNoFormat ? RequestFormatConstants.MsgLateInWithNoFormat : RequestFormatConstants.MsgLateIn;
         var actualLateIn = request.ActualLateInEarlyOut == 0 ? Labels.NA : ("+" + request.ActualLateInEarlyOut + "'");
 
-        return string.Format(msgTemplate, request.TotalMins, request.FromShift.Name, Utilities.GetMessageDateString(request.FromDate.ToClientTimeZone(), request.ToDate.ToClientTimeZone()), actualLateIn);
+        return string.Format(msgTemplate, request.TotalMins, request.FromShift.Name, Utilities.GetMessageDateString(request.FromDate, request.ToDate), actualLateIn);
     }
 
     private static string GetMessageForEarlyOut(RequestEntity request, bool isNoFormat)
@@ -363,7 +368,7 @@ public class RequestService(
         var msgTemplate = isNoFormat ? RequestFormatConstants.MsgEarlyOutWithNoFormat : RequestFormatConstants.MsgEarlyOut;
         var actualEarlyOut = request.ActualLateInEarlyOut == 0 ? Labels.NA : ("-" + request.ActualLateInEarlyOut + "'");
 
-        return string.Format(msgTemplate, request.TotalMins, request.FromShift.Name, Utilities.GetMessageDateString(request.FromDate.ToClientTimeZone(), request.ToDate.ToClientTimeZone()), actualEarlyOut);
+        return string.Format(msgTemplate, request.TotalMins, request.FromShift.Name, Utilities.GetMessageDateString(request.FromDate, request.ToDate), actualEarlyOut);
     }
 
     private static string GetMessageForKeepInView(RequestEntity request, bool isNoFormat)
@@ -385,14 +390,14 @@ public class RequestService(
             msgTemplate = isNoFormat ? RequestFormatConstants.MsgKeepInViewHalfdayWithNoFormat : RequestFormatConstants.MsgKeepInViewHalfday;
             messageDetail = string.Format(
                 msgTemplate,
-                request.FromDate.ToClientTimeZone().ToDateMonthYearFormatedDate(),
-                request.FromTime.ToClientTimeZone().ToShortTime(),
-                request.ToTime.ToClientTimeZone().ToShortTime());
+                request.FromDate.ToDateMonthYearFormatedDate(),
+                request.FromTime.ToShortTime(),
+                request.ToTime.ToShortTime());
         }
         else
         {
             msgTemplate = isNoFormat ? RequestFormatConstants.MsgKeepInViewOneDayWithNoFormat : RequestFormatConstants.MsgKeepInViewOneDay;
-            messageDetail = string.Format(msgTemplate, request.FromDate.ToClientTimeZone().ToDateMonthYearFormatedDate());
+            messageDetail = string.Format(msgTemplate, request.FromDate.ToDateMonthYearFormatedDate());
         }
 
         return messageDetail;
@@ -405,9 +410,9 @@ public class RequestService(
         var hours = minutes / Constants.TotalMinuteInHour;
         return string.Format(
             msgTemplate,
-            request.FromDate.ToClientTimeZone().ToDateMonthYearFormatedDate(),
-            request.FromTime.ToClientTimeZone().ToShortTime(),
-            request.ToTime.ToClientTimeZone().ToShortTime(),
+            request.FromDate.ToDateMonthYearFormatedDate(),
+            request.FromTime.ToShortTime(),
+            request.ToTime.ToShortTime(),
             hours.ToString("0.#"));
     }
 
