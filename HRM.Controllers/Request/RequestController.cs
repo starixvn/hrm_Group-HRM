@@ -56,7 +56,8 @@ public class RequestController(
         {
             const long fromDays = -180;
             request.StatusId = Constants.PendingAndVerifiedStatusId;
-            request.FromDate = DateTimeOffset.Now.Date.AddDays(fromDays);
+            request.FromDate = DateTimeOffset.Now.Date.AddDays(fromDays).ToServerTimeZone();
+            request.ToDate = request.ToDate.ToServerTimeZone();
             request.IsFilterByAffectedDate = false;
         }
         await GetRequests(request);

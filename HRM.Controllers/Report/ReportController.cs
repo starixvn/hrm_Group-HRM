@@ -57,8 +57,8 @@ public class ReportController(
 
         var criteria = new GetEmployeeAttendanceCriteria
         {
-            Fromtime = fromDate,
-            Totime = toDate,
+            Fromtime = fromDate.ToServerTimeZone(),
+            Totime = toDate.ToServerTimeZone(),
             AttendanceType = 0, //show All
             EmpId = model.EmpId,
             ExcludeUserDelete = 1
