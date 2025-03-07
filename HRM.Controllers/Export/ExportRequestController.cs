@@ -12,6 +12,9 @@ using HRM.Core.Enums;
 using HRM.Core.Filters;
 using GO.UserControl.Client.Core.Enumerables;
 using HRM.Services.ExportExcel;
+using HRM.Models.Request;
+using NPOI.HSSF.UserModel;
+using System.Collections.Generic;
 
 namespace HRM.Controllers.Export;
 
@@ -55,6 +58,40 @@ public class ExportRequestController(IUserControlSession userControlSession,
     public async Task<IActionResult> MemberWorkingTimeRequest(RequestViewModel model)
     {
         model.ViewType = RequestViewType.PersonalSpace;
+        return await WorkingTimeRequest(model);
+    }
+
+    [HrmPermission(Policy.Host, FunctionKey.ProcessRequest)]
+    public async Task<IActionResult> HRViewWorkingTimeRequest(RequestViewModel model)
+    {
+        model.ToDate = model.ToDate.ToEndOfDay();
+        model.ViewType = RequestViewType.HRSpace;
+
+        var criteria = new GetRequestCriteria
+        {
+            SupervisorId = EmployeeSession.EmpId,
+            EmpId = model.EmployeeId == -1 ? null : new int?(model.EmployeeId),
+            FromDate = model.FromDate,
+            ToDate = model.ToDate,
+            TeamIds = model.TeamIds,
+            Status = model.StatusIds,
+            RequestType = model.RequestType,
+            IsQueryByCreatedDate = !model.IsFilterByAffectedDate,
+            RequestViewType = model.ViewType,
+            IsLocal = model.IsLocal.HasValue ? (model.IsLocal.Value == 1) : (bool?)null
+        };
+
+        var requestList = await requestService.GetRequests(criteria);
+        HSSFWorkbook hssfworkbook = exportExcelService.ExportWorkingTimeRequest(requestList, model.PageTitle);
+        string fileName = "EmployeeRequest_" + DateTimeOffset.Now.ToString("yyyyMMdd") + ".xls";
+
+        return ExcelFile(hssfworkbook, fileName);
+    }
+
+
+    public async Task<IActionResult> DailyViewWorkingTimeRequest(RequestViewModel model)
+    {
+        model.ViewType = RequestViewType.CompanySpace;
         return await WorkingTimeRequest(model);
     }
 
