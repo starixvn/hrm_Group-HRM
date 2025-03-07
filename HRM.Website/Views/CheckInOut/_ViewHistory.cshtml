@@ -37,7 +37,7 @@
                         <td>@request.RequestTypeName</td>
                         <td>@request.OnDate.ToDateMonthYearFormatedDate()</td>
                         <td>@request.ShiftName</td>
-                        <td>@request.RequestTime.ToShortFormatedDate()</td>
+                        <td>@request.RequestTime.ToClientTimeZone().ToShortFormatedDate()</td>
                         <td>@request.ReasonName</td>
                         <td>
                             @if (!string.IsNullOrWhiteSpace(request.Remark))
@@ -62,7 +62,7 @@
                             }
                         </td>
                         <td>@request.Status.ToString()</td>
-                        <td class="align-left">@string.Format(Messages.LogDate, @request.Modifier.Nickname, @request.InsertedDate.ToShortFormatedDate())</td>
+                        <td class="align-left">@string.Format(Messages.LogDate, @request.Modifier.Nickname, @request.InsertedDate.ToClientTimeZone().ToShortFormatedDate())</td>
                     </tr>
                 }
             </tbody>

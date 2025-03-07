@@ -34,7 +34,7 @@
                         </td>
                         <td>@request.FromDate.ToDateMonthYearFormatedDate()</td>
                         <td>@request.ToDate.ToDateMonthYearFormatedDate()</td>
-                        <td>@request.CreatedDate.ToShortFormatedDate()</td>
+                        <td>@request.CreatedDate.ToClientTimeZone().ToShortFormatedDate()</td>
                         <td>
                             @if (!string.IsNullOrWhiteSpace(request.Remark))
                             {
@@ -58,7 +58,7 @@
                             }
                         </td>
                         <td>@request.Status.ToString()</td>
-                        <td class="align-left">@string.Format(Messages.LogDate, @request.Modifier.Nickname, @request.InsertedDate.ToShortFormatedDate())</td>
+                        <td class="align-left">@string.Format(Messages.LogDate, @request.Modifier.Nickname, @request.InsertedDate.ToClientTimeZone().ToShortFormatedDate())</td>
                     </tr>
                 }
             </tbody>
