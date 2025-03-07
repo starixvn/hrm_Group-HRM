@@ -6,16 +6,16 @@ using System.Linq;
 using System.Threading.Tasks;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
-using HRM.Core.Constants;
-using HRM.Core.Filters;
-using HRM.Core.Models;
+using Core.Constants;
+using Core.Filters;
+using Core;
 using HRM.Core.Services;
-using HRM.Core.XMLExtensions;
-using HRM.Criteria.Discipline;
-using HRM.Models.Discipline;
-using HRM.Resources;
-using HRM.Services;
-using HRM.ViewModels.Discipline;
+using Core.XMLExtensions;
+using Criteria.Discipline;
+using Models.Discipline;
+using Resources;
+using Services;
+using ViewModels.Discipline;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
@@ -46,8 +46,8 @@ public class DisciplineController(
     {
         var criteria = new GetDisciplineSummaryCriteria
         {
-            FromDate = model.FromDate,
-            ToDate = model.ToDate,
+            FromDate = model.FromDate.ToServerTimeZone(),
+            ToDate = model.ToDate.ToServerTimeZone(),
             TeamId = model.TeamId,
             IsLocal = model.IsLocal,
             EmployeeId = model.EmployeeId,

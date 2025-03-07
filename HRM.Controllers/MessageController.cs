@@ -143,8 +143,8 @@ public class MessageController(
         var currentDateTime = DateTimeOffset.Now.DateTime.ToClientTimeZone();
         var param = new GetMessageByEmployeeParam
         {
-            FromDate = currentDateTime,
-            ToDate = currentDateTime,
+            FromDate = currentDateTime.ToServerTimeZone(),
+            ToDate = currentDateTime.ToServerTimeZone(),
             IsDisabled = 0,
             EmployeeId = EmployeeSession.EmpId
         };

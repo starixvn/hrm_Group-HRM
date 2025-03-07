@@ -61,7 +61,10 @@ public class RequestController(
         }
         await GetRequests(request);
         GetInfoAttachFile(request.Requests);
-
+        Parallel.ForEach(request.Requests, (item) =>
+        {
+            item.CreatedDate = item.CreatedDate.ToClientTimeZone();
+        });
         return View(EmployeeRequestViewName, request);
     }
 
@@ -244,8 +247,8 @@ public class RequestController(
         var criteria = new GetRequestCriteria
         {
             EmpId = employeeId,
-            FromDate = request.FromDate,
-            ToDate = request.ToDate,
+            FromDate = request.FromDate.ToServerTimeZone(),
+            ToDate = request.ToDate.ToServerTimeZone(),
             TeamIds = request.TeamIds,
             Status = request.StatusIds,
             RequestType = request.RequestType,

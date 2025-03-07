@@ -153,7 +153,7 @@
                             @request.Approver.Nickname
                         }
                     </td>
-                    <td>@request.CreatedDate.ToClientTimeZone().ToShortFormatedDate()</td>
+                    <td>@request.CreatedDate.ToShortFormatedDate()</td>
                     <td>@{RenderStatus(request);}</td>
                     <td>
                         <a class="viewhistory" href="javascript:;" requestid="@request.RequestId">@Labels.View</a>
