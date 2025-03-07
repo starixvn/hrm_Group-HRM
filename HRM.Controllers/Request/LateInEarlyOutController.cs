@@ -39,8 +39,8 @@ public class LateInEarlyOutController(
         var criteria = new GetLateInEarlyOutRequestByDateCriteria
         {
             EmpId = EmployeeSession.EmpId,
-            FromDate = fromDate,
-            ToDate = fromDate.AddYears(1).AddDays(-1)
+            FromDate = fromDate.ToServerTimeZone(),
+            ToDate = fromDate.AddYears(1).AddDays(-1).ToServerTimeZone()
         };
         var requests = await lateInEarlyOutRequestService.GetByDateAsync(criteria);
         foreach (var request in requests)

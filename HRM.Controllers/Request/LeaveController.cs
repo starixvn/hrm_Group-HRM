@@ -43,8 +43,8 @@ public class LeaveController(
         var criteria = new GetLeaveRequestByDateCriteria
         {
             EmpId = EmployeeSession.EmpId,
-            FromDate = fromDate,
-            ToDate = fromDate.AddYears(1).AddDays(-1)
+            FromDate = fromDate.ToServerTimeZone(),
+            ToDate = fromDate.AddYears(1).AddDays(-1).ToServerTimeZone()
         };
 
         var leaves = await leaveRequestService.GetByDateAsync(criteria);

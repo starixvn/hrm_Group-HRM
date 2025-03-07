@@ -40,8 +40,8 @@ public class CheckInOutController(
         var criteria = new GetCheckInOutRequestByDateCriteria
         {
             EmpId = EmployeeSession.EmpId,
-            FromDate = fromDate,
-            ToDate = fromDate.AddYears(1).AddDays(-1)
+            FromDate = fromDate.ToServerTimeZone(),
+            ToDate = fromDate.AddYears(1).AddDays(-1).ToServerTimeZone()
         };
 
         var requests = await checkInOutRequestService.GetByDateAsync(criteria);

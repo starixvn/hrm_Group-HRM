@@ -38,8 +38,8 @@ public class ChangeShiftController(
     public async Task<IActionResult> EmployeeView(int? year)
     {
         int tempYear = year ?? DateTimeOffset.Now.Year;
-        var fromDate = new DateTimeOffset(tempYear, 1, 1, 0, 0, 0, TimeSpan.Zero).Date;
-        var toDate = fromDate.AddYears(1).AddDays(-1).Date.ToEndOfDay();
+        var fromDate = new DateTimeOffset(tempYear, 1, 1, 0, 0, 0, TimeSpan.Zero).Date.ToServerTimeZone();
+        var toDate = fromDate.AddYears(1).AddDays(-1).Date.ToEndOfDay().ToServerTimeZone();
         var requests = await changeShiftService.GetByEmployeeAsync(EmployeeSession.EmpId, fromDate, toDate);
         foreach (var request in requests)
         {
