@@ -36,11 +36,13 @@ public class KeepInViewController(
         int tempYear = year ?? DateTimeOffset.Now.Year;
         ViewBag.Year = tempYear;
         var fromDate = new DateTimeOffset(tempYear, 1, 1, 0, 0, 0, TimeSpan.Zero).Date;
+        var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
         var criteria = new GetKeepInViewRequestByDateCriteria
         {
             EmpId = EmployeeSession.EmpId,
             FromDate = fromDate,
-            ToDate = fromDate.AddYears(1).AddDays(-1)
+            ToDate = fromDate.AddYears(1).AddDays(-1),
+            CompanyId = companyId
         };
         var requests = await keepInViewRequestService.GetByDateAsync(criteria);
         foreach (var request in requests)
