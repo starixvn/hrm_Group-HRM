@@ -100,11 +100,11 @@
                     <td>@index</td>
                     @if (item.IsWeekend)
                     {
-                        <td class="weekend">@item.AttendanceDate.ToString("ddd, dd MMM, yyyy")</td>
+                        <td class="weekend">@item.AttendanceDate.ToClientTimeZone().ToString("ddd, dd MMM, yyyy")</td>
                     }
                     else
                     {
-                        <td>@item.AttendanceDate.ToString("ddd, dd MMM, yyyy")</td>
+                        <td>@item.AttendanceDate.ToClientTimeZone().ToString("ddd, dd MMM, yyyy")</td>
                     }
                     <td>@item.DepartmentCode</td>
                     <td>@item.SectionCode</td>
