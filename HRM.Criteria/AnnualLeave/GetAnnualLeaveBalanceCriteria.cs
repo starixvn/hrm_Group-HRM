@@ -16,6 +16,8 @@
 
         public string Role { get; set; }
 
+        public int CompanyId { get; set; }
+
         public override string GetSettingKey()
         {
             return "Report_LeaveSummary";

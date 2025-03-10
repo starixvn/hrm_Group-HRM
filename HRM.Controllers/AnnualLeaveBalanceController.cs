@@ -212,7 +212,8 @@ public class AnnualLeaveBalanceController(
             TeamIds = model.TeamIds,
             IsLocal = (byte?)model.Category,
             Role = string.Empty,
-            SupervisorId = EmployeeSession.EmpId
+            SupervisorId = EmployeeSession.EmpId,
+            CompanyId = companyId
         };
         return await reportService.GetAnnualLeaveBalanceReportAsync(criteria);
     }
