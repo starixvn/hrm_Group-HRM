@@ -49,8 +49,8 @@
             var criteria = new GetWeeklyScheduleCriteria
             {
                 ActorId = filter.ActorId,
-                FromTime = filter.FromDate,
-                ToTime = filter.ToDate,
+                FromTime = filter.FromDate.ToServerTimeZone(),
+                ToTime = filter.ToDate.ToServerTimeZone(),
                 EmpId = filter.EmployeeId,
                 TeamIds = filter.TeamIds,
                 IsIFrame = filter.IsIFrame,
@@ -75,8 +75,8 @@
             var criteria = new EditWeeklyScheduleCriteria
             {
                 ActorId = actorId,
-                FromDate = fromDate,
-                ToDate = toDate,
+                FromDate = fromDate.ToServerTimeZone(),
+                ToDate = toDate.ToServerTimeZone(),
                 WeeklyScheduleXml = weeklySchedules.ToXML().ToString(),
                 DefaultShiftXml = defaultShifts.ToXML().ToString()
             };
