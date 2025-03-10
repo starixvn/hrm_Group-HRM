@@ -42,7 +42,7 @@
                 @Html.TextBox("ToDate", Model.ToDate.ToDateMonthYearFormatedDate(),
                     new {
                         @class = "datepicker form-control",
-                        mindate = DateTime.Now.ToString("yyyy/MM/dd"),
+                             mindate = DateTimeOffset.Now.DateTime.ToClientTimeZone().ToString("yyyy/MM/dd"),
                         @readonly = "readonly"
                     })
                 <i class="icon-calendar fa fa-calendar"></i>

@@ -21,7 +21,7 @@
     <thead>
         <tr>
             <th class="align-left">@Labels.Request</th>
-            <th>@DateTime.Now.ToString("MMM yyyy")</th>
+            <th>@DateTimeOffset.Now.DateTime.ToClientTimeZone().ToString("MMM yyyy")</th>
             <th>@Labels.Pending</th>
             <th>@Labels.CreateRequest</th>
         </tr>

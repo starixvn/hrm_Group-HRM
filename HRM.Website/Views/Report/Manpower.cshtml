@@ -225,14 +225,15 @@
 @{
     void RenderCell(int value, int year, int month)
     {
-        string display = "-";
-        if (DateTime.Now.Year > year)
+        var display = "-";
+        var today = DateTimeOffset.Now.DateTime.ToClientTimeZone();
+        if (today.Year > year)
         {
             display = value.ToString();
         }
-        else if (DateTime.Now.Year == year)
+        else if (today.Year == year)
         {
-            if (DateTime.Now.Month >= month)
+            if (today.Month >= month)
             {
                 display = value.ToString();
             }

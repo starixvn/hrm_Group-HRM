@@ -5,7 +5,7 @@
 @model WorkingHoursSummaryViewModel
 @{
     var isHR = (bool)ViewBag.IsHR;
-    var today = DateTime.Now.ToClientTimeZone();
+    var today = DateTimeOffset.Now.DateTime.ToClientTimeZone();
     ViewBag.Title = "Attendance Statistic for Payroll";
 }
 @section css{

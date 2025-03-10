@@ -1,9 +1,8 @@
-﻿@using HRM.Resources
-@using HRM.ViewModels
-@using HRM.Core
+﻿@using HRM.ViewModels
 @model TimesheetViewModel
 @{
     ViewBag.Title = "My timesheet";
+    var today = DateTimeOffset.Now.DateTime.ToClientTimeZone();
 }
 @section css{
     <link href="~/dist/styles/report.timesheet.css" rel="stylesheet" />
@@ -25,9 +24,9 @@
             </div>
             <div class="input-form">
                 <div id="monthPickr"></div>
-                <input type="hidden" id="Year" name="Year" value="@DateTime.Now.Year" />
-                <input type="hidden" id="Month" name="Month" value="@DateTime.Now.Month" />
-                <input type="hidden" id="maxDate" value="@DateTime.Now.GetMaxDate().ToString("yyyy/MM/dd")" />
+                <input type="hidden" id="Year" name="Year" value="@today.Year" />
+                <input type="hidden" id="Month" name="Month" value="@today.Month" />
+                <input type="hidden" id="maxDate" value="@today.GetMaxDate().ToString("yyyy/MM/dd")" />
                 @Html.HiddenFor(model => model.EmpId)
             </div>
         </div>

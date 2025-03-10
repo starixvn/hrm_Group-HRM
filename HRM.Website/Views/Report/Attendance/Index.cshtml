@@ -18,7 +18,7 @@
 <h2 class="page-title">@ViewBag.Title</h2>
 <form class="filter">
     <div class="form-horizontal clearfix">
-        @Html.Hidden("DateTime-Now", DateTime.Now.ToString("MMMM dd, yyyy"))
+        @Html.Hidden("DateTime-Now", DateTimeOffset.Now.DateTime.ToClientTimeZone().ToString("MMMM dd, yyyy"))
         @Html.HiddenFor(model => model.SupervisorId)
         @Html.HiddenFor(model => model.TeamIds)
         @Html.HiddenFor(model => model.IsLocal)

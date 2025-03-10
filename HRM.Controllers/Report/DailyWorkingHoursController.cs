@@ -24,7 +24,7 @@ public class DailyWorkingHoursController(
     {
         var model = new WeeklyFilterViewModel
         {
-            FromDate = DateTime.Now.ToClientTimeZone().Date,
+            FromDate = DateTimeOffset.Now.DateTime.ToClientTimeZone().Date,
             EmployeeStatusId = (byte)EmployeeStatus.Enabled
         };
 

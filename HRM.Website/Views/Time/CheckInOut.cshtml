@@ -11,7 +11,7 @@
 </head>
 <body>
     <div id="app"></div>
-    <input type="hidden" id="currentDateTime" value="@DateTime.Now.ToString("dd MMM, yyyy HH:mm:ss")" />
+    <input type="hidden" id="currentDateTime" value="@DateTimeOffset.Now.DateTime.ToClientTimeZone().ToString("dd MMM, yyyy HH:mm:ss")" />
     @Html.Hidden("RootURL", Url.Content("~/"))
     <script src="~/dist/js/time.checkinout.js" defer></script>
 </body>

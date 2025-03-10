@@ -26,7 +26,7 @@
                     @Html.TextBox("ChildBornDate", Model.ChildBornDate.ToDateMonthYearFormatedDate(),
                     new {
                        @class = "datepicker form-control",
-                       maxdate = DateTime.Now.ToString("yyyy/MM/dd"),
+                                 maxdate = DateTimeOffset.Now.DateTime.ToClientTimeZone().ToString("yyyy/MM/dd"),
                        @readonly = "readonly"
                     })
                     <i class="icon-calendar fa fa-calendar"></i>

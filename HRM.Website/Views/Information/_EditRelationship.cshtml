@@ -19,7 +19,8 @@
             @Html.LabelFor(model => model.BirthDay, new { @class = "control-label" })
         </div>
         <div class="calendar-form">
-            @Html.TextBox("BirthDay", Model.BirthDay.ToDateMonthYearFormatedDate(), new { @class = "datepicker form-control", maxDate = DateTime.Now })
+            @Html.TextBox("BirthDay", Model.BirthDay.ToDateMonthYearFormatedDate(),
+                     new { @class = "datepicker form-control", maxDate = DateTimeOffset.Now.DateTime.ToClientTimeZone() })
             <i class="icon-calendar fa fa-calendar"></i>
         </div>
     </div>

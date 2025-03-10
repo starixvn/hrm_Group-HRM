@@ -21,7 +21,7 @@
 <h2 class="page-title">@ViewBag.Title</h2>
 @Html.Hidden("CurrentUserId", currentUserId)
 @Html.Hidden("MinDate", new DateTime(2010, 1, 1).ToDateMonthYearFormatedDate())
-@Html.Hidden("MaxDate", DateTime.Now.AddYears(1).ToDateMonthYearFormatedDate())
+@Html.Hidden("MaxDate", DateTimeOffset.Now.DateTime.ToClientTimeZone().AddYears(1).ToDateMonthYearFormatedDate())
 <form class="filter">
     @Html.HiddenFor(model => model.TeamIds)
     @Html.HiddenFor(model => model.Month)

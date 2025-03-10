@@ -32,7 +32,7 @@
             <div class="validation-summary-errors">
                 <a href="@Url.Action("EmployeeView")">
                     You've already requested for change shift <b>@Model.TotalRequestInMonth</b>
-                    times since @DateTime.Now.ToString("MMM yyyy")
+                    times since @DateTimeOffset.Now.DateTime.ToClientTimeZone().ToString("MMM yyyy")
                 </a>
             </div>
         }

@@ -1,12 +1,10 @@
-﻿@using HRM.Core
-@using HRM.Core.Enums
+﻿@using HRM.Core.Enums
 @using HRM.Models.Dashboard
-@using HRM.Resources
 @using HRM.ViewModels.Request
 @using HRM.Website.Helper
 @model IEnumerable<MemberRequest>
 @{ 
-    var today = DateTime.Now;
+    var today = DateTimeOffset.Now.DateTime.ToClientTimeZone();
 }
 @if (Model.Any())
 {
@@ -24,7 +22,7 @@
                     <th rowspan="2" class="align-left">@Labels.Request</th>
                     <th rowspan="2">@Labels.Pending</th>
                     <th colspan="3" class="center">
-                        @DateTime.Now.AddDays(-7).Day - @DateTime.Now.ToDateMonthYearFormatedDate()
+                        @DateTimeOffset.Now.DateTime.ToClientTimeZone().AddDays(-7).Day - @DateTimeOffset.Now.DateTime.ToClientTimeZone().ToDateMonthYearFormatedDate()
                     </th>
                 </tr>
                 <tr>
@@ -33,7 +31,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (MemberRequest item in verifiers)
+                @foreach (var item in verifiers)
                 {
                     var requestModel = new RequestViewModel
                     {
@@ -82,7 +80,7 @@
                     <th rowspan="2" class="align-left">@Labels.Request</th>
                     <th rowspan="2">@Labels.Pending</th>
                     <th colspan="3" class="center">
-                        @DateTime.Now.AddDays(-7).Day - @DateTime.Now.ToDateMonthYearFormatedDate()
+                        @DateTimeOffset.Now.DateTime.ToClientTimeZone().AddDays(-7).Day - @DateTimeOffset.Now.DateTime.ToClientTimeZone().ToDateMonthYearFormatedDate()
                     </th>
                 </tr>
                 <tr>
@@ -91,7 +89,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (MemberRequest item in approvers)
+                @foreach (var item in approvers)
                 {
                     var requestModel = new RequestViewModel
                     {

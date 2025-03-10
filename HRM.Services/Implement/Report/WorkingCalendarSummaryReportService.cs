@@ -1,190 +1,183 @@
-﻿using System.Threading.Tasks;
-using HRM.ViewModels;
+﻿namespace HRM.Services;
 
-namespace HRM.Services
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
+using HRM.Core;
+using HRM.Criteria.Report;
+using HRM.Models.Report;
+using HRM.Repositories;
+using Microsoft.AspNetCore.Hosting;
+using OfficeOpenXml;
+
+public interface IWorkingCalendarSummaryReportService
 {
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
-    using HRM.Core;
-    using HRM.Criteria.Report;
-    using HRM.Models.Report;
-    using HRM.Repositories;
-    using Microsoft.AspNetCore.Hosting;
-    using OfficeOpenXml;
+    Task<IEnumerable<WorkingCalendarSummary>> GetWorkingCalendarSummaryAsync(GetWorkingHoursSummaryParam param);
 
-    public interface IWorkingCalendarSummaryReportService
+    byte[] Export(GetWorkingHoursSummaryParam param, IEnumerable<WorkingCalendarSummary> calendars);
+}
+
+public class WorkingCalendarSummaryReportService(
+    IWebHostEnvironment env,
+    IWorkingCalendarSummaryReportRepository repository) : IWorkingCalendarSummaryReportService
+{
+    private const byte MinimumWidth = 5;
+    private const byte MaximumWidth = 50;
+
+    public async Task<IEnumerable<WorkingCalendarSummary>> GetWorkingCalendarSummaryAsync(GetWorkingHoursSummaryParam param)
     {
-        Task<IEnumerable<WorkingCalendarSummary>> GetWorkingCalendarSummaryAsync(GetWorkingHoursSummaryParam param);
-
-        byte[] Export(GetWorkingHoursSummaryParam param, IEnumerable<WorkingCalendarSummary> calendars);
+        var criteria = new GetEmployeeWorkingCalendarByDateCriteria
+        {
+            ActorId = param.ActorId,
+            FromDate = param.FromDate,
+            ToDate = param.ToDate,
+            IsLocal = param.IsLocal,
+            TeamIds = param.TeamIds,
+            Employee = param.Employee
+        };
+        return await repository.GetWorkingCalendarSummaryAsync(criteria);
     }
 
-    public class WorkingCalendarSummaryReportService(
-        IWebHostEnvironment env,
-        IWorkingCalendarSummaryReportRepository repository) : IWorkingCalendarSummaryReportService
+    public byte[] Export(
+        GetWorkingHoursSummaryParam param,
+        IEnumerable<WorkingCalendarSummary> calendars)
     {
-        private const byte MinimumWidth = 5;
-        private const byte MaximumWidth = 50;
+        var templatePath = Path.Combine(env.ContentRootPath, "ExcelTemplates/WorkingCalendarSummary.xlsx");
+        using var templatePackage = new ExcelPackage(new FileInfo(templatePath));
+        using var xlPackage = new ExcelPackage();
+        var template = templatePackage.Workbook.Worksheets[0];
+        var worksheet = xlPackage.Workbook.Worksheets.Add("Working Calendar Summary");
+        const byte StartBodyRow = 3;
+        const byte TotalFixedColumns = 7;
+        const byte StartDateColumn = 8;
+        var rowIndex = 1;
+        var colIndex = 1;
 
-        public async Task<IEnumerable<WorkingCalendarSummary>> GetWorkingCalendarSummaryAsync(GetWorkingHoursSummaryParam param)
+        // title
+        template.Cells[rowIndex, colIndex, rowIndex, TotalFixedColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalFixedColumns]);
+        worksheet.Cells[rowIndex, colIndex].Value = string.Format(
+            worksheet.Cells[rowIndex, colIndex].Value.ToString(),
+            param.FromDate.ToDateMonthYearFormatedDate(),
+            param.ToDate.ToDateMonthYearFormatedDate());
+        rowIndex++;
+
+        // header
+        template.Cells[rowIndex, colIndex, rowIndex, TotalFixedColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalFixedColumns]);
+        colIndex = StartDateColumn;
+        for (var day = param.FromDate.Date; day.Date <= param.ToDate.Date; day = day.AddDays(1))
         {
-            var criteria = new GetEmployeeWorkingCalendarByDateCriteria
-            {
-                ActorId = param.ActorId,
-                FromDate = param.FromDate,
-                ToDate = param.ToDate,
-                IsLocal = param.IsLocal,
-                TeamIds = param.TeamIds,
-                Employee = param.Employee
-            };
-            return await repository.GetWorkingCalendarSummaryAsync(criteria);
+            template.Cells[rowIndex, StartDateColumn].Copy(worksheet.Cells[rowIndex, colIndex]);
+            worksheet.Cells[rowIndex, colIndex].Value = day.ToString("dd MMM, yyyy (ddd)");
+            colIndex++;
         }
 
-        public byte[] Export(
-            GetWorkingHoursSummaryParam param,
-            IEnumerable<WorkingCalendarSummary> calendars)
+        // data
+        rowIndex++;
+        var rowNum = 1;
+        var employees = calendars.GroupBy(x => x.EmployeeId).Select(x => x.First()).OrderBy(x => x.Nickname);
+        foreach (var employee in employees)
         {
-            var templatePath = Path.Combine(env.ContentRootPath, "ExcelTemplates/WorkingCalendarSummary.xlsx");
-            using (var templatePackage = new ExcelPackage(new FileInfo(templatePath)))
+            var items = calendars.Where(x => x.EmployeeId == employee.EmployeeId);
+            colIndex = 1;
+            template.Cells[StartBodyRow, 1, StartBodyRow, TotalFixedColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalFixedColumns]);
+
+            worksheet.Cells[rowIndex, colIndex++].Value = rowNum++;
+            worksheet.Cells[rowIndex, colIndex++].Value = employee.DepartmentCode;
+            worksheet.Cells[rowIndex, colIndex++].Value = employee.Section;
+            worksheet.Cells[rowIndex, colIndex++].Value = employee.Team;
+            worksheet.Cells[rowIndex, colIndex++].Value = employee.Code;
+            worksheet.Cells[rowIndex, colIndex++].Value = employee.FullName;
+            worksheet.Cells[rowIndex, colIndex++].Value = employee.Nickname;
+
+            for (var day = param.FromDate.Date; day.Date <= param.ToDate.Date; day = day.AddDays(1))
             {
-                using (var xlPackage = new ExcelPackage())
-                {
-                    var template = templatePackage.Workbook.Worksheets[0];
-                    var worksheet = xlPackage.Workbook.Worksheets.Add("Working Calendar Summary");
-                    const byte StartBodyRow = 3;
-                    const byte TotalFixedColumns = 7;
-                    const byte StartDateColumn = 8;
-                    var rowIndex = 1;
-                    var colIndex = 1;
+                var item = items.FirstOrDefault(x => x.WorkDate.Date == day.Date);
+                template.Cells[StartBodyRow, StartDateColumn].Copy(worksheet.Cells[rowIndex, colIndex]);
+                worksheet.Cells[rowIndex, colIndex].Value = item != null ? GetShift(item) : string.Empty;
+                colIndex++;
+            }
 
-                    // title
-                    template.Cells[rowIndex, colIndex, rowIndex, TotalFixedColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalFixedColumns]);
-                    worksheet.Cells[rowIndex, colIndex].Value = string.Format(
-                        worksheet.Cells[rowIndex, colIndex].Value.ToString(),
-                        param.FromDate.ToDateMonthYearFormatedDate(),
-                        param.ToDate.ToDateMonthYearFormatedDate());
-                    rowIndex++;
+            rowIndex++;
+        }
 
-                    // header
-                    template.Cells[rowIndex, colIndex, rowIndex, TotalFixedColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalFixedColumns]);
-                    colIndex = StartDateColumn;
-                    for (var day = param.FromDate.Date; day.Date <= param.ToDate.Date; day = day.AddDays(1))
-                    {
-                        template.Cells[rowIndex, StartDateColumn].Copy(worksheet.Cells[rowIndex, colIndex]);
-                        worksheet.Cells[rowIndex, colIndex].Value = day.ToString("dd MMM, yyyy (ddd)");
-                        colIndex++;
-                    }
+        worksheet.Cells.AutoFitColumns(MinimumWidth, MaximumWidth);
+        worksheet.View.FreezePanes(StartBodyRow, StartDateColumn);
+        return xlPackage.GetAsByteArray();
+    }
 
-                    // data
-                    rowIndex++;
-                    var rowNum = 1;
-                    var employees = calendars.GroupBy(x => x.EmployeeId).Select(x => x.First()).OrderBy(x => x.Nickname);
-                    foreach (var employee in employees)
-                    {
-                        var items = calendars.Where(x => x.EmployeeId == employee.EmployeeId);
-                        colIndex = 1;
-                        template.Cells[StartBodyRow, 1, StartBodyRow, TotalFixedColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalFixedColumns]);
+    private static string GetShift(WorkingCalendarSummary workingCalendar)
+    {
+        string shift;
 
-                        worksheet.Cells[rowIndex, colIndex++].Value = rowNum++;
-                        worksheet.Cells[rowIndex, colIndex++].Value = employee.DepartmentCode;
-                        worksheet.Cells[rowIndex, colIndex++].Value = employee.Section;
-                        worksheet.Cells[rowIndex, colIndex++].Value = employee.Team;
-                        worksheet.Cells[rowIndex, colIndex++].Value = employee.Code;
-                        worksheet.Cells[rowIndex, colIndex++].Value = employee.FullName;
-                        worksheet.Cells[rowIndex, colIndex++].Value = employee.Nickname;
+        if (workingCalendar.IsLeaveOffDay)
+        {
+            shift = "Off";
+        }
+        else if (workingCalendar.IsLeaveDay)
+        {
+            shift = GetShiftOnLeaveDay(workingCalendar);
+        }
+        else if (workingCalendar.IsHoliday)
+        {
+            shift = GetShiftOnHoliday(workingCalendar);
+        }
+        else if (workingCalendar.IsOffDay)
+        {
+            shift = workingCalendar.Shift != null ? workingCalendar.Shift.Code : "Off";
+        }
+        else
+        {
+            shift = workingCalendar.Shift?.Code;
+        }
 
-                        for (var day = param.FromDate.Date; day.Date <= param.ToDate.Date; day = day.AddDays(1))
-                        {
-                            var item = items.FirstOrDefault(x => x.WorkDate.Date == day.Date);
-                            template.Cells[StartBodyRow, StartDateColumn].Copy(worksheet.Cells[rowIndex, colIndex]);
-                            worksheet.Cells[rowIndex, colIndex].Value = item != null ? GetShift(item) : string.Empty;
-                            colIndex++;
-                        }
+        return shift;
+    }
 
-                        rowIndex++;
-                    }
+    private static string GetShiftOnHoliday(WorkingCalendarSummary workingCalendar)
+    {
+        string shift;
+        if (workingCalendar.IsOffDay)
+        {
+            shift = "Off";
+        }
+        else if (workingCalendar.Shift != null)
+        {
+            shift = workingCalendar.Shift.Code;
+        }
+        else
+        {
+            shift = "PH";
+        }
 
-                    worksheet.Cells.AutoFitColumns(MinimumWidth, MaximumWidth);
-                    worksheet.View.FreezePanes(StartBodyRow, StartDateColumn);
-                    return xlPackage.GetAsByteArray();
-                }
+        return shift;
+    }
+
+    private static string GetShiftOnLeaveDay(WorkingCalendarSummary workingCalendar)
+    {
+        string shift;
+        if (workingCalendar.IsHoliday)
+        {
+            shift = "PH";
+        }
+        else if (workingCalendar.IsOffDay)
+        {
+            shift = "Off";
+        }
+        else if (workingCalendar.IsLeaveHalfDay)
+        {
+            shift = $"{workingCalendar.LeaveType.Code} ½";
+        }
+        else
+        {
+            shift = workingCalendar.LeaveType.Code;
+
+            if (workingCalendar.LeaveType2 != null && workingCalendar.LeaveType.Code != workingCalendar.LeaveType2.Code)
+            {
+                shift = $"{workingCalendar.LeaveType.Code} / {workingCalendar.LeaveType2.Code}";
             }
         }
 
-        private static string GetShift(WorkingCalendarSummary workingCalendar)
-        {
-            var shift = string.Empty;
-
-            if (workingCalendar.IsLeaveOffDay)
-            {
-                shift = "Off";
-            }
-            else if (workingCalendar.IsLeaveDay)
-            {
-                shift = GetShiftOnLeaveDay(workingCalendar);
-            }
-            else if (workingCalendar.IsHoliday)
-            {
-                shift = GetShiftOnHoliday(workingCalendar);
-            }
-            else if (workingCalendar.IsOffDay)
-            {
-                shift = workingCalendar.Shift != null ? workingCalendar.Shift.Code : "Off";
-            }
-            else
-            {
-                shift = workingCalendar.Shift?.Code;
-            }
-
-            return shift;
-        }
-
-        private static string GetShiftOnHoliday(WorkingCalendarSummary workingCalendar)
-        {
-            var shift = string.Empty;
-            if (workingCalendar.IsOffDay)
-            {
-                shift = "Off";
-            }
-            else if (workingCalendar.Shift != null)
-            {
-                shift = workingCalendar.Shift.Code;
-            }
-            else
-            {
-                shift = "PH";
-            }
-
-            return shift;
-        }
-
-        private static string GetShiftOnLeaveDay(WorkingCalendarSummary workingCalendar)
-        {
-            var shift = string.Empty;
-            if (workingCalendar.IsHoliday)
-            {
-                shift = "PH";
-            }
-            else if (workingCalendar.IsOffDay)
-            {
-                shift = "Off";
-            }
-            else if (workingCalendar.IsLeaveHalfDay)
-            {
-                shift = $"{workingCalendar.LeaveType.Code} ½";
-            }
-            else
-            {
-                shift = workingCalendar.LeaveType.Code;
-
-                if (workingCalendar.LeaveType2 != null && workingCalendar.LeaveType.Code != workingCalendar.LeaveType2.Code)
-                {
-                    shift = $"{workingCalendar.LeaveType.Code} / {workingCalendar.LeaveType2.Code}";
-                }
-            }
-
-            return shift;
-        }
+        return shift;
     }
 }

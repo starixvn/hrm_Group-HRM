@@ -22,7 +22,7 @@ public class WeeklyWorkingHoursController(
     [HttpGet]
     public ActionResult Index()
     {
-        var today = DateTime.Now.ToClientTimeZone().Date;
+        var today = DateTimeOffset.Now.DateTime.ToClientTimeZone().Date;
         var model = new WeeklyFilterViewModel
         {
             FromDate = today.FirstDayOfWeek(),

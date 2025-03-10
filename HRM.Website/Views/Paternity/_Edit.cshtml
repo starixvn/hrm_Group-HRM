@@ -24,7 +24,7 @@
                     new {
                         @class = "datepicker form-control",
                         mindate = new DateTime(2010, 1, 1).ToString("yyyy/MM/dd"),
-                        maxdate = DateTime.Now.ToString("yyyy/MM/dd"),
+                             maxdate = DateTimeOffset.Now.DateTime.ToClientTimeZone().ToString("yyyy/MM/dd"),
                         @readonly = "readonly"
                     })
                 <i class="icon-calendar fa fa-calendar"></i>

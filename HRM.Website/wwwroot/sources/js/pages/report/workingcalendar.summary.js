@@ -15,7 +15,7 @@ $(document).ready(function () {
     let query = function () {
         blockUI();
         axios({
-            url: resolveClientUrl('WorkingCalendarSummaryReport/GetWorkingCalendarSumary'),
+            url: resolveClientUrl('WorkingCalendarSummaryReport/GetWorkingCalendarSummary'),
             method: 'GET',
             headers: { 'X-Requested-With': 'XMLHttpRequest' },
             params: parse($('form.filter').serialize()),

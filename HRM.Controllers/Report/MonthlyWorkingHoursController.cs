@@ -22,7 +22,7 @@ public class MonthlyWorkingHoursController(
     [HttpGet]
     public ActionResult Index()
     {
-        var today = DateTime.Now.ToClientTimeZone().Date;
+        var today = DateTimeOffset.Now.DateTime.ToClientTimeZone().Date;
         var model = new MonthlyFilterViewModel
         {
             FromDate = today.FirstDayOfMonth(),

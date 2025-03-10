@@ -5,7 +5,7 @@
 
 @using (Html.BeginForm())
 {
-    @Html.Hidden("DateTime-Now", DateTime.Now.ToString("MMMM dd, yyyy"))
+    @Html.Hidden("DateTime-Now", DateTimeOffset.Now.DateTime.ToClientTimeZone().ToString("MMMM dd, yyyy"))
     @Html.HiddenFor(model => model.ActionName)
     @Html.HiddenFor(model => model.TeamIds)
     <div class="form-horizontal clearfix">

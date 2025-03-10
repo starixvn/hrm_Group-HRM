@@ -17,8 +17,8 @@
 }
 <h2 class="page-title">@ViewBag.Title</h2>
 
-@Html.Hidden("MinDate", DateTime.Now.ToClientTimeZone().AddYears(-2).ToDateMonthYearFormatedDate())
-@Html.Hidden("MaxDate", DateTime.Now.ToClientTimeZone().ToDateMonthYearFormatedDate())
+@Html.Hidden("MinDate", DateTimeOffset.Now.DateTime.ToClientTimeZone().AddYears(-2).ToDateMonthYearFormatedDate())
+@Html.Hidden("MaxDate", DateTimeOffset.Now.DateTime.ToClientTimeZone().ToDateMonthYearFormatedDate())
 <form class="filter">
     @Html.HiddenFor(model => model.TeamIds)
     <div class="form-horizontal clearfix">

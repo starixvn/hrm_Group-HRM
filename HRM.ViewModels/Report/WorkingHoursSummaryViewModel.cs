@@ -9,7 +9,7 @@ using HRM.Models.Report;
 
 public class WorkingHoursSummaryViewModel
 {
-    private static DateTime Today = DateTime.Now.ToClientTimeZone().Date;
+    private static readonly DateTime Today = DateTimeOffset.Now.DateTime.ToClientTimeZone().Date;
 
     public byte DateOption { get; set; } = (byte)DateRangeOption.CurrentMonth;
     public DateTime FromDate { get; set; } = Today.FirstDayOfMonth();

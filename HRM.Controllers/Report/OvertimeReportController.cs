@@ -25,8 +25,8 @@ public class OvertimeReportController(
     {
         var model = new MonthlyFilterViewModel
         {
-            FromDate = DateTime.Now.ToClientTimeZone().Date.FirstDayOfMonth(),
-            ToDate = DateTime.Now.ToClientTimeZone().Date.LastDayOfMonth(),
+            FromDate = DateTimeOffset.Now.DateTime.ToClientTimeZone().Date.FirstDayOfMonth(),
+            ToDate = DateTimeOffset.Now.DateTime.ToClientTimeZone().Date.LastDayOfMonth(),
             EmployeeStatusId = (byte)EmployeeStatus.Enabled
         };
 

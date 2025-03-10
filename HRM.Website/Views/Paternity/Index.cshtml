@@ -22,7 +22,7 @@
                 </div>
                 <div class="select-form">
                     @{
-                        var yearPicker = Extensions.YearPicker(2010, DateTime.Now.Year);
+                        var yearPicker = Extensions.YearPicker(2010, DateTimeOffset.Now.DateTime.ToClientTimeZone().Year);
                         <select class="yearpicker form-control" name="year" id="Year">
                             @foreach (var item in yearPicker)
                             {

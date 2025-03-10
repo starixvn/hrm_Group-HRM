@@ -243,13 +243,13 @@
     @{
         var model = new AnnualLeaveBalanceMultiViewModel
         {
-            AffectedFrom = DateTimeOffset.Now.DateTime
+            AffectedFrom = DateTimeOffset.Now.DateTime.ToClientTimeZone()
         };
     }
     <div id="insertform" title="Adjust balance">
         @await Html.PartialAsync("_MultipleInsert", model)
     </div>
-    <div id="resetform" title="Close balance for year @DateTime.Now.AddYears(-1).Year">
+    <div id="resetform" title="Close balance for year @DateTimeOffset.Now.DateTime.ToClientTimeZone().AddYears(-1).Year">
         @await Html.PartialAsync("_MultipleReset", model)
     </div>
 </div>
