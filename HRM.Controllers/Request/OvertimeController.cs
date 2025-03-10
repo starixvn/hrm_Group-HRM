@@ -31,7 +31,7 @@ public class OvertimeController(
     [HttpGet]
     public async Task<IActionResult> EmployeeView(MonthlyOvertimeRequestViewModel model)
     {
-        model.Employee = model.Employee ?? EmployeeSession.DisplayName;
+        model.Employee ??= EmployeeSession.DisplayName;
         model.EmployeeId = model.EmployeeId <= 0 ? EmployeeSession.EmpId : model.EmployeeId;
         model.OvertimeRequests = await overtimeService.GetMonthlyRequestByEmployeeId(model.EmployeeId, model.Year);
 

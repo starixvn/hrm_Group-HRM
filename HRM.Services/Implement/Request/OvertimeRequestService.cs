@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using GO.UserControl.Client.Core.Session;
 using HRM.Core;
 using HRM.Core.Constants;
 using HRM.Core.Enums;
@@ -20,7 +21,8 @@ public class OvertimeRequestService(
     IOvertimeRequestRepository overtimeRepository,
     IBaseService baseService,
     IEmailService emailService,
-    ILetstalkService letStalkService) : IOvertimeRequestService
+    ILetstalkService letStalkService,
+    IUserControlSession userControlSession) : IOvertimeRequestService
 {
     private const byte FromDay = 21;
     private const byte ToDay = 20;
@@ -46,11 +48,14 @@ public class OvertimeRequestService(
             toDate = new DateTimeOffset(year, Constants.December, 1, 0, 0, 0, TimeSpan.Zero);
         }
 
+        var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
+
         var criteria = new GetMonthlyOvertimeRequestByEmployeeIdCriteria
         {
             EmployeeId = employeeId,
             FromDate = fromDate.Date,
-            ToDate = toDate.Date
+            ToDate = toDate.Date,
+            CompanyId = companyId
         };
         var monthlyRequests = await overtimeRepository.GetMonthlyRequestByEmployeeId(criteria);
 
