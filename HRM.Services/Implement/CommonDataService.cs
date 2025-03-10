@@ -9,11 +9,13 @@ using Criteria.Country;
 using Criteria.LeaveType;
 using Criteria.Lookup;
 using Criteria.SystemSetting;
+using GO.UserControl.Client.Core.Session;
+using HRM.Core.Constants;
 using HRM.Core.Models;
 using HRM.Core.Services;
+using HRM.Services.Interfaces;
 using Models;
 using Resources;
-using HRM.Services.Interfaces;
 
 public interface ICommonDataService
 {
@@ -36,11 +38,10 @@ public interface ICommonDataService
     Task<SystemSetting> GetSystemSettingAsync();
 
     Task<bool> IsEnableGroupDateAsync();
-
-    Task<bool> IsEnableGroupDate();
 }
 
 public class CommonDataService(
+    IUserControlSession session,
     IBaseService baseService,
     ITeamService teamService) : ICommonDataService
 {
@@ -156,16 +157,7 @@ public class CommonDataService(
     {
         var criteria = new GetSystemConfigsByKeyCriteria
         {
-            Key = "EnableGroupDate"
-        };
-
-        return await baseService.GetDataEntityAsync<bool>(criteria);
-    }
-
-    public async Task<bool> IsEnableGroupDate()
-    {
-        var criteria = new GetSystemConfigsByKeyCriteria
-        {
+            CompanyId = session.Get<short>(SessionKey.CurrentCompanyId),
             Key = "EnableGroupDate"
         };
 

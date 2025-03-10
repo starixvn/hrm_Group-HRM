@@ -1,6 +1,4 @@
-﻿@using HRM.Core
-@using HRM.Resources
-@using HRM.ViewModels.Report
+﻿@using HRM.ViewModels.Report
 @model DisciplineSummaryPerYearViewModel
 @{
     ViewBag.Title = "5 Years Discipline Summary";
@@ -74,10 +72,10 @@
             <div class="select-form">
                 @{
                     var category = new List<SelectListItem>
-                                    {
-                        new SelectListItem() {Text = Labels.All, Value = string.Empty},
-                        new SelectListItem() {Text = Labels.Expat, Value = "false"},
-                        new SelectListItem() {Text = Labels.Local, Value = "true"}
+                    {
+                        new() {Text = Labels.All, Value = string.Empty},
+                        new() {Text = Labels.Expat, Value = "false"},
+                        new() {Text = Labels.Local, Value = "true"}
                     };
                 }
                 @Html.DropDownListFor(model => model.IsLocal, category, new { @class = "category form-control" })
@@ -101,17 +99,17 @@
             </div>
             <div class="select-form">
                 @{
-                    var lengOfService = new List<SelectListItem>();
+                    var lengthOfService = new List<SelectListItem>();
 
                     if (enableGroupDate)
                     {
-                        lengOfService.Add(new SelectListItem { Text = "By Group Date", Value = "false" });
+                        lengthOfService.Add(new SelectListItem { Text = "By Group Date", Value = "false" });
                     }
 
-                    lengOfService.Add(new SelectListItem { Text = "By Company Date", Value = "true" });
+                    lengthOfService.Add(new SelectListItem { Text = "By Company Date", Value = "true" });
                 }
 
-                @Html.DropDownListFor(model => model.LengthOfService, lengOfService, new { @class = "category form-control" })
+                @Html.DropDownListFor(model => model.LengthOfService, lengthOfService, new { @class = "category form-control" })
             </div>
         </div>
 

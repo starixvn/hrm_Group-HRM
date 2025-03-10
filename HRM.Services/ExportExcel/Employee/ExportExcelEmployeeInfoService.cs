@@ -2,7 +2,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,7 +15,6 @@ using Models.EmployeeInformation;
 using Models.Supervisor;
 using Resources;
 
-[SuppressMessage("Major Code Smell", "S109:Magic numbers should not be used", Justification = "Pending")]
 public class ExportExcelEmployeeInfoService(
     IEmployeeService employeeService,
     ICommonDataService commonDataService,
@@ -38,7 +36,7 @@ public class ExportExcelEmployeeInfoService(
         var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, EmployeeBasicInfoTemplatePath);
         const string sheetName = "Employee Basic Info";
         var writer = new ExcelTemplateWriter(templatePath, string.Empty, sheetName);
-        var enableGroupDate = await commonDataService.IsEnableGroupDate();
+        var enableGroupDate = await commonDataService.IsEnableGroupDateAsync();
         const byte colGroupDate = 8;
         const byte colLengthOfServiceGroupDate = 12;
 
@@ -214,7 +212,7 @@ public class ExportExcelEmployeeInfoService(
         var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, EmployeeFullInfoTemplatePath);
         const string sheetName = "Employee Full Information";
         var writer = new ExcelTemplateWriter(templatePath, string.Empty, sheetName);
-        var enableGroupDate = await commonDataService.IsEnableGroupDate();
+        var enableGroupDate = await commonDataService.IsEnableGroupDateAsync();
         const byte colGroupDate = 10;
         const byte colLengthOfServiceGroupDate = 14;
 

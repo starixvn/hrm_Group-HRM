@@ -22,31 +22,30 @@
     <tbody>
         @if (Model != null && Model.Any())
         {
-            int index = 0;
-        <tbody>
-            @foreach (var detail in Model)
-            {
-                index++;
-            <tr>
-                <td class="align-left">@detail.Department</td>
-                <td class="align-left">@detail.Section</td>
-                <td class="align-left">@detail.Team</td>
-                <td class="align-center">@detail.Code</td>
-                <td class="align-left">@detail.WorkDate.ToString("ddd, dd MMM, yyyy")</td>
-                <td class="align-left">@detail.FullName</td>
-                <td class="align-left">@detail.NickName</td>
-                <td class="align-center">@detail.ShiftCode</td>
-                <td class="align-left">@detail.InFixed.ToShortFormatedDate()</td>
-                <td class="align-left">@detail.OutFixed.ToShortFormatedDate()</td>
-                <td class="align-center">@detail.TotalWorkHours</td>
-                <td class="align-center">@detail.TotalDays</td>
-            </tr>
-            }
-        </tbody>
+            var index = 0;
+            <tbody>
+                @foreach (var detail in Model)
+                {
+                    index++;
+                <tr>
+                    <td class="align-left">@detail.Department</td>
+                    <td class="align-left">@detail.Section</td>
+                    <td class="align-left">@detail.Team</td>
+                    <td class="align-center">@detail.Code</td>
+                    <td class="align-left">@detail.WorkDate.ToString("ddd, dd MMM, yyyy")</td>
+                    <td class="align-left">@detail.FullName</td>
+                    <td class="align-left">@detail.NickName</td>
+                    <td class="align-center">@detail.ShiftCode</td>
+                    <td class="align-left">@detail.InFixed.ToShortFormatedDate()</td>
+                    <td class="align-left">@detail.OutFixed.ToShortFormatedDate()</td>
+                    <td class="align-center">@detail.TotalWorkHours</td>
+                    <td class="align-center">@detail.TotalDays</td>
+                </tr>
+                }
+            </tbody>
     }
     else
     {
         @Html.Raw(RazorHelpers.DisplayNoInformation(colspan: 12));
     }
-    </table>
-
+</table>

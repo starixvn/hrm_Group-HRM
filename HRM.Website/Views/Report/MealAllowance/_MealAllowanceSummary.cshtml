@@ -1,5 +1,4 @@
-﻿@using HRM.Resources
-@using HRM.Models.Report.MealAllowance;
+﻿@using HRM.Models.Report.MealAllowance;
 @using HRM.Website.Helper
 @model IEnumerable<MealAllowanceSummary>
 @{
@@ -58,7 +57,7 @@
     </thead>
     @if (Model != null && Model.Any())
     {
-        int index = 0;
+        var index = 0;
         <tbody>
             @foreach (var summary in Model)
             {

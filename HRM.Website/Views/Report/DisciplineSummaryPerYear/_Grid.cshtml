@@ -1,6 +1,4 @@
 ﻿@using HRM.Models.Report
-@using HRM.Resources
-@using HRM.Core
 @using HRM.Website.Helper
 @model IList<DisciplineSummaryPerYear>
 @{
@@ -34,8 +32,8 @@
     <tbody>
         @if (Model != null && Model.Any())
         {
-            int index = 0;
-            foreach (DisciplineSummaryPerYear item in Model)
+            var index = 0;
+            foreach (var item in Model)
             {
                 index++;
                 <tr>

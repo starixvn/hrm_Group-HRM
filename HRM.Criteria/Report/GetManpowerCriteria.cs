@@ -1,19 +1,12 @@
-﻿namespace HRM.Criteria.Report
+﻿namespace HRM.Criteria.Report;
+
+using Fanex.Data.Repository;
+
+public class GetManpowerCriteria : CriteriaBase
 {
-    using Fanex.Data.Repository;
+    public int Year { get; set; }
 
-    public class GetManpowerCriteria : CriteriaBase
-    {
-        public int Year { get; set; }
+    public override string GetSettingKey() => "Report_Manpower";
 
-        public override string GetSettingKey()
-        {
-            return "Report_Manpower";
-        }
-
-        public override bool IsValid()
-        {
-            return Year > 0;
-        }
-    }
+    public override bool IsValid() => Year > 0;
 }

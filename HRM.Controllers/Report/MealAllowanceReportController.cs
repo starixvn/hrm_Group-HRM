@@ -1,98 +1,98 @@
-﻿namespace HRM.Controllers.Report
+﻿namespace HRM.Controllers.Report;
+
+using System;
+using System.Threading.Tasks;
+using GO.UserControl.Client.Core.Enumerables;
+using GO.UserControl.Client.Core.Session;
+using HRM.Controllers;
+using HRM.Core;
+using HRM.Core.Constants;
+using HRM.Core.Filters;
+using HRM.Criteria.Report.MealAllowance;
+using HRM.Services.Implement.Report;
+using HRM.ViewModels.Report;
+using Microsoft.AspNetCore.Mvc;
+
+[HrmPermission(Policy.Read, FunctionKey.MealAllowanceReport)]
+public class MealAllowanceReportController(
+    IUserControlSession userControlSession,
+    IMealAllowanceSummaryService reportService) : BaseController(userControlSession)
 {
-    using System;
-    using System.Threading.Tasks;
-    using GO.UserControl.Client.Core.Enumerables;
-    using GO.UserControl.Client.Core.Session;
-    using HRM.Controllers;
-    using HRM.Core.Constants;
-    using HRM.Core.Filters;
-    using HRM.Criteria.Report.MealAllowance;
-    using HRM.Services.Implement.Report;
-    using HRM.ViewModels.Report;
-    using Microsoft.AspNetCore.Mvc;
-
-    [HrmPermission(Policy.Read, FunctionKey.MealAllowanceReport)]
-    public class MealAllowanceReportController(
-        IUserControlSession userControlSession,
-        IMealAllowanceSummaryService reportService) : BaseController(userControlSession)
+    [HttpGet]
+    public ActionResult Index()
     {
-        [HttpGet]
-        public ActionResult Index()
+        var today = DateTimeOffset.Now.DateTime.ToClientTimeZone().Date;
+        var model = new MealAllowanceReportViewModel
         {
-            var today = DateTimeOffset.Now.Date;
-            var model = new MealAllowanceReportViewModel
-            {
-                FromDate = today,
-                ToDate = today
-            };
+            FromDate = today,
+            ToDate = today
+        };
 
-            return View("~/Views/Report/MealAllowance/Index.cshtml", model);
-        }
+        return View("~/Views/Report/MealAllowance/Index.cshtml", model);
+    }
 
-        [HttpGet]
-        public ActionResult MealAllowanceDetails(MealAllowanceReportViewModel model)
+    [HttpGet]
+    public ActionResult MealAllowanceDetails(MealAllowanceReportViewModel model)
+    {
+        return View("~/Views/Report/MealAllowance/MealAllowanceDetails.cshtml", model);
+    }
+
+    [HttpGet]
+    public async Task<ActionResult> MealAllowanceDetailsGrid(MealAllowanceReportViewModel model)
+    {
+        var criteria = new GetMealAllowanceDetailReportCriteria
         {
-            return View("~/Views/Report/MealAllowance/MealAllowanceDetails.cshtml", model);
-        }
+            EmployeeId = model.EmployeeId,
+            FromDate = model.FromDate,
+            ToDate = model.ToDate,
+            IsLocal = model.IsLocal,
+            TeamId = model.TeamIds,
+        };
+        var mealAllowanceDetails = await reportService.GetMealAllowanceDetailsAsync(criteria);
+        return PartialView("~/Views/Report/MealAllowance/_MealAllowanceDetailsGrid.cshtml", mealAllowanceDetails);
+    }
 
-        [HttpGet]
-        public async Task<ActionResult> MealAllowanceDetailsGrid(MealAllowanceReportViewModel model)
+    public async Task<ActionResult> GetMealAllowanceSummary(MealAllowanceReportViewModel model)
+    {
+        var criteria = new GetMealAllowanceSummaryReportCriteria
         {
-            var criteria = new GetMealAllowanceDetailReportCriteria
-            {
-                EmployeeId = model.EmployeeId,
-                FromDate = model.FromDate,
-                ToDate = model.ToDate,
-                IsLocal = model.IsLocal,
-                TeamId = model.TeamIds,
-            };
-            var mealAllowanceDetails = await reportService.GetMealAllowanceDetailsAsync(criteria);
-            return PartialView("~/Views/Report/MealAllowance/_MealAllowanceDetailsGrid.cshtml", mealAllowanceDetails);
-        }
+            EmployeeId = model.EmployeeId,
+            FromDate = model.FromDate,
+            ToDate = model.ToDate,
+            IsLocal = model.IsLocal,
+            TeamId = model.TeamIds,
+        };
+        var mealAllowanceSummary = await reportService.GetMealAllowanceSummaryAsync(criteria);
+        ViewBag.FromDate = model.FromDate;
+        ViewBag.ToDate = model.ToDate;
+        return PartialView("~/Views/Report/MealAllowance/_MealAllowanceSummary.cshtml", mealAllowanceSummary);
+    }
 
-        public async Task<ActionResult> GetMealAllowanceSummary(MealAllowanceReportViewModel model)
+    [HttpGet]
+    public async Task<ActionResult> ExportExcel(MealAllowanceReportViewModel model)
+    {
+        var criteriaSummary = new GetMealAllowanceSummaryReportCriteria
         {
-            var criteria = new GetMealAllowanceSummaryReportCriteria
-            {
-                EmployeeId = model.EmployeeId,
-                FromDate = model.FromDate,
-                ToDate = model.ToDate,
-                IsLocal = model.IsLocal,
-                TeamId = model.TeamIds,
-            };
-            var mealAllowanceSummary = await reportService.GetMealAllowanceSummaryAsync(criteria);
-            ViewBag.FromDate = model.FromDate;
-            ViewBag.ToDate = model.ToDate;
-            return PartialView("~/Views/Report/MealAllowance/_MealAllowanceSummary.cshtml", mealAllowanceSummary);
-        }
+            EmployeeId = model.EmployeeId,
+            FromDate = model.FromDate,
+            ToDate = model.ToDate,
+            IsLocal = model.IsLocal,
+            TeamId = model.TeamIds,
+        };
 
-        [HttpGet]
-        public async Task<ActionResult> ExportExcel(MealAllowanceReportViewModel model)
+        var criteriaDetails = new GetMealAllowanceDetailReportCriteria
         {
-            var criteriaSummary = new GetMealAllowanceSummaryReportCriteria
-            {
-                EmployeeId = model.EmployeeId,
-                FromDate = model.FromDate,
-                ToDate = model.ToDate,
-                IsLocal = model.IsLocal,
-                TeamId = model.TeamIds,
-            };
+            EmployeeId = model.EmployeeId,
+            FromDate = model.FromDate,
+            ToDate = model.ToDate,
+            IsLocal = model.IsLocal,
+            TeamId = model.TeamIds,
+        };
+        var mealAllowanceSummary = await reportService.GetMealAllowanceSummaryAsync(criteriaSummary);
+        var mealAllowanceDetails = await reportService.GetMealAllowanceDetailsAsync(criteriaDetails);
+        var bytes = reportService.Export(model, mealAllowanceSummary, mealAllowanceDetails);
 
-            var criteriaDetails = new GetMealAllowanceDetailReportCriteria
-            {
-                EmployeeId = model.EmployeeId,
-                FromDate = model.FromDate,
-                ToDate = model.ToDate,
-                IsLocal = model.IsLocal,
-                TeamId = model.TeamIds,
-            };
-            var mealAllowanceSummary = await reportService.GetMealAllowanceSummaryAsync(criteriaSummary);
-            var mealAllowanceDetails = await reportService.GetMealAllowanceDetailsAsync(criteriaDetails);
-            byte[] bytes = reportService.Export(model, mealAllowanceSummary, mealAllowanceDetails);
-
-            var fileName = $"Meal Allowance {model.FromDate.ToString("dd MMM yyyy")} - {model.ToDate:dd MMM yyyy}.xlsx";
-            return File(bytes, MimeType.XLSX, fileName);
-        }
+        var fileName = $"Meal Allowance {model.FromDate:dd MMM yyyy} - {model.ToDate:dd MMM yyyy}.xlsx";
+        return File(bytes, MimeType.XLSX, fileName);
     }
 }

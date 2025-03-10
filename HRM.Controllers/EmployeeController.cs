@@ -94,7 +94,7 @@ public class EmployeeController(
             ViewBag.PagerOption = pagerOption;
             ViewBag.IsShowJobtitle = (await roleService.GetByUserIdAsync(userControlSession.UserId))
                 .Any(r => r.RoleId is (short)RoleSystem.HR or (short)RoleSystem.SystemAdmin);
-            ViewBag.EnableGroupDate = await commonDataService.IsEnableGroupDate();
+            ViewBag.EnableGroupDate = await commonDataService.IsEnableGroupDateAsync();
         }
 
         return PartialView("_ContactList", employees);
@@ -158,7 +158,7 @@ public class EmployeeController(
         }
 
         ViewBag.HasPermissionToEdit = userControlSession.HasPermissionOnFunction(FunctionKey.EmployeeManagement, Policy.Host);
-        ViewBag.EnableGroupDate = await commonDataService.IsEnableGroupDate();
+        ViewBag.EnableGroupDate = await commonDataService.IsEnableGroupDateAsync();
 
         return PartialView("_ListEmployee", employees);
     }
@@ -176,7 +176,7 @@ public class EmployeeController(
         ViewBag.Fri = employeeShift.FriShiftName;
         ViewBag.Sat = employeeShift.SatShiftName;
         ViewBag.HasPermission = userControlSession.HasPermissionOnFunction(FunctionKey.EmployeeManagement, Policy.Host);
-        ViewBag.EnableGroupDate = await commonDataService.IsEnableGroupDate();
+        ViewBag.EnableGroupDate = await commonDataService.IsEnableGroupDateAsync();
 
         return View(model);
     }
@@ -281,7 +281,7 @@ public class EmployeeController(
             employee.ActingEmpList = GetActingSupervisors(supervisors);
             ViewBag.LengthOfServiceByGroupDate = employeeService.CaculateLengthOfService(employee.JoinedDate, employee.MilitaryFromDate, employee.MilitaryToDate);
             ViewBag.LengthOfServiceByCompanyDate = employeeService.CaculateLengthOfService(employee.CompanyDate, employee.MilitaryFromDate, employee.MilitaryToDate);
-            ViewBag.EnableGroupDate = await commonDataService.IsEnableGroupDate();
+            ViewBag.EnableGroupDate = await commonDataService.IsEnableGroupDateAsync();
 
             await ComposeViewBagsForEditEmployee();
             return View(employee);
@@ -319,7 +319,7 @@ public class EmployeeController(
         model.Disciplinarian = GetDisciplineSupervisors(supervisors);
         model.EmpShiftList = GetShiftMonitors(supervisors);
         model.ActingEmpList = GetActingSupervisors(supervisors);
-        ViewBag.EnableGroupDate = await commonDataService.IsEnableGroupDate();
+        ViewBag.EnableGroupDate = await commonDataService.IsEnableGroupDateAsync();
 
         await ComposeViewBagsForEditEmployee();
 
@@ -494,7 +494,7 @@ public class EmployeeController(
         var employee = await employeeService.GetEmployeeByIdAsync(id);
         var logs = await employeeLogService.GetLogDetailByIdAsync(id);
         ViewBag.Employee = $"{employee.NickName} ({employee.FullName})";
-        ViewBag.EnableGroupDate = await commonDataService.IsEnableGroupDate();
+        ViewBag.EnableGroupDate = await commonDataService.IsEnableGroupDateAsync();
 
         return View("ActivityLog", logs);
     }

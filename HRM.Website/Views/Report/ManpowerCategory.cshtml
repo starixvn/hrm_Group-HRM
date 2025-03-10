@@ -1,6 +1,4 @@
-﻿@using HRM.Resources
-@using HRM.ViewModels.Report
-@using HRM.Models.Report
+﻿@using HRM.ViewModels.Report
 @using HRM.Website.Helper
 
 @model ManpowerCategoryViewModel
@@ -78,29 +76,29 @@
     <tbody>
         @if (Model.Manpowers != null && Model.Manpowers.Any())
         {
-            int index = 0;
-            foreach (ManpowerCategoryModel manpower in Model.Manpowers)
+            var index = 0;
+            foreach (var manpower in Model.Manpowers)
             {
                 index++;
-        <tr>
-            <td>@index</td>
-            <td class="align-left">@manpower.DepartmentCode</td>
-            <td class="align-left">@manpower.Section</td>
-            <td class="align-left">@manpower.TeamName</td>
-            <td class="align-right">@manpower.TotalExpat</td>
-            <td class="align-right">@manpower.TotalLocal</td>
-            <td class="align-right">@manpower.Total</td>
-            <td class="align-right">@manpower.Management</td>
-            <td class="align-right">@manpower.AVGManagement.ToString("0.0%")</td>
-            <td class="align-right">@manpower.ExecutiveWithPosition</td>
-            <td class="align-right">@manpower.AVGExecutiveWithPosition.ToString("0.0%")</td>
-            <td class="align-right">@manpower.Executive</td>
-            <td class="align-right">@manpower.AVGExecutive.ToString("0.0%")</td>
-            <td class="align-right">@manpower.Staff</td>
-            <td class="align-right">@manpower.AVGStaff.ToString("0.0%")</td>
-            <td class="align-right">@manpower.Worker</td>
-            <td class="align-right">@manpower.AVGWorker.ToString("0.0%")</td>
-        </tr>
+                <tr>
+                    <td>@index</td>
+                    <td class="align-left">@manpower.DepartmentCode</td>
+                    <td class="align-left">@manpower.Section</td>
+                    <td class="align-left">@manpower.TeamName</td>
+                    <td class="align-right">@manpower.TotalExpat</td>
+                    <td class="align-right">@manpower.TotalLocal</td>
+                    <td class="align-right">@manpower.Total</td>
+                    <td class="align-right">@manpower.Management</td>
+                    <td class="align-right">@manpower.AVGManagement.ToString("0.0%")</td>
+                    <td class="align-right">@manpower.ExecutiveWithPosition</td>
+                    <td class="align-right">@manpower.AVGExecutiveWithPosition.ToString("0.0%")</td>
+                    <td class="align-right">@manpower.Executive</td>
+                    <td class="align-right">@manpower.AVGExecutive.ToString("0.0%")</td>
+                    <td class="align-right">@manpower.Staff</td>
+                    <td class="align-right">@manpower.AVGStaff.ToString("0.0%")</td>
+                    <td class="align-right">@manpower.Worker</td>
+                    <td class="align-right">@manpower.AVGWorker.ToString("0.0%")</td>
+                </tr>
             }
         }
         else

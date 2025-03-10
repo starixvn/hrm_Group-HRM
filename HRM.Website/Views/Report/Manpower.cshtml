@@ -1,6 +1,4 @@
-﻿@using HRM.Resources
-@using HRM.Models.Report
-@using HRM.ViewModels.Report
+﻿@using HRM.ViewModels.Report
 @using HRM.Website.Helper
 @model ManpowerViewModel
 @{
@@ -74,7 +72,7 @@
             <th colspan="4">@Labels.Dec</th>
         </tr>
         <tr>
-            @for (int i = 0; i <= 12; i++)
+            @for (var i = 0; i <= 12; i++)
             {
                 <th>@Labels.ProbationResigned</th>
                 <th>@Labels.ConfirmedResigned</th>
@@ -86,8 +84,8 @@
     <tbody>
         @if (Model.Manpowers != null && Model.Manpowers.Any())
         {
-            int index = 1;
-            foreach (ManpowerModel manpower in Model.Manpowers)
+            var index = 1;
+            foreach (var manpower in Model.Manpowers)
             {
         <tr>
             <td>@(index++)</td>

@@ -1,9 +1,7 @@
 ﻿namespace HRM.Core;
 
 using System;
-using System.Diagnostics.CodeAnalysis;
 
-[SuppressMessage("Major Code Smell", "S109:Magic numbers should not be used", Justification = "Pending")]
 public static class DateTimeExtensions
 {
     private static TimeSpan _serverTimeZone = TimeSpan.FromHours(-4);
@@ -11,7 +9,7 @@ public static class DateTimeExtensions
 
     public static void Initialize(short serverTimeZone)
     {
-         _serverTimeZone = TimeSpan.FromHours(serverTimeZone);
+        _serverTimeZone = TimeSpan.FromHours(serverTimeZone);
     }
 
     public static void SetClientTimeZone(short clientTimeZone)
@@ -21,7 +19,7 @@ public static class DateTimeExtensions
 
     public static DateTime FirstDayOfWeek(this DateTime dt)
     {
-        int diff = (7 + (dt.DayOfWeek - DayOfWeek.Monday)) % 7;
+        var diff = (7 + (dt.DayOfWeek - DayOfWeek.Monday)) % 7;
         return dt.AddDays(-1 * diff).Date;
     }
 
@@ -67,13 +65,13 @@ public static class DateTimeExtensions
 
     public static string ToShortFormatedDate(this DateTime date)
     {
-        string dateStr = date.ToString(@"dd MMM, yyyy - HH") + "h" + date.ToString(@"mm\'");
+        var dateStr = date.ToString(@"dd MMM, yyyy - HH") + "h" + date.ToString(@"mm\'");
         return dateStr;
     }
 
     public static string ToDetailFormatedDate(this DateTime date)
     {
-        string dateStr = date.ToString(@"ddd, dd MMM, yyyy - HH") + "h" + date.ToString(@"mm\'");
+        var dateStr = date.ToString(@"ddd, dd MMM, yyyy - HH") + "h" + date.ToString(@"mm\'");
         return dateStr;
     }
 
