@@ -71,31 +71,32 @@ public class EmployeeController(
     public async Task<IActionResult> ContactList(UserManagementViewModel model)
     {
         var employees = new List<Employee>();
-        if (model != null)
+        if (model == null)
         {
-            var criteria = new GetAllEmployeeCriteria
-            {
-                Query = model.Keyword,
-                TeamIds = model.TeamIds,
-                EnableUser = model.IsEnable,
-                IsLocalUser = model.IsLocal,
-                PageNumber = model.CurrentPage,
-                PageSize = model.ItemsPerPage
-            };
-
-            employees = (await employeeService.GetEmployeeAsync(criteria)).ToList();
-
-            var pagerOption = new PagerOptionModel
-            {
-                CurrentPage = model.CurrentPage,
-                ItemsPerPage = model.ItemsPerPage,
-                TotalItem = (int)criteria.TotalRow
-            };
-            ViewBag.PagerOption = pagerOption;
-            ViewBag.IsShowJobtitle = (await roleService.GetByUserIdAsync(userControlSession.UserId))
-                .Any(r => r.RoleId is (short)RoleSystem.HR or (short)RoleSystem.SystemAdmin);
-            ViewBag.EnableGroupDate = await commonDataService.IsEnableGroupDateAsync();
+            return PartialView("_ContactList", employees);
         }
+        var criteria = new GetAllEmployeeCriteria
+        {
+            Query = model.Keyword,
+            TeamIds = model.TeamIds,
+            EnableUser = model.IsEnable,
+            IsLocalUser = model.IsLocal,
+            PageNumber = model.CurrentPage,
+            PageSize = model.ItemsPerPage
+        };
+
+        employees = (await employeeService.GetEmployeeAsync(criteria)).ToList();
+
+        var pagerOption = new PagerOptionModel
+        {
+            CurrentPage = model.CurrentPage,
+            ItemsPerPage = model.ItemsPerPage,
+            TotalItem = criteria.TotalRow ?? 0
+        };
+        ViewBag.PagerOption = pagerOption;
+        ViewBag.IsShowJobtitle = (await roleService.GetByUserIdAsync(userControlSession.UserId))
+            .Any(r => r.RoleId is (short)RoleSystem.HR or (short)RoleSystem.SystemAdmin);
+        ViewBag.EnableGroupDate = await commonDataService.IsEnableGroupDateAsync();
 
         return PartialView("_ContactList", employees);
     }
@@ -104,7 +105,7 @@ public class EmployeeController(
     public async Task<IActionResult> UserManagement(int? jobTitleId = null, string teamIds = null)
     {
         var teams = await teamService.GetAllAsync();
-        teamIds = teamIds ?? string.Join(",", teams.Select(x => x.Id));
+        teamIds ??= string.Join(",", teams.Select(x => x.Id));
         var listJobTitle = await commonDataService.GetLookupDataByCodeAsync(Constants.JobTitle);
         IList<SelectListItem> jobTitles = listJobTitle.Select(j => new SelectListItem
         {
@@ -152,7 +153,7 @@ public class EmployeeController(
             {
                 CurrentPage = model.CurrentPage,
                 ItemsPerPage = model.ItemsPerPage,
-                TotalItem = (int)criteria.TotalRow
+                TotalItem = criteria.TotalRow ?? 0
             };
             ViewBag.PagerOption = pagerOption;
         }
@@ -273,9 +274,9 @@ public class EmployeeController(
             }
 
             employee.Coutries = await commonDataService.GetAllCountry();
-            var supervisors = await GetSupervisors(id);
+            var supervisors = (await GetSupervisors(id)).ToList();
             employee.Verifier = GetVerifiers(supervisors);
-            employee.Approver = GetApprovers(supervisors);
+            employee.Approver = GetApproverList(supervisors);
             employee.Disciplinarian = GetDisciplineSupervisors(supervisors);
             employee.EmpShiftList = GetShiftMonitors(supervisors);
             employee.ActingEmpList = GetActingSupervisors(supervisors);
@@ -313,9 +314,9 @@ public class EmployeeController(
         }
 
         model.Coutries = await commonDataService.GetAllCountry();
-        var supervisors = await GetSupervisors(model.Id);
+        var supervisors = (await GetSupervisors(model.Id)).ToList();
         model.Verifier = GetVerifiers(supervisors);
-        model.Approver = GetApprovers(supervisors);
+        model.Approver = GetApproverList(supervisors);
         model.Disciplinarian = GetDisciplineSupervisors(supervisors);
         model.EmpShiftList = GetShiftMonitors(supervisors);
         model.ActingEmpList = GetActingSupervisors(supervisors);
@@ -580,7 +581,7 @@ public class EmployeeController(
         return GetSupervisors(supervisors, (short)RoleSystem.Verifier);
     }
 
-    private static string GetApprovers(IEnumerable<SupervisorNameModel> supervisors)
+    private static string GetApproverList(IEnumerable<SupervisorNameModel> supervisors)
     {
         return GetSupervisors(supervisors, (short)RoleSystem.Approver);
     }
@@ -676,7 +677,7 @@ public class EmployeeController(
         var systemRoles = roleService.GetBySiteId(userControlSession.SiteId);
         var defaultRoles = systemRoles.Where(x => x.IsDefault).Select(x => x.RoleId);
 
-        if (roles != null && roles.Count > 0)
+        if (roles is { Count: > 0 })
         {
             var result = string.Join(",", roles.Select(i => i.RoleId));
             return roles.Any(x => defaultRoles.Any(y => x.RoleId == y)) ? result : string.Join(",", defaultRoles) + "," + result;
@@ -690,18 +691,20 @@ public class EmployeeController(
     private bool? GetCategory(bool? isLocal = null)
     {
         var category = isLocal;
-        if (!userControlSession.HasPermissionOnFunction(FunctionKey.ManageAllEmployee, Policy.Read))
+        if (userControlSession.HasPermissionOnFunction(FunctionKey.ManageAllEmployee, Policy.Read))
         {
-            if (userControlSession.HasPermissionOnFunction(FunctionKey.ManageLocalEmployee, Policy.Read))
+            return category;
+        }
+
+        if (userControlSession.HasPermissionOnFunction(FunctionKey.ManageLocalEmployee, Policy.Read))
+        {
+            category = true;
+        }
+        else
+        {
+            if (userControlSession.HasPermissionOnFunction(FunctionKey.ManageExpatEmployee, Policy.Read))
             {
-                category = true;
-            }
-            else
-            {
-                if (userControlSession.HasPermissionOnFunction(FunctionKey.ManageExpatEmployee, Policy.Read))
-                {
-                    category = false;
-                }
+                category = false;
             }
         }
 

@@ -12,5 +12,6 @@
         public bool IsProcessor { get; set; }
         public short OvertimeType { get; set; }
         public byte? IsLocal { get; set; }
+        public int CompanyId { get; set; }
     }
 }

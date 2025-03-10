@@ -91,10 +91,10 @@ public class OvertimeController(
     private async Task<IEnumerable<MonthlyOvertimeRequest>> GetMemberOvertimeRequest(MemberMonthlyOvertimeRequestViewModel model)
     {
         var statusIds = string.Empty;
-        IEnumerable<int> requestStatusIds = Enum.GetValues(typeof(CurrentRequestStatus)).Cast<int>().Where(x => x > 0);
+        var requestStatusIds = Enum.GetValues(typeof(CurrentRequestStatus)).Cast<int>().Where(x => x > 0);
         if (model.StatusId == -1)
         {
-            statusIds = string.Format("{0},{1}", (byte)CurrentRequestStatus.Pending, (byte)CurrentRequestStatus.Verified);
+            statusIds = $"{(byte)CurrentRequestStatus.Pending},{(byte)CurrentRequestStatus.Verified}";
         }
         else if (model.StatusId == 0)
         {
@@ -144,20 +144,13 @@ public class OvertimeController(
 
     private async Task<IEnumerable<MonthlyOvertimeRequest>> GetEmployeeOvertimeRequest(MemberMonthlyOvertimeRequestViewModel model)
     {
-        var statusIds = string.Empty;
         var requestStatusIds = Enum.GetValues(typeof(CurrentRequestStatus)).Cast<int>().Where(x => x > 0);
-        if (model.StatusId == -1)
+        var statusIds = model.StatusId switch
         {
-            statusIds = string.Format("{0},{1}", (byte)CurrentRequestStatus.Pending, (byte)CurrentRequestStatus.Verified);
-        }
-        else if (model.StatusId == 0)
-        {
-            statusIds = string.Join(",", requestStatusIds);
-        }
-        else
-        {
-            statusIds = model.StatusId.ToString();
-        }
+            -1 => $"{(byte)CurrentRequestStatus.Pending},{(byte)CurrentRequestStatus.Verified}",
+            0 => string.Join(",", requestStatusIds),
+            _ => model.StatusId.ToString()
+        };
 
         var param = new GetMonthlyOvertimeRequestParam
         {
@@ -168,7 +161,8 @@ public class OvertimeController(
             StatusIds = statusIds,
             IsProcessor = true,
             OvertimeType = model.OvertimeType,
-            IsLocal = model.IsLocal
+            IsLocal = model.IsLocal,
+            CompanyId = CurrentCompanyId
         };
         model.MemberRequests = await overtimeService.GetMemberMonthlyRequest(param);
 
@@ -208,7 +202,7 @@ public class OvertimeController(
     [HrmPermission(Policy.Read, FunctionKey.ProcessOvertime)]
     public async Task<IActionResult> CheckInvalidOvertime(string requestIds)
     {
-        bool isInvalid = await overtimeService.CheckInvalidOvertimes(requestIds);
+        var isInvalid = await overtimeService.CheckInvalidOvertimes(requestIds);
 
         return Json(isInvalid);
     }
@@ -225,7 +219,7 @@ public class OvertimeController(
         var fileName = $"{Labels.EmployeeOvertimeReport}.xlsx";
         const bool isMemberOvertime = false;
         model.MemberRequests = await GetEmployeeOvertimeRequest(model);
-        byte[] exportData = exportOvertimeService.Export(model.MemberRequests, isMemberOvertime);
+        var exportData = exportOvertimeService.Export(model.MemberRequests, isMemberOvertime);
 
         return File(exportData, MimeType.XLSX, fileName);
     }
@@ -236,7 +230,7 @@ public class OvertimeController(
         const bool isMemberOvertime = true;
 
         model.MemberRequests = await GetMemberOvertimeRequest(model);
-        byte[] exportData = exportOvertimeService.Export(model.MemberRequests, isMemberOvertime);
+        var exportData = exportOvertimeService.Export(model.MemberRequests, isMemberOvertime);
 
         return File(exportData, MimeType.XLSX, fileName);
     }

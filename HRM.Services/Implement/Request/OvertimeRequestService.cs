@@ -88,7 +88,8 @@ public class OvertimeRequestService(
             EmployeeId = param.EmployeeId,
             IsProcessor = param.IsProcessor,
             OvertimeType = param.OvertimeType,
-            IsLocal = param.IsLocal
+            IsLocal = param.IsLocal,
+            CompanyId = param.CompanyId
         };
         var memberRequests = await overtimeRepository.GetMemberMonthlyRequest(criteria);
         return memberRequests;
