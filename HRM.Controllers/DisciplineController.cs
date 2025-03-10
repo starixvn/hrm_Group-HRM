@@ -4,20 +4,20 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using GO.UserControl.Client.Core.Enumerables;
-using GO.UserControl.Client.Core.Session;
 using Core.Constants;
 using Core.Filters;
-using Core;
-using HRM.Core.Services;
 using Core.XMLExtensions;
 using Criteria.Discipline;
+using GO.UserControl.Client.Core.Enumerables;
+using GO.UserControl.Client.Core.Session;
+using HRM.Core;
+using HRM.Core.Services;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Models.Discipline;
 using Resources;
 using Services;
 using ViewModels.Discipline;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 
 public class DisciplineController(
     IUserControlSession userControlSession,
@@ -68,7 +68,7 @@ public class DisciplineController(
     {
         if (model != null)
         {
-            if (model.FromDate == default(DateTime))
+            if (model.FromDate == default)
             {
                 model.FromDate = GetFromDate();
                 model.ToDate = GetToDate();
@@ -136,7 +136,7 @@ public class DisciplineController(
         {
             EmployeeId = employeeId ?? -1,
             Employee = employee,
-            WorkDate = DateTimeOffset.Now.DateTime,
+            WorkDate = DateTimeOffset.Now.DateTime.ToClientTimeZone().Date,
             OtherDisciplineTypes = otherDisciplineTypes
         };
 
@@ -165,15 +165,12 @@ public class DisciplineController(
     [HrmPermission(Policy.Host, FunctionKey.OtherDiscipline)]
     public async Task<string> DeleteOtherDiscipline(DeleteOtherDisciplineCriteria criteria)
     {
-        if (criteria != null)
-        {
-            criteria.ActorId = EmployeeSession.EmpId;
-            var commandResult = await baseService.ExecuteNonQueryAsync(criteria);
+        criteria.ActorId = EmployeeSession.EmpId;
+        var commandResult = await baseService.ExecuteNonQueryAsync(criteria);
 
-            if (!commandResult.IsSuccessful)
-            {
-                return commandResult.Message;
-            }
+        if (!commandResult.IsSuccessful)
+        {
+            return commandResult.Message;
         }
 
         return string.Empty;
@@ -205,38 +202,38 @@ public class DisciplineController(
 
     private static IList<SelectListItem> GetDateRangeByQuarter()
     {
-        var dateRange = new List<SelectListItem> { new SelectListItem { Text = Labels.DateRange, Value = "0" } };
-        var currentDate = DateTimeOffset.Now.Date;
+        var dateRange = new List<SelectListItem> { new() { Text = Labels.DateRange, Value = "0" } };
+        var currentDate = DateTimeOffset.Now.DateTime.ToClientTimeZone().Date;
         const byte May = 5;
         const byte June = 6;
         const byte December = 12;
-        for (int i = 0; i < June; i++)
+        for (var i = 0; i < June; i++)
         {
-            int currentMonth = currentDate.Month;
-            int currentYear = currentDate.Year;
-            if (currentMonth == December)
+            var currentMonth = currentDate.Month;
+            var currentYear = currentDate.Year;
+            switch (currentMonth)
             {
-                dateRange.Add(new SelectListItem
-                {
-                    Text = string.Format("1H - {0}", currentYear + 1),
-                    Value = string.Format("1{0}", currentYear + 1)
-                });
-            }
-            else if (currentMonth >= 1 && currentMonth <= May)
-            {
-                dateRange.Add(new SelectListItem
-                {
-                    Text = string.Format("1H - {0}", currentYear),
-                    Value = string.Format("1{0}", currentYear)
-                });
-            }
-            else
-            {
-                dateRange.Add(new SelectListItem
-                {
-                    Text = string.Format("2H - {0}", currentYear),
-                    Value = string.Format("2{0}", currentYear)
-                });
+                case December:
+                    dateRange.Add(new SelectListItem
+                    {
+                        Text = $"1H - {currentYear + 1}",
+                        Value = $"1{currentYear + 1}"
+                    });
+                    break;
+                case >= 1 and <= May:
+                    dateRange.Add(new SelectListItem
+                    {
+                        Text = $"1H - {currentYear}",
+                        Value = $"1{currentYear}"
+                    });
+                    break;
+                default:
+                    dateRange.Add(new SelectListItem
+                    {
+                        Text = $"2H - {currentYear}",
+                        Value = $"2{currentYear}"
+                    });
+                    break;
             }
 
             currentDate = currentDate.AddMonths(-June);
@@ -250,21 +247,14 @@ public class DisciplineController(
         const byte May = 5;
         const byte June = 6;
         const byte December = 12;
-        var today = DateTimeOffset.Now.Date;
+        var today = DateTimeOffset.Now.DateTime.ToClientTimeZone().Date;
         var month = today.Month;
-        DateTimeOffset fromDate;
-        if (month == December)
+        var fromDate = month switch
         {
-            fromDate = new DateTimeOffset(today.Year, month, 1, 0, 0, 0, TimeSpan.Zero);
-        }
-        else if (month >= 1 && month <= May)
-        {
-            fromDate = new DateTimeOffset(today.Year - 1, December, 1, 0, 0, 0, TimeSpan.Zero);
-        }
-        else
-        {
-            fromDate = new DateTimeOffset(today.Year, June, 1, 0, 0, 0, TimeSpan.Zero);
-        }
+            December => new DateTimeOffset(today.Year, month, 1, 0, 0, 0, TimeSpan.Zero),
+            >= 1 and <= May => new DateTimeOffset(today.Year - 1, December, 1, 0, 0, 0, TimeSpan.Zero),
+            _ => new DateTimeOffset(today.Year, June, 1, 0, 0, 0, TimeSpan.Zero)
+        };
 
         return fromDate.DateTime;
     }
@@ -273,21 +263,17 @@ public class DisciplineController(
     {
         const byte May = 5;
         const byte December = 12;
-        var today = DateTimeOffset.Now.Date;
+        var today = DateTimeOffset.Now.DateTime.ToClientTimeZone().Date;
         var month = today.Month;
-        DateTimeOffset toDate;
-        if (month == December)
+        var toDate = month switch
         {
-            toDate = new DateTimeOffset(today.Year + 1, May, DateTime.DaysInMonth(today.Year + 1, May), 0, 0, 0, TimeSpan.Zero);
-        }
-        else if (month >= 1 && month <= May)
-        {
-            toDate = new DateTimeOffset(today.Year, May, DateTime.DaysInMonth(today.Year, May), 0, 0, 0, TimeSpan.Zero);
-        }
-        else
-        {
-            toDate = new DateTimeOffset(today.Year, December - 1, DateTime.DaysInMonth(today.Year, December - 1), 0, 0, 0, TimeSpan.Zero);
-        }
+            December => new DateTimeOffset(today.Year + 1, May, DateTime.DaysInMonth(today.Year + 1, May), 0, 0, 0,
+                TimeSpan.Zero),
+            >= 1 and <= May => new DateTimeOffset(today.Year, May, DateTime.DaysInMonth(today.Year, May), 0, 0, 0,
+                TimeSpan.Zero),
+            _ => new DateTimeOffset(today.Year, December - 1, DateTime.DaysInMonth(today.Year, December - 1), 0, 0, 0,
+                TimeSpan.Zero)
+        };
 
         return toDate.DateTime;
     }

@@ -165,7 +165,7 @@ public class AnnualLeaveBalanceController(
         var model = new AnnualLeaveTransactionViewModel
         {
             EmpId = id,
-            AffectedFrom = DateTimeOffset.Now.DateTime,
+            AffectedFrom = DateTimeOffset.Now.DateTime.ToClientTimeZone(),
         };
         return View(model);
     }

@@ -4,25 +4,11 @@ import { Modal, Button } from 'react-bootstrap';
 import Draggable from 'react-draggable';
 
 const SweetModalDialog = ({ show, contents, onSubmit, onHide }) => {
-
-    let title = '';
-    switch (window.siteId) {
-        case 1:
-            title = 'SMS HRM';
-            break;
-        case 2:
-            title = 'HM HRM';
-            break;
-        case 3:
-            title = 'CTS HRM';
-            break;
-    };
-
     return (
         <Draggable handle=".modal-header" >
             <Modal keyboard={false} backdrop="static" show={show} onHide={onHide}>
                 <Modal.Header>
-                    <Modal.Title>{title}</Modal.Title>
+                    <Modal.Title>HRM</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>{contents}</Modal.Body>
                 <Modal.Footer>

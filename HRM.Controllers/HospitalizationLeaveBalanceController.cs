@@ -1,6 +1,4 @@
-﻿using HRM.Services.ExportExcel;
-
-namespace HRM.Controllers;
+﻿namespace HRM.Controllers;
 
 using System;
 using System.Collections.Generic;
@@ -16,7 +14,7 @@ using HRM.Core.Services;
 using HRM.Criteria.HospitalizationLeave;
 using HRM.Models.HospitalizationLeave;
 using HRM.Resources;
-using HRM.Services;
+using HRM.Services.ExportExcel;
 using HRM.Services.Interfaces;
 using HRM.ViewModels.AnnualLeave;
 using HRM.ViewModels.HospitalizationLeave;
@@ -39,7 +37,7 @@ public class HospitalizationLeaveBalanceController(
     {
         var model = new HospitalizationLeaveBalanceViewModel
         {
-            Year = year ?? DateTimeOffset.Now.Year,
+            Year = year ?? DateTimeOffset.Now.DateTime.ToClientTimeZone().Year,
             TeamIds = teamIds,
             Employee = employee,
             EmployeeId = employeeId,
@@ -91,7 +89,7 @@ public class HospitalizationLeaveBalanceController(
     public async Task<IActionResult> Reset([FromBody] ResetMultipleTransactionCriteria criteria)
     {
         criteria.ActorId = EmployeeSession.EmpId;
-        criteria.Year = DateTimeOffset.Now.AddYears(-1).Year;
+        criteria.Year = DateTimeOffset.Now.DateTime.ToClientTimeZone().AddYears(-1).Year;
         var commandResult = await baseService.ExecuteNonQueryAsync(criteria);
 
         return Json(commandResult);
@@ -106,7 +104,7 @@ public class HospitalizationLeaveBalanceController(
             return RedirectToAction("PageNotFound", "Error");
         }
 
-        var year = DateTimeOffset.Now.Year;
+        var year = DateTimeOffset.Now.DateTime.ToClientTimeZone().Year;
         var model = new HospitalizationLeaveTransactionViewModel
         {
             EmployeeId = id,
@@ -138,7 +136,7 @@ public class HospitalizationLeaveBalanceController(
         {
             EmpId = id,
             Nickname = employee.NickName,
-            AffectedFrom = DateTimeOffset.Now.DateTime,
+            AffectedFrom = DateTimeOffset.Now.DateTime.ToClientTimeZone(),
         };
         return View(model);
     }
@@ -205,7 +203,7 @@ public class HospitalizationLeaveBalanceController(
 
     public async Task<IActionResult> ExportSummaryReport(HospitalizationLeaveBalanceViewModel model)
     {
-        var fileName = $"HospitalizationLeaveSummary_{DateTimeOffset.Now:yyyyMMdd}.xls";
+        var fileName = $"HospitalizationLeaveSummary_{DateTimeOffset.Now.DateTime.ToClientTimeZone():yyyyMMdd}.xls";
         var criteria = new GetSummaryReportCriteria
         {
             Year = model.Year,

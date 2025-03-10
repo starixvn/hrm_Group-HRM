@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
+using HRM.Core;
 using HRM.Core.Constants;
 using HRM.Core.Filters;
 using HRM.Core.Models;
@@ -37,7 +38,7 @@ public class PaternityController(
     {
         var model = new PaternityViewModel
         {
-            ChildBornDate = DateTimeOffset.Now.DateTime,
+            ChildBornDate = DateTimeOffset.Now.DateTime.ToClientTimeZone(),
             LeaveDay = 5
         };
         return PartialView("_Create", model);

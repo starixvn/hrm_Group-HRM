@@ -63,7 +63,7 @@ public class ChangeShiftController(
 
     public async Task<IActionResult> Create()
     {
-        var today = DateTimeOffset.Now.Date;
+        var today = DateTimeOffset.Now.DateTime.ToClientTimeZone().Date;
         var supervisor = await GetVerifierApprover(EmployeeSession.EmpId);
         var model = new ChangeShiftViewModel
         {

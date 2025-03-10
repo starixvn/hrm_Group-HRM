@@ -10,7 +10,6 @@ using Core.Constants;
 using Core.Enums;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
-using HRM.Core.Models;
 using HRM.Core.Services;
 using HRM.Criteria.Request;
 using HRM.Criteria.Request.Leave;
@@ -38,15 +37,14 @@ public class LeaveController(
     [HttpGet]
     public async Task<IActionResult> EmployeeView(int? year)
     {
-        var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
-        var tempYear = year ?? DateTimeOffset.Now.Year;
+        var tempYear = year ?? DateTimeOffset.Now.DateTime.ToClientTimeZone().Year;
         var fromDate = new DateTimeOffset(tempYear, 1, 1, 0, 0, 0, TimeSpan.Zero).Date;
         var criteria = new GetLeaveRequestByDateCriteria
         {
             EmpId = EmployeeSession.EmpId,
             FromDate = fromDate,
             ToDate = fromDate.AddYears(1).AddDays(-1),
-            CompanyId = companyId
+            CompanyId = CurrentCompanyId
         };
 
         var leaves = await leaveRequestService.GetByDateAsync(criteria);
@@ -64,7 +62,7 @@ public class LeaveController(
     {
         var supervisor = await requestService.GetVerifierAndApproverAsync(EmployeeSession.EmpId, RequestType.Leave);
         var setting = await commonDataService.GetSystemSettingAsync();
-        var today = DateTimeOffset.Now.Date;
+        var today = DateTimeOffset.Now.DateTime.ToClientTimeZone().Date;
         var model = new LeaveRequestViewModel
         {
             LeaveTypeId = (ushort)LeaveTypes.GeneralLeave,

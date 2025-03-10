@@ -34,7 +34,7 @@ public class CheckInOutController(
     [HttpGet]
     public async Task<IActionResult> EmployeeView(int? year)
     {
-        var tempYear = year ?? DateTimeOffset.Now.Year;
+        var tempYear = year ?? DateTimeOffset.Now.DateTime.ToClientTimeZone().Year;
         ViewBag.Year = tempYear;
         var fromDate = new DateTimeOffset(tempYear, 1, 1, 0, 0, 0, TimeSpan.Zero).Date;
         var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
@@ -59,7 +59,7 @@ public class CheckInOutController(
 
     public async Task<IActionResult> Create()
     {
-        var today = DateTimeOffset.Now;
+        var today = DateTimeOffset.Now.DateTime.ToClientTimeZone();
         var supervisor = await requestService.GetVerifierAndApproverAsync(EmployeeSession.EmpId, RequestType.CheckIn);
         var viewModel = new CheckInOutRequestViewModel
         {
@@ -130,7 +130,7 @@ public class CheckInOutController(
             {
                 EmployeeId = request.Requester.EmpId,
                 FromDate = request.OnDate.AddMonths(-1),
-                ToDate = DateTimeOffset.Now.Date,
+                ToDate = DateTimeOffset.Now.DateTime.ToClientTimeZone().Date,
                 RequestId = request.RequestId,
                 RequestTypeId = request.RequestTypeId
             };

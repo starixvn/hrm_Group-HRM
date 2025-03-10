@@ -1,6 +1,4 @@
-﻿using HRM.Services.Interfaces;
-
-namespace HRM.Controllers;
+﻿namespace HRM.Controllers;
 
 using System;
 using System.Linq;
@@ -12,6 +10,7 @@ using HRM.Core.Constants;
 using HRM.Core.Filters;
 using HRM.Criteria.Calendar;
 using HRM.Services;
+using HRM.Services.Interfaces;
 using HRM.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Services.Implement;
@@ -52,7 +51,7 @@ public class CalendarController(
     [HrmPermission(Policy.Read, FunctionKey.WorkingCalendars)]
     public async Task<IActionResult> WorkingCalendars()
     {
-        var currentDateTime = DateTimeOffset.Now.DateTime;
+        var currentDateTime = DateTimeOffset.Now.DateTime.ToClientTimeZone();
         var teamIds = await teamService.GetAllAsync();
         var model = new WorkingCalendarFilterViewModel
         {

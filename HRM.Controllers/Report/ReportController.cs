@@ -39,7 +39,7 @@ public class ReportController(
     {
         var model = new TimesheetViewModel
         {
-            Year = DateTimeOffset.Now.Year,
+            Year = DateTimeOffset.Now.DateTime.ToClientTimeZone().Year,
             EmpId = EmployeeSession.EmpId,
             IsHavePrivilegeCreateCheckInOutRecord = await IsPrivilegeCreateCheckInOut()
         };
@@ -50,7 +50,7 @@ public class ReportController(
     [HttpPost]
     public async Task<IActionResult> TimesheetDetails(TimesheetViewModel model)
     {
-        var today = DateTimeOffset.Now;
+        var today = DateTimeOffset.Now.DateTime.ToClientTimeZone();
         var fromDate = new DateTimeOffset(model.Year, model.Month, 1, 0, 0, 0, TimeSpan.Zero).DateTime;
         var toDate = (today.Month == model.Month && today.Year == model.Year)
             ? today.Date : fromDate.AddMonths(1).AddDays(-1);
@@ -123,13 +123,10 @@ public class ReportController(
 
     public ActionResult WeekendLeaveSummary(WeekendLeaveViewModel model)
     {
-        if (model != null)
-        {
-            var currentYear = DateTimeOffset.Now.Year;
-            model.FromDate = new DateTimeOffset(currentYear, 1, 1, 0, 0, 0, TimeSpan.Zero).Date;
-            model.ToDate = model.FromDate.AddYears(1).AddDays(-1);
-            model.DateRange = Utilities.GetDateRangeByYear();
-        }
+        var currentYear = DateTimeOffset.Now.DateTime.ToClientTimeZone().Year;
+        model.FromDate = new DateTimeOffset(currentYear, 1, 1, 0, 0, 0, TimeSpan.Zero).Date;
+        model.ToDate = model.FromDate.AddYears(1).AddDays(-1);
+        model.DateRange = Utilities.GetDateRangeByYear();
 
         return View("WeekendLeaveSummary", model);
     }
@@ -154,13 +151,10 @@ public class ReportController(
 
     public ActionResult WeekendLeaveDetail(WeekendLeaveViewModel model)
     {
-        if (model != null)
-        {
-            var today = DateTimeOffset.Now.Date;
-            model.FromDate = new DateTimeOffset(today.Year, 1, 1, 0, 0, 0, TimeSpan.Zero).Date;
-            model.ToDate = today;
-            model.DateRange = Utilities.GetDateRangeByYear();
-        }
+        var today = DateTimeOffset.Now.DateTime.ToClientTimeZone().Date;
+        model.FromDate = new DateTimeOffset(today.Year, 1, 1, 0, 0, 0, TimeSpan.Zero).Date;
+        model.ToDate = today;
+        model.DateRange = Utilities.GetDateRangeByYear();
 
         return View("WeekendLeaveDetail", model);
     }
@@ -189,7 +183,7 @@ public class ReportController(
         var teams = await teamService.GetAllAsync();
         var model = new LeaveSummaryViewModel
         {
-            Year = DateTimeOffset.Now.Year,
+            Year = DateTimeOffset.Now.DateTime.ToClientTimeZone().Year,
             EmployeeId = -1,
             TeamIds = string.Join(",", teams.Select(x => x.Id))
         };

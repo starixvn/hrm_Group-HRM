@@ -1,6 +1,4 @@
-﻿using HRM.Services.Interfaces;
-
-namespace HRM.Controllers;
+﻿namespace HRM.Controllers;
 
 using System;
 using System.Linq;
@@ -13,6 +11,7 @@ using HRM.Core.Filters;
 using HRM.Models.Report;
 using HRM.Resources;
 using HRM.Services;
+using HRM.Services.Interfaces;
 using HRM.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
@@ -26,10 +25,11 @@ public class ShiftStatisticReportController(
 {
     public IActionResult Index()
     {
+        var today = DateTimeOffset.Now.DateTime.ToClientTimeZone().Date;
         var model = new ShiftStatisticViewModel
         {
-            FromDate = DateTimeOffset.Now.Date.FirstDayOfWeek(),
-            ToDate = DateTimeOffset.Now.Date.LastDayOfWeek().Date
+            FromDate = today.FirstDayOfWeek(),
+            ToDate = today.LastDayOfWeek().Date
         };
 
         return View("~/Views/Report/ShiftStatistic/Index.cshtml", model);

@@ -32,7 +32,7 @@ public class LateInEarlyOutController(
     [HttpGet]
     public async Task<IActionResult> EmployeeView(int? year)
     {
-        var tempYear = year ?? DateTimeOffset.Now.Year;
+        var tempYear = year ?? DateTimeOffset.Now.DateTime.ToClientTimeZone().Year;
         ViewBag.Year = tempYear;
         var fromDate = new DateTimeOffset(tempYear, 1, 1, 0, 0, 0, TimeSpan.Zero).Date;
         var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
@@ -60,7 +60,7 @@ public class LateInEarlyOutController(
         {
             Employee = EmployeeSession.DisplayName,
             EmployeeId = EmployeeSession.EmpId,
-            OnDate = DateTimeOffset.Now.Date,
+            OnDate = DateTimeOffset.Now.DateTime.ToClientTimeZone().Date,
             Minute = DefaultMinutes,
             ReasonId = (byte)LateInEarlyOutReason.Other,
             RequestType = (byte)RequestType.LateIn,
@@ -117,7 +117,7 @@ public class LateInEarlyOutController(
         {
             EmployeeId = request.Requester.EmpId,
             FromDate = request.OnDate.AddMonths(-1),
-            ToDate = DateTimeOffset.Now.Date,
+            ToDate = DateTimeOffset.Now.DateTime.ToClientTimeZone().Date,
             RequestId = request.RequestId,
             RequestTypeId = request.RequestTypeId,
         };

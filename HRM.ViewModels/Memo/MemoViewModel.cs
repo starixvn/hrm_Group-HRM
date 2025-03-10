@@ -2,11 +2,12 @@
 
 using System;
 using System.Collections.Generic;
+using HRM.Core;
 using HRM.Models;
 
 public class MemoViewModel
 {
-    public int Year { get; set; } = DateTimeOffset.Now.Year;
+    public int Year { get; set; } = DateTimeOffset.Now.DateTime.ToClientTimeZone().Year;
 
     public int Category { get; set; } = -1;
 

@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
+using HRM.Core;
 using HRM.Core.Constants;
 using HRM.Core.Filters;
 using HRM.Core.Models;
@@ -35,7 +36,7 @@ public class PostnatalController(
     [HrmPermission(Policy.Host, FunctionKey.EmployeeManagement)]
     public PartialViewResult Create()
     {
-        var currentDateTime = DateTimeOffset.Now.DateTime;
+        var currentDateTime = DateTimeOffset.Now.DateTime.ToClientTimeZone();
         var model = new PostnatalViewModel
         {
             FromDate = currentDateTime,

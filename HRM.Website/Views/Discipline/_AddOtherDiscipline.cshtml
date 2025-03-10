@@ -1,5 +1,4 @@
 ﻿@using HRM.ViewModels.Discipline 
-@using HRM.Models.Discipline
 @model AddOtherDisciplineViewModel
 
 <form id="frmAddOtherDiscipline">
@@ -36,7 +35,7 @@
             <div class="select-form">
                 <select id="DisciplineTypeId" name="DisciplineTypeId" class="form-control">
                     <option value="0" data-score="0">-- Select Other Discipline Type --</option>
-                    @foreach (DisciplineTypeModel otherDisciplineType in @Model.OtherDisciplineTypes)
+                    @foreach (var otherDisciplineType in @Model.OtherDisciplineTypes)
                     {
                         <option value="@otherDisciplineType.DisciplineTypeId" data-score="@otherDisciplineType.Score">@otherDisciplineType.Name</option>
                     }

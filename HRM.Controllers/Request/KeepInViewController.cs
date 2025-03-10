@@ -33,7 +33,7 @@ public class KeepInViewController(
     [HttpGet]
     public async Task<IActionResult> EmployeeView(int? year)
     {
-        int tempYear = year ?? DateTimeOffset.Now.Year;
+        var tempYear = year ?? DateTimeOffset.Now.DateTime.ToClientTimeZone().Year;
         ViewBag.Year = tempYear;
         var fromDate = new DateTimeOffset(tempYear, 1, 1, 0, 0, 0, TimeSpan.Zero).Date;
         var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
@@ -58,7 +58,7 @@ public class KeepInViewController(
 
     public async Task<IActionResult> Create()
     {
-        var today = DateTimeOffset.Now.Date;
+        var today = DateTimeOffset.Now.DateTime.ToClientTimeZone().Date;
         var supervisor = await requestService.GetVerifierAndApproverAsync(EmployeeSession.EmpId, RequestType.KeepInView);
         var model = new KeepInViewRequestViewModel
         {

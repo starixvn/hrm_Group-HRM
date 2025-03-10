@@ -90,20 +90,13 @@ public class OvertimeController(
 
     private async Task<IEnumerable<MonthlyOvertimeRequest>> GetMemberOvertimeRequest(MemberMonthlyOvertimeRequestViewModel model)
     {
-        var statusIds = string.Empty;
         var requestStatusIds = Enum.GetValues(typeof(CurrentRequestStatus)).Cast<int>().Where(x => x > 0);
-        if (model.StatusId == -1)
+        var statusIds = model.StatusId switch
         {
-            statusIds = $"{(byte)CurrentRequestStatus.Pending},{(byte)CurrentRequestStatus.Verified}";
-        }
-        else if (model.StatusId == 0)
-        {
-            statusIds = string.Join(",", requestStatusIds);
-        }
-        else
-        {
-            statusIds = model.StatusId.ToString();
-        }
+            -1 => $"{(byte)CurrentRequestStatus.Pending},{(byte)CurrentRequestStatus.Verified}",
+            0 => string.Join(",", requestStatusIds),
+            _ => model.StatusId.ToString()
+        };
 
         var param = new GetMonthlyOvertimeRequestParam
         {

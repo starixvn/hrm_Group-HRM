@@ -4,6 +4,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using GO.UserControl.Client.Core.Session;
+using HRM.Core;
 using HRM.Core.Constants;
 using HRM.Criteria.Report;
 using HRM.Services;
@@ -22,7 +23,7 @@ public class AttendanceReportController(
     [HttpGet("Index")]
     public async Task<IActionResult> Index()
     {
-        var currentDateTime = DateTimeOffset.Now.DateTime;
+        var currentDateTime = DateTimeOffset.Now.DateTime.ToClientTimeZone();
         var teams = await teamService.GetAllAsync();
         var model = new EmployeeAttendanceViewModel
         {

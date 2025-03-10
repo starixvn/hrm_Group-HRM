@@ -5,6 +5,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
+using HRM.Core;
 using HRM.Core.Constants;
 using HRM.Core.Filters;
 using HRM.Core.Models;
@@ -28,7 +29,7 @@ public class EmployeeWorkFromHomeController(
     [HrmPermission(Policy.Read, FunctionKey.EmployeeManagement)]
     public ActionResult Index()
     {
-        var currentDateTime = DateTimeOffset.Now.DateTime;
+        var currentDateTime = DateTimeOffset.Now.DateTime.ToClientTimeZone();
         var model = new EmployeeWorkFromHomeFilterViewModel
         {
             FromDateFilter = currentDateTime,
@@ -55,7 +56,7 @@ public class EmployeeWorkFromHomeController(
     [HrmPermission(Policy.Host, FunctionKey.EmployeeManagement)]
     public IActionResult Create()
     {
-        var currentDateTime = DateTimeOffset.Now.DateTime;
+        var currentDateTime = DateTimeOffset.Now.DateTime.ToClientTimeZone();
         var model = new EmployeeWorkFromHomeViewModel
         {
             FromDate = currentDateTime,

@@ -317,7 +317,7 @@
         public static IList<SelectListItem> GetDateRangeByYear()
         {
             var dateRange = new List<SelectListItem> { new SelectListItem { Text = Labels.DateRange, Value = "0" } };
-            var currentDate = DateTimeOffset.Now;
+            var currentDate = DateTimeOffset.Now.DateTime.ToClientTimeZone();
             dateRange.Add(new SelectListItem
             {
                 Text = Labels.ThisYear,
