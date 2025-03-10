@@ -115,7 +115,7 @@ public class LateInEarlyOutController(
         var param = new GetDisabledDateParam
         {
             EmployeeId = request.Requester.EmpId,
-            FromDate = request.OnDate.AddMonths(-1),
+            FromDate = request.OnDate.ToClientTimeZone().AddMonths(-1),
             ToDate = DateTimeOffset.Now.Date,
             RequestId = request.RequestId,
             RequestTypeId = request.RequestTypeId,
@@ -151,7 +151,7 @@ public class LateInEarlyOutController(
         {
             RequestId = model.RequestId,
             EmpId = model.EmployeeId,
-            OnDate = model.OnDate,
+            OnDate = model.OnDate.ToServerTimeZone(),
             RequestType = model.RequestType,
             Remark = model.Remark,
             ReasonId = model.ReasonId,
