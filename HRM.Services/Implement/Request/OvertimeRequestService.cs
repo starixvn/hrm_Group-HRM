@@ -49,8 +49,8 @@ public class OvertimeRequestService(
         var criteria = new GetMonthlyOvertimeRequestByEmployeeIdCriteria
         {
             EmployeeId = employeeId,
-            FromDate = fromDate.Date.ToServerTimeZone(),
-            ToDate = toDate.Date.ToServerTimeZone()
+            FromDate = fromDate.Date,
+            ToDate = toDate.Date
         };
         var monthlyRequests = await overtimeRepository.GetMonthlyRequestByEmployeeId(criteria);
 

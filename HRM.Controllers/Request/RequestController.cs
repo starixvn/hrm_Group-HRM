@@ -56,16 +56,11 @@ public class RequestController(
         {
             const long fromDays = -180;
             request.StatusId = Constants.PendingAndVerifiedStatusId;
-            request.FromDate = DateTimeOffset.Now.Date.AddDays(fromDays).ToServerTimeZone();
-            request.ToDate = request.ToDate.ToServerTimeZone();
+            request.FromDate = DateTimeOffset.Now.Date.AddDays(fromDays);
             request.IsFilterByAffectedDate = false;
         }
         await GetRequests(request);
         GetInfoAttachFile(request.Requests);
-        Parallel.ForEach(request.Requests, (item) =>
-        {
-            item.CreatedDate = item.CreatedDate.ToClientTimeZone();
-        });
         return View(EmployeeRequestViewName, request);
     }
 
@@ -248,8 +243,8 @@ public class RequestController(
         var criteria = new GetRequestCriteria
         {
             EmpId = employeeId,
-            FromDate = request.FromDate.ToServerTimeZone(),
-            ToDate = request.ToDate.ToServerTimeZone(),
+            FromDate = request.FromDate,
+            ToDate = request.ToDate,
             TeamIds = request.TeamIds,
             Status = request.StatusIds,
             RequestType = request.RequestType,
@@ -261,6 +256,13 @@ public class RequestController(
         };
 
         var requestList = await requestService.GetRequests(criteria);
+
+        Parallel.ForEach(requestList, (request) =>
+        {
+            request.CreatedDate = request.CreatedDate.ToClientTimeZone();
+            request.FromTime = request.FromTime.ToClientTimeZone();
+            request.ToTime = request.ToTime.ToClientTimeZone();
+        });
         request.CurrentUserId = EmployeeSession.EmpId;
         request.Requests = request.ViewType == RequestViewType.PersonalSpace ? SortRequest(requestList) : requestList;
     }

@@ -49,8 +49,8 @@
             var criteria = new GetWeeklyScheduleCriteria
             {
                 ActorId = filter.ActorId,
-                FromTime = filter.FromDate.ToServerTimeZone(),
-                ToTime = filter.ToDate.ToServerTimeZone(),
+                FromTime = filter.FromDate,
+                ToTime = filter.ToDate,
                 EmpId = filter.EmployeeId,
                 TeamIds = filter.TeamIds,
                 IsIFrame = filter.IsIFrame,

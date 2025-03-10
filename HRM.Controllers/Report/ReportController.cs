@@ -57,14 +57,19 @@ public class ReportController(
 
         var criteria = new GetEmployeeAttendanceCriteria
         {
-            Fromtime = fromDate.ToServerTimeZone(),
-            Totime = toDate.ToServerTimeZone(),
+            Fromtime = fromDate,
+            Totime = toDate,
             AttendanceType = 0, //show All
             EmpId = model.EmpId,
             ExcludeUserDelete = 1
         };
 
         var timesheets = await reportService.GetEmployeeAttendanceReportAsync(criteria);
+        Parallel.ForEach(timesheets, (timesheet) =>
+        {
+            if (timesheet.InFixed != null) timesheet.InFixed = timesheet.InFixed.Value.ToClientTimeZone();
+            if (timesheet.OutFixed != null) timesheet.OutFixed = timesheet.OutFixed.Value.ToClientTimeZone();
+        });
 
         return PartialView("_TimesheetDetails", timesheets);
     }

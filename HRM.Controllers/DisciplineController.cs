@@ -46,8 +46,8 @@ public class DisciplineController(
     {
         var criteria = new GetDisciplineSummaryCriteria
         {
-            FromDate = model.FromDate.ToServerTimeZone(),
-            ToDate = model.ToDate.ToServerTimeZone(),
+            FromDate = model.FromDate,
+            ToDate = model.ToDate,
             TeamId = model.TeamId,
             IsLocal = model.IsLocal,
             EmployeeId = model.EmployeeId,

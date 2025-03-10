@@ -38,15 +38,13 @@ public class ChangeShiftController(
     public async Task<IActionResult> EmployeeView(int? year)
     {
         int tempYear = year ?? DateTimeOffset.Now.Year;
-        var fromDate = new DateTimeOffset(tempYear, 1, 1, 0, 0, 0, TimeSpan.Zero).Date.ToServerTimeZone();
-        var toDate = fromDate.AddYears(1).AddDays(-1).Date.ToEndOfDay().ToServerTimeZone();
+        var fromDate = new DateTimeOffset(tempYear, 1, 1, 0, 0, 0, TimeSpan.Zero).Date;
+        var toDate = fromDate.AddYears(1).AddDays(-1).Date.ToEndOfDay();
         var requests = await changeShiftService.GetByEmployeeAsync(EmployeeSession.EmpId, fromDate, toDate);
         foreach (var request in requests)
         {
             request.AttachFiles = attachFileService.GetInfoAttachFile(request.RequestId, UploadFolderPath);
             request.CreatedDate = request.CreatedDate.ToClientTimeZone();
-            request.FromDate = request.FromDate.ToClientTimeZone();
-            request.ToDate = request.ToDate.ToClientTimeZone();
         }
         ViewBag.Year = tempYear;
 
@@ -80,8 +78,6 @@ public class ChangeShiftController(
         var criteria = JsonConvert.DeserializeObject<CreateChangeShift>(model);
         var requestDetail = JsonConvert.DeserializeObject<List<ChangeShiftDetail>>(details);
         criteria.Details = requestDetail;
-        criteria.FromDate = criteria.FromDate.ToServerTimeZone();
-        criteria.ToDate = criteria.ToDate.ToServerTimeZone();
 
         var commandResult = await changeShiftService.CreateAsync(EmployeeSession.EmpId, criteria);
 
@@ -142,8 +138,6 @@ public class ChangeShiftController(
         var criteria = JsonConvert.DeserializeObject<EditChangeShift>(model);
         var requestDetail = JsonConvert.DeserializeObject<List<ChangeShiftDetail>>(details);
         criteria.Details = requestDetail;
-        criteria.FromDate = criteria.FromDate.ToServerTimeZone();
-        criteria.ToDate = criteria.ToDate.ToServerTimeZone();
 
         var commandResult = await changeShiftService.EditAsync(EmployeeSession.EmpId, criteria);
         if (commandResult.IsSuccessful)

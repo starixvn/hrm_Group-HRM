@@ -39,8 +39,8 @@ public class KeepInViewController(
         var criteria = new GetKeepInViewRequestByDateCriteria
         {
             EmpId = EmployeeSession.EmpId,
-            FromDate = fromDate.ToServerTimeZone(),
-            ToDate = fromDate.AddYears(1).AddDays(-1).ToServerTimeZone()
+            FromDate = fromDate,
+            ToDate = fromDate.AddYears(1).AddDays(-1)
         };
         var requests = await keepInViewRequestService.GetByDateAsync(criteria);
         foreach (var request in requests)
@@ -140,8 +140,8 @@ public class KeepInViewController(
             VerifierId = request.Verifier?.EmpId,
             Remark = request.Remark,
             CrossDay = (request.ToTime - request.OnDate).Days > 0,
-            FromTime = request.FromTime.ToString("HH:mm"),
-            ToTime = request.ToTime.ToString("HH:mm"),
+            FromTime = request.FromTime.ToClientTimeZone().ToString("HH:mm"),
+            ToTime = request.ToTime.ToClientTimeZone().ToString("HH:mm"),
             Verifiers = supervisor.Verifiers,
             Approvers = supervisor.Approvers,
             MinDate = request.OnDate.AddMonths(-1),
@@ -212,6 +212,11 @@ public class KeepInViewController(
     public async Task<IActionResult> ViewHistory(long id)
     {
         var requests = await keepInViewRequestService.GetHistoryByIdAsync(id);
+        Parallel.ForEach(requests, (item) =>
+        {
+            item.FromTime = item.FromTime.ToClientTimeZone();
+            item.ToTime = item.ToTime.ToClientTimeZone();
+        });
         return PartialView("_ViewHistory", requests);
     }
 

@@ -41,8 +41,8 @@ public class CalendarController(
         var criteria = new GetEmployeeCalendarByMonthCriteria
         {
             EmpId = EmployeeSession.EmpId,
-            FromDate = date.FirstDayOfMonth().ToServerTimeZone(),
-            ToDate = date.AddMonths(1).AddDays(-1).LastDayOfMonth().ToServerTimeZone()
+            FromDate = date.FirstDayOfMonth(),
+            ToDate = date.AddMonths(1).AddDays(-1).LastDayOfMonth()
         };
         var workingSchedule = await workingCalendarService.GetWorkingScheduleAsync(criteria);
 

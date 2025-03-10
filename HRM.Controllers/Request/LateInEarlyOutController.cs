@@ -9,7 +9,6 @@ using Core.Constants;
 using Core.Enums;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
-using HRM.Core.Models;
 using HRM.Core.Services;
 using HRM.Criteria.Request.LateInEarlyOut;
 using HRM.Models.Request;
@@ -39,8 +38,8 @@ public class LateInEarlyOutController(
         var criteria = new GetLateInEarlyOutRequestByDateCriteria
         {
             EmpId = EmployeeSession.EmpId,
-            FromDate = fromDate.ToServerTimeZone(),
-            ToDate = fromDate.AddYears(1).AddDays(-1).ToServerTimeZone()
+            FromDate = fromDate,
+            ToDate = fromDate.AddYears(1).AddDays(-1)
         };
         var requests = await lateInEarlyOutRequestService.GetByDateAsync(criteria);
         foreach (var request in requests)
@@ -115,7 +114,7 @@ public class LateInEarlyOutController(
         var param = new GetDisabledDateParam
         {
             EmployeeId = request.Requester.EmpId,
-            FromDate = request.OnDate.ToClientTimeZone().AddMonths(-1),
+            FromDate = request.OnDate.AddMonths(-1),
             ToDate = DateTimeOffset.Now.Date,
             RequestId = request.RequestId,
             RequestTypeId = request.RequestTypeId,
@@ -151,7 +150,7 @@ public class LateInEarlyOutController(
         {
             RequestId = model.RequestId,
             EmpId = model.EmployeeId,
-            OnDate = model.OnDate.ToServerTimeZone(),
+            OnDate = model.OnDate,
             RequestType = model.RequestType,
             Remark = model.Remark,
             ReasonId = model.ReasonId,

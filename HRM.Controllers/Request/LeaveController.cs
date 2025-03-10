@@ -43,8 +43,8 @@ public class LeaveController(
         var criteria = new GetLeaveRequestByDateCriteria
         {
             EmpId = EmployeeSession.EmpId,
-            FromDate = fromDate.ToServerTimeZone(),
-            ToDate = fromDate.AddYears(1).AddDays(-1).ToServerTimeZone()
+            FromDate = fromDate,
+            ToDate = fromDate.AddYears(1).AddDays(-1)
         };
 
         var leaves = await leaveRequestService.GetByDateAsync(criteria);
@@ -52,8 +52,6 @@ public class LeaveController(
         {
             request.AttachFiles = attachFileService.GetInfoAttachFile(request.RequestId, UploadFolderPath);
             request.CreatedDate = request.CreatedDate.ToClientTimeZone();
-            request.FromDate = request.FromDate.ToClientTimeZone();
-            request.ToDate = request.ToDate.ToClientTimeZone();
         }
         ViewBag.Year = tempYear;
         ViewBag.EmployeeBalance = await GetLeaveBalance(null, year);
@@ -97,12 +95,16 @@ public class LeaveController(
         {
             criteria.TotalDays = leaveRequestDetail.Where(x => x.WorkType == (byte)WorkType.Leave)
                 .Sum(x => x.IsHalfDay ? Constants.HalfDayOffValue : 1);
+
+            Parallel.ForEach(leaveRequestDetail, (item) =>
+            {
+                item.FromTime = item.IsHalfDay ? item.FromTime.ToServerTimeZone() : item.FromTime;
+                item.ToTime = item.IsHalfDay ? item.ToTime.ToServerTimeZone() : item.ToTime;
+            });
         }
 
         criteria.RequestDetail = leaveRequestDetail;
         criteria.CreatedBy = EmployeeSession.EmpId;
-        criteria.FromDate = criteria.FromDate.ToServerTimeZone();
-        criteria.ToDate = criteria.ToDate.ToServerTimeZone();
 
         var result = await baseService.ExecuteNonQueryAsync(criteria);
         if (result.IsSuccessful)
@@ -158,12 +160,16 @@ public class LeaveController(
         var criteria = JsonConvert.DeserializeObject<UpdateLeaveRequestCriteria>(request);
         var leaveRequestDetail = JsonConvert.DeserializeObject<List<LeaveRequestDetail>>(requestDetails);
         criteria.RequestDetail = leaveRequestDetail;
-        criteria.FromDate = criteria.FromDate.ToServerTimeZone();
-        criteria.ToDate = criteria.ToDate.ToServerTimeZone();
         if (leaveRequestDetail != null && leaveRequestDetail.Any())
         {
             criteria.TotalDays = leaveRequestDetail.Where(x => x.WorkType == (byte)WorkType.Leave)
                 .Sum(x => x.IsHalfDay ? Constants.HalfDayOffValue : 1);
+
+            Parallel.ForEach(leaveRequestDetail, (item) =>
+            {
+                item.FromTime = item.IsHalfDay ? item.FromTime.ToServerTimeZone() : item.FromTime;
+                item.ToTime = item.IsHalfDay ? item.ToTime.ToServerTimeZone() : item.ToTime;
+            });
         }
 
         criteria.ModifiedBy = EmployeeSession.EmpId;
@@ -243,6 +249,12 @@ public class LeaveController(
         var leaveRequestDetail = requestId != -1
             ? await leaveRequestService.GetLeaveRequestDetailByIdAsync(requestId)
             : [];
+
+        Parallel.ForEach(leaveRequestDetail, (item) =>
+        {
+            item.FromTime = item.IsHalfDay ? item.FromTime.ToClientTimeZone() : item.FromTime;
+            item.ToTime = item.IsHalfDay ? item.ToTime.ToClientTimeZone() : item.FromTime;
+        });
 
         leaveRequestDetail = ConvertToLeaveRequestDetail(calendars, leaveRequestDetail, fromDate, toDate);
         IList<LeaveType> leaveTypes = await commonDataService.GetLeaveTypeAsync();
