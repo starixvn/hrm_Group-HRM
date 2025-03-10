@@ -9,21 +9,24 @@
 
     public class MemoService(IBaseService baseService) : IMemoService
     {
-        public async Task<IEnumerable<Memo>> GetAllAsync(int year, int category)
+        public async Task<IEnumerable<Memo>> GetAllAsync(int year, int category, int companyId)
         {
             var criteria = new GetAllMemoCriteria
             {
                 Year = year,
-                Category = category
+                Category = category,
+                CompanyId = companyId
+
             };
             return await baseService.GetDataAsync<Memo>(criteria);
         }
 
-        public async Task<Memo> GetByIdAsync(int id)
+        public async Task<Memo> GetByIdAsync(int id, int companyId)
         {
             var criteria = new GetMemoByIdCriteria
             {
-                Id = id
+                Id = id,
+                CompanyId = companyId
             };
             var memo = await baseService.GetDataEntityAsync<Memo>(criteria);
             if (memo != null && memo.MemoType == 1)
@@ -48,7 +51,9 @@
                 TotalPages = model.TotalPages,
                 Category = model.Category,
                 MemoType = model.MemoType,
-                SendMail = model.SendMail
+                SendMail = model.SendMail,
+                CompanyId = model.CompanyId
+
             };
             return await baseService.ExecuteNonQueryAsync(criteria);
         }
@@ -67,14 +72,16 @@
                 TotalPages = model.TotalPages,
                 SentDate = model.SentDate,
                 Category = model.Category,
-                MemoType = model.MemoType
+                MemoType = model.MemoType,
+                CompanyId = model.CompanyId
+
             };
             return await baseService.ExecuteNonQueryAsync(criteria);
         }
 
-        public async Task<CommandResult> DeleteAsync(int id)
+        public async Task<CommandResult> DeleteAsync(int id, int companyId)
         {
-            var criteria = new DeleteMemoCriteria { Id = id };
+            var criteria = new DeleteMemoCriteria { Id = id, CompanyId = companyId };
             return await baseService.ExecuteNonQueryAsync(criteria);
         }
     }

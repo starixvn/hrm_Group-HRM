@@ -5,6 +5,7 @@
     public class DeleteMemoCriteria : CriteriaBase
     {
         public int Id { get; set; }
+        public int CompanyId { get; set; }
 
         public override string GetSettingKey() => "Memo_Delete";
 

@@ -152,7 +152,7 @@ $(function () {
                 return;
             }
 
-            fd.append('files[' + i + ']', file);
+            fd.append('files', file);
         }
 
         axios({

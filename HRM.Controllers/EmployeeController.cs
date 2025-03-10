@@ -29,6 +29,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Hosting.Internal;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
@@ -105,7 +106,7 @@ public class EmployeeController(
     {
         var teams = await teamService.GetAllAsync();
         teamIds ??= string.Join(",", teams.Select(x => x.Id));
-        var listJobTitle = await commonDataService.GetLookupDataByCodeAsync(Constants.JobTitle);
+        var listJobTitle = await commonDataService.GetLookupDataByCodeAsync(Constants.JobTitle, userControlSession.Get<int>(SessionKey.CurrentCompanyId));
         IList<SelectListItem> jobTitles = listJobTitle.Select(j => new SelectListItem
         {
             Text = j.Name,
@@ -604,7 +605,7 @@ public class EmployeeController(
     {
         var jobLevels = await jobLevelService.GetJobLevel();
         var managementLevels = await managementLevelService.GetManagementLevel();
-        ViewBag.JobTitles = await commonDataService.GetLookupDataByCodeAsync(Constants.JobTitle);
+        ViewBag.JobTitles = await commonDataService.GetLookupDataByCodeAsync(Constants.JobTitle, userControlSession.Get<int>(SessionKey.CurrentCompanyId));
         ViewBag.JobLevel = jobLevels;
         ViewBag.Grades = managementLevels;
         ViewBag.Marriages = Utilities.Marriages;

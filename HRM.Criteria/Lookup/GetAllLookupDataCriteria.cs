@@ -5,6 +5,7 @@
     public class GetAllLookupDataCriteria : CriteriaBase
     {
         public string LookupCode { get; set; }
+        public int CompanyId { get; set; }
 
         public override string GetSettingKey() => "Lookup_GetLookupData";
 

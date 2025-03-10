@@ -25,6 +25,7 @@
         public DateTime SentDate { get; set; }
 
         public int Category { get; set; }
+        public int CompanyId { get; set; }
 
         [SpParam(SqlParamName = "Type")]
         public int MemoType { get; set; }

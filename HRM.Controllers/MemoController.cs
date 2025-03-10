@@ -32,13 +32,13 @@ public class MemoController(
     {
         var model = new MemoViewModel
         {
-            MemoCategories = await commonDataService.GetLookupDataByCodeAsync(Constants.MemoCategory),
+            MemoCategories = await commonDataService.GetLookupDataByCodeAsync(Constants.MemoCategory, CurrentCompanyId),
             Category = category
         };
 
         model.Year = year ?? model.Year;
 
-        model.Memos = await memoService.GetAllAsync(model.Year, model.Category);
+        model.Memos = await memoService.GetAllAsync(model.Year, model.Category, CurrentCompanyId);
         ViewBag.HasPermission = userControlSession.HasPermissionOnFunction(FunctionKey.Memo, Policy.Host);
 
         return View(model);
@@ -48,8 +48,8 @@ public class MemoController(
     [HrmPermission(Policy.Host, FunctionKey.Memo)]
     public async Task<IActionResult> Edit(int id)
     {
-        var memo = await memoService.GetByIdAsync(id);
-        ViewBag.MemoCategories = await commonDataService.GetLookupDataByCodeAsync(Constants.MemoCategory);
+        var memo = await memoService.GetByIdAsync(id, CurrentCompanyId);
+        ViewBag.MemoCategories = await commonDataService.GetLookupDataByCodeAsync(Constants.MemoCategory, CurrentCompanyId);
         ViewBag.Updated = false;
 
         return View(memo);
@@ -59,7 +59,7 @@ public class MemoController(
     [HrmPermission(Policy.Host, FunctionKey.Memo)]
     public async Task<IActionResult> Edit(Memo model)
     {
-        ViewBag.MemoCategories = await commonDataService.GetLookupDataByCodeAsync(Constants.MemoCategory);
+        ViewBag.MemoCategories = await commonDataService.GetLookupDataByCodeAsync(Constants.MemoCategory, CurrentCompanyId);
         if (model.MemoType == UploadMemoType && string.IsNullOrEmpty(model.AttachFile))
         {
             ViewBag.Updated = false;
@@ -70,6 +70,7 @@ public class MemoController(
 
         if (ModelState.IsValid)
         {
+            model.CompanyId = CurrentCompanyId;
             var commandResult = await memoService.EditAsync(model);
             ViewBag.Updated = commandResult.IsSuccessful;
 
@@ -101,10 +102,11 @@ public class MemoController(
             TotalPages = 1,
             SentDate = DateTimeOffset.Now.DateTime.ToClientTimeZone(),
             Contents = "[Contents]",
-            MemoType = UploadMemoType
+            MemoType = UploadMemoType,
+            CompanyId = CurrentCompanyId
         };
 
-        ViewBag.MemoCategories = await commonDataService.GetLookupDataByCodeAsync(Constants.MemoCategory);
+        ViewBag.MemoCategories = await commonDataService.GetLookupDataByCodeAsync(Constants.MemoCategory, CurrentCompanyId);
         ViewBag.Updated = false;
 
         return View(memo);
@@ -114,11 +116,12 @@ public class MemoController(
     [HrmPermission(Policy.Host, FunctionKey.Memo)]
     public async Task<IActionResult> Create(Memo model)
     {
-        ViewBag.MemoCategories = await commonDataService.GetLookupDataByCodeAsync(Constants.MemoCategory);
+        ViewBag.MemoCategories = await commonDataService.GetLookupDataByCodeAsync(Constants.MemoCategory, CurrentCompanyId);
         model.Contents = model.MemoType == UploadMemoType ? model.AttachFile : model.Contents;
 
         if (ModelState.IsValid)
         {
+            model.CompanyId = CurrentCompanyId;
             var commandResult = await memoService.CreateAsync(model);
             ViewBag.Updated = commandResult.IsSuccessful;
 
@@ -144,8 +147,8 @@ public class MemoController(
     [HrmPermission(Policy.Host, FunctionKey.Memo)]
     public async Task<IActionResult> Delete(int id)
     {
-        var memo = await memoService.GetByIdAsync(id);
-        var commandResult = await memoService.DeleteAsync(id);
+        var memo = await memoService.GetByIdAsync(id, CurrentCompanyId);
+        var commandResult = await memoService.DeleteAsync(id, CurrentCompanyId);
 
         if (commandResult.IsSuccessful && memo.MemoType == UploadMemoType)
         {
@@ -167,7 +170,7 @@ public class MemoController(
     [HrmPermission(Policy.Read, FunctionKey.Memo)]
     public async Task<IActionResult> Detail(int id)
     {
-        var memo = await memoService.GetByIdAsync(id);
+        var memo = await memoService.GetByIdAsync(id, CurrentCompanyId);
 
         return View(memo);
     }

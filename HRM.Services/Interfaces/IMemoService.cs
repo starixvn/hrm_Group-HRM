@@ -7,14 +7,14 @@
 
     public interface IMemoService
     {
-        Task<IEnumerable<Memo>> GetAllAsync(int year, int category);
+        Task<IEnumerable<Memo>> GetAllAsync(int year, int category, int companyId);
 
-        Task<Memo> GetByIdAsync(int id);
+        Task<Memo> GetByIdAsync(int id, int companyId);
 
         Task<CommandResult> CreateAsync(Memo model);
 
         Task<CommandResult> EditAsync(Memo model);
 
-        Task<CommandResult> DeleteAsync(int id);
+        Task<CommandResult> DeleteAsync(int id, int companyId);
     }
 }

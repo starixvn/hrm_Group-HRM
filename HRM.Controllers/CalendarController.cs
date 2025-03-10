@@ -89,7 +89,7 @@ public class CalendarController(
 
     public async Task<IActionResult> GetJobTitle()
     {
-        var data = await commonDataService.GetLookupDataByCodeAsync(Constants.JobTitle);
+        var data = await commonDataService.GetLookupDataByCodeAsync(Constants.JobTitle, userControlSession.Get<int>(SessionKey.CurrentCompanyId));
         var jobTitles = data.Select(x => new MultiSelectViewModel
         {
             Id = x.Id,

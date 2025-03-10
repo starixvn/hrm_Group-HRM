@@ -18,49 +18,51 @@ public class FileController(
 {
     private const int MaxSizeFileUpload = 5 * 1024 * 1024;
 
-    //[HttpPost]
-    //public string UploadFile(IList<IFormFile> files, int categoryId, bool isOverride)
-    //{
-    //    var pathAttachFiles = string.Empty;
-    //    foreach (var file in files)
-    //    {
-    //        if (file.Length > 0)
-    //        {
-    //            var pathAttach = SaveFileToServer(file, categoryId, isOverride);
+    [HttpPost]
+    public string UploadFile(IList<IFormFile> files, int categoryId, bool isOverride)
+    {
+        var pathAttachFiles = string.Empty;
+        foreach (var file in files)
+        {
+            if (file.Length > 0)
+            {
+                var pathAttach = SaveFileToServer(file, categoryId, isOverride);
 
-    //            pathAttachFiles = (string.IsNullOrEmpty(pathAttachFiles)) ? pathAttach : string.Concat(pathAttachFiles, ";/", pathAttach);
-    //        }
-    //    }
+                pathAttachFiles = (string.IsNullOrEmpty(pathAttachFiles)) ? pathAttach : string.Concat(pathAttachFiles, ";/", pathAttach);
+            }
+        }
 
-    //    return pathAttachFiles;
-    //}
+        return pathAttachFiles;
+    }
 
-    //private string SaveFileToServer(IFormFile file, int categoryId, bool isOverride)
-    //{
-    //    var fileName = new StringBuilder(Path.GetFileName(file.FileName));
-    //    var dir = "~/file/uploads/" + categoryId;
-    //    var pathAttach = $"{dir}/{fileName}";
+    private string SaveFileToServer(IFormFile file, int categoryId, bool isOverride)
+    {
+        var fileName = Path.GetFileName(file.FileName);
+        var dir = "file/uploads/" + categoryId;
+        var pathAttach = $"{dir}/{fileName}";
+        string basePath = Path.Combine(hostingEnvironment.ContentRootPath, dir);
+        if (isOverride)
+        {
+            
+            while (System.IO.File.Exists(basePath + "/" + fileName))
+            {
+                fileName.Insert(0, "(1)");
+                pathAttach = $"{basePath}/{fileName}";
+            }
+        }
 
-    //    if (isOverride)
-    //    {
-    //        while (System.IO.File.Exists(Server.MapPath(pathAttach)))
-    //        {
-    //            fileName.Insert(0, "(1)");
-    //            pathAttach = $"{dir}/{fileName}";
-    //        }
-    //    }
+        if (!Directory.Exists(basePath))
+        {
+            Directory.CreateDirectory(basePath);
+        }
 
-    //    if (!Directory.Exists(Server.MapPath(dir)))
-    //    {
-    //        Directory.CreateDirectory(Server.MapPath(dir));
-    //    }
+        var path = Path.Combine(basePath, fileName);
+        using var stream = new FileStream(path, FileMode.Create);
+        file.CopyTo(stream);
+        const byte StartIndex = 2;
 
-    //    var path = Path.Combine(Server.MapPath(dir), fileName.ToString());
-    //    file.SaveAs(path);
-    //    const byte StartIndex = 2;
-
-    //    return pathAttach.Substring(StartIndex);
-    //}
+        return pathAttach.Substring(StartIndex);
+    }
 
     public bool Delete(string fileName)
     {

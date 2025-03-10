@@ -40,6 +40,7 @@
         public int CheckForEdit { get; set; }
 
         public bool SendMail { get; set; }
+        public int CompanyId { get; set; }
 
         public List<string> MemoDetailLink
         {

@@ -6,7 +6,7 @@
     {
         public int Year { get; set; }
         public int Category { get; set; }
-
+        public int CompanyId { get; set; }
         public override string GetSettingKey() => "Memo_GetAll";
 
         public override bool IsValid() => true;

@@ -19,6 +19,7 @@
         public string ForInfo { get; set; }
 
         public int TotalPages { get; set; }
+        public int CompanyId { get; set; }
 
         public DateTime SentDate { get; set; }
 
