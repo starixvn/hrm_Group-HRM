@@ -25,6 +25,8 @@
         [SpParam(SqlParamName = "Type")]
         public short AttendanceType { get; set; }
 
+        public int CompanyId { get; set; }
+
         public override string GetSettingKey() => "EmployeeAttendance_GetByType";
 
         public override bool IsValid() => true;

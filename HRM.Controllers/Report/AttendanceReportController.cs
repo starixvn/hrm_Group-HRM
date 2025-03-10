@@ -50,7 +50,8 @@ public class AttendanceReportController(
             TeamIds = model.TeamIds,
             ExcludeUserDelete = model.ExcludeDeletedUsers ? 1 : 0,
             IsLocal = model.IsLocal,
-            IsRealDate = model.IsRealDate
+            IsRealDate = model.IsRealDate,
+            CompanyId = currentCompanyId
         };
         var employeeAttendances = await reportService.GetEmployeeAttendanceReportAsync(criteria);
 
