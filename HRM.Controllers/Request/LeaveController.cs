@@ -38,13 +38,15 @@ public class LeaveController(
     [HttpGet]
     public async Task<IActionResult> EmployeeView(int? year)
     {
-        int tempYear = year ?? DateTimeOffset.Now.Year;
+        var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
+        var tempYear = year ?? DateTimeOffset.Now.Year;
         var fromDate = new DateTimeOffset(tempYear, 1, 1, 0, 0, 0, TimeSpan.Zero).Date;
         var criteria = new GetLeaveRequestByDateCriteria
         {
             EmpId = EmployeeSession.EmpId,
             FromDate = fromDate,
-            ToDate = fromDate.AddYears(1).AddDays(-1)
+            ToDate = fromDate.AddYears(1).AddDays(-1),
+            CompanyId = companyId
         };
 
         var leaves = await leaveRequestService.GetByDateAsync(criteria);
