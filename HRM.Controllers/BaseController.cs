@@ -11,5 +11,5 @@ using Microsoft.AspNetCore.Mvc;
 public class BaseController(IUserControlSession userControlSession) : Controller
 {
     public EmployeeSession EmployeeSession => userControlSession.Get<EmployeeSession>(SessionKey.Employee) ?? new EmployeeSession();
-    public int currentCompanyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
+    public int CurrentCompanyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
 }
