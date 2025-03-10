@@ -23,6 +23,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Services.Interfaces;
 using Newtonsoft.Json;
+using HRM.Criteria.Request.ChangeShift;
+using HRM.Models;
 
 public class ChangeShiftController(
     IUserControlSession userControlSession,
@@ -37,10 +39,18 @@ public class ChangeShiftController(
     [HttpGet]
     public async Task<IActionResult> EmployeeView(int? year)
     {
-        int tempYear = year ?? DateTimeOffset.Now.Year;
+        var tempYear = year ?? DateTimeOffset.Now.Year;
         var fromDate = new DateTimeOffset(tempYear, 1, 1, 0, 0, 0, TimeSpan.Zero).Date;
         var toDate = fromDate.AddYears(1).AddDays(-1).Date.ToEndOfDay();
-        var requests = await changeShiftService.GetByEmployeeAsync(EmployeeSession.EmpId, fromDate, toDate);
+        var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
+        var criteria = new GetChangeShiftRequestByEmployeeCriteria
+        {
+            EmployeeId = EmployeeSession.EmpId,
+            FromDate = fromDate,
+            ToDate = toDate,
+            CompanyId = companyId
+        };
+        var requests = await changeShiftService.GetByEmployeeAsync(criteria);
         foreach (var request in requests)
         {
             request.AttachFiles = attachFileService.GetInfoAttachFile(request.RequestId, UploadFolderPath);

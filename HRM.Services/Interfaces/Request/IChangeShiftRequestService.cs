@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using HRM.Core.Enums;
 using HRM.Core.Models;
+using HRM.Criteria.Request.ChangeShift;
 using HRM.Models.Request.ChangeShift;
 using HRM.Models.ScheduleArrange;
 
@@ -16,7 +17,7 @@ public interface IChangeShiftRequestService
 
     Task<IEnumerable<DateTime>> GetDisableDateForMoveOffDayRequestAsync(int employeeId, DateTime requestDate, long? requestId = null);
 
-    Task<IEnumerable<ChangeShiftRequest>> GetByEmployeeAsync(int employeeId, DateTime fromDate, DateTime toDate);
+    Task<IEnumerable<ChangeShiftRequest>> GetByEmployeeAsync(GetChangeShiftRequestByEmployeeCriteria criteria);
 
     Task<IEnumerable<ChangeShiftRequest>> GetHistoryByIdAsync(long requestId);
 

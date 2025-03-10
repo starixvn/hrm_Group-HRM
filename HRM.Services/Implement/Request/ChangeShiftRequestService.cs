@@ -80,14 +80,8 @@ public class ChangeShiftRequestService(
         return dates;
     }
 
-    public async Task<IEnumerable<ChangeShiftRequest>> GetByEmployeeAsync(int employeeId, DateTime fromDate, DateTime toDate)
+    public async Task<IEnumerable<ChangeShiftRequest>> GetByEmployeeAsync(GetChangeShiftRequestByEmployeeCriteria criteria)
     {
-        var criteria = new GetChangeShiftRequestByEmployeeCriteria
-        {
-            EmployeeId = employeeId,
-            FromDate = fromDate,
-            ToDate = toDate
-        };
         return await changeShiftRepository.GetByEmployeeAsync(criteria);
     }
 
