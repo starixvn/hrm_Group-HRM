@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using GO.UserControl.Client.Core.Enumerables;
@@ -22,8 +24,12 @@ using HRM.Services.Implement.ActionLog;
 using HRM.Services.Interfaces;
 using HRM.ViewModels;
 using HRM.ViewModels.Employee;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Hosting.Internal;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
@@ -40,8 +46,11 @@ public class EmployeeController(
     IManagementLevelService managementLevelService,
     ICryptoService cryptoService,
     IUserService userService,
-    IRoleService roleService) : BaseController(userControlSession)
+    IRoleService roleService,
+    IWebHostEnvironment hostingEnvironment) : BaseController(userControlSession)
 {
+    private readonly IUserControlSession userControlSession = userControlSession;
+
     [HrmPermission(Policy.Read, FunctionKey.ContactList)]
     public async Task<IActionResult> Index()
     {
@@ -331,43 +340,33 @@ public class EmployeeController(
         return Json(result);
     }
 
-    //[AllowAnonymous]
-    //public FileResult Avatar(string id)
-    //{
-    //    var avatarName = string.IsNullOrEmpty(id) ? EmployeeSession.Code + ".jpg" : id + ".jpg";
-    //    if (System.IO.File.Exists(Server.MapPath("/avatars/" + avatarName)))
-    //    {
-    //        return File("/avatars/" + avatarName, "image/jpeg");
-    //    }
+    [AllowAnonymous]
+    public FileResult Avatar(string id)
+    {
+        var avatarName = string.IsNullOrEmpty(id) ? EmployeeSession.Code + ".jpg" : id + ".jpg";
+        var avatarPath = Path.Combine(hostingEnvironment.ContentRootPath, "Avatars", avatarName);
+        var defaultAvatarPath = Path.Combine(hostingEnvironment.ContentRootPath, "Avatars", "avatar.jpg");
 
-    //    return File("/avatars/avatar.jpg", "image/jpeg");
-    //}
+        return System.IO.File.Exists(avatarPath)
+            ? PhysicalFile(avatarPath, "image/jpeg")
+            : PhysicalFile(defaultAvatarPath, "image/jpeg");
+    }
 
-    //[HttpPost]
-    //[HrmPermission(Policy.Host, FunctionKey.EmployeeManagement)]
-    //public async Task<JsonResult> UploadAvatar(string code, HttpPostedFileBase file)
-    //{
-    //    if (file != null && file.ContentLength > 0)
-    //    {
-    //        using (var stream = new MemoryStream())
-    //        {
-    //            using (var processor = new ImageProcessor<>())
-    //            {
-    //                const int JpegCompression = 100;
-    //                processor.OutputFormat = OutputFormat.Jpeg;
-    //                processor.JpegCompression = JpegCompression;
-    //                processor.ProcessImage(file.InputStream, stream);
-    //                var image = Image.FromStream(stream);
-    //                image.Save(Server.MapPath("/avatars/") + code + ".jpg");
-    //                image.Dispose();
+    [HttpPost]
+    [HrmPermission(Policy.Host, FunctionKey.EmployeeManagement)]
+    public async Task<JsonResult> UploadAvatar(string code, IFormFile file)
+    {
+        if (file is not { Length: > 0 }) return Json(null);
+        var avatarPath = Path.Combine(hostingEnvironment.ContentRootPath, "avatars", $"{code}.jpg");
+        using var stream = new MemoryStream();
+        await file.CopyToAsync(stream);
+        stream.Seek(0, SeekOrigin.Begin);
 
-    //                return Json(true);
-    //            }
-    //        }
-    //    }
+        using var image = Image.FromStream(stream);
+        image.Save(avatarPath, System.Drawing.Imaging.ImageFormat.Jpeg);
 
-    //    return Json(null);
-    //}
+        return Json(null);
+    }
 
     [HttpGet]
     public IActionResult ManageSupervisor(int id, short roleId)
