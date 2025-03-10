@@ -1,7 +1,6 @@
 ﻿namespace HRM.Services;
 
 using System.Threading.Tasks;
-using Fanex.NexHR.Core.Enums;
 using HRM.Core.Enums;
 using HRM.Core.Models;
 using HRM.Core.Security;
@@ -18,8 +17,6 @@ public class HRMAuthService(IBaseService baseService) : IHRMAuthService
         };
         return await baseService.GetDataEntityAsync<EmployeeSession>(criteria);
     }
-
-    public HashProvider HashProvider => HashProvider.Sha1;
 
     public int Validate(EmployeeSession employee, string password)
     {

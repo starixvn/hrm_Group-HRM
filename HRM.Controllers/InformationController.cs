@@ -1,4 +1,4 @@
-﻿namespace Fanex.NexHR.Controllers;
+﻿namespace HRM.Controllers;
 
 using System;
 using System.Collections.Generic;
@@ -7,7 +7,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GO.UserControl.Client.Core.Session;
-using HRM.Controllers;
 using HRM.Core;
 using HRM.Core.Constants;
 using HRM.Core.Models;
@@ -111,9 +110,9 @@ public class InformationController(
 
         foreach (var info in infoUpdate)
         {
-            var oldvalue = GetPropValue(employee, info.Key)?.ToString();
-            var newvalue = GetPropValue(model, info.Key)?.ToString();
-            if (!IsEquals(oldvalue, newvalue))
+            var oldValue = GetPropValue(employee, info.Key)?.ToString();
+            var newValue = GetPropValue(model, info.Key)?.ToString();
+            if (!IsEquals(oldValue, newValue))
             {
                 template.AppendFormat(info.Value, GetPropValue(model, info.Key));
             }
@@ -127,10 +126,10 @@ public class InformationController(
         return src.GetType().GetProperty(propName).GetValue(src, null);
     }
 
-    private static bool IsEquals(string oldvalue, string newvalue)
+    private static bool IsEquals(string oldValue, string newValue)
     {
-        return string.IsNullOrWhiteSpace(oldvalue) && string.IsNullOrWhiteSpace(newvalue)
-               || oldvalue == newvalue;
+        return string.IsNullOrWhiteSpace(oldValue) && string.IsNullOrWhiteSpace(newValue)
+               || oldValue == newValue;
     }
 
     private async Task SendMailUpdateInfo(Employee model, Employee employee)

@@ -106,8 +106,8 @@ public class MessageService(
     {
         var criteria = new GetMessageByEmployeeCriteria
         {
-            FromDate = param.FromDate.ToServerTimeZone(),
-            ToDate = param.ToDate.ToServerTimeZone(),
+            FromDate = param.FromDate,
+            ToDate = param.ToDate,
             IsDisabled = param.IsDisabled,
             EmployeeId = param.EmployeeId
         };
