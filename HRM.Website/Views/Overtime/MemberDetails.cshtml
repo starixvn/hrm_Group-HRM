@@ -3,12 +3,10 @@
 @using HRM.Website.Helper
 @model MonthlyOvertimeRequest
 @{
-    var verifier = string.Empty;
-    var approver = string.Empty;
     var currentUserId = (int)ViewBag.CurrentUserId;
     ViewBag.Title = Labels.MemberOvertime + " of " + Model.Requester.Nickname + " (" + (Model.Month).ToString("MMM-yyyy") + ")";
-    verifier = string.Format("{0} ({1})", Model.Verifier.Nickname, Model.Verifier.FullName);
-    approver = string.Format("{0} ({1})", Model.Approver.Nickname, Model.Approver.FullName);
+    var verifier = $"{Model.Verifier.Nickname} ({Model.Verifier.FullName})";
+    var approver = $"{Model.Approver.Nickname} ({Model.Approver.FullName})";
 }
 
 @section css{

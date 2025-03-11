@@ -17,7 +17,7 @@
 }
 <h2 class="page-title">@ViewBag.Title</h2>
 <div class="header-control">
-    <div><strong>@Labels.Status</strong>: @Model.Status</div>
+    <div><strong>@Labels.Status</strong>: @Model.Status.ToString()</div>
     <button type="button" class="btn btn-default" onclick="window.history.back()">@Labels.Back</button>
 </div>
 <table class="table table-custom" id="data">

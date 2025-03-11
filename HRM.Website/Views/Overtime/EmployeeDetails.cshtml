@@ -25,14 +25,16 @@
     @Html.Hidden("StatusId", Model.Status.Id)
     <div class="form-horizontal clearfix">
         <span>
-            ※ @Html.Label(verifier,Labels.VerifiedBy + ": ", new { @class = "control-label" })
+            ※ @Html.Label(null,Labels.VerifiedBy + ": ", new { @class = "control-label" })
+            @verifier
         </span>
         <span>
-            ※ @Html.Label(approver, Labels.ApprovedBy + ": ", new { @class = "control-label" })
+            ※ @Html.Label(null, Labels.ApprovedBy + ": ", new { @class = "control-label" })
             @approver
         </span>
         <span>
-            ※ @Html.Label(Model.Status.ToString(),Labels.Status + ": ", new { @class = "control-label" })
+            ※ @Html.Label(null,Labels.Status + ": ", new { @class = "control-label" })
+            @Model.Status.ToString()
         </span>
     </div>
 
