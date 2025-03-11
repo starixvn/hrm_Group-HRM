@@ -1,4 +1,6 @@
-﻿namespace HRM.Services.Implement;
+﻿using HRM.Core.Constants;
+
+namespace HRM.Services.Implement;
 
 using System;
 using System.Collections.Generic;
@@ -11,8 +13,10 @@ using Criteria.AnnualLeave;
 using Criteria.Employee;
 using Criteria.Shift;
 using Criteria.Supervisor;
+using GO.UserControl.Client.AspNetCore.Session;
 using GO.UserControl.Client.Core;
 using GO.UserControl.Client.Core.Services;
+using GO.UserControl.Client.Core.Session;
 using HRM.Core.Models;
 using HRM.Core.Services;
 using HRM.Models.Group;
@@ -28,8 +32,11 @@ public class EmployeeService(
     IUserControlSettings userControlSettings,
     IEmployeeRepository employeeRepository,
     IBaseService baseService,
-    IRoleService roleService) : IEmployeeService
+    IRoleService roleService,
+    IUserControlSession userControlSession) : IEmployeeService
 {
+    private readonly int currentCompanyId = userControlSession.Get<int>(SessionKey.CurrentCompanyId);
+
     public async Task<string> GenerateEmployeeCode()
     {
         var criteria = new GenerateEmployeeCodeCriteria();

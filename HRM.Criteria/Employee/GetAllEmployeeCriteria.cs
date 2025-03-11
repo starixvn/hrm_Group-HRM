@@ -68,6 +68,8 @@
         [SpParam(Ignored = true)]
         public bool? IsLocalUser { get; set; }
 
+        public short CompanyId { get; set; }
+
         public override string GetSettingKey() => "Employee_GetEmployees";
 
         public override bool IsValid() => true;

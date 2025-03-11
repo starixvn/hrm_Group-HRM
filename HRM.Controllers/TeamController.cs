@@ -30,6 +30,7 @@ public class TeamController(
     IEmployeeService employeeService) : BaseController(userControlSession)
 {
     private readonly IUserControlSession userControlSession = userControlSession;
+    private readonly short currentCompanyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
 
     public async Task<ActionResult> Index(string keyword = null)
     {
@@ -305,7 +306,8 @@ public class TeamController(
             EnableUser = true,
             IsDeleteUser = null,
             TitleId = null,
-            IsLocalUser = null
+            IsLocalUser = null,
+            CompanyId = currentCompanyId
         };
         IList<Employee> employees = (await employeeService.GetEmployeeAsync(criteria)).ToList();
 
