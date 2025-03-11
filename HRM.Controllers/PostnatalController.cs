@@ -18,6 +18,8 @@ public class PostnatalController(
     IUserControlSession userControlSession,
     IPostnatalService postnatalService) : BaseController(userControlSession)
 {
+    private readonly IUserControlSession userControlSession = userControlSession;
+
     [HrmPermission(Policy.Read, FunctionKey.EmployeeManagement)]
     public IActionResult Index()
     {
@@ -28,7 +30,7 @@ public class PostnatalController(
     [HrmPermission(Policy.Read, FunctionKey.EmployeeManagement)]
     public async Task<PartialViewResult> GetPostnatalGrid(int year)
     {
-        var postnatalList = await postnatalService.GetAll(year);
+        var postnatalList = await postnatalService.GetAll(year, CurrentCompanyId);
         ViewBag.IsHost = userControlSession.HasPermissionOnFunction(FunctionKey.EmployeeManagement, Policy.Host);
         return PartialView("_PostnatalGrid", postnatalList);
     }
@@ -67,7 +69,7 @@ public class PostnatalController(
         }
         else
         {
-            result.Message = ModelState.Values.FirstOrDefault(v => v.Errors.Any()).Errors.FirstOrDefault().ErrorMessage;
+            result.Message = ModelState.Values.FirstOrDefault(v => v.Errors.Any())?.Errors.FirstOrDefault()?.ErrorMessage;
         }
 
         return Json(result);

@@ -18,9 +18,13 @@ public class PaternityService(IBaseService baseService) : IPaternityService
         return await baseService.ExecuteNonQueryAsync(criteria);
     }
 
-    public async Task<IList<EmployeePaternity>> GetAll(int year)
+    public async Task<IList<EmployeePaternity>> GetAll(int year, short companyId)
     {
-        var criteria = new GetPaternityCriteria { Year = year };
+        var criteria = new GetPaternityCriteria
+        {
+            Year = year,
+            CompanyId = companyId
+        };
         IList<EmployeePaternity> paternityList = null;
         if (criteria.IsValid())
         {

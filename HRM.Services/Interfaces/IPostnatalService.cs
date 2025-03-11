@@ -8,7 +8,7 @@ namespace HRM.Services.Interfaces;
 
 public interface IPostnatalService
 {
-    Task<IList<EmployeePostnatal>> GetAll(int year);
+    Task<IList<EmployeePostnatal>> GetAll(int year, short companyId);
 
     Task<CommandResult> Insert(InsertPostnatalCriteria criteria);
 

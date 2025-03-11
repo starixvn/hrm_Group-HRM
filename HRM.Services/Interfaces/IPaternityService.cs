@@ -8,7 +8,7 @@ namespace HRM.Services.Interfaces;
 
 public interface IPaternityService
 {
-    Task<IList<EmployeePaternity>> GetAll(int year);
+    Task<IList<EmployeePaternity>> GetAll(int year, short companyId);
 
     Task<CommandResult> Insert(InsertPaternityCriteria criteria);
 

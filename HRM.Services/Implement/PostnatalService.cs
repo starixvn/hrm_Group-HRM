@@ -11,9 +11,13 @@ namespace HRM.Services.Implement;
 
 public class PostnatalService(IBaseService baseService) : IPostnatalService
 {
-    public async Task<IList<EmployeePostnatal>> GetAll(int year)
+    public async Task<IList<EmployeePostnatal>> GetAll(int year, short companyId)
     {
-        var criteria = new GetPostnatalCriteria { Year = year };
+        var criteria = new GetPostnatalCriteria
+        {
+            Year = year, 
+            CompanyId = companyId
+        };
         return (await baseService.GetDataAsync<EmployeePostnatal>(criteria)).ToList();
     }
 

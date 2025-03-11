@@ -6,6 +6,8 @@
     {
         public int Year { get; set; }
 
+        public short CompanyId { get; set; }
+
         public override string GetSettingKey()
         {
             return "Paternity_Get";

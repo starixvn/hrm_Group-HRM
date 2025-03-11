@@ -18,6 +18,8 @@ public class PaternityController(
     IUserControlSession userControlSession,
     IPaternityService paternityService) : BaseController(userControlSession)
 {
+    private readonly IUserControlSession userControlSession = userControlSession;
+
     [HrmPermission(Policy.Read, FunctionKey.EmployeeManagement)]
     public ActionResult Index()
     {
@@ -28,7 +30,7 @@ public class PaternityController(
     [HrmPermission(Policy.Read, FunctionKey.EmployeeManagement)]
     public async Task<PartialViewResult> ListPaternity(int year)
     {
-        var paternityList = await paternityService.GetAll(year);
+        var paternityList = await paternityService.GetAll(year, CurrentCompanyId);
         ViewBag.IsHost = userControlSession.HasPermissionOnFunction(FunctionKey.EmployeeManagement, Policy.Host);
         return PartialView("_ListPaternity", paternityList);
     }
@@ -65,7 +67,7 @@ public class PaternityController(
         }
         else
         {
-            result.Message = ModelState.Values.FirstOrDefault(v => v.Errors.Any()).Errors.FirstOrDefault().ErrorMessage;
+            result.Message = ModelState.Values.FirstOrDefault(v => v.Errors.Any())?.Errors.FirstOrDefault()?.ErrorMessage;
         }
 
         return Json(result);
@@ -109,7 +111,7 @@ public class PaternityController(
         }
         else
         {
-            result.Message = ModelState.Values.FirstOrDefault(v => v.Errors.Any()).Errors.FirstOrDefault().ErrorMessage;
+            result.Message = ModelState.Values.FirstOrDefault(v => v.Errors.Any())?.Errors.FirstOrDefault()?.ErrorMessage;
         }
 
         return Json(result);
