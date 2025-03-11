@@ -78,13 +78,15 @@ public class LeaveRequestService(
 
     public async Task<IEnumerable<DateTime>> GetDisabledDateAsync(GetDisabledDateParam param)
     {
+        var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
         var criteria = new GetDisabledDateCriteria
         {
             LeaveTypeId = param.LeaveTypeId,
             EmployeeId = param.EmployeeId,
             FromDate = param.FromDate,
             ToDate = param.ToDate,
-            RequestId = param.RequestId
+            RequestId = param.RequestId,
+            CompanyId = companyId
         };
         return await baseService.GetDataAsync<DateTime>(criteria);
     }
