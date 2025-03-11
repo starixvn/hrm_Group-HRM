@@ -232,7 +232,7 @@ public class RequestController(
     private async Task GetRequests(RequestViewModel request)
     {
         request.ToDate = request.ToDate.ToEndOfDay();
-        request.LeaveTypes = await commonDataService.GetLeaveTypeAsync(CurrentCompanyId);
+        request.LeaveTypes = await commonDataService.GetLeaveTypeAsync();
         int? employeeId = null;
         if (request.EmployeeId != -1 && !string.IsNullOrWhiteSpace(request.Employee))
         {

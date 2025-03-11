@@ -59,7 +59,8 @@ public class HospitalizationLeaveBalanceController(
             EmployeeId = model.EmployeeId,
             TeamIds = model.TeamIds,
             IsLocal = model.IsLocal,
-            SupervisorId = EmployeeSession.EmpId
+            SupervisorId = EmployeeSession.EmpId,
+            CompanyId = CurrentCompanyId
         };
         model.Employees = await baseService.GetDataAsync<HospitalizationLeaveBalanceSummaryReport>(criteria);
 

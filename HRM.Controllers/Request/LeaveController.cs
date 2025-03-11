@@ -71,7 +71,7 @@ public class LeaveController(
             FromDate = today,
             ToDate = today,
             TotalDays = 1,
-            LeaveTypeList = await commonDataService.GetLeaveTypeAsync(CurrentCompanyId),
+            LeaveTypeList = await commonDataService.GetLeaveTypeAsync(),
             EmployeeLeaveBalance = await GetLeaveBalance(null, null),
             Verifiers = supervisor.Verifiers,
             Approvers = supervisor.Approvers,
@@ -135,7 +135,7 @@ public class LeaveController(
             RequestId = model.RequestId,
             LeaveTypeId = model.LeaveTypeId
         });
-        model.LeaveTypeList = await commonDataService.GetLeaveTypeAsync(CurrentCompanyId);
+        model.LeaveTypeList = await commonDataService.GetLeaveTypeAsync();
         model.EmployeeLeaveBalance = await GetLeaveBalance(id, null);
 
         var supervisor = await requestService.GetVerifierAndApproverAsync(model.EmployeeId, RequestType.Leave);
@@ -197,7 +197,7 @@ public class LeaveController(
         }
 
         var model = ConvertRequestToModel(request);
-        model.LeaveTypeList = await commonDataService.GetLeaveTypeAsync(CurrentCompanyId);
+        model.LeaveTypeList = await commonDataService.GetLeaveTypeAsync();
         model.Files = attachFileService.GetAttachFile(id, UploadFolderPath);
 
         var supervisor = await requestService.GetVerifierAndApproverAsync(request.Requester.EmpId, RequestType.Leave);
@@ -257,7 +257,7 @@ public class LeaveController(
         });
 
         leaveRequestDetail = ConvertToLeaveRequestDetail(calendars, leaveRequestDetail, fromDate, toDate);
-        IList<LeaveType> leaveTypes = await commonDataService.GetLeaveTypeAsync(CurrentCompanyId);
+        IList<LeaveType> leaveTypes = await commonDataService.GetLeaveTypeAsync();
         var model = new LeaveDetailViewModel
         {
             LeaveRequestDetail = leaveRequestDetail,

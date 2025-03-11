@@ -46,7 +46,7 @@ public class ExportExcelUnpaidLeaveSummaryReportService(
         var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, path);
 
         var leaveTypeIds = !string.IsNullOrWhiteSpace(leaveType) ? leaveType.Split(',').ToList() : new List<string>();
-        var leaveTypes = await commonDataService.GetLeaveTypeAsync(companyId);
+        var leaveTypes = await commonDataService.GetLeaveTypeAsync();
         var type = string.Join(", ", leaveTypes.Where(x => leaveTypeIds.Exists(y => x.Id.ToString() == y)).Select(x => x.Name));
 
         var writer = new ExcelTemplateWriter(templatePath, string.Empty, "Unpaid Leave Summary");

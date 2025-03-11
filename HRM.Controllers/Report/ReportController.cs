@@ -209,7 +209,7 @@ public class ReportController(
         };
 
         var leaveTypeIds = !string.IsNullOrWhiteSpace(model.LeaveType) ? model.LeaveType.Split(',').ToList() : new List<string>();
-        var leaveTypes = await commonDataService.GetLeaveTypeAsync(CurrentCompanyId);
+        var leaveTypes = await commonDataService.GetLeaveTypeAsync();
         var leaveType = string.Join(", ", leaveTypes.Where(x => leaveTypeIds.Exists(y => x.Id.ToString() == y)).Select(x => x.Name));
         ViewBag.HeaderTitle = $"{leaveType} {model.Year}";
 
@@ -275,7 +275,7 @@ public class ReportController(
 
     public async Task<IActionResult> GetUnpaidLeaveType()
     {
-        var leaveTypes = await commonDataService.GetLeaveTypeAsync(CurrentCompanyId);
+        var leaveTypes = await commonDataService.GetLeaveTypeAsync();
         var multiSelectViewModel = leaveTypes.Where(x => x.Id is (int)LeaveTypes.MaternityLeave
             or (int)LeaveTypes.PaternityLeave
             or (int)LeaveTypes.UnpaidLeave

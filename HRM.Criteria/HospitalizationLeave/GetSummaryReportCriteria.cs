@@ -12,6 +12,7 @@
         public int Year { get; set; }
         public bool? IsLocal { get; set; }
         public int? SupervisorId { get; set; }
+        public int CompanyId { get; set; }
 
         public override string GetSettingKey() => "HospitalizationLeave_SummaryReport";
 
