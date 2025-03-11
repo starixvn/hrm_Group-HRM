@@ -55,6 +55,8 @@
 
         public int? LeaveTypeId { get; set; }
 
+        public short CompanyId { get; set; }
+
         public override string GetSettingKey()
         {
             return IsQueryByCreatedDate ? "WorkingTimeRequest_GetRequestByCreateDate_AllType" : "WorkingTimeRequest_GetRequestByRequestDate_AllType";
