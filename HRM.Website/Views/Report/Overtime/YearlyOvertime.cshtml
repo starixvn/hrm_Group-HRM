@@ -1,6 +1,4 @@
-﻿@using HRM.Resources
-@using HRM.Models.Report.Overtime
-@using HRM.ViewModels.Report.Overtime
+﻿@using HRM.ViewModels.Report.Overtime
 @using HRM.Website.Helper
 @model YearlyOvertimeViewModel
 @{
@@ -138,136 +136,136 @@
         @if (Model.Overtimes.Any())
         {
             var rowIndex = 0;
-            foreach (YearlyOvertime overtime in Model.Overtimes)
+            foreach (var overtime in Model.Overtimes)
             {
                 rowIndex++;
-        <tr>
-            <td>@rowIndex</td>
-            <td class="align-left">@overtime.DepartmentCode</td>
-            <td class="align-left">@overtime.Section</td>
-            <td class="align-left">@overtime.Team</td>
-            <td class="align-left">@overtime.FullName</td>
-            <td class="align-left">@overtime.Nickname</td>
-            <td class="align-right">
-                @if (overtime.Jan != 0)
-                {
-                    <a href="@Url.Action("MonthlyOvertimeDetails", "OvertimeReport",
-                                    new { employeeId = overtime.EmpId, month = 1, year = Model.Year, calendar = Model.Calendar })">
-                        @overtime.Jan
-                    </a>
-                }
-            </td>
-            <td class="align-right">
-                @if (overtime.Feb != 0)
-                {
-                    <a href="@Url.Action("MonthlyOvertimeDetails", "OvertimeReport",
-                                    new { employeeId = overtime.EmpId, month = 2, year = Model.Year, calendar = Model.Calendar })">
-                        @overtime.Feb
-                    </a>
-                }
-            </td>
-            <td class="align-right">
-                @if (overtime.Mar != 0)
-                {
-                    <a href="@Url.Action("MonthlyOvertimeDetails", "OvertimeReport",
-                                    new { employeeId = overtime.EmpId, month = 3, year = Model.Year, calendar = Model.Calendar })">
-                        @overtime.Mar
-                    </a>
-                }
-            </td>
-            <td class="align-right">
-                @if (overtime.Apr != 0)
-                {
-                    <a href="@Url.Action("MonthlyOvertimeDetails", "OvertimeReport",
-                                    new { employeeId = overtime.EmpId, month = 4, year = Model.Year, calendar = Model.Calendar })">
-                        @overtime.Apr
-                    </a>
-                }
-            </td>
-            <td class="align-right">
-                @if (overtime.May != 0)
-                {
-                    <a href="@Url.Action("MonthlyOvertimeDetails", "OvertimeReport",
-                                    new { employeeId = overtime.EmpId, month = 5, year = Model.Year, calendar = Model.Calendar })">
-                        @overtime.May
-                    </a>
-                }
-            </td>
-            <td class="align-right">
-                @if (overtime.Jun != 0)
-                {
-                    <a href="@Url.Action("MonthlyOvertimeDetails", "OvertimeReport",
-                                    new { employeeId = overtime.EmpId, month = 6, year = Model.Year, calendar = Model.Calendar })">
-                        @overtime.Jun
-                    </a>
-                }
-            </td>
-            <td class="align-right">
-                @if (overtime.Jul != 0)
-                {
-                    <a href="@Url.Action("MonthlyOvertimeDetails", "OvertimeReport",
-                                    new { employeeId = overtime.EmpId, month = 7, year = Model.Year, calendar = Model.Calendar })">
-                        @overtime.Jul
-                    </a>
-                }
-            </td>
-            <td class="align-right">
-                @if (overtime.Aug != 0)
-                {
-                    <a href="@Url.Action("MonthlyOvertimeDetails", "OvertimeReport",
-                                    new { employeeId = overtime.EmpId, month = 8, year = Model.Year, calendar = Model.Calendar })">
-                        @overtime.Aug
-                    </a>
-                }
-            </td>
-            <td class="align-right">
-                @if (overtime.Sep != 0)
-                {
-                    <a href="@Url.Action("MonthlyOvertimeDetails", "OvertimeReport",
-                                    new { employeeId = overtime.EmpId, month = 9, year = Model.Year, calendar = Model.Calendar })">
-                        @overtime.Sep
-                    </a>
-                }
-            </td>
-            <td class="align-right">
-                @if (overtime.Oct != 0)
-                {
-                    <a href="@Url.Action("MonthlyOvertimeDetails", "OvertimeReport",
-                                    new { employeeId = overtime.EmpId, month = 10, year = Model.Year, calendar = Model.Calendar })">
-                        @overtime.Oct
-                    </a>
-                }
-            </td>
-            <td class="align-right">
-                @if (overtime.Nov != 0)
-                {
-                    <a href="@Url.Action("MonthlyOvertimeDetails", "OvertimeReport",
-                                    new { employeeId = overtime.EmpId, month = 11, year = Model.Year, calendar = Model.Calendar })">
-                        @overtime.Nov
-                    </a>
-                }
-            </td>
-            <td class="align-right">
-                @if (overtime.Dec != 0)
-                {
-                    <a href="@Url.Action("MonthlyOvertimeDetails", "OvertimeReport",
-                                    new { employeeId = overtime.EmpId, month = 12, year = Model.Year, calendar = Model.Calendar })">
-                        @overtime.Dec
-                    </a>
-                }
-            </td>
-            <td class="align-right">
-                @if (overtime.Total != 0)
-                {
-                    @overtime.Total
-                }
-            </td>
-        </tr>
+                <tr>
+                    <td>@rowIndex</td>
+                    <td class="align-left">@overtime.DepartmentCode</td>
+                    <td class="align-left">@overtime.Section</td>
+                    <td class="align-left">@overtime.Team</td>
+                    <td class="align-left">@overtime.FullName</td>
+                    <td class="align-left">@overtime.Nickname</td>
+                    <td class="align-right">
+                        @if (overtime.Jan != 0)
+                        {
+                            <a href="@Url.Action("MonthlyOvertimeDetails", "OvertimeReport",
+                                            new { employeeId = overtime.EmpId, month = 1, year = Model.Year, calendar = Model.Calendar })">
+                                @overtime.Jan
+                            </a>
+                        }
+                    </td>
+                    <td class="align-right">
+                        @if (overtime.Feb != 0)
+                        {
+                            <a href="@Url.Action("MonthlyOvertimeDetails", "OvertimeReport",
+                                            new { employeeId = overtime.EmpId, month = 2, year = Model.Year, calendar = Model.Calendar })">
+                                @overtime.Feb
+                            </a>
+                        }
+                    </td>
+                    <td class="align-right">
+                        @if (overtime.Mar != 0)
+                        {
+                            <a href="@Url.Action("MonthlyOvertimeDetails", "OvertimeReport",
+                                            new { employeeId = overtime.EmpId, month = 3, year = Model.Year, calendar = Model.Calendar })">
+                                @overtime.Mar
+                            </a>
+                        }
+                    </td>
+                    <td class="align-right">
+                        @if (overtime.Apr != 0)
+                        {
+                            <a href="@Url.Action("MonthlyOvertimeDetails", "OvertimeReport",
+                                            new { employeeId = overtime.EmpId, month = 4, year = Model.Year, calendar = Model.Calendar })">
+                                @overtime.Apr
+                            </a>
+                        }
+                    </td>
+                    <td class="align-right">
+                        @if (overtime.May != 0)
+                        {
+                            <a href="@Url.Action("MonthlyOvertimeDetails", "OvertimeReport",
+                                            new { employeeId = overtime.EmpId, month = 5, year = Model.Year, calendar = Model.Calendar })">
+                                @overtime.May
+                            </a>
+                        }
+                    </td>
+                    <td class="align-right">
+                        @if (overtime.Jun != 0)
+                        {
+                            <a href="@Url.Action("MonthlyOvertimeDetails", "OvertimeReport",
+                                            new { employeeId = overtime.EmpId, month = 6, year = Model.Year, calendar = Model.Calendar })">
+                                @overtime.Jun
+                            </a>
+                        }
+                    </td>
+                    <td class="align-right">
+                        @if (overtime.Jul != 0)
+                        {
+                            <a href="@Url.Action("MonthlyOvertimeDetails", "OvertimeReport",
+                                            new { employeeId = overtime.EmpId, month = 7, year = Model.Year, calendar = Model.Calendar })">
+                                @overtime.Jul
+                            </a>
+                        }
+                    </td>
+                    <td class="align-right">
+                        @if (overtime.Aug != 0)
+                        {
+                            <a href="@Url.Action("MonthlyOvertimeDetails", "OvertimeReport",
+                                            new { employeeId = overtime.EmpId, month = 8, year = Model.Year, calendar = Model.Calendar })">
+                                @overtime.Aug
+                            </a>
+                        }
+                    </td>
+                    <td class="align-right">
+                        @if (overtime.Sep != 0)
+                        {
+                            <a href="@Url.Action("MonthlyOvertimeDetails", "OvertimeReport",
+                                            new { employeeId = overtime.EmpId, month = 9, year = Model.Year, calendar = Model.Calendar })">
+                                @overtime.Sep
+                            </a>
+                        }
+                    </td>
+                    <td class="align-right">
+                        @if (overtime.Oct != 0)
+                        {
+                            <a href="@Url.Action("MonthlyOvertimeDetails", "OvertimeReport",
+                                            new { employeeId = overtime.EmpId, month = 10, year = Model.Year, calendar = Model.Calendar })">
+                                @overtime.Oct
+                            </a>
+                        }
+                    </td>
+                    <td class="align-right">
+                        @if (overtime.Nov != 0)
+                        {
+                            <a href="@Url.Action("MonthlyOvertimeDetails", "OvertimeReport",
+                                            new { employeeId = overtime.EmpId, month = 11, year = Model.Year, calendar = Model.Calendar })">
+                                @overtime.Nov
+                            </a>
+                        }
+                    </td>
+                    <td class="align-right">
+                        @if (overtime.Dec != 0)
+                        {
+                            <a href="@Url.Action("MonthlyOvertimeDetails", "OvertimeReport",
+                                            new { employeeId = overtime.EmpId, month = 12, year = Model.Year, calendar = Model.Calendar })">
+                                @overtime.Dec
+                            </a>
+                        }
+                    </td>
+                    <td class="align-right">
+                        @if (overtime.Total != 0)
+                        {
+                            @overtime.Total
+                        }
+                    </td>
+                </tr>
             }
         }
         else
         {
-            @Html.Raw(RazorHelpers.DisplayNoInformation(17))
+            @Html.Raw(RazorHelpers.DisplayNoInformation(19))
         }
     </tbody>
     <tfoot>

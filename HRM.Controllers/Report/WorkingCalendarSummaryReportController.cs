@@ -38,6 +38,7 @@ public class WorkingCalendarSummaryReportController(
     {
         var param = new GetWorkingHoursSummaryParam
         {
+            CompanyId = CurrentCompanyId,
             ActorId = EmployeeSession.EmpId,
             FromDate = model.FromDate,
             ToDate = model.ToDate,
@@ -59,6 +60,7 @@ public class WorkingCalendarSummaryReportController(
     {
         var param = new GetWorkingHoursSummaryParam
         {
+            CompanyId = CurrentCompanyId,
             ActorId = EmployeeSession.EmpId,
             FromDate = model.FromDate,
             ToDate = model.ToDate,

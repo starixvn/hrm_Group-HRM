@@ -16,7 +16,7 @@ public class ManpowerReportController(
     IManpowerReportService reportService) : BaseController(userControlSession)
 {
     [HrmPermission(Policy.Read, FunctionKey.ManpowerReport)]
-    public async Task<ActionResult> Manpower(int? year)
+    public async Task<IActionResult> Manpower(int? year)
     {
         var model = new ManpowerViewModel
         {
@@ -28,7 +28,7 @@ public class ManpowerReportController(
     }
 
     [HrmPermission(Policy.Read, FunctionKey.ManpowerCategoryReport)]
-    public async Task<ActionResult> ManpowerCategory(int? year)
+    public async Task<IActionResult> ManpowerCategory(int? year)
     {
         var model = new ManpowerCategoryViewModel
         {
@@ -40,7 +40,7 @@ public class ManpowerReportController(
     }
 
     [HrmPermission(Policy.Read, FunctionKey.ManpowerReport)]
-    public async Task<ActionResult> ExportManpower(int year)
+    public async Task<IActionResult> ExportManpower(int year)
     {
         var manpowers = await reportService.GetManpowerAsync(year);
         var bytes = reportService.ExportManpower(manpowers, year);
@@ -50,7 +50,7 @@ public class ManpowerReportController(
     }
 
     [HrmPermission(Policy.Read, FunctionKey.ManpowerCategoryReport)]
-    public async Task<ActionResult> ExportManpowerCategory(int year)
+    public async Task<IActionResult> ExportManpowerCategory(int year)
     {
         var manpowers = await reportService.GetManpowerCategoryAsync(year);
         byte[] bytes = reportService.ExportManpowerCategory(manpowers, year);

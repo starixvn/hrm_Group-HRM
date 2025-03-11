@@ -65,9 +65,10 @@ public class DisciplineSummaryPerYearController(
     {
         var criteria = new GetDisciplineSummaryPerYearCriteria
         {
+            CompanyId = CurrentCompanyId,
             FromDate = new DateTimeOffset(model.FromYear, 1, 1, 0, 0, 0, TimeSpan.Zero).DateTime,
             ToDate = new DateTimeOffset(model.ToYear + 1, 1, 1, 0, 0, 0, TimeSpan.Zero).AddDays(-1).DateTime,
-            TeamId = model.TeamId,
+            TeamIds = model.TeamId,
             IsLocal = model.IsLocal,
             EmployeeId = model.EmployeeId,
             ApproverId = EmployeeSession.EmpId,

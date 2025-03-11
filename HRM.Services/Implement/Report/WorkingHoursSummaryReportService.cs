@@ -30,6 +30,7 @@ public class WorkingHoursSummaryReportService(
     {
         var criteria = new GetWorkingHoursSummaryReportCriteria
         {
+            CompanyId = param.CompanyId,
             ActorId = param.ActorId,
             FromDate = param.FromDate,
             ToDate = param.ToDate,

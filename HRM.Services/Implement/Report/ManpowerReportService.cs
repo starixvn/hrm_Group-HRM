@@ -5,6 +5,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using GO.UserControl.Client.AspNetCore.Session;
+using GO.UserControl.Client.Core.Session;
+using HRM.Core.Constants;
 using HRM.Core.Services;
 using HRM.Criteria.Report;
 using HRM.Models.Report;
@@ -24,12 +27,16 @@ public interface IManpowerReportService
 
 public class ManpowerReportService(
     IWebHostEnvironment env,
+    IUserControlSession session,
     IBaseService baseService) : IManpowerReportService
 {
+    private readonly short currentCompanyId = session.Get<short>(SessionKey.CurrentCompanyId);
+
     public async Task<IEnumerable<ManpowerModel>> GetManpowerAsync(int year)
     {
         var criteria = new GetManpowerCriteria
         {
+            CompanyId = currentCompanyId,
             Year = year
         };
         return await baseService.GetDataAsync<ManpowerModel>(criteria);
@@ -39,6 +46,7 @@ public class ManpowerReportService(
     {
         var criteria = new GetManpowerCategoryCriteria
         {
+            CompanyId = currentCompanyId,
             Year = year
         };
         return await baseService.GetDataAsync<ManpowerCategoryModel>(criteria);

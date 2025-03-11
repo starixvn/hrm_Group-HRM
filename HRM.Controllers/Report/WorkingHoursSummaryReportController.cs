@@ -28,6 +28,7 @@ public class WorkingHoursSummaryReportController(
         model.TeamIds = model.TeamIds ?? string.Join(",", teams.Select(x => x.Id));
         var param = new GetWorkingHoursSummaryParam
         {
+            CompanyId = CurrentCompanyId,
             ActorId = EmployeeSession.EmpId,
             FromDate = model.FromDate,
             ToDate = model.ToDate,
@@ -48,6 +49,7 @@ public class WorkingHoursSummaryReportController(
     {
         var param = new GetWorkingHoursSummaryParam
         {
+            CompanyId = CurrentCompanyId,
             ActorId = EmployeeSession.EmpId,
             FromDate = model.FromDate,
             ToDate = model.ToDate,
@@ -67,6 +69,7 @@ public class WorkingHoursSummaryReportController(
     {
         var param = new GetDailyOvertimeDetailsParam
         {
+            CompanyId = CurrentCompanyId,
             ActorId = EmployeeSession.EmpId,
             FromDate = model.FromDate,
             ToDate = model.ToDate,

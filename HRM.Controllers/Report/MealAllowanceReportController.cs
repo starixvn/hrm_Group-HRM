@@ -42,11 +42,12 @@ public class MealAllowanceReportController(
     {
         var criteria = new GetMealAllowanceDetailReportCriteria
         {
+            CompanyId = CurrentCompanyId,
             EmployeeId = model.EmployeeId,
             FromDate = model.FromDate,
             ToDate = model.ToDate,
             IsLocal = model.IsLocal,
-            TeamId = model.TeamIds,
+            TeamIds = model.TeamIds,
         };
         var mealAllowanceDetails = await reportService.GetMealAllowanceDetailsAsync(criteria);
         return PartialView("~/Views/Report/MealAllowance/_MealAllowanceDetailsGrid.cshtml", mealAllowanceDetails);
@@ -56,11 +57,12 @@ public class MealAllowanceReportController(
     {
         var criteria = new GetMealAllowanceSummaryReportCriteria
         {
+            CompanyId = CurrentCompanyId,
             EmployeeId = model.EmployeeId,
             FromDate = model.FromDate,
             ToDate = model.ToDate,
             IsLocal = model.IsLocal,
-            TeamId = model.TeamIds,
+            TeamIds = model.TeamIds,
         };
         var mealAllowanceSummary = await reportService.GetMealAllowanceSummaryAsync(criteria);
         ViewBag.FromDate = model.FromDate;
@@ -73,20 +75,22 @@ public class MealAllowanceReportController(
     {
         var criteriaSummary = new GetMealAllowanceSummaryReportCriteria
         {
+            CompanyId = CurrentCompanyId,
             EmployeeId = model.EmployeeId,
             FromDate = model.FromDate,
             ToDate = model.ToDate,
             IsLocal = model.IsLocal,
-            TeamId = model.TeamIds,
+            TeamIds = model.TeamIds
         };
 
         var criteriaDetails = new GetMealAllowanceDetailReportCriteria
         {
+            CompanyId = CurrentCompanyId,
             EmployeeId = model.EmployeeId,
             FromDate = model.FromDate,
             ToDate = model.ToDate,
             IsLocal = model.IsLocal,
-            TeamId = model.TeamIds,
+            TeamIds = model.TeamIds
         };
         var mealAllowanceSummary = await reportService.GetMealAllowanceSummaryAsync(criteriaSummary);
         var mealAllowanceDetails = await reportService.GetMealAllowanceDetailsAsync(criteriaDetails);
