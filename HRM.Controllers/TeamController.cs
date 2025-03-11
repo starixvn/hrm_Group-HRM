@@ -29,6 +29,8 @@ public class TeamController(
     IBaseService baseService,
     IEmployeeService employeeService) : BaseController(userControlSession)
 {
+    private readonly IUserControlSession userControlSession = userControlSession;
+
     public async Task<ActionResult> Index(string keyword = null)
     {
         var teams = await teamService.GetAllAsync(keyword: keyword);
@@ -100,7 +102,7 @@ public class TeamController(
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Critical Code Smell", "S1541:Methods and properties should not be too complex", Justification = "<Pending>")]
     public async Task<ActionResult> Edit(int id)
     {
-        var team = await teamService.GetById(id, CurrentCompanyId);
+        var team = await teamService.GetById(id);
         if (team == null)
         {
             return RedirectToAction("PageNotFound", "Error");
@@ -269,7 +271,7 @@ public class TeamController(
     [HttpGet]
     public async Task<IActionResult> DisciplineRule(int id)
     {
-        var team = await teamService.GetById(id, CurrentCompanyId);
+        var team = await teamService.GetById(id);
         if (team == null)
         {
             return RedirectToAction("PageNotFound", "Error");

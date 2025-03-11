@@ -9,7 +9,7 @@ namespace HRM.Services.Interfaces;
 
 public interface ITeamService
 {
-    Task<Team> GetById(int id, int companyId);
+    Task<Team> GetById(int id);
 
     Task<IEnumerable<Team>> GetAllAsync(bool isDeleted = false, string keyword = null);
 

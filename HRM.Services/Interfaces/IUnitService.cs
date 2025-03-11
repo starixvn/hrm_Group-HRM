@@ -10,7 +10,7 @@ public interface IUnitService
 {
     Task<Unit> GetByIdAsync(int id);
 
-    Task<IList<Unit>> GetUnitAsync(int companyId, bool? isActive = true);
+    Task<IList<Unit>> GetUnitAsync(bool? isActive = true);
 
     Task<CommandResult> CreateAsync(InsertUnitCriteria criteria);
 

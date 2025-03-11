@@ -37,7 +37,7 @@ public class DepartmentController(IUserControlSession userControlSession,
 
     public async Task<IActionResult> GetUnits()
     {
-        var units = await unitService.GetUnitAsync(currentCompanyId);
+        var units = await unitService.GetUnitAsync();
         return new JsonResult(units);
     }
 
@@ -71,7 +71,7 @@ public class DepartmentController(IUserControlSession userControlSession,
     public async Task<IActionResult> GetById(int Id)
     {
         var department = await departmentService.GetByIdAsync(Id);
-        var units = await unitService.GetUnitAsync(currentCompanyId);
+        var units = await unitService.GetUnitAsync();
         var model = new EditDepartmentViewModel
         {
             DepartmentId = Id,

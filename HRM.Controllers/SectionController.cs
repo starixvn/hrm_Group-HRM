@@ -134,7 +134,7 @@ public class SectionController(
     [HttpGet]
     public async Task<IActionResult> GetOrgChart()
     {
-        var units = await unitService.GetUnitAsync(currentCompanyId);
+        var units = await unitService.GetUnitAsync();
         var department = await departmentService.GetDepartmentAsync();
         var teams = await commonDataService.GetAllTeamAsync();
         var sections = await sectionService.GetSectionAsync();
