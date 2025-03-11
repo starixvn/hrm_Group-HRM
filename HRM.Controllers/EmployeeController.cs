@@ -82,7 +82,8 @@ public class EmployeeController(
             EnableUser = model.IsEnable,
             IsLocalUser = model.IsLocal,
             PageNumber = model.CurrentPage,
-            PageSize = model.ItemsPerPage
+            PageSize = model.ItemsPerPage,
+            CompanyId = CurrentCompanyId
         };
 
         employees = (await employeeService.GetEmployeeAsync(criteria)).ToList();

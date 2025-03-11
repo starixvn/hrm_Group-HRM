@@ -24,7 +24,8 @@ public class ShiftStatisticReportService(IBaseService baseService) : IShiftStati
             ToDate = param.ToDate,
             TeamIds = param.TeamIds,
             IsLocal = param.IsLocal,
-            IsShowWholeCompany = param.IsShowWholeCompany
+            IsShowWholeCompany = param.IsShowWholeCompany,
+            CompanyId = param.CompanyId
         };
         return await baseService.GetDataAsync<ShiftStatistic>(criteria);
     }
@@ -39,7 +40,8 @@ public class ShiftStatisticReportService(IBaseService baseService) : IShiftStati
             ShiftId = param.ShiftId,
             TeamIds = param.TeamIds,
             IsLocal = param.IsLocal,
-            IsShowWholeCompany = param.IsShowWholeCompany
+            IsShowWholeCompany = param.IsShowWholeCompany,
+            CompanyId = param.CompanyId
         };
         return await baseService.GetDataAsync<ShiftStatisticDetail>(criteria);
     }

@@ -13,6 +13,8 @@
         public bool IsShowWholeCompany { get; set; }
         public byte? IsLocal { get; set; }
 
+        public short CompanyId { get; set; }
+
         public override string GetSettingKey() => "Report_ShiftStatistic";
 
         public override bool IsValid() => SupervisorId > 0;

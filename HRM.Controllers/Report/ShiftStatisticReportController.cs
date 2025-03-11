@@ -44,7 +44,8 @@ public class ShiftStatisticReportController(
             ToDate = model.ToDate,
             TeamIds = model.TeamIds,
             IsShowWholeCompany = model.IsShowWholeCompany,
-            IsLocal = model.IsLocal
+            IsLocal = model.IsLocal,
+            CompanyId = CurrentCompanyId
         };
         model.ShiftStatistics = await statisticReportService.GetShiftStatisticAsync(param);
         return PartialView("~/Views/Report/ShiftStatistic/_ShiftStatistic.cshtml", model);
@@ -67,7 +68,8 @@ public class ShiftStatisticReportController(
             EmployeeId = model.EmployeeId,
             TeamIds = model.TeamIds ?? string.Join(",", teams.Select(x => x.Id)),
             IsShowWholeCompany = model.IsShowWholeCompany,
-            IsLocal = model.IsLocal
+            IsLocal = model.IsLocal,
+            CompanyId = CurrentCompanyId
         };
         var details = await statisticReportService.GetShiftStatisticDetailAsync(param);
         return PartialView("~/Views/Report/ShiftStatistic/_ShiftStatisticDetails.cshtml", details);
@@ -83,7 +85,9 @@ public class ShiftStatisticReportController(
             EmployeeId = model.EmployeeId,
             TeamIds = model.TeamIds,
             IsShowWholeCompany = model.IsShowWholeCompany,
-            IsLocal = model.IsLocal
+            IsLocal = model.IsLocal,
+            CompanyId = CurrentCompanyId
+            
         };
 
         var details = await statisticReportService.GetShiftStatisticDetailAsync(param);
@@ -101,7 +105,8 @@ public class ShiftStatisticReportController(
             ToDate = model.ToDate,
             TeamIds = model.TeamIds,
             IsShowWholeCompany = model.IsShowWholeCompany,
-            IsLocal = model.IsLocal
+            IsLocal = model.IsLocal,
+            CompanyId = CurrentCompanyId
         };
 
         var shiftStatistics = await statisticReportService.GetShiftStatisticAsync(param);
