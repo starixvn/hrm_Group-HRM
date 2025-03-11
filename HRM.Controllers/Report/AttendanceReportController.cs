@@ -77,7 +77,7 @@ public class AttendanceReportController(
         var employeeAttendances = await reportService.GetEmployeeAttendanceReportAsync(criteria);
         var bytes = excelService.Export(employeeAttendances, model.FromDate, model.ToDate);
 
-        var fileName = $"AttendanceReport_{DateTimeOffset.Now:yyyyMMdd}.xlsx";
+        var fileName = $"AttendanceReport_{DateTimeOffset.Now.DateTime.ToClientTimeZone():yyyyMMdd}.xlsx";
         return File(bytes, MimeType.XLSX, fileName);
     }
 }

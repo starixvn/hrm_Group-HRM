@@ -41,7 +41,7 @@ public class AnnualLeaveBalanceController(
         ViewBag.HasPermissionToEdit = userControlSession.HasPermissionOnFunction(FunctionKey.AnnualLeaveBalance, Policy.Host);
         var model = new LeaveSummaryViewModel
         {
-            Year = year ?? DateTimeOffset.Now.Year,
+            Year = year ?? DateTimeOffset.Now.DateTime.ToClientTimeZone().Year,
             TeamIds = teamIds,
             Employee = employee,
             EmployeeId = employeeId ?? -1,
@@ -113,7 +113,7 @@ public class AnnualLeaveBalanceController(
     [HrmPermission(Policy.Read, FunctionKey.AnnualLeaveBalance)]
     public async Task<IActionResult> Employee(int id)
     {
-        var year = DateTimeOffset.Now.Year;
+        var year = DateTimeOffset.Now.DateTime.ToClientTimeZone().Year;
         var model = new AnnualLeaveBalanceViewModel
         {
             EmployeeId = id,
