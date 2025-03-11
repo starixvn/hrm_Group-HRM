@@ -8,6 +8,8 @@
         
         public string Keyword { get; set; }
 
+        public short CompanyId { get; set; }
+
         public override string GetSettingKey() => "Group_Get";
 
         public override bool IsValid() => true;

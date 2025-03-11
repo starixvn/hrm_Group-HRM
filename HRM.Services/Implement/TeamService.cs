@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using GO.UserControl.Client.Core.Session;
+using HRM.Core.Constants;
 using HRM.Core.Models;
 using HRM.Core.Services;
 using HRM.Core.XMLExtensions;
@@ -17,7 +19,8 @@ namespace HRM.Services.Implement;
 
 public class TeamService(
     ITeamRepository teamRepository,
-    IBaseService baseService) : ITeamService
+    IBaseService baseService,
+    IUserControlSession userControlSession) : ITeamService
 {
     public async Task<Team> GetById(int id)
     {
@@ -30,10 +33,12 @@ public class TeamService(
 
     public async Task<IEnumerable<Team>> GetAllAsync(bool isDeleted = false, string keyword = null)
     {
+        var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
         var criteria = new GetAllGroupCriteria
         {
             IsDeleted = isDeleted,
-            Keyword = keyword
+            Keyword = keyword,
+            CompanyId = companyId
         };
         var teams = await teamRepository.GetAllAsync(criteria);
 
