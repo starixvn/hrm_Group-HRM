@@ -22,7 +22,6 @@ public class JobTitleController(
     IJobTitleExportService jobTitleExportService,
     IBaseService baseService) : BaseExportController(userControlSession)
 {
-    private readonly int currentCompanyId = userControlSession.Get<int>(SessionKey.CurrentCompanyId);
     private readonly IUserControlSession userControlSession = userControlSession;
 
     [HrmPermission(Policy.Read, FunctionKey.JobTitleManagement)]
@@ -42,14 +41,14 @@ public class JobTitleController(
     [HrmPermission(Policy.Read, FunctionKey.JobTitleManagement)]
     public async Task<IActionResult> GetJobTitles(string jobTitle)
     {
-        var jobTitles = await commonDataService.GetJobTitle(jobTitle, currentCompanyId);
+        var jobTitles = await commonDataService.GetJobTitle(jobTitle, CurrentCompanyId);
         return Json(jobTitles);
     }
 
     [HrmPermission(Policy.Host, FunctionKey.JobTitleManagement)]
     public async Task<IActionResult> ExportExcel(string jobTitle)
     {
-        var jobTitles = await commonDataService.GetJobTitle(jobTitle, currentCompanyId);
+        var jobTitles = await commonDataService.GetJobTitle(jobTitle, CurrentCompanyId);
         var bytes = jobTitleExportService.Export(jobTitles);
 
         return File(bytes, MimeType.XLSX, $"JobTitle_{DateTimeOffset.Now:yyyyMMdd}.xlsx");
@@ -77,7 +76,7 @@ public class JobTitleController(
             LookupCode = Constants.JobTitle,
             Name = model.Name,
             CategoryId = model.CategoryId.ToString(),
-            CompanyId = currentCompanyId
+            CompanyId = CurrentCompanyId
         };
         var result = await baseService.ExecuteNonQueryAsync(criteria);
 

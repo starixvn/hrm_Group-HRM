@@ -100,8 +100,7 @@ public class TeamController(
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Critical Code Smell", "S1541:Methods and properties should not be too complex", Justification = "<Pending>")]
     public async Task<ActionResult> Edit(int id)
     {
-        var currentCompanyId = userControlSession.Get<int>(SessionKey.CurrentCompanyId);
-        var team = await teamService.GetById(id, currentCompanyId);
+        var team = await teamService.GetById(id, CurrentCompanyId);
         if (team == null)
         {
             return RedirectToAction("PageNotFound", "Error");
@@ -270,8 +269,7 @@ public class TeamController(
     [HttpGet]
     public async Task<IActionResult> DisciplineRule(int id)
     {
-        var currentCompanyId = userControlSession.Get<int>(SessionKey.CurrentCompanyId);
-        var team = await teamService.GetById(id, currentCompanyId);
+        var team = await teamService.GetById(id, CurrentCompanyId);
         if (team == null)
         {
             return RedirectToAction("PageNotFound", "Error");
