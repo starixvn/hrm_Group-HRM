@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using GO.UserControl.Client.Core.Session;
 using HRM.Core;
+using HRM.Core.Constants;
 using HRM.Core.Enums;
 using HRM.Core.Models;
 using HRM.Core.Services;
@@ -23,7 +25,8 @@ public class CheckInOutRequestService(
     IBaseService baseService,
     IRequestMailService requestMailService,
     IEmailService emailService,
-    ILetstalkService letStalkService)
+    ILetstalkService letStalkService,
+    IUserControlSession userControlSession)
     : ICheckInOutRequestService
 {
     private const string EmailTemplatePathForRequest = "EmailTemplates/CheckInOut.Request.txt";
@@ -43,9 +46,12 @@ public class CheckInOutRequestService(
 
     public async Task<CheckInOutRequest> GetByIdAsync(long requestId)
     {
+        var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
+
         var criteria = new GetCheckInOutRequestByIdCriteria
         {
-            RequestId = requestId
+            RequestId = requestId,
+            CompanyId = companyId
         };
         return await checkInOutRequestRepository.GetByIdAsync(criteria);
     }
@@ -61,13 +67,15 @@ public class CheckInOutRequestService(
 
     public async Task<IEnumerable<DateTime>> GetDisabledDateAsync(GetDisabledDateParam param)
     {
+        var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
         var criteria = new GetDisabledDateCriteria
         {
             EmployeeId = param.EmployeeId,
             FromDate = param.FromDate,
             ToDate = param.ToDate,
             RequestId = param.RequestId,
-            RequestTypeId = param.RequestTypeId
+            RequestTypeId = param.RequestTypeId,
+            CompanyId = companyId
         };
         return await baseService.GetDataAsync<DateTime>(criteria);
     }

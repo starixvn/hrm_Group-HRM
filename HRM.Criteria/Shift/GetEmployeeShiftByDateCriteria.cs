@@ -11,6 +11,8 @@
 
         public DateTime Date { get; set; }
 
+        public short CompanyId { get; set; }
+
         public override string GetSettingKey() => "EmployeeCalendar_GetShiftByDate";
 
         public override bool IsValid() => EmployeeId > 0;

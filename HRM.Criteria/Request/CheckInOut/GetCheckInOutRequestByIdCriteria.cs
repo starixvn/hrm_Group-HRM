@@ -6,6 +6,8 @@
     {
         public long RequestId { get; set; }
 
+        public short CompanyId { get; set; }
+
         public override string GetSettingKey()
         {
             return "CheckInOutRequest_GetById";
