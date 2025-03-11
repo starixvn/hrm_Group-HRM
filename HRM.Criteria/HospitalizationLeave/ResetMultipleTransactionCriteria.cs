@@ -8,6 +8,7 @@
         public int Year { get; set; }
         public decimal ResetDays { get; set; }
         public string Description { get; set; }
+        public short CompanyId { get; set; }
 
         public override string GetSettingKey() => "HospitalizationLeave_ResetMultipleTransactions";
 

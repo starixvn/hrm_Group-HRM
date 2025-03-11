@@ -91,6 +91,7 @@ public class HospitalizationLeaveBalanceController(
     {
         criteria.ActorId = EmployeeSession.EmpId;
         criteria.Year = DateTimeOffset.Now.DateTime.ToClientTimeZone().AddYears(-1).Year;
+        criteria.CompanyId = CurrentCompanyId;
         var commandResult = await baseService.ExecuteNonQueryAsync(criteria);
 
         return Json(commandResult);
@@ -211,7 +212,8 @@ public class HospitalizationLeaveBalanceController(
             EmployeeId = model.EmployeeId,
             TeamIds = model.TeamIds,
             IsLocal = model.IsLocal,
-            SupervisorId = EmployeeSession.EmpId
+            SupervisorId = EmployeeSession.EmpId,
+            CompanyId = CurrentCompanyId
         };
         var employees = await baseService.GetDataAsync<HospitalizationLeaveBalanceSummaryReport>(criteria);
         var workbook = exportExcelService.ExportHospitalizationLeaveSummary(employees, model.Year);
