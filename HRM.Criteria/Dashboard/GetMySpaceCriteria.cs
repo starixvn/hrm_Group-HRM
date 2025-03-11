@@ -8,6 +8,8 @@
         public int EmployeeId { get; set; }
         public DateTime Date { get; set; }
 
+        public short CompanyId { get; set; }
+
         public override string GetSettingKey() => "Dashboard_Get";
 
         public override bool IsValid() => EmployeeId > 0;
