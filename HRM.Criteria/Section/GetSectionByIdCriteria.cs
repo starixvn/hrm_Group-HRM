@@ -6,6 +6,8 @@
     {
         public int SectionId { get; set; }
 
+        public short CompanyId { get; set; }
+
         public override string GetSettingKey() => "Section_GetById";
 
         public override bool IsValid() => SectionId > 0;

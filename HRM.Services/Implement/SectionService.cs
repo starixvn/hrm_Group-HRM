@@ -8,25 +8,33 @@ using HRM.Core.Services;
 using HRM.Repositories.Interfaces;
 using Interfaces;
 using Models;
+using Core.Constants;
+using GO.UserControl.Client.Core.Session;
 
 public class SectionService(
     ISectionRepository sectionRepository,
-    IBaseService baseService) : ISectionService
+    IBaseService baseService,
+    IUserControlSession userControlSession) : ISectionService
 {
     public async Task<Section> GetByIdAsync(int id)
     {
+        var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
+
         var criteria = new GetSectionByIdCriteria
         {
-            SectionId = id
+            SectionId = id,
+            CompanyId = companyId
         };
         return await sectionRepository.GetByIdAsync(criteria);
     }
 
     public async Task<IList<Section>> GetSectionAsync(bool? isActive = true)
     {
+        var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
         var criteria = new GetSectionCriteria
         {
-            IsActive = isActive
+            IsActive = isActive,
+            CompanyId = companyId
         };
         var sections = await sectionRepository.GetSectionAsync(criteria);
 
