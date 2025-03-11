@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using GO.UserControl.Client.Core.Session;
 using HRM.Core;
 using HRM.Core.Constants;
 using HRM.Core.Enums;
@@ -27,7 +28,8 @@ public class ChangeShiftRequestService(
     IBaseService baseService,
     IEmailService emailService,
     IRequestMailService requestMailService,
-    ILetstalkService letStalkService)
+    ILetstalkService letStalkService,
+    IUserControlSession userControlSession)
     : IChangeShiftRequestService
 {
     private const string EmailTemplatePathForRequest = "EmailTemplates/ChangeShift.Request.txt";
@@ -96,9 +98,12 @@ public class ChangeShiftRequestService(
 
     public async Task<ChangeShiftRequest> GetByIdAsync(long requestId)
     {
+        var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
+
         var criteria = new GetChangeShiftRequestByIdCriteria
         {
-            RequestId = requestId
+            RequestId = requestId,
+            CompanyId = companyId
         };
         return await changeShiftRepository.GetByIdAsync(criteria);
     }
