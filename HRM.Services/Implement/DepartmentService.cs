@@ -42,9 +42,11 @@ public class DepartmentService(
 
     public async Task<Department> GetByIdAsync(int departmentId)
     {
+        var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
         var criteria = new GetDepartmentByIdCriteria
         {
-            Id = departmentId
+            Id = departmentId,
+            CompanyId = companyId
         };
         return await departmentRepository.GetByIdAsync(criteria);
     }

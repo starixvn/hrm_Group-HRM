@@ -15,7 +15,12 @@ public class UnitService(IBaseService baseService,
 {
     public async Task<Unit> GetByIdAsync(int id)
     {
-        var criteria = new GetUnitByIdCriteria { UnitId = id };
+        var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
+        var criteria = new GetUnitByIdCriteria
+        {
+            UnitId = id, 
+            CompanyId = companyId
+        };
 
         return await baseService.GetDataEntityAsync<Unit>(criteria);
     }
