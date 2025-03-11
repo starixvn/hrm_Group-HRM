@@ -7,9 +7,9 @@ using HRM.Models;
 
 public interface IExtensionNumberService
 {
-    Task<IEnumerable<ExtensionNoModel>> GetAllExtensionNoAsync();
+    Task<IEnumerable<ExtensionNoModel>> GetAllExtensionNoAsync(short companyId);
 
-    Task<IEnumerable<ExtensionNoModel>> GetAllExtensionGroupInfoAsync(int? teamId = null, bool? isInternal = null);
+    Task<IEnumerable<ExtensionNoModel>> GetAllExtensionGroupInfoAsync(short companyId, int? teamId = null, bool? isInternal = null);
 
     Task<ExtensionNoModel> GetEmployeeExtensionNoByIdAsync(int employeeExtensionNoId, bool isInternal);
 

@@ -8,6 +8,8 @@
 
         public int? TeamId { get; set; }
 
+        public short CompanyId { get; set; }
+
         public override string GetSettingKey() => "ExtensionNO_GetGroupInfo";
 
         public override bool IsValid() => true;

@@ -34,7 +34,7 @@ public class ExtensionNoController(
     [HrmPermission(Policy.Read, FunctionKey.ExtensionNumber)]
     public async Task<IActionResult> GetExtensionNo()
     {
-        var extensionNos = await extensionNumberService.GetAllExtensionNoAsync();
+        var extensionNos = await extensionNumberService.GetAllExtensionNoAsync(CurrentCompanyId);
 
         var model = extensionNos.GroupBy(item => item.TeamName)
             .Select(item => new ExtensionNumberViewModel { Name = item.Key, Extensions = item.ToList() }).ToList();
@@ -130,7 +130,7 @@ public class ExtensionNoController(
     [HrmPermission(Policy.Host, FunctionKey.ExtensionNumber)]
     public async Task<IActionResult> GetAllExternalGroup()
     {
-        var groups = await extensionNumberService.GetAllExtensionGroupInfoAsync(isInternal: false);
+        var groups = await extensionNumberService.GetAllExtensionGroupInfoAsync( CurrentCompanyId, isInternal: false);
 
         return Json(groups);
     }
@@ -151,7 +151,7 @@ public class ExtensionNoController(
         }
         else
         {
-            var extensionGroups = await extensionNumberService.GetAllExtensionGroupInfoAsync(teamId, isInternal);
+            var extensionGroups = await extensionNumberService.GetAllExtensionGroupInfoAsync(CurrentCompanyId, teamId, isInternal);
             groups = extensionGroups.Select(x => new SelectListItem
             {
                 Text = x.TeamName,

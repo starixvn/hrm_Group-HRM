@@ -19,6 +19,8 @@
 
         public string Status { get; set; }
 
+        public short CompanyId { get; set; }
+
         public string Role
         {
             get
