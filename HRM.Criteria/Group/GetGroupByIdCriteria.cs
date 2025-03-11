@@ -8,6 +8,8 @@
 
         public bool? IsDeleted { get; set; }
 
+        public int CompanyId { get; set; }
+
         public override string GetSettingKey() => "Group_Get";
 
         public override bool IsValid() => TeamId > 0;

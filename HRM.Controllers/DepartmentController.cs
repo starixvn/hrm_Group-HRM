@@ -18,6 +18,8 @@ public class DepartmentController(IUserControlSession userControlSession,
     IUnitService unitService,
     IBaseService baseService) : BaseController(userControlSession)
 {
+    private readonly int currentCompanyId = userControlSession.Get<int>(SessionKey.CurrentCompanyId);
+
     [HrmPermission(Policy.Read, FunctionKey.DepartmentManagement)]
     public ActionResult Index()
     {
@@ -35,7 +37,7 @@ public class DepartmentController(IUserControlSession userControlSession,
 
     public async Task<IActionResult> GetUnits()
     {
-        var units = await unitService.GetUnitAsync();
+        var units = await unitService.GetUnitAsync(currentCompanyId);
         return new JsonResult(units);
     }
 
@@ -69,7 +71,7 @@ public class DepartmentController(IUserControlSession userControlSession,
     public async Task<IActionResult> GetById(int Id)
     {
         var department = await departmentService.GetByIdAsync(Id);
-        var units = await unitService.GetUnitAsync();
+        var units = await unitService.GetUnitAsync(currentCompanyId);
         var model = new EditDepartmentViewModel
         {
             DepartmentId = Id,

@@ -14,6 +14,7 @@ namespace HRM.Controllers;
 public class UnitController(IUserControlSession userControlSession,
     IUnitService unitService) : BaseController(userControlSession)
 {
+    private readonly int currentCompanyId = userControlSession.Get<int>(SessionKey.CurrentCompanyId);
     private readonly IUserControlSession userControlSession1 = userControlSession;
 
     [HrmPermission(Policy.Read, FunctionKey.UnitManagement)]
@@ -27,7 +28,7 @@ public class UnitController(IUserControlSession userControlSession,
     [HrmPermission(Policy.Read, FunctionKey.UnitManagement)]
     public async Task<IActionResult> GetUnits([FromBody] UnitViewModel model)
     {
-        var units = await unitService.GetUnitAsync(model.IsActive);
+        var units = await unitService.GetUnitAsync(currentCompanyId, model.IsActive);
         return new JsonResult(units);
     }
 

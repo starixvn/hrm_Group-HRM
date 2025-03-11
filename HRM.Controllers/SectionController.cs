@@ -27,6 +27,8 @@ public class SectionController(
     ISectionService sectionService,
     IBaseService baseService) : BaseController(userControlSession)
 {
+    private readonly int currentCompanyId = userControlSession.Get<int>(SessionKey.CurrentCompanyId);
+
     [HrmPermission(Policy.Read, FunctionKey.SectionManagement)]
     public ActionResult Index()
     {
@@ -132,7 +134,7 @@ public class SectionController(
     [HttpGet]
     public async Task<IActionResult> GetOrgChart()
     {
-        var units = await unitService.GetUnitAsync();
+        var units = await unitService.GetUnitAsync(currentCompanyId);
         var department = await departmentService.GetDepartmentAsync();
         var teams = await commonDataService.GetAllTeamAsync();
         var sections = await sectionService.GetSectionAsync();

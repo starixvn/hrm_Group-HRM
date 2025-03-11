@@ -43,7 +43,7 @@ public class TeamRepository : ITeamRepository
             },
             "SectionId"
         ).ToList();
-        var employees = await multi.ReadAsync<TeamManager>();
+        var employees = (await multi.ReadAsync<TeamManager>()).ToList();
 
         foreach (var team in teams)
         {

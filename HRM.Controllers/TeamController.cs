@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Linq;
 using System.Threading.Tasks;
 using GO.UserControl.Client.Core.Enumerables;
@@ -99,7 +100,8 @@ public class TeamController(
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Critical Code Smell", "S1541:Methods and properties should not be too complex", Justification = "<Pending>")]
     public async Task<ActionResult> Edit(int id)
     {
-        var team = await teamService.GetById(id);
+        var currentCompanyId = userControlSession.Get<int>(SessionKey.CurrentCompanyId);
+        var team = await teamService.GetById(id, currentCompanyId);
         if (team == null)
         {
             return RedirectToAction("PageNotFound", "Error");
@@ -126,7 +128,7 @@ public class TeamController(
             ManagerIds = string.Join(",", team.Managers.Where(x => x.RoleId == (byte)TeamManagerRole.Manager).Select(e => e.EmpId)),
             SupervisorIds = string.Join(",", team.Managers.Where(x => x.RoleId == (byte)TeamManagerRole.Supervisor).Select(e => e.EmpId)),
             LeaderIds = string.Join(",", team.Managers.Where(x => x.RoleId == (byte)TeamManagerRole.Leader).Select(e => e.EmpId)),
-            SectionId = team.Section != null ? team.Section.Id : 0,
+            SectionId = team.Section?.Id ?? 0,
             Sections = await sectionService.GetSectionAsync(),
             Employees = await GetAllEmployees()
         };
@@ -268,7 +270,8 @@ public class TeamController(
     [HttpGet]
     public async Task<IActionResult> DisciplineRule(int id)
     {
-        var team = await teamService.GetById(id);
+        var currentCompanyId = userControlSession.Get<int>(SessionKey.CurrentCompanyId);
+        var team = await teamService.GetById(id, currentCompanyId);
         if (team == null)
         {
             return RedirectToAction("PageNotFound", "Error");

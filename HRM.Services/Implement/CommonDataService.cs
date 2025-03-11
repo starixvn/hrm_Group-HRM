@@ -21,7 +21,7 @@ public interface ICommonDataService
 {
     Task<IEnumerable<LookupData>> GetLookupDataByCodeAsync(string code, int companyId);
 
-    Task<List<LookupData>> GetJobTitle(string jobTitle);
+    Task<List<LookupData>> GetJobTitle(string jobTitle, int companyId);
 
     Task<IList<LeaveType>> GetLeaveTypeAsync(bool excludeNotShown = true);
 
@@ -55,11 +55,12 @@ public class CommonDataService(
         return await baseService.GetDataAsync<LookupData>(criteria);
     }
 
-    public async Task<List<LookupData>> GetJobTitle(string jobTitle)
+    public async Task<List<LookupData>> GetJobTitle(string jobTitle, int companyId)
     {
         var criteria = new GetJobTitleCriteria
         {
-            JobTitle = jobTitle
+            JobTitle = jobTitle,
+            CompanyId = companyId
         };
         return (await baseService.GetDataAsync<LookupData>(criteria)).ToList();
     }
