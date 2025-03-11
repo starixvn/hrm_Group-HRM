@@ -73,7 +73,8 @@ public class CalendarController(
             Totime = model.ToDate,
             TeamIds = model.TeamIds,
             JobTitleId = model.JobTitleIds,
-            IsLocal = model.IsLocal
+            IsLocal = model.IsLocal,
+            CompanyId = CurrentCompanyId
         };
         var workingCalendars = await workingCalendarService.GetWorkingCalendarsAsync(criteria);
 

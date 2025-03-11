@@ -11,6 +11,7 @@
         public string TeamIds { get; set; }
         public string JobTitleId { get; set; }
         public byte? IsLocal { get; set; }
+        public short CompanyId { get; set; }
 
         public override string GetSettingKey() => "Report_EmployeeCalendarByWeekly";
 

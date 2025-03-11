@@ -83,7 +83,7 @@ public partial class EmployeeWorkingHoursService(
         using var templatePackage = new ExcelPackage(new FileInfo(templatePath));
         using var xlPackage = new ExcelPackage();
         var monthlyWorkings = await GetMonthlyWorkingHoursAsync(param);
-        LeaveTypes = await commonDataService.GetLeaveTypeAsync();
+        LeaveTypes = await commonDataService.GetLeaveTypeAsync(param.CompanyId);
 
         var template = templatePackage.Workbook.Worksheets[0];
         var worksheet = xlPackage.Workbook.Worksheets.Add("Details");

@@ -35,7 +35,8 @@ public class ExportLeaveSummaryController(
             TeamIds = model.TeamIds,
             IsLocal = isLocal,
             Role = string.Empty,
-            SupervisorId = null
+            SupervisorId = null,
+            CompanyId = CurrentCompanyId
         };
         var leaveSummary = await reportService.GetAnnualLeaveBalanceReportAsync(criteria);
 
@@ -53,7 +54,8 @@ public class ExportLeaveSummaryController(
             TeamIds = model.TeamIds,
             IsLocal = (byte?)model.Category,
             SupervisorId = EmployeeSession.EmpId,
-            LeaveType = model.LeaveType
+            LeaveType = model.LeaveType,
+            CompanyId = CurrentCompanyId
         };
         var leaveSummaries = await reportService.GetUnpaidLeaveAsync(criteria);
         if (model.Period.Equals("1"))
@@ -68,7 +70,7 @@ public class ExportLeaveSummaryController(
             }
         }
 
-        var data = await exportReportService.Export(leaveSummaries, model.Year, model.LeaveType, model.Period);
+        var data = await exportReportService.Export(leaveSummaries, model.Year, model.LeaveType, model.Period, CurrentCompanyId);
 
         var fileName = $"UnpaidLeaveSummary_{DateTimeOffset.Now:yyyyMMdd}.xls";
         return File(data, "application/vnd.ms-excel", fileName);

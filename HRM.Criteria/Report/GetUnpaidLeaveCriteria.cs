@@ -16,6 +16,8 @@
 
         public string LeaveType { get; set; }
 
+        public short CompanyId { get; set; }
+
         public override string GetSettingKey()
         {
             return "Report_UnpaidLeaveSummary";

@@ -23,7 +23,7 @@ public interface ICommonDataService
 
     Task<List<LookupData>> GetJobTitle(string jobTitle, int companyId);
 
-    Task<IList<LeaveType>> GetLeaveTypeAsync(bool excludeNotShown = true);
+    Task<IList<LeaveType>> GetLeaveTypeAsync(short companyId, bool excludeNotShown = true);
 
     Task<IEnumerable<Team>> GetAllTeamAsync(bool isDeleted = false);
 
@@ -66,7 +66,7 @@ public class CommonDataService(
         return (await baseService.GetDataAsync<LookupData>(criteria)).ToList();
     }
 
-    public async Task<IList<LeaveType>> GetLeaveTypeAsync(bool excludeNotShown = true)
+    public async Task<IList<LeaveType>> GetLeaveTypeAsync(short companyId, bool excludeNotShown = true)
     {
         var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
 

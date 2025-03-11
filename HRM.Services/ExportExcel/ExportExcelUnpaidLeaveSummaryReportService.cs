@@ -11,7 +11,7 @@ using Implement;
 
 public interface IExportExcelUnpaidLeaveSummaryReportService
 {
-    Task<byte[]> Export(IEnumerable<LeaveSummary> leaveSummaries, int year, string leaveType, string period);
+    Task<byte[]> Export(IEnumerable<LeaveSummary> leaveSummaries, int year, string leaveType, string period, short companyId);
 }
 
 public class ExportExcelUnpaidLeaveSummaryReportService(
@@ -24,7 +24,7 @@ public class ExportExcelUnpaidLeaveSummaryReportService(
     private const string UnpaidLeaveSummaryH1TemplatePath = @"ExcelTemplates/UnpaidLeaveSummaryH1Template.xls";
     private const string UnpaidLeaveSummaryH2TemplatePath = @"ExcelTemplates/UnpaidLeaveSummaryH2Template.xls";
 
-    public async Task<byte[]> Export(IEnumerable<LeaveSummary> leaveSummaries, int year, string leaveType, string period)
+    public async Task<byte[]> Export(IEnumerable<LeaveSummary> leaveSummaries, int year, string leaveType, string period, short companyId)
     {
         string path;
         int range;
@@ -46,7 +46,7 @@ public class ExportExcelUnpaidLeaveSummaryReportService(
         var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, path);
 
         var leaveTypeIds = !string.IsNullOrWhiteSpace(leaveType) ? leaveType.Split(',').ToList() : new List<string>();
-        var leaveTypes = await commonDataService.GetLeaveTypeAsync();
+        var leaveTypes = await commonDataService.GetLeaveTypeAsync(companyId);
         var type = string.Join(", ", leaveTypes.Where(x => leaveTypeIds.Exists(y => x.Id.ToString() == y)).Select(x => x.Name));
 
         var writer = new ExcelTemplateWriter(templatePath, string.Empty, "Unpaid Leave Summary");
