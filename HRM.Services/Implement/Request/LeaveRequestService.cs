@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using GO.UserControl.Client.Core.Session;
 using HRM.Core;
 using HRM.Core.Constants;
 using HRM.Core.Enums;
@@ -27,7 +28,8 @@ public class LeaveRequestService(
     IRequestMailService requestMailService,
     IBaseService baseService,
     IEmailService emailService,
-    ILetstalkService letStalkService) : ILeaveRequestService
+    ILetstalkService letStalkService,
+    IUserControlSession userControlSession) : ILeaveRequestService
 {
     private const string EmailTemplatePathForRequest = "EmailTemplates/Leave.Request.txt";
     private const string EmailTemplatePathForCancel = "EmailTemplates/Leave.Cancel.txt";
@@ -46,9 +48,12 @@ public class LeaveRequestService(
 
     public async Task<LeaveRequest> GetByIdAsync(long requestId)
     {
+        var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
+
         var criteria = new GetLeaveRequestByIdCriteria
         {
-            RequestId = requestId
+            RequestId = requestId,
+            CompanyId = companyId
         };
         return await leaveRequestRepository.GetByIdAsync(criteria);
     }
@@ -86,11 +91,13 @@ public class LeaveRequestService(
 
     public async Task<IEnumerable<Models.ScheduleArrange.DailySchedule>> GetEmployeeCalendarAsync(int employeeId, DateTime fromDate, DateTime toDate)
     {
+        var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
         var criteria = new GetEmployeeCalendarCriteria
         {
             EmployeeId = employeeId,
             FromDate = fromDate,
-            ToDate = toDate
+            ToDate = toDate,
+            CompanyId = companyId
         };
         return await leaveRequestRepository.GetEmployeeCalendarAsync(criteria);
     }
