@@ -45,6 +45,7 @@ public class OvertimeReportService(
 
         var criteria = new GetYearlyOvertimeReportCriteria
         {
+            CompanyId = param.CompanyId,
             ActorId = param.ActorId,
             TeamIds = param.TeamIds,
             Employee = param.Employee,
@@ -67,7 +68,7 @@ public class OvertimeReportService(
 
         var criteria = new GetMonthlyOvertimeDetailsReportCriteria
         {
-            EmployeeId = param.EmployeeId,
+            EmpId = param.EmployeeId,
             FromDate = fromDate,
             ToDate = toDate
         };
@@ -78,6 +79,7 @@ public class OvertimeReportService(
     {
         var criteria = new GetMonthlyOvertimeReportCriteria
         {
+            CompanyId = param.CompanyId,
             ActorId = param.ActorId,
             FromDate = param.FromDate,
             ToDate = param.ToDate,
@@ -93,6 +95,7 @@ public class OvertimeReportService(
     {
         var criteria = new GetDailyOvertimeReportCriteria
         {
+            CompanyId = param.CompanyId,
             ActorId = param.ActorId,
             FromDate = param.FromDate,
             ToDate = param.ToDate,

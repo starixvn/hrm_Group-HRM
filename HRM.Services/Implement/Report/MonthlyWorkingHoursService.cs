@@ -64,6 +64,7 @@ public partial class EmployeeWorkingHoursService(
     {
         var criteria = new GetEmployeeRequestCriteria
         {
+            CompanyId = param.CompanyId,
             ActorId = param.ActorId,
             FromDate = param.FromDate,
             ToDate = param.ToDate,

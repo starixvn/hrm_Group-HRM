@@ -36,6 +36,7 @@ public class DailyWorkingHoursController(
     {
         var param = new GetMonthlyWorkingHoursParam
         {
+            CompanyId = CurrentCompanyId,
             ActorId = EmployeeSession.EmpId,
             FromDate = model.FromDate,
             ToDate = model.FromDate,
@@ -55,6 +56,7 @@ public class DailyWorkingHoursController(
     {
         var param = new GetMonthlyWorkingHoursParam
         {
+            CompanyId = CurrentCompanyId,
             ActorId = EmployeeSession.EmpId,
             FromDate = model.FromDate,
             ToDate = model.FromDate,

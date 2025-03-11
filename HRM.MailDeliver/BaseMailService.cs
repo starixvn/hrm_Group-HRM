@@ -7,7 +7,6 @@ using HRM.Core;
 using HRM.Core.Models;
 using HRM.Core.Services;
 using MailKit.Net.Smtp;
-using MailKit.Security;
 using MimeKit;
 
 public class BaseMailService(AppSettings appSettings, IBaseService baseService) : IBaseMailService
@@ -42,18 +41,6 @@ public class BaseMailService(AppSettings appSettings, IBaseService baseService) 
             await mailClient.SendAsync(message);
             isSucessfull = true;
             await UpdateMailStatusAsync(email, isSucessfull);
-        }
-        catch (AuthenticationException ex)
-        {
-            await HandleMailErrorAsync(email, ex.Message, ex.StackTrace);
-        }
-        catch (SmtpCommandException ex)
-        {
-            await HandleMailErrorAsync(email, ex.Message, ex.StackTrace);
-        }
-        catch (SmtpProtocolException ex)
-        {
-            await HandleMailErrorAsync(email, ex.Message, ex.StackTrace);
         }
         catch (Exception ex)
         {

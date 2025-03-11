@@ -23,10 +23,11 @@ public class OvertimeReportController(
     [HrmPermission(Policy.Read, FunctionKey.MonthlyOvertimeReport)]
     public IActionResult MonthlyOvertime()
     {
+        var today = DateTimeOffset.Now.DateTime.ToClientTimeZone().Date;
         var model = new MonthlyFilterViewModel
         {
-            FromDate = DateTimeOffset.Now.DateTime.ToClientTimeZone().Date.FirstDayOfMonth(),
-            ToDate = DateTimeOffset.Now.DateTime.ToClientTimeZone().Date.LastDayOfMonth(),
+            FromDate = today.FirstDayOfMonth(),
+            ToDate = today.LastDayOfMonth(),
             EmployeeStatusId = (byte)EmployeeStatus.Enabled
         };
 
@@ -38,6 +39,7 @@ public class OvertimeReportController(
     {
         var param = new GetMonthlyOvertimeParam
         {
+            CompanyId = CurrentCompanyId,
             ActorId = EmployeeSession.EmpId,
             FromDate = model.FromDate,
             ToDate = model.ToDate,
@@ -58,6 +60,7 @@ public class OvertimeReportController(
         model.TeamIds = model.TeamIds ?? string.Join(",", teams.Select(x => x.Id));
         var param = new GetYearlyOvertimeParam
         {
+            CompanyId = CurrentCompanyId,
             ActorId = EmployeeSession.EmpId,
             Year = model.Year,
             Calendar = model.Calendar,
@@ -74,6 +77,7 @@ public class OvertimeReportController(
     [HrmPermission(Policy.Read, FunctionKey.MonthlyOvertimeReport)]
     public async Task<IActionResult> MonthlyOvertimeDetails(GetMonthlyOvertimeDetailParam param)
     {
+        param.CompanyId = CurrentCompanyId;
         var overtimes = await overtimeReportService.GetMonthlyOvertimeDetailsAsync(param);
         ViewBag.Month = new DateTimeOffset(param.Year, param.Month, 1, 0, 0, 0, TimeSpan.Zero).Date;
 
@@ -87,6 +91,7 @@ public class OvertimeReportController(
         model.TeamIds = model.TeamIds ?? string.Join(",", teams.Select(x => x.Id));
         var param = new GetDailyOvertimeDetailsParam
         {
+            CompanyId = CurrentCompanyId,
             ActorId = EmployeeSession.EmpId,
             FromDate = model.FromDate,
             ToDate = model.ToDate,
@@ -105,6 +110,7 @@ public class OvertimeReportController(
     {
         var param = new GetMonthlyOvertimeParam
         {
+            CompanyId = CurrentCompanyId,
             ActorId = EmployeeSession.EmpId,
             FromDate = model.FromDate,
             ToDate = model.ToDate,
@@ -126,6 +132,7 @@ public class OvertimeReportController(
     {
         var param = new GetYearlyOvertimeParam
         {
+            CompanyId = CurrentCompanyId,
             ActorId = EmployeeSession.EmpId,
             Year = model.Year,
             Calendar = model.Calendar,
@@ -146,6 +153,7 @@ public class OvertimeReportController(
     {
         var param = new GetDailyOvertimeDetailsParam
         {
+            CompanyId = CurrentCompanyId,
             ActorId = EmployeeSession.EmpId,
             FromDate = model.FromDate,
             ToDate = model.ToDate,

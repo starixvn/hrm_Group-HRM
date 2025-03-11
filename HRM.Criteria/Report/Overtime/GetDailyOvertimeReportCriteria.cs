@@ -5,6 +5,7 @@ using Fanex.Data.Repository;
 
 public class GetDailyOvertimeReportCriteria : CriteriaBase
 {
+    public short CompanyId { get; set; }
     public int ActorId { get; set; }
     public DateTime FromDate { get; set; }
     public DateTime ToDate { get; set; }
@@ -15,5 +16,5 @@ public class GetDailyOvertimeReportCriteria : CriteriaBase
 
     public override string GetSettingKey() => "Report_DailyOvertime";
 
-    public override bool IsValid() => ActorId > 0;
+    public override bool IsValid() => CompanyId > 0 && ActorId > 0;
 }
