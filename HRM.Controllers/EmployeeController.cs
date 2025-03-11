@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Models.Role;
@@ -458,11 +459,15 @@ public class EmployeeController(
             EnableUser = enable,
             IsDeleteUser = isDelete,
             TitleId = titleId,
-            IsLocalUser = isLocal
+            IsLocalUser = isLocal,
+            CompanyId = CurrentCompanyId
         };
         var employees = await employeeService.GetEmployeeAsync(criteria);
 
-        return Json(employees);
+        return new JsonResult(employees, new JsonSerializerSettings
+        {
+            ContractResolver = new DefaultContractResolver()
+        });
     }
 
     public async Task<JsonResult> GetSupervisors(string roleIds, string query, string excludeIds)
