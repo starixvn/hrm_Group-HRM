@@ -65,12 +65,14 @@ public class OvertimeRequestService(
     public async Task<MonthlyOvertimeRequest> GetMonthlyRequestDetailsByEmployeeId(int employeeId, DateTime month)
     {
         var(fromDate, toDate) = GetDateRange(month.FirstDayOfMonth());
+        var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
         var criteria = new GetMonthlyOvertimeRequestDetailsByEmployeeIdCriteria
         {
             EmployeeId = employeeId,
             Month = month.FirstDayOfMonth(),
             FromDate = fromDate,
-            ToDate = toDate
+            ToDate = toDate,
+            CompanyId = companyId
         };
         var monthlyRequest = await overtimeRepository.GetMonthlyRequestDetailsByEmployeeId(criteria);
 
