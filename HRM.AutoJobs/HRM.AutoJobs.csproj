@@ -34,7 +34,7 @@
     <PackageReference Include="Fanex.Logging.Extensions.Database" Version="1.1.0" />
     <PackageReference Include="Fanex.Logging.Sentry" Version="2.0.2" />
     <PackageReference Include="jose-jwt" Version="5.1.1" />
-    <PackageReference Include="MailKit" Version="4.10.0" />
+    <PackageReference Include="MailKit" Version="4.11.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.2" />
     <PackageReference Include="NLog.Web.AspNetCore" Version="5.4.0" />
   </ItemGroup>
