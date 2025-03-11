@@ -23,8 +23,6 @@ public partial interface IEmployeeWorkingHoursService
 {
     Task<IEnumerable<MonthlyWorking>> GetMonthlyWorkingHoursAsync(GetMonthlyWorkingHoursParam param);
 
-    Task<IEnumerable<EmployeeRequest>> GetEmployeeRequestAsync(GetMonthlyWorkingHoursParam param);
-
     Task<byte[]> ExportMonthlyWorkingHours(GetMonthlyWorkingHoursParam param);
 }
 
@@ -32,7 +30,7 @@ public partial class EmployeeWorkingHoursService(
     IWebHostEnvironment env,
     IEmployeeWorkingHoursRepository repository,
     IBaseService baseService,
-    ICommonDataService commonDataService) : IEmployeeWorkingHoursService
+    ICommonDataService commonDataService)
 {
     private const ushort TotalFixedColumns = 21;
     private const ushort TotalUPLColumns = 4;
@@ -49,6 +47,7 @@ public partial class EmployeeWorkingHoursService(
     {
         var criteria = new GetMonthlyWorkingHoursCriteria
         {
+            CompanyId = param.CompanyId,
             ActorId = param.ActorId,
             FromDate = param.FromDate,
             ToDate = param.ToDate,
@@ -61,7 +60,7 @@ public partial class EmployeeWorkingHoursService(
         return await repository.GetMonthlyWorkingHoursAsync(criteria);
     }
 
-    public async Task<IEnumerable<EmployeeRequest>> GetEmployeeRequestAsync(GetMonthlyWorkingHoursParam param)
+    private async Task<IEnumerable<EmployeeRequest>> GetEmployeeRequestAsync(GetMonthlyWorkingHoursParam param)
     {
         var criteria = new GetEmployeeRequestCriteria
         {
@@ -80,30 +79,26 @@ public partial class EmployeeWorkingHoursService(
     public async Task<byte[]> ExportMonthlyWorkingHours(GetMonthlyWorkingHoursParam param)
     {
         var templatePath = Path.Combine(env.ContentRootPath, "ExcelTemplates/MonthlyWorkingHours.xlsx");
-        using (var templatePackage = new ExcelPackage(new FileInfo(templatePath)))
-        {
-            using (var xlPackage = new ExcelPackage())
-            {
-                var monthlyWorkings = await GetMonthlyWorkingHoursAsync(param);
-                LeaveTypes = await commonDataService.GetLeaveTypeAsync();
+        using var templatePackage = new ExcelPackage(new FileInfo(templatePath));
+        using var xlPackage = new ExcelPackage();
+        var monthlyWorkings = await GetMonthlyWorkingHoursAsync(param);
+        LeaveTypes = await commonDataService.GetLeaveTypeAsync();
 
-                var template = templatePackage.Workbook.Worksheets[0];
-                var worksheet = xlPackage.Workbook.Worksheets.Add("Details");
-                WriteDetailsSheet(template, worksheet, monthlyWorkings, param);
+        var template = templatePackage.Workbook.Worksheets[0];
+        var worksheet = xlPackage.Workbook.Worksheets.Add("Details");
+        WriteDetailsSheet(template, worksheet, monthlyWorkings, param);
 
-                const byte SummarySheetIndex = 1;
-                template = templatePackage.Workbook.Worksheets[SummarySheetIndex];
-                worksheet = xlPackage.Workbook.Worksheets.Add("Summary");
-                WriteSummarySheet(template, worksheet, monthlyWorkings, param);
+        const byte SummarySheetIndex = 1;
+        template = templatePackage.Workbook.Worksheets[SummarySheetIndex];
+        worksheet = xlPackage.Workbook.Worksheets.Add("Summary");
+        WriteSummarySheet(template, worksheet, monthlyWorkings, param);
 
-                const byte RequestSheetIndex = 2;
-                template = templatePackage.Workbook.Worksheets[RequestSheetIndex];
-                worksheet = xlPackage.Workbook.Worksheets.Add("Employee's request");
-                await WriteRequestSheetAsync(template, worksheet, param);
+        const byte RequestSheetIndex = 2;
+        template = templatePackage.Workbook.Worksheets[RequestSheetIndex];
+        worksheet = xlPackage.Workbook.Worksheets.Add("Employee's request");
+        await WriteRequestSheetAsync(template, worksheet, param);
 
-                return xlPackage.GetAsByteArray();
-            }
-        }
+        return xlPackage.GetAsByteArray();
     }
 
     private void WriteDetailsSheet(
@@ -208,7 +203,7 @@ public partial class EmployeeWorkingHoursService(
             const string CountLeaveFormula = "COUNTIF({0},\"{1}\")+(COUNTIF({0},\"{1}½\")/2)+(COUNTIF({0},\"{1}½/*\")/2)+(COUNTIF({0},\"*/{1}½\")/2)";
 
             var excelAddress = $"{worksheet.Cells[rowIndex, dailyColumnIndex].Address}:{worksheet.Cells[rowIndex, TotalColumns].Address}";
-            worksheet.Cells[rowIndex, colIndex++].Formula = string.Format("COUNTIF({0},\"PH\")", excelAddress);
+            worksheet.Cells[rowIndex, colIndex++].Formula = $"COUNTIF({excelAddress},\"PH\")";
 
             var leaveCode = LeaveTypes.First(x => x.Id == (short)Core.Enums.LeaveTypes.MaternityLeave).Code;
             excelAddress = $"{worksheet.Cells[rowIndex, dailyColumnIndex].Address}:{worksheet.Cells[rowIndex, TotalColumns].Address}";
@@ -363,7 +358,7 @@ public partial class EmployeeWorkingHoursService(
         }
     }
 
-    private void WriteBodySummary(
+    private static void WriteBodySummary(
         ExcelWorksheet template,
         ExcelWorksheet worksheet,
         IEnumerable<MonthlyWorking> monthlyWorkings,
@@ -484,14 +479,12 @@ public partial class EmployeeWorkingHoursService(
 
     private static IEnumerable<DateTime> GetMonthsBetween(DateTime fromDate, DateTime toDate)
     {
-        DateTime iterator;
-        DateTime limit;
         IList<DateTime> months = new List<DateTime>();
 
         if (toDate >= fromDate)
         {
-            iterator = fromDate.FirstDayOfMonth();
-            limit = toDate;
+            var iterator = fromDate.FirstDayOfMonth();
+            var limit = toDate;
 
             while (iterator <= limit)
             {
@@ -528,7 +521,7 @@ public partial class EmployeeWorkingHoursService(
         return totals;
     }
 
-    private string GetRequestDetails(EmployeeRequest request)
+    private static string GetRequestDetails(EmployeeRequest request)
     {
         var requestEntity = new RequestEntity
         {
