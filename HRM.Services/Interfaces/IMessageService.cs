@@ -7,7 +7,7 @@ namespace HRM.Services.Interfaces;
 
 public interface IMessageService
 {
-    Task<IList<Message>> GetMessageByCreator(GetMessageByCreatorParam param);
+    Task<IEnumerable<Message>> GetMessageByCreator(GetMessageByCreatorParam param);
 
     Task<Message> GetMessageById(int id);
 
@@ -21,7 +21,7 @@ public interface IMessageService
 
     Task<CommandResult> DeleteMessageByEmployee(int employeeId, int messageId);
 
-    Task<IList<Message>> GetMessageByEmployee(GetMessageByEmployeeParam param);
+    Task<IEnumerable<Message>> GetMessageByEmployee(GetMessageByEmployeeParam param);
 
     Task<Message> GetDetailMessageByEmployee(int messageId);
 

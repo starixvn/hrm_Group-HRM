@@ -1,19 +1,12 @@
-﻿namespace HRM.Criteria.EmployeeRelationship
+﻿namespace HRM.Criteria.EmployeeRelationship;
+
+using Fanex.Data.Repository;
+
+public class GetRelationshipByEmployeeIdCriteria : CriteriaBase
 {
-    using Fanex.Data.Repository;
+    public int EmployeeId { get; set; }
 
-    public class GetRelationshipByEmployeeIdCriteria : CriteriaBase
-    {
-        public int EmployeeId { get; set; }
+    public override string GetSettingKey() => "EmployeeRelationship_GetByEmployeeId";
 
-        public override string GetSettingKey()
-        {
-            return "EmployeeRelationship_GetByEmployeeId";
-        }
-
-        public override bool IsValid()
-        {
-            return EmployeeId > 0;
-        }
-    }
+    public override bool IsValid() => EmployeeId > 0;
 }

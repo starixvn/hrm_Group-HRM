@@ -20,7 +20,7 @@ public class MessageService(
 {
     private const string MessageEmailTemplate = "EmailTemplates/MessageNotification.txt";
 
-    public async Task<IList<Message>> GetMessageByCreator(GetMessageByCreatorParam param)
+    public async Task<IEnumerable<Message>> GetMessageByCreator(GetMessageByCreatorParam param)
     {
         var criteria = new GetMessageByCreatorCriteria
         {
@@ -29,7 +29,7 @@ public class MessageService(
             IsDisabled = param.IsDisabled,
             CreatedBy = param.CreatedBy
         };
-        return (await baseService.GetDataAsync<Message>(criteria)).ToList();
+        return await baseService.GetDataAsync<Message>(criteria);
     }
 
     public async Task<Message> GetMessageById(int id)
@@ -102,7 +102,7 @@ public class MessageService(
         return await baseService.ExecuteNonQueryAsync(criteria);
     }
 
-    public async Task<IList<Message>> GetMessageByEmployee(GetMessageByEmployeeParam param)
+    public async Task<IEnumerable<Message>> GetMessageByEmployee(GetMessageByEmployeeParam param)
     {
         var criteria = new GetMessageByEmployeeCriteria
         {
@@ -111,7 +111,7 @@ public class MessageService(
             IsDisabled = param.IsDisabled,
             EmployeeId = param.EmployeeId
         };
-        return (await baseService.GetDataAsync<Message>(criteria)).ToList();
+        return await baseService.GetDataAsync<Message>(criteria);
     }
 
     public async Task<Message> GetDetailMessageByEmployee(int messageId)

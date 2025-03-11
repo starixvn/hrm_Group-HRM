@@ -4,13 +4,8 @@ using System;
 
 public static class DateTimeExtensions
 {
-    private static TimeSpan _serverTimeZone = TimeSpan.FromHours(-4);
+    private static readonly TimeSpan ServerTimeZone = TimeSpan.FromHours(-4);
     private static TimeSpan _clientTimeZone = TimeSpan.FromHours(7);
-
-    public static void Initialize(short serverTimeZone)
-    {
-        _serverTimeZone = TimeSpan.FromHours(serverTimeZone);
-    }
 
     public static void SetClientTimeZone(short clientTimeZone)
     {
@@ -24,146 +19,74 @@ public static class DateTimeExtensions
     }
 
     public static DateTime LastDayOfWeek(this DateTime dt)
-    {
-        return dt.FirstDayOfWeek().AddDays(6);
-    }
+        => dt.FirstDayOfWeek().AddDays(6);
 
     public static DateTime FirstDayOfMonth(this DateTime dt)
-    {
-        return new DateTimeOffset(dt.Year, dt.Month, 1, 0, 0, 0, TimeSpan.Zero).Date;
-    }
+        => new DateTimeOffset(dt.Year, dt.Month, 1, 0, 0, 0, TimeSpan.Zero).Date;
 
     public static DateTime LastDayOfMonth(this DateTime dt)
-    {
-        return dt.FirstDayOfMonth().AddMonths(1).AddDays(-1);
-    }
+        => dt.FirstDayOfMonth().AddMonths(1).AddDays(-1);
 
     public static string ToFormatedDate(this DateTime? date)
-    {
-        if (date.HasValue)
-        {
-            return date.Value.ToFormatedDate();
-        }
-
-        return string.Empty;
-    }
+        => date.HasValue ? date.Value.ToFormatedDate() : string.Empty;
 
     public static string ToFormatedDate(this DateTime date)
-    {
-        return date.ToString("dd MMM, yyyy hh:mm tt");
-    }
+        => date.ToString("dd MMM, yyyy hh:mm tt");
 
     public static string ToShortFormatedDate(this DateTime? date)
-    {
-        if (date.HasValue)
-        {
-            return date.Value.ToShortFormatedDate();
-        }
-
-        return string.Empty;
-    }
+        => date.HasValue ? date.Value.ToShortFormatedDate() : string.Empty;
 
     public static string ToShortFormatedDate(this DateTime date)
-    {
-        var dateStr = date.ToString(@"dd MMM, yyyy - HH") + "h" + date.ToString(@"mm\'");
-        return dateStr;
-    }
+        => date.ToString(@"dd MMM, yyyy - HH") + "h" + date.ToString(@"mm\'");
 
     public static string ToDetailFormatedDate(this DateTime date)
-    {
-        var dateStr = date.ToString(@"ddd, dd MMM, yyyy - HH") + "h" + date.ToString(@"mm\'");
-        return dateStr;
-    }
+        => date.ToString(@"ddd, dd MMM, yyyy - HH") + "h" + date.ToString(@"mm\'");
 
     public static string ToMonthAndDayFormatedDate(this DateTime? date)
-    {
-        if (date.HasValue)
-        {
-            return date.Value.ToMonthAndDayFormatedDate();
-        }
-
-        return string.Empty;
-    }
+        => date.HasValue ? date.Value.ToMonthAndDayFormatedDate() : string.Empty;
 
     public static string ToMonthAndDayFormatedDate(this DateTime date)
-    {
-        return date.ToString("dd MMM");
-    }
+        => date.ToString("dd MMM");
 
     public static string ToMonthAndYearFormatedDate(this DateTime? date)
-    {
-        if (date.HasValue)
-        {
-            return date.Value.ToMonthAndYearFormatedDate();
-        }
-
-        return string.Empty;
-    }
+        => date.HasValue ? date.Value.ToMonthAndYearFormatedDate() : string.Empty;
 
     public static string ToMonthAndYearFormatedDate(this DateTime date)
-    {
-        return date.ToString("MMM-yyyy");
-    }
+        => date.ToString("MMM-yyyy");
 
     public static string ToDayOfWeekFormatedDate(this DateTime date)
-    {
-        return date.ToString("ddd, dd MMM, yyyy");
-    }
+        => date.ToString("ddd, dd MMM, yyyy");
 
     public static string ToDateMonthYearFormatedDate(this DateTime date)
-    {
-        return date.ToString("dd MMM, yyyy");
-    }
+        => date.ToString("dd MMM, yyyy");
 
     public static string ToDateMonthYearFormatedDate(this DateTime? date)
-    {
-        if (date.HasValue)
-        {
-            return date.Value.ToDateMonthYearFormatedDate();
-        }
-
-        return string.Empty;
-    }
+        => date.HasValue ? date.Value.ToDateMonthYearFormatedDate() : string.Empty;
 
     public static string ToDateOfWeek(this DateTime date)
-    {
-        return date.ToString("d MMM, ddd");
-    }
+        => date.ToString("d MMM, ddd");
 
     public static string ToDateOfWeek(this DateTime? date)
-    {
-        if (date.HasValue)
-        {
-            return date.Value.ToDateOfWeek();
-        }
-
-        return string.Empty;
-    }
+        => date.HasValue ? date.Value.ToDateOfWeek() : string.Empty;
 
     public static string ToShortTime(this DateTime date)
-    {
-        return date.ToString("HH:mm");
-    }
+        => date.ToString("HH:mm");
 
     public static DateTime ToEndOfDay(this DateTime time)
-    {
-        return new DateTimeOffset(time.Year, time.Month, time.Day, 23, 59, 59, TimeSpan.Zero).DateTime;
-    }
+        => new DateTimeOffset(time.Year, time.Month, time.Day, 23, 59, 59, TimeSpan.Zero).DateTime;
 
     public static bool IsSameDateWith(this DateTime sourceDate, DateTime toDate)
-    {
-        return (sourceDate.Year == toDate.Year && sourceDate.Month == toDate.Month && sourceDate.Day == toDate.Day);
-    }
+        => (sourceDate.Year == toDate.Year && sourceDate.Month == toDate.Month && sourceDate.Day == toDate.Day);
 
     public static DateTime ToServerTimeZone(this DateTime time)
     {
         var offsetTime = new DateTimeOffset(time, _clientTimeZone);
-        return offsetTime.ToOffset(_serverTimeZone).DateTime;
+        return offsetTime.ToOffset(ServerTimeZone).DateTime;
     }
 
     public static DateTime ToClientTimeZone(this DateTime time)
     {
-        var offsetTime = new DateTimeOffset(time, _serverTimeZone);
+        var offsetTime = new DateTimeOffset(time, ServerTimeZone);
         return offsetTime.ToOffset(_clientTimeZone).DateTime;
     }
 }

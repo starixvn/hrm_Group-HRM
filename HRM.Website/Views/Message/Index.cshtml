@@ -1,5 +1,4 @@
-﻿@using HRM.Models.Message
-@using HRM.Website.Helper
+﻿@using HRM.Website.Helper
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @model HRM.Models.Message.GetMessageByCreatorParam
 @{
@@ -50,7 +49,7 @@
             <div class="input-form">
                 @{
                     var status = new List<SelectListItem>
-                                            {
+                    {
                         new() {Text = "-- All --", Value = string.Empty},
                         new() {Text = "Active", Value = "0"},
                         new() {Text = "Disabled", Value = "1"},
@@ -74,29 +73,15 @@
 <table id="messageTable" class="table table-custom">
     <thead>
         <tr>
-            <th>
-                @Labels.SymbolCount
-            </th>
-            <th>
-                @Labels.Subject
-            </th>
-            <th>
-                @Labels.Category
-            </th>
-            <th>
-                @Labels.SendTo
-            </th>
-            <th>
-                @Labels.CreatedDate
-            </th>
+            <th>@Labels.SymbolCount</th>
+            <th>@Labels.Subject</th>
+            <th>@Labels.Category</th>
+            <th>@Labels.SendTo</th>
+            <th>@Labels.CreatedDate</th>
             @if (hasPermission)
             {
-                <th>
-                    @Labels.Edit
-                </th>
-                <th>
-                    @Labels.Delete
-                </th>
+                <th>@Labels.Edit</th>
+                <th>@Labels.Delete</th>
             }
         </tr>
     </thead>
@@ -104,7 +89,7 @@
     {
         <tbody>
             @{var index = 1;}
-            @foreach (Message message in ViewBag.Messages)
+            @foreach (var message in ViewBag.Messages)
             {
                 <tr id="row_@message.MessageId">
                     <td>

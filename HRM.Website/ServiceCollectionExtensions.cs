@@ -94,7 +94,6 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddDIServices(this IServiceCollection services, IConfiguration configuration)
     {
         var appSettings = configuration.GetSection("AppSettings").Get<AppSettings>();
-        DateTimeExtensions.Initialize(appSettings.ServerTimeZone);
         services.AddSingleton(appSettings);
 
         var letstalkSettings = configuration.GetSection("LetstalkSettings").Get<LetstalkSettings>();
@@ -174,7 +173,6 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IManagementLevelService, ManagementLevelService>();
         services.AddSingleton<IPaternityService, PaternityService>();
         services.AddSingleton<IPostnatalService, PostnatalService>();
-        services.AddSingleton<IMealAllowanceSummaryService, MealAllowanceSummaryService>();
         services.AddSingleton<IHolidayService, HolidayService>();
         services.AddDIReportServices();
         services.AddDIExcelServices();
@@ -186,6 +184,7 @@ public static class ServiceCollectionExtensions
     {
         services.AddSingleton<IReportRepository, ReportRepository>();
         services.AddSingleton<IOvertimeReportRepository, OvertimeReportRepository>();
+        services.AddSingleton<IWorkingCalendarSummaryReportRepository, WorkingCalendarSummaryReportRepository>();
 
         services.AddSingleton<IReportService, ReportService>();
         services.AddSingleton<IShiftStatisticReportService, ShiftStatisticReportService>();
@@ -194,7 +193,7 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IWorkingHoursSummaryReportService, WorkingHoursSummaryReportService>();
         services.AddSingleton<IManpowerReportService, ManpowerReportService>();
         services.AddSingleton<IWorkingCalendarSummaryReportService, WorkingCalendarSummaryReportService>();
-        services.AddSingleton<IWorkingCalendarSummaryReportRepository, WorkingCalendarSummaryReportRepository>();
+        services.AddSingleton<IMealAllowanceSummaryService, MealAllowanceSummaryService>();
 
         return services;
     }

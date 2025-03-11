@@ -4,6 +4,8 @@
 @model GetMessageByEmployeeParam
 @{
     ViewBag.Title = Labels.MyMessage;
+
+    var messages = ViewBag.Messages as IEnumerable<Message>;
 }
 @section css{
     <link href="~/dist/styles/message.css" rel="stylesheet" />
@@ -14,9 +16,6 @@
 @section Breadcrumb {
     <a class="step">@Labels.Personal</a>
     <a class="step">@ViewBag.Title</a>
-}
-@{
-    var messages = ViewBag.Messages as IList<Message>;
 }
 <h2 class="page-title">@ViewBag.Title</h2>
 <form class="filter" method="post">
@@ -47,7 +46,7 @@
             <div class="input-form">
                 @{
                     var status = new List<SelectListItem>
-                                    {
+                    {
                         new() {Text = "-- All --", Value = string.Empty},
                         new() {Text = "Active", Value = "0"},
                         new() {Text = "Disabled", Value = "1"},
@@ -75,7 +74,7 @@
             <th>@Labels.Delete</th>
         </tr>
     </thead>
-    @if (messages is { Count: > 0 })
+    @if (messages.Any())
     {
         <tbody>
             @{var index = 1;}
