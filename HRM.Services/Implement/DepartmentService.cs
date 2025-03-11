@@ -1,4 +1,7 @@
-﻿namespace HRM.Services.Implement;
+﻿using GO.UserControl.Client.Core.Session;
+using HRM.Core.Constants;
+
+namespace HRM.Services.Implement;
 
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -11,7 +14,8 @@ using Models;
 
 public class DepartmentService(
     IDepartmentRepository departmentRepository,
-    IBaseService baseService) : IDepartmentService
+    IBaseService baseService,
+    IUserControlSession userControlSession) : IDepartmentService
 {
     public async Task<CommandResult> DeleteAsync(int actorId, int id)
     {
@@ -25,9 +29,11 @@ public class DepartmentService(
 
     public async Task<IList<Department>> GetDepartmentAsync(bool? isActive = true)
     {
+        var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
         var criteria = new GetDepartmentByActiveCriteria
         {
-            IsActive = isActive
+            IsActive = isActive,
+            CompanyId = companyId
         };
         var departments = await departmentRepository.GetByActiveAsync(criteria);
 
