@@ -6,6 +6,8 @@
     {
         public bool? IsActive { get; set; }
 
+        public short CompanyId { get; set; }
+
         public override string GetSettingKey() => "Unit_Get";
 
         public override bool IsValid() => true;
