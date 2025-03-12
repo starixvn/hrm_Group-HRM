@@ -55,13 +55,16 @@ public class ReportController(
         var toDate = (today.Month == model.Month && today.Year == model.Year)
             ? today.Date : fromDate.AddMonths(1).AddDays(-1);
 
+        var companyId = userControlSession.Get<int>(SessionKey.CurrentCompanyId);
+
         var criteria = new GetEmployeeAttendanceCriteria
         {
             Fromtime = fromDate,
             Totime = toDate,
             AttendanceType = 0, //show All
             EmpId = model.EmpId,
-            ExcludeUserDelete = 1
+            ExcludeUserDelete = 1,
+            CompanyId = companyId
         };
 
         var timesheets = await reportService.GetEmployeeAttendanceReportAsync(criteria);
