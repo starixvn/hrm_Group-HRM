@@ -37,11 +37,13 @@ public class CalendarController(
 
     public async Task<IActionResult> GetWorkingSchedule(DateTime date)
     {
+        var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
         var criteria = new GetEmployeeCalendarByMonthCriteria
         {
             EmpId = EmployeeSession.EmpId,
             FromDate = date.FirstDayOfMonth(),
-            ToDate = date.AddMonths(1).AddDays(-1).LastDayOfMonth()
+            ToDate = date.AddMonths(1).AddDays(-1).LastDayOfMonth(),
+            CompanyId = companyId
         };
         var workingSchedule = await workingCalendarService.GetWorkingScheduleAsync(criteria);
 
