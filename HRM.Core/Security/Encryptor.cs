@@ -36,7 +36,7 @@ public static class Encryptor
         Array.Copy(data, dataSalt, dataLength);
         Array.Copy(salt, 0, dataSalt, dataLength, saltLength);
 
-        HashAlgorithm hash = new SHA1Managed();
+        using HashAlgorithm hash = SHA1.Create();
         var encrypt = hash.ComputeHash(dataSalt);
         var encryptLength = encrypt.Length;
 
