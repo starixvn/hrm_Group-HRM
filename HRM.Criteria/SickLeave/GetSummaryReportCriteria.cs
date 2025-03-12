@@ -12,6 +12,7 @@ public class GetSummaryReportCriteria : CriteriaBase
     public int Year { get; set; }
     public bool? IsLocal { get; set; }
     public int? SupervisorId { get; set; }
+    public short CompanyId { get; set; }
 
     public override string GetSettingKey() => "SickLeave_SummaryReport";
 

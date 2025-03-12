@@ -37,7 +37,7 @@ public class SickLeaveBalanceController(
     {
         var model = new HospitalizationLeaveBalanceViewModel
         {
-            Year = year ?? DateTimeOffset.Now.Year,
+            Year = year ?? DateTimeOffset.Now.DateTime.ToClientTimeZone().Year,
             TeamIds = teamIds,
             Employee = employee,
             EmployeeId = employeeId,
@@ -59,7 +59,8 @@ public class SickLeaveBalanceController(
             EmployeeId = model.EmployeeId,
             TeamIds = model.TeamIds,
             IsLocal = model.IsLocal,
-            SupervisorId = EmployeeSession.EmpId
+            SupervisorId = EmployeeSession.EmpId,
+            CompanyId = CurrentCompanyId
         };
         model.Employees = await baseService.GetDataAsync<HospitalizationLeaveBalanceSummaryReport>(criteria);
 
@@ -89,7 +90,8 @@ public class SickLeaveBalanceController(
     public async Task<IActionResult> Reset([FromBody] ResetMultipleTransactionCriteria criteria)
     {
         criteria.ActorId = EmployeeSession.EmpId;
-        criteria.Year = DateTimeOffset.Now.AddYears(-1).Year;
+        criteria.Year = DateTimeOffset.Now.DateTime.ToClientTimeZone().AddYears(-1).Year;
+        criteria.CompanyId = CurrentCompanyId;
         var commandResult = await baseService.ExecuteNonQueryAsync(criteria);
 
         return Json(commandResult);
@@ -104,7 +106,7 @@ public class SickLeaveBalanceController(
             return RedirectToAction("PageNotFound", "Error");
         }
 
-        var year = DateTimeOffset.Now.Year;
+        var year = DateTimeOffset.Now.DateTime.ToClientTimeZone().Year;
         var model = new HospitalizationLeaveTransactionViewModel
         {
             EmployeeId = id,
@@ -136,7 +138,7 @@ public class SickLeaveBalanceController(
         {
             EmpId = id,
             Nickname = employee.NickName,
-            AffectedFrom = DateTimeOffset.Now.Date,
+            AffectedFrom = DateTimeOffset.Now.DateTime.ToClientTimeZone().Date,
         };
         return View(model);
     }
@@ -205,14 +207,15 @@ public class SickLeaveBalanceController(
 
     public async Task<IActionResult> ExportSummaryReport(HospitalizationLeaveBalanceViewModel model)
     {
-        var fileName = $"SickLeaveSummary_{DateTimeOffset.Now:yyyyMMdd}.xls";
+        var fileName = $"SickLeaveSummary_{DateTimeOffset.Now.DateTime.ToClientTimeZone():yyyyMMdd}.xls";
         var criteria = new GetSummaryReportCriteria
         {
             Year = model.Year,
             EmployeeId = model.EmployeeId,
             TeamIds = model.TeamIds,
             IsLocal = model.IsLocal,
-            SupervisorId = EmployeeSession.EmpId
+            SupervisorId = EmployeeSession.EmpId,
+            CompanyId = CurrentCompanyId
         };
         var employees = await baseService.GetDataAsync<HospitalizationLeaveBalanceSummaryReport>(criteria);
         var workbook = exportExcelService.ExportSickLeaveSummary(employees, model.Year);
