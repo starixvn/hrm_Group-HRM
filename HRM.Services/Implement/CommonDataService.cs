@@ -103,27 +103,27 @@ public class CommonDataService(
     {
         return new List<EntityBase<byte>>
         {
-            new EntityBase<byte>
+            new()
             {
                 Id = (byte)MarriageStatus.Default,
                 Name = EnumHelper.GetDescription(MarriageStatus.Default)
             },
-            new EntityBase<byte>
+            new()
             {
                 Id = (byte)MarriageStatus.Married,
                 Name = EnumHelper.GetDescription(MarriageStatus.Married)
             },
-            new EntityBase<byte>
+            new()
             {
                 Id = (byte)MarriageStatus.Divorced,
                 Name = EnumHelper.GetDescription(MarriageStatus.Divorced)
             },
-            new EntityBase<byte>
+            new()
             {
                 Id = (byte)MarriageStatus.Single,
                 Name = EnumHelper.GetDescription(MarriageStatus.Single)
             },
-            new EntityBase<byte>
+            new()
             {
                 Id = (byte)MarriageStatus.Widow,
                 Name = EnumHelper.GetDescription(MarriageStatus.Widow)
@@ -135,17 +135,17 @@ public class CommonDataService(
     {
         return new List<EntityBase<byte>>
         {
-            new EntityBase<byte>
+            new()
             {
                 Id = (byte)Gender.Female,
                 Name = EnumHelper.GetDescription(Gender.Female)
             },
-            new EntityBase<byte>
+            new()
             {
                 Id = (byte)Gender.Male,
                 Name = EnumHelper.GetDescription(Gender.Male)
             },
-            new EntityBase<byte>
+            new()
             {
                 Id = (byte)Gender.Unknown,
                 Name = EnumHelper.GetDescription(Gender.Unknown)

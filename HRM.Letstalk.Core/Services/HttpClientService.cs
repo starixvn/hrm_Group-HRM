@@ -15,7 +15,7 @@ using Newtonsoft.Json;
 #pragma warning disable S4462 // Calls to "async" methods should not be blocking
 public class HttpClientService : IHttpClientService
 {
-    private static readonly HttpClient httpClient = new HttpClient();
+    private static readonly HttpClient httpClient = new();
 
     public T ExecuteGet<T>(string baseUrl, string token = null, IDictionary<string, object> data = null) where T : new()
         => SendHttpClient<T>(baseUrl, token, HttpMethod.Get, data);

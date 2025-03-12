@@ -32,7 +32,7 @@ public class BaseRequest
     public byte ApprovedStatus { get; set; }
     public byte ProcessedStatus { get; set; }
 
-    public RequestStatus Status => new RequestStatus
+    public RequestStatus Status => new()
     {
         Id = CurrentStatus
     };

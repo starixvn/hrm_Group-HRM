@@ -7,8 +7,8 @@
     ViewBag.Title = Labels.Holiday;
     var holidayTypes = new List<SelectListItem>
     {
-        new SelectListItem { Value = ((byte)HolidayType.Regular).ToString(), Text = HolidayType.Regular.GetDisplayName() },
-        new SelectListItem { Value = ((byte)HolidayType.Special).ToString(), Text = HolidayType.Special.GetDisplayName() }
+        new() { Value = ((byte)HolidayType.Regular).ToString(), Text = HolidayType.Regular.GetDisplayName() },
+        new() { Value = ((byte)HolidayType.Special).ToString(), Text = HolidayType.Special.GetDisplayName() }
     };
 }
 @section css{

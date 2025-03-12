@@ -67,12 +67,12 @@ public class InformationController(
 
         ViewBag.Genders = new List<SelectListItem>
         {
-            new SelectListItem
+            new()
             {
                 Text = Labels.Female,
                 Value = "0"
             },
-            new SelectListItem
+            new()
             {
                 Text = Labels.Male,
                 Value = "1"

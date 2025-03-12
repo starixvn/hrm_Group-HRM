@@ -18,41 +18,41 @@ public static class Utilities
     public static IList<SelectListItem> CheckInOutTypes =>
         new List<SelectListItem>
         {
-            new SelectListItem { Text = Labels.CheckIn, Value = ((short)RequestType.CheckIn).ToString() },
-            new SelectListItem { Text = Labels.CheckOut, Value = ((short)RequestType.CheckOut).ToString() }
+            new() { Text = Labels.CheckIn, Value = ((short)RequestType.CheckIn).ToString() },
+            new() { Text = Labels.CheckOut, Value = ((short)RequestType.CheckOut).ToString() }
         };
 
     public static IList<SelectListItem> LateInEarlyOutTypes =>
         new List<SelectListItem>
         {
-            new SelectListItem { Text = Labels.LateIn, Value = ((short)RequestType.LateIn).ToString() },
-            new SelectListItem { Text = Labels.EarlyOut, Value = ((short)RequestType.EarlyOut).ToString() }
+            new() { Text = Labels.LateIn, Value = ((short)RequestType.LateIn).ToString() },
+            new() { Text = Labels.EarlyOut, Value = ((short)RequestType.EarlyOut).ToString() }
         };
 
     public static IList<SelectListItem> Marriages =>
         new List<SelectListItem>
         {
-            new SelectListItem
+            new()
             {
                 Text = Labels.SelectMarriageStatus,
                 Value = ((byte)MarriageStatus.Default).ToString()
             },
-            new SelectListItem
+            new()
             {
                 Text = MarriageStatus.Married.ToString(),
                 Value = ((byte)MarriageStatus.Married).ToString()
             },
-            new SelectListItem
+            new()
             {
                 Text = MarriageStatus.Divorced.ToString(),
                 Value = ((byte)MarriageStatus.Divorced).ToString()
             },
-            new SelectListItem
+            new()
             {
                 Text = MarriageStatus.Single.ToString(),
                 Value = ((byte)MarriageStatus.Single).ToString()
             },
-            new SelectListItem
+            new()
             {
                 Text = MarriageStatus.Widow.ToString(),
                 Value = ((byte)MarriageStatus.Widow).ToString()
@@ -82,9 +82,7 @@ public static class Utilities
         var ca = new char[length];
         var random = new byte[length];
 
-        // RNGCryptoServiceProvider is an implementation of a random number generator.
-        using var rng = new RNGCryptoServiceProvider();
-        rng.GetBytes(random); // The array is now filled with cryptographically strong random bytes.
+        RandomNumberGenerator.Fill(random);
         for (var i = 0; i < length; i++)
         {
             var found = false;
@@ -104,7 +102,7 @@ public static class Utilities
                 {
                     // get a new random int.
                     var single = new byte[1];
-                    rng.GetBytes(single);
+                    RandomNumberGenerator.Fill(single);
                     rand = single[0];
                 }
             }
@@ -114,23 +112,6 @@ public static class Utilities
         }
 
         return new string(ca).ToLowerInvariant();
-    }
-
-    public static IList<SelectListItem> MinuteSteps(int step)
-    {
-        var list = new List<SelectListItem>();
-        var index = 60;
-        while (index > 0)
-        {
-            list.Add(new SelectListItem
-            {
-                Text = string.Format(Labels.MinuteFormat, index),
-                Value = index.ToString()
-            });
-            index -= step;
-        }
-
-        return list;
     }
 
     public static IList<SelectListItem> TimeSteps(int minuteStep)
@@ -297,7 +278,7 @@ public static class Utilities
 
     public static IList<SelectListItem> GetDateRangeByYear()
     {
-        var dateRange = new List<SelectListItem> { new SelectListItem { Text = Labels.DateRange, Value = "0" } };
+        var dateRange = new List<SelectListItem> { new() { Text = Labels.DateRange, Value = "0" } };
         var currentDate = DateTimeOffset.Now.DateTime.ToClientTimeZone();
         dateRange.Add(new SelectListItem
         {

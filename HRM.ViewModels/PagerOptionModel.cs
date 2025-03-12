@@ -17,9 +17,9 @@ public class PagerOptionModel
         {
             var itemsPerPages = new List<SelectListItem>
             {
-                new SelectListItem { Text = "50", Value = "50" },
-                new SelectListItem { Text = "100", Value = "100" },
-                new SelectListItem { Text = "200", Value = "200" }
+                new() { Text = "50", Value = "50" },
+                new() { Text = "100", Value = "100" },
+                new() { Text = "200", Value = "200" }
             };
 
             return itemsPerPages;

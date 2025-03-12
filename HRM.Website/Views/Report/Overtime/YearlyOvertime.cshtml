@@ -48,8 +48,8 @@
                 @{
                     var calendarType = new List<SelectListItem>
                             {
-                        new SelectListItem() {Text = Labels.Fiscal, Value = "1"},
-                        new SelectListItem() {Text = Labels.Normal, Value = "0"},
+                        new() {Text = Labels.Fiscal, Value = "1"},
+                        new() {Text = Labels.Normal, Value = "0"},
                     };
                 }
                 @Html.DropDownListFor(model => model.Calendar, calendarType, new { @class = "form-control" })

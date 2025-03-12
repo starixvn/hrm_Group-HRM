@@ -58,9 +58,9 @@
                     @{
                         var category = new List<SelectListItem>
                                         {
-                            new SelectListItem() {Text = "-- All --", Value = string.Empty},
-                            new SelectListItem() {Text = @Labels.Expat, Value = "0"},
-                            new SelectListItem() {Text = @Labels.Local, Value = "1"},
+                            new() {Text = "-- All --", Value = string.Empty},
+                            new() {Text = @Labels.Expat, Value = "0"},
+                            new() {Text = @Labels.Local, Value = "1"},
                         };
                     }
                     @Html.DropDownList("category", category, new { @class = "category form-control" })

@@ -13,7 +13,7 @@ using XMLExtensions;
 
 public class HolidayService(IBaseService baseService) : IHolidayService
 {
-    private readonly ChineseLunisolarCalendar chinaCalendar = new ChineseLunisolarCalendar();
+    private readonly ChineseLunisolarCalendar chinaCalendar = new();
 
     public async Task InsertHolidayInYearAsync()
     {

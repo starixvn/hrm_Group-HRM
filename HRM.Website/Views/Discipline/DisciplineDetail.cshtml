@@ -78,9 +78,9 @@
                 @{
                     var category = new List<SelectListItem>
                     {
-                    new SelectListItem() {Text = Labels.All, Value = string.Empty},
-                    new SelectListItem() {Text = Labels.Expat, Value = "false"},
-                    new SelectListItem() {Text = Labels.Local, Value = "true"},
+                    new() {Text = Labels.All, Value = string.Empty},
+                    new() {Text = Labels.Expat, Value = "false"},
+                    new() {Text = Labels.Local, Value = "true"},
                     };
                 }
                 @Html.DropDownListFor(model => model.IsLocal, category, new { @class = "category form-control" })
@@ -119,9 +119,9 @@
                 @{
                     var ignoredStatus = new List<SelectListItem>
                     {
-                    new SelectListItem() {Text = Labels.All, Value = string.Empty},
-                    new SelectListItem() {Text = Labels.Ignored, Value = "true"},
-                    new SelectListItem() {Text = Labels.NotIgnored, Value = "false"},
+                    new() {Text = Labels.All, Value = string.Empty},
+                    new() {Text = Labels.Ignored, Value = "true"},
+                    new() {Text = Labels.NotIgnored, Value = "false"},
                     };
                 }
                 @Html.DropDownListFor(model => model.HasIgnored, ignoredStatus, new { @class = "category form-control" })

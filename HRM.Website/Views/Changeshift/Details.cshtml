@@ -37,8 +37,8 @@
                 @{
                     var types = new List<SelectListItem>
                     {
-                        new SelectListItem() { Text = Labels.ChangeShift, Value = ((byte)ChangeShiftType.ChangeShift).ToString() },
-                        new SelectListItem() { Text = Labels.MoveOffDayToAnotherWeek, Value = ((byte)ChangeShiftType.MoveOffDay).ToString() }
+                        new() { Text = Labels.ChangeShift, Value = ((byte)ChangeShiftType.ChangeShift).ToString() },
+                        new() { Text = Labels.MoveOffDayToAnotherWeek, Value = ((byte)ChangeShiftType.MoveOffDay).ToString() }
                     };
                 }
                 @Html.DropDownListFor(model => model.TypeId, types, new { @class = "form-control", @disabled = "disabled" })

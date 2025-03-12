@@ -129,7 +129,7 @@
             </div>
             <div class="select-form">
                 @{
-                    var listTypes = new List<SelectListItem> { new SelectListItem { Value = "", Text = "All" } };
+                    var listTypes = new List<SelectListItem> { new() { Value = "", Text = "All" } };
                     listTypes.AddRange(Model.LeaveTypes.Select(l => new SelectListItem { Value = l.Id.ToString(), Text = l.Name }).ToList());
                 }
                 @Html.DropDownListFor(model => model.LeaveType, listTypes, new { @class = "form-control" })
