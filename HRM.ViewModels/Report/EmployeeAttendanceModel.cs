@@ -109,30 +109,13 @@ public class EmployeeAttendanceModel
         }
     }
 
-    public bool IsOffdayOT
-    {
-        get
-        {
-            return IsOffDay == 1 && ShiftId != null;
-        }
-    }
+    public bool IsOffdayOT => IsOffDay == 1 && ShiftId != null;
 
-    public bool IsPublicHolidayOT
-    {
-        get
-        {
-            return IsPublicHoliday && ShiftId != null;
-        }
-    }
+    public bool IsPublicHolidayOT => IsPublicHoliday && ShiftId != null;
 
-    public bool IsWeekend
-    {
-        get
-        {
-            return AttendanceDate.DayOfWeek == DayOfWeek.Sunday ||
-                   AttendanceDate.DayOfWeek == DayOfWeek.Saturday;
-        }
-    }
+    public bool IsWeekend =>
+        AttendanceDate.DayOfWeek == DayOfWeek.Sunday ||
+        AttendanceDate.DayOfWeek == DayOfWeek.Saturday;
 
     public string SectionCode { get; set; }
 

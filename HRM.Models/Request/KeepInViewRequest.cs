@@ -15,15 +15,10 @@ public class KeepInViewRequest : BaseRequest
     public DateTime FromTime { get; set; }
     public DateTime ToTime { get; set; }
 
-    public string KeepInViewTypeName
-    {
-        get
-        {
-            return KeepInViewTypeId == (int)KeepInViewTypes.KeepInViewByDay
-                ? Labels.ByDay
-                : Labels.ByHour;
-        }
-    }
+    public string KeepInViewTypeName =>
+        KeepInViewTypeId == (int)KeepInViewTypes.KeepInViewByDay
+            ? Labels.ByDay
+            : Labels.ByHour;
 
     public string ShiftName { get; set; }
 

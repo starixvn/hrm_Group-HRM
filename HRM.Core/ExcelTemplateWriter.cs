@@ -39,13 +39,7 @@ public class ExcelTemplateWriter(HSSFWorkbook template, string excelFileName, st
 
     #region Properties
 
-    public int RowId
-    {
-        get
-        {
-            return _rowId;
-        }
-    }
+    public int RowId => _rowId;
 
     #endregion Properties
 

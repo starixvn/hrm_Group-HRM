@@ -17,13 +17,7 @@ public class SupervisorNameModel
     public int ActionType { get; set; }
     public bool IsTopManager { get; set; }
 
-    public string DisplayName
-    {
-        get
-        {
-            return NickName + " (" + FullName + ")";
-        }
-    }
+    public string DisplayName => NickName + " (" + FullName + ")";
 
     public string LetsTalk { get; set; }
 }

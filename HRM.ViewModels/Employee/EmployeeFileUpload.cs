@@ -12,11 +12,5 @@ public class EmployeeFileUpload
 
     public DateTime UploadedDate { get; set; }
 
-    public string FileLocation
-    {
-        get
-        {
-            return $"/file/uploads/profile/{Code}/{FileName}";
-        }
-    }
+    public string FileLocation => $"/file/uploads/profile/{Code}/{FileName}";
 }

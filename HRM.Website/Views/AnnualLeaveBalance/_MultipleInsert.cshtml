@@ -5,7 +5,7 @@
 @{
     ViewBag.Title = Labels.MultipleInsert;
 }
-@using (Html.BeginForm("AnnualLeaveBalance", "Adjust", FormMethod.Post))
+@using (Html.BeginForm("Adjust", "AnnualLeaveBalance", FormMethod.Post))
 {
     @Html.ValidationSummary()
     <div class="form-horizontal clearfix">

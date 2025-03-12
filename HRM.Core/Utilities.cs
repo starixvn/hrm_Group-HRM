@@ -15,64 +15,49 @@ public static class Utilities
 {
     private const byte PaddingLeftWidth = 2;
 
-    public static IList<SelectListItem> CheckInOutTypes
-    {
-        get
+    public static IList<SelectListItem> CheckInOutTypes =>
+        new List<SelectListItem>
         {
-            return new List<SelectListItem>
-            {
-                new SelectListItem { Text = Labels.CheckIn, Value = ((short)RequestType.CheckIn).ToString() },
-                new SelectListItem { Text = Labels.CheckOut, Value = ((short)RequestType.CheckOut).ToString() }
-            };
-        }
-    }
+            new SelectListItem { Text = Labels.CheckIn, Value = ((short)RequestType.CheckIn).ToString() },
+            new SelectListItem { Text = Labels.CheckOut, Value = ((short)RequestType.CheckOut).ToString() }
+        };
 
-    public static IList<SelectListItem> LateInEarlyOutTypes
-    {
-        get
+    public static IList<SelectListItem> LateInEarlyOutTypes =>
+        new List<SelectListItem>
         {
-            return new List<SelectListItem>
-            {
-                new SelectListItem { Text = Labels.LateIn, Value = ((short)RequestType.LateIn).ToString() },
-                new SelectListItem { Text = Labels.EarlyOut, Value = ((short)RequestType.EarlyOut).ToString() }
-            };
-        }
-    }
+            new SelectListItem { Text = Labels.LateIn, Value = ((short)RequestType.LateIn).ToString() },
+            new SelectListItem { Text = Labels.EarlyOut, Value = ((short)RequestType.EarlyOut).ToString() }
+        };
 
-    public static IList<SelectListItem> Marriages
-    {
-        get
+    public static IList<SelectListItem> Marriages =>
+        new List<SelectListItem>
         {
-            return new List<SelectListItem>
+            new SelectListItem
             {
-                new SelectListItem
-                {
-                    Text = Labels.SelectMarriageStatus,
-                    Value = ((byte)MarriageStatus.Default).ToString()
-                },
-                new SelectListItem
-                {
-                    Text = MarriageStatus.Married.ToString(),
-                    Value = ((byte)MarriageStatus.Married).ToString()
-                },
-                new SelectListItem
-                {
-                    Text = MarriageStatus.Divorced.ToString(),
-                    Value = ((byte)MarriageStatus.Divorced).ToString()
-                },
-                new SelectListItem
-                {
-                    Text = MarriageStatus.Single.ToString(),
-                    Value = ((byte)MarriageStatus.Single).ToString()
-                },
-                new SelectListItem
-                {
-                    Text = MarriageStatus.Widow.ToString(),
-                    Value = ((byte)MarriageStatus.Widow).ToString()
-                }
-            };
-        }
-    }
+                Text = Labels.SelectMarriageStatus,
+                Value = ((byte)MarriageStatus.Default).ToString()
+            },
+            new SelectListItem
+            {
+                Text = MarriageStatus.Married.ToString(),
+                Value = ((byte)MarriageStatus.Married).ToString()
+            },
+            new SelectListItem
+            {
+                Text = MarriageStatus.Divorced.ToString(),
+                Value = ((byte)MarriageStatus.Divorced).ToString()
+            },
+            new SelectListItem
+            {
+                Text = MarriageStatus.Single.ToString(),
+                Value = ((byte)MarriageStatus.Single).ToString()
+            },
+            new SelectListItem
+            {
+                Text = MarriageStatus.Widow.ToString(),
+                Value = ((byte)MarriageStatus.Widow).ToString()
+            }
+        };
 
     public static string GetTime(DateTime? dateTime)
     {

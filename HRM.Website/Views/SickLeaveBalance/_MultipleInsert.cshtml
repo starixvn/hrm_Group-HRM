@@ -2,7 +2,7 @@
 @using HRM.ViewModels.AnnualLeave
 @model AnnualLeaveBalanceMultiViewModel
 
-@using (Html.BeginForm("SickLeaveBalance", "Adjust", FormMethod.Post))
+@using (Html.BeginForm("Adjust", "SickLeaveBalance", FormMethod.Post))
 {
     @Html.ValidationSummary()
     <div class="form-horizontal clearfix">

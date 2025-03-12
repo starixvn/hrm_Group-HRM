@@ -186,10 +186,7 @@ public class Employee : EntityBase<int>
 
     public string[] Roles2Array
     {
-        get
-        {
-            return GetRoles2Array();
-        }
+        get => GetRoles2Array();
 
         set
         {
@@ -219,13 +216,7 @@ public class Employee : EntityBase<int>
 
     #endregion Contract
 
-    public string DisplayName
-    {
-        get
-        {
-            return string.IsNullOrWhiteSpace(NickName) ? FullName : NickName + " (" + FullName + ")";
-        }
-    }
+    public string DisplayName => string.IsNullOrWhiteSpace(NickName) ? FullName : NickName + " (" + FullName + ")";
 
     [Display(Name = "Pickup Remark")]
     public string PickupRemark { get; set; }
