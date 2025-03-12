@@ -8,7 +8,6 @@ using GO.UserControl.Client.Core.Session;
 using Core.Constants;
 using Core.Filters;
 using HRM.Core.Services;
-using Core;
 using HRM.Core.Models;
 using Criteria.Section;
 using Models;
@@ -62,7 +61,10 @@ public class SectionController(
     public async Task<IActionResult> Create([FromBody] AddSectionViewModel model)
     {
         var commandResult = new CommandResult();
-        if (model == null || !ModelState.IsValid) return new JsonResult(commandResult);
+        if (model == null || !ModelState.IsValid)
+        {
+            return new JsonResult(commandResult);
+        }
 
         var criteria = new InsertSectionCriteria
         {
@@ -105,7 +107,10 @@ public class SectionController(
     public async Task<IActionResult> Edit([FromBody] EditSectionViewModel model)
     {
         var commandResult = new CommandResult();
-        if (model == null || !ModelState.IsValid) return new JsonResult(commandResult);
+        if (model == null || !ModelState.IsValid)
+        {
+            return new JsonResult(commandResult);
+        }
 
         var criteria = new UpdateSectionCriteria
         {

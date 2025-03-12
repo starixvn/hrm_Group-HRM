@@ -3,12 +3,12 @@ using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
 using HRM.Core.Constants;
 using HRM.Core.Filters;
-using HRM.Core;
 using HRM.Criteria.Unit;
 using HRM.Services;
 using HRM.ViewModels.Unit;
 using Microsoft.AspNetCore.Mvc;
 using HRM.Core.Models;
+
 namespace HRM.Controllers;
 
 public class UnitController(IUserControlSession userControlSession,
@@ -42,7 +42,10 @@ public class UnitController(IUserControlSession userControlSession,
     public async Task<IActionResult> Create([FromBody] AddUnitViewModel model)
     {
         var commandResult = new CommandResult();
-        if (model == null || !ModelState.IsValid) return new JsonResult(commandResult);
+        if (model == null || !ModelState.IsValid)
+        {
+            return new JsonResult(commandResult);
+        }
 
         var criteria = new InsertUnitCriteria
         {
@@ -73,7 +76,10 @@ public class UnitController(IUserControlSession userControlSession,
     public async Task<IActionResult> Edit([FromBody] EditUnitViewModel model)
     {
         var commandResult = new CommandResult();
-        if (model == null || !ModelState.IsValid) return new JsonResult(commandResult);
+        if (model == null || !ModelState.IsValid)
+        {
+            return new JsonResult(commandResult);
+        }
 
         var criteria = new UpdateUnitCriteria
         {

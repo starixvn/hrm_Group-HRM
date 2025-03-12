@@ -236,7 +236,10 @@ public static class Extensions
             var list = new List<SelectListItem>();
             foreach (var item in selectList)
             {
-                if (valueList != null) item.Selected = item.Value != null && valueList.Contains(item.Value);
+                if (valueList != null)
+                {
+                    item.Selected = item.Value != null && valueList.Contains(item.Value); 
+                }
                 list.Add(item);
             }
             selectList = list;
