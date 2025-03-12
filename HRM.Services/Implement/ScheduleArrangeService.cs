@@ -150,7 +150,7 @@ public class ScheduleArrangeService(
         }).ToList();
 
         var weeklyDefaultShifts = weeklySchedules.Select(x => x.WeeklyDefaultShift).ToList();
-        foreach (var weeklyDefaultShift in weeklyDefaultShifts)
+        foreach (var weeklyDefaultShift in weeklyDefaultShifts.Where(weeklyDefaultShift => weeklyDefaultShift != null))
         {
             weeklyDefaultShift.MonShift = shiftBases.First(x => x.Id == weeklyDefaultShift.MonShiftId);
             weeklyDefaultShift.TueShift = shiftBases.First(x => x.Id == weeklyDefaultShift.TueShiftId);
