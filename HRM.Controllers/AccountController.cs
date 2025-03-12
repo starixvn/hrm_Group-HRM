@@ -46,7 +46,10 @@ public class AccountController(
         model.Password = Encryptor.ComputeHash("123456");
         model.IsReset = true;
         var commandResult = await employeeService.EditPasswordAsync(EmployeeSession.EmpId, model);
-        if (!commandResult.IsSuccessful) return Json(commandResult);
+        if (!commandResult.IsSuccessful)
+        {
+            return Json(commandResult);
+        }
 
         var token = cryptoService.GenerateRijndaelKeyIV();
         var keyIv = token.Split(':');
@@ -71,40 +74,41 @@ public class AccountController(
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> ChangePwd(ChangePasswordViewModel model)
     {
-        if (ModelState.IsValid)
+        if (!ModelState.IsValid)
         {
-            int retCode = authService.Validate(EmployeeSession, model.Password);
-            if (retCode == (short)ValidateUserStatus.Success)
+            return View(model);
+        }
+        var retCode = authService.Validate(EmployeeSession, model.Password);
+        if (retCode == (short)ValidateUserStatus.Success)
+        {
+            var param = new EditPassword
             {
-                var param = new EditPassword
-                {
-                    EmployeeId = EmployeeSession.EmpId,
-                    Password = Encryptor.ComputeHash(model.NewPassword)
-                };
-                var commandResult = await employeeService.EditPasswordAsync(EmployeeSession.EmpId, param);
-                switch (commandResult.Code)
-                {
-                    case (short)ValidateUserStatus.Success: // OK
-                        await UpdatePassword(model);
-                        break;
-
-                    case (short)ValidateUserStatus.Deleted:
-                        ModelState.AddModelError(string.Empty, Messages.DeletedUser);
-                        break;
-
-                    case (short)ValidateUserStatus.Disabled:
-                        ModelState.AddModelError(string.Empty, Messages.DisabledUser);
-                        break;
-
-                    default: // wrong password
-                        ModelState.AddModelError(string.Empty, Messages.WrongPassword);
-                        break;
-                }
-            }
-            else
+                EmployeeId = EmployeeSession.EmpId,
+                Password = Encryptor.ComputeHash(model.NewPassword)
+            };
+            var commandResult = await employeeService.EditPasswordAsync(EmployeeSession.EmpId, param);
+            switch (commandResult.Code)
             {
-                ModelState.AddModelError(string.Empty, Messages.WrongPassword);
+                case (short)ValidateUserStatus.Success: // OK
+                    await UpdatePassword(model);
+                    break;
+
+                case (short)ValidateUserStatus.Deleted:
+                    ModelState.AddModelError(string.Empty, Messages.DeletedUser);
+                    break;
+
+                case (short)ValidateUserStatus.Disabled:
+                    ModelState.AddModelError(string.Empty, Messages.DisabledUser);
+                    break;
+
+                default: // wrong password
+                    ModelState.AddModelError(string.Empty, Messages.WrongPassword);
+                    break;
             }
+        }
+        else
+        {
+            ModelState.AddModelError(string.Empty, Messages.WrongPassword);
         }
 
         return View(model);
@@ -122,6 +126,7 @@ public class AccountController(
             Password = cryptoService.Encrypt(model.NewPassword, rijndaelKey, rijndaelIV),
             Token = token
         });
+
         if (commandResult.IsSuccessful)
         {
             ViewBag.ChangePwdOK = Messages.ChangePwdOK;

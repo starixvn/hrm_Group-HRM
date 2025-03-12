@@ -51,7 +51,10 @@ public class DepartmentController(IUserControlSession userControlSession,
     public async Task<IActionResult> Create([FromBody] CreateDepartmentViewModel model)
     {
         var commandResult = new CommandResult();
-        if (model == null || !ModelState.IsValid) return new JsonResult(commandResult);
+        if (model == null || !ModelState.IsValid)
+        {
+            return new JsonResult(commandResult);
+        }
 
         var criteria = new InsertDepartmentCriteria
         {
@@ -95,8 +98,10 @@ public class DepartmentController(IUserControlSession userControlSession,
     public async Task<IActionResult> Edit([FromBody] EditDepartmentViewModel model)
     {
         var commandResult = new CommandResult();
-        if (model == null || !ModelState.IsValid) return new JsonResult(commandResult);
-
+        if (model == null || !ModelState.IsValid)
+        {
+            return new JsonResult(commandResult);
+        }
         var criteria = new UpdateDepartmentCriteria
         {
             DepartmentId = model.DepartmentId,
