@@ -1,4 +1,6 @@
-﻿@model HRM.ViewModels.EmployeeWorkFromHome.EmployeeWorkFromHomeViewModel
+﻿@using HRM.Core
+@using HRM.Resources
+@model HRM.ViewModels.EmployeeWorkFromHome.EmployeeWorkFromHomeViewModel
 @{
     var today = DateTime.Today;
     var maxDate = new DateTime(today.Year + 2, 1, 1).AddDays(-1);

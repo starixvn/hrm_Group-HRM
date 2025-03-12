@@ -2,7 +2,6 @@
 
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using Models;
 
 public class CreateDepartmentViewModel
 {
@@ -17,5 +16,5 @@ public class CreateDepartmentViewModel
 
     public bool IsActive { get; set; } = true;
 
-    public IList<Unit> Units { get; set; }
+    public IList<Models.Unit.Unit> Units { get; set; }
 }

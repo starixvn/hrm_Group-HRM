@@ -1,6 +1,8 @@
-﻿@using HRM.Core.Enums
-@using HRM.ViewModels
-@model EmployeeAttendanceViewModel
+﻿@using HRM.Core
+@using HRM.Core.Enums
+@using HRM.Resources
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model HRM.ViewModels.Report.EmployeeAttendanceViewModel
 @{
     ViewBag.Title = @Labels.AttendanceReport;
     var today = DateTime.Today;

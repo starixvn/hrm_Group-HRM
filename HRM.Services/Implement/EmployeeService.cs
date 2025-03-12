@@ -6,7 +6,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Core.Security;
 using Core.XMLExtensions;
-using Criteria;
 using Criteria.AnnualLeave;
 using Criteria.Employee;
 using Criteria.Shift;

@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace HRM.Services;
+namespace HRM.Services.Interfaces;
 
 public interface ILetstalkService
 {

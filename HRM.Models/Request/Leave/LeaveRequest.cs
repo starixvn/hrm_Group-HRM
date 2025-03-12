@@ -1,8 +1,8 @@
-﻿namespace HRM.Models.Request;
-
-using System;
+﻿using System;
 using System.Collections.Generic;
-using Core.Constants;
+using HRM.Core.Constants;
+
+namespace HRM.Models.Request.Leave;
 
 public class LeaveRequest : BaseRequest
 {

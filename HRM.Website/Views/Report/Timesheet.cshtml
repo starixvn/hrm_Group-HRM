@@ -1,5 +1,7 @@
-﻿@using HRM.ViewModels
-@model TimesheetViewModel
+﻿@using HRM.Core
+@using HRM.Resources
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model HRM.ViewModels.Report.TimesheetViewModel
 @{
     ViewBag.Title = "My timesheet";
     var today = DateTimeOffset.Now.DateTime.ToClientTimeZone();

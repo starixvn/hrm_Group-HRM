@@ -1,9 +1,9 @@
-﻿namespace HRM.ViewModels;
-
-using System;
+﻿using System;
 using System.Collections.Generic;
-using Core.Enums;
-using Resources;
+using HRM.Core.Enums;
+using HRM.Resources;
+
+namespace HRM.ViewModels.Report;
 
 public class EmployeeAttendanceModel
 {

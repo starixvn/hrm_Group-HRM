@@ -8,7 +8,7 @@ using HRM.Core.Models;
 using HRM.Core.Services;
 using HRM.Criteria.Request.LateInEarlyOut;
 using HRM.Models.Request;
-using HRM.Repositories;
+using HRM.Repositories.Interfaces;
 using HRM.Resources;
 using HRM.Services.Interfaces;
 using HRM.Services.Interfaces.Request;

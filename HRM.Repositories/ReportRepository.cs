@@ -1,4 +1,6 @@
-﻿namespace HRM.Repositories;
+﻿using HRM.ViewModels.Report;
+
+namespace HRM.Repositories;
 
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +12,6 @@ using Models;
 using HRM.Models.Group;
 using Models.Request;
 using Models.Supervisor;
-using ViewModels;
 
 public partial class ReportRepository : Interfaces.IReportRepository
 {

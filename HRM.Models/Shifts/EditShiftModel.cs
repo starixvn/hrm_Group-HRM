@@ -1,4 +1,4 @@
-﻿namespace HRM.Models;
+﻿namespace HRM.Models.Shifts;
 
 public class EditShiftModel : CreateShiftModel
 {

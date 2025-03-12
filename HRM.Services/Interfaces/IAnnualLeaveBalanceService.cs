@@ -1,8 +1,8 @@
-﻿namespace HRM.Services;
-
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using HRM.Core.Models;
-using Models.AnnualLeaveBalance;
+using HRM.Models.AnnualLeaveBalance;
+
+namespace HRM.Services.Interfaces;
 
 public interface IAnnualLeaveBalanceService
 {

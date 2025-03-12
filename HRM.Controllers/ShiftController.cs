@@ -1,4 +1,7 @@
-﻿namespace HRM.Controllers;
+﻿using HRM.Models.Shifts;
+using HRM.Services.Interfaces;
+
+namespace HRM.Controllers;
 
 using System;
 using System.Threading.Tasks;
@@ -7,8 +10,6 @@ using GO.UserControl.Client.Core.Session;
 using Core.Constants;
 using Core.Enums;
 using Core.Filters;
-using Models;
-using Services;
 using ViewModels.Shifts;
 using Microsoft.AspNetCore.Mvc;
 

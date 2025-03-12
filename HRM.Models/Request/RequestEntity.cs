@@ -1,4 +1,5 @@
 ﻿using HRM.Core;
+using HRM.Models.Shifts;
 
 namespace HRM.Models.Request;
 

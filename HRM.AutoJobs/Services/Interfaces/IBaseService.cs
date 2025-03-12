@@ -1,9 +1,9 @@
-﻿namespace HRM.AutoJobs.Services;
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Fanex.Data.Repository;
+
+namespace HRM.AutoJobs.Services.Interfaces;
 
 public interface IBaseService
 {

@@ -1,16 +1,16 @@
-﻿namespace HRM.Services;
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
-using Core;
-using Core.Enums;
+using HRM.Core;
+using HRM.Core.Enums;
 using HRM.Core.Services;
-using Criteria.Report;
-using Models.Report;
-using Models.Report.Overtime;
+using HRM.Criteria.Report;
+using HRM.Models.Report;
+using HRM.Models.Report.Overtime;
 using Microsoft.AspNetCore.Hosting;
 using OfficeOpenXml;
+
+namespace HRM.Services.Implement.Report;
 
 public interface IWorkingHoursSummaryReportService
 {

@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 public class Team : EntityBase<int>
 {
-    public Section Section { get; set; } = new Section();
+    public Section.Section Section { get; set; } = new Section.Section();
 
     public IEnumerable<TeamManager> Managers { get; set; } = new List<TeamManager>();
 

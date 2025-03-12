@@ -1,5 +1,7 @@
 ﻿using GO.UserControl.Client.Core.Session;
 using HRM.Core.Constants;
+using HRM.Models.Shifts;
+using HRM.Services.Interfaces;
 
 namespace HRM.Services.Implement;
 
@@ -11,7 +13,6 @@ using Core.Enums;
 using HRM.Core.Models;
 using HRM.Core.Services;
 using Criteria.Shift;
-using Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 public class ShiftService(IBaseService baseService,

@@ -1,4 +1,6 @@
-﻿namespace HRM.Controllers;
+﻿using HRM.Services.Interfaces;
+
+namespace HRM.Controllers;
 
 using System;
 using System.Threading.Tasks;
@@ -9,7 +11,6 @@ using Core.Constants;
 using Core.Enums;
 using Core.Filters;
 using Models;
-using Services;
 using Microsoft.AspNetCore.Mvc;
 
 public class HolidayController(

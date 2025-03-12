@@ -1,23 +1,23 @@
-﻿namespace HRM.Services;
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Core;
-using Core.Constants;
-using Core.Enums;
+using HRM.Core;
+using HRM.Core.Constants;
+using HRM.Core.Enums;
 using HRM.Core.Services;
-using Criteria.Report;
-using Models;
-using Models.Report.MonthlyWorkingHours;
-using Models.Request;
-using Repositories;
-using Implement;
-using Implement.Request;
+using HRM.Criteria.Report.MonthlyWorkingHours;
+using HRM.Models;
+using HRM.Models.Report.MonthlyWorkingHours;
+using HRM.Models.Request;
+using HRM.Models.Shifts;
+using HRM.Repositories.Interfaces;
+using HRM.Services.Implement.Request;
 using Microsoft.AspNetCore.Hosting;
 using OfficeOpenXml;
+
+namespace HRM.Services.Implement.Report;
 
 public partial interface IEmployeeWorkingHoursService
 {

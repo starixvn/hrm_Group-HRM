@@ -1,7 +1,7 @@
-﻿namespace HRM.Letstalk.Core.Services;
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+
+namespace HRM.Letstalk.Core.Services.Interfaces;
 
 public interface IHttpClientService
 {

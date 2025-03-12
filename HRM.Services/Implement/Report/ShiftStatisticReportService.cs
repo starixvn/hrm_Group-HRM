@@ -1,10 +1,10 @@
-﻿namespace HRM.Services;
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using HRM.Core.Services;
-using Criteria.Report;
-using Models.Report;
+using HRM.Criteria.Report.ShiftStatistic;
+using HRM.Models.Report.ShiftStatistic;
+
+namespace HRM.Services.Implement.Report;
 
 public interface IShiftStatisticReportService
 {

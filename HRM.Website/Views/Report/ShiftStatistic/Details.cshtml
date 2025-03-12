@@ -1,5 +1,7 @@
-﻿@using HRM.ViewModels
-@model ShiftStatisticDetailViewModel
+﻿@using HRM.Core
+@using HRM.Resources
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model HRM.ViewModels.Report.ShiftStatisticDetailViewModel
 @{
     ViewBag.Title = @Labels.EmployeeShift;
     var shifts = Model.Shifts;

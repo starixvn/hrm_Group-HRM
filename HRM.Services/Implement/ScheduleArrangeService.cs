@@ -1,4 +1,8 @@
-﻿namespace HRM.Services.Implement;
+﻿using HRM.Models.Shifts;
+using HRM.Repositories.Interfaces;
+using HRM.Services.Interfaces;
+
+namespace HRM.Services.Implement;
 
 using System;
 using System.Collections.Generic;
@@ -13,7 +17,6 @@ using Core.XMLExtensions;
 using Criteria.ScheduleArrange;
 using Models;
 using Models.ScheduleArrange;
-using Repositories;
 
 public class ScheduleArrangeService(
     IScheduleArrangeRepository scheduleArrangeRepository,

@@ -1,8 +1,9 @@
-﻿namespace HRM.ViewModels.Shifts;
+﻿using HRM.Models.Shifts;
+
+namespace HRM.ViewModels.Shifts;
 
 using System.Collections.Generic;
 using Core.Enums;
-using Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 public class ShiftByStatusViewModel

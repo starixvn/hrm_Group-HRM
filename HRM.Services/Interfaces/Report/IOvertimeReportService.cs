@@ -1,9 +1,9 @@
-﻿namespace HRM.Services;
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Models.Report.Overtime;
+using HRM.Models.Report.Overtime;
+
+namespace HRM.Services.Interfaces.Report;
 
 public interface IOvertimeReportService
 {

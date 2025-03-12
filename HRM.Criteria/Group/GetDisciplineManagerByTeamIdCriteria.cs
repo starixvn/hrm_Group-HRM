@@ -1,6 +1,6 @@
-﻿namespace HRM.Group;
+﻿using Fanex.Data.Repository;
 
-using Fanex.Data.Repository;
+namespace HRM.Criteria.Group;
 
 public class GetDisciplineManagerByTeamIdCriteria : CriteriaBase
 {

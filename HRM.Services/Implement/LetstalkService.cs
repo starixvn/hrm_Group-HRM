@@ -1,9 +1,11 @@
-﻿namespace HRM.Services.Implement;
+﻿using HRM.Letstalk.Core.Services.Interfaces;
+using HRM.Services.Interfaces;
+
+namespace HRM.Services.Implement;
 
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using HRM.Core.Models;
-using HRM.Letstalk.Core.Services;
 
 public class LetstalkService(
     LetstalkSettings letstalkSettings,

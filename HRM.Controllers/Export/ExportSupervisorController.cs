@@ -5,7 +5,7 @@ using HRM.Core.Constants;
 using HRM.Criteria.Supervisor;
 using HRM.Services.ExportExcel;
 using HRM.Services.Interfaces;
-using HRM.ViewModels;
+using HRM.ViewModels.Report;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HRM.Controllers.Export;

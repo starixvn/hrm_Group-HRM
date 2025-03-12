@@ -1,10 +1,10 @@
-﻿namespace HRM.Services;
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Criteria.Calendar;
-using Models.Report;
-using Models.ScheduleArrange;
+using HRM.Criteria.Calendar;
+using HRM.Models.Report;
+using HRM.Models.ScheduleArrange;
+
+namespace HRM.Services.Interfaces;
 
 public interface IWorkingCalendarService
 {

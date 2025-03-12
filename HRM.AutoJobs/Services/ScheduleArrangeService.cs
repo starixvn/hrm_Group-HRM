@@ -1,4 +1,6 @@
-﻿namespace HRM.AutoJobs.Services;
+﻿using HRM.AutoJobs.Services.Interfaces;
+
+namespace HRM.AutoJobs.Services;
 
 using System;
 using System.Threading.Tasks;

@@ -9,7 +9,6 @@ using HRM.Core.Filters;
 using HRM.Core.Security;
 using HRM.Models;
 using HRM.Resources;
-using HRM.Services;
 using HRM.Services.Implement;
 using HRM.Services.Implement.ActionLog;
 using HRM.Services.Interfaces;

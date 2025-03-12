@@ -1,9 +1,9 @@
-﻿namespace HRM.Services;
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Models.Dashboard;
+using HRM.Models.Dashboard;
+
+namespace HRM.Services.Interfaces;
 
 public interface IDashboardService
 {

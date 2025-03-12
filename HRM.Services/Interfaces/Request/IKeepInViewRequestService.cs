@@ -1,12 +1,12 @@
-﻿namespace HRM.Services;
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Core.Enums;
+using HRM.Core.Enums;
 using HRM.Core.Models;
-using Criteria.Request.KeepInView;
-using Models.Request;
+using HRM.Criteria.Request.KeepInView;
+using HRM.Models.Request;
+
+namespace HRM.Services.Interfaces.Request;
 
 public interface IKeepInViewRequestService
 {

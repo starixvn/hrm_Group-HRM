@@ -1,13 +1,12 @@
-﻿using HRM.Services.Interfaces;
-
-namespace HRM.Services;
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Models;
+using HRM.Models;
+using HRM.Services.Interfaces;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+
+namespace HRM.Services.Implement;
 
 public class AttachFileService(IWebHostEnvironment hostingEnvironment) : IAttachFileService
 {

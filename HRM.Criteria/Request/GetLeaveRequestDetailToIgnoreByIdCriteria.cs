@@ -1,6 +1,6 @@
-﻿namespace HRM.Criteria.Request.Leave;
+﻿using Fanex.Data.Repository;
 
-using Fanex.Data.Repository;
+namespace HRM.Criteria.Request;
 
 public class GetLeaveRequestDetailToIgnoreByIdCriteria : CriteriaBase
 {

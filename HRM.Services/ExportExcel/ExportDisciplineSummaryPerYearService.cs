@@ -1,14 +1,14 @@
-﻿namespace HRM.Services;
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using Models.Report;
-using Resources;
+using HRM.Models.Report.DisciplineSummaryPerYear;
+using HRM.Resources;
 using Microsoft.AspNetCore.Hosting;
 using OfficeOpenXml;
+
+namespace HRM.Services.ExportExcel;
 
 public interface IExportDisciplineSummaryPerYearService
 {

@@ -1,12 +1,13 @@
-﻿namespace HRM.Services;
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Core.Services;
-using Criteria.Discipline;
-using Repositories;
-using Models.Discipline;
+using HRM.Core.Services;
+using HRM.Criteria.Discipline;
+using HRM.Models.Discipline;
+using HRM.Repositories.Interfaces;
+using HRM.Services.Interfaces;
+
+namespace HRM.Services.Implement;
 
 public class DisciplineService(
     IDisciplineRepository disciplineRepository,

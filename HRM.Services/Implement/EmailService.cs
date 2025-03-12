@@ -1,10 +1,10 @@
-﻿namespace HRM.Services;
-
-using System.Threading.Tasks;
-using Core;
+﻿using System.Threading.Tasks;
+using HRM.Core;
 using HRM.Core.Models;
-using Interfaces;
-using MailDeliver;
+using HRM.MailDeliver;
+using HRM.Services.Interfaces;
+
+namespace HRM.Services.Implement;
 
 public class EmailService(AppSettings appSettings, IBaseMailService mailService) : IEmailService
 {

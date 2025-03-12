@@ -1,4 +1,6 @@
-﻿namespace HRM.Controllers.Report;
+﻿using HRM.ViewModels.AnnualLeave;
+
+namespace HRM.Controllers.Report;
 
 using System;
 using System.Collections.Generic;
@@ -7,7 +9,6 @@ using System.Threading.Tasks;
 using Core.Constants;
 using Core.Enums;
 using Core.Filters;
-using Criteria;
 using Criteria.Time;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;

@@ -1,7 +1,7 @@
-﻿namespace HRM.Services;
-
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using HRM.Core.Models;
+
+namespace HRM.Services.Interfaces;
 
 public interface IHRMAuthService
 {

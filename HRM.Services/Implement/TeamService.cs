@@ -8,7 +8,6 @@ using HRM.Core.Services;
 using HRM.Core.XMLExtensions;
 using HRM.Criteria.Group;
 using HRM.Criteria.Supervisor;
-using HRM.Group;
 using HRM.Models;
 using HRM.Models.Group;
 using HRM.Models.Supervisor;

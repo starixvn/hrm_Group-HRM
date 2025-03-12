@@ -1,4 +1,6 @@
-﻿namespace HRM.Controllers.Request;
+﻿using HRM.Models.Shifts;
+
+namespace HRM.Controllers.Request;
 
 using System;
 using System.Collections.Generic;
@@ -12,7 +14,6 @@ using Core.Enums;
 using Core.Filters;
 using HRM.Criteria.Request;
 using Criteria.Supervisor;
-using Models;
 using HRM.Models.Request;
 using Models.Supervisor;
 using Services.Implement;

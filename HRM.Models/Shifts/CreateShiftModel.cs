@@ -1,6 +1,6 @@
-﻿namespace HRM.Models;
+﻿using System.ComponentModel.DataAnnotations;
 
-using System.ComponentModel.DataAnnotations;
+namespace HRM.Models.Shifts;
 
 public class CreateShiftModel
 {

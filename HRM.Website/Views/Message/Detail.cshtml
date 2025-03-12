@@ -1,4 +1,6 @@
-﻿@model HRM.Models.Message.Message
+﻿@using HRM.Core
+@using HRM.Resources
+@model HRM.Models.Message.Message
 @{
     var messageSubject = Model != null ? Model.Subject : Labels.NoData;
     ViewBag.Title = messageSubject + " - " + Labels.Message;

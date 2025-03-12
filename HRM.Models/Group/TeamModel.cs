@@ -8,7 +8,7 @@ public class TeamModel
     public string Code { get; set; }
     public string Name { get; set; }
 
-    public Section Section { get; set; } = new Section();
+    public Section.Section Section { get; set; } = new Section.Section();
 
     public DateTime? CreatedDate { get; set; }
     public DateTime? ModifiedDate { get; set; }

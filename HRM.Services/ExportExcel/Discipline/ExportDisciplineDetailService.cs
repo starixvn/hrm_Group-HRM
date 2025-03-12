@@ -1,14 +1,14 @@
-﻿namespace HRM.Services;
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using Core;
-using Criteria.Discipline;
-using Core.Constants;
+using HRM.Core;
+using HRM.Core.Constants;
+using HRM.Criteria.Discipline;
+using HRM.Models.Discipline;
+using HRM.Resources;
 using Microsoft.AspNetCore.Hosting;
-using Models.Discipline;
-using Resources;
+
+namespace HRM.Services.ExportExcel.Discipline;
 
 [SuppressMessage("Major Code Smell", "S109:Magic numbers should not be used", Justification = "Pending")]
 public class ExportDisciplineDetailService(IWebHostEnvironment hostingEnvironment) : IExportDisciplineDetailService

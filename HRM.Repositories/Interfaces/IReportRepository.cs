@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Fanex.Data.Repository;
 using HRM.Models.Supervisor;
-using HRM.ViewModels;
+using HRM.ViewModels.Report;
 
 namespace HRM.Repositories.Interfaces;
 

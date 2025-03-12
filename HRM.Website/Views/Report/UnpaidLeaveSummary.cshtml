@@ -1,5 +1,7 @@
-﻿@using HRM.ViewModels
-@model LeaveSummaryViewModel
+﻿@using HRM.Core
+@using HRM.Resources
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model HRM.ViewModels.AnnualLeave.LeaveSummaryViewModel
 @{
     ViewBag.Title = Labels.UnpaidLeave;
     var hasPermission = (bool)ViewBag.HasPermission;

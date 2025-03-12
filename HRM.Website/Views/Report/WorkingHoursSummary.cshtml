@@ -1,7 +1,10 @@
-﻿@using HRM.Core.Enums
+﻿@using HRM.Core
+@using HRM.Core.Enums
+@using HRM.Resources
 @using HRM.ViewModels.Report
 @using HRM.ViewModels.Request
 @using HRM.Website.Helper
+@using Microsoft.AspNetCore.Mvc.TagHelpers
 @model WorkingHoursSummaryViewModel
 @{
     var isHR = (bool)ViewBag.IsHR;

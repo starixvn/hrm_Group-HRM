@@ -1,4 +1,6 @@
-﻿namespace HRM.Controllers.Request;
+﻿using HRM.Models.Shifts;
+
+namespace HRM.Controllers.Request;
 
 using System;
 using System.Collections.Generic;
@@ -16,9 +18,7 @@ using HRM.Services.Interfaces.Request;
 using HRM.ViewModels.Request;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Models;
 using Newtonsoft.Json;
-using Services;
 using Services.Interfaces;
 
 public class CheckInOutController(

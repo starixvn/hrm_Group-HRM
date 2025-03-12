@@ -1,4 +1,9 @@
-﻿namespace HRM.Website;
+﻿using HRM.Letstalk.Core.Services.Interfaces;
+using HRM.Services.ExportExcel.Discipline;
+using HRM.Services.ExportExcel.WeekendLeave;
+using HRM.Services.Interfaces.Report;
+
+namespace HRM.Website;
 
 using System;
 using System.Threading.Tasks;
@@ -28,7 +33,6 @@ using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Services;
 using Services.Implement;
 using Services.Interfaces;
 using StackExchange.Redis;

@@ -1,12 +1,13 @@
-﻿namespace HRM.Services;
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using HRM.Core.Models;
 using HRM.Core.Services;
-using Criteria.Holidays;
-using Models;
+using HRM.Criteria.Holidays;
+using HRM.Models;
+using HRM.Services.Interfaces;
+
+namespace HRM.Services.Implement;
 
 public class HolidayService(IBaseService baseService) : IHolidayService
 {

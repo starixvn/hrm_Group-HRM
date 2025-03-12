@@ -8,8 +8,8 @@ using HRM.Core.Constants;
 using HRM.Core.Enums;
 using HRM.Core.Filters;
 using HRM.Models.Report.Overtime;
-using HRM.Services;
 using HRM.Services.Interfaces;
+using HRM.Services.Interfaces.Report;
 using HRM.ViewModels.Report.Overtime;
 using Microsoft.AspNetCore.Mvc;
 

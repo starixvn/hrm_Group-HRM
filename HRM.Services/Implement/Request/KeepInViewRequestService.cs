@@ -1,4 +1,6 @@
-﻿namespace HRM.Services.Implement.Request;
+﻿using HRM.Repositories.Interfaces;
+
+namespace HRM.Services.Implement.Request;
 
 using System;
 using System.Collections.Generic;
@@ -10,7 +12,6 @@ using HRM.Core.Models;
 using HRM.Core.Services;
 using HRM.Criteria.Request.KeepInView;
 using HRM.Models.Request;
-using Repositories;
 using Resources;
 using Interfaces;
 using Microsoft.AspNetCore.Hosting;

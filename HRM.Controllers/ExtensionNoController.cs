@@ -1,4 +1,6 @@
-﻿namespace HRM.Controllers;
+﻿using HRM.Services.Interfaces;
+
+namespace HRM.Controllers;
 
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +15,6 @@ using GO.UserControl.Client.Core.Session;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Models;
-using Services;
 using Services.Implement;
 using ViewModels.ExtensionNumber;
 

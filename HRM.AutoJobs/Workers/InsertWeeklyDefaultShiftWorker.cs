@@ -1,4 +1,6 @@
-﻿namespace HRM.AutoJobs.Workers;
+﻿using HRM.AutoJobs.Services.Interfaces;
+
+namespace HRM.AutoJobs.Workers;
 
 using System;
 using System.Collections.Generic;
@@ -6,7 +8,6 @@ using System.Threading.Tasks;
 using Constants;
 using Helpers;
 using Models;
-using Services;
 using Microsoft.Extensions.Logging;
 
 public class InsertWeeklyDefaultShiftWorker : BaseWorker

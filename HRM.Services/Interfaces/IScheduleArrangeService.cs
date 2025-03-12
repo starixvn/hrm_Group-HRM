@@ -1,11 +1,11 @@
-﻿namespace HRM.Services;
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using HRM.Core.Models;
-using Models;
-using Models.ScheduleArrange;
+using HRM.Models;
+using HRM.Models.ScheduleArrange;
+
+namespace HRM.Services.Interfaces;
 
 public interface IScheduleArrangeService
 {

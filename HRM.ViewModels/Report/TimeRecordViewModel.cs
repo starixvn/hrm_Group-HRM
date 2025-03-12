@@ -1,8 +1,8 @@
-﻿namespace HRM.ViewModels;
-
-using System;
+﻿using System;
 using System.Collections.Generic;
-using Core;
+using HRM.Core;
+
+namespace HRM.ViewModels.Report;
 
 public class TimeRecordViewModel : PagerOptionModel
 {

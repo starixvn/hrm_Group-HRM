@@ -1,7 +1,7 @@
-﻿namespace HRM.ViewModels;
-
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
+
+namespace HRM.ViewModels.Report;
 
 public class EmployeeAttendanceViewModel
 {

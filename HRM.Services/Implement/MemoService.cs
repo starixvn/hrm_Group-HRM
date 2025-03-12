@@ -1,11 +1,12 @@
-﻿namespace HRM.Services;
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using HRM.Core.Models;
 using HRM.Core.Services;
-using Criteria.Memo;
-using Models;
+using HRM.Criteria.Memo;
+using HRM.Models;
+using HRM.Services.Interfaces;
+
+namespace HRM.Services.Implement;
 
 public class MemoService(IBaseService baseService) : IMemoService
 {

@@ -1,7 +1,7 @@
-﻿namespace HRM.Models.Report;
-
-using System;
+﻿using System;
 using System.Collections.Generic;
+
+namespace HRM.Models.Report.DisciplineSummaryPerYear;
 
 public class DisciplineSummaryPerYear
 {

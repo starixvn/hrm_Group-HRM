@@ -1,8 +1,8 @@
-﻿namespace HRM.ViewModels;
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using HRM.Models.Report;
+
+namespace HRM.ViewModels.Calendar;
 
 public class WorkingCalendarViewModel
 {

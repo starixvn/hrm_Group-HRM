@@ -1,8 +1,8 @@
-﻿namespace HRM.Letstalk.Core.Services;
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Models;
+using HRM.Letstalk.Core.Models;
+
+namespace HRM.Letstalk.Core.Services.Interfaces;
 
 public interface ISendNotificationService
 {

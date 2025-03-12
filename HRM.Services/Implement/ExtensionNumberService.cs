@@ -1,11 +1,12 @@
-﻿namespace HRM.Services;
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Core.Services;
 using HRM.Core.Models;
-using Criteria.ExtensionNumber;
-using Models;
+using HRM.Core.Services;
+using HRM.Criteria.ExtensionNumber;
+using HRM.Models;
+using HRM.Services.Interfaces;
+
+namespace HRM.Services.Implement;
 
 public class ExtensionNumberService(IBaseService baseService) : IExtensionNumberService
 {

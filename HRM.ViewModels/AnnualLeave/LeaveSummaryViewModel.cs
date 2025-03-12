@@ -1,7 +1,7 @@
-﻿namespace HRM.ViewModels;
+﻿using System.Collections.Generic;
+using HRM.Models;
 
-using System.Collections.Generic;
-using Models;
+namespace HRM.ViewModels.AnnualLeave;
 
 public class LeaveSummaryViewModel
 {

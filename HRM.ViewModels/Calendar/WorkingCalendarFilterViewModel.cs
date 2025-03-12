@@ -1,6 +1,6 @@
-﻿namespace HRM.ViewModels;
+﻿using System;
 
-using System;
+namespace HRM.ViewModels.Calendar;
 
 public class WorkingCalendarFilterViewModel
 {

@@ -1,8 +1,9 @@
-﻿namespace HRM.ViewModels.Request;
+﻿using HRM.Models.Request.Leave;
+
+namespace HRM.ViewModels.Request;
 
 using System.Collections.Generic;
 using Models;
-using HRM.Models.Request;
 
 public class LeaveDetailViewModel
 {

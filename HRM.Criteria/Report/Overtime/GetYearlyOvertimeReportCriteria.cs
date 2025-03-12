@@ -1,6 +1,6 @@
-﻿namespace HRM.Criteria.Report;
+﻿using Fanex.Data.Repository;
 
-using Fanex.Data.Repository;
+namespace HRM.Criteria.Report.Overtime;
 
 public class GetYearlyOvertimeReportCriteria : CriteriaBase
 {

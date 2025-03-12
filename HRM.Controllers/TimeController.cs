@@ -1,4 +1,6 @@
-﻿namespace HRM.Controllers;
+﻿using HRM.Services.Interfaces;
+
+namespace HRM.Controllers;
 
 using System;
 using System.Linq;
@@ -16,7 +18,6 @@ using Core.Constants;
 using Core.Filters;
 using Criteria.Time;
 using Models;
-using Services;
 using ViewModels.Time;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;

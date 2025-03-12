@@ -1,6 +1,6 @@
-﻿namespace HRM.AutoJobs.Services;
+﻿using System.Threading.Tasks;
 
-using System.Threading.Tasks;
+namespace HRM.AutoJobs.Services.Interfaces;
 
 public interface IGroupReportService
 {

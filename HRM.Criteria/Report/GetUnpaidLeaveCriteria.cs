@@ -1,6 +1,6 @@
-﻿namespace HRM.Criteria;
+﻿using Fanex.Data.Repository;
 
-using Fanex.Data.Repository;
+namespace HRM.Criteria.Report;
 
 public class GetUnpaidLeaveCriteria : CriteriaBase
 {

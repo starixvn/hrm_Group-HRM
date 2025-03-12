@@ -1,18 +1,18 @@
-﻿namespace HRM.Controllers;
-
-using System;
+﻿using System;
 using System.Threading.Tasks;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
-using Core;
-using Core.Constants;
-using Core.Enums;
-using Core.Filters;
+using HRM.Core;
+using HRM.Core.Constants;
+using HRM.Core.Enums;
+using HRM.Core.Filters;
 using HRM.Models.Report.MonthlyWorkingHours;
-using Resources;
-using Services;
+using HRM.Resources;
+using HRM.Services.Implement.Report;
 using HRM.ViewModels.Report.WorkingHours;
 using Microsoft.AspNetCore.Mvc;
+
+namespace HRM.Controllers.Report;
 
 [HrmPermission(Policy.Read, FunctionKey.AttendanceWeeklyReport)]
 public class WeeklyWorkingHoursController(

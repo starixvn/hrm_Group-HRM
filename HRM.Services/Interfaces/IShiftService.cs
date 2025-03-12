@@ -1,11 +1,11 @@
-﻿namespace HRM.Services;
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using HRM.Core.Models;
-using Models;
+using HRM.Models.Shifts;
 using Microsoft.AspNetCore.Mvc.Rendering;
+
+namespace HRM.Services.Interfaces;
 
 public interface IShiftService
 {

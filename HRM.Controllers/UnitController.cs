@@ -4,10 +4,10 @@ using GO.UserControl.Client.Core.Session;
 using HRM.Core.Constants;
 using HRM.Core.Filters;
 using HRM.Criteria.Unit;
-using HRM.Services;
 using HRM.ViewModels.Unit;
 using Microsoft.AspNetCore.Mvc;
 using HRM.Core.Models;
+using HRM.Services.Interfaces;
 
 namespace HRM.Controllers;
 

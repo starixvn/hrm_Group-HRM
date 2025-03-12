@@ -1,9 +1,9 @@
-﻿namespace HRM.Services;
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using HRM.Core.Models;
-using Models;
+using HRM.Models;
+
+namespace HRM.Services.Interfaces;
 
 public interface IMemoService
 {

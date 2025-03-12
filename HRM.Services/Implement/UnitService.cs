@@ -6,7 +6,8 @@ using HRM.Core.Constants;
 using HRM.Core.Models;
 using HRM.Core.Services;
 using HRM.Criteria.Unit;
-using HRM.Models;
+using HRM.Models.Unit;
+using HRM.Services.Interfaces;
 
 namespace HRM.Services.Implement;
 

@@ -1,9 +1,10 @@
-﻿namespace HRM.Repositories.Interfaces;
+﻿using HRM.Models.Section;
+
+namespace HRM.Repositories.Interfaces;
 
 using System.Collections.Generic;
 using Fanex.Data.Repository;
 using Criteria.Section;
-using Models;
 using System.Threading.Tasks;
 
 public interface ISectionRepository

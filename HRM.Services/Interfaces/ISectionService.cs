@@ -1,9 +1,10 @@
-﻿namespace HRM.Services.Interfaces;
+﻿using HRM.Models.Section;
+
+namespace HRM.Services.Interfaces;
 
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using HRM.Core.Models;
-using Models;
 
 public interface ISectionService
 {

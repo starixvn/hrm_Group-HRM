@@ -5,7 +5,7 @@ using GO.UserControl.Client.Core.Session;
 using HRM.Criteria.Employee;
 using HRM.Services.ExportExcel.Employee;
 using HRM.Services.Interfaces;
-using HRM.ViewModels;
+using HRM.ViewModels.Employee;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HRM.Controllers.Export;

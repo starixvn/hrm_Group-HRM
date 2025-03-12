@@ -1,4 +1,7 @@
-﻿namespace HRM.AutoJobs;
+﻿using HRM.AutoJobs.Services.Interfaces;
+using HRM.Letstalk.Core.Services.Interfaces;
+
+namespace HRM.AutoJobs;
 
 using System.Collections.Generic;
 using System.Net;

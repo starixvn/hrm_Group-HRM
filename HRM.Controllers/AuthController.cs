@@ -1,4 +1,6 @@
-﻿namespace HRM.Controllers;
+﻿using HRM.Services.Interfaces;
+
+namespace HRM.Controllers;
 
 using System;
 using System.Collections.Generic;
@@ -15,7 +17,6 @@ using HRM.Core.Services;
 using Criteria.CompanySite;
 using Criteria.SystemSetting;
 using Models;
-using Services;
 using ViewModels.Employee;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;

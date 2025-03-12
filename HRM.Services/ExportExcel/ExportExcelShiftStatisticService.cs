@@ -1,13 +1,13 @@
-﻿namespace HRM.Services;
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using Models.Report;
+using HRM.Models.Report.ShiftStatistic;
 using Microsoft.AspNetCore.Hosting;
 using OfficeOpenXml;
+
+namespace HRM.Services.ExportExcel;
 
 public interface IExportExcelShiftStatisticService
 {

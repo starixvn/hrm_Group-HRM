@@ -1,4 +1,7 @@
-﻿namespace HRM.Controllers.Report;
+﻿using HRM.Services.ExportExcel;
+using HRM.ViewModels.Report;
+
+namespace HRM.Controllers.Report;
 
 using System;
 using System.Linq;
@@ -7,9 +10,7 @@ using GO.UserControl.Client.Core.Session;
 using Core;
 using Core.Constants;
 using HRM.Criteria.Report;
-using Services;
 using Services.Interfaces;
-using ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 [Route("report/attendance")]

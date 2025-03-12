@@ -1,16 +1,16 @@
-﻿namespace HRM.Services;
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using Core.Constants;
-using Core.Enums;
-using Models.Report.MonthlyWorkingHours;
-using Resources;
+using HRM.Core.Constants;
+using HRM.Core.Enums;
+using HRM.Models.Report.MonthlyWorkingHours;
+using HRM.Resources;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
+
+namespace HRM.Services.Implement.Report;
 
 public partial interface IEmployeeWorkingHoursService
 {

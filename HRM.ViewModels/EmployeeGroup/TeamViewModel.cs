@@ -48,7 +48,7 @@ public class TeamViewModel
     [Display(Name = nameof(Labels.TeamLeader), ResourceType = typeof(Labels))]
     public string LeaderIds { get; set; }
 
-    public IList<Section> Sections { get; set; }
+    public IList<Models.Section.Section> Sections { get; set; }
 
     public IList<Employee> Employees { get; set; }
 

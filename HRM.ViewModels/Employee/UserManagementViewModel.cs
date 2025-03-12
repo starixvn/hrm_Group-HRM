@@ -1,7 +1,7 @@
-﻿namespace HRM.ViewModels;
-
+﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using System.Collections.Generic;
+
+namespace HRM.ViewModels.Employee;
 
 public class UserManagementViewModel : PagerOptionModel
 {

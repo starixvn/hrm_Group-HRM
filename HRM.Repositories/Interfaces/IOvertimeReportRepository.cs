@@ -1,10 +1,10 @@
-﻿namespace HRM.Repositories;
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Fanex.Data.Repository;
-using Models.Report.Overtime;
+using HRM.Models.Report.Overtime;
+
+namespace HRM.Repositories.Interfaces;
 
 public interface IOvertimeReportRepository
 {

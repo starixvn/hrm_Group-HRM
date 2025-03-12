@@ -1,10 +1,11 @@
-﻿namespace HRM.Services;
-
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using HRM.Core.Models;
 using HRM.Core.Services;
-using Criteria.AnnualLeave;
-using Models.AnnualLeaveBalance;
+using HRM.Criteria.AnnualLeave;
+using HRM.Models.AnnualLeaveBalance;
+using HRM.Services.Interfaces;
+
+namespace HRM.Services.Implement;
 
 public class AnnualLeaveBalanceService(IBaseService baseService) : IAnnualLeaveBalanceService
 {

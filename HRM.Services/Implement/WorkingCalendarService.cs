@@ -1,11 +1,12 @@
-﻿namespace HRM.Services;
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Criteria.Calendar;
-using Models.Report;
-using Models.ScheduleArrange;
-using Repositories;
+using HRM.Criteria.Calendar;
+using HRM.Models.Report;
+using HRM.Models.ScheduleArrange;
+using HRM.Repositories.Interfaces;
+using HRM.Services.Interfaces;
+
+namespace HRM.Services.Implement;
 
 public class WorkingCalendarService(IWorkingCalendarRepository workingCalendarRepository) : IWorkingCalendarService
 {

@@ -1,4 +1,7 @@
-﻿namespace HRM.Repositories;
+﻿using HRM.Models.Request.Leave;
+using HRM.Repositories.Interfaces;
+
+namespace HRM.Repositories;
 
 using System.Collections.Generic;
 using System.Linq;

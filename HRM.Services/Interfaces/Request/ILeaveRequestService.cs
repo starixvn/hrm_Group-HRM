@@ -7,6 +7,7 @@ using HRM.Criteria.Request;
 using HRM.Criteria.Request.Leave;
 using HRM.Models;
 using HRM.Models.Request;
+using HRM.Models.Request.Leave;
 
 namespace HRM.Services.Interfaces.Request;
 

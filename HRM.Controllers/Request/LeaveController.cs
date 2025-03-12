@@ -1,4 +1,6 @@
-﻿namespace HRM.Controllers.Request;
+﻿using HRM.Models.Request.Leave;
+
+namespace HRM.Controllers.Request;
 
 using System;
 using System.Collections.Generic;

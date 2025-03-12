@@ -1,7 +1,7 @@
-﻿namespace HRM.AutoJobs.Services;
+﻿using System.Threading.Tasks;
+using HRM.AutoJobs.Models.MailDeliver;
 
-using System.Threading.Tasks;
-using Models.MailDeliver;
+namespace HRM.AutoJobs.Services.Interfaces;
 
 public interface IBaseMailService
 {

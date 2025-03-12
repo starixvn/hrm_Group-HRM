@@ -1,9 +1,9 @@
-﻿namespace HRM.Services;
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Criteria.Discipline;
-using Models.Discipline;
+using HRM.Criteria.Discipline;
+using HRM.Models.Discipline;
+
+namespace HRM.Services.Interfaces;
 
 public interface IDisciplineService
 {

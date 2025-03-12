@@ -1,7 +1,7 @@
-﻿namespace HRM.ViewModels;
+﻿using System.Collections.Generic;
+using HRM.Models.Report.ShiftStatistic;
 
-using System.Collections.Generic;
-using HRM.Models.Report;
+namespace HRM.ViewModels.Report;
 
 public class ShiftStatisticViewModel : GetShiftStatisticParam
 {

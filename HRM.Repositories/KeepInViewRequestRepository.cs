@@ -1,4 +1,6 @@
-﻿namespace HRM.Repositories;
+﻿using HRM.Repositories.Interfaces;
+
+namespace HRM.Repositories;
 
 using System.Collections.Generic;
 using System.Linq;

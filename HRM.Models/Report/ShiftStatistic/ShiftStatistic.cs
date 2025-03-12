@@ -1,6 +1,6 @@
-﻿namespace HRM.Models.Report;
+﻿using System;
 
-using System;
+namespace HRM.Models.Report.ShiftStatistic;
 
 public class ShiftStatistic
 {

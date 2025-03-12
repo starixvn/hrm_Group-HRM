@@ -1,4 +1,4 @@
-﻿namespace HRM.Core.Model;
+﻿namespace HRM.Core.Models;
 
 public class SortModel
 {

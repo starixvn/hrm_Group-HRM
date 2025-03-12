@@ -1,6 +1,8 @@
 ﻿@using HRM.Core.Enums
+@using HRM.Resources
 @using HRM.ViewModels.Overtime
 @using HRM.Website.Helper
+@using Microsoft.AspNetCore.Mvc.TagHelpers
 @model EditMonthlyRequestViewModel
 @{
     ViewBag.Title = Model.MonthlyRequest.Requester.Nickname + "'s Overtime Request in " + Model.MonthlyRequest.Month.ToString("MMM-yyyy");

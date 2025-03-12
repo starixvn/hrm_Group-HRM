@@ -1,4 +1,6 @@
-﻿namespace HRM.Letstalk.Core.Services;
+﻿using HRM.Letstalk.Core.Services.Interfaces;
+
+namespace HRM.Letstalk.Core.Services;
 
 using System;
 using System.Collections.Generic;

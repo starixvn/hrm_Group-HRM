@@ -1,9 +1,9 @@
-﻿namespace HRM.Repositories;
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Fanex.Data.Repository;
-using Models.Discipline;
+using HRM.Models.Discipline;
+
+namespace HRM.Repositories.Interfaces;
 
 public interface IDisciplineRepository
 {

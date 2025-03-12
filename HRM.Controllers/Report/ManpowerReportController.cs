@@ -1,15 +1,15 @@
-﻿namespace HRM.Controllers;
-
-using System;
+﻿using System;
 using System.Threading.Tasks;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
-using Core;
-using Core.Constants;
-using Core.Filters;
-using Services;
+using HRM.Core;
+using HRM.Core.Constants;
+using HRM.Core.Filters;
+using HRM.Services.Implement.Report;
 using HRM.ViewModels.Report;
 using Microsoft.AspNetCore.Mvc;
+
+namespace HRM.Controllers.Report;
 
 public class ManpowerReportController(
     IUserControlSession userControlSession,

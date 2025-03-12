@@ -1,4 +1,6 @@
-﻿namespace HRM.Controllers;
+﻿using HRM.ViewModels.Calendar;
+
+namespace HRM.Controllers;
 
 using System;
 using System.Linq;
@@ -9,7 +11,6 @@ using Core;
 using Core.Constants;
 using Core.Filters;
 using Criteria.Calendar;
-using Services;
 using Services.Interfaces;
 using ViewModels;
 using Microsoft.AspNetCore.Mvc;

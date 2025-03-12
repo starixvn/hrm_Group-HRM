@@ -1,4 +1,6 @@
-﻿namespace HRM.Criteria.Request.Leave;
+﻿using HRM.Models.Request.Leave;
+
+namespace HRM.Criteria.Request.Leave;
 
 using System;
 using System.Collections.Generic;
@@ -7,7 +9,6 @@ using Fanex.Data;
 using Fanex.Data.Repository;
 using Core.Constants;
 using Core.Enums;
-using HRM.Models.Request;
 
 public abstract class BaseLeaveRequestCriteria : CriteriaBase
 {

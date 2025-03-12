@@ -1,4 +1,6 @@
-﻿using HRM.Services.Interfaces;
+﻿using HRM.Criteria.Report;
+using HRM.Services.Interfaces;
+using HRM.ViewModels.AnnualLeave;
 
 namespace HRM.Controllers.Export;
 
@@ -6,9 +8,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using GO.UserControl.Client.Core.Session;
-using Criteria;
 using Criteria.AnnualLeave;
-using ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Services.ExportExcel;
 

@@ -1,8 +1,8 @@
-﻿namespace HRM.Services;
+﻿using System.Collections.Generic;
+using HRM.Criteria.Discipline;
+using HRM.Models.Discipline;
 
-using Criteria.Discipline;
-using Models.Discipline;
-using System.Collections.Generic;
+namespace HRM.Services.ExportExcel.Discipline;
 
 public interface IExportDisciplineSummaryService
 {

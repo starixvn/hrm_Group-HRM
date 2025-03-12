@@ -1,6 +1,7 @@
-﻿@using HRM.ViewModels
+﻿@using HRM.Core
+@using HRM.Resources
 @using HRM.Website.Helper
-@model ShiftStatisticViewModel
+@model HRM.ViewModels.Report.ShiftStatisticViewModel
 @{
     var totalDays = (int)(Model.ToDate - Model.FromDate).TotalDays + 1;
     var totals = new int[totalDays];

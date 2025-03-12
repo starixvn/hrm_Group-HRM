@@ -1,10 +1,11 @@
-﻿@using HRM.Core.Enums
-@using HRM.Models
+﻿@using HRM.Core
+@using HRM.Core.Enums
 @using HRM.Models.Request
+@using HRM.Models.Shifts
+@using HRM.Resources
 @using HRM.Services.Implement.Request
-@using HRM.ViewModels
 @using HRM.Website.Helper
-@model IEnumerable<EmployeeAttendanceModel>
+@model IEnumerable<HRM.ViewModels.Report.EmployeeAttendanceModel>
 
 <table id="data" class="table table-custom">
     <thead>

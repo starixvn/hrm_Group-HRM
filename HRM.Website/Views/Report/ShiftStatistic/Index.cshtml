@@ -1,6 +1,8 @@
-﻿@using HRM.ViewModels
+﻿@using HRM.Core
+@using HRM.Resources
+@using Microsoft.AspNetCore.Mvc.TagHelpers
 
-@model ShiftStatisticViewModel
+@model HRM.ViewModels.Report.ShiftStatisticViewModel
 @{
     ViewBag.Title = @Labels.ShiftStatisticReport;
     var today = DateTime.Today;

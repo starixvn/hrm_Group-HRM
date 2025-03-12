@@ -1,4 +1,4 @@
-﻿namespace HRM.Models;
+﻿namespace HRM.Models.Overtime;
 
 public class OvertimeDailyReport
 {

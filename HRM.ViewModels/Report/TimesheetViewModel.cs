@@ -1,4 +1,4 @@
-﻿namespace HRM.ViewModels;
+﻿namespace HRM.ViewModels.Report;
 
 public class TimesheetViewModel
 {

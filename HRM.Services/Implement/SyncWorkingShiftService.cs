@@ -1,6 +1,4 @@
-﻿namespace HRM.Services;
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -9,10 +7,12 @@ using System.Threading.Tasks;
 using Fanex.Logging;
 using HRM.Core.Models;
 using HRM.Core.Services;
-using Core.XMLExtensions;
-using Criteria.ScheduleArrange;
-using Models.SyncData;
+using HRM.Core.XMLExtensions;
+using HRM.Criteria.ScheduleArrange;
+using HRM.Models.SyncData;
 using Newtonsoft.Json;
+
+namespace HRM.Services.Implement;
 
 public interface ISyncWorkingShiftService
 {

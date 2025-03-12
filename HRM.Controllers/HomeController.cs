@@ -1,4 +1,6 @@
-﻿namespace HRM.Controllers;
+﻿using HRM.Services.Interfaces;
+
+namespace HRM.Controllers;
 
 using System;
 using System.Threading.Tasks;
@@ -7,7 +9,6 @@ using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Services;
 using GO.UserControl.Client.Core.Session;
 using Core;
-using Services;
 using ViewModels.Dashboard;
 using Microsoft.AspNetCore.Mvc;
 

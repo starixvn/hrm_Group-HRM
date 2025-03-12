@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using HRM.Criteria;
 using HRM.Criteria.AnnualLeave;
 using HRM.Criteria.Report;
 using HRM.Criteria.Supervisor;
@@ -8,7 +7,7 @@ using HRM.Criteria.Time;
 using HRM.Models;
 using HRM.Models.Report;
 using HRM.Models.Supervisor;
-using HRM.ViewModels;
+using HRM.ViewModels.Report;
 
 namespace HRM.Services.Interfaces;
 

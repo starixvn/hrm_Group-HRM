@@ -1,4 +1,4 @@
-﻿namespace HRM.Models;
+﻿namespace HRM.Models.Section;
 
 public class Section : EntityBase<int>
 {

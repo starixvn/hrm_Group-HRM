@@ -1,4 +1,6 @@
-﻿namespace HRM.Services.Implement;
+﻿using HRM.Models.Section;
+
+namespace HRM.Services.Implement;
 
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -7,7 +9,6 @@ using HRM.Core.Models;
 using HRM.Core.Services;
 using HRM.Repositories.Interfaces;
 using Interfaces;
-using Models;
 using Core.Constants;
 using GO.UserControl.Client.Core.Session;
 

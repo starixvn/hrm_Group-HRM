@@ -1,18 +1,19 @@
-﻿namespace HRM.Controllers;
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
-using Core.Constants;
-using Core.Filters;
+using HRM.Core.Constants;
+using HRM.Core.Filters;
 using HRM.Models.Report;
 using HRM.Models.Report.Overtime;
-using Services;
-using Services.Interfaces;
+using HRM.Services.Implement.Report;
+using HRM.Services.Interfaces;
+using HRM.Services.Interfaces.Report;
 using HRM.ViewModels.Report;
 using Microsoft.AspNetCore.Mvc;
+
+namespace HRM.Controllers.Report;
 
 [HrmPermission(Policy.Read, FunctionKey.AttendanceStatisticReport)]
 public class WorkingHoursSummaryReportController(

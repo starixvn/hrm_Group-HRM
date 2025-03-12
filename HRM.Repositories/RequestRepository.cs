@@ -1,4 +1,7 @@
-﻿namespace HRM.Repositories;
+﻿using HRM.Models.Section;
+using HRM.Models.Shifts;
+
+namespace HRM.Repositories;
 
 using System;
 using System.Collections.Generic;

@@ -1,14 +1,14 @@
-﻿namespace HRM.Services;
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Xml;
 using HRM.Core.Services;
-using Criteria.Log;
-using Models.Log;
+using HRM.Criteria.Log;
+using HRM.Models.Log;
+
+namespace HRM.Services.Implement.ActionLog;
 
 public interface IActionLogService
 {

@@ -1,17 +1,17 @@
-﻿namespace HRM.Services;
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using GO.UserControl.Client.Core.Session;
-using Core.Constants;
+using HRM.Core.Constants;
 using HRM.Core.Services;
-using Criteria.Report;
-using Models.Report;
+using HRM.Criteria.Report;
+using HRM.Models.Report;
 using Microsoft.AspNetCore.Hosting;
 using OfficeOpenXml;
+
+namespace HRM.Services.Implement.Report;
 
 public interface IManpowerReportService
 {

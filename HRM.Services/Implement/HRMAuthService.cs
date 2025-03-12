@@ -1,11 +1,12 @@
-﻿namespace HRM.Services;
-
-using System.Threading.Tasks;
-using Core.Enums;
+﻿using System.Threading.Tasks;
+using HRM.Core.Enums;
 using HRM.Core.Models;
-using Core.Security;
+using HRM.Core.Security;
 using HRM.Core.Services;
-using Criteria.Auth;
+using HRM.Criteria.Auth;
+using HRM.Services.Interfaces;
+
+namespace HRM.Services.Implement;
 
 public class HRMAuthService(IBaseService baseService) : IHRMAuthService
 {

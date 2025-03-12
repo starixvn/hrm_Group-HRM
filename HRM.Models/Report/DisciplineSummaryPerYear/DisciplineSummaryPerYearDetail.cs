@@ -1,4 +1,4 @@
-﻿namespace HRM.Models.Report;
+﻿namespace HRM.Models.Report.DisciplineSummaryPerYear;
 
 public class DisciplineSummaryPerYearDetail
 {

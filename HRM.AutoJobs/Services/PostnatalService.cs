@@ -1,4 +1,6 @@
-﻿namespace HRM.AutoJobs.Services;
+﻿using HRM.AutoJobs.Services.Interfaces;
+
+namespace HRM.AutoJobs.Services;
 
 using System.Threading.Tasks;
 using Criteria.Postnatal;

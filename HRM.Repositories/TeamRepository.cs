@@ -1,4 +1,6 @@
-﻿namespace HRM.Repositories;
+﻿using HRM.Models.Section;
+
+namespace HRM.Repositories;
 
 using System.Collections.Generic;
 using System.Linq;

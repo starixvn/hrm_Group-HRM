@@ -1,9 +1,9 @@
-﻿namespace HRM.Repositories;
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Fanex.Data.Repository;
-using Models.Report.MonthlyWorkingHours;
+using HRM.Models.Report.MonthlyWorkingHours;
+
+namespace HRM.Repositories.Interfaces;
 
 public interface IEmployeeWorkingHoursRepository
 {

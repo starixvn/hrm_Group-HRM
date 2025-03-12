@@ -1,7 +1,7 @@
-﻿namespace HRM.Criteria.Report;
-
-using System;
+﻿using System;
 using Fanex.Data.Repository;
+
+namespace HRM.Criteria.Report.Overtime;
 
 public class GetDailyOvertimeReportCriteria : CriteriaBase
 {

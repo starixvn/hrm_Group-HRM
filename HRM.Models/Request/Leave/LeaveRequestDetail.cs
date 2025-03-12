@@ -1,6 +1,6 @@
-﻿namespace HRM.Models.Request;
+﻿using System;
 
-using System;
+namespace HRM.Models.Request.Leave;
 
 public class LeaveRequestDetail
 {

@@ -1,9 +1,9 @@
-﻿namespace HRM.ViewModels;
-
-using System;
-using Core;
-using Models;
+﻿using System;
+using HRM.Core;
+using HRM.Models;
 using HRM.Models.Request;
+
+namespace HRM.ViewModels.Report;
 
 public class EmployeeAttendanceRequest
 {
