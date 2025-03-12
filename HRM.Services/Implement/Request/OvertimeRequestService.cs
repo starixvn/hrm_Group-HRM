@@ -99,9 +99,11 @@ public class OvertimeRequestService(
 
     public async Task<MonthlyOvertimeRequest> GetMonthlyRequestDetailsById(long requestId)
     {
+        var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
         var criteria = new GetMonthlyOvertimeRequestDetailsByIdCriteria
         {
-            RequestId = requestId
+            RequestId = requestId,
+            CompanyId = companyId
         };
         var monthlyRequest = await overtimeRepository.GetMonthlyRequestDetailsByEmployeeId(criteria);
 
