@@ -53,7 +53,8 @@ public class DisciplineController(
             EmployeeId = model.EmployeeId,
             ReasonId = model.ReasonId,
             ApproverId = EmployeeSession.EmpId,
-            IsShowAll = model.IsShowAll
+            IsShowAll = model.IsShowAll,
+            CompanyId = CurrentCompanyId
         };
 
         var disciplines = await disciplineService.GetDisciplineSummaryAsync(criteria);
@@ -98,7 +99,8 @@ public class DisciplineController(
             EmployeeId = model.EmployeeId,
             ReasonId = model.ReasonId,
             HasIgnored = model.HasIgnored,
-            ApproverId = EmployeeSession.EmpId
+            ApproverId = EmployeeSession.EmpId,
+            CompanyId = CurrentCompanyId
         };
 
         var disciplines = await disciplineService.GetDisciplineDetailAsync(criteria);

@@ -27,7 +27,6 @@ public class SectionController(
     ISectionService sectionService,
     IBaseService baseService) : BaseController(userControlSession)
 {
-    private readonly int currentCompanyId = userControlSession.Get<int>(SessionKey.CurrentCompanyId);
 
     [HrmPermission(Policy.Read, FunctionKey.SectionManagement)]
     public ActionResult Index()

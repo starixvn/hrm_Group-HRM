@@ -28,6 +28,8 @@
         [SpParam(Ignored = true)]
         public string TeamName { get; set; }
 
+        public short CompanyId { get; set; }
+
         public override bool IsValid() => FromDate <= ToDate && ApproverId > 0;
 
         public override string GetSettingKey() => "Report_DisciplineDetail";

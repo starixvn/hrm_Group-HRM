@@ -35,13 +35,12 @@ public class LateInEarlyOutController(
         var tempYear = year ?? DateTimeOffset.Now.DateTime.ToClientTimeZone().Year;
         ViewBag.Year = tempYear;
         var fromDate = new DateTimeOffset(tempYear, 1, 1, 0, 0, 0, TimeSpan.Zero).Date;
-        var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
         var criteria = new GetLateInEarlyOutRequestByDateCriteria
         {
             EmpId = EmployeeSession.EmpId,
             FromDate = fromDate,
             ToDate = fromDate.AddYears(1).AddDays(-1),
-            CompanyId = companyId
+            CompanyId = CurrentCompanyId
         };
         var requests = await lateInEarlyOutRequestService.GetByDateAsync(criteria);
         foreach (var request in requests)

@@ -240,7 +240,6 @@ public class RequestController(
         }
 
         bool? isLocal = null;
-        var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
         var criteria = new GetRequestCriteria
         {
             EmpId = employeeId,
@@ -254,7 +253,7 @@ public class RequestController(
             SupervisorId = EmployeeSession.EmpId,
             IsLocal = request.IsLocal.HasValue ? (request.IsLocal.Value == 1) : isLocal,
             LeaveTypeId = request.LeaveType,
-            CompanyId = companyId
+            CompanyId = CurrentCompanyId
         };
 
         var requestList = await requestService.GetRequests(criteria);

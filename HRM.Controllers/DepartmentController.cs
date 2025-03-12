@@ -18,7 +18,6 @@ public class DepartmentController(IUserControlSession userControlSession,
     IUnitService unitService,
     IBaseService baseService) : BaseController(userControlSession)
 {
-    private readonly int currentCompanyId = userControlSession.Get<int>(SessionKey.CurrentCompanyId);
 
     [HrmPermission(Policy.Read, FunctionKey.DepartmentManagement)]
     public ActionResult Index()

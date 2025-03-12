@@ -42,13 +42,12 @@ public class ChangeShiftController(
         var tempYear = year ?? DateTimeOffset.Now.Year;
         var fromDate = new DateTimeOffset(tempYear, 1, 1, 0, 0, 0, TimeSpan.Zero).Date;
         var toDate = fromDate.AddYears(1).AddDays(-1).Date.ToEndOfDay();
-        var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
         var criteria = new GetChangeShiftRequestByEmployeeCriteria
         {
             EmployeeId = EmployeeSession.EmpId,
             FromDate = fromDate,
             ToDate = toDate,
-            CompanyId = companyId
+            CompanyId = CurrentCompanyId
         };
         var requests = await changeShiftService.GetByEmployeeAsync(criteria);
         foreach (var request in requests)
