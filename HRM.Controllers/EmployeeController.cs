@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
@@ -33,6 +32,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Hosting.Internal;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using SixLabors.ImageSharp;
 
 namespace HRM.Controllers;
 
@@ -371,8 +371,8 @@ public class EmployeeController(
         await file.CopyToAsync(stream);
         stream.Seek(0, SeekOrigin.Begin);
 
-        using var image = Image.FromStream(stream);
-        image.Save(avatarPath, format: System.Drawing.Imaging.ImageFormat.Jpeg);
+        using var image = await Image.LoadAsync(stream);
+        await image.SaveAsJpegAsync(avatarPath);
 
         return Json(null);
     }
