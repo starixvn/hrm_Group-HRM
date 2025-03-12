@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
+using NPOI.HPSF;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -40,7 +41,6 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
 app.UseStaticFiles();
 var staticFilesPath = Path.Combine(Directory.GetCurrentDirectory(), "file");
 if (Directory.Exists(staticFilesPath))
@@ -60,4 +60,6 @@ app.MapControllerRoute(
     "default",
     "{controller=Home}/{action=Index}/{id?}");
 
+app.Urls.Add("http://*:5000");
+app.Urls.Add("https://*:5000");
 await app.RunAsync();
