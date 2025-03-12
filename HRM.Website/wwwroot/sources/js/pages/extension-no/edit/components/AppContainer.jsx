@@ -112,7 +112,6 @@ const AppContainer = () => {
 
     const handleSubmit = (values, { setSubmitting }) => {
         setSubmitting(true);
-
         const model = {
             fullName: values.FullName,
             nickName: values.NickName,
