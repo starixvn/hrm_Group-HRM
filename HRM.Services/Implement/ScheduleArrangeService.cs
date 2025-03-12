@@ -1,23 +1,25 @@
-﻿namespace HRM.Services;
+﻿namespace HRM.Services.Implement;
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using HRM.Core;
-using HRM.Core.Constants;
+using Core;
+using Core.Constants;
 using HRM.Core.Models;
 using HRM.Core.Services;
-using HRM.Core.XMLExtensions;
-using HRM.Criteria.ScheduleArrange;
-using HRM.Models;
-using HRM.Models.ScheduleArrange;
-using HRM.Repositories;
+using GO.UserControl.Client.Core.Session;
+using Core.XMLExtensions;
+using Criteria.ScheduleArrange;
+using Models;
+using Models.ScheduleArrange;
+using Repositories;
 
 public class ScheduleArrangeService(
     IScheduleArrangeRepository scheduleArrangeRepository,
     IBaseService baseService,
-    IShiftService shiftService) : IScheduleArrangeService
+    IShiftService shiftService,
+    IUserControlSession userControlSession) : IScheduleArrangeService
 {
     public async Task<IEnumerable<EmployeeSuggestion>> GetEmployeesAsync(GetEmployeeFilter filter)
     {
@@ -35,6 +37,7 @@ public class ScheduleArrangeService(
     public async Task<IEnumerable<WeeklySchedule>> GetWeeklyScheduleAsync(WeeklyScheduleFilter filter)
     {
         bool? isLocal = null;
+        var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
         var criteria = new GetWeeklyScheduleCriteria
         {
             ActorId = filter.ActorId,
@@ -43,7 +46,8 @@ public class ScheduleArrangeService(
             EmpId = filter.EmployeeId,
             TeamIds = filter.TeamIds,
             IsIFrame = filter.IsIFrame,
-            IsLocal = filter.IsLocal.HasValue ? (filter.IsLocal.Value == 1) : isLocal
+            IsLocal = filter.IsLocal.HasValue ? (filter.IsLocal.Value == 1) : isLocal,
+            CompanyId = companyId
         };
 
         var weeklySchedules = await scheduleArrangeRepository.GetWeeklyScheduleAsync(criteria);
