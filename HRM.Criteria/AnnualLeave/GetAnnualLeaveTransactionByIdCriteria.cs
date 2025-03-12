@@ -1,13 +1,12 @@
-﻿namespace HRM.Criteria.AnnualLeave
+﻿namespace HRM.Criteria.AnnualLeave;
+
+using Fanex.Data.Repository;
+
+public class GetAnnualLeaveTransactionByIdCriteria : CriteriaBase
 {
-    using Fanex.Data.Repository;
+    public long LeaveTransId { get; set; }
 
-    public class GetAnnualLeaveTransactionByIdCriteria : CriteriaBase
-    {
-        public long LeaveTransId { get; set; }
+    public override string GetSettingKey() => "AnnualLeave_GetByID";
 
-        public override string GetSettingKey() => "AnnualLeave_GetByID";
-
-        public override bool IsValid() => LeaveTransId > 0;
-    }
+    public override bool IsValid() => LeaveTransId > 0;
 }

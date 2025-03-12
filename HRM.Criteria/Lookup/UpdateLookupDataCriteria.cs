@@ -1,23 +1,22 @@
-﻿namespace HRM.Criteria.Lookup
+﻿namespace HRM.Criteria.Lookup;
+
+using Fanex.Data.Repository;
+
+public class UpdateLookupDataCriteria : CriteriaBase
 {
-    using Fanex.Data.Repository;
+    public int Id { get; set; }
 
-    public class UpdateLookupDataCriteria : CriteriaBase
+    public string Name { get; set; }
+
+    public string CategoryId { get; set; }
+
+    public override string GetSettingKey()
     {
-        public int Id { get; set; }
+        return "LookupData_Update";
+    }
 
-        public string Name { get; set; }
-
-        public string CategoryId { get; set; }
-
-        public override string GetSettingKey()
-        {
-            return "LookupData_Update";
-        }
-
-        public override bool IsValid()
-        {
-            return Id > 0;
-        }
+    public override bool IsValid()
+    {
+        return Id > 0;
     }
 }

@@ -1,14 +1,13 @@
-﻿namespace HRM.Criteria.Memo
+﻿namespace HRM.Criteria.Memo;
+
+using Fanex.Data.Repository;
+
+public class GetAllMemoCriteria : CriteriaBase
 {
-    using Fanex.Data.Repository;
+    public int Year { get; set; }
+    public int Category { get; set; }
+    public int CompanyId { get; set; }
+    public override string GetSettingKey() => "Memo_GetAll";
 
-    public class GetAllMemoCriteria : CriteriaBase
-    {
-        public int Year { get; set; }
-        public int Category { get; set; }
-        public int CompanyId { get; set; }
-        public override string GetSettingKey() => "Memo_GetAll";
-
-        public override bool IsValid() => true;
-    }
+    public override bool IsValid() => true;
 }

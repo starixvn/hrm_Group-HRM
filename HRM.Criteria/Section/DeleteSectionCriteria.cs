@@ -1,21 +1,20 @@
-﻿namespace HRM.Criteria.Section
+﻿namespace HRM.Criteria.Section;
+
+using Fanex.Data.Repository;
+
+public class DeleteSectionCriteria : CriteriaBase
 {
-    using Fanex.Data.Repository;
+    public int sectionId { get; set; }
 
-    public class DeleteSectionCriteria : CriteriaBase
+    public int ModifiedBy { get; set; }
+
+    public override string GetSettingKey()
     {
-        public int sectionId { get; set; }
+        return "Section_Delete";
+    }
 
-        public int ModifiedBy { get; set; }
-
-        public override string GetSettingKey()
-        {
-            return "Section_Delete";
-        }
-
-        public override bool IsValid()
-        {
-            return sectionId > 0;
-        }
+    public override bool IsValid()
+    {
+        return sectionId > 0;
     }
 }

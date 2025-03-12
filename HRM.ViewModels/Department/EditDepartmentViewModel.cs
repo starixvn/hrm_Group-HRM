@@ -1,10 +1,9 @@
-﻿namespace HRM.ViewModels.Department
-{
-    using System.ComponentModel.DataAnnotations;
+﻿namespace HRM.ViewModels.Department;
 
-    public class EditDepartmentViewModel : CreateDepartmentViewModel
-    {
-        [Required]
-        public int DepartmentId { get; set; }
-    }
+using System.ComponentModel.DataAnnotations;
+
+public class EditDepartmentViewModel : CreateDepartmentViewModel
+{
+    [Required]
+    public int DepartmentId { get; set; }
 }

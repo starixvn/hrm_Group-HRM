@@ -1,26 +1,25 @@
-﻿namespace HRM.Criteria.Request.Leave
+﻿namespace HRM.Criteria.Request.Leave;
+
+using System;
+using Fanex.Data.Repository;
+
+public class GetLeaveRequestByDateCriteria : CriteriaBase
 {
-    using System;
-    using Fanex.Data.Repository;
+    public int EmpId { get; set; }
 
-    public class GetLeaveRequestByDateCriteria : CriteriaBase
+    public DateTime FromDate { get; set; }
+
+    public DateTime ToDate { get; set; }
+
+    public short CompanyId { get; set; }
+
+    public override string GetSettingKey()
     {
-        public int EmpId { get; set; }
+        return "LeaveRequest_GetByDate";
+    }
 
-        public DateTime FromDate { get; set; }
-
-        public DateTime ToDate { get; set; }
-
-        public short CompanyId { get; set; }
-
-        public override string GetSettingKey()
-        {
-            return "LeaveRequest_GetByDate";
-        }
-
-        public override bool IsValid()
-        {
-            return FromDate <= ToDate;
-        }
+    public override bool IsValid()
+    {
+        return FromDate <= ToDate;
     }
 }

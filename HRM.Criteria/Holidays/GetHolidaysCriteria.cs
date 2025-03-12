@@ -1,13 +1,12 @@
-﻿namespace HRM.Criteria.Holidays
+﻿namespace HRM.Criteria.Holidays;
+
+using Fanex.Data.Repository;
+
+public class GetHolidaysCriteria : CriteriaBase
 {
-    using Fanex.Data.Repository;
+    public int Year { get; set; }
 
-    public class GetHolidaysCriteria : CriteriaBase
-    {
-        public int Year { get; set; }
+    public override string GetSettingKey() => "Holiday_GetByYear";
 
-        public override string GetSettingKey() => "Holiday_GetByYear";
-
-        public override bool IsValid() => Year > 0;
-    }
+    public override bool IsValid() => Year > 0;
 }

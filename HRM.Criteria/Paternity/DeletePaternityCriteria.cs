@@ -1,19 +1,18 @@
-﻿namespace HRM.Criteria.Paternity
+﻿namespace HRM.Criteria.Paternity;
+
+using Fanex.Data.Repository;
+
+public class DeletePaternityCriteria : CriteriaBase
 {
-    using Fanex.Data.Repository;
+    public int PaternityId { get; set; }
 
-    public class DeletePaternityCriteria : CriteriaBase
+    public override string GetSettingKey()
     {
-        public int PaternityId { get; set; }
+        return "Paternity_Delete";
+    }
 
-        public override string GetSettingKey()
-        {
-            return "Paternity_Delete";
-        }
-
-        public override bool IsValid()
-        {
-            return PaternityId > 0;
-        }
+    public override bool IsValid()
+    {
+        return PaternityId > 0;
     }
 }

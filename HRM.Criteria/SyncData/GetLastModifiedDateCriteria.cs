@@ -1,11 +1,10 @@
-﻿namespace HRM.Criteria.SyncData
+﻿namespace HRM.Criteria.SyncData;
+
+using Fanex.Data.Repository;
+
+public class GetLastModifiedDateCriteria : CriteriaBase
 {
-    using Fanex.Data.Repository;
+    public override string GetSettingKey() => "Sync_WorkingShift_GetLastModifiedDate";
 
-    public class GetLastModifiedDateCriteria : CriteriaBase
-    {
-        public override string GetSettingKey() => "Sync_WorkingShift_GetLastModifiedDate";
-
-        public override bool IsValid() => true;
-    }
+    public override bool IsValid() => true;
 }

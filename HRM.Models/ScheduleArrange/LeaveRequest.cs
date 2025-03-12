@@ -1,10 +1,9 @@
-﻿namespace HRM.Models.ScheduleArrange
-{
-    using System;
+﻿namespace HRM.Models.ScheduleArrange;
 
-    public class LeaveRequest : EntityBase<int>
-    {
-        public DateTime? FromTime { get; set; }
-        public DateTime? ToTime { get; set; }
-    }
+using System;
+
+public class LeaveRequest : EntityBase<int>
+{
+    public DateTime? FromTime { get; set; }
+    public DateTime? ToTime { get; set; }
 }

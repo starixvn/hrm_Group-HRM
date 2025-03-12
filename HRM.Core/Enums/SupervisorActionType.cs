@@ -1,22 +1,21 @@
-﻿namespace HRM.Core.Enums
+﻿namespace HRM.Core.Enums;
+
+using System.ComponentModel;
+
+public enum SupervisorActionType
 {
-    using System.ComponentModel;
+    [Description("Verified by")]
+    Verifier = 2,
 
-    public enum SupervisorActionType
-    {
-        [Description("Verified by")]
-        Verifier = 2,
+    [Description("Approved by")]
+    Approver = 3,
 
-        [Description("Approved by")]
-        Approver = 3,
+    [Description("Shift Arrangement")]
+    ShiftArrangement = 4,
 
-        [Description("Shift Arrangement")]
-        ShiftArrangement = 4,
+    [Description("On Behalf Request")]
+    OnBehalfRequest = 5,
 
-        [Description("On Behalf Request")]
-        OnBehalfRequest = 5,
-
-        [Description("Discipline Manager")]
-        DisciplineManager = 8
-    }
+    [Description("Discipline Manager")]
+    DisciplineManager = 8
 }

@@ -1,13 +1,12 @@
-﻿namespace HRM.Criteria.Section
+﻿namespace HRM.Criteria.Section;
+
+using Fanex.Data.Repository;
+
+public class GetParentBySectionCriteria : CriteriaBase
 {
-    using Fanex.Data.Repository;
+    public int SectionId { get; set; }
 
-    public class GetParentBySectionCriteria : CriteriaBase
-    {
-        public int SectionId { get; set; }
+    public override string GetSettingKey() => "Section_GetParent";
 
-        public override string GetSettingKey() => "Section_GetParent";
-
-        public override bool IsValid() => SectionId > 0;
-    }
+    public override bool IsValid() => SectionId > 0;
 }

@@ -1,26 +1,25 @@
-﻿namespace HRM.Criteria.Request
+﻿namespace HRM.Criteria.Request;
+
+using System;
+using Fanex.Data.Repository;
+
+public class GetNumberRequestInMonthCriteria : CriteriaBase
 {
-    using System;
-    using Fanex.Data.Repository;
+    public int EmployeeId { get; set; }
 
-    public class GetNumberRequestInMonthCriteria : CriteriaBase
+    public int RequestType { get; set; }
+
+    public DateTime FromDate { get; set; }
+
+    public DateTime ToDate { get; set; }
+
+    public override string GetSettingKey()
     {
-        public int EmployeeId { get; set; }
+        return "WorkingTimeRequest_GetNumberRequestInMonth";
+    }
 
-        public int RequestType { get; set; }
-
-        public DateTime FromDate { get; set; }
-
-        public DateTime ToDate { get; set; }
-
-        public override string GetSettingKey()
-        {
-            return "WorkingTimeRequest_GetNumberRequestInMonth";
-        }
-
-        public override bool IsValid()
-        {
-            return RequestType > 0;
-        }
+    public override bool IsValid()
+    {
+        return RequestType > 0;
     }
 }

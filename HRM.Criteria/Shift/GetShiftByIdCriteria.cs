@@ -1,13 +1,12 @@
-﻿namespace HRM.Criteria.Shift
+﻿namespace HRM.Criteria.Shift;
+
+using Fanex.Data.Repository;
+
+public class GetShiftByIdCriteria : CriteriaBase
 {
-    using Fanex.Data.Repository;
+    public int ShiftId { get; set; }
 
-    public class GetShiftByIdCriteria : CriteriaBase
-    {
-        public int ShiftId { get; set; }
+    public override string GetSettingKey() => "Shift_GetById";
 
-        public override string GetSettingKey() => "Shift_GetById";
-
-        public override bool IsValid() => ShiftId >= 0;
-    }
+    public override bool IsValid() => ShiftId >= 0;
 }

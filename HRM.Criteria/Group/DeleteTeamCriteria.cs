@@ -1,21 +1,20 @@
-﻿namespace HRM.Criteria.Group
+﻿namespace HRM.Criteria.Group;
+
+using Fanex.Data.Repository;
+
+public class DeleteTeamCriteria : CriteriaBase
 {
-    using Fanex.Data.Repository;
+    public int TeamId { get; set; }
 
-    public class DeleteTeamCriteria : CriteriaBase
+    public int ModifiedBy { get; set; }
+
+    public override string GetSettingKey()
     {
-        public int TeamId { get; set; }
+        return "Group_Delete";
+    }
 
-        public int ModifiedBy { get; set; }
-
-        public override string GetSettingKey()
-        {
-            return "Group_Delete";
-        }
-
-        public override bool IsValid()
-        {
-            return TeamId > 0;
-        }
+    public override bool IsValid()
+    {
+        return TeamId > 0;
     }
 }

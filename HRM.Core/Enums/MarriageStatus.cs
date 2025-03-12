@@ -1,22 +1,21 @@
-﻿namespace HRM.Core.Enums
+﻿namespace HRM.Core.Enums;
+
+using System.ComponentModel;
+
+public enum MarriageStatus
 {
-    using System.ComponentModel;
+    [Description("Unknown")]
+    Default = 0,
 
-    public enum MarriageStatus
-    {
-        [Description("Unknown")]
-        Default = 0,
+    [Description("Married")]
+    Married = 1,
 
-        [Description("Married")]
-        Married = 1,
+    [Description("Divorced")]
+    Divorced = 2,
 
-        [Description("Divorced")]
-        Divorced = 2,
+    [Description("Single")]
+    Single = 3,
 
-        [Description("Single")]
-        Single = 3,
-
-        [Description("Widow")]
-        Widow = 4
-    }
+    [Description("Widow")]
+    Widow = 4
 }

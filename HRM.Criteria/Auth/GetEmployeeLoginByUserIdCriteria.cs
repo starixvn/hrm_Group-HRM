@@ -1,13 +1,12 @@
-﻿namespace HRM.Criteria.Auth
+﻿namespace HRM.Criteria.Auth;
+
+using Fanex.Data.Repository;
+
+public class GetEmployeeLoginByUserIdCriteria : CriteriaBase
 {
-    using Fanex.Data.Repository;
+    public int UserId { get; set; }
 
-    public class GetEmployeeLoginByUserIdCriteria : CriteriaBase
-    {
-        public int UserId { get; set; }
+    public override string GetSettingKey() => "Employee_GetByUserId";
 
-        public override string GetSettingKey() => "Employee_GetByUserId";
-
-        public override bool IsValid() => UserId > 0;
-    }
+    public override bool IsValid() => UserId > 0;
 }

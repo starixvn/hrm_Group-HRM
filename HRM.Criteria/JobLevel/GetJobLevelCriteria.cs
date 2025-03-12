@@ -1,11 +1,10 @@
-﻿namespace HRM.Criteria.JobLevel
+﻿namespace HRM.Criteria.JobLevel;
+
+using Fanex.Data.Repository;
+
+public class GetJobLevelCriteria : CriteriaBase
 {
-    using Fanex.Data.Repository;
+    public override string GetSettingKey() => "JobLevel_Get";
 
-    public class GetJobLevelCriteria : CriteriaBase
-    {
-        public override string GetSettingKey() => "JobLevel_Get";
-
-        public override bool IsValid() => true;
-    }
+    public override bool IsValid() => true;
 }

@@ -1,15 +1,14 @@
-﻿namespace HRM.Criteria.Overtime
+﻿namespace HRM.Criteria.Overtime;
+
+using Fanex.Data.Repository;
+
+public class GetMonthlyOvertimeRequestDetailsByIdCriteria : CriteriaBase
 {
-    using Fanex.Data.Repository;
+    public long RequestId { get; set; }
 
-    public class GetMonthlyOvertimeRequestDetailsByIdCriteria : CriteriaBase
-    {
-        public long RequestId { get; set; }
+    public short CompanyId { get; set; }
 
-        public short CompanyId { get; set; }
+    public override string GetSettingKey() => "Overtime_GetMonthlyRequestDetailsById";
 
-        public override string GetSettingKey() => "Overtime_GetMonthlyRequestDetailsById";
-
-        public override bool IsValid() => RequestId > 0;
-    }
+    public override bool IsValid() => RequestId > 0;
 }

@@ -1,19 +1,18 @@
-﻿namespace HRM.Criteria.Supervisor
+﻿namespace HRM.Criteria.Supervisor;
+
+using Fanex.Data.Repository;
+
+public class GetTeamSupervisorCriteria : CriteriaBase
 {
-    using Fanex.Data.Repository;
+    public string TeamIds { get; set; }
 
-    public class GetTeamSupervisorCriteria : CriteriaBase
+    public override bool IsValid()
     {
-        public string TeamIds { get; set; }
+        return true;
+    }
 
-        public override bool IsValid()
-        {
-            return true;
-        }
-
-        public override string GetSettingKey()
-        {
-            return "GroupSupervisor_Get";
-        }
+    public override string GetSettingKey()
+    {
+        return "GroupSupervisor_Get";
     }
 }

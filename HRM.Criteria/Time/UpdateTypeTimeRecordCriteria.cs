@@ -1,26 +1,25 @@
-namespace HRM.Criteria.Time
+namespace HRM.Criteria.Time;
+
+using System;
+using Fanex.Data.Repository;
+
+public class UpdateTypeTimeRecordCriteria : CriteriaBase
 {
-    using System;
-    using Fanex.Data.Repository;
+    public int RecordTimeId { get; set; }
 
-    public class UpdateTypeTimeRecordCriteria : CriteriaBase
+    public byte InOutType { get; set; }
+
+    public int ModifiedBy { get; set; }
+
+    public DateTime ModifiedDate { get; set; }
+
+    public override string GetSettingKey()
     {
-        public int RecordTimeId { get; set; }
+        return "TimeRecord_UpdateType";
+    }
 
-        public byte InOutType { get; set; }
-
-        public int ModifiedBy { get; set; }
-
-        public DateTime ModifiedDate { get; set; }
-
-        public override string GetSettingKey()
-        {
-            return "TimeRecord_UpdateType";
-        }
-
-        public override bool IsValid()
-        {
-            return RecordTimeId > 0;
-        }
+    public override bool IsValid()
+    {
+        return RecordTimeId > 0;
     }
 }

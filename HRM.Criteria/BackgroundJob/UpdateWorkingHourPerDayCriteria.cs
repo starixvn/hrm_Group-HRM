@@ -1,13 +1,12 @@
-﻿namespace HRM.Criteria.BackgroundJob
+﻿namespace HRM.Criteria.BackgroundJob;
+
+using Fanex.Data.Repository;
+
+public class UpdateWorkingHourPerDayCriteria : CriteriaBase
 {
-    using Fanex.Data.Repository;
+    public int? EmpId { get; set; }
 
-    public class UpdateWorkingHourPerDayCriteria : CriteriaBase
-    {
-        public int? EmpId { get; set; }
+    public override string GetSettingKey() => "Auto_Postnatal_UpdateWorkingHour";
 
-        public override string GetSettingKey() => "Auto_Postnatal_UpdateWorkingHour";
-
-        public override bool IsValid() => true;
-    }
+    public override bool IsValid() => true;
 }

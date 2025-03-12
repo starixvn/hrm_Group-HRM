@@ -1,19 +1,18 @@
-﻿namespace HRM.Criteria.Postnatal
+﻿namespace HRM.Criteria.Postnatal;
+
+using Fanex.Data.Repository;
+
+public class DeletePostnatalCriteria : CriteriaBase
 {
-    using Fanex.Data.Repository;
+    public int PostnatalId { get; set; }
 
-    public class DeletePostnatalCriteria : CriteriaBase
+    public override string GetSettingKey()
     {
-        public int PostnatalId { get; set; }
+        return "Postnatal_Delete";
+    }
 
-        public override string GetSettingKey()
-        {
-            return "Postnatal_Delete";
-        }
-
-        public override bool IsValid()
-        {
-            return PostnatalId > 0;
-        }
+    public override bool IsValid()
+    {
+        return PostnatalId > 0;
     }
 }

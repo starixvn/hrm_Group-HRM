@@ -1,73 +1,72 @@
-﻿namespace HRM.AutoJobs.Workers
+﻿namespace HRM.AutoJobs.Workers;
+
+using System;
+using System.Threading;
+using System.Threading.Tasks;
+using Cronos;
+using Models;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+
+public class BaseWorker(ILogger<BaseWorker> logfile, Fanex.Logging.ILogger logger) : BackgroundService
 {
-    using System;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using Cronos;
-    using Models;
-    using Microsoft.Extensions.Hosting;
-    using Microsoft.Extensions.Logging;
+    private readonly ILogger logfile = logfile;
+    protected JobSetting jobSetting;
 
-    public class BaseWorker(ILogger<BaseWorker> logfile, Fanex.Logging.ILogger logger) : BackgroundService
+    public override Task StartAsync(CancellationToken cancellationToken)
     {
-        private readonly ILogger logfile = logfile;
-        protected JobSetting jobSetting;
+        logfile.LogInformation($"{jobSetting.JobName}: Start");
+        return base.StartAsync(cancellationToken);
+    }
 
-        public override Task StartAsync(CancellationToken cancellationToken)
+    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+    {
+        while (!stoppingToken.IsCancellationRequested)
         {
-            logfile.LogInformation($"{jobSetting.JobName}: Start");
-            return base.StartAsync(cancellationToken);
+            var cronExpression = CronExpression.Parse(jobSetting.CronExpression);
+            var currentUtcTime = DateTimeOffset.UtcNow.UtcDateTime;
+            var occurenceTime = cronExpression.GetNextOccurrence(currentUtcTime);
+
+            var delay = occurenceTime.GetValueOrDefault() - currentUtcTime;
+            await Task.Delay(delay, stoppingToken);
+
+            await RunJobAsync();
         }
+    }
 
-        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+    private async Task RunJobAsync()
+    {
+        try
         {
-            while (!stoppingToken.IsCancellationRequested)
+            if (jobSetting.Enabled)
             {
-                var cronExpression = CronExpression.Parse(jobSetting.CronExpression);
-                var currentUtcTime = DateTimeOffset.UtcNow.UtcDateTime;
-                var occurenceTime = cronExpression.GetNextOccurrence(currentUtcTime);
-
-                var delay = occurenceTime.GetValueOrDefault() - currentUtcTime;
-                await Task.Delay(delay, stoppingToken);
-
-                await RunJobAsync();
+                logfile.LogInformation($"{jobSetting.JobName}: Doing...");
+                await DoWorkAsync();
+                logfile.LogInformation($"{jobSetting.JobName}: Done.");
             }
         }
-
-        private async Task RunJobAsync()
+        catch (Exception ex)
         {
-            try
-            {
-                if (jobSetting.Enabled)
-                {
-                    logfile.LogInformation($"{jobSetting.JobName}: Doing...");
-                    await DoWorkAsync();
-                    logfile.LogInformation($"{jobSetting.JobName}: Done.");
-                }
-            }
-            catch (Exception ex)
-            {
-                await logger.ErrorAsync($"{jobSetting.JobName}: Error - {ex}");
-            }
+            await logger.ErrorAsync($"{jobSetting.JobName}: Error - {ex}");
         }
+    }
 
-        public virtual async Task DoWorkAsync()
-        {
-            await Task.CompletedTask;
-        }
+    public virtual async Task DoWorkAsync()
+    {
+        await Task.CompletedTask;
+    }
 
-        public override async Task StopAsync(CancellationToken cancellationToken)
-        {
-            logfile.LogInformation($"{jobSetting.JobName}: Stop");
+    public override async Task StopAsync(CancellationToken cancellationToken)
+    {
+        logfile.LogInformation($"{jobSetting.JobName}: Stop");
 
-            await base.StopAsync(cancellationToken);
-        }
+        await base.StopAsync(cancellationToken);
+    }
 
-        public override void Dispose()
-        {
-            logfile.LogInformation($"{jobSetting.JobName}: Disposed");
-            GC.SuppressFinalize(this);
-            base.Dispose();
-        }
+    public override void Dispose()
+    {
+        logfile.LogInformation($"{jobSetting.JobName}: Disposed");
+        GC.SuppressFinalize(this);
+        base.Dispose();
     }
 }

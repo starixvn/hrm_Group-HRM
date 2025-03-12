@@ -1,25 +1,24 @@
-﻿namespace HRM.Criteria.Lookup
+﻿namespace HRM.Criteria.Lookup;
+
+using Fanex.Data.Repository;
+
+public class InsertLookupDataCriteria : CriteriaBase
 {
-    using Fanex.Data.Repository;
+    public string LookupCode { get; set; }
 
-    public class InsertLookupDataCriteria : CriteriaBase
+    public string Name { get; set; }
+
+    public string CategoryId { get; set; }
+
+    public int CompanyId { get; set; }
+
+    public override string GetSettingKey()
     {
-        public string LookupCode { get; set; }
+        return "LookupData_Insert";
+    }
 
-        public string Name { get; set; }
-
-        public string CategoryId { get; set; }
-
-        public int CompanyId { get; set; }
-
-        public override string GetSettingKey()
-        {
-            return "LookupData_Insert";
-        }
-
-        public override bool IsValid()
-        {
-            return true;
-        }
+    public override bool IsValid()
+    {
+        return true;
     }
 }

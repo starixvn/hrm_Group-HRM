@@ -1,13 +1,12 @@
-﻿namespace HRM.AutoJobs.Criteria
+﻿namespace HRM.AutoJobs.Criteria;
+
+using Fanex.Data.Repository;
+
+public class PublicScheduleCommand : NonQueryCommand
 {
-    using Fanex.Data.Repository;
+    public int? EmployeeId { get; set; }
 
-    public class PublicScheduleCommand : NonQueryCommand
-    {
-        public int? EmployeeId { get; set; }
+    public override string GetSettingKey() => "Auto_EmployeeCalendar_UpdateIsPublic";
 
-        public override string GetSettingKey() => "Auto_EmployeeCalendar_UpdateIsPublic";
-
-        public override bool IsValid() => true;
-    }
+    public override bool IsValid() => true;
 }

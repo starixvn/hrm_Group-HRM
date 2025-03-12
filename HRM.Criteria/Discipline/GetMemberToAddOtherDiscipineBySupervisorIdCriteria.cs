@@ -1,21 +1,20 @@
-﻿namespace HRM.Criteria.Discipline
+﻿namespace HRM.Criteria.Discipline;
+
+using Fanex.Data.Repository;
+
+public class GetMemberToAddOtherDiscipineBySupervisorIdCriteria : CriteriaBase
 {
-    using Fanex.Data.Repository;
+    public string Query { get; set; }
 
-    public class GetMemberToAddOtherDiscipineBySupervisorIdCriteria : CriteriaBase
+    public int SupervisorId { get; set; }
+
+    public override bool IsValid()
     {
-        public string Query { get; set; }
+        return SupervisorId > 0;
+    }
 
-        public int SupervisorId { get; set; }
-
-        public override bool IsValid()
-        {
-            return SupervisorId > 0;
-        }
-
-        public override string GetSettingKey()
-        {
-            return "OtherDiscipline_GetMember";
-        }
+    public override string GetSettingKey()
+    {
+        return "OtherDiscipline_GetMember";
     }
 }

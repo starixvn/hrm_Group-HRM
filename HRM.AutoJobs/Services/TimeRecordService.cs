@@ -1,14 +1,13 @@
-﻿namespace HRM.AutoJobs.Services
-{
-    using System.Threading.Tasks;
-    using Criteria;
+﻿namespace HRM.AutoJobs.Services;
 
-    public class TimeRecordService(IBaseService baseService) : ITimeRecordService
+using System.Threading.Tasks;
+using Criteria;
+
+public class TimeRecordService(IBaseService baseService) : ITimeRecordService
+{
+    public async Task ImportTimeRecordAsync()
     {
-        public async Task ImportTimeRecordAsync()
-        {
-            var command = new ImportTimeRecordCommand();
-            await baseService.ExecuteNonQueryAsync(command);
-        }
+        var command = new ImportTimeRecordCommand();
+        await baseService.ExecuteNonQueryAsync(command);
     }
 }

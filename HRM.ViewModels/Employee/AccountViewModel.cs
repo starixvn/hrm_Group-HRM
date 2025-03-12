@@ -1,13 +1,12 @@
-﻿namespace HRM.ViewModels.Employee
+﻿namespace HRM.ViewModels.Employee;
+
+using Models.Log;
+using System.Collections.Generic;
+using Models;
+
+public class AccountViewModel 
 {
-    using Models.Log;
-    using System.Collections.Generic;
-    using Models;
+    public Employee Employee { get; set; }
 
-    public class AccountViewModel 
-    {
-        public Employee Employee { get; set; }
-
-        public IEnumerable<LogObjectDetail> Logs { get; set; }
-    }
+    public IEnumerable<LogObjectDetail> Logs { get; set; }
 }

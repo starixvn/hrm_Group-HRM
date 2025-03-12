@@ -1,15 +1,14 @@
-﻿namespace HRM.Criteria.Request
+﻿namespace HRM.Criteria.Request;
+
+using Fanex.Data.Repository;
+
+public class GetRequestRelatedPeopleCriteria : CriteriaBase
 {
-    using Fanex.Data.Repository;
+    public long RequestId { get; set; }
 
-    public class GetRequestRelatedPeopleCriteria : CriteriaBase
-    {
-        public long RequestId { get; set; }
+    public int Action { get; set; }
 
-        public int Action { get; set; }
+    public override string GetSettingKey() => "EmployeeSupervisor_GetListSupervisorRequestID";
 
-        public override string GetSettingKey() => "EmployeeSupervisor_GetListSupervisorRequestID";
-
-        public override bool IsValid() => RequestId > 0;
-    }
+    public override bool IsValid() => RequestId > 0;
 }

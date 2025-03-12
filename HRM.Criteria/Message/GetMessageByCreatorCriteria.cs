@@ -1,26 +1,25 @@
-﻿namespace HRM.Criteria.Message
+﻿namespace HRM.Criteria.Message;
+
+using System;
+using Fanex.Data.Repository;
+
+public class GetMessageByCreatorCriteria : CriteriaBase
 {
-    using System;
-    using Fanex.Data.Repository;
+    public int CreatedBy { get; set; }
 
-    public class GetMessageByCreatorCriteria : CriteriaBase
+    public DateTime? FromDate { get; set; }
+
+    public DateTime? ToDate { get; set; }
+
+    public int? IsDisabled { get; set; }
+
+    public override string GetSettingKey()
     {
-        public int CreatedBy { get; set; }
+        return "Message_GetByCreator";
+    }
 
-        public DateTime? FromDate { get; set; }
-
-        public DateTime? ToDate { get; set; }
-
-        public int? IsDisabled { get; set; }
-
-        public override string GetSettingKey()
-        {
-            return "Message_GetByCreator";
-        }
-
-        public override bool IsValid()
-        {
-            return CreatedBy > 0;
-        }
+    public override bool IsValid()
+    {
+        return CreatedBy > 0;
     }
 }

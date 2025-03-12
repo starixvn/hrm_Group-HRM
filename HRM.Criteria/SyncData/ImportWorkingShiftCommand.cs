@@ -1,13 +1,12 @@
-﻿namespace HRM.Criteria.SyncData
+﻿namespace HRM.Criteria.SyncData;
+
+using Fanex.Data.Repository;
+
+public class ImportWorkingShiftCommand : CriteriaBase
 {
-    using Fanex.Data.Repository;
+    public string WorkingShiftXml { get; set; }
 
-    public class ImportWorkingShiftCommand : CriteriaBase
-    {
-        public string WorkingShiftXml { get; set; }
+    public override string GetSettingKey() => "Sync_WorkingShift_Import";
 
-        public override string GetSettingKey() => "Sync_WorkingShift_Import";
-
-        public override bool IsValid() => !string.IsNullOrWhiteSpace(WorkingShiftXml);
-    }
+    public override bool IsValid() => !string.IsNullOrWhiteSpace(WorkingShiftXml);
 }

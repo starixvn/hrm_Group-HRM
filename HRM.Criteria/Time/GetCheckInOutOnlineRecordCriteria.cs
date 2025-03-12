@@ -1,14 +1,13 @@
-﻿namespace HRM.Criteria.Time
+﻿namespace HRM.Criteria.Time;
+
+using System;
+using Fanex.Data.Repository;
+
+public class GetCheckInOutOnlineRecordCriteria : CriteriaBase
 {
-    using System;
-    using Fanex.Data.Repository;
+    public DateTime Date { get; set; }
 
-    public class GetCheckInOutOnlineRecordCriteria : CriteriaBase
-    {
-        public DateTime Date { get; set; }
+    public override string GetSettingKey() => "TimeRecord_GetCheckInOutOnline";
 
-        public override string GetSettingKey() => "TimeRecord_GetCheckInOutOnline";
-
-        public override bool IsValid() => true;
-    }
+    public override bool IsValid() => true;
 }

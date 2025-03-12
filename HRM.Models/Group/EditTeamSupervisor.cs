@@ -1,14 +1,13 @@
-﻿namespace HRM.Models.Group
-{
-    using System;
-    using Core.XMLExtensions;
+﻿namespace HRM.Models.Group;
 
-    [Serializable]
-    [XMLName("Row")]
-    public class EditTeamSupervisor
-    {
-        public int OwnerId { get; set; }
-        public ushort RequestType { get; set; }
-        public ushort DisplayOrder { get; set; }
-    }
+using System;
+using Core.XMLExtensions;
+
+[Serializable]
+[XMLName("Row")]
+public class EditTeamSupervisor
+{
+    public int OwnerId { get; set; }
+    public ushort RequestType { get; set; }
+    public ushort DisplayOrder { get; set; }
 }

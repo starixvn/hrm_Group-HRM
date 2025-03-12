@@ -1,14 +1,13 @@
-﻿namespace HRM.Criteria.SystemSetting
+﻿namespace HRM.Criteria.SystemSetting;
+
+using Fanex.Data.Repository;
+
+public class GetSystemConfigsByKeyCriteria : CriteriaBase
 {
-    using Fanex.Data.Repository;
+    public short CompanyId { get; set; }
+    public string Key { get; set; }
 
-    public class GetSystemConfigsByKeyCriteria : CriteriaBase
-    {
-        public short CompanyId { get; set; }
-        public string Key { get; set; }
+    public override string GetSettingKey() => "SystemConfigs_GetByKey";
 
-        public override string GetSettingKey() => "SystemConfigs_GetByKey";
-
-        public override bool IsValid() => CompanyId > 0 && !string.IsNullOrWhiteSpace(Key);
-    }
+    public override bool IsValid() => CompanyId > 0 && !string.IsNullOrWhiteSpace(Key);
 }

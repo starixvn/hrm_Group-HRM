@@ -1,15 +1,14 @@
-﻿namespace HRM.Criteria.Request.Leave
+﻿namespace HRM.Criteria.Request.Leave;
+
+using Fanex.Data.Repository;
+
+public class GetLeaveRequestByIdCriteria : CriteriaBase
 {
-    using Fanex.Data.Repository;
+    public long RequestId { get; set; }
 
-    public class GetLeaveRequestByIdCriteria : CriteriaBase
-    {
-        public long RequestId { get; set; }
+    public short CompanyId { get; set; }
 
-        public short CompanyId { get; set; }
+    public override string GetSettingKey() => "LeaveRequest_GetById";
 
-        public override string GetSettingKey() => "LeaveRequest_GetById";
-
-        public override bool IsValid() => RequestId > 0;
-    }
+    public override bool IsValid() => RequestId > 0;
 }

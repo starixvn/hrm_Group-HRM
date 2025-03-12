@@ -1,22 +1,20 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-namespace HRM.Controllers
+namespace HRM.Controllers;
+
+public class ErrorController : Controller
 {
-
-    public class ErrorController : Controller
+    public ActionResult PageNotFound()
     {
-        public ActionResult PageNotFound()
-        {
-            return View();
-        }
+        return View();
+    }
 
-        public ActionResult AccessDenied()
-        {
-            return View();
-        }
+    public ActionResult AccessDenied()
+    {
+        return View();
+    }
 
-        public ActionResult InternalError()
-        {
-            return View();
-        }
+    public ActionResult InternalError()
+    {
+        return View();
     }
 }

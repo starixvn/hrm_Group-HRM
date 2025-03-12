@@ -1,13 +1,12 @@
-﻿namespace HRM.Criteria.Request.CheckInOut
+﻿namespace HRM.Criteria.Request.CheckInOut;
+
+using Fanex.Data.Repository;
+
+public class GetCheckInOutDetailToReviewDisciplineCriteria : CriteriaBase
 {
-    using Fanex.Data.Repository;
+    public long RequestId { get; set; }
 
-    public class GetCheckInOutDetailToReviewDisciplineCriteria : CriteriaBase
-    {
-        public long RequestId { get; set; }
+    public override string GetSettingKey() => "CheckInOutRequest_GetDetailToReviewDiscipline";
 
-        public override string GetSettingKey() => "CheckInOutRequest_GetDetailToReviewDiscipline";
-
-        public override bool IsValid() => RequestId > 0;
-    }
+    public override bool IsValid() => RequestId > 0;
 }

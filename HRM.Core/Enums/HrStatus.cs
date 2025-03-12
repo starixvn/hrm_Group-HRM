@@ -1,16 +1,15 @@
-﻿namespace HRM.Core.Enums
+﻿namespace HRM.Core.Enums;
+
+using System.ComponentModel;
+
+public enum HRStatus
 {
-    using System.ComponentModel;
+    [Description("Pending")]
+    Pending = 1,
 
-    public enum HRStatus
-    {
-        [Description("Pending")]
-        Pending = 1,
+    [Description("Processed")]
+    Processed = 2,
 
-        [Description("Processed")]
-        Processed = 2,
-
-        [Description("Void")]
-        Void = 3
-    }
+    [Description("Void")]
+    Void = 3
 }

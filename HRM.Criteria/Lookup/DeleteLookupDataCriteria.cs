@@ -1,19 +1,18 @@
-﻿namespace HRM.Criteria.Lookup
+﻿namespace HRM.Criteria.Lookup;
+
+using Fanex.Data.Repository;
+
+public class DeleteLookupDataCriteria : CriteriaBase
 {
-    using Fanex.Data.Repository;
+    public int Id { get; set; }
 
-    public class DeleteLookupDataCriteria : CriteriaBase
+    public override string GetSettingKey()
     {
-        public int Id { get; set; }
+        return "LookupData_Delete";
+    }
 
-        public override string GetSettingKey()
-        {
-            return "LookupData_Delete";
-        }
-
-        public override bool IsValid()
-        {
-            return Id > 0;
-        }
+    public override bool IsValid()
+    {
+        return Id > 0;
     }
 }

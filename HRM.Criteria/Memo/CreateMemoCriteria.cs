@@ -1,38 +1,37 @@
-﻿namespace HRM.Criteria.Memo
+﻿namespace HRM.Criteria.Memo;
+
+using System;
+using Fanex.Data;
+using Fanex.Data.Repository;
+
+public class CreateMemoCriteria : CriteriaBase
 {
-    using System;
-    using Fanex.Data;
-    using Fanex.Data.Repository;
+    public string RefNo { get; set; }
 
-    public class CreateMemoCriteria : CriteriaBase
-    {
-        public string RefNo { get; set; }
+    public string Contents { get; set; }
 
-        public string Contents { get; set; }
+    public string Subject { get; set; }
 
-        public string Subject { get; set; }
+    public string SentTo { get; set; }
 
-        public string SentTo { get; set; }
+    public string SentFrom { get; set; }
 
-        public string SentFrom { get; set; }
+    public string ForInfo { get; set; }
 
-        public string ForInfo { get; set; }
+    public int TotalPages { get; set; }
+    public int CompanyId { get; set; }
 
-        public int TotalPages { get; set; }
-        public int CompanyId { get; set; }
+    public DateTime SentDate { get; set; }
 
-        public DateTime SentDate { get; set; }
+    public int Category { get; set; }
 
-        public int Category { get; set; }
+    [SpParam(SqlParamName = "Type")]
+    public int MemoType { get; set; }
 
-        [SpParam(SqlParamName = "Type")]
-        public int MemoType { get; set; }
+    [SpParam(Ignored = true)]
+    public bool SendMail { get; set; }
 
-        [SpParam(Ignored = true)]
-        public bool SendMail { get; set; }
+    public override string GetSettingKey() => "Memo_Insert";
 
-        public override string GetSettingKey() => "Memo_Insert";
-
-        public override bool IsValid() => true;
-    }
+    public override bool IsValid() => true;
 }

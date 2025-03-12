@@ -1,21 +1,20 @@
-﻿namespace HRM.Criteria.ExtensionNumber
+﻿namespace HRM.Criteria.ExtensionNumber;
+
+using Fanex.Data;
+using Fanex.Data.Repository;
+
+public class DeleteExtensionNumberMemberCriteria : CriteriaBase
 {
-    using Fanex.Data;
-    using Fanex.Data.Repository;
+    [SpParam(SqlParamName = "ExtID")]
+    public int ExtensionNumberId { get; set; }
 
-    public class DeleteExtensionNumberMemberCriteria : CriteriaBase
+    public override string GetSettingKey()
     {
-        [SpParam(SqlParamName = "ExtID")]
-        public int ExtensionNumberId { get; set; }
+        return "ExtensionNO_DELETE_EmployeeInfo";
+    }
 
-        public override string GetSettingKey()
-        {
-            return "ExtensionNO_DELETE_EmployeeInfo";
-        }
-
-        public override bool IsValid()
-        {
-            return ExtensionNumberId > 0;
-        }
+    public override bool IsValid()
+    {
+        return ExtensionNumberId > 0;
     }
 }

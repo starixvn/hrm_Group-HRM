@@ -1,30 +1,29 @@
-﻿namespace HRM.AutoJobs.Workers
+﻿namespace HRM.AutoJobs.Workers;
+
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Constants;
+using Helpers;
+using Models;
+using Services;
+using Microsoft.Extensions.Logging;
+
+public class SyncEmployeeInfoToGroupReportWorker : BaseWorker
 {
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
-    using Constants;
-    using Helpers;
-    using Models;
-    using Services;
-    using Microsoft.Extensions.Logging;
+    private readonly IGroupReportService groupReportService;
 
-    public class SyncEmployeeInfoToGroupReportWorker : BaseWorker
+    public SyncEmployeeInfoToGroupReportWorker(
+        IGroupReportService groupReportService,
+        List<JobSetting> jobSettings,
+        ILogger<SyncWorkingShiftWorker> logfile,
+        Fanex.Logging.ILogger logger) : base(logfile, logger)
     {
-        private readonly IGroupReportService groupReportService;
+        this.groupReportService = groupReportService;
+        jobSetting = JobHelper.GetJobConfig(jobSettings, JobSettingConstants.SyncEmployeeInfoToGroupReport);
+    }
 
-        public SyncEmployeeInfoToGroupReportWorker(
-            IGroupReportService groupReportService,
-            List<JobSetting> jobSettings,
-            ILogger<SyncWorkingShiftWorker> logfile,
-            Fanex.Logging.ILogger logger) : base(logfile, logger)
-        {
-            this.groupReportService = groupReportService;
-            jobSetting = JobHelper.GetJobConfig(jobSettings, JobSettingConstants.SyncEmployeeInfoToGroupReport);
-        }
-
-        public override async Task DoWorkAsync()
-        {
-            await groupReportService.SyncEmployeeInfoAsync();
-        }
+    public override async Task DoWorkAsync()
+    {
+        await groupReportService.SyncEmployeeInfoAsync();
     }
 }

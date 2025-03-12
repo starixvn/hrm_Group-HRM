@@ -1,13 +1,12 @@
-﻿namespace HRM.Core.Enums
+﻿namespace HRM.Core.Enums;
+
+using System.ComponentModel;
+
+public enum KeepInViewTypes
 {
-    using System.ComponentModel;
+    [Description("Compensation Leave By Day")]
+    KeepInViewByDay = 1,
 
-    public enum KeepInViewTypes
-    {
-        [Description("Compensation Leave By Day")]
-        KeepInViewByDay = 1,
-
-        [Description("Compensation Leave By Hour")]
-        KeepInViewByHour = 2
-    }
+    [Description("Compensation Leave By Hour")]
+    KeepInViewByHour = 2
 }

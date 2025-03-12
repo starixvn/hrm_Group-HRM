@@ -1,13 +1,12 @@
-﻿namespace HRM.AutoJobs.Services
+﻿namespace HRM.AutoJobs.Services;
+
+using System.Threading.Tasks;
+
+public interface IAnnualLeaveBalanceService
 {
-    using System.Threading.Tasks;
+    Task InsertForNextYearAsync();
 
-    public interface IAnnualLeaveBalanceService
-    {
-        Task InsertForNextYearAsync();
+    Task InsertForNewEmployeeAsync();
 
-        Task InsertForNewEmployeeAsync();
-
-        Task RemindUsedALAsync();
-    }
+    Task RemindUsedALAsync();
 }

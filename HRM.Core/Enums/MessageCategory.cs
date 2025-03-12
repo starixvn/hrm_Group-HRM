@@ -1,16 +1,15 @@
-﻿namespace HRM.Core.Enums
+﻿namespace HRM.Core.Enums;
+
+using System.ComponentModel;
+
+public enum MessageCategory
 {
-    using System.ComponentModel;
+    [Description("Notification")]
+    Notification = 0,
 
-    public enum MessageCategory
-    {
-        [Description("Notification")]
-        Notification = 0,
+    [Description("Warning")]
+    Warning = 1,
 
-        [Description("Warning")]
-        Warning = 1,
-
-        [Description("Violation")]
-        Violation = 2
-    }
+    [Description("Violation")]
+    Violation = 2
 }

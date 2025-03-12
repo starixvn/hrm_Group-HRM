@@ -1,9 +1,8 @@
-﻿namespace HRM.Core.Enums
+﻿namespace HRM.Core.Enums;
+
+public enum EmployeeStatus
 {
-    public enum EmployeeStatus
-    {
-        Enabled = 1,
-        Disabled,
-        Deleted
-    }
+    Enabled = 1,
+    Disabled,
+    Deleted
 }

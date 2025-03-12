@@ -1,30 +1,29 @@
-﻿namespace HRM.AutoJobs.Workers
+﻿namespace HRM.AutoJobs.Workers;
+
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Constants;
+using Helpers;
+using Models;
+using Services;
+using Microsoft.Extensions.Logging;
+
+public class SyncWorkingShiftWorker : BaseWorker
 {
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
-    using Constants;
-    using Helpers;
-    using Models;
-    using Services;
-    using Microsoft.Extensions.Logging;
+    private readonly ISyncWorkingShiftService syncWorkingShiftService;
 
-    public class SyncWorkingShiftWorker : BaseWorker
+    public SyncWorkingShiftWorker(
+        ISyncWorkingShiftService syncWorkingShiftService,
+        List<JobSetting> jobSettings,
+        ILogger<SyncWorkingShiftWorker> logfile,
+        Fanex.Logging.ILogger logger) : base(logfile, logger)
     {
-        private readonly ISyncWorkingShiftService syncWorkingShiftService;
+        this.syncWorkingShiftService = syncWorkingShiftService;
+        jobSetting = JobHelper.GetJobConfig(jobSettings, JobSettingConstants.SyncWorkingShiftFromOWP);
+    }
 
-        public SyncWorkingShiftWorker(
-            ISyncWorkingShiftService syncWorkingShiftService,
-            List<JobSetting> jobSettings,
-            ILogger<SyncWorkingShiftWorker> logfile,
-            Fanex.Logging.ILogger logger) : base(logfile, logger)
-        {
-            this.syncWorkingShiftService = syncWorkingShiftService;
-            jobSetting = JobHelper.GetJobConfig(jobSettings, JobSettingConstants.SyncWorkingShiftFromOWP);
-        }
-
-        public override async Task DoWorkAsync()
-        {
-            await syncWorkingShiftService.SyncWorkingShiftAsync();
-        }
+    public override async Task DoWorkAsync()
+    {
+        await syncWorkingShiftService.SyncWorkingShiftAsync();
     }
 }

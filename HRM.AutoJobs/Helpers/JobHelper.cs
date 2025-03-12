@@ -1,22 +1,21 @@
-﻿namespace HRM.AutoJobs.Helpers
+﻿namespace HRM.AutoJobs.Helpers;
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Models;
+
+public static class JobHelper
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using Models;
-
-    public static class JobHelper
+    public static JobSetting GetJobConfig(IEnumerable<JobSetting> jobSettings, string jobName)
     {
-        public static JobSetting GetJobConfig(IEnumerable<JobSetting> jobSettings, string jobName)
-        {
-            return jobSettings.FirstOrDefault(job => job.JobName.Equals(jobName, StringComparison.InvariantCultureIgnoreCase));
-        }
+        return jobSettings.FirstOrDefault(job => job.JobName.Equals(jobName, StringComparison.InvariantCultureIgnoreCase));
+    }
 
-        public static bool IsEnabled(IEnumerable<JobSetting> jobSettings, string jobName)
-        {
-            var settings = GetJobConfig(jobSettings, jobName);
+    public static bool IsEnabled(IEnumerable<JobSetting> jobSettings, string jobName)
+    {
+        var settings = GetJobConfig(jobSettings, jobName);
 
-            return settings != null && settings.Enabled;
-        }
+        return settings != null && settings.Enabled;
     }
 }

@@ -1,19 +1,18 @@
-﻿namespace HRM.Criteria.Request.CheckInOut
+﻿namespace HRM.Criteria.Request.CheckInOut;
+
+using Fanex.Data.Repository;
+
+public class GetCheckInOutRequestHistoryByIdCriteria : CriteriaBase
 {
-    using Fanex.Data.Repository;
+    public long RequestId { get; set; }
 
-    public class GetCheckInOutRequestHistoryByIdCriteria : CriteriaBase
+    public override string GetSettingKey()
     {
-        public long RequestId { get; set; }
+        return "CheckInOutRequest_GetHistoryById";
+    }
 
-        public override string GetSettingKey()
-        {
-            return "CheckInOutRequest_GetHistoryById";
-        }
-
-        public override bool IsValid()
-        {
-            return RequestId > 0;
-        }
+    public override bool IsValid()
+    {
+        return RequestId > 0;
     }
 }

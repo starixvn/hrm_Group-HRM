@@ -1,16 +1,15 @@
-﻿namespace HRM.Core.Enums
+﻿namespace HRM.Core.Enums;
+
+using System.ComponentModel;
+
+public enum WorkType
 {
-    using System.ComponentModel;
+    [Description("Off")]
+    Off = 1,
 
-    public enum WorkType
-    {
-        [Description("Off")]
-        Off = 1,
+    [Description("Leave")]
+    Leave = 2,
 
-        [Description("Leave")]
-        Leave = 2,
-
-        [Description("Work")]
-        Work = 3
-    }
+    [Description("Work")]
+    Work = 3
 }

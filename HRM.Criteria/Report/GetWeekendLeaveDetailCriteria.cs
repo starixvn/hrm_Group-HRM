@@ -1,39 +1,38 @@
-﻿namespace HRM.Criteria.Report
+﻿namespace HRM.Criteria.Report;
+
+using System;
+using Fanex.Data;
+using Fanex.Data.Repository;
+
+public class GetWeekendLeaveDetailCriteria : CriteriaBase
 {
-    using System;
-    using Fanex.Data;
-    using Fanex.Data.Repository;
+    public DateTime FromDate { get; set; }
 
-    public class GetWeekendLeaveDetailCriteria : CriteriaBase
+    public DateTime ToDate { get; set; }
+
+    public string TeamId { get; set; }
+
+    public int? EmployeeId { get; set; }
+
+    public bool? IsLocal { get; set; }
+
+    [SpParam(Ignored = true)]
+    public string EmployeeName { get; set; }
+
+    [SpParam(Ignored = true)]
+    public string TeamName { get; set; }
+
+    public int LeaveTypeId { get; set; }
+
+    public int SupervisorId { get; set; }
+
+    public override bool IsValid()
     {
-        public DateTime FromDate { get; set; }
+        return FromDate <= ToDate;
+    }
 
-        public DateTime ToDate { get; set; }
-
-        public string TeamId { get; set; }
-
-        public int? EmployeeId { get; set; }
-
-        public bool? IsLocal { get; set; }
-
-        [SpParam(Ignored = true)]
-        public string EmployeeName { get; set; }
-
-        [SpParam(Ignored = true)]
-        public string TeamName { get; set; }
-
-        public int LeaveTypeId { get; set; }
-
-        public int SupervisorId { get; set; }
-
-        public override bool IsValid()
-        {
-            return FromDate <= ToDate;
-        }
-
-        public override string GetSettingKey()
-        {
-            return "Report_GetWeekendLeaveDetail";
-        }
+    public override string GetSettingKey()
+    {
+        return "Report_GetWeekendLeaveDetail";
     }
 }

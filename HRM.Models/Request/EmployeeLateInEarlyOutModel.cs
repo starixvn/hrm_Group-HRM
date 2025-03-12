@@ -1,15 +1,14 @@
-﻿namespace HRM.Models.Request
+﻿namespace HRM.Models.Request;
+
+using System;
+
+public class EmployeeLateInEarlyOutModel
 {
-    using System;
+    public Employee Employee { get; set; }
 
-    public class EmployeeLateInEarlyOutModel
-    {
-        public Employee Employee { get; set; }
+    public DateTime WorkDate { get; set; }
 
-        public DateTime WorkDate { get; set; }
+    public int LateIn { get; set; }
 
-        public int LateIn { get; set; }
-
-        public int EarlyOut { get; set; }
-    }
+    public int EarlyOut { get; set; }
 }

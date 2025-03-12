@@ -1,16 +1,15 @@
-﻿namespace HRM.Core.Enums
+﻿namespace HRM.Core.Enums;
+
+using System.ComponentModel;
+
+public enum ShiftStatus
 {
-    using System.ComponentModel;
+    [Description("All")]
+    All = 0,
 
-    public enum ShiftStatus
-    {
-        [Description("All")]
-        All = 0,
+    [Description("Active")]
+    Active = 1,
 
-        [Description("Active")]
-        Active = 1,
-
-        [Description("Disabled")]
-        Disabled = 2
-    }
+    [Description("Disabled")]
+    Disabled = 2
 }

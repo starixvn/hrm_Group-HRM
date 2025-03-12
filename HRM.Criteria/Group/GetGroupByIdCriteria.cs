@@ -1,17 +1,16 @@
-﻿namespace HRM.Criteria.Group
+﻿namespace HRM.Criteria.Group;
+
+using Fanex.Data.Repository;
+
+public class GetGroupByIdCriteria : CriteriaBase
 {
-    using Fanex.Data.Repository;
+    public int TeamId { get; set; }
 
-    public class GetGroupByIdCriteria : CriteriaBase
-    {
-        public int TeamId { get; set; }
+    public bool? IsDeleted { get; set; }
 
-        public bool? IsDeleted { get; set; }
+    public int CompanyId { get; set; }
 
-        public int CompanyId { get; set; }
+    public override string GetSettingKey() => "Group_Get";
 
-        public override string GetSettingKey() => "Group_Get";
-
-        public override bool IsValid() => TeamId > 0;
-    }
+    public override bool IsValid() => TeamId > 0;
 }

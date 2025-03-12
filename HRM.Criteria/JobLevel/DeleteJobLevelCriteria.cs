@@ -1,20 +1,19 @@
-﻿namespace HRM.Criteria.JobLevel
+﻿namespace HRM.Criteria.JobLevel;
+
+using Fanex.Data.Repository;
+
+public class DeleteJobLevelCriteria : CriteriaBase
 {
-    using Fanex.Data.Repository;
+    public int JobLevelId { get; set; }
+    public int ModifiedBy { get; set; }
 
-    public class DeleteJobLevelCriteria : CriteriaBase
+    public override string GetSettingKey()
     {
-        public int JobLevelId { get; set; }
-        public int ModifiedBy { get; set; }
+        return "JobLevel_Delete";
+    }
 
-        public override string GetSettingKey()
-        {
-            return "JobLevel_Delete";
-        }
-
-        public override bool IsValid()
-        {
-            return JobLevelId > 0;
-        }
+    public override bool IsValid()
+    {
+        return JobLevelId > 0;
     }
 }

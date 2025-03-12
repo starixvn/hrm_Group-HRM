@@ -1,49 +1,48 @@
-﻿namespace HRM.Core.Enums
+﻿namespace HRM.Core.Enums;
+
+using System.ComponentModel;
+
+public enum SettingsSendMail
 {
-    using System.ComponentModel;
+    [Description("New")]
+    New = 1,
 
-    public enum SettingsSendMail
-    {
-        [Description("New")]
-        New = 1,
+    [Description("Verify")]
+    Verify = 2,
 
-        [Description("Verify")]
-        Verify = 2,
+    [Description("NotVerify")]
+    NotVerify = 3,
 
-        [Description("NotVerify")]
-        NotVerify = 3,
+    [Description("Approve")]
+    Approve = 4,
 
-        [Description("Approve")]
-        Approve = 4,
+    [Description("Reject")]
+    Reject = 5,
 
-        [Description("Reject")]
-        Reject = 5,
+    [Description("Process")]
+    Process = 6,
 
-        [Description("Process")]
-        Process = 6,
+    [Description("Void")]
+    Void = 7,
 
-        [Description("Void")]
-        Void = 7,
+    [Description("Reset1")]
+    Reset1 = 8,
 
-        [Description("Reset1")]
-        Reset1 = 8,
+    [Description("Reset2")]
+    Reset2 = 9,
 
-        [Description("Reset2")]
-        Reset2 = 9,
+    [Description("Reset3")]
+    Reset3 = 10,
 
-        [Description("Reset3")]
-        Reset3 = 10,
+    [Description("Edit")]
+    Edit = 11,
 
-        [Description("Edit")]
-        Edit = 11,
+    [Description("Cancel")]
+    Cancel = 12,
 
-        [Description("Cancel")]
-        Cancel = 12,
+    [Description("Reedit")]
+    Reedit = 13,
 
-        [Description("Reedit")]
-        Reedit = 13,
-
-        [Description("Delete")]
-        Delete = 14
-    }
+    [Description("Delete")]
+    Delete = 14
 }

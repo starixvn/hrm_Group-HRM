@@ -1,10 +1,9 @@
-﻿namespace HRM.ViewModels.Unit
-{
-    using System.ComponentModel.DataAnnotations;
+﻿namespace HRM.ViewModels.Unit;
 
-    public class EditUnitViewModel : AddUnitViewModel
-    {
-        [Required]
-        public int UnitId { get; set; }
-    }
+using System.ComponentModel.DataAnnotations;
+
+public class EditUnitViewModel : AddUnitViewModel
+{
+    [Required]
+    public int UnitId { get; set; }
 }

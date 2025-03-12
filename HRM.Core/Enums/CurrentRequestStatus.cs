@@ -1,31 +1,30 @@
-﻿namespace HRM.Core.Enums
+﻿namespace HRM.Core.Enums;
+
+using System.ComponentModel;
+
+public enum CurrentRequestStatus
 {
-    using System.ComponentModel;
+    [Description("N/A")]
+    NA = 0,
 
-    public enum CurrentRequestStatus
-    {
-        [Description("N/A")]
-        NA = 0,
+    [Description("Pending")]
+    Pending,
 
-        [Description("Pending")]
-        Pending,
+    [Description("Verified")]
+    Verified,
 
-        [Description("Verified")]
-        Verified,
+    [Description("Not Verified")]
+    NotVerified,
 
-        [Description("Not Verified")]
-        NotVerified,
+    [Description("Approved")]
+    Approved,
 
-        [Description("Approved")]
-        Approved,
+    [Description("Rejected")]
+    Rejected,
 
-        [Description("Rejected")]
-        Rejected,
+    [Description("Processed")]
+    Processed,
 
-        [Description("Processed")]
-        Processed,
-
-        [Description("Void")]
-        Void
-    }
+    [Description("Void")]
+    Void
 }

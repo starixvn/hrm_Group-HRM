@@ -1,11 +1,10 @@
-﻿namespace HRM.Models
+﻿namespace HRM.Models;
+
+public interface IEntity<TId>
 {
-    public interface IEntity<TId>
-    {
-        TId Id { get; set; }
+    TId Id { get; set; }
 
-        string Name { get; set; }
+    string Name { get; set; }
 
-        string Code { get; set; }
-    }
+    string Code { get; set; }
 }

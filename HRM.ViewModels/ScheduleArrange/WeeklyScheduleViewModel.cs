@@ -1,17 +1,16 @@
-﻿namespace HRM.ViewModels.ScheduleArrange
+﻿namespace HRM.ViewModels.ScheduleArrange;
+
+using System.Collections.Generic;
+using System.Linq;
+using HRM.Models.ScheduleArrange;
+
+public class WeeklyScheduleViewModel
 {
-    using System.Collections.Generic;
-    using System.Linq;
-    using HRM.Models.ScheduleArrange;
+    public int TeamId { get; set; }
+    public string Code { get; set; }
+    public string Name { get; set; }
+    public bool IsPublic => !Members.Any(x => !x.IsPublic);
+    public bool IsSelected => !Members.Any(x => !x.IsSelected);
 
-    public class WeeklyScheduleViewModel
-    {
-        public int TeamId { get; set; }
-        public string Code { get; set; }
-        public string Name { get; set; }
-        public bool IsPublic => !Members.Any(x => !x.IsPublic);
-        public bool IsSelected => !Members.Any(x => !x.IsSelected);
-
-        public IEnumerable<WeeklySchedule> Members { get; set; } = new List<WeeklySchedule>();
-    }
+    public IEnumerable<WeeklySchedule> Members { get; set; } = new List<WeeklySchedule>();
 }

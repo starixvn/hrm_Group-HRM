@@ -1,11 +1,10 @@
-﻿namespace HRM.Criteria.Country
+﻿namespace HRM.Criteria.Country;
+
+using Fanex.Data.Repository;
+
+public class GetAllCountryCriteria : CriteriaBase
 {
-    using Fanex.Data.Repository;
+    public override string GetSettingKey() => "Country_GetAll";
 
-    public class GetAllCountryCriteria : CriteriaBase
-    {
-        public override string GetSettingKey() => "Country_GetAll";
-
-        public override bool IsValid() => true;
-    }
+    public override bool IsValid() => true;
 }

@@ -1,19 +1,18 @@
-﻿namespace HRM.Criteria.Employee
+﻿namespace HRM.Criteria.Employee;
+
+using Fanex.Data.Repository;
+
+public class GetUserLoginByDomainUserNameCriteria : CriteriaBase
 {
-    using Fanex.Data.Repository;
+    public string DomainUsername { get; set; }
 
-    public class GetUserLoginByDomainUserNameCriteria : CriteriaBase
+    public override string GetSettingKey()
     {
-        public string DomainUsername { get; set; }
+        return "GetEmployeeByDomainUserName";
+    }
 
-        public override string GetSettingKey()
-        {
-            return "GetEmployeeByDomainUserName";
-        }
-
-        public override bool IsValid()
-        {
-            return !string.IsNullOrEmpty(DomainUsername);
-        }
+    public override bool IsValid()
+    {
+        return !string.IsNullOrEmpty(DomainUsername);
     }
 }

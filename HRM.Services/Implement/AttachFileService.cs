@@ -1,106 +1,105 @@
 ﻿using HRM.Services.Interfaces;
 
-namespace HRM.Services
+namespace HRM.Services;
+
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using Models;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+
+public class AttachFileService(IWebHostEnvironment hostingEnvironment) : IAttachFileService
 {
-    using System.Collections.Generic;
-    using System.IO;
-    using System.Linq;
-    using Models;
-    using Microsoft.AspNetCore.Hosting;
-    using Microsoft.AspNetCore.Http;
-
-    public class AttachFileService(IWebHostEnvironment hostingEnvironment) : IAttachFileService
+    public void UploadFile(IList<IFormFile> files, long fileId, string pathFolder)
     {
-        public void UploadFile(IList<IFormFile> files, long fileId, string pathFolder)
+        if (files != null && files.Any(x => x.Length > 0))
         {
-            if (files != null && files.Any(x => x.Length > 0))
+            string dir = Path.Combine(hostingEnvironment.ContentRootPath, RemoveFirstSlash(pathFolder) + fileId);
+            if (!Directory.Exists(dir))
             {
-                string dir = Path.Combine(hostingEnvironment.ContentRootPath, RemoveFirstSlash(pathFolder) + fileId);
-                if (!Directory.Exists(dir))
-                {
-                    Directory.CreateDirectory(dir);
-                }
+                Directory.CreateDirectory(dir);
+            }
 
-                foreach (var file in files)
+            foreach (var file in files)
+            {
+                if (file.Length > 0)
                 {
-                    if (file.Length > 0)
+                    var fileName = Path.GetFileName(file.FileName);
+                    var path = Path.Combine(dir, fileName);
+                    using (var stream = new FileStream(path, FileMode.Create))
                     {
-                        var fileName = Path.GetFileName(file.FileName);
-                        var path = Path.Combine(dir, fileName);
-                        using (var stream = new FileStream(path, FileMode.Create))
-                        {
-                            file.CopyTo(stream);
-                        }
+                        file.CopyTo(stream);
                     }
                 }
             }
         }
+    }
 
-        public List<string> GetAttachFile(long fileId, string pathFolder)
+    public List<string> GetAttachFile(long fileId, string pathFolder)
+    {
+        var files = new List<string>();
+        string dir = Path.Combine(hostingEnvironment.ContentRootPath, RemoveFirstSlash(pathFolder) + fileId);
+        if (Directory.Exists(dir))
         {
-            var files = new List<string>();
-            string dir = Path.Combine(hostingEnvironment.ContentRootPath, RemoveFirstSlash(pathFolder) + fileId);
-            if (Directory.Exists(dir))
+            string[] filePaths = Directory.GetFiles(dir);
+            foreach (string filePath in filePaths)
             {
-                string[] filePaths = Directory.GetFiles(dir);
-                foreach (string filePath in filePaths)
-                {
-                    files.Add(Path.GetFileName(filePath));
-                }
+                files.Add(Path.GetFileName(filePath));
             }
-
-            return files;
         }
 
-        public void DeleteFile(List<string> files, long fileId, string pathFolder)
+        return files;
+    }
+
+    public void DeleteFile(List<string> files, long fileId, string pathFolder)
+    {
+        foreach (string file in files)
         {
+            string dir = Path.Combine(hostingEnvironment.ContentRootPath, RemoveFirstSlash(pathFolder) + fileId + '/' + file);
+            File.Delete(dir);
+        }
+    }
+
+    public IList<AttachFile> GetInfoAttachFile(long fileId, string pathFolder)
+    {
+        var attachFiles = new List<AttachFile>();
+        string path = RemoveFirstSlash(pathFolder) + fileId;
+        string dir = Path.Combine(hostingEnvironment.ContentRootPath, path);
+        if (Directory.Exists(dir))
+        {
+            string[] files = Directory.GetFiles(dir);
             foreach (string file in files)
             {
-                string dir = Path.Combine(hostingEnvironment.ContentRootPath, RemoveFirstSlash(pathFolder) + fileId + '/' + file);
-                File.Delete(dir);
-            }
-        }
-
-        public IList<AttachFile> GetInfoAttachFile(long fileId, string pathFolder)
-        {
-            var attachFiles = new List<AttachFile>();
-            string path = RemoveFirstSlash(pathFolder) + fileId;
-            string dir = Path.Combine(hostingEnvironment.ContentRootPath, path);
-            if (Directory.Exists(dir))
-            {
-                string[] files = Directory.GetFiles(dir);
-                foreach (string file in files)
+                attachFiles.Add(new AttachFile
                 {
-                    attachFiles.Add(new AttachFile
-                    {
-                        Path = $"{pathFolder + fileId}/{Path.GetFileName(file)}",
-                        FileName = Path.GetFileName(file),
-                        FileNameWithoutExtension = Path.GetFileNameWithoutExtension(file),
-                        Extension = Path.GetExtension(file)
-                    });
-                }
+                    Path = $"{pathFolder + fileId}/{Path.GetFileName(file)}",
+                    FileName = Path.GetFileName(file),
+                    FileNameWithoutExtension = Path.GetFileNameWithoutExtension(file),
+                    Extension = Path.GetExtension(file)
+                });
             }
-
-            return attachFiles;
         }
 
-        public void DeleteFolderAttachFile(long id, string pathFolder)
+        return attachFiles;
+    }
+
+    public void DeleteFolderAttachFile(long id, string pathFolder)
+    {
+        string dir = Path.Combine(hostingEnvironment.ContentRootPath, RemoveFirstSlash(pathFolder) + id);
+
+        if (Directory.Exists(dir))
         {
-            string dir = Path.Combine(hostingEnvironment.ContentRootPath, RemoveFirstSlash(pathFolder) + id);
-
-            if (Directory.Exists(dir))
-            {
-                Directory.Delete(dir, true);
-            }
+            Directory.Delete(dir, true);
         }
+    }
 
-        private string RemoveFirstSlash(string path)
+    private string RemoveFirstSlash(string path)
+    {
+        if (path.StartsWith("/"))
         {
-            if (path.StartsWith("/"))
-            {
-                path = path.Substring(1);
-            }
-            return path;
+            path = path.Substring(1);
         }
+        return path;
     }
 }

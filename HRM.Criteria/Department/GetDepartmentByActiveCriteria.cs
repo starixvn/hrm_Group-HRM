@@ -1,15 +1,14 @@
-﻿namespace HRM.Criteria.Department
+﻿namespace HRM.Criteria.Department;
+
+using Fanex.Data.Repository;
+
+public class GetDepartmentByActiveCriteria : CriteriaBase
 {
-    using Fanex.Data.Repository;
+    public bool? IsActive { get; set; }
 
-    public class GetDepartmentByActiveCriteria : CriteriaBase
-    {
-        public bool? IsActive { get; set; }
+    public short CompanyId { get; set; }
 
-        public short CompanyId { get; set; }
+    public override string GetSettingKey() => "Department_Get";
 
-        public override string GetSettingKey() => "Department_Get";
-
-        public override bool IsValid() => true;
-    }
+    public override bool IsValid() => true;
 }

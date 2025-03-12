@@ -1,14 +1,13 @@
-﻿namespace HRM.Repositories
-{
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
-    using Fanex.Data.Repository;
-    using Models.Request;
+﻿namespace HRM.Repositories;
 
-    public interface IKeepInViewRequestRepository
-    {
-        Task<IList<KeepInViewRequest>> GetByDateAsync(ICriteria criteria);
-        Task<KeepInViewRequest> GetByIdAsync(ICriteria criteria);
-        Task<IList<KeepInViewRequest>> GetHistoryByIdAsync(ICriteria criteria);
-    }
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Fanex.Data.Repository;
+using Models.Request;
+
+public interface IKeepInViewRequestRepository
+{
+    Task<IList<KeepInViewRequest>> GetByDateAsync(ICriteria criteria);
+    Task<KeepInViewRequest> GetByIdAsync(ICriteria criteria);
+    Task<IList<KeepInViewRequest>> GetHistoryByIdAsync(ICriteria criteria);
 }

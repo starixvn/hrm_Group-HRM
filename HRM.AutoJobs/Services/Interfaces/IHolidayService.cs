@@ -1,9 +1,8 @@
-﻿namespace HRM.AutoJobs.Services
-{
-    using System.Threading.Tasks;
+﻿namespace HRM.AutoJobs.Services;
 
-    public interface IHolidayService
-    {
-        Task InsertHolidayInYearAsync();
-    }
+using System.Threading.Tasks;
+
+public interface IHolidayService
+{
+    Task InsertHolidayInYearAsync();
 }

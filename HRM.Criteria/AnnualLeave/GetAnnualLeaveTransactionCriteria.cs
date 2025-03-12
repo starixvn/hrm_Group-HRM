@@ -1,23 +1,22 @@
-﻿namespace HRM.Criteria.AnnualLeave
+﻿namespace HRM.Criteria.AnnualLeave;
+
+using Fanex.Data.Repository;
+
+public class GetAnnualLeaveTransactionCriteria : CriteriaBase
 {
-    using Fanex.Data.Repository;
+    public int EmpId { get; set; }
 
-    public class GetAnnualLeaveTransactionCriteria : CriteriaBase
+    public int Year { get; set; }
+
+    public bool ExcludedRequestTrans { get; set; }
+
+    public override string GetSettingKey()
     {
-        public int EmpId { get; set; }
+        return "AnnualLeave_GetTransByEmp";
+    }
 
-        public int Year { get; set; }
-
-        public bool ExcludedRequestTrans { get; set; }
-
-        public override string GetSettingKey()
-        {
-            return "AnnualLeave_GetTransByEmp";
-        }
-
-        public override bool IsValid()
-        {
-            return EmpId > 0;
-        }
+    public override bool IsValid()
+    {
+        return EmpId > 0;
     }
 }

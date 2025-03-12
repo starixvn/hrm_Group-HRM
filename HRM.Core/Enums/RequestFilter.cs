@@ -1,25 +1,24 @@
-﻿namespace HRM.Core.Enums
+﻿namespace HRM.Core.Enums;
+
+using System.ComponentModel;
+
+public enum RequestFilter
 {
-    using System.ComponentModel;
+    [Description("All")]
+    All = 0,
 
-    public enum RequestFilter
-    {
-        [Description("All")]
-        All = 0,
+    [Description("Check In/Check Out")]
+    CheckInOut = 1,
 
-        [Description("Check In/Check Out")]
-        CheckInOut = 1,
+    [Description("Late In/Early Out")]
+    LateInEarlyOut = 2,
 
-        [Description("Late In/Early Out")]
-        LateInEarlyOut = 2,
+    [Description("Change Shift")]
+    ChangeShift = 3,
 
-        [Description("Change Shift")]
-        ChangeShift = 3,
+    [Description("Leave")]
+    Leave = 4,
 
-        [Description("Leave")]
-        Leave = 4,
-
-        [Description("Compensation Leave")]
-        KeepInView = 5
-    }
+    [Description("Compensation Leave")]
+    KeepInView = 5
 }

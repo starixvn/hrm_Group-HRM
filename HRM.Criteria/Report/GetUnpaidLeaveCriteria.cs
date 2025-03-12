@@ -1,31 +1,30 @@
-﻿namespace HRM.Criteria
+﻿namespace HRM.Criteria;
+
+using Fanex.Data.Repository;
+
+public class GetUnpaidLeaveCriteria : CriteriaBase
 {
-    using Fanex.Data.Repository;
+    public int? EmpId { get; set; }
 
-    public class GetUnpaidLeaveCriteria : CriteriaBase
+    public string TeamIds { get; set; }
+
+    public int Year { get; set; }
+
+    public byte? IsLocal { get; set; }
+
+    public int? SupervisorId { get; set; }
+
+    public string LeaveType { get; set; }
+
+    public short CompanyId { get; set; }
+
+    public override string GetSettingKey()
     {
-        public int? EmpId { get; set; }
+        return "Report_UnpaidLeaveSummary";
+    }
 
-        public string TeamIds { get; set; }
-
-        public int Year { get; set; }
-
-        public byte? IsLocal { get; set; }
-
-        public int? SupervisorId { get; set; }
-
-        public string LeaveType { get; set; }
-
-        public short CompanyId { get; set; }
-
-        public override string GetSettingKey()
-        {
-            return "Report_UnpaidLeaveSummary";
-        }
-
-        public override bool IsValid()
-        {
-            return Year > 0;
-        }
+    public override bool IsValid()
+    {
+        return Year > 0;
     }
 }

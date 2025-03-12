@@ -1,21 +1,20 @@
-﻿namespace HRM.Criteria.Postnatal
+﻿namespace HRM.Criteria.Postnatal;
+
+using Fanex.Data.Repository;
+
+public class GetPostnatalCriteria : CriteriaBase
 {
-    using Fanex.Data.Repository;
+    public int Year { get; set; }
 
-    public class GetPostnatalCriteria : CriteriaBase
+    public short CompanyId { get; set; }
+
+    public override string GetSettingKey()
     {
-        public int Year { get; set; }
+        return "Postnatal_Get";
+    }
 
-        public short CompanyId { get; set; }
-
-        public override string GetSettingKey()
-        {
-            return "Postnatal_Get";
-        }
-
-        public override bool IsValid()
-        {
-            return Year > 0;
-        }
+    public override bool IsValid()
+    {
+        return Year > 0;
     }
 }

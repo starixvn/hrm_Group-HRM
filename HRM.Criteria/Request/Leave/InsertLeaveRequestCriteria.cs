@@ -1,17 +1,16 @@
-﻿namespace HRM.Criteria.Request.Leave
+﻿namespace HRM.Criteria.Request.Leave;
+
+public class InsertLeaveRequestCriteria : BaseLeaveRequestCriteria
 {
-    public class InsertLeaveRequestCriteria : BaseLeaveRequestCriteria
+    public int CreatedBy { get; set; }
+
+    public override string GetSettingKey()
     {
-        public int CreatedBy { get; set; }
+        return "LeaveRequest_Insert";
+    }
 
-        public override string GetSettingKey()
-        {
-            return "LeaveRequest_Insert";
-        }
-
-        public override bool IsValid()
-        {
-            return EmployeeId > 0 && FromDate <= ToDate;
-        }
+    public override bool IsValid()
+    {
+        return EmployeeId > 0 && FromDate <= ToDate;
     }
 }

@@ -1,13 +1,12 @@
-﻿namespace HRM.Criteria.Group
+﻿namespace HRM.Criteria.Group;
+
+using Fanex.Data.Repository;
+
+public class GetGroupBySupervisorCriteria : CriteriaBase
 {
-    using Fanex.Data.Repository;
+    public int SupervisorId { get; set; }
 
-    public class GetGroupBySupervisorCriteria : CriteriaBase
-    {
-        public int SupervisorId { get; set; }
+    public override string GetSettingKey() => "Group_GetBySupervisor";
 
-        public override string GetSettingKey() => "Group_GetBySupervisor";
-
-        public override bool IsValid() => SupervisorId > 0;
-    }
+    public override bool IsValid() => SupervisorId > 0;
 }

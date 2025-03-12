@@ -1,13 +1,12 @@
-﻿namespace HRM.ViewModels.Employee
+﻿namespace HRM.ViewModels.Employee;
+
+using System.ComponentModel.DataAnnotations;
+
+public class LoginViewModel
 {
-    using System.ComponentModel.DataAnnotations;
+    [Required]
+    public string Username { get; set; }
 
-    public class LoginViewModel
-    {
-        [Required]
-        public string Username { get; set; }
-
-        [Required]
-        public string Password { get; set; }
-    }
+    [Required]
+    public string Password { get; set; }
 }

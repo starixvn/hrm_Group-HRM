@@ -1,16 +1,15 @@
-﻿namespace HRM.Core.Enums
+﻿namespace HRM.Core.Enums;
+
+using System.ComponentModel;
+
+public enum VerifiedStatus
 {
-    using System.ComponentModel;
+    [Description("Pending")]
+    Pending = 1,
 
-    public enum VerifiedStatus
-    {
-        [Description("Pending")]
-        Pending = 1,
+    [Description("Verified")]
+    Verified = 2,
 
-        [Description("Verified")]
-        Verified = 2,
-
-        [Description("NotVerified")]
-        NotVerified = 3
-    }
+    [Description("NotVerified")]
+    NotVerified = 3
 }

@@ -1,11 +1,10 @@
-﻿namespace HRM.Criteria.Employee
+﻿namespace HRM.Criteria.Employee;
+
+using Fanex.Data.Repository;
+
+public class GenerateEmployeeCodeCriteria : CriteriaBase
 {
-    using Fanex.Data.Repository;
+    public override bool IsValid() => true;
 
-    public class GenerateEmployeeCodeCriteria : CriteriaBase
-    {
-        public override bool IsValid() => true;
-
-        public override string GetSettingKey() => "Employee_GenerateEmployeeCode";
-    }
+    public override string GetSettingKey() => "Employee_GenerateEmployeeCode";
 }

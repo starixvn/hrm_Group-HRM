@@ -1,15 +1,14 @@
-﻿namespace HRM.Criteria.Message
+﻿namespace HRM.Criteria.Message;
+
+using Fanex.Data.Repository;
+
+public class EditMessageStatusCriteria : CriteriaBase
 {
-    using Fanex.Data.Repository;
+    public int MessageId { get; set; }
 
-    public class EditMessageStatusCriteria : CriteriaBase
-    {
-        public int MessageId { get; set; }
+    public int EmployeeId { get; set; }
 
-        public int EmployeeId { get; set; }
+    public override string GetSettingKey() => "Message_Read";
 
-        public override string GetSettingKey() => "Message_Read";
-
-        public override bool IsValid() => MessageId > 0 && EmployeeId > 0;
-    }
+    public override bool IsValid() => MessageId > 0 && EmployeeId > 0;
 }

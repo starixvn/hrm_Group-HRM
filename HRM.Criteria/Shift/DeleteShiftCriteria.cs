@@ -1,13 +1,12 @@
-﻿namespace HRM.Criteria.Shift
+﻿namespace HRM.Criteria.Shift;
+
+using Fanex.Data.Repository;
+
+public class DeleteShiftCriteria : CriteriaBase
 {
-    using Fanex.Data.Repository;
+    public int ShiftId { get; set; }
 
-    public class DeleteShiftCriteria : CriteriaBase
-    {
-        public int ShiftId { get; set; }
+    public override string GetSettingKey() => "Shift_Delete";
 
-        public override string GetSettingKey() => "Shift_Delete";
-
-        public override bool IsValid() => ShiftId > 0;
-    }
+    public override bool IsValid() => ShiftId > 0;
 }

@@ -1,21 +1,20 @@
-﻿namespace HRM.Criteria.Employee
+﻿namespace HRM.Criteria.Employee;
+
+using Fanex.Data.Repository;
+
+public class GetMemberByGenderCriteria : CriteriaBase
 {
-    using Fanex.Data.Repository;
+    public string Query { get; set; }
 
-    public class GetMemberByGenderCriteria : CriteriaBase
+    public int Gender { get; set; }
+
+    public override bool IsValid()
     {
-        public string Query { get; set; }
+        return true;
+    }
 
-        public int Gender { get; set; }
-
-        public override bool IsValid()
-        {
-            return true;
-        }
-
-        public override string GetSettingKey()
-        {
-            return "Employee_GetMemberByGender";
-        }
+    public override string GetSettingKey()
+    {
+        return "Employee_GetMemberByGender";
     }
 }

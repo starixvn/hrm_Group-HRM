@@ -1,9 +1,8 @@
-﻿namespace HRM.Models
-{
-    public class Department : EntityBase<int>
-    {
-        public Unit Unit { get; set; }
+﻿namespace HRM.Models;
 
-        public bool IsActive { get; set; }
-    }
+public class Department : EntityBase<int>
+{
+    public Unit Unit { get; set; }
+
+    public bool IsActive { get; set; }
 }

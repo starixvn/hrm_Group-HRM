@@ -1,15 +1,14 @@
-﻿namespace HRM.Criteria.ExtensionNumber
+﻿namespace HRM.Criteria.ExtensionNumber;
+
+using Fanex.Data;
+using Fanex.Data.Repository;
+
+public class DeleteExternalGroupCriteria : CriteriaBase
 {
-    using Fanex.Data;
-    using Fanex.Data.Repository;
+    [SpParam(SqlParamName = "ExtID")]
+    public int ExternalId { get; set; }
 
-    public class DeleteExternalGroupCriteria : CriteriaBase
-    {
-        [SpParam(SqlParamName = "ExtID")]
-        public int ExternalId { get; set; }
+    public override string GetSettingKey() => "ExtensionNO_DELETE_GroupExternal";
 
-        public override string GetSettingKey() => "ExtensionNO_DELETE_GroupExternal";
-
-        public override bool IsValid() => ExternalId > 0;
-    }
+    public override bool IsValid() => ExternalId > 0;
 }

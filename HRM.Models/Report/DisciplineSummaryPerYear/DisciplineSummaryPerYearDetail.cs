@@ -1,9 +1,8 @@
-﻿namespace HRM.Models.Report
+﻿namespace HRM.Models.Report;
+
+public class DisciplineSummaryPerYearDetail
 {
-    public class DisciplineSummaryPerYearDetail
-    {
-        public int EmployeeId { get; set; }
-        public int Year { get; set; }
-        public float ApproverSubtractScore { get; set; }
-    }
+    public int EmployeeId { get; set; }
+    public int Year { get; set; }
+    public float ApproverSubtractScore { get; set; }
 }

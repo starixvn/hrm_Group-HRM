@@ -1,9 +1,8 @@
-﻿namespace HRM.AutoJobs.Services
-{
-    using System.Threading.Tasks;
+﻿namespace HRM.AutoJobs.Services;
 
-    public interface IPostnatalService
-    {
-        Task UpdateWorkingHourPerDayAsync();
-    }
+using System.Threading.Tasks;
+
+public interface IPostnatalService
+{
+    Task UpdateWorkingHourPerDayAsync();
 }

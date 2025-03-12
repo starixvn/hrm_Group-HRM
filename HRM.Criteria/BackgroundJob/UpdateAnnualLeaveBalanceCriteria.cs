@@ -1,15 +1,14 @@
-﻿namespace HRM.Criteria.BackgroundJob
+﻿namespace HRM.Criteria.BackgroundJob;
+
+using Fanex.Data.Repository;
+
+public class UpdateAnnualLeaveBalanceCriteria : CriteriaBase
 {
-    using Fanex.Data.Repository;
+    public int Year { get; set; }
+    public int? EmpId { get; set; }
+    public bool IsDelete { get; set; }
 
-    public class UpdateAnnualLeaveBalanceCriteria : CriteriaBase
-    {
-        public int Year { get; set; }
-        public int? EmpId { get; set; }
-        public bool IsDelete { get; set; }
+    public override string GetSettingKey() => "Auto_AnnualLeaveBalance_Update";
 
-        public override string GetSettingKey() => "Auto_AnnualLeaveBalance_Update";
-
-        public override bool IsValid() => Year > 0;
-    }
+    public override bool IsValid() => Year > 0;
 }

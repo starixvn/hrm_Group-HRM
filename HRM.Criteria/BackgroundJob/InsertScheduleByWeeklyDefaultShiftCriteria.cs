@@ -1,16 +1,15 @@
-﻿namespace HRM.Criteria.BackgroundJob
+﻿namespace HRM.Criteria.BackgroundJob;
+
+using System;
+using Fanex.Data.Repository;
+
+public class InsertScheduleByWeeklyDefaultShiftCriteria : CriteriaBase
 {
-    using System;
-    using Fanex.Data.Repository;
+    public int? EmployeeId { get; set; }
+    public DateTime FromDate { get; set; }
+    public DateTime ToDate { get; set; }
 
-    public class InsertScheduleByWeeklyDefaultShiftCriteria : CriteriaBase
-    {
-        public int? EmployeeId { get; set; }
-        public DateTime FromDate { get; set; }
-        public DateTime ToDate { get; set; }
+    public override string GetSettingKey() => "Auto_EmployeeCalendar_InsertWeeklyDefaultShift";
 
-        public override string GetSettingKey() => "Auto_EmployeeCalendar_InsertWeeklyDefaultShift";
-
-        public override bool IsValid() => true;
-    }
+    public override bool IsValid() => true;
 }

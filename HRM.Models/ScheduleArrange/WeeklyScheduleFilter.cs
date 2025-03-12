@@ -1,15 +1,14 @@
-﻿namespace HRM.Models.ScheduleArrange
-{
-    using System;
+﻿namespace HRM.Models.ScheduleArrange;
 
-    public class WeeklyScheduleFilter
-    {
-        public int ActorId { get; set; }
-        public DateTime FromDate { get; set; }
-        public DateTime ToDate { get; set; }
-        public string TeamIds { get; set; }
-        public int? EmployeeId { get; set; }
-        public bool IsIFrame { get; set; }
-        public byte? IsLocal { get; set; }
-    }
+using System;
+
+public class WeeklyScheduleFilter
+{
+    public int ActorId { get; set; }
+    public DateTime FromDate { get; set; }
+    public DateTime ToDate { get; set; }
+    public string TeamIds { get; set; }
+    public int? EmployeeId { get; set; }
+    public bool IsIFrame { get; set; }
+    public byte? IsLocal { get; set; }
 }

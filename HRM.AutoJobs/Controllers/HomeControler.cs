@@ -1,15 +1,14 @@
-﻿namespace HRM.AutoJobs.Controllers
-{
-    using Microsoft.AspNetCore.Mvc;
+﻿namespace HRM.AutoJobs.Controllers;
 
-    [ApiController]
-    [Route("[controller]")]
-    public class HomeControler : ControllerBase
+using Microsoft.AspNetCore.Mvc;
+
+[ApiController]
+[Route("[controller]")]
+public class HomeControler : ControllerBase
+{
+    [HttpGet]
+    public IActionResult Get()
     {
-        [HttpGet]
-        public IActionResult Get()
-        {
-            return Ok("I'm fine!");
-        }
+        return Ok("I'm fine!");
     }
 }

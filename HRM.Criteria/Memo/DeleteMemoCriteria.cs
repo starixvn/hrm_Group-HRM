@@ -1,14 +1,13 @@
-﻿namespace HRM.Criteria.Memo
+﻿namespace HRM.Criteria.Memo;
+
+using Fanex.Data.Repository;
+
+public class DeleteMemoCriteria : CriteriaBase
 {
-    using Fanex.Data.Repository;
+    public int Id { get; set; }
+    public int CompanyId { get; set; }
 
-    public class DeleteMemoCriteria : CriteriaBase
-    {
-        public int Id { get; set; }
-        public int CompanyId { get; set; }
+    public override string GetSettingKey() => "Memo_Delete";
 
-        public override string GetSettingKey() => "Memo_Delete";
-
-        public override bool IsValid() => Id > 0;
-    }
+    public override bool IsValid() => Id > 0;
 }

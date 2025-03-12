@@ -1,68 +1,67 @@
-﻿namespace HRM.Core.Filters
+﻿namespace HRM.Core.Filters;
+
+using System;
+using System.Linq;
+using System.Net;
+using GO.UserControl.Client.Core.Enumerables;
+using GO.UserControl.Client.Core.Session;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.Extensions.DependencyInjection;
+
+[AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
+public class HrmPermissionAttribute(Policy policy, params string[] functionKeys) : Attribute, IAuthorizationFilter
 {
-    using System;
-    using System.Linq;
-    using System.Net;
-    using GO.UserControl.Client.Core.Enumerables;
-    using GO.UserControl.Client.Core.Session;
-    using Microsoft.AspNetCore.Http;
-    using Microsoft.AspNetCore.Mvc;
-    using Microsoft.AspNetCore.Mvc.Filters;
-    using Microsoft.Extensions.DependencyInjection;
+    public string[] FunctionKeys { get; set; } = functionKeys;
+    public Policy Policy { get; set; } = policy;
 
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
-    public class HrmPermissionAttribute(Policy policy, params string[] functionKeys) : Attribute, IAuthorizationFilter
+    public void OnAuthorization(AuthorizationFilterContext context)
     {
-        public string[] FunctionKeys { get; set; } = functionKeys;
-        public Policy Policy { get; set; } = policy;
-
-        public void OnAuthorization(AuthorizationFilterContext context)
+        var session = context.HttpContext.RequestServices.GetRequiredService<IUserControlSession>();
+        if (!FunctionKeys.Select(functionKey => session.HasPermissionOnFunction(functionKey, Policy)).Any())
         {
-            var session = context.HttpContext.RequestServices.GetRequiredService<IUserControlSession>();
-            if (!FunctionKeys.Select(functionKey => session.HasPermissionOnFunction(functionKey, Policy)).Any())
+            if (IsAjaxRequest(context.HttpContext.Request))
             {
-                if (IsAjaxRequest(context.HttpContext.Request))
-                {
-                    context.Result = new UnauthorizedResult();
-                }
-                else
-                {
-                    context.Result = new RedirectToActionResult("logout", "auth", null);
-                }
+                context.Result = new UnauthorizedResult();
             }
             else
             {
-                CheckUserPermission(context, session);
+                context.Result = new RedirectToActionResult("logout", "auth", null);
             }
         }
-
-        private void CheckUserPermission(AuthorizationFilterContext context, IUserControlSession session)
+        else
         {
-            var hasPermission = false;
+            CheckUserPermission(context, session);
+        }
+    }
 
-            foreach (var functionKey in FunctionKeys)
-            {
-                if (session.HasPermissionOnFunction(functionKey, Policy))
-                {
-                    hasPermission = true;
-                }
-            }
+    private void CheckUserPermission(AuthorizationFilterContext context, IUserControlSession session)
+    {
+        var hasPermission = false;
 
-            if (!hasPermission)
+        foreach (var functionKey in FunctionKeys)
+        {
+            if (session.HasPermissionOnFunction(functionKey, Policy))
             {
-                if (IsAjaxRequest(context.HttpContext.Request))
-                {
-                    context.Result = new StatusCodeResult((int)HttpStatusCode.Forbidden);
-                }
-                else
-                {
-                    context.Result = new RedirectToActionResult("AccessDenied", "Error", null);
-                }
+                hasPermission = true;
             }
         }
 
-        private static bool IsAjaxRequest(HttpRequest request)
-           => string.Equals(request.Query["X-Requested-With"], "XMLHttpRequest", StringComparison.OrdinalIgnoreCase) ||
-              string.Equals(request.Headers["X-Requested-With"], "XMLHttpRequest", StringComparison.OrdinalIgnoreCase);
+        if (!hasPermission)
+        {
+            if (IsAjaxRequest(context.HttpContext.Request))
+            {
+                context.Result = new StatusCodeResult((int)HttpStatusCode.Forbidden);
+            }
+            else
+            {
+                context.Result = new RedirectToActionResult("AccessDenied", "Error", null);
+            }
+        }
     }
+
+    private static bool IsAjaxRequest(HttpRequest request)
+        => string.Equals(request.Query["X-Requested-With"], "XMLHttpRequest", StringComparison.OrdinalIgnoreCase) ||
+           string.Equals(request.Headers["X-Requested-With"], "XMLHttpRequest", StringComparison.OrdinalIgnoreCase);
 }

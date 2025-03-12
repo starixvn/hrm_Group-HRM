@@ -1,13 +1,12 @@
-﻿namespace HRM.Repositories
-{
-    using System;
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
-    using Fanex.Data.Repository;
-    using Models.Report.Overtime;
+﻿namespace HRM.Repositories;
 
-    public interface IOvertimeReportRepository
-    {
-        Task<Tuple<IEnumerable<DateRange>, IEnumerable<DailyOvertimeDetails>>> GetMonthlyOvertimeAsync(ICriteria criteria);
-    }
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Fanex.Data.Repository;
+using Models.Report.Overtime;
+
+public interface IOvertimeReportRepository
+{
+    Task<Tuple<IEnumerable<DateRange>, IEnumerable<DailyOvertimeDetails>>> GetMonthlyOvertimeAsync(ICriteria criteria);
 }

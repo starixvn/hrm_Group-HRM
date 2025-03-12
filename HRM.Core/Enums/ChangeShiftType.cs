@@ -1,8 +1,7 @@
-﻿namespace HRM.Core.Enums
+﻿namespace HRM.Core.Enums;
+
+public enum ChangeShiftType
 {
-    public enum ChangeShiftType
-    {
-        ChangeShift = 1,
-        MoveOffDay
-    }
+    ChangeShift = 1,
+    MoveOffDay
 }

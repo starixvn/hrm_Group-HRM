@@ -1,11 +1,10 @@
-﻿namespace HRM.MailDeliver
+﻿namespace HRM.MailDeliver;
+
+public class MailStatus
 {
-    public class MailStatus
-    {
-        public bool IsSucessfull { get; set; }
+    public bool IsSucessfull { get; set; }
 
-        public string ErrorMessage { get; set; }
+    public string ErrorMessage { get; set; }
 
-        public string StackTrace { get; set; }
-    }
+    public string StackTrace { get; set; }
 }

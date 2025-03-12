@@ -1,17 +1,16 @@
-﻿namespace HRM.Criteria.Dashboard
+﻿namespace HRM.Criteria.Dashboard;
+
+using System;
+using Fanex.Data.Repository;
+
+public class GetMemberRequestCriteria : CriteriaBase
 {
-    using System;
-    using Fanex.Data.Repository;
+    public int EmployeeId { get; set; }
+    public DateTime Date { get; set; }
 
-    public class GetMemberRequestCriteria : CriteriaBase
-    {
-        public int EmployeeId { get; set; }
-        public DateTime Date { get; set; }
+    public short CompanyId { get; set; }
 
-        public short CompanyId { get; set; }
+    public override string GetSettingKey() => "Dashboard_GetMemberRequest";
 
-        public override string GetSettingKey() => "Dashboard_GetMemberRequest";
-
-        public override bool IsValid() => EmployeeId > 0;
-    }
+    public override bool IsValid() => EmployeeId > 0;
 }

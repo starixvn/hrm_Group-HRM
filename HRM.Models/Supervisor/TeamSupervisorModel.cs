@@ -1,31 +1,30 @@
-﻿namespace HRM.Models.Supervisor
+﻿namespace HRM.Models.Supervisor;
+
+using Core.Enums;
+using Core.Helpers;
+
+public class TeamSupervisorModel
 {
-    using Core.Enums;
-    using Core.Helpers;
+    public int TeamId { get; set; }
 
-    public class TeamSupervisorModel
+    public string Code { get; set; }
+
+    public string Name { get; set; }
+
+    public int ActionType { get; set; }
+
+    public string Supervisors { get; set; }
+
+    public string ActionName
     {
-        public int TeamId { get; set; }
-
-        public string Code { get; set; }
-
-        public string Name { get; set; }
-
-        public int ActionType { get; set; }
-
-        public string Supervisors { get; set; }
-
-        public string ActionName
+        get
         {
-            get
+            if (ActionType > 0)
             {
-                if (ActionType > 0)
-                {
-                    return EnumHelper.GetDescription((SupervisorActionType)ActionType);
-                }
-
-                return string.Empty;
+                return EnumHelper.GetDescription((SupervisorActionType)ActionType);
             }
+
+            return string.Empty;
         }
     }
 }

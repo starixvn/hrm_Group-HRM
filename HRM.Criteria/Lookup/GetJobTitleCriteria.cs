@@ -1,15 +1,14 @@
-﻿namespace HRM.Criteria.Lookup
+﻿namespace HRM.Criteria.Lookup;
+
+using Fanex.Data.Repository;
+
+public class GetJobTitleCriteria : CriteriaBase
 {
-    using Fanex.Data.Repository;
+    public string JobTitle { get; set; }
 
-    public class GetJobTitleCriteria : CriteriaBase
-    {
-        public string JobTitle { get; set; }
+    public int CompanyId { get; set; }
 
-        public int CompanyId { get; set; }
+    public override string GetSettingKey() => "Lookup_GetJobTitle";
 
-        public override string GetSettingKey() => "Lookup_GetJobTitle";
-
-        public override bool IsValid() => true;
-    }
+    public override bool IsValid() => true;
 }

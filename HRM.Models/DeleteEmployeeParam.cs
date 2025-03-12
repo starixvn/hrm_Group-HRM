@@ -1,11 +1,10 @@
-﻿namespace HRM.Models
-{
-    using System;
+﻿namespace HRM.Models;
 
-    public class DeleteEmployeeParam
-    {
-        public int UserId { get; set; }
-        public int EmployeeId { get; set; }
-        public DateTime ResignedDate { get; set; }
-    }
+using System;
+
+public class DeleteEmployeeParam
+{
+    public int UserId { get; set; }
+    public int EmployeeId { get; set; }
+    public DateTime ResignedDate { get; set; }
 }

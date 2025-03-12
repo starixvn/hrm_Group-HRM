@@ -1,12 +1,11 @@
-﻿namespace HRM.ViewModels.Report
+﻿namespace HRM.ViewModels.Report;
+
+using System.Collections.Generic;
+using HRM.Models.Report;
+
+public class ManpowerCategoryViewModel
 {
-    using System.Collections.Generic;
-    using HRM.Models.Report;
+    public int Year { get; set; }
 
-    public class ManpowerCategoryViewModel
-    {
-        public int Year { get; set; }
-
-        public IEnumerable<ManpowerCategoryModel> Manpowers { get; set; }
-    }
+    public IEnumerable<ManpowerCategoryModel> Manpowers { get; set; }
 }

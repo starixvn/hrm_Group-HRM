@@ -1,7 +1,6 @@
-﻿namespace HRM.Models
+﻿namespace HRM.Models;
+
+public class JobLevel : EntityBase<int>
 {
-    public class JobLevel : EntityBase<int>
-    {
-        public bool IsActive { get; set; }
-    }
+    public bool IsActive { get; set; }
 }

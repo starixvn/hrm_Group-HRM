@@ -1,15 +1,14 @@
-﻿namespace HRM.ViewModels.AnnualLeave
+﻿namespace HRM.ViewModels.AnnualLeave;
+
+using System;
+
+public class AnnualLeaveTransactionViewModel : BaseAnnualLeaveBalanceViewModel
 {
-    using System;
+    public long LeaveTransId { get; set; }
 
-    public class AnnualLeaveTransactionViewModel : BaseAnnualLeaveBalanceViewModel
-    {
-        public long LeaveTransId { get; set; }
+    public int EmpId { get; set; }
 
-        public int EmpId { get; set; }
+    public long? RequestId { get; set; }
 
-        public long? RequestId { get; set; }
-
-        public DateTime ModifiedDate { get; set; }
-    }
+    public DateTime ModifiedDate { get; set; }
 }

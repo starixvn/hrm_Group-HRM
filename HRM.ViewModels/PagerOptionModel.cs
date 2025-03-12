@@ -1,29 +1,28 @@
-﻿namespace HRM.ViewModels
+﻿namespace HRM.ViewModels;
+
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc.Rendering;
+
+public class PagerOptionModel
 {
-    using System.Collections.Generic;
-    using Microsoft.AspNetCore.Mvc.Rendering;
+    public int ItemsPerPage { get; set; }
 
-    public class PagerOptionModel
+    public int CurrentPage { get; set; }
+
+    public int TotalItem { get; set; }
+
+    public IList<SelectListItem> ItemsPerPageArray
     {
-        public int ItemsPerPage { get; set; }
-
-        public int CurrentPage { get; set; }
-
-        public int TotalItem { get; set; }
-
-        public IList<SelectListItem> ItemsPerPageArray
+        get
         {
-            get
+            var itemsPerPages = new List<SelectListItem>
             {
-                var itemsPerPages = new List<SelectListItem>
-                {
-                    new SelectListItem { Text = "50", Value = "50" },
-                    new SelectListItem { Text = "100", Value = "100" },
-                    new SelectListItem { Text = "200", Value = "200" }
-                };
+                new SelectListItem { Text = "50", Value = "50" },
+                new SelectListItem { Text = "100", Value = "100" },
+                new SelectListItem { Text = "200", Value = "200" }
+            };
 
-                return itemsPerPages;
-            }
+            return itemsPerPages;
         }
     }
 }

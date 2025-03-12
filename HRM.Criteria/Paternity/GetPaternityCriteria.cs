@@ -1,21 +1,20 @@
-﻿namespace HRM.Criteria.Paternity
+﻿namespace HRM.Criteria.Paternity;
+
+using Fanex.Data.Repository;
+
+public class GetPaternityCriteria : CriteriaBase
 {
-    using Fanex.Data.Repository;
+    public int Year { get; set; }
 
-    public class GetPaternityCriteria : CriteriaBase
+    public short CompanyId { get; set; }
+
+    public override string GetSettingKey()
     {
-        public int Year { get; set; }
+        return "Paternity_Get";
+    }
 
-        public short CompanyId { get; set; }
-
-        public override string GetSettingKey()
-        {
-            return "Paternity_Get";
-        }
-
-        public override bool IsValid()
-        {
-            return Year > 0;
-        }
+    public override bool IsValid()
+    {
+        return Year > 0;
     }
 }

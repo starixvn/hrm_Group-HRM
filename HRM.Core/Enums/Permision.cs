@@ -1,16 +1,15 @@
-﻿namespace HRM.Core.Enums
+﻿namespace HRM.Core.Enums;
+
+using System.ComponentModel;
+
+public enum Permision
 {
-    using System.ComponentModel;
+    [Description("None")]
+    None = 0,
 
-    public enum Permision
-    {
-        [Description("None")]
-        None = 0,
+    [Description("Read")]
+    Read = 1,
 
-        [Description("Read")]
-        Read = 1,
-
-        [Description("Host")]
-        Host = 2
-    }
+    [Description("Host")]
+    Host = 2
 }

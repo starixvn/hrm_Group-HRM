@@ -1,14 +1,13 @@
-﻿namespace HRM.Criteria.Request.ChangeShift
+﻿namespace HRM.Criteria.Request.ChangeShift;
+
+using Fanex.Data.Repository;
+
+public class DeleteChangeShiftRequestCriteria : CriteriaBase
 {
-    using Fanex.Data.Repository;
+    public long RequestId { get; set; }
+    public int ActorId { get; set; }
 
-    public class DeleteChangeShiftRequestCriteria : CriteriaBase
-    {
-        public long RequestId { get; set; }
-        public int ActorId { get; set; }
+    public override string GetSettingKey() => "ChangeShiftRequest_Delete";
 
-        public override string GetSettingKey() => "ChangeShiftRequest_Delete";
-
-        public override bool IsValid() => RequestId > 0 && ActorId > 0;
-    }
+    public override bool IsValid() => RequestId > 0 && ActorId > 0;
 }

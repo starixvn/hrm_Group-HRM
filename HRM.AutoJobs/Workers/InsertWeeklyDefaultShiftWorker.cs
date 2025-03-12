@@ -1,34 +1,33 @@
-﻿namespace HRM.AutoJobs.Workers
+﻿namespace HRM.AutoJobs.Workers;
+
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Constants;
+using Helpers;
+using Models;
+using Services;
+using Microsoft.Extensions.Logging;
+
+public class InsertWeeklyDefaultShiftWorker : BaseWorker
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
-    using Constants;
-    using Helpers;
-    using Models;
-    using Services;
-    using Microsoft.Extensions.Logging;
+    private readonly IScheduleArrangeService scheduleArrangeService;
 
-    public class InsertWeeklyDefaultShiftWorker : BaseWorker
+    public InsertWeeklyDefaultShiftWorker(
+        IScheduleArrangeService scheduleArrangeService,
+        List<JobSetting> jobSettings,
+        ILogger<InsertWeeklyDefaultShiftWorker> logfile,
+        Fanex.Logging.ILogger logger) : base(logfile, logger)
     {
-        private readonly IScheduleArrangeService scheduleArrangeService;
+        this.scheduleArrangeService = scheduleArrangeService;
+        jobSetting = JobHelper.GetJobConfig(jobSettings, JobSettingConstants.InsertWeeklyDefaultShift);
+    }
 
-        public InsertWeeklyDefaultShiftWorker(
-            IScheduleArrangeService scheduleArrangeService,
-            List<JobSetting> jobSettings,
-            ILogger<InsertWeeklyDefaultShiftWorker> logfile,
-            Fanex.Logging.ILogger logger) : base(logfile, logger)
+    public override async Task DoWorkAsync()
+    {
+        if (DateTimeOffset.UtcNow.DayOfWeek == DayOfWeek.Friday)
         {
-            this.scheduleArrangeService = scheduleArrangeService;
-            jobSetting = JobHelper.GetJobConfig(jobSettings, JobSettingConstants.InsertWeeklyDefaultShift);
-        }
-
-        public override async Task DoWorkAsync()
-        {
-            if (DateTimeOffset.UtcNow.DayOfWeek == DayOfWeek.Friday)
-            {
-                await scheduleArrangeService.InsertWeeklyDefaultShiftAsync();
-            }
+            await scheduleArrangeService.InsertWeeklyDefaultShiftAsync();
         }
     }
 }

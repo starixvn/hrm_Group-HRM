@@ -1,19 +1,18 @@
-﻿namespace HRM.Criteria.Request.Leave
+﻿namespace HRM.Criteria.Request.Leave;
+
+using Fanex.Data.Repository;
+
+public class DeleteLeaveRequestCriteria : CriteriaBase
 {
-    using Fanex.Data.Repository;
+    public long RequestId { get; set; }
 
-    public class DeleteLeaveRequestCriteria : CriteriaBase
+    public override string GetSettingKey()
     {
-        public long RequestId { get; set; }
+        return "LeaveRequest_Delete";
+    }
 
-        public override string GetSettingKey()
-        {
-            return "LeaveRequest_Delete";
-        }
-
-        public override bool IsValid()
-        {
-            return RequestId > 0;
-        }
+    public override bool IsValid()
+    {
+        return RequestId > 0;
     }
 }

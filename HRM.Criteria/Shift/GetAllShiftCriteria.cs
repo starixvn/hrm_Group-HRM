@@ -1,17 +1,16 @@
-﻿namespace HRM.Criteria.Shift
+﻿namespace HRM.Criteria.Shift;
+
+using Fanex.Data.Repository;
+
+public class GetAllShiftCriteria : CriteriaBase
 {
-    using Fanex.Data.Repository;
-
-    public class GetAllShiftCriteria : CriteriaBase
+    public override string GetSettingKey()
     {
-        public override string GetSettingKey()
-        {
-            return "Shift_GetShifts";
-        }
+        return "Shift_GetShifts";
+    }
 
-        public override bool IsValid()
-        {
-            return true;
-        }
+    public override bool IsValid()
+    {
+        return true;
     }
 }

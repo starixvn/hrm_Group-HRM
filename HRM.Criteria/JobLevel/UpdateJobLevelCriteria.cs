@@ -1,23 +1,22 @@
-﻿namespace HRM.Criteria.JobLevel
+﻿namespace HRM.Criteria.JobLevel;
+
+using Fanex.Data.Repository;
+
+public class UpdateJobLevelCriteria : CriteriaBase
 {
-    using Fanex.Data.Repository;
+    public int JobLevelId { get; set; }
 
-    public class UpdateJobLevelCriteria : CriteriaBase
+    public string Name { get; set; }
+
+    public int ModifiedBy { get; set; }
+
+    public override string GetSettingKey()
     {
-        public int JobLevelId { get; set; }
+        return "JobLevel_Update";
+    }
 
-        public string Name { get; set; }
-
-        public int ModifiedBy { get; set; }
-
-        public override string GetSettingKey()
-        {
-            return "JobLevel_Update";
-        }
-
-        public override bool IsValid()
-        {
-            return !string.IsNullOrWhiteSpace(Name) && JobLevelId > 0;
-        }
+    public override bool IsValid()
+    {
+        return !string.IsNullOrWhiteSpace(Name) && JobLevelId > 0;
     }
 }

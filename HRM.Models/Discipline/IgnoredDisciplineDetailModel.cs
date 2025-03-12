@@ -1,22 +1,21 @@
-﻿namespace HRM.Models.Discipline
+﻿namespace HRM.Models.Discipline;
+
+using System;
+using Core.XMLExtensions;
+
+[Serializable]
+[XMLName("Row")]
+public class IgnoredDisciplineDetailModel
 {
-    using System;
-    using Core.XMLExtensions;
+    public DateTime WorkDate { get; set; }
 
-    [Serializable]
-    [XMLName("Row")]
-    public class IgnoredDisciplineDetailModel
-    {
-        public DateTime WorkDate { get; set; }
+    public int EmployeeId { get; set; }
 
-        public int EmployeeId { get; set; }
+    public short DisciplineTypeId { get; set; }
 
-        public short DisciplineTypeId { get; set; }
+    public string IgnoreBy { get; set; }
 
-        public string IgnoreBy { get; set; }
+    public DateTime IgnoreDate { get; set; }
 
-        public DateTime IgnoreDate { get; set; }
-
-        public bool IsIgnored { get; set; }
-    }
+    public bool IsIgnored { get; set; }
 }

@@ -1,15 +1,14 @@
-﻿namespace HRM.Criteria.Section
+﻿namespace HRM.Criteria.Section;
+
+using Fanex.Data.Repository;
+
+public class GetSectionCriteria : CriteriaBase
 {
-    using Fanex.Data.Repository;
+    public bool? IsActive { get; set; }
 
-    public class GetSectionCriteria : CriteriaBase
-    {
-        public bool? IsActive { get; set; }
+    public short CompanyId { get; set; }
 
-        public short CompanyId { get; set; }
+    public override string GetSettingKey() => "Section_Get";
 
-        public override string GetSettingKey() => "Section_Get";
-
-        public override bool IsValid() => true;
-    }
+    public override bool IsValid() => true;
 }

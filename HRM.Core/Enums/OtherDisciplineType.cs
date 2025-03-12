@@ -1,13 +1,12 @@
-﻿namespace HRM.Core.Enums
+﻿namespace HRM.Core.Enums;
+
+using System.ComponentModel;
+
+public enum OtherDisciplineType
 {
-    using System.ComponentModel;
+    [Description("Verbal Warning")]
+    VerbalWarning = -1,
 
-    public enum OtherDisciplineType
-    {
-        [Description("Verbal Warning")]
-        VerbalWarning = -1,
-
-        [Description("Written Warning")]
-        WrittenWarning = -2
-    }
+    [Description("Written Warning")]
+    WrittenWarning = -2
 }

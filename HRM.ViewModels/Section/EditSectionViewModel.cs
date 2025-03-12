@@ -1,10 +1,9 @@
-﻿namespace HRM.ViewModels.Section
-{
-    using System.ComponentModel.DataAnnotations;
+﻿namespace HRM.ViewModels.Section;
 
-    public class EditSectionViewModel : AddSectionViewModel
-    {
-        [Required]
-        public int SectionId { get; set; }
-    }
+using System.ComponentModel.DataAnnotations;
+
+public class EditSectionViewModel : AddSectionViewModel
+{
+    [Required]
+    public int SectionId { get; set; }
 }

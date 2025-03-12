@@ -1,14 +1,13 @@
-﻿namespace HRM.Criteria.Supervisor
+﻿namespace HRM.Criteria.Supervisor;
+
+using Fanex.Data.Repository;
+
+public class GetEmployeeSupervisorCriteria : CriteriaBase
 {
-    using Fanex.Data.Repository;
+    public int EmpId { get; set; }
+    public int Role { get; set; }
 
-    public class GetEmployeeSupervisorCriteria : CriteriaBase
-    {
-        public int EmpId { get; set; }
-        public int Role { get; set; }
+    public override string GetSettingKey() => "EmployeeSupervisor_GetRequestByEmpID";
 
-        public override string GetSettingKey() => "EmployeeSupervisor_GetRequestByEmpID";
-
-        public override bool IsValid() => EmpId > 0;
-    }
+    public override bool IsValid() => EmpId > 0;
 }

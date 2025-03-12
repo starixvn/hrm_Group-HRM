@@ -1,19 +1,18 @@
-﻿namespace HRM.Criteria.Time
+﻿namespace HRM.Criteria.Time;
+
+using Fanex.Data.Repository;
+
+public class GetPrivilegeCreateCheckInOutRecordCriteria : CriteriaBase
 {
-    using Fanex.Data.Repository;
+    public int EmpId { get; set; }
 
-    public class GetPrivilegeCreateCheckInOutRecordCriteria : CriteriaBase
+    public override string GetSettingKey()
     {
-        public int EmpId { get; set; }
+        return "TimeRecord_GetPrivilegeCreateCheckInOut";
+    }
 
-        public override string GetSettingKey()
-        {
-            return "TimeRecord_GetPrivilegeCreateCheckInOut";
-        }
-
-        public override bool IsValid()
-        {
-            return EmpId > 0;
-        }
+    public override bool IsValid()
+    {
+        return EmpId > 0;
     }
 }

@@ -1,26 +1,25 @@
-﻿namespace HRM.Criteria.Request.CheckInOut
+﻿namespace HRM.Criteria.Request.CheckInOut;
+
+using System;
+using Fanex.Data.Repository;
+
+public class GetCheckInOutRequestByDateCriteria : CriteriaBase
 {
-    using System;
-    using Fanex.Data.Repository;
+    public int EmpId { get; set; }
 
-    public class GetCheckInOutRequestByDateCriteria : CriteriaBase
+    public DateTime FromDate { get; set; }
+
+    public DateTime ToDate { get; set; }
+
+    public short CompanyId { get; set; }
+
+    public override string GetSettingKey()
     {
-        public int EmpId { get; set; }
+        return "CheckInOutRequest_GetByDate";
+    }
 
-        public DateTime FromDate { get; set; }
-
-        public DateTime ToDate { get; set; }
-
-        public short CompanyId { get; set; }
-
-        public override string GetSettingKey()
-        {
-            return "CheckInOutRequest_GetByDate";
-        }
-
-        public override bool IsValid()
-        {
-            return FromDate <= ToDate;
-        }
+    public override bool IsValid()
+    {
+        return FromDate <= ToDate;
     }
 }

@@ -1,13 +1,12 @@
-﻿namespace HRM.MailDeliver.Criteria
-{
-    using Fanex.Data.Repository;
+﻿namespace HRM.MailDeliver.Criteria;
 
-    public class GetMailConfigByIdCriteria : CriteriaBase
-    { 
-        public int AppId { get; set; }
+using Fanex.Data.Repository;
 
-        public override string GetSettingKey() => "MailRecorder_GetConfig";
+public class GetMailConfigByIdCriteria : CriteriaBase
+{ 
+    public int AppId { get; set; }
 
-        public override bool IsValid() => AppId > 0;
-    }
+    public override string GetSettingKey() => "MailRecorder_GetConfig";
+
+    public override bool IsValid() => AppId > 0;
 }

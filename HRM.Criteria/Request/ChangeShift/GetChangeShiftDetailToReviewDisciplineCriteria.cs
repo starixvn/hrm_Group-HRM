@@ -1,13 +1,12 @@
-﻿namespace HRM.Criteria.Request.ChangeShift
+﻿namespace HRM.Criteria.Request.ChangeShift;
+
+using Fanex.Data.Repository;
+
+public class GetChangeShiftDetailToReviewDisciplineCriteria : CriteriaBase
 {
-    using Fanex.Data.Repository;
+    public long RequestId { get; set; }
 
-    public class GetChangeShiftDetailToReviewDisciplineCriteria : CriteriaBase
-    {
-        public long RequestId { get; set; }
+    public override string GetSettingKey() => "ChangeShiftRequest_GetDetailToReviewDiscipline";
 
-        public override string GetSettingKey() => "ChangeShiftRequest_GetDetailToReviewDiscipline";
-
-        public override bool IsValid() => RequestId > 0;
-    }
+    public override bool IsValid() => RequestId > 0;
 }

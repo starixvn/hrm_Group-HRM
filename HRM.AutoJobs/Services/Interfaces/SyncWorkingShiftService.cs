@@ -1,9 +1,8 @@
-﻿namespace HRM.AutoJobs.Services
-{
-    using System.Threading.Tasks;
+﻿namespace HRM.AutoJobs.Services;
 
-    public interface ISyncWorkingShiftService
-    {
-        Task SyncWorkingShiftAsync();
-    }
+using System.Threading.Tasks;
+
+public interface ISyncWorkingShiftService
+{
+    Task SyncWorkingShiftAsync();
 }

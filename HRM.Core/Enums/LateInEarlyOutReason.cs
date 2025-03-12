@@ -1,13 +1,12 @@
-﻿namespace HRM.Core.Enums
+﻿namespace HRM.Core.Enums;
+
+using System.ComponentModel;
+
+public enum LateInEarlyOutReason
 {
-    using System.ComponentModel;
+    [Description("Management Allow")]
+    ManagementAllow = 1,
 
-    public enum LateInEarlyOutReason
-    {
-        [Description("Management Allow")]
-        ManagementAllow = 1,
-
-        [Description("Other")]
-        Other
-    }
+    [Description("Other")]
+    Other
 }

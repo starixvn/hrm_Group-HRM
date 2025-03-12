@@ -1,9 +1,8 @@
-﻿namespace HRM.Core.Enums
+﻿namespace HRM.Core.Enums;
+
+public enum SiteId
 {
-    public enum SiteId
-    {
-        None = 0,
-        SMS = 1,
-        HM = 2
-    }
+    None = 0,
+    SMS = 1,
+    HM = 2
 }

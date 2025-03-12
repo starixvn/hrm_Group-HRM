@@ -1,21 +1,20 @@
-﻿namespace HRM.Criteria.EmployeeRelationship
+﻿namespace HRM.Criteria.EmployeeRelationship;
+
+using Fanex.Data.Repository;
+
+public class DeleteRelationshipCriteria : CriteriaBase
 {
-    using Fanex.Data.Repository;
+    public int RelationshipId { get; set; }
 
-    public class DeleteRelationshipCriteria : CriteriaBase
+    public int ActorId { get; set; }
+
+    public override string GetSettingKey()
     {
-        public int RelationshipId { get; set; }
+        return "EmployeeRelationship_Delete";
+    }
 
-        public int ActorId { get; set; }
-
-        public override string GetSettingKey()
-        {
-            return "EmployeeRelationship_Delete";
-        }
-
-        public override bool IsValid()
-        {
-            return RelationshipId > 0 && ActorId > 0;
-        }
+    public override bool IsValid()
+    {
+        return RelationshipId > 0 && ActorId > 0;
     }
 }

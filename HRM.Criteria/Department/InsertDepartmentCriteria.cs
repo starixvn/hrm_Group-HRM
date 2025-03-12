@@ -1,29 +1,28 @@
-﻿namespace HRM.Criteria.Department
+﻿namespace HRM.Criteria.Department;
+
+using Fanex.Data.Repository;
+
+public class InsertDepartmentCriteria : CriteriaBase
 {
-    using Fanex.Data.Repository;
+    public string Code { get; set; }
 
-    public class InsertDepartmentCriteria : CriteriaBase
+    public string Name { get; set; }
+
+    public bool IsActive { get; set; }
+
+    public int  UnitId { get; set; }
+
+    public int ModifiedBy { get; set; }
+
+    public override string GetSettingKey()
     {
-        public string Code { get; set; }
+        return "Department_Insert";
+    }
 
-        public string Name { get; set; }
-
-        public bool IsActive { get; set; }
-
-        public int  UnitId { get; set; }
-
-        public int ModifiedBy { get; set; }
-
-        public override string GetSettingKey()
-        {
-            return "Department_Insert";
-        }
-
-        public override bool IsValid()
-        {
-            return !string.IsNullOrWhiteSpace(Code) 
-                && !string.IsNullOrWhiteSpace(Name)
-                && UnitId > 0;
-        }
+    public override bool IsValid()
+    {
+        return !string.IsNullOrWhiteSpace(Code) 
+               && !string.IsNullOrWhiteSpace(Name)
+               && UnitId > 0;
     }
 }

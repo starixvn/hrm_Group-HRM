@@ -1,7 +1,6 @@
-﻿namespace HRM.AutoJobs.Constants
+﻿namespace HRM.AutoJobs.Constants;
+
+public static class NamedHttpClients
 {
-    public static class NamedHttpClients
-    {
-        public const string ProxiedClient = "ProxiedClient";
-    }
+    public const string ProxiedClient = "ProxiedClient";
 }

@@ -1,13 +1,12 @@
-﻿namespace HRM.Core.Enums
+﻿namespace HRM.Core.Enums;
+
+public enum DateRangeOption
 {
-    public enum DateRangeOption
-    {
-        Today = 1,
-        Yesterday,
-        CurrentWeek,
-        LastWeek,
-        CurrentMonth,
-        LastMonth,
-        SinceLastMonth
-    }
+    Today = 1,
+    Yesterday,
+    CurrentWeek,
+    LastWeek,
+    CurrentMonth,
+    LastMonth,
+    SinceLastMonth
 }

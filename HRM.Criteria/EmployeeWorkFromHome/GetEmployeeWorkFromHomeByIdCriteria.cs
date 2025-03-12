@@ -1,19 +1,18 @@
-﻿namespace HRM.Criteria.EmployeeWorkFromHome
+﻿namespace HRM.Criteria.EmployeeWorkFromHome;
+
+using Fanex.Data.Repository;
+
+public class GetEmployeeWorkFromHomeByIdCriteria : CriteriaBase
 {
-    using Fanex.Data.Repository;
+    public int EmployeeWorkFromHomeId { get; set; }
 
-    public class GetEmployeeWorkFromHomeByIdCriteria : CriteriaBase
+    public override string GetSettingKey()
     {
-        public int EmployeeWorkFromHomeId { get; set; }
+        return "EmployeeWorkFromHome_GetById";
+    }
 
-        public override string GetSettingKey()
-        {
-            return "EmployeeWorkFromHome_GetById";
-        }
-
-        public override bool IsValid()
-        {
-            return EmployeeWorkFromHomeId > 0;
-        }
+    public override bool IsValid()
+    {
+        return EmployeeWorkFromHomeId > 0;
     }
 }

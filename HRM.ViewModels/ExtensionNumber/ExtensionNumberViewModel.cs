@@ -1,12 +1,11 @@
-﻿namespace HRM.ViewModels.ExtensionNumber
+﻿namespace HRM.ViewModels.ExtensionNumber;
+
+using System.Collections.Generic;
+using Models;
+
+public class ExtensionNumberViewModel
 {
-    using System.Collections.Generic;
-    using Models;
+    public string Name { get; set; }
 
-    public class ExtensionNumberViewModel
-    {
-        public string Name { get; set; }
-
-        public IList<ExtensionNoModel> Extensions { get; set; }
-    }
+    public IList<ExtensionNoModel> Extensions { get; set; }
 }

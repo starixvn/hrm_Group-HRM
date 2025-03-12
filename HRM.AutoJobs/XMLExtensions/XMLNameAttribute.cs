@@ -1,10 +1,9 @@
-﻿namespace HRM.AutoJobs.XMLExtensions
-{
-    using System;
+﻿namespace HRM.AutoJobs.XMLExtensions;
 
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Property)]
-    public sealed class XMLNameAttribute(string name) : Attribute
-    {
-        public string Name => name;
-    }
+using System;
+
+[AttributeUsage(AttributeTargets.Class | AttributeTargets.Property)]
+public sealed class XMLNameAttribute(string name) : Attribute
+{
+    public string Name => name;
 }

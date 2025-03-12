@@ -1,13 +1,12 @@
-﻿namespace HRM.ViewModels.Unit
+﻿namespace HRM.ViewModels.Unit;
+
+using System.Collections.Generic;
+using Models;
+
+public class UnitViewModel
 {
-    using System.Collections.Generic;
-    using Models;
+    public bool? IsActive { get; set; }
 
-    public class UnitViewModel
-    {
-        public bool? IsActive { get; set; }
+    public IList<Unit> Units { get; set; }
 
-        public IList<Unit> Units { get; set; }
-
-    }
 }

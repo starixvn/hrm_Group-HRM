@@ -1,10 +1,9 @@
-﻿namespace HRM.Models.Report.Overtime
-{
-    using System;
+﻿namespace HRM.Models.Report.Overtime;
 
-    public class DateRange
-    {
-        public DateTime Date { get; set; }
-        public bool IsHoliday { get; set; }
-    }
+using System;
+
+public class DateRange
+{
+    public DateTime Date { get; set; }
+    public bool IsHoliday { get; set; }
 }

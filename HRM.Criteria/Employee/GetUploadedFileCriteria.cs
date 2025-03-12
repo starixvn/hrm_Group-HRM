@@ -1,19 +1,18 @@
-﻿namespace HRM.Criteria.Employee
+﻿namespace HRM.Criteria.Employee;
+
+using Fanex.Data.Repository;
+
+public class GetUploadedFileCriteria : CriteriaBase
 {
-    using Fanex.Data.Repository;
+    public int EmpId { get; set; }
 
-    public class GetUploadedFileCriteria : CriteriaBase
+    public override string GetSettingKey()
     {
-        public int EmpId { get; set; }
+        return "Employee_GetUploadedFile";
+    }
 
-        public override string GetSettingKey()
-        {
-            return "Employee_GetUploadedFile";
-        }
-
-        public override bool IsValid()
-        {
-            return EmpId > 0;
-        }
+    public override bool IsValid()
+    {
+        return EmpId > 0;
     }
 }

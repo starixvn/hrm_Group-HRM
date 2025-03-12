@@ -1,13 +1,12 @@
-﻿namespace HRM.Criteria.Request.LateInEarlyOut
+﻿namespace HRM.Criteria.Request.LateInEarlyOut;
+
+using Fanex.Data.Repository;
+
+public class GetLateInEarlyOutDetailToReviewDisciplineCriteria : CriteriaBase
 {
-    using Fanex.Data.Repository;
+    public long RequestId { get; set; }
 
-    public class GetLateInEarlyOutDetailToReviewDisciplineCriteria : CriteriaBase
-    {
-        public long RequestId { get; set; }
+    public override string GetSettingKey() => "LateInEarlyOutRequest_GetDetailToReviewDiscipline";
 
-        public override string GetSettingKey() => "LateInEarlyOutRequest_GetDetailToReviewDiscipline";
-
-        public override bool IsValid() => RequestId > 0;
-    }
+    public override bool IsValid() => RequestId > 0;
 }

@@ -1,11 +1,10 @@
-﻿namespace HRM.Criteria.Overtime
+﻿namespace HRM.Criteria.Overtime;
+
+using Fanex.Data.Repository;
+
+public class GetEmployeeToRemindClaimOvertimeCriteria : CriteriaBase
 {
-    using Fanex.Data.Repository;
+    public override string GetSettingKey() => "Overtime_GetEmployeeToRemindClaim";
 
-    public class GetEmployeeToRemindClaimOvertimeCriteria : CriteriaBase
-    {
-        public override string GetSettingKey() => "Overtime_GetEmployeeToRemindClaim";
-
-        public override bool IsValid() => true;
-    }
+    public override bool IsValid() => true;
 }

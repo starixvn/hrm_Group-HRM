@@ -1,21 +1,20 @@
-﻿namespace HRM.Criteria.Request.KeepInView
+﻿namespace HRM.Criteria.Request.KeepInView;
+
+using Fanex.Data.Repository;
+
+public class GetKeepInViewRequestByIdCriteria : CriteriaBase
 {
-    using Fanex.Data.Repository;
+    public long RequestId { get; set; }
 
-    public class GetKeepInViewRequestByIdCriteria : CriteriaBase
+    public short CompanyId { get; set; }
+
+    public override string GetSettingKey()
     {
-        public long RequestId { get; set; }
+        return "KeepInViewRequest_GetById";
+    }
 
-        public short CompanyId { get; set; }
-
-        public override string GetSettingKey()
-        {
-            return "KeepInViewRequest_GetById";
-        }
-
-        public override bool IsValid()
-        {
-            return RequestId > 0;
-        }
+    public override bool IsValid()
+    {
+        return RequestId > 0;
     }
 }

@@ -1,27 +1,26 @@
-﻿namespace HRM.Criteria.Unit
+﻿namespace HRM.Criteria.Unit;
+
+using Fanex.Data.Repository;
+
+public class UpdateUnitCriteria : CriteriaBase
 {
-    using Fanex.Data.Repository;
+    public int UnitId { get; set; }
 
-    public class UpdateUnitCriteria : CriteriaBase
+    public string Code { get; set; }
+
+    public string Name { get; set; }
+
+    public bool IsActive { get; set; }
+
+    public int ModifiedBy { get; set; }
+
+    public override string GetSettingKey()
     {
-        public int UnitId { get; set; }
+        return "Unit_Update";
+    }
 
-        public string Code { get; set; }
-
-        public string Name { get; set; }
-
-        public bool IsActive { get; set; }
-
-        public int ModifiedBy { get; set; }
-
-        public override string GetSettingKey()
-        {
-            return "Unit_Update";
-        }
-
-        public override bool IsValid()
-        {
-            return UnitId > 0 && !string.IsNullOrWhiteSpace(Code) && !string.IsNullOrWhiteSpace(Name);
-        }
+    public override bool IsValid()
+    {
+        return UnitId > 0 && !string.IsNullOrWhiteSpace(Code) && !string.IsNullOrWhiteSpace(Name);
     }
 }

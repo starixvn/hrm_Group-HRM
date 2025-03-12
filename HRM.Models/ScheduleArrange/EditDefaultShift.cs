@@ -1,14 +1,13 @@
-﻿namespace HRM.Models.ScheduleArrange
-{
-    using System;
-    using Core.XMLExtensions;
+﻿namespace HRM.Models.ScheduleArrange;
 
-    [Serializable]
-    [XMLName("Row")]
-    public class EditDefaultShift
-    {
-        public int EmployeeId { get; set; }
-        public DateTime FromDate { get; set; }
-        public int? ShiftId { get; set; }
-    }
+using System;
+using Core.XMLExtensions;
+
+[Serializable]
+[XMLName("Row")]
+public class EditDefaultShift
+{
+    public int EmployeeId { get; set; }
+    public DateTime FromDate { get; set; }
+    public int? ShiftId { get; set; }
 }

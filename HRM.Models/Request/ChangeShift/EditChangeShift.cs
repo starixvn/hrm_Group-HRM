@@ -1,7 +1,6 @@
-﻿namespace HRM.Models.Request.ChangeShift
+﻿namespace HRM.Models.Request.ChangeShift;
+
+public class EditChangeShift : CreateChangeShift
 {
-    public class EditChangeShift : CreateChangeShift
-    {
-        public long RequestId { get; set; }
-    }
+    public long RequestId { get; set; }
 }

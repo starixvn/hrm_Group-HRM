@@ -1,34 +1,33 @@
-﻿namespace HRM.Criteria.Report
+﻿namespace HRM.Criteria.Report;
+
+using System;
+using Fanex.Data;
+using Fanex.Data.Repository;
+
+public class GetEmployeeAttendanceCriteria : CriteriaBase
 {
-    using System;
-    using Fanex.Data;
-    using Fanex.Data.Repository;
+    public int? SupervisorId { get; set; }
 
-    public class GetEmployeeAttendanceCriteria : CriteriaBase
-    {
-        public int? SupervisorId { get; set; }
+    public DateTime Fromtime { get; set; }
 
-        public DateTime Fromtime { get; set; }
+    public DateTime Totime { get; set; }
 
-        public DateTime Totime { get; set; }
+    public int? EmpId { get; set; }
 
-        public int? EmpId { get; set; }
+    public string TeamIds { get; set; }
 
-        public string TeamIds { get; set; }
+    public int? ExcludeUserDelete { get; set; }
 
-        public int? ExcludeUserDelete { get; set; }
+    public byte? IsLocal { get; set; }
 
-        public byte? IsLocal { get; set; }
+    public bool? IsRealDate { get; set; }
 
-        public bool? IsRealDate { get; set; }
+    [SpParam(SqlParamName = "Type")]
+    public short AttendanceType { get; set; }
 
-        [SpParam(SqlParamName = "Type")]
-        public short AttendanceType { get; set; }
+    public int CompanyId { get; set; }
 
-        public int CompanyId { get; set; }
+    public override string GetSettingKey() => "EmployeeAttendance_GetByType";
 
-        public override string GetSettingKey() => "EmployeeAttendance_GetByType";
-
-        public override bool IsValid() => true;
-    }
+    public override bool IsValid() => true;
 }

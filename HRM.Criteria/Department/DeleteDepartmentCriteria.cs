@@ -1,21 +1,20 @@
-﻿namespace HRM.Criteria.Department
+﻿namespace HRM.Criteria.Department;
+
+using Fanex.Data.Repository;
+
+public class DeleteDepartmentCriteria : CriteriaBase
 {
-    using Fanex.Data.Repository;
+    public int departmentId { get; set; }
 
-    public class DeleteDepartmentCriteria : CriteriaBase
+    public int ModifiedBy { get; set; }
+
+    public override string GetSettingKey()
     {
-        public int departmentId { get; set; }
+        return "Department_Delete";
+    }
 
-        public int ModifiedBy { get; set; }
-
-        public override string GetSettingKey()
-        {
-            return "Department_Delete";
-        }
-
-        public override bool IsValid()
-        {
-            return departmentId > 0;
-        }
+    public override bool IsValid()
+    {
+        return departmentId > 0;
     }
 }

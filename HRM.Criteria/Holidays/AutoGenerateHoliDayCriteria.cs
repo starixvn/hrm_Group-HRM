@@ -1,13 +1,12 @@
-﻿namespace HRM.Criteria.Holidays
+﻿namespace HRM.Criteria.Holidays;
+
+using Fanex.Data.Repository;
+
+public class AutoGenerateHoliDayCriteria : CriteriaBase
 {
-    using Fanex.Data.Repository;
+    public string Holidays { get; set; }
 
-    public class AutoGenerateHoliDayCriteria : CriteriaBase
-    {
-        public string Holidays { get; set; }
+    public override string GetSettingKey() => "Holiday_AutoGenerate";
 
-        public override string GetSettingKey() => "Holiday_AutoGenerate";
-
-        public override bool IsValid() => !string.IsNullOrWhiteSpace(Holidays);
-    }
+    public override bool IsValid() => !string.IsNullOrWhiteSpace(Holidays);
 }

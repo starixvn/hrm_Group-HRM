@@ -1,26 +1,25 @@
-﻿namespace HRM.Criteria.Request.KeepInView
+﻿namespace HRM.Criteria.Request.KeepInView;
+
+using System;
+using Fanex.Data.Repository;
+
+public class GetKeepInViewRequestByDateCriteria : CriteriaBase
 {
-    using System;
-    using Fanex.Data.Repository;
+    public int EmpId { get; set; }
 
-    public class GetKeepInViewRequestByDateCriteria : CriteriaBase
+    public DateTime FromDate { get; set; }
+
+    public DateTime ToDate { get; set; }
+
+    public short CompanyId { get; set; }
+
+    public override string GetSettingKey()
     {
-        public int EmpId { get; set; }
+        return "KeepInViewRequest_GetByDate";
+    }
 
-        public DateTime FromDate { get; set; }
-
-        public DateTime ToDate { get; set; }
-
-        public short CompanyId { get; set; }
-
-        public override string GetSettingKey()
-        {
-            return "KeepInViewRequest_GetByDate";
-        }
-
-        public override bool IsValid()
-        {
-            return FromDate <= ToDate;
-        }
+    public override bool IsValid()
+    {
+        return FromDate <= ToDate;
     }
 }

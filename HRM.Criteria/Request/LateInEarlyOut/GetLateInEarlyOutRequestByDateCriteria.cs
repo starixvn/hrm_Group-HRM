@@ -1,18 +1,17 @@
-﻿namespace HRM.Criteria.Request.LateInEarlyOut
+﻿namespace HRM.Criteria.Request.LateInEarlyOut;
+
+using System;
+using Fanex.Data.Repository;
+
+public class GetLateInEarlyOutRequestByDateCriteria : CriteriaBase
 {
-    using System;
-    using Fanex.Data.Repository;
+    public int EmpId { get; set; }
+    public DateTime FromDate { get; set; }
+    public DateTime ToDate { get; set; }
 
-    public class GetLateInEarlyOutRequestByDateCriteria : CriteriaBase
-    {
-        public int EmpId { get; set; }
-        public DateTime FromDate { get; set; }
-        public DateTime ToDate { get; set; }
+    public short CompanyId { get; set; }
 
-        public short CompanyId { get; set; }
+    public override string GetSettingKey() => "LateInEarlyOutRequest_GetByDate";
 
-        public override string GetSettingKey() => "LateInEarlyOutRequest_GetByDate";
-
-        public override bool IsValid() => FromDate <= ToDate;
-    }
+    public override bool IsValid() => FromDate <= ToDate;
 }

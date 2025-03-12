@@ -1,19 +1,18 @@
-﻿namespace HRM.Core.Enums
+﻿namespace HRM.Core.Enums;
+
+using System.ComponentModel;
+
+public enum CheckInOutReason
 {
-    using System.ComponentModel;
+    [Description("Van Late")]
+    VanLate = 1,
 
-    public enum CheckInOutReason
-    {
-        [Description("Van Late")]
-        VanLate = 1,
+    [Description("Business Trip")]
+    BusinessTrip = 2,
 
-        [Description("Business Trip")]
-        BusinessTrip = 2,
+    [Description("Forgot")]
+    Forgot = 3,
 
-        [Description("Forgot")]
-        Forgot = 3,
-
-        [Description("Other")]
-        Other = 4
-    }
+    [Description("Other")]
+    Other = 4
 }

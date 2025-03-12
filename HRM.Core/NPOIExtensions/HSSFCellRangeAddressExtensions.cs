@@ -1,14 +1,13 @@
-﻿namespace HRM.Core.NPOIExtensions
+﻿namespace HRM.Core.NPOIExtensions;
+
+using NPOI.SS.Util;
+
+public static class HSSFCellRangeAddressExtensions
 {
-    using NPOI.SS.Util;
-
-    public static class HSSFCellRangeAddressExtensions
+    public static CellRangeAddress Clone(this CellRangeAddressBase range)
     {
-        public static CellRangeAddress Clone(this CellRangeAddressBase range)
-        {
-            var result = new CellRangeAddress(range.FirstRow, range.LastRow, range.FirstColumn, range.LastColumn);
+        var result = new CellRangeAddress(range.FirstRow, range.LastRow, range.FirstColumn, range.LastColumn);
 
-            return result;
-        }
+        return result;
     }
 }

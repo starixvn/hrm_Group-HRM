@@ -1,13 +1,12 @@
-﻿namespace HRM.Criteria.ExtensionNumber
+﻿namespace HRM.Criteria.ExtensionNumber;
+
+using Fanex.Data.Repository;
+
+public class GetAllExtensionNumberCriteria : CriteriaBase
 {
-    using Fanex.Data.Repository;
+    public short CompanyId { get; set; }
 
-    public class GetAllExtensionNumberCriteria : CriteriaBase
-    {
-        public short CompanyId { get; set; }
+    public override string GetSettingKey() => "ExtensionNO_GetAll";
 
-        public override string GetSettingKey() => "ExtensionNO_GetAll";
-
-        public override bool IsValid() => true;
-    }
+    public override bool IsValid() => true;
 }

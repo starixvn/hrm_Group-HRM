@@ -1,13 +1,12 @@
-﻿namespace HRM.Core.Enums
+﻿namespace HRM.Core.Enums;
+
+using System.ComponentModel;
+
+public enum Relationship
 {
-    using System.ComponentModel;
+    [Description("Emergency")]
+    Emergency = 1,
 
-    public enum Relationship
-    {
-        [Description("Emergency")]
-        Emergency = 1,
-
-        [Description("Child")]
-        Children
-    }
+    [Description("Child")]
+    Children
 }

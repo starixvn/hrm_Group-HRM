@@ -1,22 +1,21 @@
-﻿namespace HRM.Criteria.Time
+﻿namespace HRM.Criteria.Time;
+
+using System;
+using Fanex.Data.Repository;
+
+public class GetTimeRecordCriteria : CriteriaBase
 {
-    using System;
-    using Fanex.Data.Repository;
+    public int? EmpId { get; set; }
+    public byte? IsLocal { get; set; }
+    public DateTime FromDate { get; set; }
+    public DateTime ToDate { get; set; }
+    public string TeamIds { get; set; }
+    public int? PageIndex { get; set; }
+    public int? ItemsPerPage { get; set; }
+    public int? TotalItem { get; set; }
+    public int SupervisorId { get; set; }
 
-    public class GetTimeRecordCriteria : CriteriaBase
-    {
-        public int? EmpId { get; set; }
-        public byte? IsLocal { get; set; }
-        public DateTime FromDate { get; set; }
-        public DateTime ToDate { get; set; }
-        public string TeamIds { get; set; }
-        public int? PageIndex { get; set; }
-        public int? ItemsPerPage { get; set; }
-        public int? TotalItem { get; set; }
-        public int SupervisorId { get; set; }
+    public override string GetSettingKey() => "TimeRecord_Get";
 
-        public override string GetSettingKey() => "TimeRecord_Get";
-
-        public override bool IsValid() => FromDate <= ToDate;
-    }
+    public override bool IsValid() => FromDate <= ToDate;
 }

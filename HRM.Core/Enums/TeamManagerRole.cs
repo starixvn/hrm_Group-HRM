@@ -1,10 +1,9 @@
-﻿namespace HRM.Core.Enums
+﻿namespace HRM.Core.Enums;
+
+public enum TeamManagerRole
 {
-    public enum TeamManagerRole
-    {
-        Head = 1,
-        Manager,
-        Leader,
-        Supervisor
-    }
+    Head = 1,
+    Manager,
+    Leader,
+    Supervisor
 }

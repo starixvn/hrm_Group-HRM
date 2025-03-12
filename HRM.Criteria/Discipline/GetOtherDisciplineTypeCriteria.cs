@@ -1,17 +1,16 @@
-﻿namespace HRM.Criteria.Discipline
+﻿namespace HRM.Criteria.Discipline;
+
+using Fanex.Data.Repository;
+
+public class GetOtherDisciplineTypeCriteria : CriteriaBase
 {
-    using Fanex.Data.Repository;
-
-    public class GetOtherDisciplineTypeCriteria : CriteriaBase
+    public override bool IsValid()
     {
-        public override bool IsValid()
-        {
-            return true;
-        }
+        return true;
+    }
 
-        public override string GetSettingKey()
-        {
-            return "DisciplineType_GetOtherDisciplineType";
-        }
+    public override string GetSettingKey()
+    {
+        return "DisciplineType_GetOtherDisciplineType";
     }
 }

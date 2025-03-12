@@ -1,21 +1,20 @@
-﻿namespace HRM.Criteria.JobLevel
+﻿namespace HRM.Criteria.JobLevel;
+
+using Fanex.Data.Repository;
+
+public class InsertJobLevelCriteria : CriteriaBase
 {
-    using Fanex.Data.Repository;
+    public string Name { get; set; }
 
-    public class InsertJobLevelCriteria : CriteriaBase
+    public int ModifiedBy { get; set; }
+
+    public override string GetSettingKey()
     {
-        public string Name { get; set; }
+        return "JobLevel_Insert";
+    }
 
-        public int ModifiedBy { get; set; }
-
-        public override string GetSettingKey()
-        {
-            return "JobLevel_Insert";
-        }
-
-        public override bool IsValid()
-        {
-            return !string.IsNullOrWhiteSpace(Name);
-        }
+    public override bool IsValid()
+    {
+        return !string.IsNullOrWhiteSpace(Name);
     }
 }

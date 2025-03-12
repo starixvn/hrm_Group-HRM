@@ -1,38 +1,37 @@
-﻿namespace HRM.Models.Request
+﻿namespace HRM.Models.Request;
+
+using System;
+using Core.Enums;
+using Resources;
+
+public class LateInEarlyOutRequest : BaseRequest
 {
-    using System;
-    using Core.Enums;
-    using Resources;
+    public DateTime OnDate { get; set; }
 
-    public class LateInEarlyOutRequest : BaseRequest
+    public int LateInMins { get; set; }
+
+    public int EarlyOutMins { get; set; }
+
+    public int ActualLateInEarlyOut { get; set; }
+
+    public string ShiftName { get; set; }
+
+    public byte ReasonId { get; set; }
+
+    public string ReasonName
     {
-        public DateTime OnDate { get; set; }
-
-        public int LateInMins { get; set; }
-
-        public int EarlyOutMins { get; set; }
-
-        public int ActualLateInEarlyOut { get; set; }
-
-        public string ShiftName { get; set; }
-
-        public byte ReasonId { get; set; }
-
-        public string ReasonName
+        get
         {
-            get
+            switch (ReasonId)
             {
-                switch (ReasonId)
-                {
-                    case (byte)LateInEarlyOutReason.ManagementAllow:
-                        return Labels.ManagementAllow;
+                case (byte)LateInEarlyOutReason.ManagementAllow:
+                    return Labels.ManagementAllow;
 
-                    case (byte)LateInEarlyOutReason.Other:
-                        return Labels.Other;
+                case (byte)LateInEarlyOutReason.Other:
+                    return Labels.Other;
 
-                    default:
-                        return string.Empty;
-                }
+                default:
+                    return string.Empty;
             }
         }
     }

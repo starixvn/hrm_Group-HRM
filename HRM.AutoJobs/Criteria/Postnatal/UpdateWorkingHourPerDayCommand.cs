@@ -1,13 +1,12 @@
-﻿namespace HRM.AutoJobs.Criteria.Postnatal
+﻿namespace HRM.AutoJobs.Criteria.Postnatal;
+
+using Fanex.Data.Repository;
+
+public class UpdateWorkingHourPerDayCommand : NonQueryCommand
 {
-    using Fanex.Data.Repository;
+    public int? EmpId { get; set; }
 
-    public class UpdateWorkingHourPerDayCommand : NonQueryCommand
-    {
-        public int? EmpId { get; set; }
+    public override string GetSettingKey() => "Auto_Postnatal_UpdateWorkingHour";
 
-        public override string GetSettingKey() => "Auto_Postnatal_UpdateWorkingHour";
-
-        public override bool IsValid() => true;
-    }
+    public override bool IsValid() => true;
 }

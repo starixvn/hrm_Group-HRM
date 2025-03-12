@@ -1,8 +1,7 @@
-﻿namespace HRM.Core.Enums
+﻿namespace HRM.Core.Enums;
+
+public enum CalendarType
 {
-    public enum CalendarType
-    {
-        Normal,
-        Fiscal
-    }
+    Normal,
+    Fiscal
 }

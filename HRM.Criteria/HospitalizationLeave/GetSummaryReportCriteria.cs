@@ -1,21 +1,20 @@
-﻿namespace HRM.Criteria.HospitalizationLeave
+﻿namespace HRM.Criteria.HospitalizationLeave;
+
+using Fanex.Data;
+using Fanex.Data.Repository;
+
+public class GetSummaryReportCriteria : CriteriaBase
 {
-    using Fanex.Data;
-    using Fanex.Data.Repository;
+    [SpParam(SqlParamName = "EmpId")]
+    public int? EmployeeId { get; set; }
 
-    public class GetSummaryReportCriteria : CriteriaBase
-    {
-        [SpParam(SqlParamName = "EmpId")]
-        public int? EmployeeId { get; set; }
+    public string TeamIds { get; set; }
+    public int Year { get; set; }
+    public bool? IsLocal { get; set; }
+    public int? SupervisorId { get; set; }
+    public int CompanyId { get; set; }
 
-        public string TeamIds { get; set; }
-        public int Year { get; set; }
-        public bool? IsLocal { get; set; }
-        public int? SupervisorId { get; set; }
-        public int CompanyId { get; set; }
+    public override string GetSettingKey() => "HospitalizationLeave_SummaryReport";
 
-        public override string GetSettingKey() => "HospitalizationLeave_SummaryReport";
-
-        public override bool IsValid() => true;
-    }
+    public override bool IsValid() => true;
 }

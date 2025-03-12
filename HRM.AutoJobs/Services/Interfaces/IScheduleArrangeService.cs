@@ -1,13 +1,12 @@
-﻿namespace HRM.AutoJobs.Services
+﻿namespace HRM.AutoJobs.Services;
+
+using System.Threading.Tasks;
+
+public interface IScheduleArrangeService
 {
-    using System.Threading.Tasks;
+    Task PublicScheduleAsync();
 
-    public interface IScheduleArrangeService
-    {
-        Task PublicScheduleAsync();
+    Task InsertDefaultShiftAsync();
 
-        Task InsertDefaultShiftAsync();
-
-        Task InsertWeeklyDefaultShiftAsync();
-    }
+    Task InsertWeeklyDefaultShiftAsync();
 }

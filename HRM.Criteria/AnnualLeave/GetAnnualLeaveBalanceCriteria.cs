@@ -1,31 +1,30 @@
-﻿namespace HRM.Criteria.AnnualLeave
+﻿namespace HRM.Criteria.AnnualLeave;
+
+using Fanex.Data.Repository;
+
+public class GetAnnualLeaveBalanceCriteria : CriteriaBase
 {
-    using Fanex.Data.Repository;
+    public int? EmpId { get; set; }
 
-    public class GetAnnualLeaveBalanceCriteria : CriteriaBase
+    public string TeamIds { get; set; }
+
+    public int Year { get; set; }
+
+    public byte? IsLocal { get; set; }
+
+    public int? SupervisorId { get; set; }
+
+    public string Role { get; set; }
+
+    public int CompanyId { get; set; }
+
+    public override string GetSettingKey()
     {
-        public int? EmpId { get; set; }
+        return "Report_LeaveSummary";
+    }
 
-        public string TeamIds { get; set; }
-
-        public int Year { get; set; }
-
-        public byte? IsLocal { get; set; }
-
-        public int? SupervisorId { get; set; }
-
-        public string Role { get; set; }
-
-        public int CompanyId { get; set; }
-
-        public override string GetSettingKey()
-        {
-            return "Report_LeaveSummary";
-        }
-
-        public override bool IsValid()
-        {
-            return true;
-        }
+    public override bool IsValid()
+    {
+        return true;
     }
 }

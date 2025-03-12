@@ -1,19 +1,18 @@
-﻿namespace HRM.Criteria.Request.Leave
+﻿namespace HRM.Criteria.Request.Leave;
+
+using Fanex.Data.Repository;
+
+public class GetLeaveRequestDetailToIgnoreByIdCriteria : CriteriaBase
 {
-    using Fanex.Data.Repository;
+    public long RequestId { get; set; }
 
-    public class GetLeaveRequestDetailToIgnoreByIdCriteria : CriteriaBase
+    public override string GetSettingKey()
     {
-        public long RequestId { get; set; }
+        return "LeaveRequest_GetDetailToIgnore";
+    }
 
-        public override string GetSettingKey()
-        {
-            return "LeaveRequest_GetDetailToIgnore";
-        }
-
-        public override bool IsValid()
-        {
-            return RequestId > 0;
-        }
+    public override bool IsValid()
+    {
+        return RequestId > 0;
     }
 }

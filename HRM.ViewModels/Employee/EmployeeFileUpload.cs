@@ -1,23 +1,22 @@
-﻿namespace HRM.ViewModels.Employee
+﻿namespace HRM.ViewModels.Employee;
+
+using System;
+
+public class EmployeeFileUpload
 {
-    using System;
+    public int EmpId { get; set; }
 
-    public class EmployeeFileUpload
+    public string Code { get; set; }
+
+    public string FileName { get; set; }
+
+    public DateTime UploadedDate { get; set; }
+
+    public string FileLocation
     {
-        public int EmpId { get; set; }
-
-        public string Code { get; set; }
-
-        public string FileName { get; set; }
-
-        public DateTime UploadedDate { get; set; }
-
-        public string FileLocation
+        get
         {
-            get
-            {
-                return string.Format("/file/uploads/profile/{0}/{1}", Code, FileName);
-            }
+            return string.Format("/file/uploads/profile/{0}/{1}", Code, FileName);
         }
     }
 }

@@ -1,25 +1,24 @@
-﻿namespace HRM.MailDeliver
+﻿namespace HRM.MailDeliver;
+
+using MimeKit;
+
+public class MailRecord
 {
-    using MimeKit;
+    public long MailId { get; set; }
 
-    public class MailRecord
-    {
-        public long MailId { get; set; }
+    public MailConfig MailConfig { get; set; }
 
-        public MailConfig MailConfig { get; set; }
+    public int Priority { get; set; }
 
-        public int Priority { get; set; }
+    public string Subject { get; set; }
 
-        public string Subject { get; set; }
+    public string Body { get; set; }
 
-        public string Body { get; set; }
+    public string MailTo { get; set; }
 
-        public string MailTo { get; set; }
+    public string MailCc { get; set; }
 
-        public string MailCc { get; set; }
+    public string MailBcc { get; set; }
 
-        public string MailBcc { get; set; }
-
-        public AttachmentCollection Attachments { get; set; } = new AttachmentCollection();
-    }
+    public AttachmentCollection Attachments { get; set; } = new AttachmentCollection();
 }

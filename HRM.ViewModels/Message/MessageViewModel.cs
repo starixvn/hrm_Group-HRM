@@ -1,17 +1,16 @@
-﻿namespace HRM.ViewModels.Message
+﻿namespace HRM.ViewModels.Message;
+
+using System;
+
+public class MessageViewModel
 {
-    using System;
+    public int MessageId { get; set; }
 
-    public class MessageViewModel
-    {
-        public int MessageId { get; set; }
+    public string Subject { get; set; }
 
-        public string Subject { get; set; }
+    public string CategoryName { get; set; }
 
-        public string CategoryName { get; set; }
+    public DateTime CreatedDate { get; set; }
 
-        public DateTime CreatedDate { get; set; }
-
-        public string SendTo { get; set; }
-    }
+    public string SendTo { get; set; }
 }

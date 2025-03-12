@@ -1,10 +1,8 @@
-﻿namespace HRM.Models.ScheduleArrange
+﻿namespace HRM.Models.ScheduleArrange;
+
+public class EditRemark
 {
+    public int EmployeeId { get; set; }
 
-    public class EditRemark
-    {
-        public int EmployeeId { get; set; }
-
-        public string Remark { get; set; }
-    }
+    public string Remark { get; set; }
 }

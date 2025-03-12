@@ -1,21 +1,20 @@
-﻿namespace HRM.Criteria.Request
+﻿namespace HRM.Criteria.Request;
+
+using Fanex.Data.Repository;
+
+public class GetVerifierAndApproverCriteria : CriteriaBase
 {
-    using Fanex.Data.Repository;
+    public int EmpId { get; set; }
 
-    public class GetVerifierAndApproverCriteria : CriteriaBase
+    public byte RequestType { get; set; }
+
+    public override string GetSettingKey()
     {
-        public int EmpId { get; set; }
+        return "Employee_GetVerifierAndApprover";
+    }
 
-        public byte RequestType { get; set; }
-
-        public override string GetSettingKey()
-        {
-            return "Employee_GetVerifierAndApprover";
-        }
-
-        public override bool IsValid()
-        {
-            return EmpId > 0 && RequestType > 0;
-        }
+    public override bool IsValid()
+    {
+        return EmpId > 0 && RequestType > 0;
     }
 }

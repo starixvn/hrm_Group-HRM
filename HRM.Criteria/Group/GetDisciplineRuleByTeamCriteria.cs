@@ -1,13 +1,12 @@
-﻿namespace HRM.Criteria.Group
+﻿namespace HRM.Criteria.Group;
+
+using Fanex.Data.Repository;
+
+public class GetDisciplineRuleByTeamCriteria : CriteriaBase
 {
-    using Fanex.Data.Repository;
+    public int TeamId { get; set; }
 
-    public class GetDisciplineRuleByTeamCriteria : CriteriaBase
-    {
-        public int TeamId { get; set; }
+    public override string GetSettingKey() => "DisciplineRule_GetByGroupId";
 
-        public override string GetSettingKey() => "DisciplineRule_GetByGroupId";
-
-        public override bool IsValid() => TeamId > 0;
-    }
+    public override bool IsValid() => TeamId > 0;
 }
