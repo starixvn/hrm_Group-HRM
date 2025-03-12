@@ -291,9 +291,9 @@ public static class Extensions
 
         if (!string.IsNullOrEmpty(notes))
         {
-            string[] noteArray = notes.Split(',');
+            var noteArray = notes.Split(',');
 
-            for (int i = 0; i < noteArray.Length; i++)
+            for (var i = 0; i < noteArray.Length; i++)
             {
                 if (noteArray[i] == "No Data" || noteArray[i] == "PH" || noteArray[i].Contains("Off day"))
                 {
@@ -301,7 +301,7 @@ public static class Extensions
                 }
                 else
                 {
-                    bool isLastElement = (i + 1 == noteArray.Length);
+                    var isLastElement = (i + 1 == noteArray.Length);
                     SetLinkValue(noteArray[i], ref htmlString, isLastElement);
                 }
             }
@@ -331,7 +331,7 @@ public static class Extensions
             link = "/leave/employeeview";
         }
 
-        string safeNoteValue = HtmlEncoder.Default.Encode(noteValue);
+        var safeNoteValue = HtmlEncoder.Default.Encode(noteValue);
 
         htmlString.Append($"<a href='{link}'>{safeNoteValue}</a>");
 

@@ -88,9 +88,9 @@
     </thead>
     @if (Model != null && Model.Any())
     {
-        int rowIndex = 0;
+        var rowIndex = 0;
         <tbody>
-            @foreach (DisciplineDetailModel item in Model)
+            @foreach (var item in Model)
             {
                 short colIndex = 1;
                 rowIndex++;

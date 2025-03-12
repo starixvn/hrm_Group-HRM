@@ -38,9 +38,9 @@
         </thead>
         @if (Model != null && Model.Any())
         {
-            int index = 0;
+            var index = 0;
             <tbody>
-                @foreach (MonthlyWorking monthlyWorking in Model)
+                @foreach (var monthlyWorking in Model)
                 {
                     index++;
                     <tr>
@@ -52,7 +52,7 @@
                         <td class="align-left">@monthlyWorking.FullName</td>
                         <td class="align-left">@monthlyWorking.Nickname</td>
                         <td>@monthlyWorking.ActualWorkingDays.ToString("0.0")</td>
-                        @foreach (DailyWorking dailyWorking in monthlyWorking.DailyWorkings)
+                        @foreach (var dailyWorking in monthlyWorking.DailyWorkings)
                         {
                             var className = string.Empty;
                             var value = string.Empty;

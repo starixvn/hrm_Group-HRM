@@ -25,9 +25,9 @@
         </thead>
         @if (Model != null && Model.Any())
         {
-            int index = 1;
+            var index = 1;
             <tbody>
-                @foreach (LeaveRequest request in Model)
+                @foreach (var request in Model)
                 {
                     <tr>
                         <td>@(index++)</td>
@@ -44,7 +44,7 @@
                             {
                                 case (ushort)LeaveTypes.KeepInViewByHour:
                                 case (ushort)LeaveTypes.BusinessDuringWorking:
-                                    LeaveRequestDetail detail = request.LeaveDetail.FirstOrDefault();
+                                    var detail = request.LeaveDetail.FirstOrDefault();
                                     if (detail != null)
                                     {
                                         var minutes = (detail.ToTime - detail.FromTime).TotalMinutes;

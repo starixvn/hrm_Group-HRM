@@ -21,11 +21,11 @@ public class ExportDisciplineDetailService(IWebHostEnvironment hostingEnvironmen
 
     public byte[] Export(GetDisciplineDetailCriteria criteria, IList<DisciplineDetailModel> disciplines)
     {
-        string templatePath = Path.Combine(hostingEnvironment.ContentRootPath, TemplatePath); 
-        string reportName = Labels.DisciplineDetailReportName;
+        var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, TemplatePath); 
+        var reportName = Labels.DisciplineDetailReportName;
         string reportTitle;
-        string startDate = criteria.FromDate.ToDateMonthYearFormatedDate();
-        string endDate = criteria.ToDate.ToDateMonthYearFormatedDate();
+        var startDate = criteria.FromDate.ToDateMonthYearFormatedDate();
+        var endDate = criteria.ToDate.ToDateMonthYearFormatedDate();
 
         if (criteria.EmployeeId != null)
         {
@@ -58,8 +58,8 @@ public class ExportDisciplineDetailService(IWebHostEnvironment hostingEnvironmen
 
     private void FillContentRow(IList<DisciplineDetailModel> disciplines, ref ExcelTemplateWriter writer)
     {
-        int rowIndex = 1;
-        foreach (DisciplineDetailModel discipline in disciplines)
+        var rowIndex = 1;
+        foreach (var discipline in disciplines)
         {
             FillRow(discipline, ref writer, ref rowIndex);
         }
@@ -67,7 +67,7 @@ public class ExportDisciplineDetailService(IWebHostEnvironment hostingEnvironmen
 
     private void FillRow(DisciplineDetailModel discipline, ref ExcelTemplateWriter writer, ref int rowIndex)
     {
-        object record = CreateRecord(discipline, ref rowIndex);
+        var record = CreateRecord(discipline, ref rowIndex);
 
         var rowType = (discipline.IsWeekend) ? WeekendRow : BodyRow;
 
@@ -76,24 +76,24 @@ public class ExportDisciplineDetailService(IWebHostEnvironment hostingEnvironmen
 
     private object CreateRecord(DisciplineDetailModel discipline, ref int rowIndex)
     {
-        decimal systemSubtractScore = discipline.SystemSubtractScore > 0 ? -discipline.SystemSubtractScore : 0;
-        decimal approverSubtractScore = discipline.ApproverSubtractScore > 0 ? -discipline.ApproverSubtractScore : 0;
+        var systemSubtractScore = discipline.SystemSubtractScore > 0 ? -discipline.SystemSubtractScore : 0;
+        var approverSubtractScore = discipline.ApproverSubtractScore > 0 ? -discipline.ApproverSubtractScore : 0;
 
-        string checkIn = discipline.CheckIn.HasValue ? discipline.CheckIn.Value.ToString(Constants.TimeFormat) : string.Empty;
-        string checkOut = discipline.CheckOut.HasValue ? discipline.CheckOut.Value.ToString(Constants.TimeFormat) : string.Empty;
-        string totalHours = !string.IsNullOrEmpty(discipline.TotalHours) ? discipline.TotalHours : string.Empty;
-        string missingCheckInOut = discipline.MissingCheckInOut.Value > 0 ? discipline.MissingCheckInOut.Value.ToString() : string.Empty;
-        string workingUnderTime = discipline.WorkingUnderTime.Value > 0 ? "1" : string.Empty;
-        string lateIn = ReturnValueOrEmtpyString(!string.IsNullOrEmpty(discipline.MinutesLateIn), discipline.MinutesLateIn);
-        string earlyOut = ReturnValueOrEmtpyString(!string.IsNullOrEmpty(discipline.MinutesEarlyOut), discipline.MinutesEarlyOut);
-        string absent = ReturnValueOrEmtpyString(discipline.Absent.Value > 0, discipline.Absent.Value.ToString());
-        string unpaidLeave = ReturnValueOrEmtpyString(discipline.UnpaidLeave.Value > 0, discipline.UnpaidLeave.Value.ToString());
-        string unpaidLeaveAbsent = ReturnValueOrEmtpyString(discipline.UnpaidLeaveAbsent.Value > 0, discipline.UnpaidLeaveAbsent.Value.ToString());
-        string changeShift = ReturnValueOrEmtpyString(discipline.ChangeShift.Value > 0, discipline.ChangeShift.Value.ToString());
-        string unplannedLeave = ReturnValueOrEmtpyString(discipline.UnplannedLeave.Value > 0, discipline.UnplannedLeave.Value.ToString());
-        string weekendLeave = ReturnValueOrEmtpyString(discipline.WeekendLeave.Value > 0, discipline.WeekendLeave.Value.ToString());
-        string sevenDaysLeave = ReturnValueOrEmtpyString(discipline.SevenDaysLeave.Value > 0, discipline.SevenDaysLeave.Value.ToString());
-        string isOutOfControlReason = ReturnValueOrEmtpyString(discipline.IsOutOfControlReason, Labels.Yes);
+        var checkIn = discipline.CheckIn.HasValue ? discipline.CheckIn.Value.ToString(Constants.TimeFormat) : string.Empty;
+        var checkOut = discipline.CheckOut.HasValue ? discipline.CheckOut.Value.ToString(Constants.TimeFormat) : string.Empty;
+        var totalHours = !string.IsNullOrEmpty(discipline.TotalHours) ? discipline.TotalHours : string.Empty;
+        var missingCheckInOut = discipline.MissingCheckInOut.Value > 0 ? discipline.MissingCheckInOut.Value.ToString() : string.Empty;
+        var workingUnderTime = discipline.WorkingUnderTime.Value > 0 ? "1" : string.Empty;
+        var lateIn = ReturnValueOrEmtpyString(!string.IsNullOrEmpty(discipline.MinutesLateIn), discipline.MinutesLateIn);
+        var earlyOut = ReturnValueOrEmtpyString(!string.IsNullOrEmpty(discipline.MinutesEarlyOut), discipline.MinutesEarlyOut);
+        var absent = ReturnValueOrEmtpyString(discipline.Absent.Value > 0, discipline.Absent.Value.ToString());
+        var unpaidLeave = ReturnValueOrEmtpyString(discipline.UnpaidLeave.Value > 0, discipline.UnpaidLeave.Value.ToString());
+        var unpaidLeaveAbsent = ReturnValueOrEmtpyString(discipline.UnpaidLeaveAbsent.Value > 0, discipline.UnpaidLeaveAbsent.Value.ToString());
+        var changeShift = ReturnValueOrEmtpyString(discipline.ChangeShift.Value > 0, discipline.ChangeShift.Value.ToString());
+        var unplannedLeave = ReturnValueOrEmtpyString(discipline.UnplannedLeave.Value > 0, discipline.UnplannedLeave.Value.ToString());
+        var weekendLeave = ReturnValueOrEmtpyString(discipline.WeekendLeave.Value > 0, discipline.WeekendLeave.Value.ToString());
+        var sevenDaysLeave = ReturnValueOrEmtpyString(discipline.SevenDaysLeave.Value > 0, discipline.SevenDaysLeave.Value.ToString());
+        var isOutOfControlReason = ReturnValueOrEmtpyString(discipline.IsOutOfControlReason, Labels.Yes);
 
         var record = new
         {

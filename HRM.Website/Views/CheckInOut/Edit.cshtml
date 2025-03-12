@@ -137,7 +137,7 @@
             <div class="input-form" id="@Model.RequestId">
                 @if (Model.Files != null)
                 {
-                    foreach (string file in Model.Files)
+                    foreach (var file in Model.Files)
                     {
                         <a href="javascript:;" class="delete-file" id="@file" data-id="@file">
                             <i class=" fa fa-close">@file</i><br>

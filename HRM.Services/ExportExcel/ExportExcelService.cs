@@ -304,18 +304,18 @@ public class ExportExcelService(IWebHostEnvironment hostingEnvironment) : IExpor
         RequestEntity item,
         IRow row)
     {
-        ICell cellNo = row.GetCell(0);
-        ICell cellDepartment = row.GetCell(1);
-        ICell cellSection = row.GetCell(2);
-        ICell cellTeam = row.GetCell(3);
-        ICell cellName = row.GetCell(4);
-        ICell cellNick = row.GetCell(5);
-        ICell cellRequest = row.GetCell(6);
-        ICell cellDetails = row.GetCell(7);
-        ICell cellReason = row.GetCell(8);
-        ICell cellRemarks = row.GetCell(9);
-        ICell cellCreateDate = row.GetCell(10);
-        ICell cellStatus = row.GetCell(11);
+        var cellNo = row.GetCell(0);
+        var cellDepartment = row.GetCell(1);
+        var cellSection = row.GetCell(2);
+        var cellTeam = row.GetCell(3);
+        var cellName = row.GetCell(4);
+        var cellNick = row.GetCell(5);
+        var cellRequest = row.GetCell(6);
+        var cellDetails = row.GetCell(7);
+        var cellReason = row.GetCell(8);
+        var cellRemarks = row.GetCell(9);
+        var cellCreateDate = row.GetCell(10);
+        var cellStatus = row.GetCell(11);
         cellNo.SetCellValue(rowIndex - RowStartBodyLeaveSummary + 2);
         cellDepartment.SetCellValue(item.Requester.Team.Section.Department.Code);
         cellSection.SetCellValue(item.Requester.Team.Section.Code);

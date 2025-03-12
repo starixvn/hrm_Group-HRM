@@ -32,7 +32,7 @@ public class ExportDisciplineSummaryPerYearService(IWebHostEnvironment hostingEn
         using var xlPackage = new ExcelPackage();
         var template = templatePackage.Workbook.Worksheets[0];
         var worksheet = xlPackage.Workbook.Worksheets.Add("5 Years Discipline Summary");
-        int rowIndex = 1;
+        var rowIndex = 1;
         var colIndex = 1;
 
         // title & header
@@ -46,7 +46,7 @@ public class ExportDisciplineSummaryPerYearService(IWebHostEnvironment hostingEn
         // data
         var rowNum = 1;
         rowIndex = BodyRowIndex;
-        foreach (DisciplineSummaryPerYear employee in employees)
+        foreach (var employee in employees)
         {
             colIndex = 1;
             template.Cells[BodyRowIndex, 1, BodyRowIndex, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);

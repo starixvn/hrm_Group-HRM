@@ -59,8 +59,8 @@ public class AnnualLeaveBalanceService(
 
         foreach (var employee in employees)
         {
-            float percentAnnualLeaveRemaining = employee.LeaveBalance / employee.AnnualLeaveCurrentYear * 100;
-            bool isSentMail = false;
+            var percentAnnualLeaveRemaining = employee.LeaveBalance / employee.AnnualLeaveCurrentYear * 100;
+            var isSentMail = false;
             var percentInMail = string.Empty;
 
             CheckSendMail(ref isSentMail, employee.IsLocal, ref percentInMail, percentAnnualLeaveRemaining);

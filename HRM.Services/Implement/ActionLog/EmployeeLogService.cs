@@ -172,7 +172,7 @@ public class EmployeeLogService(
 
     private void MappingTeam(FieldValue field)
     {
-        _ = int.TryParse(field.OldValue, out int teamId);
+        _ = int.TryParse(field.OldValue, out var teamId);
         field.OldValue = Teams.FirstOrDefault(x => x.Id == teamId)?.Name;
 
         _ = int.TryParse(field.Value, out teamId);
@@ -190,7 +190,7 @@ public class EmployeeLogService(
 
     private void MappingJobTitle(FieldValue field)
     {
-        _ = int.TryParse(field.OldValue, out int jobTitleId);
+        _ = int.TryParse(field.OldValue, out var jobTitleId);
         field.OldValue = JobTitles.FirstOrDefault(x => x.Id == jobTitleId)?.Name;
 
         _ = int.TryParse(field.Value, out jobTitleId);
@@ -199,7 +199,7 @@ public class EmployeeLogService(
 
     private void MappingJobLevel(FieldValue field)
     {
-        _ = int.TryParse(field.OldValue, out int jobLevelId);
+        _ = int.TryParse(field.OldValue, out var jobLevelId);
         field.OldValue = JobLevel.FirstOrDefault(x => x.Id == jobLevelId)?.Name;
 
         _ = int.TryParse(field.Value, out jobLevelId);
@@ -214,7 +214,7 @@ public class EmployeeLogService(
 
     private void MappingGender(FieldValue field)
     {
-        _ = byte.TryParse(field.OldValue, out byte gender);
+        _ = byte.TryParse(field.OldValue, out var gender);
         field.OldValue = Genders.FirstOrDefault(x => x.Id == gender)?.Name;
 
         _ = byte.TryParse(field.Value, out gender);
@@ -223,7 +223,7 @@ public class EmployeeLogService(
 
     private void MappingMarriage(FieldValue field)
     {
-        _ = byte.TryParse(field.OldValue, out byte gender);
+        _ = byte.TryParse(field.OldValue, out var gender);
         field.OldValue = MarriageStatuses.FirstOrDefault(x => x.Id == gender)?.Name;
 
         _ = byte.TryParse(field.Value, out gender);

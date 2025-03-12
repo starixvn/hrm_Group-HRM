@@ -39,7 +39,7 @@ public class FileController(
         var fileName = Path.GetFileName(file.FileName);
         var dir = "file/uploads/" + categoryId;
         var pathAttach = $"{dir}/{fileName}";
-        string basePath = Path.Combine(hostingEnvironment.ContentRootPath, dir);
+        var basePath = Path.Combine(hostingEnvironment.ContentRootPath, dir);
         if (isOverride)
         {
             
@@ -97,7 +97,7 @@ public class FileController(
             foreach (var file in files)
             {
                 var fileName = Path.GetFileName(file.FileName);
-                string basePath = Path.Combine(hostingEnvironment.ContentRootPath, Constants.ProfileUploadPath + EmployeeSession.Code);
+                var basePath = Path.Combine(hostingEnvironment.ContentRootPath, Constants.ProfileUploadPath + EmployeeSession.Code);
                 if (!Directory.Exists(basePath))
                 {
                     Directory.CreateDirectory(basePath);
@@ -123,14 +123,14 @@ public class FileController(
 
     private static bool IsValidFileUpload(IEnumerable<IFormFile> files)
     {
-        string[] allowedExtentsions = new[] { ".jpg", ".png", ".jpeg", ".pdf", ".doc", ".docx", ".xls", ".xlsx", ".txt" };
+        var allowedExtentsions = new[] { ".jpg", ".png", ".jpeg", ".pdf", ".doc", ".docx", ".xls", ".xlsx", ".txt" };
         foreach (var file in files)
         {
             if (file.Length > MaxSizeFileUpload)
             {
                 return false;
             }
-            string extentsion = Path.GetExtension(file.FileName).ToLowerInvariant();
+            var extentsion = Path.GetExtension(file.FileName).ToLowerInvariant();
             if (!allowedExtentsions.Contains(extentsion))
             {
                 return false;
@@ -143,9 +143,9 @@ public class FileController(
     [HttpPost]
     public ActionResult DeleteMyProfileUploadedFile(string fileName)
     {
-        bool isSuccessful = false;
-        string message = string.Empty;
-        string path  = Path.Combine(hostingEnvironment.ContentRootPath, Constants.ProfileUploadPath + EmployeeSession.Code + "/" + fileName); ;
+        var isSuccessful = false;
+        var message = string.Empty;
+        var path  = Path.Combine(hostingEnvironment.ContentRootPath, Constants.ProfileUploadPath + EmployeeSession.Code + "/" + fileName); ;
         if (System.IO.File.Exists(path))
         {
             System.IO.File.Delete(path);

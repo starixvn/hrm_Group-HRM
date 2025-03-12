@@ -22,7 +22,7 @@ public class ResetAnnualLeaveCriteria : CriteriaBase
 
             if (AnnualLeaves != null)
             {
-                foreach (LeaveSummary leaveSummary in AnnualLeaves)
+                foreach (var leaveSummary in AnnualLeaves)
                 {
                     value.AppendFormat(_AnnualLeaveTpl, leaveSummary.EmpId, leaveSummary.LeaveBalance);
                 }

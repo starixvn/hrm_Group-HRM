@@ -23,11 +23,11 @@ public class ExportWeekendLeaveSummaryService(IWebHostEnvironment hostingEnviron
 
     public byte[] Export(GetWeekendLeaveSummaryCriteria criteria, IList<WeekendLeaveSummary> weekendLeaves)
     {
-        string templatePath = Path.Combine(hostingEnvironment.ContentRootPath, WeekendLeaveSummaryTemplatePath); 
-        string reportName = Labels.WeekendLeaveSummary;
+        var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, WeekendLeaveSummaryTemplatePath); 
+        var reportName = Labels.WeekendLeaveSummary;
         string reportTitle;
-        string startDate = criteria.FromDate.ToDateMonthYearFormatedDate();
-        string endDate = criteria.ToDate.ToDateMonthYearFormatedDate();
+        var startDate = criteria.FromDate.ToDateMonthYearFormatedDate();
+        var endDate = criteria.ToDate.ToDateMonthYearFormatedDate();
 
         if (criteria.EmployeeId != null)
         {
@@ -73,9 +73,9 @@ public class ExportWeekendLeaveSummaryService(IWebHostEnvironment hostingEnviron
 
     private void FillContentRow(IList<WeekendLeaveSummary> weekendLeaves, ref ExcelTemplateWriter writer)
     {
-        int rowIndex = 1;
+        var rowIndex = 1;
 
-        foreach (WeekendLeaveSummary item in weekendLeaves)
+        foreach (var item in weekendLeaves)
         {
             FillRow(item, ref writer, ref rowIndex);
         }
@@ -83,13 +83,13 @@ public class ExportWeekendLeaveSummaryService(IWebHostEnvironment hostingEnviron
 
     private void FillRow(WeekendLeaveSummary weekendLeave, ref ExcelTemplateWriter writer, ref int rowIndex)
     {
-        object record = CreateRecord(weekendLeave, ref rowIndex);
+        var record = CreateRecord(weekendLeave, ref rowIndex);
         writer.WriteRow(BodyRow, record);
     }
 
     private object CreateRecord(WeekendLeaveSummary weekendLeave, ref int rowIndex)
     {
-        double totalWeekendLeaveDays = weekendLeave.TotalWeekendLeave > 0 ? weekendLeave.TotalWeekendLeave : 0;
+        var totalWeekendLeaveDays = weekendLeave.TotalWeekendLeave > 0 ? weekendLeave.TotalWeekendLeave : 0;
         var record = new
         {
             Count = rowIndex,

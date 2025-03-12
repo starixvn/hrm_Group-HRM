@@ -61,7 +61,7 @@ public partial class EmployeeWorkingHoursService : IEmployeeWorkingHoursService
 
         // data
         rowIndex++;
-        foreach (MonthlyWorking monthlyWorking in monthlyWorkings)
+        foreach (var monthlyWorking in monthlyWorkings)
         {
             colIndex = 1;
             templateWorksheet.Cells[3, 1, 3, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
@@ -74,7 +74,7 @@ public partial class EmployeeWorkingHoursService : IEmployeeWorkingHoursService
             worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.FullName;
             worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Nickname;
             worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.ActualWorkingDays;
-            foreach (DailyWorking dailyWorking in monthlyWorking.DailyWorkings)
+            foreach (var dailyWorking in monthlyWorking.DailyWorkings)
             {
                 WriteDailyCells(worksheet.Cells[rowIndex, colIndex++], dailyWorking);
             }
@@ -96,8 +96,8 @@ public partial class EmployeeWorkingHoursService : IEmployeeWorkingHoursService
         using var templatePackage = new ExcelPackage(new FileInfo(templatePath));
         using var xlPackage = new ExcelPackage();
         var redColor = ColorTranslator.FromHtml(Constants.RedColor);
-        ExcelWorksheet templateWorksheet = templatePackage.Workbook.Worksheets[0];
-        ExcelWorksheet worksheet = xlPackage.Workbook.Worksheets.Add(Labels.AttendanceDailyDetail);
+        var templateWorksheet = templatePackage.Workbook.Worksheets[0];
+        var worksheet = xlPackage.Workbook.Worksheets.Add(Labels.AttendanceDailyDetail);
         var rowIndex = 1;
         var colIndex = 1;
 
@@ -117,7 +117,7 @@ public partial class EmployeeWorkingHoursService : IEmployeeWorkingHoursService
 
         // data
         rowIndex++;
-        foreach (MonthlyWorking monthlyWorking in monthlyWorkings)
+        foreach (var monthlyWorking in monthlyWorkings)
         {
             colIndex = 1;
             templateWorksheet.Cells[3, 1, 3, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
@@ -237,7 +237,7 @@ public partial class EmployeeWorkingHoursService : IEmployeeWorkingHoursService
 
     public static bool IsUnpaidLeave(DailyWorking dailyWorking)
     {
-        bool isUnpaidLeave = false;
+        var isUnpaidLeave = false;
 
         if (dailyWorking.LeaveType.Id == (byte)Core.Enums.LeaveTypes.UnpaidLeave
             || dailyWorking.LeaveType.Id == (byte)Core.Enums.LeaveTypes.UnpaidLeaveInsurance

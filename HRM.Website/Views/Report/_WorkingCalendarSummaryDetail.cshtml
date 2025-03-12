@@ -61,7 +61,7 @@
         </thead>
         @if (Model != null && Model.Any())
         {
-            int index = 0;
+            var index = 0;
             <tbody>
                 @{
                     IEnumerable<WorkingCalendarSummary> employees = Model.GroupBy(x => x.EmployeeId).Select(x => x.First()).OrderBy(x => x.Nickname);
@@ -77,7 +77,7 @@
                         <td class="align-left">@employee.Code</td>
                         <td class="align-left">@employee.FullName</td>
                         <td class="align-left">@employee.Nickname</td>
-                        @foreach (WorkingCalendarSummary workingCalendar in Model)
+                        @foreach (var workingCalendar in Model)
                         {
                             if (workingCalendar.EmployeeId == @employee.EmployeeId)
                             {

@@ -14,7 +14,7 @@ public class AttachFileService(IWebHostEnvironment hostingEnvironment) : IAttach
     {
         if (files != null && files.Any(x => x.Length > 0))
         {
-            string dir = Path.Combine(hostingEnvironment.ContentRootPath, RemoveFirstSlash(pathFolder) + fileId);
+            var dir = Path.Combine(hostingEnvironment.ContentRootPath, RemoveFirstSlash(pathFolder) + fileId);
             if (!Directory.Exists(dir))
             {
                 Directory.CreateDirectory(dir);
@@ -36,11 +36,11 @@ public class AttachFileService(IWebHostEnvironment hostingEnvironment) : IAttach
     public List<string> GetAttachFile(long fileId, string pathFolder)
     {
         var files = new List<string>();
-        string dir = Path.Combine(hostingEnvironment.ContentRootPath, RemoveFirstSlash(pathFolder) + fileId);
+        var dir = Path.Combine(hostingEnvironment.ContentRootPath, RemoveFirstSlash(pathFolder) + fileId);
         if (Directory.Exists(dir))
         {
-            string[] filePaths = Directory.GetFiles(dir);
-            foreach (string filePath in filePaths)
+            var filePaths = Directory.GetFiles(dir);
+            foreach (var filePath in filePaths)
             {
                 files.Add(Path.GetFileName(filePath));
             }
@@ -51,9 +51,9 @@ public class AttachFileService(IWebHostEnvironment hostingEnvironment) : IAttach
 
     public void DeleteFile(List<string> files, long fileId, string pathFolder)
     {
-        foreach (string file in files)
+        foreach (var file in files)
         {
-            string dir = Path.Combine(hostingEnvironment.ContentRootPath, RemoveFirstSlash(pathFolder) + fileId + '/' + file);
+            var dir = Path.Combine(hostingEnvironment.ContentRootPath, RemoveFirstSlash(pathFolder) + fileId + '/' + file);
             File.Delete(dir);
         }
     }
@@ -61,12 +61,12 @@ public class AttachFileService(IWebHostEnvironment hostingEnvironment) : IAttach
     public IList<AttachFile> GetInfoAttachFile(long fileId, string pathFolder)
     {
         var attachFiles = new List<AttachFile>();
-        string path = RemoveFirstSlash(pathFolder) + fileId;
-        string dir = Path.Combine(hostingEnvironment.ContentRootPath, path);
+        var path = RemoveFirstSlash(pathFolder) + fileId;
+        var dir = Path.Combine(hostingEnvironment.ContentRootPath, path);
         if (Directory.Exists(dir))
         {
-            string[] files = Directory.GetFiles(dir);
-            foreach (string file in files)
+            var files = Directory.GetFiles(dir);
+            foreach (var file in files)
             {
                 attachFiles.Add(new AttachFile
                 {
@@ -83,7 +83,7 @@ public class AttachFileService(IWebHostEnvironment hostingEnvironment) : IAttach
 
     public void DeleteFolderAttachFile(long id, string pathFolder)
     {
-        string dir = Path.Combine(hostingEnvironment.ContentRootPath, RemoveFirstSlash(pathFolder) + id);
+        var dir = Path.Combine(hostingEnvironment.ContentRootPath, RemoveFirstSlash(pathFolder) + id);
 
         if (Directory.Exists(dir))
         {

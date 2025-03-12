@@ -76,14 +76,14 @@
         </tr>
     </thead>
     <tbody>
-        @{int index = 1;}
+        @{var index = 1;}
         @if (Model != null && Model.Count > 0)
         {
             var verifiedStatus = VerifiedStatus.Pending;
             var approvedStatus = ApprovedStatus.Pending;
             var processedStatus = HRStatus.Pending;
 
-            foreach (LeaveRequest request in Model)
+            foreach (var request in Model)
             {
                 verifiedStatus = (VerifiedStatus)request.VerifiedStatus;
                 approvedStatus = (ApprovedStatus)request.ApprovedStatus;
@@ -111,7 +111,7 @@
                         {
                             case (ushort)LeaveTypes.KeepInViewByHour:
                             case (ushort)LeaveTypes.BusinessDuringWorking:
-                                LeaveRequestDetail detail = request.LeaveDetail.FirstOrDefault();
+                                var detail = request.LeaveDetail.FirstOrDefault();
                                 if (detail != null)
                                 {
                                     var minutes = (detail.ToTime - detail.FromTime).TotalMinutes;

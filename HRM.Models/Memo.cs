@@ -49,12 +49,12 @@ public class Memo : EntityBase<int>
             var allLinks = new List<string>();
             if (MemoType == 1)
             {
-                string[] links = Contents.Split(';');
+                var links = Contents.Split(';');
                 if (links.Length > 0)
                 {
                     foreach (var link in links)
                     {
-                        string item =
+                        var item =
                             "<a href='"
                             + HttpUtility.HtmlEncode(link)
                             + "'> "

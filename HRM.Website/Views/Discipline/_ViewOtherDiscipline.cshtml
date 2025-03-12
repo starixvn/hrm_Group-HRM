@@ -24,9 +24,9 @@
     </thead>
     @if (Model.Any())
     {
-        int index = 0;
+        var index = 0;
         <tbody>
-            @foreach (OtherDisciplineModel item in Model)
+            @foreach (var item in Model)
             {
                 index++;
                 <tr id="row_@index">

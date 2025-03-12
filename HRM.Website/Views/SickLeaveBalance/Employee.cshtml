@@ -64,7 +64,7 @@
     @if (Model.Transactions.Any())
     {
         <tbody>
-            @{int index = 1;}
+            @{var index = 1;}
             @foreach (var item in Model.Transactions)
             {
                 <tr>

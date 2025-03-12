@@ -23,11 +23,11 @@ public class ExportWeekendLeaveDetailService(IWebHostEnvironment hostingEnvironm
 
     public byte[] Export(GetWeekendLeaveDetailCriteria criteria, IList<WeekendLeaveDetail> weekendLeaveDetails)
     {
-        string templatePath = Path.Combine(hostingEnvironment.ContentRootPath, WeekendLeaveDetailTemplatePath);
-        string reportName = Labels.WeekendLeaveDetail;
+        var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, WeekendLeaveDetailTemplatePath);
+        var reportName = Labels.WeekendLeaveDetail;
         string reportTitle;
-        string startDate = criteria.FromDate.ToDateMonthYearFormatedDate();
-        string endDate = criteria.ToDate.ToDateMonthYearFormatedDate();
+        var startDate = criteria.FromDate.ToDateMonthYearFormatedDate();
+        var endDate = criteria.ToDate.ToDateMonthYearFormatedDate();
 
         if (criteria.EmployeeId != null)
         {
@@ -73,9 +73,9 @@ public class ExportWeekendLeaveDetailService(IWebHostEnvironment hostingEnvironm
 
     private void FillContentRow(IList<WeekendLeaveDetail> weekendLeaveDetails, ref ExcelTemplateWriter writer)
     {
-        int rowIndex = 1;
+        var rowIndex = 1;
 
-        foreach (WeekendLeaveDetail item in weekendLeaveDetails)
+        foreach (var item in weekendLeaveDetails)
         {
             FillRow(item, ref writer, ref rowIndex);
         }
@@ -83,7 +83,7 @@ public class ExportWeekendLeaveDetailService(IWebHostEnvironment hostingEnvironm
 
     private void FillRow(WeekendLeaveDetail weekendLeave, ref ExcelTemplateWriter writer, ref int rowIndex)
     {
-        object record = CreateRecord(weekendLeave, ref rowIndex);
+        var record = CreateRecord(weekendLeave, ref rowIndex);
         writer.WriteRow(BodyRow, record);
     }
 

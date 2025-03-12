@@ -24,8 +24,8 @@
         @if (Model != null && Model.Any())
         {
             <tbody>
-                @{int index = 1;}
-                @foreach (KeepInViewRequest request in Model)
+                @{var index = 1;}
+                @foreach (var request in Model)
                 {
                     var fromTime = request.KeepInViewTypeId == (int)KeepInViewTypes.KeepInViewByDay && !request.IsHalfDay ? "-" : request.FromTime.ToString("HH:mm");
                     var toTime = request.KeepInViewTypeId == (int)KeepInViewTypes.KeepInViewByDay && !request.IsHalfDay ? "-" : request.ToTime.ToString("HH:mm");

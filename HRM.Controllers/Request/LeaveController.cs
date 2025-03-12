@@ -260,7 +260,7 @@ public class LeaveController(
         });
 
         leaveRequestDetail = ConvertToLeaveRequestDetail(calendars, leaveRequestDetail, fromDate, toDate);
-        IList<LeaveType> leaveTypes = await commonDataService.GetLeaveTypeAsync();
+        var leaveTypes = await commonDataService.GetLeaveTypeAsync();
         var model = new LeaveDetailViewModel
         {
             LeaveRequestDetail = leaveRequestDetail,
@@ -285,7 +285,7 @@ public class LeaveController(
             FromDate = fromDate,
             ToDate = toDate
         };
-        IEnumerable<DateTime> dates = await leaveRequestService.GetDisabledDateAsync(param);
+        var dates = await leaveRequestService.GetDisabledDateAsync(param);
         return Json(dates.Select(t => t.Date.ToString("yyyy/MM/dd")));
     }
 
@@ -316,11 +316,11 @@ public class LeaveController(
             var numberDays = (toDate - fromDate).Days + 1;
             DateTime tempDate;
 
-            for (int i = 0; i < numberDays; i++)
+            for (var i = 0; i < numberDays; i++)
             {
                 tempDate = fromDate.AddDays(i);
                 var tempLeaveDetailModels = leaveDetails.Where(t => (t.OnDate == tempDate));
-                Models.ScheduleArrange.DailySchedule calendar = calendars.FirstOrDefault(t => t.WorkDate.Date == tempDate);
+                var calendar = calendars.FirstOrDefault(t => t.WorkDate.Date == tempDate);
 
                 if (calendar != null)
                 {
@@ -341,7 +341,7 @@ public class LeaveController(
         IEnumerable<LeaveRequestDetail> leaveDetails,
         Models.ScheduleArrange.DailySchedule calendar)
     {
-        string tempScheduleStatus = string.Empty;
+        var tempScheduleStatus = string.Empty;
         LeaveRequestDetail tempLeaveDetailModel;
         var isOffOrHoliday = calendar.IsOffDay || calendar.IsHoliday;
 
@@ -367,7 +367,7 @@ public class LeaveController(
 
         if (leaveDetails != null && leaveDetails.Any())
         {
-            foreach (LeaveRequestDetail leaveDetail in leaveDetails)
+            foreach (var leaveDetail in leaveDetails)
             {
                 tempLeaveDetailModel = leaveDetail;
                 tempLeaveDetailModel.IsOffOrHoliday = isOffOrHoliday;
@@ -396,7 +396,7 @@ public class LeaveController(
         IEnumerable<LeaveRequestDetail> tempLeaveDetailModels,
         DateTime workDate)
     {
-        string tempScheduleStatus = Labels.NA;
+        var tempScheduleStatus = Labels.NA;
         LeaveRequestDetail tempLeaveDetailModel;
 
         if (tempLeaveDetailModels != null && tempLeaveDetailModels.Any())

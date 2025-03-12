@@ -92,9 +92,9 @@ public static class Utilities
 
             while (!found)
             {
-                bool randFrom48To57 = (rand >= 48) && (rand <= 57);
-                bool randFrom65To90 = (rand >= 65) && (rand <= 90);
-                bool randFrom97To122 = (rand >= 97) && (rand <= 122);
+                var randFrom48To57 = (rand >= 48) && (rand <= 57);
+                var randFrom65To90 = (rand >= 65) && (rand <= 90);
+                var randFrom97To122 = (rand >= 97) && (rand <= 122);
 
                 if (randFrom48To57 || randFrom65To90 || randFrom97To122)
                 {
@@ -221,8 +221,8 @@ public static class Utilities
 
     public static string TotalHoursToTime(float value)
     {
-        int hour = (int)value;
-        int minute = (int)Math.Round((value - hour) * 60);
+        var hour = (int)value;
+        var minute = (int)Math.Round((value - hour) * 60);
 
         return hour > 0
             ? hour.ToString().PadLeft(PaddingLeftWidth, '0') + "h" + minute.ToString().PadLeft(PaddingLeftWidth, '0') + "'"
@@ -236,8 +236,8 @@ public static class Utilities
             return string.Empty;
         }
 
-        int hour = value / 60;
-        int minute = value - (hour * 60);
+        var hour = value / 60;
+        var minute = value - (hour * 60);
 
         return hour > 0
             ? hour.ToString().PadLeft(PaddingLeftWidth, '0') + "h" + minute.ToString().PadLeft(PaddingLeftWidth, '0') + "'"

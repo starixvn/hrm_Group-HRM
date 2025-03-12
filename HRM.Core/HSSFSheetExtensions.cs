@@ -48,7 +48,7 @@ public static class HSSFSheetExtensions
         var newRow = sheet.GetRow(destRowIndex) ?? sheet.CreateRow(destRowIndex);
 
         // Loop through source columns to add to new row
-        for (int i = 0; i < sourceRow.LastCellNum; i++)
+        for (var i = 0; i < sourceRow.LastCellNum; i++)
         {
             // Grab a copy of the old/new cell
             var oldCell = sourceRow.GetCell(i);

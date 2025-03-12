@@ -58,7 +58,7 @@ public static class HSSFCellExtensions
 
     public static void SetCellValue(this ICell cell, double? value)
     {
-        double result = value ?? 0;
+        var result = value ?? 0;
 
         cell.SetCellValue(result);
     }
@@ -70,7 +70,7 @@ public static class HSSFCellExtensions
 
     public static void SetCellValue(this ICell cell, decimal? value)
     {
-        decimal result = value ?? 0;
+        var result = value ?? 0;
 
         cell.SetCellValue(result);
     }
@@ -82,7 +82,7 @@ public static class HSSFCellExtensions
 
     public static void SetCellValue(this ICell cell, int? value)
     {
-        int result = value ?? 0;
+        var result = value ?? 0;
 
         cell.SetCellValue(result);
     }
@@ -94,7 +94,7 @@ public static class HSSFCellExtensions
 
     public static void SetCellValue(this ICell cell, long? value)
     {
-        long result = value ?? 0;
+        var result = value ?? 0;
 
         cell.SetCellValue(result);
     }
@@ -103,11 +103,11 @@ public static class HSSFCellExtensions
     {
         // Copy merged cells.
         CellRangeAddress sourceRange = null;
-        int i = 0;
+        var i = 0;
 
         while (sourceRange == null && i < sourceCell.Sheet.NumMergedRegions)
         {
-            CellRangeAddress range = sourceCell.Sheet.GetMergedRegion(i);
+            var range = sourceCell.Sheet.GetMergedRegion(i);
 
             if ((range.FirstColumn <= sourceCell.ColumnIndex)
                 && (range.LastColumn >= sourceCell.ColumnIndex)

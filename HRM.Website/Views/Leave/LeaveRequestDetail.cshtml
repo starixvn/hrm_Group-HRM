@@ -26,7 +26,7 @@
         double totalAnnualLeave = 0;
         double totalUnpaidLeave = 0;
         <tbody>
-            @foreach (LeaveRequestDetail item in Model.LeaveRequestDetail)
+            @foreach (var item in Model.LeaveRequestDetail)
             {
                 if (!item.IsOffOrHoliday)
                 {

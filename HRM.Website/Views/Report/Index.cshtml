@@ -27,7 +27,7 @@
         @if (Model != null && Model.Count() > 0)
         {
             var rowIndex = 1;
-            foreach (FunctionPermission function in Model)
+            foreach (var function in Model)
             {
                 switch (function.FunctionKey)
                 {

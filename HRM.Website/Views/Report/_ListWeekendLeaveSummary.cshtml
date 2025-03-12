@@ -18,9 +18,9 @@
     </thead>
     @if (Model != null && Model.Any())
     {
-        int index = 0;
+        var index = 0;
         <tbody>
-            @foreach (WeekendLeaveSummary item in Model)
+            @foreach (var item in Model)
             {
                 index++;
                 <tr>

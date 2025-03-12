@@ -81,7 +81,7 @@ public class HttpClientService : IHttpClientService
 
     private static HttpRequestMessage CreateRequest(string baseUrl, HttpMethod method, string token)
     {
-        Uri url = new Uri(baseUrl);
+        var url = new Uri(baseUrl);
         var request = new HttpRequestMessage(method, url);
         request.Headers.Accept.Clear();
         if (token != null)

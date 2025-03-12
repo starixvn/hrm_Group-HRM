@@ -19,7 +19,7 @@ public static class HSSFRowExtensions
 
     public static void WriteCells(this IRow row, int colIndex, object[] values)
     {
-        int id = colIndex;
+        var id = colIndex;
 
         if (row != null && values != null)
         {

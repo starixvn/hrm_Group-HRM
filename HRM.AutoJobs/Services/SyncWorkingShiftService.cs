@@ -42,7 +42,7 @@ public class SyncWorkingShiftService(
                 }
 
                 var totalBatch = (int)Math.Ceiling((double)workingShifts.Count() / BatchSize);
-                for (int i = 0; i < totalBatch; i++)
+                for (var i = 0; i < totalBatch; i++)
                 {
                     var command = new ImportWorkingShiftCommand
                     {

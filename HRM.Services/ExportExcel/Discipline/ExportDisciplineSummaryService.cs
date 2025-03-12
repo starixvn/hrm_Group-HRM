@@ -21,11 +21,11 @@ public class ExportDisciplineSummaryService(IWebHostEnvironment hostingEnvironme
 
     public byte[] Export(GetDisciplineSummaryCriteria criteria, IList<DisciplineSummaryModel> disciplines)
     {
-        string templatePath = Path.Combine(hostingEnvironment.ContentRootPath, TemplatePath); 
-        string reportName = Labels.DisciplineSummaryReportName;
+        var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, TemplatePath); 
+        var reportName = Labels.DisciplineSummaryReportName;
         string reportTitle;
-        string startDate = criteria.FromDate.ToDateMonthYearFormatedDate();
-        string endDate = criteria.ToDate.ToDateMonthYearFormatedDate();
+        var startDate = criteria.FromDate.ToDateMonthYearFormatedDate();
+        var endDate = criteria.ToDate.ToDateMonthYearFormatedDate();
 
         if (criteria.EmployeeId != null)
         {
@@ -58,8 +58,8 @@ public class ExportDisciplineSummaryService(IWebHostEnvironment hostingEnvironme
 
     private void FillContentRow(IList<DisciplineSummaryModel> disciplines, ref ExcelTemplateWriter writer)
     {
-        int rowIndex = 1;
-        foreach (DisciplineSummaryModel discipline in disciplines)
+        var rowIndex = 1;
+        foreach (var discipline in disciplines)
         {
             FillRow(discipline, ref writer, ref rowIndex);
         }
@@ -67,15 +67,15 @@ public class ExportDisciplineSummaryService(IWebHostEnvironment hostingEnvironme
 
     private void FillRow(DisciplineSummaryModel discipline, ref ExcelTemplateWriter writer, ref int rowIndex)
     {
-        object record = CreateRecord(discipline, ref rowIndex);
+        var record = CreateRecord(discipline, ref rowIndex);
         writer.WriteRow(BodyRow, record);
     }
 
     private object CreateRecord(DisciplineSummaryModel discipline, ref int rowIndex)
     {
-        float otherDisciplines = discipline.OtherDisciplineScore > 0 ? -discipline.OtherDisciplineScore : 0;
-        float systemSubtractScore = discipline.SystemSubtractScore > 0 ? -discipline.SystemSubtractScore : 0;
-        float approverSubtractScore = discipline.ApproverSubtractScore > 0 ? -discipline.ApproverSubtractScore : 0;
+        var otherDisciplines = discipline.OtherDisciplineScore > 0 ? -discipline.OtherDisciplineScore : 0;
+        var systemSubtractScore = discipline.SystemSubtractScore > 0 ? -discipline.SystemSubtractScore : 0;
+        var approverSubtractScore = discipline.ApproverSubtractScore > 0 ? -discipline.ApproverSubtractScore : 0;
 
         var record = new
         {

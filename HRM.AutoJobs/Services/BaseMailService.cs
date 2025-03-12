@@ -43,7 +43,7 @@ public class BaseMailService(
 
     private async Task<bool> SendByMailKitAsync(MailRecord email)
     {
-        MimeMessage message = GetMessageContent(email);
+        var message = GetMessageContent(email);
         var isSucessfull = false;
 
         using var mailclient = new MailKit.Net.Smtp.SmtpClient();
@@ -137,7 +137,7 @@ public class BaseMailService(
     private void SendCompletedCallback(object sender, AsyncCompletedEventArgs e)
     {
         var email = (MailRecord)e.UserState;
-        bool status = e.Error == null;
+        var status = e.Error == null;
         if (!status)
         {
             HandleMailErrorAsync(email, (e.Error.InnerException != null ? e.Error.InnerException.Message : e.Error.Message), e.Error.StackTrace).Wait();
@@ -212,7 +212,7 @@ public class BaseMailService(
         {
             HtmlBody = email.Body
         };
-        foreach (MimeEntity attachment in email.Attachments)
+        foreach (var attachment in email.Attachments)
         {
             builder.Attachments.Add(attachment);
         }

@@ -83,7 +83,7 @@
             <div class="input-form" id="@Model.EmployeeWorkFromHomeId">
                 @if (Model.Files != null)
                 {
-                    foreach (string file in Model.Files)
+                    foreach (var file in Model.Files)
                     {
                         <a href="javascript:;" class="delete-file" id="@file" data-id="@file">
                             <i class="fa fa-close"></i>@file

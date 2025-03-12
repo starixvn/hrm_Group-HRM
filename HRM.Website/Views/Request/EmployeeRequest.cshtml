@@ -133,9 +133,9 @@
         </thead>
         @if (Model.Requests != null && Model.Requests.Any())
         {
-            int index = 1;
+            var index = 1;
             <tbody id="employee-request-body" class="@hasCheckBoxColumn">
-                @foreach (RequestEntity request in Model.Requests)
+                @foreach (var request in Model.Requests)
                 {
                     <tr id="row@(request.Id)">
                         @if (Model.ViewType == RequestViewType.PersonalSpace)

@@ -174,7 +174,7 @@
     @if (Model.WorkingHours.Any())
     {
         <tbody>
-            @{int index = 1;}
+            @{var index = 1;}
             @foreach (var item in Model.WorkingHours)
             {
                 var requestModel = new RequestViewModel

@@ -124,7 +124,7 @@ public class ChangeShiftController(
 
         if (request.TypeId == (byte)ChangeShiftType.MoveOffDay)
         {
-            foreach (ChangeShiftDetail detail in model.Details)
+            foreach (var detail in model.Details)
             {
                 detail.DisableDates = await changeShiftService.GetDisableDateForMoveOffDayRequestAsync(model.EmployeeId, detail.OnDate, model.RequestId);
             }
@@ -215,7 +215,7 @@ public class ChangeShiftController(
 
         if (param.TypeId == (byte)ChangeShiftType.MoveOffDay)
         {
-            foreach (ChangeShiftDetail detail in details)
+            foreach (var detail in details)
             {
                 detail.DisableDates = await changeShiftService.GetDisableDateForMoveOffDayRequestAsync(param.EmployeeId, detail.OnDate, param.RequestId);
             }
@@ -230,7 +230,7 @@ public class ChangeShiftController(
 
     public async Task<IActionResult> ViewHistory(long id)
     {
-        IEnumerable<ChangeShiftRequest> requests = await changeShiftService.GetHistoryByIdAsync(id);
+        var requests = await changeShiftService.GetHistoryByIdAsync(id);
         return PartialView("_ViewHistory", requests);
     }
 

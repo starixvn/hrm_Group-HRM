@@ -5,8 +5,8 @@
 
 @if (Model != null && Model.Any())
 {
-    int index = 0;
-    foreach (DisciplineSummaryModel item in Model)
+    var index = 0;
+    foreach (var item in Model)
     {
         index++;
         <tr>

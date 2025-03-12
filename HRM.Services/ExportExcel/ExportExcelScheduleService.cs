@@ -32,7 +32,7 @@ public class ExportExcelScheduleService(IWebHostEnvironment hostingEnvironment) 
     public byte[] Export(WeeklyScheduleFilter filter, IEnumerable<WeeklySchedule> weeklySchedules)
     {
         using var xlPackage = new ExcelPackage();
-        ExcelWorksheet worksheet = xlPackage.Workbook.Worksheets.Add("Sheet1");
+        var worksheet = xlPackage.Workbook.Worksheets.Add("Sheet1");
         worksheet.DefaultRowHeight = DefaultRowHeight;
         var columns = new List<string>
         {
@@ -44,7 +44,7 @@ public class ExportExcelScheduleService(IWebHostEnvironment hostingEnvironment) 
             columns.Add(day.ToString("dd-MMM-yyyy"));
         }
 
-        int totalColumns = columns.Count;
+        var totalColumns = columns.Count;
         var rowIndex = 1;
         int colIndex;
         for (var i = 0; i < totalColumns; i++)
@@ -59,7 +59,7 @@ public class ExportExcelScheduleService(IWebHostEnvironment hostingEnvironment) 
         rowIndex++;
 
         ShiftBase shift;
-        foreach (WeeklySchedule weeklySchedule in weeklySchedules)
+        foreach (var weeklySchedule in weeklySchedules)
         {
             colIndex = 1;
 
@@ -102,8 +102,8 @@ public class ExportExcelScheduleService(IWebHostEnvironment hostingEnvironment) 
         using var templatePackage = new ExcelPackage(new FileInfo(templatePath));
         using var xlPackage = new ExcelPackage();
         var sheetName = $"{filter.FromDate.ToString(DateFormat)}-{filter.ToDate.ToString(DateFormat)}";
-        ExcelWorksheet templateWorksheet = templatePackage.Workbook.Worksheets[0];
-        ExcelWorksheet worksheet = xlPackage.Workbook.Worksheets.Add(sheetName);
+        var templateWorksheet = templatePackage.Workbook.Worksheets[0];
+        var worksheet = xlPackage.Workbook.Worksheets.Add(sheetName);
         var rowIndex = 1;
         var colIndex = 1;
 
@@ -137,7 +137,7 @@ public class ExportExcelScheduleService(IWebHostEnvironment hostingEnvironment) 
         worksheet.Column(colIndex).Width = 40;
 
         rowIndex++;
-        foreach (WeeklySchedule weeklySchedule in weeklySchedules)
+        foreach (var weeklySchedule in weeklySchedules)
         {
             colIndex = 1;
             templateWorksheet.Cells[6, colIndex, 6, totalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, totalColumns]);
@@ -175,7 +175,7 @@ public class ExportExcelScheduleService(IWebHostEnvironment hostingEnvironment) 
         {
             var shiftHeaderRow = rowIndex;
             rowIndex++;
-            foreach (SumEmployeeWorkingOnShift item in employeeWorkingOnShifts)
+            foreach (var item in employeeWorkingOnShifts)
             {
                 templateWorksheet.Cells[4, 1, 4, totalColumns].Copy(worksheet.Cells[rowIndex, 1, rowIndex, totalColumns]);
                 worksheet.Cells[rowIndex, 1, rowIndex, 2].Value = item.Code;
@@ -191,7 +191,7 @@ public class ExportExcelScheduleService(IWebHostEnvironment hostingEnvironment) 
 
             for (var i = 3; i <= totalColumns - 1; i++)
             {
-                string totalEmployeeAddress = ExcelCellBase.GetAddress(shiftHeaderRow + 1, i, rowIndex - 1, ToColumn: i);
+                var totalEmployeeAddress = ExcelCellBase.GetAddress(shiftHeaderRow + 1, i, rowIndex - 1, ToColumn: i);
                 worksheet.Cells[shiftHeaderRow, i].Formula = $"SUM({totalEmployeeAddress})";
                 worksheet.Cells[shiftHeaderRow, i].Calculate();
             }
@@ -205,7 +205,7 @@ public class ExportExcelScheduleService(IWebHostEnvironment hostingEnvironment) 
     private static IList<SumEmployeeWorkingOnShift> SumEmployeeWorkingOnShift(IEnumerable<WeeklySchedule> weeklySchedules)
     {
         var employeeWorkingOnShifts = new List<SumEmployeeWorkingOnShift>();
-        foreach (WeeklySchedule weeklySchedule in weeklySchedules)
+        foreach (var weeklySchedule in weeklySchedules)
         {
             SumEmployeeWorkingOnShift(employeeWorkingOnShifts, weeklySchedule.MondaySchedule);
             SumEmployeeWorkingOnShift(employeeWorkingOnShifts, weeklySchedule.TuesdaySchedule);
@@ -225,7 +225,7 @@ public class ExportExcelScheduleService(IWebHostEnvironment hostingEnvironment) 
         IList<SumEmployeeWorkingOnShift> employeeWorkingOnShifts,
         DailySchedule dailySchedule)
     {
-        ShiftBase shift = GetShift(dailySchedule);
+        var shift = GetShift(dailySchedule);
         if (shift.IsShift)
         {
             var findExists = employeeWorkingOnShifts.FirstOrDefault(
@@ -258,7 +258,7 @@ public class ExportExcelScheduleService(IWebHostEnvironment hostingEnvironment) 
 
     private static void WriteDailyCells(ExcelRange cell, DailySchedule dailySchedule)
     {
-        ShiftBase shift = GetShift(dailySchedule);
+        var shift = GetShift(dailySchedule);
 
         cell.Value = shift.Code;
         if (!string.IsNullOrEmpty(shift.BackgroundColor))

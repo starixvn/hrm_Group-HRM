@@ -53,7 +53,7 @@ public class ManpowerReportController(
     public async Task<IActionResult> ExportManpowerCategory(int year)
     {
         var manpowers = await reportService.GetManpowerCategoryAsync(year);
-        byte[] bytes = reportService.ExportManpowerCategory(manpowers, year);
+        var bytes = reportService.ExportManpowerCategory(manpowers, year);
 
         var fileName = $"Manpower Category Report - {year}.xlsx";
         return File(bytes, MimeType.XLSX, fileName);

@@ -62,7 +62,7 @@ public static class RazorHelpers
     public static string MinTotalLeaveDropDownList(int minTotalLeave, string name = "MinTotalLeave")
     {
         var options = $"<option {(minTotalLeave == 0 ? "selected" : "")} value='0'>All</option>";
-        for (int i = 14; i <= 20; i++)
+        for (var i = 14; i <= 20; i++)
         {
             options += $"<option {(i == minTotalLeave ? "selected" : "")} value='{i}'>{i}</option>";
         }
