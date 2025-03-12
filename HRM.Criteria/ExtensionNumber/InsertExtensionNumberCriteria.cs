@@ -18,7 +18,7 @@ public class InsertExtensionNumberCriteria : CriteriaBase
 
     public short OrderNo { get; set; }
         
-        public short CompanyId { get; set; }
+    public short CompanyId { get; set; }
 
     public override string GetSettingKey()
     {

@@ -29,7 +29,7 @@ public class ExtensionNoModel
     public bool IsInternal { get; set; }
 
     [Required(ErrorMessage = "The Employee field is required.")]
-    [Range(1, int.MaxValue, ErrorMessage = "The Employee field is required.")]
+    [Range(0, int.MaxValue, ErrorMessage = "The Employee field is required.")]
     public int EmpId { get; set; }
 
     public string Employee { get; set; }
