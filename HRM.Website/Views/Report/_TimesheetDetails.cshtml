@@ -39,10 +39,10 @@
                     <td>@index</td>
                     <td class="@(item.IsWeekend ? "weekend" : string.Empty)">
                         <a class="time-record-link" href="@Url.Action("timerecord", "report", new {
-                            EmployeeId = item.EmpId,
-                            Employee = string.Format("{0} ({1})", item.NickName, item.FullName),
-                            FromDate = item.AttendanceDate.ToDateMonthYearFormatedDate(),
-                            ToDate = item.AttendanceDate.AddDays(1).ToDateMonthYearFormatedDate() })"
+                                                              EmployeeId = item.EmpId,
+                                                              Employee = $"{item.NickName} ({item.FullName})",
+                                                              FromDate = item.AttendanceDate.ToDateMonthYearFormatedDate(),
+                                                              ToDate = item.AttendanceDate.AddDays(1).ToDateMonthYearFormatedDate() })"
                             title="Link to time records">
                             @item.AttendanceDate.ToDayOfWeekFormatedDate()
                         </a>

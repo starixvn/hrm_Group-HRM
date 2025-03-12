@@ -102,14 +102,14 @@
                                             }
                                             else if (workingCalendar.IsLeaveHalfDay)
                                             {
-                                                value = string.Format("{0} ½", workingCalendar.LeaveType.Code);
+                                                value = $"{workingCalendar.LeaveType.Code} ½";
                                             }
                                             else
                                             {
                                                 value = workingCalendar.LeaveType.Code;
                                                 if (workingCalendar.LeaveType2 != null && workingCalendar.LeaveType.Id != workingCalendar.LeaveType2.Id)
                                                 {
-                                                    value = string.Format("{0} / {1}", workingCalendar.LeaveType.Code, workingCalendar.LeaveType2.Code);
+                                                    value = $"{workingCalendar.LeaveType.Code} / {workingCalendar.LeaveType2.Code}";
                                                 }
                                             }
 

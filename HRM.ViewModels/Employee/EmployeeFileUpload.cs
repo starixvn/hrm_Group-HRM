@@ -16,7 +16,7 @@ public class EmployeeFileUpload
     {
         get
         {
-            return string.Format("/file/uploads/profile/{0}/{1}", Code, FileName);
+            return $"/file/uploads/profile/{Code}/{FileName}";
         }
     }
 }

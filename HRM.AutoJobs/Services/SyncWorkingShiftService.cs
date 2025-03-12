@@ -55,7 +55,7 @@ public class SyncWorkingShiftService(
         else
         {
             var message = await response.Content.ReadAsStringAsync();
-            await logger.ErrorAsync(string.Format("StatusCode: {0}\r\nMessage: {1}", response.StatusCode, message));
+            await logger.ErrorAsync($"StatusCode: {response.StatusCode}\r\nMessage: {message}");
         }
     }
 

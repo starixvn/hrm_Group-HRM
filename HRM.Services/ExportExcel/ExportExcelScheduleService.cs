@@ -192,7 +192,7 @@ public class ExportExcelScheduleService(IWebHostEnvironment hostingEnvironment) 
             for (var i = 3; i <= totalColumns - 1; i++)
             {
                 string totalEmployeeAddress = ExcelCellBase.GetAddress(shiftHeaderRow + 1, i, rowIndex - 1, ToColumn: i);
-                worksheet.Cells[shiftHeaderRow, i].Formula = string.Format("SUM({0})", totalEmployeeAddress);
+                worksheet.Cells[shiftHeaderRow, i].Formula = $"SUM({totalEmployeeAddress})";
                 worksheet.Cells[shiftHeaderRow, i].Calculate();
             }
         }

@@ -215,7 +215,7 @@ public partial class EmployeeWorkingHoursService : IEmployeeWorkingHoursService
                 value = dailyWorking.LeaveType.Code;
                 if (dailyWorking.LeaveType2 != null && dailyWorking.LeaveType.Id != dailyWorking.LeaveType2.Id)
                 {
-                    value = string.Format("{0}½/{1}½", dailyWorking.LeaveType.Code, dailyWorking.LeaveType2.Code);
+                    value = $"{dailyWorking.LeaveType.Code}½/{dailyWorking.LeaveType2.Code}½";
                 }
             }
         }
@@ -231,7 +231,7 @@ public partial class EmployeeWorkingHoursService : IEmployeeWorkingHoursService
     private static string GetLeaveHalfDay(DailyWorking dailyWorking)
     {
         return dailyWorking.LeaveType.Id != (byte)Core.Enums.LeaveTypes.KeepInViewByHour
-            ? string.Format("{0}½", dailyWorking.LeaveType.Code)
+            ? $"{dailyWorking.LeaveType.Code}½"
             : string.Empty;
     }
 

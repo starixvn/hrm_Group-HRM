@@ -72,7 +72,7 @@ public class AnnualLeaveBalanceService(
                 employee.Nickname,
                 percentInMail,
                 year + 1,
-                string.Format("{0}/{1}", employee.LeaveBalance, employee.AnnualLeaveCurrentYear));
+                $"{employee.LeaveBalance}/{employee.AnnualLeaveCurrentYear}");
 
             if (!string.IsNullOrWhiteSpace(employee.Email) && isSentMail)
             {

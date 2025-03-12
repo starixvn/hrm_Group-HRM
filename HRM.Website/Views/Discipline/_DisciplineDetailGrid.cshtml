@@ -94,7 +94,7 @@
             {
                 short colIndex = 1;
                 rowIndex++;
-                var checkboxId = string.Format("checkbox-{0}-{1}", rowIndex, colIndex++);
+                var checkboxId = $"checkbox-{rowIndex}-{colIndex++}";
                 <tr>
                     <td>@rowIndex</td>
                     @if (hasPermissionToUpdateOutOfControlReason)
@@ -142,69 +142,69 @@
                     </td>
                     <td class="tooltip-tipsy" title="@{RenderTooltipLog(item.MissingCheckInOut);}">
                         @{
-                            checkboxId = string.Format("checkbox-{0}-{1}", rowIndex, colIndex++);
+                            checkboxId = $"checkbox-{rowIndex}-{colIndex++}";
                         }
                         @{RenderDisciplineCell(item.Employee.EmployeeId, item.WorkDate, item.MissingCheckInOut,
                                                 item.MissingCheckInOut.Value.ToString(), (short)DisciplineType.MissingCheckInOut, checkboxId);}
                     </td>
                     <td class="tooltip-tipsy" title="@{RenderTooltipLog(item.WorkingUnderTime);}">
                         @{
-                            checkboxId = string.Format("checkbox-{0}-{1}", rowIndex, colIndex++);
+                            checkboxId = $"checkbox-{rowIndex}-{colIndex++}";
                         }
                         @{RenderDisciplineCell(item.Employee.EmployeeId, item.WorkDate, item.WorkingUnderTime,
                                               item.WorkingUnderTime.Value.ToString(), (short)DisciplineType.WorkingUnderTime, checkboxId);}
                     </td>
                     <td class="tooltip-tipsy" title="@{RenderTooltipLog(item.LateIn);}">
                         @{
-                            checkboxId = string.Format("checkbox-{0}-{1}", rowIndex, colIndex++);
+                            checkboxId = $"checkbox-{rowIndex}-{colIndex++}";
                         }
                         @{RenderDisciplineCell(item.Employee.EmployeeId, item.WorkDate, item.LateIn, item.MinutesLateIn, (short)DisciplineType.LateIn, checkboxId);}
                     </td>
                     <td class="tooltip-tipsy" title="@{RenderTooltipLog(item.EarlyOut);}">
                         @{
-                            checkboxId = string.Format("checkbox-{0}-{1}", rowIndex, colIndex++);
+                            checkboxId = $"checkbox-{rowIndex}-{colIndex++}";
                         }
                         @{RenderDisciplineCell(item.Employee.EmployeeId, item.WorkDate, item.EarlyOut, item.MinutesEarlyOut, (short)DisciplineType.EarlyOut, checkboxId);}
                     </td>
                     <td class="tooltip-tipsy" title="@{RenderTooltipLog(item.Absent);}">
                         @{
-                            checkboxId = string.Format("checkbox-{0}-{1}", rowIndex, colIndex++);
+                            checkboxId = $"checkbox-{rowIndex}-{colIndex++}";
                         }
                         @{RenderDisciplineCell(item.Employee.EmployeeId, item.WorkDate, item.Absent,item.Absent.Value.ToString(), (short)DisciplineType.Absent, checkboxId);}
                     </td>
                     <td class="tooltip-tipsy" title="@{RenderTooltipLog(item.UnpaidLeave);}">
                         @{
-                            checkboxId = string.Format("checkbox-{0}-{1}", rowIndex, colIndex++);
+                            checkboxId = $"checkbox-{rowIndex}-{colIndex++}";
                         }
                         @{RenderDisciplineCell(item.Employee.EmployeeId, item.WorkDate, item.UnpaidLeave, item.UnpaidLeave.Value.ToString(), (short)DisciplineType.UnpaidLeave, checkboxId);}
                     </td>
                     <td class="tooltip-tipsy" title="@{RenderTooltipLog(item.UnpaidLeaveAbsent);}">
                         @{
-                            checkboxId = string.Format("checkbox-{0}-{1}", rowIndex, colIndex++);
+                            checkboxId = $"checkbox-{rowIndex}-{colIndex++}";
                         }
                         @{RenderDisciplineCell(item.Employee.EmployeeId, item.WorkDate, item.UnpaidLeaveAbsent, item.UnpaidLeaveAbsent.Value.ToString(), (short)DisciplineType.UnpaidLeaveAbsent, checkboxId);}
                     </td>
                     <td class="tooltip-tipsy" title="@{RenderTooltipLog(item.ChangeShift);}">
                         @{
-                            checkboxId = string.Format("checkbox-{0}-{1}", rowIndex, colIndex++);
+                            checkboxId = $"checkbox-{rowIndex}-{colIndex++}";
                         }
                         @{RenderDisciplineCell(item.Employee.EmployeeId, item.WorkDate, item.ChangeShift, item.ChangeShift.Value.ToString(), (short)DisciplineType.ChangeShift, checkboxId);}
                     </td>
                     <td class="tooltip-tipsy" title="@{RenderTooltipLog(item.UnplannedLeave);}">
                         @{
-                            checkboxId = string.Format("checkbox-{0}-{1}", rowIndex, colIndex++);
+                            checkboxId = $"checkbox-{rowIndex}-{colIndex++}";
                         }
                         @{RenderDisciplineCell(item.Employee.EmployeeId, item.WorkDate, item.UnplannedLeave, item.UnplannedLeave.Value.ToString(), (short)DisciplineType.UnplannedLeave, checkboxId);}
                     </td>
                     <td class="tooltip-tipsy" title="@{RenderTooltipLog(item.WeekendLeave);}">
                         @{
-                            checkboxId = string.Format("checkbox-{0}-{1}", rowIndex, colIndex++);
+                            checkboxId = $"checkbox-{rowIndex}-{colIndex++}";
                         }
                         @{RenderDisciplineCell(item.Employee.EmployeeId, item.WorkDate, item.WeekendLeave, item.WeekendLeave.Value.ToString(), (short)DisciplineType.WeekendLeave, checkboxId);}
                     </td>
                     <td class="tooltip-tipsy" title="@{RenderTooltipLog(item.SevenDaysLeave);}">
                         @{
-                            checkboxId = string.Format("checkbox-{0}-{1}", rowIndex, colIndex++);
+                            checkboxId = $"checkbox-{rowIndex}-{colIndex++}";
                         }
                         @{RenderDisciplineCell(item.Employee.EmployeeId, item.WorkDate, item.SevenDaysLeave, item.SevenDaysLeave.Value.ToString(), (short)DisciplineType.SevenDaysLeave, checkboxId);}
                     </td>

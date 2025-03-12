@@ -147,8 +147,7 @@
                         </td>
                         <td class="cell-overtime">
                             @{ 
-                                className = string.Format("specialHours form-control {0}",
-                                    request.IsHoliday && request.HolidayTypeId == (byte)HolidayType.Special ? "specialPH" : string.Empty);
+                                className = $"specialHours form-control {(request.IsHoliday && request.HolidayTypeId == (byte)HolidayType.Special ? "specialPH" : string.Empty)}";
                             }
                             @if ((Model.MonthlyRequest.Requester.SpecialOT > 0
                                 && request.ActualWorkingHours > 0
