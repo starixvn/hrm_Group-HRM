@@ -6,7 +6,6 @@ using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
 using Core.Constants;
 using Core.Filters;
-using Core;
 using ViewModels.Function;
 using Microsoft.AspNetCore.Mvc;
 
