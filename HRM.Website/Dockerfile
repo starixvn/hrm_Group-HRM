@@ -11,10 +11,10 @@ COPY **/packages.config .
 RUN dotnet nuget add source https://nuget.nexdev.net/api/v2
 
 # Restore dependencies
-RUN dotnet restore -v n -r linux-x64 HRM.Site/HRM.Site.csproj
+RUN dotnet restore -v n -r linux-x64 HRM.Website/HRM.Website.csproj
 
 # Publish the application
-WORKDIR /src/HRM.Site
+WORKDIR /src/HRM.Website
 RUN dotnet publish -r linux-x64 --self-contained false -c Release -o /app
 
 FROM hub.nexdev.net/base/dotnet/core/aspnet:9.0-alpine AS base
@@ -32,4 +32,4 @@ RUN adduser --disabled-password \
 USER dotnetuser
 #
 
-ENTRYPOINT ["dotnet", "HRM.Site.dll"]
+ENTRYPOINT ["dotnet", "HRM.Website.dll"]
