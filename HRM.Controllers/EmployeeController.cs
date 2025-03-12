@@ -195,22 +195,23 @@ public class EmployeeController(
     [HrmPermission(Policy.Host, FunctionKey.CreateAccount)]
     public async Task<IActionResult> Create(CreateEmployeeViewModel model)
     {
-        if (ModelState.IsValid)
+        if (!ModelState.IsValid)
         {
-            var param = new CreateEmployeeParam
-            {
-                Code = model.Code,
-                Nickname = model.Nickname
-            };
-
-            var commandResult = await employeeService.CheckExistAsync(param);
-            if (commandResult.IsSuccessful)
-            {
-                return await CreateUserAsync(model);
-            }
-
-            ModelState.AddModelError(string.Empty, commandResult.Message);
+            return View(model);
         }
+
+        var param = new CreateEmployeeParam
+        {
+            Code = model.Code,
+            Nickname = model.Nickname
+        };
+
+        var commandResult = await employeeService.CheckExistAsync(param);
+        if (commandResult.IsSuccessful)
+        {
+            return await CreateUserAsync(model);
+        }
+        ModelState.AddModelError(string.Empty, commandResult.Message);
 
         return View(model);
     }
@@ -360,14 +361,18 @@ public class EmployeeController(
     [HrmPermission(Policy.Host, FunctionKey.EmployeeManagement)]
     public async Task<JsonResult> UploadAvatar(string code, IFormFile file)
     {
-        if (file is not { Length: > 0 }) return Json(null);
+        if (file is not { Length: > 0 })
+        {
+            return Json(null);
+        }
+
         var avatarPath = Path.Combine(hostingEnvironment.ContentRootPath, "avatars", $"{code}.jpg");
         using var stream = new MemoryStream();
         await file.CopyToAsync(stream);
         stream.Seek(0, SeekOrigin.Begin);
 
         using var image = Image.FromStream(stream);
-        image.Save(avatarPath, System.Drawing.Imaging.ImageFormat.Jpeg);
+        image.Save(avatarPath, format: System.Drawing.Imaging.ImageFormat.Jpeg);
 
         return Json(null);
     }

@@ -1,85 +1,35 @@
-# escape=`
-FROM hub.nexdev.net/base/rocketor/buildservice AS builder
+FROM hub.nexdev.net/base/dotnet/core/sdk:9.0-alpine AS builder
 
-ARG DEPLOY_ENV
+WORKDIR /src
 
-SHELL ["cmd", "/S", "/C"]
-
-WORKDIR /build
-
-# Copy files *.sln, *.csproj, packages.config to restore nuget packages
+# Copy solution and project files
 COPY *.sln .
-COPY HRM.Resources\*.csproj HRM.Resources\
+COPY **/*.csproj .
+COPY **/packages.config .
 
-COPY HRM.Core\*.csproj HRM.Core\
-COPY HRM.Core\packages.config HRM.Core\
+# Copy the rest of the source code
+RUN dotnet nuget add source https://nuget.nexdev.net/api/v2
 
-COPY HRM.MailDeliver\*.csproj HRM.MailDeliver\
-COPY HRM.MailDeliver\packages.config HRM.MailDeliver\
+# Restore dependencies
+RUN dotnet restore -v n -r linux-x64 HRM.Site/HRM.Site.csproj
 
-COPY HRM.Models\*.csproj HRM.Models\
-COPY HRM.Models\packages.config HRM.Models\
+# Publish the application
+WORKDIR /src/HRM.Site
+RUN dotnet publish -r linux-x64 --self-contained false -c Release -o /app
 
-COPY HRM.ViewModels\*.csproj HRM.ViewModels\
-COPY HRM.ViewModels\packages.config HRM.ViewModels\
+FROM hub.nexdev.net/base/dotnet/core/aspnet:9.0-alpine AS base
 
-COPY HRM.Criteria\*.csproj HRM.Criteria\
-COPY HRM.Criteria\packages.config HRM.Criteria\
+WORKDIR /app
+COPY --from=builder /app .
 
-COPY HRM.Repositories\*.csproj HRM.Repositories\
-COPY HRM.Repositories\packages.config HRM.Repositories\
+ENV TZ="America/La_Paz" 
+ENV COMPlus_EnableDiagnostics=0
 
-COPY HRM.Services\*.csproj HRM.Services\
-COPY HRM.Services\packages.config HRM.Services\
+# Don’t run as root
+RUN adduser --disabled-password \
+    --home /app \
+    --gecos '' dotnetuser && chown -R dotnetuser /app && chown -R dotnetuser /tmp
+USER dotnetuser
+#
 
-COPY HRM.Letstalk.Core\*.csproj HRM.Letstalk.Core\
-COPY HRM.Letstalk.Core\packages.config HRM.Letstalk.Core\
-
-COPY HRM.Controllers\*.csproj HRM.Controllers\
-COPY HRM.Controllers\packages.config HRM.Controllers\
-
-COPY HRM.Site\*.csproj HRM.Site\
-COPY HRM.Site\packages.config HRM.Site\
-
-RUN nuget.exe restore NexHR.sln
-
-# Copy source codes
-COPY HRM.Resources\ HRM.Resources\
-COPY HRM.Core\ HRM.Core\
-COPY HRM.MailDeliver\ HRM.MailDeliver\
-COPY HRM.Models\ HRM.Models\
-COPY HRM.ViewModels\ HRM.ViewModels\
-COPY HRM.Criteria\ HRM.Criteria\
-COPY HRM.Repositories\ HRM.Repositories\
-COPY HRM.Services\ HRM.Services\
-COPY HRM.Letstalk.Core\ HRM.Letstalk.Core\
-COPY HRM.Controllers\ HRM.Controllers\
-COPY HRM.Site\ HRM.Site\
-
-RUN MSBuild.exe "HRM.Site\HRM.Site.csproj" `
-    /t:Build;WebPublish /m `
-    /p:DebugType=None `
-    /p:Configuration=Release `
-    /p:WebPublishMethod=FileSystem `
-    /p:TransformWebConfigEnabled=False `
-    /p:LocalizedBuild=true `
-    /p:AutoParameterizationWebConfigConnectionStrings=False `
-    /p:MarkWebConfigAssistFilesAsExclude=false `
-    /p:publishUrl="C:\Compiled" `
-    /consoleloggerparameters:ErrorsOnly
-
-WORKDIR C:\Compiled
-
-# Transform config
-RUN echo "%DEPLOY_ENV%" `
-    && xcopy "WebConfigs\Web.%DEPLOY_ENV%.config" "Web.config" /Y
-
-FROM hub.nexdev.net/base/dotnet/framework/aspnet:4.7.2-windowsservercore-ltsc2019 AS base
-
-WORKDIR C:\inetpub\wwwroot
-
-COPY --from=builder C:\Compiled .
-
-RUN dir .\bin\
-
-ENTRYPOINT ["C:\\LogMonitor\\LogMonitor.exe", "C:\\ServiceMonitor.exe", "w3svc"]
+ENTRYPOINT ["dotnet", "HRM.Site.dll"]
