@@ -1,7 +1,7 @@
 FROM hub.nexdev.net/base/dotnet/core/sdk:9.0-alpine AS builder
 
 WORKDIR /src
-# Copy source codes
+# Copy solution and project files
 COPY HRM.Criteria/*.csproj HRM.Criteria/
 COPY HRM.Letstalk.Core/*.csproj HRM.Letstalk.Core/
 COPY HRM.Models/*.csproj HRM.Models/
@@ -17,9 +17,22 @@ COPY HRM.AutoJobs/*.csproj HRM.AutoJobs/
 
 # Copy the rest of the source code
 RUN dotnet nuget add source https://nuget.nexdev.net/api/v2
-
 # Restore dependencies
-RUN dotnet restore -v n -r linux-x64 NexHR.sln
+RUN dotnet restore -v n -r linux-x64 HRM.Website/HRM.Website.csproj
+
+# Copy source codes
+COPY HRM.Criteria/ HRM.Criteria/
+COPY HRM.Letstalk.Core/ HRM.Letstalk.Core/
+COPY HRM.Models/ HRM.Models/
+COPY HRM.Services/ HRM.Services/
+COPY HRM.Core/ HRM.Core/
+COPY HRM.MailDeliver/ HRM.MailDeliver/
+COPY HRM.Resources/ HRM.Resources/
+COPY HRM.Repositories/ HRM.Repositories/
+COPY HRM.Controllers/ HRM.Controllers/
+COPY HRM.ViewModels/ HRM.ViewModels/
+COPY HRM.Website/ HRM.Website/
+COPY HRM.AutoJobs/ HRM.AutoJobs/
 
 # Publish the application
 WORKDIR /src/HRM.Website
