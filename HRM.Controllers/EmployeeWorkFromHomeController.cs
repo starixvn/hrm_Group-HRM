@@ -24,6 +24,7 @@ public class EmployeeWorkFromHomeController(
     IBaseService baseService,
     IAttachFileService attachFileService) : BaseController(userControlSession)
 {
+    private readonly IUserControlSession userControlSession = userControlSession;
     private const string UploadFolderPath = "/file/uploads/wfh/";
 
     [HrmPermission(Policy.Read, FunctionKey.EmployeeManagement)]
@@ -91,7 +92,7 @@ public class EmployeeWorkFromHomeController(
         }
         else
         {
-            result.Message = ModelState.Values.FirstOrDefault(v => v.Errors.Any()).Errors.FirstOrDefault().ErrorMessage;
+            result.Message = ModelState.Values.FirstOrDefault(v => v.Errors.Any())?.Errors.FirstOrDefault()?.ErrorMessage;
         }
 
         return Json(result);
@@ -147,7 +148,7 @@ public class EmployeeWorkFromHomeController(
         }
         else
         {
-            result.Message = ModelState.Values.FirstOrDefault(v => v.Errors.Any()).Errors.FirstOrDefault().ErrorMessage;
+            result.Message = ModelState.Values.FirstOrDefault(v => v.Errors.Any())?.Errors.FirstOrDefault()?.ErrorMessage;
         }
 
         return Json(result);
