@@ -13,30 +13,18 @@
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Logging;
 
-    public class AnnualLeaveBalanceService : IAnnualLeaveBalanceService
+    public class AnnualLeaveBalanceService(
+        IWebHostEnvironment hostEnvironment,
+        ILogger<AnnualLeaveBalanceService> logfile,
+        IBaseService baseService,
+        IBaseMailService mailService,
+        ILetstalkService letstalkService)
+        : IAnnualLeaveBalanceService
     {
         private const string RemindUseALTemplatePath = "EmailTemplates/RemindUseAL.txt";
         private const string StatisticALBalanceTemplatePath = "EmailTemplates/StatisticALBalance.txt";
 
-        private readonly IWebHostEnvironment hostEnvironment;
-        private readonly ILogger logfile;
-        private readonly IBaseService baseService;
-        private readonly IBaseMailService mailService;
-        private readonly ILetstalkService letstalkService;
-
-        public AnnualLeaveBalanceService(
-            IWebHostEnvironment hostEnvironment,
-            ILogger<AnnualLeaveBalanceService> logfile,
-            IBaseService baseService,
-            IBaseMailService mailService,
-            ILetstalkService letstalkService)
-        {
-            this.hostEnvironment = hostEnvironment;
-            this.logfile = logfile;
-            this.baseService = baseService;
-            this.mailService = mailService;
-            this.letstalkService = letstalkService;
-        }
+        private readonly ILogger logfile = logfile;
 
         public async Task InsertForNextYearAsync()
         {

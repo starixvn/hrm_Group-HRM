@@ -3,15 +3,8 @@
     using System.Threading.Tasks;
     using Criteria.Postnatal;
 
-    public class PostnatalService : IPostnatalService
+    public class PostnatalService(IBaseService baseService) : IPostnatalService
     {
-        private readonly IBaseService baseService;
-
-        public PostnatalService(IBaseService baseService)
-        {
-            this.baseService = baseService;
-        }
-
         public async Task UpdateWorkingHourPerDayAsync()
         {
             var criteria = new UpdateWorkingHourPerDayCommand();

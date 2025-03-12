@@ -15,15 +15,9 @@
         byte[] Export(int fromYear, int toYear, IList<DisciplineSummaryPerYear> employees, bool enableGroupDate);
     }
 
-    public class ExportDisciplineSummaryPerYearService : IExportDisciplineSummaryPerYearService
+    public class ExportDisciplineSummaryPerYearService(IWebHostEnvironment hostingEnvironment)
+        : IExportDisciplineSummaryPerYearService
     {
-
-        private readonly IWebHostEnvironment hostingEnvironment;
-
-        public ExportDisciplineSummaryPerYearService(IWebHostEnvironment hostingEnvironment)
-        {
-            this.hostingEnvironment = hostingEnvironment;
-        }
         public byte[] Export(int fromYear, int toYear, IList<DisciplineSummaryPerYear> employees, bool enableGroupDate)
         {
             const byte LengthOfServiceColIndex = 9;

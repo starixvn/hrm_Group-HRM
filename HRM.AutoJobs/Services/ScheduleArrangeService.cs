@@ -4,15 +4,8 @@
     using System.Threading.Tasks;
     using Criteria;
 
-    public class ScheduleArrangeService : IScheduleArrangeService
+    public class ScheduleArrangeService(IBaseService baseService) : IScheduleArrangeService
     {
-        private readonly IBaseService baseService;
-
-        public ScheduleArrangeService(IBaseService baseService)
-        {
-            this.baseService = baseService;
-        }
-
         public async Task PublicScheduleAsync()
         {
             var command = new PublicScheduleCommand();

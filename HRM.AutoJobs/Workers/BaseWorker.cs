@@ -8,17 +8,10 @@
     using Microsoft.Extensions.Hosting;
     using Microsoft.Extensions.Logging;
 
-    public class BaseWorker : BackgroundService
+    public class BaseWorker(ILogger<BaseWorker> logfile, Fanex.Logging.ILogger logger) : BackgroundService
     {
-        private readonly ILogger logfile;
-        private readonly Fanex.Logging.ILogger logger;
+        private readonly ILogger logfile = logfile;
         protected JobSetting jobSetting;
-
-        public BaseWorker(ILogger<BaseWorker> logfile, Fanex.Logging.ILogger logger)
-        {
-            this.logfile = logfile;
-            this.logger = logger;
-        }
 
         public override Task StartAsync(CancellationToken cancellationToken)
         {

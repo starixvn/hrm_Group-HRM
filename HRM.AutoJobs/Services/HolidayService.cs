@@ -9,15 +9,9 @@
     using Models;
     using XMLExtensions;
 
-    public class HolidayService : IHolidayService
+    public class HolidayService(IBaseService baseService) : IHolidayService
     {
-        private readonly IBaseService baseService;
         private readonly ChineseLunisolarCalendar chinaCalendar = new ChineseLunisolarCalendar();
-
-        public HolidayService(IBaseService baseService)
-        {
-            this.baseService = baseService;
-        }
 
         public async Task InsertHolidayInYearAsync()
         {

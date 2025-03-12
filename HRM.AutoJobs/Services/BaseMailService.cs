@@ -16,19 +16,10 @@
     using MailKit.Net.Smtp;
     using MimeKit;
 
-    public class BaseMailService : IBaseMailService
+    public class BaseMailService(
+        AppSettings appSettings,
+        IBaseService baseService) : IBaseMailService
     {
-        private readonly AppSettings appSettings;
-        private readonly IBaseService baseService;
-
-        public BaseMailService(
-            AppSettings appSettings,
-            IBaseService baseService)
-        {
-            this.appSettings = appSettings;
-            this.baseService = baseService;
-        }
-
         public async Task<bool> SendEmailAsync(MailRecord email)
         {
             var isSucessfull = false;

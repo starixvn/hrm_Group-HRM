@@ -11,23 +11,13 @@ namespace HRM.Controllers.Export
     using Services;
     using ViewModels.Report;
 
-    public class ExportWeekendLeaveController : BaseController
+    public class ExportWeekendLeaveController(
+        IUserControlSession userControlSession,
+        IReportService reportService,
+        IExportWeekendLeaveSummaryService exportWeekendLeaveSummaryService,
+        IExportWeekendLeaveDetailService exportWeekendLeaveDetailService)
+        : BaseController(userControlSession)
     {
-        private readonly IReportService reportService;
-        private readonly IExportWeekendLeaveSummaryService exportWeekendLeaveSummaryService;
-        private readonly IExportWeekendLeaveDetailService exportWeekendLeaveDetailService;
-
-        public ExportWeekendLeaveController(
-            IUserControlSession userControlSession,
-            IReportService reportService,
-            IExportWeekendLeaveSummaryService exportWeekendLeaveSummaryService,
-            IExportWeekendLeaveDetailService exportWeekendLeaveDetailService) : base(userControlSession)
-        {
-            this.reportService = reportService;
-            this.exportWeekendLeaveSummaryService = exportWeekendLeaveSummaryService;
-            this.exportWeekendLeaveDetailService = exportWeekendLeaveDetailService;
-        }
-
         public async Task<ActionResult> ExportWeekendLeaveSummaryReport(WeekendLeaveViewModel model)
         {
             var criteria = new GetWeekendLeaveSummaryCriteria

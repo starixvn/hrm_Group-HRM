@@ -5,20 +5,12 @@
     using Models;
     using HRM.Letstalk.Core.Services;
 
-    public class LetstalkService : ILetstalkService
+    public class LetstalkService(
+        LetstalkSettings letstalkSettings,
+        ISendNotificationService sendNotificationService)
+        : ILetstalkService
     {
         private readonly string templateContent = "<strong>{0}</strong><br /> {1}";
-
-        private readonly LetstalkSettings letstalkSettings;
-        private readonly ISendNotificationService sendNotificationService;
-
-        public LetstalkService(
-            LetstalkSettings letstalkSettings,
-            ISendNotificationService sendNotificationService)
-        {
-            this.letstalkSettings = letstalkSettings;
-            this.sendNotificationService = sendNotificationService;
-        }
 
         public async Task SendNotificationAsync(string letstalkId, string subject, string message)
         {

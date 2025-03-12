@@ -13,18 +13,13 @@
         byte[] Export(GetWeekendLeaveSummaryCriteria criteria, IList<WeekendLeaveSummary> weekendLeaves);
     }
 
-    public class ExportWeekendLeaveSummaryService : IExportWeekendLeaveSummaryService
+    public class ExportWeekendLeaveSummaryService(IWebHostEnvironment hostingEnvironment)
+        : IExportWeekendLeaveSummaryService
     {
         private const string WeekendLeaveSummaryTemplatePath = @"ExcelTemplates\WeekendLeaveSummaryTemplate.xls";
         private const int HeaderRow = 3;
         private const int BodyRow = 4;
         private const int TotalCol = 7;
-        private readonly IWebHostEnvironment hostingEnvironment;
-
-        public ExportWeekendLeaveSummaryService(IWebHostEnvironment hostingEnvironment)
-        {
-            this.hostingEnvironment = hostingEnvironment;
-        }
 
         public byte[] Export(GetWeekendLeaveSummaryCriteria criteria, IList<WeekendLeaveSummary> weekendLeaves)
         {

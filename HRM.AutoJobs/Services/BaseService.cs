@@ -5,15 +5,8 @@
     using System.Threading.Tasks;
     using Fanex.Data.Repository;
 
-    public class BaseService : IBaseService
+    public class BaseService(IDynamicRepository dynamicRepository) : IBaseService
     {
-        private readonly IDynamicRepository dynamicRepository;
-
-        public BaseService(IDynamicRepository dynamicRepository)
-        {
-            this.dynamicRepository = dynamicRepository;
-        }
-
         public async Task<IEnumerable<T>> GetDataAsync<T>(ICriteria criteria)
         {
             if (criteria != null && criteria.IsValid())

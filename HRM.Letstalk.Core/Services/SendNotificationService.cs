@@ -5,15 +5,8 @@
     using Constants;
     using Models;
 
-    public class SendNotificationService : ISendNotificationService
+    public class SendNotificationService(IHttpClientService httpClientService) : ISendNotificationService
     {
-        private readonly IHttpClientService httpClientService;
-
-        public SendNotificationService(IHttpClientService httpClientService)
-        {
-            this.httpClientService = httpClientService;
-        }
-
         public JwtToken GetToken(string baseUrl, string ursername, string password)
         {
             var url = $"{baseUrl}{LetstalkApiPath.Auth}?username={ursername}&password={password}";

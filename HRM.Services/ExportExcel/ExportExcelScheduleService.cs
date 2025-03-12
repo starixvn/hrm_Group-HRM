@@ -23,18 +23,11 @@
     }
 
     [SuppressMessage("Major Code Smell", "S109:Magic numbers should not be used", Justification = "Pending")]
-    public class ExportExcelScheduleService : IExportExcelScheduleService
+    public class ExportExcelScheduleService(IWebHostEnvironment hostingEnvironment) : IExportExcelScheduleService
     {
         private const int DefaultRowHeight = 14;
         private const string DateFormat = "dd-MMM-yyyy";
         private const string DateTimeFormat = "MMM dd, yyyy HH:mm:ss";
-
-        private readonly IWebHostEnvironment hostingEnvironment;
-
-        public ExportExcelScheduleService(IWebHostEnvironment hostingEnvironment)
-        {
-            this.hostingEnvironment = hostingEnvironment;
-        }
 
         public byte[] Export(WeeklyScheduleFilter filter, IEnumerable<WeeklySchedule> weeklySchedules)
         {

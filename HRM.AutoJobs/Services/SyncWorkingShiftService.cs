@@ -12,25 +12,13 @@
     using XMLExtensions;
     using Newtonsoft.Json;
 
-    public class SyncWorkingShiftService : ISyncWorkingShiftService
+    public class SyncWorkingShiftService(
+        AppSettings appSettings,
+        IHttpClientFactory clientFactory,
+        IBaseService baseService,
+        ILogger logger)
+        : ISyncWorkingShiftService
     {
-        private readonly AppSettings appSettings;
-        private readonly IBaseService baseService;
-        private readonly IHttpClientFactory clientFactory;
-        private readonly ILogger logger;
-
-        public SyncWorkingShiftService(
-            AppSettings appSettings,
-            IHttpClientFactory clientFactory,
-            IBaseService baseService,
-            ILogger logger)
-        {
-            this.appSettings = appSettings;
-            this.clientFactory = clientFactory;
-            this.baseService = baseService;
-            this.logger = logger;
-        }
-
         public async Task SyncWorkingShiftAsync()
         {
             const short BatchSize = 1000;

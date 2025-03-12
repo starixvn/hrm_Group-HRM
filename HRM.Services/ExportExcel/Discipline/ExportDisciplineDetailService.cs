@@ -11,19 +11,13 @@
     using Resources;
 
     [SuppressMessage("Major Code Smell", "S109:Magic numbers should not be used", Justification = "Pending")]
-    public class ExportDisciplineDetailService : IExportDisciplineDetailService
+    public class ExportDisciplineDetailService(IWebHostEnvironment hostingEnvironment) : IExportDisciplineDetailService
     {
         private const string TemplatePath = @"ExcelTemplates\DisciplineDetailReport.xls";
         private const int HeaderRow = 2;
         private const int BodyRow = 3;
         private const int WeekendRow = 4;
         private const int TotalCol = 26;
-        private readonly IWebHostEnvironment hostingEnvironment;
-
-        public ExportDisciplineDetailService(IWebHostEnvironment hostingEnvironment)
-        {
-            this.hostingEnvironment = hostingEnvironment;
-        }
 
         public byte[] Export(GetDisciplineDetailCriteria criteria, IList<DisciplineDetailModel> disciplines)
         {

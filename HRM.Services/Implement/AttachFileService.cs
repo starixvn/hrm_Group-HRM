@@ -9,15 +9,8 @@ namespace HRM.Services
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
 
-    public class AttachFileService : IAttachFileService
+    public class AttachFileService(IWebHostEnvironment hostingEnvironment) : IAttachFileService
     {
-        private readonly IWebHostEnvironment hostingEnvironment;
-
-        public AttachFileService(IWebHostEnvironment hostingEnvironment)
-        {
-            this.hostingEnvironment = hostingEnvironment;
-        }
-
         public void UploadFile(IList<IFormFile> files, long fileId, string pathFolder)
         {
             if (files != null && files.Any(x => x.Length > 0))

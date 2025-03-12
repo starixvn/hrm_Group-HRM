@@ -7,11 +7,6 @@
 
     public class SupervisorReportModel
     {
-        public SupervisorReportModel()
-        {
-            Supervisors = new List<SupervisorModel>();
-        }
-
         public int Id { get; set; }
 
         public string NickName { get; set; }
@@ -32,7 +27,7 @@
 
         public TeamModel Team { get; set; }
 
-        public IList<SupervisorModel> Supervisors { get; set; }
+        public IList<SupervisorModel> Supervisors { get; set; } = new List<SupervisorModel>();
 
         public string Department { get; set; }
 
