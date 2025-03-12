@@ -62,15 +62,13 @@ public class ActionLogService(IBaseService baseService) : IActionLogService
         var results = new List<FieldValue>();
         TextReader sr = new StringReader(xml);
 
-        using (var reader = XmlReader.Create(sr))
+        using var reader = XmlReader.Create(sr);
+        while (reader.Read())
         {
-            while (reader.Read())
+            if (reader.NodeType == XmlNodeType.Element)
             {
-                if (reader.NodeType == XmlNodeType.Element)
-                {
-                    var fields = ReadXmlAttribute(reader);
-                    results.AddRange(fields);
-                }
+                var fields = ReadXmlAttribute(reader);
+                results.AddRange(fields);
             }
         }
 

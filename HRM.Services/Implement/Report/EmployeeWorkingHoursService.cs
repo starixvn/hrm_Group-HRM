@@ -31,65 +31,61 @@ public partial class EmployeeWorkingHoursService : IEmployeeWorkingHoursService
         const ushort StartDateColumn = 9;
         TotalColumns = 15;
 
-        using (var templatePackage = new ExcelPackage(new FileInfo(templatePath)))
+        using var templatePackage = new ExcelPackage(new FileInfo(templatePath));
+        using var xlPackage = new ExcelPackage();
+        var redColor = ColorTranslator.FromHtml(Constants.RedColor);
+        var templateWorksheet = templatePackage.Workbook.Worksheets[0];
+        var worksheet = xlPackage.Workbook.Worksheets.Add(Labels.AttendanceWeeklyDetail);
+        var rowIndex = 1;
+        var colIndex = 1;
+
+        // title
+        templateWorksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
+        worksheet.Cells[rowIndex, colIndex].Value = $"{Labels.AttendanceWeeklyDetail} {fromDate.ToString(ShortDateFormat)} - {toDate.ToString(ShortDateFormat)}";
+        rowIndex++;
+
+        // header
+        templateWorksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
+        colIndex = StartDateColumn;
+        for (var day = fromDate.Date; day.Date <= toDate.Date; day = day.AddDays(1))
         {
-            using (var xlPackage = new ExcelPackage())
+            worksheet.Cells[rowIndex, colIndex].Value = day.ToString("dd MMM, yyyy (ddd)");
+
+            if (day.DayOfWeek == DayOfWeek.Saturday || day.DayOfWeek == DayOfWeek.Sunday)
             {
-                var redColor = ColorTranslator.FromHtml(Constants.RedColor);
-                var templateWorksheet = templatePackage.Workbook.Worksheets[0];
-                var worksheet = xlPackage.Workbook.Worksheets.Add(Labels.AttendanceWeeklyDetail);
-                var rowIndex = 1;
-                var colIndex = 1;
-
-                // title
-                templateWorksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
-                worksheet.Cells[rowIndex, colIndex].Value = $"{Labels.AttendanceWeeklyDetail} {fromDate.ToString(ShortDateFormat)} - {toDate.ToString(ShortDateFormat)}";
-                rowIndex++;
-
-                // header
-                templateWorksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
-                colIndex = StartDateColumn;
-                for (var day = fromDate.Date; day.Date <= toDate.Date; day = day.AddDays(1))
-                {
-                    worksheet.Cells[rowIndex, colIndex].Value = day.ToString("dd MMM, yyyy (ddd)");
-
-                    if (day.DayOfWeek == DayOfWeek.Saturday || day.DayOfWeek == DayOfWeek.Sunday)
-                    {
-                        worksheet.Cells[rowIndex, colIndex].Style.Font.Color.SetColor(redColor);
-                    }
-
-                    colIndex++;
-                }
-
-                // data
-                rowIndex++;
-                foreach (MonthlyWorking monthlyWorking in monthlyWorkings)
-                {
-                    colIndex = 1;
-                    templateWorksheet.Cells[3, 1, 3, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
-
-                    worksheet.Cells[rowIndex, colIndex++].Value = rowIndex - 2;
-                    worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Department;
-                    worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Section;
-                    worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Team.Name;
-                    worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Code;
-                    worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.FullName;
-                    worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Nickname;
-                    worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.ActualWorkingDays;
-                    foreach (DailyWorking dailyWorking in monthlyWorking.DailyWorkings)
-                    {
-                        WriteDailyCells(worksheet.Cells[rowIndex, colIndex++], dailyWorking);
-                    }
-
-                    rowIndex++;
-                }
-
-                worksheet.Cells.AutoFitColumns();
-                worksheet.View.FreezePanes(3, 8);
-
-                return xlPackage.GetAsByteArray();
+                worksheet.Cells[rowIndex, colIndex].Style.Font.Color.SetColor(redColor);
             }
+
+            colIndex++;
         }
+
+        // data
+        rowIndex++;
+        foreach (MonthlyWorking monthlyWorking in monthlyWorkings)
+        {
+            colIndex = 1;
+            templateWorksheet.Cells[3, 1, 3, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
+
+            worksheet.Cells[rowIndex, colIndex++].Value = rowIndex - 2;
+            worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Department;
+            worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Section;
+            worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Team.Name;
+            worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Code;
+            worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.FullName;
+            worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Nickname;
+            worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.ActualWorkingDays;
+            foreach (DailyWorking dailyWorking in monthlyWorking.DailyWorkings)
+            {
+                WriteDailyCells(worksheet.Cells[rowIndex, colIndex++], dailyWorking);
+            }
+
+            rowIndex++;
+        }
+
+        worksheet.Cells.AutoFitColumns();
+        worksheet.View.FreezePanes(3, 8);
+
+        return xlPackage.GetAsByteArray();
     }
 
     public byte[] ExportDailyWorkingHours(DateTime date, IEnumerable<MonthlyWorking> monthlyWorkings)
@@ -97,55 +93,51 @@ public partial class EmployeeWorkingHoursService : IEmployeeWorkingHoursService
         var templatePath = Path.Combine(env.ContentRootPath, "ExcelTemplates/DailyWorkingHours.xlsx");
         TotalColumns = 15;
 
-        using (var templatePackage = new ExcelPackage(new FileInfo(templatePath)))
+        using var templatePackage = new ExcelPackage(new FileInfo(templatePath));
+        using var xlPackage = new ExcelPackage();
+        var redColor = ColorTranslator.FromHtml(Constants.RedColor);
+        ExcelWorksheet templateWorksheet = templatePackage.Workbook.Worksheets[0];
+        ExcelWorksheet worksheet = xlPackage.Workbook.Worksheets.Add(Labels.AttendanceDailyDetail);
+        var rowIndex = 1;
+        var colIndex = 1;
+
+        // title
+        templateWorksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
+        worksheet.Cells[rowIndex, colIndex].Value = Labels.AttendanceDailyDetail;
+        rowIndex++;
+
+        // header
+        templateWorksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
+        colIndex = 8;
+        worksheet.Cells[rowIndex, colIndex].Value = date.ToString("dd MMM, yyyy (ddd)");
+        if (date.DayOfWeek == DayOfWeek.Saturday || date.DayOfWeek == DayOfWeek.Sunday)
         {
-            using (var xlPackage = new ExcelPackage())
-            {
-                var redColor = ColorTranslator.FromHtml(Constants.RedColor);
-                ExcelWorksheet templateWorksheet = templatePackage.Workbook.Worksheets[0];
-                ExcelWorksheet worksheet = xlPackage.Workbook.Worksheets.Add(Labels.AttendanceDailyDetail);
-                var rowIndex = 1;
-                var colIndex = 1;
-
-                // title
-                templateWorksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
-                worksheet.Cells[rowIndex, colIndex].Value = Labels.AttendanceDailyDetail;
-                rowIndex++;
-
-                // header
-                templateWorksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
-                colIndex = 8;
-                worksheet.Cells[rowIndex, colIndex].Value = date.ToString("dd MMM, yyyy (ddd)");
-                if (date.DayOfWeek == DayOfWeek.Saturday || date.DayOfWeek == DayOfWeek.Sunday)
-                {
-                    worksheet.Cells[rowIndex, colIndex].Style.Font.Color.SetColor(redColor);
-                }
-
-                // data
-                rowIndex++;
-                foreach (MonthlyWorking monthlyWorking in monthlyWorkings)
-                {
-                    colIndex = 1;
-                    templateWorksheet.Cells[3, 1, 3, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
-
-                    worksheet.Cells[rowIndex, colIndex++].Value = rowIndex - 2;
-                    worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Department;
-                    worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Section;
-                    worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Team.Name;
-                    worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Code;
-                    worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.FullName;
-                    worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Nickname;
-                    WriteDailyCells(worksheet.Cells[rowIndex, colIndex], monthlyWorking.DailyWorkings.First());
-
-                    rowIndex++;
-                }
-
-                worksheet.Cells.AutoFitColumns();
-                worksheet.View.FreezePanes(3, 1);
-
-                return xlPackage.GetAsByteArray();
-            }
+            worksheet.Cells[rowIndex, colIndex].Style.Font.Color.SetColor(redColor);
         }
+
+        // data
+        rowIndex++;
+        foreach (MonthlyWorking monthlyWorking in monthlyWorkings)
+        {
+            colIndex = 1;
+            templateWorksheet.Cells[3, 1, 3, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
+
+            worksheet.Cells[rowIndex, colIndex++].Value = rowIndex - 2;
+            worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Department;
+            worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Section;
+            worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Team.Name;
+            worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Code;
+            worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.FullName;
+            worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Nickname;
+            WriteDailyCells(worksheet.Cells[rowIndex, colIndex], monthlyWorking.DailyWorkings.First());
+
+            rowIndex++;
+        }
+
+        worksheet.Cells.AutoFitColumns();
+        worksheet.View.FreezePanes(3, 1);
+
+        return xlPackage.GetAsByteArray();
     }
 
     private void WriteDailyCells(ExcelRange cell, DailyWorking dailyWorking)

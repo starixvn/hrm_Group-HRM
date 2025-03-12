@@ -31,139 +31,133 @@ public class ExportExcelScheduleService(IWebHostEnvironment hostingEnvironment) 
 
     public byte[] Export(WeeklyScheduleFilter filter, IEnumerable<WeeklySchedule> weeklySchedules)
     {
-        using (var xlPackage = new ExcelPackage())
+        using var xlPackage = new ExcelPackage();
+        ExcelWorksheet worksheet = xlPackage.Workbook.Worksheets.Add("Sheet1");
+        worksheet.DefaultRowHeight = DefaultRowHeight;
+        var columns = new List<string>
         {
-            ExcelWorksheet worksheet = xlPackage.Workbook.Worksheets.Add("Sheet1");
-            worksheet.DefaultRowHeight = DefaultRowHeight;
-            var columns = new List<string>
-            {
-                "ID",
-                "Nickname"
-            };
-            for (var day = filter.FromDate.Date; day.Date <= filter.ToDate.Date; day = day.AddDays(1))
-            {
-                columns.Add(day.ToString("dd-MMM-yyyy"));
-            }
-
-            int totalColumns = columns.Count;
-            var rowIndex = 1;
-            int colIndex;
-            for (var i = 0; i < totalColumns; i++)
-            {
-                colIndex = i + 1;
-                worksheet.Cells[rowIndex, colIndex].Value = columns[i];
-                worksheet.Cells[rowIndex, colIndex].Style.Border.BorderAround(ExcelBorderStyle.Thin);
-                worksheet.Cells[rowIndex, colIndex].Style.Fill.PatternType = ExcelFillStyle.Solid;
-                worksheet.Cells[rowIndex, colIndex].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(142, 169, 224));
-            }
-            worksheet.Row(rowIndex).Style.VerticalAlignment = ExcelVerticalAlignment.Center;
-            rowIndex++;
-
-            ShiftBase shift;
-            foreach (WeeklySchedule weeklySchedule in weeklySchedules)
-            {
-                colIndex = 1;
-
-                worksheet.Cells[rowIndex, colIndex++].Value = weeklySchedule.Code;
-                worksheet.Cells[rowIndex, colIndex++].Value = weeklySchedule.Nickname;
-
-                shift = GetShift(weeklySchedule.MondaySchedule);
-                worksheet.Cells[rowIndex, colIndex++].Value = shift.Code;
-
-                shift = GetShift(weeklySchedule.TuesdaySchedule);
-                worksheet.Cells[rowIndex, colIndex++].Value = shift.Code;
-
-                shift = GetShift(weeklySchedule.WednesdaySchedule);
-                worksheet.Cells[rowIndex, colIndex++].Value = shift.Code;
-
-                shift = GetShift(weeklySchedule.ThursdaySchedule);
-                worksheet.Cells[rowIndex, colIndex++].Value = shift.Code;
-
-                shift = GetShift(weeklySchedule.FridaySchedule);
-                worksheet.Cells[rowIndex, colIndex++].Value = shift.Code;
-
-                shift = GetShift(weeklySchedule.SaturdaySchedule);
-                worksheet.Cells[rowIndex, colIndex++].Value = shift.Code;
-
-                shift = GetShift(weeklySchedule.SundaySchedule);
-                worksheet.Cells[rowIndex, colIndex].Value = shift.Code;
-
-                rowIndex++;
-            }
-
-            worksheet.View.FreezePanes(2, 1);
-
-            return xlPackage.GetAsByteArray();
+            "ID",
+            "Nickname"
+        };
+        for (var day = filter.FromDate.Date; day.Date <= filter.ToDate.Date; day = day.AddDays(1))
+        {
+            columns.Add(day.ToString("dd-MMM-yyyy"));
         }
+
+        int totalColumns = columns.Count;
+        var rowIndex = 1;
+        int colIndex;
+        for (var i = 0; i < totalColumns; i++)
+        {
+            colIndex = i + 1;
+            worksheet.Cells[rowIndex, colIndex].Value = columns[i];
+            worksheet.Cells[rowIndex, colIndex].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+            worksheet.Cells[rowIndex, colIndex].Style.Fill.PatternType = ExcelFillStyle.Solid;
+            worksheet.Cells[rowIndex, colIndex].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(142, 169, 224));
+        }
+        worksheet.Row(rowIndex).Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+        rowIndex++;
+
+        ShiftBase shift;
+        foreach (WeeklySchedule weeklySchedule in weeklySchedules)
+        {
+            colIndex = 1;
+
+            worksheet.Cells[rowIndex, colIndex++].Value = weeklySchedule.Code;
+            worksheet.Cells[rowIndex, colIndex++].Value = weeklySchedule.Nickname;
+
+            shift = GetShift(weeklySchedule.MondaySchedule);
+            worksheet.Cells[rowIndex, colIndex++].Value = shift.Code;
+
+            shift = GetShift(weeklySchedule.TuesdaySchedule);
+            worksheet.Cells[rowIndex, colIndex++].Value = shift.Code;
+
+            shift = GetShift(weeklySchedule.WednesdaySchedule);
+            worksheet.Cells[rowIndex, colIndex++].Value = shift.Code;
+
+            shift = GetShift(weeklySchedule.ThursdaySchedule);
+            worksheet.Cells[rowIndex, colIndex++].Value = shift.Code;
+
+            shift = GetShift(weeklySchedule.FridaySchedule);
+            worksheet.Cells[rowIndex, colIndex++].Value = shift.Code;
+
+            shift = GetShift(weeklySchedule.SaturdaySchedule);
+            worksheet.Cells[rowIndex, colIndex++].Value = shift.Code;
+
+            shift = GetShift(weeklySchedule.SundaySchedule);
+            worksheet.Cells[rowIndex, colIndex].Value = shift.Code;
+
+            rowIndex++;
+        }
+
+        worksheet.View.FreezePanes(2, 1);
+
+        return xlPackage.GetAsByteArray();
     }
 
     public byte[] ExportDriverPickup(Actor actor, WeeklyScheduleFilter filter, IEnumerable<WeeklySchedule> weeklySchedules)
     {
         var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, @"ExcelTemplates/DriverPickup.xlsx");
         const int totalColumns = 10;
-        using (var templatePackage = new ExcelPackage(new FileInfo(templatePath)))
+        using var templatePackage = new ExcelPackage(new FileInfo(templatePath));
+        using var xlPackage = new ExcelPackage();
+        var sheetName = $"{filter.FromDate.ToString(DateFormat)}-{filter.ToDate.ToString(DateFormat)}";
+        ExcelWorksheet templateWorksheet = templatePackage.Workbook.Worksheets[0];
+        ExcelWorksheet worksheet = xlPackage.Workbook.Worksheets.Add(sheetName);
+        var rowIndex = 1;
+        var colIndex = 1;
+
+        // header
+        templateWorksheet.Cells[rowIndex, colIndex, rowIndex, totalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, totalColumns]);
+        worksheet.Cells[rowIndex, colIndex].Value = $"Working Shift {filter.FromDate.ToString(DateFormat)} to {filter.ToDate.ToString(DateFormat)}";
+        worksheet.Row(rowIndex).Height = 30;
+
+        rowIndex++;
+        templateWorksheet.Cells[rowIndex, colIndex, rowIndex, totalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, totalColumns]);
+        worksheet.Cells[rowIndex, colIndex].Value =
+            $"Print Date: {DateTimeOffset.Now.ToString(DateTimeFormat)} by {actor.Nickname} ({actor.FullName}), Total Records: {weeklySchedules.Count()}";
+
+        // sum
+        rowIndex++;
+        WriteSumData(worksheet, templateWorksheet, filter, weeklySchedules, totalColumns, ref rowIndex);
+
+        // data
+        rowIndex++;
+        templateWorksheet.Cells[5, 1, 5, totalColumns].Copy(worksheet.Cells[rowIndex, 1, rowIndex, totalColumns]);
+        worksheet.Row(rowIndex).Height = 30;
+        worksheet.Column(1).Width = 20;
+        worksheet.Column(2).Width = 20;
+        colIndex = 3;
+        for (var day = filter.FromDate.Date; day.Date <= filter.ToDate.Date; day = day.AddDays(1))
         {
-            using (var xlPackage = new ExcelPackage())
-            {
-                var sheetName = $"{filter.FromDate.ToString(DateFormat)}-{filter.ToDate.ToString(DateFormat)}";
-                ExcelWorksheet templateWorksheet = templatePackage.Workbook.Worksheets[0];
-                ExcelWorksheet worksheet = xlPackage.Workbook.Worksheets.Add(sheetName);
-                var rowIndex = 1;
-                var colIndex = 1;
-
-                // header
-                templateWorksheet.Cells[rowIndex, colIndex, rowIndex, totalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, totalColumns]);
-                worksheet.Cells[rowIndex, colIndex].Value = $"Working Shift {filter.FromDate.ToString(DateFormat)} to {filter.ToDate.ToString(DateFormat)}";
-                worksheet.Row(rowIndex).Height = 30;
-
-                rowIndex++;
-                templateWorksheet.Cells[rowIndex, colIndex, rowIndex, totalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, totalColumns]);
-                worksheet.Cells[rowIndex, colIndex].Value =
-                    $"Print Date: {DateTimeOffset.Now.ToString(DateTimeFormat)} by {actor.Nickname} ({actor.FullName}), Total Records: {weeklySchedules.Count()}";
-
-                // sum
-                rowIndex++;
-                WriteSumData(worksheet, templateWorksheet, filter, weeklySchedules, totalColumns, ref rowIndex);
-
-                // data
-                rowIndex++;
-                templateWorksheet.Cells[5, 1, 5, totalColumns].Copy(worksheet.Cells[rowIndex, 1, rowIndex, totalColumns]);
-                worksheet.Row(rowIndex).Height = 30;
-                worksheet.Column(1).Width = 20;
-                worksheet.Column(2).Width = 20;
-                colIndex = 3;
-                for (var day = filter.FromDate.Date; day.Date <= filter.ToDate.Date; day = day.AddDays(1))
-                {
-                    worksheet.Cells[rowIndex, colIndex].Value = $"{ day.ToString("ddd").ToUpperInvariant()}\n{day.ToString("MMM dd").ToUpperInvariant()}";
-                    worksheet.Column(colIndex).Width = 15;
-                    colIndex++;
-                }
-                worksheet.Column(colIndex).Width = 40;
-
-                rowIndex++;
-                foreach (WeeklySchedule weeklySchedule in weeklySchedules)
-                {
-                    colIndex = 1;
-                    templateWorksheet.Cells[6, colIndex, 6, totalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, totalColumns]);
-                    worksheet.Cells[rowIndex, colIndex++].Value = weeklySchedule.Team?.Code;
-                    worksheet.Cells[rowIndex, colIndex++].Value = weeklySchedule.Nickname;
-
-                    WriteDailyCells(worksheet.Cells[rowIndex, colIndex++], weeklySchedule.MondaySchedule);
-                    WriteDailyCells(worksheet.Cells[rowIndex, colIndex++], weeklySchedule.TuesdaySchedule);
-                    WriteDailyCells(worksheet.Cells[rowIndex, colIndex++], weeklySchedule.WednesdaySchedule);
-                    WriteDailyCells(worksheet.Cells[rowIndex, colIndex++], weeklySchedule.ThursdaySchedule);
-                    WriteDailyCells(worksheet.Cells[rowIndex, colIndex++], weeklySchedule.FridaySchedule);
-                    WriteDailyCells(worksheet.Cells[rowIndex, colIndex++], weeklySchedule.SaturdaySchedule);
-                    WriteDailyCells(worksheet.Cells[rowIndex, colIndex++], weeklySchedule.SundaySchedule);
-
-                    worksheet.Cells[rowIndex, colIndex].Value = weeklySchedule.PickupRemark;
-
-                    rowIndex++;
-                }
-
-                return xlPackage.GetAsByteArray();
-            }
+            worksheet.Cells[rowIndex, colIndex].Value = $"{ day.ToString("ddd").ToUpperInvariant()}\n{day.ToString("MMM dd").ToUpperInvariant()}";
+            worksheet.Column(colIndex).Width = 15;
+            colIndex++;
         }
+        worksheet.Column(colIndex).Width = 40;
+
+        rowIndex++;
+        foreach (WeeklySchedule weeklySchedule in weeklySchedules)
+        {
+            colIndex = 1;
+            templateWorksheet.Cells[6, colIndex, 6, totalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, totalColumns]);
+            worksheet.Cells[rowIndex, colIndex++].Value = weeklySchedule.Team?.Code;
+            worksheet.Cells[rowIndex, colIndex++].Value = weeklySchedule.Nickname;
+
+            WriteDailyCells(worksheet.Cells[rowIndex, colIndex++], weeklySchedule.MondaySchedule);
+            WriteDailyCells(worksheet.Cells[rowIndex, colIndex++], weeklySchedule.TuesdaySchedule);
+            WriteDailyCells(worksheet.Cells[rowIndex, colIndex++], weeklySchedule.WednesdaySchedule);
+            WriteDailyCells(worksheet.Cells[rowIndex, colIndex++], weeklySchedule.ThursdaySchedule);
+            WriteDailyCells(worksheet.Cells[rowIndex, colIndex++], weeklySchedule.FridaySchedule);
+            WriteDailyCells(worksheet.Cells[rowIndex, colIndex++], weeklySchedule.SaturdaySchedule);
+            WriteDailyCells(worksheet.Cells[rowIndex, colIndex++], weeklySchedule.SundaySchedule);
+
+            worksheet.Cells[rowIndex, colIndex].Value = weeklySchedule.PickupRemark;
+
+            rowIndex++;
+        }
+
+        return xlPackage.GetAsByteArray();
     }
 
     private static void WriteSumData(

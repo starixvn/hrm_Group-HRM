@@ -192,10 +192,8 @@ public class AnnualLeaveBalanceService(
 
     private static string ReadTextFile(string filePath)
     {
-        using (var sr = new StreamReader(filePath))
-        {
-            return sr.ReadToEnd();
-        }
+        using var sr = new StreamReader(filePath);
+        return sr.ReadToEnd();
     }
 
     private static string GetPercentByMonth()

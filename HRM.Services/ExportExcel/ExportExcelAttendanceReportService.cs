@@ -35,64 +35,60 @@ public class ExportExcelAttendanceReportService(IWebHostEnvironment hostingEnvir
     {
         var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, @"ExcelTemplates\AttendanceReport.xlsx");
 
-        using (var templatePackage = new ExcelPackage(new FileInfo(templatePath)))
+        using var templatePackage = new ExcelPackage(new FileInfo(templatePath));
+        using var xlPackage = new ExcelPackage();
+        var template = templatePackage.Workbook.Worksheets[0];
+        var worksheet = xlPackage.Workbook.Worksheets.Add("Attendance Report");
+        var rowIndex = 1;
+        var colIndex = 1;
+
+        // title
+        template.Cells[rowIndex, colIndex, rowIndex, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
+        rowIndex++;
+
+        // header
+        template.Cells[rowIndex, colIndex, rowIndex, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
+        rowIndex++;
+
+        // data
+        var rowNum = 1;
+        foreach (var attendance in attendances)
         {
-            using (var xlPackage = new ExcelPackage())
-            {
-                var template = templatePackage.Workbook.Worksheets[0];
-                var worksheet = xlPackage.Workbook.Worksheets.Add("Attendance Report");
-                var rowIndex = 1;
-                var colIndex = 1;
+            colIndex = 1;
+            var templateRowIndex = GetTemplateRowIndex(attendance);
+            template.Cells[templateRowIndex, 1, templateRowIndex, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
 
-                // title
-                template.Cells[rowIndex, colIndex, rowIndex, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
-                rowIndex++;
+            var requests = RequestsRemark(attendance);
+            var shiftCode = !string.IsNullOrEmpty(attendance.ShiftCode) ? attendance.ShiftCode : string.Empty;
+            var totalWorkHours = attendance.TotalWorkHours != 0 ? Utilities.TotalHoursToTime((float)attendance.TotalWorkHours) : string.Empty;
+            var overtime = attendance.IsOvertime ? attendance.FormattedOvertimeStatus + " (" + attendance.OvertimeHours.ToString() + ")" : string.Empty;
 
-                // header
-                template.Cells[rowIndex, colIndex, rowIndex, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
-                rowIndex++;
+            worksheet.Cells[rowIndex, colIndex++].Value = rowNum++;
+            worksheet.Cells[rowIndex, colIndex++].Value = attendance.AttendanceDate;
+            worksheet.Cells[rowIndex, colIndex++].Value = attendance.DepartmentCode;
+            worksheet.Cells[rowIndex, colIndex++].Value = attendance.SectionCode;
+            worksheet.Cells[rowIndex, colIndex++].Value = attendance.TeamCode;
+            worksheet.Cells[rowIndex, colIndex++].Value = attendance.Code;
+            worksheet.Cells[rowIndex, colIndex++].Value = attendance.FullName;
+            worksheet.Cells[rowIndex, colIndex++].Value = attendance.NickName;
+            worksheet.Cells[rowIndex, colIndex++].Value = shiftCode;
+            worksheet.Cells[rowIndex, colIndex++].Value = attendance.InFixed.HasValue ? attendance.InFixed.Value.ToClientTimeZone() : (object)"";
+            worksheet.Cells[rowIndex, colIndex++].Value = attendance.OutFixed.HasValue ? attendance.OutFixed.Value.ToClientTimeZone() : (object)"";
+            worksheet.Cells[rowIndex, colIndex++].Value = totalWorkHours;
+            worksheet.Cells[rowIndex, colIndex++].Value = Utilities.MinuteToTime(attendance.LateIn);
+            worksheet.Cells[rowIndex, colIndex++].Value = attendance.IsOffDay == 1 && !string.IsNullOrWhiteSpace(shiftCode) ?
+                string.Empty : Utilities.MinuteToTime(attendance.EarlyOut);
+            worksheet.Cells[rowIndex, colIndex++].Value = requests;
+            worksheet.Cells[rowIndex, colIndex++].Value = overtime;
+            worksheet.Cells[rowIndex, colIndex].Value = attendance.Notes;
 
-                // data
-                var rowNum = 1;
-                foreach (var attendance in attendances)
-                {
-                    colIndex = 1;
-                    var templateRowIndex = GetTemplateRowIndex(attendance);
-                    template.Cells[templateRowIndex, 1, templateRowIndex, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
-
-                    var requests = RequestsRemark(attendance);
-                    var shiftCode = !string.IsNullOrEmpty(attendance.ShiftCode) ? attendance.ShiftCode : string.Empty;
-                    var totalWorkHours = attendance.TotalWorkHours != 0 ? Utilities.TotalHoursToTime((float)attendance.TotalWorkHours) : string.Empty;
-                    var overtime = attendance.IsOvertime ? attendance.FormattedOvertimeStatus + " (" + attendance.OvertimeHours.ToString() + ")" : string.Empty;
-
-                    worksheet.Cells[rowIndex, colIndex++].Value = rowNum++;
-                    worksheet.Cells[rowIndex, colIndex++].Value = attendance.AttendanceDate;
-                    worksheet.Cells[rowIndex, colIndex++].Value = attendance.DepartmentCode;
-                    worksheet.Cells[rowIndex, colIndex++].Value = attendance.SectionCode;
-                    worksheet.Cells[rowIndex, colIndex++].Value = attendance.TeamCode;
-                    worksheet.Cells[rowIndex, colIndex++].Value = attendance.Code;
-                    worksheet.Cells[rowIndex, colIndex++].Value = attendance.FullName;
-                    worksheet.Cells[rowIndex, colIndex++].Value = attendance.NickName;
-                    worksheet.Cells[rowIndex, colIndex++].Value = shiftCode;
-                    worksheet.Cells[rowIndex, colIndex++].Value = attendance.InFixed.HasValue ? attendance.InFixed.Value.ToClientTimeZone() : (object)"";
-                    worksheet.Cells[rowIndex, colIndex++].Value = attendance.OutFixed.HasValue ? attendance.OutFixed.Value.ToClientTimeZone() : (object)"";
-                    worksheet.Cells[rowIndex, colIndex++].Value = totalWorkHours;
-                    worksheet.Cells[rowIndex, colIndex++].Value = Utilities.MinuteToTime(attendance.LateIn);
-                    worksheet.Cells[rowIndex, colIndex++].Value = attendance.IsOffDay == 1 && !string.IsNullOrWhiteSpace(shiftCode) ?
-                        string.Empty : Utilities.MinuteToTime(attendance.EarlyOut);
-                    worksheet.Cells[rowIndex, colIndex++].Value = requests;
-                    worksheet.Cells[rowIndex, colIndex++].Value = overtime;
-                    worksheet.Cells[rowIndex, colIndex].Value = attendance.Notes;
-
-                    rowIndex++;
-                    rowNum++;
-                }
-
-                worksheet.Cells.AutoFitColumns(MinimumWidth, MaximumWidth);
-                worksheet.View.FreezePanes(RowStartBody, 1);
-                return xlPackage.GetAsByteArray();
-            }
+            rowIndex++;
+            rowNum++;
         }
+
+        worksheet.Cells.AutoFitColumns(MinimumWidth, MaximumWidth);
+        worksheet.View.FreezePanes(RowStartBody, 1);
+        return xlPackage.GetAsByteArray();
     }
 
     private static byte GetTemplateRowIndex(EmployeeAttendanceModel attendance)

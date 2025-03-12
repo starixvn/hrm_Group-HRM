@@ -15,38 +15,34 @@ public class ScheduleArrangeRepository : IScheduleArrangeRepository
 {
     public async Task<IEnumerable<WeeklySchedule>> GetWeeklyScheduleAsync(ICriteria criteria)
     {
-        using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-        {
-            using (var multi = await db.QueryMultipleAsync(criteria))
+        using var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey());
+        using var multi = await db.QueryMultipleAsync(criteria);
+        var weeklySchedules = multi.Read<WeeklySchedule, EntityBase<int>, ShiftBase, WeeklySchedule>(
+            (weeklySchedule, team, defaultShift) =>
             {
-                var weeklySchedules = multi.Read<WeeklySchedule, EntityBase<int>, ShiftBase, WeeklySchedule>(
-                    (weeklySchedule, team, defaultShift) =>
-                    {
-                        weeklySchedule.Team = team;
-                        weeklySchedule.DefaultShift = defaultShift;
+                weeklySchedule.Team = team;
+                weeklySchedule.DefaultShift = defaultShift;
 
-                        return weeklySchedule;
-                    },
-                    splitOn: "TeamId, DefaultShiftId");
+                return weeklySchedule;
+            },
+            splitOn: "TeamId, DefaultShiftId");
 
-                var dailySchedules = multi.Read<DailySchedule, ShiftBase, LeaveRequest, LeaveRequest, DailySchedule>(
-                    (dailySchedule, shift, leave, leave2) =>
-                    {
-                        dailySchedule.Shift = shift;
-                        dailySchedule.LeaveType = leave;
-                        dailySchedule.LeaveType2 = leave2;
+        var dailySchedules = multi.Read<DailySchedule, ShiftBase, LeaveRequest, LeaveRequest, DailySchedule>(
+            (dailySchedule, shift, leave, leave2) =>
+            {
+                dailySchedule.Shift = shift;
+                dailySchedule.LeaveType = leave;
+                dailySchedule.LeaveType2 = leave2;
 
-                        return dailySchedule;
-                    },
-                    splitOn: "ShiftId, LeaveTypeId, LeaveTypeId2");
+                return dailySchedule;
+            },
+            splitOn: "ShiftId, LeaveTypeId, LeaveTypeId2");
 
-                var weeklyDefaultShifts = multi.Read<WeeklyDefaultShift>();
+        var weeklyDefaultShifts = multi.Read<WeeklyDefaultShift>();
 
-                MappingData(weeklySchedules, dailySchedules, weeklyDefaultShifts);
+        MappingData(weeklySchedules, dailySchedules, weeklyDefaultShifts);
 
-                return weeklySchedules;
-            }
-        }
+        return weeklySchedules;
     }
 
     private static void MappingData(

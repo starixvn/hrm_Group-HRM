@@ -87,10 +87,8 @@ public static class Utilities
 
     public static string ReadTextFile(string filePath)
     {
-        using (var sr = new StreamReader(filePath))
-        {
-            return sr.ReadToEnd();
-        }
+        using var sr = new StreamReader(filePath);
+        return sr.ReadToEnd();
     }
 
     public static string RandomString(int length)
@@ -100,39 +98,37 @@ public static class Utilities
         var random = new byte[length];
 
         // RNGCryptoServiceProvider is an implementation of a random number generator.
-        using (var rng = new RNGCryptoServiceProvider())
+        using var rng = new RNGCryptoServiceProvider();
+        rng.GetBytes(random); // The array is now filled with cryptographically strong random bytes.
+        for (var i = 0; i < length; i++)
         {
-            rng.GetBytes(random); // The array is now filled with cryptographically strong random bytes.
-            for (var i = 0; i < length; i++)
+            var found = false;
+            var rand = (int)random[i];
+
+            while (!found)
             {
-                var found = false;
-                var rand = (int)random[i];
+                bool randFrom48To57 = (rand >= 48) && (rand <= 57);
+                bool randFrom65To90 = (rand >= 65) && (rand <= 90);
+                bool randFrom97To122 = (rand >= 97) && (rand <= 122);
 
-                while (!found)
+                if (randFrom48To57 || randFrom65To90 || randFrom97To122)
                 {
-                    bool randFrom48To57 = (rand >= 48) && (rand <= 57);
-                    bool randFrom65To90 = (rand >= 65) && (rand <= 90);
-                    bool randFrom97To122 = (rand >= 97) && (rand <= 122);
-
-                    if (randFrom48To57 || randFrom65To90 || randFrom97To122)
-                    {
-                        found = true;
-                    }
-                    else
-                    {
-                        // get a new random int.
-                        var single = new byte[1];
-                        rng.GetBytes(single);
-                        rand = single[0];
-                    }
+                    found = true;
                 }
-
-                var ci = (char)rand;
-                ca[i] = ci;
+                else
+                {
+                    // get a new random int.
+                    var single = new byte[1];
+                    rng.GetBytes(single);
+                    rand = single[0];
+                }
             }
 
-            return new string(ca).ToLowerInvariant();
+            var ci = (char)rand;
+            ca[i] = ci;
         }
+
+        return new string(ca).ToLowerInvariant();
     }
 
     public static IList<SelectListItem> MinuteSteps(int step)

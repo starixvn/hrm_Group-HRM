@@ -26,10 +26,8 @@ public class AttachFileService(IWebHostEnvironment hostingEnvironment) : IAttach
                 {
                     var fileName = Path.GetFileName(file.FileName);
                     var path = Path.Combine(dir, fileName);
-                    using (var stream = new FileStream(path, FileMode.Create))
-                    {
-                        file.CopyTo(stream);
-                    }
+                    using var stream = new FileStream(path, FileMode.Create);
+                    file.CopyTo(stream);
                 }
             }
         }

@@ -33,58 +33,50 @@ public class HttpClientService : IHttpClientService
         where T : new()
     {
         ValidateEndPoint(baseUrl);
-        using (var request = CreateRequest(baseUrl, method, token))
+        using var request = CreateRequest(baseUrl, method, token);
+        if (data != null)
         {
-            if (data != null)
-            {
-                var encodedData = JsonConvert.SerializeObject(data);
-                var content = new StringContent(encodedData, Encoding.UTF8, "application/json");
-                request.Content = content;
-            }
-
-            using (var response = await httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, CancellationToken.None))
-            {
-                ThrowExceptionWhenNotSuccess(response);
-                if (response.IsSuccessStatusCode)
-                {
-                    var responseData = response.Content.ReadAsStringAsync().Result;
-                    var result = JsonConvert.DeserializeObject<T>(responseData);
-
-                    return result;
-                }
-
-                return default(T);
-            }
+            var encodedData = JsonConvert.SerializeObject(data);
+            var content = new StringContent(encodedData, Encoding.UTF8, "application/json");
+            request.Content = content;
         }
+
+        using var response = await httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, CancellationToken.None);
+        ThrowExceptionWhenNotSuccess(response);
+        if (response.IsSuccessStatusCode)
+        {
+            var responseData = response.Content.ReadAsStringAsync().Result;
+            var result = JsonConvert.DeserializeObject<T>(responseData);
+
+            return result;
+        }
+
+        return default(T);
     }
 
     private static T SendHttpClient<T>(string baseUrl, string token, HttpMethod method, IDictionary<string, object> data)
         where T : new()
     {
         ValidateEndPoint(baseUrl);
-        using (var request = CreateRequest(baseUrl, method, token))
+        using var request = CreateRequest(baseUrl, method, token);
+        if (data != null)
         {
-            if (data != null)
-            {
-                var encodedData = JsonConvert.SerializeObject(data);
-                var content = new StringContent(encodedData, Encoding.UTF8, "application/json");
-                request.Content = content;
-            }
-
-            using (var response = httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, CancellationToken.None).Result)
-            {
-                ThrowExceptionWhenNotSuccess(response);
-                if (response.IsSuccessStatusCode)
-                {
-                    var responseData = response.Content.ReadAsStringAsync().Result;
-                    var result = JsonConvert.DeserializeObject<T>(responseData);
-
-                    return result;
-                }
-
-                return default(T);
-            }
+            var encodedData = JsonConvert.SerializeObject(data);
+            var content = new StringContent(encodedData, Encoding.UTF8, "application/json");
+            request.Content = content;
         }
+
+        using var response = httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, CancellationToken.None).Result;
+        ThrowExceptionWhenNotSuccess(response);
+        if (response.IsSuccessStatusCode)
+        {
+            var responseData = response.Content.ReadAsStringAsync().Result;
+            var result = JsonConvert.DeserializeObject<T>(responseData);
+
+            return result;
+        }
+
+        return default(T);
     }
 
     private static HttpRequestMessage CreateRequest(string baseUrl, HttpMethod method, string token)

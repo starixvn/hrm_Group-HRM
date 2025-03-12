@@ -9,11 +9,9 @@ public class BaseExportController(IUserControlSession userControlSession) : Base
 {
     protected IActionResult ExcelFile(HSSFWorkbook workbook, string fileName)
     {
-        using (var output = new MemoryStream())
-        {
-            workbook.Write(output);
+        using var output = new MemoryStream();
+        workbook.Write(output);
 
-            return File(output.ToArray(), "application/vnd.ms-excel", fileName);
-        }
+        return File(output.ToArray(), "application/vnd.ms-excel", fileName);
     }
 }

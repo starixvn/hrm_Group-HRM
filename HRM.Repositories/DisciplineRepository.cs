@@ -16,36 +16,30 @@ public class DisciplineRepository : IDisciplineRepository
 {
     public async Task<IList<DisciplineSummaryModel>> GetDisciplineSummaryAsync(ICriteria criteria)
     {
-        using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-        {
-            var result = await db.QueryAsync<DisciplineSummaryModel, EmployeeInfoModel, DisciplineSummaryModel>(
-                (discipline, employee) =>
-                {
-                    discipline.Employee = employee;
+        using var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey());
+        var result = await db.QueryAsync<DisciplineSummaryModel, EmployeeInfoModel, DisciplineSummaryModel>(
+            (discipline, employee) =>
+            {
+                discipline.Employee = employee;
 
-                    return discipline;
-                },
-                "EmployeeId",
-                criteria);
-            return result.ToList();
-        }
+                return discipline;
+            },
+            "EmployeeId",
+            criteria);
+        return result.ToList();
     }
 
     public async Task<IList<DisciplineDetailModel>> GetDisciplineDetailAsync(ICriteria criteria)
     {
-        using (var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()))
-        {
-            using (var multi = await db.QueryMultipleAsync(criteria))
-            {
-                var disciplines = await multi.ReadAsync<dynamic>();
-                var ignoreDiciplines = await multi.ReadAsync<IgnoredDisciplineDetailModel>();
-                var disciplineDetails = MappingObjectForDisciplineDetail(disciplines);
-                CalculateScore(disciplineDetails);
-                AddIgnoreDisciplineDetail(disciplineDetails, ignoreDiciplines);
+        using var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey());
+        using var multi = await db.QueryMultipleAsync(criteria);
+        var disciplines = await multi.ReadAsync<dynamic>();
+        var ignoreDiciplines = await multi.ReadAsync<IgnoredDisciplineDetailModel>();
+        var disciplineDetails = MappingObjectForDisciplineDetail(disciplines);
+        CalculateScore(disciplineDetails);
+        AddIgnoreDisciplineDetail(disciplineDetails, ignoreDiciplines);
 
-                return disciplineDetails;
-            }
-        }
+        return disciplineDetails;
     }
 
     [SuppressMessage("Critical Code Smell", "S1541:Methods and properties should not be too complex", Justification = "<Pending>")]

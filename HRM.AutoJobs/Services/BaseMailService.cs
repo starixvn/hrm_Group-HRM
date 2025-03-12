@@ -46,43 +46,41 @@ public class BaseMailService(
         MimeMessage message = GetMessageContent(email);
         var isSucessfull = false;
 
-        using (var mailclient = new MailKit.Net.Smtp.SmtpClient())
+        using var mailclient = new MailKit.Net.Smtp.SmtpClient();
+        mailclient.Connect(email.MailSetting.Server, email.MailSetting.Port, email.MailSetting.IsAuth);
+        if (email.MailSetting.IsAuth)
         {
-            mailclient.Connect(email.MailSetting.Server, email.MailSetting.Port, email.MailSetting.IsAuth);
-            if (email.MailSetting.IsAuth)
-            {
-                mailclient.Authenticate(email.MailSetting.Username, email.MailSetting.Password);
-            }
-
-            try
-            {
-                mailclient.Send(message);
-                isSucessfull = true;
-                await UpdateMailStatusAsync(email, isSucessfull);
-            }
-            catch (AuthenticationException ex)
-            {
-                await HandleMailErrorAsync(email, ex.Message, ex.StackTrace);
-                throw;
-            }
-            catch (SmtpCommandException ex)
-            {
-                await HandleMailErrorAsync(email, ex.Message, ex.StackTrace);
-                throw;
-            }
-            catch (SmtpProtocolException ex)
-            {
-                await HandleMailErrorAsync(email, ex.Message, ex.StackTrace);
-                throw;
-            }
-            catch (Exception ex)
-            {
-                await HandleMailErrorAsync(email, ex.Message, ex.StackTrace);
-                throw;
-            }
-
-            await mailclient.DisconnectAsync(true);
+            mailclient.Authenticate(email.MailSetting.Username, email.MailSetting.Password);
         }
+
+        try
+        {
+            mailclient.Send(message);
+            isSucessfull = true;
+            await UpdateMailStatusAsync(email, isSucessfull);
+        }
+        catch (AuthenticationException ex)
+        {
+            await HandleMailErrorAsync(email, ex.Message, ex.StackTrace);
+            throw;
+        }
+        catch (SmtpCommandException ex)
+        {
+            await HandleMailErrorAsync(email, ex.Message, ex.StackTrace);
+            throw;
+        }
+        catch (SmtpProtocolException ex)
+        {
+            await HandleMailErrorAsync(email, ex.Message, ex.StackTrace);
+            throw;
+        }
+        catch (Exception ex)
+        {
+            await HandleMailErrorAsync(email, ex.Message, ex.StackTrace);
+            throw;
+        }
+
+        await mailclient.DisconnectAsync(true);
 
         return isSucessfull;
     }
