@@ -25,7 +25,8 @@ public class ExportEmployeeController(
             EnableUser = model.IsEnable,
             IsDeleteUser = model.IsDelete,
             TitleId = model.JobTitleId,
-            IsLocalUser = model.IsLocal
+            IsLocalUser = model.IsLocal,
+            CompanyId = CurrentCompanyId
         };
 
         var employees = await employeeService.GetEmployeeAsync(criteria);

@@ -16,7 +16,6 @@ using Criteria.Supervisor;
 using GO.UserControl.Client.AspNetCore.Session;
 using GO.UserControl.Client.Core;
 using GO.UserControl.Client.Core.Services;
-using GO.UserControl.Client.Core.Session;
 using HRM.Core.Models;
 using HRM.Core.Services;
 using HRM.Models.Group;
@@ -32,11 +31,8 @@ public class EmployeeService(
     IUserControlSettings userControlSettings,
     IEmployeeRepository employeeRepository,
     IBaseService baseService,
-    IRoleService roleService,
-    IUserControlSession userControlSession) : IEmployeeService
+    IRoleService roleService) : IEmployeeService
 {
-    private readonly int currentCompanyId = userControlSession.Get<int>(SessionKey.CurrentCompanyId);
-
     public async Task<string> GenerateEmployeeCode()
     {
         var criteria = new GenerateEmployeeCodeCriteria();

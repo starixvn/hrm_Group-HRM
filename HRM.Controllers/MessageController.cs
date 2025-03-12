@@ -63,7 +63,8 @@ public class MessageController(
             EnableUser = true,
             IsDeleteUser = null,
             TitleId = null,
-            IsLocalUser = null
+            IsLocalUser = null,
+            CompanyId = CurrentCompanyId
         };
         ViewBag.Employees = await employeeService.GetEmployeeAsync(criteria);
         ViewBag.Groups = await commonDataService.GetAllTeamAsync();
@@ -102,7 +103,8 @@ public class MessageController(
             EnableUser = true,
             IsDeleteUser = false,
             TitleId = null,
-            IsLocalUser = null
+            IsLocalUser = null,
+            CompanyId = CurrentCompanyId
         };
 
         ViewBag.Employees = await employeeService.GetEmployeeAsync(criteria);

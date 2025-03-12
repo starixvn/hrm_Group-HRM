@@ -147,7 +147,8 @@ public class EmployeeController(
                 TitleId = model.JobTitleId,
                 IsLocalUser = GetCategory(model.IsLocal),
                 PageNumber = model.CurrentPage,
-                PageSize = model.ItemsPerPage
+                PageSize = model.ItemsPerPage,
+                CompanyId = CurrentCompanyId
             };
             employees = (await employeeService.GetEmployeeAsync(criteria)).ToList();
 
@@ -568,15 +569,16 @@ public class EmployeeController(
         var supervisorsName = string.Empty;
         const byte maxDisplayItems = 3;
 
-        if (supervisors != null)
+        if (supervisors == null)
         {
-            var supervisorsFilter = supervisors.Where(x => x.ActionType == roleId).Take(maxDisplayItems).ToList();
-            supervisorsName = string.Join(", ", supervisorsFilter.Select(x => x.NickName));
+            return supervisorsName;
+        }
+        var supervisorsFilter = supervisors.Where(x => x.ActionType == roleId).Take(maxDisplayItems).ToList();
+        supervisorsName = string.Join(", ", supervisorsFilter.Select(x => x.NickName));
 
-            if (supervisorsFilter.Count > maxDisplayItems)
-            {
-                supervisorsName += ",...";
-            }
+        if (supervisorsFilter.Count > maxDisplayItems)
+        {
+            supervisorsName += ",...";
         }
 
         return supervisorsName;
