@@ -12,6 +12,7 @@
     <PackageReference Include="GO.UserControl.Client.AspNetCore" Version="1.0.2" />
     <PackageReference Include="GO.UserControl.Client.Core" Version="1.0.3" />
     <PackageReference Include="IPAddressRange" Version="6.1.0" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="2.1.9" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\HRM.Services\HRM.Services.csproj" />
