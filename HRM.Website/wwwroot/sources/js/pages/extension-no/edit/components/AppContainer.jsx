@@ -51,10 +51,10 @@ const AppContainer = () => {
                 const { data } = response;
                 const employeeOptions = data.map(item => {
                     return {
-                        id: item.id,
-                        value: `${item.nickName} (${item.fullName})`,
-                        fullName: item.fullName,
-                        nickName: item.nickName
+                        id: item.Id,
+                        value: `${item.NickName} (${item.FullName})`,
+                        fullName: item.FullName,
+                        nickName: item.NickName
                     };
                 });
 

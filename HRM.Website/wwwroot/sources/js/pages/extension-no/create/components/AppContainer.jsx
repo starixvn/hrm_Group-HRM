@@ -36,10 +36,10 @@ const AppContainer = () => {
                 const { data } = response;
                 const employeeOptions = data.map(item => {
                     return {
-                        id: item.id,
-                        value: `${item.nickName} (${item.fullName})`,
-                        fullName: item.fullName,
-                        nickName: item.nickName
+                        id: item.Id,
+                        value: `${item.NickName} (${item.FullName})`,
+                        fullName: item.FullName,
+                        nickName: item.NickName
                     };
                 });
 
@@ -76,12 +76,13 @@ const AppContainer = () => {
 
     const handleSubmit = (values, { setSubmitting }) => {
         setSubmitting(true);
+        console.log(values);
         const model = {
             fullName: values.FullName,
             nickName: values.NickName,
             extensionNo: values.ExtensionNo,
             isInternal: values.IsInternal,
-            empId: isNaN(parseInt(values.EmpId, 10)) ? 0 : values.EmpId,
+            empId: values.EmpId,
             teamId: values.TeamId
         };
         axios({

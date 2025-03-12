@@ -12,7 +12,7 @@ public class ExtensionNumberService(IBaseService baseService) : IExtensionNumber
 {
     public async Task<IEnumerable<ExtensionNoModel>> GetAllExtensionNoAsync(short companyId)
     {
-        var criteria = new GetAllExtensionNumberCriteria();
+        var criteria = new GetAllExtensionNumberCriteria { CompanyId = companyId };
         return await baseService.GetDataAsync<ExtensionNoModel>(criteria);
     }
 
@@ -27,12 +27,14 @@ public class ExtensionNumberService(IBaseService baseService) : IExtensionNumber
         return await baseService.GetDataAsync<ExtensionNoModel>(criteria);
     }
 
-    public async Task<ExtensionNoModel> GetEmployeeExtensionNoByIdAsync(int employeeExtensionNoId, bool isInternal)
+    public async Task<ExtensionNoModel> GetEmployeeExtensionNoByIdAsync(int employeeExtensionNoId, bool isInternal, short companyId)
     {
         var criteria = new GetExtensionNumberMemberByIdCriteria
         {
             EmployeeExtensionNoId = employeeExtensionNoId,
-            IsInternal = isInternal
+            IsInternal = isInternal,
+            CompanyId = companyId
+            
         };
         return await baseService.GetDataEntityAsync<ExtensionNoModel>(criteria);
     }

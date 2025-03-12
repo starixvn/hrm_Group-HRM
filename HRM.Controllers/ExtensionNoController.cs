@@ -66,6 +66,7 @@ public class ExtensionNoController(
                 IsInternal = model.IsInternal,
                 EmpId = model.EmpId,
                 TeamId = model.TeamId,
+                CompanyId = CurrentCompanyId
             };
 
             commandResult = await baseService.ExecuteNonQueryAsync(criteria);
@@ -77,7 +78,7 @@ public class ExtensionNoController(
     [HrmPermission(Policy.Host, FunctionKey.ExtensionNumber)]
     public async Task<IActionResult> GetExtentionById(int id, bool isInternal)
     {
-        var model = await extensionNumberService.GetEmployeeExtensionNoByIdAsync(id, isInternal);
+        var model = await extensionNumberService.GetEmployeeExtensionNoByIdAsync(id, isInternal, CurrentCompanyId);
         return Json(model);
     }
 
@@ -106,7 +107,8 @@ public class ExtensionNoController(
                 IsInternal = model.IsInternal,
                 ExtId = model.EmployeeExtensionId,
                 EmpId = model.EmpId,
-                TeamId = model.TeamId
+                TeamId = model.TeamId,
+                CompanyId = CurrentCompanyId
             };
             commandResult = await baseService.ExecuteNonQueryAsync(criteria);
         }
@@ -169,6 +171,7 @@ public class ExtensionNoController(
     [HrmPermission(Policy.Host, FunctionKey.ExtensionNumber)]
     public async Task<IActionResult> CreateExternalGroup([FromBody] CreateExternalGroupCriteria criteria)
     {
+        criteria.CompanyId = CurrentCompanyId;
         var commandResult = await baseService.ExecuteNonQueryAsync(criteria);
         return Json(commandResult);
     }

@@ -20,6 +20,8 @@ public class UpdateExtensionNumberMemberCriteria : CriteriaBase
 
     public short OrderNo { get; set; }
 
+        public int CompanyId { get; set; }
+
     public override string GetSettingKey()
     {
         return "ExtensionNO_Update_EmployeeInfo";

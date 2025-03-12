@@ -10,6 +10,8 @@ public class GetExtensionNumberMemberByIdCriteria : CriteriaBase
     [SpParam(SqlParamName = "EmpExtID")]
     public int EmployeeExtensionNoId { get; set; }
 
+        public short CompanyId { get; set; }
+
     public override string GetSettingKey() => "ExtensionNO_GetEmployeeInfo";
 
     public override bool IsValid() => true;
