@@ -9,32 +9,17 @@
         {
             get
             {
-                switch (Id)
+                return Id switch
                 {
-                    case (byte)CurrentRequestStatus.Pending:
-                        return Labels.Pending;
-
-                    case (byte)CurrentRequestStatus.Verified:
-                        return Labels.Verified;
-
-                    case (byte)CurrentRequestStatus.NotVerified:
-                        return Labels.NotVerified;
-
-                    case (byte)CurrentRequestStatus.Approved:
-                        return Labels.Approved;
-
-                    case (byte)CurrentRequestStatus.Rejected:
-                        return Labels.Rejected;
-
-                    case (byte)CurrentRequestStatus.Processed:
-                        return Labels.Processed;
-
-                    case (byte)CurrentRequestStatus.Void:
-                        return Labels.Void;
-
-                    default:
-                        return string.Empty;
-                }
+                    (byte)CurrentRequestStatus.Pending => Labels.Pending,
+                    (byte)CurrentRequestStatus.Verified => Labels.Verified,
+                    (byte)CurrentRequestStatus.NotVerified => Labels.NotVerified,
+                    (byte)CurrentRequestStatus.Approved => Labels.Approved,
+                    (byte)CurrentRequestStatus.Rejected => Labels.Rejected,
+                    (byte)CurrentRequestStatus.Processed => Labels.Processed,
+                    (byte)CurrentRequestStatus.Void => Labels.Void,
+                    _ => string.Empty
+                };
             }
         }
 

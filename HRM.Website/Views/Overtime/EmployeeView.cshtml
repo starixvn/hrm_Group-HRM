@@ -72,7 +72,7 @@
     <tbody>
         @if (Model.OvertimeRequests.Any())
         {
-            foreach (MonthlyOvertimeRequest request in Model.OvertimeRequests)
+            foreach (var request in Model.OvertimeRequests)
             {
                 <tr id="row@(request.RequestId)">
                     <td>

@@ -1,5 +1,4 @@
 ﻿@using HRM.Core.Enums
-@using HRM.Models.Overtime
 @using HRM.Website.Helper
 @model HRM.Models.Overtime.MonthlyOvertimeRequest
 @{
@@ -73,7 +72,7 @@
     <tbody>
         @if (Model.DailyOvertimes.Any())
         {
-            foreach (DailyOvertimeRequest request in Model.DailyOvertimes)
+            foreach (var request in Model.DailyOvertimes)
             {
                 <tr>
                     @{

@@ -104,7 +104,7 @@
     <tbody>
         @if (Model.MemberRequests.Any())
         {
-            foreach (MonthlyOvertimeRequest request in Model.MemberRequests)
+            foreach (var request in Model.MemberRequests)
             {
                 <tr>
                     <td>

@@ -38,7 +38,7 @@
     <tbody>
         @if (Model.DailyOvertimes.Any())
         {
-            foreach (DailyOvertimeRequest request in Model.DailyOvertimes)
+            foreach (var request in Model.DailyOvertimes)
             {
                 <tr>
                     @{

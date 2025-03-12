@@ -11,8 +11,8 @@
 
 @if (Model.Any())
 {
-    int index = 0;
-    foreach (MonthlyOvertimeRequest request in Model)
+    var index = 0;
+    foreach (var request in Model)
     {
         index++;
     <tr>
@@ -63,7 +63,7 @@
         </td>
         <td>@request.Verifier.Nickname</td>
         <td>@request.Approver.Nickname</td>
-        <td>@{RenderStatus(request, currentUserId);}</td>
+        <td>@{RenderStatus(request);}</td>
         <td>
             <a href="@Url.Action("MemberDetails", "Overtime", new { id = request.RequestId })">
                 @Labels.View
@@ -84,7 +84,7 @@ else
 }
 
 @{
-    void RenderStatus(MonthlyOvertimeRequest request, int currentUserId)
+    void RenderStatus(MonthlyOvertimeRequest request)
     {
         if (request.Approver.EmpId == currentUserId)
         {

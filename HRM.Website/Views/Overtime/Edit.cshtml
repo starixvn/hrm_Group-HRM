@@ -84,7 +84,7 @@
         <tbody>
             @if (Model != null)
             {
-                foreach (DailyOvertimeRequest request in Model.MonthlyRequest.DailyOvertimes)
+                foreach (var request in Model.MonthlyRequest.DailyOvertimes)
                 {
                     <tr>
                         @{
