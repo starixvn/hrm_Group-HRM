@@ -6,7 +6,6 @@ using System.Linq;
 using GO.UserControl.Client.Core.Session;
 using Core.Constants;
 using Resources;
-using ICSharpCode.SharpZipLib.Core;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

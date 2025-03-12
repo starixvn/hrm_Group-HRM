@@ -5,11 +5,9 @@
     using System.Drawing;
     using System.IO;
     using System.Linq;
-    using System.Web;
     using Models.Report;
     using Resources;
     using Microsoft.AspNetCore.Hosting;
-    using Microsoft.AspNetCore.Http;
     using OfficeOpenXml;
 
     public interface IExportDisciplineSummaryPerYearService

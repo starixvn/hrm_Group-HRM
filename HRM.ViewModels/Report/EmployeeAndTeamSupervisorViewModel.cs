@@ -1,7 +1,6 @@
 ﻿namespace HRM.ViewModels
 {
     using System.Collections.Generic;
-    using Models;
 
     public class EmployeeAndTeamSupervisorViewModel
     {

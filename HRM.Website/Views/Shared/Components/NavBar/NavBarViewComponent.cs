@@ -8,7 +8,6 @@ namespace HRM.Website.Views.Shared.Components.NavBar
     using GO.UserControl.Client.Core.Session;
     using Core.Constants;
     using HRM.Core.Models;
-    using Services;
     using Microsoft.AspNetCore.Mvc;
 
     public class NavBarViewComponent(

@@ -4,7 +4,6 @@
     using System.Threading.Tasks;
     using HRM.Core.Models;
     using HRM.Letstalk.Core.Services;
-    using Interfaces;
 
     public class LetstalkService(
         LetstalkSettings letstalkSettings,

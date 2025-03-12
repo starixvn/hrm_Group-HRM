@@ -10,7 +10,6 @@ using GO.UserControl.Client.AspNetCore.Session;
 using GO.UserControl.Client.Core;
 using GO.UserControl.Client.Core.Services;
 using GO.UserControl.Client.Core.Session;
-using Core;
 using HRM.Core.Models;
 using HRM.Core.Repositories;
 using HRM.Core.Services;

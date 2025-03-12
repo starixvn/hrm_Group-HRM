@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using GO.UserControl.Client.AspNetCore.Session;
 using GO.UserControl.Client.Core.Session;
 using Core.Constants;
 using HRM.Core.Services;

@@ -7,7 +7,6 @@
     using Criteria.Discipline;
     using Core.Constants;
     using Microsoft.AspNetCore.Hosting;
-    using Microsoft.AspNetCore.Http;
     using Models.Discipline;
     using Resources;
 

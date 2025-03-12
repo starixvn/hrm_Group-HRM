@@ -6,7 +6,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
-using Controllers;
 using Core;
 using Core.Constants;
 using Core.Enums;
@@ -24,7 +23,6 @@ using Microsoft.AspNetCore.Mvc;
 using Services.Interfaces;
 using Newtonsoft.Json;
 using HRM.Criteria.Request.ChangeShift;
-using Models;
 
 public class ChangeShiftController(
     IUserControlSession userControlSession,

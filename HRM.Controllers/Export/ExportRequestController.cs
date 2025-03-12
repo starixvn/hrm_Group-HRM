@@ -12,9 +12,7 @@ using HRM.Core.Enums;
 using HRM.Core.Filters;
 using GO.UserControl.Client.Core.Enumerables;
 using HRM.Services.ExportExcel;
-using HRM.Models.Request;
 using NPOI.HSSF.UserModel;
-using System.Collections.Generic;
 
 namespace HRM.Controllers.Export;
 

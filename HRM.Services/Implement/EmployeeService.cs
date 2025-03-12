@@ -1,6 +1,4 @@
-﻿using HRM.Core.Constants;
-
-namespace HRM.Services.Implement;
+﻿namespace HRM.Services.Implement;
 
 using System;
 using System.Collections.Generic;
@@ -13,7 +11,6 @@ using Criteria.AnnualLeave;
 using Criteria.Employee;
 using Criteria.Shift;
 using Criteria.Supervisor;
-using GO.UserControl.Client.AspNetCore.Session;
 using GO.UserControl.Client.Core;
 using GO.UserControl.Client.Core.Services;
 using HRM.Core.Models;

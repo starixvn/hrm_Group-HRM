@@ -3,11 +3,9 @@
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
     using System.IO;
-    using System.Web;
     using Core;
     using Criteria.Discipline;
     using Microsoft.AspNetCore.Hosting;
-    using Microsoft.AspNetCore.Http;
     using Models.Discipline;
     using Resources;
 

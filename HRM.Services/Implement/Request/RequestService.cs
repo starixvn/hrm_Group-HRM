@@ -16,7 +16,6 @@ using HRM.Criteria.Request.LateInEarlyOut;
 using HRM.Criteria.Request.Leave;
 using HRM.Models.Request;
 using HRM.Models.Request.ChangeShift;
-using HRM.Repositories;
 using HRM.Repositories.Interfaces;
 using HRM.Resources;
 using HRM.Services.Interfaces.Request;
