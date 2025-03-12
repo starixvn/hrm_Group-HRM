@@ -4,9 +4,9 @@
     using System.Threading.Tasks;
     using Fanex.Data;
     using Fanex.Data.Repository;
-    using HRM.Models.Request;
-    using HRM.Models.Request.ChangeShift;
-    using HRM.Models.ScheduleArrange;
+    using Models.Request;
+    using Models.Request.ChangeShift;
+    using Models.ScheduleArrange;
 
     public interface IChangeShiftRequestRepository
     {

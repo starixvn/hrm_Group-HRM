@@ -3,7 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-    using HRM.Models;
+    using Models;
     using HRM.Models.Discipline;
     using Microsoft.AspNetCore.Mvc.Rendering;
 

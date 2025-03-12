@@ -1,7 +1,7 @@
 ﻿namespace HRM.ViewModels.Request
 {
     using System.Collections.Generic;
-    using HRM.Models;
+    using Models;
     using HRM.Models.Request;
 
     public class LeaveDetailViewModel

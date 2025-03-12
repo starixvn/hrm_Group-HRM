@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 using Fanex.Logging;
 using HRM.Core.Models;
 using HRM.Core.Services;
-using HRM.Core.XMLExtensions;
-using HRM.Criteria.ScheduleArrange;
-using HRM.Models.SyncData;
+using Core.XMLExtensions;
+using Criteria.ScheduleArrange;
+using Models.SyncData;
 using Newtonsoft.Json;
 
 public interface ISyncWorkingShiftService

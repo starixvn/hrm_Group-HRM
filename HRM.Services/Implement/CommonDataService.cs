@@ -10,10 +10,10 @@ using Criteria.LeaveType;
 using Criteria.Lookup;
 using Criteria.SystemSetting;
 using GO.UserControl.Client.Core.Session;
-using HRM.Core.Constants;
+using Core.Constants;
 using HRM.Core.Models;
 using HRM.Core.Services;
-using HRM.Services.Interfaces;
+using Interfaces;
 using Models;
 using Resources;
 

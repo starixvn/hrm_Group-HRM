@@ -1,8 +1,8 @@
 ﻿namespace HRM.Models.Request
 {
     using System;
-    using HRM.Core.Enums;
-    using HRM.Resources;
+    using Core.Enums;
+    using Resources;
 
     public class CheckInOutRequest : BaseRequest
     {

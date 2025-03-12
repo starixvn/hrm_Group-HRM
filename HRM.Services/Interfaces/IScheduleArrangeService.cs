@@ -4,8 +4,8 @@
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using HRM.Core.Models;
-    using HRM.Models;
-    using HRM.Models.ScheduleArrange;
+    using Models;
+    using Models.ScheduleArrange;
 
     public interface IScheduleArrangeService
     {

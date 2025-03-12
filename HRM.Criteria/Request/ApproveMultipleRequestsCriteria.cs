@@ -1,7 +1,7 @@
 ﻿namespace HRM.Criteria.Request
 {
     using Fanex.Data.Repository;
-    using HRM.Core.Enums;
+    using Core.Enums;
 
     public class ApproveMultipleRequestsCriteria : CriteriaBase
     {

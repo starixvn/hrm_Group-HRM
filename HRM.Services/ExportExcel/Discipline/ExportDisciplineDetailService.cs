@@ -5,7 +5,7 @@
     using System.IO;
     using Core;
     using Criteria.Discipline;
-    using HRM.Core.Constants;
+    using Core.Constants;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
     using Models.Discipline;

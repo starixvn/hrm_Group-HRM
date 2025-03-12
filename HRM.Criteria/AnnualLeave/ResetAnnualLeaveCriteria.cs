@@ -5,7 +5,7 @@
     using System.Text;
     using Fanex.Data;
     using Fanex.Data.Repository;
-    using HRM.Models;
+    using Models;
 
     public class ResetAnnualLeaveCriteria : CriteriaBase
     {

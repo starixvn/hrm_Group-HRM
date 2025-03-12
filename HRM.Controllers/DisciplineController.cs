@@ -10,7 +10,7 @@ using Core.XMLExtensions;
 using Criteria.Discipline;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
-using HRM.Core;
+using Core;
 using HRM.Core.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;

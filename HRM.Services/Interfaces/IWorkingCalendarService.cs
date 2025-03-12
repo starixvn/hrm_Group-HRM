@@ -2,9 +2,9 @@
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
-    using HRM.Criteria.Calendar;
-    using HRM.Models.Report;
-    using HRM.Models.ScheduleArrange;
+    using Criteria.Calendar;
+    using Models.Report;
+    using Models.ScheduleArrange;
 
     public interface IWorkingCalendarService
     {

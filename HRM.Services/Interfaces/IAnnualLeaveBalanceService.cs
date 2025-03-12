@@ -2,7 +2,7 @@
 {
     using System.Threading.Tasks;
     using HRM.Core.Models;
-    using HRM.Models.AnnualLeaveBalance;
+    using Models.AnnualLeaveBalance;
 
     public interface IAnnualLeaveBalanceService
     {

@@ -5,8 +5,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using HRM.Core.Models;
 using HRM.Core.Services;
-using HRM.Criteria.Holidays;
-using HRM.Models;
+using Criteria.Holidays;
+using Models;
 
 public class HolidayService(IBaseService baseService) : IHolidayService
 {

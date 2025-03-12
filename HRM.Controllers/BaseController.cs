@@ -1,8 +1,8 @@
 ﻿namespace HRM.Controllers;
 
 using GO.UserControl.Client.Core.Session;
-using HRM.Core.Constants;
-using HRM.Core.Filters;
+using Core.Constants;
+using Core.Filters;
 using HRM.Core.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;

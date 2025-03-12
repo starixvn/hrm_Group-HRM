@@ -5,14 +5,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
-using HRM.Core;
-using HRM.Core.Constants;
-using HRM.Core.Filters;
+using Core;
+using Core.Constants;
+using Core.Filters;
 using HRM.Models.Report;
-using HRM.Resources;
-using HRM.Services;
-using HRM.Services.Interfaces;
-using HRM.ViewModels;
+using Resources;
+using Services;
+using Services.Interfaces;
+using ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 [HrmPermission(Policy.Read, FunctionKey.ShiftStatisticReport)]

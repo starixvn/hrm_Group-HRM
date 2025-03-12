@@ -2,9 +2,9 @@
 
 using System;
 using System.Collections.Generic;
-using HRM.Core;
-using HRM.Core.Enums;
-using HRM.Models;
+using Core;
+using Core.Enums;
+using Models;
 using HRM.Models.Report;
 
 public class WorkingHoursSummaryViewModel

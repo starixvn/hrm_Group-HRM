@@ -2,7 +2,7 @@
 {
     using System;
     using System.ComponentModel.DataAnnotations;
-    using HRM.Resources;
+    using Resources;
 
     public class EmployeeRelationshipViewModel
     {

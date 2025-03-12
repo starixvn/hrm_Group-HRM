@@ -1,7 +1,7 @@
 ﻿namespace HRM.Models.Request
 {
-    using HRM.Core;
-    using HRM.Core.Enums;
+    using Core;
+    using Core.Enums;
 
     public class RequestTypeModel : EntityBase<short>
     {

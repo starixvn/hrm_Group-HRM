@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Core.Services;
 using Criteria.Discipline;
-using HRM.Repositories;
+using Repositories;
 using Models.Discipline;
 
 public class DisciplineService(

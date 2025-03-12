@@ -3,8 +3,8 @@
 namespace HRM.Services.Interfaces;
 
 using HRM.Core.Models;
-using HRM.Criteria.JobLevel;
-using HRM.Models;
+using Criteria.JobLevel;
+using Models;
 using System.Collections.Generic;
 
 public interface IJobLevelService

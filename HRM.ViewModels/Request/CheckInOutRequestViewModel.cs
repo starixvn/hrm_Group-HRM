@@ -3,9 +3,9 @@
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-    using HRM.Core.Enums;
-    using HRM.Models.Supervisor;
-    using HRM.Resources;
+    using Core.Enums;
+    using Models.Supervisor;
+    using Resources;
 
     public class CheckInOutRequestViewModel
     {

@@ -3,7 +3,7 @@
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using Fanex.Data.Repository;
-    using HRM.Models.Request;
+    using Models.Request;
 
     public interface ICheckInOutRequestRepository
     {

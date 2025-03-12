@@ -2,8 +2,8 @@
 {
     using System;
     using System.Collections.Generic;
-    using HRM.Core.Enums;
-    using HRM.Models;
+    using Core.Enums;
+    using Models;
     using HRM.Models.Report.Overtime;
 
     public class YearlyOvertimeViewModel

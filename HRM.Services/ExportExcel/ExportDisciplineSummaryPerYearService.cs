@@ -6,8 +6,8 @@
     using System.IO;
     using System.Linq;
     using System.Web;
-    using HRM.Models.Report;
-    using HRM.Resources;
+    using Models.Report;
+    using Resources;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
     using OfficeOpenXml;

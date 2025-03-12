@@ -1,6 +1,6 @@
 ﻿namespace HRM.Models
 {
-    using HRM.Models.Group;
+    using Group;
     using System;
     using System.Collections.Generic;
 

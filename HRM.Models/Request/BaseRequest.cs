@@ -2,8 +2,8 @@
 {
     using System;
     using System.Collections.Generic;
-    using HRM.Core.Enums;
-    using HRM.Resources;
+    using Core.Enums;
+    using Resources;
 
     public class BaseRequest
     {

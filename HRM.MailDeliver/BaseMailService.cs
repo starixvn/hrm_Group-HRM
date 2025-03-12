@@ -3,9 +3,9 @@
 using System;
 using System.Threading.Tasks;
 using Criteria;
-using HRM.Core;
-using HRM.Core.Models;
-using HRM.Core.Services;
+using Core;
+using Core.Models;
+using Core.Services;
 using MailKit.Net.Smtp;
 using MimeKit;
 

@@ -6,7 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Core.Enums;
-using HRM.Core;
+using Core;
 using Implement;
 using Interfaces;
 using Microsoft.AspNetCore.Hosting;

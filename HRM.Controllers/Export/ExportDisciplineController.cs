@@ -2,11 +2,11 @@
 {
     using System.Threading.Tasks;
     using GO.UserControl.Client.Core.Session;
-    using HRM.Criteria.Discipline;
-    using HRM.Services;
-    using HRM.ViewModels.Discipline;
+    using Criteria.Discipline;
+    using Services;
+    using ViewModels.Discipline;
     using Microsoft.AspNetCore.Mvc;
-    using HRM.Resources;
+    using Resources;
 
     public class ExportDisciplineController(
         IUserControlSession userControlSession,

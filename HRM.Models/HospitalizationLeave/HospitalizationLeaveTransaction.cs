@@ -3,8 +3,8 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using HRM.Core.Constants;
-using HRM.Resources;
+using Core.Constants;
+using Resources;
 
 public class HospitalizationLeaveTransaction : IValidatableObject
 {

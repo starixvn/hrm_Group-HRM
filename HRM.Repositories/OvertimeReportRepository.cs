@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Fanex.Data;
 using Fanex.Data.Repository;
-using HRM.Models.Report.Overtime;
+using Models.Report.Overtime;
 
 public class OvertimeReportRepository : IOvertimeReportRepository
 {

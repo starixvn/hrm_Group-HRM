@@ -1,7 +1,7 @@
 ﻿namespace HRM.Core.Enums
 {
     using System.ComponentModel.DataAnnotations;
-    using HRM.Resources;
+    using Resources;
 
     public enum Gender
     {

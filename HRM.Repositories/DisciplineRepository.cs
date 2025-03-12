@@ -7,8 +7,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Fanex.Data;
 using Fanex.Data.Repository;
-using HRM.Core.Enums;
-using HRM.Models.Discipline;
+using Core.Enums;
+using Models.Discipline;
 
 public class DisciplineRepository : IDisciplineRepository
 {

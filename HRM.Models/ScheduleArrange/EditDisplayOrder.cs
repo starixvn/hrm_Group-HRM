@@ -1,7 +1,7 @@
 ﻿namespace HRM.Models.ScheduleArrange
 {
     using System;
-    using HRM.Core.XMLExtensions;
+    using Core.XMLExtensions;
 
     [Serializable]
     [XMLName("Row")]

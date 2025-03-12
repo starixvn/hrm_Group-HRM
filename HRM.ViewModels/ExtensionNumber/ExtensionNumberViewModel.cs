@@ -1,7 +1,7 @@
 ﻿namespace HRM.ViewModels.ExtensionNumber
 {
     using System.Collections.Generic;
-    using HRM.Models;
+    using Models;
 
     public class ExtensionNumberViewModel
     {

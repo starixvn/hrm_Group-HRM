@@ -1,7 +1,7 @@
 ﻿namespace HRM.AutoJobs.Services
 {
     using System.Threading.Tasks;
-    using HRM.AutoJobs.Criteria.Postnatal;
+    using Criteria.Postnatal;
 
     public class PostnatalService : IPostnatalService
     {

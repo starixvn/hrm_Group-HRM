@@ -4,10 +4,10 @@ using System;
 using System.Threading.Tasks;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
-using HRM.Core;
-using HRM.Core.Constants;
-using HRM.Core.Filters;
-using HRM.Services;
+using Core;
+using Core.Constants;
+using Core.Filters;
+using Services;
 using HRM.ViewModels.Report;
 using Microsoft.AspNetCore.Mvc;
 

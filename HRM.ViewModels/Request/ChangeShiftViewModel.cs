@@ -3,11 +3,11 @@
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-    using HRM.Core.Enums;
+    using Core.Enums;
     using HRM.Models.Request;
     using HRM.Models.Request.ChangeShift;
-    using HRM.Models.Supervisor;
-    using HRM.Resources;
+    using Models.Supervisor;
+    using Resources;
 
     public class ChangeShiftViewModel
     {

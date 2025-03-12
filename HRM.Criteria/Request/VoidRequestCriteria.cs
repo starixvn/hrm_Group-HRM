@@ -2,7 +2,7 @@
 {
     using Fanex.Data;
     using Fanex.Data.Repository;
-    using HRM.Core.Enums;
+    using Core.Enums;
 
     public class VoidRequestCriteria : CriteriaBase
     {

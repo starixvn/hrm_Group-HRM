@@ -2,7 +2,7 @@
 {
     using System.Collections.Generic;
     using HRM.Models.Overtime;
-    using HRM.Models.Supervisor;
+    using Models.Supervisor;
 
     public class EditMonthlyRequestViewModel
     {

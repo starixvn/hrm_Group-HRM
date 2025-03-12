@@ -1,7 +1,7 @@
 ﻿namespace HRM.AutoJobs.Models
 {
     using System;
-    using HRM.AutoJobs.XMLExtensions;
+    using XMLExtensions;
 
     [Serializable]
     [XMLName("Row")]

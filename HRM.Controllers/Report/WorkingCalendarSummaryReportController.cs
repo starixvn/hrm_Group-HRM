@@ -5,12 +5,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
-using HRM.Core;
-using HRM.Core.Constants;
-using HRM.Core.Enums;
-using HRM.Core.Filters;
+using Core;
+using Core.Constants;
+using Core.Enums;
+using Core.Filters;
 using HRM.Models.Report;
-using HRM.Services;
+using Services;
 using HRM.ViewModels.Report;
 using Microsoft.AspNetCore.Mvc;
 

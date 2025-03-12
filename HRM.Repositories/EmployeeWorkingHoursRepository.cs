@@ -5,8 +5,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Fanex.Data;
 using Fanex.Data.Repository;
-using HRM.Models;
-using HRM.Models.Report.MonthlyWorkingHours;
+using Models;
+using Models.Report.MonthlyWorkingHours;
 
 public class EmployeeWorkingHoursRepository : IEmployeeWorkingHoursRepository
 {

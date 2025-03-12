@@ -1,6 +1,6 @@
 ﻿namespace HRM.Models.Request
 {
-    using HRM.Core.Enums;
+    using Core.Enums;
     using Resources;
 
     public class RequestStatus : EntityBase<byte>

@@ -2,7 +2,7 @@
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
-    using HRM.Letstalk.Core.Models;
+    using Models;
 
     public interface ISendNotificationService
     {

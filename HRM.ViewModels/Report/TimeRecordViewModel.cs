@@ -2,7 +2,7 @@
 
 using System;
 using System.Collections.Generic;
-using HRM.Core;
+using Core;
 
 public class TimeRecordViewModel : PagerOptionModel
 {

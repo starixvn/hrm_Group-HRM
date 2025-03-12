@@ -7,8 +7,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Xml;
 using HRM.Core.Services;
-using HRM.Criteria.Log;
-using HRM.Models.Log;
+using Criteria.Log;
+using Models.Log;
 
 public interface IActionLogService
 {

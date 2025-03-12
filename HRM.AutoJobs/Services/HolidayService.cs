@@ -5,9 +5,9 @@
     using System.Globalization;
     using System.Linq;
     using System.Threading.Tasks;
-    using HRM.AutoJobs.Criteria;
-    using HRM.AutoJobs.Models;
-    using HRM.AutoJobs.XMLExtensions;
+    using Criteria;
+    using Models;
+    using XMLExtensions;
 
     public class HolidayService : IHolidayService
     {

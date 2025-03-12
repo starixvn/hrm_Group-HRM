@@ -3,8 +3,8 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Fanex.Data.Repository;
-using HRM.Core.Models;
-using HRM.Core.Repositories;
+using Models;
+using Repositories;
 
 public class BaseService(
     IDynamicRepository dynamicRepository,

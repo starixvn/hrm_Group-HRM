@@ -3,8 +3,8 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using HRM.Core.Services;
-using HRM.Criteria.Report;
-using HRM.Models.Report;
+using Criteria.Report;
+using Models.Report;
 
 public interface IShiftStatisticReportService
 {

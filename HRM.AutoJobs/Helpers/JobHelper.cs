@@ -3,7 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using HRM.AutoJobs.Models;
+    using Models;
 
     public static class JobHelper
     {

@@ -5,9 +5,9 @@
     using System.Threading.Tasks;
     using Fanex.Data;
     using Fanex.Data.Repository;
-    using HRM.Models.Overtime;
-    using HRM.Models.Request;
-    using HRM.Repositories.Interfaces;
+    using Models.Overtime;
+    using Models.Request;
+    using Interfaces;
 
     public class OvertimeRequestRepository : IOvertimeRequestRepository
     {

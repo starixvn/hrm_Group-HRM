@@ -1,7 +1,7 @@
 ﻿namespace HRM.Models.Message
 {
-    using HRM.Core;
-    using HRM.Core.Enums;
+    using Core;
+    using Core.Enums;
     using System;
 
     public class Message

@@ -4,12 +4,12 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using GO.UserControl.Client.Core.Session;
-using HRM.Core;
-using HRM.Core.Constants;
+using Core;
+using Core.Constants;
 using HRM.Criteria.Report;
-using HRM.Services;
-using HRM.Services.Interfaces;
-using HRM.ViewModels;
+using Services;
+using Services.Interfaces;
+using ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 [Route("report/attendance")]

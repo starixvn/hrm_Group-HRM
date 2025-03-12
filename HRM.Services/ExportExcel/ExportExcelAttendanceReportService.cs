@@ -7,9 +7,9 @@ namespace HRM.Services
     using System.IO;
     using System.Linq;
     using System.Text;
-    using HRM.Core;
-    using HRM.Core.Enums;
-    using HRM.ViewModels;
+    using Core;
+    using Core.Enums;
+    using ViewModels;
     using Microsoft.AspNetCore.Hosting;
     using Models;
     using Models.Request;

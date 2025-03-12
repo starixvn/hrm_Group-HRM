@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 using Fanex.Data;
 using Fanex.Data.Repository;
 using GO.UserControl.Client.Core.Models.Role;
-using HRM.Models;
-using HRM.Models.EmployeeInformation;
-using HRM.Models.Supervisor;
-using HRM.Repositories.Interfaces;
+using Models;
+using Models.EmployeeInformation;
+using Models.Supervisor;
+using Interfaces;
 
 public class EmployeeRepository : IEmployeeRepository
 {

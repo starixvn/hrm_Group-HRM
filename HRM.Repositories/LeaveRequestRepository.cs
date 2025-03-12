@@ -5,10 +5,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Fanex.Data;
 using Fanex.Data.Repository;
-using HRM.Core.Constants;
-using HRM.Core.Enums;
-using HRM.Models;
-using HRM.Models.Request;
+using Core.Constants;
+using Core.Enums;
+using Models;
+using Models.Request;
 
 public class LeaveRequestRepository : ILeaveRequestRepository
 {

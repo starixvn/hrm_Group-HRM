@@ -2,8 +2,8 @@
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
-    using HRM.Letstalk.Core.Constants;
-    using HRM.Letstalk.Core.Models;
+    using Constants;
+    using Models;
 
     public class SendNotificationService : ISendNotificationService
     {

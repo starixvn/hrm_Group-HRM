@@ -3,12 +3,12 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
-using HRM.Core;
-using HRM.Core.Enums;
+using Core;
+using Core.Enums;
 using HRM.Core.Services;
-using HRM.Criteria.Report;
-using HRM.Models.Report;
-using HRM.Models.Report.Overtime;
+using Criteria.Report;
+using Models.Report;
+using Models.Report.Overtime;
 using Microsoft.AspNetCore.Hosting;
 using OfficeOpenXml;
 

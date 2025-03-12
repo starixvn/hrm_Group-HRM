@@ -1,6 +1,6 @@
 ﻿namespace HRM.Core.Models;
 
-using HRM.Resources;
+using Resources;
 
 public class CommandResult
 {

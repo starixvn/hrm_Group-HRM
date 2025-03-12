@@ -6,9 +6,9 @@ using Core.Constants;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Services;
 using GO.UserControl.Client.Core.Session;
-using HRM.Core;
-using HRM.Services;
-using HRM.ViewModels.Dashboard;
+using Core;
+using Services;
+using ViewModels.Dashboard;
 using Microsoft.AspNetCore.Mvc;
 
 public class HomeController(

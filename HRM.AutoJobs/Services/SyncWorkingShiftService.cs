@@ -6,10 +6,10 @@
     using System.Net.Http;
     using System.Threading.Tasks;
     using Fanex.Logging;
-    using HRM.AutoJobs.Constants;
-    using HRM.AutoJobs.Criteria.WorkingShift;
-    using HRM.AutoJobs.Models;
-    using HRM.AutoJobs.XMLExtensions;
+    using Constants;
+    using Criteria.WorkingShift;
+    using Models;
+    using XMLExtensions;
     using Newtonsoft.Json;
 
     public class SyncWorkingShiftService : ISyncWorkingShiftService

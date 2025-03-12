@@ -3,8 +3,8 @@
     using System;
     using System.Collections.Generic;
     using System.Xml.Serialization;
-    using HRM.Core;
-    using HRM.Core.XMLExtensions;
+    using Core;
+    using Core.XMLExtensions;
     using Newtonsoft.Json;
 
     [Serializable]

@@ -4,7 +4,7 @@
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using Fanex.Data.Repository;
-    using HRM.Models.Report.Overtime;
+    using Models.Report.Overtime;
 
     public interface IOvertimeReportRepository
     {

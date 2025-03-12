@@ -3,10 +3,10 @@
     using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
-    using HRM.Core.Enums;
+    using Core.Enums;
     using HRM.Core.Models;
-    using HRM.Criteria.Request.KeepInView;
-    using HRM.Models.Request;
+    using Criteria.Request.KeepInView;
+    using Models.Request;
 
     public interface IKeepInViewRequestService
     {

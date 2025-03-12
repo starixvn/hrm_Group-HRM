@@ -1,7 +1,7 @@
 ﻿namespace HRM.Models.Request
 {
     using System.Collections.Generic;
-    using HRM.Core.Enums;
+    using Core.Enums;
 
     public class ApproveRequestsParam
     {

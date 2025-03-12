@@ -5,10 +5,10 @@
     using System.Drawing;
     using System.IO;
     using System.Linq;
-    using HRM.Core.Constants;
-    using HRM.Core.Enums;
-    using HRM.Models.Report.MonthlyWorkingHours;
-    using HRM.Resources;
+    using Core.Constants;
+    using Core.Enums;
+    using Models.Report.MonthlyWorkingHours;
+    using Resources;
     using OfficeOpenXml;
     using OfficeOpenXml.Style;
 

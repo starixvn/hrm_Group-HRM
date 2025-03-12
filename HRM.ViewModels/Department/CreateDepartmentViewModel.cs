@@ -2,7 +2,7 @@
 {
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-    using HRM.Models;
+    using Models;
 
     public class CreateDepartmentViewModel
     {

@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Fanex.Data;
 using Fanex.Data.Repository;
-using HRM.Models.Report;
-using HRM.Models.ScheduleArrange;
+using Models.Report;
+using Models.ScheduleArrange;
 
 public partial interface IWorkingCalendarSummaryReportRepository
 {

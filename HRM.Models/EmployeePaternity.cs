@@ -1,6 +1,6 @@
 ﻿namespace HRM.Models
 {
-    using HRM.Core;
+    using Core;
     using System;
 
     public class EmployeePaternity

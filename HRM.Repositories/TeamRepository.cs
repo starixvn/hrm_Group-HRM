@@ -5,9 +5,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Fanex.Data;
 using Fanex.Data.Repository;
-using HRM.Models;
+using Models;
 using HRM.Models.Group;
-using HRM.Repositories.Interfaces;
+using Interfaces;
 
 public class TeamRepository : ITeamRepository
 {

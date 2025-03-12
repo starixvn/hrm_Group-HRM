@@ -8,10 +8,10 @@
     using System.IO;
     using System.Linq;
     using System.Web;
-    using HRM.Core;
-    using HRM.Core.Constants;
-    using HRM.Models;
-    using HRM.Models.ScheduleArrange;
+    using Core;
+    using Core.Constants;
+    using Models;
+    using Models.ScheduleArrange;
     using Microsoft.AspNetCore.Hosting;
     using OfficeOpenXml;
     using OfficeOpenXml.Style;

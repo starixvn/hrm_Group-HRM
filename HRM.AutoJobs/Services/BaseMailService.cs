@@ -10,9 +10,9 @@
     using System.Text;
     using System.Text.RegularExpressions;
     using System.Threading.Tasks;
-    using HRM.AutoJobs.Criteria.MailDeliver;
-    using HRM.AutoJobs.Models;
-    using HRM.AutoJobs.Models.MailDeliver;
+    using Criteria.MailDeliver;
+    using Models;
+    using Models.MailDeliver;
     using MailKit.Net.Smtp;
     using MimeKit;
 

@@ -1,7 +1,7 @@
 ﻿namespace HRM.Models.Dashboard
 {
     using System;
-    using HRM.Core.Enums;
+    using Core.Enums;
 
     public class MemberRequest
     {

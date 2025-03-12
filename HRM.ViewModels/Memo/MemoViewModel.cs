@@ -2,8 +2,8 @@
 
 using System;
 using System.Collections.Generic;
-using HRM.Core;
-using HRM.Models;
+using Core;
+using Models;
 
 public class MemoViewModel
 {

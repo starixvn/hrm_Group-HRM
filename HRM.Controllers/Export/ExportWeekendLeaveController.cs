@@ -5,8 +5,8 @@ namespace HRM.Controllers.Export
     using System.Threading.Tasks;
     using Criteria.Report;
     using GO.UserControl.Client.Core.Session;
-    using HRM.Controllers;
-    using HRM.Resources;
+    using Controllers;
+    using Resources;
     using Microsoft.AspNetCore.Mvc;
     using Services;
     using ViewModels.Report;

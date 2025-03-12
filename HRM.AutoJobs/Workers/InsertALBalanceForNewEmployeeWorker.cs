@@ -2,10 +2,10 @@
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
-    using HRM.AutoJobs.Constants;
-    using HRM.AutoJobs.Helpers;
-    using HRM.AutoJobs.Models;
-    using HRM.AutoJobs.Services;
+    using Constants;
+    using Helpers;
+    using Models;
+    using Services;
     using Microsoft.Extensions.Logging;
 
     public class InsertALBalanceForNewEmployeeWorker : BaseWorker

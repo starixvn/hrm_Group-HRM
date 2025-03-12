@@ -1,6 +1,6 @@
 ﻿namespace HRM.Models.Report.Overtime;
 
-using HRM.Core.Enums;
+using Core.Enums;
 
 public class GetMonthlyOvertimeDetailParam
 {

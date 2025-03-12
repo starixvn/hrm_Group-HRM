@@ -3,8 +3,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
-using HRM.Core;
-using HRM.Core.Constants;
+using Core;
+using Core.Constants;
 using HRM.Core.Services;
 using HRM.Criteria.Report.MealAllowance;
 using HRM.Models.Report.MealAllowance;

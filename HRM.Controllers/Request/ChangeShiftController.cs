@@ -24,7 +24,7 @@ using Microsoft.AspNetCore.Mvc;
 using Services.Interfaces;
 using Newtonsoft.Json;
 using HRM.Criteria.Request.ChangeShift;
-using HRM.Models;
+using Models;
 
 public class ChangeShiftController(
     IUserControlSession userControlSession,

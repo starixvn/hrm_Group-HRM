@@ -7,9 +7,9 @@
     using System.Text;
     using System.Threading;
     using System.Threading.Tasks;
-    using HRM.AutoJobs.Criteria;
-    using HRM.AutoJobs.Models;
-    using HRM.AutoJobs.Models.MailDeliver;
+    using Criteria;
+    using Models;
+    using Models.MailDeliver;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Logging;
 

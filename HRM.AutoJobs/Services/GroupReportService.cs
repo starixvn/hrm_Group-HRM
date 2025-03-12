@@ -7,8 +7,8 @@
     using System.Text;
     using System.Threading.Tasks;
     using Fanex.Logging;
-    using HRM.AutoJobs.Criteria.GroupReport;
-    using HRM.AutoJobs.Models;
+    using Criteria.GroupReport;
+    using Models;
     using Jose;
     using Newtonsoft.Json;
 

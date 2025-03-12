@@ -1,6 +1,6 @@
 ﻿namespace HRM.Models.Report;
 
-using HRM.Models.ScheduleArrange;
+using ScheduleArrange;
 
 public class WorkingCalendarSummary : DailySchedule
 {

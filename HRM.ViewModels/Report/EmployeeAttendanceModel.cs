@@ -2,8 +2,8 @@
 {
     using System;
     using System.Collections.Generic;
-    using HRM.Core.Enums;
-    using HRM.Resources;
+    using Core.Enums;
+    using Resources;
 
     public class EmployeeAttendanceModel
     {
@@ -77,7 +77,7 @@
             {
                 if (OvertimeStatus.HasValue)
                 {
-                    switch (this.OvertimeStatus.Value)
+                    switch (OvertimeStatus.Value)
                     {
                         case (byte)CurrentRequestStatus.Pending:
                             return Labels.Pending.ToLowerInvariant();

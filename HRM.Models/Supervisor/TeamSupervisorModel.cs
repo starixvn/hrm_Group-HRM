@@ -1,7 +1,7 @@
 ﻿namespace HRM.Models.Supervisor
 {
-    using HRM.Core.Enums;
-    using HRM.Core.Helpers;
+    using Core.Enums;
+    using Core.Helpers;
 
     public class TeamSupervisorModel
     {

@@ -3,7 +3,7 @@
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using Fanex.Data.Repository;
-    using HRM.Models.Report.MonthlyWorkingHours;
+    using Models.Report.MonthlyWorkingHours;
 
     public interface IEmployeeWorkingHoursRepository
     {

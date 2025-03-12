@@ -4,12 +4,12 @@ using System;
 using System.Threading.Tasks;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
-using HRM.Core.Constants;
-using HRM.Core.Enums;
-using HRM.Core.Filters;
-using HRM.Models;
-using HRM.Services;
-using HRM.ViewModels.Shifts;
+using Core.Constants;
+using Core.Enums;
+using Core.Filters;
+using Models;
+using Services;
+using ViewModels.Shifts;
 using Microsoft.AspNetCore.Mvc;
 
 public class ShiftController(

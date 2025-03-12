@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using HRM.Models.Report;
+using Models.Report;
 using Microsoft.AspNetCore.Hosting;
 using OfficeOpenXml;
 

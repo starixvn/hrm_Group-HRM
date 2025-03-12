@@ -4,8 +4,8 @@
     using System.Threading.Tasks;
     using HRM.Core.Models;
     using HRM.Core.Services;
-    using HRM.Criteria.Memo;
-    using HRM.Models;
+    using Criteria.Memo;
+    using Models;
 
     public class MemoService(IBaseService baseService) : IMemoService
     {

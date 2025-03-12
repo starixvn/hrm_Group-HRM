@@ -3,7 +3,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Fanex.Data.Repository;
-using HRM.Core.Models;
+using Models;
 
 public interface IBaseService
 {

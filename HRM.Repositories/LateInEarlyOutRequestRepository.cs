@@ -5,7 +5,7 @@
     using System.Threading.Tasks;
     using Fanex.Data;
     using Fanex.Data.Repository;
-    using HRM.Models.Request;
+    using Models.Request;
 
     public class LateInEarlyOutRequestRepository : ILateInEarlyOutRequestRepository
     {

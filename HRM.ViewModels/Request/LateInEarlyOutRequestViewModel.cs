@@ -3,8 +3,8 @@
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-    using HRM.Models.Supervisor;
-    using HRM.Resources;
+    using Models.Supervisor;
+    using Resources;
 
     public class LateInEarlyOutRequestViewModel
     {

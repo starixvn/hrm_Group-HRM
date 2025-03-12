@@ -2,7 +2,7 @@
 {
     using System;
     using System.Threading.Tasks;
-    using HRM.AutoJobs.Criteria;
+    using Criteria;
 
     public class ScheduleArrangeService : IScheduleArrangeService
     {

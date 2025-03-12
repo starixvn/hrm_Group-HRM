@@ -4,7 +4,7 @@
     using System.Threading;
     using System.Threading.Tasks;
     using Cronos;
-    using HRM.AutoJobs.Models;
+    using Models;
     using Microsoft.Extensions.Hosting;
     using Microsoft.Extensions.Logging;
 

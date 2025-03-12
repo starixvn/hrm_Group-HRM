@@ -1,6 +1,6 @@
 ﻿namespace HRM.Models.Request
 {
-    using HRM.Models.Supervisor;
+    using Supervisor;
     using System.Collections.Generic;
 
     public class VerifierAndApproverForRequest

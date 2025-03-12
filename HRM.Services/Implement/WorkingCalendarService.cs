@@ -2,10 +2,10 @@
 
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using HRM.Criteria.Calendar;
-using HRM.Models.Report;
-using HRM.Models.ScheduleArrange;
-using HRM.Repositories;
+using Criteria.Calendar;
+using Models.Report;
+using Models.ScheduleArrange;
+using Repositories;
 
 public class WorkingCalendarService(IWorkingCalendarRepository workingCalendarRepository) : IWorkingCalendarService
 {

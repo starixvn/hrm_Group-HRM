@@ -2,7 +2,7 @@
 {
     using System;
     using System.ComponentModel.DataAnnotations;
-    using HRM.Core.XMLExtensions;
+    using Core.XMLExtensions;
 
     [Serializable]
     [XMLName("Row")]

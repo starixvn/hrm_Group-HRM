@@ -2,7 +2,7 @@
 
 using System;
 using System.Collections.Generic;
-using HRM.Models.Request;
+using Request;
 
 public class MonthlyOvertimeRequest
 {

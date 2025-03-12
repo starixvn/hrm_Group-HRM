@@ -4,8 +4,8 @@
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
-    using HRM.Core.Enums;
-    using HRM.Models.Supervisor;
+    using Core.Enums;
+    using Supervisor;
     using GO.UserControl.Client.Core.Models.Role;
 
     public class EmployeeFullProfile

@@ -1,7 +1,7 @@
 ﻿namespace HRM.AutoJobs.Services
 {
     using System.Threading.Tasks;
-    using HRM.AutoJobs.Criteria;
+    using Criteria;
 
     public class TimeRecordService : ITimeRecordService
     {

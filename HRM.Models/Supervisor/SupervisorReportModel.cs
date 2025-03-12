@@ -2,7 +2,7 @@
 {
     using System.Collections.Generic;
     using System.Linq;
-    using HRM.Models.Group;
+    using Group;
     using GO.UserControl.Client.Core.Models.Role;
 
     public class SupervisorReportModel

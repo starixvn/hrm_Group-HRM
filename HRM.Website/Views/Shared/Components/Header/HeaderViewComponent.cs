@@ -2,9 +2,9 @@
 {
     using GO.UserControl.Client.Core.Enumerables;
     using GO.UserControl.Client.Core.Session;
-    using HRM.Core.Constants;
+    using Core.Constants;
     using HRM.Core.Models;
-    using HRM.ViewModels.UI;
+    using ViewModels.UI;
     using Microsoft.AspNetCore.Mvc;
 
     public class HeaderViewComponent(IUserControlSession userControlSession) : ViewComponent

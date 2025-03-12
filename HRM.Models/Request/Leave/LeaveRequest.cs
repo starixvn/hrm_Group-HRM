@@ -2,7 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
-    using HRM.Core.Constants;
+    using Core.Constants;
 
     public class LeaveRequest : BaseRequest
     {

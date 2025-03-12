@@ -3,8 +3,8 @@
     using System.Threading.Tasks;
     using HRM.Core.Models;
     using HRM.Core.Services;
-    using HRM.Criteria.AnnualLeave;
-    using HRM.Models.AnnualLeaveBalance;
+    using Criteria.AnnualLeave;
+    using Models.AnnualLeaveBalance;
 
     public class AnnualLeaveBalanceService(IBaseService baseService) : IAnnualLeaveBalanceService
     {

@@ -7,10 +7,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using GO.UserControl.Client.AspNetCore.Session;
 using GO.UserControl.Client.Core.Session;
-using HRM.Core.Constants;
+using Core.Constants;
 using HRM.Core.Services;
-using HRM.Criteria.Report;
-using HRM.Models.Report;
+using Criteria.Report;
+using Models.Report;
 using Microsoft.AspNetCore.Hosting;
 using OfficeOpenXml;
 

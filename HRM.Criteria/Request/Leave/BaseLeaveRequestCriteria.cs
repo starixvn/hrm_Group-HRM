@@ -5,8 +5,8 @@
     using System.Text;
     using Fanex.Data;
     using Fanex.Data.Repository;
-    using HRM.Core.Constants;
-    using HRM.Core.Enums;
+    using Core.Constants;
+    using Core.Enums;
     using HRM.Models.Request;
 
     public abstract class BaseLeaveRequestCriteria : CriteriaBase

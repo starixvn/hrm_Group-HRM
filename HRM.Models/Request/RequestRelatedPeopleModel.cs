@@ -1,7 +1,7 @@
 ﻿namespace HRM.Models.Request;
 
 using System.Collections.Generic;
-using HRM.Models.Supervisor;
+using Supervisor;
 
 public class RequestRelatedPeopleModel
 {

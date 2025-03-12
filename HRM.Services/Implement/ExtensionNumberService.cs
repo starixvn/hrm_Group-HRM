@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Core.Services;
 using HRM.Core.Models;
-using HRM.Criteria.ExtensionNumber;
-using HRM.Models;
+using Criteria.ExtensionNumber;
+using Models;
 
 public class ExtensionNumberService(IBaseService baseService) : IExtensionNumberService
 {

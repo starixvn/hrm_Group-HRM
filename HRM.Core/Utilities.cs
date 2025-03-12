@@ -6,8 +6,8 @@
     using System.IO;
     using System.Security.Cryptography;
     using System.Text.RegularExpressions;
-    using HRM.Core.Enums;
-    using HRM.Resources;
+    using Enums;
+    using Resources;
     using Microsoft.AspNetCore.Mvc.Rendering;
 
     [SuppressMessage("Major Code Smell", "S109:Magic numbers should not be used", Justification = "Pending")]

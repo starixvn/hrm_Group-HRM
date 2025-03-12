@@ -1,7 +1,7 @@
 ﻿namespace HRM.ViewModels;
 
 using System.Collections.Generic;
-using HRM.Models;
+using Models;
 
 public class LeaveSummaryViewModel
 {

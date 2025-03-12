@@ -5,8 +5,8 @@
     using System.ComponentModel.DataAnnotations;
     using System.Diagnostics.CodeAnalysis;
     using System.Linq;
-    using HRM.Core.Enums;
-    using HRM.Resources;
+    using Core.Enums;
+    using Resources;
     using GO.UserControl.Client.Core.Models.Role;
 
     [SuppressMessage("Major Code Smell", "S109:Magic numbers should not be used", Justification = "Pending")]

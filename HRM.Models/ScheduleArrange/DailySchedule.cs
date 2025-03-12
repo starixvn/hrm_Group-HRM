@@ -1,8 +1,8 @@
 ﻿namespace HRM.Models.ScheduleArrange;
 
 using System;
-using HRM.Core.Constants;
-using HRM.Core.Enums;
+using Core.Constants;
+using Core.Enums;
 
 [Serializable]
 public class DailySchedule

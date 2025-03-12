@@ -4,13 +4,13 @@ using System;
 using System.Threading.Tasks;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
-using HRM.Core;
-using HRM.Core.Constants;
-using HRM.Core.Enums;
-using HRM.Core.Filters;
+using Core;
+using Core.Constants;
+using Core.Enums;
+using Core.Filters;
 using HRM.Core.Models;
-using HRM.Models;
-using HRM.Services;
+using Models;
+using Services;
 using Microsoft.AspNetCore.Mvc;
 
 public class HolidayController(

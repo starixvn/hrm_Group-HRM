@@ -1,6 +1,6 @@
 ﻿namespace HRM.ViewModels.AnnualLeave
 {
-    using HRM.Models;
+    using Models;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 

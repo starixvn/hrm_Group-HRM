@@ -2,7 +2,7 @@
 {
     using System;
     using System.Xml.Serialization;
-    using HRM.AutoJobs.XMLExtensions;
+    using XMLExtensions;
 
     [Serializable]
     [XMLName("Row")]

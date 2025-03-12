@@ -2,7 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
-    using HRM.Models;
+    using Models;
 
     public class WeeklyFilterViewModel
     {

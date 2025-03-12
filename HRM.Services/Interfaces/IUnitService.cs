@@ -3,8 +3,8 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using HRM.Core.Models;
-using HRM.Criteria.Unit;
-using HRM.Models;
+using Criteria.Unit;
+using Models;
 
 public interface IUnitService
 {

@@ -6,7 +6,7 @@ namespace HRM.Services
     using System.IO;
     using System.Linq;
     using System.Web;
-    using HRM.Models;
+    using Models;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
 

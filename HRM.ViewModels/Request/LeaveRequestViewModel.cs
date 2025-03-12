@@ -4,9 +4,9 @@
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
-    using HRM.Models;
+    using Models;
     using HRM.Models.Request;
-    using HRM.Models.Supervisor;
+    using Models.Supervisor;
 
     public class LeaveRequestViewModel : IValidatableObject
     {

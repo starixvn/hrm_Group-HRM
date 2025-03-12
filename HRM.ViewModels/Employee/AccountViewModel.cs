@@ -1,8 +1,8 @@
 ﻿namespace HRM.ViewModels.Employee
 {
-    using HRM.Models.Log;
+    using Models.Log;
     using System.Collections.Generic;
-    using HRM.Models;
+    using Models;
 
     public class AccountViewModel 
     {

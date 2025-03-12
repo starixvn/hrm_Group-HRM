@@ -7,11 +7,11 @@
     using Fanex.Data.SqlServer;
     using Fanex.Logging;
     using Fanex.Logging.Sentry;
-    using HRM.AutoJobs.Constants;
-    using HRM.AutoJobs.Middlewares;
-    using HRM.AutoJobs.Models;
-    using HRM.AutoJobs.Services;
-    using HRM.AutoJobs.Workers;
+    using Constants;
+    using Middlewares;
+    using Models;
+    using Services;
+    using Workers;
     using HRM.Letstalk.Core.Services;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;

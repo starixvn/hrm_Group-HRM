@@ -9,7 +9,7 @@ using Core.Enums;
 using Criteria.Request;
 using Fanex.Data;
 using Fanex.Data.Repository;
-using HRM.Repositories.Interfaces;
+using Interfaces;
 using Models;
 using Models.Request;
 using Models.Request.ChangeShift;

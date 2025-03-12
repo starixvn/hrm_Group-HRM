@@ -1,6 +1,6 @@
 ﻿namespace HRM.Models.Log
 {
-    using HRM.Core;
+    using Core;
     using System;
     using System.Collections.Generic;
 

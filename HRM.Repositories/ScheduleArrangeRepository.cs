@@ -6,8 +6,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Fanex.Data;
 using Fanex.Data.Repository;
-using HRM.Models;
-using HRM.Models.ScheduleArrange;
+using Models;
+using Models.ScheduleArrange;
 
 public class ScheduleArrangeRepository : IScheduleArrangeRepository
 {

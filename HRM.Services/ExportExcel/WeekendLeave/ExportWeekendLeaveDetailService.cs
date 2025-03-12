@@ -3,10 +3,10 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Web;
-    using HRM.Core;
-    using HRM.Criteria.Report;
-    using HRM.Models.Report;
-    using HRM.Resources;
+    using Core;
+    using Criteria.Report;
+    using Models.Report;
+    using Resources;
     using Microsoft.AspNetCore.Hosting;
 
     public interface IExportWeekendLeaveDetailService
