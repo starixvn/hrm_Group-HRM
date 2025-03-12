@@ -26,6 +26,7 @@ public class LateInEarlyOutController(
     IBaseService baseService,
     IAttachFileService attachFileService) : BaseController(userControlSession)
 {
+    private readonly IUserControlSession userControlSession = userControlSession;
     private const string UploadFolderPath = "/file/uploads/request/";
     private const int DefaultMinutes = 60;
 

@@ -25,6 +25,8 @@ public class DisciplineController(
     IDisciplineService disciplineService,
     IBaseService baseService) : BaseController(userControlSession)
 {
+    private readonly IUserControlSession userControlSession = userControlSession;
+
     [HrmPermission(Policy.Read, FunctionKey.Discipline)]
     public async Task<IActionResult> DisciplineSummary(DisciplineSummaryViewModel model)
     {

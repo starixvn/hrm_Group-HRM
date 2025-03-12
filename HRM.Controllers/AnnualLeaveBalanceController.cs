@@ -28,6 +28,8 @@ public class AnnualLeaveBalanceController(
     IBaseService baseService,
     IAnnualLeaveBalanceService annualLeaveBalanceService) : BaseController(userControlSession)
 {
+    private readonly IUserControlSession userControlSession = userControlSession;
+
     [HrmPermission(Policy.Read, FunctionKey.AnnualLeaveBalance)]
     public async Task<IActionResult> Index(
         string teamIds,

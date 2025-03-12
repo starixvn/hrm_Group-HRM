@@ -24,6 +24,7 @@ public class MemoController(
     ICommonDataService commonDataService,
     IEmailService emailService) : BaseController(userControlSession)
 {
+    private readonly IUserControlSession userControlSession = userControlSession;
     private const int UploadMemoType = 1;
 
     [HrmPermission(Policy.Read, FunctionKey.Memo)]

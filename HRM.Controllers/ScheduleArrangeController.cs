@@ -31,6 +31,7 @@ public class ScheduleArrangeController(
     ISyncWorkingShiftService syncWorkingShiftService,
     IExportExcelScheduleService exportExcelService) : BaseController(userControlSession)
 {
+    private readonly IUserControlSession userControlSession = userControlSession;
     private const string DateFormat = "dd-MMM-yyyy";
 
     [HttpGet]

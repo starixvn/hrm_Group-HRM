@@ -29,6 +29,7 @@ public class CheckInOutController(
     IShiftService shiftService,
     IAttachFileService attachFileService) : BaseController(userControlSession)
 {
+    private readonly IUserControlSession userControlSession = userControlSession;
     private const string UploadFolderPath = "/file/uploads/request/";
 
     [HttpGet]

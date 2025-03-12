@@ -28,6 +28,7 @@ public class SectionController(
     ISectionService sectionService,
     IBaseService baseService) : BaseController(userControlSession)
 {
+    private readonly IUserControlSession userControlSession = userControlSession;
 
     [HrmPermission(Policy.Read, FunctionKey.SectionManagement)]
     public ActionResult Index()

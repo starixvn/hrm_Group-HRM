@@ -29,6 +29,8 @@ public class SickLeaveBalanceController(
     IBaseService baseService,
     IExportExcelService exportExcelService) : BaseExportController(userControlSession)
 {
+    private readonly IUserControlSession userControlSession = userControlSession;
+
     public async Task<IActionResult> Index(
         string teamIds,
         string employee,

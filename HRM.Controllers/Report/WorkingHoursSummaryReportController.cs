@@ -22,6 +22,8 @@ public class WorkingHoursSummaryReportController(
     IOvertimeReportService overtimeReportService,
     ITeamService teamService) : BaseController(userControlSession)
 {
+    private readonly IUserControlSession userControlSession = userControlSession;
+
     [HttpGet]
     public async Task<IActionResult> Index(WorkingHoursSummaryViewModel model)
     {

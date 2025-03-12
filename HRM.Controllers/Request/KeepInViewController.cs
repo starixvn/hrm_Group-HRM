@@ -27,6 +27,7 @@ public class KeepInViewController(
     IAttachFileService attachFileService,
     IShiftService shiftService) : BaseController(userControlSession)
 {
+    private readonly IUserControlSession userControlSession = userControlSession;
     private const string UploadFolderPath = "/file/uploads/request/";
 
     [HttpGet]

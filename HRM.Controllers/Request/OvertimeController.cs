@@ -28,6 +28,8 @@ public class OvertimeController(
     IExportOvertimeService exportOvertimeService,
     ITeamService teamService) : BaseController(userControlSession)
 {
+    private readonly IUserControlSession userControlSession = userControlSession;
+
     [HttpGet]
     public async Task<IActionResult> EmployeeView(MonthlyOvertimeRequestViewModel model)
     {

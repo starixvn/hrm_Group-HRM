@@ -24,6 +24,8 @@ public class ExtensionNoController(
     ICommonDataService commonDataService,
     IBaseService baseService) : BaseController(userControlSession)
 {
+    private readonly IUserControlSession userControlSession = userControlSession;
+
     [HrmPermission(Policy.Read, FunctionKey.ExtensionNumber)]
     public IActionResult Index()
     {

@@ -27,6 +27,8 @@ public class ReportController(
     ICommonDataService commonDataService,
     ITeamService teamService) : BaseController(userControlSession)
 {
+    private readonly IUserControlSession userControlSession = userControlSession;
+
     [HrmPermission(Policy.Read, FunctionKey.ReportHome)]
     public ActionResult Index()
     {

@@ -17,6 +17,7 @@ public class DepartmentController(IUserControlSession userControlSession,
     IUnitService unitService,
     IBaseService baseService) : BaseController(userControlSession)
 {
+    private readonly IUserControlSession userControlSession = userControlSession;
 
     [HrmPermission(Policy.Read, FunctionKey.DepartmentManagement)]
     public ActionResult Index()

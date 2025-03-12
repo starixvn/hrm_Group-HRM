@@ -14,6 +14,8 @@ public class FunctionController(IUserControlSession userControlSession,
     IRoleService roleService,
     IFunctionService functionService) : BaseController(userControlSession)
 {
+    private readonly IUserControlSession userControlSession = userControlSession;
+
     [HrmPermission(Policy.Read, FunctionKey.FunctionManagement)]
     public ActionResult Index()
     {

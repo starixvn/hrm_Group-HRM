@@ -14,12 +14,12 @@ namespace HRM.Controllers;
 public class UnitController(IUserControlSession userControlSession,
     IUnitService unitService) : BaseController(userControlSession)
 {
-    private readonly IUserControlSession userControlSession1 = userControlSession;
+    private readonly IUserControlSession userControlSession = userControlSession;
 
     [HrmPermission(Policy.Read, FunctionKey.UnitManagement)]
     public ActionResult Index()
     {
-        var hasPermission = userControlSession1.HasPermissionOnFunction(FunctionKey.UnitManagement, Policy.Host);
+        var hasPermission = userControlSession.HasPermissionOnFunction(FunctionKey.UnitManagement, Policy.Host);
         return View(hasPermission);
     }
 

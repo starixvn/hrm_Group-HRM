@@ -20,6 +20,8 @@ public class MessageController(
     ICommonDataService commonDataService,
     IEmployeeService employeeService) : BaseController(userControlSession)
 {
+    private readonly IUserControlSession userControlSession = userControlSession;
+
     [HrmPermission(Policy.Read, FunctionKey.Message)]
     public async Task<ActionResult> Index()
     {

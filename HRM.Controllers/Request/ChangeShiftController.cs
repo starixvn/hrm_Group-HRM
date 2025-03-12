@@ -9,7 +9,6 @@ using GO.UserControl.Client.Core.Session;
 using Core;
 using Core.Constants;
 using Core.Enums;
-using HRM.Core.Models;
 using HRM.Models.Request;
 using HRM.Models.Request.ChangeShift;
 using Models.ScheduleArrange;
@@ -28,9 +27,9 @@ public class ChangeShiftController(
     IChangeShiftRequestService changeShiftService,
     IRequestService requestService,
     IShiftService shiftService,
-    IAttachFileService attachFileService,
-    AppSettings appSettings) : BaseController(userControlSession)
+    IAttachFileService attachFileService) : BaseController(userControlSession)
 {
+    private readonly IUserControlSession userControlSession = userControlSession;
     private const string UploadFolderPath = "/file/uploads/request/";
 
     [HttpGet]

@@ -17,6 +17,8 @@ public class ShiftController(
     IUserControlSession userControlSession,
     IShiftService shiftService) : BaseController(userControlSession)
 {
+    private readonly IUserControlSession userControlSession = userControlSession;
+
     [HrmPermission(Policy.Read, FunctionKey.ShiftManagement)]
     public async Task<IActionResult> Index(int? statusId = (int)ShiftStatus.Active)
     {
