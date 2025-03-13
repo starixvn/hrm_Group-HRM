@@ -57,6 +57,7 @@ try
         app.UseHsts();
     }
 
+    app.UseHttpsRedirection();
     app.UseStaticFiles();
     var staticFilesPath = Path.Combine(Directory.GetCurrentDirectory(), "file");
     if (Directory.Exists(staticFilesPath))
@@ -76,7 +77,6 @@ try
         "default",
         "{controller=Home}/{action=Index}/{id?}");
 
-    app.Urls.Add("http://*:5000");
     await app.RunAsync();
 }
 catch (Exception ex)
