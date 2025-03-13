@@ -12,6 +12,7 @@ using HRM.Core.Constants;
 using HRM.Core.Enums;
 using HRM.Core.Filters;
 using HRM.Core.Models;
+using HRM.Core.Services;
 using HRM.Criteria.Employee;
 using HRM.Criteria.Supervisor;
 using HRM.Models;
@@ -29,7 +30,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using NPOI.SS.Formula.Functions;
 using SixLabors.ImageSharp;
+using static Org.BouncyCastle.Crypto.Engines.SM2Engine;
 
 namespace HRM.Controllers;
 
@@ -45,7 +48,8 @@ public class EmployeeController(
     ICryptoService cryptoService,
     IUserService userService,
     IRoleService roleService,
-    IWebHostEnvironment hostingEnvironment) : BaseController(userControlSession)
+    IWebHostEnvironment hostingEnvironment,
+    IMinIOService minIOService) : BaseController(userControlSession)
 {
     private readonly IUserControlSession userControlSession = userControlSession;
 
@@ -343,15 +347,13 @@ public class EmployeeController(
     }
 
     [AllowAnonymous]
-    public FileResult Avatar(string id)
+    public async Task<IActionResult> Avatar(string id)
     {
         var avatarName = string.IsNullOrEmpty(id) ? EmployeeSession.Code + ".jpg" : id + ".jpg";
-        var avatarPath = Path.Combine(hostingEnvironment.ContentRootPath, "Avatars", avatarName);
-        var defaultAvatarPath = Path.Combine(hostingEnvironment.ContentRootPath, "Avatars", "avatar.jpg");
+        var avatarPath = $"{CurrentCompanyId}/{avatarName}";
+        var avatarUrl = await minIOService.GetFilePath(Bucket.Avatar, avatarPath, "default-avatar.jpg");
 
-        return System.IO.File.Exists(avatarPath)
-            ? PhysicalFile(avatarPath, "image/jpeg")
-            : PhysicalFile(defaultAvatarPath, "image/jpeg");
+        return Redirect(avatarUrl);
     }
 
     [HttpPost]
@@ -362,14 +364,8 @@ public class EmployeeController(
         {
             return Json(null);
         }
-
-        var avatarPath = Path.Combine(hostingEnvironment.ContentRootPath, "avatars", $"{code}.jpg");
-        using var stream = new MemoryStream();
-        await file.CopyToAsync(stream);
-        stream.Seek(0, SeekOrigin.Begin);
-
-        using var image = await Image.LoadAsync(stream);
-        await image.SaveAsJpegAsync(avatarPath);
+        var path = $"{CurrentCompanyId}/{code}.jpg";
+		await minIOService.UploadFileAsync(file, Bucket.Avatar, path);
 
         return Json(null);
     }

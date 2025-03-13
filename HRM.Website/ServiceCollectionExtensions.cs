@@ -174,6 +174,7 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IPaternityService, PaternityService>();
         services.AddSingleton<IPostnatalService, PostnatalService>();
         services.AddSingleton<IHolidayService, HolidayService>();
+        services.AddSingleton<IMinIOService, MinIOService>();
         services.AddDIReportServices();
         services.AddDIExcelServices();
 
