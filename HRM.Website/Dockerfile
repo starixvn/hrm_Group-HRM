@@ -41,7 +41,8 @@ FROM hub.nexdev.net/base/dotnet/core/aspnet:9.0-alpine AS base
 WORKDIR /app
 COPY --from=builder /app .
 
-ENV TZ="America/La_Paz" 
+ENV TZ="America/La_Paz"
+ENV ASPNETCORE_HTTP_PORTS=5000
 ENV COMPlus_EnableDiagnostics=0
 
 # Don’t run as root
