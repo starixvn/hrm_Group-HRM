@@ -102,9 +102,6 @@ public static class ServiceCollectionExtensions
         var letstalkSettings = configuration.GetSection("LetstalkSettings").Get<LetstalkSettings>();
         services.AddSingleton(letstalkSettings);
 
-        var syncWorkingShiftSettings = configuration.GetSection("SyncWorkingShiftSettings").Get<SyncWorkingShiftSettings>();
-        services.AddSingleton(syncWorkingShiftSettings);
-
         services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         services.AddSingleton<IUserControlSettings>(new UserControlSettings(configuration));
         services.AddSingleton<ILogger, Logger>();

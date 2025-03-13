@@ -1,8 +1,4 @@
-﻿using HRM.Services.ExportExcel;
-using HRM.Services.Implement;
-using HRM.Services.Interfaces;
-
-namespace HRM.Controllers;
+﻿namespace HRM.Controllers;
 
 using System;
 using System.Collections.Generic;
@@ -15,16 +11,17 @@ using Core;
 using Core.Constants;
 using Core.Enums;
 using Core.Filters;
-using HRM.Core.Models;
 using Criteria.ScheduleArrange;
 using Models;
 using Models.ScheduleArrange;
 using ViewModels.ScheduleArrange;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Services.ExportExcel;
+using Services.Implement;
+using Services.Interfaces;
 
 public class ScheduleArrangeController(
-    AppSettings appSettings,
     IUserControlSession userControlSession,
     IRoleService roleService,
     IScheduleArrangeService scheduleArrangeService,
@@ -38,9 +35,11 @@ public class ScheduleArrangeController(
     [HrmPermission(Policy.Host, FunctionKey.ScheduleArrange)]
     public async Task<IActionResult> Index()
     {
+        var config = await syncWorkingShiftService.GetSyncWorkingShiftConfigAsync();
+
         ViewBag.HasPermissionToViewHoliday = userControlSession.HasPermissionOnFunction(FunctionKey.Holiday, Policy.Read);
         ViewBag.HasPermissionToViewShift = userControlSession.HasPermissionOnFunction(FunctionKey.ShiftManagement, Policy.Read);
-        ViewBag.EnableSyncWorkingShift = appSettings.EnableManualSyncWorkingShift;
+        ViewBag.EnableSyncWorkingShift = config?.Enable;
         ViewBag.IsSystemAdmin = (await roleService.GetByUserIdAsync(userControlSession.UserId))
             .Any(r => r.RoleId is (short)RoleSystem.HR or (short)RoleSystem.SystemAdmin);
         return View();

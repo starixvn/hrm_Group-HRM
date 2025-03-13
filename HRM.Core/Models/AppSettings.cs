@@ -10,5 +10,4 @@ public class AppSettings
     public string EmailGo { get; set; }
     public string WhitelistIPs { get; set; }
     public short ServerTimeZone { get; set; }
-    public bool EnableManualSyncWorkingShift { get; set; }
 }
