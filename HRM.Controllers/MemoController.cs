@@ -22,7 +22,8 @@ public class MemoController(
     IUserControlSession userControlSession,
     IMemoService memoService,
     ICommonDataService commonDataService,
-    IEmailService emailService) : BaseController(userControlSession)
+    IEmailService emailService,
+    IWebHostEnvironment hostingEnvironment) : BaseController(userControlSession)
 {
     private readonly IUserControlSession userControlSession = userControlSession;
     private const int UploadMemoType = 1;
@@ -156,7 +157,7 @@ public class MemoController(
 
             foreach (var fileName in allFiles)
             {
-                var filePath = Path.Combine(env.ContentRootPath, fileName);
+                var filePath = Path.Combine(hostingEnvironment.ContentRootPath, RemoveFirstSlash(fileName));
                 if (System.IO.File.Exists(filePath))
                 {
                     System.IO.File.Delete(filePath);
@@ -190,5 +191,14 @@ public class MemoController(
             string.Empty,
             Resources.Messages.MemoSubject + " " + subject,
             body);
+    }
+
+    private static string RemoveFirstSlash(string path)
+    {
+        if (path.StartsWith("/"))
+        {
+            path = path.Substring(1);
+        }
+        return path;
     }
 }

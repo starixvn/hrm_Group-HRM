@@ -58,9 +58,8 @@ public class FileController(
         var path = Path.Combine(basePath, fileName);
         using var stream = new FileStream(path, FileMode.Create);
         file.CopyTo(stream);
-        const byte StartIndex = 2;
 
-        return pathAttach.Substring(StartIndex);
+        return pathAttach;
     }
 
     public bool Delete(string fileName)
