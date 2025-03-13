@@ -13,7 +13,6 @@ COPY HRM.Repositories/*.csproj HRM.Repositories/
 COPY HRM.Controllers/*.csproj HRM.Controllers/
 COPY HRM.ViewModels/*.csproj HRM.ViewModels/
 COPY HRM.Website/*.csproj HRM.Website/
-COPY HRM.AutoJobs/*.csproj HRM.AutoJobs/
 
 # Copy the rest of the source code
 RUN dotnet nuget add source https://nuget.nexdev.net/api/v2
