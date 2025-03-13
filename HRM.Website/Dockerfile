@@ -32,7 +32,6 @@ COPY HRM.Repositories/ HRM.Repositories/
 COPY HRM.Controllers/ HRM.Controllers/
 COPY HRM.ViewModels/ HRM.ViewModels/
 COPY HRM.Website/ HRM.Website/
-COPY HRM.AutoJobs/ HRM.AutoJobs/
 
 # Publish the application
 WORKDIR /src/HRM.Website

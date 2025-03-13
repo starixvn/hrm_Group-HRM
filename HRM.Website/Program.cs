@@ -9,7 +9,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
-using NPOI.HPSF;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -61,5 +60,4 @@ app.MapControllerRoute(
     "{controller=Home}/{action=Index}/{id?}");
 
 app.Urls.Add("http://*:5000");
-app.Urls.Add("https://*:5000");
 await app.RunAsync();
