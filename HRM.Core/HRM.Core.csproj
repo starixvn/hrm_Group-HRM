@@ -14,6 +14,7 @@
     <PackageReference Include="GO.UserControl.Client.AspNetCore" Version="1.0.2" />
     <PackageReference Include="GO.UserControl.Client.Core" Version="1.0.3" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="NLog.Web.AspNetCore" Version="5.4.0" />
     <PackageReference Include="NPOI" Version="2.7.2" />
   </ItemGroup>
 </Project>
