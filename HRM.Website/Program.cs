@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using Fanex.Data.SqlServer;
 using Fanex.Logging.Sentry;
@@ -9,82 +8,56 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using NLog;
-using NLog.Extensions.Logging;
-using NLog.Web;
 
-var logger = LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
+var builder = WebApplication.CreateBuilder(args);
 
-try
-{
-    logger.Info("Application start.");
+var services = builder.Services;
+var configuration = builder.Configuration;
 
-    var builder = WebApplication.CreateBuilder(args);
-
-    var services = builder.Services;
-    var configuration = builder.Configuration;
-
-    // Add services to the container.
-    services.AddControllersWithViews()
-        .AddNewtonsoftJson(options =>
-        {
-            options.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Unspecified;
-        });
-
-    services.AddFanexLogSentry(configuration);
-    services.AddFanexSql(configuration);
-    services.AddCookieAuthentication(configuration);
-    services.AddRedis(configuration);
-    services.AddRedisSession(configuration);
-    services.AddDIServices(configuration);
-
-    services.AddLogging(loggingBuilder =>
+// Add services to the container.
+services.AddControllersWithViews()
+    .AddNewtonsoftJson(options =>
     {
-        loggingBuilder.ClearProviders();
-        loggingBuilder.AddNLog();
+        options.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Unspecified;
     });
 
-    var app = builder.Build();
+services.AddFanexLogSentry(configuration);
+services.AddFanexSql(configuration);
+services.AddCookieAuthentication(configuration);
+services.AddRedis(configuration);
+services.AddRedisSession(configuration);
+services.AddDIServices(configuration);
 
-    UserControlClientManager
-        .UseSettings(app.Services.GetService<IUserControlSettings>())
-        .UseSession(app.Services.GetService<IUserControlSession>());
+var app = builder.Build();
 
-    if (!app.Environment.IsDevelopment())
-    {
-        app.UseHsts();
-    }
+UserControlClientManager
+    .UseSettings(app.Services.GetService<IUserControlSettings>())
+    .UseSession(app.Services.GetService<IUserControlSession>());
 
-    app.UseHttpsRedirection();
-    app.UseStaticFiles();
-    var staticFilesPath = Path.Combine(Directory.GetCurrentDirectory(), "file");
-    if (Directory.Exists(staticFilesPath))
-    {
-        app.UseStaticFiles(new StaticFileOptions
-        {
-            FileProvider = new PhysicalFileProvider(staticFilesPath),
-            RequestPath = "/file"
-        });
-    }
-    app.UseRouting();
-    app.UseAuthentication();
-    app.UseAuthorization();
-    app.UseSession();
-
-    app.MapControllerRoute(
-        "default",
-        "{controller=Home}/{action=Index}/{id?}");
-
-    await app.RunAsync();
-}
-catch (Exception ex)
+if (!app.Environment.IsDevelopment())
 {
-    logger.Error(ex, "Application terminated unexpectedly.");
-    throw;
+    app.UseHsts();
 }
-finally
+
+app.UseHttpsRedirection();
+app.UseStaticFiles();
+var staticFilesPath = Path.Combine(Directory.GetCurrentDirectory(), "file");
+if (Directory.Exists(staticFilesPath))
 {
-    LogManager.Shutdown();
+    app.UseStaticFiles(new StaticFileOptions
+    {
+        FileProvider = new PhysicalFileProvider(staticFilesPath),
+        RequestPath = "/file"
+    });
 }
+app.UseRouting();
+app.UseAuthentication();
+app.UseAuthorization();
+app.UseSession();
+
+app.MapControllerRoute(
+    "default",
+    "{controller=Home}/{action=Index}/{id?}");
+
+await app.RunAsync();
