@@ -39,7 +39,7 @@ public class ScheduleArrangeController(
 
         ViewBag.HasPermissionToViewHoliday = userControlSession.HasPermissionOnFunction(FunctionKey.Holiday, Policy.Read);
         ViewBag.HasPermissionToViewShift = userControlSession.HasPermissionOnFunction(FunctionKey.ShiftManagement, Policy.Read);
-        ViewBag.EnableSyncWorkingShift = config?.Enable;
+        ViewBag.EnableSyncWorkingShift = config?.Enable ?? false;
         ViewBag.IsSystemAdmin = (await roleService.GetByUserIdAsync(userControlSession.UserId))
             .Any(r => r.RoleId is (short)RoleSystem.HR or (short)RoleSystem.SystemAdmin);
         return View();

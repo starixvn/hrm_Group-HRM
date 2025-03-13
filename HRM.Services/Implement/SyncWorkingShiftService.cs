@@ -64,7 +64,7 @@ public class SyncWorkingShiftService(
         };
 
         var result = await baseService.GetDataEntityAsync<string>(criteria);
-        return JsonConvert.DeserializeObject<SyncWorkingShiftSettings>(result);
+        return result == null ? null : JsonConvert.DeserializeObject<SyncWorkingShiftSettings>(result);
     }
 
     private async Task<CommandResult> SyncWorkingShiftAsync(SyncWorkingShiftCommand command, DateTime date, SyncWorkingShiftSettings config)
