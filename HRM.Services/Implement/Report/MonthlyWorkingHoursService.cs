@@ -197,7 +197,7 @@ public partial class EmployeeWorkingHoursService(
             worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.FullName;
             worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Nickname;
             worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.WorkingDays;
-            worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.ActualWorkingDays + monthlyWorking.DailyWorkings.Count(x => IsHoliday(x));
+            worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.ActualWorkingDays + monthlyWorking.DailyWorkings.Count(IsHoliday);
 
             var months = GetMonthsBetween(param.FromDate, param.ToDate);
             var dailyColumnIndex = TotalFixedColumns + months.Count() * TotalUPLColumns + 1;
@@ -373,7 +373,7 @@ public partial class EmployeeWorkingHoursService(
             .OrderBy(x => x.Department).ThenBy(x => x.Section).ThenBy(x => x.Team).ToList();
         foreach (var team in teams)
         {
-            var totalHolidays = team.Members.Sum(x => x.DailyWorkings.Count(y => IsHoliday(y)));
+            var totalHolidays = team.Members.Sum(x => x.DailyWorkings.Count(IsHoliday));
             var colIndex = 1;
             template.Cells[templateIndex.bodyRow, 1, templateIndex.bodyRow, templateIndex.companyEventColumn]
                 .Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, templateIndex.companyEventColumn]);

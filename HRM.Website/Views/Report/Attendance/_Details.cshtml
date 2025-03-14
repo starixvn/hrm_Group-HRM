@@ -119,8 +119,7 @@
                     @if (item.IsOffdayOT)
                     {
                         var title = !string.IsNullOrEmpty(item.ShiftCode) && !string.IsNullOrEmpty(item.ExpectedInTime) ? (item.ExpectedInTime + "-" + item.ExpectedOutTime) : string.Empty;
-                        var className = string.Format("{0} {1}", "mytimesheet-workinginoffday",
-                            item.IsPublicHoliday && !string.IsNullOrEmpty(item.ShiftCode) ? "holiday" : "");
+                        var className = $"mytimesheet-workinginoffday {(item.IsPublicHoliday && !string.IsNullOrEmpty(item.ShiftCode) ? "holiday" : "")}";
                         <td class="@className">
                             <span class="tooltip-tippy" data-tippy-content="@title">@item.ShiftCode</span>
                         </td>
@@ -128,8 +127,7 @@
                     else
                     {
                         var title = !string.IsNullOrEmpty(item.ShiftCode) && !string.IsNullOrEmpty(item.ExpectedInTime) ? (item.ExpectedInTime + "-" + item.ExpectedOutTime) : string.Empty;
-                        var className = string.Format("{0} {1}", "",
-                            item.IsPublicHoliday & !string.IsNullOrEmpty(item.ShiftCode) ? "holiday" : "");
+                        var className = $" {(item.IsPublicHoliday & !string.IsNullOrEmpty(item.ShiftCode) ? "holiday" : "")}";
                         <td class="@className">
                             @if (!string.IsNullOrEmpty(title))
                             {

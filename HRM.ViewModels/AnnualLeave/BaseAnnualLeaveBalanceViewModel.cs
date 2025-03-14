@@ -22,9 +22,9 @@ public class BaseAnnualLeaveBalanceViewModel : IValidatableObject
     [Display(ResourceType = typeof(Labels), Name = nameof(Labels.AffectFrom))]
     public DateTime AffectedFrom { get; set; }
 
-    public decimal DeductDays => TotalDays.HasValue && TotalDays.Value < 0 ? -TotalDays.Value : 0;
+    public decimal DeductDays => TotalDays is < 0 ? -TotalDays.Value : 0;
 
-    public decimal CreditDays => TotalDays.HasValue && TotalDays.Value > 0 ? TotalDays.Value : 0;
+    public decimal CreditDays => TotalDays is > 0 ? TotalDays.Value : 0;
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
@@ -32,7 +32,7 @@ public class BaseAnnualLeaveBalanceViewModel : IValidatableObject
 
         if (TotalDays == 0 || TotalDays % Constants.HalfDayOffValue != 0)
         {
-            var validation = new ValidationResult($"{Labels.TotalDays} is invalid.", new[] { "TotalDays" });
+            var validation = new ValidationResult($"{Labels.TotalDays} is invalid.", ["TotalDays"]);
             result.Add(validation);
         }
 

@@ -77,7 +77,7 @@
     </thead>
     <tbody>
         @{var index = 1;}
-        @if (Model != null && Model.Count > 0)
+        @if (Model is { Count: > 0 })
         {
             foreach (var request in Model)
             {

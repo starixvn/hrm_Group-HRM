@@ -16,6 +16,6 @@ public static class JobHelper
     {
         var settings = GetJobConfig(jobSettings, jobName);
 
-        return settings != null && settings.Enabled;
+        return settings is { Enabled: true };
     }
 }

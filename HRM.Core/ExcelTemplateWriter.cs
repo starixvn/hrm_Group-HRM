@@ -136,7 +136,7 @@ public class ExcelTemplateWriter(HSSFWorkbook template, string excelFileName, st
 
     public void WriteRows(int rowIndex, List<object[]> arrayList)
     {
-        if (arrayList != null && arrayList.Count > 0)
+        if (arrayList is { Count: > 0 })
         {
             var total = arrayList.Count;
             var row = CreateRows(rowIndex, total);

@@ -242,9 +242,12 @@ public class ExportExcelScheduleService(IWebHostEnvironment hostingEnvironment) 
                     CheckIn = shift.CheckIn,
                     CheckOut = shift.CheckOut,
                     IsInAfterDay = shift.IsInAfterDay,
-                    IsOutAfterDay = shift.IsOutAfterDay
+                    IsOutAfterDay = shift.IsOutAfterDay,
+                    Weekdays =
+                    {
+	                    [(int)dailySchedule.WorkDate.DayOfWeek] = 1
+                    }
                 };
-                item.Weekdays[(int)dailySchedule.WorkDate.DayOfWeek] = 1;
 
                 employeeWorkingOnShifts.Add(item);
             }

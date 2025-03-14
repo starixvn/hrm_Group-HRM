@@ -177,10 +177,10 @@ public class EmployeeLogService(
 
     private void MappingRole(FieldValue field)
     {
-        var roles = !string.IsNullOrWhiteSpace(field.OldValue) ? field.OldValue.Split(',') : new string[] { };
+        var roles = !string.IsNullOrWhiteSpace(field.OldValue) ? field.OldValue.Split(',') : [];
         field.OldValue = string.Join(", ", SystemRoles.Where(x => roles.Contains(x.RoleId.ToString())).Select(x => x.Name));
 
-        roles = !string.IsNullOrWhiteSpace(field.Value) ? field.Value.Split(',') : new string[] { };
+        roles = !string.IsNullOrWhiteSpace(field.Value) ? field.Value.Split(',') : [];
         field.Value = string.Join(", ", SystemRoles.Where(x => roles.Contains(x.RoleId.ToString())).Select(x => x.Name));
     }
 

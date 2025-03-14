@@ -25,14 +25,13 @@ public class WeeklySchedule
 
 #pragma warning disable S1541 // Methods and properties should not be too complex
 #pragma warning disable S1067 // Expressions should not be too complex
-    public bool IsPublic => MondaySchedule != null && MondaySchedule.IsPublic
-#pragma warning restore S1541 // Methods and properties should not be too complex
-                                                   && TuesdaySchedule != null && TuesdaySchedule.IsPublic
-                                                   && WednesdaySchedule != null && WednesdaySchedule.IsPublic
-                                                   && ThursdaySchedule != null && ThursdaySchedule.IsPublic
-                                                   && FridaySchedule != null && FridaySchedule.IsPublic
-                                                   && SaturdaySchedule != null && SaturdaySchedule.IsPublic
-                                                   && SundaySchedule != null && SundaySchedule.IsPublic;
+    public bool IsPublic => MondaySchedule is { IsPublic: true }
+                            && TuesdaySchedule is { IsPublic: true }
+                            && WednesdaySchedule is { IsPublic: true }
+                            && ThursdaySchedule is { IsPublic: true }
+                            && FridaySchedule is { IsPublic: true }
+                            && SaturdaySchedule is { IsPublic: true }
+                            && SundaySchedule is { IsPublic: true };
 #pragma warning restore S1067 // Expressions should not be too complex
 
     public bool IsSelected { get; set; }

@@ -37,8 +37,8 @@
                     var requestModel = new RequestViewModel
                     {
                         DateOption = 0,
-                        FromDate = item.FromDate.HasValue ? item.FromDate.Value : today.AddMonths(-4).Date,
-                        ToDate = item.ToDate.HasValue ? item.ToDate.Value : today,
+                        FromDate = item.FromDate ?? today.AddMonths(-4).Date,
+                        ToDate = item.ToDate ?? today,
                         RequestType = item.RequestFilterTypeId,
                         StatusId = (byte)CurrentRequestStatus.Pending,
                         TeamIds = string.Empty,
@@ -95,8 +95,8 @@
                     var requestModel = new RequestViewModel
                     {
                         DateOption = 0,
-                        FromDate = item.FromDate.HasValue ? item.FromDate.Value : today.AddMonths(-4).Date,
-                        ToDate = item.ToDate.HasValue ? item.ToDate.Value : today,
+                        FromDate = item.FromDate ?? today.AddMonths(-4).Date,
+                        ToDate = item.ToDate ?? today,
                         RequestType = item.RequestFilterTypeId,
                         StatusId = -1,
                         TeamIds = string.Empty,

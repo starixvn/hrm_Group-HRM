@@ -327,7 +327,7 @@ public class DisciplineRepository : IDisciplineRepository
             disciplineDetail.SevenDaysLeave
         };
 
-        foreach (var violation in violations.Where(violation => violation != null && violation.HasViolated))
+        foreach (var violation in violations.Where(violation => violation is { HasViolated: true }))
         {
             disciplineDetail.SystemSubtractScore += violation.Score;
             disciplineDetail.ApproverSubtractScore += !violation.HasIgnored ? violation.Score : 0;

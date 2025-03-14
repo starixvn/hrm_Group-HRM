@@ -43,7 +43,7 @@ public class ExportDisciplineSummaryService(IWebHostEnvironment hostingEnvironme
         var writer = new ExcelTemplateWriter(templatePath, reportName, Labels.DisciplineSummaryReportSheet);
 
         // Fill report title.
-        writer.WriteRow(0, new object[] { reportTitle });
+        writer.WriteRow(0, [reportTitle]);
         writer.CopyRows(1, 1);
 
         // Fill report header.

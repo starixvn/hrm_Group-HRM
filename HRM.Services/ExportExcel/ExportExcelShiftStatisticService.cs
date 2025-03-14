@@ -80,7 +80,7 @@ public class ExportExcelShiftStatisticService(IWebHostEnvironment hostingEnviron
             {
                 rowTableStyle.Copy(workSheet.Cells[rowIndex, colIndex]);
                 var data = shiftStatistics.FirstOrDefault(shiftStatistic => shiftStatistic.Code == shift && shiftStatistic.WorkDate == tableTitles[i].Key);
-                workSheet.Cells[rowIndex, colIndex++].Value = data is null ? 0 : data.Total;
+                workSheet.Cells[rowIndex, colIndex++].Value = data?.Total ?? 0;
             }
 
             colIndex = 1;

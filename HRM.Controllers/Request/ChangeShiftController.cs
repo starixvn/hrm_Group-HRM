@@ -241,7 +241,7 @@ public class ChangeShiftController(
             return Constants.OffDayShiftId;
         }
 
-        return dailySchedule.Shift != null ? dailySchedule.Shift.Id : 0;
+        return dailySchedule.Shift?.Id ?? 0;
     }
 
     private static string GetFromShiftName(DailySchedule dailySchedule)

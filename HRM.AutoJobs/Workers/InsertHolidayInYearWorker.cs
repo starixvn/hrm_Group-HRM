@@ -28,7 +28,7 @@ public class InsertHolidayInYearWorker : BaseWorker
     {
         const byte September = 9;
         var today = DateTimeOffset.UtcNow;
-        if (today.Day == 1 && today.Month == September)
+        if (today is { Day: 1, Month: September })
         {
             await holidayService.InsertHolidayInYearAsync();
         }

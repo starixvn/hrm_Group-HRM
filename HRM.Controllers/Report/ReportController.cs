@@ -3,7 +3,6 @@
 namespace HRM.Controllers.Report;
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Core.Constants;
@@ -218,7 +217,7 @@ public class ReportController(
             CompanyId = CurrentCompanyId
         };
 
-        var leaveTypeIds = !string.IsNullOrWhiteSpace(model.LeaveType) ? model.LeaveType.Split(',').ToList() : new List<string>();
+        var leaveTypeIds = !string.IsNullOrWhiteSpace(model.LeaveType) ? model.LeaveType.Split(',').ToList() : [];
         var leaveTypes = await commonDataService.GetLeaveTypeAsync();
         var leaveType = string.Join(", ", leaveTypes.Where(x => leaveTypeIds.Exists(y => x.Id.ToString() == y)).Select(x => x.Name));
         ViewBag.HeaderTitle = $"{leaveType} {model.Year}";

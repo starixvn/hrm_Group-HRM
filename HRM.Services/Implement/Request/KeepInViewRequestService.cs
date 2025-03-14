@@ -99,11 +99,8 @@ public class KeepInViewRequestService(
             var emailTemplatePath = Path.Combine(env.ContentRootPath, EmailTemplatePathForRequest);
             var email = await requestMailService.GetMailToMailCcAndLetStalk(requestId, (byte)SettingsSendMail.New);
 
-            email.Subject = string.Format(
-                "{0} {1} on {2}",
-                Messages.InsertedCompensationLeaveEmailSubject,
-                request.Requester.Nickname,
-                request.OnDate.ToDateMonthYearFormatedDate());
+            email.Subject =
+	            $"{Messages.InsertedCompensationLeaveEmailSubject} {request.Requester.Nickname} on {request.OnDate.ToDateMonthYearFormatedDate()}";
 
             email.Body = Utilities.ReadTextFile(emailTemplatePath);
             email.Body = string.Format(
@@ -131,11 +128,8 @@ public class KeepInViewRequestService(
         {
             var emailTemplatePath = Path.Combine(env.ContentRootPath, EmailTemplatePathForRequest);
             var email = await requestMailService.GetMailToMailCcAndLetStalk(requestId, (byte)SettingsSendMail.Edit);
-            email.Subject = string.Format(
-                "{0} {1} on {2}",
-                Messages.UpdatedCompensationLeaveEmailSubject,
-                request.Requester.Nickname,
-                request.OnDate.ToDateMonthYearFormatedDate());
+            email.Subject =
+	            $"{Messages.UpdatedCompensationLeaveEmailSubject} {request.Requester.Nickname} on {request.OnDate.ToDateMonthYearFormatedDate()}";
 
             email.Body = Utilities.ReadTextFile(emailTemplatePath);
             email.Body = string.Format(

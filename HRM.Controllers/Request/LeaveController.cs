@@ -436,8 +436,8 @@ public class LeaveController(
             TotalDays = request.TotalDays,
             HalfDayOff = request.IsHalfDay,
             IsHospitalApplication = request.IsHospitalApplication,
-            VerifierId = request.Verifier != null ? request.Verifier.EmpId : 0,
-            ApproverId = request.Approver != null ? request.Approver.EmpId : 0,
+            VerifierId = request.Verifier?.EmpId ?? 0,
+            ApproverId = request.Approver?.EmpId ?? 0,
             RefNo = request.RefNO,
             Remark = request.Remark,
             Status = request.Status

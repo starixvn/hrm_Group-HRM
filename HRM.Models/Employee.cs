@@ -190,7 +190,7 @@ public class Employee : EntityBase<int>
 
         set
         {
-            Roles = value != null ? value.Select(i => new Role { RoleId = Convert.ToInt16(i) }).ToList() : new List<Role>();
+            Roles = value != null ? value.Select(i => new Role { RoleId = Convert.ToInt16(i) }).ToList() : [];
         }
     }
 

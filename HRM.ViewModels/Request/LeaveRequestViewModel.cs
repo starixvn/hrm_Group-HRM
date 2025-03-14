@@ -99,7 +99,7 @@ public class LeaveRequestViewModel : IValidatableObject
         {
             var validation = new ValidationResult(
                 Resources.Messages.InvalidToDate,
-                new[] { "ToDate" });
+                ["ToDate"]);
             result.Add(validation);
         }
 
@@ -107,7 +107,7 @@ public class LeaveRequestViewModel : IValidatableObject
         {
             var validation = new ValidationResult(
                 Resources.Messages.InvalidTotalDays,
-                new[] { "TotalDays" });
+                ["TotalDays"]);
             result.Add(validation);
         }
 

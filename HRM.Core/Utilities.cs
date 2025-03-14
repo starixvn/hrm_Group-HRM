@@ -90,9 +90,9 @@ public static class Utilities
 
             while (!found)
             {
-                var randFrom48To57 = (rand >= 48) && (rand <= 57);
-                var randFrom65To90 = (rand >= 65) && (rand <= 90);
-                var randFrom97To122 = (rand >= 97) && (rand <= 122);
+                var randFrom48To57 = rand is >= 48 and <= 57;
+                var randFrom65To90 = rand is >= 65 and <= 90;
+                var randFrom97To122 = rand is >= 97 and <= 122;
 
                 if (randFrom48To57 || randFrom65To90 || randFrom97To122)
                 {

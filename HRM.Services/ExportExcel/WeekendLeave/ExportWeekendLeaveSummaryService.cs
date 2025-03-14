@@ -64,7 +64,7 @@ public class ExportWeekendLeaveSummaryService(IWebHostEnvironment hostingEnviron
             ToDate = criteria.ToDate.ToDateMonthYearFormatedDate()
         };
 
-        writer.WriteRow(0, new object[] { reportTitle });
+        writer.WriteRow(0, [reportTitle]);
         writer.WriteRow(1, dateRange);
         writer.CopyRows(1, 1);
 

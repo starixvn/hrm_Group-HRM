@@ -29,7 +29,7 @@ public class InsertALBalanceForNextYearWorker : BaseWorker
         const byte September = 9;
         const byte December = 12;
         var today = DateTimeOffset.UtcNow;
-        if ((today.Day == 1 && today.Month == September)
+        if (today is { Day: 1, Month: September }
             || (today.Day == DateTime.DaysInMonth(today.Year, today.Month) && today.Month == December))
         {
             await annualLeaveBalanceService.InsertForNextYearAsync();

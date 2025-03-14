@@ -20,5 +20,5 @@ public class MailRecord
 
     public string MailBcc { get; set; }
 
-    public AttachmentCollection Attachments { get; set; } = new();
+    public AttachmentCollection Attachments { get; set; } = [];
 }

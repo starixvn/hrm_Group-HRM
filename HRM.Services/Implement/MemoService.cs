@@ -30,7 +30,7 @@ public class MemoService(IBaseService baseService) : IMemoService
             CompanyId = companyId
         };
         var memo = await baseService.GetDataEntityAsync<Memo>(criteria);
-        if (memo != null && memo.MemoType == 1)
+        if (memo is { MemoType: 1 })
         {
             memo.AttachFile = memo.Contents;
         }

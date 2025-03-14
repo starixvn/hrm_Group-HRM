@@ -156,10 +156,7 @@ public class RequestController(
     [HrmPermission(Policy.Host, FunctionKey.VerifyRequest, FunctionKey.ApproveRequest, FunctionKey.ProcessRequest, FunctionKey.VoidRequest)]
     public async Task<PartialViewResult> PartialViewProcessRequest(ProcessRequestViewModel model)
     {
-        if (model != null
-            && model.RequestId > 0
-            && model.RoleId == (byte)RoleSystem.Approver
-            && model.Command == RequestCommand.Approve)
+        if (model is { RequestId: > 0, RoleId: (byte)RoleSystem.Approver, Command: RequestCommand.Approve })
         {
             await HandleProcessRequest(model);
         }

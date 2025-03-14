@@ -101,7 +101,7 @@ public static class HSSFSheetExtensions
 
     public static void RemoveColumns(this ISheet sheet, List<int> columns)
     {
-        if (columns != null && columns.Count > 0)
+        if (columns is { Count: > 0 })
         {
             columns.Sort();
             for (var i = columns.Count - 1; i >= 0; i--)

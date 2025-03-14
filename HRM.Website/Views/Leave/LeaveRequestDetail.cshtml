@@ -19,7 +19,7 @@
             <th class="tdhalfday"></th>
         </tr>
     </thead>
-    @if (Model != null && Model.LeaveRequestDetail != null && Model.LeaveRequestDetail.Any())
+    @if (Model is { LeaveRequestDetail: not null } && Model.LeaveRequestDetail.Any())
     {
         double totalAnnualLeave = 0;
         double totalUnpaidLeave = 0;
