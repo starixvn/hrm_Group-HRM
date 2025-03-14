@@ -175,8 +175,9 @@ public class OvertimeRequestService(
             RequestCommand = command,
             RequestIds = requestIds,
             ActorId = actorId,
-            RoleId = roleId
-        };
+            RoleId = roleId,
+            CompanyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId)
+		};
         return await baseService.ExecuteNonQueryAsync(criteria);
     }
 

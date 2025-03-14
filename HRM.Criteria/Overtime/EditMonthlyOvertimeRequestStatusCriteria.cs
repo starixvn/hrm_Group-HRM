@@ -9,6 +9,7 @@ public class EditMonthlyOvertimeRequestStatusCriteria : CriteriaBase
     public int ActorId { get; set; }
     public int RoleId { get; set; }
     public string RequestIds { get; set; }
+    public short CompanyId { get; set; }
 
     [SpParam(Ignored = true)]
     public RequestCommand RequestCommand { get; set; }
