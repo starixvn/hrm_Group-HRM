@@ -42,7 +42,6 @@ WORKDIR /app
 COPY --from=builder /app .
 
 ENV TZ="America/La_Paz"
-ENV ASPNETCORE_HTTP_PORTS=5000
 ENV COMPlus_EnableDiagnostics=0
 
 # Don’t run as root
