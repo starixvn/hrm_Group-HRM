@@ -1,8 +1,8 @@
-﻿using HRM.Core.Enums;
-using HRM.Resources;
-using HRM.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Globalization;
+using HRM.Core.Enums;
+using HRM.Models;
+using HRM.Resources;
 
 namespace HRM.Website.Helper;
 

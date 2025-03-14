@@ -13,7 +13,7 @@ public class ManagementLevelService(IBaseService baseService) : IManagementLevel
 {
     public async Task<IList<ManagementLevel>> GetManagementLevel()
     {
-        var criteria = new GetManagementLevelCriteria {};
+        var criteria = new GetManagementLevelCriteria();
 
         return (await baseService.GetDataAsync<ManagementLevel>(criteria)).ToList();
     }

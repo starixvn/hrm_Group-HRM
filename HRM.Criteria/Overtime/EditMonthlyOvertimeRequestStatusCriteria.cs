@@ -19,26 +19,13 @@ public class EditMonthlyOvertimeRequestStatusCriteria : CriteriaBase
 
     private static string GetSpKey(RequestCommand command)
     {
-        var key = string.Empty;
-        switch (command)
-        {
-            case RequestCommand.Accept:
-            case RequestCommand.Approve:
-            case RequestCommand.Process:
-                key = "Overtime_ApproveRequest";
-                break;
+	    var key = command switch
+	    {
+		    RequestCommand.Accept or RequestCommand.Approve or RequestCommand.Process => "Overtime_ApproveRequest",
+		    RequestCommand.NotAccept or RequestCommand.Reject or RequestCommand.Void => "Overtime_RejectRequest",
+		    _ => "Overtime_ResetRequest"
+	    };
 
-            case RequestCommand.NotAccept:
-            case RequestCommand.Reject:
-            case RequestCommand.Void:
-                key = "Overtime_RejectRequest";
-                break;
-
-            default:
-                key = "Overtime_ResetRequest";
-                break;
-        }
-
-        return key;
+	    return key;
     }
 }

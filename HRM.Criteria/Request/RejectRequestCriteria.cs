@@ -16,33 +16,16 @@ public class RejectRequestCriteria : CriteriaBase
 
     public override string GetSettingKey()
     {
-        var key = string.Empty;
-        switch (RequestTypeId)
-        {
-            case RequestType.CheckIn:
-            case RequestType.CheckOut:
-                key = "CheckInOutRequest_Reject";
-                break;
+	    var key = RequestTypeId switch
+	    {
+		    RequestType.CheckIn or RequestType.CheckOut => "CheckInOutRequest_Reject",
+		    RequestType.LateIn or RequestType.EarlyOut => "LateInEarlyOutRequest_Reject",
+		    RequestType.ChangeShift => "ChangeShiftRequest_Reject",
+		    RequestType.Leave => "LeaveRequest_Reject",
+		    _ => "KeepInViewRequest_Reject"
+	    };
 
-            case RequestType.LateIn:
-            case RequestType.EarlyOut:
-                key = "LateInEarlyOutRequest_Reject";
-                break;
-
-            case RequestType.ChangeShift:
-                key = "ChangeShiftRequest_Reject";
-                break;
-
-            case RequestType.Leave:
-                key = "LeaveRequest_Reject";
-                break;
-
-            default:
-                key = "KeepInViewRequest_Reject";
-                break;
-        }
-
-        return key;
+	    return key;
     }
 
     public override bool IsValid() => RequestId > 0 && ActorId > 0;

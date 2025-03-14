@@ -267,12 +267,12 @@ public class BaseMailService(
         await baseService.ExecuteNonQueryAsync(command);
     }
 
-    private async Task UpdateMailStatusAsync(MailRecord email, bool isSucessfull)
+    private async Task UpdateMailStatusAsync(MailRecord email, bool isSuccessful)
     {
         var command = new UpdateMailStatusCommand
         {
             MailId = email.MailId,
-            Status = isSucessfull,
+            Status = isSuccessful,
             MailUpdatedDate = DateTimeOffset.Now.DateTime
         };
 

@@ -31,7 +31,7 @@
                 @Html.LabelFor(model => model.TeamCode, new { @class = "control-label" })
             </div>
             <div class="input-form">
-                @Html.TextBoxFor(model => model.TeamCode, new { @class = "form-control", @autocomplete = "off" })
+                @Html.TextBoxFor(model => model.TeamCode, new { @class = "form-control", autocomplete = "off" })
             </div>
             @Html.ValidationMessageFor(model => model.TeamCode)
         </div>
@@ -40,7 +40,7 @@
                 @Html.LabelFor(model => model.TeamName, new { @class = "control-label" })
             </div>
             <div class="input-form">
-                @Html.TextBoxFor(model => model.TeamName, new { @class = "form-control", @autocomplete = "off" })
+                @Html.TextBoxFor(model => model.TeamName, new { @class = "form-control", autocomplete = "off" })
             </div>
             @Html.ValidationMessageFor(model => model.TeamName)
         </div>
@@ -58,7 +58,7 @@
                 @Html.LabelFor(model => model.UnitHead, new { @class = "control-label" })
             </div>
             <div class="input-form">
-                @Html.TextBoxFor(model => model.UnitHead, new { @class = "form-control", @autocomplete = "off", placeholder = Messages.SearchEmployeeWatermark })
+                @Html.TextBoxFor(model => model.UnitHead, new { @class = "form-control", autocomplete = "off", placeholder = Messages.SearchEmployeeWatermark })
             </div>
             @Html.TextBoxFor(model => model.HeadId, new { @class = "team-head" })
             @Html.ValidationMessageFor(model => model.HeadId)
@@ -110,7 +110,7 @@
                 @Html.LabelFor(model => model.MailGroup, new { @class = "control-label" })
             </div>
             <div class="input-form">
-                @Html.TextBoxFor(model => model.MailGroup, new { @class = "form-control", @autocomplete = "off" })
+                @Html.TextBoxFor(model => model.MailGroup, new { @class = "form-control", autocomplete = "off" })
             </div>
             @Html.ValidationMessageFor(model => model.MailGroup)
         </div>
@@ -123,10 +123,10 @@
                 @Html.LabelFor(model => model.LocalBasicAnnualLeaveBalance, new { @class = "control-label" })
             </div>
             <div class="input-form input-number">
-                @Html.TextBoxFor(model => model.LocalBasicAnnualLeaveBalance, new { @class = "form-control", @type = "number" })
+                @Html.TextBoxFor(model => model.LocalBasicAnnualLeaveBalance, new { @class = "form-control", type = "number" })
             </div>
             <div class="input-form input-number">
-                @Html.TextBoxFor(model => model.ExpatBasicAnnualLeaveBalance, new { @class = "form-control", @type = "number" })
+                @Html.TextBoxFor(model => model.ExpatBasicAnnualLeaveBalance, new { @class = "form-control", type = "number" })
             </div>
             @Html.ValidationMessageFor(model => model.LocalBasicAnnualLeaveBalance)
             @Html.ValidationMessageFor(model => model.ExpatBasicAnnualLeaveBalance)
@@ -136,10 +136,10 @@
                 @Html.LabelFor(model => model.LocalWorkingDays, new { @class = "control-label" })
             </div>
             <div class="input-form input-number">
-                @Html.TextBoxFor(model => model.LocalWorkingDays, new { @class = "form-control", @type = "number" })
+                @Html.TextBoxFor(model => model.LocalWorkingDays, new { @class = "form-control", type = "number" })
             </div>
             <div class="input-form input-number">
-                @Html.TextBoxFor(model => model.ExpatWorkingDays, new { @class = "form-control", @type = "number" })
+                @Html.TextBoxFor(model => model.ExpatWorkingDays, new { @class = "form-control", type = "number" })
             </div>
             @Html.ValidationMessageFor(model => model.LocalWorkingDays)
             @Html.ValidationMessageFor(model => model.ExpatWorkingDays)
@@ -149,10 +149,10 @@
                 @Html.LabelFor(model => model.LocalWorkingHoursbyWeek, new { @class = "control-label" })
             </div>
             <div class="input-form input-number">
-                @Html.TextBoxFor(model => model.LocalWorkingHoursbyWeek, new { @class = "form-control", @type = "number" })
+                @Html.TextBoxFor(model => model.LocalWorkingHoursbyWeek, new { @class = "form-control", type = "number" })
             </div>
             <div class="input-form input-number">
-                @Html.TextBoxFor(model => model.ExpatWorkingHoursbyWeek, new { @class = "form-control", @type = "number" })
+                @Html.TextBoxFor(model => model.ExpatWorkingHoursbyWeek, new { @class = "form-control", type = "number" })
             </div>
             @Html.ValidationMessageFor(model => model.LocalWorkingHoursbyWeek)
             @Html.ValidationMessageFor(model => model.ExpatWorkingHoursbyWeek)
@@ -162,10 +162,10 @@
                 @Html.LabelFor(model => model.LocalWorkingHours, new { @class = "control-label" })
             </div>
             <div class="input-form input-number">
-                @Html.TextBoxFor(model => model.LocalWorkingHours, new { @class = "form-control", @type = "number" })
+                @Html.TextBoxFor(model => model.LocalWorkingHours, new { @class = "form-control", type = "number" })
             </div>
             <div class="input-form input-number">
-                @Html.TextBoxFor(model => model.ExpatWorkingHours, new { @class = "form-control", @type = "number" })
+                @Html.TextBoxFor(model => model.ExpatWorkingHours, new { @class = "form-control", type = "number" })
             </div>
             @Html.ValidationMessageFor(model => model.LocalWorkingHours)
             @Html.ValidationMessageFor(model => model.ExpatWorkingHours)
@@ -174,10 +174,10 @@
                 @Html.LabelFor(model => model.LocalOffDaysbyWeek, new { @class = "control-label" })
             </div>
             <div class="input-form input-number">
-                @Html.TextBoxFor(model => model.LocalOffDaysbyWeek, new { @class = "form-control", @type = "number" })
+                @Html.TextBoxFor(model => model.LocalOffDaysbyWeek, new { @class = "form-control", type = "number" })
             </div>
             <div class="input-form input-number">
-                @Html.TextBoxFor(model => model.ExpatOffDaysbyWeek, new { @class = "form-control", @type = "number" })
+                @Html.TextBoxFor(model => model.ExpatOffDaysbyWeek, new { @class = "form-control", type = "number" })
             </div>
             @Html.ValidationMessageFor(model => model.LocalOffDaysbyWeek)
             @Html.ValidationMessageFor(model => model.ExpatOffDaysbyWeek)

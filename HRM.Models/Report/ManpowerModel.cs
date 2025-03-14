@@ -2,8 +2,7 @@
 
 public class ManpowerModel
 {
-    public string TeamCode { get; set; }
-    public string DepartmentCode { get; set; }
+	public string DepartmentCode { get; set; }
     public string Section { get; set; }
 
     public string TeamName { get; set; }

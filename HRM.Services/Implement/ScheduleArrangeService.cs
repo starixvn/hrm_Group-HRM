@@ -39,8 +39,7 @@ public class ScheduleArrangeService(
 
     public async Task<IEnumerable<WeeklySchedule>> GetWeeklyScheduleAsync(WeeklyScheduleFilter filter)
     {
-        bool? isLocal = null;
-        var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
+	    var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
         var criteria = new GetWeeklyScheduleCriteria
         {
             ActorId = filter.ActorId,
@@ -49,7 +48,7 @@ public class ScheduleArrangeService(
             EmpId = filter.EmployeeId,
             TeamIds = filter.TeamIds,
             IsIFrame = filter.IsIFrame,
-            IsLocal = filter.IsLocal.HasValue ? (filter.IsLocal.Value == 1) : isLocal,
+            IsLocal = filter.IsLocal.HasValue ? (filter.IsLocal.Value == 1) : null,
             CompanyId = companyId
         };
 
@@ -136,7 +135,7 @@ public class ScheduleArrangeService(
 
     private static int? GetShiftId(int? shiftId)
     {
-        return shiftId.HasValue && shiftId.Value != Constants.OffDayShiftId ? shiftId.Value : (int?)null;
+        return shiftId.HasValue && shiftId.Value != Constants.OffDayShiftId ? shiftId.Value : null;
     }
 
     private static void MappingWeeklyDefaultShift(IEnumerable<WeeklySchedule> weeklySchedules, IList<Shift> shifts)
@@ -251,10 +250,6 @@ public class ScheduleArrangeService(
 
                 case DayOfWeek.Sunday:
                     shift = weeklyDefaultShift.SunShift;
-                    break;
-
-                default:
-                    // nothing
                     break;
             }
         }

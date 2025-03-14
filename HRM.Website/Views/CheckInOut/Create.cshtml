@@ -1,10 +1,9 @@
 ﻿@using HRM.Core
-@using HRM.ViewModels.Request
 @using HRM.Core.Enums
 @using HRM.Models.Shifts
 @using HRM.Resources
 @using HRM.Website.Helper
-@model CheckInOutRequestViewModel
+@model HRM.ViewModels.Request.CheckInOutRequestViewModel
 @{
     ViewBag.Title = Labels.Create;
     var today = DateTime.Today;
@@ -42,7 +41,7 @@
                 @Html.LabelFor(model => model.RefNO, "Ref NO", new { @class = "control-label" })
             </div>
             <div class="input-form">
-                @Html.TextBoxFor(model => model.RefNO, new { @class = "form-control", @autocomplete = "off" })
+                @Html.TextBoxFor(model => model.RefNO, new { @class = "form-control", autocomplete = "off" })
             </div>
         </div>
         <div class="form-group">
@@ -67,7 +66,7 @@
             <div class="input-form">
                 @if (hasOnBehalfRequestPermission)
                 {
-                    @Html.TextBoxFor(model => model.Employee, new { @class = "form-control", @autocomplete = "off" })
+                    @Html.TextBoxFor(model => model.Employee, new { @class = "form-control", autocomplete = "off" })
                 }
                 else
                 {

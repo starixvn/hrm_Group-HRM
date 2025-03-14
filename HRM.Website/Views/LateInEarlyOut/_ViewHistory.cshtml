@@ -38,7 +38,7 @@
                         </td>
                         <td>@request.RequestTypeName</td>
                         <td>
-                            @RazorHelpers.LateInEarlyOutTimeFormat(totalMins, (short)request.RequestTypeId)
+                            @RazorHelpers.LateInEarlyOutTimeFormat(totalMins, request.RequestTypeId)
                         </td>
                         <td>
                             @if (request.ActualLateInEarlyOut == 0)
@@ -47,7 +47,7 @@
                             }
                             else
                             {
-                                @RazorHelpers.LateInEarlyOutTimeFormat(request.ActualLateInEarlyOut, (short)request.RequestTypeId)
+                                @RazorHelpers.LateInEarlyOutTimeFormat(request.ActualLateInEarlyOut, request.RequestTypeId)
                             }
                         </td>
                         <td>@request.OnDate.ToDateMonthYearFormatedDate()</td>
@@ -76,7 +76,7 @@
                             }
                         </td>
                         <td>@request.Status.ToString()</td>
-                        <td class="align-left">@string.Format(Messages.LogDate, @request.Modifier.Nickname, @request.InsertedDate.ToClientTimeZone().ToShortFormatedDate())</td>
+                        <td class="align-left">@string.Format(Messages.LogDate, request.Modifier.Nickname, request.InsertedDate.ToClientTimeZone().ToShortFormatedDate())</td>
                     </tr>
                 }
             </tbody>

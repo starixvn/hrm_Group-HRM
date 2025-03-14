@@ -41,47 +41,20 @@ public class BaseRequest
     {
         get
         {
-            var requestTypeName = string.Empty;
-            switch (RequestTypeId)
-            {
-                case (byte)RequestType.CheckIn:
-                    requestTypeName = Labels.CheckIn;
-                    break;
+	        var requestTypeName = RequestTypeId switch
+	        {
+		        (byte)RequestType.CheckIn => Labels.CheckIn,
+		        (byte)RequestType.CheckOut => Labels.CheckOut,
+		        (byte)RequestType.LateIn => Labels.LateIn,
+		        (byte)RequestType.EarlyOut => Labels.EarlyOut,
+		        (byte)RequestType.ChangeShift => Labels.ChangeShift,
+		        (byte)RequestType.Leave => Labels.Leave,
+		        (byte)RequestType.KeepInView => Labels.CompensationLeave,
+		        (byte)RequestType.Overtime => Labels.Overtime,
+		        _ => string.Empty
+	        };
 
-                case (byte)RequestType.CheckOut:
-                    requestTypeName = Labels.CheckOut;
-                    break;
-
-                case (byte)RequestType.LateIn:
-                    requestTypeName = Labels.LateIn;
-                    break;
-
-                case (byte)RequestType.EarlyOut:
-                    requestTypeName = Labels.EarlyOut;
-                    break;
-
-                case (byte)RequestType.ChangeShift:
-                    requestTypeName = Labels.ChangeShift;
-                    break;
-
-                case (byte)RequestType.Leave:
-                    requestTypeName = Labels.Leave;
-                    break;
-
-                case (byte)RequestType.KeepInView:
-                    requestTypeName = Labels.CompensationLeave;
-                    break;
-
-                case (byte)RequestType.Overtime:
-                    requestTypeName = Labels.Overtime;
-                    break;
-
-                default:
-                    requestTypeName = string.Empty;
-                    break;
-            }
-
-            return requestTypeName;
+	        return requestTypeName;
         }
     }
 

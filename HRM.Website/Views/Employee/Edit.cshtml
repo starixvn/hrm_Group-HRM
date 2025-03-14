@@ -1,9 +1,8 @@
 ﻿@using GO.UserControl.Client.Core.Models.Role
 @using HRM.Core
 @using HRM.Core.Enums
-@using HRM.Models;
 @using HRM.Resources
-@model Employee
+@model HRM.Models.Employee
 @{
 	ViewBag.Title = Labels.Edit;
 	var roles = (IEnumerable<Role>)ViewBag.Roles;
@@ -22,7 +21,7 @@
 	<a class="step" href="@Url.Action("usermanagement", "employee")">@Labels.EmployeeManagement</a>
 	<span class="step">Edit @Model.NickName (@Model.FullName) 's Personal Information</span>
 }
-@using (Html.BeginForm("Edit", "Employee", FormMethod.Post, new { @id = "formEditUser", @class = "form-edit-user form-horizontal" }))
+@using (Html.BeginForm("Edit", "Employee", FormMethod.Post, new { id = "formEditUser", @class = "form-edit-user form-horizontal" }))
 {
 	@Html.ValidationSummary(false)
 	if (ViewBag.Updated != null)

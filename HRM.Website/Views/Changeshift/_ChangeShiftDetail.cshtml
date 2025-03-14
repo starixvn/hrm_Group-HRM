@@ -1,10 +1,9 @@
 ﻿@using HRM.Core
 @using HRM.Core.Enums
-@using HRM.Models.Request.ChangeShift
-@using Newtonsoft.Json
 @using HRM.Models.Shifts
 @using HRM.Resources
-@model IEnumerable<ChangeShiftDetail>
+@using Newtonsoft.Json
+@model IEnumerable<HRM.Models.Request.ChangeShift.ChangeShiftDetail>
 
 @{
     var typeId = (byte)ViewBag.TypeId;
@@ -80,7 +79,7 @@
                     {
                         <td>
                             @Html.DropDownListFor(m => item.ToShiftId, new SelectList(shifts, "Id", "Code", item.ToShiftId),
-                                new { @class = "toShiftId form-control", @disabled = "disabled" })
+                                new { @class = "toShiftId form-control", disabled = "disabled" })
                         </td>
                     }
                 }
@@ -91,7 +90,7 @@
                     }
                     else
                     {
-                        @Html.TextBoxFor(model => item.Remark, new { @class = "form-control remark", @disabled = "disabled" })
+                        @Html.TextBoxFor(model => item.Remark, new { @class = "form-control remark", disabled = "disabled" })
                     }
                 </td>
             </tr>

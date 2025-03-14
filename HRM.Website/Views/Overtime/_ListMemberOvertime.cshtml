@@ -1,8 +1,8 @@
-﻿@using HRM.Models.Overtime
-@using HRM.Website.Helper
-@using HRM.Core.Enums
+﻿@using HRM.Core.Enums
+@using HRM.Models.Overtime
 @using HRM.Resources
-@model IEnumerable<MonthlyOvertimeRequest>
+@using HRM.Website.Helper
+@model IEnumerable<HRM.Models.Overtime.MonthlyOvertimeRequest>
 
 @{ 
     var showCheckAll = Model.Any(x => x.IsHost);

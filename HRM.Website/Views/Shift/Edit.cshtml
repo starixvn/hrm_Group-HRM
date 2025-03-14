@@ -4,7 +4,7 @@
 @model HRM.Models.Shifts.EditShiftModel
 
 @{
-    ViewBag.Title = @Labels.EditShift;
+    ViewBag.Title = Labels.EditShift;
     var isHost = (bool)ViewBag.IsHost;
 }
 
@@ -47,7 +47,7 @@
 
             <div class="form-group input-time">
                 <div class="label-form">
-                    @Html.LabelFor(model => model.HourTimeIn, @Labels.TimeIn, new { @class = "control-label" })*
+                    @Html.LabelFor(model => model.HourTimeIn, Labels.TimeIn, new { @class = "control-label" })*
                 </div>
                 <div class="input-form input-form-custom">
                     <input type="number" name="HourTimeIn" id="HourTimeIn" class="form-control"
@@ -64,7 +64,7 @@
 
             <div class="form-group input-time">
                 <div class="label-form">
-                    @Html.LabelFor(model => model.HourTimeOut, @Labels.TimeOut, new { @class = "control-label" })*
+                    @Html.LabelFor(model => model.HourTimeOut, Labels.TimeOut, new { @class = "control-label" })*
                 </div>
                 <div class="input-form">
                     <input type="number" name="HourTimeOut" id="HourTimeOut" class="form-control"

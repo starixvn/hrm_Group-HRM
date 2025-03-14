@@ -15,33 +15,16 @@ public class ResetRequestCriteria : CriteriaBase
 
     public override string GetSettingKey()
     {
-        var key = string.Empty;
-        switch (RequestTypeId)
-        {
-            case RequestType.CheckIn:
-            case RequestType.CheckOut:
-                key = "CheckInOutRequest_Reset";
-                break;
+	    var key = RequestTypeId switch
+	    {
+		    RequestType.CheckIn or RequestType.CheckOut => "CheckInOutRequest_Reset",
+		    RequestType.LateIn or RequestType.EarlyOut => "LateInEarlyOutRequest_Reset",
+		    RequestType.ChangeShift => "ChangeShiftRequest_Reset",
+		    RequestType.Leave => "LeaveRequest_Reset",
+		    _ => "KeepInViewRequest_Reset"
+	    };
 
-            case RequestType.LateIn:
-            case RequestType.EarlyOut:
-                key = "LateInEarlyOutRequest_Reset";
-                break;
-
-            case RequestType.ChangeShift:
-                key = "ChangeShiftRequest_Reset";
-                break;
-
-            case RequestType.Leave:
-                key = "LeaveRequest_Reset";
-                break;
-
-            default:
-                key = "KeepInViewRequest_Reset";
-                break;
-        }
-
-        return key;
+	    return key;
     }
 
     public override bool IsValid() => RequestId > 0 && ActorId > 0;

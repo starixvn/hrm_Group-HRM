@@ -64,7 +64,7 @@
             </div>
             <div class="input-form">
                 @Html.TextBox("Employee", string.Empty,
-                    new { placeholder = Messages.SearchEmployeeWatermark, @class = "form-control", @maxlength = 200, autocomplete = "off" })
+                    new { placeholder = Messages.SearchEmployeeWatermark, @class = "form-control", maxlength = 200, autocomplete = "off" })
             </div>
         </div>
         <div class="form-group form-group--m">
@@ -72,7 +72,7 @@
                 @Html.Label(Labels.Category, Labels.Category, new { @class = "control-label" })
             </div>
             <div class="input-form">
-                @Html.Raw(RazorHelpers.CategoryDropDownList("IsLocal", "form-control", ""))
+                @Html.Raw(RazorHelpers.CategoryDropDownList("IsLocal", "form-control"))
             </div>
         </div>
         <div class="form-group form-group--m">

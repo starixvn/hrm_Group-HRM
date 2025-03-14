@@ -1,10 +1,9 @@
 ﻿@using HRM.Core
 @using HRM.Core.Enums
-@using HRM.Models.Dashboard
 @using HRM.Resources
 @using HRM.ViewModels.Request
 @using HRM.Website.Helper
-@model IEnumerable<MemberRequest>
+@model IEnumerable<HRM.Models.Dashboard.MemberRequest>
 @{ 
     var today = DateTimeOffset.Now.DateTime.ToClientTimeZone();
 }

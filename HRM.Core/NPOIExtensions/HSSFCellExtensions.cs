@@ -21,37 +21,40 @@ public static class HSSFCellExtensions
             {
                 cell.SetCellValue(stringValue);
             }
-            else if (value is int?)
+            else switch (value)
             {
-                cell.SetCellValue((int)value);
-            }
-            else if (value is long?)
-            {
-                cell.SetCellValue((long)value);
-            }
-            else if (value is double?)
-            {
-                cell.SetCellValue((double)value);
-            }
-            else if (value is decimal?)
-            {
-                cell.SetCellValue((decimal)value);
-            }
-            else if (value is bool?)
-            {
-                cell.SetCellValue((bool)value);
-            }
-            else if (value is DateTime?)
-            {
-                cell.SetCellValue((DateTime)value);
-            }
-            else if (richTextString != null)
-            {
-                cell.SetCellValue(richTextString);
-            }
-            else
-            {
-                cell.SetCellValue(string.Empty);
+	            case int i:
+		            cell.SetCellValue(i);
+		            break;
+	            case long l:
+		            cell.SetCellValue(l);
+		            break;
+	            case double d:
+		            cell.SetCellValue(d);
+		            break;
+	            case decimal value1:
+		            cell.SetCellValue(value1);
+		            break;
+	            case bool b:
+		            cell.SetCellValue(b);
+		            break;
+	            default:
+	            {
+		            if (value is DateTime)
+		            {
+			            cell.SetCellValue((DateTime)value);
+		            }
+		            else if (richTextString != null)
+		            {
+			            cell.SetCellValue(richTextString);
+		            }
+		            else
+		            {
+			            cell.SetCellValue(string.Empty);
+		            }
+
+		            break;
+	            }
             }
         }
     }

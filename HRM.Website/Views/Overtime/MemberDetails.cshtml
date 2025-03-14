@@ -1,8 +1,7 @@
-﻿@using HRM.Models.Overtime
-@using HRM.Core.Enums
+﻿@using HRM.Core.Enums
 @using HRM.Resources
 @using HRM.Website.Helper
-@model MonthlyOvertimeRequest
+@model HRM.Models.Overtime.MonthlyOvertimeRequest
 @{
     var currentUserId = (int)ViewBag.CurrentUserId;
     ViewBag.Title = Labels.MemberOvertime + " of " + Model.Requester.Nickname + " (" + (Model.Month).ToString("MMM-yyyy") + ")";

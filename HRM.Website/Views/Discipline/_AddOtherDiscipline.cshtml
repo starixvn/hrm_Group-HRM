@@ -1,7 +1,6 @@
 ﻿@using HRM.Core
-@using HRM.ViewModels.Discipline 
 @using Microsoft.AspNetCore.Mvc.TagHelpers
-@model AddOtherDisciplineViewModel
+@model HRM.ViewModels.Discipline.AddOtherDisciplineViewModel
 
 <form id="frmAddOtherDiscipline">
     @Html.ValidationSummary()
@@ -37,7 +36,7 @@
             <div class="select-form">
                 <select id="DisciplineTypeId" name="DisciplineTypeId" class="form-control">
                     <option value="0" data-score="0">-- Select Other Discipline Type --</option>
-                    @foreach (var otherDisciplineType in @Model.OtherDisciplineTypes)
+                    @foreach (var otherDisciplineType in Model.OtherDisciplineTypes)
                     {
                         <option value="@otherDisciplineType.DisciplineTypeId" data-score="@otherDisciplineType.Score">@otherDisciplineType.Name</option>
                     }

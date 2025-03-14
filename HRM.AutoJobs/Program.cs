@@ -32,6 +32,6 @@ public static class Program
     public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
         WebHost.CreateDefaultBuilder(args)
             .UseNLog()
-            .UseUrls($"http://*:5000")
+            .UseUrls("http://*:5000")
             .UseStartup<Startup>();
 }

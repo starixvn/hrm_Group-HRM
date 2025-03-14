@@ -6,8 +6,6 @@ public class GetGroupByIdCriteria : CriteriaBase
 {
     public int TeamId { get; set; }
 
-    public bool? IsDeleted { get; set; }
-
     public int CompanyId { get; set; }
 
     public override string GetSettingKey() => "Group_Get";

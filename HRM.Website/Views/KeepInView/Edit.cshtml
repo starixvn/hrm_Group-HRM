@@ -1,11 +1,9 @@
 ﻿@using HRM.Core
 @using HRM.Core.Enums
 @using HRM.Resources
-@using HRM.ViewModels.Request
-@model KeepInViewRequestViewModel
+@model HRM.ViewModels.Request.KeepInViewRequestViewModel
 @{
-    ViewBag.Title = @Labels.Edit;
-    var isTopManager = (bool)ViewBag.IsTopManager;
+    ViewBag.Title = Labels.Edit;
 }
 @section css{
     <link href="~/dist/styles/keepinview.create.css" rel="stylesheet" />

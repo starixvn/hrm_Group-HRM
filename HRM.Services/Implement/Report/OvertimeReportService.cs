@@ -342,7 +342,7 @@ public class OvertimeReportService(
         IEnumerable<DateRange> dateRanges,
         IEnumerable<DailyOvertimeDetails> dailyOvertimes)
     {
-        const byte TotalFixedColumns = 11;
+        const byte totalFixedColumns = 11;
         var templateIndex = new
         {
             headerRow = 2,
@@ -354,7 +354,7 @@ public class OvertimeReportService(
             holidayColumn = 15
         };
         var rowIndex = 3;
-        var colIndex = 1;
+        int colIndex;
 
         // title & header
         WriteHeaderOvertimeRecord(template, worksheet, dateRanges, templateIndex);
@@ -367,7 +367,7 @@ public class OvertimeReportService(
         {
             var overtimes = dailyOvertimes.Where(x => x.EmpId == employee.EmpId);
             colIndex = 1;
-            template.Cells[templateIndex.bodyRow, 1, templateIndex.bodyRow, TotalFixedColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalFixedColumns]);
+            template.Cells[templateIndex.bodyRow, 1, templateIndex.bodyRow, totalFixedColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, totalFixedColumns]);
 
             worksheet.Cells[rowIndex, colIndex++].Value = rowNum++;
             worksheet.Cells[rowIndex, colIndex++].Value = employee.DepartmentCode;
@@ -407,8 +407,8 @@ public class OvertimeReportService(
         if (employees.Any())
         {
             const byte TotalSummaryColumns = 4;
-            template.Cells[templateIndex.summaryRow, 1, templateIndex.summaryRow, TotalFixedColumns]
-                .Copy(worksheet.Cells[rowIndex, 1, rowIndex, TotalFixedColumns]);
+            template.Cells[templateIndex.summaryRow, 1, templateIndex.summaryRow, totalFixedColumns]
+                .Copy(worksheet.Cells[rowIndex, 1, rowIndex, totalFixedColumns]);
             for (var i = 0; i < TotalSummaryColumns; i++)
             {
                 colIndex = templateIndex.startSummaryColumn + i;

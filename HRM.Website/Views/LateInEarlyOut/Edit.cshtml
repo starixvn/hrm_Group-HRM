@@ -5,7 +5,7 @@
 @using HRM.Website.Helper
 @model LateInEarlyOutRequestViewModel
 @{
-    ViewBag.Title = @Labels.Edit;
+    ViewBag.Title = Labels.Edit;
     var isTopManager = (bool)ViewBag.IsTopManager;
     var today = DateTime.Today;
 }
@@ -75,7 +75,7 @@
                 @Html.LabelFor(model => model.Minute, new { @class = "control-label" })
             </div>
             <div class="input-form">
-                @Html.TextBoxFor(model => model.Minute, new { @class = "form-control", @type = "number", @min = 1, @max = 60, @step = 1 })
+                @Html.TextBoxFor(model => model.Minute, new { @class = "form-control", type = "number", min = 1, max = 60, step = 1 })
             </div>
         </div>
         <div class="form-group">

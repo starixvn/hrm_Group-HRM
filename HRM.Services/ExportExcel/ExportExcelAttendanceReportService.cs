@@ -72,8 +72,8 @@ public class ExportExcelAttendanceReportService(IWebHostEnvironment hostingEnvir
             worksheet.Cells[rowIndex, colIndex++].Value = attendance.FullName;
             worksheet.Cells[rowIndex, colIndex++].Value = attendance.NickName;
             worksheet.Cells[rowIndex, colIndex++].Value = shiftCode;
-            worksheet.Cells[rowIndex, colIndex++].Value = attendance.InFixed.HasValue ? attendance.InFixed.Value.ToClientTimeZone() : (object)"";
-            worksheet.Cells[rowIndex, colIndex++].Value = attendance.OutFixed.HasValue ? attendance.OutFixed.Value.ToClientTimeZone() : (object)"";
+            worksheet.Cells[rowIndex, colIndex++].Value = attendance.InFixed.HasValue ? attendance.InFixed.Value.ToClientTimeZone() : "";
+            worksheet.Cells[rowIndex, colIndex++].Value = attendance.OutFixed.HasValue ? attendance.OutFixed.Value.ToClientTimeZone() : "";
             worksheet.Cells[rowIndex, colIndex++].Value = totalWorkHours;
             worksheet.Cells[rowIndex, colIndex++].Value = Utilities.MinuteToTime(attendance.LateIn);
             worksheet.Cells[rowIndex, colIndex++].Value = attendance.IsOffDay == 1 && !string.IsNullOrWhiteSpace(shiftCode) ?

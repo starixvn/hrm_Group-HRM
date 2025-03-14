@@ -14,7 +14,7 @@ public class JobLevelService(IBaseService baseService) : IJobLevelService
 {
     public async Task<IList<JobLevel>> GetJobLevel()
     {
-        var criteria = new GetJobLevelCriteria {};
+        var criteria = new GetJobLevelCriteria();
 
         return (await baseService.GetDataAsync<JobLevel>(criteria)).ToList();
     }

@@ -3,7 +3,7 @@
 @using HRM.Models.Discipline
 @using HRM.Resources
 @using HRM.Website.Helper
-@model IList<DisciplineDetailModel>
+@model IList<HRM.Models.Discipline.DisciplineDetailModel>
 @{
     var hasPermissionToEdit = (bool)ViewBag.HasPermissionToEdit;
     var hasPermissionToUpdateOutOfControlReason = (bool)ViewBag.HasPermissionToUpdateOutOfControlReason;

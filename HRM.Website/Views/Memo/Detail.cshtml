@@ -1,7 +1,6 @@
 ﻿@using HRM.Core
-@using HRM.Models
 @using HRM.Resources
-@model Memo
+@model HRM.Models.Memo
 @{
     var memoSubject = Model != null ? Model.Subject : Labels.NoData;
     ViewBag.Title = memoSubject + " - " + Labels.Memo;

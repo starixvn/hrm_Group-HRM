@@ -142,7 +142,7 @@ public partial class EmployeeWorkingHoursService : IEmployeeWorkingHoursService
 
     private void WriteDailyCells(ExcelRange cell, DailyWorking dailyWorking)
     {
-        var value = string.Empty;
+        string value;
         if (dailyWorking.IsLeaveDay)
         {
             WriteLeaveCells(cell, dailyWorking);
@@ -184,7 +184,7 @@ public partial class EmployeeWorkingHoursService : IEmployeeWorkingHoursService
     private void WriteLeaveCells(ExcelRange cell, DailyWorking dailyWorking)
     {
         var backgroundColor = string.Empty;
-        var value = string.Empty;
+        string value;
 
         if (dailyWorking.IsHoliday)
         {

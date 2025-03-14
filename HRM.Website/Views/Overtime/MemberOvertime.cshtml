@@ -1,9 +1,8 @@
 ﻿@using HRM.Core
 @using HRM.Resources
-@using HRM.ViewModels.Overtime
 @using HRM.Website.Helper
 @using Microsoft.AspNetCore.Mvc.TagHelpers
-@model MemberMonthlyOvertimeRequestViewModel
+@model HRM.ViewModels.Overtime.MemberMonthlyOvertimeRequestViewModel
 @{
     ViewBag.Title = "Members' overtime";
     var showCheckAll = Model.MemberRequests.Any(x => x.IsHost);

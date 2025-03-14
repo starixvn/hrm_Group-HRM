@@ -8,4 +8,7 @@
   <ItemGroup>
     <ProjectReference Include="..\HRM.Models\HRM.Models.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Message\" />
+  </ItemGroup>
 </Project>

@@ -19,7 +19,7 @@
 }
 
 <div class="leftpersonal">
-    @using (Html.BeginForm("UpdateInformation", "Information", FormMethod.Post, new { @id = "info-update", @class = "form-horizontal" }))
+    @using (Html.BeginForm("UpdateInformation", "Information", FormMethod.Post, new { id = "info-update", @class = "form-horizontal" }))
     {
         @Html.AntiForgeryToken()
         @Html.ValidationSummary()
@@ -195,7 +195,7 @@
             <li class="list-group-item">
                 <div class="label label-edit">Attachments</div>
                 <div class="pcontent">
-                    @Html.TextBox("Attachments", null, new { @type = "file", @multiple = "multiple" })
+                    @Html.TextBox("Attachments", null, new { type = "file", multiple = "multiple" })
                     <p class="note">* The file(s) upload must be less than 5 MB</p>
                     <p class="note">* Accept file type: .jpg; .png; .jpeg; .pdf, .doc, .docx, .xls, .xlsx</p>
                     <p class="note">* Rename the file to meaningful name before upload</p>

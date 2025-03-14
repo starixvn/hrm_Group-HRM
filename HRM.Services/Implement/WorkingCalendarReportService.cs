@@ -86,7 +86,7 @@ public class WorkingCalendarReportService(IWebHostEnvironment env) : IWorkingCal
 
     private static string GetShift(DailySchedule schedule)
     {
-        var shift = string.Empty;
+        string shift;
 
         if (schedule.IsLeaveOffDay)
         {
@@ -113,7 +113,7 @@ public class WorkingCalendarReportService(IWebHostEnvironment env) : IWorkingCal
 
     private static string GetShiftOnLeaveDay(DailySchedule schedule)
     {
-        var shift = string.Empty;
+        string shift;
         if (schedule.IsHoliday)
         {
             shift = "PH";

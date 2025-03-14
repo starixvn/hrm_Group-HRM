@@ -106,10 +106,6 @@ public class DisciplineRepository : IDisciplineRepository
                         disciplineDetail.SevenDaysLeave.IgnoreBy = ignoreDiscipline.IgnoreBy;
                         disciplineDetail.SevenDaysLeave.IgnoreDate = ignoreDiscipline.IgnoreDate;
                         break;
-
-                    default:
-                        // nothing
-                        break;
                 }
             }
         }
@@ -130,8 +126,8 @@ public class DisciplineRepository : IDisciplineRepository
             {
                 WorkDate = discipline.WorkDate,
                 ShiftName = discipline.ShiftName,
-                CheckIn = (checkIn.HasValue && checkIn.Value != default(DateTime)) ? checkIn.Value : (DateTime?)null,
-                CheckOut = (checkOut.HasValue && checkOut.Value != default(DateTime)) ? checkOut.Value : (DateTime?)null,
+                CheckIn = (checkIn.HasValue && checkIn.Value != default(DateTime)) ? checkIn.Value : null,
+                CheckOut = (checkOut.HasValue && checkOut.Value != default(DateTime)) ? checkOut.Value : null,
                 TotalHours = totalHours.HasValue ? ConvertNumberToTime(totalHours.Value * 60) : string.Empty,
                 MinutesLateIn = lateIn.HasValue ? ConvertNumberToTime(lateIn.Value) : string.Empty,
                 MinutesEarlyOut = earlyOut.HasValue ? ConvertNumberToTime(earlyOut.Value) : string.Empty,

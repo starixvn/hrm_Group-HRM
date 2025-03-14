@@ -18,37 +18,19 @@ public class MemberRequest
     {
         get
         {
-            var filterTypeId = (ushort)RequestFilter.All;
-            switch (RequestTypeId)
-            {
-                case (ushort)Core.Enums.RequestType.CheckIn:
-                case (ushort)Core.Enums.RequestType.CheckOut:
-                    filterTypeId = (ushort)RequestFilter.CheckInOut;
-                    break;
+	        var filterTypeId = RequestTypeId switch
+	        {
+		        (ushort)Core.Enums.RequestType.CheckIn or (ushort)Core.Enums.RequestType.CheckOut =>
+			        (ushort)RequestFilter.CheckInOut,
+		        (ushort)Core.Enums.RequestType.LateIn or (ushort)Core.Enums.RequestType.EarlyOut =>
+			        (ushort)RequestFilter.LateInEarlyOut,
+		        (ushort)Core.Enums.RequestType.ChangeShift => (ushort)RequestFilter.ChangeShift,
+		        (ushort)Core.Enums.RequestType.Leave => (ushort)RequestFilter.Leave,
+		        (ushort)Core.Enums.RequestType.KeepInView => (ushort)RequestFilter.KeepInView,
+		        _ => (ushort)RequestFilter.All
+	        };
 
-                case (ushort)Core.Enums.RequestType.LateIn:
-                case (ushort)Core.Enums.RequestType.EarlyOut:
-                    filterTypeId = (ushort)RequestFilter.LateInEarlyOut;
-                    break;
-
-                case (ushort)Core.Enums.RequestType.ChangeShift:
-                    filterTypeId = (ushort)RequestFilter.ChangeShift;
-                    break;
-
-                case (ushort)Core.Enums.RequestType.Leave:
-                    filterTypeId = (ushort)RequestFilter.Leave;
-                    break;
-
-                case (ushort)Core.Enums.RequestType.KeepInView:
-                    filterTypeId = (ushort)RequestFilter.KeepInView;
-                    break;
-
-                default:
-                    // nothing
-                    break;
-            }
-
-            return filterTypeId;
+	        return filterTypeId;
         }
     }
 }

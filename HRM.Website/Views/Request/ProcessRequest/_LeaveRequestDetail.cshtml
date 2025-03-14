@@ -1,8 +1,6 @@
 ﻿@using HRM.Core
-@using HRM.Models.Request
 @using HRM.Resources
-
-@model IList<LeaveDisciplineModel>
+@model IList<HRM.Models.Request.LeaveDisciplineModel>
 
 @{
     var isNotExistsWeekendLeave = !Model.Any(t => t.IsWeekendLeave);
@@ -74,7 +72,7 @@
                         }
                         else
                         {
-                            @Html.CheckBoxFor(m => leaveDetail.IsHalfDay, new { @disabled = "disabled" })
+                            @Html.CheckBoxFor(m => leaveDetail.IsHalfDay, new { disabled = "disabled" })
                         }
                     </td>
                     <td>
@@ -184,7 +182,7 @@
                         }
                         else
                         {
-                            @Html.CheckBoxFor(m => leaveDetail2.IsHalfDay, new { @disabled = "disabled" })
+                            @Html.CheckBoxFor(m => leaveDetail2.IsHalfDay, new { disabled = "disabled" })
                         }
                     </td>
                     <td>

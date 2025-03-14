@@ -4,11 +4,7 @@ public class EmployeeShift
 {
     public int EmpId { get; set; }
 
-    public int? MonShiftId { get; set; }
-
     public string MonShiftName { get; set; }
-
-    public int? TueShiftId { get; set; }
 
     public string TueShiftName { get; set; }
 

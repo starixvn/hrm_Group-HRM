@@ -1,12 +1,10 @@
 ﻿@using HRM.Core
 @using HRM.Resources
-@using HRM.ViewModels.Report
 @using HRM.Website.Helper
 @using Microsoft.AspNetCore.Mvc.TagHelpers
-
-@model ManpowerCategoryViewModel
+@model HRM.ViewModels.Report.ManpowerCategoryViewModel
 @{
-    ViewBag.Title = @Labels.ManpowerCategory;
+    ViewBag.Title = Labels.ManpowerCategory;
 }
 @section css{
     <link href="~/dist/styles/report.manpower.css" rel="stylesheet" />

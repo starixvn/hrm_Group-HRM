@@ -1,9 +1,7 @@
 ﻿@using HRM.Core
 @using HRM.Core.Enums
-@using HRM.Models.Request.Leave
 @using HRM.Resources
-@using HRM.ViewModels.Request
-@model LeaveDetailViewModel
+@model HRM.ViewModels.Request.LeaveDetailViewModel
 @{
     Layout = null;
 }
@@ -108,7 +106,7 @@
                                         }
                                     </select>
                                 }
-                                @Html.CheckBoxFor(m => item.IsFromAfterday, new { @class = "chkIsFromAfterday", @title = "Is after day" })
+                                @Html.CheckBoxFor(m => item.IsFromAfterday, new { @class = "chkIsFromAfterday", title = "Is after day" })
                                 *
                             </div>
                         </td>
@@ -123,7 +121,7 @@
                                         }
                                     </select>
                                 }
-                                @Html.CheckBoxFor(m => item.IsToAfterday, new { @class = "chkIsToAfterday", @title = "Is after day" })
+                                @Html.CheckBoxFor(m => item.IsToAfterday, new { @class = "chkIsToAfterday", title = "Is after day" })
                                 *
                             </div>
                         </td>

@@ -1,10 +1,9 @@
 ﻿@using HRM.Core
 @using HRM.Core.Constants
 @using HRM.Core.Enums
-@using HRM.Models.Request.Leave
 @using HRM.Resources
-@using HRM.Website.Helper   
-@model IEnumerable<LeaveRequest>
+@using HRM.Website.Helper
+@model IEnumerable<HRM.Models.Request.Leave.LeaveRequest>
 
     <table class="table table-custom">
         <thead>
@@ -80,7 +79,7 @@
                             }
                         </td>
                         <td>@request.Status.ToString()</td>
-                        <td class="align-left">@string.Format(Messages.LogDate, @request.Modifier.Nickname, @request.InsertedDate.ToClientTimeZone().ToShortFormatedDate())</td>
+                        <td class="align-left">@string.Format(Messages.LogDate, request.Modifier.Nickname, request.InsertedDate.ToClientTimeZone().ToShortFormatedDate())</td>
                     </tr>
                 }
             </tbody>

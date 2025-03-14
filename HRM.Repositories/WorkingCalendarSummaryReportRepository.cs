@@ -7,12 +7,12 @@ using Fanex.Data.Repository;
 using Models.Report;
 using Models.ScheduleArrange;
 
-public partial interface IWorkingCalendarSummaryReportRepository
+public interface IWorkingCalendarSummaryReportRepository
 {
     Task<IEnumerable<WorkingCalendarSummary>> GetWorkingCalendarSummaryAsync(ICriteria criteria);
 }
 
-public partial class WorkingCalendarSummaryReportRepository : IWorkingCalendarSummaryReportRepository
+public class WorkingCalendarSummaryReportRepository : IWorkingCalendarSummaryReportRepository
 {
     public async Task<IEnumerable<WorkingCalendarSummary>> GetWorkingCalendarSummaryAsync(ICriteria criteria)
     {

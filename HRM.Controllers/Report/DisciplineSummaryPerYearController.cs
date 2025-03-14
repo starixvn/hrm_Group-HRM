@@ -12,7 +12,7 @@ using GO.UserControl.Client.Core.Session;
 using HRM.Core.Services;
 using HRM.Criteria.Report;
 using HRM.Models.Report.DisciplineSummaryPerYear;
-using HRM.Services.ExportExcel;
+using Services.ExportExcel;
 using HRM.ViewModels.Report;
 using Microsoft.AspNetCore.Mvc;
 using Services.Implement;

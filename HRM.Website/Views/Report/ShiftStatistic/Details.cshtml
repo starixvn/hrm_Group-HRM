@@ -3,8 +3,7 @@
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @model HRM.ViewModels.Report.ShiftStatisticDetailViewModel
 @{
-    ViewBag.Title = @Labels.EmployeeShift;
-    var shifts = Model.Shifts;
+    ViewBag.Title = Labels.EmployeeShift;
 }
 @section css{
     <link href="~/dist/styles/report.shiftstatistic.css" rel="stylesheet" />
@@ -58,7 +57,7 @@
                 <label class="control-label">@Labels.Employee</label>
             </div>
             <div class="input-form">
-                @Html.TextBox("Employee", string.Empty, new { @class = "form-control", placeholder = Messages.SearchEmployeeWatermark, @autocomplete = "off" })
+                @Html.TextBox("Employee", string.Empty, new { @class = "form-control", placeholder = Messages.SearchEmployeeWatermark, autocomplete = "off" })
             </div>
         </div>
         <div class="form-group form-group--m">

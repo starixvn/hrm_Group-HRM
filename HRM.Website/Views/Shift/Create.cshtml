@@ -3,7 +3,7 @@
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @model HRM.Models.Shifts.CreateShiftModel
 @{
-    ViewBag.Title = @Labels.Shift;
+    ViewBag.Title = Labels.Shift;
 }
 @section css{
     <link href="~/dist/styles/shift.edit.css" rel="stylesheet" />
@@ -32,7 +32,7 @@
 
         <div class="form-group input-time">
             <div class="label-form">
-                @Html.LabelFor(model => model.HourTimeIn, @Labels.TimeIn, new { @class = "control-label" })*
+                @Html.LabelFor(model => model.HourTimeIn, Labels.TimeIn, new { @class = "control-label" })*
             </div>
             <div class="input-form input-form-custom">
                 <input type="number" name="HourTimeIn" id="HourTimeIn" class="form-control"
@@ -49,7 +49,7 @@
 
         <div class="form-group input-time">
             <div class="label-form">
-                @Html.LabelFor(model => model.HourTimeOut, @Labels.TimeOut, new { @class = "control-label" })*
+                @Html.LabelFor(model => model.HourTimeOut, Labels.TimeOut, new { @class = "control-label" })*
             </div>
             <div class="input-form">
                 <input type="number" name="HourTimeOut" id="HourTimeOut" class="form-control"

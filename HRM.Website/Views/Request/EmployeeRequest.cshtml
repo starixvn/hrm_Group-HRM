@@ -1,13 +1,10 @@
 ﻿@using HRM.Core
 @using HRM.Core.Enums
-@using HRM.Models.Request
 @using HRM.Resources
 @using HRM.Services.Implement.Request
-@using HRM.ViewModels.Request
-@using Microsoft.AspNetCore.Mvc.TagHelpers
 @using HRM.Website.Helper
-
-@model RequestViewModel
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model HRM.ViewModels.Request.RequestViewModel
 
 @{
     ViewBag.Title = Model.PageTitle;
@@ -111,7 +108,7 @@
                     </div>
                 </th>
                 <th>@Labels.Remark</th>
-                @if (@Model.ViewType != RequestViewType.CompanySpace)
+                @if (Model.ViewType != RequestViewType.CompanySpace)
                 {
                     <th>@Labels.FileAttach</th>
                 }
@@ -231,7 +228,7 @@
                                 <span>-</span>
                             }
                         </td>
-                        @if (@Model.ViewType != RequestViewType.CompanySpace)
+                        @if (Model.ViewType != RequestViewType.CompanySpace)
                         {
                             <td>
                                 @foreach (var file in request.AttachFiles)

@@ -1,8 +1,7 @@
 ﻿@using HRM.Core
-@using HRM.Models.Request.ChangeShift
 @using HRM.Resources
 @using HRM.Website.Helper
-@model IEnumerable<ChangeShiftRequest>
+@model IEnumerable<HRM.Models.Request.ChangeShift.ChangeShiftRequest>
 
     <table class="table table-custom">
         <thead>
@@ -58,7 +57,7 @@
                             }
                         </td>
                         <td>@request.Status.ToString()</td>
-                        <td class="align-left">@string.Format(Messages.LogDate, @request.Modifier.Nickname, @request.InsertedDate.ToClientTimeZone().ToShortFormatedDate())</td>
+                        <td class="align-left">@string.Format(Messages.LogDate, request.Modifier.Nickname, request.InsertedDate.ToClientTimeZone().ToShortFormatedDate())</td>
                     </tr>
                 }
             </tbody>

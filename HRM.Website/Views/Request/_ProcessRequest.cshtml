@@ -1,9 +1,7 @@
 ﻿@using HRM.Core.Enums
 @using HRM.Resources
 @using Microsoft.AspNetCore.Mvc.TagHelpers
-@using HRM.ViewModels.Request
-
-@model ProcessRequestViewModel
+@model HRM.ViewModels.Request.ProcessRequestViewModel
 
 @{
     var showTableDiscipline = Model.ViewType == RequestViewType.HRSpace ? "hidden" : "";
@@ -47,7 +45,7 @@
     </div>
     <div class="formrow">
         <div class="label approver-comment">
-            @Html.LabelFor(model => model.Comment, @Labels.Comment):
+            @Html.LabelFor(model => model.Comment, Labels.Comment):
         </div>
         <div class="input">
             @Html.TextAreaFor(model => model.Comment, new { @class = "form-control", maxlength = 500 })

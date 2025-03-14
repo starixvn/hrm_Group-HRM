@@ -79,15 +79,8 @@
         @{var index = 1;}
         @if (Model != null && Model.Count > 0)
         {
-            var verifiedStatus = VerifiedStatus.Pending;
-            var approvedStatus = ApprovedStatus.Pending;
-            var processedStatus = HRStatus.Pending;
-
             foreach (var request in Model)
             {
-                verifiedStatus = (VerifiedStatus)request.VerifiedStatus;
-                approvedStatus = (ApprovedStatus)request.ApprovedStatus;
-                processedStatus = (HRStatus)request.ProcessedStatus;
                 <tr id="row@(request.RequestId)">
                     <td>@(index++)</td>
                     <td>@request.RefNO</td>

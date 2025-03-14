@@ -8,5 +8,4 @@ using Core.XMLExtensions;
 public class EditTeamOrder
 {
     public int TeamId { get; set; }
-    public int DisplayOrder { get; set; }
 }

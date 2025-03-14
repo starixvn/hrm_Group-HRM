@@ -14,7 +14,7 @@ using GO.UserControl.Client.Core;
 using GO.UserControl.Client.Core.Services;
 using HRM.Core.Models;
 using HRM.Core.Services;
-using HRM.Models.Group;
+using Models.Group;
 using HRM.Repositories.Interfaces;
 using Interfaces;
 using Models;

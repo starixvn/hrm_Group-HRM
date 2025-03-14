@@ -1,12 +1,10 @@
 ﻿@using HRM.Core
 @using HRM.Resources
-@using HRM.ViewModels.Request
 @using HRM.Website.Helper
-@model CheckInOutRequestViewModel
+@model HRM.ViewModels.Request.CheckInOutRequestViewModel
 @{
     ViewBag.Title = Labels.Edit;
     var today = DateTime.Today;
-    var isTopManager = (bool)ViewBag.IsTopManager;
 }
 @section css{
     <link href="~/dist/styles/checkinout.create.css" rel="stylesheet" />
@@ -39,7 +37,7 @@
                 @Html.LabelFor(model => model.RefNO, new { @class = "control-label" })
             </div>
             <div class="input-form">
-                @Html.TextBoxFor(model => model.RefNO, new { @class = "form-control", @autocomplete = "off" })
+                @Html.TextBoxFor(model => model.RefNO, new { @class = "form-control", autocomplete = "off" })
             </div>
         </div>
         <div class="form-group">

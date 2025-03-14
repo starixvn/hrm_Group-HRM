@@ -37,16 +37,15 @@ public class RequestRepository : IRequestRepository
 
     public async Task<RequestRelatedPeopleModel> GetRequestRelatedPeople(GetRequestRelatedPeopleCriteria criteria)
     {
-        RequestRelatedPeopleModel relatedPeople = null;
-        using var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey());
-        using var multi = await db.QueryMultipleAsync(criteria);
-        relatedPeople = new RequestRelatedPeopleModel
+	    using var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey());
+	    using var multi = await db.QueryMultipleAsync(criteria);
+	    var relatedPeople = new RequestRelatedPeopleModel
         {
-            Requester = multi.ReadFirstOrDefault<SupervisorNameModel>(),
-            Verifier = multi.ReadFirstOrDefault<SupervisorNameModel>(),
-            Approver = multi.ReadFirstOrDefault<SupervisorNameModel>(),
-            ListHR = multi.Read<SupervisorNameModel>().ToList(),
-            EmailSetting = multi.ReadFirstOrDefault<EmailSettingsModel>()
+	        Requester = multi.ReadFirstOrDefault<SupervisorNameModel>(),
+	        Verifier = multi.ReadFirstOrDefault<SupervisorNameModel>(),
+	        Approver = multi.ReadFirstOrDefault<SupervisorNameModel>(),
+	        ListHR = multi.Read<SupervisorNameModel>().ToList(),
+	        EmailSetting = multi.ReadFirstOrDefault<EmailSettingsModel>()
         };
 
         return relatedPeople;
@@ -54,13 +53,12 @@ public class RequestRepository : IRequestRepository
 
     public async Task<VerifierAndApproverForRequest> GetVerifierAndApproverAsync(ICriteria criteria)
     {
-        VerifierAndApproverForRequest supervisor = null;
-        using var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey());
-        using var multi = await db.QueryMultipleAsync(criteria);
-        supervisor = new VerifierAndApproverForRequest
+	    using var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey());
+	    using var multi = await db.QueryMultipleAsync(criteria);
+	    var supervisor = new VerifierAndApproverForRequest
         {
-            Verifiers = multi.Read<SupervisorNameModel>().ToList(),
-            Approvers = multi.Read<SupervisorNameModel>().ToList()
+	        Verifiers = multi.Read<SupervisorNameModel>().ToList(),
+	        Approvers = multi.Read<SupervisorNameModel>().ToList()
         };
 
         return supervisor;

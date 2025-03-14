@@ -156,7 +156,7 @@ public class ExtensionNoController(
         }
         else
         {
-            var extensionGroups = await extensionNumberService.GetAllExtensionGroupInfoAsync(CurrentCompanyId, teamId, isInternal);
+            var extensionGroups = await extensionNumberService.GetAllExtensionGroupInfoAsync(CurrentCompanyId, teamId, false);
             groups = extensionGroups.Select(x => new SelectListItem
             {
                 Text = x.TeamName,

@@ -155,9 +155,10 @@
                             Selected = x.Value == pagerOption.ItemsPerPage.ToString()
                         }).ToList();
                     }
-                    @Html.Hidden("CurrentPage", (int)pagerOption.CurrentPage)
-                    @Html.Hidden("ItemsPerPage", (int)pagerOption.ItemsPerPage)
-                    @Html.Hidden("TotalItem", (int)pagerOption.TotalItem)
+
+                    @Html.Hidden("CurrentPage", pagerOption.CurrentPage)
+                    @Html.Hidden("ItemsPerPage", pagerOption.ItemsPerPage)
+                    @Html.Hidden("TotalItem", pagerOption.TotalItem)
                     @Html.DropDownList("ItemsPerPageOption", itemsPerPageArray, new { @class = "itemsPerPageOption form-control" })
                     <div class="detailtext">
                         Showing <strong>@from</strong> to <strong>@to</strong> of <strong>@pagerOption.TotalItem</strong> entries

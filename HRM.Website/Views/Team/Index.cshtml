@@ -22,7 +22,7 @@
     <div class="form-horizontal clearfix">
         <div class="form-group form-group--m">
             <div class="label-form">
-                @Html.Label(null, @Labels.Keyword, new { @class = "control-label" })
+                @Html.Label(null, Labels.Keyword, new { @class = "control-label" })
             </div>
             <div class="input-form">
                 <input id="nameSearch" type="text" name="keyWord" placeholder="@Messages.SearchTeamOrCode" class="form-control" autocomplete="off" />
@@ -173,7 +173,7 @@
                     <td>@team.TotalExpat</td>
                     <td>@team.TotalLocal</td>
                     <td>
-                        @if (@team.NoOfMembers > 0 && hasPermissionToViewEmployee)
+                        @if (team.NoOfMembers > 0 && hasPermissionToViewEmployee)
                         {
                             <a href="@Url.Action("UserManagement", "Employee", new { teamIds = team.Id })">@team.NoOfMembers</a>
                         }
@@ -183,17 +183,17 @@
                         }
                     </td>
                     <td>
-                        <a href="@Url.Action("disciplinerule", "team", new { Id = team.Id })">Manage</a>
+                        <a href="@Url.Action("disciplinerule", "team", new { team.Id })">Manage</a>
                     </td>
                     @if (hasPermission)
                     {
                         <td>
-                            <a href="@Url.Action("Edit", "Team", new { Id = team.Id })">
+                            <a href="@Url.Action("Edit", "Team", new { team.Id })">
                                 <i class="fa fa-pencil fa-lg icon-edit"></i>
                             </a>
                         </td>
                         <td>
-                            <a href="@Url.Action("TeamSupervisor", "Team", new { Id = team.Id })">Manage</a>
+                            <a href="@Url.Action("TeamSupervisor", "Team", new { team.Id })">Manage</a>
                         </td>
                         <td>
                             @if (team.NoOfMembers > 0)

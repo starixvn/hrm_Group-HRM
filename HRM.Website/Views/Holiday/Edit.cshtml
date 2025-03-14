@@ -42,7 +42,7 @@
                     @Html.LabelFor(model => model.HolidayName, new { @class = "control-label" })
                 </div>
                 <div class="input-form">
-                    @Html.TextBoxFor(model => model.HolidayName, new { @class = "form-control", @autocomplete = "off" })
+                    @Html.TextBoxFor(model => model.HolidayName, new { @class = "form-control", autocomplete = "off" })
                 </div>
                 @Html.ValidationMessageFor(model => model.HolidayName)
             </div>
@@ -51,7 +51,7 @@
                     @Html.LabelFor(model => model.TypeId, new { @class = "control-label" })
                 </div>
                 <div class="input-form">
-                    @Html.DropDownListFor(model => model.TypeId, holidayTypes, new { @class = "form-control", @autocomplete = "off" })
+                    @Html.DropDownListFor(model => model.TypeId, holidayTypes, new { @class = "form-control", autocomplete = "off" })
                 </div>
                 @Html.ValidationMessageFor(model => model.TypeId)
             </div>

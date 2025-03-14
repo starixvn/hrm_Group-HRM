@@ -242,7 +242,6 @@ public class RequestController(
             employeeId = request.EmployeeId;
         }
 
-        bool? isLocal = null;
         var criteria = new GetRequestCriteria
         {
             EmpId = employeeId,
@@ -254,7 +253,7 @@ public class RequestController(
             IsQueryByCreatedDate = !request.IsFilterByAffectedDate,
             RequestViewType = request.ViewType,
             SupervisorId = EmployeeSession.EmpId,
-            IsLocal = request.IsLocal.HasValue ? (request.IsLocal.Value == 1) : isLocal,
+            IsLocal = request.IsLocal.HasValue ? (request.IsLocal.Value == 1) : null,
             LeaveTypeId = request.LeaveType,
             CompanyId = CurrentCompanyId
         };

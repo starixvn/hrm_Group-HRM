@@ -7,8 +7,6 @@ public class LookupData
 {
     public int Id { get; set; }
 
-    public int LookupId { get; set; }
-
     public string Code { get; set; }
 
     public string Name { get; set; }

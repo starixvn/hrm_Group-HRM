@@ -62,8 +62,8 @@ public class AuthController(
             Password = cryptoService.Encrypt(model.Password, rijndaelKey, rijndaelIv),
             Token = token,
             IP = GetClientIp(HttpContext),
-            Platform = HttpContext.Request?.Headers["User-Agent"].ToString(),
-            BrowserName = HttpContext.Request?.Headers["User-Agent"].ToString(),
+            Platform = HttpContext.Request.Headers["User-Agent"].ToString(),
+            BrowserName = HttpContext.Request.Headers["User-Agent"].ToString(),
             NetSessionId = HttpContext.Session.Id
         };
         var loginResult = await authService.LoginAsync(loginParam);

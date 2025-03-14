@@ -35,7 +35,7 @@
 
             <div class="form-group form-group--m" style="margin-top: 10px;">
                 <input type="checkbox" class="checkbox-custom" id="IncludedRequestTrans" name="IncludedRequestTrans"
-                       value="true" checked="@(Model.IncludedRequestTrans ? true : false)" />
+                       value="true" checked="@Model.IncludedRequestTrans" />
                 @Html.LabelFor(model => model.IncludedRequestTrans, new { @for = "IncludedRequestTrans" })
                 @Html.HiddenFor(model => model.EmployeeId)
             </div>

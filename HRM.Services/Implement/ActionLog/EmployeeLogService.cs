@@ -163,10 +163,6 @@ public class EmployeeLogService(
             case "IsLocal":
                 MappingCategory(field);
                 break;
-
-            default:
-                // nothing
-                break;
         }
     }
 

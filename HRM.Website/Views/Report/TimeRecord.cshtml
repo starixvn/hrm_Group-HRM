@@ -3,7 +3,7 @@
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @model HRM.ViewModels.Report.TimeRecordViewModel
 @{
-    ViewBag.Title = @Labels.TimeRecord;
+    ViewBag.Title = Labels.TimeRecord;
     var hasPermission = (bool)ViewBag.HasPermission;
 }
 @section css{
@@ -65,7 +65,7 @@
                 else
                 {
                     @Html.TextBox("Employee", Model.Employee,
-                        new { placeholder = Messages.SearchEmployeeWatermark, @class = "form-control", @disabled = "disabled" })
+                        new { placeholder = Messages.SearchEmployeeWatermark, @class = "form-control", disabled = "disabled" })
                 }
                 @Html.HiddenFor(model => model.EmployeeId)
             </div>
@@ -91,7 +91,7 @@
                 }
                 else
                 {
-                    @Html.DropDownListFor(model => model.IsLocal, category, new { @class = "category form-control", @disabled = "disabled" })
+                    @Html.DropDownListFor(model => model.IsLocal, category, new { @class = "category form-control", disabled = "disabled" })
                 }
             </div>
         </div>

@@ -9,7 +9,7 @@ using Fanex.Data;
 using Fanex.Data.Repository;
 using GO.UserControl.Client.Core.Models.Role;
 using Models;
-using HRM.Models.Group;
+using Models.Group;
 using Models.Request;
 using Models.Supervisor;
 

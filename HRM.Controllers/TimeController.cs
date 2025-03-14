@@ -81,10 +81,10 @@ public class TimeController(
             Password = cryptoService.Encrypt(model.Password, rijndaelKey, rijndaelIv),
             Token = token,
             IP = GetClientIp(HttpContext),
-            Platform = HttpContext.Request?.Headers["User-Agent"].ToString(),
-            BrowserName = HttpContext.Request?.Headers["User-Agent"].ToString(),
+            Platform = HttpContext.Request.Headers["User-Agent"].ToString(),
+            BrowserName = HttpContext.Request.Headers["User-Agent"].ToString(),
             NetSessionId = HttpContext.Session.Id
-        };
+        };  
         var loginResult = await authService.LoginAsync(loginParam);
         if (loginResult.IsSuccessfull)
         {
@@ -101,7 +101,7 @@ public class TimeController(
                 RecordTime = DateTimeOffset.Now.DateTime,
                 InOutType = model.InOutType,
                 IPAddress = GetClientIp(HttpContext),
-                Platform = HttpContext.Request?.Headers["User-Agent"].ToString()
+                Platform = HttpContext.Request.Headers["User-Agent"].ToString()
             };
             var result = await baseService.ExecuteNonQueryAsync(criteria);
             loginResult = new LoginResult { IsSuccessfull = result.IsSuccessful, ErrorMessage = result.Message };
@@ -164,7 +164,7 @@ public class TimeController(
             RecordTime = DateTimeOffset.Now.DateTime,
             InOutType = 0,
             IPAddress = GetClientIp(HttpContext),
-            Platform = HttpContext.Request?.Headers["User-Agent"].ToString()
+            Platform = HttpContext.Request.Headers["User-Agent"].ToString()
         };
         var result = await baseService.ExecuteNonQueryAsync(criteria);
         return Json(result);
@@ -179,7 +179,7 @@ public class TimeController(
             RecordTime = DateTimeOffset.Now.DateTime,
             InOutType = 1,
             IPAddress = GetClientIp(HttpContext),
-            Platform = HttpContext.Request?.Headers["User-Agent"].ToString()
+            Platform = HttpContext.Request.Headers["User-Agent"].ToString()
         };
         var result = await baseService.ExecuteNonQueryAsync(criteria);
         return Json(result);

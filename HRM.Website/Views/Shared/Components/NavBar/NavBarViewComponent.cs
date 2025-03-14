@@ -1,14 +1,13 @@
-﻿using HRM.Services.Interfaces;
-
-namespace HRM.Website.Views.Shared.Components.NavBar;
-
-using System;
+﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
 using GO.UserControl.Client.Core.Session;
-using Core.Constants;
+using HRM.Core.Constants;
 using HRM.Core.Models;
+using HRM.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+
+namespace HRM.Website.Views.Shared.Components.NavBar;
 
 public class NavBarViewComponent(
     IUserControlSession userControlSession,

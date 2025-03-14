@@ -7,8 +7,8 @@ using GO.UserControl.Client.Core.Session;
 using Microsoft.AspNetCore.Mvc;
 using Resources;
 using ViewModels.Report;
-using HRM.Services.ExportExcel.WeekendLeave;
-using HRM.Services.Interfaces;
+using Services.ExportExcel.WeekendLeave;
+using Services.Interfaces;
 
 
 public class ExportWeekendLeaveController(

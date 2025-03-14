@@ -1,11 +1,10 @@
 ﻿@using HRM.Core
 @using HRM.Core.Enums
 @using HRM.Resources
-@using HRM.ViewModels.Report
 @using HRM.ViewModels.Request
 @using HRM.Website.Helper
 @using Microsoft.AspNetCore.Mvc.TagHelpers
-@model WorkingHoursSummaryViewModel
+@model HRM.ViewModels.Report.WorkingHoursSummaryViewModel
 @{
     var isHR = (bool)ViewBag.IsHR;
     var today = DateTimeOffset.Now.DateTime.ToClientTimeZone();
@@ -98,7 +97,7 @@
             </div>
             <div class="input-form">
                 @Html.TextBoxFor(model => model.Employee,
-                    new { placeholder = Messages.SearchEmployeeWatermark, @class = "form-control", @maxlength = 200, autocomplete = "off" })
+                    new { placeholder = Messages.SearchEmployeeWatermark, @class = "form-control", maxlength = 200, autocomplete = "off" })
             </div>
         </div>
     </div>

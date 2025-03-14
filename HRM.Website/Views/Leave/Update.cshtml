@@ -1,9 +1,8 @@
 ﻿@using HRM.Core
 @using HRM.Core.Enums
 @using HRM.Resources
-@using HRM.ViewModels.Request
 @using HRM.Website.Helper
-@model LeaveRequestViewModel
+@model HRM.ViewModels.Request.LeaveRequestViewModel
 @{
     ViewBag.Title = Labels.Edit;
     //var showCheckboxAfterDay = (bool)ViewBag.showCheckboxAfterDay;
@@ -86,7 +85,7 @@
                 @Html.LabelFor(model => model.RefNo, Labels.RefNo1, new { @class = "control-label" })
             </div>
             <div class="input-form">
-                @Html.TextBoxFor(model => model.RefNo, new { @class = "form-control", @autocomplete = "off" })
+                @Html.TextBoxFor(model => model.RefNo, new { @class = "form-control", autocomplete = "off" })
             </div>
         </div>
         <div class="form-group">
@@ -96,7 +95,7 @@
             <div class="input-form">
                 @if (hasOnBehalfOthersPermission)
                 {
-                    @Html.TextBoxFor(model => model.Employee, new { @class = "form-control", @autocomplete = "off" })
+                    @Html.TextBoxFor(model => model.Employee, new { @class = "form-control", autocomplete = "off" })
                 }
                 else
                 {
@@ -192,7 +191,7 @@
             </div>
             <div class="input-form">
                 @Html.TextBox(Html.NameFor(model => model.TotalDays).ToString(), Model.TotalDays.ToString("0.#"),
-                    new { @class = "form-control totaldays", @autocomplete = "off", @readonly = "readonly" })
+                    new { @class = "form-control totaldays", autocomplete = "off", @readonly = "readonly" })
             </div>
         </div>
         <div class="form-group">

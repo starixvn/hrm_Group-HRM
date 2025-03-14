@@ -1,11 +1,11 @@
-﻿namespace HRM.Website.Views.Shared.Components.Header;
-
-using GO.UserControl.Client.Core.Enumerables;
+﻿using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
-using Core.Constants;
+using HRM.Core.Constants;
 using HRM.Core.Models;
-using ViewModels.UI;
+using HRM.ViewModels.UI;
 using Microsoft.AspNetCore.Mvc;
+
+namespace HRM.Website.Views.Shared.Components.Header;
 
 public class HeaderViewComponent(IUserControlSession userControlSession) : ViewComponent
 {

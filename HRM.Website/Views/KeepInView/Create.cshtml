@@ -1,8 +1,7 @@
 ﻿@using HRM.Core
 @using HRM.Core.Enums
 @using HRM.Resources
-@using HRM.ViewModels.Request
-@model KeepInViewRequestViewModel
+@model HRM.ViewModels.Request.KeepInViewRequestViewModel
 @{
     ViewBag.Title = Labels.Create;
     var isTopManager = (bool)ViewBag.IsTopManager;
@@ -50,7 +49,7 @@
             <div class="input-form">
                 @if (hasOnBehalfRequestPermission)
                 {
-                    @Html.TextBoxFor(model => model.Employee, new { @class = "form-control", @autocomplete = "off" })
+                    @Html.TextBoxFor(model => model.Employee, new { @class = "form-control", autocomplete = "off" })
                 }
                 else
                 {

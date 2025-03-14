@@ -1,9 +1,8 @@
 ﻿@using HRM.Core
 @using HRM.Resources
-@using HRM.ViewModels.Report.Overtime
 @using HRM.Website.Helper
 @using Microsoft.AspNetCore.Mvc.TagHelpers
-@model MonthlyFilterViewModel
+@model HRM.ViewModels.Report.Overtime.MonthlyFilterViewModel
 @{
     ViewBag.Title = Labels.MonthlyOvertimeReport;
 }
@@ -81,7 +80,7 @@
             </div>
             <div class="input-form">
                 @Html.TextBoxFor(model => model.Employee,
-                    new { placeholder = Messages.SearchEmployeeWatermark, @class = "form-control", @maxlength = 200, autocomplete = "off" })
+                    new { placeholder = Messages.SearchEmployeeWatermark, @class = "form-control", maxlength = 200, autocomplete = "off" })
             </div>
         </div>
         <div class="form-group form-group--m">

@@ -221,10 +221,6 @@ public class AnnualLeaveBalanceService(
             case December:
                 percent = "> 0%";
                 break;
-
-            default:
-                // nothing
-                break;
         }
         return percent;
     }
@@ -272,10 +268,6 @@ public class AnnualLeaveBalanceService(
                 {
                     isSentMail = true;
                 }
-                break;
-
-            default:
-                // nothing
                 break;
         }
     }

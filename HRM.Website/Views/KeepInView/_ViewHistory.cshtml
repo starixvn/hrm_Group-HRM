@@ -1,9 +1,8 @@
 ﻿@using HRM.Core
 @using HRM.Core.Enums
-@using HRM.Models.Request
 @using HRM.Resources
 @using HRM.Website.Helper
-@model IList<KeepInViewRequest>
+@model IList<HRM.Models.Request.KeepInViewRequest>
     <table class="table table-custom">
         <thead>
             <tr>
@@ -62,7 +61,7 @@
                             }
                         </td>
                         <td>@request.Status.ToString()</td>
-                        <td class="align-left">@string.Format(Messages.LogDate, @request.Modifier.Nickname, @request.InsertedDate.ToClientTimeZone().ToShortFormatedDate())</td>
+                        <td class="align-left">@string.Format(Messages.LogDate, request.Modifier.Nickname, request.InsertedDate.ToClientTimeZone().ToShortFormatedDate())</td>
                     </tr>
                 }
             </tbody>

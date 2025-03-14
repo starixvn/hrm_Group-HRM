@@ -10,4 +10,8 @@
   <ItemGroup>
     <ProjectReference Include="..\HRM.Models\HRM.Models.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="BackgroundJob\" />
+    <Folder Include="SyncData\" />
+  </ItemGroup>
 </Project>

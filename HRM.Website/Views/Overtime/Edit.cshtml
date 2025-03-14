@@ -1,9 +1,8 @@
 ﻿@using HRM.Core.Enums
 @using HRM.Resources
-@using HRM.ViewModels.Overtime
 @using HRM.Website.Helper
 @using Microsoft.AspNetCore.Mvc.TagHelpers
-@model EditMonthlyRequestViewModel
+@model HRM.ViewModels.Overtime.EditMonthlyRequestViewModel
 @{
     ViewBag.Title = Model.MonthlyRequest.Requester.Nickname + "'s Overtime Request in " + Model.MonthlyRequest.Month.ToString("MMM-yyyy");
 }
@@ -129,20 +128,20 @@
                                 && !request.IsOffDay && !request.IsHoliday
                                 && request.ActualWorkingHours > Model.MonthlyRequest.Requester.WorkingHours)
                             {
-                                @Html.TextBoxFor(model => request.NormalHours, new { @class = "normalHours form-control", @maxlength = 5, autocomplete = "off" })
+                                @Html.TextBoxFor(model => request.NormalHours, new { @class = "normalHours form-control", maxlength = 5, autocomplete = "off" })
                             }
                         </td>
                         <td class="cell-overtime">
                             @if (request.ActualWorkingHours > 0 && !request.IsKeepInView && request.IsOffDay && !request.IsHoliday)
                             {
-                                @Html.TextBoxFor(model => request.OffHours, new { @class = "offHours form-control", @maxlength = 5, autocomplete = "off" })
+                                @Html.TextBoxFor(model => request.OffHours, new { @class = "offHours form-control", maxlength = 5, autocomplete = "off" })
                             }
                         </td>
                         <td class="cell-overtime">
                             @if (request.ActualWorkingHours > 0 && !request.IsKeepInView
                                 && request.IsHoliday && request.HolidayTypeId == (byte)HolidayType.Regular)
                             {
-                                @Html.TextBoxFor(model => request.PublicHours, new { @class = "publicHours form-control", @maxlength = 5, autocomplete = "off" })
+                                @Html.TextBoxFor(model => request.PublicHours, new { @class = "publicHours form-control", maxlength = 5, autocomplete = "off" })
                             }
                         </td>
                         <td class="cell-overtime">
@@ -156,13 +155,13 @@
                                 && request.ActualWorkingHours >= (Model.MonthlyRequest.Requester.WorkingHours + Model.MonthlyRequest.Requester.SpecialOT))
                                 || request.IsHoliday && request.HolidayTypeId == (byte)HolidayType.Special)
                             {
-                                @Html.TextBoxFor(model => request.SpecialHours, new { @class = className, @maxlength = 5, autocomplete = "off" })
+                                @Html.TextBoxFor(model => request.SpecialHours, new { @class = className, maxlength = 5, autocomplete = "off" })
                             }
                             else
                             {
                                 if (request.SpecialHours > 0)
                                 {
-                                    @Html.TextBoxFor(model => request.SpecialHours, new { @class = className, @maxlength = 5, autocomplete = "off", @readonly = "readonly" })
+                                    @Html.TextBoxFor(model => request.SpecialHours, new { @class = className, maxlength = 5, autocomplete = "off", @readonly = "readonly" })
                                 }
                             }
                         </td>
@@ -171,7 +170,7 @@
                             {
                                 if (request.IsOffDay || request.IsHoliday || request.ActualWorkingHours > Model.MonthlyRequest.Requester.WorkingHours)
                                 {
-                                    @Html.TextBoxFor(model => request.Remark, new { @class = "remark form-control", @maxlength = 2000, autocomplete = "off" })
+                                    @Html.TextBoxFor(model => request.Remark, new { @class = "remark form-control", maxlength = 2000, autocomplete = "off" })
                                 }
                             }
                         </td>

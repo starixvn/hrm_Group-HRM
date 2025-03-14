@@ -28,7 +28,6 @@ public class ExportRequestController(IUserControlSession userControlSession,
             employeeId = request.EmployeeId;
         }
 
-        bool? isLocal = null;
         var criteria = new GetRequestCriteria
         {
             EmpId = employeeId,
@@ -40,7 +39,7 @@ public class ExportRequestController(IUserControlSession userControlSession,
             IsQueryByCreatedDate = !request.IsFilterByAffectedDate,
             RequestViewType = request.ViewType,
             SupervisorId = EmployeeSession.EmpId,
-            IsLocal = request.IsLocal.HasValue ? (request.IsLocal.Value == 1) : isLocal
+            IsLocal = request.IsLocal.HasValue ? (request.IsLocal.Value == 1) : null
         };
 
         var requestList = await requestService.GetRequests(criteria);
@@ -75,7 +74,7 @@ public class ExportRequestController(IUserControlSession userControlSession,
             RequestType = model.RequestType,
             IsQueryByCreatedDate = !model.IsFilterByAffectedDate,
             RequestViewType = model.ViewType,
-            IsLocal = model.IsLocal.HasValue ? (model.IsLocal.Value == 1) : (bool?)null
+            IsLocal = model.IsLocal.HasValue ? (model.IsLocal.Value == 1) : null
         };
 
         var requestList = await requestService.GetRequests(criteria);
@@ -107,7 +106,7 @@ public class ExportRequestController(IUserControlSession userControlSession,
             IsQueryByCreatedDate = !model.IsFilterByAffectedDate,
             RequestViewType = model.ViewType,
             SupervisorId = EmployeeSession.EmpId,
-            IsLocal = model.IsLocal.HasValue ? (model.IsLocal.Value == 1) : (bool?)null
+            IsLocal = model.IsLocal.HasValue ? (model.IsLocal.Value == 1) : null
         };
 
         var requestList = await requestService.GetRequests(criteria);

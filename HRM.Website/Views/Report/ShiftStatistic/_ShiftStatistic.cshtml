@@ -22,17 +22,17 @@
     @if (Model.ShiftStatistics.Any())
     {
         var shiftStatistics = Model.ShiftStatistics.GroupBy(x => new { x.ShiftId, x.Code }).Select(g => new { g.Key.ShiftId, g.Key.Code, Items = g.ToList() });
-        var url = string.Empty;
+        string url;
         <tbody>
 
         @{
-            var i = 0;
+            int i;
         }
         @foreach (var shiftStatistic in shiftStatistics)
             {
                 i = 0;
-                url = "/ShiftStatisticReport/details?TeamIds=" + @Model.TeamIds + "&isLocal=" + @Model.IsLocal
-                      + "&isShowWholeCompany=" + @Model.IsShowWholeCompany + "&shiftId=" + shiftStatistic.ShiftId + "&workDate=";
+                url = "/ShiftStatisticReport/details?TeamIds=" + Model.TeamIds + "&isLocal=" + Model.IsLocal
+                      + "&isShowWholeCompany=" + Model.IsShowWholeCompany + "&shiftId=" + shiftStatistic.ShiftId + "&workDate=";
                 <tr>
                     <td>@shiftStatistic.Code</td>
                     @for (var day = Model.FromDate.Date; day.Date <= Model.ToDate.Date; day = day.AddDays(1))
@@ -50,8 +50,8 @@
                 <td class="align-right">@Labels.Total:</td>
                 @{
                     i = 0;
-                    url = "/ShiftStatisticReport/details?teamIds=" + @Model.TeamIds + "&isLocal=" + @Model.IsLocal
-                        + "&isShowWholeCompany=" + @Model.IsShowWholeCompany + "&shiftId=&workDate=";
+                    url = "/ShiftStatisticReport/details?teamIds=" + Model.TeamIds + "&isLocal=" + Model.IsLocal
+                        + "&isShowWholeCompany=" + Model.IsShowWholeCompany + "&shiftId=&workDate=";
                 }
                 @for (var day = Model.FromDate.Date; day.Date <= Model.ToDate.Date; day = day.AddDays(1))
                 {

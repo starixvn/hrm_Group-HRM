@@ -11,7 +11,7 @@ using GO.UserControl.Client.Core.Session;
 using HRM.Core.Services;
 using HRM.Criteria.Request.CheckInOut;
 using HRM.Models.Request;
-using HRM.Models.Shifts;
+using Models.Shifts;
 using HRM.Services.Interfaces.Request;
 using HRM.ViewModels.Request;
 using Microsoft.AspNetCore.Http;

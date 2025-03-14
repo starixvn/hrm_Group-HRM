@@ -10,7 +10,6 @@ using HRM.Core;
 using HRM.Core.Constants;
 using HRM.Core.Enums;
 using HRM.Core.Filters;
-using HRM.Core.Models;
 using HRM.Core.Services;
 using HRM.Criteria.Employee;
 using HRM.Criteria.Supervisor;
@@ -44,7 +43,6 @@ public class EmployeeController(
     ICryptoService cryptoService,
     IUserService userService,
     IRoleService roleService,
-    IWebHostEnvironment hostingEnvironment,
     IMinIOService minIOService) : BaseController(userControlSession)
 {
     private readonly IUserControlSession userControlSession = userControlSession;
@@ -407,7 +405,7 @@ public class EmployeeController(
     [HttpPost]
     public IActionResult ToggleLeftNavigation(bool isShow)
     {
-        userControlSession.Set<bool>(SessionKey.IsShowLeftNavigation, isShow);
+        userControlSession.Set(SessionKey.IsShowLeftNavigation, isShow);
         return Ok();
     }
 
@@ -543,7 +541,7 @@ public class EmployeeController(
     {
         if (EmployeeSession.EmpId == employeeId)
         {
-            userControlSession.Set<EmployeeSession>(SessionKey.Employee, await authService.GetByUserIdAsync(userControlSession.UserId));
+            userControlSession.Set(SessionKey.Employee, await authService.GetByUserIdAsync(userControlSession.UserId));
         }
     }
 

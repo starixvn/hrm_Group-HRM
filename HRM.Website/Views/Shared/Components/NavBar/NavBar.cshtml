@@ -1,5 +1,5 @@
 ﻿@using GO.UserControl.Client.Core.Models
-@model IEnumerable<MenuItem>
+@model IEnumerable<GO.UserControl.Client.Core.Models.MenuItem>
 @{
     var menus = Model.GroupBy(i => i.MenuItemName).Select(g => g.First()).ToList();
     var unreadMessage = (int)ViewBag.UnreadMessage;

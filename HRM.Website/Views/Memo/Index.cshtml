@@ -88,7 +88,7 @@
                         @item.RefNo
                     </td>
                     <td class="align-left">
-                        <a href="@Url.Action("detail", "memo", new { Id = item.Id })">@item.Subject</a>
+                        <a href="@Url.Action("detail", "memo", new { item.Id })">@item.Subject</a>
                     </td>
                     <td>
                         @item.CategoryName
@@ -99,7 +99,7 @@
                     @if (hasPermission)
                     {
                         <td class="cmd" title="Edit">
-                            <a href="@Url.Action("edit", "memo", new { Id = item.Id })">
+                            <a href="@Url.Action("edit", "memo", new { item.Id })">
                                 <i class="fa fa-pencil fa-lg icon-edit"></i>
                             </a>
                         </td>
