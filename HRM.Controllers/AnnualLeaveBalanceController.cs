@@ -165,7 +165,7 @@ public class AnnualLeaveBalanceController(
         var model = new AnnualLeaveTransactionViewModel
         {
             EmpId = id,
-            AffectedFrom = DateTimeOffset.Now.DateTime.ToClientTimeZone(),
+            AffectedFrom = DateTimeOffset.Now.DateTime.ToClientTimeZone()
         };
         return View(model);
     }
@@ -194,10 +194,8 @@ public class AnnualLeaveBalanceController(
             {
                 return RedirectToAction("Employee", "AnnualLeaveBalance", new { id = model.EmpId });
             }
-            else
-            {
-                ModelState.AddModelError(string.Empty, result.Message);
-            }
+
+            ModelState.AddModelError(string.Empty, result.Message);
         }
 
         return View(model);
@@ -277,10 +275,8 @@ public class AnnualLeaveBalanceController(
         {
             return RedirectToAction("Employee", "AnnualLeaveBalance", new { id = model.EmpId });
         }
-        else
-        {
-            ModelState.AddModelError(string.Empty, result.Message);
-            return View(model);
-        }
+
+        ModelState.AddModelError(string.Empty, result.Message);
+        return View(model);
     }
 }

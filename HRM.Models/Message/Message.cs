@@ -41,27 +41,15 @@ public class Message
     {
         get
         {
-            string category;
-            switch (Category)
-            {
-                case (int)MessageCategory.Notification:
-                    category = MessageCategory.Notification.ToString();
-                    break;
+	        var category = Category switch
+	        {
+		        (int)MessageCategory.Notification => MessageCategory.Notification.ToString(),
+		        (int)MessageCategory.Warning => MessageCategory.Warning.ToString(),
+		        (int)MessageCategory.Violation => MessageCategory.Violation.ToString(),
+		        _ => string.Empty
+	        };
 
-                case (int)MessageCategory.Warning:
-                    category = MessageCategory.Warning.ToString();
-                    break;
-
-                case (int)MessageCategory.Violation:
-                    category = MessageCategory.Violation.ToString();
-                    break;
-
-                default:
-                    category = string.Empty;
-                    break;
-            }
-
-            return category;
+	        return category;
         }
     }
 }

@@ -89,7 +89,7 @@
                     </td>
                     <td>@request.FromDate.ToDateMonthYearFormatedDate()</td>
                     <td>
-                        @if ((request.TotalDays - Constants.HalfDayOffValue) == 0)
+                        @if (request.TotalDays - Constants.HalfDayOffValue == 0)
                         {
                             @request.FromDate.ToDateMonthYearFormatedDate()
                         }

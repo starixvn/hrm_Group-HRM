@@ -72,8 +72,8 @@ public class SyncWorkingShiftService(
         var commandResult = new CommandResult { Code = 0, Message = string.Empty };
 
         var builder = new StringBuilder(config.ApiUrl);
-        builder.AppendFormat("?locationCode={0}&fromDate={1:yyyy-MM-dd}&toDate={2:yyyy-MM-dd}&timezone={3}",
-            config.LocationCode, date, date, config.Timezone);
+        builder.Append(
+	        $"?locationCode={config.LocationCode}&fromDate={date:yyyy-MM-dd}&toDate={date:yyyy-MM-dd}&timezone={config.Timezone}");
 
         var url = new Uri(builder.ToString());
         var response = await httpClient.GetAsync(url);

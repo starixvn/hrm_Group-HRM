@@ -25,19 +25,14 @@ public class TimeRecordModel
     {
         get
         {
-            var typeName = Labels.None;
+	        var typeName = InOutType switch
+	        {
+		        0 => Labels.In,
+		        1 => Labels.Out,
+		        _ => Labels.None
+	        };
 
-            if (InOutType == 0)
-            {
-                typeName = Labels.In;
-            }
-
-            if (InOutType == 1)
-            {
-                typeName = Labels.Out;
-            }
-
-            return typeName;
+	        return typeName;
         }
     }
 

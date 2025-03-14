@@ -25,23 +25,14 @@ public class GetRequestCriteria : CriteriaBase
     {
         get
         {
-            string role;
-            switch (RequestViewType)
-            {
-                case RequestViewType.PersonalSpace:
-                    role = ((short)RoleSystem.Verifier).ToString() + "," + ((short)RoleSystem.Approver).ToString();
-                    break;
+	        var role = RequestViewType switch
+	        {
+		        RequestViewType.PersonalSpace => (short)RoleSystem.Verifier + "," + (short)RoleSystem.Approver,
+		        RequestViewType.HRSpace => ((short)RoleSystem.HR).ToString(),
+		        _ => ((short)RoleSystem.Member).ToString()
+	        };
 
-                case RequestViewType.HRSpace:
-                    role = ((short)RoleSystem.HR).ToString();
-                    break;
-
-                default:
-                    role = ((short)RoleSystem.Member).ToString();
-                    break;
-            }
-
-            return role;
+	        return role;
         }
     }
 

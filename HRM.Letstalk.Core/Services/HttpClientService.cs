@@ -1,4 +1,5 @@
-﻿using HRM.Letstalk.Core.Services.Interfaces;
+﻿using System.Diagnostics.CodeAnalysis;
+using HRM.Letstalk.Core.Services.Interfaces;
 
 namespace HRM.Letstalk.Core.Services;
 
@@ -13,6 +14,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 
 #pragma warning disable S4462 // Calls to "async" methods should not be blocking
+[SuppressMessage("ReSharper", "ConvertIfStatementToSwitchStatement")]
 public class HttpClientService : IHttpClientService
 {
     private static readonly HttpClient httpClient = new();
@@ -51,7 +53,7 @@ public class HttpClientService : IHttpClientService
             return result;
         }
 
-        return default(T);
+        return default;
     }
 
     private static T SendHttpClient<T>(string baseUrl, string token, HttpMethod method, IDictionary<string, object> data)
@@ -76,7 +78,7 @@ public class HttpClientService : IHttpClientService
             return result;
         }
 
-        return default(T);
+        return default;
     }
 
     private static HttpRequestMessage CreateRequest(string baseUrl, HttpMethod method, string token)

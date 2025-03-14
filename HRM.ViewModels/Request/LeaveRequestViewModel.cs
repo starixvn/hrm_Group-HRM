@@ -103,7 +103,7 @@ public class LeaveRequestViewModel : IValidatableObject
             result.Add(validation);
         }
 
-        if (HalfDayOff && (TotalDays % 1 == 0))
+        if (HalfDayOff && TotalDays % 1 == 0)
         {
             var validation = new ValidationResult(
                 Resources.Messages.InvalidTotalDays,

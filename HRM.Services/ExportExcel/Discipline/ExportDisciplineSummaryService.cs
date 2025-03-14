@@ -22,7 +22,6 @@ public class ExportDisciplineSummaryService(IWebHostEnvironment hostingEnvironme
     public byte[] Export(GetDisciplineSummaryCriteria criteria, IList<DisciplineSummaryModel> disciplines)
     {
         var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, TemplatePath); 
-        var reportName = Labels.DisciplineSummaryReportName;
         string reportTitle;
         var startDate = criteria.FromDate.ToDateMonthYearFormatedDate();
         var endDate = criteria.ToDate.ToDateMonthYearFormatedDate();
@@ -40,7 +39,7 @@ public class ExportDisciplineSummaryService(IWebHostEnvironment hostingEnvironme
             reportTitle = string.Format(Labels.DisciplineSummaryReportTitleNoPrefix, startDate, endDate);
         }
 
-        var writer = new ExcelTemplateWriter(templatePath, reportName, Labels.DisciplineSummaryReportSheet);
+        var writer = new ExcelTemplateWriter(templatePath, Labels.DisciplineSummaryReportSheet);
 
         // Fill report title.
         writer.WriteRow(0, [reportTitle]);
@@ -56,7 +55,7 @@ public class ExportDisciplineSummaryService(IWebHostEnvironment hostingEnvironme
         return writer.WriteContentToBytes();
     }
 
-    private void FillContentRow(IList<DisciplineSummaryModel> disciplines, ref ExcelTemplateWriter writer)
+    private static void FillContentRow(IList<DisciplineSummaryModel> disciplines, ref ExcelTemplateWriter writer)
     {
         var rowIndex = 1;
         foreach (var discipline in disciplines)
@@ -65,13 +64,13 @@ public class ExportDisciplineSummaryService(IWebHostEnvironment hostingEnvironme
         }
     }
 
-    private void FillRow(DisciplineSummaryModel discipline, ref ExcelTemplateWriter writer, ref int rowIndex)
+    private static void FillRow(DisciplineSummaryModel discipline, ref ExcelTemplateWriter writer, ref int rowIndex)
     {
         var record = CreateRecord(discipline, ref rowIndex);
         writer.WriteRow(BodyRow, record);
     }
 
-    private object CreateRecord(DisciplineSummaryModel discipline, ref int rowIndex)
+    private static object CreateRecord(DisciplineSummaryModel discipline, ref int rowIndex)
     {
         var otherDisciplines = discipline.OtherDisciplineScore > 0 ? -discipline.OtherDisciplineScore : 0;
         var systemSubtractScore = discipline.SystemSubtractScore > 0 ? -discipline.SystemSubtractScore : 0;

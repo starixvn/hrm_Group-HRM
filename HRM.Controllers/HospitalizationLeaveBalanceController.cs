@@ -141,7 +141,7 @@ public class HospitalizationLeaveBalanceController(
         {
             EmpId = id,
             Nickname = employee.NickName,
-            AffectedFrom = DateTimeOffset.Now.DateTime.ToClientTimeZone(),
+            AffectedFrom = DateTimeOffset.Now.DateTime.ToClientTimeZone()
         };
         return View(model);
     }
@@ -168,10 +168,8 @@ public class HospitalizationLeaveBalanceController(
             {
                 return RedirectToAction("Employee", new { id = model.EmpId });
             }
-            else
-            {
-                ModelState.AddModelError(string.Empty, commandResult.Message);
-            }
+
+            ModelState.AddModelError(string.Empty, commandResult.Message);
         }
 
         return View(model);
@@ -274,10 +272,8 @@ public class HospitalizationLeaveBalanceController(
         {
             return RedirectToAction("Employee", new { id = model.EmpId });
         }
-        else
-        {
-            ModelState.AddModelError(string.Empty, commandResult.Message);
-            return View(model);
-        }
+
+        ModelState.AddModelError(string.Empty, commandResult.Message);
+        return View(model);
     }
 }

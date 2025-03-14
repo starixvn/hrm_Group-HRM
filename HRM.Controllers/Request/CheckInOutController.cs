@@ -121,45 +121,43 @@ public class CheckInOutController(
         {
             return RedirectToAction("AccessDenied", "Error");
         }
-        else
-        {
-            var supervisor = await requestService.GetVerifierAndApproverAsync(request.Requester.EmpId, RequestType.CheckIn);
-            var param = new GetDisabledDateParam
-            {
-                EmployeeId = request.Requester.EmpId,
-                FromDate = request.OnDate.AddMonths(-1),
-                ToDate = DateTimeOffset.Now.DateTime.ToClientTimeZone().Date,
-                RequestId = request.RequestId,
-                RequestTypeId = request.RequestTypeId
-            };
-            var disabledDates = await checkInOutRequestService.GetDisabledDateAsync(param);
-            var shift = await shiftService.GetByDateAsync(EmployeeSession.EmpId, request.OnDate);
-            request.RequestTime = request.RequestTime.ToClientTimeZone();
-            var viewModel = new CheckInOutRequestViewModel
-            {
-                RequestId = request.RequestId,
-                RefNO = request.RefNO,
-                RequestTypeId = request.RequestTypeId,
-                Employee = request.Requester.DisplayName,
-                EmployeeId = request.Requester.EmpId,
-                AttendantDate = request.OnDate,
-                ForDate = request.RequestTime.Date,
-                Hour = request.RequestTime.Hour,
-                Minute = request.RequestTime.Minute,
-                ReasonId = request.ReasonId,
-                Shift = shift == null ? string.Empty : shift.Name,
-                ApproverId = request.Approver?.EmpId,
-                VerifierId = request.Verifier?.EmpId,
-                Remark = request.Remark,
-                Verifiers = supervisor.Verifiers,
-                Approvers = supervisor.Approvers,
-                DisabledDates = disabledDates,
-                Files = attachFileService.GetAttachFile(id, UploadFolderPath)
-            };
 
-            ViewBag.IsTopManager = request.Requester.IsTopManager;
-            return View(viewModel);
-        }
+        var supervisor = await requestService.GetVerifierAndApproverAsync(request.Requester.EmpId, RequestType.CheckIn);
+        var param = new GetDisabledDateParam
+        {
+	        EmployeeId = request.Requester.EmpId,
+	        FromDate = request.OnDate.AddMonths(-1),
+	        ToDate = DateTimeOffset.Now.DateTime.ToClientTimeZone().Date,
+	        RequestId = request.RequestId,
+	        RequestTypeId = request.RequestTypeId
+        };
+        var disabledDates = await checkInOutRequestService.GetDisabledDateAsync(param);
+        var shift = await shiftService.GetByDateAsync(EmployeeSession.EmpId, request.OnDate);
+        request.RequestTime = request.RequestTime.ToClientTimeZone();
+        var viewModel = new CheckInOutRequestViewModel
+        {
+	        RequestId = request.RequestId,
+	        RefNO = request.RefNO,
+	        RequestTypeId = request.RequestTypeId,
+	        Employee = request.Requester.DisplayName,
+	        EmployeeId = request.Requester.EmpId,
+	        AttendantDate = request.OnDate,
+	        ForDate = request.RequestTime.Date,
+	        Hour = request.RequestTime.Hour,
+	        Minute = request.RequestTime.Minute,
+	        ReasonId = request.ReasonId,
+	        Shift = shift == null ? string.Empty : shift.Name,
+	        ApproverId = request.Approver?.EmpId,
+	        VerifierId = request.Verifier?.EmpId,
+	        Remark = request.Remark,
+	        Verifiers = supervisor.Verifiers,
+	        Approvers = supervisor.Approvers,
+	        DisabledDates = disabledDates,
+	        Files = attachFileService.GetAttachFile(id, UploadFolderPath)
+        };
+
+        ViewBag.IsTopManager = request.Requester.IsTopManager;
+        return View(viewModel);
     }
 
     [HttpPost]

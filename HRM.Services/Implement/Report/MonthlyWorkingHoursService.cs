@@ -485,9 +485,8 @@ public partial class EmployeeWorkingHoursService(
         if (toDate >= fromDate)
         {
             var iterator = fromDate.FirstDayOfMonth();
-            var limit = toDate;
 
-            while (iterator <= limit)
+            while (iterator <= toDate)
             {
                 months.Add(iterator.FirstDayOfMonth());
 

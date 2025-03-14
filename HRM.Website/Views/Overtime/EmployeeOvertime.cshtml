@@ -58,7 +58,7 @@
                         new() { Text = Labels.NormalDay, Value = ((short)OvertimeType.Normal).ToString() },
                         new() { Text = Labels.OffDay, Value = ((short)OvertimeType.Off).ToString() },
                         new() { Text = Labels.PublicHoliday, Value = ((short)OvertimeType.Holiday).ToString() },
-                        new() { Text = Labels.SpecialOT, Value = ((short)OvertimeType.Special).ToString() },
+                        new() { Text = Labels.SpecialOT, Value = ((short)OvertimeType.Special).ToString() }
                     };
                 }
                 @Html.DropDownListFor(model => model.OvertimeType, types, new { @class = "form-control" })

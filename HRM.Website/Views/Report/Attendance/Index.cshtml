@@ -51,7 +51,7 @@
                     Model.FromDate.ToDateMonthYearFormatedDate(),
                     new {
                         @class = "datepicker form-control",
-                        mindate = (new DateTime(2010, 1, 1)).ToString("yyyy/MM/dd"),
+                        mindate = new DateTime(2010, 1, 1).ToString("yyyy/MM/dd"),
                         maxdate = today.ToString("yyyy/MM/dd")
                     })
                 <i class="icon-calendar fa fa-calendar"></i>
@@ -67,7 +67,7 @@
                     Model.ToDate.ToDateMonthYearFormatedDate(),
                     new {
                         @class = "datepicker form-control",
-                        mindate = (new DateTime(2010, 1, 1)).ToString("yyyy/MM/dd"),
+                        mindate = new DateTime(2010, 1, 1).ToString("yyyy/MM/dd"),
                         maxdate = today.ToString("yyyy/MM/dd")
                     })
                 <i class="icon-calendar fa fa-calendar"></i>
@@ -87,7 +87,7 @@
                         new () { Text = Labels.MissingCheckOut, Value = ((short)AttendanceFilter.MissingCheckOut).ToString() },
                         new () { Text = Labels.LateIn, Value = ((short)AttendanceFilter.LateIn).ToString() },
                         new () { Text = Labels.EarlyOut, Value = ((short)AttendanceFilter.EarlyOut).ToString() },
-                        new () { Text = Labels.NotWork, Value = ((short)AttendanceFilter.NotWork).ToString() },
+                        new () { Text = Labels.NotWork, Value = ((short)AttendanceFilter.NotWork).ToString() }
                     };
                 }
                 @Html.DropDownListFor(model => model.AttendanceType, types, new { @class = "form-control" })

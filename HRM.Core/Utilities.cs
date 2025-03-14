@@ -218,7 +218,7 @@ public static class Utilities
         }
 
         var hour = value / 60;
-        var minute = value - (hour * 60);
+        var minute = value - hour * 60;
 
         return hour > 0
             ? hour.ToString().PadLeft(PaddingLeftWidth, '0') + "h" + minute.ToString().PadLeft(PaddingLeftWidth, '0') + "'"
@@ -237,43 +237,19 @@ public static class Utilities
 
     public static string GetCurrentStatusName(int statusId)
     {
-        string statusName;
-        switch (statusId)
-        {
-            case (int)CurrentRequestStatus.Pending:
-                statusName = Labels.Pending;
-                break;
+	    var statusName = statusId switch
+	    {
+		    (int)CurrentRequestStatus.Pending => Labels.Pending,
+		    (int)CurrentRequestStatus.Verified => Labels.Verified,
+		    (int)CurrentRequestStatus.NotVerified => Labels.NotVerified,
+		    (int)CurrentRequestStatus.Approved => Labels.Approved,
+		    (int)CurrentRequestStatus.Rejected => Labels.Rejected,
+		    (int)CurrentRequestStatus.Processed => Labels.Processed,
+		    (int)CurrentRequestStatus.Void => Labels.Void,
+		    _ => Labels.NA
+	    };
 
-            case (int)CurrentRequestStatus.Verified:
-                statusName = Labels.Verified;
-                break;
-
-            case (int)CurrentRequestStatus.NotVerified:
-                statusName = Labels.NotVerified;
-                break;
-
-            case (int)CurrentRequestStatus.Approved:
-                statusName = Labels.Approved;
-                break;
-
-            case (int)CurrentRequestStatus.Rejected:
-                statusName = Labels.Rejected;
-                break;
-
-            case (int)CurrentRequestStatus.Processed:
-                statusName = Labels.Processed;
-                break;
-
-            case (int)CurrentRequestStatus.Void:
-                statusName = Labels.Void;
-                break;
-
-            default:
-                statusName = Labels.NA;
-                break;
-        }
-
-        return statusName;
+	    return statusName;
     }
 
     public static IList<SelectListItem> GetDateRangeByYear()
@@ -307,32 +283,16 @@ public static class Utilities
 
     public static string GetBackgroundColorForLeave(int leaveTypeId)
     {
-        string backgroundColor;
-        switch (leaveTypeId)
-        {
-            case (byte)LeaveTypes.AnnualLeave:
-                backgroundColor = "#c7f391";
-                break;
+	    var backgroundColor = leaveTypeId switch
+	    {
+		    (byte)LeaveTypes.AnnualLeave => "#c7f391",
+		    (byte)LeaveTypes.UnpaidLeave => "#eacded",
+		    (byte)LeaveTypes.BusinessTrip => "#c1d6ed",
+		    (byte)LeaveTypes.WeddingLeave or (byte)LeaveTypes.WeddingOfEmployeeChildren => "#7cd3e9",
+		    _ => "#a9a7a7"
+	    };
 
-            case (byte)LeaveTypes.UnpaidLeave:
-                backgroundColor = "#eacded";
-                break;
-
-            case (byte)LeaveTypes.BusinessTrip:
-                backgroundColor = "#c1d6ed";
-                break;
-
-            case (byte)LeaveTypes.WeddingLeave:
-            case (byte)LeaveTypes.WeddingOfEmployeeChildren:
-                backgroundColor = "#7cd3e9";
-                break;
-
-            default:
-                backgroundColor = "#a9a7a7";
-                break;
-        }
-
-        return backgroundColor;
+	    return backgroundColor;
     }
 
     public static string GetMessageDateString(DateTime fromDate, DateTime toDate)
@@ -349,7 +309,7 @@ public static class Utilities
         }
         else
         {
-            result = (fromDate.Month != toDate.Month) ?
+            result = fromDate.Month != toDate.Month ?
                 fromDate.ToMonthAndDayFormatedDate() + " - " + toDate.ToDateMonthYearFormatedDate() :
                 fromDate.ToString("dd") + " - " + toDate.ToDateMonthYearFormatedDate();
         }

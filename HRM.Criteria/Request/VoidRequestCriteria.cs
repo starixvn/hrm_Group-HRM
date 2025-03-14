@@ -16,33 +16,16 @@ public class VoidRequestCriteria : CriteriaBase
 
     public override string GetSettingKey()
     {
-        string key;
-        switch (RequestTypeId)
-        {
-            case RequestType.CheckIn:
-            case RequestType.CheckOut:
-                key = "CheckInOutRequest_VoidBySA";
-                break;
+	    var key = RequestTypeId switch
+	    {
+		    RequestType.CheckIn or RequestType.CheckOut => "CheckInOutRequest_VoidBySA",
+		    RequestType.LateIn or RequestType.EarlyOut => "LateInEarlyOutRequest_VoidBySA",
+		    RequestType.ChangeShift => "ChangeShiftRequest_VoidBySA",
+		    RequestType.Leave => "LeaveRequest_VoidBySA",
+		    _ => "KeepInViewRequest_VoidBySA"
+	    };
 
-            case RequestType.LateIn:
-            case RequestType.EarlyOut:
-                key = "LateInEarlyOutRequest_VoidBySA";
-                break;
-
-            case RequestType.ChangeShift:
-                key = "ChangeShiftRequest_VoidBySA";
-                break;
-
-            case RequestType.Leave:
-                key = "LeaveRequest_VoidBySA";
-                break;
-
-            default:
-                key = "KeepInViewRequest_VoidBySA";
-                break;
-        }
-
-        return key;
+	    return key;
     }
 
     public override bool IsValid() => RequestId > 0 && ActorId > 0;

@@ -141,7 +141,7 @@ public class SickLeaveBalanceController(
         {
             EmpId = id,
             Nickname = employee.NickName,
-            AffectedFrom = DateTimeOffset.Now.DateTime.ToClientTimeZone().Date,
+            AffectedFrom = DateTimeOffset.Now.DateTime.ToClientTimeZone().Date
         };
         return View(model);
     }
@@ -168,10 +168,8 @@ public class SickLeaveBalanceController(
             {
                 return RedirectToAction("Employee", new { id = model.EmpId });
             }
-            else
-            {
-                ModelState.AddModelError(string.Empty, commandResult.Message);
-            }
+
+            ModelState.AddModelError(string.Empty, commandResult.Message);
         }
 
         return View(model);
@@ -271,10 +269,8 @@ public class SickLeaveBalanceController(
         {
             return RedirectToAction("Employee", new { id = model.EmpId });
         }
-        else
-        {
-            ModelState.AddModelError(string.Empty, commandResult.Message);
-            return View(model);
-        }
+
+        ModelState.AddModelError(string.Empty, commandResult.Message);
+        return View(model);
     }
 }

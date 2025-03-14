@@ -93,10 +93,7 @@ public static class HSSFSheetExtensions
 
     public static void RemoveRow(this ISheet sheet, int rowIndex)
     {
-        if (sheet != null)
-        {
-            sheet.RemoveRow(sheet.GetRow(rowIndex));
-        }
+	    sheet?.RemoveRow(sheet.GetRow(rowIndex));
     }
 
     public static void RemoveColumns(this ISheet sheet, List<int> columns)
@@ -145,24 +142,21 @@ public static class HSSFSheetExtensions
 
             if (rowIndex == mergedRegion.FirstRow)
             {
-                if ((columnIndex == mergedRegion.FirstColumn)
-                    && (columnIndex == mergedRegion.LastColumn))
+                if (columnIndex == mergedRegion.FirstColumn
+                    && columnIndex == mergedRegion.LastColumn)
                 {
                     sheet.RemoveMergedRegion(i);
                 }
                 else if (mergedRegion.FirstColumn > columnIndex)
                 {
-                    mergedRegion.FirstColumn = mergedRegion.FirstColumn - 1;
-                    mergedRegion.LastColumn = mergedRegion.LastColumn - 1;
+                    mergedRegion.FirstColumn -= 1;
+                    mergedRegion.LastColumn -= 1;
                 }
                 else if (columnIndex <= mergedRegion.LastColumn)
                 {
-                    mergedRegion.LastColumn = mergedRegion.LastColumn - 1;
+                    mergedRegion.LastColumn -= 1;
                 }
-                else
-                {
-                    // no action at here
-                }
+                // no action at here
             }
         }
     }
@@ -230,10 +224,10 @@ public static class HSSFSheetExtensions
             for (var i = sheet.NumMergedRegions - 1; i >= 0; i--)
             {
                 var mergedRegion = sheet.GetMergedRegion(i);
-                if ((mergedRegion.FirstRow >= firstRow)
-                    && (mergedRegion.LastRow <= lastRow)
-                    && (mergedRegion.FirstColumn >= firstCol)
-                    && (mergedRegion.LastColumn <= lastCol))
+                if (mergedRegion.FirstRow >= firstRow
+                    && mergedRegion.LastRow <= lastRow
+                    && mergedRegion.FirstColumn >= firstCol
+                    && mergedRegion.LastColumn <= lastCol)
                 {
                     sheet.RemoveMergedRegion(i);
                 }
@@ -245,7 +239,7 @@ public static class HSSFSheetExtensions
     {
         var cell = sheet.CreateCell(rowIndex, colIndex);
 
-        if ((rowSpan > 0) || (colSpan > 0))
+        if (rowSpan > 0 || colSpan > 0)
         {
             MergeCells(sheet, rowIndex, colIndex, rowIndex + rowSpan, colIndex + colSpan);
         }
@@ -317,6 +311,8 @@ public static class HSSFSheetExtensions
                     newCell.CellFormula = sourceCell.CellFormula;
                     break;
 
+                case CellType.Unknown:
+                case CellType.Blank:
                 default:
                     newCell.SetCellValue(string.Empty);
                     break;

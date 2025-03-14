@@ -17,5 +17,5 @@ public enum OvertimeType
     Holiday = 3,
 
     [Description("Special")]
-    Special = 4,
+    Special = 4
 }

@@ -75,14 +75,14 @@ public class MemoController(
             var commandResult = await memoService.EditAsync(model);
             ViewBag.Updated = commandResult.IsSuccessful;
 
-            if (commandResult.IsSuccessful && model.SendMail)
+            switch (commandResult.IsSuccessful)
             {
-                await SendMailAsync(model.Subject, commandResult);
-            }
-
-            if (!commandResult.IsSuccessful)
-            {
-                ModelState.AddModelError(string.Empty, commandResult.Message);
+	            case true when model.SendMail:
+		            await SendMailAsync(model.Subject, commandResult);
+		            break;
+	            case false:
+		            ModelState.AddModelError(string.Empty, commandResult.Message);
+		            break;
             }
         }
         else
@@ -126,14 +126,14 @@ public class MemoController(
             var commandResult = await memoService.CreateAsync(model);
             ViewBag.Updated = commandResult.IsSuccessful;
 
-            if (commandResult.IsSuccessful && model.SendMail)
+            switch (commandResult.IsSuccessful)
             {
-                await SendMailAsync(model.Subject, commandResult);
-            }
-
-            if (!commandResult.IsSuccessful)
-            {
-                ModelState.AddModelError(string.Empty, commandResult.Message);
+	            case true when model.SendMail:
+		            await SendMailAsync(model.Subject, commandResult);
+		            break;
+	            case false:
+		            ModelState.AddModelError(string.Empty, commandResult.Message);
+		            break;
             }
         }
         else
@@ -197,7 +197,7 @@ public class MemoController(
     {
         if (path.StartsWith('/'))
         {
-            path = path.Substring(1);
+            path = path[1..];
         }
         return path;
     }

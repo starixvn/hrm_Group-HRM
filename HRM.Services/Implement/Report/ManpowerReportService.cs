@@ -161,7 +161,7 @@ public class ManpowerReportService(
     {
         dynamic result = "-";
         var today = DateTimeOffset.Now;
-        if ((today.Year > year) || (today.Year == year && today.Month >= month))
+        if (today.Year > year || (today.Year == year && today.Month >= month))
         {
             result = value;
         }
@@ -332,14 +332,14 @@ public class ManpowerReportService(
         worksheet.Cells[rowIndex, colIndex++].Value = manpowers.Sum(x => x.TotalLocal);
         worksheet.Cells[rowIndex, colIndex++].Value = total;
         worksheet.Cells[rowIndex, colIndex++].Value = management;
-        worksheet.Cells[rowIndex, colIndex++].Value = total != 0 ? (management * 1.00) / total : 0;
+        worksheet.Cells[rowIndex, colIndex++].Value = total != 0 ? management * 1.00 / total : 0;
         worksheet.Cells[rowIndex, colIndex++].Value = executiveWithPosition;
-        worksheet.Cells[rowIndex, colIndex++].Value = total != 0 ? (executiveWithPosition * 1.00) / total : 0;
+        worksheet.Cells[rowIndex, colIndex++].Value = total != 0 ? executiveWithPosition * 1.00 / total : 0;
         worksheet.Cells[rowIndex, colIndex++].Value = executive;
-        worksheet.Cells[rowIndex, colIndex++].Value = total != 0 ? (executive * 1.00) / total : 0;
+        worksheet.Cells[rowIndex, colIndex++].Value = total != 0 ? executive * 1.00 / total : 0;
         worksheet.Cells[rowIndex, colIndex++].Value = staff;
-        worksheet.Cells[rowIndex, colIndex++].Value = total != 0 ? (staff * 1.00) / total : 0;
+        worksheet.Cells[rowIndex, colIndex++].Value = total != 0 ? staff * 1.00 / total : 0;
         worksheet.Cells[rowIndex, colIndex++].Value = worker;
-        worksheet.Cells[rowIndex, colIndex].Value = total != 0 ? (worker * 1.00) / total : 0;
+        worksheet.Cells[rowIndex, colIndex].Value = total != 0 ? worker * 1.00 / total : 0;
     }
 }

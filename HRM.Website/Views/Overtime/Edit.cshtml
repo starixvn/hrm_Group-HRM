@@ -92,7 +92,7 @@
                             {
                                 className = "holiday";
                             }
-                            else if (request.WorkDate.DayOfWeek == DayOfWeek.Saturday || request.WorkDate.DayOfWeek == DayOfWeek.Sunday)
+                            else if (request.WorkDate.DayOfWeek is DayOfWeek.Saturday or DayOfWeek.Sunday)
                             {
                                 className = "weekend";
                             }
@@ -152,7 +152,7 @@
                                 && request.ActualWorkingHours > 0
                                 && !request.IsKeepInView
                                 && !request.IsOffDay && !request.IsHoliday
-                                && request.ActualWorkingHours >= (Model.MonthlyRequest.Requester.WorkingHours + Model.MonthlyRequest.Requester.SpecialOT))
+                                && request.ActualWorkingHours >= Model.MonthlyRequest.Requester.WorkingHours + Model.MonthlyRequest.Requester.SpecialOT)
                                 || request.IsHoliday && request.HolidayTypeId == (byte)HolidayType.Special)
                             {
                                 @Html.TextBoxFor(model => request.SpecialHours, new { @class = className, maxlength = 5, autocomplete = "off" })

@@ -48,7 +48,7 @@ public class ExportExcelShiftStatisticService(IWebHostEnvironment hostingEnviron
             var titleCell = workSheet.Cells[dataTableTitleRow, titleCol++];
 
             titleStyle.Copy(titleCell);
-            titleCell.Style.Font.Color.SetColor(workDate.DayOfWeek == DayOfWeek.Saturday || workDate.DayOfWeek == DayOfWeek.Sunday ? Color.Red : Color.White);
+            titleCell.Style.Font.Color.SetColor(workDate.DayOfWeek is DayOfWeek.Saturday or DayOfWeek.Sunday ? Color.Red : Color.White);
             titleCell.Value = workDate.ToString("dd MMM, yyyy (ddd)");
         }
 

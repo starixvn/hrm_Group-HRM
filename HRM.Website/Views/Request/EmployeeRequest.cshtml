@@ -8,7 +8,7 @@
 
 @{
     ViewBag.Title = Model.PageTitle;
-    var hasCheckBoxColumn = Model.ViewType == RequestViewType.PersonalSpace || Model.ViewType == RequestViewType.HRSpace ? "has-check-box-column" : "";
+    var hasCheckBoxColumn = Model.ViewType is RequestViewType.PersonalSpace or RequestViewType.HRSpace ? "has-check-box-column" : "";
 }
 @section css {
     <link href="~/dist/styles/employee.request.css" rel="stylesheet" />
@@ -28,8 +28,9 @@
 <div class="table-data">
     <table class="table table-custom" id="data">
         <thead>
-            @if (Model.ViewType == RequestViewType.PersonalSpace)
-            {
+        @switch (Model.ViewType)
+        {
+            case RequestViewType.PersonalSpace:
                 <tr>
                     <th colspan="17">
                         <div style="float:right; margin-left: 10px">
@@ -41,9 +42,8 @@
                         </div>
                     </th>
                 </tr>
-            }
-            else if (Model.ViewType == RequestViewType.HRSpace)
-            {
+                break;
+            case RequestViewType.HRSpace:
                 <tr>
                     <th colspan="17">
                         <div style="float:right;">
@@ -51,9 +51,10 @@
                         </div>
                     </th>
                 </tr>
-            }
-            <tr>
-                @if (Model.ViewType == RequestViewType.PersonalSpace || Model.ViewType == RequestViewType.HRSpace)
+                break;
+        }
+        <tr>
+                @if (Model.ViewType is RequestViewType.PersonalSpace or RequestViewType.HRSpace)
                 {
                     <th>
                         <div class="checkbox">
@@ -135,53 +136,59 @@
                 @foreach (var request in Model.Requests)
                 {
                     <tr id="row@(request.Id)">
-                        @if (Model.ViewType == RequestViewType.PersonalSpace)
+                        @switch (Model.ViewType)
                         {
-                            <td>
-                                <div class="checkbox">
-                                    @if (request.Approver.Id == Model.CurrentUserId
-                                   && (request.Status.Id == (byte)CurrentRequestStatus.Pending || request.Status.Id == (byte)CurrentRequestStatus.Verified))
-                                    {
-                                        <input type="checkbox"
-                                               class="checkbox-custom chk-request"
-                                               roleid="@Convert.ToInt32(RoleSystem.Approver)"
-                                               requesttypeid="@request.RequestType.Id"
-                                               employeeid="@request.Requester.Id"
-                                               id="@request.Id"
-                                               viewtype="@Model.ViewType" />
-                                        <label for="@request.Id"></label>
-                                    }
-                                    else if (request.VerifiedBy.Id == Model.CurrentUserId && request.Status.Id == (byte)CurrentRequestStatus.Pending)
-                                    {
-                                        <input type="checkbox"
-                                               class="checkbox-custom chk-request"
-                                               roleid="@Convert.ToInt32(RoleSystem.Verifier)"
-                                               requesttypeid="@request.RequestType.Id"
-                                               employeeid="@request.Requester.Id"
-                                               id="@request.Id"
-                                               viewtype="@Model.ViewType" />
-                                        <label for="@request.Id"></label>
-                                    }
-                                </div>
-                            </td>
-                        }
-                        else if (Model.ViewType == RequestViewType.HRSpace)
-                        {
-                            <td>
-                                <div class="checkbox">
-                                    @if (Model.IsAllowChangeStatus && request.Status.Id == (byte)CurrentRequestStatus.Approved)
-                                    {
-                                        <input type="checkbox"
-                                               class="checkbox-custom chk-request"
-                                               roleid="@Convert.ToInt32(RoleSystem.HR)"
-                                               requesttypeid="@request.RequestType.Id"
-                                               employeeid="@request.Requester.Id"
-                                               id="@request.Id"
-                                               viewtype="@Model.ViewType" />
-                                        <label for="@request.Id"></label>
-                                    }
-                                </div>
-                            </td>
+                            case RequestViewType.PersonalSpace:
+                            {
+                                <td>
+                                    <div class="checkbox">
+                                        @if (request.Approver.Id == Model.CurrentUserId
+                                             && request.Status.Id is (byte)CurrentRequestStatus.Pending or (byte)CurrentRequestStatus.Verified)
+                                        {
+                                            <input type="checkbox"
+                                                   class="checkbox-custom chk-request"
+                                                   roleid="@Convert.ToInt32(RoleSystem.Approver)"
+                                                   requesttypeid="@request.RequestType.Id"
+                                                   employeeid="@request.Requester.Id"
+                                                   id="@request.Id"
+                                                   viewtype="@Model.ViewType" />
+                                            <label for="@request.Id"></label>
+                                        }
+                                        else {if (request.VerifiedBy.Id == Model.CurrentUserId && request.Status.Id == (byte)CurrentRequestStatus.Pending)
+                                            {
+                                                <input type="checkbox"
+                                                       class="checkbox-custom chk-request"
+                                                       roleid="@Convert.ToInt32(RoleSystem.Verifier)"
+                                                       requesttypeid="@request.RequestType.Id"
+                                                       employeeid="@request.Requester.Id"
+                                                       id="@request.Id"
+                                                       viewtype="@Model.ViewType" />
+                                                <label for="@request.Id"></label>
+                                            }
+                                        }
+                                    </div>
+                                </td>
+                                break;
+                            }
+                            case RequestViewType.HRSpace:
+                            {
+                                <td>
+                                    <div class="checkbox">
+                                        @if (Model.IsAllowChangeStatus && request.Status.Id == (byte)CurrentRequestStatus.Approved)
+                                        {
+                                            <input type="checkbox"
+                                                   class="checkbox-custom chk-request"
+                                                   roleid="@Convert.ToInt32(RoleSystem.HR)"
+                                                   requesttypeid="@request.RequestType.Id"
+                                                   employeeid="@request.Requester.Id"
+                                                   id="@request.Id"
+                                                   viewtype="@Model.ViewType" />
+                                            <label for="@request.Id"></label>
+                                        }
+                                    </div>
+                                </td>
+                                break;
+                            }
                         }
                         <td>@(index++)</td>
                         <td>@request.Requester.Team.Section.Department.Code</td>

@@ -46,7 +46,7 @@ public class MealAllowanceReportController(
             FromDate = model.FromDate,
             ToDate = model.ToDate,
             IsLocal = model.IsLocal,
-            TeamIds = model.TeamIds,
+            TeamIds = model.TeamIds
         };
         var mealAllowanceDetails = await reportService.GetMealAllowanceDetailsAsync(criteria);
         return PartialView("~/Views/Report/MealAllowance/_MealAllowanceDetailsGrid.cshtml", mealAllowanceDetails);
@@ -61,7 +61,7 @@ public class MealAllowanceReportController(
             FromDate = model.FromDate,
             ToDate = model.ToDate,
             IsLocal = model.IsLocal,
-            TeamIds = model.TeamIds,
+            TeamIds = model.TeamIds
         };
         var mealAllowanceSummary = await reportService.GetMealAllowanceSummaryAsync(criteria);
         ViewBag.FromDate = model.FromDate;

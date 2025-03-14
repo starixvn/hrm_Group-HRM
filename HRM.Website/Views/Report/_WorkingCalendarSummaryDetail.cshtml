@@ -48,7 +48,7 @@
                 </th>
                 @for (var day = fromDate.Date; day.Date <= toDate.Date; day = day.AddDays(1))
                 {
-                    <th class="@(day.DayOfWeek == DayOfWeek.Saturday || day.DayOfWeek == DayOfWeek.Sunday ? "weekend" : string.Empty) col-sorter">
+                    <th class="@(day.DayOfWeek is DayOfWeek.Saturday or DayOfWeek.Sunday ? "weekend" : string.Empty) col-sorter">
                         <div class="cell-control-wrapper">
                             <div>
                                 @day.ToString("dd MMM, yyyy (ddd)")

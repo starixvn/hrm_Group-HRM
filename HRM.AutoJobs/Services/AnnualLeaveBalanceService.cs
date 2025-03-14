@@ -205,27 +205,14 @@ public class AnnualLeaveBalanceService(
         const byte September = 9;
         const byte December = 12;
 
-        switch (DateTimeOffset.Now.Month)
+        percent = DateTimeOffset.Now.Month switch
         {
-            case March:
-                percent = "> 75%";
-                break;
-
-            case June:
-                percent = "> 50%";
-                break;
-
-            case September:
-                percent = "> 25%";
-                break;
-
-            case December:
-                percent = "> 0%";
-                break;
-            default: 
-                percent = percent;
-                break;
-        }
+	        March => "> 75%",
+	        June => "> 50%",
+	        September => "> 25%",
+	        December => "> 0%",
+	        _ => percent
+        };
         return percent;
     }
 

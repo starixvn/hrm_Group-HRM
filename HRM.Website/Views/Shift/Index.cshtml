@@ -68,10 +68,10 @@
 						@item.Name
 					</td>
 					<td>
-						@item.BeginCheckInTime@((item.BeginCheckInTime == item.EndCheckInTime) ? string.Empty : " - " + item.EndCheckInTime)@(item.IsInAfterDay ? "+" : "")
+						@item.BeginCheckInTime@(item.BeginCheckInTime == item.EndCheckInTime ? string.Empty : " - " + item.EndCheckInTime)@(item.IsInAfterDay ? "+" : "")
 					</td>
 					<td>
-						@item.BeginCheckOutTime@((item.BeginCheckOutTime == item.EndCheckOutTime) ? string.Empty : " - " + item.EndCheckOutTime)@(item.IsOutAfterDay ? "+" : "")
+						@item.BeginCheckOutTime@(item.BeginCheckOutTime == item.EndCheckOutTime ? string.Empty : " - " + item.EndCheckOutTime)@(item.IsOutAfterDay ? "+" : "")
 					</td>
 					<td>
 						@(item.IsDisabled ? Labels.Disabled : Labels.Active)

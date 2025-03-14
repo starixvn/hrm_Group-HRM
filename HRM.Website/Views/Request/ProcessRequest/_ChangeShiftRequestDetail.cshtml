@@ -15,8 +15,8 @@
 	<tbody>
 	@foreach (var item in Model)
 	{
-		var disciplineTypeId = (byte)DisciplineType.ChangeShift;
-		<tr>
+        const byte disciplineTypeId = (byte)DisciplineType.ChangeShift;
+        <tr>
 			<td>@item.OnDate.ToDayOfWeekFormatedDate()</td>
 			<td>@(item.FromShiftId.Equals(-1) ? Labels.Off : item.FromShift)</td>
 			<td>

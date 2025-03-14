@@ -48,7 +48,7 @@ public class ScheduleArrangeService(
             EmpId = filter.EmployeeId,
             TeamIds = filter.TeamIds,
             IsIFrame = filter.IsIFrame,
-            IsLocal = filter.IsLocal.HasValue ? (filter.IsLocal.Value == 1) : null,
+            IsLocal = filter.IsLocal.HasValue ? filter.IsLocal.Value == 1 : null,
             CompanyId = companyId
         };
 
@@ -222,36 +222,17 @@ public class ScheduleArrangeService(
         ShiftBase shift = null;
         if (weeklyDefaultShift != null)
         {
-            switch (dayOfWeek)
-            {
-                case DayOfWeek.Monday:
-                    shift = weeklyDefaultShift.MonShift;
-                    break;
-
-                case DayOfWeek.Tuesday:
-                    shift = weeklyDefaultShift.TueShift;
-                    break;
-
-                case DayOfWeek.Wednesday:
-                    shift = weeklyDefaultShift.WedShift;
-                    break;
-
-                case DayOfWeek.Thursday:
-                    shift = weeklyDefaultShift.ThuShift;
-                    break;
-
-                case DayOfWeek.Friday:
-                    shift = weeklyDefaultShift.FriShift;
-                    break;
-
-                case DayOfWeek.Saturday:
-                    shift = weeklyDefaultShift.SatShift;
-                    break;
-
-                case DayOfWeek.Sunday:
-                    shift = weeklyDefaultShift.SunShift;
-                    break;
-            }
+	        shift = dayOfWeek switch
+	        {
+		        DayOfWeek.Monday => weeklyDefaultShift.MonShift,
+		        DayOfWeek.Tuesday => weeklyDefaultShift.TueShift,
+		        DayOfWeek.Wednesday => weeklyDefaultShift.WedShift,
+		        DayOfWeek.Thursday => weeklyDefaultShift.ThuShift,
+		        DayOfWeek.Friday => weeklyDefaultShift.FriShift,
+		        DayOfWeek.Saturday => weeklyDefaultShift.SatShift,
+		        DayOfWeek.Sunday => weeklyDefaultShift.SunShift,
+		        _ => null
+	        };
         }
 
         return shift;

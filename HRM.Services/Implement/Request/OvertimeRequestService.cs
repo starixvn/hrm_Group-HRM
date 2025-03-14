@@ -203,24 +203,24 @@ public class OvertimeRequestService(
 
     private static bool IsInvalidKeepInView(DailyOvertimeRequest overtime)
     {
-        return (!overtime.OffHours.Equals(0)
-                || !overtime.PublicHours.Equals(0)
-                || overtime.ActualWorkingHours < (overtime.TotalShiftHours + overtime.NormalHours)
-                || overtime.ActualWorkingHours < (overtime.TotalShiftHours + overtime.SpecialHours));
+        return !overtime.OffHours.Equals(0)
+               || !overtime.PublicHours.Equals(0)
+               || overtime.ActualWorkingHours < overtime.TotalShiftHours + overtime.NormalHours
+               || overtime.ActualWorkingHours < overtime.TotalShiftHours + overtime.SpecialHours;
     }
 
     private static bool IsInvalidOffDay(DailyOvertimeRequest overtime)
     {
-        return (!overtime.NormalHours.Equals(0)
-                || !overtime.PublicHours.Equals(0)
-                || overtime.ActualWorkingHours < overtime.OffHours);
+        return !overtime.NormalHours.Equals(0)
+               || !overtime.PublicHours.Equals(0)
+               || overtime.ActualWorkingHours < overtime.OffHours;
     }
 
     private static bool IsInvalidHoliday(DailyOvertimeRequest overtime)
     {
-        return (!overtime.NormalHours.Equals(0)
-                || !overtime.OffHours.Equals(0)
-                || overtime.ActualWorkingHours < overtime.PublicHours);
+        return !overtime.NormalHours.Equals(0)
+               || !overtime.OffHours.Equals(0)
+               || overtime.ActualWorkingHours < overtime.PublicHours;
     }
 
     private static List<List<string>> SplitList(List<string> locations, int size)

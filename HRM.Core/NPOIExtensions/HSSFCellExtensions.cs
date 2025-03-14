@@ -112,10 +112,10 @@ public static class HSSFCellExtensions
         {
             var range = sourceCell.Sheet.GetMergedRegion(i);
 
-            if ((range.FirstColumn <= sourceCell.ColumnIndex)
-                && (range.LastColumn >= sourceCell.ColumnIndex)
-                && (range.FirstRow <= sourceCell.RowIndex)
-                && (range.LastRow >= sourceCell.RowIndex))
+            if (range.FirstColumn <= sourceCell.ColumnIndex
+                && range.LastColumn >= sourceCell.ColumnIndex
+                && range.FirstRow <= sourceCell.RowIndex
+                && range.LastRow >= sourceCell.RowIndex)
             {
                 sourceRange = range;
             }

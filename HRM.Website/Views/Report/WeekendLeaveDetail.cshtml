@@ -39,7 +39,7 @@
                     Model.FromDate.ToDateMonthYearFormatedDate(),
                     new {
                         @class = "datepicker form-control",
-                        mindate = (new DateTime(2010, 1, 1)).ToString("yyyy/MM/dd")
+                        mindate = new DateTime(2010, 1, 1).ToString("yyyy/MM/dd")
                     })
                 <i class="icon-calendar fa fa-calendar"></i>
             </div>
@@ -54,7 +54,7 @@
                     Model.ToDate.ToDateMonthYearFormatedDate(),
                     new {
                         @class = "datepicker form-control",
-                        mindate = (new DateTime(2010, 1, 1)).ToString("yyyy/MM/dd")
+                        mindate = new DateTime(2010, 1, 1).ToString("yyyy/MM/dd")
                     })
                 <i class="icon-calendar fa fa-calendar"></i>
             </div>
@@ -70,7 +70,7 @@
                     {
                         new() {Text = Labels.All, Value = string.Empty},
                         new() {Text = Labels.Expat, Value = "false"},
-                        new() {Text = Labels.Local, Value = "true"},
+                        new() {Text = Labels.Local, Value = "true"}
                     };
                 }
                 @Html.DropDownListFor(model => model.IsLocal, category, new { @class = "category form-control" })
@@ -105,7 +105,7 @@
                     {
                         new() {Text = Labels.All, Value = "-1"},
                         new() {Text = Labels.AnnualLeave, Value = "2"},
-                        new() {Text = Labels.UnpaidLeave, Value = "25"},
+                        new() {Text = Labels.UnpaidLeave, Value = "25"}
                     };
                 }
                 @Html.DropDownListFor(model => model.LeaveTypeId, leaveType, new { @class = "form-control" })

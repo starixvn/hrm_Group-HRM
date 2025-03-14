@@ -126,8 +126,8 @@ public class DisciplineRepository : IDisciplineRepository
             {
                 WorkDate = discipline.WorkDate,
                 ShiftName = discipline.ShiftName,
-                CheckIn = (checkIn.HasValue && checkIn.Value != default(DateTime)) ? checkIn.Value : null,
-                CheckOut = (checkOut.HasValue && checkOut.Value != default(DateTime)) ? checkOut.Value : null,
+                CheckIn = checkIn.HasValue && checkIn.Value != default ? checkIn.Value : null,
+                CheckOut = checkOut.HasValue && checkOut.Value != default ? checkOut.Value : null,
                 TotalHours = totalHours.HasValue ? ConvertNumberToTime(totalHours.Value * 60) : string.Empty,
                 MinutesLateIn = lateIn.HasValue ? ConvertNumberToTime(lateIn.Value) : string.Empty,
                 MinutesEarlyOut = earlyOut.HasValue ? ConvertNumberToTime(earlyOut.Value) : string.Empty,

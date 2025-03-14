@@ -108,6 +108,7 @@ public static class HSSFSheetExtensions
                 destCell.SetCellValue(sourceCell.StringCellValue);
                 break;
 
+            case CellType.Formula:
             default:
                 destCell.SetCellValue(0);
                 break;

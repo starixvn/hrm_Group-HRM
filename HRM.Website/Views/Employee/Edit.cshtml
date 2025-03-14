@@ -603,8 +603,8 @@
                         var empType = new List<SelectListItem>
 		                {
 			                new() {Text = Labels.Local, Value = "true"},
-			                new() {Text = Labels.Expat, Value = "false"},
-		                };
+			                new() {Text = Labels.Expat, Value = "false"}
+                        };
                     }
                     @Html.DropDownListFor(model => model.IsLocal, empType, new { @class = "form-control" })
                 </div>

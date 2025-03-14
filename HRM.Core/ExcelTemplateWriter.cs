@@ -13,13 +13,12 @@ public class ExcelTemplateWriter(HSSFWorkbook template, string sheetName)
 
     private readonly ISheet _templateSheet = template.GetSheetAt(0);
     private readonly ISheet _sheet = template.CreateSheet(sheetName);
-    private int _rowId;
 
     #endregion Attributes
 
     #region Constructors
 
-    public ExcelTemplateWriter(string filePath, string excelFileName = "Report.xls", string sheetName = "Result")
+    public ExcelTemplateWriter(string filePath, string sheetName = "Result")
         : this(new FileStream(filePath, FileMode.Open, FileAccess.Read), sheetName)
     {
     }
@@ -27,17 +26,14 @@ public class ExcelTemplateWriter(HSSFWorkbook template, string sheetName)
     public ExcelTemplateWriter(FileStream fs, string sheetName = "Result")
         : this(new HSSFWorkbook(fs), sheetName)
     {
-        if (fs != null)
-        {
-            fs.Close();
-        }
+	    fs?.Close();
     }
 
     #endregion Constructors
 
     #region Properties
 
-    public int RowId => _rowId;
+    public int RowId { get; private set; }
 
     #endregion Properties
 
@@ -139,9 +135,9 @@ public class ExcelTemplateWriter(HSSFWorkbook template, string sheetName)
 
     private IRow CreateRows(int rowIndex, int total)
     {
-        _sheet.CopyRows(_templateSheet, rowIndex, _rowId, total);
-        _rowId += total;
-        return _sheet.GetRow(_rowId - total);
+        _sheet.CopyRows(_templateSheet, rowIndex, RowId, total);
+        RowId += total;
+        return _sheet.GetRow(RowId - total);
     }
 
     #endregion Row related methods

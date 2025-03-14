@@ -118,7 +118,7 @@ public class LateInEarlyOutController(
             FromDate = request.OnDate.AddMonths(-1),
             ToDate = DateTimeOffset.Now.DateTime.ToClientTimeZone().Date,
             RequestId = request.RequestId,
-            RequestTypeId = request.RequestTypeId,
+            RequestTypeId = request.RequestTypeId
         };
         var disabledDates = await lateInEarlyOutRequestService.GetDisabledDateAsync(param);
         var viewModel = new LateInEarlyOutRequestViewModel

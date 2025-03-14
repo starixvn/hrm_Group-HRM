@@ -95,7 +95,7 @@
             foreach (var item in Model)
             {
                 index++;
-                var trClass = (item.LateIn > 0 || item.EarlyOut > 30) ? "highlight" : string.Empty;
+                var trClass = item.LateIn > 0 || item.EarlyOut > 30 ? "highlight" : string.Empty;
 
                 <tr class="@trClass">
                     <td>@index</td>
@@ -118,7 +118,7 @@
 
                     @if (item.IsOffdayOT)
                     {
-                        var title = !string.IsNullOrEmpty(item.ShiftCode) && !string.IsNullOrEmpty(item.ExpectedInTime) ? (item.ExpectedInTime + "-" + item.ExpectedOutTime) : string.Empty;
+                        var title = !string.IsNullOrEmpty(item.ShiftCode) && !string.IsNullOrEmpty(item.ExpectedInTime) ? item.ExpectedInTime + "-" + item.ExpectedOutTime : string.Empty;
                         var className = $"mytimesheet-workinginoffday {(item.IsPublicHoliday && !string.IsNullOrEmpty(item.ShiftCode) ? "holiday" : "")}";
                         <td class="@className">
                             <span class="tooltip-tippy" data-tippy-content="@title">@item.ShiftCode</span>
@@ -126,7 +126,7 @@
                     }
                     else
                     {
-                        var title = !string.IsNullOrEmpty(item.ShiftCode) && !string.IsNullOrEmpty(item.ExpectedInTime) ? (item.ExpectedInTime + "-" + item.ExpectedOutTime) : string.Empty;
+                        var title = !string.IsNullOrEmpty(item.ShiftCode) && !string.IsNullOrEmpty(item.ExpectedInTime) ? item.ExpectedInTime + "-" + item.ExpectedOutTime : string.Empty;
                         var className = $" {(item.IsPublicHoliday & !string.IsNullOrEmpty(item.ShiftCode) ? "holiday" : "")}";
                         <td class="@className">
                             @if (!string.IsNullOrEmpty(title))
@@ -179,7 +179,7 @@
                         {
                             foreach (var request in item.RequestList)
                             {
-                                var statusClass = request.CurrentStatus == (byte)CurrentRequestStatus.Pending || request.CurrentStatus == (byte)CurrentRequestStatus.Verified
+                                var statusClass = request.CurrentStatus is (byte)CurrentRequestStatus.Pending or (byte)CurrentRequestStatus.Verified
                                     ? " pending-request" : string.Empty;
                                 var className = "tooltip-request req" + statusClass;
                                 var requestEntity = new RequestEntity
@@ -222,7 +222,7 @@
                     <td class="td-warning">
                         @if (item.IsWarning)
                         {
-                            <span class="icon-warning" />
+                            <span class="icon-warning"></span>
                         }
                     </td>
                 </tr>

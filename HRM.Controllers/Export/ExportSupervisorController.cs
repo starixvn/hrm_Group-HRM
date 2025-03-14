@@ -35,7 +35,7 @@ public class ExportSupervisorController(
     {
         var criteria = new GetTeamSupervisorCriteria
         {
-            TeamIds = model.TeamIds,
+            TeamIds = model.TeamIds
         };
         var supervisors = await reportService.GetTeamSupervisor(criteria);
         var bytes = exportSupervisorService.ExportTeamSupervisor(supervisors);

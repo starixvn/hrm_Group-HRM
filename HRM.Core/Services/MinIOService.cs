@@ -34,7 +34,7 @@ public class MinIOService : IMinIOService
 		{
 			ServiceURL = internalUrl,
 			ForcePathStyle = true,
-			UseHttp = true,
+			UseHttp = true
 		};
 
 		s3Client = new AmazonS3Client(accessKey, secretKey, config);

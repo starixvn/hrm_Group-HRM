@@ -26,7 +26,7 @@ public class FileController(
             if (file.Length > 0)
             {
                 var pathAttach = SaveFileToServer(file, categoryId, isOverride);
-                pathAttachFiles = (string.IsNullOrEmpty(pathAttachFiles)) ? pathAttach : string.Concat(pathAttachFiles, ";/", pathAttach);
+                pathAttachFiles = string.IsNullOrEmpty(pathAttachFiles) ? pathAttach : string.Concat(pathAttachFiles, ";/", pathAttach);
             }
         }
 
@@ -75,7 +75,7 @@ public class FileController(
     {
         if (path.StartsWith('/'))
         {
-            path = path.Substring(1);
+            path = path[1..];
         }
 
         return path;
@@ -105,12 +105,10 @@ public class FileController(
                 {
                     return Json(new { isSucessful = false, message = string.Format(Labels.UploadFileExists, file.FileName) });
                 }
-                else
-                {
-                    var path = Path.Combine(basePath, fileName);
-                    using var stream = new FileStream(path, FileMode.Create);
-                    file.CopyTo(stream);
-                }
+
+                var path = Path.Combine(basePath, fileName);
+                using var stream = new FileStream(path, FileMode.Create);
+                file.CopyTo(stream);
             }
 
             return Json(new { isSuccessful = true, message = "File(s) uploaded successful." });

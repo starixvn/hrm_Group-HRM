@@ -36,7 +36,7 @@ public class OvertimeController(
         model.EmployeeId = model.EmployeeId <= 0 ? EmployeeSession.EmpId : model.EmployeeId;
         model.OvertimeRequests = await overtimeService.GetMonthlyRequestByEmployeeId(model.EmployeeId, model.Year);
 
-        Parallel.ForEach(model.OvertimeRequests, (overTimeRequest) =>
+        Parallel.ForEach(model.OvertimeRequests, overTimeRequest =>
         {
             overTimeRequest.ApprovedDate = overTimeRequest.ApprovedDate?.ToClientTimeZone();
             overTimeRequest.VerifiedDate = overTimeRequest.VerifiedDate?.ToClientTimeZone();
@@ -63,7 +63,7 @@ public class OvertimeController(
             VerifierId = monthlyRequest.Verifier?.EmpId ?? 0,
             ApproverId = monthlyRequest.Approver?.EmpId ?? 0,
             Verifiers = supervisor.Verifiers,
-            Approvers = supervisor.Approvers,
+            Approvers = supervisor.Approvers
         };
 
         return View(model);

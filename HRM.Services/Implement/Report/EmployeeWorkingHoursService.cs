@@ -51,7 +51,7 @@ public partial class EmployeeWorkingHoursService : IEmployeeWorkingHoursService
         {
             worksheet.Cells[rowIndex, colIndex].Value = day.ToString("dd MMM, yyyy (ddd)");
 
-            if (day.DayOfWeek == DayOfWeek.Saturday || day.DayOfWeek == DayOfWeek.Sunday)
+            if (day.DayOfWeek is DayOfWeek.Saturday or DayOfWeek.Sunday)
             {
                 worksheet.Cells[rowIndex, colIndex].Style.Font.Color.SetColor(redColor);
             }
@@ -110,7 +110,7 @@ public partial class EmployeeWorkingHoursService : IEmployeeWorkingHoursService
         templateWorksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
         colIndex = 8;
         worksheet.Cells[rowIndex, colIndex].Value = date.ToString("dd MMM, yyyy (ddd)");
-        if (date.DayOfWeek == DayOfWeek.Saturday || date.DayOfWeek == DayOfWeek.Sunday)
+        if (date.DayOfWeek is DayOfWeek.Saturday or DayOfWeek.Sunday)
         {
             worksheet.Cells[rowIndex, colIndex].Style.Font.Color.SetColor(redColor);
         }

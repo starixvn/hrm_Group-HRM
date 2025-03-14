@@ -29,7 +29,7 @@
                 <th>@Labels.ActualWorkingDays</th>
                 @for (var day = fromDate.Date; day.Date <= toDate.Date; day = day.AddDays(1))
                 {
-                    <th class="@(day.DayOfWeek == DayOfWeek.Saturday || day.DayOfWeek == DayOfWeek.Sunday ? "weekend" : string.Empty)">
+                    <th class="@(day.DayOfWeek is DayOfWeek.Saturday or DayOfWeek.Sunday ? "weekend" : string.Empty)">
                         @day.ToString("dd MMM, yyyy (ddd)")
                     </th>
                 }
@@ -76,11 +76,7 @@
                                         || dailyWorking.LeaveType.Id == (int)LeaveTypes.UnpaidLeaveInsurance
                                         || dailyWorking.LeaveType.Id == (int)LeaveTypes.MaternityLeave
                                         || dailyWorking.LeaveType.Id == (int)LeaveTypes.PaternityLeave
-                                        || (dailyWorking.LeaveType2 != null
-                                            && (dailyWorking.LeaveType2.Id == (int)LeaveTypes.UnpaidLeave
-                                                || dailyWorking.LeaveType2.Id == (int)LeaveTypes.UnpaidLeaveInsurance
-                                                || dailyWorking.LeaveType2.Id == (int)LeaveTypes.MaternityLeave
-                                                || dailyWorking.LeaveType2.Id == (int)LeaveTypes.PaternityLeave)))
+                                        || dailyWorking.LeaveType2 is { Id: (int)LeaveTypes.UnpaidLeave or (int)LeaveTypes.UnpaidLeaveInsurance or (int)LeaveTypes.MaternityLeave or (int)LeaveTypes.PaternityLeave })
                                     {
                                         className += " unpaidleave";
                                     }

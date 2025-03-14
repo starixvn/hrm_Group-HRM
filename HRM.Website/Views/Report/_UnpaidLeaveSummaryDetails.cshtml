@@ -19,38 +19,38 @@
             </th>
         </tr>
         <tr>
-            @if (Model.Period == "1")
+            @switch (Model.Period)
             {
-                <th>@Labels.Jan</th>
-                <th>@Labels.Feb</th>
-                <th>@Labels.Mar</th>
-                <th>@Labels.Apr</th>
-                <th>@Labels.May</th>
-                <th>@Labels.Jun</th>
-            }
-            else if (Model.Period == "2")
-            {
-                <th>@Labels.Jul</th>
-                <th>@Labels.Aug</th>
-                <th>@Labels.Sep</th>
-                <th>@Labels.Oct</th>
-                <th>@Labels.Nov</th>
-                <th>@Labels.Dec</th>
-            }
-            else
-            {
-                <th>@Labels.Jan</th>
-                <th>@Labels.Feb</th>
-                <th>@Labels.Mar</th>
-                <th>@Labels.Apr</th>
-                <th>@Labels.May</th>
-                <th>@Labels.Jun</th>
-                <th>@Labels.Jul</th>
-                <th>@Labels.Aug</th>
-                <th>@Labels.Sep</th>
-                <th>@Labels.Oct</th>
-                <th>@Labels.Nov</th>
-                <th>@Labels.Dec</th>
+                case "1":
+                    <th>@Labels.Jan</th>
+                    <th>@Labels.Feb</th>
+                    <th>@Labels.Mar</th>
+                    <th>@Labels.Apr</th>
+                    <th>@Labels.May</th>
+                    <th>@Labels.Jun</th>
+                    break;
+                case "2":
+                    <th>@Labels.Jul</th>
+                    <th>@Labels.Aug</th>
+                    <th>@Labels.Sep</th>
+                    <th>@Labels.Oct</th>
+                    <th>@Labels.Nov</th>
+                    <th>@Labels.Dec</th>
+                    break;
+                default:
+                    <th>@Labels.Jan</th>
+                    <th>@Labels.Feb</th>
+                    <th>@Labels.Mar</th>
+                    <th>@Labels.Apr</th>
+                    <th>@Labels.May</th>
+                    <th>@Labels.Jun</th>
+                    <th>@Labels.Jul</th>
+                    <th>@Labels.Aug</th>
+                    <th>@Labels.Sep</th>
+                    <th>@Labels.Oct</th>
+                    <th>@Labels.Nov</th>
+                    <th>@Labels.Dec</th>
+                    break;
             }
 
         </tr>
@@ -69,161 +69,167 @@
                 <td>@item.Team</td>
                 <td class="align-left">@item.FullName</td>
                 <td class="align-left">@item.Nickname</td>
-                @if (Model.Period == "1")
+                @switch (Model.Period)
                 {
-                    balance = item.Jan + item.Feb + item.Mar + item.Apr + item.May + item.Jun;
-                    <td>
-                        @if (item.Jan > 0)
-                        {
-                            @item.Jan.ToString("0.0")
-                        }
-                    </td>
-                    <td>
-                        @if (item.Feb > 0)
-                        {
-                            @item.Feb.ToString("0.0")
-                        }
-                    </td>
-                    <td>
-                        @if (item.Mar > 0)
-                        {
-                            @item.Mar.ToString("0.0")
-                        }
-                    </td>
-                    <td>
-                        @if (item.Apr > 0)
-                        {
-                            @item.Apr.ToString("0.0")
-                        }
-                    </td>
-                    <td>
-                        @if (item.May > 0)
-                        {
-                            @item.May.ToString("0.0")
-                        }
-                    </td>
-                    <td>
-                        @if (item.Jun > 0)
-                        {
-                            @item.Jun.ToString("0.0")
-                        }
-                    </td>
-                }
-                else if (Model.Period == "2")
-                {
-                    balance = item.Jul + item.Aug + item.Sep + item.Oct + item.Nov + item.Dec;
-                    <td>
-                        @if (item.Jul > 0)
-                        {
-                            @item.Jul.ToString("0.0")
-                        }
-                    </td>
-                    <td>
-                        @if (item.Aug > 0)
-                        {
-                            @item.Aug.ToString("0.0")
-                        }
-                    </td>
-                    <td>
-                        @if (item.Sep > 0)
-                        {
-                            @item.Sep.ToString("0.0")
-                        }
-                    </td>
-                    <td>
-                        @if (item.Oct > 0)
-                        {
-                            @item.Oct.ToString("0.0")
-                        }
-                    </td>
-                    <td>
-                        @if (item.Nov > 0)
-                        {
-                            @item.Nov.ToString("0.0")
-                        }
-                    </td>
-                    <td>
-                        @if (item.Dec > 0)
-                        {
-                            @item.Dec.ToString("0.0")
-                        }
-                    </td>
-                }
-                else
-                {
-                    balance = item.LeaveBalance;
-                    <td>
-                        @if (item.Jan > 0)
-                        {
-                            @item.Jan.ToString("0.0")
-                        }
-                    </td>
-                    <td>
-                        @if (item.Feb > 0)
-                        {
-                            @item.Feb.ToString("0.0")
-                        }
-                    </td>
-                    <td>
-                        @if (item.Mar > 0)
-                        {
-                            @item.Mar.ToString("0.0")
-                        }
-                    </td>
-                    <td>
-                        @if (item.Apr > 0)
-                        {
-                            @item.Apr.ToString("0.0")
-                        }
-                    </td>
-                    <td>
-                        @if (item.May > 0)
-                        {
-                            @item.May.ToString("0.0")
-                        }
-                    </td>
-                    <td>
-                        @if (item.Jun > 0)
-                        {
-                            @item.Jun.ToString("0.0")
-                        }
-                    </td>
-                    <td>
-                        @if (item.Jul > 0)
-                        {
-                            @item.Jul.ToString("0.0")
-                        }
-                    </td>
-                    <td>
-                        @if (item.Aug > 0)
-                        {
-                            @item.Aug.ToString("0.0")
-                        }
-                    </td>
-                    <td>
-                        @if (item.Sep > 0)
-                        {
-                            @item.Sep.ToString("0.0")
-                        }
-                    </td>
-                    <td>
-                        @if (item.Oct > 0)
-                        {
-                            @item.Oct.ToString("0.0")
-                        }
-                    </td>
-                    <td>
-                        @if (item.Nov > 0)
-                        {
-                            @item.Nov.ToString("0.0")
-                        }
-                    </td>
-                    <td>
-                        @if (item.Dec > 0)
-                        {
-                            @item.Dec.ToString("0.0")
-                        }
-                    </td>
+                    case "1":
+                    {
+                        balance = item.Jan + item.Feb + item.Mar + item.Apr + item.May + item.Jun;
+                        <td>
+                            @if (item.Jan > 0)
+                            {
+                                @item.Jan.ToString("0.0")
+                            }
+                        </td>
+                        <td>
+                            @if (item.Feb > 0)
+                            {
+                                @item.Feb.ToString("0.0")
+                            }
+                        </td>
+                        <td>
+                            @if (item.Mar > 0)
+                            {
+                                @item.Mar.ToString("0.0")
+                            }
+                        </td>
+                        <td>
+                            @if (item.Apr > 0)
+                            {
+                                @item.Apr.ToString("0.0")
+                            }
+                        </td>
+                        <td>
+                            @if (item.May > 0)
+                            {
+                                @item.May.ToString("0.0")
+                            }
+                        </td>
+                        <td>
+                            @if (item.Jun > 0)
+                            {
+                                @item.Jun.ToString("0.0")
+                            }
+                        </td>
+                        break;
+                    }
+                    case "2":
+                    {
+                        balance = item.Jul + item.Aug + item.Sep + item.Oct + item.Nov + item.Dec;
+                        <td>
+                            @if (item.Jul > 0)
+                            {
+                                @item.Jul.ToString("0.0")
+                            }
+                        </td>
+                        <td>
+                            @if (item.Aug > 0)
+                            {
+                                @item.Aug.ToString("0.0")
+                            }
+                        </td>
+                        <td>
+                            @if (item.Sep > 0)
+                            {
+                                @item.Sep.ToString("0.0")
+                            }
+                        </td>
+                        <td>
+                            @if (item.Oct > 0)
+                            {
+                                @item.Oct.ToString("0.0")
+                            }
+                        </td>
+                        <td>
+                            @if (item.Nov > 0)
+                            {
+                                @item.Nov.ToString("0.0")
+                            }
+                        </td>
+                        <td>
+                            @if (item.Dec > 0)
+                            {
+                                @item.Dec.ToString("0.0")
+                            }
+                        </td>
+                        break;
+                    }
+                    default:
+                    {
+                        balance = item.LeaveBalance;
+                        <td>
+                            @if (item.Jan > 0)
+                            {
+                                @item.Jan.ToString("0.0")
+                            }
+                        </td>
+                        <td>
+                            @if (item.Feb > 0)
+                            {
+                                @item.Feb.ToString("0.0")
+                            }
+                        </td>
+                        <td>
+                            @if (item.Mar > 0)
+                            {
+                                @item.Mar.ToString("0.0")
+                            }
+                        </td>
+                        <td>
+                            @if (item.Apr > 0)
+                            {
+                                @item.Apr.ToString("0.0")
+                            }
+                        </td>
+                        <td>
+                            @if (item.May > 0)
+                            {
+                                @item.May.ToString("0.0")
+                            }
+                        </td>
+                        <td>
+                            @if (item.Jun > 0)
+                            {
+                                @item.Jun.ToString("0.0")
+                            }
+                        </td>
+                        <td>
+                            @if (item.Jul > 0)
+                            {
+                                @item.Jul.ToString("0.0")
+                            }
+                        </td>
+                        <td>
+                            @if (item.Aug > 0)
+                            {
+                                @item.Aug.ToString("0.0")
+                            }
+                        </td>
+                        <td>
+                            @if (item.Sep > 0)
+                            {
+                                @item.Sep.ToString("0.0")
+                            }
+                        </td>
+                        <td>
+                            @if (item.Oct > 0)
+                            {
+                                @item.Oct.ToString("0.0")
+                            }
+                        </td>
+                        <td>
+                            @if (item.Nov > 0)
+                            {
+                                @item.Nov.ToString("0.0")
+                            }
+                        </td>
+                        <td>
+                            @if (item.Dec > 0)
+                            {
+                                @item.Dec.ToString("0.0")
+                            }
+                        </td>
+                        break;
+                    }
                 }
 
                 <td style="width: 250px">

@@ -333,8 +333,8 @@ public class EmployeeService(
                 totalDays -= ((TimeSpan)(militaryToDate - militaryFromDate)).Days;
             }
             var years = totalDays / dayOfYear;
-            var months = (totalDays - (years * dayOfYear)) / dayOfMonth;
-            var days = totalDays - (years * dayOfYear) - (months * dayOfMonth);
+            var months = (totalDays - years * dayOfYear) / dayOfMonth;
+            var days = totalDays - years * dayOfYear - months * dayOfMonth;
             if (days >= halfMonth)
             {
                 months++;

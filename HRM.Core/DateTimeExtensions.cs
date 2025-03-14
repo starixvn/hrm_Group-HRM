@@ -76,7 +76,7 @@ public static class DateTimeExtensions
         => new DateTimeOffset(time.Year, time.Month, time.Day, 23, 59, 59, TimeSpan.Zero).DateTime;
 
     public static bool IsSameDateWith(this DateTime sourceDate, DateTime toDate)
-        => (sourceDate.Year == toDate.Year && sourceDate.Month == toDate.Month && sourceDate.Day == toDate.Day);
+        => sourceDate.Year == toDate.Year && sourceDate.Month == toDate.Month && sourceDate.Day == toDate.Day;
 
     public static DateTime ToServerTimeZone(this DateTime time)
     {

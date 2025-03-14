@@ -173,12 +173,7 @@ public class DisciplineController(
         criteria.ActorId = EmployeeSession.EmpId;
         var commandResult = await baseService.ExecuteNonQueryAsync(criteria);
 
-        if (!commandResult.IsSuccessful)
-        {
-            return commandResult.Message;
-        }
-
-        return string.Empty;
+        return !commandResult.IsSuccessful ? commandResult.Message : string.Empty;
     }
 
     [HttpPost]
@@ -191,7 +186,7 @@ public class DisciplineController(
             IgnoreDetailXml = ignoreDetails.ToXML().ToString(),
             DisciplineIgnoreXml = disciplineIgnores.ToXML().ToString(),
             HasUpdateOutOfControlReason = userControlSession.HasPermissionOnFunction(FunctionKey.UpdateOutOfControlReason, Policy.Host),
-            ActorId = EmployeeSession.EmpId,
+            ActorId = EmployeeSession.EmpId
         };
         var commandResult = await baseService.ExecuteNonQueryAsync(criteria);
 
@@ -252,13 +247,12 @@ public class DisciplineController(
         const byte May = 5;
         const byte June = 6;
         const byte December = 12;
-        var today = DateTimeOffset.Now.DateTime.ToClientTimeZone().Date;
-        var month = today.Month;
+        var (year, month, _) = DateTimeOffset.Now.DateTime.ToClientTimeZone().Date;
         var fromDate = month switch
         {
-            December => new DateTimeOffset(today.Year, month, 1, 0, 0, 0, TimeSpan.Zero),
-            >= 1 and <= May => new DateTimeOffset(today.Year - 1, December, 1, 0, 0, 0, TimeSpan.Zero),
-            _ => new DateTimeOffset(today.Year, June, 1, 0, 0, 0, TimeSpan.Zero)
+            December => new DateTimeOffset(year, month, 1, 0, 0, 0, TimeSpan.Zero),
+            >= 1 and <= May => new DateTimeOffset(year - 1, December, 1, 0, 0, 0, TimeSpan.Zero),
+            _ => new DateTimeOffset(year, June, 1, 0, 0, 0, TimeSpan.Zero)
         };
 
         return fromDate.DateTime;
@@ -268,15 +262,14 @@ public class DisciplineController(
     {
         const byte May = 5;
         const byte December = 12;
-        var today = DateTimeOffset.Now.DateTime.ToClientTimeZone().Date;
-        var month = today.Month;
+        var (year, month, _) = DateTimeOffset.Now.DateTime.ToClientTimeZone().Date;
         var toDate = month switch
         {
-            December => new DateTimeOffset(today.Year + 1, May, DateTime.DaysInMonth(today.Year + 1, May), 0, 0, 0,
+            December => new DateTimeOffset(year + 1, May, DateTime.DaysInMonth(year + 1, May), 0, 0, 0,
                 TimeSpan.Zero),
-            >= 1 and <= May => new DateTimeOffset(today.Year, May, DateTime.DaysInMonth(today.Year, May), 0, 0, 0,
+            >= 1 and <= May => new DateTimeOffset(year, May, DateTime.DaysInMonth(year, May), 0, 0, 0,
                 TimeSpan.Zero),
-            _ => new DateTimeOffset(today.Year, December - 1, DateTime.DaysInMonth(today.Year, December - 1), 0, 0, 0,
+            _ => new DateTimeOffset(year, December - 1, DateTime.DaysInMonth(year, December - 1), 0, 0, 0,
                 TimeSpan.Zero)
         };
 

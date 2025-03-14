@@ -250,18 +250,18 @@ public class RequestController(
             IsQueryByCreatedDate = !request.IsFilterByAffectedDate,
             RequestViewType = request.ViewType,
             SupervisorId = EmployeeSession.EmpId,
-            IsLocal = request.IsLocal.HasValue ? (request.IsLocal.Value == 1) : null,
+            IsLocal = request.IsLocal.HasValue ? request.IsLocal.Value == 1 : null,
             LeaveTypeId = request.LeaveType,
             CompanyId = CurrentCompanyId
         };
 
         var requestList = await requestService.GetRequests(criteria);
 
-        Parallel.ForEach(requestList, (request) =>
+        Parallel.ForEach(requestList, rq =>
         {
-            request.CreatedDate = request.CreatedDate.ToClientTimeZone();
-            request.FromTime = request.FromTime.ToClientTimeZone();
-            request.ToTime = request.ToTime.ToClientTimeZone();
+            rq.CreatedDate = rq.CreatedDate.ToClientTimeZone();
+            rq.FromTime = rq.FromTime.ToClientTimeZone();
+            rq.ToTime = rq.ToTime.ToClientTimeZone();
         });
         request.CurrentUserId = EmployeeSession.EmpId;
         request.Requests = request.ViewType == RequestViewType.PersonalSpace ? SortRequest(requestList) : requestList;
@@ -269,14 +269,14 @@ public class RequestController(
 
     private IList<RequestEntity> SortRequest(IList<RequestEntity> requests)
     {
-        return requests.OrderByDescending(t => (SortRequestValidate(t))).ToList();
+        return requests.OrderByDescending(SortRequestValidate).ToList();
     }
 
     private bool SortRequestValidate(RequestEntity t)
     {
         var pending = t.Status.Id == (byte)CurrentRequestStatus.Pending
                       && (t.ApprovedBy.Id == EmployeeSession.EmpId || t.VerifiedBy.Id == EmployeeSession.EmpId);
-        var verified = (t.Status.Id == (byte)CurrentRequestStatus.Verified && t.ApprovedBy.Id == EmployeeSession.EmpId);
+        var verified = t.Status.Id == (byte)CurrentRequestStatus.Verified && t.ApprovedBy.Id == EmployeeSession.EmpId;
         return pending || verified;
     }
 }

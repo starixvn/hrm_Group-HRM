@@ -49,7 +49,7 @@ public class DisciplineDetailModel
 
     public string EmployeeComment { get; set; }
 
-    public bool IsWeekend => WorkDate.DayOfWeek == DayOfWeek.Saturday || WorkDate.DayOfWeek == DayOfWeek.Sunday;
+    public bool IsWeekend => WorkDate.DayOfWeek is DayOfWeek.Saturday or DayOfWeek.Sunday;
 
     public bool IsOutOfControlReason { get; set; }
 }

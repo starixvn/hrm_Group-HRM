@@ -91,11 +91,11 @@ public class AttachFileService(IWebHostEnvironment hostingEnvironment) : IAttach
         }
     }
 
-    private string RemoveFirstSlash(string path)
+    private static string RemoveFirstSlash(string path)
     {
         if (path.StartsWith('/'))
         {
-            path = path.Substring(1);
+            path = path[1..];
         }
         return path;
     }

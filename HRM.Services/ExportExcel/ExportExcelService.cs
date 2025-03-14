@@ -45,7 +45,7 @@ public class ExportExcelService(IWebHostEnvironment hostingEnvironment) : IExpor
 
         foreach (var item in employeeWfhList)
         {
-            var rowCopy = 4 + (index % 2);
+            var rowCopy = 4 + index % 2;
             sheet.CopyRow(templateSheet, rowCopy, rowIndex);
             var row = sheet.GetRow(rowIndex);
 
@@ -102,7 +102,7 @@ public class ExportExcelService(IWebHostEnvironment hostingEnvironment) : IExpor
 
         foreach (var item in leaveSummaryList)
         {
-            var rowCopy = RowStartBodyWorkingCalendar + (index % 2);
+            var rowCopy = RowStartBodyWorkingCalendar + index % 2;
             sheet.CopyRow(templateSheet, rowCopy, rowIndex);
             var row = sheet.GetRow(rowIndex);
             row.Height = height;
@@ -158,7 +158,7 @@ public class ExportExcelService(IWebHostEnvironment hostingEnvironment) : IExpor
         cellTitle.SetCellValue(title);
         foreach (var item in requestList)
         {
-            var rowCopy = RowStartBodyWorkingTimeRequest + (rowIndex % 2);
+            var rowCopy = RowStartBodyWorkingTimeRequest + rowIndex % 2;
             sheet.CopyRow(templateSheet, rowCopy, rowIndex);
             var row = sheet.GetRow(rowIndex);
             row.Height = height;
@@ -200,7 +200,7 @@ public class ExportExcelService(IWebHostEnvironment hostingEnvironment) : IExpor
 
         foreach (var employee in employees)
         {
-            var rowCopy = 4 + (index % 2);
+            var rowCopy = 4 + index % 2;
             sheet.CopyRow(templateSheet, rowCopy, rowIndex);
             var row = sheet.GetRow(rowIndex);
             row.Height = height;
@@ -264,7 +264,7 @@ public class ExportExcelService(IWebHostEnvironment hostingEnvironment) : IExpor
 
         foreach (var employee in employees)
         {
-            var rowCopy = 4 + (index % 2);
+            var rowCopy = 4 + index % 2;
             sheet.CopyRow(templateSheet, rowCopy, rowIndex);
             var row = sheet.GetRow(rowIndex);
             row.Height = height;
@@ -332,7 +332,7 @@ public class ExportExcelService(IWebHostEnvironment hostingEnvironment) : IExpor
 
     public static void WriteRowExcelReport(ExcelTemplateWriter writer, int rowIndex, int rowStartBody, object record)
     {
-        var rowStart = (rowIndex % 2 != 0) ? rowStartBody : rowStartBody + 1;
+        var rowStart = rowIndex % 2 != 0 ? rowStartBody : rowStartBody + 1;
         writer.WriteRow(rowStart, record);
     }
 }

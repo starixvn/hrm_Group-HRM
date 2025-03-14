@@ -18,23 +18,14 @@ public class CheckInOutRequest : BaseRequest
     {
         get
         {
-            switch (ReasonId)
-            {
-                case (byte)CheckInOutReason.VanLate:
-                    return Labels.VanLate;
-
-                case (byte)CheckInOutReason.BusinessTrip:
-                    return Labels.BusinessTrip;
-
-                case (byte)CheckInOutReason.Forgot:
-                    return Labels.Forgot;
-
-                case (byte)CheckInOutReason.Other:
-                    return Labels.Other;
-
-                default:
-                    return string.Empty;
-            }
+	        return ReasonId switch
+	        {
+		        (byte)CheckInOutReason.VanLate => Labels.VanLate,
+		        (byte)CheckInOutReason.BusinessTrip => Labels.BusinessTrip,
+		        (byte)CheckInOutReason.Forgot => Labels.Forgot,
+		        (byte)CheckInOutReason.Other => Labels.Other,
+		        _ => string.Empty
+	        };
         }
     }
 }

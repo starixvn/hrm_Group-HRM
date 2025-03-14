@@ -46,7 +46,7 @@
                         {
                             className = "holiday";
                         }
-                        else if (request.WorkDate.DayOfWeek == DayOfWeek.Saturday || request.WorkDate.DayOfWeek == DayOfWeek.Sunday)
+                        else if (request.WorkDate.DayOfWeek is DayOfWeek.Saturday or DayOfWeek.Sunday)
                         {
                             className = "weekend";
                         }

@@ -58,16 +58,14 @@ public class ExportLeaveSummaryController(
             CompanyId = CurrentCompanyId
         };
         var leaveSummaries = await reportService.GetUnpaidLeaveAsync(criteria);
-        if (model.Period.Equals("1"))
+        switch (model.Period)
         {
-            leaveSummaries = leaveSummaries.Where(x => x.Jan > 0 || x.Feb > 0 || x.Mar > 0 || x.Apr > 0 || x.Mar > 0 || x.Jun > 0).ToList();
-        }
-        else
-        {
-            if (model.Period.Equals("2"))
-            {
-                leaveSummaries = leaveSummaries.Where(x => x.Jul > 0 || x.Aug > 0 || x.Sep > 0 || x.Oct > 0 || x.Nov > 0 || x.Dec > 0).ToList();
-            }
+	        case "1":
+		        leaveSummaries = leaveSummaries.Where(x => x.Jan > 0 || x.Feb > 0 || x.Mar > 0 || x.Apr > 0 || x.Mar > 0 || x.Jun > 0).ToList();
+		        break;
+	        case "2":
+		        leaveSummaries = leaveSummaries.Where(x => x.Jul > 0 || x.Aug > 0 || x.Sep > 0 || x.Oct > 0 || x.Nov > 0 || x.Dec > 0).ToList();
+		        break;
         }
 
         var data = await exportReportService.Export(leaveSummaries, model.Year, model.LeaveType, model.Period, CurrentCompanyId);

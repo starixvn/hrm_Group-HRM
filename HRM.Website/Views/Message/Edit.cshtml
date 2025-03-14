@@ -59,8 +59,8 @@
                                                                                                                     {
                         new() {Text = "Notification", Value = "0"},
                         new() {Text = "Warning", Value = "1"},
-                        new() {Text = "Discipline", Value = "2"},
-                    };
+                        new() {Text = "Discipline", Value = "2"}
+                                                                                                                    };
                 }
                 @Html.DropDownListFor(model => model.Category, categories, new { @class = "category form-control" })
             </div>
@@ -103,7 +103,8 @@
                 @{
                     var defaultFromDate = message.FromDate ?? new DateTime();
                 }
-                @Html.TextBox(Html.NameFor(model => model.FromDate).ToString(), defaultFromDate.ToString("dd MMM, yyyy"), new { @class = "datepicker form-control", mindate = (new DateTime(2010, 1, 1)).ToString("yyyy/MM/dd"), maxdate = "null", disabledDate = "" })
+
+                @Html.TextBox(Html.NameFor(model => model.FromDate).ToString(), defaultFromDate.ToString("dd MMM, yyyy"), new { @class = "datepicker form-control", mindate = new DateTime(2010, 1, 1).ToString("yyyy/MM/dd"), maxdate = "null", disabledDate = "" })
                 <i class="icon-calendar fa fa-calendar"></i>
             </div>
         </div>
@@ -115,7 +116,8 @@
                 @{
                     var defaultToDate = message.ToDate ?? new DateTime();
                 }
-                @Html.TextBox(Html.NameFor(model => model.ToDate).ToString(), defaultToDate.ToString("dd MMM, yyyy"), new { @class = "datepicker form-control", mindate = (new DateTime(2010, 1, 1)).ToString("yyyy/MM/dd"), maxdate = "null", disabledDate = "" })
+
+                @Html.TextBox(Html.NameFor(model => model.ToDate).ToString(), defaultToDate.ToString("dd MMM, yyyy"), new { @class = "datepicker form-control", mindate = new DateTime(2010, 1, 1).ToString("yyyy/MM/dd"), maxdate = "null", disabledDate = "" })
                 <i class="icon-calendar fa fa-calendar"></i>
             </div>
         </div>

@@ -107,7 +107,7 @@
                         {
                             foreach (var request in item.RequestList)
                             {
-                                var statusClass = request.CurrentStatus == (byte)CurrentRequestStatus.Pending || request.CurrentStatus == (byte)CurrentRequestStatus.Verified
+                                var statusClass = request.CurrentStatus is (byte)CurrentRequestStatus.Pending or (byte)CurrentRequestStatus.Verified
                                     ? " pending-request" : string.Empty;
                                 var className = "tooltip-request req" + statusClass;
                                 var requestEntity = new RequestEntity

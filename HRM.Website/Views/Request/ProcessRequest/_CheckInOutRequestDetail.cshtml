@@ -54,7 +54,7 @@
             </td>
             <td class="violationIgnored">
                 @{
-                    var disciplineTypeId = (byte)DisciplineType.MissingCheckInOut;
+                    const byte disciplineTypeId = (byte)DisciplineType.MissingCheckInOut;
                 }
                 <input type="radio" class="chk-ignore" data-workdate="@Model.FromDate.Date.ToString("d")" data-disciplinetypeid="@disciplineTypeId" />
             </td>

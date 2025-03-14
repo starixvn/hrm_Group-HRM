@@ -176,7 +176,7 @@ public class SectionController(
                         Id = t.Id,
                         Text = t.Name,
                         IsLeaf = true,
-                        ParentId = s.Id,
+                        ParentId = s.Id
                     }).ToList()
                 }).ToList()
             }).ToList()

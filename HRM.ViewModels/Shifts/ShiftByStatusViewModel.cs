@@ -20,7 +20,7 @@ public class ShiftByStatusViewModel
             {
                 new() { Value = ((int)ShiftStatus.All).ToString(), Text = ShiftStatus.All.ToString() },
                 new() { Value = ((int)ShiftStatus.Active).ToString(), Text = ShiftStatus.Active.ToString() },
-                new() { Value = ((int)ShiftStatus.Disabled).ToString(), Text = ShiftStatus.Disabled.ToString() },
+                new() { Value = ((int)ShiftStatus.Disabled).ToString(), Text = ShiftStatus.Disabled.ToString() }
             };
 
             return status;

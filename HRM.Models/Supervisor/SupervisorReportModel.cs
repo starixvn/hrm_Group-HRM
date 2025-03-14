@@ -21,7 +21,7 @@ public class SupervisorReportModel
     {
         get
         {
-            return (Roles == null || !Roles.Any()) ? string.Empty : string.Join(", ", Roles.Select(i => i.Name));
+            return Roles == null || !Roles.Any() ? string.Empty : string.Join(", ", Roles.Select(i => i.Name));
         }
     }
 

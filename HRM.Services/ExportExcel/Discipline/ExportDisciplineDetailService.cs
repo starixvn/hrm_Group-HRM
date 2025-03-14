@@ -21,8 +21,7 @@ public class ExportDisciplineDetailService(IWebHostEnvironment hostingEnvironmen
 
     public byte[] Export(GetDisciplineDetailCriteria criteria, IList<DisciplineDetailModel> disciplines)
     {
-        var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, TemplatePath); 
-        var reportName = Labels.DisciplineDetailReportName;
+        var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, TemplatePath);
         string reportTitle;
         var startDate = criteria.FromDate.ToDateMonthYearFormatedDate();
         var endDate = criteria.ToDate.ToDateMonthYearFormatedDate();
@@ -40,7 +39,7 @@ public class ExportDisciplineDetailService(IWebHostEnvironment hostingEnvironmen
             reportTitle = string.Format(Labels.DisciplineDetailReportTitleNoPrefix, startDate, endDate);
         }
 
-        var writer = new ExcelTemplateWriter(templatePath, reportName, Labels.DisciplineDetailReportSheet);
+        var writer = new ExcelTemplateWriter(templatePath, Labels.DisciplineDetailReportSheet);
 
         // Fill report title.
         writer.WriteRow(0, [reportTitle]);
@@ -56,7 +55,7 @@ public class ExportDisciplineDetailService(IWebHostEnvironment hostingEnvironmen
         return writer.WriteContentToBytes();
     }
 
-    private void FillContentRow(IList<DisciplineDetailModel> disciplines, ref ExcelTemplateWriter writer)
+    private static void FillContentRow(IList<DisciplineDetailModel> disciplines, ref ExcelTemplateWriter writer)
     {
         var rowIndex = 1;
         foreach (var discipline in disciplines)
@@ -65,16 +64,16 @@ public class ExportDisciplineDetailService(IWebHostEnvironment hostingEnvironmen
         }
     }
 
-    private void FillRow(DisciplineDetailModel discipline, ref ExcelTemplateWriter writer, ref int rowIndex)
+    private static void FillRow(DisciplineDetailModel discipline, ref ExcelTemplateWriter writer, ref int rowIndex)
     {
         var record = CreateRecord(discipline, ref rowIndex);
 
-        var rowType = (discipline.IsWeekend) ? WeekendRow : BodyRow;
+        var rowType = discipline.IsWeekend ? WeekendRow : BodyRow;
 
         writer.WriteRow(rowType, record);
     }
 
-    private object CreateRecord(DisciplineDetailModel discipline, ref int rowIndex)
+    private static object CreateRecord(DisciplineDetailModel discipline, ref int rowIndex)
     {
         var systemSubtractScore = discipline.SystemSubtractScore > 0 ? -discipline.SystemSubtractScore : 0;
         var approverSubtractScore = discipline.ApproverSubtractScore > 0 ? -discipline.ApproverSubtractScore : 0;

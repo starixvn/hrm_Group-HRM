@@ -41,7 +41,7 @@
                     Model.FromDate.ToDateMonthYearFormatedDate(),
                     new {
                         @class = "datepicker form-control",
-                        mindate = (new DateTime(2010, 1, 1)).ToString("yyyy/MM/dd")
+                        mindate = new DateTime(2010, 1, 1).ToString("yyyy/MM/dd")
                     })
                 <i class="icon-calendar fa fa-calendar"></i>
             </div>
@@ -56,7 +56,7 @@
                     Model.ToDate.ToDateMonthYearFormatedDate(),
                     new {
                         @class = "datepicker form-control",
-                        mindate = (new DateTime(2010, 1, 1)).ToString("yyyy/MM/dd")
+                        mindate = new DateTime(2010, 1, 1).ToString("yyyy/MM/dd")
                     })
                 <i class="icon-calendar fa fa-calendar"></i>
             </div>
@@ -79,7 +79,7 @@
                     {
                     new() {Text = Labels.All, Value = string.Empty},
                     new() {Text = Labels.Expat, Value = "false"},
-                    new() {Text = Labels.Local, Value = "true"},
+                    new() {Text = Labels.Local, Value = "true"}
                     };
                 }
                 @Html.DropDownListFor(model => model.IsLocal, category, new { @class = "category form-control" })
@@ -120,7 +120,7 @@
                     {
                     new() {Text = Labels.All, Value = string.Empty},
                     new() {Text = Labels.Ignored, Value = "true"},
-                    new() {Text = Labels.NotIgnored, Value = "false"},
+                    new() {Text = Labels.NotIgnored, Value = "false"}
                     };
                 }
                 @Html.DropDownListFor(model => model.HasIgnored, ignoredStatus, new { @class = "category form-control" })

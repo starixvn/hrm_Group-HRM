@@ -35,7 +35,7 @@ public class ExportExcelEmployeeInfoService(
     {
         var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, EmployeeBasicInfoTemplatePath);
         const string sheetName = "Employee Basic Info";
-        var writer = new ExcelTemplateWriter(templatePath, string.Empty, sheetName);
+        var writer = new ExcelTemplateWriter(templatePath, sheetName);
         var enableGroupDate = await commonDataService.IsEnableGroupDateAsync();
         const byte colGroupDate = 8;
         const byte colLengthOfServiceGroupDate = 12;
@@ -57,9 +57,8 @@ public class ExportExcelEmployeeInfoService(
     public byte[] ExportEmployeeDetailsInfo(IList<Employee> employees)
     {
         var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, EmployeeDetailsInfoTemplatePath);
-        var fileName = "EmployeeDetailsInfo_" + DateTimeOffset.Now.ToString("yyyyMMdd");
         const string sheetName = "Employee Details Info";
-        var writer = new ExcelTemplateWriter(templatePath, fileName, sheetName);
+        var writer = new ExcelTemplateWriter(templatePath, sheetName);
 
         writer.CopyRows(0, 2);
         writer.CopyRows(2, 1);
@@ -86,7 +85,7 @@ public class ExportExcelEmployeeInfoService(
     {
         var record = CreateRecordEmployeeBasicInfoReport(employee, rowIndex);
 
-        var writeRowNumber = (rowIndex % 2 == 0) ? 5 : 4;
+        var writeRowNumber = rowIndex % 2 == 0 ? 5 : 4;
 
         writer.WriteRow(writeRowNumber, record);
 
@@ -128,7 +127,7 @@ public class ExportExcelEmployeeInfoService(
 
     #region Employee Details Info
 
-    private void FillContentRowEmployeeDetailsInfoReport(IList<Employee> employees, ref ExcelTemplateWriter writer)
+    private static void FillContentRowEmployeeDetailsInfoReport(IList<Employee> employees, ref ExcelTemplateWriter writer)
     {
         var rowIndex = 1;
 
@@ -138,17 +137,17 @@ public class ExportExcelEmployeeInfoService(
         }
     }
 
-    private void FillRowEmployeeDetailsInfoReport(Employee employee, ref ExcelTemplateWriter writer, ref int rowIndex)
+    private static void FillRowEmployeeDetailsInfoReport(Employee employee, ref ExcelTemplateWriter writer, ref int rowIndex)
     {
         var record = CreateRecordEmployeeDetailsInfoReport(employee, rowIndex);
-        var writeRowNumber = (rowIndex % 2 == 0) ? 4 : 3;
+        var writeRowNumber = rowIndex % 2 == 0 ? 4 : 3;
 
         writer.WriteRow(writeRowNumber, record);
 
         rowIndex++;
     }
 
-    private object CreateRecordEmployeeDetailsInfoReport(Employee employee, int rowIndex)
+    private static object CreateRecordEmployeeDetailsInfoReport(Employee employee, int rowIndex)
     {
         const string DateFormat = "dd MMM, yyyy";
         var record = new
@@ -211,7 +210,7 @@ public class ExportExcelEmployeeInfoService(
     {
         var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, EmployeeFullInfoTemplatePath);
         const string sheetName = "Employee Full Information";
-        var writer = new ExcelTemplateWriter(templatePath, string.Empty, sheetName);
+        var writer = new ExcelTemplateWriter(templatePath, sheetName);
         var enableGroupDate = await commonDataService.IsEnableGroupDateAsync();
         const byte colGroupDate = 10;
         const byte colLengthOfServiceGroupDate = 14;
@@ -235,7 +234,7 @@ public class ExportExcelEmployeeInfoService(
         var currentRow = 3;
         foreach (var p in profiles)
         {
-            var writeRowNumber = (currentRow % 2 == 0) ? 5 : 4;
+            var writeRowNumber = currentRow % 2 == 0 ? 5 : 4;
 
             var record = CreateRecordEmployeeFullProfile(p, currentRow);
             writer.WriteRow(writeRowNumber, record);
@@ -310,7 +309,7 @@ public class ExportExcelEmployeeInfoService(
             ApprovedBy = GetSupervisors(p.Supervisors, (short)RoleSystem.Approver),
             DisciplineManager = GetSupervisors(p.Supervisors, (short)RoleSystem.DisciplineManager),
             ShiftArrangement = GetSupervisors(p.Supervisors, (short)RoleSystem.ShiftManager),
-            OnBehalfRequest = GetSupervisors(p.Supervisors, (short)RoleSystem.OnBehalfRequest),
+            OnBehalfRequest = GetSupervisors(p.Supervisors, (short)RoleSystem.OnBehalfRequest)
         };
 
         return record;

@@ -49,7 +49,7 @@ public class ExportExcelUnpaidLeaveSummaryReportService(
         var leaveTypes = await commonDataService.GetLeaveTypeAsync();
         var type = string.Join(", ", leaveTypes.Where(x => leaveTypeIds.Exists(y => x.Id.ToString() == y)).Select(x => x.Name));
 
-        var writer = new ExcelTemplateWriter(templatePath, string.Empty, "Unpaid Leave Summary");
+        var writer = new ExcelTemplateWriter(templatePath, "Unpaid Leave Summary");
         // Fill report title.
         writer.CopyRows(0, 2);
 

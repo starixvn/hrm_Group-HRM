@@ -48,11 +48,9 @@ public class TimeController(
         {
             return View();
         }
-        else
-        {
-            LogService.Info(clientIpAddress);
-            return RedirectToAction("AccessDenied", "Error");
-        }
+
+        LogService.Info(clientIpAddress);
+        return RedirectToAction("AccessDenied", "Error");
     }
 
     [AllowAnonymous]
@@ -190,7 +188,7 @@ public class TimeController(
         var clientIp = httpContext.Request.Headers["x-forwarded-for"].ToString();
         if (string.IsNullOrEmpty(clientIp))
         {
-            clientIp = httpContext.Connection.RemoteIpAddress.MapToIPv4().ToString();
+            clientIp = httpContext.Connection.RemoteIpAddress?.MapToIPv4().ToString();
         }
         else
         {

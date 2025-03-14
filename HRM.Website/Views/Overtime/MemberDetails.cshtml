@@ -4,7 +4,7 @@
 @model HRM.Models.Overtime.MonthlyOvertimeRequest
 @{
     var currentUserId = (int)ViewBag.CurrentUserId;
-    ViewBag.Title = Labels.MemberOvertime + " of " + Model.Requester.Nickname + " (" + (Model.Month).ToString("MMM-yyyy") + ")";
+    ViewBag.Title = Labels.MemberOvertime + " of " + Model.Requester.Nickname + " (" + Model.Month.ToString("MMM-yyyy") + ")";
     var verifier = $"{Model.Verifier.Nickname} ({Model.Verifier.FullName})";
     var approver = $"{Model.Approver.Nickname} ({Model.Approver.FullName})";
 }
@@ -106,7 +106,7 @@
                         {
                             className = "holiday";
                         }
-                        else if (request.WorkDate.DayOfWeek == DayOfWeek.Saturday || request.WorkDate.DayOfWeek == DayOfWeek.Sunday)
+                        else if (request.WorkDate.DayOfWeek is DayOfWeek.Saturday or DayOfWeek.Sunday)
                         {
                             className = "weekend";
                         }
@@ -161,8 +161,8 @@
                         }
                     </td>
                     <td class="align-left">@request.Remark</td>
-                    @if (request.TotalShiftHours != 0 && ((request.ActualWorkingHours >= request.TotalShiftHours + 1)
-                        || ((request.NormalHours > request.ActualWorkingHours - Model.Requester.WorkingHours)
+                    @if (request.TotalShiftHours != 0 && (request.ActualWorkingHours >= request.TotalShiftHours + 1
+                        || (request.NormalHours > request.ActualWorkingHours - Model.Requester.WorkingHours
                             && request.ActualWorkingHours >= Model.Requester.WorkingHours)))
                     {
                         var tooltip = "[Total Working Hours]/[Shift Hours]: " + request.ActualWorkingHours + " / " + request.TotalShiftHours;

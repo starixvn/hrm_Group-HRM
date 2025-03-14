@@ -99,7 +99,7 @@ public class LeaveController(
             criteria.TotalDays = leaveRequestDetail.Where(x => x.WorkType == (byte)WorkType.Leave)
                 .Sum(x => x.IsHalfDay ? Constants.HalfDayOffValue : 1);
 
-            Parallel.ForEach(leaveRequestDetail, (item) =>
+            Parallel.ForEach(leaveRequestDetail, item =>
             {
                 item.FromTime = item.IsHalfDay ? item.FromTime.ToServerTimeZone() : item.FromTime;
                 item.ToTime = item.IsHalfDay ? item.ToTime.ToServerTimeZone() : item.ToTime;
@@ -168,7 +168,7 @@ public class LeaveController(
             criteria.TotalDays = leaveRequestDetail.Where(x => x.WorkType == (byte)WorkType.Leave)
                 .Sum(x => x.IsHalfDay ? Constants.HalfDayOffValue : 1);
 
-            Parallel.ForEach(leaveRequestDetail, (item) =>
+            Parallel.ForEach(leaveRequestDetail, item =>
             {
                 item.FromTime = item.IsHalfDay ? item.FromTime.ToServerTimeZone() : item.FromTime;
                 item.ToTime = item.IsHalfDay ? item.ToTime.ToServerTimeZone() : item.ToTime;
@@ -253,7 +253,7 @@ public class LeaveController(
             ? await leaveRequestService.GetLeaveRequestDetailByIdAsync(requestId)
             : [];
 
-        Parallel.ForEach(leaveRequestDetail, (item) =>
+        Parallel.ForEach(leaveRequestDetail, item =>
         {
             item.FromTime = item.IsHalfDay ? item.FromTime.ToClientTimeZone() : item.FromTime;
             item.ToTime = item.IsHalfDay ? item.ToTime.ToClientTimeZone() : item.FromTime;
@@ -304,7 +304,7 @@ public class LeaveController(
         return Json(totalDays);
     }
 
-    private List<LeaveRequestDetail> ConvertToLeaveRequestDetail(
+    private static List<LeaveRequestDetail> ConvertToLeaveRequestDetail(
         IEnumerable<Models.ScheduleArrange.DailySchedule> calendars,
         IList<LeaveRequestDetail> leaveDetails,
         DateTime fromDate,
@@ -319,7 +319,7 @@ public class LeaveController(
             for (var i = 0; i < numberDays; i++)
             {
                 tempDate = fromDate.AddDays(i);
-                var tempLeaveDetailModels = leaveDetails.Where(t => (t.OnDate == tempDate));
+                var tempLeaveDetailModels = leaveDetails.Where(t => t.OnDate == tempDate);
                 var calendar = calendars.FirstOrDefault(t => t.WorkDate.Date == tempDate);
 
                 if (calendar != null)
@@ -336,7 +336,7 @@ public class LeaveController(
         return details.OrderBy(t => t.OnDate).ThenBy(t => t.FromTime).ToList();
     }
 
-    private void AddLeaveRequestExistCalendar(
+    private static void AddLeaveRequestExistCalendar(
         List<LeaveRequestDetail> leaveRequestDetailOutput,
         IEnumerable<LeaveRequestDetail> leaveDetails,
         Models.ScheduleArrange.DailySchedule calendar)
@@ -391,7 +391,7 @@ public class LeaveController(
         }
     }
 
-    private void AddLeaveRequestNotExistCalendar(
+    private static void AddLeaveRequestNotExistCalendar(
         List<LeaveRequestDetail> leaveRequestDetailOutput,
         IEnumerable<LeaveRequestDetail> tempLeaveDetailModels,
         DateTime workDate)

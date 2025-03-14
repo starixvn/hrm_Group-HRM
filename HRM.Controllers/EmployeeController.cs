@@ -265,8 +265,8 @@ public class EmployeeController(
         var employee = await employeeService.GetEmployeeByIdAsync(id);
         if (employee != null)
         {
-            if ((userControlSession.HasPermissionOnFunction(FunctionKey.ManageLocalEmployee, Policy.Host) && !employee.IsLocal)
-                && (userControlSession.HasPermissionOnFunction(FunctionKey.ManageExpatEmployee, Policy.Host) && employee.IsLocal))
+            if (userControlSession.HasPermissionOnFunction(FunctionKey.ManageLocalEmployee, Policy.Host) && !employee.IsLocal
+                && userControlSession.HasPermissionOnFunction(FunctionKey.ManageExpatEmployee, Policy.Host) && employee.IsLocal)
             {
                 return RedirectToAction("AccessDenied", "Error");
             }
@@ -285,10 +285,8 @@ public class EmployeeController(
             await ComposeViewBagsForEditEmployee();
             return View(employee);
         }
-        else
-        {
-            return RedirectToAction("PageNotFound", "Error");
-        }
+
+        return RedirectToAction("PageNotFound", "Error");
     }
 
     [HttpPost]
@@ -681,10 +679,8 @@ public class EmployeeController(
             var result = string.Join(",", roles.Select(i => i.RoleId));
             return roles.Any(x => defaultRoles.Any(y => x.RoleId == y)) ? result : string.Join(",", defaultRoles) + "," + result;
         }
-        else
-        {
-            return string.Join(",", defaultRoles);
-        }
+
+        return string.Join(",", defaultRoles);
     }
 
     private bool? GetCategory(bool? isLocal = null)

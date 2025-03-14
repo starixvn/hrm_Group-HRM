@@ -85,7 +85,7 @@ public class KeepInViewController(
         var model = JsonConvert.DeserializeObject<KeepInViewRequestViewModel>(requestModel);
         var fromTime = DateTime.Parse(model.Date.ToDateMonthYearFormatedDate() + " " + model.FromTime, cultureInfo);
         var toTime = DateTime.Parse(model.Date.ToDateMonthYearFormatedDate() + " " + model.ToTime, cultureInfo);
-        var fromTimeCrossDay = (fromTime < toTime && model.CrossDay)
+        var fromTimeCrossDay = fromTime < toTime && model.CrossDay
             ? DateTime.Parse(model.Date.AddDays(1).ToDateMonthYearFormatedDate() + " " + model.FromTime, cultureInfo)
             : DateTime.Parse(model.Date.ToDateMonthYearFormatedDate() + " " + model.FromTime, cultureInfo);
         var toTimeCrossDay = model.CrossDay
@@ -213,7 +213,7 @@ public class KeepInViewController(
     public async Task<IActionResult> ViewHistory(long id)
     {
         var requests = await keepInViewRequestService.GetHistoryByIdAsync(id);
-        Parallel.ForEach(requests, (item) =>
+        Parallel.ForEach(requests, item =>
         {
             item.FromTime = item.FromTime.ToClientTimeZone();
             item.ToTime = item.ToTime.ToClientTimeZone();

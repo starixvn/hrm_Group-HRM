@@ -34,7 +34,7 @@
                 @Html.TextBox(Html.NameFor(model => model.AffectedFrom).ToString(), Model.AffectedFrom.ToDateMonthYearFormatedDate(),
                     new {
                         @class = "datepicker form-control",
-                        mindate = (new DateTime(2010, 1, 1)).ToString("yyyy/MM/dd")
+                        mindate = new DateTime(2010, 1, 1).ToString("yyyy/MM/dd")
                     })
                 <i class="icon-calendar fa fa-calendar"></i>
             </div>

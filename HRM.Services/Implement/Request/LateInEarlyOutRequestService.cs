@@ -71,7 +71,7 @@ public class LateInEarlyOutRequestService(
             FromDate = param.FromDate,
             ToDate = param.ToDate,
             RequestId = param.RequestId,
-            RequestTypeId = param.RequestTypeId,
+            RequestTypeId = param.RequestTypeId
         };
         return await baseService.GetDataAsync<DateTime>(criteria);
     }
@@ -162,7 +162,7 @@ public class LateInEarlyOutRequestService(
                 request.Requester.DisplayName,
                 request.RequestTypeName,
                 request.OnDate.ToDateMonthYearFormatedDate(),
-                request.RequestTypeId == (short)RequestType.LateIn ? ("+" + request.LateInMins) : ("-" + request.EarlyOutMins),
+                request.RequestTypeId == (short)RequestType.LateIn ? "+" + request.LateInMins : "-" + request.EarlyOutMins,
                 request.Remark);
 
             await emailService.SendEmailAsync(
@@ -197,7 +197,7 @@ public class LateInEarlyOutRequestService(
                 actor.DisplayName,
                 request.RequestTypeName,
                 request.OnDate.ToDateMonthYearFormatedDate(),
-                request.RequestTypeId == (byte)RequestType.LateIn ? ("+" + request.LateInMins) : ("-" + request.EarlyOutMins),
+                request.RequestTypeId == (byte)RequestType.LateIn ? "+" + request.LateInMins : "-" + request.EarlyOutMins,
                 request.Remark);
 
             await emailService.SendEmailAsync(

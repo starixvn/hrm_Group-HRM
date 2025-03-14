@@ -30,7 +30,7 @@ public class ActionLogService(IBaseService baseService) : IActionLogService
         return logs;
     }
 
-    private void GetFieldChanged(IEnumerable<LogObjectDetail> logs)
+    private static void GetFieldChanged(IEnumerable<LogObjectDetail> logs)
     {
         foreach (var log in logs)
         {

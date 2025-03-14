@@ -61,7 +61,7 @@ public class ExportExcelAttendanceReportService(IWebHostEnvironment hostingEnvir
             var requests = RequestsRemark(attendance);
             var shiftCode = !string.IsNullOrEmpty(attendance.ShiftCode) ? attendance.ShiftCode : string.Empty;
             var totalWorkHours = attendance.TotalWorkHours != 0 ? Utilities.TotalHoursToTime((float)attendance.TotalWorkHours) : string.Empty;
-            var overtime = attendance.IsOvertime ? attendance.FormattedOvertimeStatus + " (" + attendance.OvertimeHours.ToString() + ")" : string.Empty;
+            var overtime = attendance.IsOvertime ? attendance.FormattedOvertimeStatus + " (" + attendance.OvertimeHours + ")" : string.Empty;
 
             worksheet.Cells[rowIndex, colIndex++].Value = rowNum++;
             worksheet.Cells[rowIndex, colIndex++].Value = attendance.AttendanceDate;
@@ -130,7 +130,7 @@ public class ExportExcelAttendanceReportService(IWebHostEnvironment hostingEnvir
                 requestsBuilder.Append(RequestService.ToRequestMessage(request, isNoFormat: true));
                 requestsBuilder.Append("\r\n- Create date: ");
                 requestsBuilder.Append(request.CreatedDate.ToDateMonthYearFormatedDate());
-                requestsBuilder.Append((string.IsNullOrEmpty(request.Remark) ? string.Empty : "\r\n" + "- Remark: " + request.Remark));
+                requestsBuilder.Append(string.IsNullOrEmpty(request.Remark) ? string.Empty : "\r\n" + "- Remark: " + request.Remark);
                 requestsBuilder.Append("\r\n");
             }
 

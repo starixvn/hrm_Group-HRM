@@ -22,14 +22,14 @@ public class ShiftService(IBaseService baseService,
     {
         var shifts = (await baseService.GetDataAsync<Shift>(new GetAllShiftCriteria())).ToList();
 
-        if (statusId == (int)ShiftStatus.Active)
+        switch (statusId)
         {
-            shifts = shifts.Where(t => !t.IsDisabled).ToList();
-        }
-
-        if (statusId == (int)ShiftStatus.Disabled)
-        {
-            shifts = shifts.Where(t => t.IsDisabled).ToList();
+	        case (int)ShiftStatus.Active:
+		        shifts = shifts.Where(t => !t.IsDisabled).ToList();
+		        break;
+	        case (int)ShiftStatus.Disabled:
+		        shifts = shifts.Where(t => t.IsDisabled).ToList();
+		        break;
         }
 
         if (isShowOff)

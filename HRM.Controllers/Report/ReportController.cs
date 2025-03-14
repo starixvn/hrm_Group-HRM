@@ -53,7 +53,7 @@ public class ReportController(
     {
         var today = DateTimeOffset.Now.DateTime.ToClientTimeZone();
         var fromDate = new DateTimeOffset(model.Year, model.Month, 1, 0, 0, 0, TimeSpan.Zero).DateTime;
-        var toDate = (today.Month == model.Month && today.Year == model.Year)
+        var toDate = today.Month == model.Month && today.Year == model.Year
             ? today.Date : fromDate.AddMonths(1).AddDays(-1);
 
         var criteria = new GetEmployeeAttendanceCriteria
@@ -223,18 +223,14 @@ public class ReportController(
         ViewBag.HeaderTitle = $"{leaveType} {model.Year}";
 
         var leaveSummaries = await reportService.GetUnpaidLeaveAsync(criteria);
-        if (model.Period.Equals("1"))
+        model.LeaveSumaries = model.Period switch
         {
-            model.LeaveSumaries = leaveSummaries.Where(x => x.Jan > 0 || x.Feb > 0 || x.Mar > 0 || x.Apr > 0 || x.May > 0 || x.Jun > 0).ToList();
-        }
-        else if (model.Period.Equals("2"))
-        {
-            model.LeaveSumaries = leaveSummaries.Where(x => x.Jul > 0 || x.Aug > 0 || x.Sep > 0 || x.Oct > 0 || x.Nov > 0 || x.Dec > 0).ToList();
-        }
-        else
-        {
-            model.LeaveSumaries = leaveSummaries;
-        }
+	        "1" => leaveSummaries.Where(x => x.Jan > 0 || x.Feb > 0 || x.Mar > 0 || x.Apr > 0 || x.May > 0 || x.Jun > 0)
+		        .ToList(),
+	        "2" => leaveSummaries.Where(x => x.Jul > 0 || x.Aug > 0 || x.Sep > 0 || x.Oct > 0 || x.Nov > 0 || x.Dec > 0)
+		        .ToList(),
+	        _ => leaveSummaries
+        };
 
         return PartialView("_UnpaidLeaveSummaryDetails", model);
     }
@@ -275,7 +271,7 @@ public class ReportController(
     {
         var criteria = new GetTeamSupervisorCriteria
         {
-            TeamIds = model.TeamIds,
+            TeamIds = model.TeamIds
         };
         var supervisors = await reportService.GetTeamSupervisor(criteria);
 
@@ -292,7 +288,7 @@ public class ReportController(
             {
                 Id = u.Id,
                 Text = u.Name,
-                IsLeaf = true,
+                IsLeaf = true
             });
 
         return Json(multiSelectViewModel);

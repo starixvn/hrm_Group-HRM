@@ -145,11 +145,8 @@ public class EmployeeLogService(
                 break;
 
             case "JobLevelId":
-                MappingJobLevel(field);
-                break;
-
             case "ExpertGradeId":
-                MappingJobLevel(field);
+	            MappingJobLevel(field);
                 break;
 
             case "Gender":

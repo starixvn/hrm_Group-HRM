@@ -60,7 +60,7 @@
                 @Html.LabelFor(model => model.SentDate, "Sent Date", new { @class = "control-label" })
             </div>
             <div class="calendar-form">
-                @Html.TextBox(Html.NameFor(model => model.SentDate).ToString(), Model.SentDate.ToString("dd MMM, yyyy"), new { @class = "datepicker form-control", mindate = (new DateTime(2010, 1, 1)).ToString("yyyy/MM/dd"), maxdate = "null", disabledDate = "" })
+                @Html.TextBox(Html.NameFor(model => model.SentDate).ToString(), Model.SentDate.ToString("dd MMM, yyyy"), new { @class = "datepicker form-control", mindate = new DateTime(2010, 1, 1).ToString("yyyy/MM/dd"), maxdate = "null", disabledDate = "" })
                 <i class="icon-calendar fa fa-calendar"></i>
             </div>
         </div>

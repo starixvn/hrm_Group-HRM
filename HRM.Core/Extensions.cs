@@ -76,12 +76,7 @@ public static class Extensions
 
     public static DateTime GetMaxDate(this DateTime date)
     {
-        if (date.AddMonths(1).Year > DateTimeOffset.Now.Year)
-        {
-            return DateTimeOffset.Now.AddYears(1).DateTime;
-        }
-
-        return date;
+	    return date.AddMonths(1).Year > DateTimeOffset.Now.Year ? DateTimeOffset.Now.AddYears(1).DateTime : date;
     }
 
     public static IHtmlContent CheckBoxCustomFor<TModel>(
@@ -203,8 +198,7 @@ public static class Extensions
 
     private static string GetExpressionText<TModel, TProperty>(Expression<Func<TModel, TProperty>> expression)
     {
-        var memberExp = RemoveConvert(expression.Body) as MemberExpression;
-        if (memberExp == null)
+	    if (RemoveConvert(expression.Body) is not MemberExpression memberExp)
         {
             throw new ArgumentException("The expression is not a valid member expression.", nameof(expression));
         }
@@ -213,7 +207,7 @@ public static class Extensions
 
     private static Expression RemoveConvert(Expression expression)
     {
-        while (expression.NodeType == ExpressionType.Convert || expression.NodeType == ExpressionType.ConvertChecked)
+        while (expression.NodeType is ExpressionType.Convert or ExpressionType.ConvertChecked)
         {
             expression = ((UnaryExpression)expression).Operand;
         }
@@ -322,7 +316,7 @@ public static class Extensions
                 }
                 else
                 {
-                    var isLastElement = (i + 1 == noteArray.Length);
+                    var isLastElement = i + 1 == noteArray.Length;
                     SetLinkValue(noteArray[i], ref htmlString, isLastElement);
                 }
             }

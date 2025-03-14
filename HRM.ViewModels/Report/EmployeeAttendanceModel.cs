@@ -77,32 +77,17 @@ public class EmployeeAttendanceModel
         {
             if (OvertimeStatus.HasValue)
             {
-                switch (OvertimeStatus.Value)
-                {
-                    case (byte)CurrentRequestStatus.Pending:
-                        return Labels.Pending.ToLowerInvariant();
-
-                    case (byte)CurrentRequestStatus.Verified:
-                        return Labels.Verified.ToLowerInvariant();
-
-                    case (byte)CurrentRequestStatus.NotVerified:
-                        return Labels.NotVerified.ToLowerInvariant();
-
-                    case (byte)CurrentRequestStatus.Approved:
-                        return Labels.Approved.ToLowerInvariant();
-
-                    case (byte)CurrentRequestStatus.Rejected:
-                        return Labels.Rejected.ToLowerInvariant();
-
-                    case (byte)CurrentRequestStatus.Processed:
-                        return Labels.Processed.ToLowerInvariant();
-
-                    case (byte)CurrentRequestStatus.Void:
-                        return Labels.Void.ToLowerInvariant();
-
-                    default:
-                        return string.Empty;
-                }
+	            return OvertimeStatus.Value switch
+	            {
+		            (byte)CurrentRequestStatus.Pending => Labels.Pending.ToLowerInvariant(),
+		            (byte)CurrentRequestStatus.Verified => Labels.Verified.ToLowerInvariant(),
+		            (byte)CurrentRequestStatus.NotVerified => Labels.NotVerified.ToLowerInvariant(),
+		            (byte)CurrentRequestStatus.Approved => Labels.Approved.ToLowerInvariant(),
+		            (byte)CurrentRequestStatus.Rejected => Labels.Rejected.ToLowerInvariant(),
+		            (byte)CurrentRequestStatus.Processed => Labels.Processed.ToLowerInvariant(),
+		            (byte)CurrentRequestStatus.Void => Labels.Void.ToLowerInvariant(),
+		            _ => string.Empty
+	            };
             }
 
             return string.Empty;
@@ -114,8 +99,7 @@ public class EmployeeAttendanceModel
     public bool IsPublicHolidayOT => IsPublicHoliday && ShiftId != null;
 
     public bool IsWeekend =>
-        AttendanceDate.DayOfWeek == DayOfWeek.Sunday ||
-        AttendanceDate.DayOfWeek == DayOfWeek.Saturday;
+        AttendanceDate.DayOfWeek is DayOfWeek.Sunday or DayOfWeek.Saturday;
 
     public string SectionCode { get; set; }
 

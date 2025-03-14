@@ -51,10 +51,8 @@ public class ShiftController(
             {
                 return RedirectToAction("Index", "Shift");
             }
-            else
-            {
-                ModelState.AddModelError(string.Empty, commandResult.Message);
-            }
+
+            ModelState.AddModelError(string.Empty, commandResult.Message);
         }
 
         return View(model);
@@ -102,10 +100,8 @@ public class ShiftController(
             {
                 return RedirectToAction("Index", "Shift");
             }
-            else
-            {
-                ModelState.AddModelError(string.Empty, commandResult.Message);
-            }
+
+            ModelState.AddModelError(string.Empty, commandResult.Message);
         }
 
         ViewBag.IsHost = userControlSession.HasPermissionOnFunction(FunctionKey.ShiftManagement, Policy.Host);

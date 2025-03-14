@@ -24,7 +24,6 @@ public class ExportWeekendLeaveSummaryService(IWebHostEnvironment hostingEnviron
     public byte[] Export(GetWeekendLeaveSummaryCriteria criteria, IList<WeekendLeaveSummary> weekendLeaves)
     {
         var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, WeekendLeaveSummaryTemplatePath); 
-        var reportName = Labels.WeekendLeaveSummary;
         string reportTitle;
         var startDate = criteria.FromDate.ToDateMonthYearFormatedDate();
         var endDate = criteria.ToDate.ToDateMonthYearFormatedDate();
@@ -42,7 +41,7 @@ public class ExportWeekendLeaveSummaryService(IWebHostEnvironment hostingEnviron
             reportTitle = string.Format(Labels.WeekendLeaveSummary, startDate, endDate);
         }
 
-        var writer = new ExcelTemplateWriter(templatePath, reportName, Labels.WeekendLeave);
+        var writer = new ExcelTemplateWriter(templatePath, Labels.WeekendLeave);
 
         FillHeaderRows(ref writer, criteria, reportTitle);
 
@@ -53,7 +52,7 @@ public class ExportWeekendLeaveSummaryService(IWebHostEnvironment hostingEnviron
         return writer.WriteContentToBytes();
     }
 
-    private void FillHeaderRows(ref ExcelTemplateWriter writer, GetWeekendLeaveSummaryCriteria criteria, string reportTitle)
+    private static void FillHeaderRows(ref ExcelTemplateWriter writer, GetWeekendLeaveSummaryCriteria criteria, string reportTitle)
     {
         var dateRange = new
         {
@@ -71,7 +70,7 @@ public class ExportWeekendLeaveSummaryService(IWebHostEnvironment hostingEnviron
         writer.CopyRows(HeaderRow, 1);
     }
 
-    private void FillContentRow(IList<WeekendLeaveSummary> weekendLeaves, ref ExcelTemplateWriter writer)
+    private static void FillContentRow(IList<WeekendLeaveSummary> weekendLeaves, ref ExcelTemplateWriter writer)
     {
         var rowIndex = 1;
 
@@ -81,13 +80,13 @@ public class ExportWeekendLeaveSummaryService(IWebHostEnvironment hostingEnviron
         }
     }
 
-    private void FillRow(WeekendLeaveSummary weekendLeave, ref ExcelTemplateWriter writer, ref int rowIndex)
+    private static void FillRow(WeekendLeaveSummary weekendLeave, ref ExcelTemplateWriter writer, ref int rowIndex)
     {
         var record = CreateRecord(weekendLeave, ref rowIndex);
         writer.WriteRow(BodyRow, record);
     }
 
-    private object CreateRecord(WeekendLeaveSummary weekendLeave, ref int rowIndex)
+    private static object CreateRecord(WeekendLeaveSummary weekendLeave, ref int rowIndex)
     {
         var totalWeekendLeaveDays = weekendLeave.TotalWeekendLeave > 0 ? weekendLeave.TotalWeekendLeave : 0;
         var record = new

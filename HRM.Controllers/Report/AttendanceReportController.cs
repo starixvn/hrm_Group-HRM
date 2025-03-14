@@ -33,7 +33,7 @@ public class AttendanceReportController(
             TeamIds = string.Join(",", teams.Select(x => x.Id)),
             DateOption = 0,
             ExcludeDeletedUsers = true,
-            SupervisorId = EmployeeSession.EmpId,
+            SupervisorId = EmployeeSession.EmpId
         };
 
         return View("~/Views/Report/Attendance/Index.cshtml", model);

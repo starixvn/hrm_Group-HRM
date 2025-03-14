@@ -341,14 +341,14 @@ public class RequestService(
     private static string GetMessageForCheckInOut(RequestEntity request, bool isNoFormat)
     {
         var msgTemplate = isNoFormat ? RequestFormatConstants.MsgCheckInOutWithNoFormat : RequestFormatConstants.MsgCheckInOut;
-        var time = request.RequestedDate.Day == request.FromDate.Day ? request.RequestedDate.ToShortTime() : (request.RequestedDate.ToShortTime() + "+");
+        var time = request.RequestedDate.Day == request.FromDate.Day ? request.RequestedDate.ToShortTime() : request.RequestedDate.ToShortTime() + "+";
         return string.Format(msgTemplate, time, request.FromShift.Name, request.FromDate.ToDateMonthYearFormatedDate());
     }
 
     private static string GetMessageForLateIn(RequestEntity request, bool isNoFormat)
     {
         var msgTemplate = isNoFormat ? RequestFormatConstants.MsgLateInWithNoFormat : RequestFormatConstants.MsgLateIn;
-        var actualLateIn = request.ActualLateInEarlyOut == 0 ? Labels.NA : ("+" + request.ActualLateInEarlyOut + "'");
+        var actualLateIn = request.ActualLateInEarlyOut == 0 ? Labels.NA : "+" + request.ActualLateInEarlyOut + "'";
 
         return string.Format(msgTemplate, request.TotalMins, request.FromShift.Name, Utilities.GetMessageDateString(request.FromDate, request.ToDate), actualLateIn);
     }
@@ -356,7 +356,7 @@ public class RequestService(
     private static string GetMessageForEarlyOut(RequestEntity request, bool isNoFormat)
     {
         var msgTemplate = isNoFormat ? RequestFormatConstants.MsgEarlyOutWithNoFormat : RequestFormatConstants.MsgEarlyOut;
-        var actualEarlyOut = request.ActualLateInEarlyOut == 0 ? Labels.NA : ("-" + request.ActualLateInEarlyOut + "'");
+        var actualEarlyOut = request.ActualLateInEarlyOut == 0 ? Labels.NA : "-" + request.ActualLateInEarlyOut + "'";
 
         return string.Format(msgTemplate, request.TotalMins, request.FromShift.Name, Utilities.GetMessageDateString(request.FromDate, request.ToDate), actualEarlyOut);
     }
@@ -420,7 +420,7 @@ public class RequestService(
                 case (ushort)LeaveTypes.KeepInViewByHour:
                 case (ushort)LeaveTypes.BusinessDuringWorking:
                     var minutes = (request.ToTime - request.FromTime).TotalMinutes;
-                    result = $"{(minutes / Constants.TotalMinuteInHour):0.#} hour(s)";
+                    result = $"{minutes / Constants.TotalMinuteInHour:0.#} hour(s)";
                     break;
 
                 default:

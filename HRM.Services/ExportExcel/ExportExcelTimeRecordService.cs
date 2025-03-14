@@ -30,7 +30,7 @@ public class ExportExcelTimeRecordService(IWebHostEnvironment hostingEnvironment
 
         // title
         templateWorksheet.Cells[rowIndex, colIndex, rowIndex, totalColumns].Copy(workSheet.Cells[rowIndex, colIndex, rowIndex, totalColumns]);
-        rowIndex = rowIndex + headerAndTitleRow;
+        rowIndex += headerAndTitleRow;
 
         // header
         templateWorksheet.Cells[rowIndex, colIndex, rowIndex + 1, totalColumns].Copy(workSheet.Cells[rowIndex, colIndex, rowIndex + 1, totalColumns]);

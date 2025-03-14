@@ -15,16 +15,5 @@ public class TeamSupervisorModel
 
     public string Supervisors { get; set; }
 
-    public string ActionName
-    {
-        get
-        {
-            if (ActionType > 0)
-            {
-                return EnumHelper.GetDescription((SupervisorActionType)ActionType);
-            }
-
-            return string.Empty;
-        }
-    }
+    public string ActionName => ActionType > 0 ? EnumHelper.GetDescription((SupervisorActionType)ActionType) : string.Empty;
 }
