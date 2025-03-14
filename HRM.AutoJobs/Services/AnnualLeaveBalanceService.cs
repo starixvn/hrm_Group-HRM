@@ -101,10 +101,10 @@ public class AnnualLeaveBalanceService(
     {
         foreach (var item in statistics)
         {
-            var totalemps = validEmployees.Count(x => x.SectionId == item.SectionId && x.DepartmentId == item.DepartmentId);
-            var percentage = Math.Round((double)totalemps / item.TotalEmployee * 100);
+            var totalEmployees = validEmployees.Count(x => x.SectionId == item.SectionId && x.DepartmentId == item.DepartmentId);
+            var percentage = Math.Round((double)totalEmployees / item.TotalEmployee * 100);
 
-            item.AnnualLeaveBalance = totalemps;
+            item.AnnualLeaveBalance = totalEmployees;
             item.Percentage = percentage;
         }
 

@@ -2,7 +2,7 @@
 
 using Fanex.Data.Repository;
 
-public class GetMemberToAddOtherDiscipineBySupervisorIdCriteria : CriteriaBase
+public class GetMemberToAddOtherDisciplineBySupervisorIdCriteria : CriteriaBase
 {
     public string Query { get; set; }
 

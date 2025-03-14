@@ -59,7 +59,7 @@ public interface IEmployeeService
 
     Task<CommandResult> DeleteAsync(int actorId, DeleteEmployeeParam param);
 
-    string CaculateLengthOfService(DateTime? joinedDate, DateTime? militaryFromDate, DateTime? militaryToDate);
+    string CalculateLengthOfService(DateTime? joinedDate, DateTime? militaryFromDate, DateTime? militaryToDate);
 
     Task<CommandResult> UpdateUserIdAsync(UpdateUserIdCommand command);
 }

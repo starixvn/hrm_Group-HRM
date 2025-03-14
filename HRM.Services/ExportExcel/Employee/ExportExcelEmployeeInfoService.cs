@@ -110,8 +110,8 @@ public class ExportExcelEmployeeInfoService(
             employee.ConfirmedDate,
             employee.ResignedDate,
             employee.ResignedReason,
-            LengthOfServiceByGroupDate = employeeService.CaculateLengthOfService(employee.JoinedDate, employee.MilitaryFromDate, employee.MilitaryToDate),
-            LengthOfServiceByCompanyDate = employeeService.CaculateLengthOfService(employee.CompanyDate, employee.MilitaryFromDate, employee.MilitaryToDate),
+            LengthOfServiceByGroupDate = employeeService.CalculateLengthOfService(employee.JoinedDate, employee.MilitaryFromDate, employee.MilitaryToDate),
+            LengthOfServiceByCompanyDate = employeeService.CalculateLengthOfService(employee.CompanyDate, employee.MilitaryFromDate, employee.MilitaryToDate),
             DoB = employee.DateOfBirth.ToDateMonthYearFormatedDate(),
             Gender = employee.Gender == 0 ? "F" : "M",
             CellPhone = employee.Phone,
@@ -237,13 +237,13 @@ public class ExportExcelEmployeeInfoService(
         {
             var writeRowNumber = (currentRow % 2 == 0) ? 5 : 4;
 
-            var record = CreateRecordEployeeFullProfile(p, currentRow);
+            var record = CreateRecordEmployeeFullProfile(p, currentRow);
             writer.WriteRow(writeRowNumber, record);
             currentRow++;
         }
     }
 
-    private object CreateRecordEployeeFullProfile(EmployeeFullProfile p, int currentRow)
+    private object CreateRecordEmployeeFullProfile(EmployeeFullProfile p, int currentRow)
     {
         var gender = "Unknown";
         if (p.Gender.HasValue)
@@ -268,8 +268,8 @@ public class ExportExcelEmployeeInfoService(
             ConfirmedDate = FormatDate(p.ConfirmedDate),
             ResignedDate = FormatDate(p.ResignedDate),
             p.ResignedReason,
-            LengthOfServiceByGroupDate = employeeService.CaculateLengthOfService(p.JoinedDate, p.MilitaryFromDate, p.MilitaryToDate),
-            LengthOfServiceByCompanyDate = employeeService.CaculateLengthOfService(p.CompanyDate, p.MilitaryFromDate, p.MilitaryToDate),
+            LengthOfServiceByGroupDate = employeeService.CalculateLengthOfService(p.JoinedDate, p.MilitaryFromDate, p.MilitaryToDate),
+            LengthOfServiceByCompanyDate = employeeService.CalculateLengthOfService(p.CompanyDate, p.MilitaryFromDate, p.MilitaryToDate),
             p.JobTitle,
             p.JobLevel,
             p.ManagementLevel,

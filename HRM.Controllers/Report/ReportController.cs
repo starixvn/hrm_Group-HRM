@@ -216,18 +216,18 @@ public class ReportController(
         var leaveType = string.Join(", ", leaveTypes.Where(x => leaveTypeIds.Exists(y => x.Id.ToString() == y)).Select(x => x.Name));
         ViewBag.HeaderTitle = $"{leaveType} {model.Year}";
 
-        var leaveSumaries = await reportService.GetUnpaidLeaveAsync(criteria);
+        var leaveSummaries = await reportService.GetUnpaidLeaveAsync(criteria);
         if (model.Period.Equals("1"))
         {
-            model.LeaveSumaries = leaveSumaries.Where(x => x.Jan > 0 || x.Feb > 0 || x.Mar > 0 || x.Apr > 0 || x.May > 0 || x.Jun > 0).ToList();
+            model.LeaveSumaries = leaveSummaries.Where(x => x.Jan > 0 || x.Feb > 0 || x.Mar > 0 || x.Apr > 0 || x.May > 0 || x.Jun > 0).ToList();
         }
         else if (model.Period.Equals("2"))
         {
-            model.LeaveSumaries = leaveSumaries.Where(x => x.Jul > 0 || x.Aug > 0 || x.Sep > 0 || x.Oct > 0 || x.Nov > 0 || x.Dec > 0).ToList();
+            model.LeaveSumaries = leaveSummaries.Where(x => x.Jul > 0 || x.Aug > 0 || x.Sep > 0 || x.Oct > 0 || x.Nov > 0 || x.Dec > 0).ToList();
         }
         else
         {
-            model.LeaveSumaries = leaveSumaries;
+            model.LeaveSumaries = leaveSummaries;
         }
 
         return PartialView("_UnpaidLeaveSummaryDetails", model);

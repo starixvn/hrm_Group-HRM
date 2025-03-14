@@ -45,7 +45,7 @@ public class HolidayService(IBaseService baseService) : IHolidayService
             ToDate = new DateTimeOffset(year, 1, 1, 0, 0, 0, TimeSpan.Zero).DateTime
         };
 
-        var vitoryDay = new Holiday
+        var victoryDay = new Holiday
         {
             HolidayName = "Victory Day",
             FromDate = new DateTimeOffset(year, 4, 30, 0, 0, 0, TimeSpan.Zero).DateTime,
@@ -67,7 +67,7 @@ public class HolidayService(IBaseService baseService) : IHolidayService
         };
 
         solarHolidays.Add(newYear);
-        solarHolidays.Add(vitoryDay);
+        solarHolidays.Add(victoryDay);
         solarHolidays.Add(labourDay);
         solarHolidays.Add(independenceDay);
 

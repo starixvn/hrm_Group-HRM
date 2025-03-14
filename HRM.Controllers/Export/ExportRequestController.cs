@@ -79,10 +79,10 @@ public class ExportRequestController(IUserControlSession userControlSession,
         };
 
         var requestList = await requestService.GetRequests(criteria);
-        var hssfworkbook = exportExcelService.ExportWorkingTimeRequest(requestList, model.PageTitle);
+        var hssfWorkbook = exportExcelService.ExportWorkingTimeRequest(requestList, model.PageTitle);
         var fileName = "EmployeeRequest_" + DateTimeOffset.Now.ToString("yyyyMMdd") + ".xls";
 
-        return ExcelFile(hssfworkbook, fileName);
+        return ExcelFile(hssfWorkbook, fileName);
     }
 
 

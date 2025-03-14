@@ -93,7 +93,7 @@ public class TeamViewModel
 
     [Required(ErrorMessageResourceName = nameof(Messages.RequiredErrorMessage), ErrorMessageResourceType = typeof(Messages))]
     [Display(Name = nameof(Labels.NumberOfOffday), ResourceType = typeof(Labels))]
-    [Range(0, 5, ErrorMessage = "Number of Offday must be between 0 and 5.")]
+    [Range(0, 5, ErrorMessage = "Number of Off day must be between 0 and 5.")]
     public byte? ExpatOffDaysbyWeek { get; set; }
 
     [Display(Name = nameof(Labels.WorkingHoursPerWeek), ResourceType = typeof(Labels))]

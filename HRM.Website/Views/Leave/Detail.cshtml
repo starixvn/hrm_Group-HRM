@@ -47,7 +47,7 @@
                 @Html.LabelFor(model => model.LeaveTypeId, Labels.LeaveType, new { @class = "control-label" })
             </div>
             <div class="select-form">
-                @Html.Raw(RazorHelpers.LeaveTypeDropDownList("LeaveTypeId", Model.LeaveTypeList, "ddl-leavetype form-control", Model.LeaveTypeId))
+                @Html.Raw(RazorHelpers.LeaveTypeDropDownList("LeaveTypeId", Model.LeaveTypeList, "ddl-leave-type form-control", Model.LeaveTypeId))
                 @Html.HiddenFor(model => model.LeaveTypeName)
             </div>
             <span id="leavetype-info" class="fa fa-info-circle fa-lg leavetype-info" title="@Model.LeaveTypeDescription"></span>

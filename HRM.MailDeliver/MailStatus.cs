@@ -2,7 +2,7 @@
 
 public class MailStatus
 {
-    public bool IsSucessfull { get; set; }
+    public bool IsSuccessful { get; set; }
 
     public string ErrorMessage { get; set; }
 

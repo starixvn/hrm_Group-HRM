@@ -89,7 +89,7 @@
                         </td>
                         <td>
                             @Html.DropDownListFor(m => item.LeaveTypeId, new SelectList(Model.LeaveTypeList, "Id", "Name", item.LeaveTypeId),
-                                new { @class = "ddlleavetype form-control" })
+                                new { @class = "ddl-leave-type form-control" })
                         </td>
                         <td>
                             @Html.CheckBoxFor(m => item.IsHalfDay, new { @class = "chkhalfday" })

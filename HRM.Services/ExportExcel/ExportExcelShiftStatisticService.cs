@@ -23,7 +23,7 @@ public class ExportExcelShiftStatisticService(IWebHostEnvironment hostingEnviron
         const int firstDataTableRow = 4;
         const int dataTableTitleRow = 3;
         const int dataTableTitleFirstCol = 2;
-        const int sumaryTemplateRowIndex = 6;
+        const int summaryTemplateRowIndex = 6;
 
         shiftStatistics = shiftStatistics.OrderBy(statistic => statistic.WorkDate);
 
@@ -53,15 +53,15 @@ public class ExportExcelShiftStatisticService(IWebHostEnvironment hostingEnviron
         }
 
         // Table Summary
-        var sumaryRowStyle = workSheet.Cells[sumaryTemplateRowIndex, 1];
+        var summaryRowStyle = workSheet.Cells[summaryTemplateRowIndex, 1];
 
-        sumaryRowStyle.Copy(workSheet.Cells[lastTableRow, 1]);
+        summaryRowStyle.Copy(workSheet.Cells[lastTableRow, 1]);
         for (var i = 2; i <= totalCol + 1; i++)
         {
-            sumaryRowStyle.Copy(workSheet.Cells[lastTableRow, i]);
+            summaryRowStyle.Copy(workSheet.Cells[lastTableRow, i]);
             workSheet.Cells[lastTableRow, i].Formula = "SUM(" + workSheet.Cells[firstDataTableRow, i, lastTableRow - 1, i] + ")";
         }
-        workSheet.Cells[sumaryTemplateRowIndex, 1, sumaryTemplateRowIndex, 2].Clear();
+        workSheet.Cells[summaryTemplateRowIndex, 1, summaryTemplateRowIndex, 2].Clear();
 
         // Table data
         var evenRowStyle = workSheet.Cells[firstDataTableRow, 1];

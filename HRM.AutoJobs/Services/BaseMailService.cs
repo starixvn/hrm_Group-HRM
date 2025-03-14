@@ -24,40 +24,38 @@ public class BaseMailService(
 {
     public async Task<bool> SendEmailAsync(MailRecord email)
     {
-        var isSucessfull = false;
+        var isSuccessful = false;
         if (appSettings.EnableSendMail && email != null && IsValidEmail(email.MailTo))
         {
             email.MailSetting = await GetMailSettingByIdAsync(appSettings.AppMailId);
             await InsertMailRecordAsync(email);
-            isSucessfull = await SendAsync(email);
+            isSuccessful = await SendAsync(email);
         }
 
-        return isSucessfull;
+        return isSuccessful;
     }
 
     private async Task<bool> SendAsync(MailRecord email)
     {
-        var isSucessfull = email.MailSetting.Port == 465 ? await SendByMailKitAsync(email) : await SendByMailNetAsync(email);
-        return isSucessfull;
+        var isSuccessful = email.MailSetting.Port == 465 ? await SendByMailKitAsync(email) : await SendByMailNetAsync(email);
+        return isSuccessful;
     }
 
     private async Task<bool> SendByMailKitAsync(MailRecord email)
     {
         var message = GetMessageContent(email);
-        var isSucessfull = false;
 
-        using var mailclient = new MailKit.Net.Smtp.SmtpClient();
-        mailclient.Connect(email.MailSetting.Server, email.MailSetting.Port, email.MailSetting.IsAuth);
+        using var mailClient = new MailKit.Net.Smtp.SmtpClient();
+        await mailClient.ConnectAsync(email.MailSetting.Server, email.MailSetting.Port, email.MailSetting.IsAuth);
         if (email.MailSetting.IsAuth)
         {
-            mailclient.Authenticate(email.MailSetting.Username, email.MailSetting.Password);
+            await mailClient.AuthenticateAsync(email.MailSetting.Username, email.MailSetting.Password);
         }
 
         try
         {
-            mailclient.Send(message);
-            isSucessfull = true;
-            await UpdateMailStatusAsync(email, isSucessfull);
+            await mailClient.SendAsync(message);
+            await UpdateMailStatusAsync(email, true);
         }
         catch (AuthenticationException ex)
         {
@@ -80,14 +78,14 @@ public class BaseMailService(
             throw;
         }
 
-        await mailclient.DisconnectAsync(true);
+        await mailClient.DisconnectAsync(true);
 
-        return isSucessfull;
+        return true;
     }
 
     private async Task<bool> SendByMailNetAsync(MailRecord email)
     {
-        var isSucessfull = false;
+        var isSuccessful = false;
         try
         {
             var msg = new MailMessage
@@ -122,7 +120,7 @@ public class BaseMailService(
 
                 client.SendCompleted += SendCompletedCallback;
                 client.SendAsync(msg, email);
-                isSucessfull = true;
+                isSuccessful = true;
             }
         }
         catch (Exception ex)
@@ -131,7 +129,7 @@ public class BaseMailService(
             throw;
         }
 
-        return isSucessfull;
+        return isSuccessful;
     }
 
     private void SendCompletedCallback(object sender, AsyncCompletedEventArgs e)
@@ -153,8 +151,8 @@ public class BaseMailService(
         if (!string.IsNullOrWhiteSpace(mailString))
         {
             var emails = RemoveDoubleComma(mailString);
-            var mailArrs = emails.Split(';');
-            foreach (var mail in mailArrs)
+            var mailArrays = emails.Split(';');
+            foreach (var mail in mailArrays)
             {
                 if (!string.IsNullOrEmpty(mail))
                 {
@@ -169,8 +167,8 @@ public class BaseMailService(
         if (!string.IsNullOrWhiteSpace(mailString))
         {
             var emails = RemoveDoubleComma(mailString);
-            var mailArrs = emails.Split(';');
-            foreach (var mail in mailArrs)
+            var mailArrays = emails.Split(';');
+            foreach (var mail in mailArrays)
             {
                 if (!string.IsNullOrEmpty(mail))
                 {
@@ -269,12 +267,12 @@ public class BaseMailService(
         await baseService.ExecuteNonQueryAsync(command);
     }
 
-    private async Task UpdateMailStatusAsync(MailRecord email, bool isSucessfull)
+    private async Task UpdateMailStatusAsync(MailRecord email, bool isSuccessful)
     {
         var command = new UpdateMailStatusCommand
         {
             MailId = email.MailId,
-            Status = isSucessfull,
+            Status = isSuccessful,
             MailUpdatedDate = DateTimeOffset.Now.DateTime
         };
 

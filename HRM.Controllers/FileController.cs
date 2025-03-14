@@ -114,7 +114,7 @@ public class FileController(
                 }
             }
 
-            return Json(new { isSuccessful = true, message = "File(s) uploaded sucessful." });
+            return Json(new { isSuccessful = true, message = "File(s) uploaded successful." });
         }
 
         return Json(new { isSuccessful = false, message = "File(s) uploaded failed." });
@@ -122,15 +122,15 @@ public class FileController(
 
     private static bool IsValidFileUpload(IEnumerable<IFormFile> files)
     {
-        var allowedExtentsions = new[] { ".jpg", ".png", ".jpeg", ".pdf", ".doc", ".docx", ".xls", ".xlsx", ".txt" };
+        var allowedExtenstion = new[] { ".jpg", ".png", ".jpeg", ".pdf", ".doc", ".docx", ".xls", ".xlsx", ".txt" };
         foreach (var file in files)
         {
             if (file.Length > MaxSizeFileUpload)
             {
                 return false;
             }
-            var extentsion = Path.GetExtension(file.FileName).ToLowerInvariant();
-            if (!allowedExtentsions.Contains(extentsion))
+            var extenstion = Path.GetExtension(file.FileName).ToLowerInvariant();
+            if (!allowedExtenstion.Contains(extenstion))
             {
                 return false;
             }

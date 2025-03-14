@@ -9,16 +9,16 @@ using Models;
 
 public class SendNotificationService(IHttpClientService httpClientService) : ISendNotificationService
 {
-    public JwtToken GetToken(string baseUrl, string ursername, string password)
+    public JwtToken GetToken(string baseUrl, string userName, string password)
     {
-        var url = $"{baseUrl}{LetstalkApiPath.Auth}?username={ursername}&password={password}";
+        var url = $"{baseUrl}{LetstalkApiPath.Auth}?username={userName}&password={password}";
         var token = httpClientService.ExecuteGet<JwtToken>(url);
         return token;
     }
 
-    public async Task<JwtToken> GetTokenAsync(string baseUrl, string ursername, string password)
+    public async Task<JwtToken> GetTokenAsync(string baseUrl, string userName, string password)
     {
-        var url = $"{baseUrl}{LetstalkApiPath.Auth}?username={ursername}&password={password}";
+        var url = $"{baseUrl}{LetstalkApiPath.Auth}?username={userName}&password={password}";
         var token = await httpClientService.ExecuteGetAsync<JwtToken>(url);
         return token;
     }

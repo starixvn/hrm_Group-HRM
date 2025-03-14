@@ -13,21 +13,21 @@ public class BaseMailService(AppSettings appSettings, IBaseService baseService) 
 {
     public async Task<bool> SendEmailAsync(MailRecord email)
     {
-        var isSucessfull = false;
+        var isSuccessful = false;
         if (email != null && Utilities.IsValidEmail(email.MailTo))
         {
             email.MailConfig = await GetMailConfigByIdAsync(appSettings.AppMailId);
             await InsertMailRecordAsync(email);
-            isSucessfull = await SendByMailKitAsync(email);
+            isSuccessful = await SendByMailKitAsync(email);
         }
 
-        return isSucessfull;
+        return isSuccessful;
     }
 
     private async Task<bool> SendByMailKitAsync(MailRecord email)
     {
         var message = GetMessageContent(email);
-        var isSucessfull = false;
+        var isSuccessful = false;
 
         using var mailClient = new SmtpClient();
         await mailClient.ConnectAsync(email.MailConfig.Server, email.MailConfig.Port, email.MailConfig.IsAuth);
@@ -39,8 +39,8 @@ public class BaseMailService(AppSettings appSettings, IBaseService baseService) 
         try
         {
             await mailClient.SendAsync(message);
-            isSucessfull = true;
-            await UpdateMailStatusAsync(email, isSucessfull);
+            isSuccessful = true;
+            await UpdateMailStatusAsync(email, true);
         }
         catch (Exception ex)
         {
@@ -49,7 +49,7 @@ public class BaseMailService(AppSettings appSettings, IBaseService baseService) 
 
         await mailClient.DisconnectAsync(true);
 
-        return isSucessfull;
+        return isSuccessful;
     }
 
     private static void GetMailAddressFromString(string mailString, InternetAddressList mails)
@@ -57,8 +57,8 @@ public class BaseMailService(AppSettings appSettings, IBaseService baseService) 
         if (!string.IsNullOrWhiteSpace(mailString))
         {
             var emails = RemoveDoubleComma(mailString);
-            var mailArrs = emails.Split(';');
-            foreach (var mail in mailArrs)
+            var mailArrays = emails.Split(';');
+            foreach (var mail in mailArrays)
             {
                 if (!string.IsNullOrEmpty(mail))
                 {
@@ -158,12 +158,12 @@ public class BaseMailService(AppSettings appSettings, IBaseService baseService) 
         await baseService.ExecuteNonQueryAsync(criteria);
     }
 
-    private async Task UpdateMailStatusAsync(MailRecord email, bool isSucessfull)
+    private async Task UpdateMailStatusAsync(MailRecord email, bool isSuccessful)
     {
         var criteria = new UpdateMailStatusCriteria
         {
             MailId = email.MailId,
-            Status = isSucessfull,
+            Status = isSuccessful,
             MailUpdatedDate = DateTimeOffset.Now.DateTime
         };
 

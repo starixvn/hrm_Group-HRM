@@ -315,7 +315,7 @@ public class EmployeeService(
         return await baseService.ExecuteNonQueryAsync(command);
     }
 
-    public string CaculateLengthOfService(DateTime? joinedDate, DateTime? militaryFromDate, DateTime? militaryToDate)
+    public string CalculateLengthOfService(DateTime? joinedDate, DateTime? militaryFromDate, DateTime? militaryToDate)
     {
         const byte halfMonth = 15;
         const short dayOfYear = 365;

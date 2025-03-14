@@ -16,7 +16,7 @@ var LeaveRequestDetail = (function ($) {
         for (let i = 0; i < objectTr.length; i++) {
             let currentObject = objectTr[i];
             if ($(currentObject).find('.ddlWorkType').first().val() === workTypeEnum.leave) {
-                const leaveType = parseInt($(currentObject).find('.ddlleavetype').first().val(), 10);
+                const leaveType = parseInt($(currentObject).find('.ddl-leave-type').first().val(), 10);
                 if (leaveType === LeaveType.AnnualLeave) {
                     totalAnnualLeave += parseFloat($.trim($(currentObject).find('.tdnumberleaves').first().html()));
                 }
@@ -44,11 +44,11 @@ var LeaveRequestDetail = (function ($) {
         }
 
         if (workType === workTypeEnum.leave) {
-            element.closest('tr').find('.ddlleavetype').show();
+            element.closest('tr').find('.ddl-leave-type').show();
             element.closest('tr').find('.tdnumberleaves').show();
             element.closest('tr').find('.chkhalfday').removeAttr('disabled');
         } else if (workType === workTypeEnum.off || workType === workTypeEnum.onduty) {
-            element.closest('tr').find('.ddlleavetype').hide();
+            element.closest('tr').find('.ddl-leave-type').hide();
             element.closest('tr').find('.tdnumberleaves').hide();
             element.closest('tr').find('.ddlfromtime').hide();
             element.closest('tr').find('.ddltotime').hide();
@@ -57,7 +57,7 @@ var LeaveRequestDetail = (function ($) {
             element.closest('tr').find('.addhalfday').hide();
             element.closest('tr').find('.tdnumberleaves').html('1');
         } else {
-            element.closest('tr').find('.ddlleavetype').hide();
+            element.closest('tr').find('.ddl-leave-type').hide();
             element.closest('tr').find('.tdnumberleaves').hide();
             element.closest('tr').find('.chkhalfday').removeAttr('disabled');
         }
@@ -73,7 +73,7 @@ var LeaveRequestDetail = (function ($) {
             for (let i = 0; i < length; i++) {
                 object = objectTr[i];
                 if ($(object).find('.ddlWorkType').first().val() !== workTypeEnum.leave) {
-                    $(object).find('.ddlleavetype').hide();
+                    $(object).find('.ddl-leave-type').hide();
                     $(object).find('.tdnumberleaves').hide();
                     if ($(object).find('.ddlWorkType').first().val() === workTypeEnum.off) {
                         $(object).find('.chkhalfday').prop('disabled', true);
@@ -104,7 +104,7 @@ var LeaveRequestDetail = (function ($) {
                 workTypeChange($(this));
             });
 
-            $('#leaveDetails').off('change', '.ddlleavetype').on('change', '.ddlleavetype', function () {
+            $('#leaveDetails').off('change', '.ddl-leave-type').on('change', '.ddl-leave-type', function () {
                 const leaveTypeId = parseInt($(this).val(), 10);
                 LeaveRequestDetail.showHideCheckboxHalfDay($(this).closest('tr'), leaveTypeId);
                 getTotalLeave();
@@ -153,7 +153,7 @@ var LeaveRequestDetail = (function ($) {
                 }
             });
 
-            $('.ddlleavetype').each(function () {
+            $('.ddl-leave-type').each(function () {
                 if ($(this).closest('tr').find('.chkhalfday').prop('checked')) {
                     $(this).find('option[value=' + LeaveType.UnpaidLeaveInsurance + ']').prop('disabled', true);
                 }
@@ -165,7 +165,7 @@ var LeaveRequestDetail = (function ($) {
         },
         halfdayChange: function (trObject) {
             if (trObject.find('.chkhalfday').prop('checked')) {
-                trObject.find('.ddlleavetype option[value=' + LeaveType.UnpaidLeaveInsurance + ']').prop('disabled', true);
+                trObject.find('.ddl-leave-type option[value=' + LeaveType.UnpaidLeaveInsurance + ']').prop('disabled', true);
                 $('.tdhalfday').show();
                 trObject.find('.addhalfday').first().html('+ Add a half').show();
                 var fromTimeObject = trObject.find('.ddlfromtime');
@@ -178,7 +178,7 @@ var LeaveRequestDetail = (function ($) {
 
                 LeaveRequestDetail.fillTimeForHalfday(trObject);
             } else {
-                trObject.find('.ddlleavetype option[value=' + LeaveType.UnpaidLeaveInsurance + ']').prop('disabled', false);
+                trObject.find('.ddl-leave-type option[value=' + LeaveType.UnpaidLeaveInsurance + ']').prop('disabled', false);
                 trObject.find('.addhalfday').first().html();
                 trObject.find('.ddlfromtime').hide();
                 trObject.find('.ddltotime').hide();

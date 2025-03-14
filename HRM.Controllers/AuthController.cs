@@ -53,13 +53,13 @@ public class AuthController(
     {
         model.Password = Encoding.UTF8.GetString(Convert.FromBase64String(model.Password));
         var token = cryptoService.GenerateRijndaelKeyIV();
-        var keyiv = token.Split(':');
-        var rijndaelKey = keyiv[0];
-        var rijndaelIV = keyiv[1];
+        var keyIv = token.Split(':');
+        var rijndaelKey = keyIv[0];
+        var rijndaelIv = keyIv[1];
         var loginParam = new LoginParam
         {
-            Username = cryptoService.Encrypt(model.Username, rijndaelKey, rijndaelIV),
-            Password = cryptoService.Encrypt(model.Password, rijndaelKey, rijndaelIV),
+            Username = cryptoService.Encrypt(model.Username, rijndaelKey, rijndaelIv),
+            Password = cryptoService.Encrypt(model.Password, rijndaelKey, rijndaelIv),
             Token = token,
             IP = GetClientIp(HttpContext),
             Platform = HttpContext.Request?.Headers["User-Agent"].ToString(),

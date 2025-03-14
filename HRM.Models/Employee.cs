@@ -172,7 +172,7 @@ public class Employee : EntityBase<int>
 
     public bool IsShowLeftNavigation { get; set; }
 
-    [Range(0, 5, ErrorMessage = "Number of Offdays must be between 0 and 5.")]
+    [Range(0, 5, ErrorMessage = "Number of Off days must be between 0 and 5.")]
     public decimal OffDaysbyWeek { get; set; }
 
     [Required]

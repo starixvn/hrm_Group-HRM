@@ -285,8 +285,8 @@ public class EmployeeController(
             employee.Disciplinarian = GetDisciplineSupervisors(supervisors);
             employee.EmpShiftList = GetShiftMonitors(supervisors);
             employee.ActingEmpList = GetActingSupervisors(supervisors);
-            ViewBag.LengthOfServiceByGroupDate = employeeService.CaculateLengthOfService(employee.JoinedDate, employee.MilitaryFromDate, employee.MilitaryToDate);
-            ViewBag.LengthOfServiceByCompanyDate = employeeService.CaculateLengthOfService(employee.CompanyDate, employee.MilitaryFromDate, employee.MilitaryToDate);
+            ViewBag.LengthOfServiceByGroupDate = employeeService.CalculateLengthOfService(employee.JoinedDate, employee.MilitaryFromDate, employee.MilitaryToDate);
+            ViewBag.LengthOfServiceByCompanyDate = employeeService.CalculateLengthOfService(employee.CompanyDate, employee.MilitaryFromDate, employee.MilitaryToDate);
             ViewBag.EnableGroupDate = await commonDataService.IsEnableGroupDateAsync();
 
             await ComposeViewBagsForEditEmployee();
@@ -409,7 +409,7 @@ public class EmployeeController(
     }
 
     [HttpPost]
-    public IActionResult ToogleLeftNavigation(bool isShow)
+    public IActionResult ToggleLeftNavigation(bool isShow)
     {
         userControlSession.Set<bool>(SessionKey.IsShowLeftNavigation, isShow);
         return Ok();

@@ -6,7 +6,7 @@
 @model IEnumerable<Employee>
 @{
     var pagerOption = (PagerOptionModel)ViewBag.PagerOption;
-    var isShowJobtitle = (bool)ViewBag.IsShowJobtitle;
+    var isShowJobTitle = (bool)ViewBag.IsShowJobtitle;
     var enableGroupDate = ViewBag.EnableGroupDate;
 }
 
@@ -50,7 +50,7 @@
                     <div class="fa fa-sort cell-right-div"></div>
                 </div>
             </th>
-            @if (isShowJobtitle)
+            @if (isShowJobTitle)
             {
                 <th class="col-sorter">
                     <div class="cell-control-wrapper">
@@ -113,7 +113,7 @@
                     <td>
                         <a class="avatar-tooltip" data-code="@employee.Code">@employee.NickName</a>
                     </td>
-                    @if (isShowJobtitle)
+                    @if (isShowJobTitle)
                     {
                         <td class="align-left">@employee.JobTitle</td>
                     }

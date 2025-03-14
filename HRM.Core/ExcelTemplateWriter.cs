@@ -76,7 +76,7 @@ public class ExcelTemplateWriter(HSSFWorkbook template, string excelFileName, st
 
     #region Auto resize columns' width
 
-    public void AutosizeColumns(int from, int to)
+    public void AutoSizeColumns(int from, int to)
     {
         for (var i = from; i <= to; i++)
         {
@@ -84,9 +84,9 @@ public class ExcelTemplateWriter(HSSFWorkbook template, string excelFileName, st
         }
     }
 
-    public void AutosizeColumns(int total)
+    public void AutoSizeColumns(int total)
     {
-        AutosizeColumns(0, total - 1);
+        AutoSizeColumns(0, total - 1);
     }
 
     #endregion Auto resize columns' width

@@ -829,7 +829,7 @@
     <value>Not Accept</value>
   </data>
   <data name="Reseted" xml:space="preserve">
-    <value>Resetted</value>
+    <value>Resettled</value>
   </data>
   <data name="Content" xml:space="preserve">
     <value>Content</value>
@@ -1198,7 +1198,7 @@
     <value>Discipline Detail Report from {0}  to {1}</value>
   </data>
   <data name="ApproverComment" xml:space="preserve">
-    <value>Approver's Comment</value>
+    <value>Approval's Comment</value>
   </data>
   <data name="EmployeeComment" xml:space="preserve">
     <value>Employee's Comment</value>

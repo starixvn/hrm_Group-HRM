@@ -46,7 +46,7 @@
                 <td>@item.FromShift</td>
                 @if (typeId == (byte)ChangeShiftType.MoveOffDay)
                 {
-                    var disabledates = string.Join(",", item.DisableDates.Select(x => x.ToString("yyyy/MM/dd")));
+                    var disableDates = string.Join(",", item.DisableDates.Select(x => x.ToString("yyyy/MM/dd")));
 
                     <td>
                         <div class="calendar-form">
@@ -56,8 +56,8 @@
                                 requestdate="@item.OnDate.ToDateMonthYearFormatedDate()"
                                 mindate="@(new DateTime(item.OnDate.Year, 1, 1).ToString("yyyy/MM/dd"))"
                                 maxdate="@(new DateTime(item.OnDate.Year, 12, 31).ToString("yyyy/MM/dd"))"
-                                original-disabledDate="@disabledates"
-                                disabledDate="@disabledates" />
+                                original-disabledDate="@disableDates"
+                                disabledDate="@disableDates" />
                             <i class="icon-calendar fa fa-calendar"></i>
                         </div>
                     </td>

@@ -80,7 +80,7 @@ public class DisciplineSummaryPerYearController(
         foreach (var employee in employees)
         {
             var date = model.LengthOfService ? employee.CompanyDate : employee.JoinedDate;
-            employee.LengthOfService = employeeService.CaculateLengthOfService(date, employee.MilitaryFromDate, employee.MilitaryToDate);
+            employee.LengthOfService = employeeService.CalculateLengthOfService(date, employee.MilitaryFromDate, employee.MilitaryToDate);
             employee.Disciplines = disciplines.Where(x => x.EmployeeId == employee.EmployeeId).ToList();
         }
 

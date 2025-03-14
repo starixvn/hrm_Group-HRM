@@ -40,13 +40,13 @@
     <tbody>
         @foreach (var item in Model)
         {
-            var rowspan = item.LeaveDetail.Count();
-            if (rowspan == 0)
+            var rowSpan = item.LeaveDetail.Count();
+            if (rowSpan == 0)
             {
-                rowspan = 1;
+                rowSpan = 1;
             }
             <tr>
-                <td rowspan="@rowspan">
+                <td rowspan="@rowSpan">
                     @(item.WorkDate.ToDateMonthYearFormatedDate() + " (" + item.WorkDate.ToString("ddd") + ")")
                     <br />
                     <span class="shift-info">
@@ -101,12 +101,12 @@
                             </div>
                         }
                     </td>
-                    <td rowspan="@rowspan" class="td-type">
+                    <td rowspan="@rowSpan" class="td-type">
                         <span class="violation-type">
                             @item.DisciplineTypeName
                         </span>
                     </td>
-                    <td rowspan="@rowspan" class="td-active">
+                    <td rowspan="@rowSpan" class="td-active">
                         @if (item.IsUnpaidLeaveAbsent || item.IsAbsent || item.IsUnplannedLeave || item.IsUnpaidLeave || item.IsSevenDaysLeave)
                         {
                             <input class="chk-ignore" type="radio"
@@ -120,7 +120,7 @@
                     </td>
                     if (!isNotExistsWeekendLeave)
                     {
-                        <td rowspan="@rowspan" class="td-type">
+                        <td rowspan="@rowSpan" class="td-type">
                             @if (item.IsWeekendLeave)
                             {
                                 <span class="violation-type">
@@ -133,7 +133,7 @@
                             }
 
                         </td>
-                        <td rowspan="@rowspan" class="td-active">
+                        <td rowspan="@rowSpan" class="td-active">
                             @if (item.IsWeekendLeave)
                             {
                                 <input class="chk-weekend-ignore" type="radio" data-workdate="@item.WorkDate.Date.ToString("d")" />
@@ -163,7 +163,7 @@
                 }
 
             </tr>
-            if (rowspan == 2)
+            if (rowSpan == 2)
             {
                 var leaveDetail2 = item.LeaveDetail[1];
                 <tr>

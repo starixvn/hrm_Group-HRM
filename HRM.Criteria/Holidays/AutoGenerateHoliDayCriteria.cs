@@ -2,7 +2,7 @@
 
 using Fanex.Data.Repository;
 
-public class AutoGenerateHoliDayCriteria : CriteriaBase
+public class AutoGenerateHolidayCriteria : CriteriaBase
 {
     public string Holidays { get; set; }
 

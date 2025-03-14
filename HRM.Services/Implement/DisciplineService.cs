@@ -39,7 +39,7 @@ public class DisciplineService(
 
     public async Task<IEnumerable<EmployeeInfoModel>> GetMemberToAddOtherDisciplineAsync(int supervisorId, string query = null)
     {
-        var criteria = new GetMemberToAddOtherDiscipineBySupervisorIdCriteria
+        var criteria = new GetMemberToAddOtherDisciplineBySupervisorIdCriteria
         {
             SupervisorId = supervisorId,
             Query = query

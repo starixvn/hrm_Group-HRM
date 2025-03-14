@@ -8,9 +8,9 @@
 @model IList<LeaveRequest>
 @{
     ViewBag.Title = Labels.MyLeaveRequest;
-    var emmployeeBalance = ViewBag.EmployeeBalance == null ? null : (EmployeeLeaveBalance)ViewBag.EmployeeBalance;
-    var annualBalance = emmployeeBalance?.AnnualBalance ?? 0;
-    var keepInViewBalance = emmployeeBalance?.KeepInViewBalance ?? 0;
+    var employeeBalance = ViewBag.EmployeeBalance == null ? null : (EmployeeLeaveBalance)ViewBag.EmployeeBalance;
+    var annualBalance = employeeBalance?.AnnualBalance ?? 0;
+    var keepInViewBalance = employeeBalance?.KeepInViewBalance ?? 0;
 }
 @section css{
     <link href="~/dist/styles/leave.myrequest.css" rel="stylesheet" />

@@ -25,7 +25,7 @@ public class ExportExcelAttendanceReportService(IWebHostEnvironment hostingEnvir
 {
     private const byte RowStartBody = 3;
     private const byte RowHighlight = 4;
-    private const byte RowOffdate = 5;
+    private const byte RowOffDate = 5;
     private const byte RowWeekend = 6;
     private const byte TotalColumns = 17;
     private const byte MinimumWidth = 5;
@@ -100,7 +100,7 @@ public class ExportExcelAttendanceReportService(IWebHostEnvironment hostingEnvir
         }
         else if (attendance.IsPublicHoliday && !string.IsNullOrEmpty(attendance.ShiftCode))
         {
-            rowIndex = RowOffdate;
+            rowIndex = RowOffDate;
         }
         else if (attendance.IsWeekend)
         {
@@ -122,8 +122,8 @@ public class ExportExcelAttendanceReportService(IWebHostEnvironment hostingEnvir
         {
             foreach (var item in attendance.RequestList)
             {
-                var actualLateInErlyOut = item.RequestType.Id == (byte)RequestType.LateIn ? attendance.LateIn : attendance.EarlyOut;
-                var request = GetRequestEntity(item, actualLateInErlyOut);
+                var actualLateInEarlyOut = item.RequestType.Id == (byte)RequestType.LateIn ? attendance.LateIn : attendance.EarlyOut;
+                var request = GetRequestEntity(item, actualLateInEarlyOut);
                 requestsBuilder.Append("- ");
                 requestsBuilder.Append(request.RequestType.Name);
                 requestsBuilder.Append(": ");
@@ -140,7 +140,7 @@ public class ExportExcelAttendanceReportService(IWebHostEnvironment hostingEnvir
         return requests;
     }
 
-    private static RequestEntity GetRequestEntity(EmployeeAttendanceRequest request, int actualLateInErlyOut)
+    private static RequestEntity GetRequestEntity(EmployeeAttendanceRequest request, int actualLateInEarlyOut)
     {
         var currentDateTime = DateTimeOffset.Now.DateTime;
         var requestEntity = new RequestEntity
@@ -164,7 +164,7 @@ public class ExportExcelAttendanceReportService(IWebHostEnvironment hostingEnvir
                 Name = request.ToShift
             },
             TotalMins = request.TotalMins ?? 0,
-            ActualLateInEarlyOut = actualLateInErlyOut
+            ActualLateInEarlyOut = actualLateInEarlyOut
         };
 
         return requestEntity;

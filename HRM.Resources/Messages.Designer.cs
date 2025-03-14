@@ -19,7 +19,7 @@ namespace HRM.Resources {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Messages {
@@ -250,7 +250,7 @@ namespace HRM.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Employee alreadys exists.
+        ///   Looks up a localized string similar to Employee already exists.
         /// </summary>
         public static string EmployeeAlreadyExist {
             get {
@@ -799,7 +799,7 @@ namespace HRM.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Munites must be between 15&apos; to 210&apos;..
+        ///   Looks up a localized string similar to Minutes must be between 15&apos; to 210&apos;..
         /// </summary>
         public static string WrongMunites {
             get {

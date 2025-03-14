@@ -296,7 +296,7 @@ const LeaveRequest = (function ($) {
                         requestDetails.push({
                             OnDate: leaveDate,
                             WorkType: $('td select.ddlWorkType', this).first().val(),
-                            LeaveTypeId: $('td select.ddlleavetype', this).first().val(),
+                            LeaveTypeId: $('td select.ddl-leave-type', this).first().val(),
                             IsHalfDay: isHalfDay,
                             FromTime: moment(fromTime).format(DateTimeFormat),
                             ToTime: moment(toTime).format(DateTimeFormat)

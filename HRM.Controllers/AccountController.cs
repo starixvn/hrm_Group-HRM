@@ -116,13 +116,13 @@ public class AccountController(
     private async Task UpdatePassword(ChangePasswordViewModel model)
     {
         var token = cryptoService.GenerateRijndaelKeyIV();
-        var keyiv = token.Split(':');
-        var rijndaelKey = keyiv[0];
-        var rijndaelIV = keyiv[1];
+        var keyIv = token.Split(':');
+        var rijndaelKey = keyIv[0];
+        var rijndaelIv = keyIv[1];
         var commandResult = await userService.UpdatePasswordAsync(new UpdatePasswordParam
         {
-            OldPassword = cryptoService.Encrypt(model.Password, rijndaelKey, rijndaelIV),
-            Password = cryptoService.Encrypt(model.NewPassword, rijndaelKey, rijndaelIV),
+            OldPassword = cryptoService.Encrypt(model.Password, rijndaelKey, rijndaelIv),
+            Password = cryptoService.Encrypt(model.NewPassword, rijndaelKey, rijndaelIv),
             Token = token
         });
 

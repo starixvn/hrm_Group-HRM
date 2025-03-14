@@ -76,7 +76,7 @@ public class ExtensionNoController(
     }
 
     [HrmPermission(Policy.Host, FunctionKey.ExtensionNumber)]
-    public async Task<IActionResult> GetExtentionById(int id, bool isInternal)
+    public async Task<IActionResult> GetExtenstionById(int id, bool isInternal)
     {
         var model = await extensionNumberService.GetEmployeeExtensionNoByIdAsync(id, isInternal, CurrentCompanyId);
         return Json(model);

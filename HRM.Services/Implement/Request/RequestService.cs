@@ -383,7 +383,7 @@ public class RequestService(
 
         if (request.TotalDays.Equals(Constants.HalfDayOffValue))
         {
-            msgTemplate = isNoFormat ? RequestFormatConstants.MsgKeepInViewHalfdayWithNoFormat : RequestFormatConstants.MsgKeepInViewHalfday;
+            msgTemplate = isNoFormat ? RequestFormatConstants.MsgKeepInViewHalfDayWithNoFormat : RequestFormatConstants.MsgKeepInViewHalfDay;
             messageDetail = string.Format(
                 msgTemplate,
                 request.FromDate.ToDateMonthYearFormatedDate(),

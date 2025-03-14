@@ -2,7 +2,7 @@
 
 using System.ComponentModel;
 
-public enum Permision
+public enum Permission
 {
     [Description("None")]
     None = 0,

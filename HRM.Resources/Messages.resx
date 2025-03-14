@@ -181,7 +181,7 @@
     <value>Duplicate team code</value>
   </data>
   <data name="EmployeeAlreadyExist" xml:space="preserve">
-    <value>Employee alreadys exists</value>
+    <value>Employee already exists</value>
   </data>
   <data name="ErrorTryAgain" xml:space="preserve">
     <value>An error occurred while processing your request. Please try again!</value>
@@ -337,7 +337,7 @@
     <value>From Date must be less than To Date.</value>
   </data>
   <data name="WrongMunites" xml:space="preserve">
-    <value>Munites must be between 15' to 210'.</value>
+    <value>Minutes must be between 15' to 210'.</value>
   </data>
   <data name="WrongPassword" xml:space="preserve">
     <value>Password is incorrect.</value>

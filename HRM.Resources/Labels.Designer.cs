@@ -475,7 +475,7 @@ namespace HRM.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Approver&apos;s Comment.
+        ///   Looks up a localized string similar to Approval&apos;s Comment.
         /// </summary>
         public static string ApproverComment {
             get {
@@ -4165,7 +4165,7 @@ namespace HRM.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Resetted.
+        ///   Looks up a localized string similar to Resettled.
         /// </summary>
         public static string Reseted {
             get {

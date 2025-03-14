@@ -23,7 +23,7 @@ $(document).ready(function () {
 
     function updateLeftNavigationSetting(isShow) {
         axios({
-            url: resolveClientUrl('Employee/ToogleLeftNavigation'),
+            url: resolveClientUrl('Employee/ToggleLeftNavigation'),
             method: 'POST',
             headers: { 'X-Requested-With': 'XMLHttpRequest' },
             data: { isShow: isShow }

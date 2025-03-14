@@ -84,16 +84,16 @@ public class ExportDisciplineDetailService(IWebHostEnvironment hostingEnvironmen
         var totalHours = !string.IsNullOrEmpty(discipline.TotalHours) ? discipline.TotalHours : string.Empty;
         var missingCheckInOut = discipline.MissingCheckInOut.Value > 0 ? discipline.MissingCheckInOut.Value.ToString() : string.Empty;
         var workingUnderTime = discipline.WorkingUnderTime.Value > 0 ? "1" : string.Empty;
-        var lateIn = ReturnValueOrEmtpyString(!string.IsNullOrEmpty(discipline.MinutesLateIn), discipline.MinutesLateIn);
-        var earlyOut = ReturnValueOrEmtpyString(!string.IsNullOrEmpty(discipline.MinutesEarlyOut), discipline.MinutesEarlyOut);
-        var absent = ReturnValueOrEmtpyString(discipline.Absent.Value > 0, discipline.Absent.Value.ToString());
-        var unpaidLeave = ReturnValueOrEmtpyString(discipline.UnpaidLeave.Value > 0, discipline.UnpaidLeave.Value.ToString());
-        var unpaidLeaveAbsent = ReturnValueOrEmtpyString(discipline.UnpaidLeaveAbsent.Value > 0, discipline.UnpaidLeaveAbsent.Value.ToString());
-        var changeShift = ReturnValueOrEmtpyString(discipline.ChangeShift.Value > 0, discipline.ChangeShift.Value.ToString());
-        var unplannedLeave = ReturnValueOrEmtpyString(discipline.UnplannedLeave.Value > 0, discipline.UnplannedLeave.Value.ToString());
-        var weekendLeave = ReturnValueOrEmtpyString(discipline.WeekendLeave.Value > 0, discipline.WeekendLeave.Value.ToString());
-        var sevenDaysLeave = ReturnValueOrEmtpyString(discipline.SevenDaysLeave.Value > 0, discipline.SevenDaysLeave.Value.ToString());
-        var isOutOfControlReason = ReturnValueOrEmtpyString(discipline.IsOutOfControlReason, Labels.Yes);
+        var lateIn = ReturnValueOrEmptyString(!string.IsNullOrEmpty(discipline.MinutesLateIn), discipline.MinutesLateIn);
+        var earlyOut = ReturnValueOrEmptyString(!string.IsNullOrEmpty(discipline.MinutesEarlyOut), discipline.MinutesEarlyOut);
+        var absent = ReturnValueOrEmptyString(discipline.Absent.Value > 0, discipline.Absent.Value.ToString());
+        var unpaidLeave = ReturnValueOrEmptyString(discipline.UnpaidLeave.Value > 0, discipline.UnpaidLeave.Value.ToString());
+        var unpaidLeaveAbsent = ReturnValueOrEmptyString(discipline.UnpaidLeaveAbsent.Value > 0, discipline.UnpaidLeaveAbsent.Value.ToString());
+        var changeShift = ReturnValueOrEmptyString(discipline.ChangeShift.Value > 0, discipline.ChangeShift.Value.ToString());
+        var unplannedLeave = ReturnValueOrEmptyString(discipline.UnplannedLeave.Value > 0, discipline.UnplannedLeave.Value.ToString());
+        var weekendLeave = ReturnValueOrEmptyString(discipline.WeekendLeave.Value > 0, discipline.WeekendLeave.Value.ToString());
+        var sevenDaysLeave = ReturnValueOrEmptyString(discipline.SevenDaysLeave.Value > 0, discipline.SevenDaysLeave.Value.ToString());
+        var isOutOfControlReason = ReturnValueOrEmptyString(discipline.IsOutOfControlReason, Labels.Yes);
 
         var record = new
         {
@@ -129,7 +129,7 @@ public class ExportDisciplineDetailService(IWebHostEnvironment hostingEnvironmen
         return record;
     }
 
-    private static string ReturnValueOrEmtpyString(bool condition, string value)
+    private static string ReturnValueOrEmptyString(bool condition, string value)
     {
         return condition ? value : string.Empty;
     }

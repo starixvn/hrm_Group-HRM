@@ -18,8 +18,6 @@ public class BaseRequest
     public Requester ApprovedBy { get; set; }
     public Requester HR { get; set; }
     public Requester Modifier { get; set; }
-    public Requester Creater { get; set; }
-
     public DateTime CreatedDate { get; set; }
     public DateTime VerifiedDate { get; set; }
     public DateTime ApprovedDate { get; set; }

@@ -127,9 +127,9 @@
                                     LeaveType = request.LeaveType,
                                     ActualLateInEarlyOut = request.RequestType.Id == (byte)RequestType.LateIn ? item.LateIn : item.EarlyOut
                                 };
-                                var requestdetail = RequestService.ToRequestMessage(requestEntity);
+                                var requestDetail = RequestService.ToRequestMessage(requestEntity);
                                 <div class="@className"
-                                        data-requestdetail="@Html.Encode(requestdetail)"
+                                        data-requestdetail="@Html.Encode(requestDetail)"
                                         data-leavetype="@(request.LeaveType != null ? request.LeaveType.Name : string.Empty)"
                                         data-createddate="@request.CreatedDateTime"
                                         data-remark='@request.Remark'

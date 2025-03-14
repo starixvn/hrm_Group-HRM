@@ -28,7 +28,7 @@ const AppContainer = () => {
 
     const getExtentionById = (isInternal, id) => {
         axios({
-            url: resolveClientUrl('ExtensionNo/GetExtentionById'),
+            url: resolveClientUrl('ExtensionNo/GetExtenstionById'),
             method: 'GET',
             headers: { 'X-Requested-With': 'XMLHttpRequest' },
             params: {
