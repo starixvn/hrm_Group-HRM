@@ -322,7 +322,7 @@ namespace HRM.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Affect from.
+        ///   Looks up a localized string similar to Effect from.
         /// </summary>
         public static string AffectFrom {
             get {
@@ -1924,7 +1924,7 @@ namespace HRM.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The file does not exists.
+        ///   Looks up a localized string similar to The file does not exist.
         /// </summary>
         public static string FileDoesNotExists {
             get {

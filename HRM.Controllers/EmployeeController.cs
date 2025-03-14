@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using GO.UserControl.Client.Core.Enumerables;
@@ -30,9 +29,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
-using NPOI.SS.Formula.Functions;
-using SixLabors.ImageSharp;
-using static Org.BouncyCastle.Crypto.Engines.SM2Engine;
 
 namespace HRM.Controllers;
 

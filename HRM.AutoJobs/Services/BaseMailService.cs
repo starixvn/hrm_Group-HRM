@@ -116,7 +116,7 @@ public class BaseMailService(
                     client.EnableSsl = true;
                 }
 
-                ServicePointManager.ServerCertificateValidationCallback += RemoteCertificateValidationCallback;
+                //ServicePointManager.ServerCertificateValidationCallback += RemoteCertificateValidationCallback;
 
                 client.SendCompleted += SendCompletedCallback;
                 client.SendAsync(msg, email);
@@ -267,12 +267,12 @@ public class BaseMailService(
         await baseService.ExecuteNonQueryAsync(command);
     }
 
-    private async Task UpdateMailStatusAsync(MailRecord email, bool isSuccessful)
+    private async Task UpdateMailStatusAsync(MailRecord email, bool isSucessfull)
     {
         var command = new UpdateMailStatusCommand
         {
             MailId = email.MailId,
-            Status = isSuccessful,
+            Status = isSucessfull,
             MailUpdatedDate = DateTimeOffset.Now.DateTime
         };
 

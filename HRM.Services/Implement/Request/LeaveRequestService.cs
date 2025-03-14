@@ -269,6 +269,6 @@ public class LeaveRequestService(
                 email.Body);
         }
 
-        Task.Run(() => letStalkService.SendNotification(email.LetsTalk, email.Subject, email.Body));
+        await Task.Run(() => letStalkService.SendNotification(email.LetsTalk, email.Subject, email.Body));
     }
 }

@@ -610,7 +610,7 @@ namespace HRM.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Search Employee Id.
+        ///   Looks up a localized string similar to Search EmployeeId.
         /// </summary>
         public static string SearchEmployeeId {
             get {
@@ -655,7 +655,7 @@ namespace HRM.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You now can&apos;t edit your request cause&apos; it was.
+        ///   Looks up a localized string similar to You now can&apos;t edit your request because it was.
         /// </summary>
         public static string StopEditRequest {
             get {

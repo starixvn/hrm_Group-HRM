@@ -6,7 +6,7 @@
     Version 2.0
     
     The primary goals of this format is to allow a simple XML format 
-    that is mostly human readable. The generation and parsing of the 
+    that is mostly human-readable. The generation and parsing of the 
     various data types are done through the TypeConverter classes 
     associated with the data types.
     
@@ -511,7 +511,7 @@
     <value>Add adjustment</value>
   </data>
   <data name="AffectFrom" xml:space="preserve">
-    <value>Affect from</value>
+    <value>Effect from</value>
   </data>
   <data name="AnnualLeaveBalanceAdjustment" xml:space="preserve">
     <value>Annual leave balance adjustment</value>
@@ -1633,7 +1633,7 @@
     <value>Letstalk</value>
   </data>
   <data name="FileDoesNotExists" xml:space="preserve">
-    <value>The file does not exists</value>
+    <value>The file does not exist</value>
   </data>
   <data name="UploadFileExists" xml:space="preserve">
     <value>The file '{0}' has already exists. Please delete old file or rename the new file before upload</value>

@@ -6,7 +6,7 @@
     Version 2.0
     
     The primary goals of this format is to allow a simple XML format 
-    that is mostly human readable. The generation and parsing of the 
+    that is mostly human-readable. The generation and parsing of the 
     various data types are done through the TypeConverter classes 
     associated with the data types.
     
@@ -298,7 +298,7 @@
     <value>Shift's updated successfully!</value>
   </data>
   <data name="StopEditRequest" xml:space="preserve">
-    <value>You now can't edit your request cause' it was</value>
+    <value>You now can't edit your request because it was</value>
   </data>
   <data name="TeamCreated" xml:space="preserve">
     <value>Team's created!</value>
@@ -367,7 +367,7 @@
     <value>By {0} on {1}</value>
   </data>
   <data name="SearchEmployeeId" xml:space="preserve">
-    <value>Search Employee Id</value>
+    <value>Search EmployeeId</value>
   </data>
   <data name="UpdateInformation" xml:space="preserve">
     <value>Update Information</value>
