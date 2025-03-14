@@ -8,7 +8,6 @@ public static class Constants
     public const byte December = 12;
     public const byte NumberMonthsInFutureCanLeaveRequest = 7;
 
-    public const string DateFormat = "dd MMM, yyyy";
     public const string TimeFormat = "HH:mm";
 
     public const decimal MaxScoreSubtractDate = (decimal)3.5;

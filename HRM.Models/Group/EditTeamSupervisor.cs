@@ -8,5 +8,4 @@ using Core.XMLExtensions;
 public class EditTeamSupervisor
 {
 	public ushort RequestType { get; set; }
-    public ushort DisplayOrder { get; set; }
 }

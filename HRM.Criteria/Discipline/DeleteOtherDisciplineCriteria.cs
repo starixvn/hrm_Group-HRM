@@ -10,7 +10,6 @@ public class DeleteOtherDisciplineCriteria : CriteriaBase
     public int EmployeeId { get; set; }
 
     public DateTime WorkDate { get; set; }
-    public short DisciplineTypeId { get; set; }
     public int ActorId { get; set; }
 
     public override bool IsValid() => EmployeeId > 0 && ActorId > 0;

@@ -23,12 +23,10 @@
     <tbody>
         @if (Model != null && Model.Any())
         {
-            var index = 0;
             <tbody>
                 @foreach (var detail in Model)
                 {
-                    index++;
-                <tr>
+                    <tr>
                     <td class="align-left">@detail.Department</td>
                     <td class="align-left">@detail.Section</td>
                     <td class="align-left">@detail.Team</td>

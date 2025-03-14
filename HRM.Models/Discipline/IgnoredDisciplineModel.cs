@@ -9,9 +9,6 @@ public class IgnoredDisciplineModel
 {
     public DateTime WorkDate { get; set; }
     public int EmployeeId { get; set; }
-    public short DisciplineTypeId { get; set; }
-    public bool IsIgnored { get; set; }
-    public bool IsIgnoredChangeShift { get; set; }
     public bool IsIgnoredMissingCheckInOut { get; set; }
     public bool IsIgnoredLateIn { get; set; }
     public bool IsIgnoredEarlyOut { get; set; }

@@ -20,7 +20,7 @@ public class GroupReportService(
     IBaseService baseService,
     UserControlSettings userControlSettings) : IGroupReportService
 {
-    private DateTime? lastModifiedDate = null;
+    private DateTime? lastModifiedDate;
 
     public async Task SyncEmployeeInfoAsync()
     {

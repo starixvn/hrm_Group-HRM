@@ -2,7 +2,7 @@
 
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using HRM.AutoJobs.Services.Interfaces;
+using Interfaces;
 using HRM.Letstalk.Core.Services.Interfaces;
 using Models;
 

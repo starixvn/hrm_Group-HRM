@@ -13,8 +13,6 @@ public class AnnualLeaveBalance
     public string Email { get; set; }
     public bool IsLocal { get; set; }
 
-    public float AnnualLeaveCurrentYear { get; set; }
-
     public float LeaveBalance { get; set; }
     public string LetsTalk { get; set; }
 

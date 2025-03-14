@@ -10,8 +10,6 @@ public class EmployeeInfo
     public string Code { get; set; }
     public string FullName { get; set; }
     public string Nickname { get; set; }
-    public string UnitCode { get; set; }
-    public string UnitName { get; set; }
     public string DepartmentCode { get; set; }
     public string DepartmentName { get; set; }
     public string SectionCode { get; set; }

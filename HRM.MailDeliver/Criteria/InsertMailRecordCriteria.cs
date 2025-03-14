@@ -9,8 +9,6 @@ public class InsertMailRecordCriteria : CriteriaBase
 
     public int AppId { get; set; }
 
-    public int FuncId { get; set; }
-
     public string MailTo { get; set; }
 
     public string MailCc { get; set; }

@@ -118,7 +118,7 @@ public class BaseMailService(
 
                 ServicePointManager.ServerCertificateValidationCallback += RemoteCertificateValidationCallback;
 
-                client.SendCompleted += async (s, e) => await SendCompletedCallback(s, e);
+                client.SendCompleted += async (s, e) => await SendCompletedCallback(e);
                 client.SendAsync(msg, email);
                 isSuccessful = true;
             }
@@ -132,7 +132,7 @@ public class BaseMailService(
         return isSuccessful;
     }
 
-    private async Task SendCompletedCallback(object sender, AsyncCompletedEventArgs e)
+    private async Task SendCompletedCallback(AsyncCompletedEventArgs e)
     {
         var email = (MailRecord)e.UserState;
         var status = e.Error == null;

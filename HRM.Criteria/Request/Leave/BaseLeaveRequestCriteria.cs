@@ -1,4 +1,5 @@
 ﻿using HRM.Models.Request.Leave;
+// ReSharper disable All
 
 namespace HRM.Criteria.Request.Leave;
 

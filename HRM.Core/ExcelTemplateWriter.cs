@@ -7,7 +7,7 @@ using NPOI.SS.UserModel;
 using NPOI.SS.Util;
 using NPOIExtensions;
 
-public class ExcelTemplateWriter(HSSFWorkbook template, string excelFileName, string sheetName)
+public class ExcelTemplateWriter(HSSFWorkbook template, string sheetName)
 {
     #region Attributes
 
@@ -20,12 +20,12 @@ public class ExcelTemplateWriter(HSSFWorkbook template, string excelFileName, st
     #region Constructors
 
     public ExcelTemplateWriter(string filePath, string excelFileName = "Report.xls", string sheetName = "Result")
-        : this(new FileStream(filePath, FileMode.Open, FileAccess.Read), excelFileName, sheetName)
+        : this(new FileStream(filePath, FileMode.Open, FileAccess.Read), sheetName)
     {
     }
 
-    public ExcelTemplateWriter(FileStream fs, string excelFileName = "Report.xls", string sheetName = "Result")
-        : this(new HSSFWorkbook(fs), excelFileName, sheetName)
+    public ExcelTemplateWriter(FileStream fs, string sheetName = "Result")
+        : this(new HSSFWorkbook(fs), sheetName)
     {
         if (fs != null)
         {

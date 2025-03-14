@@ -75,8 +75,6 @@ public class DisciplineSummaryPerYearController(
             IsShowAll = model.IsShowAll
         };
         var (employees, disciplines) = await baseService.FetchMultipleAsync<DisciplineSummaryPerYear, DisciplineSummaryPerYearDetail>(criteria);
-		var employeeList = employees.ToList();
-		var disciplineList = disciplines.ToList();
 		var disciplineSummaryPerYears = employees.ToList();
         foreach (var employee in disciplineSummaryPerYears)
         {

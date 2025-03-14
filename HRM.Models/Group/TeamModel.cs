@@ -11,8 +11,6 @@ public class TeamModel
     public Section.Section Section { get; set; } = new();
 
     public DateTime? CreatedDate { get; set; }
-    public DateTime? ModifiedDate { get; set; }
-    public int NoOfMembers { get; set; }
     public int TotalLocal { get; set; }
     public int TotalExpat { get; set; }
     public string MailGroup { get; set; }

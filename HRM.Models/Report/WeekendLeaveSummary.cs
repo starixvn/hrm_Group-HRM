@@ -14,8 +14,6 @@ public class WeekendLeaveSummary
 
     public string TeamId { get; set; }
 
-    public string TeamCode { get; set; }
-
     public string TeamName { get; set; }
 
     public double TotalWeekendLeave { get; set; }

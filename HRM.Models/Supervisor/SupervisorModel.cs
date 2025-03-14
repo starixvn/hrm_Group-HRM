@@ -14,8 +14,6 @@ public class SupervisorModel
 
     public string FullName { get; set; }
 
-    public string TeamCode { get; set; }
-
     public byte ActionType { get; set; }
 
     public bool CheckInOuts { get; set; }

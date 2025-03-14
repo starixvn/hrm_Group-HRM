@@ -10,8 +10,6 @@ public interface IEmployeeRepository
 {
     Task<Employee> GetEmployeeByIdAsync(ICriteria criteria);
 
-    Employee GetEmployeeByCode(ICriteria criteria);
-
     Task<IEnumerable<Employee>> GetEmployeeAsync(ICriteria criteria);
 
     IList<Employee> GetEmployeesByRole(ICriteria criteria);

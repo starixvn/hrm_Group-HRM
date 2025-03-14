@@ -1,6 +1,5 @@
 ﻿namespace HRM.Criteria.Employee;
 
-using Fanex.Data;
 using Fanex.Data.Repository;
 
 public class EditPasswordCriteria : CriteriaBase
@@ -8,9 +7,6 @@ public class EditPasswordCriteria : CriteriaBase
     public int EmpId { get; set; }
 
     public string Password { get; set; }
-
-    [SpParam(Ignored = true)]
-    public string NewPassword { get; set; }
 
     public bool PasswordReset { get; set; }
 

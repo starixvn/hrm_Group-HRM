@@ -8,7 +8,5 @@ public interface IExportExcelEmployeeInfoService
 {
     Task<byte[]> ExportEmployeeBasicInfo(IList<Models.Employee> employees);
 
-    byte[] ExportEmployeeDetailsInfo(IList<Models.Employee> employees);
-
     Task<byte[]> ExportEmployeeFullProfile(IEnumerable<EmployeeFullProfile> profiles);
 }
