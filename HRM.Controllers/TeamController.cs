@@ -204,7 +204,7 @@ public class TeamController(
     {
         var supervisors = (await teamService.GetSupervisorByTeamId(id)).ToList();
         ViewBag.TeamId = id;
-        ViewBag.TeamCode = supervisors.Count != 0 ? supervisors.First().Code : string.Empty;
+        ViewBag.TeamCode = supervisors.Count != 0 ? supervisors[0].Code : string.Empty;
 
         return View(supervisors);
     }

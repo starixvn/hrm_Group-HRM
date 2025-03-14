@@ -1,4 +1,4 @@
-﻿using HRM.Models.Request.Leave;
+﻿
 
 namespace HRM.Controllers.Request;
 
@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Controllers;
 using Core;
 using Core.Constants;
 using Core.Enums;
@@ -16,6 +15,7 @@ using HRM.Core.Services;
 using HRM.Criteria.Request;
 using HRM.Criteria.Request.Leave;
 using HRM.Models.Request;
+using HRM.Models.Request.Leave;
 using HRM.Services.Interfaces.Request;
 using HRM.ViewModels.Request;
 using Microsoft.AspNetCore.Http;

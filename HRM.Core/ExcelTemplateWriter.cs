@@ -12,7 +12,6 @@ public class ExcelTemplateWriter(HSSFWorkbook template, string excelFileName, st
 {
     #region Attributes
 
-    private readonly string _fileName = excelFileName;
     private readonly ISheet _templateSheet = template.GetSheetAt(0);
     private readonly ISheet _sheet = template.CreateSheet(sheetName);
     private int _rowId;

@@ -1,5 +1,4 @@
-﻿using HRM.Services.Interfaces;
-
+﻿
 namespace HRM.Controllers;
 
 using System;
@@ -7,24 +6,25 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using Core.Constants;
+using Core.Filters;
 using Core.Models;
 using Core.Services;
+using Criteria.Time;
 using Fanex.Logging;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Models.Auth;
 using GO.UserControl.Client.Core.Services;
 using GO.UserControl.Client.Core.Session;
-using Core.Constants;
-using Core.Filters;
-using Criteria.Time;
-using Models;
-using ViewModels.Time;
+using HRM.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Models;
 using NetTools;
-using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using ViewModels.Time;
 
 public class TimeController(
     AppSettings appSettings,

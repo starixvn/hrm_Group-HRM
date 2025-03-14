@@ -3,7 +3,6 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Controllers;
 using Core;
 using Core.Constants;
 using Core.Enums;
@@ -206,7 +205,7 @@ public class LateInEarlyOutController(
         };
 
         var lateInEarlyOut = await lateInEarlyOutRequestService.GetActualLateInEarlyOutAsync(criteria);
-        lateInEarlyOut = lateInEarlyOut ?? new EmployeeLateInEarlyOutModel();
+        lateInEarlyOut ??= new EmployeeLateInEarlyOutModel();
 
         return Json(new { lateInEarlyOut.LateIn, lateInEarlyOut.EarlyOut });
     }

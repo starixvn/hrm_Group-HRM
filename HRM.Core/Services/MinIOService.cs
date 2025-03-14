@@ -1,11 +1,10 @@
-﻿using Amazon.S3;
+﻿using System;
+using System.Threading.Tasks;
+using Amazon.S3;
 using Amazon.S3.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using System;
-using System.IO;
-using System.Threading.Tasks;
 
 namespace HRM.Core.Services;
 

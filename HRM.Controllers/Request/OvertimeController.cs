@@ -4,21 +4,20 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using GO.UserControl.Client.Core.Enumerables;
-using GO.UserControl.Client.Core.Session;
-using Controllers;
+using Core;
 using Core.Constants;
 using Core.Enums;
 using Core.Filters;
 using Criteria.Supervisor;
+using GO.UserControl.Client.Core.Enumerables;
+using GO.UserControl.Client.Core.Session;
+using HRM.Services.Interfaces.Request;
+using Microsoft.AspNetCore.Mvc;
 using Models.Overtime;
 using Resources;
 using Services.ExportExcel;
 using Services.Interfaces;
-using HRM.Services.Interfaces.Request;
 using ViewModels.Overtime;
-using Core;
-using Microsoft.AspNetCore.Mvc;
 
 public class OvertimeController(
     IUserControlSession userControlSession,
@@ -81,7 +80,7 @@ public class OvertimeController(
     public async Task<IActionResult> MemberOvertime(MemberMonthlyOvertimeRequestViewModel model)
     {
         var teams = await teamService.GetAllAsync();
-        model.TeamIds = model.TeamIds ?? string.Join(",", teams.Select(x => x.Id));
+        model.TeamIds ??= string.Join(",", teams.Select(x => x.Id));
         model.MemberRequests = await GetMemberOvertimeRequest(model);
         ViewBag.CurrentUserId = EmployeeSession.EmpId;
         ViewBag.IsVerifier = userControlSession.HasPermissionOnFunction(FunctionKey.VerifyOvertime, Policy.Host);
@@ -125,7 +124,7 @@ public class OvertimeController(
     public async Task<IActionResult> EmployeeOvertime(MemberMonthlyOvertimeRequestViewModel model)
     {
         var teams = await teamService.GetAllAsync();
-        model.TeamIds = model.TeamIds ?? string.Join(",", teams.Select(x => x.Id));
+        model.TeamIds ??= string.Join(",", teams.Select(x => x.Id));
 
         return View(model);
     }

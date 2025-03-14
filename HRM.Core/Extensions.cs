@@ -229,16 +229,14 @@ public static class Extensions
     {
         if (values != null)
         {
-            var valueList = values.GetType() == typeof(string[])
-                ? values as string[]
-                : values.ToString()?.Split([','], StringSplitOptions.RemoveEmptyEntries);
+            var valueList = GetValueList(values);
 
             var list = new List<SelectListItem>();
             foreach (var item in selectList)
             {
                 if (valueList != null)
                 {
-                    item.Selected = item.Value != null && valueList.Contains(item.Value); 
+                    item.Selected = item.Value != null && valueList.Contains(item.Value);
                 }
                 list.Add(item);
             }
@@ -251,31 +249,54 @@ public static class Extensions
 
         foreach (var item in selectList)
         {
-            var input = new TagBuilder(InputTagBuilder);
-            input.MergeAttributes(htmlAttributes);
-            input.MergeAttribute("type", "checkbox");
-            input.MergeAttribute("id", name + item.Value);
-            input.MergeAttribute(ClassHtmlAttribute, CheckboxCustomHtmlClass);
-            input.MergeAttribute("name", fullHtmlFieldName, replaceExisting: true);
-            input.MergeAttribute(ValueHtmlAttribute, item.Value ?? item.Text ?? string.Empty, replaceExisting: true);
-            if (item.Selected)
-            {
-                input.MergeAttribute(CheckedHtmlAttribute, CheckedHtmlAttribute);
-            }
-
-            var label = new TagBuilder("label");
-            label.MergeAttribute("for", name + item.Value);
-            label.InnerHtml.Append(item.Text);
-
-            var div = new TagBuilder("div");
-            div.MergeAttribute(ClassHtmlAttribute, "checkbox");
-            div.InnerHtml.AppendHtml(input);
-            div.InnerHtml.AppendHtml(label);
+            var input = CreateInputTag(name, item, htmlAttributes, fullHtmlFieldName);
+            var label = CreateLabelTag(name, item);
+            var div = CreateDivTag(input, label);
 
             sb.Append(div.GetString());
         }
 
         return sb;
+    }
+
+    private static string[] GetValueList(object values)
+    {
+        return values.GetType() == typeof(string[])
+            ? values as string[]
+            : values.ToString()?.Split([','], StringSplitOptions.RemoveEmptyEntries);
+    }
+
+    private static TagBuilder CreateInputTag(string name, SelectListItem item, IDictionary<string, object> htmlAttributes, string fullHtmlFieldName)
+    {
+        var input = new TagBuilder(InputTagBuilder);
+        input.MergeAttributes(htmlAttributes);
+        input.MergeAttribute("type", "checkbox");
+        input.MergeAttribute("id", name + item.Value);
+        input.MergeAttribute(ClassHtmlAttribute, CheckboxCustomHtmlClass);
+        input.MergeAttribute("name", fullHtmlFieldName, replaceExisting: true);
+        input.MergeAttribute(ValueHtmlAttribute, item.Value ?? item.Text ?? string.Empty, replaceExisting: true);
+        if (item.Selected)
+        {
+            input.MergeAttribute(CheckedHtmlAttribute, CheckedHtmlAttribute);
+        }
+        return input;
+    }
+
+    private static TagBuilder CreateLabelTag(string name, SelectListItem item)
+    {
+        var label = new TagBuilder("label");
+        label.MergeAttribute("for", name + item.Value);
+        label.InnerHtml.Append(item.Text);
+        return label;
+    }
+
+    private static TagBuilder CreateDivTag(TagBuilder input, TagBuilder label)
+    {
+        var div = new TagBuilder("div");
+        div.MergeAttribute(ClassHtmlAttribute, "checkbox");
+        div.InnerHtml.AppendHtml(input);
+        div.InnerHtml.AppendHtml(label);
+        return div;
     }
 
     private static string GetString(this TagBuilder tagBuilder)

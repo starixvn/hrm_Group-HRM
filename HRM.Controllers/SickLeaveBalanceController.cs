@@ -198,14 +198,9 @@ public class SickLeaveBalanceController(
     public async Task<IActionResult> Edit(HospitalizationLeaveTransaction model)
     {
         var formCollection = Request.Form;
-        if (formCollection["command"].Equals(Labels.Delete))
-        {
-            return await DeleteAsync(model);
-        }
-        else
-        {
-            return await EditAsync(model);
-        }
+        return formCollection["command"].Equals(Labels.Delete)
+            ? await DeleteAsync(model)
+            : await EditAsync(model);
     }
 
     public async Task<IActionResult> ExportSummaryReport(HospitalizationLeaveBalanceViewModel model)
