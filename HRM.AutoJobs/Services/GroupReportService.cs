@@ -28,8 +28,8 @@ public class GroupReportService(
         {
             LastModifiedDate = lastModifiedDate
         };
-        var employeeInfos = await baseService.GetDataAsync<EmployeeInfo>(criteria);
-        if (employeeInfos != null && employeeInfos.Any())
+        var employeeInfos = (await baseService.GetDataAsync<EmployeeInfo>(criteria)).ToList();
+        if (employeeInfos.Count > 0)
         {
             var httpClient = clientFactory.CreateClient();
             var siteIdentity = GenerateSiteIdentity();

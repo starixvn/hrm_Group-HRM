@@ -4,7 +4,7 @@
 @using Newtonsoft.Json
 @model HRM.Models.Message.Message
 @{
-    var message = ViewBag.Message as Message;
+    var message = (Message)ViewBag.Message ?? new Message();
     ViewBag.Title = Labels.EditMessage;
 }
 @section css{

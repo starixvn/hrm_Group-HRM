@@ -13,7 +13,7 @@ using Models.ScheduleArrange;
 
 public class ScheduleArrangeRepository : IScheduleArrangeRepository
 {
-    public async Task<IEnumerable<WeeklySchedule>> GetWeeklyScheduleAsync(ICriteria criteria)
+    public async Task<List<WeeklySchedule>> GetWeeklyScheduleAsync(ICriteria criteria)
     {
         using var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey());
         using var multi = await db.QueryMultipleAsync(criteria);
@@ -25,7 +25,7 @@ public class ScheduleArrangeRepository : IScheduleArrangeRepository
 
                 return weeklySchedule;
             },
-            splitOn: "TeamId, DefaultShiftId");
+            splitOn: "TeamId, DefaultShiftId").ToList();
 
         var dailySchedules = multi.Read<DailySchedule, ShiftBase, LeaveRequest, LeaveRequest, DailySchedule>(
             (dailySchedule, shift, leave, leave2) =>
@@ -40,15 +40,15 @@ public class ScheduleArrangeRepository : IScheduleArrangeRepository
 
         var weeklyDefaultShifts = multi.Read<WeeklyDefaultShift>();
 
-        MappingData(weeklySchedules, dailySchedules, weeklyDefaultShifts);
+        MappingData(weeklySchedules, dailySchedules.ToList(), weeklyDefaultShifts.ToList());
 
         return weeklySchedules;
     }
 
     private static void MappingData(
         IEnumerable<WeeklySchedule> weeklySchedules,
-        IEnumerable<DailySchedule> dailySchedules,
-        IEnumerable<WeeklyDefaultShift> weeklyDefaultShifts)
+        List<DailySchedule> dailySchedules,
+        List<WeeklyDefaultShift> weeklyDefaultShifts)
     {
         foreach (var weeklySchedule in weeklySchedules)
         {

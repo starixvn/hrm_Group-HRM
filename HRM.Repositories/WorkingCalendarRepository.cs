@@ -32,7 +32,7 @@ public class WorkingCalendarRepository : IWorkingCalendarRepository
     {
         using var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey());
         using var multi = await db.QueryMultipleAsync(criteria);
-        var calendars = await multi.ReadAsync<WorkingCalendar>();
+        var calendars = (await multi.ReadAsync<WorkingCalendar>()).ToList();
         var dailySchedules = multi.Read<DailySchedule, ShiftBase, LeaveRequest, LeaveRequest, DailySchedule>(
             (dailySchedule, shift, leave, leave2) =>
             {
@@ -44,14 +44,14 @@ public class WorkingCalendarRepository : IWorkingCalendarRepository
             },
             splitOn: "ShiftId, LeaveTypeId, LeaveTypeId2");
 
-        MappingData(calendars, dailySchedules);
+        MappingData(calendars, dailySchedules.ToList());
 
         return calendars;
     }
 
     private static void MappingData(
         IEnumerable<WorkingCalendar> calendars,
-        IEnumerable<DailySchedule> dailySchedules)
+        List<DailySchedule> dailySchedules)
     {
         foreach (var calendar in calendars)
         {

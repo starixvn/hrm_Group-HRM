@@ -40,6 +40,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\HRM.Core\HRM.Core.csproj" />
     <ProjectReference Include="..\HRM.Letstalk.Core\HRM.Letstalk.Core.csproj" />
   </ItemGroup>
 </Project>

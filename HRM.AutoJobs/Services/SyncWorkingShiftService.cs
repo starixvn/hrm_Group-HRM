@@ -1,4 +1,5 @@
 ﻿using HRM.AutoJobs.Services.Interfaces;
+using HRM.Core.XMLExtensions;
 
 namespace HRM.AutoJobs.Services;
 
@@ -11,7 +12,6 @@ using Fanex.Logging;
 using Constants;
 using Criteria.WorkingShift;
 using Models;
-using XMLExtensions;
 using Newtonsoft.Json;
 
 public class SyncWorkingShiftService(
@@ -41,7 +41,7 @@ public class SyncWorkingShiftService(
                     ProcessData(shift);
                 }
 
-                var totalBatch = (int)Math.Ceiling((double)workingShifts.Count() / BatchSize);
+                var totalBatch = (int)Math.Ceiling((double)workingShifts.Count / BatchSize);
                 for (var i = 0; i < totalBatch; i++)
                 {
                     var command = new ImportWorkingShiftCommand

@@ -7,7 +7,7 @@
 @{
     ViewBag.Title = Labels.MyMessage;
 
-    var messages = ViewBag.Messages as IEnumerable<Message>;
+    var messages = ViewBag.Messages as List<Message>;
 }
 @section css{
     <link href="~/dist/styles/message.css" rel="stylesheet" />
@@ -76,7 +76,7 @@
             <th>@Labels.Delete</th>
         </tr>
     </thead>
-    @if (messages.Any())
+    @if (messages is not null && messages.Any())
     {
         <tbody>
             @{var index = 1;}

@@ -83,21 +83,22 @@ public class AnnualLeaveBalanceService(
                     Subject = "Annual Leave Balance Reminder",
                     Body = body
                 };
-                var thread = new Thread(async () => await SendEmailAsync(mailItem));
-                thread.Start();
-            }
 
-            var letstalkThread = new Thread(async () => await SendLetstalkNotificationAsync(employee.Letstalk, "Annual Leave Balance Reminder", body));
+                var thread = new Thread(() => SendEmailAsync(mailItem).GetAwaiter().GetResult());
+                thread.Start();
+			}
+
+			var letstalkThread = new Thread( () => SendLetstalkNotificationAsync(employee.Letstalk, "Annual Leave Balance Reminder", body).GetAwaiter().GetResult());
             letstalkThread.Start();
         }
 
-        SendMailStatisticAnnualLeave(validEmployees, supervisors, statistics);
+        SendMailStatisticAnnualLeave(validEmployees, supervisors, statistics.ToList());
     }
 
     private void SendMailStatisticAnnualLeave(
         List<AnnualLeaveBalance> validEmployees,
         IEnumerable<EmployeeSupervisor> supervisors,
-        IEnumerable<SectionStatisticAnnualLeave> statistics)
+        List<SectionStatisticAnnualLeave> statistics)
     {
         foreach (var item in statistics)
         {

@@ -4,8 +4,8 @@
 @model IEnumerable<LogObjectDetail>
 @if (Model.Any())
 {
-    var teams = Model.Where(x => x.Fields.Any(y => y.DisplayName == Labels.Team));
-    var jobTitles = Model.Where(x => x.Fields.Any(y => y.DisplayName == Labels.JobTitle));
+    var teams = Model.Where(x => x.Fields.Any(y => y.DisplayName == Labels.Team)).ToList();
+    var jobTitles = Model.Where(x => x.Fields.Any(y => y.DisplayName == Labels.JobTitle)).ToList();
     if (teams.Any() || jobTitles.Any())
     {
         <div class="panel panel-default">

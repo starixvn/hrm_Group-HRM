@@ -63,7 +63,7 @@ public class LeaveRequestViewModel : IValidatableObject
     {
         get
         {
-            return LeaveTypeList.FirstOrDefault(t => t.Id == LeaveTypeId).Description;
+            return LeaveTypeList.FirstOrDefault(t => t.Id == LeaveTypeId)?.Description;
         }
     }
 

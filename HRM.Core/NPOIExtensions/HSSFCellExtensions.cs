@@ -40,9 +40,9 @@ public static class HSSFCellExtensions
 		            break;
 	            default:
 	            {
-		            if (value is DateTime)
+		            if (value is DateTime time)
 		            {
-			            cell.SetCellValue((DateTime)value);
+			            cell.SetCellValue(time);
 		            }
 		            else if (richTextString != null)
 		            {

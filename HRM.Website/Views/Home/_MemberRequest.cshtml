@@ -9,8 +9,8 @@
 }
 @if (Model.Any())
 {
-    var verifiers = Model.Where(x => x.RoleId == (ushort)RoleSystem.Verifier);
-    var approvers = Model.Where(x => x.RoleId == (ushort)RoleSystem.Approver);
+    var verifiers = Model.Where(x => x.RoleId == (ushort)RoleSystem.Verifier).ToList();
+    var approvers = Model.Where(x => x.RoleId == (ushort)RoleSystem.Approver).ToList();
     <h2 class="section page-title">My members' requests</h2>
     if (verifiers.Any())
     {

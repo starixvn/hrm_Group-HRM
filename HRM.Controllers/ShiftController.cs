@@ -24,8 +24,8 @@ public class ShiftController(
     {
         var model = new ShiftByStatusViewModel
         {
-            StatusId = statusId.Value,
-            Shifts = await shiftService.GetAllAsync(statusId.Value)
+            StatusId = statusId ?? 0,
+            Shifts = await shiftService.GetAllAsync(statusId ?? 0)
         };
         ViewBag.IsHost = userControlSession.HasPermissionOnFunction(FunctionKey.ShiftManagement, Policy.Host);
 

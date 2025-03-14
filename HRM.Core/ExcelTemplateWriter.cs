@@ -1,6 +1,5 @@
 ﻿namespace HRM.Core;
 
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using NPOI.HSSF.UserModel;
@@ -120,31 +119,6 @@ public class ExcelTemplateWriter(HSSFWorkbook template, string excelFileName, st
         if (value != null)
         {
             WriteRow(rowIndex, value.GetType().GetProperties().Select(propertyInfo => propertyInfo.GetValue(value, null)).ToArray());
-        }
-    }
-
-    public void WriteRows(int rowId, IEnumerable<object> recordList)
-    {
-        if (recordList != null && recordList.Any())
-        {
-            foreach (var record in recordList)
-            {
-                WriteRow(rowId, record);
-            }
-        }
-    }
-
-    public void WriteRows(int rowIndex, List<object[]> arrayList)
-    {
-        if (arrayList is { Count: > 0 })
-        {
-            var total = arrayList.Count;
-            var row = CreateRows(rowIndex, total);
-            for (var i = 0; i < total; i++)
-            {
-                row.WriteCells(0, arrayList[i]);
-                row = _sheet.GetRow(row.RowNum + 1);
-            }
         }
     }
 

@@ -33,10 +33,10 @@ public class LeaveRequestRepository : ILeaveRequestRepository
             splitOn: "LeaveTypeId, EmpId, VerifierId, ApproverId, HRId, ApprovedById").ToList();
 
         var leaveDetails = multi.Read<LeaveRequestDetail>();
-        return MappingLeaveDetail(leaves, leaveDetails);
+        return MappingLeaveDetail(leaves, leaveDetails.ToList());
     }
 
-    private static IList<LeaveRequest> MappingLeaveDetail(IList<LeaveRequest> leaves, IEnumerable<LeaveRequestDetail> leaveDetails)
+    private static IList<LeaveRequest> MappingLeaveDetail(IList<LeaveRequest> leaves, List<LeaveRequestDetail> leaveDetails)
     {
         foreach (var leave in leaves)
         {
@@ -92,7 +92,7 @@ public class LeaveRequestRepository : ILeaveRequestRepository
                 return request;
             },
             splitOn: "LeaveTypeId, EmpId, VerifierId, ApproverId, HRId, ModifierId").ToList();
-        var leaveDetails = multi.Read<LeaveRequestDetail>();
+        var leaveDetails = multi.Read<LeaveRequestDetail>().ToList();
 
         foreach (var leave in leaves)
         {

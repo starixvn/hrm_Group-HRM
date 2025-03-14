@@ -40,7 +40,7 @@
                     <tr class="@rowClass">
                         @if (childRowIndex == 1)
                         {
-                            var mergeRow = item.Fields.Count();
+                            var mergeRow = item.Fields.Count;
                             <td class="align-left" rowspan="@mergeRow">@item.LogDate.ToDetailFormatedDate()</td>
                             <td rowspan="@mergeRow">@item.Nickname</td>
                         }

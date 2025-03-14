@@ -25,12 +25,12 @@ public class ExportExcelShiftStatisticService(IWebHostEnvironment hostingEnviron
         const int dataTableTitleFirstCol = 2;
         const int summaryTemplateRowIndex = 6;
 
-        shiftStatistics = shiftStatistics.OrderBy(statistic => statistic.WorkDate);
+        shiftStatistics = shiftStatistics.OrderBy(statistic => statistic.WorkDate).ToList();
 
         var tableTitles = shiftStatistics.GroupBy(shift => shift.WorkDate).ToArray();
-        var tableShifts = shiftStatistics.GroupBy(shift => shift.Code);
-        var totalCol = tableTitles.Count();
-        var totalTableRow = tableShifts.Count();
+        var tableShifts = shiftStatistics.GroupBy(shift => shift.Code).ToArray();
+        var totalCol = tableTitles.Length;
+        var totalTableRow = tableShifts.Length;
         var lastTableRow = totalTableRow + firstDataTableRow;
 
         var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, "ExcelTemplates/ShiftStatisticTemplate.xlsx");

@@ -1,4 +1,5 @@
 ﻿using HRM.AutoJobs.Services.Interfaces;
+using HRM.Core.XMLExtensions;
 
 namespace HRM.AutoJobs.Services;
 
@@ -9,7 +10,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Criteria;
 using Models;
-using XMLExtensions;
 
 public class HolidayService(IBaseService baseService) : IHolidayService
 {

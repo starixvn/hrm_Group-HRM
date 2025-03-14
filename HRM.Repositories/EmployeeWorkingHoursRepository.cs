@@ -22,7 +22,7 @@ public class EmployeeWorkingHoursRepository : IEmployeeWorkingHoursRepository
                 monthlyWorking.Team = team;
                 return monthlyWorking;
             },
-            splitOn: "Id");
+            splitOn: "Id").ToList();
 
         var dailyWorkings = multi.Read<DailyWorking, EntityBase<int>, EntityBase<int>, DailyWorking>(
             (dailyWorking, leave, leave2) =>
@@ -33,14 +33,14 @@ public class EmployeeWorkingHoursRepository : IEmployeeWorkingHoursRepository
             },
             splitOn: "LeaveTypeId, LeaveTypeId2");
 
-        MappingData(monthlyWorkings, dailyWorkings);
+        MappingData(monthlyWorkings, dailyWorkings.ToList());
 
         return monthlyWorkings;
     }
 
     private static void MappingData(
         IEnumerable<MonthlyWorking> monthlyWorkings,
-        IEnumerable<DailyWorking> dailyWorkings)
+        List<DailyWorking> dailyWorkings)
     {
         foreach (var monthlyWorking in monthlyWorkings)
         {

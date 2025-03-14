@@ -38,9 +38,7 @@ public class HrmPermissionAttribute(Policy policy, params string[] functionKeys)
 
     private void CheckUserPermission(AuthorizationFilterContext context, IUserControlSession session)
     {
-        bool hasPermission;
-       
-        hasPermission = FunctionKeys.Any(functionKey => session.HasPermissionOnFunction(functionKey, Policy));
+	    var hasPermission = FunctionKeys.Any(functionKey => session.HasPermissionOnFunction(functionKey, Policy));
 
         if (!hasPermission)
         {

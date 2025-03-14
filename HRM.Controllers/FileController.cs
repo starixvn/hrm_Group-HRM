@@ -43,7 +43,7 @@ public class FileController(
         {
             while (System.IO.File.Exists(basePath + "/" + fileName))
             {
-                fileName.Insert(0, "(1)");
+				_ = fileName.Insert(0, "(1)");
                 pathAttach = $"{basePath}/{fileName}";
             }
         }
@@ -84,14 +84,15 @@ public class FileController(
     [HttpPost]
     public ActionResult MyProfileUploadFile(IEnumerable<IFormFile> files)
     {
-        if (!files.Any(file => file.Length <= 0))
+	    var formFiles = files.ToList();
+	    if (!formFiles.Any(file => file.Length <= 0))
         {
-            if (!IsValidFileUpload(files))
+            if (!IsValidFileUpload(formFiles))
             {
                 return Json(new { isSuccessful = false, message = "The file(s) uploaded invalid" });
             }
 
-            foreach (var file in files)
+            foreach (var file in formFiles)
             {
                 var fileName = Path.GetFileName(file.FileName);
                 var basePath = Path.Combine(hostingEnvironment.ContentRootPath, Constants.ProfileUploadPath + EmployeeSession.Code);

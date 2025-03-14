@@ -2,7 +2,6 @@
 
 using System;
 using Core.Constants;
-using Core.Enums;
 
 [Serializable]
 public class DailySchedule
@@ -32,24 +31,4 @@ public class DailySchedule
     public bool IsLeaveHalfDay => IsLeaveDay && !IsHoliday && !IsOffDay && LeaveDay == Constants.HalfDayOffValue;
 
     public bool IsPublic { get; set; }
-
-    public bool IsDisabled
-    {
-        get
-        {
-            if (IsLeaveDay && !IsLeaveHalfDay)
-            {
-                return true;
-            }
-
-            if (IsChangeShift
-                && (ChangeShiftTypeId.Value == (byte)ChangeShiftType.ChangeShift
-                    || (ChangeShiftTypeId.Value == (byte)ChangeShiftType.MoveOffDay && MoveOffFromDate.HasValue)))
-            {
-                return true;
-            }
-
-            return IsLeaveOffDay || IsOvertime;
-        }
-    }
 }

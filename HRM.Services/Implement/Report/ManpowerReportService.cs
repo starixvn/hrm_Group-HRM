@@ -58,28 +58,29 @@ public class ManpowerReportService(
         using var xlPackage = new ExcelPackage();
         var template = templatePackage.Workbook.Worksheets[0];
         var worksheet = xlPackage.Workbook.Worksheets.Add("Manpower");
-        const byte TotalColumns = 56;
-        const byte TotalHeaderRows = 2;
-        const byte StartBodyRow = 4;
-        const byte StartSummaryRow = 5;
+        const byte totalColumns = 56;
+        const byte totalHeaderRows = 2;
+        const byte startBodyRow = 4;
+        const byte startSummaryRow = 5;
         var rowIndex = 1;
         var colIndex = 1;
 
         // title
-        template.Cells[rowIndex, colIndex, rowIndex, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
-        worksheet.Cells[rowIndex, colIndex].Value = string.Format(worksheet.Cells[rowIndex, colIndex].Value.ToString(), year);
+        template.Cells[rowIndex, colIndex, rowIndex, totalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, totalColumns]);
+        worksheet.Cells[rowIndex, colIndex].Value = string.Format(worksheet.Cells[rowIndex, colIndex].Value.ToString() ?? string.Empty, year);
         rowIndex++;
 
         // header
-        template.Cells[rowIndex, colIndex, rowIndex + 1, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex + 1, TotalColumns]);
+        template.Cells[rowIndex, colIndex, rowIndex + 1, totalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex + 1, totalColumns]);
 
         // data
-        rowIndex += TotalHeaderRows;
+        rowIndex += totalHeaderRows;
         var rowNum = 1;
-        foreach (var manpower in manpowers)
+        var manpowerModels = manpowers.ToList();
+        foreach (var manpower in manpowerModels)
         {
             colIndex = 1;
-            template.Cells[StartBodyRow, 1, StartBodyRow, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
+            template.Cells[startBodyRow, 1, startBodyRow, totalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, totalColumns]);
 
             WriteRow(worksheet, rowIndex, rowNum, year, manpower);
 
@@ -88,11 +89,11 @@ public class ManpowerReportService(
         }
 
         // summary
-        template.Cells[StartSummaryRow, 1, StartSummaryRow, TotalColumns].Copy(worksheet.Cells[rowIndex, 1, rowIndex, TotalColumns]);
-        WriteSummaryRow(worksheet, rowIndex, year, manpowers);
+        template.Cells[startSummaryRow, 1, startSummaryRow, totalColumns].Copy(worksheet.Cells[rowIndex, 1, rowIndex, totalColumns]);
+        WriteSummaryRow(worksheet, rowIndex, year, manpowerModels);
 
         worksheet.Cells.AutoFitColumns();
-        worksheet.View.FreezePanes(StartBodyRow, 1);
+        worksheet.View.FreezePanes(startBodyRow, 1);
         return xlPackage.GetAsByteArray();
     }
 
@@ -103,28 +104,28 @@ public class ManpowerReportService(
         using var xlPackage = new ExcelPackage();
         var template = templatePackage.Workbook.Worksheets[0];
         var worksheet = xlPackage.Workbook.Worksheets.Add("Manpower Category");
-        const byte TotalColumns = 17;
-        const byte TotalHeaderRows = 2;
-        const byte StartBodyRow = 4;
-        const byte StartSummaryRow = 5;
+        const byte totalColumns = 17;
+        const byte totalHeaderRows = 2;
+        const byte startBodyRow = 4;
+        const byte startSummaryRow = 5;
         var rowIndex = 1;
         var colIndex = 1;
 
         // title
-        template.Cells[rowIndex, colIndex, rowIndex, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
+        template.Cells[rowIndex, colIndex, rowIndex, totalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, totalColumns]);
         worksheet.Cells[rowIndex, colIndex].Value = string.Format(worksheet.Cells[rowIndex, colIndex].Value.ToString(), year);
         rowIndex++;
 
         // header
-        template.Cells[rowIndex, colIndex, rowIndex + 1, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex + 1, TotalColumns]);
+        template.Cells[rowIndex, colIndex, rowIndex + 1, totalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex + 1, totalColumns]);
 
         // data
-        rowIndex += TotalHeaderRows;
+        rowIndex += totalHeaderRows;
         var rowNum = 1;
         foreach (var manpower in manpowers)
         {
             colIndex = 1;
-            template.Cells[StartBodyRow, 1, StartBodyRow, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
+            template.Cells[startBodyRow, 1, startBodyRow, totalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, totalColumns]);
 
             worksheet.Cells[rowIndex, colIndex++].Value = rowNum++;
             worksheet.Cells[rowIndex, colIndex++].Value = manpower.DepartmentCode;
@@ -148,11 +149,11 @@ public class ManpowerReportService(
         }
 
         // summary
-        template.Cells[StartSummaryRow, 1, StartSummaryRow, TotalColumns].Copy(worksheet.Cells[rowIndex, 1, rowIndex, TotalColumns]);
+        template.Cells[startSummaryRow, 1, startSummaryRow, totalColumns].Copy(worksheet.Cells[rowIndex, 1, rowIndex, totalColumns]);
         WriteSummaryRow(worksheet, rowIndex, manpowers);
 
         worksheet.Cells.AutoFitColumns();
-        worksheet.View.FreezePanes(StartBodyRow, 1);
+        worksheet.View.FreezePanes(startBodyRow, 1);
         return xlPackage.GetAsByteArray();
     }
 

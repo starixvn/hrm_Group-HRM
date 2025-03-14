@@ -14,12 +14,13 @@ public static class XMLIO
     {
         var lambda = GetElement<T>(typeof(T));
 
-        if(source == null || !source.Any())
+        var enumerable = source.ToList();
+        if(!enumerable.Any())
         {
             return new XElement("Root");
         }
 
-        return new XElement("Root", source.Select(lambda).ToArray());
+        return new XElement("Root", enumerable.Select(lambda).ToArray<object>());
     }
 
     private static XName GetElementName(Type t)

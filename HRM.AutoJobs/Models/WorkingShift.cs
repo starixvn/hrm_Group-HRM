@@ -1,8 +1,9 @@
-﻿namespace HRM.AutoJobs.Models;
+﻿using HRM.Core.XMLExtensions;
+
+namespace HRM.AutoJobs.Models;
 
 using System;
 using System.Xml.Serialization;
-using XMLExtensions;
 
 [Serializable]
 [XMLName("Row")]

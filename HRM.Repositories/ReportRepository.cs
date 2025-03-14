@@ -19,7 +19,7 @@ public class ReportRepository : Interfaces.IReportRepository
     {
         using var objectDb = ObjectDbFactory.CreateInstance(criteria.GetSettingKey());
         using var multi = await objectDb.QueryMultipleAsync(criteria);
-        var attendances = await multi.ReadAsync<EmployeeAttendanceModel>();
+        var attendances = (await multi.ReadAsync<EmployeeAttendanceModel>()).ToList();
         var requests = multi.Read<EmployeeAttendanceRequest, RequestTypeModel, LeaveType, EmployeeAttendanceRequest>(
             (request, requestType, leaveType) =>
             {
@@ -55,7 +55,7 @@ public class ReportRepository : Interfaces.IReportRepository
                 er.Role = r;
                 return er;
             },
-            "RoleId");
+            "RoleId").ToList();
 
         var employees = multi.Read<SupervisorModel, Employee, SupervisorModel>(
             (su, e) =>
@@ -78,7 +78,7 @@ public class ReportRepository : Interfaces.IReportRepository
     {
         using var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey());
         using var multi = await db.QueryMultipleAsync(criteria);
-        var supervisors = await multi.ReadAsync<TeamSupervisorReportModel>();
+        var supervisors = (await multi.ReadAsync<TeamSupervisorReportModel>()).ToList();
 
         IList<SupervisorModel> employees = multi.Read<SupervisorModel, TeamModel, SupervisorModel>(
             (su, team) =>

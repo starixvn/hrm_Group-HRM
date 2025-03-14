@@ -75,14 +75,16 @@ public class DisciplineSummaryPerYearController(
             IsShowAll = model.IsShowAll
         };
         var (employees, disciplines) = await baseService.FetchMultipleAsync<DisciplineSummaryPerYear, DisciplineSummaryPerYearDetail>(criteria);
-
-        foreach (var employee in employees)
+		var employeeList = employees.ToList();
+		var disciplineList = disciplines.ToList();
+		var disciplineSummaryPerYears = employees.ToList();
+        foreach (var employee in disciplineSummaryPerYears)
         {
             var date = model.LengthOfService ? employee.CompanyDate : employee.JoinedDate;
             employee.LengthOfService = employeeService.CalculateLengthOfService(date, employee.MilitaryFromDate, employee.MilitaryToDate);
             employee.Disciplines = disciplines.Where(x => x.EmployeeId == employee.EmployeeId).ToList();
         }
 
-        return employees.ToList();
+        return disciplineSummaryPerYears.ToList();
     }
 }

@@ -12,19 +12,19 @@ namespace HRM.Services.Implement.ActionLog;
 
 public interface IActionLogService
 {
-    Task<IEnumerable<LogObjectDetail>> GetLogDetailByIdAsync(byte objectTypeId, int objectId);
+    Task<List<LogObjectDetail>> GetLogDetailByIdAsync(byte objectTypeId, int objectId);
 }
 
 public class ActionLogService(IBaseService baseService) : IActionLogService
 {
-    public async Task<IEnumerable<LogObjectDetail>> GetLogDetailByIdAsync(byte objectTypeId, int objectId)
+    public async Task<List<LogObjectDetail>> GetLogDetailByIdAsync(byte objectTypeId, int objectId)
     {
         var criteria = new GetLogObjectByIdCriteria
         {
             ObjectTypeId = objectTypeId,
             ObjectId = objectId
         };
-        var logs = await baseService.GetDataAsync<LogObjectDetail>(criteria);
+        var logs = (await baseService.GetDataAsync<LogObjectDetail>(criteria)).ToList();
         GetFieldChanged(logs);
 
         return logs;
@@ -57,7 +57,7 @@ public class ActionLogService(IBaseService baseService) : IActionLogService
         }
     }
 
-    private static IEnumerable<FieldValue> ReadXmlString(string xml)
+    private static List<FieldValue> ReadXmlString(string xml)
     {
         var results = new List<FieldValue>();
         TextReader sr = new StringReader(xml);

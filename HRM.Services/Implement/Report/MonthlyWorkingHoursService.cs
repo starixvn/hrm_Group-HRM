@@ -21,7 +21,7 @@ namespace HRM.Services.Implement.Report;
 
 public partial interface IEmployeeWorkingHoursService
 {
-    Task<IEnumerable<MonthlyWorking>> GetMonthlyWorkingHoursAsync(GetMonthlyWorkingHoursParam param);
+    Task<List<MonthlyWorking>> GetMonthlyWorkingHoursAsync(GetMonthlyWorkingHoursParam param);
 
     Task<byte[]> ExportMonthlyWorkingHours(GetMonthlyWorkingHoursParam param);
 }
@@ -33,17 +33,17 @@ public partial class EmployeeWorkingHoursService(
     ICommonDataService commonDataService)
 {
     private const ushort TotalFixedColumns = 21;
-    private const ushort TotalUPLColumns = 4;
+    private const ushort TotalUplColumns = 4;
     private const ushort StartDateColumnIndex = 26;
-    private const ushort StartUPLColumnIndex = 22;
-    private const ushort EndUPLColumnIndex = 25;
+    private const ushort StartUplColumnIndex = 22;
+    private const ushort EndUplColumnIndex = 25;
     private const ushort StartHeaderRowIndex = 2;
     private const ushort EndHeaderRowIndex = 3;
     private const ushort StartBodyRowIndex = 4;
 
     private IEnumerable<LeaveType> LeaveTypes { get; set; }
 
-    public async Task<IEnumerable<MonthlyWorking>> GetMonthlyWorkingHoursAsync(GetMonthlyWorkingHoursParam param)
+    public async Task<List<MonthlyWorking>> GetMonthlyWorkingHoursAsync(GetMonthlyWorkingHoursParam param)
     {
         var criteria = new GetMonthlyWorkingHoursCriteria
         {
@@ -57,7 +57,7 @@ public partial class EmployeeWorkingHoursService(
             EmployeeStatusId = param.EmployeeStatusId
         };
 
-        return await repository.GetMonthlyWorkingHoursAsync(criteria);
+        return (await repository.GetMonthlyWorkingHoursAsync(criteria)).ToList() ;
     }
 
     private async Task<IEnumerable<EmployeeRequest>> GetEmployeeRequestAsync(GetMonthlyWorkingHoursParam param)
@@ -89,13 +89,13 @@ public partial class EmployeeWorkingHoursService(
         var worksheet = xlPackage.Workbook.Worksheets.Add("Details");
         WriteDetailsSheet(template, worksheet, monthlyWorkings, param);
 
-        const byte SummarySheetIndex = 1;
-        template = templatePackage.Workbook.Worksheets[SummarySheetIndex];
+        const byte summarySheetIndex = 1;
+        template = templatePackage.Workbook.Worksheets[summarySheetIndex];
         worksheet = xlPackage.Workbook.Worksheets.Add("Summary");
         WriteSummarySheet(template, worksheet, monthlyWorkings, param);
 
-        const byte RequestSheetIndex = 2;
-        template = templatePackage.Workbook.Worksheets[RequestSheetIndex];
+        const byte requestSheetIndex = 2;
+        template = templatePackage.Workbook.Worksheets[requestSheetIndex];
         worksheet = xlPackage.Workbook.Worksheets.Add("Employee's request");
         await WriteRequestSheetAsync(template, worksheet, param);
 
@@ -110,7 +110,7 @@ public partial class EmployeeWorkingHoursService(
     {
         var months = GetMonthsBetween(param.FromDate, param.ToDate);
         var totalDays = (int)(param.ToDate - param.FromDate).TotalDays;
-        TotalColumns = TotalFixedColumns + months.Count() * TotalUPLColumns + (totalDays > 0 ? totalDays + 1 : 0);
+        TotalColumns = TotalFixedColumns + months.Count() * TotalUplColumns + (totalDays > 0 ? totalDays + 1 : 0);
 
         // title
         template.Cells[1, 1, 1, TotalFixedColumns].Copy(worksheet.Cells[1, 1, 1, TotalFixedColumns]);
@@ -129,12 +129,12 @@ public partial class EmployeeWorkingHoursService(
         // summary
         if (monthlyWorkings.Any())
         {
-            const byte SummaryRowIndex = 5;
-            TotalColumns = TotalFixedColumns + months.Count() * TotalUPLColumns;
-            template.Cells[SummaryRowIndex, 1, SummaryRowIndex, 8].Copy(worksheet.Cells[rowIndex, 1, rowIndex, 8]);
+            const byte summaryRowIndex = 5;
+            TotalColumns = TotalFixedColumns + months.Count() * TotalUplColumns;
+            template.Cells[summaryRowIndex, 1, summaryRowIndex, 8].Copy(worksheet.Cells[rowIndex, 1, rowIndex, 8]);
             for (var i = 9; i <= TotalColumns; i++)
             {
-                template.Cells[SummaryRowIndex, 9].Copy(worksheet.Cells[rowIndex, i]);
+                template.Cells[summaryRowIndex, 9].Copy(worksheet.Cells[rowIndex, i]);
                 var excelAddress = $"{worksheet.Cells[StartBodyRowIndex, i].Address}:{worksheet.Cells[rowIndex - 1, i].Address}";
                 worksheet.Cells[rowIndex, i].Formula = string.Format(Constants.SummaryFormula, excelAddress);
             }
@@ -150,14 +150,14 @@ public partial class EmployeeWorkingHoursService(
             .Copy(worksheet.Cells[StartHeaderRowIndex, 1, EndHeaderRowIndex, TotalFixedColumns]);
 
         var months = GetMonthsBetween(param.FromDate, param.ToDate);
-        var colIndex = (int)StartUPLColumnIndex;
+        var colIndex = (int)StartUplColumnIndex;
         foreach (var month in months)
         {
-            template.Cells[StartHeaderRowIndex, StartUPLColumnIndex, EndHeaderRowIndex, EndUPLColumnIndex]
-                .Copy(worksheet.Cells[StartHeaderRowIndex, colIndex, EndHeaderRowIndex, colIndex + TotalUPLColumns - 1]);
+            template.Cells[StartHeaderRowIndex, StartUplColumnIndex, EndHeaderRowIndex, EndUplColumnIndex]
+                .Copy(worksheet.Cells[StartHeaderRowIndex, colIndex, EndHeaderRowIndex, colIndex + TotalUplColumns - 1]);
             worksheet.Cells[StartHeaderRowIndex, colIndex].Value = $"Unpaid Leaves {month:MMM-yyyy}";
 
-            colIndex += TotalUPLColumns;
+            colIndex += TotalUplColumns;
         }
 
         for (var day = param.FromDate.Date; day.Date <= param.ToDate.Date; day = day.AddDays(1))
@@ -200,53 +200,53 @@ public partial class EmployeeWorkingHoursService(
             worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.ActualWorkingDays + monthlyWorking.DailyWorkings.Count(IsHoliday);
 
             var months = GetMonthsBetween(param.FromDate, param.ToDate);
-            var dailyColumnIndex = TotalFixedColumns + months.Count() * TotalUPLColumns + 1;
-            const string CountLeaveFormula = "COUNTIF({0},\"{1}\")+(COUNTIF({0},\"{1}½\")/2)+(COUNTIF({0},\"{1}½/*\")/2)+(COUNTIF({0},\"*/{1}½\")/2)";
+            var dailyColumnIndex = TotalFixedColumns + months.Count() * TotalUplColumns + 1;
+            const string countLeaveFormula = "COUNTIF({0},\"{1}\")+(COUNTIF({0},\"{1}½\")/2)+(COUNTIF({0},\"{1}½/*\")/2)+(COUNTIF({0},\"*/{1}½\")/2)";
 
             var excelAddress = $"{worksheet.Cells[rowIndex, dailyColumnIndex].Address}:{worksheet.Cells[rowIndex, TotalColumns].Address}";
             worksheet.Cells[rowIndex, colIndex++].Formula = $"COUNTIF({excelAddress},\"PH\")";
 
             var leaveCode = LeaveTypes.First(x => x.Id == (short)Core.Enums.LeaveTypes.MaternityLeave).Code;
             excelAddress = $"{worksheet.Cells[rowIndex, dailyColumnIndex].Address}:{worksheet.Cells[rowIndex, TotalColumns].Address}";
-            worksheet.Cells[rowIndex, colIndex++].Formula = string.Format(CountLeaveFormula, excelAddress, leaveCode);
+            worksheet.Cells[rowIndex, colIndex++].Formula = string.Format(countLeaveFormula, excelAddress, leaveCode);
 
             // payment leaves
             var annualLeaveColumnIndex = colIndex;
             leaveCode = LeaveTypes.First(x => x.Id == (short)Core.Enums.LeaveTypes.AnnualLeave).Code;
             excelAddress = $"{worksheet.Cells[rowIndex, dailyColumnIndex].Address}:{worksheet.Cells[rowIndex, TotalColumns].Address}";
-            worksheet.Cells[rowIndex, colIndex++].Formula = string.Format(CountLeaveFormula, excelAddress, leaveCode);
+            worksheet.Cells[rowIndex, colIndex++].Formula = string.Format(countLeaveFormula, excelAddress, leaveCode);
 
             leaveCode = LeaveTypes.First(x => x.Id == (short)Core.Enums.LeaveTypes.BusinessTrip).Code;
             excelAddress = $"{worksheet.Cells[rowIndex, dailyColumnIndex].Address}:{worksheet.Cells[rowIndex, TotalColumns].Address}";
-            worksheet.Cells[rowIndex, colIndex++].Formula = string.Format(CountLeaveFormula, excelAddress, leaveCode);
+            worksheet.Cells[rowIndex, colIndex++].Formula = string.Format(countLeaveFormula, excelAddress, leaveCode);
 
             leaveCode = LeaveTypes.First(x => x.Id == (short)Core.Enums.LeaveTypes.BereavementLeave).Code;
             excelAddress = $"{worksheet.Cells[rowIndex, dailyColumnIndex].Address}:{worksheet.Cells[rowIndex, TotalColumns].Address}";
-            worksheet.Cells[rowIndex, colIndex++].Formula = string.Format(CountLeaveFormula, excelAddress, leaveCode);
+            worksheet.Cells[rowIndex, colIndex++].Formula = string.Format(countLeaveFormula, excelAddress, leaveCode);
 
             leaveCode = LeaveTypes.First(x => x.Id == (short)Core.Enums.LeaveTypes.OffsetLeave).Code;
             excelAddress = $"{worksheet.Cells[rowIndex, dailyColumnIndex].Address}:{worksheet.Cells[rowIndex, TotalColumns].Address}";
-            worksheet.Cells[rowIndex, colIndex++].Formula = string.Format(CountLeaveFormula, excelAddress, leaveCode);
+            worksheet.Cells[rowIndex, colIndex++].Formula = string.Format(countLeaveFormula, excelAddress, leaveCode);
 
             leaveCode = LeaveTypes.First(x => x.Id == (short)Core.Enums.LeaveTypes.WeddingLeave).Code;
             excelAddress = $"{worksheet.Cells[rowIndex, dailyColumnIndex].Address}:{worksheet.Cells[rowIndex, TotalColumns].Address}";
-            worksheet.Cells[rowIndex, colIndex++].Formula = string.Format(CountLeaveFormula, excelAddress, leaveCode);
+            worksheet.Cells[rowIndex, colIndex++].Formula = string.Format(countLeaveFormula, excelAddress, leaveCode);
 
             leaveCode = LeaveTypes.First(x => x.Id == (short)Core.Enums.LeaveTypes.SuspendWork).Code;
             excelAddress = $"{worksheet.Cells[rowIndex, dailyColumnIndex].Address}:{worksheet.Cells[rowIndex, TotalColumns].Address}";
-            worksheet.Cells[rowIndex, colIndex++].Formula = string.Format(CountLeaveFormula, excelAddress, leaveCode);
+            worksheet.Cells[rowIndex, colIndex++].Formula = string.Format(countLeaveFormula, excelAddress, leaveCode);
 
             leaveCode = LeaveTypes.First(x => x.Id == (short)Core.Enums.LeaveTypes.HospitalizationLeave).Code;
             excelAddress = $"{worksheet.Cells[rowIndex, dailyColumnIndex].Address}:{worksheet.Cells[rowIndex, TotalColumns].Address}";
-            worksheet.Cells[rowIndex, colIndex++].Formula = string.Format(CountLeaveFormula, excelAddress, leaveCode);
+            worksheet.Cells[rowIndex, colIndex++].Formula = string.Format(countLeaveFormula, excelAddress, leaveCode);
 
             leaveCode = LeaveTypes.First(x => x.Id == (short)Core.Enums.LeaveTypes.KeepInViewByDay).Code;
             excelAddress = $"{worksheet.Cells[rowIndex, dailyColumnIndex].Address}:{worksheet.Cells[rowIndex, TotalColumns].Address}";
-            worksheet.Cells[rowIndex, colIndex++].Formula = string.Format(CountLeaveFormula, excelAddress, leaveCode);
+            worksheet.Cells[rowIndex, colIndex++].Formula = string.Format(countLeaveFormula, excelAddress, leaveCode);
 
             leaveCode = LeaveTypes.First(x => x.Id == (short)Core.Enums.LeaveTypes.CompanyEvent).Code;
             excelAddress = $"{worksheet.Cells[rowIndex, dailyColumnIndex].Address}:{worksheet.Cells[rowIndex, TotalColumns].Address}";
-            worksheet.Cells[rowIndex, colIndex].Formula = string.Format(CountLeaveFormula, excelAddress, leaveCode);
+            worksheet.Cells[rowIndex, colIndex].Formula = string.Format(countLeaveFormula, excelAddress, leaveCode);
 
             excelAddress = $"{worksheet.Cells[rowIndex, annualLeaveColumnIndex].Address}:{worksheet.Cells[rowIndex, colIndex++].Address}";
             worksheet.Cells[rowIndex, colIndex++].Formula = string.Format(Constants.SummaryFormula, excelAddress);
@@ -255,21 +255,21 @@ public partial class EmployeeWorkingHoursService(
             var startColumnIndex = dailyColumnIndex;
             foreach (var month in months)
             {
-                template.Cells[StartBodyRowIndex, StartUPLColumnIndex, StartBodyRowIndex, EndUPLColumnIndex]
-                    .Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, colIndex + TotalUPLColumns - 1]);
+                template.Cells[StartBodyRowIndex, StartUplColumnIndex, StartBodyRowIndex, EndUplColumnIndex]
+                    .Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, colIndex + TotalUplColumns - 1]);
                 var endColumnIndex = startColumnIndex +
                     monthlyWorking.DailyWorkings.Count(x => x.WorkDate.Year == month.Year && x.WorkDate.Month == month.Month) - 1;
                 excelAddress = $"{worksheet.Cells[rowIndex, startColumnIndex].Address}:{worksheet.Cells[rowIndex, endColumnIndex].Address}";
 
                 var unpaidLeaveColumnIndex = colIndex;
                 leaveCode = LeaveTypes.First(x => x.Id == (short)Core.Enums.LeaveTypes.UnpaidLeave).Code;
-                worksheet.Cells[rowIndex, colIndex++].Formula = string.Format(CountLeaveFormula, excelAddress, leaveCode);
+                worksheet.Cells[rowIndex, colIndex++].Formula = string.Format(countLeaveFormula, excelAddress, leaveCode);
 
                 leaveCode = LeaveTypes.First(x => x.Id == (short)Core.Enums.LeaveTypes.UnpaidLeaveInsurance).Code;
-                worksheet.Cells[rowIndex, colIndex++].Formula = string.Format(CountLeaveFormula, excelAddress, leaveCode);
+                worksheet.Cells[rowIndex, colIndex++].Formula = string.Format(countLeaveFormula, excelAddress, leaveCode);
 
                 leaveCode = LeaveTypes.First(x => x.Id == (short)Core.Enums.LeaveTypes.PaternityLeave).Code;
-                worksheet.Cells[rowIndex, colIndex].Formula = string.Format(CountLeaveFormula, excelAddress, leaveCode);
+                worksheet.Cells[rowIndex, colIndex].Formula = string.Format(countLeaveFormula, excelAddress, leaveCode);
 
                 excelAddress = $"{worksheet.Cells[rowIndex, unpaidLeaveColumnIndex].Address}:{worksheet.Cells[rowIndex, colIndex++].Address}";
                 worksheet.Cells[rowIndex, colIndex++].Formula = string.Format(Constants.SummaryFormula, excelAddress);
@@ -293,7 +293,7 @@ public partial class EmployeeWorkingHoursService(
         IEnumerable<MonthlyWorking> monthlyWorkings,
         GetMonthlyWorkingHoursParam param)
     {
-        const byte DefaultColumns = 15;
+        const byte defaultColumns = 15;
         var templateIndex = new
         {
             headerRow = 2,
@@ -305,11 +305,11 @@ public partial class EmployeeWorkingHoursService(
             unpaidLeaveColumn = 16
         };
         var months = GetMonthsBetween(param.FromDate, param.ToDate);
-        TotalColumns = DefaultColumns + months.Count();
+        TotalColumns = defaultColumns + months.Count();
         var rowIndex = 1;
 
         // title
-        template.Cells[1, 1, 1, DefaultColumns].Copy(worksheet.Cells[1, 1, 1, DefaultColumns]);
+        template.Cells[1, 1, 1, defaultColumns].Copy(worksheet.Cells[1, 1, 1, defaultColumns]);
         worksheet.Cells[1, 1].Value = string.Format(
             worksheet.Cells[1, 1].Value.ToString(),
             param.FromDate.ToString(ShortDateFormat),
@@ -335,9 +335,9 @@ public partial class EmployeeWorkingHoursService(
             }
         }
 
-        const byte MinimumWidth = 10;
-        const byte MaximumWidth = 50;
-        worksheet.Cells.AutoFitColumns(MinimumWidth, MaximumWidth);
+        const byte minimumWidth = 10;
+        const byte maximumWidth = 50;
+        worksheet.Cells.AutoFitColumns(minimumWidth, maximumWidth);
         worksheet.View.FreezePanes(templateIndex.bodyRow, 1);
     }
 
@@ -472,9 +472,9 @@ public partial class EmployeeWorkingHoursService(
             rowIndex++;
         }
 
-        const byte MinimumWidth = 10;
-        const byte MaximumWidth = 50;
-        worksheet.Cells.AutoFitColumns(MinimumWidth, MaximumWidth);
+        const byte minimumWidth = 10;
+        const byte maximumWidth = 50;
+        worksheet.Cells.AutoFitColumns(minimumWidth, maximumWidth);
         worksheet.View.FreezePanes(templateIndex.bodyRow, 1);
     }
 

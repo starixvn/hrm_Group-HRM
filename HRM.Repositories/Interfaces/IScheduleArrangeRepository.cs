@@ -7,5 +7,5 @@ namespace HRM.Repositories.Interfaces;
 
 public interface IScheduleArrangeRepository
 {
-    Task<IEnumerable<WeeklySchedule>> GetWeeklyScheduleAsync(ICriteria criteria);
+    Task<List<WeeklySchedule>> GetWeeklyScheduleAsync(ICriteria criteria);
 }
