@@ -259,7 +259,6 @@ public class RequestController(
 
         Parallel.ForEach(requestList, rq =>
         {
-            rq.CreatedDate = rq.CreatedDate.ToClientTimeZone();
             rq.FromTime = rq.FromTime.ToClientTimeZone();
             rq.ToTime = rq.ToTime.ToClientTimeZone();
         });

@@ -106,7 +106,8 @@ public class ExportRequestController(IUserControlSession userControlSession,
             IsQueryByCreatedDate = !model.IsFilterByAffectedDate,
             RequestViewType = model.ViewType,
             SupervisorId = EmployeeSession.EmpId,
-            IsLocal = model.IsLocal.HasValue ? model.IsLocal.Value == 1 : null
+            IsLocal = model.IsLocal.HasValue ? model.IsLocal.Value == 1 : null,
+            CompanyId = CurrentCompanyId
         };
 
         var requestList = await requestService.GetRequests(criteria);

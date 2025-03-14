@@ -57,7 +57,7 @@
         </div>
         <div class="form-group form-group--m">
             <div class="label-form">
-                @Html.LabelFor(model => model.ToDate, Labels.ToDay, new { @class = "control-label" })
+                @Html.LabelFor(model => model.ToDate, Labels.ToDate, new { @class = "control-label" })
             </div>
             <div class="calendar-form">
                 @Html.TextBox(Html.NameFor(model => model.ToDate).ToString(), Model.ToDate.ToDateMonthYearFormatedDate(),

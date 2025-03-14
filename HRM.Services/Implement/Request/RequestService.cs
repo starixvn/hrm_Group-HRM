@@ -34,8 +34,6 @@ public class RequestService(
 {
     public static string ToRequestMessage(RequestEntity request, bool isNoFormat = false)
     {
-        request.ToTime = request.ToTime.ToClientTimeZone();
-        request.FromTime = request.FromTime.ToClientTimeZone();
         var message = request.RequestType.Id switch
         {
             (byte)RequestType.Leave => GetMessageForLeave(request, isNoFormat),
