@@ -57,7 +57,7 @@ public class SyncWorkingShiftService(
     {
         var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
 
-        var criteria = new GetSystemConfigsByKeyCriteria()
+        var criteria = new GetSystemConfigsByKeyCriteria
         {
             CompanyId = companyId,
             Key = SystemConfigKey.SyncWorkingShift
@@ -83,7 +83,11 @@ public class SyncWorkingShiftService(
             var workingShifts = JsonConvert.DeserializeObject<IList<WorkingShiftSyncModel>>(rawData);
             workingShifts = workingShifts?.Where(x => !string.IsNullOrWhiteSpace(x.EmployeeID)).ToList();
 
-            if (workingShifts == null || !workingShifts.Any()) return commandResult;
+            if (workingShifts == null || !workingShifts.Any())
+            {
+                return commandResult;
+            }
+                
             foreach (var shift in workingShifts)
             {
                 ProcessData(shift);
@@ -163,7 +167,11 @@ public class SyncWorkingShiftService(
 
     private static void GetTotalHours(WorkingShiftSyncModel shift)
     {
-        if (!shift.ShiftStartTime.HasValue || !shift.ShiftEndTime.HasValue) return;
+        if (!shift.ShiftStartTime.HasValue || !shift.ShiftEndTime.HasValue)
+        {
+            return;
+        }
+            
         if (shift.ShiftStartTime.Value.Date != shift.ShiftEndTime.Value.Date)
         {
             shift.IsCrossDay = true;

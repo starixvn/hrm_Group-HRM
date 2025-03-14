@@ -45,13 +45,20 @@ public static class RazorHelpers
                 <select name='{controlName}' id='{controlName}' class='{htmlClass}'>
                     {(isShowAll ? $@"<option {(status == 0 ? "selected" : "")} value='0'>All</option>" : "")}
                     {(isShowPendingAndVerified ? $@"<option {(status == -1 ? "selected" : "")} value='-1'>Pending & Verified</option>" : "")}
-                    <option {(status == (byte)CurrentRequestStatus.Pending ? "selected" : "")} value='{(byte)CurrentRequestStatus.Pending}'>Pending</option>
-                    <option {(status == (byte)CurrentRequestStatus.Verified ? "selected" : "")} value='{(byte)CurrentRequestStatus.Verified}'>Verified</option>
-                    <option {(status == (byte)CurrentRequestStatus.NotVerified ? "selected" : "")} value='{(byte)CurrentRequestStatus.NotVerified}'>Not Verified</option>
-                    <option {(status == (byte)CurrentRequestStatus.Approved ? "selected" : "")} value='{(byte)CurrentRequestStatus.Approved}'>Approved</option>
-                    <option {(status == (byte)CurrentRequestStatus.Rejected ? "selected" : "")} value='{(byte)CurrentRequestStatus.Rejected}'>Rejected</option>
-                    <option {(status == (byte)CurrentRequestStatus.Processed ? "selected" : "")} value='{(byte)CurrentRequestStatus.Processed}'>Processed</option>
-                    <option {(status == (byte)CurrentRequestStatus.Void ? "selected" : "")} value='{(byte)CurrentRequestStatus.Void}'>Void</option>
+                    <option {(status == (byte)CurrentRequestStatus.Pending ? "selected" : "")} 
+                        value='{(byte)CurrentRequestStatus.Pending}'>Pending</option>
+                    <option {(status == (byte)CurrentRequestStatus.Verified ? "selected" : "")} 
+                        value='{(byte)CurrentRequestStatus.Verified}'>Verified</option>
+                    <option {(status == (byte)CurrentRequestStatus.NotVerified ? "selected" : "")} 
+                        value='{(byte)CurrentRequestStatus.NotVerified}'>Not Verified</option>
+                    <option {(status == (byte)CurrentRequestStatus.Approved ? "selected" : "")} 
+                        value='{(byte)CurrentRequestStatus.Approved}'>Approved</option>
+                    <option {(status == (byte)CurrentRequestStatus.Rejected ? "selected" : "")} 
+                        value='{(byte)CurrentRequestStatus.Rejected}'>Rejected</option>
+                    <option {(status == (byte)CurrentRequestStatus.Processed ? "selected" : "")} 
+                        value='{(byte)CurrentRequestStatus.Processed}'>Processed</option>
+                    <option {(status == (byte)CurrentRequestStatus.Void ? "selected" : "")} 
+                        value='{(byte)CurrentRequestStatus.Void}'>Void</option>
                 </select>";
     }
 
@@ -62,10 +69,11 @@ public static class RazorHelpers
 
     public static string MinTotalLeaveDropDownList(int minTotalLeave, string name = "MinTotalLeave")
     {
-        var options = $"<option {(minTotalLeave == 0 ? "selected" : "")} value='0'>All</option>";
+        var options = new System.Text.StringBuilder();
+        options.Append($"<option {(minTotalLeave == 0 ? "selected" : "")} value='0'>All</option>");
         for (var i = 14; i <= 20; i++)
         {
-            options += $"<option {(i == minTotalLeave ? "selected" : "")} value='{i}'>{i}</option>";
+            options.Append($"<option {(i == minTotalLeave ? "selected" : "")} value='{i}'>{i}</option>");
         }
         return $@"
                 <select id='{name}' name='{name}' class='minWidthDropdown form-control'>
@@ -85,12 +93,13 @@ public static class RazorHelpers
 
     public static string MessageStatusDropDownList(short action = -1, string controlName = "", string classObject = "")
     {
-        return $@"
-                <select id='{controlName}'>
-                    <option {(action == -1 ? "selected" : "")} value=''>-- All --</option>
-                    <option {(action == 0 ? "selected" : "")} value='0'>Active</option>
-                    <option {(action == 1 ? "selected" : "")} value='1'>Disabled</option>
-                </select>";
+        var sb = new System.Text.StringBuilder();
+        sb.AppendLine($@"<select id='{controlName}'>");
+        sb.AppendLine($@"<option {(action == -1 ? "selected" : "")} value=''>-- All --</option>");
+        sb.AppendLine($@"<option {(action == 0 ? "selected" : "")} value='0'>Active</option>");
+        sb.AppendLine($@"<option {(action == 1 ? "selected" : "")} value='1'>Disabled</option>");
+        sb.AppendLine("</select>");
+        return sb.ToString();
     }
 
     public static string LeaveTypeDropDownList(string id, IList<LeaveType> leaveTypes, string className, int? currentValue)

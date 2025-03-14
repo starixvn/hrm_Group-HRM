@@ -77,7 +77,10 @@ public class EmployeeService(
 
     public async Task<IEnumerable<Employee>> GetEmployeesByRoleAsync(GetEmployeeByRoleCriteria criteria)
     {
-        if (criteria == null || !criteria.IsValid()) return new List<Employee>();
+        if (criteria == null || !criteria.IsValid())
+        {
+            return new List<Employee>();
+        }
 
         var employees = await employeeRepository.GetEmployeesByRoleAsync(criteria);
         var roles = await roleService.GetBySiteIdAsync(userControlSettings.SiteId);

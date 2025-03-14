@@ -13,7 +13,7 @@ using Models.Group;
 using Models.Request;
 using Models.Supervisor;
 
-public partial class ReportRepository : Interfaces.IReportRepository
+public class ReportRepository : Interfaces.IReportRepository
 {
     public async Task<IEnumerable<EmployeeAttendanceModel>> GetEmployeeAttendanceReportAsync(ICriteria criteria)
     {

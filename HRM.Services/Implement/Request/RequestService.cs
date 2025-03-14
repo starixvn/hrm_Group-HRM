@@ -52,29 +52,23 @@ public class RequestService(
 
     public static string GetReasonRequest(short requestTypeId, byte reasonId)
     {
-        var reason = string.Empty;
-        if (requestTypeId is (byte)RequestType.CheckIn or (byte)RequestType.CheckOut)
+        return requestTypeId switch
         {
-            reason = reasonId switch
+            (byte)RequestType.CheckIn or (byte)RequestType.CheckOut => reasonId switch
             {
                 (byte)CheckInOutReason.VanLate => Labels.VanLate,
                 (byte)CheckInOutReason.BusinessTrip => Labels.BusinessTrip,
                 (byte)CheckInOutReason.Forgot => Labels.Forgot,
                 (byte)CheckInOutReason.Other => Labels.Other,
-                _ => reason
-            };
-        }
-        else
-        {
-            reason = reasonId switch
+                _ => string.Empty
+            },
+            _ => reasonId switch
             {
                 (byte)LateInEarlyOutReason.ManagementAllow => Labels.ManagementAllow,
                 (byte)LateInEarlyOutReason.Other => Labels.Other,
-                _ => reason
-            };
-        }
-
-        return reason;
+                _ => string.Empty
+            }
+        };
     }
 
     public async Task<IList<RequestEntity>> GetRequests(GetRequestCriteria criteria)

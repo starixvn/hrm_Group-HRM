@@ -122,11 +122,7 @@ public class RequestRepository : IRequestRepository
             ToTime = requestInfo.ToTime ?? DateTimeOffset.Now.DateTime,
             KeepInViewType = (byte)(requestInfo.KeepInViewType ?? 0),
             LeaveCountDetails = requestInfo.LeaveCountDetails ?? string.Empty,
-            LeaveType = new LeaveType
-            {
-                Id = requestInfo.LeaveTypeId ?? 0,
-                Name = requestInfo.LeaveTypeName ?? string.Empty
-            },
+            LeaveType = new LeaveType { Id = requestInfo.LeaveTypeId ?? 0,  Name = requestInfo.LeaveTypeName ?? string.Empty },
             Remark = requestInfo.Remark ?? string.Empty,
             TotalDaysRequestInMonth = requestInfo.TotalDaysRequestInMonth ?? 0,
             CreatedDate = requestInfo.CreatedDate,
@@ -174,8 +170,7 @@ public class RequestRepository : IRequestRepository
             RequestedDate = requestInfo.RequestedDate ?? DateTimeOffset.Now.DateTime,
             TotalMins = requestInfo.TotalMinutes ?? 0,
             ActualLateInEarlyOut = requestInfo.ActualInOutMins ?? 0,
-            CrossDay = (requestInfo.FromTime == null || requestInfo.ToTime == null) ??
-                       requestInfo.FromTime.DayOfYear > requestInfo.ToTime.DayOfYear,
+            CrossDay = (requestInfo.FromTime == null || requestInfo.ToTime == null) ??  requestInfo.FromTime.DayOfYear > requestInfo.ToTime.DayOfYear,
             ToShift = new Shift
             {
                 Id = requestInfo.ToShiftId ?? 0,

@@ -73,7 +73,7 @@ public class ChangeShiftRequestService(
         var dates = (await baseService.GetDataAsync<DateTime>(criteria)).ToList();
         for (var day = requestDate.FirstDayOfWeek().Date; day.Date <= requestDate.LastDayOfWeek().Date; day = day.AddDays(1))
         {
-            if (dates.All(x => x.Date != day.Date))
+            if (dates.TrueForAll(x => x.Date != day.Date))
             {
                 dates.Add(day);
             }

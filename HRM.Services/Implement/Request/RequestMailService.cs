@@ -85,6 +85,7 @@ public class RequestMailService(IRequestRepository requestRepository) : IRequest
             RequestCommand.Reject => (byte)SettingsSendMail.Reject,
             RequestCommand.Process => (byte)SettingsSendMail.Process,
             RequestCommand.Void => (byte)SettingsSendMail.Void,
+            RequestCommand.Reset => GetActionResetRequest(requestStatusId),
             _ => (byte)SettingsSendMail.New
         };
 

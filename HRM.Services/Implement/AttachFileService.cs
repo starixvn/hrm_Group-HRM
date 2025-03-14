@@ -93,7 +93,7 @@ public class AttachFileService(IWebHostEnvironment hostingEnvironment) : IAttach
 
     private string RemoveFirstSlash(string path)
     {
-        if (path.StartsWith("/"))
+        if (path.StartsWith('/'))
         {
             path = path.Substring(1);
         }
