@@ -68,11 +68,18 @@ public class ReportController(
         };
 
         var timesheets = await reportService.GetEmployeeAttendanceReportAsync(criteria);
-        Parallel.ForEach(timesheets, (timesheet) =>
+        foreach (var timesheet in timesheets)
         {
-            if (timesheet.InFixed != null) timesheet.InFixed = timesheet.InFixed.Value.ToClientTimeZone();
-            if (timesheet.OutFixed != null) timesheet.OutFixed = timesheet.OutFixed.Value.ToClientTimeZone();
-        });
+            if (timesheet.InFixed != null)
+            {
+                timesheet.InFixed = timesheet.InFixed.Value.ToClientTimeZone();
+            }
+
+            if (timesheet.OutFixed != null)
+            {
+                timesheet.OutFixed = timesheet.OutFixed.Value.ToClientTimeZone();
+            }
+        }
 
         return PartialView("_TimesheetDetails", timesheets);
     }

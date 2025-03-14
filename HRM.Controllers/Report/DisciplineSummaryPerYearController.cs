@@ -1,24 +1,23 @@
-﻿using HRM.Models.Report.DisciplineSummaryPerYear;
-using HRM.Services.ExportExcel;
-
-namespace HRM.Controllers.Report;
+﻿namespace HRM.Controllers.Report;
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using GO.UserControl.Client.Core.Enumerables;
-using GO.UserControl.Client.Core.Session;
-using Controllers;
 using Core;
 using Core.Constants;
 using Core.Filters;
+using GO.UserControl.Client.Core.Enumerables;
+using GO.UserControl.Client.Core.Session;
 using HRM.Core.Services;
 using HRM.Criteria.Report;
-using Services.Implement;
-using Services.Interfaces;
+using HRM.Models.Report.DisciplineSummaryPerYear;
+using HRM.Services.ExportExcel;
 using HRM.ViewModels.Report;
 using Microsoft.AspNetCore.Mvc;
+using Services.Implement;
+using Services.Interfaces;
+
 
 [HrmPermission(Policy.Read, FunctionKey.DisciplineSummaryPerYear)]
 public class DisciplineSummaryPerYearController(

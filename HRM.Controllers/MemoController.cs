@@ -195,7 +195,7 @@ public class MemoController(
 
     private static string RemoveFirstSlash(string path)
     {
-        if (path.StartsWith("/"))
+        if (path.StartsWith('/'))
         {
             path = path.Substring(1);
         }

@@ -28,7 +28,7 @@ public class WorkingHoursSummaryReportController(
     public async Task<IActionResult> Index(WorkingHoursSummaryViewModel model)
     {
         var teams = await teamService.GetAllAsync();
-        model.TeamIds = model.TeamIds ?? string.Join(",", teams.Select(x => x.Id));
+        model.TeamIds ??= string.Join(",", teams.Select(x => x.Id));
         var param = new GetWorkingHoursSummaryParam
         {
             CompanyId = CurrentCompanyId,

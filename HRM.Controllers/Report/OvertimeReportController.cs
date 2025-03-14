@@ -57,7 +57,7 @@ public class OvertimeReportController(
     public async Task<IActionResult> YearlyOvertime(YearlyOvertimeViewModel model)
     {
         var teams = await teamService.GetAllAsync();
-        model.TeamIds = model.TeamIds ?? string.Join(",", teams.Select(x => x.Id));
+        model.TeamIds ??= string.Join(",", teams.Select(x => x.Id));
         var param = new GetYearlyOvertimeParam
         {
             CompanyId = CurrentCompanyId,
@@ -88,7 +88,7 @@ public class OvertimeReportController(
     public async Task<IActionResult> DailyOvertime(DailyOvertimeDetailsViewModel model)
     {
         var teams = await teamService.GetAllAsync();
-        model.TeamIds = model.TeamIds ?? string.Join(",", teams.Select(x => x.Id));
+        model.TeamIds ??= string.Join(",", teams.Select(x => x.Id));
         var param = new GetDailyOvertimeDetailsParam
         {
             CompanyId = CurrentCompanyId,

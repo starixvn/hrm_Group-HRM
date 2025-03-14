@@ -1,11 +1,8 @@
-﻿using HRM.Models.Shifts;
-
-namespace HRM.Controllers.Request;
+﻿namespace HRM.Controllers.Request;
 
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Controllers;
 using Core;
 using Core.Constants;
 using Core.Enums;
@@ -14,6 +11,7 @@ using GO.UserControl.Client.Core.Session;
 using HRM.Core.Services;
 using HRM.Criteria.Request.CheckInOut;
 using HRM.Models.Request;
+using HRM.Models.Shifts;
 using HRM.Services.Interfaces.Request;
 using HRM.ViewModels.Request;
 using Microsoft.AspNetCore.Http;

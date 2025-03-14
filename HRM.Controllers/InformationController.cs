@@ -203,7 +203,8 @@ public class InformationController(
     private IList<string> GetAllFileUploaded()
     {
         var filePath = new List<string>();
-        var path = Path.Combine(hostingEnvironment.ContentRootPath, Constants.ProfileUploadPath + EmployeeSession.Code);
+        var profilePath = Constants.ProfileUploadPath + EmployeeSession.Code;
+        var path = Path.Combine(hostingEnvironment.ContentRootPath, profilePath);
         if (Directory.Exists(path))
         {
             var paths = Directory.GetFiles(path);

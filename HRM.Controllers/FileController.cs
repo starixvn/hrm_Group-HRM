@@ -26,7 +26,6 @@ public class FileController(
             if (file.Length > 0)
             {
                 var pathAttach = SaveFileToServer(file, categoryId, isOverride);
-
                 pathAttachFiles = (string.IsNullOrEmpty(pathAttachFiles)) ? pathAttach : string.Concat(pathAttachFiles, ";/", pathAttach);
             }
         }
@@ -42,7 +41,6 @@ public class FileController(
         var basePath = Path.Combine(hostingEnvironment.ContentRootPath, dir);
         if (isOverride)
         {
-            
             while (System.IO.File.Exists(basePath + "/" + fileName))
             {
                 fileName.Insert(0, "(1)");
@@ -75,7 +73,7 @@ public class FileController(
 
     private static string RemoveFirstSlash(string path)
     {
-        if (path.StartsWith("/"))
+        if (path.StartsWith('/'))
         {
             path = path.Substring(1);
         }
@@ -144,7 +142,7 @@ public class FileController(
     {
         var isSuccessful = false;
         var message = string.Empty;
-        var path  = Path.Combine(hostingEnvironment.ContentRootPath, Constants.ProfileUploadPath + EmployeeSession.Code + "/" + fileName);
+        var path = Path.Combine(hostingEnvironment.ContentRootPath, Constants.ProfileUploadPath + EmployeeSession.Code + "/" + fileName);
         if (System.IO.File.Exists(path))
         {
             System.IO.File.Delete(path);
