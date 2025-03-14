@@ -116,7 +116,7 @@ public class BaseMailService(
                     client.EnableSsl = true;
                 }
 
-                //ServicePointManager.ServerCertificateValidationCallback += RemoteCertificateValidationCallback;
+                ServicePointManager.ServerCertificateValidationCallback += RemoteCertificateValidationCallback;
 
                 client.SendCompleted += async (s, e) => await SendCompletedCallback(s, e);
                 client.SendAsync(msg, email);

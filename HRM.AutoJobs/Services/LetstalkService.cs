@@ -1,10 +1,9 @@
-﻿using HRM.AutoJobs.Services.Interfaces;
-using HRM.Letstalk.Core.Services.Interfaces;
-
-namespace HRM.AutoJobs.Services;
+﻿namespace HRM.AutoJobs.Services;
 
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using HRM.AutoJobs.Services.Interfaces;
+using HRM.Letstalk.Core.Services.Interfaces;
 using Models;
 
 public class LetstalkService(

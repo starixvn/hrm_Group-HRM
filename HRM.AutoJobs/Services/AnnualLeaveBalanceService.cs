@@ -221,6 +221,9 @@ public class AnnualLeaveBalanceService(
             case December:
                 percent = "> 0%";
                 break;
+            default: 
+                percent = percent;
+                break;
         }
         return percent;
     }
@@ -269,6 +272,10 @@ public class AnnualLeaveBalanceService(
                     isSentMail = true;
                 }
                 break;
+            default:
+                percentInMail = string.Empty;
+                break;
+
         }
     }
 }
