@@ -258,30 +258,32 @@ public class ChangeShiftController(
     {
         var supervisor = await requestService.GetVerifierAndApproverAsync(employeeId, RequestType.ChangeShift);
 
-        if (request != null)
+        if (request == null)
         {
-            if (request.VerifiedBy != null && !supervisor.Verifiers.Any(t => t.OwnerId == request.VerifiedBy.Id))
-            {
-                var verifier = new SupervisorNameModel
-                {
-                    OwnerId = request.VerifiedBy.Id,
-                    NickName = request.VerifiedBy.NickName,
-                    FullName = request.VerifiedBy.FullName
-                };
-                supervisor.Verifiers.Add(verifier);
-            }
-
-            if (request.ApprovedBy != null && !supervisor.Approvers.Any(t => t.OwnerId == request.ApprovedBy.Id))
-            {
-                var approver = new SupervisorNameModel
-                {
-                    OwnerId = request.ApprovedBy.Id,
-                    NickName = request.ApprovedBy.NickName,
-                    FullName = request.ApprovedBy.FullName
-                };
-                supervisor.Approvers.Add(approver);
-            }
+	        return supervisor;
         }
+        if (request.VerifiedBy != null && supervisor.Verifiers.All(t => t.OwnerId != request.VerifiedBy.Id))
+        {
+	        var verifier = new SupervisorNameModel
+	        {
+		        OwnerId = request.VerifiedBy.Id,
+		        NickName = request.VerifiedBy.NickName,
+		        FullName = request.VerifiedBy.FullName
+	        };
+	        supervisor.Verifiers.Add(verifier);
+        }
+
+        if (request.ApprovedBy == null || supervisor.Approvers.Any(t => t.OwnerId == request.ApprovedBy.Id))
+        {
+	        return supervisor;
+        }
+        var approver = new SupervisorNameModel
+        {
+	        OwnerId = request.ApprovedBy.Id,
+	        NickName = request.ApprovedBy.NickName,
+	        FullName = request.ApprovedBy.FullName
+        };
+        supervisor.Approvers.Add(approver);
 
         return supervisor;
     }

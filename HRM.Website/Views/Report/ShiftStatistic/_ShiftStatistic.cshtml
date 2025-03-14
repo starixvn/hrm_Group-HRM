@@ -5,7 +5,6 @@
 @{
     var totalDays = (int)(Model.ToDate - Model.FromDate).TotalDays + 1;
     var totals = new int[totalDays];
-    var i = 0;
 }
 
 <table class="table table-custom">
@@ -25,7 +24,11 @@
         var shiftStatistics = Model.ShiftStatistics.GroupBy(x => new { x.ShiftId, x.Code }).Select(g => new { g.Key.ShiftId, g.Key.Code, Items = g.ToList() });
         var url = string.Empty;
         <tbody>
-            @foreach (var shiftStatistic in shiftStatistics)
+
+        @{
+            var i = 0;
+        }
+        @foreach (var shiftStatistic in shiftStatistics)
             {
                 i = 0;
                 url = "/ShiftStatisticReport/details?TeamIds=" + @Model.TeamIds + "&isLocal=" + @Model.IsLocal

@@ -99,7 +99,7 @@ public partial class EmployeeWorkingHoursService(
         worksheet = xlPackage.Workbook.Worksheets.Add("Employee's request");
         await WriteRequestSheetAsync(template, worksheet, param);
 
-        return xlPackage.GetAsByteArray();
+        return await xlPackage.GetAsByteArrayAsync();
     }
 
     private void WriteDetailsSheet(

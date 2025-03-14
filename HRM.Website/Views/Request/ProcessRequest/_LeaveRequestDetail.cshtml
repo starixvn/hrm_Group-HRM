@@ -54,7 +54,7 @@
                     </span>
                 </td>
 
-                @if (item.LeaveDetail.Count() > 0 && !item.IsOffDayOrHoliday)
+                @if (item.LeaveDetail.Any() && !item.IsOffDayOrHoliday)
                 {
                     var leaveDetail = item.LeaveDetail[0];
                     <td>

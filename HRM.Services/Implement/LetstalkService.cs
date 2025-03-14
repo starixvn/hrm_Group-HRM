@@ -11,17 +11,17 @@ public class LetstalkService(
     LetstalkSettings letstalkSettings,
     ISendNotificationService sendNotificationService) : ILetstalkService
 {
-    private readonly string templateContent = "<strong>{0}</strong><br /> {1}";
+	private const string TemplateContent = "<strong>{0}</strong><br /> {1}";
 
-    public async Task SendNotificationAsync(string letstalkId, string subject, string message)
+	public async Task SendNotificationAsync(string letstalkId, string subject, string message)
     {
         var letstalk = !string.IsNullOrWhiteSpace(letstalkSettings.TestingAccountId) ? letstalkSettings.TestingAccountId : letstalkId;
         if (letstalkSettings.Enable && !string.IsNullOrWhiteSpace(letstalk))
         {
-            var jwtToken = sendNotificationService.GetToken(letstalkSettings.BaseUrl, letstalkSettings.Username, letstalkSettings.Password);
+            var jwtToken = await sendNotificationService.GetTokenAsync(letstalkSettings.BaseUrl, letstalkSettings.Username, letstalkSettings.Password);
             if (jwtToken != null)
             {
-                var content = string.Format(templateContent, subject, message);
+                var content = string.Format(TemplateContent, subject, message);
                 var data = new Dictionary<string, object>
                 {
                     { "BotId", letstalkSettings.BotId },
@@ -42,7 +42,7 @@ public class LetstalkService(
             var jwtToken = sendNotificationService.GetToken(letstalkSettings.BaseUrl, letstalkSettings.Username, letstalkSettings.Password);
             if (jwtToken != null)
             {
-                var content = string.Format(templateContent, subject, message);
+                var content = string.Format(TemplateContent, subject, message);
                 var data = new Dictionary<string, object>
                 {
                     { "BotId", letstalkSettings.BotId },

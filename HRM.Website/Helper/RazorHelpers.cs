@@ -2,6 +2,7 @@
 using HRM.Resources;
 using HRM.Models;
 using System.Collections.Generic;
+using System.Globalization;
 
 namespace HRM.Website.Helper;
 
@@ -109,7 +110,7 @@ public static class RazorHelpers
 
     public static string DisplayZeroCell(decimal value)
     {
-        return value > 0 ? value.ToString() : "-";
+        return value > 0 ? value.ToString(CultureInfo.InvariantCulture) : "-";
     }
 
     public static string CheckInOutReasonDropDownList(byte reasonId = (byte)CheckInOutReason.Forgot, string controlName = "reasonId", string htmlClass = "")

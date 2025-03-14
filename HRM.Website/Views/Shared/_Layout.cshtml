@@ -6,7 +6,7 @@
     <title>HRM - @ViewBag.Title</title>
     <meta name="viewport" content="width=device-width" />
     <link href="~/dist/styles/main.css" rel="stylesheet" />
-    @RenderSection("css", false)
+    @await RenderSectionAsync("css", false)
 </head>
 <body class="locale_en production">
     <header>
@@ -24,11 +24,11 @@
                             <div class="breadcrumb">
                                 <a id="toggle-left-navigation" class="toggle-left-navigation large-back" href="javascript:;" title="@Labels.HideLeftNavigation"><i class="glyphicon glyphicon-arrow-left"></i></a>
                                 <span class="separate">|</span>
-                                @RenderSection("Breadcrumb", required: true)
+                                @await RenderSectionAsync("Breadcrumb", required: true)
                             </div>
                         </div>
                         <div class="js-menu separator-menu">
-                            @RenderSection("SeparatorMenu", required: false)
+                            @await RenderSectionAsync("SeparatorMenu", required: false)
                         </div>
                     </div>
                 </section>
@@ -57,7 +57,7 @@
             </div>
         </section>
         <div class="right_wrap">
-            @RenderSection("Right", required: false)
+            @await RenderSectionAsync("Right", required: false)
         </div>
     </div>
     <footer></footer>
@@ -65,6 +65,6 @@
     @Html.Hidden("RootURL", Url.Content("~/"))
     <script src="~/dist/vendors/react.js"></script>
     <script src="~/dist/js/main.js"></script>
-    @RenderSection("js", false)
-</body>
+    @await RenderSectionAsync("js", false)
+    </body>
 </html>

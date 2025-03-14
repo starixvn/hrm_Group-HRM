@@ -237,27 +237,18 @@ public partial class EmployeeWorkingHoursService : IEmployeeWorkingHoursService
 
     public static bool IsUnpaidLeave(DailyWorking dailyWorking)
     {
-        var isUnpaidLeave = false;
+	    var isUnpaidLeave = dailyWorking.LeaveType.Id is 
+		    (byte)Core.Enums.LeaveTypes.UnpaidLeave
+		    or (byte)Core.Enums.LeaveTypes.UnpaidLeaveInsurance 
+		    or (byte)Core.Enums.LeaveTypes.MaternityLeave
+		    or (byte)Core.Enums.LeaveTypes.PaternityLeave 
+	                        || dailyWorking.LeaveType2 is { Id: 
+		    (byte)Core.Enums.LeaveTypes.UnpaidLeave
+		    or (byte)Core.Enums.LeaveTypes.UnpaidLeaveInsurance 
+		    or (byte)Core.Enums.LeaveTypes.MaternityLeave
+		    or (byte)Core.Enums.LeaveTypes.PaternityLeave
+	    };
 
-        if (dailyWorking.LeaveType.Id == (byte)Core.Enums.LeaveTypes.UnpaidLeave
-            || dailyWorking.LeaveType.Id == (byte)Core.Enums.LeaveTypes.UnpaidLeaveInsurance
-            || dailyWorking.LeaveType.Id == (byte)Core.Enums.LeaveTypes.MaternityLeave
-            || dailyWorking.LeaveType.Id == (byte)Core.Enums.LeaveTypes.PaternityLeave)
-        {
-            isUnpaidLeave = true;
-        }
-
-#pragma warning disable S1067 // Expressions should not be too complex
-        if (dailyWorking.LeaveType2 != null
-            && (dailyWorking.LeaveType2.Id == (byte)Core.Enums.LeaveTypes.UnpaidLeave
-                || dailyWorking.LeaveType2.Id == (byte)Core.Enums.LeaveTypes.UnpaidLeaveInsurance
-                || dailyWorking.LeaveType2.Id == (byte)Core.Enums.LeaveTypes.MaternityLeave
-                || dailyWorking.LeaveType2.Id == (byte)Core.Enums.LeaveTypes.PaternityLeave))
-#pragma warning restore S1067 // Expressions should not be too complex
-        {
-            isUnpaidLeave = true;
-        }
-
-        return isUnpaidLeave;
+	    return isUnpaidLeave;
     }
 }

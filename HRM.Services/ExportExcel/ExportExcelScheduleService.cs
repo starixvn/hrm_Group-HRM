@@ -58,7 +58,6 @@ public class ExportExcelScheduleService(IWebHostEnvironment hostingEnvironment) 
         worksheet.Row(rowIndex).Style.VerticalAlignment = ExcelVerticalAlignment.Center;
         rowIndex++;
 
-        ShiftBase shift;
         foreach (var weeklySchedule in weeklySchedules)
         {
             colIndex = 1;
@@ -66,7 +65,7 @@ public class ExportExcelScheduleService(IWebHostEnvironment hostingEnvironment) 
             worksheet.Cells[rowIndex, colIndex++].Value = weeklySchedule.Code;
             worksheet.Cells[rowIndex, colIndex++].Value = weeklySchedule.Nickname;
 
-            shift = GetShift(weeklySchedule.MondaySchedule);
+            var shift = GetShift(weeklySchedule.MondaySchedule);
             worksheet.Cells[rowIndex, colIndex++].Value = shift.Code;
 
             shift = GetShift(weeklySchedule.TuesdaySchedule);

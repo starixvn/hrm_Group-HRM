@@ -24,7 +24,7 @@
         </tr>
     </thead>
     <tbody>
-        @if (Model != null && Model.Count() > 0)
+        @if (Model != null && Model.Any())
         {
             var rowIndex = 1;
             foreach (var function in Model)
