@@ -1,6 +1,7 @@
 ﻿import 'jquery-ui-bundle/jquery-ui';
 import 'jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive';
 import 'jquery.are-you-sure/jquery.are-you-sure';
+import 'tipsy/src/javascripts/jquery.tipsy';
 import axios from 'axios';
 import moment from 'moment';
 
@@ -211,6 +212,11 @@ const LeaveRequest = (function ($) {
                 toDate.setDate(toDate.getDate() + 1);
                 LeaveRequest.toDate.val(moment(toDate).format(DateFormat));
             }
+
+            LeaveRequest.leavetypeInfo.tipsy({
+                className: 'tipsy-leave-type-info',
+                gravity: $.fn.tipsy.autoWE
+            });
         },
         timeChangeHandler: function () {
             const fromTime = LeaveRequest.leftPadding(LeaveRequest.fromTimeHour.val(), 2)

@@ -98,3 +98,16 @@
 .success ul {
     margin: 0;
 }
+
+.tipsy-leave-type-info {
+    opacity: 1 !important;
+
+    .tipsy-arrow {
+        display: none;
+    }
+
+    .tipsy-inner {
+        max-width: 400px;
+        white-space: pre-line;
+    }
+}
