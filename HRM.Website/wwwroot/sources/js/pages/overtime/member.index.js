@@ -245,7 +245,7 @@ $(document).ready(function () {
             params: parse($('form.filter').serialize()),
             responseType: 'blob'
         }).then(response => {
-            const fileName = response.headers['content-disposition'].match(/filename=(.+)/)[1];
+            const fileName = response.headers['content-disposition'].match(/filename=([^;]+)/)[1];
             downloadFile(response.data, fileName);
         }).catch(axiosError).then(() => unblockUI());
     });
