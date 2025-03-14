@@ -47,7 +47,7 @@
                             }
                             else
                             {
-                                @RazorHelpers.LateInEarlyOutTimeFormat(request.ActualLateInEarlyOut, (short)request.RequestTypeId);
+                                @RazorHelpers.LateInEarlyOutTimeFormat(request.ActualLateInEarlyOut, (short)request.RequestTypeId)
                             }
                         </td>
                         <td>@request.OnDate.ToDateMonthYearFormatedDate()</td>
@@ -83,6 +83,6 @@
         }
         else
         {
-            @RazorHelpers.DisplayNoInformation(colspan: 14);
+            @RazorHelpers.DisplayNoInformation(colspan: 14)
         }
     </table>

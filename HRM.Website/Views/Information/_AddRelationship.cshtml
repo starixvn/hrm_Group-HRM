@@ -4,8 +4,8 @@
 
 @using (Html.BeginForm("InsertRelationship", "Information", FormMethod.Post, new { @class = "dialog-form form-horizontal" }))
 {
-    @Html.AntiForgeryToken();
-    @Html.ValidationSummary();
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary()
 
     <div class="form-group">
         <div class="label-form">

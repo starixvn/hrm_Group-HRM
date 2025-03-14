@@ -144,7 +144,7 @@ public class FileController(
     {
         var isSuccessful = false;
         var message = string.Empty;
-        var path  = Path.Combine(hostingEnvironment.ContentRootPath, Constants.ProfileUploadPath + EmployeeSession.Code + "/" + fileName); ;
+        var path  = Path.Combine(hostingEnvironment.ContentRootPath, Constants.ProfileUploadPath + EmployeeSession.Code + "/" + fileName);
         if (System.IO.File.Exists(path))
         {
             System.IO.File.Delete(path);

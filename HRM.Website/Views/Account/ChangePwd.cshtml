@@ -19,8 +19,8 @@
 <div class="card" style="width: 400px;">
     @using (Html.BeginForm("changepwd", "account", FormMethod.Post, new { @class = "form-horizontal" }))
     {
-        @Html.ValidationSummary();
-        @Html.AntiForgeryToken();
+        @Html.ValidationSummary()
+        @Html.AntiForgeryToken()
         if (!string.IsNullOrWhiteSpace(changePwdOK))
         {
             <div class="success">@changePwdOK</div>
