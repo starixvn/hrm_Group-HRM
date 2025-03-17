@@ -317,6 +317,7 @@ public class EmployeeController(
         model.EmpShiftList = GetShiftMonitors(supervisors);
         model.ActingEmpList = GetActingSupervisors(supervisors);
         ViewBag.EnableGroupDate = await commonDataService.IsEnableGroupDateAsync();
+        ViewBag.Avatar = await GetAvatarUrl(model.Code);
 
         await ComposeViewBagsForEditEmployee();
 
