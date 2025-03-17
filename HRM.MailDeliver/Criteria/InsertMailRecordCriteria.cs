@@ -25,13 +25,7 @@ public class InsertMailRecordCriteria : CriteriaBase
 
     public bool IsEncrypt { get; set; }
 
-    public override string GetSettingKey()
-    {
-        return "MailRecorder_InsRecord";
-    }
+    public override string GetSettingKey() => "MailRecorder_InsRecord";
 
-    public override bool IsValid()
-    {
-        return !string.IsNullOrWhiteSpace(MailTo) && !string.IsNullOrWhiteSpace(Subject);
-    }
+    public override bool IsValid() => !string.IsNullOrWhiteSpace(MailTo) && !string.IsNullOrWhiteSpace(Subject);
 }

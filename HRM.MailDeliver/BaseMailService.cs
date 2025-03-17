@@ -1,11 +1,13 @@
 ﻿namespace HRM.MailDeliver;
 
 using System;
+using System.Net.Security;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
-using Criteria;
 using Core;
 using Core.Models;
 using Core.Services;
+using Criteria;
 using MailKit.Net.Smtp;
 using MimeKit;
 
@@ -30,6 +32,7 @@ public class BaseMailService(AppSettings appSettings, IBaseService baseService) 
         var isSuccessful = false;
 
         using var mailClient = new SmtpClient();
+        mailClient.ServerCertificateValidationCallback += RemoteCertificateValidationCallback;
         await mailClient.ConnectAsync(email.MailConfig.Server, email.MailConfig.Port, email.MailConfig.IsAuth);
         if (email.MailConfig.IsAuth)
         {
@@ -169,4 +172,7 @@ public class BaseMailService(AppSettings appSettings, IBaseService baseService) 
 
         await baseService.ExecuteNonQueryAsync(criteria);
     }
+
+    private static bool RemoteCertificateValidationCallback(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
+        => true;
 }

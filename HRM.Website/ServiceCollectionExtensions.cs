@@ -1,9 +1,4 @@
-﻿using HRM.Letstalk.Core.Services.Interfaces;
-using HRM.Services.ExportExcel.Discipline;
-using HRM.Services.ExportExcel.WeekendLeave;
-using HRM.Services.Interfaces.Report;
-
-namespace HRM.Website;
+﻿namespace HRM.Website;
 
 using System;
 using System.Threading.Tasks;
@@ -19,22 +14,26 @@ using HRM.Core.Models;
 using HRM.Core.Repositories;
 using HRM.Core.Services;
 using HRM.Letstalk.Core.Services;
-using Repositories;
-using Repositories.Interfaces;
-using Services.ExportExcel;
-using Services.ExportExcel.Employee;
-using Services.Implement.ActionLog;
-using Services.Implement.Report;
-using Services.Implement.Request;
-using Services.Interfaces.Request;
+using HRM.Letstalk.Core.Services.Interfaces;
 using MailDeliver;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Repositories;
+using Repositories.Interfaces;
+using Services.ExportExcel;
+using Services.ExportExcel.Discipline;
+using Services.ExportExcel.Employee;
+using Services.ExportExcel.WeekendLeave;
 using Services.Implement;
+using Services.Implement.ActionLog;
+using Services.Implement.Report;
+using Services.Implement.Request;
 using Services.Interfaces;
+using Services.Interfaces.Report;
+using Services.Interfaces.Request;
 using StackExchange.Redis;
 
 public static class ServiceCollectionExtensions

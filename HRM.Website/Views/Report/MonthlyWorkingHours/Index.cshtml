@@ -28,7 +28,7 @@
     <div class="form-horizontal clearfix">
         <div class="form-group form-group--m">
             <div class="label-form">
-                @Html.Label(Labels.FromDate, Labels.FromDate, new { @class = "control-label" })
+                <label class="control-label">@Labels.FromDate</label>
             </div>
             <div class="calendar-form">
                 @Html.TextBox("FromDate", Model.FromDate.ToDateMonthYearFormatedDate(),
@@ -43,7 +43,7 @@
         </div>
         <div class="form-group form-group--m">
             <div class="label-form">
-                @Html.Label(Labels.ToDate, Labels.ToDate, new { @class = "control-label" })
+                <label class="control-label">@Labels.ToDate</label>
             </div>
             <div class="calendar-form">
                 @Html.TextBox("ToDate", Model.ToDate.ToDateMonthYearFormatedDate(),
@@ -58,7 +58,7 @@
         </div>
         <div class="form-group form-group--m">
             <div class="label-form">
-                @Html.Label(Labels.Category, Labels.Category, new { @class = "control-label" })
+                <label class="control-label">@Labels.Category</label>
             </div>
             <div class="select-form">
                 @Html.Raw(RazorHelpers.CategoryDropDownList("IsLocal", classHTML: "form-control", selectedId: string.Empty))
@@ -74,7 +74,7 @@
         </div>
         <div class="form-group form-group--m">
             <div class="label-form">
-                @Html.Label(Labels.Keyword, Labels.Keyword, new { @class = "control-label" })
+                <label class="control-label">@Labels.Keyword</label>
             </div>
             <div class="input-form">
                 @Html.TextBoxFor(model => model.Employee,
@@ -83,7 +83,7 @@
         </div>
         <div class="form-group form-group--m">
             <div class="label-form">
-                @Html.Label(Labels.UserStatus, Labels.UserStatus, new { @class = "control-label" })
+                <label class="control-label">@Labels.UserStatus</label>
             </div>
             <div class="input-form">
                 @Html.Raw(RazorHelpers.UserStatusDropDownList("EmployeeStatusId", classHTML: "form-control", selectedId: Model.EmployeeStatusId))
