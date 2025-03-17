@@ -1,16 +1,15 @@
-﻿using HRM.Services.Interfaces;
-
-namespace HRM.Controllers;
+﻿namespace HRM.Controllers;
 
 using System;
 using System.Threading.Tasks;
+using Core;
 using Core.Constants;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Services;
 using GO.UserControl.Client.Core.Session;
-using Core;
-using ViewModels.Dashboard;
 using Microsoft.AspNetCore.Mvc;
+using Services.Interfaces;
+using ViewModels.Dashboard;
 
 public class HomeController(
     IUserControlSession userControlSession,

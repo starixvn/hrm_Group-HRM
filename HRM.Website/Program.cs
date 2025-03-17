@@ -1,6 +1,6 @@
 using System.IO;
 using Fanex.Data.SqlServer;
-using Fanex.Logging.Sentry;
+using Fanex.Logging.Sentry.RavenClient;
 using GO.UserControl.Client.Core;
 using GO.UserControl.Client.Core.Session;
 using HRM.Website;
