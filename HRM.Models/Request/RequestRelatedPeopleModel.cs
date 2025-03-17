@@ -13,5 +13,5 @@ public class RequestRelatedPeopleModel
 
     public IList<SupervisorNameModel> ListHR { get; set; }
 
-    public EmailSettingsModel EmailSetting { get; set; }
+    public EmailSettingsModel EmailSetting { get; set; } = new();
 }

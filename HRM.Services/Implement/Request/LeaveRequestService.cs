@@ -70,9 +70,11 @@ public class LeaveRequestService(
 
     public async Task<IEnumerable<LeaveRequest>> GetHistoryByIdAsync(long requestId)
     {
-        var criteria = new GetLeaveRequestHistoryByIdCriteria
+	    var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
+		var criteria = new GetLeaveRequestHistoryByIdCriteria
         {
-            RequestId = requestId
+            RequestId = requestId,
+            CompanyId = companyId
         };
         return await leaveRequestRepository.GetHistoryByIdAsync(criteria);
     }
