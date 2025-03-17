@@ -4,6 +4,7 @@ using Fanex.Logging.Sentry;
 using GO.UserControl.Client.Core;
 using GO.UserControl.Client.Core.Session;
 using HRM.Website;
+using HRM.Website.Middlewares;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
@@ -37,6 +38,7 @@ UserControlClientManager
 
 if (!app.Environment.IsDevelopment())
 {
+    app.UseMiddleware<ErrorHandler>();
     app.UseHsts();
 }
 
