@@ -33,7 +33,7 @@ public class ExportExcelAttendanceReportService(IWebHostEnvironment hostingEnvir
 
     public byte[] Export(IEnumerable<EmployeeAttendanceModel> attendances, DateTime fromDate, DateTime toDate)
     {
-        var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, @"ExcelTemplates\AttendanceReport.xlsx");
+        var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, "ExcelTemplates/AttendanceReport.xlsx");
 
         using var templatePackage = new ExcelPackage(new FileInfo(templatePath));
         using var xlPackage = new ExcelPackage();
