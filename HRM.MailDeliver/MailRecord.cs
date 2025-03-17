@@ -12,7 +12,7 @@ public class MailRecord
 
     public string Subject { get; set; }
 
-    public string Body { get; set; }
+    public string Body { get; set; } = string.Empty;
 
     public string MailTo { get; set; }
 
