@@ -8,6 +8,9 @@
     <link href="~/dist/styles/memo.edit.css" rel="stylesheet" />
 }
 @section js{
+    <script>
+        window.UploadBasePath = '@ViewBag.UploadBasePath';
+    </script>
     <script src="~/dist/js/memo.edit.js"></script>
 }
 @section Breadcrumb {

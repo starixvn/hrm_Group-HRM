@@ -25,7 +25,7 @@ $(function () {
                 var attachLink = attachPathFiles[i],
                     attachLinkSplit = attachLink.split('/'),
                     attachFileName = attachLinkSplit[attachLinkSplit.length - 1],
-                    pattern = '<div id="file_' + i + '"><a href="' + attachLink + '">' + attachFileName + '</a>&nbsp\
+                    pattern = '<div id="file_' + i + '"><a href="' + window.UploadBasePath + attachLink + '">' + attachFileName + '</a>&nbsp\
                                 <a href="javascript:;">\
                                     <i class="fa fa-times fa-lg icon-delete" data-id="'+ attachLink + '"></i>\
                                 </a></div>';

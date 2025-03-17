@@ -16,6 +16,8 @@ public interface IMinIOService
 	Task<string> GetFilePath(string bucketName, string filePath, string defaultFile = "");
 
 	Task<bool> DeleteFileAsync(string bucketName, string objectName);
+
+    Task<bool> IsFileExistsAsync(string bucketName, string filePath);
 }
 
 public class MinIOService : IMinIOService

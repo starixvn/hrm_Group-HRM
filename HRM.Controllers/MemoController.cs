@@ -1,5 +1,8 @@
-﻿namespace HRM.Controllers;
+﻿
+namespace HRM.Controllers;
 
+using HRM.Core.Services;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.IO;
 using System.Threading.Tasks;
@@ -9,11 +12,11 @@ using Core.Filters;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
 using HRM.Core.Models;
-using Services.Interfaces;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using Services.Implement;
+using Services.Interfaces;
 using ViewModels.Memo;
 
 public class MemoController(
@@ -23,7 +26,9 @@ public class MemoController(
     IMemoService memoService,
     ICommonDataService commonDataService,
     IEmailService emailService,
-    IWebHostEnvironment hostingEnvironment) : BaseController(userControlSession)
+    IWebHostEnvironment hostingEnvironment,
+    IMinIOService minIOService,
+    IConfiguration configuration) : BaseController(userControlSession)
 {
     private readonly IUserControlSession userControlSession = userControlSession;
     private const int UploadMemoType = 1;
@@ -41,7 +46,7 @@ public class MemoController(
 
         model.Memos = await memoService.GetAllAsync(model.Year, model.Category, CurrentCompanyId);
         ViewBag.HasPermission = userControlSession.HasPermissionOnFunction(FunctionKey.Memo, Policy.Host);
-
+        
         return View(model);
     }
 
@@ -52,6 +57,7 @@ public class MemoController(
         var memo = await memoService.GetByIdAsync(id, CurrentCompanyId);
         ViewBag.MemoCategories = await commonDataService.GetLookupDataByCodeAsync(Constants.MemoCategory, CurrentCompanyId);
         ViewBag.Updated = false;
+        ViewBag.UploadBasePath = $"{configuration["AWS:ExternalUrl"]}/{Bucket.File}";
 
         return View(memo);
     }
@@ -157,11 +163,7 @@ public class MemoController(
 
             foreach (var fileName in allFiles)
             {
-                var filePath = Path.Combine(hostingEnvironment.ContentRootPath, RemoveFirstSlash(fileName));
-                if (System.IO.File.Exists(filePath))
-                {
-                    System.IO.File.Delete(filePath);
-                }
+                await minIOService.DeleteFileAsync(Bucket.File, fileName);
             }
         }
 
