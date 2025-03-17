@@ -7,7 +7,7 @@
 @{
     ViewBag.Title = Labels.Edit;
     var isTopManager = (bool)ViewBag.IsTopManager;
-    var today = DateTime.Today;
+    var today = DateTimeOffset.Now.DateTime.ToClientTimeZone().Date;
 }
 @section css{
     <link href="~/dist/styles/lateinearlyout.create.css" rel="stylesheet" />
