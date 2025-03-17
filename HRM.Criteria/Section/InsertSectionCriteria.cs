@@ -14,6 +14,8 @@ public class InsertSectionCriteria : CriteriaBase
 
     public int ModifiedBy { get; set; }
 
+    public short CompanyId { get; set; }
+
     public override string GetSettingKey()
     {
         return "Section_Insert";

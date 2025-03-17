@@ -52,7 +52,8 @@ public class UnitController(IUserControlSession userControlSession,
             Code = model.Code,
             Name = model.Name,
             IsActive = model.IsActive,
-            CreatedBy = EmployeeSession.EmpId
+            CreatedBy = EmployeeSession.EmpId,
+            CompanyId = CurrentCompanyId
         };
         commandResult = await unitService.CreateAsync(criteria);
         return new JsonResult(commandResult);

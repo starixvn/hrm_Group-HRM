@@ -75,7 +75,8 @@ public class SectionController(
             Name = model.Name,
             IsActive = model.IsActive,
             DepartmentId = model.DepartmentId,
-            ModifiedBy = EmployeeSession.EmpId
+            ModifiedBy = EmployeeSession.EmpId,
+            CompanyId = CurrentCompanyId
         };
         commandResult = await baseService.ExecuteNonQueryAsync(criteria);
 

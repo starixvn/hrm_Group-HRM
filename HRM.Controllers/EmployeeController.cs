@@ -281,7 +281,7 @@ public class EmployeeController(
             ViewBag.LengthOfServiceByGroupDate = employeeService.CalculateLengthOfService(employee.JoinedDate, employee.MilitaryFromDate, employee.MilitaryToDate);
             ViewBag.LengthOfServiceByCompanyDate = employeeService.CalculateLengthOfService(employee.CompanyDate, employee.MilitaryFromDate, employee.MilitaryToDate);
             ViewBag.EnableGroupDate = await commonDataService.IsEnableGroupDateAsync();
-
+            ViewBag.Avatar = await GetAvatarUrl(employee.Code);
             await ComposeViewBagsForEditEmployee();
             return View(employee);
         }
@@ -340,11 +340,17 @@ public class EmployeeController(
     [AllowAnonymous]
     public async Task<IActionResult> Avatar(string id)
     {
+        var avatarUrl = await GetAvatarUrl(id);
+        
+        return Json(avatarUrl);
+    }
+
+    private async Task<string> GetAvatarUrl(string id)
+    {
         var avatarName = string.IsNullOrEmpty(id) ? EmployeeSession.Code + ".jpg" : id + ".jpg";
         var avatarPath = $"{CurrentCompanyId}/{avatarName}";
         var avatarUrl = await minIOService.GetFilePath(Bucket.Avatar, avatarPath, "default-avatar.jpg");
-
-        return Json(avatarUrl);
+        return avatarUrl;
     }
 
     [HttpPost]

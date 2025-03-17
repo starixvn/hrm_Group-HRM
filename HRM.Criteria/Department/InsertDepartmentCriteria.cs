@@ -10,9 +10,11 @@ public class InsertDepartmentCriteria : CriteriaBase
 
     public bool IsActive { get; set; }
 
-    public int  UnitId { get; set; }
+    public int UnitId { get; set; }
 
     public int ModifiedBy { get; set; }
+
+    public short CompanyId { get; set; }
 
     public override string GetSettingKey()
     {

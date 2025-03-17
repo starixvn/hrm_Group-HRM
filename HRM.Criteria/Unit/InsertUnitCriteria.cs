@@ -12,6 +12,8 @@ public class InsertUnitCriteria : CriteriaBase
         
     public int CreatedBy { get; set; }
 
+    public short CompanyId { get; set; }
+
     public override string GetSettingKey()
     {
         return "Unit_Insert";
