@@ -25,7 +25,7 @@ public class MessageController(
     [HrmPermission(Policy.Read, FunctionKey.Message)]
     public async Task<ActionResult> Index()
     {
-        var currentDateTime = DateTimeOffset.Now.DateTime.ToClientTimeZone();
+        var currentDateTime = DateTimeOffset.Now.DateTime.ToClientTimeZone().Date;
         var param = new GetMessageByCreatorParam
         {
             ToDate = currentDateTime,

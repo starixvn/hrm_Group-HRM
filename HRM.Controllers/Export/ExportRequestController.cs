@@ -12,6 +12,7 @@ using HRM.Core.Enums;
 using HRM.Core.Filters;
 using GO.UserControl.Client.Core.Enumerables;
 using HRM.Services.ExportExcel;
+using Org.BouncyCastle.Asn1.Ocsp;
 
 namespace HRM.Controllers.Export;
 
@@ -62,19 +63,20 @@ public class ExportRequestController(IUserControlSession userControlSession,
     {
         model.ToDate = model.ToDate.ToEndOfDay();
         model.ViewType = RequestViewType.HRSpace;
-
         var criteria = new GetRequestCriteria
         {
-            SupervisorId = EmployeeSession.EmpId,
-            EmpId = model.EmployeeId == -1 ? null : new int?(model.EmployeeId),
-            FromDate = model.FromDate,
-            ToDate = model.ToDate,
-            TeamIds = model.TeamIds,
-            Status = model.StatusIds,
-            RequestType = model.RequestType,
-            IsQueryByCreatedDate = !model.IsFilterByAffectedDate,
-            RequestViewType = model.ViewType,
-            IsLocal = model.IsLocal.HasValue ? model.IsLocal.Value == 1 : null
+	        EmpId = model.EmployeeId != -1 && !string.IsNullOrWhiteSpace(model.Employee) ? model.EmployeeId : null,
+			FromDate = model.FromDate,
+	        ToDate = model.ToDate,
+	        TeamIds = model.TeamIds,
+	        Status = model.StatusIds,
+	        RequestType = model.RequestType,
+	        IsQueryByCreatedDate = !model.IsFilterByAffectedDate,
+	        RequestViewType = model.ViewType,
+	        SupervisorId = EmployeeSession.EmpId,
+	        IsLocal = model.IsLocal.HasValue ? model.IsLocal.Value == 1 : null,
+	        LeaveTypeId = model.LeaveType,
+	        CompanyId = CurrentCompanyId
         };
 
         var requestList = await requestService.GetRequests(criteria);

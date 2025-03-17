@@ -24,12 +24,12 @@ public class RequestViewModel
     [Required]
     [DataType(DataType.Date)]
     [DisplayFormat(DataFormatString = "{0:MMM dd, yyyy}", ApplyFormatInEditMode = true)]
-    public DateTime FromDate { get; set; } = DateTimeOffset.Now.Date.ToClientTimeZone();
+    public DateTime FromDate { get; set; } = DateTimeOffset.Now.DateTime.ToClientTimeZone().Date;
 
     [Required]
     [DataType(DataType.Date)]
     [DisplayFormat(DataFormatString = "{0:MMM dd, yyyy}", ApplyFormatInEditMode = true)]
-    public DateTime ToDate { get; set; } = DateTimeOffset.Now.Date.ToClientTimeZone();
+    public DateTime ToDate { get; set; } = DateTimeOffset.Now.DateTime.ToClientTimeZone().Date;
 
     public int EmployeeId { get; set; } = -1;
 
