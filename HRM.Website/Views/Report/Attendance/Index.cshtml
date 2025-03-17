@@ -5,7 +5,7 @@
 @model HRM.ViewModels.Report.EmployeeAttendanceViewModel
 @{
     ViewBag.Title = Labels.AttendanceReport;
-    var today = DateTime.Today;
+    var today = DateTimeOffset.Now.DateTime.ToClientTimeZone();
 }
 @section css{
     <link href="~/dist/styles/report.attendance.css" rel="stylesheet" />
