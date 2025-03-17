@@ -6,7 +6,7 @@
 @model HRM.ViewModels.Request.CheckInOutRequestViewModel
 @{
     ViewBag.Title = Labels.Create;
-    var today = DateTime.Today;
+    var today = DateTimeOffset.Now.DateTime.ToClientTimeZone().Date;
     var shift = (Shift)ViewBag.Shift;
     var isTopManager = (bool)ViewBag.IsTopManager;
     var hasOnBehalfRequestPermission = (bool)ViewBag.HasOnBehalfRequestPermission;

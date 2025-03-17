@@ -1,4 +1,6 @@
-﻿namespace HRM.ViewModels.Request;
+﻿using HRM.Core;
+
+namespace HRM.ViewModels.Request;
 
 using System;
 using System.Collections.Generic;
@@ -22,12 +24,12 @@ public class RequestViewModel
     [Required]
     [DataType(DataType.Date)]
     [DisplayFormat(DataFormatString = "{0:MMM dd, yyyy}", ApplyFormatInEditMode = true)]
-    public DateTime FromDate { get; set; } = DateTimeOffset.Now.Date;
+    public DateTime FromDate { get; set; } = DateTimeOffset.Now.Date.ToClientTimeZone();
 
     [Required]
     [DataType(DataType.Date)]
     [DisplayFormat(DataFormatString = "{0:MMM dd, yyyy}", ApplyFormatInEditMode = true)]
-    public DateTime ToDate { get; set; } = DateTimeOffset.Now.Date;
+    public DateTime ToDate { get; set; } = DateTimeOffset.Now.Date.ToClientTimeZone();
 
     public int EmployeeId { get; set; } = -1;
 

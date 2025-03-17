@@ -4,7 +4,7 @@
 @model HRM.ViewModels.Request.CheckInOutRequestViewModel
 @{
     ViewBag.Title = Labels.Edit;
-    var today = DateTime.Today;
+    var today = DateTimeOffset.Now.DateTime.ToClientTimeZone().Date;
 }
 @section css{
     <link href="~/dist/styles/checkinout.create.css" rel="stylesheet" />

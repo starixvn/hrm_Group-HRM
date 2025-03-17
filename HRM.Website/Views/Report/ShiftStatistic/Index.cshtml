@@ -4,7 +4,7 @@
 @model HRM.ViewModels.Report.ShiftStatisticViewModel
 @{
     ViewBag.Title = Labels.ShiftStatisticReport;
-    var today = DateTime.Today;
+    var today = DateTimeOffset.Now.DateTime.ToClientTimeZone().Date;
 }
 @section css{
     <link href="~/dist/styles/report.shiftstatistic.css" rel="stylesheet" />

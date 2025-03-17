@@ -2,7 +2,7 @@
 @using HRM.Resources
 @model HRM.ViewModels.EmployeeWorkFromHome.EmployeeWorkFromHomeViewModel
 @{
-    var today = DateTime.Today;
+    var today = DateTimeOffset.Now.DateTime.ToClientTimeZone().Date;
     var maxDate = new DateTime(today.Year + 2, 1, 1).AddDays(-1);
 }
 
