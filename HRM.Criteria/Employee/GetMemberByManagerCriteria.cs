@@ -10,6 +10,8 @@ public class GetMemberByManagerCriteria : CriteriaBase
 
     public bool ExcludedManager { get; set; }
 
+    public short CompanyId { get; set; }
+
     public override string GetSettingKey() => "Employee_GetMemberByManager";
 
     public override bool IsValid() => true;

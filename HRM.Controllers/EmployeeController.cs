@@ -426,7 +426,8 @@ public class EmployeeController(
         {
             SupervisorId = EmployeeSession.EmpId,
             Query = keyword,
-            ExcludedManager = false
+            ExcludedManager = false,
+            CompanyId = CurrentCompanyId
         };
         var employees = await employeeService.GetMemberByManagerAsync(criteria);
         const byte totalItems = 10;
