@@ -2,6 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
+using Fanex.Logging;
 using HRM.Core.Constants;
 using HRM.Models.Overtime;
 using Microsoft.AspNetCore.Hosting;
@@ -15,7 +16,7 @@ public interface IExportOvertimeService
 }
 
 [SuppressMessage("Major Code Smell", "S109:Magic numbers should not be used", Justification = "Pending")]
-public class ExportOvertimeService(IWebHostEnvironment hostingEnvironment) : IExportOvertimeService
+public class ExportOvertimeService(IWebHostEnvironment hostingEnvironment, ILogger logger) : IExportOvertimeService
 {
     public byte[] Export(IEnumerable<MonthlyOvertimeRequest> memberRequests, bool isMemberOvertime)
     {
@@ -24,17 +25,23 @@ public class ExportOvertimeService(IWebHostEnvironment hostingEnvironment) : IEx
         const byte startTotal = 8;
         const byte lineOfTotal = 4;
 
-        var sheetName = "Employee Overtime Report";
+        ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+		var sheetName = "Employee Overtime Report";
         var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, "ExcelTemplates/EmployeeOverTimeTemplate.xlsx"); 
-
+       
         if (isMemberOvertime)
         {
             sheetName = "Member Overtime Report";
         }
 
-        using var templatePackage = new ExcelPackage(new FileInfo(templatePath));
-        using var xlPackage = new ExcelPackage();
-        var templateWorksheet = templatePackage.Workbook.Worksheets[0];
+        if (!File.Exists(templatePath))
+        {
+	        logger.Error($"Template file not found at: {templatePath}");
+        }
+		using var templatePackage = new ExcelPackage(new FileInfo(templatePath));
+		using var xlPackage = new ExcelPackage();
+		logger.Info("Test", templatePath, templatePackage.Workbook.Worksheets.Count);
+		var templateWorksheet = templatePackage.Workbook.Worksheets[0];
         var workSheet = xlPackage.Workbook.Worksheets.Add(sheetName);
 
         var rowIndex = 1;
