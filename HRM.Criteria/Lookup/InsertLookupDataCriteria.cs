@@ -10,7 +10,7 @@ public class InsertLookupDataCriteria : CriteriaBase
 
     public string CategoryId { get; set; }
 
-    public int CompanyId { get; set; }
+    public short CompanyId { get; set; }
 
     public override string GetSettingKey()
     {

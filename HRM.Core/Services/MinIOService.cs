@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Amazon.S3;
 using Amazon.S3.Model;
@@ -70,15 +71,15 @@ public class MinIOService : IMinIOService
 
 	public async Task<bool> IsFileExistsAsync(string bucketName, string filePath)
 	{
-		try
+		var request = new ListObjectsV2Request
 		{
-			await s3Client.GetObjectMetadataAsync(bucketName, filePath);
-			return true;
-		}
-		catch (AmazonS3Exception e) when (e.StatusCode == System.Net.HttpStatusCode.NotFound)
-		{
-			return false;
-		}
+			BucketName = bucketName,
+			Prefix = filePath,
+			MaxKeys = 1 
+		};
+
+		var response = await s3Client.ListObjectsV2Async(request);
+		return response.S3Objects.Any(o => o.Key == filePath);
 	}
 
 

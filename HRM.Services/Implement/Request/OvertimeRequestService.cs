@@ -112,10 +112,11 @@ public class OvertimeRequestService(
 
     public async Task SendMailToReminderClaimOvertime(string subject, string content)
     {
-        var criteria = new GetEmployeeToRemindClaimOvertimeCriteria();
+	    var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
+		var criteria = new GetEmployeeToRemindClaimOvertimeCriteria { CompanyId = companyId };
         var employees = (await baseService.GetDataAsync<SupervisorNameModel>(criteria)).ToList();
 
-        if (employees.Count == 0)
+        if (employees.Count > 0)
         {
             var emailList = employees.Where(t => !string.IsNullOrWhiteSpace(t.Email)).Select(t => t.Email).ToList();
             var letStalkList = employees.Where(t => !string.IsNullOrWhiteSpace(t.LetsTalk)).Select(t => t.LetsTalk).ToList();

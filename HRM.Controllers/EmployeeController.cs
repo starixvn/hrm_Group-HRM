@@ -344,7 +344,7 @@ public class EmployeeController(
         var avatarPath = $"{CurrentCompanyId}/{avatarName}";
         var avatarUrl = await minIOService.GetFilePath(Bucket.Avatar, avatarPath, "default-avatar.jpg");
 
-        return Redirect(avatarUrl);
+        return Json(avatarUrl);
     }
 
     [HttpPost]
