@@ -570,4 +570,8 @@
         <Setting Key="Sync_WorkingShift_GetLastModifiedDate" SpName="Sync_WorkingShift_GetLastModifiedDate" DbName="bodb_HRM" Plain="0" />
         <Setting Key="Sync_WorkingShift_Import" SpName="Sync_WorkingShift_Import" DbName="bodb_HRM" Plain="0" />
     </Function>
+	<Function Name="FnB">
+		<Setting Key="Fnb_Employee_GetByLastModifiedDate" SpName="Employee_GetByLastModifiedDate" DbName="bodb_HRM" Plain="0" />
+		<Setting Key="Fnb_EmployeeGroup_GetByLastModifiedDate" SpName="Employee_GetByLastModifiedDate" DbName="bodb_HRM" Plain="0" />
+	</Function>
 </Functions>
