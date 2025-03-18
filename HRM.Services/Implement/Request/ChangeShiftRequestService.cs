@@ -49,13 +49,15 @@ public class ChangeShiftRequestService(
 
     public async Task<IEnumerable<DailySchedule>> GetWorkingCalendarForRequestAsync(GetWorkingCalendarForRequestParam param)
     {
+        var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
         var criteria = new GetWorkingCalendarForRequestCriteria
         {
             EmployeeId = param.EmployeeId,
             FromDate = param.FromDate,
             ToDate = param.ToDate,
             TypeId = param.TypeId,
-            RequestId = param.RequestId
+            RequestId = param.RequestId,
+            CompanyId = companyId
         };
         return await changeShiftRepository.GetWorkingCalendarForRequestAsync(criteria);
     }
@@ -133,6 +135,7 @@ public class ChangeShiftRequestService(
 
     public async Task<CommandResult> CreateAsync(int actorId, CreateChangeShift model)
     {
+        var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
         var criteria = new CreateChangeShiftRequestCriteria
         {
             EmployeeId = model.EmployeeId,
@@ -143,7 +146,8 @@ public class ChangeShiftRequestService(
             ApproverId = model.ApproverId,
             Remark = model.Remark,
             DetailXml = model.Details.ToXML().ToString(),
-            ActorId = actorId
+            ActorId = actorId,
+            CompanyId = companyId
         };
         var commandResult = await baseService.ExecuteNonQueryAsync(criteria);
         commandResult.OutputId = criteria.RequestId;

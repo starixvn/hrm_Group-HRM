@@ -14,6 +14,8 @@ public class GetWorkingCalendarForRequestCriteria : CriteriaBase
     public byte TypeId { get; set; }
     public long? RequestId { get; set; }
 
+    public short CompanyId { get; set; }
+
     public override string GetSettingKey() => "ChangeShiftRequest_GetCalendarForRequest";
 
     public override bool IsValid() => EmployeeId > 0 && FromDate <= ToDate;
