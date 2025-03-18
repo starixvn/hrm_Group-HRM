@@ -18,7 +18,6 @@ using Microsoft.AspNetCore.Mvc;
 using Services.Implement;
 using Services.Interfaces;
 
-
 [HrmPermission(Policy.Read, FunctionKey.DisciplineSummaryPerYear)]
 public class DisciplineSummaryPerYearController(
     IUserControlSession userControlSession,
@@ -75,7 +74,7 @@ public class DisciplineSummaryPerYearController(
             IsShowAll = model.IsShowAll
         };
         var (employees, disciplines) = await baseService.FetchMultipleAsync<DisciplineSummaryPerYear, DisciplineSummaryPerYearDetail>(criteria);
-		var disciplineSummaryPerYears = employees.ToList();
+        var disciplineSummaryPerYears = employees.ToList();
         foreach (var employee in disciplineSummaryPerYears)
         {
             var date = model.LengthOfService ? employee.CompanyDate : employee.JoinedDate;

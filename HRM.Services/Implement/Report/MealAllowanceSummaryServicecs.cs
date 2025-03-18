@@ -37,7 +37,14 @@ public class MealAllowanceSummaryService(
 
     public async Task<IEnumerable<MealAllowanceDetail>> GetMealAllowanceDetailsAsync(GetMealAllowanceDetailReportCriteria criteria)
     {
-        return await baseService.GetDataAsync<MealAllowanceDetail>(criteria);
+        var details = await baseService.GetDataAsync<MealAllowanceDetail>(criteria);
+        foreach (var detail in details)
+        {
+            detail.InFixed = detail.InFixed.ToClientTimeZone();
+            detail.OutFixed = detail.OutFixed.ToClientTimeZone();
+        }
+
+        return details;
     }
 
     public byte[] Export(

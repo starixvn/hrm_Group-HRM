@@ -1,153 +1,153 @@
-﻿@using HRM.Models.Report
-@using HRM.Resources
+﻿@using HRM.Resources
 @using HRM.Website.Helper
 @model IEnumerable<HRM.Models.Report.WorkingCalendarSummary>
-    @{
-        var fromDate = (DateTime)ViewBag.FromDate;
-        var toDate = (DateTime)ViewBag.ToDate;
-    }
-    <table id="data" class="table table-custom">
-        <thead>
-            <tr>
-                <th>@Labels.SymbolCount</th>
-                <th class="col-sorter">
+@{
+    var fromDate = (DateTime)ViewBag.FromDate;
+    var toDate = (DateTime)ViewBag.ToDate;
+}
+<table id="data" class="table table-custom">
+    <thead>
+        <tr>
+            <th>@Labels.SymbolCount</th>
+            <th class="col-sorter">
+                <div class="cell-control-wrapper">
+                    <div>@Labels.Department</div>
+                    <div class="fa fa-sort"></div>
+                </div>
+            </th>
+            <th class="col-sorter">
+                <div class="cell-control-wrapper">
+                    <div>@Labels.Section</div>
+                    <div class="fa fa-sort"></div>
+                </div>
+            </th>
+            <th class="col-sorter">
+                <div class="cell-control-wrapper">
+                    <div>@Labels.Team</div>
+                    <div class="fa fa-sort"></div>
+                </div>
+            </th>
+            <th class="col-sorter">
+                <div class="cell-control-wrapper">
+                    <div>@Labels.Code</div>
+                    <div class="fa fa-sort"></div>
+                </div>
+            </th>
+            <th class="col-sorter">
+                <div class="cell-control-wrapper">
+                    <div>@Labels.FullName</div>
+                    <div class="fa fa-sort"></div>
+                </div>
+            </th>
+            <th class="col-sorter">
+                <div class="cell-control-wrapper">
+                    <div>@Labels.NickName</div>
+                    <div class="fa fa-sort"></div>
+                </div>
+            </th>
+            @for (var day = fromDate.Date; day.Date <= toDate.Date; day = day.AddDays(1))
+            {
+                <th class="@(day.DayOfWeek is DayOfWeek.Saturday or DayOfWeek.Sunday ? "weekend" : string.Empty) col-sorter">
                     <div class="cell-control-wrapper">
-                        <div>@Labels.Department</div>
-                        <div class="fa fa-sort"></div>
-                    </div>
-                </th>
-                <th class="col-sorter">
-                    <div class="cell-control-wrapper">
-                        <div>@Labels.Section</div>
-                        <div class="fa fa-sort"></div>
-                    </div>
-                </th>
-                <th class="col-sorter">
-                    <div class="cell-control-wrapper">
-                        <div>@Labels.Team</div>
-                        <div class="fa fa-sort"></div>
-                    </div>
-                </th>
-                <th class="col-sorter">
-                    <div class="cell-control-wrapper">
-                        <div>@Labels.Code</div>
-                        <div class="fa fa-sort"></div>
-                    </div>
-                </th>
-                <th class="col-sorter">
-                    <div class="cell-control-wrapper">
-                        <div>@Labels.FullName</div>
-                        <div class="fa fa-sort"></div>
-                    </div>
-                </th>
-                <th class="col-sorter">
-                    <div class="cell-control-wrapper">
-                        <div>@Labels.NickName</div>
-                        <div class="fa fa-sort"></div>
-                    </div>
-                </th>
-                @for (var day = fromDate.Date; day.Date <= toDate.Date; day = day.AddDays(1))
-                {
-                    <th class="@(day.DayOfWeek is DayOfWeek.Saturday or DayOfWeek.Sunday ? "weekend" : string.Empty) col-sorter">
-                        <div class="cell-control-wrapper">
-                            <div>
-                                @day.ToString("dd MMM, yyyy (ddd)")
-                            </div>
-                            <div class="fa fa-sort"></div>
+                        <div>
+                            @day.ToString("dd MMM, yyyy (ddd)")
                         </div>
-                    </th>
-                }
-            </tr>
-        </thead>
-        @if (Model != null && Model.Any())
-        {
-            var index = 0;
-            <tbody>
-                @{
-                    IEnumerable<WorkingCalendarSummary> employees = Model.GroupBy(x => x.EmployeeId).Select(x => x.First()).OrderBy(x => x.Nickname);
-                }
-                @foreach (var employee in employees)
-                {
-                    index++;
-                    <tr>
-                        <td>@index</td>
-                        <td class="align-left">@employee.DepartmentCode</td>
-                        <td class="align-left">@employee.Section</td>
-                        <td class="align-left">@employee.Team</td>
-                        <td class="align-left">@employee.Code</td>
-                        <td class="align-left">@employee.FullName</td>
-                        <td class="align-left">@employee.Nickname</td>
-                        @foreach (var workingCalendar in Model)
+                        <div class="fa fa-sort"></div>
+                    </div>
+                </th>
+            }
+        </tr>
+    </thead>
+    @if (Model != null && Model.Any())
+    {
+        var index = 0;
+        <tbody>
+            @{
+                var employees = Model.GroupBy(x => x.EmployeeId)
+                    .Select(x => x.First()).OrderBy(x => x.Nickname);
+            }
+            @foreach (var employee in employees)
+            {
+                index++;
+                <tr>
+                    <td>@index</td>
+                    <td class="align-left">@employee.DepartmentCode</td>
+                    <td class="align-left">@employee.Section</td>
+                    <td class="align-left">@employee.Team</td>
+                    <td class="align-left">@employee.Code</td>
+                    <td class="align-left">@employee.FullName</td>
+                    <td class="align-left">@employee.Nickname</td>
+                    @foreach (var workingCalendar in Model)
+                    {
+                        if (workingCalendar.EmployeeId == employee.EmployeeId)
                         {
-                            if (workingCalendar.EmployeeId == employee.EmployeeId)
+                            var value = string.Empty;
+                            for (var day = fromDate.Date; day.Date <= toDate.Date; day = day.AddDays(1))
                             {
-                                var value = string.Empty;
-                                for (var day = fromDate.Date; day.Date <= toDate.Date; day = day.AddDays(1))
+                                if (workingCalendar.WorkDate == day.Date)
                                 {
-                                    if (workingCalendar.WorkDate == day.Date)
+                                    if (workingCalendar.IsLeaveOffDay)
                                     {
-                                        if (workingCalendar.IsLeaveOffDay)
+                                        value = "Off";
+                                    }
+                                    else if (workingCalendar.IsLeaveDay)
+                                    {
+                                        if (workingCalendar.IsHoliday)
                                         {
-                                            value = "Off";
-                                        }
-                                        else if (workingCalendar.IsLeaveDay)
-                                        {
-                                            if (workingCalendar.IsHoliday)
-                                            {
-                                                value = "PH";
-                                            }
-                                            else if (workingCalendar.IsOffDay)
-                                            {
-                                                value = "OFF";
-                                            }
-                                            else if (workingCalendar.IsLeaveHalfDay)
-                                            {
-                                                value = $"{workingCalendar.LeaveType.Code} ½";
-                                            }
-                                            else
-                                            {
-                                                value = workingCalendar.LeaveType.Code;
-                                                if (workingCalendar.LeaveType2 != null && workingCalendar.LeaveType.Id != workingCalendar.LeaveType2.Id)
-                                                {
-                                                    value = $"{workingCalendar.LeaveType.Code} / {workingCalendar.LeaveType2.Code}";
-                                                }
-                                            }
-
-                                        }
-                                        else if (workingCalendar.IsHoliday)
-                                        {
-                                            if (workingCalendar.IsOffDay)
-                                            {
-                                                value = "Off";
-                                            }
-                                            else if (workingCalendar.Shift != null)
-                                            {
-                                                value = workingCalendar.Shift.Code;
-                                            }
-                                            else
-                                            {
-                                                value = "PH";
-                                            }
+                                            value = "PH";
                                         }
                                         else if (workingCalendar.IsOffDay)
                                         {
-                                            value = workingCalendar.Shift != null ? workingCalendar.Shift.Code : "Off";
+                                            value = "OFF";
+                                        }
+                                        else if (workingCalendar.IsLeaveHalfDay)
+                                        {
+                                            value = $"{workingCalendar.LeaveType.Code} ½";
                                         }
                                         else
                                         {
+                                            value = workingCalendar.LeaveType.Code;
+                                            if (workingCalendar.LeaveType2 != null && workingCalendar.LeaveType.Id != workingCalendar.LeaveType2.Id)
+                                            {
+                                                value = $"{workingCalendar.LeaveType.Code} / {workingCalendar.LeaveType2.Code}";
+                                            }
+                                        }
+
+                                    }
+                                    else if (workingCalendar.IsHoliday)
+                                    {
+                                        if (workingCalendar.IsOffDay)
+                                        {
+                                            value = "Off";
+                                        }
+                                        else if (workingCalendar.Shift != null)
+                                        {
                                             value = workingCalendar.Shift.Code;
                                         }
+                                        else
+                                        {
+                                            value = "PH";
+                                        }
+                                    }
+                                    else if (workingCalendar.IsOffDay)
+                                    {
+                                        value = workingCalendar.Shift != null ? workingCalendar.Shift.Code : "Off";
+                                    }
+                                    else
+                                    {
+                                        value = workingCalendar.Shift != null ? workingCalendar.Shift.Code : string.Empty;
                                     }
                                 }
-                                <td>@value</td>
                             }
+                            <td>@value</td>
                         }
-                    </tr>
-                }
-            </tbody>
-        }
-        else
-        {
-            @Html.Raw(RazorHelpers.DisplayNoInformation(colspan: 40))
-        }
-    </table>
+                    }
+                </tr>
+            }
+        </tbody>
+    }
+    else
+    {
+        @Html.Raw(RazorHelpers.DisplayNoInformation(colspan: 40))
+    }
+</table>

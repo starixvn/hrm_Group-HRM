@@ -1,5 +1,4 @@
-﻿
-namespace HRM.Controllers;
+﻿namespace HRM.Controllers;
 
 using HRM.Core.Services;
 using Microsoft.Extensions.Configuration;
@@ -46,7 +45,7 @@ public class MemoController(
 
         model.Memos = await memoService.GetAllAsync(model.Year, model.Category, CurrentCompanyId);
         ViewBag.HasPermission = userControlSession.HasPermissionOnFunction(FunctionKey.Memo, Policy.Host);
-        
+
         return View(model);
     }
 
@@ -83,12 +82,13 @@ public class MemoController(
 
             switch (commandResult.IsSuccessful)
             {
-	            case true when model.SendMail:
-		            await SendMailAsync(model.Subject, commandResult);
-		            break;
-	            case false:
-		            ModelState.AddModelError(string.Empty, commandResult.Message);
-		            break;
+                case true when model.SendMail:
+                    await SendMailAsync(model.Subject, commandResult);
+                    break;
+
+                case false:
+                    ModelState.AddModelError(string.Empty, commandResult.Message);
+                    break;
             }
         }
         else
@@ -134,12 +134,13 @@ public class MemoController(
 
             switch (commandResult.IsSuccessful)
             {
-            case true when model.SendMail:
-                await SendMailAsync(model.Subject, commandResult);
-		            break;
-	            case false:
-		            ModelState.AddModelError(string.Empty, commandResult.Message);
-		            break;
+                case true when model.SendMail:
+                    await SendMailAsync(model.Subject, commandResult);
+                    break;
+
+                case false:
+                    ModelState.AddModelError(string.Empty, commandResult.Message);
+                    break;
             }
         }
         else

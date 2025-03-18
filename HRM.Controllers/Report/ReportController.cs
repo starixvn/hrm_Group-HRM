@@ -1,24 +1,23 @@
-﻿using HRM.ViewModels.AnnualLeave;
-
-namespace HRM.Controllers.Report;
+﻿namespace HRM.Controllers.Report;
 
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Core;
 using Core.Constants;
 using Core.Enums;
 using Core.Filters;
+using Criteria.Supervisor;
 using Criteria.Time;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
-using Core;
 using HRM.Criteria.Report;
-using Criteria.Supervisor;
-using Services.Interfaces;
 using HRM.ViewModels.Report;
 using Microsoft.AspNetCore.Mvc;
 using Services.Implement;
+using Services.Interfaces;
 using ViewModels;
+using ViewModels.AnnualLeave;
 
 public class ReportController(
     IUserControlSession userControlSession,
@@ -225,11 +224,11 @@ public class ReportController(
         var leaveSummaries = await reportService.GetUnpaidLeaveAsync(criteria);
         model.LeaveSumaries = model.Period switch
         {
-	        "1" => leaveSummaries.Where(x => x.Jan > 0 || x.Feb > 0 || x.Mar > 0 || x.Apr > 0 || x.May > 0 || x.Jun > 0)
-		        .ToList(),
-	        "2" => leaveSummaries.Where(x => x.Jul > 0 || x.Aug > 0 || x.Sep > 0 || x.Oct > 0 || x.Nov > 0 || x.Dec > 0)
-		        .ToList(),
-	        _ => leaveSummaries
+            "1" => leaveSummaries.Where(x => x.Jan > 0 || x.Feb > 0 || x.Mar > 0 || x.Apr > 0 || x.May > 0 || x.Jun > 0)
+                .ToList(),
+            "2" => leaveSummaries.Where(x => x.Jul > 0 || x.Aug > 0 || x.Sep > 0 || x.Oct > 0 || x.Nov > 0 || x.Dec > 0)
+                .ToList(),
+            _ => leaveSummaries
         };
 
         return PartialView("_UnpaidLeaveSummaryDetails", model);

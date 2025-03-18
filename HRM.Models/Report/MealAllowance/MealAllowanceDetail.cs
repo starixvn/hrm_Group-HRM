@@ -1,5 +1,4 @@
-﻿
-namespace HRM.Models.Report.MealAllowance;
+﻿namespace HRM.Models.Report.MealAllowance;
 
 using System;
 

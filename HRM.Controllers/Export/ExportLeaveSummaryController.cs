@@ -1,17 +1,15 @@
-﻿using HRM.Criteria.Report;
-using HRM.Services.Interfaces;
-using HRM.ViewModels.AnnualLeave;
-
-namespace HRM.Controllers.Export;
+﻿namespace HRM.Controllers.Export;
 
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using GO.UserControl.Client.Core.Session;
 using Criteria.AnnualLeave;
+using GO.UserControl.Client.Core.Session;
+using HRM.Criteria.Report;
 using Microsoft.AspNetCore.Mvc;
 using Services.ExportExcel;
-
+using Services.Interfaces;
+using ViewModels.AnnualLeave;
 
 public class ExportLeaveSummaryController(
     IUserControlSession userControlSession,
@@ -58,15 +56,14 @@ public class ExportLeaveSummaryController(
             CompanyId = CurrentCompanyId
         };
         var leaveSummaries = await reportService.GetUnpaidLeaveAsync(criteria);
-        switch (model.Period)
+        leaveSummaries = model.Period switch
         {
-	        case "1":
-		        leaveSummaries = leaveSummaries.Where(x => x.Jan > 0 || x.Feb > 0 || x.Mar > 0 || x.Apr > 0 || x.Mar > 0 || x.Jun > 0).ToList();
-		        break;
-	        case "2":
-		        leaveSummaries = leaveSummaries.Where(x => x.Jul > 0 || x.Aug > 0 || x.Sep > 0 || x.Oct > 0 || x.Nov > 0 || x.Dec > 0).ToList();
-		        break;
-        }
+            "1" => leaveSummaries.Where(x => x.Jan > 0 || x.Feb > 0 || x.Mar > 0 || x.Apr > 0 || x.Mar > 0 || x.Jun > 0)
+                .ToList(),
+            "2" => leaveSummaries.Where(x => x.Jul > 0 || x.Aug > 0 || x.Sep > 0 || x.Oct > 0 || x.Nov > 0 || x.Dec > 0)
+                .ToList(),
+            _ => leaveSummaries
+        };
 
         var data = await exportReportService.Export(leaveSummaries, model.Year, model.LeaveType, model.Period, CurrentCompanyId);
 

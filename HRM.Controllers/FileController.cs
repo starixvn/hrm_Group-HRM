@@ -20,7 +20,6 @@ public class FileController(
 {
     private const int MaxSizeFileUpload = 5 * 1024 * 1024;
 
-
     [HttpPost]
     public async Task<string> UploadFile(IList<IFormFile> files, int categoryId, bool isOverride)
     {
@@ -40,18 +39,15 @@ public class FileController(
     private async Task<string> SaveFileToServer(IFormFile file, int categoryId, bool isOverride)
     {
         var fileName = Path.GetFileName(file.FileName);
-        var dir = "file/uploads/" + categoryId;
         var pathAttach = $"{CurrentCompanyId}/{categoryId}/{fileName}";
         if (isOverride)
         {
             if (await minIOService.IsFileExistsAsync(Bucket.File, pathAttach))
             {
                 pathAttach = pathAttach.Insert(pathAttach.LastIndexOf('/') + 1, "(1)");
-
             }
         }
         await minIOService.UploadFileAsync(file, Bucket.File, pathAttach);
-
 
         return pathAttach;
     }
@@ -66,8 +62,8 @@ public class FileController(
     [HttpPost]
     public ActionResult MyProfileUploadFile(IEnumerable<IFormFile> files)
     {
-	    var formFiles = files.ToList();
-	    if (!formFiles.Any(file => file.Length <= 0))
+        var formFiles = files.ToList();
+        if (!formFiles.Exists(file => file.Length <= 0))
         {
             if (!IsValidFileUpload(formFiles))
             {

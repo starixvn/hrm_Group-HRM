@@ -1,18 +1,17 @@
-﻿using HRM.Criteria.Request;
-using HRM.Resources;
-using HRM.ViewModels.Request;
-using System;
+﻿using System;
 using System.Threading.Tasks;
+using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
 using HRM.Core;
-using HRM.Services.Interfaces.Request;
-using Microsoft.AspNetCore.Mvc;
 using HRM.Core.Constants;
 using HRM.Core.Enums;
 using HRM.Core.Filters;
-using GO.UserControl.Client.Core.Enumerables;
+using HRM.Criteria.Request;
+using HRM.Resources;
 using HRM.Services.ExportExcel;
-using Org.BouncyCastle.Asn1.Ocsp;
+using HRM.Services.Interfaces.Request;
+using HRM.ViewModels.Request;
+using Microsoft.AspNetCore.Mvc;
 
 namespace HRM.Controllers.Export;
 
@@ -65,18 +64,18 @@ public class ExportRequestController(IUserControlSession userControlSession,
         model.ViewType = RequestViewType.HRSpace;
         var criteria = new GetRequestCriteria
         {
-	        EmpId = model.EmployeeId != -1 && !string.IsNullOrWhiteSpace(model.Employee) ? model.EmployeeId : null,
-			FromDate = model.FromDate,
-	        ToDate = model.ToDate,
-	        TeamIds = model.TeamIds,
-	        Status = model.StatusIds,
-	        RequestType = model.RequestType,
-	        IsQueryByCreatedDate = !model.IsFilterByAffectedDate,
-	        RequestViewType = model.ViewType,
-	        SupervisorId = EmployeeSession.EmpId,
-	        IsLocal = model.IsLocal.HasValue ? model.IsLocal.Value == 1 : null,
-	        LeaveTypeId = model.LeaveType,
-	        CompanyId = CurrentCompanyId
+            EmpId = model.EmployeeId != -1 && !string.IsNullOrWhiteSpace(model.Employee) ? model.EmployeeId : null,
+            FromDate = model.FromDate,
+            ToDate = model.ToDate,
+            TeamIds = model.TeamIds,
+            Status = model.StatusIds,
+            RequestType = model.RequestType,
+            IsQueryByCreatedDate = !model.IsFilterByAffectedDate,
+            RequestViewType = model.ViewType,
+            SupervisorId = EmployeeSession.EmpId,
+            IsLocal = model.IsLocal.HasValue ? model.IsLocal.Value == 1 : null,
+            LeaveTypeId = model.LeaveType,
+            CompanyId = CurrentCompanyId
         };
 
         var requestList = await requestService.GetRequests(criteria);
@@ -85,7 +84,6 @@ public class ExportRequestController(IUserControlSession userControlSession,
 
         return ExcelFile(hssfWorkbook, fileName);
     }
-
 
     public async Task<IActionResult> DailyViewWorkingTimeRequest(RequestViewModel model)
     {

@@ -7,8 +7,8 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using Enums;
-using Resources;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Resources;
 
 [SuppressMessage("Major Code Smell", "S109:Magic numbers should not be used", Justification = "Pending")]
 public static class Utilities
@@ -237,19 +237,19 @@ public static class Utilities
 
     public static string GetCurrentStatusName(int statusId)
     {
-	    var statusName = statusId switch
-	    {
-		    (int)CurrentRequestStatus.Pending => Labels.Pending,
-		    (int)CurrentRequestStatus.Verified => Labels.Verified,
-		    (int)CurrentRequestStatus.NotVerified => Labels.NotVerified,
-		    (int)CurrentRequestStatus.Approved => Labels.Approved,
-		    (int)CurrentRequestStatus.Rejected => Labels.Rejected,
-		    (int)CurrentRequestStatus.Processed => Labels.Processed,
-		    (int)CurrentRequestStatus.Void => Labels.Void,
-		    _ => Labels.NA
-	    };
+        var statusName = statusId switch
+        {
+            (int)CurrentRequestStatus.Pending => Labels.Pending,
+            (int)CurrentRequestStatus.Verified => Labels.Verified,
+            (int)CurrentRequestStatus.NotVerified => Labels.NotVerified,
+            (int)CurrentRequestStatus.Approved => Labels.Approved,
+            (int)CurrentRequestStatus.Rejected => Labels.Rejected,
+            (int)CurrentRequestStatus.Processed => Labels.Processed,
+            (int)CurrentRequestStatus.Void => Labels.Void,
+            _ => Labels.NA
+        };
 
-	    return statusName;
+        return statusName;
     }
 
     public static IList<SelectListItem> GetDateRangeByYear()
@@ -283,16 +283,16 @@ public static class Utilities
 
     public static string GetBackgroundColorForLeave(int leaveTypeId)
     {
-	    var backgroundColor = leaveTypeId switch
-	    {
-		    (byte)LeaveTypes.AnnualLeave => "#c7f391",
-		    (byte)LeaveTypes.UnpaidLeave => "#eacded",
-		    (byte)LeaveTypes.BusinessTrip => "#c1d6ed",
-		    (byte)LeaveTypes.WeddingLeave or (byte)LeaveTypes.WeddingOfEmployeeChildren => "#7cd3e9",
-		    _ => "#a9a7a7"
-	    };
+        var backgroundColor = leaveTypeId switch
+        {
+            (byte)LeaveTypes.AnnualLeave => "#c7f391",
+            (byte)LeaveTypes.UnpaidLeave => "#eacded",
+            (byte)LeaveTypes.BusinessTrip => "#c1d6ed",
+            (byte)LeaveTypes.WeddingLeave or (byte)LeaveTypes.WeddingOfEmployeeChildren => "#7cd3e9",
+            _ => "#a9a7a7"
+        };
 
-	    return backgroundColor;
+        return backgroundColor;
     }
 
     public static string GetMessageDateString(DateTime fromDate, DateTime toDate)
