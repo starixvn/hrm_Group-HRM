@@ -8,25 +8,63 @@
     <None Remove="logs\log.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="EmailTemplates\ChangeShift.Approval.txt" />
-    <Content Include="EmailTemplates\ChangeShift.Cancel.txt" />
-    <Content Include="EmailTemplates\ChangeShift.Request.txt" />
-    <Content Include="EmailTemplates\CheckInOut.Approval.txt" />
-    <Content Include="EmailTemplates\CheckInOut.Cancel.txt" />
-    <Content Include="EmailTemplates\CheckInOut.Request.txt" />
-    <Content Include="EmailTemplates\KeepInView.Approval.txt" />
-    <Content Include="EmailTemplates\KeepInView.Cancel.txt" />
-    <Content Include="EmailTemplates\KeepInView.Request.txt" />
-    <Content Include="EmailTemplates\LateInEarlyOut.Approval.txt" />
-    <Content Include="EmailTemplates\LateInEarlyOut.Cancel.txt" />
-    <Content Include="EmailTemplates\LateInEarlyOut.Request.txt" />
-    <Content Include="EmailTemplates\Leave.Approval.txt" />
-    <Content Include="EmailTemplates\Leave.Cancel.txt" />
-    <Content Include="EmailTemplates\Leave.Request.txt" />
-    <Content Include="EmailTemplates\MessageNotification.txt" />
-    <Content Include="EmailTemplates\RemindUseAL.txt" />
-    <Content Include="EmailTemplates\StatisticALBalance.txt" />
-    <Content Include="EmailTemplates\UpdateInfoNotification.txt" />
+    <Content Include="EmailTemplates\ChangeShift.Approval.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="EmailTemplates\ChangeShift.Cancel.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="EmailTemplates\ChangeShift.Request.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="EmailTemplates\CheckInOut.Approval.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="EmailTemplates\CheckInOut.Cancel.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="EmailTemplates\CheckInOut.Request.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="EmailTemplates\KeepInView.Approval.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="EmailTemplates\KeepInView.Cancel.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="EmailTemplates\KeepInView.Request.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="EmailTemplates\LateInEarlyOut.Approval.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="EmailTemplates\LateInEarlyOut.Cancel.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="EmailTemplates\LateInEarlyOut.Request.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="EmailTemplates\Leave.Approval.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="EmailTemplates\Leave.Cancel.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="EmailTemplates\Leave.Request.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="EmailTemplates\MessageNotification.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="EmailTemplates\RemindUseAL.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="EmailTemplates\StatisticALBalance.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="EmailTemplates\UpdateInfoNotification.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="App_Data\SpNames.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
