@@ -21,13 +21,16 @@ using Models;
 using Models.EmployeeInformation;
 using Models.Supervisor;
 using Resources;
+using GO.UserControl.Client.Core.Session;
+using Core.Constants;
 using ViewModels.AnnualLeave;
 
 public class EmployeeService(
     IUserControlSettings userControlSettings,
     IEmployeeRepository employeeRepository,
     IBaseService baseService,
-    IRoleService roleService) : IEmployeeService
+    IRoleService roleService,
+    IUserControlSession userControlSession) : IEmployeeService
 {
     public async Task<string> GenerateEmployeeCode()
     {
@@ -242,6 +245,8 @@ public class EmployeeService(
 
     public async Task<CommandResult> EditAsync(int actorId, EditEmployeeParam param)
     {
+        var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
+
         var criteria = new UpdateEmployeeCriteria
         {
             EmpId = param.EmployeeId,
@@ -297,7 +302,8 @@ public class EmployeeService(
             PromotionDate = param.PromotionDate,
             TeamDate = param.TeamDate,
             MilitaryFromDate = param.MilitaryFromDate,
-            MilitaryToDate = param.MilitaryToDate
+            MilitaryToDate = param.MilitaryToDate,
+            CompanyId = companyId
         };
         return await baseService.ExecuteNonQueryAsync(criteria);
     }

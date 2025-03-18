@@ -32,9 +32,10 @@ $(document).ready(function () {
 
     function uploadComplete(evt) {
         if (evt.target.status === 200) {
-            let url = $('#avatar').attr('src');
-            const parts = url.split('?f=');
-            $('#avatar').attr('src', parts[0] + '?f=' + Math.random());
+            const xhr = evt.target;
+            const responseUrl = JSON.parse(xhr.responseText);
+            if (!responseUrl) return;
+            $('#avatar').attr('src', responseUrl + '?f=' + Math.random());
         }
     }
 

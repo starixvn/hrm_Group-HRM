@@ -116,6 +116,8 @@ public class UpdateEmployeeCriteria : CriteriaBase
 
     public string PickupRemark { get; set; }
 
+    public short CompanyId { get; set; }
+
     public override string GetSettingKey() => "Employee_UpdateEmployee";
 
     public override bool IsValid() => EmpId > 0;

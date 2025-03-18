@@ -359,18 +359,21 @@ public class EmployeeController(
         return avatarUrl;
     }
 
-    [HttpPost]
-    [HrmPermission(Policy.Host, FunctionKey.EmployeeManagement)]
-    public async Task<JsonResult> UploadAvatar(string code, IFormFile file)
-    {
-        if (file is not { Length: > 0 })
-        {
-            return Json(null);
+	[HttpPost]
+	[HrmPermission(Policy.Host, FunctionKey.EmployeeManagement)]
+	public async Task<JsonResult> UploadAvatar(string code, IFormFile file)
+	{
+		if (file is not { Length: > 0 })
+		{
+			return Json(null);
         }
         var path = $"{CurrentCompanyId}/{code}.jpg";
-        await minIOService.UploadFileAsync(file, Bucket.Avatar, path);
+        var uploadStatus = await minIOService.UploadFileAsync(file, Bucket.Avatar, path);
+        if (!uploadStatus) return Json(null);
 
-        return Json(null);
+        var avatarUrl = await GetAvatarUrl(code);
+
+        return Json(avatarUrl);
     }
 
     [HttpGet]
