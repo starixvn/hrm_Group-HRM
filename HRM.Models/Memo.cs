@@ -55,7 +55,7 @@ public class Memo : EntityBase<int>
                     foreach (var link in links)
                     {
                         var item =
-                            "<a href='"
+                            "<a href='{UploadBasePath}"
                             + HttpUtility.HtmlEncode(link)
                             + "'> "
                             + HttpUtility.HtmlEncode(link.Split('/')[link.Split('/').Length - 1])

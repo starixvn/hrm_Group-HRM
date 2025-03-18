@@ -76,7 +76,7 @@
                 <td colspan="4" class="memoContents align-left">
                     @foreach (var item in Model.MemoDetailLink)
                     {
-                        @Html.Raw(item)
+                        @Html.Raw(item.Replace("{UploadBasePath}", ViewBag.UploadBasePath))
                     }
                 </td>
             </tr>
