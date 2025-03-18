@@ -73,9 +73,14 @@ import { axiosError, blockUI, floatThead, unblockUI, getParam, resolveClientUrl,
             placement: 'auto',
             appendTo: document.getElementById('tippy-avatar'),
             allowHTML: true,
-            content: (reference) => {
-                const path = resolveClientUrl('employee/avatar/' + $(reference).attr('data-code'));
-                return '<img src="' + path + '" />';
+            content: '',
+            onShow(instance) {
+                const code = $(instance.reference).attr('data-code');
+                fetch(`/employee/avatar/${code}`)
+                    .then(response => response.text())
+                    .then(avatarUrl => {
+                        instance.setContent(`<img src="${avatarUrl}" style="max-width: 100px; max-height: 100px;" />`);
+                    });
             }
         });
     }
