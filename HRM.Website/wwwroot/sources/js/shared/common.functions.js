@@ -70,15 +70,15 @@ function showFullAvatar(code, nickname) {
         dialogClass: 'popup-avatar'
     };
 
-    const path = resolveClientUrl(`employee/avatar/${code}`);
-    const avatarHtml = `<img src="${path}" style="width: 100%; height: 100%" />`;
+    $.get(`/employee/avatar/${code}`)
+        .done(function (avatarUrl) {
+            console.log("Avatar URL:", avatarUrl);
+            const avatarHtml = `<img src="${avatarUrl}" style="width: 100%; height: 100%" />`;
 
-    const $confirm = $.getOrCreateDialog('fullAvatar');
-
-    $($confirm).html(avatarHtml);
-
-    // init dialog
-    $confirm.dialog($.extend({}, defaults));
+            const $confirm = $.getOrCreateDialog('fullAvatar');
+            $confirm.html(avatarHtml);
+            $confirm.dialog($.extend({}, defaults));
+        })
 }
 
 function getParam(name) {

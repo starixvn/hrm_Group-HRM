@@ -343,12 +343,7 @@ public class EmployeeController(
     public async Task<IActionResult> Avatar(string id)
     {
         var avatarUrl = await GetAvatarUrl(id);
-        var httpClient = new HttpClient();
-        var response = await httpClient.GetAsync(avatarUrl);
-        var imageBytes = await response.Content.ReadAsByteArrayAsync();
-        var contentType = response.Content.Headers.ContentType?.ToString() ?? "image/png";
-
-        return File(imageBytes, contentType);
+        return Content(avatarUrl, "text/plain");
     }
 
     private async Task<string> GetAvatarUrl(string id)
