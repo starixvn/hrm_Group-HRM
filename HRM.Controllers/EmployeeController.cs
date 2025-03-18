@@ -298,7 +298,7 @@ public class EmployeeController(
         if (ModelState.IsValid)
         {
             var param = MappingEditEmployeeParam(model);
-            var commandResult = await employeeService.EditAsync(EmployeeSession.EmpId, param);
+            var commandResult = await employeeService.EditAsync(EmployeeSession.EmpId, param, CurrentCompanyId);
             if (commandResult.IsSuccessful)
             {
                 await UpdateUserInfo(model.UserId, param);

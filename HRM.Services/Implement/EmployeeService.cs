@@ -243,10 +243,8 @@ public class EmployeeService(
         return await baseService.GetDataEntityAsync<CommandResult>(criteria);
     }
 
-    public async Task<CommandResult> EditAsync(int actorId, EditEmployeeParam param)
+    public async Task<CommandResult> EditAsync(int actorId, EditEmployeeParam param, short companyId)
     {
-        var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
-
         var criteria = new UpdateEmployeeCriteria
         {
             EmpId = param.EmployeeId,

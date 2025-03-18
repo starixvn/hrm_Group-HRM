@@ -55,7 +55,7 @@ public interface IEmployeeService
 
     Task<CommandResult> CreateAsync(CreateEmployeeParam param);
 
-    Task<CommandResult> EditAsync(int actorId, EditEmployeeParam param);
+    Task<CommandResult> EditAsync(int actorId, EditEmployeeParam param, short companyId);
 
     Task<CommandResult> DeleteAsync(int actorId, DeleteEmployeeParam param);
 
