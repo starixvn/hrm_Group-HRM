@@ -14,6 +14,8 @@ public class GetTotalLeaveDayCriteria : CriteriaBase
     public long? RequestId { get; set; }
     public int LeaveTypeId { get; set; }
 
+    public short CompanyId { get; set; }
+
     public override string GetSettingKey() => "LeaveRequest_GetTotalLeaveDay";
 
     public override bool IsValid() => EmployeeId > 0 && FromDate <= ToDate;

@@ -296,7 +296,8 @@ public class LeaveController(
             EmployeeId = param.EmployeeId,
             FromDate = param.FromDate,
             ToDate = param.ToDate,
-            RequestId = param.RequestId
+            RequestId = param.RequestId,
+            CompanyId = CurrentCompanyId
         };
         var dates = await baseService.GetDataAsync<DateTime>(criteria);
         var totalDays = (param.ToDate - param.FromDate).Days + 1 - dates.Count();
