@@ -14,7 +14,6 @@
     <Content Include="EmailTemplates\CheckInOut.Approval.txt" />
     <Content Include="EmailTemplates\CheckInOut.Cancel.txt" />
     <Content Include="EmailTemplates\CheckInOut.Request.txt" />
-    <Content Include="EmailTemplates\EditMemoNotification.txt" />
     <Content Include="EmailTemplates\KeepInView.Approval.txt" />
     <Content Include="EmailTemplates\KeepInView.Cancel.txt" />
     <Content Include="EmailTemplates\KeepInView.Request.txt" />
@@ -24,7 +23,6 @@
     <Content Include="EmailTemplates\Leave.Approval.txt" />
     <Content Include="EmailTemplates\Leave.Cancel.txt" />
     <Content Include="EmailTemplates\Leave.Request.txt" />
-    <Content Include="EmailTemplates\MemoNotification.txt" />
     <Content Include="EmailTemplates\MessageNotification.txt" />
     <Content Include="EmailTemplates\RemindUseAL.txt" />
     <Content Include="EmailTemplates\StatisticALBalance.txt" />
