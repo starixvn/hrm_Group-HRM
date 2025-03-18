@@ -22,7 +22,7 @@
         <div class="panel-heading avatarbox">
             <div class="avatar">
                 <a href="javascript:;" class="fullSizeAvatar" style="display:block" data-code="@Model.Employee.Code" data-nickName="@Model.Employee.NickName">
-                    <img src="~/employee/avatar/@(Model.Employee.Code)" alt="@Model.Employee.NickName" />
+                    <img src="@ViewBag.Avatar" alt="@Model.Employee.NickName" />
                 </a>
             </div>
             <div class="pinfo">

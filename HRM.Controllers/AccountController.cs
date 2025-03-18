@@ -7,6 +7,7 @@ using HRM.Core.Constants;
 using HRM.Core.Enums;
 using HRM.Core.Filters;
 using HRM.Core.Security;
+using HRM.Core.Services;
 using HRM.Models;
 using HRM.Resources;
 using HRM.Services.Implement;
@@ -24,7 +25,8 @@ public class AccountController(
     ICryptoService cryptoService,
     IHRMAuthService authService,
     ICommonDataService commonDataService,
-    IUserService userService) : BaseController(userControlSession)
+    IUserService userService,
+    IMinIOService minIOService) : BaseController(userControlSession)
 {
     public async Task<IActionResult> Index()
     {
@@ -34,6 +36,7 @@ public class AccountController(
             Logs = await employeeLogService.GetLogDetailByIdAsync(EmployeeSession.EmpId)
         };
         ViewBag.EnableGroupDate = await commonDataService.IsEnableGroupDateAsync();
+        ViewBag.Avatar = await GetAvatarUrl(viewModel.Employee.Code);
 
         return View(viewModel);
     }
@@ -134,5 +137,12 @@ public class AccountController(
         {
             ModelState.AddModelError(string.Empty, commandResult.Message);
         }
+    }
+
+    private async Task<string> GetAvatarUrl(string code)
+    {
+        var avatarPath = $"{CurrentCompanyId}/{code}.jpg";
+        var avatarUrl = await minIOService.GetFilePath(Bucket.Avatar, avatarPath, "default-avatar.jpg");
+        return avatarUrl;
     }
 }
