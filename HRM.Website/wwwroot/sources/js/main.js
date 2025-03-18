@@ -26,7 +26,7 @@ $(document).ready(function () {
             url: resolveClientUrl('Employee/ToggleLeftNavigation'),
             method: 'POST',
             headers: { 'X-Requested-With': 'XMLHttpRequest' },
-            data: { isShow: isShow }
+            params: { isShow }
         }).catch(axiosError);
     }
 

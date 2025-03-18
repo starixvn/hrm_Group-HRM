@@ -5,6 +5,7 @@
 @model HRM.ViewModels.Report.Overtime.MonthlyFilterViewModel
 @{
     ViewBag.Title = Labels.MonthlyOvertimeReport;
+    var today = DateTimeOffset.Now.DateTime.ToClientTimeZone();
 }
 @section css{
     <link href="~/dist/styles/report.monthlyovertime.css" rel="stylesheet" />
@@ -19,8 +20,8 @@
 }
 <h2 class="page-title">@ViewBag.Title</h2>
 
-@Html.Hidden("MinDate", DateTimeOffset.Now.DateTime.ToClientTimeZone().AddYears(-2).ToDateMonthYearFormatedDate())
-@Html.Hidden("MaxDate", DateTimeOffset.Now.DateTime.ToClientTimeZone().ToDateMonthYearFormatedDate())
+@Html.Hidden("MinDate", today.AddYears(-2).ToDateMonthYearFormatedDate())
+@Html.Hidden("MaxDate", today.ToDateMonthYearFormatedDate())
 <form class="filter">
     @Html.HiddenFor(model => model.TeamIds)
     <div class="form-horizontal clearfix">
