@@ -24,11 +24,18 @@
     }
     <span class="step">@ViewBag.Title</span>
 }
+<script>
+    fetch('@Url.Action("Avatar", "Employee", new { id = Model.Code })')
+        .then(response => response.text())
+        .then(avatarUrl => {
+            document.getElementById('avatar-img').src = avatarUrl;
+        });
+</script>
 <div class="leftpersonal">
     <div class="panel panel-default">
         <div class="panel-heading avatarbox">
             <div class="avatar">
-                <img src="~/employee/avatar/@(Model.Code)" alt="@Model.NickName" />
+                <img id="avatar-img" src="" alt="@Model.NickName" />
             </div>
             <div class="pinfo">
                 <span class="name">@Model.FullName</span>
