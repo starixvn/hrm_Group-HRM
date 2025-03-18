@@ -20,9 +20,9 @@ public class ExportExcelEmployeeInfoService(
     ICommonDataService commonDataService,
     IWebHostEnvironment hostingEnvironment) : IExportExcelEmployeeInfoService
 {
-    private const string EmployeeBasicInfoTemplatePath = @"ExcelTemplates\EmployeeBasicInfoTemplate.xls";
-    private const string EmployeeDetailsInfoTemplatePath = @"ExcelTemplates\EmployeeDetailsInfoTemplate.xls";
-    private const string EmployeeFullInfoTemplatePath = @"ExcelTemplates\EmployeeFullProfileInfoTemplate.xls";
+    private const string EmployeeBasicInfoTemplatePath = "ExcelTemplates/EmployeeBasicInfoTemplate.xls";
+    private const string EmployeeDetailsInfoTemplatePath = "ExcelTemplates/EmployeeDetailsInfoTemplate.xls";
+    private const string EmployeeFullInfoTemplatePath = "ExcelTemplates/EmployeeFullProfileInfoTemplate.xls";
 
     private enum BasicInfo
     {
