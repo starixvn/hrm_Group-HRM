@@ -57,7 +57,7 @@ const AppContainer = () => {
 
     return (
         <Fragment>
-            <ExtensionControl />
+            <ExtensionControl data={extensions} />
             <Table data={extensions} onDelete={handleDeleteExtention} />
             <SweetModalDialog
                 show={deleteModalDialog.show}

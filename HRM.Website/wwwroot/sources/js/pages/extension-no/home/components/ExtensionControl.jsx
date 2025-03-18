@@ -1,10 +1,15 @@
 ﻿import React, { Fragment } from 'react';
+import toastr from 'toastr';
+import { resolveClientUrl, toastOptions } from '../../../../shared/common.functions';
 
-import { resolveClientUrl } from '../../../../shared/common.functions';
-
-const ExtensionControl = () => {
+const ExtensionControl = ({ data }) => {
     const handleCreateExtension = () => {
-        window.location = resolveClientUrl('ExtensionNo/Create');
+        if(data.length === 0) {
+            toastr.error('No group extension found, Please create group first!', '', toastOptions());
+        } else {
+            window.location = resolveClientUrl('ExtensionNo/Create');
+        }
+        
     };
 
     const handleCreateExtensionGroup = () => {
