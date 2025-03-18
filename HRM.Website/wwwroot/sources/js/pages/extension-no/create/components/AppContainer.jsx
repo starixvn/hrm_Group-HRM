@@ -57,6 +57,11 @@ const AppContainer = () => {
             headers: { 'X-Requested-With': 'XMLHttpRequest' },
             params: { isInternal }
         }).then(response => {
+            if(response.data.length === 0) {
+                toastr.error('No group extension found, Please create group first!', '', toastOptions());
+                setTimeout(function () { location.href = resolveClientUrl('ExtensionNo'); }, 3000);
+                return;
+            }
             setSelectExtension(response.data);
             setSelectGroup(response.data[0].value);
         }).catch(axiosError);
