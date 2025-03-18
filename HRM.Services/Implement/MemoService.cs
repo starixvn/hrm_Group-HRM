@@ -56,7 +56,9 @@ public class MemoService(IBaseService baseService) : IMemoService
             CompanyId = model.CompanyId
 
         };
-        return await baseService.ExecuteNonQueryAsync(criteria);
+        var result = await baseService.ExecuteNonQueryAsync(criteria);
+        result.OutputId = criteria.Id;
+        return result;
     }
 
     public async Task<CommandResult> EditAsync(Memo model)

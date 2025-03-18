@@ -6,6 +6,7 @@ using Fanex.Data.Repository;
 
 public class CreateMemoCriteria : CriteriaBase
 {
+    public int Id { get; set; }
     public string RefNo { get; set; }
 
     public string Contents { get; set; }

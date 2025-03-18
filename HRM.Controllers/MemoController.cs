@@ -17,6 +17,7 @@ using Models;
 using Services.Implement;
 using Services.Interfaces;
 using ViewModels.Memo;
+using Microsoft.AspNetCore.Http;
 
 public class MemoController(
     AppSettings appSettings,
@@ -83,6 +84,7 @@ public class MemoController(
             switch (commandResult.IsSuccessful)
             {
                 case true when model.SendMail:
+                    commandResult.OutputId = model.Id;
                     await SendMailAsync(model.Subject, commandResult);
                     break;
 
@@ -183,7 +185,7 @@ public class MemoController(
     private async Task SendMailAsync(string subject, CommandResult result)
     {
         var bodyTemplate = Utilities.ReadTextFile(Path.Combine(hostingEnvironment.ContentRootPath, "EmailTemplates/MemoNotification.txt"));
-        var body = string.Format(bodyTemplate, subject, appSettings.Domain + "memo/detail/" + result);
+        var body = string.Format(bodyTemplate, subject, GetDomainName(HttpContext) + "/memo/detail/" + result.OutputId);
 
         await emailService.SendEmailAsync(
             appSettings.EmailGo,
@@ -204,5 +206,11 @@ public class MemoController(
             path = path[1..];
         }
         return path;
+    }
+
+    private static string GetDomainName(HttpContext httpContext)
+    {
+        var protocol = httpContext.Request.Headers["x-forwarded-proto"].ToString();
+        return $"{(!string.IsNullOrWhiteSpace(protocol) ? protocol : httpContext.Request.Scheme)}://{httpContext.Request.Host.Value}";
     }
 }
