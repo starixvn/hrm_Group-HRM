@@ -108,6 +108,7 @@ public class LeaveController(
 
         criteria.RequestDetail = leaveRequestDetail;
         criteria.CreatedBy = EmployeeSession.EmpId;
+        criteria.CompanyId = CurrentCompanyId;
 
         var result = await baseService.ExecuteNonQueryAsync(criteria);
         if (result.IsSuccessful)

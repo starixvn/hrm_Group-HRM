@@ -4,6 +4,8 @@ public class InsertLeaveRequestCriteria : BaseLeaveRequestCriteria
 {
     public int CreatedBy { get; set; }
 
+    public short CompanyId { get; set; }
+
     public override string GetSettingKey()
     {
         return "LeaveRequest_Insert";

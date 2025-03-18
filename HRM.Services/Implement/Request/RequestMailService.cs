@@ -40,12 +40,12 @@ public class RequestMailService(IRequestRepository requestRepository) : IRequest
 
         GetMailAndLetStalkOwnerRequest(relatedPeople, emailModel);
 
-        if (relatedPeople.EmailSetting.AllowSendMailGroup)
+        if (relatedPeople.EmailSetting != null && relatedPeople.EmailSetting.AllowSendMailGroup)
         {
             GetMailGroup(relatedPeople, emailModel);
         }
 
-        emailModel.IsAllowSendRequester = relatedPeople.EmailSetting.AllowSendUser;
+        emailModel.IsAllowSendRequester = relatedPeople.EmailSetting != null && relatedPeople.EmailSetting.AllowSendUser;
 
         return emailModel;
     }
@@ -125,7 +125,7 @@ public class RequestMailService(IRequestRepository requestRepository) : IRequest
     {
         var emailModel = new EmailModel();
         var approver = relatedPeople.Approver;
-        if (approver == null || !relatedPeople.EmailSetting.AllowSendApprover)
+        if (approver == null || relatedPeople.EmailSetting == null || !relatedPeople.EmailSetting.AllowSendApprover)
         {
             return emailModel;
         }
@@ -141,7 +141,7 @@ public class RequestMailService(IRequestRepository requestRepository) : IRequest
         var isValidVerifier = relatedPeople.Verifier != null;
         var isValidApprover = relatedPeople.Approver != null;
 
-        if (!relatedPeople.EmailSetting.AllowSendVerifier || !isValidVerifier)
+        if (relatedPeople.EmailSetting == null || !relatedPeople.EmailSetting.AllowSendVerifier || !isValidVerifier)
         {
             return;
         }
@@ -184,7 +184,7 @@ public class RequestMailService(IRequestRepository requestRepository) : IRequest
 
     private static void GetMailAndLetStalkHr(RequestRelatedPeopleModel relatedPeople, EmailModel emailModel)
     {
-        if (relatedPeople.EmailSetting.AllowSendHR && relatedPeople.ListHR != null && relatedPeople.ListHR.Any())
+        if (relatedPeople.EmailSetting != null && relatedPeople.EmailSetting.AllowSendHR && relatedPeople.ListHR != null && relatedPeople.ListHR.Any())
         {
             var mailHRs = string.Join(";", relatedPeople.ListHR.Where(x => !string.IsNullOrWhiteSpace(x.Email)).Select(x => x.Email).ToList());
             var letStalks = string.Join(";", relatedPeople.ListHR.Where(x => !string.IsNullOrWhiteSpace(x.LetsTalk)).Select(x => x.LetsTalk).ToList());
@@ -212,7 +212,7 @@ public class RequestMailService(IRequestRepository requestRepository) : IRequest
 
     private static void GetMailAndLetStalkOwnerRequest(RequestRelatedPeopleModel relatedPeople, EmailModel emailModel)
     {
-        if (relatedPeople.EmailSetting.AllowSendUser && relatedPeople.Requester != null)
+        if (relatedPeople.EmailSetting != null && relatedPeople.EmailSetting.AllowSendUser && relatedPeople.Requester != null)
         {
             if (string.IsNullOrWhiteSpace(emailModel.SendTo))
             {
