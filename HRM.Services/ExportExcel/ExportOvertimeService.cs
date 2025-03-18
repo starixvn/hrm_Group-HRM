@@ -16,7 +16,7 @@ public interface IExportOvertimeService
 }
 
 [SuppressMessage("Major Code Smell", "S109:Magic numbers should not be used", Justification = "Pending")]
-public class ExportOvertimeService(IWebHostEnvironment hostingEnvironment, ILogger logger) : IExportOvertimeService
+public class ExportOvertimeService(IWebHostEnvironment hostingEnvironment) : IExportOvertimeService
 {
     public byte[] Export(IEnumerable<MonthlyOvertimeRequest> memberRequests, bool isMemberOvertime)
     {
@@ -27,20 +27,14 @@ public class ExportOvertimeService(IWebHostEnvironment hostingEnvironment, ILogg
 
         ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
 		var sheetName = "Employee Overtime Report";
-        var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, "ExcelTemplates/EmployeeOverTimeTemplate.xlsx"); 
+        var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, "ExcelTemplates/EmployeeOvertimeTemplate.xlsx"); 
        
         if (isMemberOvertime)
         {
             sheetName = "Member Overtime Report";
         }
-
-        if (!File.Exists(templatePath))
-        {
-	        logger.Error($"Template file not found at: {templatePath}");
-        }
 		using var templatePackage = new ExcelPackage(new FileInfo(templatePath));
 		using var xlPackage = new ExcelPackage();
-		logger.Info("Test", templatePath, templatePackage.Workbook.Worksheets.Count);
 		var templateWorksheet = templatePackage.Workbook.Worksheets[0];
         var workSheet = xlPackage.Workbook.Worksheets.Add(sheetName);
 
