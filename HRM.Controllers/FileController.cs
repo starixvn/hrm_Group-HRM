@@ -44,12 +44,15 @@ public class FileController(
         {
             var count = 1;
             while (await minIOService.IsFileExistsAsync(Bucket.File, pathAttach))
+            {
                 pathAttach = pathAttach.Insert(pathAttach.LastIndexOf('.'), $"({count})");
                 if (pathAttach.Contains($"({count - 1})"))
                 {
                     pathAttach = pathAttach.Replace($"({count - 1})", "");
                 }
                 count++;
+            }
+               
         }
 
         await minIOService.UploadFileAsync(file, Bucket.File, pathAttach);
