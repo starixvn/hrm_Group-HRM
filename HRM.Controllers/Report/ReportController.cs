@@ -208,7 +208,7 @@ public class ReportController(
         var criteria = new GetUnpaidLeaveCriteria
         {
             Year = model.Year,
-            EmpId = model.EmployeeId != -1 ? new int?(model.EmployeeId) : null,
+            EmpId = model.EmployeeId > 0 ? new int?(model.EmployeeId) : null,
             TeamIds = model.TeamIds,
             IsLocal = (byte?)model.Category,
             SupervisorId = EmployeeSession.EmpId,
