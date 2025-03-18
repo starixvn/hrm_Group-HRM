@@ -129,7 +129,7 @@ public class ExportExcelScheduleService(IWebHostEnvironment hostingEnvironment) 
         colIndex = 3;
         for (var day = filter.FromDate.Date; day.Date <= filter.ToDate.Date; day = day.AddDays(1))
         {
-            worksheet.Cells[rowIndex, colIndex].Value = $"{ day.ToString("ddd").ToUpperInvariant()}\n{day.ToString("MMM dd").ToUpperInvariant()}";
+            worksheet.Cells[rowIndex, colIndex].Value = $"{day.ToString("ddd").ToUpperInvariant()}\n{day.ToString("MMM dd").ToUpperInvariant()}";
             worksheet.Column(colIndex).Width = 15;
             colIndex++;
         }
@@ -245,7 +245,7 @@ public class ExportExcelScheduleService(IWebHostEnvironment hostingEnvironment) 
                     IsOutAfterDay = shift.IsOutAfterDay,
                     Weekdays =
                     {
-	                    [(int)dailySchedule.WorkDate.DayOfWeek] = 1
+                        [(int)dailySchedule.WorkDate.DayOfWeek] = 1
                     }
                 };
 

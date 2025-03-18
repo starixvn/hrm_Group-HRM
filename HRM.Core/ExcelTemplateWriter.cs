@@ -26,7 +26,7 @@ public class ExcelTemplateWriter(HSSFWorkbook template, string sheetName)
     public ExcelTemplateWriter(FileStream fs, string sheetName = "Result")
         : this(new HSSFWorkbook(fs), sheetName)
     {
-	    fs?.Close();
+        fs?.Close();
     }
 
     #endregion Constructors

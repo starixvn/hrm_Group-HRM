@@ -1,23 +1,22 @@
-﻿using HRM.Repositories.Interfaces;
-
-namespace HRM.Services.Implement.Request;
+﻿namespace HRM.Services.Implement.Request;
 
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using Core;
+using Core.Constants;
 using Core.Enums;
+using GO.UserControl.Client.Core.Session;
 using HRM.Core.Models;
 using HRM.Core.Services;
 using HRM.Criteria.Request.KeepInView;
 using HRM.Models.Request;
-using Resources;
+using HRM.Repositories.Interfaces;
+using HRM.Services.Interfaces.Request;
 using Interfaces;
 using Microsoft.AspNetCore.Hosting;
-using GO.UserControl.Client.Core.Session;
-using Core.Constants;
-using HRM.Services.Interfaces.Request;
+using Resources;
 
 public class KeepInViewRequestService(
     AppSettings appSettings,
@@ -100,7 +99,7 @@ public class KeepInViewRequestService(
             var email = await requestMailService.GetMailToMailCcAndLetStalk(requestId, (byte)SettingsSendMail.New);
 
             email.Subject =
-	            $"{Messages.InsertedCompensationLeaveEmailSubject} {request.Requester.Nickname} on {request.OnDate.ToDateMonthYearFormatedDate()}";
+                $"{Messages.InsertedCompensationLeaveEmailSubject} {request.Requester.Nickname} on {request.OnDate.ToDateMonthYearFormatedDate()}";
 
             email.Body = Utilities.ReadTextFile(emailTemplatePath);
             email.Body = string.Format(
@@ -129,7 +128,7 @@ public class KeepInViewRequestService(
             var emailTemplatePath = Path.Combine(env.ContentRootPath, EmailTemplatePathForRequest);
             var email = await requestMailService.GetMailToMailCcAndLetStalk(requestId, (byte)SettingsSendMail.Edit);
             email.Subject =
-	            $"{Messages.UpdatedCompensationLeaveEmailSubject} {request.Requester.Nickname} on {request.OnDate.ToDateMonthYearFormatedDate()}";
+                $"{Messages.UpdatedCompensationLeaveEmailSubject} {request.Requester.Nickname} on {request.OnDate.ToDateMonthYearFormatedDate()}";
 
             email.Body = Utilities.ReadTextFile(emailTemplatePath);
             email.Body = string.Format(
@@ -184,7 +183,7 @@ public class KeepInViewRequestService(
             var emailTemplatePath = Path.Combine(env.ContentRootPath, EmailTemplatePathForApproval);
             var action = requestMailService.GetActionProcessRequest(request.Status.Id, command);
             var commandMessage = requestMailService.GetCommandMessage(command);
-            var email = await  requestMailService.GetMailToMailCcAndLetStalk(requestId, action);
+            var email = await requestMailService.GetMailToMailCcAndLetStalk(requestId, action);
             email.Subject = string.Format(Messages.ApprovalNotificationCompensationLeaveSubject, request.Requester.Nickname, commandMessage, actor.Nickname);
             email.Body = Utilities.ReadTextFile(emailTemplatePath);
             email.Body = string.Format(

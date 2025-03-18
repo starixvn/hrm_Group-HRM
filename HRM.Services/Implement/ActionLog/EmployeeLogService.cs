@@ -3,15 +3,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Core.Constants;
-using Models;
-using Models.Log;
-using Resources;
-using Interfaces;
 using GO.UserControl.Client.Core.Models.Role;
 using GO.UserControl.Client.Core.Services;
 using GO.UserControl.Client.Core.Session;
-using System.Threading.Tasks;
+using Interfaces;
+using Models;
+using Models.Log;
+using Resources;
 
 public interface IEmployeeLogService
 {
@@ -146,7 +146,7 @@ public class EmployeeLogService(
 
             case "JobLevelId":
             case "ExpertGradeId":
-	            MappingJobLevel(field);
+                MappingJobLevel(field);
                 break;
 
             case "Gender":

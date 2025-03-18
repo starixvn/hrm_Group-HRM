@@ -23,38 +23,43 @@ public static class HSSFCellExtensions
             }
             else switch (value)
             {
-	            case int i:
-		            cell.SetCellValue(i);
-		            break;
-	            case long l:
-		            cell.SetCellValue(l);
-		            break;
-	            case double d:
-		            cell.SetCellValue(d);
-		            break;
-	            case decimal value1:
-		            cell.SetCellValue(value1);
-		            break;
-	            case bool b:
-		            cell.SetCellValue(b);
-		            break;
-	            default:
-	            {
-		            if (value is DateTime time)
-		            {
-			            cell.SetCellValue(time);
-		            }
-		            else if (richTextString != null)
-		            {
-			            cell.SetCellValue(richTextString);
-		            }
-		            else
-		            {
-			            cell.SetCellValue(string.Empty);
-		            }
+                case int i:
+                    cell.SetCellValue(i);
+                    break;
 
-		            break;
-	            }
+                case long l:
+                    cell.SetCellValue(l);
+                    break;
+
+                case double d:
+                    cell.SetCellValue(d);
+                    break;
+
+                case decimal value1:
+                    cell.SetCellValue(value1);
+                    break;
+
+                case bool b:
+                    cell.SetCellValue(b);
+                    break;
+
+                default:
+                {
+                    if (value is DateTime time)
+                    {
+                        cell.SetCellValue(time);
+                    }
+                    else if (richTextString != null)
+                    {
+                        cell.SetCellValue(richTextString);
+                    }
+                    else
+                    {
+                        cell.SetCellValue(string.Empty);
+                    }
+
+                    break;
+                }
             }
         }
     }

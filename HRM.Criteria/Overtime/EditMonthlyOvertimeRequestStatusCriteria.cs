@@ -1,8 +1,8 @@
 ﻿namespace HRM.Criteria.Overtime;
 
+using Core.Enums;
 using Fanex.Data;
 using Fanex.Data.Repository;
-using Core.Enums;
 
 public class EditMonthlyOvertimeRequestStatusCriteria : CriteriaBase
 {
@@ -20,13 +20,13 @@ public class EditMonthlyOvertimeRequestStatusCriteria : CriteriaBase
 
     private static string GetSpKey(RequestCommand command)
     {
-	    var key = command switch
-	    {
-		    RequestCommand.Accept or RequestCommand.Approve or RequestCommand.Process => "Overtime_ApproveRequest",
-		    RequestCommand.NotAccept or RequestCommand.Reject or RequestCommand.Void => "Overtime_RejectRequest",
-		    _ => "Overtime_ResetRequest"
-	    };
+        var key = command switch
+        {
+            RequestCommand.Accept or RequestCommand.Approve or RequestCommand.Process => "Overtime_ApproveRequest",
+            RequestCommand.NotAccept or RequestCommand.Reject or RequestCommand.Void => "Overtime_RejectRequest",
+            _ => "Overtime_ResetRequest"
+        };
 
-	    return key;
+        return key;
     }
 }

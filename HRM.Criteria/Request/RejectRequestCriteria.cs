@@ -1,8 +1,8 @@
 ﻿namespace HRM.Criteria.Request;
 
+using Core.Enums;
 using Fanex.Data;
 using Fanex.Data.Repository;
-using Core.Enums;
 
 public class RejectRequestCriteria : CriteriaBase
 {
@@ -16,16 +16,16 @@ public class RejectRequestCriteria : CriteriaBase
 
     public override string GetSettingKey()
     {
-	    var key = RequestTypeId switch
-	    {
-		    RequestType.CheckIn or RequestType.CheckOut => "CheckInOutRequest_Reject",
-		    RequestType.LateIn or RequestType.EarlyOut => "LateInEarlyOutRequest_Reject",
-		    RequestType.ChangeShift => "ChangeShiftRequest_Reject",
-		    RequestType.Leave => "LeaveRequest_Reject",
-		    _ => "KeepInViewRequest_Reject"
-	    };
+        var key = RequestTypeId switch
+        {
+            RequestType.CheckIn or RequestType.CheckOut => "CheckInOutRequest_Reject",
+            RequestType.LateIn or RequestType.EarlyOut => "LateInEarlyOutRequest_Reject",
+            RequestType.ChangeShift => "ChangeShiftRequest_Reject",
+            RequestType.Leave => "LeaveRequest_Reject",
+            _ => "KeepInViewRequest_Reject"
+        };
 
-	    return key;
+        return key;
     }
 
     public override bool IsValid() => RequestId > 0 && ActorId > 0;

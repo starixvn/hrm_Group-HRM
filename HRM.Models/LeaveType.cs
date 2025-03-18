@@ -2,7 +2,7 @@
 
 public class LeaveType : EntityBase<int>
 {
-	public bool? IsALDeduction { get; set; }
+    public bool? IsALDeduction { get; set; }
 
     public bool? IsHoliday { get; set; }
 

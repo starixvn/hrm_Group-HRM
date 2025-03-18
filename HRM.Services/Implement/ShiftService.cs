@@ -1,19 +1,18 @@
-﻿using GO.UserControl.Client.Core.Session;
-using HRM.Core.Constants;
-using HRM.Models.Shifts;
-using HRM.Services.Interfaces;
-
-namespace HRM.Services.Implement;
+﻿namespace HRM.Services.Implement;
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Core.Constants;
 using Core.Enums;
+using Criteria.Shift;
+using GO.UserControl.Client.Core.Session;
 using HRM.Core.Models;
 using HRM.Core.Services;
-using Criteria.Shift;
+using Interfaces;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Models.Shifts;
 
 public class ShiftService(IBaseService baseService,
     IUserControlSession userControlSession) : IShiftService
@@ -24,12 +23,13 @@ public class ShiftService(IBaseService baseService,
 
         switch (statusId)
         {
-	        case (int)ShiftStatus.Active:
-		        shifts = shifts.Where(t => !t.IsDisabled).ToList();
-		        break;
-	        case (int)ShiftStatus.Disabled:
-		        shifts = shifts.Where(t => t.IsDisabled).ToList();
-		        break;
+            case (int)ShiftStatus.Active:
+                shifts = shifts.Where(t => !t.IsDisabled).ToList();
+                break;
+
+            case (int)ShiftStatus.Disabled:
+                shifts = shifts.Where(t => t.IsDisabled).ToList();
+                break;
         }
 
         if (isShowOff)

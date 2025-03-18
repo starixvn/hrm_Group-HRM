@@ -64,7 +64,7 @@ public class OvertimeRequestService(
 
     public async Task<MonthlyOvertimeRequest> GetMonthlyRequestDetailsByEmployeeId(int employeeId, DateTime month)
     {
-        var(fromDate, toDate) = GetDateRange(month.FirstDayOfMonth());
+        var (fromDate, toDate) = GetDateRange(month.FirstDayOfMonth());
         var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
         var criteria = new GetMonthlyOvertimeRequestDetailsByEmployeeIdCriteria
         {
@@ -112,8 +112,8 @@ public class OvertimeRequestService(
 
     public async Task SendMailToReminderClaimOvertime(string subject, string content)
     {
-	    var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
-		var criteria = new GetEmployeeToRemindClaimOvertimeCriteria { CompanyId = companyId };
+        var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
+        var criteria = new GetEmployeeToRemindClaimOvertimeCriteria { CompanyId = companyId };
         var employees = (await baseService.GetDataAsync<SupervisorNameModel>(criteria)).ToList();
 
         if (employees.Count > 0)
@@ -178,7 +178,7 @@ public class OvertimeRequestService(
             ActorId = actorId,
             RoleId = roleId,
             CompanyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId)
-		};
+        };
         return await baseService.ExecuteNonQueryAsync(criteria);
     }
 

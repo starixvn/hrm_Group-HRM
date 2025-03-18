@@ -12,17 +12,16 @@ using Criteria.Shift;
 using Criteria.Supervisor;
 using GO.UserControl.Client.Core;
 using GO.UserControl.Client.Core.Services;
+using GO.UserControl.Client.Core.Session;
 using HRM.Core.Models;
 using HRM.Core.Services;
-using Models.Group;
 using HRM.Repositories.Interfaces;
 using Interfaces;
 using Models;
 using Models.EmployeeInformation;
+using Models.Group;
 using Models.Supervisor;
 using Resources;
-using GO.UserControl.Client.Core.Session;
-using Core.Constants;
 using ViewModels.AnnualLeave;
 
 public class EmployeeService(

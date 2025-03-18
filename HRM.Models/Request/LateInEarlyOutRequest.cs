@@ -22,12 +22,12 @@ public class LateInEarlyOutRequest : BaseRequest
     {
         get
         {
-	        return ReasonId switch
-	        {
-		        (byte)LateInEarlyOutReason.ManagementAllow => Labels.ManagementAllow,
-		        (byte)LateInEarlyOutReason.Other => Labels.Other,
-		        _ => string.Empty
-	        };
+            return ReasonId switch
+            {
+                (byte)LateInEarlyOutReason.ManagementAllow => Labels.ManagementAllow,
+                (byte)LateInEarlyOutReason.Other => Labels.Other,
+                _ => string.Empty
+            };
         }
     }
 }

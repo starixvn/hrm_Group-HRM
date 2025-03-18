@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 public class ExtensionNoModel
 {
-	[Required]
+    [Required]
     public int TeamId { get; set; }
 
     public string Team { get; set; }

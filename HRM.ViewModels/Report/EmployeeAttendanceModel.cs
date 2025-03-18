@@ -77,17 +77,17 @@ public class EmployeeAttendanceModel
         {
             if (OvertimeStatus.HasValue)
             {
-	            return OvertimeStatus.Value switch
-	            {
-		            (byte)CurrentRequestStatus.Pending => Labels.Pending.ToLowerInvariant(),
-		            (byte)CurrentRequestStatus.Verified => Labels.Verified.ToLowerInvariant(),
-		            (byte)CurrentRequestStatus.NotVerified => Labels.NotVerified.ToLowerInvariant(),
-		            (byte)CurrentRequestStatus.Approved => Labels.Approved.ToLowerInvariant(),
-		            (byte)CurrentRequestStatus.Rejected => Labels.Rejected.ToLowerInvariant(),
-		            (byte)CurrentRequestStatus.Processed => Labels.Processed.ToLowerInvariant(),
-		            (byte)CurrentRequestStatus.Void => Labels.Void.ToLowerInvariant(),
-		            _ => string.Empty
-	            };
+                return OvertimeStatus.Value switch
+                {
+                    (byte)CurrentRequestStatus.Pending => Labels.Pending.ToLowerInvariant(),
+                    (byte)CurrentRequestStatus.Verified => Labels.Verified.ToLowerInvariant(),
+                    (byte)CurrentRequestStatus.NotVerified => Labels.NotVerified.ToLowerInvariant(),
+                    (byte)CurrentRequestStatus.Approved => Labels.Approved.ToLowerInvariant(),
+                    (byte)CurrentRequestStatus.Rejected => Labels.Rejected.ToLowerInvariant(),
+                    (byte)CurrentRequestStatus.Processed => Labels.Processed.ToLowerInvariant(),
+                    (byte)CurrentRequestStatus.Void => Labels.Void.ToLowerInvariant(),
+                    _ => string.Empty
+                };
             }
 
             return string.Empty;

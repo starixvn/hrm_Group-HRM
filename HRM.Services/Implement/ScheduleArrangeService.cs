@@ -1,8 +1,4 @@
-﻿using HRM.Models.Shifts;
-using HRM.Repositories.Interfaces;
-using HRM.Services.Interfaces;
-
-namespace HRM.Services.Implement;
+﻿namespace HRM.Services.Implement;
 
 using System;
 using System.Collections.Generic;
@@ -10,13 +6,16 @@ using System.Linq;
 using System.Threading.Tasks;
 using Core;
 using Core.Constants;
-using HRM.Core.Models;
-using HRM.Core.Services;
-using GO.UserControl.Client.Core.Session;
 using Core.XMLExtensions;
 using Criteria.ScheduleArrange;
+using GO.UserControl.Client.Core.Session;
+using HRM.Core.Models;
+using HRM.Core.Services;
+using HRM.Repositories.Interfaces;
+using Interfaces;
 using Models;
 using Models.ScheduleArrange;
+using Models.Shifts;
 
 public class ScheduleArrangeService(
     IScheduleArrangeRepository scheduleArrangeRepository,
@@ -39,7 +38,7 @@ public class ScheduleArrangeService(
 
     public async Task<IEnumerable<WeeklySchedule>> GetWeeklyScheduleAsync(WeeklyScheduleFilter filter)
     {
-	    var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
+        var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
         var criteria = new GetWeeklyScheduleCriteria
         {
             ActorId = filter.ActorId,
@@ -222,17 +221,17 @@ public class ScheduleArrangeService(
         ShiftBase shift = null;
         if (weeklyDefaultShift != null)
         {
-	        shift = dayOfWeek switch
-	        {
-		        DayOfWeek.Monday => weeklyDefaultShift.MonShift,
-		        DayOfWeek.Tuesday => weeklyDefaultShift.TueShift,
-		        DayOfWeek.Wednesday => weeklyDefaultShift.WedShift,
-		        DayOfWeek.Thursday => weeklyDefaultShift.ThuShift,
-		        DayOfWeek.Friday => weeklyDefaultShift.FriShift,
-		        DayOfWeek.Saturday => weeklyDefaultShift.SatShift,
-		        DayOfWeek.Sunday => weeklyDefaultShift.SunShift,
-		        _ => null
-	        };
+            shift = dayOfWeek switch
+            {
+                DayOfWeek.Monday => weeklyDefaultShift.MonShift,
+                DayOfWeek.Tuesday => weeklyDefaultShift.TueShift,
+                DayOfWeek.Wednesday => weeklyDefaultShift.WedShift,
+                DayOfWeek.Thursday => weeklyDefaultShift.ThuShift,
+                DayOfWeek.Friday => weeklyDefaultShift.FriShift,
+                DayOfWeek.Saturday => weeklyDefaultShift.SatShift,
+                DayOfWeek.Sunday => weeklyDefaultShift.SunShift,
+                _ => null
+            };
         }
 
         return shift;

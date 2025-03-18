@@ -1,9 +1,9 @@
 ﻿namespace HRM.Criteria.Request;
 
 using System;
+using Core.Enums;
 using Fanex.Data;
 using Fanex.Data.Repository;
-using Core.Enums;
 
 public class GetRequestCriteria : CriteriaBase
 {
@@ -25,14 +25,14 @@ public class GetRequestCriteria : CriteriaBase
     {
         get
         {
-	        var role = RequestViewType switch
-	        {
-		        RequestViewType.PersonalSpace => (short)RoleSystem.Verifier + "," + (short)RoleSystem.Approver,
-		        RequestViewType.HRSpace => ((short)RoleSystem.HR).ToString(),
-		        _ => ((short)RoleSystem.Member).ToString()
-	        };
+            var role = RequestViewType switch
+            {
+                RequestViewType.PersonalSpace => (short)RoleSystem.Verifier + "," + (short)RoleSystem.Approver,
+                RequestViewType.HRSpace => ((short)RoleSystem.HR).ToString(),
+                _ => ((short)RoleSystem.Member).ToString()
+            };
 
-	        return role;
+            return role;
         }
     }
 

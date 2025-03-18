@@ -1,8 +1,8 @@
 ﻿namespace HRM.Models.Message;
 
+using System;
 using Core;
 using Core.Enums;
-using System;
 
 public class Message
 {
@@ -41,15 +41,15 @@ public class Message
     {
         get
         {
-	        var category = Category switch
-	        {
-		        (int)MessageCategory.Notification => MessageCategory.Notification.ToString(),
-		        (int)MessageCategory.Warning => MessageCategory.Warning.ToString(),
-		        (int)MessageCategory.Violation => MessageCategory.Violation.ToString(),
-		        _ => string.Empty
-	        };
+            var category = Category switch
+            {
+                (int)MessageCategory.Notification => MessageCategory.Notification.ToString(),
+                (int)MessageCategory.Warning => MessageCategory.Warning.ToString(),
+                (int)MessageCategory.Violation => MessageCategory.Violation.ToString(),
+                _ => string.Empty
+            };
 
-	        return category;
+            return category;
         }
     }
 }

@@ -1,6 +1,4 @@
-﻿using HRM.Repositories.Interfaces;
-
-namespace HRM.Repositories;
+﻿namespace HRM.Repositories;
 
 using System;
 using System.Collections.Generic;
@@ -8,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Fanex.Data;
 using Fanex.Data.Repository;
+using Interfaces;
 using Models;
 using Models.ScheduleArrange;
 
@@ -52,7 +51,7 @@ public class ScheduleArrangeRepository : IScheduleArrangeRepository
     {
         foreach (var weeklySchedule in weeklySchedules)
         {
-            weeklySchedule.WeeklyDefaultShift = weeklyDefaultShifts.FirstOrDefault(x => x.EmployeeId == weeklySchedule.EmployeeId);
+            weeklySchedule.WeeklyDefaultShift = weeklyDefaultShifts.Find(x => x.EmployeeId == weeklySchedule.EmployeeId);
             var memberDailySchedules = dailySchedules.Where(x => x.EmployeeId == weeklySchedule.EmployeeId);
 
             foreach (var dailySchedule in memberDailySchedules)

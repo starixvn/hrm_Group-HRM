@@ -41,20 +41,20 @@ public class BaseRequest
     {
         get
         {
-	        var requestTypeName = RequestTypeId switch
-	        {
-		        (byte)RequestType.CheckIn => Labels.CheckIn,
-		        (byte)RequestType.CheckOut => Labels.CheckOut,
-		        (byte)RequestType.LateIn => Labels.LateIn,
-		        (byte)RequestType.EarlyOut => Labels.EarlyOut,
-		        (byte)RequestType.ChangeShift => Labels.ChangeShift,
-		        (byte)RequestType.Leave => Labels.Leave,
-		        (byte)RequestType.KeepInView => Labels.CompensationLeave,
-		        (byte)RequestType.Overtime => Labels.Overtime,
-		        _ => string.Empty
-	        };
+            var requestTypeName = RequestTypeId switch
+            {
+                (byte)RequestType.CheckIn => Labels.CheckIn,
+                (byte)RequestType.CheckOut => Labels.CheckOut,
+                (byte)RequestType.LateIn => Labels.LateIn,
+                (byte)RequestType.EarlyOut => Labels.EarlyOut,
+                (byte)RequestType.ChangeShift => Labels.ChangeShift,
+                (byte)RequestType.Leave => Labels.Leave,
+                (byte)RequestType.KeepInView => Labels.CompensationLeave,
+                (byte)RequestType.Overtime => Labels.Overtime,
+                _ => string.Empty
+            };
 
-	        return requestTypeName;
+            return requestTypeName;
         }
     }
 

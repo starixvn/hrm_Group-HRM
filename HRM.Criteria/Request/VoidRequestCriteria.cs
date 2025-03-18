@@ -1,8 +1,8 @@
 ﻿namespace HRM.Criteria.Request;
 
+using Core.Enums;
 using Fanex.Data;
 using Fanex.Data.Repository;
-using Core.Enums;
 
 public class VoidRequestCriteria : CriteriaBase
 {
@@ -16,16 +16,16 @@ public class VoidRequestCriteria : CriteriaBase
 
     public override string GetSettingKey()
     {
-	    var key = RequestTypeId switch
-	    {
-		    RequestType.CheckIn or RequestType.CheckOut => "CheckInOutRequest_VoidBySA",
-		    RequestType.LateIn or RequestType.EarlyOut => "LateInEarlyOutRequest_VoidBySA",
-		    RequestType.ChangeShift => "ChangeShiftRequest_VoidBySA",
-		    RequestType.Leave => "LeaveRequest_VoidBySA",
-		    _ => "KeepInViewRequest_VoidBySA"
-	    };
+        var key = RequestTypeId switch
+        {
+            RequestType.CheckIn or RequestType.CheckOut => "CheckInOutRequest_VoidBySA",
+            RequestType.LateIn or RequestType.EarlyOut => "LateInEarlyOutRequest_VoidBySA",
+            RequestType.ChangeShift => "ChangeShiftRequest_VoidBySA",
+            RequestType.Leave => "LeaveRequest_VoidBySA",
+            _ => "KeepInViewRequest_VoidBySA"
+        };
 
-	    return key;
+        return key;
     }
 
     public override bool IsValid() => RequestId > 0 && ActorId > 0;

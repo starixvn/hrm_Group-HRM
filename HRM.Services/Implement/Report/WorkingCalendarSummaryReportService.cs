@@ -94,7 +94,7 @@ public class WorkingCalendarSummaryReportService(
 
             for (var day = param.FromDate.Date; day.Date <= param.ToDate.Date; day = day.AddDays(1))
             {
-                var item = items.FirstOrDefault(x => x.WorkDate.Date == day.Date);
+                var item = items.Find(x => x.WorkDate.Date == day.Date);
                 template.Cells[startBodyRow, startDateColumn].Copy(worksheet.Cells[rowIndex, colIndex]);
                 worksheet.Cells[rowIndex, colIndex].Value = item != null ? GetShift(item) : string.Empty;
                 colIndex++;

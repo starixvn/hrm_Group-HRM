@@ -4,7 +4,7 @@ using NPOI.SS.UserModel;
 
 public static class HSSFRowExtensions
 {
-	public static void WriteCells(this IRow row, int colIndex, object[] values)
+    public static void WriteCells(this IRow row, int colIndex, object[] values)
     {
         var id = colIndex;
 

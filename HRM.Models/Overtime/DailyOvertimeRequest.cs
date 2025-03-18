@@ -1,20 +1,19 @@
-﻿using System.Runtime.InteropServices.JavaScript;
-using HRM.Core;
-
-namespace HRM.Models.Overtime;
+﻿namespace HRM.Models.Overtime;
 
 using System;
 using System.Xml.Serialization;
+using Core;
 using Core.XMLExtensions;
 
 [Serializable]
 [XMLName("Row")]
 public class DailyOvertimeRequest
 {
-	[XmlIgnore]
-	private string serverTimeIn;
-	[XmlIgnore]
-	private string serverTimeOut;
+    [XmlIgnore]
+    private string serverTimeIn;
+
+    [XmlIgnore]
+    private string serverTimeOut;
 
     [XmlIgnore]
     public long RequestId { get; set; }
@@ -30,16 +29,17 @@ public class DailyOvertimeRequest
 
     public string TimeIn
     {
-	    get => serverTimeIn;
-	    set => serverTimeIn = ConvertTime(value);
+        get => serverTimeIn;
+        set => serverTimeIn = ConvertTime(value);
     }
 
     public string TimeOut
     {
-	    get => serverTimeOut;
-		set => serverTimeOut = ConvertTime(value);
+        get => serverTimeOut;
+        set => serverTimeOut = ConvertTime(value);
     }
-	public decimal ActualWorkingHours { get; set; }
+
+    public decimal ActualWorkingHours { get; set; }
     public decimal NormalHours { get; set; }
     public decimal OffHours { get; set; }
     public decimal PublicHours { get; set; }
@@ -63,8 +63,8 @@ public class DailyOvertimeRequest
 
     private static string ConvertTime(string value)
     {
-	    _ = DateTime.TryParse(value, out var time);
-	    var clientTime = time.ToClientTimeZone();
-	    return clientTime.ToString("HH:mm");
+        _ = DateTime.TryParse(value, out var time);
+        var clientTime = time.ToClientTimeZone();
+        return clientTime.ToString("HH:mm");
     }
 }

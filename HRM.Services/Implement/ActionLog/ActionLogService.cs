@@ -43,8 +43,8 @@ public class ActionLogService(IBaseService baseService) : IActionLogService
 
             foreach (var fieldName in fieldNames)
             {
-                var oldValue = oldValues.FirstOrDefault(x => x.FieldName == fieldName)?.Value;
-                var newValue = newValues.FirstOrDefault(x => x.FieldName == fieldName)?.Value;
+                var oldValue = oldValues.Find(x => x.FieldName == fieldName)?.Value;
+                var newValue = newValues.Find(x => x.FieldName == fieldName)?.Value;
 
                 if ((!string.IsNullOrWhiteSpace(oldValue) || !string.IsNullOrWhiteSpace(newValue))
                     && !string.Equals(oldValue, newValue, StringComparison.OrdinalIgnoreCase))

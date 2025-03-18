@@ -18,19 +18,19 @@ public class MemberRequest
     {
         get
         {
-	        var filterTypeId = RequestTypeId switch
-	        {
-		        (ushort)Core.Enums.RequestType.CheckIn or (ushort)Core.Enums.RequestType.CheckOut =>
-			        (ushort)RequestFilter.CheckInOut,
-		        (ushort)Core.Enums.RequestType.LateIn or (ushort)Core.Enums.RequestType.EarlyOut =>
-			        (ushort)RequestFilter.LateInEarlyOut,
-		        (ushort)Core.Enums.RequestType.ChangeShift => (ushort)RequestFilter.ChangeShift,
-		        (ushort)Core.Enums.RequestType.Leave => (ushort)RequestFilter.Leave,
-		        (ushort)Core.Enums.RequestType.KeepInView => (ushort)RequestFilter.KeepInView,
-		        _ => (ushort)RequestFilter.All
-	        };
+            var filterTypeId = RequestTypeId switch
+            {
+                (ushort)Core.Enums.RequestType.CheckIn or (ushort)Core.Enums.RequestType.CheckOut =>
+                    (ushort)RequestFilter.CheckInOut,
+                (ushort)Core.Enums.RequestType.LateIn or (ushort)Core.Enums.RequestType.EarlyOut =>
+                    (ushort)RequestFilter.LateInEarlyOut,
+                (ushort)Core.Enums.RequestType.ChangeShift => (ushort)RequestFilter.ChangeShift,
+                (ushort)Core.Enums.RequestType.Leave => (ushort)RequestFilter.Leave,
+                (ushort)Core.Enums.RequestType.KeepInView => (ushort)RequestFilter.KeepInView,
+                _ => (ushort)RequestFilter.All
+            };
 
-	        return filterTypeId;
+            return filterTypeId;
         }
     }
 }

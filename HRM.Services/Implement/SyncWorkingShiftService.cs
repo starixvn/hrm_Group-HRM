@@ -73,7 +73,7 @@ public class SyncWorkingShiftService(
 
         var builder = new StringBuilder(config.ApiUrl);
         builder.Append(
-	        $"?locationCode={config.LocationCode}&fromDate={date:yyyy-MM-dd}&toDate={date:yyyy-MM-dd}&timezone={config.Timezone}");
+            $"?locationCode={config.LocationCode}&fromDate={date:yyyy-MM-dd}&toDate={date:yyyy-MM-dd}&timezone={config.Timezone}");
 
         var url = new Uri(builder.ToString());
         var response = await httpClient.GetAsync(url);
@@ -87,7 +87,7 @@ public class SyncWorkingShiftService(
             {
                 return commandResult;
             }
-                
+
             foreach (var shift in workingShifts)
             {
                 ProcessData(shift);
@@ -171,7 +171,7 @@ public class SyncWorkingShiftService(
         {
             return;
         }
-            
+
         if (shift.ShiftStartTime.Value.Date != shift.ShiftEndTime.Value.Date)
         {
             shift.IsCrossDay = true;

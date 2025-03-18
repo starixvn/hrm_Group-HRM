@@ -93,7 +93,7 @@ public static class HSSFSheetExtensions
 
     public static void RemoveRow(this ISheet sheet, int rowIndex)
     {
-	    sheet?.RemoveRow(sheet.GetRow(rowIndex));
+        sheet?.RemoveRow(sheet.GetRow(rowIndex));
     }
 
     public static void RemoveColumns(this ISheet sheet, List<int> columns)

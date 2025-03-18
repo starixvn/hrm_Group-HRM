@@ -19,6 +19,7 @@ public static class Extensions
     private const string ValueHtmlAttribute = "value";
     private const string CheckedHtmlAttribute = "checked";
     private const string CheckboxCustomHtmlClass = "checkbox-custom";
+
     public static string RequestTypeToText(this short type)
     {
         return type switch
@@ -76,7 +77,7 @@ public static class Extensions
 
     public static DateTime GetMaxDate(this DateTime date)
     {
-	    return date.AddMonths(1).Year > DateTimeOffset.Now.Year ? DateTimeOffset.Now.AddYears(1).DateTime : date;
+        return date.AddMonths(1).Year > DateTimeOffset.Now.Year ? DateTimeOffset.Now.AddYears(1).DateTime : date;
     }
 
     public static IHtmlContent CheckBoxCustomFor<TModel>(
@@ -198,7 +199,7 @@ public static class Extensions
 
     private static string GetExpressionText<TModel, TProperty>(Expression<Func<TModel, TProperty>> expression)
     {
-	    if (RemoveConvert(expression.Body) is not MemberExpression memberExp)
+        if (RemoveConvert(expression.Body) is not MemberExpression memberExp)
         {
             throw new ArgumentException("The expression is not a valid member expression.", nameof(expression));
         }

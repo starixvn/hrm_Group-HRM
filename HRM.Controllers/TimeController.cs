@@ -1,5 +1,4 @@
-﻿
-namespace HRM.Controllers;
+﻿namespace HRM.Controllers;
 
 using System;
 using System.Linq;
@@ -54,17 +53,6 @@ public class TimeController(
     }
 
     [AllowAnonymous]
-    public async Task<IActionResult> GetCheckInOutOnlineRecord()
-    {
-        var criteria = new GetCheckInOutOnlineRecordCriteria
-        {
-            Date = DateTimeOffset.Now.Date
-        };
-        var records = await baseService.GetDataAsync<TimeRecordModel>(criteria);
-        return Json(records);
-    }
-
-    [AllowAnonymous]
     [HttpPost]
     public async Task<IActionResult> CheckInOut(CheckInOutViewModel model)
     {
@@ -82,7 +70,7 @@ public class TimeController(
             Platform = HttpContext.Request.Headers["User-Agent"].ToString(),
             BrowserName = HttpContext.Request.Headers["User-Agent"].ToString(),
             NetSessionId = HttpContext.Session.Id
-        };  
+        };
         var loginResult = await authService.LoginAsync(loginParam);
         if (loginResult.IsSuccessfull)
         {
@@ -106,6 +94,17 @@ public class TimeController(
         }
 
         return Json(loginResult);
+    }
+
+    [AllowAnonymous]
+    public async Task<IActionResult> GetCheckInOutOnlineRecord()
+    {
+        var criteria = new GetCheckInOutOnlineRecordCriteria
+        {
+            Date = DateTimeOffset.Now.Date
+        };
+        var records = await baseService.GetDataAsync<TimeRecordModel>(criteria);
+        return Json(records);
     }
 
     [HttpPost]

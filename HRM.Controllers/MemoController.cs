@@ -1,7 +1,5 @@
 ﻿namespace HRM.Controllers;
 
-using HRM.Core.Services;
-using Microsoft.Extensions.Configuration;
 using System;
 using System.IO;
 using System.Threading.Tasks;
@@ -11,13 +9,14 @@ using Core.Filters;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
 using HRM.Core.Models;
+using HRM.Core.Services;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Models;
 using Services.Implement;
 using Services.Interfaces;
 using ViewModels.Memo;
-using Microsoft.AspNetCore.Http;
 
 public class MemoController(
     AppSettings appSettings,

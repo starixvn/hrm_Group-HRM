@@ -237,18 +237,20 @@ public partial class EmployeeWorkingHoursService : IEmployeeWorkingHoursService
 
     public static bool IsUnpaidLeave(DailyWorking dailyWorking)
     {
-	    var isUnpaidLeave = dailyWorking.LeaveType.Id is 
-		    (byte)Core.Enums.LeaveTypes.UnpaidLeave
-		    or (byte)Core.Enums.LeaveTypes.UnpaidLeaveInsurance 
-		    or (byte)Core.Enums.LeaveTypes.MaternityLeave
-		    or (byte)Core.Enums.LeaveTypes.PaternityLeave 
-	                        || dailyWorking.LeaveType2 is { Id: 
-		    (byte)Core.Enums.LeaveTypes.UnpaidLeave
-		    or (byte)Core.Enums.LeaveTypes.UnpaidLeaveInsurance 
-		    or (byte)Core.Enums.LeaveTypes.MaternityLeave
-		    or (byte)Core.Enums.LeaveTypes.PaternityLeave
-	    };
+        var isUnpaidLeave = dailyWorking.LeaveType.Id is
+            (byte)Core.Enums.LeaveTypes.UnpaidLeave
+            or (byte)Core.Enums.LeaveTypes.UnpaidLeaveInsurance
+            or (byte)Core.Enums.LeaveTypes.MaternityLeave
+            or (byte)Core.Enums.LeaveTypes.PaternityLeave
+                            || dailyWorking.LeaveType2 is
+                            {
+                                Id:
+            (byte)Core.Enums.LeaveTypes.UnpaidLeave
+            or (byte)Core.Enums.LeaveTypes.UnpaidLeaveInsurance
+            or (byte)Core.Enums.LeaveTypes.MaternityLeave
+            or (byte)Core.Enums.LeaveTypes.PaternityLeave
+                            };
 
-	    return isUnpaidLeave;
+        return isUnpaidLeave;
     }
 }

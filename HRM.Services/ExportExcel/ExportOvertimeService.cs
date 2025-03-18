@@ -2,7 +2,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
-using Fanex.Logging;
 using HRM.Core.Constants;
 using HRM.Models.Overtime;
 using Microsoft.AspNetCore.Hosting;
@@ -26,16 +25,16 @@ public class ExportOvertimeService(IWebHostEnvironment hostingEnvironment) : IEx
         const byte lineOfTotal = 4;
 
         ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
-		var sheetName = "Employee Overtime Report";
-        var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, "ExcelTemplates/EmployeeOvertimeTemplate.xlsx"); 
-       
+        var sheetName = "Employee Overtime Report";
+        var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, "ExcelTemplates/EmployeeOvertimeTemplate.xlsx");
+
         if (isMemberOvertime)
         {
             sheetName = "Member Overtime Report";
         }
-		using var templatePackage = new ExcelPackage(new FileInfo(templatePath));
-		using var xlPackage = new ExcelPackage();
-		var templateWorksheet = templatePackage.Workbook.Worksheets[0];
+        using var templatePackage = new ExcelPackage(new FileInfo(templatePath));
+        using var xlPackage = new ExcelPackage();
+        var templateWorksheet = templatePackage.Workbook.Worksheets[0];
         var workSheet = xlPackage.Workbook.Worksheets.Add(sheetName);
 
         var rowIndex = 1;

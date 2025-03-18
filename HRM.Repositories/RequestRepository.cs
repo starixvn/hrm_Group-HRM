@@ -1,7 +1,4 @@
-﻿using HRM.Models.Section;
-using HRM.Models.Shifts;
-
-namespace HRM.Repositories;
+﻿namespace HRM.Repositories;
 
 using System;
 using System.Collections.Generic;
@@ -16,6 +13,8 @@ using Interfaces;
 using Models;
 using Models.Request;
 using Models.Request.ChangeShift;
+using Models.Section;
+using Models.Shifts;
 using Models.Supervisor;
 
 public class RequestRepository : IRequestRepository
@@ -37,15 +36,15 @@ public class RequestRepository : IRequestRepository
 
     public async Task<RequestRelatedPeopleModel> GetRequestRelatedPeople(GetRequestRelatedPeopleCriteria criteria)
     {
-	    using var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey());
-	    using var multi = await db.QueryMultipleAsync(criteria);
-	    var relatedPeople = new RequestRelatedPeopleModel
+        using var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey());
+        using var multi = await db.QueryMultipleAsync(criteria);
+        var relatedPeople = new RequestRelatedPeopleModel
         {
-	        Requester = multi.ReadFirstOrDefault<SupervisorNameModel>(),
-	        Verifier = multi.ReadFirstOrDefault<SupervisorNameModel>(),
-	        Approver = multi.ReadFirstOrDefault<SupervisorNameModel>(),
-	        ListHR = multi.Read<SupervisorNameModel>().ToList(),
-	        EmailSetting = multi.ReadFirstOrDefault<EmailSettingsModel>()
+            Requester = multi.ReadFirstOrDefault<SupervisorNameModel>(),
+            Verifier = multi.ReadFirstOrDefault<SupervisorNameModel>(),
+            Approver = multi.ReadFirstOrDefault<SupervisorNameModel>(),
+            ListHR = multi.Read<SupervisorNameModel>().ToList(),
+            EmailSetting = multi.ReadFirstOrDefault<EmailSettingsModel>()
         };
 
         return relatedPeople;
@@ -53,12 +52,12 @@ public class RequestRepository : IRequestRepository
 
     public async Task<VerifierAndApproverForRequest> GetVerifierAndApproverAsync(ICriteria criteria)
     {
-	    using var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey());
-	    using var multi = await db.QueryMultipleAsync(criteria);
-	    var supervisor = new VerifierAndApproverForRequest
+        using var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey());
+        using var multi = await db.QueryMultipleAsync(criteria);
+        var supervisor = new VerifierAndApproverForRequest
         {
-	        Verifiers = multi.Read<SupervisorNameModel>().ToList(),
-	        Approvers = multi.Read<SupervisorNameModel>().ToList()
+            Verifiers = multi.Read<SupervisorNameModel>().ToList(),
+            Approvers = multi.Read<SupervisorNameModel>().ToList()
         };
 
         return supervisor;
@@ -122,7 +121,7 @@ public class RequestRepository : IRequestRepository
             ToTime = requestInfo.ToTime ?? DateTimeOffset.Now.DateTime,
             KeepInViewType = (byte)(requestInfo.KeepInViewType ?? 0),
             LeaveCountDetails = requestInfo.LeaveCountDetails ?? string.Empty,
-            LeaveType = new LeaveType { Id = requestInfo.LeaveTypeId ?? 0,  Name = requestInfo.LeaveTypeName ?? string.Empty },
+            LeaveType = new LeaveType { Id = requestInfo.LeaveTypeId ?? 0, Name = requestInfo.LeaveTypeName ?? string.Empty },
             Remark = requestInfo.Remark ?? string.Empty,
             TotalDaysRequestInMonth = requestInfo.TotalDaysRequestInMonth ?? 0,
             CreatedDate = requestInfo.CreatedDate,
@@ -170,7 +169,7 @@ public class RequestRepository : IRequestRepository
             RequestedDate = requestInfo.RequestedDate ?? DateTimeOffset.Now.DateTime,
             TotalMins = requestInfo.TotalMinutes ?? 0,
             ActualLateInEarlyOut = requestInfo.ActualInOutMins ?? 0,
-            CrossDay = (requestInfo.FromTime == null || requestInfo.ToTime == null) ??  requestInfo.FromTime.DayOfYear > requestInfo.ToTime.DayOfYear,
+            CrossDay = (requestInfo.FromTime == null || requestInfo.ToTime == null) ?? requestInfo.FromTime.DayOfYear > requestInfo.ToTime.DayOfYear,
             ToShift = new Shift
             {
                 Id = requestInfo.ToShiftId ?? 0,

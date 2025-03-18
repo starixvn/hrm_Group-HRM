@@ -15,9 +15,9 @@ public static class XMLIO
         var lambda = GetElement<T>(typeof(T));
 
         var enumerable = source.ToList();
-        return enumerable.Count == 0 
-	        ? new XElement("Root") 
-	        : new XElement("Root", enumerable.Select(lambda).ToArray<object>());
+        return enumerable.Count == 0
+            ? new XElement("Root")
+            : new XElement("Root", enumerable.Select(lambda).ToArray<object>());
     }
 
     private static XName GetElementName(Type t)
