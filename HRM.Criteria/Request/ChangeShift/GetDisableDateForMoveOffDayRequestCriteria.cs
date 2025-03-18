@@ -13,6 +13,8 @@ public class GetDisableDateForMoveOffDayRequestCriteria : CriteriaBase
     public DateTime ToDate { get; set; }
     public long? RequestId { get; set; }
 
+    public short CompanyId { get; set; }
+
     public override string GetSettingKey() => "ChangeShiftRequest_MoveOffDay_GetDisableDate";
 
     public override bool IsValid() => EmployeeId > 0 && FromDate <= ToDate;

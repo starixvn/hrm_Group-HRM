@@ -65,12 +65,14 @@ public class ChangeShiftRequestService(
     public async Task<IEnumerable<DateTime>> GetDisableDateForMoveOffDayRequestAsync(int employeeId, DateTime requestDate, long? requestId = null)
     {
         var fromDate = new DateTimeOffset(requestDate.Year, 1, 1, 0, 0, 0, TimeSpan.Zero).Date;
+        var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
         var criteria = new GetDisableDateForMoveOffDayRequestCriteria
         {
             EmployeeId = employeeId,
             FromDate = fromDate,
             ToDate = fromDate.AddYears(1).AddDays(-1),
-            RequestId = requestId
+            RequestId = requestId,
+            CompanyId = companyId
         };
         var dates = (await baseService.GetDataAsync<DateTime>(criteria)).ToList();
         for (var day = requestDate.FirstDayOfWeek().Date; day.Date <= requestDate.LastDayOfWeek().Date; day = day.AddDays(1))
