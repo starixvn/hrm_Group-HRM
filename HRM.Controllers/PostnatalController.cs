@@ -8,9 +8,12 @@ using HRM.Core.Constants;
 using HRM.Core.Filters;
 using HRM.Core.Models;
 using HRM.Criteria.Postnatal;
+using HRM.Models;
 using HRM.Services.Interfaces;
 using HRM.ViewModels.Postnatal;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Serialization;
+using Newtonsoft.Json;
 
 namespace HRM.Controllers;
 
@@ -72,7 +75,7 @@ public class PostnatalController(
             result.Message = ModelState.Values.FirstOrDefault(v => v.Errors.Any())?.Errors.FirstOrDefault()?.ErrorMessage;
         }
 
-        return Json(result);
+        return new JsonResult(result, new JsonSerializerSettings { ContractResolver = new DefaultContractResolver() });
     }
 
     [HrmPermission(Policy.Read, FunctionKey.EmployeeManagement)]
@@ -117,7 +120,7 @@ public class PostnatalController(
             result.Message = ModelState.Values.FirstOrDefault(v => v.Errors.Any())?.Errors.FirstOrDefault()?.ErrorMessage;
         }
 
-        return Json(result);
+        return new JsonResult(result, new JsonSerializerSettings { ContractResolver = new DefaultContractResolver() });
     }
 
     [HttpPost]
@@ -126,6 +129,6 @@ public class PostnatalController(
     {
         var result = await postnatalService.Delete(id);
 
-        return Json(result);
+        return new JsonResult(result, new JsonSerializerSettings { ContractResolver = new DefaultContractResolver() });
     }
 }

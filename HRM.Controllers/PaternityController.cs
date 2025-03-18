@@ -11,6 +11,8 @@ using HRM.Criteria.Paternity;
 using HRM.Services.Interfaces;
 using HRM.ViewModels.Paternity;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Serialization;
+using Newtonsoft.Json;
 
 namespace HRM.Controllers;
 
@@ -70,7 +72,7 @@ public class PaternityController(
             result.Message = ModelState.Values.FirstOrDefault(v => v.Errors.Any())?.Errors.FirstOrDefault()?.ErrorMessage;
         }
 
-        return Json(result);
+        return new JsonResult(result, new JsonSerializerSettings { ContractResolver = new DefaultContractResolver() });
     }
 
     [HrmPermission(Policy.Read, FunctionKey.EmployeeManagement)]
@@ -114,7 +116,7 @@ public class PaternityController(
             result.Message = ModelState.Values.FirstOrDefault(v => v.Errors.Any())?.Errors.FirstOrDefault()?.ErrorMessage;
         }
 
-        return Json(result);
+        return new JsonResult(result, new JsonSerializerSettings { ContractResolver = new DefaultContractResolver() });
     }
 
     [HttpPost]
@@ -123,6 +125,6 @@ public class PaternityController(
     {
         var result = await paternityService.Delete(id);
 
-        return Json(result);
+        return new JsonResult(result, new JsonSerializerSettings { ContractResolver = new DefaultContractResolver() });
     }
 }
