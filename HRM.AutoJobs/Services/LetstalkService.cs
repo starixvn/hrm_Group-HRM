@@ -2,8 +2,8 @@
 
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Interfaces;
 using HRM.Letstalk.Core.Services.Interfaces;
+using Interfaces;
 using Models;
 
 public class LetstalkService(
@@ -11,9 +11,9 @@ public class LetstalkService(
     ISendNotificationService sendNotificationService)
     : ILetstalkService
 {
-	private const string TemplateContent = "<strong>{0}</strong><br /> {1}";
+    private const string TemplateContent = "<strong>{0}</strong><br /> {1}";
 
-	public async Task SendNotificationAsync(string letstalkId, string subject, string message)
+    public async Task SendNotificationAsync(string letstalkId, string subject, string message)
     {
         var letstalk = !string.IsNullOrWhiteSpace(letstalkSettings.TestingAccountId) ? letstalkSettings.TestingAccountId : letstalkId;
         if (letstalkSettings.Enable && !string.IsNullOrWhiteSpace(letstalk))

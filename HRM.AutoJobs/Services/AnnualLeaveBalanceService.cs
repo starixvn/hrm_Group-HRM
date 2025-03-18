@@ -1,6 +1,4 @@
-﻿using HRM.AutoJobs.Services.Interfaces;
-
-namespace HRM.AutoJobs.Services;
+﻿namespace HRM.AutoJobs.Services;
 
 using System;
 using System.Collections.Generic;
@@ -10,10 +8,11 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Criteria;
-using Models;
-using Models.MailDeliver;
+using Interfaces;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Logging;
+using Models;
+using Models.MailDeliver;
 
 public class AnnualLeaveBalanceService(
     IWebHostEnvironment hostEnvironment,
@@ -86,9 +85,9 @@ public class AnnualLeaveBalanceService(
 
                 var thread = new Thread(() => SendEmailAsync(mailItem).GetAwaiter().GetResult());
                 thread.Start();
-			}
+            }
 
-			var letstalkThread = new Thread( () => SendLetstalkNotificationAsync(employee.Letstalk, "Annual Leave Balance Reminder", body).GetAwaiter().GetResult());
+            var letstalkThread = new Thread(() => SendLetstalkNotificationAsync(employee.Letstalk, "Annual Leave Balance Reminder", body).GetAwaiter().GetResult());
             letstalkThread.Start();
         }
 
@@ -130,7 +129,7 @@ public class AnnualLeaveBalanceService(
             var sections = groupSupervisor.Select(x => x.Key).ToList();
             foreach (var item in sections)
             {
-                var statisticSection = statistics.FirstOrDefault(x => x.SectionId == item.SectionId && x.DepartmentId == item.DepartmentId);
+                var statisticSection = statistics.Find(x => x.SectionId == item.SectionId && x.DepartmentId == item.DepartmentId);
                 if (statisticSection != null)
                 {
                     tableStatistic.AppendFormat(
@@ -207,11 +206,11 @@ public class AnnualLeaveBalanceService(
 
         percent = DateTimeOffset.Now.Month switch
         {
-	        March => "> 75%",
-	        June => "> 50%",
-	        September => "> 25%",
-	        December => "> 0%",
-	        _ => percent
+            March => "> 75%",
+            June => "> 50%",
+            September => "> 25%",
+            December => "> 0%",
+            _ => percent
         };
         return percent;
     }
@@ -260,10 +259,10 @@ public class AnnualLeaveBalanceService(
                     isSentMail = true;
                 }
                 break;
+
             default:
                 percentInMail = string.Empty;
                 break;
-
         }
     }
 }

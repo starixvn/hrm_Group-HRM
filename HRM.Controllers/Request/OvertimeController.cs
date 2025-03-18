@@ -14,8 +14,8 @@ using GO.UserControl.Client.Core.Session;
 using HRM.Services.Interfaces.Request;
 using Microsoft.AspNetCore.Mvc;
 using Models.Overtime;
-using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using Resources;
 using Services.ExportExcel;
 using Services.Interfaces;
@@ -191,11 +191,11 @@ public class OvertimeController(
     public async Task<IActionResult> EditMonthlyRequestStatus(string requestIds, RequestCommand command, byte roleId)
     {
         var commandResult = await overtimeService.EditMonthlyRequestStatus(EmployeeSession.EmpId, requestIds, command, roleId);
-		return Json(commandResult, new JsonSerializerSettings
-		{
-			ContractResolver = new DefaultContractResolver()
-		});
-	}
+        return Json(commandResult, new JsonSerializerSettings
+        {
+            ContractResolver = new DefaultContractResolver()
+        });
+    }
 
     [HttpPost]
     [HrmPermission(Policy.Read, FunctionKey.ProcessOvertime)]

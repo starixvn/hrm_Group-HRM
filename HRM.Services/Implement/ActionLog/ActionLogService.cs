@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Xml;
+using HRM.Core;
 using HRM.Core.Services;
 using HRM.Criteria.Log;
 using HRM.Models.Log;
@@ -12,19 +13,19 @@ namespace HRM.Services.Implement.ActionLog;
 
 public interface IActionLogService
 {
-    Task<List<LogObjectDetail>> GetLogDetailByIdAsync(byte objectTypeId, int objectId);
+    Task<IEnumerable<LogObjectDetail>> GetLogDetailByIdAsync(byte objectTypeId, int objectId);
 }
 
 public class ActionLogService(IBaseService baseService) : IActionLogService
 {
-    public async Task<List<LogObjectDetail>> GetLogDetailByIdAsync(byte objectTypeId, int objectId)
+    public async Task<IEnumerable<LogObjectDetail>> GetLogDetailByIdAsync(byte objectTypeId, int objectId)
     {
         var criteria = new GetLogObjectByIdCriteria
         {
             ObjectTypeId = objectTypeId,
             ObjectId = objectId
         };
-        var logs = (await baseService.GetDataAsync<LogObjectDetail>(criteria)).ToList();
+        var logs = await baseService.GetDataAsync<LogObjectDetail>(criteria);
         GetFieldChanged(logs);
 
         return logs;
@@ -34,6 +35,8 @@ public class ActionLogService(IBaseService baseService) : IActionLogService
     {
         foreach (var log in logs)
         {
+            log.LogDate = log.LogDate.ToClientTimeZone();
+
             var oldValues = ReadXmlString(log.OldData);
             var newValues = ReadXmlString(log.Data);
             var fieldNames = oldValues.Select(x => x.FieldName).Union(newValues.Select(x => x.FieldName));
@@ -60,7 +63,7 @@ public class ActionLogService(IBaseService baseService) : IActionLogService
     private static List<FieldValue> ReadXmlString(string xml)
     {
         var results = new List<FieldValue>();
-        TextReader sr = new StringReader(xml);
+        var sr = new StringReader(xml);
 
         using var reader = XmlReader.Create(sr);
         while (reader.Read())

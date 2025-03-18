@@ -40,13 +40,11 @@ public class FileController(
     {
         var fileName = Path.GetFileName(file.FileName);
         var pathAttach = $"{CurrentCompanyId}/{categoryId}/{fileName}";
-        if (isOverride)
+        if (isOverride && await minIOService.IsFileExistsAsync(Bucket.File, pathAttach))
         {
-            if (await minIOService.IsFileExistsAsync(Bucket.File, pathAttach))
-            {
-                pathAttach = pathAttach.Insert(pathAttach.LastIndexOf('/') + 1, "(1)");
-            }
+            pathAttach = pathAttach.Insert(pathAttach.LastIndexOf('/') + 1, "(1)");
         }
+
         await minIOService.UploadFileAsync(file, Bucket.File, pathAttach);
 
         return pathAttach;

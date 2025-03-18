@@ -21,12 +21,11 @@ using Microsoft.AspNetCore.Http;
 
 public class MemoController(
     AppSettings appSettings,
-    IWebHostEnvironment env,
+    IWebHostEnvironment hostingEnvironment,
     IUserControlSession userControlSession,
     IMemoService memoService,
     ICommonDataService commonDataService,
     IEmailService emailService,
-    IWebHostEnvironment hostingEnvironment,
     IMinIOService minIOService,
     IConfiguration configuration) : BaseController(userControlSession)
 {
@@ -197,20 +196,5 @@ public class MemoController(
             string.Empty,
             Resources.Messages.MemoSubject + " " + subject,
             body);
-    }
-
-    private static string RemoveFirstSlash(string path)
-    {
-        if (path.StartsWith('/'))
-        {
-            path = path[1..];
-        }
-        return path;
-    }
-
-    private static string GetDomainName(HttpContext httpContext)
-    {
-        var protocol = httpContext.Request.Headers["x-forwarded-proto"].ToString();
-        return $"{(!string.IsNullOrWhiteSpace(protocol) ? protocol : httpContext.Request.Scheme)}://{httpContext.Request.Host.Value}";
     }
 }
