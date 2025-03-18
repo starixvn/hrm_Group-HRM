@@ -1,10 +1,32 @@
-﻿import React, { Fragment } from 'react';
+﻿import React, { Fragment, useState } from 'react';
 import toastr from 'toastr';
+import axios from 'axios';
 import { resolveClientUrl, toastOptions } from '../../../../shared/common.functions';
 
 const ExtensionControl = ({ data }) => {
+
+    const [selectExtension, setSelectExtension] = useState(null);
+    const getGroupExtension = isInternal => {
+        axios({
+            url: resolveClientUrl('ExtensionNo/GetGroupExtension'),
+            method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
+            params: { isInternal }
+        }).then(response => {
+            if(response.data.length === 0) {
+                toastr.error('No group extension found, Please create group first!', '', toastOptions());
+            } else {
+                window.location = resolveClientUrl('ExtensionNo/Create');
+                return;
+            }
+            setSelectExtension(response.data);
+        }).catch(axiosError);
+    };
+
     const handleCreateExtension = () => {
-        if(data.length === 0) {
+        if(selectExtension == null) {
+            getGroupExtension(false);
+        } else if(selectExtension != null && selectExtension.length === 0) {
             toastr.error('No group extension found, Please create group first!', '', toastOptions());
         } else {
             window.location = resolveClientUrl('ExtensionNo/Create');

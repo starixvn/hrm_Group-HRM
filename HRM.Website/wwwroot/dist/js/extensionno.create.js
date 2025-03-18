@@ -98903,13 +98903,6 @@ var AppContainer = function AppContainer() {
             headers: { 'X-Requested-With': 'XMLHttpRequest' },
             params: { isInternal: isInternal }
         }).then(function (response) {
-            if (response.data.length === 0) {
-                _toastr2.default.error('No group extension found, Please create group first!', '', (0, _common.toastOptions)());
-                setTimeout(function () {
-                    location.href = (0, _common.resolveClientUrl)('ExtensionNo');
-                }, 3000);
-                return;
-            }
             setSelectExtension(response.data);
             setSelectGroup(response.data[0].value);
         }).catch(_common.axiosError);

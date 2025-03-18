@@ -108973,6 +108973,10 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
+var _slicedToArray2 = __webpack_require__(/*! babel-runtime/helpers/slicedToArray */ "./node_modules/babel-runtime/helpers/slicedToArray.js");
+
+var _slicedToArray3 = _interopRequireDefault(_slicedToArray2);
+
 var _react = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 
 var _react2 = _interopRequireDefault(_react);
@@ -108981,6 +108985,10 @@ var _toastr = __webpack_require__(/*! toastr */ "./node_modules/toastr/toastr.js
 
 var _toastr2 = _interopRequireDefault(_toastr);
 
+var _axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+
+var _axios2 = _interopRequireDefault(_axios);
+
 var _common = __webpack_require__(/*! ../../../../shared/common.functions */ "./sources/js/shared/common.functions.js");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -108988,8 +108996,32 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var ExtensionControl = function ExtensionControl(_ref) {
     var data = _ref.data;
 
+    var _useState = (0, _react.useState)(null),
+        _useState2 = (0, _slicedToArray3.default)(_useState, 2),
+        selectExtension = _useState2[0],
+        setSelectExtension = _useState2[1];
+
+    var getGroupExtension = function getGroupExtension(isInternal) {
+        (0, _axios2.default)({
+            url: (0, _common.resolveClientUrl)('ExtensionNo/GetGroupExtension'),
+            method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
+            params: { isInternal: isInternal }
+        }).then(function (response) {
+            if (response.data.length === 0) {
+                _toastr2.default.error('No group extension found, Please create group first!', '', (0, _common.toastOptions)());
+            } else {
+                window.location = (0, _common.resolveClientUrl)('ExtensionNo/Create');
+                return;
+            }
+            setSelectExtension(response.data);
+        }).catch(axiosError);
+    };
+
     var handleCreateExtension = function handleCreateExtension() {
-        if (data.length === 0) {
+        if (selectExtension == null) {
+            getGroupExtension(false);
+        } else if (selectExtension != null && selectExtension.length === 0) {
             _toastr2.default.error('No group extension found, Please create group first!', '', (0, _common.toastOptions)());
         } else {
             window.location = (0, _common.resolveClientUrl)('ExtensionNo/Create');
