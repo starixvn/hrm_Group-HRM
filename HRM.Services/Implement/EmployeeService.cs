@@ -176,14 +176,14 @@ public class EmployeeService(
         return await baseService.ExecuteNonQueryAsync(criteria);
     }
 
-    public async Task<IEnumerable<Employee>> GetEmployeeByGender(string query, int gender)
+    public async Task<IEnumerable<Employee>> GetEmployeeByGender(string query, int gender, short companyId)
     {
         var criteria = new GetMemberByGenderCriteria
         {
             Query = query,
-            Gender = gender
+            Gender = gender,
+            CompanyId = companyId
         };
-
         return await baseService.GetDataAsync<Employee>(criteria);
     }
 

@@ -488,7 +488,7 @@ public class EmployeeController(
 
     public async Task<JsonResult> GetMemberByGender(string keyword, int gender)
     {
-        var employees = await employeeService.GetEmployeeByGender(keyword, gender);
+        var employees = await employeeService.GetEmployeeByGender(keyword, gender, CurrentCompanyId);
         return new JsonResult(employees, new JsonSerializerSettings { ContractResolver = new DefaultContractResolver() });
     }
 

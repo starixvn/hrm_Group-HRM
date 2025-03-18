@@ -8,6 +8,8 @@ public class GetMemberByGenderCriteria : CriteriaBase
 
     public int Gender { get; set; }
 
+    public short CompanyId { get; set; }
+
     public override bool IsValid()
     {
         return true;
