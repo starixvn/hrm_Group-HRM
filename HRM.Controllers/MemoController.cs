@@ -134,8 +134,8 @@ public class MemoController(
 
             switch (commandResult.IsSuccessful)
             {
-	            case true when model.SendMail:
-		            await SendMailAsync(model.Subject, commandResult);
+            case true when model.SendMail:
+                await SendMailAsync(model.Subject, commandResult);
 		            break;
 	            case false:
 		            ModelState.AddModelError(string.Empty, commandResult.Message);
@@ -174,13 +174,14 @@ public class MemoController(
     public async Task<IActionResult> Detail(int id)
     {
         var memo = await memoService.GetByIdAsync(id, CurrentCompanyId);
+        ViewBag.UploadBasePath = $"{configuration["AWS:ExternalUrl"]}/{Bucket.File}";
 
         return View(memo);
     }
 
     private async Task SendMailAsync(string subject, CommandResult result)
     {
-        var bodyTemplate = Utilities.ReadTextFile(Path.Combine(env.ContentRootPath, "EmailTemplates/MemoNotification.txt"));
+        var bodyTemplate = Utilities.ReadTextFile(Path.Combine(hostingEnvironment.ContentRootPath, "EmailTemplates/MemoNotification.txt"));
         var body = string.Format(bodyTemplate, subject, appSettings.Domain + "memo/detail/" + result);
 
         await emailService.SendEmailAsync(
