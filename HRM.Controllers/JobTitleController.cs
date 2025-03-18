@@ -41,9 +41,9 @@ public class JobTitleController(
     }
 
     [HrmPermission(Policy.Read, FunctionKey.JobTitleManagement)]
-    public async Task<IActionResult> GetJobTitles(string jobTitle)
+    public async Task<IActionResult> GetJobTitles([FromBody] JobTitleModel model)
     {
-        var jobTitles = await commonDataService.GetJobTitle(jobTitle, CurrentCompanyId);
+        var jobTitles = await commonDataService.GetJobTitle(model.JobTitle, CurrentCompanyId);
         return Json(jobTitles);
     }
 
@@ -127,4 +127,9 @@ public class JobTitleInsertModel
 {
     public string Name { get; set; }
     public int CategoryId { get; set; }
+}
+
+public class JobTitleModel
+{
+    public string JobTitle { get; set; }
 }
