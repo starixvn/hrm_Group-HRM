@@ -143,10 +143,10 @@
 	  <Content Include="ExcelTemplates\YearlyOvertime.xlsx">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </Content>
-    <Content Include="ExcelTemplates\MemoNotification.txt">
+    <Content Include="EmailTemplates\MemoNotification.txt">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="ExcelTemplates\EditMemoNotification.txt">
+    <Content Include="EmailTemplates\EditMemoNotification.txt">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
 	  <Content Include="logs\log.txt" />
