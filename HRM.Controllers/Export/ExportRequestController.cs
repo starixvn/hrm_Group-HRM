@@ -39,7 +39,8 @@ public class ExportRequestController(IUserControlSession userControlSession,
             IsQueryByCreatedDate = !request.IsFilterByAffectedDate,
             RequestViewType = request.ViewType,
             SupervisorId = EmployeeSession.EmpId,
-            IsLocal = request.IsLocal.HasValue ? request.IsLocal.Value == 1 : null
+            IsLocal = request.IsLocal.HasValue ? request.IsLocal.Value == 1 : null,
+            CompanyId = CurrentCompanyId
         };
 
         var requestList = await requestService.GetRequests(criteria);
