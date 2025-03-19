@@ -178,7 +178,7 @@ public class EmployeeWorkFromHomeController : BaseController
         var criteria = new DeleteEmployeeWorkFromHomeCriteria { EmployeeWorkFromHomeId = id };
         var result = await baseService.ExecuteNonQueryAsync(criteria);
 
-        return Json(result);
+        return new JsonResult(result, new JsonSerializerSettings { ContractResolver = new DefaultContractResolver() });
     }
 
     private static readonly JsonSerializerOptions JsonOptions = new()
