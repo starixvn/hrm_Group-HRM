@@ -14,6 +14,8 @@ public class RejectRequestCriteria : CriteriaBase
     [SpParam(Ignored = true)]
     public RequestType RequestTypeId { get; set; }
 
+    public short CompanyId { get; set; }
+
     public override string GetSettingKey()
     {
         var key = RequestTypeId switch

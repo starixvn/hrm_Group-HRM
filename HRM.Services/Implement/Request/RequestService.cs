@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GO.UserControl.Client.Core.Session;
 using HRM.Core;
 using HRM.Core.Constants;
 using HRM.Core.Enums;
@@ -29,7 +30,8 @@ public class RequestService(
     ILateInEarlyOutRequestService lateInEarlyOutRequestService,
     IChangeShiftRequestService changeShiftRequestService,
     ILeaveRequestService leaveRequestService,
-    IKeepInViewRequestService keepInViewRequestService)
+    IKeepInViewRequestService keepInViewRequestService,
+    IUserControlSession userControlSession)
     : IRequestService
 {
     public static string ToRequestMessage(RequestEntity request, bool isNoFormat = false)
@@ -157,37 +159,45 @@ public class RequestService(
 
     public async Task<CommandResult> RejectRequest(int actorId, ProcessRequestParam param)
     {
+        var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
+
         var criteria = new RejectRequestCriteria
         {
             RequestId = param.RequestId,
             RequestTypeId = param.RequestTypeId,
             RoleId = param.RoleId,
             Comment = param.Comment,
-            ActorId = actorId
+            ActorId = actorId,
+            CompanyId = companyId
         };
         return await baseService.ExecuteNonQueryAsync(criteria);
     }
 
     public async Task<CommandResult> ResetRequest(int actorId, ProcessRequestParam param)
     {
+        var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
         var criteria = new ResetRequestCriteria
         {
             RequestId = param.RequestId,
             RequestTypeId = param.RequestTypeId,
             RoleId = param.RoleId,
-            ActorId = actorId
+            ActorId = actorId,
+            CompanyId = companyId
         };
         return await baseService.ExecuteNonQueryAsync(criteria);
     }
 
     public async Task<CommandResult> VoidRequest(int actorId, ProcessRequestParam param)
     {
+        var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
+
         var criteria = new VoidRequestCriteria
         {
             RequestId = param.RequestId,
             RequestTypeId = param.RequestTypeId,
             Comment = param.Comment,
-            ActorId = actorId
+            ActorId = actorId,
+            CompanyId = companyId
         };
         return await baseService.ExecuteNonQueryAsync(criteria);
     }
