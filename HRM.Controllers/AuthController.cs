@@ -7,21 +7,21 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using Core;
+using Core.Constants;
+using Criteria.CompanySite;
+using Criteria.SystemSetting;
 using GO.UserControl.Client.Core;
 using GO.UserControl.Client.Core.Models.Auth;
 using GO.UserControl.Client.Core.Services;
 using GO.UserControl.Client.Core.Session;
-using Core;
-using Core.Constants;
 using HRM.Core.Services;
-using Criteria.CompanySite;
-using Criteria.SystemSetting;
-using Models;
-using ViewModels.Employee;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Models;
+using ViewModels.Employee;
 
 public class AuthController(
     IHRMAuthService hrmAuthService,

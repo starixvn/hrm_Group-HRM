@@ -1,15 +1,22 @@
 ﻿namespace HRM.Core;
 
 using System;
+using Constants;
+using GO.UserControl.Client.Core.Session;
 
 public static class DateTimeExtensions
 {
+    private static IUserControlSession _userControlSession;
     private static readonly TimeSpan ServerTimeZone = TimeSpan.FromHours(-4);
-    private static TimeSpan _clientTimeZone = TimeSpan.FromHours(7);
+
+    public static void Configure(IUserControlSession userControlSession)
+    {
+        _userControlSession = userControlSession;
+    }
 
     public static void SetClientTimeZone(short clientTimeZone)
     {
-        _clientTimeZone = TimeSpan.FromHours(clientTimeZone);
+        _userControlSession.Set(SessionKey.CurrentTimeZone, clientTimeZone);
     }
 
     public static DateTime FirstDayOfWeek(this DateTime dt)
@@ -80,13 +87,15 @@ public static class DateTimeExtensions
 
     public static DateTime ToServerTimeZone(this DateTime time)
     {
-        var offsetTime = new DateTimeOffset(time, _clientTimeZone);
+        var clientTimeZone = TimeSpan.FromHours(_userControlSession.Get<short>(SessionKey.CurrentTimeZone));
+        var offsetTime = new DateTimeOffset(time, clientTimeZone);
         return offsetTime.ToOffset(ServerTimeZone).DateTime;
     }
 
     public static DateTime ToClientTimeZone(this DateTime time)
     {
+        var clientTimeZone = TimeSpan.FromHours(_userControlSession.Get<short>(SessionKey.CurrentTimeZone));
         var offsetTime = new DateTimeOffset(time, ServerTimeZone);
-        return offsetTime.ToOffset(_clientTimeZone).DateTime;
+        return offsetTime.ToOffset(clientTimeZone).DateTime;
     }
 }

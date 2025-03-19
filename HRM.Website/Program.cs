@@ -3,6 +3,7 @@ using Fanex.Data.SqlServer;
 using Fanex.Logging.Sentry.RavenClient;
 using GO.UserControl.Client.Core;
 using GO.UserControl.Client.Core.Session;
+using HRM.Core;
 using HRM.Website;
 using HRM.Website.Middlewares;
 using Microsoft.AspNetCore.Builder;
@@ -32,8 +33,9 @@ services.AddDIServices(configuration);
 var app = builder.Build();
 
 UserControlClientManager
-    .UseSettings(app.Services.GetService<IUserControlSettings>())
-    .UseSession(app.Services.GetService<IUserControlSession>());
+    .UseSettings(app.Services.GetRequiredService<IUserControlSettings>())
+    .UseSession(app.Services.GetRequiredService<IUserControlSession>());
+DateTimeExtensions.Configure(app.Services.GetRequiredService<IUserControlSession>());
 
 if (!app.Environment.IsDevelopment())
 {

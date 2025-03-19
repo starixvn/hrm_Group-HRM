@@ -135,7 +135,7 @@ public class ExtensionNoController(
     [HrmPermission(Policy.Host, FunctionKey.ExtensionNumber)]
     public async Task<IActionResult> GetAllExternalGroup()
     {
-        var groups = await extensionNumberService.GetAllExtensionGroupInfoAsync( CurrentCompanyId, isInternal: false);
+        var groups = await extensionNumberService.GetAllExtensionGroupInfoAsync(CurrentCompanyId, isInternal: false);
 
         return Json(groups);
     }

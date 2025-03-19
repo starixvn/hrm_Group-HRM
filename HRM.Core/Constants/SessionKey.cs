@@ -5,4 +5,5 @@ public static class SessionKey
     public const string Employee = "InternalEmployee";
     public const string IsShowLeftNavigation = "IsShowLeftNavigation";
     public const string CurrentCompanyId = "CurrentCompanyId";
+    public const string CurrentTimeZone = "CurrentTimeZone";
 }
