@@ -159,6 +159,7 @@ public class ChangeShiftRequestService(
 
     public async Task<CommandResult> EditAsync(int actorId, EditChangeShift model)
     {
+        var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
         var criteria = new EditChangeShiftRequestCriteria
         {
             RequestId = model.RequestId,
@@ -170,17 +171,21 @@ public class ChangeShiftRequestService(
             ApproverId = model.ApproverId,
             Remark = model.Remark,
             DetailXml = model.Details.ToXML().ToString(),
-            ActorId = actorId
+            ActorId = actorId,
+            CompanyId = companyId
         };
         return await baseService.ExecuteNonQueryAsync(criteria);
     }
 
     public async Task<CommandResult> DeleteAsync(int actorId, long requestId)
     {
+        var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
+
         var criteria = new DeleteChangeShiftRequestCriteria
         {
             RequestId = requestId,
-            ActorId = actorId
+            ActorId = actorId,
+            CompanyId = companyId
         };
         return await baseService.ExecuteNonQueryAsync(criteria);
     }

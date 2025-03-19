@@ -20,6 +20,8 @@ public class EditChangeShiftRequestCriteria : CriteriaBase
     public string DetailXml { get; set; }
     public int ActorId { get; set; }
 
+    public short CompanyId { get; set; }
+
     public override string GetSettingKey() => "ChangeShiftRequest_Update";
 
     public override bool IsValid() => RequestId > 0 && EmployeeId > 0 && FromDate <= ToDate && ActorId > 0;
