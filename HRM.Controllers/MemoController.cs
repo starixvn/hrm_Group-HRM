@@ -12,7 +12,6 @@ using HRM.Core.Models;
 using HRM.Core.Services;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using Models;
 using Services.Implement;
 using Services.Interfaces;
@@ -20,13 +19,13 @@ using ViewModels.Memo;
 
 public class MemoController(
     AppSettings appSettings,
+    AmazonStorageConfig s3Config,
     IWebHostEnvironment hostingEnvironment,
     IUserControlSession userControlSession,
     IMemoService memoService,
     ICommonDataService commonDataService,
     IEmailService emailService,
-    IMinIOService minIOService,
-    IConfiguration configuration) : BaseController(userControlSession)
+    IMinIOService minIOService) : BaseController(userControlSession)
 {
     private readonly IUserControlSession userControlSession = userControlSession;
     private const int UploadMemoType = 1;
@@ -55,7 +54,7 @@ public class MemoController(
         var memo = await memoService.GetByIdAsync(id, CurrentCompanyId);
         ViewBag.MemoCategories = await commonDataService.GetLookupDataByCodeAsync(Constants.MemoCategory, CurrentCompanyId);
         ViewBag.Updated = false;
-        ViewBag.UploadBasePath = $"{configuration["AWS:ExternalUrl"]}/{Bucket.File}";
+        ViewBag.UploadBasePath = $"{s3Config.ExternalUrl}/{Bucket.File}";
 
         return View(memo);
     }
@@ -175,7 +174,7 @@ public class MemoController(
     public async Task<IActionResult> Detail(int id)
     {
         var memo = await memoService.GetByIdAsync(id, CurrentCompanyId);
-        ViewBag.UploadBasePath = $"{configuration["AWS:ExternalUrl"]}/{Bucket.File}";
+        ViewBag.UploadBasePath = $"{s3Config.ExternalUrl}/{Bucket.File}";
 
         return View(memo);
     }

@@ -101,6 +101,9 @@ public static class ServiceCollectionExtensions
         var letstalkSettings = configuration.GetSection("LetstalkSettings").Get<LetstalkSettings>();
         services.AddSingleton(letstalkSettings);
 
+        var s3Config = configuration.GetSection("AmazonStorageConfig").Get<AmazonStorageConfig>();
+        services.AddSingleton(s3Config);
+
         services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         services.AddSingleton<IUserControlSettings>(new UserControlSettings(configuration));
         services.AddSingleton<ILogger, Logger>();

@@ -29,7 +29,8 @@ public class InformationController(
     ICommonDataService commonDataService,
     IEmployeeService employeeService,
     IWebHostEnvironment hostingEnvironment,
-    IEmailService emailService) : BaseController(userControlSession)
+    IEmailService emailService,
+    IMinIOService minIOService) : BaseController(userControlSession)
 {
     private const string UpdateInfoNotificationTemplate = "EmailTemplates/UpdateInfoNotification.txt";
 
@@ -193,28 +194,18 @@ public class InformationController(
         return criteria;
     }
 
-    public ActionResult GetFileUploaded()
+    public async Task<IActionResult> GetFileUploaded()
     {
-        var fileNames = GetAllFileUploaded();
-        ViewBag.BaseUrl = $"/{Constants.ProfileUploadPath}/{EmployeeSession.Code}/";
-        return PartialView("_ListFileUploaded", fileNames);
+        var pathAttach = $"{CurrentCompanyId}/EmployeeProfiles/{EmployeeSession.Code}";
+        var files = await minIOService.GetFileAsync(Bucket.File, pathAttach);
+        return PartialView("_ListFileUploaded", files);
     }
 
-    private IList<string> GetAllFileUploaded()
+    private async Task<string> GetAvatarUrl(string code)
     {
-        var filePath = new List<string>();
-        var profilePath = Constants.ProfileUploadPath + EmployeeSession.Code;
-        var path = Path.Combine(hostingEnvironment.ContentRootPath, profilePath);
-        if (Directory.Exists(path))
-        {
-            var paths = Directory.GetFiles(path);
-            foreach (var p in paths)
-            {
-                filePath.Add(Path.GetFileName(p));
-            }
-        }
-
-        return filePath;
+        var avatarPath = $"{CurrentCompanyId}/{code}.jpg";
+        var avatarUrl = await minIOService.GetFilePath(Bucket.Avatar, avatarPath, "default-avatar.jpg");
+        return avatarUrl;
     }
 
     public async Task<IActionResult> GetEmployeeRelationship()

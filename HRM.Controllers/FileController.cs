@@ -7,15 +7,11 @@ using System.Threading.Tasks;
 using Core.Constants;
 using GO.UserControl.Client.Core.Session;
 using HRM.Core.Services;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Resources;
 
 public class FileController(
-    IWebHostEnvironment env,
     IUserControlSession userControlSession,
-    IWebHostEnvironment hostingEnvironment,
     IMinIOService minIOService) : BaseController(userControlSession)
 {
     private const int MaxSizeFileUpload = 5 * 1024 * 1024;
@@ -50,9 +46,9 @@ public class FileController(
                 {
                     pathAttach = pathAttach.Replace($"({count - 1})", "");
                 }
+
                 count++;
             }
-               
         }
 
         await minIOService.UploadFileAsync(file, Bucket.File, pathAttach);
@@ -62,13 +58,11 @@ public class FileController(
 
     public async Task<bool> Delete(string fileName)
     {
-        await minIOService.DeleteFileAsync(Bucket.File, fileName);
-
-        return true;
+        return await minIOService.DeleteFileAsync(Bucket.File, fileName);
     }
 
     [HttpPost]
-    public ActionResult MyProfileUploadFile(IEnumerable<IFormFile> files)
+    public async Task<IActionResult> MyProfileUploadFile(IEnumerable<IFormFile> files)
     {
         var formFiles = files.ToList();
         if (!formFiles.Exists(file => file.Length <= 0))
@@ -81,20 +75,10 @@ public class FileController(
             foreach (var file in formFiles)
             {
                 var fileName = Path.GetFileName(file.FileName);
-                var basePath = Path.Combine(hostingEnvironment.ContentRootPath, Constants.ProfileUploadPath + EmployeeSession.Code);
-                if (!Directory.Exists(basePath))
-                {
-                    Directory.CreateDirectory(basePath);
-                }
 
-                if (System.IO.File.Exists(basePath + "/" + file.FileName))
-                {
-                    return Json(new { isSucessful = false, message = string.Format(Labels.UploadFileExists, file.FileName) });
-                }
+                var pathAttach = $"{CurrentCompanyId}/EmployeeProfiles/{EmployeeSession.Code}/{fileName}";
 
-                var path = Path.Combine(basePath, fileName);
-                using var stream = new FileStream(path, FileMode.Create);
-                file.CopyTo(stream);
+                await minIOService.UploadFileAsync(file, Bucket.File, pathAttach);
             }
 
             return Json(new { isSuccessful = true, message = "File(s) uploaded successful." });
@@ -112,6 +96,7 @@ public class FileController(
             {
                 return false;
             }
+
             var extenstion = Path.GetExtension(file.FileName).ToLowerInvariant();
             if (!allowedExtenstion.Contains(extenstion))
             {
@@ -125,9 +110,9 @@ public class FileController(
     [HttpPost]
     public async Task<IActionResult> DeleteMyProfileUploadedFile(string fileName)
     {
-        var isSuccessful = false;
         var message = string.Empty;
-        await minIOService.DeleteFileAsync(Bucket.File, fileName);
+        var pathAttach = $"{CurrentCompanyId}/EmployeeProfiles/{EmployeeSession.Code}/{fileName}";
+        var isSuccessful = await minIOService.DeleteFileAsync(Bucket.File, pathAttach);
 
         return Json(new { isSuccessful, message });
     }

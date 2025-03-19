@@ -1,17 +1,21 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Amazon.S3;
 using Amazon.S3.Model;
+using Fanex.Logging;
+using HRM.Core.Models;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
 
 namespace HRM.Core.Services;
 
 public interface IMinIOService
 {
     Task<bool> UploadFileAsync(IFormFile file, string bucketName, string filePath);
+
+    Task<IEnumerable<S3FileObject>> GetFileAsync(string bucketName, string directoryBucket);
 
     Task<string> GetFilePath(string bucketName, string filePath, string defaultFile = "");
 
@@ -22,26 +26,22 @@ public interface IMinIOService
 
 public class MinIOService : IMinIOService
 {
-    private readonly AmazonS3Client s3Client;
-    private readonly ILogger<MinIOService> logger;
-    private readonly string externalUrl;
+    private readonly IAmazonS3 s3Client;
+    private readonly AmazonStorageConfig s3Config;
+    private readonly ILogger logger;
 
-    public MinIOService(IConfiguration configuration, ILogger<MinIOService> logger)
+    public MinIOService(AmazonStorageConfig s3Config, ILogger logger)
     {
-        var accessKey = configuration["AWS:AccessKey"];
-        var secretKey = configuration["AWS:SecretKey"];
-        var internalUrl = configuration["AWS:InternalUrl"];
-        externalUrl = configuration["AWS:ExternalUrl"];
-
         var config = new AmazonS3Config
         {
-            ServiceURL = internalUrl,
+            ServiceURL = s3Config.InternalUrl,
             ForcePathStyle = true,
             UseHttp = true
         };
 
-        s3Client = new AmazonS3Client(accessKey, secretKey, config);
+        s3Client = new AmazonS3Client(s3Config.AccessKey, s3Config.SecretKey, config);
         this.logger = logger;
+        this.s3Config = s3Config;
     }
 
     public async Task<bool> UploadFileAsync(IFormFile file, string bucketName, string filePath)
@@ -59,14 +59,14 @@ public class MinIOService : IMinIOService
             var response = await s3Client.PutObjectAsync(putRequest);
             return response.HttpStatusCode == System.Net.HttpStatusCode.OK;
         }
-        catch (AmazonS3Exception e)
+        catch (AmazonS3Exception ex)
         {
-            logger.LogError(e, "Upload to s3 Exception. Message: {Message}", e.Message);
+            await logger.ErrorAsync($"Upload to s3 Exception. Message: {ex.Message}", ex);
             return false;
         }
-        catch (Exception e)
+        catch (Exception ex)
         {
-            logger.LogError(e, "Upload to s3 Exception. Message: {Message}", e.Message);
+            await logger.ErrorAsync($"Upload to s3 Exception. Message: {ex.Message}", ex);
             return false;
         }
     }
@@ -84,11 +84,27 @@ public class MinIOService : IMinIOService
         return response.S3Objects.Any(o => o.Key == filePath);
     }
 
+    public async Task<IEnumerable<S3FileObject>> GetFileAsync(string bucketName, string directoryBucket)
+    {
+        var request = new ListObjectsV2Request
+        {
+            BucketName = bucketName,
+            Prefix = directoryBucket
+        };
+
+        var response = await s3Client.ListObjectsV2Async(request);
+        return response.S3Objects.Select(o => new S3FileObject
+        {
+            FileName = o.Key.Split("/").Last(),
+            FilePath = $"{s3Config.ExternalUrl}/{bucketName}/{o.Key}"
+        });
+    }
+
     public async Task<string> GetFilePath(string bucketName, string filePath, string defaultFile = "")
     {
         var isExistFile = await IsFileExistsAsync(bucketName, filePath);
         var fileName = isExistFile ? filePath : defaultFile;
-        return $"{externalUrl}/{bucketName}/{fileName}";
+        return $"{s3Config.ExternalUrl}/{bucketName}/{fileName}";
     }
 
     public async Task<bool> DeleteFileAsync(string bucketName, string objectName)
@@ -102,16 +118,16 @@ public class MinIOService : IMinIOService
             };
 
             var response = await s3Client.DeleteObjectAsync(deleteRequest);
-            return response.HttpStatusCode == System.Net.HttpStatusCode.OK;
+            return response.HttpStatusCode is HttpStatusCode.OK or HttpStatusCode.NoContent;
         }
-        catch (AmazonS3Exception e)
+        catch (AmazonS3Exception ex)
         {
-            logger.LogError(e, "Delete to s3 Exception. Message: {Message}", e.Message);
+            await logger.ErrorAsync($"Delete to s3 Exception. Message: {ex.Message}", ex);
             return false;
         }
-        catch (Exception e)
+        catch (Exception ex)
         {
-            logger.LogError(e, "Delete to s3 Exception. Message: {Message}", e.Message);
+            await logger.ErrorAsync($"Delete to s3 Exception. Message: {ex.Message}", ex.Message);
             return false;
         }
     }
