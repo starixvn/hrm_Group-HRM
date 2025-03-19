@@ -43,7 +43,7 @@ public interface IEmployeeService
 
     Task<IEnumerable<SupervisorNameModel>> GetHRAndSupervisorByEmpIdAsync(int employeeId);
 
-    Task<IEnumerable<Employee>> GetEmployeeByGender(string query, int gender, short CompanyId);
+    Task<IEnumerable<Employee>> GetEmployeeByGender(string query, int gender, short companyId);
 
     Task<IEnumerable<EmployeeFullProfile>> GetEmployeeFullProfile(GetEmployeeFullProfileCriteria criteria);
 
