@@ -81,7 +81,7 @@ public class MinIOService : IMinIOService
         };
 
         var response = await s3Client.ListObjectsV2Async(request);
-        return response.S3Objects.Any(o => o.Key == filePath);
+        return response.S3Objects.Exists(o => o.Key == filePath);
     }
 
     public async Task<IEnumerable<S3FileObject>> GetFileAsync(string bucketName, string directoryBucket)

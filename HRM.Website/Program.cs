@@ -1,4 +1,4 @@
-using System.IO;
+using System.Threading;
 using Fanex.Data.SqlServer;
 using Fanex.Logging.Sentry.RavenClient;
 using GO.UserControl.Client.Core;
@@ -7,7 +7,6 @@ using HRM.Website;
 using HRM.Website.Middlewares;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 
@@ -44,15 +43,6 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-var staticFilesPath = Path.Combine(Directory.GetCurrentDirectory(), "file");
-if (Directory.Exists(staticFilesPath))
-{
-    app.UseStaticFiles(new StaticFileOptions
-    {
-        FileProvider = new PhysicalFileProvider(staticFilesPath),
-        RequestPath = "/file"
-    });
-}
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
@@ -61,5 +51,7 @@ app.UseSession();
 app.MapControllerRoute(
     "default",
     "{controller=Home}/{action=Index}/{id?}");
+
+ThreadPool.SetMinThreads(100, 100);
 
 await app.RunAsync();

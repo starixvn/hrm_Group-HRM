@@ -201,13 +201,6 @@ public class InformationController(
         return PartialView("_ListFileUploaded", files);
     }
 
-    private async Task<string> GetAvatarUrl(string code)
-    {
-        var avatarPath = $"{CurrentCompanyId}/{code}.jpg";
-        var avatarUrl = await minIOService.GetFilePath(Bucket.Avatar, avatarPath, "default-avatar.jpg");
-        return avatarUrl;
-    }
-
     public async Task<IActionResult> GetEmployeeRelationship()
     {
         var criteria = new GetRelationshipByEmployeeIdCriteria

@@ -84,7 +84,6 @@ public class MemoController(
                     commandResult.OutputId = model.Id;
                     await SendMailAsync(model.Subject, commandResult);
                     break;
-
                 case false:
                     ModelState.AddModelError(string.Empty, commandResult.Message);
                     break;
