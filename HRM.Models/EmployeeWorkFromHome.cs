@@ -1,6 +1,7 @@
 ﻿namespace HRM.Models;
 
 using Core;
+using HRM.Core.Models;
 using System;
 using System.Collections.Generic;
 
@@ -32,5 +33,5 @@ public class EmployeeWorkFromHome
     }
 
     public string Remark { get; set; }
-    public IList<AttachFile> AttachFiles { get; set; }
+    public IList<S3FileObject> AttachFiles { get; set; }
 }

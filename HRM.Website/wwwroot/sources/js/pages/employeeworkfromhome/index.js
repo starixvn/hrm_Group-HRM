@@ -130,7 +130,7 @@ const workFromHomeModule = (function ($) {
                             var files = document.getElementById('file_emp_wfh').files;
                             var fd = new FormData();
                             for (var i = 0; i < files.length; i++) {
-                                fd.append('files[' + i + ']', files[i]);
+                                fd.append('files', files[i]);
                             }
                             fd.append('requestModel', JSON.stringify(model));
                             var xhr = new XMLHttpRequest();
@@ -195,7 +195,7 @@ const workFromHomeModule = (function ($) {
                             var files = document.getElementById('file_emp_wfh').files;
                             var fd = new FormData();
                             for (var i = 0; i < files.length; i++) {
-                                fd.append('files[' + i + ']', files[i]);
+                                fd.append('files', files[i]);
                             }
                             fd.append('requestModel', JSON.stringify(model));
                             fd.append('filesRemove', JSON.stringify(tempFile));

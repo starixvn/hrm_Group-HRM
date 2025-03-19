@@ -51,7 +51,7 @@
                     <td>
                         @foreach (var file in item.AttachFiles)
                         {
-                            <a href="@file.Path" class="attach-file">
+                            <a href="@file.FilePath" class="attach-file" download>
                                 <span class="file-name">@file.FileNameWithoutExtension</span><span class="file-extension">@file.Extension</span>
                             </a>
                         }

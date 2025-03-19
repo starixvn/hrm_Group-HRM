@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
@@ -16,16 +17,31 @@ using HRM.Services.Interfaces;
 using HRM.ViewModels.EmployeeWorkFromHome;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace HRM.Controllers;
 
-public class EmployeeWorkFromHomeController(
-    IUserControlSession userControlSession,
-    IBaseService baseService,
-    IAttachFileService attachFileService) : BaseController(userControlSession)
+public class EmployeeWorkFromHomeController : BaseController
 {
-    private readonly IUserControlSession userControlSession = userControlSession;
-    private const string UploadFolderPath = "/file/uploads/wfh/";
+    private readonly IUserControlSession userControlSession;
+    private readonly IBaseService baseService;
+    private readonly IAttachFileService attachFileService;
+    private readonly string uploadFolderPath;
+
+
+    public EmployeeWorkFromHomeController(
+        IUserControlSession userControlSession,
+        IBaseService baseService,
+        IAttachFileService attachFileService) : base(userControlSession)
+    {
+        this.baseService = baseService;
+        this.attachFileService = attachFileService;
+        this.userControlSession = userControlSession;
+        uploadFolderPath = $"{CurrentCompanyId}/WHF";
+    }
+
 
     [HrmPermission(Policy.Read, FunctionKey.EmployeeManagement)]
     public ActionResult Index()
@@ -47,7 +63,7 @@ public class EmployeeWorkFromHomeController(
         var employees = await baseService.GetDataAsync<EmployeeWorkFromHome>(criteria);
         foreach (var employee in employees)
         {
-            employee.AttachFiles = attachFileService.GetInfoAttachFile(employee.EmployeeWorkFromHomeId, UploadFolderPath);
+            employee.AttachFiles = await attachFileService.GetInfoAttachFileAsync(employee.EmployeeWorkFromHomeId, uploadFolderPath);
         }
 
         ViewBag.IsHost = userControlSession.HasPermissionOnFunction(FunctionKey.EmployeeManagement, Policy.Host);
@@ -70,7 +86,7 @@ public class EmployeeWorkFromHomeController(
     [HrmPermission(Policy.Host, FunctionKey.EmployeeManagement)]
     public async Task<IActionResult> Create(string requestModel, IList<IFormFile> files)
     {
-        var model = JsonSerializer.Deserialize<EmployeeWorkFromHomeViewModel>(requestModel);
+        var model = JsonSerializer.Deserialize<EmployeeWorkFromHomeViewModel>(requestModel, JsonOptions);
         var result = new CommandResult();
 
         if (model != null && ModelState.IsValid)
@@ -87,7 +103,7 @@ public class EmployeeWorkFromHomeController(
             result = await baseService.ExecuteNonQueryAsync(criteria);
             if (result.IsSuccessful)
             {
-                attachFileService.UploadFile(files, criteria.RequestId, UploadFolderPath);
+                await attachFileService.UploadFileAsync(files, criteria.RequestId, uploadFolderPath);
             }
         }
         else
@@ -95,7 +111,7 @@ public class EmployeeWorkFromHomeController(
             result.Message = ModelState.Values.FirstOrDefault(v => v.Errors.Any())?.Errors.FirstOrDefault()?.ErrorMessage;
         }
 
-        return Json(result);
+        return new JsonResult(result, new JsonSerializerSettings { ContractResolver = new DefaultContractResolver() });
     }
 
     [HrmPermission(Policy.Read, FunctionKey.EmployeeManagement)]
@@ -112,7 +128,7 @@ public class EmployeeWorkFromHomeController(
             FromDate = employeeWorkFromHome.FromDate,
             ToDate = employeeWorkFromHome.ToDate,
             Remark = employeeWorkFromHome.Remark,
-            Files = attachFileService.GetAttachFile(id, UploadFolderPath)
+            Files = await attachFileService.GetAttachFileAsync(id, uploadFolderPath)
         };
         return PartialView("_Edit", model);
     }
@@ -121,7 +137,7 @@ public class EmployeeWorkFromHomeController(
     [HrmPermission(Policy.Host, FunctionKey.EmployeeManagement)]
     public async Task<IActionResult> Edit(string requestModel, IList<IFormFile> files, string filesRemove)
     {
-        var model = JsonSerializer.Deserialize<EmployeeWorkFromHomeViewModel>(requestModel);
+        var model = JsonSerializer.Deserialize<EmployeeWorkFromHomeViewModel>(requestModel, JsonOptions);
         var result = new CommandResult();
 
         if (model != null && ModelState.IsValid)
@@ -141,9 +157,10 @@ public class EmployeeWorkFromHomeController(
             {
                 if (!string.IsNullOrWhiteSpace(filesRemove))
                 {
-                    attachFileService.DeleteFile(JsonSerializer.Deserialize<List<string>>(filesRemove), criteria.EmployeeWorkFromHomeId, UploadFolderPath);
+                    await attachFileService.DeleteFileAsync(JsonSerializer.Deserialize<List<string>>(filesRemove), criteria.EmployeeWorkFromHomeId, uploadFolderPath);
                 }
-                attachFileService.UploadFile(files, criteria.EmployeeWorkFromHomeId, UploadFolderPath);
+
+                await attachFileService.UploadFileAsync(files, criteria.EmployeeWorkFromHomeId, uploadFolderPath);
             }
         }
         else
@@ -151,7 +168,7 @@ public class EmployeeWorkFromHomeController(
             result.Message = ModelState.Values.FirstOrDefault(v => v.Errors.Any())?.Errors.FirstOrDefault()?.ErrorMessage;
         }
 
-        return Json(result);
+        return new JsonResult(result, new JsonSerializerSettings { ContractResolver = new DefaultContractResolver() });
     }
 
     [HttpPost]
@@ -163,4 +180,11 @@ public class EmployeeWorkFromHomeController(
 
         return Json(result);
     }
+
+    private static readonly JsonSerializerOptions JsonOptions = new()
+    {
+        PropertyNameCaseInsensitive = true,
+        NumberHandling = JsonNumberHandling.AllowReadingFromString,
+        Converters = { new DateTimeConverter() }
+    };
 }
