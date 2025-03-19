@@ -30,7 +30,6 @@ public class ChangeShiftController(
     IAttachFileService attachFileService) : BaseController(userControlSession)
 {
     private readonly IUserControlSession userControlSession = userControlSession;
-    private const string UploadFolderPath = "/file/uploads/request/";
 
     [HttpGet]
     public async Task<IActionResult> EmployeeView(int? year)
@@ -48,7 +47,7 @@ public class ChangeShiftController(
         var requests = await changeShiftService.GetByEmployeeAsync(criteria);
         foreach (var request in requests)
         {
-            request.AttachFiles = attachFileService.GetInfoAttachFile(request.RequestId, UploadFolderPath);
+            request.AttachFiles = await attachFileService.GetInfoAttachFileAsync(request.RequestId, $"{CurrentCompanyId}/requests");
             request.CreatedDate = request.CreatedDate.ToClientTimeZone();
         }
         ViewBag.Year = tempYear;
@@ -89,7 +88,7 @@ public class ChangeShiftController(
         if (commandResult.IsSuccessful)
         {
             await changeShiftService.SendMailAndSendLetstalkCreateRequestAsync(commandResult.OutputId);
-            attachFileService.UploadFile(files, commandResult.OutputId, UploadFolderPath);
+            await attachFileService.UploadFileAsync(files, commandResult.OutputId, $"{CurrentCompanyId}/requests");
         }
 
         return Json(commandResult);
@@ -119,7 +118,7 @@ public class ChangeShiftController(
             Details = await changeShiftService.GetDetailByIdAsync(id),
             Verifiers = supervisor.Verifiers,
             Approvers = supervisor.Approvers,
-            Files = attachFileService.GetAttachFile(id, UploadFolderPath)
+            Files = (await attachFileService.GetInfoAttachFileAsync(id, $"{CurrentCompanyId}/requests")).Select(x => x.FileName).ToList()
         };
 
         if (request.TypeId == (byte)ChangeShiftType.MoveOffDay)
@@ -148,10 +147,10 @@ public class ChangeShiftController(
         if (commandResult.IsSuccessful)
         {
             await changeShiftService.SendMailEditRequestAsync(criteria.RequestId);
-            attachFileService.UploadFile(files, criteria.RequestId, UploadFolderPath);
+            await attachFileService.UploadFileAsync(files, criteria.RequestId, $"{CurrentCompanyId}/requests");
             if (!string.IsNullOrWhiteSpace(filesRemove))
             {
-                attachFileService.DeleteFile(JsonConvert.DeserializeObject<List<string>>(filesRemove), criteria.RequestId, UploadFolderPath);
+                await attachFileService.DeleteFileAsync(JsonConvert.DeserializeObject<List<string>>(filesRemove), criteria.RequestId, $"{CurrentCompanyId}/requests");
             }
         }
 
@@ -165,7 +164,7 @@ public class ChangeShiftController(
 
         if (commandResult.IsSuccessful)
         {
-            attachFileService.DeleteFolderAttachFile(id, UploadFolderPath);
+            await attachFileService.DeleteFolderAttachFileAsync(id, $"{CurrentCompanyId}/requests");
         }
 
         return Json(commandResult);
@@ -193,7 +192,7 @@ public class ChangeShiftController(
             Status = request.Status,
             Verifiers = supervisor.Verifiers,
             Approvers = supervisor.Approvers,
-            Files = attachFileService.GetAttachFile(id, UploadFolderPath)
+            Files = (await attachFileService.GetInfoAttachFileAsync(id, $"{CurrentCompanyId}/requests")).Select(x => x.FileName).ToList()
         };
 
         ViewBag.IsHost = false;

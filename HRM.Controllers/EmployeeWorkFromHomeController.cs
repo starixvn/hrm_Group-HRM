@@ -128,7 +128,7 @@ public class EmployeeWorkFromHomeController : BaseController
             FromDate = employeeWorkFromHome.FromDate,
             ToDate = employeeWorkFromHome.ToDate,
             Remark = employeeWorkFromHome.Remark,
-            Files = await attachFileService.GetAttachFileAsync(id, uploadFolderPath)
+            Files = (await attachFileService.GetInfoAttachFileAsync(id, $"{CurrentCompanyId}/requests")).Select(x => x.FileName).ToList()
         };
         return PartialView("_Edit", model);
     }

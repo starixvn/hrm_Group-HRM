@@ -1,11 +1,11 @@
-﻿using HRM.Core;
-using HRM.Models.Shifts;
-
-namespace HRM.Models.Request;
+﻿namespace HRM.Models.Request;
 
 using System;
 using System.Collections.Generic;
 using ChangeShift;
+using Core;
+using HRM.Core.Models;
+using Shifts;
 
 public class RequestEntity : EntityBase<long>
 {
@@ -28,7 +28,7 @@ public class RequestEntity : EntityBase<long>
 
     public DateTime CreatedDate
     {
-        get => serverCreatedDate; 
+        get => serverCreatedDate;
         set => serverCreatedDate = value.ToClientTimeZone();
     }
 
@@ -54,7 +54,7 @@ public class RequestEntity : EntityBase<long>
 
     public string Remark { get; set; }
 
-    public IList<AttachFile> AttachFiles { get; set; }
+    public IEnumerable<S3FileObject> AttachFiles { get; set; }
 
     public string RefNO { get; set; }
 

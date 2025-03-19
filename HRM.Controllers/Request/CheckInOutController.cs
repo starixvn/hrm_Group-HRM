@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Core;
 using Core.Constants;
@@ -28,7 +29,6 @@ public class CheckInOutController(
     IAttachFileService attachFileService) : BaseController(userControlSession)
 {
     private readonly IUserControlSession userControlSession = userControlSession;
-    private const string UploadFolderPath = "/file/uploads/request/";
 
     [HttpGet]
     public async Task<IActionResult> EmployeeView(int? year)
@@ -47,7 +47,7 @@ public class CheckInOutController(
         var requests = await checkInOutRequestService.GetByDateAsync(criteria);
         foreach (var request in requests)
         {
-            request.AttachFiles = attachFileService.GetInfoAttachFile(request.RequestId, UploadFolderPath);
+            request.AttachFiles = await attachFileService.GetInfoAttachFileAsync(request.RequestId, $"{CurrentCompanyId}/requests");
             request.CreatedDate = request.CreatedDate.ToClientTimeZone();
             request.RequestTime = request.RequestTime.ToClientTimeZone();
         }
@@ -106,7 +106,7 @@ public class CheckInOutController(
         if (commandResult.IsSuccessful)
         {
             await checkInOutRequestService.SendMailAndSendLetstalkCreateRequestAsync(criteria.RequestId);
-            attachFileService.UploadFile(files, criteria.RequestId, UploadFolderPath);
+            await attachFileService.UploadFileAsync(files, criteria.RequestId, $"{CurrentCompanyId}/requests");
         }
 
         return Json(commandResult);
@@ -153,7 +153,7 @@ public class CheckInOutController(
             Verifiers = supervisor.Verifiers,
             Approvers = supervisor.Approvers,
             DisabledDates = disabledDates,
-            Files = attachFileService.GetAttachFile(id, UploadFolderPath)
+            Files = (await attachFileService.GetInfoAttachFileAsync(id, $"{CurrentCompanyId}/requests")).Select(x => x.FileName).ToList()
         };
 
         ViewBag.IsTopManager = request.Requester.IsTopManager;
@@ -184,10 +184,10 @@ public class CheckInOutController(
         if (commandResult.IsSuccessful)
         {
             await checkInOutRequestService.SendMailEditRequestAsync(model.RequestId);
-            attachFileService.UploadFile(files, criteria.RequestId, UploadFolderPath);
+            await attachFileService.UploadFileAsync(files, criteria.RequestId, $"{CurrentCompanyId}/requests");
             if (!string.IsNullOrWhiteSpace(filesRemove))
             {
-                attachFileService.DeleteFile(JsonConvert.DeserializeObject<List<string>>(filesRemove), criteria.RequestId, UploadFolderPath);
+                await attachFileService.DeleteFileAsync(JsonConvert.DeserializeObject<List<string>>(filesRemove), criteria.RequestId, $"{CurrentCompanyId}/requests");
             }
         }
 
@@ -202,7 +202,7 @@ public class CheckInOutController(
 
         if (commandResult.IsSuccessful)
         {
-            attachFileService.DeleteFolderAttachFile(id, UploadFolderPath);
+            await attachFileService.DeleteFolderAttachFileAsync(id, $"{CurrentCompanyId}/requests");
         }
 
         return Json(commandResult);

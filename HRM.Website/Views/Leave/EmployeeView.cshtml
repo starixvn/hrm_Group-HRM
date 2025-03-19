@@ -120,7 +120,7 @@
                     <td>
                         @if (!string.IsNullOrWhiteSpace(request.Remark))
                         {
-                            <span class="fa fa-comment tooltip-tipsy" title="@request.Remark" />
+                            <span class="fa fa-comment tooltip-tipsy" title="@request.Remark"></span>
                         }
                         else
                         {
@@ -130,7 +130,7 @@
                     <td>
                         @foreach (var file in request.AttachFiles)
                         {
-                            <a href="@file.Path" class="attach-file">
+                            <a href="@file.FilePath" class="attach-file">
                                 <span class="file-name">@file.FileNameWithoutExtension</span><span class="file-extension">@file.Extension</span>
                             </a>
                         }

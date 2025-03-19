@@ -15,18 +15,20 @@ public interface IMinIOService
 {
     Task<bool> UploadFileAsync(IFormFile file, string bucketName, string filePath);
 
-    Task<IEnumerable<S3FileObject>> GetFileAsync(string bucketName, string directoryBucket);
+    Task<IEnumerable<S3FileObject>> GetFileAsync(string bucketName, string directory);
 
     Task<string> GetFilePath(string bucketName, string filePath, string defaultFile = "");
 
     Task<bool> DeleteFileAsync(string bucketName, string objectName);
+
+    Task DeleteDirectoryAsync(string bucketName, string directory);
 
     Task<bool> IsFileExistsAsync(string bucketName, string filePath);
 }
 
 public class MinIOService : IMinIOService
 {
-    private readonly IAmazonS3 s3Client;
+    private readonly IAmazonS3 client;
     private readonly AmazonStorageConfig s3Config;
     private readonly ILogger logger;
 
@@ -39,7 +41,7 @@ public class MinIOService : IMinIOService
             UseHttp = true
         };
 
-        s3Client = new AmazonS3Client(s3Config.AccessKey, s3Config.SecretKey, config);
+        client = new AmazonS3Client(s3Config.AccessKey, s3Config.SecretKey, config);
         this.logger = logger;
         this.s3Config = s3Config;
     }
@@ -56,8 +58,8 @@ public class MinIOService : IMinIOService
                 InputStream = fileStream
             };
 
-            var response = await s3Client.PutObjectAsync(putRequest);
-            return response.HttpStatusCode == System.Net.HttpStatusCode.OK;
+            var response = await client.PutObjectAsync(putRequest);
+            return response.HttpStatusCode == HttpStatusCode.OK;
         }
         catch (AmazonS3Exception ex)
         {
@@ -80,19 +82,19 @@ public class MinIOService : IMinIOService
             MaxKeys = 1
         };
 
-        var response = await s3Client.ListObjectsV2Async(request);
+        var response = await client.ListObjectsV2Async(request);
         return response.S3Objects.Exists(o => o.Key == filePath);
     }
 
-    public async Task<IEnumerable<S3FileObject>> GetFileAsync(string bucketName, string directoryBucket)
+    public async Task<IEnumerable<S3FileObject>> GetFileAsync(string bucketName, string directory)
     {
         var request = new ListObjectsV2Request
         {
             BucketName = bucketName,
-            Prefix = directoryBucket
+            Prefix = $"{directory}/"
         };
 
-        var response = await s3Client.ListObjectsV2Async(request);
+        var response = await client.ListObjectsV2Async(request);
         return response.S3Objects.Select(o => new S3FileObject
         {
             FileName = o.Key.Split("/").Last(),
@@ -117,7 +119,7 @@ public class MinIOService : IMinIOService
                 Key = RemoveFirstSlash(objectName)
             };
 
-            var response = await s3Client.DeleteObjectAsync(deleteRequest);
+            var response = await client.DeleteObjectAsync(deleteRequest);
             return response.HttpStatusCode is HttpStatusCode.OK or HttpStatusCode.NoContent;
         }
         catch (AmazonS3Exception ex)
@@ -132,6 +134,30 @@ public class MinIOService : IMinIOService
         }
     }
 
+    public async Task DeleteDirectoryAsync(string bucketName, string directory)
+    {
+        try
+        {
+            var request = new ListObjectsV2Request
+            {
+                BucketName = bucketName,
+                Prefix = $"{directory}/"
+            };
+
+            var response = await client.ListObjectsV2Async(request);
+
+            response.S3Objects.ForEach(async obj => await client.DeleteObjectAsync(bucketName, obj.Key));
+        }
+        catch (AmazonS3Exception ex)
+        {
+            await logger.ErrorAsync($"Delete to s3 Exception. Message: {ex.Message}", ex);
+        }
+        catch (Exception ex)
+        {
+            await logger.ErrorAsync($"Delete to s3 Exception. Message: {ex.Message}", ex.Message);
+        }
+    }
+
     private static string RemoveFirstSlash(string filename)
     {
         if (string.IsNullOrEmpty(filename))
@@ -139,6 +165,6 @@ public class MinIOService : IMinIOService
             return filename;
         }
 
-        return filename.StartsWith('/') ? filename.Substring(1) : filename;
+        return filename.StartsWith('/') ? filename[1..] : filename;
     }
 }

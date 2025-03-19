@@ -96,7 +96,7 @@
                 <td>
                     @foreach (var file in request.AttachFiles)
                     {
-                        <a href="@file.Path" class="attach-file">
+                        <a href="@file.FilePath" class="attach-file">
                             <span class="file-name">@file.FileNameWithoutExtension</span><span class="file-extension">@file.Extension</span>
                         </a>
                     }

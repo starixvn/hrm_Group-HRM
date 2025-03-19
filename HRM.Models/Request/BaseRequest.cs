@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using Core.Enums;
+using HRM.Core.Models;
 using Resources;
 
 public class BaseRequest
@@ -58,5 +59,5 @@ public class BaseRequest
         }
     }
 
-    public IList<AttachFile> AttachFiles { get; set; }
+    public IEnumerable<S3FileObject> AttachFiles { get; set; }
 }

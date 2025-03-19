@@ -1,27 +1,26 @@
-﻿using HRM.Models.Shifts;
-
-namespace HRM.Controllers.Request;
+﻿namespace HRM.Controllers.Request;
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using GO.UserControl.Client.Core.Enumerables;
-using GO.UserControl.Client.Core.Session;
 using Core;
 using Core.Constants;
 using Core.Enums;
 using Core.Filters;
-using HRM.Criteria.Request;
 using Criteria.Supervisor;
+using GO.UserControl.Client.Core.Enumerables;
+using GO.UserControl.Client.Core.Session;
+using HRM.Criteria.Request;
 using HRM.Models.Request;
-using Models.Supervisor;
-using Services.Implement;
 using HRM.Services.Implement.Request;
-using Services.Interfaces;
 using HRM.Services.Interfaces.Request;
 using HRM.ViewModels.Request;
 using Microsoft.AspNetCore.Mvc;
+using Models.Shifts;
+using Models.Supervisor;
+using Services.Implement;
+using Services.Interfaces;
 
 public class RequestController(
     IUserControlSession userControlSession,
@@ -32,7 +31,6 @@ public class RequestController(
     IAttachFileService attachFileService)
     : BaseController(userControlSession)
 {
-    private const string PathFolder = "/file/uploads/request/";
     private const string EmployeeRequestViewName = "EmployeeRequest";
 
     [HttpPost]
@@ -47,7 +45,7 @@ public class RequestController(
     }
 
     [HrmPermission(Policy.Host, FunctionKey.VerifyRequest, FunctionKey.ApproveRequest)]
-    public async Task<ViewResult> Member(RequestViewModel request)
+    public async Task<IActionResult> Member(RequestViewModel request)
     {
         request.ViewType = RequestViewType.PersonalSpace;
         var team = await teamService.GetAllAsync();
@@ -61,15 +59,15 @@ public class RequestController(
             request.IsFilterByAffectedDate = false;
         }
         await GetRequests(request);
-        GetInfoAttachFile(request.Requests);
+        await GetInfoAttachFileAsync(request.Requests);
         return View(EmployeeRequestViewName, request);
     }
 
-    private void GetInfoAttachFile(IList<RequestEntity> requests)
+    private async Task GetInfoAttachFileAsync(IList<RequestEntity> requests)
     {
         foreach (var request in requests)
         {
-            request.AttachFiles = attachFileService.GetInfoAttachFile(request.Id, PathFolder);
+            request.AttachFiles = await attachFileService.GetInfoAttachFileAsync(request.Id, $"{CurrentCompanyId}/requests");
         }
     }
 
@@ -81,7 +79,7 @@ public class RequestController(
         var team = await teamService.GetAllAsync();
         request.TeamIds ??= string.Join(",", team.Select(x => x.Id));
         await GetRequests(request);
-        GetInfoAttachFile(request.Requests);
+        await GetInfoAttachFileAsync(request.Requests);
 
         return View(EmployeeRequestViewName, request);
     }
@@ -107,7 +105,7 @@ public class RequestController(
         var teams = await teamService.GetAllAsync();
         request.TeamIds ??= string.Join(",", teams.Select(x => x.Id));
         await GetRequests(request);
-        GetInfoAttachFile(request.Requests);
+        await GetInfoAttachFileAsync(request.Requests);
 
         return View(EmployeeRequestViewName, request);
     }
@@ -223,6 +221,7 @@ public class RequestController(
             case (byte)RequestType.Leave:
                 model.LeaveDisciplines = await requestService.GetLeaveRequestDetailToReviewDiscipline(model.RequestId);
                 break;
+
             default:
                 throw new ArgumentOutOfRangeException($"Unhandled request type: {model.RequestTypeId}");
         }

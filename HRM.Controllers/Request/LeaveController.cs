@@ -33,7 +33,6 @@ public class LeaveController(
     IAttachFileService attachFileService) : BaseController(userControlSession)
 {
     private readonly IUserControlSession userControlSession = userControlSession;
-    private const string UploadFolderPath = "/file/uploads/request/";
 
     [HttpGet]
     public async Task<IActionResult> EmployeeView(int? year)
@@ -51,7 +50,7 @@ public class LeaveController(
         var leaves = await leaveRequestService.GetByDateAsync(criteria);
         foreach (var request in leaves)
         {
-            request.AttachFiles = attachFileService.GetInfoAttachFile(request.RequestId, UploadFolderPath);
+            request.AttachFiles = await attachFileService.GetInfoAttachFileAsync(request.RequestId, $"{CurrentCompanyId}/requests");
             request.CreatedDate = request.CreatedDate.ToClientTimeZone();
         }
         ViewBag.Year = tempYear;
@@ -112,7 +111,7 @@ public class LeaveController(
         if (result.IsSuccessful)
         {
             leaveRequestService.SendMailAndSendLetstalkCreateRequest(criteria);
-            attachFileService.UploadFile(files, criteria.RequestId, UploadFolderPath);
+            await attachFileService.UploadFileAsync(files, criteria.RequestId, $"{CurrentCompanyId}/requests");
         }
 
         return new JsonResult(result);
@@ -144,7 +143,7 @@ public class LeaveController(
         var setting = await commonDataService.GetSystemSettingAsync();
         model.Verifiers = supervisor.Verifiers;
         model.Approvers = supervisor.Approvers;
-        model.Files = attachFileService.GetAttachFile(id, UploadFolderPath);
+        model.Files = (await attachFileService.GetInfoAttachFileAsync(id, $"{CurrentCompanyId}/requests")).Select(x => x.FileName).ToList();
         model.EnableHospitalizationLeaveBalance = setting.EnableHospitalizationLeaveBalance;
         model.EnableSickLeaveBalance = setting.EnableSickLeaveBalance;
 
@@ -180,10 +179,10 @@ public class LeaveController(
         if (result.IsSuccessful)
         {
             leaveRequestService.SendMailEditRequest(criteria);
-            attachFileService.UploadFile(files, criteria.RequestId, UploadFolderPath);
+            await attachFileService.UploadFileAsync(files, criteria.RequestId, $"{CurrentCompanyId}/requests");
             if (!string.IsNullOrWhiteSpace(filesRemove))
             {
-                attachFileService.DeleteFile(JsonConvert.DeserializeObject<List<string>>(filesRemove), criteria.RequestId, UploadFolderPath);
+                await attachFileService.DeleteFileAsync(JsonConvert.DeserializeObject<List<string>>(filesRemove), criteria.RequestId, $"{CurrentCompanyId}/requests");
             }
         }
 
@@ -200,7 +199,7 @@ public class LeaveController(
 
         var model = ConvertRequestToModel(request);
         model.LeaveTypeList = await commonDataService.GetLeaveTypeAsync();
-        model.Files = attachFileService.GetAttachFile(id, UploadFolderPath);
+        model.Files = (await attachFileService.GetInfoAttachFileAsync(id, $"{CurrentCompanyId}/requests")).Select(x => x.FileName).ToList();
 
         var supervisor = await requestService.GetVerifierAndApproverAsync(request.Requester.EmpId, RequestType.Leave);
         model.Verifiers = supervisor.Verifiers;
@@ -221,7 +220,7 @@ public class LeaveController(
 
         if (commandResult.IsSuccessful)
         {
-            attachFileService.DeleteFolderAttachFile(id, UploadFolderPath);
+            await attachFileService.DeleteFolderAttachFileAsync(id, $"{CurrentCompanyId}/requests");
         }
 
         return Json(commandResult);

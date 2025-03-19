@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
@@ -28,7 +29,6 @@ public class KeepInViewController(
     IShiftService shiftService) : BaseController(userControlSession)
 {
     private readonly IUserControlSession userControlSession = userControlSession;
-    private const string UploadFolderPath = "/file/uploads/request/";
 
     [HttpGet]
     public async Task<IActionResult> EmployeeView(int? year)
@@ -46,7 +46,7 @@ public class KeepInViewController(
         var requests = await keepInViewRequestService.GetByDateAsync(criteria);
         foreach (var request in requests)
         {
-            request.AttachFiles = attachFileService.GetInfoAttachFile(request.RequestId, UploadFolderPath);
+            request.AttachFiles = await attachFileService.GetInfoAttachFileAsync(request.RequestId, $"{CurrentCompanyId}/requests");
             request.CreatedDate = request.CreatedDate.ToClientTimeZone();
             request.FromTime = request.FromTime.ToClientTimeZone();
             request.ToTime = request.ToTime.ToClientTimeZone();
@@ -112,7 +112,7 @@ public class KeepInViewController(
         if (commandResult.IsSuccessful)
         {
             await keepInViewRequestService.SendMailAndSendLetstalkCreateRequestAsync(criteria.RequestId);
-            attachFileService.UploadFile(files, criteria.RequestId, UploadFolderPath);
+            await attachFileService.UploadFileAsync(files, criteria.RequestId, $"{CurrentCompanyId}/requests");
         }
 
         return Json(commandResult);
@@ -148,7 +148,7 @@ public class KeepInViewController(
             Approvers = supervisor.Approvers,
             MinDate = request.OnDate.AddMonths(-1),
             MaxDate = DateTimeOffset.Now.Date.FirstDayOfMonth().AddMonths(2).AddDays(-1),
-            Files = attachFileService.GetAttachFile(id, UploadFolderPath),
+            Files = (await attachFileService.GetInfoAttachFileAsync(id, $"{CurrentCompanyId}/requests")).Select(x => x.FileName).ToList(),
             ShiftId = request.ShiftId
         };
 
@@ -188,10 +188,10 @@ public class KeepInViewController(
         if (commandResult.IsSuccessful)
         {
             await keepInViewRequestService.SendMailEditRequestAsync(model.RequestId);
-            attachFileService.UploadFile(files, criteria.RequestId, UploadFolderPath);
+            await attachFileService.UploadFileAsync(files, criteria.RequestId, $"{CurrentCompanyId}/requests");
             if (!string.IsNullOrWhiteSpace(filesRemove))
             {
-                attachFileService.DeleteFile(JsonConvert.DeserializeObject<List<string>>(filesRemove), criteria.RequestId, UploadFolderPath);
+                await attachFileService.DeleteFileAsync(JsonConvert.DeserializeObject<List<string>>(filesRemove), criteria.RequestId, $"{CurrentCompanyId}/requests");
             }
         }
 
@@ -206,7 +206,7 @@ public class KeepInViewController(
 
         if (commandResult.IsSuccessful)
         {
-            attachFileService.DeleteFolderAttachFile(id, UploadFolderPath);
+            await attachFileService.DeleteFolderAttachFileAsync(id, $"{CurrentCompanyId}/requests");
         }
 
         return Json(commandResult);
