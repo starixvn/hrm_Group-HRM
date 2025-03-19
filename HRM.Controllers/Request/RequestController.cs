@@ -224,7 +224,7 @@ public class RequestController(
                 model.LeaveDisciplines = await requestService.GetLeaveRequestDetailToReviewDiscipline(model.RequestId);
                 break;
             default:
-                throw new ArgumentOutOfRangeException(nameof(model.RequestTypeId), $"Unhandled request type: {model.RequestTypeId}");
+                throw new ArgumentOutOfRangeException($"Unhandled request type: {model.RequestTypeId}");
         }
     }
 

@@ -78,15 +78,17 @@ public class MemoController(
             var commandResult = await memoService.EditAsync(model);
             ViewBag.Updated = commandResult.IsSuccessful;
 
-            switch (commandResult.IsSuccessful)
+            if (commandResult.IsSuccessful)
             {
-                case true when model.SendMail:
+                if (model.SendMail)
+                {
                     commandResult.OutputId = model.Id;
                     await SendMailAsync(model.Subject, commandResult);
-                    break;
-                case false:
-                    ModelState.AddModelError(string.Empty, commandResult.Message);
-                    break;
+                }
+            }
+            else
+            {
+                ModelState.AddModelError(string.Empty, commandResult.Message);
             }
         }
         else
@@ -130,15 +132,16 @@ public class MemoController(
             var commandResult = await memoService.CreateAsync(model);
             ViewBag.Updated = commandResult.IsSuccessful;
 
-            switch (commandResult.IsSuccessful)
+            if (commandResult.IsSuccessful)
             {
-                case true when model.SendMail:
+                if (model.SendMail)
+                {
                     await SendMailAsync(model.Subject, commandResult);
-                    break;
-
-                case false:
-                    ModelState.AddModelError(string.Empty, commandResult.Message);
-                    break;
+                }
+            }
+            else
+            {
+                ModelState.AddModelError(string.Empty, commandResult.Message);
             }
         }
         else

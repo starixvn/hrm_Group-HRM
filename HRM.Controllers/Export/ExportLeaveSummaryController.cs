@@ -1,11 +1,13 @@
 ﻿namespace HRM.Controllers.Export;
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Criteria.AnnualLeave;
 using GO.UserControl.Client.Core.Session;
 using HRM.Criteria.Report;
+using HRM.Models;
 using Microsoft.AspNetCore.Mvc;
 using Services.ExportExcel;
 using Services.Interfaces;
@@ -45,7 +47,18 @@ public class ExportLeaveSummaryController(
 
     public async Task<IActionResult> UnpaidLeaveSummary(LeaveSummaryViewModel model)
     {
-        var criteria = new GetUnpaidLeaveCriteria
+        var criteria = CreateUnpaidLeaveCriteria(model);
+        var leaveSummaries = await reportService.GetUnpaidLeaveAsync(criteria);
+        leaveSummaries = FilterLeaveSummariesByPeriod(leaveSummaries, model.Period);
+
+        var data = await exportReportService.Export(leaveSummaries, model.Year, model.LeaveType, model.Period, CurrentCompanyId);
+        var fileName = $"UnpaidLeaveSummary_{DateTimeOffset.Now:yyyyMMdd}.xls";
+        return File(data, "application/vnd.ms-excel", fileName);
+    }
+
+    private GetUnpaidLeaveCriteria CreateUnpaidLeaveCriteria(LeaveSummaryViewModel model)
+    {
+        return new GetUnpaidLeaveCriteria
         {
             Year = model.Year,
             EmpId = model.EmployeeId > 0 ? new int?(model.EmployeeId) : null,
@@ -55,19 +68,16 @@ public class ExportLeaveSummaryController(
             LeaveType = model.LeaveType,
             CompanyId = CurrentCompanyId
         };
-        var leaveSummaries = await reportService.GetUnpaidLeaveAsync(criteria);
-        leaveSummaries = model.Period switch
+    }
+
+    private IEnumerable<LeaveSummary> FilterLeaveSummariesByPeriod(IEnumerable<LeaveSummary> leaveSummaries, string period)
+    {
+        return period switch
         {
-            "1" => leaveSummaries.Where(x => x.Jan > 0 || x.Feb > 0 || x.Mar > 0 || x.Apr > 0 || x.Mar > 0 || x.Jun > 0)
-                .ToList(),
-            "2" => leaveSummaries.Where(x => x.Jul > 0 || x.Aug > 0 || x.Sep > 0 || x.Oct > 0 || x.Nov > 0 || x.Dec > 0)
-                .ToList(),
+            "1" => leaveSummaries.Where(x => x.Jan > 0 || x.Feb > 0 || x.Mar > 0 || x.Apr > 0 || x.May > 0 || x.Jun > 0).ToList(),
+            "2" => leaveSummaries.Where(x => x.Jul > 0 || x.Aug > 0 || x.Sep > 0 || x.Oct > 0 || x.Nov > 0 || x.Dec > 0).ToList(),
             _ => leaveSummaries
         };
-
-        var data = await exportReportService.Export(leaveSummaries, model.Year, model.LeaveType, model.Period, CurrentCompanyId);
-
-        var fileName = $"UnpaidLeaveSummary_{DateTimeOffset.Now:yyyyMMdd}.xls";
-        return File(data, "application/vnd.ms-excel", fileName);
     }
+
 }
