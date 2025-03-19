@@ -114,7 +114,7 @@ public class MinIOService : IMinIOService
             var deleteRequest = new DeleteObjectRequest
             {
                 BucketName = bucketName,
-                Key = objectName
+                Key = RemoveFirstSlash(objectName)
             };
 
             var response = await s3Client.DeleteObjectAsync(deleteRequest);
@@ -130,5 +130,15 @@ public class MinIOService : IMinIOService
             await logger.ErrorAsync($"Delete to s3 Exception. Message: {ex.Message}", ex.Message);
             return false;
         }
+    }
+
+    private static string RemoveFirstSlash(string filename)
+    {
+        if (string.IsNullOrEmpty(filename))
+        {
+            return filename;
+        }
+
+        return filename.StartsWith('/') ? filename.Substring(1) : filename;
     }
 }
