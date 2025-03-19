@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using GO.UserControl.Client.Core.Session;
+using HRM.Core.Constants;
 using HRM.Core.Models;
 using HRM.Core.Services;
 using HRM.Criteria.Holidays;
@@ -9,28 +11,36 @@ using HRM.Services.Interfaces;
 
 namespace HRM.Services.Implement;
 
-public class HolidayService(IBaseService baseService) : IHolidayService
+public class HolidayService(IBaseService baseService,
+    IUserControlSession userControlSession) : IHolidayService
 {
     public async Task<IEnumerable<Holiday>> GetByYearAsync(int year)
     {
+        var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
+
         var criteria = new GetHolidaysCriteria
         {
-            Year = year
+            Year = year,
+            CompanyId = companyId
         };
         return await baseService.GetDataAsync<Holiday>(criteria);
     }
 
     public async Task<Holiday> GetByIdAsync(int holidayId)
     {
+        var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
+
         var criteria = new GetHolidayByIdCriteria
         {
-            Id = holidayId
+            Id = holidayId,
+            CompanyId = companyId
         };
         return await baseService.GetDataEntityAsync<Holiday>(criteria);
     }
 
     public async Task<CommandResult> CreateAsync(int actorId, Holiday model)
     {
+        var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
         var criteria = new CreateHolidayCriteria
         {
             HolidayName = model.HolidayName,
@@ -38,7 +48,8 @@ public class HolidayService(IBaseService baseService) : IHolidayService
             FromDate = model.FromDate,
             ToDate = model.ToDate,
             ModifiedBy = actorId,
-            ModifiedDate = DateTimeOffset.Now.DateTime
+            ModifiedDate = DateTimeOffset.Now.DateTime,
+            CompanyId = companyId
         };
         return await baseService.ExecuteNonQueryAsync(criteria);
     }
