@@ -104,7 +104,8 @@ public class KeepInViewController(
             VerifierId = model.VerifierId,
             ApproverId = model.ApproverId,
             CreatedBy = EmployeeSession.EmpId,
-            ShiftId = model.ShiftId
+            ShiftId = model.ShiftId,
+            CompanyId = CurrentCompanyId
         };
 
         var commandResult = await baseService.ExecuteNonQueryAsync(criteria);
@@ -179,7 +180,8 @@ public class KeepInViewController(
             VerifierId = model.VerifierId,
             ApproverId = model.ApproverId,
             ModifiedBy = EmployeeSession.EmpId,
-            ShiftId = model.ShiftId
+            ShiftId = model.ShiftId,
+            CompanyId = CurrentCompanyId
         };
 
         var commandResult = await baseService.ExecuteNonQueryAsync(criteria);

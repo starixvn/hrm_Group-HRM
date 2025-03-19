@@ -83,9 +83,11 @@ public class KeepInViewRequestService(
 
     public async Task<CommandResult> DeleteAsync(long requestId)
     {
+        var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
         var criteria = new DeleteKeepInViewRequestCriteria
         {
-            RequestId = requestId
+            RequestId = requestId,
+            CompanyId = companyId
         };
         return await baseService.ExecuteNonQueryAsync(criteria);
     }

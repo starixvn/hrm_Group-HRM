@@ -95,7 +95,6 @@ public class ExportRequestController(IUserControlSession userControlSession,
     private async Task<IActionResult> WorkingTimeRequest(RequestViewModel model)
     {
         model.ToDate = model.ToDate.ToEndOfDay();
-        model.ViewType = RequestViewType.CompanySpace;
         var criteria = new GetRequestCriteria
         {
             EmpId = model.EmployeeId == -1 ? null : new int?(model.EmployeeId),

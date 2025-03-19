@@ -17,6 +17,7 @@ public class EditKeepInViewRequestCriteria : CriteriaBase
     public int? VerifierId { get; set; }
     public int? ApproverId { get; set; }
     public int? ShiftId { get; set; }
+    public short CompanyId { get; set; }
 
     public override string GetSettingKey() => "KeepInViewRequest_Update";
 
