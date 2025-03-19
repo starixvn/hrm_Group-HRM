@@ -88,7 +88,8 @@ public class LateInEarlyOutController(
             ReasonId = model.ReasonId,
             VerifierId = model.VerifierId,
             ApproverId = model.ApproverId,
-            CreatedBy = EmployeeSession.EmpId
+            CreatedBy = EmployeeSession.EmpId,
+            CompanyId = CurrentCompanyId
         };
         var commandResult = await baseService.ExecuteNonQueryAsync(criteria);
         if (commandResult.IsSuccessful)
@@ -159,7 +160,8 @@ public class LateInEarlyOutController(
             EarlyOutMins = model.RequestType == (short)RequestType.EarlyOut ? model.Minute : 0,
             VerifierId = model.VerifierId,
             ApproverId = model.ApproverId,
-            ModifiedBy = EmployeeSession.EmpId
+            ModifiedBy = EmployeeSession.EmpId,
+            CompanyId = CurrentCompanyId
         };
 
         var commandResult = await baseService.ExecuteNonQueryAsync(criteria);

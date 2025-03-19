@@ -27,6 +27,8 @@ public class InsertLateInEarlyOutRequestCriteria : CriteriaBase
 
     public int? ApproverId { get; set; }
 
+    public short CompanyId { get; set; }
+
     public override string GetSettingKey() => "LateInEarlyOutRequest_Insert";
 
     public override bool IsValid() => EmpId > 0;

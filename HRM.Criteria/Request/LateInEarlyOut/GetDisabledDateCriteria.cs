@@ -14,6 +14,8 @@ public class GetDisabledDateCriteria : CriteriaBase
     public long? RequestId { get; set; }
     public byte RequestTypeId { get; set; }
 
+    public short CompanyId { get; set; }
+
     public override string GetSettingKey() => "LateInEarlyOutRequest_GetDisableDate";
 
     public override bool IsValid() => EmployeeId > 0 && FromDate <= ToDate;

@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using GO.UserControl.Client.Core.Session;
 using HRM.Core;
+using HRM.Core.Constants;
 using HRM.Core.Enums;
 using HRM.Core.Models;
 using HRM.Core.Services;
@@ -23,7 +25,8 @@ public class LateInEarlyOutRequestService(
     IRequestMailService requestMailService,
     IEmailService emailService,
     IBaseService baseService,
-    ILetstalkService letStalkService) : ILateInEarlyOutRequestService
+    ILetstalkService letStalkService,
+    IUserControlSession userControlSession) : ILateInEarlyOutRequestService
 {
     private const string EmailTemplatePathForRequest = "EmailTemplates/LateInEarlyOut.Request.txt";
     private const string EmailTemplatePathForCancel = "EmailTemplates/LateInEarlyOut.Cancel.txt";
@@ -65,13 +68,15 @@ public class LateInEarlyOutRequestService(
 
     public async Task<IEnumerable<DateTime>> GetDisabledDateAsync(GetDisabledDateParam param)
     {
+        var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
         var criteria = new GetDisabledDateCriteria
         {
             EmployeeId = param.EmployeeId,
             FromDate = param.FromDate,
             ToDate = param.ToDate,
             RequestId = param.RequestId,
-            RequestTypeId = param.RequestTypeId
+            RequestTypeId = param.RequestTypeId,
+            CompanyId = companyId
         };
         return await baseService.GetDataAsync<DateTime>(criteria);
     }
