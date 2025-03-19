@@ -29,7 +29,6 @@ public class TeamController(
     IEmployeeService employeeService) : BaseController(userControlSession)
 {
     private readonly IUserControlSession userControlSession = userControlSession;
-    private readonly short currentCompanyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
 
     public async Task<ActionResult> Index(string keyword = null)
     {
@@ -79,7 +78,8 @@ public class TeamController(
                 ExpatWorkingDays = model.ExpatWorkingDays ?? 0,
                 ExpatWorkingHours = model.ExpatWorkingHours ?? 0,
                 ExpatOffDaysbyWeek = model.ExpatOffDaysbyWeek ?? 0,
-                ExpatWorkingHoursbyWeek = model.ExpatWorkingHoursbyWeek
+                ExpatWorkingHoursbyWeek = model.ExpatWorkingHoursbyWeek       ,
+                CompanyId = CurrentCompanyId
             };
             var result = await baseService.ExecuteNonQueryAsync(criteria);
 
@@ -306,7 +306,7 @@ public class TeamController(
             IsDeleteUser = null,
             TitleId = null,
             IsLocalUser = null,
-            CompanyId = currentCompanyId
+            CompanyId = CurrentCompanyId
         };
         IList<Employee> employees = (await employeeService.GetEmployeeAsync(criteria)).ToList();
 

@@ -23,6 +23,7 @@ public class CreateTeamCriteria : CriteriaBase
     public byte ExpatOffDaysbyWeek { get; set; }
     public byte? ExpatWorkingHoursbyWeek { get; set; }
     public int CreatedBy { get; set; }
+    public short CompanyId { get; set; }
 
     public override string GetSettingKey()
     {
