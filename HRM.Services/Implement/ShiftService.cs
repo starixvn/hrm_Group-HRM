@@ -14,30 +14,32 @@ using Interfaces;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Models.Shifts;
 
-public class ShiftService(IBaseService baseService,
+public class ShiftService(
+    IBaseService baseService,
     IUserControlSession userControlSession) : IShiftService
 {
     public async Task<IList<Shift>> GetAllAsync(int statusId = 1, bool isShowOff = false)
     {
-        var shifts = (await baseService.GetDataAsync<Shift>(new GetAllShiftCriteria())).ToList();
-
-        switch (statusId)
+        var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
+        var criteria = new GetAllShiftCriteria
         {
-            case (int)ShiftStatus.Active:
-                shifts = shifts.Where(t => !t.IsDisabled).ToList();
-                break;
+            CompanyId = companyId
+        };
+        var shifts = await baseService.GetDataAsync<Shift>(criteria);
 
-            case (int)ShiftStatus.Disabled:
-                shifts = shifts.Where(t => t.IsDisabled).ToList();
-                break;
-        }
+        shifts = statusId switch
+        {
+            (int)ShiftStatus.Active => shifts.Where(t => !t.IsDisabled).ToList(),
+            (int)ShiftStatus.Disabled => shifts.Where(t => t.IsDisabled).ToList(),
+            _ => shifts
+        };
 
         if (isShowOff)
         {
-            shifts.Insert(0, new Shift { Code = "Off", Id = -1 });
+            shifts = [new Shift { Code = "Off", Id = -1 }, .. shifts];
         }
 
-        return shifts;
+        return shifts.ToList();
     }
 
     public async Task<IList<Shift>> GetByQueryAsync(string query, bool isShowOff)
