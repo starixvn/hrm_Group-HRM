@@ -477,6 +477,7 @@ public class EmployeeController(
     {
         var criteria = new GetEmployeeByRoleCriteria
         {
+            CompanyId = CurrentCompanyId,
             ExcludeIds = excludeIds ?? string.Empty,
             Query = query.Trim(),
             RoleIds = roleIds
