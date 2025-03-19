@@ -143,7 +143,7 @@ function voidRequest() {
             let requestIds = [];
             for (let i = 0; i < objSelected.length; i++) {
                 let $obj = $(objSelected[i]);
-                if (parseInt($obj.data('statusid'), 10) === CurrentRequestStatus.Void) {
+                if (parseInt($obj.data('statusid'), 10) === CurrentRequestStatus.Approved) {
                     requestIds.push($obj.data('requestid'));
                 } else {
                     toastr.error('The status of some requests is not approved.', '', toastOptions());
