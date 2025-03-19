@@ -162,6 +162,8 @@ public class LeaveController(
         var criteria = JsonConvert.DeserializeObject<UpdateLeaveRequestCriteria>(request);
         var leaveRequestDetail = JsonConvert.DeserializeObject<List<LeaveRequestDetail>>(requestDetails);
         criteria.RequestDetail = leaveRequestDetail;
+        criteria.ModifiedBy = EmployeeSession.EmpId;
+        criteria.CompanyId = CurrentCompanyId;
         if (leaveRequestDetail != null && leaveRequestDetail.Any())
         {
             criteria.TotalDays = leaveRequestDetail.Where(x => x.WorkType == (byte)WorkType.Leave)
@@ -173,8 +175,6 @@ public class LeaveController(
                 item.ToTime = item.IsHalfDay ? item.ToTime.ToServerTimeZone() : item.ToTime;
             });
         }
-
-        criteria.ModifiedBy = EmployeeSession.EmpId;
 
         var result = await baseService.ExecuteNonQueryAsync(criteria);
         if (result.IsSuccessful)

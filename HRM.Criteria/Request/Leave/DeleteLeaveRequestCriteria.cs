@@ -6,6 +6,8 @@ public class DeleteLeaveRequestCriteria : CriteriaBase
 {
     public long RequestId { get; set; }
 
+    public short CompanyId { get; set; }
+
     public override string GetSettingKey()
     {
         return "LeaveRequest_Delete";

@@ -116,9 +116,11 @@ public class LeaveRequestService(
 
     public async Task<CommandResult> DeleteAsync(long requestId)
     {
+        var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
         var criteria = new DeleteLeaveRequestCriteria
         {
-            RequestId = requestId
+            RequestId = requestId,
+            CompanyId = companyId
         };
         return await baseService.ExecuteNonQueryAsync(criteria);
     }

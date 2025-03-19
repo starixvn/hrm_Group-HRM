@@ -4,6 +4,8 @@ public class UpdateLeaveRequestCriteria : BaseLeaveRequestCriteria
 {
     public int ModifiedBy { get; set; }
 
+    public short CompanyId { get; set; }
+
     public override string GetSettingKey()
     {
         return "LeaveRequest_Update";
