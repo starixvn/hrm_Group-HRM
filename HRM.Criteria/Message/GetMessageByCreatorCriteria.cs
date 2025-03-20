@@ -13,6 +13,8 @@ public class GetMessageByCreatorCriteria : CriteriaBase
 
     public int? IsDisabled { get; set; }
 
+    public short CompanyId { get; set; }
+
     public override string GetSettingKey()
     {
         return "Message_GetByCreator";

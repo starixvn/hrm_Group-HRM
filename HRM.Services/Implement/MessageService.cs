@@ -26,7 +26,8 @@ public class MessageService(
             FromDate = param.FromDate?.ToServerTimeZone(),
             ToDate = param.ToDate?.ToEndOfDay().ToServerTimeZone(),
             IsDisabled = param.IsDisabled,
-            CreatedBy = param.CreatedBy
+            CreatedBy = param.CreatedBy,
+            CompanyId = param.CompanyId
         };
         return await baseService.GetDataAsync<Message>(criteria);
     }
@@ -48,7 +49,7 @@ public class MessageService(
             ToDate = model.ToDate,
             EmployeeIds = model.EmployeeIds,
             TeamIds = model.TeamIds,
-            CreatedBy = actorId     ,
+            CreatedBy = actorId,
             CompanyId = companyId
         };
         return await baseService.ExecuteNonQueryAsync(criteria);

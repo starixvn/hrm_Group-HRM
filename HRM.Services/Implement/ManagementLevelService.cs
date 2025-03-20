@@ -28,7 +28,7 @@ public class ManagementLevelService(IBaseService baseService) : IManagementLevel
         return await baseService.ExecuteNonQueryAsync(criteria);
     }
 
-    public async Task<CommandResult> Delete(int id, int actorId)
+    public async Task<CommandResult> Delete(short id, int actorId)
     {
         var criteria = new DeleteManagementLevelCriteria
         {

@@ -14,5 +14,5 @@ public interface IManagementLevelService
 
     Task<CommandResult> Update(UpdateManagementLevelCriteria criteria);
 
-    Task<CommandResult> Delete(int id, int actorId);
+    Task<CommandResult> Delete(short id, int actorId);
 }

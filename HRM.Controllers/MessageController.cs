@@ -33,7 +33,8 @@ public class MessageController(
             ToDate = currentDateTime,
             FromDate = currentDateTime.AddMonths(-3),
             IsDisabled = 0,
-            CreatedBy = EmployeeSession.EmpId
+            CreatedBy = EmployeeSession.EmpId,
+            CompanyId = CurrentCompanyId
         };
 
         ViewBag.Messages = await messageService.GetMessageByCreator(param);
