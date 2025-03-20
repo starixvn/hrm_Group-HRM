@@ -11,7 +11,7 @@ public class UpdateEmployeePersonalInformationCriteria : CriteriaBase
     public string Email { get; set; }
 
     [SpParam(SqlParamName = "DOB")]
-    public DateTime DateOfBirth { get; set; }
+    public DateTime? DateOfBirth { get; set; }
 
     public string Phone { get; set; }
 

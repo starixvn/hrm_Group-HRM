@@ -51,7 +51,7 @@
 				@Html.LabelFor(model => model.Code, new { @class = "control-label" })
 			</div>
 			<div class="input-form">
-				@Html.TextBoxFor(model => model.Code, new { @class = "form-control", autocomplete = "off" })
+				@Html.TextBoxFor(model => model.Code, new { @class = "form-control", autocomplete = "off", maxlength = "20" })
 			</div>
 			<input type="button" class="btn btn-primary generate-code" id="generate" value="Generate"/>
 		</div>

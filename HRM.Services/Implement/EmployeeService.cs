@@ -1,6 +1,4 @@
-﻿using HRM.Core.Constants;
-
-namespace HRM.Services.Implement;
+﻿namespace HRM.Services.Implement;
 
 using System;
 using System.Collections.Generic;
@@ -10,6 +8,7 @@ using Core.Security;
 using Core.XMLExtensions;
 using Criteria.AnnualLeave;
 using Criteria.Employee;
+using Core.Constants;
 using Criteria.Shift;
 using Criteria.Supervisor;
 using GO.UserControl.Client.Core;
@@ -35,7 +34,11 @@ public class EmployeeService(
 {
     public async Task<string> GenerateEmployeeCode()
     {
-        var criteria = new GenerateEmployeeCodeCriteria();
+        var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
+        var criteria = new GenerateEmployeeCodeCriteria()
+        {
+            CompanyId = companyId
+        };
         return await baseService.GetDataEntityAsync<string>(criteria);
     }
 

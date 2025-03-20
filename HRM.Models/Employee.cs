@@ -31,7 +31,7 @@ public class Employee : EntityBase<int>
     public string ConfirmPassword { get; set; }
 
     [DataType(DataType.Date)]
-    public DateTime DateOfBirth { get; set; }
+    public DateTime? DateOfBirth { get; set; }
 
     public string PlaceOfBirth { get; set; }
 
