@@ -160,8 +160,11 @@ function Submit() {
         //validation
         let selectedGroups = $('#Groups').multiSelectTreeView('getSelectedItems');
         let sendToEmail = getSendToEmails();
+        var employeeIds = $('#Employees').val();
+
         $('#SendToEmail').val(sendToEmail);
         $('#TeamIds').val(selectedGroups);
+        $('#EmployeeIds').val(employeeIds);
 
         let isValid = validateForm();
 

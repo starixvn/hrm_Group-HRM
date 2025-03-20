@@ -50,6 +50,7 @@ public class MessageController(
         if (param != null)
         {
             param.CreatedBy = EmployeeSession.EmpId;
+            param.CompanyId = CurrentCompanyId;
         }
 
         ViewBag.Messages = await messageService.GetMessageByCreator(param);
