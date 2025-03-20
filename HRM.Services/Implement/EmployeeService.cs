@@ -1,4 +1,6 @@
-﻿namespace HRM.Services.Implement;
+﻿using HRM.Core.Constants;
+
+namespace HRM.Services.Implement;
 
 using System;
 using System.Collections.Generic;
@@ -234,10 +236,13 @@ public class EmployeeService(
 
     public async Task<CommandResult> CheckExistAsync(CreateEmployeeParam param)
     {
+        var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
+
         var criteria = new CheckExistEmployeeCriteria
         {
             Code = param.Code,
-            Nickname = param.Nickname
+            Nickname = param.Nickname,
+            CompanyId = companyId
         };
         return await baseService.GetDataEntityAsync<CommandResult>(criteria);
     }
