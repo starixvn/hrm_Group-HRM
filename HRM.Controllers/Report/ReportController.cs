@@ -108,8 +108,8 @@ public class ReportController(
         {
             EmpId = model.EmployeeId == 0 ? employeeId : model.EmployeeId,
             TeamIds = model.TeamIds,
-            FromDate = model.FromDate,
-            ToDate = model.ToDate,
+            FromDate = model.FromDate.ToServerTimeZone(),
+            ToDate = model.ToDate.ToEndOfDay().ToServerTimeZone(),
             IsLocal = model.IsLocal,
             PageIndex = model.CurrentPage - 1,
             ItemsPerPage = model.ItemsPerPage,

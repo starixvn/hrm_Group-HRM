@@ -11,6 +11,8 @@ using HRM.Models.Message;
 using HRM.Services.Implement;
 using HRM.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Serialization;
+using Newtonsoft.Json;
 
 namespace HRM.Controllers;
 
@@ -84,14 +86,15 @@ public class MessageController(
 
         if (model != null && ModelState.IsValid)
         {
-            commandResult = await messageService.Create(EmployeeSession.EmpId, model);
+            commandResult = await messageService.Create(EmployeeSession.EmpId, model, CurrentCompanyId);
+            commandResult.CompanyId = CurrentCompanyId;
             if (model.HasSendEmail && commandResult.IsSuccessful)
             {
                 await messageService.SendMailToStaff(model);
             }
         }
 
-        return Json(commandResult);
+        return new JsonResult(commandResult, new JsonSerializerSettings { ContractResolver = new DefaultContractResolver() });
     }
 
     [HrmPermission(Policy.Host, FunctionKey.Message)]
@@ -130,7 +133,7 @@ public class MessageController(
             }
         }
 
-        return Json(commandResult);
+        return new JsonResult(commandResult, new JsonSerializerSettings { ContractResolver = new DefaultContractResolver() });
     }
 
     [HttpPost]
@@ -139,7 +142,7 @@ public class MessageController(
     {
         var commandResult = await messageService.Delete(EmployeeSession.EmpId, id);
 
-        return Json(commandResult);
+        return new JsonResult(commandResult, new JsonSerializerSettings { ContractResolver = new DefaultContractResolver() });
     }
 
     public async Task<ActionResult> ViewMessageOfEmployee()

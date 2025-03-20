@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using GO.UserControl.Client.Core.Session;
+using HRM.Core;
 using HRM.Core.Constants;
 using HRM.Criteria.Time;
 using HRM.Resources;
@@ -23,8 +24,8 @@ public class ExportTimeRecordController(
             EmpId = model.EmployeeId == 0 ? null : model.EmployeeId,
             SupervisorId = EmployeeSession.EmpId,
             TeamIds = model.TeamIds,
-            FromDate = model.FromDate,
-            ToDate = model.ToDate,
+            FromDate = model.FromDate.ToServerTimeZone(),
+            ToDate = model.ToDate.ToServerTimeZone().ToEndOfDay(),
             IsLocal = model.IsLocal
         };
 

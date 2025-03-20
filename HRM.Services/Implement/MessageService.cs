@@ -37,7 +37,7 @@ public class MessageService(
         return await baseService.GetDataEntityAsync<Message>(criteria);
     }
 
-    public async Task<CommandResult> Create(int actorId, Message model)
+    public async Task<CommandResult> Create(int actorId, Message model, short companyId)
     {
         var criteria = new CreateMessageCriteria
         {
@@ -48,7 +48,8 @@ public class MessageService(
             ToDate = model.ToDate,
             EmployeeIds = model.EmployeeIds,
             TeamIds = model.TeamIds,
-            CreatedBy = actorId
+            CreatedBy = actorId     ,
+            CompanyId = companyId
         };
         return await baseService.ExecuteNonQueryAsync(criteria);
     }

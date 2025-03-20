@@ -11,7 +11,7 @@ public interface IMessageService
 
     Task<Message> GetMessageById(int id);
 
-    Task<CommandResult> Create(int actorId, Message model);
+    Task<CommandResult> Create(int actorId, Message model, short companyId);
 
     Task<CommandResult> Edit(int actorId, Message model);
 

@@ -21,6 +21,8 @@ public class CreateMessageCriteria : CriteriaBase
 
     public int CreatedBy { get; set; }
 
+    public short CompanyId { get; set; }
+
     public override string GetSettingKey() => "Message_Insert";
 
     public override bool IsValid() => true;
