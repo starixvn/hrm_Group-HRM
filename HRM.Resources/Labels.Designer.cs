@@ -1852,15 +1852,6 @@ namespace HRM.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Expert Grade.
-        /// </summary>
-        public static string ExpertGrade {
-            get {
-                return ResourceManager.GetString("ExpertGrade", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Extension Number.
         /// </summary>
         public static string ExtensionNumber {

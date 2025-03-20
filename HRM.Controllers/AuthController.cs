@@ -1,17 +1,13 @@
-﻿using HRM.Services.Interfaces;
-
-namespace HRM.Controllers;
+﻿namespace HRM.Controllers;
 
 using System;
 using System.Collections.Generic;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-using Core;
 using Core.Constants;
 using Criteria.CompanySite;
 using Criteria.SystemSetting;
-using GO.UserControl.Client.AspNetCore.Session;
 using GO.UserControl.Client.Core;
 using GO.UserControl.Client.Core.Models.Auth;
 using GO.UserControl.Client.Core.Services;
@@ -23,6 +19,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using ViewModels.Employee;
+using Services.Interfaces;
 
 public class AuthController(
     IHRMAuthService hrmAuthService,

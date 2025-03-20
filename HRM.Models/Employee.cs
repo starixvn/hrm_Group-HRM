@@ -58,7 +58,7 @@ public class Employee : EntityBase<int>
 
     public int? JobLevelId { get; set; }
 
-    public int? ManagementLevelId { get; set; }
+    public short? ManagementLevelId { get; set; }
 
     public bool Enabled { get; set; }
 

@@ -27,7 +27,7 @@ public class UpdateEmployeeCriteria : CriteriaBase
 
     public int? JobLevelId { get; set; }
 
-    public int? ManagementLevelId { get; set; }
+    public short? ManagementLevelId { get; set; }
 
     public DateTime? PromotionDate { get; set; }
 

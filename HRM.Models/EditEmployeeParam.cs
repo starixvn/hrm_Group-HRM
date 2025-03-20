@@ -14,7 +14,7 @@ public class EditEmployeeParam
     public string Email { get; set; }
     public int? JobTitleId { get; set; }
     public int? JobLevelId { get; set; }
-    public int? ManagementLevelId { get; set; }
+    public short? ManagementLevelId { get; set; }
     public DateTime? PromotionDate { get; set; }
     public bool Enabled { get; set; }
     public string Phone { get; set; }

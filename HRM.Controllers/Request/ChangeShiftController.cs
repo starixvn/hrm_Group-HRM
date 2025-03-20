@@ -204,7 +204,7 @@ public class ChangeShiftController(
     public async Task<ActionResult> GetChangeShiftDetail(GetWorkingCalendarForRequestParam param)
     {
         var dailySchedules = await changeShiftService.GetWorkingCalendarForRequestAsync(param);
-        IList<ChangeShiftDetail> details = dailySchedules.Select(x => new ChangeShiftDetail
+        var details = dailySchedules.Select(x => new ChangeShiftDetail
         {
             OnDate = x.WorkDate,
             Remark = string.Empty,

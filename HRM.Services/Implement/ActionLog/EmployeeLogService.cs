@@ -23,6 +23,7 @@ public class EmployeeLogService(
     ICommonDataService commonDataService,
     IActionLogService actionLogService,
     IJobLevelService jobLevelService,
+    IManagementLevelService managementLevelService,
     IRoleService roleService) : IEmployeeLogService
 {
     private readonly IEnumerable<MappingFieldConfig> mappingFields = new List<MappingFieldConfig>
@@ -62,7 +63,7 @@ public class EmployeeLogService(
         new() { FieldName = "TeamDate", DisplayName = Labels.TeamDate, DataType = MappingDataType.Date },
         new() { FieldName = "JobTitleId", DisplayName = Labels.JobTitle },
         new() { FieldName = "JobLevelId", DisplayName = Labels.JobLevel },
-        new() { FieldName = "ExpertGradeId", DisplayName = Labels.ExpertGrade },
+        new() { FieldName = "ManagementLevelId", DisplayName = Labels.ManagementLevel },
         new() { FieldName = "PromotionDate", DisplayName = Labels.PromotionDate, DataType = MappingDataType.Date },
         new() { FieldName = "JoinedDate", DisplayName = Labels.GroupDate },
         new() { FieldName = "CompanyDate", DisplayName = Labels.CompanyDate },
@@ -86,7 +87,8 @@ public class EmployeeLogService(
 
     private IEnumerable<Team> Teams { get; set; }
     private IEnumerable<LookupData> JobTitles { get; set; }
-    private IEnumerable<JobLevel> JobLevel { get; set; }
+    private IEnumerable<JobLevel> JobLevels { get; set; }
+    private IEnumerable<ManagementLevel> ManagementLevels { get; set; }
     private IEnumerable<Country> Countries { get; set; }
     private IEnumerable<Role> SystemRoles { get; set; }
     private IEnumerable<EntityBase<byte>> Genders { get; set; }
@@ -96,7 +98,8 @@ public class EmployeeLogService(
     {
         Teams = await commonDataService.GetAllTeamAsync();
         JobTitles = await commonDataService.GetLookupDataByCodeAsync(Constants.JobTitle, userControlSession.Get<int>(SessionKey.CurrentCompanyId));
-        JobLevel = await jobLevelService.GetJobLevel();
+        JobLevels = await jobLevelService.GetJobLevel();
+        ManagementLevels = await managementLevelService.GetManagementLevel();
         Countries = await commonDataService.GetAllCountry();
         SystemRoles = await roleService.GetBySiteIdAsync(userControlSession.SiteId);
         Genders = commonDataService.GetGender();
@@ -145,8 +148,11 @@ public class EmployeeLogService(
                 break;
 
             case "JobLevelId":
-            case "ExpertGradeId":
                 MappingJobLevel(field);
+                break;
+
+            case "ManagementLevelId":
+                MappingManagementLevel(field);
                 break;
 
             case "Gender":
@@ -193,10 +199,19 @@ public class EmployeeLogService(
     private void MappingJobLevel(FieldValue field)
     {
         _ = int.TryParse(field.OldValue, out var jobLevelId);
-        field.OldValue = JobLevel.FirstOrDefault(x => x.Id == jobLevelId)?.Name;
+        field.OldValue = JobLevels.FirstOrDefault(x => x.Id == jobLevelId)?.Name;
 
         _ = int.TryParse(field.Value, out jobLevelId);
-        field.Value = JobLevel.FirstOrDefault(x => x.Id == jobLevelId)?.Name;
+        field.Value = JobLevels.FirstOrDefault(x => x.Id == jobLevelId)?.Name;
+    }
+
+    private void MappingManagementLevel(FieldValue field)
+    {
+        _ = short.TryParse(field.OldValue, out var managementLevelId);
+        field.OldValue = ManagementLevels.FirstOrDefault(x => x.Id == managementLevelId)?.Name;
+
+        _ = short.TryParse(field.Value, out managementLevelId);
+        field.Value = ManagementLevels.FirstOrDefault(x => x.Id == managementLevelId)?.Name;
     }
 
     private void MappingCountry(FieldValue field)
