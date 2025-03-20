@@ -23,8 +23,8 @@ public class MessageService(
     {
         var criteria = new GetMessageByCreatorCriteria
         {
-            FromDate = param.FromDate,
-            ToDate = param.ToDate,
+            FromDate = param.FromDate?.ToServerTimeZone(),
+            ToDate = param.ToDate?.ToEndOfDay().ToServerTimeZone(),
             IsDisabled = param.IsDisabled,
             CreatedBy = param.CreatedBy
         };
