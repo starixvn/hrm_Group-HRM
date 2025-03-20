@@ -14,11 +14,6 @@ public static class DateTimeExtensions
         _userControlSession = userControlSession;
     }
 
-    public static void SetClientTimeZone(short clientTimeZone)
-    {
-        _userControlSession.Set(SessionKey.CurrentTimeZone, clientTimeZone);
-    }
-
     public static DateTime FirstDayOfWeek(this DateTime dt)
     {
         var diff = (7 + (dt.DayOfWeek - DayOfWeek.Monday)) % 7;

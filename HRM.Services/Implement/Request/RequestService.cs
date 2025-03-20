@@ -31,8 +31,7 @@ public class RequestService(
     IChangeShiftRequestService changeShiftRequestService,
     ILeaveRequestService leaveRequestService,
     IKeepInViewRequestService keepInViewRequestService,
-    IUserControlSession userControlSession)
-    : IRequestService
+    IUserControlSession userControlSession) : IRequestService
 {
     public static string ToRequestMessage(RequestEntity request, bool isNoFormat = false)
     {
@@ -54,32 +53,36 @@ public class RequestService(
     {
         return requestTypeId switch
         {
-            (byte)RequestType.CheckIn or (byte)RequestType.CheckOut => reasonId switch
-            {
-                (byte)CheckInOutReason.VanLate => Labels.VanLate,
-                (byte)CheckInOutReason.BusinessTrip => Labels.BusinessTrip,
-                (byte)CheckInOutReason.Forgot => Labels.Forgot,
-                (byte)CheckInOutReason.Other => Labels.Other,
-                _ => string.Empty
-            },
-            _ => reasonId switch
-            {
-                (byte)LateInEarlyOutReason.ManagementAllow => Labels.ManagementAllow,
-                (byte)LateInEarlyOutReason.Other => Labels.Other,
-                _ => string.Empty
-            }
+            (byte)RequestType.CheckIn or (byte)RequestType.CheckOut => GetCheckInOutReason(reasonId),
+            _ => GetLateInEarlyOutReason(reasonId)
+        };
+    }
+
+    private static string GetCheckInOutReason(byte reasonId)
+    {
+        return reasonId switch
+        {
+            (byte)CheckInOutReason.VanLate => Labels.VanLate,
+            (byte)CheckInOutReason.BusinessTrip => Labels.BusinessTrip,
+            (byte)CheckInOutReason.Forgot => Labels.Forgot,
+            (byte)CheckInOutReason.Other => Labels.Other,
+            _ => string.Empty
+        };
+    }
+
+    private static string GetLateInEarlyOutReason(byte reasonId)
+    {
+        return reasonId switch
+        {
+            (byte)LateInEarlyOutReason.ManagementAllow => Labels.ManagementAllow,
+            (byte)LateInEarlyOutReason.Other => Labels.Other,
+            _ => string.Empty
         };
     }
 
     public async Task<IList<RequestEntity>> GetRequests(GetRequestCriteria criteria)
     {
-        IList<RequestEntity> entityList = null;
-        if (criteria.IsValid())
-        {
-            entityList = await requestRepository.GetRequests(criteria);
-        }
-
-        return entityList;
+        return await requestRepository.GetRequests(criteria);
     }
 
     public async Task<VerifierAndApproverForRequest> GetVerifierAndApproverAsync(int employeeId, RequestType requestType)
@@ -89,8 +92,7 @@ public class RequestService(
             EmpId = employeeId,
             RequestType = (byte)requestType
         };
-        var supervisor = await requestRepository.GetVerifierAndApproverAsync(criteria);
-        return supervisor;
+        return await requestRepository.GetVerifierAndApproverAsync(criteria);
     }
 
     public async Task<RequestEntity> GetCheckInOutDetailToReviewDiscipline(long requestId)
@@ -225,8 +227,6 @@ public class RequestService(
                 break;
 
             case RequestType.KeepInView:
-            case RequestType.Overtime:
-            default:
                 await keepInViewRequestService.SendMailProcessRequestAsync(param.RequestId, actor, command);
                 break;
         }
@@ -256,7 +256,7 @@ public class RequestService(
                     await leaveRequestService.SendMailProcessRequest(request.RequestId, actor, command);
                     break;
 
-                default:
+                case (int)RequestType.KeepInView:
                     await keepInViewRequestService.SendMailProcessRequestAsync(request.RequestId, actor, command);
                     break;
             }

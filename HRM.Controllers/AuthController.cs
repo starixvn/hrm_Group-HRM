@@ -11,6 +11,7 @@ using Core;
 using Core.Constants;
 using Criteria.CompanySite;
 using Criteria.SystemSetting;
+using GO.UserControl.Client.AspNetCore.Session;
 using GO.UserControl.Client.Core;
 using GO.UserControl.Client.Core.Models.Auth;
 using GO.UserControl.Client.Core.Services;
@@ -84,8 +85,7 @@ public class AuthController(
             userControlSession.Functions = await userService.GetFunctionPermissionAsync(userControlSession.SiteId, userControlSession.UserId);
             userControlSession.Set(SessionKey.IsShowLeftNavigation, true);
             userControlSession.Set(SessionKey.Employee, employee);
-
-            DateTimeExtensions.SetClientTimeZone(await GetClientTimeZoneAsync());
+            userControlSession.Set(SessionKey.CurrentTimeZone, await GetClientTimeZoneAsync());
 
             await DoLoginAsync(loginResult.UserId);
         }
