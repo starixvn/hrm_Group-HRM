@@ -220,7 +220,7 @@ $(document).ready(function () {
             }).then(response => {
                 let data = response.data;
 
-                if (data.IsSuccessful) {
+                if (data.isSuccessful) {
                     document.location = resolveClientUrl('employee/usermanagement');
                 } else {
                     toastr.error(data.Message, '', toastOptions());
