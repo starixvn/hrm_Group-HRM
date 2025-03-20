@@ -1,4 +1,6 @@
-﻿namespace HRM.Services.Implement;
+﻿using Microsoft.AspNetCore.Mvc;
+
+namespace HRM.Services.Implement;
 
 using System;
 using System.Collections.Generic;
@@ -89,6 +91,7 @@ public class ShiftService(
 
     public async Task<CommandResult> CreateAsync(int actorId, CreateShiftModel model)
     {
+        var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
         var criteria = new CreateShiftCriteria
         {
             Name = model.Name,
@@ -96,7 +99,8 @@ public class ShiftService(
             CheckOutTime = model.TimeOut,
             IsInAfterDay = model.IsInAfterDay,
             IsOutAfterDay = model.IsOutAfterDay,
-            ActorId = actorId
+            ActorId = actorId,
+            CompanyId = companyId
         };
         return await baseService.ExecuteNonQueryAsync(criteria);
     }

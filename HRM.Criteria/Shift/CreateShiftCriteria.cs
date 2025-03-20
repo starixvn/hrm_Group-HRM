@@ -16,6 +16,8 @@ public class CreateShiftCriteria : CriteriaBase
 
     public int ActorId { get; set; }
 
+    public short CompanyId { get; set; }
+
     public override string GetSettingKey() => "Shift_Insert";
 
     public override bool IsValid() => !string.IsNullOrWhiteSpace(Name);

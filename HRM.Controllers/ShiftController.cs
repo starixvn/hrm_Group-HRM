@@ -111,9 +111,9 @@ public class ShiftController(
 
     [HttpPost]
     [HrmPermission(Policy.Host, FunctionKey.ShiftManagement)]
-    public async Task<IActionResult> Delete(int shiftId)
+    public async Task<IActionResult> Delete(DeleteShiftModel request)
     {
-        var commandResult = await shiftService.DeleteAsync(shiftId);
+        var commandResult = await shiftService.DeleteAsync(request.ShiftId);
         return Json(commandResult);
     }
 

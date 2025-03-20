@@ -2,6 +2,7 @@
 import 'jquery-ui-bundle/jquery-ui';
 import 'jquery-validation/dist/jquery.validate';
 import 'jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.js';
+import { stringify } from 'qs';
 import axios from 'axios';
 import { resolveClientUrl, confirm, axiosError, alert } from '../../shared/common.functions';
 
@@ -14,7 +15,7 @@ $(function () {
                     url: resolveClientUrl('shift/delete'),
                     method: 'POST',
                     headers: { 'X-Requested-With': 'XMLHttpRequest' },
-                    data: { shiftId: id }
+                    data: stringify({ shiftId: id })
                 }).then(response => {
                     if (response.data.isSuccessful) {
                         document.location = resolveClientUrl('shift/index');
