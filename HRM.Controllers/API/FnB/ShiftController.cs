@@ -1,15 +1,25 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
+using HRM.Criteria.Fnb;
+using HRM.Services.Interfaces.FnB;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HRM.Controllers.API.FnB;
 
 [ApiController]
 [Route("api/fnb/[controller]")]
-public class ShiftController : ControllerBase
+public class ShiftController(IShiftService shiftService) : ControllerBase
 {
-    // GET
-    public async Task<IActionResult> Index()
+    [HttpGet]
+    public async Task<IActionResult> GetShifts([FromQuery] DateTime lastModifiedDate)
     {
-        return null;
+        var criteria = new GetShiftByLastModifiedDateCriteria()
+        {
+            LastModifiedDate = lastModifiedDate
+        };
+
+        var result = await shiftService.GetShiftByLastModifiedDate(criteria);
+
+        return new JsonResult(result);
     }
 }

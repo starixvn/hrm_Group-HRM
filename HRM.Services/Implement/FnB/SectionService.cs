@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using HRM.Core.Models;
 using HRM.Core.Services;
 using HRM.Criteria.Fnb;
+using HRM.Models.FnB;
 using HRM.Models.Section;
 using HRM.Services.Interfaces.FnB;
 
@@ -13,9 +14,9 @@ namespace HRM.Services.Implement.FnB
 {
     public class SectionService(IBaseService baseService) : ISectionService
     {
-        public async Task<IEnumerable<Section>> GetSectionsByLastModifiedDate(GetSectionByLastModifiedDate criteria)
+        public async Task<IEnumerable<SectionModel>> GetSectionsByLastModifiedDate(GetSectionByLastModifiedDateCriteria criteria)
         {
-            return await baseService.GetDataAsync<Section>(criteria);
+            return await baseService.GetDataAsync<SectionModel>(criteria);
         }
     }
 }

@@ -11,9 +11,9 @@ namespace HRM.Controllers.API.FnB;
 public class SectionController(ISectionService sectionService) : ControllerBase
 {
     [HttpGet]
-    public async Task<IActionResult> GetSectionByLastModifiedDate([FromQuery] DateTime lastModifiedDate)
+    public async Task<IActionResult> GetSections([FromQuery] DateTime lastModifiedDate)
     {
-        var criteria = new GetSectionByLastModifiedDate
+        var criteria = new GetSectionByLastModifiedDateCriteria
         {
             LastModifiedDate = lastModifiedDate
         };

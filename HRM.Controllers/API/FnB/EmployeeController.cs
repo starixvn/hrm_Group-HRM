@@ -12,7 +12,7 @@ public class EmployeeController(IEmployeeService employeeService) : ControllerBa
 {
 
     [HttpGet]
-    public async Task<IActionResult> GetEmployeeByLastModifiedDate([FromQuery] DateTime lastModifiedDate)
+    public async Task<IActionResult> GetEmployees([FromQuery] DateTime lastModifiedDate)
     {
         var criteria = new GetEmployeeByLastModifiedDateCriteria
         {
@@ -24,14 +24,25 @@ public class EmployeeController(IEmployeeService employeeService) : ControllerBa
         return new JsonResult(result);
     }
 
-    [HttpGet("group")]
-    public async Task<IActionResult> GetEmployeeGroupByLastModifiedDate([FromQuery] DateTime lastModifiedDate)
+    [HttpGet("team")]
+    public async Task<IActionResult> GetEmployeeGroups([FromQuery] DateTime lastModifiedDate)
     {
         var criteria = new GetEmployeeGroupByLastModifiedDateCriteria
         {
             LastModifiedDate = lastModifiedDate
         };
         var result = await employeeService.GetEmployeeGroupByLastModifiedDate(criteria);
+        return new JsonResult(result);
+    }
+
+    [HttpGet("calendar")]
+    public async Task<IActionResult> GetEmployeeCalendars([FromQuery] DateTime lastModifiedDate)
+    {
+        var criteria = new GetEmployeeCalendarByLastModifiedDateCriteria
+        {
+            LastModifiedDate = lastModifiedDate
+        };
+        var result = await employeeService.GetEmployeeCalendarByLastModifiedDate(criteria);
         return new JsonResult(result);
     }
 }
