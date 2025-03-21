@@ -1,4 +1,6 @@
-﻿namespace HRM.Services.Implement;
+﻿using HRM.Core;
+
+namespace HRM.Services.Implement;
 
 using System;
 using System.Collections.Generic;
@@ -230,7 +232,9 @@ public class EmployeeService(
             Nickname = param.Nickname,
             TeamId = param.TeamId,
             Password = Encryptor.ComputeHash(param.Code),
-            DomainUsername = param.DomainUsername
+            DomainUsername = param.DomainUsername,
+            CreatedDate = DateTimeOffset.Now.DateTime.ToServerTimeZone(),
+            JoinDate = DateTimeOffset.Now.DateTime.ToClientTimeZone()
         };
         var commandResult = await baseService.ExecuteNonQueryAsync(criteria);
 

@@ -1,5 +1,7 @@
-﻿namespace HRM.Criteria.Employee;
+﻿
+namespace HRM.Criteria.Employee;
 
+using System;
 using Fanex.Data.Repository;
 
 public class InsertEmployeeCriteria : CriteriaBase
@@ -13,6 +15,10 @@ public class InsertEmployeeCriteria : CriteriaBase
     public string Password { get; set; }
     public string DomainUsername { get; set; }
     public int CreateBy { get; set; }
+
+    public DateTime CreatedDate { get; set; }
+
+    public DateTime JoinDate { get; set; }
 
     public override string GetSettingKey() => "Employee_Information_Insert";
 

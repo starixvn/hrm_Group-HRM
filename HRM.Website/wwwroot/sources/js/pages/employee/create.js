@@ -69,7 +69,7 @@ $(document).ready(function () {
         }).then(response => {
             let data = response.data;
 
-            $('#Code').val('X' + data);
+            $('#Code').val(data);
         }).catch(axiosError);
     });
 
