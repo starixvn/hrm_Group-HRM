@@ -1,17 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using HRM.Criteria.Fnb;
-using HRM.Models;
 using HRM.Models.FnB;
-using HRM.Models.Shifts;
 
-namespace HRM.Services.Interfaces.FnB
+namespace HRM.Services.Interfaces.FnB;
+
+public interface IShiftService
 {
-    public interface IShiftService
-    {
-        Task<IEnumerable<ShiftModel>> GetShiftByLastModifiedDate(GetShiftByLastModifiedDateCriteria criteria);
-    }
+    Task<IEnumerable<ShiftModel>> GetShiftByLastModifiedDate(GetShiftByLastModifiedDateCriteria criteria);
 }

@@ -8,7 +8,6 @@ using HRM.Core.Constants;
 using HRM.Core.Filters;
 using HRM.Core.Models;
 using HRM.Criteria.Postnatal;
-using HRM.Models;
 using HRM.Services.Interfaces;
 using HRM.ViewModels.Postnatal;
 using Microsoft.AspNetCore.Mvc;
