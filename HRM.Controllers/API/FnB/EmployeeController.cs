@@ -7,8 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace HRM.Controllers.API.FnB;
 
 [ApiController]
-[Route("api/fnb/employee/[controller]")]
-public class EmployeeController(IEmployeeService fnBService) : ControllerBase
+[Route("api/fnb/[controller]")]
+public class EmployeeController(IEmployeeService employeeService) : ControllerBase
 {
 
     [HttpGet]
@@ -19,7 +19,7 @@ public class EmployeeController(IEmployeeService fnBService) : ControllerBase
             LastModifiedDate = lastModifiedDate
         };
 
-        var result = await fnBService.GetEmployeesByLastModifiedDate(criteria);
+        var result = await employeeService.GetEmployeesByLastModifiedDate(criteria);
 
         return new JsonResult(result);
     }
@@ -31,7 +31,7 @@ public class EmployeeController(IEmployeeService fnBService) : ControllerBase
         {
             LastModifiedDate = lastModifiedDate
         };
-        var result = await fnBService.GetEmployeeGroupByLastModifiedDate(criteria);
+        var result = await employeeService.GetEmployeeGroupByLastModifiedDate(criteria);
         return new JsonResult(result);
     }
 }

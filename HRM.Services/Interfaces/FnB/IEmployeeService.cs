@@ -1,12 +1,15 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using HRM.Core.Models;
 using HRM.Criteria.Fnb;
+using HRM.Models;
+using HRM.Models.Group;
 
 namespace HRM.Services.Interfaces.FnB;
 
 public interface IEmployeeService
 {
-    Task<CommandResult> GetEmployeesByLastModifiedDate(GetEmployeeByLastModifiedDateCriteria criteria);
+    Task<IEnumerable<Employee>> GetEmployeesByLastModifiedDate(GetEmployeeByLastModifiedDateCriteria criteria);
 
-    Task<CommandResult> GetEmployeeGroupByLastModifiedDate(GetEmployeeGroupByLastModifiedDateCriteria criteria);
+    Task<IEnumerable<TeamModel>> GetEmployeeGroupByLastModifiedDate(GetEmployeeGroupByLastModifiedDateCriteria criteria);
 }

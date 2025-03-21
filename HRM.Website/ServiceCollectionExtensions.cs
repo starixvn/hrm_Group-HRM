@@ -179,6 +179,7 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IMinIOService, MinIOService>();
         services.AddDIReportServices();
         services.AddDIExcelServices();
+        services.AddSyncFnBService();
 
         return services;
     }
@@ -221,5 +222,11 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IExportExcelEmployeeInfoService, ExportExcelEmployeeInfoService>();
 
         return services;
+    }
+
+    private static void AddSyncFnBService(this IServiceCollection services)
+    {
+        services.AddScoped<Services.Interfaces.FnB.IEmployeeService, Services.Implement.FnB.EmployeeService>();
+        services.AddScoped<Services.Interfaces.FnB.ISectionService, Services.Implement.FnB.SectionService>();
     }
 }

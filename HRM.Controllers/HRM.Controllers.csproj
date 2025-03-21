@@ -16,7 +16,4 @@
   <ItemGroup>
     <ProjectReference Include="..\HRM.Services\HRM.Services.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="API\FnB\" />
-  </ItemGroup>
 </Project>
