@@ -1,6 +1,7 @@
 ﻿namespace HRM.Core.Filters;
 
 using System;
+using System.Linq;
 using GO.UserControl.Client.Core.Session;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -13,6 +14,11 @@ public class HrmAuthorizeAttribute : AuthorizeAttribute, IAuthorizationFilter
 {
     public void OnAuthorization(AuthorizationFilterContext context)
     {
+        if (context.ActionDescriptor.EndpointMetadata.Any(item => item is AllowAnonymousAttribute))
+        {
+            return;
+        }
+
         var session = context.HttpContext.RequestServices.GetRequiredService<IUserControlSession>();
         if (session.UserId <= 0 || session.JwtToken == null || session.JwtToken.IsExpired)
         {
