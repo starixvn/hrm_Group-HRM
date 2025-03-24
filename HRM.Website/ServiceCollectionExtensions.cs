@@ -158,6 +158,7 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IKeepInViewRequestRepository, KeepInViewRequestRepository>();
         services.AddSingleton<IShiftService, ShiftService>();
         services.AddSingleton<IExtensionNumberService, ExtensionNumberService>();
+        services.AddSingleton<ICompanyService, CompanyService>();
 
         services.AddSingleton<IOvertimeRequestService, OvertimeRequestService>();
         services.AddSingleton<IOvertimeRequestRepository, OvertimeRequestRepository>();

@@ -1,12 +1,11 @@
-﻿using Fanex.Common.Extensions;
-
-namespace HRM.Core.Helpers;
-
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using Fanex.Common.Extensions;
 using System.Linq;
 using System.Reflection;
+
+namespace HRM.Core.Helpers;
 
 public static class EnumHelper
 {

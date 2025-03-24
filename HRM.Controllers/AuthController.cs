@@ -28,11 +28,12 @@ public class AuthController(
     IUserService userService,
     IAuthService authService,
     ICryptoService cryptoService,
-    IBaseService baseService) : Controller
+    IBaseService baseService,
+    ICompanyService companyService) : Controller
 {
     public async Task<IActionResult> Login()
     {
-        var companySite = await GetCompanySiteByDomainAsync();
+        var companySite = await companyService.GetCompanySiteByDomainAsync();
         if (companySite == null)
         {
             return RedirectToAction("AccessDenied", "Error");
@@ -111,16 +112,6 @@ public class AuthController(
         await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
     }
 
-    private async Task<CompanySite> GetCompanySiteByDomainAsync()
-    {
-        var domainName = GetDomainName(HttpContext);
-        var criteria = new GetCompanySiteByDomainCriteria
-        {
-            Domain = domainName
-        };
-        return await baseService.GetDataEntityAsync<CompanySite>(criteria);
-    }
-
     private async Task<short> GetClientTimeZoneAsync()
     {
         var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
@@ -131,12 +122,6 @@ public class AuthController(
         };
 
         return await baseService.GetDataEntityAsync<short>(criteria);
-    }
-
-    private static string GetDomainName(HttpContext httpContext)
-    {
-        var protocol = httpContext.Request.Headers["x-forwarded-proto"].ToString();
-        return $"{(!string.IsNullOrWhiteSpace(protocol) ? protocol : httpContext.Request.Scheme)}://{httpContext.Request.Host.Value}";
     }
 
     private static string GetClientIp(HttpContext httpContext)
