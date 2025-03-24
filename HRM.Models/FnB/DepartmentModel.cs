@@ -17,6 +17,4 @@ public class DepartmentModel
     public DateTime ModifiedDate { get; set; }
 
     public bool IsDeleted { get; set; }
-
-    public int OldDepartmentId { get; set; }
 }

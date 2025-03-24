@@ -23,6 +23,4 @@ public class ShiftModel
     public string IsOutAfterDay { get; set; }
 
     public bool IsDisabled { get; set; }
-
-    public int OldShiftId { get; set; }
 }
