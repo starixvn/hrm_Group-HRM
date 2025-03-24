@@ -28,8 +28,7 @@ public class RequestController(
     IRequestService requestService,
     ICommonDataService commonDataService,
     ITeamService teamService,
-    IAttachFileService attachFileService)
-    : BaseController(userControlSession)
+    IAttachFileService attachFileService) : BaseController(userControlSession)
 {
     private const string EmployeeRequestViewName = "EmployeeRequest";
 

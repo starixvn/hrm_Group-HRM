@@ -6,7 +6,7 @@ export default class ColorDescription extends PureComponent {
         return (
             <Dropdown id={`dropdownColorDescription`} componentClass="span" className="dropdown-color">
                 <Dropdown.Toggle noCaret className="btn">
-                    <img src="../wwwroot/sources/styles/images/pantone.svg" width="17" />
+                    <img src="../sources/styles/images/pantone.svg" width="17" />
                 </Dropdown.Toggle>
                 <Dropdown.Menu>
                     <MenuItem><span className="holiday" />Public Holiday</MenuItem>
