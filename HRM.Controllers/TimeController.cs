@@ -139,36 +139,6 @@ public class TimeController(
         return new JsonResult(commandResult, new JsonSerializerSettings { ContractResolver = new DefaultContractResolver() });
     }
 
-    public IActionResult AddTimeRecord()
-    {
-        var model = new TimeRecordViewModel
-        {
-            ForDate = DateTimeOffset.Now.Date,
-            Hour = DateTimeOffset.Now.Hour,
-            Minute = DateTimeOffset.Now.Minute
-        };
-        return View(model);
-    }
-
-    [HttpPost]
-    public async Task<IActionResult> AddTimeRecord(TimeRecordViewModel model)
-    {
-        if (model != null)
-        {
-            var criteria = new InsertTimeRecordCriteria
-            {
-                EmpId = model.EmpId,
-                RecordTime = model.ForDate + new TimeSpan(model.Hour, model.Minute, 0),
-                InOutType = model.InOutType != 1
-            };
-            var result = await baseService.ExecuteNonQueryAsync(criteria);
-
-            ViewBag.Requested = result.IsSuccessful;
-        }
-
-        return View(model);
-    }
-
     [HttpPost]
     public async Task<IActionResult> AddCheckInTime()
     {
