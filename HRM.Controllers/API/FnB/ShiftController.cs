@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using HRM.Criteria.Fnb;
+using HRM.Models.FnB;
 using HRM.Services.Interfaces.FnB;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,14 +12,14 @@ namespace HRM.Controllers.API.FnB;
 public class ShiftController(IShiftService shiftService) : ControllerBase
 {
     [HttpGet]
-    public async Task<IActionResult> GetShifts([FromQuery] DateTime lastModifiedDate)
+    public async Task<IActionResult> GetShifts([FromQuery] SyncFnBRequestModel request)
     {
-        var criteria = new GetShiftByLastModifiedDateCriteria()
+        var criteria = new GetAllShiftCriteria
         {
-            LastModifiedDate = lastModifiedDate
+            CompanyId = request.CompanyId
         };
 
-        var result = await shiftService.GetShiftByLastModifiedDate(criteria);
+        var result = await shiftService.GetAllShift(criteria);
 
         return new JsonResult(result);
     }

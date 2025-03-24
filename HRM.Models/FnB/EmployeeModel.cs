@@ -41,8 +41,6 @@ public class EmployeeModel
     public string CostCenter { get; set; }
 
     public int JobLevelId { get; set; }
-
-    public int CompanyId { get; set; }
     
     public int EmpCategoryID { get; set; }
 

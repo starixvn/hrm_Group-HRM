@@ -15,6 +15,4 @@ public class UnitModel
     public DateTime ModifiedDate { get; set; }
 
     public bool IsDeleted { get; set; }
-
-    public int CompanyId { get; set; }
 }

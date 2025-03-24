@@ -23,6 +23,4 @@ public class EmployeeCalendarModel
     public DateTime ModifiedDate { get; set; }
 
     public bool HasCheckIn { get; set; }
-
-    public int CompanyId { get; set; }
 }

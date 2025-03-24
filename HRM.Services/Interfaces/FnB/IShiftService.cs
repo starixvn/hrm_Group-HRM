@@ -7,5 +7,5 @@ namespace HRM.Services.Interfaces.FnB;
 
 public interface IShiftService
 {
-    Task<IEnumerable<ShiftModel>> GetShiftByLastModifiedDate(GetShiftByLastModifiedDateCriteria criteria);
+    Task<IEnumerable<ShiftModel>> GetAllShift(GetAllShiftCriteria criteria);
 }

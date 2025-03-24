@@ -6,8 +6,6 @@ public class DepartmentModel
 {
     public int DepartmentId { get; set; }
 
-    public int CompanyId { get; set; }
-
     public string Code { get; set; }
 
     public string Name { get; set; }
@@ -19,4 +17,6 @@ public class DepartmentModel
     public DateTime ModifiedDate { get; set; }
 
     public bool IsDeleted { get; set; }
+
+    public int OldDepartmentId { get; set; }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using HRM.Criteria.Fnb;
+using HRM.Models.FnB;
 using HRM.Services.Interfaces.FnB;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,11 +12,12 @@ namespace HRM.Controllers.API.FnB;
 public class UnitController(IUnitService unitService) : ControllerBase
 {
     [HttpGet]
-    public async Task<IActionResult> GetUnits([FromQuery] DateTime lastModifiedDate)
+    public async Task<IActionResult> GetUnits([FromQuery] SyncFnBRequestModel request)
     {
-        var criteria = new GetUnitByLastModifiedDateCriteria()
+        var criteria = new GetUnitByLastModifiedDateCriteria
         {
-            LastModifiedDate = lastModifiedDate
+            CompanyId = request.CompanyId,
+            LastModifiedDate = request.LastModifiedDate
         };
 
         var result = await unitService.GetUnitByLastModifiedDate(criteria);

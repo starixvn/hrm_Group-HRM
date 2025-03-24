@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using HRM.Criteria.Fnb;
+using HRM.Models.FnB;
 using HRM.Services.Interfaces.FnB;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,11 +13,12 @@ public class EmployeeController(IEmployeeService employeeService) : ControllerBa
 {
 
     [HttpGet]
-    public async Task<IActionResult> GetEmployees([FromQuery] DateTime lastModifiedDate)
+    public async Task<IActionResult> GetEmployees([FromQuery] SyncFnBRequestModel request)
     {
         var criteria = new GetEmployeeByLastModifiedDateCriteria
         {
-            LastModifiedDate = lastModifiedDate
+            CompanyId = request.CompanyId,
+            LastModifiedDate = request.LastModifiedDate
         };
 
         var result = await employeeService.GetEmployeesByLastModifiedDate(criteria);
@@ -25,22 +27,24 @@ public class EmployeeController(IEmployeeService employeeService) : ControllerBa
     }
 
     [HttpGet("team")]
-    public async Task<IActionResult> GetEmployeeGroups([FromQuery] DateTime lastModifiedDate)
+    public async Task<IActionResult> GetEmployeeGroups([FromQuery] SyncFnBRequestModel request)
     {
         var criteria = new GetEmployeeGroupByLastModifiedDateCriteria
         {
-            LastModifiedDate = lastModifiedDate
+            CompanyId = request.CompanyId,
+            LastModifiedDate = request.LastModifiedDate
         };
         var result = await employeeService.GetEmployeeGroupByLastModifiedDate(criteria);
         return new JsonResult(result);
     }
 
     [HttpGet("calendar")]
-    public async Task<IActionResult> GetEmployeeCalendars([FromQuery] DateTime lastModifiedDate)
+    public async Task<IActionResult> GetEmployeeCalendars([FromQuery] SyncFnBRequestModel request)
     {
         var criteria = new GetEmployeeCalendarByLastModifiedDateCriteria
         {
-            LastModifiedDate = lastModifiedDate
+            CompanyId = request.CompanyId,
+            LastModifiedDate = request.LastModifiedDate
         };
         var result = await employeeService.GetEmployeeCalendarByLastModifiedDate(criteria);
         return new JsonResult(result);

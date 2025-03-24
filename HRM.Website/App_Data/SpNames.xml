@@ -574,12 +574,9 @@
 		<Setting Key="Fnb_Employee_GetByLastModifiedDate" SpName="Fnb_Employee_GetByLastModifiedDate" DbName="bodb_HRM" Plain="0" />
 		<Setting Key="Fnb_EmployeeGroup_GetByLastModifiedDate" SpName="Fnb_EmployeeGroup_GetByLastModifiedDate" DbName="bodb_HRM" Plain="0" />
 		<Setting Key="FnB_Section_GetByLastModifiedDate" SpName="FnB_Section_GetByLastModifiedDate" DbName="bodb_HRM" Plain="0" />
-
 		<Setting Key="FnB_Department_GetByLastModifiedDate" SpName="FnB_Department_GetByLastModifiedDate" DbName="bodb_HRM" Plain="0" />
 		<Setting Key="FnB_Unit_GetByLastModifiedDate" SpName="FnB_Unit_GetByLastModifiedDate" DbName="bodb_HRM" Plain="0" />
-		<Setting Key="FnB_Shift_GetByLastModifiedDate" SpName="FnB_Shift_GetByLastModifiedDate" DbName="bodb_HRM" Plain="0" />
-
-
-		<Setting Key="FnB_EmpCalendar_GetByLastModifiedDate" SpName="FnB_EmpCalendar_GetByLastModifiedDate" DbName="bodb_HRM" Plain="0" />
+		<Setting Key="FnB_Shift_GetAll" SpName="FnB_Shift_GetAll" DbName="bodb_HRM" Plain="0" />
+		<Setting Key="FnB_EmployeeCalendar_GetByLastModifiedDate" SpName="FnB_EmployeeCalendar_GetByLastModifiedDate" DbName="bodb_HRM" Plain="0" />
 	</Function>
 </Functions>

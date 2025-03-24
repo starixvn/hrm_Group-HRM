@@ -9,7 +9,7 @@ namespace HRM.Services.Implement.FnB;
 
 public class ShiftService(IBaseService baseService) : IShiftService
 {
-    public async Task<IEnumerable<ShiftModel>> GetShiftByLastModifiedDate(GetShiftByLastModifiedDateCriteria criteria)
+    public async Task<IEnumerable<ShiftModel>> GetAllShift(GetAllShiftCriteria criteria)
     {
         return await baseService.GetDataAsync<ShiftModel>(criteria);
     }

@@ -2,9 +2,7 @@
 
 public class SectionModel
 {
-    public int SectionId{ get; set; }
-
-    public int CompanyId { get; set; }
+    public int SectionId { get; set; }
 
     public string Code { get; set; }
 

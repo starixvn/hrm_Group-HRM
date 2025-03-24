@@ -22,9 +22,7 @@ public class ShiftModel
 
     public string IsOutAfterDay { get; set; }
 
-    public int CompanyId { get; set; }
-
-    public DateTime ModifiedDate { get; set; }
-
     public bool IsDisabled { get; set; }
+
+    public int OldShiftId { get; set; }
 }
