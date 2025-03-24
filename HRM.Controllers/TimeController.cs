@@ -71,7 +71,7 @@ public class TimeController(
 
     [AllowAnonymous]
     [HttpPost]
-    public async Task<IActionResult> CheckInOut(CheckInOutViewModel model)
+    public async Task<IActionResult> CheckInOut([FromBody] CheckInOutViewModel model)
     {
         model.Password = Encoding.UTF8.GetString(Convert.FromBase64String(model.Password));
         var token = cryptoService.GenerateRijndaelKeyIV();

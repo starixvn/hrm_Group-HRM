@@ -1,7 +1,7 @@
 ﻿namespace HRM.Criteria.Time;
 
-using Fanex.Data.Repository;
 using System;
+using Fanex.Data.Repository;
 
 public class InsertCheckInOutRecordCriteria : CriteriaBase
 {
@@ -9,19 +9,13 @@ public class InsertCheckInOutRecordCriteria : CriteriaBase
 
     public DateTime RecordTime { get; set; }
 
-    public short InOutType { get; set; }
+    public byte InOutType { get; set; }
 
     public string IPAddress { get; set; }
 
     public string Platform { get; set; }
 
-    public override string GetSettingKey()
-    {
-        return "TimeRecord_InsertCheckInOutTime";
-    }
+    public override string GetSettingKey() => "TimeRecord_InsertCheckInOutTime";
 
-    public override bool IsValid()
-    {
-        return EmpId > 0;
-    }
+    public override bool IsValid() => EmpId > 0;
 }
