@@ -14,7 +14,7 @@ public class ShiftController(IShiftService shiftService,
     ICompanyService companyService) : ControllerBase
 {
     [HttpGet]
-    public async Task<IActionResult> GetShifts([FromQuery] SyncFnBRequestModel request)
+    public async Task<IActionResult> GetShifts()
     {
         var company = await companyService.GetCompanySiteByDomainAsync();
         var criteria = new GetAllShiftCriteria
