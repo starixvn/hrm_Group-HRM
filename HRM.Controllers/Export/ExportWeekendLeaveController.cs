@@ -9,13 +9,11 @@ using Services.ExportExcel.WeekendLeave;
 using Services.Interfaces;
 using ViewModels.Report;
 
-
 public class ExportWeekendLeaveController(
     IUserControlSession userControlSession,
     IReportService reportService,
     IExportWeekendLeaveSummaryService exportWeekendLeaveSummaryService,
-    IExportWeekendLeaveDetailService exportWeekendLeaveDetailService)
-    : BaseController(userControlSession)
+    IExportWeekendLeaveDetailService exportWeekendLeaveDetailService) : BaseController(userControlSession)
 {
     public async Task<ActionResult> ExportWeekendLeaveSummaryReport(WeekendLeaveViewModel model)
     {

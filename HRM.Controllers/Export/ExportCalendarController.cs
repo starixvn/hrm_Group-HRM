@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using GO.UserControl.Client.Core.Session;
+using HRM.Core;
 using HRM.Core.Constants;
 using HRM.Criteria.Calendar;
 using HRM.Services.Implement;
@@ -17,7 +18,7 @@ public class ExportCalendarController(
 {
     public async Task<IActionResult> EmployeeWorkingCalendar(WorkingCalendarFilterViewModel model)
     {
-        var fileName = $"EmployeeWorkingCalendar_{DateTimeOffset.Now:yyyyMMdd}.xlsx";
+        var fileName = $"EmployeeWorkingCalendar_{DateTimeOffset.Now.DateTime.ToClientTimeZone():yyyyMMdd}.xlsx";
         var criteria = new GetWorkingCalendarWeeklyCriteria
         {
             EmpId = model.EmployeeId,

@@ -15,7 +15,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace HRM.Controllers.Export;
 
-public class ExportRequestController(IUserControlSession userControlSession,
+public class ExportRequestController(
+    IUserControlSession userControlSession,
     IRequestService requestService,
     IExportExcelService exportExcelService) : BaseExportController(userControlSession)
 {
@@ -45,7 +46,7 @@ public class ExportRequestController(IUserControlSession userControlSession,
 
         var requestList = await requestService.GetRequests(criteria);
         var hssfWorkbook = exportExcelService.ExportWorkingTimeRequest(requestList, Labels.VoidRequest);
-        var fileName = "EmployeeVoidRequest_" + DateTimeOffset.Now.ToString("yyyyMMdd") + ".xls";
+        var fileName = $"EmployeeVoidRequest_{DateTimeOffset.Now.DateTime.ToClientTimeZone():yyyyMMdd}.xls";
 
         return ExcelFile(hssfWorkbook, fileName);
     }
@@ -81,7 +82,7 @@ public class ExportRequestController(IUserControlSession userControlSession,
 
         var requestList = await requestService.GetRequests(criteria);
         var hssfWorkbook = exportExcelService.ExportWorkingTimeRequest(requestList, model.PageTitle);
-        var fileName = "EmployeeRequest_" + DateTimeOffset.Now.ToString("yyyyMMdd") + ".xls";
+        var fileName = $"EmployeeRequest_{DateTimeOffset.Now.DateTime.ToClientTimeZone():yyyyMMdd}.xls";
 
         return ExcelFile(hssfWorkbook, fileName);
     }
@@ -112,7 +113,7 @@ public class ExportRequestController(IUserControlSession userControlSession,
 
         var requestList = await requestService.GetRequests(criteria);
         var hssfWorkbook = exportExcelService.ExportWorkingTimeRequest(requestList, model.PageTitle);
-        var fileName = "DailyRequest_" + DateTimeOffset.Now.ToString("yyyyMMdd") + ".xls";
+        var fileName = $"DailyRequest_{DateTimeOffset.Now.DateTime.ToClientTimeZone():yyyyMMdd}.xls";
 
         return ExcelFile(hssfWorkbook, fileName);
     }

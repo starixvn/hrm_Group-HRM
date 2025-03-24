@@ -1,25 +1,24 @@
-﻿using HRM.Controllers.Export;
-
-namespace HRM.Controllers;
+﻿namespace HRM.Controllers;
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using GO.UserControl.Client.Core.Enumerables;
-using GO.UserControl.Client.Core.Session;
 using Core;
 using Core.Constants;
 using Core.Filters;
-using HRM.Core.Services;
 using Criteria.SickLeave;
+using Export;
+using GO.UserControl.Client.Core.Enumerables;
+using GO.UserControl.Client.Core.Session;
+using HRM.Core.Services;
+using Microsoft.AspNetCore.Mvc;
 using Models.HospitalizationLeave;
 using Resources;
 using Services.ExportExcel;
 using Services.Interfaces;
 using ViewModels.AnnualLeave;
 using ViewModels.HospitalizationLeave;
-using Microsoft.AspNetCore.Mvc;
 
 [HrmPermission(Policy.Read, FunctionKey.SickLeaveBalance)]
 public class SickLeaveBalanceController(
@@ -159,7 +158,7 @@ public class SickLeaveBalanceController(
                 FromDate = model.AffectedFrom,
                 DeductDays = model.DeductDays,
                 CreditDays = model.CreditDays,
-                CreatedDate = DateTimeOffset.Now.DateTime.ToServerTimeZone(),
+                CreatedDate = DateTimeOffset.Now.DateTime,
                 CreatedBy = EmployeeSession.EmpId
             };
             var commandResult = await baseService.ExecuteNonQueryAsync(criteria);
@@ -240,7 +239,7 @@ public class SickLeaveBalanceController(
             FromDate = model.AffectedFrom,
             DeductDays = model.DeductDays,
             CreditDays = model.CreditDays,
-            ModifiedDate = DateTimeOffset.Now.DateTime.ToServerTimeZone(),
+            ModifiedDate = DateTimeOffset.Now.DateTime,
             ModifiedBy = EmployeeSession.EmpId
         };
         var commandResult = await baseService.ExecuteNonQueryAsync(criteria);
@@ -261,7 +260,7 @@ public class SickLeaveBalanceController(
         var criteria = new DeleteTransactionCriteria
         {
             TransId = model.TransId,
-            ModifiedDate = DateTimeOffset.Now.DateTime.ToServerTimeZone(),
+            ModifiedDate = DateTimeOffset.Now.DateTime,
             ModifiedBy = EmployeeSession.EmpId
         };
         var commandResult = await baseService.ExecuteNonQueryAsync(criteria);

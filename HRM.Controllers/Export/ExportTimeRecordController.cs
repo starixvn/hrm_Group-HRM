@@ -14,8 +14,7 @@ namespace HRM.Controllers.Export;
 public class ExportTimeRecordController(
     IUserControlSession userControlSession,
     IReportService reportService,
-    IExportExcelTimeRecordService exportTimeRecordService)
-    : BaseController(userControlSession)
+    IExportExcelTimeRecordService exportTimeRecordService) : BaseController(userControlSession)
 {
     public async Task<FileContentResult> Export(TimeRecordViewModel model)
     {

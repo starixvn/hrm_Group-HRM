@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using GO.UserControl.Client.Core.Session;
+using HRM.Core;
 using HRM.Criteria.Employee;
 using HRM.Services.ExportExcel.Employee;
 using HRM.Services.Interfaces;
@@ -13,8 +14,7 @@ namespace HRM.Controllers.Export;
 public class ExportEmployeeController(
     IUserControlSession userControlSession,
     IEmployeeService employeeService,
-    IExportExcelEmployeeInfoService excelService)
-    : BaseExportController(userControlSession)
+    IExportExcelEmployeeInfoService excelService) : BaseExportController(userControlSession)
 {
     public async Task<IActionResult> EmployeeBasicInfo(UserManagementViewModel model)
     {
@@ -31,9 +31,9 @@ public class ExportEmployeeController(
 
         var employees = await employeeService.GetEmployeeAsync(criteria);
         var bytes = await excelService.ExportEmployeeBasicInfo(employees.ToList());
-        var fileName = "EmployeeBasicInfo_" + DateTimeOffset.Now.ToString("yyyyMMdd");
+        var fileName = $"EmployeeBasicInfo_{DateTimeOffset.Now.DateTime.ToClientTimeZone():yyyyMMdd}.xlsx";
 
-        return File(bytes, "application/xlsx", $"{fileName}.xlsx");
+        return File(bytes, "application/xlsx", fileName);
     }
 
     public async Task<IActionResult> EmployeeDetailsInfo(UserManagementViewModel model)
@@ -50,8 +50,8 @@ public class ExportEmployeeController(
 
         var profiles = await employeeService.GetEmployeeFullProfile(criteria);
         var bytes = await excelService.ExportEmployeeFullProfile(profiles);
-        var fileName = "EmployeeFullInfo_" + DateTimeOffset.Now.ToString("yyyyMMdd");
+        var fileName = $"EmployeeFullInfo_{DateTimeOffset.Now.DateTime.ToClientTimeZone():yyyyMMdd}.xlsx";
         
-        return File(bytes, "application/xlsx", $"{fileName}.xlsx");
+        return File(bytes, "application/xlsx", fileName);
     }
 }

@@ -4,11 +4,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Core;
 using Criteria.AnnualLeave;
 using GO.UserControl.Client.Core.Session;
 using HRM.Criteria.Report;
-using HRM.Models;
 using Microsoft.AspNetCore.Mvc;
+using Models;
 using Services.ExportExcel;
 using Services.Interfaces;
 using ViewModels.AnnualLeave;
@@ -21,7 +22,7 @@ public class ExportLeaveSummaryController(
 {
     public async Task<IActionResult> AnnualLeaveSummary(LeaveSummaryViewModel model)
     {
-        var fileName = $"LeaveSummary_{DateTimeOffset.Now:yyyyMMdd}.xls";
+        var fileName = $"LeaveSummary_{DateTimeOffset.Now.DateTime.ToClientTimeZone():yyyyMMdd}.xls";
         byte? isLocal = null;
         if (model.Category != null)
         {
@@ -52,7 +53,7 @@ public class ExportLeaveSummaryController(
         leaveSummaries = FilterLeaveSummariesByPeriod(leaveSummaries, model.Period);
 
         var data = await exportReportService.Export(leaveSummaries, model.Year, model.LeaveType, model.Period, CurrentCompanyId);
-        var fileName = $"UnpaidLeaveSummary_{DateTimeOffset.Now:yyyyMMdd}.xls";
+        var fileName = $"UnpaidLeaveSummary_{DateTimeOffset.Now.DateTime.ToClientTimeZone():yyyyMMdd}.xls";
         return File(data, "application/vnd.ms-excel", fileName);
     }
 
@@ -70,7 +71,7 @@ public class ExportLeaveSummaryController(
         };
     }
 
-    private IEnumerable<LeaveSummary> FilterLeaveSummariesByPeriod(IEnumerable<LeaveSummary> leaveSummaries, string period)
+    private static IEnumerable<LeaveSummary> FilterLeaveSummariesByPeriod(IEnumerable<LeaveSummary> leaveSummaries, string period)
     {
         return period switch
         {
@@ -79,5 +80,4 @@ public class ExportLeaveSummaryController(
             _ => leaveSummaries
         };
     }
-
 }

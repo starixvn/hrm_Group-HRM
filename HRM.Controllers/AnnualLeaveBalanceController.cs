@@ -185,7 +185,7 @@ public class AnnualLeaveBalanceController(
                 FromDate = model.AffectedFrom,
                 DeductDays = model.DeductDays,
                 CreditDays = model.CreditDays,
-                CreatedDate = DateTimeOffset.Now.DateTime.ToServerTimeZone(),
+                CreatedDate = DateTimeOffset.Now.DateTime,
                 CreatedBy = EmployeeSession.EmpId
             };
             var result = await baseService.ExecuteNonQueryAsync(criteria);
@@ -239,7 +239,7 @@ public class AnnualLeaveBalanceController(
                 FromDate = model.AffectedFrom,
                 DeductDays = model.DeductDays,
                 CreditDays = model.CreditDays,
-                ModifiedDate = DateTimeOffset.Now.DateTime.ToServerTimeZone(),
+                ModifiedDate = DateTimeOffset.Now.DateTime,
                 ModifiedBy = EmployeeSession.EmpId
             };
             var result = await baseService.ExecuteNonQueryAsync(criteria);
@@ -266,7 +266,7 @@ public class AnnualLeaveBalanceController(
         var criteria = new DeleteAnnualLeaveTransactionCriteria
         {
             LeaveTransId = model.LeaveTransId,
-            ModifiedDate = DateTimeOffset.Now.DateTime.ToServerTimeZone(),
+            ModifiedDate = DateTimeOffset.Now.DateTime,
             ModifiedBy = EmployeeSession.EmpId
         };
         var result = await baseService.ExecuteNonQueryAsync(criteria);

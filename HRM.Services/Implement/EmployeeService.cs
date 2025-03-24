@@ -233,7 +233,7 @@ public class EmployeeService(
             TeamId = param.TeamId,
             Password = Encryptor.ComputeHash(param.Code),
             DomainUsername = param.DomainUsername,
-            CreatedDate = DateTimeOffset.Now.DateTime.ToServerTimeZone(),
+            CreatedDate = DateTimeOffset.Now.DateTime,
             JoinDate = DateTimeOffset.Now.DateTime.ToClientTimeZone()
         };
         var commandResult = await baseService.ExecuteNonQueryAsync(criteria);

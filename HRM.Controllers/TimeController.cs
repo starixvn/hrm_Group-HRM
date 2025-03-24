@@ -5,17 +5,20 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using Core;
 using Core.Constants;
 using Core.Filters;
 using Core.Models;
 using Core.Services;
+using Criteria.CompanySite;
+using Criteria.SystemSetting;
 using Criteria.Time;
 using Fanex.Logging;
+using GO.UserControl.Client.Core;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Models.Auth;
 using GO.UserControl.Client.Core.Services;
 using GO.UserControl.Client.Core.Session;
-using Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -23,32 +26,46 @@ using Models;
 using NetTools;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using Services.Interfaces;
 using ViewModels.Time;
 
 public class TimeController(
     AppSettings appSettings,
+    IUserControlSettings userControlSettings,
     IUserControlSession userControlSession,
     IBaseService baseService,
     IAuthService authService,
     ICryptoService cryptoService,
-    IHRMAuthService hrmAuthService) : BaseController(userControlSession)
+    IHRMAuthService hrmAuthService,
+    ILogger logger) : BaseController(userControlSession)
 {
     [AllowAnonymous]
-    public ActionResult CheckInOut()
+    public async Task<IActionResult> CheckInOut()
     {
+        var companySite = await GetCompanySiteByDomainAsync();
+        if (companySite == null)
+        {
+            return RedirectToAction("AccessDenied", "Error");
+        }
+
+        userControlSettings.SiteId = companySite.SiteId;
+        userControlSettings.AccessToken = companySite.AccessToken;
+        userControlSession.Set(SessionKey.CurrentCompanyId, companySite.CompanyId);
+        userControlSession.Set(SessionKey.CurrentTimeZone, await GetClientTimeZoneAsync());
+
         if (appSettings.WhitelistIPs.Equals("*"))
         {
-            return View();
+            return View(DateTimeOffset.Now.DateTime.ToClientTimeZone());
         }
 
         var clientIpAddress = GetClientIp(HttpContext);
         var clientIp = IPAddress.Parse(clientIpAddress);
         if (appSettings.WhitelistIPs.Split(';').ToList().Exists(ip => IPAddressRange.Parse(ip).Contains(clientIp)))
         {
-            return View();
+            return View(DateTimeOffset.Now.DateTime.ToClientTimeZone());
         }
 
-        LogService.Info(clientIpAddress);
+        await logger.InfoAsync(clientIpAddress);
         return RedirectToAction("AccessDenied", "Error");
     }
 
@@ -122,7 +139,7 @@ public class TimeController(
         return new JsonResult(commandResult, new JsonSerializerSettings { ContractResolver = new DefaultContractResolver() });
     }
 
-    public ActionResult AddTimeRecord()
+    public IActionResult AddTimeRecord()
     {
         var model = new TimeRecordViewModel
         {
@@ -180,6 +197,28 @@ public class TimeController(
         };
         var result = await baseService.ExecuteNonQueryAsync(criteria);
         return Json(result);
+    }
+
+    private async Task<short> GetClientTimeZoneAsync()
+    {
+        var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
+        var criteria = new GetSystemConfigsByKeyCriteria
+        {
+            CompanyId = companyId,
+            Key = SystemConfigKey.TimeZone
+        };
+
+        return await baseService.GetDataEntityAsync<short>(criteria);
+    }
+
+    private async Task<CompanySite> GetCompanySiteByDomainAsync()
+    {
+        var domainName = GetDomainName(HttpContext);
+        var criteria = new GetCompanySiteByDomainCriteria
+        {
+            Domain = domainName
+        };
+        return await baseService.GetDataEntityAsync<CompanySite>(criteria);
     }
 
     private static string GetClientIp(HttpContext httpContext)

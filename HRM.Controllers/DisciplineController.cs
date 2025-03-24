@@ -1,23 +1,22 @@
-﻿using HRM.Services.Interfaces;
-
-namespace HRM.Controllers;
+﻿namespace HRM.Controllers;
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Core;
 using Core.Constants;
 using Core.Filters;
 using Core.XMLExtensions;
 using Criteria.Discipline;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
-using Core;
 using HRM.Core.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Models.Discipline;
 using Resources;
+using Services.Interfaces;
 using ViewModels.Discipline;
 
 public class DisciplineController(
@@ -220,6 +219,7 @@ public class DisciplineController(
                         Value = $"1{currentYear + 1}"
                     });
                     break;
+
                 case >= 1 and <= May:
                     dateRange.Add(new SelectListItem
                     {
@@ -227,6 +227,7 @@ public class DisciplineController(
                         Value = $"1{currentYear}"
                     });
                     break;
+
                 default:
                     dateRange.Add(new SelectListItem
                     {
