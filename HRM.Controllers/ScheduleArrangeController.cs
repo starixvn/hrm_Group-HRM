@@ -4,22 +4,23 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using GO.UserControl.Client.Core.Enumerables;
-using GO.UserControl.Client.Core.Services;
-using GO.UserControl.Client.Core.Session;
 using Core;
 using Core.Constants;
 using Core.Enums;
 using Core.Filters;
+using Core.XMLExtensions;
 using Criteria.ScheduleArrange;
-using Models;
-using Models.ScheduleArrange;
-using ViewModels.ScheduleArrange;
+using GO.UserControl.Client.Core.Enumerables;
+using GO.UserControl.Client.Core.Services;
+using GO.UserControl.Client.Core.Session;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Models;
+using Models.ScheduleArrange;
 using Services.ExportExcel;
 using Services.Implement;
 using Services.Interfaces;
+using ViewModels.ScheduleArrange;
 
 public class ScheduleArrangeController(
     IUserControlSession userControlSession,
@@ -63,6 +64,7 @@ public class ScheduleArrangeController(
     [AllowAnonymous]
     public async Task<IActionResult> GetWeeklySchedule(WeeklyScheduleFilter filter)
     {
+        filter.IsEditScheduleUnlimited = userControlSession.HasPermissionOnFunction(FunctionKey.EditScheduleUnlimited, Policy.Host);
         filter.ActorId = EmployeeSession.EmpId;
         var weeklySchedules = await scheduleArrangeService.GetWeeklyScheduleAsync(filter);
         var schedules = weeklySchedules.GroupBy(x => new { x.Team.Id, x.Team.Code, x.Team.Name })
@@ -88,12 +90,16 @@ public class ScheduleArrangeController(
         IEnumerable<EditDailySchedule> weeklySchedules,
         IEnumerable<EditDefaultShift> defaultShifts)
     {
-        var commandResult = await scheduleArrangeService.EditWeeklyAsync(
-            EmployeeSession.EmpId,
-            fromDate,
-            toDate,
-            weeklySchedules,
-            defaultShifts);
+        var criteria = new EditWeeklyScheduleCriteria
+        {
+            CompanyId = CurrentCompanyId,
+            ActorId = EmployeeSession.EmpId,
+            FromDate = fromDate,
+            ToDate = toDate,
+            WeeklyScheduleXml = weeklySchedules.ToXML().ToString(),
+            DefaultShiftXml = defaultShifts.ToXML().ToString()
+        };
+        var commandResult = await scheduleArrangeService.EditWeeklyAsync(criteria);
 
         return Json(commandResult);
     }

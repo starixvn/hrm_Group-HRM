@@ -12,8 +12,8 @@ public class GetWeeklyScheduleCriteria : CriteriaBase
     public string TeamIds { get; set; }
     public bool IsIFrame { get; set; }
     public bool? IsLocal { get; set; }
-
     public short CompanyId { get; set; }
+    public bool IsEditScheduleUnlimited { get; set; }
 
     public override string GetSettingKey() => "ScheduleArrangement_GetWeekly";
 

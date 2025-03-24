@@ -48,7 +48,8 @@ public class ScheduleArrangeService(
             TeamIds = filter.TeamIds,
             IsIFrame = filter.IsIFrame,
             IsLocal = filter.IsLocal.HasValue ? filter.IsLocal.Value == 1 : null,
-            CompanyId = companyId
+            CompanyId = companyId,
+            IsEditScheduleUnlimited = filter.IsEditScheduleUnlimited
         };
 
         var weeklySchedules = await scheduleArrangeRepository.GetWeeklyScheduleAsync(criteria);
@@ -59,22 +60,8 @@ public class ScheduleArrangeService(
         return weeklySchedules;
     }
 
-    public async Task<CommandResult> EditWeeklyAsync(
-        int actorId,
-        DateTime fromDate,
-        DateTime toDate,
-        IEnumerable<EditDailySchedule> weeklySchedules,
-        IEnumerable<EditDefaultShift> defaultShifts)
+    public async Task<CommandResult> EditWeeklyAsync(EditWeeklyScheduleCriteria criteria)
     {
-        var criteria = new EditWeeklyScheduleCriteria
-        {
-            ActorId = actorId,
-            FromDate = fromDate,
-            ToDate = toDate,
-            WeeklyScheduleXml = weeklySchedules.ToXML().ToString(),
-            DefaultShiftXml = defaultShifts.ToXML().ToString()
-        };
-
         return await baseService.ExecuteNonQueryAsync(criteria);
     }
 
