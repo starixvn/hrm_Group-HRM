@@ -1,20 +1,19 @@
-﻿using HRM.ViewModels.Calendar;
-
-namespace HRM.Controllers;
+﻿namespace HRM.Controllers;
 
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using GO.UserControl.Client.Core.Enumerables;
-using GO.UserControl.Client.Core.Session;
 using Core;
 using Core.Constants;
 using Core.Filters;
 using Criteria.Calendar;
-using Services.Interfaces;
-using ViewModels;
+using GO.UserControl.Client.Core.Enumerables;
+using GO.UserControl.Client.Core.Session;
 using Microsoft.AspNetCore.Mvc;
 using Services.Implement;
+using Services.Interfaces;
+using ViewModels;
+using ViewModels.Calendar;
 
 public class CalendarController(
     IUserControlSession userControlSession,

@@ -30,7 +30,8 @@ public class ScheduleArrangeService(
             ActorId = filter.ActorId,
             TeamIds = filter.TeamIds,
             Query = filter.Query,
-            IsIFrame = filter.IsIFrame
+            IsIFrame = filter.IsIFrame,
+            IsEditScheduleUnlimited = filter.IsEditScheduleUnlimited
         };
 
         return await baseService.GetDataAsync<EmployeeSuggestion>(criteria);

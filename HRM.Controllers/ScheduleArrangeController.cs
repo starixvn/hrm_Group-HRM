@@ -55,6 +55,7 @@ public class ScheduleArrangeController(
     [AllowAnonymous]
     public async Task<IActionResult> GetEmployees(GetEmployeeFilter filter)
     {
+        filter.IsEditScheduleUnlimited = userControlSession.HasPermissionOnFunction(FunctionKey.EditScheduleUnlimited, Policy.Host);
         filter.ActorId = EmployeeSession.EmpId;
         var employees = await scheduleArrangeService.GetEmployeesAsync(filter);
 

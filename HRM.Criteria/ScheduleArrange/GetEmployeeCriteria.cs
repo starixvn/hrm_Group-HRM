@@ -8,6 +8,7 @@ public class GetEmployeeCriteria : CriteriaBase
     public string TeamIds { get; set; }
     public string Query { get; set; }
     public bool IsIFrame { get; set; }
+    public bool IsEditScheduleUnlimited { get; set; }
 
     public override string GetSettingKey() => "ScheduleArrangement_GetEmployee";
 
