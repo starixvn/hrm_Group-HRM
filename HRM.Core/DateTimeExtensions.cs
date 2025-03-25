@@ -74,6 +74,9 @@ public static class DateTimeExtensions
     public static string ToShortTime(this DateTime date)
         => date.ToString("HH:mm");
 
+    public static DateTime ToStartOfDay(this DateTime time)
+        => new DateTimeOffset(time.Year, time.Month, time.Day, 00, 00, 00, TimeSpan.Zero).DateTime;
+
     public static DateTime ToEndOfDay(this DateTime time)
         => new DateTimeOffset(time.Year, time.Month, time.Day, 23, 59, 59, TimeSpan.Zero).DateTime;
 

@@ -229,7 +229,6 @@ public class RequestController(
     [NonAction]
     private async Task GetRequests(RequestViewModel request)
     {
-        request.ToDate = request.ToDate.ToEndOfDay();
         request.LeaveTypes = await commonDataService.GetLeaveTypeAsync();
         int? employeeId = null;
         if (request.EmployeeId != -1 && !string.IsNullOrWhiteSpace(request.Employee))
@@ -241,7 +240,7 @@ public class RequestController(
         {
             EmpId = employeeId,
             FromDate = request.FromDate.ToServerTimeZone(),
-            ToDate = request.ToDate.ToEndOfDay().ToServerTimeZone(),
+            ToDate = request.ToDate.ToServerTimeZone(),
             TeamIds = request.TeamIds,
             Status = request.StatusIds,
             RequestType = request.RequestType,

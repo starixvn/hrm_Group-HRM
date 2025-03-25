@@ -117,7 +117,7 @@ public class RequestService(
     {
         var criteria = new GetChangeShiftDetailToReviewDisciplineCriteria
         {
-            RequestId = requestId
+            RequestId = requestId   
         };
         return (await baseService.GetDataAsync<ChangeShiftDetail>(criteria)).ToList();
     }
