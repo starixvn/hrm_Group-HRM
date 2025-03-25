@@ -118,6 +118,7 @@ public class TimeController(
     {
         var criteria = new GetCheckInOutOnlineRecordCriteria
         {
+            CompanyId = CurrentCompanyId,
             Date = DateTimeOffset.Now.Date
         };
         var records = await baseService.GetDataAsync<TimeRecordModel>(criteria);

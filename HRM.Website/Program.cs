@@ -21,6 +21,7 @@ services.AddControllersWithViews()
     .AddNewtonsoftJson(options =>
     {
         options.SerializerSettings.DateTimeZoneHandling = DateTimeZoneHandling.Unspecified;
+        options.SerializerSettings.DateFormatString = "dd MMM, yyyy HH:mm:ss";
     });
 
 services.AddFanexLogSentry(configuration);
