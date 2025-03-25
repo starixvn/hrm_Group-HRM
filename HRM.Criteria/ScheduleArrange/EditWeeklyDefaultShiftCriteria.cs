@@ -5,6 +5,7 @@ using Fanex.Data.Repository;
 
 public class EditWeeklyDefaultShiftCriteria : CriteriaBase
 {
+    public short CompanyId { get; set; }
     public int ActorId { get; set; }
     public int EmployeeId { get; set; }
     public DateTime FromDate { get; set; }

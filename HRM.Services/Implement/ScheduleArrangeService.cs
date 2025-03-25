@@ -102,8 +102,10 @@ public class ScheduleArrangeService(
 
     public async Task<CommandResult> EditWeeklyDefaultShiftAsync(int actorId, WeeklyDefaultShift weeklyDefaultShift, bool isUsedWeeklyDefaultShift)
     {
+        var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
         var criteria = new EditWeeklyDefaultShiftCriteria
         {
+            CompanyId = companyId,
             ActorId = actorId,
             EmployeeId = weeklyDefaultShift.EmployeeId,
             FromDate = DateTimeOffset.Now.Date.LastDayOfWeek().AddDays(1),
