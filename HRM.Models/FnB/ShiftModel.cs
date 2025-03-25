@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace HRM.Models.FnB;
+﻿namespace HRM.Models.FnB;
 
 public class ShiftModel
 {

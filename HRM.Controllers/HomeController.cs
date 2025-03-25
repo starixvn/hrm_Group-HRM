@@ -1,7 +1,5 @@
-﻿namespace HRM.Controllers; 
+﻿namespace HRM.Controllers;
 
-using System.Linq;
-using Core.Enums;
 using System;
 using System.Threading.Tasks;
 using Core;

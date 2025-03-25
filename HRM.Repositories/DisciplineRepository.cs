@@ -106,6 +106,8 @@ public class DisciplineRepository : IDisciplineRepository
                         disciplineDetail.SevenDaysLeave.IgnoreBy = ignoreDiscipline.IgnoreBy;
                         disciplineDetail.SevenDaysLeave.IgnoreDate = ignoreDiscipline.IgnoreDate;
                         break;
+                    default:
+                        break;
                 }
             }
         }

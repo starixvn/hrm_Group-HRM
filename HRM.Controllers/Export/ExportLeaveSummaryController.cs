@@ -75,9 +75,19 @@ public class ExportLeaveSummaryController(
     {
         return period switch
         {
-            "1" => leaveSummaries.Where(x => x.Jan > 0 || x.Feb > 0 || x.Mar > 0 || x.Apr > 0 || x.May > 0 || x.Jun > 0).ToList(),
-            "2" => leaveSummaries.Where(x => x.Jul > 0 || x.Aug > 0 || x.Sep > 0 || x.Oct > 0 || x.Nov > 0 || x.Dec > 0).ToList(),
+            "1" => leaveSummaries.Where(HasLeavesInFirstHalf).ToList(),
+            "2" => leaveSummaries.Where(HasLeavesInSecondHalf).ToList(),
             _ => leaveSummaries
         };
+    }
+
+    private static bool HasLeavesInFirstHalf(LeaveSummary x)
+    {
+        return new[] { x.Jan, x.Feb, x.Mar, x.Apr, x.May, x.Jun }.Any(month => month > 0);
+    }
+
+    private static bool HasLeavesInSecondHalf(LeaveSummary x)
+    {
+        return new[] { x.Jul, x.Aug, x.Sep, x.Oct, x.Nov, x.Dec }.Any(month => month > 0);
     }
 }
