@@ -2,7 +2,6 @@
 
 using System;
 using System.Threading.Tasks;
-using Core;
 using Core.Constants;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Services;
