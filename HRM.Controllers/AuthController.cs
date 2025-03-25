@@ -6,7 +6,6 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Core.Constants;
-using Criteria.CompanySite;
 using Criteria.SystemSetting;
 using GO.UserControl.Client.Core;
 using GO.UserControl.Client.Core.Models.Auth;
@@ -17,9 +16,8 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Models;
-using ViewModels.Employee;
 using Services.Interfaces;
+using ViewModels.Employee;
 
 public class AuthController(
     IHRMAuthService hrmAuthService,
