@@ -20,7 +20,7 @@ public class HomeController(
 
     public async Task<IActionResult> Index()
     {
-        var today = DateTimeOffset.Now.DateTime.ToEndOfDay().ToServerTimeZone();
+        var today = DateTimeOffset.Now.DateTime;
         var user = await userService.GetByIdAsync(userControlSession.UserId);
         var viewModel = new DashboardViewModel
         {
@@ -33,13 +33,6 @@ public class HomeController(
         if (isVerifierApprover)
         {
             viewModel.MemberRequests = await dashboardService.GetMemberRequestAsync(EmployeeSession.EmpId, today);
-            var fromDate = DateTimeOffset.Now.DateTime.ToStartOfDay().ToClientTimeZone().Subtract(TimeSpan.FromDays(7));
-            Parallel.ForEach(viewModel.MemberRequests, request =>
-            {
-                request.FromDate = fromDate;
-                request.ToDate = today;
-
-            });
         }
 
         return View(viewModel);

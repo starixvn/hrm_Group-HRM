@@ -229,9 +229,6 @@ public class RequestService(
             case RequestType.KeepInView:
                 await keepInViewRequestService.SendMailProcessRequestAsync(param.RequestId, actor, command);
                 break;
-            case RequestType.Overtime:
-            default:
-                break;
         }
     }
 
@@ -261,8 +258,6 @@ public class RequestService(
 
                 case (int)RequestType.KeepInView:
                     await keepInViewRequestService.SendMailProcessRequestAsync(request.RequestId, actor, command);
-                    break;
-                default:
                     break;
             }
         }
