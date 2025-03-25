@@ -1,7 +1,5 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using HRM.Criteria.Fnb;
-using HRM.Models.FnB;
 using HRM.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using IShiftService = HRM.Services.Interfaces.FnB.IShiftService;

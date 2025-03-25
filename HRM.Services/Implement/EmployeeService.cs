@@ -37,7 +37,7 @@ public class EmployeeService(
     public async Task<string> GenerateEmployeeCode()
     {
         var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
-        var criteria = new GenerateEmployeeCodeCriteria()
+        var criteria = new GenerateEmployeeCodeCriteria
         {
             CompanyId = companyId
         };
