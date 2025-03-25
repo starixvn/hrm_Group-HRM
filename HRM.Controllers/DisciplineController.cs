@@ -177,7 +177,8 @@ public class DisciplineController(
 
     [HttpPost]
     [HrmPermission(Policy.Host, FunctionKey.Discipline)]
-    public async Task<IActionResult> EditDisciplineIgnore(IEnumerable<IgnoredDisciplineModel> ignoreDetails,
+    public async Task<IActionResult> EditDisciplineIgnore(
+        IEnumerable<IgnoredDisciplineModel> ignoreDetails,
         IEnumerable<IgnoredDisciplineDetailModel> disciplineIgnores)
     {
         var criteria = new UpdateIgnoredDisciplineCriteria
