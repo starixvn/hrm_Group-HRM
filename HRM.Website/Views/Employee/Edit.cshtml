@@ -4,58 +4,58 @@
 @using HRM.Resources
 @model HRM.Models.Employee
 @{
-	ViewBag.Title = Labels.Edit;
-	var roles = (IEnumerable<Role>)ViewBag.Roles;
-	var roleItems = roles.Select(r => new SelectListItem { Value = r.RoleId.ToString(), Text = r.Name });
-	bool enableGroupDate = ViewBag.EnableGroupDate;
+    ViewBag.Title = Labels.Edit;
+    var roles = (IEnumerable<Role>)ViewBag.Roles;
+    var roleItems = roles.Select(r => new SelectListItem { Value = r.RoleId.ToString(), Text = r.Name });
+    bool enableGroupDate = ViewBag.EnableGroupDate;
 }
 @section css {
-	<link href="~/dist/vendors/chosen.css" rel="stylesheet" />
-	<link href="~/dist/styles/employee.edit.css" rel="stylesheet"/>
+    <link href="~/dist/vendors/chosen.css" rel="stylesheet" />
+    <link href="~/dist/styles/employee.edit.css" rel="stylesheet" />
 }
-@section js{
-	<script src="~/dist/js/employee.edit.js"></script>
+@section js {
+    <script src="~/dist/js/employee.edit.js"></script>
 }
 @section Breadcrumb {
-	<a class="step" href="javascript:;">@Labels.HRSpace</a>
-	<a class="step" href="@Url.Action("usermanagement", "employee")">@Labels.EmployeeManagement</a>
-	<span class="step">Edit @Model.NickName (@Model.FullName) 's Personal Information</span>
+    <a class="step" href="javascript:;">@Labels.HRSpace</a>
+    <a class="step" href="@Url.Action("usermanagement", "employee")">@Labels.EmployeeManagement</a>
+    <span class="step">Edit @Model.NickName (@Model.FullName) 's Personal Information</span>
 }
 @using (Html.BeginForm("Edit", "Employee", FormMethod.Post, new { id = "formEditUser", @class = "form-edit-user form-horizontal" }))
 {
-	@Html.ValidationSummary(false)
-	if (ViewBag.Updated != null)
-	{
-		if ((bool)ViewBag.Updated)
-		{
-			<div class="success flash">@Messages.UpdatedSuccessfully</div>
-		}
+    @Html.ValidationSummary(false)
+    if (ViewBag.Updated != null)
+    {
+        if ((bool)ViewBag.Updated)
+        {
+            <div class="success flash">@Messages.UpdatedSuccessfully</div>
+        }
 
-		if (!(bool)ViewBag.Updated)
-		{
-			<div class="error flash">@ViewBag.ErrorMessage</div>
-		}
-	}
+        if (!(bool)ViewBag.Updated)
+        {
+            <div class="error flash">@ViewBag.ErrorMessage</div>
+        }
+    }
 
-	<div class="panel panel-default">
-		<div class="panel-heading">
-			<span class="fa fa-chevron-down"></span>
-			<span>@Labels.Personal</span>
-		</div>
-		<ul class="list-group">
-			<li class="list-group-item form-group upload-avatar">
-				<div class="label-form">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <span class="fa fa-chevron-down"></span>
+            <span>@Labels.Personal</span>
+        </div>
+        <ul class="list-group">
+            <li class="list-group-item form-group upload-avatar">
+                <div class="label-form">
                     @Html.LabelForModel(Labels.Avatar, new { @class = "control-label" })
-				</div>
-				<div class="input-form">
-					<div class="avatarbox">
-						<img id="avatar" src="@ViewBag.Avatar" alt="@Model.FullName" />
-					</div>
-					<br />
-					<input type="file" id="file" />
-					<input type="button" id="upload" class="btn btn-primary" value="Upload" style="display: none;" />
-				</div>
-			</li>
+                </div>
+                <div class="input-form">
+                    <div class="avatarbox">
+                        <img id="avatar" src="@ViewBag.Avatar" alt="@Model.FullName" />
+                    </div>
+                    <br />
+                    <input type="file" id="file" />
+                    <input type="button" id="upload" class="btn btn-primary" value="Upload" style="display: none;" />
+                </div>
+            </li>
             <li class="list-group-item form-group">
                 <div class="label-form">
                     @Html.LabelFor(model => model.Code, Labels.EmployeeID, new { @class = "control-label" })
@@ -144,11 +144,11 @@
                 <div class="select-form">
                     @{
                         var gender = new List<SelectListItem>
-		                {
-			                new() {Text = Labels.Unknown, Value = "2"},
-			                new() {Text = Labels.Female, Value = "0"},
-			                new() {Text = Labels.Male, Value = "1"}
-		                };
+                {
+                new() {Text = Labels.Unknown, Value = "2"},
+                new() {Text = Labels.Female, Value = "0"},
+                new() {Text = Labels.Male, Value = "1"}
+                };
                     }
                     @Html.DropDownListFor(model => model.Gender, gender, new { @class = "form-control" })
                 </div>
@@ -233,40 +233,44 @@
                     @Html.TextBoxFor(model => model.Major, new { @class = "form-control" })
                 </div>
             </li>
-		</ul>
-	</div>
+        </ul>
+    </div>
 
-	if (Model.Gender != null && Model.Gender != 0)
-	{
-		<div class="panel panel-default">
-			<div class="panel-heading">
-				<span class="fa fa-chevron-down"></span>
-				<span>Military</span>
-			</div>
-			<ul class="list-group">
-				<li class="list-group-item form-group">
-					<div class="label-form">
-						@Html.LabelFor(model => model.MilitaryFromDate, Labels.From, new { @class = "control-label" })
-					</div>
-					<div class="calendar-form">
-						@{ var militaryFromDate = Model.MilitaryFromDate.HasValue ? Model.MilitaryFromDate.ToDateMonthYearFormatedDate() : string.Empty; }
-						@Html.TextBox("MilitaryFromDate", militaryFromDate, new { @class = "datepicker form-control" })
-						<i class="icon-calendar fa fa-calendar"></i>
-					</div>
-				</li>
-				<li class="list-group-item form-group">
-					<div class="label-form">
-						@Html.LabelFor(model => model.MilitaryToDate, Labels.To, new { @class = "control-label" })
-					</div>
-					<div class="calendar-form">
-						@{ var militaryToDate = Model.MilitaryToDate.HasValue ? Model.MilitaryToDate.ToDateMonthYearFormatedDate() : string.Empty; }
-						@Html.TextBox("MilitaryToDate", militaryToDate, new { @class = "datepicker form-control" })
-						<i class="icon-calendar fa fa-calendar"></i>
-					</div>
-				</li>
-			</ul>
-		</div>
-	}
+    if (Model.Gender != null && Model.Gender != 0)
+    {
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <span class="fa fa-chevron-down"></span>
+                <span>Military</span>
+            </div>
+            <ul class="list-group">
+                <li class="list-group-item form-group">
+                    <div class="label-form">
+                        @Html.LabelFor(model => model.MilitaryFromDate, Labels.From, new { @class = "control-label" })
+                    </div>
+                    <div class="calendar-form">
+                        @{
+                            var militaryFromDate = Model.MilitaryFromDate.HasValue ? Model.MilitaryFromDate.ToDateMonthYearFormatedDate() : string.Empty;
+                        }
+                        @Html.TextBox("MilitaryFromDate", militaryFromDate, new { @class = "datepicker form-control" })
+                        <i class="icon-calendar fa fa-calendar"></i>
+                    </div>
+                </li>
+                <li class="list-group-item form-group">
+                    <div class="label-form">
+                        @Html.LabelFor(model => model.MilitaryToDate, Labels.To, new { @class = "control-label" })
+                    </div>
+                    <div class="calendar-form">
+                        @{
+                            var militaryToDate = Model.MilitaryToDate.HasValue ? Model.MilitaryToDate.ToDateMonthYearFormatedDate() : string.Empty;
+                        }
+                        @Html.TextBox("MilitaryToDate", militaryToDate, new { @class = "datepicker form-control" })
+                        <i class="icon-calendar fa fa-calendar"></i>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    }
     <div class="panel panel-default">
         <div class="panel-heading">
             <span class="fa fa-chevron-down"></span>
@@ -339,206 +343,206 @@
             </li>
         </ul>
     </div>
-	<div class="panel panel-default">
-		<div class="panel-heading">
-			<span class="fa fa-chevron-down"></span>
-			<span>@Labels.Information</span>
-		</div>
-		<ul class="list-group">
-			<li class="list-group-item form-group">
-				<div class="label-form">
-					@Html.LabelFor(model => model.Team.Id, Labels.SectionTeam, new { @class = "control-label" })
-				</div>
-				@Html.HiddenFor(model => model.Team.Id)
-				<div class="select-form" id="Team"></div>
-			</li>
-			<li class="list-group-item form-group">
-				<div class="label-form">
-					@Html.LabelFor(model => model.TeamDate, Labels.TeamDate, new { @class = "control-label" })
-				</div>
-				<div class="calendar-form">
-					@{
-						var teamDate = Model.TeamDate.HasValue ? Model.TeamDate.ToDateMonthYearFormatedDate() : string.Empty;
-					}
-					@Html.TextBox("TeamDate", teamDate, new { @class = "datepicker form-control" })
-					<i class="icon-calendar fa fa-calendar"></i>
-				</div>
-			</li>
-			<li class="list-group-item form-group">
-				<div class="label-form">
-					@Html.LabelFor(model => model.JobTitleId, Labels.JobTitle, new { @class = "control-label" })
-				</div>
-				<div class="select-form">
-					@Html.DropDownListFor(model => model.JobTitleId, new SelectList(ViewBag.JobTitles, "Id", "Name"), "--Select a Job Title--", new { @class = "form-control" })
-				</div>
-			</li>
-			<li class="list-group-item form-group">
-				<div class="label-form">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <span class="fa fa-chevron-down"></span>
+            <span>@Labels.Information</span>
+        </div>
+        <ul class="list-group">
+            <li class="list-group-item form-group">
+                <div class="label-form">
+                    @Html.LabelFor(model => model.Team.Id, Labels.SectionTeam, new { @class = "control-label" })
+                </div>
+                @Html.HiddenFor(model => model.Team.Id)
+                <div class="select-form" id="Team"></div>
+            </li>
+            <li class="list-group-item form-group">
+                <div class="label-form">
+                    @Html.LabelFor(model => model.TeamDate, Labels.TeamDate, new { @class = "control-label" })
+                </div>
+                <div class="calendar-form">
+                    @{
+                        var teamDate = Model.TeamDate.HasValue ? Model.TeamDate.ToDateMonthYearFormatedDate() : string.Empty;
+                    }
+                    @Html.TextBox("TeamDate", teamDate, new { @class = "datepicker form-control" })
+                    <i class="icon-calendar fa fa-calendar"></i>
+                </div>
+            </li>
+            <li class="list-group-item form-group">
+                <div class="label-form">
+                    @Html.LabelFor(model => model.JobTitleId, Labels.JobTitle, new { @class = "control-label" })
+                </div>
+                <div class="select-form">
+                    @Html.DropDownListFor(model => model.JobTitleId, new SelectList(ViewBag.JobTitles, "Id", "Name"), "--Select a Job Title--", new { @class = "form-control" })
+                </div>
+            </li>
+            <li class="list-group-item form-group">
+                <div class="label-form">
                     @Html.LabelFor(model => model.JobLevelId, Labels.JobLevel, new { @class = "control-label" })
-				</div>
-				<div class="select-form">
-					@Html.DropDownListFor(model => model.JobLevelId, new SelectList(ViewBag.JobLevel, "Id", "Name"), "--Select a Job Level--", new { @class = "form-control" })
-				</div>
-			</li>
-			<li class="list-group-item form-group">
-				<div class="label-form">
-					@Html.LabelFor(model => model.ManagementLevelId, Labels.ManagementGrade, new { @class = "control-label" })
-				</div>
-				<div class="select-form">
+                </div>
+                <div class="select-form">
+                    @Html.DropDownListFor(model => model.JobLevelId, new SelectList(ViewBag.JobLevel, "Id", "Name"), "--Select a Job Level--", new { @class = "form-control" })
+                </div>
+            </li>
+            <li class="list-group-item form-group">
+                <div class="label-form">
+                    @Html.LabelFor(model => model.ManagementLevelId, Labels.ManagementGrade, new { @class = "control-label" })
+                </div>
+                <div class="select-form">
                     @Html.DropDownListFor(model => model.ManagementLevelId, new SelectList(ViewBag.Grades, "Id", "Name"), "--Select an Management Grade--", new { @class = "form-control" })
-				</div>
-			</li>
-			<li class="list-group-item form-group">
-				<div class="label-form">
-					@Html.LabelFor(model => model.PromotionDate, Labels.PromotionDate, new { @class = "control-label" })
-				</div>
-				<div class="calendar-form">
-					@{
-						var promotionDate = Model.PromotionDate.HasValue ? Model.PromotionDate.ToDateMonthYearFormatedDate() : string.Empty;
-					}
-					@Html.TextBox("PromotionDate", promotionDate, new { @class = "datepicker form-control" })
-					<i class="icon-calendar fa fa-calendar"></i>
-				</div>
-			</li>
-			<li class="list-group-item form-group @(enableGroupDate ? "" : "hide-group-date")">
-				<div class="label-form">
-					@Html.LabelFor(model => model.JoinedDate, Labels.GroupDate, new { @class = "control-label" })
-				</div>
-				<div class="calendar-form">
-					@{
-						var joinedDate = Model.JoinedDate.HasValue ? Model.JoinedDate.ToDateMonthYearFormatedDate() : string.Empty;
-					}
-					@Html.TextBox("JoinedDate", joinedDate, new { @class = "datepicker form-control" })
-					<i class="icon-calendar fa fa-calendar"></i>
-				</div>
-			</li>
-			<li class="list-group-item form-group">
-				<div class="label-form">
-					@Html.LabelFor(model => model.CompanyDate, Labels.CompanyDate, new { @class = "control-label" })
-				</div>
-				<div class="calendar-form">
-					@{
-						var companyDate = Model.CompanyDate.HasValue ? Model.CompanyDate.ToDateMonthYearFormatedDate() : string.Empty;
-					}
-					@Html.TextBox("CompanyDate", companyDate, new { @class = "datepicker form-control" })
-					<i class="icon-calendar fa fa-calendar"></i>
-				</div>
-			</li>
-			<li class="list-group-item form-group">
-				<div class="label-form">
-					@Html.LabelFor(model => model.ConfirmedDate, Labels.ConfirmedDate, new { @class = "control-label" })
-				</div>
-				<div class="calendar-form">
-					@{
-						var confirmedDate = Model.ConfirmedDate.HasValue ? Model.ConfirmedDate.ToDateMonthYearFormatedDate() : string.Empty;
-					}
-					@Html.TextBox("ConfirmedDate", confirmedDate, new { @class = "datepicker form-control" })
-					<i class="icon-calendar fa fa-calendar"></i>
-				</div>
-			</li>
-			<li class="list-group-item form-group">
-				<div class="label-form">
-					@Html.LabelFor(model => model.ResignedDate, Labels.ResignedDate, new { @class = "control-label" })
-				</div>
-				<div class="calendar-form">
-					@{
-						var resignedDate = Model.ResignedDate.HasValue ? Model.ResignedDate.ToDateMonthYearFormatedDate() : string.Empty;
-					}
-					@Html.TextBox("ResignedDate", resignedDate, new { @class = "datepicker form-control" })
-					<i class="icon-calendar fa fa-calendar"></i>
-				</div>
-			</li>
-			<li class="list-group-item form-group">
-				<div class="label-form">
-					@Html.LabelFor(model => model.ResignedReason, Labels.ResignedReason, new { @class = "control-label" })
-				</div>
-				<div class="input-form">
-					@Html.TextAreaFor(model => model.ResignedReason, new { @class = "form-control", maxlength = 200 })
-				</div>
-			</li>
-			<li class="list-group-item form-group">
-				<div class="label-form">@Labels.LengthOfService:</div>
-			</li>
-			@if (enableGroupDate)
-			{
-				<li class="list-group-item form-group field-length-service">
-					<div class="label-form">@Labels.ByGroupDate</div>
-					<div>@ViewBag.LengthOfServiceByGroupDate</div>
-				</li>
-			}
-			<li class="list-group-item form-group field-length-service">
-				<div class="label-form">@Labels.ByCompanyDate</div>
-				<div>@ViewBag.LengthOfServiceByCompanyDate</div>
-			</li>
-		</ul>
-	</div>
-	<div class="panel panel-default">
-		<div class="panel-heading">
-			<span class="fa fa-chevron-down"></span>
-			<span>@Labels.Policy</span>
-		</div>
-		<ul class="list-group">
-			<li class="list-group-item form-group">
-				<div class="label-form">
-					@Html.LabelFor(model => model.CanOT, Labels.AllowClaimOT, new { @class = "control-label" })
-				</div>
-				<div class="input-form">
-					<div class="checkbox">@Html.CheckBoxFor(model => model.CanOT, new { @class = "checkbox-custom"})</div>
-				</div>
-			</li>
-			<li class="list-group-item form-group">
-				<div class="label-form">
-					@Html.LabelFor(model => model.SpecialOT, Labels.SpecialOT, new { @class = "control-label" })
-				</div>
-				<div class="input-form">
-					@Html.TextBoxFor(model => model.SpecialOT, new { @class = "form-control" })
-				</div>
-			</li>
-			<li class="list-group-item form-group">
-				<div class="label-form">
-					@Html.LabelFor(model => model.WorkingDays, Labels.WorkingDaysPerMonth, new { @class = "control-label" })
-				</div>
-				<div class="input-form">
-					@Html.TextBoxFor(model => model.WorkingDays, new { @class = "form-control" })
-				</div>
-			</li>
-			<li class="list-group-item form-group">
-				<div class="label-form">
-					@Html.LabelFor(model => model.WorkingHoursbyWeek, Labels.WorkingHoursPerWeek, new { @class = "control-label" })
-				</div>
-				<div class="input-form">
-					@Html.TextBoxFor(model => model.WorkingHoursbyWeek, new { @class = "form-control" })
-				</div>
-			</li>
-			<li class="list-group-item form-group">
-				<div class="label-form">
-					@Html.LabelFor(model => model.WorkingHours, Labels.WorkingHoursPerDay, new { @class = "control-label" })
-				</div>
-				<div class="input-form">
-					@Html.TextBoxFor(model => model.WorkingHours, new { @class = "form-control" })
-				</div>
-			</li>
-			<li class="list-group-item form-group">
-				<div class="label-form">
-					@Html.LabelFor(model => model.OffDaysbyWeek, Labels.NumberOfOffday, new { @class = "control-label" })
-				</div>
-				<div class="input-form">
-					@Html.TextBoxFor(model => model.OffDaysbyWeek, new { @class = "form-control" })
-				</div>
-			</li>
-			<li class="list-group-item form-group">
-				<div class="label-form">@Labels.LeaveBalance</div>
-				<div>
-					@Model.AnnualLeaveBalance day(s)
-					<a href="~/annualleavebalance/employee/@Model.Id">@Labels.Update</a>
-				</div>
-			</li>
-			<li class="list-group-item form-group">
-				<div class="label-form">Compensation Leave Balance</div>
-				<div>@Model.KeepInViewBalance day(s)</div>
-			</li>
-		</ul>
-	</div>
+                </div>
+            </li>
+            <li class="list-group-item form-group">
+                <div class="label-form">
+                    @Html.LabelFor(model => model.PromotionDate, Labels.PromotionDate, new { @class = "control-label" })
+                </div>
+                <div class="calendar-form">
+                    @{
+                        var promotionDate = Model.PromotionDate.HasValue ? Model.PromotionDate.ToDateMonthYearFormatedDate() : string.Empty;
+                    }
+                    @Html.TextBox("PromotionDate", promotionDate, new { @class = "datepicker form-control" })
+                    <i class="icon-calendar fa fa-calendar"></i>
+                </div>
+            </li>
+            <li class="list-group-item form-group @(enableGroupDate ? "" : "hide-group-date")">
+                <div class="label-form">
+                    @Html.LabelFor(model => model.JoinedDate, Labels.GroupDate, new { @class = "control-label" })
+                </div>
+                <div class="calendar-form">
+                    @{
+                        var joinedDate = Model.JoinedDate.HasValue ? Model.JoinedDate.ToDateMonthYearFormatedDate() : string.Empty;
+                    }
+                    @Html.TextBox("JoinedDate", joinedDate, new { @class = "datepicker form-control" })
+                    <i class="icon-calendar fa fa-calendar"></i>
+                </div>
+            </li>
+            <li class="list-group-item form-group">
+                <div class="label-form">
+                    @Html.LabelFor(model => model.CompanyDate, Labels.CompanyDate, new { @class = "control-label" })
+                </div>
+                <div class="calendar-form">
+                    @{
+                        var companyDate = Model.CompanyDate.HasValue ? Model.CompanyDate.ToDateMonthYearFormatedDate() : string.Empty;
+                    }
+                    @Html.TextBox("CompanyDate", companyDate, new { @class = "datepicker form-control" })
+                    <i class="icon-calendar fa fa-calendar"></i>
+                </div>
+            </li>
+            <li class="list-group-item form-group">
+                <div class="label-form">
+                    @Html.LabelFor(model => model.ConfirmedDate, Labels.ConfirmedDate, new { @class = "control-label" })
+                </div>
+                <div class="calendar-form">
+                    @{
+                        var confirmedDate = Model.ConfirmedDate.HasValue ? Model.ConfirmedDate.ToDateMonthYearFormatedDate() : string.Empty;
+                    }
+                    @Html.TextBox("ConfirmedDate", confirmedDate, new { @class = "datepicker form-control" })
+                    <i class="icon-calendar fa fa-calendar"></i>
+                </div>
+            </li>
+            <li class="list-group-item form-group">
+                <div class="label-form">
+                    @Html.LabelFor(model => model.ResignedDate, Labels.ResignedDate, new { @class = "control-label" })
+                </div>
+                <div class="calendar-form">
+                    @{
+                        var resignedDate = Model.ResignedDate.HasValue ? Model.ResignedDate.ToDateMonthYearFormatedDate() : string.Empty;
+                    }
+                    @Html.TextBox("ResignedDate", resignedDate, new { @class = "datepicker form-control" })
+                    <i class="icon-calendar fa fa-calendar"></i>
+                </div>
+            </li>
+            <li class="list-group-item form-group">
+                <div class="label-form">
+                    @Html.LabelFor(model => model.ResignedReason, Labels.ResignedReason, new { @class = "control-label" })
+                </div>
+                <div class="input-form">
+                    @Html.TextAreaFor(model => model.ResignedReason, new { @class = "form-control", maxlength = 200 })
+                </div>
+            </li>
+            <li class="list-group-item form-group">
+                <div class="label-form">@Labels.LengthOfService:</div>
+            </li>
+            @if (enableGroupDate)
+            {
+                <li class="list-group-item form-group field-length-service">
+                    <div class="label-form">@Labels.ByGroupDate</div>
+                    <div>@ViewBag.LengthOfServiceByGroupDate</div>
+                </li>
+            }
+            <li class="list-group-item form-group field-length-service">
+                <div class="label-form">@Labels.ByCompanyDate</div>
+                <div>@ViewBag.LengthOfServiceByCompanyDate</div>
+            </li>
+        </ul>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <span class="fa fa-chevron-down"></span>
+            <span>@Labels.Policy</span>
+        </div>
+        <ul class="list-group">
+            <li class="list-group-item form-group">
+                <div class="label-form">
+                    @Html.LabelFor(model => model.CanOT, Labels.AllowClaimOT, new { @class = "control-label" })
+                </div>
+                <div class="input-form">
+                    <div class="checkbox">@Html.CheckBoxCustomFor(model => model.CanOT)</div>
+                </div>
+            </li>
+            <li class="list-group-item form-group">
+                <div class="label-form">
+                    @Html.LabelFor(model => model.SpecialOT, Labels.SpecialOT, new { @class = "control-label" })
+                </div>
+                <div class="input-form">
+                    @Html.TextBoxFor(model => model.SpecialOT, new { @class = "form-control" })
+                </div>
+            </li>
+            <li class="list-group-item form-group">
+                <div class="label-form">
+                    @Html.LabelFor(model => model.WorkingDays, Labels.WorkingDaysPerMonth, new { @class = "control-label" })
+                </div>
+                <div class="input-form">
+                    @Html.TextBoxFor(model => model.WorkingDays, new { @class = "form-control" })
+                </div>
+            </li>
+            <li class="list-group-item form-group">
+                <div class="label-form">
+                    @Html.LabelFor(model => model.WorkingHoursbyWeek, Labels.WorkingHoursPerWeek, new { @class = "control-label" })
+                </div>
+                <div class="input-form">
+                    @Html.TextBoxFor(model => model.WorkingHoursbyWeek, new { @class = "form-control" })
+                </div>
+            </li>
+            <li class="list-group-item form-group">
+                <div class="label-form">
+                    @Html.LabelFor(model => model.WorkingHours, Labels.WorkingHoursPerDay, new { @class = "control-label" })
+                </div>
+                <div class="input-form">
+                    @Html.TextBoxFor(model => model.WorkingHours, new { @class = "form-control" })
+                </div>
+            </li>
+            <li class="list-group-item form-group">
+                <div class="label-form">
+                    @Html.LabelFor(model => model.OffDaysbyWeek, Labels.NumberOfOffday, new { @class = "control-label" })
+                </div>
+                <div class="input-form">
+                    @Html.TextBoxFor(model => model.OffDaysbyWeek, new { @class = "form-control" })
+                </div>
+            </li>
+            <li class="list-group-item form-group">
+                <div class="label-form">@Labels.LeaveBalance</div>
+                <div>
+                    @Model.AnnualLeaveBalance day(s)
+                    <a href="~/annualleavebalance/employee/@Model.Id">@Labels.Update</a>
+                </div>
+            </li>
+            <li class="list-group-item form-group">
+                <div class="label-form">Compensation Leave Balance</div>
+                <div>@Model.KeepInViewBalance day(s)</div>
+            </li>
+        </ul>
+    </div>
     <div class="panel panel-default">
         <div class="panel-heading">
             <span class="fa fa-chevron-down"></span>
@@ -548,7 +552,7 @@
             <li class="list-group-item form-group">
                 <div class="label-form">@Labels.Roles</div>
                 <div id="userRole" class="user-role">
-	                @Html.CheckBoxListFor(model => model.Roles2Array, roleItems)
+                    @Html.CheckBoxListFor(model => model.Roles2Array, roleItems)
                 </div>
             </li>
             <li class="list-group-item form-group">
@@ -601,10 +605,10 @@
                 <div class="select-form">
                     @{
                         var empType = new List<SelectListItem>
-		                {
-			                new() {Text = Labels.Local, Value = "true"},
-			                new() {Text = Labels.Expat, Value = "false"}
-                        };
+                {
+                new() {Text = Labels.Local, Value = "true"},
+                new() {Text = Labels.Expat, Value = "false"}
+                };
                     }
                     @Html.DropDownListFor(model => model.IsLocal, empType, new { @class = "form-control" })
                 </div>
