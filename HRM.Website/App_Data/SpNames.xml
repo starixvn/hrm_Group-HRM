@@ -556,10 +556,6 @@
         <Setting Key="WorkFromHome_MealAllowanceDetailReport" SpName="WorkFromHome_MealAllowanceDetailReport" DbName="bodb_HRM" Plain="0" />
         <Setting Key="WorkFromHome_MealAllowanceSummaryReport" SpName="WorkFromHome_MealAllowanceSummaryReport" DbName="bodb_HRM" Plain="0" />
     </Function>
-    <Function Name="Sync Data">
-        <Setting Key="Sync_WorkingShift_GetLastModifiedDate" SpName="Sync_WorkingShift_GetLastModifiedDate" DbName="bodb_HRM" Plain="0" />
-        <Setting Key="Sync_WorkingShift_Import" SpName="Sync_WorkingShift_Import" DbName="bodb_HRM" Plain="0" />
-    </Function>
     <Function Name="FnB">
         <Setting Key="Fnb_Employee_GetByLastModifiedDate" SpName="Fnb_Employee_GetByLastModifiedDate" DbName="bodb_HRM" Plain="0" />
         <Setting Key="Fnb_EmployeeGroup_GetByLastModifiedDate" SpName="Fnb_EmployeeGroup_GetByLastModifiedDate" DbName="bodb_HRM" Plain="0" />
