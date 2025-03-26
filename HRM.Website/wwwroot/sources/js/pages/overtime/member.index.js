@@ -93,7 +93,7 @@ $(document).ready(function () {
             }
         }).then(response => {
             let data = response.data;
-            if (data.isSuccessful) {
+            if (data.IsSuccessful) {
                 toastr.success('Updated successfully!', '', toastOptions());
                 setTimeout(function () { $('#btnSearch').trigger('click'); }, 1000);
             } else {

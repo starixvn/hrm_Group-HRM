@@ -30,7 +30,7 @@ $(document).ready(function () {
             }
         }).then(response => {
             let data = response.data;
-            if (data.isSuccessful) {
+            if (data.IsSuccessful) {
                 toastr.success('Updated Successfully!', '', toastOptions());
                 setTimeout(function () { window.location.reload(); }, 1000);
             } else {

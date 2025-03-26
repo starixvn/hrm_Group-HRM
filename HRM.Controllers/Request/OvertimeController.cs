@@ -108,7 +108,8 @@ public class OvertimeController(
             TeamIds = model.TeamIds,
             EmployeeId = model.EmployeeId,
             StatusIds = statusIds,
-            IsLocal = model.IsLocal
+            IsLocal = model.IsLocal,
+            CompanyId = CurrentCompanyId
         };
         model.MemberRequests = await overtimeService.GetMemberMonthlyRequest(param);
 
