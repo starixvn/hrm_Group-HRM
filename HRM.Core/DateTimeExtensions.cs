@@ -85,14 +85,14 @@ public static class DateTimeExtensions
 
     public static DateTime ToServerTimeZone(this DateTime time)
     {
-        var clientTimeZone = TimeSpan.FromHours(_userControlSession.Get<short>(SessionKey.CurrentTimeZone));
+        var clientTimeZone = TimeSpan.FromHours(_userControlSession.Get<float>(SessionKey.CurrentTimeZone));
         var offsetTime = new DateTimeOffset(time, clientTimeZone);
         return offsetTime.ToOffset(ServerTimeZone).DateTime;
     }
 
     public static DateTime ToClientTimeZone(this DateTime time)
     {
-        var clientTimeZone = TimeSpan.FromHours(_userControlSession.Get<short>(SessionKey.CurrentTimeZone));
+        var clientTimeZone = TimeSpan.FromHours(_userControlSession.Get<float>(SessionKey.CurrentTimeZone));
         var offsetTime = new DateTimeOffset(time, ServerTimeZone);
         return offsetTime.ToOffset(clientTimeZone).DateTime;
     }

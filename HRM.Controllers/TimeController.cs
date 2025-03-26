@@ -170,7 +170,7 @@ public class TimeController(
         return Json(result);
     }
 
-    private async Task<short> GetClientTimeZoneAsync()
+    private async Task<float> GetClientTimeZoneAsync()
     {
         var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
         var criteria = new GetSystemConfigsByKeyCriteria
@@ -179,7 +179,7 @@ public class TimeController(
             Key = SystemConfigKey.TimeZone
         };
 
-        return await baseService.GetDataEntityAsync<short>(criteria);
+        return await baseService.GetDataEntityAsync<float>(criteria);
     }
 
     private async Task<CompanySite> GetCompanySiteByDomainAsync()

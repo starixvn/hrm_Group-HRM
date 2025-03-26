@@ -105,7 +105,7 @@ public class AuthController(
         await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
     }
 
-    private async Task<short> GetClientTimeZoneAsync()
+    private async Task<float> GetClientTimeZoneAsync()
     {
         var companyId = session.Get<short>(SessionKey.CurrentCompanyId);
         var criteria = new GetSystemConfigsByKeyCriteria
@@ -114,7 +114,7 @@ public class AuthController(
             Key = SystemConfigKey.TimeZone
         };
 
-        return await baseService.GetDataEntityAsync<short>(criteria);
+        return await baseService.GetDataEntityAsync<float>(criteria);
     }
 
     private static string GetClientIp(HttpContext httpContext)
