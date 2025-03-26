@@ -87,7 +87,7 @@ $(document).ready(function () {
             }).then(response => {
                 let data = response.data;
 
-                if (data.IsSuccessful) {
+                if (data.isSuccessful) {
                     toastr.success('Reset password successfully!', '', toastOptions());
                 } else {
                     toastr.error(response.Message, '', toastOptions());

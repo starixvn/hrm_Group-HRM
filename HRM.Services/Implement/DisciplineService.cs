@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using GO.UserControl.Client.Core.Session;
+using HRM.Core.Constants;
 using HRM.Core.Services;
 using HRM.Criteria.Discipline;
 using HRM.Models.Discipline;
@@ -11,7 +13,8 @@ namespace HRM.Services.Implement;
 
 public class DisciplineService(
     IDisciplineRepository disciplineRepository,
-    IBaseService baseService) : IDisciplineService
+    IBaseService baseService,
+    IUserControlSession userControlSession) : IDisciplineService
 {
     public async Task<IList<DisciplineSummaryModel>> GetDisciplineSummaryAsync(GetDisciplineSummaryCriteria criteria)
     {
@@ -39,10 +42,12 @@ public class DisciplineService(
 
     public async Task<IEnumerable<EmployeeInfoModel>> GetMemberToAddOtherDisciplineAsync(int supervisorId, string query = null)
     {
+        var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
         var criteria = new GetMemberToAddOtherDisciplineBySupervisorIdCriteria
         {
             SupervisorId = supervisorId,
-            Query = query
+            Query = query,
+            CompanyId = companyId
         };
         return await baseService.GetDataAsync<EmployeeInfoModel>(criteria);
     }
