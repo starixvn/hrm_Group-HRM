@@ -222,7 +222,7 @@ public class RequestController(
                 break;
 
             default:
-                throw new ArgumentOutOfRangeException($"Unhandled request type: {model.RequestTypeId}");
+                break;
         }
     }
 
