@@ -11,8 +11,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Fanex.Data.Postgres" Version="4.3.2" />
     <PackageReference Include="Fanex.Data.Repository" Version="4.3.3" />
     <PackageReference Include="Fanex.Data.SqlServer" Version="4.3.3" />
+    <PackageReference Include="Fanex.Logging.Extensions" Version="1.1.0" />
     <PackageReference Include="Fanex.Logging.Sentry" Version="2.0.2" />
   </ItemGroup>
 
