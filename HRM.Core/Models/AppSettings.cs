@@ -9,5 +9,5 @@ public class AppSettings
     public string EmailSD { get; set; }
     public string EmailGo { get; set; }
     public string WhitelistIPs { get; set; }
-    public short ServerTimeZone { get; set; }
+    public string OWPWorkingShiftAPI { get; set; }
 }

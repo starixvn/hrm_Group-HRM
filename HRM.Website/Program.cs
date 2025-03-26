@@ -24,6 +24,7 @@ services.AddControllersWithViews()
         options.SerializerSettings.DateFormatString = "dd MMM, yyyy HH:mm:ss";
     });
 
+services.AddHttpClient();
 services.AddFanexLogSentry(configuration);
 services.AddFanexSql(configuration);
 services.AddCookieAuthentication(configuration);

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using Fanex.Logging;
 using GO.UserControl.Client.Core.Session;
@@ -12,6 +11,7 @@ using HRM.Core.Services;
 using HRM.Core.XMLExtensions;
 using HRM.Criteria.ScheduleArrange;
 using HRM.Criteria.SystemSetting;
+using HRM.Models.ScheduleArrange;
 using HRM.Models.SyncData;
 using Newtonsoft.Json;
 
@@ -21,28 +21,27 @@ public interface ISyncWorkingShiftService
 {
     Task<CommandResult> SyncWorkingShiftAsync(SyncWorkingShiftCommand command);
 
-    Task<SyncWorkingShiftSettings> GetSyncWorkingShiftConfigAsync();
+    Task<SyncWorkingShiftConfig> GetSyncWorkingShiftConfigAsync();
 }
 
 public class SyncWorkingShiftService(
+    AppSettings appSettings,
+    IHttpClientFactory clientFactory,
     ILogger logger,
     IBaseService baseService,
-    IUserControlSession userControlSession
-    ) : ISyncWorkingShiftService, IDisposable
+    IUserControlSession userControlSession) : ISyncWorkingShiftService
 {
-    private bool isDisposed;
     private const int BatchSize = 1000;
-    private readonly HttpClient httpClient = new();
 
     public async Task<CommandResult> SyncWorkingShiftAsync(SyncWorkingShiftCommand command)
     {
         var commandResult = new CommandResult { Code = 0, Message = string.Empty };
-        var syncConfig = await GetSyncWorkingShiftConfigAsync();
+        var config = await GetSyncWorkingShiftConfigAsync();
         for (var date = command.FromDate.Date; date.Date <= command.ToDate.Date; date = date.AddDays(1))
         {
             try
             {
-                commandResult = await SyncWorkingShiftAsync(command, date, syncConfig);
+                commandResult = await SyncWorkingShiftAsync(command, date, config);
             }
             catch (Exception ex)
             {
@@ -53,7 +52,7 @@ public class SyncWorkingShiftService(
         return commandResult;
     }
 
-    public async Task<SyncWorkingShiftSettings> GetSyncWorkingShiftConfigAsync()
+    public async Task<SyncWorkingShiftConfig> GetSyncWorkingShiftConfigAsync()
     {
         var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
 
@@ -64,18 +63,15 @@ public class SyncWorkingShiftService(
         };
 
         var result = await baseService.GetDataEntityAsync<string>(criteria);
-        return result == null ? null : JsonConvert.DeserializeObject<SyncWorkingShiftSettings>(result);
+        return result == null ? null : JsonConvert.DeserializeObject<SyncWorkingShiftConfig>(result);
     }
 
-    private async Task<CommandResult> SyncWorkingShiftAsync(SyncWorkingShiftCommand command, DateTime date, SyncWorkingShiftSettings config)
+    private async Task<CommandResult> SyncWorkingShiftAsync(SyncWorkingShiftCommand command, DateTime date, SyncWorkingShiftConfig config)
     {
         var commandResult = new CommandResult { Code = 0, Message = string.Empty };
 
-        var builder = new StringBuilder(config.ApiUrl);
-        builder.Append(
-            $"?locationCode={config.LocationCode}&fromDate={date:yyyy-MM-dd}&toDate={date:yyyy-MM-dd}&timezone={config.Timezone}");
-
-        var url = new Uri(builder.ToString());
+        var url = new Uri($"{appSettings.OWPWorkingShiftAPI}?locationCode={config.LocationCode}&fromDate={date:yyyy-MM-dd}&toDate={date:yyyy-MM-dd}&timezone={config.Timezone}");
+        var httpClient = clientFactory.CreateClient();
         var response = await httpClient.GetAsync(url);
         if (response.IsSuccessStatusCode)
         {
@@ -179,31 +175,5 @@ public class SyncWorkingShiftService(
 
         const byte numberOfDigits = 2;
         shift.TotalHours = Math.Round((shift.ShiftEndTime.Value - shift.ShiftStartTime.Value).TotalHours, numberOfDigits);
-    }
-
-    public void Dispose()
-    {
-        Dispose(true);
-        GC.SuppressFinalize(this);
-    }
-
-    protected virtual void Dispose(bool disposing)
-    {
-        if (isDisposed)
-        {
-            return;
-        }
-
-        if (disposing)
-        {
-            httpClient.Dispose();
-        }
-
-        isDisposed = true;
-    }
-
-    ~SyncWorkingShiftService()
-    {
-        Dispose(false);
     }
 }
