@@ -30,7 +30,8 @@ public class LeaveController(
     IRequestService requestService,
     IBaseService baseService,
     ICommonDataService commonDataService,
-    IAttachFileService attachFileService) : BaseController(userControlSession)
+    IAttachFileService attachFileService,
+    IEmployeeService employeeService) : BaseController(userControlSession)
 {
     private readonly IUserControlSession userControlSession = userControlSession;
 
@@ -63,6 +64,8 @@ public class LeaveController(
         var supervisor = await requestService.GetVerifierAndApproverAsync(EmployeeSession.EmpId, RequestType.Leave);
         var setting = await commonDataService.GetSystemSettingAsync();
         var today = DateTimeOffset.Now.DateTime.ToClientTimeZone().Date;
+        var minDate = await GetEmployeeMinDate();
+
         var model = new LeaveRequestViewModel
         {
             LeaveTypeId = (ushort)LeaveTypes.GeneralLeave,
@@ -75,7 +78,7 @@ public class LeaveController(
             EmployeeLeaveBalance = await GetLeaveBalance(null, null),
             Verifiers = supervisor.Verifiers,
             Approvers = supervisor.Approvers,
-            MinDate = today.FirstDayOfMonth().AddMonths(-5),
+            MinDate = minDate,
             EnableHospitalizationLeaveBalance = setting.EnableHospitalizationLeaveBalance,
             EnableSickLeaveBalance = setting.EnableSickLeaveBalance
         };
@@ -127,7 +130,7 @@ public class LeaveController(
             return RedirectToAction("AccessDenied", "Error");
         }
 
-        var model = ConvertRequestToModel(request);
+        var model = await ConvertRequestToModel(request);
         model.DisabledDates = await leaveRequestService.GetDisabledDateAsync(new GetDisabledDateParam
         {
             EmployeeId = model.EmployeeId,
@@ -146,6 +149,7 @@ public class LeaveController(
         model.Files = (await attachFileService.GetInfoAttachFileAsync(id, $"{CurrentCompanyId}/requests")).Select(x => x.FileName).ToList();
         model.EnableHospitalizationLeaveBalance = setting.EnableHospitalizationLeaveBalance;
         model.EnableSickLeaveBalance = setting.EnableSickLeaveBalance;
+        
 
         ViewBag.IsView = false;
         ViewBag.IsTopManager = request.Requester.IsTopManager;
@@ -197,7 +201,7 @@ public class LeaveController(
             return RedirectToAction("PageNotFound", "Error");
         }
 
-        var model = ConvertRequestToModel(request);
+        var model = await ConvertRequestToModel(request);
         model.LeaveTypeList = await commonDataService.GetLeaveTypeAsync();
         model.Files = (await attachFileService.GetInfoAttachFileAsync(id, $"{CurrentCompanyId}/requests")).Select(x => x.FileName).ToList();
 
@@ -422,7 +426,7 @@ public class LeaveController(
         }
     }
 
-    private LeaveRequestViewModel ConvertRequestToModel(LeaveRequest request)
+    private async Task<LeaveRequestViewModel> ConvertRequestToModel(LeaveRequest request)
     {
         var model = new LeaveRequestViewModel
         {
@@ -448,7 +452,7 @@ public class LeaveController(
         }
 
         var today = DateTimeOffset.Now.Date;
-        var minDate = today.FirstDayOfMonth().AddMonths(-5);
+        var minDate = await GetEmployeeMinDate();
         var maxDate = today.FirstDayOfMonth().AddMonths(Constants.NumberMonthsInFutureCanLeaveRequest).AddDays(-1);
         if (model.LeaveTypeId == (ushort)LeaveTypes.MaternityLeave)
         {
@@ -487,5 +491,22 @@ public class LeaveController(
             EffectedDay = year.HasValue ? new DateTimeOffset(year.Value, 1, 1, 0, 0, 0, TimeSpan.Zero).Date : DateTimeOffset.Now.Date
         };
         return await leaveRequestService.GetLeaveBalanceAsync(criteria);
+    }
+
+    private async Task<DateTime> GetEmployeeMinDate()
+    {
+        var today = DateTimeOffset.Now.DateTime.ToClientTimeZone().Date;
+
+        var employee = await employeeService.GetEmployeeByIdAsync(EmployeeSession.EmpId);
+        var employeeJoinDate = employee.JoinedDate;
+
+        var defaultMinDate = today.FirstDayOfMonth().AddMonths(-5);
+        var minDate =
+            employeeJoinDate.HasValue && employeeJoinDate.Value > defaultMinDate
+            ? employeeJoinDate.Value.Date
+            :
+            defaultMinDate;
+
+        return minDate;
     }
 }
