@@ -11,8 +11,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 public class FileController(
-    IUserControlSession userControlSession,
-    IMinIOService minIOService) : BaseController(userControlSession)
+    IUserControlSession session,
+    IMinIOService minIOService) : BaseController(session)
 {
     private const int MaxSizeFileUpload = 5 * 1024 * 1024;
 

@@ -1,30 +1,29 @@
-﻿using HRM.Services.Interfaces;
-
-namespace HRM.Controllers;
+﻿namespace HRM.Controllers;
 
 using System;
 using System.Threading.Tasks;
-using GO.UserControl.Client.Core.Enumerables;
-using GO.UserControl.Client.Core.Session;
 using Core;
 using Core.Constants;
 using Core.Enums;
 using Core.Filters;
-using Models;
+using GO.UserControl.Client.Core.Enumerables;
+using GO.UserControl.Client.Core.Session;
 using Microsoft.AspNetCore.Mvc;
+using Models;
+using Services.Interfaces;
 
 public class HolidayController(
-    IUserControlSession userControlSession,
-    IHolidayService holidayService) : BaseController(userControlSession)
+    IUserControlSession session,
+    IHolidayService holidayService) : BaseController(session)
 {
-    private readonly IUserControlSession userControlSession = userControlSession;
+    private readonly IUserControlSession session = session;
 
     [HttpGet]
     [HrmPermission(Policy.Read, FunctionKey.Holiday)]
     public async Task<IActionResult> Index(int? year)
     {
         var yearToCheck = year ?? DateTimeOffset.Now.DateTime.ToClientTimeZone().Year;
-        ViewBag.HasPermission = userControlSession.HasPermissionOnFunction(FunctionKey.Holiday, Policy.Host);
+        ViewBag.HasPermission = session.HasPermissionOnFunction(FunctionKey.Holiday, Policy.Host);
         ViewBag.Year = yearToCheck;
 
         var holidays = await holidayService.GetByYearAsync(yearToCheck);
@@ -46,7 +45,7 @@ public class HolidayController(
     {
         if (ModelState.IsValid)
         {
-            var commandResult = await holidayService.EditAsync(EmployeeSession.EmpId, model);
+            var commandResult = await holidayService.EditAsync(session.UserId, model);
             ViewBag.Updated = commandResult.IsSuccessful;
 
             if (!commandResult.IsSuccessful)
@@ -78,7 +77,7 @@ public class HolidayController(
     {
         if (ModelState.IsValid)
         {
-            var commandResult = await holidayService.CreateAsync(EmployeeSession.EmpId, model);
+            var commandResult = await holidayService.CreateAsync(session.UserId, model);
             ViewBag.Updated = commandResult.IsSuccessful;
 
             if (!commandResult.IsSuccessful)
@@ -94,7 +93,7 @@ public class HolidayController(
     [HrmPermission(Policy.Host, FunctionKey.Holiday)]
     public async Task<IActionResult> Delete(int id)
     {
-        var commandResult = await holidayService.DeleteAsync(EmployeeSession.EmpId, id);
+        var commandResult = await holidayService.DeleteAsync(session.UserId, id);
 
         return Json(commandResult);
     }

@@ -12,6 +12,7 @@ public class EmployeeShift
 
     public string WedShiftName { get; set; }
 
+    public int? ThuShiftId { get; set; }
     public string ThuShiftName { get; set; }
 
     public int? FriShiftId { get; set; }

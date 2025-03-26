@@ -6,6 +6,7 @@ public class ResetMultipleTransactionCriteria : CriteriaBase
 {
     public int ActorId { get; set; }
     public int Year { get; set; }
+    public decimal ResetDays { get; set; }
     public string Description { get; set; }
     public short CompanyId { get; set; }
 

@@ -19,21 +19,21 @@ using Microsoft.AspNetCore.Mvc;
 namespace HRM.Controllers;
 
 public class AccountController(
-    IUserControlSession userControlSession,
+    IUserControlSession session,
     IEmployeeService employeeService,
     IEmployeeLogService employeeLogService,
     ICryptoService cryptoService,
     IHRMAuthService authService,
     ICommonDataService commonDataService,
     IUserService userService,
-    IMinIOService minIOService) : BaseController(userControlSession)
+    IMinIOService minIOService) : BaseController(session)
 {
     public async Task<IActionResult> Index()
     {
         var viewModel = new AccountViewModel
         {
-            Employee = await employeeService.GetEmployeeByIdAsync(EmployeeSession.EmpId),
-            Logs = await employeeLogService.GetLogDetailByIdAsync(EmployeeSession.EmpId)
+            Employee = await employeeService.GetEmployeeByIdAsync(session.UserId),
+            Logs = await employeeLogService.GetLogDetailByIdAsync(session.UserId)
         };
         ViewBag.EnableGroupDate = await commonDataService.IsEnableGroupDateAsync();
         ViewBag.Avatar = await GetAvatarUrl(viewModel.Employee.Code);
@@ -47,7 +47,7 @@ public class AccountController(
     {
         model.Password = Encryptor.ComputeHash("123456");
         model.IsReset = true;
-        var commandResult = await employeeService.EditPasswordAsync(EmployeeSession.EmpId, model);
+        var commandResult = await employeeService.EditPasswordAsync(session.UserId, model);
         if (!commandResult.IsSuccessful)
         {
             return Json(commandResult);
@@ -85,10 +85,10 @@ public class AccountController(
         {
             var param = new EditPassword
             {
-                EmployeeId = EmployeeSession.EmpId,
+                EmployeeId = session.UserId,
                 Password = Encryptor.ComputeHash(model.NewPassword)
             };
-            var commandResult = await employeeService.EditPasswordAsync(EmployeeSession.EmpId, param);
+            var commandResult = await employeeService.EditPasswordAsync(session.UserId, param);
             switch (commandResult.Code)
             {
                 case (short)ValidateUserStatus.Success: // OK

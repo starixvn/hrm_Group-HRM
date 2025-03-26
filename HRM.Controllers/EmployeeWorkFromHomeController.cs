@@ -25,23 +25,21 @@ namespace HRM.Controllers;
 
 public class EmployeeWorkFromHomeController : BaseController
 {
-    private readonly IUserControlSession userControlSession;
+    private readonly IUserControlSession session;
     private readonly IBaseService baseService;
     private readonly IAttachFileService attachFileService;
     private readonly string uploadFolderPath;
 
-
     public EmployeeWorkFromHomeController(
-        IUserControlSession userControlSession,
+        IUserControlSession session,
         IBaseService baseService,
-        IAttachFileService attachFileService) : base(userControlSession)
+        IAttachFileService attachFileService) : base(session)
     {
+        this.session = session;
         this.baseService = baseService;
         this.attachFileService = attachFileService;
-        this.userControlSession = userControlSession;
         uploadFolderPath = $"{CurrentCompanyId}/WHF";
     }
-
 
     [HrmPermission(Policy.Read, FunctionKey.EmployeeManagement)]
     public ActionResult Index()
@@ -53,7 +51,7 @@ public class EmployeeWorkFromHomeController : BaseController
             ToDateFilter = currentDateTime
         };
 
-        ViewBag.IsHost = userControlSession.HasPermissionOnFunction(FunctionKey.EmployeeManagement, Policy.Host);
+        ViewBag.IsHost = session.HasPermissionOnFunction(FunctionKey.EmployeeManagement, Policy.Host);
         return View(model);
     }
 
@@ -66,7 +64,7 @@ public class EmployeeWorkFromHomeController : BaseController
             employee.AttachFiles = await attachFileService.GetInfoAttachFileAsync(employee.EmployeeWorkFromHomeId, uploadFolderPath);
         }
 
-        ViewBag.IsHost = userControlSession.HasPermissionOnFunction(FunctionKey.EmployeeManagement, Policy.Host);
+        ViewBag.IsHost = session.HasPermissionOnFunction(FunctionKey.EmployeeManagement, Policy.Host);
         return PartialView("_EmployeeWorkFromHomeGrid", employees);
     }
 
@@ -96,7 +94,7 @@ public class EmployeeWorkFromHomeController : BaseController
                 EmpId = model.EmployeeId,
                 FromDate = model.FromDate,
                 ToDate = model.ToDate,
-                CreatedBy = EmployeeSession.EmpId,
+                CreatedBy = session.UserId,
                 Remark = model.Remark
             };
 
@@ -148,7 +146,7 @@ public class EmployeeWorkFromHomeController : BaseController
                 EmpId = model.EmployeeId,
                 FromDate = model.FromDate,
                 ToDate = model.ToDate,
-                ModifiedBy = EmployeeSession.EmpId,
+                ModifiedBy = session.UserId,
                 Remark = model.Remark
             };
 

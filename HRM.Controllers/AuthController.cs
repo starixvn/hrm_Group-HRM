@@ -22,7 +22,7 @@ using ViewModels.Employee;
 public class AuthController(
     IHRMAuthService hrmAuthService,
     IUserControlSettings userControlSettings,
-    IUserControlSession userControlSession,
+    IUserControlSession session,
     IUserService userService,
     IAuthService authService,
     ICryptoService cryptoService,
@@ -40,7 +40,7 @@ public class AuthController(
         userControlSettings.SiteId = companySite.SiteId;
         userControlSettings.AccessToken = companySite.AccessToken;
 
-        userControlSession.Set(SessionKey.CurrentCompanyId, companySite.CompanyId);
+        session.Set(SessionKey.CurrentCompanyId, companySite.CompanyId);
 
         return View();
     }
@@ -67,21 +67,16 @@ public class AuthController(
         if (loginResult.IsSuccessfull)
         {
             var employee = await hrmAuthService.GetByUserIdAsync(loginResult.UserId);
-            if (employee == null)
-            {
-                loginResult = new LoginResult { IsSuccessfull = false, ErrorMessage = "User has not been mapped." };
-                return Json(loginResult);
-            }
 
-            userControlSession.UserId = loginResult.UserId;
-            userControlSession.SiteId = userControlSettings.SiteId;
-            userControlSession.JwtToken = loginResult.JwtToken;
-            userControlSession.OnUserId = loginResult.OnUserId;
-            userControlSession.MenuItems = await userService.GetMenuItemAsync();
-            userControlSession.Functions = await userService.GetFunctionPermissionAsync(userControlSession.SiteId, userControlSession.UserId);
-            userControlSession.Set(SessionKey.IsShowLeftNavigation, true);
-            userControlSession.Set(SessionKey.Employee, employee);
-            userControlSession.Set(SessionKey.CurrentTimeZone, await GetClientTimeZoneAsync());
+            session.UserId = loginResult.UserId;
+            session.SiteId = userControlSettings.SiteId;
+            session.JwtToken = loginResult.JwtToken;
+            session.OnUserId = loginResult.OnUserId;
+            session.MenuItems = await userService.GetMenuItemAsync();
+            session.Functions = await userService.GetFunctionPermissionAsync(session.SiteId, session.UserId);
+            session.Set(SessionKey.IsShowLeftNavigation, true);
+            session.Set(SessionKey.Employee, employee);
+            session.Set(SessionKey.CurrentTimeZone, await GetClientTimeZoneAsync());
 
             await DoLoginAsync(loginResult.UserId);
         }
@@ -92,8 +87,8 @@ public class AuthController(
     [HttpGet]
     public async Task<IActionResult> Logout()
     {
-        await authService.LogoutAsync(userControlSession.OnUserId);
-        userControlSession.ClearAll();
+        await authService.LogoutAsync(session.OnUserId);
+        session.ClearAll();
         await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
         return RedirectToAction("Login");
@@ -112,7 +107,7 @@ public class AuthController(
 
     private async Task<short> GetClientTimeZoneAsync()
     {
-        var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
+        var companyId = session.Get<short>(SessionKey.CurrentCompanyId);
         var criteria = new GetSystemConfigsByKeyCriteria
         {
             CompanyId = companyId,

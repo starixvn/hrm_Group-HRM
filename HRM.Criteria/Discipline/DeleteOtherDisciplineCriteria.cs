@@ -8,7 +8,7 @@ public class DeleteOtherDisciplineCriteria : CriteriaBase
 {
     [SpParam(SqlParamName = "EmpId")]
     public int EmployeeId { get; set; }
-
+    public short DisciplineTypeId { get; set; }
     public DateTime WorkDate { get; set; }
     public int ActorId { get; set; }
 

@@ -11,18 +11,18 @@ using HRM.Models.Message;
 using HRM.Services.Implement;
 using HRM.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace HRM.Controllers;
 
 public class MessageController(
-    IUserControlSession userControlSession,
+    IUserControlSession session,
     IMessageService messageService,
     ICommonDataService commonDataService,
-    IEmployeeService employeeService) : BaseController(userControlSession)
+    IEmployeeService employeeService) : BaseController(session)
 {
-    private readonly IUserControlSession userControlSession = userControlSession;
+    private readonly IUserControlSession session = session;
 
     [HrmPermission(Policy.Read, FunctionKey.Message)]
     public async Task<ActionResult> Index()
@@ -33,12 +33,12 @@ public class MessageController(
             ToDate = currentDateTime,
             FromDate = currentDateTime.AddMonths(-3),
             IsDisabled = 0,
-            CreatedBy = EmployeeSession.EmpId,
+            CreatedBy = session.UserId,
             CompanyId = CurrentCompanyId
         };
 
         ViewBag.Messages = await messageService.GetMessageByCreator(param);
-        ViewBag.HasPermission = userControlSession.HasPermissionOnFunction(FunctionKey.Message, Policy.Host);
+        ViewBag.HasPermission = session.HasPermissionOnFunction(FunctionKey.Message, Policy.Host);
 
         return View(param);
     }
@@ -49,12 +49,12 @@ public class MessageController(
     {
         if (param != null)
         {
-            param.CreatedBy = EmployeeSession.EmpId;
+            param.CreatedBy = session.UserId;
             param.CompanyId = CurrentCompanyId;
         }
 
         ViewBag.Messages = await messageService.GetMessageByCreator(param);
-        ViewBag.HasPermission = userControlSession.HasPermissionOnFunction(FunctionKey.Message, Policy.Host);
+        ViewBag.HasPermission = session.HasPermissionOnFunction(FunctionKey.Message, Policy.Host);
 
         return View(param);
     }
@@ -88,7 +88,7 @@ public class MessageController(
 
         if (model != null && ModelState.IsValid)
         {
-            commandResult = await messageService.Create(EmployeeSession.EmpId, model, CurrentCompanyId);
+            commandResult = await messageService.Create(session.UserId, model, CurrentCompanyId);
             commandResult.CompanyId = CurrentCompanyId;
             if (model.HasSendEmail && commandResult.IsSuccessful)
             {
@@ -128,7 +128,7 @@ public class MessageController(
 
         if (model != null && ModelState.IsValid)
         {
-            commandResult = await messageService.Edit(EmployeeSession.EmpId, model);
+            commandResult = await messageService.Edit(session.UserId, model);
             if (model.HasSendEmail && commandResult.IsSuccessful)
             {
                 await messageService.SendMailToStaff(model);
@@ -142,7 +142,7 @@ public class MessageController(
     [HrmPermission(Policy.Host, FunctionKey.Message)]
     public async Task<JsonResult> Delete(int id)
     {
-        var commandResult = await messageService.Delete(EmployeeSession.EmpId, id);
+        var commandResult = await messageService.Delete(session.UserId, id);
 
         return new JsonResult(commandResult, new JsonSerializerSettings { ContractResolver = new DefaultContractResolver() });
     }
@@ -155,7 +155,7 @@ public class MessageController(
             FromDate = currentDateTime,
             ToDate = currentDateTime,
             IsDisabled = 0,
-            EmployeeId = EmployeeSession.EmpId
+            EmployeeId = session.UserId
         };
         ViewBag.Messages = await messageService.GetMessageByEmployee(param);
 
@@ -167,7 +167,7 @@ public class MessageController(
     {
         if (param != null)
         {
-            param.EmployeeId = EmployeeSession.EmpId;
+            param.EmployeeId = session.UserId;
         }
 
         ViewBag.Messages = await messageService.GetMessageByEmployee(param);
@@ -178,7 +178,7 @@ public class MessageController(
     [HttpPost]
     public async Task<JsonResult> DeleteMessageByEmployee(int id)
     {
-        var commandResult = await messageService.DeleteMessageByEmployee(EmployeeSession.EmpId, id);
+        var commandResult = await messageService.DeleteMessageByEmployee(session.UserId, id);
 
         return Json(commandResult);
     }
@@ -198,7 +198,7 @@ public class MessageController(
 
     public async Task<JsonResult> EditMessageStatus(int id)
     {
-        var commandResult = await messageService.EditStatus(EmployeeSession.EmpId, id);
+        var commandResult = await messageService.EditStatus(session.UserId, id);
 
         return Json(commandResult);
     }

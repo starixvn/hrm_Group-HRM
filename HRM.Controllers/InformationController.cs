@@ -6,37 +6,37 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using GO.UserControl.Client.Core.Session;
 using Core;
 using Core.Constants;
-using HRM.Core.Models;
-using HRM.Core.Services;
 using Criteria.Employee;
 using Criteria.EmployeeRelationship;
+using GO.UserControl.Client.Core.Session;
+using HRM.Core.Models;
+using HRM.Core.Services;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Models;
 using Models.EmployeeInformation;
 using Resources;
 using Services.Implement;
 using Services.Interfaces;
 using ViewModels.Information;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 
 public class InformationController(
-    IUserControlSession userControlSession,
+    IUserControlSession session,
     IBaseService baseService,
     ICommonDataService commonDataService,
     IEmployeeService employeeService,
     IWebHostEnvironment hostingEnvironment,
     IEmailService emailService,
-    IMinIOService minIOService) : BaseController(userControlSession)
+    IMinIOService minIOService) : BaseController(session)
 {
     private const string UpdateInfoNotificationTemplate = "EmailTemplates/UpdateInfoNotification.txt";
 
     public async Task<IActionResult> UpdateInformation()
     {
-        var employee = await employeeService.GetEmployeeByIdAsync(EmployeeSession.EmpId);
+        var employee = await employeeService.GetEmployeeByIdAsync(session.UserId);
         await DisplayDefaultValuesOfDropDownListsForPersonalInformation();
         ViewBag.BaseFileLocation = Constants.ProfileUploadPath + "/" + EmployeeSession.Code + "/";
         return View(employee);
@@ -47,9 +47,9 @@ public class InformationController(
     public async Task<IActionResult> UpdateInformation(Employee model)
     {
         ModelState.Clear();
-        model.Id = EmployeeSession.EmpId;
+        model.Id = session.UserId;
         var criteria = SetUpdatePersonalInfoCriteria(model);
-        var employee = await employeeService.GetEmployeeByIdAsync(EmployeeSession.EmpId);
+        var employee = await employeeService.GetEmployeeByIdAsync(session.UserId);
 
         var result = await baseService.ExecuteNonQueryAsync(criteria);
 
@@ -135,7 +135,7 @@ public class InformationController(
 
     private async Task SendMailUpdateInfo(Employee model, Employee employee)
     {
-        var hrAndSupervisors = await employeeService.GetHRAndSupervisorByEmpIdAsync(EmployeeSession.EmpId);
+        var hrAndSupervisors = await employeeService.GetHRAndSupervisorByEmpIdAsync(session.UserId);
         var updateInfoTemplate = Utilities.ReadTextFile(Path.Combine(hostingEnvironment.ContentRootPath, UpdateInfoNotificationTemplate));
 
         foreach (var hrAndSupervisor in hrAndSupervisors)
@@ -187,7 +187,7 @@ public class InformationController(
             IdCardNumber = employee.CardNo,
             PassportNo = employee.PassportNo,
             PassportExp = employee.PassportExp,
-            ModifiedBy = EmployeeSession.EmpId,
+            ModifiedBy = session.UserId,
             CountryCode = employee.CountryCode
         };
 
@@ -205,7 +205,7 @@ public class InformationController(
     {
         var criteria = new GetRelationshipByEmployeeIdCriteria
         {
-            EmployeeId = EmployeeSession.EmpId
+            EmployeeId = session.UserId
         };
 
         var relationships = await baseService.GetDataAsync<EmployeeRelationship>(criteria);
@@ -232,14 +232,14 @@ public class InformationController(
         {
             var criteria = new InsertRelationshipCriteria
             {
-                EmployeeId = EmployeeSession.EmpId,
+                EmployeeId = session.UserId,
                 FullName = viewModel.FullName,
                 Gender = viewModel.Gender,
                 DateOfBirth = viewModel.BirthDay,
                 Phone = viewModel.Phone,
                 Relationship = viewModel.Relationship,
                 IsEmergency = viewModel.IsEmergency,
-                Creator = EmployeeSession.EmpId
+                Creator = session.UserId
             };
 
             result = await baseService.ExecuteNonQueryAsync(criteria);
@@ -286,7 +286,7 @@ public class InformationController(
                 Phone = string.IsNullOrEmpty(viewModel.Phone) ? string.Empty : viewModel.Phone,
                 Relationship = viewModel.Relationship,
                 IsEmergency = viewModel.IsEmergency,
-                Modifier = EmployeeSession.EmpId
+                Modifier = session.UserId
             };
 
             result = await baseService.ExecuteNonQueryAsync(criteria);
@@ -305,7 +305,7 @@ public class InformationController(
         var criteria = new DeleteRelationshipCriteria
         {
             RelationshipId = id,
-            ActorId = EmployeeSession.EmpId
+            ActorId = session.UserId
         };
 
         var result = await baseService.ExecuteNonQueryAsync(criteria);

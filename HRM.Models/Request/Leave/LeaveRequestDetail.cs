@@ -14,6 +14,7 @@ public class LeaveRequestDetail
     public int WorkType { get; set; }
 
     public int LeaveTypeId { get; set; }
+    public string LeaveTypeName { get; set; }
 
     public bool IsHalfDay { get; set; }
 

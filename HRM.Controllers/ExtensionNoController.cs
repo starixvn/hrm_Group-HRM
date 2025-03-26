@@ -1,6 +1,4 @@
-﻿using HRM.Services.Interfaces;
-
-namespace HRM.Controllers;
+﻿namespace HRM.Controllers;
 
 using System.Collections.Generic;
 using System.Linq;
@@ -16,20 +14,21 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Models;
 using Services.Implement;
+using Services.Interfaces;
 using ViewModels.ExtensionNumber;
 
 public class ExtensionNoController(
-    IUserControlSession userControlSession,
+    IUserControlSession session,
     IExtensionNumberService extensionNumberService,
     ICommonDataService commonDataService,
-    IBaseService baseService) : BaseController(userControlSession)
+    IBaseService baseService) : BaseController(session)
 {
-    private readonly IUserControlSession userControlSession = userControlSession;
+    private readonly IUserControlSession session = session;
 
     [HrmPermission(Policy.Read, FunctionKey.ExtensionNumber)]
     public IActionResult Index()
     {
-        var hasPermission = userControlSession.HasPermissionOnFunction(FunctionKey.ExtensionNumber, Policy.Host);
+        var hasPermission = session.HasPermissionOnFunction(FunctionKey.ExtensionNumber, Policy.Host);
 
         return View(hasPermission);
     }

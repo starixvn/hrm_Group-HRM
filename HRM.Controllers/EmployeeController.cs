@@ -31,7 +31,7 @@ using Newtonsoft.Json.Serialization;
 namespace HRM.Controllers;
 
 public class EmployeeController(
-    IUserControlSession userControlSession,
+    IUserControlSession session,
     IEmployeeService employeeService,
     ICommonDataService commonDataService,
     IHRMAuthService authService,
@@ -42,9 +42,9 @@ public class EmployeeController(
     ICryptoService cryptoService,
     IUserService userService,
     IRoleService roleService,
-    IMinIOService minIOService) : BaseController(userControlSession)
+    IMinIOService minIOService) : BaseController(session)
 {
-    private readonly IUserControlSession userControlSession = userControlSession;
+    private readonly IUserControlSession session = session;
 
     [HrmPermission(Policy.Read, FunctionKey.ContactList)]
     public async Task<IActionResult> Index()
@@ -90,7 +90,7 @@ public class EmployeeController(
             TotalItem = criteria.TotalRow ?? 0
         };
         ViewBag.PagerOption = pagerOption;
-        ViewBag.IsShowJobtitle = (await roleService.GetByUserIdAsync(userControlSession.UserId))
+        ViewBag.IsShowJobtitle = (await roleService.GetByUserIdAsync(session.UserId))
             .Any(r => r.RoleId is (short)RoleSystem.HR or (short)RoleSystem.SystemAdmin);
         ViewBag.EnableGroupDate = await commonDataService.IsEnableGroupDateAsync();
 
@@ -102,8 +102,8 @@ public class EmployeeController(
     {
         var teams = await teamService.GetAllAsync();
         teamIds ??= string.Join(",", teams.Select(x => x.Id));
-        var listJobTitle = await commonDataService.GetLookupDataByCodeAsync(Constants.JobTitle, userControlSession.Get<int>(SessionKey.CurrentCompanyId));
-        IList<SelectListItem> jobTitles = listJobTitle.Select(j => new SelectListItem
+        var listJobTitle = await commonDataService.GetLookupDataByCodeAsync(Constants.JobTitle, session.Get<int>(SessionKey.CurrentCompanyId));
+        var jobTitles = listJobTitle.Select(j => new SelectListItem
         {
             Text = j.Name,
             Value = j.Id.ToString(),
@@ -119,7 +119,7 @@ public class EmployeeController(
             JobTitles = jobTitles,
             CurrentPage = Constants.CurrentPage,
             ItemsPerPage = Constants.ItemsPerPage,
-            IsShowDropdownCategory = userControlSession.HasPermissionOnFunction(FunctionKey.ManageAllEmployee, Policy.Read)
+            IsShowDropdownCategory = session.HasPermissionOnFunction(FunctionKey.ManageAllEmployee, Policy.Read)
         };
 
         return View(model);
@@ -155,7 +155,7 @@ public class EmployeeController(
             ViewBag.PagerOption = pagerOption;
         }
 
-        ViewBag.HasPermissionToEdit = userControlSession.HasPermissionOnFunction(FunctionKey.EmployeeManagement, Policy.Host);
+        ViewBag.HasPermissionToEdit = session.HasPermissionOnFunction(FunctionKey.EmployeeManagement, Policy.Host);
         ViewBag.EnableGroupDate = await commonDataService.IsEnableGroupDateAsync();
 
         return PartialView("_ListEmployee", employees);
@@ -173,7 +173,7 @@ public class EmployeeController(
         ViewBag.Thu = employeeShift.ThuShiftName;
         ViewBag.Fri = employeeShift.FriShiftName;
         ViewBag.Sat = employeeShift.SatShiftName;
-        ViewBag.HasPermission = userControlSession.HasPermissionOnFunction(FunctionKey.EmployeeManagement, Policy.Host);
+        ViewBag.HasPermission = session.HasPermissionOnFunction(FunctionKey.EmployeeManagement, Policy.Host);
         ViewBag.EnableGroupDate = await commonDataService.IsEnableGroupDateAsync();
 
         return View(model);
@@ -240,14 +240,14 @@ public class EmployeeController(
     {
         var param = new CreateEmployeeParam
         {
-            CompanyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId),
+            CompanyId = session.Get<short>(SessionKey.CurrentCompanyId),
             UserId = userId,
             Code = model.Code,
             FullName = model.FullName,
             Nickname = model.Nickname,
             TeamId = model.TeamId,
             DomainUsername = model.DomainUsername,
-            ActorId = EmployeeSession.EmpId
+            ActorId = session.UserId
         };
         var commandResult = await employeeService.CreateAsync(param);
         if (commandResult.IsSuccessful)
@@ -265,8 +265,8 @@ public class EmployeeController(
         var employee = await employeeService.GetEmployeeByIdAsync(id);
         if (employee != null)
         {
-            if (userControlSession.HasPermissionOnFunction(FunctionKey.ManageLocalEmployee, Policy.Host) && !employee.IsLocal
-                && userControlSession.HasPermissionOnFunction(FunctionKey.ManageExpatEmployee, Policy.Host) && employee.IsLocal)
+            if (session.HasPermissionOnFunction(FunctionKey.ManageLocalEmployee, Policy.Host) && !employee.IsLocal
+                && session.HasPermissionOnFunction(FunctionKey.ManageExpatEmployee, Policy.Host) && employee.IsLocal)
             {
                 return RedirectToAction("AccessDenied", "Error");
             }
@@ -297,7 +297,7 @@ public class EmployeeController(
         if (ModelState.IsValid)
         {
             var param = MappingEditEmployeeParam(model);
-            var commandResult = await employeeService.EditAsync(EmployeeSession.EmpId, param, CurrentCompanyId);
+            var commandResult = await employeeService.EditAsync(session.UserId, param, CurrentCompanyId);
             if (commandResult.IsSuccessful)
             {
                 await UpdateUserInfo(model.UserId, param);
@@ -328,7 +328,7 @@ public class EmployeeController(
     [HrmPermission(Policy.Host, FunctionKey.EmployeeManagement)]
     public async Task<ActionResult> Delete(DeleteEmployeeParam param)
     {
-        var commandResult = await employeeService.DeleteAsync(EmployeeSession.EmpId, param);
+        var commandResult = await employeeService.DeleteAsync(session.UserId, param);
         if (!commandResult.IsSuccessful)
         {
             Json(commandResult);
@@ -390,7 +390,7 @@ public class EmployeeController(
     [HttpPost]
     public async Task<JsonResult> EditEmployeeSupervisor(int employeeId, short roleId, IEnumerable<EditTeamSupervisor> supervisors)
     {
-        var commandResult = await employeeService.EditEmployeeSupervisorAsync(EmployeeSession.EmpId, employeeId, roleId, supervisors);
+        var commandResult = await employeeService.EditEmployeeSupervisorAsync(session.UserId, employeeId, roleId, supervisors);
 
         return new JsonResult(commandResult);
     }
@@ -414,7 +414,7 @@ public class EmployeeController(
     [HttpPost]
     public IActionResult ToggleLeftNavigation(bool isShow)
     {
-        userControlSession.Set(SessionKey.IsShowLeftNavigation, isShow);
+        session.Set(SessionKey.IsShowLeftNavigation, isShow);
         return Ok();
     }
 
@@ -436,7 +436,7 @@ public class EmployeeController(
     {
         var criteria = new GetMemberByManagerCriteria
         {
-            SupervisorId = EmployeeSession.EmpId,
+            SupervisorId = session.UserId,
             Query = keyword,
             ExcludedManager = false,
             CompanyId = CurrentCompanyId
@@ -550,9 +550,9 @@ public class EmployeeController(
 
     private async Task UpdateUserSession(int employeeId)
     {
-        if (EmployeeSession.EmpId == employeeId)
+        if (session.UserId == employeeId)
         {
-            userControlSession.Set(SessionKey.Employee, await authService.GetByUserIdAsync(userControlSession.UserId));
+            session.Set(SessionKey.Employee, await authService.GetByUserIdAsync(session.UserId));
         }
     }
 
@@ -616,11 +616,11 @@ public class EmployeeController(
     {
         var jobLevels = await jobLevelService.GetJobLevel();
         var managementLevels = await managementLevelService.GetManagementLevel();
-        ViewBag.JobTitles = await commonDataService.GetLookupDataByCodeAsync(Constants.JobTitle, userControlSession.Get<int>(SessionKey.CurrentCompanyId));
+        ViewBag.JobTitles = await commonDataService.GetLookupDataByCodeAsync(Constants.JobTitle, session.Get<int>(SessionKey.CurrentCompanyId));
         ViewBag.JobLevel = jobLevels;
         ViewBag.Grades = managementLevels;
         ViewBag.Marriages = Utilities.Marriages;
-        ViewBag.Roles = await roleService.GetBySiteIdAsync(userControlSession.SiteId);
+        ViewBag.Roles = await roleService.GetBySiteIdAsync(session.SiteId);
     }
 
     private EditEmployeeParam MappingEditEmployeeParam(Employee model)
@@ -685,7 +685,7 @@ public class EmployeeController(
 
     private string BuildRole(IList<Role> roles)
     {
-        var systemRoles = roleService.GetBySiteId(userControlSession.SiteId);
+        var systemRoles = roleService.GetBySiteId(session.SiteId);
         var defaultRoles = systemRoles.Where(x => x.IsDefault).Select(x => x.RoleId);
 
         if (roles is { Count: > 0 })
@@ -700,18 +700,18 @@ public class EmployeeController(
     private bool? GetCategory(bool? isLocal = null)
     {
         var category = isLocal;
-        if (userControlSession.HasPermissionOnFunction(FunctionKey.ManageAllEmployee, Policy.Read))
+        if (session.HasPermissionOnFunction(FunctionKey.ManageAllEmployee, Policy.Read))
         {
             return category;
         }
 
-        if (userControlSession.HasPermissionOnFunction(FunctionKey.ManageLocalEmployee, Policy.Read))
+        if (session.HasPermissionOnFunction(FunctionKey.ManageLocalEmployee, Policy.Read))
         {
             category = true;
         }
         else
         {
-            if (userControlSession.HasPermissionOnFunction(FunctionKey.ManageExpatEmployee, Policy.Read))
+            if (session.HasPermissionOnFunction(FunctionKey.ManageExpatEmployee, Policy.Read))
             {
                 category = false;
             }

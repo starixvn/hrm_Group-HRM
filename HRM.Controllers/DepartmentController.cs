@@ -1,18 +1,19 @@
 ﻿namespace HRM.Controllers;
 
 using System.Threading.Tasks;
-using GO.UserControl.Client.Core.Enumerables;
-using GO.UserControl.Client.Core.Session;
 using Core.Constants;
 using Core.Filters;
+using Criteria.Department;
+using GO.UserControl.Client.Core.Enumerables;
+using GO.UserControl.Client.Core.Session;
 using HRM.Core.Models;
 using HRM.Core.Services;
-using Criteria.Department;
+using Microsoft.AspNetCore.Mvc;
 using Services.Interfaces;
 using ViewModels.Department;
-using Microsoft.AspNetCore.Mvc;
 
-public class DepartmentController(IUserControlSession userControlSession,
+public class DepartmentController(
+    IUserControlSession userControlSession,
     IDepartmentService departmentService,
     IUnitService unitService,
     IBaseService baseService) : BaseController(userControlSession)
@@ -62,7 +63,7 @@ public class DepartmentController(IUserControlSession userControlSession,
             Name = model.Name,
             IsActive = model.IsActive,
             UnitId = model.UnitId,
-            ModifiedBy = EmployeeSession.EmpId,
+            ModifiedBy = userControlSession.UserId,
             CompanyId = CurrentCompanyId
         };
         commandResult = await baseService.ExecuteNonQueryAsync(criteria);
@@ -110,7 +111,7 @@ public class DepartmentController(IUserControlSession userControlSession,
             Name = model.Name,
             IsActive = model.IsActive,
             UnitId = model.UnitId,
-            ModifiedBy = EmployeeSession.EmpId
+            ModifiedBy = userControlSession.UserId
         };
         commandResult = await baseService.ExecuteNonQueryAsync(criteria);
 
@@ -121,7 +122,7 @@ public class DepartmentController(IUserControlSession userControlSession,
     [HrmPermission(Policy.Host, FunctionKey.DepartmentManagement)]
     public async Task<IActionResult> Delete([FromBody] DeleteDepartmentViewModel request)
     {
-        var commandResult = await departmentService.DeleteAsync(EmployeeSession.EmpId, request.Id);
+        var commandResult = await departmentService.DeleteAsync(userControlSession.UserId, request.Id);
 
         return new JsonResult(commandResult);
     }

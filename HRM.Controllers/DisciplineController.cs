@@ -54,7 +54,7 @@ public class DisciplineController(
             IsLocal = model.IsLocal,
             EmployeeId = model.EmployeeId,
             ReasonId = model.ReasonId,
-            ApproverId = EmployeeSession.EmpId,
+            ApproverId = userControlSession.UserId,
             IsShowAll = model.IsShowAll,
             CompanyId = CurrentCompanyId
         };
@@ -101,7 +101,7 @@ public class DisciplineController(
             EmployeeId = model.EmployeeId,
             ReasonId = model.ReasonId,
             HasIgnored = model.HasIgnored,
-            ApproverId = EmployeeSession.EmpId,
+            ApproverId = userControlSession.UserId,
             CompanyId = CurrentCompanyId
         };
 
@@ -123,7 +123,7 @@ public class DisciplineController(
         };
 
         var otherDisciplines = await disciplineService.GetOtherDisciplineAsync(criteria);
-        var members = await disciplineService.GetMemberToAddOtherDisciplineAsync(EmployeeSession.EmpId);
+        var members = await disciplineService.GetMemberToAddOtherDisciplineAsync(userControlSession.UserId);
         ViewBag.IsHost = members.Any(x => x.EmployeeId == employeeId)
                          && userControlSession.HasPermissionOnFunction(FunctionKey.Discipline, Policy.Host);
 
@@ -158,7 +158,7 @@ public class DisciplineController(
             DisciplineTypeId = model.DisciplineTypeId,
             Score = model.MinusScore,
             Comment = model.Comment,
-            ActorId = EmployeeSession.EmpId
+            ActorId = userControlSession.UserId
         };
         var commandResult = await baseService.ExecuteNonQueryAsync(criteria);
 
@@ -169,7 +169,7 @@ public class DisciplineController(
     [HrmPermission(Policy.Host, FunctionKey.OtherDiscipline)]
     public async Task<string> DeleteOtherDiscipline(DeleteOtherDisciplineCriteria criteria)
     {
-        criteria.ActorId = EmployeeSession.EmpId;
+        criteria.ActorId = userControlSession.UserId;
         var commandResult = await baseService.ExecuteNonQueryAsync(criteria);
 
         return !commandResult.IsSuccessful ? commandResult.Message : string.Empty;
@@ -186,7 +186,7 @@ public class DisciplineController(
             IgnoreDetailXml = ignoreDetails.ToXML().ToString(),
             DisciplineIgnoreXml = disciplineIgnores.ToXML().ToString(),
             HasUpdateOutOfControlReason = userControlSession.HasPermissionOnFunction(FunctionKey.UpdateOutOfControlReason, Policy.Host),
-            ActorId = EmployeeSession.EmpId
+            ActorId = userControlSession.UserId
         };
         var commandResult = await baseService.ExecuteNonQueryAsync(criteria);
 
@@ -195,7 +195,7 @@ public class DisciplineController(
 
     public async Task<IActionResult> GetMemberToAddOtherDiscipline(string keyword)
     {
-        var employees = await disciplineService.GetMemberToAddOtherDisciplineAsync(EmployeeSession.EmpId, keyword);
+        var employees = await disciplineService.GetMemberToAddOtherDisciplineAsync(userControlSession.UserId, keyword);
 
         return Json(employees);
     }

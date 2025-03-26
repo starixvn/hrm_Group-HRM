@@ -22,13 +22,13 @@ using ViewModels.HospitalizationLeave;
 
 [HrmPermission(Policy.Read, FunctionKey.HospitalizationLeaveBalance)]
 public class HospitalizationLeaveBalanceController(
-    IUserControlSession userControlSession,
+    IUserControlSession session,
     IEmployeeService employeeService,
     ITeamService teamService,
     IBaseService baseService,
-    IExportExcelService exportExcelService) : BaseExportController(userControlSession)
+    IExportExcelService exportExcelService) : BaseExportController(session)
 {
-    private readonly IUserControlSession userControlSession = userControlSession;
+    private readonly IUserControlSession session = session;
 
     public async Task<IActionResult> Index(
         string teamIds,
@@ -44,7 +44,7 @@ public class HospitalizationLeaveBalanceController(
             Employee = employee,
             EmployeeId = employeeId,
             IsLocal = isLocal,
-            IsHost = userControlSession.HasPermissionOnFunction(FunctionKey.HospitalizationLeaveBalance, Policy.Host)
+            IsHost = session.HasPermissionOnFunction(FunctionKey.HospitalizationLeaveBalance, Policy.Host)
         };
 
         return await Index(model);
