@@ -287,16 +287,6 @@
         <Setting Key="ScheduleArrangement_UpdateWeeklyDefaultShift" SpName="ScheduleArrangement_UpdateWeeklyDefaultShift" DbName="bodb_HRM" Plain="0" />
         <Setting Key="ScheduleArrangement_SyncWorkingShift" SpName="ScheduleArrangement_SyncWorkingShift" DbName="bodb_HRM" Plain="0" />
     </Function>
-    <Function Name="Background Job">
-        <Setting Key="TimeRecord_ImportData" SpName="TimeRecord_ImportData" DbName="bodb_HRM" Plain="0" />
-        <Setting Key="Auto_EmployeeCalendar_UpdateIsPublic" SpName="Auto_EmployeeCalendar_UpdateIsPublic" DbName="bodb_HRM" Plain="0" />
-        <Setting Key="Auto_EmployeeCalendar_InsertDefaultShift" SpName="Auto_EmployeeCalendar_InsertDefaultShift" DbName="bodb_HRM" Plain="0" />
-        <Setting Key="Auto_EmployeeCalendar_InsertWeeklyDefaultShift" SpName="Auto_EmployeeCalendar_InsertWeeklyDefaultShift" DbName="bodb_HRM" Plain="0" />
-        <Setting Key="Auto_Postnatal_UpdateWorkingHour" SpName="Auto_Postnatal_UpdateWorkingHour" DbName="bodb_HRM" Plain="0" />
-        <Setting Key="Auto_AnnualLeaveBalance_Update" SpName="Auto_AnnualLeaveBalance_Update" DbName="bodb_HRM" Plain="0" />
-        <Setting Key="Auto_AnnualLeaveBalance_UpdateForNewEmployee" SpName="Auto_AnnualLeaveBalance_UpdateForNewEmployee" DbName="bodb_HRM" Plain="0" />
-        <Setting Key="Auto_AnnualLeaveBalance_Get" SpName="Auto_AnnualLeaveBalance_Get" DbName="bodb_HRM" Plain="0" />
-    </Function>
     <Function Name="Postnatal">
         <Setting Key="Postnatal_Get" SpName="Postnatal_Get" DbName="bodb_HRM" Plain="0" />
         <Setting Key="Postnatal_GetById" SpName="Postnatal_GetById" DbName="bodb_HRM" Plain="0" />
@@ -570,13 +560,13 @@
         <Setting Key="Sync_WorkingShift_GetLastModifiedDate" SpName="Sync_WorkingShift_GetLastModifiedDate" DbName="bodb_HRM" Plain="0" />
         <Setting Key="Sync_WorkingShift_Import" SpName="Sync_WorkingShift_Import" DbName="bodb_HRM" Plain="0" />
     </Function>
-	<Function Name="FnB">
-		<Setting Key="Fnb_Employee_GetByLastModifiedDate" SpName="Fnb_Employee_GetByLastModifiedDate" DbName="bodb_HRM" Plain="0" />
-		<Setting Key="Fnb_EmployeeGroup_GetByLastModifiedDate" SpName="Fnb_EmployeeGroup_GetByLastModifiedDate" DbName="bodb_HRM" Plain="0" />
-		<Setting Key="FnB_Section_GetByLastModifiedDate" SpName="FnB_Section_GetByLastModifiedDate" DbName="bodb_HRM" Plain="0" />
-		<Setting Key="FnB_Department_GetByLastModifiedDate" SpName="FnB_Department_GetByLastModifiedDate" DbName="bodb_HRM" Plain="0" />
-		<Setting Key="FnB_Unit_GetByLastModifiedDate" SpName="FnB_Unit_GetByLastModifiedDate" DbName="bodb_HRM" Plain="0" />
-		<Setting Key="FnB_Shift_GetAll" SpName="FnB_Shift_GetAll" DbName="bodb_HRM" Plain="0" />
-		<Setting Key="FnB_EmployeeCalendar_GetByLastModifiedDate" SpName="FnB_EmployeeCalendar_GetByLastModifiedDate" DbName="bodb_HRM" Plain="0" />
-	</Function>
+    <Function Name="FnB">
+        <Setting Key="Fnb_Employee_GetByLastModifiedDate" SpName="Fnb_Employee_GetByLastModifiedDate" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Fnb_EmployeeGroup_GetByLastModifiedDate" SpName="Fnb_EmployeeGroup_GetByLastModifiedDate" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="FnB_Section_GetByLastModifiedDate" SpName="FnB_Section_GetByLastModifiedDate" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="FnB_Department_GetByLastModifiedDate" SpName="FnB_Department_GetByLastModifiedDate" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="FnB_Unit_GetByLastModifiedDate" SpName="FnB_Unit_GetByLastModifiedDate" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="FnB_Shift_GetAll" SpName="FnB_Shift_GetAll" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="FnB_EmployeeCalendar_GetByLastModifiedDate" SpName="FnB_EmployeeCalendar_GetByLastModifiedDate" DbName="bodb_HRM" Plain="0" />
+    </Function>
 </Functions>
