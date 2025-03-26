@@ -35,7 +35,7 @@
         </div>
         <div class="form-group">
             <div class="label-form">
-                @Html.LabelFor(model => model.NewPassword, new { @class = "control-label" })
+                @Html.LabelFor(model => model.NewPassword, "New Password", new { @class = "control-label" })
             </div>
             <div class="input-form">
                 @Html.PasswordFor(model => model.NewPassword, new { @class = "form-control", autocomplete = "off" })
@@ -43,7 +43,7 @@
         </div>
         <div class="form-group">
             <div class="label-form">
-                @Html.LabelFor(model => model.ConfirmPassword, new { @class = "control-label" })
+                @Html.LabelFor(model => model.ConfirmPassword, "Confirm Password", new { @class = "control-label" })
             </div>
             <div class="input-form">
                 @Html.PasswordFor(model => model.ConfirmPassword, new { @class = "form-control", autocomplete = "off" })
