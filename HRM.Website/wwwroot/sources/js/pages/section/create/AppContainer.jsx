@@ -34,8 +34,8 @@ const AppContainer = () => {
         axios.post(
             resolveClientUrl('Section/Create'),
             {
-                Code: values.name.trim(),
-                Name: values.code.trim(),
+                Code: values.code.trim(),
+                Name: values.name.trim(),
                 IsActive: values.isActive,
                 DepartmentId: values.department
             },
