@@ -16,9 +16,9 @@ using Microsoft.AspNetCore.Mvc;
 namespace HRM.Controllers.Export;
 
 public class ExportRequestController(
-    IUserControlSession userControlSession,
+    IUserControlSession session,
     IRequestService requestService,
-    IExportExcelService exportExcelService) : BaseExportController(userControlSession)
+    IExportExcelService exportExcelService) : BaseExportController(session)
 {
     public async Task<IActionResult> VoidRequestWorkingTimeRequest(RequestViewModel request)
     {
@@ -39,7 +39,7 @@ public class ExportRequestController(
             RequestType = request.RequestType,
             IsQueryByCreatedDate = !request.IsFilterByAffectedDate,
             RequestViewType = request.ViewType,
-            SupervisorId = EmployeeSession.EmpId,
+            SupervisorId = session.UserId,
             IsLocal = request.IsLocal.HasValue ? request.IsLocal.Value == 1 : null,
             CompanyId = CurrentCompanyId
         };
@@ -74,7 +74,7 @@ public class ExportRequestController(
             RequestType = model.RequestType,
             IsQueryByCreatedDate = !model.IsFilterByAffectedDate,
             RequestViewType = model.ViewType,
-            SupervisorId = EmployeeSession.EmpId,
+            SupervisorId = session.UserId,
             IsLocal = model.IsLocal.HasValue ? model.IsLocal.Value == 1 : null,
             LeaveTypeId = model.LeaveType,
             CompanyId = CurrentCompanyId
@@ -106,7 +106,7 @@ public class ExportRequestController(
             RequestType = model.RequestType,
             IsQueryByCreatedDate = !model.IsFilterByAffectedDate,
             RequestViewType = model.ViewType,
-            SupervisorId = EmployeeSession.EmpId,
+            SupervisorId = session.UserId,
             IsLocal = model.IsLocal.HasValue ? model.IsLocal.Value == 1 : null,
             CompanyId = CurrentCompanyId
         };

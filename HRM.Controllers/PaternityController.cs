@@ -11,21 +11,19 @@ using HRM.Criteria.Paternity;
 using HRM.Services.Interfaces;
 using HRM.ViewModels.Paternity;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace HRM.Controllers;
 
 public class PaternityController(
-    IUserControlSession userControlSession,
-    IPaternityService paternityService) : BaseController(userControlSession)
+    IUserControlSession session,
+    IPaternityService paternityService) : BaseController(session)
 {
-    private readonly IUserControlSession userControlSession = userControlSession;
-
     [HrmPermission(Policy.Read, FunctionKey.EmployeeManagement)]
     public ActionResult Index()
     {
-        ViewBag.IsHost = userControlSession.HasPermissionOnFunction(FunctionKey.EmployeeManagement, Policy.Host);
+        ViewBag.IsHost = session.HasPermissionOnFunction(FunctionKey.EmployeeManagement, Policy.Host);
         return View();
     }
 
@@ -33,7 +31,7 @@ public class PaternityController(
     public async Task<PartialViewResult> ListPaternity(int year)
     {
         var paternityList = await paternityService.GetAll(year, CurrentCompanyId);
-        ViewBag.IsHost = userControlSession.HasPermissionOnFunction(FunctionKey.EmployeeManagement, Policy.Host);
+        ViewBag.IsHost = session.HasPermissionOnFunction(FunctionKey.EmployeeManagement, Policy.Host);
         return PartialView("_ListPaternity", paternityList);
     }
 
@@ -61,7 +59,7 @@ public class PaternityController(
                 EmpId = model.EmployeeId,
                 ChildBornDate = model.ChildBornDate,
                 LeaveDay = model.LeaveDay,
-                CreatedBy = EmployeeSession.EmpId,
+                CreatedBy = session.UserId,
                 Remark = model.Remark
             };
 
@@ -105,7 +103,7 @@ public class PaternityController(
                 EmpId = model.EmployeeId,
                 ChildBornDate = model.ChildBornDate,
                 LeaveDay = model.LeaveDay,
-                ModifiedBy = EmployeeSession.EmpId,
+                ModifiedBy = session.UserId,
                 Remark = model.Remark
             };
 

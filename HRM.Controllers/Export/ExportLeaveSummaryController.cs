@@ -15,10 +15,10 @@ using Services.Interfaces;
 using ViewModels.AnnualLeave;
 
 public class ExportLeaveSummaryController(
-    IUserControlSession userControlSession,
+    IUserControlSession session,
     IReportService reportService,
     IExportExcelService exportExcelService,
-    IExportExcelUnpaidLeaveSummaryReportService exportReportService) : BaseExportController(userControlSession)
+    IExportExcelUnpaidLeaveSummaryReportService exportReportService) : BaseExportController(session)
 {
     public async Task<IActionResult> AnnualLeaveSummary(LeaveSummaryViewModel model)
     {
@@ -65,7 +65,7 @@ public class ExportLeaveSummaryController(
             EmpId = model.EmployeeId > 0 ? new int?(model.EmployeeId) : null,
             TeamIds = model.TeamIds,
             IsLocal = (byte?)model.Category,
-            SupervisorId = EmployeeSession.EmpId,
+            SupervisorId = session.UserId,
             LeaveType = model.LeaveType,
             CompanyId = CurrentCompanyId
         };

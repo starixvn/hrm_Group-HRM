@@ -10,15 +10,13 @@ using Microsoft.AspNetCore.Mvc;
 namespace HRM.Controllers;
 
 public class JobLevelController(
-    IUserControlSession userControlSession,
-    IJobLevelService jobLevelService) : BaseController(userControlSession)
+    IUserControlSession session,
+    IJobLevelService jobLevelService) : BaseController(session)
 {
-    private readonly IUserControlSession userControlSession = userControlSession;
-
     [HrmPermission(Policy.Read, FunctionKey.JobLevelManagement)]
     public IActionResult Index()
     {
-        var hasPermission = userControlSession.HasPermissionOnFunction(FunctionKey.JobLevelManagement, Policy.Host);
+        var hasPermission = session.HasPermissionOnFunction(FunctionKey.JobLevelManagement, Policy.Host);
         return View(hasPermission);
     }
 
@@ -36,7 +34,7 @@ public class JobLevelController(
         var criteria = new InsertJobLevelCriteria
         {
             Name = model.Name,
-            ModifiedBy = EmployeeSession.EmpId
+            ModifiedBy = session.UserId
         };
 
         var result = await jobLevelService.Insert(criteria);
@@ -52,7 +50,7 @@ public class JobLevelController(
         {
             JobLevelId = model.Id,
             Name = model.Name,
-            ModifiedBy = EmployeeSession.EmpId
+            ModifiedBy = session.UserId
         };
         var result = await jobLevelService.Update(criteria);
 
@@ -63,7 +61,7 @@ public class JobLevelController(
     [HrmPermission(Policy.Host, FunctionKey.JobLevelManagement)]
     public async Task<IActionResult> Delete([FromBody] JobLevelDeleteModel model)
     {
-        var result = await jobLevelService.Delete(model.Id, EmployeeSession.EmpId);
+        var result = await jobLevelService.Delete(model.Id, session.UserId);
 
         return Json(result);
     }

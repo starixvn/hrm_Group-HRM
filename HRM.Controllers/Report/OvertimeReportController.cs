@@ -16,9 +16,9 @@ using Microsoft.AspNetCore.Mvc;
 namespace HRM.Controllers.Report;
 
 public class OvertimeReportController(
-    IUserControlSession userControlSession,
+    IUserControlSession session,
     IOvertimeReportService overtimeReportService,
-    ITeamService teamService) : BaseController(userControlSession)
+    ITeamService teamService) : BaseController(session)
 {
     [HrmPermission(Policy.Read, FunctionKey.MonthlyOvertimeReport)]
     public IActionResult MonthlyOvertime()
@@ -40,7 +40,7 @@ public class OvertimeReportController(
         var param = new GetMonthlyOvertimeParam
         {
             CompanyId = CurrentCompanyId,
-            ActorId = EmployeeSession.EmpId,
+            ActorId = session.UserId,
             FromDate = model.FromDate,
             ToDate = model.ToDate,
             Employee = model.Employee,
@@ -61,7 +61,7 @@ public class OvertimeReportController(
         var param = new GetYearlyOvertimeParam
         {
             CompanyId = CurrentCompanyId,
-            ActorId = EmployeeSession.EmpId,
+            ActorId = session.UserId,
             Year = model.Year,
             Calendar = model.Calendar,
             TeamIds = model.TeamIds,
@@ -92,7 +92,7 @@ public class OvertimeReportController(
         var param = new GetDailyOvertimeDetailsParam
         {
             CompanyId = CurrentCompanyId,
-            ActorId = EmployeeSession.EmpId,
+            ActorId = session.UserId,
             FromDate = model.FromDate,
             ToDate = model.ToDate,
             TeamIds = model.TeamIds,
@@ -111,7 +111,7 @@ public class OvertimeReportController(
         var param = new GetMonthlyOvertimeParam
         {
             CompanyId = CurrentCompanyId,
-            ActorId = EmployeeSession.EmpId,
+            ActorId = session.UserId,
             FromDate = model.FromDate,
             ToDate = model.ToDate,
             Employee = model.Employee,
@@ -133,7 +133,7 @@ public class OvertimeReportController(
         var param = new GetYearlyOvertimeParam
         {
             CompanyId = CurrentCompanyId,
-            ActorId = EmployeeSession.EmpId,
+            ActorId = session.UserId,
             Year = model.Year,
             Calendar = model.Calendar,
             TeamIds = model.TeamIds,
@@ -154,7 +154,7 @@ public class OvertimeReportController(
         var param = new GetDailyOvertimeDetailsParam
         {
             CompanyId = CurrentCompanyId,
-            ActorId = EmployeeSession.EmpId,
+            ActorId = session.UserId,
             FromDate = model.FromDate,
             ToDate = model.ToDate,
             TeamIds = model.TeamIds,

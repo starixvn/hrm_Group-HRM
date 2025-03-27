@@ -16,8 +16,8 @@ namespace HRM.Controllers.Report;
 
 [HrmPermission(Policy.Read, FunctionKey.AttendanceDailyReport)]
 public class DailyWorkingHoursController(
-    IUserControlSession userControlSession,
-    IEmployeeWorkingHoursService workingHoursService) : BaseController(userControlSession)
+    IUserControlSession session,
+    IEmployeeWorkingHoursService workingHoursService) : BaseController(session)
 {
     [HttpGet]
     public ActionResult Index()
@@ -37,7 +37,7 @@ public class DailyWorkingHoursController(
         var param = new GetMonthlyWorkingHoursParam
         {
             CompanyId = CurrentCompanyId,
-            ActorId = EmployeeSession.EmpId,
+            ActorId = session.UserId,
             FromDate = model.FromDate,
             ToDate = model.FromDate,
             TeamIds = model.TeamIds,
@@ -57,7 +57,7 @@ public class DailyWorkingHoursController(
         var param = new GetMonthlyWorkingHoursParam
         {
             CompanyId = CurrentCompanyId,
-            ActorId = EmployeeSession.EmpId,
+            ActorId = session.UserId,
             FromDate = model.FromDate,
             ToDate = model.FromDate,
             TeamIds = model.TeamIds,

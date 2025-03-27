@@ -11,21 +11,19 @@ using HRM.Criteria.Postnatal;
 using HRM.Services.Interfaces;
 using HRM.ViewModels.Postnatal;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace HRM.Controllers;
 
 public class PostnatalController(
-    IUserControlSession userControlSession,
-    IPostnatalService postnatalService) : BaseController(userControlSession)
+    IUserControlSession session,
+    IPostnatalService postnatalService) : BaseController(session)
 {
-    private readonly IUserControlSession userControlSession = userControlSession;
-
     [HrmPermission(Policy.Read, FunctionKey.EmployeeManagement)]
     public IActionResult Index()
     {
-        ViewBag.IsHost = userControlSession.HasPermissionOnFunction(FunctionKey.EmployeeManagement, Policy.Host);
+        ViewBag.IsHost = session.HasPermissionOnFunction(FunctionKey.EmployeeManagement, Policy.Host);
         return View();
     }
 
@@ -33,7 +31,7 @@ public class PostnatalController(
     public async Task<PartialViewResult> GetPostnatalGrid(int year)
     {
         var postnatalList = await postnatalService.GetAll(year, CurrentCompanyId);
-        ViewBag.IsHost = userControlSession.HasPermissionOnFunction(FunctionKey.EmployeeManagement, Policy.Host);
+        ViewBag.IsHost = session.HasPermissionOnFunction(FunctionKey.EmployeeManagement, Policy.Host);
         return PartialView("_PostnatalGrid", postnatalList);
     }
 
@@ -62,7 +60,7 @@ public class PostnatalController(
                 EmpId = model.EmployeeId,
                 FromDate = model.FromDate,
                 ToDate = model.ToDate,
-                CreatedBy = EmployeeSession.EmpId,
+                CreatedBy = session.UserId,
                 Remark = model.Remark,
                 WorkingHours = model.WorkingHours ?? 0
             };
@@ -107,7 +105,7 @@ public class PostnatalController(
                 EmpId = model.EmployeeId,
                 FromDate = model.FromDate,
                 ToDate = model.ToDate,
-                ModifiedBy = EmployeeSession.EmpId,
+                ModifiedBy = session.UserId,
                 Remark = model.Remark,
                 WorkingHours = model.WorkingHours ?? 0
             };

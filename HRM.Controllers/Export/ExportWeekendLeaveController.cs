@@ -10,10 +10,10 @@ using Services.Interfaces;
 using ViewModels.Report;
 
 public class ExportWeekendLeaveController(
-    IUserControlSession userControlSession,
+    IUserControlSession session,
     IReportService reportService,
     IExportWeekendLeaveSummaryService exportWeekendLeaveSummaryService,
-    IExportWeekendLeaveDetailService exportWeekendLeaveDetailService) : BaseController(userControlSession)
+    IExportWeekendLeaveDetailService exportWeekendLeaveDetailService) : BaseController(session)
 {
     public async Task<ActionResult> ExportWeekendLeaveSummaryReport(WeekendLeaveViewModel model)
     {
@@ -25,7 +25,7 @@ public class ExportWeekendLeaveController(
             IsLocal = model.IsLocal,
             EmployeeId = model.EmployeeId,
             MinTotalLeave = model.MinTotalLeave,
-            SupervisorId = EmployeeSession.EmpId
+            SupervisorId = session.UserId
         };
 
         var weekendLeaves = await reportService.GetWeekendLeaveSummaryAsync(criteria);

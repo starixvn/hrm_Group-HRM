@@ -12,19 +12,19 @@ using GO.UserControl.Client.Core.Session;
 using HRM.Core.Services;
 using HRM.Criteria.Report;
 using HRM.Models.Report.DisciplineSummaryPerYear;
-using Services.ExportExcel;
 using HRM.ViewModels.Report;
 using Microsoft.AspNetCore.Mvc;
+using Services.ExportExcel;
 using Services.Implement;
 using Services.Interfaces;
 
 [HrmPermission(Policy.Read, FunctionKey.DisciplineSummaryPerYear)]
 public class DisciplineSummaryPerYearController(
-    IUserControlSession userControlSession,
+    IUserControlSession session,
     IBaseService baseService,
     IEmployeeService employeeService,
     IExportDisciplineSummaryPerYearService exportService,
-    ICommonDataService commonDataService) : BaseController(userControlSession)
+    ICommonDataService commonDataService) : BaseController(session)
 {
     public async Task<IActionResult> Index(DisciplineSummaryPerYearViewModel model)
     {
@@ -70,7 +70,7 @@ public class DisciplineSummaryPerYearController(
             TeamIds = model.TeamId,
             IsLocal = model.IsLocal,
             EmployeeId = model.EmployeeId,
-            ApproverId = EmployeeSession.EmpId,
+            ApproverId = session.UserId,
             IsShowAll = model.IsShowAll
         };
         var (employees, disciplines) = await baseService.FetchMultipleAsync<DisciplineSummaryPerYear, DisciplineSummaryPerYearDetail>(criteria);

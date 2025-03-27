@@ -11,10 +11,10 @@ using Microsoft.AspNetCore.Mvc;
 namespace HRM.Controllers.Export;
 
 public class ExportDisciplineController(
-    IUserControlSession userControlSession,
+    IUserControlSession session,
     IDisciplineService disciplineService,
     IExportDisciplineSummaryService exportDisciplineSummaryService,
-    IExportDisciplineDetailService exportDisciplineDetailService) : BaseController(userControlSession)
+    IExportDisciplineDetailService exportDisciplineDetailService) : BaseController(session)
 {
     public async Task<IActionResult> ExportDisciplineSummaryReport(DisciplineSummaryViewModel model)
     {
@@ -26,7 +26,7 @@ public class ExportDisciplineController(
             IsLocal = model.IsLocal,
             EmployeeId = model.EmployeeId,
             ReasonId = model.ReasonId,
-            ApproverId = EmployeeSession.EmpId,
+            ApproverId = session.UserId,
             EmployeeName = model.Employee,
             TeamName = model.TeamName,
             CompanyId = CurrentCompanyId
@@ -49,11 +49,10 @@ public class ExportDisciplineController(
             IsLocal = model.IsLocal,
             EmployeeId = model.EmployeeId,
             ReasonId = model.ReasonId,
-            ApproverId = EmployeeSession.EmpId,
+            ApproverId = session.UserId,
             EmployeeName = model.Employee,
             TeamName = model.TeamName
         };
-
 
         var disciplines = await disciplineService.GetDisciplineDetailAsync(criteria);
         var data = exportDisciplineDetailService.Export(criteria, disciplines);

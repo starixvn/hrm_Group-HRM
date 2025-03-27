@@ -12,16 +12,16 @@ using Microsoft.AspNetCore.Mvc;
 namespace HRM.Controllers.Export;
 
 public class ExportTimeRecordController(
-    IUserControlSession userControlSession,
+    IUserControlSession session,
     IReportService reportService,
-    IExportExcelTimeRecordService exportTimeRecordService) : BaseController(userControlSession)
+    IExportExcelTimeRecordService exportTimeRecordService) : BaseController(session)
 {
     public async Task<FileContentResult> Export(TimeRecordViewModel model)
     {
         var criteria = new GetTimeRecordCriteria
         {
             EmpId = model.EmployeeId == 0 ? null : model.EmployeeId,
-            SupervisorId = EmployeeSession.EmpId,
+            SupervisorId = session.UserId,
             TeamIds = model.TeamIds,
             FromDate = model.FromDate.ToServerTimeZone(),
             ToDate = model.ToDate.ToServerTimeZone().ToEndOfDay(),
