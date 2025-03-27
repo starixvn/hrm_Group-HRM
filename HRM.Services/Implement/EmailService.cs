@@ -1,16 +1,22 @@
 ﻿using System.Threading.Tasks;
+using GO.UserControl.Client.Core.Session;
 using HRM.Core;
-using HRM.Core.Models;
+using HRM.Core.Constants;
+using HRM.Core.Services;
+using HRM.Criteria.SystemSetting;
 using HRM.MailDeliver;
+using HRM.Models;
 using HRM.Services.Interfaces;
+using Newtonsoft.Json;
 
 namespace HRM.Services.Implement;
 
-public class EmailService(AppSettings appSettings, IBaseMailService mailService) : IEmailService
+public class EmailService(IBaseMailService mailService,IBaseService baseService, IUserControlSession session) : IEmailService
 {
     public async Task SendEmailAsync(string receiverEmail, string mailCc, string subject, string body)
     {
-        if (!Utilities.IsValidEmail(receiverEmail) || !appSettings.EnableSendMail)
+        var mailSetting = await GetMailSettingAsync();
+        if (!Utilities.IsValidEmail(receiverEmail) || !mailSetting.Enable)
         {
             return;
         }
@@ -20,9 +26,30 @@ public class EmailService(AppSettings appSettings, IBaseMailService mailService)
             MailTo = receiverEmail,
             MailCc = mailCc,
             Subject = subject,
-            Body = body
+            Body = body,
+            AppMailId = mailSetting.AppMailId
         };
 
         await mailService.SendEmailAsync(mailItem);
+    }
+
+    public async Task<MailSetting> GetMailSettingAsync()
+    {
+        var mailSetting = session.Get<MailSetting>(SessionKey.MailSetting);
+        if (mailSetting != null)
+        {
+            return mailSetting;
+        }
+        var companyId = session.Get<short>(SessionKey.CurrentCompanyId);
+        var criteria = new GetSystemConfigsByKeyCriteria
+        {
+            CompanyId = companyId,
+            Key = SystemConfigKey.MailSetting
+        };
+
+        var data = await baseService.GetDataEntityAsync<string>(criteria);
+        var result = data == null ? null : JsonConvert.DeserializeObject<MailSetting>(data);
+        session.Set(SessionKey.MailSetting, result);
+        return result;
     }
 }

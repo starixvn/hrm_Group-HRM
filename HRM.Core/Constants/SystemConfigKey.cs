@@ -5,4 +5,6 @@ public static class SystemConfigKey
     public const string TimeZone = "TimeZone";
 
     public const string SyncWorkingShift = "SyncWorkingShift";
+
+    public const string MailSetting = "MailSetting";
 }

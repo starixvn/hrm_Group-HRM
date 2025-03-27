@@ -7,4 +7,5 @@ public static class SessionKey
     public const string CurrentCompanyId = "CurrentCompanyId";
     public const string CurrentTimeZone = "CurrentTimeZone";
     public const string CurrentDomain = "CurrentDomain";
+    public const string MailSetting = "MailSetting";
 }

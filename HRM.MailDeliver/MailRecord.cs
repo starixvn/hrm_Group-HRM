@@ -6,6 +6,8 @@ public class MailRecord
 {
     public long MailId { get; set; }
 
+    public int AppMailId { get; set; }
+
     public MailConfig MailConfig { get; set; }
 
     public int Priority { get; set; }

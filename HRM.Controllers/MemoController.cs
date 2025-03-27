@@ -185,14 +185,14 @@ public class MemoController(
     {
         var bodyTemplate = Utilities.ReadTextFile(Path.Combine(hostingEnvironment.ContentRootPath, "EmailTemplates/MemoNotification.txt"));
         var body = string.Format(bodyTemplate, subject, GetDomainName(HttpContext) + "/memo/detail/" + result.OutputId);
-
+        var mailSetting = await emailService.GetMailSettingAsync();
         await emailService.SendEmailAsync(
-            appSettings.EmailGo,
+            mailSetting.EmailGo,
             string.Empty,
             Resources.Messages.MemoSubject + " " + subject,
             body);
         await emailService.SendEmailAsync(
-            appSettings.EmailSD,
+            mailSetting.EmailSD,
             string.Empty,
             Resources.Messages.MemoSubject + " " + subject,
             body);

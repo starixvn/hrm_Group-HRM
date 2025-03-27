@@ -11,20 +11,21 @@ using Criteria;
 using MailKit.Net.Smtp;
 using MimeKit;
 
-public class BaseMailService(AppSettings appSettings, IBaseService baseService) : IBaseMailService
+public class BaseMailService(IBaseService baseService) : IBaseMailService
 {
     public async Task<bool> SendEmailAsync(MailRecord email)
     {
         var isSuccessful = false;
         if (email != null && Utilities.IsValidEmail(email.MailTo))
         {
-            email.MailConfig = await GetMailConfigByIdAsync(appSettings.AppMailId);
+            email.MailConfig = await GetMailConfigByIdAsync(email.AppMailId);
             await InsertMailRecordAsync(email);
             isSuccessful = await SendByMailKitAsync(email);
         }
 
         return isSuccessful;
     }
+
 
     private async Task<bool> SendByMailKitAsync(MailRecord email)
     {

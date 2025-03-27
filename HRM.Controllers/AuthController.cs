@@ -12,10 +12,12 @@ using GO.UserControl.Client.Core.Models.Auth;
 using GO.UserControl.Client.Core.Services;
 using GO.UserControl.Client.Core.Session;
 using HRM.Core.Services;
+using HRM.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using Services.Interfaces;
 using ViewModels.Employee;
 
@@ -78,6 +80,7 @@ public class AuthController(
             session.Set(SessionKey.Employee, employee);
             session.Set(SessionKey.CurrentTimeZone, await GetClientTimeZoneAsync());
             session.Set(SessionKey.CurrentDomain, GetDomainName(HttpContext));
+            session.Set(SessionKey.MailSetting, await GetMailSettingAsync());
 
             await DoLoginAsync(loginResult.UserId);
         }
@@ -117,6 +120,21 @@ public class AuthController(
 
         return await baseService.GetDataEntityAsync<float>(criteria);
     }
+
+    private async Task<MailSetting> GetMailSettingAsync()
+    {
+        var companyId = session.Get<short>(SessionKey.CurrentCompanyId);
+        var criteria = new GetSystemConfigsByKeyCriteria
+        {
+            CompanyId = companyId,
+            Key = SystemConfigKey.MailSetting
+        };
+
+        var result = await baseService.GetDataEntityAsync<string>(criteria);
+        var data = result == null ? null : JsonConvert.DeserializeObject<MailSetting>(result);
+        return data;
+    }
+
 
     private static string GetClientIp(HttpContext httpContext)
     {
