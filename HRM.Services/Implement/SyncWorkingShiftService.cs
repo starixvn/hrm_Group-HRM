@@ -36,12 +36,13 @@ public class SyncWorkingShiftService(
     public async Task<CommandResult> SyncWorkingShiftAsync(SyncWorkingShiftCommand command)
     {
         var commandResult = new CommandResult { Code = 0, Message = string.Empty };
+        var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
         var config = await GetSyncWorkingShiftConfigAsync();
         for (var date = command.FromDate.Date; date.Date <= command.ToDate.Date; date = date.AddDays(1))
         {
             try
             {
-                commandResult = await SyncWorkingShiftAsync(command, date, config);
+                commandResult = await SyncWorkingShiftAsync(companyId, command, date, config);
             }
             catch (Exception ex)
             {
@@ -66,7 +67,7 @@ public class SyncWorkingShiftService(
         return result == null ? null : JsonConvert.DeserializeObject<SyncWorkingShiftConfig>(result);
     }
 
-    private async Task<CommandResult> SyncWorkingShiftAsync(SyncWorkingShiftCommand command, DateTime date, SyncWorkingShiftConfig config)
+    private async Task<CommandResult> SyncWorkingShiftAsync(short companyId, SyncWorkingShiftCommand command, DateTime date, SyncWorkingShiftConfig config)
     {
         var commandResult = new CommandResult { Code = 0, Message = string.Empty };
 
@@ -76,7 +77,7 @@ public class SyncWorkingShiftService(
         if (response.IsSuccessStatusCode)
         {
             var rawData = await response.Content.ReadAsStringAsync();
-            var workingShifts = JsonConvert.DeserializeObject<IList<WorkingShiftSyncModel>>(rawData);
+            var workingShifts = JsonConvert.DeserializeObject<IList<OWPWorkingShift>>(rawData);
             workingShifts = workingShifts?.Where(x => !string.IsNullOrWhiteSpace(x.EmployeeID)).ToList();
 
             if (workingShifts == null || !workingShifts.Any())
@@ -92,13 +93,17 @@ public class SyncWorkingShiftService(
             var totalBatch = (int)Math.Ceiling((double)workingShifts.Count / BatchSize);
             for (var i = 0; i < totalBatch; i++)
             {
+                var batchData = workingShifts.Skip(i * BatchSize).Take(BatchSize).ToList();
+                await ImportShiftAsync(companyId, command.ActorId, batchData);
+
                 commandResult = await baseService.ExecuteNonQueryAsync(new SyncWorkingShiftCommand
                 {
+                    CompanyId = companyId,
                     ActorId = command.ActorId,
                     EmployeeIds = command.EmployeeIds,
                     FromDate = date,
                     ToDate = date,
-                    WorkingShiftXml = workingShifts.Skip(i * BatchSize).Take(BatchSize).ToXML().ToString()
+                    WorkingShiftXml = batchData.ToXML().ToString()
                 });
             }
         }
@@ -113,7 +118,44 @@ public class SyncWorkingShiftService(
         return commandResult;
     }
 
-    private static void ProcessData(WorkingShiftSyncModel shift)
+    private async Task ImportShiftAsync(short companyId, int actorId, IList<OWPWorkingShift> workingShifts)
+    {
+        var shifts = workingShifts.Where(x => !string.IsNullOrWhiteSpace(x.ShiftCode)
+                    && !string.IsNullOrWhiteSpace(x.CheckInTime)
+                    && !string.IsNullOrWhiteSpace(x.CheckOutTime))
+            .GroupBy(x => new OWPShift
+            {
+                ShiftCode = x.ShiftCode,
+                CheckInTime = x.CheckInTime,
+                CheckOutTime = x.CheckOutTime,
+                IsInAfterDay = x.IsInAfterDay,
+                IsOutAfterDay = x.IsOutAfterDay,
+                IsCrossDay = x.IsCrossDay,
+                TotalHours = x.TotalHours
+            }).Select(x =>
+            {
+                return new OWPShift
+                {
+                    ShiftCode = x.Key.ShiftCode,
+                    CheckInTime = x.Key.CheckInTime,
+                    CheckOutTime = x.Key.CheckOutTime,
+                    IsInAfterDay = x.Key.IsInAfterDay,
+                    IsOutAfterDay = x.Key.IsOutAfterDay,
+                    IsCrossDay = x.Key.IsCrossDay,
+                    TotalHours = x.Key.TotalHours,
+                    LastUpdated = x.Max(y => y.LastUpdated)
+                };
+            }).ToList();
+        var command = new SyncShiftCommand
+        {
+            CompanyId = companyId,
+            ActorId = actorId,
+            ShiftXml = shifts.ToXML().ToString()
+        };
+        await baseService.ExecuteNonQueryAsync(command);
+    }
+
+    private static void ProcessData(OWPWorkingShift shift)
     {
         shift.EmployeeID = shift.EmployeeID.Trim();
         shift.ShiftCode = shift.ShiftCode?.Trim();
@@ -142,7 +184,7 @@ public class SyncWorkingShiftService(
         GetTotalHours(shift);
     }
 
-    private static void CheckOffDay(WorkingShiftSyncModel shift)
+    private static void CheckOffDay(OWPWorkingShift shift)
     {
         if (shift.ShiftCode?.IndexOf("OFF", StringComparison.OrdinalIgnoreCase) >= 0
             && !shift.IsOffDay)
@@ -151,7 +193,7 @@ public class SyncWorkingShiftService(
         }
     }
 
-    private static void CheckPublicHoliday(WorkingShiftSyncModel shift)
+    private static void CheckPublicHoliday(OWPWorkingShift shift)
     {
         if (!string.IsNullOrWhiteSpace(shift.ShiftCode)
             && shift.ShiftCode.Equals("PH", StringComparison.OrdinalIgnoreCase)
@@ -161,7 +203,7 @@ public class SyncWorkingShiftService(
         }
     }
 
-    private static void GetTotalHours(WorkingShiftSyncModel shift)
+    private static void GetTotalHours(OWPWorkingShift shift)
     {
         if (!shift.ShiftStartTime.HasValue || !shift.ShiftEndTime.HasValue)
         {
