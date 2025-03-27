@@ -239,8 +239,8 @@ public class RequestController(
         var criteria = new GetRequestCriteria
         {
             EmpId = employeeId,
-            FromDate = request.FromDate.ToStartOfDay(),
-            ToDate = request.ToDate.ToEndOfDay(),
+            FromDate = request.IsFilterByAffectedDate ? request.FromDate.ToStartOfDay() : request.FromDate.ToStartOfDay().ToServerTimeZone(),
+            ToDate = request.IsFilterByAffectedDate ? request.ToDate.ToEndOfDay() : request.ToDate.ToEndOfDay().ToClientTimeZone(),
             TeamIds = request.TeamIds,
             Status = request.StatusIds,
             RequestType = request.RequestType,
