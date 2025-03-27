@@ -69,6 +69,7 @@ public class OvertimeReportService(
 
         var criteria = new GetMonthlyOvertimeDetailsReportCriteria
         {
+            CompanyId = param.CompanyId,
             EmpId = param.EmployeeId,
             FromDate = fromDate,
             ToDate = toDate
