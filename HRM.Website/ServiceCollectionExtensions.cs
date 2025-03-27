@@ -20,6 +20,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using HRM.Controllers.API.Middlewares;
 using Microsoft.Extensions.DependencyInjection;
 using Repositories;
 using Repositories.Interfaces;
@@ -227,6 +228,7 @@ public static class ServiceCollectionExtensions
 
     private static void AddSyncFnBService(this IServiceCollection services)
     {
+        services.AddSingleton<IApiKeyValidator, ApiKeyValidator>();
         services.AddScoped<Services.Interfaces.FnB.IEmployeeService, Services.Implement.FnB.EmployeeService>();
         services.AddScoped<Services.Interfaces.FnB.ISectionService, Services.Implement.FnB.SectionService>();
         services.AddScoped<Services.Interfaces.FnB.IUnitService, Services.Implement.FnB.UnitService>();

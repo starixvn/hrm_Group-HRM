@@ -18,9 +18,9 @@ public class EmployeeCalendarModel
 
     public int LeaveTypeId { get; set; }
 
-    public decimal LeaveDay { get; set; }
+    public decimal? LeaveDay { get; set; }
 
-    public DateTime ModifiedDate { get; set; }
+    public DateTime? ModifiedDate { get; set; }
 
     public bool HasCheckIn { get; set; }
 }

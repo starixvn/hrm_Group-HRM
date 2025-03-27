@@ -43,4 +43,6 @@ public class EmployeeModel
     public int JobLevelId { get; set; }
     
     public int EmpCategoryID { get; set; }
+
+    public string EmployeeCard { get; set; }
 }

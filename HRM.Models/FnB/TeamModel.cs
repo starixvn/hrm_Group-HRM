@@ -17,4 +17,6 @@ public class TeamModel
     public bool IsDeleted { get; set; }
 
     public DateTime ModifiedDate { get; set; }
+
+    public int SectionId { get; set; }
 }

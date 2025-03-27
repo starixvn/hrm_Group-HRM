@@ -3,6 +3,7 @@ using Fanex.Data.SqlServer;
 using Fanex.Logging.Sentry.RavenClient;
 using GO.UserControl.Client.Core;
 using GO.UserControl.Client.Core.Session;
+using HRM.Controllers.API.Middlewares;
 using HRM.Core;
 using HRM.Website;
 using HRM.Website.Middlewares;
@@ -48,6 +49,10 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
+app.UseWhen(context => context.Request.Path.StartsWithSegments("/api/fnb"), branch =>
+{
+    branch.UseMiddleware<ApiKeyMiddleware>();
+});
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseSession();
