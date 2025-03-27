@@ -130,7 +130,7 @@
                                 <div class="@className"
                                         data-requestdetail="@Html.Encode(requestDetail)"
                                         data-leavetype="@(request.LeaveType != null ? request.LeaveType.Name : string.Empty)"
-                                        data-createddate="@request.CreatedDateTime"
+                                     data-createddate="@request.CreatedDate.ToClientTimeZone().ToShortFormatedDate()"
                                         data-remark='@request.Remark'
                                         data-currentStatus="@request.CurrentStatus">
                                     @request.RequestType.Name

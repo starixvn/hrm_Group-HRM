@@ -104,11 +104,11 @@ const timesheetModule = (function ($) {
                 responseType: 'json'
             }).then(response => {
                 let data = response.data;
-                if (data.IsSuccessful) {
+                if (data.isSuccessful) {
                     alert('Create Check In time successfully!');
                     query();
                 } else {
-                    alert(response.data.Message);
+                    alert(response.data.message);
                 }
             }).catch(axiosError).then(() => unblockUI());
         });
@@ -122,11 +122,11 @@ const timesheetModule = (function ($) {
                 responseType: 'json'
             }).then(response => {
                 let data = response.data;
-                if (data.IsSuccessful) {
+                if (data.isSuccessful) {
                     alert('Create Check Out time successfully!');
                     query();
                 } else {
-                    alert(response.data.Message);
+                    alert(response.data.message);
                 }
             }).catch(axiosError).then(() => unblockUI());
         });
