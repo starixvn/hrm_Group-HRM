@@ -22,15 +22,13 @@ using Microsoft.AspNetCore.Hosting;
 namespace HRM.Services.Implement.Request;
 
 public class ChangeShiftRequestService(
-    AppSettings appSettings,
     IWebHostEnvironment env,
     IChangeShiftRequestRepository changeShiftRepository,
     IBaseService baseService,
     IEmailService emailService,
     IRequestMailService requestMailService,
     ILetstalkService letStalkService,
-    IUserControlSession userControlSession)
-    : IChangeShiftRequestService
+    IUserControlSession userControlSession) : IChangeShiftRequestService
 {
     private const string EmailTemplatePathForRequest = "EmailTemplates/ChangeShift.Request.txt";
     private const string EmailTemplatePathForCancel = "EmailTemplates/ChangeShift.Cancel.txt";
@@ -207,7 +205,7 @@ public class ChangeShiftRequestService(
                 request.Requester.Nickname,
                 forDate,
                 request.Remark,
-                appSettings.Domain);
+                userControlSession.Get<string>(SessionKey.CurrentDomain));
 
             await Task.WhenAll(
                 emailService.SendEmailAsync(email.SendTo, email.SendCC, email.Subject, email.Body),
@@ -233,7 +231,7 @@ public class ChangeShiftRequestService(
                 request.Requester.Nickname,
                 forDate,
                 request.Remark,
-                appSettings.Domain);
+                userControlSession.Get<string>(SessionKey.CurrentDomain));
 
             await Task.WhenAll(
                 emailService.SendEmailAsync(email.SendTo, email.SendCC, email.Subject, email.Body),

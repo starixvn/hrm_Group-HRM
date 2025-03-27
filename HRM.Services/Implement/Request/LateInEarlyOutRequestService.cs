@@ -19,7 +19,6 @@ using Microsoft.AspNetCore.Hosting;
 namespace HRM.Services.Implement.Request;
 
 public class LateInEarlyOutRequestService(
-    AppSettings appSettings,
     IWebHostEnvironment env,
     ILateInEarlyOutRequestRepository lateInEarlyOutRequestRepository,
     IRequestMailService requestMailService,
@@ -109,7 +108,7 @@ public class LateInEarlyOutRequestService(
                 request.OnDate.ToDateMonthYearFormatedDate(),
                 request.RequestTypeId == (short)RequestType.LateIn ? request.LateInMins : request.EarlyOutMins,
                 request.Remark,
-                appSettings.Domain);
+                userControlSession.Get<string>(SessionKey.CurrentDomain));
 
             await emailService.SendEmailAsync(
                 email.SendTo,
@@ -140,7 +139,7 @@ public class LateInEarlyOutRequestService(
                 request.OnDate.ToDateMonthYearFormatedDate(),
                 request.RequestTypeId == (short)RequestType.LateIn ? request.LateInMins : request.EarlyOutMins,
                 request.Remark,
-                appSettings.Domain);
+                userControlSession.Get<string>(SessionKey.CurrentDomain));
 
             await emailService.SendEmailAsync(
                 email.SendTo,

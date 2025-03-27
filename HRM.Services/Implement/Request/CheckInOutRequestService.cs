@@ -19,15 +19,13 @@ using Microsoft.AspNetCore.Hosting;
 namespace HRM.Services.Implement.Request;
 
 public class CheckInOutRequestService(
-    AppSettings appSettings,
     IWebHostEnvironment env,
     ICheckInOutRequestRepository checkInOutRequestRepository,
     IBaseService baseService,
     IRequestMailService requestMailService,
     IEmailService emailService,
     ILetstalkService letStalkService,
-    IUserControlSession userControlSession)
-    : ICheckInOutRequestService
+    IUserControlSession userControlSession) : ICheckInOutRequestService
 {
     private const string EmailTemplatePathForRequest = "EmailTemplates/CheckInOut.Request.txt";
     private const string EmailTemplatePathForCancel = "EmailTemplates/CheckInOut.Cancel.txt";
@@ -109,7 +107,7 @@ public class CheckInOutRequestService(
                 request.ShiftName,
                 request.RequestTime.ToShortTime(),
                 request.Remark,
-                appSettings.Domain);
+                userControlSession.Get<string>(SessionKey.CurrentDomain));
 
             await emailService.SendEmailAsync(
                 email.SendTo,
@@ -141,7 +139,7 @@ public class CheckInOutRequestService(
                 request.ShiftName,
                 request.RequestTime.ToShortTime(),
                 request.Remark,
-                appSettings.Domain);
+                userControlSession.Get<string>(SessionKey.CurrentDomain));
 
             await emailService.SendEmailAsync(
                 email.SendTo,

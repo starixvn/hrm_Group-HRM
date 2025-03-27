@@ -77,6 +77,7 @@ public class AuthController(
             session.Set(SessionKey.IsShowLeftNavigation, true);
             session.Set(SessionKey.Employee, employee);
             session.Set(SessionKey.CurrentTimeZone, await GetClientTimeZoneAsync());
+            session.Set(SessionKey.CurrentDomain, GetDomainName(HttpContext));
 
             await DoLoginAsync(loginResult.UserId);
         }
@@ -132,5 +133,11 @@ public class AuthController(
         }
 
         return clientIp;
+    }
+
+    private static string GetDomainName(HttpContext httpContext)
+    {
+        var protocol = httpContext.Request.Headers["x-forwarded-proto"].ToString();
+        return $"{(!string.IsNullOrWhiteSpace(protocol) ? protocol : httpContext.Request.Scheme)}://{httpContext.Request.Host.Value}";
     }
 }

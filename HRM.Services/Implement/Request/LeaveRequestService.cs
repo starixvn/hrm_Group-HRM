@@ -23,7 +23,6 @@ using Microsoft.AspNetCore.Hosting;
 namespace HRM.Services.Implement.Request;
 
 public class LeaveRequestService(
-    AppSettings appSettings,
     IWebHostEnvironment env,
     ILeaveRequestRepository leaveRequestRepository,
     IRequestMailService requestMailService,
@@ -263,7 +262,7 @@ public class LeaveRequestService(
             forDate,
             criteria.LeaveTypeName,
             criteria.Remark,
-            appSettings.Domain);
+            userControlSession.Get<string>(SessionKey.CurrentDomain));
         if (!string.IsNullOrWhiteSpace(email.SendTo))
         {
             await emailService.SendEmailAsync(

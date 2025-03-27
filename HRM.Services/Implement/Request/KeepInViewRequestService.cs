@@ -19,15 +19,13 @@ using Microsoft.AspNetCore.Hosting;
 using Resources;
 
 public class KeepInViewRequestService(
-    AppSettings appSettings,
     IWebHostEnvironment env,
     IKeepInViewRequestRepository keepInViewRequestRepository,
     IBaseService baseService,
     IRequestMailService requestMailService,
     IEmailService emailService,
     ILetstalkService letstalkService,
-    IUserControlSession userControlSession)
-    : IKeepInViewRequestService
+    IUserControlSession userControlSession) : IKeepInViewRequestService
 {
     private const string EmailTemplatePathForRequest = "EmailTemplates/KeepInView.Request.txt";
     private const string EmailTemplatePathForCancel = "EmailTemplates/KeepInView.Cancel.txt";
@@ -110,7 +108,7 @@ public class KeepInViewRequestService(
                 request.Requester.Nickname,
                 request.OnDate.ToDateMonthYearFormatedDate(),
                 request.Remark,
-                appSettings.Domain);
+                userControlSession.Get<string>(SessionKey.CurrentDomain));
 
             await emailService.SendEmailAsync(
                 email.SendTo,
@@ -139,7 +137,7 @@ public class KeepInViewRequestService(
                 request.Requester.Nickname,
                 request.OnDate.ToDateMonthYearFormatedDate(),
                 request.Remark,
-                appSettings.Domain);
+                userControlSession.Get<string>(SessionKey.CurrentDomain));
 
             await emailService.SendEmailAsync(
                 email.SendTo,
