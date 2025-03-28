@@ -170,7 +170,7 @@ function axiosError(error) {
                 break;
         }
 
-        //window.location = resolveClientUrl(url);
+        window.location = resolveClientUrl(url);
     }
 }
 
