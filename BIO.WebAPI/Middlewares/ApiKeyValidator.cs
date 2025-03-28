@@ -17,6 +17,6 @@ public class ApiKeyValidator(IConfiguration configuration) : IApiKeyValidator
         }
 
         var apiKey = configuration.GetValue<string>("ApiKey");
-        return string.IsNullOrWhiteSpace(apiKey) && apiKey == userApiKey;
+        return !string.IsNullOrWhiteSpace(apiKey) && apiKey == userApiKey;
     }
 }
