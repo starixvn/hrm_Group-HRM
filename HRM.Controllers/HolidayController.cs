@@ -16,8 +16,6 @@ public class HolidayController(
     IUserControlSession session,
     IHolidayService holidayService) : BaseController(session)
 {
-    private readonly IUserControlSession session = session;
-
     [HttpGet]
     [HrmPermission(Policy.Read, FunctionKey.Holiday)]
     public async Task<IActionResult> Index(int? year)

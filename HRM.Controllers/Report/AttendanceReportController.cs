@@ -6,19 +6,19 @@ namespace HRM.Controllers.Report;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using GO.UserControl.Client.Core.Session;
 using Core;
 using Core.Constants;
+using GO.UserControl.Client.Core.Session;
 using HRM.Criteria.Report;
-using Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Services.Interfaces;
 
 [Route("report/attendance")]
 public class AttendanceReportController(
-    IUserControlSession userControlSession,
+    IUserControlSession session,
     IReportService reportService,
     IExportExcelAttendanceReportService excelService,
-    ITeamService teamService) : BaseController(userControlSession)
+    ITeamService teamService) : BaseController(session)
 {
     [HttpGet("")]
     [HttpGet("Index")]
@@ -33,7 +33,7 @@ public class AttendanceReportController(
             TeamIds = string.Join(",", teams.Select(x => x.Id)),
             DateOption = 0,
             ExcludeDeletedUsers = true,
-            SupervisorId = EmployeeSession.EmpId
+            SupervisorId = session.UserId
         };
 
         return View("~/Views/Report/Attendance/Index.cshtml", model);

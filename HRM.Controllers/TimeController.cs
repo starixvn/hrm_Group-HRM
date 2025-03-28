@@ -32,12 +32,12 @@ using ViewModels.Time;
 public class TimeController(
     AppSettings appSettings,
     IUserControlSettings userControlSettings,
-    IUserControlSession userControlSession,
+    IUserControlSession session,
     IBaseService baseService,
     IAuthService authService,
     ICryptoService cryptoService,
     IHRMAuthService hrmAuthService,
-    ILogger logger) : BaseController(userControlSession)
+    ILogger logger) : BaseController(session)
 {
     [AllowAnonymous]
     public async Task<IActionResult> CheckInOut()
@@ -50,8 +50,8 @@ public class TimeController(
 
         userControlSettings.SiteId = companySite.SiteId;
         userControlSettings.AccessToken = companySite.AccessToken;
-        userControlSession.Set(SessionKey.CurrentCompanyId, companySite.CompanyId);
-        userControlSession.Set(SessionKey.CurrentTimeZone, await GetClientTimeZoneAsync());
+        session.Set(SessionKey.CurrentCompanyId, companySite.CompanyId);
+        session.Set(SessionKey.CurrentTimeZone, await GetClientTimeZoneAsync());
 
         if (appSettings.WhitelistIPs.Equals("*"))
         {
@@ -131,7 +131,7 @@ public class TimeController(
     {
         if (criteria != null)
         {
-            criteria.ModifiedBy = EmployeeSession.EmpId;
+            criteria.ModifiedBy = session.UserId;
             criteria.ModifiedDate = DateTimeOffset.Now.DateTime;
         }
 
@@ -145,7 +145,7 @@ public class TimeController(
     {
         var criteria = new InsertCheckInOutRecordCriteria
         {
-            EmpId = EmployeeSession.EmpId,
+            EmpId = session.UserId,
             RecordTime = DateTimeOffset.Now.DateTime,
             InOutType = 0,
             IPAddress = GetClientIp(HttpContext),
@@ -160,7 +160,7 @@ public class TimeController(
     {
         var criteria = new InsertCheckInOutRecordCriteria
         {
-            EmpId = EmployeeSession.EmpId,
+            EmpId = session.UserId,
             RecordTime = DateTimeOffset.Now.DateTime,
             InOutType = 1,
             IPAddress = GetClientIp(HttpContext),
@@ -172,7 +172,7 @@ public class TimeController(
 
     private async Task<float> GetClientTimeZoneAsync()
     {
-        var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
+        var companyId = session.Get<short>(SessionKey.CurrentCompanyId);
         var criteria = new GetSystemConfigsByKeyCriteria
         {
             CompanyId = companyId,

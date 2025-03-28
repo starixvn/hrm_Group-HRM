@@ -13,17 +13,15 @@ using Services.Interfaces;
 using ViewModels.Department;
 
 public class DepartmentController(
-    IUserControlSession userControlSession,
+    IUserControlSession session,
     IDepartmentService departmentService,
     IUnitService unitService,
-    IBaseService baseService) : BaseController(userControlSession)
+    IBaseService baseService) : BaseController(session)
 {
-    private readonly IUserControlSession userControlSession = userControlSession;
-
     [HrmPermission(Policy.Read, FunctionKey.DepartmentManagement)]
     public ActionResult Index()
     {
-        var hasPermission = userControlSession.HasPermissionOnFunction(FunctionKey.DepartmentManagement, Policy.Host);
+        var hasPermission = session.HasPermissionOnFunction(FunctionKey.DepartmentManagement, Policy.Host);
         return View(hasPermission);
     }
 
@@ -63,7 +61,7 @@ public class DepartmentController(
             Name = model.Name,
             IsActive = model.IsActive,
             UnitId = model.UnitId,
-            ModifiedBy = userControlSession.UserId,
+            ModifiedBy = session.UserId,
             CompanyId = CurrentCompanyId
         };
         commandResult = await baseService.ExecuteNonQueryAsync(criteria);
@@ -111,7 +109,7 @@ public class DepartmentController(
             Name = model.Name,
             IsActive = model.IsActive,
             UnitId = model.UnitId,
-            ModifiedBy = userControlSession.UserId
+            ModifiedBy = session.UserId
         };
         commandResult = await baseService.ExecuteNonQueryAsync(criteria);
 
@@ -122,7 +120,7 @@ public class DepartmentController(
     [HrmPermission(Policy.Host, FunctionKey.DepartmentManagement)]
     public async Task<IActionResult> Delete([FromBody] DeleteDepartmentViewModel request)
     {
-        var commandResult = await departmentService.DeleteAsync(userControlSession.UserId, request.Id);
+        var commandResult = await departmentService.DeleteAsync(session.UserId, request.Id);
 
         return new JsonResult(commandResult);
     }

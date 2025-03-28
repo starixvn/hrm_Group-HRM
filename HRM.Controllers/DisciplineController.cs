@@ -20,12 +20,10 @@ using Services.Interfaces;
 using ViewModels.Discipline;
 
 public class DisciplineController(
-    IUserControlSession userControlSession,
+    IUserControlSession session,
     IDisciplineService disciplineService,
-    IBaseService baseService) : BaseController(userControlSession)
+    IBaseService baseService) : BaseController(session)
 {
-    private readonly IUserControlSession userControlSession = userControlSession;
-
     [HrmPermission(Policy.Read, FunctionKey.Discipline)]
     public async Task<IActionResult> DisciplineSummary(DisciplineSummaryViewModel model)
     {
@@ -37,8 +35,8 @@ public class DisciplineController(
             model.DateRange = GetDateRangeByQuarter();
         }
 
-        ViewBag.IsHost = userControlSession.HasPermissionOnFunction(FunctionKey.Discipline, Policy.Host);
-        ViewBag.IsHostOtherDiscipline = userControlSession.HasPermissionOnFunction(FunctionKey.OtherDiscipline, Policy.Host);
+        ViewBag.IsHost = session.HasPermissionOnFunction(FunctionKey.Discipline, Policy.Host);
+        ViewBag.IsHostOtherDiscipline = session.HasPermissionOnFunction(FunctionKey.OtherDiscipline, Policy.Host);
         return View(model);
     }
 
@@ -54,14 +52,14 @@ public class DisciplineController(
             IsLocal = model.IsLocal,
             EmployeeId = model.EmployeeId,
             ReasonId = model.ReasonId,
-            ApproverId = userControlSession.UserId,
+            ApproverId = session.UserId,
             IsShowAll = model.IsShowAll,
             CompanyId = CurrentCompanyId
         };
 
         var disciplines = await disciplineService.GetDisciplineSummaryAsync(criteria);
 
-        ViewBag.IsHost = userControlSession.HasPermissionOnFunction(FunctionKey.Discipline, Policy.Host);
+        ViewBag.IsHost = session.HasPermissionOnFunction(FunctionKey.Discipline, Policy.Host);
 
         return PartialView("_DisciplineSummaryGrid", disciplines);
     }
@@ -101,13 +99,13 @@ public class DisciplineController(
             EmployeeId = model.EmployeeId,
             ReasonId = model.ReasonId,
             HasIgnored = model.HasIgnored,
-            ApproverId = userControlSession.UserId,
+            ApproverId = session.UserId,
             CompanyId = CurrentCompanyId
         };
 
         var disciplines = await disciplineService.GetDisciplineDetailAsync(criteria);
-        ViewBag.HasPermissionToEdit = userControlSession.HasPermissionOnFunction(FunctionKey.Discipline, Policy.Host);
-        ViewBag.HasPermissionToUpdateOutOfControlReason = userControlSession.HasPermissionOnFunction(FunctionKey.UpdateOutOfControlReason, Policy.Host);
+        ViewBag.HasPermissionToEdit = session.HasPermissionOnFunction(FunctionKey.Discipline, Policy.Host);
+        ViewBag.HasPermissionToUpdateOutOfControlReason = session.HasPermissionOnFunction(FunctionKey.UpdateOutOfControlReason, Policy.Host);
 
         return PartialView("_DisciplineDetailGrid", disciplines);
     }
@@ -123,9 +121,9 @@ public class DisciplineController(
         };
 
         var otherDisciplines = await disciplineService.GetOtherDisciplineAsync(criteria);
-        var members = await disciplineService.GetMemberToAddOtherDisciplineAsync(userControlSession.UserId);
+        var members = await disciplineService.GetMemberToAddOtherDisciplineAsync(session.UserId);
         ViewBag.IsHost = members.Any(x => x.EmployeeId == employeeId)
-                         && userControlSession.HasPermissionOnFunction(FunctionKey.Discipline, Policy.Host);
+            && session.HasPermissionOnFunction(FunctionKey.Discipline, Policy.Host);
 
         return PartialView("_ViewOtherDiscipline", otherDisciplines);
     }
@@ -158,7 +156,7 @@ public class DisciplineController(
             DisciplineTypeId = model.DisciplineTypeId,
             Score = model.MinusScore,
             Comment = model.Comment,
-            ActorId = userControlSession.UserId
+            ActorId = session.UserId
         };
         var commandResult = await baseService.ExecuteNonQueryAsync(criteria);
 
@@ -169,7 +167,7 @@ public class DisciplineController(
     [HrmPermission(Policy.Host, FunctionKey.OtherDiscipline)]
     public async Task<string> DeleteOtherDiscipline(DeleteOtherDisciplineCriteria criteria)
     {
-        criteria.ActorId = userControlSession.UserId;
+        criteria.ActorId = session.UserId;
         var commandResult = await baseService.ExecuteNonQueryAsync(criteria);
 
         return !commandResult.IsSuccessful ? commandResult.Message : string.Empty;
@@ -185,8 +183,8 @@ public class DisciplineController(
         {
             IgnoreDetailXml = ignoreDetails.ToXML().ToString(),
             DisciplineIgnoreXml = disciplineIgnores.ToXML().ToString(),
-            HasUpdateOutOfControlReason = userControlSession.HasPermissionOnFunction(FunctionKey.UpdateOutOfControlReason, Policy.Host),
-            ActorId = userControlSession.UserId
+            HasUpdateOutOfControlReason = session.HasPermissionOnFunction(FunctionKey.UpdateOutOfControlReason, Policy.Host),
+            ActorId = session.UserId
         };
         var commandResult = await baseService.ExecuteNonQueryAsync(criteria);
 
@@ -195,7 +193,7 @@ public class DisciplineController(
 
     public async Task<IActionResult> GetMemberToAddOtherDiscipline(string keyword)
     {
-        var employees = await disciplineService.GetMemberToAddOtherDisciplineAsync(userControlSession.UserId, keyword);
+        var employees = await disciplineService.GetMemberToAddOtherDisciplineAsync(session.UserId, keyword);
 
         return Json(employees);
     }

@@ -16,11 +16,11 @@ using ViewModels;
 using ViewModels.Calendar;
 
 public class CalendarController(
-    IUserControlSession userControlSession,
+    IUserControlSession session,
     IWorkingCalendarService workingCalendarService,
     IShiftService shiftService,
     ICommonDataService commonDataService,
-    ITeamService teamService) : BaseController(userControlSession)
+    ITeamService teamService) : BaseController(session)
 {
     public async Task<IActionResult> GetShift(string query, bool isShowOff = false)
     {
@@ -39,7 +39,7 @@ public class CalendarController(
     {
         var criteria = new GetEmployeeCalendarByMonthCriteria
         {
-            EmpId = userControlSession.UserId,
+            EmpId = session.UserId,
             FromDate = date.FirstDayOfMonth(),
             ToDate = date.AddMonths(1).AddDays(-1).LastDayOfMonth(),
             CompanyId = CurrentCompanyId

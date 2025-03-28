@@ -25,16 +25,14 @@ using Services.Implement;
 using Services.Interfaces;
 
 public class LeaveController(
-    IUserControlSession userControlSession,
+    IUserControlSession session,
     ILeaveRequestService leaveRequestService,
     IRequestService requestService,
     IBaseService baseService,
     ICommonDataService commonDataService,
     IAttachFileService attachFileService,
-    IEmployeeService employeeService) : BaseController(userControlSession)
+    IEmployeeService employeeService) : BaseController(session)
 {
-    private readonly IUserControlSession userControlSession = userControlSession;
-
     [HttpGet]
     public async Task<IActionResult> EmployeeView(int? year)
     {
@@ -83,8 +81,8 @@ public class LeaveController(
             EnableSickLeaveBalance = setting.EnableSickLeaveBalance
         };
         ViewBag.IsTopManager = EmployeeSession.IsTopManager;
-        ViewBag.HasOnBehalfOthersPermission = userControlSession.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
-                                              || userControlSession.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);
+        ViewBag.HasOnBehalfOthersPermission = session.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
+            || session.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);
 
         return View(model);
     }
@@ -149,12 +147,11 @@ public class LeaveController(
         model.Files = (await attachFileService.GetInfoAttachFileAsync(id, $"{CurrentCompanyId}/requests")).Select(x => x.FileName).ToList();
         model.EnableHospitalizationLeaveBalance = setting.EnableHospitalizationLeaveBalance;
         model.EnableSickLeaveBalance = setting.EnableSickLeaveBalance;
-        
 
         ViewBag.IsView = false;
         ViewBag.IsTopManager = request.Requester.IsTopManager;
-        ViewBag.HasOnBehalfOthersPermission = userControlSession.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
-                                              || userControlSession.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);
+        ViewBag.HasOnBehalfOthersPermission = session.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
+            || session.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);
 
         return View(model);
     }
@@ -210,8 +207,8 @@ public class LeaveController(
         model.Approvers = supervisor.Approvers;
 
         ViewBag.IsView = true;
-        ViewBag.HasOnBehalfOthersPermission = userControlSession.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
-                                              || userControlSession.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);
+        ViewBag.HasOnBehalfOthersPermission = session.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
+            || session.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);
 
         return View(model);
     }

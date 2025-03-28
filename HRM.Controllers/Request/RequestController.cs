@@ -23,12 +23,12 @@ using Services.Implement;
 using Services.Interfaces;
 
 public class RequestController(
-    IUserControlSession userControlSession,
+    IUserControlSession session,
     IEmployeeService employeeService,
     IRequestService requestService,
     ICommonDataService commonDataService,
     ITeamService teamService,
-    IAttachFileService attachFileService) : BaseController(userControlSession)
+    IAttachFileService attachFileService) : BaseController(session)
 {
     private const string EmployeeRequestViewName = "EmployeeRequest";
 

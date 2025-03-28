@@ -21,15 +21,13 @@ using Newtonsoft.Json;
 using Services.Interfaces;
 
 public class CheckInOutController(
-    IUserControlSession userControlSession,
+    IUserControlSession session,
     ICheckInOutRequestService checkInOutRequestService,
     IRequestService requestService,
     IBaseService baseService,
     IShiftService shiftService,
-    IAttachFileService attachFileService) : BaseController(userControlSession)
+    IAttachFileService attachFileService) : BaseController(session)
 {
-    private readonly IUserControlSession userControlSession = userControlSession;
-
     [HttpGet]
     public async Task<IActionResult> EmployeeView(int? year)
     {
@@ -77,8 +75,8 @@ public class CheckInOutController(
         viewModel.Shift = shift == null ? string.Empty : shift.Name;
         ViewBag.Shift = shift;
         ViewBag.IsTopManager = EmployeeSession.IsTopManager;
-        ViewBag.HasOnBehalfRequestPermission = userControlSession.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
-                                               || userControlSession.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);
+        ViewBag.HasOnBehalfRequestPermission = session.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
+            || session.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);
 
         return View(viewModel);
     }

@@ -20,17 +20,15 @@ using ViewModels;
 using ViewModels.AnnualLeave;
 
 public class ReportController(
-    IUserControlSession userControlSession,
+    IUserControlSession session,
     IReportService reportService,
     ICommonDataService commonDataService,
-    ITeamService teamService) : BaseController(userControlSession)
+    ITeamService teamService) : BaseController(session)
 {
-    private readonly IUserControlSession userControlSession = userControlSession;
-
     [HrmPermission(Policy.Read, FunctionKey.ReportHome)]
     public ActionResult Index()
     {
-        var functions = userControlSession.Functions.Where(x => x.IsRead || x.IsHost);
+        var functions = session.Functions.Where(x => x.IsRead || x.IsHost);
         return View(functions);
     }
 
@@ -40,7 +38,7 @@ public class ReportController(
         var model = new TimesheetViewModel
         {
             Year = DateTimeOffset.Now.DateTime.ToClientTimeZone().Year,
-            EmpId = EmployeeSession.EmpId,
+            EmpId = session.UserId,
             IsHavePrivilegeCreateCheckInOutRecord = await IsPrivilegeCreateCheckInOut()
         };
 
@@ -86,11 +84,11 @@ public class ReportController(
     {
         model.CurrentPage = Constants.CurrentPage;
         model.ItemsPerPage = Constants.ItemsPerPage;
-        var supervisors = await teamService.GetBySupervisorAsync(EmployeeSession.EmpId);
+        var supervisors = await teamService.GetBySupervisorAsync(session.UserId);
         model.TeamIds = string.Join(",", supervisors.Select(x => x.Id));
 
-        ViewBag.HasPermission = userControlSession.HasPermissionOnFunction(FunctionKey.TimeRecord, Policy.Read)
-            || userControlSession.HasPermissionOnFunction(FunctionKey.TimeRecord, Policy.Host);
+        ViewBag.HasPermission = session.HasPermissionOnFunction(FunctionKey.TimeRecord, Policy.Read)
+            || session.HasPermissionOnFunction(FunctionKey.TimeRecord, Policy.Host);
 
         return View(model);
     }
@@ -99,10 +97,10 @@ public class ReportController(
     public async Task<PartialViewResult> TimeRecordDetail(TimeRecordViewModel model)
     {
         int? employeeId = null;
-        if (!userControlSession.HasPermissionOnFunction(FunctionKey.TimeRecord, Policy.Read)
-            && !userControlSession.HasPermissionOnFunction(FunctionKey.TimeRecord, Policy.Host))
+        if (!session.HasPermissionOnFunction(FunctionKey.TimeRecord, Policy.Read)
+            && !session.HasPermissionOnFunction(FunctionKey.TimeRecord, Policy.Host))
         {
-            employeeId = EmployeeSession.EmpId;
+            employeeId = session.UserId;
         }
         var criteria = new GetTimeRecordCriteria
         {
@@ -113,10 +111,10 @@ public class ReportController(
             IsLocal = model.IsLocal,
             PageIndex = model.CurrentPage - 1,
             ItemsPerPage = model.ItemsPerPage,
-            SupervisorId = EmployeeSession.EmpId
+            SupervisorId = session.UserId
         };
         var timeRecords = await reportService.GetTimeRecords(criteria);
-        ViewBag.HasPermission = userControlSession.HasPermissionOnFunction(FunctionKey.TimeRecord, Policy.Host);
+        ViewBag.HasPermission = session.HasPermissionOnFunction(FunctionKey.TimeRecord, Policy.Host);
 
         var pagerOption = new PagerOptionModel
         {
@@ -149,7 +147,7 @@ public class ReportController(
             IsLocal = model.IsLocal,
             EmployeeId = model.EmployeeId,
             MinTotalLeave = model.MinTotalLeave,
-            SupervisorId = EmployeeSession.EmpId
+            SupervisorId = session.UserId
         };
 
         var weekendLeaves = await reportService.GetWeekendLeaveSummaryAsync(criteria);
@@ -177,7 +175,7 @@ public class ReportController(
             IsLocal = model.IsLocal,
             EmployeeId = model.EmployeeId,
             LeaveTypeId = model.LeaveTypeId,
-            SupervisorId = EmployeeSession.EmpId
+            SupervisorId = session.UserId
         };
 
         var weekendLeaveDetails = await reportService.GetWeekendLeaveDetailAsync(criteria);
@@ -196,8 +194,8 @@ public class ReportController(
             TeamIds = string.Join(",", teams.Select(x => x.Id))
         };
 
-        ViewBag.HasPermission = userControlSession.HasPermissionOnFunction(FunctionKey.CanFilterUnpaidLeaveSummary, Policy.Read)
-            || userControlSession.HasPermissionOnFunction(FunctionKey.CanFilterUnpaidLeaveSummary, Policy.Host);
+        ViewBag.HasPermission = session.HasPermissionOnFunction(FunctionKey.CanFilterUnpaidLeaveSummary, Policy.Read)
+            || session.HasPermissionOnFunction(FunctionKey.CanFilterUnpaidLeaveSummary, Policy.Host);
 
         return View(model);
     }
@@ -211,7 +209,7 @@ public class ReportController(
             EmpId = model.EmployeeId > 0 ? new int?(model.EmployeeId) : null,
             TeamIds = model.TeamIds,
             IsLocal = (byte?)model.Category,
-            SupervisorId = EmployeeSession.EmpId,
+            SupervisorId = session.UserId,
             LeaveType = model.LeaveType,
             CompanyId = CurrentCompanyId
         };
@@ -297,10 +295,9 @@ public class ReportController(
     {
         var criteria = new GetPrivilegeCreateCheckInOutRecordCriteria
         {
-            EmpId = EmployeeSession.EmpId
+            EmpId = session.UserId
         };
 
-        var isPrivilegeCreateCheckInOut = await reportService.GetIsPrivilegeCreateCheckInOutAsync(criteria);
-        return isPrivilegeCreateCheckInOut;
+        return await reportService.GetIsPrivilegeCreateCheckInOutAsync(criteria);
     }
 }

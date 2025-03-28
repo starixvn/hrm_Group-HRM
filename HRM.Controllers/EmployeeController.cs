@@ -44,8 +44,6 @@ public class EmployeeController(
     IRoleService roleService,
     IMinIOService minIOService) : BaseController(session)
 {
-    private readonly IUserControlSession session = session;
-
     [HrmPermission(Policy.Read, FunctionKey.ContactList)]
     public async Task<IActionResult> Index()
     {

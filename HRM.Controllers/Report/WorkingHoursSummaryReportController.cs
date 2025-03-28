@@ -17,13 +17,11 @@ namespace HRM.Controllers.Report;
 
 [HrmPermission(Policy.Read, FunctionKey.AttendanceStatisticReport)]
 public class WorkingHoursSummaryReportController(
-    IUserControlSession userControlSession,
+    IUserControlSession session,
     IWorkingHoursSummaryReportService reportService,
     IOvertimeReportService overtimeReportService,
-    ITeamService teamService) : BaseController(userControlSession)
+    ITeamService teamService) : BaseController(session)
 {
-    private readonly IUserControlSession userControlSession = userControlSession;
-
     [HttpGet]
     public async Task<IActionResult> Index(WorkingHoursSummaryViewModel model)
     {
@@ -32,7 +30,7 @@ public class WorkingHoursSummaryReportController(
         var param = new GetWorkingHoursSummaryParam
         {
             CompanyId = CurrentCompanyId,
-            ActorId = EmployeeSession.EmpId,
+            ActorId = session.UserId,
             FromDate = model.FromDate,
             ToDate = model.ToDate,
             TeamIds = model.TeamIds,
@@ -42,7 +40,7 @@ public class WorkingHoursSummaryReportController(
         };
         model.WorkingHours = await reportService.GetWorkingHoursSummaryAsync(param);
 
-        ViewBag.IsHR = userControlSession.HasPermissionOnFunction(FunctionKey.ProcessRequest, Policy.Host);
+        ViewBag.IsHR = session.HasPermissionOnFunction(FunctionKey.ProcessRequest, Policy.Host);
 
         return View("~/Views/Report/WorkingHoursSummary.cshtml", model);
     }
@@ -53,7 +51,7 @@ public class WorkingHoursSummaryReportController(
         var param = new GetWorkingHoursSummaryParam
         {
             CompanyId = CurrentCompanyId,
-            ActorId = EmployeeSession.EmpId,
+            ActorId = session.UserId,
             FromDate = model.FromDate,
             ToDate = model.ToDate,
             TeamIds = model.TeamIds,
@@ -73,7 +71,7 @@ public class WorkingHoursSummaryReportController(
         var param = new GetDailyOvertimeDetailsParam
         {
             CompanyId = CurrentCompanyId,
-            ActorId = EmployeeSession.EmpId,
+            ActorId = session.UserId,
             FromDate = model.FromDate,
             ToDate = model.ToDate,
             TeamIds = model.TeamIds,

@@ -19,17 +19,15 @@ using Services.ExportExcel;
 using Services.Implement;
 
 public class JobTitleController(
-    IUserControlSession userControlSession,
+    IUserControlSession session,
     ICommonDataService commonDataService,
     IJobTitleExportService jobTitleExportService,
-    IBaseService baseService) : BaseExportController(userControlSession)
+    IBaseService baseService) : BaseExportController(session)
 {
-    private readonly IUserControlSession userControlSession = userControlSession;
-
     [HrmPermission(Policy.Read, FunctionKey.JobTitleManagement)]
     public IActionResult JobTitleManagement()
     {
-        var hasPermission = userControlSession.HasPermissionOnFunction(FunctionKey.JobTitleManagement, Policy.Host);
+        var hasPermission = session.HasPermissionOnFunction(FunctionKey.JobTitleManagement, Policy.Host);
         return View(hasPermission);
     }
 

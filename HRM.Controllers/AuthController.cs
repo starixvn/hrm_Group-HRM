@@ -12,11 +12,11 @@ using GO.UserControl.Client.Core.Models.Auth;
 using GO.UserControl.Client.Core.Services;
 using GO.UserControl.Client.Core.Session;
 using HRM.Core.Services;
-using HRM.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Models;
 using Newtonsoft.Json;
 using Services.Interfaces;
 using ViewModels.Employee;
@@ -134,7 +134,6 @@ public class AuthController(
         var data = result == null ? null : JsonConvert.DeserializeObject<MailSetting>(result);
         return data;
     }
-
 
     private static string GetClientIp(HttpContext httpContext)
     {

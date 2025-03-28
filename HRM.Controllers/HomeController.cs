@@ -15,8 +15,6 @@ public class HomeController(
     IDashboardService dashboardService,
     IUserService userService) : BaseController(session)
 {
-    private readonly IUserControlSession session = session;
-
     public async Task<IActionResult> Index()
     {
         var today = DateTimeOffset.Now.DateTime;

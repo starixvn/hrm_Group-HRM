@@ -1,39 +1,36 @@
-﻿using HRM.Models.Section;
-using HRM.Models.Unit;
-
-namespace HRM.Controllers;
+﻿namespace HRM.Controllers;
 
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using GO.UserControl.Client.Core.Enumerables;
-using GO.UserControl.Client.Core.Session;
 using Core.Constants;
 using Core.Filters;
-using HRM.Core.Services;
-using HRM.Core.Models;
 using Criteria.Section;
+using GO.UserControl.Client.Core.Enumerables;
+using GO.UserControl.Client.Core.Session;
+using HRM.Core.Models;
+using HRM.Core.Services;
+using Microsoft.AspNetCore.Mvc;
 using Models;
+using Models.Section;
+using Models.Unit;
 using Services.Implement;
 using Services.Interfaces;
 using ViewModels;
 using ViewModels.Section;
-using Microsoft.AspNetCore.Mvc;
 
 public class SectionController(
-    IUserControlSession userControlSession,
+    IUserControlSession session,
     IUnitService unitService,
     IDepartmentService departmentService,
     ICommonDataService commonDataService,
     ISectionService sectionService,
-    IBaseService baseService) : BaseController(userControlSession)
+    IBaseService baseService) : BaseController(session)
 {
-    private readonly IUserControlSession userControlSession = userControlSession;
-
     [HrmPermission(Policy.Read, FunctionKey.SectionManagement)]
     public ActionResult Index()
     {
-        var hasPermission = userControlSession.HasPermissionOnFunction(FunctionKey.SectionManagement, Policy.Host);
+        var hasPermission = session.HasPermissionOnFunction(FunctionKey.SectionManagement, Policy.Host);
 
         return View(hasPermission);
     }
@@ -75,7 +72,7 @@ public class SectionController(
             Name = model.Name,
             IsActive = model.IsActive,
             DepartmentId = model.DepartmentId,
-            ModifiedBy = EmployeeSession.EmpId,
+            ModifiedBy = session.UserId,
             CompanyId = CurrentCompanyId
         };
         commandResult = await baseService.ExecuteNonQueryAsync(criteria);
@@ -123,7 +120,7 @@ public class SectionController(
             Name = model.Name,
             IsActive = model.IsActive,
             DepartmentId = model.DepartmentId,
-            ModifiedBy = EmployeeSession.EmpId
+            ModifiedBy = session.UserId
         };
         commandResult = await baseService.ExecuteNonQueryAsync(criteria);
 
@@ -134,7 +131,7 @@ public class SectionController(
     [HrmPermission(Policy.Host, FunctionKey.SectionManagement)]
     public async Task<IActionResult> Delete([FromRoute] DeleteSectionViewModel request)
     {
-        var commandResult = await sectionService.DeleteAsync(EmployeeSession.EmpId, request.Id);
+        var commandResult = await sectionService.DeleteAsync(session.UserId, request.Id);
 
         return new JsonResult(commandResult);
     }

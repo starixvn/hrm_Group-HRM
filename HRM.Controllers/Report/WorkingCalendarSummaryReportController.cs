@@ -16,8 +16,8 @@ namespace HRM.Controllers.Report;
 
 [HrmPermission(Policy.Read, FunctionKey.WorkingCalendarReport)]
 public class WorkingCalendarSummaryReportController(
-    IUserControlSession userControlSession,
-    IWorkingCalendarSummaryReportService reportService) : BaseController(userControlSession)
+    IUserControlSession session,
+    IWorkingCalendarSummaryReportService reportService) : BaseController(session)
 {
     [HttpGet]
     public ActionResult Index()
@@ -39,7 +39,7 @@ public class WorkingCalendarSummaryReportController(
         var param = new GetWorkingHoursSummaryParam
         {
             CompanyId = CurrentCompanyId,
-            ActorId = EmployeeSession.EmpId,
+            ActorId = session.UserId,
             FromDate = model.FromDate,
             ToDate = model.ToDate,
             TeamIds = model.TeamIds,
@@ -61,7 +61,7 @@ public class WorkingCalendarSummaryReportController(
         var param = new GetWorkingHoursSummaryParam
         {
             CompanyId = CurrentCompanyId,
-            ActorId = EmployeeSession.EmpId,
+            ActorId = session.UserId,
             FromDate = model.FromDate,
             ToDate = model.ToDate,
             TeamIds = model.TeamIds,

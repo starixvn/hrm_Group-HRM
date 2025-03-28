@@ -4,33 +4,31 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using GO.UserControl.Client.Core.Enumerables;
-using GO.UserControl.Client.Core.Session;
 using Core;
 using Core.Constants;
 using Core.Enums;
+using GO.UserControl.Client.Core.Enumerables;
+using GO.UserControl.Client.Core.Session;
+using HRM.Criteria.Request.ChangeShift;
 using HRM.Models.Request;
 using HRM.Models.Request.ChangeShift;
-using Models.ScheduleArrange;
-using Models.Supervisor;
-using Resources;
 using HRM.Services.Interfaces.Request;
 using HRM.ViewModels.Request;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Services.Interfaces;
+using Models.ScheduleArrange;
+using Models.Supervisor;
 using Newtonsoft.Json;
-using HRM.Criteria.Request.ChangeShift;
+using Resources;
+using Services.Interfaces;
 
 public class ChangeShiftController(
-    IUserControlSession userControlSession,
+    IUserControlSession session,
     IChangeShiftRequestService changeShiftService,
     IRequestService requestService,
     IShiftService shiftService,
-    IAttachFileService attachFileService) : BaseController(userControlSession)
+    IAttachFileService attachFileService) : BaseController(session)
 {
-    private readonly IUserControlSession userControlSession = userControlSession;
-
     [HttpGet]
     public async Task<IActionResult> EmployeeView(int? year)
     {
@@ -71,8 +69,8 @@ public class ChangeShiftController(
         };
         ViewBag.IsHost = true;
         ViewBag.IsTopManager = EmployeeSession.IsTopManager;
-        ViewBag.HasOnBehalfRequestPermission = userControlSession.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
-                                               || userControlSession.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);
+        ViewBag.HasOnBehalfRequestPermission = session.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
+            || session.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);
         return View(model);
     }
 

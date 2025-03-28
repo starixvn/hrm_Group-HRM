@@ -3,23 +3,22 @@ using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
 using HRM.Core.Constants;
 using HRM.Core.Filters;
+using HRM.Core.Models;
 using HRM.Criteria.Unit;
+using HRM.Services.Interfaces;
 using HRM.ViewModels.Unit;
 using Microsoft.AspNetCore.Mvc;
-using HRM.Core.Models;
-using HRM.Services.Interfaces;
 
 namespace HRM.Controllers;
 
-public class UnitController(IUserControlSession userControlSession,
-    IUnitService unitService) : BaseController(userControlSession)
+public class UnitController(
+    IUserControlSession session,
+    IUnitService unitService) : BaseController(session)
 {
-    private readonly IUserControlSession userControlSession = userControlSession;
-
     [HrmPermission(Policy.Read, FunctionKey.UnitManagement)]
     public ActionResult Index()
     {
-        var hasPermission = userControlSession.HasPermissionOnFunction(FunctionKey.UnitManagement, Policy.Host);
+        var hasPermission = session.HasPermissionOnFunction(FunctionKey.UnitManagement, Policy.Host);
         return View(hasPermission);
     }
 
@@ -52,7 +51,7 @@ public class UnitController(IUserControlSession userControlSession,
             Code = model.Code,
             Name = model.Name,
             IsActive = model.IsActive,
-            CreatedBy = EmployeeSession.EmpId,
+            CreatedBy = session.UserId,
             CompanyId = CurrentCompanyId
         };
         commandResult = await unitService.CreateAsync(criteria);
@@ -88,7 +87,7 @@ public class UnitController(IUserControlSession userControlSession,
             Code = model.Code,
             Name = model.Name,
             IsActive = model.IsActive,
-            ModifiedBy = EmployeeSession.EmpId
+            ModifiedBy = session.UserId
         };
         commandResult = await unitService.EditAsync(criteria);
         return new JsonResult(commandResult);
@@ -98,7 +97,7 @@ public class UnitController(IUserControlSession userControlSession,
     [HrmPermission(Policy.Host, FunctionKey.UnitManagement)]
     public async Task<IActionResult> Delete([FromBody] DeleteUnitCriteria criteria)
     {
-        criteria.ModifiedBy = EmployeeSession.EmpId;
+        criteria.ModifiedBy = session.UserId;
         var commandResult = await unitService.DeleteAsync(criteria);
 
         return new JsonResult(commandResult);

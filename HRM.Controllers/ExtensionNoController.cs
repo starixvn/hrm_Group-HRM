@@ -23,8 +23,6 @@ public class ExtensionNoController(
     ICommonDataService commonDataService,
     IBaseService baseService) : BaseController(session)
 {
-    private readonly IUserControlSession session = session;
-
     [HrmPermission(Policy.Read, FunctionKey.ExtensionNumber)]
     public IActionResult Index()
     {

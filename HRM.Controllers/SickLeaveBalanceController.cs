@@ -22,14 +22,12 @@ using ViewModels.HospitalizationLeave;
 
 [HrmPermission(Policy.Read, FunctionKey.SickLeaveBalance)]
 public class SickLeaveBalanceController(
-    IUserControlSession userControlSession,
+    IUserControlSession session,
     IEmployeeService employeeService,
     ITeamService teamService,
     IBaseService baseService,
-    IExportExcelService exportExcelService) : BaseExportController(userControlSession)
+    IExportExcelService exportExcelService) : BaseExportController(session)
 {
-    private readonly IUserControlSession userControlSession = userControlSession;
-
     public async Task<IActionResult> Index(
         string teamIds,
         string employee,
@@ -44,7 +42,7 @@ public class SickLeaveBalanceController(
             Employee = employee,
             EmployeeId = employeeId,
             IsLocal = isLocal,
-            IsHost = userControlSession.HasPermissionOnFunction(FunctionKey.SickLeaveBalance, Policy.Host)
+            IsHost = session.HasPermissionOnFunction(FunctionKey.SickLeaveBalance, Policy.Host)
         };
 
         return await Index(model);
@@ -53,7 +51,7 @@ public class SickLeaveBalanceController(
     [HttpPost]
     public async Task<IActionResult> Index(HospitalizationLeaveBalanceViewModel model)
     {
-        model.Teams = await teamService.GetBySupervisorAsync(EmployeeSession.EmpId);
+        model.Teams = await teamService.GetBySupervisorAsync(session.UserId);
         model.TeamIds = !string.IsNullOrWhiteSpace(model.TeamIds) ? model.TeamIds : string.Join(",", model.Teams.Select(x => x.Id));
         var criteria = new GetSummaryReportCriteria
         {
@@ -61,7 +59,7 @@ public class SickLeaveBalanceController(
             EmployeeId = model.EmployeeId,
             TeamIds = model.TeamIds,
             IsLocal = model.IsLocal,
-            SupervisorId = EmployeeSession.EmpId,
+            SupervisorId = session.UserId,
             CompanyId = CurrentCompanyId
         };
         model.Employees = await baseService.GetDataAsync<HospitalizationLeaveBalanceSummaryReport>(criteria);
@@ -80,7 +78,7 @@ public class SickLeaveBalanceController(
             CreditDays = model.CreditDays,
             DeductDays = model.DeductDays,
             FromDate = model.AffectedFrom,
-            ActorId = EmployeeSession.EmpId
+            ActorId = session.UserId
         };
         var commandResult = await baseService.ExecuteNonQueryAsync(criteria);
 
@@ -91,7 +89,7 @@ public class SickLeaveBalanceController(
     [HrmPermission(Policy.Host, FunctionKey.SickLeaveBalance)]
     public async Task<IActionResult> Reset([FromBody] ResetMultipleTransactionCriteria criteria)
     {
-        criteria.ActorId = EmployeeSession.EmpId;
+        criteria.ActorId = session.UserId;
         criteria.Year = DateTimeOffset.Now.DateTime.ToClientTimeZone().AddYears(-1).Year;
         criteria.CompanyId = CurrentCompanyId;
         var commandResult = await baseService.ExecuteNonQueryAsync(criteria);
@@ -159,7 +157,7 @@ public class SickLeaveBalanceController(
                 DeductDays = model.DeductDays,
                 CreditDays = model.CreditDays,
                 CreatedDate = DateTimeOffset.Now.DateTime,
-                CreatedBy = EmployeeSession.EmpId
+                CreatedBy = session.UserId
             };
             var commandResult = await baseService.ExecuteNonQueryAsync(criteria);
 
@@ -209,7 +207,7 @@ public class SickLeaveBalanceController(
             EmployeeId = model.EmployeeId,
             TeamIds = model.TeamIds,
             IsLocal = model.IsLocal,
-            SupervisorId = EmployeeSession.EmpId,
+            SupervisorId = session.UserId,
             CompanyId = CurrentCompanyId
         };
         var employees = await baseService.GetDataAsync<HospitalizationLeaveBalanceSummaryReport>(criteria);
@@ -240,7 +238,7 @@ public class SickLeaveBalanceController(
             DeductDays = model.DeductDays,
             CreditDays = model.CreditDays,
             ModifiedDate = DateTimeOffset.Now.DateTime,
-            ModifiedBy = EmployeeSession.EmpId
+            ModifiedBy = session.UserId
         };
         var commandResult = await baseService.ExecuteNonQueryAsync(criteria);
         if (commandResult.IsSuccessful)
@@ -261,7 +259,7 @@ public class SickLeaveBalanceController(
         {
             TransId = model.TransId,
             ModifiedDate = DateTimeOffset.Now.DateTime,
-            ModifiedBy = EmployeeSession.EmpId
+            ModifiedBy = session.UserId
         };
         var commandResult = await baseService.ExecuteNonQueryAsync(criteria);
         if (commandResult.IsSuccessful)

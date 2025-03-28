@@ -21,15 +21,13 @@ using Newtonsoft.Json;
 namespace HRM.Controllers.Request;
 
 public class KeepInViewController(
-    IUserControlSession userControlSession,
+    IUserControlSession session,
     IKeepInViewRequestService keepInViewRequestService,
     IRequestService requestService,
     IBaseService baseService,
     IAttachFileService attachFileService,
-    IShiftService shiftService) : BaseController(userControlSession)
+    IShiftService shiftService) : BaseController(session)
 {
-    private readonly IUserControlSession userControlSession = userControlSession;
-
     [HttpGet]
     public async Task<IActionResult> EmployeeView(int? year)
     {
@@ -71,8 +69,8 @@ public class KeepInViewController(
             MaxDate = today.FirstDayOfMonth().AddMonths(2).AddDays(-1)
         };
         ViewBag.IsTopManager = EmployeeSession.IsTopManager;
-        ViewBag.HasOnBehalfRequestPermission = userControlSession.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
-                                               || userControlSession.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);
+        ViewBag.HasOnBehalfRequestPermission = session.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
+            || session.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);
         ViewBag.Shifts = await shiftService.GetAllAsync();
 
         return View(model);

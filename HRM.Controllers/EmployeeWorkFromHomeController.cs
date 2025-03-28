@@ -25,7 +25,6 @@ namespace HRM.Controllers;
 
 public class EmployeeWorkFromHomeController : BaseController
 {
-    private readonly IUserControlSession session;
     private readonly IBaseService baseService;
     private readonly IAttachFileService attachFileService;
     private readonly string uploadFolderPath;

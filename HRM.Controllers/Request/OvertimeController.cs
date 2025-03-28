@@ -22,15 +22,13 @@ using Services.Interfaces;
 using ViewModels.Overtime;
 
 public class OvertimeController(
-    IUserControlSession userControlSession,
+    IUserControlSession session,
     IEmployeeService employeeService,
     IRequestService requestService,
     IOvertimeRequestService overtimeService,
     IExportOvertimeService exportOvertimeService,
-    ITeamService teamService) : BaseController(userControlSession)
+    ITeamService teamService) : BaseController(session)
 {
-    private readonly IUserControlSession userControlSession = userControlSession;
-
     [HttpGet]
     public async Task<IActionResult> EmployeeView(MonthlyOvertimeRequestViewModel model)
     {
@@ -85,8 +83,8 @@ public class OvertimeController(
         model.TeamIds ??= string.Join(",", teams.Select(x => x.Id));
         model.MemberRequests = await GetMemberOvertimeRequest(model);
         ViewBag.CurrentUserId = EmployeeSession.EmpId;
-        ViewBag.IsVerifier = userControlSession.HasPermissionOnFunction(FunctionKey.VerifyOvertime, Policy.Host);
-        ViewBag.IsApprover = userControlSession.HasPermissionOnFunction(FunctionKey.ApproveOvertime, Policy.Host);
+        ViewBag.IsVerifier = session.HasPermissionOnFunction(FunctionKey.VerifyOvertime, Policy.Host);
+        ViewBag.IsApprover = session.HasPermissionOnFunction(FunctionKey.ApproveOvertime, Policy.Host);
 
         return View(model);
     }

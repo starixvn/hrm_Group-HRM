@@ -18,11 +18,11 @@ namespace HRM.Controllers.Report;
 
 [HrmPermission(Policy.Read, FunctionKey.ShiftStatisticReport)]
 public class ShiftStatisticReportController(
-    IUserControlSession userControlSession,
+    IUserControlSession session,
     IShiftStatisticReportService statisticReportService,
     IShiftService shiftService,
     IExportExcelShiftStatisticService exportExcelService,
-    ITeamService teamService) : BaseController(userControlSession)
+    ITeamService teamService) : BaseController(session)
 {
     public IActionResult Index()
     {
@@ -40,7 +40,7 @@ public class ShiftStatisticReportController(
     {
         var param = new GetShiftStatisticParam
         {
-            SupervisorId = EmployeeSession.EmpId,
+            SupervisorId = session.UserId,
             FromDate = model.FromDate,
             ToDate = model.ToDate,
             TeamIds = model.TeamIds,
@@ -63,7 +63,7 @@ public class ShiftStatisticReportController(
         var teams = await teamService.GetAllAsync();
         var param = new GetShiftStatisticDetailParam
         {
-            SupervisorId = EmployeeSession.EmpId,
+            SupervisorId = session.UserId,
             WorkDate = model.WorkDate,
             ShiftId = model.ShiftId,
             EmployeeId = model.EmployeeId,
@@ -80,7 +80,7 @@ public class ShiftStatisticReportController(
     {
         var param = new GetShiftStatisticDetailParam
         {
-            SupervisorId = EmployeeSession.EmpId,
+            SupervisorId = session.UserId,
             WorkDate = model.WorkDate,
             ShiftId = model.ShiftId,
             EmployeeId = model.EmployeeId,
@@ -88,7 +88,6 @@ public class ShiftStatisticReportController(
             IsShowWholeCompany = model.IsShowWholeCompany,
             IsLocal = model.IsLocal,
             CompanyId = CurrentCompanyId
-            
         };
 
         var details = await statisticReportService.GetShiftStatisticDetailAsync(param);
@@ -101,7 +100,7 @@ public class ShiftStatisticReportController(
     {
         var param = new GetShiftStatisticParam
         {
-            SupervisorId = EmployeeSession.EmpId,
+            SupervisorId = session.UserId,
             FromDate = model.FromDate,
             ToDate = model.ToDate,
             TeamIds = model.TeamIds,

@@ -22,8 +22,6 @@ public class MessageController(
     ICommonDataService commonDataService,
     IEmployeeService employeeService) : BaseController(session)
 {
-    private readonly IUserControlSession session = session;
-
     [HrmPermission(Policy.Read, FunctionKey.Message)]
     public async Task<ActionResult> Index()
     {

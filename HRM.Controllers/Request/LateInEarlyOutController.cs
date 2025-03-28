@@ -20,13 +20,12 @@ using Newtonsoft.Json;
 using Services.Interfaces;
 
 public class LateInEarlyOutController(
-    IUserControlSession userControlSession,
+    IUserControlSession session,
     ILateInEarlyOutRequestService lateInEarlyOutRequestService,
     IRequestService requestService,
     IBaseService baseService,
-    IAttachFileService attachFileService) : BaseController(userControlSession)
+    IAttachFileService attachFileService) : BaseController(session)
 {
-    private readonly IUserControlSession userControlSession = userControlSession;
     private const int DefaultMinutes = 60;
 
     [HttpGet]
@@ -67,8 +66,8 @@ public class LateInEarlyOutController(
             Approvers = supervisor.Approvers
         };
         ViewBag.IsTopManager = EmployeeSession.IsTopManager;
-        ViewBag.HasOnBehalfRequestPermission = userControlSession.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
-                                               || userControlSession.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);
+        ViewBag.HasOnBehalfRequestPermission = session.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
+            || session.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);
 
         return View(viewModel);
     }

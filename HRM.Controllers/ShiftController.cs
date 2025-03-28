@@ -1,24 +1,21 @@
-﻿using HRM.Models.Shifts;
-using HRM.Services.Interfaces;
-
-namespace HRM.Controllers;
+﻿namespace HRM.Controllers;
 
 using System;
 using System.Threading.Tasks;
-using GO.UserControl.Client.Core.Enumerables;
-using GO.UserControl.Client.Core.Session;
 using Core.Constants;
 using Core.Enums;
 using Core.Filters;
-using ViewModels.Shifts;
+using GO.UserControl.Client.Core.Enumerables;
+using GO.UserControl.Client.Core.Session;
 using Microsoft.AspNetCore.Mvc;
+using Models.Shifts;
+using Services.Interfaces;
+using ViewModels.Shifts;
 
 public class ShiftController(
-    IUserControlSession userControlSession,
-    IShiftService shiftService) : BaseController(userControlSession)
+    IUserControlSession session,
+    IShiftService shiftService) : BaseController(session)
 {
-    private readonly IUserControlSession userControlSession = userControlSession;
-
     [HrmPermission(Policy.Read, FunctionKey.ShiftManagement)]
     public async Task<IActionResult> Index(int? statusId = (int)ShiftStatus.Active)
     {
@@ -27,7 +24,7 @@ public class ShiftController(
             StatusId = statusId ?? 0,
             Shifts = await shiftService.GetAllAsync(statusId ?? 0)
         };
-        ViewBag.IsHost = userControlSession.HasPermissionOnFunction(FunctionKey.ShiftManagement, Policy.Host);
+        ViewBag.IsHost = session.HasPermissionOnFunction(FunctionKey.ShiftManagement, Policy.Host);
 
         return View(model);
     }
@@ -46,7 +43,7 @@ public class ShiftController(
     {
         if (model != null && ModelState.IsValid)
         {
-            var commandResult = await shiftService.CreateAsync(EmployeeSession.EmpId, model);
+            var commandResult = await shiftService.CreateAsync(session.UserId, model);
             if (commandResult.IsSuccessful)
             {
                 return RedirectToAction("Index", "Shift");
@@ -84,7 +81,7 @@ public class ShiftController(
         }
 
         ViewBag.Successed = false;
-        ViewBag.IsHost = userControlSession.HasPermissionOnFunction(FunctionKey.ShiftManagement, Policy.Host);
+        ViewBag.IsHost = session.HasPermissionOnFunction(FunctionKey.ShiftManagement, Policy.Host);
 
         return View(model);
     }
@@ -95,7 +92,7 @@ public class ShiftController(
     {
         if (model != null && ModelState.IsValid)
         {
-            var commandResult = await shiftService.EditAsync(EmployeeSession.EmpId, model);
+            var commandResult = await shiftService.EditAsync(session.UserId, model);
             if (commandResult.IsSuccessful)
             {
                 return RedirectToAction("Index", "Shift");
@@ -104,7 +101,7 @@ public class ShiftController(
             ModelState.AddModelError(string.Empty, commandResult.Message);
         }
 
-        ViewBag.IsHost = userControlSession.HasPermissionOnFunction(FunctionKey.ShiftManagement, Policy.Host);
+        ViewBag.IsHost = session.HasPermissionOnFunction(FunctionKey.ShiftManagement, Policy.Host);
 
         return View(model);
     }

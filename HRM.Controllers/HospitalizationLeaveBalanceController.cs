@@ -28,8 +28,6 @@ public class HospitalizationLeaveBalanceController(
     IBaseService baseService,
     IExportExcelService exportExcelService) : BaseExportController(session)
 {
-    private readonly IUserControlSession session = session;
-
     public async Task<IActionResult> Index(
         string teamIds,
         string employee,

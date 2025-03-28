@@ -18,16 +18,14 @@ using Services.Interfaces;
 using ViewModels.Memo;
 
 public class MemoController(
-    AppSettings appSettings,
     AmazonStorageConfig s3Config,
     IWebHostEnvironment hostingEnvironment,
-    IUserControlSession userControlSession,
+    IUserControlSession session,
     IMemoService memoService,
     ICommonDataService commonDataService,
     IEmailService emailService,
-    IMinIOService minIOService) : BaseController(userControlSession)
+    IMinIOService minIOService) : BaseController(session)
 {
-    private readonly IUserControlSession userControlSession = userControlSession;
     private const int UploadMemoType = 1;
 
     [HrmPermission(Policy.Read, FunctionKey.Memo)]
@@ -42,7 +40,7 @@ public class MemoController(
         model.Year = year ?? model.Year;
 
         model.Memos = await memoService.GetAllAsync(model.Year, model.Category, CurrentCompanyId);
-        ViewBag.HasPermission = userControlSession.HasPermissionOnFunction(FunctionKey.Memo, Policy.Host);
+        ViewBag.HasPermission = session.HasPermissionOnFunction(FunctionKey.Memo, Policy.Host);
 
         return View(model);
     }

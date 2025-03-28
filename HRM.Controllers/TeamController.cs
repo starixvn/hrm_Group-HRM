@@ -22,19 +22,17 @@ namespace HRM.Controllers;
 
 [HrmPermission(Policy.Read, FunctionKey.TeamManagement)]
 public class TeamController(
-    IUserControlSession userControlSession,
+    IUserControlSession session,
     ITeamService teamService,
     ISectionService sectionService,
     IBaseService baseService,
-    IEmployeeService employeeService) : BaseController(userControlSession)
+    IEmployeeService employeeService) : BaseController(session)
 {
-    private readonly IUserControlSession userControlSession = userControlSession;
-
     public async Task<ActionResult> Index(string keyword = null)
     {
         var teams = await teamService.GetAllAsync(keyword: keyword);
-        ViewBag.HasPermission = userControlSession.HasPermissionOnFunction(FunctionKey.TeamManagement, Policy.Host);
-        ViewBag.HasPermissionToViewEmployee = userControlSession.HasPermissionOnFunction(FunctionKey.EmployeeManagement, Policy.Read);
+        ViewBag.HasPermission = session.HasPermissionOnFunction(FunctionKey.TeamManagement, Policy.Host);
+        ViewBag.HasPermissionToViewEmployee = session.HasPermissionOnFunction(FunctionKey.EmployeeManagement, Policy.Read);
         return View(teams);
     }
 
@@ -68,7 +66,7 @@ public class TeamController(
                 LeaderIds = model.LeaderIds,
                 SupervisorIds = model.SupervisorIds,
                 MailGroup = model.MailGroup,
-                CreatedBy = EmployeeSession.EmpId,
+                CreatedBy = session.UserId,
                 LocalBasicAnnualLeaveBalance = model.LocalBasicAnnualLeaveBalance ?? 0,
                 LocalWorkingDays = model.LocalWorkingDays ?? 0,
                 LocalWorkingHours = model.LocalWorkingHours ?? 0,
@@ -78,7 +76,7 @@ public class TeamController(
                 ExpatWorkingDays = model.ExpatWorkingDays ?? 0,
                 ExpatWorkingHours = model.ExpatWorkingHours ?? 0,
                 ExpatOffDaysbyWeek = model.ExpatOffDaysbyWeek ?? 0,
-                ExpatWorkingHoursbyWeek = model.ExpatWorkingHoursbyWeek       ,
+                ExpatWorkingHoursbyWeek = model.ExpatWorkingHoursbyWeek,
                 CompanyId = CurrentCompanyId
             };
             var result = await baseService.ExecuteNonQueryAsync(criteria);
@@ -159,7 +157,7 @@ public class TeamController(
                     ManagerIds = model.ManagerIds,
                     LeaderIds = model.LeaderIds,
                     SupervisorIds = model.SupervisorIds,
-                    ModifiedBy = EmployeeSession.EmpId,
+                    ModifiedBy = session.UserId,
                     LocalBasicAnnualLeaveBalance = model.LocalBasicAnnualLeaveBalance ?? 0,
                     LocalWorkingDays = model.LocalWorkingDays ?? 0,
                     LocalWorkingHours = model.LocalWorkingHours ?? 0,
@@ -195,7 +193,7 @@ public class TeamController(
     [HrmPermission(Policy.Host, FunctionKey.TeamManagement)]
     public async Task<IActionResult> Delete(int id)
     {
-        var commandResult = await teamService.Delete(EmployeeSession.EmpId, id);
+        var commandResult = await teamService.Delete(session.UserId, id);
 
         return Json(commandResult);
     }
@@ -263,7 +261,7 @@ public class TeamController(
     [HrmPermission(Policy.Host, FunctionKey.TeamManagement)]
     public async Task<IActionResult> EditTeamSupervisor(int teamId, short roleId, IEnumerable<EditTeamSupervisor> supervisors)
     {
-        var commandResult = await teamService.EditTeamSupervisor(EmployeeSession.EmpId, teamId, roleId, supervisors);
+        var commandResult = await teamService.EditTeamSupervisor(session.UserId, teamId, roleId, supervisors);
 
         return Json(commandResult);
     }
@@ -281,7 +279,7 @@ public class TeamController(
         {
             TeamId = team.Id,
             Team = team.Name,
-            IsHost = userControlSession.HasPermissionOnFunction(FunctionKey.TeamManagement, Policy.Host),
+            IsHost = session.HasPermissionOnFunction(FunctionKey.TeamManagement, Policy.Host),
             DisciplineRules = await teamService.GetDisciplineRuleByTeam(id)
         };
         return View(model);
@@ -291,7 +289,7 @@ public class TeamController(
     [HrmPermission(Policy.Host, FunctionKey.TeamManagement)]
     public async Task<IActionResult> EditDisciplineRule(int teamId, IEnumerable<DisciplineRule> disciplineRules)
     {
-        var commandResult = await teamService.EditDisciplineRule(EmployeeSession.EmpId, teamId, disciplineRules);
+        var commandResult = await teamService.EditDisciplineRule(session.UserId, teamId, disciplineRules);
 
         return Json(commandResult);
     }
