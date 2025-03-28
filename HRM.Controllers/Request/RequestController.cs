@@ -124,16 +124,16 @@ public class RequestController(
         return Json(supervisors);
     }
 
-    public ActionResult GetVerifiers(int employeeId, byte requestType)
+    public async Task<IActionResult> GetVerifiers(int employeeId, byte requestType)
     {
-        var verifierList = GetSupervisorByRequestType(employeeId, (byte)RoleSystem.Verifier, requestType);
+        var verifierList = await GetSupervisorByRequestType(employeeId, (byte)RoleSystem.Verifier, requestType);
 
         return Json(verifierList);
     }
 
-    public ActionResult GetApprovers(int employeeId, byte requestType)
+    public async Task<IActionResult> GetApprovers(int employeeId, byte requestType)
     {
-        var approverList = GetSupervisorByRequestType(employeeId, (byte)RoleSystem.Approver, requestType);
+        var approverList = await GetSupervisorByRequestType(employeeId, (byte)RoleSystem.Approver, requestType);
 
         return Json(approverList);
     }

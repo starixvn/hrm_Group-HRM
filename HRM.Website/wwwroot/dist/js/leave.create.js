@@ -65126,13 +65126,13 @@ var LeaveRequest = function ($) {
                     approvers = approverResponse.data;
                 var options = '';
                 for (var i = 0; i < verifiers.length; i++) {
-                    options += "<option value='" + verifiers[i].OwnerId + "'>" + verifiers[i].NickName + " (" + verifiers[i].FullName + ")</option>";
+                    options += "<option value='" + verifiers[i].ownerId + "'>" + verifiers[i].nickName + " (" + verifiers[i].fullName + ")</option>";
                 }
                 LeaveRequest.verifierId.html(options);
 
                 options = '';
                 for (var _i2 = 0; _i2 < approvers.length; _i2++) {
-                    options += "<option value='" + approvers[_i2].OwnerId + "'>" + approvers[_i2].NickName + " (" + approvers[_i2].FullName + ")</option>";
+                    options += "<option value='" + approvers[_i2].ownerId + "'>" + approvers[_i2].nickName + " (" + approvers[_i2].fullName + ")</option>";
                 }
                 LeaveRequest.approverId.html(options);
             }).catch(_common.axiosError);

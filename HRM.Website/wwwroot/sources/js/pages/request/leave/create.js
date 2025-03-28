@@ -688,13 +688,13 @@ const LeaveRequest = (function ($) {
                         approvers = approverResponse.data;
                     let options = '';
                     for (let i = 0; i < verifiers.length; i++) {
-                        options += "<option value='" + verifiers[i].OwnerId + "'>" + verifiers[i].NickName + " (" + verifiers[i].FullName + ")</option>";
+                        options += "<option value='" + verifiers[i].ownerId + "'>" + verifiers[i].nickName + " (" + verifiers[i].fullName + ")</option>";
                     }
                     LeaveRequest.verifierId.html(options);
 
                     options = '';
                     for (let i = 0; i < approvers.length; i++) {
-                        options += "<option value='" + approvers[i].OwnerId + "'>" + approvers[i].NickName + " (" + approvers[i].FullName + ")</option>";
+                        options += "<option value='" + approvers[i].ownerId + "'>" + approvers[i].nickName + " (" + approvers[i].fullName + ")</option>";
                     }
                     LeaveRequest.approverId.html(options);
                 }).catch(axiosError);
