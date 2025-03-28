@@ -16,7 +16,7 @@ public class ApiKeyValidator(IConfiguration configuration) : IApiKeyValidator
             return false;
         }
 
-        var apiKey = configuration.GetValue<string>("FnBSyncApiKey");
+        var apiKey = configuration.GetValue<string>("ApiKey");
         return !string.IsNullOrWhiteSpace(apiKey) && apiKey == userApiKey;
     }
 }
