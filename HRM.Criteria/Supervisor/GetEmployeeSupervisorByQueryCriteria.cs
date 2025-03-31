@@ -1,7 +1,7 @@
 ﻿namespace HRM.Criteria.Supervisor;
 
 using Fanex.Data.Repository;
-    
+
 public class GetEmployeeSupervisorByQueryCriteria : CriteriaBase
 {
     public short CompanyId { get; set; }

@@ -174,6 +174,7 @@ public class OvertimeController(
     {
         var criteria = new GetEmployeeSupervisorByQueryCriteria
         {
+            CompanyId = CurrentCompanyId,
             EmpId = session.UserId,
             Role = (byte)RoleSystem.OnBehalfRequest,
             RequestType = (byte)RequestType.Overtime,
