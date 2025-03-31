@@ -21,7 +21,7 @@ public class NavBarViewComponent(
         var link = $"/{controller}/{action}";
         var selectedMenu = menus.FirstOrDefault(i => !string.IsNullOrEmpty(i.URL) && i.URL.Equals(link, StringComparison.OrdinalIgnoreCase));
 
-        var employee = userControlSession.Get<EmployeeSession>(SessionKey.Employee);
+        var employee = userControlSession.Get<EmployeeSession>(SessionKey.Employee) ?? new EmployeeSession();
         var unreadMessageCount = (await messageService.GetUnreadMessageOfEmployeeAsync(employee.EmpId)).Count();
 
         ViewBag.SelectedMenu = selectedMenu;

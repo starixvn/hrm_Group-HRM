@@ -40,7 +40,7 @@ public class LeaveController(
         var fromDate = new DateTimeOffset(tempYear, 1, 1, 0, 0, 0, TimeSpan.Zero).Date;
         var criteria = new GetLeaveRequestByDateCriteria
         {
-            EmpId = EmployeeSession.EmpId,
+            EmpId = session.UserId,
             FromDate = fromDate,
             ToDate = fromDate.AddYears(1).AddDays(-1),
             CompanyId = CurrentCompanyId
@@ -59,7 +59,7 @@ public class LeaveController(
 
     public async Task<ActionResult> Create()
     {
-        var supervisor = await requestService.GetVerifierAndApproverAsync(EmployeeSession.EmpId, RequestType.Leave);
+        var supervisor = await requestService.GetVerifierAndApproverAsync(session.UserId, RequestType.Leave);
         var setting = await commonDataService.GetSystemSettingAsync();
         var today = DateTimeOffset.Now.DateTime.ToClientTimeZone().Date;
         var minDate = await GetEmployeeMinDate();
@@ -68,7 +68,7 @@ public class LeaveController(
         {
             LeaveTypeId = (ushort)LeaveTypes.GeneralLeave,
             Employee = EmployeeSession.DisplayName,
-            EmployeeId = EmployeeSession.EmpId,
+            EmployeeId = session.UserId,
             FromDate = today,
             ToDate = today,
             TotalDays = 1,
@@ -92,7 +92,7 @@ public class LeaveController(
     {
         var criteria = JsonConvert.DeserializeObject<InsertLeaveRequestCriteria>(request);
         var leaveRequestDetail = JsonConvert.DeserializeObject<List<LeaveRequestDetail>>(requestDetails);
-        if (leaveRequestDetail != null && leaveRequestDetail.Any())
+        if (leaveRequestDetail is { Count: > 0 })
         {
             criteria.TotalDays = leaveRequestDetail.Where(x => x.WorkType == (byte)WorkType.Leave)
                 .Sum(x => x.IsHalfDay ? Constants.HalfDayOffValue : 1);
@@ -105,7 +105,7 @@ public class LeaveController(
         }
 
         criteria.RequestDetail = leaveRequestDetail;
-        criteria.CreatedBy = EmployeeSession.EmpId;
+        criteria.CreatedBy = session.UserId;
         criteria.CompanyId = CurrentCompanyId;
 
         var result = await baseService.ExecuteNonQueryAsync(criteria);
@@ -122,7 +122,7 @@ public class LeaveController(
     {
         var request = await leaveRequestService.GetByIdAsync(id);
         if (request == null
-            || !Utilities.CheckUserCanEditRequest(EmployeeSession.EmpId, request.Requester.EmpId)
+            || !Utilities.CheckUserCanEditRequest(session.UserId, request.Requester.EmpId)
             || request.Status.Id != (byte)CurrentRequestStatus.Pending)
         {
             return RedirectToAction("AccessDenied", "Error");
@@ -162,9 +162,9 @@ public class LeaveController(
         var criteria = JsonConvert.DeserializeObject<UpdateLeaveRequestCriteria>(request);
         var leaveRequestDetail = JsonConvert.DeserializeObject<List<LeaveRequestDetail>>(requestDetails);
         criteria.RequestDetail = leaveRequestDetail;
-        criteria.ModifiedBy = EmployeeSession.EmpId;
+        criteria.ModifiedBy = session.UserId;
         criteria.CompanyId = CurrentCompanyId;
-        if (leaveRequestDetail != null && leaveRequestDetail.Any())
+        if (leaveRequestDetail is { Count: > 0 })
         {
             criteria.TotalDays = leaveRequestDetail.Where(x => x.WorkType == (byte)WorkType.Leave)
                 .Sum(x => x.IsHalfDay ? Constants.HalfDayOffValue : 1);
@@ -483,7 +483,7 @@ public class LeaveController(
     {
         var criteria = new GetLeaveBalanceCriteria
         {
-            EmpId = EmployeeSession.EmpId,
+            EmpId = session.UserId,
             RequestId = requestId,
             EffectedDay = year.HasValue ? new DateTimeOffset(year.Value, 1, 1, 0, 0, 0, TimeSpan.Zero).Date : DateTimeOffset.Now.Date
         };
@@ -494,15 +494,14 @@ public class LeaveController(
     {
         var today = DateTimeOffset.Now.DateTime.ToClientTimeZone().Date;
 
-        var employee = await employeeService.GetEmployeeByIdAsync(EmployeeSession.EmpId);
+        var employee = await employeeService.GetEmployeeByIdAsync(session.UserId);
         var employeeJoinDate = employee.JoinedDate;
 
         var defaultMinDate = today.FirstDayOfMonth().AddMonths(-5);
         var minDate =
             employeeJoinDate.HasValue && employeeJoinDate.Value > defaultMinDate
             ? employeeJoinDate.Value.Date
-            :
-            defaultMinDate;
+            : defaultMinDate;
 
         return minDate;
     }

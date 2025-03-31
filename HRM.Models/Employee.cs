@@ -70,7 +70,7 @@ public class Employee : EntityBase<int>
 
     public string UnitName { get; set; }
 
-    public Team Team { get; set; }
+    public Team Team { get; set; } = new();
 
     [DataType(DataType.Date)]
     public DateTime? TeamDate { get; set; }

@@ -164,7 +164,7 @@ public class CommonDataService(
         var criteria = new GetSystemConfigsByKeyCriteria
         {
             CompanyId = session.Get<short>(SessionKey.CurrentCompanyId),
-            Key = "EnableGroupDate"
+            Key = SessionKey.EnableGroupDate
         };
 
         return await baseService.GetDataEntityAsync<bool>(criteria);

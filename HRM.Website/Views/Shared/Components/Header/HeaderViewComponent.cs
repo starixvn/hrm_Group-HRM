@@ -13,7 +13,7 @@ public class HeaderViewComponent(IUserControlSession userControlSession) : ViewC
     {
         var viewModel = new HeaderViewModel
         {
-            Employee = userControlSession.Get<EmployeeSession>(SessionKey.Employee),
+            Employee = userControlSession.Get<EmployeeSession>(SessionKey.Employee) ?? new EmployeeSession(),
             IsShowSearchBox = userControlSession.HasPermissionOnFunction(FunctionKey.ContactList, Policy.Read)
         };
         ViewBag.IsShowLeftNavigation = userControlSession.Get<bool>(SessionKey.IsShowLeftNavigation);

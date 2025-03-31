@@ -33,7 +33,7 @@ public class OvertimeController(
     public async Task<IActionResult> EmployeeView(MonthlyOvertimeRequestViewModel model)
     {
         model.Employee ??= EmployeeSession.DisplayName;
-        model.EmployeeId = model.EmployeeId <= 0 ? EmployeeSession.EmpId : model.EmployeeId;
+        model.EmployeeId = model.EmployeeId <= 0 ? session.UserId : model.EmployeeId;
         model.OvertimeRequests = await overtimeService.GetMonthlyRequestByEmployeeId(model.EmployeeId, model.Year);
 
         Parallel.ForEach(model.OvertimeRequests, overTimeRequest =>
@@ -72,7 +72,7 @@ public class OvertimeController(
     [HttpPost]
     public async Task<IActionResult> Edit(EditMonthlyOvertimeRequest model)
     {
-        var commandResult = await overtimeService.EditMonthlyRequest(EmployeeSession.EmpId, model);
+        var commandResult = await overtimeService.EditMonthlyRequest(session.UserId, model);
         return Json(commandResult);
     }
 
@@ -82,7 +82,7 @@ public class OvertimeController(
         var teams = await teamService.GetAllAsync();
         model.TeamIds ??= string.Join(",", teams.Select(x => x.Id));
         model.MemberRequests = await GetMemberOvertimeRequest(model);
-        ViewBag.CurrentUserId = EmployeeSession.EmpId;
+        ViewBag.CurrentUserId = session.UserId;
         ViewBag.IsVerifier = session.HasPermissionOnFunction(FunctionKey.VerifyOvertime, Policy.Host);
         ViewBag.IsApprover = session.HasPermissionOnFunction(FunctionKey.ApproveOvertime, Policy.Host);
 
@@ -91,7 +91,7 @@ public class OvertimeController(
 
     private async Task<IEnumerable<MonthlyOvertimeRequest>> GetMemberOvertimeRequest(MemberMonthlyOvertimeRequestViewModel model)
     {
-        var requestStatusIds = Enum.GetValues(typeof(CurrentRequestStatus)).Cast<int>().Where(x => x > 0);
+        var requestStatusIds = Enum.GetValues<CurrentRequestStatus>().Cast<int>().Where(x => x > 0);
         var statusIds = model.StatusId switch
         {
             -1 => $"{(byte)CurrentRequestStatus.Pending},{(byte)CurrentRequestStatus.Verified}",
@@ -101,7 +101,7 @@ public class OvertimeController(
 
         var param = new GetMonthlyOvertimeRequestParam
         {
-            ActorId = EmployeeSession.EmpId,
+            ActorId = session.UserId,
             Month = model.Month,
             TeamIds = model.TeamIds,
             EmployeeId = model.EmployeeId,
@@ -117,7 +117,7 @@ public class OvertimeController(
     public async Task<IActionResult> MemberDetails(long id)
     {
         var monthlyRequest = await overtimeService.GetMonthlyRequestDetailsById(id);
-        ViewBag.CurrentUserId = EmployeeSession.EmpId;
+        ViewBag.CurrentUserId = session.UserId;
         return View(monthlyRequest);
     }
 
@@ -139,7 +139,7 @@ public class OvertimeController(
 
     private async Task<IEnumerable<MonthlyOvertimeRequest>> GetEmployeeOvertimeRequest(MemberMonthlyOvertimeRequestViewModel model)
     {
-        var requestStatusIds = Enum.GetValues(typeof(CurrentRequestStatus)).Cast<int>().Where(x => x > 0);
+        var requestStatusIds = Enum.GetValues<CurrentRequestStatus>().Cast<int>().Where(x => x > 0);
         var statusIds = model.StatusId switch
         {
             -1 => $"{(byte)CurrentRequestStatus.Pending},{(byte)CurrentRequestStatus.Verified}",
@@ -149,7 +149,7 @@ public class OvertimeController(
 
         var param = new GetMonthlyOvertimeRequestParam
         {
-            ActorId = EmployeeSession.EmpId,
+            ActorId = session.UserId,
             Month = model.Month,
             TeamIds = model.TeamIds,
             EmployeeId = model.EmployeeId,
@@ -174,7 +174,7 @@ public class OvertimeController(
     {
         var criteria = new GetEmployeeSupervisorByQueryCriteria
         {
-            EmpId = EmployeeSession.EmpId,
+            EmpId = session.UserId,
             Role = (byte)RoleSystem.OnBehalfRequest,
             RequestType = (byte)RequestType.Overtime,
             Query = string.IsNullOrWhiteSpace(query) ? string.Empty : query.Trim(),
@@ -189,7 +189,7 @@ public class OvertimeController(
     [HrmPermission(Policy.Host, FunctionKey.VerifyOvertime, FunctionKey.ApproveOvertime, FunctionKey.ProcessOvertime)]
     public async Task<IActionResult> EditMonthlyRequestStatus(string requestIds, RequestCommand command, byte roleId)
     {
-        var commandResult = await overtimeService.EditMonthlyRequestStatus(EmployeeSession.EmpId, requestIds, command, roleId);
+        var commandResult = await overtimeService.EditMonthlyRequestStatus(session.UserId, requestIds, command, roleId);
         return Json(commandResult, new JsonSerializerSettings
         {
             ContractResolver = new DefaultContractResolver()

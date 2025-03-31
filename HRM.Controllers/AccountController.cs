@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Models.User;
 using GO.UserControl.Client.Core.Services;
@@ -9,6 +10,7 @@ using HRM.Core.Filters;
 using HRM.Core.Security;
 using HRM.Core.Services;
 using HRM.Models;
+using HRM.Models.Log;
 using HRM.Resources;
 using HRM.Services.Implement;
 using HRM.Services.Implement.ActionLog;
@@ -32,8 +34,8 @@ public class AccountController(
     {
         var viewModel = new AccountViewModel
         {
-            Employee = await employeeService.GetEmployeeByIdAsync(session.UserId),
-            Logs = await employeeLogService.GetLogDetailByIdAsync(session.UserId)
+            Employee = await employeeService.GetEmployeeByIdAsync(session.UserId) ?? new Employee(),
+            Logs = await employeeLogService.GetLogDetailByIdAsync(session.UserId) ?? new List<LogObjectDetail>()
         };
         ViewBag.EnableGroupDate = await commonDataService.IsEnableGroupDateAsync();
         ViewBag.Avatar = await GetAvatarUrl(viewModel.Employee.Code);

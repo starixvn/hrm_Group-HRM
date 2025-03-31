@@ -12,8 +12,6 @@ public interface IEmployeeRepository
 
     Task<IEnumerable<Employee>> GetEmployeeAsync(ICriteria criteria);
 
-    IList<Employee> GetEmployeesByRole(ICriteria criteria);
-
     Task<IList<Employee>> GetEmployeesByRoleAsync(ICriteria criteria);
 
     Task<List<EmployeeFullProfile>> GetEmployeeFullInformation(ICriteria criteria);

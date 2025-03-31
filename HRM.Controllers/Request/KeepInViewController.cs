@@ -36,7 +36,7 @@ public class KeepInViewController(
         var fromDate = new DateTimeOffset(tempYear, 1, 1, 0, 0, 0, TimeSpan.Zero).Date;
         var criteria = new GetKeepInViewRequestByDateCriteria
         {
-            EmpId = EmployeeSession.EmpId,
+            EmpId = session.UserId,
             FromDate = fromDate,
             ToDate = fromDate.AddYears(1).AddDays(-1),
             CompanyId = CurrentCompanyId
@@ -56,11 +56,11 @@ public class KeepInViewController(
     public async Task<IActionResult> Create()
     {
         var today = DateTimeOffset.Now.DateTime.ToClientTimeZone().Date;
-        var supervisor = await requestService.GetVerifierAndApproverAsync(EmployeeSession.EmpId, RequestType.KeepInView);
+        var supervisor = await requestService.GetVerifierAndApproverAsync(session.UserId, RequestType.KeepInView);
         var model = new KeepInViewRequestViewModel
         {
             Employee = EmployeeSession.DisplayName,
-            EmployeeId = EmployeeSession.EmpId,
+            EmployeeId = session.UserId,
             Date = today,
             KeepInViewType = (byte)KeepInViewTypes.KeepInViewByDay,
             Verifiers = supervisor.Verifiers,
@@ -101,7 +101,7 @@ public class KeepInViewController(
             ToTime = toTimeCrossDay.ToServerTimeZone(),
             VerifierId = model.VerifierId,
             ApproverId = model.ApproverId,
-            CreatedBy = EmployeeSession.EmpId,
+            CreatedBy = session.UserId,
             ShiftId = model.ShiftId,
             CompanyId = CurrentCompanyId
         };
@@ -120,7 +120,7 @@ public class KeepInViewController(
     {
         var request = await keepInViewRequestService.GetByIdAsync(id);
         if (request == null
-            || !Utilities.CheckUserCanEditRequest(EmployeeSession.EmpId, request.Requester.EmpId)
+            || !Utilities.CheckUserCanEditRequest(session.UserId, request.Requester.EmpId)
             || request.Status.Id != (byte)CurrentRequestStatus.Pending)
         {
             return RedirectToAction("AccessDenied", "Error");
@@ -177,7 +177,7 @@ public class KeepInViewController(
             ToTime = toTimeCrossDay.ToServerTimeZone(),
             VerifierId = model.VerifierId,
             ApproverId = model.ApproverId,
-            ModifiedBy = EmployeeSession.EmpId,
+            ModifiedBy = session.UserId,
             ShiftId = model.ShiftId,
             CompanyId = CurrentCompanyId
         };

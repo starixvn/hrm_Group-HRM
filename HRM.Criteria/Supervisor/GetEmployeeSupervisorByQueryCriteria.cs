@@ -4,6 +4,7 @@ using Fanex.Data.Repository;
     
 public class GetEmployeeSupervisorByQueryCriteria : CriteriaBase
 {
+    public short CompanyId { get; set; }
     public int EmpId { get; set; }
 
     public byte Role { get; set; }
@@ -14,13 +15,7 @@ public class GetEmployeeSupervisorByQueryCriteria : CriteriaBase
 
     public bool IncludeLoginUser { get; set; }
 
-    public override string GetSettingKey()
-    {
-        return "EmployeeSupervisor_GetByQuery";
-    }
+    public override string GetSettingKey() => "EmployeeSupervisor_GetByQuery";
 
-    public override bool IsValid()
-    {
-        return EmpId > 0;
-    }
+    public override bool IsValid() => EmpId > 0;
 }

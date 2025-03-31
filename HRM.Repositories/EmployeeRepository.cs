@@ -1,6 +1,4 @@
-﻿using HRM.Models.Section;
-
-namespace HRM.Repositories;
+﻿namespace HRM.Repositories;
 
 using System.Collections.Generic;
 using System.Linq;
@@ -8,10 +6,11 @@ using System.Threading.Tasks;
 using Fanex.Data;
 using Fanex.Data.Repository;
 using GO.UserControl.Client.Core.Models.Role;
+using Interfaces;
 using Models;
 using Models.EmployeeInformation;
+using Models.Section;
 using Models.Supervisor;
-using Interfaces;
 
 public class EmployeeRepository : IEmployeeRepository
 {
@@ -22,19 +21,6 @@ public class EmployeeRepository : IEmployeeRepository
             (e, t) =>
             {
                 e.Team = t;
-                return e;
-            },
-            splitOn: "TeamId",
-            parameterSet: criteria);
-    }
-
-    public Employee GetEmployeeByCode(ICriteria criteria)
-    {
-        using var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey());
-        return db.QueryEntity<Employee, dynamic, Employee>(
-            (e, t) =>
-            {
-                e.Team = new Team { Id = t.TeamID, Name = t.Team };
                 return e;
             },
             splitOn: "TeamId",
@@ -69,31 +55,6 @@ public class EmployeeRepository : IEmployeeRepository
                 return e;
             },
             splitOn: "TeamId");
-
-        var roles = multi.Read<EmployeeRole, Role, EmployeeRole>(
-            (er, r) =>
-            {
-                er.Role = r;
-                return er;
-            },
-            "RoleId");
-
-        employees = GroupByRoles(employees, roles);
-
-        return employees.ToList();
-    }
-
-    public IList<Employee> GetEmployeesByRole(ICriteria criteria)
-    {
-        using var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey());
-        using var multi = db.QueryMultiple(criteria);
-        var employees = multi.Read<Employee, dynamic, Employee>(
-            (e, t) =>
-            {
-                e.Team = new Team { Id = t.TeamID, Name = t.Team };
-                return e;
-            },
-            splitOn: "TeamID");
 
         var roles = multi.Read<EmployeeRole, Role, EmployeeRole>(
             (er, r) =>

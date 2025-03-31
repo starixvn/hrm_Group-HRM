@@ -13,11 +13,9 @@ using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
 using HRM.Criteria.Request;
 using HRM.Models.Request;
-using HRM.Services.Implement.Request;
 using HRM.Services.Interfaces.Request;
 using HRM.ViewModels.Request;
 using Microsoft.AspNetCore.Mvc;
-using Models.Shifts;
 using Models.Supervisor;
 using Services.Implement;
 using Services.Interfaces;
@@ -31,17 +29,6 @@ public class RequestController(
     IAttachFileService attachFileService) : BaseController(session)
 {
     private const string EmployeeRequestViewName = "EmployeeRequest";
-
-    [HttpPost]
-    public string GetMessageDetailRequest(RequestEntity request, short requestType, string fromShiftCode, string toShiftCode)
-    {
-        request.RequestType = new RequestTypeModel { Id = requestType };
-        request.FromShift = new Shift { Name = fromShiftCode };
-        request.ToShift = new Shift { Name = toShiftCode };
-
-        var date = RequestService.ToRequestMessage(request);
-        return date;
-    }
 
     [HrmPermission(Policy.Host, FunctionKey.VerifyRequest, FunctionKey.ApproveRequest)]
     public async Task<IActionResult> Member(RequestViewModel request)
@@ -113,7 +100,8 @@ public class RequestController(
     {
         var criteria = new GetEmployeeSupervisorByQueryCriteria
         {
-            EmpId = EmployeeSession.EmpId,
+            CompanyId = CurrentCompanyId,
+            EmpId = session.UserId,
             Role = role,
             RequestType = requestType,
             Query = query.Trim(),
@@ -163,16 +151,16 @@ public class RequestController(
 
     [HttpPost]
     [HrmPermission(Policy.Host, FunctionKey.VerifyRequest, FunctionKey.ApproveRequest, FunctionKey.ProcessRequest, FunctionKey.VoidRequest)]
-    public async Task<JsonResult> ProcessRequest(ProcessRequestParam model)
+    public async Task<IActionResult> ProcessRequest(ProcessRequestParam model)
     {
         var commandResult = model.Command switch
         {
             RequestCommand.Accept or RequestCommand.Approve or RequestCommand.Process => await requestService
-                .ApproveRequest(EmployeeSession.EmpId, model),
-            RequestCommand.Reset => await requestService.ResetRequest(EmployeeSession.EmpId, model),
+                .ApproveRequest(session.UserId, model),
+            RequestCommand.Reset => await requestService.ResetRequest(session.UserId, model),
             RequestCommand.NotAccept or RequestCommand.Reject or RequestCommand.Void => await requestService
-                .RejectRequest(EmployeeSession.EmpId, model),
-            _ => await requestService.VoidRequest(EmployeeSession.EmpId, model)
+                .RejectRequest(session.UserId, model),
+            _ => await requestService.VoidRequest(session.UserId, model)
         };
 
         if (commandResult.IsSuccessful)
@@ -185,9 +173,9 @@ public class RequestController(
 
     [HttpPost]
     [HrmPermission(Policy.Host, FunctionKey.ApproveRequest)]
-    public async Task<JsonResult> ProcessMultipleRequests(ApproveRequestsParam model)
+    public async Task<IActionResult> ProcessMultipleRequests(ApproveRequestsParam model)
     {
-        model.ActorId = EmployeeSession.EmpId;
+        model.ActorId = session.UserId;
 
         var commandResult = await requestService.ApproveRequests(model);
 
@@ -246,7 +234,7 @@ public class RequestController(
             RequestType = request.RequestType,
             IsQueryByCreatedDate = !request.IsFilterByAffectedDate,
             RequestViewType = request.ViewType,
-            SupervisorId = EmployeeSession.EmpId,
+            SupervisorId = session.UserId,
             IsLocal = request.IsLocal.HasValue ? request.IsLocal.Value == 1 : null,
             LeaveTypeId = request.LeaveType,
             CompanyId = CurrentCompanyId
@@ -259,11 +247,11 @@ public class RequestController(
             rq.FromTime = rq.FromTime.ToClientTimeZone();
             rq.ToTime = rq.ToTime.ToClientTimeZone();
         });
-        request.CurrentUserId = EmployeeSession.EmpId;
+        request.CurrentUserId = session.UserId;
         request.Requests = request.ViewType == RequestViewType.PersonalSpace ? SortRequest(requestList) : requestList;
     }
 
-    private IList<RequestEntity> SortRequest(IList<RequestEntity> requests)
+    private List<RequestEntity> SortRequest(IList<RequestEntity> requests)
     {
         return requests.OrderByDescending(SortRequestValidate).ToList();
     }
@@ -271,8 +259,8 @@ public class RequestController(
     private bool SortRequestValidate(RequestEntity t)
     {
         var pending = t.Status.Id == (byte)CurrentRequestStatus.Pending
-                      && (t.ApprovedBy.Id == EmployeeSession.EmpId || t.VerifiedBy.Id == EmployeeSession.EmpId);
-        var verified = t.Status.Id == (byte)CurrentRequestStatus.Verified && t.ApprovedBy.Id == EmployeeSession.EmpId;
+                      && (t.ApprovedBy.Id == session.UserId || t.VerifiedBy.Id == session.UserId);
+        var verified = t.Status.Id == (byte)CurrentRequestStatus.Verified && t.ApprovedBy.Id == session.UserId;
         return pending || verified;
     }
 }

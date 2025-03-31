@@ -36,7 +36,7 @@ public class InformationController(
 
     public async Task<IActionResult> UpdateInformation()
     {
-        var employee = await employeeService.GetEmployeeByIdAsync(session.UserId);
+        var employee = await employeeService.GetEmployeeByIdAsync(session.UserId) ?? new Employee();
         await DisplayDefaultValuesOfDropDownListsForPersonalInformation();
         ViewBag.BaseFileLocation = Constants.ProfileUploadPath + "/" + EmployeeSession.Code + "/";
         return View(employee);

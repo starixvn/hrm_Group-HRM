@@ -4,7 +4,7 @@
 @model AccountViewModel
 @{
     ViewBag.Title = Labels.MyProfile;
-    bool enableGroupDate = ViewBag.EnableGroupDate;
+    var enableGroupDate = (bool)ViewBag.EnableGroupDate;
 }
 @section css{
     <link href="~/dist/styles/account.index.css" rel="stylesheet" />

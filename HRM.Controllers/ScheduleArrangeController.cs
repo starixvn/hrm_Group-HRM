@@ -174,11 +174,11 @@ public class ScheduleArrangeController(
     {
         var actor = new Actor
         {
-            ActorId = EmployeeSession.EmpId,
+            ActorId = session.UserId,
             Nickname = EmployeeSession.Nickname,
             FullName = EmployeeSession.FullName
         };
-        filter.ActorId = EmployeeSession.EmpId;
+        filter.ActorId = session.UserId;
         var weeklySchedules = await scheduleArrangeService.GetWeeklyScheduleAsync(filter);
         var bytes = exportExcelService.ExportDriverPickup(actor, filter, weeklySchedules);
 
