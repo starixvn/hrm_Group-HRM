@@ -37,7 +37,7 @@ public class EmployeeWorkFromHomeController : BaseController
         this.session = session;
         this.baseService = baseService;
         this.attachFileService = attachFileService;
-        uploadFolderPath = $"{CurrentCompanyId}/WHF";
+        uploadFolderPath = $"{CurrentCompanyId}/WFH";
     }
 
     [HrmPermission(Policy.Read, FunctionKey.EmployeeManagement)]
