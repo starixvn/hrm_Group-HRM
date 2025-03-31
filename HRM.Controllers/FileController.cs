@@ -35,7 +35,7 @@ public class FileController(
     private async Task<string> SaveFileToServer(IFormFile file, int categoryId, bool isOverride)
     {
         var fileName = Path.GetFileName(file.FileName);
-        var pathAttach = $"{CurrentCompanyId}/{categoryId}/{fileName}";
+        var pathAttach = $"{CurrentCompanyId}/memo/{categoryId}/{fileName}";
         if (isOverride)
         {
             var count = 1;
