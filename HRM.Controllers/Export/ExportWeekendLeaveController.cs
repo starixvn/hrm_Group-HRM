@@ -19,6 +19,7 @@ public class ExportWeekendLeaveController(
     {
         var criteria = new GetWeekendLeaveSummaryCriteria
         {
+            CompanyId = CurrentCompanyId,
             FromDate = model.FromDate,
             ToDate = model.ToDate,
             TeamId = model.TeamId,
@@ -40,6 +41,7 @@ public class ExportWeekendLeaveController(
     {
         var criteria = new GetWeekendLeaveDetailCriteria
         {
+            CompanyId = CurrentCompanyId,
             FromDate = model.FromDate,
             ToDate = model.ToDate,
             TeamId = model.TeamId,

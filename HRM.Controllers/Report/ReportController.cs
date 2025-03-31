@@ -141,6 +141,7 @@ public class ReportController(
     {
         var criteria = new GetWeekendLeaveSummaryCriteria
         {
+            CompanyId = CurrentCompanyId,
             FromDate = model.FromDate,
             ToDate = model.ToDate,
             TeamId = model.TeamId,
@@ -169,6 +170,7 @@ public class ReportController(
     {
         var criteria = new GetWeekendLeaveDetailCriteria
         {
+            CompanyId = CurrentCompanyId,
             FromDate = model.FromDate,
             ToDate = model.ToDate,
             TeamId = model.TeamId,
