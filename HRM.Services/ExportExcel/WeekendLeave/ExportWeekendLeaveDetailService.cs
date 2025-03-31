@@ -16,7 +16,7 @@ public interface IExportWeekendLeaveDetailService
 public class ExportWeekendLeaveDetailService(IWebHostEnvironment hostingEnvironment)
     : IExportWeekendLeaveDetailService
 {
-    private const string WeekendLeaveDetailTemplatePath = @"ExcelTemplates\WeekendLeaveDetailTemplate.xls";
+    private const string WeekendLeaveDetailTemplatePath = @"ExcelTemplates/WeekendLeaveDetailTemplate.xls";
     private const int HeaderRow = 3;
     private const int BodyRow = 4;
     private const int TotalCol = 9;

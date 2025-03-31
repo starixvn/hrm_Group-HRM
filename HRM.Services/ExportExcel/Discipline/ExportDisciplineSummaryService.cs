@@ -13,7 +13,7 @@ namespace HRM.Services.ExportExcel.Discipline;
 public class ExportDisciplineSummaryService(IWebHostEnvironment hostingEnvironment)
     : IExportDisciplineSummaryService
 {
-    private const string TemplatePath = @"ExcelTemplates\DisciplineSummaryReport.xls";
+    private const string TemplatePath = @"ExcelTemplates/DisciplineSummaryReport.xls";
     private const int HeaderRow = 2;
     private const int BodyRow = 3;
     private const int TotalCol = 20;
