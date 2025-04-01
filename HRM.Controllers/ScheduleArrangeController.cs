@@ -160,6 +160,7 @@ public class ScheduleArrangeController(
     [HrmPermission(Policy.Host, FunctionKey.ScheduleArrange)]
     public async Task<IActionResult> ExportExcel(WeeklyScheduleFilter filter)
     {
+        filter.IsEditScheduleUnlimited = session.HasPermissionOnFunction(FunctionKey.EditScheduleUnlimited, Policy.Host);
         filter.ActorId = session.UserId;
         var weeklySchedules = await scheduleArrangeService.GetWeeklyScheduleAsync(filter);
         var bytes = exportExcelService.Export(filter, weeklySchedules);
@@ -178,6 +179,7 @@ public class ScheduleArrangeController(
             Nickname = EmployeeSession.Nickname,
             FullName = EmployeeSession.FullName
         };
+        filter.IsEditScheduleUnlimited = session.HasPermissionOnFunction(FunctionKey.EditScheduleUnlimited, Policy.Host);
         filter.ActorId = session.UserId;
         var weeklySchedules = await scheduleArrangeService.GetWeeklyScheduleAsync(filter);
         var bytes = exportExcelService.ExportDriverPickup(actor, filter, weeklySchedules);
