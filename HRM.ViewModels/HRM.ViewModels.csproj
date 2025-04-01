@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="Message\**" />
+    <EmbeddedResource Remove="Message\**" />
+    <None Remove="Message\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="GO.UserControl.Client.Core" Version="1.0.3" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\HRM.Models\HRM.Models.csproj" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,143 @@
+﻿@using HRM.Core
+@using HRM.Resources
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model HRM.ViewModels.Discipline.DisciplineSummaryViewModel
+@{
+    ViewBag.Title = Labels.DisciplineDetail;
+}
+@section css{
+    <link href="~/dist/styles/discipline.details.css" rel="stylesheet" />
+}
+@section js{
+    <script src="~/dist/js/discipline.detail.js"></script>
+}
+@section Breadcrumb {
+    @if (Model.FromSummaryPage)
+    {
+        <a class="step" href="@Url.Action("disciplinesummary", "discipline")">@Labels.DisciplineSummary</a>
+    }
+    <a class="step">@ViewBag.Title</a>
+}
+<h2 class="page-title">@Labels.DisciplineDetail</h2>
+<form class="form-filter filter">
+    <div class="form-horizontal clearfix">
+        @Html.HiddenFor(model => model.TeamId)
+        @Html.HiddenFor(model => model.TeamName)
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                <label class="control-label">@Labels.DateRange</label>
+            </div>
+            <div class="select-form">
+                @Html.DropDownListFor(model => model.DateRange, Model.DateRange, new { @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.LabelFor(model => model.FromDate, Labels.FromDate, new { @class = "control-label" })
+            </div>
+            <div class="calendar-form">
+                @Html.TextBox(Html.NameFor(model => model.FromDate).ToString(),
+                    Model.FromDate.ToDateMonthYearFormatedDate(),
+                    new {
+                        @class = "datepicker form-control",
+                        mindate = new DateTime(2010, 1, 1).ToString("yyyy/MM/dd")
+                    })
+                <i class="icon-calendar fa fa-calendar"></i>
+            </div>
+        </div>
+
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.LabelFor(model => model.ToDate, Labels.ToDate, new { @class = "control-label" })
+            </div>
+            <div class="calendar-form">
+                @Html.TextBox(Html.NameFor(model => model.ToDate).ToString(),
+                    Model.ToDate.ToDateMonthYearFormatedDate(),
+                    new {
+                        @class = "datepicker form-control",
+                        mindate = new DateTime(2010, 1, 1).ToString("yyyy/MM/dd")
+                    })
+                <i class="icon-calendar fa fa-calendar"></i>
+            </div>
+        </div>
+
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                <label class="control-label">@Labels.SectionTeam</label>
+            </div>
+            <div class="input-form" id="Team"></div>
+        </div>
+
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                <label class="control-label">@Labels.Category</label>
+            </div>
+            <div class="select-form">
+                @{
+                    var category = new List<SelectListItem>
+                    {
+                    new() {Text = Labels.All, Value = string.Empty},
+                    new() {Text = Labels.Expat, Value = "false"},
+                    new() {Text = Labels.Local, Value = "true"}
+                    };
+                }
+                @Html.DropDownListFor(model => model.IsLocal, category, new { @class = "category form-control" })
+            </div>
+        </div>
+
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.LabelFor(model => model.Employee, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.TextBoxFor(model => model.Employee,
+                new {
+                    placeholder = Messages.SearchEmployeeWatermark,
+                    @class = "form-control",
+                    autocomplete = "off"
+                })
+                @Html.HiddenFor(model => model.EmployeeId)
+            </div>
+        </div>
+
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.LabelFor(model => model.ReasonId, new { @class = "control-label" })
+            </div>
+            <div class="select-form">
+                @Html.DropDownListFor(model => model.ReasonId, new SelectList(Model.DisciplineTypes, "DisciplineTypeId", "Name"), Labels.All, new { @class = "form-control" })
+            </div>
+        </div>
+
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                <label class="control-label">@Labels.Status</label>
+            </div>
+            <div class="select-form">
+                @{
+                    var ignoredStatus = new List<SelectListItem>
+                    {
+                    new() {Text = Labels.All, Value = string.Empty},
+                    new() {Text = Labels.Ignored, Value = "true"},
+                    new() {Text = Labels.NotIgnored, Value = "false"}
+                    };
+                }
+                @Html.DropDownListFor(model => model.HasIgnored, ignoredStatus, new { @class = "category form-control" })
+            </div>
+        </div>
+
+        <div class="clearfix"></div>
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                <label class="control-label"></label>
+            </div>
+            <div class="select-form">
+                <input type="button" class="btn btn-primary" id="submit" value="@Labels.Submit" />
+                <input type="button" class="btn btn-excel" value="@Labels.Excel" id="btnExcel" />
+            </div>
+        </div>
+    </div>
+</form>
+
+<div id="discipline-detail"></div>

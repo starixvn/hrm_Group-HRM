@@ -1,0 +1,39 @@
+﻿@using HRM.Resources
+@{
+    ViewBag.Title = Labels.ScheduleArrange;
+    var isSystemAdmin = (bool)ViewBag.IsSystemAdmin;
+    var hasPermissionToViewHoliday = (bool)ViewBag.HasPermissionToViewHoliday;
+    var hasPermissionToViewShift = (bool)ViewBag.HasPermissionToViewShift;
+    var enableSyncWorkingShift = (bool)ViewBag.EnableSyncWorkingShift;
+}
+@section css{
+    <link href="~/dist/styles/schedule.arrange.css" rel="stylesheet" />
+}
+@section js{
+    <script src="~/dist/js/schedule.arrange.js"></script>
+}
+@section Breadcrumb {
+    <a class="step">@ViewBag.Title</a>
+}
+
+<div class="title">
+    <h2 class="page-title">@ViewBag.Title</h2>
+    <div>
+        @if (hasPermissionToViewHoliday)
+        {
+            <a href="~/Holiday/index">@Labels.Holiday</a>
+        }
+        @if (hasPermissionToViewHoliday && hasPermissionToViewShift)
+        {
+            <span>||</span>
+        }
+        @if (hasPermissionToViewShift)
+        {
+            <a href="~/Shift/index">@Labels.Shift</a>
+        }
+    </div>
+</div>
+
+<input type="checkbox" id="IsSystemAdmin" hidden @(isSystemAdmin ? "checked" : string.Empty) />
+<input type="checkbox" id="EnableSyncWorkingShift" hidden @(enableSyncWorkingShift ? "checked" : string.Empty) />
+<div id="schedule-wrapper"></div>

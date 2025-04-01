@@ -1,0 +1,131 @@
+﻿@using HRM.Core
+@using HRM.Core.Enums
+@using HRM.Resources
+@using HRM.ViewModels.Request
+@using HRM.Website.Helper
+@model IEnumerable<HRM.Models.Dashboard.MemberRequest>
+@{ 
+    var today = DateTimeOffset.Now.DateTime.ToClientTimeZone();
+}
+@if (Model.Any())
+{
+    var verifiers = Model.Where(x => x.RoleId == (ushort)RoleSystem.Verifier).ToList();
+    var approvers = Model.Where(x => x.RoleId == (ushort)RoleSystem.Approver).ToList();
+    <h2 class="section page-title">My members' requests</h2>
+    if (verifiers.Any())
+    {
+        <h4>
+            Verification List
+        </h4>
+        <table class="table table-custom">
+            <thead>
+                <tr>
+                    <th rowspan="2" class="align-left">@Labels.Request</th>
+                    <th rowspan="2">@Labels.Pending</th>
+                    <th colspan="3" class="center">
+                        @DateTimeOffset.Now.DateTime.ToClientTimeZone().AddDays(-7).Day - @DateTimeOffset.Now.DateTime.ToClientTimeZone().ToDateMonthYearFormatedDate()
+                    </th>
+                </tr>
+                <tr>
+                    <th>@Labels.Verified</th>
+                    <th>@Labels.NotVerified</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in verifiers)
+                {
+                    var requestModel = new RequestViewModel
+                    {
+                        DateOption = 0,
+                        FromDate = item.FromDate ?? today.AddMonths(-4).Date,
+                        ToDate = item.ToDate ?? today,
+                        RequestType = item.RequestFilterTypeId,
+                        StatusId = (byte)CurrentRequestStatus.Pending,
+                        TeamIds = string.Empty,
+                        ViewType = RequestViewType.PersonalSpace
+                    };
+                    <tr>
+                        <td class="align-left">@item.RequestType</td>
+                        <td>
+                            @if (item.TotalPending > 0)
+                            {
+                                if (item.RequestTypeId == (ushort)RequestType.Overtime)
+                                {
+                                    @Html.ActionLink(item.TotalPending.ToString(), "memberovertime", "overtime", new { }, new { @class = "pending" })
+                                }
+                                else
+                                {
+                                    <a href="@Url.Action("member", "request", requestModel)" class="pending">@item.TotalPending.ToString()</a>
+                                }
+                            }
+                            else
+                            {
+                                <span>-</span>
+                            }
+                        </td>
+                        <td>@Html.Raw(RazorHelpers.DisplayZeroCell(item.TotalApproved))</td>
+                        <td>@Html.Raw(RazorHelpers.DisplayZeroCell(item.TotalRejected))</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    if (approvers.Any())
+    {
+        <h4>
+            Approval List
+        </h4>
+        <table class="table table-custom">
+            <thead>
+                <tr>
+                    <th rowspan="2" class="align-left">@Labels.Request</th>
+                    <th rowspan="2">@Labels.Pending</th>
+                    <th colspan="3" class="center">
+                        @DateTimeOffset.Now.DateTime.ToClientTimeZone().AddDays(-7).Day - @DateTimeOffset.Now.DateTime.ToClientTimeZone().ToDateMonthYearFormatedDate()
+                    </th>
+                </tr>
+                <tr>
+                    <th>@Labels.Approved</th>
+                    <th>@Labels.Rejected</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in approvers)
+                {
+                    var requestModel = new RequestViewModel
+                    {
+                        DateOption = 0,
+                        FromDate = item.FromDate ?? today.AddMonths(-4).Date,
+                        ToDate = item.ToDate ?? today,
+                        RequestType = item.RequestFilterTypeId,
+                        StatusId = -1,
+                        TeamIds = string.Empty,
+                        ViewType = RequestViewType.PersonalSpace
+                    };
+                    <tr>
+                        <td class="align-left">@item.RequestType</td>
+                        <td>
+                            @if (item.TotalPending > 0)
+                            {
+                                if (item.RequestTypeId == (ushort)RequestType.Overtime)
+                                {
+                                    @Html.ActionLink(item.TotalPending.ToString(), "memberovertime", "overtime", new { }, new { @class = "pending" })
+                                }
+                                else
+                                {
+                                    <a href="@Url.Action("member", "request", requestModel)" class="pending">@item.TotalPending.ToString()</a>
+                                }
+                            }
+                            else
+                            {
+                                <span>-</span>
+                            }
+                        </td>
+                        <td>@Html.Raw(RazorHelpers.DisplayZeroCell(item.TotalApproved))</td>
+                        <td>@Html.Raw(RazorHelpers.DisplayZeroCell(item.TotalRejected))</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+}

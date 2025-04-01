@@ -1,0 +1,85 @@
+﻿using HRM.Services.ExportExcel;
+using HRM.ViewModels.Report;
+
+namespace HRM.Controllers.Report;
+
+using System;
+using System.Linq;
+using System.Threading.Tasks;
+using Core;
+using Core.Constants;
+using GO.UserControl.Client.Core.Session;
+using HRM.Criteria.Report;
+using Microsoft.AspNetCore.Mvc;
+using Services.Interfaces;
+
+[Route("report/attendance")]
+public class AttendanceReportController(
+    IUserControlSession session,
+    IReportService reportService,
+    IExportExcelAttendanceReportService excelService,
+    ITeamService teamService) : BaseController(session)
+{
+    [HttpGet("")]
+    [HttpGet("Index")]
+    public async Task<IActionResult> Index()
+    {
+        var currentDateTime = DateTimeOffset.Now.DateTime.ToClientTimeZone();
+        var teams = await teamService.GetAllAsync();
+        var model = new EmployeeAttendanceViewModel
+        {
+            FromDate = currentDateTime,
+            ToDate = currentDateTime,
+            TeamIds = string.Join(",", teams.Select(x => x.Id)),
+            DateOption = 0,
+            ExcludeDeletedUsers = true,
+            SupervisorId = session.UserId
+        };
+
+        return View("~/Views/Report/Attendance/Index.cshtml", model);
+    }
+
+    [HttpPost("Details")]
+    public async Task<IActionResult> Details(EmployeeAttendanceViewModel model)
+    {
+        var criteria = new GetEmployeeAttendanceCriteria
+        {
+            SupervisorId = model.SupervisorId,
+            Fromtime = model.FromDate,
+            Totime = model.ToDate,
+            AttendanceType = model.AttendanceType,
+            EmpId = model.EmployeeId,
+            TeamIds = model.TeamIds,
+            ExcludeUserDelete = model.ExcludeDeletedUsers ? 1 : 0,
+            IsLocal = model.IsLocal,
+            IsRealDate = model.IsRealDate,
+            CompanyId = CurrentCompanyId
+        };
+        var employeeAttendances = await reportService.GetEmployeeAttendanceReportAsync(criteria);
+
+        return PartialView("~/Views/Report/Attendance/_Details.cshtml", employeeAttendances);
+    }
+
+    [HttpGet("ExportExcel")]
+    public async Task<IActionResult> ExportExcel(EmployeeAttendanceViewModel model)
+    {
+        var criteria = new GetEmployeeAttendanceCriteria
+        {
+            SupervisorId = model.SupervisorId,
+            Fromtime = model.FromDate,
+            Totime = model.ToDate,
+            AttendanceType = model.AttendanceType,
+            EmpId = model.EmployeeId,
+            TeamIds = model.TeamIds,
+            ExcludeUserDelete = model.ExcludeDeletedUsers ? 1 : 0,
+            IsLocal = model.IsLocal,
+            IsRealDate = model.IsRealDate,
+            CompanyId = CurrentCompanyId
+        };
+        var employeeAttendances = await reportService.GetEmployeeAttendanceReportAsync(criteria);
+        var bytes = excelService.Export(employeeAttendances, model.FromDate, model.ToDate);
+
+        var fileName = $"AttendanceReport_{DateTimeOffset.Now.DateTime.ToClientTimeZone():yyyyMMdd}.xlsx";
+        return File(bytes, MimeType.XLSX, fileName);
+    }
+}

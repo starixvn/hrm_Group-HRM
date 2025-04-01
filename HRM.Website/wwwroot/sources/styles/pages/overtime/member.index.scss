@@ -1,0 +1,44 @@
+﻿@import '~jquery-contextmenu/dist/jquery.contextMenu.css';
+@import '../../../libs/monthPicker/monPickr-0.0.3.css';
+
+@import '../../abstracts/variables';
+@import '../../abstracts/mixins';
+@import '../../components/buttons-new';
+@import '../../components/checkbox';
+@import '../../components/modal';
+@import '../../components/icon';
+@import '../../components/multiselect-treeview';
+@import '../../components/context-menu';
+@import '../../components/monpickr';
+@import '../../layout/filter';
+@import '../../layout/table';
+@import '../../layout/shift.color';
+@import '../../layout/toastr';
+@import '../../vendors/multiselect';
+@import '../../vendors/autocomplete';
+
+.title {
+    display: flex;
+    align-items: center;
+}
+
+.multiselect-treeview {
+    .multiselect-treeview-dropdown-list {
+        width: 220px;
+    }
+}
+
+.reminder-modal {
+    .form-horizontal {
+        .form-group {
+            margin-right: 0;
+            float: none;
+
+            textarea {
+                height: 120px;
+                padding: 5px;
+                resize: none;
+            }
+        }
+    }
+}

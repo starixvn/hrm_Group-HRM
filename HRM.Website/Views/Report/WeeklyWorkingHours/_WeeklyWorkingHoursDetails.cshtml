@@ -1,0 +1,132 @@
+﻿@using HRM.Core.Enums
+@using HRM.Resources
+@using HRM.Website.Helper
+@model IEnumerable<HRM.Models.Report.MonthlyWorkingHours.MonthlyWorking>
+    @{
+        var fromDate = (DateTime)ViewBag.FromDate;
+        var toDate = (DateTime)ViewBag.ToDate;
+    }
+    <table id="data" class="table table-custom">
+        <thead>
+            <tr>
+                <th>@Labels.SymbolCount</th>
+                <th class="col-sorter">
+                    <div class="cell-control-wrapper">
+                        <div>@Labels.Department</div>
+                        <div class="fa fa-sort"></div>
+                    </div>
+                </th>
+                <th class="col-sorter">
+                    <div class="cell-control-wrapper">
+                        <div>@Labels.Section</div>
+                        <div class="fa fa-sort"></div>
+                    </div>
+                </th>
+                <th class="cell-section">@Labels.Team</th>
+                <th>@Labels.Code</th>
+                <th class="cell-fullname">@Labels.FullName</th>
+                <th>@Labels.NickName</th>
+                <th>@Labels.ActualWorkingDays</th>
+                @for (var day = fromDate.Date; day.Date <= toDate.Date; day = day.AddDays(1))
+                {
+                    <th class="@(day.DayOfWeek is DayOfWeek.Saturday or DayOfWeek.Sunday ? "weekend" : string.Empty)">
+                        @day.ToString("dd MMM, yyyy (ddd)")
+                    </th>
+                }
+            </tr>
+        </thead>
+        @if (Model != null && Model.Any())
+        {
+            var index = 0;
+            <tbody>
+                @foreach (var monthlyWorking in Model)
+                {
+                    index++;
+                    <tr>
+                        <td>@index</td>
+                        <td>@monthlyWorking.Department</td>
+                        <td>@monthlyWorking.Section</td>
+                        <td class="align-left">@monthlyWorking.Team.Name</td>
+                        <td class="align-left">@monthlyWorking.Code</td>
+                        <td class="align-left">@monthlyWorking.FullName</td>
+                        <td class="align-left">@monthlyWorking.Nickname</td>
+                        <td>@monthlyWorking.ActualWorkingDays.ToString("0.0")</td>
+                        @foreach (var dailyWorking in monthlyWorking.DailyWorkings)
+                        {
+                            var className = string.Empty;
+                            var value = string.Empty;
+                            if (dailyWorking.IsLeaveDay)
+                            {
+                                if (dailyWorking.IsHoliday)
+                                {
+                                    value = "PH";
+                                }
+                                else if (dailyWorking.IsOffDay)
+                                {
+                                    value = "OFF";
+                                }
+                                else
+                                {
+                                    if (dailyWorking.RequestStatusId == (byte)CurrentRequestStatus.Pending)
+                                    {
+                                        className = "pending";
+                                    }
+
+                                    if (dailyWorking.LeaveType.Id == (int)LeaveTypes.UnpaidLeave
+                                        || dailyWorking.LeaveType.Id == (int)LeaveTypes.UnpaidLeaveInsurance
+                                        || dailyWorking.LeaveType.Id == (int)LeaveTypes.MaternityLeave
+                                        || dailyWorking.LeaveType.Id == (int)LeaveTypes.PaternityLeave
+                                        || dailyWorking.LeaveType2 is { Id: (int)LeaveTypes.UnpaidLeave or (int)LeaveTypes.UnpaidLeaveInsurance or (int)LeaveTypes.MaternityLeave or (int)LeaveTypes.PaternityLeave })
+                                    {
+                                        className += " unpaidleave";
+                                    }
+
+                                    if (dailyWorking.IsLeaveHalfDay)
+                                    {
+                                        value = $"{dailyWorking.LeaveType.Code}½";
+                                    }
+                                    else
+                                    {
+                                        value = dailyWorking.LeaveType.Code;
+                                        if (dailyWorking.LeaveType2 != null && dailyWorking.LeaveType.Id != dailyWorking.LeaveType2.Id)
+                                        {
+                                            value = $"{dailyWorking.LeaveType.Code}½/{dailyWorking.LeaveType2.Code}½";
+                                        }
+                                    }
+                                }
+                            }
+                            else if (dailyWorking.TotalWorkingHours > 0)
+                            {
+                                value = dailyWorking.TotalWorkingHoursToDisplay;
+                            }
+                            else if (dailyWorking.IsMissingCheckIn)
+                            {
+                                value = "Check In";
+                            }
+                            else if (dailyWorking.IsMissingCheckOut)
+                            {
+                                value = "Check Out";
+                            }
+                            else if (dailyWorking.IsAbsent)
+                            {
+                                value = "Absent";
+                            }
+                            else if (dailyWorking.IsHoliday)
+                            {
+                                value = "PH";
+                            }
+                            else if (dailyWorking.IsOffDay)
+                            {
+                                value = "OFF";
+                            }
+                            <td class="@className">@value</td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        }
+        else
+        {
+            @Html.Raw(RazorHelpers.DisplayNoInformation(colspan: 40))
+        }
+    </table>

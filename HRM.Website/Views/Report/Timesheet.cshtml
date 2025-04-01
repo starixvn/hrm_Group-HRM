@@ -1,0 +1,47 @@
+﻿@using HRM.Core
+@using HRM.Resources
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model HRM.ViewModels.Report.TimesheetViewModel
+@{
+    ViewBag.Title = "My timesheet";
+    var today = DateTimeOffset.Now.DateTime.ToClientTimeZone();
+}
+@section css{
+    <link href="~/dist/styles/report.timesheet.css" rel="stylesheet" />
+
+}
+@section js{
+    <script src="~/dist/js/report.timesheet.js"></script>
+}
+@section Breadcrumb {
+    <a class="step">Personal</a> <span class="step">@ViewBag.Title</span>
+}
+<h2 class="page-title">@ViewBag.Title</h2>
+
+<form class="filter" action="" novalidate="novalidate">
+    <div class="form-horizontal clearfix">
+        <div class="form-group form-group--m style-mr-0">
+            <div class="label-form label--xs">
+                <label class="control-label">@Labels.Month</label>
+            </div>
+            <div class="input-form">
+                <div id="monthPickr"></div>
+                <input type="hidden" id="Year" name="Year" value="@today.Year" />
+                <input type="hidden" id="Month" name="Month" value="@today.Month" />
+                <input type="hidden" id="maxDate" value="@today.GetMaxDate().ToString("yyyy/MM/dd")" />
+                @Html.HiddenFor(model => model.EmpId)
+            </div>
+        </div>
+        <div class="form-group">
+            <button type="submit" id="btnSubmit" class="btn btn-primary">@Labels.Submit</button>
+            @if (Model.IsHavePrivilegeCreateCheckInOutRecord)
+            {
+                <a href="javascript:;" class="btn btn-request" id="btnCreateCheckIn"><span class="fa fa-plus"></span> @Labels.CheckIn</a>
+                <a href="javascript:;" class="btn btn-request" id="btnCreateCheckOut"><span class="fa fa-plus"></span> @Labels.CheckOut</a>
+            }
+        </div>
+    </div>
+</form>
+<div id="timesheetDetails"></div>
+
+<div id="tippy-request" class="tippy-request"></div>

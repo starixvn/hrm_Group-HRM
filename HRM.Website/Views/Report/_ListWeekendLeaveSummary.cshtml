@@ -1,0 +1,66 @@
+﻿@using HRM.Core.Constants
+@using HRM.Resources
+@using HRM.Website.Helper
+@model IList<HRM.Models.Report.WeekendLeaveSummary>
+<table id="data" class="table table-custom discipline-summary">
+    <thead>
+        <tr>
+            <th>@Labels.SymbolCount</th>
+            <th>@Labels.Team</th>
+            <th>@Labels.Code</th>
+            <th>@Labels.NickName</th>
+            <th>@Labels.FullName</th>
+            <th>@Labels.Category</th>
+            <th>@Labels.TotalWeekendLeave</th>
+            <th>@Labels.Action</th>
+        </tr>
+    </thead>
+    @if (Model != null && Model.Any())
+    {
+        var index = 0;
+        <tbody>
+            @foreach (var item in Model)
+            {
+                index++;
+                <tr>
+                    <td>@index</td>
+                    <td>@item.TeamName</td>
+                    <td>@item.Code</td>
+                    <td>@item.NickName</td>
+                    <td class="align-left">@item.FullName</td>
+                    <td>
+                        @if (item.IsLocal)
+                        {
+                            <span>@Labels.Local</span>
+                        }
+                        else
+                        {
+                            <span>@Labels.Expat</span>
+                        }
+                    </td>
+                    <td>
+                        @if (item.TotalWeekendLeave >= Constants.TotalWeekendLeaveLimit)
+                        {
+                            <span style="color: red">@item.TotalWeekendLeave</span>
+                        }
+                        else
+                        {
+                            @item.TotalWeekendLeave
+                        }
+                    </td>
+                    <td>
+                        @{
+                            var empId = item.EmployeeId;
+                            var employee = item.NickName + " (" + item.FullName + ")";
+                        }
+                        <a href="javascript:;" class="fa fa-search fa-lg viewWeekendLeaveDetail" data-empid="@empId" data-employee="@employee"></a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    }
+    else
+    {
+        @Html.Raw(RazorHelpers.DisplayNoInformation(colspan: 8))
+    }
+</table>

@@ -1,0 +1,11 @@
+﻿@import '../../abstracts/_variables.scss';
+@import '../../abstracts/mixins';
+@import '../../layout/filter';
+@import '../../layout/table';
+@import '../../components/buttons-new';
+@import '../../components/_card.scss';
+@import '../../components/_jquery-ui-dialog.scss';
+
+.send-to {
+    max-width : 600px;
+}

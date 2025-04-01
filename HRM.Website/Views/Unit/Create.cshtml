@@ -1,0 +1,18 @@
+﻿@using HRM.Resources
+@{
+	ViewBag.Title = Labels.AddUnit;
+}
+@section css{
+	<link href="~/dist/styles/unit.create.css" rel="stylesheet" />
+}
+@section js{
+	<script src="~/dist/js/unit.create.js"></script>
+}
+@section Breadcrumb {
+	<a class="step">@Labels.SASpace</a>
+	<a class="step" href="@Url.Action("index", "unit")">@Labels.UnitManagement</a>
+	<span class="step">@ViewBag.Title</span>
+}
+
+<h2 class="page-title">@Labels.Create</h2>
+<div id="create-unit"></div>

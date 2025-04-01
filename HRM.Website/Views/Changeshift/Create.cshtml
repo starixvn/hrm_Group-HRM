@@ -1,0 +1,160 @@
+﻿@using HRM.Core
+@using HRM.Core.Enums
+@using HRM.Resources
+@model HRM.ViewModels.Request.ChangeShiftViewModel
+@{
+    ViewBag.Title = Labels.Create;
+    var isTopManager = (bool)ViewBag.IsTopManager;
+    var hasOnBehalfRequestPermission = (bool)ViewBag.HasOnBehalfRequestPermission;
+    var today = DateTimeOffset.Now.DateTime.ToClientTimeZone().Date;
+}
+@section css{
+    <link href="~/dist/styles/changeshift.create.css" rel="stylesheet" />
+}
+@section js{
+    <script src="~/dist/js/changeshift.create.js"></script>
+}
+@section Breadcrumb {
+    <a class="step">@Labels.Personal</a>
+    <a class="step" href="@Url.Action("employeeview", "changeshift", new { })">@Labels.MyChangeShiftRequest</a>
+    <a class="step">@ViewBag.Title</a>
+}
+<h2 class="page-title">@ViewBag.Title</h2>
+<div class="card">
+    <input type="checkbox" id="IsTopManager" hidden @(isTopManager ? "checked" : string.Empty) />
+    @using (Html.BeginForm("Create", "ChangeShift", FormMethod.Post, new { id = "formShift", @class = "form-horizontal" }))
+    {
+        @Html.ValidationSummary()
+        <div class="validation-summary-errors" style="display: none;"></div>
+        if (Model.TotalRequestInMonth > 0)
+        {
+            <div class="validation-summary-errors">
+                <a href="@Url.Action("EmployeeView")">
+                    You've already requested for change shift <b>@Model.TotalRequestInMonth</b>
+                    times since @DateTimeOffset.Now.DateTime.ToClientTimeZone().ToString("MMM yyyy")
+                </a>
+            </div>
+        }
+
+        @Html.HiddenFor(model => model.EmployeeId)
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.Employee, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @if (hasOnBehalfRequestPermission)
+                {
+                    @Html.TextBoxFor(model => model.Employee, new { @class = "form-control", autocomplete = "off" })
+                }
+                else
+                {
+                    <strong>@Html.DisplayFor(model => model.Employee)</strong>
+                }
+            </div>
+            @Html.ValidationMessageFor(model => model.Employee)
+        </div>
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.TypeId, new { @class = "control-label" })
+            </div>
+            <div class="select-form">
+                @{
+                    var types = new List<SelectListItem>
+                    {
+                        new() { Text = Labels.ChangeShift, Value = ((byte)ChangeShiftType.ChangeShift).ToString() },
+                        new() { Text = Labels.MoveOffDayToAnotherWeek, Value = ((byte)ChangeShiftType.MoveOffDay).ToString() }
+                    };
+                }
+                @Html.DropDownListFor(model => model.TypeId, types, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.FromDate, new { @class = "control-label" })
+            </div>
+            <div class="calendar-form">
+                @Html.TextBox("FromDate", Model.FromDate.ToDateMonthYearFormatedDate(),
+                    new {
+                        @class = "datepicker form-control",
+                        mindate = today.FirstDayOfMonth().AddMonths(-1).ToString("yyyy/MM/dd"),
+                        maxdate = today.FirstDayOfMonth().AddMonths(2).AddDays(-1).ToString("yyyy/MM/dd")
+                    })
+                <i class="icon-calendar fa fa-calendar"></i>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.ToDate, new { @class = "control-label" })
+            </div>
+            <div class="calendar-form">
+                @Html.TextBox("ToDate", Model.ToDate.ToDateMonthYearFormatedDate(),
+                    new {
+                        @class = "datepicker form-control",
+                        mindate = today.FirstDayOfMonth().AddMonths(-1).ToString("yyyy/MM/dd"),
+                        maxdate = today.FirstDayOfMonth().AddMonths(2).AddDays(-1).ToString("yyyy/MM/dd")
+                    })
+                <i class="icon-calendar fa fa-calendar"></i>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.VerifierId, new { @class = "control-label" })
+            </div>
+            <div class="select-form">
+                @if (Model.Verifiers.Count > 1)
+                {
+                    @Html.DropDownListFor(x => x.VerifierId, new SelectList(Model.Verifiers, "OwnerId", "DisplayName"), Labels.SelectVerifier, new { @class = "form-control" })
+                }
+                else
+                {
+                    @Html.DropDownListFor(x => x.VerifierId, new SelectList(Model.Verifiers, "OwnerId", "DisplayName"), new { @class = "form-control" })
+                }
+            </div>
+            @Html.ValidationMessageFor(model => model.VerifierId)
+        </div>
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.ApproverId, new { @class = "control-label" })
+            </div>
+            <div class="select-form">
+                @if (Model.Approvers.Count > 1)
+                {
+                    @Html.DropDownListFor(x => x.ApproverId, new SelectList(Model.Approvers, "OwnerId", "DisplayName"), Labels.SelectApprover, new { @class = "form-control" })
+                }
+                else
+                {
+                    @Html.DropDownListFor(x => x.ApproverId, new SelectList(Model.Approvers, "OwnerId", "DisplayName"), new { @class = "form-control" })
+                }
+            </div>
+            @Html.ValidationMessageFor(model => model.ApproverId)
+        </div>
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.Remark, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.TextAreaFor(model => model.Remark, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.Files, Labels.UploadFile, new { @class = "control-label" })
+            </div>
+            <div class="left input--m" id="upload">
+                <input type="file" id="file" name="file" size="55" multiple />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="label-form">@Labels.Details</div>
+            <div id="changeShiftDetails" class="change-shift-details"></div>
+        </div>
+
+        <div class="form-group">
+            <div class="label-form"></div>
+            <div>
+                <button type="button" class="btn btn-primary" id="btnSubmit">@Labels.Request</button>
+                <button type="button" class="btn btn-default" onclick="window.history.back()">@Labels.Back</button>
+            </div>
+        </div>
+    }
+</div>

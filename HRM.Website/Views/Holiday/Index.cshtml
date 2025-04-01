@@ -1,0 +1,105 @@
+﻿@using HRM.Core
+@using HRM.Core.Enums
+@using HRM.Core.Helpers
+@using HRM.Models
+@using HRM.Resources
+@using HRM.Website.Helper
+@model IEnumerable<Holiday>
+@{
+    ViewBag.Title = Labels.Holiday;
+    var hasPermission = (bool)ViewBag.HasPermission;
+    var totalColumn = hasPermission ? 8 : 6;
+}
+@section css{
+    <link href="~/dist/styles/holiday.index.css" rel="stylesheet" />
+}
+@section js{
+    <script src="~/dist/js/holiday.index.js"></script>
+}
+@section Breadcrumb {
+    <a class="step">@Labels.CompanySpace</a>
+    <a class="step" href="@Url.Action("workingcalendars", "calendar")">Working calendars</a>
+    <a class="step">@ViewBag.Title</a>
+}
+<h2 class="page-title">@ViewBag.Title</h2>
+
+@using (Html.BeginForm("index", "holiday", FormMethod.Get, new { @class = "filter" }))
+{
+    <div class="form-horizontal clearfix">
+        <div class="form-group year">
+            <div class="label-form">
+            @Html.Label(Labels.Year, Labels.Year, new { @class = "control-label" })
+            </div>
+            <div class="select-form">
+            @{
+                var yearPicker = Extensions.YearPicker(2014, (int)ViewBag.Year);
+                <select class="yearpicker form-control" name="year" id="year">
+                    @foreach (var item in yearPicker)
+                    {
+                        <!option value="@item.Value" @(item.Selected ? "selected" : "")>@item.Value</!option>
+                    }
+                </select>
+            }
+            </div>
+        </div>
+        <div class="form-group form-group--m">
+            <button type="submit" id="btnSearch" class="btn btn-primary">@Labels.Search</button>
+            <a class="btn btn-request" href="@Url.Action("create", "holiday")">
+                <span class="fa fa-plus"></span> @Labels.NewHoliday
+            </a>
+        </div>
+    </div>
+}
+<table id="data" class="table table-custom">
+    <thead>
+        <tr>
+            <th>@Labels.SymbolCount</th>
+            <th>@Labels.Name</th>
+            <th>@Labels.Type</th>
+            <th>@Labels.From</th>
+            <th>@Labels.To</th>
+            @if (hasPermission)
+            {
+                <th>@Labels.Edit</th>
+                <th>@Labels.Delete</th>
+            }
+        </tr>
+    </thead>
+    @if (Model.Any())
+    {
+        <tbody>
+            @{var index = 1;}
+            @foreach (var item in Model)
+            {
+                <tr id="row@(item.Id)">
+                    <td>@(index++)</td>
+                    <td class="align-left">@item.HolidayName</td>
+                    <td>@(((HolidayType)item.TypeId).GetDisplayName())</td>
+                    <td>
+                        @item.FromDate.ToDateMonthYearFormatedDate()
+                    </td>
+                    <td>
+                        @item.ToDate.ToDateMonthYearFormatedDate()
+                    </td>
+                    @if (hasPermission)
+                    {
+                        <td class="cmd">
+                            <a href="@Url.Action("edit", "Holiday", new { item.Id })">
+                                <i class="fa fa-pencil fa-lg icon-edit"></i>
+                            </a>
+                        </td>
+                        <td class="cmd">
+                            <a href="javascript:;" class="deleteHoliday" data-id="@item.Id">
+                                <i class="fa fa-times fa-lg icon-delete"></i>
+                            </a>
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    }
+    else
+    {
+        @Html.Raw(RazorHelpers.DisplayNoInformation(colspan: totalColumn))
+    }
+</table>

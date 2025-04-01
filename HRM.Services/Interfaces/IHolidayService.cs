@@ -1,0 +1,19 @@
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using HRM.Core.Models;
+using HRM.Models;
+
+namespace HRM.Services.Interfaces;
+
+public interface IHolidayService
+{
+    Task<Holiday> GetByIdAsync(int holidayId);
+
+    Task<IEnumerable<Holiday>> GetByYearAsync(int year);
+
+    Task<CommandResult> CreateAsync(int actorId, Holiday model);
+
+    Task<CommandResult> EditAsync(int actorId, Holiday model);
+
+    Task<CommandResult> DeleteAsync(int actorId, int id);
+}

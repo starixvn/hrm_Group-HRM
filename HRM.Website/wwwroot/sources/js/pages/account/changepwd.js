@@ -1,0 +1,1 @@
+﻿import 'jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.js';

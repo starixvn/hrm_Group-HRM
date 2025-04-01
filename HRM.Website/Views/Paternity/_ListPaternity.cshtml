@@ -1,0 +1,63 @@
+﻿@using HRM.Core
+@using HRM.Resources
+@using HRM.Website.Helper
+@model IList<HRM.Models.EmployeePaternity>
+
+<table class="table table-custom" id="data">
+    <thead>
+        <tr>
+            <th>@Labels.SymbolCount</th>
+            <th>@Labels.NickName</th>
+            <th>@Labels.FullName</th>
+            <th>Child's Born Date</th>
+            <th>Leave Day</th>
+            <th>@Labels.Remark</th>
+            <th>@Labels.CreatedBy</th>
+            <th>@Labels.CreatedDate</th>
+            @if (ViewBag.IsHost)
+            {
+                <th>@Labels.Action</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @{var index = 1;}
+        @if (Model is { Count: > 0 })
+        {
+            foreach (var paternity in Model)
+            {
+                <tr>
+                    <td>@(index++)</td>
+                    <td>@paternity.Nickname</td>
+                    <td class="align-left">@paternity.Fullname</td>
+                    <td>@paternity.ChildBornDate.ToDateMonthYearFormatedDate()</td>
+                    <td>@paternity.LeaveDay</td>
+                    <td>
+                        @if (!string.IsNullOrWhiteSpace(paternity.Remark))
+                        {
+                            <span class="fa fa-comment tooltip-tipsy" original-title="@paternity.Remark"></span>
+                        }
+                    </td>
+                    <td>@paternity.Creator</td>
+                    <td>@paternity.CreatedDate.ToFormatedDate()</td>
+
+                    @if (ViewBag.IsHost)
+                    {
+                        <td class="action-column">
+                            <a data-id="@paternity.PaternityId" class="edit-paternity" title="@Labels.Edit">
+                                <i class="fa fa-pencil fa-lg icon-edit"></i>
+                            </a>
+                            <a data-id="@paternity.PaternityId" class="delete-paternity" title="@Labels.Delete">
+                                <i class="fa fa-times fa-lg icon-delete"></i>
+                            </a>
+                        </td>
+                    }
+                </tr>
+            }
+        }
+        else
+        {
+            @Html.Raw(RazorHelpers.DisplayNoInformation(colspan: 9))
+        }
+    </tbody>
+</table>

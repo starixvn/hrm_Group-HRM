@@ -1,0 +1,42 @@
+﻿@using HRM.Core
+@using HRM.ViewModels.AnnualLeave
+@model AnnualLeaveBalanceMultiViewModel
+
+@using (Html.BeginForm("Adjust", "SickLeaveBalance", FormMethod.Post))
+{
+    @Html.ValidationSummary()
+    <div class="form-horizontal clearfix">
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.TotalDays, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.TextBoxFor(model => model.TotalDays, new { @class = "form-control", autocomplete = "off", required = true })
+            </div>
+        </div>
+
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.LabelFor(model => model.Description, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.TextAreaFor(model => model.Description, new { @class = "form-control", rows = 5 })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.AffectedFrom, new { @class = "control-label" })
+            </div>
+            <div class="calendar-form">
+                @Html.TextBox(Html.NameFor(model => model.AffectedFrom).ToString(), Model.AffectedFrom.ToDateMonthYearFormatedDate(),
+                    new {
+                        @class = "datepicker form-control",
+                        mindate = new DateTime(2010, 1, 1).ToString("yyyy/MM/dd")
+                    })
+                <i class="icon-calendar fa fa-calendar"></i>
+            </div>
+        </div>
+        @Html.HiddenFor(model => model.EmpIds)
+    </div>
+}

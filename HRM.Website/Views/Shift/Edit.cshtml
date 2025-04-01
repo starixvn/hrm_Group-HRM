@@ -1,0 +1,106 @@
+﻿@using HRM.Core
+@using HRM.Resources
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model HRM.Models.Shifts.EditShiftModel
+
+@{
+    ViewBag.Title = Labels.EditShift;
+    var isHost = (bool)ViewBag.IsHost;
+}
+
+@section css{
+    <link href="~/dist/styles/shift.edit.css" rel="stylesheet" />
+}
+@section js{
+    <script src="~/dist/js/shift.edit.js"></script>
+}
+@section Breadcrumb {
+    <a class="step">@Labels.CompanySpace</a>
+    <a class="step" href="@Url.Action("index", "shift")">@Labels.ShiftManagement</a>
+    <span class="step">@ViewBag.Title</span>
+}
+
+<h2 class="page-title">@Labels.Edit</h2>
+
+<div class="card card-md">
+    @if (Model == null)
+    {
+        <div class="error">The shift you are looking for does not exist!</div>
+        <a href="@Url.Action("index", "shift")" class="button">@Labels.Back</a>
+    }
+    else
+    {
+        
+        <form class="form-horizontal clearfix" method="post">
+            @Html.ValidationSummary()
+            @Html.HiddenFor(model => model.ShiftId)
+            @Html.HiddenFor(model => model.IsUsed)
+            <div class="form-group">
+                <div class="label-form">
+                    @Html.LabelFor(model => model.Name, new { @class = "control-label" })*
+                </div>
+                <div class="input-form input-form-custom">
+                    @Html.TextBoxFor(model => model.Name, new { maxlength = "20", @class = "form-control shift-name" })
+                    @Html.ValidationMessageFor(model => model.Name)
+                </div>
+            </div>
+
+            <div class="form-group input-time">
+                <div class="label-form">
+                    @Html.LabelFor(model => model.HourTimeIn, Labels.TimeIn, new { @class = "control-label" })*
+                </div>
+                <div class="input-form input-form-custom">
+                    <input type="number" name="HourTimeIn" id="HourTimeIn" class="form-control"
+                           min="0" max="23" step="1" maxlength="2" value="@Model.HourTimeIn" />
+                    :
+                    <input type="number" name="MinuteTimeIn" id="MinuteTimeIn" class="form-control"
+                           min="0" max="59" step="1" maxlength="2" value="@Model.MinuteTimeIn" />
+                    <div class="checkbox-group">
+                        @Html.CheckBoxCustomFor(model => model.IsInAfterDay)
+                        @Html.LabelFor(model => model.IsInAfterDay, new { @class = "checkbox-label" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group input-time">
+                <div class="label-form">
+                    @Html.LabelFor(model => model.HourTimeOut, Labels.TimeOut, new { @class = "control-label" })*
+                </div>
+                <div class="input-form">
+                    <input type="number" name="HourTimeOut" id="HourTimeOut" class="form-control"
+                           min="0" max="23" step="1" maxlength="2" value="@Model.HourTimeOut" />
+                    :
+                    <input type="number" name="MinuteTimeOut" id="MinuteTimeOut" class="form-control"
+                           min="0" max="59" step="1" maxlength="2" value="@Model.MinuteTimeOut" />
+                    <div class="checkbox-group">
+                        @Html.CheckBoxCustomFor(model => model.IsOutAfterDay)
+                        @Html.LabelFor(model => model.IsOutAfterDay, new { @class = "checkbox-label" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="label-form">
+                    @Html.LabelFor(model => model.IsDisabled, "Disabled", new { @class = "control-label"})*
+                </div>
+                <div class="input-form">
+                    @Html.CheckBoxCustomFor(model => model.IsDisabled)
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="label-form">
+                </div>
+                <div class="input-form">
+                    <input type="submit" class="btn btn-primary" value="@Labels.Save" />
+                    @if (!Model.IsUsed && isHost)
+                    {
+                        <a href="javascript:;" class="btn btn-danger js-delete-shift" data-id="@Model.ShiftId">@Labels.Delete</a>
+                    }
+
+                    <a href="@Url.Action("index", "shift")" class="btn btn-default">@Labels.Back</a>
+                </div>
+            </div>
+        </form>
+    }
+</div>

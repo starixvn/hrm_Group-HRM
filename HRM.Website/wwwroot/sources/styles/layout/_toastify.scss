@@ -1,0 +1,40 @@
+﻿@import '~react-toastify/dist/ReactToastify.css';
+
+.Toastify__toast-container {
+    width: 360px;
+
+    .Toastify__toast {
+        min-height: 50px;
+        @include border-radius(5px);
+        padding: 8px 12px 14px;
+    }
+
+    &.Toastify__toast-container--top-center {
+        top: 0;
+    }
+
+    .Toastify__progress-bar {
+        height: 2px;
+    }
+
+    .Toastify__close-button {
+        /*width: unset;
+        height: unset;
+        line-height: unset;
+        color: #fff !important;
+        align-self: center;
+        padding-top: 6px;
+        font-size: 14px !important;
+        background: transparent;
+        outline: none;
+        border: none;
+        padding: 0;
+        text-shadow: none;
+        box-shadow: none;
+        vertical-align: middle;*/
+
+        &:hover, &:active, &:focus {
+            background: transparent;
+        }
+    }
+}

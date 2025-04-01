@@ -1,0 +1,58 @@
+﻿@using HRM.Resources
+@using HRM.ViewModels.Employee
+@model ChangePasswordViewModel
+@{
+    ViewBag.Title = "Change Password";
+    string changePwdOK = ViewBag.ChangePwdOK;
+}
+@section css{
+    <link href="~/dist/styles/account.changepwd.css" rel="stylesheet" />
+}
+@section js{
+    <script src="~/dist/js/account.changepwd.js"></script>
+}
+@section Breadcrumb {
+    <span class="step">@ViewBag.Title</span>
+}
+
+<h2 class="page-title">@ViewBag.Title</h2>
+<div class="card" style="width: 400px;">
+    @using (Html.BeginForm("changepwd", "account", FormMethod.Post, new { @class = "form-horizontal" }))
+    {
+        @Html.ValidationSummary()
+        @Html.AntiForgeryToken()
+        if (!string.IsNullOrWhiteSpace(changePwdOK))
+        {
+            <div class="success">@changePwdOK</div>
+        }
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.Password, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.PasswordFor(model => model.Password, new { @class = "form-control", autocomplete = "off" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.NewPassword, "New Password", new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.PasswordFor(model => model.NewPassword, new { @class = "form-control", autocomplete = "off" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.ConfirmPassword, "Confirm Password", new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.PasswordFor(model => model.ConfirmPassword, new { @class = "form-control", autocomplete = "off" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div>
+                <button type="submit" class="btn btn-primary" id="btnSubmit">@Labels.Submit</button>
+            </div>
+        </div>
+    }
+</div>

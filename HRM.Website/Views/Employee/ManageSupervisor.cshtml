@@ -1,0 +1,33 @@
+﻿@using HRM.Core.Enums
+@using HRM.Resources
+@{
+	ViewBag.Title = "Edit Employee Supervisor";
+	var employeeId = (int)ViewBag.EmployeeId;
+	var roleId = (short)ViewBag.RoleId;
+	var breadcrumb = string.Empty;
+}
+@section css{
+	<link href="~/dist/styles/team.edit.supervisor.css" rel="stylesheet" />
+}
+@section js{
+	<script src="~/dist/js/employee.edit.supervisor.js"></script>
+}
+@section Breadcrumb
+{
+	<a class="step" href="javascript:;">@Labels.HRSpace</a>
+	<a class="step" href="@Url.Action("usermanagement", "employee")">@Labels.EmployeeManagement</a>
+	<a class="step" href="@Url.Action("edit", "employee", new { id = employeeId })">@Labels.EmployeePersonalInformation</a>
+	<a class="step">
+        @{ breadcrumb = roleId switch
+            {
+                (short)RoleSystem.Verifier => Labels.Verifier,
+                (short)RoleSystem.Approver => Labels.Approver,
+                (short)RoleSystem.OnBehalfRequest => Labels.OnBehalfRequest,
+                _ => breadcrumb
+            }; }
+        @breadcrumb
+	</a>
+}
+@Html.Hidden("EmployeeId", employeeId)
+@Html.Hidden("RoleId", roleId)
+<div id="supervisor-wrapper"></div>

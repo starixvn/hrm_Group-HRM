@@ -1,0 +1,66 @@
+﻿.form-horizontal {
+    .form-group {
+        display: flex;
+        align-items: center;
+        margin-left: 0;
+        margin-right: 0;
+
+        .form-control {
+            font-size: 1.3rem;
+            height: 27px;
+            padding: 0 5px;
+        }
+
+        textarea.form-control {
+            padding-top: 5px;
+            padding-bottom: 5px;
+            min-height: 70px;
+            resize: vertical;
+        }
+
+        .label-form {
+            width: 120px;
+            padding-right: 5px;
+
+            &.label--l {
+                width: 140px;
+            }
+
+            .control-label {
+                font-weight: normal;
+                padding-top: 0;
+                margin-bottom: 0;
+                text-align: left;
+            }
+        }
+
+        .select-form, .calendar-form, .input-form {
+            width: 200px;
+        }
+
+        .calendar-form {
+            display: flex;
+            align-items: center;
+
+            .form-control {
+                width: 120px;
+            }
+
+            .icon-calendar {
+                margin-left: 2px;
+                font-size: 1.6rem;
+                color: #A63C45;
+            }
+        }
+
+        .input-validation-error {
+            border-color: #ff4545;
+            @include box-shadow(0 0 2px 2px rgba(255,0,0, .2));
+        }
+
+        .field-validation-error {
+            color: #e80c4d;
+            padding-left: 10px;
+        }
+    }
+}

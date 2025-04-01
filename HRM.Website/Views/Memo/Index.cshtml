@@ -1,0 +1,120 @@
+﻿@using HRM.Core
+@using HRM.Resources
+@using HRM.ViewModels.Memo
+@using HRM.Website.Helper
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model MemoViewModel
+@{
+    ViewBag.Title = "Company Memo";
+    var hasPermission = (bool)ViewBag.HasPermission;
+    var totalColumn = hasPermission ? 7 : 5;
+}
+@section css{
+    <link href="~/dist/styles/memo.css" rel="stylesheet" />
+}
+@section js{
+    <script src="~/dist/js/memo.js"></script>
+}
+@section Breadcrumb {
+    <a class="step">@Labels.CompanySpace</a> <span class="step">@ViewBag.Title</span>
+}
+<h2 class="page-title">@ViewBag.Title</h2>
+
+<form class="filter">
+    <div class="form-horizontal clearfix">
+        <div class="form-group year">
+            <div class="label-form">
+                @Html.LabelFor(model => model.Year, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @{
+                    var years = Extensions.YearPickerFor(2010, true);
+                    <select asp-items="years" asp-for="Year" class="yearpicker form-control"></select>
+                }
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="label-form label--m">
+                @Html.LabelFor(model => model.Category, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @{
+                    var items = Model.MemoCategories.Select(x => new SelectListItem { Value = x.Id.ToString(), Text = x.Name });
+                }
+                <select class="form-control" asp-items="items" asp-for="Category" class="yearpicker form-control">
+                    <option value="-1">All</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <input type="submit" id="submit" class="btn btn-primary" value="@Labels.Submit" />
+            @if (hasPermission)
+            {
+                <a href="@Url.Action("Create")" class="btn btn-request">
+                    <span class="fa fa-plus"></span>
+                    @Labels.CreateMemo
+                </a>
+            }
+        </div>
+    </div>
+</form>
+<table id="memo" class="table table-custom js-table-memo">
+    <thead>
+        <tr>
+            <th>@Labels.SymbolCount</th>
+            <th>@Labels.RefNo</th>
+            <th>@Labels.Subject</th>
+            <th>@Labels.Category</th>
+            <th>@Labels.Date</th>
+            @if (hasPermission)
+            {
+                <th>@Labels.Edit</th>
+                <th>@Labels.Delete</th>
+            }
+        </tr>
+    </thead>
+    @if (Model.Memos.Any())
+    {
+        <tbody>
+            @{var index = 1;}
+            @foreach (var item in Model.Memos)
+            {
+                <tr id="row_@item.Id">
+                    <td>
+                        @(index++)
+                    </td>
+                    <td>
+                        @item.RefNo
+                    </td>
+                    <td class="align-left">
+                        <a href="@Url.Action("detail", "memo", new { item.Id })">@item.Subject</a>
+                    </td>
+                    <td>
+                        @item.CategoryName
+                    </td>
+                    <td class="ddMMyyyy">
+                        @item.SentDate.ToDateMonthYearFormatedDate()
+                    </td>
+                    @if (hasPermission)
+                    {
+                        <td class="cmd" title="Edit">
+                            <a href="@Url.Action("edit", "memo", new { item.Id })">
+                                <i class="fa fa-pencil fa-lg icon-edit"></i>
+                            </a>
+                        </td>
+                        <td class="cmd" title="Delete">
+                            <a href="javascript:;">
+                                <i class="fa fa-times fa-lg icon-delete" data-id="@item.Id"></i>
+                            </a>
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    }
+    else
+    {
+        @Html.Raw(RazorHelpers.DisplayNoInformation(colspan: totalColumn))
+    }
+</table>

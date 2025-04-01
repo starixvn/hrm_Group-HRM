@@ -1,0 +1,332 @@
+﻿namespace HRM.Services.ExportExcel.Employee;
+
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
+using Core.Enums;
+using Core;
+using Implement;
+using Interfaces;
+using Microsoft.AspNetCore.Hosting;
+using Models;
+using Models.EmployeeInformation;
+using Models.Supervisor;
+using Resources;
+
+public class ExportExcelEmployeeInfoService(
+    IEmployeeService employeeService,
+    ICommonDataService commonDataService,
+    IWebHostEnvironment hostingEnvironment) : IExportExcelEmployeeInfoService
+{
+    private const string EmployeeBasicInfoTemplatePath = "ExcelTemplates/EmployeeBasicInfoTemplate.xls";
+    private const string EmployeeDetailsInfoTemplatePath = "ExcelTemplates/EmployeeDetailsInfoTemplate.xls";
+    private const string EmployeeFullInfoTemplatePath = "ExcelTemplates/EmployeeFullProfileInfoTemplate.xls";
+
+    private enum BasicInfo
+    {
+        RowStartHeader = 2,
+        RowStartBody = 4,
+        TotalColumns = 22
+    }
+
+    public async Task<byte[]> ExportEmployeeBasicInfo(IList<Employee> employees)
+    {
+        var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, EmployeeBasicInfoTemplatePath);
+        const string sheetName = "Employee Basic Info";
+        var writer = new ExcelTemplateWriter(templatePath, sheetName);
+        var enableGroupDate = await commonDataService.IsEnableGroupDateAsync();
+        const byte colGroupDate = 8;
+        const byte colLengthOfServiceGroupDate = 12;
+
+        writer.CopyRows(0, 2);
+        writer.CopyRows((byte)BasicInfo.RowStartHeader, 2);
+
+        FillContentRowEmployeeBasicInfoReport(employees, ref writer);
+        writer.SyncColumnsWidth((byte)BasicInfo.TotalColumns);
+        writer.CreateFreezePane(0, (byte)BasicInfo.RowStartBody);
+        if (!enableGroupDate)
+        {
+            writer.RemoveColumn(colGroupDate);
+            writer.RemoveColumn(colLengthOfServiceGroupDate);
+        }
+        return writer.WriteContentToBytes();
+    }
+
+    public byte[] ExportEmployeeDetailsInfo(IList<Employee> employees)
+    {
+        var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, EmployeeDetailsInfoTemplatePath);
+        const string sheetName = "Employee Details Info";
+        var writer = new ExcelTemplateWriter(templatePath, sheetName);
+
+        writer.CopyRows(0, 2);
+        writer.CopyRows(2, 1);
+
+        FillContentRowEmployeeDetailsInfoReport(employees, ref writer);
+        writer.SyncColumnsWidth(43);
+        writer.CreateFreezePane(0, 3);
+        return writer.WriteContentToBytes();
+    }
+
+    #region Employee Basic Info
+
+    private void FillContentRowEmployeeBasicInfoReport(IList<Employee> employees, ref ExcelTemplateWriter writer)
+    {
+        var rowIndex = 1;
+
+        foreach (var employee in employees)
+        {
+            FillRowEmployeeBasicInfoReport(employee, ref writer, ref rowIndex);
+        }
+    }
+
+    private void FillRowEmployeeBasicInfoReport(Employee employee, ref ExcelTemplateWriter writer, ref int rowIndex)
+    {
+        var record = CreateRecordEmployeeBasicInfoReport(employee, rowIndex);
+
+        var writeRowNumber = rowIndex % 2 == 0 ? 5 : 4;
+
+        writer.WriteRow(writeRowNumber, record);
+
+        rowIndex++;
+    }
+
+    private object CreateRecordEmployeeBasicInfoReport(Employee employee, int rowIndex)
+    {
+        var record = new
+        {
+            Count = rowIndex,
+            employee.UnitName,
+            Department = employee.Team.Section.Department.Name,
+            Section = employee.Team.Section.Name,
+            Team = employee.Team.Name,
+            employee.Code,
+            employee.FullName,
+            employee.NickName,
+            GroupDate = employee.JoinedDate,
+            employee.CompanyDate,
+            employee.ConfirmedDate,
+            employee.ResignedDate,
+            employee.ResignedReason,
+            LengthOfServiceByGroupDate = employeeService.CalculateLengthOfService(employee.JoinedDate, employee.MilitaryFromDate, employee.MilitaryToDate),
+            LengthOfServiceByCompanyDate = employeeService.CalculateLengthOfService(employee.CompanyDate, employee.MilitaryFromDate, employee.MilitaryToDate),
+            DoB = employee.DateOfBirth.ToDateMonthYearFormatedDate(),
+            Gender = employee.Gender == 0 ? "F" : "M",
+            CellPhone = employee.Phone,
+            employee.Email,
+            employee.Address,
+            employee.CurrentAddress,
+            Category = employee.IsLocal ? Labels.Local : Labels.Expat
+        };
+
+        return record;
+    }
+
+    #endregion Employee Basic Info
+
+    #region Employee Details Info
+
+    private static void FillContentRowEmployeeDetailsInfoReport(IList<Employee> employees, ref ExcelTemplateWriter writer)
+    {
+        var rowIndex = 1;
+
+        foreach (var employee in employees)
+        {
+            FillRowEmployeeDetailsInfoReport(employee, ref writer, ref rowIndex);
+        }
+    }
+
+    private static void FillRowEmployeeDetailsInfoReport(Employee employee, ref ExcelTemplateWriter writer, ref int rowIndex)
+    {
+        var record = CreateRecordEmployeeDetailsInfoReport(employee, rowIndex);
+        var writeRowNumber = rowIndex % 2 == 0 ? 4 : 3;
+
+        writer.WriteRow(writeRowNumber, record);
+
+        rowIndex++;
+    }
+
+    private static object CreateRecordEmployeeDetailsInfoReport(Employee employee, int rowIndex)
+    {
+        const string DateFormat = "dd MMM, yyyy";
+        var record = new
+        {
+            Count = rowIndex,
+            employee.Code,
+            employee.EmployeeCard,
+            employee.DomainUsername,
+            employee.FullName,
+            employee.NickName,
+            Team = employee.Team.Name,
+            DoB = employee.DateOfBirth,
+            employee.PlaceOfBirth,
+            employee.Ethnic,
+            employee.Native,
+            employee.Religion,
+            Gender = employee.Gender == 0 ? "F" : "M",
+            employee.MarriageName,
+            employee.CountryName,
+            employee.CardNo,
+            DateOfIdCard = FormatDate(employee.DateOfIdCard, DateFormat),
+            employee.PlaceOfIdCard,
+            employee.PassportNo,
+            PassportExp = FormatDate(employee.PassportExp, DateFormat),
+            employee.Qualification,
+            employee.Major,
+            employee.Phone,
+            employee.HomePhone,
+            employee.Email,
+            employee.Address,
+            employee.CurrentAddress,
+            employee.Skype,
+            Unit = employee.UnitName,
+            employee.JobTitle,
+            GroupDate = FormatDate(employee.JoinedDate, DateFormat),
+            CompanyDate = FormatDate(employee.CompanyDate, DateFormat),
+            ConfirmedDate = FormatDate(employee.ConfirmedDate, DateFormat),
+            ResignedDate = FormatDate(employee.ResignedDate, DateFormat),
+            ResignReason = employee.ResignedReason,
+            employee.WorkingDays,
+            employee.WorkingHoursbyWeek,
+            employee.WorkingHours,
+            employee.OffDaysbyWeek,
+            employee.AnnualLeaveBalance,
+            Category = employee.IsLocal ? Labels.Local : Labels.Expat,
+            employee.BankAccount,
+            employee.TaxCode,
+            employee.SocialInsuranceNo,
+            employee.RegisteredHospital
+        };
+
+        return record;
+    }
+
+    #endregion Employee Details Info
+
+    #region Employee Full Profile Information
+
+    public async Task<byte[]> ExportEmployeeFullProfile(IEnumerable<EmployeeFullProfile> profiles)
+    {
+        var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, EmployeeFullInfoTemplatePath);
+        const string sheetName = "Employee Full Information";
+        var writer = new ExcelTemplateWriter(templatePath, sheetName);
+        var enableGroupDate = await commonDataService.IsEnableGroupDateAsync();
+        const byte colGroupDate = 10;
+        const byte colLengthOfServiceGroupDate = 14;
+
+        writer.CopyRows(0, 2);
+        writer.CopyRows(2, 2);
+
+        WriteFullProfileBody(writer, profiles);
+        writer.SyncColumnsWidth(57);
+        writer.CreateFreezePane(0, 4);
+        if (!enableGroupDate)
+        {
+            writer.RemoveColumn(colGroupDate);
+            writer.RemoveColumn(colLengthOfServiceGroupDate);
+        }
+        return writer.WriteContentToBytes();
+    }
+
+    private void WriteFullProfileBody(ExcelTemplateWriter writer, IEnumerable<EmployeeFullProfile> profiles)
+    {
+        var currentRow = 3;
+        foreach (var p in profiles)
+        {
+            var writeRowNumber = currentRow % 2 == 0 ? 5 : 4;
+
+            var record = CreateRecordEmployeeFullProfile(p, currentRow);
+            writer.WriteRow(writeRowNumber, record);
+            currentRow++;
+        }
+    }
+
+    private object CreateRecordEmployeeFullProfile(EmployeeFullProfile p, int currentRow)
+    {
+        var gender = "Unknown";
+        if (p.Gender.HasValue)
+        {
+            gender = p.Gender == 0 ? "Female" : "Male";
+        }
+
+        var record = new
+        {
+            Index = currentRow - 2,
+            p.UnitName,
+            Department = p.DepartmentName,
+            Section = p.SectionName,
+            p.TeamName,
+            p.Code,
+            p.EmployeeCard,
+            p.FullName,
+            p.Nickname,
+            Gender = gender,
+            GroupDate = FormatDate(p.JoinedDate),
+            CompanyDate = FormatDate(p.CompanyDate),
+            ConfirmedDate = FormatDate(p.ConfirmedDate),
+            ResignedDate = FormatDate(p.ResignedDate),
+            p.ResignedReason,
+            LengthOfServiceByGroupDate = employeeService.CalculateLengthOfService(p.JoinedDate, p.MilitaryFromDate, p.MilitaryToDate),
+            LengthOfServiceByCompanyDate = employeeService.CalculateLengthOfService(p.CompanyDate, p.MilitaryFromDate, p.MilitaryToDate),
+            p.JobTitle,
+            p.JobLevel,
+            p.ManagementLevel,
+            TeamDate = FormatDate(p.TeamDate),
+            DOB = FormatDate(p.DateOfBirth),
+            p.PlaceOfBirth,
+            p.Ethnic,
+            p.Native,
+            p.Religion,
+            p.MarriageName,
+            p.Nationality,
+            p.CardNo,
+            DateOfIDCard = FormatDate(p.DateOfIdCard),
+            p.PlaceOfIdCard,
+            p.PassportNo,
+            PassportExp = FormatDate(p.PassportExp),
+            p.Qualification,
+            p.Major,
+            p.Address,
+            p.CurrentAddress,
+            p.Phone,
+            p.HomePhone,
+            p.Email,
+            p.PickupRemark,
+            p.Skype,
+            p.LetsTalk,
+            CanOT = p.CanOT ? Labels.Yes : Labels.No,
+            p.SpecialOT,
+            p.WorkingDays,
+            p.WorkingHours,
+            p.OffDaysbyWeek,
+            p.AnnualLeaveBalance,
+            p.KeepInViewBalance,
+            Category = p.IsLocal ? Labels.Local : Labels.Expat,
+            p.Roles2String,
+            SpecialUser = p.IsTopManager ? Labels.Yes : Labels.No,
+            VerifiedBy = GetSupervisors(p.Supervisors, (short)RoleSystem.Verifier),
+            ApprovedBy = GetSupervisors(p.Supervisors, (short)RoleSystem.Approver),
+            DisciplineManager = GetSupervisors(p.Supervisors, (short)RoleSystem.DisciplineManager),
+            ShiftArrangement = GetSupervisors(p.Supervisors, (short)RoleSystem.ShiftManager),
+            OnBehalfRequest = GetSupervisors(p.Supervisors, (short)RoleSystem.OnBehalfRequest)
+        };
+
+        return record;
+    }
+
+    private static string GetSupervisors(IList<SupervisorNameModel> supervisors, short roleId)
+    {
+        var nicknames = string.Empty;
+        if (supervisors != null && supervisors.Any())
+        {
+            nicknames = string.Join(", ", supervisors.Where(x => x.ActionType == roleId).Select(x => x.NickName));
+        }
+
+        return nicknames;
+    }
+
+    private static string FormatDate(DateTime? date, string format = "dd/MM/yyyy") => date?.ToString(format);
+
+    #endregion Employee Full Profile Information
+}

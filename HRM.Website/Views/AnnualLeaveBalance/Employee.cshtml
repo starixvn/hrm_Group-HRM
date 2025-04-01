@@ -1,0 +1,102 @@
+﻿@using HRM.Core
+@using HRM.Resources
+@using HRM.ViewModels.AnnualLeave
+@using HRM.Website.Helper
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model AnnualLeaveBalanceViewModel
+@{
+    ViewBag.Title = Model.Employee.NickName + "'s annual leave balance";
+}
+@section css{
+    <link href="~/dist/styles/annual.leavebalance.employee.css" rel="stylesheet" />
+}
+
+@section Breadcrumb
+{
+    <a class="step" href="javascript:;">@Labels.HRSpace</a>
+    <a class="step" href="@Url.Action("index", "annualleavebalance")">@Labels.AnualLeaveBalance</a>
+    <span class="step">@Model.Employee.NickName's annual leave balance</span>
+}
+<h2 class="page-title">@ViewBag.Title</h2>
+<div class="filter">
+    @using (Html.BeginForm())
+    {
+        <div class="form-horizontal clearfix">
+            <div class="form-group year">
+                <div class="label-form">
+                    @Html.LabelFor(model => model.Year, new { @class = "control-label" })
+                </div>
+                <div class="select-form">
+                    @{
+                        var years = Extensions.YearPickerFor(2010);
+                        <select asp-items="years" asp-for="Year" class="yearpicker form-control"></select>
+                    }
+                </div>
+            </div>
+
+            <div class="form-group form-group--m" style="margin-top: 10px;">
+                <input type="checkbox" class="checkbox-custom" id="ExcludedRequestTrans" name="ExcludedRequestTrans"
+                       value="true" checked="@Model.ExcludedRequestTrans" />
+                @Html.LabelFor(model => model.ExcludedRequestTrans, new { @for = "ExcludedRequestTrans" })
+                @Html.HiddenFor(model => model.EmployeeId)
+            </div>
+            <div class="form-group form-group--m">
+                <button type="submit" class="btn btn-primary">@Labels.Submit</button>
+                <a href="@Url.Action("create", "annualleavebalance", new { id = Model.Employee.Id })" class="btn btn-request">
+                    <span class="fa fa-plus"></span>
+                    Adjustment
+                </a>
+            </div>
+        </div>
+    }
+</div>
+<div class="clear"></div>
+<table class="table table-custom">
+    <thead>
+        <tr>
+            <th>@Labels.SymbolCount</th>
+            <th>@Labels.AffectFrom</th>
+            <th>@Labels.TotalDays</th>
+            <th>@Labels.Description</th>
+            <th>@Labels.ModifiedDate</th>
+            <th>@Labels.Edit</th>
+        </tr>
+    </thead>
+    @if (Model.AnnualLeaveBalances.Any())
+    {
+        <tbody>
+            @{var index = 1;}
+            @foreach (var item in Model.AnnualLeaveBalances)
+            {
+                <tr>
+                    <td>@(index++)</td>
+                    <td class="ddMMyyyy">@item.AffectedFrom.ToDateMonthYearFormatedDate()</td>
+                    <td>@item.TotalDays</td>
+                    <td class="align-left">
+                        @if (item.RequestId != null)
+                        {
+                            <span>[request]</span>
+                        }
+                        @item.Description
+                    </td>
+                    <td>@item.ModifiedDate.ToClientTimeZone().ToShortFormatedDate()</td>
+                    @if (item.RequestId == null)
+                    {
+                        <td>
+                            <a href="~/annualleavebalance/edit/@item.LeaveTransId">@Labels.Edit</a>
+                        </td>
+                    }
+                    else
+                    {
+                        <td>-</td>
+                    }
+                </tr>
+            }
+        </tbody>
+
+    }
+    else
+    {
+        @Html.Raw(RazorHelpers.DisplayNoInformation(colspan: 6))
+    }
+</table>

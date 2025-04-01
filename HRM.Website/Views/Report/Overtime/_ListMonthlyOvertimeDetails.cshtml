@@ -1,0 +1,190 @@
+﻿@using HRM.Core
+@using HRM.Core.Enums
+@using HRM.Resources
+@using HRM.Website.Helper
+@model IEnumerable<HRM.Models.Report.Overtime.DailyOvertimeDetails>
+<table class="table table-custom" id="data">
+    <thead>
+        <tr>
+            <th>@Labels.SymbolCount</th>
+            <th class="col-sorter">
+                <div class="cell-control-wrapper">
+                    <div>@Labels.Date</div>
+                    <div class="fa fa-sort"></div>
+                </div>
+            </th>
+            <th class="col-sorter">
+                <div class="cell-control-wrapper">
+                    <div>@Labels.Department</div>
+                    <div class="fa fa-sort"></div>
+                </div>
+            </th>
+            <th class="col-sorter">
+                <div class="cell-control-wrapper">
+                    <div>@Labels.Section</div>
+                    <div class="fa fa-sort"></div>
+                </div>
+            </th>
+            <th class="col-sorter">
+                <div class="cell-control-wrapper">
+                    <div>@Labels.Team</div>
+                    <div class="fa fa-sort"></div>
+                </div>
+            </th>
+            <th class="col-sorter">
+                <div class="cell-control-wrapper">
+                    <div>@Labels.Code</div>
+                    <div class="fa fa-sort"></div>
+                </div>
+            </th>
+            <th class="col-sorter">
+                <div class="cell-control-wrapper">
+                    <div>@Labels.FullName</div>
+                    <div class="fa fa-sort"></div>
+                </div>
+            </th>
+            <th class="col-sorter">
+                <div class="cell-control-wrapper">
+                    <div>@Labels.NickName</div>
+                    <div class="fa fa-sort"></div>
+                </div>
+            </th>
+            <th class="col-sorter">
+                <div class="cell-control-wrapper">
+                    <div>@Labels.Shift</div>
+                    <div class="fa fa-sort"></div>
+                </div>
+            </th>
+            <th class="col-sorter">
+                <div class="cell-control-wrapper">
+                    <div>@Labels.TimeIn</div>
+                    <div class="fa fa-sort"></div>
+                </div>
+            </th>
+            <th class="col-sorter">
+                <div class="cell-control-wrapper">
+                    <div>@Labels.TimeOut</div>
+                    <div class="fa fa-sort"></div>
+                </div>
+            </th>
+            <th class="col-sorter">
+                <div class="cell-control-wrapper">
+                    <div>@Labels.TotalHours</div>
+                    <div class="fa fa-sort"></div>
+                </div>
+            </th>
+            <th class="col-sorter">
+                <div class="cell-control-wrapper">
+                    <div>@Labels.NormalDay</div>
+                    <div class="fa fa-sort"></div>
+                </div>
+            </th>
+            <th class="col-sorter">
+                <div class="cell-control-wrapper">
+                    <div>@Labels.OffDay</div>
+                    <div class="fa fa-sort"></div>
+                </div>
+            </th>
+            <th class="col-sorter">
+                <div class="cell-control-wrapper">
+                    <div>@Labels.PublicHoliday</div>
+                    <div class="fa fa-sort"></div>
+                </div>
+            </th>
+            <th class="col-sorter">
+                <div class="cell-control-wrapper">
+                    <div>@Labels.SpecialOT</div>
+                    <div class="fa fa-sort"></div>
+                </div>
+            </th>
+            <th class="col-sorter">
+                <div class="cell-control-wrapper">
+                    <div>@Labels.Remark</div>
+                    <div class="fa fa-sort"></div>
+                </div>
+            </th>
+            <th class="col-sorter">
+                <div class="cell-control-wrapper">
+                    <div>@Labels.Status</div>
+                    <div class="fa fa-sort"></div>
+                </div>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            var index = 0;
+            foreach (var request in Model)
+            {
+                index++;
+                <tr>
+                    <td>@index</td>
+                    <td>@request.WorkDate.ToString("dd MMM,yyyy")</td>
+                    <td>@request.DepartmentCode</td>
+                    <td>@request.Section</td>
+                    <td>@request.Team</td>
+                    <td>@request.Code</td>
+                    <td>@request.FullName</td>
+                    <td>@request.Nickname</td>
+                    <td>@request.ShiftCode</td>
+                    <td>@request.TimeIn.ToClientTimeZone().ToString("HH:mm")</td>
+                    <td>@request.TimeOut.ToClientTimeZone().ToString("HH:mm")</td>
+                    <td>
+                        @if (request.ActualWorkingHours > 0)
+                        {
+                            @request.ActualWorkingHours
+                        }
+                    </td>
+                    <td>
+                        @if (request.NormalHours > 0)
+                        {
+                            @request.NormalHours
+                        }
+                    </td>
+                    <td>
+                        @if (request.OffHours > 0)
+                        {
+                            @request.OffHours
+                        }
+                    </td>
+                    <td>
+                        @if (request.PublicHours > 0)
+                        {
+                            @request.PublicHours
+                        }
+                    </td>
+                    <td>
+                        @if (request.SpecialHours > 0)
+                        {
+                            @request.SpecialHours
+                        }
+                    </td>
+                    <td class="align-left">@request.Remark</td>
+                    <td>
+                        @if (request.StatusId != 0)
+                        {
+                            var status = (CurrentRequestStatus)request.StatusId;
+                            @status
+                        }
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            @Html.Raw(RazorHelpers.DisplayNoInformation(colspan: 18))
+        }
+    </tbody>
+    <tfoot>
+        <tr class="summary">
+            <td class="align-right" colspan="12">@Labels.TotalOvertimeHours:</td>
+            <td>@Model.Sum(t => t.NormalHours).ToString("0.00")</td>
+            <td>@Model.Sum(t => t.OffHours).ToString("0.00")</td>
+            <td>@Model.Sum(t => t.PublicHours).ToString("0.00")</td>
+            <td>@Model.Sum(t => t.SpecialHours).ToString("0.00")</td>
+            <td></td>
+            <td></td>
+        </tr>
+    </tfoot>
+</table>

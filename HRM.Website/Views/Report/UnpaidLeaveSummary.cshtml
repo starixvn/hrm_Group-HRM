@@ -1,0 +1,87 @@
+﻿@using HRM.Core
+@using HRM.Resources
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model HRM.ViewModels.AnnualLeave.LeaveSummaryViewModel
+@{
+    ViewBag.Title = Labels.UnpaidLeave;
+    var hasPermission = (bool)ViewBag.HasPermission;
+}
+@section css{
+    <link href="~/dist/styles/report.unpaid.leave.summary.css" rel="stylesheet" />
+}
+@section js{
+    <script src="~/dist/js/report.unpaid.leave.summary.js"></script>
+}
+@section Breadcrumb {
+    <a class="step">@Labels.CompanySpace</a> <a class="step">@ViewBag.Title</a>
+}
+<h2 class="page-title">@ViewBag.Title</h2>
+@if (hasPermission)
+{
+    <form class="filter">
+        @Html.HiddenFor(model => model.TeamIds)
+        <div class="form-horizontal clearfix">
+            <div class="form-group form-group--m">
+                <div class="label-form">
+                    <label class="control-label">@Labels.Year</label>
+                </div>
+                <div class="select-form">
+                    @{
+                        var years = Extensions.YearPickerFor(2010);
+                        <select asp-items="years" asp-for="Year" class="yearpicker form-control"></select>
+                    }
+                </div>
+            </div>
+
+            <div class="form-group form-group--m">
+                <div class="label-form">
+                    <label class="control-label">@Labels.Category</label>
+                </div>
+                <div class="select-form">
+                    <select id="Category" name="Category" class="form-control">
+                        <option value="">-- All --</option>
+                        <option selected="@(Model.Category == 1)" value="1">@Labels.Local</option>
+                        <option selected="@(Model.Category == 0)" value="0">@Labels.Expat</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group form-group--m">
+                <div class="label-form">
+                    <label class="control-label">@Labels.SectionTeam</label>
+                </div>
+                <div class="select-form" id="Team"></div>
+            </div>
+        </div>
+        <div class="form-horizontal clearfix">
+            <div class="form-group form-group--m">
+                <div class="label-form">
+                    <label class="control-label">@Labels.Type</label>
+                </div>
+                <div class="select-form" id="LeaveType">
+                </div>
+            </div>
+            <div class="form-group form-group--m">
+                <div class="label-form">
+                    <label class="control-label">@Labels.Employee</label>
+                </div>
+                <div class="input-form">
+                    @Html.TextBox("Employee", Model.Employee, new { placeholder = Messages.SearchEmployeeWatermark, @class = "form-control" })
+                    @Html.HiddenFor(model => model.EmployeeId)
+                </div>
+            </div>
+            <div class="form-group form-group--m">
+                <div class="label-form">
+                    <label class="control-label">@Labels.Period</label>
+                </div>
+                <div class="select-form" id="Period"></div>
+            </div>
+            <div class="form-group form-group--m">
+                <input type="button" class="btn btn-primary" id="btnSearch" value="@Labels.Submit" />
+                <input type="button" class="btn btn-excel" id="btnExcel" value="@Labels.Excel" />
+            </div>
+        </div>
+    </form>
+}
+
+<div id="UnpaidLeaveSummaryDetails"></div>

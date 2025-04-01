@@ -1,0 +1,11 @@
+﻿@import '../../abstracts/variables';
+@import '../../abstracts/mixins';
+@import '../../components/buttons-new';
+@import '../../layout/table';
+@import '../../layout/shift.color';
+
+.header-control {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}

@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="OvertimeController.cs" />
+    <Compile Remove="OvertimeReportController.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Fanex.Data" Version="4.3.3" />
+    <PackageReference Include="Fanex.Data.Repository" Version="4.3.3" />
+    <PackageReference Include="GO.UserControl.Client.AspNetCore" Version="1.0.2" />
+    <PackageReference Include="GO.UserControl.Client.Core" Version="1.0.3" />
+    <PackageReference Include="IPAddressRange" Version="6.1.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\HRM.Services\HRM.Services.csproj" />
+  </ItemGroup>
+</Project>

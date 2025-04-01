@@ -1,0 +1,50 @@
+﻿@using HRM.Core
+@using HRM.Resources
+@using HRM.Website.Helper
+@model IEnumerable<HRM.Models.Report.MealAllowance.MealAllowanceDetail>
+
+<table class="table table-custom" id="data">
+    <thead>
+        <tr>
+            <th>@Labels.Department</th>
+            <th>@Labels.Section</th>
+            <th>@Labels.Team</th>
+            <th>@Labels.Code</th>
+            <th>@Labels.Date</th>
+            <th>@Labels.FullName</th>
+            <th>@Labels.NickName</th>
+            <th>@Labels.Shift</th>
+            <th>@Labels.CheckIn</th>
+            <th>@Labels.CheckOut</th>
+            <th>@Labels.TotalHours</th>
+            <th>@Labels.TotalDays</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            <tbody>
+                @foreach (var detail in Model)
+                {
+                    <tr>
+                    <td class="align-left">@detail.Department</td>
+                    <td class="align-left">@detail.Section</td>
+                    <td class="align-left">@detail.Team</td>
+                    <td class="align-center">@detail.Code</td>
+                    <td class="align-left">@detail.WorkDate.ToString("ddd, dd MMM, yyyy")</td>
+                    <td class="align-left">@detail.FullName</td>
+                    <td class="align-left">@detail.NickName</td>
+                    <td class="align-center">@detail.ShiftCode</td>
+                    <td class="align-left">@detail.InFixed.ToShortFormatedDate()</td>
+                    <td class="align-left">@detail.OutFixed.ToShortFormatedDate()</td>
+                    <td class="align-center">@detail.TotalWorkHours</td>
+                    <td class="align-center">@detail.TotalDays</td>
+                </tr>
+                }
+            </tbody>
+    }
+    else
+    {
+        @Html.Raw(RazorHelpers.DisplayNoInformation(colspan: 12))
+    }
+</table>

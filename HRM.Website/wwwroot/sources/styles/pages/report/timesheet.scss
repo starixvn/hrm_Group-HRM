@@ -1,0 +1,85 @@
+﻿@import '../../../libs/monthPicker/monPickr-0.0.3.css';
+@import '../../abstracts/variables';
+@import '../../abstracts/mixins';
+@import '../../layout/filter';
+@import '../../layout/table';
+@import '../../components/buttons-new';
+@import '../../components/monpickr';
+@import '~tippy.js/dist/tippy.css';
+
+.tooltip-request {
+    border: 1px solid #0789D1;
+    padding: 5px;
+    font-size: 11px;
+    border-radius: 2px;
+    font-weight: 500;
+    margin-right: 2px;
+    margin-bottom: 2px;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.tippy-request .tippy-box {
+    background-color: #fff;
+    @include border-radius(0);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.8);
+
+    .tippy-content {
+        padding: 0 9px 0 0;
+    }
+
+    .tippy-arrow {
+        color: #fff;
+    }
+
+    table.table-tooltip {
+        min-width: 400px;
+        max-width: 600px;
+        color: #000;
+        padding: 5px;
+
+        tr {
+            &.hasborder {
+                border-bottom: 1px solid #0789D1;
+            }
+
+            td {
+                padding: 5px 10px;
+                font-weight: normal;
+                height: 25px;
+
+                &.col1 {
+                    width: 110px;
+                    text-align: right;
+                }
+
+                &.col11 {
+                    width: 150px;
+                    text-align: right;
+                }
+
+                &.col2 {
+                    border-left: 1px solid #0789D1;
+                }
+
+                span.bold {
+                    font-weight: bold;
+                }
+            }
+        }
+    }
+}
+
+span.req {
+    &.mytimesheet-pending {
+        background-color: #808080;
+    }
+
+    &.mytimesheet-accepted, &.mytimesheet-verified, &.mytimesheet-approved, &.mytimesheet-processed {
+        background-color: #008000;
+    }
+
+    &.mytimesheet-notaccepted, &.mytimesheet-notverified, &.mytimesheet-rejected, &.mytimesheet-void {
+        background-color: #ff0000;
+    }
+}

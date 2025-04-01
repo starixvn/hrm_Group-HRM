@@ -1,0 +1,64 @@
+﻿@using HRM.Core
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model HRM.ViewModels.Discipline.AddOtherDisciplineViewModel
+
+<form id="frmAddOtherDiscipline">
+    @Html.ValidationSummary()
+
+    @Html.Hidden("IsSuccessful", false)
+
+    <div class="form-horizontal clearfix">
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.Employee, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.TextBoxFor(model => model.Employee, new { @class = "form-control" })
+                @Html.HiddenFor(model => model.EmployeeId)
+            </div>
+            @Html.ValidationMessageFor(model => model.EmployeeId)
+        </div>
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.WorkDate, "Discipline Date", new { @class = "control-label" })
+            </div>
+            <div class="calendar-form">
+                @Html.TextBox(Html.NameFor(model => model.WorkDate).ToString(), Model.WorkDate.ToDateMonthYearFormatedDate(),
+                    new { @class = "datepicker form-control", mindate = new DateTime(2010, 1, 1).ToString("yyyy/MM/dd") })
+                <i class="icon-calendar fa fa-calendar"></i>
+            </div>
+            @Html.ValidationMessageFor(model => model.WorkDate)
+        </div>
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.DisciplineTypeId, new { @class = "control-label" })
+            </div>
+            <div class="select-form">
+                <select id="DisciplineTypeId" name="DisciplineTypeId" class="form-control">
+                    <option value="0" data-score="0">-- Select Other Discipline Type --</option>
+                    @foreach (var otherDisciplineType in Model.OtherDisciplineTypes)
+                    {
+                        <option value="@otherDisciplineType.DisciplineTypeId" data-score="@otherDisciplineType.Score">@otherDisciplineType.Name</option>
+                    }
+                </select>
+            </div>
+            @Html.ValidationMessageFor(model => model.DisciplineTypeId)
+        </div>
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.MinusScore, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.TextBoxFor(model => model.MinusScore, new { @class = "form-control minusScore" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.Comment, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.TextAreaFor(model => model.Comment, new { @class = "form-control" })
+            </div>
+        </div>
+    </div>
+</form>

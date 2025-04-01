@@ -1,0 +1,28 @@
+﻿@model HRM.ViewModels.Employee.LoginViewModel
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>HRM</title>
+    <link href="~/sources/styles/login.css" rel="stylesheet" />
+</head>
+<body>
+    <div id="panel-login">
+        <div class="header-login">
+            <div class="header-container">
+                <div style="color: #fff">HRM</div>
+                <div>
+                    <img src="~/sources/styles/images/signin_icon.png" alt="" />
+                </div>
+            </div>
+        </div>
+        <div id="login-page"></div>
+    </div>
+    
+    @Html.Hidden("RootURL", Url.Content("~/"))
+    <script src="~/dist/js/auth.index.js" defer></script>
+</body>
+</html>

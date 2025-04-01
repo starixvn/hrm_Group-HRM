@@ -1,0 +1,13 @@
+﻿@using HRM.Resources
+@{
+    Layout = "~/Views/Shared/_IFrame.cshtml";
+    ViewBag.Title = Labels.ScheduleArrange;
+}
+@section css{
+    <link href="~/dist/styles/schedule.arrange.css" rel="stylesheet" />
+}
+@section js{
+    <script src="~/dist/js/schedule.arrange.iframe.js"></script>
+}
+
+<div id="schedule-wrapper"></div>

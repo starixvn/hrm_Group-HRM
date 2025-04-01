@@ -1,0 +1,185 @@
+﻿@using HRM.Core
+@using HRM.Core.Enums
+@using HRM.Resources
+@using HRM.Website.Helper
+@model HRM.ViewModels.Request.LeaveRequestViewModel
+@{
+    ViewBag.Title = Labels.Details;
+}
+@section css{
+    <link href="~/dist/styles/leave.create.css" rel="stylesheet" />
+}
+@section js{
+    <script src="~/dist/js/leave.create.js"></script>
+}
+@section Breadcrumb {
+    <a class="step">@Labels.Personal</a>
+    <a class="step" href="@Url.Action("employeeview", "leave")">@Labels.MyLeaveRequest</a>
+    <a class="step">@ViewBag.Title</a>
+}
+<h2 class="page-title">@Labels.Details</h2>
+<div class="card form-horizontal">
+    @using (Html.BeginForm())
+    {
+        @Html.HiddenFor(model => model.EmployeeId)
+        @Html.Hidden("RequestType", (byte)RequestType.Leave)
+        @Html.Hidden("RequestId", Model.RequestId)
+        @Html.Hidden("IsView", (bool)ViewBag.IsView)
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.RefNo, Labels.RefNo1, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.TextBoxFor(model => model.RefNo, new { @class = "form-control", autocomplete = "off" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.Employee, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                <strong>@Html.DisplayFor(model => model.Employee)</strong>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.LeaveTypeId, Labels.LeaveType, new { @class = "control-label" })
+            </div>
+            <div class="select-form">
+                @Html.Raw(RazorHelpers.LeaveTypeDropDownList("LeaveTypeId", Model.LeaveTypeList, "ddl-leave-type form-control", Model.LeaveTypeId))
+                @Html.HiddenFor(model => model.LeaveTypeName)
+            </div>
+            <span id="leavetype-info" class="fa fa-info-circle fa-lg leavetype-info" title="@Model.LeaveTypeDescription"></span>
+        </div>
+        <div id="grbHalfDay" class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.HalfDayOff, Labels.HalfDay, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.CheckBoxFor(model => model.HalfDayOff)
+            </div>
+        </div>
+        <div id="grbHospitalizationLeave" class="form-group" style="display: none;">
+            <div class="label-form">
+                @Html.LabelFor(model => model.IsHospitalApplication, "Applicable for stay in Hospital only", new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.CheckBoxFor(model => model.IsHospitalApplication)
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.FromDate, Labels.FromDate, new { @class = "control-label" })
+            </div>
+            <div class="calendar-form">
+                @Html.TextBox("FromDate", Model.FromDate.ToDateMonthYearFormatedDate(),
+                     new
+                     {
+                         @class = "datepicker form-control",
+                         @readonly = "readonly"
+                     })
+                <i class="icon-calendar fa fa-calendar disabled"></i>
+            </div>
+            <div class="time-businesstrip" style="display: none;">
+                <input type="number" name="Hour" id="FromTimeHour" class="form-control"
+                       min="0" max="23" step="1" maxlength="2" value="@Model.FromTimeHour" />
+                :
+                <input type="number" name="Minute" id="FromTimeMinute" class="form-control"
+                       min="0" max="59" step="1" maxlength="2" value="@Model.FromTimeMinute" />
+            </div>
+            <div class="time-isafterday">
+                @Html.CheckBoxFor(model => model.IsFromTimeAfterDay)
+                @Html.LabelFor(model => model.IsFromTimeAfterDay, "Is after day", new { @class = "control-label" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.ToDate, Labels.ToDate, new { @class = "control-label" })
+            </div>
+            <div class="calendar-form">
+                @Html.TextBox("ToDate", Model.ToDate.ToDateMonthYearFormatedDate(),
+                 new
+                 {
+                     @class = "datepicker form-control",
+                     @readonly = "readonly"
+                 })
+                <i class="icon-calendar fa fa-calendar disabled"></i>
+            </div>
+            <div class="time-businesstrip" style="display: none;">
+                <input type="number" name="Hour" id="ToTimeHour" class="form-control"
+                       min="0" max="23" step="1" maxlength="2" value="@Model.ToTimeHour" />
+                :
+                <input type="number" name="Minute" id="ToTimeMinute" class="form-control"
+                       min="0" max="59" step="1" maxlength="2" value="@Model.ToTimeMinute" />
+            </div>
+        </div>
+        <div id="grbTotalDay" class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.TotalDays, Labels.TotalDays, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.TextBox(Html.NameFor(model => model.TotalDays).ToString(), Model.TotalDays.ToString("0.#"),
+                 new { @class = "form-control totaldays", autocomplete = "off", @readonly = "readonly" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.VerifierId, Labels.Verifier, new { @class = "control-label" })
+            </div>
+            <div class="select-form">
+                @Html.DropDownListFor(model => model.VerifierId, new SelectList(Model.Verifiers, "OwnerId", "DisplayName"), new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.ApproverId, Labels.Approver, new { @class = "control-label" })
+            </div>
+            <div class="select-form">
+                @Html.DropDownListFor(model => model.ApproverId, new SelectList(Model.Approvers, "OwnerId", "DisplayName"), new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.Remark, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.TextAreaFor(model => model.Remark, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.Status.Name, Labels.Status, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                <strong>@Html.DisplayFor(model => model.Status.Name)</strong>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="label-form">
+                @Html.LabelFor(model => model.Files, Labels.UploadFile, new { @class = "control-label" })
+            </div>
+            @if (Model.Files.Count > 0)
+            {
+                foreach (var file in Model.Files)
+                {
+                    @file<br>
+                }
+            }
+            else
+            {
+                @Labels.NoFileChoose
+            }
+        </div>
+        if (Model.LeaveTypeId == 0)
+        {
+            <div class="form-group" id="leaveDetailContainer">
+                <div class="label-form">@Labels.Details</div>
+                <div id="leaveDetails" class="leave-details"></div>
+            </div>
+        }
+        <div class="form-group">
+            <div class="label-form"></div>
+            <button type="button" class="btn btn-default" onclick="window.history.back()">@Labels.Back</button>
+        </div>
+    }
+</div>

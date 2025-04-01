@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Functions>
+    <Function Name="Auth">
+        <Setting Key="API_TimeRecord_Get" SpName="API_TimeRecord_Get" DbName="bodb_BIO" Plain="0" />
+    </Function>
+</Functions>

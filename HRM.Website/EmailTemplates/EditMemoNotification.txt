@@ -1,0 +1,17 @@
+<p>
+    <strong>Dear all,</strong>
+</p>
+<p>
+    Please be informed the following memo has just been updated:
+    <br />
+    <strong>{0}</strong>
+    <br />
+    <em><a href="{1}">{1}</a></em>
+    <br />
+    <br />
+    ------------------------------------------------------
+    <br />
+    Any questions, please contact HR department.
+    <br />
+    Thanks
+</p>

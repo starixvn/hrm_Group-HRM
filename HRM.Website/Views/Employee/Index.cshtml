@@ -1,0 +1,66 @@
+﻿@using HRM.Resources
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model HRM.ViewModels.Employee.UserManagementViewModel
+@{
+    ViewBag.Title = Labels.StaffInfo;
+}
+@section css{
+    <link href="~/dist/styles/employee.index.css" rel="stylesheet" />
+}
+@section js{
+    <script src="~/dist/js/employee.index.js"></script>
+
+}
+@section Breadcrumb {
+    <a class="step">@Labels.CompanySpace</a> <a class="step">@ViewBag.Title</a>
+}
+<h2 class="page-title">@ViewBag.Title</h2>
+<form class="filter">
+    @Html.HiddenFor(model => model.TeamIds)
+    @Html.HiddenFor(model => model.IsEnable)
+    @Html.HiddenFor(model => model.IsLocal)
+    @Html.HiddenFor(model => model.CurrentPage)
+    @Html.HiddenFor(model => model.ItemsPerPage)
+    <div class="form-horizontal clearfix">
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.LabelFor(model => model.Keyword, Labels.Keyword, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.TextBoxFor(model => model.Keyword,
+               new { placeholder = Messages.SearchEmployeeWatermark, @class = "form-control", autocomplete = "off" })
+            </div>
+        </div>
+
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                <label class="control-label">@Labels.SectionTeam</label>
+            </div>
+            <div class="input-form" id="Team"></div>
+        </div>
+
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                <label class="control-label">@Labels.Category</label>
+            </div>
+            <div class="input-form">
+                @{
+                    var category = new List<SelectListItem>
+                    {
+                        new () {Text = "-- All --", Value = string.Empty},
+                        new () {Text = "Expat", Value = "0"},
+                        new () {Text = "Local", Value = "1"}
+                    };
+                }
+                @Html.DropDownListFor(model => model.IsLocal, category, new { @class = "category form-control", id = "category" })
+            </div>
+        </div>
+
+        <div class="form-group form-group--m">
+            <button id="query" type="submit" class="btn btn-primary">@Labels.Submit</button>
+        </div>
+    </div>
+</form>
+
+<div id="contact-list"></div>
+<div id="tippy-avatar" class="tippy-avatar"></div>

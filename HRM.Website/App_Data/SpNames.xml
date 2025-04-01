@@ -1,0 +1,569 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Functions>
+    <Function Name="Auth">
+        <Setting Key="Employee_GetByUserId" SpName="Employee_GetByUserId" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="CompanySite_GetByDomain" SpName="CompanySite_GetByDomain" DbName="bodb_HRM" Plain="0" />
+    </Function>
+    <Function Name="Dashboard">
+        <Setting Key="Dashboard_Get" SpName="Dashboard_Get" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Dashboard_GetMemberRequest" SpName="Dashboard_GetMemberRequest" DbName="bodb_HRM" Plain="0" />
+    </Function>
+    <Function Name="Employee">
+        <Setting Key="Employee_CheckResetPassword" SpName="Employee_CheckResetPassword" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Employee_GetEmployeeByID" SpName="Employee_GetEmployeeByID" DbName="bodb_HRM" Plain="0">
+            <Mapping DataField="EmpId" ObjectProperty="Id" Class="Employee" />
+            <Mapping DataField="TeamId" ObjectProperty="Id" Class="Team" />
+        </Setting>
+        <Setting Key="Employee_GetFullProfileInformation" SpName="Employee_GetFullProfileInformation" DbName="bodb_HRM" Plain="0">
+            <Mapping DataField="IdCardNumber" ObjectProperty="CardNo" />
+            <Mapping DataField="PermanentAddress" ObjectProperty="Address" />
+            <Mapping DataField="DOB" ObjectProperty="DateOfBirth" />
+        </Setting>
+        <Setting Key="Employee_GetUploadedFile" SpName="Employee_GetUploadedFile" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Employee_GetEmployees" SpName="Employee_GetEmployees" DbName="bodb_HRM" Plain="0">
+            <Mapping DataField="EmpId" ObjectProperty="Id" Class="Employee" />
+            <Mapping DataField="IdCardNumber" ObjectProperty="CardNo" Class="Employee" />
+            <Mapping DataField="PermanentAddress" ObjectProperty="Address" Class="Employee" />
+            <Mapping DataField="DOB" ObjectProperty="DateOfBirth" Class="Employee" />
+            <Mapping DataField="TeamID" ObjectProperty="Id" Class="Team" />
+        </Setting>
+        <Setting Key="Employee_GetMemberByManager" SpName="Employee_GetMemberByManager" DbName="bodb_HRM" Plain="0">
+            <Mapping DataField="EmpId" ObjectProperty="Id" />
+        </Setting>
+        <Setting Key="Support_TimeSheetInput" SpName="Support_TimeSheetInput" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="TimeRecord_Insert" SpName="TimeRecord_Insert" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="TimeRecord_InsertCheckInOutTime" SpName="TimeRecord_InsertCheckInOutTime" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="TimeRecord_GetPrivilegeCreateCheckInOut" SpName="TimeRecord_GetPrivilegeCreateCheckInOut" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Country_GetAll" SpName="Country_GetAll" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Employee_GenerateEmployeeCode" SpName="Employee_GetNewEmployeeCode" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Employee_UpdatePasswordResetStatusByEmpId" SpName="Employee_UpdatePasswordResetStatusByEmpId" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Employee_Insert_CheckExist" SpName="Employee_Insert_CheckExist" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Employee_Information_Insert" SpName="Employee_Information_Insert" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Employee_Delete" SpName="Employee_Delete" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Employee_UpdateEmployee" SpName="Employee_Information_update" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Employee_Information_UpdateByEmpId" SpName="Employee_Information_UpdateByEmpId" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="EmployeeShift_Get" SpName="Employee_Shift_Get" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="EmployeeAttendance_GetByType" SpName="EmployeeAttendance_GetByType" DbName="bodb_HRM" Plain="0">
+            <Mapping DataField="RequestType" ObjectProperty="Id" Class="RequestTypeModel" />
+            <Mapping DataField="LeaveTypeId" ObjectProperty="Id" Class="LeaveType" />
+            <Mapping DataField="LeaveTypeName" ObjectProperty="Name" Class="LeaveType" />
+        </Setting>
+        <Setting Key="TimeSheet_GetLateInEarlyOut" SpName="TimeSheet_GetLateInEarlyOut" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="TimeRecord_Get" SpName="TimeRecord_Get" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="TimeRecord_UpdateType" SpName="TimeRecord_UpdateType" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Report_Manpower" SpName="Report_Manpower" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Report_ManpowerCategory" SpName="Report_ManpowerCategory" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Report_WorkingHoursSummary" SpName="Report_WorkingHoursSummary" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Report_LeaveSummary" SpName="Report_LeaveSummary" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Report_UnpaidLeaveSummary" SpName="Report_UnpaidLeaveSummary" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Report_GetWeekendLeaveSummary" SpName="Report_GetWeekendLeaveSummary" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Report_GetWeekendLeaveDetail" SpName="Report_GetWeekendLeaveDetail" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Report_RequestMonitor" SpName="Report_RequestMonitor" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Report_EmployeeCalendarByWeekly" SpName="Report_EmployeeCalendarByWeekly" DbName="bodb_HRM" Plain="0">
+            <Mapping DataField="ShiftId" ObjectProperty="Id" />
+            <Mapping DataField="LeaveTypeId" ObjectProperty="Id" />
+            <Mapping DataField="LeaveTypeId2" ObjectProperty="Id" />
+        </Setting>
+        <Setting Key="Report_EmployeeCalendarByDateRange" SpName="Report_EmployeeCalendarByDateRange" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Report_MonthlyWorkingHours" SpName="Report_MonthlyWorkingHours" DbName="bodb_HRM" Plain="0">
+            <Mapping DataField="GroupId" ObjectProperty="Id" />
+            <Mapping DataField="LeaveTypeId" ObjectProperty="Id" />
+            <Mapping DataField="LeaveTypeId2" ObjectProperty="Id" />
+            <Mapping DataField="LeaveCode" ObjectProperty="Code" />
+            <Mapping DataField="LeaveName" ObjectProperty="Name" />
+        </Setting>
+        <Setting Key="Report_MonthlyWorkingHours_EmployeeRequest" SpName="Report_MonthlyWorkingHours_EmployeeRequest" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Report_ShiftStatistic" SpName="Report_ShiftStatistic" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Report_ShiftStatisticDetail" SpName="Report_ShiftStatisticDetail" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="WorkingTimeRequest_GetRequestByCreateDate_AllType" SpName="WorkingTimeRequest_GetRequestByCreateDate_AllType" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Employee_GetSupervisorForRequest" SpName="Employee_GetSupervisorForRequest" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Employee_GetVerifierAndApprover" SpName="Employee_GetVerifierAndApprover" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="EmployeeSupervisor_Get" SpName="EmployeeSupervisor_Get" DbName="bodb_HRM" Plain="0">
+            <Mapping DataField="EmpId" ObjectProperty="Id" />
+        </Setting>
+        <Setting Key="WorkingTimeRequest_GetRequestByRequestDate_AllType" SpName="WorkingTimeRequest_GetRequestByRequestDate_AllType" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="WorkingTimeRequest_ApproveRequest" SpName="WorkingTimeRequest_ApproveRequest" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="WorkingTimeRequest_ApproveMultipleRequest" SpName="WorkingTimeRequest_ApproveMultipleRequest" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="EmployeeCalendar_GetMonthlyByEmployeeId" SpName="EmployeeCalendar_GetMonthlyByEmployeeId" DbName="bodb_HRM" Plain="0">
+            <Mapping DataField="ShiftId" ObjectProperty="Id" />
+            <Mapping DataField="LeaveTypeId" ObjectProperty="Id" />
+            <Mapping DataField="LeaveTypeId2" ObjectProperty="Id" />
+        </Setting>
+        <Setting Key="Employee_ChangePassword" SpName="Employee_ChangePassword" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Employee_GetByRole" SpName="Employee_GetByRole" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="EmployeeSupervisor_Update" SpName="EmployeeSupervisor_Update" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="EmployeeSupervisor_GetRequestByEmpID" SpName="EmployeeSupervisor_GetRequestByEmpID" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="EmployeeSupervisor_GetListSupervisorByEmpID" SpName="EmployeeSupervisor_GetListSupervisorByEmpID" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="EmployeeSupervisor_GetByQuery" SpName="EmployeeSupervisor_GetByQuery" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="EmployeeSupervisor_GetListSupervisorRequestID" SpName="EmployeeSupervisor_GetListSupervisorRequestID" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="EmployeeSupervisor_GetDisciplineSettingById" SpName="EmployeeSupervisor_GetDisciplineSettingById" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Employee_GetMemberByGender" SpName="Employee_GetMemberByGender" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Employee_UpdateUserId" SpName="Employee_UpdateUserId" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Employee_GetHRAndSupervisorByEmpId" SpName="Employee_GetHRAndSupervisorByEmpId" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="TimeRecord_GetCheckInOutOnline" SpName="TimeRecord_GetCheckInOutOnline" DbName="bodb_HRM" Plain="0" />
+    </Function>
+    <Function Name="Group">
+        <Setting Key="EmployeeGroup_GetGroup" SpName="EmployeeGroup_GetGroup" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="GetGroupOfEmployee" SpName="EmployeeGroup_GetGroupOfEmployee" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Group_Get" SpName="Group_Get" DbName="bodb_HRM" Plain="0">
+            <Mapping DataField="TeamId" ObjectProperty="Id" Class="Team" />
+            <Mapping DataField="SectionId" ObjectProperty="Id" Class="Section" />
+        </Setting>
+        <Setting Key="Group_GetBySupervisor" SpName="Group_GetBySupervisor" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="GroupSupervisor_GetById" SpName="GroupSupervisor_GetById" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="GroupSupervisor_GetByRole" SpName="GroupSupervisor_GetByRole" DbName="bodb_HRM" Plain="0">
+            <Mapping DataField="HasCheckInOut" ObjectProperty="CheckInOuts" />
+            <Mapping DataField="HasLateInEarlyOut" ObjectProperty="LateInEarlyOuts" />
+            <Mapping DataField="HasChangeShift" ObjectProperty="ChangeShifts" />
+            <Mapping DataField="HasLeave" ObjectProperty="Leaves" />
+            <Mapping DataField="HasKeepInView" ObjectProperty="KeepInViews" />
+            <Mapping DataField="HasOvertime" ObjectProperty="Overtimes" />
+            <Mapping DataField="EmpId" ObjectProperty="OwnerId" />
+            <Mapping DataField="Code" ObjectProperty="TeamCode" />
+        </Setting>
+        <Setting Key="GroupSupervisor_Update" SpName="GroupSupervisor_Update" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="GroupSupervisor_Get" SpName="GroupSupervisor_Get" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="GroupSupervisor_GetDisciplineSettingById" SpName="GroupSupervisor_GetDisciplineSettingById" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Group_Insert" SpName="Group_Insert" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Group_Update" SpName="Group_Update" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Group_Delete" SpName="Group_Delete" DbName="bodb_HRM" Plain="0" />
+    </Function>
+    <Function Name="Lookup">
+        <Setting Key="Lookup_GetLookupData" SpName="Lookup_GetLookupData" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Lookup_GetJobTitle" SpName="LookupData_JobTitle_SELECT" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="LookupData_Delete" SpName="LookupData_JobTitle_Delete" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="LookupData_Insert" SpName="LookupData_JobTitle_Insert" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="LookupData_Update" SpName="LookupData_JobTitle_Update" DbName="bodb_HRM" Plain="0" />
+    </Function>
+    <Function Name="Shift">
+        <Setting Key="Shift_GetShifts" SpName="Shift_GetShifts" DbName="bodb_HRM" Plain="0">
+            <Mapping DataField="ShiftID" ObjectProperty="Id" />
+        </Setting>
+        <Setting Key="EmployeeCalendar_GetShiftByDate" SpName="EmployeeCalendar_GetShiftByDate" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Shift_Insert" SpName="Shift_Insert" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Shift_Update" SpName="Shift_Update" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Shift_Delete" SpName="Shift_Delete" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Shift_GetById" SpName="Shift_GetById" DbName="bodb_HRM" Plain="0" />
+    </Function>
+    <Function Name="Holiday">
+        <Setting Key="Holiday_Insert" SpName="Holiday_Insert" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Holiday_Update" SpName="Holiday_Update" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Holiday_Delete" SpName="Holiday_Delete" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Holiday_GetByYear" SpName="Holiday_GetByYear" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Holiday_GetById" SpName="Holiday_GetById" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Holiday_AutoGenerate" SpName="Holiday_AutoGenerate" DbName="bodb_HRM" Plain="0" />
+    </Function>
+    <Function Name="Memo">
+        <Setting Key="Memo_Insert" SpName="Memo_Insert" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Memo_Update" SpName="Memo_Update" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Memo_Delete" SpName="Memo_Delete" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Memo_GetAll" SpName="Memo_GetAll" DbName="bodb_HRM" Plain="0">
+            <Mapping DataField="Type" ObjectProperty="MemoType" />
+        </Setting>
+        <Setting Key="Memo_GetById" SpName="Memo_GetById" DbName="bodb_HRM" Plain="0">
+            <Mapping DataField="Type" ObjectProperty="MemoType" />
+        </Setting>
+    </Function>
+    <Function Name="LeaveType">
+        <Setting Key="LeaveType_GetAll" SpName="LeaveType_GetAll" DbName="bodb_HRM" Plain="0">
+            <Mapping DataField="LeaveTypeId" ObjectProperty="Id" />
+        </Setting>
+    </Function>
+    <Function Name="ExtensionNumber">
+        <Setting Key="ExtensionNO_GetAll" SpName="ExtensionNO_GetAll" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="ExtensionNO_GetGroupInfo" SpName="ExtensionNO_GetGroupInfo" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="ExtensionNO_Insert_EmployeeInfo" SpName="ExtensionNO_Insert_EmployeeInfo" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="ExtensionNO_GetEmployeeInfo" SpName="ExtensionNO_GetEmployeeInfo" DbName="bodb_HRM" Plain="0">
+            <Mapping DataField="ExtId" ObjectProperty="ExtensionNoId" />
+            <Mapping DataField="EmpExtId" ObjectProperty="EmployeeExtensionId" />
+        </Setting>
+        <Setting Key="ExtensionNO_Update_EmployeeInfo" SpName="ExtensionNO_Update_EmployeeInfo" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="ExtensionNO_DELETE_EmployeeInfo" SpName="ExtensionNO_DELETE_EmployeeInfo" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="ExtensionNO_Insert_GroupExternal" SpName="ExtensionNO_Insert_GroupExternal" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="ExtensionNO_Update_GroupExternal" SpName="ExtensionNO_Update_GroupExternal" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="ExtensionNO_DELETE_GroupExternal" SpName="ExtensionNO_DELETE_GroupExternal" DbName="bodb_HRM" Plain="0" />
+    </Function>
+    <Function Name="AnnualLeaveBalance">
+        <Setting Key="AnnualLeave_InsertTransaction" SpName="AnnualLeave_InsertTransaction" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="AnnualLeave_InsertMultipleTransactions" SpName="AnnualLeave_InsertMultipleTransactions" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="AnnualLeave_UpdateTransaction" SpName="AnnualLeave_UpdateTransaction" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="AnnualLeave_DeleteTransaction" SpName="AnnualLeave_DeleteTransaction" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="AnnualLeave_GetTransByEmp" SpName="AnnualLeave_GetTransByEmp" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="AnnualLeave_GetByID" SpName="AnnualLeave_GetByID" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="AnnualLeave_ResetMultipleTransactions" SpName="AnnualLeave_ResetMultipleTransactions" DbName="bodb_HRM" Plain="0" />
+    </Function>
+    <Function Name="Message">
+        <Setting Key="Message_GetByCreator" SpName="Message_GetByCreator" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Message_Insert" SpName="Message_Insert" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Message_Update" SpName="Message_Update" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Message_GetById" SpName="Message_GetById" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Message_Delete" SpName="Message_Delete" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Message_GetByEmployee" SpName="Message_GetByEmployee" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Message_EmployeeDelete" SpName="Message_EmployeeDelete" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Message_Read" SpName="Message_Read" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Message_GetDetailByEmployee" SpName="Message_GetDetailByEmployee" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Message_GetUnreadMessageByEmployee" SpName="Message_GetUnreadMessageByEmployee" DbName="bodb_HRM" Plain="0" />
+    </Function>
+    <Function Name="Section">
+        <Setting Key="Section_Insert" SpName="Section_Insert" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Section_Update" SpName="Section_Update" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Section_Get" SpName="Section_Get" DbName="bodb_HRM" Plain="0">
+            <Mapping DataField="DepartmentId" ObjectProperty="Id" Class="Department" />
+        </Setting>
+        <Setting Key="Section_GetById" SpName="Section_GetById" DbName="bodb_HRM" Plain="0">
+            <Mapping DataField="DepartmentId" ObjectProperty="Id" Class="Department" />
+        </Setting>
+        <Setting Key="Section_Delete" SpName="Section_Delete" DbName="bodb_HRM" Plain="0" />
+    </Function>
+    <Function Name="Department">
+        <Setting Key="Department_Delete" SpName="Department_Delete" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Department_Insert" SpName="Department_Insert" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Department_Delete" SpName="Department_Delete" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Department_Update" SpName="Department_Update" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Department_GetById" SpName="Department_GetById" DbName="bodb_HRM" Plain="0">
+            <Mapping DataField="UnitId" ObjectProperty="Id" Class="Unit" />
+        </Setting>
+        <Setting Key="Department_Get" SpName="Department_Get" DbName="bodb_HRM" Plain="0">
+            <Mapping DataField="UnitId" ObjectProperty="Id" Class="Unit" />
+        </Setting>
+    </Function>
+    <Function Name="Unit">
+        <Setting Key="Unit_Insert" SpName="Unit_Insert" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Unit_Update" SpName="Unit_Update" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Unit_Get" SpName="Unit_Get" DbName="bodb_HRM" Plain="0">
+            <Mapping DataField="UnitId" ObjectProperty="Id" Class="Unit" />
+        </Setting>
+        <Setting Key="Unit_GetById" SpName="Unit_GetById" DbName="bodb_HRM" Plain="0">
+            <Mapping DataField="UnitId" ObjectProperty="Id" Class="Unit" />
+        </Setting>
+        <Setting Key="Unit_Delete" SpName="Unit_Delete" DbName="bodb_HRM" Plain="0" />
+    </Function>
+    <Function Name="Discipline">
+        <Setting Key="OtherDiscipline_Get" SpName="OtherDiscipline_Get" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="OtherDiscipline_Insert" SpName="OtherDiscipline_Insert" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="OtherDiscipline_Delete" SpName="OtherDiscipline_Delete" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="DisciplineType_GetOtherDisciplineType" SpName="DisciplineType_GetOtherDisciplineType" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="DisciplineType_GetDisciplineType" SpName="DisciplineType_GetDisciplineType" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Report_DisciplineSummary" SpName="Report_DisciplineSummary" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Report_DisciplineDetail" SpName="Report_DisciplineDetail" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Discipline_UpdateIgnore" SpName="Discipline_UpdateIgnore" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="OtherDiscipline_GetMember" SpName="OtherDiscipline_GetMember" DbName="bodb_HRM" Plain="0" />
+    </Function>
+    <Function Name="RoleManagement">
+        <Setting Key="Function_AssignFunctionToRole" SpName="Function_AssignFunctionToRole" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Function_GetFunctionsByRoleId" SpName="Function_GetFunctionsByRoleId" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Function_GetFunctionsByUserId" SpName="Function_GetFunctionsByUserId" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Role_GetRolesByUserId" SpName="Role_GetRolesByUserId" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Role_GetRoles" SpName="Role_GetRoles" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Function_GetFunctions" SpName="Function_GetFunctions" DbName="bodb_HRM" Plain="0" />
+    </Function>
+    <Function Name="Menu">
+        <Setting Key="Menu_GetMenusByUserId" SpName="Menu_GetMenusByUserId" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Menu_GetMenus" SpName="Menu_GetMenus" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Menu_GetMenuById" SpName="Menu_GetMenuById" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Menu_Insert" SpName="Menu_Insert" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Menu_Update" SpName="Menu_Update" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Menu_Delete" SpName="Menu_Delete" DbName="bodb_HRM" Plain="0" />
+    </Function>
+    <Function Name="MailDeliver">
+        <Setting Key="MailRecorder_GetConfig" SpName="MailRecorder_GetConfig" DbName="bodb_HRM" />
+        <Setting Key="MailRecorder_InsError" SpName="MailRecorder_InsError" DbName="bodb_HRM" />
+        <Setting Key="MailRecorder_InsRecord" SpName="MailRecorder_InsRecord" DbName="bodb_HRM" />
+        <Setting Key="MailRecorder_UpdateMailStatus" SpName="MailRecorder_UpdateMailStatus" DbName="bodb_HRM" />
+    </Function>
+    <Function Name="Schedule Arrange">
+        <Setting Key="ScheduleArrangement_GetEmployee" SpName="ScheduleArrangement_GetEmployee" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="ScheduleArrangement_GetWeekly" SpName="ScheduleArrangement_GetWeekly" DbName="bodb_HRM" Plain="0">
+            <Mapping DataField="TeamId" ObjectProperty="Id" />
+            <Mapping DataField="DefaultShiftId" ObjectProperty="Id" />
+            <Mapping DataField="ShiftId" ObjectProperty="Id" />
+            <Mapping DataField="LeaveTypeId" ObjectProperty="Id" />
+            <Mapping DataField="LeaveTypeId2" ObjectProperty="Id" />
+        </Setting>
+        <Setting Key="ScheduleArrangement_UpdateWeekly" SpName="ScheduleArrangement_UpdateWeekly" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="ScheduleArrangement_UpdateRemark" SpName="ScheduleArrangement_UpdateRemark" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="ScheduleArrangement_UpdateDisplayOrder" SpName="ScheduleArrangement_UpdateDisplayOrder" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="ScheduleArrangement_UpdateTeamOrder" SpName="ScheduleArrangement_UpdateGroupOrder" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="ScheduleArrangement_UpdateWeeklyDefaultShift" SpName="ScheduleArrangement_UpdateWeeklyDefaultShift" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="ScheduleArrangement_SyncShift" SpName="ScheduleArrangement_SyncShift" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="ScheduleArrangement_SyncWorkingShift" SpName="ScheduleArrangement_SyncWorkingShift" DbName="bodb_HRM" Plain="0" />
+    </Function>
+    <Function Name="Postnatal">
+        <Setting Key="Postnatal_Get" SpName="Postnatal_Get" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Postnatal_GetById" SpName="Postnatal_GetById" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Postnatal_Insert" SpName="Postnatal_Insert" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Postnatal_Update" SpName="Postnatal_Update" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Postnatal_Delete" SpName="Postnatal_Delete" DbName="bodb_HRM" Plain="0" />
+    </Function>
+    <Function Name="Paternity">
+        <Setting Key="Paternity_Get" SpName="Paternity_Get" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Paternity_GetById" SpName="Paternity_GetById" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Paternity_Insert" SpName="Paternity_Insert" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Paternity_Update" SpName="Paternity_Update" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Paternity_Delete" SpName="Paternity_Delete" DbName="bodb_HRM" Plain="0" />
+    </Function>
+    <Function Name="Leave Request">
+        <Setting Key="LeaveRequest_Insert" SpName="LeaveRequest_Insert" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="LeaveRequest_Update" SpName="LeaveRequest_Update" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="LeaveRequest_Delete" SpName="LeaveRequest_Delete" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="LeaveRequest_Approve" SpName="LeaveRequest_Approve" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="LeaveRequest_Reject" SpName="LeaveRequest_Reject" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="LeaveRequest_Reset" SpName="LeaveRequest_Reset" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="LeaveRequest_VoidBySA" SpName="LeaveRequest_VoidBySA" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="LeaveRequest_GetLeaveBalance" SpName="LeaveRequest_GetLeaveBalance" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="LeaveRequest_GetById" SpName="LeaveRequest_GetById" DbName="bodb_HRM" Plain="0">
+            <Mapping DataField="LeaveTypeId" ObjectProperty="Id" Class="LeaveType" />
+            <Mapping DataField="VerifierId" ObjectProperty="EmpId" Class="Requester" />
+            <Mapping DataField="ApproverId" ObjectProperty="EmpId" Class="Requester" />
+            <Mapping DataField="HRId" ObjectProperty="EmpId" Class="Requester" />
+        </Setting>
+        <Setting Key="LeaveRequest_GetDetailById" SpName="LeaveRequest_GetDetailById" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="LeaveRequest_GetByDate" SpName="LeaveRequest_GetByDate" DbName="bodb_HRM" Plain="0">
+            <Mapping DataField="LeaveTypeId" ObjectProperty="Id" Class="LeaveType" />
+            <Mapping DataField="VerifierId" ObjectProperty="EmpId" Class="Requester" />
+            <Mapping DataField="ApproverId" ObjectProperty="EmpId" Class="Requester" />
+            <Mapping DataField="HRId" ObjectProperty="EmpId" Class="Requester" />
+        </Setting>
+        <Setting Key="LeaveRequest_GetHistoryById" SpName="LeaveRequest_GetHistoryById" DbName="bodb_HRM" Plain="0">
+            <Mapping DataField="LeaveTypeId" ObjectProperty="Id" Class="LeaveType" />
+            <Mapping DataField="VerifierId" ObjectProperty="EmpId" Class="Requester" />
+            <Mapping DataField="ApproverId" ObjectProperty="EmpId" Class="Requester" />
+            <Mapping DataField="HRId" ObjectProperty="EmpId" Class="Requester" />
+            <Mapping DataField="ModifierId" ObjectProperty="EmpId" Class="Requester" />
+        </Setting>
+        <Setting Key="LeaveRequest_GetDisableDate" SpName="LeaveRequest_GetDisableDate" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="LeaveRequest_GetTotalLeaveDay" SpName="LeaveRequest_GetTotalLeaveDay" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="LeaveRequest_GetCalendar" SpName="LeaveRequest_GetCalendar" DbName="bodb_HRM" Plain="0">
+            <Mapping DataField="ShiftId" ObjectProperty="Id" />
+            <Mapping DataField="LeaveTypeId" ObjectProperty="Id" />
+            <Mapping DataField="LeaveTypeId2" ObjectProperty="Id" />
+        </Setting>
+        <Setting Key="LeaveRequest_GetDetailToReviewDiscipline" SpName="LeaveRequest_GetDetailToReviewDiscipline" DbName="bodb_HRM" Plain="0" />
+    </Function>
+    <Function Name="Keep In View">
+        <Setting Key="KeepInViewRequest_Insert" SpName="KeepInViewRequest_Insert" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="KeepInViewRequest_Update" SpName="KeepInViewRequest_Update" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="KeepInViewRequest_Delete" SpName="KeepInViewRequest_Delete" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="KeepInViewRequest_Approve" SpName="KeepInViewRequest_Approve" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="KeepInViewRequest_Reject" SpName="KeepInViewRequest_Reject" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="KeepInViewRequest_Reset" SpName="KeepInViewRequest_Reset" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="KeepInViewRequest_VoidBySA" SpName="KeepInViewRequest_VoidBySA" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="KeepInViewRequest_GetByDate" SpName="KeepInViewRequest_GetByDate" DbName="bodb_HRM" Plain="0">
+            <Mapping DataField="VerifierId" ObjectProperty="EmpId" Class="Requester" />
+            <Mapping DataField="ApproverId" ObjectProperty="EmpId" Class="Requester" />
+            <Mapping DataField="HRId" ObjectProperty="EmpId" Class="Requester" />
+        </Setting>
+        <Setting Key="KeepInViewRequest_GetById" SpName="KeepInViewRequest_GetById" DbName="bodb_HRM" Plain="0">
+            <Mapping DataField="VerifierId" ObjectProperty="EmpId" Class="Requester" />
+            <Mapping DataField="ApproverId" ObjectProperty="EmpId" Class="Requester" />
+            <Mapping DataField="HRId" ObjectProperty="EmpId" Class="Requester" />
+        </Setting>
+        <Setting Key="KeepInViewRequest_GetHistoryById" SpName="KeepInViewRequest_GetHistoryById" DbName="bodb_HRM" Plain="0">
+            <Mapping DataField="VerifierId" ObjectProperty="EmpId" Class="Requester" />
+            <Mapping DataField="ApproverId" ObjectProperty="EmpId" Class="Requester" />
+            <Mapping DataField="HRId" ObjectProperty="EmpId" Class="Requester" />
+            <Mapping DataField="ModifierId" ObjectProperty="EmpId" Class="Requester" />
+        </Setting>
+        <Setting Key="KeepInViewRequest_GetDisableDate" SpName="KeepInViewRequest_GetDisableDate" DbName="bodb_HRM" Plain="0" />
+    </Function>
+    <Function Name="Employee Relationship">
+        <Setting Key="EmployeeRelationship_GetById" SpName="EmployeeRelationship_GetById" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="EmployeeRelationship_Insert" SpName="EmployeeRelationship_Insert" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="EmployeeRelationship_GetByEmployeeId" SpName="EmployeeRelationship_GetByEmployeeId" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="EmployeeRelationship_Edit" SpName="EmployeeRelationship_Edit" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="EmployeeRelationship_Delete" SpName="EmployeeRelationship_Delete" DbName="bodb_HRM" Plain="0" />
+    </Function>
+    <Function Name="Check In Out">
+        <Setting Key="CheckInOutRequest_Insert" SpName="CheckInOutRequest_Insert" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="CheckInOutRequest_Update" SpName="CheckInOutRequest_Update" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="CheckInOutRequest_Delete" SpName="CheckInOutRequest_Delete" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="CheckInOutRequest_Approve" SpName="CheckInOutRequest_Approve" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="CheckInOutRequest_Reject" SpName="CheckInOutRequest_Reject" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="CheckInOutRequest_Reset" SpName="CheckInOutRequest_Reset" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="CheckInOutRequest_VoidBySA" SpName="CheckInOutRequest_VoidBySA" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="CheckInOutRequest_GetById" SpName="CheckInOutRequest_GetById" DbName="bodb_HRM" Plain="0">
+            <Mapping DataField="VerifierId" ObjectProperty="EmpId" Class="Requester" />
+            <Mapping DataField="ApproverId" ObjectProperty="EmpId" Class="Requester" />
+            <Mapping DataField="HRId" ObjectProperty="EmpId" Class="Requester" />
+        </Setting>
+        <Setting Key="CheckInOutRequest_GetByDate" SpName="CheckInOutRequest_GetByDate" DbName="bodb_HRM" Plain="0">
+            <Mapping DataField="VerifierId" ObjectProperty="EmpId" Class="Requester" />
+            <Mapping DataField="ApproverId" ObjectProperty="EmpId" Class="Requester" />
+            <Mapping DataField="HRId" ObjectProperty="EmpId" Class="Requester" />
+        </Setting>
+        <Setting Key="CheckInOutRequest_GetHistoryById" SpName="CheckInOutRequest_GetHistoryById" DbName="bodb_HRM" Plain="0">
+            <Mapping DataField="VerifierId" ObjectProperty="EmpId" Class="Requester" />
+            <Mapping DataField="ApproverId" ObjectProperty="EmpId" Class="Requester" />
+            <Mapping DataField="HRId" ObjectProperty="EmpId" Class="Requester" />
+            <Mapping DataField="ModifierId" ObjectProperty="EmpId" Class="Requester" />
+        </Setting>
+        <Setting Key="CheckInOutRequest_GetDetailToReviewDiscipline" SpName="CheckInOutRequest_GetDetailToReviewDiscipline" DbName="bodb_HRM" Plain="0">
+            <Mapping DataField="RequestType" ObjectProperty="Id" />
+            <Mapping DataField="RequesterId" ObjectProperty="Id" />
+            <Mapping DataField="ShiftId" ObjectProperty="Id" />
+        </Setting>
+        <Setting Key="CheckInOutRequest_GetDisableDate" SpName="CheckInOutRequest_GetDisableDate" DbName="bodb_HRM" Plain="0" />
+    </Function>
+    <Function Name="Late In Early Out">
+        <Setting Key="LateInEarlyOutRequest_Insert" SpName="LateInEarlyOutRequest_Insert" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="LateInEarlyOutRequest_Update" SpName="LateInEarlyOutRequest_Update" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="LateInEarlyOutRequest_Delete" SpName="LateInEarlyOutRequest_Delete" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="LateInEarlyOutRequest_Approve" SpName="LateInEarlyOutRequest_Approve" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="LateInEarlyOutRequest_Reject" SpName="LateInEarlyOutRequest_Reject" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="LateInEarlyOutRequest_Reset" SpName="LateInEarlyOutRequest_Reset" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="LateInEarlyOutRequest_VoidBySA" SpName="LateInEarlyOutRequest_VoidBySA" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="LateInEarlyOutRequest_GetDisableDate" SpName="LateInEarlyOutRequest_GetDisableDate" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="LateInEarlyOutRequest_GetById" SpName="LateInEarlyOutRequest_GetById" DbName="bodb_HRM" Plain="0">
+            <Mapping DataField="VerifierId" ObjectProperty="EmpId" Class="Requester" />
+            <Mapping DataField="ApproverId" ObjectProperty="EmpId" Class="Requester" />
+            <Mapping DataField="HRId" ObjectProperty="EmpId" Class="Requester" />
+        </Setting>
+        <Setting Key="LateInEarlyOutRequest_GetByDate" SpName="LateInEarlyOutRequest_GetByDate" DbName="bodb_HRM" Plain="0">
+            <Mapping DataField="VerifierId" ObjectProperty="EmpId" Class="Requester" />
+            <Mapping DataField="ApproverId" ObjectProperty="EmpId" Class="Requester" />
+            <Mapping DataField="HRId" ObjectProperty="EmpId" Class="Requester" />
+        </Setting>
+        <Setting Key="LateInEarlyOutRequest_GetHistoryById" SpName="LateInEarlyOutRequest_GetHistoryById" DbName="bodb_HRM" Plain="0">
+            <Mapping DataField="VerifierId" ObjectProperty="EmpId" Class="Requester" />
+            <Mapping DataField="ApproverId" ObjectProperty="EmpId" Class="Requester" />
+            <Mapping DataField="HRId" ObjectProperty="EmpId" Class="Requester" />
+            <Mapping DataField="ModifierId" ObjectProperty="EmpId" Class="Requester" />
+        </Setting>
+        <Setting Key="LateInEarlyOutRequest_GetDetailToReviewDiscipline" SpName="LateInEarlyOutRequest_GetDetailToReviewDiscipline" DbName="bodb_HRM" Plain="0">
+            <Mapping DataField="RequestType" ObjectProperty="Id" />
+            <Mapping DataField="RequesterId" ObjectProperty="Id" />
+            <Mapping DataField="ShiftId" ObjectProperty="Id" />
+        </Setting>
+    </Function>
+    <Function Name="Overtime">
+        <Setting Key="Overtime_UpdateMonthlyRequest" SpName="Overtime_UpdateMonthlyRequest" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Overtime_GetMonthlyRequestByEmpId" SpName="Overtime_GetMonthlyRequestByEmpId" DbName="bodb_HRM" Plain="0">
+            <Mapping DataField="VerifierId" ObjectProperty="EmpId" Class="Requester" />
+            <Mapping DataField="ApproverId" ObjectProperty="EmpId" Class="Requester" />
+            <Mapping DataField="StatusId" ObjectProperty="Id" Class="RequestStatus" />
+        </Setting>
+        <Setting Key="Overtime_GetMonthlyRequestDetailsByEmpId" SpName="Overtime_GetMonthlyRequestDetailsByEmpId" DbName="bodb_HRM" Plain="0">
+            <Mapping DataField="VerifierId" ObjectProperty="EmpId" Class="Requester" />
+            <Mapping DataField="ApproverId" ObjectProperty="EmpId" Class="Requester" />
+            <Mapping DataField="StatusId" ObjectProperty="Id" Class="RequestStatus" />
+        </Setting>
+        <Setting Key="Overtime_GetMemberMonthlyRequest" SpName="Overtime_GetMemberMonthlyRequest" DbName="bodb_HRM" Plain="0">
+            <Mapping DataField="VerifierId" ObjectProperty="EmpId" Class="Requester" />
+            <Mapping DataField="ApproverId" ObjectProperty="EmpId" Class="Requester" />
+            <Mapping DataField="StatusId" ObjectProperty="Id" Class="RequestStatus" />
+        </Setting>
+        <Setting Key="Overtime_GetMonthlyRequestDetailsById" SpName="Overtime_GetMonthlyRequestDetailsById" DbName="bodb_HRM" Plain="0">
+            <Mapping DataField="VerifierId" ObjectProperty="EmpId" Class="Requester" />
+            <Mapping DataField="ApproverId" ObjectProperty="EmpId" Class="Requester" />
+            <Mapping DataField="StatusId" ObjectProperty="Id" Class="RequestStatus" />
+        </Setting>
+        <Setting Key="Overtime_ApproveRequest" SpName="Overtime_ApproveRequest" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Overtime_RejectRequest" SpName="Overtime_RejectRequest" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Overtime_ResetRequest" SpName="Overtime_ResetRequest" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Overtime_GetEmployeeToRemindClaim" SpName="Overtime_GetEmployeeToRemindClaim" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Overtime_GetDetailsByRequestIds" SpName="Overtime_GetDetailsByRequestIds" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Report_YearlyOvertime" SpName="Report_YearlyOvertime" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Report_MonthlyOvertimeDetails" SpName="Report_MonthlyOvertimeDetails" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Report_MonthlyOvertime" SpName="Report_MonthlyOvertime" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Report_DailyOvertime" SpName="Report_DailyOvertime" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Report_DisciplineSummaryPerYear" SpName="Report_DisciplineSummaryPerYear" DbName="bodb_HRM" Plain="0" />
+    </Function>
+    <Function Name="Log">
+        <Setting Key="ActivityLog_GetByObjectId" SpName="ActivityLog_GetByObjectId" DbName="bodb_HRM" Plain="0" />
+    </Function>
+    <Function Name="Change Shift">
+        <Setting Key="ChangeShiftRequest_GetNumberOfRequest" SpName="ChangeShiftRequest_GetNumberOfRequest" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="ChangeShiftRequest_GetCalendarForRequest" SpName="ChangeShiftRequest_GetCalendarForRequest" DbName="bodb_HRM" Plain="0">
+            <Mapping DataField="ShiftId" ObjectProperty="Id" />
+        </Setting>
+        <Setting Key="ChangeShiftRequest_MoveOffDay_GetDisableDate" SpName="ChangeShiftRequest_MoveOffDay_GetDisableDate" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="ChangeShiftRequest_GetByEmployee" SpName="ChangeShiftRequest_GetByEmployee" DbName="bodb_HRM" Plain="0">
+            <Mapping DataField="VerifierId" ObjectProperty="EmpId" Class="Requester" />
+            <Mapping DataField="ApproverId" ObjectProperty="EmpId" Class="Requester" />
+            <Mapping DataField="HRId" ObjectProperty="EmpId" Class="Requester" />
+        </Setting>
+        <Setting Key="ChangeShiftRequest_GetById" SpName="ChangeShiftRequest_GetById" DbName="bodb_HRM" Plain="0">
+            <Mapping DataField="VerifierId" ObjectProperty="EmpId" Class="Requester" />
+            <Mapping DataField="ApproverId" ObjectProperty="EmpId" Class="Requester" />
+        </Setting>
+        <Setting Key="ChangeShiftRequest_GetDetailById" SpName="ChangeShiftRequest_GetDetailById" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="ChangeShiftRequest_Insert" SpName="ChangeShiftRequest_Insert" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="ChangeShiftRequest_Update" SpName="ChangeShiftRequest_Update" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="ChangeShiftRequest_Delete" SpName="ChangeShiftRequest_Delete" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="ChangeShiftRequest_GetHistoryById" SpName="ChangeShiftRequest_GetHistoryById" DbName="bodb_HRM" Plain="0">
+            <Mapping DataField="VerifierId" ObjectProperty="EmpId" Class="Requester" />
+            <Mapping DataField="ApproverId" ObjectProperty="EmpId" Class="Requester" />
+            <Mapping DataField="ModifierId" ObjectProperty="EmpId" Class="Requester" />
+        </Setting>
+        <Setting Key="ChangeShiftRequest_Approve" SpName="ChangeShiftRequest_Approve" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="ChangeShiftRequest_Reset" SpName="ChangeShiftRequest_Reset" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="ChangeShiftRequest_Reject" SpName="ChangeShiftRequest_Reject" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="ChangeShiftRequest_VoidBySA" SpName="ChangeShiftRequest_VoidBySA" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="ChangeShiftRequest_GetDetailToReviewDiscipline" SpName="ChangeShiftRequest_GetDetailToReviewDiscipline" DbName="bodb_HRM" Plain="0" />
+    </Function>
+    <Function Name="Discipline Rule">
+        <Setting Key="DisciplineRule_GetByGroupId" SpName="DisciplineRule_GetByGroupId" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="DisciplineRule_Update" SpName="DisciplineRule_Update" DbName="bodb_HRM" Plain="0" />
+    </Function>
+    <Function Name="JobLevel">
+        <Setting Key="JobLevel_Get" SpName="JobLevel_Get" DbName="bodb_HRM" Plain="0">
+            <Mapping DataField="JobLevelId" ObjectProperty="Id" Class="JobLevel" />
+        </Setting>
+        <Setting Key="JobLevel_Insert" SpName="JobLevel_Insert" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="JobLevel_Update" SpName="JobLevel_Update" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="JobLevel_Delete" SpName="JobLevel_Delete" DbName="bodb_HRM" Plain="0" />
+    </Function>
+    <Function Name="ManagementLevel">
+        <Setting Key="ManagementLevel_Get" SpName="ManagementLevel_Get" DbName="bodb_HRM" Plain="0">
+            <Mapping DataField="ManagementLevelId" ObjectProperty="Id" Class="ManagementLevel" />
+        </Setting>
+        <Setting Key="ManagementLevel_Insert" SpName="ManagementLevel_Insert" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="ManagementLevel_Update" SpName="ManagementLevel_Update" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="ManagementLevel_Delete" SpName="ManagementLevel_Delete" DbName="bodb_HRM" Plain="0" />
+    </Function>
+    <Function Name="EmployeeWorkFromHome">
+        <Setting Key="EmployeeWorkFromHome_Get" SpName="EmployeeWorkFromHome_Get" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="EmployeeWorkFromHome_GetById" SpName="EmployeeWorkFromHome_GetById" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="EmployeeWorkFromHome_Insert" SpName="EmployeeWorkFromHome_Insert" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="EmployeeWorkFromHome_Update" SpName="EmployeeWorkFromHome_Update" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="EmployeeWorkFromHome_Delete" SpName="EmployeeWorkFromHome_Delete" DbName="bodb_HRM" Plain="0" />
+    </Function>
+
+    <Function Name="Hospitalization Leave">
+        <Setting Key="HospitalizationLeave_SummaryReport" SpName="HospitalizationLeave_SummaryReport" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="HospitalizationLeave_InsertMultipleTransactions" SpName="HospitalizationLeave_InsertMultipleTransactions" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="HospitalizationLeave_ResetMultipleTransactions" SpName="HospitalizationLeave_ResetMultipleTransactions" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="HospitalizationLeave_GetTransByEmpId" SpName="HospitalizationLeave_GetTransByEmpId" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="HospitalizationLeave_GetTransById" SpName="HospitalizationLeave_GetTransById" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="HospitalizationLeave_InsertTransaction" SpName="HospitalizationLeave_InsertTransaction" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="HospitalizationLeave_UpdateTransaction" SpName="HospitalizationLeave_UpdateTransaction" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="HospitalizationLeave_DeleteTransaction" SpName="HospitalizationLeave_DeleteTransaction" DbName="bodb_HRM" Plain="0" />
+    </Function>
+    <Function Name="Sick Leave">
+        <Setting Key="SickLeave_SummaryReport" SpName="SickLeave_SummaryReport" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="SickLeave_InsertMultipleTransactions" SpName="SickLeave_InsertMultipleTransactions" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="SickLeave_ResetMultipleTransactions" SpName="SickLeave_ResetMultipleTransactions" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="SickLeave_GetTransByEmpId" SpName="SickLeave_GetTransByEmpId" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="SickLeave_GetTransById" SpName="SickLeave_GetTransById" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="SickLeave_InsertTransaction" SpName="SickLeave_InsertTransaction" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="SickLeave_UpdateTransaction" SpName="SickLeave_UpdateTransaction" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="SickLeave_DeleteTransaction" SpName="SickLeave_DeleteTransaction" DbName="bodb_HRM" Plain="0" />
+    </Function>
+    <Function Name="System Setting">
+        <Setting Key="SystemSetting_Get" SpName="SystemSetting_Get" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="SystemConfigs_GetByKey" SpName="SystemConfigs_GetByKey" DbName="bodb_HRM" Plain="0" />
+    </Function>
+    <Function Name="Meal Allowance Report">
+        <Setting Key="WorkFromHome_MealAllowanceDetailReport" SpName="WorkFromHome_MealAllowanceDetailReport" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="WorkFromHome_MealAllowanceSummaryReport" SpName="WorkFromHome_MealAllowanceSummaryReport" DbName="bodb_HRM" Plain="0" />
+    </Function>
+    <Function Name="FnB">
+        <Setting Key="Fnb_Employee_GetByLastModifiedDate" SpName="Fnb_Employee_GetByLastModifiedDate" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Fnb_EmployeeGroup_GetByLastModifiedDate" SpName="Fnb_EmployeeGroup_GetByLastModifiedDate" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="FnB_Section_GetByLastModifiedDate" SpName="FnB_Section_GetByLastModifiedDate" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="FnB_Department_GetByLastModifiedDate" SpName="FnB_Department_GetByLastModifiedDate" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="FnB_Unit_GetByLastModifiedDate" SpName="FnB_Unit_GetByLastModifiedDate" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="FnB_Shift_GetAll" SpName="FnB_Shift_GetAll" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="FnB_EmployeeCalendar_GetByLastModifiedDate" SpName="FnB_EmployeeCalendar_GetByLastModifiedDate" DbName="bodb_HRM" Plain="0" />
+    </Function>
+</Functions>

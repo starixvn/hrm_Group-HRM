@@ -1,0 +1,70 @@
+﻿@using HRM.Resources
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>HRM - @ViewBag.Title</title>
+    <meta name="viewport" content="width=device-width" />
+    <link href="~/dist/styles/main.css" rel="stylesheet" />
+    @await RenderSectionAsync("css", false)
+</head>
+<body class="locale_en production">
+    <header>
+        @await Component.InvokeAsync("Header")
+    </header>
+    <div id="container">
+        <nav id="left-navigation" class="left-navigation">
+            @await Component.InvokeAsync("NavBar")
+        </nav>
+        <section id="section_content" class="section-content">
+            <div id="content-wrapper" class="content_wrap">
+                <section id="section_breadcrumb" class="section_breadcrumb">
+                    <div class="separator js-separator">
+                        <div class="js-view-title separator-view-title" id="view_title">
+                            <div class="breadcrumb">
+                                <a id="toggle-left-navigation" class="toggle-left-navigation large-back" href="javascript:;" title="@Labels.HideLeftNavigation"><i class="glyphicon glyphicon-arrow-left"></i></a>
+                                <span class="separate">|</span>
+                                @await RenderSectionAsync("Breadcrumb", required: true)
+                            </div>
+                        </div>
+                        <div class="js-menu separator-menu">
+                            @await RenderSectionAsync("SeparatorMenu", required: false)
+                        </div>
+                    </div>
+                </section>
+                <section id="section_body" class="section_body">
+                    <div class="content_scroll">
+                        @RenderBody()
+                    </div>
+
+                    <div id="loadingProcess" class="loading-process" style="display: none;">
+                        <svg class="icon-loading" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="64" height="64" fill="#439ff0">
+                            <circle transform="translate(8 0)" cx="0" cy="16" r="0">
+                                <animate attributeName="r" values="0; 4; 0; 0" dur="1.2s" repeatCount="indefinite" begin="0"
+                                         keytimes="0;0.2;0.7;1" keySplines="0.2 0.2 0.4 0.8;0.2 0.6 0.4 0.8;0.2 0.6 0.4 0.8" calcMode="spline" />
+                            </circle>
+                            <circle transform="translate(16 0)" cx="0" cy="16" r="0">
+                                <animate attributeName="r" values="0; 4; 0; 0" dur="1.2s" repeatCount="indefinite" begin="0.3"
+                                         keytimes="0;0.2;0.7;1" keySplines="0.2 0.2 0.4 0.8;0.2 0.6 0.4 0.8;0.2 0.6 0.4 0.8" calcMode="spline" />
+                            </circle>
+                            <circle transform="translate(24 0)" cx="0" cy="16" r="0">
+                                <animate attributeName="r" values="0; 4; 0; 0" dur="1.2s" repeatCount="indefinite" begin="0.6"
+                                         keytimes="0;0.2;0.7;1" keySplines="0.2 0.2 0.4 0.8;0.2 0.6 0.4 0.8;0.2 0.6 0.4 0.8" calcMode="spline" />
+                            </circle>
+                        </svg>
+                    </div>
+                </section>
+            </div>
+        </section>
+        <div class="right_wrap">
+            @await RenderSectionAsync("Right", required: false)
+        </div>
+    </div>
+    <footer></footer>
+    <div id="message"></div>
+    @Html.Hidden("RootURL", Url.Content("~/"))
+    <script src="~/dist/vendors/react.js"></script>
+    <script src="~/dist/js/main.js"></script>
+    @await RenderSectionAsync("js", false)
+    </body>
+</html>

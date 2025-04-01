@@ -1,0 +1,16 @@
+﻿@model IEnumerable<HRM.Core.Models.S3FileObject>
+
+@if (Model != null && Model.Any())
+{
+    foreach (var file in Model)
+    {
+        <li>
+            <a href="@file.FilePath" class="file-name" target="_blank" title="@file.FileName">@file.FileName</a>
+            <i class="fa fa-times fa-lg icon-delete delete-file-upload" title="Delete file" data-file-name="@file.FileName"></i>
+        </li>
+    }
+}
+else
+{
+    <span class="no-file">No file uploaded</span>
+}

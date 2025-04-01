@@ -1,0 +1,18 @@
+﻿@using HRM.Resources
+@{
+	ViewBag.Title = Labels.AddDepartment;
+}
+@section css{
+	<link href="~/dist/styles/department.create.css" rel="stylesheet" />
+}
+@section js{
+	<script src="~/dist/js/department.create.js"></script>
+}
+@section Breadcrumb {
+	<a class="step">@Labels.SASpace</a>
+	<a class="step" href="@Url.Action("index", "department")">@Labels.DepartmentManagement</a>
+	<span class="step">@ViewBag.Title</span>
+}
+
+<h2 class="page-title">@Labels.Create</h2>
+<div id="department-create"></div>

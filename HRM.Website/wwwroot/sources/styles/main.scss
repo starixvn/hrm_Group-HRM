@@ -1,0 +1,44 @@
+﻿@import 'abstracts/variables';
+@import 'base/common';
+@import 'base/typo';
+
+@import '~jquery-ui-bundle/jquery-ui.css';
+@import '~bootstrap/dist/css/bootstrap.css';
+@import '~tipsy/src/stylesheets/tipsy.css';
+$fa-font-path: "~font-awesome/fonts";
+@import '~font-awesome/scss/font-awesome.scss';
+
+@import 'fonts/font.css';
+@import 'layout/navbar';
+@import 'layout/header';
+@import 'components/breadcrumb';
+@import 'components/popupAvatar';
+
+.tipsy {
+    .tipsy-inner {
+        padding: 8px 11px 7px 11px;
+        font-size: 12px;
+        text-align: left;
+    }
+}
+
+.loading-process {
+    background: rgba(255, 255, 255, 0.7) no-repeat;
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    z-index: 9999;
+
+    .icon-loading {
+        position: absolute;
+        top: 30%;
+        width: 64px;
+        height: 64px;
+        left: 50%;
+        margin: -10px 0 0 -70px;
+    }
+}
+
+.bold {
+    font-weight: 700;
+}

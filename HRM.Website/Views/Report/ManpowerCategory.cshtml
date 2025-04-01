@@ -1,0 +1,183 @@
+﻿@using HRM.Core
+@using HRM.Resources
+@using HRM.Website.Helper
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model HRM.ViewModels.Report.ManpowerCategoryViewModel
+@{
+    ViewBag.Title = Labels.ManpowerCategory;
+}
+@section css{
+    <link href="~/dist/styles/report.manpower.css" rel="stylesheet" />
+}
+@section js{
+    <script src="~/dist/js/report.manpower.category.js"></script>
+}
+@section Breadcrumb {
+    <a class="step">@Labels.Personal</a>
+    <a class="step" href="@Url.Action("index", "report")">@Labels.Reports</a>
+    <a class="step">@ViewBag.Title</a>
+}
+<h2 class="page-title">@ViewBag.Title</h2>
+<form class="filter">
+    <div class="form-horizontal clearfix">
+        <div class="form-group year">
+            <div class="label-form">
+                @Html.Label(Labels.Year, Labels.Year, new { @class = "control-label" })
+            </div>
+            <div class="select-form">
+                @{
+                    var yearPicker = Extensions.YearPicker(2010, Model.Year);
+                    <select class="yearpicker form-control" name="year" id="year">
+                        @foreach (var item in yearPicker)
+                        {
+                            <!option value="@item.Value" @(item.Selected ? "selected" : "")>@item.Value</!option>
+                        }
+                    </select>
+                }
+            </div>
+        </div>
+        <div class="form-group form-group--m">
+            <button class="btn btn-primary">@Labels.Search</button>
+            <button type="button" class="btn btn-excel" id="btnExcel">@Labels.Excel</button>
+        </div>
+    </div>
+</form>
+
+<table id="data" class="table table-custom">
+    <thead>
+        <tr>
+            <th rowspan="2">@Labels.SymbolCount</th>
+            <th rowspan="2" class="col-sorter">
+                <div class="cell-control-wrapper">
+                    <div>@Labels.Department</div>
+                    <div class="fa fa-sort"></div>
+                </div>
+            </th>
+            <th rowspan="2" class="col-sorter">
+                <div class="cell-control-wrapper">
+                    <div>@Labels.Section</div>
+                    <div class="fa fa-sort"></div>
+                </div>
+            </th>
+            <th rowspan="2">@Labels.Team</th>
+            <th colspan="3">@Labels.TotalManpower</th>
+            <th colspan="10">@Labels.JobCategory</th>
+        </tr>
+        <tr>
+            <th>@Labels.Expat</th>
+            <th>@Labels.Local</th>
+            <th>@Labels.Total</th>
+            <th colspan="2">@Labels.Management</th>
+            <th colspan="2">@Labels.ExecutiveWithPosition</th>
+            <th colspan="2">@Labels.Executive</th>
+            <th colspan="2">@Labels.Staff</th>
+            <th colspan="2">@Labels.Worker</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Manpowers != null && Model.Manpowers.Any())
+        {
+            var index = 0;
+            foreach (var manpower in Model.Manpowers)
+            {
+                index++;
+                <tr>
+                    <td>@index</td>
+                    <td class="align-left">@manpower.DepartmentCode</td>
+                    <td class="align-left">@manpower.Section</td>
+                    <td class="align-left">@manpower.TeamName</td>
+                    <td class="align-right">@manpower.TotalExpat</td>
+                    <td class="align-right">@manpower.TotalLocal</td>
+                    <td class="align-right">@manpower.Total</td>
+                    <td class="align-right">@manpower.Management</td>
+                    <td class="align-right">@manpower.AVGManagement.ToString("0.0%")</td>
+                    <td class="align-right">@manpower.ExecutiveWithPosition</td>
+                    <td class="align-right">@manpower.AVGExecutiveWithPosition.ToString("0.0%")</td>
+                    <td class="align-right">@manpower.Executive</td>
+                    <td class="align-right">@manpower.AVGExecutive.ToString("0.0%")</td>
+                    <td class="align-right">@manpower.Staff</td>
+                    <td class="align-right">@manpower.AVGStaff.ToString("0.0%")</td>
+                    <td class="align-right">@manpower.Worker</td>
+                    <td class="align-right">@manpower.AVGWorker.ToString("0.0%")</td>
+                </tr>
+            }
+        }
+        else
+        {
+            @Html.Raw(RazorHelpers.DisplayNoInformation(colspan: 15))
+        }
+    </tbody>
+    <tfoot>
+        <tr class="summary">
+            @{
+                int total = Model.Manpowers.Sum(t => t.Total),
+                    management = Model.Manpowers.Sum(t => t.Management),
+                    executiveWithPosition = Model.Manpowers.Sum(t => t.ExecutiveWithPosition),
+                    executive = Model.Manpowers.Sum(t => t.Executive),
+                    staff = Model.Manpowers.Sum(t => t.Staff),
+                    worker = Model.Manpowers.Sum(t => t.Worker);
+            }
+            <td colspan="4" class="align-right">
+                @Labels.Total
+            </td>
+            <td class="align-right">@Model.Manpowers.Sum(t => t.TotalExpat)</td>
+            <td class="align-right">@Model.Manpowers.Sum(t => t.TotalLocal)</td>
+            <td class="align-right">@Model.Manpowers.Sum(t => t.Total)</td>
+            <td class="align-right">@management</td>
+            <td class="align-right">
+                @if (total != 0)
+                {
+                    @((management * 100.00 / total).ToString("0.0") + "%")
+                }
+                else
+                {
+                    @("0.0%")
+                }
+            </td>
+            <td class="align-right">@executiveWithPosition</td>
+            <td class="align-right">
+                @if (total != 0)
+                {
+                    @((executiveWithPosition * 100.00 / total).ToString("0.0") + "%")
+                }
+                else
+                {
+                    @("0.0%")
+                }
+            </td>
+            <td class="align-right">@executive</td>
+            <td class="align-right">
+                @if (total != 0)
+                {
+                    @((executive * 100.00 / total).ToString("0.0") + "%")
+                }
+                else
+                {
+                    @("0.0%")
+                }
+            </td>
+            <td class="align-right">@staff</td>
+            <td class="align-right">
+                @if (total != 0)
+                {
+                    @((staff * 100.00 / total).ToString("0.0") + "%")
+                }
+                else
+                {
+                    @("0.0%")
+                }
+            </td>
+            <td class="align-right">@worker</td>
+            <td class="align-right">
+                @if (total != 0)
+                {
+                    @((worker * 100.00 / total).ToString("0.0") + "%")
+                }
+                else
+                {
+                    @("0.0%")
+                }
+            </td>
+        </tr>
+    </tfoot>
+</table>

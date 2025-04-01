@@ -1,0 +1,79 @@
+﻿@import '../../abstracts/mixins';
+@import '../../vendors/multiselect';
+@import '../../layout/filter';
+@import '../../layout/table';
+@import '../../components/validation';
+@import '../../components/buttons-new';
+@import '../../components/jquery-ui-dialog';
+@import '../../components/multiselect-treeview';
+
+.table {
+    .action-column {
+        a {
+            cursor: pointer;
+        }
+    }
+
+    .attach-file {
+        display: flex;
+
+        .file-name {
+            max-width: 150px;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+    }
+}
+
+.dialog-form {
+    .form-horizontal {
+        .label-form {
+            width: 90px;
+
+            label {
+                text-align: left;
+            }
+        }
+
+        .form-group--m {
+            width: 400px;
+
+            .input-form {
+                width: calc(100% - 90px);
+            }
+        }
+
+        .calendar-form {
+            position: relative;
+            width: 150px !important;
+
+            .form-control {
+                width: 130px !important;
+            }
+        }
+
+        textarea.form-control {
+            height: 100px;
+            resize: vertical;
+        }
+
+        .workinghours {
+            width: 150px;
+        }
+
+        .delete-file {
+            display: block;
+            color: #337ab7;
+            line-height: 1.5em;
+
+            .fa-close {
+                margin-right: 0.5em;
+
+                &:hover {
+                    color: #da5350;
+                }
+            }
+        }
+    }
+}

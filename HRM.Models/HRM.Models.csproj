@@ -1,0 +1,13 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\HRM.Core\HRM.Core.csproj" />
+    <ProjectReference Include="..\HRM.Resources\HRM.Resources.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="GO.UserControl.Client.AspNetCore" Version="1.0.2" />
+    <PackageReference Include="GO.UserControl.Client.Core" Version="1.0.3" />
+  </ItemGroup>
+</Project>

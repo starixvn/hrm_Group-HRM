@@ -1,0 +1,93 @@
+﻿@using HRM.Resources
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model HRM.ViewModels.Employee.UserManagementViewModel
+@{
+    ViewBag.Title = Labels.EmployeeManagement;
+}
+@section css{
+    <link href="~/dist/styles/user.management.css" rel="stylesheet" />
+}
+@section js{
+    <script src="~/dist/js/employee.user.management.js"></script>
+}
+@section Breadcrumb {
+    <a class="step">@Labels.HRSpace</a><span class="step">@ViewBag.Title</span>
+}
+
+<h2 class="page-title">@ViewBag.Title</h2>
+<form class="filter">
+    <div class="form-horizontal clearfix">
+        @Html.HiddenFor(model => model.JobTitleId)
+        @Html.HiddenFor(model => model.TeamIds)
+        @Html.HiddenFor(model => model.IsEnable)
+        @Html.HiddenFor(model => model.IsDelete)
+        @Html.HiddenFor(model => model.IsLocal)
+        @Html.HiddenFor(model => model.CurrentPage)
+        @Html.HiddenFor(model => model.ItemsPerPage)
+
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.LabelFor(model => model.Keyword, Labels.Keyword, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.TextBoxFor(model => model.Keyword,
+               new { placeholder = Messages.SearchEmployeeWatermark, @class = "form-control", autocomplete = "off" })
+            </div>
+        </div>
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                <label class="control-label">@Labels.SectionTeam</label>
+            </div>
+            <div class="input-form" id="Team"></div>
+        </div>
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                <label class="control-label">@Labels.Title</label>
+            </div>
+            <div class="select-form">
+                @Html.DropDownList("title", Model.JobTitles, Labels.AllTitles, new { @class = "title-select form-control" })
+            </div>
+        </div>
+        @if (Model.IsShowDropdownCategory)
+        {
+            <div class="form-group form-group--m">
+                <div class="label-form">
+                    <label class="control-label">@Labels.Category</label>
+                </div>
+                <div class="select-form">
+                    @{
+                        var category = new List<SelectListItem>
+                                        {
+                            new() {Text = "-- All --", Value = string.Empty},
+                            new() {Text = Labels.Expat, Value = "0"},
+                            new() {Text = Labels.Local, Value = "1"}
+                                        };
+                    }
+                    @Html.DropDownList("category", category, new { @class = "category form-control" })
+                </div>
+            </div>
+        }
+        <div class="form-group user-status" id="usertype">
+            <input type="radio" id="enabled" checked="checked" />
+            <label for="enabled">@Labels.ActiveUsers</label>
+
+            <input type="radio" id="disabled" />
+            <label for="disabled">@Labels.DisabledUsers</label>
+
+            <input type="radio" id="deleted" />
+            <label for="deleted">@Labels.DeletedUsers</label>
+        </div>
+    </div>
+    <div class="form-horizontal clearfix">
+        <div class="form-group">
+            <button id="query" type="button" class="btn btn-primary">@Labels.Submit</button>
+            <button type="button" id="basicExcel" class="btn btn-excel">Excel - Basic Info</button>
+            <button type="button" id="detailsExcel" class="btn btn-excel">Excel - Details Info</button>
+            <a href="/Postnatal/Index" class="btn btn-request">@Labels.Postnatal</a>
+            <a href="/Paternity/Index" class="btn btn-request">@Labels.Paternity</a>
+            <a href="/EmployeeWorkFromHome/Index" class="btn btn-request">@Labels.EmployeeWorkFromHome</a>
+        </div>
+    </div>
+</form>
+<div id="user-management"></div>
+<div id="tippy-avatar" class="tippy-avatar"></div>

@@ -1,0 +1,190 @@
+﻿@using HRM.Core
+@using HRM.Core.Enums
+@using HRM.Models.ScheduleArrange
+@using HRM.Resources
+@using HRM.Website.Helper
+@model HRM.ViewModels.Calendar.WorkingCalendarViewModel
+@{
+    var fromDay = Model.FromDate;
+    var toDay = Model.ToDate;
+    var colspanHeader = (int)((toDay - fromDay).TotalDays + 5);
+}
+<table id="data" class="table table-custom" style="width:100%">
+    <thead>
+        <tr>
+            <th colspan="@colspanHeader">
+                <div class="toolbar">
+                    <div class="search">
+                        <input class="form-control quick-search" placeholder="quick search" />
+                    </div>
+                    <div>
+                        <span class="label-week">
+                            <span>@Model.FromDate.ToDateMonthYearFormatedDate()</span> - <span>@Model.ToDate.ToDateMonthYearFormatedDate()</span>
+                        </span>
+                        <span class="dropdown-color dropdown">
+                            <button id="dropdownColorDescription" aria-haspopup="true" aria-expanded="false" data-toggle="dropdown"
+                            type="button" class="btn dropdown-toggle btn-default">
+                                <img src="~/dist/styles/fonts/pantone.svg" width="17" alt="" />
+                            </button>
+                            <ul role="menu" class="dropdown-menu" aria-labelledby="dropdownColorDescription">
+                                <li role="presentation">
+                                    <a role="menuitem" tabindex="-1" href="javascript:;"><span class="holiday"></span>Public Holiday</a>
+                                </li>
+                                <li role="presentation">
+                                    <a role="menuitem" tabindex="-1" href="javascript:;"><span class="offday"></span>Off Day</a>
+                                </li>
+                                <li role="presentation">
+                                    <a role="menuitem" tabindex="-1" href="javascript:;"><span class="offdayreplacement"></span>Off Replacement</a>
+                                </li>
+                                <li role="presentation">
+                                    <a role="menuitem" tabindex="-1" href="javascript:;"><span class="keepinviewday"></span>Compensation Leave</a>
+                                </li>
+                                <li role="presentation">
+                                    <a role="menuitem" tabindex="-1" href="javascript:;"><span class="changeshift"></span>Change Shift</a>
+                                </li>
+                                <li role="presentation">
+                                    <a role="menuitem" tabindex="-1" href="javascript:;"><span class="overtime"></span>Overtime</a>
+                                </li>
+                                <li role="presentation">
+                                    <a role="menuitem" tabindex="-1" href="javascript:;"><span class="annualleave"></span>Annual Leave</a>
+                                </li>
+                                <li role="presentation">
+                                    <a role="menuitem" tabindex="-1" href="javascript:;"><span class="unpaidleave"></span>Unpaid Leave</a>
+                                </li>
+                                <li role="presentation">
+                                    <a role="menuitem" tabindex="-1" href="javascript:;"><span class="businesstrip"></span>Business Trip</a>
+                                </li>
+                                <li role="presentation">
+                                    <a role="menuitem" tabindex="-1" href="javascript:;"><span class="weddingleave"></span>Wedding Leave</a>
+                                </li>
+                                <li role="presentation">
+                                    <a role="menuitem" tabindex="-1" href="javascript:;"><span class="leavehalfday2"></span>2 Leaves Half Day</a>
+                                </li>
+                                <li role="presentation">
+                                    <a role="menuitem" tabindex="-1" href="javascript:;"><span class="leaveday"></span>Others Leave</a>
+                                </li>
+                            </ul>
+                        </span>
+                    </div>
+                </div>
+            </th>
+        </tr>
+        <tr>
+            <th class="col-sorter">
+                <div class="cell-control-wrapper">
+                    <div>@Labels.Department</div>
+                    <div class="fa fa-sort"></div>
+                </div>
+            </th>
+            <th class="col-sorter">
+                <div class="cell-control-wrapper">
+                    <div>@Labels.Section</div>
+                    <div class="fa fa-sort"></div>
+                </div>
+            </th>
+            <th>@Labels.Team</th>
+            <th>@Labels.NickName</th>
+            @for (var day = fromDay.Date; day.Date <= toDay.Date; day = day.AddDays(1))
+            {
+                <th class="@(day.DayOfWeek is DayOfWeek.Saturday or DayOfWeek.Sunday ? "weekend" : string.Empty)">
+                    <div>
+                        @day.ToString("dd MMM, yyyy (ddd)")
+                    </div>
+                </th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.WorkingCalendars.Any())
+        {
+            foreach (var calendar in Model.WorkingCalendars)
+            {
+                <tr>
+                    <td class="align-left">@calendar.DepartmentCode</td>
+                    <td class="align-left">@calendar.SectionCode</td>
+                    <td class="align-left">@calendar.Team</td>
+                    <td class="align-left">@calendar.Nickname</td>
+                    @foreach (var daily in calendar.Schedules)
+                    {
+                        RenderColShift(daily);
+                    }
+                </tr>
+            }
+        }
+        else
+        {
+            @Html.Raw(RazorHelpers.DisplayNoInformation(colspan: colspanHeader))
+        }
+    </tbody>
+</table>
+
+@{
+    void RenderColShift(DailySchedule schedule)
+    {
+        string shift;
+        var className = string.Empty;
+        if (schedule.IsLeaveOffDay)
+        {
+            shift = Labels.Off;
+            className = "leave offday";
+        }
+        else if (schedule.IsLeaveDay)
+        {
+            if (schedule.IsHoliday)
+            {
+                shift = Labels.PH;
+                className = "holiday";
+            }
+            else if (schedule.IsOffDay)
+            {
+                shift = Labels.Off;
+                className = "offday";
+            }
+            else
+            {
+                if (schedule.LeaveType != null && (schedule.LeaveType2 == null || schedule.LeaveType.Code == schedule.LeaveType2.Code))
+                {
+                    className = schedule.LeaveType.Id switch
+                    {
+                        (byte)LeaveTypes.AnnualLeave => "annualleave",
+                        (byte)LeaveTypes.UnpaidLeave => "unpaidleave",
+                        (byte)LeaveTypes.BusinessTrip => "businesstrip",
+                        (byte)LeaveTypes.WeddingLeave or (byte)LeaveTypes.WeddingOfEmployeeChildren => "weddingleave",
+                        _ => "leaveday"
+                    };
+                }
+
+                if (schedule.IsLeaveHalfDay)
+                {
+                    shift = $"{schedule.LeaveType.Code} ½";
+                }
+                else
+                {
+                    shift = schedule.LeaveType.Code;
+
+                    if (schedule.LeaveType2 != null && schedule.LeaveType.Code != schedule.LeaveType2.Code)
+                    {
+                        className = "leaveday leavehalfday2";
+                        shift = $"{schedule.LeaveType.Code} / {schedule.LeaveType2.Code}";
+                    }
+                }
+            }
+        }
+        else if (schedule.IsHoliday)
+        {
+            className = "holiday";
+            shift = schedule.Shift != null ? schedule.Shift.Code : Labels.PH;
+        }
+        else if (schedule.IsOffDay)
+        {
+            className = "offday";
+            shift = schedule.Shift != null ? schedule.Shift.Code : Labels.Off;
+        }
+        else
+        {
+            shift = schedule.Shift != null ? schedule.Shift.Code : string.Empty;
+        }
+
+        <td class="@className">@shift</td>
+    }
+}

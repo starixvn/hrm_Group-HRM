@@ -1,0 +1,88 @@
+﻿@using HRM.Core
+@using HRM.Resources
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model HRM.ViewModels.Report.ShiftStatisticDetailViewModel
+@{
+    ViewBag.Title = Labels.EmployeeShift;
+}
+@section css{
+    <link href="~/dist/styles/report.shiftstatistic.css" rel="stylesheet" />
+}
+@section js{
+    <script src="~/dist/js/report.shiftstatistic.details.js"></script>
+}
+@section Breadcrumb {
+    <a class="step">@Labels.CompanySpace</a>
+    <a class="step" href="@Url.Action("index", "shiftstatisticreport")">@Labels.ShiftStatisticReport</a>
+    <a class="step">@ViewBag.Title</a>
+}
+<h2 class="page-title">@ViewBag.Title</h2>
+<form class="filter">
+    @Html.HiddenFor(model => model.TeamIds)
+    @Html.HiddenFor(model => model.EmployeeId)
+    <div class="form-horizontal clearfix">
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.LabelFor(model => model.WorkDate, Labels.Date, new { @class = "control-label" })
+            </div>
+            <div class="calendar-form">
+                @Html.TextBox("WorkDate", Model.WorkDate.ToDateMonthYearFormatedDate(),
+                new {
+                    @class = "datepicker form-control",
+                    mindate = new DateTime(2010, 1, 1).ToString("yyyy/MM/dd"),
+                    maxdate = string.Empty,
+                    disabledDate = string.Empty
+                })
+                <i class="icon-calendar fa fa-calendar"></i>
+            </div>
+        </div>
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.LabelFor(model => model.ShiftId, Labels.Shift, new { @class = "control-label" })
+            </div>
+            <div class="select-form">
+                @Html.DropDownListFor(model => model.ShiftId, new SelectList(Model.Shifts, "Id", "Name"), "-- " + Labels.All + " --", new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                <label class="control-label">@Labels.SectionTeam</label>
+            </div>
+            <div class="select-form" id="Team"></div>
+        </div>
+    </div>
+    <div class="form-horizontal clearfix">
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                <label class="control-label">@Labels.Employee</label>
+            </div>
+            <div class="input-form">
+                @Html.TextBox("Employee", string.Empty, new { @class = "form-control", placeholder = Messages.SearchEmployeeWatermark, autocomplete = "off" })
+            </div>
+        </div>
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                <label class="control-label">@Labels.Category</label>
+            </div>
+            <div class="select-form">
+                <select id="IsLocal" name="IsLocal" class="form-control">
+                    <option selected="@(!Model.IsLocal.HasValue)" value="">-- All --</option>
+                    <option selected="@(Model.IsLocal == 1)" value="1">@Labels.Local</option>
+                    <option selected="@(Model.IsLocal == 0)" value="0">@Labels.Expat</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group form-group--m">
+            <div class="checkbox">
+                <input type="checkbox" class="checkbox-custom" name="IsShowWholeCompany" id="IsShowWholeCompany"
+                       @(Model.IsShowWholeCompany ? "checked" : string.Empty) />
+                <label for="IsShowWholeCompany">@Labels.ShowWholeTeam</label>
+            </div>
+        </div>
+        <div class="form-group form-group--m">
+            <button type="button" class="btn btn-primary" id="btnSearch">@Labels.Search</button>
+            <button type="button" class="btn btn-excel" id="btnExcel">@Labels.Excel</button>
+        </div>
+    </div>
+</form>
+<div id="shiftstatisticdetails"></div>
