@@ -21,7 +21,6 @@ public class ExportExcelEmployeeInfoService(
     IWebHostEnvironment hostingEnvironment) : IExportExcelEmployeeInfoService
 {
     private const string EmployeeBasicInfoTemplatePath = "ExcelTemplates/EmployeeBasicInfoTemplate.xls";
-    private const string EmployeeDetailsInfoTemplatePath = "ExcelTemplates/EmployeeDetailsInfoTemplate.xls";
     private const string EmployeeFullInfoTemplatePath = "ExcelTemplates/EmployeeFullProfileInfoTemplate.xls";
 
     private enum BasicInfo
@@ -51,21 +50,6 @@ public class ExportExcelEmployeeInfoService(
             writer.RemoveColumn(colGroupDate);
             writer.RemoveColumn(colLengthOfServiceGroupDate);
         }
-        return writer.WriteContentToBytes();
-    }
-
-    public byte[] ExportEmployeeDetailsInfo(IList<Employee> employees)
-    {
-        var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, EmployeeDetailsInfoTemplatePath);
-        const string sheetName = "Employee Details Info";
-        var writer = new ExcelTemplateWriter(templatePath, sheetName);
-
-        writer.CopyRows(0, 2);
-        writer.CopyRows(2, 1);
-
-        FillContentRowEmployeeDetailsInfoReport(employees, ref writer);
-        writer.SyncColumnsWidth(43);
-        writer.CreateFreezePane(0, 3);
         return writer.WriteContentToBytes();
     }
 
@@ -124,85 +108,6 @@ public class ExportExcelEmployeeInfoService(
     }
 
     #endregion Employee Basic Info
-
-    #region Employee Details Info
-
-    private static void FillContentRowEmployeeDetailsInfoReport(IList<Employee> employees, ref ExcelTemplateWriter writer)
-    {
-        var rowIndex = 1;
-
-        foreach (var employee in employees)
-        {
-            FillRowEmployeeDetailsInfoReport(employee, ref writer, ref rowIndex);
-        }
-    }
-
-    private static void FillRowEmployeeDetailsInfoReport(Employee employee, ref ExcelTemplateWriter writer, ref int rowIndex)
-    {
-        var record = CreateRecordEmployeeDetailsInfoReport(employee, rowIndex);
-        var writeRowNumber = rowIndex % 2 == 0 ? 4 : 3;
-
-        writer.WriteRow(writeRowNumber, record);
-
-        rowIndex++;
-    }
-
-    private static object CreateRecordEmployeeDetailsInfoReport(Employee employee, int rowIndex)
-    {
-        const string DateFormat = "dd MMM, yyyy";
-        var record = new
-        {
-            Count = rowIndex,
-            employee.Code,
-            employee.EmployeeCard,
-            employee.DomainUsername,
-            employee.FullName,
-            employee.NickName,
-            Team = employee.Team.Name,
-            DoB = employee.DateOfBirth,
-            employee.PlaceOfBirth,
-            employee.Ethnic,
-            employee.Native,
-            employee.Religion,
-            Gender = employee.Gender == 0 ? "F" : "M",
-            employee.MarriageName,
-            employee.CountryName,
-            employee.CardNo,
-            DateOfIdCard = FormatDate(employee.DateOfIdCard, DateFormat),
-            employee.PlaceOfIdCard,
-            employee.PassportNo,
-            PassportExp = FormatDate(employee.PassportExp, DateFormat),
-            employee.Qualification,
-            employee.Major,
-            employee.Phone,
-            employee.HomePhone,
-            employee.Email,
-            employee.Address,
-            employee.CurrentAddress,
-            employee.Skype,
-            Unit = employee.UnitName,
-            employee.JobTitle,
-            GroupDate = FormatDate(employee.JoinedDate, DateFormat),
-            CompanyDate = FormatDate(employee.CompanyDate, DateFormat),
-            ConfirmedDate = FormatDate(employee.ConfirmedDate, DateFormat),
-            ResignedDate = FormatDate(employee.ResignedDate, DateFormat),
-            ResignReason = employee.ResignedReason,
-            employee.WorkingDays,
-            employee.WorkingHoursbyWeek,
-            employee.WorkingHours,
-            employee.OffDaysbyWeek,
-            employee.AnnualLeaveBalance,
-            Category = employee.IsLocal ? Labels.Local : Labels.Expat,
-            employee.BankAccount,
-            employee.TaxCode,
-            employee.SocialInsuranceNo,
-            employee.RegisteredHospital
-        };
-
-        return record;
-    }
-
-    #endregion Employee Details Info
 
     #region Employee Full Profile Information
 
