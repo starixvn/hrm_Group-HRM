@@ -31,12 +31,13 @@ public class TeamController(
     public async Task<ActionResult> Index(string keyword = null)
     {
         var teams = await teamService.GetAllAsync(keyword: keyword);
-        ViewBag.HasPermission = session.HasPermissionOnFunction(FunctionKey.TeamManagement, Policy.Host);
+        ViewBag.HasTeamPermission = session.HasPermissionOnFunction(FunctionKey.TeamManagement, Policy.Host);
+        ViewBag.HasGroupPermission = session.HasPermissionOnFunction(FunctionKey.GroupManagement, Policy.Host);
         ViewBag.HasPermissionToViewEmployee = session.HasPermissionOnFunction(FunctionKey.EmployeeManagement, Policy.Read);
         return View(teams);
     }
 
-    [HrmPermission(Policy.Host, FunctionKey.TeamManagement)]
+    [HrmPermission(Policy.Host, FunctionKey.GroupManagement)]
     public async Task<ActionResult> Create()
     {
         var model = new TeamViewModel
@@ -48,7 +49,7 @@ public class TeamController(
     }
 
     [HttpPost]
-    [HrmPermission(Policy.Host, FunctionKey.TeamManagement)]
+    [HrmPermission(Policy.Host, FunctionKey.GroupManagement)]
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Critical Code Smell", "S1541:Methods and properties should not be too complex", Justification = "<Pending>")]
     public async Task<ActionResult> Create(TeamViewModel model)
     {
@@ -96,7 +97,7 @@ public class TeamController(
         return View(model);
     }
 
-    [HrmPermission(Policy.Host, FunctionKey.TeamManagement)]
+    [HrmPermission(Policy.Host, FunctionKey.GroupManagement)]
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Critical Code Smell", "S1541:Methods and properties should not be too complex", Justification = "<Pending>")]
     public async Task<ActionResult> Edit(int id)
     {
@@ -136,7 +137,7 @@ public class TeamController(
     }
 
     [HttpPost]
-    [HrmPermission(Policy.Host, FunctionKey.TeamManagement)]
+    [HrmPermission(Policy.Host, FunctionKey.GroupManagement)]
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Critical Code Smell", "S1541:Methods and properties should not be too complex", Justification = "<Pending>")]
     public async Task<ActionResult> Edit(TeamViewModel model)
     {
@@ -190,7 +191,7 @@ public class TeamController(
     }
 
     [HttpPost]
-    [HrmPermission(Policy.Host, FunctionKey.TeamManagement)]
+    [HrmPermission(Policy.Host, FunctionKey.GroupManagement)]
     public async Task<IActionResult> Delete(int id)
     {
         var commandResult = await teamService.Delete(session.UserId, id);
@@ -258,7 +259,7 @@ public class TeamController(
     }
 
     [HttpPost]
-    [HrmPermission(Policy.Host, FunctionKey.TeamManagement)]
+    [HrmPermission(Policy.Host, FunctionKey.GroupManagement)]
     public async Task<IActionResult> EditTeamSupervisor(int teamId, short roleId, IEnumerable<EditTeamSupervisor> supervisors)
     {
         var commandResult = await teamService.EditTeamSupervisor(session.UserId, teamId, roleId, supervisors);
@@ -286,7 +287,7 @@ public class TeamController(
     }
 
     [HttpPost]
-    [HrmPermission(Policy.Host, FunctionKey.TeamManagement)]
+    [HrmPermission(Policy.Host, FunctionKey.GroupManagement)]
     public async Task<IActionResult> EditDisciplineRule(int teamId, IEnumerable<DisciplineRule> disciplineRules)
     {
         var commandResult = await teamService.EditDisciplineRule(session.UserId, teamId, disciplineRules);

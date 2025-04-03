@@ -4,8 +4,9 @@
 @model IEnumerable<HRM.Models.Team>
 @{
     ViewBag.Title = Labels.TeamManagement;
-    var hasPermission = (bool)ViewBag.HasPermission;
+    var hasTeamPermission = (bool)ViewBag.HasTeamPermission;
     var hasPermissionToViewEmployee = (bool)ViewBag.HasPermissionToViewEmployee;
+    var hasGroupPermission = (bool)ViewBag.HasGroupPermission;
 }
 @section css{
     <link href="~/dist/styles/team.index.css" rel="stylesheet" />
@@ -29,7 +30,7 @@
             </div>
         </div>
         <button class="btn btn-primary" type="submit" id="btnSearchTeam">@Labels.Submit</button>
-        @if (hasPermission)
+        @if (hasGroupPermission)
         {
             <a href="/team/create" class="btn btn-request">
                 <span class="fa fa-plus"></span> @Labels.NewTeam
@@ -121,9 +122,9 @@
                     <div class="fa fa-sort"></div>
                 </div>
             </th>
-            <th rowspan="2">@Labels.DisciplineRule</th>
-            @if (hasPermission)
+            @if (hasGroupPermission)
             {
+				<th rowspan="2">@Labels.DisciplineRule</th>
                 <th rowspan="2">@Labels.Edit</th>
                 <th rowspan="2">@Labels.Roles</th>
                 <th rowspan="2">@Labels.Delete</th>
@@ -182,11 +183,11 @@
                             <span>@team.NoOfMembers</span>
                         }
                     </td>
-                    <td>
-                        <a href="@Url.Action("disciplinerule", "team", new { team.Id })">Manage</a>
-                    </td>
-                    @if (hasPermission)
+                    @if (hasGroupPermission)
                     {
+	                    <td>
+	                        <a href="@Url.Action("disciplinerule", "team", new { team.Id })">Manage</a>
+	                    </td>
                         <td>
                             <a href="@Url.Action("Edit", "Team", new { team.Id })">
                                 <i class="fa fa-pencil fa-lg icon-edit"></i>
