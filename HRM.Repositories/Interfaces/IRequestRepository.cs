@@ -8,7 +8,7 @@ namespace HRM.Repositories.Interfaces;
 
 public interface IRequestRepository
 {
-    Task<IList<RequestEntity>> GetRequests(ICriteria criteria);
+    Task<IList<RequestEntity>> GetRequestAsync(ICriteria criteria);
 
     Task<RequestRelatedPeopleModel> GetRequestRelatedPeople(GetRequestRelatedPeopleCriteria criteria);
 

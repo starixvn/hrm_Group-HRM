@@ -32,15 +32,21 @@ public class RequestEntity : EntityBase<long>
         set => serverCreatedDate = value.ToClientTimeZone();
     }
 
-    public Employee ModifiedBy { get; set; }
-
     public Employee VerifiedBy { get; set; }
-
     public Employee ApprovedBy { get; set; }
-
+    public Employee ProcessedBy { get; set; }
     public Employee Approver { get; set; }
 
-    public Employee ProcessedBy { get; set; }
+    public int VerifierId { get; set; }
+    public string VerifierNickName { get; set; }
+    public string VerifierFullName { get; set; }
+
+    public int ApproverId { get; set; }
+    public string ApproverNickName { get; set; }
+    public string ApproverFullName { get; set; }
+
+    public string ProcessedByNickName { get; set; }
+    public string ProcessedByFullName { get; set; }
 
     public DateTime? ModifiedDate { get; set; }
 

@@ -10,7 +10,7 @@ namespace HRM.Services.Interfaces.Request;
 
 public interface IRequestService
 {
-    Task<IList<RequestEntity>> GetRequests(GetRequestCriteria criteria);
+    Task<IList<RequestEntity>> GetRequestAsync(GetRequestCriteria criteria);
 
     Task<VerifierAndApproverForRequest> GetVerifierAndApproverAsync(int employeeId, RequestType requestType);
 

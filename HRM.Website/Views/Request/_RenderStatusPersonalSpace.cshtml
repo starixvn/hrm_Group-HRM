@@ -1,20 +1,22 @@
 ﻿@using HRM.Core
 @using HRM.Core.Enums
-@model (HRM.ViewModels.Request.RequestViewModel RequestViewModel, HRM.Models.Request.RequestEntity Request)
+@using HRM.Models.Request
+@using HRM.ViewModels.Request
+@model (RequestViewModel RequestViewModel, RequestEntity Request)
 @{
-	var annualBalance = string.Empty;
-	var request = Model.Request;
-	if (request.Id == (byte)RequestType.Leave)
-	{
-		annualBalance = "AL Balance " + request.FromDate.Year + ": " + request.Requester.AnnualLeaveBalance + " && ";
-	}
-	var requestViewModel = Model.RequestViewModel;
+    var annualBalance = string.Empty;
+    var request = Model.Request;
+    if (request.Id == (byte)RequestType.Leave)
+    {
+        annualBalance = "AL Balance " + request.FromDate.Year + ": " + request.Requester.AnnualLeaveBalance + " && ";
+    }
+    var requestViewModel = Model.RequestViewModel;
 }
 
 @switch (request.Status.Id)
 {
     case (byte)CurrentRequestStatus.Pending:
-        if (request.Approver.Id == requestViewModel.CurrentUserId)
+        if (request.ApproverId == requestViewModel.CurrentUserId)
         {
             <a roleid="@Convert.ToInt32(RoleSystem.Approver)" requestid="@request.Id" requesttypeid="@request.RequestType.Id" employeeid="@request.Requester.Id"
                href="javascript:void(0);" class="approver-actions tooltip-tipsy"
@@ -23,7 +25,7 @@
                 <span class="caret"></span>
             </a>
         }
-        else if (request.VerifiedBy.Id == requestViewModel.CurrentUserId)
+        else if (request.VerifierId == requestViewModel.CurrentUserId)
         {
             <a roleid="@Convert.ToInt32(RoleSystem.Verifier)" requestid="@request.Id" requesttypeid="@request.RequestType.Id" employeeid="@request.Requester.Id"
                href="javascript:void(0);" class="verifier-actions tooltip-tipsy"
@@ -38,20 +40,20 @@
         }
         break;
     case (byte)CurrentRequestStatus.Verified:
-        if (request.Approver.Id == requestViewModel.CurrentUserId)
+        if (request.ApproverId == requestViewModel.CurrentUserId)
         {
             <a roleid="@Convert.ToInt32(RoleSystem.Approver)" requestid="@request.Id" requesttypeid="@request.RequestType.Id" employeeid="@request.Requester.Id"
                href="javascript:void(0);" class="approver-actions tooltip-tipsy"
-               title="@annualBalance @request.Status.Name by @request.VerifiedBy.NickName (@request.VerifiedDate.ToShortFormatedDate())">
+               title="@annualBalance @request.Status.Name by @request.VerifierNickName (@request.VerifiedDate.ToShortFormatedDate())">
                 @request.Status.ToString()
                 <span class="caret"></span>
             </a>
         }
-        else if (request.VerifiedBy.Id == requestViewModel.CurrentUserId)
+        else if (request.VerifierId == requestViewModel.CurrentUserId)
         {
             <a roleid="@Convert.ToInt32(RoleSystem.Verifier)" requestid="@request.Id" requesttypeid="@request.RequestType.Id" employeeid="@request.Requester.Id"
                href="javascript:void(0);" class="verifier-actions-reset tooltip-tipsy"
-               title="@annualBalance @request.Status.Name by @request.VerifiedBy.NickName (@request.VerifiedDate.ToShortFormatedDate())">
+               title="@annualBalance @request.Status.Name by @request.VerifierNickName (@request.VerifiedDate.ToShortFormatedDate())">
                 @request.Status.ToString()
                 <span class="caret"></span>
             </a>
@@ -62,11 +64,11 @@
         }
         break;
     case (byte)CurrentRequestStatus.NotVerified:
-        if (request.VerifiedBy.Id == requestViewModel.CurrentUserId)
+        if (request.VerifierId == requestViewModel.CurrentUserId)
         {
             <a roleid="@Convert.ToInt32(RoleSystem.Verifier)" requestid="@request.Id" requesttypeid="@request.RequestType.Id" employeeid="@request.Requester.Id"
                href="javascript:void(0);" class="verifier-actions-reset tooltip-tipsy"
-               title="@request.Status.Name by @request.VerifiedBy.NickName (@request.VerifiedDate.ToShortFormatedDate())">
+               title="@request.Status.Name by @request.VerifierNickName (@request.VerifiedDate.ToShortFormatedDate())">
                 @request.Status.ToString()
                 <span class="caret"></span>
             </a>
@@ -78,11 +80,11 @@
         break;
     case (byte)CurrentRequestStatus.Approved:
     case (byte)CurrentRequestStatus.Rejected:
-        if (request.Approver.Id == requestViewModel.CurrentUserId)
+        if (request.ApproverId == requestViewModel.CurrentUserId)
         {
             <a roleid="@Convert.ToInt32(RoleSystem.Approver)" requestid="@request.Id" requesttypeid="@request.RequestType.Id" employeeid="@request.Requester.Id"
                href="javascript:void(0);" class="approver-actions-reset tooltip-tipsy"
-               title="@request.Status.Name by @request.ApprovedBy.NickName (@request.ApprovedDate.ToShortFormatedDate())">
+               title="@request.Status.Name by @request.ApproverNickName (@request.ApprovedDate.ToShortFormatedDate())">
                 @request.Status.ToString()
                 <span class="caret"></span>
             </a>
@@ -94,7 +96,7 @@
         break;
     case (byte)CurrentRequestStatus.Processed:
     case (byte)CurrentRequestStatus.Void:
-        <span class="tooltip-tipsy" title="@request.Status.Name by @request.ProcessedBy.NickName (@request.ProcessedDate.ToShortFormatedDate())">
+        <span class="tooltip-tipsy" title="@request.Status.Name by @request.ProcessedByNickName (@request.ProcessedDate.ToShortFormatedDate())">
             @request.Status.ToString()
         </span>
         break;

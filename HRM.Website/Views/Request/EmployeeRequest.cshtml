@@ -53,7 +53,7 @@
                 </tr>
                 break;
         }
-        <tr>
+            <tr>
                 @if (Model.ViewType is RequestViewType.PersonalSpace or RequestViewType.HRSpace)
                 {
                     <th>
@@ -92,7 +92,7 @@
                 <th>@Labels.Reason</th>
                 <th class="col-sorter">
                     <div class="cell-control-wrapper">
-                        @Labels.Verified
+                        @Labels.Verifier
                         <div class="fa fa-sort cell-right-div"></div>
                     </div>
                 </th>
@@ -136,7 +136,7 @@
                             {
                                 <td>
                                     <div class="checkbox">
-                                        @if (request.Approver.Id == Model.CurrentUserId
+                                        @if (request.ApproverId == Model.CurrentUserId
                                              && request.Status.Id is (byte)CurrentRequestStatus.Pending or (byte)CurrentRequestStatus.Verified)
                                         {
                                             <input type="checkbox"
@@ -148,7 +148,7 @@
                                                    viewtype="@Model.ViewType" />
                                             <label for="@request.Id"></label>
                                         }
-                                        else {if (request.VerifiedBy.Id == Model.CurrentUserId && request.Status.Id == (byte)CurrentRequestStatus.Pending)
+                                        else {if (request.VerifierId == Model.CurrentUserId && request.Status.Id == (byte)CurrentRequestStatus.Pending)
                                             {
                                                 <input type="checkbox"
                                                        class="checkbox-custom chk-request"
@@ -185,7 +185,9 @@
                             }
                         }
                         <td>@(index++)</td>
-                        <td>@request.Requester.Team.Department.Code</td>
+                        <td>
+                            <span class="tooltip-tipsy" title="@request.Requester.Team.Department.Name">@request.Requester.Team.Department.Code</span>
+                        </td>
                         <td>
                             <span class="tooltip-tipsy" title="@request.Requester.Team.Name">@request.Requester.Team.Code</span>
                         </td>
@@ -213,10 +215,10 @@
                             @Html.Raw(RequestService.GetReasonRequest(request.RequestType.Id, request.ReasonId))
                         </td>
                         <td>
-                            <span class="tooltip-tipsy" title="@request.VerifiedBy.FullName">@request.VerifiedBy.NickName</span>
+                            <span class="tooltip-tipsy" title="@request.VerifierFullName">@request.VerifierNickName</span>
                         </td>
                         <td>
-                            <span class="tooltip-tipsy" title="@request.Approver.FullName">@request.Approver.NickName</span>
+                            <span class="tooltip-tipsy" title="@request.ApproverFullName">@request.ApproverNickName</span>
                         </td>
                         <td>
                             @if (!string.IsNullOrWhiteSpace(request.Remark))
