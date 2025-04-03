@@ -702,7 +702,6 @@ export default class App extends Component {
                             shiftId: schedule.defaultShift !== null ? schedule.defaultShift.id : null
                         });
                     }
-
                     this.scheduleAttrNames.forEach(attrName => {
                         if (!isEqual(originalSchedule[attrName], schedule[attrName]) || originalSchedule.isPublic !== schedule.isPublic) {
                             weeklySchedules.push({
@@ -725,14 +724,13 @@ export default class App extends Component {
 
             return;
         }
-
         if (weeklySchedules.length > 0 || defaultShifts.length > 0) {
             blockUI();
 
             axios({
                 url: resolveClientUrl('ScheduleArrange/EditWeekly'),
                 method: 'POST',
-                data: stringify({ fromDate, toDate, weeklySchedules, defaultShifts }),
+                data: stringify({ fromDate, toDate, weeklySchedules: weeklySchedules.length > 0 ? weeklySchedules : null  , defaultShifts }),
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest',
                     'Content-Type': 'application/x-www-form-urlencoded'
