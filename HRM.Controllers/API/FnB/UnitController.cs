@@ -16,10 +16,8 @@ public class UnitController(
     [HttpGet]
     public async Task<IActionResult> GetUnits([FromQuery] SyncFnBRequestModel request)
     {
-        var company = await companyService.GetCompanySiteByDomainAsync();
         var criteria = new GetUnitByLastModifiedDateCriteria
         {
-            CompanyId = company.CompanyId,
             LastModifiedDate = request.LastModifiedDate
         };
 
