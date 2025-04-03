@@ -92,9 +92,6 @@
 	  <Content Include="ExcelTemplates\EmployeeBasicInfoTemplate.xls">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </Content>
-	  <Content Include="ExcelTemplates\EmployeeDetailsInfoTemplate.xls">
-		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </Content>
 	  <Content Include="ExcelTemplates\EmployeeFullProfileInfoTemplate.xls">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </Content>
