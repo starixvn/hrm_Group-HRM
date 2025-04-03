@@ -9,5 +9,5 @@ public class WorkingCalendarSummary : DailySchedule
     public string FullName { get; set; }
     public string Team { get; set; }
     public string DepartmentCode { get; set; }
-    public string Section { get; set; }
+    public string Department { get; set; }
 }

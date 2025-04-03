@@ -24,7 +24,6 @@ public class MonthlyOvertimeRequest
     public string Nickname => Requester.Nickname;
     public string FullName => Requester.FullName;
     public string Team => Requester.Team;
-    public string Section => Requester.Section;
     public string Department => Requester.Department;
 
     public IEnumerable<DailyOvertimeRequest> DailyOvertimes { get; set; } = new List<DailyOvertimeRequest>();

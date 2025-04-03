@@ -7,7 +7,6 @@ public class Requester
     public string Nickname { get; set; }
     public string FullName { get; set; }
     public string Team { get; set; }
-    public string Section { get; set; }
     public string Department { get; set; }
     public bool IsTopManager { get; set; }
     public string DisplayName => string.IsNullOrWhiteSpace(Nickname) || string.IsNullOrWhiteSpace(FullName) ? string.Empty : Nickname + " (" + FullName + ")";

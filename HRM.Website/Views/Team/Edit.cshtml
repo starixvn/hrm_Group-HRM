@@ -46,64 +46,20 @@
         </div>
         <div class="form-group">
             <div class="label-form">
-                @Html.LabelFor(model => model.SectionId, Labels.Section, new { @class = "control-label" })
+                @Html.LabelFor(model => model.DepartmentId, Labels.Department, new { @class = "control-label" })
             </div>
             <div class="input-form">
-                @Html.DropDownListFor(model => model.SectionId, new SelectList(Model.Sections, "Id", "Name"), new { @class = "form-control" })
+                @Html.DropDownListFor(model => model.DepartmentId, new SelectList(Model.Departments, "Id", "Name"), new { @class = "form-control" })
             </div>
-            @Html.ValidationMessageFor(model => model.SectionId)
+            @Html.ValidationMessageFor(model => model.DepartmentId)
         </div>
         <div class="form-group">
-            <div class="label-form">
-                @Html.LabelFor(model => model.UnitHead, new { @class = "control-label" })
-            </div>
-            <div class="input-form">
-                @Html.TextBoxFor(model => model.UnitHead, new { @class = "form-control", autocomplete = "off", placeholder = Messages.SearchEmployeeWatermark })
-            </div>
-            @Html.TextBoxFor(model => model.HeadId, new { @class = "team-head" })
-            @Html.ValidationMessageFor(model => model.HeadId)
-        </div>
-        <div class="form-group">
-            <div class="label-form">
-                @Html.LabelFor(model => model.ManagerIds, new { @class = "control-label" })
-            </div>
-            <div class="input-form">
-                <select id="Managers" data-placeholder="Choose managers..." multiple="multiple" class="form-control chosen-select">
-                    @foreach (var employee in Model.Employees)
-                    {
-                        <option value="@employee.Id">@employee.DisplayName</option>
-                    }
-                </select>
-            </div>
-            @Html.HiddenFor(model => model.ManagerIds)
-        </div>
-        <div class="form-group">
-            <div class="label-form">
-                @Html.LabelFor(model => model.SupervisorIds, new { @class = "control-label" })
-            </div>
-            <div class="input-form">
-                <select id="Supervisors" data-placeholder="Choose supervisors..." multiple class="form-control">
-                    @foreach (var employee in Model.Employees)
-                    {
-                        <option value="@employee.Id">@employee.DisplayName</option>
-                    }
-                </select>
-            </div>
-            @Html.HiddenFor(model => model.SupervisorIds)
-        </div>
-        <div class="form-group">
-            <div class="label-form">
-                @Html.LabelFor(model => model.LeaderIds, new { @class = "control-label" })
-            </div>
-            <div class="input-form">
-                <select id="Leaders" data-placeholder="Choose leaders..." multiple class="form-control">
-                    @foreach (var employee in Model.Employees)
-                    {
-                        <option value="@employee.Id">@employee.DisplayName</option>
-                    }
-                </select>
-            </div>
-            @Html.HiddenFor(model => model.LeaderIds)
+	        <div class="label-form">
+		        @Html.LabelFor(model => model.PICEmpId, Labels.PIC, new { @class = "control-label" })
+	        </div>
+	        <div class="input-form">
+		        @Html.DropDownListFor(model => model.PICEmpId, new SelectList(Model.Employees, "UserId", "NickName"), new { @class = "form-control" })
+	        </div>
         </div>
         <div class="form-group">
             <div class="label-form">

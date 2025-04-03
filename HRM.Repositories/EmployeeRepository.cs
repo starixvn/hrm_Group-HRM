@@ -9,7 +9,6 @@ using GO.UserControl.Client.Core.Models.Role;
 using Interfaces;
 using Models;
 using Models.EmployeeInformation;
-using Models.Section;
 using Models.Supervisor;
 
 public class EmployeeRepository : IEmployeeRepository
@@ -39,17 +38,11 @@ public class EmployeeRepository : IEmployeeRepository
                     Id = t.TeamId,
                     Code = t.TeamCode,
                     Name = t.TeamName,
-                    Section = new Section
+                    Department = new Department
                     {
-                        Id = t.SectionId,
-                        Code = t.SectionCode,
-                        Name = t.SectionName,
-                        Department = new Department
-                        {
-                            Id = t.DepartmentId,
-                            Code = t.DepartmentCode,
-                            Name = t.DepartmentName
-                        }
+                        Id = t.DepartmentId,
+                        Code = t.DepartmentCode,
+                        Name = t.DepartmentName
                     }
                 };
                 return e;

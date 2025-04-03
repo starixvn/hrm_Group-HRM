@@ -72,12 +72,6 @@
                 </th>
                 <th class="col-sorter">
                     <div class="cell-control-wrapper">
-                        @Labels.Section
-                        <div class="fa fa-sort cell-right-div"></div>
-                    </div>
-                </th>
-                <th class="col-sorter">
-                    <div class="cell-control-wrapper">
                         @Labels.Team
                         <div class="fa fa-sort cell-right-div"></div>
                     </div>
@@ -191,8 +185,7 @@
                             }
                         }
                         <td>@(index++)</td>
-                        <td>@request.Requester.Team.Section.Department.Code</td>
-                        <td>@request.Requester.Team.Section.Code</td>
+                        <td>@request.Requester.Team.Department.Code</td>
                         <td>
                             <span class="tooltip-tipsy" title="@request.Requester.Team.Name">@request.Requester.Team.Code</span>
                         </td>

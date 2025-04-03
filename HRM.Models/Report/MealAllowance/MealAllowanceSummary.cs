@@ -9,6 +9,5 @@ public class MealAllowanceSummary
     public string NickName { get; set; }
     public int TeamId { get; set; }
     public string Team { get; set; }
-    public string Section { get; set; }
     public string Department { get; set; }
 }

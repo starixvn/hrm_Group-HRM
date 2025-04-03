@@ -31,5 +31,4 @@ public class SupervisorReportModel
 
     public string Department { get; set; }
 
-    public string Section { get; set; }
 }

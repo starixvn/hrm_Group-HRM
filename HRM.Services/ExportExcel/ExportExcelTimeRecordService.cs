@@ -42,7 +42,6 @@ public class ExportExcelTimeRecordService(IWebHostEnvironment hostingEnvironment
 
             workSheet.Cells[rowIndex, colIndex++].Value = count;
             workSheet.Cells[rowIndex, colIndex++].Value = detail.DepartmentCode;
-            workSheet.Cells[rowIndex, colIndex++].Value = detail.SectionCode;
             workSheet.Cells[rowIndex, colIndex++].Value = detail.Team;
             workSheet.Cells[rowIndex, colIndex++].Value = detail.Code;
             workSheet.Cells[rowIndex, colIndex++].Value = detail.FullName;

@@ -13,7 +13,6 @@ using Interfaces;
 using Models;
 using Models.Request;
 using Models.Request.ChangeShift;
-using Models.Section;
 using Models.Shifts;
 using Models.Supervisor;
 
@@ -200,15 +199,10 @@ public class RequestRepository : IRequestRepository
                 Id = requestInfo.TeamId,
                 Code = requestInfo.TeamCode,
                 Name = requestInfo.TeamName,
-                Section = new Section
+                Department = new Department
                 {
-                    Id = requestInfo.SectionId,
-                    Code = requestInfo.SectionCode,
-                    Department = new Department
-                    {
-                        Id = requestInfo.DepartmentId,
-                        Code = requestInfo.DepartmentCode
-                    }
+                    Id = requestInfo.DepartmentId,
+                    Code = requestInfo.DepartmentCode
                 }
             }
         };

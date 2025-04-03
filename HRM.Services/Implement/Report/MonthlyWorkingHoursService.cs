@@ -191,7 +191,6 @@ public partial class EmployeeWorkingHoursService(
 
             worksheet.Cells[rowIndex, colIndex++].Value = rowNum++;
             worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Department;
-            worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Section;
             worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Team.Name;
             worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Code;
             worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.FullName;
@@ -368,9 +367,9 @@ public partial class EmployeeWorkingHoursService(
         dynamic templateIndex)
     {
         rowIndex = templateIndex.bodyRow;
-        var teams = monthlyWorkings.GroupBy(x => new { x.Team.Id, x.Team.Name, x.Department, x.Section })
-            .Select(x => new { x.Key.Department, x.Key.Section, Team = x.Key.Name, Members = x.ToList() })
-            .OrderBy(x => x.Department).ThenBy(x => x.Section).ThenBy(x => x.Team).ToList();
+        var teams = monthlyWorkings.GroupBy(x => new { x.Team.Id, x.Team.Name, x.Department })
+            .Select(x => new { x.Key.Department, Team = x.Key.Name, Members = x.ToList() })
+            .OrderBy(x => x.Department).ThenBy(x => x.Team).ToList();
         foreach (var team in teams)
         {
             var totalHolidays = team.Members.Sum(x => x.DailyWorkings.Count(IsHoliday));
@@ -379,7 +378,6 @@ public partial class EmployeeWorkingHoursService(
                 .Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, templateIndex.companyEventColumn]);
 
             worksheet.Cells[rowIndex, colIndex++].Value = team.Department;
-            worksheet.Cells[rowIndex, colIndex++].Value = team.Section;
             worksheet.Cells[rowIndex, colIndex++].Value = team.Team;
             worksheet.Cells[rowIndex, colIndex++].Value = team.Members.Sum(x => x.ActualWorkingDays) + totalHolidays;
             worksheet.Cells[rowIndex, colIndex++].Value = totalHolidays;
@@ -458,7 +456,6 @@ public partial class EmployeeWorkingHoursService(
 
             worksheet.Cells[rowIndex, colIndex++].Value = rowNum++;
             worksheet.Cells[rowIndex, colIndex++].Value = request.Department;
-            worksheet.Cells[rowIndex, colIndex++].Value = request.Section;
             worksheet.Cells[rowIndex, colIndex++].Value = request.Team;
             worksheet.Cells[rowIndex, colIndex++].Value = request.FullName;
             worksheet.Cells[rowIndex, colIndex++].Value = request.Nickname;

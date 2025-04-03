@@ -114,7 +114,6 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IEmployeeRepository, EmployeeRepository>();
         services.AddSingleton<IDepartmentRepository, DepartmentRepository>();
         services.AddSingleton<ITeamRepository, TeamRepository>();
-        services.AddSingleton<ISectionRepository, SectionRepository>();
         services.AddSingleton<IRequestRepository, RequestRepository>();
 
         services.AddSingleton<IUserControlSession, UserControlSession>();
@@ -136,7 +135,6 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IEmployeeService, EmployeeService>();
         services.AddSingleton<IUnitService, UnitService>();
         services.AddSingleton<IDepartmentService, DepartmentService>();
-        services.AddSingleton<ISectionService, SectionService>();
         services.AddSingleton<IJobLevelService, JobLevelService>();
         services.AddSingleton<IMemoService, MemoService>();
 

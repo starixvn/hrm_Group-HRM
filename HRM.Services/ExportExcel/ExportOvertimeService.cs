@@ -57,7 +57,6 @@ public class ExportOvertimeService(IWebHostEnvironment hostingEnvironment) : IEx
 
             workSheet.Cells[rowIndex, colIndex++].Value = count;
             workSheet.Cells[rowIndex, colIndex++].Value = detail.Requester.Department;
-            workSheet.Cells[rowIndex, colIndex++].Value = detail.Requester.Section;
             workSheet.Cells[rowIndex, colIndex++].Value = detail.Team;
             workSheet.Cells[rowIndex, colIndex++].Value = detail.FullName;
             workSheet.Cells[rowIndex, colIndex++].Value = detail.Nickname;

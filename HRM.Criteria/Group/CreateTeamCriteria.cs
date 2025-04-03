@@ -6,12 +6,9 @@ public class CreateTeamCriteria : CriteriaBase
 {
     public string Code { get; set; }
     public string Name { get; set; }
-    public int SectionId { get; set; }
+    public int DepartmentId { get; set; }
+    public int PICEmpId { get; set; }
     public string MailGroup { get; set; }
-    public int HeadId { get; set; }
-    public string ManagerIds { get; set; }
-    public string LeaderIds { get; set; }
-    public string SupervisorIds { get; set; }
     public byte LocalBasicAnnualLeaveBalance { get; set; }
     public byte LocalWorkingDays { get; set; }
     public byte LocalWorkingHours { get; set; }
@@ -34,6 +31,7 @@ public class CreateTeamCriteria : CriteriaBase
     {
         return !string.IsNullOrWhiteSpace(Code)
                && !string.IsNullOrWhiteSpace(Name)
-               && HeadId > 0;
+               && DepartmentId > 0
+               && PICEmpId > 0;
     }
 }

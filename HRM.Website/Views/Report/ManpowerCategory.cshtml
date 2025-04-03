@@ -53,12 +53,6 @@
                     <div class="fa fa-sort"></div>
                 </div>
             </th>
-            <th rowspan="2" class="col-sorter">
-                <div class="cell-control-wrapper">
-                    <div>@Labels.Section</div>
-                    <div class="fa fa-sort"></div>
-                </div>
-            </th>
             <th rowspan="2">@Labels.Team</th>
             <th colspan="3">@Labels.TotalManpower</th>
             <th colspan="10">@Labels.JobCategory</th>
@@ -83,8 +77,7 @@
                 index++;
                 <tr>
                     <td>@index</td>
-                    <td class="align-left">@manpower.DepartmentCode</td>
-                    <td class="align-left">@manpower.Section</td>
+                    <td class="align-left">@manpower.Department</td>
                     <td class="align-left">@manpower.TeamName</td>
                     <td class="align-right">@manpower.TotalExpat</td>
                     <td class="align-right">@manpower.TotalLocal</td>

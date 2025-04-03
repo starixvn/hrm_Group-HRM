@@ -107,7 +107,6 @@
         <Setting Key="GetGroupOfEmployee" SpName="EmployeeGroup_GetGroupOfEmployee" DbName="bodb_HRM" Plain="0" />
         <Setting Key="Group_Get" SpName="Group_Get" DbName="bodb_HRM" Plain="0">
             <Mapping DataField="TeamId" ObjectProperty="Id" Class="Team" />
-            <Mapping DataField="SectionId" ObjectProperty="Id" Class="Section" />
         </Setting>
         <Setting Key="Group_GetBySupervisor" SpName="Group_GetBySupervisor" DbName="bodb_HRM" Plain="0" />
         <Setting Key="GroupSupervisor_GetById" SpName="GroupSupervisor_GetById" DbName="bodb_HRM" Plain="0" />
@@ -203,17 +202,6 @@
         <Setting Key="Message_Read" SpName="Message_Read" DbName="bodb_HRM" Plain="0" />
         <Setting Key="Message_GetDetailByEmployee" SpName="Message_GetDetailByEmployee" DbName="bodb_HRM" Plain="0" />
         <Setting Key="Message_GetUnreadMessageByEmployee" SpName="Message_GetUnreadMessageByEmployee" DbName="bodb_HRM" Plain="0" />
-    </Function>
-    <Function Name="Section">
-        <Setting Key="Section_Insert" SpName="Section_Insert" DbName="bodb_HRM" Plain="0" />
-        <Setting Key="Section_Update" SpName="Section_Update" DbName="bodb_HRM" Plain="0" />
-        <Setting Key="Section_Get" SpName="Section_Get" DbName="bodb_HRM" Plain="0">
-            <Mapping DataField="DepartmentId" ObjectProperty="Id" Class="Department" />
-        </Setting>
-        <Setting Key="Section_GetById" SpName="Section_GetById" DbName="bodb_HRM" Plain="0">
-            <Mapping DataField="DepartmentId" ObjectProperty="Id" Class="Department" />
-        </Setting>
-        <Setting Key="Section_Delete" SpName="Section_Delete" DbName="bodb_HRM" Plain="0" />
     </Function>
     <Function Name="Department">
         <Setting Key="Department_Delete" SpName="Department_Delete" DbName="bodb_HRM" Plain="0" />

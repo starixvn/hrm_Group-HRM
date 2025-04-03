@@ -1,15 +1,9 @@
 ﻿namespace HRM.Models;
-
-using Group;
 using System;
-using System.Collections.Generic;
+
 
 public class Team : EntityBase<int>
 {
-    public Section.Section Section { get; set; } = new();
-
-    public IEnumerable<TeamManager> Managers { get; set; } = new List<TeamManager>();
-
     public DateTime? CreatedDate { get; set; }
 
     public Employee Creator { get; set; }
@@ -48,5 +42,5 @@ public class Team : EntityBase<int>
 
     public Department Department { get; set; } = new();
 
-    public string DepartmentCode { get; set; }
+    public int? PICEmpId { get; set; }
 }

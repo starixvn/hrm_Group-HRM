@@ -11,7 +11,7 @@ public class DisciplineSummaryPerYear
     public string FullName { get; set; }
     public bool IsLocal { get; set; }
     public string Team { get; set; }
-    public string Section { get; set; }
+    public string Department { get; set; }
     public DateTime? JoinedDate { get; set; }
     public DateTime? CompanyDate { get; set; }
     public DateTime? MilitaryFromDate { get; set; }

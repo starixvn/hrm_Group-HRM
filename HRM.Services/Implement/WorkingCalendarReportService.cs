@@ -62,7 +62,6 @@ public class WorkingCalendarReportService(IWebHostEnvironment env) : IWorkingCal
 
             worksheet.Cells[rowIndex, colIndex++].Value = rowNum++;
             worksheet.Cells[rowIndex, colIndex++].Value = employee.DepartmentCode;
-            worksheet.Cells[rowIndex, colIndex++].Value = employee.SectionCode;
             worksheet.Cells[rowIndex, colIndex++].Value = employee.Team;
             worksheet.Cells[rowIndex, colIndex++].Value = employee.Code;
             worksheet.Cells[rowIndex, colIndex++].Value = employee.FullName;

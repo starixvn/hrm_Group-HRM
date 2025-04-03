@@ -49,7 +49,6 @@ public class EmployeeFullProfile
     public string Major { get; set; }
 
     public string TeamName { get; set; }
-    public string SectionName { get; set; }
     public string DepartmentName { get; set; }
     public string UnitName { get; set; }
 

@@ -68,7 +68,6 @@ public partial class EmployeeWorkingHoursService : IEmployeeWorkingHoursService
 
             worksheet.Cells[rowIndex, colIndex++].Value = rowIndex - 2;
             worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Department;
-            worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Section;
             worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Team.Name;
             worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Code;
             worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.FullName;
@@ -124,7 +123,6 @@ public partial class EmployeeWorkingHoursService : IEmployeeWorkingHoursService
 
             worksheet.Cells[rowIndex, colIndex++].Value = rowIndex - 2;
             worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Department;
-            worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Section;
             worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Team.Name;
             worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Code;
             worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.FullName;

@@ -241,15 +241,6 @@ namespace HRM.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add New Section.
-        /// </summary>
-        public static string AddNewSection {
-            get {
-                return ResourceManager.GetString("AddNewSection", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Add new shift.
         /// </summary>
         public static string AddNewShift {
@@ -1240,6 +1231,15 @@ namespace HRM.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Dep./Team.
+        /// </summary>
+        public static string DepTeam {
+            get {
+                return ResourceManager.GetString("DepTeam", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Description.
         /// </summary>
         public static string Description {
@@ -1560,15 +1560,6 @@ namespace HRM.Resources {
         public static string EditMessage {
             get {
                 return ResourceManager.GetString("EditMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Edit Section.
-        /// </summary>
-        public static string EditSection {
-            get {
-                return ResourceManager.GetString("EditSection", resourceCulture);
             }
         }
         
@@ -3274,15 +3265,6 @@ namespace HRM.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to New Section.
-        /// </summary>
-        public static string NewSection {
-            get {
-                return ResourceManager.GetString("NewSection", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to New Shift.
         /// </summary>
         public static string NewShift {
@@ -3756,6 +3738,15 @@ namespace HRM.Resources {
         public static string Phone {
             get {
                 return ResourceManager.GetString("Phone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to PIC.
+        /// </summary>
+        public static string PIC {
+            get {
+                return ResourceManager.GetString("PIC", resourceCulture);
             }
         }
         
@@ -4296,33 +4287,6 @@ namespace HRM.Resources {
         public static string SearchEmployee {
             get {
                 return ResourceManager.GetString("SearchEmployee", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Section.
-        /// </summary>
-        public static string Section {
-            get {
-                return ResourceManager.GetString("Section", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Section Management.
-        /// </summary>
-        public static string SectionManagement {
-            get {
-                return ResourceManager.GetString("SectionManagement", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Sec./Team.
-        /// </summary>
-        public static string SectionTeam {
-            get {
-                return ResourceManager.GetString("SectionTeam", resourceCulture);
             }
         }
         

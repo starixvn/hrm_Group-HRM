@@ -95,7 +95,7 @@ public class WorkingHoursSummaryReportService(
 
             worksheet.Cells[rowIndex, colIndex++].Value = rowNum++;
             worksheet.Cells[rowIndex, colIndex++].Value = item.DepartmentCode;
-            worksheet.Cells[rowIndex, colIndex++].Value = item.Section;
+            worksheet.Cells[rowIndex, colIndex++].Value = item.Department;
             worksheet.Cells[rowIndex, colIndex++].Value = item.Team;
             worksheet.Cells[rowIndex, colIndex++].Value = item.Code;
             worksheet.Cells[rowIndex, colIndex++].Value = item.FullName;
@@ -170,7 +170,7 @@ public class WorkingHoursSummaryReportService(
             worksheet.Cells[rowIndex, colIndex++].Value = rowNum++;
             worksheet.Cells[rowIndex, colIndex++].Value = overtime.WorkDate;
             worksheet.Cells[rowIndex, colIndex++].Value = overtime.DepartmentCode;
-            worksheet.Cells[rowIndex, colIndex++].Value = overtime.Section;
+            worksheet.Cells[rowIndex, colIndex++].Value = overtime.Department;
             worksheet.Cells[rowIndex, colIndex++].Value = overtime.Team;
             worksheet.Cells[rowIndex, colIndex++].Value = overtime.Code;
             worksheet.Cells[rowIndex, colIndex++].Value = overtime.FullName;

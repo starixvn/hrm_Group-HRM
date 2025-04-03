@@ -25,12 +25,6 @@
             </th>
             <th class="col-sorter">
                 <div class="cell-control-wrapper">
-                    @Labels.Section
-                    <div class="fa fa-sort cell-right-div"></div>
-                </div>
-            </th>
-            <th class="col-sorter">
-                <div class="cell-control-wrapper">
                     @Labels.Team
                     <div class="fa fa-sort cell-right-div"></div>
                 </div>
@@ -108,7 +102,6 @@
                         <td>@item.AttendanceDate.ToString("ddd, dd MMM, yyyy")</td>
                     }
                     <td>@item.DepartmentCode</td>
-                    <td>@item.SectionCode</td>
                     <td>
                         <span class="tooltip-tippy" data-tippy-content="@item.Team">@item.TeamCode</span>
                     </td>

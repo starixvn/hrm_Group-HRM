@@ -82,8 +82,7 @@ public class ExportExcelEmployeeInfoService(
         {
             Count = rowIndex,
             employee.UnitName,
-            Department = employee.Team.Section.Department.Name,
-            Section = employee.Team.Section.Name,
+            Department = employee.Team.Department.Name,
             Team = employee.Team.Name,
             employee.Code,
             employee.FullName,
@@ -160,7 +159,6 @@ public class ExportExcelEmployeeInfoService(
             Index = currentRow - 2,
             p.UnitName,
             Department = p.DepartmentName,
-            Section = p.SectionName,
             p.TeamName,
             p.Code,
             p.EmployeeCard,

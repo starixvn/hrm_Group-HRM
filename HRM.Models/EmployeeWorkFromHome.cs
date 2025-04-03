@@ -19,7 +19,6 @@ public class EmployeeWorkFromHome
     public DateTime ToDate { get; set; }
 
     public string Department { get; set; }
-    public string Section { get; set; }
     public string Team { get; set; }
 
     public int ModifiedBy { get; set; }

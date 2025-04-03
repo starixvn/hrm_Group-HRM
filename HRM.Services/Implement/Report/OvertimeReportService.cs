@@ -142,7 +142,7 @@ public class OvertimeReportService(
 
             worksheet.Cells[rowIndex, colIndex++].Value = rowNum++;
             worksheet.Cells[rowIndex, colIndex++].Value = overtime.DepartmentCode;
-            worksheet.Cells[rowIndex, colIndex++].Value = overtime.Section;
+            worksheet.Cells[rowIndex, colIndex++].Value = overtime.Department;
             worksheet.Cells[rowIndex, colIndex++].Value = overtime.Team;
             worksheet.Cells[rowIndex, colIndex++].Value = overtime.FullName;
             worksheet.Cells[rowIndex, colIndex++].Value = overtime.Nickname;
@@ -234,7 +234,7 @@ public class OvertimeReportService(
             worksheet.Cells[rowIndex, colIndex++].Value = rowNum++;
             worksheet.Cells[rowIndex, colIndex++].Value = overtime.WorkDate;
             worksheet.Cells[rowIndex, colIndex++].Value = overtime.DepartmentCode;
-            worksheet.Cells[rowIndex, colIndex++].Value = overtime.Section;
+            worksheet.Cells[rowIndex, colIndex++].Value = overtime.Department;
             worksheet.Cells[rowIndex, colIndex++].Value = overtime.Team;
             worksheet.Cells[rowIndex, colIndex++].Value = overtime.Code;
             worksheet.Cells[rowIndex, colIndex++].Value = overtime.FullName;
@@ -301,7 +301,7 @@ public class OvertimeReportService(
             worksheet.Cells[rowIndex, colIndex++].Value = rowNum++;
             worksheet.Cells[rowIndex, colIndex++].Value = overtime.WorkDate;
             worksheet.Cells[rowIndex, colIndex++].Value = overtime.DepartmentCode;
-            worksheet.Cells[rowIndex, colIndex++].Value = overtime.Section;
+            worksheet.Cells[rowIndex, colIndex++].Value = overtime.Department;
             worksheet.Cells[rowIndex, colIndex++].Value = overtime.Team;
             worksheet.Cells[rowIndex, colIndex++].Value = overtime.Code;
             worksheet.Cells[rowIndex, colIndex++].Value = overtime.FullName;
@@ -372,7 +372,7 @@ public class OvertimeReportService(
 
             worksheet.Cells[rowIndex, colIndex++].Value = rowNum++;
             worksheet.Cells[rowIndex, colIndex++].Value = employee.DepartmentCode;
-            worksheet.Cells[rowIndex, colIndex++].Value = employee.Section;
+            worksheet.Cells[rowIndex, colIndex++].Value = employee.Department;
             worksheet.Cells[rowIndex, colIndex++].Value = employee.Team;
             worksheet.Cells[rowIndex, colIndex++].Value = employee.Code;
             worksheet.Cells[rowIndex, colIndex++].Value = employee.FullName;

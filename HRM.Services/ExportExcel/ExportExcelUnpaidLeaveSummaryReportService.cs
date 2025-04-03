@@ -90,7 +90,6 @@ public class ExportExcelUnpaidLeaveSummaryReportService(
             {
                 Count = rowIndex + 1,
                 leaveSummary.Department,
-                leaveSummary.Section,
                 leaveSummary.Team,
                 leaveSummary.FullName,
                 leaveSummary.Nickname,
@@ -106,7 +105,6 @@ public class ExportExcelUnpaidLeaveSummaryReportService(
             {
                 Count = rowIndex + 1,
                 leaveSummary.Department,
-                leaveSummary.Section,
                 leaveSummary.Team,
                 leaveSummary.FullName,
                 leaveSummary.Nickname,
@@ -122,7 +120,6 @@ public class ExportExcelUnpaidLeaveSummaryReportService(
             {
                 Count = rowIndex + 1,
                 leaveSummary.Department,
-                leaveSummary.Section,
                 leaveSummary.Team,
                 leaveSummary.FullName,
                 leaveSummary.Nickname,

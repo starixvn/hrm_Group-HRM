@@ -57,7 +57,6 @@ public class ExportSupervisorService(IWebHostEnvironment hostingEnvironment) : I
 
             worksheet.Cells[rowIndex, colIndex++].Value = recordIndex++;
             worksheet.Cells[rowIndex, colIndex++].Value = supervisor.Department;
-            worksheet.Cells[rowIndex, colIndex++].Value = supervisor.Section;
             worksheet.Cells[rowIndex, colIndex++].Value = supervisor.Team.Code;
             worksheet.Cells[rowIndex, colIndex++].Value = supervisor.Code;
             worksheet.Cells[rowIndex, colIndex++].Value = supervisor.FullName;
@@ -109,7 +108,6 @@ public class ExportSupervisorService(IWebHostEnvironment hostingEnvironment) : I
 
             worksheet.Cells[rowIndex, colIndex++].Value = recordIndex++;
             worksheet.Cells[rowIndex, colIndex++].Value = supervisor.Department;
-            worksheet.Cells[rowIndex, colIndex++].Value = supervisor.Section;
             worksheet.Cells[rowIndex, colIndex++].Value = supervisor.Code;
             worksheet.Cells[rowIndex, colIndex++].Value = GetSupervisorByActionType(supervisor.Supervisors, SupervisorActionType.Verifier);
             worksheet.Cells[rowIndex, colIndex++].Value = GetSupervisorByActionType(supervisor.Supervisors, SupervisorActionType.Approver);

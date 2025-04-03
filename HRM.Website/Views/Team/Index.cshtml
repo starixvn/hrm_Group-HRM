@@ -46,12 +46,6 @@
             </th>
             <th rowspan="2" class="col-sorter">
                 <div class="cell-control-wrapper">
-                    <div>@Labels.Section</div>
-                    <div class="fa fa-sort"></div>
-                </div>
-            </th>
-            <th rowspan="2" class="col-sorter">
-                <div class="cell-control-wrapper">
                     <div>@Labels.Team</div>
                     <div class="fa fa-sort"></div>
                 </div>
@@ -64,25 +58,7 @@
             </th>
             <th rowspan="2" class="col-sorter">
                 <div class="cell-control-wrapper">
-                    <div>@Labels.UnitHead</div>
-                    <div class="fa fa-sort"></div>
-                </div>
-            </th>
-            <th rowspan="2" class="col-sorter">
-                <div class="cell-control-wrapper">
-                    <div>@Labels.Manager</div>
-                    <div class="fa fa-sort"></div>
-                </div>
-            </th>
-            <th rowspan="2" class="col-sorter">
-                <div class="cell-control-wrapper">
-                    <div>@Labels.Supervisor</div>
-                    <div class="fa fa-sort"></div>
-                </div>
-            </th>
-            <th rowspan="2" class="col-sorter">
-                <div class="cell-control-wrapper">
-                    <div>@Labels.TeamLeader</div>
+                    <div>@Labels.PIC</div>
                     <div class="fa fa-sort"></div>
                 </div>
             </th>
@@ -141,17 +117,12 @@
             @{var index = 1;}
             @foreach (var team in Model)
             {
-                var unitHead = team.Managers.FirstOrDefault(x => x.RoleId == (byte)TeamManagerRole.Head);
                 <tr id="row@(team.Id)">
                     <td>@(index++)</td>
-                    <td>@team.DepartmentCode</td>
-                    <td>@team.Section.Name</td>
+                    <td>@team.Department</td>
                     <td>@team.Name</td>
                     <td>@team.Code</td>
-                    <td>@(unitHead != null ? unitHead.Nickname : string.Empty)</td>
-                    <td>@string.Join(", ", team.Managers.Where(x => x.RoleId == (byte)TeamManagerRole.Manager).Select(x => x.Nickname))</td>
-                    <td>@string.Join(", ", team.Managers.Where(x => x.RoleId == (byte)TeamManagerRole.Supervisor).Select(x => x.Nickname))</td>
-                    <td>@string.Join(", ", team.Managers.Where(x => x.RoleId == (byte)TeamManagerRole.Leader).Select(x => x.Nickname))</td>
+                    <td>@team.PICEmpId</td>
                     <td class="align-left">@team.MailGroup</td>
                     <td>@team.LocalBasicAnnualLeaveBalance</td>
                     <td>@team.ExpatBasicAnnualLeaveBalance</td>

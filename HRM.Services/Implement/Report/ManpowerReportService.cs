@@ -129,7 +129,7 @@ public class ManpowerReportService(
 
             worksheet.Cells[rowIndex, colIndex++].Value = rowNum++;
             worksheet.Cells[rowIndex, colIndex++].Value = manpower.DepartmentCode;
-            worksheet.Cells[rowIndex, colIndex++].Value = manpower.Section;
+            worksheet.Cells[rowIndex, colIndex++].Value = manpower.Department;
             worksheet.Cells[rowIndex, colIndex++].Value = manpower.TeamName;
             worksheet.Cells[rowIndex, colIndex++].Value = manpower.TotalExpat;
             worksheet.Cells[rowIndex, colIndex++].Value = manpower.TotalLocal;
@@ -180,7 +180,7 @@ public class ManpowerReportService(
         var month = 1;
         worksheet.Cells[rowIndex, colIndex++].Value = rowNum;
         worksheet.Cells[rowIndex, colIndex++].Value = manpower.DepartmentCode;
-        worksheet.Cells[rowIndex, colIndex++].Value = manpower.Section;
+        worksheet.Cells[rowIndex, colIndex++].Value = manpower.Department;
         worksheet.Cells[rowIndex, colIndex++].Value = manpower.TeamName;
         worksheet.Cells[rowIndex, colIndex++].Value = manpower.ProbationResigned;
         worksheet.Cells[rowIndex, colIndex++].Value = manpower.ConfirmedResigned;

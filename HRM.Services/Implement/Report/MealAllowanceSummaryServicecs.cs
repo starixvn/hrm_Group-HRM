@@ -101,7 +101,6 @@ public class MealAllowanceSummaryService(
 
             worksheet.Cells[rowIndex, colIndex++].Value = rowNum++;
             worksheet.Cells[rowIndex, colIndex++].Value = summary.Department;
-            worksheet.Cells[rowIndex, colIndex++].Value = summary.Section;
             worksheet.Cells[rowIndex, colIndex++].Value = summary.Team;
             worksheet.Cells[rowIndex, colIndex++].Value = summary.Code;
             worksheet.Cells[rowIndex, colIndex++].Value = summary.FullName;
@@ -151,7 +150,6 @@ public class MealAllowanceSummaryService(
             template.Cells[StartBodyRow, 1, StartBodyRow, TotalFixedColumnsDetail].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalFixedColumnsDetail]);
             worksheet.Cells[rowIndex, colIndex++].Value = rowNum++;
             worksheet.Cells[rowIndex, colIndex++].Value = detail.Department;
-            worksheet.Cells[rowIndex, colIndex++].Value = detail.Section;
             worksheet.Cells[rowIndex, colIndex++].Value = detail.Team;
             worksheet.Cells[rowIndex, colIndex++].Value = detail.Code;
             worksheet.Cells[rowIndex, colIndex++].Value = detail.WorkDate.ToString("ddd, dd MMM, yyyy");

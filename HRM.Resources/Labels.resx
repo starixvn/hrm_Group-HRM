@@ -861,9 +861,6 @@
   <data name="FullNameNick" xml:space="preserve">
     <value>Full Name/Nick</value>
   </data>
-  <data name="Section" xml:space="preserve">
-    <value>Section</value>
-  </data>
   <data name="StaffId" xml:space="preserve">
     <value>Staff ID</value>
   </data>
@@ -1101,12 +1098,6 @@
   <data name="Parent" xml:space="preserve">
     <value>Parent</value>
   </data>
-  <data name="AddNewSection" xml:space="preserve">
-    <value>Add New Section</value>
-  </data>
-  <data name="EditSection" xml:space="preserve">
-    <value>Edit Section</value>
-  </data>
   <data name="DisciplineSummary" xml:space="preserve">
     <value>Discipline Review</value>
   </data>
@@ -1239,8 +1230,8 @@
   <data name="DefaultShift" xml:space="preserve">
     <value>Default Shift</value>
   </data>
-  <data name="SectionTeam" xml:space="preserve">
-    <value>Sec./Team</value>
+  <data name="DepTeam" xml:space="preserve">
+    <value>Dep./Team</value>
   </data>
   <data name="EmployeeID" xml:space="preserve">
     <value>Employee ID</value>
@@ -1881,17 +1872,14 @@
   <data name="EditDepartment" xml:space="preserve">
     <value>Edit Department</value>
   </data>
-  <data name="NewSection" xml:space="preserve">
-    <value>New Section</value>
-  </data>
-  <data name="SectionManagement" xml:space="preserve">
-    <value>Section Management</value>
-  </data>
   <data name="TeamLeader" xml:space="preserve">
     <value>Team Leader</value>
   </data>
   <data name="UnitHead" xml:space="preserve">
     <value>Unit Head</value>
+  </data>
+  <data name="PIC" xml:space="preserve">
+    <value>PIC</value>
   </data>
   <data name="ExtNo" xml:space="preserve">
     <value>Ext No</value>
