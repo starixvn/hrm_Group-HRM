@@ -31,167 +31,167 @@ public class TeamController(
     public async Task<ActionResult> Index(string keyword = null)
     {
         var teams = await teamService.GetAllAsync(keyword: keyword);
-        ViewBag.HasTeamPermission = session.HasPermissionOnFunction(FunctionKey.TeamManagement, Policy.Host);
-        ViewBag.HasGroupPermission = session.HasPermissionOnFunction(FunctionKey.GroupManagement, Policy.Host);
+        ViewBag.HasPermission = session.HasPermissionOnFunction(FunctionKey.TeamManagement, Policy.Host);
         ViewBag.HasPermissionToViewEmployee = session.HasPermissionOnFunction(FunctionKey.EmployeeManagement, Policy.Read);
         return View(teams);
     }
 
-    [HrmPermission(Policy.Host, FunctionKey.GroupManagement)]
-    public async Task<ActionResult> Create()
-    {
-        var model = new TeamViewModel
-        {
-            Sections = await sectionService.GetSectionAsync(),
-            Employees = await GetAllEmployees()
-        };
-        return View(model);
-    }
+    //* TODO: reuse when group space available
+    //[HrmPermission(Policy.Host, FunctionKey.TeamManagement)]
+    //public async Task<ActionResult> Create()
+    //{
+    //    var model = new TeamViewModel
+    //    {
+    //        Sections = await sectionService.GetSectionAsync(),
+    //        Employees = await GetAllEmployees()
+    //    };
+    //    return View(model);
+    //}
+
+    //[HttpPost]
+    //[HrmPermission(Policy.Host, FunctionKey.TeamManagement)]
+    //[System.Diagnostics.CodeAnalysis.SuppressMessage("Critical Code Smell", "S1541:Methods and properties should not be too complex", Justification = "<Pending>")]
+    //public async Task<ActionResult> Create(TeamViewModel model)
+    //{
+    //    model.Sections = await sectionService.GetSectionAsync();
+    //    model.Employees = await GetAllEmployees();
+    //    if (ModelState.IsValid)
+    //    {
+    //        var criteria = new CreateTeamCriteria
+    //        {
+    //            Code = model.TeamCode,
+    //            Name = model.TeamName,
+    //            SectionId = model.SectionId ?? 0,
+    //            HeadId = model.HeadId ?? 0,
+    //            ManagerIds = model.ManagerIds,
+    //            LeaderIds = model.LeaderIds,
+    //            SupervisorIds = model.SupervisorIds,
+    //            MailGroup = model.MailGroup,
+    //            CreatedBy = session.UserId,
+    //            LocalBasicAnnualLeaveBalance = model.LocalBasicAnnualLeaveBalance ?? 0,
+    //            LocalWorkingDays = model.LocalWorkingDays ?? 0,
+    //            LocalWorkingHours = model.LocalWorkingHours ?? 0,
+    //            LocalOffDaysbyWeek = model.LocalOffDaysbyWeek ?? 0,
+    //            LocalWorkingHoursbyWeek = model.LocalWorkingHoursbyWeek,
+    //            ExpatBasicAnnualLeaveBalance = model.ExpatBasicAnnualLeaveBalance ?? 0,
+    //            ExpatWorkingDays = model.ExpatWorkingDays ?? 0,
+    //            ExpatWorkingHours = model.ExpatWorkingHours ?? 0,
+    //            ExpatOffDaysbyWeek = model.ExpatOffDaysbyWeek ?? 0,
+    //            ExpatWorkingHoursbyWeek = model.ExpatWorkingHoursbyWeek,
+    //            CompanyId = CurrentCompanyId
+    //        };
+    //        var result = await baseService.ExecuteNonQueryAsync(criteria);
+
+    //        if (result.IsSuccessful)
+    //        {
+    //            return RedirectToAction("Index", "Team");
+    //        }
+
+    //        ModelState.AddModelError(string.Empty, result.Message);
+    //    }
+    //    else
+    //    {
+    //        ModelState.AddModelError(string.Empty, Messages.InvalidInputData);
+    //    }
+
+    //    return View(model);
+    //}
+
+    //[HrmPermission(Policy.Host, FunctionKey.TeamManagement)]
+    //[System.Diagnostics.CodeAnalysis.SuppressMessage("Critical Code Smell", "S1541:Methods and properties should not be too complex", Justification = "<Pending>")]
+    //public async Task<ActionResult> Edit(int id)
+    //{
+    //    var team = await teamService.GetById(id);
+    //    if (team == null)
+    //    {
+    //        return RedirectToAction("PageNotFound", "Error");
+    //    }
+
+    //    var unitHead = team.Managers.FirstOrDefault(x => x.RoleId == (byte)TeamManagerRole.Head);
+    //    var model = new TeamViewModel
+    //    {
+    //        TeamCode = team.Code,
+    //        TeamName = team.Name,
+    //        MailGroup = team.MailGroup,
+    //        LocalBasicAnnualLeaveBalance = team.LocalBasicAnnualLeaveBalance ?? 0,
+    //        LocalWorkingDays = team.LocalWorkingDays ?? 0,
+    //        LocalWorkingHours = team.LocalWorkingHours ?? 0,
+    //        LocalOffDaysbyWeek = team.LocalOffDaysbyWeek ?? 0,
+    //        LocalWorkingHoursbyWeek = team.LocalWorkingHoursbyWeek,
+    //        ExpatBasicAnnualLeaveBalance = team.ExpatBasicAnnualLeaveBalance ?? 0,
+    //        ExpatWorkingDays = team.ExpatWorkingDays ?? 0,
+    //        ExpatWorkingHours = team.ExpatWorkingHours ?? 0,
+    //        ExpatOffDaysbyWeek = team.ExpatOffDaysbyWeek ?? 0,
+    //        ExpatWorkingHoursbyWeek = team.ExpatWorkingHoursbyWeek,
+    //        HeadId = unitHead?.EmpId,
+    //        UnitHead = unitHead?.DisplayName,
+    //        ManagerIds = string.Join(",", team.Managers.Where(x => x.RoleId == (byte)TeamManagerRole.Manager).Select(e => e.EmpId)),
+    //        SupervisorIds = string.Join(",", team.Managers.Where(x => x.RoleId == (byte)TeamManagerRole.Supervisor).Select(e => e.EmpId)),
+    //        LeaderIds = string.Join(",", team.Managers.Where(x => x.RoleId == (byte)TeamManagerRole.Leader).Select(e => e.EmpId)),
+    //        SectionId = team.Section?.Id ?? 0,
+    //        Sections = await sectionService.GetSectionAsync(),
+    //        Employees = await GetAllEmployees()
+    //    };
+
+    //    return View(model);
+    //}
+
+    //[HttpPost]
+    //[HrmPermission(Policy.Host, FunctionKey.TeamManagement)]
+    //[System.Diagnostics.CodeAnalysis.SuppressMessage("Critical Code Smell", "S1541:Methods and properties should not be too complex", Justification = "<Pending>")]
+    //public async Task<ActionResult> Edit(TeamViewModel model)
+    //{
+    //    if (model != null)
+    //    {
+    //        model.Sections = await sectionService.GetSectionAsync();
+    //        model.Employees = await GetAllEmployees();
+    //        if (ModelState.IsValid)
+    //        {
+    //            var criteria = new EditTeamCriteria
+    //            {
+    //                TeamId = model.Id,
+    //                Code = model.TeamCode,
+    //                Name = model.TeamName,
+    //                SectionId = model.SectionId ?? 0,
+    //                MailGroup = model.MailGroup,
+    //                HeadId = model.HeadId ?? 0,
+    //                ManagerIds = model.ManagerIds,
+    //                LeaderIds = model.LeaderIds,
+    //                SupervisorIds = model.SupervisorIds,
+    //                ModifiedBy = session.UserId,
+    //                LocalBasicAnnualLeaveBalance = model.LocalBasicAnnualLeaveBalance ?? 0,
+    //                LocalWorkingDays = model.LocalWorkingDays ?? 0,
+    //                LocalWorkingHours = model.LocalWorkingHours ?? 0,
+    //                LocalOffDaysbyWeek = model.LocalOffDaysbyWeek ?? 0,
+    //                LocalWorkingHoursbyWeek = model.LocalWorkingHoursbyWeek,
+    //                ExpatBasicAnnualLeaveBalance = model.ExpatBasicAnnualLeaveBalance ?? 0,
+    //                ExpatWorkingDays = model.ExpatWorkingDays ?? 0,
+    //                ExpatWorkingHours = model.ExpatWorkingHours ?? 0,
+    //                ExpatOffDaysbyWeek = model.ExpatOffDaysbyWeek ?? 0,
+    //                ExpatWorkingHoursbyWeek = model.ExpatWorkingHoursbyWeek
+    //            };
+    //            var result = await baseService.ExecuteNonQueryAsync(criteria);
+
+    //            if (result.IsSuccessful)
+    //            {
+    //                ViewBag.Updated = true;
+    //            }
+    //            else
+    //            {
+    //                ModelState.AddModelError(string.Empty, result.Message);
+    //            }
+    //        }
+    //        else
+    //        {
+    //            ModelState.AddModelError(string.Empty, Messages.InvalidInputData);
+    //        }
+    //    }
+
+    //    return View(model);
+    //}
 
     [HttpPost]
-    [HrmPermission(Policy.Host, FunctionKey.GroupManagement)]
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Critical Code Smell", "S1541:Methods and properties should not be too complex", Justification = "<Pending>")]
-    public async Task<ActionResult> Create(TeamViewModel model)
-    {
-        model.Sections = await sectionService.GetSectionAsync();
-        model.Employees = await GetAllEmployees();
-        if (ModelState.IsValid)
-        {
-            var criteria = new CreateTeamCriteria
-            {
-                Code = model.TeamCode,
-                Name = model.TeamName,
-                SectionId = model.SectionId ?? 0,
-                HeadId = model.HeadId ?? 0,
-                ManagerIds = model.ManagerIds,
-                LeaderIds = model.LeaderIds,
-                SupervisorIds = model.SupervisorIds,
-                MailGroup = model.MailGroup,
-                CreatedBy = session.UserId,
-                LocalBasicAnnualLeaveBalance = model.LocalBasicAnnualLeaveBalance ?? 0,
-                LocalWorkingDays = model.LocalWorkingDays ?? 0,
-                LocalWorkingHours = model.LocalWorkingHours ?? 0,
-                LocalOffDaysbyWeek = model.LocalOffDaysbyWeek ?? 0,
-                LocalWorkingHoursbyWeek = model.LocalWorkingHoursbyWeek,
-                ExpatBasicAnnualLeaveBalance = model.ExpatBasicAnnualLeaveBalance ?? 0,
-                ExpatWorkingDays = model.ExpatWorkingDays ?? 0,
-                ExpatWorkingHours = model.ExpatWorkingHours ?? 0,
-                ExpatOffDaysbyWeek = model.ExpatOffDaysbyWeek ?? 0,
-                ExpatWorkingHoursbyWeek = model.ExpatWorkingHoursbyWeek,
-                CompanyId = CurrentCompanyId
-            };
-            var result = await baseService.ExecuteNonQueryAsync(criteria);
-
-            if (result.IsSuccessful)
-            {
-                return RedirectToAction("Index", "Team");
-            }
-
-            ModelState.AddModelError(string.Empty, result.Message);
-        }
-        else
-        {
-            ModelState.AddModelError(string.Empty, Messages.InvalidInputData);
-        }
-
-        return View(model);
-    }
-
-    [HrmPermission(Policy.Host, FunctionKey.GroupManagement)]
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Critical Code Smell", "S1541:Methods and properties should not be too complex", Justification = "<Pending>")]
-    public async Task<ActionResult> Edit(int id)
-    {
-        var team = await teamService.GetById(id);
-        if (team == null)
-        {
-            return RedirectToAction("PageNotFound", "Error");
-        }
-
-        var unitHead = team.Managers.FirstOrDefault(x => x.RoleId == (byte)TeamManagerRole.Head);
-        var model = new TeamViewModel
-        {
-            TeamCode = team.Code,
-            TeamName = team.Name,
-            MailGroup = team.MailGroup,
-            LocalBasicAnnualLeaveBalance = team.LocalBasicAnnualLeaveBalance ?? 0,
-            LocalWorkingDays = team.LocalWorkingDays ?? 0,
-            LocalWorkingHours = team.LocalWorkingHours ?? 0,
-            LocalOffDaysbyWeek = team.LocalOffDaysbyWeek ?? 0,
-            LocalWorkingHoursbyWeek = team.LocalWorkingHoursbyWeek,
-            ExpatBasicAnnualLeaveBalance = team.ExpatBasicAnnualLeaveBalance ?? 0,
-            ExpatWorkingDays = team.ExpatWorkingDays ?? 0,
-            ExpatWorkingHours = team.ExpatWorkingHours ?? 0,
-            ExpatOffDaysbyWeek = team.ExpatOffDaysbyWeek ?? 0,
-            ExpatWorkingHoursbyWeek = team.ExpatWorkingHoursbyWeek,
-            HeadId = unitHead?.EmpId,
-            UnitHead = unitHead?.DisplayName,
-            ManagerIds = string.Join(",", team.Managers.Where(x => x.RoleId == (byte)TeamManagerRole.Manager).Select(e => e.EmpId)),
-            SupervisorIds = string.Join(",", team.Managers.Where(x => x.RoleId == (byte)TeamManagerRole.Supervisor).Select(e => e.EmpId)),
-            LeaderIds = string.Join(",", team.Managers.Where(x => x.RoleId == (byte)TeamManagerRole.Leader).Select(e => e.EmpId)),
-            SectionId = team.Section?.Id ?? 0,
-            Sections = await sectionService.GetSectionAsync(),
-            Employees = await GetAllEmployees()
-        };
-
-        return View(model);
-    }
-
-    [HttpPost]
-    [HrmPermission(Policy.Host, FunctionKey.GroupManagement)]
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Critical Code Smell", "S1541:Methods and properties should not be too complex", Justification = "<Pending>")]
-    public async Task<ActionResult> Edit(TeamViewModel model)
-    {
-        if (model != null)
-        {
-            model.Sections = await sectionService.GetSectionAsync();
-            model.Employees = await GetAllEmployees();
-            if (ModelState.IsValid)
-            {
-                var criteria = new EditTeamCriteria
-                {
-                    TeamId = model.Id,
-                    Code = model.TeamCode,
-                    Name = model.TeamName,
-                    SectionId = model.SectionId ?? 0,
-                    MailGroup = model.MailGroup,
-                    HeadId = model.HeadId ?? 0,
-                    ManagerIds = model.ManagerIds,
-                    LeaderIds = model.LeaderIds,
-                    SupervisorIds = model.SupervisorIds,
-                    ModifiedBy = session.UserId,
-                    LocalBasicAnnualLeaveBalance = model.LocalBasicAnnualLeaveBalance ?? 0,
-                    LocalWorkingDays = model.LocalWorkingDays ?? 0,
-                    LocalWorkingHours = model.LocalWorkingHours ?? 0,
-                    LocalOffDaysbyWeek = model.LocalOffDaysbyWeek ?? 0,
-                    LocalWorkingHoursbyWeek = model.LocalWorkingHoursbyWeek,
-                    ExpatBasicAnnualLeaveBalance = model.ExpatBasicAnnualLeaveBalance ?? 0,
-                    ExpatWorkingDays = model.ExpatWorkingDays ?? 0,
-                    ExpatWorkingHours = model.ExpatWorkingHours ?? 0,
-                    ExpatOffDaysbyWeek = model.ExpatOffDaysbyWeek ?? 0,
-                    ExpatWorkingHoursbyWeek = model.ExpatWorkingHoursbyWeek
-                };
-                var result = await baseService.ExecuteNonQueryAsync(criteria);
-
-                if (result.IsSuccessful)
-                {
-                    ViewBag.Updated = true;
-                }
-                else
-                {
-                    ModelState.AddModelError(string.Empty, result.Message);
-                }
-            }
-            else
-            {
-                ModelState.AddModelError(string.Empty, Messages.InvalidInputData);
-            }
-        }
-
-        return View(model);
-    }
-
-    [HttpPost]
-    [HrmPermission(Policy.Host, FunctionKey.GroupManagement)]
+    [HrmPermission(Policy.Host, FunctionKey.TeamManagement)]
     public async Task<IActionResult> Delete(int id)
     {
         var commandResult = await teamService.Delete(session.UserId, id);
@@ -259,7 +259,7 @@ public class TeamController(
     }
 
     [HttpPost]
-    [HrmPermission(Policy.Host, FunctionKey.GroupManagement)]
+    [HrmPermission(Policy.Host, FunctionKey.TeamManagement)]
     public async Task<IActionResult> EditTeamSupervisor(int teamId, short roleId, IEnumerable<EditTeamSupervisor> supervisors)
     {
         var commandResult = await teamService.EditTeamSupervisor(session.UserId, teamId, roleId, supervisors);
@@ -287,7 +287,7 @@ public class TeamController(
     }
 
     [HttpPost]
-    [HrmPermission(Policy.Host, FunctionKey.GroupManagement)]
+    [HrmPermission(Policy.Host, FunctionKey.TeamManagement)]
     public async Task<IActionResult> EditDisciplineRule(int teamId, IEnumerable<DisciplineRule> disciplineRules)
     {
         var commandResult = await teamService.EditDisciplineRule(session.UserId, teamId, disciplineRules);

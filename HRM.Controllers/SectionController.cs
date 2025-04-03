@@ -27,37 +27,37 @@ public class SectionController(
     ISectionService sectionService,
     IBaseService baseService) : BaseController(session)
 {
-    [HrmPermission(Policy.Read, FunctionKey.GroupManagement)]
+    [HrmPermission(Policy.Read, FunctionKey.SectionManagement)]
     public ActionResult Index()
     {
-        var hasPermission = session.HasPermissionOnFunction(FunctionKey.GroupManagement, Policy.Host);
+        var hasPermission = session.HasPermissionOnFunction(FunctionKey.SectionManagement, Policy.Host);
 
         return View(hasPermission);
     }
 
     [HttpPost]
-    [HrmPermission(Policy.Read, FunctionKey.GroupManagement)]
+    [HrmPermission(Policy.Read, FunctionKey.SectionManagement)]
     public async Task<IActionResult> GetSections([FromBody] GetSectionViewModel request)
     {
         var sections = await sectionService.GetSectionAsync(request.IsActive);
         return new JsonResult(sections);
     }
 
-    [HrmPermission(Policy.Host, FunctionKey.GroupManagement)]
+    [HrmPermission(Policy.Host, FunctionKey.SectionManagement)]
     public async Task<IActionResult> GetDepartments()
     {
         var departments = await departmentService.GetDepartmentAsync();
         return new JsonResult(departments);
     }
 
-    [HrmPermission(Policy.Host, FunctionKey.GroupManagement)]
+    [HrmPermission(Policy.Host, FunctionKey.SectionManagement)]
     public ActionResult Create()
     {
         return View();
     }
 
     [HttpPost]
-    [HrmPermission(Policy.Host, FunctionKey.GroupManagement)]
+    [HrmPermission(Policy.Host, FunctionKey.SectionManagement)]
     public async Task<IActionResult> Create([FromBody] AddSectionViewModel model)
     {
         var commandResult = new CommandResult();
@@ -80,7 +80,7 @@ public class SectionController(
         return new JsonResult(commandResult);
     }
 
-    [HrmPermission(Policy.Host, FunctionKey.GroupManagement)]
+    [HrmPermission(Policy.Host, FunctionKey.SectionManagement)]
     public async Task<IActionResult> GetById(int id)
     {
         var section = await sectionService.GetByIdAsync(id);
@@ -97,14 +97,14 @@ public class SectionController(
         return new JsonResult(model);
     }
 
-    [HrmPermission(Policy.Host, FunctionKey.GroupManagement)]
+    [HrmPermission(Policy.Host, FunctionKey.SectionManagement)]
     public ActionResult Edit(int id)
     {
         return View(id);
     }
 
     [HttpPost]
-    [HrmPermission(Policy.Host, FunctionKey.GroupManagement)]
+    [HrmPermission(Policy.Host, FunctionKey.SectionManagement)]
     public async Task<IActionResult> Edit([FromBody] EditSectionViewModel model)
     {
         var commandResult = new CommandResult();
@@ -128,7 +128,7 @@ public class SectionController(
     }
 
     [HttpPost]
-    [HrmPermission(Policy.Host, FunctionKey.GroupManagement)]
+    [HrmPermission(Policy.Host, FunctionKey.SectionManagement)]
     public async Task<IActionResult> Delete([FromRoute] DeleteSectionViewModel request)
     {
         var commandResult = await sectionService.DeleteAsync(session.UserId, request.Id);

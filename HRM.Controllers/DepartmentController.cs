@@ -18,15 +18,15 @@ public class DepartmentController(
     IUnitService unitService,
     IBaseService baseService) : BaseController(session)
 {
-    [HrmPermission(Policy.Read, FunctionKey.GroupManagement)]
+    [HrmPermission(Policy.Read, FunctionKey.DepartmentManagement)]
     public ActionResult Index()
     {
-        var hasPermission = session.HasPermissionOnFunction(FunctionKey.GroupManagement, Policy.Host);
+        var hasPermission = session.HasPermissionOnFunction(FunctionKey.DepartmentManagement, Policy.Host);
         return View(hasPermission);
     }
 
     [HttpPost]
-    [HrmPermission(Policy.Read, FunctionKey.GroupManagement)]
+    [HrmPermission(Policy.Read, FunctionKey.DepartmentManagement)]
     public async Task<IActionResult> GetDepartments([FromBody] GetDepartmentViewModel request)
     {
         var departments = await departmentService.GetDepartmentAsync(request.IsActive);
@@ -39,14 +39,14 @@ public class DepartmentController(
         return new JsonResult(units);
     }
 
-    [HrmPermission(Policy.Host, FunctionKey.GroupManagement)]
+    [HrmPermission(Policy.Host, FunctionKey.DepartmentManagement)]
     public IActionResult Create()
     {
         return View();
     }
 
     [HttpPost]
-    [HrmPermission(Policy.Host, FunctionKey.GroupManagement)]
+    [HrmPermission(Policy.Host, FunctionKey.DepartmentManagement)]
     public async Task<IActionResult> Create([FromBody] CreateDepartmentViewModel model)
     {
         var commandResult = new CommandResult();
@@ -69,7 +69,7 @@ public class DepartmentController(
         return new JsonResult(commandResult);
     }
 
-    [HrmPermission(Policy.Host, FunctionKey.GroupManagement)]
+    [HrmPermission(Policy.Host, FunctionKey.DepartmentManagement)]
     public async Task<IActionResult> GetById(int Id)
     {
         var department = await departmentService.GetByIdAsync(Id);
@@ -87,14 +87,14 @@ public class DepartmentController(
         return new JsonResult(model);
     }
 
-    [HrmPermission(Policy.Host, FunctionKey.GroupManagement)]
+    [HrmPermission(Policy.Host, FunctionKey.DepartmentManagement)]
     public ActionResult Edit(int id)
     {
         return View(id);
     }
 
     [HttpPost]
-    [HrmPermission(Policy.Host, FunctionKey.GroupManagement)]
+    [HrmPermission(Policy.Host, FunctionKey.DepartmentManagement)]
     public async Task<IActionResult> Edit([FromBody] EditDepartmentViewModel model)
     {
         var commandResult = new CommandResult();
@@ -117,7 +117,7 @@ public class DepartmentController(
     }
 
     [HttpPost]
-    [HrmPermission(Policy.Host, FunctionKey.GroupManagement)]
+    [HrmPermission(Policy.Host, FunctionKey.DepartmentManagement)]
     public async Task<IActionResult> Delete([FromBody] DeleteDepartmentViewModel request)
     {
         var commandResult = await departmentService.DeleteAsync(session.UserId, request.Id);

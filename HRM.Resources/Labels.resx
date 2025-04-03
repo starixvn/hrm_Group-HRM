@@ -2001,7 +2001,4 @@
   <data name="ManagementGrade" xml:space="preserve">
     <value>Management Grade</value>
   </data>
-  <data name="GroupSpace" xml:space="preserve">
-    <value>Group Space</value>
-  </data>
 </root>

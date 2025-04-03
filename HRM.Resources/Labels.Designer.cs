@@ -2059,15 +2059,6 @@ namespace HRM.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Group Space.
-        /// </summary>
-        public static string GroupSpace {
-            get {
-                return ResourceManager.GetString("GroupSpace", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Half Day.
         /// </summary>
         public static string HalfDay {
