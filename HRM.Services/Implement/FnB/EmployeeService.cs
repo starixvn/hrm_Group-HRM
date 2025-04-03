@@ -14,7 +14,7 @@ public class EmployeeService(IBaseService baseService) : IEmployeeService
         return await baseService.GetDataAsync<EmployeeModel>(criteria);
     }
 
-    public async Task<IEnumerable<TeamModel>> GetEmployeeGroupByLastModifiedDate(GetEmployeeGroupByLastModifiedDateCriteria criteria)
+    public async Task<IEnumerable<TeamModel>> GetEmployeeTeamByLastModifiedDate(GetEmployeeTeamByLastModifiedDateCriteria criteria)
     {
         return await baseService.GetDataAsync<TeamModel>(criteria);
     }
