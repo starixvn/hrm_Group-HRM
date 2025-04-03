@@ -56,8 +56,8 @@ public class ExportOvertimeService(IWebHostEnvironment hostingEnvironment) : IEx
             templateWorksheet.Cells[startBodyRow, 1, startBodyRow, totalColumns].Copy(workSheet.Cells[rowIndex, colIndex, rowIndex, totalColumns]);
 
             workSheet.Cells[rowIndex, colIndex++].Value = count;
-            workSheet.Cells[rowIndex, colIndex++].Value = detail.Requester.Department;
-            workSheet.Cells[rowIndex, colIndex++].Value = detail.Team;
+            workSheet.Cells[rowIndex, colIndex++].Value = detail.DepartmentCode;
+            workSheet.Cells[rowIndex, colIndex++].Value = detail.TeamCode;
             workSheet.Cells[rowIndex, colIndex++].Value = detail.FullName;
             workSheet.Cells[rowIndex, colIndex++].Value = detail.Nickname;
             workSheet.Cells[rowIndex, colIndex++].Value = detail.Month.ToString("MMM-yyyy");
@@ -65,8 +65,8 @@ public class ExportOvertimeService(IWebHostEnvironment hostingEnvironment) : IEx
             workSheet.Cells[rowIndex, colIndex++].Value = detail.OffHours;
             workSheet.Cells[rowIndex, colIndex++].Value = detail.PublicHours;
             workSheet.Cells[rowIndex, colIndex++].Value = detail.SpecialHours;
-            workSheet.Cells[rowIndex, colIndex++].Value = detail.Verifier.Nickname;
-            workSheet.Cells[rowIndex, colIndex++].Value = detail.Approver.Nickname;
+            workSheet.Cells[rowIndex, colIndex++].Value = detail.VerifierNickname;
+            workSheet.Cells[rowIndex, colIndex++].Value = detail.ApproverNickname;
             workSheet.Cells[rowIndex, colIndex].Value = detail.Status;
 
             rowIndex++;

@@ -23,7 +23,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace HRM.Controllers;
 
-[HrmPermission(Policy.Read, FunctionKey.TeamManagement)]
 public class TeamController(
     IUserControlSession session,
     IUnitService unitService,
@@ -33,6 +32,7 @@ public class TeamController(
     IBaseService baseService,
     IEmployeeService employeeService) : BaseController(session)
 {
+    [HrmPermission(Policy.Read, FunctionKey.TeamManagement)]
     public async Task<ActionResult> Index(string keyword = null)
     {
         var teams = await teamService.GetAllAsync(keyword: keyword);
@@ -190,6 +190,7 @@ public class TeamController(
         return Json(commandResult);
     }
 
+    [HrmPermission(Policy.Read, FunctionKey.TeamManagement)]
     public async Task<IActionResult> TeamSupervisor(int id)
     {
         var supervisors = (await teamService.GetSupervisorByTeamId(id)).ToList();
@@ -242,7 +243,7 @@ public class TeamController(
         return View();
     }
 
-    [HttpGet]
+    [HrmPermission(Policy.Read, FunctionKey.TeamManagement)]
     public async Task<IActionResult> GetDisciplineManagerByTeamId(int teamId)
     {
         var supervisors = await teamService.GetDisciplineManagerByTeamId(teamId);

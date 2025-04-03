@@ -11,6 +11,7 @@ public class MonthlyOvertimeRequest
     public Requester Requester { get; set; }
     public Requester Verifier { get; set; }
     public Requester Approver { get; set; }
+
     public decimal NormalHours { get; set; }
     public decimal OffHours { get; set; }
     public decimal PublicHours { get; set; }
@@ -23,8 +24,19 @@ public class MonthlyOvertimeRequest
     public bool IsHost { get; set; }
     public string Nickname => Requester.Nickname;
     public string FullName => Requester.FullName;
-    public string Team => Requester.Team;
-    public string Department => Requester.Department;
+
+    public string DepartmentCode { get; set; }
+    public string DepartmentName { get; set; }
+    public string TeamCode { get; set; }
+    public string TeamName { get; set; }
+
+    public int VerifierId { get; set; }
+    public string VerifierNickname { get; set; }
+    public string VerifierFullName { get; set; }
+
+    public int ApproverId { get; set; }
+    public string ApproverNickname { get; set; }
+    public string ApproverFullName { get; set; }
 
     public IEnumerable<DailyOvertimeRequest> DailyOvertimes { get; set; } = new List<DailyOvertimeRequest>();
 }

@@ -4,7 +4,7 @@
 @using HRM.Website.Helper
 @model IEnumerable<HRM.Models.Overtime.MonthlyOvertimeRequest>
 
-@{ 
+@{
     var showCheckAll = Model.Any(x => x.IsHost);
     var currentUserId = (int)ViewBag.CurrentUserId;
 }
@@ -24,15 +24,15 @@
                     <div class="checkbox">
                         <input type="checkbox" class="checkbox-custom" id="ckb@(request.RequestId)"
                                data-requestid="@request.RequestId" data-statusid="@request.Status.Id"
-                               data-verifierid="@request.Verifier.EmpId" data-approverid="@request.Approver.EmpId" />
+                               data-verifierid="@request.VerifierId" data-approverid="@request.ApproverId" />
                         <label for="ckb@(request.RequestId)"></label>
                     </div>
                 }
             </td>
         }
         <td>@index</td>
-        <td>@request.Requester.Department</td>
-        <td>@request.Requester.Team</td>
+        <td>@request.DepartmentCode</td>
+        <td>@request.TeamCode</td>
         <td class="align-left">@request.Requester.FullName</td>
         <td>@request.Requester.Nickname</td>
         <td data-datetime="@request.Month">@request.Month.ToString("MMM-yyyy")</td>
@@ -85,7 +85,7 @@ else
 @{
     void RenderStatus(MonthlyOvertimeRequest request)
     {
-        if (request.Approver.EmpId == currentUserId)
+        if (request.ApproverId == currentUserId)
         {
             switch (request.Status.Id)
             {
@@ -113,7 +113,7 @@ else
                     break;
             }
         }
-        else if (request.Verifier.EmpId == currentUserId)
+        else if (request.VerifierId == currentUserId)
         {
             switch (request.Status.Id)
             {
