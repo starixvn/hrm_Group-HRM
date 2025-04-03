@@ -228,7 +228,6 @@ public static class ServiceCollectionExtensions
     {
         services.AddSingleton<IApiKeyValidator, ApiKeyValidator>();
         services.AddScoped<Services.Interfaces.FnB.IEmployeeService, Services.Implement.FnB.EmployeeService>();
-        services.AddScoped<Services.Interfaces.FnB.ISectionService, Services.Implement.FnB.SectionService>();
         services.AddScoped<Services.Interfaces.FnB.IUnitService, Services.Implement.FnB.UnitService>();
         services.AddScoped<Services.Interfaces.FnB.IDepartmentService, Services.Implement.FnB.DepartmentService>();
         services.AddScoped<Services.Interfaces.FnB.IShiftService, Services.Implement.FnB.ShiftService>();
