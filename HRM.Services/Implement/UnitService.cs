@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using GO.UserControl.Client.Core.Session;
 using HRM.Core.Constants;
@@ -11,7 +10,8 @@ using HRM.Services.Interfaces;
 
 namespace HRM.Services.Implement;
 
-public class UnitService(IBaseService baseService,
+public class UnitService(
+    IBaseService baseService,
     IUserControlSession userControlSession) : IUnitService
 {
     public async Task<Unit> GetByIdAsync(int id)
@@ -26,17 +26,14 @@ public class UnitService(IBaseService baseService,
         return await baseService.GetDataEntityAsync<Unit>(criteria);
     }
 
-    public async Task<IList<Unit>> GetUnitAsync(bool? isActive = true)
+    public async Task<IEnumerable<Unit>> GetUnitAsync(bool? isActive = true)
     {
-        var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
-        var criteria = new GetUnitsCriteria
+        var criteria = new GetUnitCriteria
         {
-            IsActive = isActive, 
-            CompanyId = companyId
+            IsActive = isActive
         };
 
-        var data = await baseService.GetDataAsync<Unit>(criteria);
-        return data.ToList();
+        return await baseService.GetDataAsync<Unit>(criteria);
     }
 
     public async Task<CommandResult> CreateAsync(InsertUnitCriteria criteria)

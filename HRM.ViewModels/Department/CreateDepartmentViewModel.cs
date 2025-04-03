@@ -16,5 +16,5 @@ public class CreateDepartmentViewModel
 
     public bool IsActive { get; set; } = true;
 
-    public IList<Models.Unit.Unit> Units { get; set; }
+    public IEnumerable<Models.Unit.Unit> Units { get; set; }
 }

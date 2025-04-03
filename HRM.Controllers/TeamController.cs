@@ -54,7 +54,6 @@ public class TeamController(
 
     [HttpPost]
     [HrmPermission(Policy.Host, FunctionKey.TeamManagement)]
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Critical Code Smell", "S1541:Methods and properties should not be too complex", Justification = "<Pending>")]
     public async Task<ActionResult> Create(TeamViewModel model)
     {
         model.Departments = await departmentService.GetDepartmentAsync();
@@ -99,7 +98,6 @@ public class TeamController(
     }
 
     [HrmPermission(Policy.Host, FunctionKey.TeamManagement)]
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Critical Code Smell", "S1541:Methods and properties should not be too complex", Justification = "<Pending>")]
     public async Task<ActionResult> Edit(int id)
     {
         var team = await teamService.GetById(id);
@@ -135,7 +133,6 @@ public class TeamController(
 
     [HttpPost]
     [HrmPermission(Policy.Host, FunctionKey.TeamManagement)]
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Critical Code Smell", "S1541:Methods and properties should not be too complex", Justification = "<Pending>")]
     public async Task<ActionResult> Edit(TeamViewModel model)
     {
         if (model != null)
@@ -319,7 +316,7 @@ public class TeamController(
     }
 
     private static IEnumerable<MultiSelectViewModel> GetOrgChart(
-        IList<Unit> units,
+        IEnumerable<Unit> units,
         IList<Department> department,
         IEnumerable<Team> teams)
     {

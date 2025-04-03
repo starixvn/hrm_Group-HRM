@@ -1,11 +1,10 @@
-﻿using GO.UserControl.Client.Core.Session;
-using HRM.Core.Constants;
-
-namespace HRM.Services.Implement;
+﻿namespace HRM.Services.Implement;
 
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Core.Constants;
 using Criteria.Department;
+using GO.UserControl.Client.Core.Session;
 using HRM.Core.Models;
 using HRM.Core.Services;
 using HRM.Repositories.Interfaces;
@@ -29,11 +28,9 @@ public class DepartmentService(
 
     public async Task<IList<Department>> GetDepartmentAsync(bool? isActive = true)
     {
-        var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
         var criteria = new GetDepartmentByActiveCriteria
         {
-            IsActive = isActive,
-            CompanyId = companyId
+            IsActive = isActive
         };
         var departments = await departmentRepository.GetByActiveAsync(criteria);
 
