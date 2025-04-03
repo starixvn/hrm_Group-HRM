@@ -10,10 +10,10 @@ import '../../shared/employee.search.in.team';
 import { axiosError, alert, initDatepicker, resolveClientUrl, floatThead } from '../../shared/common.functions';
 
 const hospitalizationLeaveBalance = (function ($) {
-    function getSection() {
+    function getOrgChart() {
         axios({
             method: 'GET',
-            url: resolveClientUrl('Section/GetOrgChart'),
+            url: resolveClientUrl('Team/GetOrgChart'),
             headers: { 'X-Requested-With': 'XMLHttpRequest' }
         }).then(response => {
             $('#Team').multiSelectTreeView({
@@ -222,7 +222,7 @@ const hospitalizationLeaveBalance = (function ($) {
     }
 
     function init() {
-        getSection();
+        getOrgChart();
         initDatepicker();
         initSubmitFilterEvent();
         initExportExcelEvent();

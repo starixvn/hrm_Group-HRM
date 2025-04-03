@@ -9,9 +9,9 @@ import '../../shared/multiselect-tree-view';
 import '../../shared/employee.search.in.team';
 
 const annualLeaveBalance = (function ($) {
-    function getSection() {
+    function getOrgChart() {
         axios({
-            url: resolveClientUrl('Section/GetOrgChart'),
+            url: resolveClientUrl('Team/GetOrgChart'),
             method: 'GET',
             headers: { 'X-Requested-With': 'XMLHttpRequest' }
         }).then(response => {
@@ -226,7 +226,7 @@ const annualLeaveBalance = (function ($) {
     }
 
     function init() {
-        getSection();
+        getOrgChart();
         initDatepicker();
         initSubmitFilterEvent();
         initExportExcelEvent();

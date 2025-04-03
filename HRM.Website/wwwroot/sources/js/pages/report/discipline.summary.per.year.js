@@ -51,7 +51,7 @@ import {
         $disciplineTable = $('#discipline-summary-table');
         initDatepicker();
         axios({
-            url: resolveClientUrl('Section/GetOrgChart'),
+            url: resolveClientUrl('Team/GetOrgChart'),
             method: 'GET',
             headers: { 'X-Requested-With': 'XMLHttpRequest' }
         }).then(response => {

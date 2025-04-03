@@ -42,7 +42,7 @@ const workingCalendarModule = (function ($) {
     function initModule() {
         const promises = [
             axios({
-                url: resolveClientUrl('Section/GetOrgChart'),
+                url: resolveClientUrl('Team/GetOrgChart'),
                 method: 'GET',
                 headers: { 'X-Requested-With': 'XMLHttpRequest' }
             }),

@@ -346,7 +346,7 @@ import {
         initEventForDateRangeDropdown();
         axios({
             method: 'GET',
-            url: resolveClientUrl('Section/GetOrgChart'),
+            url: resolveClientUrl('Team/GetOrgChart'),
             headers: { 'X-Requested-With': 'XMLHttpRequest' }
         }).then(response => {
             $('#Team').multiSelectTreeView({

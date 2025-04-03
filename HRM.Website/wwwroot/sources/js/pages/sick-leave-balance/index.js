@@ -10,9 +10,9 @@ import '../../shared/employee.search.in.team';
 import { axiosError, alert, initDatepicker, resolveClientUrl, floatThead } from '../../shared/common.functions';
 
 const sickLeaveBalance = (function ($) {
-    function getSection() {
+    function getOrgChart() {
         axios({
-            url: resolveClientUrl('Section/GetOrgChart'),
+            url: resolveClientUrl('Team/GetOrgChart'),
             method: 'GET',
             headers: { 'X-Requested-With': 'XMLHttpRequest' }
         }).then(response => {
@@ -222,7 +222,7 @@ const sickLeaveBalance = (function ($) {
     }
 
     function init() {
-        getSection();
+        getOrgChart();
         initDatepicker();
         initSubmitFilterEvent();
         initExportExcelEvent();
