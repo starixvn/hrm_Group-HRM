@@ -61,8 +61,7 @@ public class DepartmentController(
             Name = model.Name,
             IsActive = model.IsActive,
             UnitId = model.UnitId,
-            ModifiedBy = session.UserId,
-            CompanyId = CurrentCompanyId
+            ModifiedBy = session.UserId
         };
         commandResult = await baseService.ExecuteNonQueryAsync(criteria);
 

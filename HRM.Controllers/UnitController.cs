@@ -51,8 +51,7 @@ public class UnitController(
             Code = model.Code,
             Name = model.Name,
             IsActive = model.IsActive,
-            CreatedBy = session.UserId,
-            CompanyId = CurrentCompanyId
+            CreatedBy = session.UserId
         };
         commandResult = await unitService.CreateAsync(criteria);
         return new JsonResult(commandResult);
