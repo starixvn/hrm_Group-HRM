@@ -50,11 +50,11 @@ public class ExportExcelService(IWebHostEnvironment hostingEnvironment) : IExpor
             var row = sheet.GetRow(rowIndex);
 
             row.GetCell(0).SetCellValue(index + 1);
-            row.GetCell(1).SetCellValue(item.Code);
-            row.GetCell(2).SetCellValue(item.FullName);
-            row.GetCell(3).SetCellValue(item.Nickname);
-            row.GetCell(4).SetCellValue(item.Department);
-            row.GetCell(5).SetCellValue(item.Team);
+            row.GetCell(1).SetCellValue(item.Department);
+            row.GetCell(2).SetCellValue(item.Team);
+            row.GetCell(3).SetCellValue(item.Code);
+            row.GetCell(4).SetCellValue(item.FullName);
+            row.GetCell(5).SetCellValue(item.Nickname);
             row.GetCell(6).SetCellValue(item.FromDate.ToDateMonthYearFormatedDate());
             row.GetCell(7).SetCellValue(item.ToDate.ToDateMonthYearFormatedDate());
             row.GetCell(8).SetCellValue(item.Remark);

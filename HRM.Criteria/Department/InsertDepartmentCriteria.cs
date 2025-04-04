@@ -14,8 +14,6 @@ public class InsertDepartmentCriteria : CriteriaBase
 
     public int ModifiedBy { get; set; }
 
-    public short CompanyId { get; set; }
-
     public override string GetSettingKey()
     {
         return "Department_Insert";
