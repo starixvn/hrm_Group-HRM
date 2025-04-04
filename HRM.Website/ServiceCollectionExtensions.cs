@@ -231,5 +231,6 @@ public static class ServiceCollectionExtensions
         services.AddScoped<Services.Interfaces.FnB.IUnitService, Services.Implement.FnB.UnitService>();
         services.AddScoped<Services.Interfaces.FnB.IDepartmentService, Services.Implement.FnB.DepartmentService>();
         services.AddScoped<Services.Interfaces.FnB.IShiftService, Services.Implement.FnB.ShiftService>();
+        services.AddScoped<Services.Interfaces.FnB.ISectionService, Services.Implement.FnB.SectionService>();
     }
 }
