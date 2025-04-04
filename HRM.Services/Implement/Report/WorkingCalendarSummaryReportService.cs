@@ -85,7 +85,6 @@ public class WorkingCalendarSummaryReportService(
             template.Cells[startBodyRow, 1, startBodyRow, totalFixedColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, totalFixedColumns]);
 
             worksheet.Cells[rowIndex, colIndex++].Value = rowNum++;
-            worksheet.Cells[rowIndex, colIndex++].Value = employee.DepartmentCode;
             worksheet.Cells[rowIndex, colIndex++].Value = employee.Department;
             worksheet.Cells[rowIndex, colIndex++].Value = employee.Team;
             worksheet.Cells[rowIndex, colIndex++].Value = employee.Code;

@@ -128,7 +128,6 @@ public class ManpowerReportService(
             template.Cells[startBodyRow, 1, startBodyRow, totalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, totalColumns]);
 
             worksheet.Cells[rowIndex, colIndex++].Value = rowNum++;
-            worksheet.Cells[rowIndex, colIndex++].Value = manpower.DepartmentCode;
             worksheet.Cells[rowIndex, colIndex++].Value = manpower.Department;
             worksheet.Cells[rowIndex, colIndex++].Value = manpower.TeamName;
             worksheet.Cells[rowIndex, colIndex++].Value = manpower.TotalExpat;
@@ -179,7 +178,6 @@ public class ManpowerReportService(
         var colIndex = 1;
         var month = 1;
         worksheet.Cells[rowIndex, colIndex++].Value = rowNum;
-        worksheet.Cells[rowIndex, colIndex++].Value = manpower.DepartmentCode;
         worksheet.Cells[rowIndex, colIndex++].Value = manpower.Department;
         worksheet.Cells[rowIndex, colIndex++].Value = manpower.TeamName;
         worksheet.Cells[rowIndex, colIndex++].Value = manpower.ProbationResigned;

@@ -6,7 +6,6 @@ public class YearlyOvertime
     public string FullName { get; set; }
     public string Nickname { get; set; }
     public string Team { get; set; }
-    public string DepartmentCode { get; set; }
     public string Department { get; set; }
     public float Jan { get; set; }
     public float Feb { get; set; }
