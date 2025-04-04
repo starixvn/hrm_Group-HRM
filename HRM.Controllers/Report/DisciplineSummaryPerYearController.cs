@@ -8,6 +8,7 @@ using Core;
 using Core.Constants;
 using Core.Filters;
 using GO.UserControl.Client.Core.Enumerables;
+using GO.UserControl.Client.Core.Services;
 using GO.UserControl.Client.Core.Session;
 using HRM.Core.Services;
 using HRM.Criteria.Report;
@@ -21,6 +22,7 @@ using Services.Interfaces;
 [HrmPermission(Policy.Read, FunctionKey.DisciplineSummaryPerYear)]
 public class DisciplineSummaryPerYearController(
     IUserControlSession session,
+    IRoleService roleService,
     IBaseService baseService,
     IEmployeeService employeeService,
     IExportDisciplineSummaryPerYearService exportService,
@@ -62,6 +64,7 @@ public class DisciplineSummaryPerYearController(
 
     private async Task<IList<DisciplineSummaryPerYear>> GetDisciplineSummary(DisciplineSummaryPerYearViewModel model)
     {
+        var roles = await roleService.GetByUserIdAsync(session.UserId);
         var criteria = new GetDisciplineSummaryPerYearCriteria
         {
             CompanyId = CurrentCompanyId,
@@ -71,7 +74,8 @@ public class DisciplineSummaryPerYearController(
             IsLocal = model.IsLocal,
             EmployeeId = model.EmployeeId,
             ApproverId = session.UserId,
-            IsShowAll = model.IsShowAll
+            IsShowAll = model.IsShowAll,
+            RoleIds = string.Join(",", roles.Select(x => x.RoleId))
         };
         var (employees, disciplines) = await baseService.FetchMultipleAsync<DisciplineSummaryPerYear, DisciplineSummaryPerYearDetail>(criteria);
         var disciplineSummaryPerYears = employees.ToList();

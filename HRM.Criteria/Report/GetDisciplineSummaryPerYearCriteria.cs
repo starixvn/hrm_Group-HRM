@@ -13,6 +13,7 @@ public class GetDisciplineSummaryPerYearCriteria : CriteriaBase
     public bool? IsLocal { get; set; }
     public int ApproverId { get; set; }
     public bool IsShowAll { get; set; }
+    public string RoleIds { get; set; }
 
     public override bool IsValid() => CompanyId > 0 && FromDate <= ToDate && ApproverId > 0;
 

@@ -52,8 +52,8 @@ public class ExportDisciplineSummaryPerYearService(IWebHostEnvironment hostingEn
             template.Cells[BodyRowIndex, 1, BodyRowIndex, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
 
             worksheet.Cells[rowIndex, colIndex++].Value = rowNum++;
-            worksheet.Cells[rowIndex, colIndex++].Value = employee.Department;
-            worksheet.Cells[rowIndex, colIndex++].Value = employee.Team;
+            worksheet.Cells[rowIndex, colIndex++].Value = employee.DepartmentName;
+            worksheet.Cells[rowIndex, colIndex++].Value = employee.TeamName;
             worksheet.Cells[rowIndex, colIndex++].Value = employee.Code;
             worksheet.Cells[rowIndex, colIndex++].Value = employee.FullName;
             worksheet.Cells[rowIndex, colIndex++].Value = employee.Nickname;
