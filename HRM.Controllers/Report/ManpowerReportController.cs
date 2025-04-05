@@ -12,8 +12,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace HRM.Controllers.Report;
 
 public class ManpowerReportController(
-    IUserControlSession userControlSession,
-    IManpowerReportService reportService) : BaseController(userControlSession)
+    IUserControlSession session,
+    IManpowerReportService reportService) : BaseController(session)
 {
     [HrmPermission(Policy.Read, FunctionKey.ManpowerReport)]
     public async Task<IActionResult> Manpower(int? year)

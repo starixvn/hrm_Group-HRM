@@ -2,8 +2,10 @@
 
 public class ManpowerModel
 {
-    public string Department { get; set; }
+    public string DepartmentCode { get; set; }
+    public string DepartmentName { get; set; }
 
+    public string TeamCode { get; set; }
     public string TeamName { get; set; }
 
     public int ProbationResigned { get; set; }

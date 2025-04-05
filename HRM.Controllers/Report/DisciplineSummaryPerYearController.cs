@@ -45,7 +45,7 @@ public class DisciplineSummaryPerYearController(
     [HttpPost]
     public async Task<IActionResult> GetDisciplineSummaryGrid(DisciplineSummaryPerYearViewModel model)
     {
-        var employees = await GetDisciplineSummary(model);
+        var employees = await GetDisciplineSummaryAsync(model);
         ViewBag.FromYear = model.FromYear;
         ViewBag.ToYear = model.ToYear;
         ViewBag.EnableGroupDate = await commonDataService.IsEnableGroupDateAsync();
@@ -57,12 +57,12 @@ public class DisciplineSummaryPerYearController(
     public async Task<IActionResult> ExportExcel(DisciplineSummaryPerYearViewModel model)
     {
         var enableGroupDate = await commonDataService.IsEnableGroupDateAsync();
-        var employees = await GetDisciplineSummary(model);
+        var employees = await GetDisciplineSummaryAsync(model);
         var bytes = exportService.Export(model.FromYear, model.ToYear, employees, enableGroupDate);
         return File(bytes, MimeType.XLSX, "5_Years_Discipline_Summary.xlsx");
     }
 
-    private async Task<IList<DisciplineSummaryPerYear>> GetDisciplineSummary(DisciplineSummaryPerYearViewModel model)
+    private async Task<IList<DisciplineSummaryPerYear>> GetDisciplineSummaryAsync(DisciplineSummaryPerYearViewModel model)
     {
         var roles = await roleService.GetByUserIdAsync(session.UserId);
         var criteria = new GetDisciplineSummaryPerYearCriteria

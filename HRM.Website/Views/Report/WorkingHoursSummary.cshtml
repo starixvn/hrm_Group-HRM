@@ -184,8 +184,8 @@
                 };
                 <tr>
                     <td>@(index++)</td>
-                    <td class="align-left">@item.Department</td>
-                    <td class="align-left">@item.Team</td>
+                    <td class="align-left">@item.DepartmentName</td>
+                    <td class="align-left">@item.TeamName</td>
                     <td>@item.Code</td>
                     <td class="align-left">@item.FullName</td>
                     <td class="align-left">@item.Nickname</td>
@@ -230,6 +230,6 @@
     }
     else
     {
-       @Html.Raw(RazorHelpers.DisplayNoInformation(colspan: 31))
+       @Html.Raw(RazorHelpers.DisplayNoInformation(colspan: 30))
     }
 </table>

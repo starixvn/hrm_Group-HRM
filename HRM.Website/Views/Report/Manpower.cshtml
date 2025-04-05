@@ -85,7 +85,7 @@
             {
         <tr>
             <td>@(index++)</td>
-            <td class="align-left">@manpower.Department</td>
+            <td class="align-left">@manpower.DepartmentName</td>
             <td class="align-left">@manpower.TeamName</td>
             <td class="align-right">@manpower.ProbationResigned</td>
             <td class="align-right">@manpower.ConfirmedResigned</td>
@@ -144,12 +144,12 @@
         }
         else
         {
-            @Html.Raw(RazorHelpers.DisplayNoInformation(colspan: 42))
+            @Html.Raw(RazorHelpers.DisplayNoInformation(colspan: 55))
         }
     </tbody>
     <tfoot>
         <tr class="footer summary">
-            <td colspan="4" class="align-right">
+            <td colspan="3" class="align-right">
                 @Labels.Total
             </td>
             <td class="align-right">
@@ -236,5 +236,4 @@
             @display
         </td>
     }
-    
 }

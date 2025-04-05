@@ -28,8 +28,8 @@ public partial class EmployeeWorkingHoursService : IEmployeeWorkingHoursService
     public byte[] ExportWeeklyWorkingHours(DateTime fromDate, DateTime toDate, IEnumerable<MonthlyWorking> monthlyWorkings)
     {
         var templatePath = Path.Combine(env.ContentRootPath, "ExcelTemplates/WeeklyWorkingHours.xlsx");
-        const ushort StartDateColumn = 9;
-        TotalColumns = 15;
+        const ushort StartDateColumn = 8;
+        TotalColumns = 14;
 
         using var templatePackage = new ExcelPackage(new FileInfo(templatePath));
         using var xlPackage = new ExcelPackage();
@@ -67,7 +67,7 @@ public partial class EmployeeWorkingHoursService : IEmployeeWorkingHoursService
             templateWorksheet.Cells[3, 1, 3, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
 
             worksheet.Cells[rowIndex, colIndex++].Value = rowIndex - 2;
-            worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Department;
+            worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.DepartmentName;
             worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Team.Name;
             worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Code;
             worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.FullName;
@@ -82,7 +82,7 @@ public partial class EmployeeWorkingHoursService : IEmployeeWorkingHoursService
         }
 
         worksheet.Cells.AutoFitColumns();
-        worksheet.View.FreezePanes(3, 8);
+        worksheet.View.FreezePanes(3, 7);
 
         return xlPackage.GetAsByteArray();
     }
@@ -90,7 +90,7 @@ public partial class EmployeeWorkingHoursService : IEmployeeWorkingHoursService
     public byte[] ExportDailyWorkingHours(DateTime date, IEnumerable<MonthlyWorking> monthlyWorkings)
     {
         var templatePath = Path.Combine(env.ContentRootPath, "ExcelTemplates/DailyWorkingHours.xlsx");
-        TotalColumns = 15;
+        TotalColumns = 7;
 
         using var templatePackage = new ExcelPackage(new FileInfo(templatePath));
         using var xlPackage = new ExcelPackage();
@@ -98,31 +98,29 @@ public partial class EmployeeWorkingHoursService : IEmployeeWorkingHoursService
         var templateWorksheet = templatePackage.Workbook.Worksheets[0];
         var worksheet = xlPackage.Workbook.Worksheets.Add(Labels.AttendanceDailyDetail);
         var rowIndex = 1;
-        var colIndex = 1;
 
         // title
-        templateWorksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
-        worksheet.Cells[rowIndex, colIndex].Value = Labels.AttendanceDailyDetail;
+        templateWorksheet.Cells[rowIndex, 1, rowIndex, TotalColumns].Copy(worksheet.Cells[rowIndex, 1, rowIndex, TotalColumns]);
+        worksheet.Cells[rowIndex, 1].Value = Labels.AttendanceDailyDetail;
         rowIndex++;
 
         // header
-        templateWorksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
-        colIndex = 8;
-        worksheet.Cells[rowIndex, colIndex].Value = date.ToString("dd MMM, yyyy (ddd)");
+        templateWorksheet.Cells[rowIndex, 1, rowIndex, TotalColumns].Copy(worksheet.Cells[rowIndex, 1, rowIndex, TotalColumns]);
+        worksheet.Cells[rowIndex, TotalColumns].Value = date.ToString("dd MMM, yyyy (ddd)");
         if (date.DayOfWeek is DayOfWeek.Saturday or DayOfWeek.Sunday)
         {
-            worksheet.Cells[rowIndex, colIndex].Style.Font.Color.SetColor(redColor);
+            worksheet.Cells[rowIndex, TotalColumns].Style.Font.Color.SetColor(redColor);
         }
 
         // data
         rowIndex++;
         foreach (var monthlyWorking in monthlyWorkings)
         {
-            colIndex = 1;
+            var colIndex = 1;
             templateWorksheet.Cells[3, 1, 3, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
 
             worksheet.Cells[rowIndex, colIndex++].Value = rowIndex - 2;
-            worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Department;
+            worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.DepartmentName;
             worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Team.Name;
             worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Code;
             worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.FullName;

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Core;
+using Core.Constants;
 using Criteria.AnnualLeave;
 using GO.UserControl.Client.Core.Session;
 using HRM.Criteria.Report;
@@ -54,7 +55,7 @@ public class ExportLeaveSummaryController(
 
         var data = await exportReportService.Export(leaveSummaries, model.Year, model.LeaveType, model.Period, CurrentCompanyId);
         var fileName = $"UnpaidLeaveSummary_{DateTimeOffset.Now.DateTime.ToClientTimeZone():yyyyMMdd}.xls";
-        return File(data, "application/vnd.ms-excel", fileName);
+        return File(data, MimeType.XLS, fileName);
     }
 
     private GetUnpaidLeaveCriteria CreateUnpaidLeaveCriteria(LeaveSummaryViewModel model)

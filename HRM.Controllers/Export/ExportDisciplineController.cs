@@ -4,7 +4,6 @@ using GO.UserControl.Client.Core.Services;
 using GO.UserControl.Client.Core.Session;
 using HRM.Core.Constants;
 using HRM.Criteria.Discipline;
-using HRM.Resources;
 using HRM.Services.ExportExcel.Discipline;
 using HRM.Services.Interfaces;
 using HRM.ViewModels.Discipline;
@@ -39,9 +38,7 @@ public class ExportDisciplineController(
 
         var disciplines = await disciplineService.GetDisciplineSummaryAsync(criteria);
         var data = exportDisciplineSummaryService.Export(criteria, disciplines);
-        var fileName = $"{Labels.DisciplineSummaryReportName}.xls";
-        fileName = fileName.Replace(" ", "");
-        return File(data, MimeType.XLS, fileName);
+        return File(data, MimeType.XLS, "DisciplineSummaryReport.xls");
     }
 
     public async Task<ActionResult> ExportDisciplineDetailReport(DisciplineSummaryViewModel model)
@@ -64,9 +61,6 @@ public class ExportDisciplineController(
 
         var disciplines = await disciplineService.GetDisciplineDetailAsync(criteria);
         var data = exportDisciplineDetailService.Export(criteria, disciplines);
-        var fileName = $"{Labels.DisciplineDetailReportName}.xls";
-
-        fileName = fileName.Replace(" ", "");
-        return File(data, MimeType.XLS, fileName);
+        return File(data, MimeType.XLS, "DisciplineDetailReport.xls");
     }
 }

@@ -68,7 +68,7 @@ public class WorkingHoursSummaryReportService(
         GetWorkingHoursSummaryParam param,
         IEnumerable<WorkingHoursSummary> workingHours)
     {
-        const byte TotalColumns = 31;
+        const byte TotalColumns = 30;
         const byte TotalHeaderRows = 2;
         const byte StartBodyRow = 4;
         var rowIndex = 1;
@@ -94,8 +94,8 @@ public class WorkingHoursSummaryReportService(
             template.Cells[StartBodyRow, 1, StartBodyRow, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
 
             worksheet.Cells[rowIndex, colIndex++].Value = rowNum++;
-            worksheet.Cells[rowIndex, colIndex++].Value = item.Department;
-            worksheet.Cells[rowIndex, colIndex++].Value = item.Team;
+            worksheet.Cells[rowIndex, colIndex++].Value = item.DepartmentName;
+            worksheet.Cells[rowIndex, colIndex++].Value = item.TeamName;
             worksheet.Cells[rowIndex, colIndex++].Value = item.Code;
             worksheet.Cells[rowIndex, colIndex++].Value = item.FullName;
             worksheet.Cells[rowIndex, colIndex++].Value = item.Nickname;
@@ -130,7 +130,7 @@ public class WorkingHoursSummaryReportService(
             rowIndex++;
         }
 
-        const byte FreezeColumnIndex = 8;
+        const byte FreezeColumnIndex = 7;
         worksheet.Cells.AutoFitColumns(MinimumWidth, MaximumWidth);
         worksheet.View.FreezePanes(StartBodyRow, FreezeColumnIndex);
     }
@@ -141,7 +141,7 @@ public class WorkingHoursSummaryReportService(
         GetWorkingHoursSummaryParam param,
         IEnumerable<DailyOvertimeDetails> dailyOvertimes)
     {
-        const byte TotalColumns = 18;
+        const byte TotalColumns = 17;
         const byte StartBodyRow = 3;
         var rowIndex = 1;
         var colIndex = 1;
@@ -168,8 +168,8 @@ public class WorkingHoursSummaryReportService(
 
             worksheet.Cells[rowIndex, colIndex++].Value = rowNum++;
             worksheet.Cells[rowIndex, colIndex++].Value = overtime.WorkDate;
-            worksheet.Cells[rowIndex, colIndex++].Value = overtime.Department;
-            worksheet.Cells[rowIndex, colIndex++].Value = overtime.Team;
+            worksheet.Cells[rowIndex, colIndex++].Value = overtime.DepartmentName;
+            worksheet.Cells[rowIndex, colIndex++].Value = overtime.TeamName;
             worksheet.Cells[rowIndex, colIndex++].Value = overtime.Code;
             worksheet.Cells[rowIndex, colIndex++].Value = overtime.FullName;
             worksheet.Cells[rowIndex, colIndex++].Value = overtime.Nickname;

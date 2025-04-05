@@ -7,7 +7,8 @@ public class MealAllowanceSummary
     public string Code { get; set; }
     public string FullName { get; set; }
     public string NickName { get; set; }
-    public int TeamId { get; set; }
-    public string Team { get; set; }
-    public string Department { get; set; }
+    public string TeamCode { get; set; }
+    public string TeamName { get; set; }
+    public string DepartmentCode { get; set; }
+    public string DepartmentName { get; set; }
 }

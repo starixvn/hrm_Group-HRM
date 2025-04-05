@@ -137,8 +137,8 @@
                 rowIndex++;
                 <tr>
                     <td>@rowIndex</td>
-                    <td class="align-left">@overtime.Department</td>
-                    <td class="align-left">@overtime.Team</td>
+                    <td class="align-left">@overtime.DepartmentName</td>
+                    <td class="align-left">@overtime.TeamName</td>
                     <td class="align-left">@overtime.FullName</td>
                     <td class="align-left">@overtime.Nickname</td>
                     <td class="align-right">
@@ -260,12 +260,12 @@
         }
         else
         {
-            @Html.Raw(RazorHelpers.DisplayNoInformation(19))
+            @Html.Raw(RazorHelpers.DisplayNoInformation(18))
         }
     </tbody>
     <tfoot>
         <tr class="summary">
-            <td colspan="6" class="align-right">@Labels.TotalHours:</td>
+            <td colspan="5" class="align-right">@Labels.TotalHours:</td>
             <td class="align-right">@Model.Overtimes.Sum(x => x.Jan)</td>
             <td class="align-right">@Model.Overtimes.Sum(x => x.Feb)</td>
             <td class="align-right">@Model.Overtimes.Sum(x => x.Mar)</td>

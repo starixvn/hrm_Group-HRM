@@ -77,7 +77,7 @@
                 index++;
                 <tr>
                     <td>@index</td>
-                    <td class="align-left">@manpower.Department</td>
+                    <td class="align-left">@manpower.DepartmentName</td>
                     <td class="align-left">@manpower.TeamName</td>
                     <td class="align-right">@manpower.TotalExpat</td>
                     <td class="align-right">@manpower.TotalLocal</td>
@@ -97,7 +97,7 @@
         }
         else
         {
-            @Html.Raw(RazorHelpers.DisplayNoInformation(colspan: 15))
+            @Html.Raw(RazorHelpers.DisplayNoInformation(colspan: 16))
         }
     </tbody>
     <tfoot>
@@ -110,7 +110,7 @@
                     staff = Model.Manpowers.Sum(t => t.Staff),
                     worker = Model.Manpowers.Sum(t => t.Worker);
             }
-            <td colspan="4" class="align-right">
+            <td colspan="3" class="align-right">
                 @Labels.Total
             </td>
             <td class="align-right">@Model.Manpowers.Sum(t => t.TotalExpat)</td>

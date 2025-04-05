@@ -1,10 +1,10 @@
 ﻿namespace HRM.Controllers.Export;
 
 using System.Threading.Tasks;
+using Core.Constants;
 using Criteria.Report;
 using GO.UserControl.Client.Core.Session;
 using Microsoft.AspNetCore.Mvc;
-using Resources;
 using Services.ExportExcel.WeekendLeave;
 using Services.Interfaces;
 using ViewModels.Report;
@@ -32,9 +32,7 @@ public class ExportWeekendLeaveController(
         var weekendLeaves = await reportService.GetWeekendLeaveSummaryAsync(criteria);
         var data = exportWeekendLeaveSummaryService.Export(criteria, weekendLeaves);
 
-        var fileName = $"{Labels.WeekendLeaveSummary}.xls";
-
-        return File(data, "application/vnd.ms-excel", fileName);
+        return File(data, MimeType.XLS, "WeekendLeaveSummary.xls");
     }
 
     public async Task<ActionResult> ExportWeekendLeaveDetailReport(WeekendLeaveViewModel model)
@@ -52,7 +50,7 @@ public class ExportWeekendLeaveController(
 
         var weekendLeaveDetails = await reportService.GetWeekendLeaveDetailAsync(criteria);
         var data = exportWeekendLeaveDetailService.Export(criteria, weekendLeaveDetails);
-        var fileName = $"{Labels.WeekendLeaveDetail}.xls";
-        return File(data, "application/vnd.ms-excel", fileName);
+
+        return File(data, MimeType.XLS, "WeekendLeaveDetail.xls");
     }
 }

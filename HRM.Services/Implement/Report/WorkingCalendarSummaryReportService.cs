@@ -50,8 +50,8 @@ public class WorkingCalendarSummaryReportService(
         var template = templatePackage.Workbook.Worksheets[0];
         var worksheet = xlPackage.Workbook.Worksheets.Add("Working Calendar Summary");
         const byte startBodyRow = 3;
-        const byte totalFixedColumns = 7;
-        const byte startDateColumn = 8;
+        const byte totalFixedColumns = 6;
+        const byte startDateColumn = 7;
         var rowIndex = 1;
         var colIndex = 1;
 
@@ -85,8 +85,8 @@ public class WorkingCalendarSummaryReportService(
             template.Cells[startBodyRow, 1, startBodyRow, totalFixedColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, totalFixedColumns]);
 
             worksheet.Cells[rowIndex, colIndex++].Value = rowNum++;
-            worksheet.Cells[rowIndex, colIndex++].Value = employee.Department;
-            worksheet.Cells[rowIndex, colIndex++].Value = employee.Team;
+            worksheet.Cells[rowIndex, colIndex++].Value = employee.DepartmentName;
+            worksheet.Cells[rowIndex, colIndex++].Value = employee.TeamName;
             worksheet.Cells[rowIndex, colIndex++].Value = employee.Code;
             worksheet.Cells[rowIndex, colIndex++].Value = employee.FullName;
             worksheet.Cells[rowIndex, colIndex++].Value = employee.Nickname;

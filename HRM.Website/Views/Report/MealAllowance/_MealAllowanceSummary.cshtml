@@ -1,8 +1,7 @@
-﻿@using HRM.Resources
+﻿@using HRM.Models.Report.MealAllowance
+@using HRM.Resources
 @using HRM.Website.Helper
-@model IEnumerable<HRM.Models.Report.MealAllowance.MealAllowanceSummary>
-
-
+@model IEnumerable<MealAllowanceSummary>
 
 <table id="data" class="table table-custom">
     <thead>
@@ -56,8 +55,8 @@
                 index++;
             <tr>
                 <td>@index</td>
-                <td class="align-left">@summary.Department</td>
-                <td class="align-left">@summary.Team</td>
+                <td class="align-left">@summary.DepartmentName</td>
+                <td class="align-left">@summary.TeamName</td>
                 <td class="align-center">@summary.Code</td>
                 <td class="align-left">@summary.FullName</td>
                 <td class="align-left">@summary.NickName</td>
@@ -77,7 +76,7 @@
     }
     else
     {
-        @Html.Raw(RazorHelpers.DisplayNoInformation(colspan: 11))
+        @Html.Raw(RazorHelpers.DisplayNoInformation(colspan: 9))
     }
 </table>
 <div id="dialog-meal-allowance-details"></div>
