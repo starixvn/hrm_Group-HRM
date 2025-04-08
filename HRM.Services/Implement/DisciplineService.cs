@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using GO.UserControl.Client.Core.Session;
+using HRM.Core;
 using HRM.Core.Constants;
 using HRM.Core.Services;
 using HRM.Criteria.Discipline;
@@ -35,6 +36,11 @@ public class DisciplineService(
         if (criteria != null && criteria.IsValid())
         {
             disciplines = await disciplineRepository.GetDisciplineDetailAsync(criteria);
+            foreach (var discipline in disciplines)
+            {
+                discipline.CheckIn = discipline.CheckIn?.ToClientTimeZone() ?? discipline.CheckIn;
+                discipline.CheckOut = discipline.CheckOut?.ToClientTimeZone() ?? discipline.CheckOut;
+            }
         }
 
         return disciplines;
