@@ -15,7 +15,6 @@ const Row = ({ rowIndex, item, onDelete }) => {
         <tr id={`row_${item.id}`}>
             <td>{rowIndex}</td>
             <td>{item.code}</td>
-            <td>{item.name}</td>
             <td>
                 {item.isActive && <i className="fa fa-check fa-lg icon-check" />}
             </td>

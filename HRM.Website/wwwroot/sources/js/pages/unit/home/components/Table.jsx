@@ -8,7 +8,6 @@ const Table = ({ data, onDelete }) => {
             <thead>
                 <tr>
                     <th>#</th>
-                    <th>Code</th>
                     <th>Unit</th>
                     <th>Active</th>
                     {

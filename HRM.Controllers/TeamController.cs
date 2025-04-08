@@ -324,7 +324,7 @@ public class TeamController(
         var orgCharts = units.Select(u => new MultiSelectViewModel
         {
             Id = u.Id,
-            Text = u.Name,
+            Text = u.Code,
             Items = department.Where(d => d.Unit != null && d.Unit.Id == u.Id).Select(d => new MultiSelectViewModel
             {
                 Id = d.Id,

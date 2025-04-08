@@ -43,4 +43,6 @@ public class Team : EntityBase<int>
     public Department Department { get; set; } = new();
 
     public int? PICEmpId { get; set; }
+
+    public string PICNickName { get; set; }
 }
