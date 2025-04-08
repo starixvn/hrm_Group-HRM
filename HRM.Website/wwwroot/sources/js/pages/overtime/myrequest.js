@@ -16,8 +16,8 @@ $(document).ready(function () {
             }).then(res => {
                 response($.map(res.data, function (item) {
                     return {
-                        label: item.NickName + ' (' + item.FullName + ')',
-                        value: item.OwnerId
+                        label: item.nickName + ' (' + item.fullName + ')',
+                        value: item.ownerId
                     };
                 }));
             }).catch(axiosError);
