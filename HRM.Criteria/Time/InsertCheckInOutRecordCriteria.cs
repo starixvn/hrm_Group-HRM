@@ -8,6 +8,7 @@ public class InsertCheckInOutRecordCriteria : CriteriaBase
     public int EmpId { get; set; }
 
     public DateTime RecordTime { get; set; }
+    public DateTime ClientRecordTime { get; set; }
 
     public byte InOutType { get; set; }
 

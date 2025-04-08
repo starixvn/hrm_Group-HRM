@@ -102,6 +102,7 @@ public class TimeController(
             {
                 EmpId = employee.EmpId,
                 RecordTime = DateTimeOffset.Now.DateTime,
+                ClientRecordTime = DateTimeOffset.Now.DateTime.ToClientTimeZone(),
                 InOutType = model.InOutType,
                 IPAddress = GetClientIp(HttpContext),
                 Platform = HttpContext.Request.Headers["User-Agent"].ToString()
@@ -147,6 +148,7 @@ public class TimeController(
         {
             EmpId = session.UserId,
             RecordTime = DateTimeOffset.Now.DateTime,
+            ClientRecordTime = DateTimeOffset.Now.DateTime.ToClientTimeZone(),
             InOutType = 0,
             IPAddress = GetClientIp(HttpContext),
             Platform = HttpContext.Request.Headers["User-Agent"].ToString()
@@ -162,6 +164,7 @@ public class TimeController(
         {
             EmpId = session.UserId,
             RecordTime = DateTimeOffset.Now.DateTime,
+            ClientRecordTime = DateTimeOffset.Now.DateTime.ToClientTimeZone(),
             InOutType = 1,
             IPAddress = GetClientIp(HttpContext),
             Platform = HttpContext.Request.Headers["User-Agent"].ToString()
