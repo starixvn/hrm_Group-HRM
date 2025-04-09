@@ -10,7 +10,8 @@ public class TeamSupervisorReportModel
 
     public string Name { get; set; }
 
-    public string Department { get; set; }
+    public string DepartmentCode { get; set; }
+    public string DepartmentName { get; set; }
 
     public IList<SupervisorModel> Supervisors { get; set; } = new List<SupervisorModel>();
 }

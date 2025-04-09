@@ -84,12 +84,12 @@ public class ReportService(
         return supervisors;
     }
 
-    public async Task<IList<TeamSupervisorReportModel>> GetTeamSupervisor(GetTeamSupervisorCriteria criteria)
+    public async Task<IEnumerable<TeamSupervisorReportModel>> GetTeamSupervisorAsync(GetTeamSupervisorCriteria criteria)
     {
-        IList<TeamSupervisorReportModel> supervisors = null;
+        IEnumerable<TeamSupervisorReportModel> supervisors = null;
         if (criteria != null && criteria.IsValid())
         {
-            supervisors = await reportRepository.GetTeamSupervisor(criteria);
+            supervisors = await reportRepository.GetTeamSupervisorAsync(criteria);
         }
 
         return supervisors;

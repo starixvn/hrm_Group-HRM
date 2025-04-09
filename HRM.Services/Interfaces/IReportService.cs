@@ -23,7 +23,7 @@ public interface IReportService
 
     Task<IList<SupervisorReportModel>> GetSupervisorReport(GetSupervisorReportCriteria criteria);
 
-    Task<IList<TeamSupervisorReportModel>> GetTeamSupervisor(GetTeamSupervisorCriteria criteria);
+    Task<IEnumerable<TeamSupervisorReportModel>> GetTeamSupervisorAsync(GetTeamSupervisorCriteria criteria);
 
     Task<IList<WeekendLeaveSummary>> GetWeekendLeaveSummaryAsync(GetWeekendLeaveSummaryCriteria criteria);
 

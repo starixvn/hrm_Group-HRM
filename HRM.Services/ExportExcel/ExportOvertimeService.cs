@@ -24,7 +24,6 @@ public class ExportOvertimeService(IWebHostEnvironment hostingEnvironment) : IEx
         const byte startTotal = 8;
         const byte lineOfTotal = 4;
 
-        ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
         var sheetName = "Employee Overtime Report";
         var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, "ExcelTemplates/EmployeeOvertimeTemplate.xlsx");
 

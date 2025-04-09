@@ -35,9 +35,10 @@ public class ExportSupervisorController(
     {
         var criteria = new GetTeamSupervisorCriteria
         {
+            CompanyId = CurrentCompanyId,
             TeamIds = model.TeamIds
         };
-        var supervisors = await reportService.GetTeamSupervisor(criteria);
+        var supervisors = await reportService.GetTeamSupervisorAsync(criteria);
         var bytes = exportSupervisorService.ExportTeamSupervisor(supervisors);
         var fileName = $"TeamSupervisor_{DateTimeOffset.Now.DateTime.ToClientTimeZone():yyyyMMdd}.xlsx";
 

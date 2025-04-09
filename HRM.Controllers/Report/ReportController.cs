@@ -226,7 +226,7 @@ public class ReportController(
         return PartialView("_UnpaidLeaveSummaryDetails", model);
     }
 
-    public async Task<ViewResult> EmployeeSupervisor()
+    public async Task<IActionResult> EmployeeSupervisor()
     {
         var model = new EmployeeAndTeamSupervisorViewModel();
         var teams = await teamService.GetAllAsync();
@@ -235,7 +235,7 @@ public class ReportController(
         return View("EmployeeSupervisor", model);
     }
 
-    public async Task<PartialViewResult> EmployeeSupervisorDetails(EmployeeAndTeamSupervisorViewModel model)
+    public async Task<IActionResult> EmployeeSupervisorDetails(EmployeeAndTeamSupervisorViewModel model)
     {
         var criteria = new GetSupervisorReportCriteria
         {
@@ -249,7 +249,7 @@ public class ReportController(
         return PartialView("_EmployeeSupervisorDetails", supervisors);
     }
 
-    public async Task<ViewResult> TeamSupervisor()
+    public async Task<IActionResult> TeamSupervisor()
     {
         var model = new EmployeeAndTeamSupervisorViewModel();
         var teams = await teamService.GetAllAsync();
@@ -258,13 +258,14 @@ public class ReportController(
         return View("TeamSupervisor", model);
     }
 
-    public async Task<PartialViewResult> TeamSupervisorDetails(EmployeeAndTeamSupervisorViewModel model)
+    public async Task<IActionResult> TeamSupervisorDetails(EmployeeAndTeamSupervisorViewModel model)
     {
         var criteria = new GetTeamSupervisorCriteria
         {
+            CompanyId = CurrentCompanyId,
             TeamIds = model.TeamIds
         };
-        var supervisors = await reportService.GetTeamSupervisor(criteria);
+        var supervisors = await reportService.GetTeamSupervisorAsync(criteria);
 
         return PartialView("_TeamSupervisorDetails", supervisors);
     }

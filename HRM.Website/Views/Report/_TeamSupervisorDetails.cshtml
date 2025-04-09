@@ -30,8 +30,8 @@
                         index++;
                         <tr>
                             <td>@index</td>
-                            <td>@item.Department</td>
-                            <td>@item.Code</td>
+                            <td class="align-left">@item.DepartmentName</td>
+                            <td class="align-left">@item.Name</td>
                             <td class="align-left">
                                 @string.Join(", ", item.Supervisors.Where(x => x.ActionType == (int)SupervisorActionType.Verifier).Select(x => x.NickName))
                             </td>
