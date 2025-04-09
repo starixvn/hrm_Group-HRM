@@ -258,8 +258,8 @@ public class RequestController(
     private bool SortRequestValidate(RequestEntity t)
     {
         var pending = t.Status.Id == (byte)CurrentRequestStatus.Pending
-                      && (t.ApprovedBy.Id == session.UserId || t.VerifiedBy.Id == session.UserId);
-        var verified = t.Status.Id == (byte)CurrentRequestStatus.Verified && t.ApprovedBy.Id == session.UserId;
+                      && (t.ApproverId == session.UserId || t.VerifierId == session.UserId);
+        var verified = t.Status.Id == (byte)CurrentRequestStatus.Verified && t.ApproverId == session.UserId;
         return pending || verified;
     }
 }
