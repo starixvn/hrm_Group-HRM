@@ -1231,15 +1231,6 @@ namespace HRM.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Dep./Team.
-        /// </summary>
-        public static string DepTeam {
-            get {
-                return ResourceManager.GetString("DepTeam", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Description.
         /// </summary>
         public static string Description {

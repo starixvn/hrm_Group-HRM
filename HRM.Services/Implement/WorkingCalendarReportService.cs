@@ -29,8 +29,8 @@ public class WorkingCalendarReportService(IWebHostEnvironment env) : IWorkingCal
         var template = templatePackage.Workbook.Worksheets[0];
         var worksheet = xlPackage.Workbook.Worksheets.Add("Working Calendar");
         const byte startBodyRow = 3;
-        const byte totalFixedColumns = 7;
-        const byte startDateColumn = 8;
+        const byte totalFixedColumns = 6;
+        const byte startDateColumn = 7;
         var rowIndex = 1;
         var colIndex = 1;
 

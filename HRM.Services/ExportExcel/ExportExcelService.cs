@@ -189,7 +189,7 @@ public class ExportExcelService(IWebHostEnvironment hostingEnvironment) : IExpor
         cellTakeLeave.SetCellValue("Leave in " + year);
 
         var rowAnnualBalance = sheet.GetRow(2);
-        var cellAnnualBalance = rowAnnualBalance.GetCell(19);
+        var cellAnnualBalance = rowAnnualBalance.GetCell(18);
         cellAnnualBalance.SetCellValue("Balance Of " + year);
 
         // render body
@@ -252,7 +252,7 @@ public class ExportExcelService(IWebHostEnvironment hostingEnvironment) : IExpor
         cellTakeLeave.SetCellValue("Leave in " + year);
 
         var rowAnnualBalance = sheet.GetRow(2);
-        var cellAnnualBalance = rowAnnualBalance.GetCell(19);
+        var cellAnnualBalance = rowAnnualBalance.GetCell(18);
         cellAnnualBalance.SetCellValue("Balance Of " + year);
 
         // render body
