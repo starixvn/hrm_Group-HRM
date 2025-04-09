@@ -31,8 +31,8 @@
             </td>
         }
         <td>@index</td>
-        <td>@request.DepartmentCode</td>
-        <td>@request.TeamCode</td>
+        <td class="align-left">@request.DepartmentName</td>
+        <td class="align-left">@request.TeamName</td>
         <td class="align-left">@request.Requester.FullName</td>
         <td>@request.Requester.Nickname</td>
         <td data-datetime="@request.Month">@request.Month.ToString("MMM-yyyy")</td>
@@ -60,8 +60,8 @@
                 @request.SpecialHours
             }
         </td>
-        <td>@request.Verifier.Nickname</td>
-        <td>@request.Approver.Nickname</td>
+        <td>@request.VerifierNickname</td>
+        <td>@request.ApproverNickname</td>
         <td>@{RenderStatus(request);}</td>
         <td>
             <a href="@Url.Action("MemberDetails", "Overtime", new { id = request.RequestId })">

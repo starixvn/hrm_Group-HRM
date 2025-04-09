@@ -132,12 +132,12 @@ public class OvertimeController(
 
     public async Task<IActionResult> ListEmployeeOvertime(MemberMonthlyOvertimeRequestViewModel model)
     {
-        model.MemberRequests = await GetEmployeeOvertimeRequest(model);
+        model.MemberRequests = await GetEmployeeOvertimeRequestAsync(model);
 
         return PartialView("_ListEmployeeOvertime", model);
     }
 
-    private async Task<IEnumerable<MonthlyOvertimeRequest>> GetEmployeeOvertimeRequest(MemberMonthlyOvertimeRequestViewModel model)
+    private async Task<IEnumerable<MonthlyOvertimeRequest>> GetEmployeeOvertimeRequestAsync(MemberMonthlyOvertimeRequestViewModel model)
     {
         var requestStatusIds = Enum.GetValues<CurrentRequestStatus>().Cast<int>().Where(x => x > 0);
         var statusIds = model.StatusId switch
@@ -217,7 +217,7 @@ public class OvertimeController(
     {
         var fileName = $"{Labels.EmployeeOvertimeReport}.xlsx";
         const bool isMemberOvertime = false;
-        model.MemberRequests = await GetEmployeeOvertimeRequest(model);
+        model.MemberRequests = await GetEmployeeOvertimeRequestAsync(model);
         var exportData = exportOvertimeService.Export(model.MemberRequests, isMemberOvertime);
 
         return File(exportData, MimeType.XLSX, fileName);

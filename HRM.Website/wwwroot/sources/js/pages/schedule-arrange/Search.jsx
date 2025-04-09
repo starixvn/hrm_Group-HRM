@@ -46,7 +46,7 @@ export default class Search extends Component {
                     </div>
                     <div className="form-group form-group--m">
                         <div className="label-form">
-                            <label className="control-label">Sec./Team</label>
+                            <label className="control-label">Team</label>
                         </div>
                         <div className="select-form">
                             <TreeMultiselect
