@@ -57,7 +57,7 @@ public class ExportSupervisorService(IWebHostEnvironment hostingEnvironment) : I
 
             worksheet.Cells[rowIndex, colIndex++].Value = recordIndex++;
             worksheet.Cells[rowIndex, colIndex++].Value = supervisor.Department;
-            worksheet.Cells[rowIndex, colIndex++].Value = supervisor.Team.Code;
+            worksheet.Cells[rowIndex, colIndex++].Value = supervisor.Team.Name;
             worksheet.Cells[rowIndex, colIndex++].Value = supervisor.Code;
             worksheet.Cells[rowIndex, colIndex++].Value = supervisor.FullName;
             worksheet.Cells[rowIndex, colIndex++].Value = supervisor.NickName;
