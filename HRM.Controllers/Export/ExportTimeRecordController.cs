@@ -28,8 +28,8 @@ public class ExportTimeRecordController(
             IsLocal = model.IsLocal
         };
 
-        var timeRecords = await reportService.GetTimeRecords(criteria);
-        var exportData = exportTimeRecordService.Export(timeRecords);
+        var records = await reportService.GetTimeRecordAsync(criteria);
+        var exportData = exportTimeRecordService.Export(records);
 
         var fileName = $"{Labels.TimeRecordReport}.xlsx";
         return File(exportData, MimeType.XLSX, fileName);

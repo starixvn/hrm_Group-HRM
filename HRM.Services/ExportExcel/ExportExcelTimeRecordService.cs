@@ -8,12 +8,12 @@ namespace HRM.Services.ExportExcel;
 
 public interface IExportExcelTimeRecordService
 {
-    byte[] Export(IList<TimeRecordModel> timeRecords);
+    byte[] Export(IEnumerable<TimeRecordModel> timeRecords);
 }
 
 public class ExportExcelTimeRecordService(IWebHostEnvironment hostingEnvironment) : IExportExcelTimeRecordService
 {
-    public byte[] Export(IList<TimeRecordModel> timeRecords)
+    public byte[] Export(IEnumerable<TimeRecordModel> timeRecords)
     {
         const byte startBodyRow = 4;
         const byte totalColumns = 10;

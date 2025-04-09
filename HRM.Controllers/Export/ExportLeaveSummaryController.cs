@@ -50,8 +50,7 @@ public class ExportLeaveSummaryController(
     public async Task<IActionResult> UnpaidLeaveSummary(LeaveSummaryViewModel model)
     {
         var criteria = CreateUnpaidLeaveCriteria(model);
-        var leaveSummaries = await reportService.GetUnpaidLeaveAsync(criteria);
-        leaveSummaries = FilterLeaveSummariesByPeriod(leaveSummaries, model.Period);
+        var leaveSummaries = await reportService.GetUnpaidLeaveAsync(criteria, model.Period);
 
         var data = await exportReportService.Export(leaveSummaries, model.Year, model.LeaveType, model.Period, CurrentCompanyId);
         var fileName = $"UnpaidLeaveSummary_{DateTimeOffset.Now.DateTime.ToClientTimeZone():yyyyMMdd}.xls";
@@ -84,11 +83,11 @@ public class ExportLeaveSummaryController(
 
     private static bool HasLeavesInFirstHalf(LeaveSummary x)
     {
-        return new[] { x.Jan, x.Feb, x.Mar, x.Apr, x.May, x.Jun }.Any(month => month > 0);
+        return Array.Exists([x.Jan, x.Feb, x.Mar, x.Apr, x.May, x.Jun], month => month > 0);
     }
 
     private static bool HasLeavesInSecondHalf(LeaveSummary x)
     {
-        return new[] { x.Jul, x.Aug, x.Sep, x.Oct, x.Nov, x.Dec }.Any(month => month > 0);
+        return Array.Exists([x.Jul, x.Aug, x.Sep, x.Oct, x.Nov, x.Dec], month => month > 0);
     }
 }

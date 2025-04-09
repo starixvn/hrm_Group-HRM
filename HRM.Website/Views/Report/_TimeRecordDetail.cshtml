@@ -2,7 +2,7 @@
 @using HRM.Resources
 @using HRM.ViewModels
 @using HRM.Website.Helper
-@model IList<HRM.Models.TimeRecordModel>
+@model IEnumerable<HRM.Models.TimeRecordModel>
 @{
     Layout = null;
     var isHost = (bool)ViewBag.HasPermission;
@@ -69,7 +69,7 @@
                 <td colspan="11" id="pagination">
                     @{
                         var from = (pagerOption.CurrentPage - 1) * pagerOption.ItemsPerPage + 1;
-                        var to = from + (Model.Count - 1);
+                        var to = from + (Model.Count() - 1);
                         IList<SelectListItem> itemsPerPageArray = pagerOption.ItemsPerPageArray.Select(x => new SelectListItem
                         {
                             Text = x.Text,

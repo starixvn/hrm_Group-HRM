@@ -5,7 +5,6 @@ using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using Core;
-using Core.Models;
 using Core.Services;
 using Criteria;
 using MailKit.Net.Smtp;
@@ -25,7 +24,6 @@ public class BaseMailService(IBaseService baseService) : IBaseMailService
 
         return isSuccessful;
     }
-
 
     private async Task<bool> SendByMailKitAsync(MailRecord email)
     {
