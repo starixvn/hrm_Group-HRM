@@ -185,12 +185,8 @@
                             }
                         }
                         <td>@(index++)</td>
-                        <td>
-                            <span class="tooltip-tipsy" title="@request.Requester.Team.Department.Name">@request.Requester.Team.Department.Code</span>
-                        </td>
-                        <td>
-                            <span class="tooltip-tipsy" title="@request.Requester.Team.Name">@request.Requester.Team.Code</span>
-                        </td>
+                        <td class="align-left">@request.Requester.Team.Department.Name</td>
+                        <td class="align-left">@request.Requester.Team.Name</td>
                         <td>
                             <span class="tooltip-tipsy" title="@request.Requester.FullName">@request.Requester.NickName</span>
                         </td>
