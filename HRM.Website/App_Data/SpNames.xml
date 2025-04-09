@@ -107,6 +107,7 @@
         <Setting Key="GetGroupOfEmployee" SpName="EmployeeGroup_GetGroupOfEmployee" DbName="bodb_HRM" Plain="0" />
         <Setting Key="Group_Get" SpName="Group_Get" DbName="bodb_HRM" Plain="0">
             <Mapping DataField="TeamId" ObjectProperty="Id" Class="Team" />
+            <Mapping DataField="DepartmentId" ObjectProperty="Id" Class="Department" />
         </Setting>
         <Setting Key="Group_GetBySupervisor" SpName="Group_GetBySupervisor" DbName="bodb_HRM" Plain="0" />
         <Setting Key="GroupSupervisor_GetById" SpName="GroupSupervisor_GetById" DbName="bodb_HRM" Plain="0" />
