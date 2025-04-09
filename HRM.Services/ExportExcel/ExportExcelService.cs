@@ -85,14 +85,14 @@ public class ExportExcelService(IWebHostEnvironment hostingEnvironment) : IExpor
 
         //// render header
         var rowTakeLeave = sheet.GetRow(2);
-        var cellTakeLeave = rowTakeLeave.GetCell(8);
+        var cellTakeLeave = rowTakeLeave.GetCell(7);
         cellTakeLeave.SetCellValue("Leave in " + year);
 
         var rowAnnualBalance = sheet.GetRow(2);
-        var cellAnnualBalance = rowAnnualBalance.GetCell(20);
+        var cellAnnualBalance = rowAnnualBalance.GetCell(19);
         cellAnnualBalance.SetCellValue("Balance Of AL " + year);
 
-        var cellKIVBalance = rowAnnualBalance.GetCell(21);
+        var cellKIVBalance = rowAnnualBalance.GetCell(20);
         cellKIVBalance.SetCellValue("Balance Of CL " + year);
 
         //// render body
