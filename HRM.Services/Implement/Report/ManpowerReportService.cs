@@ -61,7 +61,7 @@ public class ManpowerReportService(
         const byte totalColumns = 55;
         const byte totalHeaderRows = 2;
         const byte startBodyRow = 4;
-        const byte startSummaryRow = 4;
+        const byte startSummaryRow = 5;
         var rowIndex = 1;
         var colIndex = 1;
 
@@ -107,7 +107,7 @@ public class ManpowerReportService(
         const byte totalColumns = 16;
         const byte totalHeaderRows = 2;
         const byte startBodyRow = 4;
-        const byte startSummaryRow = 4;
+        const byte startSummaryRow = 5;
         var rowIndex = 1;
         var colIndex = 1;
 
