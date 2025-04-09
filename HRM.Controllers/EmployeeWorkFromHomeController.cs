@@ -115,16 +115,16 @@ public class EmployeeWorkFromHomeController : BaseController
     public async Task<IActionResult> Edit(int id)
     {
         var criteria = new GetEmployeeWorkFromHomeByIdCriteria { EmployeeWorkFromHomeId = id };
-        var employeeWorkFromHome = await baseService.GetDataEntityAsync<EmployeeWorkFromHome>(criteria);
+        var employee = await baseService.GetDataEntityAsync<EmployeeWorkFromHome>(criteria);
 
         var model = new EmployeeWorkFromHomeViewModel
         {
-            EmployeeWorkFromHomeId = employeeWorkFromHome.EmployeeWorkFromHomeId,
-            EmployeeId = employeeWorkFromHome.EmpId,
-            Employee = $"{employeeWorkFromHome.Nickname} ({employeeWorkFromHome.FullName})",
-            FromDate = employeeWorkFromHome.FromDate,
-            ToDate = employeeWorkFromHome.ToDate,
-            Remark = employeeWorkFromHome.Remark,
+            EmployeeWorkFromHomeId = employee.EmployeeWorkFromHomeId,
+            EmployeeId = employee.EmpId,
+            Employee = $"{employee.Nickname} ({employee.FullName})",
+            FromDate = employee.FromDate,
+            ToDate = employee.ToDate,
+            Remark = employee.Remark,
             Files = (await attachFileService.GetInfoAttachFileAsync(id, uploadFolderPath)).Select(x => x.FileName).ToList()
         };
         return PartialView("_Edit", model);
