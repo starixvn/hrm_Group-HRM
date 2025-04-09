@@ -313,7 +313,7 @@ public class ExportExcelService(IWebHostEnvironment hostingEnvironment) : IExpor
         var cellCreateDate = row.GetCell(9);
         var cellStatus = row.GetCell(10);
         cellNo.SetCellValue(rowIndex - RowStartBodyLeaveSummary + 2);
-        cellDepartment.SetCellValue(item.Requester.Team.Department.Code);
+        cellDepartment.SetCellValue(item.Requester.Team.Department.Name);
         cellTeam.SetCellValue(item.Requester.Team.Code);
         cellNick.SetCellValue(item.Requester.NickName);
         cellName.SetCellValue(item.Requester.FullName);
