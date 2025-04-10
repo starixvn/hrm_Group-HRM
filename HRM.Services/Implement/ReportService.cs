@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using HRM.Core;
 using HRM.Core.Services;
 using HRM.Criteria.AnnualLeave;
 using HRM.Criteria.Report;
@@ -20,13 +21,23 @@ public class ReportService(
 {
     public async Task<IEnumerable<EmployeeAttendanceModel>> GetEmployeeAttendanceReportAsync(GetEmployeeAttendanceCriteria criteria)
     {
-        IEnumerable<EmployeeAttendanceModel> employeeAttendance = null;
+        IEnumerable<EmployeeAttendanceModel> attendances = null;
         if (criteria != null && criteria.IsValid())
         {
-            employeeAttendance = await reportRepository.GetEmployeeAttendanceReportAsync(criteria);
+            attendances = await reportRepository.GetEmployeeAttendanceReportAsync(criteria);
+
+            foreach (var attendance in attendances)
+            {
+                foreach (var request in attendance.RequestList)
+                {
+                    request.CreatedDate = request.CreatedDate.ToClientTimeZone();
+                    request.FromTime = request.FromTime?.ToClientTimeZone() ?? request.FromTime;
+                    request.ToTime = request.ToTime?.ToClientTimeZone() ?? request.ToTime;
+                }
+            }
         }
 
-        return employeeAttendance;
+        return attendances;
     }
 
     public async Task<IEnumerable<LeaveSummary>> GetAnnualLeaveBalanceReportAsync(GetAnnualLeaveBalanceCriteria criteria)

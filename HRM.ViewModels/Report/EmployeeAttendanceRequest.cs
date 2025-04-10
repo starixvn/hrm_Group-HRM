@@ -1,5 +1,4 @@
 ﻿using System;
-using HRM.Core;
 using HRM.Models;
 using HRM.Models.Request;
 
@@ -19,11 +18,9 @@ public class EmployeeAttendanceRequest
 
     // Leave
     public DateTime? FromDate { get; set; }
-
     public DateTime? ToDate { get; set; }
 
     public DateTime CreatedDate { get; set; }
-    public string CreatedDateTime => CreatedDate.ToShortFormatedDate();
 
     public decimal? TotalDays { get; set; }
 
