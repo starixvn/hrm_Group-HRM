@@ -7,7 +7,9 @@ public class CreateTeamCriteria : CriteriaBase
     public string Code { get; set; }
     public string Name { get; set; }
     public int DepartmentId { get; set; }
-    public int PICEmpId { get; set; }
+    public int? PICEmpId { get; set; }
+    public int GroupTeamId { get; set; }
+    public string AccountableArea { get; set; }
     public string MailGroup { get; set; }
     public byte LocalBasicAnnualLeaveBalance { get; set; }
     public byte LocalWorkingDays { get; set; }

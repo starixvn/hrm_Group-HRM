@@ -1428,6 +1428,27 @@
   <data name="NewUnit" xml:space="preserve">
     <value>New Unit</value>
   </data>
+  <data name="BUId" xml:space="preserve">
+    <value>Business Unit ID</value>
+  </data>
+  <data name="BUCode" xml:space="preserve">
+    <value>Business Unit Code</value>
+  </data>
+  <data name="BUCategory" xml:space="preserve">
+    <value>Business Unit Category</value>
+  </data>
+  <data name="BUType" xml:space="preserve">
+    <value>Business Unit Type</value>
+  </data>
+  <data name="AccountableArea" xml:space="preserve">
+    <value>Accountable Area</value>
+  </data>
+  <data name="PersonalInCharge" xml:space="preserve">
+    <value>Personal In Charge</value>
+  </data>
+  <data name="DepartmentId" xml:space="preserve">
+    <value>Department ID</value>
+  </data>
   <data name="Wed" xml:space="preserve">
     <value>Wed</value>
   </data>

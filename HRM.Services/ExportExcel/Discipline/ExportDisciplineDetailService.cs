@@ -11,7 +11,7 @@ namespace HRM.Services.ExportExcel.Discipline;
 
 public class ExportDisciplineDetailService(IWebHostEnvironment hostingEnvironment) : IExportDisciplineDetailService
 {
-    private const string TemplatePath = @"ExcelTemplates\DisciplineDetailReport.xls";
+    private const string TemplatePath = @"ExcelTemplates/DisciplineDetailReport.xls";
     private const int HeaderRow = 2;
     private const int BodyRow = 3;
     private const int WeekendRow = 4;

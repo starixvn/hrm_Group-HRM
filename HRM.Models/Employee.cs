@@ -168,6 +168,10 @@ public class Employee : EntityBase<int>
 
     public string CountryName { get; set; }
 
+    public int CompanyId { get; set; }
+
+    public string CompanyName { get; set; }
+
     public bool IsShowLeftNavigation { get; set; }
 
     [Range(0, 5, ErrorMessage = "Number of Off days must be between 0 and 5.")]
@@ -215,6 +219,8 @@ public class Employee : EntityBase<int>
     #endregion Contract
 
     public string DisplayName => string.IsNullOrWhiteSpace(NickName) ? FullName : NickName + " (" + FullName + ")";
+
+    public string DisplayNameWithCompany => NickName + " (" + CompanyName + ")";
 
     [Display(Name = "Pickup Remark")]
     public string PickupRemark { get; set; }

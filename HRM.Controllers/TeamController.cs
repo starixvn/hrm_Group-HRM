@@ -65,7 +65,9 @@ public class TeamController(
                 Code = model.TeamCode,
                 Name = model.TeamName,
                 DepartmentId = model.DepartmentId ?? 0,
-                PICEmpId = model.PICEmpId ?? 0,
+                PICEmpId = model.PICEmpId,
+                GroupTeamId = model.GroupTeamId,
+                AccountableArea = model.AccountableArea,
                 MailGroup = model.MailGroup,
                 CreatedBy = session.UserId,
                 LocalBasicAnnualLeaveBalance = model.LocalBasicAnnualLeaveBalance ?? 0,
@@ -109,6 +111,7 @@ public class TeamController(
         var employees = await GetAllEmployees();
         var model = new TeamViewModel
         {
+            Id = team.Id,
             TeamCode = team.Code,
             TeamName = team.Name,
             MailGroup = team.MailGroup,
@@ -126,6 +129,8 @@ public class TeamController(
             Departments = await departmentService.GetDepartmentAsync(),
             Employees = employees,
             PICEmpId = team.PICEmpId,
+            GroupTeamId = team.GroupTeamId,
+            AccountableArea = team.AccountableArea,
         };
 
         return View(model);
@@ -148,7 +153,9 @@ public class TeamController(
                     Name = model.TeamName,
                     DepartmentId = model.DepartmentId ?? 0,
                     MailGroup = model.MailGroup,
-                    PICEmpId = model.PICEmpId ?? 0,
+                    GroupTeamId = model.GroupTeamId,
+                    PICEmpId = model.PICEmpId,
+                    AccountableArea = model.AccountableArea,
                     ModifiedBy = session.UserId,
                     LocalBasicAnnualLeaveBalance = model.LocalBasicAnnualLeaveBalance ?? 0,
                     LocalWorkingDays = model.LocalWorkingDays ?? 0,

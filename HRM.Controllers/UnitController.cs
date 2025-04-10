@@ -7,6 +7,7 @@ using HRM.Core.Models;
 using HRM.Criteria.Unit;
 using HRM.Services.Interfaces;
 using HRM.ViewModels.Unit;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HRM.Controllers;
@@ -27,6 +28,7 @@ public class UnitController(
     public async Task<IActionResult> GetUnits([FromBody] UnitViewModel model)
     {
         var units = await unitService.GetUnitAsync(model.IsActive);
+        
         return new JsonResult(units);
     }
 
@@ -41,6 +43,7 @@ public class UnitController(
     public async Task<IActionResult> Create([FromBody] AddUnitViewModel model)
     {
         var commandResult = new CommandResult();
+
         if (model == null || !ModelState.IsValid)
         {
             return new JsonResult(commandResult);
@@ -49,7 +52,12 @@ public class UnitController(
         var criteria = new InsertUnitCriteria
         {
             Code = model.Code,
-            Name = model.Name,
+            Name = model.Code,
+            GroupUnitId = model.GroupUnitId,
+            PICEmpId = model.PICEmpId,
+            Category = model.Category,
+            Type = model.Type,
+            AccountableArea = model.AccountableArea,
             IsActive = model.IsActive,
             CreatedBy = session.UserId
         };
@@ -84,7 +92,12 @@ public class UnitController(
         {
             UnitId = model.UnitId,
             Code = model.Code,
-            Name = model.Name,
+            Name = model.Code,
+            GroupUnitId = model.GroupUnitId,
+            PICEmpId = model.PICEmpId,
+            Category = model.Category,
+            Type = model.Type,
+            AccountableArea = model.AccountableArea,
             IsActive = model.IsActive,
             ModifiedBy = session.UserId
         };

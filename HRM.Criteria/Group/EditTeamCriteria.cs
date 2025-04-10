@@ -9,7 +9,9 @@ public class EditTeamCriteria : CriteriaBase
     public string Name { get; set; }
     public int DepartmentId { get; set; }
     public string MailGroup { get; set; }
-    public int PICEmpId { get; set; }
+    public int GroupTeamId { get; set; }
+    public int? PICEmpId { get; set; }
+    public string AccountableArea { get; set; }
     public byte LocalBasicAnnualLeaveBalance { get; set; }
     public byte LocalWorkingDays { get; set; }
     public byte LocalWorkingHours { get; set; }
@@ -31,7 +33,6 @@ public class EditTeamCriteria : CriteriaBase
     {
         return TeamId > 0 &&
                !string.IsNullOrWhiteSpace(Code) &&
-               !string.IsNullOrWhiteSpace(Name) &&
-               PICEmpId > 0;
+               !string.IsNullOrWhiteSpace(Name);
     }
 }

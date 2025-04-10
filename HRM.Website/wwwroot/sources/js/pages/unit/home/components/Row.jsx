@@ -14,7 +14,12 @@ const Row = ({ rowIndex, item, onDelete }) => {
     return (
         <tr id={`row_${item.id}`}>
             <td>{rowIndex}</td>
+            <td>{item.groupUnitId}</td>
             <td>{item.code}</td>
+            <td>{item.category}</td>
+            <td>{item.type}</td>
+            <td>{item.accountableArea}</td>
+            <td>{item.picNickName}</td>
             <td>
                 {item.isActive && <i className="fa fa-check fa-lg icon-check" />}
             </td>

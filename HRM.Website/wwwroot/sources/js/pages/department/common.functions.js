@@ -5,10 +5,10 @@ export const validationSchema = Yup.object({
         .trim()
         .max(50, 'Code field must not over 50 characters long!')
         .required('Code field is required!'),
-    name: Yup.string()
-        .trim()
-        .max(200, 'Name field must not over 200 characters long!')
-        .required('Name field is required!'),
     unit: Yup.string()
-        .required('Unit field is required!')
+        .required('Unit field is required!'),
+    groupDeptId: Yup.number()
+        .required('ID field is required!'),
+    accountableArea: Yup.string()
+        .max(200, 'Accountable Area field must not over 200 characters long!')
 });

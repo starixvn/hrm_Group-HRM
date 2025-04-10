@@ -45,4 +45,8 @@ public class Team : EntityBase<int>
     public int? PICEmpId { get; set; }
 
     public string PICNickName { get; set; }
+
+    public int GroupTeamId { get; set; }
+
+    public string AccountableArea { get; set; }
 }

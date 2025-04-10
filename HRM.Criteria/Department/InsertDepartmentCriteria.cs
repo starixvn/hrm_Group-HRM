@@ -8,6 +8,12 @@ public class InsertDepartmentCriteria : CriteriaBase
 
     public string Name { get; set; }
 
+    public int GroupDeptId { get; set; }
+
+    public int? PICEmpId { get; set; }
+
+    public string AccountableArea { get; set; }
+
     public bool IsActive { get; set; }
 
     public int UnitId { get; set; }

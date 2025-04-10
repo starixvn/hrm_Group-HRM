@@ -8,6 +8,7 @@ using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
 using HRM.Core.Models;
 using HRM.Core.Services;
+using HRM.Models;
 using Microsoft.AspNetCore.Mvc;
 using Services.Interfaces;
 using ViewModels.Department;
@@ -59,6 +60,9 @@ public class DepartmentController(
         {
             Code = model.Code,
             Name = model.Name,
+            GroupDeptId = model.GroupDeptId,
+            PICEmpId = model.PICEmpId,
+            AccountableArea = model.AccountableArea,
             IsActive = model.IsActive,
             UnitId = model.UnitId,
             ModifiedBy = session.UserId
@@ -78,6 +82,9 @@ public class DepartmentController(
             DepartmentId = Id,
             Code = department.Code,
             Name = department.Name,
+            GroupDeptId = department.GroupDeptId,
+            PICEmpId = department.PICEmpId,
+            AccountableArea = department.AccountableArea,
             IsActive = department.IsActive,
             UnitId = department.Unit?.Id ?? 0,
             Units = units
@@ -106,6 +113,9 @@ public class DepartmentController(
             DepartmentId = model.DepartmentId,
             Code = model.Code,
             Name = model.Name,
+            GroupDeptId = model.GroupDeptId,
+            PICEmpId = model.PICEmpId,
+            AccountableArea = model.AccountableArea,
             IsActive = model.IsActive,
             UnitId = model.UnitId,
             ModifiedBy = session.UserId

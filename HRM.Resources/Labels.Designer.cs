@@ -88,6 +88,15 @@ namespace HRM.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Accountable Area.
+        /// </summary>
+        public static string AccountableArea {
+            get {
+                return ResourceManager.GetString("AccountableArea", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Per 5 Years Accumulation Leave.
         /// </summary>
         public static string AccumulationLeave {
@@ -601,11 +610,47 @@ namespace HRM.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Business Unit Category.
+        /// </summary>
+        public static string BUCategory {
+            get {
+                return ResourceManager.GetString("BUCategory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Business Unit Code.
+        /// </summary>
+        public static string BUCode {
+            get {
+                return ResourceManager.GetString("BUCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Business Unit ID.
+        /// </summary>
+        public static string BUId {
+            get {
+                return ResourceManager.GetString("BUId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Business Trip.
         /// </summary>
         public static string BusinessTrip {
             get {
                 return ResourceManager.GetString("BusinessTrip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Business Unit Type.
+        /// </summary>
+        public static string BUType {
+            get {
+                return ResourceManager.GetString("BUType", resourceCulture);
             }
         }
         
@@ -1218,6 +1263,15 @@ namespace HRM.Resources {
         public static string Department {
             get {
                 return ResourceManager.GetString("Department", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Department ID.
+        /// </summary>
+        public static string DepartmentId {
+            get {
+                return ResourceManager.GetString("DepartmentId", resourceCulture);
             }
         }
         
@@ -3711,6 +3765,15 @@ namespace HRM.Resources {
         public static string Personal {
             get {
                 return ResourceManager.GetString("Personal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Personal In Charge.
+        /// </summary>
+        public static string PersonalInCharge {
+            get {
+                return ResourceManager.GetString("PersonalInCharge", resourceCulture);
             }
         }
         
