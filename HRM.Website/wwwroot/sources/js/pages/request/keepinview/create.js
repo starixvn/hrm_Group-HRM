@@ -60,13 +60,13 @@ $(document).ready(function () {
                     approvers = approverResponse.data;
                 let options = '';
                 for (let i = 0; i < verifiers.length; i++) {
-                    options += "<option value='" + verifiers[i].OwnerId + "'>" + verifiers[i].NickName + " (" + verifiers[i].FullName + ")</option>";
+                    options += "<option value='" + verifiers[i].ownerId + "'>" + verifiers[i].nickName + " (" + verifiers[i].fullName + ")</option>";
                 }
                 domElements.$verifierId.html(options);
 
                 options = '';
                 for (var i = 0; i < approvers.length; i++) {
-                    options += "<option value='" + approvers[i].OwnerId + "'>" + approvers[i].NickName + " (" + approvers[i].FullName + ")</option>";
+                    options += "<option value='" + approvers[i].ownerId + "'>" + approvers[i].nickName + " (" + approvers[i].fullName + ")</option>";
                 }
                 domElements.$approverId.html(options);
             }).catch(axiosError);
