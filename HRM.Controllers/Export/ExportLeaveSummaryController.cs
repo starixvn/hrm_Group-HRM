@@ -1,8 +1,6 @@
 ﻿namespace HRM.Controllers.Export;
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Core;
 using Core.Constants;
@@ -10,7 +8,6 @@ using Criteria.AnnualLeave;
 using GO.UserControl.Client.Core.Session;
 using HRM.Criteria.Report;
 using Microsoft.AspNetCore.Mvc;
-using Models;
 using Services.ExportExcel;
 using Services.Interfaces;
 using ViewModels.AnnualLeave;
@@ -69,25 +66,5 @@ public class ExportLeaveSummaryController(
             LeaveType = model.LeaveType,
             CompanyId = CurrentCompanyId
         };
-    }
-
-    private static IEnumerable<LeaveSummary> FilterLeaveSummariesByPeriod(IEnumerable<LeaveSummary> leaveSummaries, string period)
-    {
-        return period switch
-        {
-            "1" => leaveSummaries.Where(HasLeavesInFirstHalf).ToList(),
-            "2" => leaveSummaries.Where(HasLeavesInSecondHalf).ToList(),
-            _ => leaveSummaries
-        };
-    }
-
-    private static bool HasLeavesInFirstHalf(LeaveSummary x)
-    {
-        return Array.Exists([x.Jan, x.Feb, x.Mar, x.Apr, x.May, x.Jun], month => month > 0);
-    }
-
-    private static bool HasLeavesInSecondHalf(LeaveSummary x)
-    {
-        return Array.Exists([x.Jul, x.Aug, x.Sep, x.Oct, x.Nov, x.Dec], month => month > 0);
     }
 }
