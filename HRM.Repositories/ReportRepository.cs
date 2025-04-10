@@ -19,7 +19,7 @@ public class ReportRepository : Interfaces.IReportRepository
     {
         using var objectDb = ObjectDbFactory.CreateInstance(criteria.GetSettingKey());
         using var multi = await objectDb.QueryMultipleAsync(criteria);
-        var attendances = (await multi.ReadAsync<EmployeeAttendanceModel>()).ToList();
+        var attendances = await multi.ReadAsync<EmployeeAttendanceModel>();
         var requests = multi.Read<EmployeeAttendanceRequest, RequestTypeModel, LeaveType, EmployeeAttendanceRequest>(
             (request, requestType, leaveType) =>
             {

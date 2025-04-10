@@ -101,11 +101,11 @@
                     <td>@index</td>
                     @if (item.IsWeekend)
                     {
-                        <td class="weekend">@item.AttendanceDate.ToClientTimeZone().ToString("ddd, dd MMM, yyyy")</td>
+                        <td class="weekend">@item.AttendanceDate.ToString("ddd, dd MMM, yyyy")</td>
                     }
                     else
                     {
-                        <td>@item.AttendanceDate.ToClientTimeZone().ToString("ddd, dd MMM, yyyy")</td>
+                        <td>@item.AttendanceDate.ToString("ddd, dd MMM, yyyy")</td>
                     }
                     <td>@item.DepartmentCode</td>
                     <td>@item.SectionCode</td>
@@ -202,7 +202,7 @@
                                 <div class="@className"
                                      data-requestdetail="@Html.Encode(requestDetail)"
                                      data-leavetype="@(request.LeaveType != null ? request.LeaveType.Name : string.Empty)"
-                                     data-createddate="@(request.CreatedDate.ToClientTimeZone().ToShortFormatedDate())"
+                                     data-createddate="@(request.CreatedDate.ToShortFormatedDate())"
                                      data-remark='@request.Remark'
                                      data-currentStatus="@request.CurrentStatus">
                                     @request.RequestType.Name
