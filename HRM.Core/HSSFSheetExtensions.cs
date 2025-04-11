@@ -82,6 +82,13 @@ public static class HSSFSheetExtensions
 
         //// Set the cell data type
         destCell.SetCellType(sourceCell.CellType);
+        SetCellValue(sourceCell, destCell);
+
+        return destCell;
+    }
+
+    private static void SetCellValue(ICell sourceCell, ICell destCell)
+    {
         switch (sourceCell.CellType)
         {
             case CellType.Blank:
@@ -109,12 +116,13 @@ public static class HSSFSheetExtensions
                 break;
 
             case CellType.Formula:
+                destCell.CellFormula = sourceCell.CellFormula;
+                break;
+
             default:
                 destCell.SetCellValue(0);
                 break;
         }
-
-        return destCell;
     }
 
     public static int MergeCells(this ISheet sheet, int firstRow, int firstCol, int lastRow, int lastCol)
