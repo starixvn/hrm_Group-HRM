@@ -56,7 +56,7 @@ public class ExportExcelUnpaidLeaveSummaryReportService(
         // Fill report header.
         writer.CopyRows(RowStartHeader, 2);
         writer.WriteCellValue(RowStartHeader, 6, $"Take {type} {year}");
-        writer.WriteCellValue(RowStartHeader, 12 + range, $"Total Of {type} {year}");
+        writer.WriteCellValue(RowStartHeader, 11 + range, $"Total Of {type} {year}");
 
         FillContentRowReport(leaveSummaries, ref writer, period);
 
