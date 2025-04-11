@@ -85,8 +85,8 @@
                 var cssClass = employee.Enabled ? "" : "disabled";
                 <tr class="@cssClass">
                     <td>@index</td>
-                    <td>@employee.Team.Department.Name</td>
-                    <td>@employee.Team.Name</td>
+                    <td class="align-left">@employee.Team.Department.Name</td>
+                    <td class="align-left">@employee.Team.Name</td>
                     <td>@employee.Code</td>
                     <td class="align-left">@employee.FullName</td>
                     <td>
