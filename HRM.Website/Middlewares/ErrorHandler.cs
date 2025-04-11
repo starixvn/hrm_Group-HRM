@@ -3,6 +3,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Fanex.Logging;
 using Fanex.Logging.Extensions;
+using Fanex.Logging.Extensions.Database;
 using Microsoft.AspNetCore.Http;
 
 namespace HRM.Website.Middlewares;
@@ -24,6 +25,7 @@ public class ErrorHandler(RequestDelegate next, ILogger logger)
     private async Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
         var logMessage = new LogMessage(exception.Message)
+            .AddSection("Database Info", DatabaseInfoGetters.GetDbExceptionInfo(exception))
             .AddSection("Server Info", CommonInfoGetters.GetServerInfo())
             .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(exception))
             .ToString();
