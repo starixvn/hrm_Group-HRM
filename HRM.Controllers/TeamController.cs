@@ -70,15 +70,15 @@ public class TeamController(
                 AccountableArea = model.AccountableArea,
                 MailGroup = model.MailGroup,
                 CreatedBy = session.UserId,
-                LocalBasicAnnualLeaveBalance = model.LocalBasicAnnualLeaveBalance ?? 0,
-                LocalWorkingDays = model.LocalWorkingDays ?? 0,
-                LocalWorkingHours = model.LocalWorkingHours ?? 0,
-                LocalOffDaysbyWeek = model.LocalOffDaysbyWeek ?? 0,
+                LocalBasicAnnualLeaveBalance = GetValue(model.LocalBasicAnnualLeaveBalance),
+                LocalWorkingDays = GetValue(model.LocalWorkingDays),
+                LocalWorkingHours = GetValue(model.LocalWorkingHours),
+                LocalOffDaysbyWeek = GetValue(model.LocalOffDaysbyWeek),
                 LocalWorkingHoursbyWeek = model.LocalWorkingHoursbyWeek,
-                ExpatBasicAnnualLeaveBalance = model.ExpatBasicAnnualLeaveBalance ?? 0,
-                ExpatWorkingDays = model.ExpatWorkingDays ?? 0,
-                ExpatWorkingHours = model.ExpatWorkingHours ?? 0,
-                ExpatOffDaysbyWeek = model.ExpatOffDaysbyWeek ?? 0,
+                ExpatBasicAnnualLeaveBalance = GetValue(model.ExpatBasicAnnualLeaveBalance),
+                ExpatWorkingDays = GetValue(model.ExpatWorkingDays),
+                ExpatWorkingHours = GetValue(model.ExpatWorkingHours),
+                ExpatOffDaysbyWeek = GetValue(model.ExpatOffDaysbyWeek),
                 ExpatWorkingHoursbyWeek = model.ExpatWorkingHoursbyWeek,
                 CompanyId = CurrentCompanyId
             };
@@ -115,15 +115,15 @@ public class TeamController(
             TeamCode = team.Code,
             TeamName = team.Name,
             MailGroup = team.MailGroup,
-            LocalBasicAnnualLeaveBalance = team.LocalBasicAnnualLeaveBalance ?? 0,
-            LocalWorkingDays = team.LocalWorkingDays ?? 0,
-            LocalWorkingHours = team.LocalWorkingHours ?? 0,
-            LocalOffDaysbyWeek = team.LocalOffDaysbyWeek ?? 0,
+            LocalBasicAnnualLeaveBalance = GetValue(team.LocalBasicAnnualLeaveBalance),
+            LocalWorkingDays = GetValue(team.LocalWorkingDays),
+            LocalWorkingHours = GetValue(team.LocalWorkingHours),
+            LocalOffDaysbyWeek = GetValue(team.LocalOffDaysbyWeek),
             LocalWorkingHoursbyWeek = team.LocalWorkingHoursbyWeek,
-            ExpatBasicAnnualLeaveBalance = team.ExpatBasicAnnualLeaveBalance ?? 0,
-            ExpatWorkingDays = team.ExpatWorkingDays ?? 0,
-            ExpatWorkingHours = team.ExpatWorkingHours ?? 0,
-            ExpatOffDaysbyWeek = team.ExpatOffDaysbyWeek ?? 0,
+            ExpatBasicAnnualLeaveBalance = GetValue(team.ExpatBasicAnnualLeaveBalance),
+            ExpatWorkingDays = GetValue(team.ExpatWorkingDays),
+            ExpatWorkingHours = GetValue(team.ExpatWorkingHours),
+            ExpatOffDaysbyWeek = GetValue(team.ExpatOffDaysbyWeek),
             ExpatWorkingHoursbyWeek = team.ExpatWorkingHoursbyWeek,
             DepartmentId = team.Department?.Id ?? 0,
             Departments = await departmentService.GetDepartmentAsync(),
@@ -157,15 +157,15 @@ public class TeamController(
                     PICEmpId = model.PICEmpId,
                     AccountableArea = model.AccountableArea,
                     ModifiedBy = session.UserId,
-                    LocalBasicAnnualLeaveBalance = model.LocalBasicAnnualLeaveBalance ?? 0,
-                    LocalWorkingDays = model.LocalWorkingDays ?? 0,
-                    LocalWorkingHours = model.LocalWorkingHours ?? 0,
-                    LocalOffDaysbyWeek = model.LocalOffDaysbyWeek ?? 0,
+                    LocalBasicAnnualLeaveBalance = GetValue(model.LocalBasicAnnualLeaveBalance),
+                    LocalWorkingDays = GetValue(model.LocalWorkingDays),
+                    LocalWorkingHours = GetValue(model.LocalWorkingHours),
+                    LocalOffDaysbyWeek = GetValue(model.LocalOffDaysbyWeek),
                     LocalWorkingHoursbyWeek = model.LocalWorkingHoursbyWeek,
-                    ExpatBasicAnnualLeaveBalance = model.ExpatBasicAnnualLeaveBalance ?? 0,
-                    ExpatWorkingDays = model.ExpatWorkingDays ?? 0,
-                    ExpatWorkingHours = model.ExpatWorkingHours ?? 0,
-                    ExpatOffDaysbyWeek = model.ExpatOffDaysbyWeek ?? 0,
+                    ExpatBasicAnnualLeaveBalance = GetValue(model.ExpatBasicAnnualLeaveBalance),
+                    ExpatWorkingDays = GetValue(model.ExpatWorkingDays),
+                    ExpatWorkingHours = GetValue(model.ExpatWorkingHours),
+                    ExpatOffDaysbyWeek = GetValue(model.ExpatOffDaysbyWeek),
                     ExpatWorkingHoursbyWeek = model.ExpatWorkingHoursbyWeek
                 };
                 var result = await baseService.ExecuteNonQueryAsync(criteria);
@@ -349,4 +349,6 @@ public class TeamController(
 
         return orgCharts;
     }
+
+    private static byte GetValue(byte? value) => value ?? 0;
 }

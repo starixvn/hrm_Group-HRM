@@ -3,7 +3,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Models;
-using Models.Group;
 using Resources;
 
 #pragma warning disable S109 // Magic numbers should not be used

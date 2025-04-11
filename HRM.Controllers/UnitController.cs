@@ -7,7 +7,6 @@ using HRM.Core.Models;
 using HRM.Criteria.Unit;
 using HRM.Services.Interfaces;
 using HRM.ViewModels.Unit;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HRM.Controllers;
@@ -28,7 +27,7 @@ public class UnitController(
     public async Task<IActionResult> GetUnits([FromBody] UnitViewModel model)
     {
         var units = await unitService.GetUnitAsync(model.IsActive);
-        
+
         return new JsonResult(units);
     }
 
