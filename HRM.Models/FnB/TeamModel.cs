@@ -6,7 +6,7 @@ public class TeamModel
 {
     public int TeamId { get; set; }
 
-    public int DepartmentId { get; set; }
+    public int SectionId { get; set; }
         
     public string Code { get; set; }
         
