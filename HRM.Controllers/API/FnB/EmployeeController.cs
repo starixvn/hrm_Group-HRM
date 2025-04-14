@@ -9,7 +9,8 @@ namespace HRM.Controllers.API.FnB;
 
 [ApiController]
 [Route("api/fnb/[controller]")]
-public class EmployeeController(IEmployeeService employeeService,
+public class EmployeeController(
+    IEmployeeService employeeService,
     ICompanyService companyService) : ControllerBase
 {
 
