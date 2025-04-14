@@ -11,5 +11,5 @@ public interface IOvertimeRequestRepository
 
     Task<MonthlyOvertimeRequest> GetMonthlyRequestDetailsByEmployeeId(ICriteria criteria);
 
-    Task<IEnumerable<MonthlyOvertimeRequest>> GetMemberMonthlyRequest(ICriteria criteria);
+    Task<IEnumerable<MonthlyOvertimeRequest>> GetMemberMonthlyRequestAsync(ICriteria criteria);
 }

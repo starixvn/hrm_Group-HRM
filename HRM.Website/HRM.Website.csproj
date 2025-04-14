@@ -3,6 +3,9 @@
     <TargetFramework>net9.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
+    <Content Remove="bundleconfig.json" />
+  </ItemGroup>
+  <ItemGroup>
     <None Remove="App_Data\SpNames.xml" />
     <None Remove="ExcelTemplates\EmployeeOvertimeTemplate.xlsx" />
     <None Remove="logs\log.txt" />
@@ -190,13 +193,14 @@
   <ItemGroup>
     <PackageReference Include="Fanex.Data" Version="4.3.3" />
     <PackageReference Include="Fanex.Data.SqlServer" Version="4.3.3" />
-    <PackageReference Include="Fanex.Logging.Extensions" Version="1.1.0" />
+    <PackageReference Include="Fanex.Logging.Extensions" Version="2.0.2.1" />
+    <PackageReference Include="Fanex.Logging.Extensions.Database" Version="2.0.2.1" />
     <PackageReference Include="GO.UserControl.Client.AspNetCore" Version="1.0.2" />
     <PackageReference Include="GO.UserControl.Client.Core" Version="1.0.3" />
     <PackageReference Include="MailKit" Version="4.11.0" />
-    <PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="9.0.2" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="9.0.2" />
-    <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="9.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.DataProtection.StackExchangeRedis" Version="9.0.4" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="9.0.4" />
+    <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="9.0.4" />
   </ItemGroup>
   <ItemGroup>
     <Content Update="nlog.config">

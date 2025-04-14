@@ -24,23 +24,25 @@ public class RequestEntity : EntityBase<long>
 
     public RequestStatus Status { get; set; }
 
-    public Employee CreatedBy { get; set; }
-
     public DateTime CreatedDate
     {
         get => serverCreatedDate;
         set => serverCreatedDate = value.ToClientTimeZone();
     }
 
-    public Employee ModifiedBy { get; set; }
-
     public Employee VerifiedBy { get; set; }
-
     public Employee ApprovedBy { get; set; }
 
-    public Employee Approver { get; set; }
+    public int VerifierId { get; set; }
+    public string VerifierNickName { get; set; }
+    public string VerifierFullName { get; set; }
 
-    public Employee ProcessedBy { get; set; }
+    public int ApproverId { get; set; }
+    public string ApproverNickName { get; set; }
+    public string ApproverFullName { get; set; }
+
+    public string ProcessedByNickName { get; set; }
+    public string ProcessedByFullName { get; set; }
 
     public DateTime? ModifiedDate { get; set; }
 
@@ -49,8 +51,6 @@ public class RequestEntity : EntityBase<long>
     public DateTime? VerifiedDate { get; set; }
 
     public DateTime? ProcessedDate { get; set; }
-
-    public bool IsPlanned { get; set; }
 
     public string Remark { get; set; }
 

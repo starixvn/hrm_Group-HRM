@@ -12,5 +12,5 @@ public interface IReportRepository
 
     Task<IList<SupervisorReportModel>> GetSupervisorReport(ICriteria criteria);
 
-    Task<IList<TeamSupervisorReportModel>> GetTeamSupervisor(ICriteria criteria);
+    Task<IEnumerable<TeamSupervisorReportModel>> GetTeamSupervisorAsync(ICriteria criteria);
 }

@@ -22,12 +22,6 @@
             </th>
             <th class="col-sorter">
                 <div class="cell-control-wrapper">
-                    @Labels.Section
-                    <div class="fa fa-sort cell-right-div"></div>
-                </div>
-            </th>
-            <th class="col-sorter">
-                <div class="cell-control-wrapper">
                     @Labels.Team
                     <div class="fa fa-sort cell-right-div"></div>
                 </div>
@@ -105,9 +99,8 @@
                 var cssClass = employee.Enabled ? string.Empty : "disabled";
                 <tr class="@cssClass">
                     <td>@index</td>
-                    <td>@employee.Team.Section.Department.Code</td>
-                    <td>@employee.Team.Section.Code</td>
-                    <td>@employee.Team.Code</td>
+                    <td class="align-left">@employee.Team.Department.Name</td>
+                    <td class="align-left">@employee.Team.Name</td>
                     <td>@employee.Code</td>
                     <td class="align-left">@employee.FullName</td>
                     <td>

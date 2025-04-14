@@ -289,34 +289,37 @@ public static class HSSFSheetExtensions
 
             newCell.SetCellType(sourceCell.CellType);
 
-            switch (sourceCell.CellType)
-            {
-                case CellType.Boolean:
-                    newCell.SetCellValue(sourceCell.BooleanCellValue);
-                    break;
+            SetCellValue(sourceCell, newCell);
+        }
+    }
 
-                case CellType.Numeric:
-                    newCell.SetCellValue(sourceCell.NumericCellValue);
-                    break;
+    private static void SetCellValue(ICell sourceCell, ICell newCell)
+    {
+        switch (sourceCell.CellType)
+        {
+            case CellType.Boolean:
+                newCell.SetCellValue(sourceCell.BooleanCellValue);
+                break;
 
-                case CellType.String:
-                    newCell.SetCellValue(sourceCell.StringCellValue);
-                    break;
+            case CellType.Numeric:
+                newCell.SetCellValue(sourceCell.NumericCellValue);
+                break;
 
-                case CellType.Error:
-                    newCell.SetCellValue(sourceCell.ErrorCellValue);
-                    break;
+            case CellType.String:
+                newCell.SetCellValue(sourceCell.StringCellValue);
+                break;
 
-                case CellType.Formula:
-                    newCell.CellFormula = sourceCell.CellFormula;
-                    break;
+            case CellType.Error:
+                newCell.SetCellValue(sourceCell.ErrorCellValue);
+                break;
 
-                case CellType.Unknown:
-                case CellType.Blank:
-                default:
-                    newCell.SetCellValue(string.Empty);
-                    break;
-            }
+            case CellType.Formula:
+                newCell.CellFormula = sourceCell.CellFormula;
+                break;
+
+            default:
+                newCell.SetCellValue(string.Empty);
+                break;
         }
     }
 }

@@ -9,7 +9,6 @@ public class LeaveSummary
     public string Email { get; set; }
     public int TeamId { get; set; }
     public string Team { get; set; }
-    public string Section { get; set; }
     public string Department { get; set; }
 
     public float AnnualLeaveLastYear { get; set; }

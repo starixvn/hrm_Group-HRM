@@ -8,12 +8,12 @@ namespace HRM.Services.ExportExcel;
 
 public interface IExportExcelTimeRecordService
 {
-    byte[] Export(IList<TimeRecordModel> timeRecords);
+    byte[] Export(IEnumerable<TimeRecordModel> timeRecords);
 }
 
 public class ExportExcelTimeRecordService(IWebHostEnvironment hostingEnvironment) : IExportExcelTimeRecordService
 {
-    public byte[] Export(IList<TimeRecordModel> timeRecords)
+    public byte[] Export(IEnumerable<TimeRecordModel> timeRecords)
     {
         const byte startBodyRow = 4;
         const byte totalColumns = 10;
@@ -42,7 +42,6 @@ public class ExportExcelTimeRecordService(IWebHostEnvironment hostingEnvironment
 
             workSheet.Cells[rowIndex, colIndex++].Value = count;
             workSheet.Cells[rowIndex, colIndex++].Value = detail.DepartmentCode;
-            workSheet.Cells[rowIndex, colIndex++].Value = detail.SectionCode;
             workSheet.Cells[rowIndex, colIndex++].Value = detail.Team;
             workSheet.Cells[rowIndex, colIndex++].Value = detail.Code;
             workSheet.Cells[rowIndex, colIndex++].Value = detail.FullName;

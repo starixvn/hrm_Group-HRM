@@ -1,15 +1,13 @@
 ﻿namespace HRM.Controllers.Export;
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Core;
+using Core.Constants;
 using Criteria.AnnualLeave;
 using GO.UserControl.Client.Core.Session;
 using HRM.Criteria.Report;
 using Microsoft.AspNetCore.Mvc;
-using Models;
 using Services.ExportExcel;
 using Services.Interfaces;
 using ViewModels.AnnualLeave;
@@ -49,12 +47,11 @@ public class ExportLeaveSummaryController(
     public async Task<IActionResult> UnpaidLeaveSummary(LeaveSummaryViewModel model)
     {
         var criteria = CreateUnpaidLeaveCriteria(model);
-        var leaveSummaries = await reportService.GetUnpaidLeaveAsync(criteria);
-        leaveSummaries = FilterLeaveSummariesByPeriod(leaveSummaries, model.Period);
+        var leaveSummaries = await reportService.GetUnpaidLeaveAsync(criteria, model.Period);
 
         var data = await exportReportService.Export(leaveSummaries, model.Year, model.LeaveType, model.Period, CurrentCompanyId);
         var fileName = $"UnpaidLeaveSummary_{DateTimeOffset.Now.DateTime.ToClientTimeZone():yyyyMMdd}.xls";
-        return File(data, "application/vnd.ms-excel", fileName);
+        return File(data, MimeType.XLS, fileName);
     }
 
     private GetUnpaidLeaveCriteria CreateUnpaidLeaveCriteria(LeaveSummaryViewModel model)
@@ -69,25 +66,5 @@ public class ExportLeaveSummaryController(
             LeaveType = model.LeaveType,
             CompanyId = CurrentCompanyId
         };
-    }
-
-    private static IEnumerable<LeaveSummary> FilterLeaveSummariesByPeriod(IEnumerable<LeaveSummary> leaveSummaries, string period)
-    {
-        return period switch
-        {
-            "1" => leaveSummaries.Where(HasLeavesInFirstHalf).ToList(),
-            "2" => leaveSummaries.Where(HasLeavesInSecondHalf).ToList(),
-            _ => leaveSummaries
-        };
-    }
-
-    private static bool HasLeavesInFirstHalf(LeaveSummary x)
-    {
-        return new[] { x.Jan, x.Feb, x.Mar, x.Apr, x.May, x.Jun }.Any(month => month > 0);
-    }
-
-    private static bool HasLeavesInSecondHalf(LeaveSummary x)
-    {
-        return new[] { x.Jul, x.Aug, x.Sep, x.Oct, x.Nov, x.Dec }.Any(month => month > 0);
     }
 }

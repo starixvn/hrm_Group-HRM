@@ -10,6 +10,7 @@ using Core.Filters;
 using Core.XMLExtensions;
 using Criteria.Discipline;
 using GO.UserControl.Client.Core.Enumerables;
+using GO.UserControl.Client.Core.Services;
 using GO.UserControl.Client.Core.Session;
 using HRM.Core.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -21,6 +22,7 @@ using ViewModels.Discipline;
 
 public class DisciplineController(
     IUserControlSession session,
+    IRoleService roleService,
     IDisciplineService disciplineService,
     IBaseService baseService) : BaseController(session)
 {
@@ -44,17 +46,19 @@ public class DisciplineController(
     [HrmPermission(Policy.Read, FunctionKey.Discipline)]
     public async Task<IActionResult> GetDisciplineSummaryGrid(DisciplineSummaryViewModel model)
     {
+        var roles = await roleService.GetByUserIdAsync(session.UserId);
         var criteria = new GetDisciplineSummaryCriteria
         {
             FromDate = model.FromDate,
             ToDate = model.ToDate,
-            TeamId = model.TeamId,
+            TeamIds = model.TeamId,
             IsLocal = model.IsLocal,
             EmployeeId = model.EmployeeId,
             ReasonId = model.ReasonId,
             ApproverId = session.UserId,
             IsShowAll = model.IsShowAll,
-            CompanyId = CurrentCompanyId
+            CompanyId = CurrentCompanyId,
+            RoleIds = string.Join(",", roles.Select(x => x.RoleId))
         };
 
         var disciplines = await disciplineService.GetDisciplineSummaryAsync(criteria);
@@ -90,17 +94,19 @@ public class DisciplineController(
     [HrmPermission(Policy.Read, FunctionKey.Discipline)]
     public async Task<IActionResult> GetDisciplineDetailGrid(DisciplineSummaryViewModel model)
     {
+        var roles = await roleService.GetByUserIdAsync(session.UserId);
         var criteria = new GetDisciplineDetailCriteria
         {
             FromDate = model.FromDate,
             ToDate = model.ToDate,
-            TeamId = model.TeamId,
+            TeamIds = model.TeamId,
             IsLocal = model.IsLocal,
             EmployeeId = model.EmployeeId,
             ReasonId = model.ReasonId,
             HasIgnored = model.HasIgnored,
             ApproverId = session.UserId,
-            CompanyId = CurrentCompanyId
+            CompanyId = CurrentCompanyId,
+            RoleIds = string.Join(",", roles.Select(x => x.RoleId))
         };
 
         var disciplines = await disciplineService.GetDisciplineDetailAsync(criteria);

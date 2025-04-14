@@ -10,8 +10,6 @@ public static class FunctionKey
 
     public const string CreateAccount = "CreateAccount";
 
-    public const string SectionManagement = "SectionManagement";
-
     public const string UnitManagement = "UnitManagement";
 
     public const string MenuManagement = "MenuManagement";

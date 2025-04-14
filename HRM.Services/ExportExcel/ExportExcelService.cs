@@ -50,17 +50,17 @@ public class ExportExcelService(IWebHostEnvironment hostingEnvironment) : IExpor
             var row = sheet.GetRow(rowIndex);
 
             row.GetCell(0).SetCellValue(index + 1);
-            row.GetCell(1).SetCellValue(item.Department);
-            row.GetCell(2).SetCellValue(item.Section);
-            row.GetCell(3).SetCellValue(item.Team);
-            row.GetCell(4).SetCellValue(item.Code);
-            row.GetCell(5).SetCellValue(item.FullName);
-            row.GetCell(6).SetCellValue(item.Nickname);
-            row.GetCell(7).SetCellValue(item.FromDate.ToDateMonthYearFormatedDate());
-            row.GetCell(8).SetCellValue(item.ToDate.ToDateMonthYearFormatedDate());
-            row.GetCell(9).SetCellValue(item.Remark);
-            row.GetCell(10).SetCellValue(item.Modifier);
-            row.GetCell(11).SetCellValue(item.ModifiedDate.ToFormatedDate());
+            row.GetCell(1).SetCellValue(item.DepartmentName);
+            row.GetCell(2).SetCellValue(item.TeamName);
+            row.GetCell(3).SetCellValue(item.Code);
+            row.GetCell(4).SetCellValue(item.FullName);
+            row.GetCell(5).SetCellValue(item.Nickname);
+            row.GetCell(6).SetCellValue(item.FromDate.ToDateMonthYearFormatedDate());
+            row.GetCell(7).SetCellValue(item.ToDate.ToDateMonthYearFormatedDate());
+            row.GetCell(8).SetCellValue(item.Remark);
+            row.GetCell(9).SetCellValue(item.Modifier);
+            row.GetCell(10).SetCellValue(item.ModifiedDate.ToFormatedDate());
+
             index++;
             rowIndex++;
         }
@@ -85,14 +85,14 @@ public class ExportExcelService(IWebHostEnvironment hostingEnvironment) : IExpor
 
         //// render header
         var rowTakeLeave = sheet.GetRow(2);
-        var cellTakeLeave = rowTakeLeave.GetCell(8);
+        var cellTakeLeave = rowTakeLeave.GetCell(7);
         cellTakeLeave.SetCellValue("Leave in " + year);
 
         var rowAnnualBalance = sheet.GetRow(2);
-        var cellAnnualBalance = rowAnnualBalance.GetCell(20);
+        var cellAnnualBalance = rowAnnualBalance.GetCell(19);
         cellAnnualBalance.SetCellValue("Balance Of AL " + year);
 
-        var cellKIVBalance = rowAnnualBalance.GetCell(21);
+        var cellKIVBalance = rowAnnualBalance.GetCell(20);
         cellKIVBalance.SetCellValue("Balance Of CL " + year);
 
         //// render body
@@ -109,26 +109,25 @@ public class ExportExcelService(IWebHostEnvironment hostingEnvironment) : IExpor
 
             row.GetCell(0).SetCellValue(index + 1);
             row.GetCell(1).SetCellValue(item.Department);
-            row.GetCell(2).SetCellValue(item.Section);
-            row.GetCell(3).SetCellValue(item.Team);
-            row.GetCell(4).SetCellValue(item.FullName);
-            row.GetCell(5).SetCellValue(item.Nickname);
-            row.GetCell(6).SetCellValue(item.CreditKIV);
-            row.GetCell(7).SetCellValue(item.AnnualLeaveCurrentYear);
-            row.GetCell(8).SetCellValue(item.Jan);
-            row.GetCell(9).SetCellValue(item.Feb);
-            row.GetCell(10).SetCellValue(item.Mar);
-            row.GetCell(11).SetCellValue(item.Apr);
-            row.GetCell(12).SetCellValue(item.May);
-            row.GetCell(13).SetCellValue(item.Jun);
-            row.GetCell(14).SetCellValue(item.Jul);
-            row.GetCell(15).SetCellValue(item.Aug);
-            row.GetCell(16).SetCellValue(item.Sep);
-            row.GetCell(17).SetCellValue(item.Oct);
-            row.GetCell(18).SetCellValue(item.Nov);
-            row.GetCell(19).SetCellValue(item.Dec);
-            row.GetCell(20).SetCellValue(item.LeaveBalance);
-            row.GetCell(21).SetCellValue(item.KIVBalance);
+            row.GetCell(2).SetCellValue(item.Team);
+            row.GetCell(3).SetCellValue(item.FullName);
+            row.GetCell(4).SetCellValue(item.Nickname);
+            row.GetCell(5).SetCellValue(item.CreditKIV);
+            row.GetCell(6).SetCellValue(item.AnnualLeaveCurrentYear);
+            row.GetCell(7).SetCellValue(item.Jan);
+            row.GetCell(8).SetCellValue(item.Feb);
+            row.GetCell(9).SetCellValue(item.Mar);
+            row.GetCell(10).SetCellValue(item.Apr);
+            row.GetCell(11).SetCellValue(item.May);
+            row.GetCell(12).SetCellValue(item.Jun);
+            row.GetCell(13).SetCellValue(item.Jul);
+            row.GetCell(14).SetCellValue(item.Aug);
+            row.GetCell(15).SetCellValue(item.Sep);
+            row.GetCell(16).SetCellValue(item.Oct);
+            row.GetCell(17).SetCellValue(item.Nov);
+            row.GetCell(18).SetCellValue(item.Dec);
+            row.GetCell(19).SetCellValue(item.LeaveBalance);
+            row.GetCell(20).SetCellValue(item.KIVBalance);
 
             index++;
             rowIndex++;
@@ -190,7 +189,7 @@ public class ExportExcelService(IWebHostEnvironment hostingEnvironment) : IExpor
         cellTakeLeave.SetCellValue("Leave in " + year);
 
         var rowAnnualBalance = sheet.GetRow(2);
-        var cellAnnualBalance = rowAnnualBalance.GetCell(19);
+        var cellAnnualBalance = rowAnnualBalance.GetCell(18);
         cellAnnualBalance.SetCellValue("Balance Of " + year);
 
         // render body
@@ -207,24 +206,23 @@ public class ExportExcelService(IWebHostEnvironment hostingEnvironment) : IExpor
 
             row.GetCell(0).SetCellValue(index + 1);
             row.GetCell(1).SetCellValue(employee.Department);
-            row.GetCell(2).SetCellValue(employee.Section);
-            row.GetCell(3).SetCellValue(employee.Team);
-            row.GetCell(4).SetCellValue(employee.FullName);
-            row.GetCell(5).SetCellValue(employee.Nickname);
-            row.GetCell(6).SetCellValue(employee.Balance);
-            row.GetCell(7).SetCellValue(employee.Jan);
-            row.GetCell(8).SetCellValue(employee.Feb);
-            row.GetCell(9).SetCellValue(employee.Mar);
-            row.GetCell(10).SetCellValue(employee.Apr);
-            row.GetCell(11).SetCellValue(employee.May);
-            row.GetCell(12).SetCellValue(employee.Jun);
-            row.GetCell(13).SetCellValue(employee.Jul);
-            row.GetCell(14).SetCellValue(employee.Aug);
-            row.GetCell(15).SetCellValue(employee.Sep);
-            row.GetCell(16).SetCellValue(employee.Oct);
-            row.GetCell(17).SetCellValue(employee.Nov);
-            row.GetCell(18).SetCellValue(employee.Dec);
-            row.GetCell(19).SetCellValue(employee.RemainingBalance);
+            row.GetCell(2).SetCellValue(employee.Team);
+            row.GetCell(3).SetCellValue(employee.FullName);
+            row.GetCell(4).SetCellValue(employee.Nickname);
+            row.GetCell(5).SetCellValue(employee.Balance);
+            row.GetCell(6).SetCellValue(employee.Jan);
+            row.GetCell(7).SetCellValue(employee.Feb);
+            row.GetCell(8).SetCellValue(employee.Mar);
+            row.GetCell(9).SetCellValue(employee.Apr);
+            row.GetCell(10).SetCellValue(employee.May);
+            row.GetCell(11).SetCellValue(employee.Jun);
+            row.GetCell(12).SetCellValue(employee.Jul);
+            row.GetCell(13).SetCellValue(employee.Aug);
+            row.GetCell(14).SetCellValue(employee.Sep);
+            row.GetCell(15).SetCellValue(employee.Oct);
+            row.GetCell(16).SetCellValue(employee.Nov);
+            row.GetCell(17).SetCellValue(employee.Dec);
+            row.GetCell(18).SetCellValue(employee.RemainingBalance);
 
             index++;
             rowIndex++;
@@ -254,7 +252,7 @@ public class ExportExcelService(IWebHostEnvironment hostingEnvironment) : IExpor
         cellTakeLeave.SetCellValue("Leave in " + year);
 
         var rowAnnualBalance = sheet.GetRow(2);
-        var cellAnnualBalance = rowAnnualBalance.GetCell(19);
+        var cellAnnualBalance = rowAnnualBalance.GetCell(18);
         cellAnnualBalance.SetCellValue("Balance Of " + year);
 
         // render body
@@ -271,24 +269,23 @@ public class ExportExcelService(IWebHostEnvironment hostingEnvironment) : IExpor
 
             row.GetCell(0).SetCellValue(index + 1);
             row.GetCell(1).SetCellValue(employee.Department);
-            row.GetCell(2).SetCellValue(employee.Section);
-            row.GetCell(3).SetCellValue(employee.Team);
-            row.GetCell(4).SetCellValue(employee.FullName);
-            row.GetCell(5).SetCellValue(employee.Nickname);
-            row.GetCell(6).SetCellValue(employee.Balance);
-            row.GetCell(7).SetCellValue(employee.Jan);
-            row.GetCell(8).SetCellValue(employee.Feb);
-            row.GetCell(9).SetCellValue(employee.Mar);
-            row.GetCell(10).SetCellValue(employee.Apr);
-            row.GetCell(11).SetCellValue(employee.May);
-            row.GetCell(12).SetCellValue(employee.Jun);
-            row.GetCell(13).SetCellValue(employee.Jul);
-            row.GetCell(14).SetCellValue(employee.Aug);
-            row.GetCell(15).SetCellValue(employee.Sep);
-            row.GetCell(16).SetCellValue(employee.Oct);
-            row.GetCell(17).SetCellValue(employee.Nov);
-            row.GetCell(18).SetCellValue(employee.Dec);
-            row.GetCell(19).SetCellValue(employee.RemainingBalance);
+            row.GetCell(2).SetCellValue(employee.Team);
+            row.GetCell(3).SetCellValue(employee.FullName);
+            row.GetCell(4).SetCellValue(employee.Nickname);
+            row.GetCell(5).SetCellValue(employee.Balance);
+            row.GetCell(6).SetCellValue(employee.Jan);
+            row.GetCell(7).SetCellValue(employee.Feb);
+            row.GetCell(8).SetCellValue(employee.Mar);
+            row.GetCell(9).SetCellValue(employee.Apr);
+            row.GetCell(10).SetCellValue(employee.May);
+            row.GetCell(11).SetCellValue(employee.Jun);
+            row.GetCell(12).SetCellValue(employee.Jul);
+            row.GetCell(13).SetCellValue(employee.Aug);
+            row.GetCell(14).SetCellValue(employee.Sep);
+            row.GetCell(15).SetCellValue(employee.Oct);
+            row.GetCell(16).SetCellValue(employee.Nov);
+            row.GetCell(17).SetCellValue(employee.Dec);
+            row.GetCell(18).SetCellValue(employee.RemainingBalance);
 
             index++;
             rowIndex++;
@@ -306,20 +303,18 @@ public class ExportExcelService(IWebHostEnvironment hostingEnvironment) : IExpor
     {
         var cellNo = row.GetCell(0);
         var cellDepartment = row.GetCell(1);
-        var cellSection = row.GetCell(2);
-        var cellTeam = row.GetCell(3);
-        var cellName = row.GetCell(4);
-        var cellNick = row.GetCell(5);
-        var cellRequest = row.GetCell(6);
-        var cellDetails = row.GetCell(7);
-        var cellReason = row.GetCell(8);
-        var cellRemarks = row.GetCell(9);
-        var cellCreateDate = row.GetCell(10);
-        var cellStatus = row.GetCell(11);
+        var cellTeam = row.GetCell(2);
+        var cellName = row.GetCell(3);
+        var cellNick = row.GetCell(4);
+        var cellRequest = row.GetCell(5);
+        var cellDetails = row.GetCell(6);
+        var cellReason = row.GetCell(7);
+        var cellRemarks = row.GetCell(8);
+        var cellCreateDate = row.GetCell(9);
+        var cellStatus = row.GetCell(10);
         cellNo.SetCellValue(rowIndex - RowStartBodyLeaveSummary + 2);
-        cellDepartment.SetCellValue(item.Requester.Team.Section.Department.Code);
-        cellSection.SetCellValue(item.Requester.Team.Section.Code);
-        cellTeam.SetCellValue(item.Requester.Team.Code);
+        cellDepartment.SetCellValue(item.Requester.Team.Department.Name);
+        cellTeam.SetCellValue(item.Requester.Team.Name);
         cellNick.SetCellValue(item.Requester.NickName);
         cellName.SetCellValue(item.Requester.FullName);
         cellRequest.SetCellValue(item.RequestType.Id == (byte)RequestType.Leave ? item.LeaveType.Name : item.RequestType.Name);

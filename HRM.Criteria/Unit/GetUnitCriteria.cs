@@ -2,11 +2,9 @@
 
 using Fanex.Data.Repository;
 
-public class GetUnitsCriteria : CriteriaBase
+public class GetUnitCriteria : CriteriaBase
 {
     public bool? IsActive { get; set; }
-
-    public short CompanyId { get; set; }
 
     public override string GetSettingKey() => "Unit_Get";
 

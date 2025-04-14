@@ -49,19 +49,17 @@ public class OvertimeRequestRepository : IOvertimeRequestRepository
         return monthlyRequest;
     }
 
-    public async Task<IEnumerable<MonthlyOvertimeRequest>> GetMemberMonthlyRequest(ICriteria criteria)
+    public async Task<IEnumerable<MonthlyOvertimeRequest>> GetMemberMonthlyRequestAsync(ICriteria criteria)
     {
         using var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey());
-        return await db.QueryAsync<MonthlyOvertimeRequest, RequestStatus, Requester, Requester, Requester, MonthlyOvertimeRequest>(
-            (req, stt, requester, verifier, approver) =>
+        return await db.QueryAsync<MonthlyOvertimeRequest, RequestStatus, Requester, MonthlyOvertimeRequest>(
+            (req, stt, requester) =>
             {
                 req.Status = stt;
                 req.Requester = requester;
-                req.Verifier = verifier;
-                req.Approver = approver;
                 return req;
             },
-            "StatusId, EmpId, VerifierId, ApproverId",
+            "StatusId, EmpId",
             criteria);
     }
 }

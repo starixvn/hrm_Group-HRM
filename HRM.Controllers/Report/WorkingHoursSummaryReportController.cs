@@ -60,13 +60,13 @@ public class WorkingHoursSummaryReportController(
             EmployeeStatusId = model.EmployeeStatusId
         };
         var workingHours = await reportService.GetWorkingHoursSummaryAsync(param);
-        var overtimes = await GetOvertimeDetails(model);
+        var overtimes = await GetOvertimeDetailAsync(model);
         var bytes = reportService.Export(param, workingHours, overtimes);
 
         return File(bytes, MimeType.XLSX, "Attendance Statistic for Payroll.xlsx");
     }
 
-    private async Task<IEnumerable<DailyOvertimeDetails>> GetOvertimeDetails(WorkingHoursSummaryViewModel model)
+    private async Task<IEnumerable<DailyOvertimeDetails>> GetOvertimeDetailAsync(WorkingHoursSummaryViewModel model)
     {
         var param = new GetDailyOvertimeDetailsParam
         {

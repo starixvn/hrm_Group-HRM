@@ -74,14 +74,13 @@ public class MealAllowanceSummaryService(
         IEnumerable<MealAllowanceSummary> summaries)
     {
         const byte StartBodyRow = 3;
-        const byte TotalFixedColumns = 8;
-        const byte SumColumn = 8;
+        const byte TotalColumns = 7;
         const byte StartSumRow = 4;
         var rowIndex = 1;
         var colIndex = 1;
 
         // title
-        template.Cells[rowIndex, colIndex, rowIndex, TotalFixedColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalFixedColumns]);
+        template.Cells[rowIndex, colIndex, rowIndex, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
         worksheet.Cells[rowIndex, colIndex].Value = string.Format(
             worksheet.Cells[rowIndex, colIndex].Value.ToString(),
             param.FromDate.ToDateMonthYearFormatedDate(),
@@ -89,7 +88,7 @@ public class MealAllowanceSummaryService(
         rowIndex++;
 
         // header
-        template.Cells[rowIndex, colIndex, rowIndex, TotalFixedColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalFixedColumns]);
+        template.Cells[rowIndex, colIndex, rowIndex, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
 
         // data
         rowIndex++;
@@ -97,12 +96,11 @@ public class MealAllowanceSummaryService(
         foreach (var summary in summaries)
         {
             colIndex = 1;
-            template.Cells[StartBodyRow, 1, StartBodyRow, TotalFixedColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalFixedColumns]);
+            template.Cells[StartBodyRow, 1, StartBodyRow, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
 
             worksheet.Cells[rowIndex, colIndex++].Value = rowNum++;
-            worksheet.Cells[rowIndex, colIndex++].Value = summary.Department;
-            worksheet.Cells[rowIndex, colIndex++].Value = summary.Section;
-            worksheet.Cells[rowIndex, colIndex++].Value = summary.Team;
+            worksheet.Cells[rowIndex, colIndex++].Value = summary.DepartmentName;
+            worksheet.Cells[rowIndex, colIndex++].Value = summary.TeamName;
             worksheet.Cells[rowIndex, colIndex++].Value = summary.Code;
             worksheet.Cells[rowIndex, colIndex++].Value = summary.FullName;
             worksheet.Cells[rowIndex, colIndex++].Value = summary.NickName;
@@ -112,9 +110,9 @@ public class MealAllowanceSummaryService(
         }
 
         // total
-        template.Cells[StartSumRow, 1, StartSumRow, TotalFixedColumns].Copy(worksheet.Cells[rowIndex, 1, rowIndex, TotalFixedColumns]);
-        var excelAddress = $"{worksheet.Cells[StartBodyRow, SumColumn].Address}:{worksheet.Cells[rowIndex - 1, SumColumn].Address}";
-        worksheet.Cells[rowIndex, SumColumn].Formula = string.Format(Constants.SummaryFormula, excelAddress);
+        template.Cells[StartSumRow, 1, StartSumRow, TotalColumns].Copy(worksheet.Cells[rowIndex, 1, rowIndex, TotalColumns]);
+        var excelAddress = $"{worksheet.Cells[StartBodyRow, TotalColumns].Address}:{worksheet.Cells[rowIndex - 1, TotalColumns].Address}";
+        worksheet.Cells[rowIndex, TotalColumns].Formula = string.Format(Constants.SummaryFormula, excelAddress);
         worksheet.Cells.AutoFitColumns(MinimumWidth, MaximumWidth);
     }
 
@@ -125,14 +123,13 @@ public class MealAllowanceSummaryService(
         IEnumerable<MealAllowanceDetail> details)
     {
         const byte StartBodyRow = 3;
-        const byte TotalFixedColumnsDetail = 13;
-        const byte SumColumn = 13;
+        const byte TotalColumns = 12;
         const byte StartSumRow = 4;
         var rowIndex = 1;
         var colIndex = 1;
 
         // title
-        template.Cells[rowIndex, colIndex, rowIndex, TotalFixedColumnsDetail].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalFixedColumnsDetail]);
+        template.Cells[rowIndex, colIndex, rowIndex, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
         worksheet.Cells[rowIndex, colIndex].Value = string.Format(
             worksheet.Cells[rowIndex, colIndex].Value.ToString(),
             param.FromDate.ToDateMonthYearFormatedDate(),
@@ -140,7 +137,7 @@ public class MealAllowanceSummaryService(
         rowIndex++;
 
         // header
-        template.Cells[rowIndex, colIndex, rowIndex, TotalFixedColumnsDetail].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalFixedColumnsDetail]);
+        template.Cells[rowIndex, colIndex, rowIndex, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
 
         // data
         rowIndex++;
@@ -148,11 +145,10 @@ public class MealAllowanceSummaryService(
         foreach (var detail in details)
         {
             colIndex = 1;
-            template.Cells[StartBodyRow, 1, StartBodyRow, TotalFixedColumnsDetail].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalFixedColumnsDetail]);
+            template.Cells[StartBodyRow, 1, StartBodyRow, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
             worksheet.Cells[rowIndex, colIndex++].Value = rowNum++;
-            worksheet.Cells[rowIndex, colIndex++].Value = detail.Department;
-            worksheet.Cells[rowIndex, colIndex++].Value = detail.Section;
-            worksheet.Cells[rowIndex, colIndex++].Value = detail.Team;
+            worksheet.Cells[rowIndex, colIndex++].Value = detail.DepartmentName;
+            worksheet.Cells[rowIndex, colIndex++].Value = detail.TeamName;
             worksheet.Cells[rowIndex, colIndex++].Value = detail.Code;
             worksheet.Cells[rowIndex, colIndex++].Value = detail.WorkDate.ToString("ddd, dd MMM, yyyy");
             worksheet.Cells[rowIndex, colIndex++].Value = detail.FullName;
@@ -166,9 +162,9 @@ public class MealAllowanceSummaryService(
         }
 
         // total
-        template.Cells[StartSumRow, 1, StartSumRow, TotalFixedColumnsDetail].Copy(worksheet.Cells[rowIndex, 1, rowIndex, TotalFixedColumnsDetail]);
-        var excelAddress = $"{worksheet.Cells[StartBodyRow, SumColumn].Address}:{worksheet.Cells[rowIndex - 1, SumColumn].Address}";
-        worksheet.Cells[rowIndex, SumColumn].Formula = string.Format(Constants.SummaryFormula, excelAddress);
+        template.Cells[StartSumRow, 1, StartSumRow, TotalColumns].Copy(worksheet.Cells[rowIndex, 1, rowIndex, TotalColumns]);
+        var excelAddress = $"{worksheet.Cells[StartBodyRow, TotalColumns].Address}:{worksheet.Cells[rowIndex - 1, TotalColumns].Address}";
+        worksheet.Cells[rowIndex, TotalColumns].Formula = string.Format(Constants.SummaryFormula, excelAddress);
 
         worksheet.Cells.AutoFitColumns(MinimumWidth, MaximumWidth);
     }

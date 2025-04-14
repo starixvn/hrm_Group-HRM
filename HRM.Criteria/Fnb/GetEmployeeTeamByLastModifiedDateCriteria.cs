@@ -3,7 +3,7 @@ using Fanex.Data.Repository;
 
 namespace HRM.Criteria.Fnb;
 
-public class GetEmployeeGroupByLastModifiedDateCriteria : CriteriaBase
+public class GetEmployeeTeamByLastModifiedDateCriteria : CriteriaBase
 {
     public int CompanyId { get; set; }
 

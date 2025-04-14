@@ -114,7 +114,6 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IEmployeeRepository, EmployeeRepository>();
         services.AddSingleton<IDepartmentRepository, DepartmentRepository>();
         services.AddSingleton<ITeamRepository, TeamRepository>();
-        services.AddSingleton<ISectionRepository, SectionRepository>();
         services.AddSingleton<IRequestRepository, RequestRepository>();
 
         services.AddSingleton<IUserControlSession, UserControlSession>();
@@ -136,7 +135,6 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IEmployeeService, EmployeeService>();
         services.AddSingleton<IUnitService, UnitService>();
         services.AddSingleton<IDepartmentService, DepartmentService>();
-        services.AddSingleton<ISectionService, SectionService>();
         services.AddSingleton<IJobLevelService, JobLevelService>();
         services.AddSingleton<IMemoService, MemoService>();
 
@@ -230,9 +228,9 @@ public static class ServiceCollectionExtensions
     {
         services.AddSingleton<IApiKeyValidator, ApiKeyValidator>();
         services.AddScoped<Services.Interfaces.FnB.IEmployeeService, Services.Implement.FnB.EmployeeService>();
-        services.AddScoped<Services.Interfaces.FnB.ISectionService, Services.Implement.FnB.SectionService>();
         services.AddScoped<Services.Interfaces.FnB.IUnitService, Services.Implement.FnB.UnitService>();
         services.AddScoped<Services.Interfaces.FnB.IDepartmentService, Services.Implement.FnB.DepartmentService>();
         services.AddScoped<Services.Interfaces.FnB.IShiftService, Services.Implement.FnB.ShiftService>();
+        services.AddScoped<Services.Interfaces.FnB.ISectionService, Services.Implement.FnB.SectionService>();
     }
 }

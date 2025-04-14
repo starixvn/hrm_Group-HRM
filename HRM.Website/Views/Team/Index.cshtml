@@ -29,12 +29,6 @@
             </div>
         </div>
         <button class="btn btn-primary" type="submit" id="btnSearchTeam">@Labels.Submit</button>
-        @if (hasPermission)
-        {
-            <a href="/team/create" class="btn btn-request">
-                <span class="fa fa-plus"></span> @Labels.NewTeam
-            </a>
-        }
 
         @Html.ActionLink("Employee Permission Summary", "EmployeeSupervisor", "report", null, new { @class = "btn btn-primary" })
         @Html.ActionLink("Team Permission Summary", "TeamSupervisor", "report", null, new { @class = "btn btn-primary" })
@@ -52,12 +46,6 @@
             </th>
             <th rowspan="2" class="col-sorter">
                 <div class="cell-control-wrapper">
-                    <div>@Labels.Section</div>
-                    <div class="fa fa-sort"></div>
-                </div>
-            </th>
-            <th rowspan="2" class="col-sorter">
-                <div class="cell-control-wrapper">
                     <div>@Labels.Team</div>
                     <div class="fa fa-sort"></div>
                 </div>
@@ -70,25 +58,7 @@
             </th>
             <th rowspan="2" class="col-sorter">
                 <div class="cell-control-wrapper">
-                    <div>@Labels.UnitHead</div>
-                    <div class="fa fa-sort"></div>
-                </div>
-            </th>
-            <th rowspan="2" class="col-sorter">
-                <div class="cell-control-wrapper">
-                    <div>@Labels.Manager</div>
-                    <div class="fa fa-sort"></div>
-                </div>
-            </th>
-            <th rowspan="2" class="col-sorter">
-                <div class="cell-control-wrapper">
-                    <div>@Labels.Supervisor</div>
-                    <div class="fa fa-sort"></div>
-                </div>
-            </th>
-            <th rowspan="2" class="col-sorter">
-                <div class="cell-control-wrapper">
-                    <div>@Labels.TeamLeader</div>
+                    <div>@Labels.PIC</div>
                     <div class="fa fa-sort"></div>
                 </div>
             </th>
@@ -124,7 +94,6 @@
             <th rowspan="2">@Labels.DisciplineRule</th>
             @if (hasPermission)
             {
-                <th rowspan="2">@Labels.Edit</th>
                 <th rowspan="2">@Labels.Roles</th>
                 <th rowspan="2">@Labels.Delete</th>
             }
@@ -148,17 +117,12 @@
             @{var index = 1;}
             @foreach (var team in Model)
             {
-                var unitHead = team.Managers.FirstOrDefault(x => x.RoleId == (byte)TeamManagerRole.Head);
                 <tr id="row@(team.Id)">
                     <td>@(index++)</td>
-                    <td>@team.DepartmentCode</td>
-                    <td>@team.Section.Name</td>
-                    <td>@team.Name</td>
+                    <td class="align-left">@team.Department.Name</td>
+                    <td class="align-left">@team.Name</td>
                     <td>@team.Code</td>
-                    <td>@(unitHead != null ? unitHead.Nickname : string.Empty)</td>
-                    <td>@string.Join(", ", team.Managers.Where(x => x.RoleId == (byte)TeamManagerRole.Manager).Select(x => x.Nickname))</td>
-                    <td>@string.Join(", ", team.Managers.Where(x => x.RoleId == (byte)TeamManagerRole.Supervisor).Select(x => x.Nickname))</td>
-                    <td>@string.Join(", ", team.Managers.Where(x => x.RoleId == (byte)TeamManagerRole.Leader).Select(x => x.Nickname))</td>
+                    <td>@team.PICNickName</td>
                     <td class="align-left">@team.MailGroup</td>
                     <td>@team.LocalBasicAnnualLeaveBalance</td>
                     <td>@team.ExpatBasicAnnualLeaveBalance</td>
@@ -187,11 +151,6 @@
                     </td>
                     @if (hasPermission)
                     {
-                        <td>
-                            <a href="@Url.Action("Edit", "Team", new { team.Id })">
-                                <i class="fa fa-pencil fa-lg icon-edit"></i>
-                            </a>
-                        </td>
                         <td>
                             <a href="@Url.Action("TeamSupervisor", "Team", new { team.Id })">Manage</a>
                         </td>

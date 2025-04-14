@@ -30,15 +30,15 @@ public class EmployeeController(
     }
 
     [HttpGet("team")]
-    public async Task<IActionResult> GetEmployeeGroups([FromQuery] SyncFnBRequestModel request)
+    public async Task<IActionResult> GetEmployeeTeams([FromQuery] SyncFnBRequestModel request)
     {
         var company = await companyService.GetCompanySiteByDomainAsync();
-        var criteria = new GetEmployeeGroupByLastModifiedDateCriteria
+        var criteria = new GetEmployeeTeamByLastModifiedDateCriteria
         {
             CompanyId = company.CompanyId,
             LastModifiedDate = request.LastModifiedDate
         };
-        var result = await employeeService.GetEmployeeGroupByLastModifiedDate(criteria);
+        var result = await employeeService.GetEmployeeTeamByLastModifiedDate(criteria);
         return new JsonResult(result);
     }
 

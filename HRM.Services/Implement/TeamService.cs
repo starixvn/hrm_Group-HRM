@@ -26,7 +26,7 @@ public class TeamService(
         var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
         var criteria = new GetGroupByIdCriteria
         {
-            TeamId = id ,
+            TeamId = id,
             CompanyId = companyId
         };
         return await teamRepository.GetById(criteria);

@@ -51,7 +51,7 @@ $(document).ready(function () {
     }
 
     axios({
-        url: resolveClientUrl('Section/GetOrgChart'),
+        url: resolveClientUrl('Team/GetOrgChart'),
         method: 'GET',
         headers: { 'X-Requested-With': 'XMLHttpRequest' }
     }).then(response => {

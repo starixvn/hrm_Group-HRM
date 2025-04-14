@@ -79,7 +79,7 @@ public class OvertimeRequestService(
         return monthlyRequest ?? new MonthlyOvertimeRequest();
     }
 
-    public async Task<IEnumerable<MonthlyOvertimeRequest>> GetMemberMonthlyRequest(GetMonthlyOvertimeRequestParam param)
+    public async Task<IEnumerable<MonthlyOvertimeRequest>> GetMemberMonthlyRequestAsync(GetMonthlyOvertimeRequestParam param)
     {
         var criteria = new GetMemberMonthlyOvertimeRequestCriteria
         {
@@ -93,8 +93,7 @@ public class OvertimeRequestService(
             IsLocal = param.IsLocal,
             CompanyId = param.CompanyId
         };
-        var memberRequests = await overtimeRepository.GetMemberMonthlyRequest(criteria);
-        return memberRequests;
+        return await overtimeRepository.GetMemberMonthlyRequestAsync(criteria);
     }
 
     public async Task<MonthlyOvertimeRequest> GetMonthlyRequestDetailsById(long requestId)

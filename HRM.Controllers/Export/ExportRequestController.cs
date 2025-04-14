@@ -44,8 +44,8 @@ public class ExportRequestController(
             CompanyId = CurrentCompanyId
         };
 
-        var requestList = await requestService.GetRequests(criteria);
-        var hssfWorkbook = exportExcelService.ExportWorkingTimeRequest(requestList, Labels.VoidRequest);
+        var requests = await requestService.GetRequestAsync(criteria);
+        var hssfWorkbook = exportExcelService.ExportWorkingTimeRequest(requests, Labels.VoidRequest);
         var fileName = $"EmployeeVoidRequest_{DateTimeOffset.Now.DateTime.ToClientTimeZone():yyyyMMdd}.xls";
 
         return ExcelFile(hssfWorkbook, fileName);
@@ -80,8 +80,8 @@ public class ExportRequestController(
             CompanyId = CurrentCompanyId
         };
 
-        var requestList = await requestService.GetRequests(criteria);
-        var hssfWorkbook = exportExcelService.ExportWorkingTimeRequest(requestList, model.PageTitle);
+        var requests = await requestService.GetRequestAsync(criteria);
+        var hssfWorkbook = exportExcelService.ExportWorkingTimeRequest(requests, model.PageTitle);
         var fileName = $"EmployeeRequest_{DateTimeOffset.Now.DateTime.ToClientTimeZone():yyyyMMdd}.xls";
 
         return ExcelFile(hssfWorkbook, fileName);
@@ -111,8 +111,8 @@ public class ExportRequestController(
             CompanyId = CurrentCompanyId
         };
 
-        var requestList = await requestService.GetRequests(criteria);
-        var hssfWorkbook = exportExcelService.ExportWorkingTimeRequest(requestList, model.PageTitle);
+        var requests = await requestService.GetRequestAsync(criteria);
+        var hssfWorkbook = exportExcelService.ExportWorkingTimeRequest(requests, model.PageTitle);
         var fileName = $"DailyRequest_{DateTimeOffset.Now.DateTime.ToClientTimeZone():yyyyMMdd}.xls";
 
         return ExcelFile(hssfWorkbook, fileName);

@@ -55,8 +55,8 @@ public class ExportExcelUnpaidLeaveSummaryReportService(
 
         // Fill report header.
         writer.CopyRows(RowStartHeader, 2);
-        writer.WriteCellValue(RowStartHeader, 6, $"Take {type} {year}");
-        writer.WriteCellValue(RowStartHeader, 12 + range, $"Total Of {type} {year}");
+        writer.WriteCellValue(RowStartHeader, 5, $"Take {type} {year}");
+        writer.WriteCellValue(RowStartHeader, 11 + range, $"Total Of {type} {year}");
 
         FillContentRowReport(leaveSummaries, ref writer, period);
 
@@ -90,7 +90,6 @@ public class ExportExcelUnpaidLeaveSummaryReportService(
             {
                 Count = rowIndex + 1,
                 leaveSummary.Department,
-                leaveSummary.Section,
                 leaveSummary.Team,
                 leaveSummary.FullName,
                 leaveSummary.Nickname,
@@ -106,7 +105,6 @@ public class ExportExcelUnpaidLeaveSummaryReportService(
             {
                 Count = rowIndex + 1,
                 leaveSummary.Department,
-                leaveSummary.Section,
                 leaveSummary.Team,
                 leaveSummary.FullName,
                 leaveSummary.Nickname,
@@ -122,7 +120,6 @@ public class ExportExcelUnpaidLeaveSummaryReportService(
             {
                 Count = rowIndex + 1,
                 leaveSummary.Department,
-                leaveSummary.Section,
                 leaveSummary.Team,
                 leaveSummary.FullName,
                 leaveSummary.Nickname,

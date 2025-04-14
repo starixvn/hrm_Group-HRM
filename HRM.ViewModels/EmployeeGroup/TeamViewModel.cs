@@ -3,12 +3,13 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Models;
-using Models.Group;
 using Resources;
 
 #pragma warning disable S109 // Magic numbers should not be used
 public class TeamViewModel
 {
+    private const int MaxSizeName = 200;
+
     public int Id { get; set; }
 
     [Required(ErrorMessageResourceName = nameof(Messages.RequiredErrorMessage), ErrorMessageResourceType = typeof(Messages))]
@@ -22,33 +23,26 @@ public class TeamViewModel
     public string TeamName { get; set; }
 
     [Required(ErrorMessageResourceName = nameof(Messages.RequiredErrorMessage), ErrorMessageResourceType = typeof(Messages))]
-    [Display(Name = nameof(Labels.Section), ResourceType = typeof(Labels))]
-    public int? SectionId { get; set; }
+    [Display(Name = nameof(Labels.Department), ResourceType = typeof(Labels))]
+    public int? DepartmentId { get; set; }
 
     [EmailAddress(ErrorMessage = "{0} is invalid.")]
     [StringLength(50, ErrorMessageResourceType = typeof(Messages), ErrorMessageResourceName = nameof(Messages.StringLengthErrorMessage))]
     [Display(Name = nameof(Labels.Email), ResourceType = typeof(Labels))]
     public string MailGroup { get; set; }
 
-    public IEnumerable<TeamManager> Managers { get; set; } = new List<TeamManager>();
-
     [Required(ErrorMessageResourceName = nameof(Messages.RequiredErrorMessage), ErrorMessageResourceType = typeof(Messages))]
-    [Display(Name = nameof(Labels.UnitHead), ResourceType = typeof(Labels))]
-    public int? HeadId { get; set; }
+    [Display(Name = nameof(Labels.TeamId), ResourceType = typeof(Labels))]
+    public int GroupTeamId { get; set; }
 
-    [Display(Name = nameof(Labels.UnitHead), ResourceType = typeof(Labels))]
-    public string UnitHead { get; set; }
+    [Display(Name = nameof(Labels.PersonalInCharge), ResourceType = typeof(Labels))]
+    public int? PICEmpId { get; set; }
 
-    [Display(Name = nameof(Labels.Manager), ResourceType = typeof(Labels))]
-    public string ManagerIds { get; set; }
+    [StringLength(MaxSizeName, ErrorMessageResourceType = typeof(Messages), ErrorMessageResourceName = nameof(Messages.StringLengthErrorMessage))]
+    [Display(Name = nameof(Labels.AccountableArea), ResourceType = typeof(Labels))]
+    public string AccountableArea { get; set; }
 
-    [Display(Name = nameof(Labels.Supervisor), ResourceType = typeof(Labels))]
-    public string SupervisorIds { get; set; }
-
-    [Display(Name = nameof(Labels.TeamLeader), ResourceType = typeof(Labels))]
-    public string LeaderIds { get; set; }
-
-    public IList<Models.Section.Section> Sections { get; set; }
+    public IList<Models.Department> Departments { get; set; }
 
     public IList<Employee> Employees { get; set; }
 

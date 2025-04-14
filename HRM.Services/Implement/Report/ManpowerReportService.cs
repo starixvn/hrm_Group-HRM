@@ -58,7 +58,7 @@ public class ManpowerReportService(
         using var xlPackage = new ExcelPackage();
         var template = templatePackage.Workbook.Worksheets[0];
         var worksheet = xlPackage.Workbook.Worksheets.Add("Manpower");
-        const byte totalColumns = 56;
+        const byte totalColumns = 55;
         const byte totalHeaderRows = 2;
         const byte startBodyRow = 4;
         const byte startSummaryRow = 5;
@@ -104,7 +104,7 @@ public class ManpowerReportService(
         using var xlPackage = new ExcelPackage();
         var template = templatePackage.Workbook.Worksheets[0];
         var worksheet = xlPackage.Workbook.Worksheets.Add("Manpower Category");
-        const byte totalColumns = 17;
+        const byte totalColumns = 16;
         const byte totalHeaderRows = 2;
         const byte startBodyRow = 4;
         const byte startSummaryRow = 5;
@@ -128,8 +128,7 @@ public class ManpowerReportService(
             template.Cells[startBodyRow, 1, startBodyRow, totalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, totalColumns]);
 
             worksheet.Cells[rowIndex, colIndex++].Value = rowNum++;
-            worksheet.Cells[rowIndex, colIndex++].Value = manpower.DepartmentCode;
-            worksheet.Cells[rowIndex, colIndex++].Value = manpower.Section;
+            worksheet.Cells[rowIndex, colIndex++].Value = manpower.DepartmentName;
             worksheet.Cells[rowIndex, colIndex++].Value = manpower.TeamName;
             worksheet.Cells[rowIndex, colIndex++].Value = manpower.TotalExpat;
             worksheet.Cells[rowIndex, colIndex++].Value = manpower.TotalLocal;
@@ -179,8 +178,7 @@ public class ManpowerReportService(
         var colIndex = 1;
         var month = 1;
         worksheet.Cells[rowIndex, colIndex++].Value = rowNum;
-        worksheet.Cells[rowIndex, colIndex++].Value = manpower.DepartmentCode;
-        worksheet.Cells[rowIndex, colIndex++].Value = manpower.Section;
+        worksheet.Cells[rowIndex, colIndex++].Value = manpower.DepartmentName;
         worksheet.Cells[rowIndex, colIndex++].Value = manpower.TeamName;
         worksheet.Cells[rowIndex, colIndex++].Value = manpower.ProbationResigned;
         worksheet.Cells[rowIndex, colIndex++].Value = manpower.ConfirmedResigned;
@@ -251,7 +249,7 @@ public class ManpowerReportService(
     private static void WriteSummaryRow(ExcelWorksheet worksheet, int rowIndex, int year, IEnumerable<ManpowerModel> manpowers)
     {
         var month = 1;
-        var colIndex = 5;
+        var colIndex = 4;
         worksheet.Cells[rowIndex, colIndex++].Value = manpowers.Sum(t => t.ProbationResigned);
         worksheet.Cells[rowIndex, colIndex++].Value = manpowers.Sum(t => t.ConfirmedResigned);
         worksheet.Cells[rowIndex, colIndex++].Value = manpowers.Sum(t => t.NewHire);
@@ -327,7 +325,7 @@ public class ManpowerReportService(
         var staff = manpowers.Sum(t => t.Staff);
         var worker = manpowers.Sum(t => t.Worker);
 
-        var colIndex = 5;
+        var colIndex = 4;
         worksheet.Cells[rowIndex, colIndex++].Value = manpowers.Sum(x => x.TotalExpat);
         worksheet.Cells[rowIndex, colIndex++].Value = manpowers.Sum(x => x.TotalLocal);
         worksheet.Cells[rowIndex, colIndex++].Value = total;

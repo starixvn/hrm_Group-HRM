@@ -6,7 +6,7 @@ public class TeamModel
 {
     public int TeamId { get; set; }
 
-    public int DepartmentId { get; set; }
+    public int SectionId { get; set; }
         
     public string Code { get; set; }
         
@@ -17,6 +17,4 @@ public class TeamModel
     public bool IsDeleted { get; set; }
 
     public DateTime ModifiedDate { get; set; }
-
-    public int SectionId { get; set; }
 }

@@ -3,13 +3,11 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Core.Enums;
 using Resources;
 using GO.UserControl.Client.Core.Models.Role;
 
-[SuppressMessage("Major Code Smell", "S109:Magic numbers should not be used", Justification = "Pending")]
 public class Employee : EntityBase<int>
 {
     public int UserId { get; set; }
@@ -170,6 +168,10 @@ public class Employee : EntityBase<int>
 
     public string CountryName { get; set; }
 
+    public int CompanyId { get; set; }
+
+    public string CompanyName { get; set; }
+
     public bool IsShowLeftNavigation { get; set; }
 
     [Range(0, 5, ErrorMessage = "Number of Off days must be between 0 and 5.")]
@@ -217,6 +219,8 @@ public class Employee : EntityBase<int>
     #endregion Contract
 
     public string DisplayName => string.IsNullOrWhiteSpace(NickName) ? FullName : NickName + " (" + FullName + ")";
+
+    public string DisplayNameWithCompany => NickName + " (" + CompanyName + ")";
 
     [Display(Name = "Pickup Remark")]
     public string PickupRemark { get; set; }

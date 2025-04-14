@@ -1,13 +1,13 @@
 ﻿@using HRM.Core
+@using HRM.Models.Report.MealAllowance
 @using HRM.Resources
 @using HRM.Website.Helper
-@model IEnumerable<HRM.Models.Report.MealAllowance.MealAllowanceDetail>
+@model IEnumerable<MealAllowanceDetail>
 
 <table class="table table-custom" id="data">
     <thead>
         <tr>
             <th>@Labels.Department</th>
-            <th>@Labels.Section</th>
             <th>@Labels.Team</th>
             <th>@Labels.Code</th>
             <th>@Labels.Date</th>
@@ -26,10 +26,9 @@
             <tbody>
                 @foreach (var detail in Model)
                 {
-                    <tr>
-                    <td class="align-left">@detail.Department</td>
-                    <td class="align-left">@detail.Section</td>
-                    <td class="align-left">@detail.Team</td>
+                <tr>
+                    <td class="align-left">@detail.DepartmentName</td>
+                    <td class="align-left">@detail.TeamName</td>
                     <td class="align-center">@detail.Code</td>
                     <td class="align-left">@detail.WorkDate.ToString("ddd, dd MMM, yyyy")</td>
                     <td class="align-left">@detail.FullName</td>
@@ -45,6 +44,6 @@
     }
     else
     {
-        @Html.Raw(RazorHelpers.DisplayNoInformation(colspan: 12))
+        @Html.Raw(RazorHelpers.DisplayNoInformation(colspan: 11))
     }
 </table>

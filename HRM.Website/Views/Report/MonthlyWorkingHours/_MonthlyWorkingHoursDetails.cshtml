@@ -16,12 +16,6 @@
                         <div class="fa fa-sort"></div>
                     </div>
                 </th>
-                <th class="col-sorter">
-                    <div class="cell-control-wrapper">
-                        <div>@Labels.Section</div>
-                        <div class="fa fa-sort"></div>
-                    </div>
-                </th>
                 <th class="cell-section">@Labels.Team</th>
                 <th>@Labels.Code</th>
                 <th class="cell-fullname">@Labels.FullName</th>
@@ -44,8 +38,7 @@
                     index++;
                     <tr>
                         <td>@index</td>
-                        <td class="align-left">@monthlyWorking.Department</td>
-                        <td class="align-left">@monthlyWorking.Section</td>
+                        <td class="align-left">@monthlyWorking.DepartmentName</td>
                         <td class="align-left">@monthlyWorking.Team.Name</td>
                         <td class="align-left">@monthlyWorking.Code</td>
                         <td class="align-left">@monthlyWorking.FullName</td>

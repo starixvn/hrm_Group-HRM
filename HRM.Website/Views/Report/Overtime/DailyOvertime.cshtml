@@ -65,7 +65,7 @@
     <div class="form-horizontal clearfix">
         <div class="form-group form-group--m">
             <div class="label-form">
-                <label class="control-label">@Labels.SectionTeam</label>
+                <label class="control-label">@Labels.Team</label>
             </div>
             <div class="select-form" id="Team"></div>
         </div>
@@ -104,12 +104,6 @@
             <th class="col-sorter">
                 <div class="cell-control-wrapper">
                     <div>@Labels.Department</div>
-                    <div class="fa fa-sort"></div>
-                </div>
-            </th>
-            <th class="col-sorter">
-                <div class="cell-control-wrapper">
-                    <div>@Labels.Section</div>
                     <div class="fa fa-sort"></div>
                 </div>
             </th>
@@ -206,9 +200,8 @@
             {
                 <tr>
                     <td>@request.WorkDate.ToDateMonthYearFormatedDate()</td>
-                    <td>@request.DepartmentCode</td>
-                    <td>@request.Section</td>
-                    <td>@request.Team</td>
+                    <td>@request.DepartmentName</td>
+                    <td>@request.TeamName</td>
                     <td>@request.Code</td>
                     <td class="align-left">@request.FullName</td>
                     <td class="align-left">@request.Nickname</td>

@@ -107,7 +107,7 @@
                         </td>
                     }
                     <td class="@(item.IsWeekend ? "weekend" : string.Empty)">@item.WorkDate.ToDayOfWeekFormatedDate()</td>
-                    <td>@item.Employee.TeamName</td>
+                    <td class="align-left">@item.Employee.TeamName</td>
                     <td class="tooltip-tipsy" title="@item.Employee.FullName">@item.Employee.NickName</td>
                     <td>@item.ShiftName</td>
                     <td>

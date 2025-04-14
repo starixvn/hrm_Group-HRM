@@ -80,9 +80,9 @@ public class RequestService(
         };
     }
 
-    public async Task<IList<RequestEntity>> GetRequests(GetRequestCriteria criteria)
+    public async Task<IList<RequestEntity>> GetRequestAsync(GetRequestCriteria criteria)
     {
-        return await requestRepository.GetRequests(criteria);
+        return await requestRepository.GetRequestAsync(criteria);
     }
 
     public async Task<VerifierAndApproverForRequest> GetVerifierAndApproverAsync(int employeeId, RequestType requestType)

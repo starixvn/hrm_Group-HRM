@@ -1,20 +1,22 @@
 ﻿@using HRM.Core.Enums
-@model (HRM.ViewModels.Request.RequestViewModel RequestViewModel, HRM.Models.Request.RequestEntity Request)
+@using HRM.Models.Request
+@using HRM.ViewModels.Request
+@model (RequestViewModel RequestViewModel, RequestEntity Request)
 
 @{
-	var requestViewModel = Model.RequestViewModel;
-	var request = Model.Request;
+    var requestViewModel = Model.RequestViewModel;
+    var request = Model.Request;
 }
 
 @switch (requestViewModel.ViewType)
 {
-	case RequestViewType.PersonalSpace:
-		@await Html.PartialAsync("_RenderStatusPersonalSpace", (requestViewModel, request))
-		break;
-	case RequestViewType.SASpace:
-		@await Html.PartialAsync("_RenderStatusSASpace", request)
-		break;
-	default:
-		@await Html.PartialAsync("_RenderStatusHRSpace", (requestViewModel, request))
-		break;
+    case RequestViewType.PersonalSpace:
+        @await Html.PartialAsync("_RenderStatusPersonalSpace", (requestViewModel, request))
+        break;
+    case RequestViewType.SASpace:
+        @await Html.PartialAsync("_RenderStatusSASpace", request)
+        break;
+    default:
+        @await Html.PartialAsync("_RenderStatusHRSpace", (requestViewModel, request))
+        break;
 }

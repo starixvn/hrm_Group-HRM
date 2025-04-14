@@ -13,12 +13,6 @@
                             <div class="fa fa-sort"></div>
                         </div>
                     </th>
-                    <th class="col-sorter">
-                        <div class="cell-control-wrapper">
-                            <div>@Labels.Section</div>
-                            <div class="fa fa-sort"></div>
-                        </div>
-                    </th>
                     <th>@Labels.Team</th>
                     <th class="width-15-percent">@Labels.VerifiedBy</th>
                     <th class="width-15-percent">@Labels.ApprovedBy</th>
@@ -36,9 +30,8 @@
                         index++;
                         <tr>
                             <td>@index</td>
-                            <td>@item.Department</td>
-                            <td>@item.Section</td>
-                            <td>@item.Code</td>
+                            <td class="align-left">@item.DepartmentName</td>
+                            <td class="align-left">@item.Name</td>
                             <td class="align-left">
                                 @string.Join(", ", item.Supervisors.Where(x => x.ActionType == (int)SupervisorActionType.Verifier).Select(x => x.NickName))
                             </td>

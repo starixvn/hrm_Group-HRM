@@ -13,7 +13,7 @@ public interface IOvertimeRequestService
 
     Task<MonthlyOvertimeRequest> GetMonthlyRequestDetailsByEmployeeId(int employeeId, DateTime month);
 
-    Task<IEnumerable<MonthlyOvertimeRequest>> GetMemberMonthlyRequest(GetMonthlyOvertimeRequestParam param);
+    Task<IEnumerable<MonthlyOvertimeRequest>> GetMemberMonthlyRequestAsync(GetMonthlyOvertimeRequestParam param);
 
     Task<MonthlyOvertimeRequest> GetMonthlyRequestDetailsById(long requestId);
 

@@ -64,7 +64,7 @@
 
                 <div class="form-group form-group--m">
                     <div class="label-form">
-                        <label class="control-label">@Labels.SectionTeam</label>
+                        <label class="control-label">@Labels.Team</label>
                     </div>
                     <div class="input-form" id="Team"></div>
                 </div>
@@ -97,7 +97,6 @@
                 </th>
             }
             <th rowspan="2">@Labels.Department</th>
-            <th rowspan="2">@Labels.Section</th>
             <th rowspan="2">@Labels.Team</th>
             <th rowspan="2">@Labels.FullName</th>
             <th rowspan="2">@Labels.NickName</th>
@@ -139,9 +138,8 @@
                             <label for="checkbox-@employee.EmpId"></label>
                         </td>
                     }
-                    <td>@employee.Department</td>
-                    <td>@employee.Section</td>
-                    <td>@employee.Team</td>
+                    <td class="align-left">@employee.Department</td>
+                    <td class="align-left">@employee.Team</td>
                     <td class="align-left">@employee.FullName</td>
                     <td>@employee.Nickname</td>
                     <td>

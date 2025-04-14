@@ -10,7 +10,6 @@ public class WorkingCalendar
     public string FullName { get; set; }
     public string Nickname { get; set; }
     public string Team { get; set; }
-    public string SectionCode { get; set; }
     public string DepartmentCode { get; set; }
     public IEnumerable<DailySchedule> Schedules { get; set; }
 }

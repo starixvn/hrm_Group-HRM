@@ -8,7 +8,6 @@
         <tr>
             <th>@Labels.SymbolCount</th>
             <th>@Labels.Department</th>
-            <th>@Labels.Section</th>
             <th>@Labels.Team</th>
             <th>@Labels.Code</th>
             <th>@Labels.FullName</th>
@@ -34,9 +33,8 @@
             {
                 <tr>
                     <td>@(index++)</td>
-                    <td class="align-left">@item.Department</td>
-                    <td class="align-left">@item.Section</td>
-                    <td class="align-left">@item.Team</td>
+                    <td class="align-left">@item.DepartmentName</td>
+                    <td class="align-left">@item.TeamName</td>
                     <td>@item.Code</td>
                     <td class="align-left">@item.FullName</td>
                     <td>@item.Nickname</td>

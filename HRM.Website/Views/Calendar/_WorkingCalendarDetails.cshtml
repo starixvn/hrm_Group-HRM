@@ -76,12 +76,6 @@
                     <div class="fa fa-sort"></div>
                 </div>
             </th>
-            <th class="col-sorter">
-                <div class="cell-control-wrapper">
-                    <div>@Labels.Section</div>
-                    <div class="fa fa-sort"></div>
-                </div>
-            </th>
             <th>@Labels.Team</th>
             <th>@Labels.NickName</th>
             @for (var day = fromDay.Date; day.Date <= toDay.Date; day = day.AddDays(1))
@@ -101,7 +95,6 @@
             {
                 <tr>
                     <td class="align-left">@calendar.DepartmentCode</td>
-                    <td class="align-left">@calendar.SectionCode</td>
                     <td class="align-left">@calendar.Team</td>
                     <td class="align-left">@calendar.Nickname</td>
                     @foreach (var daily in calendar.Schedules)

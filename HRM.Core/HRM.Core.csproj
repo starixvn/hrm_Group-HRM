@@ -6,7 +6,7 @@
     <ProjectReference Include="..\HRM.Resources\HRM.Resources.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="AWSSDK.S3" Version="3.7.415.16" />
+    <PackageReference Include="AWSSDK.S3" Version="3.7.416.6" />
     <PackageReference Include="Fanex.Caching.Redis" Version="2.2.8" />
     <PackageReference Include="Fanex.Common" Version="1.1.2.1" />
     <PackageReference Include="Fanex.Data" Version="4.3.3" />
@@ -16,6 +16,6 @@
     <PackageReference Include="GO.UserControl.Client.Core" Version="1.0.3" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="NLog.Web.AspNetCore" Version="5.4.0" />
-    <PackageReference Include="NPOI" Version="2.7.2" />
+    <PackageReference Include="NPOI" Version="2.7.3" />
   </ItemGroup>
 </Project>

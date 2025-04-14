@@ -44,7 +44,7 @@ public class RequestController(
             request.FromDate = DateTimeOffset.Now.Date.AddDays(fromDays);
             request.IsFilterByAffectedDate = false;
         }
-        await GetRequests(request);
+        await GetRequestAsync(request);
         await GetInfoAttachFileAsync(request.Requests);
         return View(EmployeeRequestViewName, request);
     }
@@ -64,7 +64,7 @@ public class RequestController(
         request.ViewType = RequestViewType.HRSpace;
         var team = await teamService.GetAllAsync();
         request.TeamIds ??= string.Join(",", team.Select(x => x.Id));
-        await GetRequests(request);
+        await GetRequestAsync(request);
         await GetInfoAttachFileAsync(request.Requests);
 
         return View(EmployeeRequestViewName, request);
@@ -78,7 +78,7 @@ public class RequestController(
         var team = await teamService.GetAllAsync();
         request.TeamIds ??= string.Join(",", team.Select(x => x.Id));
 
-        await GetRequests(request);
+        await GetRequestAsync(request);
 
         return View(EmployeeRequestViewName, request);
     }
@@ -90,7 +90,7 @@ public class RequestController(
         request.ViewType = RequestViewType.SASpace;
         var teams = await teamService.GetAllAsync();
         request.TeamIds ??= string.Join(",", teams.Select(x => x.Id));
-        await GetRequests(request);
+        await GetRequestAsync(request);
         await GetInfoAttachFileAsync(request.Requests);
 
         return View(EmployeeRequestViewName, request);
@@ -214,8 +214,7 @@ public class RequestController(
         }
     }
 
-    [NonAction]
-    private async Task GetRequests(RequestViewModel request)
+    private async Task GetRequestAsync(RequestViewModel request)
     {
         request.LeaveTypes = await commonDataService.GetLeaveTypeAsync();
         int? employeeId = null;
@@ -240,15 +239,15 @@ public class RequestController(
             CompanyId = CurrentCompanyId
         };
 
-        var requestList = await requestService.GetRequests(criteria);
+        var requests = await requestService.GetRequestAsync(criteria);
 
-        Parallel.ForEach(requestList, rq =>
+        Parallel.ForEach(requests, rq =>
         {
             rq.FromTime = rq.FromTime.ToClientTimeZone();
             rq.ToTime = rq.ToTime.ToClientTimeZone();
         });
         request.CurrentUserId = session.UserId;
-        request.Requests = request.ViewType == RequestViewType.PersonalSpace ? SortRequest(requestList) : requestList;
+        request.Requests = request.ViewType == RequestViewType.PersonalSpace ? SortRequest(requests) : requests;
     }
 
     private List<RequestEntity> SortRequest(IList<RequestEntity> requests)
@@ -259,8 +258,8 @@ public class RequestController(
     private bool SortRequestValidate(RequestEntity t)
     {
         var pending = t.Status.Id == (byte)CurrentRequestStatus.Pending
-                      && (t.ApprovedBy.Id == session.UserId || t.VerifiedBy.Id == session.UserId);
-        var verified = t.Status.Id == (byte)CurrentRequestStatus.Verified && t.ApprovedBy.Id == session.UserId;
+                      && (t.ApproverId == session.UserId || t.VerifierId == session.UserId);
+        var verified = t.Status.Id == (byte)CurrentRequestStatus.Verified && t.ApproverId == session.UserId;
         return pending || verified;
     }
 }

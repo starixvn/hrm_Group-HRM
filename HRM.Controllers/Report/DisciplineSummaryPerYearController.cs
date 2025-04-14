@@ -8,6 +8,7 @@ using Core;
 using Core.Constants;
 using Core.Filters;
 using GO.UserControl.Client.Core.Enumerables;
+using GO.UserControl.Client.Core.Services;
 using GO.UserControl.Client.Core.Session;
 using HRM.Core.Services;
 using HRM.Criteria.Report;
@@ -21,6 +22,7 @@ using Services.Interfaces;
 [HrmPermission(Policy.Read, FunctionKey.DisciplineSummaryPerYear)]
 public class DisciplineSummaryPerYearController(
     IUserControlSession session,
+    IRoleService roleService,
     IBaseService baseService,
     IEmployeeService employeeService,
     IExportDisciplineSummaryPerYearService exportService,
@@ -43,7 +45,7 @@ public class DisciplineSummaryPerYearController(
     [HttpPost]
     public async Task<IActionResult> GetDisciplineSummaryGrid(DisciplineSummaryPerYearViewModel model)
     {
-        var employees = await GetDisciplineSummary(model);
+        var employees = await GetDisciplineSummaryAsync(model);
         ViewBag.FromYear = model.FromYear;
         ViewBag.ToYear = model.ToYear;
         ViewBag.EnableGroupDate = await commonDataService.IsEnableGroupDateAsync();
@@ -55,13 +57,14 @@ public class DisciplineSummaryPerYearController(
     public async Task<IActionResult> ExportExcel(DisciplineSummaryPerYearViewModel model)
     {
         var enableGroupDate = await commonDataService.IsEnableGroupDateAsync();
-        var employees = await GetDisciplineSummary(model);
+        var employees = await GetDisciplineSummaryAsync(model);
         var bytes = exportService.Export(model.FromYear, model.ToYear, employees, enableGroupDate);
         return File(bytes, MimeType.XLSX, "5_Years_Discipline_Summary.xlsx");
     }
 
-    private async Task<IList<DisciplineSummaryPerYear>> GetDisciplineSummary(DisciplineSummaryPerYearViewModel model)
+    private async Task<IList<DisciplineSummaryPerYear>> GetDisciplineSummaryAsync(DisciplineSummaryPerYearViewModel model)
     {
+        var roles = await roleService.GetByUserIdAsync(session.UserId);
         var criteria = new GetDisciplineSummaryPerYearCriteria
         {
             CompanyId = CurrentCompanyId,
@@ -71,7 +74,8 @@ public class DisciplineSummaryPerYearController(
             IsLocal = model.IsLocal,
             EmployeeId = model.EmployeeId,
             ApproverId = session.UserId,
-            IsShowAll = model.IsShowAll
+            IsShowAll = model.IsShowAll,
+            RoleIds = string.Join(",", roles.Select(x => x.RoleId))
         };
         var (employees, disciplines) = await baseService.FetchMultipleAsync<DisciplineSummaryPerYear, DisciplineSummaryPerYearDetail>(criteria);
         var disciplineSummaryPerYears = employees.ToList();

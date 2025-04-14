@@ -28,12 +28,6 @@
             </th>
             <th class="col-sorter">
                 <div class="cell-control-wrapper">
-                    @Labels.Section
-                    <div class="fa fa-sort cell-right-div"></div>
-                </div>
-            </th>
-            <th class="col-sorter">
-                <div class="cell-control-wrapper">
                     @Labels.Team
                     <div class="fa fa-sort cell-right-div"></div>
                 </div>
@@ -111,13 +105,12 @@
                         <div class="checkbox">
                             <input type="checkbox" class="checkbox-custom" id="ckb@(request.RequestId)"
                                    data-requestid="@request.RequestId" data-statusid="@request.Status.Id"
-                                   data-verifierid="@request.Verifier.EmpId" data-approverid="@request.Approver.EmpId" />
+                                   data-verifierid="@request.VerifierId" data-approverid="@request.ApproverId" />
                             <label for="ckb@(request.RequestId)"></label>
                         </div>
                     </td>
-                    <td>@request.Requester.Department</td>
-                    <td>@request.Requester.Section</td>
-                    <td>@request.Requester.Team</td>
+                    <td class="align-left">@request.DepartmentName</td>
+                    <td class="align-left">@request.TeamName</td>
                     <td class="align-left">@request.Requester.FullName</td>
                     <td>@request.Requester.Nickname</td>
                     <td data-datetime="@request.Month">@request.Month.ToString("MMM-yyyy")</td>
@@ -145,8 +138,8 @@
                             @request.SpecialHours
                         }
                     </td>
-                    <td>@request.Verifier.Nickname</td>
-                    <td>@request.Approver.Nickname</td>
+                    <td>@request.VerifierNickname</td>
+                    <td>@request.ApproverNickname</td>
                     <td>
                         @switch (request.Status.Id)
                         {

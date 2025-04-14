@@ -74,25 +74,25 @@ public class ReportRepository : Interfaces.IReportRepository
         return supervisors;
     }
 
-    public async Task<IList<TeamSupervisorReportModel>> GetTeamSupervisor(ICriteria criteria)
+    public async Task<IEnumerable<TeamSupervisorReportModel>> GetTeamSupervisorAsync(ICriteria criteria)
     {
         using var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey());
         using var multi = await db.QueryMultipleAsync(criteria);
-        var supervisors = (await multi.ReadAsync<TeamSupervisorReportModel>()).ToList();
+        var supervisors = await multi.ReadAsync<TeamSupervisorReportModel>();
 
-        IList<SupervisorModel> employees = multi.Read<SupervisorModel, TeamModel, SupervisorModel>(
+        var employees = multi.Read<SupervisorModel, TeamModel, SupervisorModel>(
             (su, team) =>
             {
                 su.Team = team;
                 return su;
             },
-            splitOn: "TeamId").ToList();
+            splitOn: "TeamId");
 
         foreach (var supervisor in supervisors)
         {
             supervisor.Supervisors = employees.Where(x => x.Team.TeamId == supervisor.TeamId).ToList();
         }
 
-        return supervisors.ToList();
+        return supervisors;
     }
 }

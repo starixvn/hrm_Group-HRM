@@ -88,6 +88,15 @@ namespace HRM.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Accountable Area.
+        /// </summary>
+        public static string AccountableArea {
+            get {
+                return ResourceManager.GetString("AccountableArea", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Per 5 Years Accumulation Leave.
         /// </summary>
         public static string AccumulationLeave {
@@ -237,15 +246,6 @@ namespace HRM.Resources {
         public static string AddHalfDay {
             get {
                 return ResourceManager.GetString("AddHalfDay", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Add New Section.
-        /// </summary>
-        public static string AddNewSection {
-            get {
-                return ResourceManager.GetString("AddNewSection", resourceCulture);
             }
         }
         
@@ -610,11 +610,47 @@ namespace HRM.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Business Unit Category.
+        /// </summary>
+        public static string BUCategory {
+            get {
+                return ResourceManager.GetString("BUCategory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Business Unit Code.
+        /// </summary>
+        public static string BUCode {
+            get {
+                return ResourceManager.GetString("BUCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Business Unit ID.
+        /// </summary>
+        public static string BUId {
+            get {
+                return ResourceManager.GetString("BUId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Business Trip.
         /// </summary>
         public static string BusinessTrip {
             get {
                 return ResourceManager.GetString("BusinessTrip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Business Unit Type.
+        /// </summary>
+        public static string BUType {
+            get {
+                return ResourceManager.GetString("BUType", resourceCulture);
             }
         }
         
@@ -1231,6 +1267,15 @@ namespace HRM.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Department ID.
+        /// </summary>
+        public static string DepartmentId {
+            get {
+                return ResourceManager.GetString("DepartmentId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Department Management.
         /// </summary>
         public static string DepartmentManagement {
@@ -1560,15 +1605,6 @@ namespace HRM.Resources {
         public static string EditMessage {
             get {
                 return ResourceManager.GetString("EditMessage", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Edit Section.
-        /// </summary>
-        public static string EditSection {
-            get {
-                return ResourceManager.GetString("EditSection", resourceCulture);
             }
         }
         
@@ -3274,15 +3310,6 @@ namespace HRM.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to New Section.
-        /// </summary>
-        public static string NewSection {
-            get {
-                return ResourceManager.GetString("NewSection", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to New Shift.
         /// </summary>
         public static string NewShift {
@@ -3742,6 +3769,15 @@ namespace HRM.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Personal In Charge.
+        /// </summary>
+        public static string PersonalInCharge {
+            get {
+                return ResourceManager.GetString("PersonalInCharge", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to PH.
         /// </summary>
         public static string PH {
@@ -3756,6 +3792,15 @@ namespace HRM.Resources {
         public static string Phone {
             get {
                 return ResourceManager.GetString("Phone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to PIC.
+        /// </summary>
+        public static string PIC {
+            get {
+                return ResourceManager.GetString("PIC", resourceCulture);
             }
         }
         
@@ -4296,33 +4341,6 @@ namespace HRM.Resources {
         public static string SearchEmployee {
             get {
                 return ResourceManager.GetString("SearchEmployee", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Section.
-        /// </summary>
-        public static string Section {
-            get {
-                return ResourceManager.GetString("Section", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Section Management.
-        /// </summary>
-        public static string SectionManagement {
-            get {
-                return ResourceManager.GetString("SectionManagement", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Sec./Team.
-        /// </summary>
-        public static string SectionTeam {
-            get {
-                return ResourceManager.GetString("SectionTeam", resourceCulture);
             }
         }
         

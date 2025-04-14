@@ -3,13 +3,13 @@
 @model (HRM.ViewModels.Request.RequestViewModel requestViewModel, HRM.Models.Request.RequestEntity request)
 
 @{
-	var request = Model.request;
+    var request = Model.request;
     var requestViewModel = Model.requestViewModel;
-	var annualBalance = string.Empty;
-	if (request.RequestType.Id == (byte)RequestType.Leave)
-	{
-		annualBalance = "AL Balance " + request.FromDate.Year + ": " + request.Requester.AnnualLeaveBalance + " && ";
-	}
+    var annualBalance = string.Empty;
+    if (request.RequestType.Id == (byte)RequestType.Leave)
+    {
+        annualBalance = "AL Balance " + request.FromDate.Year + ": " + request.Requester.AnnualLeaveBalance + " && ";
+    }
 }
 
 @switch (request.Status.Id)
@@ -25,13 +25,13 @@
     case (byte)CurrentRequestStatus.Verified:
         <a roleid="@Convert.ToInt32(RoleSystem.Approver)" requestid="@request.Id" requesttypeid="@request.RequestType.Id" employeeid="@request.Requester.Id" viewType="@requestViewModel.ViewType"
            href="javascript:void(0);" class="approver-actions tooltip-tipsy"
-           title="@annualBalance @request.Status.Name by @request.VerifiedBy.NickName (@request.VerifiedDate.ToShortFormatedDate())">
+           title="@annualBalance @request.Status.Name by @request.VerifierNickName (@request.VerifiedDate.ToShortFormatedDate())">
             @request.Status.ToString()
             <span class="caret"></span>
         </a>
         break;
     case (byte)CurrentRequestStatus.NotVerified:
-        <span class="tooltip-tipsy" title="@annualBalance @request.Status.Name by @request.VerifiedBy.NickName (@request.VerifiedDate.ToShortFormatedDate())">
+        <span class="tooltip-tipsy" title="@annualBalance @request.Status.Name by @request.VerifierNickName (@request.VerifiedDate.ToShortFormatedDate())">
             @request.Status.ToString()
         </span>
         break;
@@ -41,14 +41,14 @@
         {
             <a roleid="@Convert.ToInt32(RoleSystem.HR)" requestid="@request.Id" requesttypeid="@request.RequestType.Id" employeeid="@request.Requester.Id"
                href="javascript:void(0);" class="hr-actions tooltip-tipsy"
-               title="@request.Status.Name by @request.ApprovedBy.NickName (@request.ApprovedDate.ToShortFormatedDate())">
+               title="@request.Status.Name by @request.ApproverNickName (@request.ApprovedDate.ToShortFormatedDate())">
                 @request.Status.ToString()
                 <span class="caret"></span>
             </a>
         }
         else
         {
-            <span class="tooltip-tipsy" title="@request.Status.Name by @request.ApprovedBy.NickName (@request.ApprovedDate.ToShortFormatedDate())">
+            <span class="tooltip-tipsy" title="@request.Status.Name by @request.ApproverNickName (@request.ApprovedDate.ToShortFormatedDate())">
                 @request.Status.ToString()
             </span>
         }
@@ -58,20 +58,20 @@
         {
             <a roleid="@Convert.ToInt32(RoleSystem.HR)" requestid="@request.Id" requesttypeid="@request.RequestType.Id" employeeid="@request.Requester.Id"
                href="javascript:void(0);" class="hr-actions-reset tooltip-tipsy"
-               title="@request.Status.Name by @request.ProcessedBy.NickName (@request.ProcessedDate.ToShortFormatedDate())">
+               title="@request.Status.Name by @request.ProcessedByNickName (@request.ProcessedDate.ToShortFormatedDate())">
                 @request.Status.ToString()
                 <span class="caret"></span>
             </a>
         }
         else
         {
-            <span class="tooltip-tipsy" title="@request.Status.Name by @request.ProcessedBy.NickName (@request.ProcessedDate.ToShortFormatedDate())">
+            <span class="tooltip-tipsy" title="@request.Status.Name by @request.ProcessedByNickName (@request.ProcessedDate.ToShortFormatedDate())">
                 @request.Status.ToString()
             </span>
         }
         break;
     case (byte)CurrentRequestStatus.Void:
-        <span class="tooltip-tipsy" title="@request.Status.Name by @request.ProcessedBy.NickName (@request.ProcessedDate.ToShortFormatedDate())">
+        <span class="tooltip-tipsy" title="@request.Status.Name by @request.ProcessedByNickName (@request.ProcessedDate.ToShortFormatedDate())">
             @request.Status.ToString()
         </span>
         break;

@@ -2,7 +2,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 using Core.Enums;
@@ -13,18 +12,17 @@ using Interfaces;
 using Models;
 using Models.Request;
 using Models.Request.ChangeShift;
-using Models.Section;
 using Models.Shifts;
 using Models.Supervisor;
 
 public class RequestRepository : IRequestRepository
 {
-    public async Task<IList<RequestEntity>> GetRequests(ICriteria criteria)
+    public async Task<IList<RequestEntity>> GetRequestAsync(ICriteria criteria)
     {
         using var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey());
         using var multi = await db.QueryMultipleAsync(criteria);
         var entityList = FillData(multi.Read<dynamic>());
-        var changeOffDateDetails = (await multi.ReadAsync<ChangeShiftDetail>()).ToList();
+        var changeOffDateDetails = await multi.ReadAsync<ChangeShiftDetail>();
 
         foreach (var request in entityList.Where(entity => entity.RequestType.Id == (byte)RequestType.ChangeShift))
         {
@@ -95,17 +93,16 @@ public class RequestRepository : IRequestRepository
 
     private static List<RequestEntity> FillData(dynamic data)
     {
-        var entityList = new List<RequestEntity>();
+        var requests = new List<RequestEntity>();
         foreach (var request in data)
         {
             RequestEntity entity = FillDataEntity(request);
-            entityList.Add(entity);
+            requests.Add(entity);
         }
 
-        return entityList;
+        return requests;
     }
 
-    [SuppressMessage("Critical Code Smell", "S1541:Methods and properties should not be too complex", Justification = "<Pending>")]
     private static RequestEntity FillDataEntity(dynamic requestInfo)
     {
         var entity = new RequestEntity
@@ -127,40 +124,18 @@ public class RequestRepository : IRequestRepository
             CreatedDate = requestInfo.CreatedDate,
             ReasonId = (byte)requestInfo.ReasonId,
             RefNO = requestInfo.RefNo ?? string.Empty,
-            ApprovedDate = requestInfo.ApprovedDate,
-            VerifiedDate = requestInfo.VerifiedDate,
-            ProcessedDate = requestInfo.ProcessedDate,
             Requester = GetRequester(requestInfo),
-            ModifiedBy = new Employee
-            {
-                Id = requestInfo.ModifiedById ?? 0,
-                NickName = requestInfo.ModifiedByNickName ?? string.Empty,
-                FullName = requestInfo.ModifiedByFullName ?? string.Empty
-            },
-            VerifiedBy = new Employee
-            {
-                Id = requestInfo.VerifierId ?? 0,
-                NickName = requestInfo.VerifierNickName ?? string.Empty,
-                FullName = requestInfo.VerifierFullName ?? string.Empty
-            },
-            Approver = new Employee
-            {
-                Id = requestInfo.ApproverId ?? 0,
-                NickName = requestInfo.ApproverNickName ?? string.Empty,
-                FullName = requestInfo.ApproverFullName ?? string.Empty
-            },
-            ApprovedBy = new Employee
-            {
-                Id = requestInfo.ApprovedId ?? 0,
-                NickName = requestInfo.ApprovedNickName ?? string.Empty,
-                FullName = requestInfo.ApprovedFullName ?? string.Empty
-            },
-            ProcessedBy = new Employee
-            {
-                Id = requestInfo.ProcessedId ?? 0,
-                NickName = requestInfo.ProcessedNickName ?? string.Empty,
-                FullName = requestInfo.ProcessedFullName ?? string.Empty
-            },
+            VerifierId = requestInfo.VerifierId,
+            VerifierNickName = requestInfo.VerifierNickName,
+            VerifierFullName = requestInfo.VerifierFullName,
+            VerifiedDate = requestInfo.VerifiedDate,
+            ApproverId = requestInfo.ApproverId,
+            ApproverNickName = requestInfo.ApproverNickName,
+            ApproverFullName = requestInfo.ApproverFullName,
+            ApprovedDate = requestInfo.ApprovedDate,
+            ProcessedByNickName = requestInfo.ProcessedByNickName,
+            ProcessedByFullName = requestInfo.ProcessedByFullName,
+            ProcessedDate = requestInfo.ProcessedDate,
             FromShift = new Shift
             {
                 Id = requestInfo.FromShiftId ?? 0,
@@ -200,15 +175,11 @@ public class RequestRepository : IRequestRepository
                 Id = requestInfo.TeamId,
                 Code = requestInfo.TeamCode,
                 Name = requestInfo.TeamName,
-                Section = new Section
+                Department = new Department
                 {
-                    Id = requestInfo.SectionId,
-                    Code = requestInfo.SectionCode,
-                    Department = new Department
-                    {
-                        Id = requestInfo.DepartmentId,
-                        Code = requestInfo.DepartmentCode
-                    }
+                    Id = requestInfo.DepartmentId,
+                    Code = requestInfo.DepartmentCode,
+                    Name = requestInfo.DepartmentName
                 }
             }
         };

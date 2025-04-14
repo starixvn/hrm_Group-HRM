@@ -17,7 +17,7 @@ public class OvertimeReportRepository : IOvertimeReportRepository
         using var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey());
         using var multi = await db.QueryMultipleAsync(criteria);
         var dateRanges = multi.Read<DateRange>();
-        var dailyOvertimes = multi.Read<DailyOvertimeDetails>().OrderBy(x => x.WorkDate).ThenByDescending(x => x.Team);
+        var dailyOvertimes = multi.Read<DailyOvertimeDetails>().OrderBy(x => x.WorkDate).ThenByDescending(x => x.TeamName);
 
         return new Tuple<IEnumerable<DateRange>, IEnumerable<DailyOvertimeDetails>>(dateRanges, dailyOvertimes);
     }

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using HRM.Core;
 using HRM.Core.Constants;
@@ -10,10 +9,9 @@ using Microsoft.AspNetCore.Hosting;
 
 namespace HRM.Services.ExportExcel.Discipline;
 
-[SuppressMessage("Major Code Smell", "S109:Magic numbers should not be used", Justification = "Pending")]
 public class ExportDisciplineDetailService(IWebHostEnvironment hostingEnvironment) : IExportDisciplineDetailService
 {
-    private const string TemplatePath = @"ExcelTemplates\DisciplineDetailReport.xls";
+    private const string TemplatePath = @"ExcelTemplates/DisciplineDetailReport.xls";
     private const int HeaderRow = 2;
     private const int BodyRow = 3;
     private const int WeekendRow = 4;
@@ -26,11 +24,11 @@ public class ExportDisciplineDetailService(IWebHostEnvironment hostingEnvironmen
         var startDate = criteria.FromDate.ToDateMonthYearFormatedDate();
         var endDate = criteria.ToDate.ToDateMonthYearFormatedDate();
 
-        if (criteria.EmployeeId != null)
+        if (criteria.EmployeeId.HasValue)
         {
             reportTitle = string.Format(Labels.DisciplineDetailReportTitle, criteria.EmployeeName, startDate, endDate);
         }
-        else if (criteria.TeamId != null)
+        else if (!string.IsNullOrWhiteSpace(criteria.TeamIds))
         {
             reportTitle = string.Format(Labels.DisciplineDetailReportTitle, criteria.TeamName, startDate, endDate);
         }

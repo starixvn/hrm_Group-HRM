@@ -17,13 +17,13 @@ public interface IReportService
 
     Task<IEnumerable<LeaveSummary>> GetAnnualLeaveBalanceReportAsync(GetAnnualLeaveBalanceCriteria criteria);
 
-    Task<IEnumerable<LeaveSummary>> GetUnpaidLeaveAsync(GetUnpaidLeaveCriteria criteria);
+    Task<IEnumerable<LeaveSummary>> GetUnpaidLeaveAsync(GetUnpaidLeaveCriteria criteria, string period);
 
-    Task<IList<TimeRecordModel>> GetTimeRecords(GetTimeRecordCriteria criteria);
+    Task<IEnumerable<TimeRecordModel>> GetTimeRecordAsync(GetTimeRecordCriteria criteria);
 
     Task<IList<SupervisorReportModel>> GetSupervisorReport(GetSupervisorReportCriteria criteria);
 
-    Task<IList<TeamSupervisorReportModel>> GetTeamSupervisor(GetTeamSupervisorCriteria criteria);
+    Task<IEnumerable<TeamSupervisorReportModel>> GetTeamSupervisorAsync(GetTeamSupervisorCriteria criteria);
 
     Task<IList<WeekendLeaveSummary>> GetWeekendLeaveSummaryAsync(GetWeekendLeaveSummaryCriteria criteria);
 

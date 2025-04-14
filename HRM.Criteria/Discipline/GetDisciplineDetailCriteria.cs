@@ -10,7 +10,7 @@ public class GetDisciplineDetailCriteria : CriteriaBase
 
     public DateTime ToDate { get; set; }
 
-    public string TeamId { get; set; }
+    public string TeamIds { get; set; }
 
     public int? EmployeeId { get; set; }
 
@@ -29,6 +29,7 @@ public class GetDisciplineDetailCriteria : CriteriaBase
     public string TeamName { get; set; }
 
     public short CompanyId { get; set; }
+    public string RoleIds { get; set; }
 
     public override bool IsValid() => FromDate <= ToDate && ApproverId > 0;
 

@@ -13,7 +13,7 @@ public interface IExportSupervisorService
 {
     byte[] ExportEmployeeSupervisor(IList<SupervisorReportModel> supervisors);
 
-    byte[] ExportTeamSupervisor(IList<TeamSupervisorReportModel> supervisors);
+    byte[] ExportTeamSupervisor(IEnumerable<TeamSupervisorReportModel> supervisors);
 }
 
 #pragma warning disable S109 // Magic numbers should not be used
@@ -57,8 +57,7 @@ public class ExportSupervisorService(IWebHostEnvironment hostingEnvironment) : I
 
             worksheet.Cells[rowIndex, colIndex++].Value = recordIndex++;
             worksheet.Cells[rowIndex, colIndex++].Value = supervisor.Department;
-            worksheet.Cells[rowIndex, colIndex++].Value = supervisor.Section;
-            worksheet.Cells[rowIndex, colIndex++].Value = supervisor.Team.Code;
+            worksheet.Cells[rowIndex, colIndex++].Value = supervisor.Team.Name;
             worksheet.Cells[rowIndex, colIndex++].Value = supervisor.Code;
             worksheet.Cells[rowIndex, colIndex++].Value = supervisor.FullName;
             worksheet.Cells[rowIndex, colIndex++].Value = supervisor.NickName;
@@ -78,12 +77,12 @@ public class ExportSupervisorService(IWebHostEnvironment hostingEnvironment) : I
         return xlPackage.GetAsByteArray();
     }
 
-    public byte[] ExportTeamSupervisor(IList<TeamSupervisorReportModel> supervisors)
+    public byte[] ExportTeamSupervisor(IEnumerable<TeamSupervisorReportModel> supervisors)
     {
         var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, "ExcelTemplates/TeamSupervisor.xlsx");
         using var templatePackage = new ExcelPackage(new FileInfo(templatePath));
         using var xlPackage = new ExcelPackage();
-        const byte totalColumns = 9;
+        const byte totalColumns = 8;
         var templateWorksheet = templatePackage.Workbook.Worksheets[0];
         var worksheet = xlPackage.Workbook.Worksheets.Add(Labels.TeamSupervisor);
         var rowIndex = 1;
@@ -108,9 +107,8 @@ public class ExportSupervisorService(IWebHostEnvironment hostingEnvironment) : I
             }
 
             worksheet.Cells[rowIndex, colIndex++].Value = recordIndex++;
-            worksheet.Cells[rowIndex, colIndex++].Value = supervisor.Department;
-            worksheet.Cells[rowIndex, colIndex++].Value = supervisor.Section;
-            worksheet.Cells[rowIndex, colIndex++].Value = supervisor.Code;
+            worksheet.Cells[rowIndex, colIndex++].Value = supervisor.DepartmentName;
+            worksheet.Cells[rowIndex, colIndex++].Value = supervisor.Name;
             worksheet.Cells[rowIndex, colIndex++].Value = GetSupervisorByActionType(supervisor.Supervisors, SupervisorActionType.Verifier);
             worksheet.Cells[rowIndex, colIndex++].Value = GetSupervisorByActionType(supervisor.Supervisors, SupervisorActionType.Approver);
             worksheet.Cells[rowIndex, colIndex++].Value = GetSupervisorByActionType(supervisor.Supervisors, SupervisorActionType.ShiftArrangement);

@@ -7,7 +7,6 @@
         <tr>
             <th rowspan="2">@Labels.SymbolCount</th>
             <th rowspan="2">@Labels.Department</th>
-            <th rowspan="2">@Labels.Section</th>
             <th rowspan="2">@Labels.Team</th>
             <th rowspan="2">@Labels.FullName</th>
             <th rowspan="2">@Labels.NickName</th>
@@ -64,9 +63,8 @@
                 double balance;
             <tr>
                 <td>@(index++)</td>
-                <td>@item.Department</td>
-                <td>@item.Section</td>
-                <td>@item.Team</td>
+                <td class="align-left">@item.Department</td>
+                <td class="align-left">@item.Team</td>
                 <td class="align-left">@item.FullName</td>
                 <td class="align-left">@item.Nickname</td>
                 @switch (Model.Period)
