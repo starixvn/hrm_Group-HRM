@@ -3,7 +3,6 @@ using Fanex.Data.SqlServer;
 using Fanex.Logging.Sentry.RavenClient;
 using GO.UserControl.Client.Core;
 using GO.UserControl.Client.Core.Session;
-using HRM.Controllers.API.Middlewares;
 using HRM.Core;
 using HRM.Website;
 using HRM.Website.Middlewares;

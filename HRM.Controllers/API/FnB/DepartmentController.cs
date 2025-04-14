@@ -9,7 +9,8 @@ namespace HRM.Controllers.API.FnB;
 
 [ApiController]
 [Route("/api/fnb/[controller]")]
-public class DepartmentController(IDepartmentService departmentService,
+public class DepartmentController(
+    IDepartmentService departmentService,
     ICompanyService companyService) : ControllerBase
 {
     [HttpGet]

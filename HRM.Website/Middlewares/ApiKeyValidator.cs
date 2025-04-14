@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 
-namespace HRM.Controllers.API.Middlewares;
+namespace HRM.Website.Middlewares;
 
 public interface IApiKeyValidator
 {

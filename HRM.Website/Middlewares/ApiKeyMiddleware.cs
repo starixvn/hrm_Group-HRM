@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 
-namespace HRM.Controllers.API.Middlewares;
+namespace HRM.Website.Middlewares;
 
 public class ApiKeyMiddleware(RequestDelegate next, IApiKeyValidator validator)
 {

@@ -8,7 +8,8 @@ namespace HRM.Controllers.API.FnB;
 
 [ApiController]
 [Route("api/fnb/[controller]")]
-public class ShiftController(IShiftService shiftService,
+public class ShiftController(
+    IShiftService shiftService,
     ICompanyService companyService) : ControllerBase
 {
     [HttpGet]
