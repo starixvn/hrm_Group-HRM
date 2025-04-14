@@ -495,14 +495,7 @@ public class LeaveController(
         var today = DateTimeOffset.Now.DateTime.ToClientTimeZone().Date;
 
         var employee = await employeeService.GetEmployeeByIdAsync(session.UserId);
-        var employeeJoinDate = employee.JoinedDate;
 
-        var defaultMinDate = today.FirstDayOfMonth().AddMonths(-5);
-        var minDate =
-            employeeJoinDate.HasValue && employeeJoinDate.Value > defaultMinDate
-            ? employeeJoinDate.Value.Date
-            : defaultMinDate;
-
-        return minDate;
+        return employee is { JoinedDate: not null } ? employee.JoinedDate.Value : today;
     }
 }
