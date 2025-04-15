@@ -7,6 +7,7 @@ using HRM.Core;
 using HRM.Website;
 using HRM.Website.Middlewares;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
@@ -44,6 +45,11 @@ if (!app.Environment.IsDevelopment())
     app.UseMiddleware<ErrorHandler>();
     app.UseHsts();
 }
+
+app.UseForwardedHeaders(new ForwardedHeadersOptions
+{
+    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+});
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
