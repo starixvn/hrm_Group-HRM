@@ -2,11 +2,13 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Core.Constants;
 using Criteria.SystemSetting;
+using Fanex.Data;
 using GO.UserControl.Client.Core;
 using GO.UserControl.Client.Core.Models.Auth;
 using GO.UserControl.Client.Core.Services;
@@ -107,6 +109,69 @@ public class AuthController(
 
         var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
         await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
+    }
+
+    public async Task<IActionResult> SSO(string userId, string onUserId, string time, string redirectUrl = null)
+    {
+        var companySite = await companyService.GetCompanySiteByDomainAsync();
+        if (companySite == null)
+        {
+            return RedirectToAction("AccessDenied", "Error");
+        }
+
+        userControlSettings.SiteId = companySite.SiteId;
+        userControlSettings.AccessToken = companySite.AccessToken;
+
+        session.Set(SessionKey.CurrentCompanyId, companySite.CompanyId);
+
+        const string DateTimeFormat = "yyyy-MM-dd HH:mm:ss.fff";
+        var userIdValue = Cryptography.DecryptPassword(userId.Replace(" ", "+"));
+        var onUserIdValue = Cryptography.DecryptPassword(onUserId.Replace(" ", "+"));
+        var timeValue = Cryptography.DecryptPassword(time.Replace(" ", "+"));
+        var currentTime = await authService.SSOGetTimeAsync();
+        var expiration = DateTime.ParseExact(currentTime, DateTimeFormat, new CultureInfo("en-US")) - DateTime.ParseExact(timeValue, DateTimeFormat, new CultureInfo("en-US"));
+        const byte TimeExpiration = 30;
+        if (expiration.TotalSeconds <= TimeExpiration)
+        {
+            var tmpUserId = Convert.ToInt32(userIdValue);
+            var ssoParam = new SSOLoginParam
+            {
+                UserId = tmpUserId,
+                CheckOnUserId = Convert.ToInt64(onUserIdValue),
+                OnUserId = 0,
+                IP = GetClientIp(HttpContext),
+                Platform = HttpContext.Request.Headers["User-Agent"].ToString(),
+                BrowserName = HttpContext.Request.Headers["User-Agent"].ToString(),
+                NetSessionId = HttpContext.Session.Id
+            };
+            var loginResult = await authService.SSOLoginAsync(ssoParam);
+            if (loginResult.IsSuccessfull)
+            {
+                var employee = await hrmAuthService.GetByUserIdAsync(tmpUserId);
+                if (employee == null)
+                {
+                    return RedirectToAction("Login");
+                }
+
+                session.UserId = loginResult.UserId;
+                session.SiteId = userControlSettings.SiteId;
+                session.JwtToken = loginResult.JwtToken;
+                session.OnUserId = loginResult.OnUserId;
+                session.MenuItems = await userService.GetMenuItemAsync();
+                session.Functions = await userService.GetFunctionPermissionAsync(session.SiteId, session.UserId);
+                session.Set(SessionKey.IsShowLeftNavigation, true);
+                session.Set(SessionKey.Employee, employee);
+                session.Set(SessionKey.CurrentTimeZone, await GetClientTimeZoneAsync());
+                session.Set(SessionKey.CurrentDomain, GetDomainName(HttpContext));
+                session.Set(SessionKey.MailSetting, await GetMailSettingAsync());
+
+                await DoLoginAsync(loginResult.UserId);
+
+                return !string.IsNullOrWhiteSpace(redirectUrl) && Url.IsLocalUrl(redirectUrl) ? Redirect(redirectUrl) : Redirect("~/Home/Index");
+            }
+        }
+
+        return RedirectToAction("Login");
     }
 
     private async Task<float> GetClientTimeZoneAsync()

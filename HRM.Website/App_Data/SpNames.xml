@@ -272,7 +272,7 @@
         <Setting Key="ScheduleArrangement_UpdateWeekly" SpName="ScheduleArrangement_UpdateWeekly" DbName="bodb_HRM" Plain="0" />
         <Setting Key="ScheduleArrangement_UpdateRemark" SpName="ScheduleArrangement_UpdateRemark" DbName="bodb_HRM" Plain="0" />
         <Setting Key="ScheduleArrangement_UpdateDisplayOrder" SpName="ScheduleArrangement_UpdateDisplayOrder" DbName="bodb_HRM" Plain="0" />
-        <Setting Key="ScheduleArrangement_UpdateTeamOrder" SpName="ScheduleArrangement_UpdateGroupOrder" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="ScheduleArrangement_UpdateGroupOrder" SpName="ScheduleArrangement_UpdateGroupOrder" DbName="bodb_HRM" Plain="0" />
         <Setting Key="ScheduleArrangement_UpdateWeeklyDefaultShift" SpName="ScheduleArrangement_UpdateWeeklyDefaultShift" DbName="bodb_HRM" Plain="0" />
         <Setting Key="ScheduleArrangement_SyncShift" SpName="ScheduleArrangement_SyncShift" DbName="bodb_HRM" Plain="0" />
         <Setting Key="ScheduleArrangement_SyncWorkingShift" SpName="ScheduleArrangement_SyncWorkingShift" DbName="bodb_HRM" Plain="0" />
