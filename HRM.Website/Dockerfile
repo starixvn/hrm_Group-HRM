@@ -1,4 +1,14 @@
+ARG CI_REGISTRY_IMAGE
+
+FROM $CI_REGISTRY_IMAGE:builder AS deps
+
+RUN mkdir -p /src/packages
+
 FROM hub.nexdev.net/base/dotnet/core/sdk:9.0-alpine AS builder
+
+ENV NUGET_PACKAGES=/src/packages
+
+COPY --from=deps $NUGET_PACKAGES/. $NUGET_PACKAGES/
 
 WORKDIR /src
 # Copy solution and project files
