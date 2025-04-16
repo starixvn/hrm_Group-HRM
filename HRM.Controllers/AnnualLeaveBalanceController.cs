@@ -92,7 +92,8 @@ public class AnnualLeaveBalanceController(
             TeamIds = string.Join(",", teams.Select(x => x.Id)),
             IsLocal = null,
             Role = string.Empty,
-            SupervisorId = null
+            SupervisorId = null,
+            CompanyId = CurrentCompanyId
         };
         var entityList = await reportService.GetAnnualLeaveBalanceReportAsync(criteria);
         var resetAnnualLeaveCriteria = new ResetAnnualLeaveCriteria
