@@ -314,7 +314,7 @@ public class ExportExcelService(IWebHostEnvironment hostingEnvironment) : IExpor
         var cellCreateDate = row.GetCell(10);
         var cellStatus = row.GetCell(11);
         cellNo.SetCellValue(rowIndex - RowStartBodyLeaveSummary + 2);
-        cellUnitCode.SetCellValue(item.Requester.BUCode);
+        cellUnitCode.SetCellValue(item.Requester.UnitCode);
         cellDepartment.SetCellValue(item.Requester.Team.Department.Name);
         cellTeam.SetCellValue(item.Requester.Team.Name);
         cellNick.SetCellValue(item.Requester.NickName);

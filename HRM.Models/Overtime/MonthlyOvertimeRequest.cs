@@ -25,7 +25,7 @@ public class MonthlyOvertimeRequest
     public string Nickname => Requester.Nickname;
     public string FullName => Requester.FullName;
 
-    public string BUCode { get; set; }
+    public string UnitCode { get; set; }
     public string DepartmentCode { get; set; }
     public string DepartmentName { get; set; }
     public string TeamCode { get; set; }
