@@ -15,6 +15,12 @@
             </th>
             <th class="col-sorter">
                 <div class="cell-control-wrapper">
+                    <div>@Labels.BusinessUnit</div>
+                    <div class="fa fa-sort"></div>
+                </div>
+            </th>
+            <th class="col-sorter">
+                <div class="cell-control-wrapper">
                     <div>@Labels.Department</div>
                     <div class="fa fa-sort"></div>
                 </div>
@@ -115,10 +121,11 @@
                 <tr>
                     <td>@index</td>
                     <td>@request.WorkDate.ToString("dd MMM,yyyy")</td>
-                    <td>@request.DepartmentName</td>
-                    <td>@request.TeamName</td>
+                    <td class="align-left">@request.UnitCode</td>
+                    <td class="align-left">@request.DepartmentName</td>
+                    <td class="align-left">@request.TeamName</td>
                     <td>@request.Code</td>
-                    <td>@request.FullName</td>
+                    <td class="align-left">@request.FullName</td>
                     <td>@request.Nickname</td>
                     <td>@request.ShiftCode</td>
                     <td>@request.TimeIn.ToClientTimeZone().ToString("HH:mm")</td>
@@ -166,12 +173,12 @@
         }
         else
         {
-            @Html.Raw(RazorHelpers.DisplayNoInformation(colspan: 17))
+            @Html.Raw(RazorHelpers.DisplayNoInformation(colspan: 18))
         }
     </tbody>
     <tfoot>
         <tr class="summary">
-            <td class="align-right" colspan="11">@Labels.TotalOvertimeHours:</td>
+            <td class="align-right" colspan="12">@Labels.TotalOvertimeHours:</td>
             <td>@Model.Sum(t => t.NormalHours).ToString("0.00")</td>
             <td>@Model.Sum(t => t.OffHours).ToString("0.00")</td>
             <td>@Model.Sum(t => t.PublicHours).ToString("0.00")</td>
