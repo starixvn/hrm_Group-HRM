@@ -18,6 +18,12 @@
                 </div>
             </th>
             <th class="col-sorter">
+	            <div class="cell-control-wrapper">
+		            @Labels.BusinessUnit
+		            <div class="fa fa-sort cell-right-div"></div>
+	            </div>
+            </th>
+            <th class="col-sorter">
                 <div class="cell-control-wrapper">
                     @Labels.Department
                     <div class="fa fa-sort cell-right-div"></div>
@@ -92,7 +98,7 @@
                 var trClass = item.LateIn > 0 || item.EarlyOut > 30 ? "highlight" : string.Empty;
 
                 <tr class="@trClass">
-                    <td>@index</td>
+                    <td>@index</td> 
                     @if (item.IsWeekend)
                     {
                         <td class="weekend">@item.AttendanceDate.ToString("ddd, dd MMM, yyyy")</td>
@@ -101,6 +107,7 @@
                     {
                         <td>@item.AttendanceDate.ToString("ddd, dd MMM, yyyy")</td>
                     }
+                    <td>@item.BUCode</td>
                     <td>@item.DepartmentCode</td>
                     <td>
                         <span class="tooltip-tippy" data-tippy-content="@item.Team">@item.TeamCode</span>
