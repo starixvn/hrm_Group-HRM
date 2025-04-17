@@ -12,6 +12,12 @@
                 <th>@Labels.SymbolCount</th>
                 <th class="col-sorter">
                     <div class="cell-control-wrapper">
+                        <div>@Labels.BusinessUnit</div>
+                        <div class="fa fa-sort"></div>
+                    </div>
+                </th>
+                <th class="col-sorter">
+                    <div class="cell-control-wrapper">
                         <div>@Labels.Department</div>
                         <div class="fa fa-sort"></div>
                     </div>
@@ -38,6 +44,7 @@
                     index++;
                     <tr>
                         <td>@index</td>
+                        <td>@monthlyWorking.UnitCode</td>
                         <td class="align-left">@monthlyWorking.DepartmentName</td>
                         <td class="align-left">@monthlyWorking.Team.Name</td>
                         <td class="align-left">@monthlyWorking.Code</td>

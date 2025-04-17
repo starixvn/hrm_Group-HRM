@@ -32,11 +32,11 @@ public partial class EmployeeWorkingHoursService(
     IBaseService baseService,
     ICommonDataService commonDataService)
 {
-    private const ushort TotalFixedColumns = 20;
+    private const ushort TotalFixedColumns = 21;
     private const ushort TotalUplColumns = 4;
-    private const ushort StartDateColumnIndex = 25;
-    private const ushort StartUplColumnIndex = 21;
-    private const ushort EndUplColumnIndex = 24;
+    private const ushort StartDateColumnIndex = 26;
+    private const ushort StartUplColumnIndex = 22;
+    private const ushort EndUplColumnIndex = 25;
     private const ushort StartHeaderRowIndex = 2;
     private const ushort EndHeaderRowIndex = 3;
     private const ushort StartBodyRowIndex = 4;
@@ -141,7 +141,7 @@ public partial class EmployeeWorkingHoursService(
         }
 
         worksheet.Cells.AutoFitColumns();
-        worksheet.View.FreezePanes(StartBodyRowIndex, 7);
+        worksheet.View.FreezePanes(StartBodyRowIndex, 8);
     }
 
     private void WriteHeader(ExcelWorksheet template, ExcelWorksheet worksheet, GetMonthlyWorkingHoursParam param)
@@ -190,6 +190,7 @@ public partial class EmployeeWorkingHoursService(
                 .Copy(worksheet.Cells[rowIndex, 1, rowIndex, TotalFixedColumns]);
 
             worksheet.Cells[rowIndex, colIndex++].Value = rowNum++;
+            worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.UnitCode;
             worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.DepartmentName;
             worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Team.Name;
             worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Code;
@@ -292,16 +293,16 @@ public partial class EmployeeWorkingHoursService(
         IEnumerable<MonthlyWorking> monthlyWorkings,
         GetMonthlyWorkingHoursParam param)
     {
-        const byte defaultColumns = 14;
+        const byte defaultColumns = 15;
         var templateIndex = new
         {
             headerRow = 2,
             bodyRow = 3,
             summaryRow = 4,
-            actualWorkingDaysColumn = 3,
-            maternityLeaveColumn = 5,
-            companyEventColumn = 14,
-            unpaidLeaveColumn = 15
+            actualWorkingDaysColumn = 4,
+            maternityLeaveColumn = 6,
+            companyEventColumn = 15,
+            unpaidLeaveColumn = 16
         };
         var months = GetMonthsBetween(param.FromDate, param.ToDate);
         TotalColumns = defaultColumns + months.Count();
@@ -367,9 +368,9 @@ public partial class EmployeeWorkingHoursService(
         dynamic templateIndex)
     {
         rowIndex = templateIndex.bodyRow;
-        var teams = monthlyWorkings.GroupBy(x => new { x.Team.Id, x.Team.Name, x.DepartmentName })
-            .Select(x => new { x.Key.DepartmentName, Team = x.Key.Name, Members = x.ToList() })
-            .OrderBy(x => x.DepartmentName).ThenBy(x => x.Team).ToList();
+        var teams = monthlyWorkings.GroupBy(x => new { x.Team.Id, x.Team.Name, x.UnitCode, x.DepartmentName })
+            .Select(x => new { x.Key.UnitCode, x.Key.DepartmentName, Team = x.Key.Name, Members = x.ToList() })
+            .OrderBy(x => x.UnitCode).ThenBy(x => x.DepartmentName).ThenBy(x => x.Team).ToList();
         foreach (var team in teams)
         {
             var totalHolidays = team.Members.Sum(x => x.DailyWorkings.Count(IsHoliday));
@@ -377,6 +378,7 @@ public partial class EmployeeWorkingHoursService(
             template.Cells[templateIndex.bodyRow, 1, templateIndex.bodyRow, templateIndex.companyEventColumn]
                 .Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, templateIndex.companyEventColumn]);
 
+            worksheet.Cells[rowIndex, colIndex++].Value = team.UnitCode;
             worksheet.Cells[rowIndex, colIndex++].Value = team.DepartmentName;
             worksheet.Cells[rowIndex, colIndex++].Value = team.Team;
             worksheet.Cells[rowIndex, colIndex++].Value = team.Members.Sum(x => x.ActualWorkingDays) + totalHolidays;
@@ -433,7 +435,7 @@ public partial class EmployeeWorkingHoursService(
             headerRow = 2,
             bodyRow = 3
         };
-        TotalColumns = 10;
+        TotalColumns = 11;
         var rowIndex = 1;
         var colIndex = 1;
 
@@ -455,6 +457,7 @@ public partial class EmployeeWorkingHoursService(
                 .Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
 
             worksheet.Cells[rowIndex, colIndex++].Value = rowNum++;
+            worksheet.Cells[rowIndex, colIndex++].Value = request.UnitCode;
             worksheet.Cells[rowIndex, colIndex++].Value = request.DepartmentName;
             worksheet.Cells[rowIndex, colIndex++].Value = request.TeamName;
             worksheet.Cells[rowIndex, colIndex++].Value = request.FullName;
