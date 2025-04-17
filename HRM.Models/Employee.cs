@@ -66,6 +66,8 @@ public class Employee : EntityBase<int>
 
     public byte? Gender { get; set; }
 
+    public string BUCode { get; set; }
+
     public string UnitName { get; set; }
 
     public Team Team { get; set; } = new();
