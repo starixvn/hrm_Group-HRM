@@ -315,24 +315,27 @@ public class TeamController(
     public async Task<IActionResult> GetOrgChart()
     {
         var units = await unitService.GetUnitAsync();
-        var department = await departmentService.GetDepartmentAsync();
+        var departments = await departmentService.GetDepartmentAsync();
         var teams = await commonDataService.GetAllTeamAsync();
 
-        var orgchart = GetOrgChart(units, department, teams);
+        var orgchart = GetOrgChart(units, departments, teams);
 
         return Json(orgchart);
     }
 
     private static IEnumerable<MultiSelectViewModel> GetOrgChart(
         IEnumerable<Unit> units,
-        IList<Department> department,
+        IEnumerable<Department> departments,
         IEnumerable<Team> teams)
     {
+        departments = departments.Where(d => teams.Any(t => t.Department != null && t.Department.Id == d.Id));
+        units = units.Where(u => departments.Any(d => d.Unit != null && d.Unit.Id == u.Id)).ToList();
+
         var orgCharts = units.Select(u => new MultiSelectViewModel
         {
             Id = u.Id,
             Text = u.Code,
-            Items = department.Where(d => d.Unit != null && d.Unit.Id == u.Id).Select(d => new MultiSelectViewModel
+            Items = departments.Where(d => d.Unit != null && d.Unit.Id == u.Id).Select(d => new MultiSelectViewModel
             {
                 Id = d.Id,
                 Text = d.Name,
