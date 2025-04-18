@@ -72,7 +72,6 @@ function showFullAvatar(code, nickname) {
 
     $.get(`/employee/avatar/${code}`)
         .done(function (avatarUrl) {
-            console.log("Avatar URL:", avatarUrl);
             const avatarHtml = `<img src="${avatarUrl}" style="width: 100%; height: 100%" />`;
 
             const $confirm = $.getOrCreateDialog('fullAvatar');
