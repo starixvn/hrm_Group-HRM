@@ -101,6 +101,8 @@ public class EmployeeAttendanceModel
     public bool IsWeekend =>
         AttendanceDate.DayOfWeek is DayOfWeek.Sunday or DayOfWeek.Saturday;
 
+    public string UnitCode { get; set; }
+
     public string DepartmentCode { get; set; }
 
     public List<EmployeeAttendanceRequest> RequestList { get; set; }

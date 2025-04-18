@@ -65,6 +65,12 @@
                 }
                 <th>@Labels.SymbolCount</th>
                 <th class="col-sorter">
+	                <div class="cell-control-wrapper">
+		                @Labels.BusinessUnit
+		                <div class="fa fa-sort cell-right-div"></div>
+	                </div>
+                </th>
+                <th class="col-sorter">
                     <div class="cell-control-wrapper">
                         @Labels.Department
                         <div class="fa fa-sort cell-right-div"></div>
@@ -185,6 +191,7 @@
                             }
                         }
                         <td>@(index++)</td>
+                        <td class="align-left">@request.Requester.UnitCode</td>
                         <td class="align-left">@request.Requester.Team.Department.Name</td>
                         <td class="align-left">@request.Requester.Team.Name</td>
                         <td>

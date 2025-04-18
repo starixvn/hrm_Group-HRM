@@ -263,12 +263,12 @@ public class OvertimeReportService(
         IEnumerable<DateRange> dateRanges,
         IEnumerable<DailyOvertimeDetails> dailyOvertimes)
     {
-        const byte TotalColumns = 17;
+        const byte TotalColumns = 18;
         var templateIndex = new
         {
             bodyRow = 3,
             summaryRow = 4,
-            startSummaryColumn = 12
+            startSummaryColumn = 13
         };
         var fromDate = dateRanges.Min(x => x.Date);
         var toDate = dateRanges.Max(x => x.Date);
@@ -298,6 +298,7 @@ public class OvertimeReportService(
 
             worksheet.Cells[rowIndex, colIndex++].Value = rowNum++;
             worksheet.Cells[rowIndex, colIndex++].Value = overtime.WorkDate;
+            worksheet.Cells[rowIndex, colIndex++].Value = overtime.UnitCode;
             worksheet.Cells[rowIndex, colIndex++].Value = overtime.DepartmentName;
             worksheet.Cells[rowIndex, colIndex++].Value = overtime.TeamName;
             worksheet.Cells[rowIndex, colIndex++].Value = overtime.Code;
@@ -340,16 +341,16 @@ public class OvertimeReportService(
         IEnumerable<DateRange> dateRanges,
         IEnumerable<DailyOvertimeDetails> dailyOvertimes)
     {
-        const byte totalFixedColumns = 10;
+        const byte totalFixedColumns = 11;
         var templateIndex = new
         {
             headerRow = 2,
             bodyRow = 3,
             summaryRow = 4,
-            startSummaryColumn = 7,
-            startNormalDayColumn = 11,
-            endNormalDayColumn = 13,
-            holidayColumn = 14
+            startSummaryColumn = 8,
+            startNormalDayColumn = 12,
+            endNormalDayColumn = 14,
+            holidayColumn = 15
         };
         var rowIndex = 3;
         int colIndex;
@@ -368,6 +369,7 @@ public class OvertimeReportService(
             template.Cells[templateIndex.bodyRow, 1, templateIndex.bodyRow, totalFixedColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, totalFixedColumns]);
 
             worksheet.Cells[rowIndex, colIndex++].Value = rowNum++;
+            worksheet.Cells[rowIndex, colIndex++].Value = employee.UnitCode;
             worksheet.Cells[rowIndex, colIndex++].Value = employee.DepartmentName;
             worksheet.Cells[rowIndex, colIndex++].Value = employee.TeamName;
             worksheet.Cells[rowIndex, colIndex++].Value = employee.Code;
@@ -424,7 +426,7 @@ public class OvertimeReportService(
         IEnumerable<DateRange> dateRanges,
         dynamic templateIndex)
     {
-        const byte TotalFixedColumns = 10;
+        const byte TotalFixedColumns = 11;
         const byte TotalNormalDayColumns = 3;
         var colIndex = 1;
         var fromDate = dateRanges.Min(x => x.Date);

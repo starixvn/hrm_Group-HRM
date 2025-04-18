@@ -646,6 +646,15 @@ namespace HRM.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Business Unit.
+        /// </summary>
+        public static string BusinessUnit {
+            get {
+                return ResourceManager.GetString("BusinessUnit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Business Unit Type.
         /// </summary>
         public static string BUType {

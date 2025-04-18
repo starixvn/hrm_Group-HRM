@@ -302,17 +302,19 @@ public class ExportExcelService(IWebHostEnvironment hostingEnvironment) : IExpor
         IRow row)
     {
         var cellNo = row.GetCell(0);
-        var cellDepartment = row.GetCell(1);
-        var cellTeam = row.GetCell(2);
-        var cellName = row.GetCell(3);
-        var cellNick = row.GetCell(4);
-        var cellRequest = row.GetCell(5);
-        var cellDetails = row.GetCell(6);
-        var cellReason = row.GetCell(7);
-        var cellRemarks = row.GetCell(8);
-        var cellCreateDate = row.GetCell(9);
-        var cellStatus = row.GetCell(10);
+        var cellUnitCode = row.GetCell(1);
+        var cellDepartment = row.GetCell(2);
+        var cellTeam = row.GetCell(3);
+        var cellName = row.GetCell(4);
+        var cellNick = row.GetCell(5);
+        var cellRequest = row.GetCell(6);
+        var cellDetails = row.GetCell(7);
+        var cellReason = row.GetCell(8);
+        var cellRemarks = row.GetCell(9);
+        var cellCreateDate = row.GetCell(10);
+        var cellStatus = row.GetCell(11);
         cellNo.SetCellValue(rowIndex - RowStartBodyLeaveSummary + 2);
+        cellUnitCode.SetCellValue(item.Requester.UnitCode);
         cellDepartment.SetCellValue(item.Requester.Team.Department.Name);
         cellTeam.SetCellValue(item.Requester.Team.Name);
         cellNick.SetCellValue(item.Requester.NickName);

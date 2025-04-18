@@ -8,10 +8,13 @@ public class DailyOvertimeDetails
     public string Code { get; set; }
     public string FullName { get; set; }
     public string Nickname { get; set; }
-    public string TeamCode { get; set; }
-    public string TeamName { get; set; }
+
+    public string UnitCode { get; set; }
     public string DepartmentCode { get; set; }
     public string DepartmentName { get; set; }
+    public string TeamCode { get; set; }
+    public string TeamName { get; set; }
+
     public DateTime WorkDate { get; set; }
     public int? ShiftId { get; set; }
     public string ShiftCode { get; set; }

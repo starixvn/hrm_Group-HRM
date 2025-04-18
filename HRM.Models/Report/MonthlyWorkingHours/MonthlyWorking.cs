@@ -11,6 +11,7 @@ public class MonthlyWorking
     public string FullName { get; set; }
     public int WorkingDays { get; set; }
 
+    public string UnitCode { get; set; }
     public string DepartmentCode { get; set; }
     public string DepartmentName { get; set; }
 

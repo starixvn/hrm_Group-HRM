@@ -170,6 +170,7 @@ public class RequestRepository : IRequestRepository
             NickName = requestInfo.RequesterNickName,
             FullName = requestInfo.RequesterFullName,
             AnnualLeaveBalance = requestInfo.AnnualLeaveBalance,
+            UnitCode = requestInfo.UnitCode,
             Team = new Team
             {
                 Id = requestInfo.TeamId,

@@ -16,10 +16,11 @@ public class EmployeeRequest
     public string Nickname { get; set; }
     public string FullName { get; set; }
 
-    public string TeamCode { get; set; }
-    public string TeamName { get; set; }
+    public string UnitCode { get; set; }
     public string DepartmentCode { get; set; }
     public string DepartmentName { get; set; }
+    public string TeamCode { get; set; }
+    public string TeamName { get; set; }
 
     // leave
     public ushort LeaveTypeId { get; set; }
