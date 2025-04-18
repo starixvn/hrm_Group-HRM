@@ -99,7 +99,8 @@
         <Setting Key="EmployeeSupervisor_GetDisciplineSettingById" SpName="EmployeeSupervisor_GetDisciplineSettingById" DbName="bodb_HRM" Plain="0" />
         <Setting Key="Employee_GetMemberByGender" SpName="Employee_GetMemberByGender" DbName="bodb_HRM" Plain="0" />
         <Setting Key="Employee_UpdateUserId" SpName="Employee_UpdateUserId" DbName="bodb_HRM" Plain="0" />
-        <Setting Key="Employee_GetHRAndSupervisorByEmpId" SpName="Employee_GetHRAndSupervisorByEmpId" DbName="bodb_HRM" Plain="0" />
+		<Setting Key="Employee_GetHRAndSupervisorByEmpId" SpName="Employee_GetHRAndSupervisorByEmpId" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Employee_GetEmployeeForPIC" SpName="Employee_GetEmployeeForPIC" DbName="bodb_HRM" Plain="0" />
         <Setting Key="TimeRecord_GetCheckInOutOnline" SpName="TimeRecord_GetCheckInOutOnline" DbName="bodb_HRM" Plain="0" />
     </Function>
     <Function Name="Group">
@@ -127,6 +128,7 @@
         <Setting Key="Group_Insert" SpName="Group_Insert" DbName="bodb_HRM" Plain="0" />
         <Setting Key="Group_Update" SpName="Group_Update" DbName="bodb_HRM" Plain="0" />
         <Setting Key="Group_Delete" SpName="Group_Delete" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Group_GetNextGroupTeamId" SpName="Group_GetNextGroupTeamId" DbName="bodb_HRM" Plain="0" />
     </Function>
     <Function Name="Lookup">
         <Setting Key="Lookup_GetLookupData" SpName="Lookup_GetLookupData" DbName="bodb_HRM" Plain="0" />
@@ -215,6 +217,7 @@
         <Setting Key="Department_Get" SpName="Department_Get" DbName="bodb_HRM" Plain="0">
             <Mapping DataField="UnitId" ObjectProperty="Id" Class="Unit" />
         </Setting>
+        <Setting Key="Department_GetNextGroupDeptId" SpName="Department_GetNextGroupDeptId" DbName="bodb_HRM" Plain="0" />
     </Function>
     <Function Name="Unit">
         <Setting Key="Unit_Insert" SpName="Unit_Insert" DbName="bodb_HRM" Plain="0" />
@@ -226,6 +229,7 @@
             <Mapping DataField="UnitId" ObjectProperty="Id" Class="Unit" />
         </Setting>
         <Setting Key="Unit_Delete" SpName="Unit_Delete" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Unit_GetNextGroupUnitId" SpName="Unit_GetNextGroupUnitId" DbName="bodb_HRM" Plain="0" />
     </Function>
     <Function Name="Discipline">
         <Setting Key="OtherDiscipline_Get" SpName="OtherDiscipline_Get" DbName="bodb_HRM" Plain="0" />

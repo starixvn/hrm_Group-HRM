@@ -14,7 +14,7 @@ public class BaseService(
     {
         if (criteria != null && criteria.IsValid())
         {
-            var result = await dynamicRepository.FetchAsync<T>(criteria);
+             var result = await dynamicRepository.FetchAsync<T>(criteria);
             return result;
         }
 

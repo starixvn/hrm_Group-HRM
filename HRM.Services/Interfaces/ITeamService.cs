@@ -11,6 +11,8 @@ public interface ITeamService
 {
     Task<Team> GetById(int id);
 
+    Task<int> GetNextGroupTeamIdAsync();
+
     Task<IEnumerable<Team>> GetAllAsync(bool isDeleted = false, string keyword = null);
 
     Task<CommandResult> Delete(int actorId, int id);

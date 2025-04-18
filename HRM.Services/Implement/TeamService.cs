@@ -32,6 +32,12 @@ public class TeamService(
         return await teamRepository.GetById(criteria);
     }
 
+    public async Task<int> GetNextGroupTeamIdAsync()
+    {
+        var criteria = new GetNextGroupTeamIdCriteria();
+        return await baseService.GetDataEntityAsync<int>(criteria);
+    }
+
     public async Task<IEnumerable<Team>> GetAllAsync(bool isDeleted = false, string keyword = null)
     {
         var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
