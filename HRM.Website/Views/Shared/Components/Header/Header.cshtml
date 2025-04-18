@@ -2,7 +2,9 @@
 @model HRM.ViewModels.UI.HeaderViewModel
 
 <div class="header_wrap">
-    <div class="logo"></div>
+    <div class="logo">
+        <img src="~/dist/styles/images/hrm_logo.png" alt="HRM" width="120" height="30" />
+    </div>
     @if (Model.IsShowSearchBox)
     {
         <div class="search_bar">
