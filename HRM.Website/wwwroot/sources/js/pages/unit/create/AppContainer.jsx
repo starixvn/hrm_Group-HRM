@@ -22,7 +22,7 @@ const AppContainer = () => {
 
   useEffect(() => {
     axios({
-      url: resolveClientUrl(`Employee/GetEmployees`),
+      url: resolveClientUrl(`Unit/GetPrepareDataForUnit`),
       method: 'GET',
       headers: { 'X-Requested-With': 'XMLHttpRequest' }
     })
