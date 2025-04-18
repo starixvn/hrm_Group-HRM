@@ -10,9 +10,12 @@ const Table = ({ data, onDelete }) => {
             <thead>
                 <tr>
                     <th>#</th>
-                    <th>Code</th>
-                    <th>Department</th>
-                    <th>Unit</th>
+                    <th>Department Id</th>
+                    <th>Department Code</th>
+                    <th>BU Code</th>
+                    <th>Department Name</th>
+                    <th>Accountable Area</th>
+                    <th>PIC</th>
                     <th>Active</th>
                     {
                         window.hasPermission === 'True' &&
