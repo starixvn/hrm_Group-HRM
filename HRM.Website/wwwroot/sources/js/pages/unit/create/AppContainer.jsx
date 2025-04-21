@@ -73,7 +73,7 @@ const AppContainer = ({ nextId }) => {
               </label>
             </div>
             <div className="input-form">
-              <Field name="groupUnitId" className="form-control" autoComplete="off" />
+              <Field name="groupUnitId" type="number" className="form-control" autoComplete="off" />
             </div>
           </div>
           <div className="form-group">
