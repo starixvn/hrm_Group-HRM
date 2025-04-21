@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using HRM.Core.Services;
+using HRM.Criteria.Company;
 using HRM.Criteria.CompanySite;
 using HRM.Models;
 using HRM.Services.Interfaces;
@@ -21,6 +23,12 @@ public class CompanyService(IBaseService baseService,
             Domain = domainName
         };
         return await baseService.GetDataEntityAsync<CompanySite>(criteria);
+    }
+
+    public async Task<IEnumerable<Company>> GetAllCompany()
+    {
+        var criteria = new GetAllCompanyCriteria();
+        return await baseService.GetDataAsync<Company>(criteria);
     }
 
     private static string GetDomainName(HttpContext httpContext)

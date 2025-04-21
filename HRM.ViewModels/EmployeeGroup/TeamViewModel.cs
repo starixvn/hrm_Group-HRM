@@ -38,6 +38,9 @@ public class TeamViewModel
     [Display(Name = nameof(Labels.PersonalInCharge), ResourceType = typeof(Labels))]
     public int? PICEmpId { get; set; }
 
+    [Display(Name = nameof(Labels.Company), ResourceType = typeof(Labels))]
+    public List<Company> Companies { get; set; }
+
     [StringLength(MaxSizeName, ErrorMessageResourceType = typeof(Messages), ErrorMessageResourceName = nameof(Messages.StringLengthErrorMessage))]
     [Display(Name = nameof(Labels.AccountableArea), ResourceType = typeof(Labels))]
     public string AccountableArea { get; set; }
@@ -45,6 +48,10 @@ public class TeamViewModel
     public IList<Models.Department> Departments { get; set; }
 
     public IList<Employee> Employees { get; set; }
+
+    public List<EmployeePIC> EmployeePics { get; set; }
+
+    public int CompanyId { get; set; }
 
     [Required(ErrorMessageResourceName = nameof(Messages.RequiredErrorMessage), ErrorMessageResourceType = typeof(Messages))]
     [Display(Name = nameof(Labels.BasicAnnualLeaveBalance), ResourceType = typeof(Labels))]

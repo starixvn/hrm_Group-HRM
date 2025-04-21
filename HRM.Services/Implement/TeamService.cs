@@ -13,6 +13,7 @@ using HRM.Models.Group;
 using HRM.Models.Supervisor;
 using HRM.Repositories.Interfaces;
 using HRM.Services.Interfaces;
+using static Microsoft.Extensions.Logging.EventSource.LoggingEventSource;
 
 namespace HRM.Services.Implement;
 
@@ -50,6 +51,17 @@ public class TeamService(
         var teams = await teamRepository.GetAllAsync(criteria);
 
         return teams ?? new List<Team>();
+    }
+
+    public async Task<IEnumerable<GroupTeamModel>> GetAllTeamByUnitScopeAsync(string keyword)
+    {
+        var criteria = new GetAllTeamByUnitScopeCriteria
+        {
+            Keyword = keyword
+        };
+        var teams = await baseService.GetDataAsync<GroupTeamModel>(criteria);
+
+        return teams ?? new List<GroupTeamModel>();
     }
 
     public async Task<CommandResult> Delete(int actorId, int id)
