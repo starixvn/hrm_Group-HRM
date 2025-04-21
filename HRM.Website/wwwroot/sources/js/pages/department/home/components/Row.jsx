@@ -1,6 +1,6 @@
-﻿import React, { Fragment } from 'react';
+﻿import React, { Fragment } from "react";
 
-import { resolveClientUrl } from '../../../../shared/common.functions';
+import { resolveClientUrl } from "../../../../shared/common.functions";
 
 const Row = ({ rowIndex, item, onDelete }) => {
     const handleEdit = () => {
@@ -21,19 +21,26 @@ const Row = ({ rowIndex, item, onDelete }) => {
             <td>{item.accountableArea}</td>
             <td>{item.picEmployeeName}</td>
             <td>
-                {item.isActive && <i className="fa fa-check fa-lg icon-check" />}
+                {item.isActive && (
+                    <i className="fa fa-check fa-lg icon-check" />
+                )}
             </td>
-            {
-                window.hasPermission === 'True' &&
+            {window.hasPermission === "True" && (
                 <Fragment>
                     <td>
-                        <a onClick={handleEdit} className="fa fa-pencil fa-lg icon-edit" />
+                        <a
+                            onClick={handleEdit}
+                            className="fa fa-pencil fa-lg icon-edit"
+                        />
                     </td>
                     <td>
-                        <a onClick={handleDelete} className="fa fa-times fa-lg icon-delete" />
+                        <a
+                            onClick={handleDelete}
+                            className="fa fa-times fa-lg icon-delete"
+                        />
                     </td>
                 </Fragment>
-            }
+            )}
         </tr>
     );
 };

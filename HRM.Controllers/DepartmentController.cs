@@ -8,6 +8,7 @@ using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
 using HRM.Core.Models;
 using HRM.Core.Services;
+using HRM.Criteria.Employee;
 using HRM.Models;
 using Microsoft.AspNetCore.Mvc;
 using Services.Interfaces;
@@ -17,6 +18,7 @@ public class DepartmentController(
     IUserControlSession session,
     IDepartmentService departmentService,
     IUnitService unitService,
+    IEmployeeService employeeService,
     IBaseService baseService) : BaseController(session)
 {
     [HrmPermission(Policy.Read, FunctionKey.DepartmentManagement)]
@@ -132,5 +134,14 @@ public class DepartmentController(
         var commandResult = await departmentService.DeleteAsync(session.UserId, request.Id);
 
         return new JsonResult(commandResult);
+    }
+
+    [HttpGet]
+    [HrmPermission(Policy.Host, FunctionKey.UnitManagement)]
+    public async Task<JsonResult> GetPrepareDataForUnit()
+    {
+        var employees = await employeeService.GetEmployeeForPICAsync(new GetEmployeeForPICCriteria());
+        var nextId = await departmentService.GetNextGroupDeptIdAsync();
+        return new JsonResult(new { employees, nextId });
     }
 }

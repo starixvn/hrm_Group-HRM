@@ -1,14 +1,18 @@
 ﻿import * as Yup from 'yup';
 
 export const validationSchema = Yup.object({
+    groupDeptId: Yup.number()
+        .required('Department ID field is required!'),
+    unit: Yup.string()
+        .required('Business Unit field is required!'),
     code: Yup.string()
         .trim()
-        .max(50, 'Code field must not over 50 characters long!')
-        .required('Code field is required!'),
-    unit: Yup.string()
-        .required('Unit field is required!'),
-    groupDeptId: Yup.number()
-        .required('ID field is required!'),
+        .max(50, 'Department Code field must not over 50 characters long!')
+        .required('Department Code field is required!'),
+    name: Yup.string()
+        .trim()
+        .max(200, 'Department Name field must not over 200 characters long!')
+        .required('Department Name field is required!'),
     accountableArea: Yup.string()
-        .max(200, 'Accountable Area field must not over 200 characters long!')
+        .max(100, 'Accountable Area field must not over 100 characters long!')
 });
