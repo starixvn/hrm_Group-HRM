@@ -1,9 +1,5 @@
 FROM hub.nexdev.net/base/dotnet/core/sdk:9.0-alpine AS builder
 
-# cache nuget packages
-RUN --mount=type=cache,target=/root/.nuget/packages \
-    dotnet restore -v n -r linux-x64 ./NDict.Site/NDict.Site.csproj
-    
 WORKDIR /src
 # Copy solution and project files
 COPY HRM.Criteria/*.csproj HRM.Criteria/
@@ -21,7 +17,8 @@ COPY HRM.Website/*.csproj HRM.Website/
 # Copy the rest of the source code
 RUN dotnet nuget add source https://nuget.nexdev.net/api/v2
 # Restore dependencies
-RUN dotnet restore -v n -r linux-x64 HRM.Website/HRM.Website.csproj
+RUN --mount=type=cache,target=/root/.nuget/packages \
+    dotnet restore -v n -r linux-x64 HRM.Website/HRM.Website.csproj
 
 # Copy source codes
 COPY HRM.Criteria/ HRM.Criteria/
