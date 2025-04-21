@@ -34,8 +34,9 @@ public class UnitController(
     }
 
     [HrmPermission(Policy.Host, FunctionKey.UnitManagement)]
-    public ActionResult Create()
+    public async Task<IActionResult> Create()
     {
+        ViewBag.NextId = await unitService.GetNextGroupUnitIdAsync();
         return View();
     }
 
@@ -118,10 +119,9 @@ public class UnitController(
 
     [HttpGet]
     [HrmPermission(Policy.Host, FunctionKey.UnitManagement)]
-    public async Task<JsonResult> GetPrepareDataForUnit()
+    public async Task<JsonResult> GetEmployeeForPIC()
     {
         var employees = await employeeService.GetEmployeeForPICAsync(new GetEmployeeForPICCriteria());
-        var nextId = await unitService.GetNextGroupUnitIdAsync();
-        return new JsonResult(new { employees, nextId });
+        return new JsonResult(employees);
     }
 }

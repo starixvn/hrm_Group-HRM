@@ -10,7 +10,7 @@ import { validationSchema } from '../common.functions';
 
 const AppContainer = () => {
   const [unit, setUnit] = useState(null);
-  const [prepareData, setPrepareData] = useState(null);
+  const [employees, setEmployees] = useState(null);
 
   const handleGoBack = () => {
     history.back();
@@ -28,17 +28,17 @@ const AppContainer = () => {
       .catch(axiosError);
 
     axios({
-      url: resolveClientUrl(`Unit/GetPrepareDataForUnit`),
+      url: resolveClientUrl(`Unit/GetEmployeeForPIC`),
       method: 'GET',
       headers: { 'X-Requested-With': 'XMLHttpRequest' }
     })
       .then((response) => {
-        setPrepareData(response.data);
+        setEmployees(response.data);
       })
       .catch(axiosError);
   }, []);
 
-  const hanldeSubmit = (values, { setSubmitting }) => {
+  const handleSubmit = (values, { setSubmitting }) => {
     setSubmitting(true);
 
     axios
@@ -129,9 +129,8 @@ const AppContainer = () => {
             <div className="select-form">
               <Field name="picEmpId" as="select" className="form-control">
                 <option value="" />
-                {prepareData &&
-                  prepareData.employees &&
-                  prepareData.employees.map((emp) => (
+                {employees &&
+                  employees.map((emp) => (
                     <option key={emp.id} value={emp.id}>
                       {emp.displayNameWithCompany}
                     </option>
@@ -181,7 +180,7 @@ const AppContainer = () => {
         isActive: unit.isActive || false
       }}
       validationSchema={validationSchema}
-      onSubmit={hanldeSubmit}
+      onSubmit={handleSubmit}
     >
       {renderForm}
     </Formik>

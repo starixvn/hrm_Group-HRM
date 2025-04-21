@@ -8,32 +8,17 @@ import Errors from '../../../shared/components/Errors';
 import { resolveClientUrl, axiosError, toastOptions } from '../../../shared/common.functions';
 import { validationSchema } from '../common.functions';
 
-const AppContainer = () => {
-  const [prepareData, setPrepareData] = useState(null);
-  const [initialValues, setInitialValues] = useState({
-    code: '',
-    groupUnitId: '',
-    category: '',
-    type: '',
-    accountableArea: '',
-    picEmpId: 0,
-    isActive: true
-  });
+const AppContainer = ({ nextId }) => {
+  const [employees, setEmployees] = useState(null);
 
   useEffect(() => {
     axios({
-      url: resolveClientUrl(`Unit/GetPrepareDataForUnit`),
+      url: resolveClientUrl(`Unit/GetEmployeeForPIC`),
       method: 'GET',
       headers: { 'X-Requested-With': 'XMLHttpRequest' }
     })
       .then((response) => {
-        setPrepareData(response.data);
-        if (response.data && response.data.nextId) {
-          setInitialValues((prev) => ({
-            ...prev,
-            groupUnitId: response.data.nextId.toString()
-          }));
-        }
+        setEmployees(response.data);
       })
       .catch(axiosError);
   }, []);
@@ -42,7 +27,7 @@ const AppContainer = () => {
     history.back();
   };
 
-  const hanldeSubmit = (values, { setSubmitting }) => {
+  const handleSubmit = (values, { setSubmitting }) => {
     setSubmitting(true);
 
     axios
@@ -132,9 +117,8 @@ const AppContainer = () => {
             <div className="select-form">
               <Field name="picEmpId" as="select" className="form-control">
                 <option value="" />
-                {prepareData &&
-                  prepareData.employees &&
-                  prepareData.employees.map((emp) => (
+                {employees &&
+                  employees.map((emp) => (
                     <option key={emp.id} value={emp.id}>
                       {emp.displayNameWithCompany}
                     </option>
@@ -164,7 +148,21 @@ const AppContainer = () => {
   };
 
   return (
-    <Formik validateOnBlur={false} validateOnChange={false} initialValues={initialValues} validationSchema={validationSchema} onSubmit={hanldeSubmit}>
+    <Formik
+      validateOnBlur={false}
+      validateOnChange={false}
+      initialValues={{
+        code: '',
+        groupUnitId: nextId,
+        category: '',
+        type: '',
+        accountableArea: '',
+        picEmpId: 0,
+        isActive: true
+      }}
+      validationSchema={validationSchema}
+      onSubmit={handleSubmit}
+    >
       {renderForm}
     </Formik>
   );
