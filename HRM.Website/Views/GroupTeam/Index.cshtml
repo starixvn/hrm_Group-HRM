@@ -107,11 +107,13 @@
                 </div>
             </th>
             <th rowspan="2">@Labels.DisciplineRule</th>
+            <th rowspan="2">@Labels.Edit</th>
             @if (hasPermission)
             {
                 <th rowspan="2">@Labels.Roles</th>
             }
         </tr>
+		@* <th rowspan="2">@Labels.Delete</th> *@
         <tr>
             <th>@Labels.Local</th>
             <th>@Labels.Expat</th>
@@ -154,7 +156,7 @@
                     <td>@team.TotalExpat</td>
                     <td>@team.TotalLocal</td>
                     <td>
-                        @if (team.NoOfMembers > 0 && hasPermissionToViewEmployee)
+                        @if (team.NoOfMembers > 0 && hasPermissionToViewEmployee)                                                                                                                                           
                         {
                             <a href="@Url.Action("UserManagement", "Employee", new { teamIds = team.Id })">@team.NoOfMembers</a>
                         }
@@ -164,7 +166,10 @@
                         }
                     </td>
                     <td>
-                        <a href="@Url.Action("DisciplineRule", "GroupTeam", new { team.Id })">Manage</a>
+	                    <a href="@Url.Action("DisciplineRule", "GroupTeam", new { team.Id })">Manage</a>
+                    </td>
+                    <td>
+                        <a href="@Url.Action("Edit", "GroupTeam", new { team.Id })"><i class="fa fa-pencil fa-lg icon-edit"></i></a>
                     </td>
                     @if (hasPermission)
                     {

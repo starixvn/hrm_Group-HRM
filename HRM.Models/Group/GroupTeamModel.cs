@@ -10,6 +10,10 @@ public class GroupTeamModel
 
     public string UnitCode { get; set; }
 
+    public int DepartmentId { get; set; }
+
+    public int PICEmpId { get; set; }
+
     public string DepartmentName { get; set; }
 
     public string DepartmentCode { get; set; }
@@ -22,6 +26,8 @@ public class GroupTeamModel
 
     public string TeamPIC { get; set; }
 
+    public string AccountableArea { get; set; }
+
     public int NoOfMembers { get; set; }
 
     public int TotalLocal { get; set; }
@@ -29,6 +35,8 @@ public class GroupTeamModel
     public int TotalExpat { get; set; }
 
     public string MailGroup { get; set; }
+
+    public int CompanyId { get; set; }
 
     public byte? LocalBasicAnnualLeaveBalance { get; set; }
 

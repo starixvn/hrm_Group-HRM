@@ -11,7 +11,7 @@
 }
 @section Breadcrumb {
     <a class="step">@Labels.HRSpace</a>
-    <a class="step" href="@Url.Action("index", "team")">@Labels.TeamManagement</a>
+    <a class="step" href="@Url.Action("index", "GroupTeam")">@Labels.TeamManagement</a>
     <span class="step">@ViewBag.Title</span>
 }
 <h2 class="page-title">@Labels.Create</h2>
@@ -52,7 +52,7 @@
         </div>
         <div class="form-group">
             <div class="label-form">
-                @Html.LabelFor(model => model.DepartmentId,Labels.DepartmentName, new { @class = "control-label" })
+                @Html.LabelFor(model => model.DepartmentId, Labels.DepartmentName, new { @class = "control-label" })
                 <span style="color: red">*</span>
             </div>
             <div class="input-form">
