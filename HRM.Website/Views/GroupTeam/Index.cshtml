@@ -119,12 +119,12 @@
             @{var index = 1;}
             @foreach (var team in Model)
             {
-                <tr id="row@(team.Id)">
-	                <td class="align-left">@team.GroupTeamId</td>
-                    <td class="align-left">@team.Department.Name</td>
-                    <td class="align-left">@team.Name</td>
-                    <td>@team.Code</td>
-                    <td>@team.PICNickName</td>
+                        <tr id="row@(team.MailGroup)">
+	                <td class="align-left">@team.MailGroup</td>
+                    <td class="align-left">@team.MailGroup</td>
+                            <td class="align-left">@team.MailGroup</td>
+                    <td>@team.MailGroup</td>
+                    <td>@team.MailGroup</td>
                     <td class="align-left">@team.MailGroup</td>
                     <td>@team.LocalBasicAnnualLeaveBalance</td>
                     <td>@team.ExpatBasicAnnualLeaveBalance</td>
@@ -141,7 +141,7 @@
                     <td>
                         @if (team.NoOfMembers > 0 && hasPermissionToViewEmployee)
                         {
-                            <a href="@Url.Action("UserManagement", "Employee", new { teamIds = team.Id })">@team.NoOfMembers</a>
+                            <a href="@Url.Action("UserManagement", "Employee", new { teamIds = team.MailGroup })">@team.NoOfMembers</a>
                         }
                         else
                         {
@@ -149,12 +149,12 @@
                         }
                     </td>
                     <td>
-                        <a href="@Url.Action("disciplinerule", "team", new { team.Id })">Manage</a>
+                        <a href="@Url.Action("disciplinerule", "team", new { team.MailGroup })">Manage</a>
                     </td>
                     @if (hasPermission)
                     {
                         <td>
-                            <a href="@Url.Action("TeamSupervisor", "Team", new { team.Id })">Manage</a>
+                            <a href="@Url.Action("TeamSupervisor", "Team", new { team.MailGroup })">Manage</a>
                         </td>
                     }
                 </tr>
