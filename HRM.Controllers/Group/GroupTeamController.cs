@@ -13,6 +13,7 @@ using HRM.Models;
 using HRM.Resources;
 using HRM.Services.Interfaces;
 using HRM.ViewModels.EmployeeGroup;
+using HRM.ViewModels.Team;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HRM.Controllers.Group;
@@ -96,6 +97,35 @@ public class GroupTeamController(ITeamService teamService,
         }
 
         return View(model);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> DisciplineRule(int id)
+    {
+        var team = await teamService.GetGroupTeamInUnitScopeById(id);
+        if (team == null)
+        {
+            return RedirectToAction("PageNotFound", "Error");
+        }
+
+        var model = new DisciplineRuleViewModel
+        {
+            TeamId = team.Id,
+            Team = team.TeamName,
+            IsHost = session.HasPermissionOnFunction(FunctionKey.TeamManagement, Policy.Host),
+            DisciplineRules = await teamService.GetDisciplineRuleByTeam(id)
+        };
+        return View("~/Views/Team/DisciplineRule.cshtml", model);
+    }
+
+    [HrmPermission(Policy.Host, FunctionKey.TeamManagement)]
+    public async Task<IActionResult> TeamSupervisor(int id)
+    {
+        var supervisors = (await teamService.GetSupervisorByTeamId(id)).ToList();
+        ViewBag.TeamId = id;
+        ViewBag.TeamCode = supervisors.Count != 0 ? supervisors[0].Code : string.Empty;
+
+        return View("~/Views/Team/TeamSupervisor.cshtml", supervisors);
     }
 
     private async Task<IEnumerable<Company>> GetAllCompany()

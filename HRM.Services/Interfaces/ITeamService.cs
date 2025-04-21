@@ -17,6 +17,8 @@ public interface ITeamService
 
     Task<IEnumerable<GroupTeamModel>> GetAllTeamByUnitScopeAsync(string keyword);
 
+    Task<GroupTeamModel> GetGroupTeamInUnitScopeById(int id);
+
     Task<CommandResult> Delete(int actorId, int id);
 
     Task<IEnumerable<Team>> GetBySupervisorAsync(int supervisorId);

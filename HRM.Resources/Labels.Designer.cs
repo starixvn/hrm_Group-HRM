@@ -1285,6 +1285,15 @@ namespace HRM.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Department Code.
+        /// </summary>
+        public static string DepartmentCode {
+            get {
+                return ResourceManager.GetString("DepartmentCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Department ID.
         /// </summary>
         public static string DepartmentId {
@@ -1308,6 +1317,15 @@ namespace HRM.Resources {
         public static string DepartmentName {
             get {
                 return ResourceManager.GetString("DepartmentName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Department PIC.
+        /// </summary>
+        public static string DepartmentPIC {
+            get {
+                return ResourceManager.GetString("DepartmentPIC", resourceCulture);
             }
         }
         
@@ -4858,6 +4876,15 @@ namespace HRM.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Team PIC.
+        /// </summary>
+        public static string TeamPIC {
+            get {
+                return ResourceManager.GetString("TeamPIC", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Team Supervisor.
         /// </summary>
         public static string TeamSupervisor {
@@ -5196,6 +5223,15 @@ namespace HRM.Resources {
         public static string Unit {
             get {
                 return ResourceManager.GetString("Unit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to BU Code.
+        /// </summary>
+        public static string UnitCode {
+            get {
+                return ResourceManager.GetString("UnitCode", resourceCulture);
             }
         }
         

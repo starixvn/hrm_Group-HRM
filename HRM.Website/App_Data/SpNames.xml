@@ -129,7 +129,7 @@
         <Setting Key="Group_Update" SpName="Group_Update" DbName="bodb_HRM" Plain="0" />
         <Setting Key="Group_Delete" SpName="Group_Delete" DbName="bodb_HRM" Plain="0" />
         <Setting Key="Group_GetNextGroupTeamId" SpName="Group_GetNextGroupTeamId" DbName="bodb_HRM" Plain="0" />
-        <Setting Key="AllGroup_UnitScope_Get" SpName="AllGroup_UnitScope_Get" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Group_UnitScope_Get" SpName="Group_UnitScope_Get" DbName="bodb_HRM" Plain="0" />
     </Function>
     <Function Name="Lookup">
         <Setting Key="Lookup_GetLookupData" SpName="Lookup_GetLookupData" DbName="bodb_HRM" Plain="0" />

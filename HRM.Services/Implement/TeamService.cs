@@ -38,6 +38,15 @@ public class TeamService(
         var criteria = new GetNextGroupTeamIdCriteria();
         return await baseService.GetDataEntityAsync<int>(criteria);
     }
+    public async Task<GroupTeamModel> GetGroupTeamInUnitScopeById(int id)
+    {
+        var criteria = new GetTeamInUnitScopeCriteria
+        {
+            TeamId = id
+        };
+        return await baseService.GetDataEntityAsync<GroupTeamModel>(criteria);
+        
+    }
 
     public async Task<IEnumerable<Team>> GetAllAsync(bool isDeleted = false, string keyword = null)
     {
@@ -55,7 +64,7 @@ public class TeamService(
 
     public async Task<IEnumerable<GroupTeamModel>> GetAllTeamByUnitScopeAsync(string keyword)
     {
-        var criteria = new GetAllTeamByUnitScopeCriteria
+        var criteria = new GetTeamInUnitScopeCriteria
         {
             Keyword = keyword
         };

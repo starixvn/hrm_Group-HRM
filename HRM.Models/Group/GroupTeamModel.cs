@@ -4,6 +4,8 @@ namespace HRM.Models.Group;
 
 public class GroupTeamModel
 {
+    public int Id { get; set; }
+
     public int TeamId { get; set; }
 
     public string UnitCode { get; set; }
