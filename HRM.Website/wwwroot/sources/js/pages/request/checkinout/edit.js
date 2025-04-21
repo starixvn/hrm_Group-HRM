@@ -154,6 +154,9 @@ $(document).ready(function () {
 
         const isValid = validateForm();
         if (isValid) {
+            domElements.$btnSubmit.prop('disabled', true);
+            blockUI();
+
             const model = {
                 requestId: domElements.$requestId.val(),
                 employeeId: domElements.$employeeId.val(),
@@ -184,10 +187,12 @@ $(document).ready(function () {
     });
 
     function uploadComplete(evt) {
+        domElements.$btnSubmit.prop('disabled', false);
+        unblockUI();
+
         const data = JSON.parse(evt.target.response);
         if (data.isSuccessful) {
             $('form').removeClass('dirty');
-            domElements.$btnSubmit.prop('disabled', true);
             toastr.success('Update successfully!', '', toastOptions());
             setTimeout(function () { location.href = resolveClientUrl('checkinout/employeeview'); }, 3000);
         } else {
