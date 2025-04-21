@@ -139,6 +139,9 @@ $(document).ready(function () {
 
         const isValid = validateForm();
         if (isValid) {
+            domElements.$btnSubmit.prop('disabled', true);
+            blockUI();
+
             var files = document.getElementById('file').files;
             var fd = new FormData();
             for (var i = 0; i < files.length; i++) {
@@ -154,10 +157,12 @@ $(document).ready(function () {
     });
 
     function uploadComplete(evt) {
+        domElements.$btnSubmit.prop('disabled', false);
+        unblockUI();
+
         const data = JSON.parse(evt.target.response);
         if (data.isSuccessful) {
             $('form').removeClass('dirty');
-            domElements.$btnSubmit.prop('disabled', true);
             toastr.success('Update successfully!', '', toastOptions());
             setTimeout(function () { location.href = resolveClientUrl('lateinearlyout/employeeview'); }, 3000);
         } else {

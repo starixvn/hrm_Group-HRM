@@ -48,6 +48,8 @@ const RequestCommon = {
 };
 
 function uploadComplete(evt) {
+    unblockUI();
+    $('#btnSubmit').prop('disabled', false);
     const data = JSON.parse(evt.target.response);
     if (data.isSuccessful) {
         $('form').removeClass('dirty');
@@ -259,6 +261,9 @@ const LeaveRequest = (function ($) {
         saveLeaveRequest: function () {
             const isValid = LeaveRequest.validateForm();
             if (isValid) {
+                $('#btnSubmit').prop('disabled', true);
+                blockUI();
+
                 RequestCommon.removeErrorMsg(false);
                 const leaveTypeId = parseInt(LeaveRequest.leaveTypeId.val(), 10);
 
@@ -444,7 +449,6 @@ const LeaveRequest = (function ($) {
                     if (hour < 10) {
                         hour = '0' + hour;
                     }
-                    console.log(arrTimeIn);
 
                     LeaveRequest.fromTimeHour.val(arrTimeIn[0]);
                     LeaveRequest.fromTimeMinute.val(arrTimeIn[1]);
