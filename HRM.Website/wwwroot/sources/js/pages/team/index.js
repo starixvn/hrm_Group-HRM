@@ -4,7 +4,7 @@ import 'floatthead/dist/jquery.floatThead';
 import 'bootstrap/dist/js/bootstrap';
 import axios from 'axios';
 
-import { axiosError, floatThead, confirm, resolveClientUrl, alert, autoIndex, sortTable } from '../../shared/common.functions';
+import { axiosError, floatThead, confirm, resolveClientUrl, alert, sortTable } from '../../shared/common.functions';
 
 function deleteTeam(id) {
     confirm('Are you sure you want to delete this team ?', function () {
@@ -20,7 +20,6 @@ function deleteTeam(id) {
             if (data.isSuccessful) {
                 alert('Delete successfully!');
                 $('#row' + id).remove();
-                autoIndex();
             } else {
                 alert(response.data.Message);
             }
