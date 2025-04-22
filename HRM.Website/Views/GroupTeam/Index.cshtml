@@ -13,7 +13,7 @@
     <script src="~/dist/js/team.index.js"></script>
 }
 @section Breadcrumb {
-    <a class="step">@Labels.HRSpace</a><span class="step">@ViewBag.Title</span>
+    <a class="step">@Labels.GroupSpace</a><span class="step">@ViewBag.Title</span>
 }
 <h2 class="page-title">@ViewBag.Title</h2>
 @using (Html.BeginForm("index", "GroupTeam", FormMethod.Get, new { @class = "filter" }))
@@ -31,9 +31,6 @@
         <a href="/groupteam/create" class="btn btn-request">
 	        <span class="fa fa-plus"></span> @Labels.NewTeam
         </a>
-
-        @Html.ActionLink("Employee Permission Summary", "EmployeeSupervisor", "report", null, new { @class = "btn btn-primary" })
-        @Html.ActionLink("Team Permission Summary", "TeamSupervisor", "report", null, new { @class = "btn btn-primary" })
     </div>
 }
 <table id="data" class="table table-custom" style="width: auto; min-width: 600px;">
