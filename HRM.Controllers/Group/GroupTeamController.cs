@@ -41,7 +41,7 @@ public class GroupTeamController(ITeamService teamService,
         var groupTeamId = await teamService.GetNextGroupTeamIdAsync();
         var companies = await GetAllCompany();
         var employeePics = await GetAllEmployees();
-        var model = new TeamViewModel
+        var model = new GroupTeamViewModel
         {
             GroupTeamId = groupTeamId,
             Departments = await departmentService.GetDepartmentAsync(),
@@ -53,7 +53,7 @@ public class GroupTeamController(ITeamService teamService,
 
     [HttpPost]
     [HrmPermission(Policy.Host, FunctionKey.TeamManagement)]
-    public async Task<ActionResult> Create(TeamViewModel model)
+    public async Task<ActionResult> Create(GroupTeamViewModel model)
     {
         model.Departments = await departmentService.GetDepartmentAsync();
         model.EmployeePics = (await GetAllEmployees())?.ToList();
@@ -68,18 +68,7 @@ public class GroupTeamController(ITeamService teamService,
                 PICEmpId = model.PICEmpId,
                 GroupTeamId = model.GroupTeamId,
                 AccountableArea = model.AccountableArea,
-                MailGroup = model.MailGroup,
                 CreatedBy = session.UserId,
-                LocalBasicAnnualLeaveBalance = GetValue(model.LocalBasicAnnualLeaveBalance),
-                LocalWorkingDays = GetValue(model.LocalWorkingDays),
-                LocalWorkingHours = GetValue(model.LocalWorkingHours),
-                LocalOffDaysbyWeek = GetValue(model.LocalOffDaysbyWeek),
-                LocalWorkingHoursbyWeek = model.LocalWorkingHoursbyWeek,
-                ExpatBasicAnnualLeaveBalance = GetValue(model.ExpatBasicAnnualLeaveBalance),
-                ExpatWorkingDays = GetValue(model.ExpatWorkingDays),
-                ExpatWorkingHours = GetValue(model.ExpatWorkingHours),
-                ExpatOffDaysbyWeek = GetValue(model.ExpatOffDaysbyWeek),
-                ExpatWorkingHoursbyWeek = model.ExpatWorkingHoursbyWeek,
                 CompanyId = (short)model.CompanyId
             };
             var result = await baseService.ExecuteNonQueryAsync(criteria);
