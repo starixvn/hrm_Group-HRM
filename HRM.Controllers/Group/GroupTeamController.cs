@@ -146,7 +146,7 @@ public class GroupTeamController(ITeamService teamService,
             model.Departments = await departmentService.GetDepartmentAsync();
             model.EmployeePics = (await GetAllEmployees())?.ToList();
             model.Companies = (await GetAllCompany())?.ToList();
-            model.GroupTeamId = team.GroupTeamId;
+            model.CompanyId = team.CompanyId;
             if (ModelState.IsValid)
             {
                 var criteria = new EditTeamCriteria
@@ -158,7 +158,7 @@ public class GroupTeamController(ITeamService teamService,
                     PICEmpId = model.PICEmpId,
                     AccountableArea = model.AccountableArea,
                     ModifiedBy = session.UserId,
-                    CompanyId = (short)model.CompanyId
+                    GroupTeamId = model.GroupTeamId
                 };
                 var result = await baseService.ExecuteNonQueryAsync(criteria);
 

@@ -7,11 +7,11 @@ public class EditTeamCriteria : CriteriaBase
     public int TeamId { get; set; }
     public string Code { get; set; }
     public string Name { get; set; }
+    public int GroupTeamId { get; set; }
     public int DepartmentId { get; set; }
     public int? PICEmpId { get; set; }
     public string AccountableArea { get; set; }
     public int ModifiedBy { get; set; }
-    public short CompanyId { get; set; }
 
     public override string GetSettingKey()
     {
