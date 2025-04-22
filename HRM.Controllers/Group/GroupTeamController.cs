@@ -38,12 +38,12 @@ public class GroupTeamController(ITeamService teamService,
     [HrmPermission(Policy.Host, FunctionKey.TeamManagement)]
     public async Task<ActionResult> Create()
     {
-        var teamId = await teamService.GetNextGroupTeamIdAsync();
+        var groupTeamId = await teamService.GetNextGroupTeamIdAsync();
         var companies = await GetAllCompany();
         var employeePics = await GetAllEmployees();
         var model = new TeamViewModel
         {
-            GroupTeamId = teamId,
+            GroupTeamId = groupTeamId,
             Departments = await departmentService.GetDepartmentAsync(),
             EmployeePics = employeePics.ToList(),
             Companies = companies.ToList()
@@ -149,7 +149,7 @@ public class GroupTeamController(ITeamService teamService,
             Departments = await departmentService.GetDepartmentAsync(),
             EmployeePics = employeePics.ToList(),
             PICEmpId = team.PICEmpId,
-            GroupTeamId = team.TeamId,
+            GroupTeamId = team.GroupTeamId,
             AccountableArea = team.AccountableArea,
             Companies = companies.ToList(),
             CompanyId = team.CompanyId
@@ -164,13 +164,16 @@ public class GroupTeamController(ITeamService teamService,
     {
         if (model != null)
         {
+            var team = await teamService.GetGroupTeamInUnitScopeById(model.Id);
             model.Departments = await departmentService.GetDepartmentAsync();
             model.EmployeePics = (await GetAllEmployees())?.ToList();
             model.Companies = (await GetAllCompany())?.ToList();
+            model.GroupTeamId = team.GroupTeamId;
             if (ModelState.IsValid)
             {
                 var criteria = new EditTeamCriteria
                 {
+                    TeamId = model.Id,
                     Code = model.TeamCode,
                     Name = model.TeamName,
                     DepartmentId = model.DepartmentId ?? 0,
