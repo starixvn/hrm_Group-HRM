@@ -85,54 +85,26 @@
                     <div class="fa fa-sort"></div>
                 </div>
             </th>
-            <th rowspan="2" class="col-sorter">
-                <div class="cell-control-wrapper">
-                    <div>@Labels.Email</div>
-                    <div class="fa fa-sort"></div>
-                </div>
+	        <th rowspan="2" class="col-sorter">
+		        <div class="cell-control-wrapper">
+			        <div>@Labels.AccountableArea</div>
+			        <div class="fa fa-sort"></div>
+		        </div>
             </th>
-            <th colspan="2">@Labels.BasicAnnualLeaveBalance</th>
-            <th colspan="2">@Labels.WorkingDaysPerMonth</th>
-            <th colspan="2">@Labels.WorkingHoursPerWeek</th>
-            <th colspan="2">@Labels.WorkingHoursPerDay</th>
-            <th colspan="2">@Labels.NumberOfOffday</th>
             <th rowspan="2" class="col-sorter">
                 <div class="cell-control-wrapper">
-                    <div>@Labels.TotalExpat</div>
+                    <div>@Labels.CompanyName</div>
                     <div class="fa fa-sort"></div>
                 </div>
             </th>
             <th rowspan="2" class="col-sorter">
                 <div class="cell-control-wrapper">
-                    <div>@Labels.TotalLocal</div>
+                    <div>@Labels.TotalMembers</div>
                     <div class="fa fa-sort"></div>
                 </div>
             </th>
-            <th rowspan="2" class="col-sorter">
-                <div class="cell-control-wrapper">
-                    <div>@Labels.Total</div>
-                    <div class="fa fa-sort"></div>
-                </div>
-            </th>
-            <th rowspan="2">@Labels.DisciplineRule</th>
             <th rowspan="2">@Labels.Edit</th>
-            @if (hasPermission)
-            {
-                <th rowspan="2">@Labels.Roles</th>
-                <th rowspan="2">@Labels.Delete</th>
-            }
-        </tr>
-        <tr>
-            <th>@Labels.Local</th>
-            <th>@Labels.Expat</th>
-            <th>@Labels.Local</th>
-            <th>@Labels.Expat</th>
-            <th>@Labels.Local</th>
-            <th>@Labels.Expat</th>
-            <th>@Labels.Local</th>
-            <th>@Labels.Expat</th>
-            <th>@Labels.Local</th>
-            <th>@Labels.Expat</th>
+            <th rowspan="2">@Labels.Delete</th>
         </tr>
     </thead>
     @if (Model != null && Model.Any())
@@ -148,56 +120,27 @@
 	                <td class="align-left">@team.DepartmentName</td>
                     <td class="align-left">@team.DepartmentCode</td>
                     <td class="align-left">@team.DepartmentPIC</td>
-                    <td>@team.TeamName</td>
-                    <td>@team.TeamCode</td>
+                    <td class="align-left">@team.TeamName</td>
+                    <td class="align-left">@team.TeamCode</td>
                     <td class="align-left">@team.TeamPIC</td>
-                    <td class="align-left">@team.MailGroup</td>
-                    <td>@team.LocalBasicAnnualLeaveBalance</td>
-                    <td>@team.ExpatBasicAnnualLeaveBalance</td>
-                    <td>@team.LocalWorkingDays</td>
-                    <td>@team.ExpatWorkingDays</td>
-                    <td>@team.LocalWorkingHoursbyWeek</td>
-                    <td>@team.ExpatWorkingHoursbyWeek</td>
-                    <td>@team.LocalWorkingHours</td>
-                    <td>@team.ExpatWorkingHours</td>
-                    <td>@team.LocalOffDaysbyWeek</td>
-                    <td>@team.ExpatOffDaysbyWeek</td>
-                    <td>@team.TotalExpat</td>
-                    <td>@team.TotalLocal</td>
-                    <td>
-                        @if (team.NoOfMembers > 0 && hasPermissionToViewEmployee)                                                                                                                                           
-                        {
-                            <a href="@Url.Action("UserManagement", "Employee", new { teamIds = team.Id })">@team.NoOfMembers</a>
-                        }
-                        else
-                        {
-                            <span>@team.NoOfMembers</span>
-                        }
-                    </td>
-                    <td>
-	                    <a href="@Url.Action("DisciplineRule", "GroupTeam", new { team.Id })">Manage</a>
-                    </td>
+                    <td class="align-left">@team.AccountableArea</td>
+                    <td class="align-left">@team.CompanyName</td>
+                    <td>@team.NoOfMembers</td>
                     <td>
                         <a href="@Url.Action("Edit", "GroupTeam", new { team.Id })"><i class="fa fa-pencil fa-lg icon-edit"></i></a>
                     </td>
-                    @if (hasPermission)
-                    {
-                        <td>
-                            <a href="@Url.Action("TeamSupervisor", "GroupTeam", new { team.Id })">Manage</a>
-                        </td>
-                        <td>
-	                        @if (team.NoOfMembers > 0)
-	                        {
-		                        <i class="fa fa-times fa-lg fa-disabled icon-delete"></i>
-	                        }
-	                        else
-	                        {
-		                        <a href="javascript:;" class="deleteTeam" data-team-id="@team.Id">
-			                        <i class="fa fa-times fa-lg icon-delete"></i>
-		                        </a>
-	                        }
-                        </td>
-                    }
+                    <td>
+                        @if (team.NoOfMembers > 0)
+                        {
+	                        <i class="fa fa-times fa-lg fa-disabled icon-delete"></i>
+                        }
+                        else
+                        {
+	                        <a href="javascript:;" class="deleteTeam" data-team-id="@team.Id">
+		                        <i class="fa fa-times fa-lg icon-delete"></i>
+	                        </a>
+                        }
+                    </td>
                 </tr>
             }
         </tbody>

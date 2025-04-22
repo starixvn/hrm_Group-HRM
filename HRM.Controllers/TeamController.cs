@@ -153,7 +153,6 @@ public class TeamController(
                     Name = model.TeamName,
                     DepartmentId = model.DepartmentId ?? 0,
                     MailGroup = model.MailGroup,
-                    GroupTeamId = model.GroupTeamId,
                     PICEmpId = model.PICEmpId,
                     AccountableArea = model.AccountableArea,
                     ModifiedBy = session.UserId,

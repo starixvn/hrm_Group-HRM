@@ -2034,4 +2034,10 @@
   <data name="UnitCode" xml:space="preserve">
     <value>BU Code</value>
   </data>
+  <data name="CompanyName" xml:space="preserve">
+    <value>Company Name</value>
+  </data>
+  <data name="TotalMembers" xml:space="preserve">
+    <value>Total Members</value>
+  </data>
 </root>

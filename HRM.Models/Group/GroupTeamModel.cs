@@ -28,6 +28,8 @@ public class GroupTeamModel
 
     public string AccountableArea { get; set; }
 
+    public string CompanyName { get; set; }
+
     public int NoOfMembers { get; set; }
 
     public int TotalLocal { get; set; }
