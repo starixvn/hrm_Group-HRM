@@ -35,7 +35,8 @@ COPY HRM.Website/ HRM.Website/
 
 # Publish the application
 WORKDIR /src/HRM.Website
-RUN dotnet publish -r linux-x64 --self-contained false -c Release -o /app
+RUN RUN --mount=type=cache,target=/root/.nuget/packages \
+    dotnet publish -r linux-x64 --self-contained false -c Release -o /app
 
 FROM hub.nexdev.net/base/dotnet/core/aspnet:9.0-alpine AS base
 
