@@ -39,8 +39,19 @@
 <table id="data" class="table table-custom" style="width: auto; min-width: 600px;">
     <thead>
         <tr>
-            <th rowspan="2">@Labels.TeamId</th>
-            <th rowspan="2">@Labels.UnitCode</th>
+	        <th rowspan="2">@Labels.SymbolCount</th>
+            <th rowspan="2" class="col-sorter">
+	            <div class="cell-control-wrapper">
+                    @Labels.TeamId
+		            <div class="fa fa-sort"></div>
+	            </div>
+            </th>
+            <th rowspan="2" class="col-sorter">
+	            <div class="cell-control-wrapper">
+		            @Labels.UnitCode
+		            <div class="fa fa-sort"></div>
+	            </div>
+	        </th>
             <th rowspan="2" class="col-sorter">
                 <div class="cell-control-wrapper">
                     <div>@Labels.DepartmentName</div>
@@ -134,6 +145,7 @@
             @foreach (var team in Model)
             {
                 <tr id="row@(team.Id)">
+	                <td>@(index++)</td>
                     <td class="align-left">@team.TeamId</td>
                     <td class="align-left">@team.UnitCode</td>
 	                <td class="align-left">@team.DepartmentName</td>
