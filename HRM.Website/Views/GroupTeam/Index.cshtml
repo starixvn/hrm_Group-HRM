@@ -3,8 +3,6 @@
 @model IEnumerable<HRM.Models.Group.GroupTeamModel>
 @{
     ViewBag.Title = Labels.TeamManagement;
-    var hasPermission = (bool)ViewBag.HasPermission;
-    var hasPermissionToViewEmployee = (bool)ViewBag.HasPermissionToViewEmployee;
 }
 @section css{
     <link href="~/dist/styles/team.index.css" rel="stylesheet" />

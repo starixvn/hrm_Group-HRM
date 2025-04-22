@@ -107,100 +107,100 @@ public class GroupTeamController(ITeamService teamService,
         return View("~/Views/Team/DisciplineRule.cshtml", model);
     }
 
-    [HrmPermission(Policy.Host, FunctionKey.TeamManagement)]
-    public async Task<ActionResult> Edit(int id)
-    {
-        var team = await teamService.GetGroupTeamInUnitScopeById(id);
-        var companies = await GetAllCompany();
-        if (team == null)
-        {
-            return RedirectToAction("PageNotFound", "Error");
-        }
+    //[HrmPermission(Policy.Host, FunctionKey.TeamManagement)]
+    //public async Task<ActionResult> Edit(int id)
+    //{
+    //    var team = await teamService.GetGroupTeamInUnitScopeById(id);
+    //    var companies = await GetAllCompany();
+    //    if (team == null)
+    //    {
+    //        return RedirectToAction("PageNotFound", "Error");
+    //    }
                                                                                                                                                                 
-        var employeePics = await GetAllEmployees();
-        var model = new TeamViewModel
-        {
-            Id = team.Id,
-            TeamCode = team.TeamCode,
-            TeamName = team.TeamName,
-            MailGroup = team.MailGroup,
-            LocalBasicAnnualLeaveBalance = GetValue(team.LocalBasicAnnualLeaveBalance),
-            LocalWorkingDays = GetValue(team.LocalWorkingDays),
-            LocalWorkingHours = GetValue(team.LocalWorkingHours),
-            LocalOffDaysbyWeek = GetValue(team.LocalOffDaysbyWeek),
-            LocalWorkingHoursbyWeek = team.LocalWorkingHoursbyWeek,
-            ExpatBasicAnnualLeaveBalance = GetValue(team.ExpatBasicAnnualLeaveBalance),
-            ExpatWorkingDays = GetValue(team.ExpatWorkingDays),
-            ExpatWorkingHours = GetValue(team.ExpatWorkingHours),
-            ExpatOffDaysbyWeek = GetValue(team.ExpatOffDaysbyWeek),
-            ExpatWorkingHoursbyWeek = team.ExpatWorkingHoursbyWeek,
-            DepartmentId = team.DepartmentId,
-            Departments = await departmentService.GetDepartmentAsync(),
-            EmployeePics = employeePics.ToList(),
-            PICEmpId = team.PICEmpId,
-            GroupTeamId = team.GroupTeamId,
-            AccountableArea = team.AccountableArea,
-            Companies = companies.ToList(),
-            CompanyId = team.CompanyId
-        };
+    //    var employeePics = await GetAllEmployees();
+    //    var model = new TeamViewModel
+    //    {
+    //        Id = team.Id,
+    //        TeamCode = team.TeamCode,
+    //        TeamName = team.TeamName,
+    //        MailGroup = team.MailGroup,
+    //        LocalBasicAnnualLeaveBalance = GetValue(team.LocalBasicAnnualLeaveBalance),
+    //        LocalWorkingDays = GetValue(team.LocalWorkingDays),
+    //        LocalWorkingHours = GetValue(team.LocalWorkingHours),
+    //        LocalOffDaysbyWeek = GetValue(team.LocalOffDaysbyWeek),
+    //        LocalWorkingHoursbyWeek = team.LocalWorkingHoursbyWeek,
+    //        ExpatBasicAnnualLeaveBalance = GetValue(team.ExpatBasicAnnualLeaveBalance),
+    //        ExpatWorkingDays = GetValue(team.ExpatWorkingDays),
+    //        ExpatWorkingHours = GetValue(team.ExpatWorkingHours),
+    //        ExpatOffDaysbyWeek = GetValue(team.ExpatOffDaysbyWeek),
+    //        ExpatWorkingHoursbyWeek = team.ExpatWorkingHoursbyWeek,
+    //        DepartmentId = team.DepartmentId,
+    //        Departments = await departmentService.GetDepartmentAsync(),
+    //        EmployeePics = employeePics.ToList(),
+    //        PICEmpId = team.PICEmpId,
+    //        GroupTeamId = team.GroupTeamId,
+    //        AccountableArea = team.AccountableArea,
+    //        Companies = companies.ToList(),
+    //        CompanyId = team.CompanyId
+    //    };
 
-        return View(model);
-    }
+    //    return View(model);
+    //}
 
-    [HttpPost]
-    [HrmPermission(Policy.Host, FunctionKey.TeamManagement)]
-    public async Task<ActionResult> Edit(TeamViewModel model)
-    {
-        if (model != null)
-        {
-            var team = await teamService.GetGroupTeamInUnitScopeById(model.Id);
-            model.Departments = await departmentService.GetDepartmentAsync();
-            model.EmployeePics = (await GetAllEmployees())?.ToList();
-            model.Companies = (await GetAllCompany())?.ToList();
-            model.GroupTeamId = team.GroupTeamId;
-            if (ModelState.IsValid)
-            {
-                var criteria = new EditTeamCriteria
-                {
-                    TeamId = model.Id,
-                    Code = model.TeamCode,
-                    Name = model.TeamName,
-                    DepartmentId = model.DepartmentId ?? 0,
-                    MailGroup = model.MailGroup,
-                    PICEmpId = model.PICEmpId,
-                    AccountableArea = model.AccountableArea,
-                    ModifiedBy = session.UserId,
-                    LocalBasicAnnualLeaveBalance = GetValue(model.LocalBasicAnnualLeaveBalance),
-                    LocalWorkingDays = GetValue(model.LocalWorkingDays),
-                    LocalWorkingHours = GetValue(model.LocalWorkingHours),
-                    LocalOffDaysbyWeek = GetValue(model.LocalOffDaysbyWeek),
-                    LocalWorkingHoursbyWeek = model.LocalWorkingHoursbyWeek,
-                    ExpatBasicAnnualLeaveBalance = GetValue(model.ExpatBasicAnnualLeaveBalance),
-                    ExpatWorkingDays = GetValue(model.ExpatWorkingDays),
-                    ExpatWorkingHours = GetValue(model.ExpatWorkingHours),
-                    ExpatOffDaysbyWeek = GetValue(model.ExpatOffDaysbyWeek),
-                    ExpatWorkingHoursbyWeek = model.ExpatWorkingHoursbyWeek,
-                    CompanyId = (short)model.CompanyId
-                };
-                var result = await baseService.ExecuteNonQueryAsync(criteria);
+    //[HttpPost]
+    //[HrmPermission(Policy.Host, FunctionKey.TeamManagement)]
+    //public async Task<ActionResult> Edit(TeamViewModel model)
+    //{
+    //    if (model != null)
+    //    {
+    //        var team = await teamService.GetGroupTeamInUnitScopeById(model.Id);
+    //        model.Departments = await departmentService.GetDepartmentAsync();
+    //        model.EmployeePics = (await GetAllEmployees())?.ToList();
+    //        model.Companies = (await GetAllCompany())?.ToList();
+    //        model.GroupTeamId = team.GroupTeamId;
+    //        if (ModelState.IsValid)
+    //        {
+    //            var criteria = new EditTeamCriteria
+    //            {
+    //                TeamId = model.Id,
+    //                Code = model.TeamCode,
+    //                Name = model.TeamName,
+    //                DepartmentId = model.DepartmentId ?? 0,
+    //                MailGroup = model.MailGroup,
+    //                PICEmpId = model.PICEmpId,
+    //                AccountableArea = model.AccountableArea,
+    //                ModifiedBy = session.UserId,
+    //                LocalBasicAnnualLeaveBalance = GetValue(model.LocalBasicAnnualLeaveBalance),
+    //                LocalWorkingDays = GetValue(model.LocalWorkingDays),
+    //                LocalWorkingHours = GetValue(model.LocalWorkingHours),
+    //                LocalOffDaysbyWeek = GetValue(model.LocalOffDaysbyWeek),
+    //                LocalWorkingHoursbyWeek = model.LocalWorkingHoursbyWeek,
+    //                ExpatBasicAnnualLeaveBalance = GetValue(model.ExpatBasicAnnualLeaveBalance),
+    //                ExpatWorkingDays = GetValue(model.ExpatWorkingDays),
+    //                ExpatWorkingHours = GetValue(model.ExpatWorkingHours),
+    //                ExpatOffDaysbyWeek = GetValue(model.ExpatOffDaysbyWeek),
+    //                ExpatWorkingHoursbyWeek = model.ExpatWorkingHoursbyWeek,
+    //                CompanyId = (short)model.CompanyId
+    //            };
+    //            var result = await baseService.ExecuteNonQueryAsync(criteria);
 
-                if (result.IsSuccessful)
-                {
-                    ViewBag.Updated = true;
-                }
-                else
-                {
-                    ModelState.AddModelError(string.Empty, result.Message);
-                }
-            }
-            else
-            {
-                ModelState.AddModelError(string.Empty, Messages.InvalidInputData);
-            }
-        }
+    //            if (result.IsSuccessful)
+    //            {
+    //                ViewBag.Updated = true;
+    //            }
+    //            else
+    //            {
+    //                ModelState.AddModelError(string.Empty, result.Message);
+    //            }
+    //        }
+    //        else
+    //        {
+    //            ModelState.AddModelError(string.Empty, Messages.InvalidInputData);
+    //        }
+    //    }
 
-        return View(model);
-    }
+    //    return View(model);
+    //}
 
     [HrmPermission(Policy.Host, FunctionKey.TeamManagement)]
     public async Task<IActionResult> TeamSupervisor(int id)
