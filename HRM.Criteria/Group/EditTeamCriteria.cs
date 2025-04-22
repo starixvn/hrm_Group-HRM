@@ -9,7 +9,6 @@ public class EditTeamCriteria : CriteriaBase
     public string Name { get; set; }
     public int DepartmentId { get; set; }
     public string MailGroup { get; set; }
-    public int GroupTeamId { get; set; }
     public int? PICEmpId { get; set; }
     public string AccountableArea { get; set; }
     public byte LocalBasicAnnualLeaveBalance { get; set; }
