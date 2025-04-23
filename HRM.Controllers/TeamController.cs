@@ -41,15 +41,6 @@ public class TeamController(
         return View(teams);
     }
 
-    [HttpPost]
-    [HrmPermission(Policy.Host, FunctionKey.TeamManagement)]
-    public async Task<IActionResult> Delete(int id)
-    {
-        var commandResult = await teamService.Delete(session.UserId, id);
-
-        return Json(commandResult);
-    }
-
     [HrmPermission(Policy.Read, FunctionKey.TeamManagement)]
     public async Task<IActionResult> TeamSupervisor(int id)
     {
