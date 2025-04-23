@@ -6,14 +6,12 @@ using GO.UserControl.Client.Core.Session;
 using HRM.Core.Constants;
 using HRM.Core.Filters;
 using HRM.Core.Services;
-using HRM.Criteria.Company;
 using HRM.Criteria.Employee;
 using HRM.Criteria.Group;
 using HRM.Models;
 using HRM.Resources;
 using HRM.Services.Interfaces;
 using HRM.ViewModels.EmployeeGroup;
-using HRM.ViewModels.Team;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HRM.Controllers.Group;
@@ -26,16 +24,14 @@ public class GroupTeamController(ITeamService teamService,
     ICompanyService companyService) : BaseController(userControlSession)
 {
 
-    [HrmPermission(Policy.Host, FunctionKey.TeamManagement)]
+    [HrmPermission(Policy.Host, FunctionKey.GroupTeamManagement)]
     public async Task<IActionResult> Index(string keyword = null)
     {
         var teams = await teamService.GetAllTeamByUnitScopeAsync(keyword);
-        ViewBag.HasPermission = userControlSession.HasPermissionOnFunction(FunctionKey.TeamManagement, Policy.Host);
-        ViewBag.HasPermissionToViewEmployee = userControlSession.HasPermissionOnFunction(FunctionKey.EmployeeManagement, Policy.Read);
         return View(teams);
     }
 
-    [HrmPermission(Policy.Host, FunctionKey.TeamManagement)]
+    [HrmPermission(Policy.Host, FunctionKey.GroupTeamManagement)]
     public async Task<ActionResult> Create()
     {
         var groupTeamId = await teamService.GetNextGroupTeamIdAsync();
@@ -52,7 +48,7 @@ public class GroupTeamController(ITeamService teamService,
     }
 
     [HttpPost]
-    [HrmPermission(Policy.Host, FunctionKey.TeamManagement)]
+    [HrmPermission(Policy.Host, FunctionKey.GroupTeamManagement)]
     public async Task<ActionResult> Create(GroupTeamViewModel model)
     {
         model.Departments = await departmentService.GetDepartmentAsync();
@@ -88,26 +84,7 @@ public class GroupTeamController(ITeamService teamService,
         return View(model);
     }
 
-    [HttpGet]
-    public async Task<IActionResult> DisciplineRule(int id)
-    {
-        var team = await teamService.GetGroupTeamInUnitScopeById(id);
-        if (team == null)
-        {
-            return RedirectToAction("PageNotFound", "Error");
-        }
-
-        var model = new DisciplineRuleViewModel
-        {
-            TeamId = team.Id,
-            Team = team.TeamName,
-            IsHost = session.HasPermissionOnFunction(FunctionKey.TeamManagement, Policy.Host),
-            DisciplineRules = await teamService.GetDisciplineRuleByTeam(id)
-        };
-        return View("~/Views/Team/DisciplineRule.cshtml", model);
-    }
-
-    [HrmPermission(Policy.Host, FunctionKey.TeamManagement)]
+    [HrmPermission(Policy.Host, FunctionKey.GroupTeamManagement)]
     public async Task<ActionResult> Edit(int id)
     {
         var team = await teamService.GetGroupTeamInUnitScopeById(id);
@@ -137,7 +114,7 @@ public class GroupTeamController(ITeamService teamService,
     }
 
     [HttpPost]
-    [HrmPermission(Policy.Host, FunctionKey.TeamManagement)]
+    [HrmPermission(Policy.Host, FunctionKey.GroupTeamManagement)]
     public async Task<ActionResult> Edit(GroupTeamViewModel model)
     {
         if (model != null)
@@ -178,16 +155,6 @@ public class GroupTeamController(ITeamService teamService,
         }
 
         return View(model);
-    }
-
-    [HrmPermission(Policy.Host, FunctionKey.TeamManagement)]
-    public async Task<IActionResult> TeamSupervisor(int id)
-    {
-        var supervisors = (await teamService.GetSupervisorByTeamId(id)).ToList();
-        ViewBag.TeamId = id;
-        ViewBag.TeamCode = supervisors.Count != 0 ? supervisors[0].Code : string.Empty;
-
-        return View("~/Views/Team/TeamSupervisor.cshtml", supervisors);
     }
 
     private async Task<IEnumerable<Company>> GetAllCompany()
