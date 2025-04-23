@@ -24,10 +24,11 @@ public class GroupTeamController(ITeamService teamService,
     ICompanyService companyService) : BaseController(userControlSession)
 {
 
-    [HrmPermission(Policy.Host, FunctionKey.GroupTeamManagement)]
+    [HrmPermission(Policy.Read, FunctionKey.GroupTeamManagement)]
     public async Task<IActionResult> Index(string keyword = null)
     {
         var teams = await teamService.GetAllTeamByUnitScopeAsync(keyword);
+        ViewBag.HasPermission = session.HasPermissionOnFunction(FunctionKey.GroupTeamManagement, Policy.Host);
         return View(teams);
     }
 

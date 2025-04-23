@@ -3,6 +3,7 @@
 @model IEnumerable<HRM.Models.Group.GroupTeamModel>
 @{
     ViewBag.Title = Labels.TeamManagement;
+    var hasPermission = (bool)ViewBag.HasPermission;
 }
 @section css{
     <link href="~/dist/styles/team.index.css" rel="stylesheet" />
@@ -95,14 +96,17 @@
                     <div class="fa fa-sort"></div>
                 </div>
             </th>
-            <th rowspan="2" class="col-sorter">
-                <div class="cell-control-wrapper">
-                    <div>@Labels.TotalMembers</div>
-                    <div class="fa fa-sort"></div>
-                </div>
-            </th>
-            <th rowspan="2">@Labels.Edit</th>
-            <th rowspan="2">@Labels.Delete</th>
+	        <th rowspan="2" class="col-sorter">
+		        <div class="cell-control-wrapper">
+			        <div>@Labels.TotalMembers</div>
+			        <div class="fa fa-sort"></div>
+		        </div>
+	        </th>
+            @if (hasPermission)
+	        {
+		        <th rowspan="2">@Labels.Edit</th>
+		        <th rowspan="2">@Labels.Delete</th>
+	        }
         </tr>
     </thead>
     @if (Model != null && Model.Any())
@@ -124,21 +128,24 @@
                     <td class="align-left">@team.AccountableArea</td>
                     <td class="align-left">@team.CompanyName</td>
                     <td>@team.NoOfMembers</td>
-                    <td>
-                        <a href="@Url.Action("Edit", "GroupTeam", new { team.Id })"><i class="fa fa-pencil fa-lg icon-edit"></i></a>
-                    </td>
-                    <td>
-                        @if (team.NoOfMembers > 0)
-                        {
-	                        <i class="fa fa-times fa-lg fa-disabled icon-delete"></i>
-                        }
-                        else
-                        {
-	                        <a href="javascript:;" class="deleteTeam" data-team-id="@team.Id">
-		                        <i class="fa fa-times fa-lg icon-delete"></i>
-	                        </a>
-                        }
-                    </td>
+                    @if (hasPermission)
+	                {
+		                <td>
+			                <a href="@Url.Action("Edit", "GroupTeam", new { team.Id })"><i class="fa fa-pencil fa-lg icon-edit"></i></a>
+		                </td>
+		                <td>
+			                @if (team.NoOfMembers > 0)
+			                {
+				                <i class="fa fa-times fa-lg fa-disabled icon-delete"></i>
+			                }
+			                else
+			                {
+				                <a href="javascript:;" class="deleteTeam" data-team-id="@team.Id">
+					                <i class="fa fa-times fa-lg icon-delete"></i>
+				                </a>
+			                }
+		                </td>
+	                }
                 </tr>
             }
         </tbody>
