@@ -12,6 +12,17 @@ public class EditTeamCriteria : CriteriaBase
     public int? PICEmpId { get; set; }
     public string AccountableArea { get; set; }
     public int ModifiedBy { get; set; }
+    public string MailGroup { get; set; }
+    public int LocalBasicAnnualLeaveBalance { get; set; }
+    public int LocalWorkingDays { get; set; }
+    public int LocalWorkingHours { get; set; }
+    public int LocalOffDaysbyWeek { get; set; }
+    public byte? LocalWorkingHoursbyWeek { get; set; }
+    public int ExpatBasicAnnualLeaveBalance { get; set; }
+    public int ExpatWorkingDays { get; set; }
+    public int ExpatWorkingHours { get; set; }
+    public int ExpatOffDaysbyWeek { get; set; }
+    public byte? ExpatWorkingHoursbyWeek { get; set; }
 
     public override string GetSettingKey()
     {

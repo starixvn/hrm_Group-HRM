@@ -135,7 +135,18 @@ public class GroupTeamController(ITeamService teamService,
                     PICEmpId = model.PICEmpId,
                     AccountableArea = model.AccountableArea,
                     ModifiedBy = session.UserId,
-                    GroupTeamId = model.GroupTeamId
+                    GroupTeamId = model.GroupTeamId,
+                    MailGroup = team.MailGroup,
+                    LocalBasicAnnualLeaveBalance = GetValue(team.LocalBasicAnnualLeaveBalance),
+                    LocalWorkingDays = GetValue(team.LocalWorkingDays),
+                    LocalWorkingHours = GetValue(team.LocalWorkingHours),
+                    LocalOffDaysbyWeek = GetValue(team.LocalOffDaysbyWeek),
+                    LocalWorkingHoursbyWeek = team.LocalWorkingHoursbyWeek,
+                    ExpatBasicAnnualLeaveBalance = GetValue(team.ExpatBasicAnnualLeaveBalance),
+                    ExpatWorkingDays = GetValue(team.ExpatWorkingDays),
+                    ExpatWorkingHours = GetValue(team.ExpatWorkingHours),
+                    ExpatOffDaysbyWeek = GetValue(team.ExpatOffDaysbyWeek),
+                    ExpatWorkingHoursbyWeek = team.ExpatWorkingHoursbyWeek
                 };
                 var result = await baseService.ExecuteNonQueryAsync(criteria);
 

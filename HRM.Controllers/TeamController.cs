@@ -41,6 +41,102 @@ public class TeamController(
         return View(teams);
     }
 
+    [HrmPermission(Policy.Host, FunctionKey.TeamManagement)]
+    public async Task<ActionResult> Edit(int id)
+    {
+        var team = await teamService.GetById(id);
+        if (team == null)
+        {
+            return RedirectToAction("PageNotFound", "Error");
+        }
+
+        var employees = await GetAllEmployees();
+        var model = new TeamViewModel
+        {
+            Id = team.Id,
+            TeamCode = team.Code,
+            TeamName = team.Name,
+            MailGroup = team.MailGroup,
+            LocalBasicAnnualLeaveBalance = GetValue(team.LocalBasicAnnualLeaveBalance),
+            LocalWorkingDays = GetValue(team.LocalWorkingDays),
+            LocalWorkingHours = GetValue(team.LocalWorkingHours),
+            LocalOffDaysbyWeek = GetValue(team.LocalOffDaysbyWeek),
+            LocalWorkingHoursbyWeek = team.LocalWorkingHoursbyWeek,
+            ExpatBasicAnnualLeaveBalance = GetValue(team.ExpatBasicAnnualLeaveBalance),
+            ExpatWorkingDays = GetValue(team.ExpatWorkingDays),
+            ExpatWorkingHours = GetValue(team.ExpatWorkingHours),
+            ExpatOffDaysbyWeek = GetValue(team.ExpatOffDaysbyWeek),
+            ExpatWorkingHoursbyWeek = team.ExpatWorkingHoursbyWeek,
+            DepartmentId = team.Department?.Id ?? 0,
+            Departments = await departmentService.GetDepartmentAsync(),
+            DepartmentName = team.Department?.Name ?? "",
+            Employees = employees,
+            PICEmpId = team.PICEmpId,
+            GroupTeamId = team.GroupTeamId,
+            AccountableArea = team.AccountableArea,
+        };
+
+        return View(model);
+    }
+
+    [HttpPost]
+    [HrmPermission(Policy.Host, FunctionKey.TeamManagement)]
+    public async Task<ActionResult> Edit(TeamViewModel model)
+    {
+        if (model != null)
+        {
+            model.Departments = await departmentService.GetDepartmentAsync();
+            model.Employees = await GetAllEmployees();
+            var team = await teamService.GetGroupTeamInUnitScopeById(model.Id);
+            model.TeamCode = team.TeamCode;
+            model.TeamName = team.TeamName;
+            model.DepartmentName = team.DepartmentName;
+            if (ModelState.IsValid)
+            {
+                var criteria = new EditTeamCriteria
+                {
+                    TeamId = team.Id,
+                    Code = team.TeamCode,
+                    Name = team.TeamName,
+                    DepartmentId = team.DepartmentId,
+                    PICEmpId = team.PICEmpId,
+                    AccountableArea = team.AccountableArea,
+                    GroupTeamId = team.GroupTeamId,
+                    ModifiedBy = session.UserId,
+                    MailGroup = model.MailGroup,
+                    LocalBasicAnnualLeaveBalance = GetValue(model.LocalBasicAnnualLeaveBalance),
+                    LocalWorkingDays = GetValue(model.LocalWorkingDays),
+                    LocalWorkingHours = GetValue(model.LocalWorkingHours),
+                    LocalOffDaysbyWeek = GetValue(model.LocalOffDaysbyWeek),
+                    LocalWorkingHoursbyWeek = model.LocalWorkingHoursbyWeek,
+                    ExpatBasicAnnualLeaveBalance = GetValue(model.ExpatBasicAnnualLeaveBalance),
+                    ExpatWorkingDays = GetValue(model.ExpatWorkingDays),
+                    ExpatWorkingHours = GetValue(model.ExpatWorkingHours),
+                    ExpatOffDaysbyWeek = GetValue(model.ExpatOffDaysbyWeek),
+                    ExpatWorkingHoursbyWeek = model.ExpatWorkingHoursbyWeek
+                };
+                var result = await baseService.ExecuteNonQueryAsync(criteria);
+
+                if (result.IsSuccessful)
+                {
+                    ViewBag.Updated = true;
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, result.Message);
+                }
+            }
+            else
+            {
+                ModelState.AddModelError(string.Empty, Messages.InvalidInputData);
+            }
+        }
+
+        return View(model);
+    }
+
+
+
     [HrmPermission(Policy.Read, FunctionKey.TeamManagement)]
     public async Task<IActionResult> TeamSupervisor(int id)
     {

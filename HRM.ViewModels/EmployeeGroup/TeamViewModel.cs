@@ -12,17 +12,14 @@ public class TeamViewModel
 
     public int Id { get; set; }
 
-    [Required(ErrorMessageResourceName = nameof(Messages.RequiredErrorMessage), ErrorMessageResourceType = typeof(Messages))]
     [StringLength(20, ErrorMessageResourceType = typeof(Messages), ErrorMessageResourceName = nameof(Messages.StringLengthErrorMessage))]
     [Display(Name = nameof(Labels.Code), ResourceType = typeof(Labels))]
     public string TeamCode { get; set; }
 
-    [Required(ErrorMessageResourceName = nameof(Messages.RequiredErrorMessage), ErrorMessageResourceType = typeof(Messages))]
     [StringLength(150, ErrorMessageResourceType = typeof(Messages), ErrorMessageResourceName = nameof(Messages.StringLengthErrorMessage))]
     [Display(Name = nameof(Labels.Name), ResourceType = typeof(Labels))]
     public string TeamName { get; set; }
 
-    [Required(ErrorMessageResourceName = nameof(Messages.RequiredErrorMessage), ErrorMessageResourceType = typeof(Messages))]
     [Display(Name = nameof(Labels.Department), ResourceType = typeof(Labels))]
     public int? DepartmentId { get; set; }
 
@@ -45,13 +42,15 @@ public class TeamViewModel
     [Display(Name = nameof(Labels.AccountableArea), ResourceType = typeof(Labels))]
     public string AccountableArea { get; set; }
 
-    public IList<Models.Department> Departments { get; set; }
+    public IList<Department> Departments { get; set; }
 
     public IList<Employee> Employees { get; set; }
 
     public List<EmployeePIC> EmployeePics { get; set; }
 
     public int CompanyId { get; set; }
+
+    public string DepartmentName { get; set; }
 
     [Required(ErrorMessageResourceName = nameof(Messages.RequiredErrorMessage), ErrorMessageResourceType = typeof(Messages))]
     [Display(Name = nameof(Labels.BasicAnnualLeaveBalance), ResourceType = typeof(Labels))]
