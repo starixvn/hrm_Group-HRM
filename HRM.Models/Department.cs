@@ -8,6 +8,8 @@ public class Department : EntityBase<int>
 
     public int PICEmpId { get; set; }
 
+    public string PICEmployeeName { get; set; }
+
     public string AccountableArea { get; set; }
 
     public bool IsActive { get; set; }

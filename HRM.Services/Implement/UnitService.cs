@@ -21,6 +21,12 @@ public class UnitService(
         return await baseService.GetDataEntityAsync<Unit>(criteria);
     }
 
+    public async Task<int> GetNextGroupUnitIdAsync()
+    {
+        var criteria = new GetNextGroupUnitIdCriteria();
+        return await baseService.GetDataEntityAsync<int>(criteria);
+    }
+
     public async Task<IEnumerable<Unit>> GetUnitAsync(bool? isActive = true)
     {
         var criteria = new GetUnitCriteria

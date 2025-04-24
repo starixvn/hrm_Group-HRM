@@ -1008,6 +1008,9 @@
   <data name="SASpace" xml:space="preserve">
     <value>SA Space</value>
   </data>
+  <data name="GroupSpace" xml:space="preserve">
+    <value>Group Space</value>
+  </data>
   <data name="VoidRequest" xml:space="preserve">
     <value>Void request</value>
   </data>
@@ -2007,7 +2010,34 @@
   <data name="ManagementGrade" xml:space="preserve">
     <value>Management Grade</value>
   </data>
+  <data name="TeamCode" xml:space="preserve">
+    <value>Team Code</value>
+  </data>
+  <data name="DepartmentName" xml:space="preserve">
+    <value>Department Name</value>
+  </data>
+  <data name="Company" xml:space="preserve">
+    <value>Company</value>
+  </data>
   <data name="BusinessUnit" xml:space="preserve">
     <value>Business Unit</value>
+  </data>
+  <data name="DepartmentCode" xml:space="preserve">
+    <value>Department Code</value>
+  </data>
+  <data name="DepartmentPIC" xml:space="preserve">
+    <value>Department PIC</value>
+  </data>
+  <data name="TeamPIC" xml:space="preserve">
+    <value>Team PIC</value>
+  </data>
+  <data name="UnitCode" xml:space="preserve">
+    <value>BU Code</value>
+  </data>
+  <data name="CompanyName" xml:space="preserve">
+    <value>Company Name</value>
+  </data>
+  <data name="TotalMembers" xml:space="preserve">
+    <value>Total Members</value>
   </data>
 </root>

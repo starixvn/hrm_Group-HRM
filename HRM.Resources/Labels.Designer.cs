@@ -898,11 +898,29 @@ namespace HRM.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Company.
+        /// </summary>
+        public static string Company {
+            get {
+                return ResourceManager.GetString("Company", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Company Date.
         /// </summary>
         public static string CompanyDate {
             get {
                 return ResourceManager.GetString("CompanyDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Company Name.
+        /// </summary>
+        public static string CompanyName {
+            get {
+                return ResourceManager.GetString("CompanyName", resourceCulture);
             }
         }
         
@@ -1276,6 +1294,15 @@ namespace HRM.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Department Code.
+        /// </summary>
+        public static string DepartmentCode {
+            get {
+                return ResourceManager.GetString("DepartmentCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Department ID.
         /// </summary>
         public static string DepartmentId {
@@ -1290,6 +1317,24 @@ namespace HRM.Resources {
         public static string DepartmentManagement {
             get {
                 return ResourceManager.GetString("DepartmentManagement", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Department Name.
+        /// </summary>
+        public static string DepartmentName {
+            get {
+                return ResourceManager.GetString("DepartmentName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Department PIC.
+        /// </summary>
+        public static string DepartmentPIC {
+            get {
+                return ResourceManager.GetString("DepartmentPIC", resourceCulture);
             }
         }
         
@@ -2100,6 +2145,15 @@ namespace HRM.Resources {
         public static string GroupDate {
             get {
                 return ResourceManager.GetString("GroupDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Group Space.
+        /// </summary>
+        public static string GroupSpace {
+            get {
+                return ResourceManager.GetString("GroupSpace", resourceCulture);
             }
         }
         
@@ -4768,6 +4822,15 @@ namespace HRM.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Team Code.
+        /// </summary>
+        public static string TeamCode {
+            get {
+                return ResourceManager.GetString("TeamCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Team Date.
         /// </summary>
         public static string TeamDate {
@@ -4818,6 +4881,15 @@ namespace HRM.Resources {
         public static string TeamPermissionSummary {
             get {
                 return ResourceManager.GetString("TeamPermissionSummary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Team PIC.
+        /// </summary>
+        public static string TeamPIC {
+            get {
+                return ResourceManager.GetString("TeamPIC", resourceCulture);
             }
         }
         
@@ -5038,6 +5110,15 @@ namespace HRM.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Total Members.
+        /// </summary>
+        public static string TotalMembers {
+            get {
+                return ResourceManager.GetString("TotalMembers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Total minutes.
         /// </summary>
         public static string TotalMinutes {
@@ -5160,6 +5241,15 @@ namespace HRM.Resources {
         public static string Unit {
             get {
                 return ResourceManager.GetString("Unit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to BU Code.
+        /// </summary>
+        public static string UnitCode {
+            get {
+                return ResourceManager.GetString("UnitCode", resourceCulture);
             }
         }
         

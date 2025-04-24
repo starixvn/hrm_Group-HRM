@@ -4,6 +4,7 @@ using GO.UserControl.Client.Core.Session;
 using HRM.Core.Constants;
 using HRM.Core.Filters;
 using HRM.Core.Models;
+using HRM.Criteria.Employee;
 using HRM.Criteria.Unit;
 using HRM.Services.Interfaces;
 using HRM.ViewModels.Unit;
@@ -13,6 +14,7 @@ namespace HRM.Controllers;
 
 public class UnitController(
     IUserControlSession session,
+    IEmployeeService employeeService,
     IUnitService unitService) : BaseController(session)
 {
     [HrmPermission(Policy.Read, FunctionKey.UnitManagement)]
@@ -32,8 +34,9 @@ public class UnitController(
     }
 
     [HrmPermission(Policy.Host, FunctionKey.UnitManagement)]
-    public ActionResult Create()
+    public async Task<IActionResult> Create()
     {
+        ViewBag.NextId = await unitService.GetNextGroupUnitIdAsync();
         return View();
     }
 
@@ -112,5 +115,13 @@ public class UnitController(
         var commandResult = await unitService.DeleteAsync(criteria);
 
         return new JsonResult(commandResult);
+    }
+
+    [HttpGet]
+    [HrmPermission(Policy.Host, FunctionKey.UnitManagement)]
+    public async Task<JsonResult> GetEmployeeForPIC()
+    {
+        var employees = await employeeService.GetEmployeeForPICAsync(new GetEmployeeForPICCriteria());
+        return new JsonResult(employees);
     }
 }

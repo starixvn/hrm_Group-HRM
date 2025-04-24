@@ -94,8 +94,8 @@
             <th rowspan="2">@Labels.DisciplineRule</th>
             @if (hasPermission)
             {
+	            <th rowspan="2">@Labels.Edit</th>
                 <th rowspan="2">@Labels.Roles</th>
-                <th rowspan="2">@Labels.Delete</th>
             }
         </tr>
         <tr>
@@ -152,19 +152,10 @@
                     @if (hasPermission)
                     {
                         <td>
-                            <a href="@Url.Action("TeamSupervisor", "Team", new { team.Id })">Manage</a>
+                            <a href="@Url.Action("Edit", "team", new { team.Id })"><i class="fa fa-pencil fa-lg icon-edit"></i></a>
                         </td>
                         <td>
-                            @if (team.NoOfMembers > 0)
-                            {
-                                <i class="fa fa-times fa-lg fa-disabled icon-delete"></i>
-                            }
-                            else
-                            {
-                                <a href="javascript:;" class="deleteTeam" data-team-id="@team.Id">
-                                    <i class="fa fa-times fa-lg icon-delete"></i>
-                                </a>
-                            }
+                            <a href="@Url.Action("TeamSupervisor", "Team", new { team.Id })">Manage</a>
                         </td>
                     }
                 </tr>

@@ -10,17 +10,6 @@ public class CreateTeamCriteria : CriteriaBase
     public int? PICEmpId { get; set; }
     public int GroupTeamId { get; set; }
     public string AccountableArea { get; set; }
-    public string MailGroup { get; set; }
-    public byte LocalBasicAnnualLeaveBalance { get; set; }
-    public byte LocalWorkingDays { get; set; }
-    public byte LocalWorkingHours { get; set; }
-    public byte LocalOffDaysbyWeek { get; set; }
-    public byte? LocalWorkingHoursbyWeek { get; set; }
-    public byte ExpatBasicAnnualLeaveBalance { get; set; }
-    public byte ExpatWorkingDays { get; set; }
-    public byte ExpatWorkingHours { get; set; }
-    public byte ExpatOffDaysbyWeek { get; set; }
-    public byte? ExpatWorkingHoursbyWeek { get; set; }
     public int CreatedBy { get; set; }
     public short CompanyId { get; set; }
 

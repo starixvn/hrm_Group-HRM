@@ -42,64 +42,6 @@ public class TeamController(
     }
 
     [HrmPermission(Policy.Host, FunctionKey.TeamManagement)]
-    public async Task<ActionResult> Create()
-    {
-        var model = new TeamViewModel
-        {
-            Departments = await departmentService.GetDepartmentAsync(),
-            Employees = await GetAllEmployees()
-        };
-        return View(model);
-    }
-
-    [HttpPost]
-    [HrmPermission(Policy.Host, FunctionKey.TeamManagement)]
-    public async Task<ActionResult> Create(TeamViewModel model)
-    {
-        model.Departments = await departmentService.GetDepartmentAsync();
-        model.Employees = await GetAllEmployees();
-        if (ModelState.IsValid)
-        {
-            var criteria = new CreateTeamCriteria
-            {
-                Code = model.TeamCode,
-                Name = model.TeamName,
-                DepartmentId = model.DepartmentId ?? 0,
-                PICEmpId = model.PICEmpId,
-                GroupTeamId = model.GroupTeamId,
-                AccountableArea = model.AccountableArea,
-                MailGroup = model.MailGroup,
-                CreatedBy = session.UserId,
-                LocalBasicAnnualLeaveBalance = GetValue(model.LocalBasicAnnualLeaveBalance),
-                LocalWorkingDays = GetValue(model.LocalWorkingDays),
-                LocalWorkingHours = GetValue(model.LocalWorkingHours),
-                LocalOffDaysbyWeek = GetValue(model.LocalOffDaysbyWeek),
-                LocalWorkingHoursbyWeek = model.LocalWorkingHoursbyWeek,
-                ExpatBasicAnnualLeaveBalance = GetValue(model.ExpatBasicAnnualLeaveBalance),
-                ExpatWorkingDays = GetValue(model.ExpatWorkingDays),
-                ExpatWorkingHours = GetValue(model.ExpatWorkingHours),
-                ExpatOffDaysbyWeek = GetValue(model.ExpatOffDaysbyWeek),
-                ExpatWorkingHoursbyWeek = model.ExpatWorkingHoursbyWeek,
-                CompanyId = CurrentCompanyId
-            };
-            var result = await baseService.ExecuteNonQueryAsync(criteria);
-
-            if (result.IsSuccessful)
-            {
-                return RedirectToAction("Index", "Team");
-            }
-
-            ModelState.AddModelError(string.Empty, result.Message);
-        }
-        else
-        {
-            ModelState.AddModelError(string.Empty, Messages.InvalidInputData);
-        }
-
-        return View(model);
-    }
-
-    [HrmPermission(Policy.Host, FunctionKey.TeamManagement)]
     public async Task<ActionResult> Edit(int id)
     {
         var team = await teamService.GetById(id);
@@ -127,6 +69,7 @@ public class TeamController(
             ExpatWorkingHoursbyWeek = team.ExpatWorkingHoursbyWeek,
             DepartmentId = team.Department?.Id ?? 0,
             Departments = await departmentService.GetDepartmentAsync(),
+            DepartmentName = team.Department?.Name ?? "",
             Employees = employees,
             PICEmpId = team.PICEmpId,
             GroupTeamId = team.GroupTeamId,
@@ -144,19 +87,23 @@ public class TeamController(
         {
             model.Departments = await departmentService.GetDepartmentAsync();
             model.Employees = await GetAllEmployees();
+            var team = await teamService.GetGroupTeamInUnitScopeById(model.Id);
+            model.TeamCode = team.TeamCode;
+            model.TeamName = team.TeamName;
+            model.DepartmentName = team.DepartmentName;
             if (ModelState.IsValid)
             {
                 var criteria = new EditTeamCriteria
                 {
-                    TeamId = model.Id,
-                    Code = model.TeamCode,
-                    Name = model.TeamName,
-                    DepartmentId = model.DepartmentId ?? 0,
-                    MailGroup = model.MailGroup,
-                    GroupTeamId = model.GroupTeamId,
-                    PICEmpId = model.PICEmpId,
-                    AccountableArea = model.AccountableArea,
+                    TeamId = team.Id,
+                    Code = team.TeamCode,
+                    Name = team.TeamName,
+                    DepartmentId = team.DepartmentId,
+                    PICEmpId = team.PICEmpId,
+                    AccountableArea = team.AccountableArea,
+                    GroupTeamId = team.GroupTeamId,
                     ModifiedBy = session.UserId,
+                    MailGroup = model.MailGroup,
                     LocalBasicAnnualLeaveBalance = GetValue(model.LocalBasicAnnualLeaveBalance),
                     LocalWorkingDays = GetValue(model.LocalWorkingDays),
                     LocalWorkingHours = GetValue(model.LocalWorkingHours),
@@ -188,14 +135,7 @@ public class TeamController(
         return View(model);
     }
 
-    [HttpPost]
-    [HrmPermission(Policy.Host, FunctionKey.TeamManagement)]
-    public async Task<IActionResult> Delete(int id)
-    {
-        var commandResult = await teamService.Delete(session.UserId, id);
 
-        return Json(commandResult);
-    }
 
     [HrmPermission(Policy.Read, FunctionKey.TeamManagement)]
     public async Task<IActionResult> TeamSupervisor(int id)

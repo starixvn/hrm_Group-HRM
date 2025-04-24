@@ -84,6 +84,11 @@ public class EmployeeService(
         return await baseService.GetDataAsync<Employee>(criteria);
     }
 
+    public async Task<IEnumerable<EmployeePIC>> GetEmployeeForPICAsync(GetEmployeeForPICCriteria criteria)
+    {
+        return await baseService.GetDataAsync<EmployeePIC>(criteria);
+    }
+
     public async Task<IEnumerable<Employee>> GetEmployeesByRoleAsync(GetEmployeeByRoleCriteria criteria)
     {
         if (criteria == null || !criteria.IsValid())

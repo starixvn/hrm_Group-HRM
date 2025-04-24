@@ -13,6 +13,7 @@ using HRM.Models.Group;
 using HRM.Models.Supervisor;
 using HRM.Repositories.Interfaces;
 using HRM.Services.Interfaces;
+using static Microsoft.Extensions.Logging.EventSource.LoggingEventSource;
 
 namespace HRM.Services.Implement;
 
@@ -32,6 +33,21 @@ public class TeamService(
         return await teamRepository.GetById(criteria);
     }
 
+    public async Task<int> GetNextGroupTeamIdAsync()
+    {
+        var criteria = new GetNextGroupTeamIdCriteria();
+        return await baseService.GetDataEntityAsync<int>(criteria);
+    }
+    public async Task<GroupTeamModel> GetGroupTeamInUnitScopeById(int id)
+    {
+        var criteria = new GetTeamInUnitScopeCriteria
+        {
+            TeamId = id
+        };
+        return await baseService.GetDataEntityAsync<GroupTeamModel>(criteria);
+        
+    }
+
     public async Task<IEnumerable<Team>> GetAllAsync(bool isDeleted = false, string keyword = null)
     {
         var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
@@ -44,6 +60,17 @@ public class TeamService(
         var teams = await teamRepository.GetAllAsync(criteria);
 
         return teams ?? new List<Team>();
+    }
+
+    public async Task<IEnumerable<GroupTeamModel>> GetAllTeamByUnitScopeAsync(string keyword)
+    {
+        var criteria = new GetTeamInUnitScopeCriteria
+        {
+            Keyword = keyword
+        };
+        var teams = await baseService.GetDataAsync<GroupTeamModel>(criteria);
+
+        return teams ?? new List<GroupTeamModel>();
     }
 
     public async Task<CommandResult> Delete(int actorId, int id)

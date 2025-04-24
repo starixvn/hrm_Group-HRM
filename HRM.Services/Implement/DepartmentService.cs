@@ -23,6 +23,12 @@ public class DepartmentService(
         return await baseService.ExecuteNonQueryAsync(criteria);
     }
 
+    public async Task<int> GetNextGroupDeptIdAsync()
+    {
+        var criteria = new GetNextGroupDeptIdCriteria();
+        return await baseService.GetDataEntityAsync<int>(criteria);
+    }
+
     public async Task<IList<Department>> GetDepartmentAsync(bool? isActive = true)
     {
         var criteria = new GetDepartmentByActiveCriteria

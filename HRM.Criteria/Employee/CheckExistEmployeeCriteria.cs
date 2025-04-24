@@ -5,6 +5,7 @@ namespace HRM.Criteria.Employee;
 public class CheckExistEmployeeCriteria : CriteriaBase
 {
     public string Code { get; set; }
+
     public string Nickname { get; set; }
 
     public short CompanyId { get; set; }

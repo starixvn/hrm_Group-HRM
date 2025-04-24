@@ -10,6 +10,8 @@ public interface IUnitService
 {
     Task<Unit> GetByIdAsync(int id);
 
+    Task<int> GetNextGroupUnitIdAsync();
+
     Task<IEnumerable<Unit>> GetUnitAsync(bool? isActive = true);
 
     Task<CommandResult> CreateAsync(InsertUnitCriteria criteria);

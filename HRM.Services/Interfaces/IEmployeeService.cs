@@ -27,6 +27,8 @@ public interface IEmployeeService
 
     Task<IEnumerable<Employee>> GetMemberByManagerAsync(GetMemberByManagerCriteria criteria);
 
+    Task<IEnumerable<EmployeePIC>> GetEmployeeForPICAsync(GetEmployeeForPICCriteria criteria);
+
     Task<IEnumerable<Employee>> GetEmployeesByRoleAsync(GetEmployeeByRoleCriteria criteria);
 
     Task<EmployeeShift> GetShiftByEmployeeId(int id);
