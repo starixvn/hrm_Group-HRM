@@ -9,7 +9,7 @@ import { axiosError, floatThead, confirm, resolveClientUrl, alert, sortTable } f
 function deleteTeam(id) {
     confirm('Are you sure you want to delete this team ?', function () {
         axios({
-            url: resolveClientUrl('team/delete' + '/' + id),
+            url: resolveClientUrl('groupteam/delete' + '/' + id),
             method: 'POST',
             headers: {
                 'X-Requested-With': 'XMLHttpRequest',

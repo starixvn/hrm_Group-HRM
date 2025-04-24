@@ -169,6 +169,15 @@ public class GroupTeamController(ITeamService teamService,
         return View(model);
     }
 
+    [HttpPost]
+    [HrmPermission(Policy.Host, FunctionKey.GroupTeamManagement)]
+    public async Task<IActionResult> Delete(int id)
+    {
+        var commandResult = await teamService.Delete(session.UserId, id);
+
+        return Json(commandResult);
+    }
+
     private async Task<IEnumerable<Company>> GetAllCompany()
     {
         var companies = await companyService.GetAllCompany();
