@@ -50,6 +50,9 @@ public class TimeController(
 
         userControlSettings.SiteId = companySite.SiteId;
         userControlSettings.AccessToken = companySite.AccessToken;
+
+        UserControlClientManager.UseSettings(userControlSettings);
+
         session.Set(SessionKey.CurrentCompanyId, companySite.CompanyId);
         session.Set(SessionKey.CurrentTimeZone, await GetClientTimeZoneAsync());
 

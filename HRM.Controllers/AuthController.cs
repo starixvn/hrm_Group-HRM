@@ -44,6 +44,8 @@ public class AuthController(
         userControlSettings.SiteId = companySite.SiteId;
         userControlSettings.AccessToken = companySite.AccessToken;
 
+        UserControlClientManager.UseSettings(userControlSettings);
+
         session.Set(SessionKey.CurrentCompanyId, companySite.CompanyId);
 
         return View();
@@ -121,6 +123,8 @@ public class AuthController(
 
         userControlSettings.SiteId = companySite.SiteId;
         userControlSettings.AccessToken = companySite.AccessToken;
+
+        UserControlClientManager.UseSettings(userControlSettings);
 
         session.Set(SessionKey.CurrentCompanyId, companySite.CompanyId);
 
