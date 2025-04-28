@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 using Core.Constants;
 using Criteria.SystemSetting;
 using Fanex.Data;
-using GO.UserControl.Client.Core;
 using GO.UserControl.Client.Core.Models.Auth;
 using GO.UserControl.Client.Core.Services;
 using GO.UserControl.Client.Core.Session;
@@ -25,7 +24,6 @@ using ViewModels.Employee;
 
 public class AuthController(
     IHRMAuthService hrmAuthService,
-    IUserControlSettings userControlSettings,
     IUserControlSession session,
     IUserService userService,
     IAuthService authService,
@@ -41,10 +39,8 @@ public class AuthController(
             return RedirectToAction("AccessDenied", "Error");
         }
 
-        userControlSettings.SiteId = companySite.SiteId;
-        userControlSettings.AccessToken = companySite.AccessToken;
-
-        UserControlClientManager.UseSettings(userControlSettings);
+        session.SiteId = companySite.SiteId;
+        session.AccessToken = companySite.AccessToken;
 
         session.Set(SessionKey.CurrentCompanyId, companySite.CompanyId);
 
@@ -75,11 +71,11 @@ public class AuthController(
             var employee = await hrmAuthService.GetByUserIdAsync(loginResult.UserId);
 
             session.UserId = loginResult.UserId;
-            session.SiteId = userControlSettings.SiteId;
             session.JwtToken = loginResult.JwtToken;
             session.OnUserId = loginResult.OnUserId;
             session.MenuItems = await userService.GetMenuItemAsync();
             session.Functions = await userService.GetFunctionPermissionAsync(session.SiteId, session.UserId);
+
             session.Set(SessionKey.IsShowLeftNavigation, true);
             session.Set(SessionKey.Employee, employee);
             session.Set(SessionKey.CurrentTimeZone, await GetClientTimeZoneAsync());
@@ -121,12 +117,10 @@ public class AuthController(
             return RedirectToAction("AccessDenied", "Error");
         }
 
-        userControlSettings.SiteId = companySite.SiteId;
-        userControlSettings.AccessToken = companySite.AccessToken;
-
-        UserControlClientManager.UseSettings(userControlSettings);
-
         session.Set(SessionKey.CurrentCompanyId, companySite.CompanyId);
+
+        session.SiteId = companySite.SiteId;
+        session.AccessToken = companySite.AccessToken;
 
         const string DateTimeFormat = "yyyy-MM-dd HH:mm:ss.fff";
         var userIdValue = Cryptography.DecryptPassword(userId.Replace(" ", "+"));
@@ -158,7 +152,6 @@ public class AuthController(
                 }
 
                 session.UserId = loginResult.UserId;
-                session.SiteId = userControlSettings.SiteId;
                 session.JwtToken = loginResult.JwtToken;
                 session.OnUserId = loginResult.OnUserId;
                 session.MenuItems = await userService.GetMenuItemAsync();

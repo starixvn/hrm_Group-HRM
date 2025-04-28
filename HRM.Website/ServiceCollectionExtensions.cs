@@ -5,9 +5,6 @@ using System.Threading.Tasks;
 using Fanex.Caching.Redis;
 using Fanex.Data.Repository;
 using Fanex.Logging;
-using GO.UserControl.Client.AspNetCore;
-using GO.UserControl.Client.AspNetCore.Session;
-using GO.UserControl.Client.Core;
 using GO.UserControl.Client.Core.Services;
 using GO.UserControl.Client.Core.Session;
 using HRM.Core.Models;
@@ -105,8 +102,6 @@ public static class ServiceCollectionExtensions
         var s3Config = configuration.GetSection("AmazonStorageConfig").Get<AmazonStorageConfig>();
         services.AddSingleton(s3Config);
 
-        services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-        services.AddSingleton<IUserControlSettings>(new UserControlSettings(configuration));
         services.AddSingleton<ILogger, Logger>();
         services.AddSingleton<IDynamicRepository, DynamicRepository>();
 
