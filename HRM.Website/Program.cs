@@ -25,6 +25,7 @@ services.AddControllersWithViews()
         options.SerializerSettings.DateFormatString = "dd MMM, yyyy HH:mm:ss";
     });
 
+services.AddHttpContextAccessor();
 services.AddHttpClient();
 services.AddFanexLogSentry(configuration);
 services.AddFanexSql(configuration);
@@ -35,9 +36,8 @@ services.AddDIServices(configuration);
 
 var app = builder.Build();
 
-UserControlClientManager
-    .UseSettings(app.Services.GetRequiredService<IUserControlSettings>())
-    .UseSession(app.Services.GetRequiredService<IUserControlSession>());
+UserControlClient
+    .UseSession(app.Services.GetRequiredService<IUserControlSession>(), configuration);
 DateTimeExtensions.Configure(app.Services.GetRequiredService<IUserControlSession>());
 
 if (!app.Environment.IsDevelopment())

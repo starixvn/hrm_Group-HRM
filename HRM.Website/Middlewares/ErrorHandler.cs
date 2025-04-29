@@ -24,22 +24,46 @@ public class ErrorHandler(RequestDelegate next, ILogger logger)
 
     private async Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
-        var logMessage = new LogMessage(exception.Message)
-            .AddSection("Database Info", DatabaseInfoGetters.GetDbExceptionInfo(exception))
-            .AddSection("Server Info", CommonInfoGetters.GetServerInfo())
-            .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(exception))
-            .ToString();
-        await logger.ErrorAsync(logMessage);
-
-        if (IsAjaxRequest(context.Request))
+        if (exception.GetType() == typeof(UnauthorizedAccessException))
         {
-            context.Response.ContentType = "application/json";
-            context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-            await context.Response.WriteAsync(exception.Message);
+            await HandleUnauthorizedAsync(context, exception);
         }
         else
         {
-            context.Response.Redirect("/Error/InternalError");
+            var logMessage = new LogMessage(exception.Message)
+                .AddSection("Database Info", DatabaseInfoGetters.GetDbExceptionInfo(exception))
+                .AddSection("Server Info", CommonInfoGetters.GetServerInfo())
+                .AddSection("Exception Info", CommonInfoGetters.GetExceptionInfo(exception))
+                .ToString();
+            await logger.ErrorAsync(logMessage);
+
+            if (IsAjaxRequest(context.Request))
+            {
+                context.Response.ContentType = "application/json";
+                context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                await context.Response.WriteAsync(exception.Message);
+            }
+            else
+            {
+                context.Response.Redirect("/Error/InternalError");
+            }
+        }
+    }
+
+    private static async Task HandleUnauthorizedAsync(HttpContext context, Exception exception)
+    {
+        if (exception is UnauthorizedAccessException)
+        {
+            if (IsAjaxRequest(context.Request))
+            {
+                context.Response.ContentType = "application/json";
+                context.Response.StatusCode = (int)HttpStatusCode.Unauthorized;
+                await context.Response.WriteAsync(exception.Message);
+            }
+            else
+            {
+                context.Response.Redirect("/Auth/Login");
+            }
         }
     }
 

@@ -14,7 +14,6 @@ using Criteria.CompanySite;
 using Criteria.SystemSetting;
 using Criteria.Time;
 using Fanex.Logging;
-using GO.UserControl.Client.Core;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Models.Auth;
 using GO.UserControl.Client.Core.Services;
@@ -31,7 +30,6 @@ using ViewModels.Time;
 
 public class TimeController(
     AppSettings appSettings,
-    IUserControlSettings userControlSettings,
     IUserControlSession session,
     IBaseService baseService,
     IAuthService authService,
@@ -48,8 +46,8 @@ public class TimeController(
             return RedirectToAction("AccessDenied", "Error");
         }
 
-        userControlSettings.SiteId = companySite.SiteId;
-        userControlSettings.AccessToken = companySite.AccessToken;
+        session.SiteId = companySite.SiteId;
+        session.AccessToken = companySite.AccessToken;
         session.Set(SessionKey.CurrentCompanyId, companySite.CompanyId);
         session.Set(SessionKey.CurrentTimeZone, await GetClientTimeZoneAsync());
 

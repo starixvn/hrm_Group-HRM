@@ -6,14 +6,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Core.Constants;
 using Core.Security;
 using Core.XMLExtensions;
 using Criteria.AnnualLeave;
 using Criteria.Employee;
-using Core.Constants;
 using Criteria.Shift;
 using Criteria.Supervisor;
-using GO.UserControl.Client.Core;
 using GO.UserControl.Client.Core.Services;
 using GO.UserControl.Client.Core.Session;
 using HRM.Core.Models;
@@ -28,15 +27,14 @@ using Resources;
 using ViewModels.AnnualLeave;
 
 public class EmployeeService(
-    IUserControlSettings userControlSettings,
     IEmployeeRepository employeeRepository,
     IBaseService baseService,
     IRoleService roleService,
-    IUserControlSession userControlSession) : IEmployeeService
+    IUserControlSession session) : IEmployeeService
 {
     public async Task<string> GenerateEmployeeCode()
     {
-        var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
+        var companyId = session.Get<short>(SessionKey.CurrentCompanyId);
         var criteria = new GenerateEmployeeCodeCriteria
         {
             CompanyId = companyId
@@ -66,7 +64,7 @@ public class EmployeeService(
         {
             employees = await employeeRepository.GetEmployeeAsync(criteria);
 
-            var roles = await roleService.GetBySiteIdAsync(userControlSettings.SiteId);
+            var roles = await roleService.GetBySiteIdAsync(session.SiteId);
             foreach (var employee in employees)
             {
                 if (employee.Roles != null && employee.Roles.Any())
@@ -97,7 +95,7 @@ public class EmployeeService(
         }
 
         var employees = await employeeRepository.GetEmployeesByRoleAsync(criteria);
-        var roles = await roleService.GetBySiteIdAsync(userControlSettings.SiteId);
+        var roles = await roleService.GetBySiteIdAsync(session.SiteId);
         foreach (var employee in employees)
         {
             if (employee.Roles != null && employee.Roles.Any())
@@ -201,7 +199,7 @@ public class EmployeeService(
     public async Task<IEnumerable<EmployeeFullProfile>> GetEmployeeFullProfile(GetEmployeeFullProfileCriteria criteria)
     {
         var employees = await employeeRepository.GetEmployeeFullInformation(criteria);
-        var roles = await roleService.GetBySiteIdAsync(userControlSettings.SiteId);
+        var roles = await roleService.GetBySiteIdAsync(session.SiteId);
         foreach (var employee in employees)
         {
             if (employee.Roles != null && employee.Roles.Any())
@@ -248,7 +246,7 @@ public class EmployeeService(
 
     public async Task<CommandResult> CheckExistAsync(CreateEmployeeParam param)
     {
-        var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
+        var companyId = session.Get<short>(SessionKey.CurrentCompanyId);
 
         var criteria = new CheckExistEmployeeCriteria
         {
