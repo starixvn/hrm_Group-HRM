@@ -10,10 +10,14 @@ using System.Linq;
 using HRM.Services.Interfaces;
 using HRM.Models.Payroll;
 using Microsoft.AspNetCore.Hosting;
+using Newtonsoft.Json;
+using HRM.Criteria.EmployeePayroll;
 
 namespace HRM.Services.Implement;
 
-public class UploadSalaryService(IWebHostEnvironment hostingEnvironment) : IUploadSalaryService
+public class UploadSalaryService(
+    IWebHostEnvironment hostingEnvironment,
+    IBaseService baseService) : IUploadSalaryService
 {
     private const string SheetExpat = "Payroll - Expat";
     private const string SheetGO = "Payroll - GO";
@@ -27,7 +31,14 @@ public class UploadSalaryService(IWebHostEnvironment hostingEnvironment) : IUplo
         try
         {
             var allPayrollData = await ProcessExcelFileAsync(file);
-            return new CommandResult { Code = 0 };
+            var criteria = new ImportEmployeePayrollCriteria
+            {
+                EmployeeListJson = JsonConvert.SerializeObject(allPayrollData),
+                Month = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1),
+                PeriodType = 1,
+                CompanyId = 3
+            };
+            return await baseService.ExecuteNonQueryAsync(criteria);
         }
         catch (Exception ex)
         {

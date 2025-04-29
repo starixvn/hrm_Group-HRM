@@ -562,4 +562,7 @@
 	<Function Name="Company">
 		<Setting Key="Company_GetAll" SpName="Company_GetAll" DbName="bodb_HRM" Plain="0" />
 	</Function>
+    <Function Name="EmployeePayroll">
+		<Setting Key="EmployeePayroll_Import" SpName="EmployeePayroll_Import" DbName="bodb_HRM" Plain="0" />
+	</Function>
 </Functions>
