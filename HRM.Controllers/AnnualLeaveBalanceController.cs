@@ -68,6 +68,7 @@ public class AnnualLeaveBalanceController(
     {
         var annualLeave = new AdjustAnnualLeaveBalance
         {
+            CompanyId = CurrentCompanyId,
             EmployeeIds = model.EmpIds,
             Description = model.Description,
             CreditDays = model.CreditDays,

@@ -4,6 +4,7 @@ using System;
 
 public class AdjustAnnualLeaveBalance
 {
+    public short CompanyId { get; set; }
     public string EmployeeIds { get; set; }
     public string Description { get; set; }
     public DateTime AffectedFrom { get; set; }
