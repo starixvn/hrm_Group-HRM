@@ -26,11 +26,11 @@ public class UploadSalaryService(
     private const string ColumnIdStaff = "id staff";
     private const string ColumnTotalPersonalCost = "total personal cost";
 
-    public async Task<CommandResult> ImportEmpSalaryAsync(IFormFile file)
+    public async Task<CommandResult> ImportEmpSalaryAsync(UploadPayrollModel model)
     {
         try
         {
-            var allPayrollData = await ProcessExcelFileAsync(file);
+            var allPayrollData = await ProcessExcelFileAsync(model.File);
             var criteria = new ImportEmployeePayrollCriteria
             {
                 EmployeeListJson = JsonConvert.SerializeObject(allPayrollData),
@@ -42,14 +42,14 @@ public class UploadSalaryService(
         }
         catch (Exception ex)
         {
-            return new CommandResult 
+            return new CommandResult
             {
                 Message = ex.Message
             };
         }
     }
 
-    private async Task<List<UploadSalaryModel>> ProcessExcelFileAsync(IFormFile file)
+    private async Task<List<ImportPayrollModel>> ProcessExcelFileAsync(IFormFile file)
     {
         var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, "ExcelTemplates/Payroll.xlsx");
         // await using var stream = file.OpenReadStream();
@@ -61,7 +61,7 @@ public class UploadSalaryService(
         }
 
         var worksheets = new[] { SheetExpat, SheetGO, SheetOPS, SheetExtraPayment };
-        var allPayrollData = new List<UploadSalaryModel>();
+        var allPayrollData = new List<ImportPayrollModel>();
 
         foreach (var sheetName in worksheets)
         {
@@ -87,7 +87,7 @@ public class UploadSalaryService(
     }
 
 
-    private static void ProcessPayrollData(List<UploadSalaryModel> allPayrollData, List<UploadSalaryModel> payrollData, string sheetName)
+    private static void ProcessPayrollData(List<ImportPayrollModel> allPayrollData, List<ImportPayrollModel> payrollData, string sheetName)
     {
         if (sheetName == SheetExtraPayment)
         {
@@ -99,7 +99,7 @@ public class UploadSalaryService(
         }
     }
 
-    private static void ProcessExtraPayments(List<UploadSalaryModel> allPayrollData, List<UploadSalaryModel> extraPayments)
+    private static void ProcessExtraPayments(List<ImportPayrollModel> allPayrollData, List<ImportPayrollModel> extraPayments)
     {
         foreach (var extraPayment in extraPayments)
         {
@@ -110,7 +110,7 @@ public class UploadSalaryService(
             }
             else
             {
-                allPayrollData.Add(new UploadSalaryModel
+                allPayrollData.Add(new ImportPayrollModel
                 {
                     EmpId = extraPayment.EmpId,
                     ExtraPayment = extraPayment.TotalPersonalCost,
@@ -120,7 +120,7 @@ public class UploadSalaryService(
         }
     }
 
-    private static void ProcessRegular(List<UploadSalaryModel> allPayrollData, List<UploadSalaryModel> regularPayments)
+    private static void ProcessRegular(List<ImportPayrollModel> allPayrollData, List<ImportPayrollModel> regularPayments)
     {
         foreach (var payroll in regularPayments)
         {
@@ -173,9 +173,9 @@ public class UploadSalaryService(
         return (idStaffColumn, totalPersonalCostColumn);
     }
 
-    private static List<UploadSalaryModel> ExtractPayrollData(ExcelWorksheet worksheet, int headerRow, (int idStaffColumn, int totalPersonalCostColumn) columns, string sheetName)
+    private static List<ImportPayrollModel> ExtractPayrollData(ExcelWorksheet worksheet, int headerRow, (int idStaffColumn, int totalPersonalCostColumn) columns, string sheetName)
     {
-        var payrollData = new List<UploadSalaryModel>();
+        var payrollData = new List<ImportPayrollModel>();
         var totalRows = worksheet.Dimension.End.Row;
 
         for (int row = headerRow + 1; row <= totalRows; row++)
@@ -185,7 +185,7 @@ public class UploadSalaryService(
 
             var totalPersonalCost = ParseCostCell(worksheet.Cells[row, columns.totalPersonalCostColumn].Value);
             
-            payrollData.Add(new UploadSalaryModel
+            payrollData.Add(new ImportPayrollModel
             {
                 EmpId = empId,
                 TotalPersonalCost = totalPersonalCost,

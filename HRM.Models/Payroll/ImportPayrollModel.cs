@@ -1,6 +1,6 @@
 namespace HRM.Models.Payroll;
 
-public class UploadSalaryModel
+public class ImportPayrollModel
 {
     public string EmpId { get; set; }
     public decimal TotalPersonalCost { get; set; }

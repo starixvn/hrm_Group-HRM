@@ -1,10 +1,10 @@
 using System.Threading.Tasks;
 using HRM.Core.Models;
-using Microsoft.AspNetCore.Http;
+using HRM.Models.Payroll;
 
 namespace HRM.Services.Interfaces;
 
 public interface IUploadSalaryService
 {
-    Task<CommandResult> ImportEmpSalaryAsync(IFormFile file);
+    Task<CommandResult> ImportEmpSalaryAsync(UploadPayrollModel model);
 }
