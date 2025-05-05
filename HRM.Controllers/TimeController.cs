@@ -71,6 +71,13 @@ public class TimeController(
     [HttpPost]
     public async Task<IActionResult> CheckInOut([FromBody] CheckInOutViewModel model)
     {
+        var companySite = await GetCompanySiteByDomainAsync();
+
+        session.SiteId = companySite.SiteId;
+        session.AccessToken = companySite.AccessToken;
+        session.Set(SessionKey.CurrentCompanyId, companySite.CompanyId);
+        session.Set(SessionKey.CurrentTimeZone, await GetClientTimeZoneAsync());
+
         model.Password = Encoding.UTF8.GetString(Convert.FromBase64String(model.Password));
         var token = cryptoService.GenerateRijndaelKeyIV();
         var keyIv = token.Split(':');
