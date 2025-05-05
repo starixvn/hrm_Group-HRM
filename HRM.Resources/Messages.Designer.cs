@@ -628,6 +628,15 @@ namespace HRM.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to nickname.
+        /// </summary>
+        public static string SearchNickName {
+            get {
+                return ResourceManager.GetString("SearchNickName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to team or code.
         /// </summary>
         public static string SearchTeamOrCode {

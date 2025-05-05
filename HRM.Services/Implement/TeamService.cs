@@ -62,7 +62,7 @@ public class TeamService(
         return teams ?? new List<Team>();
     }
 
-    public async Task<IEnumerable<GroupTeamModel>> GetAllTeamByUnitScopeAsync(string keyword)
+    public async Task<IEnumerable<GroupTeamModel>> GetAllTeamByUnitScopeAsync(string keyword = null)
     {
         var criteria = new GetTeamInUnitScopeCriteria
         {

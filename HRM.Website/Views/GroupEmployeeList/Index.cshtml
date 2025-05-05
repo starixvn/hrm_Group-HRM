@@ -1,0 +1,73 @@
+﻿@using HRM.Resources
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model HRM.ViewModels.EmployeeGroup.GroupEmployeeViewModel
+@{
+    ViewBag.Title = Labels.User;
+}
+@section css {
+    <link href="~/dist/styles/group.employee.list.index.css" rel="stylesheet" />
+}
+@section js {
+    <script src="~/dist/js/group.employee.list.index.js"></script>
+}
+@section Breadcrumb {
+    <a class="step">@Labels.GroupSpace</a><span class="step">@ViewBag.Title</span>
+}
+
+<h2 class="page-title">@ViewBag.Title</h2>
+<form class="filter">
+    <div class="form-horizontal clearfix">
+	    @Html.HiddenFor(model => model.JobTitleId)
+        @Html.HiddenFor(model => model.TeamIds)
+        @Html.HiddenFor(model => model.CompanyIds)
+	    @Html.HiddenFor(model => model.IsEnable)
+	    @Html.HiddenFor(model => model.IsDelete)
+	    @Html.HiddenFor(model => model.IsAll)
+	    @Html.HiddenFor(model => model.CurrentPage)
+	    @Html.HiddenFor(model => model.ItemsPerPage)
+
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.LabelFor(model => model.Keyword, Labels.Keyword, new { @class = "control-label" })
+            </div>
+            <div class="input-form">
+                @Html.TextBoxFor(model => model.Keyword,
+                         new { placeholder = Messages.SearchNickName, @class = "form-control", autocomplete = "off" })
+            </div>
+        </div>
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                <label class="control-label">@Labels.Team</label>
+            </div>
+            <div class="input-form" id="GroupTeam"></div>
+        </div>
+	    <div class="form-group form-group--m">
+		    <div class="label-form">
+			    <label class="control-label">@Labels.Company</label>
+		    </div>
+		    <div class="input-form" id="Company"></div>
+	    </div>
+        <div class="form-group user-status" id="usertype">
+	        <input type="radio" id="all"/>
+	        <label for="enabled">@Labels.All</label>
+
+            <input type="radio" id="enabled" checked="checked" />
+            <label for="enabled">@Labels.ActiveUsers</label>
+
+            <input type="radio" id="disabled" />
+            <label for="disabled">@Labels.DisabledUsers</label>
+
+            <input type="radio" id="deleted" />
+            <label for="deleted">@Labels.DeletedUsers</label>
+        </div>
+    </div>
+    <div class="form-horizontal clearfix">
+        <div class="form-group">
+            <button id="query" type="button" class="btn btn-primary">@Labels.Submit</button>
+            <button type="button" id="basicExcel" class="btn btn-excel">Excel - Basic Info</button>
+            <button type="button" id="detailsExcel" class="btn btn-excel">Excel - Details Info</button>
+        </div>
+    </div>
+</form>
+<div id="group-employee-list"></div>
+<div id="tippy-avatar" class="tippy-avatar"></div>

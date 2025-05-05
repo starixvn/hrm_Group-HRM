@@ -2040,4 +2040,31 @@
   <data name="TotalMembers" xml:space="preserve">
     <value>Total Members</value>
   </data>
+  <data name="User" xml:space="preserve">
+    <value>User</value>
+  </data>
+  <data name="EmployeeCode" xml:space="preserve">
+    <value>EmployeeCode</value>
+  </data>
+  <data name="CtrID" xml:space="preserve">
+    <value>Ctr ID</value>
+  </data>
+  <data name="BUPIC" xml:space="preserve">
+    <value>BU PIC</value>
+  </data>
+  <data name="DepartmentNameShort" xml:space="preserve">
+    <value>Dept Name</value>
+  </data>
+  <data name="DepartmentPICShort" xml:space="preserve">
+    <value>Dept PIC</value>
+  </data>
+  <data name="ERole" xml:space="preserve">
+    <value>E Role</value>
+  </data>
+  <data name="MRole" xml:space="preserve">
+    <value>M Role</value>
+  </data>
+  <data name="BUIdShort" xml:space="preserve">
+    <value>BU ID</value>
+  </data>
 </root>
