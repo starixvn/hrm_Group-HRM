@@ -29,6 +29,7 @@ public class SalaryManagementController(
     }
 
     [HttpGet]
+    [HrmPermission(Policy.Read, FunctionKey.SalaryManagement)]
     public async Task<IActionResult> GetSalaryData()
     {
         var criteria = new GetEmployeePayrollCriteria
@@ -41,6 +42,7 @@ public class SalaryManagementController(
     }
 
     [HttpGet]
+    [HrmPermission(Policy.Read, FunctionKey.SalaryManagement)]
     public async Task<IActionResult> GetUploadHistory()
     {
         var history = await payrollService.GetUploadHistoryAsync(CurrentCompanyId);

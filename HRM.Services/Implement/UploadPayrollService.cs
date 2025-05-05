@@ -34,7 +34,7 @@ public class UploadPayrollService(
             var criteria = new ImportEmployeePayrollCriteria
             {
                 EmployeeListJson = JsonConvert.SerializeObject(allPayrollData),
-                Month = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1),
+                Month = model.Month,
                 PeriodType = model.PeriodType,
                 CompanyId = model.CompanyId,
                 ActorId = model.ActorId,
