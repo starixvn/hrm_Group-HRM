@@ -14,6 +14,8 @@ using Models;
 using Models.EmployeeInformation;
 using Models.Supervisor;
 using Resources;
+using HRM.Models.Group;
+using OfficeOpenXml;
 
 public class ExportExcelEmployeeInfoService(
     IEmployeeService employeeService,
@@ -22,6 +24,13 @@ public class ExportExcelEmployeeInfoService(
 {
     private const string EmployeeBasicInfoTemplatePath = "ExcelTemplates/EmployeeBasicInfoTemplate.xls";
     private const string EmployeeFullInfoTemplatePath = "ExcelTemplates/EmployeeFullProfileInfoTemplate.xls";
+    private const string GroupEmployeeListTemplatePath = "ExcelTemplates/GroupEmployeeList.xlsx";
+    
+    private const byte TotalColumns = 8;
+    private const byte RowStartBody = 3;
+    private const byte MinimumWidth = 5;
+    private const byte MaximumWidth = 50;
+
 
     private enum BasicInfo
     {
@@ -232,4 +241,58 @@ public class ExportExcelEmployeeInfoService(
     private static string FormatDate(DateTime? date, string format = "dd/MM/yyyy") => date?.ToString(format);
 
     #endregion Employee Full Profile Information
+
+
+    public async Task<byte[]> ExportGroupEmployeesAsync(IEnumerable<GroupEmployeeModel> employees)
+    {
+        var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, GroupEmployeeListTemplatePath);
+
+        await using var templateStream = new FileStream(templatePath, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, useAsync: true);
+        using var templatePackage = new ExcelPackage(templateStream);
+        using var xlPackage = new ExcelPackage();
+
+        var template = templatePackage.Workbook.Worksheets.FirstOrDefault();
+        if (template == null)
+        {
+            throw new InvalidOperationException("The template Excel file does not contain any worksheet.");
+        }
+
+        var worksheet = xlPackage.Workbook.Worksheets.Add("Group Employee List");
+        var rowIndex = 1;
+        var colIndex = 1;
+
+        // title
+        template.Cells[rowIndex, colIndex, rowIndex, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
+        rowIndex++;
+
+        // header
+        template.Cells[rowIndex, colIndex, rowIndex, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
+        rowIndex++;
+
+        // data
+        var rowNum = 1;
+        foreach (var employee in employees)
+        {
+            colIndex = 1;
+            template.Cells[RowStartBody, 1, RowStartBody, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
+
+            worksheet.Cells[rowIndex, colIndex++].Value = rowNum++;
+            worksheet.Cells[rowIndex, colIndex++].Value = employee.FullName;
+            worksheet.Cells[rowIndex, colIndex++].Value = employee.CompanyDate.HasValue ? employee.CompanyDate.ToDateMonthYearFormatedDate() : null;
+            worksheet.Cells[rowIndex, colIndex++].Value = employee.ResignedDate.HasValue ? employee.ResignedDate.ToDateMonthYearFormatedDate() : null;
+            worksheet.Cells[rowIndex, colIndex++].Value = employee.IsLocal;
+            worksheet.Cells[rowIndex, colIndex++].Value = employee.IsSpecial;
+            worksheet.Cells[rowIndex, colIndex++].Value = employee.Enabled;
+            worksheet.Cells[rowIndex, colIndex++].Value = employee.IsDeleted;
+
+            rowIndex++;
+        }
+
+        worksheet.Cells.AutoFitColumns(MinimumWidth, MaximumWidth);
+        worksheet.View.FreezePanes(RowStartBody, 1);
+
+        await using var ms = new MemoryStream();
+        await xlPackage.SaveAsAsync(ms);
+        return ms.ToArray();
+    }
 }

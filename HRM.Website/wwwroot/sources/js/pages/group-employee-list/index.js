@@ -101,14 +101,10 @@ import { axiosError, blockUI, floatThead, unblockUI, getParam, resolveClientUrl,
         var url = null,
             controllerPath;
 
-        if (object.attr("id") === "basicExcel") {
-            controllerPath = "ExportEmployee/EmployeeBasicInfo?";
-        }
-        if (object.attr("id") === "detailsExcel") {
-            controllerPath = "ExportEmployee/EmployeeDetailsInfo?";
-        }
+        controllerPath = "ExportEmployee/ExportGroupEmployeeList?";
 
         $('#TeamIds').val($('#GroupTeam').multiSelectTreeView('getSelectedItems'));
+        $('#CompanyIds').val($('#Company').multiSelectTreeView('getSelectedItems'));
         url = resolveClientUrl(controllerPath + $('form.filter').serialize());
         location.href = url;
     }
@@ -206,11 +202,7 @@ import { axiosError, blockUI, floatThead, unblockUI, getParam, resolveClientUrl,
             query();
         });
 
-        $("#basicExcel").on('click', function () {
-            exportExcel($(this));
-        });
-
-        $("#detailsExcel").on('click', function () {
+        $("#exportExcel").on('click', function () {
             exportExcel($(this));
         });
     });
