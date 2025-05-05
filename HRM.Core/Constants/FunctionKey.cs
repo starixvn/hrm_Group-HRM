@@ -80,7 +80,7 @@ public static class FunctionKey
     public const string ExtensionNumber = "ExtensionNumber";
     public const string Memo = "Memo";
     public const string ShiftStatisticReport = "ShiftStatisticReport";
-    public const string EmployeePayrollUpload = "EmployeePayrollUpload";
+    public const string SalaryManagement = "SalaryManagement";
 
 
     //Group Space

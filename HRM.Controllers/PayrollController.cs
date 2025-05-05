@@ -20,7 +20,7 @@ public class PayrollController(
 {
 
     [HttpPost("UploadExcel")]
-    [HrmPermission(Policy.Host, FunctionKey.EmployeePayrollUpload)]
+    [HrmPermission(Policy.Host, FunctionKey.SalaryManagement)]
     public async Task<IActionResult> UploadExcel(IFormFile file, short periodType, DateTime month)
     {
         if (file == null || file.Length == 0)
