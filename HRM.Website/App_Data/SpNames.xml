@@ -564,5 +564,6 @@
 	</Function>
     <Function Name="EmployeePayroll">
 		<Setting Key="EmployeePayroll_Import" SpName="EmployeePayroll_Import" DbName="bodb_HRM" Plain="0" />
-	</Function>
+        <Setting Key="EmployeePayroll_Get" SpName="EmployeePayroll_Get" DbName="bodb_HRM" Plain="0" />
+    </Function>
 </Functions>
