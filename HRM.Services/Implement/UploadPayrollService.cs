@@ -55,9 +55,9 @@ public class UploadPayrollService(
     private async Task<List<ImportPayrollModel>> ProcessExcelFileAsync(IFormFile file)
     {
         var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, "ExcelTemplates/Payroll.xlsx");
-        // await using var stream = file.OpenReadStream();
-        // using var package = new ExcelPackage(stream);
-        using var package = new ExcelPackage(new FileInfo(templatePath));
+        await using var stream = file.OpenReadStream();
+        using var package = new ExcelPackage(stream);
+        //using var package = new ExcelPackage(new FileInfo(templatePath));
         if (package.Workbook.Worksheets.Count == 0)
         {
             throw new InvalidOperationException("Excel file does not contain any worksheets");

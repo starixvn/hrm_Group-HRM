@@ -173,6 +173,7 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IHolidayService, HolidayService>();
         services.AddSingleton<IMinIOService, MinIOService>();
         services.AddSingleton<IUploadPayrollService, UploadPayrollService>();
+        services.AddSingleton<IPayrollService, PayrollService>();
         services.AddDIReportServices();
         services.AddDIExcelServices();
         services.AddSyncFnBService();

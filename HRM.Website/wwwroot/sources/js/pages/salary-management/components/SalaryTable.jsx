@@ -1,4 +1,5 @@
 import React from "react";
+import { PayrollType } from "../../../shared/constants";
 
 const SalaryTable = ({ data }) => {
     return (
@@ -6,8 +7,12 @@ const SalaryTable = ({ data }) => {
             <table className="table table-custom">
                 <thead>
                     <tr>
-                        <th>Staff ID</th>
-                        <th>Total Personal Cost</th>
+                        <th>Department</th>
+                        <th>Team</th>
+                        <th>Employee</th>
+                        <th>Personal Cost</th>
+                        <th>Extra Payment</th>
+                        <th>Total</th>
                         <th>Month</th>
                         <th>Period Type</th>
                     </tr>
@@ -15,13 +20,24 @@ const SalaryTable = ({ data }) => {
                 <tbody>
                     {data.map((item, index) => (
                         <tr key={index}>
-                            <td>{item.staffId}</td>
-                            <td>{item.totalPersonalCost}</td>
-                            <td>{item.month}</td>
+                            <td align="left">{item.departmentName}</td>
+                            <td>{item.teamName}</td>
+                            <td>{item.nickname}</td>
+                            <td>{item.personalCost}</td>
+                            <td>{item.extraPayment}</td>
+                            <td>{item.personalCost + item.extraPayment}</td>
+                            <td>{item.monthFormatted}</td>
                             <td>
-                                {item.periodType === "1"
-                                    ? "1st Half"
-                                    : "2nd Half"}
+                                {(() => {
+                                    switch (item.periodType) {
+                                        case PayrollType.FirstHalf:
+                                            return "1st Half";
+                                        case PayrollType.SecondHalf:
+                                            return "2nd Half";
+                                        default:
+                                            return "Full Month";
+                                    }
+                                })()}
                             </td>
                         </tr>
                     ))}

@@ -13,4 +13,11 @@ public class PayrollService(IBaseService baseService) : IPayrollService
     {
         return await baseService.GetDataAsync<EmployeePayroll>(criteria);
     }
+
+    public async Task<IEnumerable<UploadHistory>> GetUploadHistoryAsync(short companyId)
+    {
+        return await baseService.GetDataAsync<UploadHistory>(new GetSalaryUploadHistoryCriteria { CompanyId = companyId });
+    }
+
+
 }

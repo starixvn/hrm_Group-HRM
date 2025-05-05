@@ -6,6 +6,7 @@ import {
     resolveClientUrl,
     toastOptions,
 } from "../../../shared/common.functions";
+import { PayrollType } from "../../../shared/constants";
 
 const ViewUploadHistoryModal = ({ onClose }) => {
     const [history, setHistory] = useState([]);
@@ -84,13 +85,20 @@ const ViewUploadHistoryModal = ({ onClose }) => {
                                             {item.fileName}
                                         </a>
                                     </td>
-                                    <td>{item.uploadDateTime}</td>
-                                    <td>{item.uploadedBy}</td>
-                                    <td>{item.month}</td>
+                                    <td>{item.createdTime}</td>
+                                    <td>{item.nickName}</td>
+                                    <td>{item.monthFormatted}</td>
                                     <td>
-                                        {item.periodType === "1"
-                                            ? "1st Half"
-                                            : "2nd Half"}
+                                        {(() => {
+                                            switch (item.periodType) {
+                                                case PayrollType.FirstHalf:
+                                                    return "1st Half";
+                                                case PayrollType.SecondHalf:
+                                                    return "2nd Half";
+                                                default:
+                                                    return "Full Month";
+                                            }
+                                        })()}
                                     </td>
                                 </tr>
                             ))}
