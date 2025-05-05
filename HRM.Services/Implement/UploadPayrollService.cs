@@ -15,9 +15,9 @@ using HRM.Criteria.EmployeePayroll;
 
 namespace HRM.Services.Implement;
 
-public class UploadSalaryService(
+public class UploadPayrollService(
     IWebHostEnvironment hostingEnvironment,
-    IBaseService baseService) : IUploadSalaryService
+    IBaseService baseService) : IUploadPayrollService
 {
     private const string SheetExpat = "Payroll - Expat";
     private const string SheetGO = "Payroll - GO";
@@ -35,8 +35,11 @@ public class UploadSalaryService(
             {
                 EmployeeListJson = JsonConvert.SerializeObject(allPayrollData),
                 Month = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1),
-                PeriodType = 1,
-                CompanyId = 3
+                PeriodType = model.PeriodType,
+                CompanyId = model.CompanyId,
+                ActorId = model.ActorId,
+                SavedFileName = model.SavedFileName,
+                FileName = model.File.FileName
             };
             return await baseService.ExecuteNonQueryAsync(criteria);
         }

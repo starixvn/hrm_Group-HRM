@@ -15,6 +15,10 @@ public class ImportEmployeePayrollCriteria : CriteriaBase
 
     public int CompanyId { get; set; }
 
+    public string SavedFileName { get; set; }
+
+    public string FileName { get; set; }
+
     public override string GetSettingKey()
     {
         return "EmployeePayroll_Import";

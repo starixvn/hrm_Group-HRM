@@ -172,7 +172,7 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IPostnatalService, PostnatalService>();
         services.AddSingleton<IHolidayService, HolidayService>();
         services.AddSingleton<IMinIOService, MinIOService>();
-        services.AddSingleton<IUploadSalaryService, UploadSalaryService>();
+        services.AddSingleton<IUploadPayrollService, UploadPayrollService>();
         services.AddDIReportServices();
         services.AddDIExcelServices();
         services.AddSyncFnBService();

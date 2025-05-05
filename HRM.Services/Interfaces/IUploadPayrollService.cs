@@ -4,7 +4,7 @@ using HRM.Models.Payroll;
 
 namespace HRM.Services.Interfaces;
 
-public interface IUploadSalaryService
+public interface IUploadPayrollService
 {
     Task<CommandResult> ImportEmpSalaryAsync(UploadPayrollModel model);
 }
