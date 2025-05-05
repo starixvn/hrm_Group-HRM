@@ -13,6 +13,7 @@ public class AnnualLeaveBalanceService(IBaseService baseService) : IAnnualLeaveB
     {
         var criteria = new AdjustEmployeeAnnualLeaveCriteria
         {
+            CompanyId = model.CompanyId,
             EmployeeIds = model.EmployeeIds,
             Description = model.Description,
             CreditDays = model.CreditDays,

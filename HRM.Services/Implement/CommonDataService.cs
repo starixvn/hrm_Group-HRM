@@ -155,7 +155,10 @@ public class CommonDataService(
 
     public async Task<SystemSetting> GetSystemSettingAsync()
     {
-        var criteria = new GetSystemSettingCriteria();
+        var criteria = new GetSystemSettingCriteria
+        {
+            CompanyId = session.Get<short>(SessionKey.CurrentCompanyId)
+        };
         return await baseService.GetDataEntityAsync<SystemSetting>(criteria);
     }
 
