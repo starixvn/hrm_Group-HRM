@@ -2,15 +2,9 @@ import React, { useState } from "react";
 import axios from "axios";
 import toastr from "toastr";
 import { Modal, ModalBody, ModalFooter, ModalHeader } from "react-bootstrap";
-import {
-    resolveClientUrl,
-    toastOptions,
-} from "../../../shared/common.functions";
-import {
-    PERIOD_TYPES,
-    PeriodType,
-    PeriodTypeLabel,
-} from "../constants/periodType";
+import {resolveClientUrl,toastOptions} from "../../../shared/common.functions";
+import { PERIOD_TYPES, PeriodType, PeriodTypeLabel} from "../constants/periodType";
+
 
 const UploadSalaryModal = ({ onSuccess }) => {
     const [show, setShow] = useState(false);
@@ -55,18 +49,14 @@ const UploadSalaryModal = ({ onSuccess }) => {
         setFile(e.dataTransfer.files[0]);
     };
 
-    const handleSubmit = async () => {
-        if (!file || !month || !periodType) {
-            toastr.error("Please fill all required fields", "", toastOptions());
-            return;
-        }
 
-        const formData = new FormData();
-        formData.append("file", file);
-        formData.append("month", month);
-        formData.append("periodType", periodType);
+    const confirmUpload = async (formData) => {
+        const response = await axios.post(resolveClientUrl("SalaryManagement/ConfirmUpload"), formData);
+        return response.data;
+    };
 
-        setIsUploading(true);
+
+    const processUpload = async (formData) => {
         try {
             await axios.post(
                 resolveClientUrl("SalaryManagement/UploadSalary"),
@@ -74,12 +64,43 @@ const UploadSalaryModal = ({ onSuccess }) => {
                 {
                     headers: {
                         "Content-Type": "multipart/form-data",
-                    },
+                    }
                 }
             );
             toastr.success("Salary uploaded successfully", "", toastOptions());
             onSuccess();
             handleClose();
+        } catch (error) {
+            toastr.error("Failed to upload salary", "", toastOptions());
+        } finally {
+            setIsUploading(false);
+        }
+    };
+
+    const handleSubmit = async () => {
+        if (!file || !month || !periodType) {
+            toastr.error("Please fill all required fields", "", toastOptions());
+            return;
+        }
+
+        setIsUploading(true);
+
+        try {
+            const formData = new FormData();
+            formData.append("file", file);
+            formData.append("month", month);
+            formData.append("periodType", periodType);
+
+            const confirmResult = await confirmUpload(formData);
+
+            if (confirmResult.isSuccessful) {
+                await processUpload(formData);
+            } else {
+                confirm(confirmResult.message || "Are you sure you want to proceed with the upload?", 
+                    async () => await processUpload(formData)
+                );
+                return;
+            }
         } catch (error) {
             toastr.error("Failed to upload salary", "", toastOptions());
         } finally {
@@ -94,6 +115,7 @@ const UploadSalaryModal = ({ onSuccess }) => {
             </button>
 
             <Modal
+                zIndex={100}
                 show={show}
                 onHide={handleClose}
                 centered="true"
