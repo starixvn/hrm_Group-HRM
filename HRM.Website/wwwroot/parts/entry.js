@@ -1,7 +1,7 @@
-const jsSourcePath = './sources/js/pages';
-const jsDistPath = 'js';
-const styleSourcePath = './sources/styles';
-const styleDistPath = 'styles';
+const jsSourcePath = "./sources/js/pages";
+const jsDistPath = "js";
+const styleSourcePath = "./sources/styles";
+const styleDistPath = "styles";
 
 module.exports = {
     client: {
@@ -86,9 +86,10 @@ module.exports = {
         [`${styleDistPath}/discipline.summary.per.year`]: `${styleSourcePath}/pages/report/discipline.summary.per.year.scss`,
         [`${styleDistPath}/time.checkinout`]: `${styleSourcePath}/pages/time/checkinout.scss`,
         [`${styleDistPath}/group.employee.list.index`]: `${styleSourcePath}/pages/group-employee-list/index.scss`,
+        [`${styleDistPath}/salary.management`]: `${styleSourcePath}/pages/salary-management/salary.management.scss`,
 
         //
-        [`${jsDistPath}/main`]: './sources/js/main.js',
+        [`${jsDistPath}/main`]: "./sources/js/main.js",
         [`${jsDistPath}/auth.index`]: `${jsSourcePath}/auth/index.jsx`,
         [`${jsDistPath}/home.index`]: `${jsSourcePath}/home.index.js`,
         [`${jsDistPath}/employee.request`]: `${jsSourcePath}/request/employee.request.js`,
@@ -192,5 +193,6 @@ module.exports = {
         [`${jsDistPath}/discipline.summary.per.year`]: `${jsSourcePath}/report/discipline.summary.per.year.js`,
         [`${jsDistPath}/time.checkinout`]: `${jsSourcePath}/time/checkinout/index.jsx`,
         [`${jsDistPath}/group.employee.list.index`]: `${jsSourcePath}/group-employee-list/index.js`
-    }
+        [`${jsDistPath}/salary.management`]: `${jsSourcePath}/salary-management/index.jsx`,
+    },
 };

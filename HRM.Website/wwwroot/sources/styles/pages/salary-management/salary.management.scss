@@ -1,0 +1,74 @@
+@import "../../abstracts/mixins";
+@import "../../abstracts/variables";
+@import "../../components/buttons-new";
+@import "../../layout/toastr";
+@import "../../layout/filter";
+@import "../../layout/table";
+
+.salary-management-container {
+    .upload-section {
+        margin-bottom: 20px;
+
+        .upload-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+    }
+
+    .file-link {
+        color: #007bff;
+        text-decoration: none;
+        cursor: pointer;
+        font-weight: 500;
+        padding: 2px 4px;
+        border-radius: 4px;
+        transition: all 0.2s ease;
+
+        &:hover {
+            text-decoration: underline;
+            color: #0056b3;
+            background-color: #e9ecef;
+        }
+    }
+
+    .btn {
+        padding: 8px 16px;
+        border-radius: 4px;
+        font-weight: 500;
+        transition: all 0.2s ease;
+
+        &.btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+
+            &:hover {
+                background-color: #0069d9;
+                border-color: #0062cc;
+            }
+        }
+
+        &.btn-default {
+            background-color: #6c757d;
+            border-color: #6c757d;
+            color: white;
+
+            &:hover {
+                background-color: #5a6268;
+                border-color: #545b62;
+            }
+        }
+    }
+}
+
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
