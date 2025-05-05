@@ -628,7 +628,7 @@ namespace HRM.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to nickname.
+        ///   Looks up a localized string similar to search by nickname.
         /// </summary>
         public static string SearchNickName {
             get {

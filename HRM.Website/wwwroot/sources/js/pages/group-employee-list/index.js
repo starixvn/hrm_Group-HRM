@@ -126,27 +126,27 @@ import { axiosError, blockUI, floatThead, unblockUI, getParam, resolveClientUrl,
             headers: { 'X-Requested-With': 'XMLHttpRequest' }
         }).then(response => {
             $('#GroupTeam').multiSelectTreeView({
-                data: response.data,
-                selectedItems: $('#TeamIds').val(),
+                data: response.data.data,
+                selectedItems: response.data.teamIds,
                 hasSearchBox: true
             });
 
-            query();
+            axios({
+                url: resolveClientUrl('GroupEmployeeList/GetCompanyDropdownList'),
+                method: 'GET',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            }).then(companyResponse => {
+                $('#Company').multiSelectTreeView({
+                    data: companyResponse.data,
+                    selectedItems: $('#CompanyIds').val(),
+                    hasSearchBox: true
+                });
+                query();
+
+            }).catch(axiosError);
+
         }).catch(axiosError);
 
-        axios({
-            url: resolveClientUrl('GroupEmployeeList/GetCompanyDropdownList'),
-            method: 'GET',
-            headers: { 'X-Requested-With': 'XMLHttpRequest' }
-        }).then(response => {
-            $('#Company').multiSelectTreeView({
-                data: response.data,
-                selectedItems: $('#CompanyIds').val(),
-                hasSearchBox: true
-            });
-
-            query();
-        }).catch(axiosError);
 
         $('#Keyword').keyup(function (event) {
             if (event.keyCode === 13) {

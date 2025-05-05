@@ -373,6 +373,6 @@
     <value>Update Information</value>
   </data>
   <data name="SearchNickName" xml:space="preserve">
-    <value>nickname</value>
+    <value>search by nickname</value>
   </data>
 </root>

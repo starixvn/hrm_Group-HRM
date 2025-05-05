@@ -100,8 +100,15 @@ public class GroupEmployeeListController(IUserControlSession session,
         var teams = await teamService.GetAllTeamByUnitScopeAsync();
 
         var orgchart = GetOrgChart(units, departments, teams);
+        var teamIds = string.Join(",", teams?.Select(t => t.Id));
 
-        return Json(orgchart);
+        var response = new GroupTeamMultiSelectViewModel
+        {
+            Data = orgchart, 
+            TeamIds = teamIds
+        };
+
+        return Json(response);
     }
 
     private static IEnumerable<MultiSelectViewModel> GetOrgChart(
