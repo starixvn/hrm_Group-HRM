@@ -13,6 +13,9 @@ const UploadSalaryModal = ({ onSuccess }) => {
     const [file, setFile] = useState(null);
     const [isDragging, setIsDragging] = useState(false);
     const [isUploading, setIsUploading] = useState(false);
+    const [showConfirm, setShowConfirm] = useState(false);
+    const [confirmMessage, setConfirmMessage] = useState("");
+    const [pendingFormData, setPendingFormData] = useState(null);
 
     const handleClose = () => {
         setShow(false);
@@ -49,12 +52,10 @@ const UploadSalaryModal = ({ onSuccess }) => {
         setFile(e.dataTransfer.files[0]);
     };
 
-
     const confirmUpload = async (formData) => {
         const response = await axios.post(resolveClientUrl("SalaryManagement/ConfirmUpload"), formData);
         return response.data;
     };
-
 
     const processUpload = async (formData) => {
         try {
@@ -74,6 +75,8 @@ const UploadSalaryModal = ({ onSuccess }) => {
             toastr.error("Failed to upload salary", "", toastOptions());
         } finally {
             setIsUploading(false);
+            setShowConfirm(false);
+            setPendingFormData(null);
         }
     };
 
@@ -96,15 +99,21 @@ const UploadSalaryModal = ({ onSuccess }) => {
             if (confirmResult.isSuccessful) {
                 await processUpload(formData);
             } else {
-                confirm(confirmResult.message || "Are you sure you want to proceed with the upload?", 
-                    async () => await processUpload(formData)
-                );
-                return;
+                setPendingFormData(formData);
+                setConfirmMessage(confirmResult.message || "Are you sure you want to proceed with the upload?");
+                setShowConfirm(true);
+                setIsUploading(false);
             }
         } catch (error) {
             toastr.error("Failed to upload salary", "", toastOptions());
-        } finally {
             setIsUploading(false);
+        }
+    };
+
+    const handleConfirm = async () => {
+        if (pendingFormData) {
+            setIsUploading(true);
+            await processUpload(pendingFormData);
         }
     };
 
@@ -118,7 +127,8 @@ const UploadSalaryModal = ({ onSuccess }) => {
                 zIndex={100}
                 show={show}
                 onHide={handleClose}
-                centered="true"
+                centered
+                backdrop={!showConfirm}
                 className="upload-salary-modal">
                 <ModalHeader closeButton>
                     <Modal.Title>Upload Salary</Modal.Title>
@@ -191,6 +201,27 @@ const UploadSalaryModal = ({ onSuccess }) => {
                         {isUploading ? "Uploading..." : "Upload"}
                     </button>
                     <button className="btn btn-default" onClick={handleClose}>
+                        Cancel
+                    </button>
+                </ModalFooter>
+            </Modal>
+
+            <Modal
+                show={showConfirm}
+                onHide={() => setShowConfirm(false)}
+                centered
+                zIndex={1050}>
+                <ModalHeader closeButton>
+                    <Modal.Title>Confirm Upload</Modal.Title>
+                </ModalHeader>
+                <ModalBody>
+                    {confirmMessage}
+                </ModalBody>
+                <ModalFooter>
+                    <button className="btn btn-primary" onClick={handleConfirm}>
+                        OK
+                    </button>
+                    <button className="btn btn-default" onClick={() => setShowConfirm(false)}>
                         Cancel
                     </button>
                 </ModalFooter>
