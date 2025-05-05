@@ -15,11 +15,5 @@ public class EmployeePayroll
     public decimal PersonalCost { get; set; }
     public decimal ExtraPayment { get; set; }
 
-    public string MonthFormatted
-    {
-        get
-        {
-            return Month.ToString("MM-yyyy");
-        }
-    }
+    public string MonthFormatted => Month.ToString("MM-yyyy");
 }

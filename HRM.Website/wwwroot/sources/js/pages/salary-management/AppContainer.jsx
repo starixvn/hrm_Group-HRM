@@ -6,6 +6,7 @@ import UploadSalaryModal from "./components/UploadSalaryModal";
 import ViewUploadHistoryModal from "./components/ViewUploadHistoryModal";
 import SalaryTable from "./components/SalaryTable";
 import { resolveClientUrl, toastOptions } from "../../shared/common.functions";
+import Filter from "./components/Filter";
 
 const AppContainer = () => {
     const [salaryData, setSalaryData] = React.useState([]);
@@ -42,13 +43,18 @@ const AppContainer = () => {
             });
     };
 
+    const handleSearch = (filters) => {
+        fetchSalaryData(filters);
+    };
+
     return (
         <div className="salary-management-container">
-            <div className="action-section">
-                <UploadSalaryModal onSuccess={fetchSalaryData} />
-                <ViewUploadHistoryModal />
+            <div className="filter">
+                <Filter onSearch={handleSearch} />
             </div>
-            <SalaryTable data={salaryData} />
+            <div className="salary-table">
+                <SalaryTable data={salaryData} />
+            </div>
         </div>
     );
 };

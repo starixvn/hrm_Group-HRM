@@ -7,10 +7,11 @@
 
 .salary-management-container {
     .action-section {
-        margin-bottom: 20px;
-        display: flex;
-        justify-content: flex-end;
-        gap: 10px;
+        margin: 0;
+    }
+
+    .filter {
+        max-width: 100%;
     }
 
     .file-link {
@@ -30,18 +31,14 @@
     }
 
     .btn {
-        padding: 8px 16px;
-        border-radius: 4px;
-        font-weight: 500;
-        transition: all 0.2s ease;
-
-        &.btn-primary {
-            background-color: #007bff;
-            border-color: #007bff;
-
+        transition: all 0.2s ease-in;
+        &.btn-upload {
+            background-color: #f4783d;
+            border-color: 1px solid #f4783d;
+            color: white;
+            margin-left: 5px;
             &:hover {
-                background-color: #0069d9;
-                border-color: #0062cc;
+                background-color: #f4783d;
             }
         }
 
@@ -49,7 +46,7 @@
             background-color: #6c757d;
             border-color: #6c757d;
             color: white;
-
+            margin-left: 5px;
             &:hover {
                 background-color: #5a6268;
                 border-color: #545b62;

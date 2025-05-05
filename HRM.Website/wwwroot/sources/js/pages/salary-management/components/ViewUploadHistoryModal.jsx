@@ -95,7 +95,7 @@ const ViewUploadHistoryModal = () => {
                         <tbody>
                             {history.map((item, index) => (
                                 <tr key={index}>
-                                    <td>{item.month}</td>
+                                    <td>{item.monthFormatted}</td>
                                     <td>
                                         {getPeriodTypeLabel(item.periodType)}
                                     </td>
@@ -110,8 +110,8 @@ const ViewUploadHistoryModal = () => {
                                             {item.fileName}
                                         </a>
                                     </td>
-                                    <td>{item.uploadDateTime}</td>
-                                    <td>{item.uploadedBy}</td>
+                                    <td>{item.createdDate}</td>
+                                    <td>{item.nickName}</td>
                                 </tr>
                             ))}
                         </tbody>

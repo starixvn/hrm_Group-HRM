@@ -56,6 +56,10 @@ const UploadSalaryModal = ({ onSuccess }) => {
         const response = await axios.post(resolveClientUrl("SalaryManagement/ConfirmUpload"), formData);
         return response.data;
     };
+    const handleMonthClick = (e) => {
+        e.target.showPicker();
+    };
+
 
     const processUpload = async (formData) => {
         try {
@@ -119,7 +123,7 @@ const UploadSalaryModal = ({ onSuccess }) => {
 
     return (
         <React.Fragment>
-            <button className="btn btn-primary" onClick={handleOpen}>
+            <button className="btn btn-upload" onClick={handleOpen}>
                 Upload Salary
             </button>
 
@@ -144,6 +148,7 @@ const UploadSalaryModal = ({ onSuccess }) => {
                             value={month}
                             onChange={(e) => setMonth(e.target.value)}
                             required
+                            onClick={handleMonthClick}
                         />
                     </div>
                     <div className="form-group">

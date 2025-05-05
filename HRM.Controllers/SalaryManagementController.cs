@@ -87,7 +87,7 @@ public class SalaryManagementController(
             {
                 return BadRequest(res.Message);
             }
-            await minIOService.UploadFileAsync(file, Bucket.File, path);
+            await minIOService.UploadFileAsync(file, Bucket.Payroll, path);
 
             return new JsonResult(res);
         }
