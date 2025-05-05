@@ -2,7 +2,8 @@ import React from "react";
 import axios from "axios";
 import toastr from "toastr";
 
-import Action from "./components/Action";
+import UploadSalaryModal from "./components/UploadSalaryModal";
+import ViewUploadHistoryModal from "./components/ViewUploadHistoryModal";
 import SalaryTable from "./components/SalaryTable";
 import { resolveClientUrl, toastOptions } from "../../shared/common.functions";
 
@@ -43,10 +44,10 @@ const AppContainer = () => {
 
     return (
         <div className="salary-management-container">
-            <Action
-                onUploadSuccess={fetchSalaryData}
-                onUploadHistorySuccess={fetchUploadHistory}
-            />
+            <div className="action-section">
+                <UploadSalaryModal onSuccess={fetchSalaryData} />
+                <ViewUploadHistoryModal />
+            </div>
             <SalaryTable data={salaryData} />
         </div>
     );

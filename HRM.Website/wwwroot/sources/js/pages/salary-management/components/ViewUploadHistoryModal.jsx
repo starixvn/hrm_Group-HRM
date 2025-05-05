@@ -1,19 +1,26 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import toastr from "toastr";
-import { Modal, ModalBody, ModalFooter, ModalHeader } from "react-bootstrap";
+import {
+    Modal,
+    ModalBody,
+    ModalFooter,
+    ModalHeader,
+    ModalTitle,
+} from "react-bootstrap";
 import {
     resolveClientUrl,
     toastOptions,
 } from "../../../shared/common.functions";
-import { PayrollType } from "../../../shared/constants";
+import { getPeriodTypeLabel } from "../constants/periodType";
 
-const ViewUploadHistoryModal = ({ onClose }) => {
+const ViewUploadHistoryModal = () => {
+    const [show, setShow] = useState(false);
     const [history, setHistory] = useState([]);
 
-    useEffect(() => {
-        fetchHistory();
-    }, []);
+    const handleClose = () => {
+        setShow(false);
+    };
 
     const fetchHistory = () => {
         axios
@@ -55,25 +62,43 @@ const ViewUploadHistoryModal = ({ onClose }) => {
     };
 
     return (
-        <Modal show={true} onHide={onClose} size="lg" centered>
-            <ModalHeader closeButton>
-                <Modal.Title>Upload History</Modal.Title>
-            </ModalHeader>
-            <ModalBody>
-                <div className="table-responsive">
-                    <table className="table table-striped">
+        <React.Fragment>
+            <button
+                className="btn btn-default"
+                onClick={() => {
+                    setShow(true);
+                    fetchHistory();
+                }}>
+                <i className="fa fa-history"></i> View History
+            </button>
+
+            <Modal
+                show={show}
+                onHide={handleClose}
+                size="lg"
+                centered
+                className="view-history">
+                <ModalHeader closeButton>
+                    <ModalTitle>Upload History</ModalTitle>
+                </ModalHeader>
+                <ModalBody>
+                    <table className="table table-custom">
                         <thead>
                             <tr>
+                                <th>Month</th>
+                                <th>Period Type</th>
                                 <th>File Name</th>
                                 <th>Upload Date Time</th>
                                 <th>Uploaded By</th>
-                                <th>Month</th>
-                                <th>Period Type</th>
                             </tr>
                         </thead>
                         <tbody>
                             {history.map((item, index) => (
                                 <tr key={index}>
+                                    <td>{item.month}</td>
+                                    <td>
+                                        {getPeriodTypeLabel(item.periodType)}
+                                    </td>
                                     <td>
                                         <a
                                             href="#"
@@ -85,33 +110,15 @@ const ViewUploadHistoryModal = ({ onClose }) => {
                                             {item.fileName}
                                         </a>
                                     </td>
-                                    <td>{item.createdTime}</td>
-                                    <td>{item.nickName}</td>
-                                    <td>{item.monthFormatted}</td>
-                                    <td>
-                                        {(() => {
-                                            switch (item.periodType) {
-                                                case PayrollType.FirstHalf:
-                                                    return "1st Half";
-                                                case PayrollType.SecondHalf:
-                                                    return "2nd Half";
-                                                default:
-                                                    return "Full Month";
-                                            }
-                                        })()}
-                                    </td>
+                                    <td>{item.uploadDateTime}</td>
+                                    <td>{item.uploadedBy}</td>
                                 </tr>
                             ))}
                         </tbody>
                     </table>
-                </div>
-            </ModalBody>
-            <ModalFooter>
-                <button className="btn btn-default" onClick={onClose}>
-                    Close
-                </button>
-            </ModalFooter>
-        </Modal>
+                </ModalBody>
+            </Modal>
+        </React.Fragment>
     );
 };
 

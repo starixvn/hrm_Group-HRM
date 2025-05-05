@@ -6,13 +6,35 @@ import {
     resolveClientUrl,
     toastOptions,
 } from "../../../shared/common.functions";
+import {
+    PERIOD_TYPES,
+    PeriodType,
+    PeriodTypeLabel,
+} from "../constants/periodType";
 
-const UploadSalaryModal = ({ onClose, onSuccess }) => {
+const UploadSalaryModal = ({ onSuccess }) => {
+    const [show, setShow] = useState(false);
     const [month, setMonth] = useState("");
-    const [periodType, setPeriodType] = useState("1");
+    const [periodType, setPeriodType] = useState(PeriodType.FULL_MONTH);
     const [file, setFile] = useState(null);
     const [isDragging, setIsDragging] = useState(false);
     const [isUploading, setIsUploading] = useState(false);
+
+    const handleClose = () => {
+        setShow(false);
+        setMonth("");
+        setPeriodType(PeriodType.FULL_MONTH);
+        setFile(null);
+    };
+
+    const handleOpen = () => {
+        const now = new Date();
+        const currentMonth = `${now.getFullYear()}-${String(
+            now.getMonth() + 1
+        ).padStart(2, "0")}`;
+        setMonth(currentMonth);
+        setShow(true);
+    };
 
     const handleFileChange = (e) => {
         setFile(e.target.files[0]);
@@ -57,6 +79,7 @@ const UploadSalaryModal = ({ onClose, onSuccess }) => {
             );
             toastr.success("Salary uploaded successfully", "", toastOptions());
             onSuccess();
+            handleClose();
         } catch (error) {
             toastr.error("Failed to upload salary", "", toastOptions());
         } finally {
@@ -65,64 +88,92 @@ const UploadSalaryModal = ({ onClose, onSuccess }) => {
     };
 
     return (
-        <Modal show={true} onHide={onClose} centered>
-            <ModalHeader closeButton>
-                <Modal.Title>Upload Salary</Modal.Title>
-            </ModalHeader>
-            <ModalBody>
-                <div className="form-group">
-                    <label>Month</label>
-                    <input
-                        type="month"
-                        className="form-control"
-                        value={month}
-                        onChange={(e) => setMonth(e.target.value)}
-                        required
-                    />
-                </div>
-                <div className="form-group">
-                    <label>Period Type</label>
-                    <select
-                        className="form-control"
-                        value={periodType}
-                        onChange={(e) => setPeriodType(e.target.value)}
-                        required>
-                        <option value="1">1st Half (1-15)</option>
-                        <option value="2">2nd Half (16-end)</option>
-                        <option value="3">Full Month</option>
-                    </select>
-                </div>
-                <div
-                    className={`file-upload-area ${
-                        isDragging ? "dragging" : ""
-                    }`}
-                    onDragOver={handleDragOver}
-                    onDragLeave={handleDragLeave}
-                    onDrop={handleDrop}>
-                    <input
-                        type="file"
-                        onChange={handleFileChange}
-                        className="file-input"
-                    />
-                    <div className="upload-text">
-                        {file
-                            ? file.name
-                            : "Drag and drop file here or click to browse"}
+        <React.Fragment>
+            <button className="btn btn-primary" onClick={handleOpen}>
+                Upload Salary
+            </button>
+
+            <Modal
+                show={show}
+                onHide={handleClose}
+                centered="true"
+                className="upload-salary-modal">
+                <ModalHeader closeButton>
+                    <Modal.Title>Upload Salary</Modal.Title>
+                </ModalHeader>
+                <ModalBody>
+                    <div className="form-group">
+                        <label>
+                            Month<span className="required"> *</span>
+                        </label>
+                        <input
+                            type="month"
+                            className="form-control"
+                            value={month}
+                            onChange={(e) => setMonth(e.target.value)}
+                            required
+                        />
                     </div>
-                </div>
-            </ModalBody>
-            <ModalFooter>
-                <button
-                    className="btn btn-primary"
-                    onClick={handleSubmit}
-                    disabled={isUploading}>
-                    {isUploading ? "Uploading..." : "Upload"}
-                </button>
-                <button className="btn btn-default" onClick={onClose}>
-                    Cancel
-                </button>
-            </ModalFooter>
-        </Modal>
+                    <div className="form-group">
+                        <label>
+                            Period Type<span className="required"> *</span>
+                        </label>
+                        <select
+                            className="form-control"
+                            value={periodType}
+                            onChange={(e) => setPeriodType(e.target.value)}
+                            required>
+                            {PERIOD_TYPES.map((type) => (
+                                <option key={type} value={type}>
+                                    {PeriodTypeLabel[type]}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                    <div className="form-group">
+                        <label>
+                            File<span className="required"> *</span>
+                        </label>
+                        <div
+                            className={`file-upload-area ${
+                                isDragging ? "dragging" : ""
+                            }`}
+                            onDragOver={handleDragOver}
+                            onDragLeave={handleDragLeave}
+                            onDrop={handleDrop}>
+                            <input
+                                type="file"
+                                onChange={handleFileChange}
+                                className="file-input"
+                                multiple={false}
+                                accept=".xlsx, .xls"
+                            />
+                            <div className="upload-text">
+                                {file
+                                    ? file.name
+                                    : "Drag and drop file here or click to browse"}
+                                {!file && (
+                                    <div className="upload-text-small">
+                                        Support single Excel file (.xlsx, .xls)
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                </ModalBody>
+                <ModalFooter>
+                    <button
+                        className="btn btn-primary"
+                        onClick={handleSubmit}
+                        disabled={isUploading}>
+                        {isUploading ? "Uploading..." : "Upload"}
+                    </button>
+                    <button className="btn btn-default" onClick={handleClose}>
+                        Cancel
+                    </button>
+                </ModalFooter>
+            </Modal>
+        </React.Fragment>
     );
 };
 
