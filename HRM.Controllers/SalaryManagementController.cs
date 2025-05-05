@@ -58,7 +58,14 @@ public class SalaryManagementController(
             var file = Request.Form.Files[0];
             var month = Request.Form["month"];
             var periodType = Request.Form["periodType"];
-            
+            if(file == null)
+            {
+                return BadRequest("Please select a file to upload");
+            }
+            if(string.IsNullOrEmpty(month))
+            {
+                return BadRequest("Please select a month to upload");
+            }
             var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(file.FileName);
             var extension = Path.GetExtension(file.FileName);
             var timestamp = DateTimeOffset.Now.ToString("yyyyMMddHHmmss");
@@ -89,4 +96,21 @@ public class SalaryManagementController(
             return Json(new { success = false, message = ex.Message });
         }
     }
+
+    [HttpPost]
+    [HrmPermission(Policy.Host, FunctionKey.SalaryManagement)]
+    public async Task<IActionResult> ConfirmUpload()
+    {
+        var month = Request.Form["month"];
+        var periodType = Request.Form["periodType"];
+        var criteria = new ConfirmUploadPayrollCriteria
+        {
+            CompanyId = CurrentCompanyId,
+            Month = new DateTime(DateTime.Parse(month).Year, DateTime.Parse(month).Month, 1),
+            PeriodType = short.Parse(periodType)
+        };
+        var res = await payrollService.ConfirmUploadPayrollAsync(criteria);
+        return Json(res);
+    }
+    
 }

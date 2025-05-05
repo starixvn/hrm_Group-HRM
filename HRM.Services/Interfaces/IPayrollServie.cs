@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using HRM.Core.Models;
 using HRM.Criteria.EmployeePayroll;
 using HRM.Models.Payroll;
 
@@ -9,4 +10,5 @@ public interface IPayrollService
 {
     Task<IEnumerable<EmployeePayroll>> GetEmployeePayrollAsync(GetEmployeePayrollCriteria criteria);
     Task<IEnumerable<UploadHistory>> GetUploadHistoryAsync(short companyId);
+    Task<CommandResult> ConfirmUploadPayrollAsync(ConfirmUploadPayrollCriteria criteria);
 }
