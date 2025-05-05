@@ -6,5 +6,5 @@ namespace HRM.Services.Interfaces;
 
 public interface IUploadPayrollService
 {
-    Task<CommandResult> ImportEmpSalaryAsync(UploadPayrollModel model);
+    Task<CommandResult> ImportEmpPayrollAsync(UploadPayrollModel model);
 }

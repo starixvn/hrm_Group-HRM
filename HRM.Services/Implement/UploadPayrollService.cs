@@ -26,7 +26,7 @@ public class UploadPayrollService(
     private const string ColumnIdStaff = "id staff";
     private const string ColumnTotalPersonalCost = "total personal cost";
 
-    public async Task<CommandResult> ImportEmpSalaryAsync(UploadPayrollModel model)
+    public async Task<CommandResult> ImportEmpPayrollAsync(UploadPayrollModel model)
     {
         try
         {
