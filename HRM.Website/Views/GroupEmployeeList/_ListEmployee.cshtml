@@ -7,6 +7,9 @@
     var pagerOption = (PagerOptionModel)ViewBag.PagerOption;
     const int totalColumn = 24;
 }
+@section css {
+	<link href="~/dist/styles/group.employee.list.index.css" rel="stylesheet" />
+}
 
 <table id="data" class="table table-custom">
     <thead>
@@ -30,43 +33,43 @@
                     <div class="fa fa-sort cell-right-div"></div>
                 </div>
             </th>
-            <th class="col-sorter">
+            <th class="col-sorter bu-highlight">
                 <div class="cell-control-wrapper">
                     @Labels.BUIdShort
                     <div class="fa fa-sort cell-right-div"></div>
                 </div>
             </th>
-            <th class="col-sorter">
+            <th class="col-sorter bu-highlight">
                 <div class="cell-control-wrapper">
                     @Labels.UnitCode
                     <div class="fa fa-sort cell-right-div"></div>
                 </div>
             </th>
-            <th class="col-sorter">
+            <th class="col-sorter bu-highlight">
                 <div class="cell-control-wrapper">
                     @Labels.BUPIC
                     <div class="fa fa-sort cell-right-div"></div>
                 </div>
             </th>
-            <th class="col-sorter">
+            <th class="col-sorter dept-highlight">
                 <div class="cell-control-wrapper">
                     @Labels.DepartmentNameShort
                     <div class="fa fa-sort cell-right-div"></div>
                 </div>
             </th>
-            <th class="col-sorter col-roles">
+            <th class="col-sorter col-roles dept-highlight">
                 <div class="cell-control-wrapper">
                     @Labels.DepartmentPICShort
                     <div class="fa fa-sort cell-right-div"></div>
                 </div>
             </th>
-            <th class="col-sorter col-roles">
+            <th class="col-sorter col-roles team-highlight">
 	            <div class="cell-control-wrapper">
 		            @Labels.TeamName
 		            <div class="fa fa-sort cell-right-div"></div>
 	            </div>
             </th>
-            <th class="col-sorter col-roles">
+            <th class="col-sorter col-roles team-highlight">
 	            <div class="cell-control-wrapper">
 		            @Labels.TeamPIC
 		            <div class="fa fa-sort cell-right-div"></div>
@@ -117,13 +120,13 @@
                     <td>@employee.CtrId</td>
                     <td class="align-left">@employee.EmployeeCode</td>
                     <td class="align-left">@employee.NickName</td>
-                    <td class="align-left">@employee.UnitId</td>
-                    <td class="align-left">@employee.UnitCode</td>
-                    <td class="align-left">@employee.UnitPIC</td>
-                    <td class="align-left">@employee.DepartmentName</td>
-                    <td class="align-left">@employee.DepartmentPIC</td>
-                    <td class="align-left">@employee.TeamName</td>
-                    <td class="align-left">@employee.TeamPIC</td>
+                    <td class="align-left bu-highlight">@employee.UnitId</td>
+                    <td class="align-left bu-highlight">@employee.UnitCode</td>
+                    <td class="align-left bu-highlight">@employee.UnitPIC</td>
+                    <td class="align-left dept-highlight">@employee.DepartmentName</td>
+                    <td class="align-left dept-highlight">@employee.DepartmentPIC</td>
+                    <td class="align-left team-highlight">@employee.TeamName</td>
+                    <td class="align-left team-highlight">@employee.TeamPIC</td>
                     <td class="align-left">@employee.JobLevel</td>
                     <td class="align-left">@employee.ManagementLevel</td>
                     <td class="align-left">@employee.JobTitle</td>

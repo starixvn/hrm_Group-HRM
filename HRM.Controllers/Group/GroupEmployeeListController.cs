@@ -6,16 +6,13 @@ using GO.UserControl.Client.Core.Session;
 using HRM.Core.Constants;
 using HRM.Core.Filters;
 using HRM.Core.Services;
-using HRM.Criteria.Employee;
 using HRM.Criteria.Group;
 using HRM.Models;
 using HRM.Models.Group;
 using HRM.Models.Unit;
 using HRM.Services.Implement;
-using HRM.Services.Implement.FnB;
 using HRM.Services.Interfaces;
 using HRM.ViewModels;
-using HRM.ViewModels.Employee;
 using HRM.ViewModels.EmployeeGroup;
 using Microsoft.AspNetCore.Mvc;
 
@@ -29,7 +26,7 @@ public class GroupEmployeeListController(IUserControlSession session,
     IUnitService unitService,
     IDepartmentService departmentService) : BaseController(session)
 {
-    //[HrmPermission(Policy.Read, FunctionKey.GroupUser)]
+    [HrmPermission(Policy.Read, FunctionKey.GroupEmployeeList)]
     public async Task<IActionResult> Index(string key = null)
     {
         var teams = await teamService.GetAllAsync();
@@ -47,7 +44,7 @@ public class GroupEmployeeListController(IUserControlSession session,
     }
 
     [HttpPost]
-    //[HrmPermission(Policy.Read, FunctionKey.GroupUser)]
+    [HrmPermission(Policy.Read, FunctionKey.GroupEmployeeList)]
     public async Task<IActionResult> ListEmployee(GroupEmployeeViewModel model)
     {
         var employees = new List<GroupEmployeeModel>();
