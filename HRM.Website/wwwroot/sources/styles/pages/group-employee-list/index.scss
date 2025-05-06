@@ -44,15 +44,17 @@
 
 .bu-highlight {
     background: #CAF0F8;
-    color: #000;
 }
 
 .dept-highlight {
     background: #FEDDE6;
-    color: #000;
 }
 
 .team-highlight {
     background: #ffffe0;
+}
+
+.bu-highlight, .dept-highlight, .team-highlight {
     color: #000;
-} 
+    border-color: #d2d2d2 !important;
+}
