@@ -26,7 +26,7 @@ public class ExportExcelEmployeeInfoService(
     private const string EmployeeFullInfoTemplatePath = "ExcelTemplates/EmployeeFullProfileInfoTemplate.xls";
     private const string GroupEmployeeListTemplatePath = "ExcelTemplates/GroupEmployeeList.xlsx";
     
-    private const byte TotalColumns = 8;
+    private const byte TotalColumns = 23;
     private const byte RowStartBody = 3;
     private const byte MinimumWidth = 5;
     private const byte MaximumWidth = 50;
@@ -277,7 +277,22 @@ public class ExportExcelEmployeeInfoService(
             template.Cells[RowStartBody, 1, RowStartBody, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
 
             worksheet.Cells[rowIndex, colIndex++].Value = rowNum++;
+            worksheet.Cells[rowIndex, colIndex++].Value = employee.CtrId;
+            worksheet.Cells[rowIndex, colIndex++].Value = employee.EmpId;
             worksheet.Cells[rowIndex, colIndex++].Value = employee.FullName;
+            worksheet.Cells[rowIndex, colIndex++].Value = employee.NickName;
+            worksheet.Cells[rowIndex, colIndex++].Value = employee.UnitId;
+            worksheet.Cells[rowIndex, colIndex++].Value = employee.UnitCode;
+            worksheet.Cells[rowIndex, colIndex++].Value = employee.UnitPIC;
+            worksheet.Cells[rowIndex, colIndex++].Value = employee.DepartmentName;
+            worksheet.Cells[rowIndex, colIndex++].Value = employee.DepartmentPIC;
+            worksheet.Cells[rowIndex, colIndex++].Value = employee.TeamName;
+            worksheet.Cells[rowIndex, colIndex++].Value = employee.TeamPIC;
+            worksheet.Cells[rowIndex, colIndex++].Value = employee.JobLevel;
+            worksheet.Cells[rowIndex, colIndex++].Value = employee.ManagementLevel;
+            worksheet.Cells[rowIndex, colIndex++].Value = employee.JobTitle;
+            worksheet.Cells[rowIndex, colIndex++].Value = employee.JoinedDate.HasValue ? employee.JoinedDate.ToDateMonthYearFormatedDate() : null;
+            worksheet.Cells[rowIndex, colIndex++].Value = employee.Company;
             worksheet.Cells[rowIndex, colIndex++].Value = employee.CompanyDate.HasValue ? employee.CompanyDate.ToDateMonthYearFormatedDate() : null;
             worksheet.Cells[rowIndex, colIndex++].Value = employee.ResignedDate.HasValue ? employee.ResignedDate.ToDateMonthYearFormatedDate() : null;
             worksheet.Cells[rowIndex, colIndex++].Value = employee.IsLocal;
