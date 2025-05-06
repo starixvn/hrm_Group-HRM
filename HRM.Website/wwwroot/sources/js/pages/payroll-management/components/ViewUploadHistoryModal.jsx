@@ -30,18 +30,10 @@ const ViewUploadHistoryModal = () => {
 
     const handleDownload = async (savedFileName, fileName) => {
         try {
-            const blob = await salaryService.downloadFile(savedFileName, fileName);
-            const downloadUrl = URL.createObjectURL(blob);
-
-            const downloadLink = document.createElement("a");
-            downloadLink.href = downloadUrl;
-            downloadLink.download = fileName;
-
-            document.body.appendChild(downloadLink);
-            downloadLink.click();
-            document.body.removeChild(downloadLink);
-
-            URL.revokeObjectURL(downloadUrl);
+            window.location.href = salaryService.downloadFile(
+                savedFileName,
+                fileName
+            );
         } catch (error) {
             toastr.error("Failed to download file", "", toastOptions());
         }
@@ -98,7 +90,7 @@ const ViewUploadHistoryModal = () => {
                                             {item.fileName}
                                         </a>
                                     </td>
-                                    <td>{item.createdDate}</td>
+                                    <td>{item.clientCreatedTime}</td>
                                     <td>{item.nickName}</td>
                                 </tr>
                             ))}

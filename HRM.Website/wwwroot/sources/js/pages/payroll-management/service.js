@@ -90,22 +90,10 @@ const PayrollService = {
      * Download salary file
      * @param {string} savedFileName - Name of the file to download
      * @param {string} fileName - Name of the file to download
-     * @returns {Promise} Promise with file blob
+     * @returns {string} URL of the file to download
      */
-    downloadFile: async (savedFileName, fileName) => {
-        try {
-            const response = await axios.get(
-                resolveClientUrl(
-                    `PayrollManagement/DownloadFile?savedFileName=${encodeURIComponent(savedFileName)}&fileName=${encodeURIComponent(fileName)}`
-                ),
-                { responseType: "blob" }
-            );
-            return response.data;
-        } catch (error) {
-            toastr.error("Failed to download file", "", toastOptions());
-            throw error;
-        }
-    },
+    downloadFile: (savedFileName, fileName) =>
+        `/PayrollManagement/DownloadFile?savedFileName=${savedFileName}&fileName=${fileName}`,
 };
 
 export default PayrollService;

@@ -14,18 +14,6 @@ public class UploadHistory
     public short PeriodType { get; set; }
     public string NickName { get; set; }
 
-    public string MonthFormatted
-    {
-        get
-        {
-            return Month.ToString("MM-yyyy");
-        }
-    }
-    public string CreatedTime
-    {
-        get
-        {
-            return CreatedDate.ToClientTimeZone().ToString("MM/dd/yyyy HH:mm:ss");
-        }
-    }
+    public string MonthFormatted => Month.ToString("MM-yyyy");
+    public string ClientCreatedTime => CreatedDate.ToClientTimeZone().ToString("MM/dd/yyyy HH:mm:ss");
 }
