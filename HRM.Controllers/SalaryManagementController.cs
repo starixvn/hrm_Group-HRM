@@ -122,8 +122,7 @@ public class SalaryManagementController(
         }
 
         var path = $"Payroll/{savedFileName}";
-        var stream = await minIOService.GetFilePath(Bucket.Payroll, path);
-        
+        var stream = await minIOService.GetFileContentAsync(Bucket.Payroll, path);
         return File(stream, "application/octet-stream", fileName);
     }
     
