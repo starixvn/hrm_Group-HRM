@@ -53,6 +53,14 @@
             }
         }
     }
+
+    .table-custom {
+        tfoot {
+            tr.summary-row {
+                background-color: #bbf8f2;
+            }
+        }
+    }
 }
 
 .upload-salary-modal {
