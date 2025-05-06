@@ -59,43 +59,47 @@ const ViewUploadHistoryModal = () => {
                     <ModalTitle>Upload History</ModalTitle>
                 </ModalHeader>
                 <ModalBody>
-                    <table className="table table-custom">
-                        <thead>
-                            <tr>
-                                <th>Month</th>
-                                <th>Period Type</th>
-                                <th>File Name</th>
-                                <th>Upload Date Time</th>
-                                <th>Uploaded By</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {history.map((item, index) => (
-                                <tr key={index}>
-                                    <td>{item.monthFormatted}</td>
-                                    <td>
-                                        {getPeriodTypeLabel(item.periodType)}
-                                    </td>
-                                    <td>
-                                        <a
-                                            href="#"
-                                            onClick={(e) => {
-                                                e.preventDefault();
-                                                handleDownload(
-                                                    item.savedFileName,
-                                                    item.fileName
-                                                );
-                                            }}
-                                            className="file-link">
-                                            {item.fileName}
-                                        </a>
-                                    </td>
-                                    <td>{item.clientCreatedTime}</td>
-                                    <td>{item.nickName}</td>
+                    <div className="table-container">
+                        <table className="table table-custom">
+                            <thead>
+                                <tr>
+                                    <th>Month</th>
+                                    <th>Period Type</th>
+                                    <th>File Name</th>
+                                    <th>Upload Date Time</th>
+                                    <th>Uploaded By</th>
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                {history.map((item, index) => (
+                                    <tr key={index}>
+                                        <td>{item.monthFormatted}</td>
+                                        <td>
+                                            {getPeriodTypeLabel(
+                                                item.periodType
+                                            )}
+                                        </td>
+                                        <td>
+                                            <a
+                                                href="#"
+                                                onClick={(e) => {
+                                                    e.preventDefault();
+                                                    handleDownload(
+                                                        item.savedFileName,
+                                                        item.fileName
+                                                    );
+                                                }}
+                                                className="file-link">
+                                                {item.fileName}
+                                            </a>
+                                        </td>
+                                        <td>{item.clientCreatedTime}</td>
+                                        <td>{item.nickName}</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
                 </ModalBody>
             </Modal>
         </React.Fragment>
