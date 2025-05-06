@@ -112,7 +112,7 @@ public class MinIOService : IMinIOService
         return $"{s3Config.ExternalUrl}/{bucketName}/{fileName}";
     }
 
-     public async Task<Stream> GetFileContentAsync(string bucketName, string filePath)
+    public async Task<Stream> GetFileContentAsync(string bucketName, string filePath)
     {
         var request = new GetObjectRequest
         {
@@ -123,7 +123,7 @@ public class MinIOService : IMinIOService
         using var response = await client.GetObjectAsync(request);
         var memoryStream = new MemoryStream();
         await response.ResponseStream.CopyToAsync(memoryStream);
-        memoryStream.Position = 0; 
+        memoryStream.Position = 0;
         return memoryStream;
     }
 

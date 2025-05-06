@@ -30,9 +30,10 @@ const ViewUploadHistoryModal = () => {
 
     const handleDownload = async (savedFileName, fileName) => {
         try {
-            window.location.href = salaryService.downloadFile(fileName);
-                        savedFileName
-                    )}&fileName=${encodeURIComponent(
+            window.location.href = salaryService.downloadFile(
+                savedFileName,
+                fileName
+            );
         } catch (error) {
             toastr.error("Failed to download file", "", toastOptions());
         }
@@ -81,7 +82,8 @@ const ViewUploadHistoryModal = () => {
                                             onClick={(e) => {
                                                 e.preventDefault();
                                                 handleDownload(
-                                                    item.savedFileName
+                                                    item.savedFileName,
+                                                    item.fileName
                                                 );
                                             }}
                                             className="file-link">

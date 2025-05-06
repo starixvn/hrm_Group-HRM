@@ -126,5 +126,5 @@ public class SalaryManagementController(
         var stream = await minIOService.GetFileContentAsync(Bucket.Payroll, path);
         return File(stream, "application/octet-stream", fileName);
     }
-    
+
 }

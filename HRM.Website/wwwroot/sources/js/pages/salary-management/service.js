@@ -88,14 +88,15 @@ const salaryService = {
 
     /**
      * Download salary file
+     * @param {string} savedFileName - Name of the file to download
      * @param {string} fileName - Name of the file to download
      * @returns {Promise} Promise with file blob
      */
-    downloadFile: async (fileName) => {
+    downloadFile: async (savedFileName, fileName) => {
         try {
             const response = await axios.get(
                 resolveClientUrl(
-                    `SalaryManagement/DownloadFile?fileName=${fileName}`
+                    `SalaryManagement/DownloadFile?savedFileName=${savedFileName}&fileName=${fileName}`
                 ),
                 { responseType: "blob" }
             );

@@ -15,7 +15,7 @@ const Filter = ({ onSearch }) => {
             "0"
         )}`;
     });
-    const [periodType, setPeriodType] = useState(PeriodType.FULL_MONTH);
+    const [periodType, setPeriodType] = useState(PeriodType.ALL);
 
     useEffect(() => {
         handleSearch();
@@ -62,6 +62,9 @@ const Filter = ({ onSearch }) => {
                                 {PeriodTypeLabel[type]}
                             </option>
                         ))}
+                        <option key={PeriodType.ALL} value={null}>
+                            {PeriodTypeLabel[PeriodType.ALL]}
+                        </option>
                     </select>
                 </div>
             </div>
