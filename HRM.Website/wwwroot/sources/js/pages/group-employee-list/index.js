@@ -180,7 +180,7 @@ import { axiosError, blockUI, floatThead, unblockUI, getParam, resolveClientUrl,
 
         $('#disabled').on('click', function () {
             $("#IsAll").val(null);
-            $("#IsEnable").val(null);
+            $("#IsEnable").val(false);
             $("#IsDelete").val(null);
             $('#all').prop('checked', false);
             $('#deleted').prop('checked', false);
