@@ -37,8 +37,24 @@
 }
 
 .table {
+    .col-150 {
+        width: 150px;
+    }
+
+    .col-180 {
+        width: 150px;
+    }
+
     .col-250 {
         width: 250px;
+    }
+
+    .col-120 {
+        width: 120px;
+    }
+
+    .col-500{
+        width: 500px;
     }
 }
 
