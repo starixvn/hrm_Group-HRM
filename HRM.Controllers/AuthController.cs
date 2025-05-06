@@ -50,6 +50,12 @@ public class AuthController(
     [HttpPost]
     public async Task<IActionResult> Login([FromBody] LoginViewModel model)
     {
+        var companySite = await companyService.GetCompanySiteByDomainAsync();
+
+        session.SiteId = companySite.SiteId;
+        session.AccessToken = companySite.AccessToken;
+        session.Set(SessionKey.CurrentCompanyId, companySite.CompanyId);
+
         model.Password = Encoding.UTF8.GetString(Convert.FromBase64String(model.Password));
         var token = cryptoService.GenerateRijndaelKeyIV();
         var keyIv = token.Split(':');
