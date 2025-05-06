@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
+using HRM.Core;
 using HRM.Core.Constants;
 using HRM.Core.Filters;
 using HRM.Core.Services;
@@ -10,6 +12,7 @@ using HRM.Criteria.Group;
 using HRM.Models;
 using HRM.Models.Group;
 using HRM.Models.Unit;
+using HRM.Services.ExportExcel.Employee;
 using HRM.Services.Implement;
 using HRM.Services.Interfaces;
 using HRM.ViewModels;
@@ -21,10 +24,11 @@ namespace HRM.Controllers.Group;
 public class GroupEmployeeListController(IUserControlSession session,
     ITeamService teamService,
     ICommonDataService commonDataService,
-    IBaseService baseService,
     ICompanyService companyService,
     IUnitService unitService,
-    IDepartmentService departmentService) : BaseController(session)
+    IDepartmentService departmentService, 
+    IExportExcelEmployeeInfoService excelService,
+    IBaseService baseService) : BaseController(session)
 {
     [HrmPermission(Policy.Read, FunctionKey.GroupEmployeeList)]
     public async Task<IActionResult> Index(string key = null)
@@ -76,6 +80,26 @@ public class GroupEmployeeListController(IUserControlSession session,
         ViewBag.EnableGroupDate = await commonDataService.IsEnableGroupDateAsync();
 
         return PartialView("_ListEmployee", employees);
+    }
+    
+    [HrmPermission(Policy.Read, FunctionKey.GroupEmployeeList)]
+    public async Task<IActionResult> ExportGroupEmployeeList(GroupEmployeeViewModel model)
+    {
+        var criteria = new GetEmployeesInGroupScopeCriteria
+        {
+            Query = model.Keyword,
+            TeamIds = model.TeamIds,
+            EnableUser = model.IsEnable,
+            IsDeleteUser = model.IsDelete,
+            TitleId = model.JobTitleId,
+            CompanyIds = model.CompanyIds
+        };
+
+        var profiles = (await baseService.GetDataAsync<GroupEmployeeModel>(criteria)).ToList();
+        var bytes = await excelService.ExportGroupEmployeesAsync(profiles);
+        var fileName = $"GroupEmployeeList_{DateTimeOffset.Now.DateTime.ToClientTimeZone():yyyyMMdd}.xlsx";
+
+        return File(bytes, MimeType.XLS, fileName);
     }
 
     [HttpGet]

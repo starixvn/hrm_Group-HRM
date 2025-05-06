@@ -101,7 +101,7 @@ import { axiosError, blockUI, floatThead, unblockUI, getParam, resolveClientUrl,
         var url = null,
             controllerPath;
 
-        controllerPath = "ExportEmployee/ExportGroupEmployeeList?";
+        controllerPath = "GroupEmployeeList/ExportGroupEmployeeList?";
 
         $('#TeamIds').val($('#GroupTeam').multiSelectTreeView('getSelectedItems'));
         $('#CompanyIds').val($('#Company').multiSelectTreeView('getSelectedItems'));
