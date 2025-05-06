@@ -65,12 +65,12 @@ const UploadSalaryModal = ({ onSuccess }) => {
 
     const processUpload = async (formData) => {
         try {
-            await salaryService.uploadSalary(formData);
-            toastr.success("Salary uploaded successfully", "", toastOptions());
+            await salaryService.uploadPayroll(formData);
+            toastr.success("Payroll uploaded successfully", "", toastOptions());
             onSuccess();
             handleClose();
         } catch (error) {
-            toastr.error("Failed to upload salary", "", toastOptions());
+            toastr.error("Failed to upload Payroll", "", toastOptions());
         } finally {
             setIsUploading(false);
             setShowConfirm(false);
@@ -121,7 +121,7 @@ const UploadSalaryModal = ({ onSuccess }) => {
     return (
         <React.Fragment>
             <button className="btn btn-upload" onClick={handleOpen}>
-                Upload Salary
+                Upload Payroll
             </button>
 
             <Modal
@@ -131,7 +131,7 @@ const UploadSalaryModal = ({ onSuccess }) => {
                 backdrop={!showConfirm}
                 className="upload-salary-modal">
                 <ModalHeader closeButton>
-                    <Modal.Title>Upload Salary</Modal.Title>
+                    <Modal.Title>Upload Payroll</Modal.Title>
                 </ModalHeader>
                 <ModalBody>
                     <div className="form-group">

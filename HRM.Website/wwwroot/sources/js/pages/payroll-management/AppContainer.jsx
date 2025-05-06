@@ -3,13 +3,13 @@ import toastr from "toastr";
 import SalaryTable from "./components/SalaryTable";
 import { toastOptions } from "../../shared/common.functions";
 import Filter from "./components/Filter";
-import salaryService from "./Service";
+import PayrollService from "./Service";
 
 const AppContainer = () => {
     const [salaryData, setSalaryData] = React.useState([]);
 
     const fetchSalaryData = (filters = {}) => {
-        salaryService
+        PayrollService
             .getSalaryData(filters)
             .then((data) => {
                 setSalaryData(data);

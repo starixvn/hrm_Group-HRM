@@ -2,4 +2,4 @@ import React from "react";
 import ReactDOM from "react-dom";
 import AppContainer from "./AppContainer";
 
-ReactDOM.render(<AppContainer />, document.getElementById("salary-management"));
+ReactDOM.render(<AppContainer />, document.getElementById("payroll-management"));

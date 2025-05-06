@@ -86,7 +86,7 @@ module.exports = {
         [`${styleDistPath}/discipline.summary.per.year`]: `${styleSourcePath}/pages/report/discipline.summary.per.year.scss`,
         [`${styleDistPath}/time.checkinout`]: `${styleSourcePath}/pages/time/checkinout.scss`,
         [`${styleDistPath}/group.employee.list.index`]: `${styleSourcePath}/pages/group-employee-list/index.scss`,
-        [`${styleDistPath}/salary.management`]: `${styleSourcePath}/pages/salary-management/salary.management.scss`,
+        [`${styleDistPath}/payroll.management`]: `${styleSourcePath}/pages/payroll-management/payroll.management.scss`,
 
         //
         [`${jsDistPath}/main`]: "./sources/js/main.js",
@@ -193,6 +193,6 @@ module.exports = {
         [`${jsDistPath}/discipline.summary.per.year`]: `${jsSourcePath}/report/discipline.summary.per.year.js`,
         [`${jsDistPath}/time.checkinout`]: `${jsSourcePath}/time/checkinout/index.jsx`,
         [`${jsDistPath}/group.employee.list.index`]: `${jsSourcePath}/group-employee-list/index.js`
-        [`${jsDistPath}/salary.management`]: `${jsSourcePath}/salary-management/index.jsx`,
+        [`${jsDistPath}/payroll.management`]: `${jsSourcePath}/payroll-management/index.jsx`,
     },
 };

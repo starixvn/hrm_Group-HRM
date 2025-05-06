@@ -2,7 +2,7 @@ import axios from "axios";
 import { resolveClientUrl, toastOptions } from "../../shared/common.functions";
 import toastr from "toastr";
 
-const salaryService = {
+const PayrollService = {
     /**
      * Get salary data with optional filters
      * @param {Object} filters - Optional filters for salary data
@@ -13,7 +13,7 @@ const salaryService = {
     getSalaryData: async (filters = {}) => {
         try {
             const response = await axios.get(
-                resolveClientUrl("SalaryManagement/GetSalaryData"),
+                resolveClientUrl("PayrollManagement/GetPayrollData"),
                 {
                     params: {
                         month: filters.month || null,
@@ -36,7 +36,7 @@ const salaryService = {
     getUploadHistory: async () => {
         try {
             const response = await axios.get(
-                resolveClientUrl("SalaryManagement/GetUploadHistory")
+                resolveClientUrl("PayrollManagement/GetUploadHistory")
             );
             return response.data;
         } catch (error) {
@@ -50,10 +50,10 @@ const salaryService = {
      * @param {FormData} formData - Form data containing file, month and periodType
      * @returns {Promise} Promise with upload result
      */
-    uploadSalary: async (formData) => {
+    uploadPayroll: async (formData) => {
         try {
             const response = await axios.post(
-                resolveClientUrl("SalaryManagement/UploadSalary"),
+                resolveClientUrl("PayrollManagement/UploadPayroll"),
                 formData,
                 {
                     headers: {
@@ -76,7 +76,7 @@ const salaryService = {
     confirmUpload: async (formData) => {
         try {
             const response = await axios.post(
-                resolveClientUrl("SalaryManagement/ConfirmUpload"),
+                resolveClientUrl("PayrollManagement/ConfirmUpload"),
                 formData
             );
             return response.data;
@@ -96,7 +96,7 @@ const salaryService = {
         try {
             const response = await axios.get(
                 resolveClientUrl(
-                    `SalaryManagement/DownloadFile?savedFileName=${savedFileName}&fileName=${fileName}`
+                    `PayrollManagement/DownloadFile?savedFileName=${encodeURIComponent(savedFileName)}&fileName=${encodeURIComponent(fileName)}`
                 ),
                 { responseType: "blob" }
             );
@@ -108,4 +108,4 @@ const salaryService = {
     },
 };
 
-export default salaryService;
+export default PayrollService;

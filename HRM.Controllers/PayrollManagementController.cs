@@ -1,22 +1,19 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
-using HRM.Core;
 using HRM.Core.Constants;
 using HRM.Core.Filters;
 using HRM.Core.Services;
 using HRM.Criteria.EmployeePayroll;
 using HRM.Models.Payroll;
-using HRM.Services.Implement;
 using HRM.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HRM.Controllers;
 
-public class SalaryManagementController(
+public class PayrollManagementController(
     IUserControlSession session,
     IMinIOService minIOService,
     IUploadPayrollService uploadService,
@@ -29,8 +26,8 @@ public class SalaryManagementController(
     }
 
     [HttpGet]
-    [HrmPermission(Policy.Read, FunctionKey.SalaryManagement)]
-    public async Task<IActionResult> GetSalaryData(string month, short? periodType)
+    [HrmPermission(Policy.Read, FunctionKey.PayrollManagement)]
+    public async Task<IActionResult> GetPayrollData(string month, short? periodType)
     {
         var criteria = new GetEmployeePayrollCriteria
         {
@@ -43,7 +40,7 @@ public class SalaryManagementController(
     }
 
     [HttpGet]
-    [HrmPermission(Policy.Read, FunctionKey.SalaryManagement)]
+    [HrmPermission(Policy.Read, FunctionKey.PayrollManagement)]
     public async Task<IActionResult> GetUploadHistory()
     {
         var history = await payrollService.GetUploadHistoryAsync(CurrentCompanyId);
@@ -51,8 +48,8 @@ public class SalaryManagementController(
     }
 
     [HttpPost]
-    [HrmPermission(Policy.Host, FunctionKey.SalaryManagement)]
-    public async Task<IActionResult> UploadSalary()
+    [HrmPermission(Policy.Host, FunctionKey.PayrollManagement)]
+    public async Task<IActionResult> UploadPayroll()
     {
         try
         {
@@ -99,7 +96,7 @@ public class SalaryManagementController(
     }
 
     [HttpPost]
-    [HrmPermission(Policy.Host, FunctionKey.SalaryManagement)]
+    [HrmPermission(Policy.Host, FunctionKey.PayrollManagement)]
     public async Task<IActionResult> ConfirmUpload()
     {
         var month = Request.Form["month"];
@@ -114,7 +111,7 @@ public class SalaryManagementController(
         return Json(res);
     }
 
-    [HrmPermission(Policy.Read, FunctionKey.SalaryManagement)]
+    [HrmPermission(Policy.Read, FunctionKey.PayrollManagement)]
     public async Task<IActionResult> DownloadFile(string savedFileName, string fileName)
     {
         if (string.IsNullOrEmpty(savedFileName))

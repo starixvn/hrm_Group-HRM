@@ -2,18 +2,18 @@
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @model bool
 @{
-	ViewData["Title"] = "Salary Management";
+	ViewData["Title"] = "Payroll Management";
 	Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @section css{
-	<link href="~/dist/styles/salary.management.css" rel="stylesheet" />
+	<link href="~/dist/styles/payroll.management.css" rel="stylesheet" />
 }
 @section js{
-	<script src="~/dist/js/salary.management.js"></script>
+	<script src="~/dist/js/payroll.management.js"></script>
 }
 @section Breadcrumb {
 	<a class="step">@Labels.HRSpace</a><span class="step">@ViewData["Title"]</span>
 }
 
 <h2 class="page-title">@ViewData["Title"]</h2>
-<div id="salary-management"></div>
+<div id="payroll-management"></div>
