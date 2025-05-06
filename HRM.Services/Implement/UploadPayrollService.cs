@@ -202,9 +202,9 @@ public class UploadPayrollService(
         return payrollData;
     }
 
-    private static decimal ParseCostCell(object costCell)
+    private static decimal? ParseCostCell(object costCell)
     {
-        if (costCell == null) return 0M;
+        if (costCell == null) return null;
         decimal.TryParse(costCell.ToString(), out var totalPersonalCost);
         return totalPersonalCost;
     }
