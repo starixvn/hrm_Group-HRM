@@ -67,7 +67,7 @@ public class PayrollManagementController(
         var timestamp = DateTimeOffset.Now.ToString("yyyyMMddHHmmss", CultureInfo.InvariantCulture);
 
         var savedFileName = $"{fileNameWithoutExtension}_{timestamp}{extension}";
-        var path = $"Payroll/{savedFileName}";
+            var path = $"{CurrentCompanyId}/{savedFileName}";
         var model = new UploadPayrollModel
         {
             File = request.File,
@@ -111,7 +111,7 @@ public class PayrollManagementController(
             return BadRequest("File name is required.");
         }
 
-        var path = $"Payroll/{savedFileName}";
+        var path = $"{CurrentCompanyId}/{savedFileName}";
         var stream = await minIOService.GetFileContentAsync(Bucket.Payroll, path);
         return File(stream, "application/octet-stream", fileName);
     }
