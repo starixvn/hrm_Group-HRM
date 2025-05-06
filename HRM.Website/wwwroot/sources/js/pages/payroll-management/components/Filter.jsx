@@ -57,14 +57,14 @@ const Filter = ({ onSearch }) => {
                         className="form-control"
                         value={periodType}
                         onChange={(e) => setPeriodType(e.target.value)}>
+                        <option key={PeriodType.ALL} value={null}>
+                            {PeriodTypeLabel[PeriodType.ALL]}
+                        </option>
                         {PERIOD_TYPES.map((type) => (
                             <option key={type} value={type}>
                                 {PeriodTypeLabel[type]}
                             </option>
                         ))}
-                        <option key={PeriodType.ALL} value={null}>
-                            {PeriodTypeLabel[PeriodType.ALL]}
-                        </option>
                     </select>
                 </div>
             </div>

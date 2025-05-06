@@ -108806,18 +108806,18 @@ var Filter = function Filter(_ref) {
                         onChange: function onChange(e) {
                             return setPeriodType(e.target.value);
                         } },
+                    _react2.default.createElement(
+                        "option",
+                        { key: _periodType.PeriodType.ALL, value: null },
+                        _periodType.PeriodTypeLabel[_periodType.PeriodType.ALL]
+                    ),
                     _periodType.PERIOD_TYPES.map(function (type) {
                         return _react2.default.createElement(
                             "option",
                             { key: type, value: type },
                             _periodType.PeriodTypeLabel[type]
                         );
-                    }),
-                    _react2.default.createElement(
-                        "option",
-                        { key: _periodType.PeriodType.ALL, value: null },
-                        _periodType.PeriodTypeLabel[_periodType.PeriodType.ALL]
-                    )
+                    })
                 )
             )
         ),
