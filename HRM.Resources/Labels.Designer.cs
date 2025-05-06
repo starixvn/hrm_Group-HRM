@@ -2212,6 +2212,15 @@ namespace HRM.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Group Employee.
+        /// </summary>
+        public static string GroupEmployee {
+            get {
+                return ResourceManager.GetString("GroupEmployee", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Group Space.
         /// </summary>
         public static string GroupSpace {

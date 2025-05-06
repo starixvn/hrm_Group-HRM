@@ -2067,4 +2067,7 @@
   <data name="BUIdShort" xml:space="preserve">
     <value>BU ID</value>
   </data>
+  <data name="GroupEmployee" xml:space="preserve">
+    <value>Group Employee</value>
+  </data>
 </root>
