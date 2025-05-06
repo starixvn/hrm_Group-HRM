@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
     PERIOD_TYPES,
     PeriodType,
@@ -16,13 +16,15 @@ const Filter = ({ onSearch }) => {
         )}`;
     });
     const [periodType, setPeriodType] = useState(PeriodType.FULL_MONTH);
-    const [employeeName, setEmployeeName] = useState("");
+
+    useEffect(() => {
+        handleSearch();
+    }, []);
 
     const handleSearch = () => {
         onSearch({
             month,
             periodType,
-            employeeName,
         });
     };
 
@@ -61,20 +63,6 @@ const Filter = ({ onSearch }) => {
                             </option>
                         ))}
                     </select>
-                </div>
-            </div>
-            <div className="form-group">
-                <div className="label-form">
-                    <label className="control-label">Employee</label>
-                </div>
-                <div className="input-form">
-                    <input
-                        type="text"
-                        className="form-control"
-                        value={employeeName}
-                        onChange={(e) => setEmployeeName(e.target.value)}
-                        placeholder="full name or nickname"
-                    />
                 </div>
             </div>
             <div className="form-group">

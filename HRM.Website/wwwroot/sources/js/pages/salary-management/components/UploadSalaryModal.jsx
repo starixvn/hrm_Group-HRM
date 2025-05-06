@@ -2,9 +2,16 @@ import React, { useState } from "react";
 import axios from "axios";
 import toastr from "toastr";
 import { Modal, ModalBody, ModalFooter, ModalHeader } from "react-bootstrap";
-import {resolveClientUrl,toastOptions} from "../../../shared/common.functions";
-import { PERIOD_TYPES, PeriodType, PeriodTypeLabel} from "../constants/periodType";
-
+import {
+    resolveClientUrl,
+    toastOptions,
+} from "../../../shared/common.functions";
+import {
+    PERIOD_TYPES,
+    PeriodType,
+    PeriodTypeLabel,
+} from "../constants/periodType";
+import salaryService from "../Service";
 
 const UploadSalaryModal = ({ onSuccess }) => {
     const [show, setShow] = useState(false);
@@ -52,26 +59,13 @@ const UploadSalaryModal = ({ onSuccess }) => {
         setFile(e.dataTransfer.files[0]);
     };
 
-    const confirmUpload = async (formData) => {
-        const response = await axios.post(resolveClientUrl("SalaryManagement/ConfirmUpload"), formData);
-        return response.data;
-    };
     const handleMonthClick = (e) => {
         e.target.showPicker();
     };
 
-
     const processUpload = async (formData) => {
         try {
-            await axios.post(
-                resolveClientUrl("SalaryManagement/UploadSalary"),
-                formData,
-                {
-                    headers: {
-                        "Content-Type": "multipart/form-data",
-                    }
-                }
-            );
+            await salaryService.uploadSalary(formData);
             toastr.success("Salary uploaded successfully", "", toastOptions());
             onSuccess();
             handleClose();
@@ -98,13 +92,16 @@ const UploadSalaryModal = ({ onSuccess }) => {
             formData.append("month", month);
             formData.append("periodType", periodType);
 
-            const confirmResult = await confirmUpload(formData);
+            const confirmResult = await salaryService.confirmUpload(formData);
 
             if (confirmResult.isSuccessful) {
                 await processUpload(formData);
             } else {
                 setPendingFormData(formData);
-                setConfirmMessage(confirmResult.message || "Are you sure you want to proceed with the upload?");
+                setConfirmMessage(
+                    confirmResult.message ||
+                        "Are you sure you want to proceed with the upload?"
+                );
                 setShowConfirm(true);
                 setIsUploading(false);
             }
@@ -128,10 +125,9 @@ const UploadSalaryModal = ({ onSuccess }) => {
             </button>
 
             <Modal
-                zIndex={100}
                 show={show}
                 onHide={handleClose}
-                centered
+                centered="true"
                 backdrop={!showConfirm}
                 className="upload-salary-modal">
                 <ModalHeader closeButton>
@@ -214,19 +210,18 @@ const UploadSalaryModal = ({ onSuccess }) => {
             <Modal
                 show={showConfirm}
                 onHide={() => setShowConfirm(false)}
-                centered
                 zIndex={1050}>
                 <ModalHeader closeButton>
                     <Modal.Title>Confirm Upload</Modal.Title>
                 </ModalHeader>
-                <ModalBody>
-                    {confirmMessage}
-                </ModalBody>
+                <ModalBody>{confirmMessage}</ModalBody>
                 <ModalFooter>
                     <button className="btn btn-primary" onClick={handleConfirm}>
                         OK
                     </button>
-                    <button className="btn btn-default" onClick={() => setShowConfirm(false)}>
+                    <button
+                        className="btn btn-default"
+                        onClick={() => setShowConfirm(false)}>
                         Cancel
                     </button>
                 </ModalFooter>

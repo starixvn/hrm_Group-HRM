@@ -1,45 +1,21 @@
 import React from "react";
-import axios from "axios";
 import toastr from "toastr";
-
-import UploadSalaryModal from "./components/UploadSalaryModal";
-import ViewUploadHistoryModal from "./components/ViewUploadHistoryModal";
 import SalaryTable from "./components/SalaryTable";
-import { resolveClientUrl, toastOptions } from "../../shared/common.functions";
+import { toastOptions } from "../../shared/common.functions";
 import Filter from "./components/Filter";
+import salaryService from "./Service";
 
 const AppContainer = () => {
     const [salaryData, setSalaryData] = React.useState([]);
-    const [uploadHistory, setUploadHistory] = React.useState([]);
 
-    React.useEffect(() => {
-        fetchSalaryData();
-        fetchUploadHistory();
-    }, []);
-
-    const fetchSalaryData = () => {
-        axios
-            .get(resolveClientUrl("SalaryManagement/GetSalaryData"))
-            .then((response) => {
-                setSalaryData(response.data);
+    const fetchSalaryData = (filters = {}) => {
+        salaryService
+            .getSalaryData(filters)
+            .then((data) => {
+                setSalaryData(data);
             })
-            .catch((error) => {
+            .catch((_) => {
                 toastr.error("Failed to fetch salary data", "", toastOptions());
-            });
-    };
-
-    const fetchUploadHistory = () => {
-        axios
-            .get(resolveClientUrl("SalaryManagement/GetUploadHistory"))
-            .then((response) => {
-                setUploadHistory(response.data);
-            })
-            .catch((error) => {
-                toastr.error(
-                    "Failed to fetch upload history",
-                    "",
-                    toastOptions()
-                );
             });
     };
 

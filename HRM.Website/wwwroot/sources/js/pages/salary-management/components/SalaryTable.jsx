@@ -20,20 +20,21 @@ const SalaryTable = ({ data }) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {data.map((item, index) => (
-                        <tr key={index}>
-                            <td>{index + 1}</td>
-                            <td>{item.monthFormatted}</td>
-                            <td>{getPeriodTypeLabel(item.periodType)}</td>
-                            <td>{item.empId}</td>
-                            <td>{item.fullName}</td>
-                            <td>{item.nickname}</td>
-                            <td>{item.departmentName}</td>
-                            <td>{item.teamName}</td>
-                            <td>{item.personalCost}</td>
-                            <td>{item.extraPayment}</td>
-                        </tr>
-                    ))}
+                    {data.length > 0 &&
+                        data.map((item, index) => (
+                            <tr key={index}>
+                                <td>{index + 1}</td>
+                                <td>{item.monthFormatted}</td>
+                                <td>{getPeriodTypeLabel(item.periodType)}</td>
+                                <td>{item.empId}</td>
+                                <td>{item.fullName}</td>
+                                <td>{item.nickname}</td>
+                                <td>{item.departmentName}</td>
+                                <td>{item.teamName}</td>
+                                <td>{item.personalCost}</td>
+                                <td>{item.extraPayment}</td>
+                            </tr>
+                        ))}
                 </tbody>
             </table>
         </div>

@@ -1,18 +1,9 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React, { useState } from "react";
+import { Modal, ModalBody, ModalHeader, ModalTitle } from "react-bootstrap";
 import toastr from "toastr";
-import {
-    Modal,
-    ModalBody,
-    ModalFooter,
-    ModalHeader,
-    ModalTitle,
-} from "react-bootstrap";
-import {
-    resolveClientUrl,
-    toastOptions,
-} from "../../../shared/common.functions";
+import { toastOptions } from "../../../shared/common.functions";
 import { getPeriodTypeLabel } from "../constants/periodType";
+import salaryService from "../Service";
 
 const ViewUploadHistoryModal = () => {
     const [show, setShow] = useState(false);
@@ -23,12 +14,12 @@ const ViewUploadHistoryModal = () => {
     };
 
     const fetchHistory = () => {
-        axios
-            .get(resolveClientUrl("SalaryManagement/GetUploadHistory"))
-            .then((response) => {
-                setHistory(response.data);
+        salaryService
+            .getUploadHistory()
+            .then((data) => {
+                setHistory(data);
             })
-            .catch((error) => {
+            .catch((_) => {
                 toastr.error(
                     "Failed to fetch upload history",
                     "",
@@ -39,25 +30,9 @@ const ViewUploadHistoryModal = () => {
 
     const handleDownload = async (savedFileName, fileName) => {
         try {
-            const response = await axios.get(
-                resolveClientUrl(
-                    `SalaryManagement/DownloadFile?savedFileName=${encodeURIComponent(
+            window.location.href = salaryService.downloadFile(fileName);
                         savedFileName
                     )}&fileName=${encodeURIComponent(
-                        fileName
-                    )}`
-                ),
-                { responseType: "blob" }
-            );
-
-            const url = window.URL.createObjectURL(new Blob([response.data]));
-            const link = document.createElement("a");
-            link.href = url;
-            link.setAttribute("download", fileName);
-            document.body.appendChild(link);
-            link.click();
-            link.remove();
-            window.URL.revokeObjectURL(url);
         } catch (error) {
             toastr.error("Failed to download file", "", toastOptions());
         }
@@ -78,7 +53,6 @@ const ViewUploadHistoryModal = () => {
                 show={show}
                 onHide={handleClose}
                 size="lg"
-                centered
                 className="view-history">
                 <ModalHeader closeButton>
                     <ModalTitle>Upload History</ModalTitle>
@@ -106,7 +80,9 @@ const ViewUploadHistoryModal = () => {
                                             href="#"
                                             onClick={(e) => {
                                                 e.preventDefault();
-                                                handleDownload(item.savedFileName, item.fileName);
+                                                handleDownload(
+                                                    item.savedFileName
+                                                );
                                             }}
                                             className="file-link">
                                             {item.fileName}

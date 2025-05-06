@@ -30,12 +30,13 @@ public class SalaryManagementController(
 
     [HttpGet]
     [HrmPermission(Policy.Read, FunctionKey.SalaryManagement)]
-    public async Task<IActionResult> GetSalaryData()
+    public async Task<IActionResult> GetSalaryData(string month, short? periodType)
     {
         var criteria = new GetEmployeePayrollCriteria
         {
             CompanyId = CurrentCompanyId,
-            Month = null
+            Month = !string.IsNullOrEmpty(month) ? DateTime.Parse(month) : null,
+            PeriodType = periodType
         };
         var data = await payrollService.GetEmployeePayrollAsync(criteria);
         return Json(data);
@@ -58,18 +59,18 @@ public class SalaryManagementController(
             var file = Request.Form.Files[0];
             var month = Request.Form["month"];
             var periodType = Request.Form["periodType"];
-            if(file == null)
+            if (file == null)
             {
                 return BadRequest("Please select a file to upload");
             }
-            if(string.IsNullOrEmpty(month))
+            if (string.IsNullOrEmpty(month))
             {
                 return BadRequest("Please select a month to upload");
             }
             var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(file.FileName);
             var extension = Path.GetExtension(file.FileName);
             var timestamp = DateTimeOffset.Now.ToString("yyyyMMddHHmmss");
-            
+
             var savedFileName = $"{fileNameWithoutExtension}_{timestamp}{extension}";
             var path = $"Payroll/{savedFileName}";
             var model = new UploadPayrollModel

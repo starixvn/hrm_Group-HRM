@@ -9,6 +9,8 @@ public class GetEmployeePayrollCriteria : CriteriaBase
 
     public int CompanyId { get; set; }
 
+    public short? PeriodType { get; set; }
+
     public override string GetSettingKey()
     {
         return "EmployeePayroll_Get";
@@ -16,6 +18,6 @@ public class GetEmployeePayrollCriteria : CriteriaBase
 
     public override bool IsValid()
     {
-        return  CompanyId > 0;
+        return CompanyId > 0;
     }
 }
