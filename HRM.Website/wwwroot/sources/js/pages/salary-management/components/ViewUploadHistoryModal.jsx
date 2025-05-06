@@ -37,11 +37,13 @@ const ViewUploadHistoryModal = () => {
             });
     };
 
-    const handleDownload = async (fileName) => {
+    const handleDownload = async (savedFileName, fileName) => {
         try {
             const response = await axios.get(
                 resolveClientUrl(
-                    `SalaryManagement/DownloadFile?fileName=${encodeURIComponent(
+                    `SalaryManagement/DownloadFile?savedFileName=${encodeURIComponent(
+                        savedFileName
+                    )}&fileName=${encodeURIComponent(
                         fileName
                     )}`
                 ),
@@ -104,7 +106,7 @@ const ViewUploadHistoryModal = () => {
                                             href="#"
                                             onClick={(e) => {
                                                 e.preventDefault();
-                                                handleDownload(item.fileName);
+                                                handleDownload(item.savedFileName, item.fileName);
                                             }}
                                             className="file-link">
                                             {item.fileName}

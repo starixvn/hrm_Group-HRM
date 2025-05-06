@@ -112,5 +112,19 @@ public class SalaryManagementController(
         var res = await payrollService.ConfirmUploadPayrollAsync(criteria);
         return Json(res);
     }
+
+    [HrmPermission(Policy.Read, FunctionKey.SalaryManagement)]
+    public async Task<IActionResult> DownloadFile(string savedFileName, string fileName)
+    {
+        if (string.IsNullOrEmpty(savedFileName))
+        {
+            return BadRequest("File name is required.");
+        }
+
+        var path = $"Payroll/{savedFileName}";
+        var stream = await minIOService.GetFilePath(Bucket.Payroll, path);
+        
+        return File(stream, "application/octet-stream", fileName);
+    }
     
 }
