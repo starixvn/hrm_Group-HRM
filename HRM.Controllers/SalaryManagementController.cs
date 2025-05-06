@@ -35,7 +35,7 @@ public class SalaryManagementController(
         var criteria = new GetEmployeePayrollCriteria
         {
             CompanyId = CurrentCompanyId,
-            Month = new DateTime(DateTimeOffset.Now.DateTime.ToClientTimeZone().Year, DateTimeOffset.Now.DateTime.ToClientTimeZone().Month, 1)
+            Month = null
         };
         var data = await payrollService.GetEmployeePayrollAsync(criteria);
         return Json(data);

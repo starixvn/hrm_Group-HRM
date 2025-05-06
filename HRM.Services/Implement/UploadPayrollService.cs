@@ -81,9 +81,12 @@ public class UploadPayrollService(
             }
 
             var columnIndexes = GetColumnIndexes(worksheet, headerRow);
-            var payrollData = ExtractPayrollData(worksheet, headerRow, columnIndexes, sheetName);
+            if (columnIndexes.idStaffColumn != 0 && columnIndexes.totalPersonalCostColumn != 0)
+            {
+                var payrollData = ExtractPayrollData(worksheet, headerRow, columnIndexes, sheetName);
             
-            ProcessPayrollData(allPayrollData, payrollData, sheetName);
+                ProcessPayrollData(allPayrollData, payrollData, sheetName);
+            }
         }
 
         return allPayrollData;

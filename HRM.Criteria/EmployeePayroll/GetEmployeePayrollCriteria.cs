@@ -5,7 +5,7 @@ using Fanex.Data.Repository;
 
 public class GetEmployeePayrollCriteria : CriteriaBase
 {
-    public DateTime Month { get; set; }
+    public DateTime? Month { get; set; }
 
     public int CompanyId { get; set; }
 
@@ -16,6 +16,6 @@ public class GetEmployeePayrollCriteria : CriteriaBase
 
     public override bool IsValid()
     {
-        return Month != default && CompanyId > 0;
+        return  CompanyId > 0;
     }
 }
