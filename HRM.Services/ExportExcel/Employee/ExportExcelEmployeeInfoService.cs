@@ -278,7 +278,7 @@ public class ExportExcelEmployeeInfoService(
 
             worksheet.Cells[rowIndex, colIndex++].Value = rowNum++;
             worksheet.Cells[rowIndex, colIndex++].Value = employee.CtrId;
-            worksheet.Cells[rowIndex, colIndex++].Value = employee.EmpId;
+            worksheet.Cells[rowIndex, colIndex++].Value = employee.EmployeeCode;
             worksheet.Cells[rowIndex, colIndex++].Value = employee.FullName;
             worksheet.Cells[rowIndex, colIndex++].Value = employee.NickName;
             worksheet.Cells[rowIndex, colIndex++].Value = employee.UnitId;
