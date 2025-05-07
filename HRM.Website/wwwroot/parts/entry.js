@@ -192,7 +192,7 @@ module.exports = {
         [`${jsDistPath}/sick.leave.balance.index`]: `${jsSourcePath}/sick-leave-balance/index.js`,
         [`${jsDistPath}/discipline.summary.per.year`]: `${jsSourcePath}/report/discipline.summary.per.year.js`,
         [`${jsDistPath}/time.checkinout`]: `${jsSourcePath}/time/checkinout/index.jsx`,
-        [`${jsDistPath}/group.employee.list.index`]: `${jsSourcePath}/group-employee-list/index.js`
+        [`${jsDistPath}/group.employee.list.index`]: `${jsSourcePath}/group-employee-list/index.js`,
         [`${jsDistPath}/payroll.management`]: `${jsSourcePath}/payroll-management/index.jsx`,
     },
 };
