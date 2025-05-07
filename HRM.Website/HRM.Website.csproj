@@ -8,6 +8,7 @@
   <ItemGroup>
     <None Remove="App_Data\SpNames.xml" />
     <None Remove="ExcelTemplates\EmployeeOvertimeTemplate.xlsx" />
+    <None Remove="ExcelTemplates\GroupEmployeeList.xlsx" />
     <None Remove="logs\log.txt" />
   </ItemGroup>
   <ItemGroup>
@@ -106,6 +107,9 @@
 	  </Content>
 	  <Content Include="ExcelTemplates\EmployeeWorkFromHome.xls">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	  <Content Include="ExcelTemplates\GroupEmployeeList.xlsx">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	  </Content>
 	  <Content Include="ExcelTemplates\HospitalizationLeaveSummary.xls">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>

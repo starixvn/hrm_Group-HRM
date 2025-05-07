@@ -1,7 +1,6 @@
-﻿using HRM.Core;
+﻿namespace HRM.Services.Implement;
 
-namespace HRM.Services.Implement;
-
+using HRM.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,6 +24,7 @@ using Models.Group;
 using Models.Supervisor;
 using Resources;
 using ViewModels.AnnualLeave;
+using HRM.Criteria.Group;
 
 public class EmployeeService(
     IEmployeeRepository employeeRepository,

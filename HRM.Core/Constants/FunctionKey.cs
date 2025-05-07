@@ -83,4 +83,5 @@ public static class FunctionKey
 
     //Group Space
     public const string GroupTeamManagement = "GroupTeamManagement";
+    public const string GroupEmployeeList = "GroupEmployeeList";
 }

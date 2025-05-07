@@ -637,6 +637,24 @@ namespace HRM.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to BU ID.
+        /// </summary>
+        public static string BUIdShort {
+            get {
+                return ResourceManager.GetString("BUIdShort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to BU PIC.
+        /// </summary>
+        public static string BUPIC {
+            get {
+                return ResourceManager.GetString("BUPIC", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Business Trip.
         /// </summary>
         public static string BusinessTrip {
@@ -1150,6 +1168,15 @@ namespace HRM.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Ctr ID.
+        /// </summary>
+        public static string CtrID {
+            get {
+                return ResourceManager.GetString("CtrID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Current Address.
         /// </summary>
         public static string CurrentAddress {
@@ -1330,11 +1357,29 @@ namespace HRM.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Dept Name.
+        /// </summary>
+        public static string DepartmentNameShort {
+            get {
+                return ResourceManager.GetString("DepartmentNameShort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Department PIC.
         /// </summary>
         public static string DepartmentPIC {
             get {
                 return ResourceManager.GetString("DepartmentPIC", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dept PIC.
+        /// </summary>
+        public static string DepartmentPICShort {
+            get {
+                return ResourceManager.GetString("DepartmentPICShort", resourceCulture);
             }
         }
         
@@ -1726,6 +1771,15 @@ namespace HRM.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to EmployeeCode.
+        /// </summary>
+        public static string EmployeeCode {
+            get {
+                return ResourceManager.GetString("EmployeeCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Employee&apos;s Comment.
         /// </summary>
         public static string EmployeeComment {
@@ -1848,6 +1902,15 @@ namespace HRM.Resources {
         public static string EnabledUser {
             get {
                 return ResourceManager.GetString("EnabledUser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to E Role.
+        /// </summary>
+        public static string ERole {
+            get {
+                return ResourceManager.GetString("ERole", resourceCulture);
             }
         }
         
@@ -2145,6 +2208,15 @@ namespace HRM.Resources {
         public static string GroupDate {
             get {
                 return ResourceManager.GetString("GroupDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Group Employee.
+        /// </summary>
+        public static string GroupEmployee {
+            get {
+                return ResourceManager.GetString("GroupEmployee", resourceCulture);
             }
         }
         
@@ -3162,6 +3234,15 @@ namespace HRM.Resources {
         public static string MoveToDate {
             get {
                 return ResourceManager.GetString("MoveToDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to M Role.
+        /// </summary>
+        public static string MRole {
+            get {
+                return ResourceManager.GetString("MRole", resourceCulture);
             }
         }
         
@@ -5385,6 +5466,15 @@ namespace HRM.Resources {
         public static string UploadFileExists {
             get {
                 return ResourceManager.GetString("UploadFileExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User.
+        /// </summary>
+        public static string User {
+            get {
+                return ResourceManager.GetString("User", resourceCulture);
             }
         }
         
