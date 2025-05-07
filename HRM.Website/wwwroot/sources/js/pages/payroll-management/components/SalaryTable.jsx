@@ -38,7 +38,7 @@ const SalaryTable = ({ data }) => {
                                 <td>{index + 1}</td>
                                 <td>{item.monthFormatted}</td>
                                 <td>{getPeriodTypeLabel(item.periodType)}</td>
-                                <td>{item.empId}</td>
+                                <td>{item.code}</td>
                                 <td>{item.fullName}</td>
                                 <td>{item.nickname}</td>
                                 <td>{item.departmentName}</td>

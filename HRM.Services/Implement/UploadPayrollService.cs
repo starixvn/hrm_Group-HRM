@@ -54,7 +54,6 @@ public class UploadPayrollService(
 
     private async Task<List<ImportPayrollModel>> ProcessExcelFileAsync(IFormFile file)
     {
-        var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, "ExcelTemplates/Payroll.xlsx");
         await using var stream = file.OpenReadStream();
         using var package = new ExcelPackage(stream);
         //using var package = new ExcelPackage(new FileInfo(templatePath));
@@ -109,7 +108,7 @@ public class UploadPayrollService(
     {
         foreach (var extraPayment in extraPayments)
         {
-            var existingPayroll = allPayrollData.FirstOrDefault(p => p.EmpId == extraPayment.EmpId);
+            var existingPayroll = allPayrollData.FirstOrDefault(p => p.EmpCode == extraPayment.EmpCode);
             if (existingPayroll != null)
             {
                 existingPayroll.ExtraPayment = extraPayment.TotalPersonalCost;
@@ -118,7 +117,7 @@ public class UploadPayrollService(
             {
                 allPayrollData.Add(new ImportPayrollModel
                 {
-                    EmpId = extraPayment.EmpId,
+                    EmpCode = extraPayment.EmpCode,
                     ExtraPayment = extraPayment.TotalPersonalCost,
                     IsExtraPayment = true
                 });
@@ -130,7 +129,7 @@ public class UploadPayrollService(
     {
         foreach (var payroll in regularPayments)
         {
-            var existingPayroll = allPayrollData.FirstOrDefault(p => p.EmpId == payroll.EmpId);
+            var existingPayroll = allPayrollData.FirstOrDefault(p => p.EmpCode == payroll.EmpCode);
             if (existingPayroll != null)
             {
                 existingPayroll.TotalPersonalCost = payroll.TotalPersonalCost;
@@ -162,17 +161,26 @@ public class UploadPayrollService(
         var totalPersonalCostColumn = 0;
         var totalColumns = worksheet.Dimension.End.Column;
 
-        for (int col = 1; col <= totalColumns; col++)
+        // Search from header row up to first row
+        for (int row = headerRow; row >= 1; row--)
         {
-            var headerText = worksheet.Cells[headerRow, col].Value?.ToString()?.Trim().ToLower();
-            switch (headerText)
+            for (int col = 1; col <= totalColumns; col++) 
             {
-                case ColumnIdStaff:
+                var headerText = worksheet.Cells[row, col].Value?.ToString()?.Trim().ToLower();
+                
+                if (headerText == ColumnIdStaff && idStaffColumn == 0)
+                {
                     idStaffColumn = col;
-                    break;
-                case ColumnTotalPersonalCost:
+                }
+                if (headerText == ColumnTotalPersonalCost && totalPersonalCostColumn == 0) 
+                {
                     totalPersonalCostColumn = col;
-                    break;
+                }
+
+                if (idStaffColumn > 0 && totalPersonalCostColumn > 0)
+                {
+                    return (idStaffColumn, totalPersonalCostColumn);
+                }
             }
         }
 
@@ -186,14 +194,14 @@ public class UploadPayrollService(
 
         for (int row = headerRow + 1; row <= totalRows; row++)
         {
-            var empId = worksheet.Cells[row, columns.idStaffColumn].Value?.ToString();
-            if (string.IsNullOrEmpty(empId)) continue;
+            var EmpCode = worksheet.Cells[row, columns.idStaffColumn].Value?.ToString();
+            if (string.IsNullOrEmpty(EmpCode)) continue;
 
             var totalPersonalCost = ParseCostCell(worksheet.Cells[row, columns.totalPersonalCostColumn].Value);
             
             payrollData.Add(new ImportPayrollModel
             {
-                EmpId = empId,
+                EmpCode = EmpCode,
                 TotalPersonalCost = totalPersonalCost,
                 IsExtraPayment = sheetName == SheetExtraPayment
             });
