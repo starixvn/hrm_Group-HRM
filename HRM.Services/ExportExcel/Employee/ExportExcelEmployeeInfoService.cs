@@ -5,17 +5,17 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Core.Enums;
 using Core;
+using Core.Enums;
 using Implement;
 using Interfaces;
 using Microsoft.AspNetCore.Hosting;
 using Models;
 using Models.EmployeeInformation;
+using Models.Group;
 using Models.Supervisor;
-using Resources;
-using HRM.Models.Group;
 using OfficeOpenXml;
+using Resources;
 
 public class ExportExcelEmployeeInfoService(
     IEmployeeService employeeService,
@@ -25,12 +25,11 @@ public class ExportExcelEmployeeInfoService(
     private const string EmployeeBasicInfoTemplatePath = "ExcelTemplates/EmployeeBasicInfoTemplate.xls";
     private const string EmployeeFullInfoTemplatePath = "ExcelTemplates/EmployeeFullProfileInfoTemplate.xls";
     private const string GroupEmployeeListTemplatePath = "ExcelTemplates/GroupEmployeeList.xlsx";
-    
+
     private const byte TotalColumns = 23;
     private const byte RowStartBody = 3;
     private const byte MinimumWidth = 5;
     private const byte MaximumWidth = 50;
-
 
     private enum BasicInfo
     {
@@ -242,7 +241,6 @@ public class ExportExcelEmployeeInfoService(
 
     #endregion Employee Full Profile Information
 
-
     public async Task<byte[]> ExportGroupEmployeesAsync(IEnumerable<GroupEmployeeModel> employees)
     {
         var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, GroupEmployeeListTemplatePath);
@@ -298,7 +296,7 @@ public class ExportExcelEmployeeInfoService(
             worksheet.Cells[rowIndex, colIndex++].Value = employee.IsLocal;
             worksheet.Cells[rowIndex, colIndex++].Value = employee.IsSpecial;
             worksheet.Cells[rowIndex, colIndex++].Value = employee.Enabled;
-            worksheet.Cells[rowIndex, colIndex++].Value = employee.IsDeleted;
+            worksheet.Cells[rowIndex, colIndex].Value = employee.IsDeleted;
 
             rowIndex++;
         }

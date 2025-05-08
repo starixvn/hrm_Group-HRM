@@ -1,6 +1,7 @@
 ﻿namespace HRM.Models.Overtime;
 
 using System;
+using System.Globalization;
 using System.Xml.Serialization;
 using Core;
 using Core.XMLExtensions;
@@ -63,7 +64,7 @@ public class DailyOvertimeRequest
 
     private static string ConvertTime(string value)
     {
-        _ = DateTime.TryParse(value, out var time);
+        var time = DateTime.Parse(value, new CultureInfo("en-US"));
         var clientTime = time.ToClientTimeZone();
         return clientTime.ToString("HH:mm");
     }

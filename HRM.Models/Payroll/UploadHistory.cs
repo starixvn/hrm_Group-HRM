@@ -1,6 +1,5 @@
 using System;
 using HRM.Core;
-using Microsoft.AspNetCore.Http;
 
 namespace HRM.Models.Payroll;
 
