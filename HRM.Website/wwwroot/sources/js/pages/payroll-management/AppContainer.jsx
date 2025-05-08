@@ -7,7 +7,6 @@ import PayrollService from "./Service";
 
 const AppContainer = () => {
     const [salaryData, setSalaryData] = React.useState([]);
-
     const fetchSalaryData = (filters = {}) => {
         PayrollService
             .getSalaryData(filters)

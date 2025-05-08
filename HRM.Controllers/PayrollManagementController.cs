@@ -24,6 +24,7 @@ public class PayrollManagementController(
 
     public IActionResult Index()
     {
+        ViewBag.HasPermissionToUpload = session.HasPermissionOnFunction(FunctionKey.PayrollManagement, Policy.Host);
         return View();
     }
 

@@ -108800,7 +108800,7 @@ var Filter = function Filter(_ref) {
         _react2.default.createElement(
             "div",
             { className: "form-group action-section" },
-            _react2.default.createElement(_UploadSalaryModal2.default, { onSuccess: handleSearch }),
+            window.hasPermissionToUpload === "True" && _react2.default.createElement(_UploadSalaryModal2.default, { onSuccess: handleSearch }),
             _react2.default.createElement(_ViewUploadHistoryModal2.default, null)
         )
     );

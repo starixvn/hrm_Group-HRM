@@ -9,6 +9,9 @@
 	<link href="~/dist/styles/payroll.management.css" rel="stylesheet" />
 }
 @section js{
+	<script>
+		window.hasPermissionToUpload = '@ViewBag.HasPermissionToUpload';
+	</script>
 	<script src="~/dist/js/payroll.management.js"></script>
 }
 @section Breadcrumb {

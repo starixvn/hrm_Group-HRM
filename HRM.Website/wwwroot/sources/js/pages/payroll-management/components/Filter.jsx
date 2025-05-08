@@ -74,7 +74,9 @@ const Filter = ({ onSearch }) => {
                 </button>
             </div>
             <div className="form-group action-section">
-                <UploadSalaryModal onSuccess={handleSearch} />
+                {window.hasPermissionToUpload === "True" && (
+                    <UploadSalaryModal onSuccess={handleSearch} />
+                )}
                 <ViewUploadHistoryModal />
             </div>
         </div>
