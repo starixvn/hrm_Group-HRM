@@ -1,0 +1,189 @@
+@import "../../abstracts/mixins";
+@import "../../abstracts/variables";
+@import "../../components/buttons-new";
+@import "../../layout/toastr";
+@import "../../layout/filter";
+@import "../../layout/table";
+
+.salary-management-container {
+    .action-section {
+        margin: 0;
+    }
+
+    .filter {
+        max-width: 100%;
+    }
+
+    .file-link {
+        color: #007bff;
+        text-decoration: none;
+        cursor: pointer;
+        font-weight: 500;
+        padding: 2px 4px;
+        border-radius: 4px;
+        transition: all 0.2s ease;
+
+        &:hover {
+            text-decoration: underline;
+            color: #0056b3;
+            background-color: #e9ecef;
+        }
+    }
+
+    .btn {
+        transition: all 0.2s ease-in;
+        &.btn-upload {
+            background-color: #f4783d;
+            border-color: 1px solid #f4783d;
+            color: white;
+            margin-left: 5px;
+            &:hover {
+                background-color: #f4783d;
+            }
+        }
+
+        &.btn-default {
+            background-color: #6c757d;
+            border-color: #6c757d;
+            color: white;
+            margin-left: 5px;
+            &:hover {
+                background-color: #5a6268;
+                border-color: #545b62;
+            }
+        }
+    }
+
+    .table-custom {
+        tfoot {
+            tr.summary-row {
+                background-color: #bbf8f2;
+            }
+        }
+    }
+}
+
+.upload-salary-modal {
+    .modal-dialog {
+        display: flex;
+        align-items: center;
+        min-height: calc(100vh - 60px);
+        margin: 30px auto;
+    }
+
+    .modal-content {
+        width: 100%;
+        max-width: 500px;
+        margin: 0 auto;
+    }
+}
+
+.view-history {
+    .modal-dialog {
+        display: flex;
+        align-items: center;
+        min-height: calc(100vh - 60px);
+        margin: 30px auto;
+    }
+
+    .modal-content {
+        width: 100%;
+        min-width: 800px;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .table-container {
+        max-height: 80vh;
+        overflow-y: auto;
+        position: relative;
+
+        table {
+            thead {
+                position: sticky;
+                top: 0;
+                background-color: #fff;
+                z-index: 1;
+                th {
+                    border-bottom: 2px solid #dee2e6;
+                }
+            }
+        }
+    }
+}
+
+.upload-salary-modal {
+    .required {
+        color: red;
+    }
+
+    .file-upload-area {
+        border: 2px dashed #ccc;
+        border-radius: 8px;
+        padding: 20px;
+        text-align: center;
+        background-color: #f8f9fa;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        position: relative;
+
+        &:hover {
+            border-color: #5c85b1;
+            background-color: #f0f7ff;
+        }
+
+        &.dragging {
+            border-color: #28a745;
+            background-color: #e8f5e9;
+        }
+
+        .file-input {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .upload-text {
+            color: #6c757d;
+            font-size: 16px;
+            font-weight: 500;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+
+            &::before {
+                content: "";
+                display: inline-block;
+                width: 24px;
+                height: 24px;
+                background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23007bff'%3E%3Cpath d='M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z'/%3E%3C/svg%3E");
+                background-size: contain;
+                background-repeat: no-repeat;
+                background-position: center;
+            }
+
+            .upload-text-small {
+                font-size: 12px;
+                color: #868e96;
+                font-weight: normal;
+            }
+        }
+    }
+}
+
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

@@ -90,3 +90,8 @@ export const Messages = {
     requireResignedDate: 'Please input the resigned date first!',
     hostileInput: 'You have input data that could be considered hostile. Please change data!'
 };
+export const PayrollType = {
+    FirstHalf: 1,
+    SecondHalf: 2,
+    FullMonth: 3
+};

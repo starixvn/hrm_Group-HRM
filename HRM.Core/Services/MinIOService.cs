@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -24,6 +25,8 @@ public interface IMinIOService
     Task DeleteDirectoryAsync(string bucketName, string directory);
 
     Task<bool> IsFileExistsAsync(string bucketName, string filePath);
+
+    Task<Stream> GetFileContentAsync(string bucketName, string filePath);
 }
 
 public class MinIOService : IMinIOService
@@ -107,6 +110,21 @@ public class MinIOService : IMinIOService
         var isExistFile = await IsFileExistsAsync(bucketName, filePath);
         var fileName = isExistFile ? filePath : defaultFile;
         return $"{s3Config.ExternalUrl}/{bucketName}/{fileName}";
+    }
+
+    public async Task<Stream> GetFileContentAsync(string bucketName, string filePath)
+    {
+        var request = new GetObjectRequest
+        {
+            BucketName = bucketName,
+            Key = filePath
+        };
+
+        using var response = await client.GetObjectAsync(request);
+        var memoryStream = new MemoryStream();
+        await response.ResponseStream.CopyToAsync(memoryStream);
+        memoryStream.Position = 0;
+        return memoryStream;
     }
 
     public async Task<bool> DeleteFileAsync(string bucketName, string objectName)
