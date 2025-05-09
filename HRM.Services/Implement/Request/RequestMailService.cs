@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 using HRM.Core;
 using HRM.Core.Enums;
@@ -35,17 +34,14 @@ public class RequestMailService(IRequestRepository requestRepository) : IRequest
 
         GetMailAndLetStalkVerifier(relatedPeople, emailModel);
 
-        RelatedPeopleAllowSendHr(relatedPeople);
-        GetMailAndLetStalkHr(relatedPeople, emailModel);
-
         GetMailAndLetStalkOwnerRequest(relatedPeople, emailModel);
 
-        if (relatedPeople.EmailSetting != null && relatedPeople.EmailSetting.AllowSendMailGroup)
+        if (relatedPeople.EmailSetting is { AllowSendMailGroup: true })
         {
             GetMailGroup(relatedPeople, emailModel);
         }
 
-        emailModel.IsAllowSendRequester = relatedPeople.EmailSetting != null && relatedPeople.EmailSetting.AllowSendUser;
+        emailModel.IsAllowSendRequester = relatedPeople.EmailSetting is { AllowSendUser: true };
 
         return emailModel;
     }
@@ -60,19 +56,6 @@ public class RequestMailService(IRequestRepository requestRepository) : IRequest
             _ => string.Format(MailContentLeaveHalfDay, requestedDate.ToDateMonthYearFormatedDate(),
                 fromDate.ToShortTime(), toDate.ToShortTime())
         };
-    }
-
-    private static void RelatedPeopleAllowSendHr(RequestRelatedPeopleModel relatedPeople)
-    {
-        if (relatedPeople.Verifier != null)
-        {
-            relatedPeople.ListHR = relatedPeople.ListHR.Where(t => t.Email != relatedPeople.Verifier.Email).ToList();
-        }
-
-        if (relatedPeople.Approver != null)
-        {
-            relatedPeople.ListHR = relatedPeople.ListHR.Where(t => t.Email != relatedPeople.Approver.Email).ToList();
-        }
     }
 
     public byte GetActionProcessRequest(byte requestStatusId, RequestCommand command)
@@ -182,37 +165,9 @@ public class RequestMailService(IRequestRepository requestRepository) : IRequest
         }
     }
 
-    private static void GetMailAndLetStalkHr(RequestRelatedPeopleModel relatedPeople, EmailModel emailModel)
-    {
-        if (relatedPeople.EmailSetting != null && relatedPeople.EmailSetting.AllowSendHR && relatedPeople.ListHR != null && relatedPeople.ListHR.Any())
-        {
-            var mailHRs = string.Join(";", relatedPeople.ListHR.Where(x => !string.IsNullOrWhiteSpace(x.Email)).Select(x => x.Email).ToList());
-            var letStalks = string.Join(";", relatedPeople.ListHR.Where(x => !string.IsNullOrWhiteSpace(x.LetsTalk)).Select(x => x.LetsTalk).ToList());
-
-            if (string.IsNullOrWhiteSpace(emailModel.SendTo))
-            {
-                emailModel.SendTo = mailHRs;
-                emailModel.SendToNickName = Labels.HR;
-            }
-            else
-            {
-                emailModel.SendCC = mailHRs;
-            }
-
-            if (string.IsNullOrWhiteSpace(emailModel.LetsTalk))
-            {
-                emailModel.LetsTalk = letStalks;
-            }
-            else
-            {
-                emailModel.LetsTalk += ";" + letStalks;
-            }
-        }
-    }
-
     private static void GetMailAndLetStalkOwnerRequest(RequestRelatedPeopleModel relatedPeople, EmailModel emailModel)
     {
-        if (relatedPeople.EmailSetting != null && relatedPeople.EmailSetting.AllowSendUser && relatedPeople.Requester != null)
+        if (relatedPeople.EmailSetting is { AllowSendUser: true } && relatedPeople.Requester != null)
         {
             if (string.IsNullOrWhiteSpace(emailModel.SendTo))
             {
