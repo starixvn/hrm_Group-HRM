@@ -8,32 +8,38 @@ public enum RoleSystem
     Member = 1,
 
     [Description("Verifier")]
-    Verifier = 2,
+    Verifier,
 
     [Description("Approver")]
-    Approver = 3,
+    Approver,
 
     [Description("Shift Current Week Editor")]
-    ShiftManager = 4,
+    ShiftManager,
 
     [Description("On Behalf Request")]
-    OnBehalfRequest = 5,
+    OnBehalfRequest,
 
     [Description("HR")]
-    HR = 6,
+    HR,
 
     [Description("System Admin")]
-    SystemAdmin = 7,
+    SystemAdmin,
 
     [Description("Discipline Manager")]
-    DisciplineManager = 8,
+    DisciplineManager,
 
     [Description("Shift Arrange")]
-    ShiftManager2 = 9,
+    ShiftManager2,
 
     [Description("Local HR")]
-    LocalHR = 10,
+    LocalHR,
 
     [Description("Expat HR")]
-    ExpatHR = 11
+    ExpatHR,
+
+    [Description("HR Assistant")]
+    HRAssistant,
+
+    [Description("Payroll Admin")]
+    PayrollAdmin
 }

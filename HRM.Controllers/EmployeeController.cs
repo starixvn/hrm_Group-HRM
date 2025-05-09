@@ -614,11 +614,18 @@ public class EmployeeController(
     {
         var jobLevels = await jobLevelService.GetJobLevel();
         var managementLevels = await managementLevelService.GetManagementLevel();
+        var roles = await roleService.GetBySiteIdAsync(session.SiteId);
+        var userRoles = await roleService.GetByUserIdAsync(session.UserId);
+        if (userRoles.All(r => r.RoleId != (short)RoleSystem.SystemAdmin))
+        {
+            roles = roles.Where(r => r.RoleId != (short)RoleSystem.SystemAdmin).ToList();
+        }
+
         ViewBag.JobTitles = await commonDataService.GetLookupDataByCodeAsync(Constants.JobTitle, session.Get<int>(SessionKey.CurrentCompanyId));
         ViewBag.JobLevel = jobLevels;
         ViewBag.Grades = managementLevels;
         ViewBag.Marriages = Utilities.Marriages;
-        ViewBag.Roles = await roleService.GetBySiteIdAsync(session.SiteId);
+        ViewBag.Roles = roles;
     }
 
     private EditEmployeeParam MappingEditEmployeeParam(Employee model)
