@@ -124,7 +124,8 @@
                                     FromShift = new Shift { Name = request.FromShift },
                                     ToShift = new Shift { Name = request.ToShift },
                                     LeaveType = request.LeaveType,
-                                    ActualLateInEarlyOut = request.RequestType.Id == (byte)RequestType.LateIn ? item.LateIn : item.EarlyOut
+                                    ActualLateInEarlyOut = request.RequestType.Id == (byte)RequestType.LateIn ? item.LateIn : item.EarlyOut,
+                                    KeepInViewType = request.KeepInViewTypeId ?? 0
                                 };
                                 var requestDetail = RequestService.ToRequestMessage(requestEntity);
                                 <div class="@className"

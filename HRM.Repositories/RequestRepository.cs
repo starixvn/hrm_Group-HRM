@@ -41,7 +41,6 @@ public class RequestRepository : IRequestRepository
             Requester = multi.ReadFirstOrDefault<SupervisorNameModel>(),
             Verifier = multi.ReadFirstOrDefault<SupervisorNameModel>(),
             Approver = multi.ReadFirstOrDefault<SupervisorNameModel>(),
-            ListHR = multi.Read<SupervisorNameModel>().ToList(),
             EmailSetting = multi.ReadFirstOrDefault<EmailSettingsModel>()
         };
 

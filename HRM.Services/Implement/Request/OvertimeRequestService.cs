@@ -141,7 +141,7 @@ public class OvertimeRequestService(
         var isInvalid = false;
         var criteria = new GetOvertimeDetailsByRequestIdsCriteria { RequestIds = requestIds };
         var overtimes = (await baseService.GetDataAsync<DailyOvertimeRequest>(criteria)).ToList();
-        if (overtimes.Any())
+        if (overtimes.Count > 0)
         {
             var index = 0;
             while (!isInvalid && index < overtimes.Count)

@@ -19,8 +19,6 @@ public interface IExportExcelAttendanceReportService
     byte[] Export(IEnumerable<EmployeeAttendanceModel> attendances, DateTime fromDate, DateTime toDate);
 }
 
-#pragma warning disable S109 // Magic numbers should not be used
-
 public class ExportExcelAttendanceReportService(IWebHostEnvironment hostingEnvironment) : IExportExcelAttendanceReportService
 {
     private const byte RowStartBody = 3;
@@ -118,7 +116,7 @@ public class ExportExcelAttendanceReportService(IWebHostEnvironment hostingEnvir
     {
         var requests = string.Empty;
         var requestsBuilder = new StringBuilder();
-        if (attendance.RequestList != null && attendance.RequestList.Any())
+        if (attendance.RequestList is { Count: > 0 })
         {
             foreach (var item in attendance.RequestList)
             {
@@ -164,7 +162,8 @@ public class ExportExcelAttendanceReportService(IWebHostEnvironment hostingEnvir
                 Name = request.ToShift
             },
             TotalMins = request.TotalMins ?? 0,
-            ActualLateInEarlyOut = actualLateInEarlyOut
+            ActualLateInEarlyOut = actualLateInEarlyOut,
+            KeepInViewType = request.KeepInViewTypeId ?? 0
         };
 
         return requestEntity;

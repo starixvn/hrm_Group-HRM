@@ -1,23 +1,19 @@
-using Microsoft.AspNetCore.Http;
-using System.IO;
-using System.Threading.Tasks;
-using HRM.Core.Models;
-using HRM.Core.Services;
-using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using HRM.Services.Interfaces;
-using HRM.Models.Payroll;
-using Microsoft.AspNetCore.Hosting;
-using Newtonsoft.Json;
+using System.Threading.Tasks;
+using HRM.Core.Models;
+using HRM.Core.Services;
 using HRM.Criteria.EmployeePayroll;
+using HRM.Models.Payroll;
+using HRM.Services.Interfaces;
+using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
+using OfficeOpenXml;
 
 namespace HRM.Services.Implement;
 
-public class UploadPayrollService(
-    IWebHostEnvironment hostingEnvironment,
-    IBaseService baseService) : IUploadPayrollService
+public class UploadPayrollService(IBaseService baseService) : IUploadPayrollService
 {
     private const string SheetExpat = "Payroll - Expat";
     private const string SheetGO = "Payroll - GO";
@@ -52,11 +48,11 @@ public class UploadPayrollService(
         }
     }
 
-    private async Task<List<ImportPayrollModel>> ProcessExcelFileAsync(IFormFile file)
+    private static async Task<List<ImportPayrollModel>> ProcessExcelFileAsync(IFormFile file)
     {
         await using var stream = file.OpenReadStream();
         using var package = new ExcelPackage(stream);
-        //using var package = new ExcelPackage(new FileInfo(templatePath));
+
         if (package.Workbook.Worksheets.Count == 0)
         {
             throw new InvalidOperationException("Excel file does not contain any worksheets");
@@ -68,13 +64,13 @@ public class UploadPayrollService(
         foreach (var sheetName in worksheets)
         {
             var worksheet = package.Workbook.Worksheets[sheetName];
-            if (worksheet == null) 
+            if (worksheet == null)
             {
                 continue;
             }
 
             var headerRow = FindHeaderRow(worksheet);
-            if (headerRow == 0) 
+            if (headerRow == 0)
             {
                 continue;
             }
@@ -83,14 +79,13 @@ public class UploadPayrollService(
             if (columnIndexes.idStaffColumn != 0 && columnIndexes.totalPersonalCostColumn != 0)
             {
                 var payrollData = ExtractPayrollData(worksheet, headerRow, columnIndexes, sheetName);
-            
+
                 ProcessPayrollData(allPayrollData, payrollData, sheetName);
             }
         }
 
         return allPayrollData;
     }
-
 
     private static void ProcessPayrollData(List<ImportPayrollModel> allPayrollData, List<ImportPayrollModel> payrollData, string sheetName)
     {
@@ -108,7 +103,7 @@ public class UploadPayrollService(
     {
         foreach (var extraPayment in extraPayments)
         {
-            var existingPayroll = allPayrollData.FirstOrDefault(p => p.EmpCode == extraPayment.EmpCode);
+            var existingPayroll = allPayrollData.Find(p => p.EmpCode == extraPayment.EmpCode);
             if (existingPayroll != null)
             {
                 existingPayroll.ExtraPayment = extraPayment.TotalPersonalCost;
@@ -129,7 +124,7 @@ public class UploadPayrollService(
     {
         foreach (var payroll in regularPayments)
         {
-            var existingPayroll = allPayrollData.FirstOrDefault(p => p.EmpCode == payroll.EmpCode);
+            var existingPayroll = allPayrollData.Find(p => p.EmpCode == payroll.EmpCode);
             if (existingPayroll != null)
             {
                 existingPayroll.TotalPersonalCost = payroll.TotalPersonalCost;
@@ -144,14 +139,15 @@ public class UploadPayrollService(
     private static int FindHeaderRow(ExcelWorksheet worksheet)
     {
         var totalRows = worksheet.Dimension.End.Row;
-        for (int row = 1; row <= totalRows; row++)
+        for (var row = 1; row <= totalRows; row++)
         {
             var headerName = worksheet.Cells[row, 1].Value?.ToString()?.Trim().ToLower();
-            if (headerName == "no" || headerName == "no.")
+            if (headerName is "no" or "no.")
             {
                 return row;
             }
         }
+
         return 0;
     }
 
@@ -162,17 +158,18 @@ public class UploadPayrollService(
         var totalColumns = worksheet.Dimension.End.Column;
 
         // Search from header row up to first row
-        for (int row = headerRow; row >= 1; row--)
+        for (var row = headerRow; row >= 1; row--)
         {
-            for (int col = 1; col <= totalColumns; col++) 
+            for (var col = 1; col <= totalColumns; col++)
             {
                 var headerText = worksheet.Cells[row, col].Value?.ToString()?.Trim().ToLower();
-                
+
                 if (headerText == ColumnIdStaff && idStaffColumn == 0)
                 {
                     idStaffColumn = col;
                 }
-                if (headerText == ColumnTotalPersonalCost && totalPersonalCostColumn == 0) 
+
+                if (headerText == ColumnTotalPersonalCost && totalPersonalCostColumn == 0)
                 {
                     totalPersonalCostColumn = col;
                 }
@@ -192,13 +189,16 @@ public class UploadPayrollService(
         var payrollData = new List<ImportPayrollModel>();
         var totalRows = worksheet.Dimension.End.Row;
 
-        for (int row = headerRow + 1; row <= totalRows; row++)
+        for (var row = headerRow + 1; row <= totalRows; row++)
         {
             var EmpCode = worksheet.Cells[row, columns.idStaffColumn].Value?.ToString();
-            if (string.IsNullOrEmpty(EmpCode)) continue;
+            if (string.IsNullOrEmpty(EmpCode))
+            {
+                continue;
+            }
 
             var totalPersonalCost = ParseCostCell(worksheet.Cells[row, columns.totalPersonalCostColumn].Value);
-            
+
             payrollData.Add(new ImportPayrollModel
             {
                 EmpCode = EmpCode,
@@ -212,8 +212,12 @@ public class UploadPayrollService(
 
     private static decimal ParseCostCell(object costCell)
     {
-        if (costCell == null) return 0M;
-        decimal.TryParse(costCell.ToString(), out var totalPersonalCost);
+        if (costCell == null)
+        {
+            return 0M;
+        }
+
+        _ = decimal.TryParse(costCell.ToString(), out var totalPersonalCost);
         return totalPersonalCost;
     }
 }

@@ -21,17 +21,18 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace HRM.Controllers.Group;
 
-public class GroupEmployeeListController(IUserControlSession session,
+public class GroupEmployeeListController(
+    IUserControlSession session,
     ITeamService teamService,
     ICommonDataService commonDataService,
     ICompanyService companyService,
     IUnitService unitService,
-    IDepartmentService departmentService, 
+    IDepartmentService departmentService,
     IExportExcelEmployeeInfoService excelService,
     IBaseService baseService) : BaseController(session)
 {
     [HrmPermission(Policy.Read, FunctionKey.GroupEmployeeList)]
-    public async Task<IActionResult> Index(string key = null)
+    public async Task<IActionResult> Index()
     {
         var teams = await teamService.GetAllAsync();
         var companies = await companyService.GetAllCompany();
@@ -81,7 +82,7 @@ public class GroupEmployeeListController(IUserControlSession session,
 
         return PartialView("_ListEmployee", employees);
     }
-    
+
     [HrmPermission(Policy.Read, FunctionKey.GroupEmployeeList)]
     public async Task<IActionResult> ExportGroupEmployeeList(GroupEmployeeViewModel model)
     {
@@ -113,7 +114,7 @@ public class GroupEmployeeListController(IUserControlSession session,
             IsLeaf = true
         });
 
-        return Json(dropdownList);                                                  
+        return Json(dropdownList);
     }
 
     [HttpGet]
@@ -128,7 +129,7 @@ public class GroupEmployeeListController(IUserControlSession session,
 
         var response = new GroupTeamMultiSelectViewModel
         {
-            Data = orgchart, 
+            Data = orgchart,
             TeamIds = teamIds
         };
 
@@ -140,7 +141,7 @@ public class GroupEmployeeListController(IUserControlSession session,
         IEnumerable<Department> departments,
         IEnumerable<GroupTeamModel> teams)
     {
-        departments = departments.Where(d => teams.Any(t => t.DepartmentId != null && t.DepartmentId == d.Id));
+        departments = departments.Where(d => teams.Any(t => t.DepartmentId == d.Id));
         units = units.Where(u => departments.Any(d => d.Unit != null && d.Unit.Id == u.Id)).ToList();
 
         var orgCharts = units.Select(u => new MultiSelectViewModel
@@ -152,12 +153,12 @@ public class GroupEmployeeListController(IUserControlSession session,
                 Id = d.Id,
                 Text = d.Name,
                 ParentId = u.Id,
-                Items = teams.Where(s => s.DepartmentId != null && s.DepartmentId == d.Id).Select(s => new MultiSelectViewModel
+                Items = teams.Where(t => t.DepartmentId == d.Id).Select(s => new MultiSelectViewModel
                 {
                     Id = s.Id,
                     Text = s.TeamName,
-                    IsLeaf = true,
                     ParentId = d.Id,
+                    IsLeaf = true
                 }).ToList()
             }).ToList()
         });
