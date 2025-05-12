@@ -25,7 +25,7 @@ public class GetEmployeeAttendanceCriteria : CriteriaBase
     [SpParam(SqlParamName = "Type")]
     public short AttendanceType { get; set; }
 
-    public int CompanyId { get; set; }
+    public short CompanyId { get; set; }
 
     public override string GetSettingKey() => "EmployeeAttendance_GetByType";
 

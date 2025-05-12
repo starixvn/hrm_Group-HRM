@@ -7,16 +7,16 @@ namespace HRM.ViewModels.Report;
 
 public class EmployeeAttendanceModel
 {
-    public string Code { get; set; }
-
     public int EmpId { get; set; }
-
+    public string Code { get; set; }
     public string FullName { get; set; }
-
     public string NickName { get; set; }
 
-    public string Team { get; set; }
+    public string UnitCode { get; set; }
+    public string DepartmentCode { get; set; }
+    public string DepartmentName { get; set; }
 
+    public string Team { get; set; }
     public string TeamCode { get; set; }
 
     public DateTime AttendanceDate { get; set; }
@@ -98,12 +98,7 @@ public class EmployeeAttendanceModel
 
     public bool IsPublicHolidayOT => IsPublicHoliday && ShiftId != null;
 
-    public bool IsWeekend =>
-        AttendanceDate.DayOfWeek is DayOfWeek.Sunday or DayOfWeek.Saturday;
-
-    public string UnitCode { get; set; }
-
-    public string DepartmentCode { get; set; }
+    public bool IsWeekend => AttendanceDate.DayOfWeek is DayOfWeek.Sunday or DayOfWeek.Saturday;
 
     public List<EmployeeAttendanceRequest> RequestList { get; set; }
 }
