@@ -64,8 +64,8 @@ public class ExportExcelAttendanceReportService(IWebHostEnvironment hostingEnvir
             worksheet.Cells[rowIndex, colIndex++].Value = rowNum++;
             worksheet.Cells[rowIndex, colIndex++].Value = attendance.AttendanceDate;
             worksheet.Cells[rowIndex, colIndex++].Value = attendance.UnitCode;
-            worksheet.Cells[rowIndex, colIndex++].Value = attendance.DepartmentCode;
-            worksheet.Cells[rowIndex, colIndex++].Value = attendance.TeamCode;
+            worksheet.Cells[rowIndex, colIndex++].Value = attendance.DepartmentName;
+            worksheet.Cells[rowIndex, colIndex++].Value = attendance.Team;
             worksheet.Cells[rowIndex, colIndex++].Value = attendance.Code;
             worksheet.Cells[rowIndex, colIndex++].Value = attendance.FullName;
             worksheet.Cells[rowIndex, colIndex++].Value = attendance.NickName;

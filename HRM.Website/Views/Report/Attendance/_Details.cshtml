@@ -18,10 +18,10 @@
                 </div>
             </th>
             <th class="col-sorter">
-	            <div class="cell-control-wrapper">
-		            @Labels.BusinessUnit
-		            <div class="fa fa-sort cell-right-div"></div>
-	            </div>
+                <div class="cell-control-wrapper">
+                    @Labels.BusinessUnit
+                    <div class="fa fa-sort cell-right-div"></div>
+                </div>
             </th>
             <th class="col-sorter">
                 <div class="cell-control-wrapper">
@@ -107,11 +107,9 @@
                     {
                         <td>@item.AttendanceDate.ToString("ddd, dd MMM, yyyy")</td>
                     }
-                    <td>@item.UnitCode</td>
-                    <td>@item.DepartmentCode</td>
-                    <td>
-                        <span class="tooltip-tippy" data-tippy-content="@item.Team">@item.TeamCode</span>
-                    </td>
+                    <td class="align-left">@item.UnitCode</td>
+                    <td class="align-left">@item.DepartmentName</td>
+                    <td class="align-left">@item.Team</td>
                     <td>
                         <span class="tooltip-tippy" data-tippy-content="@item.FullName">@item.NickName</span>
                     </td>
