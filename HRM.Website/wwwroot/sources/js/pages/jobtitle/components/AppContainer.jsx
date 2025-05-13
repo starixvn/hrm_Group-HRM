@@ -70,7 +70,7 @@ const AppContainer = () => {
             setShowModalDialog({ create: false });
             if (data.isSuccessful) {
                 toastr.success('Created successfully!', '', toastOptions());
-                getJobTitles();
+                getJobTitles(filterParams);
             } else {
                 toastr.error(data.message, '', toastOptions());
             }
@@ -102,7 +102,7 @@ const AppContainer = () => {
             setShowModalDialog({ edit: false });
             if (data.isSuccessful) {
                 toastr.success('Edit successfully!', '', toastOptions());
-                getJobTitles();
+                getJobTitles(filterParams);
             } else {
                 toastr.error(data.message, '', toastOptions());
             }
@@ -134,7 +134,7 @@ const AppContainer = () => {
             const { data } = response;
             if (data.isSuccessful) {
                 toastr.success('Deleted successfully!', '', toastOptions());
-                getJobTitles();
+                getJobTitles(filterParams);
             } else {
                 toastr.error(data.message, '', toastOptions());
             }

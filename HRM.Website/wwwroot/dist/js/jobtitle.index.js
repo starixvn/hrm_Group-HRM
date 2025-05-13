@@ -119257,7 +119257,7 @@ var AppContainer = function AppContainer() {
             setShowModalDialog({ create: false });
             if (data.isSuccessful) {
                 _toastr2.default.success('Created successfully!', '', (0, _common.toastOptions)());
-                getJobTitles();
+                getJobTitles(filterParams);
             } else {
                 _toastr2.default.error(data.message, '', (0, _common.toastOptions)());
             }
@@ -119286,7 +119286,7 @@ var AppContainer = function AppContainer() {
             setShowModalDialog({ edit: false });
             if (data.isSuccessful) {
                 _toastr2.default.success('Edit successfully!', '', (0, _common.toastOptions)());
-                getJobTitles();
+                getJobTitles(filterParams);
             } else {
                 _toastr2.default.error(data.message, '', (0, _common.toastOptions)());
             }
@@ -119315,7 +119315,7 @@ var AppContainer = function AppContainer() {
 
             if (data.isSuccessful) {
                 _toastr2.default.success('Deleted successfully!', '', (0, _common.toastOptions)());
-                getJobTitles();
+                getJobTitles(filterParams);
             } else {
                 _toastr2.default.error(data.message, '', (0, _common.toastOptions)());
             }
