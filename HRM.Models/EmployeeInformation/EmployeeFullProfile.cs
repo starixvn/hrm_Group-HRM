@@ -51,6 +51,7 @@ public class EmployeeFullProfile
     public string TeamName { get; set; }
     public string DepartmentName { get; set; }
     public string UnitName { get; set; }
+    public string UnitCode { get; set; }
 
     public string EmployeeCard { get; set; }
 
