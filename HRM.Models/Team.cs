@@ -30,6 +30,8 @@ public class Team : EntityBase<int>
 
     public byte? LocalWorkingHoursbyWeek { get; set; }
 
+    public byte? LocalYearsOfServiceForExtraLeave { get; set; }
+
     public byte? ExpatBasicAnnualLeaveBalance { get; set; }
 
     public byte? ExpatWorkingDays { get; set; }
@@ -39,6 +41,8 @@ public class Team : EntityBase<int>
     public byte? ExpatOffDaysbyWeek { get; set; }
 
     public byte? ExpatWorkingHoursbyWeek { get; set; }
+
+    public byte? ExpatYearsOfServiceForExtraLeave { get; set; }
 
     public Department Department { get; set; } = new();
 

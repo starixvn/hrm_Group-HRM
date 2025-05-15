@@ -143,11 +143,14 @@ public class GroupTeamController(ITeamService teamService,
                     LocalWorkingHours = GetValue(team.LocalWorkingHours),
                     LocalOffDaysbyWeek = GetValue(team.LocalOffDaysbyWeek),
                     LocalWorkingHoursbyWeek = team.LocalWorkingHoursbyWeek,
+                    LocalYearsOfServiceForExtraLeave = team.LocalYearsOfServiceForExtraLeave,
                     ExpatBasicAnnualLeaveBalance = GetValue(team.ExpatBasicAnnualLeaveBalance),
                     ExpatWorkingDays = GetValue(team.ExpatWorkingDays),
                     ExpatWorkingHours = GetValue(team.ExpatWorkingHours),
                     ExpatOffDaysbyWeek = GetValue(team.ExpatOffDaysbyWeek),
-                    ExpatWorkingHoursbyWeek = team.ExpatWorkingHoursbyWeek
+                    ExpatWorkingHoursbyWeek = team.ExpatWorkingHoursbyWeek,
+                    ExpatYearsOfServiceForExtraLeave = team.ExpatYearsOfServiceForExtraLeave
+
                 };
                 var result = await baseService.ExecuteNonQueryAsync(criteria);
 
