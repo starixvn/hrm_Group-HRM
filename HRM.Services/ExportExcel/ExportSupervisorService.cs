@@ -31,7 +31,7 @@ public class ExportSupervisorService(IWebHostEnvironment hostingEnvironment) : I
         var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, "ExcelTemplates/EmployeeSupervisor.xlsx");
         using var templatePackage = new ExcelPackage(new FileInfo(templatePath));
         using var xlPackage = new ExcelPackage();
-        const byte totalColumns = 13;
+        const byte totalColumns = 12;
         var templateWorksheet = templatePackage.Workbook.Worksheets[0];
         var worksheet = xlPackage.Workbook.Worksheets.Add(Labels.EmployeeSupervisor);
         var rowIndex = 1;

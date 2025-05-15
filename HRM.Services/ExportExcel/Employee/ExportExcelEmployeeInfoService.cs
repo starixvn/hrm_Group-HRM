@@ -89,7 +89,7 @@ public class ExportExcelEmployeeInfoService(
         var record = new
         {
             Count = rowIndex,
-            employee.UnitName,
+            employee.UnitCode,
             Department = employee.Team.Department.Name,
             Team = employee.Team.Name,
             employee.Code,
@@ -165,7 +165,7 @@ public class ExportExcelEmployeeInfoService(
         var record = new
         {
             Index = currentRow - 2,
-            p.UnitName,
+            p.UnitCode,
             Department = p.DepartmentName,
             p.TeamName,
             p.Code,

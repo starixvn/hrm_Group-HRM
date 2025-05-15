@@ -24,7 +24,7 @@ public class ExportTimeRecordController(
             SupervisorId = session.UserId,
             TeamIds = model.TeamIds,
             FromDate = model.FromDate.ToServerTimeZone(),
-            ToDate = model.ToDate.ToServerTimeZone().ToEndOfDay(),
+            ToDate = model.ToDate.ToEndOfDay().ToServerTimeZone(),
             IsLocal = model.IsLocal
         };
 

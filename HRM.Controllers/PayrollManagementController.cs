@@ -22,6 +22,7 @@ public class PayrollManagementController(
     IPayrollService payrollService) : BaseController(session)
 {
 
+    [HrmPermission(Policy.Read, FunctionKey.PayrollManagement)]
     public IActionResult Index()
     {
         ViewBag.HasPermissionToUpload = session.HasPermissionOnFunction(FunctionKey.PayrollManagement, Policy.Host);
