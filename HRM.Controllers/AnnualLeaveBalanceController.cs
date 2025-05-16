@@ -37,8 +37,8 @@ public class AnnualLeaveBalanceController(
         int? employeeId = null,
         int? category = null)
     {
-        var isJoinedDate = true;
-        ViewBag.IsJoinedDate = isJoinedDate;
+        var isJoinedDateRule = false;
+        ViewBag.IsJoinedDateRule = isJoinedDateRule;
         ViewBag.HasPermissionToEdit = session.HasPermissionOnFunction(FunctionKey.AnnualLeaveBalance, Policy.Host);
         var model = new LeaveSummaryViewModel
         {
@@ -49,7 +49,7 @@ public class AnnualLeaveBalanceController(
             Category = category,
             IsShowCloseBalance = appSettings.IsShowCloseBalance
         };
-        if(isJoinedDate)
+        if(isJoinedDateRule)
         {
             return await GetJoinedDateRuleData("JoinedDateRule", model);
         }
@@ -134,13 +134,14 @@ public class AnnualLeaveBalanceController(
     [HrmPermission(Policy.Read, FunctionKey.AnnualLeaveBalance)]
     public async Task<IActionResult> Employee(int id)
     {
-        var year = DateTimeOffset.Now.DateTime.ToClientTimeZone().Year;
+        ViewBag.IsJoinedDateRule = false;
+        var fromDate = DateTimeOffset.Now.DateTime.ToClientTimeZone();
         var model = new AnnualLeaveBalanceViewModel
         {
             EmployeeId = id,
-            Year = year,
+            Year = fromDate.Year,
             ExcludedRequestTrans = true,
-            AnnualLeaveBalances = await GetAnnualLeaveTransactionAsync(id, false, year),
+            AnnualLeaveBalances = await GetAnnualLeaveTransactionAsync(id, false, fromDate),
             Employee = await employeeService.GetEmployeeByIdAsync(id)
         };
 
@@ -151,9 +152,12 @@ public class AnnualLeaveBalanceController(
     [HrmPermission(Policy.Read, FunctionKey.AnnualLeaveBalance)]
     public async Task<IActionResult> Employee(AnnualLeaveBalanceViewModel model)
     {
+        ViewBag.IsJoinedDateRule = false;
+        var fromDate = model.Year == 0
+            ? DateTimeOffset.Now.DateTime.ToClientTimeZone()
+            : new DateTime(model.Year, 1, 1);
         model.Employee = await employeeService.GetEmployeeByIdAsync(model.EmployeeId);
-        model.AnnualLeaveBalances = await GetAnnualLeaveTransactionAsync(model.EmployeeId, !model.ExcludedRequestTrans, model.Year);
-
+        model.AnnualLeaveBalances = await GetAnnualLeaveTransactionAsync(model.EmployeeId, !model.ExcludedRequestTrans, fromDate);
         return View(model);
     }
 
@@ -252,13 +256,13 @@ public class AnnualLeaveBalanceController(
         return await reportService.GetAnnualLeaveBalanceForJoinedDateReportAsync(criteria);
     }
 
-    private async Task<IEnumerable<AnnualLeaveTransactionViewModel>> GetAnnualLeaveTransactionAsync(int empId, bool excludedRequest, int year)
+    private async Task<IEnumerable<AnnualLeaveTransactionViewModel>> GetAnnualLeaveTransactionAsync(int empId, bool excludedRequest, DateTime fromDate)
     {
         var criteria = new GetAnnualLeaveTransactionCriteria
         {
             EmpId = empId,
             ExcludedRequestTrans = excludedRequest,
-            Year = year
+            FromDate = fromDate
         };
 
         return await employeeService.GetAnnualLeaveTransactionAsync(criteria);

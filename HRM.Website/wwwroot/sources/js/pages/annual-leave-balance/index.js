@@ -44,7 +44,7 @@ const annualLeaveBalance = (function ($) {
 
     function initExportExcelEvent() {
         $('#btnExcel').click(function () {
-            if(window.IsJoinedDate == 'True') {
+            if(window.IsJoinedDateRule == 'True') {
                 var postToUrl = 'ExportLeaveSummary/AnnualLeaveSummaryForJoinedDate?year=';
                 var url = submitData(postToUrl);
             } else {
