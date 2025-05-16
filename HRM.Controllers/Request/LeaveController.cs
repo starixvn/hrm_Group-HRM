@@ -466,8 +466,8 @@ public class LeaveController(
 
     private void GetTimeForHalfDayRequest(LeaveRequest request, LeaveRequestViewModel model)
     {
-        var fromTime = leaveRequestService.GetFromTimeHalfDay(request.LeaveDetail);
-        var toTime = leaveRequestService.GetToTimeHalfDay(request.LeaveDetail);
+        var fromTime = leaveRequestService.GetFromTimeHalfDay(request.LeaveDetail).ToClientTimeZone();
+        var toTime = leaveRequestService.GetToTimeHalfDay(request.LeaveDetail).ToClientTimeZone();
 
         model.FromTime = fromTime.ToString("HH:mm");
         model.ToTime = toTime.ToString("HH:mm");
