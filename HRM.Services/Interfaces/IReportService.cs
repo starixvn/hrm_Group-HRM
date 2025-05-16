@@ -17,6 +17,8 @@ public interface IReportService
 
     Task<IEnumerable<LeaveSummary>> GetAnnualLeaveBalanceReportAsync(GetAnnualLeaveBalanceCriteria criteria);
 
+    Task<IEnumerable<LeaveSummaryForJoinedDate>> GetAnnualLeaveBalanceForJoinedDateReportAsync(GetAnnualLeaveBalanceForJoinedDateCriteria criteria);
+
     Task<IEnumerable<LeaveSummary>> GetUnpaidLeaveAsync(GetUnpaidLeaveCriteria criteria, string period);
 
     Task<IEnumerable<TimeRecordModel>> GetTimeRecordAsync(GetTimeRecordCriteria criteria);

@@ -55,6 +55,7 @@
         <Setting Key="Report_ManpowerCategory" SpName="Report_ManpowerCategory" DbName="bodb_HRM" Plain="0" />
         <Setting Key="Report_WorkingHoursSummary" SpName="Report_WorkingHoursSummary" DbName="bodb_HRM" Plain="0" />
         <Setting Key="Report_LeaveSummary" SpName="Report_LeaveSummary" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Report_LeaveSummaryForJoinedDate" SpName="Report_LeaveSummaryForJoinedDate" DbName="bodb_HRM" Plain="0" />
         <Setting Key="Report_UnpaidLeaveSummary" SpName="Report_UnpaidLeaveSummary" DbName="bodb_HRM" Plain="0" />
         <Setting Key="Report_GetWeekendLeaveSummary" SpName="Report_GetWeekendLeaveSummary" DbName="bodb_HRM" Plain="0" />
         <Setting Key="Report_GetWeekendLeaveDetail" SpName="Report_GetWeekendLeaveDetail" DbName="bodb_HRM" Plain="0" />

@@ -1,0 +1,177 @@
+﻿@using HRM.Core
+@using HRM.Resources
+@using HRM.ViewModels.AnnualLeave
+@using HRM.Website.Helper
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model LeaveSummaryViewModel
+@{
+    ViewBag.Title = Labels.AnualLeaveBalance;
+    var hasPermissionToEdit = (bool)ViewBag.HasPermissionToEdit;
+}
+@section css{
+    <link href="~/dist/styles/annual.leavebalance.index.css" rel="stylesheet" />
+}
+@section js{
+    <script>
+        window.IsJoinedDate = '@ViewBag.IsJoinedDate';
+    </script>
+    <script src="~/dist/js/annual.leavebalance.index.js"></script>
+}
+@section Breadcrumb {
+    <a class="step">@Labels.CompanySpace</a> <a class="step">@ViewBag.Title</a>
+}
+<h2 class="page-title">@ViewBag.Title</h2>
+@if (hasPermissionToEdit)
+{
+    <div class="filter">
+        @using (Html.BeginForm())
+        {
+            <div class="form-horizontal clearfix">
+                @Html.HiddenFor(model => model.TeamIds)
+                <div class="form-group form-group--m">
+                    <div class="label-form">
+                        <label class="control-label">@Labels.Category</label>
+                    </div>
+                    <div class="select-form">
+                        <select id="Category" name="Category" class="category form-control">
+                            <option value="">-- All --</option>
+                            <option selected="@(Model.Category == 1)" value="1">@Labels.Local</option>
+                            <option selected="@(Model.Category == 0)" value="0">@Labels.Expat</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group form-group--m">
+                    <div class="label-form">
+                        @Html.LabelFor(model => model.Employee, new { @class = "control-label" })
+                    </div>
+                    <div class="input-form">
+                        @Html.TextBox("Employee", Model.Employee,
+                            new { placeholder = Messages.SearchEmployeeWatermark, @class = "form-control" })
+                        @Html.HiddenFor(model => model.EmployeeId)
+                    </div>
+                </div>
+
+                <div class="form-group form-group--m">
+                    <div class="label-form">
+                        <label class="control-label">@Labels.Team</label>
+                    </div>
+                    <div class="input-form" id="Team"></div>
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">@Labels.Submit</button>
+                    <button type="button" class="btn btn-excel" id="btnExcel">@Labels.Excel</button>
+                    @if (Model.IsShowCloseBalance)
+                    {
+                        <a href="javascript:;" class="btn btn-request" id="resetblc">
+                            <span class="fa fa-plus"></span>
+                            @Labels.CloseBalance
+                        </a>
+                    }
+                    
+                    <a href="javascript:;" class="btn btn-request" id="addadj">
+                        <span class="fa fa-plus"></span>
+                        @Labels.Adjustment
+                    </a>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+<table class="table table-custom" id="data">
+    <thead>
+        <tr>
+            @if (hasPermissionToEdit)
+            {
+                <th rowspan="2">
+                    <input type="checkbox" class="checkbox-custom" id="checkuncheckall" name="checkuncheckall" />
+                    <label for="checkuncheckall"></label>
+                </th>
+            }
+            <th rowspan="2">@Labels.Department</th>
+            <th rowspan="2">@Labels.Team</th>
+            <th rowspan="2">@Labels.FullName</th>
+            <th rowspan="2">@Labels.NickName</th>
+            <th rowspan="2">@Labels.JoinedDate</th>
+            <th rowspan="2">@Labels.AnnualLeave</th>
+            <th rowspan="2">Extra Leave</th>
+            <th rowspan="2">Taken Leave</th>
+            <th rowspan="2">Balance </th>
+            @if (hasPermissionToEdit)
+            {
+                <th rowspan="2">@Labels.Edit</th>
+            }
+        </tr>
+    </thead>
+    @if (Model.LeaveSumariesForJoinedDate != null)
+    {
+        <tbody>
+            @foreach (var leave in Model.LeaveSumariesForJoinedDate)
+            {
+                <tr>
+                    @if (hasPermissionToEdit)
+                    {
+                        <td>
+                            <input type="checkbox" class="aba checkbox-custom" id="checkbox-@leave.EmpId" data-id="@leave.EmpId" />
+                            <label for="checkbox-@leave.EmpId"></label>
+                        </td>
+                    }
+                    <td class="align-left">@leave.Department</td>
+                    <td class="align-left">@leave.Team</td>
+                    <td class="align-left">@leave.FullName</td>
+                    <td>@leave.Nickname</td>
+                    <td>@(leave.FromDate == DateTime.MinValue ? "" : leave.FromDate.ToString("dd MMM yyyy"))</td>
+                    <td>
+                        @if (leave.AnnualLeaveCurrentYear != 0)
+                        {
+                            <span class="@(leave.AnnualLeaveCurrentYear < 0 ? "red" : string.Empty)">@leave.AnnualLeaveCurrentYear.ToString("0.0")</span>
+                        }
+                    </td>
+                    <td>
+                        @if (leave.ExtraLeave != 0)
+                        {
+                            <span class="@(leave.ExtraLeave < 0 ? "red" : string.Empty)">@leave.ExtraLeave.ToString("0.0")</span>
+                        }
+                    </td>
+                    <td>
+                        @if (leave.DeductDays != 0)
+                        {
+                            <span>@leave.DeductDays.ToString("0.0")</span>
+                        }
+                    </td>
+                    <td>
+                        <span class="@(leave.LeaveBalance < 0 ? "red" : string.Empty)">@leave.LeaveBalance.ToString("0.0")</span>
+                    </td>
+                    @if (hasPermissionToEdit)
+                    {
+                        <td>
+                            <a href="~/annualleavebalance/employee/@leave.EmpId">
+                                <i class="fa fa-pencil fa-lg icon-edit"></i>
+                            </a>
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    }
+    else
+    {
+        @Html.Raw(RazorHelpers.DisplayNoInformation(colspan: 23))
+    }
+</table>
+<div class="hide">
+    @{
+        var model = new AnnualLeaveBalanceMultiViewModel
+        {
+                AffectedFrom = DateTimeOffset.Now.DateTime.ToClientTimeZone()
+        };
+    }
+    <div id="insertform" title="Adjust annual leave balance">
+        @await Html.PartialAsync("_MultipleInsert", model)
+    </div>
+    <div id="resetform" title="Close balance for year @DateTimeOffset.Now.DateTime.ToClientTimeZone().AddYears(-1).Year">
+        @await Html.PartialAsync("_MultipleReset", model)
+    </div>
+</div>

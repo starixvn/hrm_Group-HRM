@@ -9,6 +9,7 @@ namespace HRM.Services.ExportExcel;
 public interface IExportExcelService
 {
     HSSFWorkbook ExportLeaveSummary(IEnumerable<LeaveSummary> leaveSummaryList, int year);
+    HSSFWorkbook ExportLeaveSummaryForJoinedDate(IEnumerable<LeaveSummaryForJoinedDate> leaveSummaryList);
     HSSFWorkbook ExportEmployeeWfh(IEnumerable<EmployeeWorkFromHome> employeeWfhList);
 
     HSSFWorkbook ExportWorkingTimeRequest(IList<RequestEntity> requestList, string title);

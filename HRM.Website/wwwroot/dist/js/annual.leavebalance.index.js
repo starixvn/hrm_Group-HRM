@@ -63239,8 +63239,13 @@ var annualLeaveBalance = function ($) {
 
     function initExportExcelEvent() {
         $('#btnExcel').click(function () {
-            var postToUrl = 'ExportLeaveSummary/AnnualLeaveSummary?year=';
-            var url = submitData(postToUrl);
+            if (window.IsJoinedDate == 'True') {
+                var postToUrl = 'ExportLeaveSummary/AnnualLeaveSummaryForJoinedDate?year=';
+                var url = submitData(postToUrl);
+            } else {
+                var postToUrl = 'ExportLeaveSummary/AnnualLeaveSummary?year=';
+                var url = submitData(postToUrl);
+            }
             location.href = url;
         });
     }
