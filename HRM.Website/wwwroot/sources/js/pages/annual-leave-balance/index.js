@@ -25,7 +25,8 @@ const annualLeaveBalance = (function ($) {
 
     function submitData(postToUrl) {
         const teamIds = $('#Team').multiSelectTreeView('getSelectedItems');
-        return resolveClientUrl(postToUrl + $('#Year').val()
+        const year = $('#Year').val() || 0;
+        return resolveClientUrl(postToUrl + year
             + '&teamIds=' + (teamIds !== '' ? teamIds : ' ')
             + '&Employee=' + $('#Employee').val()
             + '&EmployeeId=' + $('#EmployeeId').val()

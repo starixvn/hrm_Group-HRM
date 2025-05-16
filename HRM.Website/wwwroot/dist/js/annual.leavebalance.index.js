@@ -63225,7 +63225,8 @@ var annualLeaveBalance = function ($) {
 
     function submitData(postToUrl) {
         var teamIds = $('#Team').multiSelectTreeView('getSelectedItems');
-        return (0, _common.resolveClientUrl)(postToUrl + $('#Year').val() + '&teamIds=' + (teamIds !== '' ? teamIds : ' ') + '&Employee=' + $('#Employee').val() + '&EmployeeId=' + $('#EmployeeId').val() + '&Category=' + $('#Category').val());
+        var year = $('#Year').val() || 0;
+        return (0, _common.resolveClientUrl)(postToUrl + year + '&teamIds=' + (teamIds !== '' ? teamIds : ' ') + '&Employee=' + $('#Employee').val() + '&EmployeeId=' + $('#EmployeeId').val() + '&Category=' + $('#Category').val());
     }
 
     function initSubmitFilterEvent() {
