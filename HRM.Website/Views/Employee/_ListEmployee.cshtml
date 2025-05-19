@@ -6,7 +6,7 @@
 @{
     var pagerOption = (PagerOptionModel)ViewBag.PagerOption;
     var hasPermissionToEdit = (bool)ViewBag.HasPermissionToEdit;
-    var totalColumn = 13;
+    var totalColumn = 14;
     totalColumn -= hasPermissionToEdit ? 0 : 1;
     bool enableGroupDate = ViewBag.EnableGroupDate;
 }
@@ -15,6 +15,12 @@
     <thead>
         <tr>
             <th>@Labels.SymbolCount</th>
+            <th class="col-sorter">
+                <div class="cell-control-wrapper">
+                    @Labels.BusinessUnit
+                    <div class="fa fa-sort cell-right-div"></div>
+                </div>
+            </th>
             <th class="col-sorter">
                 <div class="cell-control-wrapper">
                     @Labels.Department
@@ -85,6 +91,7 @@
                 var cssClass = employee.Enabled ? "" : "disabled";
                 <tr class="@cssClass">
                     <td>@index</td>
+                    <td class="align-left">@employee.UnitCode</td>
                     <td class="align-left">@employee.Team.Department.Name</td>
                     <td class="align-left">@employee.Team.Name</td>
                     <td>@employee.Code</td>
