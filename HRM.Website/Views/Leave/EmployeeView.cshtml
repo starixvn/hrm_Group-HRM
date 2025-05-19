@@ -11,6 +11,7 @@
     var employeeBalance = ViewBag.EmployeeBalance == null ? null : (EmployeeLeaveBalance)ViewBag.EmployeeBalance;
     var annualBalance = employeeBalance?.AnnualBalance ?? 0;
     var keepInViewBalance = employeeBalance?.KeepInViewBalance ?? 0;
+    var keepInViewHourBalance = employeeBalance?.KeepInViewByHourBalance ?? 0;
 }
 @section css{
     <link href="~/dist/styles/leave.myrequest.css" rel="stylesheet" />
@@ -54,7 +55,7 @@
     <div class="leave-balance">
         <div>@Labels.AnualLeaveBalance:<strong> @annualBalance.ToString("0.#") day(s)</strong></div>
         <hr />
-        <div>Compensation Leave Balance:<strong> @keepInViewBalance.ToString("0.#") day(s)</strong></div>
+        <div>Compensation Leave Balance:<strong> @keepInViewBalance.ToString("0.#") day(s) @keepInViewHourBalance.ToString("0.#") hour(s)</strong></div>
     </div>
 </div>
 <table class="table table-custom" id="data">

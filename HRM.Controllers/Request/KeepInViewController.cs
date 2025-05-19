@@ -11,6 +11,7 @@ using HRM.Core.Enums;
 using HRM.Core.Services;
 using HRM.Criteria.Request.KeepInView;
 using HRM.Models.Request;
+using HRM.Services.Implement.Request;
 using HRM.Services.Interfaces;
 using HRM.Services.Interfaces.Request;
 using HRM.ViewModels.Request;
@@ -26,7 +27,8 @@ public class KeepInViewController(
     IRequestService requestService,
     IBaseService baseService,
     IAttachFileService attachFileService,
-    IShiftService shiftService) : BaseController(session)
+    IShiftService shiftService,
+    ILeaveRequestService leaveRequestService) : BaseController(session)
 {
     [HttpGet]
     public async Task<IActionResult> EmployeeView(int? year)
@@ -49,7 +51,7 @@ public class KeepInViewController(
             request.FromTime = request.FromTime.ToClientTimeZone();
             request.ToTime = request.ToTime.ToClientTimeZone();
         }
-
+        ViewBag.EmployeeBalance = await leaveRequestService.GetLeaveBalance(session.UserId, null, tempYear);
         return View(requests);
     }
 
@@ -71,7 +73,6 @@ public class KeepInViewController(
         ViewBag.IsTopManager = EmployeeSession.IsTopManager;
         ViewBag.HasOnBehalfRequestPermission = session.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
             || session.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);
-        ViewBag.Shifts = await shiftService.GetAllAsync();
 
         return View(model);
     }
@@ -102,7 +103,6 @@ public class KeepInViewController(
             VerifierId = model.VerifierId,
             ApproverId = model.ApproverId,
             CreatedBy = session.UserId,
-            ShiftId = model.ShiftId,
             CompanyId = CurrentCompanyId
         };
 
@@ -147,7 +147,6 @@ public class KeepInViewController(
             MinDate = request.OnDate.AddMonths(-1),
             MaxDate = DateTimeOffset.Now.Date.FirstDayOfMonth().AddMonths(2).AddDays(-1),
             Files = (await attachFileService.GetInfoAttachFileAsync(id, $"{CurrentCompanyId}/requests")).Select(x => x.FileName).ToList(),
-            ShiftId = request.ShiftId
         };
 
         ViewBag.IsTopManager = request.Requester.IsTopManager;
@@ -178,7 +177,6 @@ public class KeepInViewController(
             VerifierId = model.VerifierId,
             ApproverId = model.ApproverId,
             ModifiedBy = session.UserId,
-            ShiftId = model.ShiftId,
             CompanyId = CurrentCompanyId
         };
 
