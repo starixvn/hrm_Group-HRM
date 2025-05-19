@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Globalization;
 using System.Threading.Tasks;
 using HRM.Core.Models;
 using HRM.Core.Services;
@@ -141,7 +141,7 @@ public class UploadPayrollService(IBaseService baseService) : IUploadPayrollServ
         var totalRows = worksheet.Dimension.End.Row;
         for (var row = 1; row <= totalRows; row++)
         {
-            var headerName = worksheet.Cells[row, 1].Value?.ToString()?.Trim().ToLower();
+            var headerName = worksheet.Cells[row, 1].Value?.ToString()?.Trim().ToLower(CultureInfo.InvariantCulture);
             if (headerName is "no" or "no.")
             {
                 return row;
@@ -162,7 +162,7 @@ public class UploadPayrollService(IBaseService baseService) : IUploadPayrollServ
         {
             for (var col = 1; col <= totalColumns; col++)
             {
-                var headerText = worksheet.Cells[row, col].Value?.ToString()?.Trim().ToLower();
+                var headerText = worksheet.Cells[row, col].Value?.ToString()?.Trim().ToLower(CultureInfo.InvariantCulture);
 
                 if (headerText == ColumnIdStaff && idStaffColumn == 0)
                 {

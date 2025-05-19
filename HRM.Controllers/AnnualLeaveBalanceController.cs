@@ -2,7 +2,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 using System.Threading.Tasks;
 using Core;
@@ -50,14 +49,9 @@ public class AnnualLeaveBalanceController(
             Category = category,
             IsShowCloseBalance = appSettings.IsShowCloseBalance
         };
-        if(isJoinedDateRule)
-        {
-            return await GetJoinedDateRuleData("JoinedDateRule", model);
-        }
-        else
-        {
-            return await GetYearlyRuleData("YearlyRule", model);
-        }
+        return isJoinedDateRule 
+            ? await GetJoinedDateRuleData("JoinedDateRule", model)
+            : await GetYearlyRuleData("YearlyRule", model);
     }
 
     [HttpPost]
@@ -156,7 +150,7 @@ public class AnnualLeaveBalanceController(
         ViewBag.IsJoinedDateRule = session.Get<short>(SessionKey.AnnualLeaveRule) == (short)AnnualLeaveRuleType.JoinedDate;
         var fromDate = model.Year == 0
             ? DateTimeOffset.Now.DateTime.ToClientTimeZone()
-            : new DateTime(model.Year, 1, 1);
+            : new DateTimeOffset(model.Year, 1, 1, 0, 0, 0, TimeSpan.Zero).DateTime;
         model.Employee = await employeeService.GetEmployeeByIdAsync(model.EmployeeId);
         model.AnnualLeaveBalances = await GetAnnualLeaveTransactionAsync(model.EmployeeId, !model.ExcludedRequestTrans, fromDate);
         return View(model);
