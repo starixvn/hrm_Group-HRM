@@ -13,6 +13,7 @@ using Core.Services;
 using Criteria.AnnualLeave;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
+using HRM.Core.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using Models.AnnualLeaveBalance;
@@ -37,7 +38,7 @@ public class AnnualLeaveBalanceController(
         int? employeeId = null,
         int? category = null)
     {
-        var isJoinedDateRule = false;
+        var isJoinedDateRule = session.Get<short>(SessionKey.AnnualLeaveRule) == (short)AnnualLeaveRuleType.JoinedDate;
         ViewBag.IsJoinedDateRule = isJoinedDateRule;
         ViewBag.HasPermissionToEdit = session.HasPermissionOnFunction(FunctionKey.AnnualLeaveBalance, Policy.Host);
         var model = new LeaveSummaryViewModel
@@ -134,7 +135,7 @@ public class AnnualLeaveBalanceController(
     [HrmPermission(Policy.Read, FunctionKey.AnnualLeaveBalance)]
     public async Task<IActionResult> Employee(int id)
     {
-        ViewBag.IsJoinedDateRule = false;
+        ViewBag.IsJoinedDateRule = session.Get<short>(SessionKey.AnnualLeaveRule) == (short)AnnualLeaveRuleType.JoinedDate;
         var fromDate = DateTimeOffset.Now.DateTime.ToClientTimeZone();
         var model = new AnnualLeaveBalanceViewModel
         {
@@ -152,7 +153,7 @@ public class AnnualLeaveBalanceController(
     [HrmPermission(Policy.Read, FunctionKey.AnnualLeaveBalance)]
     public async Task<IActionResult> Employee(AnnualLeaveBalanceViewModel model)
     {
-        ViewBag.IsJoinedDateRule = false;
+        ViewBag.IsJoinedDateRule = session.Get<short>(SessionKey.AnnualLeaveRule) == (short)AnnualLeaveRuleType.JoinedDate;
         var fromDate = model.Year == 0
             ? DateTimeOffset.Now.DateTime.ToClientTimeZone()
             : new DateTime(model.Year, 1, 1);

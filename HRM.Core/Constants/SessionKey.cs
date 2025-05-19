@@ -9,4 +9,5 @@ public static class SessionKey
     public const string CurrentDomain = "CurrentDomain";
     public const string MailSetting = "MailSetting";
     public const string EnableGroupDate = "EnableGroupDate";
+    public const string AnnualLeaveRule = "AnnualLeaveRule";
 }

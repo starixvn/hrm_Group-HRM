@@ -12,6 +12,7 @@ using Fanex.Data;
 using GO.UserControl.Client.Core.Models.Auth;
 using GO.UserControl.Client.Core.Services;
 using GO.UserControl.Client.Core.Session;
+using HRM.Core.Enums;
 using HRM.Core.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -87,6 +88,7 @@ public class AuthController(
             session.Set(SessionKey.CurrentTimeZone, await GetClientTimeZoneAsync());
             session.Set(SessionKey.CurrentDomain, GetDomainName(HttpContext));
             session.Set(SessionKey.MailSetting, await GetMailSettingAsync());
+            session.Set(SessionKey.AnnualLeaveRule, await GetAnnualLeaveRuleAsync());
 
             await DoLoginAsync(loginResult.UserId);
         }
@@ -201,6 +203,19 @@ public class AuthController(
         var result = await baseService.GetDataEntityAsync<string>(criteria);
         var data = result == null ? null : JsonConvert.DeserializeObject<MailSetting>(result);
         return data;
+    }
+
+    private async Task<short> GetAnnualLeaveRuleAsync()
+    {
+        var companyId = session.Get<short>(SessionKey.CurrentCompanyId);
+        var criteria = new GetSystemConfigsByKeyCriteria
+        {
+            CompanyId = companyId,
+            Key = SystemConfigKey.AnnualLeaveResetTimeLine
+        };
+
+        var result = await baseService.GetDataEntityAsync<short?>(criteria);
+        return result ?? (short)AnnualLeaveRuleType.Yearly;
     }
 
     private static string GetClientIp(HttpContext httpContext)
