@@ -78,7 +78,8 @@ public class LeaveController(
             Approvers = supervisor.Approvers,
             MinDate = minDate,
             EnableHospitalizationLeaveBalance = setting.EnableHospitalizationLeaveBalance,
-            EnableSickLeaveBalance = setting.EnableSickLeaveBalance
+            EnableSickLeaveBalance = setting.EnableSickLeaveBalance,
+            EnableLimitUseAnnualLeaveBalance = setting.EnableLimitUseAnnualLeaveBalance
         };
         ViewBag.IsTopManager = EmployeeSession.IsTopManager;
         ViewBag.HasOnBehalfOthersPermission = session.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
@@ -147,6 +148,7 @@ public class LeaveController(
         model.Files = (await attachFileService.GetInfoAttachFileAsync(id, $"{CurrentCompanyId}/requests")).Select(x => x.FileName).ToList();
         model.EnableHospitalizationLeaveBalance = setting.EnableHospitalizationLeaveBalance;
         model.EnableSickLeaveBalance = setting.EnableSickLeaveBalance;
+        model.EnableLimitUseAnnualLeaveBalance = setting.EnableLimitUseAnnualLeaveBalance;
 
         ViewBag.IsView = false;
         ViewBag.IsTopManager = request.Requester.IsTopManager;

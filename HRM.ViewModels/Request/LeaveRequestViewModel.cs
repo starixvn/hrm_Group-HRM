@@ -117,4 +117,5 @@ public class LeaveRequestViewModel : IValidatableObject
     public List<string> Files { get; set; }
     public bool EnableHospitalizationLeaveBalance { get; set; }
     public bool EnableSickLeaveBalance { get; set; }
+    public bool EnableLimitUseAnnualLeaveBalance { get; set; }
 }

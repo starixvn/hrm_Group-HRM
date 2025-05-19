@@ -30,14 +30,25 @@
         @Html.ValidationSummary()
 
         <div class="leave-info">
-            ※ <span class="infobalance">
-                In <span id="lblMonth">@Model.ToDate.ToString("MMMM")</span>, you can use up to
-                <span class="numberbalance" id="lblCurrentLeaveBalance">
-                    @Model.EmployeeLeaveBalance.CurrentLeaveBalanceDay.ToString("0.#")
-                </span> day(s) of balance
-                <span class="numberbalance" id="lblAnnualBalance">@Model.EmployeeLeaveBalance.AnnualBalance.ToString("0.#")</span> day(s) for
-                <span id="lblYear">@Model.ToDate.ToString("yyyy")</span>
-            </span>
+            ※
+            @if (Model.EnableLimitUseAnnualLeaveBalance)
+            {
+                <span class ="infobalance">
+                    In <span id="lblMonth">@Model.ToDate.ToString("MMMM")</span>, you can use up to
+                    <span class="numberbalance" id="lblCurrentLeaveBalance">
+                        @Model.EmployeeLeaveBalance.CurrentLeaveBalanceDay.ToString("0.#")
+                    </span> day(s) of balance
+                    <span class="numberbalance" id="lblAnnualBalance">@Model.EmployeeLeaveBalance.AnnualBalance.ToString("0.#")</span> day(s) for
+                    <span id="lblYear">@Model.ToDate.ToString("yyyy")</span>
+                </span>
+            }
+            else
+            {
+                <span class="infobalance">
+                    Annual Leave balance:
+                    <span class="numberbalance" id="lblAnnualBalance">@Model.EmployeeLeaveBalance.AnnualBalance.ToString("0.#")</span> day(s)
+                </span>
+            }
             <br />
             ※ <span class="infobalance">
                 Weekend Leave has been taken:
