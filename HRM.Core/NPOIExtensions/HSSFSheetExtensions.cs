@@ -152,11 +152,13 @@ public static class HSSFSheetExtensions
                     mergedRegion.FirstColumn -= 1;
                     mergedRegion.LastColumn -= 1;
                 }
-                else if (columnIndex <= mergedRegion.LastColumn)
+                else
                 {
-                    mergedRegion.LastColumn -= 1;
+                    if (columnIndex <= mergedRegion.LastColumn)
+                    {
+                        mergedRegion.LastColumn -= 1;
+                    }
                 }
-                // no action at here
             }
         }
     }

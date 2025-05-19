@@ -1,5 +1,4 @@
 ﻿using System;
-using EnumsNET;
 
 namespace HRM.Models;
 

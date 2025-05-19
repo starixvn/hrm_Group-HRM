@@ -170,7 +170,7 @@ public class ExportExcelService(IWebHostEnvironment hostingEnvironment) : IExpor
             row.GetCell(2).SetCellValue(item.Team); // Team
             row.GetCell(3).SetCellValue(item.FullName); // FullName
             row.GetCell(4).SetCellValue(item.Nickname); // Nickname
-            row.GetCell(5).SetCellValue(item.FromDate == DateTime.MinValue ? string.Empty : item.FromDate.ToString("dd MMM yyyy")); // Joined Date
+            row.GetCell(5).SetCellValue(item.FromDate == DateTimeOffset.MinValue ? string.Empty : item.FromDate.ToString("dd MMM yyyy")); // Joined Date
             row.GetCell(6).SetCellValue(item.AnnualLeaveCurrentYear); // Annual Leave
             row.GetCell(7).SetCellValue(item.ExtraLeave); // Extra Leave
             row.GetCell(8).SetCellValue(item.DeductDays); // Taken Leave

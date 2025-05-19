@@ -117,7 +117,7 @@ public class RequestRepository : IRequestRepository
             ToTime = requestInfo.ToTime ?? DateTimeOffset.Now.DateTime,
             KeepInViewType = (byte)(requestInfo.KeepInViewType ?? 0),
             LeaveCountDetails = requestInfo.LeaveCountDetails ?? string.Empty,
-            LeaveType = new LeaveType { Id = requestInfo.LeaveTypeId ?? 0, Name = requestInfo.LeaveTypeName ?? string.Empty },
+            LeaveType = GetLeaveType(requestInfo),
             Remark = requestInfo.Remark ?? string.Empty,
             TotalDaysRequestInMonth = requestInfo.TotalDaysRequestInMonth ?? 0,
             CreatedDate = requestInfo.CreatedDate,
@@ -135,31 +135,45 @@ public class RequestRepository : IRequestRepository
             ProcessedByNickName = requestInfo.ProcessedByNickName,
             ProcessedByFullName = requestInfo.ProcessedByFullName,
             ProcessedDate = requestInfo.ProcessedDate,
-            FromShift = new Shift
-            {
-                Id = requestInfo.FromShiftId ?? 0,
-                Name = requestInfo.FromShiftName ?? string.Empty
-            },
+            FromShift = GetFromShift(requestInfo),
             RequestedDate = requestInfo.RequestedDate ?? DateTimeOffset.Now.DateTime,
             TotalMins = requestInfo.TotalMinutes ?? 0,
             ActualLateInEarlyOut = requestInfo.ActualInOutMins ?? 0,
-            CrossDay = (requestInfo.FromTime == null || requestInfo.ToTime == null) ?? requestInfo.FromTime.DayOfYear > requestInfo.ToTime.DayOfYear,
-            ToShift = new Shift
-            {
-                Id = requestInfo.ToShiftId ?? 0,
-                Name = requestInfo.ToShiftName ?? string.Empty
-            },
+            CrossDay = IsCrossDay(requestInfo),
+            ToShift = GetToShift(requestInfo),
             ChangeShiftType = (byte)(requestInfo.ChangeShiftType ?? 0),
             IsWarning = requestInfo.IsWarning ?? false,
             ModifiedDate = requestInfo.ModifiedDate,
-            VerifiedStatus = requestInfo.VerifiedStatus ?? 0,
-            ApprovedStatus = requestInfo.ApprovedStatus ?? 0,
-            ProcessedStatus = requestInfo.ProcessedStatus ?? 0,
+            VerifiedStatus = GetStatus(requestInfo.VerifiedStatus),
+            ApprovedStatus = GetStatus(requestInfo.ApprovedStatus),
+            ProcessedStatus = GetStatus(requestInfo.ProcessedStatus),
             ReworkCount = requestInfo.ReworkCount ?? 0
         };
 
         return entity;
     }
+
+    private static bool IsCrossDay(dynamic requestInfo)
+        => (requestInfo.FromTime == null || requestInfo.ToTime == null) ?? requestInfo.FromTime.DayOfYear > requestInfo.ToTime.DayOfYear;
+
+    private static int GetStatus(dynamic value) => value ?? 0;
+
+    private static LeaveType GetLeaveType(dynamic requestInfo)
+        => new() { Id = requestInfo.LeaveTypeId ?? 0, Name = requestInfo.LeaveTypeName ?? string.Empty };
+
+    private static Shift GetFromShift(dynamic requestInfo)
+        => new()
+        {
+            Id = requestInfo.FromShiftId ?? 0,
+            Name = requestInfo.FromShiftName ?? string.Empty
+        };
+
+    private static Shift GetToShift(dynamic requestInfo)
+        => new()
+        {
+            Id = requestInfo.ToShiftId ?? 0,
+            Name = requestInfo.ToShiftName ?? string.Empty
+        };
 
     private static Employee GetRequester(dynamic requestInfo)
     {
