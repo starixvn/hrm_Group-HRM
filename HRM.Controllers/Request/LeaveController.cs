@@ -241,7 +241,7 @@ public class LeaveController(
         {
             EmpId = employeeId,
             RequestId = requestId == -1 ? null : requestId,
-            EffectedDay = toDate ?? DateTimeOffset.Now.Date
+            EffectedDay = toDate ?? DateTimeOffset.Now.Date.ToClientTimeZone()
         };
         var employeeLeaveBalance = await leaveRequestService.GetLeaveBalanceAsync(criteria);
         return new JsonResult(employeeLeaveBalance);
@@ -487,7 +487,9 @@ public class LeaveController(
         {
             EmpId = session.UserId,
             RequestId = requestId,
-            EffectedDay = year.HasValue ? new DateTimeOffset(year.Value, 1, 1, 0, 0, 0, TimeSpan.Zero).Date : DateTimeOffset.Now.Date
+            EffectedDay = year.HasValue
+                ? new DateTimeOffset(year.Value, 1, 1, 0, 0, 0, TimeSpan.Zero).Date
+                : DateTimeOffset.Now.Date.ToClientTimeZone()
         };
         return await leaveRequestService.GetLeaveBalanceAsync(criteria);
     }
