@@ -24,6 +24,4 @@ public class PayrollService(IBaseService baseService) : IPayrollService
     {
         return await baseService.ExecuteNonQueryAsync(criteria);
     }
-
-
 }

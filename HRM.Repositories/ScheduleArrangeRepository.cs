@@ -85,6 +85,10 @@ public class ScheduleArrangeRepository : IScheduleArrangeRepository
                     case DayOfWeek.Sunday:
                         weeklySchedule.SundaySchedule = dailySchedule;
                         break;
+
+                    default:
+                        // Handle other days of the week
+                        break;
                 }
             }
         }

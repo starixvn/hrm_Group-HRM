@@ -1,15 +1,13 @@
-﻿using HRM.Repositories.Interfaces;
-
-namespace HRM.Repositories;
+﻿namespace HRM.Repositories;
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
+using Core.Enums;
 using Fanex.Data;
 using Fanex.Data.Repository;
-using Core.Enums;
+using Interfaces;
 using Models.Discipline;
 
 public class DisciplineRepository : IDisciplineRepository
@@ -42,7 +40,6 @@ public class DisciplineRepository : IDisciplineRepository
         return disciplineDetails;
     }
 
-    [SuppressMessage("Critical Code Smell", "S1541:Methods and properties should not be too complex", Justification = "<Pending>")]
     private static void AddIgnoreDisciplineDetail(IEnumerable<DisciplineDetailModel> disciplineDetails, List<IgnoredDisciplineDetailModel> ignoreDisciplines)
     {
         foreach (var disciplineDetail in disciplineDetails)
@@ -106,14 +103,15 @@ public class DisciplineRepository : IDisciplineRepository
                         disciplineDetail.SevenDaysLeave.IgnoreBy = ignoreDiscipline.IgnoreBy;
                         disciplineDetail.SevenDaysLeave.IgnoreDate = ignoreDiscipline.IgnoreDate;
                         break;
+
                     default:
+                        // Handle other discipline types
                         break;
                 }
             }
         }
     }
 
-    [SuppressMessage("Major Code Smell", "S109:Magic numbers should not be used", Justification = "Pending")]
     private static IList<DisciplineDetailModel> MappingObjectForDisciplineDetail(IEnumerable<dynamic> disciplines)
     {
         return disciplines.Select(discipline =>
