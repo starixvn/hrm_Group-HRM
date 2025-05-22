@@ -112,7 +112,9 @@ public class LeaveRequestService(
         {
             EmpId = userId,
             RequestId = requestId,
-            EffectedDay = year.HasValue ? new DateTimeOffset(year.Value, 1, 1, 0, 0, 0, TimeSpan.Zero).Date : DateTimeOffset.Now.Date
+            EffectedDay = year.HasValue
+                ? new DateTimeOffset(year.Value, 1, 1, 0, 0, 0, TimeSpan.Zero).Date
+                : DateTimeOffset.Now.Date.ToClientTimeZone()
         };
         return await GetLeaveBalanceAsync(criteria);
     }

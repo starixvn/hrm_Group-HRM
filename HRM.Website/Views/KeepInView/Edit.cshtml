@@ -3,7 +3,7 @@
 @using HRM.Resources
 @model HRM.ViewModels.Request.KeepInViewRequestViewModel
 @{
-    ViewBag.Title = Labels.Edit;
+    ViewBag.Title = Labels.KeepCompensationLeave;
 }
 @section css{
     <link href="~/dist/styles/keepinview.create.css" rel="stylesheet" />
@@ -82,7 +82,7 @@
         <div id="timeGroup" class="form-group"
              style="display: @(Model.KeepInViewType == (byte)KeepInViewTypes.KeepInViewByHour
                 || (Model.KeepInViewType == (byte)KeepInViewTypes.KeepInViewByDay && Model.HalfDay) ? string.Empty : "none")">
-            <div class="label-form">@Labels.Time</div>
+            <div class="label-form">@Labels.Overtime</div>
             <div class="select-form request-time">
                 @Html.DropDownList("FromTime", Utilities.TimeSteps(30), new { @class = "form-control" })
                 <span>~</span>
@@ -114,7 +114,7 @@
         </div>
         <div class="form-group">
             <div class="label-form">
-                @Html.LabelFor(model => model.Remark, new { @class = "control-label" })
+                @Html.LabelFor(model => model.Remark, Labels.RemarkNote, new { @class = "control-label" })
             </div>
             <div class="input-form">
                 @Html.TextAreaFor(model => model.Remark, new { @class = "form-control" })

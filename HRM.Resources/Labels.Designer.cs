@@ -691,7 +691,7 @@ namespace HRM.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to By Day.
+        ///   Looks up a localized string similar to OT by Day.
         /// </summary>
         public static string ByDay {
             get {
@@ -709,7 +709,7 @@ namespace HRM.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to By Hour.
+        ///   Looks up a localized string similar to OT by Hour.
         /// </summary>
         public static string ByHour {
             get {
@@ -2608,6 +2608,15 @@ namespace HRM.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Keep Compensation Leave.
+        /// </summary>
+        public static string KeepCompensationLeave {
+            get {
+                return ResourceManager.GetString("KeepCompensationLeave", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Keyword.
         /// </summary>
         public static string Keyword {
@@ -4197,6 +4206,15 @@ namespace HRM.Resources {
         public static string Remark {
             get {
                 return ResourceManager.GetString("Remark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please remark the reason and the outcomes of your overtime work .
+        /// </summary>
+        public static string RemarkNote {
+            get {
+                return ResourceManager.GetString("RemarkNote", resourceCulture);
             }
         }
         

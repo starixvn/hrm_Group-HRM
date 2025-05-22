@@ -481,9 +481,6 @@ public class LeaveController(
         model.IsToTimeAfterDay = fromTime.Date != toTime.Date || request.ToDate.Date != toTime.Date;
     }
 
-            EffectedDay = year.HasValue
-                ? new DateTimeOffset(year.Value, 1, 1, 0, 0, 0, TimeSpan.Zero).Date
-                : DateTimeOffset.Now.Date.ToClientTimeZone()
     private async Task<DateTime> GetEmployeeMinDate()
     {
         var today = DateTimeOffset.Now.DateTime.ToClientTimeZone().Date;

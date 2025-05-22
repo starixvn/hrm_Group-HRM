@@ -336,6 +336,9 @@
   <data name="Time" xml:space="preserve">
     <value>Time</value>
   </data>
+  <data name="Overtime" xml:space="preserve">
+    <value>Overtime</value>
+  </data>
   <data name="ChangeShiftRequest" xml:space="preserve">
     <value>Change Shift Request</value>
   </data>
@@ -368,6 +371,9 @@
   </data>
   <data name="Remark" xml:space="preserve">
     <value>Remark</value>
+  </data>
+  <data name="RemarkNote" xml:space="preserve">
+    <value>Please remark the reason and the outcomes of your overtime work </value>
   </data>
   <data name="Total" xml:space="preserve">
     <value>Total(s)</value>
@@ -680,6 +686,9 @@
   </data>
   <data name="MyKeepInViewRequest" xml:space="preserve">
     <value>My Compensation Leave Request(s)</value>
+  </data>
+  <data name="KeepCompensationLeave" xml:space="preserve">
+    <value>Keep Compensation Leave</value>
   </data>
   <data name="ShiftManager" xml:space="preserve">
     <value>Shift Manager</value>
@@ -1576,10 +1585,10 @@
     <value>Violation 2</value>
   </data>
   <data name="ByDay" xml:space="preserve">
-    <value>By Day</value>
+    <value>OT by Day</value>
   </data>
   <data name="ByHour" xml:space="preserve">
-    <value>By Hour</value>
+    <value>OT by Hour</value>
   </data>
   <data name="WorkingDaysMonth" xml:space="preserve">
     <value>Working Days/Month</value>
