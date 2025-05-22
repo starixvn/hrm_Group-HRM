@@ -44,6 +44,32 @@ public class ExportLeaveSummaryController(
         return ExcelFile(workbook, fileName);
     }
 
+    public async Task<IActionResult> AnnualLeaveSummaryForJoinedDate(LeaveSummaryViewModel model)
+    {
+        var fileName = $"LeaveSummary_{DateTimeOffset.Now.DateTime.ToClientTimeZone():yyyyMMdd}.xls";
+        byte? isLocal = null;
+        if (model.Category != null)
+        {
+            isLocal = (byte)model.Category;
+        }
+
+        var criteria = new GetAnnualLeaveBalanceForJoinedDateCriteria
+        {
+            FromDate = DateTimeOffset.Now.DateTime.ToClientTimeZone(),
+            EmpId = model.EmployeeId > 0 ? new int?(model.EmployeeId) : null,
+            TeamIds = model.TeamIds,
+            IsLocal = isLocal,
+            Role = string.Empty,
+            SupervisorId = null,
+            CompanyId = CurrentCompanyId
+        };
+        var leaveSummary = await reportService.GetAnnualLeaveBalanceForJoinedDateReportAsync(criteria);
+
+        var workbook = exportExcelService.ExportLeaveSummaryForJoinedDate(leaveSummary);
+
+        return ExcelFile(workbook, fileName);
+    }
+
     public async Task<IActionResult> UnpaidLeaveSummary(LeaveSummaryViewModel model)
     {
         var criteria = CreateUnpaidLeaveCriteria(model);

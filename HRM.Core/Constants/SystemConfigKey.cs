@@ -7,4 +7,6 @@ public static class SystemConfigKey
     public const string SyncWorkingShift = "SyncWorkingShift";
 
     public const string MailSetting = "MailSetting";
+
+    public const string AnnualLeaveResetTimeLine = "AnnualLeaveResetTimeLine";
 }

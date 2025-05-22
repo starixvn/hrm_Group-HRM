@@ -210,6 +210,7 @@ public class RequestController(
                 break;
 
             default:
+                // Handle other request types
                 break;
         }
     }

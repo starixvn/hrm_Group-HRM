@@ -16,4 +16,5 @@ public class LeaveSummaryViewModel
     public string LeaveType { get; set; }
     public bool IsShowCloseBalance { get; set; }
     public IEnumerable<LeaveSummary> LeaveSumaries { get; set; }
+    public IEnumerable<LeaveSummaryForJoinedDate> LeaveSumariesForJoinedDate { get; set; }
 }

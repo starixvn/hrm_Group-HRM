@@ -22,17 +22,20 @@
     @using (Html.BeginForm())
     {
         <div class="form-horizontal clearfix">
-            <div class="form-group year">
-                <div class="label-form">
-                    @Html.LabelFor(model => model.Year, new { @class = "control-label" })
+            @if (!(Boolean)ViewBag.IsJoinedDateRule)
+            {
+                <div class="form-group year">
+                    <div class="label-form">
+                        @Html.LabelFor(model => model.Year, new { @class = "control-label" })
                 </div>
                 <div class="select-form">
                     @{
                         var years = Extensions.YearPickerFor(2010);
                         <select asp-items="years" asp-for="Year" class="yearpicker form-control"></select>
                     }
+                    </div>
                 </div>
-            </div>
+            }
 
             <div class="form-group form-group--m" style="margin-top: 10px;">
                 <input type="checkbox" class="checkbox-custom" id="ExcludedRequestTrans" name="ExcludedRequestTrans"

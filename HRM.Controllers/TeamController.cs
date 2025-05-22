@@ -62,11 +62,13 @@ public class TeamController(
             LocalWorkingHours = GetValue(team.LocalWorkingHours),
             LocalOffDaysbyWeek = GetValue(team.LocalOffDaysbyWeek),
             LocalWorkingHoursbyWeek = team.LocalWorkingHoursbyWeek,
+            LocalYearsOfServiceForExtraLeave = team.LocalYearsOfServiceForExtraLeave,
             ExpatBasicAnnualLeaveBalance = GetValue(team.ExpatBasicAnnualLeaveBalance),
             ExpatWorkingDays = GetValue(team.ExpatWorkingDays),
             ExpatWorkingHours = GetValue(team.ExpatWorkingHours),
             ExpatOffDaysbyWeek = GetValue(team.ExpatOffDaysbyWeek),
             ExpatWorkingHoursbyWeek = team.ExpatWorkingHoursbyWeek,
+            ExpatYearsOfServiceForExtraLeave = team.ExpatYearsOfServiceForExtraLeave,
             DepartmentId = team.Department?.Id ?? 0,
             Departments = await departmentService.GetDepartmentAsync(),
             DepartmentName = team.Department?.Name ?? "",
@@ -109,11 +111,13 @@ public class TeamController(
                     LocalWorkingHours = GetValue(model.LocalWorkingHours),
                     LocalOffDaysbyWeek = GetValue(model.LocalOffDaysbyWeek),
                     LocalWorkingHoursbyWeek = model.LocalWorkingHoursbyWeek,
+                    LocalYearsOfServiceForExtraLeave = model.LocalYearsOfServiceForExtraLeave,
                     ExpatBasicAnnualLeaveBalance = GetValue(model.ExpatBasicAnnualLeaveBalance),
                     ExpatWorkingDays = GetValue(model.ExpatWorkingDays),
                     ExpatWorkingHours = GetValue(model.ExpatWorkingHours),
                     ExpatOffDaysbyWeek = GetValue(model.ExpatOffDaysbyWeek),
-                    ExpatWorkingHoursbyWeek = model.ExpatWorkingHoursbyWeek
+                    ExpatWorkingHoursbyWeek = model.ExpatWorkingHoursbyWeek,
+                    ExpatYearsOfServiceForExtraLeave = model.ExpatYearsOfServiceForExtraLeave
                 };
                 var result = await baseService.ExecuteNonQueryAsync(criteria);
 

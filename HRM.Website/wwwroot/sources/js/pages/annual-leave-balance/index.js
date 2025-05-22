@@ -25,7 +25,8 @@ const annualLeaveBalance = (function ($) {
 
     function submitData(postToUrl) {
         const teamIds = $('#Team').multiSelectTreeView('getSelectedItems');
-        return resolveClientUrl(postToUrl + $('#Year').val()
+        const year = $('#Year').val() || 0;
+        return resolveClientUrl(postToUrl + year
             + '&teamIds=' + (teamIds !== '' ? teamIds : ' ')
             + '&Employee=' + $('#Employee').val()
             + '&EmployeeId=' + $('#EmployeeId').val()
@@ -43,8 +44,13 @@ const annualLeaveBalance = (function ($) {
 
     function initExportExcelEvent() {
         $('#btnExcel').click(function () {
-            var postToUrl = 'ExportLeaveSummary/AnnualLeaveSummary?year=';
-            var url = submitData(postToUrl);
+            if(window.IsJoinedDateRule == 'True') {
+                var postToUrl = 'ExportLeaveSummary/AnnualLeaveSummaryForJoinedDate?year=';
+                var url = submitData(postToUrl);
+            } else {
+                var postToUrl = 'ExportLeaveSummary/AnnualLeaveSummary?year=';
+                var url = submitData(postToUrl);
+            }
             location.href = url;
         });
     }

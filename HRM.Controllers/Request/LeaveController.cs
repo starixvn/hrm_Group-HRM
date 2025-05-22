@@ -78,7 +78,8 @@ public class LeaveController(
             Approvers = supervisor.Approvers,
             MinDate = minDate,
             EnableHospitalizationLeaveBalance = setting.EnableHospitalizationLeaveBalance,
-            EnableSickLeaveBalance = setting.EnableSickLeaveBalance
+            EnableSickLeaveBalance = setting.EnableSickLeaveBalance,
+            EnableLimitUseAnnualLeaveBalance = setting.EnableLimitUseAnnualLeaveBalance
         };
         ViewBag.IsTopManager = EmployeeSession.IsTopManager;
         ViewBag.HasOnBehalfOthersPermission = session.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
@@ -147,6 +148,7 @@ public class LeaveController(
         model.Files = (await attachFileService.GetInfoAttachFileAsync(id, $"{CurrentCompanyId}/requests")).Select(x => x.FileName).ToList();
         model.EnableHospitalizationLeaveBalance = setting.EnableHospitalizationLeaveBalance;
         model.EnableSickLeaveBalance = setting.EnableSickLeaveBalance;
+        model.EnableLimitUseAnnualLeaveBalance = setting.EnableLimitUseAnnualLeaveBalance;
 
         ViewBag.IsView = false;
         ViewBag.IsTopManager = request.Requester.IsTopManager;
@@ -239,7 +241,7 @@ public class LeaveController(
         {
             EmpId = employeeId,
             RequestId = requestId == -1 ? null : requestId,
-            EffectedDay = toDate ?? DateTimeOffset.Now.Date
+            EffectedDay = toDate ?? DateTimeOffset.Now.Date.ToClientTimeZone()
         };
         var employeeLeaveBalance = await leaveRequestService.GetLeaveBalanceAsync(criteria);
         return new JsonResult(employeeLeaveBalance);
@@ -485,7 +487,9 @@ public class LeaveController(
         {
             EmpId = session.UserId,
             RequestId = requestId,
-            EffectedDay = year.HasValue ? new DateTimeOffset(year.Value, 1, 1, 0, 0, 0, TimeSpan.Zero).Date : DateTimeOffset.Now.Date
+            EffectedDay = year.HasValue
+                ? new DateTimeOffset(year.Value, 1, 1, 0, 0, 0, TimeSpan.Zero).Date
+                : DateTimeOffset.Now.Date.ToClientTimeZone()
         };
         return await leaveRequestService.GetLeaveBalanceAsync(criteria);
     }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using HRM.Core;
 using HRM.Core.Enums;
@@ -20,6 +21,7 @@ public class ExportExcelService(IWebHostEnvironment hostingEnvironment) : IExpor
     private const int RowStartBodyWorkingCalendar = 5;
 
     private const string LeaveSummaryFilePathExcelTemplate = "ExcelTemplates/LeaveSummaryTemplate.xls";
+    private const string LeaveSummaryForJoinedDateFilePathExcelTemplate = "ExcelTemplates/LeaveSummaryForJoinedDateTemplate.xls";
     private const string EmployeeWFHTemplate = "ExcelTemplates/EmployeeWorkFromHome.xls";
     private const string WorkingTimeRequestFilePathExcelTemplate = "ExcelTemplates/WorkingTimeRequestTemplate.xls";
     private const string HospitalizationLeaveSummaryTemplatePath = "ExcelTemplates/HospitalizationLeaveSummary.xls";
@@ -128,6 +130,51 @@ public class ExportExcelService(IWebHostEnvironment hostingEnvironment) : IExpor
             row.GetCell(18).SetCellValue(item.Dec);
             row.GetCell(19).SetCellValue(item.LeaveBalance);
             row.GetCell(20).SetCellValue(item.KIVBalance);
+
+            index++;
+            rowIndex++;
+        }
+
+        workbook.RemoveSheetAt(0);
+
+        return workbook;
+    }
+
+    public HSSFWorkbook ExportLeaveSummaryForJoinedDate(IEnumerable<LeaveSummaryForJoinedDate> leaveSummaryList)
+    {
+        HSSFWorkbook workbook;
+
+        var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, LeaveSummaryForJoinedDateFilePathExcelTemplate);
+        using (var template = new FileStream(templatePath, FileMode.Open, FileAccess.Read))
+        {
+            workbook = new HSSFWorkbook(template);
+        }
+
+        var templateSheet = workbook.GetSheet(DefaultSheetName);
+        var sheet = workbook.CloneSheet(DefaultSheetName, "LeaveSummary");
+
+        // render body
+        var rowIndex = RowStartBodyLeaveSummary;
+        var height = sheet.GetRow(RowStartBodyLeaveSummary).Height;
+        var index = 0;
+
+        foreach (var item in leaveSummaryList)
+        {
+            var rowCopy = RowStartBodyWorkingCalendar + index % 2;
+            sheet.CopyRow(templateSheet, rowCopy, rowIndex);
+            var row = sheet.GetRow(rowIndex);
+            row.Height = height;
+
+            row.GetCell(0).SetCellValue(index + 1); // #
+            row.GetCell(1).SetCellValue(item.Department); // Department
+            row.GetCell(2).SetCellValue(item.Team); // Team
+            row.GetCell(3).SetCellValue(item.FullName); // FullName
+            row.GetCell(4).SetCellValue(item.Nickname); // Nickname
+            row.GetCell(5).SetCellValue(item.FromDate == DateTimeOffset.MinValue ? string.Empty : item.FromDate.ToString("dd MMM yyyy")); // Joined Date
+            row.GetCell(6).SetCellValue(item.AnnualLeaveCurrentYear); // Annual Leave
+            row.GetCell(7).SetCellValue(item.ExtraLeave); // Extra Leave
+            row.GetCell(8).SetCellValue(item.DeductDays); // Taken Leave
+            row.GetCell(9).SetCellValue(item.LeaveBalance); // Balance
 
             index++;
             rowIndex++;

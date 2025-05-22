@@ -76,6 +76,8 @@ public class TeamViewModel
     [Range(1, 120, ErrorMessage = "Working hours per week must be between 1 and 120.")]
     public byte? LocalWorkingHoursbyWeek { get; set; }
 
+    public byte? LocalYearsOfServiceForExtraLeave { get; set; }
+
     [Required(ErrorMessageResourceName = nameof(Messages.RequiredErrorMessage), ErrorMessageResourceType = typeof(Messages))]
     [Display(Name = nameof(Labels.BasicAnnualLeaveBalance), ResourceType = typeof(Labels))]
     [Range(0, int.MaxValue, ErrorMessage = "Basic Annual Leave Balance must be greater than 0.")]
@@ -99,4 +101,6 @@ public class TeamViewModel
     [Display(Name = nameof(Labels.WorkingHoursPerWeek), ResourceType = typeof(Labels))]
     [Range(1, 120, ErrorMessage = "Working hours per week must be between 1 and 120.")]
     public byte? ExpatWorkingHoursbyWeek { get; set; }
+
+    public byte? ExpatYearsOfServiceForExtraLeave { get; set; }
 }

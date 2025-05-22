@@ -18,11 +18,13 @@ public class EditTeamCriteria : CriteriaBase
     public int LocalWorkingHours { get; set; }
     public int LocalOffDaysbyWeek { get; set; }
     public byte? LocalWorkingHoursbyWeek { get; set; }
+    public byte? LocalYearsOfServiceForExtraLeave { get; set; }
     public int ExpatBasicAnnualLeaveBalance { get; set; }
     public int ExpatWorkingDays { get; set; }
     public int ExpatWorkingHours { get; set; }
     public int ExpatOffDaysbyWeek { get; set; }
     public byte? ExpatWorkingHoursbyWeek { get; set; }
+    public byte? ExpatYearsOfServiceForExtraLeave { get; set; }
 
     public override string GetSettingKey()
     {

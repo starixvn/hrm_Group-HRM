@@ -5902,6 +5902,15 @@ namespace HRM.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Years Of Service For Extra Leave.
+        /// </summary>
+        public static string YearsOfServiceForExtraLeave {
+            get {
+                return ResourceManager.GetString("YearsOfServiceForExtraLeave", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Yes.
         /// </summary>
         public static string Yes {

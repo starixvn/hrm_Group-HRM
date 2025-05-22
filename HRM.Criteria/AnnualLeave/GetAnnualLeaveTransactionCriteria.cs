@@ -1,12 +1,13 @@
 ﻿namespace HRM.Criteria.AnnualLeave;
 
+using System;
 using Fanex.Data.Repository;
 
 public class GetAnnualLeaveTransactionCriteria : CriteriaBase
 {
     public int EmpId { get; set; }
 
-    public int Year { get; set; }
+    public DateTime FromDate { get; set; }
 
     public bool ExcludedRequestTrans { get; set; }
 

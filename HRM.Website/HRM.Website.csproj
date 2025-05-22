@@ -189,6 +189,9 @@
     <Content Include="EmailTemplates\EditMemoNotification.txt">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+	<Content Include="ExcelTemplates\LeaveSummaryForJoinedDateTemplate.xls">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
 	  <Content Include="logs\log.txt" />
   </ItemGroup>
   <ItemGroup>

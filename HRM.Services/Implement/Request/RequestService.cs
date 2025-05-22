@@ -229,6 +229,10 @@ public class RequestService(
             case RequestType.KeepInView:
                 await keepInViewRequestService.SendMailProcessRequestAsync(param.RequestId, actor, command);
                 break;
+
+            default:
+                // Handle other request types
+                break;
         }
     }
 
@@ -258,6 +262,10 @@ public class RequestService(
 
                 case (int)RequestType.KeepInView:
                     await keepInViewRequestService.SendMailProcessRequestAsync(request.RequestId, actor, command);
+                    break;
+
+                default:
+                    // Handle other request types
                     break;
             }
         }

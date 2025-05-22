@@ -47,6 +47,11 @@ public class ReportService(
         return await baseService.GetDataAsync<LeaveSummary>(criteria);
     }
 
+    public async Task<IEnumerable<LeaveSummaryForJoinedDate>> GetAnnualLeaveBalanceForJoinedDateReportAsync(GetAnnualLeaveBalanceForJoinedDateCriteria criteria)
+    {
+        return await baseService.GetDataAsync<LeaveSummaryForJoinedDate>(criteria);
+    }
+
     public async Task<IEnumerable<LeaveSummary>> GetUnpaidLeaveAsync(GetUnpaidLeaveCriteria criteria, string period)
     {
         var leaveSummaries = await baseService.GetDataAsync<LeaveSummary>(criteria);

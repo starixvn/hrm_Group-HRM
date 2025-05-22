@@ -12,6 +12,7 @@ using Core.Services;
 using Criteria.AnnualLeave;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
+using HRM.Core.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Models;
 using Models.AnnualLeaveBalance;
@@ -36,6 +37,8 @@ public class AnnualLeaveBalanceController(
         int? employeeId = null,
         int? category = null)
     {
+        var isJoinedDateRule = session.Get<short>(SessionKey.AnnualLeaveRule) == (short)AnnualLeaveRuleType.JoinedDate;
+        ViewBag.IsJoinedDateRule = isJoinedDateRule;
         ViewBag.HasPermissionToEdit = session.HasPermissionOnFunction(FunctionKey.AnnualLeaveBalance, Policy.Host);
         var model = new LeaveSummaryViewModel
         {
@@ -46,20 +49,33 @@ public class AnnualLeaveBalanceController(
             Category = category,
             IsShowCloseBalance = appSettings.IsShowCloseBalance
         };
-
-        return await Index(model);
+        return isJoinedDateRule 
+            ? await GetJoinedDateRuleData("JoinedDateRule", model)
+            : await GetYearlyRuleData("YearlyRule", model);
     }
 
     [HttpPost]
     [HrmPermission(Policy.Read, FunctionKey.AnnualLeaveBalance)]
-    public async Task<IActionResult> Index(LeaveSummaryViewModel model)
+    public async Task<IActionResult> GetYearlyRuleData(string view, LeaveSummaryViewModel model)
     {
         model.Teams = await teamService.GetBySupervisorAsync(session.UserId);
         model.TeamIds = !string.IsNullOrWhiteSpace(model.TeamIds) ? model.TeamIds : string.Join(",", model.Teams.Select(x => x.Id));
         model.IsShowCloseBalance = appSettings.IsShowCloseBalance;
         model.LeaveSumaries = await GetAnnualLeaveBalanceAsync(model);
 
-        return View(model);
+        return View(view, model);
+    }
+
+    [HttpPost]
+    [HrmPermission(Policy.Read, FunctionKey.AnnualLeaveBalance)]
+    public async Task<IActionResult> GetJoinedDateRuleData(string view, LeaveSummaryViewModel model)
+    {
+        model.Teams = await teamService.GetBySupervisorAsync(session.UserId);
+        model.TeamIds = !string.IsNullOrWhiteSpace(model.TeamIds) ? model.TeamIds : string.Join(",", model.Teams.Select(x => x.Id));
+        model.IsShowCloseBalance = false;
+        model.LeaveSumariesForJoinedDate = await GetAnnualLeaveBalanceForJoinedDateAsync(model);
+
+        return View(view, model);
     }
 
     [HttpPost]
@@ -113,13 +129,14 @@ public class AnnualLeaveBalanceController(
     [HrmPermission(Policy.Read, FunctionKey.AnnualLeaveBalance)]
     public async Task<IActionResult> Employee(int id)
     {
-        var year = DateTimeOffset.Now.DateTime.ToClientTimeZone().Year;
+        ViewBag.IsJoinedDateRule = session.Get<short>(SessionKey.AnnualLeaveRule) == (short)AnnualLeaveRuleType.JoinedDate;
+        var fromDate = DateTimeOffset.Now.DateTime.ToClientTimeZone();
         var model = new AnnualLeaveBalanceViewModel
         {
             EmployeeId = id,
-            Year = year,
+            Year = fromDate.Year,
             ExcludedRequestTrans = true,
-            AnnualLeaveBalances = await GetAnnualLeaveTransactionAsync(id, false, year),
+            AnnualLeaveBalances = await GetAnnualLeaveTransactionAsync(id, false, fromDate),
             Employee = await employeeService.GetEmployeeByIdAsync(id)
         };
 
@@ -130,9 +147,12 @@ public class AnnualLeaveBalanceController(
     [HrmPermission(Policy.Read, FunctionKey.AnnualLeaveBalance)]
     public async Task<IActionResult> Employee(AnnualLeaveBalanceViewModel model)
     {
+        ViewBag.IsJoinedDateRule = session.Get<short>(SessionKey.AnnualLeaveRule) == (short)AnnualLeaveRuleType.JoinedDate;
+        var fromDate = model.Year == 0
+            ? DateTimeOffset.Now.DateTime.ToClientTimeZone()
+            : new DateTimeOffset(model.Year, 1, 1, 0, 0, 0, TimeSpan.Zero).DateTime;
         model.Employee = await employeeService.GetEmployeeByIdAsync(model.EmployeeId);
-        model.AnnualLeaveBalances = await GetAnnualLeaveTransactionAsync(model.EmployeeId, !model.ExcludedRequestTrans, model.Year);
-
+        model.AnnualLeaveBalances = await GetAnnualLeaveTransactionAsync(model.EmployeeId, !model.ExcludedRequestTrans, fromDate);
         return View(model);
     }
 
@@ -216,13 +236,28 @@ public class AnnualLeaveBalanceController(
         return await reportService.GetAnnualLeaveBalanceReportAsync(criteria);
     }
 
-    private async Task<IEnumerable<AnnualLeaveTransactionViewModel>> GetAnnualLeaveTransactionAsync(int empId, bool excludedRequest, int year)
+    private async Task<IEnumerable<LeaveSummaryForJoinedDate>> GetAnnualLeaveBalanceForJoinedDateAsync(LeaveSummaryViewModel model)
+    {
+        var criteria = new GetAnnualLeaveBalanceForJoinedDateCriteria
+        {
+            FromDate = DateTimeOffset.Now.DateTime.ToClientTimeZone(),
+            EmpId = model.EmployeeId != -1 ? new int?(model.EmployeeId) : null,
+            TeamIds = model.TeamIds,
+            IsLocal = (byte?)model.Category,
+            Role = string.Empty,
+            SupervisorId = session.UserId,
+            CompanyId = CurrentCompanyId
+        };
+        return await reportService.GetAnnualLeaveBalanceForJoinedDateReportAsync(criteria);
+    }
+
+    private async Task<IEnumerable<AnnualLeaveTransactionViewModel>> GetAnnualLeaveTransactionAsync(int empId, bool excludedRequest, DateTime fromDate)
     {
         var criteria = new GetAnnualLeaveTransactionCriteria
         {
             EmpId = empId,
             ExcludedRequestTrans = excludedRequest,
-            Year = year
+            FromDate = fromDate
         };
 
         return await employeeService.GetAnnualLeaveTransactionAsync(criteria);
