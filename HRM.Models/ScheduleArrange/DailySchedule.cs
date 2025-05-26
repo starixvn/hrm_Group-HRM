@@ -30,5 +30,5 @@ public class DailySchedule
     public LeaveRequest LeaveType2 { get; set; }
     public bool IsLeaveHalfDay => IsLeaveDay && !IsHoliday && !IsOffDay && LeaveDay == Constants.HalfDayOffValue;
 
-    public bool IsPublic { get; set; }
+    public bool IsPublic { get; set; } = true;
 }
