@@ -106,6 +106,19 @@ public class LeaveRequestService(
         return await leaveRequestRepository.GetEmployeeCalendarAsync(criteria);
     }
 
+    public async Task<EmployeeLeaveBalance> GetLeaveBalance(int userId, long? requestId, int? year)
+    {
+        var criteria = new GetLeaveBalanceCriteria
+        {
+            EmpId = userId,
+            RequestId = requestId,
+            EffectedDay = year.HasValue
+                ? new DateTimeOffset(year.Value, 1, 1, 0, 0, 0, TimeSpan.Zero).Date
+                : DateTimeOffset.Now.Date.ToClientTimeZone()
+        };
+        return await GetLeaveBalanceAsync(criteria);
+    }
+
     public async Task<EmployeeLeaveBalance> GetLeaveBalanceAsync(GetLeaveBalanceCriteria criteria)
     {
         var leaveBalance = await baseService.GetDataEntityAsync<EmployeeLeaveBalance>(criteria);

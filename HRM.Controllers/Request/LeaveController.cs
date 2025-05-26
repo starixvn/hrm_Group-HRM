@@ -53,7 +53,7 @@ public class LeaveController(
             request.CreatedDate = request.CreatedDate.ToClientTimeZone();
         }
         ViewBag.Year = tempYear;
-        ViewBag.EmployeeBalance = await GetLeaveBalance(null, year);
+        ViewBag.EmployeeBalance = await leaveRequestService.GetLeaveBalance(session.UserId,null, year);
         return View(leaves);
     }
 
@@ -73,7 +73,7 @@ public class LeaveController(
             ToDate = today,
             TotalDays = 1,
             LeaveTypeList = await commonDataService.GetLeaveTypeAsync(),
-            EmployeeLeaveBalance = await GetLeaveBalance(null, null),
+            EmployeeLeaveBalance = await leaveRequestService.GetLeaveBalance(session.UserId, null, null),
             Verifiers = supervisor.Verifiers,
             Approvers = supervisor.Approvers,
             MinDate = minDate,
@@ -139,7 +139,7 @@ public class LeaveController(
             LeaveTypeId = model.LeaveTypeId
         });
         model.LeaveTypeList = await commonDataService.GetLeaveTypeAsync();
-        model.EmployeeLeaveBalance = await GetLeaveBalance(id, null);
+        model.EmployeeLeaveBalance = await leaveRequestService.GetLeaveBalance(session.UserId, id, null);
 
         var supervisor = await requestService.GetVerifierAndApproverAsync(model.EmployeeId, RequestType.Leave);
         var setting = await commonDataService.GetSystemSettingAsync();
@@ -479,19 +479,6 @@ public class LeaveController(
         model.ToTimeMinute = toTime.Minute;
         model.IsFromTimeAfterDay = request.FromDate.Date != fromTime.Date;
         model.IsToTimeAfterDay = fromTime.Date != toTime.Date || request.ToDate.Date != toTime.Date;
-    }
-
-    private async Task<EmployeeLeaveBalance> GetLeaveBalance(long? requestId, int? year)
-    {
-        var criteria = new GetLeaveBalanceCriteria
-        {
-            EmpId = session.UserId,
-            RequestId = requestId,
-            EffectedDay = year.HasValue
-                ? new DateTimeOffset(year.Value, 1, 1, 0, 0, 0, TimeSpan.Zero).Date
-                : DateTimeOffset.Now.Date.ToClientTimeZone()
-        };
-        return await leaveRequestService.GetLeaveBalanceAsync(criteria);
     }
 
     private async Task<DateTime> GetEmployeeMinDate()

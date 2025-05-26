@@ -1,11 +1,15 @@
 ﻿@using HRM.Core
 @using HRM.Core.Enums
+@using HRM.Models
 @using HRM.Models.Request
 @using HRM.Resources
 @using HRM.Website.Helper
 @model IList<HRM.Models.Request.KeepInViewRequest>
 @{
     ViewBag.Title = Labels.MyKeepInViewRequest;
+    var employeeBalance = ViewBag.EmployeeBalance == null ? null : (EmployeeLeaveBalance)ViewBag.EmployeeBalance;
+    var keepInViewBalance = employeeBalance?.KeepInViewBalance ?? 0;
+    var keepInViewHourBalance = employeeBalance?.KeepInViewByHourBalance ?? 0;
 }
 @section css{
     <link href="~/dist/styles/changeshift.myrequest.css" rel="stylesheet" />
@@ -17,6 +21,7 @@
     <a class="step">Personal</a><a class="step">@ViewBag.Title</a>
 }
 <h2 class="page-title">@ViewBag.Title</h2>
+<div class="filter-wrapper">
 @using (Html.BeginForm("employeeview", "keepinview", FormMethod.Get, new { @class = "filter" }))
 {
     <div class="form-horizontal clearfix">
@@ -44,6 +49,10 @@
         </div>
     </div>
 }
+<div class="leave-balance">
+    <div>Compensation Leave Balance:<strong> @keepInViewBalance.ToString("0.#") day(s) @keepInViewHourBalance.ToString("0.#") hour(s)</strong></div>
+</div>
+</div>
 <table class="table table-custom">
     <thead>
         <tr>

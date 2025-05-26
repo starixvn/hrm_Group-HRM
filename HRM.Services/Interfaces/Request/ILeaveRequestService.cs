@@ -40,4 +40,6 @@ public interface ILeaveRequestService
     Task SendMailDeleteRequest(long requestId);
 
     Task SendMailProcessRequest(long requestId, EmployeeSession actor, RequestCommand command);
+
+    Task<EmployeeLeaveBalance> GetLeaveBalance(int userId, long? requestId, int? year);
 }
