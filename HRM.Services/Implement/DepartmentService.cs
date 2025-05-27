@@ -99,7 +99,7 @@ public class DepartmentService(
             worksheet.Cells[rowIndex, colIndex++].Value = department.Name;
             worksheet.Cells[rowIndex, colIndex++].Value = department.AccountableArea;
             worksheet.Cells[rowIndex, colIndex++].Value = department.PICEmployeeName;
-            worksheet.Cells[rowIndex, colIndex++].Value = department.IsActive;
+            worksheet.Cells[rowIndex, colIndex++].Value = department.IsActive.ToString();
 
             rowIndex++;
         }
