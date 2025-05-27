@@ -3,6 +3,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using HRM.Core.Models;
+using HRM.Models.Group;
 using Models;
 
 public interface IDepartmentService
@@ -14,4 +15,6 @@ public interface IDepartmentService
     Task<Department> GetByIdAsync(int departmentId);
 
     Task<CommandResult> DeleteAsync(int actorId, int id);
+
+    Task<byte[]> GenerateExcelAsync(IEnumerable<Department> departments);
 }

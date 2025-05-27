@@ -1,15 +1,17 @@
-﻿namespace HRM.Controllers;
+﻿
+namespace HRM.Controllers;
 
+using System;
 using System.Threading.Tasks;
 using Core.Constants;
+using Core;
 using Core.Filters;
 using Criteria.Department;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
 using HRM.Core.Models;
 using HRM.Core.Services;
-using HRM.Criteria.Employee;
-using HRM.Models;
+using Criteria.Employee;
 using Microsoft.AspNetCore.Mvc;
 using Services.Interfaces;
 using ViewModels.Department;
@@ -143,5 +145,15 @@ public class DepartmentController(
         var employees = await employeeService.GetEmployeeForPICAsync(new GetEmployeeForPICCriteria());
         var nextId = await departmentService.GetNextGroupDeptIdAsync();
         return new JsonResult(new { employees, nextId });
+    }
+
+    [HrmPermission(Policy.Read, FunctionKey.DepartmentManagement)]
+    public async Task<IActionResult> ExportDepartmentList(GetDepartmentViewModel request)
+    {
+        var departments = await departmentService.GetDepartmentAsync(request.IsActive);
+        var bytes = await departmentService.GenerateExcelAsync(departments);
+        var fileName = $"Departments_{DateTimeOffset.Now.DateTime.ToClientTimeZone():yyyyMMdd}.xlsx";
+
+        return File(bytes, MimeType.XLS, fileName);
     }
 }

@@ -37,7 +37,23 @@ function initSortTable() {
     });
 }
 
+function exportExcel() {
+    var url = null,
+        controllerPath;
+
+    var nameSearchValue = $('#nameSearch').val();
+    controllerPath = "GroupTeam/ExportGroupTeamList?";
+
+    var query = `keyword=${nameSearchValue}`;
+
+    url = resolveClientUrl(controllerPath + query);
+    location.href = url;
+}
+
 $(document).ready(function () {
+    $("#exportExcel").on('click', function () {
+        exportExcel($(this));
+    });
     floatThead('table#data');
     initSortTable();
     $('table#data a.deleteTeam').on('click', function () {

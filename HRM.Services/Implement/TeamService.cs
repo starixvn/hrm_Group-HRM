@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using GO.UserControl.Client.Core.Session;
@@ -13,15 +15,19 @@ using HRM.Models.Group;
 using HRM.Models.Supervisor;
 using HRM.Repositories.Interfaces;
 using HRM.Services.Interfaces;
-using static Microsoft.Extensions.Logging.EventSource.LoggingEventSource;
+using Microsoft.AspNetCore.Hosting;
+using OfficeOpenXml;
 
 namespace HRM.Services.Implement;
 
 public class TeamService(
     ITeamRepository teamRepository,
     IBaseService baseService,
-    IUserControlSession userControlSession) : ITeamService
+    IUserControlSession userControlSession,
+    IWebHostEnvironment hostingEnvironment) : ITeamService
 {
+    private const string GroupTeamTemplatePath = "ExcelTemplates/GroupTeams.xlsx";
+
     public async Task<Team> GetById(int id)
     {
         var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
@@ -147,5 +153,63 @@ public class TeamService(
             DisciplineRuleXml = disciplineRules.ToXML().ToString()
         };
         return await baseService.ExecuteNonQueryAsync(criteria);
+    }
+
+    public async Task<byte[]> GenerateGroupTeamExcel(IEnumerable<GroupTeamModel> teams)
+    {
+        const int totalColumns = 12;
+        const int rowStartBody = 3;
+        var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, GroupTeamTemplatePath);
+
+        await using var templateStream = new FileStream(templatePath, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, useAsync: true);
+        using var templatePackage = new ExcelPackage(templateStream);
+        using var xlPackage = new ExcelPackage();
+
+        var template = templatePackage.Workbook.Worksheets.FirstOrDefault();
+        if (template == null)
+        {
+            throw new InvalidOperationException("The template Excel file does not contain any worksheet.");
+        }
+
+        var worksheet = xlPackage.Workbook.Worksheets.Add("Group Team List");
+        var rowIndex = 1;
+        var colIndex = 1;
+
+        // title
+        template.Cells[rowIndex, colIndex, rowIndex, totalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, totalColumns]);
+        rowIndex++;
+
+        // header
+        template.Cells[rowIndex, colIndex, rowIndex, totalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, totalColumns]);
+        rowIndex++;
+
+        // data
+        var rowNum = 1;
+        foreach (var team in teams)
+        {
+            colIndex = 1;
+            template.Cells[rowStartBody, 1, rowStartBody, totalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, totalColumns]);
+
+            worksheet.Cells[rowIndex, colIndex++].Value = rowNum++;
+            worksheet.Cells[rowIndex, colIndex++].Value = team.GroupTeamId.ToString();
+            worksheet.Cells[rowIndex, colIndex++].Value = team.UnitCode;
+            worksheet.Cells[rowIndex, colIndex++].Value = team.DepartmentName;
+            worksheet.Cells[rowIndex, colIndex++].Value = team.DepartmentCode;
+            worksheet.Cells[rowIndex, colIndex++].Value = team.DepartmentPIC;
+            worksheet.Cells[rowIndex, colIndex++].Value = team.TeamName;
+            worksheet.Cells[rowIndex, colIndex++].Value = team.TeamCode;
+            worksheet.Cells[rowIndex, colIndex++].Value = team.TeamPIC;
+            worksheet.Cells[rowIndex, colIndex++].Value = team.AccountableArea;
+            worksheet.Cells[rowIndex, colIndex++].Value = team.CompanyName;
+            worksheet.Cells[rowIndex, colIndex++].Value = team.NoOfMembers.ToString();
+            rowIndex++;
+        }
+
+        worksheet.Cells.AutoFitColumns();
+        worksheet.View.FreezePanes(rowStartBody, 1);
+
+        await using var ms = new MemoryStream();
+        await xlPackage.SaveAsAsync(ms);
+        return ms.ToArray();
     }
 }

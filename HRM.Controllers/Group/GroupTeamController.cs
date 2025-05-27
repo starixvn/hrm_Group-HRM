@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
+using HRM.Core;
 using HRM.Core.Constants;
 using HRM.Core.Filters;
 using HRM.Core.Services;
@@ -179,6 +181,16 @@ public class GroupTeamController(ITeamService teamService,
         var commandResult = await teamService.Delete(session.UserId, id);
 
         return Json(commandResult);
+    }
+
+    [HrmPermission(Policy.Read, FunctionKey.GroupTeamManagement)]
+    public async Task<IActionResult> ExportGroupTeamList(string keyword = null)
+    {
+        var teams = await teamService.GetAllTeamByUnitScopeAsync(keyword);
+        var bytes = await teamService.GenerateGroupTeamExcel(teams);
+        var fileName = $"GroupTeam_{DateTimeOffset.Now.DateTime.ToClientTimeZone():yyyyMMdd}.xlsx";
+
+        return File(bytes, MimeType.XLS, fileName);
     }
 
     private async Task<IEnumerable<Company>> GetAllCompany()
