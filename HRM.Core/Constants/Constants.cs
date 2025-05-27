@@ -32,4 +32,8 @@ public static class Constants
     public const string HolidayBackgroundColor = "#f3aa4b";
 
     public const string SummaryFormula = "SUM({0})";
+
+    public const string Yes = "Yes";
+
+    public const string No = "No";
 }

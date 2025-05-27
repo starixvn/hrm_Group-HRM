@@ -1,4 +1,6 @@
-﻿namespace HRM.Services.Implement;
+﻿using HRM.Core.Constants;
+
+namespace HRM.Services.Implement;
 
 using System;
 using System.Collections.Generic;
@@ -99,7 +101,7 @@ public class DepartmentService(
             worksheet.Cells[rowIndex, colIndex++].Value = department.Name;
             worksheet.Cells[rowIndex, colIndex++].Value = department.AccountableArea;
             worksheet.Cells[rowIndex, colIndex++].Value = department.PICEmployeeName;
-            worksheet.Cells[rowIndex, colIndex++].Value = department.IsActive.ToString();
+            worksheet.Cells[rowIndex, colIndex++].Value = department.IsActive ? Constants.Yes : Constants.No;
 
             rowIndex++;
         }
