@@ -571,4 +571,11 @@
         <Setting Key="SalaryUploadHistory_Get" SpName="SalaryUploadHistory_Get" DbName="bodb_HRM" Plain="0" />
         <Setting Key="EmployeePayroll_ConfirmUpload" SpName="EmployeePayroll_ConfirmUpload" DbName="bodb_HRM" Plain="0" />
     </Function>
+    <Function Name="CompanySecondmentEmployee">
+        <Setting Key="CompanySecondmentEmployee_Get" SpName="CompanySecondmentEmployee_Get" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="CompanySecondmentEmployee_Insert" SpName="CompanySecondmentEmployee_Insert" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="CompanySecondmentEmployee_Update" SpName="CompanySecondmentEmployee_Update" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="CompanySecondmentEmployee_Delete" SpName="CompanySecondmentEmployee_Delete" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="CompanySecondmentEmployee_GetByEmpId" SpName="CompanySecondmentEmployee_GetByEmpId" DbName="bodb_HRM" Plain="0" />
+    </Function>
 </Functions>

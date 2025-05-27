@@ -1,0 +1,30 @@
+﻿@import "../../abstracts/mixins";
+@import "../../abstracts/variables";
+@import "../../components/buttons-new";
+@import "../../layout/toastr";
+@import "../../layout/filter";
+@import "../../layout/table";
+@import "../../components/sweet-modal";
+
+.filter {
+    max-width: unset;
+}
+
+.btn {
+    &:focus,
+    &:active {
+        outline: none;
+    }
+}
+
+.btn-request {
+    margin-left: 5px;
+}
+
+.form-group {
+    margin-bottom: 0 !important;
+}
+
+.table-custom {
+    width: auto;
+}

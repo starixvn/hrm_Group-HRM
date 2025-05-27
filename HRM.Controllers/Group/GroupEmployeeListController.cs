@@ -103,6 +103,30 @@ public class GroupEmployeeListController(
         return File(bytes, MimeType.XLS, fileName);
     }
 
+    public async Task<IActionResult> GroupEmployeeList(GroupEmployeeViewModel model)
+    {
+        var employees = new List<GroupEmployeeModel>();
+        if (model != null)
+        {
+            var criteria = new GetEmployeesInGroupScopeCriteria
+            {
+                Query = model.Keyword,
+                TeamIds = model.TeamIds,
+                EnableUser = model.IsEnable,
+                IsDeleteUser = model.IsDelete,
+                TitleId = model.JobTitleId,
+                PageNumber = model.CurrentPage,
+                PageSize = model.ItemsPerPage,
+                CompanyIds = model.CompanyIds
+            };
+            employees = (await baseService.GetDataAsync<GroupEmployeeModel>(criteria)).ToList();
+
+        }
+
+
+        return Json(employees);
+    }
+
     [HttpGet]
     public async Task<IActionResult> GetCompanyDropdownList()
     {

@@ -1,0 +1,18 @@
+﻿@using HRM.Resources
+@{
+	ViewBag.Title = Labels.AddSecondmentCompany;
+}
+@section css{
+	<link href="~/dist/styles/secondment-company.create.css" rel="stylesheet" />
+}
+@section js{
+	<script src="~/dist/js/secondment-company.create.js"></script>
+}
+@section Breadcrumb {
+	<a class="step">@Labels.GroupSpace</a>
+	<a class="step" href="@Url.Action("index", "secondmentcompany")">@Labels.SecondmentCompanyManagement</a>
+	<span class="step">@ViewBag.Title</span>
+}
+
+<h2 class="page-title">@Labels.Create</h2>
+<div id="secondment-company-create"></div>
