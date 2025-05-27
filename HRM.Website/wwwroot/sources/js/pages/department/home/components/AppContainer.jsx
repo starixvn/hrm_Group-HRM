@@ -68,9 +68,21 @@ const AppContainer = () => {
         setDeleteModalDialog({ show: false });
     };
 
+    function exportExcel() {
+        var url = null,
+            controllerPath;
+
+        controllerPath = "Department/ExportDepartmentList?";
+
+        var query = "isActive=" + filterParams.isActive;
+
+        url = resolveClientUrl(controllerPath + query);
+        location.href = url;
+    }
+
     return (
         <Fragment>
-            <Filter onSubmit={getDepartments} />
+            <Filter onSubmit={getDepartments} exportExcel={exportExcel} />
             <Table data={departments} onDelete={handleDelete} />
             {deleteModalDialog.show && (
                 <SweetModalDialog

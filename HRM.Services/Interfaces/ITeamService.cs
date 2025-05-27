@@ -34,4 +34,6 @@ public interface ITeamService
     Task<IEnumerable<DisciplineRule>> GetDisciplineRuleByTeam(int teamId);
 
     Task<CommandResult> EditDisciplineRule(int actorId, int teamId, IEnumerable<DisciplineRule> disciplineRules);
+
+    Task<byte[]> GenerateGroupTeamExcel(IEnumerable<GroupTeamModel> teams);
 }

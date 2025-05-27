@@ -2,7 +2,7 @@
 
 import { resolveClientUrl } from '../../../../shared/common.functions';
 
-const Filter = ({ onSubmit }) => {
+const Filter = ({ onSubmit, exportExcel }) => {
     const [filterParams, setFilterParams] = useState({ isActive: true });
 
     const handleCreate = () => {
@@ -36,7 +36,7 @@ const Filter = ({ onSubmit }) => {
                         </select>
                     </div>
                 </div>
-                <div className="form-group form-group--m">
+                <div className="form-group form-group--m" style={{width: 'unset'} }>
                     <button type="submit" className="btn btn-primary">Search</button>
                     {
                         window.hasPermission === 'True' &&
@@ -45,6 +45,7 @@ const Filter = ({ onSubmit }) => {
                             &nbsp;New Department
                         </a>
                     }
+                    <button type="button" class="btn btn-excel" onClick={exportExcel} style={{ marginLeft: 5 }}>Excel</button>
                 </div>
             </div>
         </form>
