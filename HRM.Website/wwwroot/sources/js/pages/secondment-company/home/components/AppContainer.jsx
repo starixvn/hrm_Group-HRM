@@ -77,8 +77,8 @@ const AppContainer = () => {
                     show={deleteModalDialog.show}
                     contents={
                         <p>
-                            Are you sure you want to delete{" "}
-                            <strong>{deleteModalDialog.secondmentCompany.empId}</strong>
+                            Are you sure you want to delete secondment company of{" "}
+                            <strong>{deleteModalDialog.secondmentCompany.nickName}</strong>
                             ?
                         </p>
                     }

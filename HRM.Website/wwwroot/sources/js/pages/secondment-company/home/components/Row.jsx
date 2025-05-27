@@ -14,8 +14,8 @@ const Row = ({ rowIndex, item, onDelete }) => {
     return (
         <tr id={`row_${item.empId}`}>
             <td>{rowIndex}</td>
-            <td>{item.empCode}</td>
-            <td>{item.fullName}</td>
+            <td className="align-left">{item.empCode}</td>
+            <td className="align-left">{item.fullName}</td>
             <td>{item.nickName}</td>
             <td>{item.currentCompanyName}</td>
             <td>{item.secondCompanyName}</td>

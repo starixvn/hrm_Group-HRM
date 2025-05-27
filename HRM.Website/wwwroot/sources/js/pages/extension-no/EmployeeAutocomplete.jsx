@@ -1,8 +1,14 @@
-﻿import React, { useState } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import Autocomplete from 'react-autocomplete';
 
-const EmployeeAutocomplete = ({ options, onChange, onSelect }) => {
-    const [keyword, setKeyword] = useState('');
+const EmployeeAutocomplete = ({ options, onChange, onSelect, value }) => {
+    const [keyword, setKeyword] = useState(value || '');
+
+    useEffect(() => {
+        if (value) {
+            setKeyword(value);
+        }
+    }, [value]);
 
     const handleChange = event => {
         const value = event.target.value;

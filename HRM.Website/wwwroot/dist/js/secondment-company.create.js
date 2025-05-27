@@ -98490,12 +98490,19 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var EmployeeAutocomplete = function EmployeeAutocomplete(_ref) {
     var options = _ref.options,
         onChange = _ref.onChange,
-        onSelect = _ref.onSelect;
+        onSelect = _ref.onSelect,
+        value = _ref.value;
 
-    var _useState = (0, _react.useState)(''),
+    var _useState = (0, _react.useState)(value || ''),
         _useState2 = (0, _slicedToArray3.default)(_useState, 2),
         keyword = _useState2[0],
         setKeyword = _useState2[1];
+
+    (0, _react.useEffect)(function () {
+        if (value) {
+            setKeyword(value);
+        }
+    }, [value]);
 
     var handleChange = function handleChange(event) {
         var value = event.target.value;
@@ -98583,6 +98590,10 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
+var _extends2 = __webpack_require__(/*! babel-runtime/helpers/extends */ "./node_modules/babel-runtime/helpers/extends.js");
+
+var _extends3 = _interopRequireDefault(_extends2);
+
 var _slicedToArray2 = __webpack_require__(/*! babel-runtime/helpers/slicedToArray */ "./node_modules/babel-runtime/helpers/slicedToArray.js");
 
 var _slicedToArray3 = _interopRequireDefault(_slicedToArray2);
@@ -98631,17 +98642,26 @@ var AppContainer = function AppContainer() {
         selectEmployee = _useState6[0],
         setSelectEmployee = _useState6[1];
 
-    var _useState7 = (0, _react.useState)(null),
+    var _useState7 = (0, _react.useState)(0),
         _useState8 = (0, _slicedToArray3.default)(_useState7, 2),
-        selectCompany = _useState8[0],
-        setSelectCompany = _useState8[1];
+        formKey = _useState8[0],
+        setFormKey = _useState8[1];
 
-    var _useState9 = (0, _react.useState)(0),
+    var _useState9 = (0, _react.useState)({
+        empId: 0,
+        employee: '',
+        companyId: ''
+    }),
         _useState10 = (0, _slicedToArray3.default)(_useState9, 2),
-        formKey = _useState10[0],
-        setFormKey = _useState10[1];
+        initialValues = _useState10[0],
+        setInitialValues = _useState10[1];
 
     var getEmployees = function getEmployees(query) {
+        setInitialValues(function (prev) {
+            return (0, _extends3.default)({}, prev, {
+                employee: ''
+            });
+        });
         if (query.trim().length >= 2) {
             (0, _axios2.default)({
                 url: (0, _common.resolveClientUrl)('GroupEmployeeList/GroupEmployeeList'),
@@ -98683,6 +98703,13 @@ var AppContainer = function AppContainer() {
 
     var handleSelectEmployee = function handleSelectEmployee(selectedItem) {
         setSelectEmployee(selectedItem);
+
+        setInitialValues(function (prev) {
+            return (0, _extends3.default)({}, prev, {
+                empId: selectedItem.id,
+                employee: selectedItem.value
+            });
+        });
     };
 
     var handleSubmit = function handleSubmit(values, _ref) {
@@ -98745,12 +98772,14 @@ var AppContainer = function AppContainer() {
                         { className: "select-form" },
                         _react2.default.createElement(
                             _formik.Field,
-                            { type: "text", name: "Employee", className: "form-control" },
-                            function () {
+                            { type: "text", name: "employee", className: "form-control" },
+                            function (_ref3) {
+                                var field = _ref3.field;
                                 return _react2.default.createElement(_EmployeeAutocomplete2.default, {
                                     options: employees,
                                     onChange: getEmployees,
-                                    onSelect: handleSelectEmployee
+                                    onSelect: handleSelectEmployee,
+                                    value: field.value
                                 });
                             }
                         )
@@ -98824,11 +98853,7 @@ var AppContainer = function AppContainer() {
             key: formKey,
             validateOnBlur: false,
             validateOnChange: false,
-            initialValues: {
-                empId: empId,
-                employee: empName,
-                companyId: ''
-            },
+            initialValues: initialValues,
             enableReinitialize: true,
             validationSchema: _common2.validationSchema,
             onSubmit: handleSubmit },

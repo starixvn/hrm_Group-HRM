@@ -25,6 +25,10 @@ const AppContainer = () => {
     });
 
     const getEmployees = query => {
+        setInitialValues(prev => ({
+            ...prev,
+            employee: ''
+        }));
         if (query.trim().length >= 2) {
             axios({
                 url: resolveClientUrl('GroupEmployeeList/GroupEmployeeList'),
@@ -78,10 +82,14 @@ const AppContainer = () => {
             const data = response.data;
             setInitialValues({
                 empId: data.empId,
-                nickName: data.nickName,
+                employee: `${data.nickName} (${data.fullName} - ${data.currentCompanyName})`,
+                companyId: data.secondCompanyId
+            });
+            setSelectEmployee({
+                id: data.empId,
+                value: `${data.nickName} (${data.fullName} - ${data.currentCompanyName})`,
                 fullName: data.fullName,
-                companyId: data.secondCompanyId,
-                companyName: data.secondCompanyName
+                nickName: data.nickName
             });
             setFormKey(prev => prev + 1);
         } catch (error) {
@@ -96,13 +104,20 @@ const AppContainer = () => {
 
     const handleSelectEmployee = selectedItem => {
         setSelectEmployee(selectedItem);
+        if (selectedItem) {
+            setInitialValues(prev => ({
+                ...prev,
+                empId: selectedItem.id,
+                employee: selectedItem.value
+            }));
+        }
     };
 
     const handleSubmit = (values, { setSubmitting }) => {
         setSubmitting(true);
 
         const model = {
-            id: window.secondmentCompanyId,
+            id: window.empId,
             empId: isNaN(parseInt(values.empId, 10)) ? 0 : values.empId,
             companyId: values.companyId
         };
@@ -144,13 +159,13 @@ const AppContainer = () => {
                             </label>
                         </div>
                         <div className="select-form">
-                            <Field type="text" name="employee" value="123123" className="form-control">
-                                {() => (
+                            <Field type="text" name="employee" className="form-control">
+                                {({ field }) => (
                                     <EmployeeAutocomplete
                                         options={employees}
                                         onChange={getEmployees}
                                         onSelect={handleSelectEmployee}
-                                        value={initialValues.employee}
+                                        value={field.value}
                                     />
                                 )}
                             </Field>
@@ -203,7 +218,7 @@ const AppContainer = () => {
             validateOnChange={false}
             initialValues={{
                 empId: initialValues.empId,
-                employee: `${initialValues.nickName} (${initialValues.fullName} - ${initialValues.companyName})`,
+                employee: initialValues.employee,
                 companyId: initialValues.companyId
             }}
             enableReinitialize={true}

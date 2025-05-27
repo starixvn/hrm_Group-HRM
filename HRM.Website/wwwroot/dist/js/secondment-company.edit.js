@@ -100122,12 +100122,19 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var EmployeeAutocomplete = function EmployeeAutocomplete(_ref) {
     var options = _ref.options,
         onChange = _ref.onChange,
-        onSelect = _ref.onSelect;
+        onSelect = _ref.onSelect,
+        value = _ref.value;
 
-    var _useState = (0, _react.useState)(''),
+    var _useState = (0, _react.useState)(value || ''),
         _useState2 = (0, _slicedToArray3.default)(_useState, 2),
         keyword = _useState2[0],
         setKeyword = _useState2[1];
+
+    (0, _react.useEffect)(function () {
+        if (value) {
+            setKeyword(value);
+        }
+    }, [value]);
 
     var handleChange = function handleChange(event) {
         var value = event.target.value;
@@ -100223,6 +100230,10 @@ var _asyncToGenerator2 = __webpack_require__(/*! babel-runtime/helpers/asyncToGe
 
 var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
 
+var _extends2 = __webpack_require__(/*! babel-runtime/helpers/extends */ "./node_modules/babel-runtime/helpers/extends.js");
+
+var _extends3 = _interopRequireDefault(_extends2);
+
 var _slicedToArray2 = __webpack_require__(/*! babel-runtime/helpers/slicedToArray */ "./node_modules/babel-runtime/helpers/slicedToArray.js");
 
 var _slicedToArray3 = _interopRequireDefault(_slicedToArray2);
@@ -100286,6 +100297,11 @@ var AppContainer = function AppContainer() {
         setInitialValues = _useState10[1];
 
     var getEmployees = function getEmployees(query) {
+        setInitialValues(function (prev) {
+            return (0, _extends3.default)({}, prev, {
+                employee: ''
+            });
+        });
         if (query.trim().length >= 2) {
             (0, _axios2.default)({
                 url: (0, _common.resolveClientUrl)('GroupEmployeeList/GroupEmployeeList'),
@@ -100377,29 +100393,33 @@ var AppContainer = function AppContainer() {
 
                             setInitialValues({
                                 empId: data.empId,
-                                nickName: data.nickName,
+                                employee: data.nickName + " (" + data.fullName + " - " + data.currentCompanyName + ")",
+                                companyId: data.secondCompanyId
+                            });
+                            setSelectEmployee({
+                                id: data.empId,
+                                value: data.nickName + " (" + data.fullName + " - " + data.currentCompanyName + ")",
                                 fullName: data.fullName,
-                                companyId: data.secondCompanyId,
-                                companyName: data.secondCompanyName
+                                nickName: data.nickName
                             });
                             setFormKey(function (prev) {
                                 return prev + 1;
                             });
-                            _context2.next = 12;
+                            _context2.next = 13;
                             break;
 
-                        case 9:
-                            _context2.prev = 9;
+                        case 10:
+                            _context2.prev = 10;
                             _context2.t0 = _context2["catch"](0);
 
                             (0, _common.axiosError)(_context2.t0);
 
-                        case 12:
+                        case 13:
                         case "end":
                             return _context2.stop();
                     }
                 }
-            }, _callee2, undefined, [[0, 9]]);
+            }, _callee2, undefined, [[0, 10]]);
         }));
 
         return function getInitialData() {
@@ -100414,6 +100434,14 @@ var AppContainer = function AppContainer() {
 
     var handleSelectEmployee = function handleSelectEmployee(selectedItem) {
         setSelectEmployee(selectedItem);
+        if (selectedItem) {
+            setInitialValues(function (prev) {
+                return (0, _extends3.default)({}, prev, {
+                    empId: selectedItem.id,
+                    employee: selectedItem.value
+                });
+            });
+        }
     };
 
     var handleSubmit = function handleSubmit(values, _ref3) {
@@ -100422,7 +100450,7 @@ var AppContainer = function AppContainer() {
         setSubmitting(true);
 
         var model = {
-            id: window.secondmentCompanyId,
+            id: window.empId,
             empId: isNaN(parseInt(values.empId, 10)) ? 0 : values.empId,
             companyId: values.companyId
         };
@@ -100477,13 +100505,14 @@ var AppContainer = function AppContainer() {
                         { className: "select-form" },
                         _react2.default.createElement(
                             _formik.Field,
-                            { type: "text", name: "employee", value: "123123", className: "form-control" },
-                            function () {
+                            { type: "text", name: "employee", className: "form-control" },
+                            function (_ref5) {
+                                var field = _ref5.field;
                                 return _react2.default.createElement(_EmployeeAutocomplete2.default, {
                                     options: employees,
                                     onChange: getEmployees,
                                     onSelect: handleSelectEmployee,
-                                    value: initialValues.employee
+                                    value: field.value
                                 });
                             }
                         )
@@ -100556,7 +100585,7 @@ var AppContainer = function AppContainer() {
             validateOnChange: false,
             initialValues: {
                 empId: initialValues.empId,
-                employee: initialValues.nickName + " (" + initialValues.fullName + " - " + initialValues.companyName + ")",
+                employee: initialValues.employee,
                 companyId: initialValues.companyId
             },
             enableReinitialize: true,

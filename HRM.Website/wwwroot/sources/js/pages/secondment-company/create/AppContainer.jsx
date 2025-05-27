@@ -17,10 +17,18 @@ const AppContainer = () => {
     const [companies, setCompanies] = useState(null);
     const [employees, setEmployees] = useState([]);
     const [selectEmployee, setSelectEmployee] = useState(null);
-    const [selectCompany, setSelectCompany] = useState(null);
     const [formKey, setFormKey] = useState(0);
+    const [initialValues, setInitialValues] = useState({
+        empId: 0,
+        employee: '',
+        companyId: ''
+    });
 
     const getEmployees = query => {
+        setInitialValues(prev => ({
+            ...prev,
+            employee: ''
+        }));
         if (query.trim().length >= 2) {
             axios({
                 url: resolveClientUrl('GroupEmployeeList/GroupEmployeeList'),
@@ -63,6 +71,12 @@ const AppContainer = () => {
 
     const handleSelectEmployee = selectedItem => {
         setSelectEmployee(selectedItem);
+        
+        setInitialValues(prev => ({
+            ...prev,
+            empId: selectedItem.id,
+            employee: selectedItem.value
+        }));
     };
 
     const handleSubmit = (values, { setSubmitting }) => {
@@ -110,12 +124,13 @@ const AppContainer = () => {
                             </label>
                         </div>
                         <div className="select-form">
-                            <Field type="text" name="Employee" className="form-control">
-                                {() => (
+                            <Field type="text" name="employee" className="form-control">
+                                {({ field }) => (
                                     <EmployeeAutocomplete
                                         options={employees}
                                         onChange={getEmployees}
                                         onSelect={handleSelectEmployee}
+                                        value={field.value}
                                     />
                                 )}
                             </Field>
@@ -168,11 +183,7 @@ const AppContainer = () => {
             key={formKey}
             validateOnBlur={false}
             validateOnChange={false}
-            initialValues={{
-                empId: empId,
-                employee: empName,
-                companyId: ''
-            }}
+            initialValues={initialValues}
             enableReinitialize={true}
             validationSchema={validationSchema}
             onSubmit={handleSubmit}>

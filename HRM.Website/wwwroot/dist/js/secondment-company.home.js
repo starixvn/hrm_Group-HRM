@@ -108953,12 +108953,12 @@ var AppContainer = function AppContainer() {
             contents: _react2.default.createElement(
                 "p",
                 null,
-                "Are you sure you want to delete",
+                "Are you sure you want to delete secondment company of",
                 " ",
                 _react2.default.createElement(
                     "strong",
                     null,
-                    deleteModalDialog.secondmentCompany.empId
+                    deleteModalDialog.secondmentCompany.nickName
                 ),
                 "?"
             ),
@@ -109084,12 +109084,12 @@ var Row = function Row(_ref) {
         ),
         _react2.default.createElement(
             "td",
-            null,
+            { className: "align-left" },
             item.empCode
         ),
         _react2.default.createElement(
             "td",
-            null,
+            { className: "align-left" },
             item.fullName
         ),
         _react2.default.createElement(
