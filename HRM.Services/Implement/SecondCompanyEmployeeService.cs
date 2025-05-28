@@ -23,12 +23,13 @@ public class SecondCompanyEmployeeService(
         return await baseService.ExecuteNonQueryAsync(criteria);
     }
 
-    public async Task<CommandResult> UpdateAsync(int actorId, int empId, int companyId)
+    public async Task<CommandResult> UpdateAsync(int actorId, int oldEmpId, int empId, int companyId)
     {
         var criteria = new UpdateCompanySecondmentEmployeeCriteria
         {
             EmpId = empId,
             CompanyId = companyId,
+            OldEmpId = oldEmpId,
             ModifiedBy = actorId
         };
         return await baseService.ExecuteNonQueryAsync(criteria);

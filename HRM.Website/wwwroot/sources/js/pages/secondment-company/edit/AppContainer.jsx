@@ -117,7 +117,7 @@ const AppContainer = () => {
         setSubmitting(true);
 
         const model = {
-            id: window.empId,
+            oldEmpId: window.empId,
             empId: isNaN(parseInt(values.empId, 10)) ? 0 : values.empId,
             companyId: values.companyId
         };

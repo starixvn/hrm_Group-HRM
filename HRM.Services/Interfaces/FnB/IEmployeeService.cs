@@ -9,6 +9,8 @@ public interface IEmployeeService
 {
     Task<IEnumerable<EmployeeModel>> GetEmployeesByLastModifiedDate(GetEmployeeByLastModifiedDateCriteria criteria);
 
+    Task<IEnumerable<EmployeeModel>> GetEmployeeSecondments(GetEmployeeSecondmentCriteria criteria);
+
     Task<IEnumerable<TeamModel>> GetEmployeeTeamByLastModifiedDate(GetEmployeeTeamByLastModifiedDateCriteria criteria);
 
     Task<IEnumerable<EmployeeCalendarModel>> GetEmployeeCalendarByLastModifiedDate(

@@ -17,8 +17,7 @@ using ViewModels.Department;
 
 public class SecondmentCompanyController(
     IUserControlSession session,
-    ISecondCompanyEmployeeService secondCompanyEmployeeService,
-    ICompanyService companyService) : BaseController(session)
+    ISecondCompanyEmployeeService secondCompanyEmployeeService) : BaseController(session)
 {
     [HrmPermission(Policy.Read, FunctionKey.SecondmentCompanyList)]
     public ActionResult Index()
@@ -79,7 +78,7 @@ public class SecondmentCompanyController(
         {
             return new JsonResult(commandResult);
         }
-        commandResult = await secondCompanyEmployeeService.UpdateAsync(session.UserId, model.EmpId, model.CompanyId);
+        commandResult = await secondCompanyEmployeeService.UpdateAsync(session.UserId, model.OldEmpId, model.EmpId, model.CompanyId);
 
         return new JsonResult(commandResult);
     }

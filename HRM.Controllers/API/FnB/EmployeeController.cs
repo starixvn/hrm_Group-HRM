@@ -29,6 +29,18 @@ public class EmployeeController(
         return new JsonResult(result);
     }
 
+    [HttpGet("secondment")]
+    public async Task<IActionResult> GetEmployeeSecondments()
+    {
+        var company = await companyService.GetCompanySiteByDomainAsync();
+        var criteria = new GetEmployeeSecondmentCriteria
+        {
+            CompanyId = company.CompanyId
+        };
+        var result = await employeeService.GetEmployeeSecondments(criteria);
+        return new JsonResult(result);
+    }
+
     [HttpGet("team")]
     public async Task<IActionResult> GetEmployeeTeams([FromQuery] SyncFnBRequestModel request)
     {
