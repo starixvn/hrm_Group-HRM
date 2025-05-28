@@ -36,6 +36,8 @@ public class GroupEmployeeModel
     
     public string TeamPIC { get; set; }
 
+    public string TeamCode{ get; set; }
+
     public DateTime? JoinedDate { get; set; }
 
     public string JobLevel { get; set; }

@@ -11,10 +11,12 @@ using HRM.Core.Services;
 using HRM.Criteria.Employee;
 using HRM.Criteria.Group;
 using HRM.Models;
+using HRM.Models.Supervisor;
 using HRM.Resources;
 using HRM.Services.Interfaces;
 using HRM.ViewModels.EmployeeGroup;
 using Microsoft.AspNetCore.Mvc;
+using HRM.Models.Group;
 
 namespace HRM.Controllers.Group;
 
@@ -74,6 +76,12 @@ public class GroupTeamController(ITeamService teamService,
 
             if (result.IsSuccessful)
             {
+                if (model.PICEmpId != null)
+                {
+                    var insertedTeamId = await teamService.GetGroupIdByGroupTeamId(model.GroupTeamId);
+                    await InsertTeamSupervisorByTeamPIC(model.PICEmpId.Value, insertedTeamId);
+                }
+
                 return RedirectToAction("Index", "GroupTeam");
             }
 
@@ -85,6 +93,23 @@ public class GroupTeamController(ITeamService teamService,
         }
 
         return View(model);
+    }
+
+    private async Task InsertTeamSupervisorByTeamPIC(int picEmId, int groupId)
+    {
+        var supervisorFunctions = new List<EditTeamSupervisor>();
+
+        for (ushort i = 1; i <= 8; i++)
+        {
+            supervisorFunctions.Add(new EditTeamSupervisor
+            {
+                OwnerId = picEmId,
+                RequestType = i,
+                DisplayOrder = 1
+            });
+        }
+
+        await teamService.InsertTeamSupervisorByPIC(session.UserId, groupId, supervisorFunctions);
     }
 
     [HrmPermission(Policy.Host, FunctionKey.GroupTeamManagement)]
@@ -159,6 +184,10 @@ public class GroupTeamController(ITeamService teamService,
                 if (result.IsSuccessful)
                 {
                     ViewBag.Updated = true;
+                    if (model.PICEmpId != null)
+                    {
+                        await InsertTeamSupervisorByTeamPIC(model.PICEmpId.Value, model.Id);
+                    }
                 }
                 else
                 {
@@ -191,6 +220,61 @@ public class GroupTeamController(ITeamService teamService,
         var fileName = $"GroupTeam_{DateTimeOffset.Now.DateTime.ToClientTimeZone():yyyyMMdd}.xlsx";
 
         return File(bytes, MimeType.XLS, fileName);
+    }
+
+    [HrmPermission(Policy.Host, FunctionKey.GroupTeamManagement)]
+    public async Task<IActionResult> TeamSupervisor(int id)
+    {
+        const bool isGroupSpace = true;
+        var supervisors = (await teamService.GetSupervisorByTeamId(id, isGroupSpace)).ToList();
+        ViewBag.TeamId = id;
+        ViewBag.TeamCode = supervisors.Count != 0 ? supervisors[0].Code : string.Empty;
+
+        return View(supervisors);
+    }
+
+    [HrmPermission(Policy.Host, FunctionKey.GroupTeamManagement)]
+    public IActionResult ManageSupervisor(int id, short roleId)
+    {
+        ViewBag.TeamId = id;
+        ViewBag.RoleId = roleId;
+
+        return View();
+    }
+
+    [HrmPermission(Policy.Host, FunctionKey.GroupTeamManagement)]
+    public async Task<IActionResult> GetTeamSupervisorByRoleId(int teamId, short roleId)
+    {
+        IEnumerable<SupervisorModel> supervisors = await teamService.GetTeamSupervisorByRoleId(teamId, roleId);
+
+        return Json(supervisors);
+    }
+
+    [HttpPost]
+    [HrmPermission(Policy.Host, FunctionKey.GroupTeamManagement)]
+    public async Task<IActionResult> EditTeamSupervisor(int teamId, short roleId, IEnumerable<EditTeamSupervisor> supervisors)
+    {
+        var commandResult = await teamService.EditTeamSupervisor(session.UserId, teamId, roleId, supervisors);
+
+        return Json(commandResult);
+    }
+
+    [HrmPermission(Policy.Read, FunctionKey.GroupTeamManagement)]
+    public async Task<IActionResult> GetEmployees(GroupEmployeeViewModel model)
+    {
+        var employees = new List<GroupEmployeeModel>();
+        if (model != null)
+        {
+            var criteria = new GetEmployeesInGroupScopeCriteria
+            {
+                Query = model.Keyword,
+                IsDeleteUser = model.IsDelete,
+                EnableUser = model.IsEnable
+            };
+            employees = (await baseService.GetDataAsync<GroupEmployeeModel>(criteria)).ToList();
+        }
+
+        return Ok(employees);
     }
 
     private async Task<IEnumerable<Company>> GetAllCompany()

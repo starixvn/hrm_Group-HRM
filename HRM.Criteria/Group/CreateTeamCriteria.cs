@@ -22,7 +22,6 @@ public class CreateTeamCriteria : CriteriaBase
     {
         return !string.IsNullOrWhiteSpace(Code)
                && !string.IsNullOrWhiteSpace(Name)
-               && DepartmentId > 0
-               && PICEmpId > 0;
+               && DepartmentId > 0;
     }
 }

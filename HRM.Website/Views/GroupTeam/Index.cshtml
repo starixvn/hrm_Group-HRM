@@ -108,7 +108,8 @@
 	        </th>
             @if (hasPermission)
 	        {
-		        <th rowspan="2">@Labels.Edit</th>
+                <th rowspan="2">@Labels.Edit</th>
+                <th rowspan="2">@Labels.Role</th>
 		        <th rowspan="2">@Labels.Delete</th>
 	        }
         </tr>
@@ -136,7 +137,10 @@
 	                {
 		                <td>
 			                <a href="@Url.Action("Edit", "GroupTeam", new { team.Id })"><i class="fa fa-pencil fa-lg icon-edit"></i></a>
-		                </td>
+                        </td>
+                        <td>
+                            <a href="@Url.Action("TeamSupervisor", "GroupTeam", new { team.Id })"><i class="fa fa-pencil fa-lg icon-edit"></i></a>
+                        </td>
 		                <td>
 			                @if (team.NoOfMembers > 0)
 			                {

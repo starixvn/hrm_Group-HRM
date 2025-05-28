@@ -96,6 +96,7 @@ module.exports = {
         [`${jsDistPath}/schedule.arrange`]: `${jsSourcePath}/schedule-arrange/index.jsx`,
         [`${jsDistPath}/schedule.arrange.iframe`]: `${jsSourcePath}/schedule-arrange/iframe/index.jsx`,
         [`${jsDistPath}/function.index`]: `${jsSourcePath}/function/index.jsx`,
+        [`${jsDistPath}/groupteam.supervisor.index`]: `${jsSourcePath}/group-team/supervisor/index.jsx`,
         [`${jsDistPath}/team.index`]: `${jsSourcePath}/team/index.js`,
         [`${jsDistPath}/team.edit`]: `${jsSourcePath}/team/edit.js`,
         [`${jsDistPath}/team.edit.supervisor`]: `${jsSourcePath}/team/supervisor/index.jsx`,
