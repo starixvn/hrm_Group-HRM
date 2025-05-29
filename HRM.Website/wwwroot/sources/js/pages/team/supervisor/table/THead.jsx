@@ -63,7 +63,6 @@ export default class THead extends PureComponent {
                 </tr>
                 <tr>
                     <th rowSpan={2}>{roleName}</th>
-                    <th rowSpan={2}>Team</th>
                     <th colSpan={6}>Request</th>
                     <th rowSpan={2} />
                 </tr>

@@ -9,6 +9,8 @@ public class EditTeamSupervisorCriteria : CriteriaBase
     public string SupervisorXml { get; set; }
     public int ActorId { get; set; }
 
+    public int? CompanyId { get; set; }
+
     public override bool IsValid() => TeamId > 0 && ActorId > 0;
 
     public override string GetSettingKey() => "GroupSupervisor_Update";

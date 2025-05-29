@@ -30,7 +30,6 @@ export default class Row extends PureComponent {
                         />
                     </div>
                 </td>
-                <td className="align-left">{data.teamCode}</td>
                 <td>
                     <div className="checkbox">
                         <input type="checkbox" className={`checkbox-custom`} id={`ckb-leave${data.ownerId}`}

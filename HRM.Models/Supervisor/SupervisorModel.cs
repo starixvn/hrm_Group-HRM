@@ -16,6 +16,8 @@ public class SupervisorModel
 
     public string TeamCode { get; set; }
 
+    public int CompanyId { get; set; }
+
     public string CompanyName { get; set; }
 
     public byte ActionType { get; set; }

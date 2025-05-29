@@ -24,6 +24,7 @@ export default class Supervisor extends Component {
         };
 
         this.roleId = document.getElementById('RoleId').value;
+        this.companyId = document.getElementById('CompanyId').value;
     }
 
     componentDidMount() {
@@ -49,7 +50,7 @@ export default class Supervisor extends Component {
                         nickname: item.NickName,
                         fullName: item.FullName,
                         teamCode: item.TeamCode !== null ? item.Team.code : '',
-                        value: item.DisplayName
+                        value: item.NickName
                     };
                 });
 
@@ -107,6 +108,7 @@ export default class Supervisor extends Component {
                 nickName: employee.nickname,
                 fullName: employee.fullName,
                 teamCode: employee.teamCode,
+                companyId:this.companyId,
                 leaves: true,
                 changeShifts: true,
                 lateInEarlyOuts: true,
@@ -166,7 +168,6 @@ export default class Supervisor extends Component {
 
     render() {
         const { employeeOptions, supervisors } = this.state;
-
         return (
             <Fragment>
                 <ToastLayout />
@@ -177,6 +178,7 @@ export default class Supervisor extends Component {
                     onChangePermissionOnRequest={this.handleChangePermissionOnRequest}
                     onRemoveEmployee={this.handleRemoveEmployee}
                     onChangeOrder={this.handleChangeOrder}
+                    companyId={this.companyId}
                 />
                 <Button onClick={this.handleSave} bsStyle="primary">Save</Button>
                 <a className="btn btn-default"

@@ -38,6 +38,7 @@ public class TeamController(
         var teams = await teamService.GetAllAsync(keyword: keyword);
         ViewBag.HasPermission = session.HasPermissionOnFunction(FunctionKey.TeamManagement, Policy.Host);
         ViewBag.HasPermissionToViewEmployee = session.HasPermissionOnFunction(FunctionKey.EmployeeManagement, Policy.Read);
+        ViewBag.CompanyId = CurrentCompanyId;
         return View(teams);
     }
 
@@ -157,6 +158,7 @@ public class TeamController(
     {
         ViewBag.TeamId = id;
         ViewBag.RoleId = roleId;
+        ViewBag.CompanyId = CurrentCompanyId;
 
         return View();
     }
