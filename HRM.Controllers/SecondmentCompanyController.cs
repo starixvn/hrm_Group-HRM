@@ -87,7 +87,7 @@ public class SecondmentCompanyController(
     [HrmPermission(Policy.Host, FunctionKey.SecondmentCompanyList)]
     public async Task<IActionResult> Delete([FromBody] DeleteCompanySecondEmployeeViewModel request)
     {
-        var commandResult = await secondCompanyEmployeeService.DeleteAsync(request.EmpId);
+        var commandResult = await secondCompanyEmployeeService.DeleteAsync(request.EmpId, session.UserId);
 
         return new JsonResult(commandResult);
     }

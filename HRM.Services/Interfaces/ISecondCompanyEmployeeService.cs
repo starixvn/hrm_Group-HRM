@@ -9,7 +9,7 @@ public interface ISecondCompanyEmployeeService
 {
     Task<CommandResult> CreateAsync(int actorId, int empId, int companyId);
     Task<CommandResult> UpdateAsync(int actorId, int oldEmpId, int empId, int companyId);
-    Task<CommandResult> DeleteAsync(int empId);
+    Task<CommandResult> DeleteAsync(int empId, int actorId);
     Task<CompanySecondmentEmployee> GetByIdAsync(int empId);
     Task<IEnumerable<CompanySecondmentEmployee>> GetAllAsync();
 }

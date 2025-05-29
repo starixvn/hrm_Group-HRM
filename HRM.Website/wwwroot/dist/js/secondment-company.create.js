@@ -98674,7 +98674,7 @@ var AppContainer = function AppContainer() {
                 var employeeOptions = data.map(function (item) {
                     return {
                         id: item.empId,
-                        value: item.nickName + " (" + item.fullName + " - " + item.company + ")",
+                        value: item.nickName + " ( " + item.company + ")",
                         fullName: item.fullName,
                         nickName: item.nickName
                     };
@@ -98843,9 +98843,6 @@ var AppContainer = function AppContainer() {
             )
         );
     };
-
-    var empId = selectEmployee ? selectEmployee.id : 0;
-    var empName = selectEmployee ? selectEmployee.value : '';
 
     return _react2.default.createElement(
         _formik.Formik,

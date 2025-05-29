@@ -29,3 +29,7 @@ span.require {
 .react-autocomplete-wrapper{
     width :auto;
 }
+
+.form-horizontal .form-group .select-form, .form-horizontal .form-group .calendar-form, .form-horizontal .form-group .input-form {
+    width: 300px !important;
+}

@@ -35,11 +35,12 @@ public class SecondCompanyEmployeeService(
         return await baseService.ExecuteNonQueryAsync(criteria);
     }
 
-    public async Task<CommandResult> DeleteAsync(int empId)
+    public async Task<CommandResult> DeleteAsync(int empId, int actorId)
     {
         var criteria = new DeleteCompanySecondmentEmployeeCriteria
         {
             EmpId = empId,
+            ModifiedBy = actorId
         };
         return await baseService.ExecuteNonQueryAsync(criteria);
     }

@@ -596,4 +596,8 @@ span.require {
   width: auto;
 }
 
+.form-horizontal .form-group .select-form, .form-horizontal .form-group .calendar-form, .form-horizontal .form-group .input-form {
+  width: 300px !important;
+}
+
 /*# sourceMappingURL=secondment-company.create.css.map*/

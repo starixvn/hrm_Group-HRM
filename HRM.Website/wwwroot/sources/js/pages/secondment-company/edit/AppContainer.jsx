@@ -4,7 +4,6 @@ import axios from "axios";
 import toastr from "toastr";
 
 import Errors from "../../../shared/components/Errors";
-import EmployeeAutocomplete from '../../extension-no/EmployeeAutocomplete';
 
 import {
     resolveClientUrl,
@@ -15,43 +14,12 @@ import { validationSchema } from "../common.functions";
 
 const AppContainer = () => {
     const [companies, setCompanies] = useState(null);
-    const [employees, setEmployees] = useState([]);
-    const [selectEmployee, setSelectEmployee] = useState(null);
     const [formKey, setFormKey] = useState(0);
     const [initialValues, setInitialValues] = useState({
         empId: 0,
         employee: '',
         companyId: ''
     });
-
-    const getEmployees = query => {
-        setInitialValues(prev => ({
-            ...prev,
-            employee: ''
-        }));
-        if (query.trim().length >= 2) {
-            axios({
-                url: resolveClientUrl('GroupEmployeeList/GroupEmployeeList'),
-                method: 'GET',
-                headers: { 'X-Requested-With': 'XMLHttpRequest' },
-                params: { keyword: query }
-            }).then(response => {
-                const { data } = response;
-                const employeeOptions = data.map(item => {
-                    return {
-                        id: item.empId,
-                        value: `${item.nickName} (${item.fullName} - ${item.company})`,
-                        fullName: item.fullName,
-                        nickName: item.nickName
-                    };
-                });
-
-                setEmployees(employeeOptions);
-            }).catch(axiosError);
-        } else {
-            setEmployees([]);
-        }
-    };
 
 
     const handleGoBack = () => {
@@ -82,14 +50,8 @@ const AppContainer = () => {
             const data = response.data;
             setInitialValues({
                 empId: data.empId,
-                employee: `${data.nickName} (${data.fullName} - ${data.currentCompanyName})`,
+                employee: `${data.nickName} ( ${data.currentCompanyName})`,
                 companyId: data.secondCompanyId
-            });
-            setSelectEmployee({
-                id: data.empId,
-                value: `${data.nickName} (${data.fullName} - ${data.currentCompanyName})`,
-                fullName: data.fullName,
-                nickName: data.nickName
             });
             setFormKey(prev => prev + 1);
         } catch (error) {
@@ -102,16 +64,6 @@ const AppContainer = () => {
         getInitialData();
     }, []);
 
-    const handleSelectEmployee = selectedItem => {
-        setSelectEmployee(selectedItem);
-        if (selectedItem) {
-            setInitialValues(prev => ({
-                ...prev,
-                empId: selectedItem.id,
-                employee: selectedItem.value
-            }));
-        }
-    };
 
     const handleSubmit = (values, { setSubmitting }) => {
         setSubmitting(true);
@@ -159,22 +111,14 @@ const AppContainer = () => {
                             </label>
                         </div>
                         <div className="select-form">
-                            <Field type="text" name="employee" className="form-control">
-                                {({ field }) => (
-                                    <EmployeeAutocomplete
-                                        options={employees}
-                                        onChange={getEmployees}
-                                        onSelect={handleSelectEmployee}
-                                        value={field.value}
-                                    />
-                                )}
+                            <Field type="text" name="employee" className="form-control" readOnly>
                             </Field>
                         </div>
                     </div>
                     <div className="form-group">
                         <div className="label-form">
                             <label className="control-label">
-                                Company<span className="require">*</span>
+                                Second Company<span className="require">*</span>
                             </label>
                         </div>
                         <div className="select-form">

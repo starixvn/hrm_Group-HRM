@@ -40,7 +40,7 @@ const AppContainer = () => {
                 const employeeOptions = data.map(item => {
                     return {
                         id: item.empId,
-                        value: `${item.nickName} (${item.fullName} - ${item.company})`,
+                        value: `${item.nickName} ( ${item.company})`,
                         fullName: item.fullName,
                         nickName: item.nickName
                     };
@@ -175,8 +175,6 @@ const AppContainer = () => {
         );
     };
 
-    const empId = selectEmployee ? selectEmployee.id : 0;
-    const empName = selectEmployee ? selectEmployee.value : '';
 
     return (
         <Formik
