@@ -24,7 +24,8 @@ export default class Supervisor extends Component {
         };
 
         this.roleId = document.getElementById('RoleId').value;
-        this.companyId = document.getElementById('CompanyId').value;
+        const companyId = (document.getElementById('CompanyId') || {}).value || '';
+        this.companyId = companyId;
     }
 
     componentDidMount() {
@@ -108,7 +109,7 @@ export default class Supervisor extends Component {
                 nickName: employee.nickname,
                 fullName: employee.fullName,
                 teamCode: employee.teamCode,
-                companyId:this.companyId,
+                companyId: this.companyId,
                 leaves: true,
                 changeShifts: true,
                 lateInEarlyOuts: true,
