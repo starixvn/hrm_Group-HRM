@@ -8,6 +8,8 @@ public class GetVerifierAndApproverCriteria : CriteriaBase
 
     public byte RequestType { get; set; }
 
+    public int? CompanyId { get; set; }
+
     public override string GetSettingKey()
     {
         return "Employee_GetVerifierAndApprover";
