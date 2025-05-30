@@ -224,7 +224,7 @@ public class TeamService(
             worksheet.Cells[rowIndex, colIndex++].Value = team.DepartmentPIC;
             worksheet.Cells[rowIndex, colIndex++].Value = team.TeamName;
             worksheet.Cells[rowIndex, colIndex++].Value = team.TeamCode;
-            worksheet.Cells[rowIndex, colIndex++].Value = team.TeamPIC;
+            worksheet.Cells[rowIndex, colIndex++].Value = team.PICDisplayName;
             worksheet.Cells[rowIndex, colIndex++].Value = team.AccountableArea;
             worksheet.Cells[rowIndex, colIndex++].Value = team.CompanyName;
             worksheet.Cells[rowIndex, colIndex++].Value = team.NoOfMembers.ToString();

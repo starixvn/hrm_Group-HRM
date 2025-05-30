@@ -30,7 +30,7 @@ public class GroupTeamModel
 
     public int? TeamPICCompanyId { get; set; }
 
-    public string DisplayName {
+    public string PICDisplayName {
         get
         {
             if (TeamPICCompanyId != null && TeamPICCompanyId != CompanyId)
