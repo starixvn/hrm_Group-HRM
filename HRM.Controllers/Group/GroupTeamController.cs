@@ -184,10 +184,6 @@ public class GroupTeamController(ITeamService teamService,
                 if (result.IsSuccessful)
                 {
                     ViewBag.Updated = true;
-                    if (model.PICEmpId != null)
-                    {
-                        await InsertTeamSupervisorByTeamPIC(model.PICEmpId.Value, model.Id);
-                    }
                 }
                 else
                 {
