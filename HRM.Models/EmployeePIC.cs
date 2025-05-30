@@ -8,6 +8,6 @@ public class EmployeePIC : EntityBase<int>
 
     public string CompanyName { get; set; }
 
-    public string DisplayNameWithCompany => NickName + " - " + CompanyName;
+    public string DisplayNameWithCompany => NickName + " (" + CompanyName + ")";
 
 }
