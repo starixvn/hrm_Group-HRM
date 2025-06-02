@@ -6,6 +6,8 @@ public class GetCheckInOutRequestHistoryByIdCriteria : CriteriaBase
 {
     public long RequestId { get; set; }
 
+    public int? CompanyId { get; set; }
+
     public override string GetSettingKey()
     {
         return "CheckInOutRequest_GetHistoryById";

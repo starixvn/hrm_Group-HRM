@@ -56,9 +56,12 @@ public class CheckInOutRequestService(
 
     public async Task<IList<CheckInOutRequest>> GetHistoryByIdAsync(long requestId)
     {
+        var companyId = userControlSession.Get<int>(SessionKey.CurrentCompanyId);
+
         var criteria = new GetCheckInOutRequestHistoryByIdCriteria
         {
-            RequestId = requestId
+            RequestId = requestId,
+            CompanyId = companyId
         };
         return await checkInOutRequestRepository.GetHistoryByIdAsync(criteria);
     }

@@ -53,9 +53,12 @@ public class LateInEarlyOutRequestService(
 
     public async Task<IList<LateInEarlyOutRequest>> GetHistoryByIdAsync(long requestId)
     {
+        var companyId = userControlSession.Get<int>(SessionKey.CurrentCompanyId);
+
         var criteria = new GetLateInEarlyOutRequestHistoryByIdCriteria
         {
-            RequestId = requestId
+            RequestId = requestId,
+            CompanyId = companyId
         };
         return await lateInEarlyOutRequestRepository.GetHistoryByIdAsync(criteria);
     }

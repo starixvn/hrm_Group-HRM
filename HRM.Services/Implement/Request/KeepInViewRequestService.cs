@@ -56,9 +56,12 @@ public class KeepInViewRequestService(
 
     public async Task<IList<KeepInViewRequest>> GetHistoryByIdAsync(long requestId)
     {
+        var companyId = userControlSession.Get<int>(SessionKey.CurrentCompanyId);
+
         var criteria = new GetKeepInViewRequestHistoryByIdCriteria
         {
-            RequestId = requestId
+            RequestId = requestId,
+            CompanyId = companyId
         };
         return await keepInViewRequestRepository.GetHistoryByIdAsync(criteria);
     }

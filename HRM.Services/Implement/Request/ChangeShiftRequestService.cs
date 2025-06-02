@@ -91,9 +91,12 @@ public class ChangeShiftRequestService(
 
     public async Task<IEnumerable<ChangeShiftRequest>> GetHistoryByIdAsync(long requestId)
     {
+        var companyId = userControlSession.Get<int>(SessionKey.CurrentCompanyId);
+
         var criteria = new GetChangeShiftRequestHistoryByIdCriteria
         {
-            RequestId = requestId
+            RequestId = requestId,
+            CompanyId = companyId
         };
         return await changeShiftRepository.GetHistoryByIdAsync(criteria);
     }

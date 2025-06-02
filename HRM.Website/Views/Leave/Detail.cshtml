@@ -127,7 +127,7 @@
                 @Html.LabelFor(model => model.VerifierId, Labels.Verifier, new { @class = "control-label" })
             </div>
             <div class="select-form">
-                @Html.DropDownListFor(model => model.VerifierId, new SelectList(Model.Verifiers, "OwnerId", "DisplayName"), new { @class = "form-control" })
+                @Html.DropDownListFor(model => model.VerifierId, new SelectList(Model.Verifiers, "OwnerId", "NickName"), new { @class = "form-control" })
             </div>
         </div>
         <div class="form-group">
@@ -135,7 +135,7 @@
                 @Html.LabelFor(model => model.ApproverId, Labels.Approver, new { @class = "control-label" })
             </div>
             <div class="select-form">
-                @Html.DropDownListFor(model => model.ApproverId, new SelectList(Model.Approvers, "OwnerId", "DisplayName"), new { @class = "form-control" })
+                @Html.DropDownListFor(model => model.ApproverId, new SelectList(Model.Approvers, "OwnerId", "NickName"), new { @class = "form-control" })
             </div>
         </div>
         <div class="form-group">
