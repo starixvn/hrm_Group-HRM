@@ -4,10 +4,10 @@ using System.ComponentModel;
 
 public enum SupervisorActionType
 {
-    [Description("Verified by")]
+    [Description("Verify by")]
     Verifier = 2,
 
-    [Description("Approved by")]
+    [Description("Approve by")]
     Approver = 3,
 
     [Description("Shift Arrangement")]

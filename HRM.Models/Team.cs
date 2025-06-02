@@ -50,6 +50,10 @@ public class Team : EntityBase<int>
 
     public string PICNickName { get; set; }
 
+    public int PICCompanyId { get; set; }
+
+    public string PICCompanyName { get; set; }
+
     public int GroupTeamId { get; set; }
 
     public string AccountableArea { get; set; }

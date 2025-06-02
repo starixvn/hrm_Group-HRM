@@ -26,6 +26,22 @@ public class GroupTeamModel
 
     public string TeamPIC { get; set; }
 
+    public string TeamPICCompany { get; set; }
+
+    public int? TeamPICCompanyId { get; set; }
+
+    public string PICDisplayName {
+        get
+        {
+            if (TeamPICCompanyId != null && TeamPICCompanyId != CompanyId)
+            {
+                return $"{TeamPIC} ({TeamPICCompany})";
+            }
+
+            return TeamPIC;
+        }
+    }
+
     public string AccountableArea { get; set; }
 
     public string CompanyName { get; set; }

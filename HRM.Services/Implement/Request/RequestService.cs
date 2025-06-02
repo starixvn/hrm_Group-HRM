@@ -87,10 +87,12 @@ public class RequestService(
 
     public async Task<VerifierAndApproverForRequest> GetVerifierAndApproverAsync(int employeeId, RequestType requestType)
     {
+        var companyId = userControlSession.Get<int>(SessionKey.CurrentCompanyId);
         var criteria = new GetVerifierAndApproverCriteria
         {
             EmpId = employeeId,
-            RequestType = (byte)requestType
+            RequestType = (byte)requestType,
+            CompanyId = companyId
         };
         return await requestRepository.GetVerifierAndApproverAsync(criteria);
     }

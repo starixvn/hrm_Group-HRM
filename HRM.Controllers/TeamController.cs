@@ -38,6 +38,7 @@ public class TeamController(
         var teams = await teamService.GetAllAsync(keyword: keyword);
         ViewBag.HasPermission = session.HasPermissionOnFunction(FunctionKey.TeamManagement, Policy.Host);
         ViewBag.HasPermissionToViewEmployee = session.HasPermissionOnFunction(FunctionKey.EmployeeManagement, Policy.Read);
+        ViewBag.CompanyId = CurrentCompanyId;
         return View(teams);
     }
 
@@ -144,7 +145,8 @@ public class TeamController(
     [HrmPermission(Policy.Read, FunctionKey.TeamManagement)]
     public async Task<IActionResult> TeamSupervisor(int id)
     {
-        var supervisors = (await teamService.GetSupervisorByTeamId(id)).ToList();
+        const bool isGroupSpace = false;
+        var supervisors = (await teamService.GetSupervisorByTeamId(id, isGroupSpace)).ToList();
         ViewBag.TeamId = id;
         ViewBag.TeamCode = supervisors.Count != 0 ? supervisors[0].Code : string.Empty;
 
@@ -156,6 +158,7 @@ public class TeamController(
     {
         ViewBag.TeamId = id;
         ViewBag.RoleId = roleId;
+        ViewBag.CompanyId = CurrentCompanyId;
 
         return View();
     }

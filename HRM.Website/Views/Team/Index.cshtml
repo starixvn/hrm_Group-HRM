@@ -6,6 +6,7 @@
     ViewBag.Title = Labels.TeamManagement;
     var hasPermission = (bool)ViewBag.HasPermission;
     var hasPermissionToViewEmployee = (bool)ViewBag.HasPermissionToViewEmployee;
+    int companyId = ViewBag.CompanyId;
 }
 @section css{
     <link href="~/dist/styles/team.index.css" rel="stylesheet" />
@@ -125,7 +126,9 @@
                     <td class="align-left">@team.Department.Name</td>
                     <td class="align-left">@team.Name</td>
                     <td>@team.Code</td>
-                    <td>@team.PICNickName</td>
+                    <td>@team.PICNickName
+                        @(companyId != team.PICCompanyId && !string.IsNullOrEmpty(@team.PICNickName) ? $" ({team.PICCompanyName})" : "")
+                    </td>
                     <td class="align-left">@team.MailGroup</td>
                     <td>@team.LocalBasicAnnualLeaveBalance</td>
                     <td>@team.ExpatBasicAnnualLeaveBalance</td>

@@ -4,6 +4,7 @@
     ViewBag.Title = "Edit Team Supervisor";
     var teamId = (int)ViewBag.TeamId;
     var roleId = (short)ViewBag.RoleId;
+    var companyId = (int)ViewBag.CompanyId;
     var breadcrumb = string.Empty;
 }
 @section css{
@@ -31,4 +32,5 @@
 
 @Html.Hidden("TeamId", teamId)
 @Html.Hidden("RoleId", roleId)
+@Html.Hidden("CompanyId", companyId)
 <div id="supervisor-wrapper"></div>

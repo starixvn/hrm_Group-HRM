@@ -44,6 +44,7 @@ public class TeamService(
         var criteria = new GetNextGroupTeamIdCriteria();
         return await baseService.GetDataEntityAsync<int>(criteria);
     }
+
     public async Task<GroupTeamModel> GetGroupTeamInUnitScopeById(int id)
     {
         var criteria = new GetTeamInUnitScopeCriteria
@@ -52,6 +53,15 @@ public class TeamService(
         };
         return await baseService.GetDataEntityAsync<GroupTeamModel>(criteria);
         
+    }
+    
+    public async Task<int> GetGroupIdByGroupTeamId(int groupTeamId)
+    {
+        var criteria = new GetGroupIdByGroupTeamIdCriteria
+        {
+            GroupTeamId = groupTeamId
+        };
+        return await baseService.GetDataEntityAsync<int>(criteria);
     }
 
     public async Task<IEnumerable<Team>> GetAllAsync(bool isDeleted = false, string keyword = null)
@@ -108,11 +118,16 @@ public class TeamService(
         return (await baseService.GetDataAsync<SupervisorModel>(criteria)).ToList();
     }
 
-    public async Task<IEnumerable<TeamSupervisorModel>> GetSupervisorByTeamId(int id)
+    public async Task<IEnumerable<TeamSupervisorModel>> GetSupervisorByTeamId(int id, bool isGroupSpace)
     {
+        int? companyId = null;
+        if (!isGroupSpace) companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
+
         var criteria = new GetSupervisorByTeamIdCriteria
         {
-            TeamId = id
+            TeamId = id,
+            IsGroupSpace = isGroupSpace,
+            CompanyId = companyId
         };
         return (await baseService.GetDataAsync<TeamSupervisorModel>(criteria)).ToList();
     }
@@ -133,6 +148,17 @@ public class TeamService(
             TeamId = teamId,
             ActorId = actorId,
             RoleId = roleId,
+            SupervisorXml = supervisors.ToXML().ToString()
+        };
+        return await baseService.ExecuteNonQueryAsync(criteria);
+    }
+
+    public async Task<CommandResult> InsertTeamSupervisorByPIC(int actorId, int teamId, IEnumerable<EditTeamSupervisor> supervisors)
+    {
+        var criteria = new InsertTeamSupervisorByPICCriteria
+        {
+            TeamId = teamId,
+            ActorId = actorId,
             SupervisorXml = supervisors.ToXML().ToString()
         };
         return await baseService.ExecuteNonQueryAsync(criteria);
@@ -198,7 +224,7 @@ public class TeamService(
             worksheet.Cells[rowIndex, colIndex++].Value = team.DepartmentPIC;
             worksheet.Cells[rowIndex, colIndex++].Value = team.TeamName;
             worksheet.Cells[rowIndex, colIndex++].Value = team.TeamCode;
-            worksheet.Cells[rowIndex, colIndex++].Value = team.TeamPIC;
+            worksheet.Cells[rowIndex, colIndex++].Value = team.PICDisplayName;
             worksheet.Cells[rowIndex, colIndex++].Value = team.AccountableArea;
             worksheet.Cells[rowIndex, colIndex++].Value = team.CompanyName;
             worksheet.Cells[rowIndex, colIndex++].Value = team.NoOfMembers.ToString();

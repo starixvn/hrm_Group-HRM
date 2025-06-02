@@ -19,13 +19,15 @@ public interface ITeamService
 
     Task<GroupTeamModel> GetGroupTeamInUnitScopeById(int id);
 
+    Task<int> GetGroupIdByGroupTeamId(int groupTeamId);
+
     Task<CommandResult> Delete(int actorId, int id);
 
     Task<IEnumerable<Team>> GetBySupervisorAsync(int supervisorId);
 
     Task<IList<SupervisorModel>> GetTeamSupervisorByRoleId(int teamId, short roleId);
 
-    Task<IEnumerable<TeamSupervisorModel>> GetSupervisorByTeamId(int id);
+    Task<IEnumerable<TeamSupervisorModel>> GetSupervisorByTeamId(int id, bool isGroupSpace);
 
     Task<IEnumerable<Supervisor>> GetDisciplineManagerByTeamId(int teamId);
 
@@ -36,4 +38,7 @@ public interface ITeamService
     Task<CommandResult> EditDisciplineRule(int actorId, int teamId, IEnumerable<DisciplineRule> disciplineRules);
 
     Task<byte[]> GenerateGroupTeamExcel(IEnumerable<GroupTeamModel> teams);
+
+    Task<CommandResult> InsertTeamSupervisorByPIC(int actorId, int teamId,
+        IEnumerable<EditTeamSupervisor> supervisors);
 }

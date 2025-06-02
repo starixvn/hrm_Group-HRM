@@ -78,7 +78,7 @@
 		        @Html.LabelFor(model => model.PICEmpId, Labels.PersonalInCharge, new { @class = "control-label" })
 	        </div>
 	        <div class="input-form">
-		        @Html.DropDownListFor(model => model.PICEmpId, new SelectList(Model.EmployeePics, "Id", "DisplayNameWithCompany"), new { @class = "form-control" })
+		        @Html.DropDownListFor(model => model.PICEmpId, new SelectList(Model.EmployeePics, "Id", "DisplayNameWithCompany"), "", new { @class = "form-control" })
 	        </div>
         </div>
         <div class="form-group">
