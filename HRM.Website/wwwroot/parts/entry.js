@@ -87,7 +87,8 @@ module.exports = {
         [`${styleDistPath}/time.checkinout`]: `${styleSourcePath}/pages/time/checkinout.scss`,
         [`${styleDistPath}/group.employee.list.index`]: `${styleSourcePath}/pages/group-employee-list/index.scss`,
         [`${styleDistPath}/payroll.management`]: `${styleSourcePath}/pages/payroll-management/payroll.management.scss`,
-
+        [`${styleDistPath}/secondment-company.index`]: `${styleSourcePath}/pages/secondment-company/index.scss`,
+        [`${styleDistPath}/secondment-company.create`]: `${styleSourcePath}/pages/secondment-company/create.scss`,
         //
         [`${jsDistPath}/main`]: "./sources/js/main.js",
         [`${jsDistPath}/auth.index`]: `${jsSourcePath}/auth/index.jsx`,
@@ -195,5 +196,8 @@ module.exports = {
         [`${jsDistPath}/time.checkinout`]: `${jsSourcePath}/time/checkinout/index.jsx`,
         [`${jsDistPath}/group.employee.list.index`]: `${jsSourcePath}/group-employee-list/index.js`,
         [`${jsDistPath}/payroll.management`]: `${jsSourcePath}/payroll-management/index.jsx`,
+        [`${jsDistPath}/secondment-company.home`]: `${jsSourcePath}/secondment-company/home/index.jsx`,
+        [`${jsDistPath}/secondment-company.create`]: `${jsSourcePath}/secondment-company/create/index.jsx`,
+        [`${jsDistPath}/secondment-company.edit`]: `${jsSourcePath}/secondment-company/edit/index.jsx`,
     },
 };

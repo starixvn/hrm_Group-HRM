@@ -8,9 +8,9 @@ public class GroupEmployeeViewModel : PagerOptionModel
 {
     public string Keyword { get; set; }
 
-    public string TeamIds { get; set; }
+    public string TeamIds { get; set; } = "";
 
-    public string CompanyIds { get; set; }
+    public string CompanyIds { get; set; } = "";
 
     public int? JobTitleId { get; set; }
 

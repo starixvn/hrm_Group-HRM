@@ -2082,4 +2082,13 @@
   <data name="YearsOfServiceForExtraLeave" xml:space="preserve">
     <value>Years Of Service For Extra Leave</value>
   </data>
+  <data name="SecondmentCompanyManagement" xml:space="preserve">
+    <value>Secondment Company Management</value>
+  </data>
+  <data name="AddSecondmentCompany" xml:space="preserve">
+    <value>Add Secondment Company</value>
+  </data>
+  <data name="UpdateSecondmentCompany" xml:space="preserve">
+    <value>Update Secondment Company</value>
+  </data>
 </root>

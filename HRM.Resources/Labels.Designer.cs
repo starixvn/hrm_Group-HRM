@@ -5945,5 +5945,32 @@ namespace HRM.Resources {
                 return ResourceManager.GetString("Yesterday", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Secondment Company Management.
+        /// </summary>
+        public static string SecondmentCompanyManagement {
+            get {
+                return ResourceManager.GetString("SecondmentCompanyManagement", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add Secondment Company.
+        /// </summary>
+        public static string AddSecondmentCompany {
+            get {
+                return ResourceManager.GetString("AddSecondmentCompany", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update Secondment Company.
+        /// </summary>
+        public static string UpdateSecondmentCompany {
+            get {
+                return ResourceManager.GetString("UpdateSecondmentCompany", resourceCulture);
+            }
+        }
     }
 }
