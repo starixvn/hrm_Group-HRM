@@ -21,6 +21,8 @@ public class GetRequestCriteria : CriteriaBase
 
     public short CompanyId { get; set; }
 
+    public bool IsShowCrossCompany { get; set; } = false;
+
     public string Role
     {
         get

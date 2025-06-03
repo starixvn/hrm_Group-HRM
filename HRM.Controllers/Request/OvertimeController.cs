@@ -107,7 +107,8 @@ public class OvertimeController(
             EmployeeId = model.EmployeeId,
             StatusIds = statusIds,
             IsLocal = model.IsLocal,
-            CompanyId = CurrentCompanyId
+            CompanyId = CurrentCompanyId,
+            IsShowCrossCompany = model.IsShowCrossCompany
         };
         model.MemberRequests = await overtimeService.GetMemberMonthlyRequestAsync(param);
 

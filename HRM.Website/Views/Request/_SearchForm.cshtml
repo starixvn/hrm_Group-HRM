@@ -104,6 +104,16 @@
                 @Html.HiddenFor(model => model.EmployeeId)
             </div>
         </div>
+        @if (Model.ViewType == RequestViewType.PersonalSpace)
+        {
+            <div class="form-group form-group--m">
+                <div class="checkbox">
+                    <input type="checkbox" class="checkbox-custom" id="IsShowCrossCompany" name="IsShowCrossCompany"
+                           @(Model.IsShowCrossCompany ? "checked" : string.Empty) />
+                    <label for="IsShowCrossCompany">@Labels.ShowCrossCompany</label>
+                </div>
+            </div>
+        }
     </div>
     <div class="form-horizontal clearfix">
         <div class="form-group form-group--m">

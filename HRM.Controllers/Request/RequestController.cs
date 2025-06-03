@@ -237,7 +237,8 @@ public class RequestController(
             SupervisorId = session.UserId,
             IsLocal = request.IsLocal.HasValue ? request.IsLocal.Value == 1 : null,
             LeaveTypeId = request.LeaveType,
-            CompanyId = CurrentCompanyId
+            CompanyId = CurrentCompanyId,
+            IsShowCrossCompany = request.IsShowCrossCompany
         };
 
         var requests = await requestService.GetRequestAsync(criteria);

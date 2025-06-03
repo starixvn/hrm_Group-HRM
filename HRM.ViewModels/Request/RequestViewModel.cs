@@ -85,6 +85,7 @@ public class RequestViewModel
 
     public bool IsAllowChangeStatus => ViewType != RequestViewType.CompanySpace;
 
+    public bool IsShowCrossCompany { get; set; } = false;
     public bool IsFilterByAffectedDate
     {
         get
