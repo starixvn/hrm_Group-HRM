@@ -30,11 +30,11 @@
                 <div class="select-form">
                     @if (Model.Verifiers.Count() > 1)
                     {
-                        @Html.DropDownListFor(model => model.VerifierId, new SelectList(Model.Verifiers, "OwnerId", "DisplayName"), Labels.SelectVerifier, new { @class = "form-control" })
+                        @Html.DropDownListFor(model => model.VerifierId, new SelectList(Model.Verifiers, "OwnerId", "NickName"), Labels.SelectVerifier, new { @class = "form-control" })
                     }
                     else
                     {
-                        @Html.DropDownListFor(model => model.VerifierId, new SelectList(Model.Verifiers, "OwnerId", "DisplayName"), new { @class = "form-control" })
+                        @Html.DropDownListFor(model => model.VerifierId, new SelectList(Model.Verifiers, "OwnerId", "NickName"), new { @class = "form-control" })
                     }
                 </div>
             </div>
@@ -45,11 +45,11 @@
                 <div class="select-form">
                     @if (Model.Approvers.Count() > 1)
                     {
-                        @Html.DropDownListFor(model => model.ApproverId, new SelectList(Model.Approvers, "OwnerId", "DisplayName"), Labels.SelectApprover, new { @class = "form-control" })
+                        @Html.DropDownListFor(model => model.ApproverId, new SelectList(Model.Approvers, "OwnerId", "NickName"), Labels.SelectApprover, new { @class = "form-control" })
                     }
                     else
                     {
-                        @Html.DropDownListFor(model => model.ApproverId, new SelectList(Model.Approvers, "OwnerId", "DisplayName"), new { @class = "form-control" })
+                        @Html.DropDownListFor(model => model.ApproverId, new SelectList(Model.Approvers, "OwnerId", "NickName"), new { @class = "form-control" })
                     }
                 </div>
             </div>
