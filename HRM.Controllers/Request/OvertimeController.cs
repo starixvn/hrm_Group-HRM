@@ -81,6 +81,7 @@ public class OvertimeController(
     {
         var teams = await teamService.GetAllAsync();
         model.TeamIds ??= string.Join(",", teams.Select(x => x.Id));
+        model.IsShowCrossCompany = true;
         model.MemberRequests = await GetMemberOvertimeRequestAsync(model);
         ViewBag.CurrentUserId = session.UserId;
         ViewBag.IsVerifier = session.HasPermissionOnFunction(FunctionKey.VerifyOvertime, Policy.Host);
