@@ -139,29 +139,35 @@ public class LeaveRequestService(
 
     public void SendMailAndSendLetstalkCreateRequest(InsertLeaveRequestCriteria criteria)
     {
+        var domain = userControlSession.Get<string>(SessionKey.CurrentDomain);
+        var mailSetting = userControlSession.Get<MailSetting>(SessionKey.MailSetting);
+        var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
         var templateEmailPath = Path.Combine(env.ContentRootPath, EmailTemplatePathForRequest);
-        Task.Run(() => SendMailForInsertSuccessfully(criteria, templateEmailPath));
+        Task.Run(() => SendMailForInsertSuccessfully(criteria, templateEmailPath, domain, mailSetting, companyId));
     }
 
     public void SendMailEditRequest(UpdateLeaveRequestCriteria criteria)
     {
+        var domain = userControlSession.Get<string>(SessionKey.CurrentDomain);
+        var mailSetting = userControlSession.Get<MailSetting>(SessionKey.MailSetting);
         var templateEmailPath = Path.Combine(env.ContentRootPath, EmailTemplatePathForRequest);
-        Task.Run(() => SendMailForUpdateSuccessfully(criteria, templateEmailPath));
+        var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
+        Task.Run(() => SendMailForUpdateSuccessfully(criteria, templateEmailPath, domain, mailSetting, companyId));
     }
 
-    public async Task SendMailForInsertSuccessfully(InsertLeaveRequestCriteria criteria, string templateEmailPath)
+    private async Task SendMailForInsertSuccessfully(InsertLeaveRequestCriteria criteria, string templateEmailPath, string domain, MailSetting mailSetting, short companyId)
     {
         var email = await requestMailService.GetMailToMailCcAndLetStalk(criteria.RequestId, (int)SettingsSendMail.New);
         email.Subject = Messages.LeaveEmailSubject + " " + criteria.EmployeeName;
-        await SendMailForSuccessfully(criteria, templateEmailPath, email);
+        await SendMailForSuccessfully(criteria, templateEmailPath, email, domain, mailSetting, companyId);
     }
 
-    public async Task SendMailForUpdateSuccessfully(UpdateLeaveRequestCriteria criteria, string templateEmailPath)
+    private async Task SendMailForUpdateSuccessfully(UpdateLeaveRequestCriteria criteria, string templateEmailPath, string domain, MailSetting mailSetting, short companyId)
     {
         var email = await requestMailService.GetMailToMailCcAndLetStalk(criteria.RequestId, (int)SettingsSendMail.Edit);
         email.Subject = Messages.UpdatedLeaveEmailSubject + " " + criteria.EmployeeName;
 
-        await SendMailForSuccessfully(criteria, templateEmailPath, email);
+        await SendMailForSuccessfully(criteria, templateEmailPath, email, domain, mailSetting, companyId);
     }
 
     public async Task SendMailDeleteRequest(long requestId)
@@ -258,7 +264,7 @@ public class LeaveRequestService(
         return toTime.DateTime;
     }
 
-    private async Task SendMailForSuccessfully(BaseLeaveRequestCriteria criteria, string templateEmailPath, EmailModel email)
+    private async Task SendMailForSuccessfully(BaseLeaveRequestCriteria criteria, string templateEmailPath, EmailModel email, string currentDomain, MailSetting mailSetting, short companyId)
     {
         email.Subject += criteria.TotalDays > 1
             ? " from " + criteria.FromDate.ToDateMonthYearFormatedDate() + " to " + criteria.ToDate.ToDateMonthYearFormatedDate()
@@ -275,14 +281,16 @@ public class LeaveRequestService(
             forDate,
             criteria.LeaveTypeName,
             criteria.Remark,
-            userControlSession.Get<string>(SessionKey.CurrentDomain));
+            currentDomain);
         if (!string.IsNullOrWhiteSpace(email.SendTo))
         {
             await emailService.SendEmailAsync(
                 email.SendTo,
                 email.SendCC,
                 email.Subject,
-                email.Body);
+                email.Body,
+                mailSetting,
+                companyId);
         }
 
         await Task.Run(() => letStalkService.SendNotification(email.LetsTalk, email.Subject, email.Body));
