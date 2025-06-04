@@ -2094,6 +2094,9 @@
   <data name="ShowCrossCompany" xml:space="preserve">
     <value>Show Cross Company</value>
   </data>
+   <data name="SecondmentCompanyManagement" xml:space="preserve">
+    <value>Secondment Company Management</value>
+  </data>
   <data name="AddSecondmentCompany" xml:space="preserve">
     <value>Add Secondment Company</value>
   </data>

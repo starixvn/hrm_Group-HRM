@@ -5981,6 +5981,15 @@ namespace HRM.Resources {
                 return ResourceManager.GetString("ShowCrossCompany", resourceCulture);
             }
         }
+
+         /// <summary>
+        ///   Looks up a localized string similar to Show Cross Company.
+        /// </summary>
+        public static string SecondmentCompanyManagement {
+            get {
+                return ResourceManager.GetString("SecondmentCompanyManagement", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   Looks up a localized string similar to Add Secondment Company.
