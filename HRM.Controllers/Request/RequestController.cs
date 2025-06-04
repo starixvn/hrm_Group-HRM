@@ -36,7 +36,6 @@ public class RequestController(
         request.ViewType = RequestViewType.PersonalSpace;
         var team = await teamService.GetAllAsync();
         request.TeamIds ??= string.Join(",", team.Select(x => x.Id));
-        request.IsShowCrossCompany = true;
         if (request.StatusId == Constants.DefaultRequestFilterStatusId)
         {
             const long fromDays = -180;

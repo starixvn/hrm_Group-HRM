@@ -80,8 +80,8 @@ public class OvertimeController(
     public async Task<IActionResult> MemberOvertime(MemberMonthlyOvertimeRequestViewModel model)
     {
         var teams = await teamService.GetAllAsync();
+        model.IsShowCrossCompany = model.TeamIds == null || model.IsShowCrossCompany;
         model.TeamIds ??= string.Join(",", teams.Select(x => x.Id));
-        model.IsShowCrossCompany = true;
         model.MemberRequests = await GetMemberOvertimeRequestAsync(model);
         ViewBag.CurrentUserId = session.UserId;
         ViewBag.IsVerifier = session.HasPermissionOnFunction(FunctionKey.VerifyOvertime, Policy.Host);
