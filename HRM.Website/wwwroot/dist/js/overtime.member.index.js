@@ -67828,6 +67828,7 @@ $(document).ready(function () {
         } else {
             var teamIds = $('#Team').multiSelectTreeView('getSelectedItems');
             $('#TeamIds').val(teamIds === '' ? ' ' : teamIds);
+            $('#IsShowCrossCompany').val($('#IsShowCrossCompany').is(':checked'));
 
             $('form.filter').submit();
         }
@@ -67995,11 +67996,14 @@ $(document).ready(function () {
         event.preventDefault();
 
         (0, _common.blockUI)();
+        var formData = $('form.filter').serialize();
+        var params = (0, _qs.parse)(formData);
+        params.IsShowCrossCompany = $('#IsShowCrossCompany').is(':checked');
         (0, _axios2.default)({
             url: (0, _common.resolveClientUrl)('Overtime/ExportMemberOvertime'),
             method: 'GET',
             headers: { 'X-Requested-With': 'XMLHttpRequest' },
-            params: (0, _qs.parse)($('form.filter').serialize()),
+            params: params,
             responseType: 'blob'
         }).then(function (response) {
             var fileName = response.headers['content-disposition'].match(/filename=([^;]+)/)[1];
