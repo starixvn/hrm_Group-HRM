@@ -20,5 +20,14 @@ public enum JobTitleCategory
     ExecutiveWithPosition = 4,
 
     [Description("Management")]
-    Management = 5
+    Management = 5,
+
+    [Description("PD")]
+    PD = 6,
+
+    [Description("Product")]
+    Product = 7,
+
+    [Description("Support")]
+    Support = 8
 }

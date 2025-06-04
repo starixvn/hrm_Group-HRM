@@ -3868,6 +3868,15 @@ namespace HRM.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to PD.
+        /// </summary>
+        public static string PD {
+            get {
+                return ResourceManager.GetString("PD", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Pending.
         /// </summary>
         public static string Pending {
@@ -4044,6 +4053,15 @@ namespace HRM.Resources {
         public static string ProcessedDate {
             get {
                 return ResourceManager.GetString("ProcessedDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Product.
+        /// </summary>
+        public static string Product {
+            get {
+                return ResourceManager.GetString("Product", resourceCulture);
             }
         }
         
@@ -4872,6 +4890,15 @@ namespace HRM.Resources {
         public static string Supervisor {
             get {
                 return ResourceManager.GetString("Supervisor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Support.
+        /// </summary>
+        public static string Support {
+            get {
+                return ResourceManager.GetString("Support", resourceCulture);
             }
         }
         
