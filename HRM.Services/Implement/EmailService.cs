@@ -35,12 +35,6 @@ public class EmailService(IBaseMailService mailService,IBaseService baseService,
 
     public async Task<MailSetting> GetMailSettingAsync(MailSetting mailSetting = null, short? companyId = null)
     {
-        mailSetting ??= session.Get<MailSetting>(SessionKey.MailSetting);
-        if (mailSetting != null)
-        {
-            return mailSetting;
-        }
-
         companyId ??= session.Get<short?>(SessionKey.CurrentCompanyId);
         var criteria = new GetSystemConfigsByKeyCriteria
         {
