@@ -34,7 +34,7 @@ const AppContainer = () => {
                 url: resolveClientUrl('GroupEmployeeList/GroupEmployeeList'),
                 method: 'GET',
                 headers: { 'X-Requested-With': 'XMLHttpRequest' },
-                params: { keyword: query }
+                params: { keyword: query, isDelete: false, isEnable: true }
             }).then(response => {
                 const { data } = response;
                 const employeeOptions = data.map(item => {
