@@ -11,7 +11,6 @@ using HRM.Core.Enums;
 using HRM.Core.Services;
 using HRM.Criteria.Request.KeepInView;
 using HRM.Models.Request;
-using HRM.Services.Implement.Request;
 using HRM.Services.Interfaces;
 using HRM.Services.Interfaces.Request;
 using HRM.ViewModels.Request;
@@ -28,7 +27,8 @@ public class KeepInViewController(
     IBaseService baseService,
     IAttachFileService attachFileService,
     IShiftService shiftService,
-    ILeaveRequestService leaveRequestService) : BaseController(session)
+    ILeaveRequestService leaveRequestService,
+    IRequestMailService requestMailService) : BaseController(session)
 {
     [HttpGet]
     public async Task<IActionResult> EmployeeView(int? year)
@@ -109,8 +109,12 @@ public class KeepInViewController(
         var commandResult = await baseService.ExecuteNonQueryAsync(criteria);
         if (commandResult.IsSuccessful)
         {
-            await keepInViewRequestService.SendMailAndSendLetstalkCreateRequestAsync(criteria.RequestId);
             await attachFileService.UploadFileAsync(files, criteria.RequestId, $"{CurrentCompanyId}/requests");
+
+            if (criteria.ApproverId == null) return Json(commandResult);
+
+            var mailConfig = await requestMailService.GetEmployeeMailConfig(criteria.ApproverId.Value);
+            await keepInViewRequestService.SendMailAndSendLetstalkCreateRequestAsync(criteria.RequestId, mailConfig);
         }
 
         return Json(commandResult);
@@ -183,7 +187,10 @@ public class KeepInViewController(
         var commandResult = await baseService.ExecuteNonQueryAsync(criteria);
         if (commandResult.IsSuccessful)
         {
-            await keepInViewRequestService.SendMailEditRequestAsync(model.RequestId);
+            if (criteria.ApproverId == null) return Json(commandResult);
+
+            var mailConfig = await requestMailService.GetEmployeeMailConfig(criteria.ApproverId.Value);
+            await keepInViewRequestService.SendMailEditRequestAsync(model.RequestId, mailConfig);
             await attachFileService.UploadFileAsync(files, criteria.RequestId, $"{CurrentCompanyId}/requests");
             if (!string.IsNullOrWhiteSpace(filesRemove))
             {

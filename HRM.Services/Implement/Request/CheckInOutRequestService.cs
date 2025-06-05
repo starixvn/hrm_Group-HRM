@@ -9,12 +9,14 @@ using HRM.Core.Enums;
 using HRM.Core.Models;
 using HRM.Core.Services;
 using HRM.Criteria.Request.CheckInOut;
+using HRM.Models;
 using HRM.Models.Request;
 using HRM.Repositories.Interfaces;
 using HRM.Resources;
 using HRM.Services.Interfaces;
 using HRM.Services.Interfaces.Request;
 using Microsoft.AspNetCore.Hosting;
+using Newtonsoft.Json;
 
 namespace HRM.Services.Implement.Request;
 
@@ -90,7 +92,7 @@ public class CheckInOutRequestService(
         return await baseService.ExecuteNonQueryAsync(criteria);
     }
 
-    public async Task SendMailAndSendLetstalkCreateRequestAsync(long requestId)
+    public async Task SendMailAndSendLetstalkCreateRequestAsync(long requestId, MailConfigModel mailConfig)
     {
         var request = await GetByIdAsync(requestId);
         if (request != null)
@@ -110,19 +112,22 @@ public class CheckInOutRequestService(
                 request.ShiftName,
                 request.RequestTime.ToShortTime(),
                 request.Remark,
-                userControlSession.Get<string>(SessionKey.CurrentDomain));
+                mailConfig.Domain);
 
+            var mailSetting = JsonConvert.DeserializeObject<MailSetting>(mailConfig.MailSetting);
             await emailService.SendEmailAsync(
                 email.SendTo,
                 email.SendCC,
                 email.Subject,
-                email.Body);
+                email.Body,
+                mailSetting,
+                (short)mailConfig.CompanyId);
 
             await letStalkService.SendNotificationAsync(email.LetsTalk, email.Subject, email.Body);
         }
     }
 
-    public async Task SendMailEditRequestAsync(long requestId)
+    public async Task SendMailEditRequestAsync(long requestId, MailConfigModel mailConfig)
     {
         var emailTemplatePath = Path.Combine(env.ContentRootPath, EmailTemplatePathForRequest);
         var request = await GetByIdAsync(requestId);
@@ -142,13 +147,16 @@ public class CheckInOutRequestService(
                 request.ShiftName,
                 request.RequestTime.ToShortTime(),
                 request.Remark,
-                userControlSession.Get<string>(SessionKey.CurrentDomain));
+                mailConfig.Domain);
 
+            var mailSetting = JsonConvert.DeserializeObject<MailSetting>(mailConfig.MailSetting);
             await emailService.SendEmailAsync(
                 email.SendTo,
                 email.SendCC,
                 email.Subject,
-                email.Body);
+                email.Body,
+                mailSetting,
+                (short)mailConfig.CompanyId);
 
             await letStalkService.SendNotificationAsync(email.LetsTalk, email.Subject, email.Body);
         }

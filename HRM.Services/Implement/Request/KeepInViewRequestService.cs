@@ -1,4 +1,6 @@
-﻿namespace HRM.Services.Implement.Request;
+﻿using Newtonsoft.Json;
+
+namespace HRM.Services.Implement.Request;
 
 using System;
 using System.Collections.Generic;
@@ -11,6 +13,7 @@ using GO.UserControl.Client.Core.Session;
 using HRM.Core.Models;
 using HRM.Core.Services;
 using HRM.Criteria.Request.KeepInView;
+using Models;
 using HRM.Models.Request;
 using HRM.Repositories.Interfaces;
 using HRM.Services.Interfaces.Request;
@@ -93,7 +96,7 @@ public class KeepInViewRequestService(
         return await baseService.ExecuteNonQueryAsync(criteria);
     }
 
-    public async Task SendMailAndSendLetstalkCreateRequestAsync(long requestId)
+    public async Task SendMailAndSendLetstalkCreateRequestAsync(long requestId, MailConfigModel mailConfig)
     {
         var request = await GetByIdAsync(requestId);
         if (request != null)
@@ -111,19 +114,22 @@ public class KeepInViewRequestService(
                 request.Requester.Nickname,
                 request.OnDate.ToDateMonthYearFormatedDate(),
                 request.Remark,
-                userControlSession.Get<string>(SessionKey.CurrentDomain));
+                mailConfig.Domain);
 
+            var mailSetting = JsonConvert.DeserializeObject<MailSetting>(mailConfig.MailSetting);
             await emailService.SendEmailAsync(
                 email.SendTo,
                 email.SendCC,
                 email.Subject,
-                email.Body);
+                email.Body,
+                mailSetting,
+                (short)mailConfig.CompanyId);
 
             await letstalkService.SendNotificationAsync(email.LetsTalk, email.Subject, email.Body);
         }
     }
 
-    public async Task SendMailEditRequestAsync(long requestId)
+    public async Task SendMailEditRequestAsync(long requestId, MailConfigModel mailConfig)
     {
         var request = await GetByIdAsync(requestId);
         if (request != null)
@@ -140,13 +146,16 @@ public class KeepInViewRequestService(
                 request.Requester.Nickname,
                 request.OnDate.ToDateMonthYearFormatedDate(),
                 request.Remark,
-                userControlSession.Get<string>(SessionKey.CurrentDomain));
+                mailConfig.Domain);
 
+            var mailSetting = JsonConvert.DeserializeObject<MailSetting>(mailConfig.MailSetting);
             await emailService.SendEmailAsync(
                 email.SendTo,
                 email.SendCC,
                 email.Subject,
-                email.Body);
+                email.Body,
+                mailSetting,
+                (short)mailConfig.CompanyId);
 
             await letstalkService.SendNotificationAsync(email.LetsTalk, email.Subject, email.Body);
         }

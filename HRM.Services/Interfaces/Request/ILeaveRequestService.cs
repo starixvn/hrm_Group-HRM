@@ -33,9 +33,9 @@ public interface ILeaveRequestService
 
     Task<CommandResult> DeleteAsync(long requestId);
 
-    void SendMailAndSendLetstalkCreateRequest(InsertLeaveRequestCriteria criteria);
+    void SendMailAndSendLetstalkCreateRequest(InsertLeaveRequestCriteria criteria, MailConfigModel mailConfig);
 
-    void SendMailEditRequest(UpdateLeaveRequestCriteria criteria);
+    void SendMailEditRequest(UpdateLeaveRequestCriteria criteria, MailConfigModel mailConfig);
 
     Task SendMailDeleteRequest(long requestId);
 

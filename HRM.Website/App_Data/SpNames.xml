@@ -267,7 +267,8 @@
         <Setting Key="MailRecorder_GetConfig" SpName="MailRecorder_GetConfig" DbName="bodb_HRM" />
         <Setting Key="MailRecorder_InsError" SpName="MailRecorder_InsError" DbName="bodb_HRM" />
         <Setting Key="MailRecorder_InsRecord" SpName="MailRecorder_InsRecord" DbName="bodb_HRM" />
-        <Setting Key="MailRecorder_UpdateMailStatus" SpName="MailRecorder_UpdateMailStatus" DbName="bodb_HRM" />
+		<Setting Key="MailRecorder_UpdateMailStatus" SpName="MailRecorder_UpdateMailStatus" DbName="bodb_HRM" />
+		<Setting Key="MailConfig_ByEmpId_Get" SpName="MailConfig_ByEmpId_Get" DbName="bodb_HRM" />
     </Function>
     <Function Name="Schedule Arrange">
         <Setting Key="ScheduleArrangement_GetEmployee" SpName="ScheduleArrangement_GetEmployee" DbName="bodb_HRM" Plain="0" />

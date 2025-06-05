@@ -26,7 +26,8 @@ public class CheckInOutController(
     IRequestService requestService,
     IBaseService baseService,
     IShiftService shiftService,
-    IAttachFileService attachFileService) : BaseController(session)
+    IAttachFileService attachFileService,
+    IRequestMailService requestMailService) : BaseController(session)
 {
     [HttpGet]
     public async Task<IActionResult> EmployeeView(int? year)
@@ -103,8 +104,11 @@ public class CheckInOutController(
 
         if (commandResult.IsSuccessful)
         {
-            await checkInOutRequestService.SendMailAndSendLetstalkCreateRequestAsync(criteria.RequestId);
             await attachFileService.UploadFileAsync(files, criteria.RequestId, $"{CurrentCompanyId}/requests");
+            if (criteria.ApproverId == null) return Json(commandResult);
+
+            var mailConfig = await requestMailService.GetEmployeeMailConfig(criteria.ApproverId.Value);
+            await checkInOutRequestService.SendMailAndSendLetstalkCreateRequestAsync(criteria.RequestId, mailConfig);
         }
 
         return Json(commandResult);
@@ -181,12 +185,15 @@ public class CheckInOutController(
         var commandResult = await baseService.ExecuteNonQueryAsync(criteria);
         if (commandResult.IsSuccessful)
         {
-            await checkInOutRequestService.SendMailEditRequestAsync(model.RequestId);
             await attachFileService.UploadFileAsync(files, criteria.RequestId, $"{CurrentCompanyId}/requests");
             if (!string.IsNullOrWhiteSpace(filesRemove))
             {
                 await attachFileService.DeleteFileAsync(JsonConvert.DeserializeObject<List<string>>(filesRemove), criteria.RequestId, $"{CurrentCompanyId}/requests");
             }
+            if (criteria.ApproverId == null) return Json(commandResult);
+
+            var mailConfig = await requestMailService.GetEmployeeMailConfig(criteria.ApproverId.Value);
+            await checkInOutRequestService.SendMailEditRequestAsync(model.RequestId, mailConfig);
         }
 
         return Json(commandResult);

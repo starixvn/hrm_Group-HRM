@@ -14,4 +14,6 @@ public interface IRequestMailService
     string GetCommandMessage(RequestCommand command);
 
     string GetStringDateForLeaveRequest(DateTime requestedDate, DateTime fromDate, DateTime toDate, decimal totalDays);
+
+    Task<MailConfigModel> GetEmployeeMailConfig(int empId);
 }

@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using HRM.Core.Enums;
 using HRM.Core.Models;
 using HRM.Criteria.Request.ChangeShift;
+using HRM.Models;
 using HRM.Models.Request.ChangeShift;
 using HRM.Models.ScheduleArrange;
 
@@ -31,9 +32,9 @@ public interface IChangeShiftRequestService
 
     Task<CommandResult> DeleteAsync(int actorId, long requestId);
 
-    Task SendMailAndSendLetstalkCreateRequestAsync(long requestId);
+    Task SendMailAndSendLetstalkCreateRequestAsync(long requestId, MailConfigModel mailConfigModel);
 
-    Task SendMailEditRequestAsync(long requestId);
+    Task SendMailEditRequestAsync(long requestId, MailConfigModel mailConfigModel);
 
     Task SendMailDeleteRequestAsync(long requestId);
 

@@ -19,6 +19,7 @@ using HRM.Resources;
 using HRM.Services.Interfaces;
 using HRM.Services.Interfaces.Request;
 using Microsoft.AspNetCore.Hosting;
+using Newtonsoft.Json;
 
 namespace HRM.Services.Implement.Request;
 
@@ -137,37 +138,31 @@ public class LeaveRequestService(
         return await baseService.ExecuteNonQueryAsync(criteria);
     }
 
-    public void SendMailAndSendLetstalkCreateRequest(InsertLeaveRequestCriteria criteria)
+    public void SendMailAndSendLetstalkCreateRequest(InsertLeaveRequestCriteria criteria, MailConfigModel mailConfig)
     {
-        var domain = userControlSession.Get<string>(SessionKey.CurrentDomain);
-        var mailSetting = userControlSession.Get<MailSetting>(SessionKey.MailSetting);
-        var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
         var templateEmailPath = Path.Combine(env.ContentRootPath, EmailTemplatePathForRequest);
-        Task.Run(() => SendMailForInsertSuccessfully(criteria, templateEmailPath, domain, mailSetting, companyId));
+        Task.Run(() => SendMailForInsertSuccessfully(criteria, templateEmailPath, mailConfig));
     }
 
-    public void SendMailEditRequest(UpdateLeaveRequestCriteria criteria)
+    public void SendMailEditRequest(UpdateLeaveRequestCriteria criteria, MailConfigModel mailConfig)
     {
-        var domain = userControlSession.Get<string>(SessionKey.CurrentDomain);
-        var mailSetting = userControlSession.Get<MailSetting>(SessionKey.MailSetting);
         var templateEmailPath = Path.Combine(env.ContentRootPath, EmailTemplatePathForRequest);
-        var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
-        Task.Run(() => SendMailForUpdateSuccessfully(criteria, templateEmailPath, domain, mailSetting, companyId));
+        Task.Run(() => SendMailForUpdateSuccessfully(criteria, templateEmailPath, mailConfig));
     }
 
-    private async Task SendMailForInsertSuccessfully(InsertLeaveRequestCriteria criteria, string templateEmailPath, string domain, MailSetting mailSetting, short companyId)
+    private async Task SendMailForInsertSuccessfully(InsertLeaveRequestCriteria criteria, string templateEmailPath, MailConfigModel mailConfig)
     {
         var email = await requestMailService.GetMailToMailCcAndLetStalk(criteria.RequestId, (int)SettingsSendMail.New);
         email.Subject = Messages.LeaveEmailSubject + " " + criteria.EmployeeName;
-        await SendMailForSuccessfully(criteria, templateEmailPath, email, domain, mailSetting, companyId);
+        await SendMailForSuccessfully(criteria, templateEmailPath, email, mailConfig);
     }
 
-    private async Task SendMailForUpdateSuccessfully(UpdateLeaveRequestCriteria criteria, string templateEmailPath, string domain, MailSetting mailSetting, short companyId)
+    private async Task SendMailForUpdateSuccessfully(UpdateLeaveRequestCriteria criteria, string templateEmailPath, MailConfigModel mailConfig)
     {
         var email = await requestMailService.GetMailToMailCcAndLetStalk(criteria.RequestId, (int)SettingsSendMail.Edit);
         email.Subject = Messages.UpdatedLeaveEmailSubject + " " + criteria.EmployeeName;
 
-        await SendMailForSuccessfully(criteria, templateEmailPath, email, domain, mailSetting, companyId);
+        await SendMailForSuccessfully(criteria, templateEmailPath, email, mailConfig);
     }
 
     public async Task SendMailDeleteRequest(long requestId)
@@ -266,8 +261,12 @@ public class LeaveRequestService(
         return toTime.DateTime;
     }
 
-    private async Task SendMailForSuccessfully(BaseLeaveRequestCriteria criteria, string templateEmailPath, EmailModel email, string currentDomain, MailSetting mailSetting, short companyId)
+    private async Task SendMailForSuccessfully(BaseLeaveRequestCriteria criteria, string templateEmailPath, EmailModel email, MailConfigModel mailConfig)
     {
+        var domain = mailConfig.Domain;
+        var mailSetting = JsonConvert.DeserializeObject<MailSetting>(mailConfig.MailSetting);
+        var companyId = (short)mailConfig.CompanyId;
+
         email.Subject += criteria.TotalDays > 1
             ? " from " + criteria.FromDate.ToDateMonthYearFormatedDate() + " to " + criteria.ToDate.ToDateMonthYearFormatedDate()
             : " on " + criteria.FromDate.ToDateMonthYearFormatedDate();
@@ -283,7 +282,7 @@ public class LeaveRequestService(
             forDate,
             criteria.LeaveTypeName,
             criteria.Remark,
-            currentDomain);
+            domain);
         if (!string.IsNullOrWhiteSpace(email.SendTo))
         {
             await emailService.SendEmailAsync(

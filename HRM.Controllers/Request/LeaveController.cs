@@ -18,7 +18,6 @@ using HRM.Services.Interfaces.Request;
 using HRM.ViewModels.Request;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Models;
 using Newtonsoft.Json;
 using Resources;
 using Services.Implement;
@@ -31,7 +30,8 @@ public class LeaveController(
     IBaseService baseService,
     ICommonDataService commonDataService,
     IAttachFileService attachFileService,
-    IEmployeeService employeeService) : BaseController(session)
+    IEmployeeService employeeService,
+    IRequestMailService requestMailService) : BaseController(session)
 {
     [HttpGet]
     public async Task<IActionResult> EmployeeView(int? year)
@@ -112,8 +112,11 @@ public class LeaveController(
         var result = await baseService.ExecuteNonQueryAsync(criteria);
         if (result.IsSuccessful)
         {
-            leaveRequestService.SendMailAndSendLetstalkCreateRequest(criteria);
             await attachFileService.UploadFileAsync(files, criteria.RequestId, $"{CurrentCompanyId}/requests");
+            if (criteria.ApproverId == null) return new JsonResult(result);
+
+            var mailConfig = await requestMailService.GetEmployeeMailConfig(criteria.ApproverId.Value);
+            leaveRequestService.SendMailAndSendLetstalkCreateRequest(criteria, mailConfig);
         }
 
         return new JsonResult(result);
@@ -181,12 +184,16 @@ public class LeaveController(
         var result = await baseService.ExecuteNonQueryAsync(criteria);
         if (result.IsSuccessful)
         {
-            leaveRequestService.SendMailEditRequest(criteria);
             await attachFileService.UploadFileAsync(files, criteria.RequestId, $"{CurrentCompanyId}/requests");
             if (!string.IsNullOrWhiteSpace(filesRemove))
             {
                 await attachFileService.DeleteFileAsync(JsonConvert.DeserializeObject<List<string>>(filesRemove), criteria.RequestId, $"{CurrentCompanyId}/requests");
             }
+            await attachFileService.UploadFileAsync(files, criteria.RequestId, $"{CurrentCompanyId}/requests");
+            if (criteria.ApproverId == null) return new JsonResult(result);
+
+            var mailConfig = await requestMailService.GetEmployeeMailConfig(criteria.ApproverId.Value);
+            leaveRequestService.SendMailEditRequest(criteria, mailConfig);
         }
 
         return Json(result);

@@ -11,6 +11,7 @@ using HRM.Core.Models;
 using HRM.Core.Services;
 using HRM.Core.XMLExtensions;
 using HRM.Criteria.Request.ChangeShift;
+using HRM.Models;
 using HRM.Models.Request.ChangeShift;
 using HRM.Models.ScheduleArrange;
 using HRM.Repositories;
@@ -18,6 +19,7 @@ using HRM.Resources;
 using HRM.Services.Interfaces;
 using HRM.Services.Interfaces.Request;
 using Microsoft.AspNetCore.Hosting;
+using Newtonsoft.Json;
 
 namespace HRM.Services.Implement.Request;
 
@@ -191,7 +193,7 @@ public class ChangeShiftRequestService(
         return await baseService.ExecuteNonQueryAsync(criteria);
     }
 
-    public async Task SendMailAndSendLetstalkCreateRequestAsync(long requestId)
+    public async Task SendMailAndSendLetstalkCreateRequestAsync(long requestId, MailConfigModel mailConfigModel)
     {
         var request = await GetByIdAsync(requestId);
         if (request != null)
@@ -208,16 +210,17 @@ public class ChangeShiftRequestService(
                 request.Requester.Nickname,
                 forDate,
                 request.Remark,
-                userControlSession.Get<string>(SessionKey.CurrentDomain));
+                mailConfigModel.Domain);
 
+            var mailSetting = JsonConvert.DeserializeObject<MailSetting>(mailConfigModel.MailSetting);
             await Task.WhenAll(
-                emailService.SendEmailAsync(email.SendTo, email.SendCC, email.Subject, email.Body),
+                emailService.SendEmailAsync(email.SendTo, email.SendCC, email.Subject, email.Body, mailSetting, (short)mailConfigModel.CompanyId),
                 letStalkService.SendNotificationAsync(email.LetsTalk, email.Subject, email.Body)
             );
         }
     }
 
-    public async Task SendMailEditRequestAsync(long requestId)
+    public async Task SendMailEditRequestAsync(long requestId, MailConfigModel mailConfigModel)
     {
         var request = await GetByIdAsync(requestId);
         if (request != null)
@@ -234,10 +237,11 @@ public class ChangeShiftRequestService(
                 request.Requester.Nickname,
                 forDate,
                 request.Remark,
-                userControlSession.Get<string>(SessionKey.CurrentDomain));
+                mailConfigModel.Domain);
 
+            var mailSetting = JsonConvert.DeserializeObject<MailSetting>(mailConfigModel.MailSetting);
             await Task.WhenAll(
-                emailService.SendEmailAsync(email.SendTo, email.SendCC, email.Subject, email.Body),
+                emailService.SendEmailAsync(email.SendTo, email.SendCC, email.Subject, email.Body, mailSetting, (short)mailConfigModel.CompanyId),
                 letStalkService.SendNotificationAsync(email.LetsTalk, email.Subject, email.Body)
             );
         }

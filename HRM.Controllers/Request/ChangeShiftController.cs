@@ -9,7 +9,10 @@ using Core.Constants;
 using Core.Enums;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
+using HRM.Core.Services;
 using HRM.Criteria.Request.ChangeShift;
+using Criteria.SystemSetting;
+using Models;
 using HRM.Models.Request;
 using HRM.Models.Request.ChangeShift;
 using HRM.Services.Interfaces.Request;
@@ -27,7 +30,9 @@ public class ChangeShiftController(
     IChangeShiftRequestService changeShiftService,
     IRequestService requestService,
     IShiftService shiftService,
-    IAttachFileService attachFileService) : BaseController(session)
+    IAttachFileService attachFileService,
+    IBaseService baseService,
+    IRequestMailService requestMailService) : BaseController(session)
 {
     [HttpGet]
     public async Task<IActionResult> EmployeeView(int? year)
@@ -85,8 +90,15 @@ public class ChangeShiftController(
 
         if (commandResult.IsSuccessful)
         {
-            await changeShiftService.SendMailAndSendLetstalkCreateRequestAsync(commandResult.OutputId);
             await attachFileService.UploadFileAsync(files, commandResult.OutputId, $"{CurrentCompanyId}/requests");
+            if (criteria.ApproverId == null) return Json(commandResult);
+
+            GetMailConfigByEmpIdCriteria mailConfigCriteria = new()
+            {
+                EmpId = criteria.ApproverId.Value,
+            };
+            var mailConfig = await baseService.GetDataEntityAsync<MailConfigModel>(mailConfigCriteria);
+            await changeShiftService.SendMailAndSendLetstalkCreateRequestAsync(commandResult.OutputId, mailConfig);
         }
 
         return Json(commandResult);
@@ -144,7 +156,10 @@ public class ChangeShiftController(
         var commandResult = await changeShiftService.EditAsync(session.UserId, criteria);
         if (commandResult.IsSuccessful)
         {
-            await changeShiftService.SendMailEditRequestAsync(criteria.RequestId);
+            if (criteria.ApproverId == null) return Json(commandResult);
+
+            var mailConfig = await requestMailService.GetEmployeeMailConfig(criteria.ApproverId.Value);
+            await changeShiftService.SendMailEditRequestAsync(criteria.RequestId, mailConfig);
             await attachFileService.UploadFileAsync(files, criteria.RequestId, $"{CurrentCompanyId}/requests");
             if (!string.IsNullOrWhiteSpace(filesRemove))
             {

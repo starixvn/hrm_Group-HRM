@@ -24,7 +24,7 @@ public class LateInEarlyOutController(
     ILateInEarlyOutRequestService lateInEarlyOutRequestService,
     IRequestService requestService,
     IBaseService baseService,
-    IAttachFileService attachFileService) : BaseController(session)
+    IAttachFileService attachFileService, IRequestMailService requestMailService) : BaseController(session)
 {
     private const int DefaultMinutes = 60;
 
@@ -93,8 +93,11 @@ public class LateInEarlyOutController(
         var commandResult = await baseService.ExecuteNonQueryAsync(criteria);
         if (commandResult.IsSuccessful)
         {
-            await lateInEarlyOutRequestService.SendMailAndSendLetstalkCreateRequestAsync(criteria.RequestId);
             await attachFileService.UploadFileAsync(files, criteria.RequestId, $"{CurrentCompanyId}/requests");
+            if (criteria.ApproverId == null) return Json(commandResult);
+
+            var mailConfig = await requestMailService.GetEmployeeMailConfig(criteria.ApproverId.Value);
+            await lateInEarlyOutRequestService.SendMailAndSendLetstalkCreateRequestAsync(criteria.RequestId, mailConfig);
         }
 
         return Json(commandResult);
@@ -166,12 +169,15 @@ public class LateInEarlyOutController(
         var commandResult = await baseService.ExecuteNonQueryAsync(criteria);
         if (commandResult.IsSuccessful)
         {
-            await lateInEarlyOutRequestService.SendMailEditRequestAsync(model.RequestId);
             await attachFileService.UploadFileAsync(files, criteria.RequestId, $"{CurrentCompanyId}/requests");
             if (!string.IsNullOrWhiteSpace(filesRemove))
             {
                 await attachFileService.DeleteFileAsync(JsonConvert.DeserializeObject<List<string>>(filesRemove), criteria.RequestId, $"{CurrentCompanyId}/requests");
             }
+            if (criteria.ApproverId == null) return Json(commandResult);
+
+            var mailConfig = await requestMailService.GetEmployeeMailConfig(criteria.ApproverId.Value);
+            await lateInEarlyOutRequestService.SendMailEditRequestAsync(model.RequestId, mailConfig);
         }
 
         return Json(commandResult);

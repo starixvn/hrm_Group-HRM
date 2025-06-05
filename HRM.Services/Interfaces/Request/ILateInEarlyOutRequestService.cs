@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using HRM.Core.Enums;
 using HRM.Core.Models;
 using HRM.Criteria.Request.LateInEarlyOut;
+using HRM.Models;
 using HRM.Models.Request;
 
 namespace HRM.Services.Interfaces.Request;
@@ -16,8 +17,8 @@ public interface ILateInEarlyOutRequestService
     Task<IEnumerable<DateTime>> GetDisabledDateAsync(GetDisabledDateParam param);
     Task<CommandResult> DeleteAsync(long requestId);
     Task<EmployeeLateInEarlyOutModel> GetActualLateInEarlyOutAsync(GetActualLateInEarlyOutCriteria criteria);
-    Task SendMailAndSendLetstalkCreateRequestAsync(long requestId);
-    Task SendMailEditRequestAsync(long requestId);
+    Task SendMailAndSendLetstalkCreateRequestAsync(long requestId, MailConfigModel mailConfig);
+    Task SendMailEditRequestAsync(long requestId, MailConfigModel mailConfig);
     Task SendMailDeleteRequestAsync(long requestId);
     Task SendMailProcessRequestAsync(long requestId, EmployeeSession actor, RequestCommand command);
 }
