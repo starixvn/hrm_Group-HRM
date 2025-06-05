@@ -296,7 +296,7 @@ public class ChangeShiftRequestService(
                 request.Remark);
 
             await Task.WhenAll(
-                emailService.SendEmailAsync(email.SendTo, email.SendCC, email.Subject, email.Body),
+                emailService.SendEmailAsync(email.SendTo, email.SendCC, email.Subject, email.Body, companyId: request.Requester.CompanyId),
                 letStalkService.SendNotificationAsync(email.LetsTalk, email.Subject, email.Body)
             );
         }

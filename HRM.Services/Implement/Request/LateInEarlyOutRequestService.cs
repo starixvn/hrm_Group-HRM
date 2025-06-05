@@ -220,7 +220,8 @@ public class LateInEarlyOutRequestService(
                 email.SendTo,
                 email.SendCC,
                 email.Subject,
-                email.Body);
+                email.Body,
+                companyId: request.Requester.CompanyId);
 
             await letStalkService.SendNotificationAsync(email.LetsTalk, email.Subject, email.Body);
         }
