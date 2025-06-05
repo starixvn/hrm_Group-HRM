@@ -5,8 +5,6 @@
 @{
     var currentUserId = (int)ViewBag.CurrentUserId;
     ViewBag.Title = Labels.MemberOvertime + " of " + Model.Requester.Nickname + " (" + Model.Month.ToString("MMM-yyyy") + ")";
-    var verifier = $"{Model.Verifier.Nickname} ({Model.Verifier.FullName})";
-    var approver = $"{Model.Approver.Nickname} ({Model.Approver.FullName})";
 }
 
 @section css{
@@ -27,11 +25,11 @@
     <div class="form-horizontal clearfix">
         <span>
             ※ @Html.Label(Labels.VerifiedBy + ": ", Labels.VerifiedBy + ": ", new { @class = "control-label" })
-            @verifier
+            @Model.Verifier.Nickname
         </span>
         <span>
             ※ @Html.Label(Labels.ApprovedBy + ": ", Labels.ApprovedBy + ": ", new { @class = "control-label" })
-            @approver
+            @Model.Approver.Nickname
         </span>
         <span>
             ※ @Html.Label(Labels.Status + ": ",  Labels.Status + ": ", new { @class = "control-label" })
