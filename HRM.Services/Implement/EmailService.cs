@@ -44,7 +44,6 @@ public class EmailService(IBaseMailService mailService,IBaseService baseService,
 
         var data = await baseService.GetDataEntityAsync<string>(criteria);
         var result = data == null ? null : JsonConvert.DeserializeObject<MailSetting>(data);
-        session.Set(SessionKey.MailSetting, result);
         return result;
     }
 }
