@@ -26,8 +26,7 @@ public class CheckInOutController(
     IRequestService requestService,
     IBaseService baseService,
     IShiftService shiftService,
-    IAttachFileService attachFileService,
-    IRequestMailService requestMailService) : BaseController(session)
+    IAttachFileService attachFileService) : BaseController(session)
 {
     [HttpGet]
     public async Task<IActionResult> EmployeeView(int? year)
@@ -105,10 +104,7 @@ public class CheckInOutController(
         if (commandResult.IsSuccessful)
         {
             await attachFileService.UploadFileAsync(files, criteria.RequestId, $"{CurrentCompanyId}/requests");
-            if (criteria.ApproverId == null) return Json(commandResult);
-
-            var mailConfig = await requestMailService.GetEmployeeMailConfig(criteria.ApproverId.Value);
-            await checkInOutRequestService.SendMailAndSendLetstalkCreateRequestAsync(criteria.RequestId, mailConfig);
+            await checkInOutRequestService.SendMailAndSendLetstalkCreateRequestAsync(criteria.RequestId);
         }
 
         return Json(commandResult);
@@ -190,10 +186,7 @@ public class CheckInOutController(
             {
                 await attachFileService.DeleteFileAsync(JsonConvert.DeserializeObject<List<string>>(filesRemove), criteria.RequestId, $"{CurrentCompanyId}/requests");
             }
-            if (criteria.ApproverId == null) return Json(commandResult);
-
-            var mailConfig = await requestMailService.GetEmployeeMailConfig(criteria.ApproverId.Value);
-            await checkInOutRequestService.SendMailEditRequestAsync(model.RequestId, mailConfig);
+            await checkInOutRequestService.SendMailEditRequestAsync(model.RequestId);
         }
 
         return Json(commandResult);

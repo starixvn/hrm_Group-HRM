@@ -28,7 +28,8 @@ public class KeepInViewRequestService(
     IRequestMailService requestMailService,
     IEmailService emailService,
     ILetstalkService letstalkService,
-    IUserControlSession userControlSession) : IKeepInViewRequestService
+    IUserControlSession userControlSession,
+    ICompanyService companyService) : IKeepInViewRequestService
 {
     private const string EmailTemplatePathForRequest = "EmailTemplates/KeepInView.Request.txt";
     private const string EmailTemplatePathForCancel = "EmailTemplates/KeepInView.Cancel.txt";
@@ -96,11 +97,13 @@ public class KeepInViewRequestService(
         return await baseService.ExecuteNonQueryAsync(criteria);
     }
 
-    public async Task SendMailAndSendLetstalkCreateRequestAsync(long requestId, MailConfigModel mailConfig)
+    public async Task SendMailAndSendLetstalkCreateRequestAsync(long requestId)
     {
         var request = await GetByIdAsync(requestId);
         if (request != null)
         {
+            if (request.Approver == null) return;
+            var domain = await companyService.GetDomain(request.Approver.CompanyId);
             var emailTemplatePath = Path.Combine(env.ContentRootPath, EmailTemplatePathForRequest);
             var email = await requestMailService.GetMailToMailCcAndLetStalk(requestId, (byte)SettingsSendMail.New);
 
@@ -114,26 +117,26 @@ public class KeepInViewRequestService(
                 request.Requester.Nickname,
                 request.OnDate.ToDateMonthYearFormatedDate(),
                 request.Remark,
-                mailConfig.Domain);
+                domain);
 
-            var mailSetting = JsonConvert.DeserializeObject<MailSetting>(mailConfig.MailSetting);
             await emailService.SendEmailAsync(
                 email.SendTo,
                 email.SendCC,
                 email.Subject,
                 email.Body,
-                mailSetting,
-                (short)mailConfig.CompanyId);
+                request.Approver.CompanyId);
 
             await letstalkService.SendNotificationAsync(email.LetsTalk, email.Subject, email.Body);
         }
     }
 
-    public async Task SendMailEditRequestAsync(long requestId, MailConfigModel mailConfig)
+    public async Task SendMailEditRequestAsync(long requestId)
     {
         var request = await GetByIdAsync(requestId);
         if (request != null)
         {
+            if (request.Approver == null) return;
+            var domain = await companyService.GetDomain(request.Approver.CompanyId);
             var emailTemplatePath = Path.Combine(env.ContentRootPath, EmailTemplatePathForRequest);
             var email = await requestMailService.GetMailToMailCcAndLetStalk(requestId, (byte)SettingsSendMail.Edit);
             email.Subject =
@@ -146,16 +149,14 @@ public class KeepInViewRequestService(
                 request.Requester.Nickname,
                 request.OnDate.ToDateMonthYearFormatedDate(),
                 request.Remark,
-                mailConfig.Domain);
+                domain);
 
-            var mailSetting = JsonConvert.DeserializeObject<MailSetting>(mailConfig.MailSetting);
             await emailService.SendEmailAsync(
                 email.SendTo,
                 email.SendCC,
                 email.Subject,
                 email.Body,
-                mailSetting,
-                (short)mailConfig.CompanyId);
+                request.Approver.CompanyId);
 
             await letstalkService.SendNotificationAsync(email.LetsTalk, email.Subject, email.Body);
         }

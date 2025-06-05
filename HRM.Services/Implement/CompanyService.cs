@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using HRM.Core.Services;
 using HRM.Criteria.Company;
 using HRM.Criteria.CompanySite;
+using HRM.Criteria.SystemSetting;
 using HRM.Models;
 using HRM.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
@@ -29,6 +30,17 @@ public class CompanyService(IBaseService baseService,
     {
         var criteria = new GetAllCompanyCriteria();
         return await baseService.GetDataAsync<Company>(criteria);
+    }
+
+    public async Task<string> GetDomain(int companyId)
+    {
+        GetDomainByCompanyIdCriteria criteria = new()
+        {
+            CompanyId = companyId
+        };
+        var mailConfig = await baseService.GetDataEntityAsync<string>(criteria);
+
+        return mailConfig;
     }
 
     private static string GetDomainName(HttpContext httpContext)

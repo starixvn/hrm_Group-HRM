@@ -16,8 +16,8 @@ public interface IKeepInViewRequestService
     Task<IList<KeepInViewRequest>> GetHistoryByIdAsync(long requestId);
     Task<IEnumerable<DateTime>> GetDisabledDateAsync(GetDisabledDateParam param);
     Task<CommandResult> DeleteAsync(long requestId);
-    Task SendMailAndSendLetstalkCreateRequestAsync(long requestId, MailConfigModel mailConfig);
-    Task SendMailEditRequestAsync(long requestId, MailConfigModel mailConfig);
+    Task SendMailAndSendLetstalkCreateRequestAsync(long requestId);
+    Task SendMailEditRequestAsync(long requestId);
     Task SendMailDeleteRequestAsync(long requestId);
     Task SendMailProcessRequestAsync(long requestId, EmployeeSession actor, RequestCommand command);
 }

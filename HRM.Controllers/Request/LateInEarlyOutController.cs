@@ -24,7 +24,7 @@ public class LateInEarlyOutController(
     ILateInEarlyOutRequestService lateInEarlyOutRequestService,
     IRequestService requestService,
     IBaseService baseService,
-    IAttachFileService attachFileService, IRequestMailService requestMailService) : BaseController(session)
+    IAttachFileService attachFileService) : BaseController(session)
 {
     private const int DefaultMinutes = 60;
 
@@ -94,10 +94,7 @@ public class LateInEarlyOutController(
         if (commandResult.IsSuccessful)
         {
             await attachFileService.UploadFileAsync(files, criteria.RequestId, $"{CurrentCompanyId}/requests");
-            if (criteria.ApproverId == null) return Json(commandResult);
-
-            var mailConfig = await requestMailService.GetEmployeeMailConfig(criteria.ApproverId.Value);
-            await lateInEarlyOutRequestService.SendMailAndSendLetstalkCreateRequestAsync(criteria.RequestId, mailConfig);
+            await lateInEarlyOutRequestService.SendMailAndSendLetstalkCreateRequestAsync(criteria.RequestId);
         }
 
         return Json(commandResult);
@@ -174,10 +171,7 @@ public class LateInEarlyOutController(
             {
                 await attachFileService.DeleteFileAsync(JsonConvert.DeserializeObject<List<string>>(filesRemove), criteria.RequestId, $"{CurrentCompanyId}/requests");
             }
-            if (criteria.ApproverId == null) return Json(commandResult);
-
-            var mailConfig = await requestMailService.GetEmployeeMailConfig(criteria.ApproverId.Value);
-            await lateInEarlyOutRequestService.SendMailEditRequestAsync(model.RequestId, mailConfig);
+            await lateInEarlyOutRequestService.SendMailEditRequestAsync(model.RequestId);
         }
 
         return Json(commandResult);

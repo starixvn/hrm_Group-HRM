@@ -32,9 +32,9 @@ public interface IChangeShiftRequestService
 
     Task<CommandResult> DeleteAsync(int actorId, long requestId);
 
-    Task SendMailAndSendLetstalkCreateRequestAsync(long requestId, MailConfigModel mailConfigModel);
+    Task SendMailAndSendLetstalkCreateRequestAsync(long requestId);
 
-    Task SendMailEditRequestAsync(long requestId, MailConfigModel mailConfigModel);
+    Task SendMailEditRequestAsync(long requestId);
 
     Task SendMailDeleteRequestAsync(long requestId);
 

@@ -27,7 +27,8 @@ public class CheckInOutRequestService(
     IRequestMailService requestMailService,
     IEmailService emailService,
     ILetstalkService letStalkService,
-    IUserControlSession userControlSession) : ICheckInOutRequestService
+    IUserControlSession userControlSession,
+    ICompanyService companyService) : ICheckInOutRequestService
 {
     private const string EmailTemplatePathForRequest = "EmailTemplates/CheckInOut.Request.txt";
     private const string EmailTemplatePathForCancel = "EmailTemplates/CheckInOut.Cancel.txt";
@@ -92,11 +93,13 @@ public class CheckInOutRequestService(
         return await baseService.ExecuteNonQueryAsync(criteria);
     }
 
-    public async Task SendMailAndSendLetstalkCreateRequestAsync(long requestId, MailConfigModel mailConfig)
+    public async Task SendMailAndSendLetstalkCreateRequestAsync(long requestId)
     {
         var request = await GetByIdAsync(requestId);
         if (request != null)
         {
+            if (request.Approver == null) return;
+            var domain = await companyService.GetDomain(request.Approver.CompanyId);
             var emailTemplatePath = Path.Combine(env.ContentRootPath, EmailTemplatePathForRequest);
             var email = await requestMailService.GetMailToMailCcAndLetStalk(requestId, (byte)SettingsSendMail.New);
             email.Subject =
@@ -112,27 +115,27 @@ public class CheckInOutRequestService(
                 request.ShiftName,
                 request.RequestTime.ToShortTime(),
                 request.Remark,
-                mailConfig.Domain);
+                domain);
 
-            var mailSetting = JsonConvert.DeserializeObject<MailSetting>(mailConfig.MailSetting);
             await emailService.SendEmailAsync(
                 email.SendTo,
                 email.SendCC,
                 email.Subject,
                 email.Body,
-                mailSetting,
-                (short)mailConfig.CompanyId);
+                request.Approver.CompanyId);
 
             await letStalkService.SendNotificationAsync(email.LetsTalk, email.Subject, email.Body);
         }
     }
 
-    public async Task SendMailEditRequestAsync(long requestId, MailConfigModel mailConfig)
+    public async Task SendMailEditRequestAsync(long requestId)
     {
         var emailTemplatePath = Path.Combine(env.ContentRootPath, EmailTemplatePathForRequest);
         var request = await GetByIdAsync(requestId);
         if (request != null)
         {
+            if (request.Approver == null) return;
+            var domain = await companyService.GetDomain(request.Approver.CompanyId);
             var email = await requestMailService.GetMailToMailCcAndLetStalk(requestId, (byte)SettingsSendMail.Edit);
             email.Subject =
                 $"{Messages.UpdatedCheckInOutEmailSubject} {request.Requester.Nickname} on {request.OnDate.ToDateMonthYearFormatedDate()}";
@@ -147,16 +150,14 @@ public class CheckInOutRequestService(
                 request.ShiftName,
                 request.RequestTime.ToShortTime(),
                 request.Remark,
-                mailConfig.Domain);
+                domain);
 
-            var mailSetting = JsonConvert.DeserializeObject<MailSetting>(mailConfig.MailSetting);
             await emailService.SendEmailAsync(
                 email.SendTo,
                 email.SendCC,
                 email.Subject,
                 email.Body,
-                mailSetting,
-                (short)mailConfig.CompanyId);
+                request.Approver.CompanyId);
 
             await letStalkService.SendNotificationAsync(email.LetsTalk, email.Subject, email.Body);
         }

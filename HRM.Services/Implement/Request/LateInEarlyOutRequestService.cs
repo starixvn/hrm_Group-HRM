@@ -27,7 +27,8 @@ public class LateInEarlyOutRequestService(
     IEmailService emailService,
     IBaseService baseService,
     ILetstalkService letStalkService,
-    IUserControlSession userControlSession) : ILateInEarlyOutRequestService
+    IUserControlSession userControlSession,
+    ICompanyService companyService) : ILateInEarlyOutRequestService
 {
     private const string EmailTemplatePathForRequest = "EmailTemplates/LateInEarlyOut.Request.txt";
     private const string EmailTemplatePathForCancel = "EmailTemplates/LateInEarlyOut.Cancel.txt";
@@ -94,11 +95,13 @@ public class LateInEarlyOutRequestService(
         return await baseService.ExecuteNonQueryAsync(criteria);
     }
 
-    public async Task SendMailAndSendLetstalkCreateRequestAsync(long requestId, MailConfigModel mailConfig)
+    public async Task SendMailAndSendLetstalkCreateRequestAsync(long requestId)
     {
         var request = await GetByIdAsync(requestId);
         if (request != null)
         {
+            if (request.Approver == null) return;
+            var domain = await companyService.GetDomain(request.Approver.CompanyId);
             var emailTemplatePath = Path.Combine(env.ContentRootPath, EmailTemplatePathForRequest);
             var email = await requestMailService.GetMailToMailCcAndLetStalk(requestId, (byte)SettingsSendMail.New);
             email.Subject =
@@ -113,27 +116,26 @@ public class LateInEarlyOutRequestService(
                 request.OnDate.ToDateMonthYearFormatedDate(),
                 request.RequestTypeId == (short)RequestType.LateIn ? request.LateInMins : request.EarlyOutMins,
                 request.Remark,
-                mailConfig.Domain);
+                domain);
 
-
-            var mailSetting = JsonConvert.DeserializeObject<MailSetting>(mailConfig.MailSetting);
             await emailService.SendEmailAsync(
                 email.SendTo,
                 email.SendCC,
                 email.Subject,
                 email.Body,
-                mailSetting, 
-                (short)mailConfig.CompanyId);
+                request.Approver.CompanyId);
 
             await letStalkService.SendNotificationAsync(email.LetsTalk, email.Subject, email.Body);
         }
     }
 
-    public async Task SendMailEditRequestAsync(long requestId, MailConfigModel mailConfig)
+    public async Task SendMailEditRequestAsync(long requestId)
     {
         var request = await GetByIdAsync(requestId);
         if (request != null)
         {
+            if (request.Approver == null) return;
+            var domain = await companyService.GetDomain(request.Approver.CompanyId);
             var emailTemplatePath = Path.Combine(env.ContentRootPath, EmailTemplatePathForRequest);
             var email = await requestMailService.GetMailToMailCcAndLetStalk(requestId, (byte)SettingsSendMail.Edit);
             email.Subject =
@@ -148,16 +150,14 @@ public class LateInEarlyOutRequestService(
                 request.OnDate.ToDateMonthYearFormatedDate(),
                 request.RequestTypeId == (short)RequestType.LateIn ? request.LateInMins : request.EarlyOutMins,
                 request.Remark,
-                mailConfig.Domain);
+                domain);
 
-            var mailSetting = JsonConvert.DeserializeObject<MailSetting>(mailConfig.MailSetting);
             await emailService.SendEmailAsync(
                 email.SendTo,
                 email.SendCC,
                 email.Subject,
                 email.Body,
-                mailSetting,
-                (short)mailConfig.CompanyId);
+                request.Approver.CompanyId);
 
             await letStalkService.SendNotificationAsync(email.LetsTalk, email.Subject, email.Body);
         }

@@ -11,7 +11,6 @@ using HRM.Core.Models;
 using HRM.Core.Services;
 using HRM.Core.XMLExtensions;
 using HRM.Criteria.Request.ChangeShift;
-using HRM.Models;
 using HRM.Models.Request.ChangeShift;
 using HRM.Models.ScheduleArrange;
 using HRM.Repositories;
@@ -19,7 +18,6 @@ using HRM.Resources;
 using HRM.Services.Interfaces;
 using HRM.Services.Interfaces.Request;
 using Microsoft.AspNetCore.Hosting;
-using Newtonsoft.Json;
 
 namespace HRM.Services.Implement.Request;
 
@@ -30,7 +28,8 @@ public class ChangeShiftRequestService(
     IEmailService emailService,
     IRequestMailService requestMailService,
     ILetstalkService letStalkService,
-    IUserControlSession userControlSession) : IChangeShiftRequestService
+    IUserControlSession userControlSession,
+    ICompanyService companyService) : IChangeShiftRequestService
 {
     private const string EmailTemplatePathForRequest = "EmailTemplates/ChangeShift.Request.txt";
     private const string EmailTemplatePathForCancel = "EmailTemplates/ChangeShift.Cancel.txt";
@@ -193,11 +192,14 @@ public class ChangeShiftRequestService(
         return await baseService.ExecuteNonQueryAsync(criteria);
     }
 
-    public async Task SendMailAndSendLetstalkCreateRequestAsync(long requestId, MailConfigModel mailConfigModel)
+    public async Task SendMailAndSendLetstalkCreateRequestAsync(long requestId)
     {
         var request = await GetByIdAsync(requestId);
         if (request != null)
         {
+            if (request.Approver == null) return;
+            var domain = await companyService.GetDomain(request.Approver.CompanyId);
+
             var emailTemplatePath = Path.Combine(env.ContentRootPath, EmailTemplatePathForRequest);
             var email = await requestMailService.GetMailToMailCcAndLetStalk(requestId, (byte)SettingsSendMail.New);
             var forDate = Utilities.GetMessageDateString(request.FromDate, request.ToDate);
@@ -210,21 +212,22 @@ public class ChangeShiftRequestService(
                 request.Requester.Nickname,
                 forDate,
                 request.Remark,
-                mailConfigModel.Domain);
+                domain);
 
-            var mailSetting = JsonConvert.DeserializeObject<MailSetting>(mailConfigModel.MailSetting);
             await Task.WhenAll(
-                emailService.SendEmailAsync(email.SendTo, email.SendCC, email.Subject, email.Body, mailSetting, (short)mailConfigModel.CompanyId),
+                emailService.SendEmailAsync(email.SendTo, email.SendCC, email.Subject, email.Body, request.Approver.CompanyId),
                 letStalkService.SendNotificationAsync(email.LetsTalk, email.Subject, email.Body)
             );
         }
     }
 
-    public async Task SendMailEditRequestAsync(long requestId, MailConfigModel mailConfigModel)
+    public async Task SendMailEditRequestAsync(long requestId)
     {
         var request = await GetByIdAsync(requestId);
         if (request != null)
         {
+            if (request.Approver == null) return;
+            var domain = await companyService.GetDomain(request.Approver.CompanyId);
             var emailTemplatePath = Path.Combine(env.ContentRootPath, EmailTemplatePathForRequest);
             var email = await requestMailService.GetMailToMailCcAndLetStalk(requestId, (byte)SettingsSendMail.Edit);
             var forDate = Utilities.GetMessageDateString(request.FromDate, request.ToDate);
@@ -237,11 +240,10 @@ public class ChangeShiftRequestService(
                 request.Requester.Nickname,
                 forDate,
                 request.Remark,
-                mailConfigModel.Domain);
+                domain);
 
-            var mailSetting = JsonConvert.DeserializeObject<MailSetting>(mailConfigModel.MailSetting);
             await Task.WhenAll(
-                emailService.SendEmailAsync(email.SendTo, email.SendCC, email.Subject, email.Body, mailSetting, (short)mailConfigModel.CompanyId),
+                emailService.SendEmailAsync(email.SendTo, email.SendCC, email.Subject, email.Body, request.Approver.CompanyId),
                 letStalkService.SendNotificationAsync(email.LetsTalk, email.Subject, email.Body)
             );
         }

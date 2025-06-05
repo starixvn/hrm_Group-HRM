@@ -9,5 +9,7 @@ namespace HRM.Services.Interfaces
         Task<CompanySite> GetCompanySiteByDomainAsync();
 
         Task<IEnumerable<Company>> GetAllCompany();
+
+        Task<string> GetDomain(int companyId);
     }
 }

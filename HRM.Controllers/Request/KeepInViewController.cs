@@ -27,8 +27,7 @@ public class KeepInViewController(
     IBaseService baseService,
     IAttachFileService attachFileService,
     IShiftService shiftService,
-    ILeaveRequestService leaveRequestService,
-    IRequestMailService requestMailService) : BaseController(session)
+    ILeaveRequestService leaveRequestService) : BaseController(session)
 {
     [HttpGet]
     public async Task<IActionResult> EmployeeView(int? year)
@@ -110,11 +109,7 @@ public class KeepInViewController(
         if (commandResult.IsSuccessful)
         {
             await attachFileService.UploadFileAsync(files, criteria.RequestId, $"{CurrentCompanyId}/requests");
-
-            if (criteria.ApproverId == null) return Json(commandResult);
-
-            var mailConfig = await requestMailService.GetEmployeeMailConfig(criteria.ApproverId.Value);
-            await keepInViewRequestService.SendMailAndSendLetstalkCreateRequestAsync(criteria.RequestId, mailConfig);
+            await keepInViewRequestService.SendMailAndSendLetstalkCreateRequestAsync(criteria.RequestId);
         }
 
         return Json(commandResult);
@@ -187,10 +182,7 @@ public class KeepInViewController(
         var commandResult = await baseService.ExecuteNonQueryAsync(criteria);
         if (commandResult.IsSuccessful)
         {
-            if (criteria.ApproverId == null) return Json(commandResult);
-
-            var mailConfig = await requestMailService.GetEmployeeMailConfig(criteria.ApproverId.Value);
-            await keepInViewRequestService.SendMailEditRequestAsync(model.RequestId, mailConfig);
+            await keepInViewRequestService.SendMailEditRequestAsync(model.RequestId);
             await attachFileService.UploadFileAsync(files, criteria.RequestId, $"{CurrentCompanyId}/requests");
             if (!string.IsNullOrWhiteSpace(filesRemove))
             {

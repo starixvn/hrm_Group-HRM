@@ -30,9 +30,7 @@ public class ChangeShiftController(
     IChangeShiftRequestService changeShiftService,
     IRequestService requestService,
     IShiftService shiftService,
-    IAttachFileService attachFileService,
-    IBaseService baseService,
-    IRequestMailService requestMailService) : BaseController(session)
+    IAttachFileService attachFileService) : BaseController(session)
 {
     [HttpGet]
     public async Task<IActionResult> EmployeeView(int? year)
@@ -91,14 +89,7 @@ public class ChangeShiftController(
         if (commandResult.IsSuccessful)
         {
             await attachFileService.UploadFileAsync(files, commandResult.OutputId, $"{CurrentCompanyId}/requests");
-            if (criteria.ApproverId == null) return Json(commandResult);
-
-            GetMailConfigByEmpIdCriteria mailConfigCriteria = new()
-            {
-                EmpId = criteria.ApproverId.Value,
-            };
-            var mailConfig = await baseService.GetDataEntityAsync<MailConfigModel>(mailConfigCriteria);
-            await changeShiftService.SendMailAndSendLetstalkCreateRequestAsync(commandResult.OutputId, mailConfig);
+            await changeShiftService.SendMailAndSendLetstalkCreateRequestAsync(commandResult.OutputId);
         }
 
         return Json(commandResult);
@@ -156,10 +147,7 @@ public class ChangeShiftController(
         var commandResult = await changeShiftService.EditAsync(session.UserId, criteria);
         if (commandResult.IsSuccessful)
         {
-            if (criteria.ApproverId == null) return Json(commandResult);
-
-            var mailConfig = await requestMailService.GetEmployeeMailConfig(criteria.ApproverId.Value);
-            await changeShiftService.SendMailEditRequestAsync(criteria.RequestId, mailConfig);
+            await changeShiftService.SendMailEditRequestAsync(criteria.RequestId);
             await attachFileService.UploadFileAsync(files, criteria.RequestId, $"{CurrentCompanyId}/requests");
             if (!string.IsNullOrWhiteSpace(filesRemove))
             {

@@ -2,9 +2,7 @@
 using System.Threading.Tasks;
 using HRM.Core;
 using HRM.Core.Enums;
-using HRM.Core.Services;
 using HRM.Criteria.Request;
-using HRM.Criteria.SystemSetting;
 using HRM.Models;
 using HRM.Models.Request;
 using HRM.Repositories.Interfaces;
@@ -13,8 +11,7 @@ using HRM.Services.Interfaces.Request;
 
 namespace HRM.Services.Implement.Request;
 
-public class RequestMailService(IRequestRepository requestRepository,
-    IBaseService baseService) : IRequestMailService
+public class RequestMailService(IRequestRepository requestRepository) : IRequestMailService
 {
     #region constant
 
@@ -93,17 +90,6 @@ public class RequestMailService(IRequestRepository requestRepository,
         };
 
         return message;
-    }
-
-    public async Task<MailConfigModel> GetEmployeeMailConfig(int empId)
-    {
-        GetMailConfigByEmpIdCriteria mailConfigCriteria = new()
-        {
-            EmpId = empId,
-        };
-        var mailConfig = await baseService.GetDataEntityAsync<MailConfigModel>(mailConfigCriteria);
-
-        return mailConfig;
     }
 
     private static byte GetActionResetRequest(byte statusId)

@@ -13,9 +13,9 @@ namespace HRM.Services.Implement;
 
 public class EmailService(IBaseMailService mailService,IBaseService baseService, IUserControlSession session) : IEmailService
 {
-    public async Task SendEmailAsync(string receiverEmail, string mailCc, string subject, string body, MailSetting setting = null, short? companyId = null)
+    public async Task SendEmailAsync(string receiverEmail, string mailCc, string subject, string body, short? companyId = null)
     {
-        var mailSetting = await GetMailSettingAsync(setting, companyId);
+        var mailSetting = await GetMailSettingAsync(companyId);
         if (!Utilities.IsValidEmail(receiverEmail) || !mailSetting.Enable)
         {
             return;
@@ -33,7 +33,7 @@ public class EmailService(IBaseMailService mailService,IBaseService baseService,
         await mailService.SendEmailAsync(mailItem);
     }
 
-    public async Task<MailSetting> GetMailSettingAsync(MailSetting mailSetting = null, short? companyId = null)
+    public async Task<MailSetting> GetMailSettingAsync(short? companyId = null)
     {
         companyId ??= session.Get<short?>(SessionKey.CurrentCompanyId);
         var criteria = new GetSystemConfigsByKeyCriteria

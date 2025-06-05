@@ -31,7 +31,7 @@ public class LeaveController(
     ICommonDataService commonDataService,
     IAttachFileService attachFileService,
     IEmployeeService employeeService,
-    IRequestMailService requestMailService) : BaseController(session)
+    ICompanyService companyService) : BaseController(session)
 {
     [HttpGet]
     public async Task<IActionResult> EmployeeView(int? year)
@@ -114,9 +114,10 @@ public class LeaveController(
         {
             await attachFileService.UploadFileAsync(files, criteria.RequestId, $"{CurrentCompanyId}/requests");
             if (criteria.ApproverId == null) return new JsonResult(result);
-
-            var mailConfig = await requestMailService.GetEmployeeMailConfig(criteria.ApproverId.Value);
-            leaveRequestService.SendMailAndSendLetstalkCreateRequest(criteria, mailConfig);
+            var leaveRequest = await leaveRequestService.GetByIdAsync(criteria.RequestId);
+            if (leaveRequest == null) return new JsonResult(result);
+            var domain = await companyService.GetDomain(leaveRequest.Approver.CompanyId);
+            leaveRequestService.SendMailAndSendLetstalkCreateRequest(criteria, domain, leaveRequest.Approver.CompanyId);
         }
 
         return new JsonResult(result);
@@ -191,9 +192,10 @@ public class LeaveController(
             }
             await attachFileService.UploadFileAsync(files, criteria.RequestId, $"{CurrentCompanyId}/requests");
             if (criteria.ApproverId == null) return new JsonResult(result);
-
-            var mailConfig = await requestMailService.GetEmployeeMailConfig(criteria.ApproverId.Value);
-            leaveRequestService.SendMailEditRequest(criteria, mailConfig);
+            var leaveRequest = await leaveRequestService.GetByIdAsync(criteria.RequestId);
+            if (leaveRequest == null) return new JsonResult(result);
+            var domain = await companyService.GetDomain(leaveRequest.Approver.CompanyId);
+            leaveRequestService.SendMailEditRequest(criteria, domain, leaveRequest.Approver.CompanyId);
         }
 
         return Json(result);
