@@ -1,4 +1,6 @@
-﻿namespace HRM.Services.Implement.Request;
+﻿using Newtonsoft.Json;
+
+namespace HRM.Services.Implement.Request;
 
 using System;
 using System.Collections.Generic;
@@ -11,6 +13,7 @@ using GO.UserControl.Client.Core.Session;
 using HRM.Core.Models;
 using HRM.Core.Services;
 using HRM.Criteria.Request.KeepInView;
+using Models;
 using HRM.Models.Request;
 using HRM.Repositories.Interfaces;
 using HRM.Services.Interfaces.Request;
@@ -25,7 +28,8 @@ public class KeepInViewRequestService(
     IRequestMailService requestMailService,
     IEmailService emailService,
     ILetstalkService letstalkService,
-    IUserControlSession userControlSession) : IKeepInViewRequestService
+    IUserControlSession userControlSession,
+    ICompanyService companyService) : IKeepInViewRequestService
 {
     private const string EmailTemplatePathForRequest = "EmailTemplates/KeepInView.Request.txt";
     private const string EmailTemplatePathForCancel = "EmailTemplates/KeepInView.Cancel.txt";
@@ -56,9 +60,12 @@ public class KeepInViewRequestService(
 
     public async Task<IList<KeepInViewRequest>> GetHistoryByIdAsync(long requestId)
     {
+        var companyId = userControlSession.Get<int>(SessionKey.CurrentCompanyId);
+
         var criteria = new GetKeepInViewRequestHistoryByIdCriteria
         {
-            RequestId = requestId
+            RequestId = requestId,
+            CompanyId = companyId
         };
         return await keepInViewRequestRepository.GetHistoryByIdAsync(criteria);
     }
@@ -95,6 +102,8 @@ public class KeepInViewRequestService(
         var request = await GetByIdAsync(requestId);
         if (request != null)
         {
+            if (request.Approver == null) return;
+            var domain = await companyService.GetDomain(request.Approver.CompanyId);
             var emailTemplatePath = Path.Combine(env.ContentRootPath, EmailTemplatePathForRequest);
             var email = await requestMailService.GetMailToMailCcAndLetStalk(requestId, (byte)SettingsSendMail.New);
 
@@ -108,13 +117,14 @@ public class KeepInViewRequestService(
                 request.Requester.Nickname,
                 request.OnDate.ToDateMonthYearFormatedDate(),
                 request.Remark,
-                userControlSession.Get<string>(SessionKey.CurrentDomain));
+                domain);
 
             await emailService.SendEmailAsync(
                 email.SendTo,
                 email.SendCC,
                 email.Subject,
-                email.Body);
+                email.Body,
+                request.Approver.CompanyId);
 
             await letstalkService.SendNotificationAsync(email.LetsTalk, email.Subject, email.Body);
         }
@@ -125,6 +135,8 @@ public class KeepInViewRequestService(
         var request = await GetByIdAsync(requestId);
         if (request != null)
         {
+            if (request.Approver == null) return;
+            var domain = await companyService.GetDomain(request.Approver.CompanyId);
             var emailTemplatePath = Path.Combine(env.ContentRootPath, EmailTemplatePathForRequest);
             var email = await requestMailService.GetMailToMailCcAndLetStalk(requestId, (byte)SettingsSendMail.Edit);
             email.Subject =
@@ -137,13 +149,14 @@ public class KeepInViewRequestService(
                 request.Requester.Nickname,
                 request.OnDate.ToDateMonthYearFormatedDate(),
                 request.Remark,
-                userControlSession.Get<string>(SessionKey.CurrentDomain));
+                domain);
 
             await emailService.SendEmailAsync(
                 email.SendTo,
                 email.SendCC,
                 email.Subject,
-                email.Body);
+                email.Body,
+                request.Approver.CompanyId);
 
             await letstalkService.SendNotificationAsync(email.LetsTalk, email.Subject, email.Body);
         }
@@ -201,7 +214,8 @@ public class KeepInViewRequestService(
                 email.SendTo,
                 email.SendCC,
                 email.Subject,
-                email.Body);
+                email.Body,
+                companyId: request.Requester.CompanyId);
 
             await letstalkService.SendNotificationAsync(email.LetsTalk, email.Subject, email.Body);
         }

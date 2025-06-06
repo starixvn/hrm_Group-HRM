@@ -9,7 +9,10 @@ using Core.Constants;
 using Core.Enums;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
+using HRM.Core.Services;
 using HRM.Criteria.Request.ChangeShift;
+using Criteria.SystemSetting;
+using Models;
 using HRM.Models.Request;
 using HRM.Models.Request.ChangeShift;
 using HRM.Services.Interfaces.Request;
@@ -85,8 +88,8 @@ public class ChangeShiftController(
 
         if (commandResult.IsSuccessful)
         {
-            await changeShiftService.SendMailAndSendLetstalkCreateRequestAsync(commandResult.OutputId);
             await attachFileService.UploadFileAsync(files, commandResult.OutputId, $"{CurrentCompanyId}/requests");
+            await changeShiftService.SendMailAndSendLetstalkCreateRequestAsync(commandResult.OutputId);
         }
 
         return Json(commandResult);

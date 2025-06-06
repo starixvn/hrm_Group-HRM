@@ -9,12 +9,14 @@ using HRM.Core.Enums;
 using HRM.Core.Models;
 using HRM.Core.Services;
 using HRM.Criteria.Request.CheckInOut;
+using HRM.Models;
 using HRM.Models.Request;
 using HRM.Repositories.Interfaces;
 using HRM.Resources;
 using HRM.Services.Interfaces;
 using HRM.Services.Interfaces.Request;
 using Microsoft.AspNetCore.Hosting;
+using Newtonsoft.Json;
 
 namespace HRM.Services.Implement.Request;
 
@@ -25,7 +27,8 @@ public class CheckInOutRequestService(
     IRequestMailService requestMailService,
     IEmailService emailService,
     ILetstalkService letStalkService,
-    IUserControlSession userControlSession) : ICheckInOutRequestService
+    IUserControlSession userControlSession,
+    ICompanyService companyService) : ICheckInOutRequestService
 {
     private const string EmailTemplatePathForRequest = "EmailTemplates/CheckInOut.Request.txt";
     private const string EmailTemplatePathForCancel = "EmailTemplates/CheckInOut.Cancel.txt";
@@ -56,9 +59,12 @@ public class CheckInOutRequestService(
 
     public async Task<IList<CheckInOutRequest>> GetHistoryByIdAsync(long requestId)
     {
+        var companyId = userControlSession.Get<int>(SessionKey.CurrentCompanyId);
+
         var criteria = new GetCheckInOutRequestHistoryByIdCriteria
         {
-            RequestId = requestId
+            RequestId = requestId,
+            CompanyId = companyId
         };
         return await checkInOutRequestRepository.GetHistoryByIdAsync(criteria);
     }
@@ -92,6 +98,8 @@ public class CheckInOutRequestService(
         var request = await GetByIdAsync(requestId);
         if (request != null)
         {
+            if (request.Approver == null) return;
+            var domain = await companyService.GetDomain(request.Approver.CompanyId);
             var emailTemplatePath = Path.Combine(env.ContentRootPath, EmailTemplatePathForRequest);
             var email = await requestMailService.GetMailToMailCcAndLetStalk(requestId, (byte)SettingsSendMail.New);
             email.Subject =
@@ -107,13 +115,14 @@ public class CheckInOutRequestService(
                 request.ShiftName,
                 request.RequestTime.ToShortTime(),
                 request.Remark,
-                userControlSession.Get<string>(SessionKey.CurrentDomain));
+                domain);
 
             await emailService.SendEmailAsync(
                 email.SendTo,
                 email.SendCC,
                 email.Subject,
-                email.Body);
+                email.Body,
+                request.Approver.CompanyId);
 
             await letStalkService.SendNotificationAsync(email.LetsTalk, email.Subject, email.Body);
         }
@@ -125,6 +134,8 @@ public class CheckInOutRequestService(
         var request = await GetByIdAsync(requestId);
         if (request != null)
         {
+            if (request.Approver == null) return;
+            var domain = await companyService.GetDomain(request.Approver.CompanyId);
             var email = await requestMailService.GetMailToMailCcAndLetStalk(requestId, (byte)SettingsSendMail.Edit);
             email.Subject =
                 $"{Messages.UpdatedCheckInOutEmailSubject} {request.Requester.Nickname} on {request.OnDate.ToDateMonthYearFormatedDate()}";
@@ -139,13 +150,14 @@ public class CheckInOutRequestService(
                 request.ShiftName,
                 request.RequestTime.ToShortTime(),
                 request.Remark,
-                userControlSession.Get<string>(SessionKey.CurrentDomain));
+                domain);
 
             await emailService.SendEmailAsync(
                 email.SendTo,
                 email.SendCC,
                 email.Subject,
-                email.Body);
+                email.Body,
+                request.Approver.CompanyId);
 
             await letStalkService.SendNotificationAsync(email.LetsTalk, email.Subject, email.Body);
         }
@@ -210,7 +222,8 @@ public class CheckInOutRequestService(
                 email.SendTo,
                 email.SendCC,
                 email.Subject,
-                email.Body);
+                email.Body,
+                companyId: request.Requester.CompanyId);
 
             await letStalkService.SendNotificationAsync(email.LetsTalk, email.Subject, email.Body);
         }

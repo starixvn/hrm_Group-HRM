@@ -28,7 +28,8 @@ public class ChangeShiftRequestService(
     IEmailService emailService,
     IRequestMailService requestMailService,
     ILetstalkService letStalkService,
-    IUserControlSession userControlSession) : IChangeShiftRequestService
+    IUserControlSession userControlSession,
+    ICompanyService companyService) : IChangeShiftRequestService
 {
     private const string EmailTemplatePathForRequest = "EmailTemplates/ChangeShift.Request.txt";
     private const string EmailTemplatePathForCancel = "EmailTemplates/ChangeShift.Cancel.txt";
@@ -91,9 +92,12 @@ public class ChangeShiftRequestService(
 
     public async Task<IEnumerable<ChangeShiftRequest>> GetHistoryByIdAsync(long requestId)
     {
+        var companyId = userControlSession.Get<int>(SessionKey.CurrentCompanyId);
+
         var criteria = new GetChangeShiftRequestHistoryByIdCriteria
         {
-            RequestId = requestId
+            RequestId = requestId,
+            CompanyId = companyId
         };
         return await changeShiftRepository.GetHistoryByIdAsync(criteria);
     }
@@ -193,6 +197,9 @@ public class ChangeShiftRequestService(
         var request = await GetByIdAsync(requestId);
         if (request != null)
         {
+            if (request.Approver == null) return;
+            var domain = await companyService.GetDomain(request.Approver.CompanyId);
+
             var emailTemplatePath = Path.Combine(env.ContentRootPath, EmailTemplatePathForRequest);
             var email = await requestMailService.GetMailToMailCcAndLetStalk(requestId, (byte)SettingsSendMail.New);
             var forDate = Utilities.GetMessageDateString(request.FromDate, request.ToDate);
@@ -205,10 +212,10 @@ public class ChangeShiftRequestService(
                 request.Requester.Nickname,
                 forDate,
                 request.Remark,
-                userControlSession.Get<string>(SessionKey.CurrentDomain));
+                domain);
 
             await Task.WhenAll(
-                emailService.SendEmailAsync(email.SendTo, email.SendCC, email.Subject, email.Body),
+                emailService.SendEmailAsync(email.SendTo, email.SendCC, email.Subject, email.Body, request.Approver.CompanyId),
                 letStalkService.SendNotificationAsync(email.LetsTalk, email.Subject, email.Body)
             );
         }
@@ -219,6 +226,8 @@ public class ChangeShiftRequestService(
         var request = await GetByIdAsync(requestId);
         if (request != null)
         {
+            if (request.Approver == null) return;
+            var domain = await companyService.GetDomain(request.Approver.CompanyId);
             var emailTemplatePath = Path.Combine(env.ContentRootPath, EmailTemplatePathForRequest);
             var email = await requestMailService.GetMailToMailCcAndLetStalk(requestId, (byte)SettingsSendMail.Edit);
             var forDate = Utilities.GetMessageDateString(request.FromDate, request.ToDate);
@@ -231,10 +240,10 @@ public class ChangeShiftRequestService(
                 request.Requester.Nickname,
                 forDate,
                 request.Remark,
-                userControlSession.Get<string>(SessionKey.CurrentDomain));
+                domain);
 
             await Task.WhenAll(
-                emailService.SendEmailAsync(email.SendTo, email.SendCC, email.Subject, email.Body),
+                emailService.SendEmailAsync(email.SendTo, email.SendCC, email.Subject, email.Body, request.Approver.CompanyId),
                 letStalkService.SendNotificationAsync(email.LetsTalk, email.Subject, email.Body)
             );
         }
@@ -289,7 +298,7 @@ public class ChangeShiftRequestService(
                 request.Remark);
 
             await Task.WhenAll(
-                emailService.SendEmailAsync(email.SendTo, email.SendCC, email.Subject, email.Body),
+                emailService.SendEmailAsync(email.SendTo, email.SendCC, email.Subject, email.Body, companyId: request.Requester.CompanyId),
                 letStalkService.SendNotificationAsync(email.LetsTalk, email.Subject, email.Body)
             );
         }

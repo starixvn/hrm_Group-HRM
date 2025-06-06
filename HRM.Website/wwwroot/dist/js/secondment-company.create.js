@@ -98667,7 +98667,7 @@ var AppContainer = function AppContainer() {
                 url: (0, _common.resolveClientUrl)('GroupEmployeeList/GroupEmployeeList'),
                 method: 'GET',
                 headers: { 'X-Requested-With': 'XMLHttpRequest' },
-                params: { keyword: query }
+                params: { keyword: query, isDelete: false, isEnable: true }
             }).then(function (response) {
                 var data = response.data;
 

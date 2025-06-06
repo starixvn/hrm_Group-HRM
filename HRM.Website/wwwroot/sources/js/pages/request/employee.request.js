@@ -470,7 +470,7 @@ $(function () {
         $('#btnExcel').click(function () {
             const action = $('#ActionName').val() + 'WorkingTimeRequest';
             const teamIds = $('#Team').multiSelectTreeView('getSelectedItems');
-
+            
             const url = resolveClientUrl('ExportRequest/' + action
                 + '?DateOption=' + $('#Date').val()
                 + '&TeamIds=' + (teamIds !== '' ? teamIds : ' ')
@@ -481,6 +481,7 @@ $(function () {
                 + '&StatusId=' + $('#statusId').val()
                 + '&RequestType=' + $("input[type='radio'][name='RequestType']:checked").val()
                 + '&IsLocal=' + $('#IsLocal').val()
+                + '&IsShowCrossCompany=' + ($('#IsShowCrossCompany').is(':checked') ? 'true' : 'false')
                 + '&IsFilterByAffectedDate=' + $('#IsFilterByAffectedDate').val());
             location.href = url;
         });
@@ -562,6 +563,7 @@ $(function () {
                     + '&RequestType=' + $("#RequestType").val()
                     + '&IsLocal=' + $('#IsLocal').val()
                     + '&IsFilterByAffectedDate=' + $('#IsFilterByAffectedDate').val()
+                    + '&IsShowCrossCompany=' + ($('#IsShowCrossCompany').is(':checked') ? 'true' : 'false')
                     + '&leaveType=' + $('#LeaveType').val());
                 location.href = url;
             }

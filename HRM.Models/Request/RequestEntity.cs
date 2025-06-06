@@ -123,4 +123,6 @@ public class RequestEntity : EntityBase<long>
     public bool CrossDay { get; set; }
 
     public byte KeepInViewType { get; set; }
+
+    public int CompanyId { get; set; }
 }

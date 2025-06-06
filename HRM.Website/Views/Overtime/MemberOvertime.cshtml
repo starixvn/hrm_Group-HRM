@@ -72,6 +72,15 @@
             </div>
         </div>
         <div class="form-group form-group--m">
+            <div class="checkbox-form">
+                <div class="checkbox">
+                    <input type="checkbox" class="checkbox-custom" id="IsShowCrossCompany" name="IsShowCrossCompany"
+                           @(Model.IsShowCrossCompany ? "checked" : string.Empty) />
+                    <label for="IsShowCrossCompany">@Labels.ShowCrossCompany</label>
+                </div>
+            </div>
+        </div>
+        <div class="form-group form-group--m">
             <button type="button" class="btn btn-primary" id="btnSearch">@Labels.Search</button>
             <button id="btnExcel" type="button" class="btn btn-excel">@Labels.Excel</button>
         </div>

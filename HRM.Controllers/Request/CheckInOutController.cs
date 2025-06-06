@@ -103,8 +103,8 @@ public class CheckInOutController(
 
         if (commandResult.IsSuccessful)
         {
-            await checkInOutRequestService.SendMailAndSendLetstalkCreateRequestAsync(criteria.RequestId);
             await attachFileService.UploadFileAsync(files, criteria.RequestId, $"{CurrentCompanyId}/requests");
+            await checkInOutRequestService.SendMailAndSendLetstalkCreateRequestAsync(criteria.RequestId);
         }
 
         return Json(commandResult);
@@ -181,12 +181,12 @@ public class CheckInOutController(
         var commandResult = await baseService.ExecuteNonQueryAsync(criteria);
         if (commandResult.IsSuccessful)
         {
-            await checkInOutRequestService.SendMailEditRequestAsync(model.RequestId);
             await attachFileService.UploadFileAsync(files, criteria.RequestId, $"{CurrentCompanyId}/requests");
             if (!string.IsNullOrWhiteSpace(filesRemove))
             {
                 await attachFileService.DeleteFileAsync(JsonConvert.DeserializeObject<List<string>>(filesRemove), criteria.RequestId, $"{CurrentCompanyId}/requests");
             }
+            await checkInOutRequestService.SendMailEditRequestAsync(model.RequestId);
         }
 
         return Json(commandResult);

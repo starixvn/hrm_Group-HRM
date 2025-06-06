@@ -73,6 +73,7 @@ $(document).ready(function () {
         } else {
             const teamIds = $('#Team').multiSelectTreeView('getSelectedItems');
             $('#TeamIds').val(teamIds === '' ? ' ' : teamIds);
+            $('#IsShowCrossCompany').val($('#IsShowCrossCompany').is(':checked'));
 
             $('form.filter').submit();
         }
@@ -238,11 +239,14 @@ $(document).ready(function () {
         event.preventDefault();
 
         blockUI();
+        const formData = $('form.filter').serialize();
+        const params = parse(formData);
+        params.IsShowCrossCompany = $('#IsShowCrossCompany').is(':checked');
         axios({
             url: resolveClientUrl('Overtime/ExportMemberOvertime'),
             method: 'GET',
             headers: { 'X-Requested-With': 'XMLHttpRequest' },
-            params: parse($('form.filter').serialize()),
+            params: params,
             responseType: 'blob'
         }).then(response => {
             const fileName = response.headers['content-disposition'].match(/filename=([^;]+)/)[1];

@@ -12,4 +12,5 @@ public class Requester
     public string DisplayName => string.IsNullOrWhiteSpace(Nickname) || string.IsNullOrWhiteSpace(FullName) ? string.Empty : Nickname + " (" + FullName + ")";
     public int WorkingHours { get; set; }
     public decimal SpecialOT { get; set; }
+    public short CompanyId { get; set; }
 }

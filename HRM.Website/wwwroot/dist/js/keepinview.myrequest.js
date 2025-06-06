@@ -66568,7 +66568,7 @@ $(function () {
                 $('.tooltip-tipsy').tipsy({ html: true, gravity: $.fn.tipsy.autoWE });
                 $('#dialoghistorycontent').dialog({
                     modal: true,
-                    width: 1100,
+                    width: 'unset',
                     title: 'Request History'
                 });
             }).catch(_common.axiosError);

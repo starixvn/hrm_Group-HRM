@@ -6,6 +6,8 @@ public class GetKeepInViewRequestHistoryByIdCriteria : CriteriaBase
 {
     public long RequestId { get; set; }
 
+    public int? CompanyId { get; set; }
+
     public override string GetSettingKey()
     {
         return "KeepInViewRequest_GetHistoryById";

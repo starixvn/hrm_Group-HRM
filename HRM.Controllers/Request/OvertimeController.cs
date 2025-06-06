@@ -80,6 +80,7 @@ public class OvertimeController(
     public async Task<IActionResult> MemberOvertime(MemberMonthlyOvertimeRequestViewModel model)
     {
         var teams = await teamService.GetAllAsync();
+        model.IsShowCrossCompany = model.TeamIds == null || model.IsShowCrossCompany;
         model.TeamIds ??= string.Join(",", teams.Select(x => x.Id));
         model.MemberRequests = await GetMemberOvertimeRequestAsync(model);
         ViewBag.CurrentUserId = session.UserId;
@@ -107,7 +108,8 @@ public class OvertimeController(
             EmployeeId = model.EmployeeId,
             StatusIds = statusIds,
             IsLocal = model.IsLocal,
-            CompanyId = CurrentCompanyId
+            CompanyId = CurrentCompanyId,
+            IsShowCrossCompany = model.IsShowCrossCompany
         };
         model.MemberRequests = await overtimeService.GetMemberMonthlyRequestAsync(param);
 

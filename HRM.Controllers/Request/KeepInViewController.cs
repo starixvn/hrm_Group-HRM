@@ -11,7 +11,6 @@ using HRM.Core.Enums;
 using HRM.Core.Services;
 using HRM.Criteria.Request.KeepInView;
 using HRM.Models.Request;
-using HRM.Services.Implement.Request;
 using HRM.Services.Interfaces;
 using HRM.Services.Interfaces.Request;
 using HRM.ViewModels.Request;
@@ -109,8 +108,8 @@ public class KeepInViewController(
         var commandResult = await baseService.ExecuteNonQueryAsync(criteria);
         if (commandResult.IsSuccessful)
         {
-            await keepInViewRequestService.SendMailAndSendLetstalkCreateRequestAsync(criteria.RequestId);
             await attachFileService.UploadFileAsync(files, criteria.RequestId, $"{CurrentCompanyId}/requests");
+            await keepInViewRequestService.SendMailAndSendLetstalkCreateRequestAsync(criteria.RequestId);
         }
 
         return Json(commandResult);

@@ -15,6 +15,9 @@ public class SupervisorNameModel
     public string MailGroup { get; set; }
 
     public int ActionType { get; set; }
+
+    public string CompanyName { get; set; }
+
     public bool IsTopManager { get; set; }
 
     public string DisplayName => NickName + " (" + FullName + ")";

@@ -6,6 +6,8 @@ public class GetLateInEarlyOutRequestHistoryByIdCriteria : CriteriaBase
 {
     public long RequestId { get; set; }
 
+    public int? CompanyId { get; set; }
+
     public override string GetSettingKey() => "LateInEarlyOutRequest_GetHistoryById";
 
     public override bool IsValid() => RequestId > 0;

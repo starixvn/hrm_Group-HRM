@@ -67711,7 +67711,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
                 (0, _jquery2.default)('.tooltip-tipsy').tipsy({ html: true, gravity: _jquery2.default.fn.tipsy.autoWE });
                 (0, _jquery2.default)('#dialoghistorycontent').dialog({
                     modal: true,
-                    width: 1100,
+                    width: 'unset',
                     title: 'Request History'
                 });
             }).catch(_common.axiosError).then(function () {

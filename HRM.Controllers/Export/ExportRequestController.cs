@@ -108,7 +108,8 @@ public class ExportRequestController(
             RequestViewType = model.ViewType,
             SupervisorId = session.UserId,
             IsLocal = model.IsLocal.HasValue ? model.IsLocal.Value == 1 : null,
-            CompanyId = CurrentCompanyId
+            CompanyId = CurrentCompanyId,
+            IsShowCrossCompany = model.IsShowCrossCompany
         };
 
         var requests = await requestService.GetRequestAsync(criteria);

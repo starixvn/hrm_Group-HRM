@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using HRM.Core.Enums;
 using HRM.Core.Models;
 using HRM.Criteria.Request.ChangeShift;
+using HRM.Models;
 using HRM.Models.Request.ChangeShift;
 using HRM.Models.ScheduleArrange;
 

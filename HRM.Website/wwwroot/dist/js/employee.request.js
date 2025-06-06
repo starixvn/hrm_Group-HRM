@@ -69358,7 +69358,7 @@ $(function () {
             var action = $('#ActionName').val() + 'WorkingTimeRequest';
             var teamIds = $('#Team').multiSelectTreeView('getSelectedItems');
 
-            var url = (0, _common.resolveClientUrl)('ExportRequest/' + action + '?DateOption=' + $('#Date').val() + '&TeamIds=' + (teamIds !== '' ? teamIds : ' ') + '&Employee=' + $('#Employee').val() + '&EmployeeId=' + $('#EmployeeId').val() + '&FromDate=' + $('#FromDate').val() + '&ToDate=' + $('#ToDate').val() + '&StatusId=' + $('#statusId').val() + '&RequestType=' + $("input[type='radio'][name='RequestType']:checked").val() + '&IsLocal=' + $('#IsLocal').val() + '&IsFilterByAffectedDate=' + $('#IsFilterByAffectedDate').val());
+            var url = (0, _common.resolveClientUrl)('ExportRequest/' + action + '?DateOption=' + $('#Date').val() + '&TeamIds=' + (teamIds !== '' ? teamIds : ' ') + '&Employee=' + $('#Employee').val() + '&EmployeeId=' + $('#EmployeeId').val() + '&FromDate=' + $('#FromDate').val() + '&ToDate=' + $('#ToDate').val() + '&StatusId=' + $('#statusId').val() + '&RequestType=' + $("input[type='radio'][name='RequestType']:checked").val() + '&IsLocal=' + $('#IsLocal').val() + '&IsShowCrossCompany=' + ($('#IsShowCrossCompany').is(':checked') ? 'true' : 'false') + '&IsFilterByAffectedDate=' + $('#IsFilterByAffectedDate').val());
             location.href = url;
         });
     }
@@ -69430,7 +69430,7 @@ $(function () {
                 e.preventDefault();
             } else {
                 var teamIds = $('#Team').multiSelectTreeView('getSelectedItems');
-                var url = (0, _common.resolveClientUrl)('request/' + $('#ActionName').val() + '?DateOption=' + $('#Date').val() + '&TeamIds=' + (teamIds === '' ? ' ' : teamIds) + '&Employee=' + $('#Employee').val() + '&EmployeeId=' + $('#EmployeeId').val() + '&FromDate=' + $('#FromDate').val() + '&ToDate=' + $('#ToDate').val() + '&StatusId=' + $('#statusId').val() + '&RequestType=' + $("#RequestType").val() + '&IsLocal=' + $('#IsLocal').val() + '&IsFilterByAffectedDate=' + $('#IsFilterByAffectedDate').val() + '&leaveType=' + $('#LeaveType').val());
+                var url = (0, _common.resolveClientUrl)('request/' + $('#ActionName').val() + '?DateOption=' + $('#Date').val() + '&TeamIds=' + (teamIds === '' ? ' ' : teamIds) + '&Employee=' + $('#Employee').val() + '&EmployeeId=' + $('#EmployeeId').val() + '&FromDate=' + $('#FromDate').val() + '&ToDate=' + $('#ToDate').val() + '&StatusId=' + $('#statusId').val() + '&RequestType=' + $("#RequestType").val() + '&IsLocal=' + $('#IsLocal').val() + '&IsFilterByAffectedDate=' + $('#IsFilterByAffectedDate').val() + '&IsShowCrossCompany=' + ($('#IsShowCrossCompany').is(':checked') ? 'true' : 'false') + '&leaveType=' + $('#LeaveType').val());
                 location.href = url;
             }
         });

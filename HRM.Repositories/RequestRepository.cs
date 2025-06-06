@@ -147,7 +147,8 @@ public class RequestRepository : IRequestRepository
             VerifiedStatus = GetStatus(requestInfo.VerifiedStatus),
             ApprovedStatus = GetStatus(requestInfo.ApprovedStatus),
             ProcessedStatus = GetStatus(requestInfo.ProcessedStatus),
-            ReworkCount = requestInfo.ReworkCount ?? 0
+            ReworkCount = requestInfo.ReworkCount ?? 0,
+            CompanyId = requestInfo.CompanyId
         };
 
         return entity;

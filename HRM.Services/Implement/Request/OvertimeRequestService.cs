@@ -91,7 +91,8 @@ public class OvertimeRequestService(
             IsProcessor = param.IsProcessor,
             OvertimeType = param.OvertimeType,
             IsLocal = param.IsLocal,
-            CompanyId = param.CompanyId
+            CompanyId = param.CompanyId,
+            IsShowCrossCompany = param.IsShowCrossCompany
         };
         return await overtimeRepository.GetMemberMonthlyRequestAsync(criteria);
     }

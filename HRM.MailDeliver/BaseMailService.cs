@@ -27,19 +27,19 @@ public class BaseMailService(IBaseService baseService) : IBaseMailService
 
     private async Task<bool> SendByMailKitAsync(MailRecord email)
     {
+         var isSuccessful = false;
         var message = GetMessageContent(email);
-        var isSuccessful = false;
-
         using var mailClient = new SmtpClient();
+       
         mailClient.ServerCertificateValidationCallback += RemoteCertificateValidationCallback;
-        await mailClient.ConnectAsync(email.MailConfig.Server, email.MailConfig.Port, email.MailConfig.IsAuth);
-        if (email.MailConfig.IsAuth)
-        {
-            await mailClient.AuthenticateAsync(email.MailConfig.Username, email.MailConfig.Password);
-        }
 
         try
         {
+            await mailClient.ConnectAsync(email.MailConfig.Server, email.MailConfig.Port, email.MailConfig.IsAuth);
+            if (email.MailConfig.IsAuth)
+            {
+                await mailClient.AuthenticateAsync(email.MailConfig.Username, email.MailConfig.Password);
+            }
             await mailClient.SendAsync(message);
             isSuccessful = true;
             await UpdateMailStatusAsync(email, true);
