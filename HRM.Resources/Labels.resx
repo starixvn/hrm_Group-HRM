@@ -1047,6 +1047,15 @@
   <data name="Management" xml:space="preserve">
     <value>Management</value>
   </data>
+  <data name="PD" xml:space="preserve">
+    <value>PD</value>
+  </data>
+  <data name="Product" xml:space="preserve">
+    <value>Product</value>
+  </data>
+  <data name="Support" xml:space="preserve">
+    <value>Support</value>
+  </data>
   <data name="NewJobTitle" xml:space="preserve">
     <value>New Job Title</value>
   </data>

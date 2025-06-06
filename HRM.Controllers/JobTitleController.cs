@@ -105,7 +105,10 @@ public class JobTitleController(
             new() { Text = Labels.Staff, Value = ((int)JobTitleCategory.Staff).ToString() },
             new() { Text = Labels.Executive, Value = ((int)JobTitleCategory.Executive).ToString() },
             new() { Text = Labels.ExecutiveWithPosition, Value = ((int)JobTitleCategory.ExecutiveWithPosition).ToString() },
-            new() { Text = Labels.Management, Value = ((int)JobTitleCategory.Management).ToString() }
+            new() { Text = Labels.Management, Value = ((int)JobTitleCategory.Management).ToString() },
+            new() { Text = Labels.PD, Value = ((int)JobTitleCategory.PD).ToString() },
+            new() { Text = Labels.Product, Value = ((int)JobTitleCategory.Product).ToString() },
+            new() { Text = Labels.Support, Value = ((int)JobTitleCategory.Support).ToString() }
         };
 }
 
