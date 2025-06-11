@@ -52,7 +52,7 @@ public class RequestController(
     {
         foreach (var request in requests)
         {
-            request.AttachFiles = await attachFileService.GetInfoAttachFileAsync(request.Id, $"{CurrentCompanyId}/requests");
+            request.AttachFiles = await attachFileService.GetInfoAttachFileAsync(request.Id, $"{request.CompanyId}/requests");
         }
     }
 
