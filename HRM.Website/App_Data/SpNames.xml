@@ -581,4 +581,7 @@
         <Setting Key="CompanySecondmentEmployee_Delete" SpName="CompanySecondmentEmployee_Delete" DbName="bodb_HRM" Plain="0" />
         <Setting Key="CompanySecondmentEmployee_GetByEmpId" SpName="CompanySecondmentEmployee_GetByEmpId" DbName="bodb_HRM" Plain="0" />
     </Function>
+	<Function Name="HeadcountReport">
+		<Setting Key="Report_HeadcountGet" SpName="Report_HeadcountGet" DbName="bodb_HRM" Plain="0" />
+	</Function>
 </Functions>

@@ -224,6 +224,9 @@
     <None Update="Avatars\avatar.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="ExcelTemplates\HeadcountReportTemplate.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="ExcelTemplates\Payroll.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

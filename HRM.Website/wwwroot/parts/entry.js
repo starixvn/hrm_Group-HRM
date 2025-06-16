@@ -89,6 +89,7 @@ module.exports = {
         [`${styleDistPath}/payroll.management`]: `${styleSourcePath}/pages/payroll-management/payroll.management.scss`,
         [`${styleDistPath}/secondment-company.index`]: `${styleSourcePath}/pages/secondment-company/index.scss`,
         [`${styleDistPath}/secondment-company.create`]: `${styleSourcePath}/pages/secondment-company/create.scss`,
+        [`${styleDistPath}/headcount-report.index`]: `${styleSourcePath}/pages/headcount-report/index.scss`,
         //
         [`${jsDistPath}/main`]: "./sources/js/main.js",
         [`${jsDistPath}/auth.index`]: `${jsSourcePath}/auth/index.jsx`,
@@ -199,5 +200,6 @@ module.exports = {
         [`${jsDistPath}/secondment-company.home`]: `${jsSourcePath}/secondment-company/home/index.jsx`,
         [`${jsDistPath}/secondment-company.create`]: `${jsSourcePath}/secondment-company/create/index.jsx`,
         [`${jsDistPath}/secondment-company.edit`]: `${jsSourcePath}/secondment-company/edit/index.jsx`,
+        [`${jsDistPath}/headcount-report.index`]: `${jsSourcePath}/headcount-report/home/index.jsx`,
     },
 };

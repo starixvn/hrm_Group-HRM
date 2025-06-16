@@ -1,0 +1,19 @@
+@using HRM.Resources
+@{
+    ViewData["Title"] = Labels.HeadcountReport;
+}
+
+@section Breadcrumb {
+    <a class="step">@Labels.GroupSpace</a><span class="step">@ViewBag.Title</span>
+}
+
+@section css {
+    <link rel="stylesheet" href="~/dist/styles/headcount-report.index.css" />
+}
+
+@section js {
+    <script src="~/dist/js/headcount-report.index.js"></script>
+}
+
+<h2 class="page-title">@ViewBag.Title</h2>
+<div id="headcount-report"></div>
