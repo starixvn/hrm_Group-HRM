@@ -25,6 +25,7 @@ public class EditTeamCriteria : CriteriaBase
     public int ExpatOffDaysbyWeek { get; set; }
     public byte? ExpatWorkingHoursbyWeek { get; set; }
     public byte? ExpatYearsOfServiceForExtraLeave { get; set; }
+    public bool IsOutsource { get; set; }
 
     public override string GetSettingKey()
     {

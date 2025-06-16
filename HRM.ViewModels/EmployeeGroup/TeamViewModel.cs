@@ -52,6 +52,8 @@ public class TeamViewModel
 
     public string DepartmentName { get; set; }
 
+    public bool IsOutsource { get; set; }
+
     [Required(ErrorMessageResourceName = nameof(Messages.RequiredErrorMessage), ErrorMessageResourceType = typeof(Messages))]
     [Display(Name = nameof(Labels.BasicAnnualLeaveBalance), ResourceType = typeof(Labels))]
     [Range(0, int.MaxValue, ErrorMessage = "Basic Annual Leave Balance must be greater than 0.")]

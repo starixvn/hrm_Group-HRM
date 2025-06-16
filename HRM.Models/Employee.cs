@@ -116,6 +116,8 @@ public class Employee : EntityBase<int>
     [Display(Name = "Permanent Address")]
     public string Address { get; set; }
 
+    public int? SubCompanyId { get; set; }
+
     public string CurrentAddress { get; set; }
 
     public string CardNo { get; set; }

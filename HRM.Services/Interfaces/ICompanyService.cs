@@ -11,5 +11,7 @@ namespace HRM.Services.Interfaces
         Task<IEnumerable<Company>> GetAllCompany();
 
         Task<string> GetDomain(int companyId);
+
+        Task<IEnumerable<SubCompany>> GetSubCompanies(int companyId);
     }
 }

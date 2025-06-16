@@ -43,6 +43,16 @@ public class CompanyService(IBaseService baseService,
         return mailConfig;
     }
 
+    public async Task<IEnumerable<SubCompany>> GetSubCompanies(int companyId)
+    {
+        var criteria = new GetSubCompaniesCriteria
+        {
+            CompanyId = companyId 
+        };
+
+        return await baseService.GetDataAsync<SubCompany>(criteria);
+    }
+
     private static string GetDomainName(HttpContext httpContext)
     {
         var protocol = httpContext.Request.Headers["x-forwarded-proto"].ToString();

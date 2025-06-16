@@ -314,7 +314,8 @@ public class EmployeeService(
             TeamDate = param.TeamDate,
             MilitaryFromDate = param.MilitaryFromDate,
             MilitaryToDate = param.MilitaryToDate,
-            CompanyId = companyId
+            CompanyId = companyId,
+            SubCompanyId = param.SubCompanyId
         };
         return await baseService.ExecuteNonQueryAsync(criteria);
     }

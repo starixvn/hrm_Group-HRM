@@ -349,6 +349,14 @@
             <span>@Labels.Information</span>
         </div>
         <ul class="list-group">
+	        <li class="list-group-item form-group">
+		        <div class="label-form">
+                    @Html.LabelFor(model => model.SubCompanyId, Labels.SubCompany, new { @class = "control-label" })
+		        </div>
+		        <div class="select-form">
+                    @Html.DropDownListFor(model => model.SubCompanyId, new SelectList(ViewBag.SubCompanies, "SubCompanyId", "Name"), "--Select a Sub Company--", new { @class = "form-control" })
+		        </div>
+	        </li>
             <li class="list-group-item form-group">
                 <div class="label-form">
                     @Html.LabelFor(model => model.Team.Id, Labels.Team, new { @class = "control-label" })

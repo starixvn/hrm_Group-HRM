@@ -77,4 +77,6 @@ public class GroupTeamModel
     public byte? ExpatWorkingHoursbyWeek { get; set; }
 
     public byte? ExpatYearsOfServiceForExtraLeave { get; set; }
+
+    public bool IsOutsource { get; set; }
 }

@@ -45,4 +45,6 @@ public class GroupTeamViewModel
     public List<EmployeePIC> EmployeePics { get; set; }
 
     public int CompanyId { get; set; }
+
+    public bool IsOutsource { get; set; }
 }

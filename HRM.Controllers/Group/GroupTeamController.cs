@@ -70,7 +70,8 @@ public class GroupTeamController(ITeamService teamService,
                 GroupTeamId = model.GroupTeamId,
                 AccountableArea = model.AccountableArea,
                 CreatedBy = session.UserId,
-                CompanyId = (short)model.CompanyId
+                CompanyId = (short)model.CompanyId,
+                IsOutsource = model.IsOutsource
             };
             var result = await baseService.ExecuteNonQueryAsync(criteria);
 
@@ -135,7 +136,8 @@ public class GroupTeamController(ITeamService teamService,
             GroupTeamId = team.GroupTeamId,
             AccountableArea = team.AccountableArea,
             Companies = companies.ToList(),
-            CompanyId = team.CompanyId
+            CompanyId = team.CompanyId,
+            IsOutsource = team.IsOutsource
         };
 
         return View(model);
@@ -176,8 +178,8 @@ public class GroupTeamController(ITeamService teamService,
                     ExpatWorkingHours = GetValue(team.ExpatWorkingHours),
                     ExpatOffDaysbyWeek = GetValue(team.ExpatOffDaysbyWeek),
                     ExpatWorkingHoursbyWeek = team.ExpatWorkingHoursbyWeek,
-                    ExpatYearsOfServiceForExtraLeave = team.ExpatYearsOfServiceForExtraLeave
-
+                    ExpatYearsOfServiceForExtraLeave = team.ExpatYearsOfServiceForExtraLeave,
+                    IsOutsource = model.IsOutsource
                 };
                 var result = await baseService.ExecuteNonQueryAsync(criteria);
 

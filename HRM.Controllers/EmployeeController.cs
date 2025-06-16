@@ -42,7 +42,8 @@ public class EmployeeController(
     ICryptoService cryptoService,
     IUserService userService,
     IRoleService roleService,
-    IMinIOService minIOService) : BaseController(session)
+    IMinIOService minIOService,
+    ICompanyService companyService) : BaseController(session)
 {
     [HrmPermission(Policy.Read, FunctionKey.ContactList)]
     public async Task<IActionResult> Index()
@@ -616,6 +617,7 @@ public class EmployeeController(
         var managementLevels = await managementLevelService.GetManagementLevel();
         var roles = await roleService.GetBySiteIdAsync(session.SiteId);
         var userRoles = await roleService.GetByUserIdAsync(session.UserId);
+        var subCompanies = await companyService.GetSubCompanies(CurrentCompanyId);
         if (userRoles.All(r => r.RoleId != (short)RoleSystem.SystemAdmin))
         {
             roles = roles.Where(r => r.RoleId != (short)RoleSystem.SystemAdmin).ToList();
@@ -626,6 +628,7 @@ public class EmployeeController(
         ViewBag.Grades = managementLevels;
         ViewBag.Marriages = Utilities.Marriages;
         ViewBag.Roles = roles;
+        ViewBag.SubCompanies = subCompanies;
     }
 
     private EditEmployeeParam MappingEditEmployeeParam(Employee model)
@@ -684,7 +687,8 @@ public class EmployeeController(
             PromotionDate = model.PromotionDate,
             TeamDate = model.TeamDate,
             MilitaryFromDate = model.MilitaryFromDate,
-            MilitaryToDate = model.MilitaryToDate
+            MilitaryToDate = model.MilitaryToDate,
+            SubCompanyId = model.SubCompanyId
         };
     }
 

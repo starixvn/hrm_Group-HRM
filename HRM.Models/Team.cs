@@ -20,6 +20,8 @@ public class Team : EntityBase<int>
 
     public string MailGroup { get; set; }
 
+    public bool IsOutsource { get; set; }
+
     public byte? LocalBasicAnnualLeaveBalance { get; set; }
 
     public byte? LocalWorkingDays { get; set; }
