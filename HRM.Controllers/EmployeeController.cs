@@ -277,12 +277,10 @@ public class EmployeeController(
             employee.Disciplinarian = GetDisciplineSupervisors(supervisors);
             employee.EmpShiftList = GetShiftMonitors(supervisors);
             employee.ActingEmpList = GetActingSupervisors(supervisors);
-            var isShowSubCompanyConfig = await companyService.GetIsShowSubCompanyValue();
             ViewBag.LengthOfServiceByGroupDate = employeeService.CalculateLengthOfService(employee.JoinedDate, employee.MilitaryFromDate, employee.MilitaryToDate);
             ViewBag.LengthOfServiceByCompanyDate = employeeService.CalculateLengthOfService(employee.CompanyDate, employee.MilitaryFromDate, employee.MilitaryToDate);
             ViewBag.EnableGroupDate = await commonDataService.IsEnableGroupDateAsync();
             ViewBag.Avatar = await GetAvatarUrl(employee.Code);
-            ViewBag.IsShowSubCompanyConfig = isShowSubCompanyConfig;
             await ComposeViewBagsForEditEmployee();
             return View(employee);
         }
@@ -625,6 +623,8 @@ public class EmployeeController(
             roles = roles.Where(r => r.RoleId != (short)RoleSystem.SystemAdmin).ToList();
         }
 
+        var isShowSubCompanyConfig = await companyService.GetIsShowSubCompanyValue();
+        ViewBag.IsShowSubCompanyConfig = isShowSubCompanyConfig;
         ViewBag.JobTitles = await commonDataService.GetLookupDataByCodeAsync(Constants.JobTitle, session.Get<int>(SessionKey.CurrentCompanyId));
         ViewBag.JobLevel = jobLevels;
         ViewBag.Grades = managementLevels;
