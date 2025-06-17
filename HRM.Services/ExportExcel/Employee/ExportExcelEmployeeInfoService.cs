@@ -47,9 +47,9 @@ public class ExportExcelEmployeeInfoService(
         const string sheetName = "Employee Basic Info";
         var writer = new ExcelTemplateWriter(templatePath, sheetName);
         var enableGroupDate = await commonDataService.IsEnableGroupDateAsync();
-        const byte colGroupDate = 8;
-        const byte colLengthOfServiceGroupDate = 12;
-        const byte colSubCompany = 7;
+        const byte colGroupDate = 7;
+        const byte colLengthOfServiceGroupDate = 11;
+        byte colSubCompany = 21;
 
         writer.CopyRows(0, 2);
         writer.CopyRows((byte)BasicInfo.RowStartHeader, 2);
@@ -61,6 +61,7 @@ public class ExportExcelEmployeeInfoService(
         {
             writer.RemoveColumn(colGroupDate);
             writer.RemoveColumn(colLengthOfServiceGroupDate);
+            colSubCompany -= 2; // sub company column is backed to 2 cells if group date cols are removed
         }
 
         var isShowSubCompanyConfig = await companyService.GetIsShowSubCompanyValue();
@@ -105,7 +106,6 @@ public class ExportExcelEmployeeInfoService(
             employee.Code,
             employee.FullName,
             employee.NickName,
-            CompanyName = string.IsNullOrEmpty(employee.SubCompanyName) ? employee.CompanyName : employee.SubCompanyName,
             GroupDate = employee.JoinedDate,
             employee.CompanyDate,
             employee.ConfirmedDate,
@@ -119,7 +119,8 @@ public class ExportExcelEmployeeInfoService(
             employee.Email,
             employee.Address,
             employee.CurrentAddress,
-            Category = employee.IsLocal ? Labels.Local : Labels.Expat
+            Category = employee.IsLocal ? Labels.Local : Labels.Expat,
+            CompanyName = string.IsNullOrEmpty(employee.SubCompanyName) ? string.Empty : employee.SubCompanyName
         };
 
         return record;
@@ -135,25 +136,19 @@ public class ExportExcelEmployeeInfoService(
         const string sheetName = "Employee Full Information";
         var writer = new ExcelTemplateWriter(templatePath, sheetName);
         var enableGroupDate = await commonDataService.IsEnableGroupDateAsync();
-        const byte colSubCompany = 9;
-        const byte colGroupDate = 10;
-        const byte colLengthOfServiceGroupDate = 14;
+        const byte colGroupDate = 9;
+        const byte colLengthOfServiceGroupDate = 13;
 
         writer.CopyRows(0, 2);
         writer.CopyRows(2, 2);
 
         WriteFullProfileBody(writer, profiles);
-        writer.SyncColumnsWidth(58);
+        writer.SyncColumnsWidth(57);
         writer.CreateFreezePane(0, 4);
         if (!enableGroupDate)
         {
             writer.RemoveColumn(colGroupDate);
             writer.RemoveColumn(colLengthOfServiceGroupDate);
-        }
-        var isShowSubCompanyConfig = await companyService.GetIsShowSubCompanyValue();
-        if (!isShowSubCompanyConfig)
-        {
-            writer.RemoveColumn(colSubCompany);
         }
         return writer.WriteContentToBytes();
     }
@@ -190,7 +185,6 @@ public class ExportExcelEmployeeInfoService(
             p.FullName,
             p.Nickname,
             Gender = gender,
-            CompanyName = string.IsNullOrEmpty(p.SubCompanyName) ? p.CompanyName : p.SubCompanyName,
             GroupDate = FormatDate(p.JoinedDate),
             CompanyDate = FormatDate(p.CompanyDate),
             ConfirmedDate = FormatDate(p.ConfirmedDate),
