@@ -1,4 +1,6 @@
-﻿namespace HRM.Services.ExportExcel.Employee;
+﻿using HRM.Core.Constants;
+
+namespace HRM.Services.ExportExcel.Employee;
 
 using System;
 using System.Collections.Generic;
@@ -295,10 +297,10 @@ public class ExportExcelEmployeeInfoService(
             worksheet.Cells[rowIndex, colIndex++].Value = employee.Company;
             worksheet.Cells[rowIndex, colIndex++].Value = employee.CompanyDate.HasValue ? employee.CompanyDate.ToDateMonthYearFormatedDate() : null;
             worksheet.Cells[rowIndex, colIndex++].Value = employee.ResignedDate.HasValue ? employee.ResignedDate.ToDateMonthYearFormatedDate() : null;
-            worksheet.Cells[rowIndex, colIndex++].Value = employee.IsLocal;
-            worksheet.Cells[rowIndex, colIndex++].Value = employee.IsSpecial;
-            worksheet.Cells[rowIndex, colIndex++].Value = employee.Enabled;
-            worksheet.Cells[rowIndex, colIndex].Value = employee.IsDeleted;
+            worksheet.Cells[rowIndex, colIndex++].Value = employee.IsLocal ? Constants.Yes : Constants.No;
+            worksheet.Cells[rowIndex, colIndex++].Value = employee.IsSpecial ? Constants.Yes : Constants.No;
+            worksheet.Cells[rowIndex, colIndex++].Value = employee.Enabled ? Constants.Yes : Constants.No;
+            worksheet.Cells[rowIndex, colIndex].Value = employee.IsDeleted ? Constants.Yes : Constants.No;
 
             rowIndex++;
         }
