@@ -2101,7 +2101,7 @@
     <value>Update Secondment Company</value>
   </data>
   <data name="SubCompany" xml:space="preserve">
-    <value>Subsidiary Company</value>
+    <value>Sub Company</value>
   </data>
   <data name="IsOutsource" xml:space="preserve">
     <value>Is Outsource</value>

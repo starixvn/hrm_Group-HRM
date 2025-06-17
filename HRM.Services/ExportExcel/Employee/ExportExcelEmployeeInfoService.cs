@@ -22,7 +22,8 @@ using Resources;
 public class ExportExcelEmployeeInfoService(
     IEmployeeService employeeService,
     ICommonDataService commonDataService,
-    IWebHostEnvironment hostingEnvironment) : IExportExcelEmployeeInfoService
+    IWebHostEnvironment hostingEnvironment,
+    ICompanyService companyService) : IExportExcelEmployeeInfoService
 {
     private const string EmployeeBasicInfoTemplatePath = "ExcelTemplates/EmployeeBasicInfoTemplate.xls";
     private const string EmployeeFullInfoTemplatePath = "ExcelTemplates/EmployeeFullProfileInfoTemplate.xls";
@@ -48,6 +49,7 @@ public class ExportExcelEmployeeInfoService(
         var enableGroupDate = await commonDataService.IsEnableGroupDateAsync();
         const byte colGroupDate = 8;
         const byte colLengthOfServiceGroupDate = 12;
+        const byte colSubCompany = 7;
 
         writer.CopyRows(0, 2);
         writer.CopyRows((byte)BasicInfo.RowStartHeader, 2);
@@ -59,6 +61,12 @@ public class ExportExcelEmployeeInfoService(
         {
             writer.RemoveColumn(colGroupDate);
             writer.RemoveColumn(colLengthOfServiceGroupDate);
+        }
+
+        var isShowSubCompanyConfig = await companyService.GetIsShowSubCompanyValue();
+        if (!isShowSubCompanyConfig)
+        {
+            writer.RemoveColumn(colSubCompany);
         }
         return writer.WriteContentToBytes();
     }
@@ -127,6 +135,7 @@ public class ExportExcelEmployeeInfoService(
         const string sheetName = "Employee Full Information";
         var writer = new ExcelTemplateWriter(templatePath, sheetName);
         var enableGroupDate = await commonDataService.IsEnableGroupDateAsync();
+        const byte colSubCompany = 9;
         const byte colGroupDate = 10;
         const byte colLengthOfServiceGroupDate = 14;
 
@@ -140,6 +149,11 @@ public class ExportExcelEmployeeInfoService(
         {
             writer.RemoveColumn(colGroupDate);
             writer.RemoveColumn(colLengthOfServiceGroupDate);
+        }
+        var isShowSubCompanyConfig = await companyService.GetIsShowSubCompanyValue();
+        if (!isShowSubCompanyConfig)
+        {
+            writer.RemoveColumn(colSubCompany);
         }
         return writer.WriteContentToBytes();
     }

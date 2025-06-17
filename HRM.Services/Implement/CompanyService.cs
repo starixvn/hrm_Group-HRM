@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using GO.UserControl.Client.Core.Session;
+using HRM.Core.Constants;
 using HRM.Core.Services;
 using HRM.Criteria.Company;
 using HRM.Criteria.CompanySite;
@@ -12,7 +14,8 @@ using Microsoft.AspNetCore.Http;
 namespace HRM.Services.Implement;
 
 public class CompanyService(IBaseService baseService,
-    IHttpContextAccessor httpContextAccessor) : ICompanyService
+    IHttpContextAccessor httpContextAccessor,
+    IUserControlSession userControlSession) : ICompanyService
 {
     public async Task<CompanySite> GetCompanySiteByDomainAsync()
     {
@@ -51,6 +54,18 @@ public class CompanyService(IBaseService baseService,
         };
 
         return await baseService.GetDataAsync<SubCompany>(criteria);
+    }
+
+    public async Task<bool> GetIsShowSubCompanyValue()
+    {
+        var currentCompanyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
+        var criteria = new GetSystemConfigsByKeyCriteria
+        {
+            CompanyId = currentCompanyId,
+            Key = SystemConfigKey.IsShowSubCompany
+        };
+
+        return await baseService.GetDataEntityAsync<bool>(criteria);
     }
 
     private static string GetDomainName(HttpContext httpContext)

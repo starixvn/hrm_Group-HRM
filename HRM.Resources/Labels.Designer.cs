@@ -4894,7 +4894,7 @@ namespace HRM.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Subsidiary Company.
+        ///   Looks up a localized string similar to Sub Company.
         /// </summary>
         public static string SubCompany {
             get {
