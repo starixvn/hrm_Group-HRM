@@ -31,37 +31,40 @@ public class CalculateHeadcountService(IBaseService baseService) : IHeadcountRep
         return (await baseService.GetDataAsync<EmployeeInfo>(criteria)).ToList();
     }
 
-    public List<UnitReport> CalculateReportByUnit(IEnumerable<EmployeeInfo> employeeInfos, int year)
+    public static List<UnitReport> CalculateReportByUnit(IEnumerable<EmployeeInfo> employeeInfos, int year)
     {
-        var result = employeeInfos
-            .GroupBy(x => x.UnitCategory)
-            .OrderBy(g => g.Key)
+        var result = employeeInfos.GroupBy(x => x.UnitCategory).OrderBy(g => g.Key)
             .SelectMany(categoryGroup =>
             {
                 var unitReports = categoryGroup
-                    .GroupBy(x => x.Unit)
-                    .OrderBy(g => g.Key)
+                    .GroupBy(x => x.Unit).OrderBy(g => g.Key)
                     .Select(unitGroup => new UnitReport
                     {
-                        Unit = unitGroup.Key,
-                        Details = CountByMonth(unitGroup.ToList(), year)
-                    })
-                    .ToList();
+                        Label1 = unitGroup.Key,
+                        Details = CountByMonth(unitGroup, year)
+                    }).ToList();
 
                 unitReports.Add(new UnitReport
                 {
-                    Unit = $"{categoryGroup.Key} TOTAL",
-                    Details = CountByMonth(categoryGroup.ToList(), year),
+                    Label1 = $"{categoryGroup.Key} TOTAL",
+                    Details = CountByMonth(categoryGroup, year),
                     IsUnitCategory = true
                 });
 
                 return unitReports;
-            })
-            .ToList();
+            }).ToList();
+
+        result.Add(new UnitReport
+        {
+            Label1 = "GRAND TOTAL",
+            Details = CountByMonth(employeeInfos, year),
+            IsGrandTotal = true
+        });
+
         return result;
     }
 
-    public static IEnumerable<ReportModel> CountByMonth(List<EmployeeInfo> employeesByUnit, int year)
+    public static IEnumerable<ReportModel> CountByMonth(IEnumerable<EmployeeInfo> employeesByUnit, int year)
     {
         for (var i = 1; i <= 12; i++)
         {
@@ -91,31 +94,51 @@ public class CalculateHeadcountService(IBaseService baseService) : IHeadcountRep
 
     public List<UnitReport> CalculateReportByCompany(IEnumerable<EmployeeInfo> employeeInfos, int year)
     {
-        return employeeInfos
-            .GroupBy(x => new { x.Country, x.Company })
-            .OrderBy(a => a.Key.Country).ThenBy(a => a.Key.Company)
-            .Select(group => new UnitReport
+        var result = employeeInfos.GroupBy(x => x.Country).OrderBy(g => g.Key)
+            .SelectMany(countryGroup =>
             {
-                Company = group.Key.Company,
-                Country = group.Key.Country,
-                Details = CountByMonth(group.ToList(), year)
-            })
-            .ToList();
+                var unitReports = countryGroup
+                    .GroupBy(x => x.Company).OrderBy(g => g.Key).Select(companyGroup => new UnitReport
+                    {
+                        Label1 = countryGroup.Key,
+                        Label2 = companyGroup.Key,
+                        Details = CountByMonth(employeeInfos, year)
+                    }).ToList();
+
+                unitReports.Add(new UnitReport
+                {
+                    Label1 = countryGroup.Key,
+                    Label2 = "TOTAL",
+                    Details = CountByMonth(countryGroup, year),
+                    IsUnitCategory = true
+                });
+
+                return unitReports;
+            }).ToList();
+
+        result.Add(new UnitReport
+        {
+            Label1 = "GRAND TOTAL",
+            Label2 = "GRAND TOTAL",
+            Details = CountByMonth(employeeInfos, year),
+            IsGrandTotal = true
+        });
+
+        return result;
     }
 
     public List<UnitReport> CalculateReportByDetails(IEnumerable<EmployeeInfo> employeeInfos, int year)
     {
         return employeeInfos
-            .GroupBy(x => new { x.Unit, x.LocationCode, x.Company, x.UserType })
+            .GroupBy(x => new { x.Unit, x.CountryCode, x.Company })
             .OrderBy(a => a.Key.Unit)
-            .ThenBy(a => a.Key.LocationCode)
+            .ThenBy(a => a.Key.CountryCode)
             .ThenBy(a => a.Key.Company)
-            .ThenBy(a => a.Key.UserType)
             .Select(group => new UnitReport
             {
-                Company = $"{group.Key.UserType} {group.Key.Company}",
-                Unit = group.Key.Unit,
-                LocationCode = group.Key.LocationCode,
+                Label2 = group.Key.Company,
+                Label1 = group.Key.Unit,
+                Label3 = group.Key.CountryCode,
                 Details = CountByMonth(group.ToList(), year)
             })
             .ToList();

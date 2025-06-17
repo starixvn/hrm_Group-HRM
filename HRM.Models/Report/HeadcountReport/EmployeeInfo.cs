@@ -12,10 +12,8 @@ public class EmployeeInfo
     public string Nickname { get; set; }
     public string Company { get; set; }
     public string Country { get; set; }
-    public string LocationCode { get; set; }
+    public string CountryCode { get; set; }
     public DateTime? JoinedDate { get; set; }
     public DateTime? ConfirmedDate { get; set; }
     public DateTime? ResignedDate { get; set; }
-    public bool IsLocal { get; set; }
-    public UserType UserType => IsLocal ? UserType.Local : UserType.Expat;
 }

@@ -4,8 +4,6 @@ using System.IO;
 using System.Linq;
 using HRM.Models.Report.HeadcountReport;
 using HRM.Services.Interfaces.Report.Headcount;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Hosting.Internal;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
 
@@ -34,23 +32,23 @@ public class HeadcountExportService : IHeadcountExportService
 
     private void RenderUnitSheet(ExcelWorksheet worksheet)
     {
-        string[] headers = ["Unit"];
+        string[] headers = ["Label1"];
         RenderSheet(worksheet, data.ReportByUnit, headers);
     }
 
     private void RenderCompanySheet(ExcelWorksheet worksheet)
     {
-        string[] headers = ["Country", "Company"];
+        string[] headers = ["Label1", "Label2"];
         RenderSheet(worksheet, data.ReportByCompany, headers);
     }
 
     private void RenderDetailSheet(ExcelWorksheet worksheet)
     {
-        string[] headers = ["Unit", "LocationCode", "Company"];
+        string[] headers = ["Label1", "Label3", "Label2"];
         RenderSheet(worksheet, data.ReportByDetails, headers);
     }
 
-    public void RenderSheet(ExcelWorksheet worksheet, List<UnitReport> sheetData, string[] headers)
+    public static void RenderSheet(ExcelWorksheet worksheet, List<UnitReport> sheetData, string[] headers)
     {
         for (var col = 0; col < sheetData.Count; col++)
         {
@@ -68,20 +66,11 @@ public class HeadcountExportService : IHeadcountExportService
         for (var i = 0; i < headers.Length; i++)
         {
             var header = headers[i];
+            var cell = worksheet.Cells[i + 1, colIndex];
             var value = GetPropertyValue(data, header);
-            worksheet.Cells[i + 1, colIndex].Value = value;
-            worksheet.Cells[i + 1, colIndex].Style.Fill.PatternType = ExcelFillStyle.Solid;
-            worksheet.Cells[i + 1, colIndex].Style.Border.BorderAround(ExcelBorderStyle.Thin);
-            if (data.IsUnitCategory)
-            {
-                worksheet.Cells[i + 1, colIndex].Style.Font.Bold = true;
-                worksheet.Cells[i + 1, colIndex].Style.Fill.BackgroundColor.SetColor(Color.MidnightBlue);
-                worksheet.Cells[i + 1, colIndex].Style.Font.Color.SetAuto();
-            }
-            else
-            {
-                worksheet.Cells[i + 1, colIndex].Style.Fill.BackgroundColor.SetColor(ColorTranslator.FromHtml("#a4c2f4"));
-            }
+            var backgroundColor = data.IsUnitCategory ? Color.MidnightBlue : Color.FromArgb(217, 231, 253);
+            WriteDataToCell(cell, value, backgroundColor, true);
+            worksheet.Row(i + 1).CustomHeight = false;
         }
     }
 
@@ -91,29 +80,37 @@ public class HeadcountExportService : IHeadcountExportService
         {
             var rowIdx = month * PropertyNumber + startRow;
             var dataByMonth = unitData.Details.FirstOrDefault(x => x.Month == month + 1) ?? new ReportModel();
-            WriteDataToCell(worksheet, rowIdx + 0, colIdx, dataByMonth.NewHire);
-            WriteDataToCell(worksheet, rowIdx + 1, colIdx, dataByMonth.ProbationResign);
-            WriteDataToCell(worksheet, rowIdx + 2, colIdx, dataByMonth.ConfirmedResign);
-            WriteDataToCell(worksheet, rowIdx + 3, colIdx, dataByMonth.CurrentHeadCount);
-
-            if ((month + 1) % 2 != 0)
+            Color backgroundColor;
+            var isBold = unitData.IsGrandTotal || unitData.IsUnitCategory;
+            if (unitData.IsGrandTotal)
             {
-                continue;
+                backgroundColor = Color.FromArgb(164, 194, 244);
             }
-            var backgroundColor = Color.FromArgb(217, 231, 253);
-            worksheet.Cells[rowIdx, colIdx, rowIdx + 3, colIdx].Style.Fill.PatternType = ExcelFillStyle.Solid;
-            worksheet.Cells[rowIdx, colIdx, rowIdx + 3, colIdx].Style.Fill.BackgroundColor
-                .SetColor(backgroundColor);
+            else
+            {
+                backgroundColor = (month + 1) % 2 != 0 ? Color.White : Color.FromArgb(235, 237, 236);
+            }
+
+            WriteDataToCell(worksheet.Cells[rowIdx + 0, colIdx], dataByMonth.NewHire, backgroundColor, isBold);
+            WriteDataToCell(worksheet.Cells[rowIdx + 1, colIdx], dataByMonth.ProbationResign, backgroundColor, isBold);
+            WriteDataToCell(worksheet.Cells[rowIdx + 2, colIdx], dataByMonth.ConfirmedResign, backgroundColor, isBold);
+            WriteDataToCell(worksheet.Cells[rowIdx + 3, colIdx], dataByMonth.CurrentHeadCount, backgroundColor, isBold);
         }
     }
 
-    private static void WriteDataToCell(ExcelWorksheet worksheet, int rowIdx, int colIdx, dynamic value)
+    private static void WriteDataToCell(ExcelRange cell, dynamic value, Color backgroundColor, bool isBold = false)
     {
-        worksheet.Cells[rowIdx, colIdx].Value = value ?? string.Empty;
-        worksheet.Cells[rowIdx, colIdx].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+        cell.Value = value ?? string.Empty;
+        cell.Style.Fill.PatternType = ExcelFillStyle.Solid;
+        cell.Style.Border.BorderAround(ExcelBorderStyle.Thin, Color.DarkGray);
+        cell.Style.Font.Color.SetAuto();
+        cell.Style.WrapText = true;
+        cell.Style.Fill.PatternType = ExcelFillStyle.Solid;
+        cell.Style.Fill.BackgroundColor.SetColor(backgroundColor);
+        cell.Style.Font.Bold = isBold;
     }
 
-    public void MergeVerticalConsecutiveCells(ExcelWorksheet worksheet, int startColumn, int nRows)
+    public static void MergeVerticalConsecutiveCells(ExcelWorksheet worksheet, int startColumn, int nRows)
     {
         for (var row = 1; row <= nRows; row++)
         {
@@ -123,7 +120,7 @@ public class HeadcountExportService : IHeadcountExportService
                 var currentCellValue = worksheet.Cells[row, col - 1].Text;
                 var nextCellValue = worksheet.Cells[row, col].Text;
 
-                if (currentCellValue == nextCellValue && 
+                if (currentCellValue == nextCellValue &&
                     (row == 1 || worksheet.Cells[row - 1, col - 1].Text == worksheet.Cells[row - 1, col].Text))
                 {
                     continue;
@@ -134,7 +131,19 @@ public class HeadcountExportService : IHeadcountExportService
                     worksheet.Cells[row, startMergeColumn, row, col - 1].Merge = true;
                 }
                 startMergeColumn = col;
+                MergeGrandTotalHeader(worksheet, col);
             }
+        }
+    }
+
+    private static void MergeGrandTotalHeader(ExcelWorksheet worksheet, int colIdx)
+    {
+        var cellValue1 = worksheet.Cells[1, colIdx].Text;
+        var cellValue2 = worksheet.Cells[2, colIdx].Text;
+        if (cellValue1 == "GRAND TOTAL" && cellValue2 == "GRAND TOTAL")
+        {
+            worksheet.Cells[1, colIdx, 2, colIdx].Merge = true;
+            worksheet.Cells[1, colIdx, 2, colIdx].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
         }
     }
 

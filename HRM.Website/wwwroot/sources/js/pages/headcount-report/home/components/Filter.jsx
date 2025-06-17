@@ -1,6 +1,7 @@
 ﻿import React, { useState } from "react";
+import { resolveClientUrl } from "../../../../shared/common.functions";
 
-const Filter = ({ exportExcel }) => {
+const Filter = () => {
     const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
     const currentYear = new Date().getFullYear();
     const years = Array.from(
@@ -10,6 +11,12 @@ const Filter = ({ exportExcel }) => {
 
     const handleYearChange = (e) => {
         setSelectedYear(parseInt(e.target.value));
+    };
+
+    const handleExport = () => {
+        window.location.href = resolveClientUrl(
+            `HeadcountReport/ExportExcel?year=${selectedYear}`
+        );
     };
 
     return (
@@ -37,7 +44,7 @@ const Filter = ({ exportExcel }) => {
                     <button
                         type="button"
                         className="btn btn-excel"
-                        onClick={exportExcel(selectedYear)}>
+                        onClick={handleExport}>
                         Export
                     </button>
                 </div>
