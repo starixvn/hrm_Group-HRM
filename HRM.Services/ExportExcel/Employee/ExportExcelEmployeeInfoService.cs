@@ -35,7 +35,7 @@ public class ExportExcelEmployeeInfoService(
     {
         RowStartHeader = 2,
         RowStartBody = 4,
-        TotalColumns = 22
+        TotalColumns = 23
     }
 
     public async Task<byte[]> ExportEmployeeBasicInfo(IList<Employee> employees)
@@ -95,6 +95,7 @@ public class ExportExcelEmployeeInfoService(
             employee.Code,
             employee.FullName,
             employee.NickName,
+            CompanyName = string.IsNullOrEmpty(employee.SubCompanyName) ? employee.CompanyName : employee.SubCompanyName,
             GroupDate = employee.JoinedDate,
             employee.CompanyDate,
             employee.ConfirmedDate,
@@ -131,7 +132,7 @@ public class ExportExcelEmployeeInfoService(
         writer.CopyRows(2, 2);
 
         WriteFullProfileBody(writer, profiles);
-        writer.SyncColumnsWidth(57);
+        writer.SyncColumnsWidth(58);
         writer.CreateFreezePane(0, 4);
         if (!enableGroupDate)
         {
@@ -173,6 +174,7 @@ public class ExportExcelEmployeeInfoService(
             p.FullName,
             p.Nickname,
             Gender = gender,
+            CompanyName = string.IsNullOrEmpty(p.SubCompanyName) ? p.CompanyName : p.SubCompanyName,
             GroupDate = FormatDate(p.JoinedDate),
             CompanyDate = FormatDate(p.CompanyDate),
             ConfirmedDate = FormatDate(p.ConfirmedDate),

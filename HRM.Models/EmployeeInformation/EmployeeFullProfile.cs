@@ -55,6 +55,10 @@ public class EmployeeFullProfile
 
     public string EmployeeCard { get; set; }
 
+    public string CompanyName { get; set; }
+
+    public string SubCompanyName { get; set; }
+
     [DataType(DataType.Date)]
     public DateTime? CompanyDate { get; set; }
 
