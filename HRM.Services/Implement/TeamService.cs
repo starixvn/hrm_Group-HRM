@@ -121,7 +121,10 @@ public class TeamService(
     public async Task<IEnumerable<TeamSupervisorModel>> GetSupervisorByTeamId(int id, bool isGroupSpace)
     {
         int? companyId = null;
-        if (!isGroupSpace) companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
+        if (!isGroupSpace)
+        {
+            companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
+        }
 
         var criteria = new GetSupervisorByTeamIdCriteria
         {

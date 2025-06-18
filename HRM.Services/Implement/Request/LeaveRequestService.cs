@@ -19,9 +19,6 @@ using HRM.Resources;
 using HRM.Services.Interfaces;
 using HRM.Services.Interfaces.Request;
 using Microsoft.AspNetCore.Hosting;
-using Newtonsoft.Json;
-using Org.BouncyCastle.Asn1.Ocsp;
-using SharpRaven.Data;
 
 namespace HRM.Services.Implement.Request;
 

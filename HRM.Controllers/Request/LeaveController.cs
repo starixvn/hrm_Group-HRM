@@ -113,9 +113,17 @@ public class LeaveController(
         if (result.IsSuccessful)
         {
             await attachFileService.UploadFileAsync(files, criteria.RequestId, $"{CurrentCompanyId}/requests");
-            if (criteria.ApproverId == null) return new JsonResult(result);
+            if (criteria.ApproverId == null)
+            {
+                return new JsonResult(result);
+            }
+
             var leaveRequest = await leaveRequestService.GetByIdAsync(criteria.RequestId);
-            if (leaveRequest == null) return new JsonResult(result);
+            if (leaveRequest == null)
+            {
+                return new JsonResult(result);
+            }
+
             var domain = await companyService.GetDomain(leaveRequest.Approver.CompanyId);
             leaveRequestService.SendMailAndSendLetstalkCreateRequest(criteria, domain, leaveRequest.Approver.CompanyId);
         }
@@ -191,9 +199,17 @@ public class LeaveController(
                 await attachFileService.DeleteFileAsync(JsonConvert.DeserializeObject<List<string>>(filesRemove), criteria.RequestId, $"{CurrentCompanyId}/requests");
             }
             await attachFileService.UploadFileAsync(files, criteria.RequestId, $"{CurrentCompanyId}/requests");
-            if (criteria.ApproverId == null) return new JsonResult(result);
+            if (criteria.ApproverId == null)
+            {
+                return new JsonResult(result);
+            }
+
             var leaveRequest = await leaveRequestService.GetByIdAsync(criteria.RequestId);
-            if (leaveRequest == null) return new JsonResult(result);
+            if (leaveRequest == null)
+            {
+                return new JsonResult(result);
+            }
+
             var domain = await companyService.GetDomain(leaveRequest.Approver.CompanyId);
             leaveRequestService.SendMailEditRequest(criteria, domain, leaveRequest.Approver.CompanyId);
         }

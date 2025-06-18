@@ -47,6 +47,12 @@ public class HeadcountExportService : IHeadcountExportService
         RenderSheet(worksheet, data.ReportByDetails, headers);
     }
 
+    private void RenderCountryUnitSheet(ExcelWorksheet worksheet)
+    {
+        string[] headers = [HeadcountConstants.PropertyNames.Label1];
+        RenderSheet(worksheet, data.ReportByDetails, headers);
+    }
+
     public static void RenderSheet(ExcelWorksheet worksheet, List<UnitReport> sheetData, string[] headers)
     {
         for (var col = 0; col < sheetData.Count; col++)

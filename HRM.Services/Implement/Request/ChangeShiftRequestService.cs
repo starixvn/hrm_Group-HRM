@@ -197,7 +197,11 @@ public class ChangeShiftRequestService(
         var request = await GetByIdAsync(requestId);
         if (request != null)
         {
-            if (request.Approver == null) return;
+            if (request.Approver == null)
+            {
+                return;
+            }
+
             var domain = await companyService.GetDomain(request.Approver.CompanyId);
 
             var emailTemplatePath = Path.Combine(env.ContentRootPath, EmailTemplatePathForRequest);
@@ -226,7 +230,11 @@ public class ChangeShiftRequestService(
         var request = await GetByIdAsync(requestId);
         if (request != null)
         {
-            if (request.Approver == null) return;
+            if (request.Approver == null)
+            {
+                return;
+            }
+
             var domain = await companyService.GetDomain(request.Approver.CompanyId);
             var emailTemplatePath = Path.Combine(env.ContentRootPath, EmailTemplatePathForRequest);
             var email = await requestMailService.GetMailToMailCcAndLetStalk(requestId, (byte)SettingsSendMail.Edit);
