@@ -7,6 +7,7 @@ using HRM.Models.Report.HeadcountReport;
 using HRM.Services.Interfaces.Report.Headcount;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
+using Org.BouncyCastle.Asn1.Ocsp;
 
 namespace HRM.Services.Implement.Report.Headcount;
 
@@ -47,6 +48,20 @@ public class HeadcountExportService : IHeadcountExportService
         RenderSheet(worksheet, data.ReportByDetails, headers);
     }
 
+    private void RenderCompanyUnitSheet(ExcelWorksheet worksheet)
+    {
+        string[] headers = [HeadcountConstants.PropertyNames.Label1];
+
+        var sheetData = data.ReportByDetails;
+        for (var col = 0; col < sheetData.Count; col++)
+        {
+            var value = sheetData[col];
+            var colIndex = HeadcountConstants.StartColumn + col;
+            RenderHeader(worksheet, headers, value, colIndex);
+            RenderSpecialValue(worksheet, headers.Length + 1, value, colIndex);
+        }
+    }
+
     public static void RenderSheet(ExcelWorksheet worksheet, List<UnitReport> sheetData, string[] headers)
     {
         for (var col = 0; col < sheetData.Count; col++)
@@ -83,6 +98,30 @@ public class HeadcountExportService : IHeadcountExportService
 
             var alternatingColor = (month + 1) % 2 != 0 ? HeadcountConstants.Colors.White : HeadcountConstants.Colors.LightGray;
             var backgroundColor = unitData.IsGrandTotal ? HeadcountConstants.Colors.GrandTotalBlue : alternatingColor;
+
+            WriteDataToCell(worksheet.Cells[rowIdx + 0, colIdx], dataByMonth.NewHire, backgroundColor, isBold);
+            WriteDataToCell(worksheet.Cells[rowIdx + 1, colIdx], dataByMonth.ProbationResign, backgroundColor, isBold);
+            WriteDataToCell(worksheet.Cells[rowIdx + 2, colIdx], dataByMonth.ConfirmedResign, backgroundColor, isBold);
+            WriteDataToCell(worksheet.Cells[rowIdx + 3, colIdx], dataByMonth.CurrentHeadCount, backgroundColor, isBold);
+        }
+    }
+
+    public static void RenderSpecialValue(ExcelWorksheet worksheet, int startRow, UnitReport unitData, int colIdx)
+    {
+        for (var month = 0; month < HeadcountConstants.TotalMonths; month++)
+        {
+            var rowIdx = month * HeadcountConstants.PropertyNumber + startRow;
+            var dataByMonth = unitData.Details.FirstOrDefault(x => x.Month == month + 1) ?? new ReportModel();
+            Color backgroundColor;
+            var isBold = unitData.IsGrandTotal || unitData.IsUnitCategory;
+            if (unitData.IsGrandTotal)
+            {
+                backgroundColor = HeadcountConstants.Colors.GrandTotalBlue;
+            }
+            else
+            {
+                backgroundColor = (month + 1) % 2 != 0 ? HeadcountConstants.Colors.White : HeadcountConstants.Colors.LightGray;
+            }
 
             WriteDataToCell(worksheet.Cells[rowIdx + 0, colIdx], dataByMonth.NewHire, backgroundColor, isBold);
             WriteDataToCell(worksheet.Cells[rowIdx + 1, colIdx], dataByMonth.ProbationResign, backgroundColor, isBold);

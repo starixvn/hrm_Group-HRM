@@ -19,7 +19,8 @@ public class CalculateHeadcountService(IBaseService baseService) : IHeadcountRep
         {
             ReportByUnit = CalculateReportByUnit(employeeInfos, year),
             ReportByCompany = CalculateReportByCompany(employeeInfos, year),
-            ReportByDetails = CalculateReportByDetails(employeeInfos, year)
+            ReportByDetails = CalculateReportByDetails(employeeInfos, year),
+            ReportByUnitCountry = CalculateReportByUnitCountry(employeeInfos, year)
         };
 
         return report;
@@ -143,6 +144,39 @@ public class CalculateHeadcountService(IBaseService baseService) : IHeadcountRep
                 Details = CountByMonth(group.ToList(), year)
             })
             .ToList();
+    }
+
+    public static List<UnitReport> CalculateReportByUnitCountry(IEnumerable<EmployeeInfo> employeeInfos, int year)
+    {
+        var result = employeeInfos.GroupBy(x => x.CountryCode).OrderBy(g => g.Key)
+            .SelectMany(countryGroup =>
+            {
+                var unitReports = countryGroup
+                    .GroupBy(x => x.Unit).OrderBy(g => g.Key)
+                    .Select(unitGroup => new UnitReport
+                    {
+                        Label1 = unitGroup.Key,
+                        Details = CountByMonth(unitGroup, year)
+                    }).ToList();
+
+                unitReports.Add(new UnitReport
+                {
+                    Label1 = $"{countryGroup.Key} {HeadcountConstants.TotalLabel}",
+                    Details = CountByMonth(countryGroup, year),
+                    IsUnitCategory = true
+                });
+
+                return unitReports;
+            }).ToList();
+
+        result.Add(new UnitReport
+        {
+            Label1 = HeadcountConstants.GrandTotalLabel,
+            Details = CountByMonth(employeeInfos, year),
+            IsGrandTotal = true
+        });
+
+        return result;
     }
 
     private static bool IsInMonth(DateTime? date, DateTime fromDate, DateTime toDate) => date >= fromDate && date <= toDate;
