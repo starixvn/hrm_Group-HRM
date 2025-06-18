@@ -12,10 +12,9 @@ public class HeadcountReportModel
 public class UnitReport
 {
     public string Label1 { get; set; }
+    public string Label2 { get; set; }
+    public string Label3 { get; set; }
     public bool IsUnitCategory { get; set; }
     public bool IsGrandTotal { get; set; }
-    public string Label2 { get; set; }
-    public string Country { get; set; }
-    public string Label3 { get; set; }
     public IEnumerable<ReportModel> Details { get; set; }
 }

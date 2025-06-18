@@ -2,9 +2,9 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using GO.UserControl.Client.Core.Enumerables;
+using GO.UserControl.Client.Core.Session;
 using HRM.Core.Constants;
 using HRM.Core.Filters;
-using HRM.Services.ExportExcel;
 using HRM.Services.Interfaces.Report.Headcount;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
@@ -15,8 +15,9 @@ namespace HRM.Controllers.Request;
 public class HeadcountReportController(
     IHeadcountReportService service,
     IHostEnvironment env,
+    IUserControlSession session,
     IHeadcountExportService excelService)
-    : Controller
+    : BaseController(session)
 {
     public IActionResult Index()
     {
@@ -27,7 +28,7 @@ public class HeadcountReportController(
     public async Task<IActionResult> ExportExcel(int year)
     {
         var data = await service.GetReportAsync(year);
-        const string excelTemplatePath = "ExcelTemplates/HeadCountReportTemplate.xlsx";
+        const string excelTemplatePath = "ExcelTemplates/HeadcountReportTemplate.xlsx";
         var templatePath = Path.Combine(env.ContentRootPath, excelTemplatePath);
 
         var bytes = excelService.Export(templatePath, data);

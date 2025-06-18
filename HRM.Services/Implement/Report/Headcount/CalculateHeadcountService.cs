@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using HRM.Core.Constants;
 using HRM.Core.Services;
 using HRM.Criteria.Report.Headcount;
 using HRM.Models.Report.HeadcountReport;
@@ -46,7 +47,7 @@ public class CalculateHeadcountService(IBaseService baseService) : IHeadcountRep
 
                 unitReports.Add(new UnitReport
                 {
-                    Label1 = $"{categoryGroup.Key} TOTAL",
+                    Label1 = $"{categoryGroup.Key} {HeadcountConstants.TotalLabel}",
                     Details = CountByMonth(categoryGroup, year),
                     IsUnitCategory = true
                 });
@@ -56,7 +57,7 @@ public class CalculateHeadcountService(IBaseService baseService) : IHeadcountRep
 
         result.Add(new UnitReport
         {
-            Label1 = "GRAND TOTAL",
+            Label1 = HeadcountConstants.GrandTotalLabel,
             Details = CountByMonth(employeeInfos, year),
             IsGrandTotal = true
         });
@@ -66,7 +67,7 @@ public class CalculateHeadcountService(IBaseService baseService) : IHeadcountRep
 
     public static IEnumerable<ReportModel> CountByMonth(IEnumerable<EmployeeInfo> employeesByUnit, int year)
     {
-        for (var i = 1; i <= 12; i++)
+        for (var i = 1; i <= HeadcountConstants.TotalMonths; i++)
         {
             var fromDate = new DateTime(year, i, 1);
             var toDate = new DateTime(year, i, DateTime.DaysInMonth(year, i));
@@ -102,13 +103,13 @@ public class CalculateHeadcountService(IBaseService baseService) : IHeadcountRep
                     {
                         Label1 = countryGroup.Key,
                         Label2 = companyGroup.Key,
-                        Details = CountByMonth(employeeInfos, year)
+                        Details = CountByMonth(companyGroup, year)
                     }).ToList();
 
                 unitReports.Add(new UnitReport
                 {
                     Label1 = countryGroup.Key,
-                    Label2 = "TOTAL",
+                    Label2 = HeadcountConstants.TotalLabel,
                     Details = CountByMonth(countryGroup, year),
                     IsUnitCategory = true
                 });
@@ -118,8 +119,8 @@ public class CalculateHeadcountService(IBaseService baseService) : IHeadcountRep
 
         result.Add(new UnitReport
         {
-            Label1 = "GRAND TOTAL",
-            Label2 = "GRAND TOTAL",
+            Label1 = HeadcountConstants.GrandTotalLabel,
+            Label2 = HeadcountConstants.GrandTotalLabel,
             Details = CountByMonth(employeeInfos, year),
             IsGrandTotal = true
         });
@@ -136,8 +137,8 @@ public class CalculateHeadcountService(IBaseService baseService) : IHeadcountRep
             .ThenBy(a => a.Key.Company)
             .Select(group => new UnitReport
             {
-                Label2 = group.Key.Company,
                 Label1 = group.Key.Unit,
+                Label2 = group.Key.Company,
                 Label3 = group.Key.CountryCode,
                 Details = CountByMonth(group.ToList(), year)
             })
