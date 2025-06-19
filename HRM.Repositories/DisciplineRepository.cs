@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 using Core.Enums;
@@ -40,6 +41,8 @@ public class DisciplineRepository : IDisciplineRepository
         return disciplineDetails;
     }
 
+    [SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity", Justification = "Complex switch statement for discipline types is necessary and readable")]
+    [SuppressMessage("SonarQube", "S1541:Methods and properties should not be too complex", Justification = "Complex switch statement for discipline types is necessary and readable")]
     private static void AddIgnoreDisciplineDetail(IEnumerable<DisciplineDetailModel> disciplineDetails, List<IgnoredDisciplineDetailModel> ignoreDisciplines)
     {
         foreach (var disciplineDetail in disciplineDetails)

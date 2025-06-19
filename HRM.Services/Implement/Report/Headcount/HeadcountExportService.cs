@@ -47,12 +47,6 @@ public class HeadcountExportService : IHeadcountExportService
         RenderSheet(worksheet, data.ReportByDetails, headers);
     }
 
-    private void RenderCountryUnitSheet(ExcelWorksheet worksheet)
-    {
-        string[] headers = [HeadcountConstants.PropertyNames.Label1];
-        RenderSheet(worksheet, data.ReportByDetails, headers);
-    }
-
     public static void RenderSheet(ExcelWorksheet worksheet, List<UnitReport> sheetData, string[] headers)
     {
         for (var col = 0; col < sheetData.Count; col++)
@@ -85,16 +79,10 @@ public class HeadcountExportService : IHeadcountExportService
         {
             var rowIdx = month * HeadcountConstants.PropertyNumber + startRow;
             var dataByMonth = unitData.Details.FirstOrDefault(x => x.Month == month + 1) ?? new ReportModel();
-            Color backgroundColor;
             var isBold = unitData.IsGrandTotal || unitData.IsUnitCategory;
-            if (unitData.IsGrandTotal)
-            {
-                backgroundColor = HeadcountConstants.Colors.GrandTotalBlue;
-            }
-            else
-            {
-                backgroundColor = (month + 1) % 2 != 0 ? HeadcountConstants.Colors.White : HeadcountConstants.Colors.LightGray;
-            }
+
+            var alternatingColor = (month + 1) % 2 != 0 ? HeadcountConstants.Colors.White : HeadcountConstants.Colors.LightGray;
+            var backgroundColor = unitData.IsGrandTotal ? HeadcountConstants.Colors.GrandTotalBlue : alternatingColor;
 
             WriteDataToCell(worksheet.Cells[rowIdx + 0, colIdx], dataByMonth.NewHire, backgroundColor, isBold);
             WriteDataToCell(worksheet.Cells[rowIdx + 1, colIdx], dataByMonth.ProbationResign, backgroundColor, isBold);
@@ -108,11 +96,20 @@ public class HeadcountExportService : IHeadcountExportService
         cell.Value = value ?? string.Empty;
         cell.Style.Fill.PatternType = ExcelFillStyle.Solid;
         cell.Style.Border.BorderAround(ExcelBorderStyle.Thin, HeadcountConstants.Colors.DarkGray);
-        cell.Style.Font.Color.SetAuto();
+
+        var fontColor = GetContrastingFontColor(backgroundColor);
+        cell.Style.Font.Color.SetColor(fontColor);
+
         cell.Style.WrapText = true;
         cell.Style.Fill.PatternType = ExcelFillStyle.Solid;
         cell.Style.Fill.BackgroundColor.SetColor(backgroundColor);
         cell.Style.Font.Bold = isBold;
+    }
+
+    private static Color GetContrastingFontColor(Color backgroundColor)
+    {
+        var luminance = (0.299 * backgroundColor.R + 0.587 * backgroundColor.G + 0.114 * backgroundColor.B) / 255; // Calculate luminance to determine if background is dark or light
+        return luminance > 0.5 ? Color.Black : Color.White; // Use white text for dark backgrounds, black text for light backgrounds
     }
 
     public static void MergeVerticalConsecutiveCells(ExcelWorksheet worksheet, int startColumn, int nRows)
@@ -145,7 +142,9 @@ public class HeadcountExportService : IHeadcountExportService
     {
         var cellValue1 = worksheet.Cells[1, colIdx].Text;
         var cellValue2 = worksheet.Cells[2, colIdx].Text;
-        if (cellValue1 == HeadcountConstants.GrandTotalLabel && cellValue2 == HeadcountConstants.GrandTotalLabel)
+        var shouldMerge = cellValue1 == HeadcountConstants.GrandTotalLabel && cellValue2 == HeadcountConstants.GrandTotalLabel;
+
+        if (shouldMerge)
         {
             worksheet.Cells[1, colIdx, 2, colIdx].Merge = true;
             worksheet.Cells[1, colIdx, 2, colIdx].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;

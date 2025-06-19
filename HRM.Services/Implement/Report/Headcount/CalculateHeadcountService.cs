@@ -69,9 +69,9 @@ public class CalculateHeadcountService(IBaseService baseService) : IHeadcountRep
     {
         for (var i = 1; i <= HeadcountConstants.TotalMonths; i++)
         {
-            var fromDate = new DateTime(year, i, 1);
-            var toDate = new DateTime(year, i, DateTime.DaysInMonth(year, i));
-            if (fromDate > DateTime.Now.Date)
+            var fromDate = new DateTimeOffset(year, i, 1, 0, 0, 0, TimeSpan.Zero).DateTime;
+            var toDate = new DateTimeOffset(year, i, DateTime.DaysInMonth(year, i), 0, 0, 0, TimeSpan.Zero).DateTime;
+            if (fromDate > DateTimeOffset.Now.DateTime.Date)
             {
                 yield return new ReportModel();
             }

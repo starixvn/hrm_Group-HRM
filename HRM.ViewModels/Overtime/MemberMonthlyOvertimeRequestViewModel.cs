@@ -17,6 +17,6 @@ public class MemberMonthlyOvertimeRequestViewModel
     public IEnumerable<EntityBase<int>> Teams { get; set; }
     public string Sort { get; set; }
     public short OvertimeType { get; set; }
-    public bool IsShowCrossCompany { get; set; } = false;
+    public bool IsShowCrossCompany { get; set; }
 }
 

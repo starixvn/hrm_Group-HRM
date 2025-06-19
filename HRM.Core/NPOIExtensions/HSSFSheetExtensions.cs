@@ -140,25 +140,27 @@ public static class HSSFSheetExtensions
         {
             var mergedRegion = sheet.GetMergedRegion(i);
 
-            if (rowIndex == mergedRegion.FirstRow)
+            if (rowIndex != mergedRegion.FirstRow)
             {
-                if (columnIndex == mergedRegion.FirstColumn
-                    && columnIndex == mergedRegion.LastColumn)
-                {
-                    sheet.RemoveMergedRegion(i);
-                }
-                else if (mergedRegion.FirstColumn > columnIndex)
-                {
-                    mergedRegion.FirstColumn -= 1;
-                    mergedRegion.LastColumn -= 1;
-                }
-                else
-                {
-                    if (columnIndex <= mergedRegion.LastColumn)
-                    {
-                        mergedRegion.LastColumn -= 1;
-                    }
-                }
+                continue;
+            }
+
+            if (columnIndex == mergedRegion.FirstColumn && columnIndex == mergedRegion.LastColumn)
+            {
+                sheet.RemoveMergedRegion(i);
+                continue;
+            }
+
+            if (mergedRegion.FirstColumn > columnIndex)
+            {
+                mergedRegion.FirstColumn -= 1;
+                mergedRegion.LastColumn -= 1;
+                continue;
+            }
+
+            if (columnIndex <= mergedRegion.LastColumn)
+            {
+                mergedRegion.LastColumn -= 1;
             }
         }
     }
@@ -198,7 +200,7 @@ public static class HSSFSheetExtensions
 
     public static void CloneCell(this ISheet sheet, ICell newCell, ICell sourceCell)
     {
-        sheet.CloneCell(newCell, sourceCell);
+        CloneCell(newCell, sourceCell);
     }
 
     public static ICell GetCell(this ISheet sheet, int rowIndex, int colIndex)

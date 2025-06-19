@@ -11,57 +11,52 @@ public static class HSSFCellExtensions
         if (value == null)
         {
             cell.SetCellValue(string.Empty);
+            return;
         }
-        else
+
+        var stringValue = value as string;
+        if (!string.IsNullOrEmpty(stringValue))
         {
-            var stringValue = value as string;
-            var richTextString = value as IRichTextString;
+            cell.SetCellValue(stringValue);
+            return;
+        }
 
-            if (!string.IsNullOrEmpty(stringValue))
-            {
-                cell.SetCellValue(stringValue);
-            }
-            else
-            {
-                switch (value)
-                {
-                    case int i:
-                        cell.SetCellValue(i);
-                        break;
+        var richTextString = value as IRichTextString;
+        if (richTextString != null)
+        {
+            cell.SetCellValue(richTextString);
+            return;
+        }
 
-                    case long l:
-                        cell.SetCellValue(l);
-                        break;
+        switch (value)
+        {
+            case int i:
+                cell.SetCellValue(i);
+                break;
 
-                    case double d:
-                        cell.SetCellValue(d);
-                        break;
+            case long l:
+                cell.SetCellValue(l);
+                break;
 
-                    case decimal value1:
-                        cell.SetCellValue(value1);
-                        break;
+            case double d:
+                cell.SetCellValue(d);
+                break;
 
-                    case bool b:
-                        cell.SetCellValue(b);
-                        break;
+            case decimal value1:
+                cell.SetCellValue(value1);
+                break;
 
-                    default:
-                        if (value is DateTime time)
-                        {
-                            cell.SetCellValue(time);
-                        }
-                        else if (richTextString != null)
-                        {
-                            cell.SetCellValue(richTextString);
-                        }
-                        else
-                        {
-                            cell.SetCellValue(string.Empty);
-                        }
+            case bool b:
+                cell.SetCellValue(b);
+                break;
 
-                        break;
-                }
-            }
+            case DateTime time:
+                cell.SetCellValue(time);
+                break;
+
+            default:
+                cell.SetCellValue(string.Empty);
+                break;
         }
     }
 

@@ -29,7 +29,7 @@ public interface IMinIOService
     Task<Stream> GetFileContentAsync(string bucketName, string filePath);
 }
 
-public class MinIOService : IMinIOService
+public class MinIOService : IMinIOService, IDisposable
 {
     private readonly IAmazonS3 client;
     private readonly AmazonStorageConfig s3Config;
@@ -100,7 +100,7 @@ public class MinIOService : IMinIOService
         var response = await client.ListObjectsV2Async(request);
         return response.S3Objects.Select(o => new S3FileObject
         {
-            FileName = o.Key.Split("/").Last(),
+            FileName = o.Key.Split("/")[^1],
             FilePath = $"{s3Config.ExternalUrl}/{bucketName}/{o.Key}"
         });
     }
@@ -164,7 +164,10 @@ public class MinIOService : IMinIOService
 
             var response = await client.ListObjectsV2Async(request);
 
-            response.S3Objects.ForEach(async obj => await client.DeleteObjectAsync(bucketName, obj.Key));
+            foreach (var obj in response.S3Objects)
+            {
+                await client.DeleteObjectAsync(bucketName, obj.Key);
+            }
         }
         catch (AmazonS3Exception ex)
         {
@@ -184,5 +187,10 @@ public class MinIOService : IMinIOService
         }
 
         return filename.StartsWith('/') ? filename[1..] : filename;
+    }
+
+    public void Dispose()
+    {
+        client?.Dispose();
     }
 }
