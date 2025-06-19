@@ -1,0 +1,31 @@
+# Ignore version control system files
+.git
+.gitignore
+
+# Ignore build outputs
+bin/
+obj/
+
+# Ignore user-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Ignore logs and temp files
+*.log
+logs/
+*.tmp
+*.temp
+
+# Ignore IDE and editor folders
+.vscode/
+.idea/
+
+# Ignore Docker files that shouldn't be in context
+Dockerfile*
+
+# Ignore other unnecessary files
+*.md
+*.DS_Store
+Thumbs.db
