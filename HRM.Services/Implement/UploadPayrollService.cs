@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Threading.Tasks;
 using HRM.Core.Models;
@@ -151,6 +152,7 @@ public class UploadPayrollService(IBaseService baseService) : IUploadPayrollServ
         return 0;
     }
 
+    [SuppressMessage("SonarQube", "S1541:Methods and properties should not be too complex", Justification = "Complex column search logic is necessary for Excel processing")]
     private static (int idStaffColumn, int totalPersonalCostColumn) GetColumnIndexes(ExcelWorksheet worksheet, int headerRow)
     {
         var idStaffColumn = 0;

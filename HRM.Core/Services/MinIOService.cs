@@ -34,6 +34,7 @@ public class MinIOService : IMinIOService, IDisposable
     private readonly IAmazonS3 client;
     private readonly AmazonStorageConfig s3Config;
     private readonly ILogger logger;
+    private bool disposed;
 
     public MinIOService(AmazonStorageConfig s3Config, ILogger logger)
     {
@@ -191,6 +192,20 @@ public class MinIOService : IMinIOService, IDisposable
 
     public void Dispose()
     {
-        client?.Dispose();
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (!disposed)
+        {
+            if (disposing)
+            {
+                client?.Dispose();
+            }
+
+            disposed = true;
+        }
     }
 }
