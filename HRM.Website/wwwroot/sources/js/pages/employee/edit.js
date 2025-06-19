@@ -107,7 +107,7 @@ $(document).ready(function () {
 
     initDatepicker();
     let $uploadButton = $('#upload');
-    $('#CountryCode, #JobTitleId, #JobLevelId, #ManagementLevelId').chosen();
+    $('#CountryCode, #JobTitleId, #JobLevelId, #ManagementLevelId, #SubCompanyId').chosen();
 
     bindSARole(true);
 

@@ -1,4 +1,6 @@
-﻿namespace HRM.Services.ExportExcel.Employee;
+﻿using HRM.Core.Constants;
+
+namespace HRM.Services.ExportExcel.Employee;
 
 using System;
 using System.Collections.Generic;
@@ -20,7 +22,8 @@ using Resources;
 public class ExportExcelEmployeeInfoService(
     IEmployeeService employeeService,
     ICommonDataService commonDataService,
-    IWebHostEnvironment hostingEnvironment) : IExportExcelEmployeeInfoService
+    IWebHostEnvironment hostingEnvironment,
+    ICompanyService companyService) : IExportExcelEmployeeInfoService
 {
     private const string EmployeeBasicInfoTemplatePath = "ExcelTemplates/EmployeeBasicInfoTemplate.xls";
     private const string EmployeeFullInfoTemplatePath = "ExcelTemplates/EmployeeFullProfileInfoTemplate.xls";
@@ -35,7 +38,7 @@ public class ExportExcelEmployeeInfoService(
     {
         RowStartHeader = 2,
         RowStartBody = 4,
-        TotalColumns = 22
+        TotalColumns = 23
     }
 
     public async Task<byte[]> ExportEmployeeBasicInfo(IList<Employee> employees)
@@ -44,8 +47,9 @@ public class ExportExcelEmployeeInfoService(
         const string sheetName = "Employee Basic Info";
         var writer = new ExcelTemplateWriter(templatePath, sheetName);
         var enableGroupDate = await commonDataService.IsEnableGroupDateAsync();
-        const byte colGroupDate = 8;
-        const byte colLengthOfServiceGroupDate = 12;
+        const byte colGroupDate = 7;
+        const byte colLengthOfServiceGroupDate = 11;
+        byte colSubCompany = 21;
 
         writer.CopyRows(0, 2);
         writer.CopyRows((byte)BasicInfo.RowStartHeader, 2);
@@ -57,6 +61,13 @@ public class ExportExcelEmployeeInfoService(
         {
             writer.RemoveColumn(colGroupDate);
             writer.RemoveColumn(colLengthOfServiceGroupDate);
+            colSubCompany -= 2; // sub company column is backed to 2 cells if group date cols are removed
+        }
+
+        var isShowSubCompanyConfig = await companyService.GetIsShowSubCompanyValue();
+        if (!isShowSubCompanyConfig)
+        {
+            writer.RemoveColumn(colSubCompany);
         }
         return writer.WriteContentToBytes();
     }
@@ -108,7 +119,8 @@ public class ExportExcelEmployeeInfoService(
             employee.Email,
             employee.Address,
             employee.CurrentAddress,
-            Category = employee.IsLocal ? Labels.Local : Labels.Expat
+            Category = employee.IsLocal ? Labels.Local : Labels.Expat,
+            CompanyName = string.IsNullOrEmpty(employee.SubCompanyName) ? string.Empty : employee.SubCompanyName
         };
 
         return record;
@@ -124,8 +136,8 @@ public class ExportExcelEmployeeInfoService(
         const string sheetName = "Employee Full Information";
         var writer = new ExcelTemplateWriter(templatePath, sheetName);
         var enableGroupDate = await commonDataService.IsEnableGroupDateAsync();
-        const byte colGroupDate = 10;
-        const byte colLengthOfServiceGroupDate = 14;
+        const byte colGroupDate = 9;
+        const byte colLengthOfServiceGroupDate = 13;
 
         writer.CopyRows(0, 2);
         writer.CopyRows(2, 2);
@@ -293,10 +305,10 @@ public class ExportExcelEmployeeInfoService(
             worksheet.Cells[rowIndex, colIndex++].Value = employee.Company;
             worksheet.Cells[rowIndex, colIndex++].Value = employee.CompanyDate.HasValue ? employee.CompanyDate.ToDateMonthYearFormatedDate() : null;
             worksheet.Cells[rowIndex, colIndex++].Value = employee.ResignedDate.HasValue ? employee.ResignedDate.ToDateMonthYearFormatedDate() : null;
-            worksheet.Cells[rowIndex, colIndex++].Value = employee.IsLocal;
-            worksheet.Cells[rowIndex, colIndex++].Value = employee.IsSpecial;
-            worksheet.Cells[rowIndex, colIndex++].Value = employee.Enabled;
-            worksheet.Cells[rowIndex, colIndex].Value = employee.IsDeleted;
+            worksheet.Cells[rowIndex, colIndex++].Value = employee.IsLocal ? Constants.Yes : Constants.No;
+            worksheet.Cells[rowIndex, colIndex++].Value = employee.IsSpecial ? Constants.Yes : Constants.No;
+            worksheet.Cells[rowIndex, colIndex++].Value = employee.Enabled ? Constants.Yes : Constants.No;
+            worksheet.Cells[rowIndex, colIndex].Value = employee.IsDeleted ? Constants.Yes : Constants.No;
 
             rowIndex++;
         }

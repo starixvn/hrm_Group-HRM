@@ -277,6 +277,15 @@ namespace HRM.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add Secondment Company.
+        /// </summary>
+        public static string AddSecondmentCompany {
+            get {
+                return ResourceManager.GetString("AddSecondmentCompany", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add Unit.
         /// </summary>
         public static string AddUnit {
@@ -2509,6 +2518,15 @@ namespace HRM.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Is Outsource.
+        /// </summary>
+        public static string IsOutsource {
+            get {
+                return ResourceManager.GetString("IsOutsource", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Is Read.
         /// </summary>
         public static string IsRead {
@@ -4525,6 +4543,15 @@ namespace HRM.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Secondment Company Management.
+        /// </summary>
+        public static string SecondmentCompanyManagement {
+            get {
+                return ResourceManager.GetString("SecondmentCompanyManagement", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to --Select an Approver--.
         /// </summary>
         public static string SelectApprover {
@@ -4714,6 +4741,15 @@ namespace HRM.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Show Cross Company.
+        /// </summary>
+        public static string ShowCrossCompany {
+            get {
+                return ResourceManager.GetString("ShowCrossCompany", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Show Left Navigation.
         /// </summary>
         public static string ShowLeftNavigation {
@@ -4854,6 +4890,15 @@ namespace HRM.Resources {
         public static string Status {
             get {
                 return ResourceManager.GetString("Status", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sub Company.
+        /// </summary>
+        public static string SubCompany {
+            get {
+                return ResourceManager.GetString("SubCompany", resourceCulture);
             }
         }
         
@@ -5461,6 +5506,15 @@ namespace HRM.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Update Secondment Company.
+        /// </summary>
+        public static string UpdateSecondmentCompany {
+            get {
+                return ResourceManager.GetString("UpdateSecondmentCompany", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Update Shift Manager.
         /// </summary>
         public static string UpdateShiftManager {
@@ -5970,42 +6024,6 @@ namespace HRM.Resources {
         public static string Yesterday {
             get {
                 return ResourceManager.GetString("Yesterday", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Show Cross Company.
-        /// </summary>
-        public static string ShowCrossCompany {
-            get {
-                return ResourceManager.GetString("ShowCrossCompany", resourceCulture);
-            }
-        }
-
-         /// <summary>
-        ///   Looks up a localized string similar to Show Cross Company.
-        /// </summary>
-        public static string SecondmentCompanyManagement {
-            get {
-                return ResourceManager.GetString("SecondmentCompanyManagement", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Add Secondment Company.
-        /// </summary>
-        public static string AddSecondmentCompany {
-            get {
-                return ResourceManager.GetString("AddSecondmentCompany", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Update Secondment Company.
-        /// </summary>
-        public static string UpdateSecondmentCompany {
-            get {
-                return ResourceManager.GetString("UpdateSecondmentCompany", resourceCulture);
             }
         }
     }

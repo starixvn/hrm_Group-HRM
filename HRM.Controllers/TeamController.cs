@@ -77,6 +77,7 @@ public class TeamController(
             PICEmpId = team.PICEmpId,
             GroupTeamId = team.GroupTeamId,
             AccountableArea = team.AccountableArea,
+            IsOutsource = team.IsOutsource
         };
 
         return View(model);
@@ -118,7 +119,8 @@ public class TeamController(
                     ExpatWorkingHours = GetValue(model.ExpatWorkingHours),
                     ExpatOffDaysbyWeek = GetValue(model.ExpatOffDaysbyWeek),
                     ExpatWorkingHoursbyWeek = model.ExpatWorkingHoursbyWeek,
-                    ExpatYearsOfServiceForExtraLeave = model.ExpatYearsOfServiceForExtraLeave
+                    ExpatYearsOfServiceForExtraLeave = model.ExpatYearsOfServiceForExtraLeave,
+                    IsOutsource = model.IsOutsource
                 };
                 var result = await baseService.ExecuteNonQueryAsync(criteria);
 

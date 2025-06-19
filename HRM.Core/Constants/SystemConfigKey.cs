@@ -9,4 +9,6 @@ public static class SystemConfigKey
     public const string MailSetting = "MailSetting";
 
     public const string AnnualLeaveResetTimeLine = "AnnualLeaveResetTimeLine";
+
+    public const string IsShowSubCompany = "IsShowSubCompany";
 }

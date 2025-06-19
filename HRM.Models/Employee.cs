@@ -116,6 +116,12 @@ public class Employee : EntityBase<int>
     [Display(Name = "Permanent Address")]
     public string Address { get; set; }
 
+    public int? SubCompanyId { get; set; }
+
+    public string SubCompanyName { get; set; }
+
+    public string CompanyName { get; set; }
+
     public string CurrentAddress { get; set; }
 
     public string CardNo { get; set; }
@@ -171,8 +177,6 @@ public class Employee : EntityBase<int>
     public string CountryName { get; set; }
 
     public int CompanyId { get; set; }
-
-    public string CompanyName { get; set; }
 
     public bool IsShowLeftNavigation { get; set; }
 

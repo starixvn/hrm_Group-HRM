@@ -58,4 +58,5 @@ public class EditEmployeeParam
     public string Major { get; set; }
     public string PickupRemark { get; set; }
     public string LetsTalk { get; set; }
+    public int? SubCompanyId { get; set; }
 }

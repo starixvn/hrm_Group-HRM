@@ -183,7 +183,7 @@ public class TeamService(
 
     public async Task<byte[]> GenerateGroupTeamExcel(IEnumerable<GroupTeamModel> teams)
     {
-        const int totalColumns = 12;
+        const int totalColumns = 13;
         const int rowStartBody = 3;
         var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, GroupTeamTemplatePath);
 
@@ -227,6 +227,7 @@ public class TeamService(
             worksheet.Cells[rowIndex, colIndex++].Value = team.PICDisplayName;
             worksheet.Cells[rowIndex, colIndex++].Value = team.AccountableArea;
             worksheet.Cells[rowIndex, colIndex++].Value = team.CompanyName;
+            worksheet.Cells[rowIndex, colIndex++].Value = team.IsOutsource ? Constants.Yes : Constants.No;
             worksheet.Cells[rowIndex, colIndex++].Value = team.NoOfMembers.ToString();
             rowIndex++;
         }
