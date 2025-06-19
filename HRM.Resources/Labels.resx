@@ -672,9 +672,6 @@
   <data name="ToTime" xml:space="preserve">
     <value>To Time</value>
   </data>
-  <data name="Overtime" xml:space="preserve">
-    <value>Overtime</value>
-  </data>
   <data name="TotalMinutes" xml:space="preserve">
     <value>Total minutes</value>
   </data>

@@ -29,8 +29,7 @@ public class LeaveRequestService(
     IBaseService baseService,
     IEmailService emailService,
     ILetstalkService letStalkService,
-    IUserControlSession userControlSession,
-    ICompanyService companyService) : ILeaveRequestService
+    IUserControlSession userControlSession) : ILeaveRequestService
 {
     private const string EmailTemplatePathForRequest = "EmailTemplates/Leave.Request.txt";
     private const string EmailTemplatePathForCancel = "EmailTemplates/Leave.Cancel.txt";
@@ -263,7 +262,6 @@ public class LeaveRequestService(
 
     private async Task SendMailForSuccessfully(BaseLeaveRequestCriteria criteria, string templateEmailPath, EmailModel email, string domain, short companyId)
     {
-
         email.Subject += criteria.TotalDays > 1
             ? " from " + criteria.FromDate.ToDateMonthYearFormatedDate() + " to " + criteria.ToDate.ToDateMonthYearFormatedDate()
             : " on " + criteria.FromDate.ToDateMonthYearFormatedDate();
