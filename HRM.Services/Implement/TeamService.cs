@@ -52,9 +52,9 @@ public class TeamService(
             TeamId = id
         };
         return await baseService.GetDataEntityAsync<GroupTeamModel>(criteria);
-        
+
     }
-    
+
     public async Task<int> GetGroupIdByGroupTeamId(int groupTeamId)
     {
         var criteria = new GetGroupIdByGroupTeamIdCriteria
@@ -121,7 +121,10 @@ public class TeamService(
     public async Task<IEnumerable<TeamSupervisorModel>> GetSupervisorByTeamId(int id, bool isGroupSpace)
     {
         int? companyId = null;
-        if (!isGroupSpace) companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
+        if (!isGroupSpace)
+        {
+            companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
+        }
 
         var criteria = new GetSupervisorByTeamIdCriteria
         {
@@ -228,7 +231,7 @@ public class TeamService(
             worksheet.Cells[rowIndex, colIndex++].Value = team.AccountableArea;
             worksheet.Cells[rowIndex, colIndex++].Value = team.CompanyName;
             worksheet.Cells[rowIndex, colIndex++].Value = team.IsOutsource ? Constants.Yes : Constants.No;
-            worksheet.Cells[rowIndex, colIndex++].Value = team.NoOfMembers.ToString();
+            worksheet.Cells[rowIndex, colIndex].Value = team.NoOfMembers.ToString();
             rowIndex++;
         }
 

@@ -51,11 +51,9 @@ public class RequestService(
 
     public static string GetReasonRequest(short requestTypeId, byte reasonId)
     {
-        return requestTypeId switch
-        {
-            (byte)RequestType.CheckIn or (byte)RequestType.CheckOut => GetCheckInOutReason(reasonId),
-            _ => GetLateInEarlyOutReason(reasonId)
-        };
+        return requestTypeId == (byte)RequestType.CheckIn || requestTypeId == (byte)RequestType.CheckOut
+            ? GetCheckInOutReason(reasonId)
+            : GetLateInEarlyOutReason(reasonId);
     }
 
     private static string GetCheckInOutReason(byte reasonId)

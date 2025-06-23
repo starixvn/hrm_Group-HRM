@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using HRM.Core.Enums;
 using HRM.Core.Models;
 using HRM.Criteria.Request.CheckInOut;
-using HRM.Models;
 using HRM.Models.Request;
 
 namespace HRM.Services.Interfaces.Request;

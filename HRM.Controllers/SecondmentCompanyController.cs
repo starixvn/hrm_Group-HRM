@@ -3,17 +3,12 @@
 using System.Threading.Tasks;
 using Core.Constants;
 using Core.Filters;
-using Criteria.Department;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
 using HRM.Core.Models;
-using HRM.Core.Services;
-using HRM.Criteria.Employee;
-using HRM.Models;
 using HRM.ViewModels.CompanySecondmentEmployee;
 using Microsoft.AspNetCore.Mvc;
 using Services.Interfaces;
-using ViewModels.Department;
 
 public class SecondmentCompanyController(
     IUserControlSession session,

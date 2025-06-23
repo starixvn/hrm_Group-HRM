@@ -2248,6 +2248,15 @@ namespace HRM.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Headcount Report.
+        /// </summary>
+        public static string HeadcountReport {
+            get {
+                return ResourceManager.GetString("HeadcountReport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Hide Left Navigation.
         /// </summary>
         public static string HideLeftNavigation {

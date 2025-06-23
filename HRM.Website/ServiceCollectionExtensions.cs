@@ -1,4 +1,6 @@
-﻿namespace HRM.Website;
+﻿using HRM.Services.Implement.Report.Headcount;
+
+namespace HRM.Website;
 
 using System;
 using System.Threading.Tasks;
@@ -12,6 +14,7 @@ using HRM.Core.Repositories;
 using HRM.Core.Services;
 using HRM.Letstalk.Core.Services;
 using HRM.Letstalk.Core.Services.Interfaces;
+using HRM.Services.Interfaces.Report.Headcount;
 using MailDeliver;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.DataProtection;
@@ -196,6 +199,8 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IManpowerReportService, ManpowerReportService>();
         services.AddSingleton<IWorkingCalendarSummaryReportService, WorkingCalendarSummaryReportService>();
         services.AddSingleton<IMealAllowanceSummaryService, MealAllowanceSummaryService>();
+        services.AddSingleton<IHeadcountReportService, CalculateHeadcountService>();
+        services.AddSingleton<IHeadcountExportService, HeadcountExportService>();
 
         return services;
     }

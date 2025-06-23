@@ -10,7 +10,6 @@ using HRM.Core.Services;
 using HRM.Criteria.EmployeePayroll;
 using HRM.Models.Payroll;
 using HRM.Services.Interfaces;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HRM.Controllers;

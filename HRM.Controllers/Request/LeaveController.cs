@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 using Core;
@@ -53,7 +54,7 @@ public class LeaveController(
             request.CreatedDate = request.CreatedDate.ToClientTimeZone();
         }
         ViewBag.Year = tempYear;
-        ViewBag.EmployeeBalance = await leaveRequestService.GetLeaveBalance(session.UserId,null, year);
+        ViewBag.EmployeeBalance = await leaveRequestService.GetLeaveBalance(session.UserId, null, year);
         return View(leaves);
     }
 
@@ -113,9 +114,17 @@ public class LeaveController(
         if (result.IsSuccessful)
         {
             await attachFileService.UploadFileAsync(files, criteria.RequestId, $"{CurrentCompanyId}/requests");
-            if (criteria.ApproverId == null) return new JsonResult(result);
+            if (criteria.ApproverId == null)
+            {
+                return new JsonResult(result);
+            }
+
             var leaveRequest = await leaveRequestService.GetByIdAsync(criteria.RequestId);
-            if (leaveRequest == null) return new JsonResult(result);
+            if (leaveRequest == null)
+            {
+                return new JsonResult(result);
+            }
+
             var domain = await companyService.GetDomain(leaveRequest.Approver.CompanyId);
             leaveRequestService.SendMailAndSendLetstalkCreateRequest(criteria, domain, leaveRequest.Approver.CompanyId);
         }
@@ -163,6 +172,8 @@ public class LeaveController(
     }
 
     [HttpPost]
+    [SuppressMessage("CognitiveComplexity", "CA1522:AvoidExcessiveCognitiveComplexity", Justification = "Complex business logic for leave request update is necessary and well-structured")]
+    [SuppressMessage("SonarQube", "S3776:Cognitive Complexity of methods should not be too high", Justification = "Complex business logic for leave request update is necessary and well-structured")]
     public async Task<IActionResult> Update(string request, string requestDetails, IList<IFormFile> files, string filesRemove)
     {
         var criteria = JsonConvert.DeserializeObject<UpdateLeaveRequestCriteria>(request);
@@ -191,9 +202,17 @@ public class LeaveController(
                 await attachFileService.DeleteFileAsync(JsonConvert.DeserializeObject<List<string>>(filesRemove), criteria.RequestId, $"{CurrentCompanyId}/requests");
             }
             await attachFileService.UploadFileAsync(files, criteria.RequestId, $"{CurrentCompanyId}/requests");
-            if (criteria.ApproverId == null) return new JsonResult(result);
+            if (criteria.ApproverId == null)
+            {
+                return new JsonResult(result);
+            }
+
             var leaveRequest = await leaveRequestService.GetByIdAsync(criteria.RequestId);
-            if (leaveRequest == null) return new JsonResult(result);
+            if (leaveRequest == null)
+            {
+                return new JsonResult(result);
+            }
+
             var domain = await companyService.GetDomain(leaveRequest.Approver.CompanyId);
             leaveRequestService.SendMailEditRequest(criteria, domain, leaveRequest.Approver.CompanyId);
         }

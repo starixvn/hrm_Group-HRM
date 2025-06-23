@@ -9,14 +9,12 @@ using HRM.Core.Enums;
 using HRM.Core.Models;
 using HRM.Core.Services;
 using HRM.Criteria.Request.LateInEarlyOut;
-using HRM.Models;
 using HRM.Models.Request;
 using HRM.Repositories.Interfaces;
 using HRM.Resources;
 using HRM.Services.Interfaces;
 using HRM.Services.Interfaces.Request;
 using Microsoft.AspNetCore.Hosting;
-using Newtonsoft.Json;
 
 namespace HRM.Services.Implement.Request;
 
@@ -100,7 +98,11 @@ public class LateInEarlyOutRequestService(
         var request = await GetByIdAsync(requestId);
         if (request != null)
         {
-            if (request.Approver == null) return;
+            if (request.Approver == null)
+            {
+                return;
+            }
+
             var domain = await companyService.GetDomain(request.Approver.CompanyId);
             var emailTemplatePath = Path.Combine(env.ContentRootPath, EmailTemplatePathForRequest);
             var email = await requestMailService.GetMailToMailCcAndLetStalk(requestId, (byte)SettingsSendMail.New);
@@ -134,7 +136,11 @@ public class LateInEarlyOutRequestService(
         var request = await GetByIdAsync(requestId);
         if (request != null)
         {
-            if (request.Approver == null) return;
+            if (request.Approver == null)
+            {
+                return;
+            }
+
             var domain = await companyService.GetDomain(request.Approver.CompanyId);
             var emailTemplatePath = Path.Combine(env.ContentRootPath, EmailTemplatePathForRequest);
             var email = await requestMailService.GetMailToMailCcAndLetStalk(requestId, (byte)SettingsSendMail.Edit);

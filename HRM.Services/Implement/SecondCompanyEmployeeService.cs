@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using HRM.Core.Models;
 using HRM.Core.Services;
 using HRM.Criteria.CompanyEmployee;
-using HRM.Repositories.Interfaces;
 using Interfaces;
 using Models;
 

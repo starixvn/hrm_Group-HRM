@@ -3,7 +3,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using HRM.Core.Models;
-using HRM.Models.Group;
 using Models;
 
 public interface IDepartmentService

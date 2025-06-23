@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using HRM.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace HRM.ViewModels.EmployeeGroup;

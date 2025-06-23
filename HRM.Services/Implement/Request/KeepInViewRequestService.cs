@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json;
-
-namespace HRM.Services.Implement.Request;
+﻿namespace HRM.Services.Implement.Request;
 
 using System;
 using System.Collections.Generic;
@@ -13,7 +11,6 @@ using GO.UserControl.Client.Core.Session;
 using HRM.Core.Models;
 using HRM.Core.Services;
 using HRM.Criteria.Request.KeepInView;
-using Models;
 using HRM.Models.Request;
 using HRM.Repositories.Interfaces;
 using HRM.Services.Interfaces.Request;
@@ -102,7 +99,11 @@ public class KeepInViewRequestService(
         var request = await GetByIdAsync(requestId);
         if (request != null)
         {
-            if (request.Approver == null) return;
+            if (request.Approver == null)
+            {
+                return;
+            }
+
             var domain = await companyService.GetDomain(request.Approver.CompanyId);
             var emailTemplatePath = Path.Combine(env.ContentRootPath, EmailTemplatePathForRequest);
             var email = await requestMailService.GetMailToMailCcAndLetStalk(requestId, (byte)SettingsSendMail.New);
@@ -135,7 +136,11 @@ public class KeepInViewRequestService(
         var request = await GetByIdAsync(requestId);
         if (request != null)
         {
-            if (request.Approver == null) return;
+            if (request.Approver == null)
+            {
+                return;
+            }
+
             var domain = await companyService.GetDomain(request.Approver.CompanyId);
             var emailTemplatePath = Path.Combine(env.ContentRootPath, EmailTemplatePathForRequest);
             var email = await requestMailService.GetMailToMailCcAndLetStalk(requestId, (byte)SettingsSendMail.Edit);
