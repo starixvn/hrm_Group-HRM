@@ -468,7 +468,6 @@
         <Setting Key="ActivityLog_GetByObjectId" SpName="ActivityLog_GetByObjectId" DbName="bodb_HRM" Plain="0" />
     </Function>
     <Function Name="Change Shift">
-        <Setting Key="ChangeShiftRequest_GetNumberOfRequest" SpName="ChangeShiftRequest_GetNumberOfRequest" DbName="bodb_HRM" Plain="0" />
         <Setting Key="ChangeShiftRequest_GetCalendarForRequest" SpName="ChangeShiftRequest_GetCalendarForRequest" DbName="bodb_HRM" Plain="0">
             <Mapping DataField="ShiftId" ObjectProperty="Id" />
         </Setting>
