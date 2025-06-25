@@ -41,8 +41,6 @@ public class ChangeShiftViewModel
 
     public RequestStatus Status { get; set; }
 
-    public decimal TotalRequestInMonth { get; set; }
-
     public IList<SupervisorNameModel> Verifiers { get; set; } = new List<SupervisorNameModel>();
 
     public IList<SupervisorNameModel> Approvers { get; set; } = new List<SupervisorNameModel>();

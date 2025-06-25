@@ -1,7 +1,9 @@
 FROM hub.nexdev.net/base/dotnet/core/sdk:9.0-alpine AS builder
 
 WORKDIR /src
+
 # Copy solution and project files
+COPY HRM.Website/*.csproj HRM.Website/
 COPY HRM.Criteria/*.csproj HRM.Criteria/
 COPY HRM.Letstalk.Core/*.csproj HRM.Letstalk.Core/
 COPY HRM.Models/*.csproj HRM.Models/
@@ -12,7 +14,6 @@ COPY HRM.Resources/*.csproj HRM.Resources/
 COPY HRM.Repositories/*.csproj HRM.Repositories/
 COPY HRM.Controllers/*.csproj HRM.Controllers/
 COPY HRM.ViewModels/*.csproj HRM.ViewModels/
-COPY HRM.Website/*.csproj HRM.Website/
 
 # Copy the rest of the source code
 RUN dotnet nuget add source https://nuget.nexdev.net/api/v2
@@ -21,19 +22,8 @@ RUN --mount=type=cache,target=/root/.nuget/packages \
     dotnet restore -v n -r linux-x64 HRM.Website/HRM.Website.csproj
 
 # Copy source codes
-COPY HRM.Criteria/ HRM.Criteria/
-COPY HRM.Letstalk.Core/ HRM.Letstalk.Core/
-COPY HRM.Models/ HRM.Models/
-COPY HRM.Services/ HRM.Services/
-COPY HRM.Core/ HRM.Core/
-COPY HRM.MailDeliver/ HRM.MailDeliver/
-COPY HRM.Resources/ HRM.Resources/
-COPY HRM.Repositories/ HRM.Repositories/
-COPY HRM.Controllers/ HRM.Controllers/
-COPY HRM.ViewModels/ HRM.ViewModels/
-COPY HRM.Website/ HRM.Website/
+COPY . .
 
-# Publish the application
 WORKDIR /src/HRM.Website
 RUN --mount=type=cache,target=/root/.nuget/packages \
     dotnet publish -r linux-x64 --self-contained false -c Release -o /app
@@ -46,7 +36,7 @@ COPY --from=builder /app .
 ENV TZ="America/La_Paz"
 ENV COMPlus_EnableDiagnostics=0
 
-# Don�t run as root
+# Don't run as root
 RUN adduser --disabled-password \
     --home /app \
     --gecos '' dotnetuser && chown -R dotnetuser /app && chown -R dotnetuser /tmp

@@ -11,8 +11,6 @@ namespace HRM.Services.Interfaces.Request;
 
 public interface IChangeShiftRequestService
 {
-    Task<int> GetNumberOfRequestAsync(int employeeId, DateTime fromDate, DateTime toDate);
-
     Task<IEnumerable<DailySchedule>> GetWorkingCalendarForRequestAsync(GetWorkingCalendarForRequestParam param);
 
     Task<IEnumerable<DateTime>> GetDisableDateForMoveOffDayRequestAsync(int employeeId, DateTime requestDate, long? requestId = null);

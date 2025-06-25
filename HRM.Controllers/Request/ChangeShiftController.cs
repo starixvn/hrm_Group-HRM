@@ -63,7 +63,6 @@ public class ChangeShiftController(
             EmployeeId = session.UserId,
             FromDate = today,
             ToDate = today,
-            TotalRequestInMonth = await changeShiftService.GetNumberOfRequestAsync(session.UserId, today.FirstDayOfMonth(), today.LastDayOfMonth()),
             Verifiers = supervisor.Verifiers,
             Approvers = supervisor.Approvers
         };

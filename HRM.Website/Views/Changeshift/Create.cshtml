@@ -26,16 +26,6 @@
     {
         @Html.ValidationSummary()
         <div class="validation-summary-errors" style="display: none;"></div>
-        if (Model.TotalRequestInMonth > 0)
-        {
-            <div class="validation-summary-errors">
-                <a href="@Url.Action("EmployeeView")">
-                    You've already requested for change shift <b>@Model.TotalRequestInMonth</b>
-                    times since @DateTimeOffset.Now.DateTime.ToClientTimeZone().ToString("MMM yyyy")
-                </a>
-            </div>
-        }
-
         @Html.HiddenFor(model => model.EmployeeId)
         <div class="form-group">
             <div class="label-form">

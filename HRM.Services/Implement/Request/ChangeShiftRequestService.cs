@@ -35,17 +35,6 @@ public class ChangeShiftRequestService(
     private const string EmailTemplatePathForCancel = "EmailTemplates/ChangeShift.Cancel.txt";
     private const string EmailTemplatePathForApproval = "EmailTemplates/ChangeShift.Approval.txt";
 
-    public async Task<int> GetNumberOfRequestAsync(int employeeId, DateTime fromDate, DateTime toDate)
-    {
-        var criteria = new GetNumberOfRequestCriteria
-        {
-            EmployeeId = employeeId,
-            FromDate = fromDate,
-            ToDate = toDate
-        };
-        return await baseService.GetDataEntityAsync<int>(criteria);
-    }
-
     public async Task<IEnumerable<DailySchedule>> GetWorkingCalendarForRequestAsync(GetWorkingCalendarForRequestParam param)
     {
         var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
