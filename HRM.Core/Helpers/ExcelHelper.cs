@@ -22,6 +22,17 @@ public static class ExcelHelper
         cell.Style.Font.Bold = isBold;
     }
 
+    public static void WriteDataToCell(this ExcelRange cell, dynamic value, bool isBold = false)
+    {
+        WriteDataToCell(cell, value, Color.White, isBold);
+    }
+
+    public static void WriteHeader(this ExcelRange cell, dynamic value)
+    {
+        
+        WriteDataToCell(cell, value, HeadcountConstants.Colors.LightBlue, true);
+    }
+
     private static Color GetContrastingFontColor(Color backgroundColor)
     {
         var luminance = (0.299 * backgroundColor.R + 0.587 * backgroundColor.G + 0.114 * backgroundColor.B) / 255; // Calculate luminance to determine if background is dark or light

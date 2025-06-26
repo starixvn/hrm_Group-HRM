@@ -5,18 +5,22 @@ using System.Linq;
 using HRM.Core.Constants;
 using HRM.Models.Report.HeadcountReport;
 using HRM.Services.Interfaces.Report.Headcount;
-using NPOI.OpenXmlFormats.Spreadsheet;
-using NPOI.SS.Formula.Functions;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
-using Org.BouncyCastle.Asn1.Ocsp;
 using System;
 using HRM.Core.Helpers;
+using System.Globalization;
 
 namespace HRM.Services.Implement.Report.Headcount;
 
 public class HeadcountExportService : IHeadcountExportService
 {
+    private static readonly string[] monthNames = CultureInfo.InvariantCulture.DateTimeFormat.AbbreviatedMonthNames.Take(12).ToArray();
+
+    private static readonly Color[] MonthColors = Enumerable.Range(0, 12)
+        .Select(i => i % 2 == 0 ? HeadcountConstants.Colors.White : HeadcountConstants.Colors.LightGray)
+        .ToArray();
+
     private HeadcountReportModel data;
 
     public byte[] Export(string templatePath, HeadcountReportModel data)
@@ -31,7 +35,7 @@ public class HeadcountExportService : IHeadcountExportService
         RenderUnitSheet(worksheet1);
         RenderCompanySheet(worksheet2);
         RenderDetailSheet(worksheet3);
-        RenderCompanyUnitSheet(worksheet4);
+        RenderCountryUnitSheet(worksheet4);
 
         return package.GetAsByteArray();
     }
@@ -54,41 +58,43 @@ public class HeadcountExportService : IHeadcountExportService
         RenderSheet(worksheet, data.ReportByDetails, headers);
     }
 
-    private void RenderCompanyUnitSheet(ExcelWorksheet worksheet)
+    private void RenderCountryUnitSheet(ExcelWorksheet worksheet)
     {
+        var currentMonth = DateTimeOffset.Now.Month;
         var sheetData = data.ReportByUnitCountry;
         var units = sheetData.Select(x => x.Label1).Distinct().ToList();
-        var months = Enumerable.Range(1, 12).ToList();
-        var label3s = sheetData.Select(x => x.Label3).Distinct().ToList();
+        var label3s = sheetData.Select(x => x.Label3).Distinct().OrderBy(x => x).ToList();
         string[] headers = [HeadcountConstants.PropertyNames.Label1];
 
         for (var col = 0; col < units.Count; col++)
         {
-            var unitObj = sheetData.FirstOrDefault(x => x.Label1 == units[col]);
+            var unitObj = sheetData.Find(x => x.Label1 == units[col]);
             RenderHeader(worksheet, headers, unitObj, col + 3);
         }
 
-        var startRow = 2;
-        foreach (var month in months)
+        var startRow = HeadcountConstants.StartRow;
+        for (var month = 0; month < HeadcountConstants.TotalMonths; month++)
         {
-            var monthCell = worksheet.Cells[startRow, 1];
-            var monthText = new DateTime(2000, month, 1, 0, 0, 0, DateTimeKind.Unspecified).ToString("MMM");
-            monthCell.WriteDataToCell(monthText, HeadcountConstants.Colors.LightBlue, true);
-            worksheet.Cells[startRow, 1, startRow + label3s.Count - 1, 1].Merge = true; // Merge month cell
+            if (month + 1 > currentMonth)
+            {
+                return;
+            }
+            var alternatingColor = MonthColors[month];
+            var monthText = monthNames[month];
+            worksheet.Cells[startRow, 1].WriteHeader(monthText);
+            worksheet.Cells[startRow, 1, startRow + label3s.Count - 1, 1].Merge = true;
 
             for (var i = 0; i < label3s.Count; i++)
             {
-                worksheet.Cells[startRow + i, 2].Value = label3s[i];
+                worksheet.Cells[startRow + i, 2].WriteDataToCell(label3s[i], alternatingColor, true);
                 for (var j = 0; j < units.Count; j++)
                 {
-                    var value = sheetData.FirstOrDefault(x =>
-                        x.Label1 == units[j] &&
-                        x.Label3 == label3s[i] &&
-                        x.Details != null &&
-                        x.Details.Any(d => d.Month == month));
-                    var report = value?.Details?.FirstOrDefault(d => d.Month == month);
-                    var valueToWrite = report?.CurrentHeadCount ?? 0;
-                    worksheet.Cells[startRow + i, j + 3].WriteDataToCell(valueToWrite, HeadcountConstants.Colors.White, false);
+                    var value = sheetData.Find(x => x.Label1 == units[j] && x.Label3 == label3s[i] &&
+                                                    x.Details.Any(d => d.Month == month + 1)) ?? new UnitReport();
+                    var report = value.Details.FirstOrDefault(d => d.Month == month + 1);
+
+                    var (isBold, backgroundColor) = GetCellStyle(value, alternatingColor);
+                    worksheet.Cells[startRow + i, j + 3].WriteDataToCell(report?.CurrentHeadCount, backgroundColor, isBold);
                 }
             }
             startRow += label3s.Count;
@@ -128,7 +134,7 @@ public class HeadcountExportService : IHeadcountExportService
             var dataByMonth = unitData.Details?.FirstOrDefault(x => x.Month == month + 1) ?? new ReportModel();
             var isBold = unitData.IsGrandTotal || unitData.IsUnitCategory;
 
-            var alternatingColor = (month + 1) % 2 != 0 ? HeadcountConstants.Colors.White : HeadcountConstants.Colors.LightGray;
+            var alternatingColor = MonthColors[month];
             var backgroundColor = unitData.IsGrandTotal ? HeadcountConstants.Colors.GrandTotalBlue : alternatingColor;
 
             worksheet.Cells[rowIdx + 0, colIdx].WriteDataToCell(dataByMonth.NewHire, backgroundColor, isBold);
@@ -137,38 +143,6 @@ public class HeadcountExportService : IHeadcountExportService
             worksheet.Cells[rowIdx + 3, colIdx].WriteDataToCell(dataByMonth.CurrentHeadCount, backgroundColor, isBold);
         }
     }
-
-    //public static void RenderSpecialValue(ExcelWorksheet worksheet, int startRow, UnitReport unitData, int colIdx, IEnumerable<string> properties)
-    //{
-    //    var nProperties = properties.Count();
-    //    for (var month = 0; month < HeadcountConstants.TotalMonths; month++)
-    //    {
-    //        var rowIdx = month * nProperties + startRow;
-    //        var dataByMonth = unitData.Details?.FirstOrDefault(x => x.Month == month + 1) ?? new ReportModel();
-    //        Color backgroundColor;
-    //        var isBold = unitData.IsGrandTotal || unitData.IsUnitCategory;
-    //        if (unitData.IsGrandTotal)
-    //        {
-    //            backgroundColor = HeadcountConstants.Colors.GrandTotalBlue;
-    //        }
-    //        else
-    //        {
-    //            backgroundColor = (month + 1) % 2 != 0 ? HeadcountConstants.Colors.White : HeadcountConstants.Colors.LightGray;
-    //        }
-
-    //        for (var i = 0; i < nProperties; i++)
-    //        {
-    //            var property = properties.ElementAt(i);
-    //            var data = GetPropertyValue(dataByMonth, property);
-    //            var propertyInfo = dataByMonth.GetType().GetProperty(property);
-    //            var propertyValue = propertyInfo?.GetValue(dataByMonth);
-
-    //            WriteDataToCell(worksheet.Cells[rowIdx + i, colIdx], data, backgroundColor, isBold);
-    //            WriteDataToCell(worksheet.Cells[rowIdx + i, colIdx], propertyValue, backgroundColor, isBold);
-    //        }
-    //    }
-    //}
-
     public static void MergeVerticalConsecutiveCells(ExcelWorksheet worksheet, int startColumn, int nRows)
     {
         for (var row = 1; row <= nRows; row++)
@@ -212,5 +186,14 @@ public class HeadcountExportService : IHeadcountExportService
     {
         var propertyInfo = data.GetType().GetProperty(propertyName);
         return propertyInfo?.GetValue(data);
+    }
+
+    private static (bool isBold, Color backgroundColor) GetCellStyle(UnitReport value, Color alternatingColor)
+    {
+        var isBold = value.IsGrandTotal || value.IsUnitCategory;
+        var backgroundColor = value.IsGrandTotal
+            ? HeadcountConstants.Colors.GrandTotalBlue
+            : alternatingColor;
+        return (isBold, backgroundColor);
     }
 }

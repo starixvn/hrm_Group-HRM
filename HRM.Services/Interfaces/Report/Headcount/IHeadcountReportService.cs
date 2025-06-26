@@ -5,6 +5,6 @@ namespace HRM.Services.Interfaces.Report.Headcount
 {
     public interface IHeadcountReportService
     {
-        Task<HeadcountReportModel> GetReportAsync(int year);
+        Task<HeadcountReportModel> GetReportAsync(int selectedYear);
     }
 }

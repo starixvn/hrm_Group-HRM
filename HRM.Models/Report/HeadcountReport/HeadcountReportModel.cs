@@ -17,5 +17,5 @@ public class UnitReport
     public string Label3 { get; set; }
     public bool IsUnitCategory { get; set; }
     public bool IsGrandTotal { get; set; }
-    public IEnumerable<ReportModel> Details { get; set; }
+    public IEnumerable<ReportModel> Details { get; set; } = new List<ReportModel>();
 }
