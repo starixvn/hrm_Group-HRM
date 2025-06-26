@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Core;
 using Core.Constants;
 using Core.Enums;
+using Fanex.Logging;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
 using HRM.Core.Services;
@@ -25,6 +26,7 @@ using Services.Implement;
 using Services.Interfaces;
 
 public class LeaveController(
+    ILogger logger,
     IUserControlSession session,
     ILeaveRequestService leaveRequestService,
     IRequestService requestService,
@@ -110,7 +112,11 @@ public class LeaveController(
         criteria.CreatedBy = session.UserId;
         criteria.CompanyId = CurrentCompanyId;
 
+        var startTime = DateTimeOffset.Now;
         var result = await baseService.ExecuteNonQueryAsync(criteria);
+        var endTime = DateTimeOffset.Now;
+        await logger.InfoAsync($"Create leave request took {(endTime - startTime).TotalSeconds} s");
+
         if (result.IsSuccessful)
         {
             await attachFileService.UploadFileAsync(files, criteria.RequestId, $"{CurrentCompanyId}/requests");
@@ -193,7 +199,11 @@ public class LeaveController(
             });
         }
 
+        var startTime = DateTimeOffset.Now;
         var result = await baseService.ExecuteNonQueryAsync(criteria);
+        var endTime = DateTimeOffset.Now;
+        await logger.InfoAsync($"Update leave request took {(endTime - startTime).TotalSeconds} s");
+
         if (result.IsSuccessful)
         {
             await attachFileService.UploadFileAsync(files, criteria.RequestId, $"{CurrentCompanyId}/requests");

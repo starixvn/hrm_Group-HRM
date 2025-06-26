@@ -1,6 +1,4 @@
-﻿using HRM.Core.Constants;
-
-namespace HRM.Services.ExportExcel.Employee;
+﻿namespace HRM.Services.ExportExcel.Employee;
 
 using System;
 using System.Collections.Generic;
@@ -8,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Core;
+using Core.Constants;
 using Core.Enums;
 using Implement;
 using Interfaces;
@@ -249,8 +248,6 @@ public class ExportExcelEmployeeInfoService(
         return nicknames;
     }
 
-    private static string FormatDate(DateTime? date, string format = "dd/MM/yyyy") => date?.ToString(format);
-
     #endregion Employee Full Profile Information
 
     public async Task<byte[]> ExportGroupEmployeesAsync(IEnumerable<GroupEmployeeModel> employees)
@@ -301,14 +298,14 @@ public class ExportExcelEmployeeInfoService(
             worksheet.Cells[rowIndex, colIndex++].Value = employee.JobLevel;
             worksheet.Cells[rowIndex, colIndex++].Value = employee.ManagementLevel;
             worksheet.Cells[rowIndex, colIndex++].Value = employee.JobTitle;
-            worksheet.Cells[rowIndex, colIndex++].Value = employee.JoinedDate.HasValue ? employee.JoinedDate.ToDateMonthYearFormatedDate() : null;
+            worksheet.Cells[rowIndex, colIndex++].Value = FormatDate(employee.JoinedDate);
             worksheet.Cells[rowIndex, colIndex++].Value = employee.Company;
-            worksheet.Cells[rowIndex, colIndex++].Value = employee.CompanyDate.HasValue ? employee.CompanyDate.ToDateMonthYearFormatedDate() : null;
-            worksheet.Cells[rowIndex, colIndex++].Value = employee.ResignedDate.HasValue ? employee.ResignedDate.ToDateMonthYearFormatedDate() : null;
-            worksheet.Cells[rowIndex, colIndex++].Value = employee.IsLocal ? Constants.Yes : Constants.No;
-            worksheet.Cells[rowIndex, colIndex++].Value = employee.IsSpecial ? Constants.Yes : Constants.No;
-            worksheet.Cells[rowIndex, colIndex++].Value = employee.Enabled ? Constants.Yes : Constants.No;
-            worksheet.Cells[rowIndex, colIndex].Value = employee.IsDeleted ? Constants.Yes : Constants.No;
+            worksheet.Cells[rowIndex, colIndex++].Value = FormatDate(employee.CompanyDate);
+            worksheet.Cells[rowIndex, colIndex++].Value = FormatDate(employee.ResignedDate);
+            worksheet.Cells[rowIndex, colIndex++].Value = FormatBoolean(employee.IsLocal);
+            worksheet.Cells[rowIndex, colIndex++].Value = FormatBoolean(employee.IsSpecial);
+            worksheet.Cells[rowIndex, colIndex++].Value = FormatBoolean(employee.Enabled);
+            worksheet.Cells[rowIndex, colIndex].Value = FormatBoolean(employee.IsDeleted);
 
             rowIndex++;
         }
@@ -320,4 +317,8 @@ public class ExportExcelEmployeeInfoService(
         await xlPackage.SaveAsAsync(ms);
         return ms.ToArray();
     }
+
+    private static string FormatDate(DateTime? date) => date?.ToDateMonthYearFormatedDate();
+
+    private static string FormatBoolean(bool value) => value ? Constants.Yes : Constants.No;
 }
