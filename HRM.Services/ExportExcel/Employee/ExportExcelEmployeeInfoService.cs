@@ -248,8 +248,6 @@ public class ExportExcelEmployeeInfoService(
         return nicknames;
     }
 
-    private static string FormatDate(DateTime? date, string format = "dd/MM/yyyy") => date?.ToString(format);
-
     #endregion Employee Full Profile Information
 
     public async Task<byte[]> ExportGroupEmployeesAsync(IEnumerable<GroupEmployeeModel> employees)
