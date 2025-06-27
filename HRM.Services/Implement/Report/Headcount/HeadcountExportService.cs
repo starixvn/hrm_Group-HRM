@@ -23,9 +23,9 @@ public class HeadcountExportService : IHeadcountExportService
 
     private HeadcountReportModel data;
 
-    public byte[] Export(string templatePath, HeadcountReportModel data)
+    public byte[] Export(string templatePath, HeadcountReportModel headcountData)
     {
-        this.data = data;
+        this.data = headcountData;
         using var package = new ExcelPackage(new FileInfo(templatePath));
         var worksheet1 = package.Workbook.Worksheets[0];
         var worksheet2 = package.Workbook.Worksheets[1];
@@ -90,11 +90,12 @@ public class HeadcountExportService : IHeadcountExportService
                 for (var j = 0; j < units.Count; j++)
                 {
                     var value = sheetData.Find(x => x.Label1 == units[j] && x.Label3 == label3s[i] &&
+                                                    x.Details != null &&
                                                     x.Details.Any(d => d.Month == month + 1)) ?? new UnitReport();
                     var report = value.Details.FirstOrDefault(d => d.Month == month + 1);
 
                     var (isBold, backgroundColor) = GetCellStyle(value, alternatingColor);
-                    worksheet.Cells[startRow + i, j + 3].WriteDataToCell(report?.CurrentHeadCount, backgroundColor, isBold);
+                    worksheet.Cells[startRow + i, j + 3].WriteDataToCell(report?.CurrentHeadCount ?? 0, backgroundColor, isBold);
                 }
             }
             startRow += label3s.Count;

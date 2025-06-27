@@ -193,7 +193,7 @@ public class CalculateHeadcountService(IBaseService baseService) : IHeadcountRep
                 unitReports.AddRange(regularReports);
                 unitReports.AddRange(wfhReports);
 
-                return unitReports.Where(x => x != null);
+                return unitReports.Where(x => x is { Details: not null });
             }).ToList();
     }
 
@@ -215,12 +215,18 @@ public class CalculateHeadcountService(IBaseService baseService) : IHeadcountRep
                 result.AddRange(regularReports);
 
                 var wfhEmployees = unitGroup.Where(e => wfhEmpIds.Contains(e.EmpId));
-                if (wfhEmployees.Any())
+                if (!wfhEmployees.Any())
                 {
-                    result.Add(CreateUnitReport(unitGroup.Key, "WFH", wfhEmployees, isWFH: true));
+                    continue;
+                }
+
+                var wfhReport = CreateUnitReport(unitGroup.Key, "WFH", wfhEmployees, isWFH: true);
+                if (wfhReport != null)
+                {
+                    result.Add(wfhReport);
                 }
             }
-            var label3List = result.Select(r => r.Label3).Distinct().ToList();
+            var label3List = result.Where(r => r != null).Select(r => r.Label3).Distinct().ToList();
 
             foreach (var label3 in label3List)
             {
@@ -239,7 +245,7 @@ public class CalculateHeadcountService(IBaseService baseService) : IHeadcountRep
             }
         }
 
-        var countryCodes = result.Select(r => r.Label3).Distinct().ToList();
+        var countryCodes = result.Where(r => r != null).Select(r => r.Label3).Distinct().ToList();
         foreach (var label3 in countryCodes)
         {
             var isWFH = label3 == "WFH";
