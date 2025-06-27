@@ -64,6 +64,13 @@ public class HeadcountExportService : IHeadcountExportService
         var sheetData = data.ReportByUnitCountry;
         var units = sheetData.Select(x => x.Label1).Distinct().ToList();
         var label3s = sheetData.Select(x => x.Label3).Distinct().OrderBy(x => x).ToList();
+
+        RenderCountryUnitHeaders(worksheet, sheetData, units);
+        RenderCountryUnitMonthData(worksheet, sheetData, units, label3s, currentMonth);
+    }
+
+    private static void RenderCountryUnitHeaders(ExcelWorksheet worksheet, List<UnitReport> sheetData, List<string> units)
+    {
         string[] headers = [HeadcountConstants.PropertyNames.Label1];
 
         for (var col = 0; col < units.Count; col++)
@@ -71,35 +78,64 @@ public class HeadcountExportService : IHeadcountExportService
             var unitObj = sheetData.Find(x => x.Label1 == units[col]);
             RenderHeader(worksheet, headers, unitObj, col + 3);
         }
+    }
 
+    private static void RenderCountryUnitMonthData(ExcelWorksheet worksheet, List<UnitReport> sheetData, List<string> units, List<string> label3s, int currentMonth)
+    {
         var startRow = HeadcountConstants.StartRow;
+
         for (var month = 0; month < HeadcountConstants.TotalMonths; month++)
         {
             if (month + 1 > currentMonth)
             {
                 return;
             }
-            var alternatingColor = MonthColors[month];
-            var monthText = monthNames[month];
-            worksheet.Cells[startRow, 1].WriteHeader(monthText);
-            worksheet.Cells[startRow, 1, startRow + label3s.Count - 1, 1].Merge = true;
 
-            for (var i = 0; i < label3s.Count; i++)
-            {
-                worksheet.Cells[startRow + i, 2].WriteDataToCell(label3s[i], alternatingColor, true);
-                for (var j = 0; j < units.Count; j++)
-                {
-                    var value = sheetData.Find(x => x.Label1 == units[j] && x.Label3 == label3s[i] &&
-                                                    x.Details != null &&
-                                                    x.Details.Any(d => d.Month == month + 1)) ?? new UnitReport();
-                    var report = value.Details.FirstOrDefault(d => d.Month == month + 1);
-
-                    var (isBold, backgroundColor) = GetCellStyle(value, alternatingColor);
-                    worksheet.Cells[startRow + i, j + 3].WriteDataToCell(report?.CurrentHeadCount ?? 0, backgroundColor, isBold);
-                }
-            }
+            RenderMonthHeader(worksheet, month, label3s, startRow);
+            RenderMonthData(worksheet, sheetData, units, label3s, month, startRow);
             startRow += label3s.Count;
         }
+    }
+
+    private static void RenderMonthHeader(ExcelWorksheet worksheet, int month, List<string> label3s, int startRow)
+    {
+        var monthText = monthNames[month];
+        worksheet.Cells[startRow, 1].WriteHeader(monthText);
+        worksheet.Cells[startRow, 1, startRow + label3s.Count - 1, 1].Merge = true;
+    }
+
+    private static void RenderMonthData(ExcelWorksheet worksheet, List<UnitReport> sheetData, List<string> units, List<string> label3s, int month, int startRow)
+    {
+        var alternatingColor = MonthColors[month];
+        var targetMonth = month + 1;
+
+        for (var i = 0; i < label3s.Count; i++)
+        {
+            var label3 = label3s[i];
+            var currentRow = startRow + i;
+            worksheet.Cells[currentRow, 2].WriteDataToCell(label3, alternatingColor, true);
+            RenderUnitsForLabel3(worksheet, sheetData, units, label3, targetMonth, currentRow, alternatingColor);
+        }
+    }
+
+    private static void RenderUnitsForLabel3(ExcelWorksheet worksheet, List<UnitReport> sheetData, List<string> units, string label3, int targetMonth, int currentRow, Color alternatingColor)
+    {
+        for (var j = 0; j < units.Count; j++)
+        {
+            var value = FindUnitReportForMonth(sheetData, units[j], label3, targetMonth);
+            var reportDetail = value.Details?.FirstOrDefault(d => d.Month == targetMonth);
+            var (isBold, backgroundColor) = GetCellStyle(value, alternatingColor);
+            worksheet.Cells[currentRow, j + 3].WriteDataToCell(reportDetail?.CurrentHeadCount ?? 0, backgroundColor, isBold);
+        }
+    }
+
+    private static UnitReport FindUnitReportForMonth(List<UnitReport> sheetData, string unit, string label3, int targetMonth)
+    {
+        return sheetData.FirstOrDefault(report =>
+            report.Label1 == unit &&
+            report.Label3 == label3 &&
+            report.Details != null &&
+            report.Details.Any(d => d.Month == targetMonth)) ?? new UnitReport();
     }
 
     public static void RenderSheet(ExcelWorksheet worksheet, List<UnitReport> sheetData, string[] headers)

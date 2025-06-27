@@ -87,37 +87,48 @@ public class CalculateHeadcountService(IBaseService baseService) : IHeadcountRep
         {
             var fromDate = new DateTimeOffset(year, i, 1, 0, 0, 0, TimeSpan.Zero).DateTime;
             var toDate = new DateTimeOffset(year, i, DateTime.DaysInMonth(year, i), 0, 0, 0, TimeSpan.Zero).DateTime;
+
             if (fromDate > DateTimeOffset.Now.DateTime.ToClientTimeZone().Date)
             {
                 result.Add(new ReportModel());
+                continue;
             }
-            else
-            {
-                var wfhInMonth = employeeWFHs?.Where(wfh => wfh.FromDate <= toDate && wfh.ToDate >= fromDate).Select(wfh => wfh.EmpId).ToList() ?? [];
-                var employees = !isWFH
-                    ? groupEmployees.Where(x => !wfhInMonth.Contains(x.EmpId))
-                    : groupEmployees.Where(x => wfhInMonth.Contains(x.EmpId));
-                if (!employees.Any())
-                {
-                    return null;
-                }
 
-                result.Add(new ReportModel
-                {
-                    Month = i,
-                    NewHire = employees.Count(x => IsInMonth(x.JoinedDate, fromDate, toDate)),
-                    ProbationResign = employees.Count(x => IsInMonth(x.ResignedDate, fromDate, toDate) &&
-                                                           (x.ConfirmedDate is null ||
-                                                            x.ResignedDate <= x.ConfirmedDate)),
-                    ConfirmedResign = employees.Count(x =>
-                        IsInMonth(x.ResignedDate, fromDate, toDate) && x.ResignedDate > x.ConfirmedDate),
-                    CurrentHeadCount = employees.Count(x =>
-                        x.JoinedDate <= toDate && (x.ResignedDate is null || x.ResignedDate > toDate))
-                });
+            var employees = GetFilteredEmployees(groupEmployees, employeeWFHs, isWFH, fromDate, toDate);
+            if (!employees.Any())
+            {
+                return [];
             }
+
+            result.Add(CreateReportModel(i, employees, fromDate, toDate));
         }
 
-        return result.Where(x => x != null);
+        return result;
+    }
+
+    private static IEnumerable<EmployeeInfo> GetFilteredEmployees(IEnumerable<EmployeeInfo> groupEmployees, IEnumerable<EmployeeWFH> employeeWFHs, bool isWFH, DateTime fromDate, DateTime toDate)
+    {
+        var wfhInMonth = employeeWFHs?.Where(wfh => wfh.FromDate <= toDate && wfh.ToDate >= fromDate).Select(wfh => wfh.EmpId).ToList() ?? [];
+
+        return !isWFH
+            ? groupEmployees.Where(x => !wfhInMonth.Contains(x.EmpId))
+            : groupEmployees.Where(x => wfhInMonth.Contains(x.EmpId));
+    }
+
+    private static ReportModel CreateReportModel(int month, IEnumerable<EmployeeInfo> employees, DateTime fromDate, DateTime toDate)
+    {
+        return new ReportModel
+        {
+            Month = month,
+            NewHire = employees.Count(x => IsInMonth(x.JoinedDate, fromDate, toDate)),
+            ProbationResign = employees.Count(x => IsInMonth(x.ResignedDate, fromDate, toDate) &&
+                                                    (x.ConfirmedDate is null ||
+                                                    x.ResignedDate <= x.ConfirmedDate)),
+            ConfirmedResign = employees.Count(x =>
+                IsInMonth(x.ResignedDate, fromDate, toDate) && x.ResignedDate > x.ConfirmedDate),
+            CurrentHeadCount = employees.Count(x =>
+                x.JoinedDate <= toDate && (x.ResignedDate is null || x.ResignedDate > toDate))
+        };
     }
 
     public List<UnitReport> CalculateReportByCompany()
@@ -172,7 +183,7 @@ public class CalculateHeadcountService(IBaseService baseService) : IHeadcountRep
                         .Select(companyGroup =>
                         {
                             var details = CountByMonth(companyGroup, allEmployeeWFHs);
-                            return details == null ? null : new UnitReport
+                            return !details.Any() ? null : new UnitReport
                             {
                                 Label1 = unitGroup.Key,
                                 Label2 = companyGroup.Key,
@@ -193,7 +204,7 @@ public class CalculateHeadcountService(IBaseService baseService) : IHeadcountRep
                 unitReports.AddRange(regularReports);
                 unitReports.AddRange(wfhReports);
 
-                return unitReports.Where(x => x is { Details: not null });
+                return unitReports.Where(x => x is { Details: not null } && x.Details.Any());
             }).ToList();
     }
 
@@ -215,61 +226,51 @@ public class CalculateHeadcountService(IBaseService baseService) : IHeadcountRep
                 result.AddRange(regularReports);
 
                 var wfhEmployees = unitGroup.Where(e => wfhEmpIds.Contains(e.EmpId));
-                if (!wfhEmployees.Any())
-                {
-                    continue;
-                }
-
                 var wfhReport = CreateUnitReport(unitGroup.Key, "WFH", wfhEmployees, isWFH: true);
                 if (wfhReport != null)
                 {
                     result.Add(wfhReport);
                 }
             }
-            var label3List = result.Where(r => r != null).Select(r => r.Label3).Distinct().ToList();
 
-            foreach (var label3 in label3List)
-            {
-                var isWFH = label3 == "WFH";
-                var group = isWFH
-                    ? categoryGroup.Where(e => wfhEmpIds.Contains(e.EmpId))
-                    : categoryGroup.Where(e => e.CountryCode == label3);
-
-                result.Add(new UnitReport
-                {
-                    Label1 = $"{categoryGroup.Key} {HeadcountConstants.TotalLabel}",
-                    Label3 = label3,
-                    Details = CountByMonth(group, allEmployeeWFHs, isWFH),
-                    IsUnitCategory = true
-                });
-            }
+            result.AddRange(CalculateTotalReports(result, categoryGroup, wfhEmpIds, categoryGroup.Key, true));
         }
 
-        var countryCodes = result.Where(r => r != null).Select(r => r.Label3).Distinct().ToList();
-        foreach (var label3 in countryCodes)
+        result.AddRange(CalculateTotalReports(result, employeeInfos, wfhEmpIds, HeadcountConstants.GrandTotalLabel, false));
+
+        return result;
+    }
+
+    private IEnumerable<UnitReport> CalculateTotalReports(List<UnitReport> result, IEnumerable<EmployeeInfo> group, HashSet<int> wfhEmpIds, string label1, bool isUnitCategory)
+    {
+        var label3List = result.Select(r => r.Label3).Distinct().ToList();
+        foreach (var label3 in label3List)
         {
             var isWFH = label3 == "WFH";
             var targetGroup = isWFH
-                ? employeeInfos.Where(e => wfhEmpIds.Contains(e.EmpId))
-                : employeeInfos.Where(e => e.CountryCode == label3);
+                ? group.Where(e => wfhEmpIds.Contains(e.EmpId))
+                : group.Where(e => e.CountryCode == label3);
 
-            result.Add(new UnitReport
+            yield return new UnitReport
             {
-                Label1 = HeadcountConstants.GrandTotalLabel,
+                Label1 = label1,
                 Label3 = label3,
                 Details = CountByMonth(targetGroup, allEmployeeWFHs, isWFH),
-                IsGrandTotal = true
-            });
+                IsUnitCategory = isUnitCategory,
+                IsGrandTotal = !isUnitCategory
+            };
         }
-
-        return result;
     }
 
     private UnitReport CreateUnitReport(string label1, string label3,
         IEnumerable<EmployeeInfo> group, bool isWFH = false)
     {
+        if (!group.Any())
+        {
+            return null;
+        }
         var details = CountByMonth(group, allEmployeeWFHs, isWFH);
-        return details == null ? null : new UnitReport
+        return !details.Any() ? null : new UnitReport
         {
             Label1 = label1,
             Label3 = label3,
