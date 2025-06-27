@@ -88,9 +88,8 @@ public class CalculateHeadcountService(IBaseService baseService) : IHeadcountRep
             var fromDate = new DateTimeOffset(year, i, 1, 0, 0, 0, TimeSpan.Zero).DateTime;
             var toDate = new DateTimeOffset(year, i, DateTime.DaysInMonth(year, i), 0, 0, 0, TimeSpan.Zero).DateTime;
 
-            if (fromDate > DateTimeOffset.Now.DateTime.ToClientTimeZone().Date)
+            if (i >= DateTimeOffset.Now.DateTime.ToClientTimeZone().Month)
             {
-                result.Add(new ReportModel());
                 continue;
             }
 
@@ -238,7 +237,7 @@ public class CalculateHeadcountService(IBaseService baseService) : IHeadcountRep
 
         result.AddRange(CalculateTotalReports(result, employeeInfos, wfhEmpIds, HeadcountConstants.GrandTotalLabel, false));
 
-        return result;
+        return result.Where(x => x is not null).ToList();
     }
 
     private IEnumerable<UnitReport> CalculateTotalReports(List<UnitReport> result, IEnumerable<EmployeeInfo> group, HashSet<int> wfhEmpIds, string label1, bool isUnitCategory)

@@ -60,13 +60,12 @@ public class HeadcountExportService : IHeadcountExportService
 
     private void RenderCountryUnitSheet(ExcelWorksheet worksheet)
     {
-        var currentMonth = DateTimeOffset.Now.Month;
         var sheetData = data.ReportByUnitCountry;
         var units = sheetData.Select(x => x.Label1).Distinct().ToList();
         var label3s = sheetData.Select(x => x.Label3).Distinct().OrderBy(x => x).ToList();
 
         RenderCountryUnitHeaders(worksheet, sheetData, units);
-        RenderCountryUnitMonthData(worksheet, sheetData, units, label3s, currentMonth);
+        RenderCountryUnitMonthData(worksheet, sheetData, units, label3s);
     }
 
     private static void RenderCountryUnitHeaders(ExcelWorksheet worksheet, List<UnitReport> sheetData, List<string> units)
@@ -80,17 +79,12 @@ public class HeadcountExportService : IHeadcountExportService
         }
     }
 
-    private static void RenderCountryUnitMonthData(ExcelWorksheet worksheet, List<UnitReport> sheetData, List<string> units, List<string> label3s, int currentMonth)
+    private static void RenderCountryUnitMonthData(ExcelWorksheet worksheet, List<UnitReport> sheetData, List<string> units, List<string> label3s)
     {
         var startRow = HeadcountConstants.StartRow;
 
         for (var month = 0; month < HeadcountConstants.TotalMonths; month++)
         {
-            if (month + 1 > currentMonth)
-            {
-                return;
-            }
-
             RenderMonthHeader(worksheet, month, label3s, startRow);
             RenderMonthData(worksheet, sheetData, units, label3s, month, startRow);
             startRow += label3s.Count;
@@ -101,7 +95,11 @@ public class HeadcountExportService : IHeadcountExportService
     {
         var monthText = monthNames[month];
         worksheet.Cells[startRow, 1].WriteHeader(monthText);
-        worksheet.Cells[startRow, 1, startRow + label3s.Count - 1, 1].Merge = true;
+
+        if (label3s.Count > 0)
+        {
+            worksheet.Cells[startRow, 1, startRow + label3s.Count - 1, 1].Merge = true;
+        }
     }
 
     private static void RenderMonthData(ExcelWorksheet worksheet, List<UnitReport> sheetData, List<string> units, List<string> label3s, int month, int startRow)
@@ -131,7 +129,7 @@ public class HeadcountExportService : IHeadcountExportService
 
     private static UnitReport FindUnitReportForMonth(List<UnitReport> sheetData, string unit, string label3, int targetMonth)
     {
-        return sheetData.FirstOrDefault(report =>
+        return sheetData.Find(report =>
             report.Label1 == unit &&
             report.Label3 == label3 &&
             report.Details != null &&
@@ -180,6 +178,7 @@ public class HeadcountExportService : IHeadcountExportService
             worksheet.Cells[rowIdx + 3, colIdx].WriteDataToCell(dataByMonth.CurrentHeadCount, backgroundColor, isBold);
         }
     }
+
     public static void MergeVerticalConsecutiveCells(ExcelWorksheet worksheet, int startColumn, int nRows)
     {
         for (var row = 1; row <= nRows; row++)
