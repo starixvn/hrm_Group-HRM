@@ -77,19 +77,13 @@
             </th>
             <th class="col-sorter col-150">
 	            <div class="cell-control-wrapper">
-		            @Labels.ERole
+		            @Labels.JobLevel
 		            <div class="fa fa-sort cell-right-div"></div>
 	            </div>
             </th>
             <th class="col-sorter col-150">
 	            <div class="cell-control-wrapper">
 		            @Labels.MRole
-		            <div class="fa fa-sort cell-right-div"></div>
-	            </div>
-            </th>
-            <th class="col-sorter col-500">
-	            <div class="cell-control-wrapper">
-		            @Labels.JobTitle
 		            <div class="fa fa-sort cell-right-div"></div>
 	            </div>
             </th>
@@ -129,7 +123,6 @@
                     <td class="align-left team-highlight">@employee.TeamPIC</td>
                     <td class="align-left">@employee.JobLevel</td>
                     <td class="align-left">@employee.ManagementLevel</td>
-                    <td class="align-left">@employee.JobTitle</td>
                     <td class="align-left">
 	                    @if (employee.JoinedDate.HasValue)
 	                    {
