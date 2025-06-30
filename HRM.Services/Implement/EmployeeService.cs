@@ -383,7 +383,6 @@ public class EmployeeService(
         if (isMissing)
         {
             var supervisor = await GetEmployeeByIdAsync(supervisorId);
-            var currentCompanyId = session.Get<int>(SessionKey.CurrentCompanyId);
             SupervisorNameModel missingSupervisor = new()
             {
                 NickName = supervisor.NickName,
@@ -391,10 +390,7 @@ public class EmployeeService(
                 OwnerId = supervisorId,
                 Email = supervisor.Email
             };
-            if (!string.IsNullOrEmpty(supervisor.CompanyName) && currentCompanyId != supervisor.CompanyId)
-            {
-                missingSupervisor.NickName = $"{missingSupervisor.NickName} ({supervisor.CompanyName})"; 
-            }
+
             supervisors.Add(missingSupervisor);
             return supervisors;
         }
