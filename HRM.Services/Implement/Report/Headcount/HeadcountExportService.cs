@@ -63,13 +63,6 @@ public class HeadcountExportService : IHeadcountExportService
         var sheetData = data.ReportByUnitCountry;
         var units = sheetData.Select(x => x.Label1).Distinct().ToList();
         var label3s = sheetData.Select(x => x.Label3).Distinct().OrderBy(x => x).ToList();
-
-        RenderCountryUnitHeaders(worksheet, sheetData, units);
-        RenderCountryUnitMonthData(worksheet, sheetData, units, label3s);
-    }
-
-    private static void RenderCountryUnitHeaders(ExcelWorksheet worksheet, List<UnitReport> sheetData, List<string> units)
-    {
         string[] headers = [HeadcountConstants.PropertyNames.Label1];
 
         for (var col = 0; col < units.Count; col++)
@@ -77,12 +70,8 @@ public class HeadcountExportService : IHeadcountExportService
             var unitObj = sheetData.Find(x => x.Label1 == units[col]);
             RenderHeader(worksheet, headers, unitObj, col + 3);
         }
-    }
 
-    private static void RenderCountryUnitMonthData(ExcelWorksheet worksheet, List<UnitReport> sheetData, List<string> units, List<string> label3s)
-    {
         var startRow = HeadcountConstants.StartRow;
-
         for (var month = 0; month < HeadcountConstants.TotalMonths; month++)
         {
             RenderMonthHeader(worksheet, month, label3s, startRow);
@@ -112,18 +101,17 @@ public class HeadcountExportService : IHeadcountExportService
             var label3 = label3s[i];
             var currentRow = startRow + i;
             worksheet.Cells[currentRow, 2].WriteDataToCell(label3, alternatingColor, true);
-            RenderUnitsForLabel3(worksheet, sheetData, units, label3, targetMonth, currentRow, alternatingColor);
-        }
-    }
-
-    private static void RenderUnitsForLabel3(ExcelWorksheet worksheet, List<UnitReport> sheetData, List<string> units, string label3, int targetMonth, int currentRow, Color alternatingColor)
-    {
-        for (var j = 0; j < units.Count; j++)
-        {
-            var value = FindUnitReportForMonth(sheetData, units[j], label3, targetMonth);
-            var reportDetail = value.Details?.FirstOrDefault(d => d.Month == targetMonth);
-            var (isBold, backgroundColor) = GetCellStyle(value, alternatingColor);
-            worksheet.Cells[currentRow, j + 3].WriteDataToCell(reportDetail?.CurrentHeadCount ?? 0, backgroundColor, isBold);
+            if (targetMonth >= DateTimeOffset.Now.Month)
+            {
+                continue;
+            }
+            for (var j = 0; j < units.Count; j++)
+            {
+                var value = FindUnitReportForMonth(sheetData, units[j], label3, targetMonth);
+                var reportDetail = value.Details?.FirstOrDefault(d => d.Month == targetMonth);
+                var (isBold, backgroundColor) = GetCellStyle(value, alternatingColor);
+                worksheet.Cells[currentRow, j + 3].WriteDataToCell(reportDetail?.CurrentHeadCount ?? 0, backgroundColor, isBold);
+            }
         }
     }
 
@@ -184,7 +172,7 @@ public class HeadcountExportService : IHeadcountExportService
         for (var row = 1; row <= nRows; row++)
         {
             var startMergeColumn = startColumn;
-            for (var col = startColumn + 1; col <= worksheet.Dimension.End.Column; col++)
+            for (var col = startColumn + 1; col <= worksheet.Dimension.End.Column + 1; col++)
             {
                 var currentCellValue = worksheet.Cells[row, col - 1].Text;
                 var nextCellValue = worksheet.Cells[row, col].Text;

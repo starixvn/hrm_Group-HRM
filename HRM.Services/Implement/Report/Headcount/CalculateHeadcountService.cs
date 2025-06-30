@@ -93,7 +93,10 @@ public class CalculateHeadcountService(IBaseService baseService) : IHeadcountRep
                 continue;
             }
 
-            var employees = GetFilteredEmployees(groupEmployees, employeeWFHs, isWFH, fromDate, toDate);
+            var wfhInMonth = employeeWFHs?.Where(wfh => wfh.FromDate <= toDate && wfh.ToDate >= fromDate).Select(wfh => wfh.EmpId).ToList() ?? [];
+            var employees = !isWFH
+                ? groupEmployees.Where(x => !wfhInMonth.Contains(x.EmpId))
+                : groupEmployees.Where(x => wfhInMonth.Contains(x.EmpId));
             if (!employees.Any())
             {
                 return [];
@@ -103,15 +106,6 @@ public class CalculateHeadcountService(IBaseService baseService) : IHeadcountRep
         }
 
         return result;
-    }
-
-    private static IEnumerable<EmployeeInfo> GetFilteredEmployees(IEnumerable<EmployeeInfo> groupEmployees, IEnumerable<EmployeeWFH> employeeWFHs, bool isWFH, DateTime fromDate, DateTime toDate)
-    {
-        var wfhInMonth = employeeWFHs?.Where(wfh => wfh.FromDate <= toDate && wfh.ToDate >= fromDate).Select(wfh => wfh.EmpId).ToList() ?? [];
-
-        return !isWFH
-            ? groupEmployees.Where(x => !wfhInMonth.Contains(x.EmpId))
-            : groupEmployees.Where(x => wfhInMonth.Contains(x.EmpId));
     }
 
     private static ReportModel CreateReportModel(int month, IEnumerable<EmployeeInfo> employees, DateTime fromDate, DateTime toDate)
@@ -217,7 +211,6 @@ public class CalculateHeadcountService(IBaseService baseService) : IHeadcountRep
             foreach (var unitGroup in categoryGroup.GroupBy(x => x.Unit))
             {
                 var regularReports = unitGroup
-                    .Where(e => !wfhEmpIds.Contains(e.EmpId))
                     .GroupBy(e => e.CountryCode)
                     .Select(countryGroup => CreateUnitReport(unitGroup.Key, countryGroup.Key, countryGroup))
                     .Where(report => report != null);
