@@ -27,7 +27,8 @@ public class KeepInViewController(
     IBaseService baseService,
     IAttachFileService attachFileService,
     IShiftService shiftService,
-    ILeaveRequestService leaveRequestService) : BaseController(session)
+    ILeaveRequestService leaveRequestService,
+    IEmployeeService employeeService) : BaseController(session)
 {
     [HttpGet]
     public async Task<IActionResult> EmployeeView(int? year)
@@ -147,6 +148,16 @@ public class KeepInViewController(
             MaxDate = DateTimeOffset.Now.Date.FirstDayOfMonth().AddMonths(2).AddDays(-1),
             Files = (await attachFileService.GetInfoAttachFileAsync(id, $"{CurrentCompanyId}/requests")).Select(x => x.FileName).ToList(),
         };
+
+        if (viewModel.Verifiers.Any() && viewModel.VerifierId.HasValue)
+        {
+            viewModel.Verifiers = await employeeService.CheckAndAddMissingSupervisor(viewModel.Verifiers, viewModel.VerifierId.Value);
+        }
+
+        if (viewModel.Approvers.Any() && viewModel.ApproverId.HasValue)
+        {
+            viewModel.Approvers = await employeeService.CheckAndAddMissingSupervisor(viewModel.Approvers, viewModel.ApproverId.Value);
+        }
 
         ViewBag.IsTopManager = request.Requester.IsTopManager;
         ViewBag.Shifts = await shiftService.GetAllAsync();

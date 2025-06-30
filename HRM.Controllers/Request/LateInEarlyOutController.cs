@@ -24,7 +24,8 @@ public class LateInEarlyOutController(
     ILateInEarlyOutRequestService lateInEarlyOutRequestService,
     IRequestService requestService,
     IBaseService baseService,
-    IAttachFileService attachFileService) : BaseController(session)
+    IAttachFileService attachFileService,
+    IEmployeeService employeeService) : BaseController(session)
 {
     private const int DefaultMinutes = 60;
 
@@ -138,6 +139,16 @@ public class LateInEarlyOutController(
             Approvers = supervisor.Approvers,
             Files = (await attachFileService.GetInfoAttachFileAsync(id, $"{CurrentCompanyId}/requests")).Select(x => x.FileName).ToList()
         };
+
+        if (viewModel.Verifiers.Any() && viewModel.VerifierId.HasValue)
+        {
+            viewModel.Verifiers = await employeeService.CheckAndAddMissingSupervisor(viewModel.Verifiers, viewModel.VerifierId.Value);
+        }
+
+        if (viewModel.Approvers.Any() && viewModel.ApproverId.HasValue)
+        {
+            viewModel.Approvers = await employeeService.CheckAndAddMissingSupervisor(viewModel.Approvers, viewModel.ApproverId.Value);
+        }
 
         ViewBag.IsTopManager = request.Requester.IsTopManager;
         return View(viewModel);

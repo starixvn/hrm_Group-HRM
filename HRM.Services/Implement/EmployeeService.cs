@@ -17,6 +17,7 @@ using GO.UserControl.Client.Core.Session;
 using HRM.Core.Models;
 using HRM.Core.Services;
 using HRM.Repositories.Interfaces;
+using HRM.Services.Implement.FnB;
 using Interfaces;
 using Models;
 using Models.EmployeeInformation;
@@ -368,5 +369,36 @@ public class EmployeeService(
         }
 
         return lengthOfService;
+    }
+
+    public async Task<IList<SupervisorNameModel>> CheckAndAddMissingSupervisor(IList<SupervisorNameModel> supervisors, int supervisorId)
+    {
+        var supervisorIds = supervisors.Select(x => x.OwnerId).ToList();
+        if (supervisorId == 0)
+        {
+            return supervisors;
+        }
+        var isMissing = !supervisorIds.Contains(supervisorId);
+
+        if (isMissing)
+        {
+            var supervisor = await GetEmployeeByIdAsync(supervisorId);
+            var currentCompanyId = session.Get<int>(SessionKey.CurrentCompanyId);
+            SupervisorNameModel missingSupervisor = new()
+            {
+                NickName = supervisor.NickName,
+                FullName = supervisor.FullName,
+                OwnerId = supervisorId,
+                Email = supervisor.Email
+            };
+            if (!string.IsNullOrEmpty(supervisor.CompanyName) && currentCompanyId != supervisor.CompanyId)
+            {
+                missingSupervisor.NickName = $"{missingSupervisor.NickName} ({supervisor.CompanyName})"; 
+            }
+            supervisors.Add(missingSupervisor);
+            return supervisors;
+        }
+
+        return supervisors;
     }
 }
