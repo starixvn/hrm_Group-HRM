@@ -7,6 +7,7 @@ public class HeadcountReportModel
     public List<UnitReport> ReportByUnit { get; set; }
     public List<UnitReport> ReportByCompany { get; set; }
     public List<UnitReport> ReportByDetails { get; set; }
+    public List<UnitReport> ReportByUnitCountry { get; set; }
 }
 
 public class UnitReport
@@ -16,5 +17,5 @@ public class UnitReport
     public string Label3 { get; set; }
     public bool IsUnitCategory { get; set; }
     public bool IsGrandTotal { get; set; }
-    public IEnumerable<ReportModel> Details { get; set; }
+    public IEnumerable<ReportModel> Details { get; set; } = new List<ReportModel>();
 }
