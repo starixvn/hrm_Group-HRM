@@ -216,7 +216,7 @@ public class ChangeShiftController(
 
         ViewBag.IsHost = false;
         ViewBag.TypeId = request.TypeId;
-        ViewBag.Shifts = await shiftService.GetAllAsync(isShowOff: true);
+        ViewBag.Shifts = await shiftService.GetAllAsync(isShowOff: true, empCompanyId: request.Requester.CompanyId);
         return View(model);
     }
 

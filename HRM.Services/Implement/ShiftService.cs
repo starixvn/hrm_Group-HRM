@@ -18,12 +18,12 @@ public class ShiftService(
     IBaseService baseService,
     IUserControlSession userControlSession) : IShiftService
 {
-    public async Task<IList<Shift>> GetAllAsync(int statusId = 1, bool isShowOff = false)
+    public async Task<IList<Shift>> GetAllAsync(int statusId = 1, bool isShowOff = false, short empCompanyId = 0)
     {
         var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
         var criteria = new GetAllShiftCriteria
         {
-            CompanyId = companyId
+            CompanyId = empCompanyId == 0 ? companyId : empCompanyId
         };
         var shifts = await baseService.GetDataAsync<Shift>(criteria);
 
