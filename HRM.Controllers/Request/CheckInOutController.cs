@@ -26,7 +26,8 @@ public class CheckInOutController(
     IRequestService requestService,
     IBaseService baseService,
     IShiftService shiftService,
-    IAttachFileService attachFileService) : BaseController(session)
+    IAttachFileService attachFileService,
+    IEmployeeService employeeService) : BaseController(session)
 {
     [HttpGet]
     public async Task<IActionResult> EmployeeView(int? year)
@@ -153,6 +154,16 @@ public class CheckInOutController(
             DisabledDates = disabledDates,
             Files = (await attachFileService.GetInfoAttachFileAsync(id, $"{CurrentCompanyId}/requests")).Select(x => x.FileName).ToList()
         };
+
+        if (viewModel.Verifiers.Any() && viewModel.VerifierId.HasValue)
+        {
+            viewModel.Verifiers = await employeeService.CheckAndAddMissingSupervisor(viewModel.Verifiers, viewModel.VerifierId.Value);
+        }
+
+        if (viewModel.Approvers.Any() && viewModel.ApproverId.HasValue)
+        {
+            viewModel.Approvers = await employeeService.CheckAndAddMissingSupervisor(viewModel.Approvers, viewModel.ApproverId.Value);
+        }
 
         ViewBag.IsTopManager = request.Requester.IsTopManager;
         return View(viewModel);
