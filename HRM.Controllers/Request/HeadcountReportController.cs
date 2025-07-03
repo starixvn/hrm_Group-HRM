@@ -31,7 +31,7 @@ public class HeadcountReportController(
         const string excelTemplatePath = "ExcelTemplates/HeadcountReportTemplate.xlsx";
         var templatePath = Path.Combine(env.ContentRootPath, excelTemplatePath);
 
-        var bytes = excelService.Export(templatePath, data);
+        var bytes = excelService.Export(templatePath, data, year);
         var reportName = $"HeadcountReport_{year}_{DateTimeOffset.Now.Date:yyyyMMdd}";
         return File(bytes, "application/xlsx", $"{reportName}.xlsx");
     }

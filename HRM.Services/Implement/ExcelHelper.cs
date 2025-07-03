@@ -9,7 +9,7 @@ public static class ExcelHelper
 {
     public static void WriteDataToCell(this ExcelRange cell, dynamic value, Color backgroundColor, bool isBold = false)
     {
-        cell.Value = value ?? string.Empty;
+        cell.Value = value ?? 0;
         cell.Style.Fill.PatternType = ExcelFillStyle.Solid;
         cell.Style.Border.BorderAround(ExcelBorderStyle.Thin, HeadcountConstants.Colors.DarkGray);
 
