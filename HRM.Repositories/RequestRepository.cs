@@ -122,7 +122,7 @@ public class RequestRepository : IRequestRepository
                 ApproverNickName = approver.NickName,
                 ApproverFullName = approver.FullName,
                 CompanyId = requestInfo.CompanyId,
-                RequestedDate = requestInfo.RequestedDate,
+                RequestedDate = requestInfo.RequestedDate.ToServerTimeZone(),
                 Requester = new Employee
                 {
                     Id = requestInfo.EmpId,
