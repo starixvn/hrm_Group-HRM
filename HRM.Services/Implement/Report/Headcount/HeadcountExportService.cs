@@ -22,10 +22,12 @@ public class HeadcountExportService : IHeadcountExportService
         .ToArray();
 
     private HeadcountReportModel data;
+    private int maxMonth;
 
-    public byte[] Export(string templatePath, HeadcountReportModel headcountData)
+    public byte[] Export(string templatePath, HeadcountReportModel headcountData, int selectedYear)
     {
-        this.data = headcountData;
+        data = headcountData;
+        maxMonth = Helper.GetMaxMonth(selectedYear);
         using var package = new ExcelPackage(new FileInfo(templatePath));
         var worksheet1 = package.Workbook.Worksheets[0];
         var worksheet2 = package.Workbook.Worksheets[1];
@@ -72,7 +74,7 @@ public class HeadcountExportService : IHeadcountExportService
         }
 
         var startRow = HeadcountConstants.StartRow;
-        for (var month = 0; month < HeadcountConstants.TotalMonths; month++)
+        for (var month = 0; month < maxMonth; month++)
         {
             RenderMonthHeader(worksheet, month, label3s, startRow);
             RenderMonthData(worksheet, sheetData, units, label3s, month, startRow);
@@ -101,10 +103,6 @@ public class HeadcountExportService : IHeadcountExportService
             var label3 = label3s[i];
             var currentRow = startRow + i;
             worksheet.Cells[currentRow, 2].WriteDataToCell(label3, alternatingColor, true);
-            if (targetMonth >= DateTimeOffset.Now.Month)
-            {
-                continue;
-            }
             for (var j = 0; j < units.Count; j++)
             {
                 var value = FindUnitReportForMonth(sheetData, units[j], label3, targetMonth);
@@ -124,7 +122,7 @@ public class HeadcountExportService : IHeadcountExportService
             report.Details.Any(d => d.Month == targetMonth)) ?? new UnitReport();
     }
 
-    public static void RenderSheet(ExcelWorksheet worksheet, List<UnitReport> sheetData, string[] headers)
+    public void RenderSheet(ExcelWorksheet worksheet, List<UnitReport> sheetData, string[] headers)
     {
         for (var col = 0; col < sheetData.Count; col++)
         {
@@ -149,16 +147,15 @@ public class HeadcountExportService : IHeadcountExportService
         }
     }
 
-    private static void RenderValue(ExcelWorksheet worksheet, int startRow, UnitReport unitData, int colIdx)
+    private void RenderValue(ExcelWorksheet worksheet, int startRow, UnitReport unitData, int colIdx)
     {
-        for (var month = 0; month < HeadcountConstants.TotalMonths; month++)
+        for (var month = 0; month < maxMonth; month++)
         {
             var rowIdx = month * HeadcountConstants.PropertyNumber + startRow;
             var dataByMonth = unitData.Details?.FirstOrDefault(x => x.Month == month + 1) ?? new ReportModel();
-            var isBold = unitData.IsGrandTotal || unitData.IsUnitCategory;
 
             var alternatingColor = MonthColors[month];
-            var backgroundColor = unitData.IsGrandTotal ? HeadcountConstants.Colors.GrandTotalBlue : alternatingColor;
+            var (isBold, backgroundColor) = GetCellStyle(unitData, alternatingColor);
 
             worksheet.Cells[rowIdx + 0, colIdx].WriteDataToCell(dataByMonth.NewHire, backgroundColor, isBold);
             worksheet.Cells[rowIdx + 1, colIdx].WriteDataToCell(dataByMonth.ProbationResign, backgroundColor, isBold);
