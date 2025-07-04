@@ -358,7 +358,7 @@ public class RequestService(
     {
         var msgTemplate = isNoFormat ? RequestFormatConstants.MsgCheckInOutWithNoFormat : RequestFormatConstants.MsgCheckInOut;
         var time = request.RequestedDate.Day == request.FromDate.Day ? request.RequestedDate.ToShortTime() : request.RequestedDate.ToShortTime() + "+";
-        return string.Format(msgTemplate, time, request.FromShift.Name, request.FromDate.ToDateMonthYearFormatedDate());
+        return string.Format(msgTemplate, time, request.FromShift?.Name, request.FromDate.ToDateMonthYearFormatedDate());
     }
 
     private static string GetMessageForLateIn(RequestEntity request, bool isNoFormat)
@@ -366,7 +366,7 @@ public class RequestService(
         var msgTemplate = isNoFormat ? RequestFormatConstants.MsgLateInWithNoFormat : RequestFormatConstants.MsgLateIn;
         var actualLateIn = request.ActualLateInEarlyOut == 0 ? Labels.NA : "+" + request.ActualLateInEarlyOut + "'";
 
-        return string.Format(msgTemplate, request.TotalMins, request.FromShift.Name, Utilities.GetMessageDateString(request.FromDate, request.ToDate), actualLateIn);
+        return string.Format(msgTemplate, request.TotalMins, request.FromShift?.Name, Utilities.GetMessageDateString(request.FromDate, request.ToDate), actualLateIn);
     }
 
     private static string GetMessageForEarlyOut(RequestEntity request, bool isNoFormat)
@@ -374,7 +374,7 @@ public class RequestService(
         var msgTemplate = isNoFormat ? RequestFormatConstants.MsgEarlyOutWithNoFormat : RequestFormatConstants.MsgEarlyOut;
         var actualEarlyOut = request.ActualLateInEarlyOut == 0 ? Labels.NA : "-" + request.ActualLateInEarlyOut + "'";
 
-        return string.Format(msgTemplate, request.TotalMins, request.FromShift.Name, Utilities.GetMessageDateString(request.FromDate, request.ToDate), actualEarlyOut);
+        return string.Format(msgTemplate, request.TotalMins, request.FromShift?.Name, Utilities.GetMessageDateString(request.FromDate, request.ToDate), actualEarlyOut);
     }
 
     private static string GetMessageForKeepInView(RequestEntity request, bool isNoFormat)

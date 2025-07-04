@@ -8,6 +8,10 @@
 
 @{
     ViewBag.Title = Model.PageTitle;
+    string nexCompanyIds = ViewBag.NexCompanyIds ?? "";
+    var companyIds = nexCompanyIds.Split(',')
+	    .Select(id => id.Trim())
+	    .ToList();
     var hasCheckBoxColumn = Model.ViewType is RequestViewType.PersonalSpace or RequestViewType.HRSpace ? "has-check-box-column" : "";
 }
 @section css {
@@ -135,6 +139,9 @@
             <tbody id="employee-request-body" class="@hasCheckBoxColumn">
                 @foreach (var request in Model.Requests)
                 {
+	                var requestCompanyId = request.CompanyId.ToString();
+	                var isInNexCompany = companyIds.Contains(requestCompanyId);
+
                     <tr id="row@(request.Id)">
                         @switch (Model.ViewType)
                         {
@@ -200,15 +207,30 @@
                         <td>
                             @switch (request.RequestType.Id)
                             {
-                                case (byte)RequestType.Leave:
-                                    <a href="@Url.Action("Detail", "Leave", new { id = request.Id })">@request.LeaveType.Name</a>
-                                    break;
-                                case (byte)RequestType.ChangeShift:
-                                    <a href="@Url.Action("Details", "ChangeShift", new { id = request.Id })">@request.RequestType.Name</a>
-                                    break;
-                                default:
-                                    @request.RequestType.Name
-                                    break;
+	                            case (byte)RequestType.Leave:
+                                    @if (isInNexCompany)
+                                    {
+                                        @request.LeaveType.Name
+                                    }
+                                    else
+                                    {
+                                        <a href="@Url.Action("Detail", "Leave", new { id = request.Id })">@request.LeaveType.Name</a>
+                                    }
+		                            break;
+	                            case (byte)RequestType.ChangeShift:
+		                            @if (isInNexCompany)
+		                            {
+                                        @request.RequestType.Name
+		                            }
+		                            else
+		                            {
+                                        <a href="@Url.Action("Details", "ChangeShift", new { id = request.Id })">@request.RequestType.Name</a>
+                                    }
+		                            break;
+	                            default:
+		                            @request.RequestType.Name
+		                            break;
+		                            ;
                             }
                         </td>
                         <td class="align-left">
@@ -246,7 +268,12 @@
                         }
                         <td data-datetime="@request.CreatedDate">@request.CreatedDate.ToDetailFormatedDate()</td>
                         <td class="status">@await Html.PartialAsync("_RenderStatus", (Model, request))</td>
-                        <td>@await Html.PartialAsync("_RenderHistoryLink", request)</td>
+                        <td>
+                            @if (!isInNexCompany)
+                            {
+	                            @await Html.PartialAsync("_RenderHistoryLink", request)
+                            }
+                        </td>
                         <td class="td-warning">
                             @if (request.IsWarning)
                             {
