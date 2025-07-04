@@ -4,14 +4,12 @@
 @using HRM.Services.Implement.Request
 @using HRM.Website.Helper
 @using Microsoft.AspNetCore.Mvc.TagHelpers
+@using System.Linq;
 @model HRM.ViewModels.Request.RequestViewModel
 
 @{
     ViewBag.Title = Model.PageTitle;
-    string nexCompanyIds = ViewBag.NexCompanyIds ?? "";
-    var companyIds = nexCompanyIds.Split(',')
-	    .Select(id => id.Trim())
-	    .ToList();
+    int[] nexCompanyIds = ViewBag.NexCompanyIds as int[];
     var hasCheckBoxColumn = Model.ViewType is RequestViewType.PersonalSpace or RequestViewType.HRSpace ? "has-check-box-column" : "";
 }
 @section css {
@@ -139,8 +137,8 @@
             <tbody id="employee-request-body" class="@hasCheckBoxColumn">
                 @foreach (var request in Model.Requests)
                 {
-	                var requestCompanyId = request.CompanyId.ToString();
-	                var isInNexCompany = companyIds.Contains(requestCompanyId);
+	                var requestCompanyId = request.CompanyId;
+	                var isInNexCompany = nexCompanyIds != null && nexCompanyIds.Contains(requestCompanyId);
 
                     <tr id="row@(request.Id)">
                         @switch (Model.ViewType)

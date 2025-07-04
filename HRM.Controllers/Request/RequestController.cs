@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Repositories.Interfaces;
 using System.Threading.Tasks;
 using Core;
 using Core.Constants;
@@ -20,7 +21,6 @@ using Models.Supervisor;
 using Services.Implement;
 using Services.Interfaces;
 using HRM.Core.Services;
-using Models;
 
 public class RequestController(
     IUserControlSession session,
@@ -29,7 +29,8 @@ public class RequestController(
     ICommonDataService commonDataService,
     ITeamService teamService,
     IAttachFileService attachFileService,
-    IBaseService baseService) : BaseController(session)
+    IBaseService baseService,
+    IRequestRepository requestRepository) : BaseController(session)
 {
     private const string EmployeeRequestViewName = "EmployeeRequest";
 
@@ -51,7 +52,7 @@ public class RequestController(
         var isLocal = request.IsLocal != 0;
         if (isLocal && request.IsShowCrossCompany)
         {
-            var nexRequest = (await NexRequest(request)).ToList();
+            var nexRequest = (await NexRequests(request)).ToList();
             nexRequest.ForEach(item =>
             {
                 request.Requests.Add(item);
@@ -62,71 +63,53 @@ public class RequestController(
         return View(EmployeeRequestViewName, request);
     }
 
-    private async Task<IEnumerable<RequestEntity>> NexRequest(RequestViewModel model)
+    private async Task<IEnumerable<RequestEntity>> NexRequests(RequestViewModel model)
     {
-        var criteria = new GetNexRequestCriteria
-        {
-            EmpId = model.EmployeeId,
-            FromDate = model.IsFilterByAffectedDate ? model.FromDate.ToStartOfDay() : model.FromDate.ToStartOfDay().ToServerTimeZone(),
-            ToDate = model.IsFilterByAffectedDate ? model.ToDate.ToEndOfDay() : model.ToDate.ToEndOfDay().ToClientTimeZone(),
-            Status = model.StatusIds,
-            RequestType = model.RequestType,
-            IsQueryByCreatedDate = !model.IsFilterByAffectedDate,
-            SupervisorId = session.UserId,
-            LeaveTypeId = model.LeaveType
-        };
-
-        var requests = await baseService.GetDataAsync<NexRequestModel>(criteria);
-
         List<RequestEntity> responseRequests = [];
-
-        foreach (var requestInfo in requests)
+        const string pendingStatus = "1";
+        var status = model.StatusIds.Contains(pendingStatus) ? int.Parse(pendingStatus) : int.Parse(model.StatusIds);
+        var supervisorCompanyCriteria = new GetSupervisorCompaniesCriteria
         {
-            var entity = new RequestEntity
+            EmpId = session.UserId
+        };
+        var supervisorCompanyIds = await baseService.GetDataAsync<int>(supervisorCompanyCriteria);
+
+        var nexCompanies = supervisorCompanyIds
+            .Where(s => Constants.NexCompanyIds.Contains(s));
+        if (!nexCompanies.Any())
+        {
+            return responseRequests;
+        }
+        const int AssistantLeader = 1;
+        List<NexRequestModel> requests = [];
+        foreach (var companyId in nexCompanies)
+        {
+            var criteria = new GetNexRequestCriteria
             {
-                Id = requestInfo.RequestId,
-                RequestType = new RequestTypeModel { Id = (short)requestInfo.RequestType },
-                Status = new RequestStatus { Id = requestInfo.Status },
-                FromDate = requestInfo.FromDate,
-                ToDate = requestInfo.ToDate,
-                TotalDays = requestInfo.TotalDays ?? 0,
-                IsHalfDay = requestInfo.IsHalfDay,
-                FromTime = requestInfo.FromDate,
-                ToTime = requestInfo.ToDate,
-                LeaveType = new LeaveType
-                {
-                    Id = requestInfo.LeaveTypeID,
-                    Name = requestInfo.LeaveTypeName ?? string.Empty
-                },
-                Remark = requestInfo.Remark,
-                CreatedDate = requestInfo.CreatedDate.ToServerTimeZone(),
-                TotalMins = requestInfo.TotalMinutes ?? 0,
-                CrossDay = requestInfo.CrossDay,
-                ModifiedDate = requestInfo.ModifiedDate,
-                ApproverId = requestInfo.ApproverId,
-                ApproverNickName = requestInfo.ApproverNickName,
-                CompanyId = requestInfo.CompanyId,
-                RequestedDate = requestInfo.FromDate.ToServerTimeZone(),
-                Requester = new Employee
-                {
-                    Id = requestInfo.RequesterId,
-                    NickName = requestInfo.RequesterNickName,
-                    FullName = requestInfo.RequesterFullName,
-                    UnitCode = requestInfo.UnitCode,
-                    Team = new Team
-                    {
-                        Name = requestInfo.TeamName,
-                        Department = new Department
-                        {
-                            Name = requestInfo.DepartmentName
-                        }
-                    }
-                }
+                EmpId = model.EmployeeId == -1 ? null : model.EmployeeId,
+                FromDate = model.FromDate.ToStartOfDay(),
+                ToDate = model.ToDate.ToEndOfDay(),
+                Status = status,
+                RequestType = model.RequestType == 0 ? "" : model.RequestType.ToString(),
+                isFilterByEffectedDate = model.IsFilterByAffectedDate,
+                ActorId = session.UserId,
+                LeaveTypeId = model.LeaveType,
+                Role = AssistantLeader,
+                ExcludedEmpID = session.UserId,
+                CompanyId = companyId
             };
-            responseRequests.Add(entity);
+
+            var responseData = await baseService.GetDataAsync<NexRequestModel>(criteria);
+            requests.AddRange(responseData);
         }
 
-        responseRequests = responseRequests.OrderByDescending(item => item.CreatedDate).ToList();
+        var approver = await employeeService.GetEmployeeByIdAsync(session.UserId);
+
+        responseRequests = requestRepository
+            .MappingNexRequestToGroupRequest(requests, approver)
+            .OrderByDescending(item => item.CreatedDate)
+            .ToList();
+
         return responseRequests;
     }
 
@@ -309,7 +292,7 @@ public class RequestController(
         {
             EmpId = employeeId,
             FromDate = request.IsFilterByAffectedDate ? request.FromDate.ToStartOfDay() : request.FromDate.ToStartOfDay().ToServerTimeZone(),
-            ToDate = request.IsFilterByAffectedDate ? request.ToDate.ToEndOfDay() : request.ToDate.ToEndOfDay().ToClientTimeZone(),
+            ToDate = request.IsFilterByAffectedDate ? request.ToDate.ToEndOfDay() : request.ToDate.ToEndOfDay().ToServerTimeZone(),
             TeamIds = request.TeamIds,
             Status = request.StatusIds,
             RequestType = request.RequestType,

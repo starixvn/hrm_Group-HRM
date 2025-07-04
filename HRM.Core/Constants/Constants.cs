@@ -37,5 +37,11 @@ public static class Constants
 
     public const string No = "No";
 
-    public const string NexCompanyIds = "1,2,34";
+    public const int NexCompanyId = 1;
+
+    public const int LumiCompanyId = 2;
+
+    public const int NexVisionCompanyId = 34;
+
+    public static readonly int[] NexCompanyIds = [NexCompanyId, LumiCompanyId, NexVisionCompanyId];
 }

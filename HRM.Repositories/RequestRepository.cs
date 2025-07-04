@@ -8,6 +8,7 @@ using Core.Enums;
 using Criteria.Request;
 using Fanex.Data;
 using Fanex.Data.Repository;
+using HRM.Core;
 using Interfaces;
 using Models;
 using Models.Request;
@@ -88,6 +89,60 @@ public class RequestRepository : IRequestRepository
         }
 
         return disciplines;
+    }
+
+    public IEnumerable<RequestEntity> MappingNexRequestToGroupRequest(List<NexRequestModel> requests, Employee approver)
+    {
+        List<RequestEntity> responseRequests = [];
+
+        foreach (var requestInfo in requests)
+        {
+            var entity = new RequestEntity
+            {
+                Id = requestInfo.Id,
+                RequestType = new RequestTypeModel { Id = (short)requestInfo.RequestType },
+                Status = new RequestStatus { Id = requestInfo.Status },
+                FromDate = requestInfo.FromDate,
+                ToDate = requestInfo.ToDate,
+                TotalDays = requestInfo.TotalDays ?? 0,
+                IsHalfDay = requestInfo.IsHalfDay,
+                FromTime = requestInfo.FromDate,
+                ToTime = requestInfo.ToDate,
+                LeaveType = new LeaveType
+                {
+                    Id = requestInfo.LeaveTypeID,
+                    Name = requestInfo.LeaveTypeName ?? string.Empty
+                },
+                Remark = requestInfo.Remark,
+                CreatedDate = requestInfo.CreatedDate.ToServerTimeZone(),
+                TotalMins = requestInfo.TotalMins ?? 0,
+                CrossDay = requestInfo.IsCrossDate,
+                ModifiedDate = requestInfo.ModifiedDate,
+                ApproverId = approver.Id,
+                ApproverNickName = approver.NickName,
+                ApproverFullName = approver.FullName,
+                CompanyId = requestInfo.CompanyId,
+                RequestedDate = requestInfo.RequestedDate,
+                Requester = new Employee
+                {
+                    Id = requestInfo.EmpId,
+                    NickName = requestInfo.Requester,
+                    FullName = requestInfo.FullNameRequester,
+                    UnitCode = requestInfo.UnitCode,
+                    Team = new Team
+                    {
+                        Name = requestInfo.Team,
+                        Department = new Department
+                        {
+                            Name = requestInfo.DepartmentName
+                        }
+                    }
+                }
+            };
+            responseRequests.Add(entity);
+        }
+
+        return responseRequests;
     }
 
     private static List<RequestEntity> FillData(dynamic data)

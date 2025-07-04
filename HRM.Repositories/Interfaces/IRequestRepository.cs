@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Fanex.Data.Repository;
 using HRM.Criteria.Request;
+using HRM.Models;
 using HRM.Models.Request;
 
 namespace HRM.Repositories.Interfaces;
@@ -17,4 +18,6 @@ public interface IRequestRepository
     Task<RequestEntity> GetRequestToIgnoreById(ICriteria criteria);
 
     Task<List<LeaveDisciplineModel>> GetLeaveRequestToReviewDiscipline(ICriteria criteria);
+
+    IEnumerable<RequestEntity> MappingNexRequestToGroupRequest(List<NexRequestModel> requests, Employee approver);
 }
