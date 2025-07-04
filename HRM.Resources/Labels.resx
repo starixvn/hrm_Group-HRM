@@ -2112,4 +2112,7 @@
   <data name="HeadcountReport" xml:space="preserve">
     <value>Headcount Report</value>
   </data>
+  <data name="SalaryStructure" xml:space="preserve">
+    <value>Salary Structure</value>
+  </data>
 </root>

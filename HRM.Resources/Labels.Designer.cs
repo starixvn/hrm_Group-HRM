@@ -3112,6 +3112,15 @@ namespace HRM.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to M Grade.
+        /// </summary>
+        public static string MGrade {
+            get {
+                return ResourceManager.GetString("MGrade", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Military From Date.
         /// </summary>
         public static string MilitaryFromDate {
@@ -3279,15 +3288,6 @@ namespace HRM.Resources {
         public static string MRole {
             get {
                 return ResourceManager.GetString("MRole", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to M Grade.
-        /// </summary>
-        public static string MGrade {
-            get {
-                return ResourceManager.GetString("MGrade", resourceCulture);
             }
         }
         
@@ -4467,6 +4467,15 @@ namespace HRM.Resources {
         public static string Roles {
             get {
                 return ResourceManager.GetString("Roles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Salary Structure.
+        /// </summary>
+        public static string SalaryStructure {
+            get {
+                return ResourceManager.GetString("SalaryStructure", resourceCulture);
             }
         }
         

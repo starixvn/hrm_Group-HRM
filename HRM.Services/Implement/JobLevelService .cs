@@ -37,6 +37,6 @@ public class JobLevelService(IBaseService baseService) : IJobLevelService
             ModifiedBy = actorId
         };
 
-        return await baseService.ExecuteNonQueryAsync(criteria);
+        return await baseService.GetDataEntityAsync(criteria);
     }
 }

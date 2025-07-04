@@ -90,6 +90,9 @@ module.exports = {
         [`${styleDistPath}/secondment-company.index`]: `${styleSourcePath}/pages/secondment-company/index.scss`,
         [`${styleDistPath}/secondment-company.create`]: `${styleSourcePath}/pages/secondment-company/create.scss`,
         [`${styleDistPath}/headcount-report.index`]: `${styleSourcePath}/pages/headcount-report/index.scss`,
+        [`${styleDistPath}/salary-structure.index`]: `${styleSourcePath}/pages/salary-structure/index.scss`,
+        [`${styleDistPath}/salary-structure.create`]: `${styleSourcePath}/pages/salary-structure/create.scss`,
+
         //
         [`${jsDistPath}/main`]: "./sources/js/main.js",
         [`${jsDistPath}/auth.index`]: `${jsSourcePath}/auth/index.jsx`,
@@ -201,5 +204,8 @@ module.exports = {
         [`${jsDistPath}/secondment-company.create`]: `${jsSourcePath}/secondment-company/create/index.jsx`,
         [`${jsDistPath}/secondment-company.edit`]: `${jsSourcePath}/secondment-company/edit/index.jsx`,
         [`${jsDistPath}/headcount-report.index`]: `${jsSourcePath}/headcount-report/home/index.jsx`,
+        [`${jsDistPath}/salary-structure.home`]: `${jsSourcePath}/salary-structure/home/index.jsx`,
+        [`${jsDistPath}/salary-structure.create`]: `${jsSourcePath}/salary-structure/create/index.jsx`,
+        [`${jsDistPath}/salary-structure.edit`]: `${jsSourcePath}/salary-structure/edit/index.jsx`,
     },
 };
