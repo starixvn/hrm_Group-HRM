@@ -3283,6 +3283,15 @@ namespace HRM.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to M Grade.
+        /// </summary>
+        public static string MGrade {
+            get {
+                return ResourceManager.GetString("MGrade", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to MultipleInsert.
         /// </summary>
         public static string MultipleInsert {
