@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Core.Constants;
+using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Models.Role;
 using GO.UserControl.Client.Core.Services;
 using GO.UserControl.Client.Core.Session;
@@ -19,12 +20,13 @@ public interface IEmployeeLogService
 }
 
 public class EmployeeLogService(
-    IUserControlSession userControlSession,
+    IUserControlSession session,
     ICommonDataService commonDataService,
     IActionLogService actionLogService,
     IJobLevelService jobLevelService,
     IManagementLevelService managementLevelService,
-    IRoleService roleService) : IEmployeeLogService
+    IRoleService roleService,
+    ISalaryStructureService salaryStructureService) : IEmployeeLogService
 {
     private readonly IEnumerable<MappingFieldConfig> mappingFields = new List<MappingFieldConfig>
     {
@@ -64,6 +66,7 @@ public class EmployeeLogService(
         new() { FieldName = "JobTitleId", DisplayName = Labels.JobTitle },
         new() { FieldName = "JobLevelId", DisplayName = Labels.JobLevel },
         new() { FieldName = "ManagementLevelId", DisplayName = Labels.ManagementLevel },
+        new() { FieldName = "SalaryStructureId", DisplayName = Labels.SalaryStructure },
         new() { FieldName = "PromotionDate", DisplayName = Labels.PromotionDate, DataType = MappingDataType.Date },
         new() { FieldName = "JoinedDate", DisplayName = Labels.GroupDate },
         new() { FieldName = "CompanyDate", DisplayName = Labels.CompanyDate },
@@ -93,17 +96,21 @@ public class EmployeeLogService(
     private IEnumerable<Role> SystemRoles { get; set; }
     private IEnumerable<EntityBase<byte>> Genders { get; set; }
     private IEnumerable<EntityBase<byte>> MarriageStatuses { get; set; }
+    private IEnumerable<SalaryStructure> SalaryStructures { get; set; }
 
     public async Task<IEnumerable<LogObjectDetail>> GetLogDetailByIdAsync(int employeeId)
     {
+        var companyId = session.Get<int>(SessionKey.CurrentCompanyId);
         Teams = await commonDataService.GetAllTeamAsync();
-        JobTitles = await commonDataService.GetLookupDataByCodeAsync(Constants.JobTitle, userControlSession.Get<int>(SessionKey.CurrentCompanyId));
+        JobTitles = await commonDataService.GetLookupDataByCodeAsync(Constants.JobTitle, companyId);
         JobLevels = await jobLevelService.GetJobLevel();
         ManagementLevels = await managementLevelService.GetManagementLevel();
         Countries = await commonDataService.GetAllCountry();
-        SystemRoles = await roleService.GetBySiteIdAsync(userControlSession.SiteId);
+        SystemRoles = await roleService.GetBySiteIdAsync(session.SiteId);
         Genders = commonDataService.GetGender();
         MarriageStatuses = commonDataService.GetMarriageStatus();
+        SalaryStructures = await salaryStructureService.GetSalaryStructureAsync(companyId);
+
         var logs = await actionLogService.GetLogDetailByIdAsync(LogObjectType.Employee, employeeId);
         MappingField(logs);
 
@@ -165,6 +172,10 @@ public class EmployeeLogService(
 
             case "IsLocal":
                 MappingCategory(field);
+                break;
+
+            case "SalaryStructureId":
+                MappingSalaryStructure(field);
                 break;
 
             default:
@@ -246,5 +257,17 @@ public class EmployeeLogService(
     {
         field.OldValue = field.OldValue == "1" ? Labels.Local : Labels.Expat;
         field.Value = field.Value == "1" ? Labels.Local : Labels.Expat;
+    }
+
+    private void MappingSalaryStructure(FieldValue field)
+    {
+        if (session.HasPermissionOnFunction(FunctionKey.SalaryStructureAssignment, Policy.Read))
+        {
+            _ = int.TryParse(field.OldValue, out var salaryStructureId);
+            field.OldValue = SalaryStructures.FirstOrDefault(x => x.SalaryStructureId == salaryStructureId)?.Name;
+
+            _ = int.TryParse(field.Value, out salaryStructureId);
+            field.Value = SalaryStructures.FirstOrDefault(x => x.SalaryStructureId == salaryStructureId)?.Name;
+        }
     }
 }
