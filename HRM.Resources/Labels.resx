@@ -2115,4 +2115,10 @@
   <data name="SalaryStructure" xml:space="preserve">
     <value>Salary Structure</value>
   </data>
+  <data name="CreateSalaryStructure" xml:space="preserve">
+    <value>New Salary Structure</value>
+  </data>
+  <data name="EditSalaryStructure" xml:space="preserve">
+    <value>Edit Salary Structure</value>
+  </data>
 </root>

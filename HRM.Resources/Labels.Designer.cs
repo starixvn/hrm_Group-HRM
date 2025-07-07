@@ -1168,6 +1168,15 @@ namespace HRM.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to New Salary Structure.
+        /// </summary>
+        public static string CreateSalaryStructure {
+            get {
+                return ResourceManager.GetString("CreateSalaryStructure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cross day.
         /// </summary>
         public static string CrossDay {
@@ -1713,6 +1722,15 @@ namespace HRM.Resources {
         public static string EditMessage {
             get {
                 return ResourceManager.GetString("EditMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit Salary Structure.
+        /// </summary>
+        public static string EditSalaryStructure {
+            get {
+                return ResourceManager.GetString("EditSalaryStructure", resourceCulture);
             }
         }
         

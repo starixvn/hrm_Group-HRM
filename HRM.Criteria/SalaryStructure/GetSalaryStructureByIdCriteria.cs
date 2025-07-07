@@ -2,7 +2,7 @@
 
 using Fanex.Data.Repository;
 
-public class GetSalaryStructureCriteria : CriteriaBase
+public class GetSalaryStructureByIdCriteria : CriteriaBase
 {
     public int SalaryStructureId { get; set; }
 

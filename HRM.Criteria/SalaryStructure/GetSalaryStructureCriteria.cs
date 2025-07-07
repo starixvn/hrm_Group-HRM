@@ -4,7 +4,13 @@ using Fanex.Data.Repository;
 
 public class GetSalaryStructureCriteria : CriteriaBase
 {
+    public int CompanyId { get; set; }
+
     public override string GetSettingKey() => "SalaryStructure_Get";
 
-    public override bool IsValid() => true;
+
+    public override bool IsValid()
+    {
+        return CompanyId > 0 ;
+    }
 }

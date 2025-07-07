@@ -1,0 +1,18 @@
+﻿@using HRM.Resources
+@{
+	ViewBag.Title = Labels.CreateSalaryStructure;
+}
+@section css{
+	<link href="~/dist/styles/salary-structure.create.css" rel="stylesheet" />
+}
+@section js{
+	<script src="~/dist/js/salary-structure.create.js"></script>
+}
+@section Breadcrumb {
+	<a class="step">@Labels.GroupSpace</a>
+	<a class="step" href="@Url.Action("index", "SalaryStructure")">@Labels.SalaryStructure</a>
+	<span class="step">@ViewBag.Title</span>
+}
+
+<h2 class="page-title">@Labels.Create</h2>
+<div id="salary-structure-create"></div>

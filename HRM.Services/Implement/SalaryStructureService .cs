@@ -1,51 +1,45 @@
-﻿using HRM.Core.Constants;
+﻿namespace HRM.Services.Implement;
 
-namespace HRM.Services.Implement;
-
-using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Threading.Tasks;
-using Criteria.Department;
+using Criteria.SalaryStructure;
 using HRM.Core.Models;
 using HRM.Core.Services;
-using HRM.Repositories.Interfaces;
 using Interfaces;
 using System.Linq;
-using Microsoft.AspNetCore.Hosting;
 using Models;
-using OfficeOpenXml;
 
-public class SalaryStructureService(
-    IDepartmentRepository departmentRepository,
-    IBaseService baseService,
-    IWebHostEnvironment hostingEnvironment) : ISalaryStructureService
+public class SalaryStructureService(IBaseService baseService) : ISalaryStructureService
 {
-
     public async Task<CommandResult> DeleteAsync(int actorId, int id)
     {
         var criteria = new DeleteSalaryStructureCriteria
         {
             SalaryStructureId = id,
-            ModifiedBy = actorId
+            DeletedBy = actorId
         };
         return await baseService.ExecuteNonQueryAsync(criteria);
     }
 
-    public async Task<IList<SalaryStructure>> GetSalaryStructureAsync()
+    public async Task<IList<SalaryStructure>> GetSalaryStructureAsync(int CompanyId)
     {
-        var criteria = new GetSalaryStructureCriteria();
+        var criteria = new GetSalaryStructureCriteria
+        {
+            CompanyId = CompanyId
+        };
 
-        return (await baseService.GetDataAsync<SalaryStructure>(criteria)).ToList();
+    var result = await baseService.GetDataAsync<SalaryStructure>(criteria);
+
+        return result.ToList();
     }
 
-    public async Task<SalaryStructure> GetByIdAsync(int salaryStructureId)
+    public async Task<SalaryStructure> GetByIdAsync(int Id)
     {
         var criteria = new GetSalaryStructureByIdCriteria
         {
-            Id = salaryStructureId
+            SalaryStructureId = Id
         };
-
-        return await baseService.(criteria);
+        var result = await baseService.GetDataAsync<SalaryStructure>(criteria);
+        return result.FirstOrDefault();
     }
 }

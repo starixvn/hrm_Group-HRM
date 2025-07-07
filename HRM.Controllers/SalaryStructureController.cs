@@ -2,22 +2,21 @@
 namespace HRM.Controllers;
 
 using System.Threading.Tasks;
-using Core.Constants;
-using Core.Filters;
-using Criteria.Department;
-using GO.UserControl.Client.Core.Enumerables;
+using Criteria.SalaryStructure;
 using GO.UserControl.Client.Core.Session;
+using HRM.Core.Constants;
+using HRM.Core.Filters;
 using HRM.Core.Models;
 using HRM.Core.Services;
+using HRM.ViewModels.Department;
 using Microsoft.AspNetCore.Mvc;
 using Services.Interfaces;
-using ViewModels.Department;
+using ViewModels.SalaryStructure;
 
 public class SalaryStructureController(
     IUserControlSession session,
     IJobLevelService jobLevelService,
     ISalaryStructureService salaryStructureService,
-    IEmployeeService employeeService,
     IBaseService baseService) : BaseController(session)
 {
     //  [HrmPermission(Policy.Read, FunctionKey.SalaryStructureManagement)]
@@ -31,7 +30,7 @@ public class SalaryStructureController(
     // [HrmPermission(Policy.Read, FunctionKey.SalaryStructureManagement)]
     public async Task<IActionResult> GetSalaryStructures()
     {
-        var salaryStructures = await salaryStructureService.Get(request.IsActive);
+        var salaryStructures = await salaryStructureService.GetSalaryStructureAsync(CurrentCompanyId);
         return new JsonResult(salaryStructures);
     }
 
@@ -49,7 +48,7 @@ public class SalaryStructureController(
 
     [HttpPost]
     // [HrmPermission(Policy.Host, FunctionKey.SalaryStructureManagement)]
-    public async Task<IActionResult> Create([FromBody] CreateDepartmentViewModel model)
+    public async Task<IActionResult> Create([FromBody] CreateSalaryStructureViewModel model)
     {
         var commandResult = new CommandResult();
         if (model == null || !ModelState.IsValid)
@@ -57,29 +56,30 @@ public class SalaryStructureController(
             return new JsonResult(commandResult);
         }
 
-        var criteria = new InsertDepartmentCriteria
+        var criteria = new InsertSalaryStructureCriteria
         {
-            Code = model.Code,
             Name = model.Name,
-            //ModifiedBy = session.UserId
+            JobLevelId = model.JobLevelId,
+            LocalSalary = model.LocalSalary,
+            ExpatSalary = model.ExpatSalary,
+            CreatedBy = session.UserId
         };
         commandResult = await baseService.ExecuteNonQueryAsync(criteria);
 
         return new JsonResult(commandResult);
     }
 
-    // [HrmPermission(Policy.Host, FunctionKey.SalaryStructureManagement)]
+    //[HrmPermission(Policy.Host, FunctionKey.SalaryStructureManagement)]
     public async Task<IActionResult> GetById(int Id)
     {
-        var department = await departmentService.GetByIdAsync(Id);
-        var units = await unitService.GetUnitAsync();
-        var model = new EditDepartmentViewModel
+        var salaryStructure = await salaryStructureService.GetByIdAsync(Id);
+
+        var model = new EditSalaryStructureViewModel
         {
-            DepartmentId = Id,
-            Code = department.Code,
-            Name = department.Name,
-            UnitId = department.Unit?.Id ?? 0,
-            Units = units
+            SalaryStructureId = Id,
+            Name = salaryStructure.Name,
+            LocalSalary = salaryStructure.LocalSalary,
+            ExpatSalary = salaryStructure.ExpatSalary
         };
 
         return new JsonResult(model);
@@ -93,19 +93,22 @@ public class SalaryStructureController(
 
     [HttpPost]
     // [HrmPermission(Policy.Host, FunctionKey.SalaryStructureManagement)]
-    public async Task<IActionResult> Edit([FromBody] EditDepartmentViewModel model)
+    public async Task<IActionResult> Edit([FromBody] EditSalaryStructureViewModel model)
     {
         var commandResult = new CommandResult();
         if (model == null || !ModelState.IsValid)
         {
             return new JsonResult(commandResult);
         }
-        var criteria = new UpdateDepartmentCriteria
+
+        var criteria = new UpdateSalaryStructureCriteria
         {
-            DepartmentId = model.DepartmentId,
-            Code = model.Code,
+            SalaryStructureId = model.SalaryStructureId,
             Name = model.Name,
-            ModifiedBy = session.UserId
+            LocalSalary = model.LocalSalary,
+            ExpatSalary = model.ExpatSalary,
+            ModifiedBy = session.UserId,
+            CompanyId = CurrentCompanyId
         };
         commandResult = await baseService.ExecuteNonQueryAsync(criteria);
 
@@ -114,9 +117,9 @@ public class SalaryStructureController(
 
     [HttpPost]
     // [HrmPermission(Policy.Host, FunctionKey.SalaryStructureManagement)]
-    public async Task<IActionResult> Delete([FromBody] DeleteDepartmentViewModel request)
+    public async Task<IActionResult> Delete([FromBody] DeleteSalaryStructureViewModel model)
     {
-        var commandResult = await departmentService.DeleteAsync(session.UserId, request.Id);
+        var commandResult = await salaryStructureService.DeleteAsync(session.UserId, model.Id);
 
         return new JsonResult(commandResult);
     }

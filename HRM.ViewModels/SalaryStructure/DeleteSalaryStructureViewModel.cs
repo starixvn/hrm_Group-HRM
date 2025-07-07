@@ -5,5 +5,5 @@ namespace HRM.ViewModels.SalaryStructure;
 public class DeleteSalaryStructureViewModel
 {
     [Required]
-    public int SalaryStructureId { get; set; }
+    public int Id { get; set; }
 }

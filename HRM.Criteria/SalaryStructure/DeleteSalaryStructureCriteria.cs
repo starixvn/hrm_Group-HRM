@@ -2,11 +2,11 @@
 
 using Fanex.Data.Repository;
 
-public class DeleteSalaryStructureIdCriteria : CriteriaBase
+public class DeleteSalaryStructureCriteria : CriteriaBase
 {
     public int SalaryStructureId { get; set; }
 
-    public int ModifiedBy { get; set; }
+    public int DeletedBy { get; set; }
 
     public override string GetSettingKey()
     {
