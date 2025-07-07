@@ -4,11 +4,8 @@ namespace HRM.Controllers;
 using System.Threading.Tasks;
 using Criteria.SalaryStructure;
 using GO.UserControl.Client.Core.Session;
-using HRM.Core.Constants;
-using HRM.Core.Filters;
 using HRM.Core.Models;
 using HRM.Core.Services;
-using HRM.ViewModels.Department;
 using Microsoft.AspNetCore.Mvc;
 using Services.Interfaces;
 using ViewModels.SalaryStructure;
@@ -62,7 +59,8 @@ public class SalaryStructureController(
             JobLevelId = model.JobLevelId,
             LocalSalary = model.LocalSalary,
             ExpatSalary = model.ExpatSalary,
-            CreatedBy = session.UserId
+            CreatedBy = session.UserId,
+            CompanyId = CurrentCompanyId
         };
         commandResult = await baseService.ExecuteNonQueryAsync(criteria);
 
@@ -76,8 +74,9 @@ public class SalaryStructureController(
 
         var model = new EditSalaryStructureViewModel
         {
-            SalaryStructureId = Id,
+            SalaryStructureId = salaryStructure.SalaryStructureId,
             Name = salaryStructure.Name,
+            JobLevelId = salaryStructure.JobLevelId,
             LocalSalary = salaryStructure.LocalSalary,
             ExpatSalary = salaryStructure.ExpatSalary
         };
@@ -104,6 +103,7 @@ public class SalaryStructureController(
         var criteria = new UpdateSalaryStructureCriteria
         {
             SalaryStructureId = model.SalaryStructureId,
+            JobLevelId = model.JobLevelId,
             Name = model.Name,
             LocalSalary = model.LocalSalary,
             ExpatSalary = model.ExpatSalary,

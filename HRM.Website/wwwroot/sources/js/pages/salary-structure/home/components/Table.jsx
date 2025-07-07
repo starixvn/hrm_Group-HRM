@@ -4,12 +4,12 @@ import Row from "./Row";
 
 const Table = ({ data, onDelete }) => {
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
-  const colSpan = window.hasPermission === "True" ? 6 : 4;
+  const colSpan = window.hasPermission === "True" ? 7 : 5;
 
   const columns = [
-    { label: "#", key: "no", sortable: true },
-    { label: "Salary Structure", key: "salaryStructure", sortable: true },
-    { label: "Job Level", key: "jobLevel", sortable: true },
+    { label: "#", key: "no", sortable: false },
+    { label: "Salary Structure", key: "name", sortable: true },
+    { label: "Job Level", key: "jobLevelName", sortable: true },
     { label: "Local Salary", key: "localSalary", sortable: true },
     { label: "Expat Salary", key: "expatSalary", sortable: true },
   ];
@@ -98,7 +98,7 @@ const Table = ({ data, onDelete }) => {
         {sortedData.length > 0 ? (
           sortedData.map((item, index) => (
             <Row
-              key={item.id}
+              key={item.salaryStructureId}
               rowIndex={index + 1}
               item={item}
               onDelete={onDelete}

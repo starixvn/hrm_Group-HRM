@@ -14,6 +14,8 @@ public class InsertSalaryStructureCriteria : CriteriaBase
 
     public int CreatedBy { get; set; }
 
+    public int CompanyId { get; set; }
+
     public override string GetSettingKey()
     {
         return "SalaryStructure_Insert";
@@ -21,6 +23,11 @@ public class InsertSalaryStructureCriteria : CriteriaBase
 
     public override bool IsValid()
     {
-        return !string.IsNullOrWhiteSpace(Name) && JobLevelId > 0;
+        return IsValidId(JobLevelId) &&
+            IsValidId(CompanyId) &&
+            IsValidId(CreatedBy) &&
+            !string.IsNullOrWhiteSpace(Name);
     }
+
+    private static bool IsValidId(int value) => value > 0;
 }

@@ -13,12 +13,11 @@ import {
 import { validationSchema } from "../common.functions";
 
 const AppContainer = () => {
-    const [prepareData, setPrepareData] = useState(null);
     const [formKey, setFormKey] = useState(0);
 
     const [initialValues, setInitialValues] = useState({
         salaryStructureId: 0,
-        salaryStructureName: "",
+        name: "",
         jobLevel: "",
         localSalary: 0,
         expatSalary: 0,
@@ -31,7 +30,7 @@ const AppContainer = () => {
 
     useEffect(() => {
         axios({
-            url: resolveClientUrl(`SalaryStructure/getById/${window.salaryStructureId}`),
+            url: resolveClientUrl(`salarystructure/getById/${window.salaryStructureId}`),
             method: "GET",
             headers: { "X-Requested-With": "XMLHttpRequest" },
         })
@@ -40,8 +39,8 @@ const AppContainer = () => {
                 setInitialValues((prev) => ({
                     ...prev,
                     salaryStructureId: data.salaryStructureId,
-                    salaryStructureName: data.salaryStructureName,
-                    jobLevel: data.jobLevel,
+                    name: data.name,
+                    jobLevelId: data.jobLevelId,
                     localSalary: data.localSalary,
                     expatSalary: data.expatSalary,
                 }));
@@ -73,8 +72,8 @@ const AppContainer = () => {
                 resolveClientUrl("SalaryStructure/Edit"),
                 {
                     salaryStructureId: values.salaryStructureId,
-                    salaryStructureName: values.salaryStructureName.trim(),
-                    jobLevel: values.jobLevel,
+                    name: values.name.trim(),
+                    jobLevelId: values.jobLevelId,
                     localSalary: values.localSalary,
                     expatSalary: values.expatSalary,
                 },
@@ -112,7 +111,7 @@ const AppContainer = () => {
                         </div>
                         <div className="input-form">
                             <Field
-                                name="salaryStructureName"
+                                name="name"
                                 className="form-control"
                                 autoComplete="off"
                             />
@@ -127,14 +126,13 @@ const AppContainer = () => {
                         </div>
                         <div className="select-form">
                             <Field
-                                name="unit"
+                                name="jobLevelId"
                                 as="select"
                                 className="form-control">
-                                <option value="" />
                                 {initialValues.jobLevels
                                     ? initialValues.jobLevels.map((jobLevel) => (
                                           <option key={jobLevel.id} value={jobLevel.id}>
-                                              {jobLevel.code}-{jobLevel.name}
+                                              {jobLevel.name}
                                           </option>
                                       ))
                                     : ""}
@@ -145,7 +143,6 @@ const AppContainer = () => {
                         <div className="label-form">
                             <label className="control-label">
                                 Local Salary
-                                <span className="require">*</span>
                             </label>
                         </div>
                         <div className="input-form">
@@ -162,7 +159,6 @@ const AppContainer = () => {
                         <div className="label-form">
                             <label className="control-label">
                                 Expat Salary
-                                <span className="require">*</span>
                             </label>
                         </div>
                         <div className="input-form">

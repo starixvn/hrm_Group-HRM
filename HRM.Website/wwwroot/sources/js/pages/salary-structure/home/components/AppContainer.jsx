@@ -17,13 +17,12 @@ const AppContainer = () => {
     const [deleteModalDialog, setDeleteModalDialog] = useState({ show: false });
 
     const getSalaryStructures = (params) => {
-        setFilterParams(params);
         axios
             .post(resolveClientUrl("SalaryStructure/GetSalaryStructures"), params, {
                 headers: { "X-Requested-With": "XMLHttpRequest" },
             })
             .then((response) => {
-                setDepartments(response.data);
+                setSalaryStructures(response.data);
             })
             .catch(axiosError);
     };
@@ -45,7 +44,7 @@ const AppContainer = () => {
             .post(
                 resolveClientUrl("SalaryStructure/Delete"),
                 {
-                    id: deleteModalDialog.salaryStructure.id,
+                    id: deleteModalDialog.salaryStructure.salaryStructureId,
                 },
                 {
                     headers: { "X-Requested-With": "XMLHttpRequest" },

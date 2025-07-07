@@ -18,8 +18,8 @@ const AppContainer = () => {
     const [initialValues, setInitialValues] = useState({
         salaryStructure: "",
         jobLevel: "",
-        localSalary: 0,
-        expatSalary: 0,
+        localSalary: null,
+        expatSalary: null,
         jobLevels: []
     });
 
@@ -49,10 +49,10 @@ const AppContainer = () => {
             .post(
                 resolveClientUrl("SalaryStructure/Create"),
                 {
-                    salaryStructure: values.salaryStructure.trim(),
-                    jobLevel: values.jobLevel,
-                    localSalary: values.localSalary,
-                    expatSalary: values.expatSalary,
+                    Name: values.salaryStructure.trim(),
+                    JobLevelId: values.jobLevel,
+                    LocalSalary: values.localSalary,
+                    ExpatSalary: values.expatSalary,
                 },
                 {
                     headers: { "X-Requested-With": "XMLHttpRequest" },
@@ -88,7 +88,7 @@ const AppContainer = () => {
                         </div>
                         <div className="input-form">
                             <Field
-                                name="salaryStructure"
+                                name="name"
                                 className="form-control"
                                 autoComplete="off"
                             />
@@ -110,7 +110,7 @@ const AppContainer = () => {
                                 {initialValues.jobLevels
                                     ? initialValues.jobLevels.map((jobLevel) => (
                                           <option key={jobLevel.id} value={jobLevel.id}>
-                                              {jobLevel.code}-{jobLevel.nam}
+                                              {jobLevel.name}
                                           </option>
                                       ))
                                     : ""}

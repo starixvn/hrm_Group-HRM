@@ -4,7 +4,7 @@ import { resolveClientUrl } from "../../../../shared/common.functions";
 
 const Row = ({ rowIndex, item, onDelete }) => {
     const handleEdit = () => {
-        window.location = resolveClientUrl(`department/edit/${item.id}`);
+        window.location = resolveClientUrl(`salarystructure/edit/${item.salaryStructureId}`);
     };
 
     const handleDelete = () => {
@@ -12,19 +12,12 @@ const Row = ({ rowIndex, item, onDelete }) => {
     };
 
     return (
-        <tr id={`row_${item.id}`}>
+        <tr id={`row_${item.salaryStructureId}`}>
             <td>{rowIndex}</td>
-            <td>{item.groupDeptId}</td>
-            <td>{item.code}</td>
-            <td>{item.unit ? item.unit.code : ""}</td>
             <td>{item.name}</td>
-            <td>{item.accountableArea}</td>
-            <td>{item.picEmployeeName}</td>
-            <td>
-                {item.isActive && (
-                    <i className="fa fa-check fa-lg icon-check" />
-                )}
-            </td>
+            <td>{item.jobLevelName}</td>
+            <td>{item.localSalary}</td>
+            <td>{item.expatSalary}</td>
             {window.hasPermission === "True" && (
                 <Fragment>
                     <td>

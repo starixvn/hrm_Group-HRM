@@ -3,7 +3,7 @@ import { resolveClientUrl } from '../../../../shared/common.functions';
 
 const Filter = () => {
     const handleCreate = () => {
-        window.location.href = resolveClientUrl('SalaryStructure/Create');
+        window.location.href = resolveClientUrl('salarystructure/create');
     };
 
     return (

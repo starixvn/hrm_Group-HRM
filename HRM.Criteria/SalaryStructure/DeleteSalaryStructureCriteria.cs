@@ -15,6 +15,6 @@ public class DeleteSalaryStructureCriteria : CriteriaBase
 
     public override bool IsValid()
     {
-        return SalaryStructureId > 0;
+        return SalaryStructureId > 0 && DeletedBy > 0;
     }
 }
