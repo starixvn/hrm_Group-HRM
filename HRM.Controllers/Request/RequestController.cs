@@ -30,7 +30,8 @@ public class RequestController(
     ITeamService teamService,
     IAttachFileService attachFileService,
     IBaseService baseService,
-    IRequestRepository requestRepository) : BaseController(session)
+    IRequestRepository requestRepository,
+    ICompanyService companyService) : BaseController(session)
 {
     private const string EmployeeRequestViewName = "EmployeeRequest";
 
@@ -74,6 +75,8 @@ public class RequestController(
         };
         var supervisorCompanyIds = await baseService.GetDataAsync<int>(supervisorCompanyCriteria);
 
+        var companies = await companyService.GetAllCompany();
+
         var nexCompanies = supervisorCompanyIds
             .Where(s => Constants.NexCompanyIds.Contains(s));
         if (!nexCompanies.Any())
@@ -100,8 +103,22 @@ public class RequestController(
             };
 
             var responseData = await baseService.GetDataAsync<NexRequestModel>(criteria);
-            requests.AddRange(responseData);
+            var mappedData = responseData.Select(item =>
+            {
+                item.CompanyId = companyId;
+                return item;
+            });
+            requests.AddRange(mappedData);
         }
+
+        Parallel.ForEach(requests, r =>
+        {
+            var companyName = companies
+                .Where(c => c.CompanyId == r.CompanyId)
+                .Select(c => c.Name)
+                .FirstOrDefault();
+            r.Requester += $" ({companyName})";
+        });
 
         var approver = await employeeService.GetEmployeeByIdAsync(session.UserId);
 
