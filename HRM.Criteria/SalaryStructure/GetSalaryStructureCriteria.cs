@@ -8,9 +8,5 @@ public class GetSalaryStructureCriteria : CriteriaBase
 
     public override string GetSettingKey() => "SalaryStructure_Get";
 
-
-    public override bool IsValid()
-    {
-        return CompanyId > 0 ;
-    }
+    public override bool IsValid() => CompanyId > 0;
 }

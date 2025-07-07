@@ -11,16 +11,6 @@ using Models;
 
 public class SalaryStructureService(IBaseService baseService) : ISalaryStructureService
 {
-    public async Task<CommandResult> DeleteAsync(int actorId, int id)
-    {
-        var criteria = new DeleteSalaryStructureCriteria
-        {
-            SalaryStructureId = id,
-            DeletedBy = actorId
-        };
-        return await baseService.ExecuteNonQueryAsync(criteria);
-    }
-
     public async Task<IList<SalaryStructure>> GetSalaryStructureAsync(int CompanyId)
     {
         var criteria = new GetSalaryStructureCriteria
@@ -28,7 +18,7 @@ public class SalaryStructureService(IBaseService baseService) : ISalaryStructure
             CompanyId = CompanyId
         };
 
-    var result = await baseService.GetDataAsync<SalaryStructure>(criteria);
+        var result = await baseService.GetDataAsync<SalaryStructure>(criteria);
 
         return result.ToList();
     }
@@ -41,5 +31,14 @@ public class SalaryStructureService(IBaseService baseService) : ISalaryStructure
         };
         var result = await baseService.GetDataAsync<SalaryStructure>(criteria);
         return result.FirstOrDefault();
+    }
+    public async Task<CommandResult> DeleteAsync(int actorId, int id)
+    {
+        var criteria = new DeleteSalaryStructureCriteria
+        {
+            SalaryStructureId = id,
+            DeletedBy = actorId
+        };
+        return await baseService.ExecuteNonQueryAsync(criteria);
     }
 }
