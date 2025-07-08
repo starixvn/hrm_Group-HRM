@@ -4852,17 +4852,6 @@ module.exports = { "default": __webpack_require__(/*! core-js/library/fn/is-iter
 
 /***/ }),
 
-/***/ "./node_modules/babel-runtime/core-js/object/assign.js":
-/*!*************************************************************!*\
-  !*** ./node_modules/babel-runtime/core-js/object/assign.js ***!
-  \*************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = { "default": __webpack_require__(/*! core-js/library/fn/object/assign */ "./node_modules/core-js/library/fn/object/assign.js"), __esModule: true };
-
-/***/ }),
-
 /***/ "./node_modules/babel-runtime/core-js/object/keys.js":
 /*!***********************************************************!*\
   !*** ./node_modules/babel-runtime/core-js/object/keys.js ***!
@@ -4904,40 +4893,6 @@ module.exports = { "default": __webpack_require__(/*! core-js/library/fn/symbol 
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = { "default": __webpack_require__(/*! core-js/library/fn/symbol/iterator */ "./node_modules/core-js/library/fn/symbol/iterator.js"), __esModule: true };
-
-/***/ }),
-
-/***/ "./node_modules/babel-runtime/helpers/extends.js":
-/*!*******************************************************!*\
-  !*** ./node_modules/babel-runtime/helpers/extends.js ***!
-  \*******************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-exports.__esModule = true;
-
-var _assign = __webpack_require__(/*! ../core-js/object/assign */ "./node_modules/babel-runtime/core-js/object/assign.js");
-
-var _assign2 = _interopRequireDefault(_assign);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = _assign2.default || function (target) {
-  for (var i = 1; i < arguments.length; i++) {
-    var source = arguments[i];
-
-    for (var key in source) {
-      if (Object.prototype.hasOwnProperty.call(source, key)) {
-        target[key] = source[key];
-      }
-    }
-  }
-
-  return target;
-};
 
 /***/ }),
 
@@ -7089,19 +7044,6 @@ module.exports = __webpack_require__(/*! ../modules/core.is-iterable */ "./node_
 
 /***/ }),
 
-/***/ "./node_modules/core-js/library/fn/object/assign.js":
-/*!**********************************************************!*\
-  !*** ./node_modules/core-js/library/fn/object/assign.js ***!
-  \**********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-__webpack_require__(/*! ../../modules/es6.object.assign */ "./node_modules/core-js/library/modules/es6.object.assign.js");
-module.exports = __webpack_require__(/*! ../../modules/_core */ "./node_modules/core-js/library/modules/_core.js").Object.assign;
-
-
-/***/ }),
-
 /***/ "./node_modules/core-js/library/fn/object/keys.js":
 /*!********************************************************!*\
   !*** ./node_modules/core-js/library/fn/object/keys.js ***!
@@ -7938,52 +7880,6 @@ var meta = module.exports = {
 
 /***/ }),
 
-/***/ "./node_modules/core-js/library/modules/_object-assign.js":
-/*!****************************************************************!*\
-  !*** ./node_modules/core-js/library/modules/_object-assign.js ***!
-  \****************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-// 19.1.2.1 Object.assign(target, source, ...)
-var getKeys = __webpack_require__(/*! ./_object-keys */ "./node_modules/core-js/library/modules/_object-keys.js");
-var gOPS = __webpack_require__(/*! ./_object-gops */ "./node_modules/core-js/library/modules/_object-gops.js");
-var pIE = __webpack_require__(/*! ./_object-pie */ "./node_modules/core-js/library/modules/_object-pie.js");
-var toObject = __webpack_require__(/*! ./_to-object */ "./node_modules/core-js/library/modules/_to-object.js");
-var IObject = __webpack_require__(/*! ./_iobject */ "./node_modules/core-js/library/modules/_iobject.js");
-var $assign = Object.assign;
-
-// should work with symbols and should have deterministic property order (V8 bug)
-module.exports = !$assign || __webpack_require__(/*! ./_fails */ "./node_modules/core-js/library/modules/_fails.js")(function () {
-  var A = {};
-  var B = {};
-  // eslint-disable-next-line no-undef
-  var S = Symbol();
-  var K = 'abcdefghijklmnopqrst';
-  A[S] = 7;
-  K.split('').forEach(function (k) { B[k] = k; });
-  return $assign({}, A)[S] != 7 || Object.keys($assign({}, B)).join('') != K;
-}) ? function assign(target, source) { // eslint-disable-line no-unused-vars
-  var T = toObject(target);
-  var aLen = arguments.length;
-  var index = 1;
-  var getSymbols = gOPS.f;
-  var isEnum = pIE.f;
-  while (aLen > index) {
-    var S = IObject(arguments[index++]);
-    var keys = getSymbols ? getKeys(S).concat(getSymbols(S)) : getKeys(S);
-    var length = keys.length;
-    var j = 0;
-    var key;
-    while (length > j) if (isEnum.call(S, key = keys[j++])) T[key] = S[key];
-  } return T;
-} : $assign;
-
-
-/***/ }),
-
 /***/ "./node_modules/core-js/library/modules/_object-create.js":
 /*!****************************************************************!*\
   !*** ./node_modules/core-js/library/modules/_object-create.js ***!
@@ -8747,21 +8643,6 @@ Iterators.Arguments = Iterators.Array;
 addToUnscopables('keys');
 addToUnscopables('values');
 addToUnscopables('entries');
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/es6.object.assign.js":
-/*!*******************************************************************!*\
-  !*** ./node_modules/core-js/library/modules/es6.object.assign.js ***!
-  \*******************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-// 19.1.3.1 Object.assign(target, source)
-var $export = __webpack_require__(/*! ./_export */ "./node_modules/core-js/library/modules/_export.js");
-
-$export($export.S + $export.F, 'Object', { assign: __webpack_require__(/*! ./_object-assign */ "./node_modules/core-js/library/modules/_object-assign.js") });
 
 
 /***/ }),
@@ -96612,7 +96493,7 @@ function addMethod(schemaType, name, fn) {
 
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+  value: true
 });
 exports.validationSchema = undefined;
 
@@ -96623,8 +96504,27 @@ var Yup = _interopRequireWildcard(_yup);
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 var validationSchema = exports.validationSchema = Yup.object({
-    name: Yup.string().required('Salary Structure field is required!').trim(),
-    jobLevelId: Yup.number().required('Job Level field is required!')
+  name: Yup.string().required('Salary Structure field is required !').trim(),
+
+  jobLevelId: Yup.number().nullable().typeError('Job Level field is required !').required('Job Level field is required !'),
+
+  localSalary: Yup.number().nullable().transform(function (value, originalValue) {
+    return originalValue === '' ? null : value;
+  }),
+
+  expatSalary: Yup.number().nullable().transform(function (value, originalValue) {
+    return originalValue === '' ? null : value;
+  })
+}).test('at-least-one-salary', 'Local Salary or Expat Salary is required !', function (values) {
+  if (!values) return false;
+  var localSalary = values.localSalary,
+      expatSalary = values.expatSalary;
+
+
+  var isLocalFilled = typeof localSalary === 'number' && !isNaN(localSalary);
+  var isExpatFilled = typeof expatSalary === 'number' && !isNaN(expatSalary);
+
+  return isLocalFilled || isExpatFilled;
 });
 
 /***/ }),
@@ -96643,9 +96543,9 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _extends2 = __webpack_require__(/*! babel-runtime/helpers/extends */ "./node_modules/babel-runtime/helpers/extends.js");
+var _getIterator2 = __webpack_require__(/*! babel-runtime/core-js/get-iterator */ "./node_modules/babel-runtime/core-js/get-iterator.js");
 
-var _extends3 = _interopRequireDefault(_extends2);
+var _getIterator3 = _interopRequireDefault(_getIterator2);
 
 var _slicedToArray2 = __webpack_require__(/*! babel-runtime/helpers/slicedToArray */ "./node_modules/babel-runtime/helpers/slicedToArray.js");
 
@@ -96681,16 +96581,17 @@ var AppContainer = function AppContainer() {
         formKey = _useState2[0],
         setFormKey = _useState2[1];
 
-    var _useState3 = (0, _react.useState)({
-        salaryStructure: "",
-        jobLevel: "",
-        localSalary: null,
-        expatSalary: null,
-        jobLevels: []
-    }),
+    var _useState3 = (0, _react.useState)([]),
         _useState4 = (0, _slicedToArray3.default)(_useState3, 2),
-        initialValues = _useState4[0],
-        setInitialValues = _useState4[1];
+        jobLevels = _useState4[0],
+        setJobLevels = _useState4[1];
+
+    var initialValues = {
+        name: '',
+        jobLevelId: '',
+        localSalary: '',
+        expatSalary: ''
+    };
 
     var handleGoBack = function handleGoBack() {
         history.back();
@@ -96701,12 +96602,8 @@ var AppContainer = function AppContainer() {
             url: (0, _common.resolveClientUrl)("SalaryStructure/GetJobLevels"),
             method: "GET",
             headers: { "X-Requested-With": "XMLHttpRequest" }
-        }).then(function (response) {
-            setInitialValues(function (prev) {
-                return (0, _extends3.default)({}, prev, {
-                    jobLevels: response.data
-                });
-            });
+        }).then(function (res) {
+            return setJobLevels(res.data);
         }).catch(_common.axiosError);
     }, []);
 
@@ -96716,8 +96613,8 @@ var AppContainer = function AppContainer() {
         setSubmitting(true);
 
         _axios2.default.post((0, _common.resolveClientUrl)("SalaryStructure/Create"), {
-            Name: values.salaryStructure.trim(),
-            JobLevelId: values.jobLevel,
+            Name: values.name.trim(),
+            JobLevelId: values.jobLevelId,
             LocalSalary: values.localSalary,
             ExpatSalary: values.expatSalary
         }, {
@@ -96734,6 +96631,9 @@ var AppContainer = function AppContainer() {
                 _toastr2.default.error(data.message, "", (0, _common.toastOptions)());
                 setSubmitting(false);
             }
+            setFormKey(function (prev) {
+                return prev + 1;
+            });
         }).catch(_common.axiosError);
     };
 
@@ -96798,11 +96698,11 @@ var AppContainer = function AppContainer() {
                         _react2.default.createElement(
                             _formik.Field,
                             {
-                                name: "jobLevel",
+                                name: "jobLevelId",
                                 as: "select",
                                 className: "form-control" },
                             _react2.default.createElement("option", { value: "" }),
-                            initialValues.jobLevels ? initialValues.jobLevels.map(function (jobLevel) {
+                            jobLevels ? jobLevels.map(function (jobLevel) {
                                 return _react2.default.createElement(
                                     "option",
                                     { key: jobLevel.id, value: jobLevel.id },
@@ -96882,6 +96782,46 @@ var AppContainer = function AppContainer() {
         );
     };
 
+    var validateFormValues = function validateFormValues(values) {
+        try {
+            _common2.validationSchema.validateSync(values, { abortEarly: false });
+            return {};
+        } catch (error) {
+            var errors = {};
+            if (error.inner && Array.isArray(error.inner)) {
+                var _iteratorNormalCompletion = true;
+                var _didIteratorError = false;
+                var _iteratorError = undefined;
+
+                try {
+                    for (var _iterator = (0, _getIterator3.default)(error.inner), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                        var err = _step.value;
+
+                        if (!errors[err.path]) {
+                            errors[err.path || '_form'] = err.message;
+                        }
+                    }
+                } catch (err) {
+                    _didIteratorError = true;
+                    _iteratorError = err;
+                } finally {
+                    try {
+                        if (!_iteratorNormalCompletion && _iterator.return) {
+                            _iterator.return();
+                        }
+                    } finally {
+                        if (_didIteratorError) {
+                            throw _iteratorError;
+                        }
+                    }
+                }
+            } else {
+                errors._form = error.message;
+            }
+            return errors;
+        }
+    };
+
     return _react2.default.createElement(
         _formik.Formik,
         {
@@ -96890,6 +96830,7 @@ var AppContainer = function AppContainer() {
             validateOnChange: false,
             initialValues: initialValues,
             validationSchema: _common2.validationSchema,
+            validate: validateFormValues,
             onSubmit: handleSubmit },
         renderForm
     );

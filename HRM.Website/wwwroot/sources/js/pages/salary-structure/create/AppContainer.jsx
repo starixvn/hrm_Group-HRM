@@ -15,13 +15,14 @@ import { validationSchema } from "../common.functions";
 const AppContainer = () => {
     const [formKey, setFormKey] = useState(0);
 
-    const [initialValues, setInitialValues] = useState({
-        salaryStructure: "",
-        jobLevel: "",
-        localSalary: null,
-        expatSalary: null,
-        jobLevels: []
-    });
+  const [jobLevels, setJobLevels] = useState([]);
+
+    const initialValues = {
+        name: '',
+        jobLevelId: '',
+        localSalary: '',
+        expatSalary: ''
+      };
 
     const handleGoBack = () => {
         history.back();
@@ -33,12 +34,7 @@ const AppContainer = () => {
             method: "GET",
             headers: { "X-Requested-With": "XMLHttpRequest" },
         })
-            .then((response) => {
-                setInitialValues((prev) => ({
-                    ...prev,
-                    jobLevels: response.data,
-                }));
-            })
+        .then((res) => setJobLevels(res.data))
             .catch(axiosError);
     }, []);
 
@@ -49,8 +45,8 @@ const AppContainer = () => {
             .post(
                 resolveClientUrl("SalaryStructure/Create"),
                 {
-                    Name: values.salaryStructure.trim(),
-                    JobLevelId: values.jobLevel,
+                    Name: values.name.trim(),
+                    JobLevelId: values.jobLevelId,
                     LocalSalary: values.localSalary,
                     ExpatSalary: values.expatSalary,
                 },
@@ -70,6 +66,7 @@ const AppContainer = () => {
                     toastr.error(data.message, "", toastOptions());
                     setSubmitting(false);
                 }
+                setFormKey((prev) => prev + 1);
             })
             .catch(axiosError);
     };
@@ -103,12 +100,12 @@ const AppContainer = () => {
                         </div>
                         <div className="select-form">
                             <Field
-                                name="jobLevel"
+                                name="jobLevelId"
                                 as="select"
                                 className="form-control">
                                 <option value="" />
-                                {initialValues.jobLevels
-                                    ? initialValues.jobLevels.map((jobLevel) => (
+                                {jobLevels
+                                    ? jobLevels.map((jobLevel) => (
                                           <option key={jobLevel.id} value={jobLevel.id}>
                                               {jobLevel.name}
                                           </option>
@@ -166,6 +163,25 @@ const AppContainer = () => {
         );
     };
 
+    const validateFormValues = (values) => {
+        try {
+          validationSchema.validateSync(values, { abortEarly: false });
+          return {};
+        } catch (error) {
+          const errors = {};
+          if (error.inner && Array.isArray(error.inner)) {
+            for (const err of error.inner) {
+              if (!errors[err.path]) {
+                errors[err.path || '_form'] = err.message;
+              }
+            }
+          } else {
+            errors._form = error.message;
+          }
+          return errors;
+        }
+      };
+
     return (
         <Formik
             key={formKey}
@@ -173,6 +189,7 @@ const AppContainer = () => {
             validateOnChange={false}
             initialValues={initialValues}
             validationSchema={validationSchema}
+            validate={validateFormValues}
             onSubmit={handleSubmit}>
             {renderForm}
         </Formik>

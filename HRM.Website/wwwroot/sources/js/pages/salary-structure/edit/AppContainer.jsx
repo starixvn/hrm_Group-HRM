@@ -15,13 +15,14 @@ import { validationSchema } from "../common.functions";
 const AppContainer = () => {
     const [formKey, setFormKey] = useState(0);
 
+  const [jobLevels, setJobLevels] = useState([]);
+
     const [initialValues, setInitialValues] = useState({
-        salaryStructureId: 0,
-        name: "",
-        jobLevel: "",
-        localSalary: 0,
-        expatSalary: 0,
-        jobLevels: []
+        salaryStructureId: '',
+        name: '',
+        jobLevelId: '',
+        localSalary: '',
+        expatSalary: ''
     });
 
     const handleGoBack = () => {
@@ -55,13 +56,8 @@ const AppContainer = () => {
             method: "GET",
             headers: { "X-Requested-With": "XMLHttpRequest" },
         })
-            .then((response) => {
-                setInitialValues((prev) => ({
-                    ...prev,
-                    jobLevels: response.data,
-                }));
-            })
-            .catch(axiosError);
+        .then((res) => setJobLevels(res.data))
+        .catch(axiosError);
     }, []);
 
     const handleSubmit = (values, { setSubmitting }) => {
@@ -129,8 +125,8 @@ const AppContainer = () => {
                                 name="jobLevelId"
                                 as="select"
                                 className="form-control">
-                                {initialValues.jobLevels
-                                    ? initialValues.jobLevels.map((jobLevel) => (
+                                {jobLevels
+                                    ? jobLevels.map((jobLevel) => (
                                           <option key={jobLevel.id} value={jobLevel.id}>
                                               {jobLevel.name}
                                           </option>
@@ -188,6 +184,25 @@ const AppContainer = () => {
         );
     };
 
+    const validateFormValues = (values) => {
+        try {
+          validationSchema.validateSync(values, { abortEarly: false });
+          return {};
+        } catch (error) {
+          const errors = {};
+          if (error.inner && Array.isArray(error.inner)) {
+            for (const err of error.inner) {
+              if (!errors[err.path]) {
+                errors[err.path || '_form'] = err.message;
+              }
+            }
+          } else {
+            errors._form = error.message;
+          }
+          return errors;
+        }
+      };
+
     return (
         <Formik
             key={formKey}
@@ -195,6 +210,7 @@ const AppContainer = () => {
             validateOnChange={false}
             initialValues={initialValues}
             validationSchema={validationSchema}
+            validate={validateFormValues}
             onSubmit={handleSubmit}>
             {renderForm}
         </Formik>

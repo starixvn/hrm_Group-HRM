@@ -96612,7 +96612,7 @@ function addMethod(schemaType, name, fn) {
 
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+  value: true
 });
 exports.validationSchema = undefined;
 
@@ -96623,8 +96623,27 @@ var Yup = _interopRequireWildcard(_yup);
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 var validationSchema = exports.validationSchema = Yup.object({
-    name: Yup.string().required('Salary Structure field is required!').trim(),
-    jobLevelId: Yup.number().required('Job Level field is required!')
+  name: Yup.string().required('Salary Structure field is required !').trim(),
+
+  jobLevelId: Yup.number().nullable().typeError('Job Level field is required !').required('Job Level field is required !'),
+
+  localSalary: Yup.number().nullable().transform(function (value, originalValue) {
+    return originalValue === '' ? null : value;
+  }),
+
+  expatSalary: Yup.number().nullable().transform(function (value, originalValue) {
+    return originalValue === '' ? null : value;
+  })
+}).test('at-least-one-salary', 'Local Salary or Expat Salary is required !', function (values) {
+  if (!values) return false;
+  var localSalary = values.localSalary,
+      expatSalary = values.expatSalary;
+
+
+  var isLocalFilled = typeof localSalary === 'number' && !isNaN(localSalary);
+  var isExpatFilled = typeof expatSalary === 'number' && !isNaN(expatSalary);
+
+  return isLocalFilled || isExpatFilled;
 });
 
 /***/ }),
@@ -96642,6 +96661,10 @@ var validationSchema = exports.validationSchema = Yup.object({
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+
+var _getIterator2 = __webpack_require__(/*! babel-runtime/core-js/get-iterator */ "./node_modules/babel-runtime/core-js/get-iterator.js");
+
+var _getIterator3 = _interopRequireDefault(_getIterator2);
 
 var _extends2 = __webpack_require__(/*! babel-runtime/helpers/extends */ "./node_modules/babel-runtime/helpers/extends.js");
 
@@ -96681,17 +96704,21 @@ var AppContainer = function AppContainer() {
         formKey = _useState2[0],
         setFormKey = _useState2[1];
 
-    var _useState3 = (0, _react.useState)({
-        salaryStructureId: 0,
-        name: "",
-        jobLevel: "",
-        localSalary: 0,
-        expatSalary: 0,
-        jobLevels: []
-    }),
+    var _useState3 = (0, _react.useState)([]),
         _useState4 = (0, _slicedToArray3.default)(_useState3, 2),
-        initialValues = _useState4[0],
-        setInitialValues = _useState4[1];
+        jobLevels = _useState4[0],
+        setJobLevels = _useState4[1];
+
+    var _useState5 = (0, _react.useState)({
+        salaryStructureId: '',
+        name: '',
+        jobLevelId: '',
+        localSalary: '',
+        expatSalary: ''
+    }),
+        _useState6 = (0, _slicedToArray3.default)(_useState5, 2),
+        initialValues = _useState6[0],
+        setInitialValues = _useState6[1];
 
     var handleGoBack = function handleGoBack() {
         history.back();
@@ -96724,12 +96751,8 @@ var AppContainer = function AppContainer() {
             url: (0, _common.resolveClientUrl)("SalaryStructure/GetJobLevels"),
             method: "GET",
             headers: { "X-Requested-With": "XMLHttpRequest" }
-        }).then(function (response) {
-            setInitialValues(function (prev) {
-                return (0, _extends3.default)({}, prev, {
-                    jobLevels: response.data
-                });
-            });
+        }).then(function (res) {
+            return setJobLevels(res.data);
         }).catch(_common.axiosError);
     }, []);
 
@@ -96825,7 +96848,7 @@ var AppContainer = function AppContainer() {
                                 name: "jobLevelId",
                                 as: "select",
                                 className: "form-control" },
-                            initialValues.jobLevels ? initialValues.jobLevels.map(function (jobLevel) {
+                            jobLevels ? jobLevels.map(function (jobLevel) {
                                 return _react2.default.createElement(
                                     "option",
                                     { key: jobLevel.id, value: jobLevel.id },
@@ -96905,6 +96928,46 @@ var AppContainer = function AppContainer() {
         );
     };
 
+    var validateFormValues = function validateFormValues(values) {
+        try {
+            _common2.validationSchema.validateSync(values, { abortEarly: false });
+            return {};
+        } catch (error) {
+            var errors = {};
+            if (error.inner && Array.isArray(error.inner)) {
+                var _iteratorNormalCompletion = true;
+                var _didIteratorError = false;
+                var _iteratorError = undefined;
+
+                try {
+                    for (var _iterator = (0, _getIterator3.default)(error.inner), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                        var err = _step.value;
+
+                        if (!errors[err.path]) {
+                            errors[err.path || '_form'] = err.message;
+                        }
+                    }
+                } catch (err) {
+                    _didIteratorError = true;
+                    _iteratorError = err;
+                } finally {
+                    try {
+                        if (!_iteratorNormalCompletion && _iterator.return) {
+                            _iterator.return();
+                        }
+                    } finally {
+                        if (_didIteratorError) {
+                            throw _iteratorError;
+                        }
+                    }
+                }
+            } else {
+                errors._form = error.message;
+            }
+            return errors;
+        }
+    };
+
     return _react2.default.createElement(
         _formik.Formik,
         {
@@ -96913,6 +96976,7 @@ var AppContainer = function AppContainer() {
             validateOnChange: false,
             initialValues: initialValues,
             validationSchema: _common2.validationSchema,
+            validate: validateFormValues,
             onSubmit: handleSubmit },
         renderForm
     );

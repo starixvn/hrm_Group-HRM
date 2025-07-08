@@ -6,11 +6,15 @@ using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
 using HRM.Core.Constants;
 using HRM.Core.Filters;
-using HRM.Core.Models;
-using HRM.Core.Services;
 using Microsoft.AspNetCore.Mvc;
 using Services.Interfaces;
 using ViewModels.SalaryStructure;
+using Core.Constants;
+using Core.Filters;
+using GO.UserControl.Client.Core.Enumerables;
+using HRM.Core.Models;
+using HRM.Core.Services;
+using Fanex.Data;
 
 [HrmPermission(Policy.Read, FunctionKey.SalaryStructureConfiguration)]
 public class SalaryStructureController(
@@ -29,7 +33,17 @@ public class SalaryStructureController(
     public async Task<IActionResult> GetSalaryStructures()
     {
         var salaryStructures = await salaryStructureService.GetSalaryStructureAsync(CurrentCompanyId);
-        return Json(salaryStructures);
+        foreach (var item in salaryStructures)
+        {
+            item.LocalSalary = !string.IsNullOrWhiteSpace(item.LocalSalary)
+                ? Cryptography.DecryptPassword(item.LocalSalary)
+                : null;
+
+            item.ExpatSalary = !string.IsNullOrWhiteSpace(item.ExpatSalary)
+                ? Cryptography.DecryptPassword(item.ExpatSalary)
+                : null;
+        }
+
     }
 
     public async Task<IActionResult> GetJobLevels()
@@ -58,8 +72,12 @@ public class SalaryStructureController(
         {
             Name = model.Name,
             JobLevelId = model.JobLevelId,
-            LocalSalary = model.LocalSalary,
-            ExpatSalary = model.ExpatSalary,
+            LocalSalary = !string.IsNullOrWhiteSpace(model.LocalSalary)
+                ? Cryptography.EncryptPassword(model.LocalSalary)
+                : model.LocalSalary,
+            ExpatSalary = !string.IsNullOrWhiteSpace(model.ExpatSalary)
+                ? Cryptography.EncryptPassword(model.ExpatSalary)
+                : model.ExpatSalary,
             CreatedBy = session.UserId,
             CompanyId = CurrentCompanyId
         };
@@ -77,8 +95,12 @@ public class SalaryStructureController(
             SalaryStructureId = salaryStructure.SalaryStructureId,
             Name = salaryStructure.Name,
             JobLevelId = salaryStructure.JobLevelId,
-            LocalSalary = salaryStructure.LocalSalary,
-            ExpatSalary = salaryStructure.ExpatSalary
+            LocalSalary = !string.IsNullOrWhiteSpace(salaryStructure.LocalSalary)
+                ? Cryptography.DecryptPassword(salaryStructure.LocalSalary)
+                : salaryStructure.LocalSalary,
+            ExpatSalary = !string.IsNullOrWhiteSpace(salaryStructure.ExpatSalary)
+                ? Cryptography.DecryptPassword(salaryStructure.ExpatSalary)
+                : salaryStructure.ExpatSalary
         };
 
         return new JsonResult(model);
@@ -105,8 +127,12 @@ public class SalaryStructureController(
             SalaryStructureId = model.SalaryStructureId,
             JobLevelId = model.JobLevelId,
             Name = model.Name,
-            LocalSalary = model.LocalSalary,
-            ExpatSalary = model.ExpatSalary,
+            LocalSalary = !string.IsNullOrWhiteSpace(model.LocalSalary)
+                ? Cryptography.EncryptPassword(model.LocalSalary)
+                : model.LocalSalary,
+            ExpatSalary = !string.IsNullOrWhiteSpace(model.ExpatSalary)
+                ? Cryptography.EncryptPassword(model.ExpatSalary)
+                : model.ExpatSalary,
             ModifiedBy = session.UserId,
             CompanyId = CurrentCompanyId
         };
