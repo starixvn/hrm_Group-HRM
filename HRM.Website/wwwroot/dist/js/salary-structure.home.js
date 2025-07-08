@@ -107966,7 +107966,7 @@ var Row = function Row(_ref) {
         ),
         _react2.default.createElement(
             "td",
-            null,
+            { className: "text-left" },
             item.name
         ),
         _react2.default.createElement(
@@ -107976,12 +107976,12 @@ var Row = function Row(_ref) {
         ),
         _react2.default.createElement(
             "td",
-            null,
+            { className: "text-right" },
             formatSalary(item.localSalary)
         ),
         _react2.default.createElement(
             "td",
-            null,
+            { className: "text-right" },
             formatSalary(item.expatSalary)
         ),
         window.hasPermission === "True" && _react2.default.createElement(

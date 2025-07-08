@@ -659,4 +659,12 @@ span.req.keepinview {
   width: auto;
 }
 
+.text-left {
+  text-align: left !important;
+}
+
+.text-right {
+  text-align: right !important;
+}
+
 /*# sourceMappingURL=salary-structure.index.css.map*/

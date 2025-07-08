@@ -20,10 +20,10 @@ const Row = ({ rowIndex, item, onDelete }) => {
     return (
         <tr id={`row_${item.salaryStructureId}`}>
             <td>{rowIndex}</td>
-            <td>{item.name}</td>
+            <td className="text-left">{item.name}</td>
             <td>{item.jobLevelName}</td>
-            <td>{formatSalary(item.localSalary)}</td>
-            <td>{formatSalary(item.expatSalary)}</td>
+            <td className="text-right">{formatSalary(item.localSalary)}</td>
+            <td className="text-right">{formatSalary(item.expatSalary)}</td>
             {window.hasPermission === "True" && (
                 <Fragment>
                     <td>
