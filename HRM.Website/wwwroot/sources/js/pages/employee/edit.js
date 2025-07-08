@@ -12,15 +12,6 @@ import '../../shared/multiselect-tree-view';
 import { axiosError, confirm, alert, initDatepicker, toastOptions, resolveClientUrl } from '../../shared/common.functions';
 
 $(document).ready(function () {
-    function bindSARole(onload) {
-        let combineSARole = $('input[id*=Roles2Array]').not('#Roles2Array7');
-        if ($('#Roles2Array7').prop('checked')) {
-            combineSARole.prop('checked', true).prop('readonly', 'readonly');
-        } else if (!onload) {
-            combineSARole.prop('checked', false).prop('readonly', false);
-        }
-    }
-
     function bindDisciplineRole(onload) {
         let combineDisciplineRole = $('#Roles2Array3');
         if ($('#Roles2Array8').prop('checked')) {
@@ -107,13 +98,7 @@ $(document).ready(function () {
 
     initDatepicker();
     let $uploadButton = $('#upload');
-    $('#CountryCode, #JobTitleId, #JobLevelId, #ManagementLevelId, #SubCompanyId').chosen();
-
-    bindSARole(true);
-
-    $('#Roles2Array7').click(function () {
-        bindSARole(false);
-    });
+    $('#CountryCode, #JobTitleId, #JobLevelId, #ManagementLevelId, #SubCompanyId, select#SalaryStructureId').chosen();
 
     bindDisciplineRole(true);
     $('#Roles2Array8').click(function () {

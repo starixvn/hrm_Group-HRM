@@ -7,7 +7,7 @@ using Models;
 
 public interface ISalaryStructureService
 {
-    Task<IList<SalaryStructure>> GetSalaryStructureAsync(int companyId);
+    Task<IEnumerable<SalaryStructure>> GetSalaryStructureAsync(int companyId);
 
     Task<SalaryStructure> GetByIdAsync(int salaryStructureId);
 

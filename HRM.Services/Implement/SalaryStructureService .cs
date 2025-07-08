@@ -6,21 +6,18 @@ using Criteria.SalaryStructure;
 using HRM.Core.Models;
 using HRM.Core.Services;
 using Interfaces;
-using System.Linq;
 using Models;
 
 public class SalaryStructureService(IBaseService baseService) : ISalaryStructureService
 {
-    public async Task<IList<SalaryStructure>> GetSalaryStructureAsync(int CompanyId)
+    public async Task<IEnumerable<SalaryStructure>> GetSalaryStructureAsync(int CompanyId)
     {
         var criteria = new GetSalaryStructureCriteria
         {
             CompanyId = CompanyId
         };
 
-        var result = await baseService.GetDataAsync<SalaryStructure>(criteria);
-
-        return result.ToList();
+        return await baseService.GetDataAsync<SalaryStructure>(criteria);
     }
 
     public async Task<SalaryStructure> GetByIdAsync(int Id)
@@ -29,9 +26,9 @@ public class SalaryStructureService(IBaseService baseService) : ISalaryStructure
         {
             SalaryStructureId = Id
         };
-        var result = await baseService.GetDataAsync<SalaryStructure>(criteria);
-        return result.FirstOrDefault();
+        return await baseService.GetDataEntityAsync<SalaryStructure>(criteria);
     }
+
     public async Task<CommandResult> DeleteAsync(int actorId, int id)
     {
         var criteria = new DeleteSalaryStructureCriteria
