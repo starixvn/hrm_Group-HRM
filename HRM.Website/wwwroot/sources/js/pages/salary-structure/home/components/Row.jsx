@@ -11,13 +11,19 @@ const Row = ({ rowIndex, item, onDelete }) => {
         onDelete(item);
     };
 
+    const formatSalary = (value) => {
+    if (value === null || value === undefined || value === '') return '';
+    const number = Number(value);
+    if (isNaN(number)) return '';
+    return number.toLocaleString('en-US')};
+
     return (
         <tr id={`row_${item.salaryStructureId}`}>
             <td>{rowIndex}</td>
             <td>{item.name}</td>
             <td>{item.jobLevelName}</td>
-            <td>{item.localSalary}</td>
-            <td>{item.expatSalary}</td>
+            <td>{formatSalary(item.localSalary)}</td>
+            <td>{formatSalary(item.expatSalary)}</td>
             {window.hasPermission === "True" && (
                 <Fragment>
                     <td>

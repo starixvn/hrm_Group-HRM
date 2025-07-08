@@ -107949,6 +107949,13 @@ var Row = function Row(_ref) {
         onDelete(item);
     };
 
+    var formatSalary = function formatSalary(value) {
+        if (value === null || value === undefined || value === '') return '';
+        var number = Number(value);
+        if (isNaN(number)) return '';
+        return number.toLocaleString('en-US');
+    };
+
     return _react2.default.createElement(
         "tr",
         { id: "row_" + item.salaryStructureId },
@@ -107970,12 +107977,12 @@ var Row = function Row(_ref) {
         _react2.default.createElement(
             "td",
             null,
-            item.localSalary
+            formatSalary(item.localSalary)
         ),
         _react2.default.createElement(
             "td",
             null,
-            item.expatSalary
+            formatSalary(item.expatSalary)
         ),
         window.hasPermission === "True" && _react2.default.createElement(
             _react.Fragment,
