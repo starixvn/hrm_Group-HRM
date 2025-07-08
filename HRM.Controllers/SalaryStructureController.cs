@@ -9,9 +9,6 @@ using HRM.Core.Filters;
 using Microsoft.AspNetCore.Mvc;
 using Services.Interfaces;
 using ViewModels.SalaryStructure;
-using Core.Constants;
-using Core.Filters;
-using GO.UserControl.Client.Core.Enumerables;
 using HRM.Core.Models;
 using HRM.Core.Services;
 using Fanex.Data;
@@ -44,6 +41,7 @@ public class SalaryStructureController(
                 : null;
         }
 
+        return Json(salaryStructures);
     }
 
     public async Task<IActionResult> GetJobLevels()
