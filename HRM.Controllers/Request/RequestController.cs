@@ -277,23 +277,30 @@ public class RequestController(
 
         var commandResults = new List<CommandResult>();
 
-        if (nexCompanyRequests.Any())
+        if (nexCompanyRequests.Count > 0)
         {
             model.Requests = nexCompanyRequests;
-            var nexCommandResult = await requestService.SendNexHrmMultipleProcessRequest(session.UserId, model);
-            commandResults.AddRange(nexCommandResult);
+            var nexCommandResults = await requestService.SendNexHrmMultipleProcessRequest(session.UserId, model);
+            commandResults.AddRange(nexCommandResults);
         }
-        model.Requests = localRequests;
-        var commandResult = await requestService.ApproveRequests(model);
-        commandResults.AddRange(commandResult);
-        if (commandResult.IsSuccessful)
+
+        if (localRequests.Count > 0)
+        {
+            model.Requests = localRequests;
+            var localCommandResult = await requestService.ApproveRequests(model);
+            commandResults.Add(localCommandResult);
+        }
+
+        var finalResult = commandResults.All(r => r.IsSuccessful)
+            ? commandResults.FirstOrDefault()
+            : commandResults.FirstOrDefault(r => !r.IsSuccessful);
+
+        if (finalResult?.IsSuccessful == true)
         {
             await requestService.SendMailProcessRequests(model, EmployeeSession, model.Command);
         }
 
-        return new JsonResult(commandResults.All(r => r.IsSuccessful)
-            ? commandResults.FirstOrDefault()
-            : commandResults.FirstOrDefault(r => !r.IsSuccessful));
+        return new JsonResult(finalResult);
     }
 
     private async Task HandleProcessRequest(ProcessRequestViewModel model)

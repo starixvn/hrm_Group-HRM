@@ -69465,7 +69465,8 @@ $(function () {
 
                         requests.push({
                             RequestId: parseInt(request.getAttribute("Id"), 10),
-                            RequestTypeID: parseInt(request.getAttribute("RequestTypeID"), 10)
+                            RequestTypeID: parseInt(request.getAttribute("RequestTypeID"), 10),
+                            RequesterCompanyId: parseInt(request.getAttribute("companyid"), 10)
                         });
                     });
 
@@ -69509,7 +69510,8 @@ $(function () {
 
                         requests.push({
                             RequestId: parseInt(request.getAttribute("Id"), 10),
-                            RequestTypeID: parseInt(request.getAttribute("RequestTypeID"), 10)
+                            RequestTypeID: parseInt(request.getAttribute("RequestTypeID"), 10),
+                            RequesterCompanyId: parseInt(request.getAttribute("companyid"), 10)
                         });
                     });
 
@@ -69552,7 +69554,8 @@ $(function () {
 
                         requests.push({
                             RequestId: parseInt(request.getAttribute("Id"), 10),
-                            RequestTypeID: parseInt(request.getAttribute("RequestTypeID"), 10)
+                            RequestTypeID: parseInt(request.getAttribute("RequestTypeID"), 10),
+                            RequesterCompanyId: parseInt(request.getAttribute("companyid"), 10)
                         });
                     });
 

@@ -215,7 +215,8 @@ public class RequestService(
     public async Task<CommandResult> SendNexHrmProcessRequest(int actorId, ProcessRequestParam param)
     {
         var baseUrl = nexConfig.GetBaseUrlByCompanyId(param.RequesterCompanyId);
-        var url = $"Request/ProcessRequest?requestId={param.RequestId}&command={param.Command}&processedBy={actorId}";
+        var command = param.Command is RequestCommand.Reset ? "Disapprove" : param.Command.ToString();
+        var url = $"Request/ProcessRequest?requestId={param.RequestId}&command={command}&processedBy={actorId}";
         return await SendAsync<CommandResult>(baseUrl, url, HttpMethod.Post);
     }
 
@@ -514,8 +515,8 @@ public class RequestService(
             var requestIds = string.Join(",", companyGroup.Select(r => r.RequestId));
             var url = $"Request/ProcessMultipleRequest?requestIds={requestIds}&command={param.Command}&processedBy={actorId}";
 
-            var result = await SendAsync<CommandResult>(baseUrl, url, HttpMethod.Post);
-            results.Add(result);
+            var result = await SendAsync<List<CommandResult>>(baseUrl, url, HttpMethod.Post);
+            results.AddRange(result);
         }
 
         return results;
