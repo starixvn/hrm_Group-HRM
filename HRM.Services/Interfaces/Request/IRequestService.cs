@@ -35,4 +35,8 @@ public interface IRequestService
     Task SendMailProcessRequest(ProcessRequestParam param, EmployeeSession actor, RequestCommand command);
 
     Task SendMailProcessRequests(ApproveRequestsParam param, EmployeeSession actor, RequestCommand command);
+
+    Task<CommandResult> SendNexHrmProcessRequest(int actorId, ProcessRequestParam param);
+
+    Task<List<CommandResult>> SendNexHrmMultipleProcessRequest(int actorId, ApproveRequestsParam param);
 }

@@ -18,7 +18,7 @@
     case (byte)CurrentRequestStatus.Pending:
         if (request.ApproverId == requestViewModel.CurrentUserId)
         {
-            <a roleid="@Convert.ToInt32(RoleSystem.Approver)" requestid="@request.Id" requesttypeid="@request.RequestType.Id" employeeid="@request.Requester.Id"
+            <a roleid="@Convert.ToInt32(RoleSystem.Approver)" requestid="@request.Id" requesttypeid="@request.RequestType.Id" employeeid="@request.Requester.Id" companyid="@request.CompanyId"
                href="javascript:void(0);" class="approver-actions tooltip-tipsy"
                title="@annualBalance @request.Requester.NickName had @request.TotalDaysRequestInMonth.ToString("0.#") approved request(s) in @request.FromDate.ToMonthAndYearFormatedDate()">
                 @request.Status.ToString()
@@ -27,7 +27,7 @@
         }
         else if (request.VerifierId == requestViewModel.CurrentUserId)
         {
-            <a roleid="@Convert.ToInt32(RoleSystem.Verifier)" requestid="@request.Id" requesttypeid="@request.RequestType.Id" employeeid="@request.Requester.Id"
+            <a roleid="@Convert.ToInt32(RoleSystem.Verifier)" requestid="@request.Id" requesttypeid="@request.RequestType.Id" employeeid="@request.Requester.Id" companyid="@request.CompanyId"
                href="javascript:void(0);" class="verifier-actions tooltip-tipsy"
                title="@annualBalance @request.Requester.NickName had @request.TotalDaysRequestInMonth.ToString("0.#") approved request(s) in @request.FromDate.ToMonthAndYearFormatedDate()">
                 @request.Status.ToString()
@@ -42,7 +42,7 @@
     case (byte)CurrentRequestStatus.Verified:
         if (request.ApproverId == requestViewModel.CurrentUserId)
         {
-            <a roleid="@Convert.ToInt32(RoleSystem.Approver)" requestid="@request.Id" requesttypeid="@request.RequestType.Id" employeeid="@request.Requester.Id"
+            <a roleid="@Convert.ToInt32(RoleSystem.Approver)" requestid="@request.Id" requesttypeid="@request.RequestType.Id" employeeid="@request.Requester.Id" companyid="@request.CompanyId"
                href="javascript:void(0);" class="approver-actions tooltip-tipsy"
                title="@annualBalance @request.Status.Name by @request.VerifierNickName (@request.VerifiedDate.ToShortFormatedDate())">
                 @request.Status.ToString()
@@ -51,7 +51,7 @@
         }
         else if (request.VerifierId == requestViewModel.CurrentUserId)
         {
-            <a roleid="@Convert.ToInt32(RoleSystem.Verifier)" requestid="@request.Id" requesttypeid="@request.RequestType.Id" employeeid="@request.Requester.Id"
+            <a roleid="@Convert.ToInt32(RoleSystem.Verifier)" requestid="@request.Id" requesttypeid="@request.RequestType.Id" employeeid="@request.Requester.Id" companyid="@request.CompanyId"
                href="javascript:void(0);" class="verifier-actions-reset tooltip-tipsy"
                title="@annualBalance @request.Status.Name by @request.VerifierNickName (@request.VerifiedDate.ToShortFormatedDate())">
                 @request.Status.ToString()
@@ -66,7 +66,7 @@
     case (byte)CurrentRequestStatus.NotVerified:
         if (request.VerifierId == requestViewModel.CurrentUserId)
         {
-            <a roleid="@Convert.ToInt32(RoleSystem.Verifier)" requestid="@request.Id" requesttypeid="@request.RequestType.Id" employeeid="@request.Requester.Id"
+            <a roleid="@Convert.ToInt32(RoleSystem.Verifier)" requestid="@request.Id" requesttypeid="@request.RequestType.Id" employeeid="@request.Requester.Id" companyid="@request.CompanyId"
                href="javascript:void(0);" class="verifier-actions-reset tooltip-tipsy"
                title="@request.Status.Name by @request.VerifierNickName (@request.VerifiedDate.ToShortFormatedDate())">
                 @request.Status.ToString()
@@ -82,7 +82,7 @@
     case (byte)CurrentRequestStatus.Rejected:
         if (request.ApproverId == requestViewModel.CurrentUserId)
         {
-            <a roleid="@Convert.ToInt32(RoleSystem.Approver)" requestid="@request.Id" requesttypeid="@request.RequestType.Id" employeeid="@request.Requester.Id"
+            <a roleid="@Convert.ToInt32(RoleSystem.Approver)" requestid="@request.Id" requesttypeid="@request.RequestType.Id" employeeid="@request.Requester.Id" companyid="@request.CompanyId"
                href="javascript:void(0);" class="approver-actions-reset tooltip-tipsy"
                title="@request.Status.Name by @request.ApproverNickName (@request.ApprovedDate.ToShortFormatedDate())">
                 @request.Status.ToString()

@@ -9,4 +9,5 @@ public class RequestsXML
 {
     public long RequestId { get; set; }
     public int RequestTypeID { get; set; }
+    public short RequesterCompanyId { get; set; }
 }

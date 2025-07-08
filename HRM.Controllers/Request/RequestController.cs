@@ -9,6 +9,7 @@ using Core;
 using Core.Constants;
 using Core.Enums;
 using Core.Filters;
+using Core.Models;
 using Criteria.Supervisor;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
@@ -234,19 +235,27 @@ public class RequestController(
     [HrmPermission(Policy.Host, FunctionKey.VerifyRequest, FunctionKey.ApproveRequest, FunctionKey.ProcessRequest, FunctionKey.VoidRequest)]
     public async Task<IActionResult> ProcessRequest(ProcessRequestParam model)
     {
-        var commandResult = model.Command switch
+        CommandResult commandResult;
+        if (Constants.NexCompanyIds.Contains(model.RequesterCompanyId))
         {
-            RequestCommand.Accept or RequestCommand.Approve or RequestCommand.Process => await requestService
-                .ApproveRequest(session.UserId, model),
-            RequestCommand.Reset => await requestService.ResetRequest(session.UserId, model),
-            RequestCommand.NotAccept or RequestCommand.Reject or RequestCommand.Void => await requestService
-                .RejectRequest(session.UserId, model),
-            _ => await requestService.VoidRequest(session.UserId, model)
-        };
+            commandResult = await requestService.SendNexHrmProcessRequest(session.UserId, model);
+        }
+        else
+        {
+            commandResult = model.Command switch
+            {
+                RequestCommand.Accept or RequestCommand.Approve or RequestCommand.Process => await requestService
+                    .ApproveRequest(session.UserId, model),
+                RequestCommand.Reset => await requestService.ResetRequest(session.UserId, model),
+                RequestCommand.NotAccept or RequestCommand.Reject or RequestCommand.Void => await requestService
+                    .RejectRequest(session.UserId, model),
+                _ => await requestService.VoidRequest(session.UserId, model)
+            };
 
-        if (commandResult.IsSuccessful)
-        {
-            await requestService.SendMailProcessRequest(model, EmployeeSession, model.Command);
+            if (commandResult.IsSuccessful)
+            {
+                await requestService.SendMailProcessRequest(model, EmployeeSession, model.Command);
+            }
         }
 
         return new JsonResult(commandResult);
@@ -257,15 +266,28 @@ public class RequestController(
     public async Task<IActionResult> ProcessMultipleRequests(ApproveRequestsParam model)
     {
         model.ActorId = session.UserId;
+        var nexCompanyRequests = model.Requests.Where(r => Constants.NexCompanyIds.Contains(r.RequesterCompanyId)).ToList();
+        var localRequests = model.Requests.Where(r => !Constants.NexCompanyIds.Contains(r.RequesterCompanyId)).ToList();
 
+        var commandResults = new List<CommandResult>();
+
+        if (nexCompanyRequests.Any())
+        {
+            model.Requests = nexCompanyRequests;
+            var nexCommandResult = await requestService.SendNexHrmMultipleProcessRequest(session.UserId, model);
+            commandResults.AddRange(nexCommandResult);
+        }
+        model.Requests = localRequests;
         var commandResult = await requestService.ApproveRequests(model);
-
+        commandResults.AddRange(commandResult);
         if (commandResult.IsSuccessful)
         {
             await requestService.SendMailProcessRequests(model, EmployeeSession, model.Command);
         }
 
-        return new JsonResult(commandResult);
+        return new JsonResult(commandResults.All(r => r.IsSuccessful)
+            ? commandResults.FirstOrDefault()
+            : commandResults.FirstOrDefault(r => !r.IsSuccessful));
     }
 
     private async Task HandleProcessRequest(ProcessRequestViewModel model)
@@ -305,7 +327,7 @@ public class RequestController(
             employeeId = request.EmployeeId;
         }
 
-        var criteria = new GetRequestCriteria   
+        var criteria = new GetRequestCriteria
         {
             EmpId = employeeId,
             FromDate = request.IsFilterByAffectedDate ? request.FromDate.ToStartOfDay() : request.FromDate.ToStartOfDay().ToServerTimeZone(),

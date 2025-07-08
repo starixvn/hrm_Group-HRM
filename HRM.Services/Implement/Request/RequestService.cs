@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Net;
+using System.Text.Json;
 using GO.UserControl.Client.Core.Session;
 using HRM.Core;
 using HRM.Core.Constants;
@@ -17,9 +21,11 @@ using HRM.Criteria.Request.LateInEarlyOut;
 using HRM.Criteria.Request.Leave;
 using HRM.Models.Request;
 using HRM.Models.Request.ChangeShift;
+using HRM.Models.Request;
 using HRM.Repositories.Interfaces;
 using HRM.Resources;
 using HRM.Services.Interfaces.Request;
+using Microsoft.Extensions.Configuration;
 
 namespace HRM.Services.Implement.Request;
 
@@ -31,7 +37,9 @@ public class RequestService(
     IChangeShiftRequestService changeShiftRequestService,
     ILeaveRequestService leaveRequestService,
     IKeepInViewRequestService keepInViewRequestService,
-    IUserControlSession userControlSession) : IRequestService
+    IUserControlSession userControlSession,
+    IHttpClientFactory httpClientFactory,
+    NexConfig nexConfig) : IRequestService
 {
     public static string ToRequestMessage(RequestEntity request, bool isNoFormat = false)
     {
@@ -202,6 +210,50 @@ public class RequestService(
             CompanyId = companyId
         };
         return await baseService.ExecuteNonQueryAsync(criteria);
+    }
+
+    public async Task<CommandResult> SendNexHrmProcessRequest(int actorId, ProcessRequestParam param)
+    {
+        var baseUrl = nexConfig.GetBaseUrlByCompanyId(param.RequesterCompanyId);
+        var url = $"Request/ProcessRequest?requestId={param.RequestId}&command={param.Command}&processedBy={actorId}";
+        return await SendAsync<CommandResult>(baseUrl, url, HttpMethod.Post);
+    }
+
+    private async Task<T> SendAsync<T>(string baseUrl, string pathUrl, HttpMethod method)
+    {
+        var token = await GetTokenAsync(baseUrl);
+
+        var handler = new HttpClientHandler
+        {
+            ServerCertificateCustomValidationCallback = (_, _, _, _) => true
+        };
+
+        using var httpClient = new HttpClient(handler);
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        var url = new Uri($"{baseUrl}/{pathUrl}");
+        using var request = new HttpRequestMessage(method, url);
+        using var response = await httpClient.SendAsync(request);
+        response.EnsureSuccessStatusCode();
+        var jsonResult = await response.Content.ReadAsStringAsync();
+        return JsonSerializer.Deserialize<T>(jsonResult);
+    }
+
+    private async Task<string> GetTokenAsync(string baseUrl)
+    {
+        string usr = nexConfig.NexHRId,
+               pwd = nexConfig.NexHRPassword;
+        var url = new Uri($"{baseUrl}/Token/GetToken?username={usr}&password={pwd}");
+
+        var handler = new HttpClientHandler
+        {
+            ServerCertificateCustomValidationCallback = (_, _, _, _) => true
+        };
+
+        using var httpClient = new HttpClient(handler);
+        using var request = new HttpRequestMessage(HttpMethod.Post, url);
+        using var response = await httpClient.SendAsync(request);
+        var responseData = await response.Content.ReadAsStringAsync();
+        return responseData;
     }
 
     public async Task SendMailProcessRequest(ProcessRequestParam param, EmployeeSession actor, RequestCommand command)
@@ -450,4 +502,22 @@ public class RequestService(
 
     private static string GetTotalDay(decimal totalDays)
         => totalDays != 0 ? string.Format(RequestFormatConstants.MsgTotalLeaveDays, totalDays.ToString("0.#")) : string.Empty;
+
+    public async Task<List<CommandResult>> SendNexHrmMultipleProcessRequest(int actorId, ApproveRequestsParam param)
+    {
+        var requestsByCompany = param.Requests.GroupBy(r => r.RequesterCompanyId);
+        var results = new List<CommandResult>();
+
+        foreach (var companyGroup in requestsByCompany)
+        {
+            var baseUrl = nexConfig.GetBaseUrlByCompanyId(companyGroup.Key);
+            var requestIds = string.Join(",", companyGroup.Select(r => r.RequestId));
+            var url = $"Request/ProcessMultipleRequest?requestIds={requestIds}&command={param.Command}&processedBy={actorId}";
+
+            var result = await SendAsync<CommandResult>(baseUrl, url, HttpMethod.Post);
+            results.Add(result);
+        }
+
+        return results;
+    }
 }

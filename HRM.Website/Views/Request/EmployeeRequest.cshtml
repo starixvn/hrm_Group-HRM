@@ -16,7 +16,7 @@
     <link href="~/dist/styles/employee.request.css" rel="stylesheet" />
 }
 @section js {
-    <script src="~/dist/js/employee.request.js"></script>
+    <script src="~/dist/js/employee.request.js?v=@DateTime.Now.Ticks"></script>
 }
 @section Breadcrumb {
     <a class="step">@Model.BreadcrumbText</a><span class="step">@ViewBag.Title</span>
@@ -155,6 +155,7 @@
                                                    roleid="@Convert.ToInt32(RoleSystem.Approver)"
                                                    requesttypeid="@request.RequestType.Id"
                                                    employeeid="@request.Requester.Id"
+                                                   companyid="@request.CompanyId"
                                                    id="@request.Id"
                                                    viewtype="@Model.ViewType" />
                                             <label for="@request.Id"></label>
@@ -166,6 +167,7 @@
                                                        roleid="@Convert.ToInt32(RoleSystem.Verifier)"
                                                        requesttypeid="@request.RequestType.Id"
                                                        employeeid="@request.Requester.Id"
+                                                       companyid="@request.CompanyId"
                                                        id="@request.Id"
                                                        viewtype="@Model.ViewType" />
                                                 <label for="@request.Id"></label>
@@ -186,6 +188,7 @@
                                                    roleid="@Convert.ToInt32(RoleSystem.HR)"
                                                    requesttypeid="@request.RequestType.Id"
                                                    employeeid="@request.Requester.Id"
+                                                   companyid="@request.CompanyId"
                                                    id="@request.Id"
                                                    viewtype="@Model.ViewType" />
                                             <label for="@request.Id"></label>

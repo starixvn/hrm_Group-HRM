@@ -12,5 +12,6 @@ public class ProcessRequestParam
     public RequestCommand Command { get; set; }
     public string Comment { get; set; }
     public string ViewType { get; set; }
+    public short RequesterCompanyId { get; set; }
     public IEnumerable<DisciplineReview> Disciplines { get; set; } = new List<DisciplineReview>();
 }
