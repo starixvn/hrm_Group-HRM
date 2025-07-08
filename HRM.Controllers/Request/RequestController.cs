@@ -68,8 +68,13 @@ public class RequestController(
     private async Task<IEnumerable<RequestEntity>> NexRequests(RequestViewModel model)
     {
         List<RequestEntity> responseRequests = [];
-        const string pendingStatus = "1";
-        var status = model.StatusIds.Contains(pendingStatus) ? int.Parse(pendingStatus) : int.Parse(model.StatusIds);
+        var status = requestRepository.GetNexRequestStatus(model.StatusIds);
+        var requestType = requestRepository.GetNexRequestType(model.RequestType);
+        int? leaveType = null;
+        if (model.LeaveType != null)
+        {
+            leaveType = requestRepository.GetNexLeaveType(model.LeaveType.Value);
+        }
         var supervisorCompanyCriteria = new GetSupervisorCompaniesCriteria
         {
             EmpId = session.UserId
@@ -94,10 +99,10 @@ public class RequestController(
                 FromDate = model.FromDate.ToStartOfDay(),
                 ToDate = model.ToDate.ToEndOfDay(),
                 Status = status,
-                RequestType = model.RequestType == 0 ? "" : model.RequestType.ToString(),
+                RequestType = requestType,
                 isFilterByEffectedDate = model.IsFilterByAffectedDate,
                 ActorId = session.UserId,
-                LeaveTypeId = model.LeaveType,
+                LeaveTypeId = leaveType,
                 Role = AssistantLeader,
                 ExcludedEmpID = session.UserId,
                 CompanyId = companyId

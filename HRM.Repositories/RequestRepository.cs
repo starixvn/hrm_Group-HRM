@@ -145,6 +145,89 @@ public class RequestRepository : IRequestRepository
         return responseRequests;
     }
 
+    public int? GetNexRequestStatus(string requestStatusId)
+    {
+        const int nexPending = 1;
+        const int nexApproved = 2;
+        const int nexRejected = 3;
+        const string groupHrmPending = "1";
+        const string groupHrmApproved = "4";
+        const string groupHrmRejected = "5";
+        if (string.IsNullOrEmpty(requestStatusId))
+        {
+            return null;
+        }
+
+        if (requestStatusId.Contains(groupHrmPending))
+        {
+            return nexPending;
+        }
+
+        return requestStatusId switch
+        {
+            groupHrmApproved => nexApproved,
+            groupHrmRejected => nexRejected,
+            _ => int.Parse(requestStatusId)
+        };
+    }
+
+    public string GetNexRequestType(int requestTypeId)
+    {
+        const int groupAll = 0;
+        const int groupCheckInOut = 1;
+        const int groupLateInOut = 2;
+        const int groupChangeShift = 3;
+        const int groupLeave = 4;
+        const string nexCheckInOut = "1,2";
+        const string nexLateInOut = "3,4";
+        const string nexChangeShift = "5";
+        const string nexLeave = "6";
+
+        return requestTypeId switch
+        {
+            groupAll => "",
+            groupCheckInOut => nexCheckInOut,
+            groupLateInOut => nexLateInOut,
+            groupChangeShift => nexChangeShift,
+            groupLeave => nexLeave,
+            _ => requestTypeId.ToString()
+        };
+    }
+
+    public int GetNexLeaveType(int leaveTypeId)
+    {
+        const int groupAnnualLeave = 1;
+        const int groupWeddingLeave = 6;
+        const int groupBusinessTrip = 9;
+        const int groupMaternityLeave = 12;
+        const int groupPaternityLeave = 14;
+        const int groupBereavementLeave = 21;
+        const int groupUnpaidLeave = 25;
+        const int groupCompanyEvent = 38;
+
+        const int nexAnnualLeave = 2;
+        const int nexWeddingLeave = 6;
+        const int nexBusinessTrip = 9;
+        const int nexMaternityLeave = 13;
+        const int nexPaternityLeave = 27;
+        const int nexBereavementLeave = 22;
+        const int nexUnpaidLeave = 26;
+        const int nexCompanyEvent = 33;
+
+        return leaveTypeId switch
+        {
+            groupAnnualLeave => nexAnnualLeave,
+            groupWeddingLeave => nexWeddingLeave,
+            groupBusinessTrip => nexBusinessTrip,
+            groupMaternityLeave => nexMaternityLeave,
+            groupPaternityLeave => nexPaternityLeave,
+            groupBereavementLeave => nexBereavementLeave,
+            groupUnpaidLeave => nexUnpaidLeave,
+            groupCompanyEvent => nexCompanyEvent,
+            _ => leaveTypeId
+        };
+    }
+
     private static List<RequestEntity> FillData(dynamic data)
     {
         var requests = new List<RequestEntity>();
