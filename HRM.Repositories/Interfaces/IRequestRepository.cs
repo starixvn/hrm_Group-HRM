@@ -23,8 +23,9 @@ public interface IRequestRepository
 
     int? GetNexRequestStatus(string requestStatusId);
 
+    int GetGroupByNexRequestStatus(int requestStatusId);
+
     string GetNexRequestType(int requestTypeId);
 
     int GetNexLeaveType(int leaveTypeId);
-
 }

@@ -171,6 +171,24 @@ public class RequestRepository : IRequestRepository
         };
     }
 
+    public int GetGroupByNexRequestStatus(int requestStatusId)
+    {
+        const int nexPending = 1;
+        const int nexApproved = 2;
+        const int nexRejected = 3;
+        const int groupHrmPending = 1;
+        const int groupHrmApproved = 4;
+        const int groupHrmRejected = 5;
+
+        return requestStatusId switch
+        {
+            nexPending => groupHrmPending,
+            nexApproved => groupHrmApproved,
+            nexRejected => groupHrmRejected,
+            _ => requestStatusId
+        };
+    }
+
     public string GetNexRequestType(int requestTypeId)
     {
         const int groupAll = 0;

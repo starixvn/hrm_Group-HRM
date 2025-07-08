@@ -156,9 +156,9 @@
                                                    requesttypeid="@request.RequestType.Id"
                                                    employeeid="@request.Requester.Id"
                                                    companyid="@request.CompanyId"
-                                                   id="@request.Id"
+                                                   id="@request.CustomId"
                                                    viewtype="@Model.ViewType" />
-                                            <label for="@request.Id"></label>
+                                            <label for="@request.CustomId"></label>
                                         }
                                         else {if (request.VerifierId == Model.CurrentUserId && request.Status.Id == (byte)CurrentRequestStatus.Pending)
                                             {
@@ -168,9 +168,9 @@
                                                        requesttypeid="@request.RequestType.Id"
                                                        employeeid="@request.Requester.Id"
                                                        companyid="@request.CompanyId"
-                                                       id="@request.Id"
+                                                        id="@request.CustomId"
                                                        viewtype="@Model.ViewType" />
-                                                <label for="@request.Id"></label>
+                                                <label for="@request.CustomId"></label>
                                             }
                                         }
                                     </div>

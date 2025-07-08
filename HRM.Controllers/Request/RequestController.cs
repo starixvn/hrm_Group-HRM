@@ -112,6 +112,7 @@ public class RequestController(
             var mappedData = responseData.Select(item =>
             {
                 item.CompanyId = companyId;
+                item.Status = (byte)requestRepository.GetGroupByNexRequestStatus(item.Status);
                 return item;
             });
             requests.AddRange(mappedData);

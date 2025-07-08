@@ -20,6 +20,8 @@ public class RequestEntity : EntityBase<long>
         set => serverRequestDate = value.ToClientTimeZone();
     }
 
+    public string CustomId => $"{CompanyId}_{Id}";
+
     public RequestTypeModel RequestType { get; set; }
 
     public RequestStatus Status { get; set; }
