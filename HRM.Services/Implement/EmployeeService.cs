@@ -17,7 +17,6 @@ using GO.UserControl.Client.Core.Session;
 using HRM.Core.Models;
 using HRM.Core.Services;
 using HRM.Repositories.Interfaces;
-using HRM.Services.Implement.FnB;
 using Interfaces;
 using Models;
 using Models.EmployeeInformation;
@@ -317,7 +316,8 @@ public class EmployeeService(
             MilitaryToDate = param.MilitaryToDate,
             CompanyId = companyId,
             SubCompanyId = param.SubCompanyId,
-            SalaryStructureId = param.SalaryStructureId
+            SalaryStructureId = param.SalaryStructureId,
+            Salary = param.Salary
         };
         return await baseService.ExecuteNonQueryAsync(criteria);
     }

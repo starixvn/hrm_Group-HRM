@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Fanex.Data;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Models.Role;
 using GO.UserControl.Client.Core.Models.User;
@@ -271,6 +272,7 @@ public class EmployeeController(
                 return RedirectToAction("AccessDenied", "Error");
             }
 
+            employee.Salary = !string.IsNullOrWhiteSpace(employee.Salary) ? Cryptography.DecryptPassword(employee.Salary) : string.Empty;
             employee.Coutries = await commonDataService.GetAllCountry();
             var supervisors = (await GetSupervisors(id)).ToList();
             employee.Verifier = GetVerifiers(supervisors);
@@ -696,7 +698,8 @@ public class EmployeeController(
             MilitaryFromDate = model.MilitaryFromDate,
             MilitaryToDate = model.MilitaryToDate,
             SubCompanyId = model.SubCompanyId,
-            SalaryStructureId = model.SalaryStructureId
+            SalaryStructureId = model.SalaryStructureId,
+            Salary = !string.IsNullOrWhiteSpace(model.Salary) ? Cryptography.EncryptPassword(model.Salary) : model.Salary
         };
     }
 

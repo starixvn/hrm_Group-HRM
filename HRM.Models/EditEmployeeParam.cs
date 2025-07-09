@@ -60,4 +60,5 @@ public class EditEmployeeParam
     public string LetsTalk { get; set; }
     public int? SubCompanyId { get; set; }
     public int? SalaryStructureId { get; set; }
+    public string Salary { get; set; }
 }

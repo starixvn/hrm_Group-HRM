@@ -567,6 +567,25 @@
                     @Html.TextBoxFor(model => model.OffDaysbyWeek, new { @class = "form-control" })
                 </div>
             </li>
+            @if (hasReadPermissionOnSalaryStructure || hasHostPermissionOnSalaryStructure)
+            {
+                <li class="list-group-item form-group">
+                    <div class="label-form">
+                        @Html.LabelFor(model => model.Salary, "Salary", new { @class = "control-label" })
+                    </div>
+                    <div class="select-form">
+                        @if (!hasHostPermissionOnSalaryStructure)
+                        {
+                            <span>@Model.Salary</span>
+                            @Html.HiddenFor(model => model.Salary)
+                        }
+                        else
+                        {
+                            @Html.TextBoxFor(model => model.Salary, new { @class = "form-control", @type = "number", @min = "0", @step = "0.01" })
+                        }
+                    </div>
+                </li>
+            }
             <li class="list-group-item form-group">
                 <div class="label-form">@Labels.LeaveBalance</div>
                 <div>

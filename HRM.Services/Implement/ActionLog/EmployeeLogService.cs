@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Core.Constants;
+using Fanex.Data;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Models.Role;
 using GO.UserControl.Client.Core.Services;
@@ -28,7 +29,7 @@ public class EmployeeLogService(
     IRoleService roleService,
     ISalaryStructureService salaryStructureService) : IEmployeeLogService
 {
-    private readonly IEnumerable<MappingFieldConfig> mappingFields = new List<MappingFieldConfig>
+    private IEnumerable<MappingFieldConfig> mappingFields = new List<MappingFieldConfig>
     {
         new() { FieldName = "Code", DisplayName = Labels.EmployeeID },
         new() { FieldName = "EmployeeCard", DisplayName = Labels.EmployeeCard },
@@ -66,7 +67,6 @@ public class EmployeeLogService(
         new() { FieldName = "JobTitleId", DisplayName = Labels.JobTitle },
         new() { FieldName = "JobLevelId", DisplayName = Labels.JobLevel },
         new() { FieldName = "ManagementLevelId", DisplayName = Labels.ManagementLevel },
-        new() { FieldName = "SalaryStructureId", DisplayName = Labels.SalaryStructure },
         new() { FieldName = "PromotionDate", DisplayName = Labels.PromotionDate, DataType = MappingDataType.Date },
         new() { FieldName = "JoinedDate", DisplayName = Labels.GroupDate },
         new() { FieldName = "CompanyDate", DisplayName = Labels.CompanyDate },
@@ -119,6 +119,12 @@ public class EmployeeLogService(
 
     private void MappingField(IEnumerable<LogObjectDetail> logs)
     {
+        if (session.HasPermissionOnFunction(FunctionKey.SalaryStructureAssignment, Policy.Read))
+        {
+            mappingFields = mappingFields.Append(new MappingFieldConfig { FieldName = "Salary", DisplayName = "Salary" });
+            mappingFields = mappingFields.Append(new MappingFieldConfig { FieldName = "SalaryStructureId", DisplayName = Labels.SalaryStructure });
+        }
+
         foreach (var log in logs)
         {
             foreach (var field in log.Fields)
@@ -176,6 +182,10 @@ public class EmployeeLogService(
 
             case "SalaryStructureId":
                 MappingSalaryStructure(field);
+                break;
+
+            case "Salary":
+                MappingSalary(field);
                 break;
 
             default:
@@ -268,6 +278,15 @@ public class EmployeeLogService(
 
             _ = int.TryParse(field.Value, out salaryStructureId);
             field.Value = SalaryStructures.FirstOrDefault(x => x.SalaryStructureId == salaryStructureId)?.Name;
+        }
+    }
+
+    private void MappingSalary(FieldValue field)
+    {
+        if (session.HasPermissionOnFunction(FunctionKey.SalaryStructureAssignment, Policy.Read))
+        {
+            field.OldValue = !string.IsNullOrWhiteSpace(field.OldValue) ? Cryptography.DecryptPassword(field.OldValue) : string.Empty;
+            field.Value = !string.IsNullOrWhiteSpace(field.Value) ? Cryptography.DecryptPassword(field.Value) : string.Empty;
         }
     }
 }
