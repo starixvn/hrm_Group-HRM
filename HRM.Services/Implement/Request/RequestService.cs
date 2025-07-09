@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Net;
 using System.Text.Json;
 using GO.UserControl.Client.Core.Session;
 using HRM.Core;
@@ -21,11 +20,9 @@ using HRM.Criteria.Request.LateInEarlyOut;
 using HRM.Criteria.Request.Leave;
 using HRM.Models.Request;
 using HRM.Models.Request.ChangeShift;
-using HRM.Models.Request;
 using HRM.Repositories.Interfaces;
 using HRM.Resources;
 using HRM.Services.Interfaces.Request;
-using Microsoft.Extensions.Configuration;
 
 namespace HRM.Services.Implement.Request;
 
@@ -220,18 +217,14 @@ public class RequestService(
         return await SendAsync<CommandResult>(baseUrl, url, HttpMethod.Post);
     }
 
-    private async Task<T> SendAsync<T>(string baseUrl, string pathUrl, HttpMethod method)
+    private async Task<T> SendAsync<T>(Uri baseUrl, string pathUrl, HttpMethod method)
     {
         var token = await GetTokenAsync(baseUrl);
-
-        var handler = new HttpClientHandler
-        {
-            ServerCertificateCustomValidationCallback = (_, _, _, _) => true
-        };
+        var handler = new HttpClientHandler { ServerCertificateCustomValidationCallback = (_, _, _, _) => true };
 
         using var httpClient = new HttpClient(handler);
         httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-        var url = new Uri($"{baseUrl}/{pathUrl}");
+        var url = new Uri($"{baseUrl}{pathUrl}");
         using var request = new HttpRequestMessage(method, url);
         using var response = await httpClient.SendAsync(request);
         response.EnsureSuccessStatusCode();
@@ -239,22 +232,15 @@ public class RequestService(
         return JsonSerializer.Deserialize<T>(jsonResult);
     }
 
-    private async Task<string> GetTokenAsync(string baseUrl)
+    private async Task<string> GetTokenAsync(Uri baseUrl)
     {
-        string usr = nexConfig.NexHRId,
-               pwd = nexConfig.NexHRPassword;
-        var url = new Uri($"{baseUrl}/Token/GetToken?username={usr}&password={pwd}");
-
-        var handler = new HttpClientHandler
-        {
-            ServerCertificateCustomValidationCallback = (_, _, _, _) => true
-        };
+        var url = new Uri($"{baseUrl}Token/GetToken?username={nexConfig.NexHRId}&password={nexConfig.NexHRPassword}");
+        var handler = new HttpClientHandler { ServerCertificateCustomValidationCallback = (_, _, _, _) => true };
 
         using var httpClient = new HttpClient(handler);
         using var request = new HttpRequestMessage(HttpMethod.Post, url);
         using var response = await httpClient.SendAsync(request);
-        var responseData = await response.Content.ReadAsStringAsync();
-        return responseData;
+        return await response.Content.ReadAsStringAsync();
     }
 
     public async Task SendMailProcessRequest(ProcessRequestParam param, EmployeeSession actor, RequestCommand command)

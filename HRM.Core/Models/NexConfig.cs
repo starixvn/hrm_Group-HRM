@@ -1,5 +1,6 @@
 namespace HRM.Core.Models;
 
+using System;
 using System.Collections.Generic;
 
 public class NexConfig
@@ -8,5 +9,5 @@ public class NexConfig
     public string NexHRPassword { get; set; }
     public Dictionary<string, string> CompanyUrls { get; set; } = new();
 
-    public string GetBaseUrlByCompanyId(short companyId) => CompanyUrls.GetValueOrDefault(companyId.ToString(), "");
+    public Uri GetBaseUrlByCompanyId(short companyId) => new Uri(CompanyUrls.GetValueOrDefault(companyId.ToString(), ""));
 }

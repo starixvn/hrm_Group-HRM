@@ -276,29 +276,21 @@ public class RequestController(
         var localRequests = model.Requests.Where(r => !Constants.NexCompanyIds.Contains(r.RequesterCompanyId)).ToList();
 
         var commandResults = new List<CommandResult>();
-
         if (nexCompanyRequests.Count > 0)
         {
             model.Requests = nexCompanyRequests;
             var nexCommandResults = await requestService.SendNexHrmMultipleProcessRequest(session.UserId, model);
             commandResults.AddRange(nexCommandResults);
         }
-
-        if (localRequests.Count > 0)
-        {
-            model.Requests = localRequests;
-            var localCommandResult = await requestService.ApproveRequests(model);
-            commandResults.Add(localCommandResult);
-        }
-
-        var finalResult = commandResults.All(r => r.IsSuccessful)
-            ? commandResults.FirstOrDefault()
-            : commandResults.FirstOrDefault(r => !r.IsSuccessful);
-
-        if (finalResult?.IsSuccessful == true)
+        model.Requests = localRequests;
+        var localCommandResult = await requestService.ApproveRequests(model);
+        commandResults.Add(localCommandResult);
+        if (localCommandResult.IsSuccessful)
         {
             await requestService.SendMailProcessRequests(model, EmployeeSession, model.Command);
         }
+
+        var finalResult = commandResults.Find(r => !r.IsSuccessful) ?? commandResults.Find(r => true);
 
         return new JsonResult(finalResult);
     }

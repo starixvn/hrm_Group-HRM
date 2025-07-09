@@ -1,5 +1,4 @@
 ﻿using System;
-using HRM.Core;
 
 namespace HRM.Models.Request;
 

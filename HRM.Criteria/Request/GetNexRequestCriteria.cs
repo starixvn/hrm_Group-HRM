@@ -3,7 +3,6 @@
 namespace HRM.Criteria.Request;
 
 using System;
-using Core.Enums;
 using Fanex.Data;
 using Fanex.Data.Repository;
 
