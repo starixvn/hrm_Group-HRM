@@ -125,6 +125,7 @@ const AppContainer = () => {
                                 name="localSalary"
                                 type="number"
                                 min="0"
+                                step="0.01"
                                 className="form-control"
                                 autoComplete="off"
                             />
@@ -141,6 +142,7 @@ const AppContainer = () => {
                                 name="expatSalary"
                                 type="number"
                                 min="0"
+                                step="0.01"
                                 className="form-control"
                                 autoComplete="off"
                             />
