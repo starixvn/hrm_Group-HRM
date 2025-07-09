@@ -19,6 +19,7 @@ using HRM.Services.Interfaces.Request;
 using HRM.ViewModels.Request;
 using Microsoft.AspNetCore.Mvc;
 using Models.Supervisor;
+using Fanex.Common.Extensions;
 using Services.Implement;
 using Services.Interfaces;
 using HRM.Core.Services;
@@ -49,17 +50,14 @@ public class RequestController(
             request.FromDate = DateTimeOffset.Now.Date.AddDays(fromDays);
             request.IsFilterByAffectedDate = false;
         }
-
-        await GetRequestAsync(request);
         var isLocal = request.IsLocal != 0;
         if (isLocal && request.IsShowCrossCompany)
         {
             var nexRequest = (await NexRequests(request)).ToList();
-            nexRequest.ForEach(item =>
-            {
-                request.Requests.Add(item);
-            });
+            request.Requests = nexRequest;
         }
+
+        await GetRequestAsync(request);
         await GetInfoAttachFileAsync(request.Requests);
         ViewBag.NexCompanyIds = Constants.NexCompanyIds;
         return View(EmployeeRequestViewName, request);
@@ -356,8 +354,16 @@ public class RequestController(
             rq.FromTime = rq.FromTime.ToClientTimeZone();
             rq.ToTime = rq.ToTime.ToClientTimeZone();
         });
+        request.Requests ??= new List<RequestEntity>();
+        requests.ForEach(item =>
+        {
+            request.Requests.Add(item);
+        });
         request.CurrentUserId = session.UserId;
-        request.Requests = request.ViewType == RequestViewType.PersonalSpace ? SortRequest(requests) : requests;
+        request.Requests = request.Requests
+            .OrderByDescending(r => r.CreatedDate)
+            .ToList();
+        request.Requests = request.ViewType == RequestViewType.PersonalSpace ? SortRequest(request.Requests) : request.Requests;
     }
 
     private List<RequestEntity> SortRequest(IList<RequestEntity> requests)
