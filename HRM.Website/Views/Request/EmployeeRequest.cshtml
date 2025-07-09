@@ -270,7 +270,11 @@
                         <td data-datetime="@request.CreatedDate">@request.CreatedDate.ToDetailFormatedDate()</td>
                         <td class="status">@await Html.PartialAsync("_RenderStatus", (Model, request))</td>
                         <td>
-                            @if (!isInNexCompany)
+                            @if (isInNexCompany)
+                            {
+	                            <a class="viewhistory" href="javascript:;" id="/request/viewhistory/@request.CustomId">@Labels.View</a>
+                            }
+                            else
                             {
 	                            @await Html.PartialAsync("_RenderHistoryLink", request)
                             }

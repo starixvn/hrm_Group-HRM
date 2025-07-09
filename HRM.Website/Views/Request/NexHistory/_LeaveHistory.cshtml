@@ -1,0 +1,76 @@
+﻿@using HRM.Core
+@using HRM.Models.Request
+@using HRM.Resources
+@using HRM.Website.Helper
+@model IEnumerable<HRM.Models.Request.NexRequestModel>
+
+    <table class="table table-custom">
+        <thead>
+            <tr>
+                <th>@Labels.SymbolCount</th>
+                <th>@Labels.Team</th>
+                <th>@Labels.Employee</th>
+                <th>@Labels.LeaveType</th>
+                <th>@Labels.From</th>
+                <th>@Labels.To</th>
+                <th>@Labels.Total</th>
+                <th>@Labels.Remark</th>
+                <th>@Labels.Approver</th>
+                <th>@Labels.Status</th>
+                <th>@Labels.LogDate</th>
+            </tr>
+        </thead>
+        @if (Model != null && Model.Any())
+        {
+            var index = 1;
+            <tbody>
+                @foreach (var history in Model)
+                {
+	                var requestStatus = new RequestStatus { Id = history.Status };
+	                var statusText = requestStatus.Name;
+                    <tr>
+                        <td>@(index++)</td>
+						<td>@history.Team</td>
+                        <td>
+							<span class="tooltip-tipsy" title="@history.FullNameRequester">@history.Requester</span>
+                        </td>
+						<td>@history.LeaveTypeName</td>
+                        <td>@history.FromDate.ToClientTimeZone().ToDateMonthYearFormatedDate()</td>
+						<td>@history.ToDate.ToClientTimeZone().ToDateMonthYearFormatedDate()</td>
+                        <td>
+                        @{
+                            var totaldays = history.TotalDays.HasValue ? history.TotalDays.Value.ToString("0.0") : string.Empty;
+                        }
+                            @totaldays
+                        </td>
+                        <td>
+                        @if (!string.IsNullOrWhiteSpace(history.Remark))
+                            {
+								<span class="fa fa-comment tooltip-tipsy" title="@history.Remark"></span>
+                            }
+                            else
+                            {
+                                <span>-</span>
+                            }
+                        </td>
+                        <td>
+                            @if (history.Requester != history.ProcessedBy)
+                            {
+	                            @history.ProcessedBy
+                            }
+                        </td>
+						<td>@statusText</td>
+                        <td class="align-left">
+                        @(history.ProcessedDate != null
+                            ? string.Format(Messages.LogDate, history.ProcessedBy, history.ProcessedDate?.ToShortFormatedDate())
+                            : string.Empty)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        }
+        else
+        {
+            @Html.Raw(RazorHelpers.DisplayNoInformation(colspan: 12))
+        }
+    </table>

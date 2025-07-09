@@ -47,7 +47,7 @@ export default class Supervisor extends Component {
         headers: { "X-Requested-With": "XMLHttpRequest" },
         params: {
           keyword,
-          enable: true,
+          isEnable: true,
           isDelete: false,
         },
       })

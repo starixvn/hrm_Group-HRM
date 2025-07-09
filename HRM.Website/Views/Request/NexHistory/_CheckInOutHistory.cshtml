@@ -1,0 +1,59 @@
+﻿@using HRM.Core
+@using HRM.Models.Request
+@using HRM.Resources
+@using HRM.Website.Helper
+@model IEnumerable<HRM.Models.Request.NexRequestModel>
+
+    <table class="table table-custom">
+        <thead>
+            <tr>
+                <th>@Labels.SymbolCount</th>
+                <th>@Labels.Team</th>
+                <th>@Labels.Employee</th>
+                <th>@Labels.Request</th>
+                <th>@Labels.Shift</th>
+                <th>@Labels.RequestTime</th>
+                <th>@Labels.CreatedDate</th>
+                <th>@Labels.Status</th>
+                <th>@Labels.ProcessedBy</th>
+            </tr>
+        </thead>
+        @if (Model != null && Model.Any())
+        {
+            var index = 1;
+            <tbody>
+                @foreach (var history in Model)
+                {
+					var requestType = new RequestTypeModel { Id = (short)history.RequestType };
+					var typeText = requestType.Name;
+	                var requestStatus = new RequestStatus { Id = history.Status };
+	                var statusText = requestStatus.Name;
+                    <tr>
+                        <td>@(index++)</td>
+						<td>@history.Team</td>
+                        <td>
+							<span class="tooltip-tipsy" title="@history.FullNameRequester">@history.Requester</span>
+                        </td>
+						<td>@typeText</td>
+                        <td>@history.FromShift</td>
+                        <td>
+                            @history.FromDate
+                        </td>
+                        <td class="align-left">
+                            @history.CreatedDate
+                        </td>
+                        <td>@statusText</td>
+                        <td>
+	                        @(history.ProcessedDate != null
+		                        ? string.Format(Messages.LogDate, history.ProcessedBy, history.ProcessedDate?.ToShortFormatedDate())
+		                        : string.Empty)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        }
+        else
+        {
+            @Html.Raw(RazorHelpers.DisplayNoInformation(colspan: 12))
+        }
+    </table>

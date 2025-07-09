@@ -135,6 +135,26 @@ public class RequestController(
         return responseRequests;
     }
 
+    public async Task<ActionResult> ViewHistory(string id)
+    {
+        var splitCustomId = id.Split("_");
+        var companyId = int.Parse(splitCustomId[1]);
+        var requestId = int.Parse(splitCustomId[0]);
+        var criteria = new GetNexRequestHistoryCriteria
+        {
+            RequestId = requestId,
+            CompanyId = companyId
+        };
+        var history = await baseService.GetDataAsync<NexRequestModel>(criteria);
+        Parallel.ForEach(history, h =>
+        {
+            h.Status = (byte)requestRepository.GetGroupByNexRequestStatus(h.Status);
+        });
+        var requestType = history.FirstOrDefault()?.RequestType;
+        var isCheckInOutType = requestType is (int)RequestType.CheckIn or (int)RequestType.CheckOut;
+        return PartialView(isCheckInOutType ? "NexHistory/_CheckInOutHistory" : "NexHistory/_LeaveHistory", history);
+    }
+
     private async Task GetInfoAttachFileAsync(IList<RequestEntity> requests)
     {
         foreach (var request in requests)
