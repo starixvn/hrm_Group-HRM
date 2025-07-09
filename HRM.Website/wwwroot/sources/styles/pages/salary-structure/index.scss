@@ -6,8 +6,8 @@
 @import "../../layout/table";
 @import "../../components/sweet-modal";
 
-.filter {
-    max-width: unset;
+.filter, .table-custom {
+    max-width: 70%;
 }
 
 .btn {
@@ -23,10 +23,6 @@
 
 .form-group {
     margin-bottom: 0 !important;
-}
-
-.table-custom {
-    width: auto;
 }
 
 .text-left {
