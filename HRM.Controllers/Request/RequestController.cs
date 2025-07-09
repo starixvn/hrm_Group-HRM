@@ -75,23 +75,17 @@ public class RequestController(
         {
             leaveType = requestRepository.GetNexLeaveType(model.LeaveType.Value);
         }
-        var supervisorCompanyCriteria = new GetSupervisorCompaniesCriteria
-        {
-            EmpId = session.UserId
-        };
-        var supervisorCompanyIds = await baseService.GetDataAsync<int>(supervisorCompanyCriteria);
 
-        var companies = await companyService.GetAllCompany();
+        var supervisorCompanies = await employeeService.GetCompaniesBelongToSupervisor();
 
-        var nexCompanies = supervisorCompanyIds
-            .Where(s => Constants.NexCompanyIds.Contains(s));
-        if (!nexCompanies.Any())
+        if (!supervisorCompanies.Any())
         {
             return responseRequests;
         }
         const int AssistantLeader = 1;
         List<NexRequestModel> requests = [];
-        foreach (var companyId in nexCompanies)
+        var companies = await companyService.GetAllCompany();
+        foreach (var companyId in supervisorCompanies)
         {
             var criteria = new GetNexRequestCriteria
             {
@@ -113,22 +107,18 @@ public class RequestController(
             {
                 item.CompanyId = companyId;
                 item.Status = (byte)requestRepository.GetGroupByNexRequestStatus(item.Status);
+                var companyName = companies
+                    .Where(c => c.CompanyId == item.CompanyId)
+                    .Select(c => c.Name)
+                    .FirstOrDefault();
+                item.Requester += $" ({companyName})";
                 return item;
             });
             requests.AddRange(mappedData);
         }
 
-        Parallel.ForEach(requests, r =>
-        {
-            var companyName = companies
-                .Where(c => c.CompanyId == r.CompanyId)
-                .Select(c => c.Name)
-                .FirstOrDefault();
-            r.Requester += $" ({companyName})";
-        });
-
         responseRequests = requestRepository
-            .MappingNexRequestToGroupRequest(requests, session.UserId)
+            .MappingNexRequestToGroupRequest(requests, EmployeeSession)
             .OrderByDescending(item => item.CreatedDate)
             .ToList();
 

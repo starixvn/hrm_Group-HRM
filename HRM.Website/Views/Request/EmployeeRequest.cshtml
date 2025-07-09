@@ -244,7 +244,14 @@
                             <span class="tooltip-tipsy" title="@request.VerifierFullName">@request.VerifierNickName</span>
                         </td>
                         <td>
-                            <span class="tooltip-tipsy" title="@request.ApproverFullName">@request.ApproverNickName</span>
+	                        @if (isInNexCompany)
+	                        {
+                                <span class="tooltip-tipsy" title="@request.ProcessedByFullName">@request.ProcessedByNickName</span>
+	                        }
+	                        else
+	                        {
+                                <span class="tooltip-tipsy" title="request.ApproverFullName">@request.ApproverNickName</span>
+	                        }
                         </td>
                         <td>
                             @if (!string.IsNullOrWhiteSpace(request.Remark))

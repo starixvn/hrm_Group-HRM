@@ -66,4 +66,6 @@ public interface IEmployeeService
     Task<CommandResult> UpdateUserIdAsync(UpdateUserIdCommand command);
 
     Task<IList<SupervisorNameModel>> CheckAndAddMissingSupervisor(IList<SupervisorNameModel> supervisors, int supervisorId);
+
+    Task<IEnumerable<int>> GetCompaniesBelongToSupervisor();
 }
