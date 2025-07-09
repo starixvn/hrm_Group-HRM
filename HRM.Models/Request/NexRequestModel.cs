@@ -46,7 +46,7 @@ public class NexRequestModel
 
     public string ToShift { get; set; }
 
-    public DateTime ModifiedDate { get; set; }
+    public DateTime? ModifiedDate { get; set; }
 
     public int EmpId { get; set; }
 

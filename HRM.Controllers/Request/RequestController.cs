@@ -139,6 +139,7 @@ public class RequestController(
         Parallel.ForEach(history, h =>
         {
             h.Status = (byte)requestRepository.GetGroupByNexRequestStatus(h.Status);
+            h.ModifiedDate = h.ModifiedDate?.ConvertToClientTimeZone(Constants.NexTimezone);
         });
         var requestType = history.FirstOrDefault()?.RequestType;
         var isCheckInOutType = requestType is (int)RequestType.CheckIn or (int)RequestType.CheckOut;
