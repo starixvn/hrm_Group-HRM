@@ -19,7 +19,7 @@ public interface IRequestRepository
 
     Task<List<LeaveDisciplineModel>> GetLeaveRequestToReviewDiscipline(ICriteria criteria);
 
-    IEnumerable<RequestEntity> MappingNexRequestToGroupRequest(List<NexRequestModel> requests, Employee approver);
+    IEnumerable<RequestEntity> MappingNexRequestToGroupRequest(List<NexRequestModel> requests, int currentUserId);
 
     int? GetNexRequestStatus(string requestStatusId);
 

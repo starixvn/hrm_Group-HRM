@@ -1,4 +1,6 @@
-﻿namespace HRM.Repositories;
+﻿using HRM.Core.Constants;
+
+namespace HRM.Repositories;
 
 using System;
 using System.Collections.Generic;
@@ -91,7 +93,7 @@ public class RequestRepository : IRequestRepository
         return disciplines;
     }
 
-    public IEnumerable<RequestEntity> MappingNexRequestToGroupRequest(List<NexRequestModel> requests, Employee approver)
+    public IEnumerable<RequestEntity> MappingNexRequestToGroupRequest(List<NexRequestModel> requests, int currentUserId)
     {
         List<RequestEntity> responseRequests = [];
 
@@ -118,9 +120,10 @@ public class RequestRepository : IRequestRepository
                 TotalMins = requestInfo.TotalMins ?? 0,
                 CrossDay = requestInfo.IsCrossDate,
                 ModifiedDate = requestInfo.ModifiedDate,
-                ApproverId = approver.Id,
-                ApproverNickName = approver.NickName,
-                ApproverFullName = approver.FullName,
+                ApproverId = currentUserId,
+                ApproverNickName = requestInfo.ProcessedBy,
+                ApproverFullName = requestInfo.FullNameProcessedBy,
+                ApprovedDate = requestInfo.ProcessedDate?.ConvertToClientTimeZone(Constants.NexTimezone),
                 CompanyId = requestInfo.CompanyId,
                 RequestedDate = requestInfo.RequestedDate.ToServerTimeZone(),
                 Requester = new Employee

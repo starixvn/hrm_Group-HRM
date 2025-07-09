@@ -96,4 +96,11 @@ public static class DateTimeExtensions
         var offsetTime = new DateTimeOffset(time, ServerTimeZone);
         return offsetTime.ToOffset(clientTimeZone).DateTime;
     }
+
+    public static DateTime ConvertToClientTimeZone(this DateTime time, TimeSpan fromTimeZone)
+    {
+        var clientTimeZone = TimeSpan.FromHours(_userControlSession.Get<float>(SessionKey.CurrentTimeZone));
+        var offsetTime = new DateTimeOffset(time, fromTimeZone);
+        return offsetTime.ToOffset(clientTimeZone).DateTime;
+    }
 }

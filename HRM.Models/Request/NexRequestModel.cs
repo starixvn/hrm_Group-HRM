@@ -59,4 +59,10 @@ public class NexRequestModel
     public string ApproverNickName { get; set; }
 
     public int CompanyId { get; set; }
+
+    public string ProcessedBy { get; set; }
+
+    public DateTime? ProcessedDate { get; set; }
+
+    public string FullNameProcessedBy { get; set; }
 }

@@ -1,4 +1,6 @@
-﻿namespace HRM.Controllers.Request;
+﻿using HRM.Models;
+
+namespace HRM.Controllers.Request;
 
 using System;
 using System.Collections.Generic;
@@ -125,10 +127,8 @@ public class RequestController(
             r.Requester += $" ({companyName})";
         });
 
-        var approver = await employeeService.GetEmployeeByIdAsync(session.UserId);
-
         responseRequests = requestRepository
-            .MappingNexRequestToGroupRequest(requests, approver)
+            .MappingNexRequestToGroupRequest(requests, session.UserId)
             .OrderByDescending(item => item.CreatedDate)
             .ToList();
 
