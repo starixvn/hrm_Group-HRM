@@ -7,7 +7,7 @@ const Table = ({ data, onDelete }) => {
   const colSpan = window.hasPermission === "True" ? 7 : 5;
 
   const columns = [
-    { label: "#", key: "no", sortable: false },
+    { label: "#", key: null, sortable: false },
     { label: "Salary Structure", key: "name", sortable: true },
     { label: "Job Level", key: "jobLevelName", sortable: true },
     { label: "Local Salary", key: "localSalary", sortable: true },
