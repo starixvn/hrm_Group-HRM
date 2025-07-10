@@ -84,7 +84,7 @@
         {
             <a roleid="@Convert.ToInt32(RoleSystem.Approver)" requestid="@request.Id" requesttypeid="@request.RequestType.Id" employeeid="@request.Requester.Id" companyid="@request.CompanyId"
                href="javascript:void(0);" class="approver-actions-reset tooltip-tipsy"
-               title="@request.Status.Name by @request.ApproverNickName (@request.ApprovedDate.ToShortFormatedDate())">
+               title="@request.Status.Name by @request.ApproverNickName (@request.ApprovedDate?.ToClientTimeZone().ToShortFormatedDate())">
                 @request.Status.ToString()
                 <span class="caret"></span>
             </a>

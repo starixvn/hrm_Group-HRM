@@ -136,6 +136,7 @@ public class RequestController(
             CompanyId = companyId
         };
         var history = await baseService.GetDataAsync<NexRequestModel>(criteria);
+        history = history.OrderByDescending(h => h.ProcessedDate);
         Parallel.ForEach(history, h =>
         {
             h.Status = (byte)requestRepository.GetGroupByNexRequestStatus(h.Status);
