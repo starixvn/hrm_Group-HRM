@@ -395,8 +395,15 @@ public class RequestService(
 
     private static string GetMessageForCheckInOut(RequestEntity request, bool isNoFormat)
     {
+        var nexCompanyIds = Constants.NexCompanyIds;
+        var requestCompanyId = request.CompanyId;
+        var isInNexCompany = nexCompanyIds != null && nexCompanyIds.Contains(requestCompanyId);
         var msgTemplate = isNoFormat ? RequestFormatConstants.MsgCheckInOutWithNoFormat : RequestFormatConstants.MsgCheckInOut;
         var time = request.RequestedDate.Day == request.FromDate.Day ? request.RequestedDate.ToShortTime() : request.RequestedDate.ToShortTime() + "+";
+        if (isInNexCompany)
+        {
+            time = request.OriginalRequestedDate?.Day == request.FromDate.Day ? request.OriginalRequestedDate?.ToShortTime() : request.OriginalRequestedDate?.ToShortTime() + "+";
+        }
         return string.Format(msgTemplate, time, request.FromShift?.Name, request.FromDate.ToDateMonthYearFormatedDate());
     }
 

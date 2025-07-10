@@ -20,6 +20,8 @@ public class RequestEntity : EntityBase<long>
         set => serverRequestDate = value.ToClientTimeZone();
     }
 
+    public DateTime? OriginalRequestedDate { get; set; }
+
     public string CustomId => $"{Id}_{CompanyId}";
 
     public RequestTypeModel RequestType { get; set; }
@@ -31,6 +33,8 @@ public class RequestEntity : EntityBase<long>
         get => serverCreatedDate;
         set => serverCreatedDate = value.ToClientTimeZone();
     }
+
+    public DateTime? OriginalCreatedDate { get; set; }
 
     public Employee VerifiedBy { get; set; }
     public Employee ApprovedBy { get; set; }

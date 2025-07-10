@@ -119,7 +119,7 @@ public class RequestRepository : IRequestRepository
                     Name = requestInfo.LeaveTypeName ?? string.Empty
                 },
                 Remark = requestInfo.Remark,
-                CreatedDate = requestInfo.CreatedDate.ToServerTimeZone().ConvertToClientTimeZone(Constants.NexTimezone),
+                OriginalCreatedDate = requestInfo.CreatedDate.ConvertToClientTimeZone(Constants.NexTimezone),
                 TotalMins = requestInfo.TotalMins ?? 0,
                 CrossDay = requestInfo.IsCrossDate,
                 ModifiedDate = requestInfo.ModifiedDate?.ConvertToClientTimeZone(Constants.NexTimezone),
@@ -130,7 +130,7 @@ public class RequestRepository : IRequestRepository
                 ProcessedByNickName = sessionUser.Nickname,
                 ApprovedDate = requestInfo.ProcessedDate?.ConvertToClientTimeZone(Constants.NexTimezone),
                 CompanyId = requestInfo.CompanyId,
-                RequestedDate = requestInfo.RequestedDate.ToServerTimeZone().ConvertToClientTimeZone(Constants.NexTimezone),
+                OriginalRequestedDate = requestInfo.RequestedDate.ConvertToClientTimeZone(Constants.NexTimezone),
                 Requester = new Employee
                 {
                     Id = requestInfo.EmpId,
