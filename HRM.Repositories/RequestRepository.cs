@@ -99,17 +99,20 @@ public class RequestRepository : IRequestRepository
         List<RequestEntity> responseRequests = [];
         foreach (var requestInfo in requests)
         {
+            var toDate = requestInfo.ToDate != DateTime.MinValue
+                ? requestInfo.ToDate.ConvertToClientTimeZone(Constants.NexTimezone)
+                : requestInfo.ToDate;
             var entity = new RequestEntity
             {
                 Id = requestInfo.Id,
                 RequestType = new RequestTypeModel { Id = (short)requestInfo.RequestType },
                 Status = new RequestStatus { Id = requestInfo.Status },
                 FromDate = requestInfo.FromDate.ConvertToClientTimeZone(Constants.NexTimezone),
-                ToDate = requestInfo.ToDate.ConvertToClientTimeZone(Constants.NexTimezone),
+                ToDate = toDate,
                 TotalDays = requestInfo.TotalDays ?? 0,
                 IsHalfDay = requestInfo.IsHalfDay,
                 FromTime = requestInfo.FromDate.ConvertToClientTimeZone(Constants.NexTimezone),
-                ToTime = requestInfo.ToDate.ConvertToClientTimeZone(Constants.NexTimezone),
+                ToTime = toDate,
                 LeaveType = new LeaveType
                 {
                     Id = requestInfo.LeaveTypeID,
