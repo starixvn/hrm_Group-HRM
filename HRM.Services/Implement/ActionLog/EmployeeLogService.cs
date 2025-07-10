@@ -274,10 +274,12 @@ public class EmployeeLogService(
         if (session.HasPermissionOnFunction(FunctionKey.SalaryStructureAssignment, Policy.Read))
         {
             _ = int.TryParse(field.OldValue, out var salaryStructureId);
-            field.OldValue = SalaryStructures.FirstOrDefault(x => x.SalaryStructureId == salaryStructureId)?.Name;
+            var salaryStructure = SalaryStructures.FirstOrDefault(x => x.SalaryStructureId == salaryStructureId);
+            field.OldValue = $"{salaryStructure?.Name} - {salaryStructure?.JobLevelName}";
 
             _ = int.TryParse(field.Value, out salaryStructureId);
-            field.Value = SalaryStructures.FirstOrDefault(x => x.SalaryStructureId == salaryStructureId)?.Name;
+            salaryStructure = SalaryStructures.FirstOrDefault(x => x.SalaryStructureId == salaryStructureId);
+            field.Value = $"{salaryStructure?.Name} - {salaryStructure?.JobLevelName}";
         }
     }
 
