@@ -97,7 +97,6 @@ public class RequestRepository : IRequestRepository
     public IEnumerable<RequestEntity> MappingNexRequestToGroupRequest(List<NexRequestModel> requests, EmployeeSession sessionUser)
     {
         List<RequestEntity> responseRequests = [];
-
         foreach (var requestInfo in requests)
         {
             var entity = new RequestEntity
@@ -105,22 +104,22 @@ public class RequestRepository : IRequestRepository
                 Id = requestInfo.Id,
                 RequestType = new RequestTypeModel { Id = (short)requestInfo.RequestType },
                 Status = new RequestStatus { Id = requestInfo.Status },
-                FromDate = requestInfo.FromDate,
-                ToDate = requestInfo.ToDate,
+                FromDate = requestInfo.FromDate.ConvertToClientTimeZone(Constants.NexTimezone),
+                ToDate = requestInfo.ToDate.ConvertToClientTimeZone(Constants.NexTimezone),
                 TotalDays = requestInfo.TotalDays ?? 0,
                 IsHalfDay = requestInfo.IsHalfDay,
-                FromTime = requestInfo.FromDate,
-                ToTime = requestInfo.ToDate,
+                FromTime = requestInfo.FromDate.ConvertToClientTimeZone(Constants.NexTimezone),
+                ToTime = requestInfo.ToDate.ConvertToClientTimeZone(Constants.NexTimezone),
                 LeaveType = new LeaveType
                 {
                     Id = requestInfo.LeaveTypeID,
                     Name = requestInfo.LeaveTypeName ?? string.Empty
                 },
                 Remark = requestInfo.Remark,
-                CreatedDate = requestInfo.CreatedDate.ToServerTimeZone(),
+                CreatedDate = requestInfo.CreatedDate.ToServerTimeZone().ConvertToClientTimeZone(Constants.NexTimezone),
                 TotalMins = requestInfo.TotalMins ?? 0,
                 CrossDay = requestInfo.IsCrossDate,
-                ModifiedDate = requestInfo.ModifiedDate,
+                ModifiedDate = requestInfo.ModifiedDate?.ConvertToClientTimeZone(Constants.NexTimezone),
                 ApproverId = sessionUser.EmpId,
                 ApproverNickName =  requestInfo.ProcessedBy,
                 ApproverFullName = requestInfo.FullNameProcessedBy,
@@ -128,7 +127,7 @@ public class RequestRepository : IRequestRepository
                 ProcessedByNickName = sessionUser.Nickname,
                 ApprovedDate = requestInfo.ProcessedDate?.ConvertToClientTimeZone(Constants.NexTimezone),
                 CompanyId = requestInfo.CompanyId,
-                RequestedDate = requestInfo.RequestedDate.ToServerTimeZone(),
+                RequestedDate = requestInfo.RequestedDate.ToServerTimeZone().ConvertToClientTimeZone(Constants.NexTimezone),
                 Requester = new Employee
                 {
                     Id = requestInfo.EmpId,
