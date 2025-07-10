@@ -406,29 +406,6 @@
                     @Html.DropDownListFor(model => model.ManagementLevelId, new SelectList(ViewBag.Grades, "Id", "Name"), "--Select a M Grade--", new { @class = "form-control" })
                 </div>
             </li>
-            @if (hasReadPermissionOnSalaryStructure || hasHostPermissionOnSalaryStructure)
-            {
-                <li class="list-group-item form-group">
-                    <div class="label-form">
-                        @Html.LabelFor(model => model.SalaryStructureId, Labels.SalaryStructure, new { @class = "control-label" })
-                    </div>
-                    <div class="select-form">
-                        @if (!hasHostPermissionOnSalaryStructure)
-                        {
-                            var salaryStructure = salaryStructures.FirstOrDefault(x => x.SalaryStructureId == Model.SalaryStructureId);
-                            <span>@salaryStructure?.Name</span>
-                            @Html.HiddenFor(model => model.SalaryStructureId)
-                        }
-                        else
-                        {
-                            @Html.DropDownListFor(model => model.SalaryStructureId,
-                                     new SelectList(salaryStructures, "SalaryStructureId", "Name"),
-                                "--Select a Salary Structure--",
-                                new { @class = "form-control" })
-                        }
-                    </div>
-                </li>
-            }
             <li class="list-group-item form-group">
                 <div class="label-form">
                     @Html.LabelFor(model => model.PromotionDate, Labels.PromotionDate, new { @class = "control-label" })
@@ -571,7 +548,27 @@
             {
                 <li class="list-group-item form-group">
                     <div class="label-form">
-                        @Html.LabelFor(model => model.Salary, "Salary", new { @class = "control-label" })
+                        @Html.LabelFor(model => model.SalaryStructureId, Labels.SalaryStructure, new { @class = "control-label" })
+                    </div>
+                    <div class="select-form">
+                        @if (!hasHostPermissionOnSalaryStructure)
+                        {
+                            var salaryStructure = salaryStructures.FirstOrDefault(x => x.SalaryStructureId == Model.SalaryStructureId);
+                            <span>@salaryStructure?.Name</span>
+                            @Html.HiddenFor(model => model.SalaryStructureId)
+                        }
+                        else
+                        {
+                            @Html.DropDownListFor(model => model.SalaryStructureId,
+                                new SelectList(salaryStructures, "SalaryStructureId", "Name"),
+                                "--Select a Salary Structure--",
+                                new { @class = "form-control" })
+                        }
+                    </div>
+                </li>
+                <li class="list-group-item form-group">
+                    <div class="label-form">
+                        @Html.LabelFor(model => model.Salary, Labels.NonStandardSalaryStructure, new { @class = "control-label" })
                     </div>
                     <div class="select-form">
                         @if (!hasHostPermissionOnSalaryStructure)
@@ -585,6 +582,10 @@
                         }
                     </div>
                 </li>
+            }
+            else
+            {
+                @Html.HiddenFor(model => model.Salary)
             }
             <li class="list-group-item form-group">
                 <div class="label-form">@Labels.LeaveBalance</div>

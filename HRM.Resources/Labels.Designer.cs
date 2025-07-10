@@ -3616,6 +3616,15 @@ namespace HRM.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Non-standard Salary Structure.
+        /// </summary>
+        public static string NonStandardSalaryStructure {
+            get {
+                return ResourceManager.GetString("NonStandardSalaryStructure", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Normal.
         /// </summary>
         public static string Normal {

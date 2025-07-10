@@ -121,8 +121,8 @@ public class EmployeeLogService(
     {
         if (session.HasPermissionOnFunction(FunctionKey.SalaryStructureAssignment, Policy.Read))
         {
-            mappingFields = mappingFields.Append(new MappingFieldConfig { FieldName = "Salary", DisplayName = "Salary" });
             mappingFields = mappingFields.Append(new MappingFieldConfig { FieldName = "SalaryStructureId", DisplayName = Labels.SalaryStructure });
+            mappingFields = mappingFields.Append(new MappingFieldConfig { FieldName = "Salary", DisplayName = Labels.NonStandardSalaryStructure });
         }
 
         foreach (var log in logs)

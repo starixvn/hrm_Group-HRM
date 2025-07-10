@@ -2121,4 +2121,7 @@
   <data name="EditSalaryStructure" xml:space="preserve">
     <value>Edit Salary Structure</value>
   </data>
+  <data name="NonStandardSalaryStructure" xml:space="preserve">
+    <value>Non-standard Salary Structure</value>
+  </data>
 </root>
