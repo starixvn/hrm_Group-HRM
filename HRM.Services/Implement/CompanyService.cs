@@ -13,7 +13,8 @@ using Microsoft.AspNetCore.Http;
 
 namespace HRM.Services.Implement;
 
-public class CompanyService(IBaseService baseService,
+public class CompanyService(
+    IBaseService baseService,
     IHttpContextAccessor httpContextAccessor,
     IUserControlSession userControlSession) : ICompanyService
 {

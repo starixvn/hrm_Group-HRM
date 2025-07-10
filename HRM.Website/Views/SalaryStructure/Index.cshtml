@@ -1,0 +1,21 @@
+﻿@using HRM.Resources
+
+@model bool
+@{
+    ViewBag.Title = Labels.SalaryStructure;
+}
+@section css{
+    <link href="~/dist/styles/salary-structure.index.css" rel="stylesheet" />
+}
+@section js{
+    <script type="text/javascript">
+        window.hasPermission = "@Model";
+    </script>
+    <script src="~/dist/js/salary-structure.home.js"></script>
+}
+
+@section Breadcrumb {
+    <a class="step">@Labels.HRSpace</a><span class="step">@ViewBag.Title</span>
+}
+<h2 class="page-title">@ViewBag.Title</h2>
+<div id="salary-structure"></div>

@@ -291,4 +291,13 @@
     &.icon-headcountreport {
         background-position: -24px -168px;
     }
+
+    &.icon-salarystructure {
+        background-image: url(images/icon-settings-money.png);
+        background-size: contain;
+        width: 16px;
+        height: 16px;
+        margin: 4px !important;
+        background-position: center;
+    }
 }

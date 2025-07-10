@@ -68,6 +68,9 @@ public static class FunctionKey
     public const string TimeRecord = "TimeRecord";
     public const string Message = "Message";
 
+    public const string SalaryStructureConfiguration = "SalaryStructureConfiguration";
+    public const string SalaryStructureAssignment = "SalaryStructureAssignment";
+
     // Company space
     public const string ContactList = "ContactList";
     public const string WorkingCalendars = "WorkingCalendars";
@@ -81,7 +84,6 @@ public static class FunctionKey
     public const string Memo = "Memo";
     public const string ShiftStatisticReport = "ShiftStatisticReport";
     public const string PayrollManagement = "PayrollManagement";
-
 
     //Group Space
     public const string GroupTeamManagement = "GroupTeamManagement";

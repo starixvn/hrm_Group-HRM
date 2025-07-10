@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Fanex.Data;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Models.Role;
 using GO.UserControl.Client.Core.Models.User;
@@ -43,7 +44,8 @@ public class EmployeeController(
     IUserService userService,
     IRoleService roleService,
     IMinIOService minIOService,
-    ICompanyService companyService) : BaseController(session)
+    ICompanyService companyService,
+    ISalaryStructureService salaryStructureService) : BaseController(session)
 {
     [HrmPermission(Policy.Read, FunctionKey.ContactList)]
     public async Task<IActionResult> Index()
@@ -270,6 +272,7 @@ public class EmployeeController(
                 return RedirectToAction("AccessDenied", "Error");
             }
 
+            employee.Salary = !string.IsNullOrWhiteSpace(employee.Salary) ? Cryptography.DecryptPassword(employee.Salary) : string.Empty;
             employee.Coutries = await commonDataService.GetAllCountry();
             var supervisors = (await GetSupervisors(id)).ToList();
             employee.Verifier = GetVerifiers(supervisors);
@@ -625,12 +628,16 @@ public class EmployeeController(
 
         var isShowSubCompanyConfig = await companyService.GetIsShowSubCompanyValue();
         ViewBag.IsShowSubCompanyConfig = isShowSubCompanyConfig;
+        ViewBag.HasReadPermissionOnSalaryStructure = session.HasPermissionOnFunction(FunctionKey.SalaryStructureAssignment, Policy.Read);
+        ViewBag.HasHostPermissionOnSalaryStructure = session.HasPermissionOnFunction(FunctionKey.SalaryStructureAssignment, Policy.Host);
+
         ViewBag.JobTitles = await commonDataService.GetLookupDataByCodeAsync(Constants.JobTitle, session.Get<int>(SessionKey.CurrentCompanyId));
         ViewBag.JobLevel = jobLevels;
         ViewBag.Grades = managementLevels;
         ViewBag.Marriages = Utilities.Marriages;
         ViewBag.Roles = roles;
         ViewBag.SubCompanies = subCompanies;
+        ViewBag.SalaryStructures = await salaryStructureService.GetSalaryStructureAsync(CurrentCompanyId);
     }
 
     private EditEmployeeParam MappingEditEmployeeParam(Employee model)
@@ -690,7 +697,9 @@ public class EmployeeController(
             TeamDate = model.TeamDate,
             MilitaryFromDate = model.MilitaryFromDate,
             MilitaryToDate = model.MilitaryToDate,
-            SubCompanyId = model.SubCompanyId
+            SubCompanyId = model.SubCompanyId,
+            SalaryStructureId = model.SalaryStructureId,
+            Salary = !string.IsNullOrWhiteSpace(model.Salary) ? Cryptography.EncryptPassword(model.Salary) : model.Salary
         };
     }
 

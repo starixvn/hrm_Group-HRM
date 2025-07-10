@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Core.Constants;
+using Fanex.Data;
+using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Models.Role;
 using GO.UserControl.Client.Core.Services;
 using GO.UserControl.Client.Core.Session;
@@ -19,14 +21,15 @@ public interface IEmployeeLogService
 }
 
 public class EmployeeLogService(
-    IUserControlSession userControlSession,
+    IUserControlSession session,
     ICommonDataService commonDataService,
     IActionLogService actionLogService,
     IJobLevelService jobLevelService,
     IManagementLevelService managementLevelService,
-    IRoleService roleService) : IEmployeeLogService
+    IRoleService roleService,
+    ISalaryStructureService salaryStructureService) : IEmployeeLogService
 {
-    private readonly IEnumerable<MappingFieldConfig> mappingFields = new List<MappingFieldConfig>
+    private IEnumerable<MappingFieldConfig> mappingFields = new List<MappingFieldConfig>
     {
         new() { FieldName = "Code", DisplayName = Labels.EmployeeID },
         new() { FieldName = "EmployeeCard", DisplayName = Labels.EmployeeCard },
@@ -93,17 +96,21 @@ public class EmployeeLogService(
     private IEnumerable<Role> SystemRoles { get; set; }
     private IEnumerable<EntityBase<byte>> Genders { get; set; }
     private IEnumerable<EntityBase<byte>> MarriageStatuses { get; set; }
+    private IEnumerable<SalaryStructure> SalaryStructures { get; set; }
 
     public async Task<IEnumerable<LogObjectDetail>> GetLogDetailByIdAsync(int employeeId)
     {
+        var companyId = session.Get<int>(SessionKey.CurrentCompanyId);
         Teams = await commonDataService.GetAllTeamAsync();
-        JobTitles = await commonDataService.GetLookupDataByCodeAsync(Constants.JobTitle, userControlSession.Get<int>(SessionKey.CurrentCompanyId));
+        JobTitles = await commonDataService.GetLookupDataByCodeAsync(Constants.JobTitle, companyId);
         JobLevels = await jobLevelService.GetJobLevel();
         ManagementLevels = await managementLevelService.GetManagementLevel();
         Countries = await commonDataService.GetAllCountry();
-        SystemRoles = await roleService.GetBySiteIdAsync(userControlSession.SiteId);
+        SystemRoles = await roleService.GetBySiteIdAsync(session.SiteId);
         Genders = commonDataService.GetGender();
         MarriageStatuses = commonDataService.GetMarriageStatus();
+        SalaryStructures = await salaryStructureService.GetSalaryStructureAsync(companyId);
+
         var logs = await actionLogService.GetLogDetailByIdAsync(LogObjectType.Employee, employeeId);
         MappingField(logs);
 
@@ -112,6 +119,12 @@ public class EmployeeLogService(
 
     private void MappingField(IEnumerable<LogObjectDetail> logs)
     {
+        if (session.HasPermissionOnFunction(FunctionKey.SalaryStructureAssignment, Policy.Read))
+        {
+            mappingFields = mappingFields.Append(new MappingFieldConfig { FieldName = "SalaryStructureId", DisplayName = Labels.SalaryStructure });
+            mappingFields = mappingFields.Append(new MappingFieldConfig { FieldName = "Salary", DisplayName = Labels.NonStandardSalaryStructure });
+        }
+
         foreach (var log in logs)
         {
             foreach (var field in log.Fields)
@@ -165,6 +178,14 @@ public class EmployeeLogService(
 
             case "IsLocal":
                 MappingCategory(field);
+                break;
+
+            case "SalaryStructureId":
+                MappingSalaryStructure(field);
+                break;
+
+            case "Salary":
+                MappingSalary(field);
                 break;
 
             default:
@@ -246,5 +267,28 @@ public class EmployeeLogService(
     {
         field.OldValue = field.OldValue == "1" ? Labels.Local : Labels.Expat;
         field.Value = field.Value == "1" ? Labels.Local : Labels.Expat;
+    }
+
+    private void MappingSalaryStructure(FieldValue field)
+    {
+        if (session.HasPermissionOnFunction(FunctionKey.SalaryStructureAssignment, Policy.Read))
+        {
+            _ = int.TryParse(field.OldValue, out var salaryStructureId);
+            var salaryStructure = SalaryStructures.FirstOrDefault(x => x.SalaryStructureId == salaryStructureId);
+            field.OldValue = salaryStructure != null ? $"{salaryStructure.Name} - {salaryStructure.JobLevelName}" : string.Empty;
+
+            _ = int.TryParse(field.Value, out salaryStructureId);
+            salaryStructure = SalaryStructures.FirstOrDefault(x => x.SalaryStructureId == salaryStructureId);
+            field.Value = salaryStructure != null ? $"{salaryStructure?.Name} - {salaryStructure?.JobLevelName}" : string.Empty;
+        }
+    }
+
+    private void MappingSalary(FieldValue field)
+    {
+        if (session.HasPermissionOnFunction(FunctionKey.SalaryStructureAssignment, Policy.Read))
+        {
+            field.OldValue = !string.IsNullOrWhiteSpace(field.OldValue) ? Cryptography.DecryptPassword(field.OldValue) : string.Empty;
+            field.Value = !string.IsNullOrWhiteSpace(field.Value) ? Cryptography.DecryptPassword(field.Value) : string.Empty;
+        }
     }
 }
