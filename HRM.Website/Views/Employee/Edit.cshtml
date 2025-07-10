@@ -554,7 +554,7 @@
                         @if (!hasHostPermissionOnSalaryStructure)
                         {
                             var salaryStructure = salaryStructures.FirstOrDefault(x => x.SalaryStructureId == Model.SalaryStructureId);
-                            <span>@($"{salaryStructure?.Name} - {salaryStructure?.JobLevelName}")</span>
+                            <span>@(salaryStructure != null ? $"{salaryStructure?.Name} - {salaryStructure?.JobLevelName}" : string.Empty)</span>
                             @Html.HiddenFor(model => model.SalaryStructureId)
                         }
                         else
@@ -590,6 +590,7 @@
             }
             else
             {
+                @Html.HiddenFor(model => model.SalaryStructureId)
                 @Html.HiddenFor(model => model.Salary)
             }
             <li class="list-group-item form-group">

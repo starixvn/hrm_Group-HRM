@@ -275,11 +275,11 @@ public class EmployeeLogService(
         {
             _ = int.TryParse(field.OldValue, out var salaryStructureId);
             var salaryStructure = SalaryStructures.FirstOrDefault(x => x.SalaryStructureId == salaryStructureId);
-            field.OldValue = $"{salaryStructure?.Name} - {salaryStructure?.JobLevelName}";
+            field.OldValue = salaryStructure != null ? $"{salaryStructure.Name} - {salaryStructure.JobLevelName}" : string.Empty;
 
             _ = int.TryParse(field.Value, out salaryStructureId);
             salaryStructure = SalaryStructures.FirstOrDefault(x => x.SalaryStructureId == salaryStructureId);
-            field.Value = $"{salaryStructure?.Name} - {salaryStructure?.JobLevelName}";
+            field.Value = salaryStructure != null ? $"{salaryStructure?.Name} - {salaryStructure?.JobLevelName}" : string.Empty;
         }
     }
 
