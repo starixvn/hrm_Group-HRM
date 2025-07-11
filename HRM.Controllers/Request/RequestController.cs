@@ -1,6 +1,4 @@
-﻿using HRM.Models;
-
-namespace HRM.Controllers.Request;
+﻿namespace HRM.Controllers.Request;
 
 using System;
 using System.Collections.Generic;
@@ -243,6 +241,15 @@ public class RequestController(
     [HrmPermission(Policy.Host, FunctionKey.VerifyRequest, FunctionKey.ApproveRequest, FunctionKey.ProcessRequest, FunctionKey.VoidRequest)]
     public async Task<PartialViewResult> PartialViewProcessRequest(ProcessRequestViewModel model)
     {
+        var companyId = model.CompanyId;
+        var isInNexCompany = companyId.HasValue
+                             && Constants.NexCompanyIds?.Contains(companyId.Value) == true;
+
+        if (isInNexCompany)
+        {
+            return PartialView("_ProcessRequest", model);
+        }
+
         if (model is { RequestId: > 0, RoleId: (byte)RoleSystem.Approver, Command: RequestCommand.Approve })
         {
             await HandleProcessRequest(model);

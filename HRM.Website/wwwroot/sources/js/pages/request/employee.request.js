@@ -168,6 +168,7 @@ $(function () {
             EmployeeId: employeeId,
             Command: command,
             ViewType: viewType,
+            companyId: companyId,
         };
 
         blockUI();
