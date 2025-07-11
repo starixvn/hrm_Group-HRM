@@ -1,16 +1,13 @@
-﻿namespace HRM.ViewModels.SalaryStructure;
-
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using HRM.Models.SalaryStructure;
+
+namespace HRM.ViewModels.SalaryStructure;
 
 public class CreateSalaryStructureViewModel
 {
     [Required]
     public string Name { get; set; }
 
-    [Required]
-    public int JobLevelId { get; set; }
-
-    public string LocalSalary { get; set; }
-
-    public string ExpatSalary { get; set; }
+    public IEnumerable<SalaryStructureDetail> Details { get; set; }
 }

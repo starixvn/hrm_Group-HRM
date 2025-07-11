@@ -10,6 +10,7 @@ using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Models.Role;
 using GO.UserControl.Client.Core.Services;
 using GO.UserControl.Client.Core.Session;
+using HRM.Models.SalaryStructure;
 using Interfaces;
 using Models;
 using Models.Log;
@@ -275,11 +276,11 @@ public class EmployeeLogService(
         {
             _ = int.TryParse(field.OldValue, out var salaryStructureId);
             var salaryStructure = SalaryStructures.FirstOrDefault(x => x.SalaryStructureId == salaryStructureId);
-            field.OldValue = salaryStructure != null ? $"{salaryStructure.Name} - {salaryStructure.JobLevelName}" : string.Empty;
+            field.OldValue = salaryStructure?.Name;
 
             _ = int.TryParse(field.Value, out salaryStructureId);
             salaryStructure = SalaryStructures.FirstOrDefault(x => x.SalaryStructureId == salaryStructureId);
-            field.Value = salaryStructure != null ? $"{salaryStructure?.Name} - {salaryStructure?.JobLevelName}" : string.Empty;
+            field.Value = salaryStructure?.Name;
         }
     }
 

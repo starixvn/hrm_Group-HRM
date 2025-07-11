@@ -2,16 +2,17 @@
 
 using System.Threading.Tasks;
 using Criteria.SalaryStructure;
+using Fanex.Data;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
 using HRM.Core.Constants;
 using HRM.Core.Filters;
-using Microsoft.AspNetCore.Mvc;
-using Services.Interfaces;
-using ViewModels.SalaryStructure;
 using HRM.Core.Models;
 using HRM.Core.Services;
-using Fanex.Data;
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using Services.Interfaces;
+using ViewModels.SalaryStructure;
 
 [HrmPermission(Policy.Read, FunctionKey.SalaryStructureConfiguration)]
 public class SalaryStructureController(
@@ -30,17 +31,6 @@ public class SalaryStructureController(
     public async Task<IActionResult> GetSalaryStructures()
     {
         var salaryStructures = await salaryStructureService.GetSalaryStructureAsync(CurrentCompanyId);
-        foreach (var item in salaryStructures)
-        {
-            item.LocalSalary = !string.IsNullOrWhiteSpace(item.LocalSalary)
-                ? Cryptography.DecryptPassword(item.LocalSalary)
-                : null;
-
-            item.ExpatSalary = !string.IsNullOrWhiteSpace(item.ExpatSalary)
-                ? Cryptography.DecryptPassword(item.ExpatSalary)
-                : null;
-        }
-
         return Json(salaryStructures);
     }
 
@@ -66,18 +56,18 @@ public class SalaryStructureController(
             return new JsonResult(commandResult);
         }
 
+        foreach (var item in model.Details)
+        {
+            item.LocalSalary = !string.IsNullOrWhiteSpace(item.LocalSalary) ? Cryptography.EncryptPassword(item.LocalSalary) : null;
+            item.ExpatSalary = !string.IsNullOrWhiteSpace(item.ExpatSalary) ? Cryptography.EncryptPassword(item.ExpatSalary) : null;
+        }
+
         var criteria = new InsertSalaryStructureCriteria
         {
+            CompanyId = CurrentCompanyId,
             Name = model.Name,
-            JobLevelId = model.JobLevelId,
-            LocalSalary = !string.IsNullOrWhiteSpace(model.LocalSalary)
-                ? Cryptography.EncryptPassword(model.LocalSalary)
-                : model.LocalSalary,
-            ExpatSalary = !string.IsNullOrWhiteSpace(model.ExpatSalary)
-                ? Cryptography.EncryptPassword(model.ExpatSalary)
-                : model.ExpatSalary,
-            CreatedBy = session.UserId,
-            CompanyId = CurrentCompanyId
+            Details = JsonConvert.SerializeObject(model.Details),
+            CreatedBy = session.UserId
         };
         commandResult = await baseService.ExecuteNonQueryAsync(criteria);
 
@@ -92,13 +82,7 @@ public class SalaryStructureController(
         {
             SalaryStructureId = salaryStructure.SalaryStructureId,
             Name = salaryStructure.Name,
-            JobLevelId = salaryStructure.JobLevelId,
-            LocalSalary = !string.IsNullOrWhiteSpace(salaryStructure.LocalSalary)
-                ? Cryptography.DecryptPassword(salaryStructure.LocalSalary)
-                : salaryStructure.LocalSalary,
-            ExpatSalary = !string.IsNullOrWhiteSpace(salaryStructure.ExpatSalary)
-                ? Cryptography.DecryptPassword(salaryStructure.ExpatSalary)
-                : salaryStructure.ExpatSalary
+            Details = salaryStructure.Details
         };
 
         return new JsonResult(model);
@@ -120,19 +104,19 @@ public class SalaryStructureController(
             return new JsonResult(commandResult);
         }
 
+        foreach (var item in model.Details)
+        {
+            item.LocalSalary = !string.IsNullOrWhiteSpace(item.LocalSalary) ? Cryptography.EncryptPassword(item.LocalSalary) : null;
+            item.ExpatSalary = !string.IsNullOrWhiteSpace(item.ExpatSalary) ? Cryptography.EncryptPassword(item.ExpatSalary) : null;
+        }
+
         var criteria = new UpdateSalaryStructureCriteria
         {
+            CompanyId = CurrentCompanyId,
             SalaryStructureId = model.SalaryStructureId,
-            JobLevelId = model.JobLevelId,
             Name = model.Name,
-            LocalSalary = !string.IsNullOrWhiteSpace(model.LocalSalary)
-                ? Cryptography.EncryptPassword(model.LocalSalary)
-                : model.LocalSalary,
-            ExpatSalary = !string.IsNullOrWhiteSpace(model.ExpatSalary)
-                ? Cryptography.EncryptPassword(model.ExpatSalary)
-                : model.ExpatSalary,
-            ModifiedBy = session.UserId,
-            CompanyId = CurrentCompanyId
+            Details = JsonConvert.SerializeObject(model.Details),
+            ModifiedBy = session.UserId
         };
         commandResult = await baseService.ExecuteNonQueryAsync(criteria);
 

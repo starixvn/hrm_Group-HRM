@@ -1,6 +1,7 @@
 ﻿@using GO.UserControl.Client.Core.Models.Role
 @using HRM.Core
 @using HRM.Core.Enums
+@using HRM.Models.SalaryStructure
 @using HRM.Resources
 @model HRM.Models.Employee
 @{
@@ -8,7 +9,7 @@
     var roles = (IEnumerable<Role>)ViewBag.Roles;
     var roleItems = roles.Select(r => new SelectListItem { Value = r.RoleId.ToString(), Text = r.Name });
     var enableGroupDate = (bool)ViewBag.EnableGroupDate;
-    var salaryStructures = (IEnumerable<HRM.Models.SalaryStructure>)ViewBag.SalaryStructures;
+    var salaryStructures = (IEnumerable<SalaryStructure>)ViewBag.SalaryStructures;
     var hasReadPermissionOnSalaryStructure = (bool)ViewBag.HasReadPermissionOnSalaryStructure;
     var hasHostPermissionOnSalaryStructure = (bool)ViewBag.HasHostPermissionOnSalaryStructure;
 }
@@ -554,7 +555,7 @@
                         @if (!hasHostPermissionOnSalaryStructure)
                         {
                             var salaryStructure = salaryStructures.FirstOrDefault(x => x.SalaryStructureId == Model.SalaryStructureId);
-                            <span>@(salaryStructure != null ? $"{salaryStructure?.Name} - {salaryStructure?.JobLevelName}" : string.Empty)</span>
+                            <span>@salaryStructure?.Name</span>
                             @Html.HiddenFor(model => model.SalaryStructureId)
                         }
                         else
@@ -562,7 +563,7 @@
                             var items = salaryStructures.Select(x => new SelectListItem
                             {
                                 Value = x.SalaryStructureId.ToString(),
-                                Text = $"{x.Name} - {x.JobLevelName}"
+                                Text = x.Name
                             });
                             @Html.DropDownListFor(model => model.SalaryStructureId,
                                 items,
