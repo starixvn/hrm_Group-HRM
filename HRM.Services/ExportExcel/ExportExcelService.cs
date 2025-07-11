@@ -356,7 +356,7 @@ public class ExportExcelService(IWebHostEnvironment hostingEnvironment) : IExpor
         var createdDate = item.CreatedDate;
         if (isInNexCompany)
         {
-            createdDate = item.OriginalCreatedDate;
+            createdDate = item.OriginalCreatedDate ?? item.CreatedDate;
         }
 
         var cellNo = row.GetCell(0);
