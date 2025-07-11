@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using HRM.Core;
+using HRM.Core.Constants;
 using HRM.Core.Enums;
 using HRM.Models;
 using HRM.Models.HospitalizationLeave;
@@ -348,6 +350,15 @@ public class ExportExcelService(IWebHostEnvironment hostingEnvironment) : IExpor
         RequestEntity item,
         IRow row)
     {
+        var companyId = item.CompanyId;
+        var isInNexCompany = Constants.NexCompanyIds.Contains(companyId);
+
+        var createdDate = item.CreatedDate;
+        if (isInNexCompany)
+        {
+            createdDate = item.OriginalCreatedDate;
+        }
+
         var cellNo = row.GetCell(0);
         var cellUnitCode = row.GetCell(1);
         var cellDepartment = row.GetCell(2);
@@ -370,7 +381,7 @@ public class ExportExcelService(IWebHostEnvironment hostingEnvironment) : IExpor
         cellDetails.SetCellValue(RequestService.ToRequestMessage(item, isNoFormat: true));
         cellReason.SetCellValue(RequestService.GetReasonRequest(item.RequestType.Id, item.ReasonId));
         cellRemarks.SetCellValue(item.Remark);
-        cellCreateDate.SetCellValue(item.CreatedDate);
+        cellCreateDate.SetCellValue(createdDate);
         cellStatus.SetCellValue(item.Status.Name);
     }
 
