@@ -144,6 +144,7 @@ public class RequestController(
             h.CreatedDate = h.CreatedDate.ConvertToClientTimeZone(Constants.NexTimezone);
             h.ProcessedDate = h.ProcessedDate?.ConvertToClientTimeZone(Constants.NexTimezone);
             h.FromDate = h.FromDate.ConvertToClientTimeZone(Constants.NexTimezone);
+            h.ToDate = h.ToDate.ConvertToClientTimeZone(Constants.NexTimezone);
         });
         var requestType = history.FirstOrDefault()?.RequestType;
         var isCheckInOutType = requestType is (int)RequestType.CheckIn or (int)RequestType.CheckOut;

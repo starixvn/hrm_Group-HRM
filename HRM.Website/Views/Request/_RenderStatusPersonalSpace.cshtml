@@ -1,4 +1,5 @@
 ﻿@using HRM.Core
+@using HRM.Core.Constants
 @using HRM.Core.Enums
 @using HRM.Models.Request
 @using HRM.ViewModels.Request
@@ -82,9 +83,17 @@
     case (byte)CurrentRequestStatus.Rejected:
         if (request.ApproverId == requestViewModel.CurrentUserId)
         {
+	        var nexCompanyIds = Constants.NexCompanyIds;
+	        var requestCompanyId = request.CompanyId;
+	        var isInNexCompany = nexCompanyIds != null && nexCompanyIds.Contains(requestCompanyId);
+	        var approvedDate = request.ApprovedDate;
+            if (isInNexCompany)
+            {
+	            approvedDate = @request.ApprovedDate?.ToClientTimeZone();
+            }
             <a roleid="@Convert.ToInt32(RoleSystem.Approver)" requestid="@request.Id" requesttypeid="@request.RequestType.Id" employeeid="@request.Requester.Id" companyid="@request.CompanyId"
                href="javascript:void(0);" class="approver-actions-reset tooltip-tipsy"
-               title="@request.Status.Name by @request.ApproverNickName (@request.ApprovedDate?.ToClientTimeZone().ToShortFormatedDate())">
+               title="@request.Status.Name by @request.ApproverNickName (@approvedDate.ToShortFormatedDate())">
                 @request.Status.ToString()
                 <span class="caret"></span>
             </a>

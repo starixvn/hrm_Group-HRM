@@ -35,8 +35,8 @@
 							<span class="tooltip-tipsy" title="@history.FullNameRequester">@history.Requester</span>
                         </td>
 						<td>@history.LeaveTypeName</td>
-                        <td>@history.FromDate.ToClientTimeZone().ToDateMonthYearFormatedDate()</td>
-						<td>@history.ToDate.ToClientTimeZone().ToDateMonthYearFormatedDate()</td>
+                        <td>@history.FromDate.ToDateMonthYearFormatedDate()</td>
+						<td>@history.ToDate.ToDateMonthYearFormatedDate()</td>
                         <td>
                         @{
                             var totaldays = history.TotalDays.HasValue ? history.TotalDays.Value.ToString("0.0") : string.Empty;
