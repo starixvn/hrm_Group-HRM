@@ -23,6 +23,9 @@ using HRM.Models.Request.ChangeShift;
 using HRM.Repositories.Interfaces;
 using HRM.Resources;
 using HRM.Services.Interfaces.Request;
+using HRM.Services.Interfaces;
+using HRM.ViewModels.Request;
+using IEmployeeService = HRM.Services.Interfaces.IEmployeeService;
 
 namespace HRM.Services.Implement.Request;
 
@@ -35,7 +38,8 @@ public class RequestService(
     ILeaveRequestService leaveRequestService,
     IKeepInViewRequestService keepInViewRequestService,
     IUserControlSession userControlSession,
-    IHttpClientFactory httpClientFactory,
+    IEmployeeService employeeService,
+    ICompanyService companyService,
     NexConfig nexConfig) : IRequestService
 {
     public static string ToRequestMessage(RequestEntity request, bool isNoFormat = false)
@@ -513,5 +517,65 @@ public class RequestService(
         }
 
         return results;
+    }
+
+    public async Task<IEnumerable<RequestEntity>> GetNexRequests(RequestViewModel model, EmployeeSession employeeSession)
+    {
+        List<RequestEntity> responseRequests = [];
+        var status = requestRepository.GetNexRequestStatus(model.StatusIds);
+        var requestType = requestRepository.GetNexRequestType(model.RequestType);
+        int? leaveType = null;
+        if (model.LeaveType != null)
+        {
+            leaveType = requestRepository.GetNexLeaveType(model.LeaveType.Value);
+        }
+
+        var supervisorCompanies = await employeeService.GetCompaniesBelongToSupervisor();
+
+        if (!supervisorCompanies.Any())
+        {
+            return responseRequests;
+        }
+        const int AssistantLeader = 1;
+        List<NexRequestModel> requests = [];
+        var companies = await companyService.GetAllCompany();
+        foreach (var companyId in supervisorCompanies)
+        {
+            var criteria = new GetNexRequestCriteria
+            {
+                EmpId = model.EmployeeId == -1 ? null : model.EmployeeId,
+                FromDate = model.FromDate.ToStartOfDay(),
+                ToDate = model.ToDate.ToEndOfDay(),
+                Status = status,
+                RequestType = requestType,
+                isFilterByEffectedDate = model.IsFilterByAffectedDate,
+                ActorId = model.CurrentUserId,
+                LeaveTypeId = leaveType,
+                Role = AssistantLeader,
+                ExcludedEmpID = model.CurrentUserId,
+                CompanyId = companyId
+            };
+
+            var responseData = await baseService.GetDataAsync<NexRequestModel>(criteria);
+            var mappedData = responseData.Select(item =>
+            {
+                item.CompanyId = companyId;
+                item.Status = (byte)requestRepository.GetGroupByNexRequestStatus(item.Status);
+                var companyName = companies
+                    .Where(c => c.CompanyId == item.CompanyId)
+                    .Select(c => c.Name)
+                    .FirstOrDefault();
+                item.Requester += $" ({companyName})";
+                return item;
+            });
+            requests.AddRange(mappedData);
+        }
+
+        responseRequests = requestRepository
+            .MappingNexRequestToGroupRequest(requests, employeeSession)
+            .OrderByDescending(item => item.CreatedDate)
+            .ToList();
+
+        return responseRequests;
     }
 }

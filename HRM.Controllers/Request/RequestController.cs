@@ -53,7 +53,8 @@ public class RequestController(
         var isLocal = request.IsLocal != 0;
         if (isLocal && request.IsShowCrossCompany)
         {
-            var nexRequest = (await NexRequests(request)).ToList();
+            request.CurrentUserId = session.UserId;
+            var nexRequest = (await requestService.GetNexRequests(request, EmployeeSession)).ToList();
             request.Requests = nexRequest;
         }
 
@@ -61,66 +62,6 @@ public class RequestController(
         await GetInfoAttachFileAsync(request.Requests);
         ViewBag.NexCompanyIds = Constants.NexCompanyIds;
         return View(EmployeeRequestViewName, request);
-    }
-
-    private async Task<IEnumerable<RequestEntity>> NexRequests(RequestViewModel model)
-    {
-        List<RequestEntity> responseRequests = [];
-        var status = requestRepository.GetNexRequestStatus(model.StatusIds);
-        var requestType = requestRepository.GetNexRequestType(model.RequestType);
-        int? leaveType = null;
-        if (model.LeaveType != null)
-        {
-            leaveType = requestRepository.GetNexLeaveType(model.LeaveType.Value);
-        }
-
-        var supervisorCompanies = await employeeService.GetCompaniesBelongToSupervisor();
-
-        if (!supervisorCompanies.Any())
-        {
-            return responseRequests;
-        }
-        const int AssistantLeader = 1;
-        List<NexRequestModel> requests = [];
-        var companies = await companyService.GetAllCompany();
-        foreach (var companyId in supervisorCompanies)
-        {
-            var criteria = new GetNexRequestCriteria
-            {
-                EmpId = model.EmployeeId == -1 ? null : model.EmployeeId,
-                FromDate = model.FromDate.ToStartOfDay(),
-                ToDate = model.ToDate.ToEndOfDay(),
-                Status = status,
-                RequestType = requestType,
-                isFilterByEffectedDate = model.IsFilterByAffectedDate,
-                ActorId = session.UserId,
-                LeaveTypeId = leaveType,
-                Role = AssistantLeader,
-                ExcludedEmpID = session.UserId,
-                CompanyId = companyId
-            };
-
-            var responseData = await baseService.GetDataAsync<NexRequestModel>(criteria);
-            var mappedData = responseData.Select(item =>
-            {
-                item.CompanyId = companyId;
-                item.Status = (byte)requestRepository.GetGroupByNexRequestStatus(item.Status);
-                var companyName = companies
-                    .Where(c => c.CompanyId == item.CompanyId)
-                    .Select(c => c.Name)
-                    .FirstOrDefault();
-                item.Requester += $" ({companyName})";
-                return item;
-            });
-            requests.AddRange(mappedData);
-        }
-
-        responseRequests = requestRepository
-            .MappingNexRequestToGroupRequest(requests, EmployeeSession)
-            .OrderByDescending(item => item.CreatedDate)
-            .ToList();
-
-        return responseRequests;
     }
 
     public async Task<ActionResult> ViewHistory(string id)

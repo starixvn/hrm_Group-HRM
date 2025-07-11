@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
@@ -113,6 +114,13 @@ public class ExportRequestController(
         };
 
         var requests = await requestService.GetRequestAsync(criteria);
+        var isLocal = model.IsLocal != 0;
+        if (isLocal && model.IsShowCrossCompany && model.ViewType == RequestViewType.PersonalSpace)
+        {
+            model.CurrentUserId = session.UserId;
+            var nexRequest = (await requestService.GetNexRequests(model, EmployeeSession)).ToList();
+            requests = requests.Concat(nexRequest).ToList();
+        }
         var hssfWorkbook = exportExcelService.ExportWorkingTimeRequest(requests, model.PageTitle);
         var fileName = $"DailyRequest_{DateTimeOffset.Now.DateTime.ToClientTimeZone():yyyyMMdd}.xls";
 
