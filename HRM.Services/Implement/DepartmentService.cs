@@ -39,11 +39,12 @@ public class DepartmentService(
         return await baseService.GetDataEntityAsync<int>(criteria);
     }
 
-    public async Task<IList<Department>> GetDepartmentAsync(bool? isActive = true)
+    public async Task<IList<Department>> GetDepartmentAsync(bool? isActive = true, int? unitId = null)
     {
         var criteria = new GetDepartmentByActiveCriteria
         {
-            IsActive = isActive
+            IsActive = isActive,
+            UnitId = unitId
         };
         var departments = await departmentRepository.GetByActiveAsync(criteria);
 

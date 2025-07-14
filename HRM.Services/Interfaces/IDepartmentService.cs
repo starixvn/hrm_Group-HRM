@@ -7,8 +7,8 @@ using Models;
 
 public interface IDepartmentService
 {
-    Task<IList<Department>> GetDepartmentAsync(bool? isActive = true);
-    
+    Task<IList<Department>> GetDepartmentAsync(bool? isActive = true, int? unitId = null);
+
     Task<int> GetNextGroupDeptIdAsync();
 
     Task<Department> GetByIdAsync(int departmentId);
