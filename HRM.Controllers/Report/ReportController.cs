@@ -23,7 +23,9 @@ public class ReportController(
     IUserControlSession session,
     IReportService reportService,
     ICommonDataService commonDataService,
-    ITeamService teamService) : BaseController(session)
+    ITeamService teamService,
+    IEmployeeService employeeService,
+    IHRMAuthService hrmAuthService) : BaseController(session)
 {
     [HrmPermission(Policy.Read, FunctionKey.ReportHome)]
     public ActionResult Index()
@@ -38,9 +40,12 @@ public class ReportController(
         var model = new TimesheetViewModel
         {
             Year = DateTimeOffset.Now.DateTime.ToClientTimeZone().Year,
-            EmpId = session.UserId,
-            IsHavePrivilegeCreateCheckInOutRecord = await IsPrivilegeCreateCheckInOut()
+            EmpId = session.UserId
         };
+        var clientIp = hrmAuthService.GetClientIp(HttpContext);
+        var companyBioInfo = await employeeService.GetEmployeeBioInfoAsync(CurrentCompanyId, clientIp);
+        var isHavePrivilegeCreateCheckInOutRecord = await IsPrivilegeCreateCheckInOut() && companyBioInfo.IsWhitelisted;
+        model.IsHavePrivilegeCreateCheckInOutRecord = isHavePrivilegeCreateCheckInOutRecord;
 
         return View(model);
     }

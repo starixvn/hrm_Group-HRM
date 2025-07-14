@@ -103,6 +103,7 @@
 		<Setting Key="Employee_GetHRAndSupervisorByEmpId" SpName="Employee_GetHRAndSupervisorByEmpId" DbName="bodb_HRM" Plain="0" />
         <Setting Key="Employee_GetEmployeeForPIC" SpName="Employee_GetEmployeeForPIC" DbName="bodb_HRM" Plain="0" />
 		<Setting Key="TimeRecord_GetCheckInOutOnline" SpName="TimeRecord_GetCheckInOutOnline" DbName="bodb_HRM" Plain="0" />
+		<Setting Key="EmployeeBioInfo_Get" SpName="EmployeeBioInfo_Get" DbName="bodb_HRM" Plain="0" />
 		<Setting Key="Nex_WorkingTimeRequest_GetRequestByDate" SpName="WorkingTimeRequest_GetRequestByDate" DbName="nex_HRM" Plain="0" />
 		<Setting Key="Lumi_WorkingTimeRequest_GetRequestByDate" SpName="WorkingTimeRequest_GetRequestByDate" DbName="lumi_HRM" Plain="0" />
 		<Setting Key="NexVision_WorkingTimeRequest_GetRequestByDate" SpName="WorkingTimeRequest_GetRequestByDate" DbName="nexvision_HRM" Plain="0" />
