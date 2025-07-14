@@ -574,6 +574,8 @@
 		<Setting Key="Company_GetAll" SpName="Company_GetAll" DbName="bodb_HRM" Plain="0" />
 		<Setting Key="Domain_ByCompanyId_Get" SpName="Domain_ByCompanyId_Get" DbName="bodb_HRM" />
 		<Setting Key="SubCompanies_ByCompanyId_Get" SpName="SubCompanies_ByCompanyId_Get" DbName="bodb_HRM" />
+        <Setting Key="Company_Get" SpName="Company_Get" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Company_GetById" SpName="Company_GetById" DbName="bodb_HRM" Plain="0"/>
 	</Function>
     <Function Name="EmployeePayroll">
 		<Setting Key="EmployeePayroll_Import" SpName="EmployeePayroll_Import" DbName="bodb_HRM" Plain="0" />
@@ -598,5 +600,8 @@
         <Setting Key="SalaryStructure_Insert" SpName="SalaryStructure_Insert" DbName="bodb_HRM" Plain="0" />
         <Setting Key="SalaryStructure_Update" SpName="SalaryStructure_Update" DbName="bodb_HRM" Plain="0" />
         <Setting Key="SalaryStructure_Delete" SpName="SalaryStructure_Delete" DbName="bodb_HRM" Plain="0" />
+    </Function>
+    <Function Name="Currency">
+        <Setting Key="Currency_Get" SpName="Currency_Get" DbName="bodb_HRM" Plain="0"/>
     </Function>
 </Functions>

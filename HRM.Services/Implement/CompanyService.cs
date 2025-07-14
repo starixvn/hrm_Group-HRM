@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using GO.UserControl.Client.Core.Session;
 using HRM.Core.Constants;
 using HRM.Core.Services;
 using HRM.Criteria.Company;
 using HRM.Criteria.CompanySite;
+using HRM.Criteria.SalaryStructure;
 using HRM.Criteria.SystemSetting;
 using HRM.Models;
 using HRM.Services.Interfaces;
@@ -73,5 +75,27 @@ public class CompanyService(
     {
         var protocol = httpContext.Request.Headers["x-forwarded-proto"].ToString();
         return $"{(!string.IsNullOrWhiteSpace(protocol) ? protocol : httpContext.Request.Scheme)}://{httpContext.Request.Host.Value}";
+    }
+
+    public async Task<IEnumerable<CompanySetting>> GetSettingCompanyAsync()
+    {
+        var criteria = new GetCompanyCriteria();
+        return await baseService.GetDataAsync<CompanySetting>(criteria);
+    }
+
+    public async Task<List<Currency>> GetCurrencyAsync()
+    {
+        var criteria = new GetCurrencyCriteria();
+        var result = await baseService.GetDataAsync<Currency>(criteria);
+        return result.ToList();
+    }
+
+    public async Task<CompanySetting> GetByIdAsync(int Id)
+    {
+        var criteria = new GetByIdCriteria
+        {
+            CompanyId = Id
+        };
+        return await baseService.GetDataEntityAsync<CompanySetting>(criteria);
     }
 }

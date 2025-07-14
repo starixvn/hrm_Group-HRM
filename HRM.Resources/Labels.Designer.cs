@@ -952,6 +952,15 @@ namespace HRM.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Company Setting.
+        /// </summary>
+        public static string CompanySetting {
+            get {
+                return ResourceManager.GetString("CompanySetting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Company Space.
         /// </summary>
         public static string CompanySpace {
@@ -1677,6 +1686,15 @@ namespace HRM.Resources {
         public static string Edit {
             get {
                 return ResourceManager.GetString("Edit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit Company Setting.
+        /// </summary>
+        public static string EditCompanySetting {
+            get {
+                return ResourceManager.GetString("EditCompanySetting", resourceCulture);
             }
         }
         

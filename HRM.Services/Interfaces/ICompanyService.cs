@@ -15,5 +15,11 @@ namespace HRM.Services.Interfaces
         Task<IEnumerable<SubCompany>> GetSubCompanies(int companyId);
 
         Task<bool> GetIsShowSubCompanyValue();
+
+        Task<IEnumerable<CompanySetting>> GetSettingCompanyAsync();
+
+        Task<List<Currency>> GetCurrencyAsync();
+
+        Task<CompanySetting> GetByIdAsync(int companyId);
     }
 }

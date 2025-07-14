@@ -92,6 +92,8 @@ module.exports = {
         [`${styleDistPath}/headcount-report.index`]: `${styleSourcePath}/pages/headcount-report/index.scss`,
         [`${styleDistPath}/salary-structure.index`]: `${styleSourcePath}/pages/salary-structure/index.scss`,
         [`${styleDistPath}/salary-structure.create`]: `${styleSourcePath}/pages/salary-structure/create.scss`,
+        [`${styleDistPath}/company.index`]: `${styleSourcePath}/pages/company/index.scss`,
+        [`${styleDistPath}/company.edit`]: `${styleSourcePath}/pages/company/edit.scss`,
 
         //
         [`${jsDistPath}/main`]: "./sources/js/main.js",
@@ -207,6 +209,8 @@ module.exports = {
         [`${jsDistPath}/headcount-report.index`]: `${jsSourcePath}/headcount-report/home/index.jsx`,
         [`${jsDistPath}/salary-structure.home`]: `${jsSourcePath}/salary-structure/home/index.jsx`,
         [`${jsDistPath}/salary-structure.create`]: `${jsSourcePath}/salary-structure/create/index.jsx`,
-        [`${jsDistPath}/salary-structure.edit`]: `${jsSourcePath}/salary-structure/edit/index.jsx`,
+        [`${jsDistPath}/salary-structure.edit`]: `${jsSourcePath}/salary-structure/edit/index.jsx`,,
+        [`${jsDistPath}/company.home`]: `${jsSourcePath}/company/home/index.jsx`,
+        [`${jsDistPath}/company.edit`]: `${jsSourcePath}/company/edit/index.jsx`
     },
 };
