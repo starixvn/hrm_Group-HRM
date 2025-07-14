@@ -408,7 +408,50 @@ public class RequestService(
         {
             time = request.OriginalRequestedDate?.Day == request.FromDate.Day ? request.OriginalRequestedDate?.ToShortTime() : request.OriginalRequestedDate?.ToShortTime() + "+";
         }
-        return string.Format(msgTemplate, time, request.FromShift?.Name, request.FromDate.ToDateMonthYearFormatedDate());
+        return string.Format(msgTemplate, time, ConvertShiftNameTimeZone(request), request.FromDate.ToDateMonthYearFormatedDate());
+    }
+
+    private static string ConvertShiftNameTimeZone(RequestEntity request)
+    {
+        var shiftName = request.FromShift?.Name;
+        if (string.IsNullOrWhiteSpace(shiftName))
+            return shiftName;
+
+        string[] splitShiftName;
+        char symbol;
+        const char greaterSign = '>';
+        const char lowerSign = '<';
+
+        if (shiftName.Contains(greaterSign))
+        {
+            symbol = greaterSign;
+            splitShiftName = shiftName.Split(greaterSign);
+        }
+        else if (shiftName.Contains(lowerSign))
+        {
+            symbol = lowerSign;
+            splitShiftName = shiftName.Split(lowerSign);
+        }
+        else
+        {
+            return shiftName;
+        }
+
+        if (splitShiftName.Length != 2
+            || !int.TryParse(splitShiftName[0].Trim(), out var beginHour)
+            || !int.TryParse(splitShiftName[1].Trim(), out var endHour))
+        {
+            return shiftName;
+        }
+        var offset = TimeSpan.FromHours(request.RequestTimeZone);
+
+        var beginDate = DateTime.Now.Date.AddHours(beginHour);
+        var endDate = DateTime.Now.Date.AddHours(endHour);
+
+        var convertBeginHour = beginDate.ConvertToClientTimeZone(offset).Hour;
+        var convertEndHour = endDate.ConvertToClientTimeZone(offset).Hour;
+
+        return $"{convertBeginHour} {symbol} {convertEndHour}";
     }
 
     private static string GetMessageForLateIn(RequestEntity request, bool isNoFormat)

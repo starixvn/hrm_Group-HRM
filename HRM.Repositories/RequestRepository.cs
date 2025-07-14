@@ -312,7 +312,8 @@ public class RequestRepository : IRequestRepository
             ApprovedStatus = GetStatus(requestInfo.ApprovedStatus),
             ProcessedStatus = GetStatus(requestInfo.ProcessedStatus),
             ReworkCount = requestInfo.ReworkCount ?? 0,
-            CompanyId = requestInfo.CompanyId
+            CompanyId = requestInfo.CompanyId,
+            RequestTimeZone = int.Parse(requestInfo.RequestTimeZone)
         };
 
         return entity;

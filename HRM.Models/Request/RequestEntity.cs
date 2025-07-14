@@ -131,4 +131,6 @@ public class RequestEntity : EntityBase<long>
     public byte KeepInViewType { get; set; }
 
     public int CompanyId { get; set; }
+
+    public int RequestTimeZone { get; set; }
 }
