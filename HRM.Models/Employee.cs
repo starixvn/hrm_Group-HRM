@@ -112,6 +112,8 @@ public class Employee : EntityBase<int>
 
     public string JobLevel { get; set; }
 
+    public string ManagementLevel { get; set; }
+
     [DataType(DataType.Date)]
     public DateTime? PromotionDate { get; set; }
 
