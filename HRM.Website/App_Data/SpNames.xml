@@ -555,6 +555,7 @@
     <Function Name="System Setting">
         <Setting Key="SystemSetting_Get" SpName="SystemSetting_Get" DbName="bodb_HRM" Plain="0" />
         <Setting Key="SystemConfigs_GetByKey" SpName="SystemConfigs_GetByKey" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="SystemConfigs_UpdateCompanySetting" SpName="SystemConfigs_UpdateCompanySetting" DbName="bodb_HRM" Plain="0" />
     </Function>
     <Function Name="Meal Allowance Report">
         <Setting Key="WorkFromHome_MealAllowanceDetailReport" SpName="WorkFromHome_MealAllowanceDetailReport" DbName="bodb_HRM" Plain="0" />

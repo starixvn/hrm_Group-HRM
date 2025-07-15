@@ -1,4 +1,6 @@
-﻿namespace HRM.Core.Constants;
+﻿using Jose;
+
+namespace HRM.Core.Constants;
 
 public static class FunctionKey
 {
@@ -88,6 +90,7 @@ public static class FunctionKey
     public const string GroupEmployeeList = "GroupEmployeeList";
     public const string SecondmentCompanyList = "SecondmentCompanyList";
     public const string HeadcountReport = "HeadcountReport";
+    public const string CompanyManagement = "CompanyManagement";
     public const string JobLevelManagement = "JobLevelManagement";
 
 }

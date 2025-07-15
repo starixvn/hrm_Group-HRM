@@ -8,8 +8,8 @@ const Table = ({ data }) => {
     { label: "#", key: null },
     { label: "Company", key: "name" },
     { label: "BIO", key: "hasBIO" },
-    { label: "Whitelist IPs", key: "whitelistIPs" },
     { label: "Let's Talk", key: "enableLetstalk" },
+    { label: "Whitelist IPs", key: "whitelistIPs" },
     { label: "Currency", key: "currency" },
     { label: "Edit", key: null }
   ];

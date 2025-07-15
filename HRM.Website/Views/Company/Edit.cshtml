@@ -2,7 +2,7 @@
 @model int
 
 @{
-	ViewBag.Title = Labels.EditCompanySetting;
+	ViewBag.Title = Labels.EditCompanyManagement;
 }
 @section css{
 	<link href="~/dist/styles/company.edit.css" rel="stylesheet" />
@@ -13,7 +13,7 @@
 }
 @section Breadcrumb {
 	<a class="step">@Labels.GroupSpace</a>
-	<a class="step" href="@Url.Action("index", "Company")">@Labels.CompanySetting</a>
+	<a class="step" href="@Url.Action("index", "Company")">@Labels.CompanyManagement</a>
 	<span class="step">@ViewBag.Title</span>
 }
 

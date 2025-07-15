@@ -1,24 +1,29 @@
-﻿import React, { useEffect, useState } from "react";
+﻿import React, { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import toastr from "toastr";
 import { Formik, Form, Field } from "formik";
 
-import Errors from "../../../shared/components/Errors";
+import Errors from "../../../../shared/components/Errors";
 import {
     resolveClientUrl,
     axiosError,
     toastOptions,
-} from "../../../shared/common.functions";
+} from "../../../../shared/common.functions";
+
+import TagInput from "./TagInput";
+import CurrencyMultiSelect from "./CurrencyMultiSelect";
 
 const AppContainer = () => {
     const [formKey, setFormKey] = useState(0);
+    const [tagItems, setTagItems] = useState([]);
+    const [currencyOptions, setCurrencyOptions] = useState([]);
+
     const [initialValues, setInitialValues] = useState({
-        companyId: '',
-        name: '',
+        companyId: "",
+        name: "",
         hasBIO: false,
-        whitelistIPs: '',
         enableLetstalk: false,
-        currency: ''
+        currency: "",
     });
 
     const handleGoBack = () => {
@@ -33,50 +38,81 @@ const AppContainer = () => {
         })
             .then((response) => {
                 const data = response.data;
+
+                let parsedIPs = [];
+                if (data.whitelistIPs) {
+                    const rawIPs = JSON.parse(data.whitelistIPs);
+                    parsedIPs = rawIPs.map((ip, index) => ({
+                        id: index.toString(),
+                        text: ip,
+                    }));
+                }
+
+                let parsedCurrency = [];
+                if (data.currency) {
+                    try {
+                        parsedCurrency = JSON.parse(data.currency);
+                    } catch (error) {
+                        parsedCurrency = data.currency.split(',').map(c => c.trim()).filter(c => c); 
+                    }
+                }
+
                 setInitialValues({
-                    companyId: data.companyId || '',
-                    name: data.name || '',
-                    hasBIO: String(data.hasBIO).toLowerCase() === 'true',
-                    whitelistIPs: data.whitelistIPs || '',
-                    enableLetstalk: String(data.enableLetstalk).toLowerCase() === 'true',
-                    currency: data.currency || '',
+                    companyId: data.companyId || "",
+                    name: data.name || "",
+                    hasBIO: String(data.hasBIO).toLowerCase() === "true",
+                    enableLetstalk: String(data.enableLetstalk).toLowerCase() === "true",
+                    currency: parsedCurrency,
                 });
-                setFormKey(prev => prev + 1);
+
+                setTagItems(parsedIPs);
+                setFormKey((prev) => prev + 1);
             })
             .catch(axiosError);
     }, []);
 
-    const handleSubmit = (values, { setSubmitting }) => {
+    useEffect(() => {
+        axios({
+            url: resolveClientUrl(`Company/GetCurrency`),
+            method: "GET",
+            headers: { "X-Requested-With": "XMLHttpRequest" },
+        })
+        .then((res) => {
+            setCurrencyOptions(res.data);
+        })
+        .catch(axiosError);
+    }, []);
+
+    const handleSubmit = useCallback((values, { setSubmitting }) => {
         setSubmitting(true);
 
         axios.post(
             resolveClientUrl("company/edit"),
             {
                 companyId: values.companyId,
-                name: values.name.trim(),
                 hasBIO: values.hasBIO ? "true" : "false",
-                whitelistIPs: values.whitelistIPs.trim(),
                 enableLetstalk: values.enableLetstalk ? "true" : "false",
-                currency: values.currency.trim(),
+                currency: Array.isArray(values.currency) && values.currency.length > 0 ? values.currency.join(',') : '',
+                whitelistIPs: JSON.stringify(tagItems.map((tag) => tag.text)),
             },
             {
                 headers: { "X-Requested-With": "XMLHttpRequest" },
             }
         )
-        .then((response) => {
-            const { data } = response;
-            if (data.isSuccessful) {
-                toastr.success("Updated successfully!", "", toastOptions());
-                setTimeout(() => {
-                    document.location = resolveClientUrl("company/index");
-                }, 3000);
-            } else {
-                toastr.error(data.message, "", toastOptions());
-                setSubmitting(false);
-            }
-        })
-        .catch(axiosError);
-    };
+            .then((response) => {
+                const { data } = response;
+                if (data.isSuccessful) {
+                    toastr.success("Updated successfully!", "", toastOptions());
+                    setTimeout(() => {
+                        document.location = resolveClientUrl("company/index");
+                    }, 3000);
+                } else {
+                    toastr.error(data.message, "", toastOptions());
+                    setSubmitting(false);
+                }
+            })
+            .catch(axiosError);
+    }, [tagItems]);
 
     const renderForm = ({ errors, isSubmitting, values, setFieldValue }) => (
         <div className="card">
@@ -89,7 +125,7 @@ const AppContainer = () => {
                     <div className="input-form">
                         <Field
                             name="name"
-                            className="form-control"
+                            className="form-control field-name"
                             autoComplete="off"
                             readOnly
                         />
@@ -141,10 +177,9 @@ const AppContainer = () => {
                         <label className="control-label">Whitelist IPs</label>
                     </div>
                     <div className="input-form">
-                        <Field
-                            name="whitelistIPs"
-                            className="form-control"
-                            autoComplete="off"
+                        <TagInput
+                            tags={tagItems}
+                            onChange={(newTags) => setTagItems(newTags)}
                         />
                     </div>
                 </div>
@@ -154,10 +189,12 @@ const AppContainer = () => {
                         <label className="control-label">Currency</label>
                     </div>
                     <div className="input-form">
-                        <Field
-                            name="currency"
-                            className="form-control"
-                            autoComplete="off"
+                        <CurrencyMultiSelect
+                            options={currencyOptions || []}
+                            value={values.currency || []}
+                            onChange={(selectedValues) => setFieldValue("currency", selectedValues)}
+                            isDisabled={isSubmitting}
+                            isLoading={currencyOptions.length === 0}
                         />
                     </div>
                 </div>
@@ -167,12 +204,17 @@ const AppContainer = () => {
                         type="submit"
                         className="btn btn-primary"
                         id="btnSubmit"
-                        disabled={isSubmitting}>
+                        disabled={isSubmitting}
+                    >
                         Update
                     </button>
-                    <a className="btn btn-default" onClick={handleGoBack}>
+                    <button
+                        type="button"
+                        className="btn btn-default"
+                        onClick={handleGoBack}
+                    >
                         Back
-                    </a>
+                    </button>
                 </div>
             </Form>
         </div>
@@ -185,7 +227,8 @@ const AppContainer = () => {
             validateOnBlur={false}
             validateOnChange={false}
             initialValues={initialValues}
-            onSubmit={handleSubmit}>
+            onSubmit={handleSubmit}
+        >
             {renderForm}
         </Formik>
     );

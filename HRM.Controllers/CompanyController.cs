@@ -1,20 +1,18 @@
 ﻿namespace HRM.Controllers;
 
 using System.Threading.Tasks;
-using Criteria.SalaryStructure;
-using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
-using HRM.Core.Constants;
-using HRM.Core.Filters;
+using GO.UserControl.Client.Core.Enumerables;
 using Microsoft.AspNetCore.Mvc;
 using Services.Interfaces;
-using ViewModels.SalaryStructure;
 using HRM.Core.Models;
 using HRM.Core.Services;
-using Fanex.Data;
-using HRM.Models;
 using HRM.ViewModels.Company;
+using HRM.Criteria.Company;
+using HRM.Core.Constants;
+using HRM.Core.Filters;
 
+[HrmPermission(Policy.Read, FunctionKey.CompanyManagement)]
 public class CompanyController(
     IUserControlSession session,
     ICompanyService companyService,
@@ -22,7 +20,8 @@ public class CompanyController(
 {
     public ActionResult Index()
     {
-        return View();
+        var hasPermission = session.HasPermissionOnFunction(FunctionKey.CompanyManagement, Policy.Host);
+        return View(hasPermission);
     }
 
     [HttpPost]
@@ -56,30 +55,32 @@ public class CompanyController(
         return new JsonResult(model);
     }
 
+    [HrmPermission(Policy.Read, FunctionKey.CompanyManagement)]
     public ActionResult Edit(int Id)
     {
         return View(Id);
     }
 
-    //[HttpPost]
-    //public async Task<IActionResult> Edit([FromBody] EditCompanySettingViewModel model)
-    //{
-    //    var commandResult = new CommandResult();
-    //    if (model == null || !ModelState.IsValid)
-    //    {
-    //        return new JsonResult(commandResult);
-    //    }
+    [HttpPost]
+    [HrmPermission(Policy.Read, FunctionKey.CompanyManagement)]
+    public async Task<IActionResult> Edit([FromBody] EditCompanySettingViewModel model)
+    {
+        var commandResult = new CommandResult();
+        if (model == null || !ModelState.IsValid)
+        {
+            return new JsonResult(commandResult);
+        }
 
-    //    var criteria = new UpdateSalaryStructureCriteria
-    //    {
-    //        SalaryStructureId = model.SalaryStructureId,
-    //        JobLevelId = model.JobLevelId,
-    //        Name = model.Name,
-    //        ModifiedBy = session.UserId,
-    //        CompanyId = CurrentCompanyId
-    //    };
-    //    commandResult = await baseService.ExecuteNonQueryAsync(criteria);
+        var criteria = new UpdateCompanySettingCriteria
+        {
+            CompanyId = model.CompanyId,
+            HasBIO = model.HasBIO,
+            EnableLetstalk = model.EnableLetstalk,
+            WhitelistIPs = model.WhitelistIPs,
+            Currency = model.Currency
+        };
+        commandResult = await baseService.ExecuteNonQueryAsync(criteria);
 
-    //    return new JsonResult(commandResult);
-    //}
+        return new JsonResult(commandResult);
+    }
 }
