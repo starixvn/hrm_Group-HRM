@@ -27,13 +27,20 @@ public class GroupTeamController(ITeamService teamService,
     IEmployeeService employeeService,
     ICompanyService companyService) : BaseController(userControlSession)
 {
-
     [HrmPermission(Policy.Read, FunctionKey.GroupTeamManagement)]
-    public async Task<IActionResult> Index(string keyword = null)
+    public IActionResult Index()
     {
-        var teams = await teamService.GetAllTeamByUnitScopeAsync(keyword);
         ViewBag.HasPermission = session.HasPermissionOnFunction(FunctionKey.GroupTeamManagement, Policy.Host);
-        return View(teams);
+        return View();
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> GetTeamList(string teamIds = null)
+    {
+        var teams = await teamService.GetAllTeamByUnitScopeAsync(teamIds);
+        ViewBag.HasPermission = session.HasPermissionOnFunction(FunctionKey.GroupTeamManagement, Policy.Host);
+        ViewBag.HasPermissionToViewEmployee = session.HasPermissionOnFunction(FunctionKey.GroupEmployeeList, Policy.Read);
+        return PartialView("_TeamList", teams);
     }
 
     [HrmPermission(Policy.Host, FunctionKey.GroupTeamManagement)]
@@ -226,7 +233,7 @@ public class GroupTeamController(ITeamService teamService,
         const bool isGroupSpace = true;
         var supervisors = (await teamService.GetSupervisorByTeamId(id, isGroupSpace)).ToList();
         ViewBag.TeamId = id;
-        ViewBag.TeamCode = supervisors.Count != 0 ? supervisors[0].Code : string.Empty;
+        ViewBag.TeamName = supervisors.Count != 0 ? supervisors[0].Name : string.Empty;
 
         return View(supervisors);
     }

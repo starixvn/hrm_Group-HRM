@@ -32,16 +32,19 @@ public class GroupEmployeeListController(
     IBaseService baseService) : BaseController(session)
 {
     [HrmPermission(Policy.Read, FunctionKey.GroupEmployeeList)]
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(string teamIds = null)
     {
         var teams = await teamService.GetAllAsync();
         var companies = await companyService.GetAllCompany();
+
+        var selectedTeamIds = !string.IsNullOrEmpty(teamIds) ? teamIds : string.Join(",", teams.Select(x => x.Id));
+
         var model = new GroupEmployeeViewModel
         {
             IsEnable = true,
             CurrentPage = Constants.CurrentPage,
             ItemsPerPage = Constants.ItemsPerPage,
-            TeamIds = string.Join(",", teams.Select(x => x.Id)),
+            TeamIds = selectedTeamIds,
             CompanyIds = string.Join(",", companies.Select(c => c.CompanyId))
         };
 
@@ -142,7 +145,7 @@ public class GroupEmployeeListController(
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetOrgChart()
+    public async Task<IActionResult> GetOrgChart(bool isGroup = false)
     {
         var units = await unitService.GetUnitAsync();
         var departments = await departmentService.GetDepartmentAsync();

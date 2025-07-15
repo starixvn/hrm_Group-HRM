@@ -44,7 +44,17 @@ import { axiosError, blockUI, floatThead, unblockUI, getParam, resolveClientUrl,
     }
 
     function query() {
-        $('#TeamIds').val($('#GroupTeam').multiSelectTreeView('getSelectedItems'));
+        var urlTeamIds = getParam('teamIds');
+        if (urlTeamIds) {
+            $("#TeamIds").val(urlTeamIds);
+        } else {
+            var currentTeamIds = $("#TeamIds").val();
+            if (!currentTeamIds || currentTeamIds === "") {
+                $("#TeamIds").val(
+                    $("#GroupTeam").multiSelectTreeView("getSelectedItems")
+                );
+            }
+        }
         $('#CompanyIds').val($('#Company').multiSelectTreeView('getSelectedItems'));
         blockUI();
         axios({

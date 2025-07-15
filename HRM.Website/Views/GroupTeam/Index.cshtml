@@ -9,7 +9,7 @@
     <link href="~/dist/styles/team.index.css" rel="stylesheet" />
 }
 @section js{
-    <script src="~/dist/js/team.index.js"></script>
+    <script src="~/dist/js/groupteam.index.js"></script>
 }
 @section Breadcrumb {
     <a class="step">@Labels.GroupSpace</a><span class="step">@ViewBag.Title</span>
@@ -20,11 +20,9 @@
     <div class="form-horizontal clearfix">
         <div class="form-group form-group--m">
             <div class="label-form">
-                @Html.Label(null, Labels.Keyword, new { @class = "control-label" })
+                <label class="control-label">@Labels.Team</label>
             </div>
-            <div class="input-form">
-                <input id="nameSearch" type="text" name="keyWord" placeholder="@Messages.SearchTeamOrCode" class="form-control" autocomplete="off" />
-            </div>
+            <div class="input-form" id="GroupTeam"></div>
         </div>
         <button class="btn btn-primary" type="submit" id="btnSearchTeam">@Labels.Submit</button>
         @if (hasPermission)
@@ -36,130 +34,5 @@
         <button type="button" id="exportExcel" class="btn btn-excel">Excel</button>
     </div>
 }
-<table id="data" class="table table-custom" style="width: auto; min-width: 600px;">
-    <thead>
-        <tr>
-	        <th rowspan="2">@Labels.SymbolCount</th>
-            <th rowspan="2" class="col-sorter">
-	            <div class="cell-control-wrapper">
-                    @Labels.TeamId
-		            <div class="fa fa-sort"></div>
-	            </div>
-            </th>
-            <th rowspan="2" class="col-sorter">
-	            <div class="cell-control-wrapper">
-		            @Labels.UnitCode
-		            <div class="fa fa-sort"></div>
-	            </div>
-	        </th>
-            <th rowspan="2" class="col-sorter">
-                <div class="cell-control-wrapper">
-                    <div>@Labels.DepartmentName</div>
-                    <div class="fa fa-sort"></div>
-                </div>
-            </th>
-            <th rowspan="2" class="col-sorter">
-	            <div class="cell-control-wrapper">
-		            <div>@Labels.DepartmentCode</div>
-		            <div class="fa fa-sort"></div>
-	            </div>
-            </th>
-            <th rowspan="2" class="col-sorter">
-                <div class="cell-control-wrapper">
-                    <div>@Labels.DepartmentPIC</div>
-                    <div class="fa fa-sort"></div>
-                </div>
-            </th>
-            <th rowspan="2" class="col-sorter">
-                <div class="cell-control-wrapper">
-                    <div>@Labels.TeamName</div>
-                    <div class="fa fa-sort"></div>
-                </div>
-            </th>
-            <th rowspan="2" class="col-sorter">
-                <div class="cell-control-wrapper">
-                    <div>@Labels.TeamCode</div>
-                    <div class="fa fa-sort"></div>
-                </div>
-            </th>
-            <th rowspan="2" class="col-sorter">
-                <div class="cell-control-wrapper">
-                    <div>@Labels.TeamPIC</div>
-                    <div class="fa fa-sort"></div>
-                </div>
-            </th>
-	        <th rowspan="2" class="col-sorter">
-		        <div class="cell-control-wrapper">
-			        <div>@Labels.AccountableArea</div>
-			        <div class="fa fa-sort"></div>
-		        </div>
-            </th>
-            <th rowspan="2" class="col-sorter">
-                <div class="cell-control-wrapper">
-                    <div>@Labels.CompanyName</div>
-                    <div class="fa fa-sort"></div>
-                </div>
-            </th>
-	        <th rowspan="2" class="col-sorter">
-		        <div class="cell-control-wrapper">
-			        <div>@Labels.TotalMembers</div>
-			        <div class="fa fa-sort"></div>
-		        </div>
-	        </th>
-            @if (hasPermission)
-	        {
-                <th rowspan="2">@Labels.Edit</th>
-                <th rowspan="2">@Labels.Role</th>
-		        <th rowspan="2">@Labels.Delete</th>
-	        }
-        </tr>
-    </thead>
-    @if (Model != null && Model.Any())
-    {
-        <tbody>
-            @{var index = 1;}
-            @foreach (var team in Model)
-            {
-                <tr id="row@(team.Id)">
-	                <td>@(index++)</td>
-                    <td class="align-left">@team.GroupTeamId</td>
-                    <td class="align-left">@team.UnitCode</td>
-	                <td class="align-left">@team.DepartmentName</td>
-                    <td class="align-left">@team.DepartmentCode</td>
-                    <td class="align-left">@team.DepartmentPIC</td>
-                    <td class="align-left">@team.TeamName</td>
-                    <td class="align-left">@team.TeamCode</td>
-                    <td class="align-left">@team.PICDisplayName</td>
-                    <td class="align-left">@team.AccountableArea</td>
-                    <td class="align-left">@team.CompanyName</td>
-                    <td>@team.NoOfMembers</td>
-                    @if (hasPermission)
-	                {
-		                <td>
-			                <a href="@Url.Action("Edit", "GroupTeam", new { team.Id })"><i class="fa fa-pencil fa-lg icon-edit"></i></a>
-                        </td>
-                        <td>
-                            <a href="@Url.Action("TeamSupervisor", "GroupTeam", new { team.Id })">Manage</a>
-                        </td>
-		                <td>
-			                @if (team.NoOfMembers > 0)
-			                {
-				                <i class="fa fa-times fa-lg fa-disabled icon-delete"></i>
-			                }
-			                else
-			                {
-				                <a href="javascript:;" class="deleteTeam" data-team-id="@team.Id">
-					                <i class="fa fa-times fa-lg icon-delete"></i>
-				                </a>
-			                }
-		                </td>
-	                }
-                </tr>
-            }
-        </tbody>
-    }
-    else
-    {
-        @Html.Raw(RazorHelpers.DisplayNoInformation(colspan: 25))
-    }
-</table>
+
+<div id="teamTableContainer"></div>

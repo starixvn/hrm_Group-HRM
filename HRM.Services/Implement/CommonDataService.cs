@@ -25,7 +25,7 @@ public interface ICommonDataService
 
     Task<IList<LeaveType>> GetLeaveTypeAsync( bool excludeNotShown = true);
 
-    Task<IEnumerable<Team>> GetAllTeamAsync(bool isDeleted = false);
+    Task<IEnumerable<Team>> GetAllTeamAsync(bool isDeleted = false, bool isGroup = false);
 
     Task<List<Country>> GetAllCountry();
 
@@ -81,9 +81,9 @@ public class CommonDataService(
         return leaveTypes;
     }
 
-    public async Task<IEnumerable<Team>> GetAllTeamAsync(bool isDeleted = false)
+    public async Task<IEnumerable<Team>> GetAllTeamAsync(bool isDeleted = false, bool isGroup = false)
     {
-        return await teamService.GetAllAsync(isDeleted);
+        return await teamService.GetAllAsync(isDeleted, isGroup: isGroup);
     }
 
     public async Task<List<Country>> GetAllCountry()
