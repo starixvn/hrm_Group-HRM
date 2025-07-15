@@ -113,7 +113,7 @@ public class TimeController(
             var criteria = new InsertCheckInOutRecordCriteria
             {
                 EmpId = employee.EmpId,
-                RecordTime = DateTimeOffset.Now.DateTime.ToClientTimeZone(),
+                RecordTime = DateTimeOffset.Now.DateTime,
                 ClientRecordTime = DateTimeOffset.Now.DateTime.ToClientTimeZone(),
                 InOutType = model.InOutType,
                 IPAddress = hrmAuthService.GetClientIp(HttpContext),
