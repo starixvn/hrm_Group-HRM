@@ -628,8 +628,8 @@ public class EmployeeController(
 
         var isShowSubCompanyConfig = await companyService.GetIsShowSubCompanyValue();
         ViewBag.IsShowSubCompanyConfig = isShowSubCompanyConfig;
-        ViewBag.HasReadPermissionOnSalaryStructure = session.HasPermissionOnFunction(FunctionKey.SalaryStructureAssignment, Policy.Read);
-        ViewBag.HasHostPermissionOnSalaryStructure = session.HasPermissionOnFunction(FunctionKey.SalaryStructureAssignment, Policy.Host);
+        ViewBag.HasReadPermissionOnSalaryStructure = session.HasPermissionOnFunction(FunctionKey.SalaryStructureConfiguration, Policy.Read);
+        ViewBag.HasHostPermissionOnSalaryStructure = session.HasPermissionOnFunction(FunctionKey.SalaryStructureConfiguration, Policy.Host);
 
         ViewBag.JobTitles = await commonDataService.GetLookupDataByCodeAsync(Constants.JobTitle, session.Get<int>(SessionKey.CurrentCompanyId));
         ViewBag.JobLevel = jobLevels;

@@ -32,3 +32,15 @@
 .text-right {
     text-align: right !important;
 }
+
+.table.table-custom {
+    tbody {
+        tr.even-row {
+            background: #ececec !important;
+        }
+
+        tr.odd-row {
+            background: #fff !important;
+        }
+    }
+}

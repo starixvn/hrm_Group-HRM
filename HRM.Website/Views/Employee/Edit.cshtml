@@ -545,33 +545,26 @@
                     @Html.TextBoxFor(model => model.OffDaysbyWeek, new { @class = "form-control" })
                 </div>
             </li>
+            <li class="list-group-item form-group">
+                <div class="label-form">
+                    @Html.LabelFor(model => model.SalaryStructureId, Labels.SalaryStructure, new { @class = "control-label" })
+                </div>
+                <div class="select-form">
+                    @{
+                        var items = salaryStructures.Select(x => new SelectListItem
+                        {
+                            Value = x.SalaryStructureId.ToString(),
+                            Text = x.Name
+                        });
+                        @Html.DropDownListFor(model => model.SalaryStructureId,
+                            items,
+                            "--Select a Salary Structure--",
+                            new { @class = "form-control" })
+                    }
+                </div>
+            </li>
             @if (hasReadPermissionOnSalaryStructure || hasHostPermissionOnSalaryStructure)
             {
-                <li class="list-group-item form-group">
-                    <div class="label-form">
-                        @Html.LabelFor(model => model.SalaryStructureId, Labels.SalaryStructure, new { @class = "control-label" })
-                    </div>
-                    <div class="select-form">
-                        @if (!hasHostPermissionOnSalaryStructure)
-                        {
-                            var salaryStructure = salaryStructures.FirstOrDefault(x => x.SalaryStructureId == Model.SalaryStructureId);
-                            <span>@salaryStructure?.Name</span>
-                            @Html.HiddenFor(model => model.SalaryStructureId)
-                        }
-                        else
-                        {
-                            var items = salaryStructures.Select(x => new SelectListItem
-                            {
-                                Value = x.SalaryStructureId.ToString(),
-                                Text = x.Name
-                            });
-                            @Html.DropDownListFor(model => model.SalaryStructureId,
-                                items,
-                                "--Select a Salary Structure--",
-                                new { @class = "form-control" })
-                        }
-                    </div>
-                </li>
                 <li class="list-group-item form-group">
                     <div class="label-form">
                         @Html.LabelFor(model => model.Salary, Labels.NonStandardSalaryStructure, new { @class = "control-label" })
@@ -591,7 +584,6 @@
             }
             else
             {
-                @Html.HiddenFor(model => model.SalaryStructureId)
                 @Html.HiddenFor(model => model.Salary)
             }
             <li class="list-group-item form-group">

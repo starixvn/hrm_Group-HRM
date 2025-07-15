@@ -7,41 +7,61 @@ const Row = ({ rowIndex, item, onDelete }) => {
         window.location = resolveClientUrl(`salarystructure/edit/${item.salaryStructureId}`);
     };
 
-    const handleDelete = () => {
-        onDelete(item);
-    };
+    const handleDelete = () => onDelete(item);;
 
     const formatSalary = (value) => {
-    if (value === null || value === undefined || value === '') return '';
-    const number = Number(value);
-    if (isNaN(number)) return '';
-    return number.toLocaleString('en-US')};
+        if (value === null || value === undefined || value === '') {
+            return '';
+        }
 
-    return (
-        <tr id={`row_${item.salaryStructureId}`}>
-            <td>{rowIndex}</td>
-            <td className="text-left">{item.name}</td>
-            <td>{item.jobLevelName}</td>
-            <td className="text-right">{formatSalary(item.localSalary)}</td>
-            <td className="text-right">{formatSalary(item.expatSalary)}</td>
-            {window.hasPermission === "True" && (
-                <Fragment>
-                    <td>
-                        <a
-                            onClick={handleEdit}
-                            className="fa fa-pencil fa-lg icon-edit"
-                        />
-                    </td>
-                    <td>
-                        <a
-                            onClick={handleDelete}
-                            className="fa fa-times fa-lg icon-delete"
-                        />
-                    </td>
-                </Fragment>
-            )}
-        </tr>
-    );
+        const number = Number(value);
+        if (isNaN(number)) {
+            return '';
+        }
+
+        return number.toLocaleString('en-US');
+    };
+
+    const getRows = () => {
+        const rows = [];
+        const rowspan = item.details.length >= 2 ? item.details.length : 1;
+
+        item.details.forEach((detail, index) => {
+            rows.push(
+                <tr id={`row_${item.salaryStructureId}_${index}`} className={rowIndex % 2 === 0 ? 'odd-row' : 'even-row'}>
+                    {index === 0 && (
+                        <Fragment>
+                            <td rowSpan={rowspan}>{rowIndex}</td>
+                            <td className="text-left" rowSpan={rowspan}>{item.name}</td>
+                        </Fragment>
+                    )}
+                    <td>{detail.name}</td>
+                    <td className="text-right">{formatSalary(detail.localSalary)}</td>
+                    <td className="text-right">{formatSalary(detail.expatSalary)}</td>
+                    {index === 0 && window.hasPermission === 'True' && (
+                        <Fragment>
+                            <td rowSpan={rowspan}>
+                                <a
+                                    onClick={handleEdit}
+                                    className="fa fa-pencil fa-lg icon-edit"
+                                />
+                            </td>
+                            <td rowSpan={rowspan}>
+                                <a
+                                    onClick={handleDelete}
+                                    className="fa fa-times fa-lg icon-delete"
+                                />
+                            </td>
+                        </Fragment>
+                    )}
+                </tr>
+            );
+        });
+
+        return rows;
+    };
+
+    return getRows();
 };
 
 export default Row;

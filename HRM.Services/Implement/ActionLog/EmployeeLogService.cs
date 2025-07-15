@@ -86,7 +86,8 @@ public class EmployeeLogService(
         new() { FieldName = "Enabled", DisplayName = Labels.EnabledUser, DataType = MappingDataType.Boolean },
         new() { FieldName = "IsDeleted", DisplayName = Labels.Deleted, DataType = MappingDataType.Boolean },
         new() { FieldName = "ChineseName", DisplayName = Labels.ChineseName },
-        new() { FieldName = "WorkingHoursbyWeek", DisplayName = Labels.WorkingHoursPerWeek }
+        new() { FieldName = "WorkingHoursbyWeek", DisplayName = Labels.WorkingHoursPerWeek },
+        new() { FieldName = "SalaryStructureId", DisplayName = Labels.SalaryStructure }
     };
 
     private IEnumerable<Team> Teams { get; set; }
@@ -120,9 +121,8 @@ public class EmployeeLogService(
 
     private void MappingField(IEnumerable<LogObjectDetail> logs)
     {
-        if (session.HasPermissionOnFunction(FunctionKey.SalaryStructureAssignment, Policy.Read))
+        if (session.HasPermissionOnFunction(FunctionKey.SalaryStructureConfiguration, Policy.Read))
         {
-            mappingFields = mappingFields.Append(new MappingFieldConfig { FieldName = "SalaryStructureId", DisplayName = Labels.SalaryStructure });
             mappingFields = mappingFields.Append(new MappingFieldConfig { FieldName = "Salary", DisplayName = Labels.NonStandardSalaryStructure });
         }
 
@@ -272,21 +272,18 @@ public class EmployeeLogService(
 
     private void MappingSalaryStructure(FieldValue field)
     {
-        if (session.HasPermissionOnFunction(FunctionKey.SalaryStructureAssignment, Policy.Read))
-        {
-            _ = int.TryParse(field.OldValue, out var salaryStructureId);
-            var salaryStructure = SalaryStructures.FirstOrDefault(x => x.SalaryStructureId == salaryStructureId);
-            field.OldValue = salaryStructure?.Name;
+        _ = int.TryParse(field.OldValue, out var salaryStructureId);
+        var salaryStructure = SalaryStructures.FirstOrDefault(x => x.SalaryStructureId == salaryStructureId);
+        field.OldValue = salaryStructure?.Name;
 
-            _ = int.TryParse(field.Value, out salaryStructureId);
-            salaryStructure = SalaryStructures.FirstOrDefault(x => x.SalaryStructureId == salaryStructureId);
-            field.Value = salaryStructure?.Name;
-        }
+        _ = int.TryParse(field.Value, out salaryStructureId);
+        salaryStructure = SalaryStructures.FirstOrDefault(x => x.SalaryStructureId == salaryStructureId);
+        field.Value = salaryStructure?.Name;
     }
 
     private void MappingSalary(FieldValue field)
     {
-        if (session.HasPermissionOnFunction(FunctionKey.SalaryStructureAssignment, Policy.Read))
+        if (session.HasPermissionOnFunction(FunctionKey.SalaryStructureConfiguration, Policy.Read))
         {
             field.OldValue = !string.IsNullOrWhiteSpace(field.OldValue) ? Cryptography.DecryptPassword(field.OldValue) : string.Empty;
             field.Value = !string.IsNullOrWhiteSpace(field.Value) ? Cryptography.DecryptPassword(field.Value) : string.Empty;

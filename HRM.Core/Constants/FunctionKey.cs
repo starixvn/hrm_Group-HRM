@@ -69,7 +69,6 @@ public static class FunctionKey
     public const string Message = "Message";
 
     public const string SalaryStructureConfiguration = "SalaryStructureConfiguration";
-    public const string SalaryStructureAssignment = "SalaryStructureAssignment";
 
     // Company space
     public const string ContactList = "ContactList";
