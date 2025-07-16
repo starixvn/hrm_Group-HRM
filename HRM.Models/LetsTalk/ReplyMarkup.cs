@@ -24,11 +24,11 @@ namespace HRM.Models.LetsTalk
             {
                 return ActionType switch
                 {
-                    ReplyActionType.PostBack => ReplyActionTypeString.Postback,
-                    ReplyActionType.Uri => ReplyActionTypeString.Uri,
-                    ReplyActionType.OpenWeb => ReplyActionTypeString.OpenWeb,
-                    ReplyActionType.OpenTextInput => ReplyActionTypeString.OpenTextInput,
-                    _ => ReplyActionTypeString.Postback
+                    ReplyActionType.PostBack => "postback",
+                    ReplyActionType.Uri => "uri",
+                    ReplyActionType.OpenWeb => "open_web",
+                    ReplyActionType.OpenTextInput => "open_text_input",
+                    _ => "postback"
                 };
             }
         }
@@ -41,13 +41,5 @@ namespace HRM.Models.LetsTalk
 
         [JsonProperty(PropertyName = "uri")]
         public string Uri { get; set; }
-    }
-
-    internal static class ReplyActionTypeString
-    {
-        public const string Postback = "postback";
-        public const string Uri = "uri";
-        public const string OpenWeb = "open_web";
-        public const string OpenTextInput = "open_text_input";
     }
 }

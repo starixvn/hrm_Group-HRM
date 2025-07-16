@@ -1,9 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using HRM.Models.LetsTalk;
 using HRM.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 
 namespace HRM.Controllers.LetsTalk;
 

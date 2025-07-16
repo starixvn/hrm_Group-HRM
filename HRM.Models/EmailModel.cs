@@ -1,5 +1,4 @@
-﻿using HRM.Core.Enums;
-using HRM.Models.LetsTalk;
+﻿using HRM.Models.LetsTalk;
 
 namespace HRM.Models;
 
@@ -24,6 +23,8 @@ public class EmailModel
     public string PICDisplayName { get; set; }
 
     public long RequestId { get; set; }
+
+    public int Action { get; set; }
 
     public int? RequestType { get; set; }
 
