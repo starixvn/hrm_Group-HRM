@@ -6,6 +6,7 @@ using HRM.Criteria.Request;
 using HRM.Models;
 using HRM.Models.LetsTalk;
 using HRM.Models.Request;
+using HRM.Models.Supervisor;
 using HRM.Repositories.Interfaces;
 using HRM.Resources;
 using HRM.Services.Interfaces;
@@ -33,6 +34,7 @@ public class RequestMailService(IRequestRepository requestRepository, ICompanySe
         var relatedPeople = await requestRepository.GetRequestRelatedPeople(criteria);
         var emailModel = new EmailModel
         {
+            Action = action,
             RequestType = requestType,
             RequestId = requestId,
             CallbackUrl = companyService.GetDomainName()
@@ -124,20 +126,7 @@ public class RequestMailService(IRequestRepository requestRepository, ICompanySe
         if (!string.IsNullOrWhiteSpace(approver.LetsTalk)
         && approver.EmpId != relatedPeople.Requester?.EmpId)
         {
-            var param = $"&requestId={emailModel.RequestId}&requestTypeId={emailModel.RequestType}&roleId=3&empId={approver.EmpId}&nickName={approver.NickName}&fullName={approver.FullName}";
-            emailModel.Approver = new LetsTalkActor
-            {
-                LetsTalkId = approver.LetsTalk,
-                ReplyMarkup = new ReplyMarkup
-                {
-                    Actions =
-                    {
-                        new ReplyAction { ActionType = ReplyActionType.PostBack, Label = "Approve", Data = $"{emailModel.CallbackUrl}/api/request/process?command={RequestCommand.Approve}{param}" },
-                        new ReplyAction { ActionType = ReplyActionType.PostBack, Label = "Reject", Data = $"{emailModel.CallbackUrl}/api/request/process?command={RequestCommand.Reject}{param}" },
-                        new ReplyAction { ActionType = ReplyActionType.Uri, Label = "View detail", Uri = $"{emailModel.CallbackUrl}/request/member" }
-                    }
-                }
-            };
+            emailModel.Approver = GenerateLetsTalkActor(emailModel, approver, true);
         }
     }
 
@@ -169,21 +158,7 @@ public class RequestMailService(IRequestRepository requestRepository, ICompanySe
         && relatedPeople.Verifier.EmpId != relatedPeople.Approver?.EmpId
         && relatedPeople.Verifier.EmpId != relatedPeople.Requester?.EmpId)
         {
-            var verifier = relatedPeople.Verifier;
-            var param = $"&requestId={emailModel.RequestId}&requestTypeId={emailModel.RequestType}&roleId=2&empId={verifier.EmpId}&nickName={verifier.NickName}&fullName={verifier.FullName}";
-            emailModel.Verifier = new LetsTalkActor
-            {
-                LetsTalkId = relatedPeople.Verifier.LetsTalk,
-                ReplyMarkup = new ReplyMarkup
-                {
-                    Actions =
-                    {
-                        new ReplyAction { ActionType = ReplyActionType.PostBack, Label = "Verify", Data = $"{emailModel.CallbackUrl}/api/request/process?command={RequestCommand.Approve}{param}" },
-                        new ReplyAction { ActionType = ReplyActionType.PostBack, Label = "Reject", Data = $"{emailModel.CallbackUrl}/api/request/process?command={RequestCommand.Reject}{param}" },
-                        new ReplyAction { ActionType = ReplyActionType.Uri, Label = "View detail", Uri = $"{emailModel.CallbackUrl}/request/member" }
-                    }
-                }
-            };
+            emailModel.Verifier = GenerateLetsTalkActor(emailModel, relatedPeople.Verifier, false);
         }
     }
 
@@ -247,5 +222,34 @@ public class RequestMailService(IRequestRepository requestRepository, ICompanySe
                 emailModel.SendCC += ";" + relatedPeople.Requester.MailGroup;
             }
         }
+    }
+
+    private static LetsTalkActor GenerateLetsTalkActor(EmailModel emailModel, SupervisorNameModel supervisor, bool isApprover)
+    {
+        var allowReplyMarkup = emailModel.Action == (byte)SettingsSendMail.New || emailModel.Action == (byte)SettingsSendMail.Edit;
+        if (!allowReplyMarkup)
+        {
+            return new LetsTalkActor
+            {
+                LetsTalkId = supervisor.LetsTalk
+            };
+        }
+
+        var roleId = isApprover ? "3" : "2";
+        var textAccept = isApprover ? "Approve" : "Verify";
+        var param = $"&requestId={emailModel.RequestId}&requestTypeId={emailModel.RequestType}&roleId={roleId}&empId={supervisor.EmpId}&nickName={supervisor.NickName}&fullName={supervisor.FullName}";
+        return new LetsTalkActor
+        {
+            LetsTalkId = supervisor.LetsTalk,
+            ReplyMarkup = new ReplyMarkup
+            {
+                Actions =
+                    {
+                        new ReplyAction { ActionType = ReplyActionType.PostBack, Label = textAccept, Data = $"{emailModel.CallbackUrl}/api/request/process?command={RequestCommand.Approve}{param}" },
+                        new ReplyAction { ActionType = ReplyActionType.PostBack, Label = "Reject", Data = $"{emailModel.CallbackUrl}/api/request/process?command={RequestCommand.Reject}{param}" },
+                        new ReplyAction { ActionType = ReplyActionType.Uri, Label = "View detail", Uri = $"{emailModel.CallbackUrl}/request/member" }
+                    }
+            }
+        };
     }
 }

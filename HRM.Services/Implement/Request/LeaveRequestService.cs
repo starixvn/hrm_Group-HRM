@@ -204,14 +204,7 @@ public class LeaveRequestService(
                 request.Remark
                 );
 
-            if (email.Approver != null && !string.IsNullOrWhiteSpace(email.Approver.LetsTalkId))
-            {
-                await Task.Run(() => letStalkService.SendNotification(email.Approver.LetsTalkId, content));
-            }
-            if (email.Verifier != null && !string.IsNullOrWhiteSpace(email.Verifier.LetsTalkId))
-            {
-                await Task.Run(() => letStalkService.SendNotification(email.Verifier.LetsTalkId, content));
-            }
+            await SendLetsTalkNotifications(email, content);
         }
     }
 
@@ -331,15 +324,11 @@ public class LeaveRequestService(
             email.PICDisplayName,
             criteria.Remark);
 
-        if (email.Approver != null && !string.IsNullOrWhiteSpace(email.Approver.LetsTalkId))
-        {
-            await emailService.SendEmailAsync(
-                email.SendTo,
-                email.SendCC,
-                email.Subject,
-                email.Body);
-        }
+        await SendLetsTalkNotifications(email, content);
+    }
 
+    private async Task SendLetsTalkNotifications(EmailModel email, string content)
+    {
         if (email.Approver != null && !string.IsNullOrWhiteSpace(email.Approver.LetsTalkId))
         {
             await Task.Run(() => letStalkService.SendNotification(email.Approver.LetsTalkId, content, email.Approver.ReplyMarkup));
