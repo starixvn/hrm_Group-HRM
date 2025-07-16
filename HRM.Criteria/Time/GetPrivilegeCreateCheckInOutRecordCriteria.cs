@@ -1,10 +1,14 @@
-﻿namespace HRM.Criteria.Time;
+﻿using System;
+
+namespace HRM.Criteria.Time;
 
 using Fanex.Data.Repository;
 
 public class GetPrivilegeCreateCheckInOutRecordCriteria : CriteriaBase
 {
     public int EmpId { get; set; }
+
+    public DateTime CurrentDate { get; set; }
 
     public override string GetSettingKey()
     {
