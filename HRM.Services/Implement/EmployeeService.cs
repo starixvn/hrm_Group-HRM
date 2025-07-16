@@ -409,7 +409,7 @@ public class EmployeeService(
         {
             EmpId = empId,
             CompanyId = companyId,
-            CurrentDate = DateTimeOffset.Now.DateTime.ToServerTimeZone().Date,
+            CurrentDate = DateTimeOffset.Now.DateTime.ToClientTimeZone().Date,
             ClientIp = clientIp
         };
         return await baseService.GetDataEntityAsync<EmployeeBioInfoModel>(criteria);
