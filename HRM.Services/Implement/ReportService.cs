@@ -112,7 +112,7 @@ public class ReportService(
 
     public async Task<bool> GetIsPrivilegeCreateCheckInOutAsync(GetPrivilegeCreateCheckInOutRecordCriteria criteria)
     {
-        var currentDate = DateTimeOffset.Now.DateTime.ToServerTimeZone().Date;
+        var currentDate = DateTimeOffset.Now.DateTime.ToClientTimeZone().Date;
         criteria.CurrentDate = currentDate;
         return await baseService.GetDataEntityAsync<bool>(criteria);
     }
