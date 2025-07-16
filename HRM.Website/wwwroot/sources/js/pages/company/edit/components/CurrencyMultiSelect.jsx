@@ -5,8 +5,7 @@ const CurrencyMultiSelect = ({
     options = [], 
     value = [], 
     onChange, 
-    isDisabled = false,
-    isLoading = false
+    isDisabled = false
 }) => {
     const selectOptions = options.map(option => ({
         value: String(option.id),
@@ -33,7 +32,6 @@ const CurrencyMultiSelect = ({
                 value={selectValue}
                 onChange={handleChange}
                 isDisabled={isDisabled}
-                isLoading={isLoading}
                 closeMenuOnSelect={false}
                 hideSelectedOptions={false}
                 isClearable={true}

@@ -7,7 +7,6 @@ using HRM.Core.Constants;
 using HRM.Core.Services;
 using HRM.Criteria.Company;
 using HRM.Criteria.CompanySite;
-using HRM.Criteria.SalaryStructure;
 using HRM.Criteria.SystemSetting;
 using HRM.Models;
 using HRM.Services.Interfaces;

@@ -50,11 +50,7 @@ const AppContainer = () => {
 
                 let parsedCurrency = [];
                 if (data.currency) {
-                    try {
-                        parsedCurrency = JSON.parse(data.currency);
-                    } catch (error) {
-                        parsedCurrency = data.currency.split(',').map(c => c.trim()).filter(c => c); 
-                    }
+                    parsedCurrency = data.currency.split(',').map(c => c.trim()).filter(c => c);
                 }
 
                 setInitialValues({
@@ -194,7 +190,6 @@ const AppContainer = () => {
                             value={values.currency || []}
                             onChange={(selectedValues) => setFieldValue("currency", selectedValues)}
                             isDisabled={isSubmitting}
-                            isLoading={currencyOptions.length === 0}
                         />
                     </div>
                 </div>
