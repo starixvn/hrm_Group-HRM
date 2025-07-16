@@ -105,6 +105,9 @@ public static class ServiceCollectionExtensions
         var s3Config = configuration.GetSection("AmazonStorageConfig").Get<AmazonStorageConfig>();
         services.AddSingleton(s3Config);
 
+        var nexConfig = configuration.GetSection("NexConfig").Get<NexConfig>();
+        services.AddSingleton(nexConfig);
+
         services.AddSingleton<ILogger, Logger>();
         services.AddSingleton<IDynamicRepository, DynamicRepository>();
 
@@ -180,6 +183,7 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IUploadPayrollService, UploadPayrollService>();
         services.AddSingleton<IPayrollService, PayrollService>();
         services.AddSingleton<ISecondCompanyEmployeeService, SecondCompanyEmployeeService>();
+        services.AddHttpClient();
         services.AddDIReportServices();
         services.AddDIExcelServices();
         services.AddSyncFnBService();

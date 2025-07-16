@@ -20,6 +20,8 @@ public class ProcessRequestViewModel
     [Display(Name = "Remark")]
     public string Comment { get; set; }
 
+    public int? CompanyId { get; set; }
+
     public RequestEntity CheckInOutDetail { get; set; }
     public RequestEntity LateInEarlyOutDetail { get; set; }
     public IList<ChangeShiftDetail> ChangeShiftDetails { get; set; }

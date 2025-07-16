@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Fanex.Data.Repository;
+using HRM.Core.Models;
 using HRM.Criteria.Request;
 using HRM.Models.Request;
 
@@ -17,4 +18,14 @@ public interface IRequestRepository
     Task<RequestEntity> GetRequestToIgnoreById(ICriteria criteria);
 
     Task<List<LeaveDisciplineModel>> GetLeaveRequestToReviewDiscipline(ICriteria criteria);
+
+    IEnumerable<RequestEntity> MappingNexRequestToGroupRequest(List<NexRequestModel> requests, EmployeeSession sessionUser);
+
+    int? GetNexRequestStatus(string requestStatusId);
+
+    int GetGroupByNexRequestStatus(int requestStatusId);
+
+    string GetNexRequestType(int requestTypeId);
+
+    int GetNexLeaveType(int leaveTypeId);
 }

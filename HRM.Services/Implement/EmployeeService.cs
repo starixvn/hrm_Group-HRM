@@ -29,7 +29,8 @@ public class EmployeeService(
     IEmployeeRepository employeeRepository,
     IBaseService baseService,
     IRoleService roleService,
-    IUserControlSession session) : IEmployeeService
+    IUserControlSession session,
+    ICompanyService companyService) : IEmployeeService
 {
     public async Task<string> GenerateEmployeeCode()
     {
@@ -397,5 +398,19 @@ public class EmployeeService(
         }
 
         return supervisors;
+    }
+
+    public async Task<IEnumerable<int>> GetCompaniesBelongToSupervisor()
+    {
+        var supervisorCompanyCriteria = new GetSupervisorCompaniesCriteria
+        {
+            EmpId = session.UserId
+        };
+        var supervisorCompanyIds = await baseService.GetDataAsync<int>(supervisorCompanyCriteria);
+
+        var nexCompanies = supervisorCompanyIds
+            .Where(s => Constants.NexCompanyIds.Contains(s));
+
+        return nexCompanies;
     }
 }

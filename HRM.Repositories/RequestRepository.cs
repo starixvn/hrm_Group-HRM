@@ -1,4 +1,7 @@
-﻿namespace HRM.Repositories;
+﻿using HRM.Core.Constants;
+using HRM.Core.Models;
+
+namespace HRM.Repositories;
 
 using System;
 using System.Collections.Generic;
@@ -8,6 +11,7 @@ using Core.Enums;
 using Criteria.Request;
 using Fanex.Data;
 using Fanex.Data.Repository;
+using HRM.Core;
 using Interfaces;
 using Models;
 using Models.Request;
@@ -88,6 +92,166 @@ public class RequestRepository : IRequestRepository
         }
 
         return disciplines;
+    }
+
+    public IEnumerable<RequestEntity> MappingNexRequestToGroupRequest(List<NexRequestModel> requests, EmployeeSession sessionUser)
+    {
+        List<RequestEntity> responseRequests = [];
+        foreach (var requestInfo in requests)
+        {
+            var toDate = requestInfo.ToDate != DateTime.MinValue
+                ? requestInfo.ToDate.ConvertToClientTimeZone(Constants.NexTimezone)
+                : requestInfo.ToDate;
+            var entity = new RequestEntity
+            {
+                Id = requestInfo.Id,
+                RequestType = new RequestTypeModel { Id = (short)requestInfo.RequestType },
+                Status = new RequestStatus { Id = requestInfo.Status },
+                FromDate = requestInfo.FromDate.ConvertToClientTimeZone(Constants.NexTimezone),
+                ToDate = toDate,
+                TotalDays = requestInfo.TotalDays ?? 0,
+                IsHalfDay = requestInfo.IsHalfDay,
+                FromTime = requestInfo.FromDate.ConvertToClientTimeZone(Constants.NexTimezone),
+                ToTime = toDate,
+                LeaveType = new LeaveType
+                {
+                    Id = requestInfo.LeaveTypeID,
+                    Name = requestInfo.LeaveTypeName ?? string.Empty
+                },
+                Remark = requestInfo.Remark,
+                OriginalCreatedDate = requestInfo.CreatedDate.ConvertToClientTimeZone(Constants.NexTimezone),
+                TotalMins = requestInfo.TotalMins ?? 0,
+                CrossDay = requestInfo.IsCrossDate,
+                ModifiedDate = requestInfo.ModifiedDate?.ConvertToClientTimeZone(Constants.NexTimezone),
+                ApproverId = sessionUser.EmpId,
+                ApproverNickName =  requestInfo.ProcessedBy,
+                ApproverFullName = requestInfo.FullNameProcessedBy,
+                ProcessedByFullName = sessionUser.FullName,
+                ProcessedByNickName = sessionUser.Nickname,
+                ApprovedDate = requestInfo.ProcessedDate?.ConvertToClientTimeZone(Constants.NexTimezone),
+                CompanyId = requestInfo.CompanyId,
+                OriginalRequestedDate = requestInfo.RequestedDate.ConvertToClientTimeZone(Constants.NexTimezone),
+                Requester = new Employee
+                {
+                    Id = requestInfo.EmpId,
+                    NickName = requestInfo.Requester,
+                    FullName = requestInfo.FullNameRequester,
+                    UnitCode = requestInfo.UnitCode,
+                    Team = new Team
+                    {
+                        Name = requestInfo.Team,
+                        Department = new Department
+                        {
+                            Name = requestInfo.DepartmentName
+                        }
+                    }
+                }
+            };
+            responseRequests.Add(entity);
+        }
+
+        return responseRequests;
+    }
+
+    public int? GetNexRequestStatus(string requestStatusId)
+    {
+        const int nexPending = 1;
+        const int nexApproved = 2;
+        const int nexRejected = 3;
+        const string groupHrmPending = "1";
+        const string groupHrmApproved = "4";
+        const string groupHrmRejected = "5";
+        if (string.IsNullOrEmpty(requestStatusId))
+        {
+            return null;
+        }
+
+        if (requestStatusId.Contains(groupHrmPending))
+        {
+            return nexPending;
+        }
+
+        return requestStatusId switch
+        {
+            groupHrmApproved => nexApproved,
+            groupHrmRejected => nexRejected,
+            _ => int.Parse(requestStatusId)
+        };
+    }
+
+    public int GetGroupByNexRequestStatus(int requestStatusId)
+    {
+        const int nexPending = 1;
+        const int nexApproved = 2;
+        const int nexRejected = 3;
+        const int groupHrmPending = 1;
+        const int groupHrmApproved = 4;
+        const int groupHrmRejected = 5;
+
+        return requestStatusId switch
+        {
+            nexPending => groupHrmPending,
+            nexApproved => groupHrmApproved,
+            nexRejected => groupHrmRejected,
+            _ => requestStatusId
+        };
+    }
+
+    public string GetNexRequestType(int requestTypeId)
+    {
+        const int groupAll = 0;
+        const int groupCheckInOut = 1;
+        const int groupLateInOut = 2;
+        const int groupChangeShift = 3;
+        const int groupLeave = 4;
+        const string nexCheckInOut = "1,2";
+        const string nexLateInOut = "3,4";
+        const string nexChangeShift = "5";
+        const string nexLeave = "6";
+
+        return requestTypeId switch
+        {
+            groupAll => "",
+            groupCheckInOut => nexCheckInOut,
+            groupLateInOut => nexLateInOut,
+            groupChangeShift => nexChangeShift,
+            groupLeave => nexLeave,
+            _ => requestTypeId.ToString()
+        };
+    }
+
+    public int GetNexLeaveType(int leaveTypeId)
+    {
+        const int groupAnnualLeave = 1;
+        const int groupWeddingLeave = 6;
+        const int groupBusinessTrip = 9;
+        const int groupMaternityLeave = 12;
+        const int groupPaternityLeave = 14;
+        const int groupBereavementLeave = 21;
+        const int groupUnpaidLeave = 25;
+        const int groupCompanyEvent = 38;
+
+        const int nexAnnualLeave = 2;
+        const int nexWeddingLeave = 6;
+        const int nexBusinessTrip = 9;
+        const int nexMaternityLeave = 13;
+        const int nexPaternityLeave = 27;
+        const int nexBereavementLeave = 22;
+        const int nexUnpaidLeave = 26;
+        const int nexCompanyEvent = 33;
+
+        return leaveTypeId switch
+        {
+            groupAnnualLeave => nexAnnualLeave,
+            groupWeddingLeave => nexWeddingLeave,
+            groupBusinessTrip => nexBusinessTrip,
+            groupMaternityLeave => nexMaternityLeave,
+            groupPaternityLeave => nexPaternityLeave,
+            groupBereavementLeave => nexBereavementLeave,
+            groupUnpaidLeave => nexUnpaidLeave,
+            groupCompanyEvent => nexCompanyEvent,
+            _ => leaveTypeId
+        };
     }
 
     private static List<RequestEntity> FillData(dynamic data)

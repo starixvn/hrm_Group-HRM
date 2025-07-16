@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text.Json;
 using GO.UserControl.Client.Core.Session;
 using HRM.Core;
 using HRM.Core.Constants;
@@ -20,6 +23,9 @@ using HRM.Models.Request.ChangeShift;
 using HRM.Repositories.Interfaces;
 using HRM.Resources;
 using HRM.Services.Interfaces.Request;
+using HRM.Services.Interfaces;
+using HRM.ViewModels.Request;
+using IEmployeeService = HRM.Services.Interfaces.IEmployeeService;
 
 namespace HRM.Services.Implement.Request;
 
@@ -31,7 +37,10 @@ public class RequestService(
     IChangeShiftRequestService changeShiftRequestService,
     ILeaveRequestService leaveRequestService,
     IKeepInViewRequestService keepInViewRequestService,
-    IUserControlSession userControlSession) : IRequestService
+    IUserControlSession userControlSession,
+    IEmployeeService employeeService,
+    ICompanyService companyService,
+    NexConfig nexConfig) : IRequestService
 {
     public static string ToRequestMessage(RequestEntity request, bool isNoFormat = false)
     {
@@ -204,6 +213,40 @@ public class RequestService(
         return await baseService.ExecuteNonQueryAsync(criteria);
     }
 
+    public async Task<CommandResult> SendNexHrmProcessRequest(int actorId, ProcessRequestParam param)
+    {
+        var baseUrl = nexConfig.GetBaseUrlByCompanyId(param.RequesterCompanyId);
+        var command = param.Command is RequestCommand.Reset ? "Disapprove" : param.Command.ToString();
+        var url = $"Request/ProcessRequest?requestId={param.RequestId}&command={command}&processedBy={actorId}";
+        return await SendAsync<CommandResult>(baseUrl, url, HttpMethod.Post);
+    }
+
+    private async Task<T> SendAsync<T>(Uri baseUrl, string pathUrl, HttpMethod method)
+    {
+        var token = await GetTokenAsync(baseUrl);
+        var handler = new HttpClientHandler { ServerCertificateCustomValidationCallback = (_, _, _, _) => true };
+
+        using var httpClient = new HttpClient(handler);
+        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        var url = new Uri($"{baseUrl}{pathUrl}");
+        using var request = new HttpRequestMessage(method, url);
+        using var response = await httpClient.SendAsync(request);
+        response.EnsureSuccessStatusCode();
+        var jsonResult = await response.Content.ReadAsStringAsync();
+        return JsonSerializer.Deserialize<T>(jsonResult);
+    }
+
+    private async Task<string> GetTokenAsync(Uri baseUrl)
+    {
+        var url = new Uri($"{baseUrl}Token/GetToken?username={nexConfig.NexHRId}&password={nexConfig.NexHRPassword}");
+        var handler = new HttpClientHandler { ServerCertificateCustomValidationCallback = (_, _, _, _) => true };
+
+        using var httpClient = new HttpClient(handler);
+        using var request = new HttpRequestMessage(HttpMethod.Post, url);
+        using var response = await httpClient.SendAsync(request);
+        return await response.Content.ReadAsStringAsync();
+    }
+
     public async Task SendMailProcessRequest(ProcessRequestParam param, EmployeeSession actor, RequestCommand command)
     {
         switch (param.RequestTypeId)
@@ -356,9 +399,16 @@ public class RequestService(
 
     private static string GetMessageForCheckInOut(RequestEntity request, bool isNoFormat)
     {
+        var nexCompanyIds = Constants.NexCompanyIds;
+        var requestCompanyId = request.CompanyId;
+        var isInNexCompany = nexCompanyIds != null && nexCompanyIds.Contains(requestCompanyId);
         var msgTemplate = isNoFormat ? RequestFormatConstants.MsgCheckInOutWithNoFormat : RequestFormatConstants.MsgCheckInOut;
         var time = request.RequestedDate.Day == request.FromDate.Day ? request.RequestedDate.ToShortTime() : request.RequestedDate.ToShortTime() + "+";
-        return string.Format(msgTemplate, time, request.FromShift.Name, request.FromDate.ToDateMonthYearFormatedDate());
+        if (isInNexCompany)
+        {
+            time = request.OriginalRequestedDate?.Day == request.FromDate.Day ? request.OriginalRequestedDate?.ToShortTime() : request.OriginalRequestedDate?.ToShortTime() + "+";
+        }
+        return string.Format(msgTemplate, time, request.FromShift?.Name, request.FromDate.ToDateMonthYearFormatedDate());
     }
 
     private static string GetMessageForLateIn(RequestEntity request, bool isNoFormat)
@@ -366,7 +416,7 @@ public class RequestService(
         var msgTemplate = isNoFormat ? RequestFormatConstants.MsgLateInWithNoFormat : RequestFormatConstants.MsgLateIn;
         var actualLateIn = request.ActualLateInEarlyOut == 0 ? Labels.NA : "+" + request.ActualLateInEarlyOut + "'";
 
-        return string.Format(msgTemplate, request.TotalMins, request.FromShift.Name, Utilities.GetMessageDateString(request.FromDate, request.ToDate), actualLateIn);
+        return string.Format(msgTemplate, request.TotalMins, request.FromShift?.Name, Utilities.GetMessageDateString(request.FromDate, request.ToDate), actualLateIn);
     }
 
     private static string GetMessageForEarlyOut(RequestEntity request, bool isNoFormat)
@@ -374,7 +424,7 @@ public class RequestService(
         var msgTemplate = isNoFormat ? RequestFormatConstants.MsgEarlyOutWithNoFormat : RequestFormatConstants.MsgEarlyOut;
         var actualEarlyOut = request.ActualLateInEarlyOut == 0 ? Labels.NA : "-" + request.ActualLateInEarlyOut + "'";
 
-        return string.Format(msgTemplate, request.TotalMins, request.FromShift.Name, Utilities.GetMessageDateString(request.FromDate, request.ToDate), actualEarlyOut);
+        return string.Format(msgTemplate, request.TotalMins, request.FromShift?.Name, Utilities.GetMessageDateString(request.FromDate, request.ToDate), actualEarlyOut);
     }
 
     private static string GetMessageForKeepInView(RequestEntity request, bool isNoFormat)
@@ -450,4 +500,82 @@ public class RequestService(
 
     private static string GetTotalDay(decimal totalDays)
         => totalDays != 0 ? string.Format(RequestFormatConstants.MsgTotalLeaveDays, totalDays.ToString("0.#")) : string.Empty;
+
+    public async Task<List<CommandResult>> SendNexHrmMultipleProcessRequest(int actorId, ApproveRequestsParam param)
+    {
+        var requestsByCompany = param.Requests.GroupBy(r => r.RequesterCompanyId);
+        var results = new List<CommandResult>();
+
+        foreach (var companyGroup in requestsByCompany)
+        {
+            var baseUrl = nexConfig.GetBaseUrlByCompanyId(companyGroup.Key);
+            var requestIds = string.Join(",", companyGroup.Select(r => r.RequestId));
+            var url = $"Request/ProcessMultipleRequest?requestIds={requestIds}&command={param.Command}&processedBy={actorId}";
+
+            var result = await SendAsync<List<CommandResult>>(baseUrl, url, HttpMethod.Post);
+            results.AddRange(result);
+        }
+
+        return results;
+    }
+
+    public async Task<IEnumerable<RequestEntity>> GetNexRequests(RequestViewModel model, EmployeeSession employeeSession)
+    {
+        List<RequestEntity> responseRequests = [];
+        var status = requestRepository.GetNexRequestStatus(model.StatusIds);
+        var requestType = requestRepository.GetNexRequestType(model.RequestType);
+        int? leaveType = null;
+        if (model.LeaveType != null)
+        {
+            leaveType = requestRepository.GetNexLeaveType(model.LeaveType.Value);
+        }
+
+        var supervisorCompanies = await employeeService.GetCompaniesBelongToSupervisor();
+
+        if (!supervisorCompanies.Any())
+        {
+            return responseRequests;
+        }
+        const int AssistantLeader = 1;
+        List<NexRequestModel> requests = [];
+        var companies = await companyService.GetAllCompany();
+        foreach (var companyId in supervisorCompanies)
+        {
+            var criteria = new GetNexRequestCriteria
+            {
+                EmpId = model.EmployeeId == -1 ? null : model.EmployeeId,
+                FromDate = model.FromDate.ToStartOfDay(),
+                ToDate = model.ToDate.ToEndOfDay(),
+                Status = status,
+                RequestType = requestType,
+                isFilterByEffectedDate = model.IsFilterByAffectedDate,
+                ActorId = model.CurrentUserId,
+                LeaveTypeId = leaveType,
+                Role = AssistantLeader,
+                ExcludedEmpID = model.CurrentUserId,
+                CompanyId = companyId
+            };
+
+            var responseData = await baseService.GetDataAsync<NexRequestModel>(criteria);
+            var mappedData = responseData.Select(item =>
+            {
+                item.CompanyId = companyId;
+                item.Status = (byte)requestRepository.GetGroupByNexRequestStatus(item.Status);
+                var companyName = companies
+                    .Where(c => c.CompanyId == item.CompanyId)
+                    .Select(c => c.Name)
+                    .FirstOrDefault();
+                item.Requester += $" ({companyName})";
+                return item;
+            });
+            requests.AddRange(mappedData);
+        }
+
+        responseRequests = requestRepository
+            .MappingNexRequestToGroupRequest(requests, employeeSession)
+            .OrderByDescending(item => item.CreatedDate)
+            .ToList();
+
+        return responseRequests;
+    }
 }

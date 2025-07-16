@@ -10,7 +10,6 @@ using HRM.Models.EmployeeInformation;
 using HRM.Models.Group;
 using HRM.Models.Supervisor;
 using HRM.ViewModels.AnnualLeave;
-using Org.BouncyCastle.Crypto;
 
 namespace HRM.Services.Interfaces;
 
@@ -67,4 +66,6 @@ public interface IEmployeeService
     Task<CommandResult> UpdateUserIdAsync(UpdateUserIdCommand command);
 
     Task<IList<SupervisorNameModel>> CheckAndAddMissingSupervisor(IList<SupervisorNameModel> supervisors, int supervisorId);
+
+    Task<IEnumerable<int>> GetCompaniesBelongToSupervisor();
 }

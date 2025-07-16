@@ -5,6 +5,7 @@ using HRM.Core.Models;
 using HRM.Criteria.Request;
 using HRM.Models.Request;
 using HRM.Models.Request.ChangeShift;
+using HRM.ViewModels.Request;
 
 namespace HRM.Services.Interfaces.Request;
 
@@ -35,4 +36,10 @@ public interface IRequestService
     Task SendMailProcessRequest(ProcessRequestParam param, EmployeeSession actor, RequestCommand command);
 
     Task SendMailProcessRequests(ApproveRequestsParam param, EmployeeSession actor, RequestCommand command);
+
+    Task<CommandResult> SendNexHrmProcessRequest(int actorId, ProcessRequestParam param);
+
+    Task<List<CommandResult>> SendNexHrmMultipleProcessRequest(int actorId, ApproveRequestsParam param);
+
+    Task<IEnumerable<RequestEntity>> GetNexRequests(RequestViewModel model, EmployeeSession employeeSession);
 }

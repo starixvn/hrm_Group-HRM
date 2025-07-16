@@ -1,4 +1,6 @@
-﻿namespace HRM.Core.Constants;
+﻿using System;
+
+namespace HRM.Core.Constants;
 
 public static class Constants
 {
@@ -36,4 +38,14 @@ public static class Constants
     public const string Yes = "Yes";
 
     public const string No = "No";
+
+    public const int NexCompanyId = 1;
+
+    public const int LumiCompanyId = 2;
+
+    public const int NexVisionCompanyId = 34;
+
+    public static readonly TimeSpan NexTimezone = TimeSpan.FromHours(7);
+
+    public static readonly int[] NexCompanyIds = [NexCompanyId, LumiCompanyId, NexVisionCompanyId];
 }

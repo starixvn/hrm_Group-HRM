@@ -3,11 +3,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Repositories.Interfaces;
 using System.Threading.Tasks;
 using Core;
 using Core.Constants;
 using Core.Enums;
 using Core.Filters;
+using Core.Models;
 using Criteria.Supervisor;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
@@ -17,8 +19,10 @@ using HRM.Services.Interfaces.Request;
 using HRM.ViewModels.Request;
 using Microsoft.AspNetCore.Mvc;
 using Models.Supervisor;
+using Fanex.Common.Extensions;
 using Services.Implement;
 using Services.Interfaces;
+using HRM.Core.Services;
 
 public class RequestController(
     IUserControlSession session,
@@ -26,7 +30,10 @@ public class RequestController(
     IRequestService requestService,
     ICommonDataService commonDataService,
     ITeamService teamService,
-    IAttachFileService attachFileService) : BaseController(session)
+    IAttachFileService attachFileService,
+    IBaseService baseService,
+    IRequestRepository requestRepository,
+    ICompanyService companyService) : BaseController(session)
 {
     private const string EmployeeRequestViewName = "EmployeeRequest";
 
@@ -43,9 +50,44 @@ public class RequestController(
             request.FromDate = DateTimeOffset.Now.Date.AddDays(fromDays);
             request.IsFilterByAffectedDate = false;
         }
+        var isLocal = request.IsLocal != 0;
+        if (isLocal && request.IsShowCrossCompany)
+        {
+            request.CurrentUserId = session.UserId;
+            var nexRequest = (await requestService.GetNexRequests(request, EmployeeSession)).ToList();
+            request.Requests = nexRequest;
+        }
+
         await GetRequestAsync(request);
         await GetInfoAttachFileAsync(request.Requests);
+        ViewBag.NexCompanyIds = Constants.NexCompanyIds;
         return View(EmployeeRequestViewName, request);
+    }
+
+    public async Task<ActionResult> ViewHistory(string id)
+    {
+        var splitCustomId = id.Split("_");
+        var companyId = int.Parse(splitCustomId[1]);
+        var requestId = int.Parse(splitCustomId[0]);
+        var criteria = new GetNexRequestHistoryCriteria
+        {
+            RequestId = requestId,
+            CompanyId = companyId
+        };
+        var history = await baseService.GetDataAsync<NexRequestModel>(criteria);
+        history = history.OrderByDescending(h => h.ProcessedDate);
+        Parallel.ForEach(history, h =>
+        {
+            h.Status = (byte)requestRepository.GetGroupByNexRequestStatus(h.Status);
+            h.ModifiedDate = h.ModifiedDate?.ConvertToClientTimeZone(Constants.NexTimezone);
+            h.CreatedDate = h.CreatedDate.ConvertToClientTimeZone(Constants.NexTimezone);
+            h.ProcessedDate = h.ProcessedDate?.ConvertToClientTimeZone(Constants.NexTimezone);
+            h.FromDate = h.FromDate.ConvertToClientTimeZone(Constants.NexTimezone);
+            h.ToDate = h.ToDate != DateTime.MinValue ? h.ToDate.ConvertToClientTimeZone(Constants.NexTimezone) : h.ToDate;
+        });
+        var requestType = history.FirstOrDefault()?.RequestType;
+        var isCheckInOutType = requestType is (int)RequestType.CheckIn or (int)RequestType.CheckOut;
+        return PartialView(isCheckInOutType ? "NexHistory/_CheckInOutHistory" : "NexHistory/_LeaveHistory", history);
     }
 
     private async Task GetInfoAttachFileAsync(IList<RequestEntity> requests)
@@ -140,6 +182,15 @@ public class RequestController(
     [HrmPermission(Policy.Host, FunctionKey.VerifyRequest, FunctionKey.ApproveRequest, FunctionKey.ProcessRequest, FunctionKey.VoidRequest)]
     public async Task<PartialViewResult> PartialViewProcessRequest(ProcessRequestViewModel model)
     {
+        var companyId = model.CompanyId;
+        var isInNexCompany = companyId.HasValue
+                             && Constants.NexCompanyIds?.Contains(companyId.Value) == true;
+
+        if (isInNexCompany)
+        {
+            return PartialView("_ProcessRequest", model);
+        }
+
         if (model is { RequestId: > 0, RoleId: (byte)RoleSystem.Approver, Command: RequestCommand.Approve })
         {
             await HandleProcessRequest(model);
@@ -152,19 +203,27 @@ public class RequestController(
     [HrmPermission(Policy.Host, FunctionKey.VerifyRequest, FunctionKey.ApproveRequest, FunctionKey.ProcessRequest, FunctionKey.VoidRequest)]
     public async Task<IActionResult> ProcessRequest(ProcessRequestParam model)
     {
-        var commandResult = model.Command switch
+        CommandResult commandResult;
+        if (Constants.NexCompanyIds.Contains(model.RequesterCompanyId))
         {
-            RequestCommand.Accept or RequestCommand.Approve or RequestCommand.Process => await requestService
-                .ApproveRequest(session.UserId, model),
-            RequestCommand.Reset => await requestService.ResetRequest(session.UserId, model),
-            RequestCommand.NotAccept or RequestCommand.Reject or RequestCommand.Void => await requestService
-                .RejectRequest(session.UserId, model),
-            _ => await requestService.VoidRequest(session.UserId, model)
-        };
+            commandResult = await requestService.SendNexHrmProcessRequest(session.UserId, model);
+        }
+        else
+        {
+            commandResult = model.Command switch
+            {
+                RequestCommand.Accept or RequestCommand.Approve or RequestCommand.Process => await requestService
+                    .ApproveRequest(session.UserId, model),
+                RequestCommand.Reset => await requestService.ResetRequest(session.UserId, model),
+                RequestCommand.NotAccept or RequestCommand.Reject or RequestCommand.Void => await requestService
+                    .RejectRequest(session.UserId, model),
+                _ => await requestService.VoidRequest(session.UserId, model)
+            };
 
-        if (commandResult.IsSuccessful)
-        {
-            await requestService.SendMailProcessRequest(model, EmployeeSession, model.Command);
+            if (commandResult.IsSuccessful)
+            {
+                await requestService.SendMailProcessRequest(model, EmployeeSession, model.Command);
+            }
         }
 
         return new JsonResult(commandResult);
@@ -175,15 +234,27 @@ public class RequestController(
     public async Task<IActionResult> ProcessMultipleRequests(ApproveRequestsParam model)
     {
         model.ActorId = session.UserId;
+        var nexCompanyRequests = model.Requests.Where(r => Constants.NexCompanyIds.Contains(r.RequesterCompanyId)).ToList();
+        var localRequests = model.Requests.Where(r => !Constants.NexCompanyIds.Contains(r.RequesterCompanyId)).ToList();
 
-        var commandResult = await requestService.ApproveRequests(model);
-
-        if (commandResult.IsSuccessful)
+        var commandResults = new List<CommandResult>();
+        if (nexCompanyRequests.Count > 0)
+        {
+            model.Requests = nexCompanyRequests;
+            var nexCommandResults = await requestService.SendNexHrmMultipleProcessRequest(session.UserId, model);
+            commandResults.AddRange(nexCommandResults);
+        }
+        model.Requests = localRequests;
+        var localCommandResult = await requestService.ApproveRequests(model);
+        commandResults.Add(localCommandResult);
+        if (localCommandResult.IsSuccessful)
         {
             await requestService.SendMailProcessRequests(model, EmployeeSession, model.Command);
         }
 
-        return new JsonResult(commandResult);
+        var finalResult = commandResults.Find(r => !r.IsSuccessful) ?? commandResults.Find(r => true);
+
+        return new JsonResult(finalResult);
     }
 
     private async Task HandleProcessRequest(ProcessRequestViewModel model)
@@ -227,7 +298,7 @@ public class RequestController(
         {
             EmpId = employeeId,
             FromDate = request.IsFilterByAffectedDate ? request.FromDate.ToStartOfDay() : request.FromDate.ToStartOfDay().ToServerTimeZone(),
-            ToDate = request.IsFilterByAffectedDate ? request.ToDate.ToEndOfDay() : request.ToDate.ToEndOfDay().ToClientTimeZone(),
+            ToDate = request.IsFilterByAffectedDate ? request.ToDate.ToEndOfDay() : request.ToDate.ToEndOfDay().ToServerTimeZone(),
             TeamIds = request.TeamIds,
             Status = request.StatusIds,
             RequestType = request.RequestType,
@@ -247,8 +318,16 @@ public class RequestController(
             rq.FromTime = rq.FromTime.ToClientTimeZone();
             rq.ToTime = rq.ToTime.ToClientTimeZone();
         });
+        request.Requests ??= new List<RequestEntity>();
+        requests.ForEach(item =>
+        {
+            request.Requests.Add(item);
+        });
         request.CurrentUserId = session.UserId;
-        request.Requests = request.ViewType == RequestViewType.PersonalSpace ? SortRequest(requests) : requests;
+        request.Requests = request.Requests
+            .OrderByDescending(r => r.CreatedDate)
+            .ToList();
+        request.Requests = request.ViewType == RequestViewType.PersonalSpace ? SortRequest(request.Requests) : request.Requests;
     }
 
     private List<RequestEntity> SortRequest(IList<RequestEntity> requests)

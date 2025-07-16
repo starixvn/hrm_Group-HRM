@@ -76,7 +76,7 @@
         <Setting Key="Report_MonthlyWorkingHours_EmployeeRequest" SpName="Report_MonthlyWorkingHours_EmployeeRequest" DbName="bodb_HRM" Plain="0" />
         <Setting Key="Report_ShiftStatistic" SpName="Report_ShiftStatistic" DbName="bodb_HRM" Plain="0" />
         <Setting Key="Report_ShiftStatisticDetail" SpName="Report_ShiftStatisticDetail" DbName="bodb_HRM" Plain="0" />
-        <Setting Key="WorkingTimeRequest_GetRequestByCreateDate_AllType" SpName="WorkingTimeRequest_GetRequestByCreateDate_AllType" DbName="bodb_HRM" Plain="0" />
+		<Setting Key="WorkingTimeRequest_GetRequestByCreateDate_AllType" SpName="WorkingTimeRequest_GetRequestByCreateDate_AllType" DbName="bodb_HRM" Plain="0" />
         <Setting Key="Employee_GetSupervisorForRequest" SpName="Employee_GetSupervisorForRequest" DbName="bodb_HRM" Plain="0" />
         <Setting Key="Employee_GetVerifierAndApprover" SpName="Employee_GetVerifierAndApprover" DbName="bodb_HRM" Plain="0" />
         <Setting Key="EmployeeSupervisor_Get" SpName="EmployeeSupervisor_Get" DbName="bodb_HRM" Plain="0">
@@ -103,8 +103,14 @@
 		<Setting Key="Employee_GetHRAndSupervisorByEmpId" SpName="Employee_GetHRAndSupervisorByEmpId" DbName="bodb_HRM" Plain="0" />
         <Setting Key="Employee_GetEmployeeForPIC" SpName="Employee_GetEmployeeForPIC" DbName="bodb_HRM" Plain="0" />
 		<Setting Key="TimeRecord_GetCheckInOutOnline" SpName="TimeRecord_GetCheckInOutOnline" DbName="bodb_HRM" Plain="0" />
-    </Function>
-    <Function Name="Group">
+		<Setting Key="Nex_WorkingTimeRequest_GetRequestByDate" SpName="WorkingTimeRequest_GetRequestByDate" DbName="nex_HRM" Plain="0" />
+		<Setting Key="Lumi_WorkingTimeRequest_GetRequestByDate" SpName="WorkingTimeRequest_GetRequestByDate" DbName="lumi_HRM" Plain="0" />
+		<Setting Key="NexVision_WorkingTimeRequest_GetRequestByDate" SpName="WorkingTimeRequest_GetRequestByDate" DbName="nexvision_HRM" Plain="0" />
+        <Setting Key="Nex_WorkingTimeRequest_GetRequestHistory" SpName="WorkingTimeRequest_GetRequestHistory" DbName="nex_HRM" Plain="0" />
+        <Setting Key="Lumi_WorkingTimeRequest_GetRequestHistory" SpName="WorkingTimeRequest_GetRequestHistory" DbName="lumi_HRM" Plain="0" />
+        <Setting Key="NexVision_WorkingTimeRequest_GetRequestHistory" SpName="WorkingTimeRequest_GetRequestHistory" DbName="nexvision_HRM" Plain="0" />
+	</Function>
+	<Function Name="Group">
         <Setting Key="EmployeeGroup_GetGroup" SpName="EmployeeGroup_GetGroup" DbName="bodb_HRM" Plain="0" />
         <Setting Key="GetGroupOfEmployee" SpName="EmployeeGroup_GetGroupOfEmployee" DbName="bodb_HRM" Plain="0" />
         <Setting Key="Group_Get" SpName="Group_Get" DbName="bodb_HRM" Plain="0">
@@ -112,7 +118,8 @@
             <Mapping DataField="DepartmentId" ObjectProperty="Id" Class="Department" />
         </Setting>
         <Setting Key="Group_GetBySupervisor" SpName="Group_GetBySupervisor" DbName="bodb_HRM" Plain="0" />
-        <Setting Key="GroupSupervisor_GetById" SpName="GroupSupervisor_GetById" DbName="bodb_HRM" Plain="0" />
+		<Setting Key="GroupSupervisor_GetById" SpName="GroupSupervisor_GetById" DbName="bodb_HRM" Plain="0" />
+		<Setting Key="SupervisorCompanies_GetByEmpId" SpName="SupervisorCompanies_GetByEmpId" DbName="bodb_HRM" Plain="0" />
         <Setting Key="GroupSupervisor_GetByRole" SpName="GroupSupervisor_GetByRole" DbName="bodb_HRM" Plain="0">
             <Mapping DataField="HasCheckInOut" ObjectProperty="CheckInOuts" />
             <Mapping DataField="HasLateInEarlyOut" ObjectProperty="LateInEarlyOuts" />

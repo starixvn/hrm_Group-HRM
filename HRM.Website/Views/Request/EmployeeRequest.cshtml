@@ -4,17 +4,19 @@
 @using HRM.Services.Implement.Request
 @using HRM.Website.Helper
 @using Microsoft.AspNetCore.Mvc.TagHelpers
+@using System.Linq;
 @model HRM.ViewModels.Request.RequestViewModel
 
 @{
     ViewBag.Title = Model.PageTitle;
+    int[] nexCompanyIds = ViewBag.NexCompanyIds as int[];
     var hasCheckBoxColumn = Model.ViewType is RequestViewType.PersonalSpace or RequestViewType.HRSpace ? "has-check-box-column" : "";
 }
 @section css {
     <link href="~/dist/styles/employee.request.css" rel="stylesheet" />
 }
 @section js {
-    <script src="~/dist/js/employee.request.js"></script>
+    <script src="~/dist/js/employee.request.js?v=@DateTime.Now.Ticks"></script>
 }
 @section Breadcrumb {
     <a class="step">@Model.BreadcrumbText</a><span class="step">@ViewBag.Title</span>
@@ -135,6 +137,9 @@
             <tbody id="employee-request-body" class="@hasCheckBoxColumn">
                 @foreach (var request in Model.Requests)
                 {
+	                var requestCompanyId = request.CompanyId;
+	                var isInNexCompany = nexCompanyIds != null && nexCompanyIds.Contains(requestCompanyId);
+
                     <tr id="row@(request.Id)">
                         @switch (Model.ViewType)
                         {
@@ -150,9 +155,10 @@
                                                    roleid="@Convert.ToInt32(RoleSystem.Approver)"
                                                    requesttypeid="@request.RequestType.Id"
                                                    employeeid="@request.Requester.Id"
-                                                   id="@request.Id"
+                                                   companyid="@request.CompanyId"
+                                                   id="@request.CustomId"
                                                    viewtype="@Model.ViewType" />
-                                            <label for="@request.Id"></label>
+                                            <label for="@request.CustomId"></label>
                                         }
                                         else {if (request.VerifierId == Model.CurrentUserId && request.Status.Id == (byte)CurrentRequestStatus.Pending)
                                             {
@@ -161,9 +167,10 @@
                                                        roleid="@Convert.ToInt32(RoleSystem.Verifier)"
                                                        requesttypeid="@request.RequestType.Id"
                                                        employeeid="@request.Requester.Id"
-                                                       id="@request.Id"
+                                                       companyid="@request.CompanyId"
+                                                        id="@request.CustomId"
                                                        viewtype="@Model.ViewType" />
-                                                <label for="@request.Id"></label>
+                                                <label for="@request.CustomId"></label>
                                             }
                                         }
                                     </div>
@@ -181,6 +188,7 @@
                                                    roleid="@Convert.ToInt32(RoleSystem.HR)"
                                                    requesttypeid="@request.RequestType.Id"
                                                    employeeid="@request.Requester.Id"
+                                                   companyid="@request.CompanyId"
                                                    id="@request.Id"
                                                    viewtype="@Model.ViewType" />
                                             <label for="@request.Id"></label>
@@ -200,15 +208,30 @@
                         <td>
                             @switch (request.RequestType.Id)
                             {
-                                case (byte)RequestType.Leave:
-                                    <a href="@Url.Action("Detail", "Leave", new { id = request.Id })">@request.LeaveType.Name</a>
-                                    break;
-                                case (byte)RequestType.ChangeShift:
-                                    <a href="@Url.Action("Details", "ChangeShift", new { id = request.Id })">@request.RequestType.Name</a>
-                                    break;
-                                default:
-                                    @request.RequestType.Name
-                                    break;
+	                            case (byte)RequestType.Leave:
+                                    @if (isInNexCompany)
+                                    {
+                                        @request.LeaveType.Name
+                                    }
+                                    else
+                                    {
+                                        <a href="@Url.Action("Detail", "Leave", new { id = request.Id })">@request.LeaveType.Name</a>
+                                    }
+		                            break;
+	                            case (byte)RequestType.ChangeShift:
+		                            @if (isInNexCompany)
+		                            {
+                                        @request.RequestType.Name
+		                            }
+		                            else
+		                            {
+                                        <a href="@Url.Action("Details", "ChangeShift", new { id = request.Id })">@request.RequestType.Name</a>
+                                    }
+		                            break;
+	                            default:
+		                            @request.RequestType.Name
+		                            break;
+		                            ;
                             }
                         </td>
                         <td class="align-left">
@@ -221,7 +244,14 @@
                             <span class="tooltip-tipsy" title="@request.VerifierFullName">@request.VerifierNickName</span>
                         </td>
                         <td>
-                            <span class="tooltip-tipsy" title="@request.ApproverFullName">@request.ApproverNickName</span>
+	                        @if (isInNexCompany)
+	                        {
+                                <span class="tooltip-tipsy" title="@request.ProcessedByFullName">@request.ProcessedByNickName</span>
+	                        }
+	                        else
+	                        {
+                                <span class="tooltip-tipsy" title="request.ApproverFullName">@request.ApproverNickName</span>
+	                        }
                         </td>
                         <td>
                             @if (!string.IsNullOrWhiteSpace(request.Remark))
@@ -244,9 +274,25 @@
                                 }
                             </td>
                         }
-                        <td data-datetime="@request.CreatedDate">@request.CreatedDate.ToDetailFormatedDate()</td>
+                        @if (isInNexCompany)
+                        {
+                            <td data-datetime="@request.OriginalCreatedDate">@request.OriginalCreatedDate?.ToDetailFormatedDate()</td>
+                        }
+                        else
+                        {
+	                        <td data-datetime="@request.CreatedDate">@request.CreatedDate.ToDetailFormatedDate()</td>
+                        }
                         <td class="status">@await Html.PartialAsync("_RenderStatus", (Model, request))</td>
-                        <td>@await Html.PartialAsync("_RenderHistoryLink", request)</td>
+                        <td>
+                            @if (isInNexCompany)
+                            {
+	                            <a class="viewhistory" href="javascript:;" id="/request/viewhistory/@request.CustomId">@Labels.View</a>
+                            }
+                            else
+                            {
+	                            @await Html.PartialAsync("_RenderHistoryLink", request)
+                            }
+                        </td>
                         <td class="td-warning">
                             @if (request.IsWarning)
                             {
