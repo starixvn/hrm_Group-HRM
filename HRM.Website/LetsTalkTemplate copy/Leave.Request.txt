@@ -1,0 +1,7 @@
+{0}
+- Employee No: {1}
+- Name: {2}
+- Leave Type: {3}
+- Period: {4}
+- Deputy: {5}
+- Remark: {6}

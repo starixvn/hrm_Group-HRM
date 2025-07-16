@@ -23,5 +23,7 @@ namespace HRM.Services.Interfaces
         Task<CompanySetting> GetByIdAsync(int companyId);
 
         Task<string> GetWhitelistIps();
+        
+        string GetDomainName();
     }
 }

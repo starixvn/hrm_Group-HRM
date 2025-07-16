@@ -23,4 +23,9 @@ public class SupervisorNameModel
     public string DisplayName => NickName + " (" + FullName + ")";
 
     public string LetsTalk { get; set; }
+
+    public string EmpCode { get; set; }
+
+    public string PICDisplayName { get; set; }
+
 }

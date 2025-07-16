@@ -1,0 +1,4 @@
+Your leave request {0} by {1}.
+- Date: {2}
+- Type: {3}
+- Remark: {4}

@@ -1,4 +1,7 @@
-﻿namespace HRM.Models;
+﻿using HRM.Core.Enums;
+using HRM.Models.LetsTalk;
+
+namespace HRM.Models;
 
 public class EmailModel
 {
@@ -12,7 +15,30 @@ public class EmailModel
 
     public string SendToNickName { get; set; }
 
+    public string SendToDisplayName { get; set; }
+
     public bool IsAllowSendRequester { get; set; }
 
-    public string LetsTalk { get; set; }
+    public string RequesterCode { get; set; }
+
+    public string PICDisplayName { get; set; }
+
+    public long RequestId { get; set; }
+
+    public int? RequestType { get; set; }
+
+    public string CallbackUrl { get; set; }
+
+    public LetsTalkActor Approver { get; set; }
+
+    public LetsTalkActor Verifier { get; set; }
+
+    public LetsTalkActor Owner { get; set; }
+
+}
+
+public class LetsTalkActor
+{
+    public string LetsTalkId { get; set; }
+    public ReplyMarkup ReplyMarkup { get; set; }
 }

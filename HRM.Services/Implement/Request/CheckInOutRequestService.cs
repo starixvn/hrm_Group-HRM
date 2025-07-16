@@ -24,7 +24,6 @@ public class CheckInOutRequestService(
     IBaseService baseService,
     IRequestMailService requestMailService,
     IEmailService emailService,
-    ILetstalkService letStalkService,
     IUserControlSession userControlSession,
     ICompanyService companyService) : ICheckInOutRequestService
 {
@@ -125,8 +124,6 @@ public class CheckInOutRequestService(
                 email.Subject,
                 email.Body,
                 request.Approver.CompanyId);
-
-            await letStalkService.SendNotificationAsync(email.LetsTalk, email.Subject, email.Body);
         }
     }
 
@@ -164,8 +161,6 @@ public class CheckInOutRequestService(
                 email.Subject,
                 email.Body,
                 request.Approver.CompanyId);
-
-            await letStalkService.SendNotificationAsync(email.LetsTalk, email.Subject, email.Body);
         }
     }
 
@@ -193,8 +188,6 @@ public class CheckInOutRequestService(
                 email.SendCC,
                 email.Subject,
                 email.Body);
-
-            await letStalkService.SendNotificationAsync(email.LetsTalk, email.Subject, email.Body);
         }
     }
 
@@ -230,8 +223,6 @@ public class CheckInOutRequestService(
                 email.Subject,
                 email.Body,
                 companyId: request.Requester.CompanyId);
-
-            await letStalkService.SendNotificationAsync(email.LetsTalk, email.Subject, email.Body);
         }
     }
 }

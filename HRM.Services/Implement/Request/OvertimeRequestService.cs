@@ -21,7 +21,6 @@ public class OvertimeRequestService(
     IOvertimeRequestRepository overtimeRepository,
     IBaseService baseService,
     IEmailService emailService,
-    ILetstalkService letStalkService,
     IUserControlSession userControlSession) : IOvertimeRequestService
 {
     private const byte FromDay = 21;
@@ -119,20 +118,12 @@ public class OvertimeRequestService(
         if (employees.Count > 0)
         {
             var emailList = employees.Where(t => !string.IsNullOrWhiteSpace(t.Email)).Select(t => t.Email).ToList();
-            var letStalkList = employees.Where(t => !string.IsNullOrWhiteSpace(t.LetsTalk)).Select(t => t.LetsTalk).ToList();
             var emails = SplitList(emailList, 100);
-            var letStalks = SplitList(letStalkList, 100);
 
             foreach (var list in emails)
             {
                 var mailTo = string.Join(";", list);
                 await emailService.SendEmailAsync(mailTo, string.Empty, subject, content);
-            }
-
-            foreach (var letStalk in letStalks)
-            {
-                var letStalkJoin = string.Join(";", letStalk);
-                await Task.Run(() => letStalkService.SendNotificationAsync(letStalkJoin, subject, content));
             }
         }
     }

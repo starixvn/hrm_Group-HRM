@@ -1,0 +1,4 @@
+This is to inform you about {1} has been cancel {2} request.
+- Date: {3} ({4})
+- Time: {5}
+- Remark: {6}

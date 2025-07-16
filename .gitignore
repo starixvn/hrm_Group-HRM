@@ -47,3 +47,4 @@ node_modules/
 *.cobertura.xml
 *.pubxml
 __snapshots__/
+.vscode/

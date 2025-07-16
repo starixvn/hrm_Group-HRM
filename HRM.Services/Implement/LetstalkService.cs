@@ -4,28 +4,28 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using HRM.Core.Models;
 using HRM.Letstalk.Core.Services.Interfaces;
+using HRM.Models.LetsTalk;
 using Interfaces;
+using Newtonsoft.Json;
 
 public class LetstalkService(
     LetstalkSettings letstalkSettings,
     ISendNotificationService sendNotificationService) : ILetstalkService
 {
-    private const string TemplateContent = "<strong>{0}</strong><br /> {1}";
 
-    public async Task SendNotificationAsync(string letstalkId, string subject, string message)
+    public async Task SendNotificationAsync(string letstalkId, string content, ReplyMarkup replyMarkup = null)
     {
-        var letstalk = !string.IsNullOrWhiteSpace(letstalkSettings.TestingAccountId) ? letstalkSettings.TestingAccountId : letstalkId;
-        if (letstalkSettings.Enable && !string.IsNullOrWhiteSpace(letstalk))
+        if (letstalkSettings.Enable && !string.IsNullOrWhiteSpace(letstalkId))
         {
             var jwtToken = await sendNotificationService.GetTokenAsync(letstalkSettings.BaseUrl, letstalkSettings.Username, letstalkSettings.Password);
             if (jwtToken != null)
             {
-                var content = string.Format(TemplateContent, subject, message);
                 var data = new Dictionary<string, object>
                 {
                     { "BotId", letstalkSettings.BotId },
-                    { "ConversationId", letstalk },
-                    { "Message", content }
+                    { "ConversationId", letstalkId },
+                    { "Message", content },
+                    { "ReplyMarkup", JsonConvert.SerializeObject(replyMarkup) }
                 };
 
                 await sendNotificationService.SendNotificationToLetstalkAsync(letstalkSettings.BaseUrl, jwtToken.Token, data);
@@ -33,20 +33,19 @@ public class LetstalkService(
         }
     }
 
-    public void SendNotification(string letstalkId, string subject, string message)
+    public void SendNotification(string letstalkId, string content, ReplyMarkup replyMarkup = null)
     {
-        var letstalk = !string.IsNullOrWhiteSpace(letstalkSettings.TestingAccountId) ? letstalkSettings.TestingAccountId : letstalkId;
-        if (letstalkSettings.Enable && !string.IsNullOrWhiteSpace(letstalk))
+        if (letstalkSettings.Enable && !string.IsNullOrWhiteSpace(letstalkId))
         {
             var jwtToken = sendNotificationService.GetToken(letstalkSettings.BaseUrl, letstalkSettings.Username, letstalkSettings.Password);
             if (jwtToken != null)
             {
-                var content = string.Format(TemplateContent, subject, message);
                 var data = new Dictionary<string, object>
                 {
                     { "BotId", letstalkSettings.BotId },
-                    { "ConversationId", letstalk },
-                    { "Message", content }
+                    { "ConversationId", letstalkId },
+                    { "Message", content },
+                    { "ReplyMarkup", JsonConvert.SerializeObject(replyMarkup) }
                 };
 
                 sendNotificationService.SendNotificationToLetstalk(letstalkSettings.BaseUrl, jwtToken.Token, data);

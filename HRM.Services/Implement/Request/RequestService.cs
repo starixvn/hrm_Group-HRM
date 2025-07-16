@@ -22,8 +22,8 @@ using HRM.Models.Request;
 using HRM.Models.Request.ChangeShift;
 using HRM.Repositories.Interfaces;
 using HRM.Resources;
-using HRM.Services.Interfaces.Request;
 using HRM.Services.Interfaces;
+using HRM.Services.Interfaces.Request;
 using HRM.ViewModels.Request;
 using IEmployeeService = HRM.Services.Interfaces.IEmployeeService;
 
@@ -171,7 +171,11 @@ public class RequestService(
     public async Task<CommandResult> RejectRequest(int actorId, ProcessRequestParam param)
     {
         var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
-
+        if (companyId == 0)
+        {
+            var company = await companyService.GetCompanySiteByDomainAsync();
+            companyId = company.CompanyId;
+        }
         var criteria = new RejectRequestCriteria
         {
             RequestId = param.RequestId,
@@ -187,6 +191,11 @@ public class RequestService(
     public async Task<CommandResult> ResetRequest(int actorId, ProcessRequestParam param)
     {
         var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
+        if (companyId == 0)
+        {
+            var company = await companyService.GetCompanySiteByDomainAsync();
+            companyId = company.CompanyId;
+        }
         var criteria = new ResetRequestCriteria
         {
             RequestId = param.RequestId,
@@ -201,7 +210,11 @@ public class RequestService(
     public async Task<CommandResult> VoidRequest(int actorId, ProcessRequestParam param)
     {
         var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
-
+        if (companyId == 0)
+        {
+            var company = await companyService.GetCompanySiteByDomainAsync();
+            companyId = company.CompanyId;
+        }
         var criteria = new VoidRequestCriteria
         {
             RequestId = param.RequestId,

@@ -27,7 +27,6 @@ public class ChangeShiftRequestService(
     IBaseService baseService,
     IEmailService emailService,
     IRequestMailService requestMailService,
-    ILetstalkService letStalkService,
     IUserControlSession userControlSession,
     ICompanyService companyService) : IChangeShiftRequestService
 {
@@ -208,8 +207,7 @@ public class ChangeShiftRequestService(
                 domain);
 
             await Task.WhenAll(
-                emailService.SendEmailAsync(email.SendTo, email.SendCC, email.Subject, email.Body, request.Approver.CompanyId),
-                letStalkService.SendNotificationAsync(email.LetsTalk, email.Subject, email.Body)
+                emailService.SendEmailAsync(email.SendTo, email.SendCC, email.Subject, email.Body, request.Approver.CompanyId)
             );
         }
     }
@@ -240,8 +238,7 @@ public class ChangeShiftRequestService(
                 domain);
 
             await Task.WhenAll(
-                emailService.SendEmailAsync(email.SendTo, email.SendCC, email.Subject, email.Body, request.Approver.CompanyId),
-                letStalkService.SendNotificationAsync(email.LetsTalk, email.Subject, email.Body)
+                emailService.SendEmailAsync(email.SendTo, email.SendCC, email.Subject, email.Body, request.Approver.CompanyId)
             );
         }
     }
@@ -265,8 +262,7 @@ public class ChangeShiftRequestService(
                 request.Remark);
 
             await Task.WhenAll(
-                emailService.SendEmailAsync(email.SendTo, email.SendCC, email.Subject, email.Body),
-                letStalkService.SendNotificationAsync(email.LetsTalk, email.Subject, email.Body)
+                emailService.SendEmailAsync(email.SendTo, email.SendCC, email.Subject, email.Body)
             );
         }
     }
@@ -295,8 +291,7 @@ public class ChangeShiftRequestService(
                 request.Remark);
 
             await Task.WhenAll(
-                emailService.SendEmailAsync(email.SendTo, email.SendCC, email.Subject, email.Body, companyId: request.Requester.CompanyId),
-                letStalkService.SendNotificationAsync(email.LetsTalk, email.Subject, email.Body)
+                emailService.SendEmailAsync(email.SendTo, email.SendCC, email.Subject, email.Body, companyId: request.Requester.CompanyId)
             );
         }
     }
