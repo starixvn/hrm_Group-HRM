@@ -7,7 +7,7 @@
 @import "../../components/sweet-modal";
 
 .filter, .table-custom {
-    max-width: 70%;
+    max-width: 992px;
 }
 
 .btn {
@@ -31,4 +31,20 @@
 
 .text-right {
     text-align: right !important;
+}
+
+.table.table-custom {
+    tbody {
+        tr.even-row {
+            background: #ececec !important;
+        }
+
+        tr.odd-row {
+            background: #fff !important;
+        }
+
+        tr.hovered-row {
+            background: #e3eceb !important;
+        }
+    }
 }

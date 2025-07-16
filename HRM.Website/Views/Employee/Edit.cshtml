@@ -1,6 +1,7 @@
 ﻿@using GO.UserControl.Client.Core.Models.Role
 @using HRM.Core
 @using HRM.Core.Enums
+@using HRM.Models.SalaryStructure
 @using HRM.Resources
 @model HRM.Models.Employee
 @{
@@ -8,7 +9,7 @@
     var roles = (IEnumerable<Role>)ViewBag.Roles;
     var roleItems = roles.Select(r => new SelectListItem { Value = r.RoleId.ToString(), Text = r.Name });
     var enableGroupDate = (bool)ViewBag.EnableGroupDate;
-    var salaryStructures = (IEnumerable<HRM.Models.SalaryStructure>)ViewBag.SalaryStructures;
+    var salaryStructures = (IEnumerable<SalaryStructure>)ViewBag.SalaryStructures;
     var hasReadPermissionOnSalaryStructure = (bool)ViewBag.HasReadPermissionOnSalaryStructure;
     var hasHostPermissionOnSalaryStructure = (bool)ViewBag.HasHostPermissionOnSalaryStructure;
 }
@@ -408,6 +409,47 @@
             </li>
             <li class="list-group-item form-group">
                 <div class="label-form">
+                    @Html.LabelFor(model => model.SalaryStructureId, Labels.SalaryStructure, new { @class = "control-label" })
+                </div>
+                <div class="select-form">
+                    @{
+                        var items = salaryStructures.Select(x => new SelectListItem
+                {
+                    Value = x.SalaryStructureId.ToString(),
+                    Text = x.Name
+                });
+                        @Html.DropDownListFor(model => model.SalaryStructureId,
+                             items,
+                             "--Select a Salary Structure--",
+                             new { @class = "form-control" })
+                    }
+                </div>
+            </li>
+            @if (hasReadPermissionOnSalaryStructure || hasHostPermissionOnSalaryStructure)
+            {
+                <li class="list-group-item form-group">
+                    <div class="label-form">
+                        @Html.LabelFor(model => model.Salary, Labels.NonStandardSalaryStructure, new { @class = "control-label" })
+                    </div>
+                    <div class="select-form">
+                        @if (!hasHostPermissionOnSalaryStructure)
+                        {
+                            <span>@Model.Salary</span>
+                            @Html.HiddenFor(model => model.Salary)
+                        }
+                        else
+                        {
+                            @Html.TextBoxFor(model => model.Salary, new { @class = "form-control", @type = "number", @min = "0", @step = "0.01" })
+                        }
+                    </div>
+                </li>
+            }
+            else
+            {
+                @Html.HiddenFor(model => model.Salary)
+            }
+            <li class="list-group-item form-group">
+                <div class="label-form">
                     @Html.LabelFor(model => model.PromotionDate, Labels.PromotionDate, new { @class = "control-label" })
                 </div>
                 <div class="calendar-form">
@@ -544,55 +586,6 @@
                     @Html.TextBoxFor(model => model.OffDaysbyWeek, new { @class = "form-control" })
                 </div>
             </li>
-            @if (hasReadPermissionOnSalaryStructure || hasHostPermissionOnSalaryStructure)
-            {
-                <li class="list-group-item form-group">
-                    <div class="label-form">
-                        @Html.LabelFor(model => model.SalaryStructureId, Labels.SalaryStructure, new { @class = "control-label" })
-                    </div>
-                    <div class="select-form">
-                        @if (!hasHostPermissionOnSalaryStructure)
-                        {
-                            var salaryStructure = salaryStructures.FirstOrDefault(x => x.SalaryStructureId == Model.SalaryStructureId);
-                            <span>@(salaryStructure != null ? $"{salaryStructure?.Name} - {salaryStructure?.JobLevelName}" : string.Empty)</span>
-                            @Html.HiddenFor(model => model.SalaryStructureId)
-                        }
-                        else
-                        {
-                            var items = salaryStructures.Select(x => new SelectListItem
-                            {
-                                Value = x.SalaryStructureId.ToString(),
-                                Text = $"{x.Name} - {x.JobLevelName}"
-                            });
-                            @Html.DropDownListFor(model => model.SalaryStructureId,
-                                items,
-                                "--Select a Salary Structure--",
-                                new { @class = "form-control" })
-                        }
-                    </div>
-                </li>
-                <li class="list-group-item form-group">
-                    <div class="label-form">
-                        @Html.LabelFor(model => model.Salary, Labels.NonStandardSalaryStructure, new { @class = "control-label" })
-                    </div>
-                    <div class="select-form">
-                        @if (!hasHostPermissionOnSalaryStructure)
-                        {
-                            <span>@Model.Salary</span>
-                            @Html.HiddenFor(model => model.Salary)
-                        }
-                        else
-                        {
-                            @Html.TextBoxFor(model => model.Salary, new { @class = "form-control", @type = "number", @min = "0", @step = "0.01" })
-                        }
-                    </div>
-                </li>
-            }
-            else
-            {
-                @Html.HiddenFor(model => model.SalaryStructureId)
-                @Html.HiddenFor(model => model.Salary)
-            }
             <li class="list-group-item form-group">
                 <div class="label-form">@Labels.LeaveBalance</div>
                 <div>

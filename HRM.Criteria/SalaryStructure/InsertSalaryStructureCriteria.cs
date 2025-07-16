@@ -4,30 +4,12 @@ using Fanex.Data.Repository;
 
 public class InsertSalaryStructureCriteria : CriteriaBase
 {
+    public int CompanyId { get; set; }
     public string Name { get; set; }
-
-    public int JobLevelId { get; set; }
-
-    public string LocalSalary { get; set; }
-
-    public string ExpatSalary { get; set; }
-
+    public string Details { get; set; }
     public int CreatedBy { get; set; }
 
-    public int CompanyId { get; set; }
+    public override string GetSettingKey() => "SalaryStructure_Insert";
 
-    public override string GetSettingKey()
-    {
-        return "SalaryStructure_Insert";
-    }
-
-    public override bool IsValid()
-    {
-        return IsValidId(JobLevelId) &&
-            IsValidId(CompanyId) &&
-            IsValidId(CreatedBy) &&
-            !string.IsNullOrWhiteSpace(Name);
-    }
-
-    private static bool IsValidId(int value) => value > 0;
+    public override bool IsValid() => CompanyId > 0 && CreatedBy > 0 && !string.IsNullOrWhiteSpace(Name);
 }

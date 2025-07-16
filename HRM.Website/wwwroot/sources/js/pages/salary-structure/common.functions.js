@@ -2,7 +2,7 @@
 
 export const validationSchema = Yup.object({
   name: Yup.string()
-    .required('Salary Structure field is required !')
+    .required('Salary Structure field is required!')
     .trim(),
 
   jobLevelId: Yup.number()

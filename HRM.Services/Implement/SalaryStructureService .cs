@@ -1,12 +1,14 @@
-﻿namespace HRM.Services.Implement;
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
-using Criteria.SalaryStructure;
+using Fanex.Data;
 using HRM.Core.Models;
 using HRM.Core.Services;
-using Interfaces;
-using Models;
+using HRM.Criteria.SalaryStructure;
+using HRM.Models.SalaryStructure;
+using HRM.Services.Interfaces;
+
+namespace HRM.Services.Implement;
 
 public class SalaryStructureService(IBaseService baseService) : ISalaryStructureService
 {
@@ -16,8 +18,24 @@ public class SalaryStructureService(IBaseService baseService) : ISalaryStructure
         {
             CompanyId = CompanyId
         };
+        var (salaryStructures, details) = await baseService.FetchMultipleAsync<SalaryStructure, SalaryStructureDetail>(criteria);
+        foreach (var item in details)
+        {
+            item.LocalSalary = !string.IsNullOrWhiteSpace(item.LocalSalary)
+                ? Cryptography.DecryptPassword(item.LocalSalary)
+                : null;
 
-        return await baseService.GetDataAsync<SalaryStructure>(criteria);
+            item.ExpatSalary = !string.IsNullOrWhiteSpace(item.ExpatSalary)
+                ? Cryptography.DecryptPassword(item.ExpatSalary)
+                : null;
+        }
+
+        foreach (var structure in salaryStructures)
+        {
+            structure.Details = details.Where(x => x.SalaryStructureId == structure.SalaryStructureId);
+        }
+
+        return salaryStructures;
     }
 
     public async Task<SalaryStructure> GetByIdAsync(int Id)
@@ -26,7 +44,25 @@ public class SalaryStructureService(IBaseService baseService) : ISalaryStructure
         {
             SalaryStructureId = Id
         };
-        return await baseService.GetDataEntityAsync<SalaryStructure>(criteria);
+        var (salaryStructures, details) = await baseService.FetchMultipleAsync<SalaryStructure, SalaryStructureDetail>(criteria);
+        var salaryStructure = salaryStructures.FirstOrDefault();
+        if (salaryStructure != null)
+        {
+            foreach (var item in details)
+            {
+                item.LocalSalary = !string.IsNullOrWhiteSpace(item.LocalSalary)
+                    ? Cryptography.DecryptPassword(item.LocalSalary)
+                    : null;
+
+                item.ExpatSalary = !string.IsNullOrWhiteSpace(item.ExpatSalary)
+                    ? Cryptography.DecryptPassword(item.ExpatSalary)
+                    : null;
+            }
+
+            salaryStructure.Details = details;
+        }
+
+        return salaryStructure;
     }
 
     public async Task<CommandResult> DeleteAsync(int actorId, int id)
