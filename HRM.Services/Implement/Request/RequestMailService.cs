@@ -9,12 +9,11 @@ using HRM.Models.Request;
 using HRM.Models.Supervisor;
 using HRM.Repositories.Interfaces;
 using HRM.Resources;
-using HRM.Services.Interfaces;
 using HRM.Services.Interfaces.Request;
 
 namespace HRM.Services.Implement.Request;
 
-public class RequestMailService(IRequestRepository requestRepository, ICompanyService companyService) : IRequestMailService
+public class RequestMailService(IRequestRepository requestRepository) : IRequestMailService
 {
     #region constant
 
@@ -37,7 +36,7 @@ public class RequestMailService(IRequestRepository requestRepository, ICompanySe
             Action = action,
             RequestType = requestType,
             RequestId = requestId,
-            CallbackUrl = companyService.GetDomainName()
+            CallbackUrl = relatedPeople.EmailSetting.CallbackUrl,
         };
         GetMailAndLetStalkApprover(relatedPeople, emailModel);
 
