@@ -70,6 +70,18 @@ public class CompanyService(
         return await baseService.GetDataEntityAsync<bool>(criteria);
     }
 
+    public async Task<string> GetWhitelistIps()
+    {
+        var currentCompanyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
+        var criteria = new GetSystemConfigsByKeyCriteria
+        {
+            CompanyId = currentCompanyId,
+            Key = SystemConfigKey.WhitelistIPs
+        };
+
+        return await baseService.GetDataEntityAsync<string>(criteria);
+    }
+
     private static string GetDomainName(HttpContext httpContext)
     {
         var protocol = httpContext.Request.Headers["x-forwarded-proto"].ToString();

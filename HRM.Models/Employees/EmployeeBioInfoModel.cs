@@ -2,8 +2,6 @@
 
 public class EmployeeBioInfoModel
 {
-    public bool IsWhitelisted { get; set; }
-
     public bool HasBio { get; set; }
 
     public bool IsSecondment { get; set; }

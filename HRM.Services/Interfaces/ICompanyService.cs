@@ -21,5 +21,7 @@ namespace HRM.Services.Interfaces
         Task<List<Currency>> GetCurrencyAsync();
 
         Task<CompanySetting> GetByIdAsync(int companyId);
+
+        Task<string> GetWhitelistIps();
     }
 }

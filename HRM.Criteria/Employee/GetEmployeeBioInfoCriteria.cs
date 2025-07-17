@@ -10,8 +10,6 @@ public class GetEmployeeBioInfoCriteria : CriteriaBase
     public int CompanyId { get; set; }
 
     public DateTime CurrentDate { get; set; }
-    
-    public string ClientIp { get; set; }
 
     public override string GetSettingKey() => "EmployeeBioInfo_Get";
 

@@ -68,7 +68,7 @@ public interface IEmployeeService
 
     Task<IList<SupervisorNameModel>> CheckAndAddMissingSupervisor(IList<SupervisorNameModel> supervisors, int supervisorId);
 
-    Task<EmployeeBioInfoModel> GetEmployeeBioInfoAsync(int employeeId, string clientIp);
+    Task<EmployeeBioInfoModel> GetEmployeeBioInfoAsync(int employeeId);
 
     Task<IEnumerable<int>> GetCompaniesBelongToSupervisor();
 }

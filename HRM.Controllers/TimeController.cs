@@ -1,6 +1,4 @@
-﻿using HRM.Criteria.Employee;
-
-namespace HRM.Controllers;
+﻿namespace HRM.Controllers;
 
 using System;
 using System.Linq;
@@ -21,8 +19,8 @@ using GO.UserControl.Client.Core.Models.Auth;
 using GO.UserControl.Client.Core.Services;
 using GO.UserControl.Client.Core.Session;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.RegularExpressions;
 using Models;
 using NetTools;
 using Newtonsoft.Json;
@@ -37,7 +35,8 @@ public class TimeController(
     ICryptoService cryptoService,
     IHRMAuthService hrmAuthService,
     ILogger logger,
-    IEmployeeService employeeService) : BaseController(session)
+    IEmployeeService employeeService,
+    ICompanyService companyService) : BaseController(session)
 {
     [AllowAnonymous]
     public async Task<IActionResult> CheckInOut()
@@ -53,12 +52,20 @@ public class TimeController(
         session.Set(SessionKey.CurrentCompanyId, companySite.CompanyId);
         session.Set(SessionKey.CurrentTimeZone, await GetClientTimeZoneAsync());
 
-        var clientIpAddress = hrmAuthService.GetClientIp(HttpContext);
+        var clientIpAddress = IPAddress.Parse(hrmAuthService.GetClientIp(HttpContext));
 
-        var companyBioInfo = await employeeService.GetEmployeeBioInfoAsync(companySite.CompanyId, clientIpAddress);
-        if (!companyBioInfo.IsWhitelisted)
+        var whitelistIps = await companyService.GetWhitelistIps();
+        if (string.IsNullOrEmpty(whitelistIps))
         {
-            await logger.InfoAsync(clientIpAddress);
+            await logger.InfoAsync(clientIpAddress.ToString());
+            return RedirectToAction("AccessDenied", "Error");
+        }
+
+        whitelistIps = Regex.Replace(whitelistIps, @"[\[\]\""]", "");
+        var isIpExist = whitelistIps.Split(',').ToList().Exists(ip => IPAddressRange.Parse(ip).Contains(clientIpAddress));
+        if (!isIpExist)
+        {
+            await logger.InfoAsync(clientIpAddress.ToString());
             return RedirectToAction("AccessDenied", "Error");
         }
 
@@ -101,7 +108,7 @@ public class TimeController(
                 return Json(loginResult);
             }
 
-            var employeeBioInfo = await employeeService.GetEmployeeBioInfoAsync(employee.EmpId, loginParam.IP);
+            var employeeBioInfo = await employeeService.GetEmployeeBioInfoAsync(employee.EmpId);
 
             var isEmployeeSecondmentOrWorkFromHome = employeeBioInfo.IsWorkFromHome || employeeBioInfo.IsSecondment;
             if (employeeBioInfo.HasBio && !isEmployeeSecondmentOrWorkFromHome)
