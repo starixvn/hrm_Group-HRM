@@ -19,6 +19,7 @@ using HRM.Resources;
 using HRM.Services.Interfaces;
 using HRM.Services.Interfaces.Request;
 using Microsoft.AspNetCore.Hosting;
+using Fanex.Logging;
 
 namespace HRM.Services.Implement.Request;
 
@@ -30,6 +31,7 @@ public class LeaveRequestService(
     IEmailService emailService,
     ILetstalkService letStalkService,
     ICompanyService companyService,
+    ILogger logger,
     IUserControlSession userControlSession) : ILeaveRequestService
 {
     private const string EmailTemplatePathForRequest = "EmailTemplates/Leave.Request.txt";
@@ -164,9 +166,16 @@ public class LeaveRequestService(
 
     private async Task SendMailForUpdateSuccessfully(UpdateLeaveRequestCriteria criteria, string domain, short companyId)
     {
-        var email = await requestMailService.GetMailToMailCcAndLetStalk(criteria.RequestId, (int)SettingsSendMail.Edit, (int)RequestType.Leave);
-        email.Subject = Messages.UpdatedLeaveEmailSubject + " " + criteria.EmployeeName;
-        await SendMailForSuccessfully(criteria, email, domain, companyId);
+        try
+        {
+            var email = await requestMailService.GetMailToMailCcAndLetStalk(criteria.RequestId, (int)SettingsSendMail.Edit, (int)RequestType.Leave);
+            email.Subject = Messages.UpdatedLeaveEmailSubject + " " + criteria.EmployeeName;
+            await SendMailForSuccessfully(criteria, email, domain, companyId);
+        }
+        catch (Exception e)
+        {
+            await logger.InfoAsync($"Send Letstalk fail: {e.Message});");
+        }
     }
 
     public async Task SendMailDeleteRequest(long requestId)
