@@ -6,7 +6,7 @@ public class GetByIdCriteria : CriteriaBase
 {
     public int CompanyId { get; set; }
 
-    public override string GetSettingKey() => "Company_GetById";
+    public override string GetSettingKey() => "CompanySetting_GetById";
 
     public override bool IsValid() => CompanyId > 0;
 }

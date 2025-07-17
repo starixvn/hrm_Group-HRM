@@ -74,10 +74,7 @@ public class CompanyController(
         var criteria = new UpdateCompanySettingCriteria
         {
             CompanyId = model.CompanyId,
-            HasBIO = model.HasBIO,
-            EnableLetstalk = model.EnableLetstalk,
-            WhitelistIPs = model.WhitelistIPs,
-            Currency = model.Currency
+            SettingsJson = model.SettingsJson
         };
         commandResult = await baseService.ExecuteNonQueryAsync(criteria);
 

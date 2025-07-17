@@ -36,36 +36,40 @@ const AppContainer = () => {
             method: "GET",
             headers: { "X-Requested-With": "XMLHttpRequest" },
         })
-            .then((response) => {
-                const data = response.data;
-
-                let parsedIPs = [];
-                if (data.whitelistIPs) {
-                    const rawIPs = JSON.parse(data.whitelistIPs);
-                    parsedIPs = rawIPs.map((ip, index) => ({
+        .then((response) => {
+            const data = response.data;
+    
+            let parsedIPs = [];
+            if (data.whitelistIPs) {
+                parsedIPs = data.whitelistIPs
+                    .split(',')
+                    .map(ip => ip.trim())
+                    .filter(ip => !!ip)
+                    .map((ip, index) => ({
                         id: index.toString(),
                         text: ip,
                     }));
-                }
-
-                let parsedCurrency = [];
-                if (data.currency) {
-                    parsedCurrency = data.currency.split(',').map(c => c.trim()).filter(c => c);
-                }
-
-                setInitialValues({
-                    companyId: data.companyId || "",
-                    name: data.name || "",
-                    hasBIO: String(data.hasBIO).toLowerCase() === "true",
-                    enableLetstalk: String(data.enableLetstalk).toLowerCase() === "true",
-                    currency: parsedCurrency,
-                });
-
-                setTagItems(parsedIPs);
-                setFormKey((prev) => prev + 1);
-            })
-            .catch(axiosError);
+            }
+    
+            let parsedCurrency = [];
+            if (data.currency) {
+                parsedCurrency = data.currency.split(',').map(c => c.trim()).filter(c => c);
+            }
+    
+            setInitialValues({
+                companyId: data.companyId || "",
+                name: data.name || "",
+                hasBIO: String(data.hasBIO).toLowerCase() === "true",
+                enableLetstalk: String(data.enableLetstalk).toLowerCase() === "true",
+                currency: parsedCurrency,
+            });
+    
+            setTagItems(parsedIPs);
+            setFormKey((prev) => prev + 1);
+        })
+        .catch(axiosError);
     }, []);
+    
 
     useEffect(() => {
         axios({
@@ -82,14 +86,18 @@ const AppContainer = () => {
     const handleSubmit = useCallback((values, { setSubmitting }) => {
         setSubmitting(true);
 
+        const settingsJson = JSON.stringify({
+            hasBIO: values.hasBIO ? "true" : "false",
+            enableLetstalk: values.enableLetstalk ? "true" : "false",
+            currency: Array.isArray(values.currency) && values.currency.length > 0 ? values.currency.join(',') : '',
+            whitelistIPs: tagItems.map((tag) => tag.text).join(','),
+        });
+
         axios.post(
             resolveClientUrl("company/edit"),
             {
                 companyId: values.companyId,
-                hasBIO: values.hasBIO ? "true" : "false",
-                enableLetstalk: values.enableLetstalk ? "true" : "false",
-                currency: Array.isArray(values.currency) && values.currency.length > 0 ? values.currency.join(',') : '',
-                whitelistIPs: JSON.stringify(tagItems.map((tag) => tag.text)),
+                settingsJson: settingsJson
             },
             {
                 headers: { "X-Requested-With": "XMLHttpRequest" },

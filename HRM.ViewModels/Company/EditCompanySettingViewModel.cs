@@ -16,4 +16,6 @@ public class EditCompanySettingViewModel
     public string Currency { get; set; }
 
     public string EnableLetstalk { get; set; }
+
+    public string SettingsJson { get; set; }
 }

@@ -1,5 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Text.Json;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace HRM.Models;
 
@@ -17,16 +18,11 @@ public class CompanySetting : Company
     {
         get
         {
-            try
-            {
-                return string.IsNullOrWhiteSpace(WhitelistIPs)
-                    ? []
-                    : JsonSerializer.Deserialize<List<string>>(WhitelistIPs) ?? [];
-            }
-            catch
-            {
-                return [];
-            }
+            return string.IsNullOrWhiteSpace(WhitelistIPs)
+                ? new List<string>()
+                : WhitelistIPs
+                    .Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+                    .ToList();
         }
     }
 }
