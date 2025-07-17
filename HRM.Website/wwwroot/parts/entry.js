@@ -209,7 +209,7 @@ module.exports = {
         [`${jsDistPath}/headcount-report.index`]: `${jsSourcePath}/headcount-report/home/index.jsx`,
         [`${jsDistPath}/salary-structure.home`]: `${jsSourcePath}/salary-structure/home/index.jsx`,
         [`${jsDistPath}/salary-structure.create`]: `${jsSourcePath}/salary-structure/create/index.jsx`,
-        [`${jsDistPath}/salary-structure.edit`]: `${jsSourcePath}/salary-structure/edit/index.jsx`,,
+        [`${jsDistPath}/salary-structure.edit`]: `${jsSourcePath}/salary-structure/edit/index.jsx`,
         [`${jsDistPath}/company.home`]: `${jsSourcePath}/company/home/index.jsx`,
         [`${jsDistPath}/company.edit`]: `${jsSourcePath}/company/edit/index.jsx`
     },
