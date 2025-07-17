@@ -62,7 +62,13 @@
             }
             <th class="col-sorter">
                 <div class="cell-control-wrapper">
-                    @Labels.JobTitle
+                    @Labels.JobLevel
+                    <div class="fa fa-sort cell-right-div"></div>
+                </div>
+            </th>
+            <th class="col-sorter">
+                <div class="cell-control-wrapper">
+                    @Labels.MGrade
                     <div class="fa fa-sort cell-right-div"></div>
                 </div>
             </th>
@@ -108,7 +114,8 @@
                             }
                         </td>
                     }
-                    <td class="align-left">@employee.JobTitle</td>
+                    <td class="align-left">@employee.JobLevel</td>
+                    <td class="align-left">@employee.ManagementLevel</td>
                     <td class="align-left">@employee.Roles2String</td>
                     <td class="resignedDate">
                         @if (employee.ResignedDate.HasValue)

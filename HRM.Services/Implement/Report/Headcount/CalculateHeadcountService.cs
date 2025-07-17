@@ -91,10 +91,6 @@ public class CalculateHeadcountService(IBaseService baseService) : IHeadcountRep
             var employees = isWFH
                 ? groupEmployees.Where(x => wfhInMonth.Contains(x.EmpId))
                 : groupEmployees.Where(x => !wfhInMonth.Contains(x.EmpId));
-            //if (!employees.Any())
-            //{
-            //    continue;
-            //}
 
             yield return CreateReportModel(i, employees.ToList(), fromDate, toDate);
         }

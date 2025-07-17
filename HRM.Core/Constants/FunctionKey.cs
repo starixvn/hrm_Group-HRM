@@ -64,7 +64,6 @@ public static class FunctionKey
 
     public const string TeamManagement = "TeamManagement";
     public const string JobTitleManagement = "JobTitleManagement";
-    public const string JobLevelManagement = "JobLevelManagement";
     public const string TimeRecord = "TimeRecord";
     public const string Message = "Message";
 
@@ -87,7 +86,8 @@ public static class FunctionKey
     //Group Space
     public const string GroupTeamManagement = "GroupTeamManagement";
     public const string GroupEmployeeList = "GroupEmployeeList";
-
     public const string SecondmentCompanyList = "SecondmentCompanyList";
     public const string HeadcountReport = "HeadcountReport";
+    public const string JobLevelManagement = "JobLevelManagement";
+
 }

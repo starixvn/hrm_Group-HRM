@@ -5,6 +5,7 @@ using Fanex.Data.Repository;
 public class GetDepartmentByActiveCriteria : CriteriaBase
 {
     public bool? IsActive { get; set; }
+    public int? UnitId { get; set; }
 
     public override string GetSettingKey() => "Department_Get";
 

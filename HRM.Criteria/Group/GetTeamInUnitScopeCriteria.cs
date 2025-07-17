@@ -6,7 +6,7 @@ public class GetTeamInUnitScopeCriteria : CriteriaBase
 {
     public int? TeamId { get; set; }
 
-    public string Keyword { get; set; }
+    public string TeamIds { get; set; }
 
     public override string GetSettingKey() => "Group_UnitScope_Get";
 

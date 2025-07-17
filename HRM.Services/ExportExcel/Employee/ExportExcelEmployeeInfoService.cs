@@ -191,6 +191,7 @@ public class ExportExcelEmployeeInfoService(
             p.ResignedReason,
             LengthOfServiceByGroupDate = employeeService.CalculateLengthOfService(p.JoinedDate, p.MilitaryFromDate, p.MilitaryToDate),
             LengthOfServiceByCompanyDate = employeeService.CalculateLengthOfService(p.CompanyDate, p.MilitaryFromDate, p.MilitaryToDate),
+            p.JobTitle,
             p.JobLevel,
             p.ManagementLevel,
             TeamDate = FormatDate(p.TeamDate),

@@ -150,7 +150,7 @@ public class TeamController(
         const bool isGroupSpace = false;
         var supervisors = (await teamService.GetSupervisorByTeamId(id, isGroupSpace)).ToList();
         ViewBag.TeamId = id;
-        ViewBag.TeamCode = supervisors.Count != 0 ? supervisors[0].Code : string.Empty;
+        ViewBag.TeamName = supervisors.Count != 0 ? supervisors[0].Name : string.Empty;
 
         return View(supervisors);
     }
@@ -261,11 +261,11 @@ public class TeamController(
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetOrgChart()
+    public async Task<IActionResult> GetOrgChart(bool isGroup = false)
     {
         var units = await unitService.GetUnitAsync();
         var departments = await departmentService.GetDepartmentAsync();
-        var teams = await commonDataService.GetAllTeamAsync();
+        var teams = await commonDataService.GetAllTeamAsync(isGroup: isGroup);
 
         var orgchart = GetOrgChart(units, departments, teams);
 

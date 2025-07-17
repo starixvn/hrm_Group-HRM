@@ -102,6 +102,7 @@ module.exports = {
         [`${jsDistPath}/schedule.arrange.iframe`]: `${jsSourcePath}/schedule-arrange/iframe/index.jsx`,
         [`${jsDistPath}/function.index`]: `${jsSourcePath}/function/index.jsx`,
         [`${jsDistPath}/groupteam.supervisor.index`]: `${jsSourcePath}/group-team/supervisor/index.jsx`,
+        [`${jsDistPath}/groupteam.index`]: `${jsSourcePath}/group-team/index.js`,
         [`${jsDistPath}/team.index`]: `${jsSourcePath}/team/index.js`,
         [`${jsDistPath}/team.edit`]: `${jsSourcePath}/team/edit.js`,
         [`${jsDistPath}/team.edit.supervisor`]: `${jsSourcePath}/team/supervisor/index.jsx`,
@@ -206,6 +207,6 @@ module.exports = {
         [`${jsDistPath}/headcount-report.index`]: `${jsSourcePath}/headcount-report/home/index.jsx`,
         [`${jsDistPath}/salary-structure.home`]: `${jsSourcePath}/salary-structure/home/index.jsx`,
         [`${jsDistPath}/salary-structure.create`]: `${jsSourcePath}/salary-structure/create/index.jsx`,
-        [`${jsDistPath}/salary-structure.edit`]: `${jsSourcePath}/salary-structure/edit/index.jsx`
+        [`${jsDistPath}/salary-structure.edit`]: `${jsSourcePath}/salary-structure/edit/index.jsx`,
     },
 };

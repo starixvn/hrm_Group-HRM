@@ -64,9 +64,9 @@ public class TeamService(
         return await baseService.GetDataEntityAsync<int>(criteria);
     }
 
-    public async Task<IEnumerable<Team>> GetAllAsync(bool isDeleted = false, string keyword = null)
+    public async Task<IEnumerable<Team>> GetAllAsync(bool isDeleted = false, string keyword = null, bool isGroup = false)
     {
-        var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
+        var companyId = isGroup ? (short?)null : userControlSession.Get<short>(SessionKey.CurrentCompanyId);
         var criteria = new GetAllGroupCriteria
         {
             IsDeleted = isDeleted,
@@ -78,11 +78,11 @@ public class TeamService(
         return teams ?? new List<Team>();
     }
 
-    public async Task<IEnumerable<GroupTeamModel>> GetAllTeamByUnitScopeAsync(string keyword = null)
+    public async Task<IEnumerable<GroupTeamModel>> GetAllTeamByUnitScopeAsync(string teamIds = null)
     {
         var criteria = new GetTeamInUnitScopeCriteria
         {
-            Keyword = keyword
+            TeamIds = teamIds
         };
         var teams = await baseService.GetDataAsync<GroupTeamModel>(criteria);
 

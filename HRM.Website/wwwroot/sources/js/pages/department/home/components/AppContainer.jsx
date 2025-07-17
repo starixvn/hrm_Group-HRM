@@ -14,22 +14,46 @@ import {
 
 const AppContainer = () => {
     const [departments, setDepartments] = useState([]);
-    const [filterParams, setFilterParams] = useState({ isActive: true });
+    const [allUnits, setAllUnits] = useState([]);
+    const [filterParams, setFilterParams] = useState({
+        isActive: true,
+        unitId: "",
+    });
     const [deleteModalDialog, setDeleteModalDialog] = useState({ show: false });
 
     const getDepartments = (params) => {
-        setFilterParams(params);
+        const processedParams = {
+            ...params,
+            unitId: params.unitId === "" ? null : params.unitId,
+        };
+        setFilterParams(processedParams);
         axios
-            .post(resolveClientUrl("Department/GetDepartments"), params, {
-                headers: { "X-Requested-With": "XMLHttpRequest" },
-            })
+            .post(
+                resolveClientUrl("Department/GetDepartments"),
+                processedParams,
+                {
+                    headers: { "X-Requested-With": "XMLHttpRequest" },
+                }
+            )
             .then((response) => {
                 setDepartments(response.data);
             })
             .catch(axiosError);
     };
 
+    const loadAllUnits = () => {
+        axios
+            .get(resolveClientUrl("Department/GetUnits"), {
+                headers: { "X-Requested-With": "XMLHttpRequest" },
+            })
+            .then((response) => {
+                setAllUnits(response.data);
+            })
+            .catch(axiosError);
+    };
+
     useEffect(() => {
+        loadAllUnits();
         getDepartments(filterParams);
     }, []);
 
@@ -75,6 +99,9 @@ const AppContainer = () => {
         controllerPath = "Department/ExportDepartmentList?";
 
         var query = "isActive=" + filterParams.isActive;
+        if (filterParams.unitId) {
+            query += "&unitId=" + filterParams.unitId;
+        }
 
         url = resolveClientUrl(controllerPath + query);
         location.href = url;
@@ -82,7 +109,11 @@ const AppContainer = () => {
 
     return (
         <Fragment>
-            <Filter onSubmit={getDepartments} exportExcel={exportExcel} />
+            <Filter
+                onSubmit={getDepartments}
+                exportExcel={exportExcel}
+                allUnits={allUnits}
+            />
             <Table data={departments} onDelete={handleDelete} />
             {deleteModalDialog.show && (
                 <SweetModalDialog

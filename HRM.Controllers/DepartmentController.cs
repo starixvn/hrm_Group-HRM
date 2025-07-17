@@ -34,7 +34,7 @@ public class DepartmentController(
     [HrmPermission(Policy.Read, FunctionKey.DepartmentManagement)]
     public async Task<IActionResult> GetDepartments([FromBody] GetDepartmentViewModel request)
     {
-        var departments = await departmentService.GetDepartmentAsync(request.IsActive);
+        var departments = await departmentService.GetDepartmentAsync(request.IsActive, request.UnitId);
         return new JsonResult(departments);
     }
 
@@ -150,7 +150,7 @@ public class DepartmentController(
     [HrmPermission(Policy.Read, FunctionKey.DepartmentManagement)]
     public async Task<IActionResult> ExportDepartmentList(GetDepartmentViewModel request)
     {
-        var departments = await departmentService.GetDepartmentAsync(request.IsActive);
+        var departments = await departmentService.GetDepartmentAsync(request.IsActive, request.UnitId);
         var bytes = await departmentService.GenerateExcelAsync(departments);
         var fileName = $"Departments_{DateTimeOffset.Now.DateTime.ToClientTimeZone():yyyyMMdd}.xlsx";
 
