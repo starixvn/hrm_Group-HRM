@@ -41,14 +41,11 @@ const AppContainer = () => {
     
             let parsedIPs = [];
             if (data.whitelistIPs) {
-                parsedIPs = data.whitelistIPs
-                    .split(',')
-                    .map(ip => ip.trim())
-                    .filter(ip => !!ip)
-                    .map((ip, index) => ({
-                        id: index.toString(),
-                        text: ip,
-                    }));
+                const rawIPs = JSON.parse(data.whitelistIPs);
+                parsedIPs = rawIPs.map((ip, index) => ({
+                    id: index.toString(),
+                    text: ip,
+                }));
             }
     
             let parsedCurrency = [];
@@ -90,7 +87,8 @@ const AppContainer = () => {
             hasBIO: values.hasBIO ? "true" : "false",
             enableLetstalk: values.enableLetstalk ? "true" : "false",
             currency: Array.isArray(values.currency) && values.currency.length > 0 ? values.currency.join(',') : '',
-            whitelistIPs: tagItems.map((tag) => tag.text).join(','),
+            whitelistIPs: tagItems.length > 0 ? JSON.stringify(tagItems.map(tag => tag.text)) : '',
+
         });
 
         axios.post(
