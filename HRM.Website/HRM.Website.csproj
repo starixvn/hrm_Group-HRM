@@ -14,7 +14,6 @@
     <None Remove="ExcelTemplates\HeadcountReportTemplate.xlsx" />
     <None Remove="LetsTalkTemplate\Leave.Approval.txt" />
     <None Remove="LetsTalkTemplate\Leave.Cancel.txt" />
-    <None Remove="LetsTalkTemplate\Leave.Request.txt" />
     <None Remove="logs\log.txt" />
   </ItemGroup>
   <ItemGroup>

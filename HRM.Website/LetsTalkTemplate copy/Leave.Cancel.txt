@@ -1,4 +1,0 @@
-This is to inform you that {0} has been cancel leave request.
-- Date: {1}
-- Type: {2}
-- Remark: {3}

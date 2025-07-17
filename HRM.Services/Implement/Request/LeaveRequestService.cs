@@ -166,16 +166,9 @@ public class LeaveRequestService(
 
     private async Task SendMailForUpdateSuccessfully(UpdateLeaveRequestCriteria criteria, string domain, short companyId)
     {
-        try
-        {
-            var email = await requestMailService.GetMailToMailCcAndLetStalk(criteria.RequestId, (int)SettingsSendMail.Edit, (int)RequestType.Leave);
-            email.Subject = Messages.UpdatedLeaveEmailSubject + " " + criteria.EmployeeName;
-            await SendMailForSuccessfully(criteria, email, domain, companyId);
-        }
-        catch (Exception e)
-        {
-            await logger.InfoAsync($"Send Letstalk fail: {e.Message});");
-        }
+        var email = await requestMailService.GetMailToMailCcAndLetStalk(criteria.RequestId, (int)SettingsSendMail.Edit, (int)RequestType.Leave);
+        email.Subject = Messages.UpdatedLeaveEmailSubject + " " + criteria.EmployeeName;
+        await SendMailForSuccessfully(criteria, email, domain, companyId);
     }
 
     public async Task SendMailDeleteRequest(long requestId)
