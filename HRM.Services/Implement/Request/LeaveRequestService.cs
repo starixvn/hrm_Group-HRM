@@ -159,16 +159,30 @@ public class LeaveRequestService(
 
     private async Task SendMailForInsertSuccessfully(InsertLeaveRequestCriteria criteria, string domain, short companyId)
     {
-        var email = await requestMailService.GetMailToMailCcAndLetStalk(criteria.RequestId, (int)SettingsSendMail.New, (int)RequestType.Leave);
-        email.Subject = Messages.LeaveEmailSubject + " " + criteria.EmployeeName;
-        await SendMailForSuccessfully(criteria, email, domain, companyId);
+        try
+        {
+            var email = await requestMailService.GetMailToMailCcAndLetStalk(criteria.RequestId, (int)SettingsSendMail.New, (int)RequestType.Leave);
+            email.Subject = Messages.LeaveEmailSubject + " " + criteria.EmployeeName;
+            await SendMailForSuccessfully(criteria, email, domain, companyId);
+        }
+        catch (Exception e)
+        {
+            await logger.InfoAsync($"Send Email + Letstalk insert fail: {e.Message});");
+        }
     }
 
     private async Task SendMailForUpdateSuccessfully(UpdateLeaveRequestCriteria criteria, string domain, short companyId)
     {
-        var email = await requestMailService.GetMailToMailCcAndLetStalk(criteria.RequestId, (int)SettingsSendMail.Edit, (int)RequestType.Leave);
-        email.Subject = Messages.UpdatedLeaveEmailSubject + " " + criteria.EmployeeName;
-        await SendMailForSuccessfully(criteria, email, domain, companyId);
+        try
+        {
+            var email = await requestMailService.GetMailToMailCcAndLetStalk(criteria.RequestId, (int)SettingsSendMail.Edit, (int)RequestType.Leave);
+            email.Subject = Messages.UpdatedLeaveEmailSubject + " " + criteria.EmployeeName;
+            await SendMailForSuccessfully(criteria, email, domain, companyId);
+        }
+        catch (Exception e)
+        {
+            await logger.InfoAsync($"Send Email + Letstalk fail: {e.Message});");
+        }
     }
 
     public async Task SendMailDeleteRequest(long requestId)
