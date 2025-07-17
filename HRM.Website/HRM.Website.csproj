@@ -14,6 +14,7 @@
     <None Remove="ExcelTemplates\HeadcountReportTemplate.xlsx" />
     <None Remove="LetsTalkTemplate\Leave.Approval.txt" />
     <None Remove="LetsTalkTemplate\Leave.Cancel.txt" />
+    <None Remove="LetsTalkTemplate\Leave.Request.txt" />
     <None Remove="logs\log.txt" />
   </ItemGroup>
   <ItemGroup>
@@ -212,6 +213,9 @@
 	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	</Content>
 	<Content Include="LetsTalkTemplate\Leave.Cancel.txt">
+	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	</Content>
+	<Content Include="LetsTalkTemplate\Leave.Request.txt">
 	  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
 	</Content>
 	  <Content Include="logs\log.txt" />
