@@ -1,16 +1,16 @@
 ﻿namespace HRM.Controllers;
 
 using System.Threading.Tasks;
-using GO.UserControl.Client.Core.Session;
 using GO.UserControl.Client.Core.Enumerables;
-using Microsoft.AspNetCore.Mvc;
-using Services.Interfaces;
-using HRM.Core.Models;
-using HRM.Core.Services;
-using HRM.ViewModels.Company;
-using HRM.Criteria.Company;
+using GO.UserControl.Client.Core.Session;
 using HRM.Core.Constants;
 using HRM.Core.Filters;
+using HRM.Core.Models;
+using HRM.Core.Services;
+using HRM.Criteria.Company;
+using HRM.ViewModels.Company;
+using Microsoft.AspNetCore.Mvc;
+using Services.Interfaces;
 
 [HrmPermission(Policy.Read, FunctionKey.CompanyManagement)]
 public class CompanyController(
@@ -52,23 +52,23 @@ public class CompanyController(
             EnableLetstalk = company.EnableLetstalk
         };
 
-        return new JsonResult(model);
+        return Json(model);
     }
 
-    [HrmPermission(Policy.Read, FunctionKey.CompanyManagement)]
+    [HrmPermission(Policy.Host, FunctionKey.CompanyManagement)]
     public ActionResult Edit(int Id)
     {
         return View(Id);
     }
 
     [HttpPost]
-    [HrmPermission(Policy.Read, FunctionKey.CompanyManagement)]
+    [HrmPermission(Policy.Host, FunctionKey.CompanyManagement)]
     public async Task<IActionResult> Edit([FromBody] EditCompanySettingViewModel model)
     {
         var commandResult = new CommandResult();
         if (model == null || !ModelState.IsValid)
         {
-            return new JsonResult(commandResult);
+            return Json(commandResult);
         }
 
         var criteria = new UpdateCompanySettingCriteria
@@ -78,6 +78,6 @@ public class CompanyController(
         };
         commandResult = await baseService.ExecuteNonQueryAsync(criteria);
 
-        return new JsonResult(commandResult);
+        return Json(commandResult);
     }
 }
