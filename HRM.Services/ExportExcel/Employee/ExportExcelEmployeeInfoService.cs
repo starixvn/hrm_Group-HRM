@@ -299,6 +299,7 @@ public class ExportExcelEmployeeInfoService(
             worksheet.Cells[rowIndex, colIndex++].Value = employee.ManagementLevel;
             worksheet.Cells[rowIndex, colIndex++].Value = FormatDate(employee.JoinedDate);
             worksheet.Cells[rowIndex, colIndex++].Value = employee.Company;
+            worksheet.Cells[rowIndex, colIndex++].Value = employee.SubCompany;
             worksheet.Cells[rowIndex, colIndex++].Value = FormatDate(employee.CompanyDate);
             worksheet.Cells[rowIndex, colIndex++].Value = FormatDate(employee.ResignedDate);
             worksheet.Cells[rowIndex, colIndex++].Value = FormatBoolean(employee.IsLocal);

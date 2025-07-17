@@ -103,6 +103,7 @@
 		<Setting Key="Employee_GetHRAndSupervisorByEmpId" SpName="Employee_GetHRAndSupervisorByEmpId" DbName="bodb_HRM" Plain="0" />
         <Setting Key="Employee_GetEmployeeForPIC" SpName="Employee_GetEmployeeForPIC" DbName="bodb_HRM" Plain="0" />
 		<Setting Key="TimeRecord_GetCheckInOutOnline" SpName="TimeRecord_GetCheckInOutOnline" DbName="bodb_HRM" Plain="0" />
+		<Setting Key="EmployeeBioInfo_Get" SpName="EmployeeBioInfo_Get" DbName="bodb_HRM" Plain="0" />
 		<Setting Key="Nex_WorkingTimeRequest_GetRequestByDate" SpName="WorkingTimeRequest_GetRequestByDate" DbName="nex_HRM" Plain="0" />
 		<Setting Key="Lumi_WorkingTimeRequest_GetRequestByDate" SpName="WorkingTimeRequest_GetRequestByDate" DbName="lumi_HRM" Plain="0" />
 		<Setting Key="NexVision_WorkingTimeRequest_GetRequestByDate" SpName="WorkingTimeRequest_GetRequestByDate" DbName="nexvision_HRM" Plain="0" />
@@ -554,6 +555,7 @@
     <Function Name="System Setting">
         <Setting Key="SystemSetting_Get" SpName="SystemSetting_Get" DbName="bodb_HRM" Plain="0" />
         <Setting Key="SystemConfigs_GetByKey" SpName="SystemConfigs_GetByKey" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="SystemConfigs_Update" SpName="SystemConfigs_Update" DbName="bodb_HRM" Plain="0" />
     </Function>
     <Function Name="Meal Allowance Report">
         <Setting Key="WorkFromHome_MealAllowanceDetailReport" SpName="WorkFromHome_MealAllowanceDetailReport" DbName="bodb_HRM" Plain="0" />
@@ -574,6 +576,10 @@
 		<Setting Key="Domain_ByCompanyId_Get" SpName="Domain_ByCompanyId_Get" DbName="bodb_HRM" />
 		<Setting Key="SubCompanies_ByCompanyId_Get" SpName="SubCompanies_ByCompanyId_Get" DbName="bodb_HRM" />
 	</Function>
+    <Function Name="CompanySetting">
+        <Setting Key="CompanySetting_Get" SpName="CompanySetting_Get" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="CompanySetting_GetById" SpName="CompanySetting_GetById" DbName="bodb_HRM" Plain="0" />
+    </Function>
     <Function Name="EmployeePayroll">
 		<Setting Key="EmployeePayroll_Import" SpName="EmployeePayroll_Import" DbName="bodb_HRM" Plain="0" />
         <Setting Key="EmployeePayroll_Get" SpName="EmployeePayroll_Get" DbName="bodb_HRM" Plain="0" />
@@ -597,5 +603,8 @@
         <Setting Key="SalaryStructure_Insert" SpName="SalaryStructure_Insert" DbName="bodb_HRM" Plain="0" />
         <Setting Key="SalaryStructure_Update" SpName="SalaryStructure_Update" DbName="bodb_HRM" Plain="0" />
         <Setting Key="SalaryStructure_Delete" SpName="SalaryStructure_Delete" DbName="bodb_HRM" Plain="0" />
+    </Function>
+    <Function Name="Currency">
+        <Setting Key="Currency_Get" SpName="Currency_Get" DbName="bodb_HRM" Plain="0"/>
     </Function>
 </Functions>

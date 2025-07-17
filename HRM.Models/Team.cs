@@ -59,4 +59,6 @@ public class Team : EntityBase<int>
     public int GroupTeamId { get; set; }
 
     public string AccountableArea { get; set; }
+
+    public string UnitCode { get; set; }
 }

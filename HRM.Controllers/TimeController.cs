@@ -1,4 +1,6 @@
-﻿namespace HRM.Controllers;
+﻿using HRM.Criteria.Employee;
+
+namespace HRM.Controllers;
 
 using System;
 using System.Linq;
@@ -29,13 +31,13 @@ using Services.Interfaces;
 using ViewModels.Time;
 
 public class TimeController(
-    AppSettings appSettings,
     IUserControlSession session,
     IBaseService baseService,
     IAuthService authService,
     ICryptoService cryptoService,
     IHRMAuthService hrmAuthService,
-    ILogger logger) : BaseController(session)
+    ILogger logger,
+    IEmployeeService employeeService) : BaseController(session)
 {
     [AllowAnonymous]
     public async Task<IActionResult> CheckInOut()
@@ -51,20 +53,16 @@ public class TimeController(
         session.Set(SessionKey.CurrentCompanyId, companySite.CompanyId);
         session.Set(SessionKey.CurrentTimeZone, await GetClientTimeZoneAsync());
 
-        if (appSettings.WhitelistIPs.Equals("*"))
+        var clientIpAddress = hrmAuthService.GetClientIp(HttpContext);
+
+        var companyBioInfo = await employeeService.GetEmployeeBioInfoAsync(companySite.CompanyId, clientIpAddress);
+        if (!companyBioInfo.IsWhitelisted)
         {
-            return View(DateTimeOffset.Now.DateTime.ToClientTimeZone());
+            await logger.InfoAsync(clientIpAddress);
+            return RedirectToAction("AccessDenied", "Error");
         }
 
-        var clientIpAddress = GetClientIp(HttpContext);
-        var clientIp = IPAddress.Parse(clientIpAddress);
-        if (appSettings.WhitelistIPs.Split(';').ToList().Exists(ip => IPAddressRange.Parse(ip).Contains(clientIp)))
-        {
-            return View(DateTimeOffset.Now.DateTime.ToClientTimeZone());
-        }
-
-        await logger.InfoAsync(clientIpAddress);
-        return RedirectToAction("AccessDenied", "Error");
+        return View(DateTimeOffset.Now.DateTime.ToClientTimeZone());
     }
 
     [AllowAnonymous]
@@ -88,7 +86,7 @@ public class TimeController(
             Username = cryptoService.Encrypt(model.Username, rijndaelKey, rijndaelIv),
             Password = cryptoService.Encrypt(model.Password, rijndaelKey, rijndaelIv),
             Token = token,
-            IP = GetClientIp(HttpContext),
+            IP = hrmAuthService.GetClientIp(HttpContext),
             Platform = HttpContext.Request.Headers["User-Agent"].ToString(),
             BrowserName = HttpContext.Request.Headers["User-Agent"].ToString(),
             NetSessionId = HttpContext.Session.Id
@@ -103,16 +101,29 @@ public class TimeController(
                 return Json(loginResult);
             }
 
+            var employeeBioInfo = await employeeService.GetEmployeeBioInfoAsync(employee.EmpId, loginParam.IP);
+
+            var isEmployeeSecondmentOrWorkFromHome = employeeBioInfo.IsWorkFromHome || employeeBioInfo.IsSecondment;
+            if (employeeBioInfo.HasBio && !isEmployeeSecondmentOrWorkFromHome)
+            {
+                loginResult = new LoginResult { IsSuccessfull = false, ErrorMessage = "Your submission is unsuccessful. Please contact your supervisor!" };
+                return Json(loginResult);
+            }
+
             var criteria = new InsertCheckInOutRecordCriteria
             {
                 EmpId = employee.EmpId,
                 RecordTime = DateTimeOffset.Now.DateTime,
                 ClientRecordTime = DateTimeOffset.Now.DateTime.ToClientTimeZone(),
                 InOutType = model.InOutType,
-                IPAddress = GetClientIp(HttpContext),
+                IPAddress = hrmAuthService.GetClientIp(HttpContext),
                 Platform = HttpContext.Request.Headers["User-Agent"].ToString()
             };
             var result = await baseService.ExecuteNonQueryAsync(criteria);
+            if (employeeBioInfo.IsWFHNearlyExpired)
+            {
+                result.Message = "Your WFH period is ending soon. Please contact your supervisor!";
+            }
             loginResult = new LoginResult { IsSuccessfull = result.IsSuccessful, ErrorMessage = result.Message };
         }
 
@@ -155,7 +166,7 @@ public class TimeController(
             RecordTime = DateTimeOffset.Now.DateTime,
             ClientRecordTime = DateTimeOffset.Now.DateTime.ToClientTimeZone(),
             InOutType = 0,
-            IPAddress = GetClientIp(HttpContext),
+            IPAddress = hrmAuthService.GetClientIp(HttpContext),
             Platform = HttpContext.Request.Headers["User-Agent"].ToString()
         };
         var result = await baseService.ExecuteNonQueryAsync(criteria);
@@ -171,7 +182,7 @@ public class TimeController(
             RecordTime = DateTimeOffset.Now.DateTime,
             ClientRecordTime = DateTimeOffset.Now.DateTime.ToClientTimeZone(),
             InOutType = 1,
-            IPAddress = GetClientIp(HttpContext),
+            IPAddress = hrmAuthService.GetClientIp(HttpContext),
             Platform = HttpContext.Request.Headers["User-Agent"].ToString()
         };
         var result = await baseService.ExecuteNonQueryAsync(criteria);
@@ -198,22 +209,5 @@ public class TimeController(
             Domain = domainName
         };
         return await baseService.GetDataEntityAsync<CompanySite>(criteria);
-    }
-
-    private static string GetClientIp(HttpContext httpContext)
-    {
-        var clientIp = httpContext.Request.Headers["x-forwarded-for"].ToString();
-        if (string.IsNullOrEmpty(clientIp))
-        {
-            clientIp = httpContext.Connection.RemoteIpAddress?.MapToIPv4().ToString();
-        }
-        else
-        {
-            var forwardedIps = clientIp.Split([','], StringSplitOptions.RemoveEmptyEntries);
-
-            clientIp = forwardedIps[0];
-        }
-
-        return clientIp;
     }
 }

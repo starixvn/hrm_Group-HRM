@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Core;
 using Core.Constants;
 using Core.Security;
+using HRM.Models.Employees;
 using Core.XMLExtensions;
 using Criteria.AnnualLeave;
 using Criteria.Employee;
@@ -398,6 +399,20 @@ public class EmployeeService(
         }
 
         return supervisors;
+    }
+
+    public async Task<EmployeeBioInfoModel> GetEmployeeBioInfoAsync(int empId, string clientIp)
+    {
+        var companyId = session.Get<short>(SessionKey.CurrentCompanyId);
+
+        var criteria = new GetEmployeeBioInfoCriteria
+        {
+            EmpId = empId,
+            CompanyId = companyId,
+            CurrentDate = DateTimeOffset.Now.DateTime.ToClientTimeZone().Date,
+            ClientIp = clientIp
+        };
+        return await baseService.GetDataEntityAsync<EmployeeBioInfoModel>(criteria);
     }
 
     public async Task<IEnumerable<int>> GetCompaniesBelongToSupervisor()

@@ -39,6 +39,7 @@
         "react-bootstrap": "^0.32.1",
         "react-dom": "16.8.6",
         "react-draggable": "^4.4.6",
+        "react-select": "^5.10.2",
         "react-toastify": "^5.5.0",
         "sass": "^1.69.2",
         "tinymce": "^5.8.1",

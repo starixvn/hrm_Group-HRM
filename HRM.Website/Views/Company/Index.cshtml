@@ -1,0 +1,18 @@
+﻿@using HRM.Resources
+
+@model bool
+@{
+    ViewBag.Title = Labels.CompanyManagement;
+}
+@section css{
+    <link href="~/dist/styles/company.index.css" rel="stylesheet" />
+}
+@section js{
+    <script src="~/dist/js/company.home.js"></script>
+}
+
+@section Breadcrumb {
+    <a class="step">@Labels.GroupSpace</a><span class="step">@ViewBag.Title</span>
+}
+<h2 class="page-title">@ViewBag.Title</h2>
+<div id="company"></div>

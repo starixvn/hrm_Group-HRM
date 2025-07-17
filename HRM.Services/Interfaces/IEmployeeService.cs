@@ -7,6 +7,7 @@ using HRM.Criteria.Employee;
 using HRM.Criteria.Supervisor;
 using HRM.Models;
 using HRM.Models.EmployeeInformation;
+using HRM.Models.Employees;
 using HRM.Models.Group;
 using HRM.Models.Supervisor;
 using HRM.ViewModels.AnnualLeave;
@@ -66,6 +67,8 @@ public interface IEmployeeService
     Task<CommandResult> UpdateUserIdAsync(UpdateUserIdCommand command);
 
     Task<IList<SupervisorNameModel>> CheckAndAddMissingSupervisor(IList<SupervisorNameModel> supervisors, int supervisorId);
+
+    Task<EmployeeBioInfoModel> GetEmployeeBioInfoAsync(int employeeId, string clientIp);
 
     Task<IEnumerable<int>> GetCompaniesBelongToSupervisor();
 }

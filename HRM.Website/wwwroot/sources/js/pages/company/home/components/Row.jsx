@@ -1,0 +1,59 @@
+﻿import React from "react";
+import { resolveClientUrl } from "../../../../shared/common.functions";
+
+const Row = ({ rowIndex, item }) => {
+    const handleEdit = () => {
+        window.location = resolveClientUrl(`company/edit?Id=${item.companyId}`);
+    };
+
+    const isBooleanString = (val) =>
+        val && ["true", "false"].includes(val.toLowerCase());
+
+    const isTrue = (val) => val && val.toLowerCase() === "true";
+
+    return (
+        <tr id={`row_${item.companyId}`}>
+            <td>{rowIndex}</td>
+            <td className="text-left">{item.name}</td>
+            <td>
+                {isBooleanString(item.hasBIO) && (
+                    <input
+                        type="checkbox"
+                        className="readonly-checkbox"
+                        name={`hasBIO-${item.companyId}`}
+                        checked={isTrue(item.hasBIO)}
+                        readOnly
+                    />
+                )}
+            </td>
+            <td>
+                {isBooleanString(item.enableLetstalk) && (
+                    <input
+                        type="checkbox"
+                        className="readonly-checkbox"
+                        checked={isTrue(item.enableLetstalk)}
+                        readOnly
+                    />
+                )}
+            </td>
+            <td>
+                {item.whitelistIPList.length > 0 && (
+                    <ul className="whitelist-ip-list">
+                        {item.whitelistIPList.map((ip, idx) => (
+                            <li className="text-left" key={idx}>{ip}</li>
+                        ))}
+                    </ul>
+                )}
+            </td>
+            <td>{item.currency}</td>
+            <td>
+                <a
+                    onClick={handleEdit}
+                    className="fa fa-pencil fa-lg icon-edit"
+                />
+            </td>
+        </tr>
+    );
+};
+
+export default Row;

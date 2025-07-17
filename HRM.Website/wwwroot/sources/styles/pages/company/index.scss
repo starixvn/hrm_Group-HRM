@@ -1,0 +1,23 @@
+﻿@import "../../layout/table";
+
+.table-custom {
+    max-width: 60%;
+}
+
+.whitelist-ip-list {
+    padding-left: 1rem;
+    margin: 0 0 0 4px;
+    line-height: 1.8;
+}
+
+.readonly-checkbox {
+    pointer-events: none;
+}
+
+.text-left {
+    text-align: left !important;
+}
+
+.text-right {
+    text-align: right !important;
+}

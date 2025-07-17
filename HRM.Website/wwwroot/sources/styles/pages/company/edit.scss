@@ -1,0 +1,129 @@
+﻿@import "../../abstracts/_variables.scss";
+@import "../../abstracts/_mixins.scss";
+@import "../../components/_buttons-new.scss";
+@import "../../components/_card.scss";
+@import "../../components/_form-horizontal.scss";
+@import "../../components/_validation.scss";
+@import "../../layout/_toastr.scss";
+@import "../../components/_checkbox.scss";
+
+.field-name {
+    font-size: 1.5rem !important;
+    height: 30px !important;
+}
+
+.input-form {
+    width: 230px !important;
+}
+
+.btn {
+    margin-right: 5px;
+
+    &:focus,
+    &:active {
+        outline: none;
+    }
+}
+
+.validation-summary-errors ul {
+    list-style: none;
+    padding-left: 8px;
+}
+
+span.require {
+    color: red;
+}
+
+input[type="checkbox"].checkbox {
+    width: 15px;
+    height: 15px;
+}
+
+// Custom Tag Input Styles
+.tag-input-container {
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    padding: 8px;
+    min-height: 50px;
+    background-color: #fff;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+
+    &:focus-within {
+        border-color: #86b7fe;
+        outline: 0;
+        box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+    }
+}
+
+.tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-bottom: 8px;
+}
+
+.tag-item {
+    display: inline-flex;
+    align-items: center;
+    background: #007bff;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 12px;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+
+    &:hover {
+        background: #0056b3;
+    }
+}
+
+.tag-remove-btn {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    margin-left: 6px;
+    padding: 0;
+    line-height: 1;
+    width: 16px;
+    height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+        background: rgba(255, 255, 255, 0.2);
+    }
+
+    &:focus {
+        outline: none;
+        background: rgba(255, 255, 255, 0.3);
+    }
+
+    .fa-times {
+        font-size: 11px !important;
+    }
+}
+
+.tag-input-field {
+    border: none;
+    outline: none;
+    font-size: 12px;
+    width: 100%;
+    padding: 4px 0;
+    background: transparent;
+
+    &::placeholder {
+        color: #6c757d;
+        opacity: 1;
+    }
+}
+
+.react-select__menu-list {
+    max-height: 320px !important;
+}

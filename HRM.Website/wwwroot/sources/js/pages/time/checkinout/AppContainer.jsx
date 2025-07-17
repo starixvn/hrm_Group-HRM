@@ -246,7 +246,7 @@ export default class AppContainer extends Component {
                         <i className={`fa ${modalDialog.isSuccessfull ? 'fa-check-circle' : 'fa-exclamation-circle'}`} />
                         <p>{modalDialog.inOutType === 0 ? 'Check in' : 'Check out'} {modalDialog.isSuccessfull ? 'successfully!' : 'unsuccessfully!'}</p>
                         {
-                            !modalDialog.isSuccessfull &&
+                            modalDialog.errMsg &&
                             <p>{modalDialog.errMsg}</p>
                         }
                     </Modal.Body>

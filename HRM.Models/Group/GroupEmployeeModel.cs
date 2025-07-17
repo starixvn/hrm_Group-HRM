@@ -48,6 +48,8 @@ public class GroupEmployeeModel
 
     public string Company { get; set; }
 
+    public string SubCompany { get; set; }
+
     public bool Enabled { get; set; }
 
     public bool IsDeleted { get; set; }

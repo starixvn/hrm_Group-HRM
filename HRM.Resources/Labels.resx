@@ -2124,4 +2124,10 @@
   <data name="NonStandardSalaryStructure" xml:space="preserve">
     <value>Non-standard Salary Structure</value>
   </data>
+  <data name="CompanyManagement" xml:space="preserve">
+    <value>Company Management</value>
+  </data>
+  <data name="EditCompanyManagement" xml:space="preserve">
+    <value>Edit Company Management</value>
+  </data>
 </root>
