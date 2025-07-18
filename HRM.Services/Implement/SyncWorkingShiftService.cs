@@ -110,7 +110,7 @@ public class SyncWorkingShiftService(
         else
         {
             var message = await response.Content.ReadAsStringAsync();
-            await logger.ErrorAsync($"StatusCode: {response.StatusCode}\r\nMessage: {message}");
+            await logger.ErrorAsync($"Sync working shift - StatusCode: {response.StatusCode}\r\nMessage: {message}");
             commandResult.Code = (int)response.StatusCode;
             commandResult.Message = message;
         }
