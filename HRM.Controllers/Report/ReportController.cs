@@ -28,7 +28,6 @@ public class ReportController(
     IReportService reportService,
     ICommonDataService commonDataService,
     ITeamService teamService,
-    IEmployeeService employeeService,
     IHRMAuthService hrmAuthService,
     ICompanyService companyService) : BaseController(session)
 {
@@ -57,6 +56,12 @@ public class ReportController(
             return View(model);
         }
         var whitelistIpsList = JsonConvert.DeserializeObject<List<string>>(whitelistIps).ToList();
+        var isSkippedIpChecking = whitelistIpsList.Contains(Constants.AllIp);
+        if (isSkippedIpChecking)
+        {
+            isWhitelisted = true;
+        }
+
         var isIpExist = whitelistIpsList
             .Exists(ip => IPAddressRange.Parse(ip).Contains(clientIp));
         if (isIpExist)
@@ -64,7 +69,9 @@ public class ReportController(
             isWhitelisted = true;
         }
 
-        var isHavePrivilegeCreateCheckInOutRecord = await IsPrivilegeCreateCheckInOut() && isWhitelisted;
+        var isWorkFromHome = await IsPrivilegeCreateCheckInOut();
+
+        var isHavePrivilegeCreateCheckInOutRecord = isWorkFromHome && isWhitelisted;
         model.IsHavePrivilegeCreateCheckInOutRecord = isHavePrivilegeCreateCheckInOutRecord;
 
         return View(model);

@@ -48,4 +48,6 @@ public static class Constants
     public static readonly TimeSpan NexTimezone = TimeSpan.FromHours(7);
 
     public static readonly int[] NexCompanyIds = [NexCompanyId, LumiCompanyId, NexVisionCompanyId];
+
+    public const string AllIp = "0.0.0.0";
 }

@@ -61,6 +61,12 @@ public class TimeController(
         }
         
         var whitelistIpsList = JsonConvert.DeserializeObject<List<string>>(whitelistIps).ToList();
+        var isSkippedIpChecking = whitelistIpsList.Contains(Constants.AllIp);
+        if (isSkippedIpChecking)
+        {
+            return View(DateTimeOffset.Now.DateTime.ToClientTimeZone());
+        }
+
         var isIpExist = whitelistIpsList
             .Exists(ip => IPAddressRange.Parse(ip).Contains(clientIpAddress));
         if (!isIpExist)
