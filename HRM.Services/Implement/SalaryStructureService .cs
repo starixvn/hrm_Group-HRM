@@ -12,11 +12,11 @@ namespace HRM.Services.Implement;
 
 public class SalaryStructureService(IBaseService baseService) : ISalaryStructureService
 {
-    public async Task<IEnumerable<SalaryStructure>> GetSalaryStructureAsync(int CompanyId)
+    public async Task<IEnumerable<SalaryStructure>> GetSalaryStructureAsync(int companyId)
     {
         var criteria = new GetSalaryStructureCriteria
         {
-            CompanyId = CompanyId
+            CompanyId = companyId
         };
         var (salaryStructures, details) = await baseService.FetchMultipleAsync<SalaryStructure, SalaryStructureDetail>(criteria);
         foreach (var item in details)
@@ -38,11 +38,11 @@ public class SalaryStructureService(IBaseService baseService) : ISalaryStructure
         return salaryStructures;
     }
 
-    public async Task<SalaryStructure> GetByIdAsync(int Id)
+    public async Task<SalaryStructure> GetByIdAsync(int salaryStructureId)
     {
         var criteria = new GetSalaryStructureByIdCriteria
         {
-            SalaryStructureId = Id
+            SalaryStructureId = salaryStructureId
         };
         var (salaryStructures, details) = await baseService.FetchMultipleAsync<SalaryStructure, SalaryStructureDetail>(criteria);
         var salaryStructure = salaryStructures.FirstOrDefault();

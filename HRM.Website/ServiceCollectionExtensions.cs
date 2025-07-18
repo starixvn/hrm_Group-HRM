@@ -1,6 +1,4 @@
-﻿using HRM.Services.Implement.Report.Headcount;
-
-namespace HRM.Website;
+﻿namespace HRM.Website;
 
 using System;
 using System.Threading.Tasks;
@@ -14,6 +12,7 @@ using HRM.Core.Repositories;
 using HRM.Core.Services;
 using HRM.Letstalk.Core.Services;
 using HRM.Letstalk.Core.Services.Interfaces;
+using HRM.Services.Implement.Report.Headcount;
 using HRM.Services.Interfaces.Report.Headcount;
 using MailDeliver;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -109,13 +108,8 @@ public static class ServiceCollectionExtensions
         services.AddSingleton(nexConfig);
 
         services.AddSingleton<ILogger, Logger>();
-        services.AddSingleton<IDynamicRepository, DynamicRepository>();
 
-        services.AddSingleton<IBaseRepository, BaseRepository>();
-        services.AddSingleton<IEmployeeRepository, EmployeeRepository>();
-        services.AddSingleton<IDepartmentRepository, DepartmentRepository>();
-        services.AddSingleton<ITeamRepository, TeamRepository>();
-        services.AddSingleton<IRequestRepository, RequestRepository>();
+        services.AddDIRepositories();
 
         services.AddSingleton<IUserControlSession, UserControlSession>();
         services.AddSingleton<IAuthService, AuthService>();
@@ -140,41 +134,30 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IMemoService, MemoService>();
         services.AddSingleton<ISalaryStructureService, SalaryStructureService>();
 
-
         services.AddSingleton<IRequestService, RequestService>();
         services.AddSingleton<IAttachFileService, AttachFileService>();
         services.AddSingleton<ICommonDataService, CommonDataService>();
         services.AddSingleton<IRequestMailService, RequestMailService>();
         services.AddSingleton<ILetstalkService, LetstalkService>();
         services.AddSingleton<ISendNotificationService, SendNotificationService>();
-        services.AddSingleton<ILeaveRequestRepository, LeaveRequestRepository>();
         services.AddSingleton<ILeaveRequestService, LeaveRequestService>();
         services.AddSingleton<ICheckInOutRequestService, CheckInOutRequestService>();
-        services.AddSingleton<ICheckInOutRequestRepository, CheckInOutRequestRepository>();
         services.AddSingleton<ITeamService, TeamService>();
         services.AddSingleton<ILateInEarlyOutRequestService, LateInEarlyOutRequestService>();
-        services.AddSingleton<ILateInEarlyOutRequestRepository, LateInEarlyOutRequestRepository>();
         services.AddSingleton<IChangeShiftRequestService, ChangeShiftRequestService>();
-        services.AddSingleton<IChangeShiftRequestRepository, ChangeShiftRequestRepository>();
         services.AddSingleton<IKeepInViewRequestService, KeepInViewRequestService>();
-        services.AddSingleton<IKeepInViewRequestRepository, KeepInViewRequestRepository>();
         services.AddSingleton<IShiftService, ShiftService>();
         services.AddSingleton<IExtensionNumberService, ExtensionNumberService>();
         services.AddSingleton<ICompanyService, CompanyService>();
 
         services.AddSingleton<IOvertimeRequestService, OvertimeRequestService>();
-        services.AddSingleton<IOvertimeRequestRepository, OvertimeRequestRepository>();
         services.AddSingleton<IWorkingCalendarService, WorkingCalendarService>();
-        services.AddSingleton<IWorkingCalendarRepository, WorkingCalendarRepository>();
         services.AddSingleton<IDisciplineService, DisciplineService>();
-        services.AddSingleton<IDisciplineRepository, DisciplineRepository>();
         services.AddSingleton<IScheduleArrangeService, ScheduleArrangeService>();
-        services.AddSingleton<IScheduleArrangeRepository, ScheduleArrangeRepository>();
         services.AddSingleton<ISyncWorkingShiftService, SyncWorkingShiftService>();
         services.AddSingleton<IEmployeeLogService, EmployeeLogService>();
         services.AddSingleton<IActionLogService, ActionLogService>();
         services.AddSingleton<IEmployeeWorkingHoursService, EmployeeWorkingHoursService>();
-        services.AddSingleton<IEmployeeWorkingHoursRepository, EmployeeWorkingHoursRepository>();
         services.AddSingleton<IManagementLevelService, ManagementLevelService>();
         services.AddSingleton<IPaternityService, PaternityService>();
         services.AddSingleton<IPostnatalService, PostnatalService>();
@@ -188,6 +171,27 @@ public static class ServiceCollectionExtensions
         services.AddDIExcelServices();
         services.AddSyncFnBService();
 
+        return services;
+    }
+
+    public static IServiceCollection AddDIRepositories(this IServiceCollection services)
+    {
+        services.AddSingleton<IDynamicRepository, DynamicRepository>();
+        services.AddSingleton<IBaseRepository, BaseRepository>();
+        services.AddSingleton<IEmployeeRepository, EmployeeRepository>();
+        services.AddSingleton<IDepartmentRepository, DepartmentRepository>();
+        services.AddSingleton<ITeamRepository, TeamRepository>();
+        services.AddSingleton<IRequestRepository, RequestRepository>();
+        services.AddSingleton<ICheckInOutRequestRepository, CheckInOutRequestRepository>();
+        services.AddSingleton<ILeaveRequestRepository, LeaveRequestRepository>();
+        services.AddSingleton<ILateInEarlyOutRequestRepository, LateInEarlyOutRequestRepository>();
+        services.AddSingleton<IChangeShiftRequestRepository, ChangeShiftRequestRepository>();
+        services.AddSingleton<IKeepInViewRequestRepository, KeepInViewRequestRepository>();
+        services.AddSingleton<IEmployeeWorkingHoursRepository, EmployeeWorkingHoursRepository>();
+        services.AddSingleton<IScheduleArrangeRepository, ScheduleArrangeRepository>();
+        services.AddSingleton<IWorkingCalendarRepository, WorkingCalendarRepository>();
+        services.AddSingleton<IOvertimeRequestRepository, OvertimeRequestRepository>();
+        services.AddSingleton<IDisciplineRepository, DisciplineRepository>();
         return services;
     }
 

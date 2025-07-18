@@ -1,6 +1,4 @@
-﻿using Jose;
-
-namespace HRM.Core.Constants;
+﻿namespace HRM.Core.Constants;
 
 public static class FunctionKey
 {
@@ -60,6 +58,7 @@ public static class FunctionKey
 
     // HR space
     public const string EmployeeManagement = "EmployeeManagement";
+
     public const string ManageAllEmployee = "ManageAllEmployee";
     public const string ManageLocalEmployee = "ManageLocalEmployee";
     public const string ManageExpatEmployee = "ManageExpatEmployee";
@@ -73,6 +72,7 @@ public static class FunctionKey
 
     // Company space
     public const string ContactList = "ContactList";
+
     public const string WorkingCalendars = "WorkingCalendars";
     public const string DailyRequest = "DailyRequest";
     public const string AttendanceReport = "AttendanceReport";
@@ -87,10 +87,10 @@ public static class FunctionKey
 
     //Group Space
     public const string GroupTeamManagement = "GroupTeamManagement";
+
     public const string GroupEmployeeList = "GroupEmployeeList";
     public const string SecondmentCompanyList = "SecondmentCompanyList";
     public const string HeadcountReport = "HeadcountReport";
     public const string CompanyManagement = "CompanyManagement";
     public const string JobLevelManagement = "JobLevelManagement";
-
 }

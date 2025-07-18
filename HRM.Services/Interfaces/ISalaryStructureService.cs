@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using HRM.Core.Models;
 using HRM.Models.SalaryStructure;
-using Models;
 
 public interface ISalaryStructureService
 {
