@@ -401,16 +401,15 @@ public class EmployeeService(
         return supervisors;
     }
 
-    public async Task<EmployeeBioInfoModel> GetEmployeeBioInfoAsync(int empId, string clientIp)
+    public async Task<EmployeeBioInfoModel> GetEmployeeBioInfoAsync(int employeeId)
     {
         var companyId = session.Get<short>(SessionKey.CurrentCompanyId);
 
         var criteria = new GetEmployeeBioInfoCriteria
         {
-            EmpId = empId,
+            EmpId = employeeId,
             CompanyId = companyId,
-            CurrentDate = DateTimeOffset.Now.DateTime.ToClientTimeZone().Date,
-            ClientIp = clientIp
+            CurrentDate = DateTimeOffset.Now.DateTime.ToClientTimeZone().Date
         };
         return await baseService.GetDataEntityAsync<EmployeeBioInfoModel>(criteria);
     }

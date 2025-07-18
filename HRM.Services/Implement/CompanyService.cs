@@ -52,7 +52,7 @@ public class CompanyService(
     {
         var criteria = new GetSubCompaniesCriteria
         {
-            CompanyId = companyId 
+            CompanyId = companyId
         };
 
         return await baseService.GetDataAsync<SubCompany>(criteria);
@@ -68,6 +68,18 @@ public class CompanyService(
         };
 
         return await baseService.GetDataEntityAsync<bool>(criteria);
+    }
+
+    public async Task<string> GetWhitelistIps()
+    {
+        var currentCompanyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
+        var criteria = new GetSystemConfigsByKeyCriteria
+        {
+            CompanyId = currentCompanyId,
+            Key = SystemConfigKey.WhitelistIPs
+        };
+
+        return await baseService.GetDataEntityAsync<string>(criteria);
     }
 
     private static string GetDomainName(HttpContext httpContext)
@@ -89,11 +101,11 @@ public class CompanyService(
         return result.ToList();
     }
 
-    public async Task<CompanySetting> GetByIdAsync(int Id)
+    public async Task<CompanySetting> GetByIdAsync(int companyId)
     {
         var criteria = new GetByIdCriteria
         {
-            CompanyId = Id
+            CompanyId = companyId
         };
         return await baseService.GetDataEntityAsync<CompanySetting>(criteria);
     }

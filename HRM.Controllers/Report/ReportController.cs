@@ -1,7 +1,9 @@
 ﻿namespace HRM.Controllers.Report;
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Core;
 using Core.Constants;
@@ -14,6 +16,8 @@ using GO.UserControl.Client.Core.Session;
 using HRM.Criteria.Report;
 using HRM.ViewModels.Report;
 using Microsoft.AspNetCore.Mvc;
+using NetTools;
+using Newtonsoft.Json;
 using Services.Implement;
 using Services.Interfaces;
 using ViewModels;
@@ -24,8 +28,8 @@ public class ReportController(
     IReportService reportService,
     ICommonDataService commonDataService,
     ITeamService teamService,
-    IEmployeeService employeeService,
-    IHRMAuthService hrmAuthService) : BaseController(session)
+    IHRMAuthService hrmAuthService,
+    ICompanyService companyService) : BaseController(session)
 {
     [HrmPermission(Policy.Read, FunctionKey.ReportHome)]
     public ActionResult Index()
@@ -42,9 +46,26 @@ public class ReportController(
             Year = DateTimeOffset.Now.DateTime.ToClientTimeZone().Year,
             EmpId = session.UserId
         };
-        var clientIp = hrmAuthService.GetClientIp(HttpContext);
-        var companyBioInfo = await employeeService.GetEmployeeBioInfoAsync(CurrentCompanyId, clientIp);
-        var isHavePrivilegeCreateCheckInOutRecord = await IsPrivilegeCreateCheckInOut() && companyBioInfo.IsWhitelisted;
+        var clientIp = IPAddress.Parse(hrmAuthService.GetClientIp(HttpContext));
+        var isWhitelisted = false;
+        var whitelistIps = await companyService.GetWhitelistIps();
+
+        if (string.IsNullOrEmpty(whitelistIps))
+        {
+            model.IsHavePrivilegeCreateCheckInOutRecord = false;
+            return View(model);
+        }
+
+        var whitelistIpsList = JsonConvert.DeserializeObject<List<string>>(whitelistIps).ToList();
+        if (whitelistIpsList.Contains(Constants.AllIp)
+            || whitelistIpsList.Exists(ip => IPAddressRange.Parse(ip).Contains(clientIp)))
+        {
+            isWhitelisted = true;
+        }
+
+        var isWorkFromHome = await IsPrivilegeCreateCheckInOut();
+
+        var isHavePrivilegeCreateCheckInOutRecord = isWorkFromHome && isWhitelisted;
         model.IsHavePrivilegeCreateCheckInOutRecord = isHavePrivilegeCreateCheckInOutRecord;
 
         return View(model);
