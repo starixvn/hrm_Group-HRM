@@ -1,7 +1,9 @@
 ﻿namespace HRM.Controllers.Report;
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Core;
 using Core.Constants;
@@ -15,13 +17,11 @@ using HRM.Criteria.Report;
 using HRM.ViewModels.Report;
 using Microsoft.AspNetCore.Mvc;
 using NetTools;
+using Newtonsoft.Json;
 using Services.Implement;
-using System.Net;
 using Services.Interfaces;
 using ViewModels;
 using ViewModels.AnnualLeave;
-using Newtonsoft.Json;
-using System.Collections.Generic;
 
 public class ReportController(
     IUserControlSession session,
@@ -55,16 +55,10 @@ public class ReportController(
             model.IsHavePrivilegeCreateCheckInOutRecord = false;
             return View(model);
         }
-        var whitelistIpsList = JsonConvert.DeserializeObject<List<string>>(whitelistIps).ToList();
-        var isSkippedIpChecking = whitelistIpsList.Contains(Constants.AllIp);
-        if (isSkippedIpChecking)
-        {
-            isWhitelisted = true;
-        }
 
-        var isIpExist = whitelistIpsList
-            .Exists(ip => IPAddressRange.Parse(ip).Contains(clientIp));
-        if (isIpExist)
+        var whitelistIpsList = JsonConvert.DeserializeObject<List<string>>(whitelistIps).ToList();
+        if (whitelistIpsList.Contains(Constants.AllIp)
+            || whitelistIpsList.Exists(ip => IPAddressRange.Parse(ip).Contains(clientIp)))
         {
             isWhitelisted = true;
         }

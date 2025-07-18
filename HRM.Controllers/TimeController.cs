@@ -1,6 +1,7 @@
 ﻿namespace HRM.Controllers;
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -25,7 +26,6 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Services.Interfaces;
 using ViewModels.Time;
-using System.Collections.Generic;
 
 public class TimeController(
     IUserControlSession session,
@@ -59,23 +59,16 @@ public class TimeController(
             await logger.InfoAsync(clientIpAddress.ToString());
             return RedirectToAction("AccessDenied", "Error");
         }
-        
+
         var whitelistIpsList = JsonConvert.DeserializeObject<List<string>>(whitelistIps).ToList();
-        var isSkippedIpChecking = whitelistIpsList.Contains(Constants.AllIp);
-        if (isSkippedIpChecking)
+        if (whitelistIpsList.Contains(Constants.AllIp)
+            || whitelistIpsList.Exists(ip => IPAddressRange.Parse(ip).Contains(clientIpAddress)))
         {
             return View(DateTimeOffset.Now.DateTime.ToClientTimeZone());
         }
 
-        var isIpExist = whitelistIpsList
-            .Exists(ip => IPAddressRange.Parse(ip).Contains(clientIpAddress));
-        if (!isIpExist)
-        {
-            await logger.InfoAsync(clientIpAddress.ToString());
-            return RedirectToAction("AccessDenied", "Error");
-        }
-
-        return View(DateTimeOffset.Now.DateTime.ToClientTimeZone());
+        await logger.InfoAsync(clientIpAddress.ToString());
+        return RedirectToAction("AccessDenied", "Error");
     }
 
     [AllowAnonymous]
