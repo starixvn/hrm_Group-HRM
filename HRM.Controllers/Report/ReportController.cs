@@ -2,7 +2,6 @@
 
 using System;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Core;
 using Core.Constants;
@@ -21,6 +20,8 @@ using System.Net;
 using Services.Interfaces;
 using ViewModels;
 using ViewModels.AnnualLeave;
+using Newtonsoft.Json;
+using System.Collections.Generic;
 
 public class ReportController(
     IUserControlSession session,
@@ -50,13 +51,14 @@ public class ReportController(
         var isWhitelisted = false;
         var whitelistIps = await companyService.GetWhitelistIps();
 
-        whitelistIps = Regex.Replace(whitelistIps, @"[\[\]\""]", "");
         if (string.IsNullOrEmpty(whitelistIps))
         {
             model.IsHavePrivilegeCreateCheckInOutRecord = false;
             return View(model);
         }
-        var isIpExist = whitelistIps.Split(',').ToList().Exists(ip => IPAddressRange.Parse(ip).Contains(clientIp));
+        var whitelistIpsList = JsonConvert.DeserializeObject<List<string>>(whitelistIps).ToList();
+        var isIpExist = whitelistIpsList
+            .Exists(ip => IPAddressRange.Parse(ip).Contains(clientIp));
         if (isIpExist)
         {
             isWhitelisted = true;

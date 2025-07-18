@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using Core;
 using Core.Constants;
 using Core.Filters;
-using Core.Models;
 using Core.Services;
 using Criteria.CompanySite;
 using Criteria.SystemSetting;
@@ -20,13 +19,13 @@ using GO.UserControl.Client.Core.Services;
 using GO.UserControl.Client.Core.Session;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Text.RegularExpressions;
 using Models;
 using NetTools;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Services.Interfaces;
 using ViewModels.Time;
+using System.Collections.Generic;
 
 public class TimeController(
     IUserControlSession session,
@@ -60,9 +59,10 @@ public class TimeController(
             await logger.InfoAsync(clientIpAddress.ToString());
             return RedirectToAction("AccessDenied", "Error");
         }
-
-        whitelistIps = Regex.Replace(whitelistIps, @"[\[\]\""]", "");
-        var isIpExist = whitelistIps.Split(',').ToList().Exists(ip => IPAddressRange.Parse(ip).Contains(clientIpAddress));
+        
+        var whitelistIpsList = JsonConvert.DeserializeObject<List<string>>(whitelistIps).ToList();
+        var isIpExist = whitelistIpsList
+            .Exists(ip => IPAddressRange.Parse(ip).Contains(clientIpAddress));
         if (!isIpExist)
         {
             await logger.InfoAsync(clientIpAddress.ToString());
