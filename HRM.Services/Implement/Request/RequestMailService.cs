@@ -36,7 +36,7 @@ public class RequestMailService(IRequestRepository requestRepository) : IRequest
             Action = action,
             RequestType = requestType,
             RequestId = requestId,
-            CallbackUrl = relatedPeople.EmailSetting.CallbackUrl,
+            CallbackUrl = relatedPeople.EmailSetting?.CallbackUrl,
         };
         GetMailAndLetStalkApprover(relatedPeople, emailModel);
 

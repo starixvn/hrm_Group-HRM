@@ -167,7 +167,7 @@ public class LeaveRequestService(
         }
         catch (Exception e)
         {
-            await logger.InfoAsync($"Send Email + Letstalk insert fail: {e.Message});");
+            await logger.ErrorAsync($"Send Email + Letstalk insert fail: {e.Message});");
         }
     }
 
@@ -181,7 +181,7 @@ public class LeaveRequestService(
         }
         catch (Exception e)
         {
-            await logger.InfoAsync($"Send Email + Letstalk fail: {e.Message});");
+            await logger.ErrorAsync($"Send Email + Letstalk update fail: {e.Message});");
         }
     }
 
