@@ -80,18 +80,6 @@ public class CompanyService(
         return await baseService.GetDataEntityAsync<string>(criteria);
     }
 
-    public async Task<string> GetWhitelistIps()
-    {
-        var currentCompanyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
-        var criteria = new GetSystemConfigsByKeyCriteria
-        {
-            CompanyId = currentCompanyId,
-            Key = SystemConfigKey.WhitelistIPs
-        };
-
-        return await baseService.GetDataEntityAsync<string>(criteria);
-    }
-
     public string GetDomainName()
     {
         var httpContext = httpContextAccessor.HttpContext
