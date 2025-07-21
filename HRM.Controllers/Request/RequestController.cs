@@ -230,7 +230,7 @@ public class RequestController(
     }
 
     [HttpPost]
-    [HrmPermission(Policy.Host, FunctionKey.ApproveRequest)]
+    [HrmPermission(Policy.Host, FunctionKey.VerifyRequest, FunctionKey.ApproveRequest, FunctionKey.ProcessRequest, FunctionKey.VoidRequest)]
     public async Task<IActionResult> ProcessMultipleRequests(ApproveRequestsParam model)
     {
         model.ActorId = session.UserId;
