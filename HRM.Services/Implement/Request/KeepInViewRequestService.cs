@@ -24,7 +24,6 @@ public class KeepInViewRequestService(
     IBaseService baseService,
     IRequestMailService requestMailService,
     IEmailService emailService,
-    ILetstalkService letstalkService,
     IUserControlSession userControlSession,
     ICompanyService companyService) : IKeepInViewRequestService
 {
@@ -126,8 +125,6 @@ public class KeepInViewRequestService(
                 email.Subject,
                 email.Body,
                 request.Approver.CompanyId);
-
-            await letstalkService.SendNotificationAsync(email.LetsTalk, email.Subject, email.Body);
         }
     }
 
@@ -162,8 +159,6 @@ public class KeepInViewRequestService(
                 email.Subject,
                 email.Body,
                 request.Approver.CompanyId);
-
-            await letstalkService.SendNotificationAsync(email.LetsTalk, email.Subject, email.Body);
         }
     }
 
@@ -188,8 +183,6 @@ public class KeepInViewRequestService(
                 email.SendCC,
                 email.Subject,
                 email.Body);
-
-            await letstalkService.SendNotificationAsync(email.LetsTalk, email.Subject, email.Body);
         }
     }
 
@@ -221,8 +214,6 @@ public class KeepInViewRequestService(
                 email.Subject,
                 email.Body,
                 companyId: request.Requester.CompanyId);
-
-            await letstalkService.SendNotificationAsync(email.LetsTalk, email.Subject, email.Body);
         }
     }
 }

@@ -21,9 +21,7 @@ public class CompanyService(
 {
     public async Task<CompanySite> GetCompanySiteByDomainAsync()
     {
-        var httpContext = httpContextAccessor.HttpContext
-                          ?? throw new InvalidOperationException("HttpContext is unavailable.");
-        var domainName = GetDomainName(httpContext);
+        var domainName = GetDomainName();
         var criteria = new GetCompanySiteByDomainCriteria
         {
             Domain = domainName
@@ -82,8 +80,10 @@ public class CompanyService(
         return await baseService.GetDataEntityAsync<string>(criteria);
     }
 
-    private static string GetDomainName(HttpContext httpContext)
+    public string GetDomainName()
     {
+        var httpContext = httpContextAccessor.HttpContext
+                          ?? throw new InvalidOperationException("HttpContext is unavailable.");
         var protocol = httpContext.Request.Headers["x-forwarded-proto"].ToString();
         return $"{(!string.IsNullOrWhiteSpace(protocol) ? protocol : httpContext.Request.Scheme)}://{httpContext.Request.Host.Value}";
     }

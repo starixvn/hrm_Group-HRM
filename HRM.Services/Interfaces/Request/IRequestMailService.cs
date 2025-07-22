@@ -7,7 +7,7 @@ namespace HRM.Services.Interfaces.Request;
 
 public interface IRequestMailService
 {
-    Task<EmailModel> GetMailToMailCcAndLetStalk(long requestId, int action);
+    Task<EmailModel> GetMailToMailCcAndLetStalk(long requestId, int action, int? requestType = null);
 
     byte GetActionProcessRequest(byte requestStatusId, RequestCommand command);
 

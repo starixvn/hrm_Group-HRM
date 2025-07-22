@@ -54,7 +54,7 @@ app.UseForwardedHeaders(new ForwardedHeadersOptions
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
-app.UseWhen(context => context.Request.Path.StartsWithSegments("/api/fnb"), branch =>
+app.UseWhen(context => context.Request.Path.StartsWithSegments("/api"), branch =>
 {
     branch.UseMiddleware<ApiKeyMiddleware>();
 });

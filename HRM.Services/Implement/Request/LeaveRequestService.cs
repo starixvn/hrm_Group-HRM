@@ -19,6 +19,7 @@ using HRM.Resources;
 using HRM.Services.Interfaces;
 using HRM.Services.Interfaces.Request;
 using Microsoft.AspNetCore.Hosting;
+using Fanex.Logging;
 
 namespace HRM.Services.Implement.Request;
 
@@ -29,11 +30,16 @@ public class LeaveRequestService(
     IBaseService baseService,
     IEmailService emailService,
     ILetstalkService letStalkService,
+    ICompanyService companyService,
+    ILogger logger,
     IUserControlSession userControlSession) : ILeaveRequestService
 {
     private const string EmailTemplatePathForRequest = "EmailTemplates/Leave.Request.txt";
     private const string EmailTemplatePathForCancel = "EmailTemplates/Leave.Cancel.txt";
     private const string EmailTemplatePathForApproval = "EmailTemplates/Leave.Approval.txt";
+    private const string LetsTalkTemplatePathForRequest = "LetsTalkTemplate/Leave.Request.txt";
+    private const string LetsTalkTemplatePathForCancel = "LetsTalkTemplate/Leave.Cancel.txt";
+    private const string LetsTalkTemplatePathForApproval = "LetsTalkTemplate/Leave.Approval.txt";
 
     public async Task<IList<LeaveRequest>> GetByDateAsync(GetLeaveRequestByDateCriteria criteria)
     {
@@ -49,7 +55,11 @@ public class LeaveRequestService(
     public async Task<LeaveRequest> GetByIdAsync(long requestId)
     {
         var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
-
+        if (companyId == 0)
+        {
+            var company = await companyService.GetCompanySiteByDomainAsync();
+            companyId = company.CompanyId;
+        }
         var criteria = new GetLeaveRequestByIdCriteria
         {
             RequestId = requestId,
@@ -139,29 +149,40 @@ public class LeaveRequestService(
 
     public void SendMailAndSendLetstalkCreateRequest(InsertLeaveRequestCriteria criteria, string domain, short companyId)
     {
-        var templateEmailPath = Path.Combine(env.ContentRootPath, EmailTemplatePathForRequest);
-        Task.Run(() => SendMailForInsertSuccessfully(criteria, templateEmailPath, domain, companyId));
+        Task.Run(() => SendMailForInsertSuccessfully(criteria, domain, companyId));
     }
 
     public void SendMailEditRequest(UpdateLeaveRequestCriteria criteria, string domain, short companyId)
     {
-        var templateEmailPath = Path.Combine(env.ContentRootPath, EmailTemplatePathForRequest);
-        Task.Run(() => SendMailForUpdateSuccessfully(criteria, templateEmailPath, domain, companyId));
+        Task.Run(() => SendMailForUpdateSuccessfully(criteria, domain, companyId));
     }
 
-    private async Task SendMailForInsertSuccessfully(InsertLeaveRequestCriteria criteria, string templateEmailPath, string domain, short companyId)
+    private async Task SendMailForInsertSuccessfully(InsertLeaveRequestCriteria criteria, string domain, short companyId)
     {
-        var email = await requestMailService.GetMailToMailCcAndLetStalk(criteria.RequestId, (int)SettingsSendMail.New);
-        email.Subject = Messages.LeaveEmailSubject + " " + criteria.EmployeeName;
-        await SendMailForSuccessfully(criteria, templateEmailPath, email, domain, companyId);
+        try
+        {
+            var email = await requestMailService.GetMailToMailCcAndLetStalk(criteria.RequestId, (int)SettingsSendMail.New, (int)RequestType.Leave);
+            email.Subject = Messages.LeaveEmailSubject + " " + criteria.EmployeeName;
+            await SendMailForSuccessfully(criteria, email, domain, companyId);
+        }
+        catch (Exception e)
+        {
+            await logger.ErrorAsync($"Send Email + Letstalk insert fail: {e.Message});");
+        }
     }
 
-    private async Task SendMailForUpdateSuccessfully(UpdateLeaveRequestCriteria criteria, string templateEmailPath, string domain, short companyId)
+    private async Task SendMailForUpdateSuccessfully(UpdateLeaveRequestCriteria criteria, string domain, short companyId)
     {
-        var email = await requestMailService.GetMailToMailCcAndLetStalk(criteria.RequestId, (int)SettingsSendMail.Edit);
-        email.Subject = Messages.UpdatedLeaveEmailSubject + " " + criteria.EmployeeName;
-
-        await SendMailForSuccessfully(criteria, templateEmailPath, email, domain, companyId);
+        try
+        {
+            var email = await requestMailService.GetMailToMailCcAndLetStalk(criteria.RequestId, (int)SettingsSendMail.Edit, (int)RequestType.Leave);
+            email.Subject = Messages.UpdatedLeaveEmailSubject + " " + criteria.EmployeeName;
+            await SendMailForSuccessfully(criteria, email, domain, companyId);
+        }
+        catch (Exception e)
+        {
+            await logger.ErrorAsync($"Send Email + Letstalk update fail: {e.Message});");
+        }
     }
 
     public async Task SendMailDeleteRequest(long requestId)
@@ -169,14 +190,13 @@ public class LeaveRequestService(
         var request = await GetByIdAsync(requestId);
         if (request != null)
         {
-            var emailTemplatePath = Path.Combine(env.ContentRootPath, EmailTemplatePathForCancel);
-            var email = await requestMailService.GetMailToMailCcAndLetStalk(requestId, (byte)SettingsSendMail.Cancel);
+            var email = await requestMailService.GetMailToMailCcAndLetStalk(requestId, (byte)SettingsSendMail.Cancel, (int)RequestType.Leave);
             var fromDate = request.TotalDays == Constants.HalfDayOffValue ? GetFromTimeHalfDay(request.LeaveDetail) : request.FromDate;
             var toDate = request.TotalDays == Constants.HalfDayOffValue ? GetToTimeHalfDay(request.LeaveDetail) : request.ToDate;
             var forDate = requestMailService.GetStringDateForLeaveRequest(request.FromDate, fromDate, toDate, request.TotalDays);
 
             email.Subject = string.Format(Messages.MessageLeaveRequestCanceled, request.Requester.Nickname);
-            email.Body = Utilities.ReadTextFile(emailTemplatePath);
+            email.Body = Utilities.ReadTextFile(GetTemplatePath(EmailTemplatePathForCancel));
             email.Body = string.Format(
                 email.Body,
                 email.SendToNickName,
@@ -191,7 +211,16 @@ public class LeaveRequestService(
                 email.Subject,
                 email.Body);
 
-            await letStalkService.SendNotificationAsync(email.LetsTalk, email.Subject, email.Body);
+            var content = Utilities.ReadTextFile(GetTemplatePath(LetsTalkTemplatePathForCancel));
+            content = string.Format(
+                content,
+                request.Requester.DisplayName,
+                forDate,
+                request.LeaveType.Name,
+                request.Remark
+                );
+
+            await SendLetsTalkNotifications(email, content);
         }
     }
 
@@ -200,19 +229,18 @@ public class LeaveRequestService(
         var request = await GetByIdAsync(requestId);
         if (request != null)
         {
-            var emailTemplatePath = Path.Combine(env.ContentRootPath, EmailTemplatePathForApproval);
             var action = requestMailService.GetActionProcessRequest(request.Status.Id, command);
             var commandMessage = requestMailService.GetCommandMessage(command);
             var fromDate = request.TotalDays == Constants.HalfDayOffValue ? GetFromTimeHalfDay(request.LeaveDetail) : request.FromDate;
             var toDate = request.TotalDays == Constants.HalfDayOffValue ? GetToTimeHalfDay(request.LeaveDetail) : request.ToDate;
             var forDate = requestMailService.GetStringDateForLeaveRequest(request.FromDate, fromDate, toDate, request.TotalDays);
 
-            var email = await requestMailService.GetMailToMailCcAndLetStalk(requestId, action);
+            var email = await requestMailService.GetMailToMailCcAndLetStalk(requestId, action, (int)RequestType.Leave);
             email.Subject = string.Format(Messages.ApprovalNotificationLeaveSubject,
                 request.Requester.Nickname,
                 commandMessage,
                 actor.Nickname);
-            email.Body = Utilities.ReadTextFile(emailTemplatePath);
+            email.Body = Utilities.ReadTextFile(GetTemplatePath(EmailTemplatePathForApproval));
             email.Body = string.Format(
                 email.Body,
                 email.SendToNickName,
@@ -232,7 +260,19 @@ public class LeaveRequestService(
                 companyId: request.Requester.CompanyId
                 );
 
-            await letStalkService.SendNotificationAsync(email.LetsTalk, email.Subject, email.Body);
+            var content = Utilities.ReadTextFile(GetTemplatePath(LetsTalkTemplatePathForApproval));
+            content = string.Format(
+                content,
+                commandMessage,
+                actor.DisplayName,
+                forDate,
+                request.LeaveType.Name,
+                request.Remark);
+
+            if (email.Owner != null && !string.IsNullOrWhiteSpace(email.Owner.LetsTalkId))
+            {
+                await Task.Run(() => letStalkService.SendNotification(email.Owner.LetsTalkId, content));
+            }
         }
     }
 
@@ -260,7 +300,12 @@ public class LeaveRequestService(
         return toTime.DateTime;
     }
 
-    private async Task SendMailForSuccessfully(BaseLeaveRequestCriteria criteria, string templateEmailPath, EmailModel email, string domain, short companyId)
+    private string GetTemplatePath(string templatePath)
+    {
+        return Path.Combine(env.ContentRootPath, templatePath);
+    }
+
+    private async Task SendMailForSuccessfully(BaseLeaveRequestCriteria criteria, EmailModel email, string domain, short companyId)
     {
         email.Subject += criteria.TotalDays > 1
             ? " from " + criteria.FromDate.ToDateMonthYearFormatedDate() + " to " + criteria.ToDate.ToDateMonthYearFormatedDate()
@@ -269,7 +314,7 @@ public class LeaveRequestService(
         var toDate = criteria.TotalDays == Constants.HalfDayOffValue ? GetToTimeHalfDay(criteria.RequestDetail) : criteria.ToDate;
         var forDate = requestMailService.GetStringDateForLeaveRequest(criteria.FromDate, fromDate, toDate, criteria.TotalDays);
 
-        email.Body = Utilities.ReadTextFile(templateEmailPath);
+        email.Body = Utilities.ReadTextFile(GetTemplatePath(EmailTemplatePathForRequest));
         email.Body = string.Format(
             email.Body,
             email.SendToNickName,
@@ -288,6 +333,29 @@ public class LeaveRequestService(
                 companyId);
         }
 
-        await Task.Run(() => letStalkService.SendNotification(email.LetsTalk, email.Subject, email.Body));
+        var content = Utilities.ReadTextFile(GetTemplatePath(LetsTalkTemplatePathForRequest));
+        content = string.Format(
+            content,
+            email.Subject,
+            email.RequesterCode,
+            criteria.EmployeeName,
+            criteria.LeaveTypeName,
+            forDate,
+            email.PICDisplayName,
+            criteria.Remark);
+
+        await SendLetsTalkNotifications(email, content);
+    }
+
+    private async Task SendLetsTalkNotifications(EmailModel email, string content)
+    {
+        if (email.Approver != null && !string.IsNullOrWhiteSpace(email.Approver.LetsTalkId))
+        {
+            await Task.Run(() => letStalkService.SendNotification(email.Approver.LetsTalkId, content, email.Approver.ReplyMarkup));
+        }
+        if (email.Verifier != null && !string.IsNullOrWhiteSpace(email.Verifier.LetsTalkId))
+        {
+            await Task.Run(() => letStalkService.SendNotification(email.Verifier.LetsTalkId, content, email.Verifier.ReplyMarkup));
+        }
     }
 }

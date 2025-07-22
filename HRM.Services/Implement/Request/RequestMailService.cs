@@ -4,7 +4,9 @@ using HRM.Core;
 using HRM.Core.Enums;
 using HRM.Criteria.Request;
 using HRM.Models;
+using HRM.Models.LetsTalk;
 using HRM.Models.Request;
+using HRM.Models.Supervisor;
 using HRM.Repositories.Interfaces;
 using HRM.Resources;
 using HRM.Services.Interfaces.Request;
@@ -21,7 +23,7 @@ public class RequestMailService(IRequestRepository requestRepository) : IRequest
 
     #endregion constant
 
-    public async Task<EmailModel> GetMailToMailCcAndLetStalk(long requestId, int action)
+    public async Task<EmailModel> GetMailToMailCcAndLetStalk(long requestId, int action, int? requestType)
     {
         var criteria = new GetRequestRelatedPeopleCriteria
         {
@@ -29,8 +31,14 @@ public class RequestMailService(IRequestRepository requestRepository) : IRequest
             Action = action
         };
         var relatedPeople = await requestRepository.GetRequestRelatedPeople(criteria);
-
-        var emailModel = GetMailAndLetStalkApprover(relatedPeople);
+        var emailModel = new EmailModel
+        {
+            Action = action,
+            RequestType = requestType,
+            RequestId = requestId,
+            CallbackUrl = relatedPeople.EmailSetting?.CallbackUrl,
+        };
+        GetMailAndLetStalkApprover(relatedPeople, emailModel);
 
         GetMailAndLetStalkVerifier(relatedPeople, emailModel);
 
@@ -104,19 +112,21 @@ public class RequestMailService(IRequestRepository requestRepository) : IRequest
         return action;
     }
 
-    private static EmailModel GetMailAndLetStalkApprover(RequestRelatedPeopleModel relatedPeople)
+    private static void GetMailAndLetStalkApprover(RequestRelatedPeopleModel relatedPeople, EmailModel emailModel)
     {
-        var emailModel = new EmailModel();
         var approver = relatedPeople.Approver;
         if (approver == null || relatedPeople.EmailSetting == null || !relatedPeople.EmailSetting.AllowSendApprover)
         {
-            return emailModel;
+            return;
         }
         emailModel.SendTo = approver.Email;
         emailModel.SendToNickName = approver.NickName;
-        emailModel.LetsTalk = !string.IsNullOrWhiteSpace(approver.LetsTalk) ? approver.LetsTalk : string.Empty;
 
-        return emailModel;
+        if (!string.IsNullOrWhiteSpace(approver.LetsTalk)
+        && approver.EmpId != relatedPeople.Requester?.EmpId)
+        {
+            emailModel.Approver = GenerateLetsTalkActor(emailModel, approver, true);
+        }
     }
 
     private static void GetMailAndLetStalkVerifier(RequestRelatedPeopleModel relatedPeople, EmailModel emailModel)
@@ -143,30 +153,19 @@ public class RequestMailService(IRequestRepository requestRepository) : IRequest
                 emailModel.SendTo += ";" + relatedPeople.Verifier.Email;
             }
         }
-
-        GetLetStalkVerifier(relatedPeople, emailModel);
-    }
-
-    private static void GetLetStalkVerifier(RequestRelatedPeopleModel relatedPeople, EmailModel emailModel)
-    {
-        if (string.IsNullOrWhiteSpace(emailModel.LetsTalk))
+        if (!string.IsNullOrWhiteSpace(relatedPeople.Verifier.LetsTalk)
+        && relatedPeople.Verifier.EmpId != relatedPeople.Approver?.EmpId
+        && relatedPeople.Verifier.EmpId != relatedPeople.Requester?.EmpId)
         {
-            emailModel.LetsTalk = relatedPeople.Verifier.LetsTalk;
-        }
-        else
-        {
-            var isValidLetStalk = relatedPeople.Approver != null
-                                && !string.IsNullOrWhiteSpace(relatedPeople.Verifier.LetsTalk)
-                                && !relatedPeople.Verifier.LetsTalk.Equals(relatedPeople.Approver.LetsTalk, StringComparison.OrdinalIgnoreCase);
-            if (isValidLetStalk)
-            {
-                emailModel.LetsTalk += ";" + relatedPeople.Verifier.LetsTalk;
-            }
+            emailModel.Verifier = GenerateLetsTalkActor(emailModel, relatedPeople.Verifier, false);
         }
     }
+
 
     private static void GetMailAndLetStalkOwnerRequest(RequestRelatedPeopleModel relatedPeople, EmailModel emailModel)
     {
+        emailModel.RequesterCode = relatedPeople.Requester?.EmpCode;
+        emailModel.PICDisplayName = relatedPeople.Requester?.PICDisplayName;
         if (relatedPeople.EmailSetting is { AllowSendUser: true } && relatedPeople.Requester != null)
         {
             if (string.IsNullOrWhiteSpace(emailModel.SendTo))
@@ -178,15 +177,14 @@ public class RequestMailService(IRequestRepository requestRepository) : IRequest
             {
                 emailModel.SendCC = AddMailToList(emailModel.SendCC, relatedPeople.Requester.Email);
             }
+        }
 
-            if (string.IsNullOrWhiteSpace(emailModel.LetsTalk))
+        if (relatedPeople.Requester != null && !string.IsNullOrWhiteSpace(relatedPeople.Requester.LetsTalk))
+        {
+            emailModel.Owner = new LetsTalkActor
             {
-                emailModel.LetsTalk = relatedPeople.Requester.LetsTalk;
-            }
-            else
-            {
-                emailModel.LetsTalk += ";" + relatedPeople.Requester.LetsTalk;
-            }
+                LetsTalkId = relatedPeople.Requester.LetsTalk
+            };
         }
     }
 
@@ -223,5 +221,34 @@ public class RequestMailService(IRequestRepository requestRepository) : IRequest
                 emailModel.SendCC += ";" + relatedPeople.Requester.MailGroup;
             }
         }
+    }
+
+    private static LetsTalkActor GenerateLetsTalkActor(EmailModel emailModel, SupervisorNameModel supervisor, bool isApprover)
+    {
+        var allowReplyMarkup = emailModel.Action == (byte)SettingsSendMail.New || emailModel.Action == (byte)SettingsSendMail.Edit;
+        if (!allowReplyMarkup)
+        {
+            return new LetsTalkActor
+            {
+                LetsTalkId = supervisor.LetsTalk
+            };
+        }
+
+        var roleId = isApprover ? "3" : "2";
+        var textAccept = isApprover ? "Approve" : "Verify";
+        var param = $"&requestId={emailModel.RequestId}&requestTypeId={emailModel.RequestType}&roleId={roleId}&empId={supervisor.EmpId}&nickName={supervisor.NickName}&fullName={supervisor.FullName}";
+        return new LetsTalkActor
+        {
+            LetsTalkId = supervisor.LetsTalk,
+            ReplyMarkup = new ReplyMarkup
+            {
+                Actions =
+                    {
+                        new ReplyAction { ActionType = ReplyActionType.PostBack, Label = textAccept, Data = $"{emailModel.CallbackUrl}/api/request/process?command={RequestCommand.Approve}{param}" },
+                        new ReplyAction { ActionType = ReplyActionType.PostBack, Label = "Reject", Data = $"{emailModel.CallbackUrl}/api/request/process?command={RequestCommand.Reject}{param}" },
+                        new ReplyAction { ActionType = ReplyActionType.Uri, Label = "View detail", Uri = $"{emailModel.CallbackUrl}/request/member" }
+                    }
+            }
+        };
     }
 }

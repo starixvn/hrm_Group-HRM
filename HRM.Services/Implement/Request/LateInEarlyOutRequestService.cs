@@ -24,7 +24,6 @@ public class LateInEarlyOutRequestService(
     IRequestMailService requestMailService,
     IEmailService emailService,
     IBaseService baseService,
-    ILetstalkService letStalkService,
     IUserControlSession userControlSession,
     ICompanyService companyService) : ILateInEarlyOutRequestService
 {
@@ -126,8 +125,6 @@ public class LateInEarlyOutRequestService(
                 email.Subject,
                 email.Body,
                 request.Approver.CompanyId);
-
-            await letStalkService.SendNotificationAsync(email.LetsTalk, email.Subject, email.Body);
         }
     }
 
@@ -164,8 +161,6 @@ public class LateInEarlyOutRequestService(
                 email.Subject,
                 email.Body,
                 request.Approver.CompanyId);
-
-            await letStalkService.SendNotificationAsync(email.LetsTalk, email.Subject, email.Body);
         }
     }
 
@@ -192,8 +187,6 @@ public class LateInEarlyOutRequestService(
                 email.SendCC,
                 email.Subject,
                 email.Body);
-
-            await letStalkService.SendNotificationAsync(email.LetsTalk, email.Subject, email.Body);
         }
     }
 
@@ -228,8 +221,6 @@ public class LateInEarlyOutRequestService(
                 email.Subject,
                 email.Body,
                 companyId: request.Requester.CompanyId);
-
-            await letStalkService.SendNotificationAsync(email.LetsTalk, email.Subject, email.Body);
         }
     }
 }

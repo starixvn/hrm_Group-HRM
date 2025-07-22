@@ -1,0 +1,5 @@
+This is to inform you about your member, {1} had a {2} request.
+- Date: {3} ({4})
+- Time: {5}
+- Remark: {6}
+Please process this request at: <a href="{7}/request/member">{7}/request/member</a>
