@@ -28,7 +28,6 @@ public class EditEmployeeParam
     public string ResignedReason { get; set; }
     public DateTime? MilitaryFromDate { get; set; }
     public DateTime? MilitaryToDate { get; set; }
-    public string Skype { get; set; }
     public byte Marriage { get; set; }
     public string PermanentAddress { get; set; }
     public string CurrentAddress { get; set; }

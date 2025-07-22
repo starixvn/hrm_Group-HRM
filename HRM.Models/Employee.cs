@@ -88,8 +88,6 @@ public class Employee : EntityBase<int>
 
     public string ResignedReason { get; set; }
 
-    public string Skype { get; set; }
-
     public string LetsTalk { get; set; }
 
     public byte Marriage { get; set; }
@@ -235,8 +233,7 @@ public class Employee : EntityBase<int>
     [Display(Name = "Pickup Remark")]
     public string PickupRemark { get; set; }
 
-    private string[] GetRoles2Array()
-    {
-        return Roles?.Select(i => i.RoleId.ToString()).ToArray();
-    }
+    public bool AutoApproveRequest { get; set; }
+
+    private string[] GetRoles2Array() => Roles?.Select(i => i.RoleId.ToString()).ToArray();
 }

@@ -33,7 +33,6 @@ public class UpdateEmployeeCriteria : CriteriaBase
     public string ResignedReason { get; set; }
     public DateTime? MilitaryFromDate { get; set; }
     public DateTime? MilitaryToDate { get; set; }
-    public string Skype { get; set; }
     public string LetsTalk { get; set; }
     public byte Marriage { get; set; }
     public int ModifiedBy { get; set; }
@@ -68,6 +67,7 @@ public class UpdateEmployeeCriteria : CriteriaBase
     public int? SubCompanyId { get; set; }
     public int? SalaryStructureId { get; set; }
     public string Salary { get; set; }
+    public bool AutoApproveRequest { get; set; }
 
     public override string GetSettingKey() => "Employee_UpdateEmployee";
 

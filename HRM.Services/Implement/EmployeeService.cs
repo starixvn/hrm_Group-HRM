@@ -30,8 +30,7 @@ public class EmployeeService(
     IEmployeeRepository employeeRepository,
     IBaseService baseService,
     IRoleService roleService,
-    IUserControlSession session,
-    ICompanyService companyService) : IEmployeeService
+    IUserControlSession session) : IEmployeeService
 {
     public async Task<string> GenerateEmployeeCode()
     {
@@ -282,7 +281,6 @@ public class EmployeeService(
             ConfirmedDate = param.ConfirmedDate,
             ResignedDate = param.ResignedDate,
             ResignedReason = param.ResignedReason,
-            Skype = param.Skype,
             LetsTalk = param.LetsTalk,
             Marriage = param.Marriage,
             PermanentAddress = param.PermanentAddress,
@@ -333,11 +331,6 @@ public class EmployeeService(
             ResignedDate = param.ResignedDate
         };
         return await baseService.ExecuteNonQueryAsync(criteria);
-    }
-
-    public async Task<CommandResult> UpdateUserIdAsync(UpdateUserIdCommand command)
-    {
-        return await baseService.ExecuteNonQueryAsync(command);
     }
 
     public string CalculateLengthOfService(DateTime? joinedDate, DateTime? militaryFromDate, DateTime? militaryToDate)

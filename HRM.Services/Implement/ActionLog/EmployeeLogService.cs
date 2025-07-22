@@ -60,7 +60,6 @@ public class EmployeeLogService(
         new() { FieldName = "PermanentAddress", DisplayName = Labels.Address },
         new() { FieldName = "CurrentAddress", DisplayName = Labels.CurrentAddress },
         new() { FieldName = "PickupRemark", DisplayName = Labels.PickupRemark },
-        new() { FieldName = "Skype", DisplayName = Labels.Skype },
         new() { FieldName = "LetsTalk", DisplayName = Labels.LetsTalk },
         new() { FieldName = "Unit", DisplayName = Labels.Unit },
         new() { FieldName = "TeamId", DisplayName = Labels.Team },

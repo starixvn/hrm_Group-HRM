@@ -663,7 +663,6 @@ public class EmployeeController(
             ConfirmedDate = model.ConfirmedDate,
             ResignedDate = model.ResignedDate,
             ResignedReason = model.ResignedReason,
-            Skype = model.Skype,
             LetsTalk = model.LetsTalk,
             Marriage = model.Marriage,
             PermanentAddress = model.Address,

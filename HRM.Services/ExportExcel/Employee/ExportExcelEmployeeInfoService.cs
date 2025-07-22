@@ -219,7 +219,6 @@ public class ExportExcelEmployeeInfoService(
             p.HomePhone,
             p.Email,
             p.PickupRemark,
-            p.Skype,
             p.LetsTalk,
             CanOT = p.CanOT ? Labels.Yes : Labels.No,
             p.SpecialOT,

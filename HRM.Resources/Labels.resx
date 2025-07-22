@@ -450,9 +450,6 @@
   <data name="SearchEmployee" xml:space="preserve">
     <value>Search Employee</value>
   </data>
-  <data name="Skype" xml:space="preserve">
-    <value>Skype</value>
-  </data>
   <data name="Memo" xml:space="preserve">
     <value>Memo</value>
   </data>

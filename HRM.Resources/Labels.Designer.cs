@@ -4867,15 +4867,6 @@ namespace HRM.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Skype.
-        /// </summary>
-        public static string Skype {
-            get {
-                return ResourceManager.GetString("Skype", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Source.
         /// </summary>
         public static string Source {

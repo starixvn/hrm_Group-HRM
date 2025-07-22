@@ -99,7 +99,6 @@
         <Setting Key="EmployeeSupervisor_GetListSupervisorRequestID" SpName="EmployeeSupervisor_GetListSupervisorRequestID" DbName="bodb_HRM" Plain="0" />
         <Setting Key="EmployeeSupervisor_GetDisciplineSettingById" SpName="EmployeeSupervisor_GetDisciplineSettingById" DbName="bodb_HRM" Plain="0" />
         <Setting Key="Employee_GetMemberByGender" SpName="Employee_GetMemberByGender" DbName="bodb_HRM" Plain="0" />
-        <Setting Key="Employee_UpdateUserId" SpName="Employee_UpdateUserId" DbName="bodb_HRM" Plain="0" />
 		<Setting Key="Employee_GetHRAndSupervisorByEmpId" SpName="Employee_GetHRAndSupervisorByEmpId" DbName="bodb_HRM" Plain="0" />
         <Setting Key="Employee_GetEmployeeForPIC" SpName="Employee_GetEmployeeForPIC" DbName="bodb_HRM" Plain="0" />
 		<Setting Key="TimeRecord_GetCheckInOutOnline" SpName="TimeRecord_GetCheckInOutOnline" DbName="bodb_HRM" Plain="0" />

@@ -17,8 +17,6 @@ public class UpdateEmployeePersonalInformationCriteria : CriteriaBase
 
     public byte? Gender { get; set; }
 
-    public string Skype { get; set; }
-
     public string LetsTalk { get; set; }
 
     public byte Marriage { get; set; }

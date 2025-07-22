@@ -178,7 +178,6 @@ public class InformationController(
             Major = employee.Major,
             Phone = employee.Phone,
             Gender = employee.Gender,
-            Skype = employee.Skype,
             LetsTalk = employee.LetsTalk,
             ChineseName = employee.ChineseName,
             Marriage = employee.Marriage,
