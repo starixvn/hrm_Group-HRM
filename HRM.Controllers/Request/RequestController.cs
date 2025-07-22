@@ -32,8 +32,7 @@ public class RequestController(
     ITeamService teamService,
     IAttachFileService attachFileService,
     IBaseService baseService,
-    IRequestRepository requestRepository,
-    ICompanyService companyService) : BaseController(session)
+    IRequestRepository requestRepository) : BaseController(session)
 {
     private const string EmployeeRequestViewName = "EmployeeRequest";
 

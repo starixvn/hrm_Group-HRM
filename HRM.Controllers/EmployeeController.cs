@@ -705,7 +705,8 @@ public class EmployeeController(
             MilitaryToDate = model.MilitaryToDate,
             SubCompanyId = model.SubCompanyId,
             SalaryStructureId = model.SalaryStructureId,
-            Salary = !string.IsNullOrWhiteSpace(model.Salary) ? Cryptography.EncryptPassword(model.Salary) : model.Salary
+            Salary = !string.IsNullOrWhiteSpace(model.Salary) ? Cryptography.EncryptPassword(model.Salary) : model.Salary,
+            AutoApproveRequest = model.AutoApproveRequest
         };
     }
 

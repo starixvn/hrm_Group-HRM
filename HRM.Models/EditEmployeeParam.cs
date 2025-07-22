@@ -60,4 +60,5 @@ public class EditEmployeeParam
     public int? SubCompanyId { get; set; }
     public int? SalaryStructureId { get; set; }
     public string Salary { get; set; }
+    public bool AutoApproveRequest { get; set; }
 }

@@ -565,6 +565,15 @@ namespace HRM.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Auto-Approved.
+        /// </summary>
+        public static string AutoApproved {
+            get {
+                return ResourceManager.GetString("AutoApproved", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Avatar.
         /// </summary>
         public static string Avatar {
