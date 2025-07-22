@@ -39,7 +39,8 @@ public class ScheduleArrangeService(
 
     public async Task<IEnumerable<WeeklySchedule>> GetWeeklyScheduleAsync(WeeklyScheduleFilter filter)
     {
-        var companyId = filter.CompanyId ?? userControlSession.Get<short>(SessionKey.CurrentCompanyId);
+        var currentCompanyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
+        var companyId = filter.CompanyId ?? currentCompanyId;
         var criteria = new GetWeeklyScheduleCriteria
         {
             ActorId = filter.ActorId,
@@ -50,6 +51,7 @@ public class ScheduleArrangeService(
             IsIFrame = filter.IsIFrame,
             IsLocal = filter.IsLocal.HasValue ? filter.IsLocal.Value == 1 : null,
             CompanyId = companyId,
+            CurrentCompanyId = currentCompanyId,
             IsEditScheduleUnlimited = filter.IsEditScheduleUnlimited
         };
 
