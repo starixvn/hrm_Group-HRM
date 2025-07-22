@@ -268,7 +268,11 @@ public class LeaveRequestService(
                 forDate,
                 request.LeaveType.Name,
                 request.Remark);
-            await Task.Run(() => letStalkService.SendNotification(email.Owner.LetsTalkId, content));
+
+            if (email.Owner != null && !string.IsNullOrWhiteSpace(email.Owner.LetsTalkId))
+            {
+                await Task.Run(() => letStalkService.SendNotification(email.Owner.LetsTalkId, content));
+            }
         }
     }
 
