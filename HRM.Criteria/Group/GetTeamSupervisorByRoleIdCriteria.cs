@@ -6,6 +6,7 @@ public class GetTeamSupervisorByRoleIdCriteria : CriteriaBase
 {
     public int TeamId { get; set; }
     public int Role { get; set; }
+    public short? CompanyId { get; set; }
 
     public override bool IsValid() => TeamId > 0;
 

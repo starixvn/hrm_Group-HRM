@@ -108,12 +108,13 @@ public class TeamService(
         return await baseService.GetDataAsync<Team>(criteria);
     }
 
-    public async Task<IList<SupervisorModel>> GetTeamSupervisorByRoleId(int teamId, short roleId)
+    public async Task<IList<SupervisorModel>> GetTeamSupervisorByRoleId(int teamId, short roleId, bool isGroup = false)
     {
         var criteria = new GetTeamSupervisorByRoleIdCriteria
         {
             TeamId = teamId,
-            Role = roleId
+            Role = roleId,
+            CompanyId = isGroup ? null : userControlSession.Get<short>(SessionKey.CurrentCompanyId)
         };
         return (await baseService.GetDataAsync<SupervisorModel>(criteria)).ToList();
     }
@@ -135,11 +136,12 @@ public class TeamService(
         return (await baseService.GetDataAsync<TeamSupervisorModel>(criteria)).ToList();
     }
 
-    public async Task<IEnumerable<Supervisor>> GetDisciplineManagerByTeamId(int teamId)
+    public async Task<IEnumerable<Supervisor>> GetDisciplineManagerByTeamId(int teamId, bool isGroup = false)
     {
         var criteria = new GetDisciplineManagerByTeamIdCriteria
         {
-            TeamId = teamId
+            TeamId = teamId,
+            CompanyId = isGroup ? null : userControlSession.Get<short>(SessionKey.CurrentCompanyId)
         };
         return (await baseService.GetDataAsync<Supervisor>(criteria)).ToList();
     }

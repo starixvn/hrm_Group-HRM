@@ -29,6 +29,7 @@ module.exports = {
         [`${styleDistPath}/team.supervisor.index`]: `${styleSourcePath}/pages/team/supervisor.index.scss`,
         [`${styleDistPath}/team.edit.supervisor`]: `${styleSourcePath}/pages/team/edit.supervisor.scss`,
         [`${styleDistPath}/team.edit.discipline.manager`]: `${styleSourcePath}/pages/team/edit.discipline.manager.scss`,
+        [`${styleDistPath}/groupteam.edit.discipline.manager`]: `${styleSourcePath}/pages/team/edit.discipline.manager.scss`,
         [`${styleDistPath}/team.discipline.rule`]: `${styleSourcePath}/pages/team/discipline.rule.scss`,
         [`${styleDistPath}/report.monthlyworkinghours`]: `${styleSourcePath}/pages/report/monthlyworkinghours.scss`,
         [`${styleDistPath}/report.weeklyworkinghours`]: `${styleSourcePath}/pages/report/weeklyworkinghours.scss`,
@@ -112,6 +113,8 @@ module.exports = {
         [`${jsDistPath}/team.edit.supervisor`]: `${jsSourcePath}/team/supervisor/index.jsx`,
         [`${jsDistPath}/team.edit.discipline.manager`]: `${jsSourcePath}/team/discipline-manager/index.jsx`,
         [`${jsDistPath}/team.edit.shift.manager`]: `${jsSourcePath}/team/shift-manager/index.jsx`,
+        [`${jsDistPath}/groupteam.edit.discipline.manager`]: `${jsSourcePath}/group-team/discipline-manager/index.jsx`,
+        [`${jsDistPath}/groupteam.edit.shift.manager`]: `${jsSourcePath}/group-team/shift-manager/index.jsx`,
         [`${jsDistPath}/team.discipline.rule`]: `${jsSourcePath}/team/discipline.rule.js`,
         [`${jsDistPath}/employee.edit.supervisor`]: `${jsSourcePath}/employee/supervisor/index.jsx`,
         [`${jsDistPath}/employee.edit.discipline.manager`]: `${jsSourcePath}/employee/discipline-manager/index.jsx`,
@@ -216,6 +219,6 @@ module.exports = {
         [`${jsDistPath}/salary-structure.create`]: `${jsSourcePath}/salary-structure/create/index.jsx`,
         [`${jsDistPath}/salary-structure.edit`]: `${jsSourcePath}/salary-structure/edit/index.jsx`,
         [`${jsDistPath}/company.home`]: `${jsSourcePath}/company/home/index.jsx`,
-        [`${jsDistPath}/company.edit`]: `${jsSourcePath}/company/edit/index.jsx`
+        [`${jsDistPath}/company.edit`]: `${jsSourcePath}/company/edit/index.jsx`,
     },
 };

@@ -17,6 +17,7 @@ using HRM.Services.Interfaces;
 using HRM.ViewModels.EmployeeGroup;
 using Microsoft.AspNetCore.Mvc;
 using HRM.Models.Group;
+using HRM.Core.Enums;
 
 namespace HRM.Controllers.Group;
 
@@ -239,6 +240,23 @@ public class GroupTeamController(ITeamService teamService,
     }
 
     [HrmPermission(Policy.Host, FunctionKey.GroupTeamManagement)]
+    public IActionResult ShiftManager(int id)
+    {
+        ViewBag.TeamId = id;
+        ViewBag.RoleId = (short)RoleSystem.ShiftManager;
+
+        return View();
+    }
+
+    [HrmPermission(Policy.Host, FunctionKey.GroupTeamManagement)]
+    public IActionResult DisciplineManager(int id)
+    {
+        ViewBag.TeamId = id;
+        ViewBag.RoleId = (short)RoleSystem.DisciplineManager;
+        return View();
+    }
+
+    [HrmPermission(Policy.Host, FunctionKey.GroupTeamManagement)]
     public IActionResult ManageSupervisor(int id, short roleId)
     {
         ViewBag.TeamId = id;
@@ -253,6 +271,22 @@ public class GroupTeamController(ITeamService teamService,
         IEnumerable<SupervisorModel> supervisors = await teamService.GetTeamSupervisorByRoleId(teamId, roleId);
 
         return Json(supervisors);
+    }
+
+    [HrmPermission(Policy.Read, FunctionKey.GroupTeamManagement)]
+    public async Task<IActionResult> GetDisciplineManagerByTeamId(int teamId)
+    {
+        var supervisors = await teamService.GetDisciplineManagerByTeamId(teamId, true);
+        return Json(supervisors);
+    }
+
+    [HrmPermission(Policy.Read, FunctionKey.GroupTeamManagement)]
+    public async Task<IActionResult> GetShiftManagerByTeamId(int teamId)
+    {
+        IEnumerable<SupervisorModel> supervisors = await teamService.GetTeamSupervisorByRoleId(teamId, (short)RoleSystem.ShiftManager, true);
+        var result = supervisors.Select(x => new Supervisor
+        { OwnerId = x.OwnerId, Nickname = x.NickName, FullName = x.FullName, CanRemove = x.CanRemove});
+        return Json(result);
     }
 
     [HttpPost]

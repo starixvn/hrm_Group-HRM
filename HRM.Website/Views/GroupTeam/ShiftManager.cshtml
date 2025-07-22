@@ -1,0 +1,22 @@
+﻿@using HRM.Resources
+@{
+    ViewBag.Title = "Edit Team Shift Manager";
+    var teamId = (int)ViewBag.TeamId;
+    var roleId = (short)ViewBag.RoleId;
+}
+@section css{
+    <link href="~/dist/styles/groupteam.edit.discipline.manager.css" rel="stylesheet" />
+}
+@section js{
+    <script src="~/dist/js/groupteam.edit.shift.manager.js"></script>
+}
+@section Breadcrumb {
+    <a class="step">@Labels.GroupSpace</a>
+    <a href="@Url.Action("index", "GroupTeam")" class="step">@Labels.TeamManagement</a>
+    <a href="@Url.Action("TeamSupervisor", "GroupTeam", new { id = teamId })" class="step">@Labels.TeamSupervisor</a>
+    <a class="step">@Labels.ShiftManager</a>
+}
+
+@Html.Hidden("TeamId", teamId)
+@Html.Hidden("RoleId", roleId)
+<div id="shift-manager-wrapper"></div>

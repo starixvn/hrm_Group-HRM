@@ -1,7 +1,12 @@
-﻿import React, { PureComponent } from 'react';
+﻿import React, { PureComponent } from "react";
 
-import DropdownOrder from '../../../../shared/components/DropdownOrder';
-import { moveUp, moveDown, moveTop, moveBottom } from '../../supervisor/common.functions';
+import DropdownOrder from "../../../../shared/components/DropdownOrder";
+import {
+    moveUp,
+    moveDown,
+    moveTop,
+    moveBottom,
+} from "../../supervisor/common.functions";
 
 export default class Row extends PureComponent {
     handleRemoveEmployee = () => {
@@ -10,15 +15,14 @@ export default class Row extends PureComponent {
     };
 
     render() {
-        const { data, companyId } = this.props;
-        const isSameCompany = companyId == data.companyId;
-        const companyName = !isSameCompany && data.companyName ? `(${data.companyName})` : "";
+        const { data } = this.props;
         return (
             <tr>
                 <td className="align-left cell-name">
                     <div className="wrapper">
-                        <div>{`${data.nickname} ${companyName}`}</div>
-                        <DropdownOrder id={`dropdown${data.ownerId}`}
+                        <div>{`${data.nickname}`}</div>
+                        <DropdownOrder
+                            id={`dropdown${data.ownerId}`}
                             onMoveUp={() => moveUp(this)}
                             onMoveDown={() => moveDown(this)}
                             onMoveTop={() => moveTop(this)}
@@ -27,8 +31,10 @@ export default class Row extends PureComponent {
                     </div>
                 </td>
                 <td>
-                    {isSameCompany && (
-                        <a className="fa fa-times fa-lg icon-delete" href="javascript:;"
+                    {data.canRemove && (
+                        <a
+                            className="fa fa-times fa-lg icon-delete"
+                            href="javascript:;"
                             onClick={this.handleRemoveEmployee}
                         />
                     )}
