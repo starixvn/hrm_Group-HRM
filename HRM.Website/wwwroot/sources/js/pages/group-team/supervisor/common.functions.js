@@ -4,7 +4,7 @@ import { stringify } from 'qs';
 import { reorder, resolveClientUrl, axiosError } from '../../../shared/common.functions';
 
 function getSupervisors(query, roleIds, excludeIds) {
-    return axios(resolveClientUrl('employee/GetSupervisors'), {
+    return axios(resolveClientUrl('groupEmployeeList/GetSupervisors'), {
         params: {
             roleIds,
             query,

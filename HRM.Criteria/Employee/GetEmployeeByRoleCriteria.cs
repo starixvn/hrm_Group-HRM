@@ -4,7 +4,7 @@ using Fanex.Data.Repository;
 
 public class GetEmployeeByRoleCriteria : CriteriaBase
 {
-    public short CompanyId { get; set; }
+    public short? CompanyId { get; set; }
     public string RoleIds { get; set; }
 
     public string Query { get; set; }
@@ -13,5 +13,5 @@ public class GetEmployeeByRoleCriteria : CriteriaBase
 
     public override string GetSettingKey() => "Employee_GetByRole";
 
-    public override bool IsValid() => CompanyId > 0;
+    public override bool IsValid() => true;
 }

@@ -264,7 +264,7 @@ public class GroupTeamController(ITeamService teamService,
         return Json(commandResult);
     }
 
-    [HrmPermission(Policy.Read, FunctionKey.GroupTeamManagement)]
+    [HrmPermission(Policy.Read, FunctionKey.GroupTeamManagement, FunctionKey.GroupEmployeeList)]
     public async Task<IActionResult> GetEmployees(GroupEmployeeViewModel model)
     {
         var employees = new List<GroupEmployeeModel>();

@@ -1,0 +1,23 @@
+﻿@using HRM.Resources
+@{
+	ViewBag.Title = "Edit Employee Supervisor";
+	var employeeId = (int)ViewBag.EmployeeId;
+	var roleId = (short)ViewBag.RoleId;
+}
+@section css{
+	<link href="~/dist/styles/team.edit.discipline.manager.css" rel="stylesheet" />
+}
+@section js{
+	<script src="~/dist/js/group.employee.list.discipline.index.js"></script>
+}
+@section Breadcrumb
+{
+	<a class="step">@Labels.GroupSpace</a>
+	<a class="step" href="@Url.Action("Index", "GroupEmployeeList")">@Labels.GroupEmployee</a>
+	<a class="step" href="@Url.Action("edit", "GroupEmployeeList", new { id = employeeId })">@Labels.EmployeePersonalInformation</a>
+	<a class="step">@Labels.DisciplineManager</a>
+}
+
+@Html.Hidden("EmployeeId", employeeId)
+@Html.Hidden("RoleId", roleId)
+<div id="discipline-wrapper"></div>

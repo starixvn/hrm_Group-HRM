@@ -1,0 +1,70 @@
+﻿@using HRM.Core.Enums
+@using HRM.Resources
+@model HRM.Models.Employee
+@{
+    ViewBag.Title = Labels.Edit;
+}
+@section css {
+    <link href="~/dist/vendors/chosen.css" rel="stylesheet" />
+    <link href="~/dist/styles/employee.edit.css" rel="stylesheet" />
+}
+@section js {
+    <script src="~/dist/js/employee.edit.js"></script>
+}
+@section Breadcrumb {
+    <a class="step" href="javascript:;">@Labels.GroupSpace</a>
+    <a class="step" href="@Url.Action("index", "GroupEmployeeList")">@Labels.GroupEmployee</a>
+    <span class="step">Edit @Model.NickName (@Model.FullName) 's Personal Information</span>
+}
+@using (Html.BeginForm("Edit", "Employee", FormMethod.Post, new { id = "formEditUser", @class = "form-edit-user form-horizontal" }))
+{
+    @Html.ValidationSummary(false)
+    if (ViewBag.Updated != null)
+    {
+        if ((bool)ViewBag.Updated)
+        {
+            <div class="success flash">@Messages.UpdatedSuccessfully</div>
+        }
+
+        if (!(bool)ViewBag.Updated)
+        {
+            <div class="error flash">@ViewBag.ErrorMessage</div>
+        }
+    }
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <span class="fa fa-chevron-down"></span>
+            <span>@Labels.Permission</span>
+        </div>
+        <ul class="list-group">
+            <li class="list-group-item form-group">
+                <div class="label-form">@Labels.VerifiedBy</div>
+                <div>
+                    <span id="lstVerifier" class="list-supervisor">@Model.Verifier</span>
+                    @Html.ActionLink("Update", "ManageSupervisor", "GroupEmployeeList", new { id = Model.Id, roleId = (short)RoleSystem.Verifier }, null)
+                </div>
+            </li>
+            <li class="list-group-item form-group">
+                <div class="label-form">@Labels.ApprovedBy</div>
+                <div>
+                    <span id="lstApprover" class="list-supervisor">@Model.Approver</span>
+                    @Html.ActionLink("Update", "ManageSupervisor", "GroupEmployeeList", new { id = Model.Id, roleId = (short)RoleSystem.Approver }, null)
+                </div>
+            </li>
+            <li class="list-group-item form-group">
+                <div class="label-form">@Labels.DisciplineManager</div>
+                <div>
+                    <span id="lstDisciplinarian" class="list-supervisor">@Model.Disciplinarian</span>
+                    @Html.ActionLink("Update", "DisciplineManager", "GroupEmployeeList", new { id = Model.Id }, null)
+                </div>
+            </li>
+            <li class="list-group-item form-group">
+                <div class="label-form">@Labels.ShiftArrangement</div>
+                <div>
+                    <span class="list-supervisor">@Model.EmpShiftList</span>
+                    @Html.ActionLink("Update", "ShiftManager", "GroupEmployeeList", new { id = Model.Id }, null)
+                </div>
+            </li>
+        </ul>
+    </div>
+}

@@ -6,6 +6,7 @@
 @{
     var pagerOption = (PagerOptionModel)ViewBag.PagerOption;
     const int totalColumn = 24;
+    var hasPermissionToEdit = ViewBag.HasPermissionToEdit;
 }
 @section css {
 	<link href="~/dist/styles/group.employee.list.index.css" rel="stylesheet" />
@@ -99,6 +100,10 @@
                     <div class="fa fa-sort cell-right-div"></div>
                 </div>
             </th>
+            @if (hasPermissionToEdit)
+            {
+	            <th>@Labels.Edit</th>
+            }
         </tr>
     </thead>
     <tbody>
@@ -130,6 +135,14 @@
 	                    }
 	                </td>
                     <td class="align-left">@employee.Company</td>
+                    @if (hasPermissionToEdit)
+                    {
+	                    <td>
+		                    <a href="@Url.Action("edit", "GroupEmployeeList", new { id = employee.EmpId })" title="Edit">
+			                    <i class="fa fa-pencil fa-lg icon-edit"></i>
+		                    </a>
+	                    </td>
+                    }
                 </tr>
             }
         }

@@ -410,7 +410,7 @@ public class EmployeeController(
     {
         var supervisors = await employeeService.GetEmployeeSupervisorByRoleIdAsync(employeeId, (short)RoleSystem.ShiftManager);
         return new JsonResult(supervisors.Select(x => new Supervisor
-        { OwnerId = x.OwnerId, Nickname = x.NickName, FullName = x.FullName }));
+        { OwnerId = x.OwnerId, Nickname = x.NickName, FullName = x.FullName, CompanyName = x.CompanyName}));
     }
 
     [HttpPost]
