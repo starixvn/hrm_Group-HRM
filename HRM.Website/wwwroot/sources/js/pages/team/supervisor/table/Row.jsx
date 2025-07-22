@@ -17,10 +17,8 @@ export default class Row extends PureComponent {
       event.target.checked
     );
   };
-
   render() {
     const { data, companyId } = this.props;
-    console.log('data', data);
     const isSameCompany = companyId == data.companyId;
     const companyName = !isSameCompany && data.companyName ? `(${data.companyName})` : "";
     return (

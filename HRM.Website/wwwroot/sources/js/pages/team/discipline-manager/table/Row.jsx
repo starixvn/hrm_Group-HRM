@@ -10,13 +10,14 @@ export default class Row extends PureComponent {
     };
 
     render() {
-        const { data } = this.props;
-
+        const { data, companyId } = this.props;
+        const isSameCompany = companyId == data.companyId;
+        const companyName = !isSameCompany && data.companyName ? `(${data.companyName})` : "";
         return (
             <tr>
                 <td className="align-left cell-name">
                     <div className="wrapper">
-                        <div>{`${data.nickname} (${data.fullName})`}</div>
+                        <div>{`${data.nickname} ${companyName}`}</div>
                         <DropdownOrder id={`dropdown${data.ownerId}`}
                             onMoveUp={() => moveUp(this)}
                             onMoveDown={() => moveDown(this)}
@@ -26,9 +27,11 @@ export default class Row extends PureComponent {
                     </div>
                 </td>
                 <td>
-                    <a className="fa fa-times fa-lg icon-delete" href="javascript:;"
-                        onClick={this.handleRemoveEmployee}
-                    />
+                    {isSameCompany && (
+                        <a className="fa fa-times fa-lg icon-delete" href="javascript:;"
+                            onClick={this.handleRemoveEmployee}
+                        />
+                    )}
                 </td>
             </tr>
         );

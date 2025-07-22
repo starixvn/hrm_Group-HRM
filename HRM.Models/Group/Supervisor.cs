@@ -6,4 +6,5 @@ public class Supervisor
     public string Nickname { get; set; }
     public string FullName { get; set; }
     public string CompanyName { get; set; }
+    public int CompanyId { get; set; }
 }

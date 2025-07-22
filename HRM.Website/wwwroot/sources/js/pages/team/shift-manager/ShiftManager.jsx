@@ -23,6 +23,8 @@ export default class ShiftManager extends Component {
         };
 
         this.roleId = document.getElementById('RoleId').value;
+        const companyId = (document.getElementById('CompanyId') || {}).value || '';
+        this.companyId = companyId;
     }
 
     componentDidMount() {
@@ -46,7 +48,9 @@ export default class ShiftManager extends Component {
                         id: item.Id,
                         nickname: item.NickName,
                         fullName: item.FullName,
-                        value: item.DisplayName
+                        value: item.NickName,
+                        companyName: item.CompanyName,
+                        companyId : item.CompanyId
                     };
                 });
 
@@ -125,7 +129,6 @@ export default class ShiftManager extends Component {
 
     render() {
         const { employeeOptions, managers } = this.state;
-
         return (
             <Fragment>
                 <ToastLayout />
@@ -135,6 +138,7 @@ export default class ShiftManager extends Component {
                     onChangeOrder={this.handleChangeOrder}
                     onAddEmployee={this.handleAddEmployee}
                     onRemoveEmployee={this.handleRemoveEmployee}
+                    companyId={this.companyId}
                 />
                 <Button onClick={this.handleSave} bsStyle="primary">Save</Button>
                 <a className="btn btn-default"

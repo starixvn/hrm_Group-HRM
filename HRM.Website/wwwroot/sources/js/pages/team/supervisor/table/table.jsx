@@ -6,7 +6,6 @@ import Row from './Row';
 export default class Table extends PureComponent {
     render() {
         const { data, employeeOptions, roleId, companyId } = this.props;
-
         return (
             <table className="table table-custom">
                 <THead roleId={roleId} employeeOptions={employeeOptions}

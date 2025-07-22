@@ -380,6 +380,7 @@ public class EmployeeController(
     {
         ViewBag.EmployeeId = id;
         ViewBag.RoleId = roleId;
+        ViewBag.CompanyId = CurrentCompanyId;
         return View();
     }
 
@@ -402,6 +403,7 @@ public class EmployeeController(
     {
         ViewBag.EmployeeId = id;
         ViewBag.RoleId = (short)RoleSystem.ShiftManager;
+        ViewBag.CompanyId = CurrentCompanyId;
 
         return View();
     }
@@ -410,7 +412,7 @@ public class EmployeeController(
     {
         var supervisors = await employeeService.GetEmployeeSupervisorByRoleIdAsync(employeeId, (short)RoleSystem.ShiftManager);
         return new JsonResult(supervisors.Select(x => new Supervisor
-        { OwnerId = x.OwnerId, Nickname = x.NickName, FullName = x.FullName, CompanyName = x.CompanyName}));
+        { OwnerId = x.OwnerId, Nickname = x.NickName, FullName = x.FullName, CompanyName = x.CompanyName, CompanyId = x.CompanyId}));
     }
 
     [HttpPost]
@@ -425,6 +427,7 @@ public class EmployeeController(
     {
         ViewBag.EmployeeId = id;
         ViewBag.RoleId = (short)RoleSystem.DisciplineManager;
+        ViewBag.CompanyId = CurrentCompanyId;
         return View();
     }
 
@@ -569,47 +572,52 @@ public class EmployeeController(
         return await employeeService.GetListSupervisorNameAsync(criteria);
     }
 
-    private static string GetSupervisors(IEnumerable<SupervisorNameModel> supervisors, short roleId)
+    private string GetSupervisors(IEnumerable<SupervisorNameModel> supervisors, short roleId)
     {
-        var supervisorsName = string.Empty;
         const byte maxDisplayItems = 3;
 
-        if (supervisors == null)
+        if (supervisors == null || !supervisors.Any())
         {
-            return supervisorsName;
-        }
-        var supervisorsFilter = supervisors.Where(x => x.ActionType == roleId).Take(maxDisplayItems).ToList();
-        supervisorsName = string.Join(", ", supervisorsFilter.Select(x => x.NickName));
-
-        if (supervisorsFilter.Count > maxDisplayItems)
-        {
-            supervisorsName += ",...";
+            return string.Empty;
         }
 
-        return supervisorsName;
+        var filteredSupervisors = supervisors
+            .Where(x => x.ActionType == roleId)
+            .Select(x => $"{x.NickName} {(string.IsNullOrEmpty(x.CompanyName) || x.CompanyId == CurrentCompanyId ? "" : $"({x.CompanyName})")}")
+            .Take(maxDisplayItems)
+            .ToList();
+
+        var supervisorNames = string.Join(", ", filteredSupervisors);
+
+        if (supervisors.Count(x => x.ActionType == roleId) > maxDisplayItems)
+        {
+            supervisorNames += ",...";
+        }
+
+        return supervisorNames;
     }
 
-    private static string GetVerifiers(IEnumerable<SupervisorNameModel> supervisors)
+    private string GetVerifiers(IEnumerable<SupervisorNameModel> supervisors)
     {
         return GetSupervisors(supervisors, (short)RoleSystem.Verifier);
     }
 
-    private static string GetApproverList(IEnumerable<SupervisorNameModel> supervisors)
+    private string GetApproverList(IEnumerable<SupervisorNameModel> supervisors)
     {
         return GetSupervisors(supervisors, (short)RoleSystem.Approver);
     }
 
-    private static string GetShiftMonitors(IEnumerable<SupervisorNameModel> supervisors)
+    private string GetShiftMonitors(IEnumerable<SupervisorNameModel> supervisors)
     {
         return GetSupervisors(supervisors, (short)RoleSystem.ShiftManager);
     }
 
-    private static string GetActingSupervisors(IEnumerable<SupervisorNameModel> supervisors)
+    private string GetActingSupervisors(IEnumerable<SupervisorNameModel> supervisors)
     {
         return GetSupervisors(supervisors, (short)RoleSystem.OnBehalfRequest);
     }
 
-    private static string GetDisciplineSupervisors(IEnumerable<SupervisorNameModel> supervisors)
+    private string GetDisciplineSupervisors(IEnumerable<SupervisorNameModel> supervisors)
     {
         return GetSupervisors(supervisors, (short)RoleSystem.DisciplineManager);
     }

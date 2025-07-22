@@ -23,6 +23,8 @@ export default class DisciplineManager extends Component {
         };
 
         this.roleId = document.getElementById('RoleId').value;
+        const companyId = (document.getElementById('CompanyId') || {}).value || '';
+        this.companyId = companyId;
     }
 
     componentDidMount() {
@@ -39,7 +41,9 @@ export default class DisciplineManager extends Component {
                         id: item.id,
                         nickname: item.nickName,
                         fullName: item.fullName,
-                        value: item.displayName
+                        value: item.nickName,
+                        companyName: item.companyName,
+                        companyId : item.companyId
                     };
                 });
 
@@ -78,7 +82,14 @@ export default class DisciplineManager extends Component {
     };
 
     handleAddEmployee = employee => {
-        const managers = [...this.state.managers, { ownerId: employee.id, nickname: employee.nickname, fullName: employee.fullName }];
+        const managers = [...this.state.managers, 
+            { 
+                ownerId: employee.id, 
+                nickname: employee.nickname, 
+                fullName: employee.fullName,
+                companyName: employee.companyName,
+                companyId: employee.companyId
+            }];
         this.setState({ managers, employeeOptions: [] });
     };
 
@@ -114,7 +125,6 @@ export default class DisciplineManager extends Component {
 
     render() {
         const { employeeOptions, managers } = this.state;
-
         return (
             <Fragment>
                 <ToastLayout />
@@ -124,6 +134,7 @@ export default class DisciplineManager extends Component {
                     onAddEmployee={this.handleAddEmployee}
                     onRemoveEmployee={this.handleRemoveEmployee}
                     onChangeOrder={this.handleChangeOrder}
+                    companyId={this.companyId}
                 />
                 <Button onClick={this.handleSave} bsStyle="primary">Save</Button>
                 <a className="btn btn-default"

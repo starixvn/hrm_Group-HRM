@@ -51,7 +51,9 @@ export default class Supervisor extends Component {
                         nickname: item.NickName,
                         fullName: item.FullName,
                         teamCode: item.TeamCode !== null ? item.Team.code : '',
-                        value: item.NickName
+                        value: item.NickName,
+                        companyName: item.CompanyName,
+                        companyId: item.CompanyId
                     };
                 });
 
@@ -87,7 +89,6 @@ export default class Supervisor extends Component {
                 }
             });
         }
-
         promise.then(response => {
             this.setState({ supervisors: response.data });
         }).catch(axiosError).then(() => unblockUI());

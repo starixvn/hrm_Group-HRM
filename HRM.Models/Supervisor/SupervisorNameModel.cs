@@ -16,6 +16,8 @@ public class SupervisorNameModel
 
     public int ActionType { get; set; }
 
+    public int CompanyId { get; set; }
+
     public string CompanyName { get; set; }
 
     public bool IsTopManager { get; set; }
