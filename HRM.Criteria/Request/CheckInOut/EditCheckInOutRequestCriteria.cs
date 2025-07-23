@@ -6,7 +6,7 @@ using Fanex.Data.Repository;
 public class EditCheckInOutRequestCriteria : CriteriaBase
 {
     public long RequestId { get; set; }
-
+    public short CompanyId { get; set; }
     public int EmpId { get; set; }
 
     public byte RequestType { get; set; }

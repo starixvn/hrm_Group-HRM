@@ -74,7 +74,7 @@ $(document).ready(function () {
             errorMessages.push('Employee field is required.');
         }
 
-        if (!$('#IsTopManager').prop('checked')) {
+        if (!$('#AutoApproveRequest').prop('checked')) {
             if (verifierId === null || verifierId === '') {
                 errorMessages.push('Verified by field is required.');
             }

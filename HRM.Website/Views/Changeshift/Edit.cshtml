@@ -4,7 +4,7 @@
 @model HRM.ViewModels.Request.ChangeShiftViewModel
 @{
     ViewBag.Title = Labels.Edit;
-    var isTopManager = (bool)ViewBag.IsTopManager;
+    var autoApproveRequest = (bool)ViewBag.AutoApproveRequest;
     var today = DateTimeOffset.Now.DateTime.ToClientTimeZone().Date;
 }
 @section css{
@@ -25,7 +25,7 @@
     {
         @Html.ValidationSummary()
         <div class="validation-summary-errors" style="display: none;"></div>
-        <input type="checkbox" id="IsTopManager" hidden @(isTopManager ? "checked" : string.Empty) />
+        <input type="checkbox" id="AutoApproveRequest" hidden @(autoApproveRequest ? "checked" : string.Empty) />
         @Html.HiddenFor(model => model.EmployeeId)
         @Html.HiddenFor(model => model.Employee)
         @Html.HiddenFor(model => model.RequestId)

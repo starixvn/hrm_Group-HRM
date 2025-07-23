@@ -68,7 +68,7 @@ public class ChangeShiftController(
             Approvers = supervisor.Approvers
         };
         ViewBag.IsHost = true;
-        ViewBag.IsTopManager = EmployeeSession.IsTopManager;
+        ViewBag.AutoApproveRequest = EmployeeSession.AutoApproveRequest;
         ViewBag.HasOnBehalfRequestPermission = session.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
             || session.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);
         return View(model);
@@ -138,7 +138,7 @@ public class ChangeShiftController(
         }
 
         ViewBag.IsHost = true;
-        ViewBag.IsTopManager = request.Requester.IsTopManager;
+        ViewBag.AutoApproveRequest = request.Requester.AutoApproveRequest;
         ViewBag.TypeId = request.TypeId;
         ViewBag.Shifts = await shiftService.GetAllAsync(isShowOff: true);
         return View(model);

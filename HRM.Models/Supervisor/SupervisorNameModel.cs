@@ -20,7 +20,7 @@ public class SupervisorNameModel
 
     public string CompanyName { get; set; }
 
-    public bool IsTopManager { get; set; }
+    public bool AutoApproveRequest { get; set; }
 
     public string DisplayName => NickName + " (" + FullName + ")";
 

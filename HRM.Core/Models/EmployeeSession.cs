@@ -11,7 +11,7 @@ public class EmployeeSession
     public string Nickname { get; set; }
     public string Password { get; set; }
     public bool Enabled { get; set; }
-    public bool IsTopManager { get; set; }
+    public bool AutoApproveRequest { get; set; }
     public string DisplayName => string.IsNullOrWhiteSpace(Nickname) ? FullName : Nickname + " (" + FullName + ")";
     public int CompanyId { get; set; }
 }

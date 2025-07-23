@@ -6,7 +6,7 @@
 @model LateInEarlyOutRequestViewModel
 @{
     ViewBag.Title = Labels.Edit;
-    var isTopManager = (bool)ViewBag.IsTopManager;
+    var autoApproveRequest = (bool)ViewBag.AutoApproveRequest;
     var today = DateTimeOffset.Now.DateTime.ToClientTimeZone().Date;
 }
 @section css{
@@ -22,7 +22,7 @@
 }
 <h2 class="page-title">@Labels.Edit</h2>
 <div class="card">
-    <input type="checkbox" id="IsTopManager" hidden @(isTopManager ? "checked" : string.Empty) />
+    <input type="checkbox" id="AutoApproveRequest" hidden @(autoApproveRequest ? "checked" : string.Empty) />
     @using (Html.BeginForm("Edit", "lateinearlyout", FormMethod.Post, new { @class = "form-horizontal" }))
     {
         @Html.ValidationSummary()

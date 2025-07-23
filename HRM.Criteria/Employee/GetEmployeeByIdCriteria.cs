@@ -10,5 +10,5 @@ public class GetEmployeeByIdCriteria : CriteriaBase
 
     public override string GetSettingKey() => "Employee_GetEmployeeById";
 
-    public override bool IsValid() => CompanyId > 0 && EmpId > 0;
+    public override bool IsValid() => EmpId > 0;
 }

@@ -5,7 +5,7 @@
 @model HRM.ViewModels.Request.LeaveRequestViewModel
 @{
     ViewBag.Title = Labels.Create;
-    var isTopManager = (bool)ViewBag.IsTopManager;
+    var autoApproveRequest = (bool)ViewBag.AutoApproveRequest;
     var hasOnBehalfOthersPermission = (bool)ViewBag.HasOnBehalfOthersPermission;
 }
 @section css{
@@ -23,7 +23,7 @@
 <div class="card form-horizontal">
     @using (Html.BeginForm())
     {
-        <input type="checkbox" id="IsTopManager" hidden @(isTopManager ? "checked" : string.Empty) />
+        <input type="checkbox" id="AutoApproveRequest" hidden @(autoApproveRequest ? "checked" : string.Empty) />
         @Html.HiddenFor(model => model.EmployeeId)
         @Html.Hidden("RequestType", (byte)RequestType.Leave)
         @Html.Hidden("RequestId", -1)

@@ -4,7 +4,7 @@
 @model HRM.ViewModels.Request.KeepInViewRequestViewModel
 @{
     ViewBag.Title = Labels.KeepCompensationLeave;
-    var isTopManager = (bool)ViewBag.IsTopManager;
+    var autoApproveRequest = (bool)ViewBag.AutoApproveRequest;
     var hasOnBehalfRequestPermission = (bool)ViewBag.HasOnBehalfRequestPermission;
 }
 @section css{
@@ -20,7 +20,7 @@
 }
 <h2 class="page-title">@ViewBag.Title</h2>
 <div class="card">
-    <input type="checkbox" id="IsTopManager" hidden @(isTopManager ? "checked" : string.Empty) />
+    <input type="checkbox" id="AutoApproveRequest" hidden @(autoApproveRequest ? "checked" : string.Empty) />
     @using (Html.BeginForm("create", "keepinview", FormMethod.Post, new { @class = "form-horizontal" }))
     {
         @Html.ValidationSummary()

@@ -84,7 +84,7 @@ public class LeaveController(
             EnableSickLeaveBalance = setting.EnableSickLeaveBalance,
             EnableLimitUseAnnualLeaveBalance = setting.EnableLimitUseAnnualLeaveBalance
         };
-        ViewBag.IsTopManager = EmployeeSession.IsTopManager;
+        ViewBag.AutoApproveRequest = EmployeeSession.AutoApproveRequest;
         ViewBag.HasOnBehalfOthersPermission = session.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
             || session.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);
 
@@ -178,7 +178,7 @@ public class LeaveController(
         model.EnableLimitUseAnnualLeaveBalance = setting.EnableLimitUseAnnualLeaveBalance;
 
         ViewBag.IsView = false;
-        ViewBag.IsTopManager = request.Requester.IsTopManager;
+        ViewBag.AutoApproveRequest = request.Requester.AutoApproveRequest;
         ViewBag.HasOnBehalfOthersPermission = session.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
             || session.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);
 

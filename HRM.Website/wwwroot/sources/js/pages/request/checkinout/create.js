@@ -146,7 +146,7 @@ $(document).ready(function () {
             errorMessages.push('Employee field is required.');
         }
 
-        if (!$('#IsTopManager').prop('checked')) {
+        if (!$('#AutoApproveRequest').prop('checked')) {
             if (verifierId === null || verifierId === '') {
                 errorMessages.push('Verified by field is required.');
             }
@@ -204,7 +204,7 @@ $(document).ready(function () {
                     return {
                         label: item.nickName + ' (' + item.fullName + ')',
                         value: item.ownerId,
-                        isTopManager: item.isTopManager
+                        autoApproveRequest: item.autoApproveRequest
                     };
                 }));
             }).catch(axiosError);
@@ -214,20 +214,20 @@ $(document).ready(function () {
             event.preventDefault();
             $('#Employee').val(ui.item.label);
             $('#EmployeeId').val(ui.item.value);
-            $('#IsTopManager').prop('checked', ui.item.isTopManager);
+            $('#AutoApproveRequest').prop('checked', ui.item.autoApproveRequest);
         },
         focus: function (event, ui) {
             event.preventDefault();
             $('#Employee').val(ui.item.label);
             $('#EmployeeId').val(ui.item.value);
-            $('#IsTopManager').prop('checked', ui.item.isTopManager);
+            $('#AutoApproveRequest').prop('checked', ui.item.autoApproveRequest);
         },
         change: function (event, ui) {
             event.preventDefault();
             if (ui && ui.item) {
                 $('#Employee').val(ui.item.label);
                 $('#EmployeeId').val(ui.item.value);
-                $('#IsTopManager').prop('checked', ui.item.isTopManager);
+                $('#AutoApproveRequest').prop('checked', ui.item.autoApproveRequest);
                 getDataAfterChangeEmployee();
                 getDisabledDates();
             } else {

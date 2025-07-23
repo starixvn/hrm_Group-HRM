@@ -66,7 +66,7 @@ public class LateInEarlyOutController(
             Verifiers = supervisor.Verifiers,
             Approvers = supervisor.Approvers
         };
-        ViewBag.IsTopManager = EmployeeSession.IsTopManager;
+        ViewBag.AutoApproveRequest = EmployeeSession.AutoApproveRequest;
         ViewBag.HasOnBehalfRequestPermission = session.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
             || session.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);
 
@@ -150,7 +150,7 @@ public class LateInEarlyOutController(
             viewModel.Approvers = await employeeService.CheckAndAddMissingSupervisor(viewModel.Approvers, viewModel.ApproverId.Value);
         }
 
-        ViewBag.IsTopManager = request.Requester.IsTopManager;
+        ViewBag.AutoApproveRequest = request.Requester.AutoApproveRequest;
         return View(viewModel);
     }
 

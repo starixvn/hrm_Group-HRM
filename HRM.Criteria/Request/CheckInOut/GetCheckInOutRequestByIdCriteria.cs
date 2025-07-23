@@ -8,13 +8,7 @@ public class GetCheckInOutRequestByIdCriteria : CriteriaBase
 
     public short CompanyId { get; set; }
 
-    public override string GetSettingKey()
-    {
-        return "CheckInOutRequest_GetById";
-    }
+    public override string GetSettingKey() => "CheckInOutRequest_GetById";
 
-    public override bool IsValid()
-    {
-        return RequestId > 0;
-    }
+    public override bool IsValid() => RequestId > 0;
 }
