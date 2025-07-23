@@ -35,13 +35,13 @@ public class ScheduleArrangeController(
     [HrmPermission(Policy.Host, FunctionKey.ScheduleArrange)]
     public async Task<IActionResult> Index()
     {
-        var config = await syncWorkingShiftService.GetSyncWorkingShiftConfigAsync();
 
         ViewBag.HasPermissionToViewHoliday = session.HasPermissionOnFunction(FunctionKey.Holiday, Policy.Read);
         ViewBag.HasPermissionToViewShift = session.HasPermissionOnFunction(FunctionKey.ShiftManagement, Policy.Read);
-        ViewBag.EnableSyncWorkingShift = config?.Enable ?? false;
         ViewBag.IsSystemAdmin = (await roleService.GetByUserIdAsync(session.UserId))
             .Any(r => r.RoleId is (short)RoleSystem.HR or (short)RoleSystem.SystemAdmin);
+        ViewBag.CompanyId = CurrentCompanyId;
+        ViewBag.RoleId = (short)RoleSystem.ShiftManager;
         return View();
     }
 
@@ -66,6 +66,8 @@ public class ScheduleArrangeController(
     {
         filter.IsEditScheduleUnlimited = session.HasPermissionOnFunction(FunctionKey.EditScheduleUnlimited, Policy.Host);
         filter.ActorId = session.UserId;
+        filter.CompanyId ??= CurrentCompanyId;
+
         var weeklySchedules = await scheduleArrangeService.GetWeeklyScheduleAsync(filter);
         var schedules = weeklySchedules.GroupBy(x => new { x.Team.Id, x.Team.Code, x.Team.Name })
             .Select(x => new WeeklyScheduleViewModel
@@ -77,7 +79,8 @@ public class ScheduleArrangeController(
             });
 
         var isHost = CheckPermission(filter.FromDate);
-        var data = new { isHost, schedules };
+        var enableSyncWorkingShift = (await syncWorkingShiftService.GetSyncWorkingShiftConfigAsync(filter.CompanyId))?.Enable ?? false;
+        var data = new { isHost, enableSyncWorkingShift, schedules };
 
         return Json(data);
     }
@@ -162,6 +165,12 @@ public class ScheduleArrangeController(
     {
         filter.IsEditScheduleUnlimited = session.HasPermissionOnFunction(FunctionKey.EditScheduleUnlimited, Policy.Host);
         filter.ActorId = session.UserId;
+
+        if (!filter.CompanyId.HasValue)
+        {
+            filter.CompanyId = CurrentCompanyId;
+        }
+
         var weeklySchedules = await scheduleArrangeService.GetWeeklyScheduleAsync(filter);
         var bytes = exportExcelService.Export(filter, weeklySchedules);
 
@@ -181,6 +190,12 @@ public class ScheduleArrangeController(
         };
         filter.IsEditScheduleUnlimited = session.HasPermissionOnFunction(FunctionKey.EditScheduleUnlimited, Policy.Host);
         filter.ActorId = session.UserId;
+
+        if (!filter.CompanyId.HasValue)
+        {
+            filter.CompanyId = CurrentCompanyId;
+        }
+
         var weeklySchedules = await scheduleArrangeService.GetWeeklyScheduleAsync(filter);
         var bytes = exportExcelService.ExportDriverPickup(actor, filter, weeklySchedules);
 

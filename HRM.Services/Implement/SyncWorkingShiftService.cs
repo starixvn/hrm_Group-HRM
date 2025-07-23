@@ -21,7 +21,7 @@ public interface ISyncWorkingShiftService
 {
     Task<CommandResult> SyncWorkingShiftAsync(SyncWorkingShiftCommand command);
 
-    Task<SyncWorkingShiftConfig> GetSyncWorkingShiftConfigAsync();
+    Task<SyncWorkingShiftConfig> GetSyncWorkingShiftConfigAsync(short? companyId = null);
 }
 
 public class SyncWorkingShiftService(
@@ -53,13 +53,13 @@ public class SyncWorkingShiftService(
         return commandResult;
     }
 
-    public async Task<SyncWorkingShiftConfig> GetSyncWorkingShiftConfigAsync()
+    public async Task<SyncWorkingShiftConfig> GetSyncWorkingShiftConfigAsync(short? companyId = null)
     {
-        var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
+        companyId ??= userControlSession.Get<short>(SessionKey.CurrentCompanyId);
 
         var criteria = new GetSystemConfigsByKeyCriteria
         {
-            CompanyId = companyId,
+            CompanyId = companyId.Value,
             Key = SystemConfigKey.SyncWorkingShift
         };
 

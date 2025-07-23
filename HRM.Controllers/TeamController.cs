@@ -245,7 +245,7 @@ public class TeamController(
         return Json(commandResult);
     }
 
-    private async Task<IList<Employee>> GetAllEmployees()
+    private async Task<IList<Employee>> GetAllEmployees(short? companyId = null)
     {
         var criteria = new GetAllEmployeeCriteria
         {
@@ -255,7 +255,7 @@ public class TeamController(
             IsDeleteUser = null,
             TitleId = null,
             IsLocalUser = null,
-            CompanyId = CurrentCompanyId
+            CompanyId = companyId ?? CurrentCompanyId
         };
         IList<Employee> employees = (await employeeService.GetEmployeeAsync(criteria)).ToList();
 
@@ -263,11 +263,11 @@ public class TeamController(
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetOrgChart(bool isGroup = false)
+    public async Task<IActionResult> GetOrgChart(bool isGroup = false, short? companyId = null)
     {
         var units = await unitService.GetUnitAsync();
         var departments = await departmentService.GetDepartmentAsync();
-        var teams = await commonDataService.GetAllTeamAsync(isGroup: isGroup);
+        var teams = await commonDataService.GetAllTeamAsync(isGroup: isGroup, companyId: companyId);
 
         var orgchart = GetOrgChart(units, departments, teams);
 
@@ -302,6 +302,13 @@ public class TeamController(
         });
 
         return orgCharts;
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetCompaniesByRoleIdForEmployee(int? roleId = 4)
+    {
+        var companies = await teamService.GetCompaniesByRoleIdForEmployee(EmployeeSession.EmpId, roleId.Value);
+        return Json(companies);
     }
 
     private static byte GetValue(byte? value) => value ?? 0;

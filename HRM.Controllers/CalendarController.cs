@@ -22,10 +22,11 @@ public class CalendarController(
     ICommonDataService commonDataService,
     ITeamService teamService) : BaseController(session)
 {
-    public async Task<IActionResult> GetShift(string query, bool isShowOff = false)
+    public async Task<IActionResult> GetShift(string query, bool isShowOff = false, short? companyId = null)
     {
         var trimmedQuery = query?.Trim() ?? string.Empty;
-        var shifts = await shiftService.GetByQueryAsync(trimmedQuery, isShowOff);
+        companyId ??= CurrentCompanyId;
+        var shifts = await shiftService.GetByQueryAsync(trimmedQuery, isShowOff, companyId.Value);
 
         return Json(shifts);
     }

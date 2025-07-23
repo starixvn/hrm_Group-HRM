@@ -42,9 +42,9 @@ public class ShiftService(
         return shifts.ToList();
     }
 
-    public async Task<IList<Shift>> GetByQueryAsync(string query, bool isShowOff)
+    public async Task<IList<Shift>> GetByQueryAsync(string query, bool isShowOff, short empCompanyId = 0)
     {
-        var shifts = await GetAllAsync(isShowOff: isShowOff);
+        var shifts = await GetAllAsync(isShowOff: isShowOff, empCompanyId: empCompanyId);
         IList<Shift> queriedShifts = null;
 
         if (shifts != null && shifts.Any())

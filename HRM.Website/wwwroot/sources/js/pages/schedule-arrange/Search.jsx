@@ -6,12 +6,12 @@ import TreeMultiselect from '../../shared/components/react-tree-multiselect/Tree
 import WeekPicker from '../../shared/components/WeekPicker';
 
 export default class Search extends Component {
-    handleTeamChange = selectedItems => {
-        const ids = selectedItems.map(item => item.id);
+    handleTeamChange = (selectedItems) => {
+        const ids = selectedItems.map((item) => item.id);
         this.props.onChange('teamIds', ids.join(','));
     };
 
-    handleEmployeeChange = value => {
+    handleEmployeeChange = (value) => {
         this.props.onChange('employee', value);
     };
 
@@ -20,11 +20,11 @@ export default class Search extends Component {
         this.props.onChange('toDate', toDate);
     };
 
-    handleCategoryChange = e => {
+    handleCategoryChange = (e) => {
         this.props.onChange('isLocal', e.target.value);
     };
 
-    handleSubmit = event => {
+    handleSubmit = (event) => {
         this.props.onSubmit(event.target.name === 'currentWeek');
     };
 
@@ -62,8 +62,11 @@ export default class Search extends Component {
                             <label className="control-label">Category</label>
                         </div>
                         <div className="select-form">
-                            <select className="form-control" value={this.props.filter.isLocal} onChange={this.handleCategoryChange}>
-                                <option value >All</option>
+                            <select
+                                className="form-control"
+                                value={this.props.filter.isLocal}
+                                onChange={this.handleCategoryChange}>
+                                <option value>All</option>
                                 <option value="0">Expat</option>
                                 <option value="1">Local</option>
                             </select>
@@ -86,22 +89,40 @@ export default class Search extends Component {
                 </div>
                 <div className="form-horizontal clearfix">
                     <div className="button-group">
-                        <button className="btn btn-primary" onClick={this.handleSubmit}>Submit</button>
-                        <button className="btn btn-primary" name="currentWeek" onClick={this.handleSubmit}>
+                        <button
+                            className="btn btn-primary"
+                            onClick={this.handleSubmit}>
+                            Submit
+                        </button>
+                        <button
+                            className="btn btn-primary"
+                            name="currentWeek"
+                            onClick={this.handleSubmit}>
                             Current Week
                         </button>
-                        {
-                            this.props.showExportExcel &&
-                            <Dropdown id={`dropdownExportExcel`} componentClass="div">
-                                <Dropdown.Toggle useAnchor className="btn btn-excel">
+                        {this.props.showExportExcel && (
+                            <Dropdown
+                                id={`dropdownExportExcel`}
+                                componentClass="div">
+                                <Dropdown.Toggle
+                                    useAnchor
+                                    className="btn btn-excel">
                                     Excel
                                 </Dropdown.Toggle>
                                 <Dropdown.Menu>
-                                    <MenuItem onClick={this.props.onExportExcel}>Upload</MenuItem>
-                                    <MenuItem onClick={this.props.onExportExcelDriverPickup}>Driver Pickup</MenuItem>
+                                    <MenuItem
+                                        onClick={this.props.onExportExcel}>
+                                        Upload
+                                    </MenuItem>
+                                    <MenuItem
+                                        onClick={
+                                            this.props.onExportExcelDriverPickup
+                                        }>
+                                        Driver Pickup
+                                    </MenuItem>
                                 </Dropdown.Menu>
                             </Dropdown>
-                        }
+                        )}
                     </div>
                 </div>
             </div>

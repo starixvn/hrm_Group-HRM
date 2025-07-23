@@ -12,4 +12,5 @@ public class WeeklyScheduleFilter
     public bool IsIFrame { get; set; }
     public byte? IsLocal { get; set; }
     public bool IsEditScheduleUnlimited { get; set; }
+    public short? CompanyId { get; set; }
 }

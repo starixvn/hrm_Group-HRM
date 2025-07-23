@@ -64,14 +64,14 @@ public class TeamService(
         return await baseService.GetDataEntityAsync<int>(criteria);
     }
 
-    public async Task<IEnumerable<Team>> GetAllAsync(bool isDeleted = false, string keyword = null, bool isGroup = false)
+    public async Task<IEnumerable<Team>> GetAllAsync(bool isDeleted = false, string keyword = null, bool isGroup = false, short? companyId = null)
     {
-        var companyId = isGroup ? (short?)null : userControlSession.Get<short>(SessionKey.CurrentCompanyId);
+        var currentCompanyId = isGroup ? (short?)null : companyId ?? userControlSession.Get<short>(SessionKey.CurrentCompanyId);
         var criteria = new GetAllGroupCriteria
         {
             IsDeleted = isDeleted,
             Keyword = keyword,
-            CompanyId = companyId
+            CompanyId = currentCompanyId
         };
         var teams = await teamRepository.GetAllAsync(criteria);
 
@@ -243,5 +243,15 @@ public class TeamService(
         await using var ms = new MemoryStream();
         await xlPackage.SaveAsAsync(ms);
         return ms.ToArray();
+    }
+
+    public async Task<IEnumerable<Company>> GetCompaniesByRoleIdForEmployee(int employeeId, int roleId)
+    {
+        var criteria = new GetCompaniesByRoleIdForEmployeeCriteria
+        {
+            EmpId = employeeId,
+            RoleId = roleId
+        };
+        return await baseService.GetDataAsync<Company>(criteria);
     }
 }

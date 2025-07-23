@@ -9,12 +9,22 @@ import moment from 'moment';
 import { stringify } from 'qs';
 import { cloneDeep, isEqual, unset } from 'lodash';
 
-import { axiosError, blockUI, unblockUI, reorder, resolveClientUrl, downloadFile } from '../../shared/common.functions';
+import {
+    axiosError,
+    blockUI,
+    unblockUI,
+    reorder,
+    resolveClientUrl,
+    downloadFile,
+} from '../../shared/common.functions';
 import { getTotalOffDays } from './common.functions';
 import { DateFormat, OffDayShiftId } from '../../shared/constants';
 import ToastLayout from '../../shared/layouts/ToastLayout';
 import buildData from '../../shared/components/react-tree-multiselect/buildData';
 import SweetModalDialog from '../../shared/components/SweetModalDialog';
+import CompanySelect, {
+    renderCompanySelect,
+} from '../../shared/components/CompanySelect';
 import ShiftMultipleModal from './ShiftMultipleModal';
 import WeeklyDefaultShiftModal from './WeeklyDefaultShiftModal';
 import Search from './Search';
@@ -26,6 +36,10 @@ export default class App extends Component {
 
         const fromDate = moment().day('Monday').format(DateFormat),
             toDate = moment(fromDate).add(6, 'days').format(DateFormat);
+        const companyElement = document.getElementById('CompanyId');
+        const roleElement = document.getElementById('RoleId');
+        const defaultCompanyId = companyElement ? companyElement.value : '';
+        const defaultRoleId = roleElement ? roleElement.value : '';
 
         this.state = {
             isHost: false,
@@ -33,7 +47,8 @@ export default class App extends Component {
                 fromDate: fromDate,
                 toDate: toDate,
                 teamIds: '',
-                employee: { value: 0, label: '' }
+                companyId: defaultCompanyId,
+                employee: { value: 0, label: '' },
             },
             schedules: [],
             employeeOptions: [],
@@ -48,8 +63,9 @@ export default class App extends Component {
                 employeeId: 0,
                 nickname: '',
                 data: null,
-                isUsedWeeklyDefaultShift: false
-            }
+                isUsedWeeklyDefaultShift: false,
+            },
+            enableSyncWorkingShift: false,
         };
 
         this.originalSchedules = [];
@@ -57,59 +73,117 @@ export default class App extends Component {
         this.shiftOptions = [];
         this.currentWeek = { fromDate, toDate };
         this.selectedWeek = { fromDate, toDate };
-        this.scheduleAttrNames = ['mondaySchedule', 'tuesdaySchedule', 'wednesdaySchedule',
-            'thursdaySchedule', 'fridaySchedule', 'saturdaySchedule', 'sundaySchedule'];
+        this.defaultRoleId = defaultRoleId;
+        this.scheduleAttrNames = [
+            'mondaySchedule',
+            'tuesdaySchedule',
+            'wednesdaySchedule',
+            'thursdaySchedule',
+            'fridaySchedule',
+            'saturdaySchedule',
+            'sundaySchedule',
+        ];
     }
 
     componentDidMount() {
-        const promises = [
-            axios({
-                url: resolveClientUrl('Team/GetOrgChart'),
-                method: 'GET',
-                headers: { 'X-Requested-With': 'XMLHttpRequest' }
-            }),
-            axios({
-                url: resolveClientUrl('Calendar/GetShift'),
-                method: 'GET',
-                headers: { 'X-Requested-With': 'XMLHttpRequest' },
-                params: {
-                    query: '',
-                    isShowOff: true
-                }
-            })
-        ];
+        renderCompanySelect({
+            defaultCompanyId: this.state.filter.companyId,
+            roleId: this.defaultRoleId,
+            onChange: this.handleCompanyChange,
+        });
 
-        Promise.all(promises)
-            .then(([teamResponse, shiftResponse]) => {
-                this.teamOptions = teamResponse.data;
-                const { floatData } = buildData(teamResponse.data);
-                this.shiftOptions = shiftResponse.data.map(shift => { return { id: shift.id, code: shift.code, name: shift.name }; });
-                const filter = { ...this.state.filter, teamIds: floatData.filter(item => item.isLeaf).map(item => item.id).join(',') };
+        const companyElement = document.getElementById('CompanyId');
+        const defaultCompanyId = companyElement ? companyElement.value : '';
+        this.loadShifts(defaultCompanyId);
 
-                this.getWeeklyShedules(filter);
-
-                this.setState({ filter: filter });
-            }).catch(axiosError);
-
-        window.addEventListener('beforeunload', this.onLeavingPageEventListener);
+        window.addEventListener(
+            'beforeunload',
+            this.onLeavingPageEventListener
+        );
     }
 
     componentWillUnmount() {
-        window.removeEventListener('beforeunload', this.onLeavingPageEventListener);
+        window.removeEventListener(
+            'beforeunload',
+            this.onLeavingPageEventListener
+        );
     }
 
-    onLeavingPageEventListener = event => {
+    loadTeams = (companyId) => {
+        axios({
+            url: resolveClientUrl('Team/GetOrgChart'),
+            method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
+            params: {
+                companyId: companyId || null,
+            },
+        })
+            .then((response) => {
+                this.teamOptions = response.data;
+                const { floatData } = buildData(response.data);
+                const filter = {
+                    ...this.state.filter,
+                    teamIds: floatData
+                        .filter((item) => item.isLeaf)
+                        .map((item) => item.id)
+                        .join(','),
+                };
+
+                this.setState({ filter: filter });
+
+                this.getWeeklyShedules(filter);
+            })
+            .catch(axiosError);
+    };
+
+    loadShifts = (companyId) => {
+        axios({
+            url: resolveClientUrl('Calendar/GetShift'),
+            method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
+            params: {
+                query: '',
+                isShowOff: true,
+                companyId: companyId,
+            },
+        })
+            .then((response) => {
+                this.shiftOptions = response.data.map((shift) => {
+                    return { id: shift.id, code: shift.code, name: shift.name };
+                });
+
+                this.loadTeams(companyId);
+            })
+            .catch(axiosError);
+    };
+
+    handleCompanyChange = (companyId) => {
+        this.setState({
+            filter: {
+                ...this.state.filter,
+                companyId: companyId,
+                employee: { value: 0, label: '' },
+            },
+            employeeOptions: [],
+        });
+
+        this.loadTeams(companyId);
+        this.loadShifts(companyId);
+    };
+
+    onLeavingPageEventListener = (event) => {
         if (!this.isDirtyData()) {
             return undefined;
         }
 
-        const confirmationMessage = 'It looks like you have been editing something. '
-            + 'If you leave before saving, your changes will be lost.';
+        const confirmationMessage =
+            'It looks like you have been editing something. ' +
+            'If you leave before saving, your changes will be lost.';
 
         (event || window.event).returnValue = confirmationMessage;
 
         return confirmationMessage;
-    }
+    };
 
     isDirtyData = () => {
         let isDirty = false;
@@ -117,12 +191,12 @@ export default class App extends Component {
             originalSchedules = cloneDeep(this.originalSchedules),
             totalItems = schedules.length;
 
-        outerloop:
-        for (let gindex = 0; gindex < totalItems; gindex++) {
+        outerloop: for (let gindex = 0; gindex < totalItems; gindex++) {
             const totalSubItems = schedules[gindex].members.length;
             for (let eindex = 0; eindex < totalSubItems; eindex++) {
                 let schedule = schedules[gindex].members[eindex],
-                    originalSchedule = originalSchedules[gindex].members[eindex];
+                    originalSchedule =
+                        originalSchedules[gindex].members[eindex];
                 unset(schedule, 'selectWeekDays');
                 unset(originalSchedule, 'selectWeekDays');
 
@@ -134,34 +208,41 @@ export default class App extends Component {
         }
 
         return isDirty;
-    }
+    };
 
     handleFilterChange = (name, value) => {
         this.setState({ filter: { ...this.state.filter, [name]: value } });
-    }
+    };
 
-    getEmployees = query => {
+    getEmployees = (query) => {
+        if (!this.state.filter.teamIds) {
+            this.setState({ employeeOptions: [] });
+            return;
+        }
+
         axios({
             url: resolveClientUrl('ScheduleArrange/GetEmployees'),
             method: 'GET',
             headers: { 'X-Requested-With': 'XMLHttpRequest' },
             params: {
                 teamIds: this.state.filter.teamIds,
-                query: query
-            }
-        }).then(response => {
-            const employeeOptions = response.data.map(item => {
-                return {
-                    id: item.employeeId,
-                    value: `${item.nickname} (${item.fullName})`
-                };
-            });
+                query: query,
+            },
+        })
+            .then((response) => {
+                const employeeOptions = response.data.map((item) => {
+                    return {
+                        id: item.employeeId,
+                        value: `${item.nickname} (${item.fullName})`,
+                    };
+                });
 
-            this.setState({ employeeOptions: employeeOptions });
-        }).catch(axiosError);
-    }
+                this.setState({ employeeOptions: employeeOptions });
+            })
+            .catch(axiosError);
+    };
 
-    getWeeklyShedules = filter => {
+    getWeeklyShedules = (filter) => {
         const fromDate = moment(filter.fromDate).format(DateFormat),
             toDate = moment(filter.toDate).format(DateFormat);
         blockUI();
@@ -174,45 +255,55 @@ export default class App extends Component {
                 fromDate: fromDate,
                 toDate: toDate,
                 teamIds: filter.teamIds,
+                companyId: filter.companyId,
                 isLocal: filter.isLocal,
-                employeeId: filter.employee.value === 0 ? null : filter.employee.value
-            }
-        }).then(response => {
-            this.selectedWeek = { fromDate, toDate };
-            let { isHost, schedules } = response.data;
+                employeeId:
+                    filter.employee.value === 0 ? null : filter.employee.value,
+            },
+        })
+            .then((response) => {
+                this.selectedWeek = { fromDate, toDate };
+                let { isHost, enableSyncWorkingShift, schedules } =
+                    response.data;
 
-            this.originalSchedules = schedules.map(team => {
-                team.members.map(schedule => {
-                    schedule.selectWeekDays = {
-                        mondaySchedule: false,
-                        tuesdaySchedule: false,
-                        wednesdaySchedule: false,
-                        thursdaySchedule: false,
-                        fridaySchedule: false,
-                        saturdaySchedule: false,
-                        sundaySchedule: false
-                    };
-                    schedule.totalOffDayReplacement = 0;
+                this.originalSchedules = schedules.map((team) => {
+                    team.members.map((schedule) => {
+                        schedule.selectWeekDays = {
+                            mondaySchedule: false,
+                            tuesdaySchedule: false,
+                            wednesdaySchedule: false,
+                            thursdaySchedule: false,
+                            fridaySchedule: false,
+                            saturdaySchedule: false,
+                            sundaySchedule: false,
+                        };
+                        schedule.totalOffDayReplacement = 0;
 
-                    Object.keys(schedule.selectWeekDays).forEach(objectKey => {
-                        if (schedule[objectKey].isOffDayReplacement) {
-                            schedule.totalOffDayReplacement = schedule.totalOffDayReplacement + 1;
-                        }
+                        Object.keys(schedule.selectWeekDays).forEach(
+                            (objectKey) => {
+                                if (schedule[objectKey].isOffDayReplacement) {
+                                    schedule.totalOffDayReplacement =
+                                        schedule.totalOffDayReplacement + 1;
+                                }
+                            }
+                        );
+
+                        return schedule;
                     });
 
-                    return schedule;
+                    return team;
                 });
 
-                return team;
-            });
-
-            this.setState({
-                filter: { ...this.state.filter, fromDate, toDate },
-                isHost,
-                schedules: cloneDeep(this.originalSchedules)
-            });
-        }).catch(axiosError).then(() => unblockUI());
-    }
+                this.setState({
+                    filter: { ...this.state.filter, fromDate, toDate },
+                    isHost,
+                    enableSyncWorkingShift,
+                    schedules: cloneDeep(this.originalSchedules),
+                });
+            })
+            .catch(axiosError)
+            .then(() => unblockUI());
+    };
 
     handleExportExcel = () => {
         const filter = this.state.filter,
@@ -228,15 +319,23 @@ export default class App extends Component {
                 fromDate: fromDate,
                 toDate: toDate,
                 teamIds: filter.teamIds,
+                companyId: filter.companyId,
                 isLocal: filter.isLocal,
-                employeeId: filter.employee.value === 0 ? null : filter.employee.value
+                employeeId:
+                    filter.employee.value === 0 ? null : filter.employee.value,
             },
-            responseType: 'blob'
-        }).then(response => {
-            const fileName = response.headers['content-disposition'].match(/filename="(.+)"/)[1];
-            downloadFile(response.data, fileName);
-        }).catch(axiosError).then(() => unblockUI());
-    }
+            responseType: 'blob',
+        })
+            .then((response) => {
+                const fileName =
+                    response.headers['content-disposition'].match(
+                        /filename="(.+)"/
+                    )[1];
+                downloadFile(response.data, fileName);
+            })
+            .catch(axiosError)
+            .then(() => unblockUI());
+    };
 
     handleExportExcelDriverPickup = () => {
         const filter = this.state.filter,
@@ -252,33 +351,49 @@ export default class App extends Component {
                 fromDate: fromDate,
                 toDate: toDate,
                 teamIds: filter.teamIds,
+                companyId: filter.companyId,
                 isLocal: filter.isLocal,
-                employeeId: filter.employee.value === 0 ? null : filter.employee.value
+                employeeId:
+                    filter.employee.value === 0 ? null : filter.employee.value,
             },
-            responseType: 'blob'
-        }).then(response => {
-            const fileName = response.headers['content-disposition'].match(/filename="(.+)"/)[1];
-            downloadFile(response.data, fileName);
-        }).catch(axiosError).then(() => unblockUI());
-    }
+            responseType: 'blob',
+        })
+            .then((response) => {
+                const fileName =
+                    response.headers['content-disposition'].match(
+                        /filename="(.+)"/
+                    )[1];
+                downloadFile(response.data, fileName);
+            })
+            .catch(axiosError)
+            .then(() => unblockUI());
+    };
 
-    handleGetWeeklyShedules = isCurrentWeek => {
+    handleGetWeeklyShedules = (isCurrentWeek) => {
         if (this.isDirtyData()) {
             this.handleShowConfirmRefreshDataModal();
         } else {
             const filter = isCurrentWeek
-                ? { ...this.state.filter, fromDate: this.currentWeek.fromDate, toDate: this.currentWeek.toDate }
+                ? {
+                      ...this.state.filter,
+                      fromDate: this.currentWeek.fromDate,
+                      toDate: this.currentWeek.toDate,
+                  }
                 : this.state.filter;
 
             this.setState({ filter });
 
             this.getWeeklyShedules(filter);
         }
-    }
+    };
 
     handleGetPreviousWeekSchedule = () => {
-        const fromDate = moment(this.selectedWeek.fromDate).add(-7, 'days').format(DateFormat),
-            toDate = moment(this.selectedWeek.toDate).add(-7, 'days').format(DateFormat),
+        const fromDate = moment(this.selectedWeek.fromDate)
+                .add(-7, 'days')
+                .format(DateFormat),
+            toDate = moment(this.selectedWeek.toDate)
+                .add(-7, 'days')
+                .format(DateFormat),
             filter = { ...this.state.filter, fromDate, toDate };
         this.setState({ filter });
 
@@ -287,11 +402,15 @@ export default class App extends Component {
         } else {
             this.getWeeklyShedules(filter);
         }
-    }
+    };
 
     handleGetNextWeekSchedule = () => {
-        const fromDate = moment(this.selectedWeek.fromDate).add(7, 'days').format(DateFormat),
-            toDate = moment(this.selectedWeek.toDate).add(7, 'days').format(DateFormat),
+        const fromDate = moment(this.selectedWeek.fromDate)
+                .add(7, 'days')
+                .format(DateFormat),
+            toDate = moment(this.selectedWeek.toDate)
+                .add(7, 'days')
+                .format(DateFormat),
             filter = { ...this.state.filter, fromDate, toDate };
         this.setState({ filter });
 
@@ -300,20 +419,30 @@ export default class App extends Component {
         } else {
             this.getWeeklyShedules(filter);
         }
-    }
+    };
 
-    handleChangeSelectWeekDay = (teamId, employeeId, scheduleAttrName, isChecked) => {
+    handleChangeSelectWeekDay = (
+        teamId,
+        employeeId,
+        scheduleAttrName,
+        isChecked
+    ) => {
         let schedules = [...this.state.schedules];
-        const gindex = schedules.findIndex(item => item.teamId === teamId);
+        const gindex = schedules.findIndex((item) => item.teamId === teamId);
         let members = [...schedules[gindex].members];
-        const eindex = members.findIndex(item => item.employeeId === employeeId);
+        const eindex = members.findIndex(
+            (item) => item.employeeId === employeeId
+        );
         members[eindex] = Object.assign({}, members[eindex], {
-            selectWeekDays: { ...members[eindex].selectWeekDays, [scheduleAttrName]: isChecked }
+            selectWeekDays: {
+                ...members[eindex].selectWeekDays,
+                [scheduleAttrName]: isChecked,
+            },
         });
         schedules[gindex] = { ...schedules[gindex], members };
 
         this.setState({ schedules });
-    }
+    };
 
     handleChangeSelectWeekDays = (scheduleAttrName, isChecked) => {
         let schedules = [...this.state.schedules];
@@ -325,7 +454,10 @@ export default class App extends Component {
                 const totalSubItems = members.length;
                 for (let subindex = 0; subindex < totalSubItems; subindex++) {
                     members[subindex] = Object.assign({}, members[subindex], {
-                        selectWeekDays: { ...members[subindex].selectWeekDays, [scheduleAttrName]: isChecked }
+                        selectWeekDays: {
+                            ...members[subindex].selectWeekDays,
+                            [scheduleAttrName]: isChecked,
+                        },
                     });
                 }
                 schedules[gindex] = { ...schedules[gindex], members };
@@ -343,8 +475,8 @@ export default class App extends Component {
                             thursdaySchedule: isChecked,
                             fridaySchedule: isChecked,
                             saturdaySchedule: isChecked,
-                            sundaySchedule: isChecked
-                        }
+                            sundaySchedule: isChecked,
+                        },
                     });
                 }
                 schedules[gindex] = { ...schedules[gindex], members };
@@ -352,75 +484,136 @@ export default class App extends Component {
         }
 
         this.setState({ schedules });
-    }
+    };
 
     handleChangeShift = (teamId, employeeId, attrName, shift) => {
         let schedules = [...this.state.schedules];
-        const gindex = schedules.findIndex(item => item.teamId === teamId);
+        const gindex = schedules.findIndex((item) => item.teamId === teamId);
         let members = [...schedules[gindex].members];
-        const eindex = members.findIndex(item => item.employeeId === employeeId);
+        const eindex = members.findIndex(
+            (item) => item.employeeId === employeeId
+        );
         let member = { ...members[eindex] };
 
         if (shift !== null && isEqual(member[attrName].shift, shift)) {
             return;
         }
 
-        let defaultShift = member.defaultShift !== null ? { ...member.defaultShift } : null;
+        let defaultShift =
+            member.defaultShift !== null ? { ...member.defaultShift } : null;
         if (member.isUsedWeeklyDefaultShift) {
-            defaultShift = member.weeklyDefaultShift[`${attrName.substring(0, 3)}Shift`];
+            defaultShift =
+                member.weeklyDefaultShift[`${attrName.substring(0, 3)}Shift`];
         }
 
-        shift = shift === null && !member[attrName].isHoliday ? defaultShift : shift;
+        shift =
+            shift === null && !member[attrName].isHoliday
+                ? defaultShift
+                : shift;
         const isOffDay = shift !== null && shift.id === OffDayShiftId;
         shift = shift !== null && shift.id === OffDayShiftId ? null : shift;
-        const originalSchedule = this.originalSchedules[gindex].members[eindex][attrName];
+        const originalSchedule =
+            this.originalSchedules[gindex].members[eindex][attrName];
 
         member[attrName] = {
             ...member[attrName],
             isOffDay,
             isOffDayReplacement: false,
             shift,
-            isModified: !isEqual(shift, originalSchedule.shift) ? true : originalSchedule.isModified
+            isModified: !isEqual(shift, originalSchedule.shift)
+                ? true
+                : originalSchedule.isModified,
         };
 
         members[eindex] = member;
         schedules[gindex] = { ...schedules[gindex], members };
         this.setState({ schedules });
-    }
+    };
 
     handleChangeDefaultShift = (teamId, employeeId, defaultShift) => {
         let schedules = [...this.state.schedules];
-        const gindex = schedules.findIndex(item => item.teamId === teamId);
+        const gindex = schedules.findIndex((item) => item.teamId === teamId);
         let members = [...schedules[gindex].members];
-        const eindex = members.findIndex(item => item.employeeId === employeeId),
+        const eindex = members.findIndex(
+                (item) => item.employeeId === employeeId
+            ),
             originalDefaultShift = members[eindex].defaultShift;
 
         if (defaultShift !== null) {
-            this.scheduleAttrNames.forEach(attrName => {
+            this.scheduleAttrNames.forEach((attrName) => {
                 if (!members[eindex][attrName].isDisabled) {
                     const shift = members[eindex][attrName].shift;
-                    if (members[eindex][attrName].isHoliday || members[eindex][attrName].isOffDay) {
-                        if (shift !== null && isEqual(originalDefaultShift, shift)) {
-                            const originalSchedule = this.originalSchedules[gindex].members[eindex][attrName],
-                                isModified = !isEqual(defaultShift, originalSchedule.shift) ? true : originalSchedule.isModified;
-                            members[eindex][attrName] = { ...members[eindex][attrName], shift: defaultShift, isModified };
+                    if (
+                        members[eindex][attrName].isHoliday ||
+                        members[eindex][attrName].isOffDay
+                    ) {
+                        if (
+                            shift !== null &&
+                            isEqual(originalDefaultShift, shift)
+                        ) {
+                            const originalSchedule =
+                                    this.originalSchedules[gindex].members[
+                                        eindex
+                                    ][attrName],
+                                isModified = !isEqual(
+                                    defaultShift,
+                                    originalSchedule.shift
+                                )
+                                    ? true
+                                    : originalSchedule.isModified;
+                            members[eindex][attrName] = {
+                                ...members[eindex][attrName],
+                                shift: defaultShift,
+                                isModified,
+                            };
                         }
                     } else {
-                        if (shift === null || isEqual(originalDefaultShift, shift)) {
-                            const originalSchedule = this.originalSchedules[gindex].members[eindex][attrName],
-                                isModified = !isEqual(defaultShift, originalSchedule.shift) ? true : originalSchedule.isModified;
-                            members[eindex][attrName] = { ...members[eindex][attrName], shift: defaultShift, isModified };
+                        if (
+                            shift === null ||
+                            isEqual(originalDefaultShift, shift)
+                        ) {
+                            const originalSchedule =
+                                    this.originalSchedules[gindex].members[
+                                        eindex
+                                    ][attrName],
+                                isModified = !isEqual(
+                                    defaultShift,
+                                    originalSchedule.shift
+                                )
+                                    ? true
+                                    : originalSchedule.isModified;
+                            members[eindex][attrName] = {
+                                ...members[eindex][attrName],
+                                shift: defaultShift,
+                                isModified,
+                            };
                         }
                     }
                 }
             });
         } else {
-            this.scheduleAttrNames.forEach(attrName => {
+            this.scheduleAttrNames.forEach((attrName) => {
                 const shift = members[eindex][attrName].shift;
-                if (!members[eindex][attrName].isModified && shift !== null && isEqual(originalDefaultShift, shift)) {
-                    const originalSchedule = this.originalSchedules[gindex].members[eindex][attrName],
-                        isModified = !isEqual(defaultShift, originalSchedule.shift) ? true : originalSchedule.isModified;
-                    members[eindex][attrName] = { ...members[eindex][attrName], shift: defaultShift, isModified };
+                if (
+                    !members[eindex][attrName].isModified &&
+                    shift !== null &&
+                    isEqual(originalDefaultShift, shift)
+                ) {
+                    const originalSchedule =
+                            this.originalSchedules[gindex].members[eindex][
+                                attrName
+                            ],
+                        isModified = !isEqual(
+                            defaultShift,
+                            originalSchedule.shift
+                        )
+                            ? true
+                            : originalSchedule.isModified;
+                    members[eindex][attrName] = {
+                        ...members[eindex][attrName],
+                        shift: defaultShift,
+                        isModified,
+                    };
                 }
             });
         }
@@ -429,37 +622,48 @@ export default class App extends Component {
         schedules[gindex] = { ...schedules[gindex], members };
 
         this.setState({ schedules });
-    }
+    };
 
     handleChangePublics = (teamId, isChecked) => {
         let schedules = [...this.state.schedules];
-        const gindex = schedules.findIndex(item => item.teamId === teamId);
+        const gindex = schedules.findIndex((item) => item.teamId === teamId);
         let members = [...schedules[gindex].members];
         const totalItems = members.length;
         for (let index = 0; index < totalItems; index++) {
             members[index] = { ...members[index], isPublic: isChecked };
         }
-        schedules[gindex] = { ...schedules[gindex], isPublic: isChecked, members };
+        schedules[gindex] = {
+            ...schedules[gindex],
+            isPublic: isChecked,
+            members,
+        };
 
         this.setState({ schedules });
-    }
+    };
 
-    getSelectedMembers = schedules => {
+    getSelectedMembers = (schedules) => {
         let selectedMembers = [];
         const totalItems = schedules.length;
         for (let gindex = 0; gindex < totalItems; gindex++) {
             const totalSubItems = schedules[gindex].members.length;
             for (let eindex = 0; eindex < totalSubItems; eindex++) {
-                if (this.scheduleAttrNames.filter(attrName => schedules[gindex].members[eindex].selectWeekDays[attrName]).length > 0) {
+                if (
+                    this.scheduleAttrNames.filter(
+                        (attrName) =>
+                            schedules[gindex].members[eindex].selectWeekDays[
+                                attrName
+                            ]
+                    ).length > 0
+                ) {
                     selectedMembers.push({ gindex, eindex });
                 }
             }
         }
 
         return selectedMembers;
-    }
+    };
 
-    isChangeOffDayKIV = item => {
+    isChangeOffDayKIV = (item) => {
         if (item.isKeepInView) {
             return !item.isOffDay;
         } else return true;
@@ -476,16 +680,23 @@ export default class App extends Component {
                 let members = [...schedules[gindex].members];
                 let member = { ...members[eindex] };
                 const selectWeekDays = member.selectWeekDays;
-                this.scheduleAttrNames.forEach(attrName => {
+                this.scheduleAttrNames.forEach((attrName) => {
                     if (selectWeekDays[attrName]) {
-                        member.selectWeekDays = { ...member.selectWeekDays, [attrName]: false };
-                        if ((!member[attrName].isHoliday && !member[attrName].isChangeShift) && this.isChangeOffDayKIV(member[attrName])) {
+                        member.selectWeekDays = {
+                            ...member.selectWeekDays,
+                            [attrName]: false,
+                        };
+                        if (
+                            !member[attrName].isHoliday &&
+                            !member[attrName].isChangeShift &&
+                            this.isChangeOffDayKIV(member[attrName])
+                        ) {
                             member[attrName] = {
                                 ...member[attrName],
                                 isOffDay: true,
                                 isFixedOffDay: false,
                                 isOffDayReplacement: false,
-                                shift: null
+                                shift: null,
                             };
                         }
                     }
@@ -499,7 +710,7 @@ export default class App extends Component {
         } else {
             toast.warn('Please choose at least one day to off!');
         }
-    }
+    };
 
     handleChangeOffDayOT = () => {
         let schedules = [...this.state.schedules];
@@ -513,17 +724,30 @@ export default class App extends Component {
                 let member = { ...members[eindex] };
                 const selectWeekDays = member.selectWeekDays;
 
-                this.scheduleAttrNames.forEach(attrName => {
+                this.scheduleAttrNames.forEach((attrName) => {
                     if (selectWeekDays[attrName]) {
-                        member.selectWeekDays = { ...member.selectWeekDays, [attrName]: false };
-                        if ((!member[attrName].isHoliday && !member[attrName].isChangeShift && member[attrName].shift !== null) && this.isChangeOffDayKIV(member[attrName])) {
-                            const originalSchedule = this.originalSchedules[gindex].members[eindex][attrName];
+                        member.selectWeekDays = {
+                            ...member.selectWeekDays,
+                            [attrName]: false,
+                        };
+                        if (
+                            !member[attrName].isHoliday &&
+                            !member[attrName].isChangeShift &&
+                            member[attrName].shift !== null &&
+                            this.isChangeOffDayKIV(member[attrName])
+                        ) {
+                            const originalSchedule =
+                                this.originalSchedules[gindex].members[eindex][
+                                    attrName
+                                ];
                             member[attrName] = {
                                 ...member[attrName],
                                 isOffDay: true,
                                 isFixedOffDay: false,
                                 isOffDayReplacement: false,
-                                isModified: !originalSchedule.isOffDay ? true : originalSchedule.isModified
+                                isModified: !originalSchedule.isOffDay
+                                    ? true
+                                    : originalSchedule.isModified,
                             };
                         }
                     }
@@ -537,7 +761,7 @@ export default class App extends Component {
         } else {
             toast.warn('Please choose at least one day to off!');
         }
-    }
+    };
 
     handleChangeWorkday = () => {
         let schedules = [...this.state.schedules];
@@ -551,18 +775,29 @@ export default class App extends Component {
                 let member = { ...members[eindex] };
                 const selectWeekDays = member.selectWeekDays;
 
-                this.scheduleAttrNames.forEach(attrName => {
+                this.scheduleAttrNames.forEach((attrName) => {
                     if (selectWeekDays[attrName]) {
-                        member.selectWeekDays = { ...member.selectWeekDays, [attrName]: false };
-                        if (!member[attrName].isHoliday && member[attrName].shift !== null) {
-                            const originalSchedule = this.originalSchedules[gindex].members[eindex][attrName];
+                        member.selectWeekDays = {
+                            ...member.selectWeekDays,
+                            [attrName]: false,
+                        };
+                        if (
+                            !member[attrName].isHoliday &&
+                            member[attrName].shift !== null
+                        ) {
+                            const originalSchedule =
+                                this.originalSchedules[gindex].members[eindex][
+                                    attrName
+                                ];
                             selectWeekDays[attrName] = false;
                             member[attrName] = {
                                 ...member[attrName],
                                 isOffDay: false,
                                 isFixedOffDay: false,
                                 isOffDayReplacement: false,
-                                isModified: originalSchedule.isOffDay ? true : originalSchedule.isModified
+                                isModified: originalSchedule.isOffDay
+                                    ? true
+                                    : originalSchedule.isModified,
                             };
                         }
                     }
@@ -576,7 +811,7 @@ export default class App extends Component {
         } else {
             toast.warn('Please choose at least one day to work!');
         }
-    }
+    };
 
     handleShiftMultiple = () => {
         const selectedMembers = this.getSelectedMembers(this.state.schedules),
@@ -587,7 +822,7 @@ export default class App extends Component {
         } else {
             toast.warn('Please choose at least one day to continue!');
         }
-    }
+    };
 
     handleChangeMultipleShift = (shift, isOffDay) => {
         let schedules = [...this.state.schedules];
@@ -601,19 +836,31 @@ export default class App extends Component {
                 let member = { ...members[eindex] };
                 const selectWeekDays = member.selectWeekDays;
 
-                this.scheduleAttrNames.forEach(attrName => {
+                this.scheduleAttrNames.forEach((attrName) => {
                     if (selectWeekDays[attrName]) {
-                        member.selectWeekDays = { ...member.selectWeekDays, [attrName]: false };
+                        member.selectWeekDays = {
+                            ...member.selectWeekDays,
+                            [attrName]: false,
+                        };
                         if (!member[attrName].isHoliday) {
-                            const originalSchedule = this.originalSchedules[gindex].members[eindex][attrName];
-                            const isModified = !isEqual(shift, originalSchedule.shift) || originalSchedule.isOffDay !== isOffDay
-                                ? true : originalSchedule.isModified;
+                            const originalSchedule =
+                                this.originalSchedules[gindex].members[eindex][
+                                    attrName
+                                ];
+                            const isModified =
+                                !isEqual(shift, originalSchedule.shift) ||
+                                originalSchedule.isOffDay !== isOffDay
+                                    ? true
+                                    : originalSchedule.isModified;
                             member[attrName] = {
                                 ...member[attrName],
-                                isOffDay: isOffDay && !member[attrName].isChangeShift,
-                                isFixedOffDay: isOffDay ? member[attrName].isFixedOffDay : false,
+                                isOffDay:
+                                    isOffDay && !member[attrName].isChangeShift,
+                                isFixedOffDay: isOffDay
+                                    ? member[attrName].isFixedOffDay
+                                    : false,
                                 shift,
-                                isModified
+                                isModified,
                             };
                         }
                     }
@@ -627,7 +874,7 @@ export default class App extends Component {
         }
 
         this.handleCloseShiftMultipleModal();
-    }
+    };
 
     handleFixedOffDay = () => {
         let schedules = [...this.state.schedules];
@@ -641,17 +888,32 @@ export default class App extends Component {
                 let member = { ...members[eindex] };
                 const selectWeekDays = member.selectWeekDays;
 
-                this.scheduleAttrNames.forEach(attrName => {
+                this.scheduleAttrNames.forEach((attrName) => {
                     if (selectWeekDays[attrName]) {
-                        member.selectWeekDays = { ...member.selectWeekDays, [attrName]: false };
-                        if ((!member[attrName].isHoliday && !member[attrName].isChangeShift && member[attrName].shift !== null) && this.isChangeOffDayKIV(member[attrName])) {
-                            const originalSchedule = this.originalSchedules[gindex].members[eindex][attrName];
+                        member.selectWeekDays = {
+                            ...member.selectWeekDays,
+                            [attrName]: false,
+                        };
+                        if (
+                            !member[attrName].isHoliday &&
+                            !member[attrName].isChangeShift &&
+                            member[attrName].shift !== null &&
+                            this.isChangeOffDayKIV(member[attrName])
+                        ) {
+                            const originalSchedule =
+                                this.originalSchedules[gindex].members[eindex][
+                                    attrName
+                                ];
                             member[attrName] = {
                                 ...member[attrName],
                                 isOffDay: true,
                                 isFixedOffDay: true,
                                 isOffDayReplacement: false,
-                                isModified: !originalSchedule.isOffDay || !originalSchedule.isFixedOffDay ? true : originalSchedule.isModified
+                                isModified:
+                                    !originalSchedule.isOffDay ||
+                                    !originalSchedule.isFixedOffDay
+                                        ? true
+                                        : originalSchedule.isModified,
                             };
                         }
                     }
@@ -665,7 +927,7 @@ export default class App extends Component {
         } else {
             toast.warn('Please choose at least one day to continue!');
         }
-    }
+    };
 
     handleSave = () => {
         let isValidData = true,
@@ -676,18 +938,20 @@ export default class App extends Component {
         const totalItems = schedules.length,
             { fromDate, toDate } = this.selectedWeek;
 
-        outerloop:
-        for (let gindex = 0; gindex < totalItems; gindex++) {
+        outerloop: for (let gindex = 0; gindex < totalItems; gindex++) {
             const totalSubItems = schedules[gindex].members.length;
 
             for (let eindex = 0; eindex < totalSubItems; eindex++) {
                 let schedule = schedules[gindex].members[eindex],
-                    originalSchedule = originalSchedules[gindex].members[eindex];
+                    originalSchedule =
+                        originalSchedules[gindex].members[eindex];
                 unset(schedule, 'selectWeekDays');
                 unset(originalSchedule, 'selectWeekDays');
 
                 if (!isEqual(schedule, originalSchedule)) {
-                    const totalOffDaysDefault = schedule.offDaysbyWeek + schedule.totalOffDayReplacement,
+                    const totalOffDaysDefault =
+                            schedule.offDaysbyWeek +
+                            schedule.totalOffDayReplacement,
                         totalOffDays = getTotalOffDays(schedule);
 
                     if (totalOffDaysDefault < totalOffDays) {
@@ -695,23 +959,40 @@ export default class App extends Component {
                         break outerloop;
                     }
 
-                    if (!isEqual(originalSchedule.defaultShift, schedule.defaultShift)) {
+                    if (
+                        !isEqual(
+                            originalSchedule.defaultShift,
+                            schedule.defaultShift
+                        )
+                    ) {
                         defaultShifts.push({
                             employeeId: schedule.employeeId,
                             fromDate: schedule.mondaySchedule.workDate,
-                            shiftId: schedule.defaultShift !== null ? schedule.defaultShift.id : null
+                            shiftId:
+                                schedule.defaultShift !== null
+                                    ? schedule.defaultShift.id
+                                    : null,
                         });
                     }
-                    this.scheduleAttrNames.forEach(attrName => {
-                        if (!isEqual(originalSchedule[attrName], schedule[attrName]) || originalSchedule.isPublic !== schedule.isPublic) {
+                    this.scheduleAttrNames.forEach((attrName) => {
+                        if (
+                            !isEqual(
+                                originalSchedule[attrName],
+                                schedule[attrName]
+                            ) ||
+                            originalSchedule.isPublic !== schedule.isPublic
+                        ) {
                             weeklySchedules.push({
                                 employeeId: schedule.employeeId,
                                 workDate: schedule[attrName].workDate,
-                                shiftId: schedule[attrName].shift !== null ? schedule[attrName].shift.id : null,
+                                shiftId:
+                                    schedule[attrName].shift !== null
+                                        ? schedule[attrName].shift.id
+                                        : null,
                                 isHoliday: schedule[attrName].isHoliday,
                                 isOffDay: schedule[attrName].isOffDay,
                                 isFixedOffDay: schedule[attrName].isFixedOffDay,
-                                isPublic: schedule.isPublic
+                                isPublic: schedule.isPublic,
                             });
                         }
                     });
@@ -720,7 +1001,9 @@ export default class App extends Component {
         }
 
         if (!isValidData) {
-            toast.error('Some employees have a larger number of days off during the week according to the setting.');
+            toast.error(
+                'Some employees have a larger number of days off during the week according to the setting.'
+            );
 
             return;
         }
@@ -730,31 +1013,40 @@ export default class App extends Component {
             axios({
                 url: resolveClientUrl('ScheduleArrange/EditWeekly'),
                 method: 'POST',
-                data: stringify({ fromDate, toDate, weeklySchedules: weeklySchedules.length > 0 ? weeklySchedules : null  , defaultShifts }),
+                data: stringify({
+                    fromDate,
+                    toDate,
+                    weeklySchedules:
+                        weeklySchedules.length > 0 ? weeklySchedules : null,
+                    defaultShifts,
+                }),
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest',
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                }
-            }).then(response => {
-                const data = response.data;
-                if (data.isSuccessful) {
-                    toast.success('Updated Successfully!');
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+            })
+                .then((response) => {
+                    const data = response.data;
+                    if (data.isSuccessful) {
+                        toast.success('Updated Successfully!');
 
-                    this.getWeeklyShedules(this.state.filter);
-                } else {
-                    toast.error(data.message);
-                }
-            }).catch(axiosError).then(() => unblockUI());
+                        this.getWeeklyShedules(this.state.filter);
+                    } else {
+                        toast.error(data.message);
+                    }
+                })
+                .catch(axiosError)
+                .then(() => unblockUI());
         }
-    }
+    };
 
     handleCloseShiftMultipleModal = () => {
         this.setState({ showShiftMultipleModal: false });
-    }
+    };
 
     handleShowConfirmRefreshDataModal = () => {
         this.setState({ showConfirmRefreshDataModal: true });
-    }
+    };
 
     handleCloseConfirmRefreshDataModal = () => {
         const fromDate = moment(this.selectedWeek.fromDate).format(DateFormat),
@@ -762,21 +1054,23 @@ export default class App extends Component {
             filter = { ...this.state.filter, fromDate, toDate };
 
         this.setState({ filter, showConfirmRefreshDataModal: false });
-    }
+    };
 
     handleSubmitRefreshData = () => {
         this.getWeeklyShedules(this.state.filter);
         this.handleCloseConfirmRefreshDataModal();
-    }
+    };
 
-    handleChangeShowRemarkPopover = show => {
+    handleChangeShowRemarkPopover = (show) => {
         this.setState({ showRemarkPopover: show });
-    }
+    };
 
     handleShowWeeklyDefaultShiftModal = (teamId, employeeId) => {
         const schedules = this.state.schedules,
-            gindex = schedules.findIndex(item => item.teamId === teamId),
-            eindex = schedules[gindex].members.findIndex(item => item.employeeId === employeeId);
+            gindex = schedules.findIndex((item) => item.teamId === teamId),
+            eindex = schedules[gindex].members.findIndex(
+                (item) => item.employeeId === employeeId
+            );
 
         this.setState({
             editWeeklyDefaultShift: {
@@ -785,10 +1079,11 @@ export default class App extends Component {
                 employeeId,
                 nickname: schedules[gindex].members[eindex].nickname,
                 data: schedules[gindex].members[eindex].weeklyDefaultShift,
-                isUsedWeeklyDefaultShift: schedules[gindex].members[eindex].isUsedWeeklyDefaultShift
-            }
+                isUsedWeeklyDefaultShift:
+                    schedules[gindex].members[eindex].isUsedWeeklyDefaultShift,
+            },
         });
-    }
+    };
 
     handleCloseWeeklyDefaultShiftModal = () => {
         this.setState({
@@ -798,50 +1093,85 @@ export default class App extends Component {
                 employeeId: 0,
                 nickname: '',
                 data: null,
-                isUsedWeeklyDefaultShift: false
-            }
+                isUsedWeeklyDefaultShift: false,
+            },
         });
-    }
+    };
 
-    updateWeeklyDefaultShift = (teamId, employeeId, weeklyDefaultShift, isUsedWeeklyDefaultShift) => {
+    updateWeeklyDefaultShift = (
+        teamId,
+        employeeId,
+        weeklyDefaultShift,
+        isUsedWeeklyDefaultShift
+    ) => {
         let schedules = [...this.state.schedules];
-        const gindex = schedules.findIndex(item => item.teamId === teamId);
+        const gindex = schedules.findIndex((item) => item.teamId === teamId);
         let members = [...schedules[gindex].members];
-        const eindex = members.findIndex(item => item.employeeId === employeeId);
-        members[eindex] = { ...members[eindex], weeklyDefaultShift, isUsedWeeklyDefaultShift };
+        const eindex = members.findIndex(
+            (item) => item.employeeId === employeeId
+        );
+        members[eindex] = {
+            ...members[eindex],
+            weeklyDefaultShift,
+            isUsedWeeklyDefaultShift,
+        };
         this.originalSchedules[gindex].members[eindex] = {
             ...this.originalSchedules[gindex].members[eindex],
             weeklyDefaultShift,
-            isUsedWeeklyDefaultShift
+            isUsedWeeklyDefaultShift,
         };
-        const fromDate = moment(this.currentWeek.toDate).add(1, 'days').format(DateFormat);
+        const fromDate = moment(this.currentWeek.toDate)
+            .add(1, 'days')
+            .format(DateFormat);
 
         if (isUsedWeeklyDefaultShift) {
-            this.scheduleAttrNames.forEach(attrName => {
-                const shiftId = weeklyDefaultShift[`${attrName.substring(0, 3)}Shift`].id,
+            this.scheduleAttrNames.forEach((attrName) => {
+                const shiftId =
+                        weeklyDefaultShift[`${attrName.substring(0, 3)}Shift`]
+                            .id,
                     isOffDay = shiftId === OffDayShiftId,
-                    shift = isOffDay ? null : weeklyDefaultShift[`${attrName.substring(0, 3)}Shift`],
+                    shift = isOffDay
+                        ? null
+                        : weeklyDefaultShift[
+                              `${attrName.substring(0, 3)}Shift`
+                          ],
                     workDate = moment(members[eindex][attrName].workDate);
 
-                if (workDate.isSameOrAfter(fromDate)
-                    && !members[eindex][attrName].isDisabled) {
-                    members[eindex][attrName] = { ...members[eindex][attrName], shift, isOffDay };
-                    this.originalSchedules[gindex].members[eindex][attrName] =
-                        { ...this.originalSchedules[gindex].members[eindex][attrName], shift, isOffDay };
+                if (
+                    workDate.isSameOrAfter(fromDate) &&
+                    !members[eindex][attrName].isDisabled
+                ) {
+                    members[eindex][attrName] = {
+                        ...members[eindex][attrName],
+                        shift,
+                        isOffDay,
+                    };
+                    this.originalSchedules[gindex].members[eindex][attrName] = {
+                        ...this.originalSchedules[gindex].members[eindex][
+                            attrName
+                        ],
+                        shift,
+                        isOffDay,
+                    };
                 }
             });
         } else {
             const defaultShift = members[eindex].defaultShift;
 
             if (defaultShift !== null) {
-                this.scheduleAttrNames.forEach(attrName => {
+                this.scheduleAttrNames.forEach((attrName) => {
                     const workDate = moment(members[eindex][attrName].workDate);
-                    if (workDate.isSameOrAfter(fromDate)
-                        && !members[eindex][attrName].isDisabled
-                        && !members[eindex][attrName].isHoliday
-                        && !members[eindex][attrName].isOffDay
-                        && members[eindex][attrName].shift === null) {
-                        members[eindex][attrName] = { ...members[eindex][attrName], shift: defaultShift };
+                    if (
+                        workDate.isSameOrAfter(fromDate) &&
+                        !members[eindex][attrName].isDisabled &&
+                        !members[eindex][attrName].isHoliday &&
+                        !members[eindex][attrName].isOffDay &&
+                        members[eindex][attrName].shift === null
+                    ) {
+                        members[eindex][attrName] = {
+                            ...members[eindex][attrName],
+                            shift: defaultShift,
+                        };
                     }
                 });
             }
@@ -849,18 +1179,24 @@ export default class App extends Component {
 
         schedules[gindex] = { ...schedules[gindex], members };
         this.setState({ schedules });
-    }
+    };
 
-    handleChangeWeeklyDefaultShift = (weeklyDefaultShift, isUsedWeeklyDefaultShift) => {
+    handleChangeWeeklyDefaultShift = (
+        weeklyDefaultShift,
+        isUsedWeeklyDefaultShift
+    ) => {
         const { teamId, employeeId } = this.state.editWeeklyDefaultShift;
         let schedules = this.state.schedules;
-        const gindex = schedules.findIndex(item => item.teamId === teamId);
+        const gindex = schedules.findIndex((item) => item.teamId === teamId);
         let members = schedules[gindex].members;
-        const eindex = members.findIndex(item => item.employeeId === employeeId);
+        const eindex = members.findIndex(
+            (item) => item.employeeId === employeeId
+        );
 
         let totalOffDays = 0;
-        this.scheduleAttrNames.forEach(attrName => {
-            const shiftId = weeklyDefaultShift[`${attrName.substring(0, 3)}Shift`].id,
+        this.scheduleAttrNames.forEach((attrName) => {
+            const shiftId =
+                    weeklyDefaultShift[`${attrName.substring(0, 3)}Shift`].id,
                 isOffDay = shiftId === OffDayShiftId;
 
             if (isOffDay) {
@@ -869,7 +1205,9 @@ export default class App extends Component {
         });
 
         if (totalOffDays > members[eindex].offDaysbyWeek) {
-            toast.error('Employee has a larger number of days off during the week according to the setting.');
+            toast.error(
+                'Employee has a larger number of days off during the week according to the setting.'
+            );
 
             return;
         }
@@ -880,52 +1218,69 @@ export default class App extends Component {
             data: stringify({ weeklyDefaultShift, isUsedWeeklyDefaultShift }),
             headers: {
                 'X-Requested-With': 'XMLHttpRequest',
-                'Content-Type': 'application/x-www-form-urlencoded'
-            }
-        }).then(response => {
-            const data = response.data;
-            if (data.isSuccessful) {
-                toast.success('Updated Successfully!');
-                this.updateWeeklyDefaultShift(teamId, employeeId, weeklyDefaultShift, isUsedWeeklyDefaultShift);
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+        })
+            .then((response) => {
+                const data = response.data;
+                if (data.isSuccessful) {
+                    toast.success('Updated Successfully!');
+                    this.updateWeeklyDefaultShift(
+                        teamId,
+                        employeeId,
+                        weeklyDefaultShift,
+                        isUsedWeeklyDefaultShift
+                    );
 
-                this.handleCloseWeeklyDefaultShiftModal();
-            } else {
-                toast.error(data.message);
-            }
-        }).catch(axiosError);
-    }
+                    this.handleCloseWeeklyDefaultShiftModal();
+                } else {
+                    toast.error(data.message);
+                }
+            })
+            .catch(axiosError);
+    };
 
     handleUpdateRemark = (teamId, employeeId, remark) => {
         let schedules = [...this.state.schedules];
-        const gindex = schedules.findIndex(item => item.teamId === teamId);
+        const gindex = schedules.findIndex((item) => item.teamId === teamId);
         let members = [...schedules[gindex].members];
-        const eindex = members.findIndex(item => item.employeeId === employeeId);
+        const eindex = members.findIndex(
+            (item) => item.employeeId === employeeId
+        );
 
-        if (!isEqual(remark, this.originalSchedules[gindex].members[eindex].remark)) {
+        if (
+            !isEqual(
+                remark,
+                this.originalSchedules[gindex].members[eindex].remark
+            )
+        ) {
             axios({
                 url: resolveClientUrl('ScheduleArrange/EditRemark'),
                 method: 'POST',
                 data: stringify({ employeeId, remark }),
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest',
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                }
-            }).then(response => {
-                const data = response.data;
-                if (data.isSuccessful) {
-                    toast.success('Updated Successfully!');
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+            })
+                .then((response) => {
+                    const data = response.data;
+                    if (data.isSuccessful) {
+                        toast.success('Updated Successfully!');
 
-                    members[eindex] = { ...members[eindex], remark };
-                    schedules[gindex] = { ...schedules[gindex], members };
-                    this.originalSchedules[gindex].members[eindex].remark = remark;
+                        members[eindex] = { ...members[eindex], remark };
+                        schedules[gindex] = { ...schedules[gindex], members };
+                        this.originalSchedules[gindex].members[eindex].remark =
+                            remark;
 
-                    this.setState({ schedules });
-                } else {
-                    toast.error(data.message);
-                }
-            }).catch(axiosError);
+                        this.setState({ schedules });
+                    } else {
+                        toast.error(data.message);
+                    }
+                })
+                .catch(axiosError);
         }
-    }
+    };
 
     handleEditTeamOrder = () => {
         let displayOrders = [];
@@ -935,7 +1290,7 @@ export default class App extends Component {
         for (let index = 0; index < totalItems; index++) {
             displayOrders.push({
                 teamId: schedules[index].teamId,
-                displayOrder: index + 1
+                displayOrder: index + 1,
             });
         }
 
@@ -946,18 +1301,20 @@ export default class App extends Component {
                 data: stringify({ displayOrders }),
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest',
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                }
-            }).then(response => {
-                const data = response.data;
-                if (!data.isSuccessful) {
-                    toast.error(data.message);
-                }
-            }).catch(axiosError);
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+            })
+                .then((response) => {
+                    const data = response.data;
+                    if (!data.isSuccessful) {
+                        toast.error(data.message);
+                    }
+                })
+                .catch(axiosError);
         }
-    }
+    };
 
-    handleEditDisplayOrder = gindex => {
+    handleEditDisplayOrder = (gindex) => {
         let displayOrders = [];
         const members = this.state.schedules[gindex].members,
             totalItems = members.length;
@@ -965,7 +1322,7 @@ export default class App extends Component {
         for (let index = 0; index < totalItems; index++) {
             displayOrders.push({
                 employeeId: members[index].employeeId,
-                displayOrder: index + 1
+                displayOrder: index + 1,
             });
         }
 
@@ -976,19 +1333,24 @@ export default class App extends Component {
                 data: stringify({ displayOrders }),
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest',
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                }
-            }).then(response => {
-                const data = response.data;
-                if (!data.isSuccessful) {
-                    toast.error(data.message);
-                }
-            }).catch(axiosError);
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+            })
+                .then((response) => {
+                    const data = response.data;
+                    if (!data.isSuccessful) {
+                        toast.error(data.message);
+                    }
+                })
+                .catch(axiosError);
         }
-    }
+    };
 
-    handleDragEnd = result => {
-        if (!result.destination || result.source.index === result.destination.index) {
+    handleDragEnd = (result) => {
+        if (
+            !result.destination ||
+            result.source.index === result.destination.index
+        ) {
             return;
         }
 
@@ -998,20 +1360,34 @@ export default class App extends Component {
         let schedules = [...this.state.schedules];
         if (resultType === 'droppableTeam') {
             schedules = reorder(schedules, sourceIndex, destinationIndex);
-            this.originalSchedules = reorder(schedules, sourceIndex, destinationIndex);
+            this.originalSchedules = reorder(
+                schedules,
+                sourceIndex,
+                destinationIndex
+            );
             this.setState({ schedules }, () => this.handleEditTeamOrder());
         } else if (resultType.includes('droppableMember')) {
             const teamId = parseInt(resultType.split('-')[1], 10),
-                index = schedules.findIndex(x => x.teamId === teamId);
-            this.originalSchedules[index].members = reorder(this.originalSchedules[index].members, sourceIndex, destinationIndex);
-            schedules[index].members = reorder(schedules[index].members, sourceIndex, destinationIndex);
-            this.setState({ schedules }, () => this.handleEditDisplayOrder(index));
+                index = schedules.findIndex((x) => x.teamId === teamId);
+            this.originalSchedules[index].members = reorder(
+                this.originalSchedules[index].members,
+                sourceIndex,
+                destinationIndex
+            );
+            schedules[index].members = reorder(
+                schedules[index].members,
+                sourceIndex,
+                destinationIndex
+            );
+            this.setState({ schedules }, () =>
+                this.handleEditDisplayOrder(index)
+            );
         }
-    }
+    };
 
     handleChangeTeamOrder = (key, teamId) => {
         let schedules = [...this.state.schedules];
-        const sourceIndex = schedules.findIndex(x => x.teamId === teamId),
+        const sourceIndex = schedules.findIndex((x) => x.teamId === teamId),
             totalItems = schedules.length;
         let destinationIndex = 0;
 
@@ -1027,20 +1403,30 @@ export default class App extends Component {
                 break;
         }
 
-        if (destinationIndex < 0 || destinationIndex > totalItems || sourceIndex === destinationIndex) {
+        if (
+            destinationIndex < 0 ||
+            destinationIndex > totalItems ||
+            sourceIndex === destinationIndex
+        ) {
             return;
         }
 
         schedules = reorder(schedules, sourceIndex, destinationIndex);
-        this.originalSchedules = reorder(this.originalSchedules, sourceIndex, destinationIndex);
+        this.originalSchedules = reorder(
+            this.originalSchedules,
+            sourceIndex,
+            destinationIndex
+        );
         this.setState({ schedules }, () => this.handleEditTeamOrder());
-    }
+    };
 
     handleChangeOrder = (key, teamId, employeeId) => {
         let schedules = [...this.state.schedules];
-        const index = schedules.findIndex(x => x.teamId === teamId),
+        const index = schedules.findIndex((x) => x.teamId === teamId),
             totalItems = schedules[index].members.length,
-            sourceIndex = schedules[index].members.findIndex(schedule => schedule.employeeId === employeeId);
+            sourceIndex = schedules[index].members.findIndex(
+                (schedule) => schedule.employeeId === employeeId
+            );
         let destinationIndex = 0;
 
         switch (key) {
@@ -1055,24 +1441,41 @@ export default class App extends Component {
                 break;
         }
 
-        if (destinationIndex < 0 || destinationIndex > totalItems || sourceIndex === destinationIndex) {
+        if (
+            destinationIndex < 0 ||
+            destinationIndex > totalItems ||
+            sourceIndex === destinationIndex
+        ) {
             return;
         }
 
-        schedules[index].members = reorder(schedules[index].members, sourceIndex, destinationIndex);
-        this.originalSchedules[index].members = reorder(this.originalSchedules[index].members, sourceIndex, destinationIndex);
+        schedules[index].members = reorder(
+            schedules[index].members,
+            sourceIndex,
+            destinationIndex
+        );
+        this.originalSchedules[index].members = reorder(
+            this.originalSchedules[index].members,
+            sourceIndex,
+            destinationIndex
+        );
         this.setState({ schedules }, () => this.handleEditDisplayOrder(index));
-    }
+    };
 
     handleSelectEmployeeOfTeam = (teamId, employeeId, isSelected) => {
         let schedules = [...this.state.schedules];
-        const gindex = schedules.findIndex(item => item.teamId === teamId);
+        const gindex = schedules.findIndex((item) => item.teamId === teamId);
         let members = [...schedules[gindex].members];
 
         if (employeeId !== null) {
-            const eindex = members.findIndex(item => item.employeeId === employeeId);
+            const eindex = members.findIndex(
+                (item) => item.employeeId === employeeId
+            );
             members[eindex] = { ...members[eindex], isSelected };
-            schedules[gindex] = { ...schedules[gindex], isSelected: members.findIndex(item => !item.isSelected) < 0 };
+            schedules[gindex] = {
+                ...schedules[gindex],
+                isSelected: members.findIndex((item) => !item.isSelected) < 0,
+            };
         } else {
             schedules[gindex] = { ...schedules[gindex], isSelected };
             const totalItems = members.length;
@@ -1093,7 +1496,9 @@ export default class App extends Component {
             const totalMembers = schedules[gindex].members.length;
             for (let eindex = 0; eindex < totalMembers; eindex++) {
                 if (schedules[gindex].members[eindex].isSelected) {
-                    employeeIds.push(schedules[gindex].members[eindex].employeeId);
+                    employeeIds.push(
+                        schedules[gindex].members[eindex].employeeId
+                    );
                 }
             }
         }
@@ -1101,7 +1506,7 @@ export default class App extends Component {
         if (employeeIds.length > 0) {
             this.setState({
                 selectedEmployeeIds: employeeIds,
-                showConfirmSyncDataModalDialog: true
+                showConfirmSyncDataModalDialog: true,
             });
         } else {
             toast.warn('Please select at least a employee to continue!');
@@ -1111,7 +1516,7 @@ export default class App extends Component {
     handleCloseConfirmSyncDataModalDialog = () => {
         this.setState({
             selectedEmployeeIds: [],
-            showConfirmSyncDataModalDialog: false
+            showConfirmSyncDataModalDialog: false,
         });
     };
 
@@ -1122,37 +1527,45 @@ export default class App extends Component {
         axios({
             url: resolveClientUrl('ScheduleArrange/SyncWorkingShift'),
             method: 'POST',
-            data: stringify({ fromDate, toDate, employeeIds: this.state.selectedEmployeeIds.join(',') }),
+            data: stringify({
+                fromDate,
+                toDate,
+                employeeIds: this.state.selectedEmployeeIds.join(','),
+            }),
             headers: {
                 'X-Requested-With': 'XMLHttpRequest',
-                'Content-Type': 'application/x-www-form-urlencoded'
-            }
-        }).then(response => {
-            const data = response.data;
-            if (data.isSuccessful) {
-                toast.success('Synced successfully!');
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+        })
+            .then((response) => {
+                const data = response.data;
+                if (data.isSuccessful) {
+                    toast.success('Synced successfully!');
 
-                this.setState({
-                    selectedEmployeeIds: [],
-                    showConfirmSyncDataModalDialog: false
-                });
+                    this.setState({
+                        selectedEmployeeIds: [],
+                        showConfirmSyncDataModalDialog: false,
+                    });
 
-                this.getWeeklyShedules(this.state.filter);
-            } else {
-                toast.error(data.message);
-            }
-        }).catch(axiosError).then(() => unblockUI());
+                    this.getWeeklyShedules(this.state.filter);
+                } else {
+                    toast.error(data.message);
+                }
+            })
+            .catch(axiosError)
+            .then(() => unblockUI());
     };
 
     render() {
         const {
             isHost,
+            enableSyncWorkingShift,
             schedules,
             showShiftMultipleModal,
             showConfirmRefreshDataModal,
             showRemarkPopover,
             editWeeklyDefaultShift,
-            showConfirmSyncDataModalDialog
+            showConfirmSyncDataModalDialog,
         } = this.state;
 
         return (
@@ -1167,13 +1580,17 @@ export default class App extends Component {
                     onChange={this.handleFilterChange}
                     onSubmit={this.handleGetWeeklyShedules}
                     onExportExcel={this.handleExportExcel}
-                    onExportExcelDriverPickup={this.handleExportExcelDriverPickup}
+                    onExportExcelDriverPickup={
+                        this.handleExportExcelDriverPickup
+                    }
                 />
                 <Table
                     isHost={isHost}
-                    fromDate={this.selectedWeek.fromDate} toDate={this.selectedWeek.toDate}
+                    fromDate={this.selectedWeek.fromDate}
+                    toDate={this.selectedWeek.toDate}
                     data={schedules}
-                    shiftOptions={this.shiftOptions} showRemarkPopover={showRemarkPopover}
+                    shiftOptions={this.shiftOptions}
+                    showRemarkPopover={showRemarkPopover}
                     onPrevious={this.handleGetPreviousWeekSchedule}
                     onNext={this.handleGetNextWeekSchedule}
                     onChangeSelectWeekDay={this.handleChangeSelectWeekDay}
@@ -1186,8 +1603,12 @@ export default class App extends Component {
                     onChangeWorkday={this.handleChangeWorkday}
                     onShiftMultiple={this.handleShiftMultiple}
                     onFixedOffDay={this.handleFixedOffDay}
-                    onChangeShowRemarkPopover={this.handleChangeShowRemarkPopover}
-                    onShowWeeklyDefaultShift={this.handleShowWeeklyDefaultShiftModal}
+                    onChangeShowRemarkPopover={
+                        this.handleChangeShowRemarkPopover
+                    }
+                    onShowWeeklyDefaultShift={
+                        this.handleShowWeeklyDefaultShiftModal
+                    }
                     onUpdateRemark={this.handleUpdateRemark}
                     onDragEnd={this.handleDragEnd}
                     onChangeTeamOrder={this.handleChangeTeamOrder}
@@ -1195,42 +1616,59 @@ export default class App extends Component {
                     onSelectEmployeeOfTeam={this.handleSelectEmployeeOfTeam}
                     onSyncData={this.handleSyncData}
                     onSave={this.handleSave}
+                    enableSyncWorkingShift={this.state.enableSyncWorkingShift}
                 />
-                {
-                    showShiftMultipleModal &&
-                    <ShiftMultipleModal show={showShiftMultipleModal}
+                {showShiftMultipleModal && (
+                    <ShiftMultipleModal
+                        show={showShiftMultipleModal}
                         onHide={this.handleCloseShiftMultipleModal}
-                        shiftOptions={this.shiftOptions.filter(shift => shift.id !== OffDayShiftId)}
+                        shiftOptions={this.shiftOptions.filter(
+                            (shift) => shift.id !== OffDayShiftId
+                        )}
                         onSubmit={this.handleChangeMultipleShift}
                     />
-                }
-                {
-                    editWeeklyDefaultShift.show &&
-                    <WeeklyDefaultShiftModal show={editWeeklyDefaultShift.show}
-                        isHost={isHost} nickname={editWeeklyDefaultShift.nickname}
-                        data={editWeeklyDefaultShift.data} isUsedWeeklyDefaultShift={editWeeklyDefaultShift.isUsedWeeklyDefaultShift}
-                        fromDate={moment(this.currentWeek.toDate).add(1, 'days').format(DateFormat)}
+                )}
+                {editWeeklyDefaultShift.show && (
+                    <WeeklyDefaultShiftModal
+                        show={editWeeklyDefaultShift.show}
+                        isHost={isHost}
+                        nickname={editWeeklyDefaultShift.nickname}
+                        data={editWeeklyDefaultShift.data}
+                        isUsedWeeklyDefaultShift={
+                            editWeeklyDefaultShift.isUsedWeeklyDefaultShift
+                        }
+                        fromDate={moment(this.currentWeek.toDate)
+                            .add(1, 'days')
+                            .format(DateFormat)}
                         shiftOptions={this.shiftOptions}
                         onHide={this.handleCloseWeeklyDefaultShiftModal}
                         onSubmit={this.handleChangeWeeklyDefaultShift}
                     />
-                }
-                {
-                    showConfirmRefreshDataModal &&
-                    <SweetModalDialog show={showConfirmRefreshDataModal}
-                        contents={<p>It looks like you have been editing something. If you refresh before saving, your changes will be lost.</p>}
+                )}
+                {showConfirmRefreshDataModal && (
+                    <SweetModalDialog
+                        show={showConfirmRefreshDataModal}
+                        contents={
+                            <p>
+                                It looks like you have been editing something.
+                                If you refresh before saving, your changes will
+                                be lost.
+                            </p>
+                        }
                         onHide={this.handleCloseConfirmRefreshDataModal}
                         onSubmit={this.handleSubmitRefreshData}
                     />
-                }
-                {
-                    showConfirmSyncDataModalDialog &&
-                    <SweetModalDialog show={showConfirmSyncDataModalDialog}
-                        contents={<p>Are you sure you want to sync data from OWP?</p>}
+                )}
+                {showConfirmSyncDataModalDialog && (
+                    <SweetModalDialog
+                        show={showConfirmSyncDataModalDialog}
+                        contents={
+                            <p>Are you sure you want to sync data from OWP?</p>
+                        }
                         onHide={this.handleCloseConfirmSyncDataModalDialog}
                         onSubmit={this.handleSubmitSyncData}
                     />
-                }
+                )}
             </Fragment>
         );
     }
