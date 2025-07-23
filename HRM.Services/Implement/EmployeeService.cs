@@ -44,8 +44,10 @@ public class EmployeeService(
 
     public async Task<Employee> GetEmployeeByIdAsync(int id)
     {
+        var companyId = session.Get<short>(SessionKey.CurrentCompanyId);
         var criteria = new GetEmployeeByIdCriteria
         {
+            CompanyId = companyId,
             EmpId = id
         };
         var employee = await employeeRepository.GetEmployeeByIdAsync(criteria);
