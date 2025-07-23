@@ -46,7 +46,7 @@ public class CompanyService(
         return mailConfig;
     }
 
-    public async Task<IEnumerable<SubCompany>> GetSubCompanies(int companyId)
+    public async Task<IEnumerable<SubCompany>> GetSubCompanies(int? companyId)
     {
         var criteria = new GetSubCompaniesCriteria
         {

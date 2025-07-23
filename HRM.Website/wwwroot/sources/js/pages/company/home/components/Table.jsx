@@ -2,15 +2,17 @@
 import Row from "./Row";
 
 const Table = ({ data }) => {
-  const colSpan = 7;
+  const colSpan = 9;
 
   const columns = [
     { label: "#", key: null },
     { label: "Company", key: "name" },
     { label: "BIO", key: "hasBIO" },
-    { label: "Let's Talk", key: "enableLetstalk" },
-    { label: "Whitelist IPs", key: "whitelistIPs" },
+    { label: "Letstalk", key: "enableLetstalk" },
     { label: "Currency", key: "currency" },
+    { label: "Whitelist IPs", key: "whitelistIPs" },
+    { label: "URLs", key: "urls" },
+    { label: "Sub Company", key: "subCompany" },
     { label: "Edit", key: null }
   ];
 

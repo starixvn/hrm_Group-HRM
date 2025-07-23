@@ -1,6 +1,7 @@
 ﻿namespace HRM.ViewModels.Company;
 
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 public class EditCompanySettingViewModel
 {
@@ -12,6 +13,9 @@ public class EditCompanySettingViewModel
     public string HasBIO { get; set; }
 
     public string WhitelistIPs { get; set; }
+
+    [JsonPropertyName("urls")]
+    public string Urls { get; set; }
 
     public string Currency { get; set; }
 

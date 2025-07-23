@@ -36,6 +36,7 @@ const Row = ({ rowIndex, item }) => {
                     />
                 )}
             </td>
+            <td>{item.currency}</td>
             <td>
                 {item.whitelistIPList.length > 0 && (
                     <ul className="whitelist-ip-list">
@@ -45,7 +46,22 @@ const Row = ({ rowIndex, item }) => {
                     </ul>
                 )}
             </td>
-            <td>{item.currency}</td>
+            <td>
+                {item.urlList.length > 0 && (
+                    <ul className="whitelist-ip-list">
+                        {item.urlList.map((ip, idx) => (
+                            <li className="text-left" key={idx}>{ip}</li>
+                        ))}
+                    </ul>
+                )}
+            </td>
+            <td>
+                {item.subCompanyList && item.subCompanyList.length > 0 ? (
+                    item.subCompanyList.map(subCompany => subCompany.name).join(", ")
+                ) : (
+                    ""
+                )}
+            </td>
             <td>
                 <a
                     onClick={handleEdit}

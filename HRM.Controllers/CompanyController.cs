@@ -1,5 +1,6 @@
 ﻿namespace HRM.Controllers;
 
+using System.Linq;
 using System.Threading.Tasks;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
@@ -28,6 +29,14 @@ public class CompanyController(
     public async Task<IActionResult> GetSettingCompany()
     {
         var companies = await companyService.GetSettingCompanyAsync();
+        var subCompanies = await companyService.GetSubCompanies(null);
+
+        foreach (var company in companies)
+        {
+            company.SubCompanyList = subCompanies
+                .Where(sub => sub.CompanyId == company.CompanyId)
+                .ToList();
+        }
 
         return Json(companies);
     }
@@ -48,11 +57,19 @@ public class CompanyController(
             Name = company.Name,
             HasBIO = company.HasBIO,
             WhitelistIPs = company.WhitelistIPs,
+            Urls = company.Urls,
             Currency = company.Currency,
             EnableLetstalk = company.EnableLetstalk
         };
 
         return Json(model);
+    }
+
+    public async Task<IActionResult> GetSubCompanies(int Id)
+    {
+        var subCompanies = await companyService.GetSubCompanies(Id);
+
+        return Json(subCompanies);
     }
 
     [HrmPermission(Policy.Host, FunctionKey.CompanyManagement)]
