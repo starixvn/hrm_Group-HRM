@@ -101,7 +101,14 @@ export default class ShiftManager extends Component {
         const index = this.state.managers.findIndex(item => item.ownerId === employee.id);
         this.setState({ employeeOptions: [] });
         if (index < 0) {
-            const managers = [...this.state.managers, { ownerId: employee.id, nickname: employee.nickname, fullName: employee.fullName }];
+            const managers = [...this.state.managers, 
+                { 
+                    ownerId: employee.id, 
+                    nickname: employee.nickname, 
+                    fullName: employee.fullName,
+                    companyName: employee.companyName,
+                    companyId: employee.companyId
+                }];
             this.setState({ managers });
         }
     };

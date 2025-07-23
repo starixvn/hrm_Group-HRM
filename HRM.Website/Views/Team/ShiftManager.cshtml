@@ -3,6 +3,7 @@
     ViewBag.Title = "Edit Team Supervisor";
     var teamId = (int)ViewBag.TeamId;
     var roleId = (short)ViewBag.RoleId;
+    var companyId = (int)ViewBag.CompanyId;
 }
 @section css{
     <link href="~/dist/styles/team.edit.discipline.manager.css" rel="stylesheet" />
@@ -19,5 +20,6 @@
 }
 
 @Html.Hidden("TeamId", teamId)
+@Html.Hidden("CompanyId", companyId)
 @Html.Hidden("RoleId", roleId)
 <div id="shift-wrapper"></div>

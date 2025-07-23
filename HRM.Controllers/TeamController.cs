@@ -178,6 +178,7 @@ public class TeamController(
     {
         ViewBag.TeamId = id;
         ViewBag.RoleId = (short)RoleSystem.ShiftManager;
+        ViewBag.CompanyId = CurrentCompanyId;
 
         return View();
     }
@@ -187,7 +188,7 @@ public class TeamController(
     {
         IEnumerable<SupervisorModel> supervisors = await teamService.GetTeamSupervisorByRoleId(teamId, (short)RoleSystem.ShiftManager);
         var result = supervisors.Select(x => new Supervisor
-        { OwnerId = x.OwnerId, Nickname = x.NickName, FullName = x.FullName });
+        { OwnerId = x.OwnerId, Nickname = x.NickName, FullName = x.FullName, CompanyId = x.CompanyId, CompanyName = x.CompanyName});
         return Json(result);
     }
 
@@ -196,6 +197,7 @@ public class TeamController(
     {
         ViewBag.TeamId = id;
         ViewBag.RoleId = (short)RoleSystem.DisciplineManager;
+        ViewBag.CompanyId = CurrentCompanyId;
         return View();
     }
 
