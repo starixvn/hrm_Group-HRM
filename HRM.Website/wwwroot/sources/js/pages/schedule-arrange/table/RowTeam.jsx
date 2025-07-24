@@ -42,7 +42,6 @@ export default class RowTeam extends PureComponent {
             shiftOptions,
             enableSyncWorkingShift,
         } = this.props;
-        console.log('RowTeam enableSyncWorkingShift:', enableSyncWorkingShift);
         const { teamId, name, isPublic, isSelected, members } = this.props.data;
 
         return (

@@ -32,7 +32,7 @@ public class ExportDisciplineController(
             ApproverId = session.UserId,
             EmployeeName = model.Employee,
             TeamName = model.TeamName,
-            CompanyId = CurrentCompanyId,
+            CompanyId = model.CompanyId ?? CurrentCompanyId,
             RoleIds = string.Join(",", roles.Select(x => x.RoleId))
         };
 

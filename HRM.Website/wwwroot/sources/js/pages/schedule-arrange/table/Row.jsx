@@ -48,12 +48,6 @@ export default class Row extends PureComponent {
             draggableProvided,
             isDragging,
         } = this.props;
-        console.log(
-            'Row enableSyncWorkingShift:',
-            enableSyncWorkingShift,
-            'for employee:',
-            data.employeeId
-        );
 
         return (
             <div

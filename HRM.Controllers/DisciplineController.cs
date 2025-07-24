@@ -37,6 +37,9 @@ public class DisciplineController(
             model.DateRange = GetDateRangeByQuarter();
         }
 
+        var roles = await roleService.GetByUserIdAsync(session.UserId);
+        ViewBag.RoleId = string.Join(",", roles.Select(x => x.RoleId));
+        ViewBag.CompanyId = CurrentCompanyId;
         ViewBag.IsHost = session.HasPermissionOnFunction(FunctionKey.Discipline, Policy.Host);
         ViewBag.IsHostOtherDiscipline = session.HasPermissionOnFunction(FunctionKey.OtherDiscipline, Policy.Host);
         return View(model);
@@ -44,7 +47,7 @@ public class DisciplineController(
 
     [HttpPost]
     [HrmPermission(Policy.Read, FunctionKey.Discipline)]
-    public async Task<IActionResult> GetDisciplineSummaryGrid(DisciplineSummaryViewModel model)
+    public async Task<IActionResult> GetDisciplineSummaryGrid(DisciplineSummaryViewModel model, int? companyId = null)
     {
         var roles = await roleService.GetByUserIdAsync(session.UserId);
         var criteria = new GetDisciplineSummaryCriteria
@@ -57,7 +60,7 @@ public class DisciplineController(
             ReasonId = model.ReasonId,
             ApproverId = session.UserId,
             IsShowAll = model.IsShowAll,
-            CompanyId = CurrentCompanyId,
+            CompanyId = (short)(companyId ?? CurrentCompanyId),
             RoleIds = string.Join(",", roles.Select(x => x.RoleId))
         };
 

@@ -10,7 +10,8 @@
 @import '../../components/checkbox';
 @import '../../components/jquery-ui-dialog';
 
-#dialogAddOtherDiscipline, #dialogViewOtherDiscipline {
+#dialogAddOtherDiscipline,
+#dialogViewOtherDiscipline {
     .form-group {
         width: 100%;
 
@@ -18,7 +19,8 @@
             width: 10rem;
         }
 
-        .select-form, .input-form {
+        .select-form,
+        .input-form {
             width: calc(100% - 10rem);
 
             .minusScore {
@@ -40,7 +42,7 @@
                 right: 5px;
                 top: 5px;
                 font-size: 1.6rem;
-                color: #A63C45;
+                color: #a63c45;
             }
         }
 

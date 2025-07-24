@@ -437,14 +437,14 @@ public class EmployeeController(
         return new JsonResult(supervisors);
     }
 
-    public async Task<JsonResult> GetMemberByManager(string keyword)
+    public async Task<JsonResult> GetMemberByManager(string keyword, short? companyId = null)
     {
         var criteria = new GetMemberByManagerCriteria
         {
             SupervisorId = session.UserId,
             Query = keyword,
             ExcludedManager = false,
-            CompanyId = CurrentCompanyId
+            CompanyId = companyId ?? CurrentCompanyId
         };
         var employees = await employeeService.GetMemberByManagerAsync(criteria);
         const byte totalItems = 10;

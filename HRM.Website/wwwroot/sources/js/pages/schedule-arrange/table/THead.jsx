@@ -16,7 +16,6 @@ export default class THead extends PureComponent {
 
     render() {
         const { isHost, enableSyncWorkingShift, fromDate, toDate } = this.props;
-        console.log('enableSyncWorkingShift', enableSyncWorkingShift);
         const isSystemAdmin = document.getElementById('IsSystemAdmin').checked;
 
         return (
