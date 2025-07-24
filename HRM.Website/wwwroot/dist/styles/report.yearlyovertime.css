@@ -263,8 +263,8 @@
 }
 
 .filter {
-  background-color: #F4F4F4;
-  border: 1px solid #C8C8C8;
+  background-color: #f4f4f4;
+  border: 1px solid #c8c8c8;
   padding: 15px 10px;
   -webkit-border-radius: 2px;
   -khtml-border-radius: 2px;
@@ -279,6 +279,11 @@
 }
 .filter .form-horizontal .form-group.year .label-form {
   width: 4rem;
+}
+
+.title {
+  display: flex !important;
+  align-items: center !important;
 }
 
 .form-horizontal .form-group {
@@ -322,7 +327,10 @@
   padding-top: 7px;
   margin-bottom: 0;
 }
-.form-horizontal .form-group .select-form, .form-horizontal .form-group .calendar-form, .form-horizontal .form-group .input-form, .form-horizontal .form-group .radio-form {
+.form-horizontal .form-group .select-form,
+.form-horizontal .form-group .calendar-form,
+.form-horizontal .form-group .input-form,
+.form-horizontal .form-group .radio-form {
   float: left;
 }
 .form-horizontal .form-group.form-group--m {
@@ -349,7 +357,7 @@
   right: 0;
   top: 7px;
   font-size: 1.6rem;
-  color: #A63C45;
+  color: #a63c45;
 }
 .form-horizontal .form-group.form-group--m.style-mr-0, .form-horizontal .form-group.form-group--l.style-mr-0 {
   margin-right: 0;
