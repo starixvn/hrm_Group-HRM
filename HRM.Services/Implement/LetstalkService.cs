@@ -2,6 +2,7 @@
 
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Fanex.Logging;
 using HRM.Core.Models;
 using HRM.Letstalk.Core.Services.Interfaces;
 using HRM.Models.LetsTalk;
@@ -10,6 +11,7 @@ using Newtonsoft.Json;
 
 public class LetstalkService(
     LetstalkSettings letstalkSettings,
+    ILogger logger,
     ISendNotificationService sendNotificationService) : ILetstalkService
 {
 
@@ -28,6 +30,7 @@ public class LetstalkService(
                     { "ReplyMarkup", JsonConvert.SerializeObject(replyMarkup) }
                 };
 
+                await logger.InfoAsync($"Send notification to Letstalk: {JsonConvert.SerializeObject(data)}");
                 await sendNotificationService.SendNotificationToLetstalkAsync(letstalkSettings.BaseUrl, jwtToken.Token, data);
             }
         }
@@ -48,6 +51,7 @@ public class LetstalkService(
                     { "ReplyMarkup", JsonConvert.SerializeObject(replyMarkup) }
                 };
 
+                logger.InfoAsync($"Send notification to Letstalk: {JsonConvert.SerializeObject(data)}");
                 sendNotificationService.SendNotificationToLetstalk(letstalkSettings.BaseUrl, jwtToken.Token, data);
             }
         }
