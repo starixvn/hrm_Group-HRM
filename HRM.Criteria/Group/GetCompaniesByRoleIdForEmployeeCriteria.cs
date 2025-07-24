@@ -1,5 +1,4 @@
 using Fanex.Data.Repository;
-using HRM.Models;
 
 namespace HRM.Criteria.Group;
 

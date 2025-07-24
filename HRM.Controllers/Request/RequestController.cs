@@ -209,15 +209,7 @@ public class RequestController(
         }
         else
         {
-            commandResult = model.Command switch
-            {
-                RequestCommand.Accept or RequestCommand.Approve or RequestCommand.Process => await requestService
-                    .ApproveRequest(session.UserId, model),
-                RequestCommand.Reset => await requestService.ResetRequest(session.UserId, model),
-                RequestCommand.NotAccept or RequestCommand.Reject or RequestCommand.Void => await requestService
-                    .RejectRequest(session.UserId, model),
-                _ => await requestService.VoidRequest(session.UserId, model)
-            };
+            commandResult = await ProcessLocalRequest(model);
 
             if (commandResult.IsSuccessful)
             {
@@ -226,6 +218,19 @@ public class RequestController(
         }
 
         return new JsonResult(commandResult);
+    }
+
+    private async Task<CommandResult> ProcessLocalRequest(ProcessRequestParam model)
+    {
+        return model.Command switch
+        {
+            RequestCommand.Accept or RequestCommand.Approve or RequestCommand.Process => await requestService
+                .ApproveRequest(session.UserId, model),
+            RequestCommand.Reset => await requestService.ResetRequest(session.UserId, model),
+            RequestCommand.NotAccept or RequestCommand.Reject or RequestCommand.Void => await requestService
+                .RejectRequest(session.UserId, model),
+            _ => await requestService.VoidRequest(session.UserId, model)
+        };
     }
 
     [HttpPost]

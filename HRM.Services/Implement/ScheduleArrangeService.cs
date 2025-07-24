@@ -130,7 +130,9 @@ public class ScheduleArrangeService(
     private static ShiftBase FindShiftOrDefault(IList<ShiftBase> shiftBases, int? shiftId)
     {
         if (!shiftId.HasValue)
+        {
             return null;
+        }
 
         return shiftBases.FirstOrDefault(x => x.Id == shiftId.Value) ??
                new ShiftBase { Id = shiftId.Value, Code = "Unknown", Name = "Unknown Shift" };
