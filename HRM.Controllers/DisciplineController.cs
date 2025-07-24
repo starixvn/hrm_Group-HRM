@@ -12,6 +12,7 @@ using Criteria.Discipline;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Services;
 using GO.UserControl.Client.Core.Session;
+using HRM.Core.Enums;
 using HRM.Core.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -37,8 +38,7 @@ public class DisciplineController(
             model.DateRange = GetDateRangeByQuarter();
         }
 
-        var roles = await roleService.GetByUserIdAsync(session.UserId);
-        ViewBag.RoleId = string.Join(",", roles.Select(x => x.RoleId));
+        ViewBag.RoleId = (short)RoleSystem.DisciplineManager;
         ViewBag.CompanyId = CurrentCompanyId;
         ViewBag.IsHost = session.HasPermissionOnFunction(FunctionKey.Discipline, Policy.Host);
         ViewBag.IsHostOtherDiscipline = session.HasPermissionOnFunction(FunctionKey.OtherDiscipline, Policy.Host);
