@@ -9,5 +9,4 @@ public class Supervisor
     public int CompanyId { get; set; }
     public bool CanRemove { get; set; }
     public string CompanyName { get; set; }
-    public int CompanyId { get; set; }
 }
