@@ -10,6 +10,11 @@
 @import '../../layout/toastr';
 @import '../../vendors/autocomplete';
 
+.title {
+    display: flex !important;
+    align-items: center !important;
+}
+
 .header-label {
     color: #fff !important;
 }

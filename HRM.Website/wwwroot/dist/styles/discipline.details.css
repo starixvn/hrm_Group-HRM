@@ -1027,6 +1027,11 @@ button.toast-close-button {
   overflow-y: auto;
 }
 
+.title {
+  display: flex !important;
+  align-items: center !important;
+}
+
 .header-label {
   color: #fff !important;
 }

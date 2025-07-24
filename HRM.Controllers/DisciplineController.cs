@@ -72,7 +72,7 @@ public class DisciplineController(
     }
 
     [HrmPermission(Policy.Read, FunctionKey.Discipline)]
-    public async Task<IActionResult> DisciplineDetail(DisciplineSummaryViewModel model)
+    public async Task<IActionResult> DisciplineDetail(DisciplineSummaryViewModel model, short? companyId = null)
     {
         if (model != null)
         {
@@ -91,11 +91,16 @@ public class DisciplineController(
             model.DateRange = GetDateRangeByQuarter();
         }
 
+        var roles = await roleService.GetByUserIdAsync(session.UserId);
+        ViewBag.RoleId = string.Join(",", roles.Select(x => x.RoleId));
+        ViewBag.CompanyId = companyId ?? CurrentCompanyId;
+        ViewBag.IsHost = session.HasPermissionOnFunction(FunctionKey.Discipline, Policy.Host);
+
         return View(model);
     }
 
     [HrmPermission(Policy.Read, FunctionKey.Discipline)]
-    public async Task<IActionResult> GetDisciplineDetailGrid(DisciplineSummaryViewModel model)
+    public async Task<IActionResult> GetDisciplineDetailGrid(DisciplineSummaryViewModel model, short? companyId = null)
     {
         var roles = await roleService.GetByUserIdAsync(session.UserId);
         var criteria = new GetDisciplineDetailCriteria
@@ -108,7 +113,7 @@ public class DisciplineController(
             ReasonId = model.ReasonId,
             HasIgnored = model.HasIgnored,
             ApproverId = session.UserId,
-            CompanyId = CurrentCompanyId,
+            CompanyId = companyId ?? CurrentCompanyId,
             RoleIds = string.Join(",", roles.Select(x => x.RoleId))
         };
 
@@ -200,9 +205,9 @@ public class DisciplineController(
         return Json(commandResult);
     }
 
-    public async Task<IActionResult> GetMemberToAddOtherDiscipline(string keyword)
+    public async Task<IActionResult> GetMemberToAddOtherDiscipline(string keyword, short? companyId = null)
     {
-        var employees = await disciplineService.GetMemberToAddOtherDisciplineAsync(session.UserId, keyword);
+        var employees = await disciplineService.GetMemberToAddOtherDisciplineAsync(session.UserId, keyword, companyId);
 
         return Json(employees);
     }

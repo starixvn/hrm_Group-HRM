@@ -19,6 +19,7 @@ import {
     resolveClientUrl,
     downloadFile,
 } from '../../shared/common.functions';
+import { getOrgChart } from '../group-team/supervisor/common.functions';
 
 (function () {
     var $disciplineTableBody,
@@ -109,6 +110,7 @@ import {
                         headers: { 'X-Requested-With': 'XMLHttpRequest' },
                         params: {
                             keyword: request.term,
+                            companyId: $('#CompanyId').val(),
                         },
                     })
                         .then((res) => {
@@ -290,6 +292,7 @@ import {
                     teamId = $('form.form-filter #TeamId').val(),
                     isLocal = $('form.form-filter #IsLocal').val(),
                     reasonId = $('form.form-filter #ReasonId').val(),
+                    companyId = $('#CompanyId').val(),
                     fromDate = $('form.form-filter #FromDate')
                         .datepicker({ dateFormat: 'dd M, yy' })
                         .val(),
@@ -313,6 +316,8 @@ import {
                             isLocal +
                             '&reasonId=' +
                             reasonId +
+                            '&companyId=' +
+                            companyId +
                             '&fromSummaryPage=true'
                     ),
                     '_blank'
@@ -497,13 +502,7 @@ import {
             roleId: roleId,
             onChange: (companyId) => {
                 $('#CompanyId').val(companyId);
-                // Reload teams when company changes
-                axios({
-                    method: 'GET',
-                    url: resolveClientUrl('Team/GetOrgChart'),
-                    headers: { 'X-Requested-With': 'XMLHttpRequest' },
-                    params: { companyId: companyId },
-                })
+                getOrgChart(companyId)
                     .then((response) => {
                         $('#Team').multiSelectTreeView({
                             data: response.data,
@@ -513,31 +512,11 @@ import {
                         $('#TeamId').val(
                             $('#Team').multiSelectTreeView('getSelectedItems')
                         );
-
                         query();
                     })
                     .catch(axiosError);
             },
         });
-        axios({
-            method: 'GET',
-            url: resolveClientUrl('Team/GetOrgChart'),
-            headers: { 'X-Requested-With': 'XMLHttpRequest' },
-            params: { companyId: defaultCompanyId },
-        })
-            .then((response) => {
-                $('#Team').multiSelectTreeView({
-                    data: response.data,
-                    isSelectedAll: true,
-                    hasSearchBox: true,
-                });
-                $('#TeamId').val(
-                    $('#Team').multiSelectTreeView('getSelectedItems')
-                );
-
-                query();
-            })
-            .catch(axiosError);
 
         $('form.form-filter #FromDate, form.form-filter #ToDate').on(
             'change',

@@ -18,11 +18,16 @@
     }
     <a class="step">@ViewBag.Title</a>
 }
-<h2 class="page-title">@Labels.DisciplineDetail</h2>
+<div class="title">
+    <h2 class="page-title">@Labels.DisciplineDetail</h2>
+    <div id="company-list"></div>
+</div>
 <form class="form-filter filter">
+    @Html.HiddenFor(model => model.TeamId)
+    @Html.HiddenFor(model => model.TeamName)
+    <input type="hidden" id="CompanyId" name="CompanyId" value="@ViewBag.CompanyId" />
+    <input type="hidden" id="RoleId" value="@ViewBag.RoleId" />
     <div class="form-horizontal clearfix">
-        @Html.HiddenFor(model => model.TeamId)
-        @Html.HiddenFor(model => model.TeamName)
         <div class="form-group form-group--m">
             <div class="label-form">
                 <label class="control-label">@Labels.DateRange</label>
