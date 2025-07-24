@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Fanex.Logging;
 using HRM.Models.Request;
 using HRM.Services.Interfaces.Request;
 using Microsoft.AspNetCore.Mvc;
@@ -9,7 +10,7 @@ namespace HRM.Controllers.API.Request;
 
 [ApiController]
 [Route("api/[controller]")]
-public class RequestController(IRequestService requestService) : ControllerBase
+public class RequestController(IRequestService requestService, ILogger logger) : ControllerBase
 {
     [HttpPost("Process")]
     public async Task<IActionResult> ProcessRequest([FromQuery] ProcessRequestParam request, [FromQuery] EmployeeSession employee)
@@ -27,8 +28,9 @@ public class RequestController(IRequestService requestService) : ControllerBase
         if (commandResult.IsSuccessful)
         {
             await requestService.SendMailProcessRequest(request, employee, request.Command);
-        }
 
+        }
+        await logger.InfoAsync($"ProcessRequest by Letstalk: RequestId: {request.RequestId}, isSuccess: {commandResult.IsSuccessful}, message: {commandResult.Message}");
         return new JsonResult(commandResult);
     }
 }
