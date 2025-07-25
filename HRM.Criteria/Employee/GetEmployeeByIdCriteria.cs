@@ -4,7 +4,7 @@ using Fanex.Data.Repository;
 
 public class GetEmployeeByIdCriteria : CriteriaBase
 {
-    public short CompanyId { get; set; }
+    public short? CompanyId { get; set; }
 
     public int EmpId { get; set; }
 
