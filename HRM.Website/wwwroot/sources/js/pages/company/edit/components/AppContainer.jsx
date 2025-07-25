@@ -42,6 +42,18 @@ const AppContainer = () => {
 
     useEffect(() => {
         axios({
+            url: resolveClientUrl(`Company/GetCurrency`),
+            method: "GET",
+            headers: { "X-Requested-With": "XMLHttpRequest" },
+        })
+        .then((res) => {
+            setCurrencyOptions(res.data);
+        })
+        .catch(axiosError);
+    }, []);
+
+    useEffect(() => {
+        axios({
             url: resolveClientUrl(`Company/GetCompanyById/${window.companyId}`),
             method: "GET",
             headers: { "X-Requested-With": "XMLHttpRequest" },
@@ -60,57 +72,36 @@ const AppContainer = () => {
                 const rawUrls = JSON.parse(data.urls);
                 parsedUrls = rawUrls;
             }
-    
+
             let parsedCurrency = [];
             if (data.currency) {
                 parsedCurrency = data.currency.split(',').map(c => c.trim()).filter(c => c);
             }
-    
+
+            let subCompaniesData = [];
+            if (data.subCompanies && Array.isArray(data.subCompanies)) {
+                subCompaniesData = data.subCompanies.map(item => ({
+                    subCompanyId: item.subCompanyId,
+                    companyId: item.companyId,
+                    name: item.name,
+                    employeeCount: item.employeeCount || 0,
+                    actionType: 'none'
+                }));
+            }
+            setSubCompanies(subCompaniesData);
+
             setInitialValues({
                 companyId: data.companyId || "",
                 name: data.name || "",
                 hasBIO: String(data.hasBIO).toLowerCase() === "true",
                 enableLetstalk: String(data.enableLetstalk).toLowerCase() === "true",
                 currency: parsedCurrency,
-                subCompany: subCompanies,
+                subCompany: subCompaniesData,
             });
-    
+
             setWhitelistIPs(parsedIPs);
             setUrls(parsedUrls);
             setFormKey((prev) => prev + 1);
-        })
-        .catch(axiosError);
-    }, []);
-
-    useEffect(() => {
-        axios({
-            url: resolveClientUrl(`Company/GetSubCompanies/${window.companyId}`),
-            method: "GET",
-            headers: { "X-Requested-With": "XMLHttpRequest" },
-        })
-        .then((response) => {
-            const data = response.data;
-            if (data && Array.isArray(data)) {
-                // Transform data to include subCompanyId, companyId, and name
-                const transformedData = data.map(item => ({
-                    subCompanyId: item.subCompanyId || item.id,
-                    companyId: item.companyId,
-                    name: item.name || item.text || item.value
-                }));
-                setSubCompanies(transformedData);
-            }
-        })
-        .catch(axiosError);
-    }, []);
-
-    useEffect(() => {
-        axios({
-            url: resolveClientUrl(`Company/GetCurrency`),
-            method: "GET",
-            headers: { "X-Requested-With": "XMLHttpRequest" },
-        })
-        .then((res) => {
-            setCurrencyOptions(res.data);
         })
         .catch(axiosError);
     }, []);
@@ -119,14 +110,14 @@ const AppContainer = () => {
         setWhitelistIPs(newIPs);
     }, []);
 
-    const validateAndAddIP = useCallback((tag) => {
-        if (!isValidIP(tag)) {
+    const validateAndAddIP = useCallback((ip) => {
+        if (!isValidIP(ip)) {
             toastr.warning("Invalid IP address format", "", toastOptions());
             return false;
         }
 
-        if (whitelistIPs.includes(tag)) {
-            toastr.info(`"${tag}" is already exists!`, "", toastOptions());
+        if (whitelistIPs.includes(ip)) {
+            toastr.info(`"${ip}" is already exists!`, "", toastOptions());
             return false;
         }
 
@@ -144,11 +135,18 @@ const AppContainer = () => {
             urls: urls.length > 0 ? JSON.stringify(urls) : ''
         });
 
+        const processedSubCompanies = subCompanies.map(company => ({
+            subCompanyId: company.subCompanyId,
+            companyId: company.companyId,
+            name: company.name,
+            actionType: company.actionType || 'none'
+        }));
+
         axios.post(
             resolveClientUrl("company/edit"),
             {
                 companyId: values.companyId,
-                subCompanyIds: subCompanies.map(company => company.subCompanyId),
+                subCompanies: processedSubCompanies,
                 settingsJson: settingsJson
             },
             {
@@ -168,7 +166,7 @@ const AppContainer = () => {
                 }
             })
             .catch(axiosError);
-    }, [whitelistIPs, urls]);
+    }, [whitelistIPs, urls, subCompanies]);
 
     const renderForm = ({ errors, isSubmitting, values, setFieldValue }) => (
         <div className="card">
@@ -246,7 +244,7 @@ const AppContainer = () => {
                     <div className="label-form">
                         <label className="control-label">Whitelist IPs</label>
                     </div>
-                    <div className="input-form">
+                    <div className="input-form flex-form">
                         <TagsInput
                             value={whitelistIPs}
                             onChange={handleWhitelistIPsChange}
@@ -262,7 +260,7 @@ const AppContainer = () => {
                     <div className="label-form">
                         <label className="control-label">URLs</label>
                     </div>
-                    <div className="input-form">
+                    <div className="input-form flex-form">
                         <TagsInput
                             value={urls}
                             onChange={setUrls}
@@ -277,18 +275,13 @@ const AppContainer = () => {
                     <div className="label-form">
                         <label className="control-label">Sub Company</label>
                     </div>
-                    <div className="input-form">
+                    <div className="input-form flex-form">
                         <SubCompany 
                             companyId={values.companyId} 
-                            initialTags={subCompanies.map(company => company.name)}
+                            initialTags={subCompanies}
+                            validTags={subCompanies.filter(company => company.actionType === 'none')}
                             onTagsChange={(newTags) => {
-                                // Transform back to the required format
-                                const transformedTags = newTags.map((tag, index) => ({
-                                    subCompanyId: `new_${Date.now()}_${index}`, // Generate temporary ID for new tags
-                                    companyId: values.companyId,
-                                    name: tag
-                                }));
-                                setSubCompanies(transformedTags);
+                                setSubCompanies(newTags);
                             }}
                         />
                     </div>

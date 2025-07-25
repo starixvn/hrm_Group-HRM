@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Linq;
 using System.Threading.Tasks;
 using GO.UserControl.Client.Core.Session;
@@ -108,5 +109,15 @@ public class CompanyService(
             CompanyId = companyId
         };
         return await baseService.GetDataEntityAsync<CompanySetting>(criteria);
+    }
+
+    public async Task<List<SubCompanyEmployee>> CountEmployeeById(int companyId)
+    {
+        var criteria = new CountEmployeeByIdCriteria
+        {
+            CompanyId = companyId
+        };
+        var result = await baseService.GetDataAsync<SubCompanyEmployee>(criteria);
+        return result.ToList();
     }
 }

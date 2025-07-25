@@ -7,14 +7,23 @@
 @import "../../layout/_toastr.scss";
 @import "../../components/_checkbox.scss";
 
+.form-horizontal .form-group {
+  .label-form {
+    min-width: 120px;
+  }
+
+  .input-form {
+    min-width: 300px;
+  }
+
+  .flex-form {
+    width: auto !important;
+  }
+}
 
 .field-name {
     font-size: 1.5rem !important;
     height: 30px !important;
-}
-
-.input-form {
-    width: 300px !important;
 }
 
 .btn {
@@ -22,7 +31,7 @@
 
     &:focus,
     &:active {
-        outline: none;
+        outline: none !important;
     }
 }
 

@@ -5,23 +5,23 @@ const Table = ({ data }) => {
   const colSpan = 9;
 
   const columns = [
-    { label: "#", key: null },
-    { label: "Company", key: "name" },
-    { label: "BIO", key: "hasBIO" },
-    { label: "Letstalk", key: "enableLetstalk" },
-    { label: "Currency", key: "currency" },
-    { label: "Whitelist IPs", key: "whitelistIPs" },
-    { label: "URLs", key: "urls" },
-    { label: "Sub Company", key: "subCompany" },
-    { label: "Edit", key: null }
+    { label: "#", key: null, width: "3%" },
+    { label: "Company", key: "name", width: "15%" },
+    { label: "BIO", key: "hasBIO", width: "4%" },
+    { label: "Letstalk", key: "enableLetstalk", width: "4%" },
+    { label: "Currency", key: "currency", width: "10%" },
+    { label: "Whitelist IPs", key: "whitelistIPs", width: "25%" },
+    { label: "URLs", key: "urls", width: "25%" },
+    { label: "Sub Company", key: "subCompany", width: "10%" },
+    { label: "Edit", key: null, width: "4%" }
   ];
 
   return (
     <table className="table table-custom">
       <thead>
         <tr>
-          {columns.map(({ label }) => (
-            <th key={label}>
+          {columns.map(({ label, width }) => (
+            <th key={label} style={{ width }}>
               <div className="cell-control-wrapper">
                 {label}
               </div>

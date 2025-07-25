@@ -1,5 +1,7 @@
 ﻿namespace HRM.ViewModels.Company;
 
+using HRM.Models;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
@@ -22,4 +24,6 @@ public class EditCompanySettingViewModel
     public string EnableLetstalk { get; set; }
 
     public string SettingsJson { get; set; }
+
+    public List<SubCompany> SubCompanies { get; set; }
 }

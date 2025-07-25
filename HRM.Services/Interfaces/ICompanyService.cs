@@ -14,6 +14,8 @@ namespace HRM.Services.Interfaces
 
         Task<IEnumerable<SubCompany>> GetSubCompanies(int? companyId);
 
+        Task<List<SubCompanyEmployee>> CountEmployeeById(int companyId);
+
         Task<bool> GetIsShowSubCompanyValue();
 
         Task<IEnumerable<CompanySetting>> GetSettingCompanyAsync();

@@ -39,20 +39,20 @@ const Row = ({ rowIndex, item }) => {
             <td>{item.currency}</td>
             <td>
                 {item.whitelistIPList.length > 0 && (
-                    <ul className="whitelist-ip-list">
+                    <div className="whitelist-ip-list">
                         {item.whitelistIPList.map((ip, idx) => (
-                            <li className="text-left" key={idx}>{ip}</li>
+                            <span className="text-left whitelist-item" key={idx}>{ip}</span>
                         ))}
-                    </ul>
+                    </div>
                 )}
             </td>
             <td>
                 {item.urlList.length > 0 && (
-                    <ul className="whitelist-ip-list">
+                    <div className="whitelist-ip-list">
                         {item.urlList.map((ip, idx) => (
-                            <li className="text-left" key={idx}>{ip}</li>
+                            <span className="text-left url-item" key={idx}>{ip}</span>
                         ))}
-                    </ul>
+                    </div>
                 )}
             </td>
             <td>
