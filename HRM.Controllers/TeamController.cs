@@ -183,12 +183,12 @@ public class TeamController(
         return View();
     }
 
-    [HrmPermission(Policy.Host, FunctionKey.TeamManagement)]
+    [HrmPermission(Policy.Host, FunctionKey.TeamManagement, FunctionKey.GroupTeamManagement)]
     public async Task<IActionResult> GetShiftManagerByTeamId(int teamId)
     {
         IEnumerable<SupervisorModel> supervisors = await teamService.GetTeamSupervisorByRoleId(teamId, (short)RoleSystem.ShiftManager);
         var result = supervisors.Select(x => new Supervisor
-        { OwnerId = x.OwnerId, Nickname = x.NickName, FullName = x.FullName, CompanyId = x.CompanyId, CompanyName = x.CompanyName});
+        { OwnerId = x.OwnerId, Nickname = x.NickName, FullName = x.FullName, CompanyId = x.CompanyId, CompanyName = x.CompanyName, CanRemove = x.CanRemove});
         return Json(result);
     }
 
@@ -201,7 +201,7 @@ public class TeamController(
         return View();
     }
 
-    [HrmPermission(Policy.Read, FunctionKey.TeamManagement)]
+    [HrmPermission(Policy.Read, FunctionKey.TeamManagement, FunctionKey.GroupTeamManagement)]
     public async Task<IActionResult> GetDisciplineManagerByTeamId(int teamId)
     {
         var supervisors = await teamService.GetDisciplineManagerByTeamId(teamId);
