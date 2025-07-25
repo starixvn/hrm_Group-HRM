@@ -156,13 +156,13 @@ public class ScheduleArrangeService(
         var weeklyDefaultShifts = weeklySchedules.Select(x => x.WeeklyDefaultShift).ToList();
         foreach (var weeklyDefaultShift in weeklyDefaultShifts.Where(weeklyDefaultShift => weeklyDefaultShift != null))
         {
-            weeklyDefaultShift.MonShift = FindShiftOrDefault(shiftBases, weeklyDefaultShift.MonShiftId);
-            weeklyDefaultShift.TueShift = FindShiftOrDefault(shiftBases, weeklyDefaultShift.TueShiftId);
-            weeklyDefaultShift.WedShift = FindShiftOrDefault(shiftBases, weeklyDefaultShift.WedShiftId);
-            weeklyDefaultShift.ThuShift = FindShiftOrDefault(shiftBases, weeklyDefaultShift.ThuShiftId);
-            weeklyDefaultShift.FriShift = FindShiftOrDefault(shiftBases, weeklyDefaultShift.FriShiftId);
-            weeklyDefaultShift.SatShift = FindShiftOrDefault(shiftBases, weeklyDefaultShift.SatShiftId);
-            weeklyDefaultShift.SunShift = FindShiftOrDefault(shiftBases, weeklyDefaultShift.SunShiftId);
+            weeklyDefaultShift.MonShift = shiftBases.First(x => x.Id == weeklyDefaultShift.MonShiftId);
+            weeklyDefaultShift.TueShift = shiftBases.First(x => x.Id == weeklyDefaultShift.TueShiftId);
+            weeklyDefaultShift.WedShift = shiftBases.First(x => x.Id == weeklyDefaultShift.WedShiftId);
+            weeklyDefaultShift.ThuShift = shiftBases.First(x => x.Id == weeklyDefaultShift.ThuShiftId);
+            weeklyDefaultShift.FriShift = shiftBases.First(x => x.Id == weeklyDefaultShift.FriShiftId);
+            weeklyDefaultShift.SatShift = shiftBases.First(x => x.Id == weeklyDefaultShift.SatShiftId);
+            weeklyDefaultShift.SunShift = shiftBases.First(x => x.Id == weeklyDefaultShift.SunShiftId);
         }
     }
 

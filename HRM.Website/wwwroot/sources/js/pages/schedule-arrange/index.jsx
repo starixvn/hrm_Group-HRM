@@ -151,8 +151,6 @@ export default class App extends Component {
                 this.shiftOptions = response.data.map((shift) => {
                     return { id: shift.id, code: shift.code, name: shift.name };
                 });
-
-                this.loadTeams(companyId);
             })
             .catch(axiosError);
     };
