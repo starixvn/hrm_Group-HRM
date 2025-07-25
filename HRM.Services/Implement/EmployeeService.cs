@@ -149,10 +149,12 @@ public class EmployeeService(
 
     public async Task<IEnumerable<SupervisorModel>> GetEmployeeSupervisorByRoleIdAsync(int employeeId, short roleId)
     {
+        var companyId = session.Get<short>(SessionKey.CurrentCompanyId);
         var criteria = new GetEmployeeSupervisorCriteria
         {
             EmpId = employeeId,
-            Role = roleId
+            Role = roleId,
+            CompanyId = companyId
         };
         return await baseService.GetDataAsync<SupervisorModel>(criteria);
     }
@@ -174,9 +176,11 @@ public class EmployeeService(
 
     public async Task<IEnumerable<Supervisor>> GetDisciplineSettingByEmployeeIdAsync(int employeeId)
     {
+        var companyId = session.Get<int>(SessionKey.CurrentCompanyId);
         var criteria = new GetDisciplineSettingByEmployeeId
         {
-            EmpId = employeeId
+            EmpId = employeeId,
+            CompanyId = companyId
         };
         return await baseService.GetDataAsync<Supervisor>(criteria);
     }

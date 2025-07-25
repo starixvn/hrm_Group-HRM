@@ -50,18 +50,20 @@ export default class DisciplineManager extends Component {
                 .join(',');
 
             let apiCall;
-            if (this.props.pageType === PageType.GroupTeam) {
+            let isGroupTeam = this.props.pageType === PageType.GroupTeam;
+            if (isGroupTeam) {
                 apiCall = getGroupTeamEmployees(query);
             } else {
                 apiCall = getSupervisors(query, this.roleId, excludeIds);
             }
-
+            
             apiCall
                 .then((response) => {
                     const employeeOptions = response.data.map((item) => {
+                    var id = isGroupTeam ? item.empId : item.id;
                         return {
-                            key: item.empId,
-                            id: item.empId,
+                            key: id,
+                            id: id,
                             teamCode:
                                 item.teamCode !== null ? item.teamCode : '',
                             value:

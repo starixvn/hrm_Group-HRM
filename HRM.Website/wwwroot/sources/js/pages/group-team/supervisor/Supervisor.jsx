@@ -125,7 +125,7 @@ export default class Supervisor extends Component {
         ...this.state.supervisors,
         {
           ownerId: employee.id,
-          nickName: employee.nickname,
+          nickName: employee.value,
           fullName: employee.fullName,
           teamCode: employee.teamCode,
           companyName: employee.companyName,

@@ -15,7 +15,7 @@ export default class Row extends PureComponent {
             <tr>
                 <td className="align-left cell-name">
                     <div className="wrapper">
-                        <div>{`${data.nickname} (${data.companyName})`}</div>
+                        <div>{data.nickname}</div>
                         <DropdownOrder id={`dropdown${data.ownerId}`}
                             onMoveUp={() => moveUp(this)}
                             onMoveDown={() => moveDown(this)}

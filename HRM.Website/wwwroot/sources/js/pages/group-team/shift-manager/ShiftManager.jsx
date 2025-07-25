@@ -50,6 +50,7 @@ export default class ShiftManager extends Component {
                         teamCode: item.teamCode !== null ? item.teamCode : "",
                         value: `${item.nickName} (${item.company})`,
                         companyName: item.company !== null ? item.company : "",
+                        companyId: item.companyId !== null ? item.companyId : "",
                     };
                 });
 
@@ -62,7 +63,6 @@ export default class ShiftManager extends Component {
 
     getShiftManagers = () => {
         blockUI();
-
         let promise;
         if (this.props.pageType === PageType.Team) {
             promise = axios({
@@ -103,7 +103,7 @@ export default class ShiftManager extends Component {
             const managers = [...this.state.managers, 
                 { 
                     ownerId: employee.id, 
-                    nickname: employee.nickname, 
+                    nickname: employee.value, 
                     fullName: employee.fullName,
                     companyName: employee.companyName
                 }];

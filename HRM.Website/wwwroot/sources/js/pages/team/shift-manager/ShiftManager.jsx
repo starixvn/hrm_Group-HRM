@@ -41,12 +41,11 @@ export default class ShiftManager extends Component {
     componentDidMount() {
         this.getShiftManagers();
     }
-
     getEmployees = (query) => {
         if (query.trim().length > 1) {
             let apiCall;
-
-            if (this.props.pageType === PageType.GroupTeam) {
+            let isGroupTeam = this.props.pageType === PageType.GroupTeam;
+            if (isGroupTeam) {
                 apiCall = getGroupTeamEmployees(query);
             } else {
                 apiCall = axios({
@@ -64,9 +63,10 @@ export default class ShiftManager extends Component {
             apiCall
                 .then((response) => {
                     const employeeOptions = response.data.map((item) => {
+                        var id = isGroupTeam ? item.empId : item.id;
                         return {
-                            key: item.empId,
-                            id: item.empId,
+                            key: id,
+                            id: id,
                             teamCode:
                                 item.teamCode !== null ? item.teamCode : '',
                             value:

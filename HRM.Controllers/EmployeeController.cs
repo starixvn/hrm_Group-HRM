@@ -412,7 +412,7 @@ public class EmployeeController(
     {
         var supervisors = await employeeService.GetEmployeeSupervisorByRoleIdAsync(employeeId, (short)RoleSystem.ShiftManager);
         return new JsonResult(supervisors.Select(x => new Supervisor
-        { OwnerId = x.OwnerId, Nickname = x.NickName, FullName = x.FullName, CompanyName = x.CompanyName, CompanyId = x.CompanyId}));
+        { OwnerId = x.OwnerId, Nickname = x.NickName, FullName = x.FullName, CompanyName = x.CompanyName, CompanyId = x.CompanyId, CanRemove = x.CanRemove}));
     }
 
     [HttpPost]
@@ -472,10 +472,7 @@ public class EmployeeController(
         };
         var employees = await employeeService.GetEmployeeAsync(criteria);
 
-        return new JsonResult(employees, new JsonSerializerSettings
-        {
-            ContractResolver = new DefaultContractResolver()
-        });
+        return Json(employees);
     }
 
     public async Task<JsonResult> GetSupervisors(string roleIds, string query, string excludeIds)

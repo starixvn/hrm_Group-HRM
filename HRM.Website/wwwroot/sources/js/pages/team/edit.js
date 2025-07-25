@@ -22,8 +22,8 @@ import { axiosError, resolveClientUrl } from '../../shared/common.functions';
                 }).then(res => {
                     response($.map(res.data, function (item) {
                         return {
-                            label: item.NickName + ' (' + item.FullName + ')',
-                            value: item.Id
+                            label: item.nickName + ' (' + item.fullName + ')',
+                            value: item.id
                         };
                     }));
                 }).catch(axiosError);

@@ -81,8 +81,8 @@ export default class DisciplineManager extends Component {
         const managers = [...this.state.managers, 
             { 
                 ownerId: employee.id, 
-                nickname: employee.nickname, 
-                fullName: employee.fullNamem,
+                nickname: employee.value, 
+                fullName: employee.fullName,
                 companyName: employee.companyName
             }];
         this.setState({ managers, employeeOptions: [] });
