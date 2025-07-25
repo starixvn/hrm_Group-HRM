@@ -91,8 +91,7 @@ public class DisciplineController(
             model.DateRange = GetDateRangeByQuarter();
         }
 
-        var roles = await roleService.GetByUserIdAsync(session.UserId);
-        ViewBag.RoleId = string.Join(",", roles.Select(x => x.RoleId));
+        ViewBag.RoleId = (short)RoleSystem.DisciplineManager;
         ViewBag.CompanyId = companyId ?? CurrentCompanyId;
         ViewBag.IsHost = session.HasPermissionOnFunction(FunctionKey.Discipline, Policy.Host);
 
