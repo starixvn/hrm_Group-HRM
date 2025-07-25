@@ -93,7 +93,8 @@ public class CompanyController(
         var criteria = new UpdateCompanySettingCriteria
         {
             CompanyId = model.CompanyId,
-            SettingsJson = model.SettingsJson
+            SettingsJson = model.SettingsJson,
+            ModifiedBy = session.UserId
         };
         commandResult = await baseService.ExecuteNonQueryAsync(criteria);
 

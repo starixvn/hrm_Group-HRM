@@ -8,8 +8,10 @@ public class UpdateCompanySettingCriteria : CriteriaBase
 
     public string SettingsJson { get; set; }
 
+    public int ModifiedBy { get; set; }
+
     public override string GetSettingKey() => "SystemConfigs_Update";
 
     public override bool IsValid() =>
-        CompanyId > 0 && !string.IsNullOrWhiteSpace(SettingsJson);
+        CompanyId > 0 && ModifiedBy > 0 && !string.IsNullOrWhiteSpace(SettingsJson);
 }
