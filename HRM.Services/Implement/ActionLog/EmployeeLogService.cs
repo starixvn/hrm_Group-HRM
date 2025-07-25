@@ -87,7 +87,8 @@ public class EmployeeLogService(
         new() { FieldName = "IsDeleted", DisplayName = Labels.Deleted, DataType = MappingDataType.Boolean },
         new() { FieldName = "ChineseName", DisplayName = Labels.ChineseName },
         new() { FieldName = "WorkingHoursbyWeek", DisplayName = Labels.WorkingHoursPerWeek },
-        new() { FieldName = "SalaryStructureId", DisplayName = Labels.SalaryStructure }
+        new() { FieldName = "SalaryStructureId", DisplayName = Labels.SalaryStructure },
+        new() { FieldName = "SubCompanyName", DisplayName = Labels.SubCompany }
     };
 
     private IEnumerable<Team> Teams { get; set; }
