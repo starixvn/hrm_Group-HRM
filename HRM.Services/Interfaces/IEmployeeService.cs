@@ -24,6 +24,8 @@ public interface IEmployeeService
 
     Task<Employee> GetEmployeeByIdAsync(int id);
 
+    Task<Employee> GetEmployeeByIdInGroupScopeAsync(int id);
+
     Task<IEnumerable<Employee>> GetEmployeeAsync(GetAllEmployeeCriteria criteria);
 
     Task<IEnumerable<Employee>> GetMemberByManagerAsync(GetMemberByManagerCriteria criteria);

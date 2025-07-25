@@ -59,6 +59,21 @@ public class EmployeeService(
         return employee;
     }
 
+    public async Task<Employee> GetEmployeeByIdInGroupScopeAsync(int id)
+    {
+        var criteria = new GetEmployeeByIdCriteria
+        {
+            EmpId = id
+        };
+        var employee = await employeeRepository.GetEmployeeByIdAsync(criteria);
+        if (employee != null)
+        {
+            employee.Roles = await roleService.GetByUserIdAsync(employee.UserId);
+        }
+
+        return employee;
+    }
+
     public async Task<IEnumerable<Employee>> GetEmployeeAsync(GetAllEmployeeCriteria criteria)
     {
         IEnumerable<Employee> employees = null;

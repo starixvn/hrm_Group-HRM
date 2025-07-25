@@ -140,7 +140,7 @@ public class GroupEmployeeListController(
     [HrmPermission(Policy.Host, FunctionKey.GroupEmployeeList)]
     public async Task<IActionResult> Edit(int id)
     {
-        var employee = await employeeService.GetEmployeeByIdAsync(id);
+        var employee = await employeeService.GetEmployeeByIdInGroupScopeAsync(id);
         if (employee != null)
         {
             var supervisors = (await GetSupervisors(id)).ToList();
