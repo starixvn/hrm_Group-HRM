@@ -29,9 +29,12 @@ public class LetstalkService(
                     { "Message", content },
                     { "ReplyMarkup", JsonConvert.SerializeObject(replyMarkup) }
                 };
-
-                await logger.InfoAsync($"Send notification to Letstalk: {JsonConvert.SerializeObject(data)}");
                 await sendNotificationService.SendNotificationToLetstalkAsync(letstalkSettings.BaseUrl, jwtToken.Token, data);
+
+                if (replyMarkup != null)
+                {
+                    await logger.InfoAsync($"Send notification to Letstalk: {JsonConvert.SerializeObject(data)}");
+                }
             }
         }
     }
@@ -50,9 +53,12 @@ public class LetstalkService(
                     { "Message", content },
                     { "ReplyMarkup", JsonConvert.SerializeObject(replyMarkup) }
                 };
-
-                logger.InfoAsync($"Send notification to Letstalk: {JsonConvert.SerializeObject(data)}");
                 sendNotificationService.SendNotificationToLetstalk(letstalkSettings.BaseUrl, jwtToken.Token, data);
+
+                if (replyMarkup != null)
+                {
+                    logger.InfoAsync($"Send notification to Letstalk: {JsonConvert.SerializeObject(data)}");
+                }
             }
         }
     }
