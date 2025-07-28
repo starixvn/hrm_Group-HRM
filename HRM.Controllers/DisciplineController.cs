@@ -124,7 +124,7 @@ public class DisciplineController(
     }
 
     [HrmPermission(Policy.Read, FunctionKey.Discipline)]
-    public async Task<IActionResult> ViewOtherDiscipline(int employeeId, DateTime fromDate, DateTime toDate)
+    public async Task<IActionResult> ViewOtherDiscipline(int employeeId, DateTime fromDate, DateTime toDate, short? companyId = null)
     {
         var criteria = new GetOtherDisciplineOfEmployeeCriteria
         {
@@ -134,7 +134,7 @@ public class DisciplineController(
         };
 
         var otherDisciplines = await disciplineService.GetOtherDisciplineAsync(criteria);
-        var members = await disciplineService.GetMemberToAddOtherDisciplineAsync(session.UserId);
+        var members = await disciplineService.GetMemberToAddOtherDisciplineAsync(session.UserId, null, companyId);
         ViewBag.IsHost = members.Any(x => x.EmployeeId == employeeId)
             && session.HasPermissionOnFunction(FunctionKey.Discipline, Policy.Host);
 

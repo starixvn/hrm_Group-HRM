@@ -258,6 +258,7 @@ import { getOrgChart } from '../group-team/supervisor/common.functions';
                             toDate: $('form.form-filter #ToDate')
                                 .datepicker({ dateFormat: 'dd M, yy' })
                                 .val(),
+                            companyId: $('#CompanyId').val(),
                         },
                     })
                         .then((response) => {
