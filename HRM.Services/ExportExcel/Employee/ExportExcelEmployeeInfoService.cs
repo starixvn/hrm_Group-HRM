@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Core;
 using Core.Constants;
 using Core.Enums;
+using GO.UserControl.Client.Core.Session;
 using Implement;
 using Interfaces;
 using Microsoft.AspNetCore.Hosting;
@@ -19,6 +20,7 @@ using OfficeOpenXml;
 using Resources;
 
 public class ExportExcelEmployeeInfoService(
+    IUserControlSession session,
     IEmployeeService employeeService,
     ICommonDataService commonDataService,
     IWebHostEnvironment hostingEnvironment,
@@ -62,9 +64,11 @@ public class ExportExcelEmployeeInfoService(
             writer.RemoveColumn(colLengthOfServiceGroupDate);
             colSubCompany -= 2; // sub company column is backed to 2 cells if group date cols are removed
         }
+        var companyId = session.Get<short>(SessionKey.CurrentCompanyId);
+        var subCompanies = await companyService.GetSubCompanies(companyId);
+        var isShowSubCompany = subCompanies != null && subCompanies.Any();
 
-        var isShowSubCompanyConfig = await companyService.GetIsShowSubCompanyValue();
-        if (!isShowSubCompanyConfig)
+        if (!isShowSubCompany)
         {
             writer.RemoveColumn(colSubCompany);
         }
