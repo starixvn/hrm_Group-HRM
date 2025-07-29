@@ -192,8 +192,6 @@ public class GroupEmployeeListController(
 
     private static string GetSupervisors(IEnumerable<SupervisorNameModel> supervisors, short roleId)
     {
-        const byte maxDisplayItems = 3;
-
         if (supervisors == null || !supervisors.Any())
         {
             return string.Empty;
@@ -202,15 +200,9 @@ public class GroupEmployeeListController(
         var filteredSupervisors = supervisors
             .Where(x => x.ActionType == roleId)
             .Select(x => $"{x.NickName} ({x.CompanyName})")
-            .Take(maxDisplayItems)
             .ToList();
 
         var supervisorNames = string.Join(", ", filteredSupervisors);
-
-        if (supervisors.Count(x => x.ActionType == roleId) > maxDisplayItems)
-        {
-            supervisorNames += ",...";
-        }
 
         return supervisorNames;
     }

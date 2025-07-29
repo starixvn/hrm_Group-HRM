@@ -3,10 +3,17 @@
 @model HRM.Models.Employee
 @{
     ViewBag.Title = Labels.Edit;
+    var ActionType = new List<RoleSystem> { RoleSystem.Approver, RoleSystem.Verifier, RoleSystem.DisciplineManager, RoleSystem.ShiftManager };
+    var roleLinks = new Dictionary<RoleSystem, (string PropertyName, string ActionName, string Label)>
+    {
+	    { RoleSystem.Verifier, ("Verifier", "ManageSupervisor", Labels.VerifiedBy) },
+	    { RoleSystem.Approver, ("Approver", "ManageSupervisor", Labels.ApprovedBy) },
+	    { RoleSystem.ShiftManager, ("EmpShiftList", "ShiftManager", Labels.ShiftArrangement) },
+	    { RoleSystem.DisciplineManager, ("Disciplinarian", "DisciplineManager", Labels.DisciplineManager) }
+    };
 }
 @section css {
-    <link href="~/dist/vendors/chosen.css" rel="stylesheet" />
-    <link href="~/dist/styles/employee.edit.css" rel="stylesheet" />
+    <link href="~/dist/styles/team.supervisor.index.css" rel="stylesheet" />
 }
 @section js {
     <script src="~/dist/js/employee.edit.js"></script>
@@ -16,55 +23,33 @@
     <a class="step" href="@Url.Action("index", "GroupEmployeeList")">@Labels.GroupEmployee</a>
     <span class="step">Edit @Model.NickName (@Model.FullName) 's Personal Information</span>
 }
-@using (Html.BeginForm("Edit", "Employee", FormMethod.Post, new { id = "formEditUser", @class = "form-edit-user form-horizontal" }))
-{
-    @Html.ValidationSummary(false)
-    if (ViewBag.Updated != null)
+<h2 class="page-title">@Model.NickName (@Model.CompanyName)</h2>
+<table class="table table-custom" style="width: auto; min-width: 800px;">
+    <thead>
+        <tr>
+            <th>@Labels.Roles</th>
+            <th>@Labels.NickName</th>
+            <th>@Labels.Edit</th>
+        </tr>
+    </thead>
+    @if (Model != null)
     {
-        if ((bool)ViewBag.Updated)
-        {
-            <div class="success flash">@Messages.UpdatedSuccessfully</div>
-        }
+	    <tbody>
+	    @foreach (var item in ActionType)
+	    {
+		    var role = roleLinks[item];
+		    var roleValue = Model.GetType().GetProperty(role.PropertyName)?.GetValue(Model)?.ToString();
 
-        if (!(bool)ViewBag.Updated)
-        {
-            <div class="error flash">@ViewBag.ErrorMessage</div>
-        }
+		    <tr>
+			    <td class="align-left">@role.Label</td>
+			    <td class="align-left">@roleValue</td>
+			    <td>
+				    <a href="@Url.Action(role.ActionName, "GroupEmployeeList", new { id = Model.Id, roleId = (short)item })">
+					    <i class="fa fa-pencil fa-lg icon-edit"></i>
+				    </a>
+			    </td>
+		    </tr>
+	    }
+	    </tbody>
     }
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <span class="fa fa-chevron-down"></span>
-            <span>@Labels.Permission</span>
-        </div>
-        <ul class="list-group">
-            <li class="list-group-item form-group">
-                <div class="label-form">@Labels.VerifiedBy</div>
-                <div>
-                    <span id="lstVerifier" class="list-supervisor">@Model.Verifier</span>
-                    @Html.ActionLink("Update", "ManageSupervisor", "GroupEmployeeList", new { id = Model.Id, roleId = (short)RoleSystem.Verifier }, null)
-                </div>
-            </li>
-            <li class="list-group-item form-group">
-                <div class="label-form">@Labels.ApprovedBy</div>
-                <div>
-                    <span id="lstApprover" class="list-supervisor">@Model.Approver</span>
-                    @Html.ActionLink("Update", "ManageSupervisor", "GroupEmployeeList", new { id = Model.Id, roleId = (short)RoleSystem.Approver }, null)
-                </div>
-            </li>
-            <li class="list-group-item form-group">
-                <div class="label-form">@Labels.DisciplineManager</div>
-                <div>
-                    <span id="lstDisciplinarian" class="list-supervisor">@Model.Disciplinarian</span>
-                    @Html.ActionLink("Update", "DisciplineManager", "GroupEmployeeList", new { id = Model.Id }, null)
-                </div>
-            </li>
-            <li class="list-group-item form-group">
-                <div class="label-form">@Labels.ShiftArrangement</div>
-                <div>
-                    <span class="list-supervisor">@Model.EmpShiftList</span>
-                    @Html.ActionLink("Update", "ShiftManager", "GroupEmployeeList", new { id = Model.Id }, null)
-                </div>
-            </li>
-        </ul>
-    </div>
-}
+</table>
