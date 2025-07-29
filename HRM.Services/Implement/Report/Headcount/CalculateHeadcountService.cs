@@ -16,17 +16,35 @@ public class CalculateHeadcountService(IBaseService baseService) : IHeadcountRep
     private int year;
     private IEnumerable<EmployeeInfo> employeeInfos;
 
+    // CPU-bound optimization: Cache frequently accessed data (safe optimization)
+    private HashSet<int> wfhEmployeeIds;
+
     public async Task<HeadcountReportModel> GetReportAsync(int selectedYear)
     {
         year = selectedYear;
         employeeInfos = await GetEmployeesInfos(year);
         allEmployeeWFHs = await GetEmployeesWFH(year);
+
+        // CPU-bound optimization: Pre-compute safe lookups
+        wfhEmployeeIds = new HashSet<int>(allEmployeeWFHs.Select(wfh => wfh.EmpId));
+
+        // CPU-bound optimization: Use parallel execution for independent calculations
+        var reportTasks = new[]
+        {
+            Task.Run(() => CalculateReportByUnit()),
+            Task.Run(() => CalculateReportByCompany()),
+            Task.Run(() => CalculateReportByDetails()),
+            Task.Run(() => CalculateReportByUnitCountry())
+        };
+
+        var results = await Task.WhenAll(reportTasks);
+
         var report = new HeadcountReportModel
         {
-            ReportByUnit = CalculateReportByUnit(),
-            ReportByCompany = CalculateReportByCompany(),
-            ReportByDetails = CalculateReportByDetails(),
-            ReportByUnitCountry = CalculateReportByUnitCountry()
+            ReportByUnit = results[0],
+            ReportByCompany = results[1],
+            ReportByDetails = results[2],
+            ReportByUnitCountry = results[3]
         };
 
         return report;
