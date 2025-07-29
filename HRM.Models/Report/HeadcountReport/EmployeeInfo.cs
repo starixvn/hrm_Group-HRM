@@ -15,4 +15,5 @@ public class EmployeeInfo
     public DateTime? JoinedDate { get; set; }
     public DateTime? ConfirmedDate { get; set; }
     public DateTime? ResignedDate { get; set; }
+    public bool IsLocal { get; set; }
 }

@@ -16,48 +16,45 @@ public class CalculateHeadcountService(IBaseService baseService) : IHeadcountRep
     private int year;
     private IEnumerable<EmployeeInfo> employeeInfos;
 
-    // CPU-bound optimization: Cache frequently accessed data (safe optimization)
     private HashSet<int> wfhEmployeeIds;
 
     public async Task<HeadcountReportModel> GetReportAsync(int selectedYear)
     {
         year = selectedYear;
-        employeeInfos = await GetEmployeesInfos(year);
-        allEmployeeWFHs = await GetEmployeesWFH(year);
+        employeeInfos = await GetEmployeesInfos();
+        allEmployeeWFHs = await GetEmployeesWFH();
+        wfhEmployeeIds = [.. allEmployeeWFHs.Select(wfh => wfh.EmpId)];
 
-        // CPU-bound optimization: Pre-compute safe lookups
-        wfhEmployeeIds = new HashSet<int>(allEmployeeWFHs.Select(wfh => wfh.EmpId));
-
-        // CPU-bound optimization: Use parallel execution for independent calculations
         var reportTasks = new[]
         {
-            Task.Run(() => CalculateReportByUnit()),
-            Task.Run(() => CalculateReportByCompany()),
-            Task.Run(() => CalculateReportByDetails()),
-            Task.Run(() => CalculateReportByUnitCountry())
+            Task.Run(CalculateReportByUnit),
+            Task.Run(CalculateReportByCompany),
+            Task.Run(CalculateReportByDetails),
+            Task.Run(() => CalculateReportByUnitCountry(null)),
+            Task.Run(() => CalculateReportByUnitCountry(true)),
+            Task.Run(() => CalculateReportByUnitCountry(false))
         };
 
         var results = await Task.WhenAll(reportTasks);
-
-        var report = new HeadcountReportModel
+        return new HeadcountReportModel
         {
             ReportByUnit = results[0],
             ReportByCompany = results[1],
             ReportByDetails = results[2],
-            ReportByUnitCountry = results[3]
+            ReportByUnitCountry = results[3],
+            ReportByUnitCountryLocal = results[4],
+            ReportByUnitCountryExpat = results[5]
         };
-
-        return report;
     }
 
-    public async Task<List<EmployeeInfo>> GetEmployeesInfos(int year)
+    public async Task<List<EmployeeInfo>> GetEmployeesInfos()
     {
         var criteria = new GetHeadcountReportCriteria { Year = year };
 
         return (await baseService.GetDataAsync<EmployeeInfo>(criteria)).ToList();
     }
 
-    public async Task<List<EmployeeWFH>> GetEmployeesWFH(int year)
+    public async Task<List<EmployeeWFH>> GetEmployeesWFH()
     {
         var criteria = new GetEmployeeWFHCriteria { Year = year };
 
@@ -66,11 +63,11 @@ public class CalculateHeadcountService(IBaseService baseService) : IHeadcountRep
 
     public List<UnitReport> CalculateReportByUnit()
     {
-        var result = employeeInfos.GroupBy(x => x.UnitCategory).OrderBy(g => g.Key)
+        var result = employeeInfos.GroupByAndOrderByKey(x => x.UnitCategory)
             .SelectMany(categoryGroup =>
             {
                 var unitReports = categoryGroup
-                    .GroupBy(x => x.Unit).OrderBy(g => g.Key)
+                    .GroupByAndOrderByKey(x => x.Unit)
                     .Select(unitGroup => new UnitReport
                     {
                         Label1 = unitGroup.Key,
@@ -132,11 +129,11 @@ public class CalculateHeadcountService(IBaseService baseService) : IHeadcountRep
 
     public List<UnitReport> CalculateReportByCompany()
     {
-        var result = employeeInfos.GroupBy(x => x.Country).OrderBy(g => g.Key)
+        var result = employeeInfos.GroupByAndOrderByKey(x => x.Country)
             .SelectMany(countryGroup =>
             {
                 var unitReports = countryGroup
-                    .GroupBy(x => x.Company).OrderBy(g => g.Key).Select(companyGroup => new UnitReport
+                    .GroupByAndOrderByKey(x => x.Company).Select(companyGroup => new UnitReport
                     {
                         Label1 = countryGroup.Key,
                         Label2 = companyGroup.Key,
@@ -167,18 +164,17 @@ public class CalculateHeadcountService(IBaseService baseService) : IHeadcountRep
 
     public List<UnitReport> CalculateReportByDetails()
     {
-        return employeeInfos.GroupBy(x => x.Unit).OrderBy(g => g.Key)
+        return employeeInfos.GroupByAndOrderByKey(x => x.Unit)
             .SelectMany(unitGroup =>
             {
                 var unitReports = new List<UnitReport>();
                 var unitEmployeeIds = unitGroup.Select(e => e.EmpId);
-                var wfhEmpIds = allEmployeeWFHs
-                    .Where(wfh => unitEmployeeIds.Contains(wfh.EmpId))
-                    .Select(wfh => wfh.EmpId).Distinct();
+                var wfhEmpIds = wfhEmployeeIds
+                    .Where(wfh => unitEmployeeIds.Contains(wfh));
                 var regularReports = unitGroup
-                    .GroupBy(x => x.CountryCode).OrderBy(g => g.Key)
+                    .GroupByAndOrderByKey(x => x.CountryCode)
                     .SelectMany(countryGroup => countryGroup
-                        .GroupBy(x => x.Company).OrderBy(g => g.Key)
+                        .GroupByAndOrderByKey(x => x.Company)
                         .Select(companyGroup => new UnitReport
                         {
                             Label1 = unitGroup.Key,
@@ -188,7 +184,7 @@ public class CalculateHeadcountService(IBaseService baseService) : IHeadcountRep
                         }));
 
                 var wfhReports = unitGroup.Where(e => wfhEmpIds.Contains(e.EmpId))
-                    .GroupBy(x => x.Company).OrderBy(g => g.Key)
+                    .GroupByAndOrderByKey(x => x.Company)
                     .Select(companyGroup => new UnitReport
                     {
                         Label1 = unitGroup.Key,
@@ -204,17 +200,20 @@ public class CalculateHeadcountService(IBaseService baseService) : IHeadcountRep
             }).ToList();
     }
 
-    public List<UnitReport> CalculateReportByUnitCountry()
+
+    public List<UnitReport> CalculateReportByUnitCountry(bool? isLocal)
     {
         var result = new List<UnitReport>();
+
+        var filteredEmployees = FilterEmployeesByType(employeeInfos, isLocal);
         var wfhEmpIds = new HashSet<int>(allEmployeeWFHs.Select(wfh => wfh.EmpId));
 
-        foreach (var categoryGroup in employeeInfos.GroupBy(x => x.UnitCategory))
+        foreach (var categoryGroup in filteredEmployees.GroupByAndOrderByKey(x => x.UnitCategory))
         {
-            foreach (var unitGroup in categoryGroup.GroupBy(x => x.Unit))
+            foreach (var unitGroup in categoryGroup.GroupByAndOrderByKey(x => x.Unit))
             {
                 var regularReports = unitGroup
-                    .GroupBy(e => e.CountryCode)
+                    .GroupByAndOrderByKey(e => e.CountryCode)
                     .Select(countryGroup => CreateUnitReport(unitGroup.Key, countryGroup.Key, countryGroup));
 
                 var wfhEmployees = unitGroup.Where(e => wfhEmpIds.Contains(e.EmpId));
@@ -226,10 +225,18 @@ public class CalculateHeadcountService(IBaseService baseService) : IHeadcountRep
             result.AddRange(CalculateTotalReports(result, categoryGroup, wfhEmpIds, categoryGroup.Key, true));
         }
 
-        result.AddRange(CalculateTotalReports(result, employeeInfos, wfhEmpIds, HeadcountConstants.GrandTotalLabel, false));
+        result.AddRange(CalculateTotalReports(result, filteredEmployees, wfhEmpIds, HeadcountConstants.GrandTotalLabel, false));
 
         return result;
     }
+
+    private static IEnumerable<EmployeeInfo> FilterEmployeesByType(IEnumerable<EmployeeInfo> employees, bool? isLocal)
+        => isLocal switch
+        {
+            null => employees,
+            true => employees.Where(e => e.IsLocal),
+            false => employees.Where(e => !e.IsLocal)
+        };
 
     private IEnumerable<UnitReport> CalculateTotalReports(List<UnitReport> result, IEnumerable<EmployeeInfo> group, HashSet<int> wfhEmpIds, string label1, bool isUnitCategory)
     {
