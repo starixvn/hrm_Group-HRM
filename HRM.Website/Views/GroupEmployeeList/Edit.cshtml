@@ -3,7 +3,7 @@
 @model HRM.Models.Employee
 @{
     ViewBag.Title = Labels.Edit;
-    var ActionType = new List<RoleSystem> { RoleSystem.Approver, RoleSystem.Verifier, RoleSystem.DisciplineManager, RoleSystem.ShiftManager };
+	var ActionType = new List<RoleSystem> { RoleSystem.Verifier, RoleSystem.Approver, RoleSystem.DisciplineManager, RoleSystem.ShiftManager };
     var roleLinks = new Dictionary<RoleSystem, (string PropertyName, string ActionName, string Label)>
     {
 	    { RoleSystem.Verifier, ("Verifier", "ManageSupervisor", Labels.VerifiedBy) },
