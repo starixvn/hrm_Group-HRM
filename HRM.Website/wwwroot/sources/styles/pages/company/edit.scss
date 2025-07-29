@@ -7,13 +7,23 @@
 @import "../../layout/_toastr.scss";
 @import "../../components/_checkbox.scss";
 
+.form-horizontal .form-group {
+  .label-form {
+    min-width: 120px;
+  }
+
+  .input-form {
+    min-width: 300px;
+  }
+
+  .flex-form {
+    width: auto !important;
+  }
+}
+
 .field-name {
     font-size: 1.5rem !important;
     height: 30px !important;
-}
-
-.input-form {
-    width: 230px !important;
 }
 
 .btn {
@@ -21,7 +31,7 @@
 
     &:focus,
     &:active {
-        outline: none;
+        outline: none !important;
     }
 }
 
@@ -39,91 +49,133 @@ input[type="checkbox"].checkbox {
     height: 15px;
 }
 
-// Custom Tag Input Styles
-.tag-input-container {
-    border: 1px solid #ced4da;
-    border-radius: 4px;
-    padding: 8px;
-    min-height: 50px;
-    background-color: #fff;
-    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-
-    &:focus-within {
-        border-color: #86b7fe;
-        outline: 0;
-        box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
-    }
+.rti--tag, .react-select__multi-value {
+    background: #007bff !important;
+    color: #fff !important;
 }
 
-.tag-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 4px;
-    margin-bottom: 8px;
+.rti--tag {
+    padding: 2px 4px !important;
 }
 
-.tag-item {
-    display: inline-flex;
-    align-items: center;
-    background: #007bff;
-    color: white;
-    padding: 4px 8px;
-    border-radius: 6px;
-    font-size: 12px;
-    white-space: nowrap;
-    transition: all 0.2s ease;
-
-    &:hover {
-        background: #0056b3;
-    }
-}
-
-.tag-remove-btn {
-    background: none;
-    border: none;
-    color: white;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: bold;
-    margin-left: 6px;
-    padding: 0;
-    line-height: 1;
-    width: 16px;
-    height: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    transition: background-color 0.2s ease;
-
-    &:hover {
-        background: rgba(255, 255, 255, 0.2);
-    }
-
-    &:focus {
-        outline: none;
-        background: rgba(255, 255, 255, 0.3);
-    }
-
-    .fa-times {
-        font-size: 11px !important;
-    }
-}
-
-.tag-input-field {
-    border: none;
-    outline: none;
-    font-size: 12px;
-    width: 100%;
-    padding: 4px 0;
-    background: transparent;
-
-    &::placeholder {
-        color: #6c757d;
-        opacity: 1;
-    }
+.react-select__multi-value__label {
+    color: #fff !important;
 }
 
 .react-select__menu-list {
-    max-height: 320px !important;
+    max-height: unset !important;
+}
+
+.rti--input {
+    width: 100% !important;
+}
+
+.rti--container {
+    min-height: 40px;
+}
+
+.react-select__multi-value__remove {
+    background-color: unset !important;
+}
+
+.sub-company-container {
+  .tag-input-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    min-height: 40px;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #fff;
+
+    .input-field-wrapper {
+        width: 100%;
+        display: flex;
+    }
+
+    .tag-input-field {
+        width: 100%;
+    }
+  }
+
+  .tag-item {
+    background: #007bff !important;
+    color: #fff !important;
+    padding: 2px 4px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    border: 1px solid #ddd;
+    transition: all 0.2s ease;
+
+    &.editing {
+      background: #e3f2fd;
+      border: 2px solid #2196f3;
+    }
+
+    .tag-text {
+      cursor: pointer;
+      font-weight: normal;
+      flex: 1;
+
+      &.editing {
+        font-weight: bold;
+      }
+    }
+
+    .tag-remove-btn {
+      margin-left: 6px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      opacity: 1;
+      font-size: 12px;
+
+      &:disabled {
+        cursor: not-allowed;
+        opacity: 0.5;
+      }
+
+      &:hover {
+        color: #e53e3e;
+      }
+    }
+  }
+
+  .tag-input-field {
+    border: none;
+    outline: none;
+    flex: 1;
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+
+  .tag-edit-input {
+    min-width: 60px;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: inherit;
+  }
+
+  .error-message {
+    color: #d32f2f;
+    margin-top: 5px;
+    font-size: 12px;
+    padding: 4px 8px;
+    background-color: #ffebee;
+    border-radius: 4px;
+    border: 1px solid #ffcdd2;
+  }
+
+  .loading-message {
+    color: #1976d2;
+    margin-top: 5px;
+    font-size: 12px;
+    font-style: italic;
+  }
 }

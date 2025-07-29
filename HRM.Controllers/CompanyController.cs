@@ -1,5 +1,6 @@
 ﻿namespace HRM.Controllers;
 
+using System.Linq;
 using System.Threading.Tasks;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
@@ -28,6 +29,14 @@ public class CompanyController(
     public async Task<IActionResult> GetSettingCompany()
     {
         var companies = await companyService.GetSettingCompanyAsync();
+        var subCompanies = await companyService.GetSubCompanies(null);
+
+        foreach (var company in companies)
+        {
+            company.SubCompanyList = subCompanies
+                .Where(sub => sub.CompanyId == company.CompanyId)
+                .ToList();
+        }
 
         return Json(companies);
     }
@@ -41,6 +50,14 @@ public class CompanyController(
     public async Task<IActionResult> GetCompanyById(int Id)
     {
         var company = await companyService.GetByIdAsync(Id);
+        var subCompanies = await companyService.GetSubCompanies(Id);
+        var countEmployee = await companyService.CountEmployeeById(Id);
+
+        foreach (var sub in subCompanies)
+        {
+            var countItem = countEmployee.FirstOrDefault(x => x.SubCompanyId == sub.SubCompanyId);
+            sub.EmployeeCount = countItem?.EmployeeCount ?? 0;
+        }
 
         var model = new EditCompanySettingViewModel
         {
@@ -48,8 +65,10 @@ public class CompanyController(
             Name = company.Name,
             HasBIO = company.HasBIO,
             WhitelistIPs = company.WhitelistIPs,
+            Urls = company.Urls,
             Currency = company.Currency,
-            EnableLetstalk = company.EnableLetstalk
+            EnableLetstalk = company.EnableLetstalk,
+            SubCompanies = subCompanies.ToList()
         };
 
         return Json(model);
@@ -74,9 +93,54 @@ public class CompanyController(
         var criteria = new UpdateCompanySettingCriteria
         {
             CompanyId = model.CompanyId,
-            SettingsJson = model.SettingsJson
+            SettingsJson = model.SettingsJson,
+            ModifiedBy = session.UserId
         };
         commandResult = await baseService.ExecuteNonQueryAsync(criteria);
+
+        if (!commandResult.IsSuccessful)
+        {
+            return Json(commandResult);
+        }
+
+        foreach (var sub in model.SubCompanies)
+        {
+            switch (sub.ActionType?.ToLower())
+            {
+                case "insert":
+                    var insertCriteria = new InsertSubCompanyCriteria
+                    {
+                        CompanyId = sub.CompanyId,
+                        Name = sub.Name,
+                        CreatedBy = session.UserId
+                    };
+                    commandResult = await baseService.ExecuteNonQueryAsync(insertCriteria);
+                    break;
+
+                case "update":
+                    var updateCriteria = new UpdateSubCompanyCriteria
+                    {
+                        SubCompanyId = sub.SubCompanyId,
+                        CompanyId = sub.CompanyId,
+                        Name = sub.Name,
+                        ModifiedBy = session.UserId
+                    };
+                    commandResult = await baseService.ExecuteNonQueryAsync(updateCriteria);
+                    break;
+
+                case "delete":
+                    var deleteCriteria = new DeleteSubCompanyCriteria
+                    {
+                        SubCompanyId = sub.SubCompanyId,
+                        DeletedBy = session.UserId
+                    };
+                    commandResult = await baseService.ExecuteNonQueryAsync(deleteCriteria);
+                    break;
+
+                default:
+                    continue;
+            }
+        }
 
         return Json(commandResult);
     }

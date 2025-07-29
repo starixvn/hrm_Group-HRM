@@ -12,7 +12,9 @@ namespace HRM.Services.Interfaces
 
         Task<string> GetDomain(int companyId);
 
-        Task<IEnumerable<SubCompany>> GetSubCompanies(int companyId);
+        Task<IEnumerable<SubCompany>> GetSubCompanies(int? companyId);
+
+        Task<List<SubCompanyEmployee>> CountEmployeeById(int companyId);
 
         Task<bool> GetIsShowSubCompanyValue();
 

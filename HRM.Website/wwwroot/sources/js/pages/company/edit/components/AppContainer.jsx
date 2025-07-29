@@ -2,6 +2,7 @@
 import axios from "axios";
 import toastr from "toastr";
 import { Formik, Form, Field } from "formik";
+import { TagsInput } from "react-tag-input-component";
 
 import Errors from "../../../../shared/components/Errors";
 import {
@@ -10,13 +11,21 @@ import {
     toastOptions,
 } from "../../../../shared/common.functions";
 
-import TagInput from "./TagInput";
-import CurrencyMultiSelect from "./CurrencyMultiSelect";
+import Currency from "./Currency";
+import SubCompany from "./SubCompany";
 
 const AppContainer = () => {
     const [formKey, setFormKey] = useState(0);
-    const [tagItems, setTagItems] = useState([]);
+    const [whitelistIPs, setWhitelistIPs] = useState([]);
+    const [urls, setUrls] = useState([]);
     const [currencyOptions, setCurrencyOptions] = useState([]);
+    const [subCompanies, setSubCompanies] = useState([]);
+
+    const isValidIP = (ip) => {
+        const ipv4WithCIDR = /^(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}(\/([0-9]|[12][0-9]|3[0-2]))?$/;
+        const ipv6WithCIDR = /^(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4})(\/([0-9]|[1-9][0-9]|1[01][0-9]|12[0-8]))?$/;
+        return ipv4WithCIDR.test(ip) || ipv6WithCIDR.test(ip);
+    };
 
     const [initialValues, setInitialValues] = useState({
         companyId: "",
@@ -24,49 +33,12 @@ const AppContainer = () => {
         hasBIO: false,
         enableLetstalk: false,
         currency: "",
+        subCompany: [],
     });
 
     const handleGoBack = () => {
         history.back();
     };
-
-    useEffect(() => {
-        axios({
-            url: resolveClientUrl(`Company/GetCompanyById/${window.companyId}`),
-            method: "GET",
-            headers: { "X-Requested-With": "XMLHttpRequest" },
-        })
-        .then((response) => {
-            const data = response.data;
-    
-            let parsedIPs = [];
-            if (data.whitelistIPs) {
-                const rawIPs = JSON.parse(data.whitelistIPs);
-                parsedIPs = rawIPs.map((ip, index) => ({
-                    id: index.toString(),
-                    text: ip,
-                }));
-            }
-    
-            let parsedCurrency = [];
-            if (data.currency) {
-                parsedCurrency = data.currency.split(',').map(c => c.trim()).filter(c => c);
-            }
-    
-            setInitialValues({
-                companyId: data.companyId || "",
-                name: data.name || "",
-                hasBIO: String(data.hasBIO).toLowerCase() === "true",
-                enableLetstalk: String(data.enableLetstalk).toLowerCase() === "true",
-                currency: parsedCurrency,
-            });
-    
-            setTagItems(parsedIPs);
-            setFormKey((prev) => prev + 1);
-        })
-        .catch(axiosError);
-    }, []);
-    
 
     useEffect(() => {
         axios({
@@ -80,6 +52,78 @@ const AppContainer = () => {
         .catch(axiosError);
     }, []);
 
+    useEffect(() => {
+        axios({
+            url: resolveClientUrl(`Company/GetCompanyById/${window.companyId}`),
+            method: "GET",
+            headers: { "X-Requested-With": "XMLHttpRequest" },
+        })
+        .then((response) => {
+            const data = response.data;
+    
+            let parsedIPs = [];
+            if (data.whitelistIPs) {
+                const rawIPs = JSON.parse(data.whitelistIPs);
+                parsedIPs = rawIPs;
+            }
+
+            let parsedUrls = [];
+            if (data.urls) {
+                const rawUrls = JSON.parse(data.urls);
+                parsedUrls = rawUrls;
+            }
+
+            let parsedCurrency = [];
+            if (data.currency) {
+                parsedCurrency = data.currency.split(',').map(c => c.trim()).filter(c => c);
+            }
+
+            let subCompaniesData = [];
+            if (data.subCompanies && Array.isArray(data.subCompanies)) {
+                subCompaniesData = data.subCompanies.map(item => ({
+                    subCompanyId: item.subCompanyId,
+                    companyId: item.companyId,
+                    name: item.name,
+                    employeeCount: item.employeeCount || 0,
+                    actionType: 'none'
+                }));
+            }
+            setSubCompanies(subCompaniesData);
+
+            setInitialValues({
+                companyId: data.companyId || "",
+                name: data.name || "",
+                hasBIO: String(data.hasBIO).toLowerCase() === "true",
+                enableLetstalk: String(data.enableLetstalk).toLowerCase() === "true",
+                currency: parsedCurrency,
+                subCompany: subCompaniesData,
+            });
+
+            setWhitelistIPs(parsedIPs);
+            setUrls(parsedUrls);
+            setFormKey((prev) => prev + 1);
+        })
+        .catch(axiosError);
+    }, []);
+
+    const handleWhitelistIPsChange = useCallback((newIPs) => {
+        setWhitelistIPs(newIPs);
+    }, []);
+
+    const validateAndAddIP = useCallback((ip) => {
+        if (!isValidIP(ip)) {
+            toastr.warning("Invalid IP address format", "", toastOptions());
+            return false;
+        }
+
+        if (whitelistIPs.includes(ip)) {
+            toastr.info(`"${ip}" is already exists!`, "", toastOptions());
+            return false;
+        }
+
+        return true;
+    }, [whitelistIPs]);
+
     const handleSubmit = useCallback((values, { setSubmitting }) => {
         setSubmitting(true);
 
@@ -87,14 +131,22 @@ const AppContainer = () => {
             hasBIO: values.hasBIO ? "true" : "false",
             enableLetstalk: values.enableLetstalk ? "true" : "false",
             currency: Array.isArray(values.currency) && values.currency.length > 0 ? values.currency.join(',') : '',
-            whitelistIPs: tagItems.length > 0 ? JSON.stringify(tagItems.map(tag => tag.text)) : '',
-
+            whitelistIPs: whitelistIPs.length > 0 ? JSON.stringify(whitelistIPs) : '',
+            urls: urls.length > 0 ? JSON.stringify(urls) : ''
         });
+
+        const processedSubCompanies = subCompanies.map(company => ({
+            subCompanyId: company.subCompanyId,
+            companyId: company.companyId,
+            name: company.name,
+            actionType: company.actionType || 'none'
+        }));
 
         axios.post(
             resolveClientUrl("company/edit"),
             {
                 companyId: values.companyId,
+                subCompanies: processedSubCompanies,
                 settingsJson: settingsJson
             },
             {
@@ -114,7 +166,7 @@ const AppContainer = () => {
                 }
             })
             .catch(axiosError);
-    }, [tagItems]);
+    }, [whitelistIPs, urls, subCompanies]);
 
     const renderForm = ({ errors, isSubmitting, values, setFieldValue }) => (
         <div className="card">
@@ -156,7 +208,7 @@ const AppContainer = () => {
 
                 <div className="form-group">
                     <div className="label-form">
-                        <label className="control-label">Let's Talk</label>
+                        <label className="control-label">Letstalk</label>
                     </div>
                     <div className="input-form">
                         <Field name="enableLetstalk">
@@ -176,26 +228,61 @@ const AppContainer = () => {
 
                 <div className="form-group">
                     <div className="label-form">
-                        <label className="control-label">Whitelist IPs</label>
+                        <label className="control-label">Currency</label>
                     </div>
                     <div className="input-form">
-                        <TagInput
-                            tags={tagItems}
-                            onChange={(newTags) => setTagItems(newTags)}
+                        <Currency
+                            options={currencyOptions || []}
+                            value={values.currency || []}
+                            onChange={(selectedValues) => setFieldValue("currency", selectedValues)}
+                            isDisabled={isSubmitting}
                         />
                     </div>
                 </div>
 
                 <div className="form-group">
                     <div className="label-form">
-                        <label className="control-label">Currency</label>
+                        <label className="control-label">Whitelist IPs</label>
                     </div>
-                    <div className="input-form">
-                        <CurrencyMultiSelect
-                            options={currencyOptions || []}
-                            value={values.currency || []}
-                            onChange={(selectedValues) => setFieldValue("currency", selectedValues)}
-                            isDisabled={isSubmitting}
+                    <div className="input-form flex-form">
+                        <TagsInput
+                            value={whitelistIPs}
+                            onChange={handleWhitelistIPsChange}
+                            name="whitelistIPs"
+                            placeHolder="Enter IP address and press Enter"
+                            autoComplete="off"
+                            beforeAddValidate={validateAndAddIP}
+                        />
+                    </div>
+                </div>
+
+                <div className="form-group">
+                    <div className="label-form">
+                        <label className="control-label">URLs</label>
+                    </div>
+                    <div className="input-form flex-form">
+                        <TagsInput
+                            value={urls}
+                            onChange={setUrls}
+                            name="urls"
+                            placeHolder="Enter URL and press Enter"
+                            autoComplete="off"
+                        />
+                    </div>
+                </div>
+
+                <div className="form-group">
+                    <div className="label-form">
+                        <label className="control-label">Sub Company</label>
+                    </div>
+                    <div className="input-form flex-form">
+                        <SubCompany 
+                            companyId={values.companyId} 
+                            initialTags={subCompanies}
+                            validTags={subCompanies.filter(company => company.actionType === 'none')}
+                            onTagsChange={(newTags) => {
+                                setSubCompanies(newTags);
+                            }}
                         />
                     </div>
                 </div>

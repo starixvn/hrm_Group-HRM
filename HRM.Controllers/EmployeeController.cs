@@ -626,8 +626,7 @@ public class EmployeeController(
             roles = roles.Where(r => r.RoleId != (short)RoleSystem.SystemAdmin).ToList();
         }
 
-        var isShowSubCompanyConfig = await companyService.GetIsShowSubCompanyValue();
-        ViewBag.IsShowSubCompanyConfig = isShowSubCompanyConfig;
+        ViewBag.IsShowSubCompanyConfig = subCompanies != null && subCompanies.Any();
         ViewBag.HasReadPermissionOnSalaryStructure = session.HasPermissionOnFunction(FunctionKey.SalaryStructureConfiguration, Policy.Read);
         ViewBag.HasHostPermissionOnSalaryStructure = session.HasPermissionOnFunction(FunctionKey.SalaryStructureConfiguration, Policy.Host);
 
