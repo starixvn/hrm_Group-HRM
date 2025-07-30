@@ -4,7 +4,7 @@ public class EmailSettingsModel
 {
     public int TeamId { get; set; }
 
-    public string CallbackUrl { get; set; }
+    public int CompanyId { get; set; }
 
     public int Action { get; set; }
 

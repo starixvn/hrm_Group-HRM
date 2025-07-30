@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using HRM.Core;
 using HRM.Core.Enums;
+using HRM.Core.Models;
 using HRM.Criteria.Request;
 using HRM.Models;
 using HRM.Models.LetsTalk;
@@ -9,11 +10,12 @@ using HRM.Models.Request;
 using HRM.Models.Supervisor;
 using HRM.Repositories.Interfaces;
 using HRM.Resources;
+using HRM.Services.Interfaces;
 using HRM.Services.Interfaces.Request;
 
 namespace HRM.Services.Implement.Request;
 
-public class RequestMailService(IRequestRepository requestRepository) : IRequestMailService
+public class RequestMailService(IRequestRepository requestRepository, LetstalkSettings letstalkSettings, ICompanyService companyService) : IRequestMailService
 {
     #region constant
 
@@ -36,7 +38,8 @@ public class RequestMailService(IRequestRepository requestRepository) : IRequest
             Action = action,
             RequestType = requestType,
             RequestId = requestId,
-            CallbackUrl = relatedPeople.EmailSetting?.CallbackUrl,
+            CallbackUrl = letstalkSettings.HRMCallbackUrl,
+            CompanyId = relatedPeople.EmailSetting?.CompanyId ?? 0,
         };
         GetMailAndLetStalkApprover(relatedPeople, emailModel);
 
@@ -225,7 +228,7 @@ public class RequestMailService(IRequestRepository requestRepository) : IRequest
 
     private static LetsTalkActor GenerateLetsTalkActor(EmailModel emailModel, SupervisorNameModel supervisor, bool isApprover)
     {
-        var allowReplyMarkup = emailModel.Action == (byte)SettingsSendMail.New || emailModel.Action == (byte)SettingsSendMail.Edit;
+        var allowReplyMarkup = emailModel.Action is (byte)SettingsSendMail.New or (byte)SettingsSendMail.Edit;
         if (!allowReplyMarkup)
         {
             return new LetsTalkActor
@@ -236,19 +239,30 @@ public class RequestMailService(IRequestRepository requestRepository) : IRequest
 
         var roleId = isApprover ? "3" : "2";
         var textAccept = isApprover ? "Approve" : "Verify";
-        var param = $"&requestId={emailModel.RequestId}&requestTypeId={emailModel.RequestType}&roleId={roleId}&empId={supervisor.EmpId}&nickName={supervisor.NickName}&fullName={supervisor.FullName}";
+        var param = BuildRequestParameters(emailModel, supervisor, roleId);
         return new LetsTalkActor
         {
             LetsTalkId = supervisor.LetsTalk,
             ReplyMarkup = new ReplyMarkup
             {
                 Actions =
-                    {
-                        new ReplyAction { ActionType = ReplyActionType.PostBack, Label = textAccept, Data = $"{emailModel.CallbackUrl}/api/request/process?command={RequestCommand.Approve}{param}" },
-                        new ReplyAction { ActionType = ReplyActionType.PostBack, Label = "Reject", Data = $"{emailModel.CallbackUrl}/api/request/process?command={RequestCommand.Reject}{param}" },
-                        new ReplyAction { ActionType = ReplyActionType.Uri, Label = "View detail", Uri = $"{emailModel.CallbackUrl}/request/member" }
-                    }
+                {
+                    new ReplyAction { ActionType = ReplyActionType.PostBack, Label = textAccept, Data = $"{emailModel.CallbackUrl}/api/request/process?command={RequestCommand.Approve}{param}" },
+                    new ReplyAction { ActionType = ReplyActionType.PostBack, Label = "Reject", Data = $"{emailModel.CallbackUrl}/api/request/process?command={RequestCommand.Reject}{param}" },
+                    new ReplyAction { ActionType = ReplyActionType.Uri, Label = "View detail", Uri = $"{emailModel.CallbackUrl}/request/member" }
+                }
             }
         };
+    }
+
+    private static string BuildRequestParameters(EmailModel emailModel, SupervisorNameModel supervisor, string roleId)
+    {
+        return $"&requestId={emailModel.RequestId}" +
+               $"&requestTypeId={emailModel.RequestType}" +
+               $"&roleId={roleId}" +
+               $"&empId={supervisor.EmpId}" +
+               $"&nickName={supervisor.NickName}" +
+               $"&fullName={supervisor.FullName}" +
+               $"&companyId={emailModel.CompanyId}";
     }
 }

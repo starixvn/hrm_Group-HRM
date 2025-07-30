@@ -30,6 +30,8 @@ public class EmailModel
 
     public string CallbackUrl { get; set; }
 
+    public int CompanyId { get; set; }
+
     public LetsTalkActor Approver { get; set; }
 
     public LetsTalkActor Verifier { get; set; }
