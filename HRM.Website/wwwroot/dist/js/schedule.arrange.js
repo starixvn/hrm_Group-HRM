@@ -7218,55 +7218,6 @@ module.exports = { "default": __webpack_require__(/*! core-js/library/fn/symbol/
 
 /***/ }),
 
-/***/ "./node_modules/babel-runtime/helpers/asyncToGenerator.js":
-/*!****************************************************************!*\
-  !*** ./node_modules/babel-runtime/helpers/asyncToGenerator.js ***!
-  \****************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-exports.__esModule = true;
-
-var _promise = __webpack_require__(/*! ../core-js/promise */ "./node_modules/babel-runtime/core-js/promise.js");
-
-var _promise2 = _interopRequireDefault(_promise);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = function (fn) {
-  return function () {
-    var gen = fn.apply(this, arguments);
-    return new _promise2.default(function (resolve, reject) {
-      function step(key, arg) {
-        try {
-          var info = gen[key](arg);
-          var value = info.value;
-        } catch (error) {
-          reject(error);
-          return;
-        }
-
-        if (info.done) {
-          resolve(value);
-        } else {
-          return _promise2.default.resolve(value).then(function (value) {
-            step("next", value);
-          }, function (err) {
-            step("throw", err);
-          });
-        }
-      }
-
-      return step("next");
-    });
-  };
-};
-
-/***/ }),
-
 /***/ "./node_modules/babel-runtime/helpers/classCallCheck.js":
 /*!**************************************************************!*\
   !*** ./node_modules/babel-runtime/helpers/classCallCheck.js ***!
@@ -7589,18 +7540,6 @@ exports.default = typeof _symbol2.default === "function" && _typeof(_iterator2.d
 } : function (obj) {
   return obj && typeof _symbol2.default === "function" && obj.constructor === _symbol2.default && obj !== _symbol2.default.prototype ? "symbol" : typeof obj === "undefined" ? "undefined" : _typeof(obj);
 };
-
-/***/ }),
-
-/***/ "./node_modules/babel-runtime/regenerator/index.js":
-/*!*********************************************************!*\
-  !*** ./node_modules/babel-runtime/regenerator/index.js ***!
-  \*********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__(/*! regenerator-runtime */ "./node_modules/regenerator-runtime/runtime-module.js");
-
 
 /***/ }),
 
@@ -141756,790 +141695,6 @@ function applyMiddleware() {
 
 /***/ }),
 
-/***/ "./node_modules/regenerator-runtime/runtime-module.js":
-/*!************************************************************!*\
-  !*** ./node_modules/regenerator-runtime/runtime-module.js ***!
-  \************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-/**
- * Copyright (c) 2014-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
-
-// This method of obtaining a reference to the global object needs to be
-// kept identical to the way it is obtained in runtime.js
-var g = (function() { return this })() || Function("return this")();
-
-// Use `getOwnPropertyNames` because not all browsers support calling
-// `hasOwnProperty` on the global `self` object in a worker. See #183.
-var hadRuntime = g.regeneratorRuntime &&
-  Object.getOwnPropertyNames(g).indexOf("regeneratorRuntime") >= 0;
-
-// Save the old regeneratorRuntime in case it needs to be restored later.
-var oldRuntime = hadRuntime && g.regeneratorRuntime;
-
-// Force reevalutation of runtime.js.
-g.regeneratorRuntime = undefined;
-
-module.exports = __webpack_require__(/*! ./runtime */ "./node_modules/regenerator-runtime/runtime.js");
-
-if (hadRuntime) {
-  // Restore the original runtime.
-  g.regeneratorRuntime = oldRuntime;
-} else {
-  // Remove the global property added by runtime.js.
-  try {
-    delete g.regeneratorRuntime;
-  } catch(e) {
-    g.regeneratorRuntime = undefined;
-  }
-}
-
-
-/***/ }),
-
-/***/ "./node_modules/regenerator-runtime/runtime.js":
-/*!*****************************************************!*\
-  !*** ./node_modules/regenerator-runtime/runtime.js ***!
-  \*****************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-/**
- * Copyright (c) 2014-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
-
-!(function(global) {
-  "use strict";
-
-  var Op = Object.prototype;
-  var hasOwn = Op.hasOwnProperty;
-  var undefined; // More compressible than void 0.
-  var $Symbol = typeof Symbol === "function" ? Symbol : {};
-  var iteratorSymbol = $Symbol.iterator || "@@iterator";
-  var asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator";
-  var toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag";
-
-  var inModule = typeof module === "object";
-  var runtime = global.regeneratorRuntime;
-  if (runtime) {
-    if (inModule) {
-      // If regeneratorRuntime is defined globally and we're in a module,
-      // make the exports object identical to regeneratorRuntime.
-      module.exports = runtime;
-    }
-    // Don't bother evaluating the rest of this file if the runtime was
-    // already defined globally.
-    return;
-  }
-
-  // Define the runtime globally (as expected by generated code) as either
-  // module.exports (if we're in a module) or a new, empty object.
-  runtime = global.regeneratorRuntime = inModule ? module.exports : {};
-
-  function wrap(innerFn, outerFn, self, tryLocsList) {
-    // If outerFn provided and outerFn.prototype is a Generator, then outerFn.prototype instanceof Generator.
-    var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator;
-    var generator = Object.create(protoGenerator.prototype);
-    var context = new Context(tryLocsList || []);
-
-    // The ._invoke method unifies the implementations of the .next,
-    // .throw, and .return methods.
-    generator._invoke = makeInvokeMethod(innerFn, self, context);
-
-    return generator;
-  }
-  runtime.wrap = wrap;
-
-  // Try/catch helper to minimize deoptimizations. Returns a completion
-  // record like context.tryEntries[i].completion. This interface could
-  // have been (and was previously) designed to take a closure to be
-  // invoked without arguments, but in all the cases we care about we
-  // already have an existing method we want to call, so there's no need
-  // to create a new function object. We can even get away with assuming
-  // the method takes exactly one argument, since that happens to be true
-  // in every case, so we don't have to touch the arguments object. The
-  // only additional allocation required is the completion record, which
-  // has a stable shape and so hopefully should be cheap to allocate.
-  function tryCatch(fn, obj, arg) {
-    try {
-      return { type: "normal", arg: fn.call(obj, arg) };
-    } catch (err) {
-      return { type: "throw", arg: err };
-    }
-  }
-
-  var GenStateSuspendedStart = "suspendedStart";
-  var GenStateSuspendedYield = "suspendedYield";
-  var GenStateExecuting = "executing";
-  var GenStateCompleted = "completed";
-
-  // Returning this object from the innerFn has the same effect as
-  // breaking out of the dispatch switch statement.
-  var ContinueSentinel = {};
-
-  // Dummy constructor functions that we use as the .constructor and
-  // .constructor.prototype properties for functions that return Generator
-  // objects. For full spec compliance, you may wish to configure your
-  // minifier not to mangle the names of these two functions.
-  function Generator() {}
-  function GeneratorFunction() {}
-  function GeneratorFunctionPrototype() {}
-
-  // This is a polyfill for %IteratorPrototype% for environments that
-  // don't natively support it.
-  var IteratorPrototype = {};
-  IteratorPrototype[iteratorSymbol] = function () {
-    return this;
-  };
-
-  var getProto = Object.getPrototypeOf;
-  var NativeIteratorPrototype = getProto && getProto(getProto(values([])));
-  if (NativeIteratorPrototype &&
-      NativeIteratorPrototype !== Op &&
-      hasOwn.call(NativeIteratorPrototype, iteratorSymbol)) {
-    // This environment has a native %IteratorPrototype%; use it instead
-    // of the polyfill.
-    IteratorPrototype = NativeIteratorPrototype;
-  }
-
-  var Gp = GeneratorFunctionPrototype.prototype =
-    Generator.prototype = Object.create(IteratorPrototype);
-  GeneratorFunction.prototype = Gp.constructor = GeneratorFunctionPrototype;
-  GeneratorFunctionPrototype.constructor = GeneratorFunction;
-  GeneratorFunctionPrototype[toStringTagSymbol] =
-    GeneratorFunction.displayName = "GeneratorFunction";
-
-  // Helper for defining the .next, .throw, and .return methods of the
-  // Iterator interface in terms of a single ._invoke method.
-  function defineIteratorMethods(prototype) {
-    ["next", "throw", "return"].forEach(function(method) {
-      prototype[method] = function(arg) {
-        return this._invoke(method, arg);
-      };
-    });
-  }
-
-  runtime.isGeneratorFunction = function(genFun) {
-    var ctor = typeof genFun === "function" && genFun.constructor;
-    return ctor
-      ? ctor === GeneratorFunction ||
-        // For the native GeneratorFunction constructor, the best we can
-        // do is to check its .name property.
-        (ctor.displayName || ctor.name) === "GeneratorFunction"
-      : false;
-  };
-
-  runtime.mark = function(genFun) {
-    if (Object.setPrototypeOf) {
-      Object.setPrototypeOf(genFun, GeneratorFunctionPrototype);
-    } else {
-      genFun.__proto__ = GeneratorFunctionPrototype;
-      if (!(toStringTagSymbol in genFun)) {
-        genFun[toStringTagSymbol] = "GeneratorFunction";
-      }
-    }
-    genFun.prototype = Object.create(Gp);
-    return genFun;
-  };
-
-  // Within the body of any async function, `await x` is transformed to
-  // `yield regeneratorRuntime.awrap(x)`, so that the runtime can test
-  // `hasOwn.call(value, "__await")` to determine if the yielded value is
-  // meant to be awaited.
-  runtime.awrap = function(arg) {
-    return { __await: arg };
-  };
-
-  function AsyncIterator(generator) {
-    function invoke(method, arg, resolve, reject) {
-      var record = tryCatch(generator[method], generator, arg);
-      if (record.type === "throw") {
-        reject(record.arg);
-      } else {
-        var result = record.arg;
-        var value = result.value;
-        if (value &&
-            typeof value === "object" &&
-            hasOwn.call(value, "__await")) {
-          return Promise.resolve(value.__await).then(function(value) {
-            invoke("next", value, resolve, reject);
-          }, function(err) {
-            invoke("throw", err, resolve, reject);
-          });
-        }
-
-        return Promise.resolve(value).then(function(unwrapped) {
-          // When a yielded Promise is resolved, its final value becomes
-          // the .value of the Promise<{value,done}> result for the
-          // current iteration. If the Promise is rejected, however, the
-          // result for this iteration will be rejected with the same
-          // reason. Note that rejections of yielded Promises are not
-          // thrown back into the generator function, as is the case
-          // when an awaited Promise is rejected. This difference in
-          // behavior between yield and await is important, because it
-          // allows the consumer to decide what to do with the yielded
-          // rejection (swallow it and continue, manually .throw it back
-          // into the generator, abandon iteration, whatever). With
-          // await, by contrast, there is no opportunity to examine the
-          // rejection reason outside the generator function, so the
-          // only option is to throw it from the await expression, and
-          // let the generator function handle the exception.
-          result.value = unwrapped;
-          resolve(result);
-        }, reject);
-      }
-    }
-
-    var previousPromise;
-
-    function enqueue(method, arg) {
-      function callInvokeWithMethodAndArg() {
-        return new Promise(function(resolve, reject) {
-          invoke(method, arg, resolve, reject);
-        });
-      }
-
-      return previousPromise =
-        // If enqueue has been called before, then we want to wait until
-        // all previous Promises have been resolved before calling invoke,
-        // so that results are always delivered in the correct order. If
-        // enqueue has not been called before, then it is important to
-        // call invoke immediately, without waiting on a callback to fire,
-        // so that the async generator function has the opportunity to do
-        // any necessary setup in a predictable way. This predictability
-        // is why the Promise constructor synchronously invokes its
-        // executor callback, and why async functions synchronously
-        // execute code before the first await. Since we implement simple
-        // async functions in terms of async generators, it is especially
-        // important to get this right, even though it requires care.
-        previousPromise ? previousPromise.then(
-          callInvokeWithMethodAndArg,
-          // Avoid propagating failures to Promises returned by later
-          // invocations of the iterator.
-          callInvokeWithMethodAndArg
-        ) : callInvokeWithMethodAndArg();
-    }
-
-    // Define the unified helper method that is used to implement .next,
-    // .throw, and .return (see defineIteratorMethods).
-    this._invoke = enqueue;
-  }
-
-  defineIteratorMethods(AsyncIterator.prototype);
-  AsyncIterator.prototype[asyncIteratorSymbol] = function () {
-    return this;
-  };
-  runtime.AsyncIterator = AsyncIterator;
-
-  // Note that simple async functions are implemented on top of
-  // AsyncIterator objects; they just return a Promise for the value of
-  // the final result produced by the iterator.
-  runtime.async = function(innerFn, outerFn, self, tryLocsList) {
-    var iter = new AsyncIterator(
-      wrap(innerFn, outerFn, self, tryLocsList)
-    );
-
-    return runtime.isGeneratorFunction(outerFn)
-      ? iter // If outerFn is a generator, return the full iterator.
-      : iter.next().then(function(result) {
-          return result.done ? result.value : iter.next();
-        });
-  };
-
-  function makeInvokeMethod(innerFn, self, context) {
-    var state = GenStateSuspendedStart;
-
-    return function invoke(method, arg) {
-      if (state === GenStateExecuting) {
-        throw new Error("Generator is already running");
-      }
-
-      if (state === GenStateCompleted) {
-        if (method === "throw") {
-          throw arg;
-        }
-
-        // Be forgiving, per 25.3.3.3.3 of the spec:
-        // https://people.mozilla.org/~jorendorff/es6-draft.html#sec-generatorresume
-        return doneResult();
-      }
-
-      context.method = method;
-      context.arg = arg;
-
-      while (true) {
-        var delegate = context.delegate;
-        if (delegate) {
-          var delegateResult = maybeInvokeDelegate(delegate, context);
-          if (delegateResult) {
-            if (delegateResult === ContinueSentinel) continue;
-            return delegateResult;
-          }
-        }
-
-        if (context.method === "next") {
-          // Setting context._sent for legacy support of Babel's
-          // function.sent implementation.
-          context.sent = context._sent = context.arg;
-
-        } else if (context.method === "throw") {
-          if (state === GenStateSuspendedStart) {
-            state = GenStateCompleted;
-            throw context.arg;
-          }
-
-          context.dispatchException(context.arg);
-
-        } else if (context.method === "return") {
-          context.abrupt("return", context.arg);
-        }
-
-        state = GenStateExecuting;
-
-        var record = tryCatch(innerFn, self, context);
-        if (record.type === "normal") {
-          // If an exception is thrown from innerFn, we leave state ===
-          // GenStateExecuting and loop back for another invocation.
-          state = context.done
-            ? GenStateCompleted
-            : GenStateSuspendedYield;
-
-          if (record.arg === ContinueSentinel) {
-            continue;
-          }
-
-          return {
-            value: record.arg,
-            done: context.done
-          };
-
-        } else if (record.type === "throw") {
-          state = GenStateCompleted;
-          // Dispatch the exception by looping back around to the
-          // context.dispatchException(context.arg) call above.
-          context.method = "throw";
-          context.arg = record.arg;
-        }
-      }
-    };
-  }
-
-  // Call delegate.iterator[context.method](context.arg) and handle the
-  // result, either by returning a { value, done } result from the
-  // delegate iterator, or by modifying context.method and context.arg,
-  // setting context.delegate to null, and returning the ContinueSentinel.
-  function maybeInvokeDelegate(delegate, context) {
-    var method = delegate.iterator[context.method];
-    if (method === undefined) {
-      // A .throw or .return when the delegate iterator has no .throw
-      // method always terminates the yield* loop.
-      context.delegate = null;
-
-      if (context.method === "throw") {
-        if (delegate.iterator.return) {
-          // If the delegate iterator has a return method, give it a
-          // chance to clean up.
-          context.method = "return";
-          context.arg = undefined;
-          maybeInvokeDelegate(delegate, context);
-
-          if (context.method === "throw") {
-            // If maybeInvokeDelegate(context) changed context.method from
-            // "return" to "throw", let that override the TypeError below.
-            return ContinueSentinel;
-          }
-        }
-
-        context.method = "throw";
-        context.arg = new TypeError(
-          "The iterator does not provide a 'throw' method");
-      }
-
-      return ContinueSentinel;
-    }
-
-    var record = tryCatch(method, delegate.iterator, context.arg);
-
-    if (record.type === "throw") {
-      context.method = "throw";
-      context.arg = record.arg;
-      context.delegate = null;
-      return ContinueSentinel;
-    }
-
-    var info = record.arg;
-
-    if (! info) {
-      context.method = "throw";
-      context.arg = new TypeError("iterator result is not an object");
-      context.delegate = null;
-      return ContinueSentinel;
-    }
-
-    if (info.done) {
-      // Assign the result of the finished delegate to the temporary
-      // variable specified by delegate.resultName (see delegateYield).
-      context[delegate.resultName] = info.value;
-
-      // Resume execution at the desired location (see delegateYield).
-      context.next = delegate.nextLoc;
-
-      // If context.method was "throw" but the delegate handled the
-      // exception, let the outer generator proceed normally. If
-      // context.method was "next", forget context.arg since it has been
-      // "consumed" by the delegate iterator. If context.method was
-      // "return", allow the original .return call to continue in the
-      // outer generator.
-      if (context.method !== "return") {
-        context.method = "next";
-        context.arg = undefined;
-      }
-
-    } else {
-      // Re-yield the result returned by the delegate method.
-      return info;
-    }
-
-    // The delegate iterator is finished, so forget it and continue with
-    // the outer generator.
-    context.delegate = null;
-    return ContinueSentinel;
-  }
-
-  // Define Generator.prototype.{next,throw,return} in terms of the
-  // unified ._invoke helper method.
-  defineIteratorMethods(Gp);
-
-  Gp[toStringTagSymbol] = "Generator";
-
-  // A Generator should always return itself as the iterator object when the
-  // @@iterator function is called on it. Some browsers' implementations of the
-  // iterator prototype chain incorrectly implement this, causing the Generator
-  // object to not be returned from this call. This ensures that doesn't happen.
-  // See https://github.com/facebook/regenerator/issues/274 for more details.
-  Gp[iteratorSymbol] = function() {
-    return this;
-  };
-
-  Gp.toString = function() {
-    return "[object Generator]";
-  };
-
-  function pushTryEntry(locs) {
-    var entry = { tryLoc: locs[0] };
-
-    if (1 in locs) {
-      entry.catchLoc = locs[1];
-    }
-
-    if (2 in locs) {
-      entry.finallyLoc = locs[2];
-      entry.afterLoc = locs[3];
-    }
-
-    this.tryEntries.push(entry);
-  }
-
-  function resetTryEntry(entry) {
-    var record = entry.completion || {};
-    record.type = "normal";
-    delete record.arg;
-    entry.completion = record;
-  }
-
-  function Context(tryLocsList) {
-    // The root entry object (effectively a try statement without a catch
-    // or a finally block) gives us a place to store values thrown from
-    // locations where there is no enclosing try statement.
-    this.tryEntries = [{ tryLoc: "root" }];
-    tryLocsList.forEach(pushTryEntry, this);
-    this.reset(true);
-  }
-
-  runtime.keys = function(object) {
-    var keys = [];
-    for (var key in object) {
-      keys.push(key);
-    }
-    keys.reverse();
-
-    // Rather than returning an object with a next method, we keep
-    // things simple and return the next function itself.
-    return function next() {
-      while (keys.length) {
-        var key = keys.pop();
-        if (key in object) {
-          next.value = key;
-          next.done = false;
-          return next;
-        }
-      }
-
-      // To avoid creating an additional object, we just hang the .value
-      // and .done properties off the next function object itself. This
-      // also ensures that the minifier will not anonymize the function.
-      next.done = true;
-      return next;
-    };
-  };
-
-  function values(iterable) {
-    if (iterable) {
-      var iteratorMethod = iterable[iteratorSymbol];
-      if (iteratorMethod) {
-        return iteratorMethod.call(iterable);
-      }
-
-      if (typeof iterable.next === "function") {
-        return iterable;
-      }
-
-      if (!isNaN(iterable.length)) {
-        var i = -1, next = function next() {
-          while (++i < iterable.length) {
-            if (hasOwn.call(iterable, i)) {
-              next.value = iterable[i];
-              next.done = false;
-              return next;
-            }
-          }
-
-          next.value = undefined;
-          next.done = true;
-
-          return next;
-        };
-
-        return next.next = next;
-      }
-    }
-
-    // Return an iterator with no values.
-    return { next: doneResult };
-  }
-  runtime.values = values;
-
-  function doneResult() {
-    return { value: undefined, done: true };
-  }
-
-  Context.prototype = {
-    constructor: Context,
-
-    reset: function(skipTempReset) {
-      this.prev = 0;
-      this.next = 0;
-      // Resetting context._sent for legacy support of Babel's
-      // function.sent implementation.
-      this.sent = this._sent = undefined;
-      this.done = false;
-      this.delegate = null;
-
-      this.method = "next";
-      this.arg = undefined;
-
-      this.tryEntries.forEach(resetTryEntry);
-
-      if (!skipTempReset) {
-        for (var name in this) {
-          // Not sure about the optimal order of these conditions:
-          if (name.charAt(0) === "t" &&
-              hasOwn.call(this, name) &&
-              !isNaN(+name.slice(1))) {
-            this[name] = undefined;
-          }
-        }
-      }
-    },
-
-    stop: function() {
-      this.done = true;
-
-      var rootEntry = this.tryEntries[0];
-      var rootRecord = rootEntry.completion;
-      if (rootRecord.type === "throw") {
-        throw rootRecord.arg;
-      }
-
-      return this.rval;
-    },
-
-    dispatchException: function(exception) {
-      if (this.done) {
-        throw exception;
-      }
-
-      var context = this;
-      function handle(loc, caught) {
-        record.type = "throw";
-        record.arg = exception;
-        context.next = loc;
-
-        if (caught) {
-          // If the dispatched exception was caught by a catch block,
-          // then let that catch block handle the exception normally.
-          context.method = "next";
-          context.arg = undefined;
-        }
-
-        return !! caught;
-      }
-
-      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
-        var entry = this.tryEntries[i];
-        var record = entry.completion;
-
-        if (entry.tryLoc === "root") {
-          // Exception thrown outside of any try block that could handle
-          // it, so set the completion value of the entire function to
-          // throw the exception.
-          return handle("end");
-        }
-
-        if (entry.tryLoc <= this.prev) {
-          var hasCatch = hasOwn.call(entry, "catchLoc");
-          var hasFinally = hasOwn.call(entry, "finallyLoc");
-
-          if (hasCatch && hasFinally) {
-            if (this.prev < entry.catchLoc) {
-              return handle(entry.catchLoc, true);
-            } else if (this.prev < entry.finallyLoc) {
-              return handle(entry.finallyLoc);
-            }
-
-          } else if (hasCatch) {
-            if (this.prev < entry.catchLoc) {
-              return handle(entry.catchLoc, true);
-            }
-
-          } else if (hasFinally) {
-            if (this.prev < entry.finallyLoc) {
-              return handle(entry.finallyLoc);
-            }
-
-          } else {
-            throw new Error("try statement without catch or finally");
-          }
-        }
-      }
-    },
-
-    abrupt: function(type, arg) {
-      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
-        var entry = this.tryEntries[i];
-        if (entry.tryLoc <= this.prev &&
-            hasOwn.call(entry, "finallyLoc") &&
-            this.prev < entry.finallyLoc) {
-          var finallyEntry = entry;
-          break;
-        }
-      }
-
-      if (finallyEntry &&
-          (type === "break" ||
-           type === "continue") &&
-          finallyEntry.tryLoc <= arg &&
-          arg <= finallyEntry.finallyLoc) {
-        // Ignore the finally entry if control is not jumping to a
-        // location outside the try/catch block.
-        finallyEntry = null;
-      }
-
-      var record = finallyEntry ? finallyEntry.completion : {};
-      record.type = type;
-      record.arg = arg;
-
-      if (finallyEntry) {
-        this.method = "next";
-        this.next = finallyEntry.finallyLoc;
-        return ContinueSentinel;
-      }
-
-      return this.complete(record);
-    },
-
-    complete: function(record, afterLoc) {
-      if (record.type === "throw") {
-        throw record.arg;
-      }
-
-      if (record.type === "break" ||
-          record.type === "continue") {
-        this.next = record.arg;
-      } else if (record.type === "return") {
-        this.rval = this.arg = record.arg;
-        this.method = "return";
-        this.next = "end";
-      } else if (record.type === "normal" && afterLoc) {
-        this.next = afterLoc;
-      }
-
-      return ContinueSentinel;
-    },
-
-    finish: function(finallyLoc) {
-      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
-        var entry = this.tryEntries[i];
-        if (entry.finallyLoc === finallyLoc) {
-          this.complete(entry.completion, entry.afterLoc);
-          resetTryEntry(entry);
-          return ContinueSentinel;
-        }
-      }
-    },
-
-    "catch": function(tryLoc) {
-      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
-        var entry = this.tryEntries[i];
-        if (entry.tryLoc === tryLoc) {
-          var record = entry.completion;
-          if (record.type === "throw") {
-            var thrown = record.arg;
-            resetTryEntry(entry);
-          }
-          return thrown;
-        }
-      }
-
-      // The context.catch method must only be called with a location
-      // argument that corresponds to a known catch block.
-      throw new Error("illegal catch attempt");
-    },
-
-    delegateYield: function(iterable, resultName, nextLoc) {
-      this.delegate = {
-        iterator: values(iterable),
-        resultName: resultName,
-        nextLoc: nextLoc
-      };
-
-      if (this.method === "next") {
-        // Deliberately forget the last sent value so that we don't
-        // accidentally pass it on to the delegate.
-        this.arg = undefined;
-      }
-
-      return ContinueSentinel;
-    }
-  };
-})(
-  // In sloppy mode, unbound `this` refers to the global object, fallback to
-  // Function constructor if we're in global strict mode. That is sadly a form
-  // of indirect eval which violates Content Security Policy.
-  (function() { return this })() || Function("return this")()
-);
-
-
-/***/ }),
-
 /***/ "./node_modules/scheduler/cjs/scheduler-tracing.development.js":
 /*!*********************************************************************!*\
   !*** ./node_modules/scheduler/cjs/scheduler-tracing.development.js ***!
@@ -144721,10 +143876,7 @@ var Search = function (_Component) {
                             { className: 'select-form' },
                             _react2.default.createElement(
                                 'select',
-                                {
-                                    className: 'form-control',
-                                    value: this.props.filter.isLocal,
-                                    onChange: this.handleCategoryChange },
+                                { className: 'form-control', value: this.props.filter.isLocal, onChange: this.handleCategoryChange },
                                 _react2.default.createElement(
                                     'option',
                                     { value: true },
@@ -144775,29 +143927,20 @@ var Search = function (_Component) {
                         { className: 'button-group' },
                         _react2.default.createElement(
                             'button',
-                            {
-                                className: 'btn btn-primary',
-                                onClick: this.handleSubmit },
+                            { className: 'btn btn-primary', onClick: this.handleSubmit },
                             'Submit'
                         ),
                         _react2.default.createElement(
                             'button',
-                            {
-                                className: 'btn btn-primary',
-                                name: 'currentWeek',
-                                onClick: this.handleSubmit },
+                            { className: 'btn btn-primary', name: 'currentWeek', onClick: this.handleSubmit },
                             'Current Week'
                         ),
                         this.props.showExportExcel && _react2.default.createElement(
                             _reactBootstrap.Dropdown,
-                            {
-                                id: 'dropdownExportExcel',
-                                componentClass: 'div' },
+                            { id: 'dropdownExportExcel', componentClass: 'div' },
                             _react2.default.createElement(
                                 _reactBootstrap.Dropdown.Toggle,
-                                {
-                                    useAnchor: true,
-                                    className: 'btn btn-excel' },
+                                { useAnchor: true, className: 'btn btn-excel' },
                                 'Excel'
                             ),
                             _react2.default.createElement(
@@ -144805,14 +143948,12 @@ var Search = function (_Component) {
                                 null,
                                 _react2.default.createElement(
                                     _reactBootstrap.MenuItem,
-                                    {
-                                        onClick: this.props.onExportExcel },
+                                    { onClick: this.props.onExportExcel },
                                     'Upload'
                                 ),
                                 _react2.default.createElement(
                                     _reactBootstrap.MenuItem,
-                                    {
-                                        onClick: this.props.onExportExcelDriverPickup },
+                                    { onClick: this.props.onExportExcelDriverPickup },
                                     'Driver Pickup'
                                 )
                             )
@@ -145769,6 +144910,14 @@ var _extends10 = __webpack_require__(/*! babel-runtime/helpers/extends */ "./nod
 
 var _extends11 = _interopRequireDefault(_extends10);
 
+var _slicedToArray2 = __webpack_require__(/*! babel-runtime/helpers/slicedToArray */ "./node_modules/babel-runtime/helpers/slicedToArray.js");
+
+var _slicedToArray3 = _interopRequireDefault(_slicedToArray2);
+
+var _promise = __webpack_require__(/*! babel-runtime/core-js/promise */ "./node_modules/babel-runtime/core-js/promise.js");
+
+var _promise2 = _interopRequireDefault(_promise);
+
 var _getPrototypeOf = __webpack_require__(/*! babel-runtime/core-js/object/get-prototype-of */ "./node_modules/babel-runtime/core-js/object/get-prototype-of.js");
 
 var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
@@ -145833,10 +144982,6 @@ var _SweetModalDialog = __webpack_require__(/*! ../../shared/components/SweetMod
 
 var _SweetModalDialog2 = _interopRequireDefault(_SweetModalDialog);
 
-var _CompanySelect = __webpack_require__(/*! ../../shared/components/CompanySelect */ "./sources/js/shared/components/CompanySelect.jsx");
-
-var _CompanySelect2 = _interopRequireDefault(_CompanySelect);
-
 var _ShiftMultipleModal = __webpack_require__(/*! ./ShiftMultipleModal */ "./sources/js/pages/schedule-arrange/ShiftMultipleModal.jsx");
 
 var _ShiftMultipleModal2 = _interopRequireDefault(_ShiftMultipleModal);
@@ -145867,10 +145012,6 @@ var App = function (_Component) {
 
         var fromDate = (0, _moment2.default)().day('Monday').format(_constants.DateFormat),
             toDate = (0, _moment2.default)(fromDate).add(6, 'days').format(_constants.DateFormat);
-        var companyElement = document.getElementById('CompanyId');
-        var roleElement = document.getElementById('RoleId');
-        var defaultCompanyId = companyElement ? companyElement.value : '';
-        var defaultRoleId = roleElement ? roleElement.value : '';
 
         _this.state = {
             isHost: false,
@@ -145878,7 +145019,6 @@ var App = function (_Component) {
                 fromDate: fromDate,
                 toDate: toDate,
                 teamIds: '',
-                companyId: defaultCompanyId,
                 employee: { value: 0, label: '' }
             },
             schedules: [],
@@ -145895,8 +145035,7 @@ var App = function (_Component) {
                 nickname: '',
                 data: null,
                 isUsedWeeklyDefaultShift: false
-            },
-            enableSyncWorkingShift: false
+            }
         };
 
         _this.originalSchedules = [];
@@ -145904,7 +145043,6 @@ var App = function (_Component) {
         _this.shiftOptions = [];
         _this.currentWeek = { fromDate: fromDate, toDate: toDate };
         _this.selectedWeek = { fromDate: fromDate, toDate: toDate };
-        _this.defaultRoleId = defaultRoleId;
         _this.scheduleAttrNames = ['mondaySchedule', 'tuesdaySchedule', 'wednesdaySchedule', 'thursdaySchedule', 'fridaySchedule', 'saturdaySchedule', 'sundaySchedule'];
         return _this;
     }
@@ -145912,15 +145050,45 @@ var App = function (_Component) {
     (0, _createClass3.default)(App, [{
         key: 'componentDidMount',
         value: function componentDidMount() {
-            (0, _CompanySelect.renderCompanySelect)({
-                defaultCompanyId: this.state.filter.companyId,
-                roleId: this.defaultRoleId,
-                onChange: this.handleCompanyChange
-            });
+            var _this2 = this;
 
-            var companyElement = document.getElementById('CompanyId');
-            var defaultCompanyId = companyElement ? companyElement.value : '';
-            this.loadShifts(defaultCompanyId);
+            var promises = [(0, _axios2.default)({
+                url: (0, _common.resolveClientUrl)('Team/GetOrgChart'),
+                method: 'GET',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            }), (0, _axios2.default)({
+                url: (0, _common.resolveClientUrl)('Calendar/GetShift'),
+                method: 'GET',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                params: {
+                    query: '',
+                    isShowOff: true
+                }
+            })];
+
+            _promise2.default.all(promises).then(function (_ref) {
+                var _ref2 = (0, _slicedToArray3.default)(_ref, 2),
+                    teamResponse = _ref2[0],
+                    shiftResponse = _ref2[1];
+
+                _this2.teamOptions = teamResponse.data;
+
+                var _buildData = (0, _buildData3.default)(teamResponse.data),
+                    floatData = _buildData.floatData;
+
+                _this2.shiftOptions = shiftResponse.data.map(function (shift) {
+                    return { id: shift.id, code: shift.code, name: shift.name };
+                });
+                var filter = (0, _extends11.default)({}, _this2.state.filter, { teamIds: floatData.filter(function (item) {
+                        return item.isLeaf;
+                    }).map(function (item) {
+                        return item.id;
+                    }).join(',') });
+
+                _this2.getWeeklyShedules(filter);
+
+                _this2.setState({ filter: filter });
+            }).catch(_common.axiosError);
 
             window.addEventListener('beforeunload', this.onLeavingPageEventListener);
         }
@@ -145934,7 +145102,6 @@ var App = function (_Component) {
         value: function render() {
             var _state = this.state,
                 isHost = _state.isHost,
-                enableSyncWorkingShift = _state.enableSyncWorkingShift,
                 schedules = _state.schedules,
                 showShiftMultipleModal = _state.showShiftMultipleModal,
                 showConfirmRefreshDataModal = _state.showConfirmRefreshDataModal,
@@ -145960,11 +145127,9 @@ var App = function (_Component) {
                 }),
                 _react2.default.createElement(_table2.default, {
                     isHost: isHost,
-                    fromDate: this.selectedWeek.fromDate,
-                    toDate: this.selectedWeek.toDate,
+                    fromDate: this.selectedWeek.fromDate, toDate: this.selectedWeek.toDate,
                     data: schedules,
-                    shiftOptions: this.shiftOptions,
-                    showRemarkPopover: showRemarkPopover,
+                    shiftOptions: this.shiftOptions, showRemarkPopover: showRemarkPopover,
                     onPrevious: this.handleGetPreviousWeekSchedule,
                     onNext: this.handleGetNextWeekSchedule,
                     onChangeSelectWeekDay: this.handleChangeSelectWeekDay,
@@ -145985,30 +145150,24 @@ var App = function (_Component) {
                     onChangeOrder: this.handleChangeOrder,
                     onSelectEmployeeOfTeam: this.handleSelectEmployeeOfTeam,
                     onSyncData: this.handleSyncData,
-                    onSave: this.handleSave,
-                    enableSyncWorkingShift: this.state.enableSyncWorkingShift
+                    onSave: this.handleSave
                 }),
-                showShiftMultipleModal && _react2.default.createElement(_ShiftMultipleModal2.default, {
-                    show: showShiftMultipleModal,
+                showShiftMultipleModal && _react2.default.createElement(_ShiftMultipleModal2.default, { show: showShiftMultipleModal,
                     onHide: this.handleCloseShiftMultipleModal,
                     shiftOptions: this.shiftOptions.filter(function (shift) {
                         return shift.id !== _constants.OffDayShiftId;
                     }),
                     onSubmit: this.handleChangeMultipleShift
                 }),
-                editWeeklyDefaultShift.show && _react2.default.createElement(_WeeklyDefaultShiftModal2.default, {
-                    show: editWeeklyDefaultShift.show,
-                    isHost: isHost,
-                    nickname: editWeeklyDefaultShift.nickname,
-                    data: editWeeklyDefaultShift.data,
-                    isUsedWeeklyDefaultShift: editWeeklyDefaultShift.isUsedWeeklyDefaultShift,
+                editWeeklyDefaultShift.show && _react2.default.createElement(_WeeklyDefaultShiftModal2.default, { show: editWeeklyDefaultShift.show,
+                    isHost: isHost, nickname: editWeeklyDefaultShift.nickname,
+                    data: editWeeklyDefaultShift.data, isUsedWeeklyDefaultShift: editWeeklyDefaultShift.isUsedWeeklyDefaultShift,
                     fromDate: (0, _moment2.default)(this.currentWeek.toDate).add(1, 'days').format(_constants.DateFormat),
                     shiftOptions: this.shiftOptions,
                     onHide: this.handleCloseWeeklyDefaultShiftModal,
                     onSubmit: this.handleChangeWeeklyDefaultShift
                 }),
-                showConfirmRefreshDataModal && _react2.default.createElement(_SweetModalDialog2.default, {
-                    show: showConfirmRefreshDataModal,
+                showConfirmRefreshDataModal && _react2.default.createElement(_SweetModalDialog2.default, { show: showConfirmRefreshDataModal,
                     contents: _react2.default.createElement(
                         'p',
                         null,
@@ -146017,8 +145176,7 @@ var App = function (_Component) {
                     onHide: this.handleCloseConfirmRefreshDataModal,
                     onSubmit: this.handleSubmitRefreshData
                 }),
-                showConfirmSyncDataModalDialog && _react2.default.createElement(_SweetModalDialog2.default, {
-                    show: showConfirmSyncDataModalDialog,
+                showConfirmSyncDataModalDialog && _react2.default.createElement(_SweetModalDialog2.default, { show: showConfirmSyncDataModalDialog,
                     contents: _react2.default.createElement(
                         'p',
                         null,
@@ -146034,68 +145192,10 @@ var App = function (_Component) {
 }(_react.Component);
 
 var _initialiseProps = function _initialiseProps() {
-    var _this2 = this;
-
-    this.loadTeams = function (companyId) {
-        (0, _axios2.default)({
-            url: (0, _common.resolveClientUrl)('Team/GetOrgChart'),
-            method: 'GET',
-            headers: { 'X-Requested-With': 'XMLHttpRequest' },
-            params: {
-                companyId: companyId || null
-            }
-        }).then(function (response) {
-            _this2.teamOptions = response.data;
-
-            var _buildData = (0, _buildData3.default)(response.data),
-                floatData = _buildData.floatData;
-
-            var filter = (0, _extends11.default)({}, _this2.state.filter, {
-                teamIds: floatData.filter(function (item) {
-                    return item.isLeaf;
-                }).map(function (item) {
-                    return item.id;
-                }).join(',')
-            });
-
-            _this2.setState({ filter: filter });
-
-            _this2.getWeeklyShedules(filter);
-        }).catch(_common.axiosError);
-    };
-
-    this.loadShifts = function (companyId) {
-        (0, _axios2.default)({
-            url: (0, _common.resolveClientUrl)('Calendar/GetShift'),
-            method: 'GET',
-            headers: { 'X-Requested-With': 'XMLHttpRequest' },
-            params: {
-                query: '',
-                isShowOff: true,
-                companyId: companyId
-            }
-        }).then(function (response) {
-            _this2.shiftOptions = response.data.map(function (shift) {
-                return { id: shift.id, code: shift.code, name: shift.name };
-            });
-        }).catch(_common.axiosError);
-    };
-
-    this.handleCompanyChange = function (companyId) {
-        _this2.setState({
-            filter: (0, _extends11.default)({}, _this2.state.filter, {
-                companyId: companyId,
-                employee: { value: 0, label: '' }
-            }),
-            employeeOptions: []
-        });
-
-        _this2.loadTeams(companyId);
-        _this2.loadShifts(companyId);
-    };
+    var _this3 = this;
 
     this.onLeavingPageEventListener = function (event) {
-        if (!_this2.isDirtyData()) {
+        if (!_this3.isDirtyData()) {
             return undefined;
         }
 
@@ -146108,8 +145208,8 @@ var _initialiseProps = function _initialiseProps() {
 
     this.isDirtyData = function () {
         var isDirty = false;
-        var schedules = (0, _lodash.cloneDeep)(_this2.state.schedules),
-            originalSchedules = (0, _lodash.cloneDeep)(_this2.originalSchedules),
+        var schedules = (0, _lodash.cloneDeep)(_this3.state.schedules),
+            originalSchedules = (0, _lodash.cloneDeep)(_this3.originalSchedules),
             totalItems = schedules.length;
 
         outerloop: for (var gindex = 0; gindex < totalItems; gindex++) {
@@ -146131,21 +145231,16 @@ var _initialiseProps = function _initialiseProps() {
     };
 
     this.handleFilterChange = function (name, value) {
-        _this2.setState({ filter: (0, _extends11.default)({}, _this2.state.filter, (0, _defineProperty3.default)({}, name, value)) });
+        _this3.setState({ filter: (0, _extends11.default)({}, _this3.state.filter, (0, _defineProperty3.default)({}, name, value)) });
     };
 
     this.getEmployees = function (query) {
-        if (!_this2.state.filter.teamIds) {
-            _this2.setState({ employeeOptions: [] });
-            return;
-        }
-
         (0, _axios2.default)({
             url: (0, _common.resolveClientUrl)('ScheduleArrange/GetEmployees'),
             method: 'GET',
             headers: { 'X-Requested-With': 'XMLHttpRequest' },
             params: {
-                teamIds: _this2.state.filter.teamIds,
+                teamIds: _this3.state.filter.teamIds,
                 query: query
             }
         }).then(function (response) {
@@ -146156,7 +145251,7 @@ var _initialiseProps = function _initialiseProps() {
                 };
             });
 
-            _this2.setState({ employeeOptions: employeeOptions });
+            _this3.setState({ employeeOptions: employeeOptions });
         }).catch(_common.axiosError);
     };
 
@@ -146173,19 +145268,17 @@ var _initialiseProps = function _initialiseProps() {
                 fromDate: fromDate,
                 toDate: toDate,
                 teamIds: filter.teamIds,
-                companyId: filter.companyId,
                 isLocal: filter.isLocal,
                 employeeId: filter.employee.value === 0 ? null : filter.employee.value
             }
         }).then(function (response) {
-            _this2.selectedWeek = { fromDate: fromDate, toDate: toDate };
+            _this3.selectedWeek = { fromDate: fromDate, toDate: toDate };
             var _response$data = response.data,
                 isHost = _response$data.isHost,
-                enableSyncWorkingShift = _response$data.enableSyncWorkingShift,
                 schedules = _response$data.schedules;
 
 
-            _this2.originalSchedules = schedules.map(function (team) {
+            _this3.originalSchedules = schedules.map(function (team) {
                 team.members.map(function (schedule) {
                     schedule.selectWeekDays = {
                         mondaySchedule: false,
@@ -146210,11 +145303,10 @@ var _initialiseProps = function _initialiseProps() {
                 return team;
             });
 
-            _this2.setState({
-                filter: (0, _extends11.default)({}, _this2.state.filter, { fromDate: fromDate, toDate: toDate }),
+            _this3.setState({
+                filter: (0, _extends11.default)({}, _this3.state.filter, { fromDate: fromDate, toDate: toDate }),
                 isHost: isHost,
-                enableSyncWorkingShift: enableSyncWorkingShift,
-                schedules: (0, _lodash.cloneDeep)(_this2.originalSchedules)
+                schedules: (0, _lodash.cloneDeep)(_this3.originalSchedules)
             });
         }).catch(_common.axiosError).then(function () {
             return (0, _common.unblockUI)();
@@ -146222,7 +145314,7 @@ var _initialiseProps = function _initialiseProps() {
     };
 
     this.handleExportExcel = function () {
-        var filter = _this2.state.filter,
+        var filter = _this3.state.filter,
             fromDate = (0, _moment2.default)(filter.fromDate).format('DD-MMM-YYYY'),
             toDate = (0, _moment2.default)(filter.toDate).format('DD-MMM-YYYY');
 
@@ -146235,7 +145327,6 @@ var _initialiseProps = function _initialiseProps() {
                 fromDate: fromDate,
                 toDate: toDate,
                 teamIds: filter.teamIds,
-                companyId: filter.companyId,
                 isLocal: filter.isLocal,
                 employeeId: filter.employee.value === 0 ? null : filter.employee.value
             },
@@ -146249,7 +145340,7 @@ var _initialiseProps = function _initialiseProps() {
     };
 
     this.handleExportExcelDriverPickup = function () {
-        var filter = _this2.state.filter,
+        var filter = _this3.state.filter,
             fromDate = (0, _moment2.default)(filter.fromDate).format('DD-MMM-YYYY'),
             toDate = (0, _moment2.default)(filter.toDate).format('DD-MMM-YYYY');
 
@@ -146262,7 +145353,6 @@ var _initialiseProps = function _initialiseProps() {
                 fromDate: fromDate,
                 toDate: toDate,
                 teamIds: filter.teamIds,
-                companyId: filter.companyId,
                 isLocal: filter.isLocal,
                 employeeId: filter.employee.value === 0 ? null : filter.employee.value
             },
@@ -146276,48 +145366,45 @@ var _initialiseProps = function _initialiseProps() {
     };
 
     this.handleGetWeeklyShedules = function (isCurrentWeek) {
-        if (_this2.isDirtyData()) {
-            _this2.handleShowConfirmRefreshDataModal();
+        if (_this3.isDirtyData()) {
+            _this3.handleShowConfirmRefreshDataModal();
         } else {
-            var filter = isCurrentWeek ? (0, _extends11.default)({}, _this2.state.filter, {
-                fromDate: _this2.currentWeek.fromDate,
-                toDate: _this2.currentWeek.toDate
-            }) : _this2.state.filter;
+            var filter = isCurrentWeek ? (0, _extends11.default)({}, _this3.state.filter, { fromDate: _this3.currentWeek.fromDate, toDate: _this3.currentWeek.toDate }) : _this3.state.filter;
 
-            _this2.setState({ filter: filter });
+            _this3.setState({ filter: filter });
 
-            _this2.getWeeklyShedules(filter);
+            _this3.getWeeklyShedules(filter);
         }
     };
 
     this.handleGetPreviousWeekSchedule = function () {
-        var fromDate = (0, _moment2.default)(_this2.selectedWeek.fromDate).add(-7, 'days').format(_constants.DateFormat),
-            toDate = (0, _moment2.default)(_this2.selectedWeek.toDate).add(-7, 'days').format(_constants.DateFormat),
-            filter = (0, _extends11.default)({}, _this2.state.filter, { fromDate: fromDate, toDate: toDate });
-        _this2.setState({ filter: filter });
+        var fromDate = (0, _moment2.default)(_this3.selectedWeek.fromDate).add(-7, 'days').format(_constants.DateFormat),
+            toDate = (0, _moment2.default)(_this3.selectedWeek.toDate).add(-7, 'days').format(_constants.DateFormat),
+            filter = (0, _extends11.default)({}, _this3.state.filter, { fromDate: fromDate, toDate: toDate });
+        _this3.setState({ filter: filter });
 
-        if (_this2.isDirtyData()) {
-            _this2.handleShowConfirmRefreshDataModal();
+        if (_this3.isDirtyData()) {
+            _this3.handleShowConfirmRefreshDataModal();
         } else {
-            _this2.getWeeklyShedules(filter);
+            _this3.getWeeklyShedules(filter);
         }
     };
 
     this.handleGetNextWeekSchedule = function () {
-        var fromDate = (0, _moment2.default)(_this2.selectedWeek.fromDate).add(7, 'days').format(_constants.DateFormat),
-            toDate = (0, _moment2.default)(_this2.selectedWeek.toDate).add(7, 'days').format(_constants.DateFormat),
-            filter = (0, _extends11.default)({}, _this2.state.filter, { fromDate: fromDate, toDate: toDate });
-        _this2.setState({ filter: filter });
+        var fromDate = (0, _moment2.default)(_this3.selectedWeek.fromDate).add(7, 'days').format(_constants.DateFormat),
+            toDate = (0, _moment2.default)(_this3.selectedWeek.toDate).add(7, 'days').format(_constants.DateFormat),
+            filter = (0, _extends11.default)({}, _this3.state.filter, { fromDate: fromDate, toDate: toDate });
+        _this3.setState({ filter: filter });
 
-        if (_this2.isDirtyData()) {
-            _this2.handleShowConfirmRefreshDataModal();
+        if (_this3.isDirtyData()) {
+            _this3.handleShowConfirmRefreshDataModal();
         } else {
-            _this2.getWeeklyShedules(filter);
+            _this3.getWeeklyShedules(filter);
         }
     };
 
     this.handleChangeSelectWeekDay = function (teamId, employeeId, scheduleAttrName, isChecked) {
-        var schedules = [].concat((0, _toConsumableArray3.default)(_this2.state.schedules));
+        var schedules = [].concat((0, _toConsumableArray3.default)(_this3.state.schedules));
         var gindex = schedules.findIndex(function (item) {
             return item.teamId === teamId;
         });
@@ -146330,11 +145417,11 @@ var _initialiseProps = function _initialiseProps() {
         });
         schedules[gindex] = (0, _extends11.default)({}, schedules[gindex], { members: members });
 
-        _this2.setState({ schedules: schedules });
+        _this3.setState({ schedules: schedules });
     };
 
     this.handleChangeSelectWeekDays = function (scheduleAttrName, isChecked) {
-        var schedules = [].concat((0, _toConsumableArray3.default)(_this2.state.schedules));
+        var schedules = [].concat((0, _toConsumableArray3.default)(_this3.state.schedules));
         var totalItems = schedules.length;
 
         if (scheduleAttrName !== null) {
@@ -146369,11 +145456,11 @@ var _initialiseProps = function _initialiseProps() {
             }
         }
 
-        _this2.setState({ schedules: schedules });
+        _this3.setState({ schedules: schedules });
     };
 
     this.handleChangeShift = function (teamId, employeeId, attrName, shift) {
-        var schedules = [].concat((0, _toConsumableArray3.default)(_this2.state.schedules));
+        var schedules = [].concat((0, _toConsumableArray3.default)(_this3.state.schedules));
         var gindex = schedules.findIndex(function (item) {
             return item.teamId === teamId;
         });
@@ -146395,7 +145482,7 @@ var _initialiseProps = function _initialiseProps() {
         shift = shift === null && !member[attrName].isHoliday ? defaultShift : shift;
         var isOffDay = shift !== null && shift.id === _constants.OffDayShiftId;
         shift = shift !== null && shift.id === _constants.OffDayShiftId ? null : shift;
-        var originalSchedule = _this2.originalSchedules[gindex].members[eindex][attrName];
+        var originalSchedule = _this3.originalSchedules[gindex].members[eindex][attrName];
 
         member[attrName] = (0, _extends11.default)({}, member[attrName], {
             isOffDay: isOffDay,
@@ -146406,11 +145493,11 @@ var _initialiseProps = function _initialiseProps() {
 
         members[eindex] = member;
         schedules[gindex] = (0, _extends11.default)({}, schedules[gindex], { members: members });
-        _this2.setState({ schedules: schedules });
+        _this3.setState({ schedules: schedules });
     };
 
     this.handleChangeDefaultShift = function (teamId, employeeId, defaultShift) {
-        var schedules = [].concat((0, _toConsumableArray3.default)(_this2.state.schedules));
+        var schedules = [].concat((0, _toConsumableArray3.default)(_this3.state.schedules));
         var gindex = schedules.findIndex(function (item) {
             return item.teamId === teamId;
         });
@@ -146421,40 +145508,31 @@ var _initialiseProps = function _initialiseProps() {
             originalDefaultShift = members[eindex].defaultShift;
 
         if (defaultShift !== null) {
-            _this2.scheduleAttrNames.forEach(function (attrName) {
+            _this3.scheduleAttrNames.forEach(function (attrName) {
                 if (!members[eindex][attrName].isDisabled) {
                     var shift = members[eindex][attrName].shift;
                     if (members[eindex][attrName].isHoliday || members[eindex][attrName].isOffDay) {
                         if (shift !== null && (0, _lodash.isEqual)(originalDefaultShift, shift)) {
-                            var originalSchedule = _this2.originalSchedules[gindex].members[eindex][attrName],
+                            var originalSchedule = _this3.originalSchedules[gindex].members[eindex][attrName],
                                 isModified = !(0, _lodash.isEqual)(defaultShift, originalSchedule.shift) ? true : originalSchedule.isModified;
-                            members[eindex][attrName] = (0, _extends11.default)({}, members[eindex][attrName], {
-                                shift: defaultShift,
-                                isModified: isModified
-                            });
+                            members[eindex][attrName] = (0, _extends11.default)({}, members[eindex][attrName], { shift: defaultShift, isModified: isModified });
                         }
                     } else {
                         if (shift === null || (0, _lodash.isEqual)(originalDefaultShift, shift)) {
-                            var _originalSchedule = _this2.originalSchedules[gindex].members[eindex][attrName],
+                            var _originalSchedule = _this3.originalSchedules[gindex].members[eindex][attrName],
                                 _isModified = !(0, _lodash.isEqual)(defaultShift, _originalSchedule.shift) ? true : _originalSchedule.isModified;
-                            members[eindex][attrName] = (0, _extends11.default)({}, members[eindex][attrName], {
-                                shift: defaultShift,
-                                isModified: _isModified
-                            });
+                            members[eindex][attrName] = (0, _extends11.default)({}, members[eindex][attrName], { shift: defaultShift, isModified: _isModified });
                         }
                     }
                 }
             });
         } else {
-            _this2.scheduleAttrNames.forEach(function (attrName) {
+            _this3.scheduleAttrNames.forEach(function (attrName) {
                 var shift = members[eindex][attrName].shift;
                 if (!members[eindex][attrName].isModified && shift !== null && (0, _lodash.isEqual)(originalDefaultShift, shift)) {
-                    var originalSchedule = _this2.originalSchedules[gindex].members[eindex][attrName],
+                    var originalSchedule = _this3.originalSchedules[gindex].members[eindex][attrName],
                         isModified = !(0, _lodash.isEqual)(defaultShift, originalSchedule.shift) ? true : originalSchedule.isModified;
-                    members[eindex][attrName] = (0, _extends11.default)({}, members[eindex][attrName], {
-                        shift: defaultShift,
-                        isModified: isModified
-                    });
+                    members[eindex][attrName] = (0, _extends11.default)({}, members[eindex][attrName], { shift: defaultShift, isModified: isModified });
                 }
             });
         }
@@ -146462,11 +145540,11 @@ var _initialiseProps = function _initialiseProps() {
         members[eindex] = (0, _extends11.default)({}, members[eindex], { defaultShift: defaultShift });
         schedules[gindex] = (0, _extends11.default)({}, schedules[gindex], { members: members });
 
-        _this2.setState({ schedules: schedules });
+        _this3.setState({ schedules: schedules });
     };
 
     this.handleChangePublics = function (teamId, isChecked) {
-        var schedules = [].concat((0, _toConsumableArray3.default)(_this2.state.schedules));
+        var schedules = [].concat((0, _toConsumableArray3.default)(_this3.state.schedules));
         var gindex = schedules.findIndex(function (item) {
             return item.teamId === teamId;
         });
@@ -146475,12 +145553,9 @@ var _initialiseProps = function _initialiseProps() {
         for (var index = 0; index < totalItems; index++) {
             members[index] = (0, _extends11.default)({}, members[index], { isPublic: isChecked });
         }
-        schedules[gindex] = (0, _extends11.default)({}, schedules[gindex], {
-            isPublic: isChecked,
-            members: members
-        });
+        schedules[gindex] = (0, _extends11.default)({}, schedules[gindex], { isPublic: isChecked, members: members });
 
-        _this2.setState({ schedules: schedules });
+        _this3.setState({ schedules: schedules });
     };
 
     this.getSelectedMembers = function (schedules) {
@@ -146491,7 +145566,7 @@ var _initialiseProps = function _initialiseProps() {
             var totalSubItems = schedules[gindex].members.length;
 
             var _loop2 = function _loop2(eindex) {
-                if (_this2.scheduleAttrNames.filter(function (attrName) {
+                if (_this3.scheduleAttrNames.filter(function (attrName) {
                     return schedules[gindex].members[eindex].selectWeekDays[attrName];
                 }).length > 0) {
                     selectedMembers.push({ gindex: gindex, eindex: eindex });
@@ -146517,8 +145592,8 @@ var _initialiseProps = function _initialiseProps() {
     };
 
     this.handleChangeOffNoShift = function () {
-        var schedules = [].concat((0, _toConsumableArray3.default)(_this2.state.schedules));
-        var selectedMembers = _this2.getSelectedMembers(schedules),
+        var schedules = [].concat((0, _toConsumableArray3.default)(_this3.state.schedules));
+        var selectedMembers = _this3.getSelectedMembers(schedules),
             totalItems = selectedMembers.length;
 
         if (totalItems > 0) {
@@ -146530,10 +145605,10 @@ var _initialiseProps = function _initialiseProps() {
                 var members = [].concat((0, _toConsumableArray3.default)(schedules[gindex].members));
                 var member = (0, _extends11.default)({}, members[eindex]);
                 var selectWeekDays = member.selectWeekDays;
-                _this2.scheduleAttrNames.forEach(function (attrName) {
+                _this3.scheduleAttrNames.forEach(function (attrName) {
                     if (selectWeekDays[attrName]) {
                         member.selectWeekDays = (0, _extends11.default)({}, member.selectWeekDays, (0, _defineProperty3.default)({}, attrName, false));
-                        if (!member[attrName].isHoliday && !member[attrName].isChangeShift && _this2.isChangeOffDayKIV(member[attrName])) {
+                        if (!member[attrName].isHoliday && !member[attrName].isChangeShift && _this3.isChangeOffDayKIV(member[attrName])) {
                             member[attrName] = (0, _extends11.default)({}, member[attrName], {
                                 isOffDay: true,
                                 isFixedOffDay: false,
@@ -146552,15 +145627,15 @@ var _initialiseProps = function _initialiseProps() {
                 _loop3(index);
             }
 
-            _this2.setState({ schedules: schedules });
+            _this3.setState({ schedules: schedules });
         } else {
             _reactToastify.toast.warn('Please choose at least one day to off!');
         }
     };
 
     this.handleChangeOffDayOT = function () {
-        var schedules = [].concat((0, _toConsumableArray3.default)(_this2.state.schedules));
-        var selectedMembers = _this2.getSelectedMembers(schedules),
+        var schedules = [].concat((0, _toConsumableArray3.default)(_this3.state.schedules));
+        var selectedMembers = _this3.getSelectedMembers(schedules),
             totalItems = selectedMembers.length;
 
         if (totalItems > 0) {
@@ -146573,11 +145648,11 @@ var _initialiseProps = function _initialiseProps() {
                 var member = (0, _extends11.default)({}, members[eindex]);
                 var selectWeekDays = member.selectWeekDays;
 
-                _this2.scheduleAttrNames.forEach(function (attrName) {
+                _this3.scheduleAttrNames.forEach(function (attrName) {
                     if (selectWeekDays[attrName]) {
                         member.selectWeekDays = (0, _extends11.default)({}, member.selectWeekDays, (0, _defineProperty3.default)({}, attrName, false));
-                        if (!member[attrName].isHoliday && !member[attrName].isChangeShift && member[attrName].shift !== null && _this2.isChangeOffDayKIV(member[attrName])) {
-                            var originalSchedule = _this2.originalSchedules[gindex].members[eindex][attrName];
+                        if (!member[attrName].isHoliday && !member[attrName].isChangeShift && member[attrName].shift !== null && _this3.isChangeOffDayKIV(member[attrName])) {
+                            var originalSchedule = _this3.originalSchedules[gindex].members[eindex][attrName];
                             member[attrName] = (0, _extends11.default)({}, member[attrName], {
                                 isOffDay: true,
                                 isFixedOffDay: false,
@@ -146596,15 +145671,15 @@ var _initialiseProps = function _initialiseProps() {
                 _loop4(index);
             }
 
-            _this2.setState({ schedules: schedules });
+            _this3.setState({ schedules: schedules });
         } else {
             _reactToastify.toast.warn('Please choose at least one day to off!');
         }
     };
 
     this.handleChangeWorkday = function () {
-        var schedules = [].concat((0, _toConsumableArray3.default)(_this2.state.schedules));
-        var selectedMembers = _this2.getSelectedMembers(schedules),
+        var schedules = [].concat((0, _toConsumableArray3.default)(_this3.state.schedules));
+        var selectedMembers = _this3.getSelectedMembers(schedules),
             totalItems = selectedMembers.length;
 
         if (totalItems > 0) {
@@ -146617,11 +145692,11 @@ var _initialiseProps = function _initialiseProps() {
                 var member = (0, _extends11.default)({}, members[eindex]);
                 var selectWeekDays = member.selectWeekDays;
 
-                _this2.scheduleAttrNames.forEach(function (attrName) {
+                _this3.scheduleAttrNames.forEach(function (attrName) {
                     if (selectWeekDays[attrName]) {
                         member.selectWeekDays = (0, _extends11.default)({}, member.selectWeekDays, (0, _defineProperty3.default)({}, attrName, false));
                         if (!member[attrName].isHoliday && member[attrName].shift !== null) {
-                            var originalSchedule = _this2.originalSchedules[gindex].members[eindex][attrName];
+                            var originalSchedule = _this3.originalSchedules[gindex].members[eindex][attrName];
                             selectWeekDays[attrName] = false;
                             member[attrName] = (0, _extends11.default)({}, member[attrName], {
                                 isOffDay: false,
@@ -146641,26 +145716,26 @@ var _initialiseProps = function _initialiseProps() {
                 _loop5(index);
             }
 
-            _this2.setState({ schedules: schedules });
+            _this3.setState({ schedules: schedules });
         } else {
             _reactToastify.toast.warn('Please choose at least one day to work!');
         }
     };
 
     this.handleShiftMultiple = function () {
-        var selectedMembers = _this2.getSelectedMembers(_this2.state.schedules),
+        var selectedMembers = _this3.getSelectedMembers(_this3.state.schedules),
             totalItems = selectedMembers.length;
 
         if (totalItems > 0) {
-            _this2.setState({ showShiftMultipleModal: true });
+            _this3.setState({ showShiftMultipleModal: true });
         } else {
             _reactToastify.toast.warn('Please choose at least one day to continue!');
         }
     };
 
     this.handleChangeMultipleShift = function (shift, isOffDay) {
-        var schedules = [].concat((0, _toConsumableArray3.default)(_this2.state.schedules));
-        var selectedMembers = _this2.getSelectedMembers(schedules),
+        var schedules = [].concat((0, _toConsumableArray3.default)(_this3.state.schedules));
+        var selectedMembers = _this3.getSelectedMembers(schedules),
             totalItems = selectedMembers.length;
 
         if (totalItems > 0) {
@@ -146673,11 +145748,11 @@ var _initialiseProps = function _initialiseProps() {
                 var member = (0, _extends11.default)({}, members[eindex]);
                 var selectWeekDays = member.selectWeekDays;
 
-                _this2.scheduleAttrNames.forEach(function (attrName) {
+                _this3.scheduleAttrNames.forEach(function (attrName) {
                     if (selectWeekDays[attrName]) {
                         member.selectWeekDays = (0, _extends11.default)({}, member.selectWeekDays, (0, _defineProperty3.default)({}, attrName, false));
                         if (!member[attrName].isHoliday) {
-                            var originalSchedule = _this2.originalSchedules[gindex].members[eindex][attrName];
+                            var originalSchedule = _this3.originalSchedules[gindex].members[eindex][attrName];
                             var isModified = !(0, _lodash.isEqual)(shift, originalSchedule.shift) || originalSchedule.isOffDay !== isOffDay ? true : originalSchedule.isModified;
                             member[attrName] = (0, _extends11.default)({}, member[attrName], {
                                 isOffDay: isOffDay && !member[attrName].isChangeShift,
@@ -146697,15 +145772,15 @@ var _initialiseProps = function _initialiseProps() {
                 _loop6(index);
             }
 
-            _this2.setState({ schedules: schedules });
+            _this3.setState({ schedules: schedules });
         }
 
-        _this2.handleCloseShiftMultipleModal();
+        _this3.handleCloseShiftMultipleModal();
     };
 
     this.handleFixedOffDay = function () {
-        var schedules = [].concat((0, _toConsumableArray3.default)(_this2.state.schedules));
-        var selectedMembers = _this2.getSelectedMembers(schedules),
+        var schedules = [].concat((0, _toConsumableArray3.default)(_this3.state.schedules));
+        var selectedMembers = _this3.getSelectedMembers(schedules),
             totalItems = selectedMembers.length;
 
         if (totalItems > 0) {
@@ -146718,11 +145793,11 @@ var _initialiseProps = function _initialiseProps() {
                 var member = (0, _extends11.default)({}, members[eindex]);
                 var selectWeekDays = member.selectWeekDays;
 
-                _this2.scheduleAttrNames.forEach(function (attrName) {
+                _this3.scheduleAttrNames.forEach(function (attrName) {
                     if (selectWeekDays[attrName]) {
                         member.selectWeekDays = (0, _extends11.default)({}, member.selectWeekDays, (0, _defineProperty3.default)({}, attrName, false));
-                        if (!member[attrName].isHoliday && !member[attrName].isChangeShift && member[attrName].shift !== null && _this2.isChangeOffDayKIV(member[attrName])) {
-                            var originalSchedule = _this2.originalSchedules[gindex].members[eindex][attrName];
+                        if (!member[attrName].isHoliday && !member[attrName].isChangeShift && member[attrName].shift !== null && _this3.isChangeOffDayKIV(member[attrName])) {
+                            var originalSchedule = _this3.originalSchedules[gindex].members[eindex][attrName];
                             member[attrName] = (0, _extends11.default)({}, member[attrName], {
                                 isOffDay: true,
                                 isFixedOffDay: true,
@@ -146741,7 +145816,7 @@ var _initialiseProps = function _initialiseProps() {
                 _loop7(index);
             }
 
-            _this2.setState({ schedules: schedules });
+            _this3.setState({ schedules: schedules });
         } else {
             _reactToastify.toast.warn('Please choose at least one day to continue!');
         }
@@ -146751,10 +145826,10 @@ var _initialiseProps = function _initialiseProps() {
         var isValidData = true,
             weeklySchedules = [],
             defaultShifts = [],
-            schedules = (0, _lodash.cloneDeep)(_this2.state.schedules),
-            originalSchedules = (0, _lodash.cloneDeep)(_this2.originalSchedules);
+            schedules = (0, _lodash.cloneDeep)(_this3.state.schedules),
+            originalSchedules = (0, _lodash.cloneDeep)(_this3.originalSchedules);
         var totalItems = schedules.length,
-            _selectedWeek = _this2.selectedWeek,
+            _selectedWeek = _this3.selectedWeek,
             fromDate = _selectedWeek.fromDate,
             toDate = _selectedWeek.toDate;
 
@@ -146784,7 +145859,7 @@ var _initialiseProps = function _initialiseProps() {
                             shiftId: schedule.defaultShift !== null ? schedule.defaultShift.id : null
                         });
                     }
-                    _this2.scheduleAttrNames.forEach(function (attrName) {
+                    _this3.scheduleAttrNames.forEach(function (attrName) {
                         if (!(0, _lodash.isEqual)(originalSchedule[attrName], schedule[attrName]) || originalSchedule.isPublic !== schedule.isPublic) {
                             weeklySchedules.push({
                                 employeeId: schedule.employeeId,
@@ -146818,12 +145893,7 @@ var _initialiseProps = function _initialiseProps() {
             (0, _axios2.default)({
                 url: (0, _common.resolveClientUrl)('ScheduleArrange/EditWeekly'),
                 method: 'POST',
-                data: (0, _qs.stringify)({
-                    fromDate: fromDate,
-                    toDate: toDate,
-                    weeklySchedules: weeklySchedules.length > 0 ? weeklySchedules : null,
-                    defaultShifts: defaultShifts
-                }),
+                data: (0, _qs.stringify)({ fromDate: fromDate, toDate: toDate, weeklySchedules: weeklySchedules.length > 0 ? weeklySchedules : null, defaultShifts: defaultShifts }),
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest',
                     'Content-Type': 'application/x-www-form-urlencoded'
@@ -146833,7 +145903,7 @@ var _initialiseProps = function _initialiseProps() {
                 if (data.isSuccessful) {
                     _reactToastify.toast.success('Updated Successfully!');
 
-                    _this2.getWeeklyShedules(_this2.state.filter);
+                    _this3.getWeeklyShedules(_this3.state.filter);
                 } else {
                     _reactToastify.toast.error(data.message);
                 }
@@ -146844,32 +145914,32 @@ var _initialiseProps = function _initialiseProps() {
     };
 
     this.handleCloseShiftMultipleModal = function () {
-        _this2.setState({ showShiftMultipleModal: false });
+        _this3.setState({ showShiftMultipleModal: false });
     };
 
     this.handleShowConfirmRefreshDataModal = function () {
-        _this2.setState({ showConfirmRefreshDataModal: true });
+        _this3.setState({ showConfirmRefreshDataModal: true });
     };
 
     this.handleCloseConfirmRefreshDataModal = function () {
-        var fromDate = (0, _moment2.default)(_this2.selectedWeek.fromDate).format(_constants.DateFormat),
-            toDate = (0, _moment2.default)(_this2.selectedWeek.toDate).format(_constants.DateFormat),
-            filter = (0, _extends11.default)({}, _this2.state.filter, { fromDate: fromDate, toDate: toDate });
+        var fromDate = (0, _moment2.default)(_this3.selectedWeek.fromDate).format(_constants.DateFormat),
+            toDate = (0, _moment2.default)(_this3.selectedWeek.toDate).format(_constants.DateFormat),
+            filter = (0, _extends11.default)({}, _this3.state.filter, { fromDate: fromDate, toDate: toDate });
 
-        _this2.setState({ filter: filter, showConfirmRefreshDataModal: false });
+        _this3.setState({ filter: filter, showConfirmRefreshDataModal: false });
     };
 
     this.handleSubmitRefreshData = function () {
-        _this2.getWeeklyShedules(_this2.state.filter);
-        _this2.handleCloseConfirmRefreshDataModal();
+        _this3.getWeeklyShedules(_this3.state.filter);
+        _this3.handleCloseConfirmRefreshDataModal();
     };
 
     this.handleChangeShowRemarkPopover = function (show) {
-        _this2.setState({ showRemarkPopover: show });
+        _this3.setState({ showRemarkPopover: show });
     };
 
     this.handleShowWeeklyDefaultShiftModal = function (teamId, employeeId) {
-        var schedules = _this2.state.schedules,
+        var schedules = _this3.state.schedules,
             gindex = schedules.findIndex(function (item) {
             return item.teamId === teamId;
         }),
@@ -146877,7 +145947,7 @@ var _initialiseProps = function _initialiseProps() {
             return item.employeeId === employeeId;
         });
 
-        _this2.setState({
+        _this3.setState({
             editWeeklyDefaultShift: {
                 show: true,
                 teamId: teamId,
@@ -146890,7 +145960,7 @@ var _initialiseProps = function _initialiseProps() {
     };
 
     this.handleCloseWeeklyDefaultShiftModal = function () {
-        _this2.setState({
+        _this3.setState({
             editWeeklyDefaultShift: {
                 show: false,
                 teamId: 0,
@@ -146903,7 +145973,7 @@ var _initialiseProps = function _initialiseProps() {
     };
 
     this.updateWeeklyDefaultShift = function (teamId, employeeId, weeklyDefaultShift, isUsedWeeklyDefaultShift) {
-        var schedules = [].concat((0, _toConsumableArray3.default)(_this2.state.schedules));
+        var schedules = [].concat((0, _toConsumableArray3.default)(_this3.state.schedules));
         var gindex = schedules.findIndex(function (item) {
             return item.teamId === teamId;
         });
@@ -146911,59 +145981,48 @@ var _initialiseProps = function _initialiseProps() {
         var eindex = members.findIndex(function (item) {
             return item.employeeId === employeeId;
         });
-        members[eindex] = (0, _extends11.default)({}, members[eindex], {
+        members[eindex] = (0, _extends11.default)({}, members[eindex], { weeklyDefaultShift: weeklyDefaultShift, isUsedWeeklyDefaultShift: isUsedWeeklyDefaultShift });
+        _this3.originalSchedules[gindex].members[eindex] = (0, _extends11.default)({}, _this3.originalSchedules[gindex].members[eindex], {
             weeklyDefaultShift: weeklyDefaultShift,
             isUsedWeeklyDefaultShift: isUsedWeeklyDefaultShift
         });
-        _this2.originalSchedules[gindex].members[eindex] = (0, _extends11.default)({}, _this2.originalSchedules[gindex].members[eindex], {
-            weeklyDefaultShift: weeklyDefaultShift,
-            isUsedWeeklyDefaultShift: isUsedWeeklyDefaultShift
-        });
-        var fromDate = (0, _moment2.default)(_this2.currentWeek.toDate).add(1, 'days').format(_constants.DateFormat);
+        var fromDate = (0, _moment2.default)(_this3.currentWeek.toDate).add(1, 'days').format(_constants.DateFormat);
 
         if (isUsedWeeklyDefaultShift) {
-            _this2.scheduleAttrNames.forEach(function (attrName) {
+            _this3.scheduleAttrNames.forEach(function (attrName) {
                 var shiftId = weeklyDefaultShift[attrName.substring(0, 3) + 'Shift'].id,
                     isOffDay = shiftId === _constants.OffDayShiftId,
                     shift = isOffDay ? null : weeklyDefaultShift[attrName.substring(0, 3) + 'Shift'],
                     workDate = (0, _moment2.default)(members[eindex][attrName].workDate);
 
                 if (workDate.isSameOrAfter(fromDate) && !members[eindex][attrName].isDisabled) {
-                    members[eindex][attrName] = (0, _extends11.default)({}, members[eindex][attrName], {
-                        shift: shift,
-                        isOffDay: isOffDay
-                    });
-                    _this2.originalSchedules[gindex].members[eindex][attrName] = (0, _extends11.default)({}, _this2.originalSchedules[gindex].members[eindex][attrName], {
-                        shift: shift,
-                        isOffDay: isOffDay
-                    });
+                    members[eindex][attrName] = (0, _extends11.default)({}, members[eindex][attrName], { shift: shift, isOffDay: isOffDay });
+                    _this3.originalSchedules[gindex].members[eindex][attrName] = (0, _extends11.default)({}, _this3.originalSchedules[gindex].members[eindex][attrName], { shift: shift, isOffDay: isOffDay });
                 }
             });
         } else {
             var defaultShift = members[eindex].defaultShift;
 
             if (defaultShift !== null) {
-                _this2.scheduleAttrNames.forEach(function (attrName) {
+                _this3.scheduleAttrNames.forEach(function (attrName) {
                     var workDate = (0, _moment2.default)(members[eindex][attrName].workDate);
                     if (workDate.isSameOrAfter(fromDate) && !members[eindex][attrName].isDisabled && !members[eindex][attrName].isHoliday && !members[eindex][attrName].isOffDay && members[eindex][attrName].shift === null) {
-                        members[eindex][attrName] = (0, _extends11.default)({}, members[eindex][attrName], {
-                            shift: defaultShift
-                        });
+                        members[eindex][attrName] = (0, _extends11.default)({}, members[eindex][attrName], { shift: defaultShift });
                     }
                 });
             }
         }
 
         schedules[gindex] = (0, _extends11.default)({}, schedules[gindex], { members: members });
-        _this2.setState({ schedules: schedules });
+        _this3.setState({ schedules: schedules });
     };
 
     this.handleChangeWeeklyDefaultShift = function (weeklyDefaultShift, isUsedWeeklyDefaultShift) {
-        var _state$editWeeklyDefa = _this2.state.editWeeklyDefaultShift,
+        var _state$editWeeklyDefa = _this3.state.editWeeklyDefaultShift,
             teamId = _state$editWeeklyDefa.teamId,
             employeeId = _state$editWeeklyDefa.employeeId;
 
-        var schedules = _this2.state.schedules;
+        var schedules = _this3.state.schedules;
         var gindex = schedules.findIndex(function (item) {
             return item.teamId === teamId;
         });
@@ -146973,7 +146032,7 @@ var _initialiseProps = function _initialiseProps() {
         });
 
         var totalOffDays = 0;
-        _this2.scheduleAttrNames.forEach(function (attrName) {
+        _this3.scheduleAttrNames.forEach(function (attrName) {
             var shiftId = weeklyDefaultShift[attrName.substring(0, 3) + 'Shift'].id,
                 isOffDay = shiftId === _constants.OffDayShiftId;
 
@@ -147000,9 +146059,9 @@ var _initialiseProps = function _initialiseProps() {
             var data = response.data;
             if (data.isSuccessful) {
                 _reactToastify.toast.success('Updated Successfully!');
-                _this2.updateWeeklyDefaultShift(teamId, employeeId, weeklyDefaultShift, isUsedWeeklyDefaultShift);
+                _this3.updateWeeklyDefaultShift(teamId, employeeId, weeklyDefaultShift, isUsedWeeklyDefaultShift);
 
-                _this2.handleCloseWeeklyDefaultShiftModal();
+                _this3.handleCloseWeeklyDefaultShiftModal();
             } else {
                 _reactToastify.toast.error(data.message);
             }
@@ -147010,7 +146069,7 @@ var _initialiseProps = function _initialiseProps() {
     };
 
     this.handleUpdateRemark = function (teamId, employeeId, remark) {
-        var schedules = [].concat((0, _toConsumableArray3.default)(_this2.state.schedules));
+        var schedules = [].concat((0, _toConsumableArray3.default)(_this3.state.schedules));
         var gindex = schedules.findIndex(function (item) {
             return item.teamId === teamId;
         });
@@ -147019,7 +146078,7 @@ var _initialiseProps = function _initialiseProps() {
             return item.employeeId === employeeId;
         });
 
-        if (!(0, _lodash.isEqual)(remark, _this2.originalSchedules[gindex].members[eindex].remark)) {
+        if (!(0, _lodash.isEqual)(remark, _this3.originalSchedules[gindex].members[eindex].remark)) {
             (0, _axios2.default)({
                 url: (0, _common.resolveClientUrl)('ScheduleArrange/EditRemark'),
                 method: 'POST',
@@ -147035,9 +146094,9 @@ var _initialiseProps = function _initialiseProps() {
 
                     members[eindex] = (0, _extends11.default)({}, members[eindex], { remark: remark });
                     schedules[gindex] = (0, _extends11.default)({}, schedules[gindex], { members: members });
-                    _this2.originalSchedules[gindex].members[eindex].remark = remark;
+                    _this3.originalSchedules[gindex].members[eindex].remark = remark;
 
-                    _this2.setState({ schedules: schedules });
+                    _this3.setState({ schedules: schedules });
                 } else {
                     _reactToastify.toast.error(data.message);
                 }
@@ -147047,7 +146106,7 @@ var _initialiseProps = function _initialiseProps() {
 
     this.handleEditTeamOrder = function () {
         var displayOrders = [];
-        var schedules = _this2.state.schedules,
+        var schedules = _this3.state.schedules,
             totalItems = schedules.length;
 
         for (var index = 0; index < totalItems; index++) {
@@ -147077,7 +146136,7 @@ var _initialiseProps = function _initialiseProps() {
 
     this.handleEditDisplayOrder = function (gindex) {
         var displayOrders = [];
-        var members = _this2.state.schedules[gindex].members,
+        var members = _this3.state.schedules[gindex].members,
             totalItems = members.length;
 
         for (var index = 0; index < totalItems; index++) {
@@ -147113,28 +146172,28 @@ var _initialiseProps = function _initialiseProps() {
         var resultType = result.type,
             sourceIndex = result.source.index,
             destinationIndex = result.destination.index;
-        var schedules = [].concat((0, _toConsumableArray3.default)(_this2.state.schedules));
+        var schedules = [].concat((0, _toConsumableArray3.default)(_this3.state.schedules));
         if (resultType === 'droppableTeam') {
             schedules = (0, _common.reorder)(schedules, sourceIndex, destinationIndex);
-            _this2.originalSchedules = (0, _common.reorder)(schedules, sourceIndex, destinationIndex);
-            _this2.setState({ schedules: schedules }, function () {
-                return _this2.handleEditTeamOrder();
+            _this3.originalSchedules = (0, _common.reorder)(schedules, sourceIndex, destinationIndex);
+            _this3.setState({ schedules: schedules }, function () {
+                return _this3.handleEditTeamOrder();
             });
         } else if (resultType.includes('droppableMember')) {
             var teamId = parseInt(resultType.split('-')[1], 10),
                 index = schedules.findIndex(function (x) {
                 return x.teamId === teamId;
             });
-            _this2.originalSchedules[index].members = (0, _common.reorder)(_this2.originalSchedules[index].members, sourceIndex, destinationIndex);
+            _this3.originalSchedules[index].members = (0, _common.reorder)(_this3.originalSchedules[index].members, sourceIndex, destinationIndex);
             schedules[index].members = (0, _common.reorder)(schedules[index].members, sourceIndex, destinationIndex);
-            _this2.setState({ schedules: schedules }, function () {
-                return _this2.handleEditDisplayOrder(index);
+            _this3.setState({ schedules: schedules }, function () {
+                return _this3.handleEditDisplayOrder(index);
             });
         }
     };
 
     this.handleChangeTeamOrder = function (key, teamId) {
-        var schedules = [].concat((0, _toConsumableArray3.default)(_this2.state.schedules));
+        var schedules = [].concat((0, _toConsumableArray3.default)(_this3.state.schedules));
         var sourceIndex = schedules.findIndex(function (x) {
             return x.teamId === teamId;
         }),
@@ -147158,14 +146217,14 @@ var _initialiseProps = function _initialiseProps() {
         }
 
         schedules = (0, _common.reorder)(schedules, sourceIndex, destinationIndex);
-        _this2.originalSchedules = (0, _common.reorder)(_this2.originalSchedules, sourceIndex, destinationIndex);
-        _this2.setState({ schedules: schedules }, function () {
-            return _this2.handleEditTeamOrder();
+        _this3.originalSchedules = (0, _common.reorder)(_this3.originalSchedules, sourceIndex, destinationIndex);
+        _this3.setState({ schedules: schedules }, function () {
+            return _this3.handleEditTeamOrder();
         });
     };
 
     this.handleChangeOrder = function (key, teamId, employeeId) {
-        var schedules = [].concat((0, _toConsumableArray3.default)(_this2.state.schedules));
+        var schedules = [].concat((0, _toConsumableArray3.default)(_this3.state.schedules));
         var index = schedules.findIndex(function (x) {
             return x.teamId === teamId;
         }),
@@ -147192,14 +146251,14 @@ var _initialiseProps = function _initialiseProps() {
         }
 
         schedules[index].members = (0, _common.reorder)(schedules[index].members, sourceIndex, destinationIndex);
-        _this2.originalSchedules[index].members = (0, _common.reorder)(_this2.originalSchedules[index].members, sourceIndex, destinationIndex);
-        _this2.setState({ schedules: schedules }, function () {
-            return _this2.handleEditDisplayOrder(index);
+        _this3.originalSchedules[index].members = (0, _common.reorder)(_this3.originalSchedules[index].members, sourceIndex, destinationIndex);
+        _this3.setState({ schedules: schedules }, function () {
+            return _this3.handleEditDisplayOrder(index);
         });
     };
 
     this.handleSelectEmployeeOfTeam = function (teamId, employeeId, isSelected) {
-        var schedules = [].concat((0, _toConsumableArray3.default)(_this2.state.schedules));
+        var schedules = [].concat((0, _toConsumableArray3.default)(_this3.state.schedules));
         var gindex = schedules.findIndex(function (item) {
             return item.teamId === teamId;
         });
@@ -147210,11 +146269,9 @@ var _initialiseProps = function _initialiseProps() {
                 return item.employeeId === employeeId;
             });
             members[_eindex2] = (0, _extends11.default)({}, members[_eindex2], { isSelected: isSelected });
-            schedules[gindex] = (0, _extends11.default)({}, schedules[gindex], {
-                isSelected: members.findIndex(function (item) {
+            schedules[gindex] = (0, _extends11.default)({}, schedules[gindex], { isSelected: members.findIndex(function (item) {
                     return !item.isSelected;
-                }) < 0
-            });
+                }) < 0 });
         } else {
             schedules[gindex] = (0, _extends11.default)({}, schedules[gindex], { isSelected: isSelected });
             var totalItems = members.length;
@@ -147224,12 +146281,12 @@ var _initialiseProps = function _initialiseProps() {
         }
 
         schedules[gindex] = (0, _extends11.default)({}, schedules[gindex], { members: members });
-        _this2.setState({ schedules: schedules });
+        _this3.setState({ schedules: schedules });
     };
 
     this.handleSyncData = function () {
         var employeeIds = [];
-        var schedules = _this2.state.schedules,
+        var schedules = _this3.state.schedules,
             totalItems = schedules.length;
         for (var _gindex3 = 0; _gindex3 < totalItems; _gindex3++) {
             var totalMembers = schedules[_gindex3].members.length;
@@ -147241,7 +146298,7 @@ var _initialiseProps = function _initialiseProps() {
         }
 
         if (employeeIds.length > 0) {
-            _this2.setState({
+            _this3.setState({
                 selectedEmployeeIds: employeeIds,
                 showConfirmSyncDataModalDialog: true
             });
@@ -147251,7 +146308,7 @@ var _initialiseProps = function _initialiseProps() {
     };
 
     this.handleCloseConfirmSyncDataModalDialog = function () {
-        _this2.setState({
+        _this3.setState({
             selectedEmployeeIds: [],
             showConfirmSyncDataModalDialog: false
         });
@@ -147259,7 +146316,7 @@ var _initialiseProps = function _initialiseProps() {
 
     this.handleSubmitSyncData = function () {
         (0, _common.blockUI)();
-        var _selectedWeek2 = _this2.selectedWeek,
+        var _selectedWeek2 = _this3.selectedWeek,
             fromDate = _selectedWeek2.fromDate,
             toDate = _selectedWeek2.toDate;
 
@@ -147267,12 +146324,7 @@ var _initialiseProps = function _initialiseProps() {
         (0, _axios2.default)({
             url: (0, _common.resolveClientUrl)('ScheduleArrange/SyncWorkingShift'),
             method: 'POST',
-            data: (0, _qs.stringify)({
-                fromDate: fromDate,
-                toDate: toDate,
-                employeeIds: _this2.state.selectedEmployeeIds.join(','),
-                companyId: _this2.state.filter.companyId
-            }),
+            data: (0, _qs.stringify)({ fromDate: fromDate, toDate: toDate, employeeIds: _this3.state.selectedEmployeeIds.join(',') }),
             headers: {
                 'X-Requested-With': 'XMLHttpRequest',
                 'Content-Type': 'application/x-www-form-urlencoded'
@@ -147282,12 +146334,12 @@ var _initialiseProps = function _initialiseProps() {
             if (data.isSuccessful) {
                 _reactToastify.toast.success('Synced successfully!');
 
-                _this2.setState({
+                _this3.setState({
                     selectedEmployeeIds: [],
                     showConfirmSyncDataModalDialog: false
                 });
 
-                _this2.getWeeklyShedules(_this2.state.filter);
+                _this3.getWeeklyShedules(_this3.state.filter);
             } else {
                 _reactToastify.toast.error(data.message);
             }
@@ -148113,8 +147165,7 @@ var DroppableMember = function (_PureComponent) {
                                             onShowWeeklyDefaultShift: _this2.props.onShowWeeklyDefaultShift,
                                             onUpdateRemark: _this2.props.onUpdateRemark,
                                             onChangeOrder: _this2.props.onChangeOrder,
-                                            onSelectEmployeeOfTeam: _this2.props.onSelectEmployeeOfTeam,
-                                            enableSyncWorkingShift: _this2.props.enableSyncWorkingShift
+                                            onSelectEmployeeOfTeam: _this2.props.onSelectEmployeeOfTeam
                                         }),
                                         memberProvided.placeholder
                                     );
@@ -148232,8 +147283,7 @@ var DroppableTeam = function (_PureComponent) {
                                             onShowWeeklyDefaultShift: _this2.props.onShowWeeklyDefaultShift,
                                             onUpdateRemark: _this2.props.onUpdateRemark,
                                             onChangeOrder: _this2.props.onChangeOrder,
-                                            onSelectEmployeeOfTeam: _this2.props.onSelectEmployeeOfTeam,
-                                            enableSyncWorkingShift: _this2.props.enableSyncWorkingShift
+                                            onSelectEmployeeOfTeam: _this2.props.onSelectEmployeeOfTeam
                                         }),
                                         teamProvided.placeholder
                                     );
@@ -148364,7 +147414,6 @@ var Row = function (_PureComponent) {
         value: function render() {
             var _props = this.props,
                 isHost = _props.isHost,
-                enableSyncWorkingShift = _props.enableSyncWorkingShift,
                 shiftOptions = _props.shiftOptions,
                 teamId = _props.teamId,
                 data = _props.data,
@@ -148372,116 +147421,72 @@ var Row = function (_PureComponent) {
                 draggableProvided = _props.draggableProvided,
                 isDragging = _props.isDragging;
 
+            var enableSyncWorkingShift = document.getElementById('EnableSyncWorkingShift').checked;
 
             return _react2.default.createElement(
                 'div',
-                (0, _extends3.default)({
-                    className: 'table-row ' + (isDragging ? 'dragging' : ''),
-                    ref: draggableProvided.innerRef
-                }, draggableProvided.draggableProps, draggableProvided.dragHandleProps),
+                (0, _extends3.default)({ className: 'table-row ' + (isDragging ? 'dragging' : ''),
+                    ref: draggableProvided.innerRef }, draggableProvided.draggableProps, draggableProvided.dragHandleProps),
                 _react2.default.createElement(_ColIndex2.default, { data: data }),
-                _react2.default.createElement(_ColNickname2.default, {
-                    isHost: isHost,
-                    teamId: teamId,
-                    employeeId: data.employeeId,
-                    nickname: data.nickname,
-                    remark: data.remark,
+                _react2.default.createElement(_ColNickname2.default, { isHost: isHost,
+                    teamId: teamId, employeeId: data.employeeId, nickname: data.nickname, remark: data.remark,
                     showRemarkPopover: showRemarkPopover,
                     onChangeShowRemarkPopover: this.props.onChangeShowRemarkPopover,
                     onShowWeeklyDefaultShift: this.props.onShowWeeklyDefaultShift,
                     onUpdateRemark: this.props.onUpdateRemark,
                     onChangeOrder: this.props.onChangeOrder
                 }),
-                _react2.default.createElement(_ColDefaultShift2.default, {
-                    isHost: isHost,
-                    teamId: teamId,
-                    employeeId: data.employeeId,
-                    isUsedWeeklyDefaultShift: data.isUsedWeeklyDefaultShift,
-                    data: data.defaultShift,
+                _react2.default.createElement(_ColDefaultShift2.default, { isHost: isHost, teamId: teamId, employeeId: data.employeeId,
+                    isUsedWeeklyDefaultShift: data.isUsedWeeklyDefaultShift, data: data.defaultShift,
                     shiftOptions: shiftOptions.filter(function (shift) {
                         return shift.id !== _constants.OffDayShiftId;
                     }),
                     onChangeDefaultShift: this.props.onChangeDefaultShift
                 }),
-                _react2.default.createElement(_ColShift2.default, {
-                    isHost: isHost,
-                    shiftOptions: shiftOptions,
-                    isUsedWeeklyDefaultShift: data.isUsedWeeklyDefaultShift,
-                    employeeId: data.employeeId,
-                    defaultShift: data.defaultShift,
-                    data: data.mondaySchedule,
+                _react2.default.createElement(_ColShift2.default, { isHost: isHost, shiftOptions: shiftOptions, isUsedWeeklyDefaultShift: data.isUsedWeeklyDefaultShift,
+                    employeeId: data.employeeId, defaultShift: data.defaultShift, data: data.mondaySchedule,
                     scheduleAttrName: 'mondaySchedule',
                     isChecked: data.selectWeekDays.mondaySchedule,
                     onChangeShift: this.handleChangeShift,
                     onChangeSelectWeekDay: this.handleChangeSelectWeekDay
                 }),
-                _react2.default.createElement(_ColShift2.default, {
-                    isHost: isHost,
-                    shiftOptions: shiftOptions,
-                    isUsedWeeklyDefaultShift: data.isUsedWeeklyDefaultShift,
-                    employeeId: data.employeeId,
-                    defaultShift: data.defaultShift,
-                    data: data.tuesdaySchedule,
+                _react2.default.createElement(_ColShift2.default, { isHost: isHost, shiftOptions: shiftOptions, isUsedWeeklyDefaultShift: data.isUsedWeeklyDefaultShift,
+                    employeeId: data.employeeId, defaultShift: data.defaultShift, data: data.tuesdaySchedule,
                     scheduleAttrName: 'tuesdaySchedule',
                     isChecked: data.selectWeekDays.tuesdaySchedule,
                     onChangeShift: this.handleChangeShift,
                     onChangeSelectWeekDay: this.handleChangeSelectWeekDay
                 }),
-                _react2.default.createElement(_ColShift2.default, {
-                    isHost: isHost,
-                    shiftOptions: shiftOptions,
-                    isUsedWeeklyDefaultShift: data.isUsedWeeklyDefaultShift,
-                    employeeId: data.employeeId,
-                    defaultShift: data.defaultShift,
-                    data: data.wednesdaySchedule,
+                _react2.default.createElement(_ColShift2.default, { isHost: isHost, shiftOptions: shiftOptions, isUsedWeeklyDefaultShift: data.isUsedWeeklyDefaultShift,
+                    employeeId: data.employeeId, defaultShift: data.defaultShift, data: data.wednesdaySchedule,
                     scheduleAttrName: 'wednesdaySchedule',
                     isChecked: data.selectWeekDays.wednesdaySchedule,
                     onChangeShift: this.handleChangeShift,
                     onChangeSelectWeekDay: this.handleChangeSelectWeekDay
                 }),
-                _react2.default.createElement(_ColShift2.default, {
-                    isHost: isHost,
-                    shiftOptions: shiftOptions,
-                    isUsedWeeklyDefaultShift: data.isUsedWeeklyDefaultShift,
-                    employeeId: data.employeeId,
-                    defaultShift: data.defaultShift,
-                    data: data.thursdaySchedule,
+                _react2.default.createElement(_ColShift2.default, { isHost: isHost, shiftOptions: shiftOptions, isUsedWeeklyDefaultShift: data.isUsedWeeklyDefaultShift,
+                    employeeId: data.employeeId, defaultShift: data.defaultShift, data: data.thursdaySchedule,
                     scheduleAttrName: 'thursdaySchedule',
                     isChecked: data.selectWeekDays.thursdaySchedule,
                     onChangeShift: this.handleChangeShift,
                     onChangeSelectWeekDay: this.handleChangeSelectWeekDay
                 }),
-                _react2.default.createElement(_ColShift2.default, {
-                    isHost: isHost,
-                    shiftOptions: shiftOptions,
-                    isUsedWeeklyDefaultShift: data.isUsedWeeklyDefaultShift,
-                    employeeId: data.employeeId,
-                    defaultShift: data.defaultShift,
-                    data: data.fridaySchedule,
+                _react2.default.createElement(_ColShift2.default, { isHost: isHost, shiftOptions: shiftOptions, isUsedWeeklyDefaultShift: data.isUsedWeeklyDefaultShift,
+                    employeeId: data.employeeId, defaultShift: data.defaultShift, data: data.fridaySchedule,
                     scheduleAttrName: 'fridaySchedule',
                     isChecked: data.selectWeekDays.fridaySchedule,
                     onChangeShift: this.handleChangeShift,
                     onChangeSelectWeekDay: this.handleChangeSelectWeekDay
                 }),
-                _react2.default.createElement(_ColShift2.default, {
-                    isHost: isHost,
-                    shiftOptions: shiftOptions,
-                    isUsedWeeklyDefaultShift: data.isUsedWeeklyDefaultShift,
-                    employeeId: data.employeeId,
-                    defaultShift: data.defaultShift,
-                    data: data.saturdaySchedule,
+                _react2.default.createElement(_ColShift2.default, { isHost: isHost, shiftOptions: shiftOptions, isUsedWeeklyDefaultShift: data.isUsedWeeklyDefaultShift,
+                    employeeId: data.employeeId, defaultShift: data.defaultShift, data: data.saturdaySchedule,
                     scheduleAttrName: 'saturdaySchedule',
                     isChecked: data.selectWeekDays.saturdaySchedule,
                     onChangeShift: this.handleChangeShift,
                     onChangeSelectWeekDay: this.handleChangeSelectWeekDay
                 }),
-                _react2.default.createElement(_ColShift2.default, {
-                    isHost: isHost,
-                    shiftOptions: shiftOptions,
-                    isUsedWeeklyDefaultShift: data.isUsedWeeklyDefaultShift,
-                    employeeId: data.employeeId,
-                    defaultShift: data.defaultShift,
-                    data: data.sundaySchedule,
+                _react2.default.createElement(_ColShift2.default, { isHost: isHost, shiftOptions: shiftOptions, isUsedWeeklyDefaultShift: data.isUsedWeeklyDefaultShift,
+                    employeeId: data.employeeId, defaultShift: data.defaultShift, data: data.sundaySchedule,
                     scheduleAttrName: 'sundaySchedule',
                     isChecked: data.selectWeekDays.sundaySchedule,
                     onChangeShift: this.handleChangeShift,
@@ -148493,16 +147498,10 @@ var Row = function (_PureComponent) {
                     _react2.default.createElement(
                         'div',
                         { className: 'checkbox' },
-                        _react2.default.createElement('input', {
-                            type: 'checkbox',
-                            className: 'checkbox-custom',
-                            id: 'ckb-syncdata-emp' + data.employeeId,
-                            checked: data.isSelected,
-                            onChange: this.handleSelectEmployee
+                        _react2.default.createElement('input', { type: 'checkbox', className: 'checkbox-custom', id: 'ckb-syncdata-emp' + data.employeeId,
+                            checked: data.isSelected, onChange: this.handleSelectEmployee
                         }),
-                        _react2.default.createElement('label', {
-                            htmlFor: 'ckb-syncdata-emp' + data.employeeId
-                        })
+                        _react2.default.createElement('label', { htmlFor: 'ckb-syncdata-emp' + data.employeeId })
                     )
                 ),
                 _react2.default.createElement(
@@ -148510,8 +147509,7 @@ var Row = function (_PureComponent) {
                     { className: 'table-cell cell-modifier' },
                     data.modifier && _react2.default.createElement(
                         'span',
-                        {
-                            title: (0, _moment2.default)(data.modifiedDate).format(_constants.DateTimeFormat) },
+                        { title: (0, _moment2.default)(data.modifiedDate).format(_constants.DateTimeFormat) },
                         data.modifier
                     )
                 )
@@ -148625,8 +147623,7 @@ var RowTeam = function (_PureComponent) {
                 isHost = _props.isHost,
                 draggableProvided = _props.draggableProvided,
                 isDragging = _props.isDragging,
-                shiftOptions = _props.shiftOptions,
-                enableSyncWorkingShift = _props.enableSyncWorkingShift;
+                shiftOptions = _props.shiftOptions;
             var _props$data = this.props.data,
                 teamId = _props$data.teamId,
                 name = _props$data.name,
@@ -148634,13 +147631,12 @@ var RowTeam = function (_PureComponent) {
                 isSelected = _props$data.isSelected,
                 members = _props$data.members;
 
+            var enableSyncWorkingShift = document.getElementById('EnableSyncWorkingShift').checked;
 
             return _react2.default.createElement(
                 'div',
-                (0, _extends3.default)({
-                    className: '' + (isDragging ? 'dragging' : ''),
-                    ref: draggableProvided.innerRef
-                }, draggableProvided.draggableProps, draggableProvided.dragHandleProps),
+                (0, _extends3.default)({ className: '' + (isDragging ? 'dragging' : ''),
+                    ref: draggableProvided.innerRef }, draggableProvided.draggableProps, draggableProvided.dragHandleProps),
                 _react2.default.createElement(
                     'div',
                     { className: 'row-team' },
@@ -148652,8 +147648,7 @@ var RowTeam = function (_PureComponent) {
                             null,
                             name
                         ),
-                        isHost && _react2.default.createElement(_DropdownOrder2.default, {
-                            id: 'dropdownTeam' + teamId,
+                        isHost && _react2.default.createElement(_DropdownOrder2.default, { id: 'dropdownTeam' + teamId,
                             onMoveUp: this.handleMoveUp,
                             onMoveDown: this.handleMoveDown,
                             onMoveTop: this.handleMoveTop,
@@ -148669,16 +147664,10 @@ var RowTeam = function (_PureComponent) {
                             _react2.default.createElement(
                                 'div',
                                 { className: 'checkbox' },
-                                _react2.default.createElement('input', {
-                                    type: 'checkbox',
-                                    className: 'checkbox-custom',
-                                    id: 'ckb-syncdata-team' + teamId,
-                                    checked: isSelected,
-                                    onChange: this.handleSelectEmployeeOfTeam
+                                _react2.default.createElement('input', { type: 'checkbox', className: 'checkbox-custom', id: 'ckb-syncdata-team' + teamId,
+                                    checked: isSelected, onChange: this.handleSelectEmployeeOfTeam
                                 }),
-                                _react2.default.createElement('label', {
-                                    htmlFor: 'ckb-syncdata-team' + teamId
-                                })
+                                _react2.default.createElement('label', { htmlFor: 'ckb-syncdata-team' + teamId })
                             )
                         ),
                         _react2.default.createElement(
@@ -148687,28 +147676,20 @@ var RowTeam = function (_PureComponent) {
                             _react2.default.createElement(
                                 'div',
                                 { className: 'checkbox' },
-                                _react2.default.createElement('input', {
-                                    type: 'checkbox',
-                                    className: 'checkbox-custom',
-                                    id: 'ckb-public-team' + teamId,
-                                    checked: isPublic,
-                                    disabled: !isHost,
-                                    onChange: this.handleChangePublic
+                                _react2.default.createElement('input', { type: 'checkbox', className: 'checkbox-custom', id: 'ckb-public-team' + teamId,
+                                    checked: isPublic, disabled: !isHost, onChange: this.handleChangePublic
                                 }),
                                 _react2.default.createElement(
                                     'label',
                                     { htmlFor: 'ckb-public-team' + teamId },
-                                    ' ',
-                                    'Publish'
+                                    ' Publish'
                                 )
                             )
                         )
                     )
                 ),
-                _react2.default.createElement(_DroppableMember2.default, {
-                    isHost: isHost,
-                    teamId: teamId,
-                    data: members,
+                _react2.default.createElement(_DroppableMember2.default, { isHost: isHost,
+                    teamId: teamId, data: members,
                     shiftOptions: shiftOptions,
                     showRemarkPopover: this.props.showRemarkPopover,
                     onChangeSelectWeekDay: this.props.onChangeSelectWeekDay,
@@ -148718,8 +147699,7 @@ var RowTeam = function (_PureComponent) {
                     onShowWeeklyDefaultShift: this.props.onShowWeeklyDefaultShift,
                     onUpdateRemark: this.props.onUpdateRemark,
                     onChangeOrder: this.props.onChangeOrder,
-                    onSelectEmployeeOfTeam: this.props.onSelectEmployeeOfTeam,
-                    enableSyncWorkingShift: this.props.enableSyncWorkingShift
+                    onSelectEmployeeOfTeam: this.props.onSelectEmployeeOfTeam
                 })
             );
         }
@@ -148803,11 +147783,11 @@ var THead = function (_PureComponent) {
 
             var _props = this.props,
                 isHost = _props.isHost,
-                enableSyncWorkingShift = _props.enableSyncWorkingShift,
                 fromDate = _props.fromDate,
                 toDate = _props.toDate;
 
             var isSystemAdmin = document.getElementById('IsSystemAdmin').checked;
+            var enableSyncWorkingShift = document.getElementById('EnableSyncWorkingShift').checked;
 
             return _react2.default.createElement(
                 _react.Fragment,
@@ -148818,11 +147798,8 @@ var THead = function (_PureComponent) {
                     _react2.default.createElement(
                         'div',
                         null,
-                        _react2.default.createElement('button', {
-                            className: 'btn save fa fa-floppy-o',
-                            title: 'Save',
-                            onClick: this.props.onSave,
-                            disabled: !isHost
+                        _react2.default.createElement('button', { className: 'btn save fa fa-floppy-o',
+                            title: 'Save', onClick: this.props.onSave, disabled: !isHost
                         }),
                         _react2.default.createElement(
                             'div',
@@ -148830,11 +147807,7 @@ var THead = function (_PureComponent) {
                             _react2.default.createElement(
                                 'div',
                                 { className: 'checkbox' },
-                                _react2.default.createElement('input', {
-                                    type: 'checkbox',
-                                    className: 'checkbox-custom',
-                                    id: 'ckb-checkAllWeekDays',
-                                    disabled: !isHost,
+                                _react2.default.createElement('input', { type: 'checkbox', className: 'checkbox-custom', id: 'ckb-checkAllWeekDays', disabled: !isHost,
                                     onChange: function onChange(event) {
                                         return _this2.props.onChangeSelectWeekDays(null, event.target.checked);
                                     }
@@ -148842,64 +147815,41 @@ var THead = function (_PureComponent) {
                                 _react2.default.createElement(
                                     'label',
                                     { htmlFor: 'ckb-checkAllWeekDays' },
-                                    ' ',
-                                    'Check/Uncheck all'
+                                    ' Check/Uncheck all'
                                 )
                             )
                         ),
                         _react2.default.createElement(
                             'button',
-                            {
-                                className: 'btn offNoshift',
-                                onClick: this.props.onChangeOffNoShift,
-                                disabled: !isHost },
+                            { className: 'btn offNoshift', onClick: this.props.onChangeOffNoShift, disabled: !isHost },
                             'Off No Shift'
                         ),
                         _react2.default.createElement(
                             'button',
-                            {
-                                className: 'btn offdayOT',
-                                onClick: this.props.onChangeOffdayOT,
-                                disabled: !isHost },
+                            { className: 'btn offdayOT', onClick: this.props.onChangeOffdayOT, disabled: !isHost },
                             'Off Day OT'
                         ),
                         _react2.default.createElement(
                             'button',
-                            {
-                                className: 'btn workday',
-                                onClick: this.props.onChangeWorkday,
-                                disabled: !isHost },
+                            { className: 'btn workday', onClick: this.props.onChangeWorkday, disabled: !isHost },
                             'Workday'
                         ),
                         _react2.default.createElement(
                             'button',
-                            {
-                                className: 'btn shiftMultiple',
-                                onClick: this.props.onShiftMultiple,
-                                disabled: !isHost },
+                            { className: 'btn shiftMultiple', onClick: this.props.onShiftMultiple, disabled: !isHost },
                             'Shift Multiple'
                         ),
                         isSystemAdmin && _react2.default.createElement(
                             'button',
-                            {
-                                className: 'btn fixedOffday',
-                                onClick: this.props.onFixedOffDay },
+                            { className: 'btn fixedOffday', onClick: this.props.onFixedOffDay },
                             'Off Day OT Fixed'
                         )
                     ),
                     _react2.default.createElement(
                         'div',
                         null,
-                        _react2.default.createElement('button', {
-                            className: 'btn prev-week fa fa-chevron-left',
-                            onClick: this.props.onPrevious,
-                            title: 'Prev'
-                        }),
-                        _react2.default.createElement('button', {
-                            className: 'btn next-week fa fa-chevron-right',
-                            onClick: this.props.onNext,
-                            title: 'Next'
-                        }),
+                        _react2.default.createElement('button', { className: 'btn prev-week fa fa-chevron-left', onClick: this.props.onPrevious, title: 'Prev' }),
+                        _react2.default.createElement('button', { className: 'btn next-week fa fa-chevron-right', onClick: this.props.onNext, title: 'Next' }),
                         _react2.default.createElement(
                             'span',
                             { className: 'label-week' },
@@ -148925,9 +147875,7 @@ var THead = function (_PureComponent) {
                     this.dayOfWeeks.map(function (item) {
                         return _react2.default.createElement(
                             'div',
-                            {
-                                className: 'table-cell cell-shift',
-                                key: 'dayOfWeeks' + item.value },
+                            { className: 'table-cell cell-shift', key: 'dayOfWeeks' + item.value },
                             _react2.default.createElement(
                                 'div',
                                 { className: 'cell-control-wrapper' },
@@ -148939,11 +147887,7 @@ var THead = function (_PureComponent) {
                                 _react2.default.createElement(
                                     'div',
                                     { className: 'checkbox' },
-                                    _react2.default.createElement('input', {
-                                        type: 'checkbox',
-                                        className: 'checkbox-custom',
-                                        id: 'ckb-' + item.name,
-                                        disabled: !isHost,
+                                    _react2.default.createElement('input', { type: 'checkbox', className: 'checkbox-custom', id: 'ckb-' + item.name, disabled: !isHost,
                                         onChange: function onChange(event) {
                                             return _this2.props.onChangeSelectWeekDays(item.name, event.target.checked);
                                         }
@@ -148956,9 +147900,7 @@ var THead = function (_PureComponent) {
                     isHost && enableSyncWorkingShift && _react2.default.createElement(
                         'div',
                         { className: 'table-cell cell-syncdata' },
-                        _react2.default.createElement('span', {
-                            className: 'fa fa-refresh',
-                            title: 'Sync data from OWP',
+                        _react2.default.createElement('span', { className: 'fa fa-refresh', title: 'Sync data from OWP',
                             onClick: this.props.onSyncData
                         })
                     ),
@@ -149123,25 +148065,20 @@ var Table = function (_PureComponent) {
                 fromDate = _props.fromDate,
                 toDate = _props.toDate,
                 shiftOptions = _props.shiftOptions,
-                data = _props.data,
-                enableSyncWorkingShift = _props.enableSyncWorkingShift;
+                data = _props.data;
 
+            var enableSyncWorkingShift = document.getElementById('EnableSyncWorkingShift').checked;
 
             return _react2.default.createElement(
                 _react.Fragment,
                 null,
                 _react2.default.createElement(
                     'div',
-                    {
-                        className: 'table-wrapper ' + (isHost && enableSyncWorkingShift ? 'has-syncdata' : '') },
+                    { className: 'table-wrapper ' + (isHost && enableSyncWorkingShift ? 'has-syncdata' : '') },
                     _react2.default.createElement(
                         'div',
-                        {
-                            className: 'table-header ' + (this.state.isFixedHeader ? 'fixed' : '') },
-                        _react2.default.createElement(_THead2.default, {
-                            fromDate: fromDate,
-                            toDate: toDate,
-                            isHost: isHost,
+                        { className: 'table-header ' + (this.state.isFixedHeader ? 'fixed' : '') },
+                        _react2.default.createElement(_THead2.default, { fromDate: fromDate, toDate: toDate, isHost: isHost,
                             onSave: this.props.onSave,
                             onChangeSelectWeekDays: this.props.onChangeSelectWeekDays,
                             onChangeOffNoShift: this.props.onChangeOffNoShift,
@@ -149151,8 +148088,7 @@ var Table = function (_PureComponent) {
                             onFixedOffDay: this.props.onFixedOffDay,
                             onPrevious: this.props.onPrevious,
                             onNext: this.props.onNext,
-                            onSyncData: this.props.onSyncData,
-                            enableSyncWorkingShift: enableSyncWorkingShift
+                            onSyncData: this.props.onSyncData
                         })
                     ),
                     _react2.default.createElement(
@@ -149166,11 +148102,8 @@ var Table = function (_PureComponent) {
                         data.length > 0 && _react2.default.createElement(
                             _reactBeautifulDnd.DragDropContext,
                             { onDragEnd: this.props.onDragEnd },
-                            _react2.default.createElement(_DroppableTeam2.default, {
-                                isHost: isHost,
-                                data: data,
+                            _react2.default.createElement(_DroppableTeam2.default, { isHost: isHost, data: data,
                                 shiftOptions: shiftOptions,
-                                enableSyncWorkingShift: enableSyncWorkingShift,
                                 showRemarkPopover: this.props.showRemarkPopover,
                                 onChangeSelectWeekDay: this.props.onChangeSelectWeekDay,
                                 onChangeShift: this.props.onChangeShift,
@@ -149838,191 +148771,6 @@ Autocomplete.defaultProps = {
 };
 exports.default = Autocomplete;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js")))
-
-/***/ }),
-
-/***/ "./sources/js/shared/components/CompanySelect.jsx":
-/*!********************************************************!*\
-  !*** ./sources/js/shared/components/CompanySelect.jsx ***!
-  \********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.renderCompanySelect = undefined;
-
-var _regenerator = __webpack_require__(/*! babel-runtime/regenerator */ "./node_modules/babel-runtime/regenerator/index.js");
-
-var _regenerator2 = _interopRequireDefault(_regenerator);
-
-var _asyncToGenerator2 = __webpack_require__(/*! babel-runtime/helpers/asyncToGenerator */ "./node_modules/babel-runtime/helpers/asyncToGenerator.js");
-
-var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
-
-var _slicedToArray2 = __webpack_require__(/*! babel-runtime/helpers/slicedToArray */ "./node_modules/babel-runtime/helpers/slicedToArray.js");
-
-var _slicedToArray3 = _interopRequireDefault(_slicedToArray2);
-
-var _react = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-
-var _react2 = _interopRequireDefault(_react);
-
-var _reactDom = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
-
-var _reactDom2 = _interopRequireDefault(_reactDom);
-
-var _axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-
-var _axios2 = _interopRequireDefault(_axios);
-
-var _common = __webpack_require__(/*! ../common.functions */ "./sources/js/shared/common.functions.js");
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var CompanySelect = function CompanySelect(_ref) {
-    var _ref$defaultCompanyId = _ref.defaultCompanyId,
-        defaultCompanyId = _ref$defaultCompanyId === undefined ? '' : _ref$defaultCompanyId,
-        _ref$roleId = _ref.roleId,
-        roleId = _ref$roleId === undefined ? '' : _ref$roleId,
-        onChange = _ref.onChange;
-
-    var _useState = (0, _react.useState)([]),
-        _useState2 = (0, _slicedToArray3.default)(_useState, 2),
-        companyOptions = _useState2[0],
-        setCompanyOptions = _useState2[1];
-
-    var _useState3 = (0, _react.useState)(defaultCompanyId),
-        _useState4 = (0, _slicedToArray3.default)(_useState3, 2),
-        selectedCompanyId = _useState4[0],
-        setSelectedCompanyId = _useState4[1];
-
-    var _useState5 = (0, _react.useState)(true),
-        _useState6 = (0, _slicedToArray3.default)(_useState5, 2),
-        isLoading = _useState6[0],
-        setIsLoading = _useState6[1];
-
-    var _useState7 = (0, _react.useState)(false),
-        _useState8 = (0, _slicedToArray3.default)(_useState7, 2),
-        hasNotifiedInitialValue = _useState8[0],
-        setHasNotifiedInitialValue = _useState8[1];
-
-    var loadCompanies = function () {
-        var _ref2 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee() {
-            var response, companies;
-            return _regenerator2.default.wrap(function _callee$(_context) {
-                while (1) {
-                    switch (_context.prev = _context.next) {
-                        case 0:
-                            _context.next = 2;
-                            return (0, _axios2.default)({
-                                url: (0, _common.resolveClientUrl)('Team/GetCompaniesByRoleIdForEmployee'),
-                                method: 'GET',
-                                headers: { 'X-Requested-With': 'XMLHttpRequest' },
-                                params: {
-                                    roleId: roleId
-                                }
-                            });
-
-                        case 2:
-                            response = _context.sent;
-                            companies = response.data.map(function (company) {
-                                return {
-                                    id: company.companyId,
-                                    name: company.name
-                                };
-                            });
-
-
-                            setCompanyOptions(companies);
-                            setIsLoading(false);
-
-                        case 6:
-                        case 'end':
-                            return _context.stop();
-                    }
-                }
-            }, _callee, undefined);
-        }));
-
-        return function loadCompanies() {
-            return _ref2.apply(this, arguments);
-        };
-    }();
-
-    var handleCompanyChange = function handleCompanyChange(e) {
-        var companyId = e.target.value;
-        setSelectedCompanyId(companyId);
-
-        if (onChange) {
-            onChange(companyId);
-        }
-    };
-
-    (0, _react.useEffect)(function () {
-        loadCompanies();
-    }, [roleId]);
-
-    (0, _react.useEffect)(function () {
-        setSelectedCompanyId(defaultCompanyId);
-    }, [defaultCompanyId]);
-
-    (0, _react.useEffect)(function () {
-        if (!isLoading && selectedCompanyId && onChange && !hasNotifiedInitialValue) {
-            onChange(selectedCompanyId);
-            setHasNotifiedInitialValue(true);
-        }
-    }, [isLoading, selectedCompanyId, onChange, hasNotifiedInitialValue]);
-
-    if (isLoading || companyOptions.length <= 1) {
-        return null;
-    }
-
-    return _react2.default.createElement(
-        'select',
-        {
-            className: 'form-control',
-            value: selectedCompanyId,
-            onChange: handleCompanyChange,
-            style: {
-                display: 'inline-block',
-                width: 'auto',
-                fontSize: '13px',
-                marginLeft: '15px',
-                padding: '4px 8px',
-                fontWeight: 'bold',
-                border: '2px solid #337ab7',
-                borderRadius: '4px',
-                boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-                cursor: 'pointer',
-                transition: 'all 0.2s ease'
-            } },
-        companyOptions.map(function (company) {
-            return _react2.default.createElement(
-                'option',
-                { key: company.id, value: company.id },
-                company.name
-            );
-        })
-    );
-};
-
-var renderCompanySelect = exports.renderCompanySelect = function renderCompanySelect() {
-    var props = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-
-    var element = document.getElementById('company-list');
-    if (element) {
-        _reactDom2.default.render(_react2.default.createElement(CompanySelect, props), element);
-        return true;
-    }
-    return false;
-};
-
-exports.default = CompanySelect;
 
 /***/ }),
 
@@ -150912,11 +149660,6 @@ var PayrollType = exports.PayrollType = {
     FirstHalf: 1,
     SecondHalf: 2,
     FullMonth: 3
-};
-var PageType = exports.PageType = {
-    Team: 1,
-    Employee: 2,
-    GroupTeam: 3
 };
 
 /***/ }),
