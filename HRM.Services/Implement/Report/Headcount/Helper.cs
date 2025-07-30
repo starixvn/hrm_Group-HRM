@@ -83,4 +83,11 @@ public static class Helper
             list.AddRange(reports.Where(IsValidUnitReport));
         }
     }
+
+    public static IOrderedEnumerable<IGrouping<TKey, TSource>> GroupByAndOrderByKey<TSource, TKey>(
+        this IEnumerable<TSource> source,
+        Func<TSource, TKey> keySelector) where TKey : IComparable<TKey>
+    {
+        return source.GroupBy(keySelector).OrderBy(g => g.Key);
+    }
 }

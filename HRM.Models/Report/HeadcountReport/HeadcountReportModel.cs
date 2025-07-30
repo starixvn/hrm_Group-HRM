@@ -8,6 +8,8 @@ public class HeadcountReportModel
     public List<UnitReport> ReportByCompany { get; set; }
     public List<UnitReport> ReportByDetails { get; set; }
     public List<UnitReport> ReportByUnitCountry { get; set; }
+    public List<UnitReport> ReportByUnitCountryLocal { get; set; }
+    public List<UnitReport> ReportByUnitCountryExpat { get; set; }
 }
 
 public class UnitReport

@@ -7,7 +7,6 @@ using HRM.Models.Report.HeadcountReport;
 using HRM.Services.Interfaces.Report.Headcount;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
-using System;
 using System.Globalization;
 
 namespace HRM.Services.Implement.Report.Headcount;
@@ -32,11 +31,15 @@ public class HeadcountExportService : IHeadcountExportService
         var worksheet2 = package.Workbook.Worksheets[1];
         var worksheet3 = package.Workbook.Worksheets[2];
         var worksheet4 = package.Workbook.Worksheets[3];
+        var worksheet5 = package.Workbook.Worksheets[4];
+        var worksheet6 = package.Workbook.Worksheets[5];
 
         RenderUnitSheet(worksheet1);
         RenderCompanySheet(worksheet2);
         RenderDetailSheet(worksheet3);
-        RenderCountryUnitSheet(worksheet4);
+        RenderCountryUnitSheet(worksheet4, data.ReportByUnitCountry);
+        RenderCountryUnitSheet(worksheet5, data.ReportByUnitCountryLocal);
+        RenderCountryUnitSheet(worksheet6, data.ReportByUnitCountryExpat);
 
         return package.GetAsByteArray();
     }
@@ -59,9 +62,8 @@ public class HeadcountExportService : IHeadcountExportService
         RenderSheet(worksheet, data.ReportByDetails, headers);
     }
 
-    private void RenderCountryUnitSheet(ExcelWorksheet worksheet)
+    private void RenderCountryUnitSheet(ExcelWorksheet worksheet, List<UnitReport> sheetData)
     {
-        var sheetData = data.ReportByUnitCountry;
         var units = sheetData.Select(x => x.Label1).Distinct().ToList();
         var label3s = sheetData.Select(x => x.Label3).Distinct().OrderBy(x => x).ToList();
         string[] headers = [HeadcountConstants.PropertyNames.Label1];
