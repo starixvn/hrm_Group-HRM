@@ -400,7 +400,7 @@ public class EmployeeService(
 
         if (isMissing)
         {
-            var supervisor = await GetEmployeeByIdAsync(supervisorId);
+            var supervisor = await GetEmployeeByIdInGroupScopeAsync(supervisorId);
             SupervisorNameModel missingSupervisor = new()
             {
                 NickName = supervisor.NickName,
