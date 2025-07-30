@@ -69,7 +69,7 @@
             </div>
             <div class="select-form">
                 @Html.DropDownListFor(x => x.VerifierId, new SelectList(Model.Verifiers, "OwnerId", "NickName"),
-                    new { @class = "form-control", disabled = "disabled" })
+                         Labels.SelectVerifier, new { @class = "form-control", disabled = "disabled" })
             </div>
         </div>
         <div class="form-group">
@@ -78,7 +78,7 @@
             </div>
             <div class="select-form">
                 @Html.DropDownListFor(x => x.ApproverId, new SelectList(Model.Approvers, "OwnerId", "NickName"),
-                    new { @class = "form-control", disabled = "disabled" })
+                        Labels.SelectApprover, new { @class = "form-control", disabled = "disabled" })
             </div>
         </div>
         <div class="form-group">

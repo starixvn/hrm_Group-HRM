@@ -37,7 +37,7 @@
     case (byte)CurrentRequestStatus.Approved:
         <a roleid="@Convert.ToInt32(RoleSystem.HR)" requestid="@request.Id" requesttypeid="@request.RequestType.Id" employeeid="@request.Requester.Id"
            class="sa-void tooltip-tipsy" href="javascript:void(0);"
-           title="@request.Status.Name by @request.ApproverNickName (@request.ApprovedDate?.ToClientTimeZone().ToShortFormatedDate())">
+           title="@request.Status.Name by @(request.ApproverId == -1 ? "System" : request.ApproverNickName) (@request.ApprovedDate?.ToClientTimeZone().ToShortFormatedDate())">
             @request.Status.ToString()
             <span class="caret"></span>
         </a>
