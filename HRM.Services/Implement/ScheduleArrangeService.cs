@@ -129,17 +129,6 @@ public class ScheduleArrangeService(
         return shiftId.HasValue && shiftId.Value != Constants.OffDayShiftId ? shiftId.Value : null;
     }
 
-    private static ShiftBase FindShiftOrDefault(IList<ShiftBase> shiftBases, int? shiftId)
-    {
-        if (!shiftId.HasValue)
-        {
-            return null;
-        }
-
-        return shiftBases.FirstOrDefault(x => x.Id == shiftId.Value) ??
-               new ShiftBase { Id = shiftId.Value, Code = "Unknown", Name = "Unknown Shift" };
-    }
-
     private static void MappingWeeklyDefaultShift(IEnumerable<WeeklySchedule> weeklySchedules, IList<Shift> shifts)
     {
         var shiftBases = shifts.Select(x => new ShiftBase
