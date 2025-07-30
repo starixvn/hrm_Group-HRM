@@ -54,12 +54,18 @@ $(document).ready(function () {
                 const verifiers = verifierResponse.data,
                     approvers = approverResponse.data;
                 let options = '';
+                if ($('#AutoApproveRequest').prop('checked')) {
+                    options += '<option>--Select a Verifier--</option>';
+                }
                 for (let i = 0; i < verifiers.length; i++) {
                     options += "<option value='" + verifiers[i].ownerId + "'>" + verifiers[i].nickName + " (" + verifiers[i].fullName + ")</option>";
                 }
                 domElements.$verifierId.html(options);
 
                 options = '';
+                if ($('#AutoApproveRequest').prop('checked')) {
+                    options += '<option>--Select an Approver--</option>';
+                }
                 for (var i = 0; i < approvers.length; i++) {
                     options += "<option value='" + approvers[i].ownerId + "'>" + approvers[i].nickName + " (" + approvers[i].fullName + ")</option>";
                 }
