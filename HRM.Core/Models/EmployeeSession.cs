@@ -13,4 +13,5 @@ public class EmployeeSession
     public bool Enabled { get; set; }
     public bool IsTopManager { get; set; }
     public string DisplayName => string.IsNullOrWhiteSpace(Nickname) ? FullName : Nickname + " (" + FullName + ")";
+    public int CompanyId { get; set; }
 }
