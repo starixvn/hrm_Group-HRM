@@ -5,6 +5,7 @@
 @{
     ViewBag.Title = Labels.Edit;
     var today = DateTimeOffset.Now.DateTime.ToClientTimeZone().Date;
+    var autoApproveRequest = (bool)ViewBag.AutoApproveRequest;
 }
 @section css{
     <link href="~/dist/styles/checkinout.create.css" rel="stylesheet" />
@@ -102,7 +103,14 @@
                 @Html.LabelFor(model => model.VerifierId, new { @class = "control-label" })
             </div>
             <div class="select-form">
-                @Html.DropDownListFor(x => x.VerifierId, new SelectList(Model.Verifiers, "OwnerId", "NickName"), new { @class = "form-control" })
+                @if (Model.Verifiers.Count > 1 || autoApproveRequest)
+                {
+                    @Html.DropDownListFor(x => x.VerifierId, new SelectList(Model.Verifiers, "OwnerId", "NickName"), Labels.SelectVerifier, new { @class = "form-control" })
+                }
+                else
+                {
+                    @Html.DropDownListFor(x => x.VerifierId, new SelectList(Model.Verifiers, "OwnerId", "NickName"), new { @class = "form-control" })
+                }
             </div>
         </div>
         <div class="form-group">
@@ -110,7 +118,14 @@
                 @Html.LabelFor(model => model.ApproverId, new { @class = "control-label" })
             </div>
             <div class="select-form">
-                @Html.DropDownListFor(x => x.ApproverId, new SelectList(Model.Approvers, "OwnerId", "NickName"), new { @class = "form-control" })
+                @if (Model.Approvers.Count > 1 || autoApproveRequest)
+                {
+                    @Html.DropDownListFor(x => x.ApproverId, new SelectList(Model.Approvers, "OwnerId", "NickName"), Labels.SelectApprover, new { @class = "form-control" })
+                }
+                else
+                {
+                    @Html.DropDownListFor(x => x.ApproverId, new SelectList(Model.Approvers, "OwnerId", "NickName"), new { @class = "form-control" })
+                }
             </div>
         </div>
         <div class="form-group">

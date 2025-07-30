@@ -91,7 +91,7 @@
                 @Html.LabelFor(model => model.VerifierId, new { @class = "control-label" })
             </div>
             <div class="select-form">
-                @if (Model.Verifiers.Count > 1)
+                @if (Model.Verifiers.Count > 1 || autoApproveRequest)
                 {
                     @Html.DropDownListFor(x => x.VerifierId, new SelectList(Model.Verifiers, "OwnerId", "NickName"), Labels.SelectVerifier, new { @class = "form-control" })
                 }
@@ -107,7 +107,7 @@
                 @Html.LabelFor(model => model.ApproverId, new { @class = "control-label" })
             </div>
             <div class="select-form">
-                @if (Model.Approvers.Count > 1)
+                @if (Model.Approvers.Count > 1 || autoApproveRequest)
                 {
                     @Html.DropDownListFor(x => x.ApproverId, new SelectList(Model.Approvers, "OwnerId", "NickName"), Labels.SelectApprover, new { @class = "form-control" })
                 }

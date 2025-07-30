@@ -63,7 +63,8 @@ public class OvertimeController(
             VerifierId = monthlyRequest.Verifier?.EmpId ?? 0,
             ApproverId = monthlyRequest.Approver?.EmpId ?? 0,
             Verifiers = supervisor.Verifiers,
-            Approvers = supervisor.Approvers
+            Approvers = supervisor.Approvers,
+            AutoApproveRequest = EmployeeSession.AutoApproveRequest
         };
 
         if (model.Verifiers.Any())

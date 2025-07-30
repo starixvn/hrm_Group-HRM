@@ -11,4 +11,5 @@ public class EditMonthlyRequestViewModel
     public IEnumerable<SupervisorNameModel> Verifiers { get; set; } = new List<SupervisorNameModel>();
     public IEnumerable<SupervisorNameModel> Approvers { get; set; } = new List<SupervisorNameModel>();
     public MonthlyOvertimeRequest MonthlyRequest { get; set; }
+    public bool AutoApproveRequest { get; set; }
 }

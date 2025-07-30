@@ -4,6 +4,7 @@
 @model HRM.ViewModels.Request.KeepInViewRequestViewModel
 @{
     ViewBag.Title = Labels.KeepCompensationLeave;
+    var autoApproveRequest = (bool)ViewBag.AutoApproveRequest;
 }
 @section css{
     <link href="~/dist/styles/keepinview.create.css" rel="stylesheet" />
@@ -101,7 +102,14 @@
                 @Html.LabelFor(model => model.VerifierId, new { @class = "control-label" })
             </div>
             <div class="select-form">
-                @Html.DropDownListFor(model => model.VerifierId, new SelectList(Model.Verifiers, "OwnerId", "NickName"), new { @class = "form-control" })
+                @if (Model.Verifiers.Count > 1 || autoApproveRequest)
+                {
+                    @Html.DropDownListFor(model => model.VerifierId, new SelectList(Model.Verifiers, "OwnerId", "NickName"), Labels.SelectVerifier, new { @class = "form-control" })
+                }
+                else
+                {
+                    @Html.DropDownListFor(model => model.VerifierId, new SelectList(Model.Verifiers, "OwnerId", "NickName"), new { @class = "form-control" })
+                }
             </div>
         </div>
         <div class="form-group">
@@ -109,7 +117,14 @@
                 @Html.LabelFor(model => model.ApproverId, new { @class = "control-label" })
             </div>
             <div class="select-form">
-                @Html.DropDownListFor(model => model.ApproverId, new SelectList(Model.Approvers, "OwnerId", "NickName"), new { @class = "form-control" })
+                @if (Model.Approvers.Count > 1 || autoApproveRequest)
+                {
+                    @Html.DropDownListFor(model => model.ApproverId, new SelectList(Model.Approvers, "OwnerId", "NickName"), Labels.SelectApprover, new { @class = "form-control" })
+                }
+                else
+                {
+                    @Html.DropDownListFor(model => model.ApproverId, new SelectList(Model.Approvers, "OwnerId", "NickName"), new { @class = "form-control" })
+                })
             </div>
         </div>
         <div class="form-group">
