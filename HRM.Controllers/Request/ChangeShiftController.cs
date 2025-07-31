@@ -119,15 +119,8 @@ public class ChangeShiftController(
             Files = (await attachFileService.GetInfoAttachFileAsync(id, $"{CurrentCompanyId}/requests")).Select(x => x.FileName).ToList()
         };
 
-        if (model.Verifiers.Any() && model.VerifierId.HasValue)
-        {
-            model.Verifiers = await employeeService.CheckAndAddMissingSupervisor(model.Verifiers, model.VerifierId.Value);
-        }
-
-        if (model.Approvers.Any() && model.ApproverId.HasValue)
-        {
-            model.Approvers = await employeeService.CheckAndAddMissingSupervisor(model.Approvers, model.ApproverId.Value);
-        }
+        model.Verifiers = await employeeService.CheckAndAddMissingSupervisor(model.Verifiers, model.VerifierId);
+        model.Approvers = await employeeService.CheckAndAddMissingSupervisor(model.Approvers, model.ApproverId);
 
         if (request.TypeId == (byte)ChangeShiftType.MoveOffDay)
         {
@@ -203,16 +196,8 @@ public class ChangeShiftController(
             Files = (await attachFileService.GetInfoAttachFileAsync(id, $"{CurrentCompanyId}/requests")).Select(x => x.FileName).ToList()
         };
 
-
-        if (model.Verifiers.Any() && model.VerifierId.HasValue)
-        {
-            model.Verifiers = await employeeService.CheckAndAddMissingSupervisor(model.Verifiers, model.VerifierId.Value);
-        }
-
-        if (model.Approvers.Any() && model.ApproverId.HasValue)
-        {
-            model.Approvers = await employeeService.CheckAndAddMissingSupervisor(model.Approvers, model.ApproverId.Value);
-        }
+        model.Verifiers = await employeeService.CheckAndAddMissingSupervisor(model.Verifiers, model.VerifierId);
+        model.Approvers = await employeeService.CheckAndAddMissingSupervisor(model.Approvers, model.ApproverId);
 
         ViewBag.IsHost = false;
         ViewBag.TypeId = request.TypeId;

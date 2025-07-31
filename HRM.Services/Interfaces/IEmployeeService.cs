@@ -66,7 +66,7 @@ public interface IEmployeeService
 
     string CalculateLengthOfService(DateTime? joinedDate, DateTime? militaryFromDate, DateTime? militaryToDate);
 
-    Task<IList<SupervisorNameModel>> CheckAndAddMissingSupervisor(IList<SupervisorNameModel> supervisors, int supervisorId);
+    Task<IList<SupervisorNameModel>> CheckAndAddMissingSupervisor(IList<SupervisorNameModel> supervisors, int? supervisorId);
 
     Task<EmployeeBioInfoModel> GetEmployeeBioInfoAsync(int employeeId);
 

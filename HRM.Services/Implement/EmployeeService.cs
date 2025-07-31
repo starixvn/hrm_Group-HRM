@@ -389,23 +389,23 @@ public class EmployeeService(
         return lengthOfService;
     }
 
-    public async Task<IList<SupervisorNameModel>> CheckAndAddMissingSupervisor(IList<SupervisorNameModel> supervisors, int supervisorId)
+    public async Task<IList<SupervisorNameModel>> CheckAndAddMissingSupervisor(IList<SupervisorNameModel> supervisors, int? supervisorId)
     {
-        var supervisorIds = supervisors.Select(x => x.OwnerId).ToList();
-        if (supervisorId == 0)
+        if (supervisorId == null || supervisorId == 0 || !supervisors.Any())
         {
             return supervisors;
         }
-        var isMissing = !supervisorIds.Contains(supervisorId);
+        var supervisorIds = supervisors.Select(x => x.OwnerId).ToList();
+        var isMissing = !supervisorIds.Contains(supervisorId.Value);
 
         if (isMissing)
         {
-            var supervisor = await GetEmployeeByIdInGroupScopeAsync(supervisorId);
+            var supervisor = await GetEmployeeByIdInGroupScopeAsync(supervisorId.Value);
             SupervisorNameModel missingSupervisor = new()
             {
                 NickName = supervisor.NickName,
                 FullName = supervisor.FullName,
-                OwnerId = supervisorId,
+                OwnerId = supervisorId.Value,
                 Email = supervisor.Email
             };
 

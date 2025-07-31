@@ -156,15 +156,8 @@ public class CheckInOutController(
             Files = (await attachFileService.GetInfoAttachFileAsync(id, $"{CurrentCompanyId}/requests")).Select(x => x.FileName).ToList()
         };
 
-        if (viewModel.Verifiers.Any() && viewModel.VerifierId.HasValue)
-        {
-            viewModel.Verifiers = await employeeService.CheckAndAddMissingSupervisor(viewModel.Verifiers, viewModel.VerifierId.Value);
-        }
-
-        if (viewModel.Approvers.Any() && viewModel.ApproverId.HasValue)
-        {
-            viewModel.Approvers = await employeeService.CheckAndAddMissingSupervisor(viewModel.Approvers, viewModel.ApproverId.Value);
-        }
+        viewModel.Verifiers = await employeeService.CheckAndAddMissingSupervisor(viewModel.Verifiers, viewModel.VerifierId);
+        viewModel.Approvers = await employeeService.CheckAndAddMissingSupervisor(viewModel.Approvers, viewModel.ApproverId);
 
         ViewBag.AutoApproveRequest = request.Requester.AutoApproveRequest;
         return View(viewModel);
