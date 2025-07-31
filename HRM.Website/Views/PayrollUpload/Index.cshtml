@@ -1,21 +1,21 @@
 ﻿@using HRM.Resources
 @model bool
 @{
-    ViewData["Title"] = "Payroll Management";
+    ViewData["Title"] = "Payroll Upload";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @section css{
-    <link href="~/dist/styles/payroll.management.css" rel="stylesheet" />
+    <link href="~/dist/styles/payroll.upload.css" rel="stylesheet" />
 }
 @section js{
     <script>
 		window.hasPermissionToUpload = '@ViewBag.HasPermissionToUpload';
 	</script>
-    <script src="~/dist/js/payroll.management.js"></script>
+    <script src="~/dist/js/payroll.upload.js"></script>
 }
 @section Breadcrumb {
     <a class="step">@Labels.HRSpace</a><span class="step">@ViewData["Title"]</span>
 }
 
 <h2 class="page-title">@ViewData["Title"]</h2>
-<div id="payroll-management"></div>
+<div id="payroll-upload"></div>

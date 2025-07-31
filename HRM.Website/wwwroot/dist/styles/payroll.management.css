@@ -628,6 +628,11 @@ span.req.keepinview {
   background-color: #F8F89C;
 }
 
+.flex-column {
+  display: flex;
+  justify-content: space-between;
+}
+
 .salary-management-container .action-section {
   margin: 0;
 }

@@ -592,6 +592,7 @@
         <Setting Key="EmployeePayroll_Get" SpName="EmployeePayroll_Get" DbName="bodb_HRM" Plain="0" />
         <Setting Key="SalaryUploadHistory_Get" SpName="SalaryUploadHistory_Get" DbName="bodb_HRM" Plain="0" />
         <Setting Key="EmployeePayroll_ConfirmUpload" SpName="EmployeePayroll_ConfirmUpload" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="PayrollManagement_GetByMonth" SpName="PayrollManagement_GetByMonth" DbName="bodb_HRM" Plain="0" />
     </Function>
     <Function Name="CompanySecondmentEmployee">
         <Setting Key="CompanySecondmentEmployee_Get" SpName="CompanySecondmentEmployee_Get" DbName="bodb_HRM" Plain="0" />

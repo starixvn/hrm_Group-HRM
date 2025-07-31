@@ -1,17 +1,26 @@
-import React from "react";
-import { getPeriodTypeLabel } from "../constants/periodType";
+import React from 'react';
 
 const SalaryTable = ({ data }) => {
     const formatNumber = (number) => {
-        return new Intl.NumberFormat("en-US").format(number || 0);
+        return new Intl.NumberFormat('en-US').format(number || 0);
     };
 
     const totals = data.reduce(
         (acc, item) => ({
-            personalCost: (acc.personalCost || 0) + (item.personalCost || 0),
-            extraPayment: (acc.extraPayment || 0) + (item.extraPayment || 0),
+            basicSalary: (acc.basicSalary || 0) + (item.basicSalary || 0),
+            standardWorkingDay:
+                (acc.standardWorkingDay || 0) + (item.standardWorkingDay || 0),
+            unpaidLeave: (acc.unpaidLeave || 0) + (item.unpaidLeave || 0),
+            paidDay: (acc.paidDay || 0) + (item.paidDay || 0),
+            grossSalary: (acc.grossSalary || 0) + (item.grossSalary || 0),
         }),
-        { personalCost: 0, extraPayment: 0 }
+        {
+            basicSalary: 0,
+            standardWorkingDay: 0,
+            unpaidLeave: 0,
+            paidDay: 0,
+            grossSalary: 0,
+        }
     );
 
     return (
@@ -19,16 +28,17 @@ const SalaryTable = ({ data }) => {
             <table className="table table-custom">
                 <thead>
                     <tr>
-                        <th>#</th>
-                        <th>Month</th>
-                        <th>Period Type</th>
-                        <th>Staff ID</th>
+                        <th>No</th>
+                        <th>ID Staff</th>
                         <th>Full Name</th>
                         <th>Nickname</th>
-                        <th>Department</th>
-                        <th>Team</th>
-                        <th>Personal Cost</th>
-                        <th>Extra Payment</th>
+                        <th>Commencement Date</th>
+                        <th>Confirmation Date</th>
+                        <th>Basic Salary</th>
+                        <th>Standard Working day</th>
+                        <th>Unpaid Leave</th>
+                        <th>Actual Paid Day</th>
+                        <th>Gross salary</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -36,28 +46,38 @@ const SalaryTable = ({ data }) => {
                         data.map((item, index) => (
                             <tr key={index}>
                                 <td>{index + 1}</td>
-                                <td>{item.monthFormatted}</td>
-                                <td>{getPeriodTypeLabel(item.periodType)}</td>
                                 <td>{item.code}</td>
                                 <td>{item.fullName}</td>
-                                <td>{item.nickname}</td>
-                                <td>{item.departmentName}</td>
-                                <td>{item.teamName}</td>
-                                <td>{formatNumber(item.personalCost)}</td>
-                                <td>{formatNumber(item.extraPayment)}</td>
+                                <td>{item.nickName}</td>
+                                <td>{item.joinedDate}</td>
+                                <td>{item.confirmedDate}</td>
+                                <td>{formatNumber(item.basicSalary)}</td>
+                                <td>{item.standardWorkingDay}</td>
+                                <td>{item.unpaidLeave}</td>
+                                <td>{item.paidDay}</td>
+                                <td>{formatNumber(item.grossSalary)}</td>
                             </tr>
                         ))}
                 </tbody>
                 <tfoot>
                     <tr className="summary-row">
-                        <td colSpan="8" className="text-end">
+                        <td colSpan="6" className="text-end">
                             <strong>Total</strong>
                         </td>
                         <td>
-                            <strong>{formatNumber(totals.personalCost)}</strong>
+                            <strong>{formatNumber(totals.basicSalary)}</strong>
                         </td>
                         <td>
-                            <strong>{formatNumber(totals.extraPayment)}</strong>
+                            <strong>{totals.standardWorkingDay}</strong>
+                        </td>
+                        <td>
+                            <strong>{totals.unpaidLeave}</strong>
+                        </td>
+                        <td>
+                            <strong>{totals.paidDay}</strong>
+                        </td>
+                        <td>
+                            <strong>{formatNumber(totals.grossSalary)}</strong>
                         </td>
                     </tr>
                 </tfoot>

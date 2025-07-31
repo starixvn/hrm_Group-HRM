@@ -38,7 +38,7 @@ public class PayrollUploadController(
             Month = !string.IsNullOrEmpty(month) ? DateTimeOffset.Parse(month, CultureInfo.InvariantCulture).DateTime : null,
             PeriodType = periodType
         };
-        var data = await payrollService.GetEmployeePayrollAsync(criteria);
+        var data = await payrollService.GetUploadEmployeePayrollAsync(criteria);
         return Json(data);
     }
 

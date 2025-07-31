@@ -8,6 +8,7 @@ using HRM.Core.Enums;
 using HRM.Core.Models;
 using HRM.Core.Services;
 using HRM.Criteria.PayrollManagement;
+using HRM.Models.Payroll;
 using HRM.Models.PayrollManagement;
 using HRM.Services.Interfaces;
 using Newtonsoft.Json;
@@ -18,6 +19,12 @@ public class SMSPayrollManagementService(IBaseService baseService, IUserControlS
 {
     private const int MAX_ALLOWED_UNPAID_LEAVE_DAYS = 10;
     private const decimal PROBATION_PERCENTAGE = 0.85m;
+
+    public async Task<IEnumerable<GeneratedPayrollDetail>> GetPayrollByMonthAsync(GetPayrollByMonthCriteria criteria)
+    {
+        return await baseService.GetDataAsync<GeneratedPayrollDetail>(criteria);
+    }
+
     public async Task<CommandResult> GeneratePayroll(DateTime date)
     {
         var companyId = session.Get<short>(SessionKey.CurrentCompanyId);

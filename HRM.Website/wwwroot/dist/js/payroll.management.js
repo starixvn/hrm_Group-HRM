@@ -108680,13 +108680,13 @@ var _react2 = _interopRequireDefault(_react);
 
 var _periodType = __webpack_require__(/*! ../constants/periodType */ "./sources/js/pages/payroll-management/constants/periodType.js");
 
-var _UploadSalaryModal = __webpack_require__(/*! ./UploadSalaryModal */ "./sources/js/pages/payroll-management/components/UploadSalaryModal.jsx");
-
-var _UploadSalaryModal2 = _interopRequireDefault(_UploadSalaryModal);
-
 var _ViewUploadHistoryModal = __webpack_require__(/*! ./ViewUploadHistoryModal */ "./sources/js/pages/payroll-management/components/ViewUploadHistoryModal.jsx");
 
 var _ViewUploadHistoryModal2 = _interopRequireDefault(_ViewUploadHistoryModal);
+
+var _GenerateSalaryModal = __webpack_require__(/*! ./GenerateSalaryModal */ "./sources/js/pages/payroll-management/components/GenerateSalaryModal.jsx");
+
+var _GenerateSalaryModal2 = _interopRequireDefault(_GenerateSalaryModal);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -108695,13 +108695,13 @@ var Filter = function Filter(_ref) {
 
     var _useState = (0, _react.useState)(function () {
         var now = new Date();
-        return now.getFullYear() + "-" + String(now.getMonth() + 1).padStart(2, "0");
+        return now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0');
     }),
         _useState2 = (0, _slicedToArray3.default)(_useState, 2),
         month = _useState2[0],
         setMonth = _useState2[1];
 
-    var _useState3 = (0, _react.useState)(_periodType.PeriodType.ALL),
+    var _useState3 = (0, _react.useState)(_periodType.UserType.ALL),
         _useState4 = (0, _slicedToArray3.default)(_useState3, 2),
         periodType = _useState4[0],
         setPeriodType = _useState4[1];
@@ -108722,85 +108722,84 @@ var Filter = function Filter(_ref) {
     };
 
     return _react2.default.createElement(
-        "div",
-        { className: "form-horizontal  clearfix" },
+        'div',
+        { className: 'form-horizontal flex-column' },
         _react2.default.createElement(
-            "div",
-            { className: "form-group" },
+            'div',
+            { className: 'filter-section' },
             _react2.default.createElement(
-                "div",
-                { className: "label-form" },
+                'div',
+                { className: 'form-group' },
                 _react2.default.createElement(
-                    "label",
-                    { className: "control-label" },
-                    "Month"
-                )
-            ),
-            _react2.default.createElement(
-                "div",
-                { className: "input-form" },
-                _react2.default.createElement("input", {
-                    type: "month",
-                    className: "form-control",
-                    value: month,
-                    onChange: function onChange(e) {
-                        return setMonth(e.target.value);
-                    },
-                    onClick: handleMonthClick
-                })
-            )
-        ),
-        _react2.default.createElement(
-            "div",
-            { className: "form-group" },
-            _react2.default.createElement(
-                "div",
-                { className: "label-form" },
-                _react2.default.createElement(
-                    "label",
-                    { className: "control-label" },
-                    "Period Type"
-                )
-            ),
-            _react2.default.createElement(
-                "div",
-                { className: "input-form" },
-                _react2.default.createElement(
-                    "select",
-                    {
-                        className: "form-control",
-                        value: periodType,
-                        onChange: function onChange(e) {
-                            return setPeriodType(e.target.value);
-                        } },
+                    'div',
+                    { className: 'label-form' },
                     _react2.default.createElement(
-                        "option",
-                        { key: _periodType.PeriodType.ALL, value: null },
-                        _periodType.PeriodTypeLabel[_periodType.PeriodType.ALL]
-                    ),
-                    _periodType.PERIOD_TYPES.map(function (type) {
-                        return _react2.default.createElement(
-                            "option",
-                            { key: type, value: type },
-                            _periodType.PeriodTypeLabel[type]
-                        );
+                        'label',
+                        { className: 'control-label' },
+                        'Month'
+                    )
+                ),
+                _react2.default.createElement(
+                    'div',
+                    { className: 'input-form' },
+                    _react2.default.createElement('input', {
+                        type: 'month',
+                        className: 'form-control',
+                        value: month,
+                        onChange: function onChange(e) {
+                            return setMonth(e.target.value);
+                        },
+                        onClick: handleMonthClick
                     })
                 )
-            )
-        ),
-        _react2.default.createElement(
-            "div",
-            { className: "form-group" },
+            ),
             _react2.default.createElement(
-                "button",
-                { className: "btn btn-primary", onClick: handleSearch },
-                "Search"
+                'div',
+                { className: 'form-group' },
+                _react2.default.createElement(
+                    'div',
+                    { className: 'label-form' },
+                    _react2.default.createElement(
+                        'label',
+                        { className: 'control-label' },
+                        'Category'
+                    )
+                ),
+                _react2.default.createElement(
+                    'div',
+                    { className: 'input-form' },
+                    _react2.default.createElement(
+                        'select',
+                        {
+                            className: 'form-control',
+                            value: periodType,
+                            onChange: function onChange(e) {
+                                return setPeriodType(e.target.value);
+                            } },
+                        _periodType.PERIOD_TYPES.map(function (type) {
+                            return _react2.default.createElement(
+                                'option',
+                                { key: type, value: type },
+                                _periodType.UserTypeLabel[type]
+                            );
+                        })
+                    )
+                )
+            ),
+            _react2.default.createElement(
+                'div',
+                { className: 'form-group' },
+                _react2.default.createElement(
+                    'button',
+                    { className: 'btn btn-primary', onClick: handleSearch },
+                    'Search'
+                )
             )
         ),
         _react2.default.createElement(
-            "div",
-            { className: "form-group action-section" },
-            window.hasPermissionToUpload === "True" && _react2.default.createElement(_UploadSalaryModal2.default, { onSuccess: handleSearch }),
+            'div',
+            { className: 'form-group action-section' },
+            window.hasPermissionToUpload === 'True' && _react2.default.createElement(_GenerateSalaryModal2.default, { onSuccess: handleSearch }),
             _react2.default.createElement(_ViewUploadHistoryModal2.default, null)
         )
     );
@@ -108810,213 +108809,10 @@ exports.default = Filter;
 
 /***/ }),
 
-/***/ "./sources/js/pages/payroll-management/components/SalaryTable.jsx":
-/*!************************************************************************!*\
-  !*** ./sources/js/pages/payroll-management/components/SalaryTable.jsx ***!
-  \************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _react = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-
-var _react2 = _interopRequireDefault(_react);
-
-var _periodType = __webpack_require__(/*! ../constants/periodType */ "./sources/js/pages/payroll-management/constants/periodType.js");
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var SalaryTable = function SalaryTable(_ref) {
-    var data = _ref.data;
-
-    var formatNumber = function formatNumber(number) {
-        return new Intl.NumberFormat("en-US").format(number || 0);
-    };
-
-    var totals = data.reduce(function (acc, item) {
-        return {
-            personalCost: (acc.personalCost || 0) + (item.personalCost || 0),
-            extraPayment: (acc.extraPayment || 0) + (item.extraPayment || 0)
-        };
-    }, { personalCost: 0, extraPayment: 0 });
-
-    return _react2.default.createElement(
-        "div",
-        { className: "salary-table-section" },
-        _react2.default.createElement(
-            "table",
-            { className: "table table-custom" },
-            _react2.default.createElement(
-                "thead",
-                null,
-                _react2.default.createElement(
-                    "tr",
-                    null,
-                    _react2.default.createElement(
-                        "th",
-                        null,
-                        "#"
-                    ),
-                    _react2.default.createElement(
-                        "th",
-                        null,
-                        "Month"
-                    ),
-                    _react2.default.createElement(
-                        "th",
-                        null,
-                        "Period Type"
-                    ),
-                    _react2.default.createElement(
-                        "th",
-                        null,
-                        "Staff ID"
-                    ),
-                    _react2.default.createElement(
-                        "th",
-                        null,
-                        "Full Name"
-                    ),
-                    _react2.default.createElement(
-                        "th",
-                        null,
-                        "Nickname"
-                    ),
-                    _react2.default.createElement(
-                        "th",
-                        null,
-                        "Department"
-                    ),
-                    _react2.default.createElement(
-                        "th",
-                        null,
-                        "Team"
-                    ),
-                    _react2.default.createElement(
-                        "th",
-                        null,
-                        "Personal Cost"
-                    ),
-                    _react2.default.createElement(
-                        "th",
-                        null,
-                        "Extra Payment"
-                    )
-                )
-            ),
-            _react2.default.createElement(
-                "tbody",
-                null,
-                data.length > 0 && data.map(function (item, index) {
-                    return _react2.default.createElement(
-                        "tr",
-                        { key: index },
-                        _react2.default.createElement(
-                            "td",
-                            null,
-                            index + 1
-                        ),
-                        _react2.default.createElement(
-                            "td",
-                            null,
-                            item.monthFormatted
-                        ),
-                        _react2.default.createElement(
-                            "td",
-                            null,
-                            (0, _periodType.getPeriodTypeLabel)(item.periodType)
-                        ),
-                        _react2.default.createElement(
-                            "td",
-                            null,
-                            item.code
-                        ),
-                        _react2.default.createElement(
-                            "td",
-                            null,
-                            item.fullName
-                        ),
-                        _react2.default.createElement(
-                            "td",
-                            null,
-                            item.nickname
-                        ),
-                        _react2.default.createElement(
-                            "td",
-                            null,
-                            item.departmentName
-                        ),
-                        _react2.default.createElement(
-                            "td",
-                            null,
-                            item.teamName
-                        ),
-                        _react2.default.createElement(
-                            "td",
-                            null,
-                            formatNumber(item.personalCost)
-                        ),
-                        _react2.default.createElement(
-                            "td",
-                            null,
-                            formatNumber(item.extraPayment)
-                        )
-                    );
-                })
-            ),
-            _react2.default.createElement(
-                "tfoot",
-                null,
-                _react2.default.createElement(
-                    "tr",
-                    { className: "summary-row" },
-                    _react2.default.createElement(
-                        "td",
-                        { colSpan: "8", className: "text-end" },
-                        _react2.default.createElement(
-                            "strong",
-                            null,
-                            "Total"
-                        )
-                    ),
-                    _react2.default.createElement(
-                        "td",
-                        null,
-                        _react2.default.createElement(
-                            "strong",
-                            null,
-                            formatNumber(totals.personalCost)
-                        )
-                    ),
-                    _react2.default.createElement(
-                        "td",
-                        null,
-                        _react2.default.createElement(
-                            "strong",
-                            null,
-                            formatNumber(totals.extraPayment)
-                        )
-                    )
-                )
-            )
-        )
-    );
-};
-
-exports.default = SalaryTable;
-
-/***/ }),
-
-/***/ "./sources/js/pages/payroll-management/components/UploadSalaryModal.jsx":
-/*!******************************************************************************!*\
-  !*** ./sources/js/pages/payroll-management/components/UploadSalaryModal.jsx ***!
-  \******************************************************************************/
+/***/ "./sources/js/pages/payroll-management/components/GenerateSalaryModal.jsx":
+/*!********************************************************************************!*\
+  !*** ./sources/js/pages/payroll-management/components/GenerateSalaryModal.jsx ***!
+  \********************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -109043,10 +108839,6 @@ var _react = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 
 var _react2 = _interopRequireDefault(_react);
 
-var _axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-
-var _axios2 = _interopRequireDefault(_axios);
-
 var _toastr = __webpack_require__(/*! toastr */ "./node_modules/toastr/toastr.js");
 
 var _toastr2 = _interopRequireDefault(_toastr);
@@ -109055,15 +108847,13 @@ var _reactBootstrap = __webpack_require__(/*! react-bootstrap */ "./node_modules
 
 var _common = __webpack_require__(/*! ../../../shared/common.functions */ "./sources/js/shared/common.functions.js");
 
-var _periodType = __webpack_require__(/*! ../constants/periodType */ "./sources/js/pages/payroll-management/constants/periodType.js");
-
 var _Service = __webpack_require__(/*! ../Service */ "./sources/js/pages/payroll-management/Service.js");
 
 var _Service2 = _interopRequireDefault(_Service);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var UploadSalaryModal = function UploadSalaryModal(_ref) {
+var GenerateSalaryModal = function GenerateSalaryModal(_ref) {
     var onSuccess = _ref.onSuccess;
 
     var _useState = (0, _react.useState)(false),
@@ -109071,77 +108861,41 @@ var UploadSalaryModal = function UploadSalaryModal(_ref) {
         show = _useState2[0],
         setShow = _useState2[1];
 
-    var _useState3 = (0, _react.useState)(""),
+    var _useState3 = (0, _react.useState)(''),
         _useState4 = (0, _slicedToArray3.default)(_useState3, 2),
         month = _useState4[0],
         setMonth = _useState4[1];
 
-    var _useState5 = (0, _react.useState)(_periodType.PeriodType.FULL_MONTH),
+    var _useState5 = (0, _react.useState)(false),
         _useState6 = (0, _slicedToArray3.default)(_useState5, 2),
-        periodType = _useState6[0],
-        setPeriodType = _useState6[1];
+        isGenerating = _useState6[0],
+        setIsGenerating = _useState6[1];
 
-    var _useState7 = (0, _react.useState)(null),
+    var _useState7 = (0, _react.useState)(false),
         _useState8 = (0, _slicedToArray3.default)(_useState7, 2),
-        file = _useState8[0],
-        setFile = _useState8[1];
+        showConfirm = _useState8[0],
+        setShowConfirm = _useState8[1];
 
-    var _useState9 = (0, _react.useState)(false),
+    var _useState9 = (0, _react.useState)(''),
         _useState10 = (0, _slicedToArray3.default)(_useState9, 2),
-        isDragging = _useState10[0],
-        setIsDragging = _useState10[1];
+        confirmMessage = _useState10[0],
+        setConfirmMessage = _useState10[1];
 
-    var _useState11 = (0, _react.useState)(false),
+    var _useState11 = (0, _react.useState)(null),
         _useState12 = (0, _slicedToArray3.default)(_useState11, 2),
-        isUploading = _useState12[0],
-        setIsUploading = _useState12[1];
-
-    var _useState13 = (0, _react.useState)(false),
-        _useState14 = (0, _slicedToArray3.default)(_useState13, 2),
-        showConfirm = _useState14[0],
-        setShowConfirm = _useState14[1];
-
-    var _useState15 = (0, _react.useState)(""),
-        _useState16 = (0, _slicedToArray3.default)(_useState15, 2),
-        confirmMessage = _useState16[0],
-        setConfirmMessage = _useState16[1];
-
-    var _useState17 = (0, _react.useState)(null),
-        _useState18 = (0, _slicedToArray3.default)(_useState17, 2),
-        pendingFormData = _useState18[0],
-        setPendingFormData = _useState18[1];
+        pendingFormData = _useState12[0],
+        setPendingFormData = _useState12[1];
 
     var handleClose = function handleClose() {
         setShow(false);
-        setMonth("");
-        setPeriodType(_periodType.PeriodType.FULL_MONTH);
-        setFile(null);
+        setMonth('');
     };
 
     var handleOpen = function handleOpen() {
         var now = new Date();
-        var currentMonth = now.getFullYear() + "-" + String(now.getMonth() + 1).padStart(2, "0");
+        var currentMonth = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0');
         setMonth(currentMonth);
         setShow(true);
-    };
-
-    var handleFileChange = function handleFileChange(e) {
-        setFile(e.target.files[0]);
-    };
-
-    var handleDragOver = function handleDragOver(e) {
-        e.preventDefault();
-        setIsDragging(true);
-    };
-
-    var handleDragLeave = function handleDragLeave() {
-        setIsDragging(false);
-    };
-
-    var handleDrop = function handleDrop(e) {
-        e.preventDefault();
-        setIsDragging(false);
-        setFile(e.dataTransfer.files[0]);
     };
 
     var handleMonthClick = function handleMonthClick(e) {
@@ -109159,7 +108913,7 @@ var UploadSalaryModal = function UploadSalaryModal(_ref) {
                             return _Service2.default.uploadPayroll(formData);
 
                         case 3:
-                            _toastr2.default.success("Payroll uploaded successfully", "", (0, _common.toastOptions)());
+                            _toastr2.default.success('Payroll generated successfully', '', (0, _common.toastOptions)());
                             onSuccess();
                             handleClose();
                             _context.next = 11;
@@ -109167,20 +108921,20 @@ var UploadSalaryModal = function UploadSalaryModal(_ref) {
 
                         case 8:
                             _context.prev = 8;
-                            _context.t0 = _context["catch"](0);
+                            _context.t0 = _context['catch'](0);
 
-                            _toastr2.default.error("Failed to upload Payroll", "", (0, _common.toastOptions)());
+                            _toastr2.default.error('Failed to generate Payroll', '', (0, _common.toastOptions)());
 
                         case 11:
                             _context.prev = 11;
 
-                            setIsUploading(false);
+                            setIsGenerating(false);
                             setShowConfirm(false);
                             setPendingFormData(null);
                             return _context.finish(11);
 
                         case 16:
-                        case "end":
+                        case 'end':
                             return _context.stop();
                     }
                 }
@@ -109199,66 +108953,64 @@ var UploadSalaryModal = function UploadSalaryModal(_ref) {
                 while (1) {
                     switch (_context2.prev = _context2.next) {
                         case 0:
-                            if (!(!file || !month || !periodType)) {
+                            if (month) {
                                 _context2.next = 3;
                                 break;
                             }
 
-                            _toastr2.default.error("Please fill all required fields", "", (0, _common.toastOptions)());
-                            return _context2.abrupt("return");
+                            _toastr2.default.error('Please fill all required fields', '', (0, _common.toastOptions)());
+                            return _context2.abrupt('return');
 
                         case 3:
 
-                            setIsUploading(true);
+                            setIsGenerating(true);
 
                             _context2.prev = 4;
                             formData = new FormData();
 
-                            formData.append("file", file);
-                            formData.append("month", month);
-                            formData.append("periodType", periodType);
+                            formData.append('month', month);
 
-                            _context2.next = 11;
+                            _context2.next = 9;
                             return _Service2.default.confirmUpload(formData);
 
-                        case 11:
+                        case 9:
                             confirmResult = _context2.sent;
 
                             if (!confirmResult.isSuccessful) {
-                                _context2.next = 17;
+                                _context2.next = 15;
                                 break;
                             }
 
-                            _context2.next = 15;
+                            _context2.next = 13;
                             return processUpload(formData);
 
-                        case 15:
-                            _context2.next = 21;
+                        case 13:
+                            _context2.next = 19;
                             break;
 
-                        case 17:
+                        case 15:
                             setPendingFormData(formData);
-                            setConfirmMessage(confirmResult.message || "Are you sure you want to proceed with the upload?");
+                            setConfirmMessage(confirmResult.message || 'Are you sure you want to proceed with the upload?');
                             setShowConfirm(true);
-                            setIsUploading(false);
+                            setIsGenerating(false);
+
+                        case 19:
+                            _context2.next = 25;
+                            break;
 
                         case 21:
-                            _context2.next = 27;
-                            break;
+                            _context2.prev = 21;
+                            _context2.t0 = _context2['catch'](4);
 
-                        case 23:
-                            _context2.prev = 23;
-                            _context2.t0 = _context2["catch"](4);
+                            _toastr2.default.error('Failed to upload salary', '', (0, _common.toastOptions)());
+                            setIsGenerating(false);
 
-                            _toastr2.default.error("Failed to upload salary", "", (0, _common.toastOptions)());
-                            setIsUploading(false);
-
-                        case 27:
-                        case "end":
+                        case 25:
+                        case 'end':
                             return _context2.stop();
                     }
                 }
-            }, _callee2, undefined, [[4, 23]]);
+            }, _callee2, undefined, [[4, 21]]);
         }));
 
         return function handleSubmit() {
@@ -109277,12 +109029,12 @@ var UploadSalaryModal = function UploadSalaryModal(_ref) {
                                 break;
                             }
 
-                            setIsUploading(true);
+                            setIsGenerating(true);
                             _context3.next = 4;
                             return processUpload(pendingFormData);
 
                         case 4:
-                        case "end":
+                        case 'end':
                             return _context3.stop();
                     }
                 }
@@ -109298,46 +109050,46 @@ var UploadSalaryModal = function UploadSalaryModal(_ref) {
         _react2.default.Fragment,
         null,
         _react2.default.createElement(
-            "button",
-            { className: "btn btn-upload", onClick: handleOpen },
-            "Upload Payroll"
+            'button',
+            { className: 'btn btn-upload', onClick: handleOpen },
+            'Generate Payroll'
         ),
         _react2.default.createElement(
             _reactBootstrap.Modal,
             {
                 show: show,
                 onHide: handleClose,
-                centered: "true",
+                centered: 'true',
                 backdrop: !showConfirm,
-                className: "upload-salary-modal" },
+                className: 'upload-salary-modal' },
             _react2.default.createElement(
                 _reactBootstrap.ModalHeader,
                 { closeButton: true },
                 _react2.default.createElement(
                     _reactBootstrap.Modal.Title,
                     null,
-                    "Upload Payroll"
+                    'Generate Payroll'
                 )
             ),
             _react2.default.createElement(
                 _reactBootstrap.ModalBody,
                 null,
                 _react2.default.createElement(
-                    "div",
-                    { className: "form-group" },
+                    'div',
+                    { className: 'form-group' },
                     _react2.default.createElement(
-                        "label",
+                        'label',
                         null,
-                        "Month",
+                        'Month',
                         _react2.default.createElement(
-                            "span",
-                            { className: "required" },
-                            " *"
+                            'span',
+                            { className: 'required' },
+                            ' *'
                         )
                     ),
-                    _react2.default.createElement("input", {
-                        type: "month",
-                        className: "form-control",
+                    _react2.default.createElement('input', {
+                        type: 'month',
+                        className: 'form-control',
                         value: month,
                         onChange: function onChange(e) {
                             return setMonth(e.target.value);
@@ -109345,93 +109097,23 @@ var UploadSalaryModal = function UploadSalaryModal(_ref) {
                         required: true,
                         onClick: handleMonthClick
                     })
-                ),
-                _react2.default.createElement(
-                    "div",
-                    { className: "form-group" },
-                    _react2.default.createElement(
-                        "label",
-                        null,
-                        "Period Type",
-                        _react2.default.createElement(
-                            "span",
-                            { className: "required" },
-                            " *"
-                        )
-                    ),
-                    _react2.default.createElement(
-                        "select",
-                        {
-                            className: "form-control",
-                            value: periodType,
-                            onChange: function onChange(e) {
-                                return setPeriodType(e.target.value);
-                            },
-                            required: true },
-                        _periodType.PERIOD_TYPES.map(function (type) {
-                            return _react2.default.createElement(
-                                "option",
-                                { key: type, value: type },
-                                _periodType.PeriodTypeLabel[type]
-                            );
-                        })
-                    )
-                ),
-                _react2.default.createElement(
-                    "div",
-                    { className: "form-group" },
-                    _react2.default.createElement(
-                        "label",
-                        null,
-                        "File",
-                        _react2.default.createElement(
-                            "span",
-                            { className: "required" },
-                            " *"
-                        )
-                    ),
-                    _react2.default.createElement(
-                        "div",
-                        {
-                            className: "file-upload-area " + (isDragging ? "dragging" : ""),
-                            onDragOver: handleDragOver,
-                            onDragLeave: handleDragLeave,
-                            onDrop: handleDrop },
-                        _react2.default.createElement("input", {
-                            type: "file",
-                            onChange: handleFileChange,
-                            className: "file-input",
-                            multiple: false,
-                            accept: ".xlsx, .xls"
-                        }),
-                        _react2.default.createElement(
-                            "div",
-                            { className: "upload-text" },
-                            file ? file.name : "Drag and drop file here or click to browse",
-                            !file && _react2.default.createElement(
-                                "div",
-                                { className: "upload-text-small" },
-                                "Support single Excel file (.xlsx, .xls)"
-                            )
-                        )
-                    )
                 )
             ),
             _react2.default.createElement(
                 _reactBootstrap.ModalFooter,
                 null,
                 _react2.default.createElement(
-                    "button",
+                    'button',
                     {
-                        className: "btn btn-primary",
+                        className: 'btn btn-primary',
                         onClick: handleSubmit,
-                        disabled: isUploading },
-                    isUploading ? "Uploading..." : "Upload"
+                        disabled: isGenerating },
+                    isGenerating ? 'Generating...' : 'Generate'
                 ),
                 _react2.default.createElement(
-                    "button",
-                    { className: "btn btn-default", onClick: handleClose },
-                    "Cancel"
+                    'button',
+                    { className: 'btn btn-default', onClick: handleClose },
+                    'Cancel'
                 )
             )
         ),
@@ -109449,7 +109131,7 @@ var UploadSalaryModal = function UploadSalaryModal(_ref) {
                 _react2.default.createElement(
                     _reactBootstrap.Modal.Title,
                     null,
-                    "Confirm Upload"
+                    'Confirm Generate'
                 )
             ),
             _react2.default.createElement(
@@ -109461,25 +109143,272 @@ var UploadSalaryModal = function UploadSalaryModal(_ref) {
                 _reactBootstrap.ModalFooter,
                 null,
                 _react2.default.createElement(
-                    "button",
-                    { className: "btn btn-primary", onClick: handleConfirm },
-                    "OK"
+                    'button',
+                    { className: 'btn btn-primary', onClick: handleConfirm },
+                    'OK'
                 ),
                 _react2.default.createElement(
-                    "button",
+                    'button',
                     {
-                        className: "btn btn-default",
+                        className: 'btn btn-default',
                         onClick: function onClick() {
                             return setShowConfirm(false);
                         } },
-                    "Cancel"
+                    'Cancel'
                 )
             )
         )
     );
 };
 
-exports.default = UploadSalaryModal;
+exports.default = GenerateSalaryModal;
+
+/***/ }),
+
+/***/ "./sources/js/pages/payroll-management/components/SalaryTable.jsx":
+/*!************************************************************************!*\
+  !*** ./sources/js/pages/payroll-management/components/SalaryTable.jsx ***!
+  \************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _react = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var SalaryTable = function SalaryTable(_ref) {
+    var data = _ref.data;
+
+    var formatNumber = function formatNumber(number) {
+        return new Intl.NumberFormat('en-US').format(number || 0);
+    };
+
+    var totals = data.reduce(function (acc, item) {
+        return {
+            basicSalary: (acc.basicSalary || 0) + (item.basicSalary || 0),
+            standardWorkingDay: (acc.standardWorkingDay || 0) + (item.standardWorkingDay || 0),
+            unpaidLeave: (acc.unpaidLeave || 0) + (item.unpaidLeave || 0),
+            paidDay: (acc.paidDay || 0) + (item.paidDay || 0),
+            grossSalary: (acc.grossSalary || 0) + (item.grossSalary || 0)
+        };
+    }, {
+        basicSalary: 0,
+        standardWorkingDay: 0,
+        unpaidLeave: 0,
+        paidDay: 0,
+        grossSalary: 0
+    });
+
+    return _react2.default.createElement(
+        'div',
+        { className: 'salary-table-section' },
+        _react2.default.createElement(
+            'table',
+            { className: 'table table-custom' },
+            _react2.default.createElement(
+                'thead',
+                null,
+                _react2.default.createElement(
+                    'tr',
+                    null,
+                    _react2.default.createElement(
+                        'th',
+                        null,
+                        'No'
+                    ),
+                    _react2.default.createElement(
+                        'th',
+                        null,
+                        'ID Staff'
+                    ),
+                    _react2.default.createElement(
+                        'th',
+                        null,
+                        'Full Name'
+                    ),
+                    _react2.default.createElement(
+                        'th',
+                        null,
+                        'Nickname'
+                    ),
+                    _react2.default.createElement(
+                        'th',
+                        null,
+                        'Commencement Date'
+                    ),
+                    _react2.default.createElement(
+                        'th',
+                        null,
+                        'Confirmation Date'
+                    ),
+                    _react2.default.createElement(
+                        'th',
+                        null,
+                        'Basic Salary'
+                    ),
+                    _react2.default.createElement(
+                        'th',
+                        null,
+                        'Standard Working day'
+                    ),
+                    _react2.default.createElement(
+                        'th',
+                        null,
+                        'Unpaid Leave'
+                    ),
+                    _react2.default.createElement(
+                        'th',
+                        null,
+                        'Actual Paid Day'
+                    ),
+                    _react2.default.createElement(
+                        'th',
+                        null,
+                        'Gross salary'
+                    )
+                )
+            ),
+            _react2.default.createElement(
+                'tbody',
+                null,
+                data.length > 0 && data.map(function (item, index) {
+                    return _react2.default.createElement(
+                        'tr',
+                        { key: index },
+                        _react2.default.createElement(
+                            'td',
+                            null,
+                            index + 1
+                        ),
+                        _react2.default.createElement(
+                            'td',
+                            null,
+                            item.code
+                        ),
+                        _react2.default.createElement(
+                            'td',
+                            null,
+                            item.fullName
+                        ),
+                        _react2.default.createElement(
+                            'td',
+                            null,
+                            item.nickName
+                        ),
+                        _react2.default.createElement(
+                            'td',
+                            null,
+                            item.joinedDate
+                        ),
+                        _react2.default.createElement(
+                            'td',
+                            null,
+                            item.confirmedDate
+                        ),
+                        _react2.default.createElement(
+                            'td',
+                            null,
+                            formatNumber(item.basicSalary)
+                        ),
+                        _react2.default.createElement(
+                            'td',
+                            null,
+                            item.standardWorkingDay
+                        ),
+                        _react2.default.createElement(
+                            'td',
+                            null,
+                            item.unpaidLeave
+                        ),
+                        _react2.default.createElement(
+                            'td',
+                            null,
+                            item.paidDay
+                        ),
+                        _react2.default.createElement(
+                            'td',
+                            null,
+                            formatNumber(item.grossSalary)
+                        )
+                    );
+                })
+            ),
+            _react2.default.createElement(
+                'tfoot',
+                null,
+                _react2.default.createElement(
+                    'tr',
+                    { className: 'summary-row' },
+                    _react2.default.createElement(
+                        'td',
+                        { colSpan: '6', className: 'text-end' },
+                        _react2.default.createElement(
+                            'strong',
+                            null,
+                            'Total'
+                        )
+                    ),
+                    _react2.default.createElement(
+                        'td',
+                        null,
+                        _react2.default.createElement(
+                            'strong',
+                            null,
+                            formatNumber(totals.basicSalary)
+                        )
+                    ),
+                    _react2.default.createElement(
+                        'td',
+                        null,
+                        _react2.default.createElement(
+                            'strong',
+                            null,
+                            totals.standardWorkingDay
+                        )
+                    ),
+                    _react2.default.createElement(
+                        'td',
+                        null,
+                        _react2.default.createElement(
+                            'strong',
+                            null,
+                            totals.unpaidLeave
+                        )
+                    ),
+                    _react2.default.createElement(
+                        'td',
+                        null,
+                        _react2.default.createElement(
+                            'strong',
+                            null,
+                            totals.paidDay
+                        )
+                    ),
+                    _react2.default.createElement(
+                        'td',
+                        null,
+                        _react2.default.createElement(
+                            'strong',
+                            null,
+                            formatNumber(totals.grossSalary)
+                        )
+                    )
+                )
+            )
+        )
+    );
+};
+
+exports.default = SalaryTable;
 
 /***/ }),
 
@@ -109718,30 +109647,28 @@ exports.default = ViewUploadHistoryModal;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.PERIOD_TYPES = exports.getPeriodTypeLabel = exports.PeriodTypeLabel = exports.PeriodType = undefined;
+exports.PERIOD_TYPES = exports.getPeriodTypeLabel = exports.UserTypeLabel = exports.UserType = undefined;
 
 var _defineProperty2 = __webpack_require__(/*! babel-runtime/helpers/defineProperty */ "./node_modules/babel-runtime/helpers/defineProperty.js");
 
 var _defineProperty3 = _interopRequireDefault(_defineProperty2);
 
-var _PeriodTypeLabel;
+var _UserTypeLabel;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var PeriodType = exports.PeriodType = {
-    ALL: 0,
-    FIRST_HALF: 1,
-    SECOND_HALF: 2,
-    FULL_MONTH: 3
+var UserType = exports.UserType = {
+    LOCAL: 1,
+    EXPAT: 2
 };
 
-var PeriodTypeLabel = exports.PeriodTypeLabel = (_PeriodTypeLabel = {}, (0, _defineProperty3.default)(_PeriodTypeLabel, PeriodType.FIRST_HALF, "1st Half (1-15)"), (0, _defineProperty3.default)(_PeriodTypeLabel, PeriodType.SECOND_HALF, "2nd Half (16-end)"), (0, _defineProperty3.default)(_PeriodTypeLabel, PeriodType.FULL_MONTH, "Full Month"), (0, _defineProperty3.default)(_PeriodTypeLabel, PeriodType.ALL, "-- All --"), _PeriodTypeLabel);
+var UserTypeLabel = exports.UserTypeLabel = (_UserTypeLabel = {}, (0, _defineProperty3.default)(_UserTypeLabel, UserType.LOCAL, 'Local'), (0, _defineProperty3.default)(_UserTypeLabel, UserType.EXPAT, 'Expat'), _UserTypeLabel);
 
 var getPeriodTypeLabel = exports.getPeriodTypeLabel = function getPeriodTypeLabel(type) {
-    return PeriodTypeLabel[type] || "Unknown";
+    return UserTypeLabel[type] || 'Unknown';
 };
 
-var PERIOD_TYPES = exports.PERIOD_TYPES = [PeriodType.FIRST_HALF, PeriodType.SECOND_HALF, PeriodType.FULL_MONTH];
+var PERIOD_TYPES = exports.PERIOD_TYPES = [UserType.LOCAL, UserType.EXPAT];
 
 /***/ }),
 

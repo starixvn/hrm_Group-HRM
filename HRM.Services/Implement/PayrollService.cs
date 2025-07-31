@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using HRM.Core.Models;
 using HRM.Core.Services;
 using HRM.Criteria.EmployeePayroll;
+using HRM.Criteria.PayrollManagement;
 using HRM.Models.Payroll;
 using HRM.Services.Interfaces;
 
@@ -10,7 +11,7 @@ namespace HRM.Services.Implement;
 
 public class PayrollService(IBaseService baseService) : IPayrollService
 {
-    public async Task<IEnumerable<EmployeePayroll>> GetEmployeePayrollAsync(GetEmployeePayrollCriteria criteria)
+    public async Task<IEnumerable<EmployeePayroll>> GetUploadEmployeePayrollAsync(GetEmployeePayrollCriteria criteria)
     {
         return await baseService.GetDataAsync<EmployeePayroll>(criteria);
     }

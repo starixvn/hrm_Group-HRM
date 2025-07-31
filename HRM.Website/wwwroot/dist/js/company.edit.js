@@ -100400,6 +100400,24 @@ function memoizeOne(resultFn, isEqual) {
 
 /***/ }),
 
+/***/ "./node_modules/react-tag-input-component/dist/esm/index.js":
+/*!******************************************************************!*\
+  !*** ./node_modules/react-tag-input-component/dist/esm/index.js ***!
+  \******************************************************************/
+/*! exports provided: TagsInput */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "TagsInput", function() { return q; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+function u(e,{insertAt:o}={}){if(!e||typeof document>"u")return;let t=document.head||document.getElementsByTagName("head")[0],i=document.createElement("style");i.type="text/css",o==="top"&&t.firstChild?t.insertBefore(i,t.firstChild):t.appendChild(i),i.styleSheet?i.styleSheet.cssText=e:i.appendChild(document.createTextNode(e))}u(`.rti--container *{box-sizing:border-box;transition:all .2s ease}.rti--container{--rti-bg: #fff;--rti-border: #ccc;--rti-main: #3182ce;--rti-radius: .375rem;--rti-s: .5rem;--rti-tag: #edf2f7;--rti-tag-remove: #e53e3e;--rti-tag-padding: .15rem .25rem;align-items:center;background:var(--rti-bg);border:1px solid var(--rti-border);border-radius:var(--rti-radius);display:flex;flex-wrap:wrap;gap:var(--rti-s);line-height:1.4;padding:var(--rti-s)}.rti--container:focus-within{border-color:var(--rti-main);box-shadow:var(--rti-main) 0 0 0 1px}.rti--input{border:0;outline:0;font-size:inherit;line-height:inherit;width:50%}.rti--tag{align-items:center;background:var(--rti-tag);border-radius:var(--rti-radius);display:inline-flex;justify-content:center;padding:var(--rti-tag-padding)}.rti--tag button{background:none;border:0;border-radius:50%;cursor:pointer;line-height:inherit;padding:0 var(--rti-s)}.rti--tag button:hover{color:var(--rti-tag-remove)}
+`);function c(e,o){let t=Object(react__WEBPACK_IMPORTED_MODULE_0__["useRef"])(!1);Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(()=>{t.current?e():t.current=!0},o)}function d(...e){return e.filter(o=>o).join(" ")}function m({text:e,remove:o,disabled:t,className:i}){let g=l=>{l.stopPropagation(),o(e)};return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span",{className:d("rti--tag",i)},react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span",null,e),!t&&react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button",{type:"button",onClick:g,"aria-label":`remove ${e}`},"\u2715"))}var S=["Enter"],q=({name:e,placeHolder:o,value:t,onChange:i,onBlur:g,separators:l,disableBackspaceRemove:T,onExisting:v,onRemoved:y,disabled:h,isEditOnRemove:k,beforeAddValidate:x,onKeyUp:E,classNames:s})=>{let[n,p]=Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(t||[]);c(()=>{i&&i(n)},[n]),c(()=>{JSON.stringify(t)!==JSON.stringify(n)&&p(t)},[t]);let w=r=>{r.stopPropagation();let a=r.target.value;if(!a&&!T&&n.length&&r.key==="Backspace"&&(r.target.value=k?`${n.at(-1)} `:"",p([...n.slice(0,-1)])),a&&(l||S).includes(r.key)){if(r.preventDefault(),x&&!x(a,n))return;if(n.includes(a)){v&&v(a);return}p([...n,a]),r.target.value=""}},B=r=>{p(n.filter(a=>a!==r)),y&&y(r)};return react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div",{"aria-labelledby":e,className:"rti--container"},n.map(r=>react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(m,{key:r,className:s==null?void 0:s.tag,text:r,remove:B,disabled:h})),react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("input",{className:d("rti--input",s==null?void 0:s.input),type:"text",name:e,placeholder:o,onKeyDown:w,onBlur:g,disabled:h,onKeyUp:E}))};
+
+
+/***/ }),
+
 /***/ "./node_modules/react/cjs/react.development.js":
 /*!*****************************************************!*\
   !*** ./node_modules/react/cjs/react.development.js ***!
@@ -105349,7 +105367,7 @@ var _toastr2 = _interopRequireDefault(_toastr);
 
 var _formik = __webpack_require__(/*! formik */ "./node_modules/formik/dist/formik.esm.js");
 
-var _reactTagInputComponent = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module 'react-tag-input-component'"); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+var _reactTagInputComponent = __webpack_require__(/*! react-tag-input-component */ "./node_modules/react-tag-input-component/dist/esm/index.js");
 
 var _Errors = __webpack_require__(/*! ../../../../shared/components/Errors */ "./sources/js/shared/components/Errors.jsx");
 
