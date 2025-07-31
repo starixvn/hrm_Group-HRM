@@ -10,10 +10,10 @@
     var today = DateTimeOffset.Now.DateTime.ToClientTimeZone().Date;
 }
 @section css{
-    <link href="~/dist/styles/lateinearlyout.create.css" rel="stylesheet" />
+    <link href="~/dist/styles/lateinearlyout.create.css" rel="stylesheet" asp-append-version="true" />
 }
 @section js{
-    <script src="~/dist/js/lateinearlyout.edit.js"></script>
+    <script src="~/dist/js/lateinearlyout.edit.js" asp-append-version="true"></script>
 }
 @section Breadcrumb {
     <a class="step">@Labels.Personal</a>

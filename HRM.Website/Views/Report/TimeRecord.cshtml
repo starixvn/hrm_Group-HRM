@@ -7,10 +7,10 @@
     var hasPermission = (bool)ViewBag.HasPermission;
 }
 @section css{
-    <link href="~/dist/styles/report.time.record.css" rel="stylesheet" />
+    <link href="~/dist/styles/report.time.record.css" rel="stylesheet" asp-append-version="true" />
 }
 @section js{
-    <script src="~/dist/js/report.time.record.js"></script>
+    <script src="~/dist/js/report.time.record.js" asp-append-version="true"></script>
 }
 @section Breadcrumb {
     <a class="step">@Labels.HRSpace</a> <span class="step">@ViewBag.Title</span>

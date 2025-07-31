@@ -5,13 +5,13 @@
     ViewBag.Title = Labels.JobTitleManagement;
 }
 @section css{
-    <link href="~/dist/styles/jobtitle.css" rel="stylesheet" />
+    <link href="~/dist/styles/jobtitle.css" rel="stylesheet" asp-append-version="true" />
 }
 @section js{
     <script type="text/javascript">
         window.hasPermission = "@Model";
     </script>
-    <script src="~/dist/js/jobtitle.index.js"></script>
+    <script src="~/dist/js/jobtitle.index.js" asp-append-version="true"></script>
 
 }
 @section Breadcrumb {

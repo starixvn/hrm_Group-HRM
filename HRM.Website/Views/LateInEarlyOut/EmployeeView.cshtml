@@ -8,10 +8,10 @@
     ViewBag.Title = Labels.MyLateInEarlyOutRequest;
 }
 @section css{
-    <link href="~/dist/styles/changeshift.myrequest.css" rel="stylesheet" />
+    <link href="~/dist/styles/changeshift.myrequest.css" rel="stylesheet" asp-append-version="true" />
 }
 @section js{
-    <script src="~/dist/js/lateinearlyout.myrequest.js"></script>
+    <script src="~/dist/js/lateinearlyout.myrequest.js" asp-append-version="true"></script>
 }
 @section Breadcrumb {
     <a class="step">@Labels.Personal</a><a class="step">@ViewBag.Title</a>

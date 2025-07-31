@@ -13,10 +13,10 @@
     var hasCheckBoxColumn = Model.ViewType is RequestViewType.PersonalSpace or RequestViewType.HRSpace ? "has-check-box-column" : "";
 }
 @section css {
-    <link href="~/dist/styles/employee.request.css" rel="stylesheet" />
+    <link href="~/dist/styles/employee.request.css" rel="stylesheet" asp-append-version="true" />
 }
 @section js {
-    <script src="~/dist/js/employee.request.js?v=@DateTime.Now.Ticks"></script>
+    <script src="~/dist/js/employee.request.js" asp-append-version="true"></script>
 }
 @section Breadcrumb {
     <a class="step">@Model.BreadcrumbText</a><span class="step">@ViewBag.Title</span>

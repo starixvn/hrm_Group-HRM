@@ -8,10 +8,10 @@
     var today = DateTimeOffset.Now.DateTime.ToClientTimeZone();
 }
 @section css{
-    <link href="~/dist/styles/report.monthlyovertime.css" rel="stylesheet" />
+    <link href="~/dist/styles/report.monthlyovertime.css" rel="stylesheet" asp-append-version="true" />
 }
 @section js{
-    <script src="~/dist/js/report.monthlyovertime.js"></script>
+    <script src="~/dist/js/report.monthlyovertime.js" asp-append-version="true"></script>
 }
 @section Breadcrumb {
     <a class="step">@Labels.Personal</a>

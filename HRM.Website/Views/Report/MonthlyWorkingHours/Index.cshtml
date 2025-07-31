@@ -11,10 +11,10 @@
     var maxDate = new DateTime(today.Year, today.Month, DateTime.DaysInMonth(today.Year, today.Month)).ToString("yyyy/MM/dd");
 }
 @section css{
-    <link href="~/dist/styles/report.monthlyworkinghours.css" rel="stylesheet" />
+    <link href="~/dist/styles/report.monthlyworkinghours.css" rel="stylesheet" asp-append-version="true" />
 }
 @section js{
-    <script src="~/dist/js/report.monthlyworkinghours.js"></script>
+    <script src="~/dist/js/report.monthlyworkinghours.js" asp-append-version="true"></script>
 }
 @section Breadcrumb {
     <a class="step">@Labels.Personal</a>

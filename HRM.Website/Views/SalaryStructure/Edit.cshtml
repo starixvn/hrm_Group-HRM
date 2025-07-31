@@ -5,11 +5,11 @@
 	ViewBag.Title = Labels.EditSalaryStructure;
 }
 @section css{
-	<link href="~/dist/styles/salary-structure.create.css" rel="stylesheet" />
+    <link href="~/dist/styles/salary-structure.create.css" rel="stylesheet" asp-append-version="true" />
 }
 @section js{
 	<script>window.salaryStructureId = @Model;</script>
-	<script src="~/dist/js/salary-structure.edit.js"></script>
+    <script src="~/dist/js/salary-structure.edit.js" asp-append-version="true"></script>
 }
 @section Breadcrumb {
 	<a class="step">@Labels.HRSpace</a>

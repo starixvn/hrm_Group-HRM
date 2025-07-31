@@ -4,13 +4,13 @@
 	ViewBag.Title = Labels.EditUnit;
 }
 @section css{
-	<link href="~/dist/styles/unit.create.css" rel="stylesheet" />
+    <link href="~/dist/styles/unit.create.css" rel="stylesheet" asp-append-version="true" />
 }
 @section js{
 	<script>
         window.unitId = @Model;
     </script>
-	<script src="~/dist/js/unit.edit.js"></script>
+    <script src="~/dist/js/unit.edit.js" asp-append-version="true"></script>
 }
 
 @section Breadcrumb {

@@ -5,10 +5,10 @@
     ViewBag.Title = Labels.EmployeeManagement;
 }
 @section css{
-    <link href="~/dist/styles/user.management.css" rel="stylesheet" />
+    <link href="~/dist/styles/user.management.css" rel="stylesheet" asp-append-version="true" />
 }
 @section js{
-    <script src="~/dist/js/employee.user.management.js"></script>
+    <script src="~/dist/js/employee.user.management.js" asp-append-version="true"></script>
 }
 @section Breadcrumb {
     <a class="step">@Labels.HRSpace</a><span class="step">@ViewBag.Title</span>

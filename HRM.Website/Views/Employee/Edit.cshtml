@@ -14,11 +14,11 @@
     var hasHostPermissionOnSalaryStructure = (bool)ViewBag.HasHostPermissionOnSalaryStructure;
 }
 @section css {
-    <link href="~/dist/vendors/chosen.css" rel="stylesheet" />
-    <link href="~/dist/styles/employee.edit.css" rel="stylesheet" />
+    <link href="~/dist/vendors/chosen.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/dist/styles/employee.edit.css" rel="stylesheet" asp-append-version="true" />
 }
 @section js {
-    <script src="~/dist/js/employee.edit.js"></script>
+    <script src="~/dist/js/employee.edit.js" asp-append-version="true"></script>
 }
 @section Breadcrumb {
     <a class="step" href="javascript:;">@Labels.HRSpace</a>

@@ -7,14 +7,14 @@
     const byte host = (byte)Policy.Host;
 }
 @section css{
-	<link href="~/dist/styles/function.index.css" rel="stylesheet" />
+    <link href="~/dist/styles/function.index.css" rel="stylesheet" asp-append-version="true" />
 }
 @section js{
 	<script type="text/javascript">
         window.read = "@read",
             window.host = "@host";
     </script>
-	<script src="~/dist/js/function.index.js"></script>
+    <script src="~/dist/js/function.index.js" asp-append-version="true"></script>
 }
 @section Breadcrumb {
 	<a class="step">@ViewBag.Title</a>

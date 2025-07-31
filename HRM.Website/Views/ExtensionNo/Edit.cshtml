@@ -4,15 +4,15 @@
     ViewBag.Title = Labels.Edit;
 }
 @section css{
-    <link href="~/dist/styles/extensionno.create.css" rel="stylesheet" />
+    <link href="~/dist/styles/extensionno.create.css" rel="stylesheet" asp-append-version="true" />
 }
 @section js{
     <script>
         window.id = '@ViewBag.Id';
         window.isInternal = '@ViewBag.isInternal';
     </script>
-    
-    <script src="~/dist/js/extensionno.edit.js"></script>
+
+    <script src="~/dist/js/extensionno.edit.js" asp-append-version="true"></script>
 }
 @section Breadcrumb {
     <a class="step">@Labels.CompanySpace</a>

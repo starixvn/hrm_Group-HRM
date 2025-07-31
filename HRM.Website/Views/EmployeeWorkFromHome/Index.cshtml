@@ -9,10 +9,10 @@
     var maxDate = new DateTime(today.Year + 2, 1, 1).AddDays(-1);
 }
 @section css{
-    <link href="~/dist/styles/employee.workfromhome.css" rel="stylesheet" />
+    <link href="~/dist/styles/employee.workfromhome.css" rel="stylesheet" asp-append-version="true" />
 }
 @section js{
-    <script src="~/dist/js/employee.workfromhome.js"></script>
+    <script src="~/dist/js/employee.workfromhome.js" asp-append-version="true"></script>
 }
 @section Breadcrumb {
     <a class="step">@Labels.HRSpace</a>

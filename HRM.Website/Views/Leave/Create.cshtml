@@ -9,10 +9,10 @@
     var hasOnBehalfOthersPermission = (bool)ViewBag.HasOnBehalfOthersPermission;
 }
 @section css{
-    <link href="~/dist/styles/leave.create.css" rel="stylesheet" />
+    <link href="~/dist/styles/leave.create.css" rel="stylesheet" asp-append-version="true" />
 }
 @section js{
-    <script src="~/dist/js/leave.create.js"></script>
+    <script src="~/dist/js/leave.create.js" asp-append-version="true"></script>
 }
 @section Breadcrumb {
     <a class="step">@Labels.Personal</a>

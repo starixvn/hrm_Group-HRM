@@ -8,10 +8,10 @@
     var roleId = (short)ViewBag.RoleId;
 }
 @section css{
-    <link href="~/dist/styles/schedule.arrange.css" rel="stylesheet" />
+    <link href="~/dist/styles/schedule.arrange.css" rel="stylesheet" asp-append-version="true" />
 }
 @section js{
-    <script src="~/dist/js/schedule.arrange.js"></script>
+    <script src="~/dist/js/schedule.arrange.js" asp-append-version="true"></script>
 }
 @section Breadcrumb {
     <a class="step">@ViewBag.Title</a>

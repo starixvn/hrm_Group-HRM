@@ -6,10 +6,10 @@
     bool enableGroupDate = ViewBag.EnableGroupDate;
 }
 @section css{
-    <link href="~/dist/styles/discipline.summary.per.year.css" rel="stylesheet" />
+    <link href="~/dist/styles/discipline.summary.per.year.css" rel="stylesheet" asp-append-version="true" />
 }
 @section js{
-    <script src="~/dist/js/discipline.summary.per.year.js"></script>
+    <script src="~/dist/js/discipline.summary.per.year.js" asp-append-version="true"></script>
 }
 @section Breadcrumb {
     <a class="step">@Labels.Personal</a>

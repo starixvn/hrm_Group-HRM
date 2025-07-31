@@ -8,10 +8,10 @@
     var autoApproveRequest = (bool)ViewBag.AutoApproveRequest;
 }
 @section css{
-    <link href="~/dist/styles/checkinout.create.css" rel="stylesheet" />
+    <link href="~/dist/styles/checkinout.create.css" rel="stylesheet" asp-append-version="true" />
 }
 @section js{
-    <script src="~/dist/js/checkinout.edit.js"></script>
+    <script src="~/dist/js/checkinout.edit.js" asp-append-version="true"></script>
 }
 @section Breadcrumb {
     <a class="step">@Labels.Personal</a>
