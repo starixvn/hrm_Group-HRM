@@ -63,18 +63,12 @@ public class OvertimeController(
             VerifierId = monthlyRequest.Verifier?.EmpId ?? 0,
             ApproverId = monthlyRequest.Approver?.EmpId ?? 0,
             Verifiers = supervisor.Verifiers,
-            Approvers = supervisor.Approvers
+            Approvers = supervisor.Approvers,
+            AutoApproveRequest = EmployeeSession.AutoApproveRequest
         };
 
-        if (model.Verifiers.Any())
-        {
-            model.Verifiers = await employeeService.CheckAndAddMissingSupervisor(model.Verifiers.ToList(), model.VerifierId);
-        }
-
-        if (model.Verifiers.Any())
-        {
-            model.Approvers = await employeeService.CheckAndAddMissingSupervisor(model.Approvers.ToList(), model.ApproverId);
-        }
+        model.Verifiers = await employeeService.CheckAndAddMissingSupervisor(model.Verifiers.ToList(), model.VerifierId);
+        model.Approvers = await employeeService.CheckAndAddMissingSupervisor(model.Approvers.ToList(), model.ApproverId);
 
         return View(model);
     }

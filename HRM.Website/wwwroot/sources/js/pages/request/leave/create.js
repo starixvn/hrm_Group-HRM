@@ -486,7 +486,7 @@ const LeaveRequest = (function ($) {
                             return {
                                 label: item.nickName + ' (' + item.fullName + ')',
                                 value: item.ownerId,
-                                isTopManager: item.isTopManager
+                                autoApproveRequest: item.autoApproveRequest
                             };
                         }));
                     }).catch(axiosError);
@@ -496,7 +496,7 @@ const LeaveRequest = (function ($) {
                     event.preventDefault();
                     LeaveRequest.employee.val(ui.item.label);
                     LeaveRequest.employeeId.val(ui.item.value);
-                    $('#IsTopManager').prop('checked', ui.item.isTopManager);
+                    $('#AutoApproveRequest').prop('checked', ui.item.autoApproveRequest);
                     LeaveRequest.employeeChange();
                     RequestCommon.removeErrorMsg(true);
                 },
@@ -504,14 +504,14 @@ const LeaveRequest = (function ($) {
                     event.preventDefault();
                     LeaveRequest.employee.val(ui.item.label);
                     LeaveRequest.employeeId.val(ui.item.value);
-                    $('#IsTopManager').prop('checked', ui.item.isTopManager);
+                    $('#AutoApproveRequest').prop('checked', ui.item.autoApproveRequest);
                 },
                 change: function (event, ui) {
                     event.preventDefault();
                     if (ui && ui.item) {
                         LeaveRequest.employee.val(ui.item.label);
                         LeaveRequest.employeeId.val(ui.item.value);
-                        $('#IsTopManager').prop('checked', ui.item.isTopManager);
+                        $('#AutoApproveRequest').prop('checked', ui.item.autoApproveRequest);
                     } else {
                         LeaveRequest.employeeId.val('0');
                     }
@@ -631,7 +631,7 @@ const LeaveRequest = (function ($) {
                 }
             }
 
-            if (!$('#IsTopManager').prop('checked')) {
+            if (!$('#AutoApproveRequest').prop('checked')) {
                 if (verifier === null || verifier === '') {
                     errorString.push('Verified by field is required.');
                 }
@@ -691,12 +691,18 @@ const LeaveRequest = (function ($) {
                     const verifiers = verifierResponse.data,
                         approvers = approverResponse.data;
                     let options = '';
+                    if ($('#AutoApproveRequest').prop('checked')) {
+                        options += '<option>--Select a Verifier--</option>';
+                    }
                     for (let i = 0; i < verifiers.length; i++) {
                         options += "<option value='" + verifiers[i].ownerId + "'>" + verifiers[i].nickName + " (" + verifiers[i].fullName + ")</option>";
                     }
                     LeaveRequest.verifierId.html(options);
 
                     options = '';
+                    if ($('#AutoApproveRequest').prop('checked')) {
+                        options += '<option>--Select an Approver--</option>';
+                    }
                     for (let i = 0; i < approvers.length; i++) {
                         options += "<option value='" + approvers[i].ownerId + "'>" + approvers[i].nickName + " (" + approvers[i].fullName + ")</option>";
                     }

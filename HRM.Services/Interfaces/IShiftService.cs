@@ -11,7 +11,7 @@ public interface IShiftService
 {
     Task<IList<Shift>> GetAllAsync(int statusId = 1, bool isShowOff = false, short empCompanyId = 0);
 
-    Task<IList<Shift>> GetByQueryAsync(string query, bool isShowOff);
+    Task<IList<Shift>> GetByQueryAsync(string query, bool isShowOff, short empCompanyId = 0);
 
     Task<IList<SelectListItem>> GetSelectListAsync(int statusId = 1, bool isShowOff = false);
 

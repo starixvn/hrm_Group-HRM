@@ -24,6 +24,8 @@ public interface IEmployeeService
 
     Task<Employee> GetEmployeeByIdAsync(int id);
 
+    Task<Employee> GetEmployeeByIdInGroupScopeAsync(int id);
+
     Task<IEnumerable<Employee>> GetEmployeeAsync(GetAllEmployeeCriteria criteria);
 
     Task<IEnumerable<Employee>> GetMemberByManagerAsync(GetMemberByManagerCriteria criteria);
@@ -64,9 +66,7 @@ public interface IEmployeeService
 
     string CalculateLengthOfService(DateTime? joinedDate, DateTime? militaryFromDate, DateTime? militaryToDate);
 
-    Task<CommandResult> UpdateUserIdAsync(UpdateUserIdCommand command);
-
-    Task<IList<SupervisorNameModel>> CheckAndAddMissingSupervisor(IList<SupervisorNameModel> supervisors, int supervisorId);
+    Task<IList<SupervisorNameModel>> CheckAndAddMissingSupervisor(IList<SupervisorNameModel> supervisors, int? supervisorId);
 
     Task<EmployeeBioInfoModel> GetEmployeeBioInfoAsync(int employeeId);
 

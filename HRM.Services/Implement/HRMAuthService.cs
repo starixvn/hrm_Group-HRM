@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
+using GO.UserControl.Client.Core.Session;
+using HRM.Core.Constants;
 using HRM.Core.Enums;
 using HRM.Core.Models;
 using HRM.Core.Security;
@@ -10,13 +12,17 @@ using Microsoft.AspNetCore.Http;
 
 namespace HRM.Services.Implement;
 
-public class HRMAuthService(IBaseService baseService) : IHRMAuthService
+public class HRMAuthService(
+    IUserControlSession session,
+    IBaseService baseService) : IHRMAuthService
 {
     public async Task<EmployeeSession> GetByUserIdAsync(int userId)
     {
+        var companyId = session.Get<short>(SessionKey.CurrentCompanyId);
         var criteria = new GetEmployeeLoginByUserIdCriteria
         {
-            UserId = userId
+            UserId = userId,
+            CompanyId = companyId
         };
         return await baseService.GetDataEntityAsync<EmployeeSession>(criteria);
     }

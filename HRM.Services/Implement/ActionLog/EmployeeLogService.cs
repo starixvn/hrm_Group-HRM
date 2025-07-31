@@ -60,7 +60,6 @@ public class EmployeeLogService(
         new() { FieldName = "PermanentAddress", DisplayName = Labels.Address },
         new() { FieldName = "CurrentAddress", DisplayName = Labels.CurrentAddress },
         new() { FieldName = "PickupRemark", DisplayName = Labels.PickupRemark },
-        new() { FieldName = "Skype", DisplayName = Labels.Skype },
         new() { FieldName = "LetsTalk", DisplayName = Labels.LetsTalk },
         new() { FieldName = "Unit", DisplayName = Labels.Unit },
         new() { FieldName = "TeamId", DisplayName = Labels.Team },
@@ -88,7 +87,8 @@ public class EmployeeLogService(
         new() { FieldName = "ChineseName", DisplayName = Labels.ChineseName },
         new() { FieldName = "WorkingHoursbyWeek", DisplayName = Labels.WorkingHoursPerWeek },
         new() { FieldName = "SalaryStructureId", DisplayName = Labels.SalaryStructure },
-        new() { FieldName = "SubCompanyName", DisplayName = Labels.SubCompany }
+        new() { FieldName = "SubCompanyName", DisplayName = Labels.SubCompany },
+        new() { FieldName = "AutoApproveRequest", DisplayName = Labels.AutoApproved }
     };
 
     private IEnumerable<Team> Teams { get; set; }

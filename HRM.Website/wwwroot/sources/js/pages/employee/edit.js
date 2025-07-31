@@ -139,9 +139,9 @@ $(document).ready(function () {
         });
     }).catch(axiosError);
 
-    $('#postform').click(function () {
-        const isCheckedTopManager = $("input[name='IsTopManager']").prop('checked');
-        if (isCheckedTopManager === true) {
+    $('#postform').on('click', function () {
+        const isAutoApproveRequest = $("input[name='AutoApproveRequest']").prop('checked');
+        if (isAutoApproveRequest === true) {
             $('#formEditUser')[0].submit();
         } else {
             const verifier = $('#lstVerifier').text(),

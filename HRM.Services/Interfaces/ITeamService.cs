@@ -13,7 +13,7 @@ public interface ITeamService
 
     Task<int> GetNextGroupTeamIdAsync();
 
-    Task<IEnumerable<Team>> GetAllAsync(bool isDeleted = false, string keyword = null, bool isGroup = false);
+    Task<IEnumerable<Team>> GetAllAsync(bool isDeleted = false, string keyword = null, bool isGroup = false, short? companyId = null);
 
     Task<IEnumerable<GroupTeamModel>> GetAllTeamByUnitScopeAsync(string teamIds = null);
 
@@ -25,11 +25,11 @@ public interface ITeamService
 
     Task<IEnumerable<Team>> GetBySupervisorAsync(int supervisorId);
 
-    Task<IList<SupervisorModel>> GetTeamSupervisorByRoleId(int teamId, short roleId);
+    Task<IList<SupervisorModel>> GetTeamSupervisorByRoleId(int teamId, short roleId, bool isGroup = false);
 
     Task<IEnumerable<TeamSupervisorModel>> GetSupervisorByTeamId(int id, bool isGroupSpace);
 
-    Task<IEnumerable<Supervisor>> GetDisciplineManagerByTeamId(int teamId);
+    Task<IEnumerable<Supervisor>> GetDisciplineManagerByTeamId(int teamId, bool isGroup = false);
 
     Task<CommandResult> EditTeamSupervisor(int actorId, int teamId, short roleId, IEnumerable<EditTeamSupervisor> supervisors);
 
@@ -41,4 +41,6 @@ public interface ITeamService
 
     Task<CommandResult> InsertTeamSupervisorByPIC(int actorId, int teamId,
         IEnumerable<EditTeamSupervisor> supervisors);
+
+    Task<IEnumerable<Company>> GetCompaniesByRoleIdForEmployee(int employeeId, int roleId);
 }

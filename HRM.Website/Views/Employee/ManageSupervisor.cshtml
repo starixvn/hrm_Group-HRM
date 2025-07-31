@@ -5,6 +5,7 @@
 	var employeeId = (int)ViewBag.EmployeeId;
 	var roleId = (short)ViewBag.RoleId;
 	var breadcrumb = string.Empty;
+	var companyId = (int)ViewBag.CompanyId;
 }
 @section css{
 	<link href="~/dist/styles/team.edit.supervisor.css" rel="stylesheet" />
@@ -29,5 +30,6 @@
 	</a>
 }
 @Html.Hidden("EmployeeId", employeeId)
+@Html.Hidden("CompanyId", companyId)
 @Html.Hidden("RoleId", roleId)
 <div id="supervisor-wrapper"></div>

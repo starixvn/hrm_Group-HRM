@@ -18,7 +18,7 @@ public class ExportDisciplineController(
     IExportDisciplineSummaryService exportDisciplineSummaryService,
     IExportDisciplineDetailService exportDisciplineDetailService) : BaseController(session)
 {
-    public async Task<IActionResult> ExportDisciplineSummaryReport(DisciplineSummaryViewModel model)
+    public async Task<IActionResult> ExportDisciplineSummaryReport(DisciplineSummaryViewModel model, short? companyId = null)
     {
         var roles = await roleService.GetByUserIdAsync(session.UserId);
         var criteria = new GetDisciplineSummaryCriteria
@@ -32,7 +32,7 @@ public class ExportDisciplineController(
             ApproverId = session.UserId,
             EmployeeName = model.Employee,
             TeamName = model.TeamName,
-            CompanyId = CurrentCompanyId,
+            CompanyId = companyId ?? CurrentCompanyId,
             RoleIds = string.Join(",", roles.Select(x => x.RoleId))
         };
 
@@ -41,7 +41,7 @@ public class ExportDisciplineController(
         return File(data, MimeType.XLS, "DisciplineSummaryReport.xls");
     }
 
-    public async Task<ActionResult> ExportDisciplineDetailReport(DisciplineSummaryViewModel model)
+    public async Task<ActionResult> ExportDisciplineDetailReport(DisciplineSummaryViewModel model, short? companyId = null)
     {
         var roles = await roleService.GetByUserIdAsync(session.UserId);
         var criteria = new GetDisciplineDetailCriteria
@@ -55,7 +55,7 @@ public class ExportDisciplineController(
             ApproverId = session.UserId,
             EmployeeName = model.Employee,
             TeamName = model.TeamName,
-            CompanyId = CurrentCompanyId,
+            CompanyId = companyId ?? CurrentCompanyId,
             RoleIds = string.Join(",", roles.Select(x => x.RoleId))
         };
 

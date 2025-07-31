@@ -6,9 +6,10 @@
 @{
     var pagerOption = (PagerOptionModel)ViewBag.PagerOption;
     const int totalColumn = 24;
+    var hasPermissionToEdit = ViewBag.HasPermissionToEdit;
 }
 @section css {
-	<link href="~/dist/styles/group.employee.list.index.css" rel="stylesheet" />
+    <link href="~/dist/styles/group.employee.list.index.css" rel="stylesheet" />
 }
 
 <table id="data" class="table table-custom">
@@ -64,34 +65,34 @@
                 </div>
             </th>
             <th class="col-sorter col-250">
-	            <div class="cell-control-wrapper">
-		            @Labels.TeamName
-		            <div class="fa fa-sort cell-right-div"></div>
-	            </div>
+                <div class="cell-control-wrapper">
+                    @Labels.TeamName
+                    <div class="fa fa-sort cell-right-div"></div>
+                </div>
             </th>
             <th class="col-sorter col-250">
-	            <div class="cell-control-wrapper">
-		            @Labels.TeamPIC
-		            <div class="fa fa-sort cell-right-div"></div>
-	            </div>
+                <div class="cell-control-wrapper">
+                    @Labels.TeamPIC
+                    <div class="fa fa-sort cell-right-div"></div>
+                </div>
             </th>
             <th class="col-sorter col-150">
-	            <div class="cell-control-wrapper">
-		            @Labels.JobLevel
-		            <div class="fa fa-sort cell-right-div"></div>
-	            </div>
+                <div class="cell-control-wrapper">
+                    @Labels.JobLevel
+                    <div class="fa fa-sort cell-right-div"></div>
+                </div>
             </th>
             <th class="col-sorter col-150">
-	            <div class="cell-control-wrapper">
-		            @Labels.MGrade
-		            <div class="fa fa-sort cell-right-div"></div>
-	            </div>
+                <div class="cell-control-wrapper">
+                    @Labels.MGrade
+                    <div class="fa fa-sort cell-right-div"></div>
+                </div>
             </th>
             <th class="col-sorter col-250">
-	            <div class="cell-control-wrapper">
-		            @Labels.GroupDate
-		            <div class="fa fa-sort cell-right-div"></div>
-	            </div>
+                <div class="cell-control-wrapper">
+                    @Labels.GroupDate
+                    <div class="fa fa-sort cell-right-div"></div>
+                </div>
             </th>
             <th class="col-sorter col-150">
                 <div class="cell-control-wrapper">
@@ -99,6 +100,10 @@
                     <div class="fa fa-sort cell-right-div"></div>
                 </div>
             </th>
+            @if (hasPermissionToEdit)
+            {
+                <th>@Labels.Role</th>
+            }
         </tr>
     </thead>
     <tbody>
@@ -124,12 +129,18 @@
                     <td class="align-left">@employee.JobLevel</td>
                     <td class="align-left">@employee.ManagementLevel</td>
                     <td class="align-left">
-	                    @if (employee.JoinedDate.HasValue)
-	                    {
-		                    @employee.JoinedDate.Value.ToDateMonthYearFormatedDate()
-	                    }
-	                </td>
+                        @if (employee.JoinedDate.HasValue)
+                        {
+                            @employee.JoinedDate.Value.ToDateMonthYearFormatedDate()
+                        }
+                    </td>
                     <td class="align-left">@employee.Company</td>
+                    @if (hasPermissionToEdit)
+                    {
+                        <td>
+                            @Html.ActionLink("Manage", "edit", "GroupEmployeeList", new { id = employee.EmpId }, null)
+                        </td>
+                    }
                 </tr>
             }
         }

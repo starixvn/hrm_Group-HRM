@@ -4,7 +4,8 @@
     var isSystemAdmin = (bool)ViewBag.IsSystemAdmin;
     var hasPermissionToViewHoliday = (bool)ViewBag.HasPermissionToViewHoliday;
     var hasPermissionToViewShift = (bool)ViewBag.HasPermissionToViewShift;
-    var enableSyncWorkingShift = (bool)ViewBag.EnableSyncWorkingShift;
+    var companyId = (int)ViewBag.CompanyId;
+    var roleId = (short)ViewBag.RoleId;
 }
 @section css{
     <link href="~/dist/styles/schedule.arrange.css" rel="stylesheet" />
@@ -17,7 +18,10 @@
 }
 
 <div class="title">
-    <h2 class="page-title">@ViewBag.Title</h2>
+    <div class="title">
+        <h2 class="page-title">@ViewBag.Title </h2>
+        <div id="company-list"></div>
+    </div>
     <div>
         @if (hasPermissionToViewHoliday)
         {
@@ -35,5 +39,6 @@
 </div>
 
 <input type="checkbox" id="IsSystemAdmin" hidden @(isSystemAdmin ? "checked" : string.Empty) />
-<input type="checkbox" id="EnableSyncWorkingShift" hidden @(enableSyncWorkingShift ? "checked" : string.Empty) />
+<input type="hidden" id="CompanyId" value="@companyId" />
+<input type="hidden" id="RoleId" value="@roleId" />
 <div id="schedule-wrapper"></div>

@@ -178,16 +178,17 @@ public class TeamController(
     {
         ViewBag.TeamId = id;
         ViewBag.RoleId = (short)RoleSystem.ShiftManager;
+        ViewBag.CompanyId = CurrentCompanyId;
 
         return View();
     }
 
-    [HrmPermission(Policy.Host, FunctionKey.TeamManagement)]
+    [HrmPermission(Policy.Host, FunctionKey.TeamManagement, FunctionKey.GroupTeamManagement)]
     public async Task<IActionResult> GetShiftManagerByTeamId(int teamId)
     {
         IEnumerable<SupervisorModel> supervisors = await teamService.GetTeamSupervisorByRoleId(teamId, (short)RoleSystem.ShiftManager);
         var result = supervisors.Select(x => new Supervisor
-        { OwnerId = x.OwnerId, Nickname = x.NickName, FullName = x.FullName });
+        { OwnerId = x.OwnerId, Nickname = x.NickName, FullName = x.FullName, CompanyId = x.CompanyId, CompanyName = x.CompanyName, CanRemove = x.CanRemove });
         return Json(result);
     }
 
@@ -196,10 +197,11 @@ public class TeamController(
     {
         ViewBag.TeamId = id;
         ViewBag.RoleId = (short)RoleSystem.DisciplineManager;
+        ViewBag.CompanyId = CurrentCompanyId;
         return View();
     }
 
-    [HrmPermission(Policy.Read, FunctionKey.TeamManagement)]
+    [HrmPermission(Policy.Read, FunctionKey.TeamManagement, FunctionKey.GroupTeamManagement)]
     public async Task<IActionResult> GetDisciplineManagerByTeamId(int teamId)
     {
         var supervisors = await teamService.GetDisciplineManagerByTeamId(teamId);
@@ -243,7 +245,7 @@ public class TeamController(
         return Json(commandResult);
     }
 
-    private async Task<IList<Employee>> GetAllEmployees()
+    private async Task<IList<Employee>> GetAllEmployees(short? companyId = null)
     {
         var criteria = new GetAllEmployeeCriteria
         {
@@ -253,7 +255,7 @@ public class TeamController(
             IsDeleteUser = null,
             TitleId = null,
             IsLocalUser = null,
-            CompanyId = CurrentCompanyId
+            CompanyId = companyId ?? CurrentCompanyId
         };
         IList<Employee> employees = (await employeeService.GetEmployeeAsync(criteria)).ToList();
 
@@ -261,11 +263,11 @@ public class TeamController(
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetOrgChart(bool isGroup = false)
+    public async Task<IActionResult> GetOrgChart(bool isGroup = false, short? companyId = null)
     {
         var units = await unitService.GetUnitAsync();
         var departments = await departmentService.GetDepartmentAsync();
-        var teams = await commonDataService.GetAllTeamAsync(isGroup: isGroup);
+        var teams = await commonDataService.GetAllTeamAsync(isGroup: isGroup, companyId: companyId);
 
         var orgchart = GetOrgChart(units, departments, teams);
 
@@ -300,6 +302,13 @@ public class TeamController(
         });
 
         return orgCharts;
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetCompaniesByRoleIdForEmployee(int? roleId = 4)
+    {
+        var companies = await teamService.GetCompaniesByRoleIdForEmployee(EmployeeSession.EmpId, roleId.Value);
+        return Json(companies);
     }
 
     private static byte GetValue(byte? value) => value ?? 0;

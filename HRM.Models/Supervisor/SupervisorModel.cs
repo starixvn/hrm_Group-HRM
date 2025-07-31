@@ -37,4 +37,6 @@ public class SupervisorModel
     public bool ArrangeShifts { get; set; }
 
     public string OrderCode { get; set; }
+
+    public bool CanRemove { get; set; }
 }

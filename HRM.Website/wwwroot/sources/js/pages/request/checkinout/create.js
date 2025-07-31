@@ -54,12 +54,18 @@ $(document).ready(function () {
                 const verifiers = verifierResponse.data,
                     approvers = approverResponse.data;
                 let options = '';
+                if ($('#AutoApproveRequest').prop('checked')) {
+                    options += '<option>--Select a Verifier--</option>';
+                }
                 for (let i = 0; i < verifiers.length; i++) {
                     options += "<option value='" + verifiers[i].ownerId + "'>" + verifiers[i].nickName + " (" + verifiers[i].fullName + ")</option>";
                 }
                 domElements.$verifierId.html(options);
 
                 options = '';
+                if ($('#AutoApproveRequest').prop('checked')) {
+                    options += '<option>--Select an Approver--</option>';
+                }
                 for (var i = 0; i < approvers.length; i++) {
                     options += "<option value='" + approvers[i].ownerId + "'>" + approvers[i].nickName + " (" + approvers[i].fullName + ")</option>";
                 }
@@ -146,7 +152,7 @@ $(document).ready(function () {
             errorMessages.push('Employee field is required.');
         }
 
-        if (!$('#IsTopManager').prop('checked')) {
+        if (!$('#AutoApproveRequest').prop('checked')) {
             if (verifierId === null || verifierId === '') {
                 errorMessages.push('Verified by field is required.');
             }
@@ -204,7 +210,7 @@ $(document).ready(function () {
                     return {
                         label: item.nickName + ' (' + item.fullName + ')',
                         value: item.ownerId,
-                        isTopManager: item.isTopManager
+                        autoApproveRequest: item.autoApproveRequest
                     };
                 }));
             }).catch(axiosError);
@@ -214,20 +220,20 @@ $(document).ready(function () {
             event.preventDefault();
             $('#Employee').val(ui.item.label);
             $('#EmployeeId').val(ui.item.value);
-            $('#IsTopManager').prop('checked', ui.item.isTopManager);
+            $('#AutoApproveRequest').prop('checked', ui.item.autoApproveRequest);
         },
         focus: function (event, ui) {
             event.preventDefault();
             $('#Employee').val(ui.item.label);
             $('#EmployeeId').val(ui.item.value);
-            $('#IsTopManager').prop('checked', ui.item.isTopManager);
+            $('#AutoApproveRequest').prop('checked', ui.item.autoApproveRequest);
         },
         change: function (event, ui) {
             event.preventDefault();
             if (ui && ui.item) {
                 $('#Employee').val(ui.item.label);
                 $('#EmployeeId').val(ui.item.value);
-                $('#IsTopManager').prop('checked', ui.item.isTopManager);
+                $('#AutoApproveRequest').prop('checked', ui.item.autoApproveRequest);
                 getDataAfterChangeEmployee();
                 getDisabledDates();
             } else {

@@ -45,6 +45,16 @@
                                                     <i class="fa fa-pencil fa-lg icon-edit"></i>
                                                 </a>
                                 break;
+                            case (short)RoleSystem.ShiftManager:
+                                <a href="@Url.Action("ShiftManager", "GroupTeam", new { id = teamId })">
+                                    <i class="fa fa-pencil fa-lg icon-edit"></i>
+                                </a>
+                                break;
+                            case (short)RoleSystem.DisciplineManager:
+                                <a href="@Url.Action("DisciplineManager", "GroupTeam", new { id = teamId })">
+                                    <i class="fa fa-pencil fa-lg icon-edit"></i>
+                                </a>
+                                break;
                         }
                             </td>
                         </tr>

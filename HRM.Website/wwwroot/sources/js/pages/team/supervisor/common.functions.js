@@ -1,15 +1,32 @@
 ﻿import axios from 'axios';
 import { stringify } from 'qs';
 
-import { reorder, resolveClientUrl, axiosError } from '../../../shared/common.functions';
+import {
+    reorder,
+    resolveClientUrl,
+    axiosError,
+} from '../../../shared/common.functions';
 
 function getSupervisors(query, roleIds, excludeIds) {
     return axios(resolveClientUrl('employee/GetSupervisors'), {
         params: {
             roleIds,
             query,
-            excludeIds
-        }
+            excludeIds,
+        },
+    });
+}
+
+function getGroupTeamEmployees(keyword) {
+    return axios({
+        url: resolveClientUrl('GroupTeam/getemployees'),
+        method: 'GET',
+        headers: { 'X-Requested-With': 'XMLHttpRequest' },
+        params: {
+            keyword,
+            isEnable: true,
+            isDelete: false,
+        },
     });
 }
 
@@ -20,48 +37,60 @@ function editEmployeeSupervisor(employeeId, roleId, supervisors, toastObj) {
         data: stringify({
             employeeId,
             roleId,
-            supervisors
+            supervisors,
         }),
         headers: {
             'X-Requested-With': 'XMLHttpRequest',
-            'Content-Type': 'application/x-www-form-urlencoded'
-        }
-    }).then(response => {
-        const data = response.data;
-        if (data.isSuccessful) {
-            toastObj.success('Updated Successfully!');
-        } else {
-            toastObj.error(data.message);
-        }
-    }).catch(axiosError);
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+    })
+        .then((response) => {
+            const data = response.data;
+            if (data.isSuccessful) {
+                toastObj.success('Updated Successfully!');
+            } else {
+                toastObj.error(data.message);
+            }
+        })
+        .catch(axiosError);
 }
 
-function editTeamSupervisor(teamId, roleId, supervisors, toastObj) {
+function editTeamSupervisor(
+    teamId,
+    roleId,
+    supervisors,
+    toastObj,
+    controller = 'Team'
+) {
     axios({
-        url: resolveClientUrl('Team/EditTeamSupervisor'),
+        url: resolveClientUrl(`${controller}/EditTeamSupervisor`),
         method: 'POST',
         data: stringify({
             teamId,
             roleId,
-            supervisors
+            supervisors,
         }),
         headers: {
             'X-Requested-With': 'XMLHttpRequest',
-            'Content-Type': 'application/x-www-form-urlencoded'
-        }
-    }).then(response => {
-        const data = response.data;
-        if (data.isSuccessful) {
-            toastObj.success('Updated Successfully!');
-        } else {
-            toastObj.error(data.message);
-        }
-    }).catch(axiosError);
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+    })
+        .then((response) => {
+            const data = response.data;
+            if (data.isSuccessful) {
+                toastObj.success('Updated Successfully!');
+            } else {
+                toastObj.error(data.message);
+            }
+        })
+        .catch(axiosError);
 }
 
 function reorderSupervisor(key, employeeId, supervisors, callback) {
     const totalItems = supervisors.length,
-        sourceIndex = supervisors.findIndex(item => item.ownerId === employeeId);
+        sourceIndex = supervisors.findIndex(
+            (item) => item.ownerId === employeeId
+        );
     let destinationIndex = 0;
 
     switch (key) {
@@ -76,7 +105,11 @@ function reorderSupervisor(key, employeeId, supervisors, callback) {
             break;
     }
 
-    if (destinationIndex < 0 || destinationIndex > totalItems || sourceIndex === destinationIndex) {
+    if (
+        destinationIndex < 0 ||
+        destinationIndex > totalItems ||
+        sourceIndex === destinationIndex
+    ) {
         return;
     }
 
@@ -108,11 +141,12 @@ function moveBottom(vm) {
 
 export {
     getSupervisors,
+    getGroupTeamEmployees,
     editEmployeeSupervisor,
     editTeamSupervisor,
     reorderSupervisor,
     moveUp,
     moveDown,
     moveTop,
-    moveBottom
+    moveBottom,
 };

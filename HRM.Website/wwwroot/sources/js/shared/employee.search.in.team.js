@@ -10,16 +10,21 @@ $(document).ready(function () {
                 method: 'GET',
                 headers: { 'X-Requested-With': 'XMLHttpRequest' },
                 params: {
-                    keyword: request.term
-                }
-            }).then(res => {
-                response($.map(res.data, function (item) {
-                    return {
-                        label: item.nickName + ' (' + item.fullName + ')',
-                        value: item.id
-                    };
-                }));
-            }).catch(axiosError);
+                    keyword: request.term,
+                    companyId: $('#CompanyId').val() || null,
+                },
+            })
+                .then((res) => {
+                    response($.map(res.data, function (item) {
+                            return {
+                                label:
+                                    item.nickName + ' (' + item.fullName + ')',
+                                value: item.id,
+                            };
+                        })
+                    );
+                })
+                .catch(axiosError);
         },
         minLength: 2,
         select: function (event, ui) {
@@ -46,6 +51,6 @@ $(document).ready(function () {
                     }
                 }
             }
-        }
+        },
     });
 });

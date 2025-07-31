@@ -21,6 +21,7 @@
     @Html.Hidden("WorkingHours", Model.MonthlyRequest.Requester.WorkingHours)
     @Html.Hidden("EmployeeId", Model.MonthlyRequest.Requester.EmpId)
     @Html.Hidden("Month", Model.MonthlyRequest.Month)
+    @Html.Hidden("AutoApproveRequest", Model.AutoApproveRequest)
     <div class="header-control">
         <div class="form-horizontal clearfix">
             <div class="form-group form-group--m">
@@ -28,7 +29,7 @@
                     @Html.Label(Labels.Verifier, Labels.Verifier, new { @class = "control-label" })
                 </div>
                 <div class="select-form">
-                    @if (Model.Verifiers.Count() > 1)
+                    @if (Model.Verifiers.Count() > 1 || Model.AutoApproveRequest)
                     {
                         @Html.DropDownListFor(model => model.VerifierId, new SelectList(Model.Verifiers, "OwnerId", "NickName"), Labels.SelectVerifier, new { @class = "form-control" })
                     }
@@ -43,7 +44,7 @@
                     @Html.Label(Labels.Approver, Labels.Approver, new { @class = "control-label" })
                 </div>
                 <div class="select-form">
-                    @if (Model.Approvers.Count() > 1)
+                    @if (Model.Approvers.Count() > 1 || Model.AutoApproveRequest)
                     {
                         @Html.DropDownListFor(model => model.ApproverId, new SelectList(Model.Approvers, "OwnerId", "NickName"), Labels.SelectApprover, new { @class = "form-control" })
                     }

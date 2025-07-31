@@ -3,14 +3,25 @@ import { Button } from 'react-bootstrap';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 
-import { axiosError, blockUI, unblockUI, resolveClientUrl } from '../../../shared/common.functions';
-import { editTeamSupervisor, editEmployeeSupervisor, reorderSupervisor } from '../supervisor/common.functions';
+import {
+    axiosError,
+    blockUI,
+    unblockUI,
+    resolveClientUrl,
+} from '../../../shared/common.functions';
+import {
+    editTeamSupervisor,
+    editEmployeeSupervisor,
+    reorderSupervisor,
+    getGroupTeamEmployees,
+} from '../supervisor/common.functions';
 import ToastLayout from '../../../shared/layouts/ToastLayout';
 import Table from '../discipline-manager/table/table';
 
 const PageType = {
     Team: 1,
-    Employee: 2
+    Employee: 2,
+    GroupTeam: 3,
 };
 
 export default class ShiftManager extends Component {
@@ -19,39 +30,55 @@ export default class ShiftManager extends Component {
 
         this.state = {
             managers: [],
-            employeeOptions: []
+            employeeOptions: [],
         };
 
         this.roleId = document.getElementById('RoleId').value;
+        const companyId = (document.getElementById('CompanyId') || {}).value || '';
+        this.companyId = companyId;
     }
 
     componentDidMount() {
         this.getShiftManagers();
     }
-
-    getEmployees = query => {
+    getEmployees = (query) => {
         if (query.trim().length > 1) {
-            axios({
-                url: resolveClientUrl('employee/getemployees'),
-                method: 'GET',
-                headers: { 'X-Requested-With': 'XMLHttpRequest' },
-                params: {
-                    query,
-                    enable: true,
-                    isDelete: false
-                }
-            }).then(response => {
-                const employeeOptions = response.data.map(item => {
-                    return {
-                        id: item.Id,
-                        nickname: item.NickName,
-                        fullName: item.FullName,
-                        value: item.DisplayName
-                    };
+            let apiCall;
+            let isGroupTeam = this.props.pageType === PageType.GroupTeam;
+            if (isGroupTeam) {
+                apiCall = getGroupTeamEmployees(query);
+            } else {
+                apiCall = axios({
+                    url: resolveClientUrl('employee/getemployees'),
+                    method: 'GET',
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                    params: {
+                        query,
+                        enable: true,
+                        isDelete: false,
+                    },
                 });
+            }
 
-                this.setState({ employeeOptions: employeeOptions });
-            }).catch(axiosError);
+            apiCall
+                .then((response) => {
+                    const employeeOptions = response.data.map((item) => {
+                        var id = isGroupTeam ? item.empId : item.id;
+                        return {
+                            key: id,
+                            id: id,
+                            teamCode:
+                                item.teamCode !== null ? item.teamCode : '',
+                            value:
+                                this.props.pageType === PageType.GroupTeam
+                                    ? `${item.nickName} (${item.company})`
+                                    : item.nickName,
+                        };
+                    });
+
+                    this.setState({ employeeOptions: employeeOptions });
+                })
+                .catch(axiosError);
         } else {
             this.setState({ employeeOptions: [] });
         }
@@ -60,51 +87,65 @@ export default class ShiftManager extends Component {
     getShiftManagers = () => {
         blockUI();
 
-        let promise;
+        let url, params;
+
         if (this.props.pageType === PageType.Team) {
-            promise = axios({
-                url: resolveClientUrl('Team/GetShiftManagerByTeamId'),
-                method: 'GET',
-                headers: { 'X-Requested-With': 'XMLHttpRequest' },
-                params: {
-                    teamId: this.props.objectId
-                }
-            });
+            url = 'Team/GetShiftManagerByTeamId';
+            params = { teamId: this.props.objectId };
+        } else if (this.props.pageType === PageType.GroupTeam) {
+            url = 'GroupTeam/GetShiftManagerByTeamId';
+            params = { teamId: this.props.objectId };
         } else {
-            promise = axios({
-                url: resolveClientUrl('Employee/GetShiftManagerByEmployeeId'),
-                method: 'GET',
-                headers: { 'X-Requested-With': 'XMLHttpRequest' },
-                params: {
-                    employeeId: this.props.objectId
-                }
-            });
+            url = 'Employee/GetShiftManagerByEmployeeId';
+            params = { employeeId: this.props.objectId };
         }
 
-        promise.then(response => {
-            this.setState({ managers: response.data });
-        }).catch(axiosError).then(() => unblockUI());
+        axios({
+            url: resolveClientUrl(url),
+            method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
+            params: params,
+        })
+            .then((response) => {
+                this.setState({ managers: response.data });
+            })
+            .catch(axiosError)
+            .then(() => unblockUI());
     };
 
     handleChangeOrder = (key, employeeId) => {
         const vm = this;
-        reorderSupervisor(key, employeeId, [...this.state.managers], function (managers) {
-            vm.setState({ managers });
-        });
+        reorderSupervisor(
+            key,
+            employeeId,
+            [...this.state.managers],
+            function (managers) {
+                vm.setState({ managers });
+            }
+        );
     };
 
-    handleAddEmployee = employee => {
-        const index = this.state.managers.findIndex(item => item.ownerId === employee.id);
+    handleAddEmployee = (employee) => {
+        const index = this.state.managers.findIndex(
+            (item) => item.ownerId === employee.id
+        );
         this.setState({ employeeOptions: [] });
         if (index < 0) {
-            const managers = [...this.state.managers, { ownerId: employee.id, nickname: employee.nickname, fullName: employee.fullName }];
+            const managers = [
+                ...this.state.managers,
+                {
+                    ownerId: employee.id,
+                    nickname: employee.value,
+                    canRemove: true,
+                },
+            ];
             this.setState({ managers });
         }
     };
 
-    handleRemoveEmployee = employeeId => {
+    handleRemoveEmployee = (employeeId) => {
         const managers = [...this.state.managers],
-            index = managers.findIndex(item => item.ownerId === employeeId);
+            index = managers.findIndex((item) => item.ownerId === employeeId);
         managers.splice(index, 1);
         this.setState({ managers });
     };
@@ -113,34 +154,71 @@ export default class ShiftManager extends Component {
         const supervisors = this.state.managers.map((item, index) => {
             return {
                 ownerId: item.ownerId,
-                displayOrder: index + 1
+                displayOrder: index + 1,
             };
         });
         if (this.props.pageType === PageType.Team) {
-            editTeamSupervisor(this.props.objectId, this.roleId, supervisors, toast);
+            editTeamSupervisor(
+                this.props.objectId,
+                this.roleId,
+                supervisors,
+                toast
+            );
+        } else if (this.props.pageType === PageType.GroupTeam) {
+            editTeamSupervisor(
+                this.props.objectId,
+                this.roleId,
+                supervisors,
+                toast,
+                'GroupTeam'
+            );
         } else {
-            editEmployeeSupervisor(this.props.objectId, this.roleId, supervisors, toast);
+            editEmployeeSupervisor(
+                this.props.objectId,
+                this.roleId,
+                supervisors,
+                toast
+            );
         }
     };
 
     render() {
         const { employeeOptions, managers } = this.state;
-
         return (
             <Fragment>
                 <ToastLayout />
-                <Table data={managers}
+                <Table
+                    data={managers}
                     employeeOptions={employeeOptions}
                     onSearchEmployees={this.getEmployees}
                     onChangeOrder={this.handleChangeOrder}
                     onAddEmployee={this.handleAddEmployee}
                     onRemoveEmployee={this.handleRemoveEmployee}
+                    companyId={this.companyId}
                 />
-                <Button onClick={this.handleSave} bsStyle="primary">Save</Button>
-                <a className="btn btn-default"
-                    href={resolveClientUrl(`${this.props.pageType === PageType.Team ? 'team/TeamSupervisor' : 'employee/edit'}/${this.props.objectId}`)}
-                >Back</a>
+                <Button onClick={this.handleSave} bsStyle="primary">
+                    Save
+                </Button>
+                <a
+                    className="btn btn-default"
+                    href={resolveClientUrl(
+                        `${this.getBackUrl()}/${this.props.objectId}`
+                    )}>
+                    Back
+                </a>
             </Fragment>
         );
     }
+
+    getBackUrl = () => {
+        switch (this.props.pageType) {
+            case PageType.Team:
+                return 'team/TeamSupervisor';
+            case PageType.GroupTeam:
+                return 'GroupTeam/TeamSupervisor';
+            case PageType.Employee:
+            default:
+                return 'employee/edit';
+        }
+    };
 }

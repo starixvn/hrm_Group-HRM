@@ -84,7 +84,7 @@ public class LeaveController(
             EnableSickLeaveBalance = setting.EnableSickLeaveBalance,
             EnableLimitUseAnnualLeaveBalance = setting.EnableLimitUseAnnualLeaveBalance
         };
-        ViewBag.IsTopManager = EmployeeSession.IsTopManager;
+        ViewBag.AutoApproveRequest = EmployeeSession.AutoApproveRequest;
         ViewBag.HasOnBehalfOthersPermission = session.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
             || session.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);
 
@@ -162,23 +162,15 @@ public class LeaveController(
 
         var supervisor = await requestService.GetVerifierAndApproverAsync(model.EmployeeId, RequestType.Leave);
         var setting = await commonDataService.GetSystemSettingAsync();
-        model.Verifiers = supervisor.Verifiers;
-        if (model.Verifiers.Any())
-        {
-            model.Verifiers = await employeeService.CheckAndAddMissingSupervisor(model.Verifiers, model.VerifierId);
-        }
-        model.Approvers = supervisor.Approvers;
-        if (model.Approvers.Any())
-        {
-            model.Approvers = await employeeService.CheckAndAddMissingSupervisor(model.Approvers, model.ApproverId);
-        }
+        model.Verifiers = await employeeService.CheckAndAddMissingSupervisor(supervisor.Verifiers, model.VerifierId);
+        model.Approvers = await employeeService.CheckAndAddMissingSupervisor(supervisor.Approvers, model.ApproverId);
         model.Files = (await attachFileService.GetInfoAttachFileAsync(id, $"{CurrentCompanyId}/requests")).Select(x => x.FileName).ToList();
         model.EnableHospitalizationLeaveBalance = setting.EnableHospitalizationLeaveBalance;
         model.EnableSickLeaveBalance = setting.EnableSickLeaveBalance;
         model.EnableLimitUseAnnualLeaveBalance = setting.EnableLimitUseAnnualLeaveBalance;
 
         ViewBag.IsView = false;
-        ViewBag.IsTopManager = request.Requester.IsTopManager;
+        ViewBag.AutoApproveRequest = request.Requester.AutoApproveRequest;
         ViewBag.HasOnBehalfOthersPermission = session.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
             || session.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);
 
@@ -251,16 +243,8 @@ public class LeaveController(
         model.Files = (await attachFileService.GetInfoAttachFileAsync(id, $"{CurrentCompanyId}/requests")).Select(x => x.FileName).ToList();
 
         var supervisor = await requestService.GetVerifierAndApproverAsync(request.Requester.EmpId, RequestType.Leave);
-        model.Verifiers = supervisor.Verifiers;
-        if (model.Verifiers.Any())
-        {
-            model.Verifiers = await employeeService.CheckAndAddMissingSupervisor(model.Verifiers, model.VerifierId);
-        }
-        model.Approvers = supervisor.Approvers;
-        if (model.Approvers.Any())
-        {
-            model.Approvers = await employeeService.CheckAndAddMissingSupervisor(model.Approvers, model.ApproverId);
-        }
+        model.Verifiers = await employeeService.CheckAndAddMissingSupervisor(supervisor.Verifiers, model.VerifierId);
+        model.Approvers = await employeeService.CheckAndAddMissingSupervisor(supervisor.Approvers, model.ApproverId);
 
         ViewBag.IsView = true;
         ViewBag.HasOnBehalfOthersPermission = session.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)

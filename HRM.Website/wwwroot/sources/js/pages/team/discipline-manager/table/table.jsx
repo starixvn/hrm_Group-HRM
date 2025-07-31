@@ -5,7 +5,7 @@ import Row from './Row';
 
 export default class Table extends PureComponent {
     render() {
-        const { data, employeeOptions } = this.props;
+        const { data, employeeOptions, companyId } = this.props;
 
         return (
             <table className="table table-custom">
@@ -24,6 +24,7 @@ export default class Table extends PureComponent {
                             <Row key={`row${index}`} data={manager}
                                 onRemoveEmployee={this.props.onRemoveEmployee}
                                 onChangeOrder={this.props.onChangeOrder}
+                                companyId={companyId}
                             />
                         )
                     }

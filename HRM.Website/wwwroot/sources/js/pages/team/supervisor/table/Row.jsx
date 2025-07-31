@@ -17,17 +17,14 @@ export default class Row extends PureComponent {
       event.target.checked
     );
   };
-
   render() {
     const { data, companyId } = this.props;
-    console.log('data', data);
     const isSameCompany = companyId == data.companyId;
-    const companyName = !isSameCompany && data.companyName ? `(${data.companyName})` : "";
     return (
       <tr>
         <td className="align-left cell-name">
           <div className="wrapper">
-            <div>{`${data.nickName} ${companyName}`}</div>
+            <div>{data.nickName}</div>
             <DropdownOrder
               id={`dropdown${data.ownerId}`}
               onMoveUp={() => moveUp(this)}

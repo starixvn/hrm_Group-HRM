@@ -24,7 +24,7 @@ public class LateInEarlyOutRequestService(
     IRequestMailService requestMailService,
     IEmailService emailService,
     IBaseService baseService,
-    IUserControlSession userControlSession,
+    IUserControlSession session,
     ICompanyService companyService) : ILateInEarlyOutRequestService
 {
     private const string EmailTemplatePathForRequest = "EmailTemplates/LateInEarlyOut.Request.txt";
@@ -44,8 +44,10 @@ public class LateInEarlyOutRequestService(
 
     public async Task<LateInEarlyOutRequest> GetByIdAsync(long requestId)
     {
+        var companyId = session.Get<short>(SessionKey.CurrentCompanyId);
         var criteria = new GetLateInEarlyOutRequestByIdCriteria
         {
+            CompanyId = companyId,
             RequestId = requestId
         };
         return await lateInEarlyOutRequestRepository.GetByIdAsync(criteria);
@@ -53,7 +55,7 @@ public class LateInEarlyOutRequestService(
 
     public async Task<IList<LateInEarlyOutRequest>> GetHistoryByIdAsync(long requestId)
     {
-        var companyId = userControlSession.Get<int>(SessionKey.CurrentCompanyId);
+        var companyId = session.Get<int>(SessionKey.CurrentCompanyId);
 
         var criteria = new GetLateInEarlyOutRequestHistoryByIdCriteria
         {
@@ -70,7 +72,7 @@ public class LateInEarlyOutRequestService(
 
     public async Task<IEnumerable<DateTime>> GetDisabledDateAsync(GetDisabledDateParam param)
     {
-        var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
+        var companyId = session.Get<short>(SessionKey.CurrentCompanyId);
         var criteria = new GetDisabledDateCriteria
         {
             EmployeeId = param.EmployeeId,

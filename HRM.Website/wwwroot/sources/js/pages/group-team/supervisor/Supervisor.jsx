@@ -74,15 +74,27 @@ export default class Supervisor extends Component {
   getSupervisors = () => {
     blockUI();
     let promise;
-    promise = axios({
-      url: resolveClientUrl("GroupTeam/GetTeamSupervisorByRoleId"),
-      method: "GET",
-      headers: { "X-Requested-With": "XMLHttpRequest" },
-      params: {
-        teamId: this.props.objectId,
-        roleId: this.roleId,
-      },
-    });
+    if (this.props.pageType === PageType.Team) {
+      promise = axios({
+        url: resolveClientUrl("GroupTeam/GetTeamSupervisorByRoleId"),
+        method: "GET",
+        headers: { "X-Requested-With": "XMLHttpRequest" },
+        params: {
+          teamId: this.props.objectId,
+          roleId: this.roleId,
+        },
+      });
+    } else {
+      promise = axios({
+        url: resolveClientUrl("Employee/GetEmployeeSupervisorByRoleId"),
+        method: "GET",
+        headers: { "X-Requested-With": "XMLHttpRequest" },
+        params: {
+          employeeId: this.props.objectId,
+          roleId: this.roleId,
+        },
+      });
+    }
     promise
       .then((response) => {
         this.setState({ supervisors: response.data });
@@ -113,7 +125,7 @@ export default class Supervisor extends Component {
         ...this.state.supervisors,
         {
           ownerId: employee.id,
-          nickName: employee.nickname,
+          nickName: employee.value,
           fullName: employee.fullName,
           teamCode: employee.teamCode,
           companyName: employee.companyName,
@@ -203,7 +215,7 @@ export default class Supervisor extends Component {
             `${
               this.props.pageType === PageType.Team
                 ? "GroupTeam/TeamSupervisor"
-                : "employee/edit"
+                : "GroupEmployeeList/Edit"
             }/${this.props.objectId}`
           )}
         >

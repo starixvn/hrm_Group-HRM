@@ -88,8 +88,6 @@ public class Employee : EntityBase<int>
 
     public string ResignedReason { get; set; }
 
-    public string Skype { get; set; }
-
     public string LetsTalk { get; set; }
 
     public byte Marriage { get; set; }
@@ -134,7 +132,6 @@ public class Employee : EntityBase<int>
 
     public DateTime? PassportExp { get; set; }
 
-    ////Add new field
     public string Verifier { get; set; }
 
     public string Approver { get; set; }
@@ -235,8 +232,8 @@ public class Employee : EntityBase<int>
     [Display(Name = "Pickup Remark")]
     public string PickupRemark { get; set; }
 
-    private string[] GetRoles2Array()
-    {
-        return Roles?.Select(i => i.RoleId.ToString()).ToArray();
-    }
+    [Display(Name = "Auto-Approved")]
+    public bool AutoApproveRequest { get; set; }
+
+    private string[] GetRoles2Array() => Roles?.Select(i => i.RoleId.ToString()).ToArray();
 }

@@ -331,14 +331,6 @@
             </li>
             <li class="list-group-item form-group">
                 <div class="label-form">
-                    @Html.LabelFor(model => model.Skype, new { @class = "control-label" })
-                </div>
-                <div class="input-form">
-                    @Html.TextBoxFor(model => model.Skype, new { @class = "form-control" })
-                </div>
-            </li>
-            <li class="list-group-item form-group">
-                <div class="label-form">
                     @Html.LabelFor(model => model.LetsTalk, Labels.LetsTalk, new { @class = "control-label" })
                 </div>
                 <div class="input-form">
@@ -617,6 +609,14 @@
                 </div>
                 <div class="input-form">
                     <div class="checkbox">@Html.CheckBoxCustomFor(model => model.IsTopManager)</div>
+                </div>
+            </li>
+            <li class="list-group-item form-group">
+                <div class="label-form">
+                    @Html.LabelFor(model => model.AutoApproveRequest, new { @class = "control-label" })
+                </div>
+                <div class="input-form">
+                    <div class="checkbox">@Html.CheckBoxCustomFor(model => model.AutoApproveRequest)</div>
                 </div>
             </li>
             <li class="list-group-item form-group">

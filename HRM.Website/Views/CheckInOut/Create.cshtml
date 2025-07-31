@@ -8,7 +8,7 @@
     ViewBag.Title = Labels.Create;
     var today = DateTimeOffset.Now.DateTime.ToClientTimeZone().Date;
     var shift = (Shift)ViewBag.Shift;
-    var isTopManager = (bool)ViewBag.IsTopManager;
+    var autoApproveRequest = (bool)ViewBag.AutoApproveRequest;
     var hasOnBehalfRequestPermission = (bool)ViewBag.HasOnBehalfRequestPermission;
 }
 @section css{
@@ -24,7 +24,7 @@
 }
 <h2 class="page-title">@ViewBag.Title</h2>
 <div class="card">
-    <input type="checkbox" id="IsTopManager" hidden @(isTopManager ? "checked" : string.Empty) />
+    <input type="checkbox" id="AutoApproveRequest" hidden @(autoApproveRequest ? "checked" : string.Empty) />
     @using (Html.BeginForm("Create", "checkinout", FormMethod.Post, new { @class = "form-horizontal" }))
     {
         @Html.ValidationSummary()
@@ -124,7 +124,7 @@
                 @Html.LabelFor(model => model.VerifierId, new { @class = "control-label" })
             </div>
             <div class="select-form">
-                @if (Model.Verifiers.Count > 1)
+                @if (Model.Verifiers.Count > 1 || autoApproveRequest)
                 {
                     @Html.DropDownListFor(x => x.VerifierId, new SelectList(Model.Verifiers, "OwnerId", "NickName"), Labels.SelectVerifier, new { @class = "form-control" })
                 }
@@ -139,7 +139,7 @@
                 @Html.LabelFor(model => model.ApproverId, new { @class = "control-label" })
             </div>
             <div class="select-form">
-                @if (Model.Approvers.Count > 1)
+                @if (Model.Approvers.Count > 1 || autoApproveRequest)
                 {
                     @Html.DropDownListFor(x => x.ApproverId, new SelectList(Model.Approvers, "OwnerId", "NickName"), Labels.SelectApprover, new { @class = "form-control" })
                 }

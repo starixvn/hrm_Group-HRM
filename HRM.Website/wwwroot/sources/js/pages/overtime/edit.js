@@ -64,14 +64,8 @@ $(document).ready(function () {
         const verifierId = $('#VerifierId').val();
         const approverId = $('#ApproverId').val();
 
-        if (verifierId === '' && approverId === '') {
+        if ((verifierId === null || verifierId === '') && (approverId === null || approverId === '') && !$('#AutoApproveRequest').prop('checked')) {
             toastr.error('Please select Verifier and Approver.', '', toastOptions());
-            isValid = false;
-        } else if (verifierId === null || verifierId === '') {
-            toastr.error('Please select a Verifier.', '', toastOptions());
-            isValid = false;
-        } else if (approverId === null || approverId === '') {
-            toastr.error('Please select an Approver.', '', toastOptions());
             isValid = false;
         } else {
             $('input.remark').each(function () {

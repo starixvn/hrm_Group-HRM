@@ -30,8 +30,7 @@ public class EmployeeService(
     IEmployeeRepository employeeRepository,
     IBaseService baseService,
     IRoleService roleService,
-    IUserControlSession session,
-    ICompanyService companyService) : IEmployeeService
+    IUserControlSession session) : IEmployeeService
 {
     public async Task<string> GenerateEmployeeCode()
     {
@@ -44,6 +43,23 @@ public class EmployeeService(
     }
 
     public async Task<Employee> GetEmployeeByIdAsync(int id)
+    {
+        var companyId = session.Get<short>(SessionKey.CurrentCompanyId);
+        var criteria = new GetEmployeeByIdCriteria
+        {
+            CompanyId = companyId,
+            EmpId = id
+        };
+        var employee = await employeeRepository.GetEmployeeByIdAsync(criteria);
+        if (employee != null)
+        {
+            employee.Roles = await roleService.GetByUserIdAsync(employee.UserId);
+        }
+
+        return employee;
+    }
+
+    public async Task<Employee> GetEmployeeByIdInGroupScopeAsync(int id)
     {
         var criteria = new GetEmployeeByIdCriteria
         {
@@ -133,10 +149,12 @@ public class EmployeeService(
 
     public async Task<IEnumerable<SupervisorModel>> GetEmployeeSupervisorByRoleIdAsync(int employeeId, short roleId)
     {
+        var companyId = session.Get<short>(SessionKey.CurrentCompanyId);
         var criteria = new GetEmployeeSupervisorCriteria
         {
             EmpId = employeeId,
-            Role = roleId
+            Role = roleId,
+            CompanyId = companyId
         };
         return await baseService.GetDataAsync<SupervisorModel>(criteria);
     }
@@ -158,9 +176,11 @@ public class EmployeeService(
 
     public async Task<IEnumerable<Supervisor>> GetDisciplineSettingByEmployeeIdAsync(int employeeId)
     {
+        var companyId = session.Get<int>(SessionKey.CurrentCompanyId);
         var criteria = new GetDisciplineSettingByEmployeeId
         {
-            EmpId = employeeId
+            EmpId = employeeId,
+            CompanyId = companyId
         };
         return await baseService.GetDataAsync<Supervisor>(criteria);
     }
@@ -282,7 +302,6 @@ public class EmployeeService(
             ConfirmedDate = param.ConfirmedDate,
             ResignedDate = param.ResignedDate,
             ResignedReason = param.ResignedReason,
-            Skype = param.Skype,
             LetsTalk = param.LetsTalk,
             Marriage = param.Marriage,
             PermanentAddress = param.PermanentAddress,
@@ -319,7 +338,8 @@ public class EmployeeService(
             CompanyId = companyId,
             SubCompanyId = param.SubCompanyId,
             SalaryStructureId = param.SalaryStructureId,
-            Salary = param.Salary
+            Salary = param.Salary,
+            AutoApproveRequest = param.AutoApproveRequest
         };
         return await baseService.ExecuteNonQueryAsync(criteria);
     }
@@ -333,11 +353,6 @@ public class EmployeeService(
             ResignedDate = param.ResignedDate
         };
         return await baseService.ExecuteNonQueryAsync(criteria);
-    }
-
-    public async Task<CommandResult> UpdateUserIdAsync(UpdateUserIdCommand command)
-    {
-        return await baseService.ExecuteNonQueryAsync(command);
     }
 
     public string CalculateLengthOfService(DateTime? joinedDate, DateTime? militaryFromDate, DateTime? militaryToDate)
@@ -374,23 +389,23 @@ public class EmployeeService(
         return lengthOfService;
     }
 
-    public async Task<IList<SupervisorNameModel>> CheckAndAddMissingSupervisor(IList<SupervisorNameModel> supervisors, int supervisorId)
+    public async Task<IList<SupervisorNameModel>> CheckAndAddMissingSupervisor(IList<SupervisorNameModel> supervisors, int? supervisorId)
     {
-        var supervisorIds = supervisors.Select(x => x.OwnerId).ToList();
-        if (supervisorId == 0)
+        if (supervisorId is null or 0)
         {
             return supervisors;
         }
-        var isMissing = !supervisorIds.Contains(supervisorId);
+        var supervisorIds = supervisors.Select(x => x.OwnerId).ToList();
+        var isMissing = !supervisorIds.Contains(supervisorId.Value);
 
         if (isMissing)
         {
-            var supervisor = await GetEmployeeByIdAsync(supervisorId);
+            var supervisor = await GetEmployeeByIdInGroupScopeAsync(supervisorId.Value);
             SupervisorNameModel missingSupervisor = new()
             {
                 NickName = supervisor.NickName,
                 FullName = supervisor.FullName,
-                OwnerId = supervisorId,
+                OwnerId = supervisorId.Value,
                 Email = supervisor.Email
             };
 

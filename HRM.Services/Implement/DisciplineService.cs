@@ -46,14 +46,13 @@ public class DisciplineService(
         return disciplines;
     }
 
-    public async Task<IEnumerable<EmployeeInfoModel>> GetMemberToAddOtherDisciplineAsync(int supervisorId, string query = null)
+    public async Task<IEnumerable<EmployeeInfoModel>> GetMemberToAddOtherDisciplineAsync(int supervisorId, string query = null, short? companyId = null)
     {
-        var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
         var criteria = new GetMemberToAddOtherDisciplineBySupervisorIdCriteria
         {
             SupervisorId = supervisorId,
             Query = query,
-            CompanyId = companyId
+            CompanyId = companyId ?? userControlSession.Get<short>(SessionKey.CurrentCompanyId)
         };
         return await baseService.GetDataAsync<EmployeeInfoModel>(criteria);
     }

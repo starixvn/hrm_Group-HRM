@@ -2,18 +2,24 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Fanex.Data;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
 using HRM.Core;
 using HRM.Core.Constants;
+using HRM.Core.Enums;
 using HRM.Core.Filters;
 using HRM.Core.Services;
+using HRM.Criteria.Employee;
 using HRM.Criteria.Group;
+using HRM.Criteria.Supervisor;
 using HRM.Models;
 using HRM.Models.Group;
+using HRM.Models.Supervisor;
 using HRM.Models.Unit;
 using HRM.Services.ExportExcel.Employee;
 using HRM.Services.Implement;
+using HRM.Services.Implement.FnB;
 using HRM.Services.Interfaces;
 using HRM.ViewModels;
 using HRM.ViewModels.EmployeeGroup;
@@ -29,7 +35,8 @@ public class GroupEmployeeListController(
     IUnitService unitService,
     IDepartmentService departmentService,
     IExportExcelEmployeeInfoService excelService,
-    IBaseService baseService) : BaseController(session)
+    IBaseService baseService,
+    IEmployeeService employeeService) : BaseController(session)
 {
     [HrmPermission(Policy.Read, FunctionKey.GroupEmployeeList)]
     public async Task<IActionResult> Index(string teamIds = null)
@@ -80,7 +87,7 @@ public class GroupEmployeeListController(
             ViewBag.PagerOption = pagerOption;
         }
 
-        ViewBag.HasPermissionToEdit = session.HasPermissionOnFunction(FunctionKey.EmployeeManagement, Policy.Host);
+        ViewBag.HasPermissionToEdit = session.HasPermissionOnFunction(FunctionKey.GroupEmployeeList, Policy.Host);
         ViewBag.EnableGroupDate = await commonDataService.IsEnableGroupDateAsync();
 
         return PartialView("_ListEmployee", employees);
@@ -128,6 +135,109 @@ public class GroupEmployeeListController(
 
 
         return Json(employees);
+    }
+
+    [HrmPermission(Policy.Host, FunctionKey.GroupEmployeeList)]
+    public async Task<IActionResult> Edit(int id)
+    {
+        var employee = await employeeService.GetEmployeeByIdInGroupScopeAsync(id);
+        if (employee != null)
+        {
+            var supervisors = (await GetSupervisors(id)).ToList();
+            employee.Verifier = GetVerifiers(supervisors);
+            employee.Approver = GetApproverList(supervisors);
+            employee.Disciplinarian = GetDisciplineSupervisors(supervisors);
+            employee.EmpShiftList = GetShiftMonitors(supervisors);
+            return View(employee);
+        }
+
+        return RedirectToAction("PageNotFound", "Error");
+    }
+
+    [HttpGet]
+    public IActionResult ShiftManager(int id)
+    {
+        ViewBag.EmployeeId = id;
+        ViewBag.RoleId = (short)RoleSystem.ShiftManager;
+
+        return View();
+    }
+
+    [HttpGet]
+    public IActionResult ManageSupervisor(int id, short roleId)
+    {
+        ViewBag.EmployeeId = id;
+        ViewBag.RoleId = roleId;
+        return View();
+    }
+
+    [HrmPermission(Policy.Read, FunctionKey.GroupEmployeeList)]
+    public IActionResult DisciplineManager(int id)
+    {
+        ViewBag.EmployeeId = id;
+        ViewBag.RoleId = (short)RoleSystem.DisciplineManager;
+        return View();
+    }
+
+    private async Task<IEnumerable<SupervisorNameModel>> GetSupervisors(int empId)
+    {
+        var criteria = new GetListSupervisorNameCriteria
+        {
+            EmpId = empId,
+            Role = null,
+            RequestType = null
+        };
+        return await employeeService.GetListSupervisorNameAsync(criteria);
+    }
+
+    private static string GetSupervisors(IEnumerable<SupervisorNameModel> supervisors, short roleId)
+    {
+        if (supervisors == null || !supervisors.Any())
+        {
+            return string.Empty;
+        }
+
+        var filteredSupervisors = supervisors
+            .Where(x => x.ActionType == roleId)
+            .Select(x => $"{x.NickName} ({x.CompanyName})")
+            .ToList();
+
+        var supervisorNames = string.Join(", ", filteredSupervisors);
+
+        return supervisorNames;
+    }
+
+    public async Task<JsonResult> GetSupervisors(string roleIds, string query, string excludeIds)
+    {
+        var criteria = new GetEmployeeByRoleCriteria
+        {
+            ExcludeIds = excludeIds ?? string.Empty,
+            Query = query.Trim(),
+            RoleIds = roleIds
+        };
+        var employees = await employeeService.GetEmployeesByRoleAsync(criteria);
+
+        return Json(employees);
+    }
+
+    private static string GetVerifiers(IEnumerable<SupervisorNameModel> supervisors)
+    {
+        return GetSupervisors(supervisors, (short)RoleSystem.Verifier);
+    }
+
+    private static string GetApproverList(IEnumerable<SupervisorNameModel> supervisors)
+    {
+        return GetSupervisors(supervisors, (short)RoleSystem.Approver);
+    }
+
+    private static string GetShiftMonitors(IEnumerable<SupervisorNameModel> supervisors)
+    {
+        return GetSupervisors(supervisors, (short)RoleSystem.ShiftManager);
+    }
+
+    private static string GetDisciplineSupervisors(IEnumerable<SupervisorNameModel> supervisors)
+    {
+        return GetSupervisors(supervisors, (short)RoleSystem.DisciplineManager);
     }
 
     [HttpGet]

@@ -33,6 +33,7 @@ export default class DroppableTeam extends PureComponent {
                                                         onUpdateRemark={this.props.onUpdateRemark}
                                                         onChangeOrder={this.props.onChangeOrder}
                                                         onSelectEmployeeOfTeam={this.props.onSelectEmployeeOfTeam}
+                                                        enableSyncWorkingShift={this.props.enableSyncWorkingShift}
                                                     />
                                                     {teamProvided.placeholder}
                                                 </div>

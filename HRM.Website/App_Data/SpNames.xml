@@ -99,7 +99,6 @@
         <Setting Key="EmployeeSupervisor_GetListSupervisorRequestID" SpName="EmployeeSupervisor_GetListSupervisorRequestID" DbName="bodb_HRM" Plain="0" />
         <Setting Key="EmployeeSupervisor_GetDisciplineSettingById" SpName="EmployeeSupervisor_GetDisciplineSettingById" DbName="bodb_HRM" Plain="0" />
         <Setting Key="Employee_GetMemberByGender" SpName="Employee_GetMemberByGender" DbName="bodb_HRM" Plain="0" />
-        <Setting Key="Employee_UpdateUserId" SpName="Employee_UpdateUserId" DbName="bodb_HRM" Plain="0" />
 		<Setting Key="Employee_GetHRAndSupervisorByEmpId" SpName="Employee_GetHRAndSupervisorByEmpId" DbName="bodb_HRM" Plain="0" />
         <Setting Key="Employee_GetEmployeeForPIC" SpName="Employee_GetEmployeeForPIC" DbName="bodb_HRM" Plain="0" />
 		<Setting Key="TimeRecord_GetCheckInOutOnline" SpName="TimeRecord_GetCheckInOutOnline" DbName="bodb_HRM" Plain="0" />
@@ -142,7 +141,8 @@
         <Setting Key="Group_UnitScope_Get" SpName="Group_UnitScope_Get" DbName="bodb_HRM" Plain="0" />
 		<Setting Key="Employee_GroupScope_Get" SpName="Employee_GroupScope_Get" DbName="bodb_HRM" Plain="0" />
 		<Setting Key="GroupId_ByGroupTeamId_Get" SpName="GroupId_ByGroupTeamId_Get" DbName="bodb_HRM" Plain="0" />
-    </Function>
+		<Setting Key="GroupSupervisor_GetCompaniesByRoleIdForEmployee" SpName="GroupSupervisor_GetCompaniesByRoleIdForEmployee" DbName="bodb_HRM" Plain="0" />
+	</Function>
     <Function Name="Lookup">
         <Setting Key="Lookup_GetLookupData" SpName="Lookup_GetLookupData" DbName="bodb_HRM" Plain="0" />
         <Setting Key="Lookup_GetJobTitle" SpName="LookupData_JobTitle_SELECT" DbName="bodb_HRM" Plain="0" />

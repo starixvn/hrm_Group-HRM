@@ -75,7 +75,7 @@ public class CheckInOutController(
         CheckShiftFromToFormat(viewModel, shift);
         viewModel.Shift = shift == null ? string.Empty : shift.Name;
         ViewBag.Shift = shift;
-        ViewBag.IsTopManager = EmployeeSession.IsTopManager;
+        ViewBag.AutoApproveRequest = EmployeeSession.AutoApproveRequest;
         ViewBag.HasOnBehalfRequestPermission = session.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
             || session.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);
 
@@ -89,6 +89,7 @@ public class CheckInOutController(
         var requestTime = model.ForDate + new TimeSpan(model.Hour, model.Minute, 0);
         var criteria = new CreateCheckInOutRequestCriteria
         {
+            CompanyId = CurrentCompanyId,
             EmpId = model.EmployeeId,
             OnDate = model.AttendantDate,
             RequestTime = requestTime.ToServerTimeZone(),
@@ -155,17 +156,10 @@ public class CheckInOutController(
             Files = (await attachFileService.GetInfoAttachFileAsync(id, $"{CurrentCompanyId}/requests")).Select(x => x.FileName).ToList()
         };
 
-        if (viewModel.Verifiers.Any() && viewModel.VerifierId.HasValue)
-        {
-            viewModel.Verifiers = await employeeService.CheckAndAddMissingSupervisor(viewModel.Verifiers, viewModel.VerifierId.Value);
-        }
+        viewModel.Verifiers = await employeeService.CheckAndAddMissingSupervisor(viewModel.Verifiers, viewModel.VerifierId);
+        viewModel.Approvers = await employeeService.CheckAndAddMissingSupervisor(viewModel.Approvers, viewModel.ApproverId);
 
-        if (viewModel.Approvers.Any() && viewModel.ApproverId.HasValue)
-        {
-            viewModel.Approvers = await employeeService.CheckAndAddMissingSupervisor(viewModel.Approvers, viewModel.ApproverId.Value);
-        }
-
-        ViewBag.IsTopManager = request.Requester.IsTopManager;
+        ViewBag.AutoApproveRequest = request.Requester.AutoApproveRequest;
         return View(viewModel);
     }
 
@@ -177,6 +171,7 @@ public class CheckInOutController(
         var criteria = new EditCheckInOutRequestCriteria
         {
             RequestId = model.RequestId,
+            CompanyId = CurrentCompanyId,
             EmpId = model.EmployeeId,
             OnDate = model.AttendantDate,
             RequestTime = requestTime.ToServerTimeZone(),

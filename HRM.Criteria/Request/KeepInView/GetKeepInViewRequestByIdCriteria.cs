@@ -8,13 +8,7 @@ public class GetKeepInViewRequestByIdCriteria : CriteriaBase
 
     public short CompanyId { get; set; }
 
-    public override string GetSettingKey()
-    {
-        return "KeepInViewRequest_GetById";
-    }
+    public override string GetSettingKey() => "KeepInViewRequest_GetById";
 
-    public override bool IsValid()
-    {
-        return RequestId > 0;
-    }
+    public override bool IsValid() => RequestId > 0;
 }

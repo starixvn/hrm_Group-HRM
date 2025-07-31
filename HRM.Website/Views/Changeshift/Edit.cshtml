@@ -4,7 +4,7 @@
 @model HRM.ViewModels.Request.ChangeShiftViewModel
 @{
     ViewBag.Title = Labels.Edit;
-    var isTopManager = (bool)ViewBag.IsTopManager;
+    var autoApproveRequest = (bool)ViewBag.AutoApproveRequest;
     var today = DateTimeOffset.Now.DateTime.ToClientTimeZone().Date;
 }
 @section css{
@@ -25,7 +25,7 @@
     {
         @Html.ValidationSummary()
         <div class="validation-summary-errors" style="display: none;"></div>
-        <input type="checkbox" id="IsTopManager" hidden @(isTopManager ? "checked" : string.Empty) />
+        <input type="checkbox" id="AutoApproveRequest" hidden @(autoApproveRequest ? "checked" : string.Empty) />
         @Html.HiddenFor(model => model.EmployeeId)
         @Html.HiddenFor(model => model.Employee)
         @Html.HiddenFor(model => model.RequestId)
@@ -81,7 +81,14 @@
                 @Html.LabelFor(model => model.VerifierId, new { @class = "control-label" })
             </div>
             <div class="select-form">
-                @Html.DropDownListFor(model => model.VerifierId, new SelectList(Model.Verifiers, "OwnerId", "NickName"), new { @class = "form-control" })
+                @if (Model.Verifiers.Count > 1 || autoApproveRequest)
+                {
+                    @Html.DropDownListFor(x => x.VerifierId, new SelectList(Model.Verifiers, "OwnerId", "NickName"), Labels.SelectVerifier, new { @class = "form-control" })
+                }
+                else
+                {
+                    @Html.DropDownListFor(model => model.VerifierId, new SelectList(Model.Verifiers, "OwnerId", "NickName"), new { @class = "form-control" })
+                }
             </div>
         </div>
         <div class="form-group">
@@ -89,7 +96,14 @@
                 @Html.LabelFor(model => model.ApproverId, new { @class = "control-label" })
             </div>
             <div class="select-form">
-                @Html.DropDownListFor(model => model.ApproverId, new SelectList(Model.Approvers, "OwnerId", "NickName"), new { @class = "form-control" })
+                @if (Model.Approvers.Count > 1 || autoApproveRequest)
+                {
+                    @Html.DropDownListFor(x => x.ApproverId, new SelectList(Model.Approvers, "OwnerId", "NickName"), Labels.SelectApprover, new { @class = "form-control" })
+                }
+                else
+                {
+                    @Html.DropDownListFor(model => model.ApproverId, new SelectList(Model.Approvers, "OwnerId", "NickName"), new { @class = "form-control" })
+                }
             </div>
         </div>
         <div class="form-group">

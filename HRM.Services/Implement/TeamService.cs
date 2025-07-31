@@ -64,14 +64,14 @@ public class TeamService(
         return await baseService.GetDataEntityAsync<int>(criteria);
     }
 
-    public async Task<IEnumerable<Team>> GetAllAsync(bool isDeleted = false, string keyword = null, bool isGroup = false)
+    public async Task<IEnumerable<Team>> GetAllAsync(bool isDeleted = false, string keyword = null, bool isGroup = false, short? companyId = null)
     {
-        var companyId = isGroup ? (short?)null : userControlSession.Get<short>(SessionKey.CurrentCompanyId);
+        var currentCompanyId = isGroup ? (short?)null : companyId ?? userControlSession.Get<short>(SessionKey.CurrentCompanyId);
         var criteria = new GetAllGroupCriteria
         {
             IsDeleted = isDeleted,
             Keyword = keyword,
-            CompanyId = companyId
+            CompanyId = currentCompanyId
         };
         var teams = await teamRepository.GetAllAsync(criteria);
 
@@ -108,12 +108,13 @@ public class TeamService(
         return await baseService.GetDataAsync<Team>(criteria);
     }
 
-    public async Task<IList<SupervisorModel>> GetTeamSupervisorByRoleId(int teamId, short roleId)
+    public async Task<IList<SupervisorModel>> GetTeamSupervisorByRoleId(int teamId, short roleId, bool isGroup = false)
     {
         var criteria = new GetTeamSupervisorByRoleIdCriteria
         {
             TeamId = teamId,
-            Role = roleId
+            Role = roleId,
+            CompanyId = isGroup ? null : userControlSession.Get<short>(SessionKey.CurrentCompanyId)
         };
         return (await baseService.GetDataAsync<SupervisorModel>(criteria)).ToList();
     }
@@ -135,11 +136,12 @@ public class TeamService(
         return (await baseService.GetDataAsync<TeamSupervisorModel>(criteria)).ToList();
     }
 
-    public async Task<IEnumerable<Supervisor>> GetDisciplineManagerByTeamId(int teamId)
+    public async Task<IEnumerable<Supervisor>> GetDisciplineManagerByTeamId(int teamId, bool isGroup = false)
     {
         var criteria = new GetDisciplineManagerByTeamIdCriteria
         {
-            TeamId = teamId
+            TeamId = teamId,
+            CompanyId = isGroup ? null : userControlSession.Get<short>(SessionKey.CurrentCompanyId)
         };
         return (await baseService.GetDataAsync<Supervisor>(criteria)).ToList();
     }
@@ -241,5 +243,15 @@ public class TeamService(
         await using var ms = new MemoryStream();
         await xlPackage.SaveAsAsync(ms);
         return ms.ToArray();
+    }
+
+    public async Task<IEnumerable<Company>> GetCompaniesByRoleIdForEmployee(int employeeId, int roleId)
+    {
+        var criteria = new GetCompaniesByRoleIdForEmployeeCriteria
+        {
+            EmpId = employeeId,
+            RoleId = roleId
+        };
+        return await baseService.GetDataAsync<Company>(criteria);
     }
 }

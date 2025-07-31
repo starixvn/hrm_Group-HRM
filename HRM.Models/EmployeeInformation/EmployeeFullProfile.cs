@@ -99,8 +99,6 @@ public class EmployeeFullProfile
 
     public string PickupRemark { get; set; }
 
-    public string Skype { get; set; }
-
     public string LetsTalk { get; set; }
 
     public bool CanOT { get; set; }

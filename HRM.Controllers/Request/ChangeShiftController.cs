@@ -68,7 +68,7 @@ public class ChangeShiftController(
             Approvers = supervisor.Approvers
         };
         ViewBag.IsHost = true;
-        ViewBag.IsTopManager = EmployeeSession.IsTopManager;
+        ViewBag.AutoApproveRequest = EmployeeSession.AutoApproveRequest;
         ViewBag.HasOnBehalfRequestPermission = session.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
             || session.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);
         return View(model);
@@ -119,15 +119,8 @@ public class ChangeShiftController(
             Files = (await attachFileService.GetInfoAttachFileAsync(id, $"{CurrentCompanyId}/requests")).Select(x => x.FileName).ToList()
         };
 
-        if (model.Verifiers.Any() && model.VerifierId.HasValue)
-        {
-            model.Verifiers = await employeeService.CheckAndAddMissingSupervisor(model.Verifiers, model.VerifierId.Value);
-        }
-
-        if (model.Approvers.Any() && model.ApproverId.HasValue)
-        {
-            model.Approvers = await employeeService.CheckAndAddMissingSupervisor(model.Approvers, model.ApproverId.Value);
-        }
+        model.Verifiers = await employeeService.CheckAndAddMissingSupervisor(model.Verifiers, model.VerifierId);
+        model.Approvers = await employeeService.CheckAndAddMissingSupervisor(model.Approvers, model.ApproverId);
 
         if (request.TypeId == (byte)ChangeShiftType.MoveOffDay)
         {
@@ -138,7 +131,7 @@ public class ChangeShiftController(
         }
 
         ViewBag.IsHost = true;
-        ViewBag.IsTopManager = request.Requester.IsTopManager;
+        ViewBag.AutoApproveRequest = request.Requester.AutoApproveRequest;
         ViewBag.TypeId = request.TypeId;
         ViewBag.Shifts = await shiftService.GetAllAsync(isShowOff: true);
         return View(model);
@@ -203,16 +196,8 @@ public class ChangeShiftController(
             Files = (await attachFileService.GetInfoAttachFileAsync(id, $"{CurrentCompanyId}/requests")).Select(x => x.FileName).ToList()
         };
 
-
-        if (model.Verifiers.Any() && model.VerifierId.HasValue)
-        {
-            model.Verifiers = await employeeService.CheckAndAddMissingSupervisor(model.Verifiers, model.VerifierId.Value);
-        }
-
-        if (model.Approvers.Any() && model.ApproverId.HasValue)
-        {
-            model.Approvers = await employeeService.CheckAndAddMissingSupervisor(model.Approvers, model.ApproverId.Value);
-        }
+        model.Verifiers = await employeeService.CheckAndAddMissingSupervisor(model.Verifiers, model.VerifierId);
+        model.Approvers = await employeeService.CheckAndAddMissingSupervisor(model.Approvers, model.ApproverId);
 
         ViewBag.IsHost = false;
         ViewBag.TypeId = request.TypeId;

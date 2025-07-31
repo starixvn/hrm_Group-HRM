@@ -35,7 +35,7 @@ $(document).ready(function () {
         let files = document.getElementById('file').files,
             allowedExtensions = /(\.jpg|\.png|\.jpeg|\.pdf|\.doc|\.docx|\.xls|\.xlsx|\.txt)$/i;
 
-        if (!$('#IsTopManager').prop('checked')) {
+        if (!$('#AutoApproveRequest').prop('checked')) {
             if (verifierId === null || verifierId === '') {
                 errorMessages.push('Verified by field is required.');
             }

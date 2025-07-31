@@ -32,6 +32,7 @@ export default class DroppableMember extends PureComponent {
                                                         onUpdateRemark={this.props.onUpdateRemark}
                                                         onChangeOrder={this.props.onChangeOrder}
                                                         onSelectEmployeeOfTeam={this.props.onSelectEmployeeOfTeam}
+                                                        enableSyncWorkingShift={this.props.enableSyncWorkingShift}
                                                     />
                                                     {memberProvided.placeholder}
                                                 </div>

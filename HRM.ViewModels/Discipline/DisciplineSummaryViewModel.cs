@@ -38,5 +38,7 @@ public class DisciplineSummaryViewModel
 
     public bool IsShowAll { get; set; }
 
+    public short? CompanyId { get; set; }
+
     public IList<SelectListItem> DateRange { get; set; }
 }

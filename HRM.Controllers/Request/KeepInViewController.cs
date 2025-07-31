@@ -70,7 +70,7 @@ public class KeepInViewController(
             MinDate = today.FirstDayOfMonth().AddMonths(-1),
             MaxDate = today.FirstDayOfMonth().AddMonths(2).AddDays(-1)
         };
-        ViewBag.IsTopManager = EmployeeSession.IsTopManager;
+        ViewBag.AutoApproveRequest = EmployeeSession.AutoApproveRequest;
         ViewBag.HasOnBehalfRequestPermission = session.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
             || session.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);
 
@@ -149,17 +149,10 @@ public class KeepInViewController(
             Files = (await attachFileService.GetInfoAttachFileAsync(id, $"{CurrentCompanyId}/requests")).Select(x => x.FileName).ToList(),
         };
 
-        if (viewModel.Verifiers.Any() && viewModel.VerifierId.HasValue)
-        {
-            viewModel.Verifiers = await employeeService.CheckAndAddMissingSupervisor(viewModel.Verifiers, viewModel.VerifierId.Value);
-        }
+        viewModel.Verifiers = await employeeService.CheckAndAddMissingSupervisor(viewModel.Verifiers, viewModel.VerifierId);
+        viewModel.Approvers = await employeeService.CheckAndAddMissingSupervisor(viewModel.Approvers, viewModel.ApproverId);
 
-        if (viewModel.Approvers.Any() && viewModel.ApproverId.HasValue)
-        {
-            viewModel.Approvers = await employeeService.CheckAndAddMissingSupervisor(viewModel.Approvers, viewModel.ApproverId.Value);
-        }
-
-        ViewBag.IsTopManager = request.Requester.IsTopManager;
+        ViewBag.AutoApproveRequest = request.Requester.AutoApproveRequest;
         ViewBag.Shifts = await shiftService.GetAllAsync();
 
         return View(viewModel);

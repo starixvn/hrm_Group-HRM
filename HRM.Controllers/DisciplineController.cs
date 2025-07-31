@@ -12,6 +12,7 @@ using Criteria.Discipline;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Services;
 using GO.UserControl.Client.Core.Session;
+using HRM.Core.Enums;
 using HRM.Core.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -37,6 +38,8 @@ public class DisciplineController(
             model.DateRange = GetDateRangeByQuarter();
         }
 
+        ViewBag.RoleId = (short)RoleSystem.DisciplineManager;
+        ViewBag.CompanyId = CurrentCompanyId;
         ViewBag.IsHost = session.HasPermissionOnFunction(FunctionKey.Discipline, Policy.Host);
         ViewBag.IsHostOtherDiscipline = session.HasPermissionOnFunction(FunctionKey.OtherDiscipline, Policy.Host);
         return View(model);
@@ -44,7 +47,7 @@ public class DisciplineController(
 
     [HttpPost]
     [HrmPermission(Policy.Read, FunctionKey.Discipline)]
-    public async Task<IActionResult> GetDisciplineSummaryGrid(DisciplineSummaryViewModel model)
+    public async Task<IActionResult> GetDisciplineSummaryGrid(DisciplineSummaryViewModel model, int? companyId = null)
     {
         var roles = await roleService.GetByUserIdAsync(session.UserId);
         var criteria = new GetDisciplineSummaryCriteria
@@ -57,7 +60,7 @@ public class DisciplineController(
             ReasonId = model.ReasonId,
             ApproverId = session.UserId,
             IsShowAll = model.IsShowAll,
-            CompanyId = CurrentCompanyId,
+            CompanyId = (short)(companyId ?? CurrentCompanyId),
             RoleIds = string.Join(",", roles.Select(x => x.RoleId))
         };
 
@@ -69,7 +72,7 @@ public class DisciplineController(
     }
 
     [HrmPermission(Policy.Read, FunctionKey.Discipline)]
-    public async Task<IActionResult> DisciplineDetail(DisciplineSummaryViewModel model)
+    public async Task<IActionResult> DisciplineDetail(DisciplineSummaryViewModel model, short? companyId = null)
     {
         if (model != null)
         {
@@ -88,11 +91,15 @@ public class DisciplineController(
             model.DateRange = GetDateRangeByQuarter();
         }
 
+        ViewBag.RoleId = (short)RoleSystem.DisciplineManager;
+        ViewBag.CompanyId = companyId ?? CurrentCompanyId;
+        ViewBag.IsHost = session.HasPermissionOnFunction(FunctionKey.Discipline, Policy.Host);
+
         return View(model);
     }
 
     [HrmPermission(Policy.Read, FunctionKey.Discipline)]
-    public async Task<IActionResult> GetDisciplineDetailGrid(DisciplineSummaryViewModel model)
+    public async Task<IActionResult> GetDisciplineDetailGrid(DisciplineSummaryViewModel model, short? companyId = null)
     {
         var roles = await roleService.GetByUserIdAsync(session.UserId);
         var criteria = new GetDisciplineDetailCriteria
@@ -105,7 +112,7 @@ public class DisciplineController(
             ReasonId = model.ReasonId,
             HasIgnored = model.HasIgnored,
             ApproverId = session.UserId,
-            CompanyId = CurrentCompanyId,
+            CompanyId = companyId ?? CurrentCompanyId,
             RoleIds = string.Join(",", roles.Select(x => x.RoleId))
         };
 
@@ -117,7 +124,7 @@ public class DisciplineController(
     }
 
     [HrmPermission(Policy.Read, FunctionKey.Discipline)]
-    public async Task<IActionResult> ViewOtherDiscipline(int employeeId, DateTime fromDate, DateTime toDate)
+    public async Task<IActionResult> ViewOtherDiscipline(int employeeId, DateTime fromDate, DateTime toDate, short? companyId = null)
     {
         var criteria = new GetOtherDisciplineOfEmployeeCriteria
         {
@@ -127,7 +134,7 @@ public class DisciplineController(
         };
 
         var otherDisciplines = await disciplineService.GetOtherDisciplineAsync(criteria);
-        var members = await disciplineService.GetMemberToAddOtherDisciplineAsync(session.UserId);
+        var members = await disciplineService.GetMemberToAddOtherDisciplineAsync(session.UserId, null, companyId);
         ViewBag.IsHost = members.Any(x => x.EmployeeId == employeeId)
             && session.HasPermissionOnFunction(FunctionKey.Discipline, Policy.Host);
 
@@ -197,9 +204,9 @@ public class DisciplineController(
         return Json(commandResult);
     }
 
-    public async Task<IActionResult> GetMemberToAddOtherDiscipline(string keyword)
+    public async Task<IActionResult> GetMemberToAddOtherDiscipline(string keyword, short? companyId = null)
     {
-        var employees = await disciplineService.GetMemberToAddOtherDisciplineAsync(session.UserId, keyword);
+        var employees = await disciplineService.GetMemberToAddOtherDisciplineAsync(session.UserId, keyword, companyId);
 
         return Json(employees);
     }
