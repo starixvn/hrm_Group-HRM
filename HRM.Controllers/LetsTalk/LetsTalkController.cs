@@ -35,7 +35,9 @@ public class LetsTalkController(
     }
 
     [HttpGet]
+#pragma warning disable S4144 // Methods should not have identical implementations
     public async Task<IActionResult> SendPostMessage()
+#pragma warning restore S4144 // Methods should not have identical implementations
     {
         var replyMarkup = new ReplyMarkup
         {
