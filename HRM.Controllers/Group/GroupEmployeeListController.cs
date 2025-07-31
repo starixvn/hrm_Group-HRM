@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Fanex.Data;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
 using HRM.Core;
@@ -19,7 +18,6 @@ using HRM.Models.Supervisor;
 using HRM.Models.Unit;
 using HRM.Services.ExportExcel.Employee;
 using HRM.Services.Implement;
-using HRM.Services.Implement.FnB;
 using HRM.Services.Interfaces;
 using HRM.ViewModels;
 using HRM.ViewModels.EmployeeGroup;
@@ -130,9 +128,7 @@ public class GroupEmployeeListController(
                 CompanyIds = model.CompanyIds
             };
             employees = (await baseService.GetDataAsync<GroupEmployeeModel>(criteria)).ToList();
-
         }
-
 
         return Json(employees);
     }

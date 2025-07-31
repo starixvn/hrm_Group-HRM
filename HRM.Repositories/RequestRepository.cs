@@ -1,7 +1,4 @@
-﻿using HRM.Core.Constants;
-using HRM.Core.Models;
-
-namespace HRM.Repositories;
+﻿namespace HRM.Repositories;
 
 using System;
 using System.Collections.Generic;
@@ -12,6 +9,8 @@ using Criteria.Request;
 using Fanex.Data;
 using Fanex.Data.Repository;
 using HRM.Core;
+using HRM.Core.Constants;
+using HRM.Core.Models;
 using Interfaces;
 using Models;
 using Models.Request;
@@ -99,7 +98,7 @@ public class RequestRepository : IRequestRepository
         List<RequestEntity> responseRequests = [];
         foreach (var requestInfo in requests)
         {
-            var toDate = requestInfo.ToDate != DateTime.MinValue
+            var toDate = requestInfo.ToDate != DateTimeOffset.MinValue
                 ? requestInfo.ToDate.ConvertToClientTimeZone(Constants.NexTimezone)
                 : requestInfo.ToDate;
             var entity = new RequestEntity
@@ -124,7 +123,7 @@ public class RequestRepository : IRequestRepository
                 CrossDay = requestInfo.IsCrossDate,
                 ModifiedDate = requestInfo.ModifiedDate?.ConvertToClientTimeZone(Constants.NexTimezone),
                 ApproverId = sessionUser.EmpId,
-                ApproverNickName =  requestInfo.ProcessedBy,
+                ApproverNickName = requestInfo.ProcessedBy,
                 ApproverFullName = requestInfo.FullNameProcessedBy,
                 ProcessedByFullName = sessionUser.FullName,
                 ProcessedByNickName = sessionUser.Nickname,
