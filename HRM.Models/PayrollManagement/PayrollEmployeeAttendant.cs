@@ -5,9 +5,9 @@ namespace HRM.Models.PayrollManagement;
 public class PayrollEmployeeAttendant
 {
     public int EmpId { get; set; }
-    public int TotalUnpaidLeaveDays { get; set; }
-    public int TotalNewHireWorkingDays { get; set; }
-    public int TotalWorkingDays { get; set; }
+    public decimal TotalUnpaidLeaveDays { get; set; }
+    public decimal TotalNewHireWorkingDays { get; set; }
+    public decimal TotalWorkingDays { get; set; }
     public int WorkingDays { get; set; }
     public bool IsResigned { get; set; }
     public bool IsMaternity { get; set; }

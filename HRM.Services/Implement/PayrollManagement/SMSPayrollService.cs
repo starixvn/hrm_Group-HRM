@@ -2,21 +2,25 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Fanex.Data;
+using GO.UserControl.Client.Core.Session;
+using HRM.Core.Constants;
 using HRM.Core.Enums;
 using HRM.Core.Models;
 using HRM.Core.Services;
 using HRM.Criteria.PayrollManagement;
 using HRM.Models.PayrollManagement;
 using HRM.Services.Interfaces;
+using Newtonsoft.Json;
 
 namespace HRM.Services.Implement.PayrollManagement;
 
-public class SMSPayrollManagementService(IBaseService baseService) : IPayrollManagementService
+public class SMSPayrollManagementService(IBaseService baseService, IUserControlSession session) : IPayrollManagementService
 {
     private const int MAX_ALLOWED_UNPAID_LEAVE_DAYS = 10;
     private const decimal PROBATION_PERCENTAGE = 0.85m;
-    public async Task<CommandResult> GeneratePayroll(int companyId, DateTime date)
+    public async Task<CommandResult> GeneratePayroll(DateTime date)
     {
+        var companyId = session.Get<short>(SessionKey.CurrentCompanyId);
         var employeeAttendants = await GetPayrollEmployeeAttendant(companyId, date);
         var payrollResults = new List<PayrollEmployeeResult>();
 
@@ -25,7 +29,14 @@ public class SMSPayrollManagementService(IBaseService baseService) : IPayrollMan
             var payrollResult = CalculatePayrollResult(employeeAttendant);
             payrollResults.Add(payrollResult);
         }
-        throw new NotImplementedException();
+        var criteria = new CalculatePayrollCriteria
+        {
+            CompanyId = companyId,
+            Date = date,
+            PayrollListJson = JsonConvert.SerializeObject(payrollResults),
+        };
+        var result = await baseService.ExecuteNonQueryAsync(criteria);
+        return result;
     }
 
     private async Task<IEnumerable<PayrollEmployeeAttendant>> GetPayrollEmployeeAttendant(int companyId, DateTime date)
@@ -43,7 +54,7 @@ public class SMSPayrollManagementService(IBaseService baseService) : IPayrollMan
         var payrollResult = new PayrollEmployeeResult
         {
             EmpId = employeeAttendant.EmpId,
-            WorkingDays = employeeAttendant.TotalWorkingDays,
+            WorkingDays = employeeAttendant.WorkingDays,
             PaidDays = employeeAttendant.TotalWorkingDays + employeeAttendant.TotalNewHireWorkingDays,
             UnpaidLeave = employeeAttendant.TotalUnpaidLeaveDays,
             BasicSalary = employeeAttendant.Salary,
@@ -105,7 +116,7 @@ public class SMSPayrollManagementService(IBaseService baseService) : IPayrollMan
 
     private static decimal CalculateSalaryPerDay(PayrollEmployeeAttendant employeeAttendant)
     {
-        return employeeAttendant.BasicSalaryPerDay * employeeAttendant.TotalWorkingDays; ;
+        return employeeAttendant.BasicSalaryPerDay * employeeAttendant.TotalWorkingDays;
     }
 
     private static EmploymentStatus GetEmploymentStatusNewHire(PayrollEmployeeAttendant employeeAttendant)

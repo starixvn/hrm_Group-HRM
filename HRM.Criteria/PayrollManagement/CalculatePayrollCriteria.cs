@@ -3,8 +3,9 @@
 using System;
 using Fanex.Data.Repository;
 
-public class GeneratePayrollCriteria : CriteriaBase
+public class CalculatePayrollCriteria : CriteriaBase
 {
+    public int ModifiedBy { get; set; }
     public int CompanyId { get; set; }
     public DateTime Date { get; set; }
     public string PayrollListJson { get; set; }
