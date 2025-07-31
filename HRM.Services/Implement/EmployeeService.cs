@@ -391,7 +391,7 @@ public class EmployeeService(
 
     public async Task<IList<SupervisorNameModel>> CheckAndAddMissingSupervisor(IList<SupervisorNameModel> supervisors, int? supervisorId)
     {
-        if (supervisorId == null || supervisorId == 0 || !supervisors.Any())
+        if (supervisorId is null or 0)
         {
             return supervisors;
         }
