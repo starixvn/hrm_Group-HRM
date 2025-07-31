@@ -1,15 +1,11 @@
 using System;
 using System.Globalization;
-using System.IO;
 using System.Threading.Tasks;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
 using HRM.Core.Constants;
 using HRM.Core.Filters;
-using HRM.Core.Services;
-using HRM.Criteria.EmployeePayroll;
 using HRM.Criteria.PayrollManagement;
-using HRM.Models.Payroll;
 using HRM.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -38,5 +34,13 @@ public class PayrollManagementController(
         };
         var data = await payrollService.GetPayrollByMonthAsync(criteria);
         return Json(data);
+    }
+
+    [HttpPost]
+    [HrmPermission(Policy.Host, FunctionKey.PayrollManagement)]
+    public async Task<IActionResult> CalculatePayroll(DateTime date)
+    {
+        var result = await payrollService.GeneratePayroll(date);
+        return Json(result);
     }
 }

@@ -27,7 +27,8 @@ public class SMSPayrollManagementService(IBaseService baseService, IUserControlS
 
     public async Task<CommandResult> GeneratePayroll(DateTime date)
     {
-        var companyId = session.Get<short>(SessionKey.CurrentCompanyId);
+        //var companyId = session.Get<short>(SessionKey.CurrentCompanyId);
+        var companyId = 3;
         var employeeAttendants = await GetPayrollEmployeeAttendant(companyId, date);
         var payrollResults = new List<PayrollEmployeeResult>();
 
@@ -58,38 +59,40 @@ public class SMSPayrollManagementService(IBaseService baseService, IUserControlS
 
     private static PayrollEmployeeResult CalculatePayrollResult(PayrollEmployeeAttendant employeeAttendant)
     {
+        var paidDays = CalculateActualPaidDays(employeeAttendant);
         var payrollResult = new PayrollEmployeeResult
         {
             EmpId = employeeAttendant.EmpId,
             WorkingDays = employeeAttendant.WorkingDays,
-            PaidDays = employeeAttendant.TotalWorkingDays + employeeAttendant.TotalNewHireWorkingDays,
             UnpaidLeave = employeeAttendant.TotalUnpaidLeaveDays,
+            PaidDays = paidDays,
             BasicSalary = employeeAttendant.Salary,
-            JoinDate = employeeAttendant.JoinDate,
+            CompanyDate = employeeAttendant.CompanyDate,
             ConfirmedDate = employeeAttendant.ConfirmedDate,
         };
         employeeAttendant.BasicSalary = DecryptSalary(employeeAttendant.Salary);
+        employeeAttendant.ActualPaidDays = paidDays;
 
         decimal grossSalary = 0;
         if (employeeAttendant.TotalNewHireWorkingDays > 0)
         {
             payrollResult.EmploymentStatus = GetEmploymentStatusNewHire(employeeAttendant);
-            grossSalary = CalculateProbationCaseSalary(employeeAttendant);
+            grossSalary = CalculateProbationSalary(employeeAttendant);
         }
         else if (employeeAttendant.IsResigned)
         {
             payrollResult.EmploymentStatus = EmploymentStatus.Resignation;
-            grossSalary = CalculateSalaryPerDay(employeeAttendant);
+            grossSalary = CalculateSalary(employeeAttendant);
         }
         else if (employeeAttendant.IsMaternity)
         {
             payrollResult.EmploymentStatus = EmploymentStatus.Maternity;
-            grossSalary = CalculateSalaryPerDay(employeeAttendant);
+            grossSalary = CalculateSalary(employeeAttendant);
         }
         else
         {
             payrollResult.EmploymentStatus = EmploymentStatus.Normal;
-            grossSalary = CalculateNormalCaseSalary(employeeAttendant);
+            grossSalary = CalculateSalary(employeeAttendant);
         }
         payrollResult.GrossSalary = Cryptography.EncryptPassword(grossSalary.ToString());
         return payrollResult;
@@ -105,25 +108,33 @@ public class SMSPayrollManagementService(IBaseService baseService, IUserControlS
         return basicSalary;
     }
 
-    private static decimal CalculateNormalCaseSalary(PayrollEmployeeAttendant employeeAttendant)
+    private static decimal CalculateActualPaidDays(PayrollEmployeeAttendant employeeAttendant)
     {
+        if (employeeAttendant.TotalNewHireWorkingDays > 0)
+        {
+            return employeeAttendant.TotalWorkingDays + employeeAttendant.TotalNewHireWorkingDays;
+        }
+        if (employeeAttendant.IsResigned || employeeAttendant.IsMaternity)
+        {
+            return employeeAttendant.TotalWorkingDays;
+        }
         if (employeeAttendant.TotalUnpaidLeaveDays > MAX_ALLOWED_UNPAID_LEAVE_DAYS)
         {
-            return CalculateSalaryPerDay(employeeAttendant);
+            return employeeAttendant.TotalWorkingDays;
         }
-        return employeeAttendant.BasicSalary * (employeeAttendant.WorkingDays - employeeAttendant.TotalUnpaidLeaveDays);
+        return employeeAttendant.WorkingDays - employeeAttendant.TotalUnpaidLeaveDays;
     }
 
-    private static decimal CalculateProbationCaseSalary(PayrollEmployeeAttendant employeeAttendant)
+    private static decimal CalculateProbationSalary(PayrollEmployeeAttendant employeeAttendant)
     {
         var newHireSalary = employeeAttendant.TotalNewHireWorkingDays * employeeAttendant.BasicSalaryPerDay * PROBATION_PERCENTAGE;
-        var confirmedSalary = CalculateSalaryPerDay(employeeAttendant);
+        var confirmedSalary = employeeAttendant.TotalWorkingDays * employeeAttendant.BasicSalaryPerDay;
         return newHireSalary + confirmedSalary;
     }
 
-    private static decimal CalculateSalaryPerDay(PayrollEmployeeAttendant employeeAttendant)
+    private static decimal CalculateSalary(PayrollEmployeeAttendant employeeAttendant)
     {
-        return employeeAttendant.BasicSalaryPerDay * employeeAttendant.TotalWorkingDays;
+        return employeeAttendant.ActualPaidDays * employeeAttendant.BasicSalaryPerDay;
     }
 
     private static EmploymentStatus GetEmploymentStatusNewHire(PayrollEmployeeAttendant employeeAttendant)

@@ -11,7 +11,7 @@ public class GetPayrollAttendantEmployeeCriteria : CriteriaBase
 
     public override string GetSettingKey()
     {
-        return "Payroll_GetPayrollAttendantEmployee";
+        return "Payroll_GetAttendantEmployee";
     }
 
     public override bool IsValid()

@@ -11,7 +11,7 @@ public class PayrollEmployeeResult
     public decimal UnpaidLeave { get; set; }
     public string BasicSalary { get; set; }
     public string GrossSalary { get; set; }
-    public DateTime? JoinDate { get; set; }
+    public DateTime? CompanyDate { get; set; }
     public DateTime? ConfirmedDate { get; set; }
     public EmploymentStatus EmploymentStatus { get; set; }
 }
