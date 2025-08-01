@@ -12,4 +12,6 @@ public interface IExportExcelEmployeeInfoService
     Task<byte[]> ExportEmployeeFullProfile(IEnumerable<EmployeeFullProfile> profiles);
 
     Task<byte[]> ExportGroupEmployeesAsync(IEnumerable<GroupEmployeeModel> employees);
+
+    Task<byte[]> ExportProfitCenterReportAsync(IEnumerable<GroupEmployeeModel> employees);
 }

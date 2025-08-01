@@ -9,7 +9,7 @@ using HRM.Core.Constants;
 using HRM.Core.Enums;
 using HRM.Core.Filters;
 using HRM.Core.Services;
-using HRM.Criteria.Employee;
+using HRM.Criteria.EmployeeWorkFromHome;
 using HRM.Criteria.Group;
 using HRM.Criteria.Supervisor;
 using HRM.Models;
@@ -92,7 +92,7 @@ public class GroupEmployeeListController(
     }
 
     [HrmPermission(Policy.Read, FunctionKey.GroupEmployeeList)]
-    public async Task<IActionResult> ExportGroupEmployeeList(GroupEmployeeViewModel model)
+    public async Task<IActionResult> ExportExcel(GroupEmployeeViewModel model, bool isEmployeeListExport)
     {
         var criteria = new GetEmployeesInGroupScopeCriteria
         {
@@ -105,10 +105,65 @@ public class GroupEmployeeListController(
         };
 
         var profiles = (await baseService.GetDataAsync<GroupEmployeeModel>(criteria)).ToList();
-        var bytes = await excelService.ExportGroupEmployeesAsync(profiles);
-        var fileName = $"GroupEmployeeList_{DateTimeOffset.Now.DateTime.ToClientTimeZone():yyyyMMdd}.xlsx";
+
+        if (!isEmployeeListExport)
+        {
+            var employeesWFHTask = GetEmployeeWorkFromHome(model.TeamIds);
+            var secondmentCompanyTask = secondCompanyEmployeeService.GetAllAsync();
+
+            await Task.WhenAll(employeesWFHTask, secondmentCompanyTask);
+
+            var employeesWFH = employeesWFHTask.Result?.ToList() ?? [];
+            var secondmentCompanyList = secondmentCompanyTask.Result?.ToList() ?? [];
+
+            var wfhByEmpId = employeesWFH
+                .GroupBy(e => e.EmpId)
+                .ToDictionary(g => g.Key, g => g.First().Location);
+
+            var secondmentByEmpId = secondmentCompanyList
+                .GroupBy(e => e.EmpId)
+                .ToDictionary(g => g.Key, g => g.First().Location);
+
+            foreach (var profile in profiles)
+            {
+                if (!int.TryParse(profile.EmpId, out var empId))
+                    continue;
+
+                if (wfhByEmpId.TryGetValue(empId, out var wfhLocation))
+                {
+                    profile.Location = wfhLocation;
+                }
+                else if (secondmentByEmpId.TryGetValue(empId, out var secondmentLocation))
+                {
+                    profile.Location = secondmentLocation;
+                }
+            }
+        }
+
+        var bytes = isEmployeeListExport
+            ? await excelService.ExportGroupEmployeesAsync(profiles)
+            : await excelService.ExportProfitCenterReportAsync(profiles);
+
+        var exportDate = DateTimeOffset.Now.DateTime.ToClientTimeZone().ToString("yyyyMMdd");
+        var fileName = isEmployeeListExport
+            ? $"GroupEmployeeList_{exportDate}.xlsx"
+            : $"Profit Center Report - {exportDate}.xlsx";
 
         return File(bytes, MimeType.XLS, fileName);
+    }
+
+    public async Task<IEnumerable<EmployeeWorkFromHome>> GetEmployeeWorkFromHome(string TeamIds)
+    {
+        var criteria = new GetEmployeeWorkFromHomeCriteria
+        {
+            FromDate = DateTime.Today,
+            ToDate = DateTime.Today,
+            TeamIds = TeamIds
+        };
+
+        var employeesWFH = await baseService.GetDataAsync<EmployeeWorkFromHome>(criteria);
+
+        return employeesWFH;
     }
 
     public async Task<IActionResult> GroupEmployeeList(GroupEmployeeViewModel model)
@@ -127,7 +182,6 @@ public class GroupEmployeeListController(
                 PageSize = model.ItemsPerPage,
                 CompanyIds = model.CompanyIds
             };
-            employees = (await baseService.GetDataAsync<GroupEmployeeModel>(criteria)).ToList();
         }
 
         return Json(employees);
@@ -212,7 +266,6 @@ public class GroupEmployeeListController(
             RoleIds = roleIds
         };
         var employees = await employeeService.GetEmployeesByRoleAsync(criteria);
-
         return Json(employees);
     }
 

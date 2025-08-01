@@ -29,6 +29,7 @@ public class ExportExcelEmployeeInfoService(
     private const string EmployeeBasicInfoTemplatePath = "ExcelTemplates/EmployeeBasicInfoTemplate.xls";
     private const string EmployeeFullInfoTemplatePath = "ExcelTemplates/EmployeeFullProfileInfoTemplate.xls";
     private const string GroupEmployeeListTemplatePath = "ExcelTemplates/GroupEmployeeList.xlsx";
+    private const string ProfitCenterReportTemplatePath = "ExcelTemplates/ProfitCenterReport.xlsx";
 
     private const byte TotalColumns = 23;
     private const byte RowStartBody = 3;
@@ -309,6 +310,76 @@ public class ExportExcelEmployeeInfoService(
             worksheet.Cells[rowIndex, colIndex++].Value = FormatBoolean(employee.IsSpecial);
             worksheet.Cells[rowIndex, colIndex++].Value = FormatBoolean(employee.Enabled);
             worksheet.Cells[rowIndex, colIndex].Value = FormatBoolean(employee.IsDeleted);
+
+            rowIndex++;
+        }
+
+        worksheet.Cells.AutoFitColumns(MinimumWidth, MaximumWidth);
+        worksheet.View.FreezePanes(RowStartBody, 1);
+
+        await using var ms = new MemoryStream();
+        await xlPackage.SaveAsAsync(ms);
+        return ms.ToArray();
+    }
+
+    public async Task<byte[]> ExportProfitCenterReportAsync(IEnumerable<GroupEmployeeModel> employees)
+    {
+        var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, ProfitCenterReportTemplatePath);
+
+        await using var templateStream = new FileStream(templatePath, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, useAsync: true);
+        using var templatePackage = new ExcelPackage(templateStream);
+        using var xlPackage = new ExcelPackage();
+
+        var template = templatePackage.Workbook.Worksheets.FirstOrDefault();
+        if (template == null)
+        {
+            throw new InvalidOperationException("The template Excel file does not contain any worksheet.");
+        }
+
+        var worksheet = xlPackage.Workbook.Worksheets.Add("Profit Center Report");
+        var rowIndex = 1;
+        var colIndex = 1;
+
+        // title
+        template.Cells[rowIndex, colIndex, rowIndex, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
+        rowIndex++;
+
+        // header
+        template.Cells[rowIndex, colIndex, rowIndex, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
+        rowIndex++;
+
+        // data
+        var rowNum = 1;
+        foreach (var employee in employees)
+        {
+            colIndex = 1;
+            template.Cells[RowStartBody, 1, RowStartBody, TotalColumns]
+                .Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
+
+            worksheet.Cells[rowIndex, colIndex++].Value = rowNum++;
+            worksheet.Cells[rowIndex, colIndex++].Value = employee.CtrId;
+            worksheet.Cells[rowIndex, colIndex++].Value = $"{employee.DepartmentCode}-{employee.TeamCode}";
+            worksheet.Cells[rowIndex, colIndex++].Value = employee.UnitId;
+            worksheet.Cells[rowIndex, colIndex++].Value = employee.UnitCode;
+            worksheet.Cells[rowIndex, colIndex++].Value = employee.DepartmentName;
+            worksheet.Cells[rowIndex, colIndex++].Value = employee.DepartmentCode;
+            worksheet.Cells[rowIndex, colIndex++].Value = employee.DepartmentPIC;
+            worksheet.Cells[rowIndex, colIndex++].Value = employee.TeamName;
+            worksheet.Cells[rowIndex, colIndex++].Value = employee.TeamCode;
+            worksheet.Cells[rowIndex, colIndex++].Value = employee.AccountableArea;
+            worksheet.Cells[rowIndex, colIndex++].Value = employee.TeamPIC;
+            worksheet.Cells[rowIndex, colIndex++].Value = employee.EmployeeCode;
+            worksheet.Cells[rowIndex, colIndex++].Value = employee.NickName;
+            worksheet.Cells[rowIndex, colIndex++].Value = employee.JobLevel;
+            worksheet.Cells[rowIndex, colIndex++].Value = employee.ManagementLevel;
+            worksheet.Cells[rowIndex, colIndex++].Value =
+            worksheet.Cells[rowIndex, colIndex++].Value =
+                new[] { "SMS", "NexVision", "Lumiplus" }.Contains(employee.Company)
+                    ? "Nexcel"
+                    : !string.IsNullOrWhiteSpace(employee.SubCompany) ? employee.SubCompany : employee.Company;
+            worksheet.Cells[rowIndex, colIndex++].Value = FormatDate(employee.JoinedDate);
+            worksheet.Cells[rowIndex, colIndex++].Value = employee.LocalCurrency;
+            worksheet.Cells[rowIndex, colIndex].Value = employee.Location;
 
             rowIndex++;
         }
