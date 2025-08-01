@@ -5,6 +5,7 @@ using GO.UserControl.Client.Core.Session;
 using HRM.Core.Constants;
 using HRM.Core.Filters;
 using HRM.Criteria.PayrollManagement;
+using HRM.Services.Implement;
 using HRM.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,11 +13,13 @@ namespace HRM.Controllers;
 
 public class PayrollManagementController(
     IUserControlSession session,
+    IAccessCounterService accessCounterService,
     IPayrollManagementService payrollService) : BaseController(session)
 {
     [HrmPermission(Policy.Read, FunctionKey.PayrollManagement)]
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
+        await accessCounterService.UpdateCounterAsync(AccessCounterFunction.PayrollManagement);
         ViewBag.HasPermissionToUpload = session.HasPermissionOnFunction(FunctionKey.PayrollManagement, Policy.Host);
         return View();
     }
