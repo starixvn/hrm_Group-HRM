@@ -1,4 +1,5 @@
 using HRM.Criteria.AccessCounter;
+using Xunit;
 
 namespace HRM.Criteria.UnitTests.AccessCounter;
 

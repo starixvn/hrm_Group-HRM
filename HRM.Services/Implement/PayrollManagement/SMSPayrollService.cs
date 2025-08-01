@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Threading.Tasks;
 using Fanex.Data;
 using GO.UserControl.Client.Core.Session;
+using HRM.Core.Constants;
 using HRM.Core.Enums;
 using HRM.Core.Models;
 using HRM.Core.Services;
@@ -15,7 +16,9 @@ using Newtonsoft.Json;
 
 namespace HRM.Services.Implement.PayrollManagement;
 
-public class SMSPayrollManagementService(IBaseService baseService, IUserControlSession session) : IPayrollManagementService
+public class SMSPayrollManagementService(
+    IBaseService baseService,
+    IUserControlSession session) : IPayrollManagementService
 {
     private const int MAX_ALLOWED_UNPAID_LEAVE_DAYS = 10;
     private const decimal PROBATION_PERCENTAGE = 0.85m;
@@ -72,7 +75,7 @@ public class SMSPayrollManagementService(IBaseService baseService, IUserControlS
         employeeAttendant.BasicSalary = DecryptSalary(employeeAttendant.Salary);
         employeeAttendant.ActualPaidDays = paidDays;
 
-        decimal grossSalary = 0;
+        decimal grossSalary;
         if (employeeAttendant.TotalNewHireWorkingDays > 0)
         {
             payrollResult.EmploymentStatus = GetEmploymentStatusNewHire(employeeAttendant);
