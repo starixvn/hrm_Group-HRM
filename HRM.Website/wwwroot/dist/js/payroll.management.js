@@ -108358,6 +108358,14 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
+var _regenerator = __webpack_require__(/*! babel-runtime/regenerator */ "./node_modules/babel-runtime/regenerator/index.js");
+
+var _regenerator2 = _interopRequireDefault(_regenerator);
+
+var _asyncToGenerator2 = __webpack_require__(/*! babel-runtime/helpers/asyncToGenerator */ "./node_modules/babel-runtime/helpers/asyncToGenerator.js");
+
+var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
+
 var _slicedToArray2 = __webpack_require__(/*! babel-runtime/helpers/slicedToArray */ "./node_modules/babel-runtime/helpers/slicedToArray.js");
 
 var _slicedToArray3 = _interopRequireDefault(_slicedToArray2);
@@ -108392,31 +108400,77 @@ var AppContainer = function AppContainer() {
         salaryData = _React$useState2[0],
         setSalaryData = _React$useState2[1];
 
-    var fetchSalaryData = function fetchSalaryData() {
-        var filters = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    var fetchSalaryData = function () {
+        var _ref = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee() {
+            var filters = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+            var data;
+            return _regenerator2.default.wrap(function _callee$(_context) {
+                while (1) {
+                    switch (_context.prev = _context.next) {
+                        case 0:
+                            _context.prev = 0;
+                            _context.next = 3;
+                            return _Service2.default.getSalaryData(filters);
 
-        _Service2.default.getSalaryData(filters).then(function (data) {
-            setSalaryData(data);
-        }).catch(function (_) {
-            _toastr2.default.error("Failed to fetch salary data", "", (0, _common.toastOptions)());
-        });
-    };
+                        case 3:
+                            data = _context.sent;
 
-    var handleSearch = function handleSearch(filters) {
-        fetchSalaryData(filters);
-    };
+                            setSalaryData(data);
+                            _context.next = 10;
+                            break;
+
+                        case 7:
+                            _context.prev = 7;
+                            _context.t0 = _context['catch'](0);
+
+                            _toastr2.default.error('Failed to fetch salary data', '', (0, _common.toastOptions)());
+
+                        case 10:
+                        case 'end':
+                            return _context.stop();
+                    }
+                }
+            }, _callee, undefined, [[0, 7]]);
+        }));
+
+        return function fetchSalaryData() {
+            return _ref.apply(this, arguments);
+        };
+    }();
+
+    var handleSearch = function () {
+        var _ref2 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee2(filters) {
+            return _regenerator2.default.wrap(function _callee2$(_context2) {
+                while (1) {
+                    switch (_context2.prev = _context2.next) {
+                        case 0:
+                            _context2.next = 2;
+                            return fetchSalaryData(filters);
+
+                        case 2:
+                        case 'end':
+                            return _context2.stop();
+                    }
+                }
+            }, _callee2, undefined);
+        }));
+
+        return function handleSearch(_x2) {
+            return _ref2.apply(this, arguments);
+        };
+    }();
 
     return _react2.default.createElement(
-        "div",
-        { className: "salary-management-container" },
+        'div',
+        { className: 'salary-management-container' },
         _react2.default.createElement(
-            "div",
-            { className: "filter" },
+            'div',
+            { className: 'filter' },
             _react2.default.createElement(_Filter2.default, { onSearch: handleSearch })
         ),
         _react2.default.createElement(
-            "div",
-            { className: "salary-table" },
+            'div',
+            { className: 'salary-table' },
             _react2.default.createElement(_SalaryTable2.default, { data: salaryData })
         )
     );
@@ -108440,14 +108494,6 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _regenerator = __webpack_require__(/*! babel-runtime/regenerator */ "./node_modules/babel-runtime/regenerator/index.js");
-
-var _regenerator2 = _interopRequireDefault(_regenerator);
-
-var _asyncToGenerator2 = __webpack_require__(/*! babel-runtime/helpers/asyncToGenerator */ "./node_modules/babel-runtime/helpers/asyncToGenerator.js");
-
-var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
-
 var _axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 
 var _axios2 = _interopRequireDefault(_axios);
@@ -108461,194 +108507,47 @@ var _toastr2 = _interopRequireDefault(_toastr);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var PayrollService = {
-    /**
-     * Get salary data with optional filters
-     * @param {Object} filters - Optional filters for salary data
-     * @param {string} filters.month - Month in YYYY-MM format
-     * @param {number} filters.periodType - Period type (1: FULL_MONTH, 2: FIRST_HALF, 3: SECOND_HALF)
-     * @returns {Promise} Promise with salary data
-     */
-    getSalaryData: function () {
-        var _ref = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee() {
-            var filters = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-            var response;
-            return _regenerator2.default.wrap(function _callee$(_context) {
-                while (1) {
-                    switch (_context.prev = _context.next) {
-                        case 0:
-                            _context.prev = 0;
-                            _context.next = 3;
-                            return _axios2.default.get((0, _common.resolveClientUrl)("PayrollManagement/GetPayrollData"), {
-                                params: {
-                                    month: filters.month || null,
-                                    periodType: filters.periodType || null,
-                                    employeeName: filters.employeeName || null
-                                }
-                            });
+    getSalaryData: function getSalaryData() {
+        var filters = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
-                        case 3:
-                            response = _context.sent;
-                            return _context.abrupt("return", response.data);
+        (0, _common.blockUI)();
+        return (0, _axios2.default)({
+            url: (0, _common.resolveClientUrl)('PayrollManagement/GetPayrollData'),
+            method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
+            params: {
+                month: filters.month || null,
+                isLocal: filters.isLocal || false
+            },
+            responseType: 'json'
+        }).then(function (response) {
+            return response.data;
+        }).catch(function (axiosError) {
+            _toastr2.default.error('Failed to fetch salary data', '', (0, _common.toastOptions)());
+            throw axiosError;
+        }).finally(function () {
+            return (0, _common.unblockUI)();
+        });
+    },
 
-                        case 7:
-                            _context.prev = 7;
-                            _context.t0 = _context["catch"](0);
-
-                            _toastr2.default.error("Failed to fetch salary data", "", (0, _common.toastOptions)());
-                            throw _context.t0;
-
-                        case 11:
-                        case "end":
-                            return _context.stop();
-                    }
-                }
-            }, _callee, undefined, [[0, 7]]);
-        }));
-
-        function getSalaryData() {
-            return _ref.apply(this, arguments);
-        }
-
-        return getSalaryData;
-    }(),
-
-    /**
-     * Get upload history
-     * @returns {Promise} Promise with upload history data
-     */
-    getUploadHistory: function () {
-        var _ref2 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee2() {
-            var response;
-            return _regenerator2.default.wrap(function _callee2$(_context2) {
-                while (1) {
-                    switch (_context2.prev = _context2.next) {
-                        case 0:
-                            _context2.prev = 0;
-                            _context2.next = 3;
-                            return _axios2.default.get((0, _common.resolveClientUrl)("PayrollManagement/GetUploadHistory"));
-
-                        case 3:
-                            response = _context2.sent;
-                            return _context2.abrupt("return", response.data);
-
-                        case 7:
-                            _context2.prev = 7;
-                            _context2.t0 = _context2["catch"](0);
-
-                            _toastr2.default.error("Failed to fetch upload history", "", (0, _common.toastOptions)());
-                            throw _context2.t0;
-
-                        case 11:
-                        case "end":
-                            return _context2.stop();
-                    }
-                }
-            }, _callee2, undefined, [[0, 7]]);
-        }));
-
-        function getUploadHistory() {
-            return _ref2.apply(this, arguments);
-        }
-
-        return getUploadHistory;
-    }(),
-
-    /**
-     * Upload salary file
-     * @param {FormData} formData - Form data containing file, month and periodType
-     * @returns {Promise} Promise with upload result
-     */
-    uploadPayroll: function () {
-        var _ref3 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee3(formData) {
-            var response;
-            return _regenerator2.default.wrap(function _callee3$(_context3) {
-                while (1) {
-                    switch (_context3.prev = _context3.next) {
-                        case 0:
-                            _context3.prev = 0;
-                            _context3.next = 3;
-                            return _axios2.default.post((0, _common.resolveClientUrl)("PayrollManagement/UploadPayroll"), formData, {
-                                headers: {
-                                    "Content-Type": "multipart/form-data"
-                                }
-                            });
-
-                        case 3:
-                            response = _context3.sent;
-                            return _context3.abrupt("return", response.data);
-
-                        case 7:
-                            _context3.prev = 7;
-                            _context3.t0 = _context3["catch"](0);
-
-                            _toastr2.default.error("Failed to upload salary", "", (0, _common.toastOptions)());
-                            throw _context3.t0;
-
-                        case 11:
-                        case "end":
-                            return _context3.stop();
-                    }
-                }
-            }, _callee3, undefined, [[0, 7]]);
-        }));
-
-        function uploadPayroll(_x2) {
-            return _ref3.apply(this, arguments);
-        }
-
-        return uploadPayroll;
-    }(),
-
-    /**
-     * Confirm salary upload
-     * @param {FormData} formData - Form data containing month and periodType
-     * @returns {Promise} Promise with confirmation result
-     */
-    confirmUpload: function () {
-        var _ref4 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee4(formData) {
-            var response;
-            return _regenerator2.default.wrap(function _callee4$(_context4) {
-                while (1) {
-                    switch (_context4.prev = _context4.next) {
-                        case 0:
-                            _context4.prev = 0;
-                            _context4.next = 3;
-                            return _axios2.default.post((0, _common.resolveClientUrl)("PayrollManagement/ConfirmUpload"), formData);
-
-                        case 3:
-                            response = _context4.sent;
-                            return _context4.abrupt("return", response.data);
-
-                        case 7:
-                            _context4.prev = 7;
-                            _context4.t0 = _context4["catch"](0);
-
-                            _toastr2.default.error("Failed to confirm upload", "", (0, _common.toastOptions)());
-                            throw _context4.t0;
-
-                        case 11:
-                        case "end":
-                            return _context4.stop();
-                    }
-                }
-            }, _callee4, undefined, [[0, 7]]);
-        }));
-
-        function confirmUpload(_x3) {
-            return _ref4.apply(this, arguments);
-        }
-
-        return confirmUpload;
-    }(),
-
-    /**
-     * Download salary file
-     * @param {string} savedFileName - Name of the file to download
-     * @param {string} fileName - Name of the file to download
-     * @returns {string} URL of the file to download
-     */
-    downloadFile: function downloadFile(savedFileName, fileName) {
-        return "/PayrollManagement/DownloadFile?savedFileName=" + savedFileName + "&fileName=" + fileName;
+    generatePayroll: function generatePayroll(month) {
+        (0, _common.blockUI)();
+        return (0, _axios2.default)({
+            url: (0, _common.resolveClientUrl)('PayrollManagement/GeneratePayroll'),
+            method: 'POST',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
+            params: {
+                month: month || null
+            },
+            responseType: 'json'
+        }).then(function (response) {
+            return response.data;
+        }).catch(function (axiosError) {
+            _toastr2.default.error('Failed to generate payroll', '', (0, _common.toastOptions)());
+            throw axiosError;
+        }).finally(function () {
+            return (0, _common.unblockUI)();
+        });
     }
 };
 
@@ -108678,11 +108577,7 @@ var _react = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 
 var _react2 = _interopRequireDefault(_react);
 
-var _periodType = __webpack_require__(/*! ../constants/periodType */ "./sources/js/pages/payroll-management/constants/periodType.js");
-
-var _ViewUploadHistoryModal = __webpack_require__(/*! ./ViewUploadHistoryModal */ "./sources/js/pages/payroll-management/components/ViewUploadHistoryModal.jsx");
-
-var _ViewUploadHistoryModal2 = _interopRequireDefault(_ViewUploadHistoryModal);
+var _constants = __webpack_require__(/*! ../constants/constants */ "./sources/js/pages/payroll-management/constants/constants.js");
 
 var _GenerateSalaryModal = __webpack_require__(/*! ./GenerateSalaryModal */ "./sources/js/pages/payroll-management/components/GenerateSalaryModal.jsx");
 
@@ -108701,10 +108596,10 @@ var Filter = function Filter(_ref) {
         month = _useState2[0],
         setMonth = _useState2[1];
 
-    var _useState3 = (0, _react.useState)(_periodType.UserType.ALL),
+    var _useState3 = (0, _react.useState)(_constants.Category.LOCAL),
         _useState4 = (0, _slicedToArray3.default)(_useState3, 2),
-        periodType = _useState4[0],
-        setPeriodType = _useState4[1];
+        category = _useState4[0],
+        setCategory = _useState4[1];
 
     (0, _react.useEffect)(function () {
         handleSearch();
@@ -108712,8 +108607,16 @@ var Filter = function Filter(_ref) {
 
     var handleSearch = function handleSearch() {
         onSearch({
-            month: month,
-            periodType: periodType
+            month: month + '-01',
+            isLocal: category === _constants.Category.LOCAL
+        });
+    };
+
+    var handleGenerateSuccess = function handleGenerateSuccess(generatedMonth) {
+        setMonth(generatedMonth);
+        onSearch({
+            month: generatedMonth + '-01',
+            isLocal: category === _constants.Category.LOCAL
         });
     };
 
@@ -108772,15 +108675,15 @@ var Filter = function Filter(_ref) {
                         'select',
                         {
                             className: 'form-control',
-                            value: periodType,
+                            value: category,
                             onChange: function onChange(e) {
-                                return setPeriodType(e.target.value);
+                                return setCategory(Number(e.target.value));
                             } },
-                        _periodType.PERIOD_TYPES.map(function (type) {
+                        _constants.CATEGORY.map(function (type) {
                             return _react2.default.createElement(
                                 'option',
                                 { key: type, value: type },
-                                _periodType.UserTypeLabel[type]
+                                _constants.CategoryLabel[type]
                             );
                         })
                     )
@@ -108799,8 +108702,7 @@ var Filter = function Filter(_ref) {
         _react2.default.createElement(
             'div',
             { className: 'form-group action-section' },
-            window.hasPermissionToUpload === 'True' && _react2.default.createElement(_GenerateSalaryModal2.default, { onSuccess: handleSearch }),
-            _react2.default.createElement(_ViewUploadHistoryModal2.default, null)
+            window.hasPermissionToUpload === 'True' && _react2.default.createElement(_GenerateSalaryModal2.default, { onSuccess: handleGenerateSuccess })
         )
     );
 };
@@ -108881,11 +108783,6 @@ var GenerateSalaryModal = function GenerateSalaryModal(_ref) {
         confirmMessage = _useState10[0],
         setConfirmMessage = _useState10[1];
 
-    var _useState11 = (0, _react.useState)(null),
-        _useState12 = (0, _slicedToArray3.default)(_useState11, 2),
-        pendingFormData = _useState12[0],
-        setPendingFormData = _useState12[1];
-
     var handleClose = function handleClose() {
         setShow(false);
         setMonth('');
@@ -108902,19 +108799,19 @@ var GenerateSalaryModal = function GenerateSalaryModal(_ref) {
         e.target.showPicker();
     };
 
-    var processUpload = function () {
-        var _ref2 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee(formData) {
+    var processGenerate = function () {
+        var _ref2 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee() {
             return _regenerator2.default.wrap(function _callee$(_context) {
                 while (1) {
                     switch (_context.prev = _context.next) {
                         case 0:
                             _context.prev = 0;
                             _context.next = 3;
-                            return _Service2.default.uploadPayroll(formData);
+                            return _Service2.default.generatePayroll(month + '-01');
 
                         case 3:
                             _toastr2.default.success('Payroll generated successfully', '', (0, _common.toastOptions)());
-                            onSuccess();
+                            onSuccess(month);
                             handleClose();
                             _context.next = 11;
                             break;
@@ -108930,25 +108827,23 @@ var GenerateSalaryModal = function GenerateSalaryModal(_ref) {
 
                             setIsGenerating(false);
                             setShowConfirm(false);
-                            setPendingFormData(null);
                             return _context.finish(11);
 
-                        case 16:
+                        case 15:
                         case 'end':
                             return _context.stop();
                     }
                 }
-            }, _callee, undefined, [[0, 8, 11, 16]]);
+            }, _callee, undefined, [[0, 8, 11, 15]]);
         }));
 
-        return function processUpload(_x) {
+        return function processGenerate() {
             return _ref2.apply(this, arguments);
         };
     }();
 
     var handleSubmit = function () {
         var _ref3 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee2() {
-            var formData, confirmResult;
             return _regenerator2.default.wrap(function _callee2$(_context2) {
                 while (1) {
                     switch (_context2.prev = _context2.next) {
@@ -108963,54 +108858,15 @@ var GenerateSalaryModal = function GenerateSalaryModal(_ref) {
 
                         case 3:
 
-                            setIsGenerating(true);
-
-                            _context2.prev = 4;
-                            formData = new FormData();
-
-                            formData.append('month', month);
-
-                            _context2.next = 9;
-                            return _Service2.default.confirmUpload(formData);
-
-                        case 9:
-                            confirmResult = _context2.sent;
-
-                            if (!confirmResult.isSuccessful) {
-                                _context2.next = 15;
-                                break;
-                            }
-
-                            _context2.next = 13;
-                            return processUpload(formData);
-
-                        case 13:
-                            _context2.next = 19;
-                            break;
-
-                        case 15:
-                            setPendingFormData(formData);
-                            setConfirmMessage(confirmResult.message || 'Are you sure you want to proceed with the upload?');
+                            setConfirmMessage('Are you sure you want to generate payroll for ' + month + '?');
                             setShowConfirm(true);
-                            setIsGenerating(false);
 
-                        case 19:
-                            _context2.next = 25;
-                            break;
-
-                        case 21:
-                            _context2.prev = 21;
-                            _context2.t0 = _context2['catch'](4);
-
-                            _toastr2.default.error('Failed to upload salary', '', (0, _common.toastOptions)());
-                            setIsGenerating(false);
-
-                        case 25:
+                        case 5:
                         case 'end':
                             return _context2.stop();
                     }
                 }
-            }, _callee2, undefined, [[4, 21]]);
+            }, _callee2, undefined);
         }));
 
         return function handleSubmit() {
@@ -109024,16 +108880,11 @@ var GenerateSalaryModal = function GenerateSalaryModal(_ref) {
                 while (1) {
                     switch (_context3.prev = _context3.next) {
                         case 0:
-                            if (!pendingFormData) {
-                                _context3.next = 4;
-                                break;
-                            }
-
                             setIsGenerating(true);
-                            _context3.next = 4;
-                            return processUpload(pendingFormData);
+                            _context3.next = 3;
+                            return processGenerate();
 
-                        case 4:
+                        case 3:
                         case 'end':
                             return _context3.stop();
                     }
@@ -109183,6 +109034,8 @@ var _react = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 
 var _react2 = _interopRequireDefault(_react);
 
+var _constants = __webpack_require__(/*! ../constants/constants */ "./sources/js/pages/payroll-management/constants/constants.js");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var SalaryTable = function SalaryTable(_ref) {
@@ -109190,6 +109043,11 @@ var SalaryTable = function SalaryTable(_ref) {
 
     var formatNumber = function formatNumber(number) {
         return new Intl.NumberFormat('en-US').format(number || 0);
+    };
+
+    var getRowStyle = function getRowStyle(employmentStatus) {
+        var color = _constants.EmploymentStatusColor[employmentStatus];
+        return color ? { color: color } : {};
     };
 
     var totals = data.reduce(function (acc, item) {
@@ -109280,10 +109138,12 @@ var SalaryTable = function SalaryTable(_ref) {
             _react2.default.createElement(
                 'tbody',
                 null,
-                data.length > 0 && data.map(function (item, index) {
+                data.map(function (item, index) {
                     return _react2.default.createElement(
                         'tr',
-                        { key: index },
+                        {
+                            key: index,
+                            style: getRowStyle(item.employmentStatus) },
                         _react2.default.createElement(
                             'td',
                             null,
@@ -109307,12 +109167,12 @@ var SalaryTable = function SalaryTable(_ref) {
                         _react2.default.createElement(
                             'td',
                             null,
-                            item.joinedDate
+                            item.displayJoinedDate
                         ),
                         _react2.default.createElement(
                             'td',
                             null,
-                            item.confirmedDate
+                            item.displayConfirmedDate
                         ),
                         _react2.default.createElement(
                             'td',
@@ -109412,10 +109272,10 @@ exports.default = SalaryTable;
 
 /***/ }),
 
-/***/ "./sources/js/pages/payroll-management/components/ViewUploadHistoryModal.jsx":
-/*!***********************************************************************************!*\
-  !*** ./sources/js/pages/payroll-management/components/ViewUploadHistoryModal.jsx ***!
-  \***********************************************************************************/
+/***/ "./sources/js/pages/payroll-management/constants/constants.js":
+/*!********************************************************************!*\
+  !*** ./sources/js/pages/payroll-management/constants/constants.js ***!
+  \********************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -109425,250 +109285,37 @@ exports.default = SalaryTable;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-
-var _regenerator = __webpack_require__(/*! babel-runtime/regenerator */ "./node_modules/babel-runtime/regenerator/index.js");
-
-var _regenerator2 = _interopRequireDefault(_regenerator);
-
-var _asyncToGenerator2 = __webpack_require__(/*! babel-runtime/helpers/asyncToGenerator */ "./node_modules/babel-runtime/helpers/asyncToGenerator.js");
-
-var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
-
-var _slicedToArray2 = __webpack_require__(/*! babel-runtime/helpers/slicedToArray */ "./node_modules/babel-runtime/helpers/slicedToArray.js");
-
-var _slicedToArray3 = _interopRequireDefault(_slicedToArray2);
-
-var _react = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-
-var _react2 = _interopRequireDefault(_react);
-
-var _reactBootstrap = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/es/index.js");
-
-var _toastr = __webpack_require__(/*! toastr */ "./node_modules/toastr/toastr.js");
-
-var _toastr2 = _interopRequireDefault(_toastr);
-
-var _common = __webpack_require__(/*! ../../../shared/common.functions */ "./sources/js/shared/common.functions.js");
-
-var _periodType = __webpack_require__(/*! ../constants/periodType */ "./sources/js/pages/payroll-management/constants/periodType.js");
-
-var _Service = __webpack_require__(/*! ../Service */ "./sources/js/pages/payroll-management/Service.js");
-
-var _Service2 = _interopRequireDefault(_Service);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var ViewUploadHistoryModal = function ViewUploadHistoryModal() {
-    var _useState = (0, _react.useState)(false),
-        _useState2 = (0, _slicedToArray3.default)(_useState, 2),
-        show = _useState2[0],
-        setShow = _useState2[1];
-
-    var _useState3 = (0, _react.useState)([]),
-        _useState4 = (0, _slicedToArray3.default)(_useState3, 2),
-        history = _useState4[0],
-        setHistory = _useState4[1];
-
-    var handleClose = function handleClose() {
-        setShow(false);
-    };
-
-    var fetchHistory = function fetchHistory() {
-        _Service2.default.getUploadHistory().then(function (data) {
-            setHistory(data);
-        }).catch(function (_) {
-            _toastr2.default.error("Failed to fetch upload history", "", (0, _common.toastOptions)());
-        });
-    };
-
-    var handleDownload = function () {
-        var _ref = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee(savedFileName, fileName) {
-            return _regenerator2.default.wrap(function _callee$(_context) {
-                while (1) {
-                    switch (_context.prev = _context.next) {
-                        case 0:
-                            try {
-                                window.location.href = _Service2.default.downloadFile(savedFileName, fileName);
-                            } catch (error) {
-                                _toastr2.default.error("Failed to download file", "", (0, _common.toastOptions)());
-                            }
-
-                        case 1:
-                        case "end":
-                            return _context.stop();
-                    }
-                }
-            }, _callee, undefined);
-        }));
-
-        return function handleDownload(_x, _x2) {
-            return _ref.apply(this, arguments);
-        };
-    }();
-
-    return _react2.default.createElement(
-        _react2.default.Fragment,
-        null,
-        _react2.default.createElement(
-            "button",
-            {
-                className: "btn btn-default",
-                onClick: function onClick() {
-                    setShow(true);
-                    fetchHistory();
-                } },
-            _react2.default.createElement("i", { className: "fa fa-history" }),
-            " View History"
-        ),
-        _react2.default.createElement(
-            _reactBootstrap.Modal,
-            {
-                show: show,
-                onHide: handleClose,
-                size: "lg",
-                className: "view-history" },
-            _react2.default.createElement(
-                _reactBootstrap.ModalHeader,
-                { closeButton: true },
-                _react2.default.createElement(
-                    _reactBootstrap.ModalTitle,
-                    null,
-                    "Upload History"
-                )
-            ),
-            _react2.default.createElement(
-                _reactBootstrap.ModalBody,
-                null,
-                _react2.default.createElement(
-                    "div",
-                    { className: "table-container" },
-                    _react2.default.createElement(
-                        "table",
-                        { className: "table table-custom" },
-                        _react2.default.createElement(
-                            "thead",
-                            null,
-                            _react2.default.createElement(
-                                "tr",
-                                null,
-                                _react2.default.createElement(
-                                    "th",
-                                    null,
-                                    "Month"
-                                ),
-                                _react2.default.createElement(
-                                    "th",
-                                    null,
-                                    "Period Type"
-                                ),
-                                _react2.default.createElement(
-                                    "th",
-                                    null,
-                                    "File Name"
-                                ),
-                                _react2.default.createElement(
-                                    "th",
-                                    null,
-                                    "Upload Date Time"
-                                ),
-                                _react2.default.createElement(
-                                    "th",
-                                    null,
-                                    "Uploaded By"
-                                )
-                            )
-                        ),
-                        _react2.default.createElement(
-                            "tbody",
-                            null,
-                            history.map(function (item, index) {
-                                return _react2.default.createElement(
-                                    "tr",
-                                    { key: index },
-                                    _react2.default.createElement(
-                                        "td",
-                                        null,
-                                        item.monthFormatted
-                                    ),
-                                    _react2.default.createElement(
-                                        "td",
-                                        null,
-                                        (0, _periodType.getPeriodTypeLabel)(item.periodType)
-                                    ),
-                                    _react2.default.createElement(
-                                        "td",
-                                        null,
-                                        _react2.default.createElement(
-                                            "a",
-                                            {
-                                                href: "#",
-                                                onClick: function onClick(e) {
-                                                    e.preventDefault();
-                                                    handleDownload(item.savedFileName, item.fileName);
-                                                },
-                                                className: "file-link" },
-                                            item.fileName
-                                        )
-                                    ),
-                                    _react2.default.createElement(
-                                        "td",
-                                        null,
-                                        item.clientCreatedTime
-                                    ),
-                                    _react2.default.createElement(
-                                        "td",
-                                        null,
-                                        item.nickName
-                                    )
-                                );
-                            })
-                        )
-                    )
-                )
-            )
-        )
-    );
-};
-
-exports.default = ViewUploadHistoryModal;
-
-/***/ }),
-
-/***/ "./sources/js/pages/payroll-management/constants/periodType.js":
-/*!*********************************************************************!*\
-  !*** ./sources/js/pages/payroll-management/constants/periodType.js ***!
-  \*********************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.PERIOD_TYPES = exports.getPeriodTypeLabel = exports.UserTypeLabel = exports.UserType = undefined;
+exports.EmploymentStatusColor = exports.EmploymentStatus = exports.CATEGORY = exports.getCategoryLabel = exports.CategoryLabel = exports.Category = undefined;
 
 var _defineProperty2 = __webpack_require__(/*! babel-runtime/helpers/defineProperty */ "./node_modules/babel-runtime/helpers/defineProperty.js");
 
 var _defineProperty3 = _interopRequireDefault(_defineProperty2);
 
-var _UserTypeLabel;
+var _CategoryLabel, _EmploymentStatusColo;
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var UserType = exports.UserType = {
+var Category = exports.Category = {
     LOCAL: 1,
-    EXPAT: 2
+    EXPAT: 0
 };
 
-var UserTypeLabel = exports.UserTypeLabel = (_UserTypeLabel = {}, (0, _defineProperty3.default)(_UserTypeLabel, UserType.LOCAL, 'Local'), (0, _defineProperty3.default)(_UserTypeLabel, UserType.EXPAT, 'Expat'), _UserTypeLabel);
+var CategoryLabel = exports.CategoryLabel = (_CategoryLabel = {}, (0, _defineProperty3.default)(_CategoryLabel, Category.LOCAL, 'Local'), (0, _defineProperty3.default)(_CategoryLabel, Category.EXPAT, 'Expat'), _CategoryLabel);
 
-var getPeriodTypeLabel = exports.getPeriodTypeLabel = function getPeriodTypeLabel(type) {
-    return UserTypeLabel[type] || 'Unknown';
+var getCategoryLabel = exports.getCategoryLabel = function getCategoryLabel(type) {
+    return CategoryLabel[type] || 'Unknown';
 };
 
-var PERIOD_TYPES = exports.PERIOD_TYPES = [UserType.LOCAL, UserType.EXPAT];
+var CATEGORY = exports.CATEGORY = [Category.LOCAL, Category.EXPAT];
+
+var EmploymentStatus = exports.EmploymentStatus = {
+    PROBATION: 1,
+    CONFIRMED: 2,
+    RESIGNED: 3,
+    MATERNITY_LEAVE: 4
+};
+
+var EmploymentStatusColor = exports.EmploymentStatusColor = (_EmploymentStatusColo = {}, (0, _defineProperty3.default)(_EmploymentStatusColo, EmploymentStatus.PROBATION, 'green'), (0, _defineProperty3.default)(_EmploymentStatusColo, EmploymentStatus.CONFIRMED, 'blue'), (0, _defineProperty3.default)(_EmploymentStatusColo, EmploymentStatus.RESIGNED, 'red'), (0, _defineProperty3.default)(_EmploymentStatusColo, EmploymentStatus.MATERNITY_LEAVE, 'purple'), _EmploymentStatusColo);
 
 /***/ }),
 

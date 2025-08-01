@@ -10,7 +10,6 @@ const GenerateSalaryModal = ({ onSuccess }) => {
     const [isGenerating, setIsGenerating] = useState(false);
     const [showConfirm, setShowConfirm] = useState(false);
     const [confirmMessage, setConfirmMessage] = useState('');
-    const [pendingFormData, setPendingFormData] = useState(null);
 
     const handleClose = () => {
         setShow(false);
@@ -30,22 +29,21 @@ const GenerateSalaryModal = ({ onSuccess }) => {
         e.target.showPicker();
     };
 
-    const processUpload = async (formData) => {
+    const processGenerate = async () => {
         try {
-            await salaryService.uploadPayroll(formData);
+            await salaryService.generatePayroll(`${month}-01`);
             toastr.success(
                 'Payroll generated successfully',
                 '',
                 toastOptions()
             );
-            onSuccess();
+            onSuccess(month);
             handleClose();
         } catch (error) {
             toastr.error('Failed to generate Payroll', '', toastOptions());
         } finally {
             setIsGenerating(false);
             setShowConfirm(false);
-            setPendingFormData(null);
         }
     };
 
@@ -55,36 +53,15 @@ const GenerateSalaryModal = ({ onSuccess }) => {
             return;
         }
 
-        setIsGenerating(true);
-
-        try {
-            const formData = new FormData();
-            formData.append('month', month);
-
-            const confirmResult = await salaryService.confirmUpload(formData);
-
-            if (confirmResult.isSuccessful) {
-                await processUpload(formData);
-            } else {
-                setPendingFormData(formData);
-                setConfirmMessage(
-                    confirmResult.message ||
-                        'Are you sure you want to proceed with the upload?'
-                );
-                setShowConfirm(true);
-                setIsGenerating(false);
-            }
-        } catch (error) {
-            toastr.error('Failed to upload salary', '', toastOptions());
-            setIsGenerating(false);
-        }
+        setConfirmMessage(
+            `Are you sure you want to generate payroll for ${month}?`
+        );
+        setShowConfirm(true);
     };
 
     const handleConfirm = async () => {
-        if (pendingFormData) {
-            setIsGenerating(true);
-            await processUpload(pendingFormData);
-        }
+        setIsGenerating(true);
+        await processGenerate();
     };
 
     return (

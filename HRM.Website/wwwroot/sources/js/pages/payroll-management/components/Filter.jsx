@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { PERIOD_TYPES, UserType, UserTypeLabel } from '../constants/periodType';
-import ViewUploadHistoryModal from './ViewUploadHistoryModal';
+import { CATEGORY, Category, CategoryLabel } from '../constants/constants';
 import GenerateSalaryModal from './GenerateSalaryModal';
 
 const Filter = ({ onSearch }) => {
@@ -11,7 +10,7 @@ const Filter = ({ onSearch }) => {
             '0'
         )}`;
     });
-    const [periodType, setPeriodType] = useState(UserType.ALL);
+    const [category, setCategory] = useState(Category.LOCAL);
 
     useEffect(() => {
         handleSearch();
@@ -19,8 +18,16 @@ const Filter = ({ onSearch }) => {
 
     const handleSearch = () => {
         onSearch({
-            month,
-            periodType,
+            month: `${month}-01`,
+            isLocal: category === Category.LOCAL,
+        });
+    };
+
+    const handleGenerateSuccess = (generatedMonth) => {
+        setMonth(generatedMonth);
+        onSearch({
+            month: `${generatedMonth}-01`,
+            isLocal: category === Category.LOCAL,
         });
     };
 
@@ -52,11 +59,13 @@ const Filter = ({ onSearch }) => {
                     <div className="input-form">
                         <select
                             className="form-control"
-                            value={periodType}
-                            onChange={(e) => setPeriodType(e.target.value)}>
-                            {PERIOD_TYPES.map((type) => (
+                            value={category}
+                            onChange={(e) =>
+                                setCategory(Number(e.target.value))
+                            }>
+                            {CATEGORY.map((type) => (
                                 <option key={type} value={type}>
-                                    {UserTypeLabel[type]}
+                                    {CategoryLabel[type]}
                                 </option>
                             ))}
                         </select>
@@ -71,9 +80,8 @@ const Filter = ({ onSearch }) => {
 
             <div className="form-group action-section">
                 {window.hasPermissionToUpload === 'True' && (
-                    <GenerateSalaryModal onSuccess={handleSearch} />
+                    <GenerateSalaryModal onSuccess={handleGenerateSuccess} />
                 )}
-                <ViewUploadHistoryModal />
             </div>
         </div>
     );

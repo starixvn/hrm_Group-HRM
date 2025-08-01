@@ -1,8 +1,14 @@
 import React from 'react';
+import { EmploymentStatusColor } from '../constants/constants';
 
 const SalaryTable = ({ data }) => {
     const formatNumber = (number) => {
         return new Intl.NumberFormat('en-US').format(number || 0);
+    };
+
+    const getRowStyle = (employmentStatus) => {
+        const color = EmploymentStatusColor[employmentStatus];
+        return color ? { color: color } : {};
     };
 
     const totals = data.reduce(
@@ -42,22 +48,23 @@ const SalaryTable = ({ data }) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {data.length > 0 &&
-                        data.map((item, index) => (
-                            <tr key={index}>
-                                <td>{index + 1}</td>
-                                <td>{item.code}</td>
-                                <td>{item.fullName}</td>
-                                <td>{item.nickName}</td>
-                                <td>{item.joinedDate}</td>
-                                <td>{item.confirmedDate}</td>
-                                <td>{formatNumber(item.basicSalary)}</td>
-                                <td>{item.standardWorkingDay}</td>
-                                <td>{item.unpaidLeave}</td>
-                                <td>{item.paidDay}</td>
-                                <td>{formatNumber(item.grossSalary)}</td>
-                            </tr>
-                        ))}
+                    {data.map((item, index) => (
+                        <tr
+                            key={index}
+                            style={getRowStyle(item.employmentStatus)}>
+                            <td>{index + 1}</td>
+                            <td>{item.code}</td>
+                            <td>{item.fullName}</td>
+                            <td>{item.nickName}</td>
+                            <td>{item.displayJoinedDate}</td>
+                            <td>{item.displayConfirmedDate}</td>
+                            <td>{formatNumber(item.basicSalary)}</td>
+                            <td>{item.standardWorkingDay}</td>
+                            <td>{item.unpaidLeave}</td>
+                            <td>{item.paidDay}</td>
+                            <td>{formatNumber(item.grossSalary)}</td>
+                        </tr>
+                    ))}
                 </tbody>
                 <tfoot>
                     <tr className="summary-row">

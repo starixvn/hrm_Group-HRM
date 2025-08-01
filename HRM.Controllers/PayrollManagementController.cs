@@ -15,7 +15,6 @@ public class PayrollManagementController(
     IUserControlSession session,
     IPayrollManagementService payrollService) : BaseController(session)
 {
-
     [HrmPermission(Policy.Read, FunctionKey.PayrollManagement)]
     public IActionResult Index()
     {
@@ -25,22 +24,24 @@ public class PayrollManagementController(
 
     [HttpGet]
     [HrmPermission(Policy.Read, FunctionKey.PayrollManagement)]
-    public async Task<IActionResult> GetPayrollData(string month)
+    public async Task<IActionResult> GetPayrollData(DateTime month, bool isLocal)
     {
         var criteria = new GetPayrollByMonthCriteria
         {
             CompanyId = CurrentCompanyId,
-            Month = !string.IsNullOrEmpty(month) ? DateTimeOffset.Parse(month, CultureInfo.InvariantCulture).DateTime : null,
+            Month = month,
+            IsLocal = isLocal
         };
+
         var data = await payrollService.GetPayrollByMonthAsync(criteria);
         return Json(data);
     }
 
     [HttpPost]
     [HrmPermission(Policy.Host, FunctionKey.PayrollManagement)]
-    public async Task<IActionResult> CalculatePayroll(DateTime date)
+    public async Task<IActionResult> GeneratePayroll(DateTime month)
     {
-        var result = await payrollService.GeneratePayroll(date);
+        var result = await payrollService.GeneratePayroll(month);
         return Json(result);
     }
 }
