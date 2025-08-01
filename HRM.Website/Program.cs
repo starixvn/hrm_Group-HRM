@@ -1,3 +1,4 @@
+using System.Net.Http;
 using System.Threading;
 using Fanex.Data.SqlServer;
 using Fanex.Logging.Sentry.RavenClient;
@@ -27,6 +28,14 @@ services.AddControllersWithViews()
 
 services.AddHttpContextAccessor();
 services.AddHttpClient();
+services.AddHttpClient("insecure-client")
+    .ConfigurePrimaryHttpMessageHandler(() =>
+    {
+        return new HttpClientHandler
+        {
+            ServerCertificateCustomValidationCallback = (_, _, _, _) => true
+        };
+    });
 services.AddFanexLogSentry(configuration);
 services.AddFanexSql(configuration);
 services.AddCookieAuthentication(configuration);
