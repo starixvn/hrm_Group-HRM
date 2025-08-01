@@ -1,5 +1,4 @@
 using System;
-using System.Globalization;
 using System.Threading.Tasks;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;

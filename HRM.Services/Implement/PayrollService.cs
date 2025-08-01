@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using HRM.Core.Models;
 using HRM.Core.Services;
 using HRM.Criteria.EmployeePayroll;
-using HRM.Criteria.PayrollManagement;
 using HRM.Models.Payroll;
 using HRM.Services.Interfaces;
 

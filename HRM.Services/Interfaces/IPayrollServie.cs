@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using HRM.Core.Models;
 using HRM.Criteria.EmployeePayroll;
-using HRM.Criteria.PayrollManagement;
 using HRM.Models.Payroll;
 
 namespace HRM.Services.Interfaces;
