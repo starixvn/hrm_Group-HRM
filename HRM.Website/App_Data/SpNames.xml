@@ -1,5 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Functions>
+    <Function Name="AccessCounter">
+        <Setting Key="AccessCounter_Update" SpName="AccessCounter_Update" DbName="bodb_HRM" Plain="0" />
+    </Function>
     <Function Name="Auth">
         <Setting Key="Employee_GetByUserId" SpName="Employee_GetByUserId" DbName="bodb_HRM" Plain="0" />
         <Setting Key="CompanySite_GetByDomain" SpName="CompanySite_GetByDomain" DbName="bodb_HRM" Plain="0" />
