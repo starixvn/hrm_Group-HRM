@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Threading.Tasks;
 using Fanex.Data;
 using GO.UserControl.Client.Core.Session;
@@ -26,8 +27,7 @@ public class SMSPayrollManagementService(IBaseService baseService, IUserControlS
 
     public async Task<CommandResult> GeneratePayroll(DateTime date)
     {
-        //var companyId = session.Get<short>(SessionKey.CurrentCompanyId);
-        var companyId = 3;
+        var companyId = session.Get<short>(SessionKey.CurrentCompanyId);
         var employeeAttendants = await GetPayrollEmployeeAttendant(companyId, date);
         var payrollResults = new List<PayrollEmployeeResult>();
 
@@ -93,7 +93,7 @@ public class SMSPayrollManagementService(IBaseService baseService, IUserControlS
             payrollResult.EmploymentStatus = EmploymentStatus.Normal;
             grossSalary = CalculateSalary(employeeAttendant);
         }
-        payrollResult.GrossSalary = Cryptography.EncryptPassword(grossSalary.ToString());
+        payrollResult.GrossSalary = Cryptography.EncryptPassword(grossSalary.ToString(CultureInfo.InvariantCulture));
         return payrollResult;
     }
 

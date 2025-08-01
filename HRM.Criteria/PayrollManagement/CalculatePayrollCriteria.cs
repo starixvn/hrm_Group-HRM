@@ -12,5 +12,5 @@ public class CalculatePayrollCriteria : CriteriaBase
 
     public override string GetSettingKey() => "Payroll_Calculate";
 
-    public override bool IsValid() => CompanyId > 0 && Date != DateTime.MinValue;
+    public override bool IsValid() => CompanyId > 0 && Date != DateTimeOffset.MinValue;
 }

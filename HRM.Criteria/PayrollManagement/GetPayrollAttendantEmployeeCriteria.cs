@@ -16,6 +16,6 @@ public class GetPayrollAttendantEmployeeCriteria : CriteriaBase
 
     public override bool IsValid()
     {
-        return CompanyId > 0 && Date != DateTime.MinValue;
+        return CompanyId > 0 && Date != DateTimeOffset.MinValue;
     }
 }
