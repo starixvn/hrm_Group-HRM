@@ -8,10 +8,10 @@
     ViewBag.Title = Labels.WeekendLeave;
 }
 @section css{
-    <link href="~/dist/styles/report.weekendleave.detail.css" rel="stylesheet" />
+    <link href="~/dist/styles/report.weekendleave.detail.css" rel="stylesheet" asp-append-version="true" />
 }
 @section js{
-    <script src="~/dist/js/report.weekendleave.summary.js"></script>
+    <script src="~/dist/js/report.weekendleave.summary.js" asp-append-version="true"></script>
 }
 @section Breadcrumb {
     <a class="step">@ViewBag.Title</a>

@@ -4,10 +4,10 @@
     ViewBag.Title = Labels.ExternalGroup;
 }
 @section css{
-    <link href="~/dist/styles/external.group.css" rel="stylesheet" />
+    <link href="~/dist/styles/external.group.css" rel="stylesheet" asp-append-version="true" />
 }
 @section js{
-    <script src="~/dist/js/external.group.js"></script>
+    <script src="~/dist/js/external.group.js" asp-append-version="true"></script>
 }
 @section Breadcrumb {
     <a class="step">@Labels.CompanySpace</a>

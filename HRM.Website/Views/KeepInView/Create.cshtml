@@ -8,10 +8,10 @@
     var hasOnBehalfRequestPermission = (bool)ViewBag.HasOnBehalfRequestPermission;
 }
 @section css{
-    <link href="~/dist/styles/keepinview.create.css" rel="stylesheet" />
+    <link href="~/dist/styles/keepinview.create.css" rel="stylesheet" asp-append-version="true" />
 }
 @section js{
-    <script src="~/dist/js/keepinview.create.js"></script>
+    <script src="~/dist/js/keepinview.create.js" asp-append-version="true"></script>
 }
 @section Breadcrumb {
     <a class="step">@Labels.Personal</a>

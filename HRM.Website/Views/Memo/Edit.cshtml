@@ -5,13 +5,13 @@
     ViewBag.Title = Labels.Edit;
 }
 @section css{
-    <link href="~/dist/styles/memo.edit.css" rel="stylesheet" />
+    <link href="~/dist/styles/memo.edit.css" rel="stylesheet" asp-append-version="true" />
 }
 @section js{
     <script>
         window.UploadBasePath = '@ViewBag.UploadBasePath';
     </script>
-    <script src="~/dist/js/memo.edit.js"></script>
+    <script src="~/dist/js/memo.edit.js" asp-append-version="true"></script>
 }
 @section Breadcrumb {
     <a class="step">Company Space</a>

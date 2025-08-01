@@ -12,10 +12,10 @@
     var hasOnBehalfRequestPermission = (bool)ViewBag.HasOnBehalfRequestPermission;
 }
 @section css{
-    <link href="~/dist/styles/checkinout.create.css" rel="stylesheet" />
+    <link href="~/dist/styles/checkinout.create.css" rel="stylesheet" asp-append-version="true" />
 }
 @section js{
-    <script src="~/dist/js/checkinout.create.js"></script>
+    <script src="~/dist/js/checkinout.create.js" asp-append-version="true"></script>
 }
 @section Breadcrumb {
     <a class="step">@Labels.Personal</a>

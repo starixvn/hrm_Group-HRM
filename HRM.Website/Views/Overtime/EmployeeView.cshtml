@@ -7,10 +7,10 @@
     ViewBag.Title = Labels.MyOvertimeRequest;
 }
 @section css{
-    <link href="~/dist/styles/overtime.myrequest.css" rel="stylesheet" />
+    <link href="~/dist/styles/overtime.myrequest.css" rel="stylesheet" asp-append-version="true" />
 }
 @section js{
-    <script src="~/dist/js/overtime.myrequest.js"></script>
+    <script src="~/dist/js/overtime.myrequest.js" asp-append-version="true"></script>
 }
 @section Breadcrumb {
     <a class="step">@Labels.Personal</a> <a class="step">@ViewBag.Title</a>

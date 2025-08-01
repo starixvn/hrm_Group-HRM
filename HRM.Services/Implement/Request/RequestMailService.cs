@@ -10,12 +10,11 @@ using HRM.Models.Request;
 using HRM.Models.Supervisor;
 using HRM.Repositories.Interfaces;
 using HRM.Resources;
-using HRM.Services.Interfaces;
 using HRM.Services.Interfaces.Request;
 
 namespace HRM.Services.Implement.Request;
 
-public class RequestMailService(IRequestRepository requestRepository, LetstalkSettings letstalkSettings, ICompanyService companyService) : IRequestMailService
+public class RequestMailService(IRequestRepository requestRepository, LetstalkSettings letstalkSettings) : IRequestMailService
 {
     #region constant
 
@@ -25,7 +24,7 @@ public class RequestMailService(IRequestRepository requestRepository, LetstalkSe
 
     #endregion constant
 
-    public async Task<EmailModel> GetMailToMailCcAndLetStalk(long requestId, int action, int? requestType)
+    public async Task<EmailModel> GetMailToMailCcAndLetStalk(long requestId, int action, int? requestType = null)
     {
         var criteria = new GetRequestRelatedPeopleCriteria
         {
@@ -41,11 +40,11 @@ public class RequestMailService(IRequestRepository requestRepository, LetstalkSe
             CallbackUrl = letstalkSettings.HRMCallbackUrl,
             CompanyId = relatedPeople.EmailSetting?.CompanyId ?? 0,
         };
-        GetMailAndLetStalkApprover(relatedPeople, emailModel);
+        GetMailAndLetstalkApprover(relatedPeople, emailModel);
 
-        GetMailAndLetStalkVerifier(relatedPeople, emailModel);
+        GetMailAndLetstalkVerifier(relatedPeople, emailModel);
 
-        GetMailAndLetStalkOwnerRequest(relatedPeople, emailModel);
+        GetMailAndLetstalkOwnerRequest(relatedPeople, emailModel);
 
         if (relatedPeople.EmailSetting is { AllowSendMailGroup: true })
         {
@@ -115,7 +114,7 @@ public class RequestMailService(IRequestRepository requestRepository, LetstalkSe
         return action;
     }
 
-    private static void GetMailAndLetStalkApprover(RequestRelatedPeopleModel relatedPeople, EmailModel emailModel)
+    private static void GetMailAndLetstalkApprover(RequestRelatedPeopleModel relatedPeople, EmailModel emailModel)
     {
         var approver = relatedPeople.Approver;
         if (approver == null || relatedPeople.EmailSetting == null || !relatedPeople.EmailSetting.AllowSendApprover)
@@ -128,19 +127,20 @@ public class RequestMailService(IRequestRepository requestRepository, LetstalkSe
         if (!string.IsNullOrWhiteSpace(approver.LetsTalk)
         && approver.EmpId != relatedPeople.Requester?.EmpId)
         {
-            emailModel.Approver = GenerateLetsTalkActor(emailModel, approver, true);
+            emailModel.Approver = GenerateLetstalkActor(emailModel, approver, true);
         }
     }
 
-    private static void GetMailAndLetStalkVerifier(RequestRelatedPeopleModel relatedPeople, EmailModel emailModel)
+    private static void GetMailAndLetstalkVerifier(RequestRelatedPeopleModel relatedPeople, EmailModel emailModel)
     {
         var isValidVerifier = relatedPeople.Verifier != null;
         var isValidApprover = relatedPeople.Approver != null;
 
-        if (relatedPeople.EmailSetting == null || !relatedPeople.EmailSetting.AllowSendVerifier || !isValidVerifier)
+        if (relatedPeople.EmailSetting is not { AllowSendVerifier: true } || !isValidVerifier)
         {
             return;
         }
+
         if (string.IsNullOrWhiteSpace(emailModel.SendTo))
         {
             emailModel.SendTo = relatedPeople.Verifier.Email;
@@ -149,23 +149,26 @@ public class RequestMailService(IRequestRepository requestRepository, LetstalkSe
         else
         {
             var isValidEmail = isValidApprover
-                               && !string.IsNullOrWhiteSpace(relatedPeople.Verifier.Email)
-                               && !relatedPeople.Verifier.Email.Equals(relatedPeople.Approver.Email, StringComparison.OrdinalIgnoreCase);
+                   && !string.IsNullOrWhiteSpace(relatedPeople.Verifier.Email)
+                   && !relatedPeople.Verifier.Email.Equals(relatedPeople.Approver.Email, StringComparison.OrdinalIgnoreCase);
             if (isValidEmail)
             {
                 emailModel.SendTo += ";" + relatedPeople.Verifier.Email;
             }
         }
-        if (!string.IsNullOrWhiteSpace(relatedPeople.Verifier.LetsTalk)
-        && relatedPeople.Verifier.EmpId != relatedPeople.Approver?.EmpId
-        && relatedPeople.Verifier.EmpId != relatedPeople.Requester?.EmpId)
+
+        if (IsValidLetstalkVerifier(relatedPeople))
         {
-            emailModel.Verifier = GenerateLetsTalkActor(emailModel, relatedPeople.Verifier, false);
+            emailModel.Verifier = GenerateLetstalkActor(emailModel, relatedPeople.Verifier, false);
         }
     }
 
+    private static bool IsValidLetstalkVerifier(RequestRelatedPeopleModel relatedPeople)
+        => !string.IsNullOrWhiteSpace(relatedPeople.Verifier.LetsTalk)
+           && relatedPeople.Verifier.EmpId != relatedPeople.Approver?.EmpId
+           && relatedPeople.Verifier.EmpId != relatedPeople.Requester?.EmpId;
 
-    private static void GetMailAndLetStalkOwnerRequest(RequestRelatedPeopleModel relatedPeople, EmailModel emailModel)
+    private static void GetMailAndLetstalkOwnerRequest(RequestRelatedPeopleModel relatedPeople, EmailModel emailModel)
     {
         emailModel.RequesterCode = relatedPeople.Requester?.EmpCode;
         emailModel.PICDisplayName = relatedPeople.Requester?.PICDisplayName;
@@ -226,7 +229,7 @@ public class RequestMailService(IRequestRepository requestRepository, LetstalkSe
         }
     }
 
-    private static LetsTalkActor GenerateLetsTalkActor(EmailModel emailModel, SupervisorNameModel supervisor, bool isApprover)
+    private static LetsTalkActor GenerateLetstalkActor(EmailModel emailModel, SupervisorNameModel supervisor, bool isApprover)
     {
         var allowReplyMarkup = emailModel.Action is (byte)SettingsSendMail.New or (byte)SettingsSendMail.Edit;
         if (!allowReplyMarkup)

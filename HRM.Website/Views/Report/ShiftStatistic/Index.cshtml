@@ -7,10 +7,10 @@
     var today = DateTimeOffset.Now.DateTime.ToClientTimeZone().Date;
 }
 @section css{
-    <link href="~/dist/styles/report.shiftstatistic.css" rel="stylesheet" />
+    <link href="~/dist/styles/report.shiftstatistic.css" rel="stylesheet" asp-append-version="true" />
 }
 @section js{
-    <script src="~/dist/js/report.shiftstatistic.js"></script>
+    <script src="~/dist/js/report.shiftstatistic.js" asp-append-version="true"></script>
 }
 @section Breadcrumb {
     <a class="step">@Labels.CompanySpace</a><a class="step">@ViewBag.Title</a>

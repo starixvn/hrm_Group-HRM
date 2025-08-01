@@ -5,11 +5,11 @@
 	ViewBag.Title = Labels.UpdateSecondmentCompany;
 }
 @section css{
-	<link href="~/dist/styles/secondment-company.create.css" rel="stylesheet" />
+    <link href="~/dist/styles/secondment-company.create.css" rel="stylesheet" asp-append-version="true" />
 }
 @section js{
 	<script>window.empId = '@Model';</script>
-	<script src="~/dist/js/secondment-company.edit.js"></script>
+    <script src="~/dist/js/secondment-company.edit.js" asp-append-version="true"></script>
 }
 @section Breadcrumb {
 	<a class="step">@Labels.GroupSpace</a>

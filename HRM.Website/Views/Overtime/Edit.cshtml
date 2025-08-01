@@ -7,10 +7,10 @@
     ViewBag.Title = Model.MonthlyRequest.Requester.Nickname + "'s Overtime Request in " + Model.MonthlyRequest.Month.ToString("MMM-yyyy");
 }
 @section css{
-    <link href="~/dist/styles/overtime.edit.css" rel="stylesheet" />
+    <link href="~/dist/styles/overtime.edit.css" rel="stylesheet" asp-append-version="true" />
 }
 @section js{
-    <script src="~/dist/js/overtime.edit.js"></script>
+    <script src="~/dist/js/overtime.edit.js" asp-append-version="true"></script>
 }
 @section Breadcrumb {
     <a class="step">@Labels.Personal</a> <a class="step" href="@Url.Action("employeeview", "overtime")">@Labels.MyOvertimeRequest</a>

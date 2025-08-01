@@ -6,13 +6,13 @@
     ViewBag.Title = Labels.CreateMessage;
 }
 @section css{
-    <link href="~/dist/styles/message.create.css" rel="stylesheet" />
+    <link href="~/dist/styles/message.create.css" rel="stylesheet" asp-append-version="true" />
 }
 @section js{
     <script>
         var GroupsCollection = @Html.Raw(JsonConvert.SerializeObject(ViewBag.Groups));
     </script>
-    <script src="~/dist/js/message.create.js"></script>
+    <script src="~/dist/js/message.create.js" asp-append-version="true"></script>
 }
 @section Breadcrumb {
     <a class="step">@Labels.HRSpace</a>

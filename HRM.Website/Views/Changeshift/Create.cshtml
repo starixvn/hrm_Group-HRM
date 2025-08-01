@@ -9,10 +9,10 @@
     var today = DateTimeOffset.Now.DateTime.ToClientTimeZone().Date;
 }
 @section css{
-    <link href="~/dist/styles/changeshift.create.css" rel="stylesheet" />
+    <link href="~/dist/styles/changeshift.create.css" rel="stylesheet" asp-append-version="true" />
 }
 @section js{
-    <script src="~/dist/js/changeshift.create.js"></script>
+    <script src="~/dist/js/changeshift.create.js" asp-append-version="true"></script>
 }
 @section Breadcrumb {
     <a class="step">@Labels.Personal</a>

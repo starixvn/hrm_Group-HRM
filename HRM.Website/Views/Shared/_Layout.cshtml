@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <title>HRM - @ViewBag.Title</title>
     <meta name="viewport" content="width=device-width" />
-    <link href="~/dist/styles/main.css" rel="stylesheet" />
+    <link href="~/dist/styles/main.css" rel="stylesheet" asp-append-version="true" />
     @await RenderSectionAsync("css", false)
 </head>
 <body class="locale_en production">
@@ -63,8 +63,8 @@
     <footer></footer>
     <div id="message"></div>
     @Html.Hidden("RootURL", Url.Content("~/"))
-    <script src="~/dist/vendors/react.js"></script>
-    <script src="~/dist/js/main.js"></script>
+    <script src="~/dist/vendors/react.js" asp-append-version="true"></script>
+    <script src="~/dist/js/main.js" asp-append-version="true"></script>
     @await RenderSectionAsync("js", false)
     </body>
 </html>

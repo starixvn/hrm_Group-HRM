@@ -14,10 +14,10 @@
     var keepInViewHourBalance = employeeBalance?.KeepInViewByHourBalance ?? 0;
 }
 @section css{
-    <link href="~/dist/styles/leave.myrequest.css" rel="stylesheet" />
+    <link href="~/dist/styles/leave.myrequest.css" rel="stylesheet" asp-append-version="true" />
 }
 @section js{
-    <script src="~/dist/js/leave.myrequest.js"></script>
+    <script src="~/dist/js/leave.myrequest.js" asp-append-version="true"></script>
 }
 @section Breadcrumb {
     <a class="step">@Labels.Personal</a> <a class="step">@ViewBag.Title</a>

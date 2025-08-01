@@ -8,10 +8,10 @@
     var today = DateTimeOffset.Now.DateTime.ToClientTimeZone().Date;
 }
 @section css{
-    <link href="~/dist/styles/report.attendance.css" rel="stylesheet" />
+    <link href="~/dist/styles/report.attendance.css" rel="stylesheet" asp-append-version="true" />
 }
 @section js{
-    <script src="~/dist/js/report.attendance.js"></script>
+    <script src="~/dist/js/report.attendance.js" asp-append-version="true"></script>
 }
 @section Breadcrumb {
     <a class="step">@Labels.CompanySpace</a> <span class="step">@ViewBag.Title</span>

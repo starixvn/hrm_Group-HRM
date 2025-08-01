@@ -6,10 +6,10 @@
     ViewBag.Title = Labels.DisciplineDetail;
 }
 @section css{
-    <link href="~/dist/styles/discipline.details.css" rel="stylesheet" />
+    <link href="~/dist/styles/discipline.details.css" rel="stylesheet" asp-append-version="true" />
 }
 @section js{
-    <script src="~/dist/js/discipline.detail.js"></script>
+    <script src="~/dist/js/discipline.detail.js" asp-append-version="true"></script>
 }
 @section Breadcrumb {
     @if (Model.FromSummaryPage)

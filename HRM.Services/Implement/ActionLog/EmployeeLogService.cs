@@ -142,6 +142,7 @@ public class EmployeeLogService(
         }
     }
 
+#pragma warning disable S1541 // Methods and properties should not be too complex
     private void MappingValue(FieldValue field)
     {
         switch (field.FieldName)
@@ -195,6 +196,7 @@ public class EmployeeLogService(
                 break;
         }
     }
+#pragma warning restore S1541 // Methods and properties should not be too complex
 
     private void MappingTeam(FieldValue field)
     {

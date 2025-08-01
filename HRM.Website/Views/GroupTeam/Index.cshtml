@@ -6,10 +6,10 @@
     var hasPermission = (bool)ViewBag.HasPermission;
 }
 @section css{
-    <link href="~/dist/styles/team.index.css" rel="stylesheet" />
+    <link href="~/dist/styles/team.index.css" rel="stylesheet" asp-append-version="true" />
 }
 @section js{
-    <script src="~/dist/js/groupteam.index.js"></script>
+    <script src="~/dist/js/groupteam.index.js" asp-append-version="true"></script>
 }
 @section Breadcrumb {
     <a class="step">@Labels.GroupSpace</a><span class="step">@ViewBag.Title</span>

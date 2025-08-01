@@ -5,13 +5,13 @@
 	ViewBag.Title = Labels.UnitManagement;
 }
 @section css{
-	<link href="~/dist/styles/unit.index.css" rel="stylesheet" />
+    <link href="~/dist/styles/unit.index.css" rel="stylesheet" asp-append-version="true" />
 }
 @section js{
 	<script type="text/javascript">
         window.hasPermission = "@Model";
     </script>
-	<script src="~/dist/js/unit.home.js"></script>
+    <script src="~/dist/js/unit.home.js" asp-append-version="true"></script>
 }
 @section Breadcrumb {
 	<a class="step">@Labels.GroupSpace</a><span class="step">@ViewBag.Title</span>

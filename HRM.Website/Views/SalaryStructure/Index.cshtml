@@ -5,13 +5,13 @@
     ViewBag.Title = Labels.SalaryStructure;
 }
 @section css{
-    <link href="~/dist/styles/salary-structure.index.css" rel="stylesheet" />
+    <link href="~/dist/styles/salary-structure.index.css" rel="stylesheet" asp-append-version="true" />
 }
 @section js{
     <script type="text/javascript">
         window.hasPermission = "@Model";
     </script>
-    <script src="~/dist/js/salary-structure.home.js"></script>
+    <script src="~/dist/js/salary-structure.home.js" asp-append-version="true"></script>
 }
 
 @section Breadcrumb {

@@ -8,10 +8,10 @@
     ViewBag.Title = Labels.MyChangeShiftRequest;
 }
 @section css{
-    <link href="~/dist/styles/changeshift.myrequest.css" rel="stylesheet" />
+    <link href="~/dist/styles/changeshift.myrequest.css" rel="stylesheet" asp-append-version="true" />
 }
 @section js{
-    <script src="~/dist/js/changeshift.myrequest.js"></script>
+    <script src="~/dist/js/changeshift.myrequest.js" asp-append-version="true"></script>
 }
 @section Breadcrumb {
     <a class="step">@Labels.Personal</a> <a class="step">@ViewBag.Title</a>

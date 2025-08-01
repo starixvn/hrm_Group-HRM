@@ -55,7 +55,7 @@ public class CompanyController(
 
         foreach (var sub in subCompanies)
         {
-            var countItem = countEmployee.FirstOrDefault(x => x.SubCompanyId == sub.SubCompanyId);
+            var countItem = countEmployee.Find(x => x.SubCompanyId == sub.SubCompanyId);
             sub.EmployeeCount = countItem?.EmployeeCount ?? 0;
         }
 

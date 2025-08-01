@@ -7,11 +7,11 @@
     var today = DateTimeOffset.Now.DateTime.ToClientTimeZone();
 }
 @section css{
-    <link href="~/dist/styles/report.timesheet.css" rel="stylesheet" />
+    <link href="~/dist/styles/report.timesheet.css" rel="stylesheet" asp-append-version="true" />
 
 }
 @section js{
-    <script src="~/dist/js/report.timesheet.js"></script>
+    <script src="~/dist/js/report.timesheet.js" asp-append-version="true"></script>
 }
 @section Breadcrumb {
     <a class="step">Personal</a> <span class="step">@ViewBag.Title</span>

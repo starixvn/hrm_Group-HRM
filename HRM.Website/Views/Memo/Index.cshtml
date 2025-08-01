@@ -10,10 +10,10 @@
     var totalColumn = hasPermission ? 7 : 5;
 }
 @section css{
-    <link href="~/dist/styles/memo.css" rel="stylesheet" />
+    <link href="~/dist/styles/memo.css" rel="stylesheet" asp-append-version="true" />
 }
 @section js{
-    <script src="~/dist/js/memo.js"></script>
+    <script src="~/dist/js/memo.js" asp-append-version="true"></script>
 }
 @section Breadcrumb {
     <a class="step">@Labels.CompanySpace</a> <span class="step">@ViewBag.Title</span>

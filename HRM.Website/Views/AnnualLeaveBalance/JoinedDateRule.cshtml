@@ -9,13 +9,13 @@
     var hasPermissionToEdit = (bool)ViewBag.HasPermissionToEdit;
 }
 @section css{
-    <link href="~/dist/styles/annual.leavebalance.index.css" rel="stylesheet" />
+    <link href="~/dist/styles/annual.leavebalance.index.css" rel="stylesheet" asp-append-version="true" />
 }
 @section js{
     <script>
         window.IsJoinedDateRule = '@ViewBag.IsJoinedDateRule';
     </script>
-    <script src="~/dist/js/annual.leavebalance.index.js"></script>
+    <script src="~/dist/js/annual.leavebalance.index.js" asp-append-version="true"></script>
 }
 @section Breadcrumb {
     <a class="step">@Labels.CompanySpace</a> <a class="step">@ViewBag.Title</a>
