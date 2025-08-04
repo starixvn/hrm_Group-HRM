@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Fanex.Data.Repository;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
 using HRM.Core;
@@ -160,8 +159,8 @@ public class GroupEmployeeListController(
     {
         var criteria = new GetEmployeeWorkFromHomeCriteria
         {
-            FromDate = DateTime.Today,
-            ToDate = DateTime.Today,
+            FromDate = DateTimeOffset.Now.DateTime,
+            ToDate = DateTimeOffset.Now.DateTime,
             TeamIds = TeamIds
         };
 

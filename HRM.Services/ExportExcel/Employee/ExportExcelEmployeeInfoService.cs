@@ -342,74 +342,100 @@ public class ExportExcelEmployeeInfoService(
         }
 
         var worksheet = xlPackage.Workbook.Worksheets.Add("Profit Center Report");
+        
+        SetupWorksheetHeaders(template, worksheet);
+        var joinedDateCol = FillEmployeeData(employees, template, worksheet);
+        ApplyWorksheetFormatting(worksheet, joinedDateCol);
+
+        await using var ms = new MemoryStream();
+        await xlPackage.SaveAsAsync(ms);
+        return ms.ToArray();
+    }
+
+    private static void SetupWorksheetHeaders(ExcelWorksheet template, ExcelWorksheet worksheet)
+    {
         var rowIndex = 1;
         var colIndex = 1;
 
-        template.Cells[rowIndex, colIndex, rowIndex, TotalColumnsProfitCenter]
-            .Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumnsProfitCenter]);
-        rowIndex++;
+        for (int i = 0; i < 3; i++)
+        {
+            template.Cells[rowIndex, colIndex, rowIndex, TotalColumnsProfitCenter]
+                .Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumnsProfitCenter]);
+            rowIndex++;
+        }
 
-        template.Cells[rowIndex, colIndex, rowIndex, TotalColumnsProfitCenter]
-            .Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumnsProfitCenter]);
-        rowIndex++;
+        worksheet.Cells[rowIndex - 1, 1, rowIndex - 1, TotalColumnsProfitCenter].AutoFilter = true;
+    }
 
-        template.Cells[rowIndex, colIndex, rowIndex, TotalColumnsProfitCenter]
-            .Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumnsProfitCenter]);
-
-        worksheet.Cells[rowIndex, 1, rowIndex, TotalColumnsProfitCenter].AutoFilter = true;
-
-        rowIndex++;
+    private static int FillEmployeeData(IEnumerable<GroupEmployeeModel> employees, ExcelWorksheet template, ExcelWorksheet worksheet)
+    {
+        var rowIndex = 4;
         var rowNum = 1;
         var joinedDateCol = 0;
 
         foreach (var employee in employees)
         {
-            string paymaster;
-            if (new[] { "Nexcel", "NexVision", "Lumiplus" }.Contains(employee.Company))
-            {
-                paymaster = "Nexcel";
-            }
-            else if (!string.IsNullOrWhiteSpace(employee.SubCompany))
-            {
-                paymaster = employee.SubCompany;
-            }
-            else
-            {
-                paymaster = employee.Company;
-            }
-
-            colIndex = 1;
-            template.Cells[RowStartBodyProfitCenter, 1, RowStartBodyProfitCenter, TotalColumnsProfitCenter]
-                .Copy(worksheet.Cells[rowIndex, 1, rowIndex, TotalColumnsProfitCenter]);
-
-            worksheet.Cells[rowIndex, colIndex++].Value = rowNum++;
-            worksheet.Cells[rowIndex, colIndex++].Value = employee.CtrId;
-            worksheet.Cells[rowIndex, colIndex++].Value = $"{employee.DepartmentCode}-{employee.TeamCode}";
-            worksheet.Cells[rowIndex, colIndex++].Value = employee.UnitId;
-            worksheet.Cells[rowIndex, colIndex++].Value = employee.UnitCode;
-            worksheet.Cells[rowIndex, colIndex++].Value = employee.DepartmentName;
-            worksheet.Cells[rowIndex, colIndex++].Value = employee.DepartmentCode;
-            worksheet.Cells[rowIndex, colIndex++].Value = employee.DepartmentPIC;
-            worksheet.Cells[rowIndex, colIndex++].Value = employee.TeamName;
-            worksheet.Cells[rowIndex, colIndex++].Value = employee.TeamCode;
-            worksheet.Cells[rowIndex, colIndex++].Value = employee.AccountableArea;
-            worksheet.Cells[rowIndex, colIndex++].Value = employee.TeamPIC;
-            worksheet.Cells[rowIndex, colIndex++].Value = employee.EmployeeCode;
-            worksheet.Cells[rowIndex, colIndex++].Value = employee.NickName;
-            worksheet.Cells[rowIndex, colIndex++].Value = employee.JobLevel;
-            worksheet.Cells[rowIndex, colIndex++].Value = employee.ManagementLevel;
-            worksheet.Cells[rowIndex, colIndex++].Value = paymaster;
-
-            joinedDateCol = colIndex;
-            worksheet.Cells[rowIndex, colIndex++].Value = FormatDate(employee.JoinedDate);
-
-            worksheet.Cells[rowIndex, colIndex++].Value = employee.LocalCurrency;
-            worksheet.Cells[rowIndex, colIndex].Value = employee.Location;
-
+            var paymaster = DeterminePaymaster(employee);
+            joinedDateCol = FillEmployeeRow(employee, template, worksheet, rowIndex, rowNum++, paymaster);
             rowIndex++;
         }
 
-        var rowEndData = rowIndex - 1;
+        return joinedDateCol;
+    }
+
+    private static string DeterminePaymaster(GroupEmployeeModel employee)
+    {
+        if (new[] { "Nexcel", "NexVision", "Lumiplus" }.Contains(employee.Company))
+        {
+            return "Nexcel";
+        }
+        else if (!string.IsNullOrWhiteSpace(employee.SubCompany))
+        {
+            return employee.SubCompany;
+        }
+        else
+        {
+            return employee.Company;
+        }
+    }
+
+    private static int FillEmployeeRow(GroupEmployeeModel employee, ExcelWorksheet template, ExcelWorksheet worksheet, int rowIndex, int rowNum, string paymaster)
+    {
+        var colIndex = 1;
+        
+        template.Cells[RowStartBodyProfitCenter, 1, RowStartBodyProfitCenter, TotalColumnsProfitCenter]
+            .Copy(worksheet.Cells[rowIndex, 1, rowIndex, TotalColumnsProfitCenter]);
+
+        worksheet.Cells[rowIndex, colIndex++].Value = rowNum;
+        worksheet.Cells[rowIndex, colIndex++].Value = employee.CtrId;
+        worksheet.Cells[rowIndex, colIndex++].Value = $"{employee.DepartmentCode}-{employee.TeamCode}";
+        worksheet.Cells[rowIndex, colIndex++].Value = employee.UnitId;
+        worksheet.Cells[rowIndex, colIndex++].Value = employee.UnitCode;
+        worksheet.Cells[rowIndex, colIndex++].Value = employee.DepartmentName;
+        worksheet.Cells[rowIndex, colIndex++].Value = employee.DepartmentCode;
+        worksheet.Cells[rowIndex, colIndex++].Value = employee.DepartmentPIC;
+        worksheet.Cells[rowIndex, colIndex++].Value = employee.TeamName;
+        worksheet.Cells[rowIndex, colIndex++].Value = employee.TeamCode;
+        worksheet.Cells[rowIndex, colIndex++].Value = employee.AccountableArea;
+        worksheet.Cells[rowIndex, colIndex++].Value = employee.TeamPIC;
+        worksheet.Cells[rowIndex, colIndex++].Value = employee.EmployeeCode;
+        worksheet.Cells[rowIndex, colIndex++].Value = employee.NickName;
+        worksheet.Cells[rowIndex, colIndex++].Value = employee.JobLevel;
+        worksheet.Cells[rowIndex, colIndex++].Value = employee.ManagementLevel;
+        worksheet.Cells[rowIndex, colIndex++].Value = paymaster;
+
+        var joinedDateCol = colIndex;
+        worksheet.Cells[rowIndex, colIndex++].Value = FormatDate(employee.JoinedDate);
+
+        worksheet.Cells[rowIndex, colIndex++].Value = employee.LocalCurrency;
+        worksheet.Cells[rowIndex, colIndex].Value = employee.Location;
+
+        return joinedDateCol;
+    }
+
+    private static void ApplyWorksheetFormatting(ExcelWorksheet worksheet, int joinedDateCol)
+    {
+        var rowEndData = worksheet.Dimension?.End.Row ?? 0;
 
         worksheet.Cells.AutoFitColumns(MinimumWidth, MaximumWidth);
         worksheet.View.FreezePanes(RowStartBodyProfitCenter, 1);
@@ -423,21 +449,30 @@ public class ExportExcelEmployeeInfoService(
         worksheet.Cells[1, 1, 3, TotalColumnsProfitCenter].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
         worksheet.Cells[1, 1, 3, TotalColumnsProfitCenter].Style.Font.Bold = true;
 
+        AddTotalRow(worksheet, rowEndData);
+    }
+
+    private static void AddTotalRow(ExcelWorksheet worksheet, int rowEndData)
+    {
         worksheet.Cells[2, 1].Value = "Total:";
         worksheet.Cells[2, 1].Style.Font.Bold = true;
         worksheet.Cells[2, 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
 
-        worksheet.Cells[2, 2].Formula = $"SUBTOTAL(103, A{RowStartBodyProfitCenter}:A{rowEndData})";
+        if (rowEndData >= RowStartBodyProfitCenter)
+        {
+            worksheet.Cells[2, 2].Formula = $"SUBTOTAL(103, A{RowStartBodyProfitCenter}:A{rowEndData})";
+        }
+        else
+        {
+            worksheet.Cells[2, 2].Value = 0;
+        }
+        
         worksheet.Cells[2, 2].Style.Font.Bold = true;
         worksheet.Cells[2, 2].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
 
         worksheet.Cells[2, 1, 2, 2].Style.Fill.PatternType = ExcelFillStyle.Solid;
         worksheet.Cells[2, 1, 2, 2].Style.Fill.BackgroundColor.SetColor(Color.Yellow);
         worksheet.Column(1).AutoFit();
-
-        await using var ms = new MemoryStream();
-        await xlPackage.SaveAsAsync(ms);
-        return ms.ToArray();
     }
 
     private static string FormatDate(DateTime? date) => date?.ToDateMonthYearFormatedDate();
