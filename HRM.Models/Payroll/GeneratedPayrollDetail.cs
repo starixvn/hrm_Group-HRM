@@ -21,8 +21,8 @@ public class GeneratedPayrollDetail
     public string BasicSalaryEncrypt { get; set; }
     public double BasicSalary => BasicSalaryEncrypt == null ? 0 : double.Parse(Cryptography.DecryptPassword(BasicSalaryEncrypt));
     public int StandardWorkingDay { get; set; }
-    public int UnpaidLeave { get; set; }
-    public int PaidDay { get; set; }
+    public decimal UnpaidLeave { get; set; }
+    public decimal PaidDay { get; set; }
     [JsonIgnore]
     public string GrossSalaryEncrypt { get; set; }
     public double GrossSalary => double.Parse(Cryptography.DecryptPassword(GrossSalaryEncrypt));
