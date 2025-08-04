@@ -35,6 +35,7 @@ public class ExportExcelEmployeeInfoService(
     private const byte RowStartBody = 3;
     private const byte MinimumWidth = 5;
     private const byte MaximumWidth = 50;
+    private const byte RowStartBodyProfitCenter = 4;
 
     private enum BasicInfo
     {
@@ -344,6 +345,12 @@ public class ExportExcelEmployeeInfoService(
         template.Cells[rowIndex, colIndex, rowIndex, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
         rowIndex++;
 
+        // total record
+        template.Cells[rowIndex, colIndex, rowIndex, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
+        worksheet.Cells[rowIndex, 1].Value = $"Total: {employees.Count()}";
+        worksheet.Cells[rowIndex, 1].Style.Font.Bold = true;
+        rowIndex++;
+
         // header
         template.Cells[rowIndex, colIndex, rowIndex, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
         rowIndex++;
@@ -352,8 +359,23 @@ public class ExportExcelEmployeeInfoService(
         var rowNum = 1;
         foreach (var employee in employees)
         {
+            string paymaster;
+
+            if (new[] { "Nexcel", "NexVision", "Lumiplus" }.Contains(employee.Company))
+            {
+                paymaster = "Nexcel";
+            }
+            else if (!string.IsNullOrWhiteSpace(employee.SubCompany))
+            {
+                paymaster = employee.SubCompany;
+            }
+            else
+            {
+                paymaster = employee.Company;
+            }
+
             colIndex = 1;
-            template.Cells[RowStartBody, 1, RowStartBody, TotalColumns]
+            template.Cells[RowStartBodyProfitCenter, 1, RowStartBodyProfitCenter, TotalColumns]
                 .Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
 
             worksheet.Cells[rowIndex, colIndex++].Value = rowNum++;
@@ -372,11 +394,7 @@ public class ExportExcelEmployeeInfoService(
             worksheet.Cells[rowIndex, colIndex++].Value = employee.NickName;
             worksheet.Cells[rowIndex, colIndex++].Value = employee.JobLevel;
             worksheet.Cells[rowIndex, colIndex++].Value = employee.ManagementLevel;
-            worksheet.Cells[rowIndex, colIndex++].Value =
-            worksheet.Cells[rowIndex, colIndex++].Value =
-                new[] { "SMS", "NexVision", "Lumiplus" }.Contains(employee.Company)
-                    ? "Nexcel"
-                    : !string.IsNullOrWhiteSpace(employee.SubCompany) ? employee.SubCompany : employee.Company;
+            worksheet.Cells[rowIndex, colIndex++].Value = paymaster;
             worksheet.Cells[rowIndex, colIndex++].Value = FormatDate(employee.JoinedDate);
             worksheet.Cells[rowIndex, colIndex++].Value = employee.LocalCurrency;
             worksheet.Cells[rowIndex, colIndex].Value = employee.Location;
@@ -385,7 +403,7 @@ public class ExportExcelEmployeeInfoService(
         }
 
         worksheet.Cells.AutoFitColumns(MinimumWidth, MaximumWidth);
-        worksheet.View.FreezePanes(RowStartBody, 1);
+        worksheet.View.FreezePanes(RowStartBodyProfitCenter, 1);
 
         await using var ms = new MemoryStream();
         await xlPackage.SaveAsAsync(ms);

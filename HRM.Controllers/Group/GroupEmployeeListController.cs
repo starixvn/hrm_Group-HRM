@@ -9,6 +9,7 @@ using HRM.Core.Constants;
 using HRM.Core.Enums;
 using HRM.Core.Filters;
 using HRM.Core.Services;
+using HRM.Criteria.Employee;
 using HRM.Criteria.EmployeeWorkFromHome;
 using HRM.Criteria.Group;
 using HRM.Criteria.Supervisor;
@@ -34,7 +35,8 @@ public class GroupEmployeeListController(
     IDepartmentService departmentService,
     IExportExcelEmployeeInfoService excelService,
     IBaseService baseService,
-    IEmployeeService employeeService) : BaseController(session)
+    IEmployeeService employeeService,
+    ISecondCompanyEmployeeService secondCompanyEmployeeService ) : BaseController(session)
 {
     [HrmPermission(Policy.Read, FunctionKey.GroupEmployeeList)]
     public async Task<IActionResult> Index(string teamIds = null)
@@ -108,13 +110,8 @@ public class GroupEmployeeListController(
 
         if (!isEmployeeListExport)
         {
-            var employeesWFHTask = GetEmployeeWorkFromHome(model.TeamIds);
-            var secondmentCompanyTask = secondCompanyEmployeeService.GetAllAsync();
-
-            await Task.WhenAll(employeesWFHTask, secondmentCompanyTask);
-
-            var employeesWFH = employeesWFHTask.Result?.ToList() ?? [];
-            var secondmentCompanyList = secondmentCompanyTask.Result?.ToList() ?? [];
+            var employeesWFH = await GetEmployeeWorkFromHome(model.TeamIds);
+            var secondmentCompanyList = await secondCompanyEmployeeService.GetAllAsync();
 
             var wfhByEmpId = employeesWFH
                 .GroupBy(e => e.EmpId)
@@ -266,6 +263,7 @@ public class GroupEmployeeListController(
             RoleIds = roleIds
         };
         var employees = await employeeService.GetEmployeesByRoleAsync(criteria);
+
         return Json(employees);
     }
 
