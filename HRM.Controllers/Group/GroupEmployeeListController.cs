@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Fanex.Data.Repository;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
 using HRM.Core;
@@ -124,7 +125,9 @@ public class GroupEmployeeListController(
             foreach (var profile in profiles)
             {
                 if (!int.TryParse(profile.EmpId, out var empId))
+                {
                     continue;
+                }
 
                 if (wfhByEmpId.TryGetValue(empId, out var wfhLocation))
                 {
@@ -133,6 +136,10 @@ public class GroupEmployeeListController(
                 else if (secondmentByEmpId.TryGetValue(empId, out var secondmentLocation))
                 {
                     profile.Location = secondmentLocation;
+                }
+                else
+                {
+                    // No matching location found; keep existing value
                 }
             }
         }
@@ -179,8 +186,9 @@ public class GroupEmployeeListController(
                 PageSize = model.ItemsPerPage,
                 CompanyIds = model.CompanyIds
             };
-        }
 
+            employees = (await baseService.GetDataAsync<GroupEmployeeModel>(criteria)).ToList();
+        }
         return Json(employees);
     }
 

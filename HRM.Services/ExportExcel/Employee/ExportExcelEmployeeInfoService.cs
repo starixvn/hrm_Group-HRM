@@ -17,6 +17,7 @@ using Models.EmployeeInformation;
 using Models.Group;
 using Models.Supervisor;
 using OfficeOpenXml;
+using OfficeOpenXml.Style;
 using Resources;
 
 public class ExportExcelEmployeeInfoService(
@@ -36,6 +37,8 @@ public class ExportExcelEmployeeInfoService(
     private const byte MinimumWidth = 5;
     private const byte MaximumWidth = 50;
     private const byte RowStartBodyProfitCenter = 4;
+    private const byte TotalColumnsProfitCenter = 20;
+
 
     private enum BasicInfo
     {
@@ -341,26 +344,28 @@ public class ExportExcelEmployeeInfoService(
         var rowIndex = 1;
         var colIndex = 1;
 
-        // title
-        template.Cells[rowIndex, colIndex, rowIndex, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
+        template.Cells[rowIndex, colIndex, rowIndex, TotalColumnsProfitCenter]
+            .Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumnsProfitCenter]);
         rowIndex++;
 
-        // total record
-        template.Cells[rowIndex, colIndex, rowIndex, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
+        template.Cells[rowIndex, colIndex, rowIndex, TotalColumnsProfitCenter]
+            .Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumnsProfitCenter]);
         worksheet.Cells[rowIndex, 1].Value = $"Total: {employees.Count()}";
         worksheet.Cells[rowIndex, 1].Style.Font.Bold = true;
         rowIndex++;
 
-        // header
-        template.Cells[rowIndex, colIndex, rowIndex, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
-        rowIndex++;
+        template.Cells[rowIndex, colIndex, rowIndex, TotalColumnsProfitCenter]
+            .Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumnsProfitCenter]);
 
-        // data
+        worksheet.Cells[rowIndex, 1, rowIndex, TotalColumnsProfitCenter].AutoFilter = true;
+
+        rowIndex++;
         var rowNum = 1;
+        var joinedDateCol = 0;
+
         foreach (var employee in employees)
         {
             string paymaster;
-
             if (new[] { "Nexcel", "NexVision", "Lumiplus" }.Contains(employee.Company))
             {
                 paymaster = "Nexcel";
@@ -375,8 +380,8 @@ public class ExportExcelEmployeeInfoService(
             }
 
             colIndex = 1;
-            template.Cells[RowStartBodyProfitCenter, 1, RowStartBodyProfitCenter, TotalColumns]
-                .Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
+            template.Cells[RowStartBodyProfitCenter, 1, RowStartBodyProfitCenter, TotalColumnsProfitCenter]
+                .Copy(worksheet.Cells[rowIndex, 1, rowIndex, TotalColumnsProfitCenter]);
 
             worksheet.Cells[rowIndex, colIndex++].Value = rowNum++;
             worksheet.Cells[rowIndex, colIndex++].Value = employee.CtrId;
@@ -395,7 +400,10 @@ public class ExportExcelEmployeeInfoService(
             worksheet.Cells[rowIndex, colIndex++].Value = employee.JobLevel;
             worksheet.Cells[rowIndex, colIndex++].Value = employee.ManagementLevel;
             worksheet.Cells[rowIndex, colIndex++].Value = paymaster;
+
+            joinedDateCol = colIndex;
             worksheet.Cells[rowIndex, colIndex++].Value = FormatDate(employee.JoinedDate);
+
             worksheet.Cells[rowIndex, colIndex++].Value = employee.LocalCurrency;
             worksheet.Cells[rowIndex, colIndex].Value = employee.Location;
 
@@ -404,6 +412,15 @@ public class ExportExcelEmployeeInfoService(
 
         worksheet.Cells.AutoFitColumns(MinimumWidth, MaximumWidth);
         worksheet.View.FreezePanes(RowStartBodyProfitCenter, 1);
+
+        for (int col = 1; col <= TotalColumnsProfitCenter; col++)
+        {
+            worksheet.Column(col).Style.HorizontalAlignment =
+                (col == joinedDateCol) ? ExcelHorizontalAlignment.Right : ExcelHorizontalAlignment.Left;
+        }
+
+        worksheet.Cells[1, 1, 3, TotalColumnsProfitCenter].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+        worksheet.Cells[1, 1, 3, TotalColumnsProfitCenter].Style.Font.Bold = true;
 
         await using var ms = new MemoryStream();
         await xlPackage.SaveAsAsync(ms);
