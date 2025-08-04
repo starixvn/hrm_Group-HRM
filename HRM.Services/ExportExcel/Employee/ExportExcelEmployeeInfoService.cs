@@ -354,8 +354,8 @@ public class ExportExcelEmployeeInfoService(
 
     private static void SetupWorksheetHeaders(ExcelWorksheet template, ExcelWorksheet worksheet)
     {
-        var rowIndex = 1;
-        var colIndex = 1;
+        int rowIndex = 1;
+        const int colIndex = 1;
 
         for (int i = 0; i < 3; i++)
         {
