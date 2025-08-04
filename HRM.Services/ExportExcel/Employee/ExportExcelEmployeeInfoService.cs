@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -350,8 +351,6 @@ public class ExportExcelEmployeeInfoService(
 
         template.Cells[rowIndex, colIndex, rowIndex, TotalColumnsProfitCenter]
             .Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumnsProfitCenter]);
-        worksheet.Cells[rowIndex, 1].Value = $"Total: {employees.Count()}";
-        worksheet.Cells[rowIndex, 1].Style.Font.Bold = true;
         rowIndex++;
 
         template.Cells[rowIndex, colIndex, rowIndex, TotalColumnsProfitCenter]
@@ -410,6 +409,8 @@ public class ExportExcelEmployeeInfoService(
             rowIndex++;
         }
 
+        var rowEndData = rowIndex - 1;
+
         worksheet.Cells.AutoFitColumns(MinimumWidth, MaximumWidth);
         worksheet.View.FreezePanes(RowStartBodyProfitCenter, 1);
 
@@ -421,6 +422,18 @@ public class ExportExcelEmployeeInfoService(
 
         worksheet.Cells[1, 1, 3, TotalColumnsProfitCenter].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
         worksheet.Cells[1, 1, 3, TotalColumnsProfitCenter].Style.Font.Bold = true;
+
+        worksheet.Cells[2, 1].Value = "Total:";
+        worksheet.Cells[2, 1].Style.Font.Bold = true;
+        worksheet.Cells[2, 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+
+        worksheet.Cells[2, 2].Formula = $"SUBTOTAL(103, A{RowStartBodyProfitCenter}:A{rowEndData})";
+        worksheet.Cells[2, 2].Style.Font.Bold = true;
+        worksheet.Cells[2, 2].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+
+        worksheet.Cells[2, 1, 2, 2].Style.Fill.PatternType = ExcelFillStyle.Solid;
+        worksheet.Cells[2, 1, 2, 2].Style.Fill.BackgroundColor.SetColor(Color.Yellow);
+        worksheet.Column(1).AutoFit();
 
         await using var ms = new MemoryStream();
         await xlPackage.SaveAsAsync(ms);
