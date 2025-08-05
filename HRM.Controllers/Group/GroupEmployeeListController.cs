@@ -156,13 +156,13 @@ public class GroupEmployeeListController(
         return File(bytes, MimeType.XLS, fileName);
     }
 
-    public async Task<IEnumerable<EmployeeWorkFromHome>> GetEmployeeWorkFromHome(string TeamIds)
+    public async Task<IEnumerable<EmployeeWorkFromHome>> GetEmployeeWorkFromHome(string teamIds)
     {
         var criteria = new GetEmployeeWorkFromHomeCriteria
         {
             FromDate = DateTimeOffset.Now.DateTime.ToClientTimeZone(),
             ToDate = DateTimeOffset.Now.DateTime.ToClientTimeZone(),
-            TeamIds = TeamIds
+            TeamIds = teamIds
         };
 
         var employeesWFH = await baseService.GetDataAsync<EmployeeWorkFromHome>(criteria);
