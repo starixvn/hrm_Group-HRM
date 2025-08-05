@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -17,6 +18,7 @@ using Models.EmployeeInformation;
 using Models.Group;
 using Models.Supervisor;
 using OfficeOpenXml;
+using OfficeOpenXml.Style;
 using Resources;
 
 public class ExportExcelEmployeeInfoService(
@@ -29,11 +31,15 @@ public class ExportExcelEmployeeInfoService(
     private const string EmployeeBasicInfoTemplatePath = "ExcelTemplates/EmployeeBasicInfoTemplate.xls";
     private const string EmployeeFullInfoTemplatePath = "ExcelTemplates/EmployeeFullProfileInfoTemplate.xls";
     private const string GroupEmployeeListTemplatePath = "ExcelTemplates/GroupEmployeeList.xlsx";
+    private const string ProfitCenterReportTemplatePath = "ExcelTemplates/ProfitCenterReport.xlsx";
 
     private const byte TotalColumns = 23;
     private const byte RowStartBody = 3;
     private const byte MinimumWidth = 5;
     private const byte MaximumWidth = 50;
+    private const byte RowStartBodyProfitCenter = 4;
+    private const byte TotalColumnsProfitCenter = 20;
+
 
     private enum BasicInfo
     {
@@ -319,6 +325,154 @@ public class ExportExcelEmployeeInfoService(
         await using var ms = new MemoryStream();
         await xlPackage.SaveAsAsync(ms);
         return ms.ToArray();
+    }
+
+    public async Task<byte[]> ExportProfitCenterReportAsync(IEnumerable<GroupEmployeeModel> employees)
+    {
+        var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, ProfitCenterReportTemplatePath);
+
+        await using var templateStream = new FileStream(templatePath, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, useAsync: true);
+        using var templatePackage = new ExcelPackage(templateStream);
+        using var xlPackage = new ExcelPackage();
+
+        var template = templatePackage.Workbook.Worksheets.FirstOrDefault();
+        if (template == null)
+        {
+            throw new InvalidOperationException("The template Excel file does not contain any worksheet.");
+        }
+
+        var worksheet = xlPackage.Workbook.Worksheets.Add("Profit Center Report");
+        
+        SetupWorksheetHeaders(template, worksheet);
+        var joinedDateCol = FillEmployeeData(employees, template, worksheet);
+        ApplyWorksheetFormatting(worksheet, joinedDateCol);
+
+        await using var ms = new MemoryStream();
+        await xlPackage.SaveAsAsync(ms);
+        return ms.ToArray();
+    }
+
+    private static void SetupWorksheetHeaders(ExcelWorksheet template, ExcelWorksheet worksheet)
+    {
+        int rowIndex = 1;
+        const int colIndex = 1;
+
+        for (int i = 0; i < 3; i++)
+        {
+            template.Cells[rowIndex, colIndex, rowIndex, TotalColumnsProfitCenter]
+                .Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumnsProfitCenter]);
+            rowIndex++;
+        }
+
+        worksheet.Cells[rowIndex - 1, 1, rowIndex - 1, TotalColumnsProfitCenter].AutoFilter = true;
+    }
+
+    private static int FillEmployeeData(IEnumerable<GroupEmployeeModel> employees, ExcelWorksheet template, ExcelWorksheet worksheet)
+    {
+        var rowIndex = 4;
+        var rowNum = 1;
+        var joinedDateCol = 0;
+
+        foreach (var employee in employees)
+        {
+            var paymaster = DeterminePaymaster(employee);
+            joinedDateCol = FillEmployeeRow(employee, template, worksheet, rowIndex, rowNum++, paymaster);
+            rowIndex++;
+        }
+
+        return joinedDateCol;
+    }
+
+    private static string DeterminePaymaster(GroupEmployeeModel employee)
+    {
+        if (new[] { "Nexcel", "NexVision", "Lumiplus" }.Contains(employee.Company))
+        {
+            return "Nexcel";
+        }
+        else if (!string.IsNullOrWhiteSpace(employee.SubCompany))
+        {
+            return employee.SubCompany;
+        }
+        else
+        {
+            return employee.Company;
+        }
+    }
+
+    private static int FillEmployeeRow(GroupEmployeeModel employee, ExcelWorksheet template, ExcelWorksheet worksheet, int rowIndex, int rowNum, string paymaster)
+    {
+        var colIndex = 1;
+        
+        template.Cells[RowStartBodyProfitCenter, 1, RowStartBodyProfitCenter, TotalColumnsProfitCenter]
+            .Copy(worksheet.Cells[rowIndex, 1, rowIndex, TotalColumnsProfitCenter]);
+
+        worksheet.Cells[rowIndex, colIndex++].Value = rowNum;
+        worksheet.Cells[rowIndex, colIndex++].Value = employee.CtrId;
+        worksheet.Cells[rowIndex, colIndex++].Value = $"{employee.DepartmentCode}-{employee.TeamCode}";
+        worksheet.Cells[rowIndex, colIndex++].Value = employee.UnitId;
+        worksheet.Cells[rowIndex, colIndex++].Value = employee.UnitCode;
+        worksheet.Cells[rowIndex, colIndex++].Value = employee.DepartmentName;
+        worksheet.Cells[rowIndex, colIndex++].Value = employee.DepartmentCode;
+        worksheet.Cells[rowIndex, colIndex++].Value = employee.DepartmentPIC;
+        worksheet.Cells[rowIndex, colIndex++].Value = employee.TeamName;
+        worksheet.Cells[rowIndex, colIndex++].Value = employee.TeamCode;
+        worksheet.Cells[rowIndex, colIndex++].Value = employee.AccountableArea;
+        worksheet.Cells[rowIndex, colIndex++].Value = employee.TeamPIC;
+        worksheet.Cells[rowIndex, colIndex++].Value = employee.EmployeeCode;
+        worksheet.Cells[rowIndex, colIndex++].Value = employee.NickName;
+        worksheet.Cells[rowIndex, colIndex++].Value = employee.JobLevel;
+        worksheet.Cells[rowIndex, colIndex++].Value = employee.ManagementLevel;
+        worksheet.Cells[rowIndex, colIndex++].Value = paymaster;
+
+        var joinedDateCol = colIndex;
+        worksheet.Cells[rowIndex, colIndex++].Value = FormatDate(employee.JoinedDate);
+
+        worksheet.Cells[rowIndex, colIndex++].Value = employee.LocalCurrency;
+        worksheet.Cells[rowIndex, colIndex].Value = employee.Location;
+
+        return joinedDateCol;
+    }
+
+    private static void ApplyWorksheetFormatting(ExcelWorksheet worksheet, int joinedDateCol)
+    {
+        var rowEndData = worksheet.Dimension?.End.Row ?? 0;
+
+        worksheet.Cells.AutoFitColumns(MinimumWidth, MaximumWidth);
+        worksheet.View.FreezePanes(RowStartBodyProfitCenter, 1);
+
+        for (int col = 1; col <= TotalColumnsProfitCenter; col++)
+        {
+            worksheet.Column(col).Style.HorizontalAlignment =
+                (col == joinedDateCol) ? ExcelHorizontalAlignment.Right : ExcelHorizontalAlignment.Left;
+        }
+
+        worksheet.Cells[1, 1, 3, TotalColumnsProfitCenter].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+        worksheet.Cells[1, 1, 3, TotalColumnsProfitCenter].Style.Font.Bold = true;
+
+        AddTotalRow(worksheet, rowEndData);
+    }
+
+    private static void AddTotalRow(ExcelWorksheet worksheet, int rowEndData)
+    {
+        worksheet.Cells[2, 1].Value = "Total:";
+        worksheet.Cells[2, 1].Style.Font.Bold = true;
+        worksheet.Cells[2, 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+
+        if (rowEndData >= RowStartBodyProfitCenter)
+        {
+            worksheet.Cells[2, 2].Formula = $"SUBTOTAL(103, A{RowStartBodyProfitCenter}:A{rowEndData})";
+        }
+        else
+        {
+            worksheet.Cells[2, 2].Value = 0;
+        }
+        
+        worksheet.Cells[2, 2].Style.Font.Bold = true;
+        worksheet.Cells[2, 2].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+
+        worksheet.Cells[2, 1, 2, 2].Style.Fill.PatternType = ExcelFillStyle.Solid;
+        worksheet.Cells[2, 1, 2, 2].Style.Fill.BackgroundColor.SetColor(Color.Yellow);
+        worksheet.Column(1).AutoFit();
     }
 
     private static string FormatDate(DateTime? date) => date?.ToDateMonthYearFormatedDate();

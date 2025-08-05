@@ -117,11 +117,11 @@ import {
             .catch(axiosError);
     }
 
-    function exportExcel(object) {
+    function exportExcel(object, type) {
         var url = null,
             controllerPath;
 
-        controllerPath = "GroupEmployeeList/ExportGroupEmployeeList?";
+            controllerPath = "GroupEmployeeList/ExportExcel?";
 
         $("#TeamIds").val(
             $("#GroupTeam").multiSelectTreeView("getSelectedItems")
@@ -129,7 +129,13 @@ import {
         $("#CompanyIds").val(
             $("#Company").multiSelectTreeView("getSelectedItems")
         );
-        url = resolveClientUrl(controllerPath + $("form.filter").serialize());
+        
+        var formData = $("form.filter").serialize();
+        if (type === "EmployeeList") {
+            formData += "&isEmployeeListExport=true";
+        }
+        
+        url = resolveClientUrl(controllerPath + formData);
         location.href = url;
     }
 
@@ -239,7 +245,11 @@ import {
         });
 
         $("#exportExcel").on("click", function () {
-            exportExcel($(this));
+            exportExcel($(this), "EmployeeList");
+        });
+
+        $("#exportExcelProfitCenter").on("click", function () {
+            exportExcel($(this), "ProfitCenterReport");
         });
     });
 })();

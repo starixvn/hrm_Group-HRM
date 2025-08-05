@@ -19,8 +19,6 @@ public class GroupEmployeeViewModel : PagerOptionModel
 
     public bool? IsAll { get; set; }
 
-    
-
     public IList<Models.Team> Groups { get; set; }
 
     public IEnumerable<SelectListItem> JobTitles { get; set; }

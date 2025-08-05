@@ -10,6 +10,7 @@ using HRM.Core.Enums;
 using HRM.Core.Filters;
 using HRM.Core.Services;
 using HRM.Criteria.Employee;
+using HRM.Criteria.EmployeeWorkFromHome;
 using HRM.Criteria.Group;
 using HRM.Criteria.Supervisor;
 using HRM.Models;
@@ -34,7 +35,8 @@ public class GroupEmployeeListController(
     IDepartmentService departmentService,
     IExportExcelEmployeeInfoService excelService,
     IBaseService baseService,
-    IEmployeeService employeeService) : BaseController(session)
+    IEmployeeService employeeService,
+    ISecondCompanyEmployeeService secondCompanyEmployeeService ) : BaseController(session)
 {
     [HrmPermission(Policy.Read, FunctionKey.GroupEmployeeList)]
     public async Task<IActionResult> Index(string teamIds = null)
@@ -92,7 +94,7 @@ public class GroupEmployeeListController(
     }
 
     [HrmPermission(Policy.Read, FunctionKey.GroupEmployeeList)]
-    public async Task<IActionResult> ExportGroupEmployeeList(GroupEmployeeViewModel model)
+    public async Task<IActionResult> ExportExcel(GroupEmployeeViewModel model, bool isEmployeeListExport)
     {
         var criteria = new GetEmployeesInGroupScopeCriteria
         {
@@ -105,10 +107,67 @@ public class GroupEmployeeListController(
         };
 
         var profiles = (await baseService.GetDataAsync<GroupEmployeeModel>(criteria)).ToList();
-        var bytes = await excelService.ExportGroupEmployeesAsync(profiles);
-        var fileName = $"GroupEmployeeList_{DateTimeOffset.Now.DateTime.ToClientTimeZone():yyyyMMdd}.xlsx";
+
+        if (!isEmployeeListExport)
+        {
+            var employeesWFH = await GetEmployeeWorkFromHome(model.TeamIds);
+            var secondmentCompanyList = await secondCompanyEmployeeService.GetAllAsync();
+
+            var wfhByEmpId = employeesWFH
+                .GroupBy(e => e.EmpId)
+                .ToDictionary(g => g.Key, g => g.First());
+
+
+            var secondmentByEmpId = secondmentCompanyList
+                .GroupBy(e => e.EmpId)
+                .ToDictionary(g => g.Key, g => g.First().Location);
+
+            foreach (var profile in profiles)
+            {
+                if (!int.TryParse(profile.EmpId, out var empId))
+                {
+                    continue;
+                }
+
+                if (wfhByEmpId.ContainsKey(empId))
+                {
+                    profile.Location = "WFH";
+                }
+                else if (secondmentByEmpId.TryGetValue(empId, out var secondmentLocation))
+                {
+                    profile.Location = secondmentLocation;
+                }
+                else
+                {
+                    // No matching location found; keep existing value
+                }
+            }
+        }
+
+        var bytes = isEmployeeListExport
+            ? await excelService.ExportGroupEmployeesAsync(profiles)
+            : await excelService.ExportProfitCenterReportAsync(profiles);
+
+        var exportDate = DateTimeOffset.Now.DateTime.ToClientTimeZone().ToString("yyyyMMdd");
+        var fileName = isEmployeeListExport
+            ? $"GroupEmployeeList_{exportDate}.xlsx"
+            : $"Profit Center Report - {exportDate}.xlsx";
 
         return File(bytes, MimeType.XLS, fileName);
+    }
+
+    public async Task<IEnumerable<EmployeeWorkFromHome>> GetEmployeeWorkFromHome(string teamIds)
+    {
+        var criteria = new GetEmployeeWorkFromHomeCriteria
+        {
+            FromDate = DateTimeOffset.Now.DateTime.ToClientTimeZone(),
+            ToDate = DateTimeOffset.Now.DateTime.ToClientTimeZone(),
+            TeamIds = teamIds
+        };
+
+        var employeesWFH = await baseService.GetDataAsync<EmployeeWorkFromHome>(criteria);
+
+        return employeesWFH;
     }
 
     public async Task<IActionResult> GroupEmployeeList(GroupEmployeeViewModel model)
@@ -127,9 +186,9 @@ public class GroupEmployeeListController(
                 PageSize = model.ItemsPerPage,
                 CompanyIds = model.CompanyIds
             };
+
             employees = (await baseService.GetDataAsync<GroupEmployeeModel>(criteria)).ToList();
         }
-
         return Json(employees);
     }
 

@@ -55,4 +55,12 @@ public class GroupEmployeeModel
     public bool Enabled { get; set; }
 
     public bool IsDeleted { get; set; }
+
+    public string DepartmentCode { get; set; }
+
+    public string AccountableArea { get; set; }
+
+    public string LocalCurrency { get; set; }
+
+    public string Location { get; set; }
 }
