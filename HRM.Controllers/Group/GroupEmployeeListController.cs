@@ -160,8 +160,8 @@ public class GroupEmployeeListController(
     {
         var criteria = new GetEmployeeWorkFromHomeCriteria
         {
-            FromDate = DateTimeOffset.Now.DateTime,
-            ToDate = DateTimeOffset.Now.DateTime,
+            FromDate = DateTimeOffset.Now.DateTime.ToClientTimeZone(),
+            ToDate = DateTimeOffset.Now.DateTime.ToClientTimeZone(),
             TeamIds = TeamIds
         };
 
