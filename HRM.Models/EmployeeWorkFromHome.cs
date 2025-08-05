@@ -33,6 +33,4 @@ public class EmployeeWorkFromHome
 
     public string Remark { get; set; }
     public IEnumerable<S3FileObject> AttachFiles { get; set; }
-
-    public string Location { get; set; }
 }

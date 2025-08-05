@@ -115,7 +115,8 @@ public class GroupEmployeeListController(
 
             var wfhByEmpId = employeesWFH
                 .GroupBy(e => e.EmpId)
-                .ToDictionary(g => g.Key, g => g.First().Location);
+                .ToDictionary(g => g.Key, g => g.First());
+
 
             var secondmentByEmpId = secondmentCompanyList
                 .GroupBy(e => e.EmpId)
@@ -128,9 +129,9 @@ public class GroupEmployeeListController(
                     continue;
                 }
 
-                if (wfhByEmpId.TryGetValue(empId, out var wfhLocation))
+                if (wfhByEmpId.ContainsKey(empId))
                 {
-                    profile.Location = wfhLocation;
+                    profile.Location = "WFH";
                 }
                 else if (secondmentByEmpId.TryGetValue(empId, out var secondmentLocation))
                 {
