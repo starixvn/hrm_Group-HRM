@@ -188,7 +188,7 @@ public class TeamService(
 
     public async Task<byte[]> GenerateGroupTeamExcel(IEnumerable<GroupTeamModel> teams)
     {
-        const int totalColumns = 13;
+        const int totalColumns = 14;
         const int rowStartBody = 3;
         var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, GroupTeamTemplatePath);
 
@@ -223,6 +223,7 @@ public class TeamService(
 
             worksheet.Cells[rowIndex, colIndex++].Value = rowNum++;
             worksheet.Cells[rowIndex, colIndex++].Value = team.GroupTeamId.ToString();
+            worksheet.Cells[rowIndex, colIndex++].Value = $"{team.DepartmentCode}-{team.TeamCode}";
             worksheet.Cells[rowIndex, colIndex++].Value = team.UnitCode;
             worksheet.Cells[rowIndex, colIndex++].Value = team.DepartmentName;
             worksheet.Cells[rowIndex, colIndex++].Value = team.DepartmentCode;

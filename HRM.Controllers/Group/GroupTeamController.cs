@@ -21,7 +21,8 @@ using HRM.Core.Enums;
 
 namespace HRM.Controllers.Group;
 
-public class GroupTeamController(ITeamService teamService,
+public class GroupTeamController(
+    ITeamService teamService,
     IUserControlSession userControlSession,
     IDepartmentService departmentService,
     IBaseService baseService,
