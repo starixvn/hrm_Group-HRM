@@ -106,8 +106,16 @@ public class SMSPayrollManagementService(
         {
             return 0;
         }
-        _ = decimal.TryParse(Cryptography.DecryptPassword(salary), out var basicSalary);
-        return basicSalary;
+        try
+        {
+
+            salary = Cryptography.DecryptPassword(salary);
+            return decimal.Parse(salary);
+        }
+        catch (Exception)
+        {
+            return 0;
+        }
     }
 
     private static decimal CalculateActualPaidDays(PayrollEmployeeAttendant employeeAttendant)
