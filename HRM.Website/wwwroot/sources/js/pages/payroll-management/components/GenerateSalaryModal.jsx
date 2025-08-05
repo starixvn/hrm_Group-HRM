@@ -110,7 +110,7 @@ const GenerateSalaryModal = ({ onSuccess }) => {
             <Modal
                 show={showConfirm}
                 onHide={() => setShowConfirm(false)}
-                zIndex={1050}>
+                style={{ zIndex: 1050 }}>
                 <ModalHeader closeButton>
                     <Modal.Title>Confirm Generate</Modal.Title>
                 </ModalHeader>

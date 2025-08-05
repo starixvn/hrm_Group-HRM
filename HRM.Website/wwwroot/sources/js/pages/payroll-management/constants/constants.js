@@ -8,10 +8,6 @@ export const CategoryLabel = {
     [Category.EXPAT]: 'Expat',
 };
 
-export const getCategoryLabel = (type) => {
-    return CategoryLabel[type] || 'Unknown';
-};
-
 export const CATEGORY = [Category.LOCAL, Category.EXPAT];
 
 export const EmploymentStatus = {
