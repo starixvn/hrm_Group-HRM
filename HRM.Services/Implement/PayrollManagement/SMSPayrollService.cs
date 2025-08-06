@@ -28,7 +28,7 @@ public class SMSPayrollManagementService(
         return await baseService.GetDataAsync<GeneratedPayrollDetail>(criteria);
     }
 
-    public async Task<CommandResult> GeneratePayroll(DateTime date)
+    public async Task<CommandResult> GeneratePayroll(DateTime date, int actorId)
     {
         var companyId = session.Get<short>(SessionKey.CurrentCompanyId);
         var employeeAttendants = await GetPayrollEmployeeAttendant(companyId, date);
@@ -41,6 +41,7 @@ public class SMSPayrollManagementService(
         }
         var criteria = new CalculatePayrollCriteria
         {
+            ModifiedBy = actorId,
             CompanyId = companyId,
             Date = date,
             PayrollListJson = JsonConvert.SerializeObject(payrollResults),

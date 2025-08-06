@@ -9,6 +9,6 @@ namespace HRM.Services.Interfaces;
 
 public interface IPayrollManagementService
 {
-    Task<CommandResult> GeneratePayroll(DateTime date);
+    Task<CommandResult> GeneratePayroll(DateTime date, int actorId);
     Task<IEnumerable<GeneratedPayrollDetail>> GetPayrollByMonthAsync(GetPayrollByMonthCriteria criteria);
 }
