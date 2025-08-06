@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { CATEGORY, Category, CategoryLabel } from '../constants/constants';
 import GenerateSalaryModal from './GenerateSalaryModal';
+import MonthPicker from '../../../shared/components/MonthPicker';
 
 const Filter = ({ onSearch }) => {
     const [month, setMonth] = useState(() => {
@@ -31,10 +32,6 @@ const Filter = ({ onSearch }) => {
         });
     };
 
-    const handleMonthClick = (e) => {
-        e.target.showPicker();
-    };
-
     return (
         <div className="form-horizontal flex-column">
             <div className="filter-section">
@@ -43,12 +40,11 @@ const Filter = ({ onSearch }) => {
                         <label className="control-label">Month</label>
                     </div>
                     <div className="input-form">
-                        <input
-                            type="month"
-                            className="form-control"
+                        <MonthPicker
                             value={month}
-                            onChange={(e) => setMonth(e.target.value)}
-                            onClick={handleMonthClick}
+                            onChange={setMonth}
+                            minDate="2020/01/01"
+                            maxDate={new Date()}
                         />
                     </div>
                 </div>

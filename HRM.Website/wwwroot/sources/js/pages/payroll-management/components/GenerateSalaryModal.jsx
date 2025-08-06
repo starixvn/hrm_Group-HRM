@@ -3,6 +3,7 @@ import toastr from 'toastr';
 import { Modal, ModalBody, ModalFooter, ModalHeader } from 'react-bootstrap';
 import { toastOptions } from '../../../shared/common.functions';
 import salaryService from '../Service';
+import MonthPicker from '../../../shared/components/MonthPicker';
 
 const GenerateSalaryModal = ({ onSuccess }) => {
     const [show, setShow] = useState(false);
@@ -23,10 +24,6 @@ const GenerateSalaryModal = ({ onSuccess }) => {
         ).padStart(2, '0')}`;
         setMonth(currentMonth);
         setShow(true);
-    };
-
-    const handleMonthClick = (e) => {
-        e.target.showPicker();
     };
 
     const processGenerate = async () => {
@@ -80,18 +77,26 @@ const GenerateSalaryModal = ({ onSuccess }) => {
                     <Modal.Title>Generate Payroll</Modal.Title>
                 </ModalHeader>
                 <ModalBody>
-                    <div className="form-group">
-                        <label>
-                            Month<span className="required"> *</span>
+                    <div
+                        className="form-group"
+                        style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '10px',
+                        }}>
+                        <label className="control-label">
+                            Month<span className="required"> * </span>
                         </label>
-                        <input
-                            type="month"
-                            className="form-control"
-                            value={month}
-                            onChange={(e) => setMonth(e.target.value)}
-                            required
-                            onClick={handleMonthClick}
-                        />
+                        <div className="input-form">
+                            <MonthPicker
+                                value={month}
+                                onChange={setMonth}
+                                placeholder="Select month for payroll..."
+                                minDate="2020/01/01"
+                                maxDate={new Date()}
+                                style={{ position: 'relative', zIndex: 1 }}
+                            />
+                        </div>
                     </div>
                 </ModalBody>
                 <ModalFooter>
