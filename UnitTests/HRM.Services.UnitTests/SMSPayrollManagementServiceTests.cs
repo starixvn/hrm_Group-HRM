@@ -153,6 +153,7 @@ public class SMSPayrollManagementServiceTests
             TotalUnpaidLeaveDays = unpaidLeaveDays,
             TotalNewHireWorkingDays = newHireDays,
             TotalWorkingDays = totalWorkingDays,
+            ConfirmedDate = newHireDays > 0 ? DateTime.Now : DateTime.Now.AddYears(-1),
             IsResigned = isResigned,
             IsMaternity = isMaternity
         };
@@ -207,6 +208,7 @@ public class SMSPayrollManagementServiceTests
             TotalUnpaidLeaveDays = unpaidLeaveDays,
             TotalNewHireWorkingDays = newHireDays,
             TotalWorkingDays = totalWorkingDays,
+            ConfirmedDate = newHireDays > 0 ? DateTime.Now: DateTime.Now.AddYears(-1),
             IsResigned = isResigned,
             IsMaternity = isMaternity
         };
@@ -247,6 +249,7 @@ public class SMSPayrollManagementServiceTests
             TotalUnpaidLeaveDays = 0,
             TotalNewHireWorkingDays = 0,
             TotalWorkingDays = 22,
+            ConfirmedDate = DateTime.Now.AddYears(-1),
             IsResigned = false,
             IsMaternity = false
         };

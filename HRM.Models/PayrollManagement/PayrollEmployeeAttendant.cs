@@ -12,6 +12,7 @@ public class PayrollEmployeeAttendant
     public bool IsResigned { get; set; }
     public bool IsMaternity { get; set; }
     public DateTime? CompanyDate { get; set; }
+    public DateTime? JoinedDate { get; set; }
     public DateTime? ConfirmedDate { get; set; }
     public string Salary { get; set; }
     public decimal BasicSalary { get; set; }

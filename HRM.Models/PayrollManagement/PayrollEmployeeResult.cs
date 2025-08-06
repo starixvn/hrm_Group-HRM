@@ -14,4 +14,6 @@ public class PayrollEmployeeResult
     public DateTime? CompanyDate { get; set; }
     public DateTime? ConfirmedDate { get; set; }
     public EmploymentStatus EmploymentStatus { get; set; }
+    public DateTime GeneratedDate { get; set; }
+
 }
