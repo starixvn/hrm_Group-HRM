@@ -210,26 +210,30 @@ public class GroupEmployeeListController(
     [HrmPermission(Policy.Host, FunctionKey.GroupEmployeeList)]
     public async Task<IActionResult> EditInfo(UpdateEmployeeViewModel model)
     {
-        if (model.CtrId is < 1 or > int.MaxValue)
+        if (ModelState.IsValid)
         {
-            ModelState.AddModelError(nameof(model.CtrId), $"Ctr ID must be between 1 and {int.MaxValue}.");
-        }
+            if (model.CtrId is < 1 or > int.MaxValue)
+            {
+                ModelState.AddModelError(nameof(model.CtrId), $"Ctr ID must be between 1 and {int.MaxValue}.");
+            }
 
-        var command = new UpdateEmployeeCommand
-        {
-            EmpId = model.EmpId,
-            CtrId = model.CtrId,
-            ModifiedBy = session.UserId
-        };
-        var result = await baseService.ExecuteNonQueryAsync(command);
-        if (result.IsSuccessful)
-        {
-            ViewBag.Updated = true;
-        }
-        else
-        {
-            ViewBag.Updated = false;
-            ModelState.AddModelError(string.Empty, result.Message);
+            var command = new UpdateEmployeeCommand
+            {
+                EmpId = model.EmpId,
+                CtrId = model.CtrId,
+                ModifiedBy = session.UserId
+            };
+            var result = await baseService.ExecuteNonQueryAsync(command);
+            if (result.IsSuccessful)
+            {
+                ViewBag.Updated = true;
+            }
+            else
+            {
+                ViewBag.Updated = false;
+                ModelState.AddModelError(string.Empty, result.Message);
+            }
+
         }
 
         return View(model);
