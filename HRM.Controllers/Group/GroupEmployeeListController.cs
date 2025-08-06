@@ -106,41 +106,34 @@ public class GroupEmployeeListController(
             CompanyIds = model.CompanyIds
         };
 
-        var profiles = (await baseService.GetDataAsync<GroupEmployeeModel>(criteria)).ToList();
+        var profiles = await baseService.GetDataAsync<GroupEmployeeModel>(criteria);
 
         if (!isEmployeeListExport)
         {
             var employeesWFH = await GetEmployeeWorkFromHome(model.TeamIds);
-            var secondmentCompanyList = await secondCompanyEmployeeService.GetAllAsync();
+            var secondments = await secondCompanyEmployeeService.GetAllAsync();
 
-            var wfhByEmpId = employeesWFH
-                .GroupBy(e => e.EmpId)
-                .ToDictionary(g => g.Key, g => g.First());
-
-
-            var secondmentByEmpId = secondmentCompanyList
+            var secondmentByEmpId = secondments
                 .GroupBy(e => e.EmpId)
                 .ToDictionary(g => g.Key, g => g.First().Location);
 
             foreach (var profile in profiles)
             {
-                if (!int.TryParse(profile.EmpId, out var empId))
+                string location;
+                if (employeesWFH.Any(x => x.EmpId == profile.EmpId))
                 {
-                    continue;
+                    location = "WFH";
                 }
-
-                if (wfhByEmpId.ContainsKey(empId))
+                else if (secondmentByEmpId.TryGetValue(profile.EmpId, out var secondmentLocation))
                 {
-                    profile.Location = "WFH";
-                }
-                else if (secondmentByEmpId.TryGetValue(empId, out var secondmentLocation))
-                {
-                    profile.Location = secondmentLocation;
+                    location = secondmentLocation;
                 }
                 else
                 {
-                    // No matching location found; keep existing value
+                    location = string.Empty;
                 }
+
+                profile.Location = location;
             }
         }
 

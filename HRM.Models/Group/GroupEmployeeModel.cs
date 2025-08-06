@@ -4,9 +4,9 @@ namespace HRM.Models.Group;
 
 public class GroupEmployeeModel
 {
-    public string CtrId { get; set; }
+    public int CtrId { get; set; }
 
-    public string EmpId { get; set; }
+    public int EmpId { get; set; }
 
     public string EmployeeCode { get; set; }
 
