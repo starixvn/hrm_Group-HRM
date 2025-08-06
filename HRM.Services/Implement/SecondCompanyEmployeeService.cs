@@ -8,8 +8,7 @@ using HRM.Criteria.CompanyEmployee;
 using Interfaces;
 using Models;
 
-public class SecondCompanyEmployeeService(
-    IBaseService baseService) : ISecondCompanyEmployeeService
+public class SecondCompanyEmployeeService(IBaseService baseService) : ISecondCompanyEmployeeService
 {
     public async Task<CommandResult> CreateAsync(int actorId, int empId, int companyId)
     {

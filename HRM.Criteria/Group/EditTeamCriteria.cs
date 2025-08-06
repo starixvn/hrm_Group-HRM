@@ -27,15 +27,9 @@ public class EditTeamCriteria : CriteriaBase
     public byte? ExpatYearsOfServiceForExtraLeave { get; set; }
     public bool IsOutsource { get; set; }
 
-    public override string GetSettingKey()
-    {
-        return "Group_Update";
-    }
+    public override string GetSettingKey() => "Group_Update";
 
-    public override bool IsValid()
-    {
-        return TeamId > 0 &&
-               !string.IsNullOrWhiteSpace(Code) &&
-               !string.IsNullOrWhiteSpace(Name);
-    }
+    public override bool IsValid() => TeamId > 0 &&
+       !string.IsNullOrWhiteSpace(Code) &&
+       !string.IsNullOrWhiteSpace(Name);
 }
