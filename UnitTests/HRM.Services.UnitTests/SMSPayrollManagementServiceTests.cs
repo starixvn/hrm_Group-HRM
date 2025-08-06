@@ -75,7 +75,7 @@ public class SMSPayrollManagementServiceTests
             .Returns(expectedCommandResult);
 
         // Act
-        var result = await _service.GeneratePayroll(date);
+        var result = await _service.GeneratePayroll(date, 424);
 
         // Assert
         Assert.Equal(expectedCommandResult, result);
@@ -99,7 +99,7 @@ public class SMSPayrollManagementServiceTests
             .Returns(expectedCommandResult);
 
         // Act
-        await _service.GeneratePayroll(date);
+        await _service.GeneratePayroll(date, 424);
 
         // Assert
         await _baseService.Received(1).ExecuteNonQueryAsync(Arg.Is<CalculatePayrollCriteria>(c =>
@@ -120,7 +120,7 @@ public class SMSPayrollManagementServiceTests
             .Returns(expectedCommandResult);
 
         // Act
-        await _service.GeneratePayroll(date);
+        await _service.GeneratePayroll(date, 424);
 
         // Assert
         await _baseService.Received(1).GetDataAsync<PayrollEmployeeAttendant>(Arg.Is<GetPayrollAttendantEmployeeCriteria>(c =>
@@ -166,7 +166,7 @@ public class SMSPayrollManagementServiceTests
             .Returns(expectedCommandResult);
 
         // Act
-        await _service.GeneratePayroll(date);
+        await _service.GeneratePayroll(date, 424);
 
         // Assert
         await _baseService.Received(1).ExecuteNonQueryAsync(Arg.Any<CalculatePayrollCriteria>());
@@ -221,7 +221,7 @@ public class SMSPayrollManagementServiceTests
             .Returns(expectedCommandResult);
 
         // Act
-        await _service.GeneratePayroll(date);
+        await _service.GeneratePayroll(date, 424);
 
         // Assert
         await _baseService.Received(1).ExecuteNonQueryAsync(Arg.Any<CalculatePayrollCriteria>());
@@ -260,14 +260,14 @@ public class SMSPayrollManagementServiceTests
             .Returns(expectedCommandResult);
 
         // Act
-        await _service.GeneratePayroll(date);
+        await _service.GeneratePayroll(date, 424);
 
         // Assert
         CalculatePayrollCriteria capturedCriteria = null;
         _baseService.ExecuteNonQueryAsync(Arg.Do<CalculatePayrollCriteria>(c => capturedCriteria = c))
             .Returns(expectedCommandResult);
 
-        await _service.GeneratePayroll(date);
+        await _service.GeneratePayroll(date, 424);
 
         var payrollResults = JsonConvert.DeserializeObject<List<PayrollEmployeeResult>>(capturedCriteria.PayrollListJson);
         var result = payrollResults.First();
@@ -292,7 +292,7 @@ public class SMSPayrollManagementServiceTests
             .Returns(expectedCommandResult);
 
         // Act
-        var result = await _service.GeneratePayroll(date);
+        var result = await _service.GeneratePayroll(date, 424);
 
         // Assert
         Assert.Equal(expectedCommandResult, result);
@@ -300,7 +300,7 @@ public class SMSPayrollManagementServiceTests
         _baseService.ExecuteNonQueryAsync(Arg.Do<CalculatePayrollCriteria>(c => capturedCriteria = c))
             .Returns(expectedCommandResult);
 
-        await _service.GeneratePayroll(date);
+        await _service.GeneratePayroll(date, 424);
 
         var payrollResults = JsonConvert.DeserializeObject<List<PayrollEmployeeResult>>(capturedCriteria.PayrollListJson);
         Assert.Empty(payrollResults);
@@ -342,14 +342,14 @@ public class SMSPayrollManagementServiceTests
             .Returns(expectedCommandResult);
 
         // Act
-        await _service.GeneratePayroll(date);
+        await _service.GeneratePayroll(date, 424);
 
         // Assert
         CalculatePayrollCriteria capturedCriteria = null;
         _baseService.ExecuteNonQueryAsync(Arg.Do<CalculatePayrollCriteria>(c => capturedCriteria = c))
             .Returns(expectedCommandResult);
 
-        await _service.GeneratePayroll(date);
+        await _service.GeneratePayroll(date, 424);
 
         var payrollResults = JsonConvert.DeserializeObject<List<PayrollEmployeeResult>>(capturedCriteria.PayrollListJson);
         Assert.Equal(2, payrollResults.Count);
