@@ -76,7 +76,7 @@
         <Setting Key="Report_MonthlyWorkingHours_EmployeeRequest" SpName="Report_MonthlyWorkingHours_EmployeeRequest" DbName="bodb_HRM" Plain="0" />
         <Setting Key="Report_ShiftStatistic" SpName="Report_ShiftStatistic" DbName="bodb_HRM" Plain="0" />
         <Setting Key="Report_ShiftStatisticDetail" SpName="Report_ShiftStatisticDetail" DbName="bodb_HRM" Plain="0" />
-		<Setting Key="WorkingTimeRequest_GetRequestByCreateDate_AllType" SpName="WorkingTimeRequest_GetRequestByCreateDate_AllType" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="WorkingTimeRequest_GetRequestByCreateDate_AllType" SpName="WorkingTimeRequest_GetRequestByCreateDate_AllType" DbName="bodb_HRM" Plain="0" />
         <Setting Key="Employee_GetSupervisorForRequest" SpName="Employee_GetSupervisorForRequest" DbName="bodb_HRM" Plain="0" />
         <Setting Key="Employee_GetVerifierAndApprover" SpName="Employee_GetVerifierAndApprover" DbName="bodb_HRM" Plain="0" />
         <Setting Key="EmployeeSupervisor_Get" SpName="EmployeeSupervisor_Get" DbName="bodb_HRM" Plain="0">
@@ -99,18 +99,19 @@
         <Setting Key="EmployeeSupervisor_GetListSupervisorRequestID" SpName="EmployeeSupervisor_GetListSupervisorRequestID" DbName="bodb_HRM" Plain="0" />
         <Setting Key="EmployeeSupervisor_GetDisciplineSettingById" SpName="EmployeeSupervisor_GetDisciplineSettingById" DbName="bodb_HRM" Plain="0" />
         <Setting Key="Employee_GetMemberByGender" SpName="Employee_GetMemberByGender" DbName="bodb_HRM" Plain="0" />
-		<Setting Key="Employee_GetHRAndSupervisorByEmpId" SpName="Employee_GetHRAndSupervisorByEmpId" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Employee_GetHRAndSupervisorByEmpId" SpName="Employee_GetHRAndSupervisorByEmpId" DbName="bodb_HRM" Plain="0" />
         <Setting Key="Employee_GetEmployeeForPIC" SpName="Employee_GetEmployeeForPIC" DbName="bodb_HRM" Plain="0" />
-		<Setting Key="TimeRecord_GetCheckInOutOnline" SpName="TimeRecord_GetCheckInOutOnline" DbName="bodb_HRM" Plain="0" />
-		<Setting Key="EmployeeBioInfo_Get" SpName="EmployeeBioInfo_Get" DbName="bodb_HRM" Plain="0" />
-		<Setting Key="Nex_WorkingTimeRequest_GetRequestByDate" SpName="WorkingTimeRequest_GetRequestByDate" DbName="nex_HRM" Plain="0" />
-		<Setting Key="Lumi_WorkingTimeRequest_GetRequestByDate" SpName="WorkingTimeRequest_GetRequestByDate" DbName="lumi_HRM" Plain="0" />
-		<Setting Key="NexVision_WorkingTimeRequest_GetRequestByDate" SpName="WorkingTimeRequest_GetRequestByDate" DbName="nexvision_HRM" Plain="0" />
+        <Setting Key="TimeRecord_GetCheckInOutOnline" SpName="TimeRecord_GetCheckInOutOnline" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="EmployeeBioInfo_Get" SpName="EmployeeBioInfo_Get" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Nex_WorkingTimeRequest_GetRequestByDate" SpName="WorkingTimeRequest_GetRequestByDate" DbName="nex_HRM" Plain="0" />
+        <Setting Key="Lumi_WorkingTimeRequest_GetRequestByDate" SpName="WorkingTimeRequest_GetRequestByDate" DbName="lumi_HRM" Plain="0" />
+        <Setting Key="NexVision_WorkingTimeRequest_GetRequestByDate" SpName="WorkingTimeRequest_GetRequestByDate" DbName="nexvision_HRM" Plain="0" />
         <Setting Key="Nex_WorkingTimeRequest_GetRequestHistory" SpName="WorkingTimeRequest_GetRequestHistory" DbName="nex_HRM" Plain="0" />
         <Setting Key="Lumi_WorkingTimeRequest_GetRequestHistory" SpName="WorkingTimeRequest_GetRequestHistory" DbName="lumi_HRM" Plain="0" />
         <Setting Key="NexVision_WorkingTimeRequest_GetRequestHistory" SpName="WorkingTimeRequest_GetRequestHistory" DbName="nexvision_HRM" Plain="0" />
-	</Function>
-	<Function Name="Group">
+        <Setting Key="Employee_GroupScope_Update" SpName="Employee_GroupScope_Update" DbName="bodb_HRM" Plain="0" />
+    </Function>
+    <Function Name="Group">
         <Setting Key="EmployeeGroup_GetGroup" SpName="EmployeeGroup_GetGroup" DbName="bodb_HRM" Plain="0" />
         <Setting Key="GetGroupOfEmployee" SpName="EmployeeGroup_GetGroupOfEmployee" DbName="bodb_HRM" Plain="0" />
         <Setting Key="Group_Get" SpName="Group_Get" DbName="bodb_HRM" Plain="0">
@@ -118,8 +119,8 @@
             <Mapping DataField="DepartmentId" ObjectProperty="Id" Class="Department" />
         </Setting>
         <Setting Key="Group_GetBySupervisor" SpName="Group_GetBySupervisor" DbName="bodb_HRM" Plain="0" />
-		<Setting Key="GroupSupervisor_GetById" SpName="GroupSupervisor_GetById" DbName="bodb_HRM" Plain="0" />
-		<Setting Key="SupervisorCompanies_GetByEmpId" SpName="SupervisorCompanies_GetByEmpId" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="GroupSupervisor_GetById" SpName="GroupSupervisor_GetById" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="SupervisorCompanies_GetByEmpId" SpName="SupervisorCompanies_GetByEmpId" DbName="bodb_HRM" Plain="0" />
         <Setting Key="GroupSupervisor_GetByRole" SpName="GroupSupervisor_GetByRole" DbName="bodb_HRM" Plain="0">
             <Mapping DataField="HasCheckInOut" ObjectProperty="CheckInOuts" />
             <Mapping DataField="HasLateInEarlyOut" ObjectProperty="LateInEarlyOuts" />
@@ -130,8 +131,8 @@
             <Mapping DataField="EmpId" ObjectProperty="OwnerId" />
             <Mapping DataField="Code" ObjectProperty="TeamCode" />
         </Setting>
-		<Setting Key="GroupSupervisor_Update" SpName="GroupSupervisor_Update" DbName="bodb_HRM" Plain="0" />
-		<Setting Key="GroupSupervisor_ByPIC_Insert" SpName="GroupSupervisor_ByPIC_Insert" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="GroupSupervisor_Update" SpName="GroupSupervisor_Update" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="GroupSupervisor_ByPIC_Insert" SpName="GroupSupervisor_ByPIC_Insert" DbName="bodb_HRM" Plain="0" />
         <Setting Key="GroupSupervisor_Get" SpName="GroupSupervisor_Get" DbName="bodb_HRM" Plain="0" />
         <Setting Key="GroupSupervisor_GetDisciplineSettingById" SpName="GroupSupervisor_GetDisciplineSettingById" DbName="bodb_HRM" Plain="0" />
         <Setting Key="Group_Insert" SpName="Group_Insert" DbName="bodb_HRM" Plain="0" />
@@ -139,10 +140,10 @@
         <Setting Key="Group_Delete" SpName="Group_Delete" DbName="bodb_HRM" Plain="0" />
         <Setting Key="Group_GetNextGroupTeamId" SpName="Group_GetNextGroupTeamId" DbName="bodb_HRM" Plain="0" />
         <Setting Key="Group_UnitScope_Get" SpName="Group_UnitScope_Get" DbName="bodb_HRM" Plain="0" />
-		<Setting Key="Employee_GroupScope_Get" SpName="Employee_GroupScope_Get" DbName="bodb_HRM" Plain="0" />
-		<Setting Key="GroupId_ByGroupTeamId_Get" SpName="GroupId_ByGroupTeamId_Get" DbName="bodb_HRM" Plain="0" />
-		<Setting Key="GroupSupervisor_GetCompaniesByRoleIdForEmployee" SpName="GroupSupervisor_GetCompaniesByRoleIdForEmployee" DbName="bodb_HRM" Plain="0" />
-	</Function>
+        <Setting Key="Employee_GroupScope_Get" SpName="Employee_GroupScope_Get" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="GroupId_ByGroupTeamId_Get" SpName="GroupId_ByGroupTeamId_Get" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="GroupSupervisor_GetCompaniesByRoleIdForEmployee" SpName="GroupSupervisor_GetCompaniesByRoleIdForEmployee" DbName="bodb_HRM" Plain="0" />
+    </Function>
     <Function Name="Lookup">
         <Setting Key="Lookup_GetLookupData" SpName="Lookup_GetLookupData" DbName="bodb_HRM" Plain="0" />
         <Setting Key="Lookup_GetJobTitle" SpName="LookupData_JobTitle_SELECT" DbName="bodb_HRM" Plain="0" />
@@ -275,7 +276,7 @@
         <Setting Key="MailRecorder_GetConfig" SpName="MailRecorder_GetConfig" DbName="bodb_HRM" />
         <Setting Key="MailRecorder_InsError" SpName="MailRecorder_InsError" DbName="bodb_HRM" />
         <Setting Key="MailRecorder_InsRecord" SpName="MailRecorder_InsRecord" DbName="bodb_HRM" />
-		<Setting Key="MailRecorder_UpdateMailStatus" SpName="MailRecorder_UpdateMailStatus" DbName="bodb_HRM" />
+        <Setting Key="MailRecorder_UpdateMailStatus" SpName="MailRecorder_UpdateMailStatus" DbName="bodb_HRM" />
     </Function>
     <Function Name="Schedule Arrange">
         <Setting Key="ScheduleArrangement_GetEmployee" SpName="ScheduleArrangement_GetEmployee" DbName="bodb_HRM" Plain="0" />
@@ -571,9 +572,9 @@
         <Setting Key="FnB_EmployeeCalendar_GetByLastModifiedDate" SpName="FnB_EmployeeCalendar_GetByLastModifiedDate" DbName="bodb_HRM" Plain="0" />
         <Setting Key="FnB_Employee_GetSecondmentCompany" SpName="FnB_Employee_GetSecondmentCompany" DbName="bodb_HRM" Plain="0" />
     </Function>
-	<Function Name="Company">
-		<Setting Key="Company_GetAll" SpName="Company_GetAll" DbName="bodb_HRM" Plain="0" />
-		<Setting Key="Domain_ByCompanyId_Get" SpName="Domain_ByCompanyId_Get" DbName="bodb_HRM" />
+    <Function Name="Company">
+        <Setting Key="Company_GetAll" SpName="Company_GetAll" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Domain_ByCompanyId_Get" SpName="Domain_ByCompanyId_Get" DbName="bodb_HRM" />
     </Function>
     <Function Name="SubCompany">
         <Setting Key="SubCompanies_ByCompanyId_Get" SpName="SubCompanies_ByCompanyId_Get" DbName="bodb_HRM" />
@@ -587,7 +588,7 @@
         <Setting Key="CompanySetting_GetById" SpName="CompanySetting_GetById" DbName="bodb_HRM" Plain="0" />
     </Function>
     <Function Name="EmployeePayroll">
-		<Setting Key="EmployeePayroll_Import" SpName="EmployeePayroll_Import" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="EmployeePayroll_Import" SpName="EmployeePayroll_Import" DbName="bodb_HRM" Plain="0" />
         <Setting Key="EmployeePayroll_Get" SpName="EmployeePayroll_Get" DbName="bodb_HRM" Plain="0" />
         <Setting Key="SalaryUploadHistory_Get" SpName="SalaryUploadHistory_Get" DbName="bodb_HRM" Plain="0" />
         <Setting Key="EmployeePayroll_ConfirmUpload" SpName="EmployeePayroll_ConfirmUpload" DbName="bodb_HRM" Plain="0" />
@@ -599,18 +600,18 @@
         <Setting Key="CompanySecondmentEmployee_Delete" SpName="CompanySecondmentEmployee_Delete" DbName="bodb_HRM" Plain="0" />
         <Setting Key="CompanySecondmentEmployee_GetByEmpId" SpName="CompanySecondmentEmployee_GetByEmpId" DbName="bodb_HRM" Plain="0" />
     </Function>
-	<Function Name="HeadcountReport">
-		<Setting Key="Report_HeadcountGet" SpName="Report_HeadcountGet" DbName="bodb_HRM" Plain="0" />
-		<Setting Key="Report_HeadcountGetWFH" SpName="Report_HeadcountGetWFH" DbName="bodb_HRM" Plain="0" />
-	</Function>
+    <Function Name="HeadcountReport">
+        <Setting Key="Report_HeadcountGet" SpName="Report_HeadcountGet" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Report_HeadcountGetWFH" SpName="Report_HeadcountGetWFH" DbName="bodb_HRM" Plain="0" />
+    </Function>
     <Function Name="SalaryStructure">
-        <Setting Key="SalaryStructure_Get" SpName="SalaryStructure_Get" DbName="bodb_HRM" Plain="0"/>
-        <Setting Key="SalaryStructure_GetById" SpName="SalaryStructure_GetById" DbName="bodb_HRM" Plain="0"/>
+        <Setting Key="SalaryStructure_Get" SpName="SalaryStructure_Get" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="SalaryStructure_GetById" SpName="SalaryStructure_GetById" DbName="bodb_HRM" Plain="0" />
         <Setting Key="SalaryStructure_Insert" SpName="SalaryStructure_Insert" DbName="bodb_HRM" Plain="0" />
         <Setting Key="SalaryStructure_Update" SpName="SalaryStructure_Update" DbName="bodb_HRM" Plain="0" />
         <Setting Key="SalaryStructure_Delete" SpName="SalaryStructure_Delete" DbName="bodb_HRM" Plain="0" />
     </Function>
     <Function Name="Currency">
-        <Setting Key="Currency_Get" SpName="Currency_Get" DbName="bodb_HRM" Plain="0"/>
+        <Setting Key="Currency_Get" SpName="Currency_Get" DbName="bodb_HRM" Plain="0" />
     </Function>
 </Functions>

@@ -1,8 +1,8 @@
 ﻿@using HRM.Resources
 @{
-	ViewBag.Title = "Edit Employee Supervisor";
-	var employeeId = (int)ViewBag.EmployeeId;
-	var roleId = (short)ViewBag.RoleId;
+    ViewBag.Title = "Edit Employee Supervisor";
+    var employeeId = (int)ViewBag.EmployeeId;
+    var roleId = (short)ViewBag.RoleId;
 }
 @section css{
     <link href="~/dist/styles/team.edit.discipline.manager.css" rel="stylesheet" asp-append-version="true" />
@@ -12,10 +12,10 @@
 }
 @section Breadcrumb
 {
-	<a class="step">@Labels.GroupSpace</a>
-	<a class="step" href="@Url.Action("Index", "GroupEmployeeList")">@Labels.GroupEmployee</a>
-	<a class="step" href="@Url.Action("edit", "GroupEmployeeList", new { id = employeeId })">@Labels.EmployeePersonalInformation</a>
-	<a class="step">@Labels.DisciplineManager</a>
+    <a class="step">@Labels.GroupSpace</a>
+    <a class="step" href="@Url.Action("Index", "GroupEmployeeList")">@Labels.GroupEmployee</a>
+    <a class="step" href="@Url.Action("Edit", "GroupEmployeeList", new { id = employeeId })">@Labels.EmployeeSupervisor</a>
+    <a class="step">@Labels.DisciplineManager</a>
 }
 
 @Html.Hidden("EmployeeId", employeeId)

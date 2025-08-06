@@ -19,7 +19,7 @@ using Microsoft.AspNetCore.Mvc;
 using HRM.Models.Group;
 using HRM.Core.Enums;
 
-namespace HRM.Controllers.Group;
+namespace HRM.Controllers.GroupSpace;
 
 public class GroupTeamController(
     ITeamService teamService,

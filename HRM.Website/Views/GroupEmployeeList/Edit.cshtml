@@ -3,25 +3,24 @@
 @model HRM.Models.Employee
 @{
     ViewBag.Title = Labels.Edit;
-	var ActionType = new List<RoleSystem> { RoleSystem.Verifier, RoleSystem.Approver, RoleSystem.DisciplineManager, RoleSystem.ShiftManager };
+    var ActionType = new List<RoleSystem> { RoleSystem.Verifier, RoleSystem.Approver, RoleSystem.DisciplineManager, RoleSystem.ShiftManager };
     var roleLinks = new Dictionary<RoleSystem, (string PropertyName, string ActionName, string Label)>
     {
-	    { RoleSystem.Verifier, ("Verifier", "ManageSupervisor", Labels.VerifiedBy) },
-	    { RoleSystem.Approver, ("Approver", "ManageSupervisor", Labels.ApprovedBy) },
-	    { RoleSystem.ShiftManager, ("EmpShiftList", "ShiftManager", Labels.ShiftArrangement) },
-	    { RoleSystem.DisciplineManager, ("Disciplinarian", "DisciplineManager", Labels.DisciplineManager) }
+        { RoleSystem.Verifier, ("Verifier", "ManageSupervisor", Labels.VerifiedBy) },
+        { RoleSystem.Approver, ("Approver", "ManageSupervisor", Labels.ApprovedBy) },
+        { RoleSystem.ShiftManager, ("EmpShiftList", "ShiftManager", Labels.ShiftArrangement) },
+        { RoleSystem.DisciplineManager, ("Disciplinarian", "DisciplineManager", Labels.DisciplineManager) }
     };
 }
 @section css {
     <link href="~/dist/styles/team.supervisor.index.css" rel="stylesheet" asp-append-version="true" />
 }
 @section js {
-    <script src="~/dist/js/employee.edit.js" asp-append-version="true"></script>
 }
 @section Breadcrumb {
     <a class="step" href="javascript:;">@Labels.GroupSpace</a>
     <a class="step" href="@Url.Action("index", "GroupEmployeeList")">@Labels.GroupEmployee</a>
-    <span class="step">Edit @Model.NickName (@Model.FullName) 's Personal Information</span>
+    <span class="step">@Labels.EmployeeSupervisor</span>
 }
 <h2 class="page-title">@Model.NickName (@Model.CompanyName)</h2>
 <table class="table table-custom" style="width: auto; min-width: 800px;">
@@ -34,22 +33,22 @@
     </thead>
     @if (Model != null)
     {
-	    <tbody>
-	    @foreach (var item in ActionType)
-	    {
-		    var role = roleLinks[item];
-		    var roleValue = Model.GetType().GetProperty(role.PropertyName)?.GetValue(Model)?.ToString();
+        <tbody>
+        @foreach (var item in ActionType)
+        {
+            var role = roleLinks[item];
+            var roleValue = Model.GetType().GetProperty(role.PropertyName)?.GetValue(Model)?.ToString();
 
-		    <tr>
-			    <td class="align-left">@role.Label</td>
-			    <td class="align-left">@roleValue</td>
-			    <td>
-				    <a href="@Url.Action(role.ActionName, "GroupEmployeeList", new { id = Model.Id, roleId = (short)item })">
-					    <i class="fa fa-pencil fa-lg icon-edit"></i>
-				    </a>
-			    </td>
-		    </tr>
-	    }
-	    </tbody>
+            <tr>
+                <td class="align-left">@role.Label</td>
+                <td class="align-left">@roleValue</td>
+                <td>
+                    <a href="@Url.Action(role.ActionName, "GroupEmployeeList", new { id = Model.Id, roleId = (short)item })">
+                        <i class="fa fa-pencil fa-lg icon-edit"></i>
+                    </a>
+                </td>
+            </tr>
+        }
+        </tbody>
     }
 </table>

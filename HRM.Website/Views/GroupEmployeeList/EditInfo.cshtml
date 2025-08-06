@@ -1,0 +1,82 @@
+﻿@using HRM.Resources
+@model HRM.ViewModels.EmployeeGroup.UpdateEmployeeViewModel
+@{
+    ViewBag.Title = Labels.Edit;
+}
+@section css {
+    <link href="~/dist/styles/employee.edit.css" rel="stylesheet" asp-append-version="true" />
+}
+@section Breadcrumb {
+    <a class="step" href="javascript:;">@Labels.GroupSpace</a>
+    <a class="step" href="@Url.Action("index", "GroupEmployeeList")">@Labels.GroupEmployee</a>
+    <span class="step">Edit</span>
+}
+
+@using (Html.BeginForm("EditInfo", "GroupEmployeeList", FormMethod.Post, new { id = "formEditUser", @class = "form-edit-user form-horizontal" }))
+{
+    @Html.ValidationSummary(false)
+    if (ViewBag.Updated != null)
+    {
+        if ((bool)ViewBag.Updated)
+        {
+            <div class="success flash">@Messages.UpdatedSuccessfully</div>
+        }
+    }
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <span>@Labels.Personal</span>
+        </div>
+        <ul class="list-group">
+            <li class="list-group-item form-group">
+                <div class="label-form">
+                    @Html.LabelFor(model => model.CtrId, Labels.CtrID, new { @class = "control-label" })
+                </div>
+                <div class="input-form">
+                    @Html.TextBoxFor(model => model.CtrId, new { @class = "form-control" })
+                </div>
+            </li>
+            <li class="list-group-item form-group">
+                <div class="label-form">
+                    @Html.LabelFor(model => model.Code, Labels.Code, new { @class = "control-label" })
+                </div>
+                <div class="input-form">
+                    <strong>@Model.Code</strong>
+                </div>
+            </li>
+            <li class="list-group-item form-group">
+                <div class="label-form">
+                    @Html.LabelFor(model => model.FullName, new { @class = "control-label" })
+                </div>
+                <div class="input-form">
+                    <strong>@Model.FullName</strong>
+                </div>
+            </li>
+            <li class="list-group-item form-group">
+                <div class="label-form">
+                    @Html.LabelFor(model => model.NickName, Labels.NickName, new { @class = "control-label" })
+                </div>
+                <div class="input-form">
+                    <strong>@Model.NickName</strong>
+                </div>
+            </li>
+            <li class="list-group-item form-group">
+                <div class="label-form">
+                    @Html.LabelFor(model => model.CompanyName, Labels.Company, new { @class = "control-label" })
+                </div>
+                <div class="input-form">
+                    <strong>@Model.CompanyName</strong>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div class="menu">
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(model => model.EmpId)
+        @Html.HiddenFor(model => model.Code)
+        @Html.HiddenFor(model => model.NickName)
+        @Html.HiddenFor(model => model.FullName)
+        @Html.HiddenFor(model => model.CompanyName)
+        <input type="submit" value="@Labels.Save" id="postform" class="btn btn-primary" />
+        <a href="@Url.Action("index","GroupEmployeeList")" class="btn btn-default">@Labels.Back</a>
+    </div>
+}
