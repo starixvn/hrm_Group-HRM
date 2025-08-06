@@ -5,7 +5,7 @@
 @model IList<HRM.Models.Group.GroupEmployeeModel>
 @{
     var pagerOption = (PagerOptionModel)ViewBag.PagerOption;
-    const int totalColumn = 24;
+    const byte totalColumn = 24;
     var hasPermissionToEdit = ViewBag.HasPermissionToEdit;
 }
 @section css {
@@ -103,6 +103,7 @@
             @if (hasPermissionToEdit)
             {
                 <th>@Labels.Role</th>
+                <th>@Labels.Edit</th>
             }
         </tr>
     </thead>
@@ -138,7 +139,12 @@
                     @if (hasPermissionToEdit)
                     {
                         <td>
-                            @Html.ActionLink("Manage", "edit", "GroupEmployeeList", new { id = employee.EmpId }, null)
+                            @Html.ActionLink("Manage", "Edit", "GroupEmployeeList", new { id = employee.EmpId }, null)
+                        </td>
+                        <td>
+                            <a href="@Url.Action("EditInfo", "GroupEmployeeList", new { id = employee.EmpId })" title="Edit">
+                                <i class="fa fa-pencil fa-lg icon-edit"></i>
+                            </a>
                         </td>
                     }
                 </tr>

@@ -12,6 +12,7 @@ using HRM.Core.Services;
 using HRM.Criteria.Employee;
 using HRM.Criteria.EmployeeWorkFromHome;
 using HRM.Criteria.Group;
+using HRM.Criteria.GroupSpace.Employee;
 using HRM.Criteria.Supervisor;
 using HRM.Models;
 using HRM.Models.Group;
@@ -24,7 +25,7 @@ using HRM.ViewModels;
 using HRM.ViewModels.EmployeeGroup;
 using Microsoft.AspNetCore.Mvc;
 
-namespace HRM.Controllers.Group;
+namespace HRM.Controllers.GroupSpace;
 
 public class GroupEmployeeListController(
     IUserControlSession session,
@@ -149,7 +150,7 @@ public class GroupEmployeeListController(
         return File(bytes, MimeType.XLS, fileName);
     }
 
-    public async Task<IEnumerable<EmployeeWorkFromHome>> GetEmployeeWorkFromHome(string teamIds)
+    private async Task<IEnumerable<EmployeeWorkFromHome>> GetEmployeeWorkFromHome(string teamIds)
     {
         var criteria = new GetEmployeeWorkFromHomeCriteria
         {
@@ -158,9 +159,7 @@ public class GroupEmployeeListController(
             TeamIds = teamIds
         };
 
-        var employeesWFH = await baseService.GetDataAsync<EmployeeWorkFromHome>(criteria);
-
-        return employeesWFH;
+        return await baseService.GetDataAsync<EmployeeWorkFromHome>(criteria);
     }
 
     public async Task<IActionResult> GroupEmployeeList(GroupEmployeeViewModel model)
@@ -183,6 +182,61 @@ public class GroupEmployeeListController(
             employees = (await baseService.GetDataAsync<GroupEmployeeModel>(criteria)).ToList();
         }
         return Json(employees);
+    }
+
+    [HrmPermission(Policy.Host, FunctionKey.GroupEmployeeList)]
+    public async Task<IActionResult> EditInfo(int id)
+    {
+        var employee = await employeeService.GetEmployeeByIdInGroupScopeAsync(id);
+        if (employee != null)
+        {
+            var model = new UpdateEmployeeViewModel
+            {
+                EmpId = employee.Id,
+                CtrId = employee.CtrId,
+                Code = employee.Code,
+                FullName = employee.FullName,
+                NickName = employee.NickName,
+                CompanyName = employee.CompanyName
+            };
+            return View(model);
+        }
+
+        return RedirectToAction("PageNotFound", "Error");
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    [HrmPermission(Policy.Host, FunctionKey.GroupEmployeeList)]
+    public async Task<IActionResult> EditInfo(UpdateEmployeeViewModel model)
+    {
+        if (ModelState.IsValid)
+        {
+            if (model.CtrId is < 1 or > int.MaxValue)
+            {
+                ModelState.AddModelError(nameof(model.CtrId), $"Ctr ID must be between 1 and {int.MaxValue}.");
+            }
+
+            var command = new UpdateEmployeeCommand
+            {
+                EmpId = model.EmpId,
+                CtrId = model.CtrId,
+                ModifiedBy = session.UserId
+            };
+            var result = await baseService.ExecuteNonQueryAsync(command);
+            if (result.IsSuccessful)
+            {
+                ViewBag.Updated = true;
+            }
+            else
+            {
+                ViewBag.Updated = false;
+                ModelState.AddModelError(string.Empty, result.Message);
+            }
+
+        }
+
+        return View(model);
     }
 
     [HrmPermission(Policy.Host, FunctionKey.GroupEmployeeList)]

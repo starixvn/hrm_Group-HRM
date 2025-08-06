@@ -1,7 +1,7 @@
 ﻿@using HRM.Core.Enums
 @using HRM.Resources
 @{
-    ViewBag.Title = "Edit Team Supervisor";
+    ViewBag.Title = "Edit Employee Supervisor";
     var employeeId = (int)ViewBag.EmployeeId;
     var roleId = (short)ViewBag.RoleId;
     var breadcrumb = string.Empty;
@@ -16,7 +16,7 @@
 {
     <a class="step">@Labels.GroupSpace</a>
     <a class="step" href="@Url.Action("Index", "GroupEmployeeList")">@Labels.GroupEmployee</a>
-    <a class="step" href="@Url.Action("edit", "GroupEmployeeList", new { id = employeeId })">@Labels.EmployeePersonalInformation</a>
+    <a class="step" href="@Url.Action("Edit", "GroupEmployeeList", new { id = employeeId })">@Labels.EmployeeSupervisor</a>
     <a class="step">
         @{ breadcrumb = roleId switch
             {

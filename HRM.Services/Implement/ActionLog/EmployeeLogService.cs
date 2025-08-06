@@ -129,6 +129,7 @@ public class EmployeeLogService(
 
         foreach (var log in logs)
         {
+            log.Fields = log.Fields.Where(x => !x.FieldName.Equals("CtrId", StringComparison.OrdinalIgnoreCase)).ToList();
             foreach (var field in log.Fields)
             {
                 var mappingField = mappingFields.FirstOrDefault(x => string.Equals(x.FieldName, field.FieldName, StringComparison.OrdinalIgnoreCase));

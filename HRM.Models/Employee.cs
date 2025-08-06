@@ -10,6 +10,8 @@ using GO.UserControl.Client.Core.Models.Role;
 
 public class Employee : EntityBase<int>
 {
+    public int? CtrId { get; set; }
+
     public int UserId { get; set; }
     public string DomainUsername { get; set; }
 
