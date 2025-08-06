@@ -130,7 +130,7 @@ public class GroupEmployeeListController(
                 }
                 else
                 {
-                    location = string.Empty;
+                    location = profile.Location;
                 }
 
                 profile.Location = location;
