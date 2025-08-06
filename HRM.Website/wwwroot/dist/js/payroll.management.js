@@ -119685,10 +119685,7 @@ const PayrollService = {
         isLocal: filters.isLocal || false
       },
       responseType: 'json'
-    }).then(response => response.data).catch(axiosError => {
-      toastr__WEBPACK_IMPORTED_MODULE_2___default.a.error('Failed to fetch salary data', '', Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_1__["toastOptions"])());
-      throw axiosError;
-    }).finally(() => Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_1__["unblockUI"])());
+    }).then(response => response.data).finally(() => Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_1__["unblockUI"])());
   },
   generatePayroll: month => {
     Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_1__["blockUI"])();
@@ -119702,10 +119699,7 @@ const PayrollService = {
         month: month || null
       },
       responseType: 'json'
-    }).then(response => response.data).catch(axiosError => {
-      toastr__WEBPACK_IMPORTED_MODULE_2___default.a.error('Failed to generate payroll', '', Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_1__["toastOptions"])());
-      throw axiosError;
-    }).finally(() => Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_1__["unblockUI"])());
+    }).then(response => response.data).finally(() => Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_1__["unblockUI"])());
   }
 };
 /* harmony default export */ __webpack_exports__["default"] = (PayrollService);

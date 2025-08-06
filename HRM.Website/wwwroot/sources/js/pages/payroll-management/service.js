@@ -21,10 +21,6 @@ const PayrollService = {
             responseType: 'json',
         })
             .then((response) => response.data)
-            .catch((axiosError) => {
-                toastr.error('Failed to fetch salary data', '', toastOptions());
-                throw axiosError;
-            })
             .finally(() => unblockUI());
     },
 
@@ -40,10 +36,6 @@ const PayrollService = {
             responseType: 'json',
         })
             .then((response) => response.data)
-            .catch((axiosError) => {
-                toastr.error('Failed to generate payroll', '', toastOptions());
-                throw axiosError;
-            })
             .finally(() => unblockUI());
     },
 };
