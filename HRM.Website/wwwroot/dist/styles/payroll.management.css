@@ -1584,27 +1584,32 @@ span.req.keepinview {
   background-color: #bbf8f2;
 }
 
-.upload-salary-modal .modal-dialog {
+.upload-salary-modal .modal-dialog,
+.confirm-modal .modal-dialog {
   display: flex;
   align-items: center;
   min-height: calc(100vh - 60px);
   margin: 30px auto;
 }
-.upload-salary-modal .modal-content {
+.upload-salary-modal .modal-content,
+.confirm-modal .modal-content {
   width: 100%;
   max-width: 500px;
   margin: 0 auto;
 }
-.upload-salary-modal .month-picker-container {
+.upload-salary-modal .month-picker-container,
+.confirm-modal .month-picker-container {
   position: relative !important;
   display: block !important;
   width: 100% !important;
 }
-.upload-salary-modal .month-picker-container .react-datepicker-wrapper {
+.upload-salary-modal .month-picker-container .react-datepicker-wrapper,
+.confirm-modal .month-picker-container .react-datepicker-wrapper {
   position: relative !important;
   width: 100% !important;
 }
-.upload-salary-modal .month-picker-container .fa-calendar {
+.upload-salary-modal .month-picker-container .fa-calendar,
+.confirm-modal .month-picker-container .fa-calendar {
   z-index: 10 !important;
   position: absolute !important;
   right: 12px !important;
@@ -1614,7 +1619,8 @@ span.req.keepinview {
   pointer-events: none !important;
   font-size: 14px !important;
 }
-.upload-salary-modal .month-picker-container input {
+.upload-salary-modal .month-picker-container input,
+.confirm-modal .month-picker-container input {
   padding-right: 35px !important;
   width: 100% !important;
   position: relative !important;

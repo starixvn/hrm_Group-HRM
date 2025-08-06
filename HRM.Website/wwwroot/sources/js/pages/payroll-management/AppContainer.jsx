@@ -9,12 +9,8 @@ const AppContainer = () => {
     const [salaryData, setSalaryData] = React.useState([]);
 
     const fetchSalaryData = async (filters = {}) => {
-        try {
-            const data = await PayrollService.getSalaryData(filters);
-            setSalaryData(data);
-        } catch (_) {
-            toastr.error('Failed to fetch salary data', '', toastOptions());
-        }
+        const data = await PayrollService.getSalaryData(filters);
+        setSalaryData(data);
     };
 
     const handleSearch = async (filters) => {

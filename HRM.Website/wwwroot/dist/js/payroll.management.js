@@ -119633,12 +119633,8 @@ __webpack_require__.r(__webpack_exports__);
 const AppContainer = () => {
   const [salaryData, setSalaryData] = react__WEBPACK_IMPORTED_MODULE_0___default.a.useState([]);
   const fetchSalaryData = async (filters = {}) => {
-    try {
-      const data = await _Service__WEBPACK_IMPORTED_MODULE_5__["default"].getSalaryData(filters);
-      setSalaryData(data);
-    } catch (_) {
-      toastr__WEBPACK_IMPORTED_MODULE_1___default.a.error('Failed to fetch salary data', '', Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_3__["toastOptions"])());
-    }
+    const data = await _Service__WEBPACK_IMPORTED_MODULE_5__["default"].getSalaryData(filters);
+    setSalaryData(data);
   };
   const handleSearch = async filters => {
     await fetchSalaryData(filters);
@@ -119913,10 +119909,12 @@ const GenerateSalaryModal = ({
     className: "btn btn-default",
     onClick: handleClose
   }, "Cancel"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Modal"], {
+    centered: "true",
     show: showConfirm,
     onHide: () => setShowConfirm(false),
+    className: "confirm-modal",
     style: {
-      zIndex: 1050
+      zIndex: 1060
     }
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["ModalHeader"], {
     closeButton: true
