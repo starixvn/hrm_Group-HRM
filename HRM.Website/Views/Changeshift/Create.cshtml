@@ -91,14 +91,10 @@
                 @Html.LabelFor(model => model.VerifierId, new { @class = "control-label" })
             </div>
             <div class="select-form">
-                @if (Model.Verifiers.Count > 1 || autoApproveRequest)
-                {
-                    @Html.DropDownListFor(x => x.VerifierId, new SelectList(Model.Verifiers, "OwnerId", "NickName"), Labels.SelectVerifier, new { @class = "form-control" })
+                @{
+                    var verifierOptionLabel = (Model.Verifiers.Count > 1 || autoApproveRequest) ? Labels.SelectVerifier : null;
                 }
-                else
-                {
-                    @Html.DropDownListFor(x => x.VerifierId, new SelectList(Model.Verifiers, "OwnerId", "NickName"), new { @class = "form-control" })
-                }
+                @Html.DropDownListFor(x => x.VerifierId, new SelectList(Model.Verifiers, "OwnerId", "NickName"), verifierOptionLabel, new { @class = "form-control" })
             </div>
             @Html.ValidationMessageFor(model => model.VerifierId)
         </div>
@@ -107,14 +103,10 @@
                 @Html.LabelFor(model => model.ApproverId, new { @class = "control-label" })
             </div>
             <div class="select-form">
-                @if (Model.Approvers.Count > 1 || autoApproveRequest)
-                {
-                    @Html.DropDownListFor(x => x.ApproverId, new SelectList(Model.Approvers, "OwnerId", "NickName"), Labels.SelectApprover, new { @class = "form-control" })
+                @{
+                    var approverOptionLabel = (Model.Approvers.Count > 1 || autoApproveRequest) ? Labels.SelectVerifier : null;
                 }
-                else
-                {
-                    @Html.DropDownListFor(x => x.ApproverId, new SelectList(Model.Approvers, "OwnerId", "NickName"), new { @class = "form-control" })
-                }
+                @Html.DropDownListFor(x => x.ApproverId, new SelectList(Model.Approvers, "OwnerId", "NickName"), approverOptionLabel, new { @class = "form-control" })
             </div>
             @Html.ValidationMessageFor(model => model.ApproverId)
         </div>

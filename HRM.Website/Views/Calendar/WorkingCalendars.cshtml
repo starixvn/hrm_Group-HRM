@@ -5,6 +5,7 @@
 @model HRM.ViewModels.Calendar.WorkingCalendarFilterViewModel
 @{
     ViewBag.Title = Labels.WorkingCalendars;
+    var minDate = new DateTimeOffset(2010, 1, 1, 0, 0, 0, TimeSpan.Zero).DateTime;
 }
 @section css{
     <link href="~/dist/styles/workingcalendars.css" rel="stylesheet" asp-append-version="true" />
@@ -29,8 +30,8 @@
                 @Html.LabelFor(model => model.FromDate, Labels.FromDate, new { @class = "control-label" })
             </div>
             <div class="calendar-form">
-                @Html.TextBox(Html.NameFor(model => model.FromDate).ToString(), Model.FromDate.ToDateMonthYearFormatedDate(),
-                    new { @class = "datepicker form-control", mindate = new DateTime(2010, 1, 1).ToString("yyyy/MM/dd") })
+                @Html.TextBox(Html.NameFor(model => model.FromDate), Model.FromDate.ToDateMonthYearFormatedDate(),
+                    new { @class = "datepicker form-control", mindate = minDate.ToString("yyyy/MM/dd") })
                 <i class="icon-calendar fa fa-calendar"></i>
             </div>
         </div>
@@ -39,8 +40,8 @@
                 @Html.LabelFor(model => model.ToDate, Labels.ToDate , new { @class = "control-label" })
             </div>
             <div class="calendar-form">
-                @Html.TextBox(Html.NameFor(model => model.ToDate).ToString(), Model.ToDate.ToDateMonthYearFormatedDate(),
-                    new { @class = "datepicker form-control", mindate = new DateTime(2010, 1, 1).ToString("yyyy/MM/dd") })
+                @Html.TextBox(Html.NameFor(model => model.ToDate), Model.ToDate.ToDateMonthYearFormatedDate(),
+                    new { @class = "datepicker form-control", mindate = minDate.ToString("yyyy/MM/dd") })
                 <i class="icon-calendar fa fa-calendar"></i>
             </div>
         </div>

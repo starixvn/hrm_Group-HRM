@@ -29,6 +29,7 @@ using IEmployeeService = HRM.Services.Interfaces.IEmployeeService;
 
 namespace HRM.Services.Implement.Request;
 
+#pragma warning disable S107 // Methods should not have too many parameters
 public class RequestService(
     IHttpClientFactory clientFactory,
     IRequestRepository requestRepository,
@@ -42,6 +43,7 @@ public class RequestService(
     IEmployeeService employeeService,
     ICompanyService companyService,
     NexConfig nexConfig) : IRequestService
+#pragma warning restore S107 // Methods should not have too many parameters
 {
     public static string ToRequestMessage(RequestEntity request, bool isNoFormat = false)
     {
