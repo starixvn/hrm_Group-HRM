@@ -84,6 +84,7 @@
         "webpack-merge": "^4.2.2"
     },
     "jest": {
+        "testResultsProcessor": "jest-sonar-reporter",
         "testEnvironment": "jsdom",
         "setupFilesAfterEnv": [
             "<rootDir>/setupTests.js"
