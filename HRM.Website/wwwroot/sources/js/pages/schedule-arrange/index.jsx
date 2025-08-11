@@ -192,7 +192,7 @@ export default class App extends Component {
         outerloop: for (let gindex = 0; gindex < totalItems; gindex++) {
             const totalSubItems = schedules[gindex].members.length;
             for (let eindex = 0; eindex < totalSubItems; eindex++) {
-                let schedule = schedules[gindex].members[eindex],
+                const schedule = schedules[gindex].members[eindex],
                     originalSchedule =
                         originalSchedules[gindex].members[eindex];
                 unset(schedule, 'selectWeekDays');
@@ -261,7 +261,7 @@ export default class App extends Component {
         })
             .then((response) => {
                 this.selectedWeek = { fromDate, toDate };
-                let { isHost, enableSyncWorkingShift, schedules } =
+                const { isHost, enableSyncWorkingShift, schedules } =
                     response.data;
 
                 this.originalSchedules = schedules.map((team) => {
@@ -425,9 +425,9 @@ export default class App extends Component {
         scheduleAttrName,
         isChecked
     ) => {
-        let schedules = [...this.state.schedules];
+        const schedules = [...this.state.schedules];
         const gindex = schedules.findIndex((item) => item.teamId === teamId);
-        let members = [...schedules[gindex].members];
+        const members = [...schedules[gindex].members];
         const eindex = members.findIndex(
             (item) => item.employeeId === employeeId
         );
@@ -443,12 +443,12 @@ export default class App extends Component {
     };
 
     handleChangeSelectWeekDays = (scheduleAttrName, isChecked) => {
-        let schedules = [...this.state.schedules];
+        const schedules = [...this.state.schedules];
         const totalItems = schedules.length;
 
         if (scheduleAttrName !== null) {
             for (let gindex = 0; gindex < totalItems; gindex++) {
-                let members = [...schedules[gindex].members];
+                const members = [...schedules[gindex].members];
                 const totalSubItems = members.length;
                 for (let subindex = 0; subindex < totalSubItems; subindex++) {
                     members[subindex] = Object.assign({}, members[subindex], {
@@ -462,7 +462,7 @@ export default class App extends Component {
             }
         } else {
             for (let gindex = 0; gindex < totalItems; gindex++) {
-                let members = [...schedules[gindex].members];
+                const members = [...schedules[gindex].members];
                 const totalSubItems = members.length;
                 for (let subindex = 0; subindex < totalSubItems; subindex++) {
                     members[subindex] = Object.assign({}, members[subindex], {
@@ -485,13 +485,13 @@ export default class App extends Component {
     };
 
     handleChangeShift = (teamId, employeeId, attrName, shift) => {
-        let schedules = [...this.state.schedules];
+        const schedules = [...this.state.schedules];
         const gindex = schedules.findIndex((item) => item.teamId === teamId);
-        let members = [...schedules[gindex].members];
+        const members = [...schedules[gindex].members];
         const eindex = members.findIndex(
             (item) => item.employeeId === employeeId
         );
-        let member = { ...members[eindex] };
+        const member = { ...members[eindex] };
 
         if (shift !== null && isEqual(member[attrName].shift, shift)) {
             return;
@@ -529,9 +529,9 @@ export default class App extends Component {
     };
 
     handleChangeDefaultShift = (teamId, employeeId, defaultShift) => {
-        let schedules = [...this.state.schedules];
+        const schedules = [...this.state.schedules];
         const gindex = schedules.findIndex((item) => item.teamId === teamId);
-        let members = [...schedules[gindex].members];
+        const members = [...schedules[gindex].members];
         const eindex = members.findIndex(
                 (item) => item.employeeId === employeeId
             ),
@@ -623,9 +623,9 @@ export default class App extends Component {
     };
 
     handleChangePublics = (teamId, isChecked) => {
-        let schedules = [...this.state.schedules];
+        const schedules = [...this.state.schedules];
         const gindex = schedules.findIndex((item) => item.teamId === teamId);
-        let members = [...schedules[gindex].members];
+        const members = [...schedules[gindex].members];
         const totalItems = members.length;
         for (let index = 0; index < totalItems; index++) {
             members[index] = { ...members[index], isPublic: isChecked };
@@ -640,7 +640,7 @@ export default class App extends Component {
     };
 
     getSelectedMembers = (schedules) => {
-        let selectedMembers = [];
+        const selectedMembers = [];
         const totalItems = schedules.length;
         for (let gindex = 0; gindex < totalItems; gindex++) {
             const totalSubItems = schedules[gindex].members.length;
@@ -668,15 +668,15 @@ export default class App extends Component {
     };
 
     handleChangeOffNoShift = () => {
-        let schedules = [...this.state.schedules];
+        const schedules = [...this.state.schedules];
         const selectedMembers = this.getSelectedMembers(schedules),
             totalItems = selectedMembers.length;
 
         if (totalItems > 0) {
             for (let index = 0; index < totalItems; index++) {
                 const { gindex, eindex } = selectedMembers[index];
-                let members = [...schedules[gindex].members];
-                let member = { ...members[eindex] };
+                const members = [...schedules[gindex].members];
+                const member = { ...members[eindex] };
                 const selectWeekDays = member.selectWeekDays;
                 this.scheduleAttrNames.forEach((attrName) => {
                     if (selectWeekDays[attrName]) {
@@ -711,15 +711,15 @@ export default class App extends Component {
     };
 
     handleChangeOffDayOT = () => {
-        let schedules = [...this.state.schedules];
+        const schedules = [...this.state.schedules];
         const selectedMembers = this.getSelectedMembers(schedules),
             totalItems = selectedMembers.length;
 
         if (totalItems > 0) {
             for (let index = 0; index < totalItems; index++) {
                 const { gindex, eindex } = selectedMembers[index];
-                let members = [...schedules[gindex].members];
-                let member = { ...members[eindex] };
+                const members = [...schedules[gindex].members];
+                const member = { ...members[eindex] };
                 const selectWeekDays = member.selectWeekDays;
 
                 this.scheduleAttrNames.forEach((attrName) => {
@@ -762,15 +762,15 @@ export default class App extends Component {
     };
 
     handleChangeWorkday = () => {
-        let schedules = [...this.state.schedules];
+        const schedules = [...this.state.schedules];
         const selectedMembers = this.getSelectedMembers(schedules),
             totalItems = selectedMembers.length;
 
         if (totalItems > 0) {
             for (let index = 0; index < totalItems; index++) {
                 const { gindex, eindex } = selectedMembers[index];
-                let members = [...schedules[gindex].members];
-                let member = { ...members[eindex] };
+                const members = [...schedules[gindex].members];
+                const member = { ...members[eindex] };
                 const selectWeekDays = member.selectWeekDays;
 
                 this.scheduleAttrNames.forEach((attrName) => {
@@ -823,15 +823,15 @@ export default class App extends Component {
     };
 
     handleChangeMultipleShift = (shift, isOffDay) => {
-        let schedules = [...this.state.schedules];
+        const schedules = [...this.state.schedules];
         const selectedMembers = this.getSelectedMembers(schedules),
             totalItems = selectedMembers.length;
 
         if (totalItems > 0) {
             for (let index = 0; index < totalItems; index++) {
                 const { gindex, eindex } = selectedMembers[index];
-                let members = [...schedules[gindex].members];
-                let member = { ...members[eindex] };
+                const members = [...schedules[gindex].members];
+                const member = { ...members[eindex] };
                 const selectWeekDays = member.selectWeekDays;
 
                 this.scheduleAttrNames.forEach((attrName) => {
@@ -875,15 +875,15 @@ export default class App extends Component {
     };
 
     handleFixedOffDay = () => {
-        let schedules = [...this.state.schedules];
+        const schedules = [...this.state.schedules];
         const selectedMembers = this.getSelectedMembers(schedules),
             totalItems = selectedMembers.length;
 
         if (totalItems > 0) {
             for (let index = 0; index < totalItems; index++) {
                 const { gindex, eindex } = selectedMembers[index];
-                let members = [...schedules[gindex].members];
-                let member = { ...members[eindex] };
+                const members = [...schedules[gindex].members];
+                const member = { ...members[eindex] };
                 const selectWeekDays = member.selectWeekDays;
 
                 this.scheduleAttrNames.forEach((attrName) => {
@@ -928,8 +928,8 @@ export default class App extends Component {
     };
 
     handleSave = () => {
-        let isValidData = true,
-            weeklySchedules = [],
+        let isValidData = true;
+        const weeklySchedules = [],
             defaultShifts = [],
             schedules = cloneDeep(this.state.schedules),
             originalSchedules = cloneDeep(this.originalSchedules);
@@ -940,7 +940,7 @@ export default class App extends Component {
             const totalSubItems = schedules[gindex].members.length;
 
             for (let eindex = 0; eindex < totalSubItems; eindex++) {
-                let schedule = schedules[gindex].members[eindex],
+                const schedule = schedules[gindex].members[eindex],
                     originalSchedule =
                         originalSchedules[gindex].members[eindex];
                 unset(schedule, 'selectWeekDays');
@@ -1102,9 +1102,9 @@ export default class App extends Component {
         weeklyDefaultShift,
         isUsedWeeklyDefaultShift
     ) => {
-        let schedules = [...this.state.schedules];
+        const schedules = [...this.state.schedules];
         const gindex = schedules.findIndex((item) => item.teamId === teamId);
-        let members = [...schedules[gindex].members];
+        const members = [...schedules[gindex].members];
         const eindex = members.findIndex(
             (item) => item.employeeId === employeeId
         );
@@ -1184,9 +1184,9 @@ export default class App extends Component {
         isUsedWeeklyDefaultShift
     ) => {
         const { teamId, employeeId } = this.state.editWeeklyDefaultShift;
-        let schedules = this.state.schedules;
+        const schedules = this.state.schedules;
         const gindex = schedules.findIndex((item) => item.teamId === teamId);
-        let members = schedules[gindex].members;
+        const members = schedules[gindex].members;
         const eindex = members.findIndex(
             (item) => item.employeeId === employeeId
         );
@@ -1239,9 +1239,9 @@ export default class App extends Component {
     };
 
     handleUpdateRemark = (teamId, employeeId, remark) => {
-        let schedules = [...this.state.schedules];
+        const schedules = [...this.state.schedules];
         const gindex = schedules.findIndex((item) => item.teamId === teamId);
-        let members = [...schedules[gindex].members];
+        const members = [...schedules[gindex].members];
         const eindex = members.findIndex(
             (item) => item.employeeId === employeeId
         );
@@ -1281,7 +1281,7 @@ export default class App extends Component {
     };
 
     handleEditTeamOrder = () => {
-        let displayOrders = [];
+        const displayOrders = [];
         const schedules = this.state.schedules,
             totalItems = schedules.length;
 
@@ -1313,7 +1313,7 @@ export default class App extends Component {
     };
 
     handleEditDisplayOrder = (gindex) => {
-        let displayOrders = [];
+        const displayOrders = [];
         const members = this.state.schedules[gindex].members,
             totalItems = members.length;
 
@@ -1419,7 +1419,7 @@ export default class App extends Component {
     };
 
     handleChangeOrder = (key, teamId, employeeId) => {
-        let schedules = [...this.state.schedules];
+        const schedules = [...this.state.schedules];
         const index = schedules.findIndex((x) => x.teamId === teamId),
             totalItems = schedules[index].members.length,
             sourceIndex = schedules[index].members.findIndex(
@@ -1461,9 +1461,9 @@ export default class App extends Component {
     };
 
     handleSelectEmployeeOfTeam = (teamId, employeeId, isSelected) => {
-        let schedules = [...this.state.schedules];
+        const schedules = [...this.state.schedules];
         const gindex = schedules.findIndex((item) => item.teamId === teamId);
-        let members = [...schedules[gindex].members];
+        const members = [...schedules[gindex].members];
 
         if (employeeId !== null) {
             const eindex = members.findIndex(

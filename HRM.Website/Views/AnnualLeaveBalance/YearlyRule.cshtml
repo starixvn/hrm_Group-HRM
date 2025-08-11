@@ -7,6 +7,7 @@
 @{
     ViewBag.Title = Labels.AnualLeaveBalance;
     var hasPermissionToEdit = (bool)ViewBag.HasPermissionToEdit;
+    const double epsilon = 0.0001;
 }
 @section css{
     <link href="~/dist/styles/annual.leavebalance.index.css" rel="stylesheet" asp-append-version="true" />
@@ -152,79 +153,79 @@
                         }
                     </td>
                     <td>
-                        @if (leave.AnnualLeaveCurrentYear != 0)
+                        @if (Math.Abs(leave.AnnualLeaveCurrentYear) > epsilon)
                         {
                             <span class="@(leave.AnnualLeaveCurrentYear < 0 ? "red" : string.Empty)">@leave.AnnualLeaveCurrentYear.ToString("0.0")</span>
                         }
                     </td>
                     <td>
-                        @if (leave.Jan != 0)
+                        @if (Math.Abs(leave.Jan) > epsilon)
                         {
                             <span class="@(leave.Jan < 0 ? "red" : string.Empty)">@leave.Jan.ToString("0.0")</span>
                         }
                     </td>
                     <td>
-                        @if (leave.Feb != 0)
+                        @if (Math.Abs(leave.Feb) > epsilon)
                         {
                             <span class="@(leave.Feb < 0 ? "red" : string.Empty)">@leave.Feb.ToString("0.0")</span>
                         }
                     </td>
                     <td>
-                        @if (leave.Mar != 0)
+                        @if (Math.Abs(leave.Mar) > epsilon)
                         {
                             <span class="@(leave.Mar < 0 ? "red" : string.Empty)">@leave.Mar.ToString("0.0")</span>
                         }
                     </td>
                     <td>
-                        @if (leave.Apr != 0)
+                        @if (Math.Abs(leave.Apr) > epsilon)
                         {
                             <span class="@(leave.Apr < 0 ? "red" : string.Empty)">@leave.Apr.ToString("0.0")</span>
                         }
                     </td>
                     <td>
-                        @if (leave.May != 0)
+                        @if (Math.Abs(leave.May) > epsilon)
                         {
                             <span class="@(leave.May < 0 ? "red" : string.Empty)">@leave.May.ToString("0.0")</span>
                         }
                     </td>
                     <td>
-                        @if (leave.Jun != 0)
+                        @if (Math.Abs(leave.Jun) > epsilon)
                         {
                             <span class="@(leave.Jun < 0 ? "red" : string.Empty)">@leave.Jun.ToString("0.0")</span>
                         }
                     </td>
                     <td>
-                        @if (leave.Jul != 0)
+                        @if (Math.Abs(leave.Jul) > epsilon)
                         {
                             <span class="@(leave.Jul < 0 ? "red" : string.Empty)">@leave.Jul.ToString("0.0")</span>
                         }
                     </td>
                     <td>
-                        @if (leave.Aug != 0)
+                        @if (Math.Abs(leave.Aug) > epsilon)
                         {
                             <span class="@(leave.Aug < 0 ? "red" : string.Empty)">@leave.Aug.ToString("0.0")</span>
                         }
                     </td>
                     <td>
-                        @if (leave.Sep != 0)
+                        @if (Math.Abs(leave.Sep) > epsilon)
                         {
                             <span class="@(leave.Sep < 0 ? "red" : string.Empty)">@leave.Sep.ToString("0.0")</span>
                         }
                     </td>
                     <td>
-                        @if (leave.Oct != 0)
+                        @if (Math.Abs(leave.Oct) > epsilon)
                         {
                             <span class="@(leave.Oct < 0 ? "red" : string.Empty)">@leave.Oct.ToString("0.0")</span>
                         }
                     </td>
                     <td>
-                        @if (leave.Nov != 0)
+                        @if (Math.Abs(leave.Nov) > epsilon)
                         {
                             <span class="@(leave.Nov < 0 ? "red" : string.Empty)">@leave.Nov.ToString("0.0")</span>
                         }
                     </td>
                     <td>
-                        @if (leave.Dec != 0)
+                        @if (Math.Abs(leave.Dec) > epsilon)
                         {
                             <span class="@(leave.Dec < 0 ? "red" : string.Empty)">@leave.Dec.ToString("0.0")</span>
                         }

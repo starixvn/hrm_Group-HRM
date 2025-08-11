@@ -50,7 +50,7 @@ export default class DisciplineManager extends Component {
                 .join(',');
 
             let apiCall;
-            let isGroupTeam = this.props.pageType === PageType.GroupTeam;
+            const isGroupTeam = this.props.pageType === PageType.GroupTeam;
             if (isGroupTeam) {
                 apiCall = getGroupTeamEmployees(query);
             } else {

@@ -20,7 +20,7 @@ const Table = ({ data, onDelete }) => {
 
     const getCellValue = (item, key) => {
         if (!key) return '';
-        let value = item[key];
+        const value = item[key];
         if (value === null || value === undefined) return '';
         if (typeof value === 'string') return value.trim().toLowerCase();
         if (typeof value === 'boolean') return value ? 'true' : 'false';
@@ -32,8 +32,8 @@ const Table = ({ data, onDelete }) => {
         if (!sortConfig.key) return data;
 
         const sorted = [...data].sort((a, b) => {
-            let valA = getCellValue(a, sortConfig.key);
-            let valB = getCellValue(b, sortConfig.key);
+            const valA = getCellValue(a, sortConfig.key);
+            const valB = getCellValue(b, sortConfig.key);
 
             if (valA === '' && valB !== '') return 1;
             if (valB === '' && valA !== '') return -1;

@@ -44,8 +44,8 @@ const Table = ({ data, onDelete }) => {
         if (!sortConfig.key) return data;
 
         const sorted = [...data].sort((a, b) => {
-            let valA = getCellValue(a, sortConfig.key);
-            let valB = getCellValue(b, sortConfig.key);
+            const valA = getCellValue(a, sortConfig.key);
+            const valB = getCellValue(b, sortConfig.key);
 
             if (valA === "" && valB !== "") return 1;
             if (valB === "" && valA !== "") return -1;
