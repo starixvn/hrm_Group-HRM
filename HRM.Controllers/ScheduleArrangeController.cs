@@ -109,10 +109,11 @@ public class ScheduleArrangeController(
 
     [HttpPost]
     [HrmPermission(Policy.Host, FunctionKey.ScheduleArrange)]
-    public async Task<IActionResult> SyncWorkingShift(DateTime fromDate, DateTime toDate, string employeeIds)
+    public async Task<IActionResult> SyncWorkingShift(DateTime fromDate, DateTime toDate, string employeeIds, short? companyId)
     {
         var command = new SyncWorkingShiftCommand
         {
+            CompanyId = companyId ?? CurrentCompanyId,
             ActorId = session.UserId,
             FromDate = fromDate,
             ToDate = toDate,
