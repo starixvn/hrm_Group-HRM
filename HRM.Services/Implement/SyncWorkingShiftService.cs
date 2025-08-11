@@ -36,8 +36,8 @@ public class SyncWorkingShiftService(
     public async Task<CommandResult> SyncWorkingShiftAsync(SyncWorkingShiftCommand command)
     {
         var commandResult = new CommandResult { Code = 0, Message = string.Empty };
-        var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
-        var config = await GetSyncWorkingShiftConfigAsync();
+        var companyId = command.CompanyId;
+        var config = await GetSyncWorkingShiftConfigAsync(companyId);
         for (var date = command.FromDate.Date; date.Date <= command.ToDate.Date; date = date.AddDays(1))
         {
             try

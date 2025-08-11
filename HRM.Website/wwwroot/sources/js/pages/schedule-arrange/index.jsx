@@ -1529,6 +1529,7 @@ export default class App extends Component {
                 fromDate,
                 toDate,
                 employeeIds: this.state.selectedEmployeeIds.join(','),
+                companyId: this.state.filter.companyId,
             }),
             headers: {
                 'X-Requested-With': 'XMLHttpRequest',
