@@ -1,22 +1,22 @@
-﻿@using HRM.Resources
+@using HRM.Resources
 @model int
 @{
-	ViewBag.Title = Labels.EditUnit;
+    ViewBag.Title = Labels.EditUnit;
 }
 @section css{
     <link href="~/dist/styles/unit.create.css" rel="stylesheet" asp-append-version="true" />
 }
 @section js{
-	<script>
+    <script>
         window.unitId = @Model;
     </script>
     <script src="~/dist/js/unit.edit.js" asp-append-version="true"></script>
 }
 
 @section Breadcrumb {
-	<a class="step">@Labels.GroupSpace</a>
-	<a class="step" href="@Url.Action("index", "unit")">@Labels.BUManagement</a>
-	<span class="step">@ViewBag.Title</span>
+    <a class="step">@Labels.GroupSpace</a>
+    <a class="step" href="@Url.Action("index", "unit")">@Labels.UnitManagement</a>
+    <span class="step">@ViewBag.Title</span>
 }
 <h2 class="page-title">@Labels.Edit</h2>
 <div id="edit-unit"></div>

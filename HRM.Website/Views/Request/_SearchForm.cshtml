@@ -1,4 +1,4 @@
-﻿@using HRM.Core
+@using HRM.Core
 @using HRM.Core.Enums
 @using HRM.Resources
 @using Microsoft.AspNetCore.Mvc.TagHelpers
@@ -73,9 +73,9 @@
             <div class="select-form">
                 @{
                     var filteringDateType = new List<SelectListItem>
-		            {
-			            new() {Text = "Effected Date", Value = "true"},
-			            new() {Text = "Created Date", Value = "false"}
+                    {
+                        new() {Text = "Effected Date", Value = "true"},
+                        new() {Text = "Created Date", Value = "false"}
                     };
                 }
                 @Html.DropDownListFor(model => model.IsFilterByAffectedDate, filteringDateType, new { @class = "form-control" })
@@ -86,7 +86,7 @@
                 @Html.LabelFor(model => model.StatusId, new { @class = "control-label" })
             </div>
             <div class="select-form">
-	            @Html.Raw(RazorHelpers.StatusDropDownList(Model.StatusId, isShowPendingAndVerified: Model.ViewType == RequestViewType.PersonalSpace, controlName: "statusId", htmlClass: "form-control"))
+                @Html.Raw(RazorHelpers.StatusDropDownList(Model.StatusId, isShowPendingAndVerified: Model.ViewType == RequestViewType.PersonalSpace, controlName: "statusId", htmlClass: "form-control"))
             </div>
         </div>
         <div class="form-group form-group--m">
@@ -152,14 +152,14 @@
             <div class="select-form">
                 @{
                     var requestTypes = new List<SelectListItem>
-		            {
-			            new() {Text = Labels.All, Value = ((int)RequestFilter.All).ToString()},
-			            new() {Text = Labels.Leave, Value = ((int)RequestFilter.Leave).ToString()},
-			            new() {Text = Labels.ChangeShift, Value = ((int)RequestFilter.ChangeShift).ToString()},
-			            new() {Text = Labels.LateInEarlyOut, Value = ((int)RequestFilter.LateInEarlyOut).ToString()},
-			            new() {Text = Labels.CheckInOut, Value = ((int)RequestFilter.CheckInOut).ToString()},
-			            new() {Text = Labels.CompensationLeave, Value = ((int)RequestFilter.KeepInView).ToString()}
-		            };
+                    {
+                        new() {Text = Labels.All, Value = ((int)RequestFilter.All).ToString()},
+                        new() {Text = Labels.Leave, Value = ((int)RequestFilter.Leave).ToString()},
+                        new() {Text = Labels.ChangeShift, Value = ((int)RequestFilter.ChangeShift).ToString()},
+                        new() {Text = Labels.LateInEarlyOut, Value = ((int)RequestFilter.LateInEarlyOut).ToString()},
+                        new() {Text = Labels.CheckInOut, Value = ((int)RequestFilter.CheckInOut).ToString()},
+                        new() {Text = Labels.CompensationLeave, Value = ((int)RequestFilter.KeepInView).ToString()}
+                    };
                     @Html.DropDownListFor(model => model.RequestType, requestTypes, new { @class = "form-control" })
                 }
             </div>

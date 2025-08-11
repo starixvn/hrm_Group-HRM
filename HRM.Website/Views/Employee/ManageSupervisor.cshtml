@@ -1,11 +1,11 @@
 ﻿@using HRM.Core.Enums
 @using HRM.Resources
 @{
-	ViewBag.Title = "Edit Employee Supervisor";
-	var employeeId = (int)ViewBag.EmployeeId;
-	var roleId = (short)ViewBag.RoleId;
-	var breadcrumb = string.Empty;
-	var companyId = (int)ViewBag.CompanyId;
+    ViewBag.Title = "Edit Employee Supervisor";
+    var employeeId = (int)ViewBag.EmployeeId;
+    var roleId = (short)ViewBag.RoleId;
+    var breadcrumb = string.Empty;
+    var companyId = (int)ViewBag.CompanyId;
 }
 @section css{
     <link href="~/dist/styles/team.edit.supervisor.css" rel="stylesheet" asp-append-version="true" />
@@ -15,10 +15,10 @@
 }
 @section Breadcrumb
 {
-	<a class="step" href="javascript:;">@Labels.HRSpace</a>
-	<a class="step" href="@Url.Action("usermanagement", "employee")">@Labels.EmployeeManagement</a>
-	<a class="step" href="@Url.Action("edit", "employee", new { id = employeeId })">@Labels.EmployeePersonalInformation</a>
-	<a class="step">
+    <a class="step" href="javascript:;">@Labels.HRSpace</a>
+    <a class="step" href="@Url.Action("usermanagement", "employee")">@Labels.EmployeeManagement</a>
+    <a class="step" href="@Url.Action("edit", "employee", new { id = employeeId })">@Labels.EmployeePersonalInformation</a>
+    <a class="step">
         @{ breadcrumb = roleId switch
             {
                 (short)RoleSystem.Verifier => Labels.Verifier,
@@ -27,7 +27,7 @@
                 _ => breadcrumb
             }; }
         @breadcrumb
-	</a>
+    </a>
 }
 @Html.Hidden("EmployeeId", employeeId)
 @Html.Hidden("CompanyId", companyId)

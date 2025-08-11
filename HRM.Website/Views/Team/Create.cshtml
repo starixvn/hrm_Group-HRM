@@ -48,12 +48,12 @@
             @Html.ValidationMessageFor(model => model.DepartmentId)
         </div>
         <div class="form-group">
-	        <div class="label-form">
+            <div class="label-form">
                 @Html.LabelFor(model => model.PICEmpId, Labels.PIC, new { @class = "control-label" })
-	        </div>
-	        <div class="input-form">
+            </div>
+            <div class="input-form">
                 @Html.DropDownListFor(model => model.PICEmpId, new SelectList(Model.Employees, "UserId", "NickName"), new { @class = "form-control" })
-	        </div>
+            </div>
         </div>
         <div class="form-group">
             <div class="label-form">
