@@ -28,14 +28,14 @@ const AppContainer = () => {
         history.back();
     };
 
-    useEffect(() => {
+    useEffect( => {
         axios({
             url: resolveClientUrl(`Department/GetUnits`),
             method: "GET",
             headers: { "X-Requested-With": "XMLHttpRequest" },
         })
-            .then((response) => {
-                setInitialValues((prev) => ({
+            .then(response => {
+                setInitialValues(prev =>({
                     ...prev,
                     units: response.data,
                 }));
@@ -43,20 +43,20 @@ const AppContainer = () => {
             .catch(axiosError);
     }, []);
 
-    useEffect(() => {
+    useEffect( => {
         axios({
             url: resolveClientUrl(`Department/GetPrepareDataForUnit`),
             method: "GET",
             headers: { "X-Requested-With": "XMLHttpRequest" },
         })
-            .then((response) => {
+            .then(response => {
                 setPrepareData(response.data);
                 if (response.data && response.data.nextId) {
-                    setInitialValues((prev) => ({
+                    setInitialValues(prev =>({
                         ...prev,
                         groupDeptId: response.data.nextId.toString(),
                     }));
-                    setFormKey((prev) => prev + 1);
+                    setFormKey(prev =>prev + 1);
                 }
             })
             .catch(axiosError);
@@ -81,7 +81,7 @@ const AppContainer = () => {
                     headers: { "X-Requested-With": "XMLHttpRequest" },
                 }
             )
-            .then((response) => {
+            .then(response => {
                 const { data } = response;
                 if (data.isSuccessful) {
                     toastr.success("Created successfully!", "", toastOptions());
@@ -98,7 +98,7 @@ const AppContainer = () => {
     };
 
     const renderForm = ({ errors, isSubmitting }) => {
-        return (
+        return 
             <div className="card">
                 <Errors errors={errors} />
                 <Form className="form-horizontal">
@@ -130,7 +130,7 @@ const AppContainer = () => {
                                 className="form-control">
                                 <option value="" />
                                 {initialValues.units
-                                    ? initialValues.units.map((unit) => (
+                                    ? initialValues.units.map((unit =>(
                                           <option key={unit.id} value={unit.id}>
                                               {unit.code}-{unit.accountableArea}
                                           </option>
@@ -197,7 +197,7 @@ const AppContainer = () => {
                                 <option value="" />
                                 {prepareData &&
                                     prepareData.employees &&
-                                    prepareData.employees.map((emp) => (
+                                    prepareData.employees.map(emp =>(
                                         <option key={emp.id} value={emp.id}>
                                             {emp.displayNameWithCompany}
                                         </option>
@@ -248,3 +248,4 @@ const AppContainer = () => {
 };
 
 export default AppContainer;
+

@@ -28,7 +28,7 @@ const Table = ({ data, onDelete }) => {
         return value;
     };
 
-    const sortedData = React.useMemo(() => {
+    const sortedData = React.useMemo( => {
         if (!sortConfig.key) return data;
 
         const sorted = [...data].sort((a, b) => {
@@ -51,7 +51,7 @@ const Table = ({ data, onDelete }) => {
         return sorted;
     }, [data, sortConfig]);
 
-    const onSort = (key) => {
+    const onSort = key => {
         if (!key) return;
 
         let direction = 'asc';
@@ -62,7 +62,7 @@ const Table = ({ data, onDelete }) => {
         setSortConfig({ key, direction });
     };
 
-    const renderSortIcon = (key) => {
+    const renderSortIcon = key => {
         if (sortConfig.key !== key) return 'fa fa-sort';
 
         return sortConfig.direction === 'asc'
@@ -74,11 +74,11 @@ const Table = ({ data, onDelete }) => {
         <table className='table table-custom'>
             <thead>
                 <tr>
-                    {columns.map(({ label, key, sortable }) => (
+                    {columns.map(({ label, key, sortable }) => 
                         <th
                             key={label}
                             className={sortable ? 'col-sorter' : ''}
-                            onClick={() => onSort(key)}
+                            onClick={( =>onSort(key)}
                             style={{ cursor: sortable ? 'pointer' : 'default' }}
                         >
                             <div className='cell-control-wrapper'>

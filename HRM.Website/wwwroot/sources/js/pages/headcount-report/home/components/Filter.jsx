@@ -9,7 +9,7 @@ const Filter = () => {
         (_, i) => currentYear - i
     );
 
-    const handleYearChange = (e) => {
+    const handleYearChange = e => {
         setSelectedYear(parseInt(e.target.value));
     };
 
@@ -19,7 +19,7 @@ const Filter = () => {
         );
     };
 
-    return (
+    return 
         <form className="filter">
             <div className="form-horizontal clearfix">
                 <div className="form-group">
@@ -32,7 +32,7 @@ const Filter = () => {
                             className="form-control"
                             value={selectedYear}
                             onChange={handleYearChange}>
-                            {years.map((year) => (
+                            {years.map((year =>(
                                 <option key={year} value={year}>
                                     {year}
                                 </option>
@@ -54,3 +54,4 @@ const Filter = () => {
 };
 
 export default Filter;
+

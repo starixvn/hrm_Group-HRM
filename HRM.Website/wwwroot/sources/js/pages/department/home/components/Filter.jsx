@@ -12,12 +12,12 @@ const Filter = ({ onSubmit, exportExcel, allUnits }) => {
         window.location = resolveClientUrl("Department/Create");
     };
 
-    const handleSubmit = (event) => {
+    const handleSubmit = event => {
         event.preventDefault();
         onSubmit(filterParams);
     };
 
-    const handleChange = (event) => {
+    const handleChange = event => {
         setFilterParams({
             ...filterParams,
             [event.target.name]: event.target.value,
@@ -30,7 +30,7 @@ const Filter = ({ onSubmit, exportExcel, allUnits }) => {
         return nameA.localeCompare(nameB);
     });
 
-    return (
+    return 
         <form className="filter" onSubmit={handleSubmit}>
             <div className="form-horizontal clearfix">
                 <div className="form-group">
@@ -61,7 +61,7 @@ const Filter = ({ onSubmit, exportExcel, allUnits }) => {
                             onChange={handleChange}
                             style={{ minWidth: "100px" }}>
                             <option value="">All</option>
-                            {sortedUnits.map((unit) => (
+                            {sortedUnits.map((unit =>(
                                 <option key={unit.id} value={unit.id}>
                                     {unit.code}
                                 </option>
@@ -95,3 +95,4 @@ const Filter = ({ onSubmit, exportExcel, allUnits }) => {
 };
 
 export default Filter;
+

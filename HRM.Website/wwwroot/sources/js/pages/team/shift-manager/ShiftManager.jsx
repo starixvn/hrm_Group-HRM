@@ -41,7 +41,7 @@ export default class ShiftManager extends Component {
     componentDidMount() {
         this.getShiftManagers();
     }
-    getEmployees = (query) => {
+    getEmployees = query => {
         if (query.trim().length > 1) {
             let apiCall;
             const isGroupTeam = this.props.pageType === PageType.GroupTeam;
@@ -61,8 +61,8 @@ export default class ShiftManager extends Component {
             }
 
             apiCall
-                .then((response) => {
-                    const employeeOptions = response.data.map((item) => {
+                .then(response => {
+                    const employeeOptions = response.data.map(item => {
                         var id = isGroupTeam ? item.empId : item.id;
                         return {
                             key: id,
@@ -106,11 +106,11 @@ export default class ShiftManager extends Component {
             headers: { 'X-Requested-With': 'XMLHttpRequest' },
             params: params,
         })
-            .then((response) => {
+            .then(response => {
                 this.setState({ managers: response.data });
             })
             .catch(axiosError)
-            .then(() => unblockUI());
+            .then( =>unblockUI());
     };
 
     handleChangeOrder = (key, employeeId) => {
@@ -125,9 +125,9 @@ export default class ShiftManager extends Component {
         );
     };
 
-    handleAddEmployee = (employee) => {
-        const index = this.state.managers.findIndex(
-            (item) => item.ownerId === employee.id
+    handleAddEmployee = employee => {
+        const index = this.state.managers.findIndex
+            (item =>item.ownerId === employee.id
         );
         this.setState({ employeeOptions: [] });
         if (index < 0) {
@@ -143,9 +143,9 @@ export default class ShiftManager extends Component {
         }
     };
 
-    handleRemoveEmployee = (employeeId) => {
+    handleRemoveEmployee = employeeId => {
         const managers = [...this.state.managers],
-            index = managers.findIndex((item) => item.ownerId === employeeId);
+            index = managers.findIndex(item =>item.ownerId === employeeId);
         managers.splice(index, 1);
         this.setState({ managers });
     };
@@ -222,3 +222,4 @@ export default class ShiftManager extends Component {
         }
     };
 }
+

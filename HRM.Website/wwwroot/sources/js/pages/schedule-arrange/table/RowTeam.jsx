@@ -24,12 +24,12 @@ export default class RowTeam extends PureComponent {
         this.props.onChangeTeamOrder('bottom', teamId);
     };
 
-    handleChangePublic = (event) => {
+    handleChangePublic = event => {
         const { teamId } = this.props.data;
         this.props.onChangePublics(teamId, event.target.checked);
     };
 
-    handleSelectEmployeeOfTeam = (event) => {
+    handleSelectEmployeeOfTeam = event => {
         const { teamId } = this.props.data;
         this.props.onSelectEmployeeOfTeam(teamId, null, event.target.checked);
     };
@@ -124,3 +124,4 @@ export default class RowTeam extends PureComponent {
         );
     }
 }
+

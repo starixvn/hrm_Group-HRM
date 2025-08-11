@@ -18,7 +18,7 @@ export default class THead extends PureComponent {
         const { isHost, enableSyncWorkingShift, fromDate, toDate } = this.props;
         const isSystemAdmin = document.getElementById('IsSystemAdmin').checked;
 
-        return (
+        return 
             <Fragment>
                 <div className="header-control">
                     <div>
@@ -35,8 +35,7 @@ export default class THead extends PureComponent {
                                     className={`checkbox-custom`}
                                     id={`ckb-checkAllWeekDays`}
                                     disabled={!isHost}
-                                    onChange={(event) =>
-                                        this.props.onChangeSelectWeekDays(
+                                    onChange={(event =>this.props.onChangeSelectWeekDays(
                                             null,
                                             event.target.checked
                                         )
@@ -99,7 +98,7 @@ export default class THead extends PureComponent {
                     <div className="table-cell cell-index" />
                     <div className="table-cell cell-nickname">Nickname</div>
                     <div className="table-cell cell-shift">Default Shift</div>
-                    {this.dayOfWeeks.map((item) => {
+                    {this.dayOfWeeks.map(item => {
                         return (
                             <div
                                 className="table-cell cell-shift"
@@ -116,8 +115,7 @@ export default class THead extends PureComponent {
                                             className={`checkbox-custom`}
                                             id={`ckb-${item.name}`}
                                             disabled={!isHost}
-                                            onChange={(event) =>
-                                                this.props.onChangeSelectWeekDays(
+                                            onChange={event =>this.props.onChangeSelectWeekDays(
                                                     item.name,
                                                     event.target.checked
                                                 )
@@ -144,3 +142,4 @@ export default class THead extends PureComponent {
         );
     }
 }
+

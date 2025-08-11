@@ -20,12 +20,12 @@ const AppContainer = () => {
         history.back();
     };
 
-    useEffect(() => {
+    useEffect( => {
         axios({
             url: resolveClientUrl(`SalaryStructure/GetJobLevels`),
             method: 'GET',
             headers: { 'X-Requested-With': 'XMLHttpRequest' },
-        }).then((res) => {
+        }).then(res => {
             setJobLevels(res.data.map(item => {
                 return {
                     ...item,
@@ -56,7 +56,7 @@ const AppContainer = () => {
                     headers: { 'X-Requested-With': 'XMLHttpRequest' },
                 }
             )
-            .then((response) => {
+            .then(response => {
                 const { data } = response;
                 if (data.isSuccessful) {
                     toastr.success('Created successfully!', '', toastOptions());
@@ -82,7 +82,7 @@ const AppContainer = () => {
         setJobLevels(tmpJobLevels);
     };
 
-    const renderForm = ({ isSubmitting }) => {
+    const renderForm = { isSubmitting } => {
         return (
             <div className='card'>
                 <Form className='form-horizontal'>
@@ -138,7 +138,7 @@ const AppContainer = () => {
         );
     };
 
-    const validateFormValues = (values) => {
+    const validateFormValues = values => {
         if (!values.name.trim()) {
             toastr.error('Salary Structure field is required!', '', toastOptions());
             return {

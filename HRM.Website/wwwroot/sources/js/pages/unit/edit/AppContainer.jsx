@@ -16,13 +16,13 @@ const AppContainer = () => {
     history.back();
   };
 
-  useEffect(() => {
+  useEffect( => {
     axios({
       url: resolveClientUrl(`Unit/getById/${window.unitId}`),
       method: 'GET',
       headers: { 'X-Requested-With': 'XMLHttpRequest' }
     })
-      .then((response) => {
+      .then(response => {
         setUnit(response.data);
       })
       .catch(axiosError);
@@ -32,7 +32,7 @@ const AppContainer = () => {
       method: 'GET',
       headers: { 'X-Requested-With': 'XMLHttpRequest' }
     })
-      .then((response) => {
+      .then(response => {
         setEmployees(response.data);
       })
       .catch(axiosError);
@@ -58,7 +58,7 @@ const AppContainer = () => {
           headers: { 'X-Requested-With': 'XMLHttpRequest' }
         }
       )
-      .then((response) => {
+      .then(response => {
         const { data } = response;
         if (data.isSuccessful) {
           toastr.success('Updated successfully!', '', toastOptions());
@@ -74,7 +74,7 @@ const AppContainer = () => {
   };
 
   const renderForm = ({ errors, isSubmitting }) => {
-    return (
+    return 
       <div className="card">
         <Errors errors={errors} />
         <Form className="form-horizontal">
@@ -130,7 +130,7 @@ const AppContainer = () => {
               <Field name="picEmpId" as="select" className="form-control">
                 <option value="" />
                 {employees &&
-                  employees.map((emp) => (
+                  employees.map((emp =>(
                     <option key={emp.id} value={emp.id}>
                       {emp.displayNameWithCompany}
                     </option>
@@ -188,3 +188,4 @@ const AppContainer = () => {
 };
 
 export default AppContainer;
+

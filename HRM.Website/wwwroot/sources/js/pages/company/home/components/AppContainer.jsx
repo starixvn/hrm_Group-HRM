@@ -12,12 +12,12 @@ const AppContainer = () => {
     const [companies, setCompanies] = useState([]);
     const [currencyMapping, setCurrencyMapping] = useState({});
 
-    const getCompanies = (params = {}) => {
+    const getCompanies = params = {} => {
         axios
             .post(resolveClientUrl("Company/GetSettingCompany"), params, {
                 headers: { "X-Requested-With": "XMLHttpRequest" },
             })
-            .then((response) => {
+            .then(response => {
                 setCompanies(response.data);
             })
             .catch(axiosError);
@@ -28,7 +28,7 @@ const AppContainer = () => {
             .get(resolveClientUrl("Company/GetCurrency"), {
                 headers: { "X-Requested-With": "XMLHttpRequest" },
             })
-            .then((response) => {
+            .then(response => {
                 const currencies = response.data;
                 const mapping = {};
                 currencies.forEach(currency => {
@@ -53,7 +53,7 @@ const AppContainer = () => {
         }));
     };
 
-    useEffect(() => {
+    useEffect( => {
         getCompanies();
         getCurrencies();
     }, []);
@@ -68,3 +68,4 @@ const AppContainer = () => {
 };
 
 export default AppContainer;
+

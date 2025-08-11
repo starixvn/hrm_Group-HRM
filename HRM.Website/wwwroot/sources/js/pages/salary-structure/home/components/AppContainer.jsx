@@ -16,22 +16,22 @@ const AppContainer = () => {
     const [salaryStructures, setSalaryStructures] = useState([]);
     const [deleteModalDialog, setDeleteModalDialog] = useState({ show: false });
 
-    const getSalaryStructures = (params) => {
+    const getSalaryStructures = params => {
         axios
             .post(resolveClientUrl("SalaryStructure/GetSalaryStructures"), params, {
                 headers: { "X-Requested-With": "XMLHttpRequest" },
             })
-            .then((response) => {
+            .then(response => {
                 setSalaryStructures(response.data);
             })
             .catch(axiosError);
     };
 
-    useEffect(() => {
+    useEffect( => {
         getSalaryStructures();
     }, []);
 
-    const handleDelete = (salaryStructure) => {
+    const handleDelete = salaryStructure => {
         setDeleteModalDialog({
             show: true,
             salaryStructure,
@@ -50,7 +50,7 @@ const AppContainer = () => {
                     headers: { "X-Requested-With": "XMLHttpRequest" },
                 }
             )
-            .then((response) => {
+            .then(response => {
                 const { data } = response;
                 if (data.isSuccessful) {
                     toastr.success("Deleted successfully!", "", toastOptions());
@@ -92,3 +92,4 @@ const AppContainer = () => {
 };
 
 export default AppContainer;
+

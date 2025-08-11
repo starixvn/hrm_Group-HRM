@@ -20,7 +20,7 @@ const AppContainer = () => {
     const [currencyOptions, setCurrencyOptions] = useState([]);
     const [subCompanies, setSubCompanies] = useState([]);
 
-    const isValidIP = (ip) => {
+    const isValidIP = ip => {
         const ipv4WithCIDR = /^(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)(\.(25[0-5]|2[0-4]\d|1\d\d|[1-9]?\d)){3}(\/([0-9]|[12][0-9]|3[0-2]))?$/;
         const ipv6WithCIDR = /^(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4})(\/([0-9]|[1-9][0-9]|1[01][0-9]|12[0-8]))?$/;
         return ipv4WithCIDR.test(ip) || ipv6WithCIDR.test(ip);
@@ -39,25 +39,25 @@ const AppContainer = () => {
         history.back();
     };
 
-    useEffect(() => {
+    useEffect( => {
         axios({
             url: resolveClientUrl(`Company/GetCurrency`),
             method: 'GET',
             headers: { 'X-Requested-With': 'XMLHttpRequest' },
         })
-        .then((res) => {
+        .then(res => {
             setCurrencyOptions(res.data);
         })
         .catch(axiosError);
     }, []);
 
-    useEffect(() => {
+    useEffect( => {
         axios({
             url: resolveClientUrl(`Company/GetCompanyById/${window.companyId}`),
             method: 'GET',
             headers: { 'X-Requested-With': 'XMLHttpRequest' },
         })
-        .then((response) => {
+        .then(response => {
             const data = response.data;
     
             let parsedIPs = [];
@@ -93,15 +93,15 @@ const AppContainer = () => {
             });
 
             setWhitelistIPs(parsedIPs);
-            setFormKey((prev) => prev + 1);
+            setFormKey(prev =>prev + 1);
         }).catch(axiosError);
     }, []);
 
-    const handleWhitelistIPsChange = useCallback((newIPs) => {
+    const handleWhitelistIPsChange = useCallback(newIPs => {
         setWhitelistIPs(newIPs);
     }, []);
 
-    const validateAndAddIP = useCallback((ip) => {
+    const validateAndAddIP = useCallback(ip => {
         if (!isValidIP(ip)) {
             toastr.warning('Invalid IP address format', '', toastOptions());
             return false;
@@ -143,11 +143,11 @@ const AppContainer = () => {
                 headers: { 'X-Requested-With': 'XMLHttpRequest' },
             }
         )
-            .then((response) => {
+            .then(response => {
                 const { data } = response;
                 if (data.isSuccessful) {
                     toastr.success('Updated successfully!', '', toastOptions());
-                    setTimeout(() => {
+                    setTimeout( => {
                         document.location = resolveClientUrl('company/index');
                     }, 3000);
                 } else {
@@ -158,7 +158,7 @@ const AppContainer = () => {
             .catch(axiosError);
     }, [whitelistIPs, subCompanies]);
 
-    const renderForm = ({ errors, isSubmitting, values, setFieldValue }) => (
+    const renderForm = ({ errors, isSubmitting, values, setFieldValue }) => 
         <div className='card'>
             <Errors errors={errors} />
             <Form className='form-horizontal'>
@@ -182,13 +182,12 @@ const AppContainer = () => {
                     </div>
                     <div className='input-form'>
                         <Field name='hasBIO'>
-                            {({ field }) => (
+                            {({ field } =>
                                 <input
                                     type='checkbox'
                                     className='checkbox'
                                     checked={field.value}
-                                    onChange={(e) =>
-                                        setFieldValue('hasBIO', e.target.checked)
+                                    onChange={(e =>setFieldValue("hasBIO", e.target.checked)
                                     }
                                 />
                             )}
@@ -202,13 +201,12 @@ const AppContainer = () => {
                     </div>
                     <div className='input-form'>
                         <Field name='enableLetstalk'>
-                            {({ field }) => (
+                            {{ field } =>
                                 <input
                                     type='checkbox'
                                     className='checkbox'
                                     checked={field.value}
-                                    onChange={(e) =>
-                                        setFieldValue('enableLetstalk', e.target.checked)
+                                    onChange={(e =>setFieldValue("enableLetstalk", e.target.checked)
                                     }
                                 />
                             )}
@@ -255,7 +253,7 @@ const AppContainer = () => {
                             companyId={values.companyId}
                             initialTags={subCompanies}
                             validTags={subCompanies.filter(company => company.actionType === 'none')}
-                            onTagsChange={(newTags) => {
+                            onTagsChange={newTags => {
                                 setSubCompanies(newTags);
                             }}
                         />

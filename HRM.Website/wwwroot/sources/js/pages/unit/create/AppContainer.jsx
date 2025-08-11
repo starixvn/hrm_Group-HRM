@@ -8,16 +8,16 @@ import Errors from '../../../shared/components/Errors';
 import { resolveClientUrl, axiosError, toastOptions } from '../../../shared/common.functions';
 import { validationSchema } from '../common.functions';
 
-const AppContainer = ({ nextId }) => {
+const AppContainer = { nextId } => {
   const [employees, setEmployees] = useState(null);
 
-  useEffect(() => {
+  useEffect( => {
     axios({
       url: resolveClientUrl(`Unit/GetEmployeeForPIC`),
       method: 'GET',
       headers: { 'X-Requested-With': 'XMLHttpRequest' }
     })
-      .then((response) => {
+      .then(response => {
         setEmployees(response.data);
       })
       .catch(axiosError);
@@ -46,7 +46,7 @@ const AppContainer = ({ nextId }) => {
           headers: { 'X-Requested-With': 'XMLHttpRequest' }
         }
       )
-      .then((response) => {
+      .then(response => {
         const { data } = response;
         if (data.isSuccessful) {
           toastr.success('Created successfully!', '', toastOptions());
@@ -62,7 +62,7 @@ const AppContainer = ({ nextId }) => {
   };
 
   const renderForm = ({ errors, isSubmitting }) => {
-    return (
+    return 
       <div className="card">
         <Errors errors={errors} />
         <Form className="form-horizontal">
@@ -118,7 +118,7 @@ const AppContainer = ({ nextId }) => {
               <Field name="picEmpId" as="select" className="form-control">
                 <option value="" />
                 {employees &&
-                  employees.map((emp) => (
+                  employees.map((emp =>(
                     <option key={emp.id} value={emp.id}>
                       {emp.displayNameWithCompany}
                     </option>
@@ -169,3 +169,4 @@ const AppContainer = ({ nextId }) => {
 };
 
 export default AppContainer;
+

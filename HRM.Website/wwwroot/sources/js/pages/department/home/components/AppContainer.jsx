@@ -21,7 +21,7 @@ const AppContainer = () => {
     });
     const [deleteModalDialog, setDeleteModalDialog] = useState({ show: false });
 
-    const getDepartments = (params) => {
+    const getDepartments = params => {
         const processedParams = {
             ...params,
             unitId: params.unitId === "" ? null : params.unitId,
@@ -35,7 +35,7 @@ const AppContainer = () => {
                     headers: { "X-Requested-With": "XMLHttpRequest" },
                 }
             )
-            .then((response) => {
+            .then(response => {
                 setDepartments(response.data);
             })
             .catch(axiosError);
@@ -46,18 +46,18 @@ const AppContainer = () => {
             .get(resolveClientUrl("Department/GetUnits"), {
                 headers: { "X-Requested-With": "XMLHttpRequest" },
             })
-            .then((response) => {
+            .then(response => {
                 setAllUnits(response.data);
             })
             .catch(axiosError);
     };
 
-    useEffect(() => {
+    useEffect( => {
         loadAllUnits();
         getDepartments(filterParams);
     }, []);
 
-    const handleDelete = (department) => {
+    const handleDelete = department => {
         setDeleteModalDialog({
             show: true,
             department,
@@ -76,7 +76,7 @@ const AppContainer = () => {
                     headers: { "X-Requested-With": "XMLHttpRequest" },
                 }
             )
-            .then((response) => {
+            .then(response => {
                 const { data } = response;
                 if (data.isSuccessful) {
                     toastr.success("Deleted successfully!", "", toastOptions());
@@ -134,3 +134,4 @@ const AppContainer = () => {
 };
 
 export default AppContainer;
+

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import axios from 'axios';
 import toastr from 'toastr';
 import { Modal, ModalBody, ModalFooter, ModalHeader } from 'react-bootstrap';
@@ -13,7 +13,7 @@ import {
 } from '../constants/periodType';
 import salaryService from '../Service';
 
-const UploadSalaryModal = ({ onSuccess }) => {
+const UploadSalaryModal = { onSuccess } => {
     const [show, setShow] = useState(false);
     const [month, setMonth] = useState('');
     const [periodType, setPeriodType] = useState(PeriodType.FULL_MONTH);
@@ -40,11 +40,11 @@ const UploadSalaryModal = ({ onSuccess }) => {
         setShow(true);
     };
 
-    const handleFileChange = (e) => {
+    const handleFileChange = e => {
         setFile(e.target.files[0]);
     };
 
-    const handleDragOver = (e) => {
+    const handleDragOver = e => {
         e.preventDefault();
         setIsDragging(true);
     };
@@ -53,17 +53,17 @@ const UploadSalaryModal = ({ onSuccess }) => {
         setIsDragging(false);
     };
 
-    const handleDrop = (e) => {
+    const handleDrop = e => {
         e.preventDefault();
         setIsDragging(false);
         setFile(e.dataTransfer.files[0]);
     };
 
-    const handleMonthClick = (e) => {
+    const handleMonthClick = e => {
         e.target.showPicker();
     };
 
-    const processUpload = async (formData) => {
+    const processUpload = async formData => {
         try {
             await salaryService.uploadPayroll(formData);
             toastr.success('Payroll uploaded successfully', '', toastOptions());
@@ -118,7 +118,7 @@ const UploadSalaryModal = ({ onSuccess }) => {
         }
     };
 
-    return (
+    return 
         <React.Fragment>
             <button className="btn btn-upload" onClick={handleOpen}>
                 Upload Payroll
@@ -142,7 +142,7 @@ const UploadSalaryModal = ({ onSuccess }) => {
                             type="month"
                             className="form-control"
                             value={month}
-                            onChange={(e) => setMonth(e.target.value)}
+                            onChange={(e =>setMonth(e.target.value)}
                             required
                             onClick={handleMonthClick}
                         />
@@ -154,9 +154,9 @@ const UploadSalaryModal = ({ onSuccess }) => {
                         <select
                             className="form-control"
                             value={periodType}
-                            onChange={(e) => setPeriodType(e.target.value)}
+                            onChange={e =>setPeriodType(e.target.value)}
                             required>
-                            {PERIOD_TYPES.map((type) => (
+                            {PERIOD_TYPES.map(type =>(
                                 <option key={type} value={type}>
                                     {PeriodTypeLabel[type]}
                                 </option>
@@ -231,3 +231,4 @@ const UploadSalaryModal = ({ onSuccess }) => {
 };
 
 export default UploadSalaryModal;
+

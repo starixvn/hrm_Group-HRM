@@ -59,7 +59,7 @@ const AppContainer = () => {
         }
     };
 
-    useEffect(() => {
+    useEffect( => {
         getCompanies();
         getInitialData();
     }, []);
@@ -82,7 +82,7 @@ const AppContainer = () => {
                     headers: { "X-Requested-With": "XMLHttpRequest" },
                 }
             )
-            .then((response) => {
+            .then(response => {
                 const { data } = response;
                 if (data.isSuccessful) {
                     toastr.success("Updated successfully!", "", toastOptions());
@@ -99,7 +99,7 @@ const AppContainer = () => {
     };
 
     const renderForm = ({ errors, isSubmitting }) => {
-        return (
+        return 
             <div className="card">
                 <Errors errors={errors} />
                 <Form className="form-horizontal">
@@ -128,7 +128,7 @@ const AppContainer = () => {
                                 className="form-control">
                                 <option value="" />
                                 {companies
-                                    ? companies.map((company) => (
+                                    ? companies.map((company =>(
                                           <option key={company.id} value={company.id}>
                                               {company.text}
                                           </option>
@@ -174,3 +174,4 @@ const AppContainer = () => {
 };
 
 export default AppContainer;
+

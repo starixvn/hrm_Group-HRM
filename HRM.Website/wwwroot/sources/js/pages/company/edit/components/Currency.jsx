@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import Select from 'react-select';
 
 const CurrencyMultiSelect = ({ 
@@ -19,12 +19,12 @@ const CurrencyMultiSelect = ({
         })
         : [];
 
-    const handleChange = (selectedOptions) => {
+    const handleChange = selectedOptions => {
         const selectedValues = selectedOptions ? selectedOptions.map(option => option.value) : [];
         onChange(selectedValues);
     };
 
-    return (
+    return 
         <div className="react-select-container">
             <Select
                 isMulti
@@ -36,7 +36,7 @@ const CurrencyMultiSelect = ({
                 hideSelectedOptions={false}
                 isClearable={true}
                 isSearchable={true}
-                noOptionsMessage={() => "No currencies found"}
+                noOptionsMessage={( =>"No currencies found"}
                 classNamePrefix="react-select"
             />
         </div>
@@ -44,3 +44,4 @@ const CurrencyMultiSelect = ({
 };
 
 export default CurrencyMultiSelect;
+

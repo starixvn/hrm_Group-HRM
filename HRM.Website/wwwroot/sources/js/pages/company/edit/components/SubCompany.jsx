@@ -1,9 +1,9 @@
-import React, { useState, useRef, useCallback } from 'react';
+﻿import React, { useState, useRef, useCallback } from 'react';
 import toastr from 'toastr';
 import { toastOptions } from '../../../../shared/common.functions';
 
 const checkTagExists = async (tag, validTags = [], excludeCompanyId = null) => {
-  return new Promise((resolve) => {
+  return new Promise(resolve => {
       const existsInSystem = validTags.some(validTag => 
         validTag.name && 
         validTag.name.toLowerCase() === tag.toLowerCase() &&
@@ -26,16 +26,16 @@ const SubCompany = ({ companyId, initialTags = [], onTagsChange, validTags = [] 
   const [isLoading, setIsLoading] = useState(false);
   const inputRef = useRef(null);
 
-  const clearInput = useCallback(() => {
+  const clearInput = useCallback( => {
     setInputValue('');
   }, []);
 
-  const resetEditing = useCallback(() => {
+  const resetEditing = useCallback( => {
     setEditingIndex(null);
     clearInput();
   }, [clearInput]);
 
-  const handleAddTag = useCallback(async (trimmedValue) => {
+  const handleAddTag = useCallbackasync (trimmedValue => {
     if (!trimmedValue) return;
 
     setIsLoading(true);
@@ -69,7 +69,7 @@ const SubCompany = ({ companyId, initialTags = [], onTagsChange, validTags = [] 
     }
   }, [tags, onTagsChange, clearInput, validTags]);
 
-  const handleEditTag = useCallback(async (trimmedValue) => {
+  const handleEditTag = useCallbackasync (trimmedValue => {
     if (!trimmedValue) {
       resetEditing();
       return;
@@ -109,7 +109,7 @@ const SubCompany = ({ companyId, initialTags = [], onTagsChange, validTags = [] 
     }
   }, [tags, editingIndex, onTagsChange, resetEditing, validTags]);
 
-  const handleKeyDown = useCallback(async (e) => {
+  const handleKeyDown = useCallbackasync (e => {
     if (e.key === 'Enter' && inputValue.trim() !== '' && !isLoading) {
       e.preventDefault();
       const trimmed = inputValue.trim();
@@ -124,16 +124,16 @@ const SubCompany = ({ companyId, initialTags = [], onTagsChange, validTags = [] 
     }
   }, [inputValue, editingIndex, isLoading, handleAddTag, handleEditTag, resetEditing]);
 
-  const handleChange = useCallback((e) => {
+  const handleChange = useCallback(e => {
     setInputValue(e.target.value);
   }, []);
 
-  const handleEdit = useCallback((index) => {
+  const handleEdit = useCallback(index => {
     setEditingIndex(index);
     setInputValue(tags[index].name);
   }, [tags]);
 
-  const handleRemove = useCallback((index) => {
+  const handleRemove = useCallback(index => {
     const tagToRemove = tags[index];
     
     if (tagToRemove.subCompanyId && tagToRemove.employeeCount > 0) {
@@ -165,7 +165,7 @@ const SubCompany = ({ companyId, initialTags = [], onTagsChange, validTags = [] 
     }
   }, [tags, editingIndex, onTagsChange, resetEditing]);
 
-  const handleBlur = useCallback(() => {
+  const handleBlur = useCallback( => {
     if (editingIndex !== null && inputValue.trim() !== '') {
       handleEditTag(inputValue.trim());
     } else {
@@ -173,13 +173,13 @@ const SubCompany = ({ companyId, initialTags = [], onTagsChange, validTags = [] 
     }
   }, [editingIndex, inputValue, handleEditTag, resetEditing]);
 
-  const renderTag = useCallback((tag, index) => (
+  const renderTag = useCallback((tag, index) => 
     <div
       key={index}
       className={`tag-item ${editingIndex === index ? 'editing' : ''}`}
     >
       <span 
-        onClick={(e) => {
+        onClick={(e => {
           e.preventDefault();
           e.stopPropagation();
           handleEdit(index);
@@ -205,7 +205,7 @@ const SubCompany = ({ companyId, initialTags = [], onTagsChange, validTags = [] 
       </span>
       <button
         type="button"
-        onClick={(e) => {
+        onClick={e => {
           e.preventDefault();
           e.stopPropagation();
           handleRemove(index);
@@ -223,7 +223,7 @@ const SubCompany = ({ companyId, initialTags = [], onTagsChange, validTags = [] 
       <div className="tag-input-container">
         {tags
           .map((tag, originalIndex) => ({ tag, originalIndex }))
-          .filter(({ tag }) => tag.actionType !== 'delete')
+          .filter({ tag } =>tag.actionType !== 'delete')
           .map(({ tag, originalIndex }) => renderTag(tag, originalIndex))}
         {editingIndex === null && (
         <div className="input-field-wrapper">
@@ -247,3 +247,4 @@ const SubCompany = ({ companyId, initialTags = [], onTagsChange, validTags = [] 
 };
 
 export default SubCompany;
+

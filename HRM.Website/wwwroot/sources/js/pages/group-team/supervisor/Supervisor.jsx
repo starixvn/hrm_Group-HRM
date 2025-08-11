@@ -39,7 +39,7 @@ export default class Supervisor extends Component {
     this.getSupervisors();
   }
 
-  getEmployees = (keyword) => {
+  getEmployees = keyword => {
     if (keyword.trim().length > 1) {
       axios({
         url: resolveClientUrl("GroupTeam/getemployees"),
@@ -51,8 +51,8 @@ export default class Supervisor extends Component {
           isDelete: false,
         },
       })
-        .then((response) => {
-          const employeeOptions = response.data.map((item) => {
+        .then(response => {
+          const employeeOptions = response.data.map(item => {
             return {
               key: item.empId,
               id: item.empId,
@@ -96,11 +96,11 @@ export default class Supervisor extends Component {
       });
     }
     promise
-      .then((response) => {
+      .then(response => {
         this.setState({ supervisors: response.data });
       })
       .catch(axiosError)
-      .then(() => unblockUI());
+      .then( =>unblockUI());
   };
 
   handleChangeOrder = (key, employeeId) => {
@@ -115,9 +115,9 @@ export default class Supervisor extends Component {
     );
   };
 
-  handleAddEmployee = (employee) => {
-    const index = this.state.supervisors.findIndex(
-      (item) => item.ownerId === employee.id
+  handleAddEmployee = employee => {
+    const index = this.state.supervisors.findIndex
+      (item =>item.ownerId === employee.id
     );
     this.setState({ employeeOptions: [] });
     if (index < 0) {
@@ -141,16 +141,16 @@ export default class Supervisor extends Component {
     }
   };
 
-  handleRemoveEmployee = (employeeId) => {
+  handleRemoveEmployee = employeeId => {
     const supervisors = [...this.state.supervisors],
-      index = supervisors.findIndex((item) => item.ownerId === employeeId);
+      index = supervisors.findIndex(item =>item.ownerId === employeeId);
     supervisors.splice(index, 1);
     this.setState({ supervisors });
   };
 
   handleChangePermissionOnRequest = (employeeId, requestType, isChecked) => {
     const supervisors = [...this.state.supervisors],
-      index = supervisors.findIndex((item) => item.ownerId === employeeId);
+      index = supervisors.findIndex(item =>item.ownerId === employeeId);
     supervisors[index] = { ...supervisors[index], [requestType]: isChecked };
     this.setState({ supervisors });
   };
@@ -170,7 +170,7 @@ export default class Supervisor extends Component {
     this.state.supervisors.forEach((item, index) => {
       const ownerId = item.ownerId;
       const displayOrder = index + 1;
-      requestTypes.forEach((requestType) => {
+      requestTypes.forEach(requestType => {
         if (item[requestType.key]) {
           supervisors.push({
             ownerId,
@@ -225,3 +225,4 @@ export default class Supervisor extends Component {
     );
   }
 }
+

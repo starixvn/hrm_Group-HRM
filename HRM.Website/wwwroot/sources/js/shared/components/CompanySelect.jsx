@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
 import { resolveClientUrl } from '../common.functions';
@@ -21,7 +21,7 @@ const CompanySelect = ({ defaultCompanyId = '', roleId = '', onChange }) => {
             },
         });
 
-        const companies = response.data.map((company) => ({
+        const companies = response.data.map(company =>({
             id: company.companyId,
             name: company.name,
         }));
@@ -30,7 +30,7 @@ const CompanySelect = ({ defaultCompanyId = '', roleId = '', onChange }) => {
         setIsLoading(false);
     };
 
-    const handleCompanyChange = (e) => {
+    const handleCompanyChange = e => {
         const companyId = e.target.value;
         setSelectedCompanyId(companyId);
 
@@ -39,15 +39,15 @@ const CompanySelect = ({ defaultCompanyId = '', roleId = '', onChange }) => {
         }
     };
 
-    useEffect(() => {
+    useEffect( => {
         loadCompanies();
     }, [roleId]);
 
-    useEffect(() => {
+    useEffect( => {
         setSelectedCompanyId(defaultCompanyId);
     }, [defaultCompanyId]);
 
-    useEffect(() => {
+    useEffect( => {
         if (
             !isLoading &&
             selectedCompanyId &&
@@ -81,7 +81,7 @@ const CompanySelect = ({ defaultCompanyId = '', roleId = '', onChange }) => {
                 cursor: 'pointer',
                 transition: 'all 0.2s ease',
             }}>
-            {companyOptions.map((company) => (
+            {companyOptions.map(company =>(
                 <option key={company.id} value={company.id}>
                     {company.name}
                 </option>
@@ -90,7 +90,7 @@ const CompanySelect = ({ defaultCompanyId = '', roleId = '', onChange }) => {
     );
 };
 
-export const renderCompanySelect = (props = {}) => {
+export const renderCompanySelect = props = {} => {
     const element = document.getElementById('company-list');
     if (element) {
         ReactDOM.render(<CompanySelect {...props} />, element);
@@ -100,3 +100,4 @@ export const renderCompanySelect = (props = {}) => {
 };
 
 export default CompanySelect;
+

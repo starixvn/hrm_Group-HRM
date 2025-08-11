@@ -109,7 +109,7 @@ export default class App extends Component {
         );
     }
 
-    loadTeams = (companyId) => {
+    loadTeams = companyId => {
         axios({
             url: resolveClientUrl('Team/GetOrgChart'),
             method: 'GET',
@@ -118,14 +118,14 @@ export default class App extends Component {
                 companyId: companyId || null,
             },
         })
-            .then((response) => {
+            .then(response => {
                 this.teamOptions = response.data;
                 const { floatData } = buildData(response.data);
                 const filter = {
                     ...this.state.filter,
                     teamIds: floatData
-                        .filter((item) => item.isLeaf)
-                        .map((item) => item.id)
+                        .filter(item =>item.isLeaf)
+                        .map(item =>item.id)
                         .join(','),
                 };
 
@@ -136,7 +136,7 @@ export default class App extends Component {
             .catch(axiosError);
     };
 
-    loadShifts = (companyId) => {
+    loadShifts = companyId => {
         axios({
             url: resolveClientUrl('Calendar/GetShift'),
             method: 'GET',
@@ -147,15 +147,15 @@ export default class App extends Component {
                 companyId: companyId,
             },
         })
-            .then((response) => {
-                this.shiftOptions = response.data.map((shift) => {
+            .then(response => {
+                this.shiftOptions = response.data.map(shift => {
                     return { id: shift.id, code: shift.code, name: shift.name };
                 });
             })
             .catch(axiosError);
     };
 
-    handleCompanyChange = (companyId) => {
+    handleCompanyChange = companyId => {
         this.setState({
             filter: {
                 ...this.state.filter,
@@ -169,7 +169,7 @@ export default class App extends Component {
         this.loadShifts(companyId);
     };
 
-    onLeavingPageEventListener = (event) => {
+    onLeavingPageEventListener = event => {
         if (!this.isDirtyData()) {
             return undefined;
         }
@@ -212,7 +212,7 @@ export default class App extends Component {
         this.setState({ filter: { ...this.state.filter, [name]: value } });
     };
 
-    getEmployees = (query) => {
+    getEmployees = query => {
         if (!this.state.filter.teamIds) {
             this.setState({ employeeOptions: [] });
             return;
@@ -227,8 +227,8 @@ export default class App extends Component {
                 query: query,
             },
         })
-            .then((response) => {
-                const employeeOptions = response.data.map((item) => {
+            .then(response => {
+                const employeeOptions = response.data.map(item => {
                     return {
                         id: item.employeeId,
                         value: `${item.nickname} (${item.fullName})`,
@@ -240,7 +240,7 @@ export default class App extends Component {
             .catch(axiosError);
     };
 
-    getWeeklyShedules = (filter) => {
+    getWeeklyShedules = filter => {
         const fromDate = moment(filter.fromDate).format(DateFormat),
             toDate = moment(filter.toDate).format(DateFormat);
         blockUI();
@@ -259,13 +259,13 @@ export default class App extends Component {
                     filter.employee.value === 0 ? null : filter.employee.value,
             },
         })
-            .then((response) => {
+            .then(response => {
                 this.selectedWeek = { fromDate, toDate };
                 const { isHost, enableSyncWorkingShift, schedules } =
                     response.data;
 
-                this.originalSchedules = schedules.map((team) => {
-                    team.members.map((schedule) => {
+                this.originalSchedules = schedules.map(team => {
+                    team.members.map(schedule => {
                         schedule.selectWeekDays = {
                             mondaySchedule: false,
                             tuesdaySchedule: false,
@@ -277,8 +277,8 @@ export default class App extends Component {
                         };
                         schedule.totalOffDayReplacement = 0;
 
-                        Object.keys(schedule.selectWeekDays).forEach(
-                            (objectKey) => {
+                        Object.keys(schedule.selectWeekDays).forEach
+                            (objectKey => {
                                 if (schedule[objectKey].isOffDayReplacement) {
                                     schedule.totalOffDayReplacement =
                                         schedule.totalOffDayReplacement + 1;
@@ -300,7 +300,7 @@ export default class App extends Component {
                 });
             })
             .catch(axiosError)
-            .then(() => unblockUI());
+            .then( =>unblockUI());
     };
 
     handleExportExcel = () => {
@@ -324,7 +324,7 @@ export default class App extends Component {
             },
             responseType: 'blob',
         })
-            .then((response) => {
+            .then(response => {
                 const fileName =
                     response.headers['content-disposition'].match(
                         /filename="(.+)"/
@@ -332,7 +332,7 @@ export default class App extends Component {
                 downloadFile(response.data, fileName);
             })
             .catch(axiosError)
-            .then(() => unblockUI());
+            .then( =>unblockUI());
     };
 
     handleExportExcelDriverPickup = () => {
@@ -356,7 +356,7 @@ export default class App extends Component {
             },
             responseType: 'blob',
         })
-            .then((response) => {
+            .then(response => {
                 const fileName =
                     response.headers['content-disposition'].match(
                         /filename="(.+)"/
@@ -364,10 +364,10 @@ export default class App extends Component {
                 downloadFile(response.data, fileName);
             })
             .catch(axiosError)
-            .then(() => unblockUI());
+            .then( =>unblockUI());
     };
 
-    handleGetWeeklyShedules = (isCurrentWeek) => {
+    handleGetWeeklyShedules = isCurrentWeek => {
         if (this.isDirtyData()) {
             this.handleShowConfirmRefreshDataModal();
         } else {
@@ -426,10 +426,10 @@ export default class App extends Component {
         isChecked
     ) => {
         const schedules = [...this.state.schedules];
-        const gindex = schedules.findIndex((item) => item.teamId === teamId);
+        const gindex = schedules.findIndex(item =>item.teamId === teamId);
         const members = [...schedules[gindex].members];
-        const eindex = members.findIndex(
-            (item) => item.employeeId === employeeId
+        const eindex = members.findIndex
+            (item =>item.employeeId === employeeId
         );
         members[eindex] = Object.assign({}, members[eindex], {
             selectWeekDays: {
@@ -486,10 +486,10 @@ export default class App extends Component {
 
     handleChangeShift = (teamId, employeeId, attrName, shift) => {
         const schedules = [...this.state.schedules];
-        const gindex = schedules.findIndex((item) => item.teamId === teamId);
+        const gindex = schedules.findIndex(item =>item.teamId === teamId);
         const members = [...schedules[gindex].members];
-        const eindex = members.findIndex(
-            (item) => item.employeeId === employeeId
+        const eindex = members.findIndex
+            (item =>item.employeeId === employeeId
         );
         const member = { ...members[eindex] };
 
@@ -530,15 +530,15 @@ export default class App extends Component {
 
     handleChangeDefaultShift = (teamId, employeeId, defaultShift) => {
         const schedules = [...this.state.schedules];
-        const gindex = schedules.findIndex((item) => item.teamId === teamId);
+        const gindex = schedules.findIndex(item =>item.teamId === teamId);
         const members = [...schedules[gindex].members];
-        const eindex = members.findIndex(
-                (item) => item.employeeId === employeeId
+        const eindex = members.findIndex
+                (item =>item.employeeId === employeeId
             ),
             originalDefaultShift = members[eindex].defaultShift;
 
         if (defaultShift !== null) {
-            this.scheduleAttrNames.forEach((attrName) => {
+            this.scheduleAttrNames.forEach(attrName => {
                 if (!members[eindex][attrName].isDisabled) {
                     const shift = members[eindex][attrName].shift;
                     if (
@@ -590,7 +590,7 @@ export default class App extends Component {
                 }
             });
         } else {
-            this.scheduleAttrNames.forEach((attrName) => {
+            this.scheduleAttrNames.forEach(attrName => {
                 const shift = members[eindex][attrName].shift;
                 if (
                     !members[eindex][attrName].isModified &&
@@ -624,7 +624,7 @@ export default class App extends Component {
 
     handleChangePublics = (teamId, isChecked) => {
         const schedules = [...this.state.schedules];
-        const gindex = schedules.findIndex((item) => item.teamId === teamId);
+        const gindex = schedules.findIndex(item =>item.teamId === teamId);
         const members = [...schedules[gindex].members];
         const totalItems = members.length;
         for (let index = 0; index < totalItems; index++) {
@@ -639,16 +639,15 @@ export default class App extends Component {
         this.setState({ schedules });
     };
 
-    getSelectedMembers = (schedules) => {
+    getSelectedMembers = schedules => {
         const selectedMembers = [];
         const totalItems = schedules.length;
         for (let gindex = 0; gindex < totalItems; gindex++) {
             const totalSubItems = schedules[gindex].members.length;
             for (let eindex = 0; eindex < totalSubItems; eindex++) {
-                if (
+                if 
                     this.scheduleAttrNames.filter(
-                        (attrName) =>
-                            schedules[gindex].members[eindex].selectWeekDays[
+                        (attrName =>schedules[gindex].members[eindex].selectWeekDays[
                                 attrName
                             ]
                     ).length > 0
@@ -661,7 +660,7 @@ export default class App extends Component {
         return selectedMembers;
     };
 
-    isChangeOffDayKIV = (item) => {
+    isChangeOffDayKIV = item => {
         if (item.isKeepInView) {
             return !item.isOffDay;
         } else return true;
@@ -678,7 +677,7 @@ export default class App extends Component {
                 const members = [...schedules[gindex].members];
                 const member = { ...members[eindex] };
                 const selectWeekDays = member.selectWeekDays;
-                this.scheduleAttrNames.forEach((attrName) => {
+                this.scheduleAttrNames.forEach(attrName => {
                     if (selectWeekDays[attrName]) {
                         member.selectWeekDays = {
                             ...member.selectWeekDays,
@@ -722,7 +721,7 @@ export default class App extends Component {
                 const member = { ...members[eindex] };
                 const selectWeekDays = member.selectWeekDays;
 
-                this.scheduleAttrNames.forEach((attrName) => {
+                this.scheduleAttrNames.forEach(attrName => {
                     if (selectWeekDays[attrName]) {
                         member.selectWeekDays = {
                             ...member.selectWeekDays,
@@ -773,7 +772,7 @@ export default class App extends Component {
                 const member = { ...members[eindex] };
                 const selectWeekDays = member.selectWeekDays;
 
-                this.scheduleAttrNames.forEach((attrName) => {
+                this.scheduleAttrNames.forEach(attrName => {
                     if (selectWeekDays[attrName]) {
                         member.selectWeekDays = {
                             ...member.selectWeekDays,
@@ -834,7 +833,7 @@ export default class App extends Component {
                 const member = { ...members[eindex] };
                 const selectWeekDays = member.selectWeekDays;
 
-                this.scheduleAttrNames.forEach((attrName) => {
+                this.scheduleAttrNames.forEach(attrName => {
                     if (selectWeekDays[attrName]) {
                         member.selectWeekDays = {
                             ...member.selectWeekDays,
@@ -886,7 +885,7 @@ export default class App extends Component {
                 const member = { ...members[eindex] };
                 const selectWeekDays = member.selectWeekDays;
 
-                this.scheduleAttrNames.forEach((attrName) => {
+                this.scheduleAttrNames.forEach(attrName => {
                     if (selectWeekDays[attrName]) {
                         member.selectWeekDays = {
                             ...member.selectWeekDays,
@@ -972,7 +971,7 @@ export default class App extends Component {
                                     : null,
                         });
                     }
-                    this.scheduleAttrNames.forEach((attrName) => {
+                    this.scheduleAttrNames.forEach(attrName => {
                         if (
                             !isEqual(
                                 originalSchedule[attrName],
@@ -1023,7 +1022,7 @@ export default class App extends Component {
                     'Content-Type': 'application/x-www-form-urlencoded',
                 },
             })
-                .then((response) => {
+                .then(response => {
                     const data = response.data;
                     if (data.isSuccessful) {
                         toast.success('Updated Successfully!');
@@ -1034,7 +1033,7 @@ export default class App extends Component {
                     }
                 })
                 .catch(axiosError)
-                .then(() => unblockUI());
+                .then( =>unblockUI());
         }
     };
 
@@ -1059,15 +1058,15 @@ export default class App extends Component {
         this.handleCloseConfirmRefreshDataModal();
     };
 
-    handleChangeShowRemarkPopover = (show) => {
+    handleChangeShowRemarkPopover = show => {
         this.setState({ showRemarkPopover: show });
     };
 
     handleShowWeeklyDefaultShiftModal = (teamId, employeeId) => {
         const schedules = this.state.schedules,
-            gindex = schedules.findIndex((item) => item.teamId === teamId),
-            eindex = schedules[gindex].members.findIndex(
-                (item) => item.employeeId === employeeId
+            gindex = schedules.findIndex(item =>item.teamId === teamId),
+            eindex = schedules[gindex].members.findIndex
+                (item =>item.employeeId === employeeId
             );
 
         this.setState({
@@ -1103,10 +1102,10 @@ export default class App extends Component {
         isUsedWeeklyDefaultShift
     ) => {
         const schedules = [...this.state.schedules];
-        const gindex = schedules.findIndex((item) => item.teamId === teamId);
+        const gindex = schedules.findIndex(item =>item.teamId === teamId);
         const members = [...schedules[gindex].members];
-        const eindex = members.findIndex(
-            (item) => item.employeeId === employeeId
+        const eindex = members.findIndex
+            (item =>item.employeeId === employeeId
         );
         members[eindex] = {
             ...members[eindex],
@@ -1123,7 +1122,7 @@ export default class App extends Component {
             .format(DateFormat);
 
         if (isUsedWeeklyDefaultShift) {
-            this.scheduleAttrNames.forEach((attrName) => {
+            this.scheduleAttrNames.forEach(attrName => {
                 const shiftId =
                         weeklyDefaultShift[`${attrName.substring(0, 3)}Shift`]
                             .id,
@@ -1157,7 +1156,7 @@ export default class App extends Component {
             const defaultShift = members[eindex].defaultShift;
 
             if (defaultShift !== null) {
-                this.scheduleAttrNames.forEach((attrName) => {
+                this.scheduleAttrNames.forEach(attrName => {
                     const workDate = moment(members[eindex][attrName].workDate);
                     if (
                         workDate.isSameOrAfter(fromDate) &&
@@ -1185,14 +1184,14 @@ export default class App extends Component {
     ) => {
         const { teamId, employeeId } = this.state.editWeeklyDefaultShift;
         const schedules = this.state.schedules;
-        const gindex = schedules.findIndex((item) => item.teamId === teamId);
+        const gindex = schedules.findIndex(item =>item.teamId === teamId);
         const members = schedules[gindex].members;
-        const eindex = members.findIndex(
-            (item) => item.employeeId === employeeId
+        const eindex = members.findIndex
+            (item =>item.employeeId === employeeId
         );
 
         let totalOffDays = 0;
-        this.scheduleAttrNames.forEach((attrName) => {
+        this.scheduleAttrNames.forEach(attrName => {
             const shiftId =
                     weeklyDefaultShift[`${attrName.substring(0, 3)}Shift`].id,
                 isOffDay = shiftId === OffDayShiftId;
@@ -1219,7 +1218,7 @@ export default class App extends Component {
                 'Content-Type': 'application/x-www-form-urlencoded',
             },
         })
-            .then((response) => {
+            .then(response => {
                 const data = response.data;
                 if (data.isSuccessful) {
                     toast.success('Updated Successfully!');
@@ -1240,10 +1239,10 @@ export default class App extends Component {
 
     handleUpdateRemark = (teamId, employeeId, remark) => {
         const schedules = [...this.state.schedules];
-        const gindex = schedules.findIndex((item) => item.teamId === teamId);
+        const gindex = schedules.findIndex(item =>item.teamId === teamId);
         const members = [...schedules[gindex].members];
-        const eindex = members.findIndex(
-            (item) => item.employeeId === employeeId
+        const eindex = members.findIndex
+            (item =>item.employeeId === employeeId
         );
 
         if (
@@ -1261,7 +1260,7 @@ export default class App extends Component {
                     'Content-Type': 'application/x-www-form-urlencoded',
                 },
             })
-                .then((response) => {
+                .then(response => {
                     const data = response.data;
                     if (data.isSuccessful) {
                         toast.success('Updated Successfully!');
@@ -1302,7 +1301,7 @@ export default class App extends Component {
                     'Content-Type': 'application/x-www-form-urlencoded',
                 },
             })
-                .then((response) => {
+                .then(response => {
                     const data = response.data;
                     if (!data.isSuccessful) {
                         toast.error(data.message);
@@ -1312,7 +1311,7 @@ export default class App extends Component {
         }
     };
 
-    handleEditDisplayOrder = (gindex) => {
+    handleEditDisplayOrder = gindex => {
         const displayOrders = [];
         const members = this.state.schedules[gindex].members,
             totalItems = members.length;
@@ -1334,7 +1333,7 @@ export default class App extends Component {
                     'Content-Type': 'application/x-www-form-urlencoded',
                 },
             })
-                .then((response) => {
+                .then(response => {
                     const data = response.data;
                     if (!data.isSuccessful) {
                         toast.error(data.message);
@@ -1344,7 +1343,7 @@ export default class App extends Component {
         }
     };
 
-    handleDragEnd = (result) => {
+    handleDragEnd = result => {
         if (
             !result.destination ||
             result.source.index === result.destination.index
@@ -1366,7 +1365,7 @@ export default class App extends Component {
             this.setState({ schedules }, () => this.handleEditTeamOrder());
         } else if (resultType.includes('droppableMember')) {
             const teamId = parseInt(resultType.split('-')[1], 10),
-                index = schedules.findIndex((x) => x.teamId === teamId);
+                index = schedules.findIndex(x =>x.teamId === teamId);
             this.originalSchedules[index].members = reorder(
                 this.originalSchedules[index].members,
                 sourceIndex,
@@ -1385,7 +1384,7 @@ export default class App extends Component {
 
     handleChangeTeamOrder = (key, teamId) => {
         let schedules = [...this.state.schedules];
-        const sourceIndex = schedules.findIndex((x) => x.teamId === teamId),
+        const sourceIndex = schedules.findIndex(x =>x.teamId === teamId),
             totalItems = schedules.length;
         let destinationIndex = 0;
 
@@ -1420,10 +1419,10 @@ export default class App extends Component {
 
     handleChangeOrder = (key, teamId, employeeId) => {
         const schedules = [...this.state.schedules];
-        const index = schedules.findIndex((x) => x.teamId === teamId),
+        const index = schedules.findIndex(x =>x.teamId === teamId),
             totalItems = schedules[index].members.length,
-            sourceIndex = schedules[index].members.findIndex(
-                (schedule) => schedule.employeeId === employeeId
+            sourceIndex = schedules[index].members.findIndex
+                (schedule =>schedule.employeeId === employeeId
             );
         let destinationIndex = 0;
 
@@ -1462,17 +1461,17 @@ export default class App extends Component {
 
     handleSelectEmployeeOfTeam = (teamId, employeeId, isSelected) => {
         const schedules = [...this.state.schedules];
-        const gindex = schedules.findIndex((item) => item.teamId === teamId);
+        const gindex = schedules.findIndex(item =>item.teamId === teamId);
         const members = [...schedules[gindex].members];
 
         if (employeeId !== null) {
-            const eindex = members.findIndex(
-                (item) => item.employeeId === employeeId
+            const eindex = members.findIndex
+                (item =>item.employeeId === employeeId
             );
             members[eindex] = { ...members[eindex], isSelected };
             schedules[gindex] = {
                 ...schedules[gindex],
-                isSelected: members.findIndex((item) => !item.isSelected) < 0,
+                isSelected: members.findIndex(item =>!item.isSelected) < 0,
             };
         } else {
             schedules[gindex] = { ...schedules[gindex], isSelected };
@@ -1536,7 +1535,7 @@ export default class App extends Component {
                 'Content-Type': 'application/x-www-form-urlencoded',
             },
         })
-            .then((response) => {
+            .then(response => {
                 const data = response.data;
                 if (data.isSuccessful) {
                     toast.success('Synced successfully!');
@@ -1552,7 +1551,7 @@ export default class App extends Component {
                 }
             })
             .catch(axiosError)
-            .then(() => unblockUI());
+            .then( =>unblockUI());
     };
 
     render() {
@@ -1567,7 +1566,7 @@ export default class App extends Component {
             showConfirmSyncDataModalDialog,
         } = this.state;
 
-        return (
+        return 
             <Fragment>
                 <ToastLayout />
                 <Search
@@ -1622,7 +1621,7 @@ export default class App extends Component {
                         show={showShiftMultipleModal}
                         onHide={this.handleCloseShiftMultipleModal}
                         shiftOptions={this.shiftOptions.filter(
-                            (shift) => shift.id !== OffDayShiftId
+                            (shift =>shift.id !== OffDayShiftId
                         )}
                         onSubmit={this.handleChangeMultipleShift}
                     />
@@ -1674,3 +1673,4 @@ export default class App extends Component {
 }
 
 ReactDOM.render(<App />, document.getElementById('schedule-wrapper'));
+

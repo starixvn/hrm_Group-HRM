@@ -9,7 +9,7 @@ export default class Row extends PureComponent {
     this.props.onRemoveEmployee(ownerId);
   };
 
-  handleChangePermissionOnRequest = (event) => {
+  handleChangePermissionOnRequest = event => {
     const { ownerId } = this.props.data;
     this.props.onChangePermissionOnRequest(
       ownerId,
@@ -20,14 +20,14 @@ export default class Row extends PureComponent {
   render() {
     const { data, companyId } = this.props;
     const isSameCompany = companyId == data.companyId;
-    return (
+    return 
       <tr>
         <td className="align-left cell-name">
           <div className="wrapper">
             <div>{data.nickName}</div>
             <DropdownOrder
               id={`dropdown${data.ownerId}`}
-              onMoveUp={() => moveUp(this)}
+              onMoveUp={( =>moveUp(this)}
               onMoveDown={() => moveDown(this)}
               onMoveTop={() => moveTop(this)}
               onMoveBottom={() => moveBottom(this)}
@@ -125,3 +125,4 @@ export default class Row extends PureComponent {
     );
   }
 }
+

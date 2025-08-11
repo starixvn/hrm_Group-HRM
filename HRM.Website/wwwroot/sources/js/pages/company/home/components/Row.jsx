@@ -6,9 +6,9 @@ const Row = ({ rowIndex, item }) => {
         window.location = resolveClientUrl(`company/edit?Id=${item.companyId}`);
     };
 
-    const isBooleanString = val => val && ['true', 'false'].includes(val.toLowerCase());
+    const isBooleanString = val =>val && ["true", "false"].includes(val.toLowerCase());
 
-    const isTrue = val => val && val.toLowerCase() === 'true';
+    const isTrue = val =>val && val.toLowerCase() === "true";
 
     return (
         <tr id={`row_${item.companyId}`}>

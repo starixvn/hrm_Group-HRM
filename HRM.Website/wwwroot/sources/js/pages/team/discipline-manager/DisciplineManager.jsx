@@ -43,10 +43,10 @@ export default class DisciplineManager extends Component {
         this.getDisciplineManagers();
     }
 
-    getEmployees = (query) => {
+    getEmployees = query => {
         if (query.trim().length > 1) {
             const excludeIds = this.state.managers
-                .map((item) => item.ownerId)
+                .map(item =>item.ownerId)
                 .join(',');
 
             let apiCall;
@@ -58,8 +58,8 @@ export default class DisciplineManager extends Component {
             }
             
             apiCall
-                .then((response) => {
-                    const employeeOptions = response.data.map((item) => {
+                .then(response => {
+                    const employeeOptions = response.data.map(item => {
                     var id = isGroupTeam ? item.empId : item.id;
                         return {
                             key: id,
@@ -102,14 +102,14 @@ export default class DisciplineManager extends Component {
             headers: { 'X-Requested-With': 'XMLHttpRequest' },
             params: params,
         })
-            .then((response) => {
+            .then(response => {
                 this.setState({ managers: response.data });
             })
             .catch(axiosError)
-            .then(() => unblockUI());
+            .then( =>unblockUI());
     };
 
-    handleAddEmployee = (employee) => {
+    handleAddEmployee = employee => {
         const managers = [
             ...this.state.managers,
             {
@@ -121,9 +121,9 @@ export default class DisciplineManager extends Component {
         this.setState({ managers, employeeOptions: [] });
     };
 
-    handleRemoveEmployee = (employeeId) => {
+    handleRemoveEmployee = employeeId => {
         const managers = [...this.state.managers],
-            index = managers.findIndex((item) => item.ownerId === employeeId);
+            index = managers.findIndex(item =>item.ownerId === employeeId);
         managers.splice(index, 1);
         this.setState({ managers });
     };
@@ -214,3 +214,4 @@ export default class DisciplineManager extends Component {
         }
     };
 }
+

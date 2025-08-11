@@ -57,13 +57,13 @@ const AppContainer = () => {
         history.back();
     };
 
-    useEffect(() => {
+    useEffect( => {
         axios({
             url: resolveClientUrl(`GroupEmployeeList/GetCompanyDropdownList`),
             method: "GET",
             headers: { "X-Requested-With": "XMLHttpRequest" },
         })
-            .then((response) => {
+            .then(response => {
                 setCompanies(response.data);
             })
             .catch(axiosError);
@@ -95,7 +95,7 @@ const AppContainer = () => {
                     headers: { "X-Requested-With": "XMLHttpRequest" },
                 }
             )
-            .then((response) => {
+            .then(response => {
                 const { data } = response;
                 if (data.isSuccessful) {
                     toastr.success("Created successfully!", "", toastOptions());
@@ -112,7 +112,7 @@ const AppContainer = () => {
     };
 
     const renderForm = ({ errors, isSubmitting }) => {
-        return (
+        return 
             <div className="card">
                 <Errors errors={errors} />
                 <Form className="form-horizontal">
@@ -125,7 +125,7 @@ const AppContainer = () => {
                         </div>
                         <div className="select-form">
                             <Field type="text" name="employee" className="form-control">
-                                {({ field }) => (
+                                {({ field } =>(
                                     <EmployeeAutocomplete
                                         options={employees}
                                         onChange={getEmployees}
@@ -149,7 +149,7 @@ const AppContainer = () => {
                                 className="form-control">
                                 <option value="" />
                                 {companies
-                                    ? companies.map((company) => (
+                                    ? companies.map(company =>(
                                           <option key={company.id} value={company.id}>
                                               {company.text}
                                           </option>
@@ -191,3 +191,4 @@ const AppContainer = () => {
 };
 
 export default AppContainer;
+

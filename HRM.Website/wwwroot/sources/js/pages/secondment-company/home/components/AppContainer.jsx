@@ -17,23 +17,23 @@ const AppContainer = () => {
     const [filterParams, setFilterParams] = useState({ isActive: true });
     const [deleteModalDialog, setDeleteModalDialog] = useState({ show: false });
 
-    const getSecondmentCompanyList = (params) => {
+    const getSecondmentCompanyList = params => {
         setFilterParams(params);
         axios
             .post(resolveClientUrl("SecondmentCompany/GetSecondmentCompanyList"), params, {
                 headers: { "X-Requested-With": "XMLHttpRequest" },
             })
-            .then((response) => {
+            .then(response => {
                 setSecondmentCompanies(response.data);
             })
             .catch(axiosError);
     };
 
-    useEffect(() => {
+    useEffect( => {
         getSecondmentCompanyList(filterParams);
     }, []);
 
-    const handleDelete = (secondmentCompany) => {
+    const handleDelete = secondmentCompany => {
         setDeleteModalDialog({
             show: true,
             secondmentCompany,
@@ -52,7 +52,7 @@ const AppContainer = () => {
                     headers: { "X-Requested-With": "XMLHttpRequest" },
                 }
             )
-            .then((response) => {
+            .then(response => {
                 const { data } = response;
                 if (data.isSuccessful) {
                     toastr.success("Deleted successfully!", "", toastOptions());
@@ -91,3 +91,4 @@ const AppContainer = () => {
 };
 
 export default AppContainer;
+
