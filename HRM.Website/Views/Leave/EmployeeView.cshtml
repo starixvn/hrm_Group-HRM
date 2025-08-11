@@ -90,14 +90,9 @@
                     </td>
                     <td>@request.FromDate.ToDateMonthYearFormatedDate()</td>
                     <td>
-                        @if (request.TotalDays - Constants.HalfDayOffValue == 0)
-                        {
-                            @request.FromDate.ToDateMonthYearFormatedDate()
-                        }
-                        else
-                        {
-                            @request.ToDate.ToDateMonthYearFormatedDate()
-                        }
+                        @(request.TotalDays - Constants.HalfDayOffValue == 0
+                            ? request.FromDate.ToDateMonthYearFormatedDate()
+                            : request.ToDate.ToDateMonthYearFormatedDate())
                     </td>
                     <td>
                         @{ var totaldays = string.Empty; }

@@ -57,16 +57,13 @@
                 @Html.LabelFor(model => model.Employee, new { @class = "control-label" })
             </div>
             <div class="input-form">
-                @if (hasPermission)
-                {
-                    @Html.TextBox("Employee", Model.Employee,
-                        new { placeholder = Messages.SearchEmployeeWatermark, @class = "form-control" })
-                }
-                else
-                {
-                    @Html.TextBox("Employee", Model.Employee,
-                        new { placeholder = Messages.SearchEmployeeWatermark, @class = "form-control", disabled = "disabled" })
-                }
+                @Html.TextBox(
+                         "Employee",
+                         Model.Employee,
+                         hasPermission
+                         ? new { placeholder = Messages.SearchEmployeeWatermark, @class = "form-control" }
+                         : new { placeholder = Messages.SearchEmployeeWatermark, @class = "form-control", disabled = "disabled" }
+                         )
                 @Html.HiddenFor(model => model.EmployeeId)
             </div>
         </div>
@@ -85,14 +82,13 @@
                         new() {Text = "Local", Value = "1"}
                     };
                 }
-                @if (hasPermission)
-                {
-                    @Html.DropDownListFor(model => model.IsLocal, category, new { @class = "category form-control" })
-                }
-                else
-                {
-                    @Html.DropDownListFor(model => model.IsLocal, category, new { @class = "category form-control", disabled = "disabled" })
-                }
+                @Html.DropDownListFor(
+                         model => model.IsLocal,
+                         category,
+                         hasPermission
+                         ? new { @class = "category form-control" }
+                         : new { @class = "category form-control", disabled = "disabled" }
+                         )
             </div>
         </div>
         <div class="form-group form-group--m">

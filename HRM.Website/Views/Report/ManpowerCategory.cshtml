@@ -118,58 +118,33 @@
             <td class="align-right">@Model.Manpowers.Sum(t => t.Total)</td>
             <td class="align-right">@management</td>
             <td class="align-right">
-                @if (total != 0)
-                {
-                    @((management * 100.00 / total).ToString("0.0") + "%")
-                }
-                else
-                {
-                    @("0.0%")
-                }
+                @(total != 0
+                    ? (management * 100.00 / total).ToString("0.0") + "%"
+                    : "0.0%")
             </td>
             <td class="align-right">@executiveWithPosition</td>
             <td class="align-right">
-                @if (total != 0)
-                {
-                    @((executiveWithPosition * 100.00 / total).ToString("0.0") + "%")
-                }
-                else
-                {
-                    @("0.0%")
-                }
+                @(total != 0
+                    ? (executiveWithPosition * 100.00 / total).ToString("0.0") + "%"
+                    : "0.0%")
             </td>
             <td class="align-right">@executive</td>
             <td class="align-right">
-                @if (total != 0)
-                {
-                    @((executive * 100.00 / total).ToString("0.0") + "%")
-                }
-                else
-                {
-                    @("0.0%")
-                }
+                @(total != 0
+                    ? (executive * 100.00 / total).ToString("0.0") + "%"
+                    : "0.0%")
             </td>
             <td class="align-right">@staff</td>
             <td class="align-right">
-                @if (total != 0)
-                {
-                    @((staff * 100.00 / total).ToString("0.0") + "%")
-                }
-                else
-                {
-                    @("0.0%")
-                }
+                @(total != 0
+                    ? (staff * 100.00 / total).ToString("0.0") + "%"
+                    : "0.0%")
             </td>
             <td class="align-right">@worker</td>
             <td class="align-right">
-                @if (total != 0)
-                {
-                    @((worker * 100.00 / total).ToString("0.0") + "%")
-                }
-                else
-                {
-                    @("0.0%")
-                }
+                @(total != 0
+                    ? (worker * 100.00 / total).ToString("0.0") + "%"
+                    : "0.0%")
             </td>
         </tr>
     </tfoot>

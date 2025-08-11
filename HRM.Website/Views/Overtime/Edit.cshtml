@@ -31,11 +31,11 @@
                 </div>
                 <div class="select-form">
                     @Html.DropDownListFor(
-                        x => x.VerifierId,
-                        new SelectList(Model.Verifiers, "OwnerId", "NickName"),
-                        Model.Verifiers.Count() > 1 || Model.AutoApproveRequest ? Labels.SelectVerifier : null,
-                        new { @class = "form-control" }
-                    )
+                             x => x.VerifierId,
+                             new SelectList(Model.Verifiers, "OwnerId", "NickName"),
+                             Model.Verifiers.Count() > 1 || Model.AutoApproveRequest ? Labels.SelectVerifier : null,
+                             new { @class = "form-control" }
+                             )
                 </div>
             </div>
             <div class="form-group form-group--m">
@@ -44,11 +44,11 @@
                 </div>
                 <div class="select-form">
                     @Html.DropDownListFor(
-                        x => x.ApproverId,
-                        new SelectList(Model.Approvers, "OwnerId", "NickName"),
-                        Model.Approvers.Count() > 1 || Model.AutoApproveRequest ? Labels.SelectApprover : null,
-                        new { @class = "form-control" }
-                    )
+                             x => x.ApproverId,
+                             new SelectList(Model.Approvers, "OwnerId", "NickName"),
+                             Model.Approvers.Count() > 1 || Model.AutoApproveRequest ? Labels.SelectApprover : null,
+                             new { @class = "form-control" }
+                             )
                 </div>
             </div>
             <div class="form-group form-group--m">

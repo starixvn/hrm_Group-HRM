@@ -84,14 +84,12 @@
                     }
                 }
                 <td>
-                    @if (isHost)
-                    {
-                        @Html.TextBoxFor(model => item.Remark, new { @class = "form-control remark" })
-                    }
-                    else
-                    {
-                        @Html.TextBoxFor(model => item.Remark, new { @class = "form-control remark", disabled = "disabled" })
-                    }
+                    @Html.TextBoxFor(
+                             model => item.Remark,
+                             isHost
+                             ? new { @class = "form-control remark" }
+                             : new { @class = "form-control remark", disabled = "disabled" }
+                             )
                 </td>
             </tr>
         }

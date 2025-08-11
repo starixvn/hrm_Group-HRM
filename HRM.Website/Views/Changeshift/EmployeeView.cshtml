@@ -71,14 +71,9 @@
                 <td>@(index++)</td>
                 <td><a href="@Url.Action("details", "changeshift", new { id = request.RequestId })">@request.RequestId</a></td>
                     <td>
-                        @if (request.TypeId == (byte)ChangeShiftType.ChangeShift)
-                        {
-                            @Labels.ChangeShift
-                        }
-                        else
-                        {
-                            @Labels.MoveOffDayToAnotherWeek
-                        }
+                        @(request.TypeId == (byte)ChangeShiftType.ChangeShift
+                            ? Labels.ChangeShift
+                            : Labels.MoveOffDayToAnotherWeek)
                     </td>
                 <td>@request.FromDate.ToDateMonthYearFormatedDate()</td>
                 <td>@request.ToDate.ToDateMonthYearFormatedDate()</td>
