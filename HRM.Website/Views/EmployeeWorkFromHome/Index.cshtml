@@ -29,7 +29,7 @@
                     @Html.LabelFor(model => model.FromDateFilter, Labels.FromDate, new { @class = "control-label" })
                 </div>
                 <div class="calendar-form">
-                    @Html.TextBox(Html.NameFor(model => model.FromDateFilter).ToString(),
+                    @Html.TextBox(Html.NameFor(model => model.FromDateFilter),
                         Model.FromDateFilter.ToDateMonthYearFormatedDate(),
                         new
                              {
@@ -45,7 +45,7 @@
                     @Html.LabelFor(model => model.ToDateFilter, Labels.ToDate, new { @class = "control-label" })
                 </div>
                 <div class="calendar-form">
-                    @Html.TextBox(Html.NameFor(model => model.ToDateFilter).ToString(),
+                    @Html.TextBox(Html.NameFor(model => model.ToDateFilter),
                         Model.ToDateFilter.ToDateMonthYearFormatedDate(),
                         new
                              {

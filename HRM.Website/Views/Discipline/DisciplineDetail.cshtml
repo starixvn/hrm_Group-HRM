@@ -42,7 +42,7 @@
                 @Html.LabelFor(model => model.FromDate, Labels.FromDate, new { @class = "control-label" })
             </div>
             <div class="calendar-form">
-                @Html.TextBox(Html.NameFor(model => model.FromDate).ToString(),
+                @Html.TextBox(Html.NameFor(model => model.FromDate),
                     Model.FromDate.ToDateMonthYearFormatedDate(),
                     new {
                         @class = "datepicker form-control",
@@ -57,7 +57,7 @@
                 @Html.LabelFor(model => model.ToDate, Labels.ToDate, new { @class = "control-label" })
             </div>
             <div class="calendar-form">
-                @Html.TextBox(Html.NameFor(model => model.ToDate).ToString(),
+                @Html.TextBox(Html.NameFor(model => model.ToDate),
                     Model.ToDate.ToDateMonthYearFormatedDate(),
                     new {
                         @class = "datepicker form-control",

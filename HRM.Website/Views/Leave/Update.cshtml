@@ -190,7 +190,7 @@
                 @Html.LabelFor(model => model.TotalDays, Labels.TotalDays, new { @class = "control-label" })
             </div>
             <div class="input-form">
-                @Html.TextBox(Html.NameFor(model => model.TotalDays).ToString(), Model.TotalDays.ToString("0.#"),
+                @Html.TextBox(Html.NameFor(model => model.TotalDays), Model.TotalDays.ToString("0.#"),
                     new { @class = "form-control totaldays", autocomplete = "off", @readonly = "readonly" })
             </div>
         </div>

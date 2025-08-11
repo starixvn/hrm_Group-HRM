@@ -28,7 +28,7 @@
                 @Html.LabelFor(model => model.FromDate, Labels.FromDate, new { @class = "control-label" })
             </div>
             <div class="calendar-form">
-                @Html.TextBox(Html.NameFor(model => model.FromDate).ToString(), Model.FromDate.ToString("dd MMM, yyyy"), new { @class = "datepicker form-control", mindate = new DateTime(2010, 1, 1).ToString("yyyy/MM/dd"), maxdate = "null", disabledDate = "" })
+                @Html.TextBox(Html.NameFor(model => model.FromDate), Model.FromDate.ToString("dd MMM, yyyy"), new { @class = "datepicker form-control", mindate = new DateTime(2010, 1, 1).ToString("yyyy/MM/dd"), maxdate = "null", disabledDate = "" })
                 <i class="icon-calendar fa fa-calendar"></i>
             </div>
         </div>
@@ -37,7 +37,7 @@
                 @Html.LabelFor(model => model.ToDate,  Labels.ToDate, new { @class = "control-label" })
             </div>
             <div class="calendar-form">
-                @Html.TextBox(Html.NameFor(model => model.ToDate).ToString(), Model.ToDate.ToString("dd MMM, yyyy"), new { @class = "datepicker form-control", mindate = new DateTime(2010, 1, 1).ToString("yyyy/MM/dd"), maxdate = "null", disabledDate = "" })
+                @Html.TextBox(Html.NameFor(model => model.ToDate), Model.ToDate.ToString("dd MMM, yyyy"), new { @class = "datepicker form-control", mindate = new DateTime(2010, 1, 1).ToString("yyyy/MM/dd"), maxdate = "null", disabledDate = "" })
                 <i class="icon-calendar fa fa-calendar"></i>
             </div>
         </div>

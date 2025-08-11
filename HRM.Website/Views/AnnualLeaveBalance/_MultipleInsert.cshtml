@@ -35,7 +35,7 @@
                     var minDate = new DateTimeOffset(2010, 1, 1, 0, 0, 0, TimeSpan.Zero).DateTime;
                 }
                 @Html.TextBox(Html.NameFor(model => model.AffectedFrom), Model.AffectedFrom.ToDateMonthYearFormatedDate(),
-                    new { @class = "datepicker form-control", mindate = minDate })
+                    new { @class = "datepicker form-control", mindate = minDate.ToString("yyyy/MM/dd") })
                 <i class="icon-calendar fa fa-calendar"></i>
             </div>
         </div>
