@@ -103,12 +103,12 @@
     <tfoot>
         <tr class="summary">
             @{
-                int total = Model.Manpowers.Sum(t => t.Total),
-                    management = Model.Manpowers.Sum(t => t.Management),
-                    executiveWithPosition = Model.Manpowers.Sum(t => t.ExecutiveWithPosition),
-                    executive = Model.Manpowers.Sum(t => t.Executive),
-                    staff = Model.Manpowers.Sum(t => t.Staff),
-                    worker = Model.Manpowers.Sum(t => t.Worker);
+                int total = Model.Manpowers.Sum(t => t.Total);
+                int management = Model.Manpowers.Sum(t => t.Management);
+                int executiveWithPosition = Model.Manpowers.Sum(t => t.ExecutiveWithPosition);
+                int executive = Model.Manpowers.Sum(t => t.Executive);
+                int staff = Model.Manpowers.Sum(t => t.Staff);
+                int worker = Model.Manpowers.Sum(t => t.Worker);
             }
             <td colspan="3" class="align-right">
                 @Labels.Total
