@@ -32,9 +32,9 @@
         @Html.HiddenFor(model => model.EmployeeId)
         @Html.Hidden("InTime", shift != null ? shift.BeginCheckInTime : string.Empty)
         @Html.Hidden("OutTime", shift != null ? shift.BeginCheckOutTime : string.Empty)
-        @Html.Hidden("CrossDay", shift != null ? shift.CrossDay.ToString().ToLower() : string.Empty)
-        @Html.Hidden("IsInAfterDay", shift != null ? shift.IsInAfterDay.ToString().ToLower() : string.Empty)
-        @Html.Hidden("IsOutAfterDay", shift != null ? shift.IsOutAfterDay.ToString().ToLower() : string.Empty)
+        @Html.Hidden("CrossDay", shift != null ? shift.CrossDay.ToString().ToLower(System.Globalization.CultureInfo.InvariantCulture) : string.Empty)
+        @Html.Hidden("IsInAfterDay", shift != null ? shift.IsInAfterDay.ToString().ToLower(System.Globalization.CultureInfo.InvariantCulture) : string.Empty)
+        @Html.Hidden("IsOutAfterDay", shift != null ? shift.IsOutAfterDay.ToString().ToLower(System.Globalization.CultureInfo.InvariantCulture) : string.Empty)
 
         <div class="form-group">
             <div class="label-form">
@@ -83,8 +83,8 @@
                     new {
                         @class = "datepicker form-control",
                         @readonly = "readonly",
-                        mindate = today.FirstDayOfMonth().AddMonths(-6).ToString("yyyy/MM/dd"),
-                        maxdate = today.ToString("yyyy/MM/dd")
+                        mindate = today.FirstDayOfMonth().AddMonths(-6).ToString("yyyy/MM/dd", System.Globalization.CultureInfo.InvariantCulture),
+                        maxdate = today.ToString("yyyy/MM/dd", System.Globalization.CultureInfo.InvariantCulture)
                     })
                 <i class="icon-calendar fa fa-calendar"></i>
             </div>
@@ -96,8 +96,8 @@
                     new {
                         @class = "datepicker form-control",
                         @readonly = "readonly",
-                        mindate = today.FirstDayOfMonth().AddMonths(-6).ToString("yyyy/MM/dd"),
-                        maxdate = today.ToString("yyyy/MM/dd")
+                        mindate = today.FirstDayOfMonth().AddMonths(-6).ToString("yyyy/MM/dd", System.Globalization.CultureInfo.InvariantCulture),
+                        maxdate = today.ToString("yyyy/MM/dd", System.Globalization.CultureInfo.InvariantCulture)
                     })
                 <i class="icon-calendar fa fa-calendar"></i>
             </div>
