@@ -10,7 +10,7 @@ namespace HRM.Services.Implement;
 
 public class PayrollService(IBaseService baseService) : IPayrollService
 {
-    public async Task<IEnumerable<EmployeePayroll>> GetEmployeePayrollAsync(GetEmployeePayrollCriteria criteria)
+    public async Task<IEnumerable<EmployeePayroll>> GetUploadEmployeePayrollAsync(GetEmployeePayrollCriteria criteria)
     {
         return await baseService.GetDataAsync<EmployeePayroll>(criteria);
     }

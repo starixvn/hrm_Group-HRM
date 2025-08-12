@@ -27,6 +27,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace HRM.Controllers.GroupSpace;
 
+#pragma warning disable S107 // Methods should not have too many parameters
 public class GroupEmployeeListController(
     IUserControlSession session,
     ITeamService teamService,
@@ -38,6 +39,7 @@ public class GroupEmployeeListController(
     IBaseService baseService,
     IEmployeeService employeeService,
     ISecondCompanyEmployeeService secondCompanyEmployeeService ) : BaseController(session)
+#pragma warning restore S107 // Methods should not have too many parameters
 {
     [HrmPermission(Policy.Read, FunctionKey.GroupEmployeeList)]
     public async Task<IActionResult> Index(string teamIds = null)

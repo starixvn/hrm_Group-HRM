@@ -1,3 +1,6 @@
+using System.Net.Http;
+using System.Net.Security;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 using Fanex.Data.SqlServer;
 using Fanex.Logging.Sentry.RavenClient;
@@ -27,6 +30,11 @@ services.AddControllersWithViews()
 
 services.AddHttpContextAccessor();
 services.AddHttpClient();
+services.AddHttpClient("insecure-client")
+    .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
+    {
+        ServerCertificateCustomValidationCallback = ServerCertificateCustomValidationCallback
+    });
 services.AddFanexLogSentry(configuration);
 services.AddFanexSql(configuration);
 services.AddCookieAuthentication(configuration);
@@ -69,3 +77,7 @@ app.MapControllerRoute(
 ThreadPool.SetMinThreads(100, 100);
 
 await app.RunAsync();
+return;
+
+bool ServerCertificateCustomValidationCallback(HttpRequestMessage message, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
+    => true;

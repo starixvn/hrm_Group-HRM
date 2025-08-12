@@ -1,9 +1,9 @@
-import React, { useState } from "react";
-import { Modal, ModalBody, ModalHeader, ModalTitle } from "react-bootstrap";
-import toastr from "toastr";
-import { toastOptions } from "../../../shared/common.functions";
-import { getPeriodTypeLabel } from "../constants/periodType";
-import salaryService from "../Service";
+import React, { useState } from 'react';
+import { Modal, ModalBody, ModalHeader, ModalTitle } from 'react-bootstrap';
+import toastr from 'toastr';
+import { toastOptions } from '../../../shared/common.functions';
+import { getPeriodTypeLabel } from '../constants/periodType';
+import salaryService from '../Service';
 
 const ViewUploadHistoryModal = () => {
     const [show, setShow] = useState(false);
@@ -21,8 +21,8 @@ const ViewUploadHistoryModal = () => {
             })
             .catch((_) => {
                 toastr.error(
-                    "Failed to fetch upload history",
-                    "",
+                    'Failed to fetch upload history',
+                    '',
                     toastOptions()
                 );
             });
@@ -35,7 +35,7 @@ const ViewUploadHistoryModal = () => {
                 fileName
             );
         } catch (error) {
-            toastr.error("Failed to download file", "", toastOptions());
+            toastr.error('Failed to download file', '', toastOptions());
         }
     };
 

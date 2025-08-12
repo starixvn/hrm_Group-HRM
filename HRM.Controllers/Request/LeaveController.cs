@@ -25,6 +25,7 @@ using Resources;
 using Services.Implement;
 using Services.Interfaces;
 
+#pragma warning disable S107 // Methods should not have too many parameters
 public class LeaveController(
     ILogger logger,
     IUserControlSession session,
@@ -35,6 +36,7 @@ public class LeaveController(
     IAttachFileService attachFileService,
     IEmployeeService employeeService,
     ICompanyService companyService) : BaseController(session)
+#pragma warning restore S107 // Methods should not have too many parameters
 {
     [HttpGet]
     public async Task<IActionResult> EmployeeView(int? year)

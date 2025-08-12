@@ -1,9 +1,15 @@
-@import "../../abstracts/mixins";
-@import "../../abstracts/variables";
-@import "../../components/buttons-new";
-@import "../../layout/toastr";
-@import "../../layout/filter";
-@import "../../layout/table";
+@import '../../abstracts/mixins';
+@import '../../abstracts/variables';
+@import '../../components/buttons-new';
+@import '../../layout/toastr';
+@import '../../layout/filter';
+@import '../../layout/table';
+@import '../../vendors/react-datepicker';
+
+.flex-column {
+    display: flex;
+    justify-content: space-between;
+}
 
 .salary-management-container {
     .action-section {
@@ -63,7 +69,8 @@
     }
 }
 
-.upload-salary-modal {
+.upload-salary-modal,
+.confirm-modal {
     .modal-dialog {
         display: flex;
         align-items: center;
@@ -75,6 +82,35 @@
         width: 100%;
         max-width: 500px;
         margin: 0 auto;
+    }
+
+    .month-picker-container {
+        position: relative !important;
+        display: block !important;
+        width: 100% !important;
+
+        .react-datepicker-wrapper {
+            position: relative !important;
+            width: 100% !important;
+        }
+
+        .fa-calendar {
+            z-index: 10 !important;
+            position: absolute !important;
+            right: 12px !important;
+            top: 50% !important;
+            transform: translateY(-50%) !important;
+            color: #666 !important;
+            pointer-events: none !important;
+            font-size: 14px !important;
+        }
+
+        input {
+            padding-right: 35px !important;
+            width: 100% !important;
+            position: relative !important;
+            z-index: 1 !important;
+        }
     }
 }
 
@@ -158,7 +194,7 @@
             gap: 8px;
 
             &::before {
-                content: "";
+                content: '';
                 display: inline-block;
                 width: 24px;
                 height: 24px;

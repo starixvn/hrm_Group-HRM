@@ -23,6 +23,7 @@ using Fanex.Logging;
 
 namespace HRM.Services.Implement.Request;
 
+#pragma warning disable S107 // Methods should not have too many parameters
 public class LeaveRequestService(
     IWebHostEnvironment env,
     ILeaveRequestRepository leaveRequestRepository,
@@ -33,6 +34,7 @@ public class LeaveRequestService(
     ICompanyService companyService,
     ILogger logger,
     IUserControlSession userControlSession) : ILeaveRequestService
+#pragma warning restore S107 // Methods should not have too many parameters
 {
     private const string EmailTemplatePathForRequest = "EmailTemplates/Leave.Request.txt";
     private const string EmailTemplatePathForCancel = "EmailTemplates/Leave.Cancel.txt";

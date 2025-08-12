@@ -12,6 +12,7 @@ using HRM.Core.Repositories;
 using HRM.Core.Services;
 using HRM.Letstalk.Core.Services;
 using HRM.Letstalk.Core.Services.Interfaces;
+using HRM.Services.Implement.PayrollManagement;
 using HRM.Services.Implement.Report.Headcount;
 using HRM.Services.Interfaces.Report.Headcount;
 using MailDeliver;
@@ -122,6 +123,7 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IBaseMailService, BaseMailService>();
         services.AddSingleton<IHttpClientService, HttpClientService>();
 
+        services.AddSingleton<IAccessCounterService, AccessCounterService>();
         services.AddSingleton<IHRMAuthService, HRMAuthService>();
         services.AddSingleton<IEmailService, EmailService>();
         services.AddSingleton<IMessageService, MessageService>();
@@ -166,7 +168,7 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IUploadPayrollService, UploadPayrollService>();
         services.AddSingleton<IPayrollService, PayrollService>();
         services.AddSingleton<ISecondCompanyEmployeeService, SecondCompanyEmployeeService>();
-        services.AddHttpClient();
+        services.AddSingleton<IPayrollManagementService, SMSPayrollManagementService>();
         services.AddDIReportServices();
         services.AddDIExcelServices();
         services.AddSyncFnBService();

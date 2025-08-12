@@ -2083,6 +2083,26 @@ $export($export.S, 'Object', {
 
 /***/ }),
 
+/***/ "./node_modules/@babel/runtime/helpers/defineProperty.js":
+/*!***************************************************************!*\
+  !*** ./node_modules/@babel/runtime/helpers/defineProperty.js ***!
+  \***************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var toPropertyKey = __webpack_require__(/*! ./toPropertyKey.js */ "./node_modules/@babel/runtime/helpers/toPropertyKey.js");
+function _defineProperty(e, r, t) {
+  return (r = toPropertyKey(r)) in e ? Object.defineProperty(e, r, {
+    value: t,
+    enumerable: !0,
+    configurable: !0,
+    writable: !0
+  }) : e[r] = t, e;
+}
+module.exports = _defineProperty, module.exports.__esModule = true, module.exports["default"] = module.exports;
+
+/***/ }),
+
 /***/ "./node_modules/@babel/runtime/helpers/esm/assertThisInitialized.js":
 /*!**************************************************************************!*\
   !*** ./node_modules/@babel/runtime/helpers/esm/assertThisInitialized.js ***!
@@ -2350,6 +2370,65 @@ function _interopRequireDefault(e) {
   };
 }
 module.exports = _interopRequireDefault, module.exports.__esModule = true, module.exports["default"] = module.exports;
+
+/***/ }),
+
+/***/ "./node_modules/@babel/runtime/helpers/toPrimitive.js":
+/*!************************************************************!*\
+  !*** ./node_modules/@babel/runtime/helpers/toPrimitive.js ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var _typeof = __webpack_require__(/*! ./typeof.js */ "./node_modules/@babel/runtime/helpers/typeof.js")["default"];
+function toPrimitive(t, r) {
+  if ("object" != _typeof(t) || !t) return t;
+  var e = t[Symbol.toPrimitive];
+  if (void 0 !== e) {
+    var i = e.call(t, r || "default");
+    if ("object" != _typeof(i)) return i;
+    throw new TypeError("@@toPrimitive must return a primitive value.");
+  }
+  return ("string" === r ? String : Number)(t);
+}
+module.exports = toPrimitive, module.exports.__esModule = true, module.exports["default"] = module.exports;
+
+/***/ }),
+
+/***/ "./node_modules/@babel/runtime/helpers/toPropertyKey.js":
+/*!**************************************************************!*\
+  !*** ./node_modules/@babel/runtime/helpers/toPropertyKey.js ***!
+  \**************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+var _typeof = __webpack_require__(/*! ./typeof.js */ "./node_modules/@babel/runtime/helpers/typeof.js")["default"];
+var toPrimitive = __webpack_require__(/*! ./toPrimitive.js */ "./node_modules/@babel/runtime/helpers/toPrimitive.js");
+function toPropertyKey(t) {
+  var i = toPrimitive(t, "string");
+  return "symbol" == _typeof(i) ? i : i + "";
+}
+module.exports = toPropertyKey, module.exports.__esModule = true, module.exports["default"] = module.exports;
+
+/***/ }),
+
+/***/ "./node_modules/@babel/runtime/helpers/typeof.js":
+/*!*******************************************************!*\
+  !*** ./node_modules/@babel/runtime/helpers/typeof.js ***!
+  \*******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+function _typeof(o) {
+  "@babel/helpers - typeof";
+
+  return module.exports = _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) {
+    return typeof o;
+  } : function (o) {
+    return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o;
+  }, module.exports.__esModule = true, module.exports["default"] = module.exports, _typeof(o);
+}
+module.exports = _typeof, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
 /***/ }),
 
@@ -7086,524 +7165,6 @@ const asap = typeof queueMicrotask !== 'undefined' ?
 
 /***/ }),
 
-/***/ "./node_modules/babel-runtime/core-js/array/from.js":
-/*!**********************************************************!*\
-  !*** ./node_modules/babel-runtime/core-js/array/from.js ***!
-  \**********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = { "default": __webpack_require__(/*! core-js/library/fn/array/from */ "./node_modules/core-js/library/fn/array/from.js"), __esModule: true };
-
-/***/ }),
-
-/***/ "./node_modules/babel-runtime/core-js/get-iterator.js":
-/*!************************************************************!*\
-  !*** ./node_modules/babel-runtime/core-js/get-iterator.js ***!
-  \************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = { "default": __webpack_require__(/*! core-js/library/fn/get-iterator */ "./node_modules/core-js/library/fn/get-iterator.js"), __esModule: true };
-
-/***/ }),
-
-/***/ "./node_modules/babel-runtime/core-js/is-iterable.js":
-/*!***********************************************************!*\
-  !*** ./node_modules/babel-runtime/core-js/is-iterable.js ***!
-  \***********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = { "default": __webpack_require__(/*! core-js/library/fn/is-iterable */ "./node_modules/core-js/library/fn/is-iterable.js"), __esModule: true };
-
-/***/ }),
-
-/***/ "./node_modules/babel-runtime/core-js/object/assign.js":
-/*!*************************************************************!*\
-  !*** ./node_modules/babel-runtime/core-js/object/assign.js ***!
-  \*************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = { "default": __webpack_require__(/*! core-js/library/fn/object/assign */ "./node_modules/core-js/library/fn/object/assign.js"), __esModule: true };
-
-/***/ }),
-
-/***/ "./node_modules/babel-runtime/core-js/object/create.js":
-/*!*************************************************************!*\
-  !*** ./node_modules/babel-runtime/core-js/object/create.js ***!
-  \*************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = { "default": __webpack_require__(/*! core-js/library/fn/object/create */ "./node_modules/core-js/library/fn/object/create.js"), __esModule: true };
-
-/***/ }),
-
-/***/ "./node_modules/babel-runtime/core-js/object/define-property.js":
-/*!**********************************************************************!*\
-  !*** ./node_modules/babel-runtime/core-js/object/define-property.js ***!
-  \**********************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = { "default": __webpack_require__(/*! core-js/library/fn/object/define-property */ "./node_modules/core-js/library/fn/object/define-property.js"), __esModule: true };
-
-/***/ }),
-
-/***/ "./node_modules/babel-runtime/core-js/object/get-prototype-of.js":
-/*!***********************************************************************!*\
-  !*** ./node_modules/babel-runtime/core-js/object/get-prototype-of.js ***!
-  \***********************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = { "default": __webpack_require__(/*! core-js/library/fn/object/get-prototype-of */ "./node_modules/core-js/library/fn/object/get-prototype-of.js"), __esModule: true };
-
-/***/ }),
-
-/***/ "./node_modules/babel-runtime/core-js/object/keys.js":
-/*!***********************************************************!*\
-  !*** ./node_modules/babel-runtime/core-js/object/keys.js ***!
-  \***********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = { "default": __webpack_require__(/*! core-js/library/fn/object/keys */ "./node_modules/core-js/library/fn/object/keys.js"), __esModule: true };
-
-/***/ }),
-
-/***/ "./node_modules/babel-runtime/core-js/object/set-prototype-of.js":
-/*!***********************************************************************!*\
-  !*** ./node_modules/babel-runtime/core-js/object/set-prototype-of.js ***!
-  \***********************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = { "default": __webpack_require__(/*! core-js/library/fn/object/set-prototype-of */ "./node_modules/core-js/library/fn/object/set-prototype-of.js"), __esModule: true };
-
-/***/ }),
-
-/***/ "./node_modules/babel-runtime/core-js/promise.js":
-/*!*******************************************************!*\
-  !*** ./node_modules/babel-runtime/core-js/promise.js ***!
-  \*******************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = { "default": __webpack_require__(/*! core-js/library/fn/promise */ "./node_modules/core-js/library/fn/promise.js"), __esModule: true };
-
-/***/ }),
-
-/***/ "./node_modules/babel-runtime/core-js/symbol.js":
-/*!******************************************************!*\
-  !*** ./node_modules/babel-runtime/core-js/symbol.js ***!
-  \******************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = { "default": __webpack_require__(/*! core-js/library/fn/symbol */ "./node_modules/core-js/library/fn/symbol/index.js"), __esModule: true };
-
-/***/ }),
-
-/***/ "./node_modules/babel-runtime/core-js/symbol/iterator.js":
-/*!***************************************************************!*\
-  !*** ./node_modules/babel-runtime/core-js/symbol/iterator.js ***!
-  \***************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = { "default": __webpack_require__(/*! core-js/library/fn/symbol/iterator */ "./node_modules/core-js/library/fn/symbol/iterator.js"), __esModule: true };
-
-/***/ }),
-
-/***/ "./node_modules/babel-runtime/helpers/asyncToGenerator.js":
-/*!****************************************************************!*\
-  !*** ./node_modules/babel-runtime/helpers/asyncToGenerator.js ***!
-  \****************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-exports.__esModule = true;
-
-var _promise = __webpack_require__(/*! ../core-js/promise */ "./node_modules/babel-runtime/core-js/promise.js");
-
-var _promise2 = _interopRequireDefault(_promise);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = function (fn) {
-  return function () {
-    var gen = fn.apply(this, arguments);
-    return new _promise2.default(function (resolve, reject) {
-      function step(key, arg) {
-        try {
-          var info = gen[key](arg);
-          var value = info.value;
-        } catch (error) {
-          reject(error);
-          return;
-        }
-
-        if (info.done) {
-          resolve(value);
-        } else {
-          return _promise2.default.resolve(value).then(function (value) {
-            step("next", value);
-          }, function (err) {
-            step("throw", err);
-          });
-        }
-      }
-
-      return step("next");
-    });
-  };
-};
-
-/***/ }),
-
-/***/ "./node_modules/babel-runtime/helpers/classCallCheck.js":
-/*!**************************************************************!*\
-  !*** ./node_modules/babel-runtime/helpers/classCallCheck.js ***!
-  \**************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-exports.__esModule = true;
-
-exports.default = function (instance, Constructor) {
-  if (!(instance instanceof Constructor)) {
-    throw new TypeError("Cannot call a class as a function");
-  }
-};
-
-/***/ }),
-
-/***/ "./node_modules/babel-runtime/helpers/createClass.js":
-/*!***********************************************************!*\
-  !*** ./node_modules/babel-runtime/helpers/createClass.js ***!
-  \***********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-exports.__esModule = true;
-
-var _defineProperty = __webpack_require__(/*! ../core-js/object/define-property */ "./node_modules/babel-runtime/core-js/object/define-property.js");
-
-var _defineProperty2 = _interopRequireDefault(_defineProperty);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = function () {
-  function defineProperties(target, props) {
-    for (var i = 0; i < props.length; i++) {
-      var descriptor = props[i];
-      descriptor.enumerable = descriptor.enumerable || false;
-      descriptor.configurable = true;
-      if ("value" in descriptor) descriptor.writable = true;
-      (0, _defineProperty2.default)(target, descriptor.key, descriptor);
-    }
-  }
-
-  return function (Constructor, protoProps, staticProps) {
-    if (protoProps) defineProperties(Constructor.prototype, protoProps);
-    if (staticProps) defineProperties(Constructor, staticProps);
-    return Constructor;
-  };
-}();
-
-/***/ }),
-
-/***/ "./node_modules/babel-runtime/helpers/defineProperty.js":
-/*!**************************************************************!*\
-  !*** ./node_modules/babel-runtime/helpers/defineProperty.js ***!
-  \**************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-exports.__esModule = true;
-
-var _defineProperty = __webpack_require__(/*! ../core-js/object/define-property */ "./node_modules/babel-runtime/core-js/object/define-property.js");
-
-var _defineProperty2 = _interopRequireDefault(_defineProperty);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = function (obj, key, value) {
-  if (key in obj) {
-    (0, _defineProperty2.default)(obj, key, {
-      value: value,
-      enumerable: true,
-      configurable: true,
-      writable: true
-    });
-  } else {
-    obj[key] = value;
-  }
-
-  return obj;
-};
-
-/***/ }),
-
-/***/ "./node_modules/babel-runtime/helpers/extends.js":
-/*!*******************************************************!*\
-  !*** ./node_modules/babel-runtime/helpers/extends.js ***!
-  \*******************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-exports.__esModule = true;
-
-var _assign = __webpack_require__(/*! ../core-js/object/assign */ "./node_modules/babel-runtime/core-js/object/assign.js");
-
-var _assign2 = _interopRequireDefault(_assign);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = _assign2.default || function (target) {
-  for (var i = 1; i < arguments.length; i++) {
-    var source = arguments[i];
-
-    for (var key in source) {
-      if (Object.prototype.hasOwnProperty.call(source, key)) {
-        target[key] = source[key];
-      }
-    }
-  }
-
-  return target;
-};
-
-/***/ }),
-
-/***/ "./node_modules/babel-runtime/helpers/inherits.js":
-/*!********************************************************!*\
-  !*** ./node_modules/babel-runtime/helpers/inherits.js ***!
-  \********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-exports.__esModule = true;
-
-var _setPrototypeOf = __webpack_require__(/*! ../core-js/object/set-prototype-of */ "./node_modules/babel-runtime/core-js/object/set-prototype-of.js");
-
-var _setPrototypeOf2 = _interopRequireDefault(_setPrototypeOf);
-
-var _create = __webpack_require__(/*! ../core-js/object/create */ "./node_modules/babel-runtime/core-js/object/create.js");
-
-var _create2 = _interopRequireDefault(_create);
-
-var _typeof2 = __webpack_require__(/*! ../helpers/typeof */ "./node_modules/babel-runtime/helpers/typeof.js");
-
-var _typeof3 = _interopRequireDefault(_typeof2);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = function (subClass, superClass) {
-  if (typeof superClass !== "function" && superClass !== null) {
-    throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : (0, _typeof3.default)(superClass)));
-  }
-
-  subClass.prototype = (0, _create2.default)(superClass && superClass.prototype, {
-    constructor: {
-      value: subClass,
-      enumerable: false,
-      writable: true,
-      configurable: true
-    }
-  });
-  if (superClass) _setPrototypeOf2.default ? (0, _setPrototypeOf2.default)(subClass, superClass) : subClass.__proto__ = superClass;
-};
-
-/***/ }),
-
-/***/ "./node_modules/babel-runtime/helpers/possibleConstructorReturn.js":
-/*!*************************************************************************!*\
-  !*** ./node_modules/babel-runtime/helpers/possibleConstructorReturn.js ***!
-  \*************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-exports.__esModule = true;
-
-var _typeof2 = __webpack_require__(/*! ../helpers/typeof */ "./node_modules/babel-runtime/helpers/typeof.js");
-
-var _typeof3 = _interopRequireDefault(_typeof2);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = function (self, call) {
-  if (!self) {
-    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-  }
-
-  return call && ((typeof call === "undefined" ? "undefined" : (0, _typeof3.default)(call)) === "object" || typeof call === "function") ? call : self;
-};
-
-/***/ }),
-
-/***/ "./node_modules/babel-runtime/helpers/slicedToArray.js":
-/*!*************************************************************!*\
-  !*** ./node_modules/babel-runtime/helpers/slicedToArray.js ***!
-  \*************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-exports.__esModule = true;
-
-var _isIterable2 = __webpack_require__(/*! ../core-js/is-iterable */ "./node_modules/babel-runtime/core-js/is-iterable.js");
-
-var _isIterable3 = _interopRequireDefault(_isIterable2);
-
-var _getIterator2 = __webpack_require__(/*! ../core-js/get-iterator */ "./node_modules/babel-runtime/core-js/get-iterator.js");
-
-var _getIterator3 = _interopRequireDefault(_getIterator2);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = function () {
-  function sliceIterator(arr, i) {
-    var _arr = [];
-    var _n = true;
-    var _d = false;
-    var _e = undefined;
-
-    try {
-      for (var _i = (0, _getIterator3.default)(arr), _s; !(_n = (_s = _i.next()).done); _n = true) {
-        _arr.push(_s.value);
-
-        if (i && _arr.length === i) break;
-      }
-    } catch (err) {
-      _d = true;
-      _e = err;
-    } finally {
-      try {
-        if (!_n && _i["return"]) _i["return"]();
-      } finally {
-        if (_d) throw _e;
-      }
-    }
-
-    return _arr;
-  }
-
-  return function (arr, i) {
-    if (Array.isArray(arr)) {
-      return arr;
-    } else if ((0, _isIterable3.default)(Object(arr))) {
-      return sliceIterator(arr, i);
-    } else {
-      throw new TypeError("Invalid attempt to destructure non-iterable instance");
-    }
-  };
-}();
-
-/***/ }),
-
-/***/ "./node_modules/babel-runtime/helpers/toConsumableArray.js":
-/*!*****************************************************************!*\
-  !*** ./node_modules/babel-runtime/helpers/toConsumableArray.js ***!
-  \*****************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-exports.__esModule = true;
-
-var _from = __webpack_require__(/*! ../core-js/array/from */ "./node_modules/babel-runtime/core-js/array/from.js");
-
-var _from2 = _interopRequireDefault(_from);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = function (arr) {
-  if (Array.isArray(arr)) {
-    for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) {
-      arr2[i] = arr[i];
-    }
-
-    return arr2;
-  } else {
-    return (0, _from2.default)(arr);
-  }
-};
-
-/***/ }),
-
-/***/ "./node_modules/babel-runtime/helpers/typeof.js":
-/*!******************************************************!*\
-  !*** ./node_modules/babel-runtime/helpers/typeof.js ***!
-  \******************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-exports.__esModule = true;
-
-var _iterator = __webpack_require__(/*! ../core-js/symbol/iterator */ "./node_modules/babel-runtime/core-js/symbol/iterator.js");
-
-var _iterator2 = _interopRequireDefault(_iterator);
-
-var _symbol = __webpack_require__(/*! ../core-js/symbol */ "./node_modules/babel-runtime/core-js/symbol.js");
-
-var _symbol2 = _interopRequireDefault(_symbol);
-
-var _typeof = typeof _symbol2.default === "function" && typeof _iterator2.default === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof _symbol2.default === "function" && obj.constructor === _symbol2.default && obj !== _symbol2.default.prototype ? "symbol" : typeof obj; };
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = typeof _symbol2.default === "function" && _typeof(_iterator2.default) === "symbol" ? function (obj) {
-  return typeof obj === "undefined" ? "undefined" : _typeof(obj);
-} : function (obj) {
-  return obj && typeof _symbol2.default === "function" && obj.constructor === _symbol2.default && obj !== _symbol2.default.prototype ? "symbol" : typeof obj === "undefined" ? "undefined" : _typeof(obj);
-};
-
-/***/ }),
-
-/***/ "./node_modules/babel-runtime/regenerator/index.js":
-/*!*********************************************************!*\
-  !*** ./node_modules/babel-runtime/regenerator/index.js ***!
-  \*********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__(/*! regenerator-runtime */ "./node_modules/regenerator-runtime/runtime-module.js");
-
-
-/***/ }),
-
 /***/ "./node_modules/base64-js/index.js":
 /*!*****************************************!*\
   !*** ./node_modules/base64-js/index.js ***!
@@ -9682,2993 +9243,6 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "clsx", function() { return clsx; });
 function r(e){var t,f,n="";if("string"==typeof e||"number"==typeof e)n+=e;else if("object"==typeof e)if(Array.isArray(e))for(t=0;t<e.length;t++)e[t]&&(f=r(e[t]))&&(n&&(n+=" "),n+=f);else for(t in e)e[t]&&(n&&(n+=" "),n+=t);return n}function clsx(){for(var e,t,f=0,n="";f<arguments.length;)(e=arguments[f++])&&(t=r(e))&&(n&&(n+=" "),n+=t);return n}/* harmony default export */ __webpack_exports__["default"] = (clsx);
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/fn/array/from.js":
-/*!*******************************************************!*\
-  !*** ./node_modules/core-js/library/fn/array/from.js ***!
-  \*******************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-__webpack_require__(/*! ../../modules/es6.string.iterator */ "./node_modules/core-js/library/modules/es6.string.iterator.js");
-__webpack_require__(/*! ../../modules/es6.array.from */ "./node_modules/core-js/library/modules/es6.array.from.js");
-module.exports = __webpack_require__(/*! ../../modules/_core */ "./node_modules/core-js/library/modules/_core.js").Array.from;
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/fn/get-iterator.js":
-/*!*********************************************************!*\
-  !*** ./node_modules/core-js/library/fn/get-iterator.js ***!
-  \*********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-__webpack_require__(/*! ../modules/web.dom.iterable */ "./node_modules/core-js/library/modules/web.dom.iterable.js");
-__webpack_require__(/*! ../modules/es6.string.iterator */ "./node_modules/core-js/library/modules/es6.string.iterator.js");
-module.exports = __webpack_require__(/*! ../modules/core.get-iterator */ "./node_modules/core-js/library/modules/core.get-iterator.js");
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/fn/is-iterable.js":
-/*!********************************************************!*\
-  !*** ./node_modules/core-js/library/fn/is-iterable.js ***!
-  \********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-__webpack_require__(/*! ../modules/web.dom.iterable */ "./node_modules/core-js/library/modules/web.dom.iterable.js");
-__webpack_require__(/*! ../modules/es6.string.iterator */ "./node_modules/core-js/library/modules/es6.string.iterator.js");
-module.exports = __webpack_require__(/*! ../modules/core.is-iterable */ "./node_modules/core-js/library/modules/core.is-iterable.js");
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/fn/object/assign.js":
-/*!**********************************************************!*\
-  !*** ./node_modules/core-js/library/fn/object/assign.js ***!
-  \**********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-__webpack_require__(/*! ../../modules/es6.object.assign */ "./node_modules/core-js/library/modules/es6.object.assign.js");
-module.exports = __webpack_require__(/*! ../../modules/_core */ "./node_modules/core-js/library/modules/_core.js").Object.assign;
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/fn/object/create.js":
-/*!**********************************************************!*\
-  !*** ./node_modules/core-js/library/fn/object/create.js ***!
-  \**********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-__webpack_require__(/*! ../../modules/es6.object.create */ "./node_modules/core-js/library/modules/es6.object.create.js");
-var $Object = __webpack_require__(/*! ../../modules/_core */ "./node_modules/core-js/library/modules/_core.js").Object;
-module.exports = function create(P, D) {
-  return $Object.create(P, D);
-};
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/fn/object/define-property.js":
-/*!*******************************************************************!*\
-  !*** ./node_modules/core-js/library/fn/object/define-property.js ***!
-  \*******************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-__webpack_require__(/*! ../../modules/es6.object.define-property */ "./node_modules/core-js/library/modules/es6.object.define-property.js");
-var $Object = __webpack_require__(/*! ../../modules/_core */ "./node_modules/core-js/library/modules/_core.js").Object;
-module.exports = function defineProperty(it, key, desc) {
-  return $Object.defineProperty(it, key, desc);
-};
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/fn/object/get-prototype-of.js":
-/*!********************************************************************!*\
-  !*** ./node_modules/core-js/library/fn/object/get-prototype-of.js ***!
-  \********************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-__webpack_require__(/*! ../../modules/es6.object.get-prototype-of */ "./node_modules/core-js/library/modules/es6.object.get-prototype-of.js");
-module.exports = __webpack_require__(/*! ../../modules/_core */ "./node_modules/core-js/library/modules/_core.js").Object.getPrototypeOf;
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/fn/object/keys.js":
-/*!********************************************************!*\
-  !*** ./node_modules/core-js/library/fn/object/keys.js ***!
-  \********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-__webpack_require__(/*! ../../modules/es6.object.keys */ "./node_modules/core-js/library/modules/es6.object.keys.js");
-module.exports = __webpack_require__(/*! ../../modules/_core */ "./node_modules/core-js/library/modules/_core.js").Object.keys;
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/fn/object/set-prototype-of.js":
-/*!********************************************************************!*\
-  !*** ./node_modules/core-js/library/fn/object/set-prototype-of.js ***!
-  \********************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-__webpack_require__(/*! ../../modules/es6.object.set-prototype-of */ "./node_modules/core-js/library/modules/es6.object.set-prototype-of.js");
-module.exports = __webpack_require__(/*! ../../modules/_core */ "./node_modules/core-js/library/modules/_core.js").Object.setPrototypeOf;
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/fn/promise.js":
-/*!****************************************************!*\
-  !*** ./node_modules/core-js/library/fn/promise.js ***!
-  \****************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-__webpack_require__(/*! ../modules/es6.object.to-string */ "./node_modules/core-js/library/modules/es6.object.to-string.js");
-__webpack_require__(/*! ../modules/es6.string.iterator */ "./node_modules/core-js/library/modules/es6.string.iterator.js");
-__webpack_require__(/*! ../modules/web.dom.iterable */ "./node_modules/core-js/library/modules/web.dom.iterable.js");
-__webpack_require__(/*! ../modules/es6.promise */ "./node_modules/core-js/library/modules/es6.promise.js");
-__webpack_require__(/*! ../modules/es7.promise.finally */ "./node_modules/core-js/library/modules/es7.promise.finally.js");
-__webpack_require__(/*! ../modules/es7.promise.try */ "./node_modules/core-js/library/modules/es7.promise.try.js");
-module.exports = __webpack_require__(/*! ../modules/_core */ "./node_modules/core-js/library/modules/_core.js").Promise;
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/fn/symbol/index.js":
-/*!*********************************************************!*\
-  !*** ./node_modules/core-js/library/fn/symbol/index.js ***!
-  \*********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-__webpack_require__(/*! ../../modules/es6.symbol */ "./node_modules/core-js/library/modules/es6.symbol.js");
-__webpack_require__(/*! ../../modules/es6.object.to-string */ "./node_modules/core-js/library/modules/es6.object.to-string.js");
-__webpack_require__(/*! ../../modules/es7.symbol.async-iterator */ "./node_modules/core-js/library/modules/es7.symbol.async-iterator.js");
-__webpack_require__(/*! ../../modules/es7.symbol.observable */ "./node_modules/core-js/library/modules/es7.symbol.observable.js");
-module.exports = __webpack_require__(/*! ../../modules/_core */ "./node_modules/core-js/library/modules/_core.js").Symbol;
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/fn/symbol/iterator.js":
-/*!************************************************************!*\
-  !*** ./node_modules/core-js/library/fn/symbol/iterator.js ***!
-  \************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-__webpack_require__(/*! ../../modules/es6.string.iterator */ "./node_modules/core-js/library/modules/es6.string.iterator.js");
-__webpack_require__(/*! ../../modules/web.dom.iterable */ "./node_modules/core-js/library/modules/web.dom.iterable.js");
-module.exports = __webpack_require__(/*! ../../modules/_wks-ext */ "./node_modules/core-js/library/modules/_wks-ext.js").f('iterator');
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/_a-function.js":
-/*!*************************************************************!*\
-  !*** ./node_modules/core-js/library/modules/_a-function.js ***!
-  \*************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = function (it) {
-  if (typeof it != 'function') throw TypeError(it + ' is not a function!');
-  return it;
-};
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/_add-to-unscopables.js":
-/*!*********************************************************************!*\
-  !*** ./node_modules/core-js/library/modules/_add-to-unscopables.js ***!
-  \*********************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = function () { /* empty */ };
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/_an-instance.js":
-/*!**************************************************************!*\
-  !*** ./node_modules/core-js/library/modules/_an-instance.js ***!
-  \**************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = function (it, Constructor, name, forbiddenField) {
-  if (!(it instanceof Constructor) || (forbiddenField !== undefined && forbiddenField in it)) {
-    throw TypeError(name + ': incorrect invocation!');
-  } return it;
-};
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/_an-object.js":
-/*!************************************************************!*\
-  !*** ./node_modules/core-js/library/modules/_an-object.js ***!
-  \************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-var isObject = __webpack_require__(/*! ./_is-object */ "./node_modules/core-js/library/modules/_is-object.js");
-module.exports = function (it) {
-  if (!isObject(it)) throw TypeError(it + ' is not an object!');
-  return it;
-};
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/_array-includes.js":
-/*!*****************************************************************!*\
-  !*** ./node_modules/core-js/library/modules/_array-includes.js ***!
-  \*****************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-// false -> Array#indexOf
-// true  -> Array#includes
-var toIObject = __webpack_require__(/*! ./_to-iobject */ "./node_modules/core-js/library/modules/_to-iobject.js");
-var toLength = __webpack_require__(/*! ./_to-length */ "./node_modules/core-js/library/modules/_to-length.js");
-var toAbsoluteIndex = __webpack_require__(/*! ./_to-absolute-index */ "./node_modules/core-js/library/modules/_to-absolute-index.js");
-module.exports = function (IS_INCLUDES) {
-  return function ($this, el, fromIndex) {
-    var O = toIObject($this);
-    var length = toLength(O.length);
-    var index = toAbsoluteIndex(fromIndex, length);
-    var value;
-    // Array#includes uses SameValueZero equality algorithm
-    // eslint-disable-next-line no-self-compare
-    if (IS_INCLUDES && el != el) while (length > index) {
-      value = O[index++];
-      // eslint-disable-next-line no-self-compare
-      if (value != value) return true;
-    // Array#indexOf ignores holes, Array#includes - not
-    } else for (;length > index; index++) if (IS_INCLUDES || index in O) {
-      if (O[index] === el) return IS_INCLUDES || index || 0;
-    } return !IS_INCLUDES && -1;
-  };
-};
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/_classof.js":
-/*!**********************************************************!*\
-  !*** ./node_modules/core-js/library/modules/_classof.js ***!
-  \**********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-// getting tag from 19.1.3.6 Object.prototype.toString()
-var cof = __webpack_require__(/*! ./_cof */ "./node_modules/core-js/library/modules/_cof.js");
-var TAG = __webpack_require__(/*! ./_wks */ "./node_modules/core-js/library/modules/_wks.js")('toStringTag');
-// ES3 wrong here
-var ARG = cof(function () { return arguments; }()) == 'Arguments';
-
-// fallback for IE11 Script Access Denied error
-var tryGet = function (it, key) {
-  try {
-    return it[key];
-  } catch (e) { /* empty */ }
-};
-
-module.exports = function (it) {
-  var O, T, B;
-  return it === undefined ? 'Undefined' : it === null ? 'Null'
-    // @@toStringTag case
-    : typeof (T = tryGet(O = Object(it), TAG)) == 'string' ? T
-    // builtinTag case
-    : ARG ? cof(O)
-    // ES3 arguments fallback
-    : (B = cof(O)) == 'Object' && typeof O.callee == 'function' ? 'Arguments' : B;
-};
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/_cof.js":
-/*!******************************************************!*\
-  !*** ./node_modules/core-js/library/modules/_cof.js ***!
-  \******************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-var toString = {}.toString;
-
-module.exports = function (it) {
-  return toString.call(it).slice(8, -1);
-};
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/_core.js":
-/*!*******************************************************!*\
-  !*** ./node_modules/core-js/library/modules/_core.js ***!
-  \*******************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-var core = module.exports = { version: '2.6.12' };
-if (typeof __e == 'number') __e = core; // eslint-disable-line no-undef
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/_create-property.js":
-/*!******************************************************************!*\
-  !*** ./node_modules/core-js/library/modules/_create-property.js ***!
-  \******************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var $defineProperty = __webpack_require__(/*! ./_object-dp */ "./node_modules/core-js/library/modules/_object-dp.js");
-var createDesc = __webpack_require__(/*! ./_property-desc */ "./node_modules/core-js/library/modules/_property-desc.js");
-
-module.exports = function (object, index, value) {
-  if (index in object) $defineProperty.f(object, index, createDesc(0, value));
-  else object[index] = value;
-};
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/_ctx.js":
-/*!******************************************************!*\
-  !*** ./node_modules/core-js/library/modules/_ctx.js ***!
-  \******************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-// optional / simple context binding
-var aFunction = __webpack_require__(/*! ./_a-function */ "./node_modules/core-js/library/modules/_a-function.js");
-module.exports = function (fn, that, length) {
-  aFunction(fn);
-  if (that === undefined) return fn;
-  switch (length) {
-    case 1: return function (a) {
-      return fn.call(that, a);
-    };
-    case 2: return function (a, b) {
-      return fn.call(that, a, b);
-    };
-    case 3: return function (a, b, c) {
-      return fn.call(that, a, b, c);
-    };
-  }
-  return function (/* ...args */) {
-    return fn.apply(that, arguments);
-  };
-};
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/_defined.js":
-/*!**********************************************************!*\
-  !*** ./node_modules/core-js/library/modules/_defined.js ***!
-  \**********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-// 7.2.1 RequireObjectCoercible(argument)
-module.exports = function (it) {
-  if (it == undefined) throw TypeError("Can't call method on  " + it);
-  return it;
-};
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/_descriptors.js":
-/*!**************************************************************!*\
-  !*** ./node_modules/core-js/library/modules/_descriptors.js ***!
-  \**************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-// Thank's IE8 for his funny defineProperty
-module.exports = !__webpack_require__(/*! ./_fails */ "./node_modules/core-js/library/modules/_fails.js")(function () {
-  return Object.defineProperty({}, 'a', { get: function () { return 7; } }).a != 7;
-});
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/_dom-create.js":
-/*!*************************************************************!*\
-  !*** ./node_modules/core-js/library/modules/_dom-create.js ***!
-  \*************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-var isObject = __webpack_require__(/*! ./_is-object */ "./node_modules/core-js/library/modules/_is-object.js");
-var document = __webpack_require__(/*! ./_global */ "./node_modules/core-js/library/modules/_global.js").document;
-// typeof document.createElement is 'object' in old IE
-var is = isObject(document) && isObject(document.createElement);
-module.exports = function (it) {
-  return is ? document.createElement(it) : {};
-};
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/_enum-bug-keys.js":
-/*!****************************************************************!*\
-  !*** ./node_modules/core-js/library/modules/_enum-bug-keys.js ***!
-  \****************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-// IE 8- don't enum bug keys
-module.exports = (
-  'constructor,hasOwnProperty,isPrototypeOf,propertyIsEnumerable,toLocaleString,toString,valueOf'
-).split(',');
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/_enum-keys.js":
-/*!************************************************************!*\
-  !*** ./node_modules/core-js/library/modules/_enum-keys.js ***!
-  \************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-// all enumerable object keys, includes symbols
-var getKeys = __webpack_require__(/*! ./_object-keys */ "./node_modules/core-js/library/modules/_object-keys.js");
-var gOPS = __webpack_require__(/*! ./_object-gops */ "./node_modules/core-js/library/modules/_object-gops.js");
-var pIE = __webpack_require__(/*! ./_object-pie */ "./node_modules/core-js/library/modules/_object-pie.js");
-module.exports = function (it) {
-  var result = getKeys(it);
-  var getSymbols = gOPS.f;
-  if (getSymbols) {
-    var symbols = getSymbols(it);
-    var isEnum = pIE.f;
-    var i = 0;
-    var key;
-    while (symbols.length > i) if (isEnum.call(it, key = symbols[i++])) result.push(key);
-  } return result;
-};
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/_export.js":
-/*!*********************************************************!*\
-  !*** ./node_modules/core-js/library/modules/_export.js ***!
-  \*********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-var global = __webpack_require__(/*! ./_global */ "./node_modules/core-js/library/modules/_global.js");
-var core = __webpack_require__(/*! ./_core */ "./node_modules/core-js/library/modules/_core.js");
-var ctx = __webpack_require__(/*! ./_ctx */ "./node_modules/core-js/library/modules/_ctx.js");
-var hide = __webpack_require__(/*! ./_hide */ "./node_modules/core-js/library/modules/_hide.js");
-var has = __webpack_require__(/*! ./_has */ "./node_modules/core-js/library/modules/_has.js");
-var PROTOTYPE = 'prototype';
-
-var $export = function (type, name, source) {
-  var IS_FORCED = type & $export.F;
-  var IS_GLOBAL = type & $export.G;
-  var IS_STATIC = type & $export.S;
-  var IS_PROTO = type & $export.P;
-  var IS_BIND = type & $export.B;
-  var IS_WRAP = type & $export.W;
-  var exports = IS_GLOBAL ? core : core[name] || (core[name] = {});
-  var expProto = exports[PROTOTYPE];
-  var target = IS_GLOBAL ? global : IS_STATIC ? global[name] : (global[name] || {})[PROTOTYPE];
-  var key, own, out;
-  if (IS_GLOBAL) source = name;
-  for (key in source) {
-    // contains in native
-    own = !IS_FORCED && target && target[key] !== undefined;
-    if (own && has(exports, key)) continue;
-    // export native or passed
-    out = own ? target[key] : source[key];
-    // prevent global pollution for namespaces
-    exports[key] = IS_GLOBAL && typeof target[key] != 'function' ? source[key]
-    // bind timers to global for call from export context
-    : IS_BIND && own ? ctx(out, global)
-    // wrap global constructors for prevent change them in library
-    : IS_WRAP && target[key] == out ? (function (C) {
-      var F = function (a, b, c) {
-        if (this instanceof C) {
-          switch (arguments.length) {
-            case 0: return new C();
-            case 1: return new C(a);
-            case 2: return new C(a, b);
-          } return new C(a, b, c);
-        } return C.apply(this, arguments);
-      };
-      F[PROTOTYPE] = C[PROTOTYPE];
-      return F;
-    // make static versions for prototype methods
-    })(out) : IS_PROTO && typeof out == 'function' ? ctx(Function.call, out) : out;
-    // export proto methods to core.%CONSTRUCTOR%.methods.%NAME%
-    if (IS_PROTO) {
-      (exports.virtual || (exports.virtual = {}))[key] = out;
-      // export proto methods to core.%CONSTRUCTOR%.prototype.%NAME%
-      if (type & $export.R && expProto && !expProto[key]) hide(expProto, key, out);
-    }
-  }
-};
-// type bitmap
-$export.F = 1;   // forced
-$export.G = 2;   // global
-$export.S = 4;   // static
-$export.P = 8;   // proto
-$export.B = 16;  // bind
-$export.W = 32;  // wrap
-$export.U = 64;  // safe
-$export.R = 128; // real proto method for `library`
-module.exports = $export;
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/_fails.js":
-/*!********************************************************!*\
-  !*** ./node_modules/core-js/library/modules/_fails.js ***!
-  \********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = function (exec) {
-  try {
-    return !!exec();
-  } catch (e) {
-    return true;
-  }
-};
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/_for-of.js":
-/*!*********************************************************!*\
-  !*** ./node_modules/core-js/library/modules/_for-of.js ***!
-  \*********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-var ctx = __webpack_require__(/*! ./_ctx */ "./node_modules/core-js/library/modules/_ctx.js");
-var call = __webpack_require__(/*! ./_iter-call */ "./node_modules/core-js/library/modules/_iter-call.js");
-var isArrayIter = __webpack_require__(/*! ./_is-array-iter */ "./node_modules/core-js/library/modules/_is-array-iter.js");
-var anObject = __webpack_require__(/*! ./_an-object */ "./node_modules/core-js/library/modules/_an-object.js");
-var toLength = __webpack_require__(/*! ./_to-length */ "./node_modules/core-js/library/modules/_to-length.js");
-var getIterFn = __webpack_require__(/*! ./core.get-iterator-method */ "./node_modules/core-js/library/modules/core.get-iterator-method.js");
-var BREAK = {};
-var RETURN = {};
-var exports = module.exports = function (iterable, entries, fn, that, ITERATOR) {
-  var iterFn = ITERATOR ? function () { return iterable; } : getIterFn(iterable);
-  var f = ctx(fn, that, entries ? 2 : 1);
-  var index = 0;
-  var length, step, iterator, result;
-  if (typeof iterFn != 'function') throw TypeError(iterable + ' is not iterable!');
-  // fast case for arrays with default iterator
-  if (isArrayIter(iterFn)) for (length = toLength(iterable.length); length > index; index++) {
-    result = entries ? f(anObject(step = iterable[index])[0], step[1]) : f(iterable[index]);
-    if (result === BREAK || result === RETURN) return result;
-  } else for (iterator = iterFn.call(iterable); !(step = iterator.next()).done;) {
-    result = call(iterator, f, step.value, entries);
-    if (result === BREAK || result === RETURN) return result;
-  }
-};
-exports.BREAK = BREAK;
-exports.RETURN = RETURN;
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/_global.js":
-/*!*********************************************************!*\
-  !*** ./node_modules/core-js/library/modules/_global.js ***!
-  \*********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-// https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
-var global = module.exports = typeof window != 'undefined' && window.Math == Math
-  ? window : typeof self != 'undefined' && self.Math == Math ? self
-  // eslint-disable-next-line no-new-func
-  : Function('return this')();
-if (typeof __g == 'number') __g = global; // eslint-disable-line no-undef
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/_has.js":
-/*!******************************************************!*\
-  !*** ./node_modules/core-js/library/modules/_has.js ***!
-  \******************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-var hasOwnProperty = {}.hasOwnProperty;
-module.exports = function (it, key) {
-  return hasOwnProperty.call(it, key);
-};
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/_hide.js":
-/*!*******************************************************!*\
-  !*** ./node_modules/core-js/library/modules/_hide.js ***!
-  \*******************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-var dP = __webpack_require__(/*! ./_object-dp */ "./node_modules/core-js/library/modules/_object-dp.js");
-var createDesc = __webpack_require__(/*! ./_property-desc */ "./node_modules/core-js/library/modules/_property-desc.js");
-module.exports = __webpack_require__(/*! ./_descriptors */ "./node_modules/core-js/library/modules/_descriptors.js") ? function (object, key, value) {
-  return dP.f(object, key, createDesc(1, value));
-} : function (object, key, value) {
-  object[key] = value;
-  return object;
-};
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/_html.js":
-/*!*******************************************************!*\
-  !*** ./node_modules/core-js/library/modules/_html.js ***!
-  \*******************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-var document = __webpack_require__(/*! ./_global */ "./node_modules/core-js/library/modules/_global.js").document;
-module.exports = document && document.documentElement;
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/_ie8-dom-define.js":
-/*!*****************************************************************!*\
-  !*** ./node_modules/core-js/library/modules/_ie8-dom-define.js ***!
-  \*****************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = !__webpack_require__(/*! ./_descriptors */ "./node_modules/core-js/library/modules/_descriptors.js") && !__webpack_require__(/*! ./_fails */ "./node_modules/core-js/library/modules/_fails.js")(function () {
-  return Object.defineProperty(__webpack_require__(/*! ./_dom-create */ "./node_modules/core-js/library/modules/_dom-create.js")('div'), 'a', { get: function () { return 7; } }).a != 7;
-});
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/_invoke.js":
-/*!*********************************************************!*\
-  !*** ./node_modules/core-js/library/modules/_invoke.js ***!
-  \*********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-// fast apply, http://jsperf.lnkit.com/fast-apply/5
-module.exports = function (fn, args, that) {
-  var un = that === undefined;
-  switch (args.length) {
-    case 0: return un ? fn()
-                      : fn.call(that);
-    case 1: return un ? fn(args[0])
-                      : fn.call(that, args[0]);
-    case 2: return un ? fn(args[0], args[1])
-                      : fn.call(that, args[0], args[1]);
-    case 3: return un ? fn(args[0], args[1], args[2])
-                      : fn.call(that, args[0], args[1], args[2]);
-    case 4: return un ? fn(args[0], args[1], args[2], args[3])
-                      : fn.call(that, args[0], args[1], args[2], args[3]);
-  } return fn.apply(that, args);
-};
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/_iobject.js":
-/*!**********************************************************!*\
-  !*** ./node_modules/core-js/library/modules/_iobject.js ***!
-  \**********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-// fallback for non-array-like ES3 and non-enumerable old V8 strings
-var cof = __webpack_require__(/*! ./_cof */ "./node_modules/core-js/library/modules/_cof.js");
-// eslint-disable-next-line no-prototype-builtins
-module.exports = Object('z').propertyIsEnumerable(0) ? Object : function (it) {
-  return cof(it) == 'String' ? it.split('') : Object(it);
-};
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/_is-array-iter.js":
-/*!****************************************************************!*\
-  !*** ./node_modules/core-js/library/modules/_is-array-iter.js ***!
-  \****************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-// check on default Array iterator
-var Iterators = __webpack_require__(/*! ./_iterators */ "./node_modules/core-js/library/modules/_iterators.js");
-var ITERATOR = __webpack_require__(/*! ./_wks */ "./node_modules/core-js/library/modules/_wks.js")('iterator');
-var ArrayProto = Array.prototype;
-
-module.exports = function (it) {
-  return it !== undefined && (Iterators.Array === it || ArrayProto[ITERATOR] === it);
-};
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/_is-array.js":
-/*!***********************************************************!*\
-  !*** ./node_modules/core-js/library/modules/_is-array.js ***!
-  \***********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-// 7.2.2 IsArray(argument)
-var cof = __webpack_require__(/*! ./_cof */ "./node_modules/core-js/library/modules/_cof.js");
-module.exports = Array.isArray || function isArray(arg) {
-  return cof(arg) == 'Array';
-};
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/_is-object.js":
-/*!************************************************************!*\
-  !*** ./node_modules/core-js/library/modules/_is-object.js ***!
-  \************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = function (it) {
-  return typeof it === 'object' ? it !== null : typeof it === 'function';
-};
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/_iter-call.js":
-/*!************************************************************!*\
-  !*** ./node_modules/core-js/library/modules/_iter-call.js ***!
-  \************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-// call something on iterator step with safe closing on error
-var anObject = __webpack_require__(/*! ./_an-object */ "./node_modules/core-js/library/modules/_an-object.js");
-module.exports = function (iterator, fn, value, entries) {
-  try {
-    return entries ? fn(anObject(value)[0], value[1]) : fn(value);
-  // 7.4.6 IteratorClose(iterator, completion)
-  } catch (e) {
-    var ret = iterator['return'];
-    if (ret !== undefined) anObject(ret.call(iterator));
-    throw e;
-  }
-};
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/_iter-create.js":
-/*!**************************************************************!*\
-  !*** ./node_modules/core-js/library/modules/_iter-create.js ***!
-  \**************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var create = __webpack_require__(/*! ./_object-create */ "./node_modules/core-js/library/modules/_object-create.js");
-var descriptor = __webpack_require__(/*! ./_property-desc */ "./node_modules/core-js/library/modules/_property-desc.js");
-var setToStringTag = __webpack_require__(/*! ./_set-to-string-tag */ "./node_modules/core-js/library/modules/_set-to-string-tag.js");
-var IteratorPrototype = {};
-
-// 25.1.2.1.1 %IteratorPrototype%[@@iterator]()
-__webpack_require__(/*! ./_hide */ "./node_modules/core-js/library/modules/_hide.js")(IteratorPrototype, __webpack_require__(/*! ./_wks */ "./node_modules/core-js/library/modules/_wks.js")('iterator'), function () { return this; });
-
-module.exports = function (Constructor, NAME, next) {
-  Constructor.prototype = create(IteratorPrototype, { next: descriptor(1, next) });
-  setToStringTag(Constructor, NAME + ' Iterator');
-};
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/_iter-define.js":
-/*!**************************************************************!*\
-  !*** ./node_modules/core-js/library/modules/_iter-define.js ***!
-  \**************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var LIBRARY = __webpack_require__(/*! ./_library */ "./node_modules/core-js/library/modules/_library.js");
-var $export = __webpack_require__(/*! ./_export */ "./node_modules/core-js/library/modules/_export.js");
-var redefine = __webpack_require__(/*! ./_redefine */ "./node_modules/core-js/library/modules/_redefine.js");
-var hide = __webpack_require__(/*! ./_hide */ "./node_modules/core-js/library/modules/_hide.js");
-var Iterators = __webpack_require__(/*! ./_iterators */ "./node_modules/core-js/library/modules/_iterators.js");
-var $iterCreate = __webpack_require__(/*! ./_iter-create */ "./node_modules/core-js/library/modules/_iter-create.js");
-var setToStringTag = __webpack_require__(/*! ./_set-to-string-tag */ "./node_modules/core-js/library/modules/_set-to-string-tag.js");
-var getPrototypeOf = __webpack_require__(/*! ./_object-gpo */ "./node_modules/core-js/library/modules/_object-gpo.js");
-var ITERATOR = __webpack_require__(/*! ./_wks */ "./node_modules/core-js/library/modules/_wks.js")('iterator');
-var BUGGY = !([].keys && 'next' in [].keys()); // Safari has buggy iterators w/o `next`
-var FF_ITERATOR = '@@iterator';
-var KEYS = 'keys';
-var VALUES = 'values';
-
-var returnThis = function () { return this; };
-
-module.exports = function (Base, NAME, Constructor, next, DEFAULT, IS_SET, FORCED) {
-  $iterCreate(Constructor, NAME, next);
-  var getMethod = function (kind) {
-    if (!BUGGY && kind in proto) return proto[kind];
-    switch (kind) {
-      case KEYS: return function keys() { return new Constructor(this, kind); };
-      case VALUES: return function values() { return new Constructor(this, kind); };
-    } return function entries() { return new Constructor(this, kind); };
-  };
-  var TAG = NAME + ' Iterator';
-  var DEF_VALUES = DEFAULT == VALUES;
-  var VALUES_BUG = false;
-  var proto = Base.prototype;
-  var $native = proto[ITERATOR] || proto[FF_ITERATOR] || DEFAULT && proto[DEFAULT];
-  var $default = $native || getMethod(DEFAULT);
-  var $entries = DEFAULT ? !DEF_VALUES ? $default : getMethod('entries') : undefined;
-  var $anyNative = NAME == 'Array' ? proto.entries || $native : $native;
-  var methods, key, IteratorPrototype;
-  // Fix native
-  if ($anyNative) {
-    IteratorPrototype = getPrototypeOf($anyNative.call(new Base()));
-    if (IteratorPrototype !== Object.prototype && IteratorPrototype.next) {
-      // Set @@toStringTag to native iterators
-      setToStringTag(IteratorPrototype, TAG, true);
-      // fix for some old engines
-      if (!LIBRARY && typeof IteratorPrototype[ITERATOR] != 'function') hide(IteratorPrototype, ITERATOR, returnThis);
-    }
-  }
-  // fix Array#{values, @@iterator}.name in V8 / FF
-  if (DEF_VALUES && $native && $native.name !== VALUES) {
-    VALUES_BUG = true;
-    $default = function values() { return $native.call(this); };
-  }
-  // Define iterator
-  if ((!LIBRARY || FORCED) && (BUGGY || VALUES_BUG || !proto[ITERATOR])) {
-    hide(proto, ITERATOR, $default);
-  }
-  // Plug for library
-  Iterators[NAME] = $default;
-  Iterators[TAG] = returnThis;
-  if (DEFAULT) {
-    methods = {
-      values: DEF_VALUES ? $default : getMethod(VALUES),
-      keys: IS_SET ? $default : getMethod(KEYS),
-      entries: $entries
-    };
-    if (FORCED) for (key in methods) {
-      if (!(key in proto)) redefine(proto, key, methods[key]);
-    } else $export($export.P + $export.F * (BUGGY || VALUES_BUG), NAME, methods);
-  }
-  return methods;
-};
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/_iter-detect.js":
-/*!**************************************************************!*\
-  !*** ./node_modules/core-js/library/modules/_iter-detect.js ***!
-  \**************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-var ITERATOR = __webpack_require__(/*! ./_wks */ "./node_modules/core-js/library/modules/_wks.js")('iterator');
-var SAFE_CLOSING = false;
-
-try {
-  var riter = [7][ITERATOR]();
-  riter['return'] = function () { SAFE_CLOSING = true; };
-  // eslint-disable-next-line no-throw-literal
-  Array.from(riter, function () { throw 2; });
-} catch (e) { /* empty */ }
-
-module.exports = function (exec, skipClosing) {
-  if (!skipClosing && !SAFE_CLOSING) return false;
-  var safe = false;
-  try {
-    var arr = [7];
-    var iter = arr[ITERATOR]();
-    iter.next = function () { return { done: safe = true }; };
-    arr[ITERATOR] = function () { return iter; };
-    exec(arr);
-  } catch (e) { /* empty */ }
-  return safe;
-};
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/_iter-step.js":
-/*!************************************************************!*\
-  !*** ./node_modules/core-js/library/modules/_iter-step.js ***!
-  \************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = function (done, value) {
-  return { value: value, done: !!done };
-};
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/_iterators.js":
-/*!************************************************************!*\
-  !*** ./node_modules/core-js/library/modules/_iterators.js ***!
-  \************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = {};
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/_library.js":
-/*!**********************************************************!*\
-  !*** ./node_modules/core-js/library/modules/_library.js ***!
-  \**********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = true;
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/_meta.js":
-/*!*******************************************************!*\
-  !*** ./node_modules/core-js/library/modules/_meta.js ***!
-  \*******************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-var META = __webpack_require__(/*! ./_uid */ "./node_modules/core-js/library/modules/_uid.js")('meta');
-var isObject = __webpack_require__(/*! ./_is-object */ "./node_modules/core-js/library/modules/_is-object.js");
-var has = __webpack_require__(/*! ./_has */ "./node_modules/core-js/library/modules/_has.js");
-var setDesc = __webpack_require__(/*! ./_object-dp */ "./node_modules/core-js/library/modules/_object-dp.js").f;
-var id = 0;
-var isExtensible = Object.isExtensible || function () {
-  return true;
-};
-var FREEZE = !__webpack_require__(/*! ./_fails */ "./node_modules/core-js/library/modules/_fails.js")(function () {
-  return isExtensible(Object.preventExtensions({}));
-});
-var setMeta = function (it) {
-  setDesc(it, META, { value: {
-    i: 'O' + ++id, // object ID
-    w: {}          // weak collections IDs
-  } });
-};
-var fastKey = function (it, create) {
-  // return primitive with prefix
-  if (!isObject(it)) return typeof it == 'symbol' ? it : (typeof it == 'string' ? 'S' : 'P') + it;
-  if (!has(it, META)) {
-    // can't set metadata to uncaught frozen object
-    if (!isExtensible(it)) return 'F';
-    // not necessary to add metadata
-    if (!create) return 'E';
-    // add missing metadata
-    setMeta(it);
-  // return object ID
-  } return it[META].i;
-};
-var getWeak = function (it, create) {
-  if (!has(it, META)) {
-    // can't set metadata to uncaught frozen object
-    if (!isExtensible(it)) return true;
-    // not necessary to add metadata
-    if (!create) return false;
-    // add missing metadata
-    setMeta(it);
-  // return hash weak collections IDs
-  } return it[META].w;
-};
-// add metadata on freeze-family methods calling
-var onFreeze = function (it) {
-  if (FREEZE && meta.NEED && isExtensible(it) && !has(it, META)) setMeta(it);
-  return it;
-};
-var meta = module.exports = {
-  KEY: META,
-  NEED: false,
-  fastKey: fastKey,
-  getWeak: getWeak,
-  onFreeze: onFreeze
-};
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/_microtask.js":
-/*!************************************************************!*\
-  !*** ./node_modules/core-js/library/modules/_microtask.js ***!
-  \************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-var global = __webpack_require__(/*! ./_global */ "./node_modules/core-js/library/modules/_global.js");
-var macrotask = __webpack_require__(/*! ./_task */ "./node_modules/core-js/library/modules/_task.js").set;
-var Observer = global.MutationObserver || global.WebKitMutationObserver;
-var process = global.process;
-var Promise = global.Promise;
-var isNode = __webpack_require__(/*! ./_cof */ "./node_modules/core-js/library/modules/_cof.js")(process) == 'process';
-
-module.exports = function () {
-  var head, last, notify;
-
-  var flush = function () {
-    var parent, fn;
-    if (isNode && (parent = process.domain)) parent.exit();
-    while (head) {
-      fn = head.fn;
-      head = head.next;
-      try {
-        fn();
-      } catch (e) {
-        if (head) notify();
-        else last = undefined;
-        throw e;
-      }
-    } last = undefined;
-    if (parent) parent.enter();
-  };
-
-  // Node.js
-  if (isNode) {
-    notify = function () {
-      process.nextTick(flush);
-    };
-  // browsers with MutationObserver, except iOS Safari - https://github.com/zloirock/core-js/issues/339
-  } else if (Observer && !(global.navigator && global.navigator.standalone)) {
-    var toggle = true;
-    var node = document.createTextNode('');
-    new Observer(flush).observe(node, { characterData: true }); // eslint-disable-line no-new
-    notify = function () {
-      node.data = toggle = !toggle;
-    };
-  // environments with maybe non-completely correct, but existent Promise
-  } else if (Promise && Promise.resolve) {
-    // Promise.resolve without an argument throws an error in LG WebOS 2
-    var promise = Promise.resolve(undefined);
-    notify = function () {
-      promise.then(flush);
-    };
-  // for other environments - macrotask based on:
-  // - setImmediate
-  // - MessageChannel
-  // - window.postMessag
-  // - onreadystatechange
-  // - setTimeout
-  } else {
-    notify = function () {
-      // strange IE + webpack dev server bug - use .call(global)
-      macrotask.call(global, flush);
-    };
-  }
-
-  return function (fn) {
-    var task = { fn: fn, next: undefined };
-    if (last) last.next = task;
-    if (!head) {
-      head = task;
-      notify();
-    } last = task;
-  };
-};
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/_new-promise-capability.js":
-/*!*************************************************************************!*\
-  !*** ./node_modules/core-js/library/modules/_new-promise-capability.js ***!
-  \*************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-// 25.4.1.5 NewPromiseCapability(C)
-var aFunction = __webpack_require__(/*! ./_a-function */ "./node_modules/core-js/library/modules/_a-function.js");
-
-function PromiseCapability(C) {
-  var resolve, reject;
-  this.promise = new C(function ($$resolve, $$reject) {
-    if (resolve !== undefined || reject !== undefined) throw TypeError('Bad Promise constructor');
-    resolve = $$resolve;
-    reject = $$reject;
-  });
-  this.resolve = aFunction(resolve);
-  this.reject = aFunction(reject);
-}
-
-module.exports.f = function (C) {
-  return new PromiseCapability(C);
-};
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/_object-assign.js":
-/*!****************************************************************!*\
-  !*** ./node_modules/core-js/library/modules/_object-assign.js ***!
-  \****************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-// 19.1.2.1 Object.assign(target, source, ...)
-var DESCRIPTORS = __webpack_require__(/*! ./_descriptors */ "./node_modules/core-js/library/modules/_descriptors.js");
-var getKeys = __webpack_require__(/*! ./_object-keys */ "./node_modules/core-js/library/modules/_object-keys.js");
-var gOPS = __webpack_require__(/*! ./_object-gops */ "./node_modules/core-js/library/modules/_object-gops.js");
-var pIE = __webpack_require__(/*! ./_object-pie */ "./node_modules/core-js/library/modules/_object-pie.js");
-var toObject = __webpack_require__(/*! ./_to-object */ "./node_modules/core-js/library/modules/_to-object.js");
-var IObject = __webpack_require__(/*! ./_iobject */ "./node_modules/core-js/library/modules/_iobject.js");
-var $assign = Object.assign;
-
-// should work with symbols and should have deterministic property order (V8 bug)
-module.exports = !$assign || __webpack_require__(/*! ./_fails */ "./node_modules/core-js/library/modules/_fails.js")(function () {
-  var A = {};
-  var B = {};
-  // eslint-disable-next-line no-undef
-  var S = Symbol();
-  var K = 'abcdefghijklmnopqrst';
-  A[S] = 7;
-  K.split('').forEach(function (k) { B[k] = k; });
-  return $assign({}, A)[S] != 7 || Object.keys($assign({}, B)).join('') != K;
-}) ? function assign(target, source) { // eslint-disable-line no-unused-vars
-  var T = toObject(target);
-  var aLen = arguments.length;
-  var index = 1;
-  var getSymbols = gOPS.f;
-  var isEnum = pIE.f;
-  while (aLen > index) {
-    var S = IObject(arguments[index++]);
-    var keys = getSymbols ? getKeys(S).concat(getSymbols(S)) : getKeys(S);
-    var length = keys.length;
-    var j = 0;
-    var key;
-    while (length > j) {
-      key = keys[j++];
-      if (!DESCRIPTORS || isEnum.call(S, key)) T[key] = S[key];
-    }
-  } return T;
-} : $assign;
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/_object-create.js":
-/*!****************************************************************!*\
-  !*** ./node_modules/core-js/library/modules/_object-create.js ***!
-  \****************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-// 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
-var anObject = __webpack_require__(/*! ./_an-object */ "./node_modules/core-js/library/modules/_an-object.js");
-var dPs = __webpack_require__(/*! ./_object-dps */ "./node_modules/core-js/library/modules/_object-dps.js");
-var enumBugKeys = __webpack_require__(/*! ./_enum-bug-keys */ "./node_modules/core-js/library/modules/_enum-bug-keys.js");
-var IE_PROTO = __webpack_require__(/*! ./_shared-key */ "./node_modules/core-js/library/modules/_shared-key.js")('IE_PROTO');
-var Empty = function () { /* empty */ };
-var PROTOTYPE = 'prototype';
-
-// Create object with fake `null` prototype: use iframe Object with cleared prototype
-var createDict = function () {
-  // Thrash, waste and sodomy: IE GC bug
-  var iframe = __webpack_require__(/*! ./_dom-create */ "./node_modules/core-js/library/modules/_dom-create.js")('iframe');
-  var i = enumBugKeys.length;
-  var lt = '<';
-  var gt = '>';
-  var iframeDocument;
-  iframe.style.display = 'none';
-  __webpack_require__(/*! ./_html */ "./node_modules/core-js/library/modules/_html.js").appendChild(iframe);
-  iframe.src = 'javascript:'; // eslint-disable-line no-script-url
-  // createDict = iframe.contentWindow.Object;
-  // html.removeChild(iframe);
-  iframeDocument = iframe.contentWindow.document;
-  iframeDocument.open();
-  iframeDocument.write(lt + 'script' + gt + 'document.F=Object' + lt + '/script' + gt);
-  iframeDocument.close();
-  createDict = iframeDocument.F;
-  while (i--) delete createDict[PROTOTYPE][enumBugKeys[i]];
-  return createDict();
-};
-
-module.exports = Object.create || function create(O, Properties) {
-  var result;
-  if (O !== null) {
-    Empty[PROTOTYPE] = anObject(O);
-    result = new Empty();
-    Empty[PROTOTYPE] = null;
-    // add "__proto__" for Object.getPrototypeOf polyfill
-    result[IE_PROTO] = O;
-  } else result = createDict();
-  return Properties === undefined ? result : dPs(result, Properties);
-};
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/_object-dp.js":
-/*!************************************************************!*\
-  !*** ./node_modules/core-js/library/modules/_object-dp.js ***!
-  \************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-var anObject = __webpack_require__(/*! ./_an-object */ "./node_modules/core-js/library/modules/_an-object.js");
-var IE8_DOM_DEFINE = __webpack_require__(/*! ./_ie8-dom-define */ "./node_modules/core-js/library/modules/_ie8-dom-define.js");
-var toPrimitive = __webpack_require__(/*! ./_to-primitive */ "./node_modules/core-js/library/modules/_to-primitive.js");
-var dP = Object.defineProperty;
-
-exports.f = __webpack_require__(/*! ./_descriptors */ "./node_modules/core-js/library/modules/_descriptors.js") ? Object.defineProperty : function defineProperty(O, P, Attributes) {
-  anObject(O);
-  P = toPrimitive(P, true);
-  anObject(Attributes);
-  if (IE8_DOM_DEFINE) try {
-    return dP(O, P, Attributes);
-  } catch (e) { /* empty */ }
-  if ('get' in Attributes || 'set' in Attributes) throw TypeError('Accessors not supported!');
-  if ('value' in Attributes) O[P] = Attributes.value;
-  return O;
-};
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/_object-dps.js":
-/*!*************************************************************!*\
-  !*** ./node_modules/core-js/library/modules/_object-dps.js ***!
-  \*************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-var dP = __webpack_require__(/*! ./_object-dp */ "./node_modules/core-js/library/modules/_object-dp.js");
-var anObject = __webpack_require__(/*! ./_an-object */ "./node_modules/core-js/library/modules/_an-object.js");
-var getKeys = __webpack_require__(/*! ./_object-keys */ "./node_modules/core-js/library/modules/_object-keys.js");
-
-module.exports = __webpack_require__(/*! ./_descriptors */ "./node_modules/core-js/library/modules/_descriptors.js") ? Object.defineProperties : function defineProperties(O, Properties) {
-  anObject(O);
-  var keys = getKeys(Properties);
-  var length = keys.length;
-  var i = 0;
-  var P;
-  while (length > i) dP.f(O, P = keys[i++], Properties[P]);
-  return O;
-};
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/_object-gopd.js":
-/*!**************************************************************!*\
-  !*** ./node_modules/core-js/library/modules/_object-gopd.js ***!
-  \**************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-var pIE = __webpack_require__(/*! ./_object-pie */ "./node_modules/core-js/library/modules/_object-pie.js");
-var createDesc = __webpack_require__(/*! ./_property-desc */ "./node_modules/core-js/library/modules/_property-desc.js");
-var toIObject = __webpack_require__(/*! ./_to-iobject */ "./node_modules/core-js/library/modules/_to-iobject.js");
-var toPrimitive = __webpack_require__(/*! ./_to-primitive */ "./node_modules/core-js/library/modules/_to-primitive.js");
-var has = __webpack_require__(/*! ./_has */ "./node_modules/core-js/library/modules/_has.js");
-var IE8_DOM_DEFINE = __webpack_require__(/*! ./_ie8-dom-define */ "./node_modules/core-js/library/modules/_ie8-dom-define.js");
-var gOPD = Object.getOwnPropertyDescriptor;
-
-exports.f = __webpack_require__(/*! ./_descriptors */ "./node_modules/core-js/library/modules/_descriptors.js") ? gOPD : function getOwnPropertyDescriptor(O, P) {
-  O = toIObject(O);
-  P = toPrimitive(P, true);
-  if (IE8_DOM_DEFINE) try {
-    return gOPD(O, P);
-  } catch (e) { /* empty */ }
-  if (has(O, P)) return createDesc(!pIE.f.call(O, P), O[P]);
-};
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/_object-gopn-ext.js":
-/*!******************************************************************!*\
-  !*** ./node_modules/core-js/library/modules/_object-gopn-ext.js ***!
-  \******************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-// fallback for IE11 buggy Object.getOwnPropertyNames with iframe and window
-var toIObject = __webpack_require__(/*! ./_to-iobject */ "./node_modules/core-js/library/modules/_to-iobject.js");
-var gOPN = __webpack_require__(/*! ./_object-gopn */ "./node_modules/core-js/library/modules/_object-gopn.js").f;
-var toString = {}.toString;
-
-var windowNames = typeof window == 'object' && window && Object.getOwnPropertyNames
-  ? Object.getOwnPropertyNames(window) : [];
-
-var getWindowNames = function (it) {
-  try {
-    return gOPN(it);
-  } catch (e) {
-    return windowNames.slice();
-  }
-};
-
-module.exports.f = function getOwnPropertyNames(it) {
-  return windowNames && toString.call(it) == '[object Window]' ? getWindowNames(it) : gOPN(toIObject(it));
-};
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/_object-gopn.js":
-/*!**************************************************************!*\
-  !*** ./node_modules/core-js/library/modules/_object-gopn.js ***!
-  \**************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-// 19.1.2.7 / 15.2.3.4 Object.getOwnPropertyNames(O)
-var $keys = __webpack_require__(/*! ./_object-keys-internal */ "./node_modules/core-js/library/modules/_object-keys-internal.js");
-var hiddenKeys = __webpack_require__(/*! ./_enum-bug-keys */ "./node_modules/core-js/library/modules/_enum-bug-keys.js").concat('length', 'prototype');
-
-exports.f = Object.getOwnPropertyNames || function getOwnPropertyNames(O) {
-  return $keys(O, hiddenKeys);
-};
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/_object-gops.js":
-/*!**************************************************************!*\
-  !*** ./node_modules/core-js/library/modules/_object-gops.js ***!
-  \**************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-exports.f = Object.getOwnPropertySymbols;
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/_object-gpo.js":
-/*!*************************************************************!*\
-  !*** ./node_modules/core-js/library/modules/_object-gpo.js ***!
-  \*************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-// 19.1.2.9 / 15.2.3.2 Object.getPrototypeOf(O)
-var has = __webpack_require__(/*! ./_has */ "./node_modules/core-js/library/modules/_has.js");
-var toObject = __webpack_require__(/*! ./_to-object */ "./node_modules/core-js/library/modules/_to-object.js");
-var IE_PROTO = __webpack_require__(/*! ./_shared-key */ "./node_modules/core-js/library/modules/_shared-key.js")('IE_PROTO');
-var ObjectProto = Object.prototype;
-
-module.exports = Object.getPrototypeOf || function (O) {
-  O = toObject(O);
-  if (has(O, IE_PROTO)) return O[IE_PROTO];
-  if (typeof O.constructor == 'function' && O instanceof O.constructor) {
-    return O.constructor.prototype;
-  } return O instanceof Object ? ObjectProto : null;
-};
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/_object-keys-internal.js":
-/*!***********************************************************************!*\
-  !*** ./node_modules/core-js/library/modules/_object-keys-internal.js ***!
-  \***********************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-var has = __webpack_require__(/*! ./_has */ "./node_modules/core-js/library/modules/_has.js");
-var toIObject = __webpack_require__(/*! ./_to-iobject */ "./node_modules/core-js/library/modules/_to-iobject.js");
-var arrayIndexOf = __webpack_require__(/*! ./_array-includes */ "./node_modules/core-js/library/modules/_array-includes.js")(false);
-var IE_PROTO = __webpack_require__(/*! ./_shared-key */ "./node_modules/core-js/library/modules/_shared-key.js")('IE_PROTO');
-
-module.exports = function (object, names) {
-  var O = toIObject(object);
-  var i = 0;
-  var result = [];
-  var key;
-  for (key in O) if (key != IE_PROTO) has(O, key) && result.push(key);
-  // Don't enum bug & hidden keys
-  while (names.length > i) if (has(O, key = names[i++])) {
-    ~arrayIndexOf(result, key) || result.push(key);
-  }
-  return result;
-};
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/_object-keys.js":
-/*!**************************************************************!*\
-  !*** ./node_modules/core-js/library/modules/_object-keys.js ***!
-  \**************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-// 19.1.2.14 / 15.2.3.14 Object.keys(O)
-var $keys = __webpack_require__(/*! ./_object-keys-internal */ "./node_modules/core-js/library/modules/_object-keys-internal.js");
-var enumBugKeys = __webpack_require__(/*! ./_enum-bug-keys */ "./node_modules/core-js/library/modules/_enum-bug-keys.js");
-
-module.exports = Object.keys || function keys(O) {
-  return $keys(O, enumBugKeys);
-};
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/_object-pie.js":
-/*!*************************************************************!*\
-  !*** ./node_modules/core-js/library/modules/_object-pie.js ***!
-  \*************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-exports.f = {}.propertyIsEnumerable;
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/_object-sap.js":
-/*!*************************************************************!*\
-  !*** ./node_modules/core-js/library/modules/_object-sap.js ***!
-  \*************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-// most Object methods by ES6 should accept primitives
-var $export = __webpack_require__(/*! ./_export */ "./node_modules/core-js/library/modules/_export.js");
-var core = __webpack_require__(/*! ./_core */ "./node_modules/core-js/library/modules/_core.js");
-var fails = __webpack_require__(/*! ./_fails */ "./node_modules/core-js/library/modules/_fails.js");
-module.exports = function (KEY, exec) {
-  var fn = (core.Object || {})[KEY] || Object[KEY];
-  var exp = {};
-  exp[KEY] = exec(fn);
-  $export($export.S + $export.F * fails(function () { fn(1); }), 'Object', exp);
-};
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/_perform.js":
-/*!**********************************************************!*\
-  !*** ./node_modules/core-js/library/modules/_perform.js ***!
-  \**********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = function (exec) {
-  try {
-    return { e: false, v: exec() };
-  } catch (e) {
-    return { e: true, v: e };
-  }
-};
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/_promise-resolve.js":
-/*!******************************************************************!*\
-  !*** ./node_modules/core-js/library/modules/_promise-resolve.js ***!
-  \******************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-var anObject = __webpack_require__(/*! ./_an-object */ "./node_modules/core-js/library/modules/_an-object.js");
-var isObject = __webpack_require__(/*! ./_is-object */ "./node_modules/core-js/library/modules/_is-object.js");
-var newPromiseCapability = __webpack_require__(/*! ./_new-promise-capability */ "./node_modules/core-js/library/modules/_new-promise-capability.js");
-
-module.exports = function (C, x) {
-  anObject(C);
-  if (isObject(x) && x.constructor === C) return x;
-  var promiseCapability = newPromiseCapability.f(C);
-  var resolve = promiseCapability.resolve;
-  resolve(x);
-  return promiseCapability.promise;
-};
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/_property-desc.js":
-/*!****************************************************************!*\
-  !*** ./node_modules/core-js/library/modules/_property-desc.js ***!
-  \****************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-module.exports = function (bitmap, value) {
-  return {
-    enumerable: !(bitmap & 1),
-    configurable: !(bitmap & 2),
-    writable: !(bitmap & 4),
-    value: value
-  };
-};
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/_redefine-all.js":
-/*!***************************************************************!*\
-  !*** ./node_modules/core-js/library/modules/_redefine-all.js ***!
-  \***************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-var hide = __webpack_require__(/*! ./_hide */ "./node_modules/core-js/library/modules/_hide.js");
-module.exports = function (target, src, safe) {
-  for (var key in src) {
-    if (safe && target[key]) target[key] = src[key];
-    else hide(target, key, src[key]);
-  } return target;
-};
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/_redefine.js":
-/*!***********************************************************!*\
-  !*** ./node_modules/core-js/library/modules/_redefine.js ***!
-  \***********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-module.exports = __webpack_require__(/*! ./_hide */ "./node_modules/core-js/library/modules/_hide.js");
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/_set-proto.js":
-/*!************************************************************!*\
-  !*** ./node_modules/core-js/library/modules/_set-proto.js ***!
-  \************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-// Works with __proto__ only. Old v8 can't work with null proto objects.
-/* eslint-disable no-proto */
-var isObject = __webpack_require__(/*! ./_is-object */ "./node_modules/core-js/library/modules/_is-object.js");
-var anObject = __webpack_require__(/*! ./_an-object */ "./node_modules/core-js/library/modules/_an-object.js");
-var check = function (O, proto) {
-  anObject(O);
-  if (!isObject(proto) && proto !== null) throw TypeError(proto + ": can't set as prototype!");
-};
-module.exports = {
-  set: Object.setPrototypeOf || ('__proto__' in {} ? // eslint-disable-line
-    function (test, buggy, set) {
-      try {
-        set = __webpack_require__(/*! ./_ctx */ "./node_modules/core-js/library/modules/_ctx.js")(Function.call, __webpack_require__(/*! ./_object-gopd */ "./node_modules/core-js/library/modules/_object-gopd.js").f(Object.prototype, '__proto__').set, 2);
-        set(test, []);
-        buggy = !(test instanceof Array);
-      } catch (e) { buggy = true; }
-      return function setPrototypeOf(O, proto) {
-        check(O, proto);
-        if (buggy) O.__proto__ = proto;
-        else set(O, proto);
-        return O;
-      };
-    }({}, false) : undefined),
-  check: check
-};
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/_set-species.js":
-/*!**************************************************************!*\
-  !*** ./node_modules/core-js/library/modules/_set-species.js ***!
-  \**************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var global = __webpack_require__(/*! ./_global */ "./node_modules/core-js/library/modules/_global.js");
-var core = __webpack_require__(/*! ./_core */ "./node_modules/core-js/library/modules/_core.js");
-var dP = __webpack_require__(/*! ./_object-dp */ "./node_modules/core-js/library/modules/_object-dp.js");
-var DESCRIPTORS = __webpack_require__(/*! ./_descriptors */ "./node_modules/core-js/library/modules/_descriptors.js");
-var SPECIES = __webpack_require__(/*! ./_wks */ "./node_modules/core-js/library/modules/_wks.js")('species');
-
-module.exports = function (KEY) {
-  var C = typeof core[KEY] == 'function' ? core[KEY] : global[KEY];
-  if (DESCRIPTORS && C && !C[SPECIES]) dP.f(C, SPECIES, {
-    configurable: true,
-    get: function () { return this; }
-  });
-};
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/_set-to-string-tag.js":
-/*!********************************************************************!*\
-  !*** ./node_modules/core-js/library/modules/_set-to-string-tag.js ***!
-  \********************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-var def = __webpack_require__(/*! ./_object-dp */ "./node_modules/core-js/library/modules/_object-dp.js").f;
-var has = __webpack_require__(/*! ./_has */ "./node_modules/core-js/library/modules/_has.js");
-var TAG = __webpack_require__(/*! ./_wks */ "./node_modules/core-js/library/modules/_wks.js")('toStringTag');
-
-module.exports = function (it, tag, stat) {
-  if (it && !has(it = stat ? it : it.prototype, TAG)) def(it, TAG, { configurable: true, value: tag });
-};
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/_shared-key.js":
-/*!*************************************************************!*\
-  !*** ./node_modules/core-js/library/modules/_shared-key.js ***!
-  \*************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-var shared = __webpack_require__(/*! ./_shared */ "./node_modules/core-js/library/modules/_shared.js")('keys');
-var uid = __webpack_require__(/*! ./_uid */ "./node_modules/core-js/library/modules/_uid.js");
-module.exports = function (key) {
-  return shared[key] || (shared[key] = uid(key));
-};
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/_shared.js":
-/*!*********************************************************!*\
-  !*** ./node_modules/core-js/library/modules/_shared.js ***!
-  \*********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-var core = __webpack_require__(/*! ./_core */ "./node_modules/core-js/library/modules/_core.js");
-var global = __webpack_require__(/*! ./_global */ "./node_modules/core-js/library/modules/_global.js");
-var SHARED = '__core-js_shared__';
-var store = global[SHARED] || (global[SHARED] = {});
-
-(module.exports = function (key, value) {
-  return store[key] || (store[key] = value !== undefined ? value : {});
-})('versions', []).push({
-  version: core.version,
-  mode: __webpack_require__(/*! ./_library */ "./node_modules/core-js/library/modules/_library.js") ? 'pure' : 'global',
-  copyright: '© 2020 Denis Pushkarev (zloirock.ru)'
-});
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/_species-constructor.js":
-/*!**********************************************************************!*\
-  !*** ./node_modules/core-js/library/modules/_species-constructor.js ***!
-  \**********************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-// 7.3.20 SpeciesConstructor(O, defaultConstructor)
-var anObject = __webpack_require__(/*! ./_an-object */ "./node_modules/core-js/library/modules/_an-object.js");
-var aFunction = __webpack_require__(/*! ./_a-function */ "./node_modules/core-js/library/modules/_a-function.js");
-var SPECIES = __webpack_require__(/*! ./_wks */ "./node_modules/core-js/library/modules/_wks.js")('species');
-module.exports = function (O, D) {
-  var C = anObject(O).constructor;
-  var S;
-  return C === undefined || (S = anObject(C)[SPECIES]) == undefined ? D : aFunction(S);
-};
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/_string-at.js":
-/*!************************************************************!*\
-  !*** ./node_modules/core-js/library/modules/_string-at.js ***!
-  \************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-var toInteger = __webpack_require__(/*! ./_to-integer */ "./node_modules/core-js/library/modules/_to-integer.js");
-var defined = __webpack_require__(/*! ./_defined */ "./node_modules/core-js/library/modules/_defined.js");
-// true  -> String#at
-// false -> String#codePointAt
-module.exports = function (TO_STRING) {
-  return function (that, pos) {
-    var s = String(defined(that));
-    var i = toInteger(pos);
-    var l = s.length;
-    var a, b;
-    if (i < 0 || i >= l) return TO_STRING ? '' : undefined;
-    a = s.charCodeAt(i);
-    return a < 0xd800 || a > 0xdbff || i + 1 === l || (b = s.charCodeAt(i + 1)) < 0xdc00 || b > 0xdfff
-      ? TO_STRING ? s.charAt(i) : a
-      : TO_STRING ? s.slice(i, i + 2) : (a - 0xd800 << 10) + (b - 0xdc00) + 0x10000;
-  };
-};
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/_task.js":
-/*!*******************************************************!*\
-  !*** ./node_modules/core-js/library/modules/_task.js ***!
-  \*******************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-var ctx = __webpack_require__(/*! ./_ctx */ "./node_modules/core-js/library/modules/_ctx.js");
-var invoke = __webpack_require__(/*! ./_invoke */ "./node_modules/core-js/library/modules/_invoke.js");
-var html = __webpack_require__(/*! ./_html */ "./node_modules/core-js/library/modules/_html.js");
-var cel = __webpack_require__(/*! ./_dom-create */ "./node_modules/core-js/library/modules/_dom-create.js");
-var global = __webpack_require__(/*! ./_global */ "./node_modules/core-js/library/modules/_global.js");
-var process = global.process;
-var setTask = global.setImmediate;
-var clearTask = global.clearImmediate;
-var MessageChannel = global.MessageChannel;
-var Dispatch = global.Dispatch;
-var counter = 0;
-var queue = {};
-var ONREADYSTATECHANGE = 'onreadystatechange';
-var defer, channel, port;
-var run = function () {
-  var id = +this;
-  // eslint-disable-next-line no-prototype-builtins
-  if (queue.hasOwnProperty(id)) {
-    var fn = queue[id];
-    delete queue[id];
-    fn();
-  }
-};
-var listener = function (event) {
-  run.call(event.data);
-};
-// Node.js 0.9+ & IE10+ has setImmediate, otherwise:
-if (!setTask || !clearTask) {
-  setTask = function setImmediate(fn) {
-    var args = [];
-    var i = 1;
-    while (arguments.length > i) args.push(arguments[i++]);
-    queue[++counter] = function () {
-      // eslint-disable-next-line no-new-func
-      invoke(typeof fn == 'function' ? fn : Function(fn), args);
-    };
-    defer(counter);
-    return counter;
-  };
-  clearTask = function clearImmediate(id) {
-    delete queue[id];
-  };
-  // Node.js 0.8-
-  if (__webpack_require__(/*! ./_cof */ "./node_modules/core-js/library/modules/_cof.js")(process) == 'process') {
-    defer = function (id) {
-      process.nextTick(ctx(run, id, 1));
-    };
-  // Sphere (JS game engine) Dispatch API
-  } else if (Dispatch && Dispatch.now) {
-    defer = function (id) {
-      Dispatch.now(ctx(run, id, 1));
-    };
-  // Browsers with MessageChannel, includes WebWorkers
-  } else if (MessageChannel) {
-    channel = new MessageChannel();
-    port = channel.port2;
-    channel.port1.onmessage = listener;
-    defer = ctx(port.postMessage, port, 1);
-  // Browsers with postMessage, skip WebWorkers
-  // IE8 has postMessage, but it's sync & typeof its postMessage is 'object'
-  } else if (global.addEventListener && typeof postMessage == 'function' && !global.importScripts) {
-    defer = function (id) {
-      global.postMessage(id + '', '*');
-    };
-    global.addEventListener('message', listener, false);
-  // IE8-
-  } else if (ONREADYSTATECHANGE in cel('script')) {
-    defer = function (id) {
-      html.appendChild(cel('script'))[ONREADYSTATECHANGE] = function () {
-        html.removeChild(this);
-        run.call(id);
-      };
-    };
-  // Rest old browsers
-  } else {
-    defer = function (id) {
-      setTimeout(ctx(run, id, 1), 0);
-    };
-  }
-}
-module.exports = {
-  set: setTask,
-  clear: clearTask
-};
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/_to-absolute-index.js":
-/*!********************************************************************!*\
-  !*** ./node_modules/core-js/library/modules/_to-absolute-index.js ***!
-  \********************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-var toInteger = __webpack_require__(/*! ./_to-integer */ "./node_modules/core-js/library/modules/_to-integer.js");
-var max = Math.max;
-var min = Math.min;
-module.exports = function (index, length) {
-  index = toInteger(index);
-  return index < 0 ? max(index + length, 0) : min(index, length);
-};
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/_to-integer.js":
-/*!*************************************************************!*\
-  !*** ./node_modules/core-js/library/modules/_to-integer.js ***!
-  \*************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-// 7.1.4 ToInteger
-var ceil = Math.ceil;
-var floor = Math.floor;
-module.exports = function (it) {
-  return isNaN(it = +it) ? 0 : (it > 0 ? floor : ceil)(it);
-};
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/_to-iobject.js":
-/*!*************************************************************!*\
-  !*** ./node_modules/core-js/library/modules/_to-iobject.js ***!
-  \*************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-// to indexed object, toObject with fallback for non-array-like ES3 strings
-var IObject = __webpack_require__(/*! ./_iobject */ "./node_modules/core-js/library/modules/_iobject.js");
-var defined = __webpack_require__(/*! ./_defined */ "./node_modules/core-js/library/modules/_defined.js");
-module.exports = function (it) {
-  return IObject(defined(it));
-};
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/_to-length.js":
-/*!************************************************************!*\
-  !*** ./node_modules/core-js/library/modules/_to-length.js ***!
-  \************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-// 7.1.15 ToLength
-var toInteger = __webpack_require__(/*! ./_to-integer */ "./node_modules/core-js/library/modules/_to-integer.js");
-var min = Math.min;
-module.exports = function (it) {
-  return it > 0 ? min(toInteger(it), 0x1fffffffffffff) : 0; // pow(2, 53) - 1 == 9007199254740991
-};
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/_to-object.js":
-/*!************************************************************!*\
-  !*** ./node_modules/core-js/library/modules/_to-object.js ***!
-  \************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-// 7.1.13 ToObject(argument)
-var defined = __webpack_require__(/*! ./_defined */ "./node_modules/core-js/library/modules/_defined.js");
-module.exports = function (it) {
-  return Object(defined(it));
-};
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/_to-primitive.js":
-/*!***************************************************************!*\
-  !*** ./node_modules/core-js/library/modules/_to-primitive.js ***!
-  \***************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-// 7.1.1 ToPrimitive(input [, PreferredType])
-var isObject = __webpack_require__(/*! ./_is-object */ "./node_modules/core-js/library/modules/_is-object.js");
-// instead of the ES6 spec version, we didn't implement @@toPrimitive case
-// and the second argument - flag - preferred type is a string
-module.exports = function (it, S) {
-  if (!isObject(it)) return it;
-  var fn, val;
-  if (S && typeof (fn = it.toString) == 'function' && !isObject(val = fn.call(it))) return val;
-  if (typeof (fn = it.valueOf) == 'function' && !isObject(val = fn.call(it))) return val;
-  if (!S && typeof (fn = it.toString) == 'function' && !isObject(val = fn.call(it))) return val;
-  throw TypeError("Can't convert object to primitive value");
-};
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/_uid.js":
-/*!******************************************************!*\
-  !*** ./node_modules/core-js/library/modules/_uid.js ***!
-  \******************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-var id = 0;
-var px = Math.random();
-module.exports = function (key) {
-  return 'Symbol('.concat(key === undefined ? '' : key, ')_', (++id + px).toString(36));
-};
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/_user-agent.js":
-/*!*************************************************************!*\
-  !*** ./node_modules/core-js/library/modules/_user-agent.js ***!
-  \*************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-var global = __webpack_require__(/*! ./_global */ "./node_modules/core-js/library/modules/_global.js");
-var navigator = global.navigator;
-
-module.exports = navigator && navigator.userAgent || '';
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/_wks-define.js":
-/*!*************************************************************!*\
-  !*** ./node_modules/core-js/library/modules/_wks-define.js ***!
-  \*************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-var global = __webpack_require__(/*! ./_global */ "./node_modules/core-js/library/modules/_global.js");
-var core = __webpack_require__(/*! ./_core */ "./node_modules/core-js/library/modules/_core.js");
-var LIBRARY = __webpack_require__(/*! ./_library */ "./node_modules/core-js/library/modules/_library.js");
-var wksExt = __webpack_require__(/*! ./_wks-ext */ "./node_modules/core-js/library/modules/_wks-ext.js");
-var defineProperty = __webpack_require__(/*! ./_object-dp */ "./node_modules/core-js/library/modules/_object-dp.js").f;
-module.exports = function (name) {
-  var $Symbol = core.Symbol || (core.Symbol = LIBRARY ? {} : global.Symbol || {});
-  if (name.charAt(0) != '_' && !(name in $Symbol)) defineProperty($Symbol, name, { value: wksExt.f(name) });
-};
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/_wks-ext.js":
-/*!**********************************************************!*\
-  !*** ./node_modules/core-js/library/modules/_wks-ext.js ***!
-  \**********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports.f = __webpack_require__(/*! ./_wks */ "./node_modules/core-js/library/modules/_wks.js");
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/_wks.js":
-/*!******************************************************!*\
-  !*** ./node_modules/core-js/library/modules/_wks.js ***!
-  \******************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-var store = __webpack_require__(/*! ./_shared */ "./node_modules/core-js/library/modules/_shared.js")('wks');
-var uid = __webpack_require__(/*! ./_uid */ "./node_modules/core-js/library/modules/_uid.js");
-var Symbol = __webpack_require__(/*! ./_global */ "./node_modules/core-js/library/modules/_global.js").Symbol;
-var USE_SYMBOL = typeof Symbol == 'function';
-
-var $exports = module.exports = function (name) {
-  return store[name] || (store[name] =
-    USE_SYMBOL && Symbol[name] || (USE_SYMBOL ? Symbol : uid)('Symbol.' + name));
-};
-
-$exports.store = store;
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/core.get-iterator-method.js":
-/*!**************************************************************************!*\
-  !*** ./node_modules/core-js/library/modules/core.get-iterator-method.js ***!
-  \**************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-var classof = __webpack_require__(/*! ./_classof */ "./node_modules/core-js/library/modules/_classof.js");
-var ITERATOR = __webpack_require__(/*! ./_wks */ "./node_modules/core-js/library/modules/_wks.js")('iterator');
-var Iterators = __webpack_require__(/*! ./_iterators */ "./node_modules/core-js/library/modules/_iterators.js");
-module.exports = __webpack_require__(/*! ./_core */ "./node_modules/core-js/library/modules/_core.js").getIteratorMethod = function (it) {
-  if (it != undefined) return it[ITERATOR]
-    || it['@@iterator']
-    || Iterators[classof(it)];
-};
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/core.get-iterator.js":
-/*!*******************************************************************!*\
-  !*** ./node_modules/core-js/library/modules/core.get-iterator.js ***!
-  \*******************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-var anObject = __webpack_require__(/*! ./_an-object */ "./node_modules/core-js/library/modules/_an-object.js");
-var get = __webpack_require__(/*! ./core.get-iterator-method */ "./node_modules/core-js/library/modules/core.get-iterator-method.js");
-module.exports = __webpack_require__(/*! ./_core */ "./node_modules/core-js/library/modules/_core.js").getIterator = function (it) {
-  var iterFn = get(it);
-  if (typeof iterFn != 'function') throw TypeError(it + ' is not iterable!');
-  return anObject(iterFn.call(it));
-};
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/core.is-iterable.js":
-/*!******************************************************************!*\
-  !*** ./node_modules/core-js/library/modules/core.is-iterable.js ***!
-  \******************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-var classof = __webpack_require__(/*! ./_classof */ "./node_modules/core-js/library/modules/_classof.js");
-var ITERATOR = __webpack_require__(/*! ./_wks */ "./node_modules/core-js/library/modules/_wks.js")('iterator');
-var Iterators = __webpack_require__(/*! ./_iterators */ "./node_modules/core-js/library/modules/_iterators.js");
-module.exports = __webpack_require__(/*! ./_core */ "./node_modules/core-js/library/modules/_core.js").isIterable = function (it) {
-  var O = Object(it);
-  return O[ITERATOR] !== undefined
-    || '@@iterator' in O
-    // eslint-disable-next-line no-prototype-builtins
-    || Iterators.hasOwnProperty(classof(O));
-};
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/es6.array.from.js":
-/*!****************************************************************!*\
-  !*** ./node_modules/core-js/library/modules/es6.array.from.js ***!
-  \****************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var ctx = __webpack_require__(/*! ./_ctx */ "./node_modules/core-js/library/modules/_ctx.js");
-var $export = __webpack_require__(/*! ./_export */ "./node_modules/core-js/library/modules/_export.js");
-var toObject = __webpack_require__(/*! ./_to-object */ "./node_modules/core-js/library/modules/_to-object.js");
-var call = __webpack_require__(/*! ./_iter-call */ "./node_modules/core-js/library/modules/_iter-call.js");
-var isArrayIter = __webpack_require__(/*! ./_is-array-iter */ "./node_modules/core-js/library/modules/_is-array-iter.js");
-var toLength = __webpack_require__(/*! ./_to-length */ "./node_modules/core-js/library/modules/_to-length.js");
-var createProperty = __webpack_require__(/*! ./_create-property */ "./node_modules/core-js/library/modules/_create-property.js");
-var getIterFn = __webpack_require__(/*! ./core.get-iterator-method */ "./node_modules/core-js/library/modules/core.get-iterator-method.js");
-
-$export($export.S + $export.F * !__webpack_require__(/*! ./_iter-detect */ "./node_modules/core-js/library/modules/_iter-detect.js")(function (iter) { Array.from(iter); }), 'Array', {
-  // 22.1.2.1 Array.from(arrayLike, mapfn = undefined, thisArg = undefined)
-  from: function from(arrayLike /* , mapfn = undefined, thisArg = undefined */) {
-    var O = toObject(arrayLike);
-    var C = typeof this == 'function' ? this : Array;
-    var aLen = arguments.length;
-    var mapfn = aLen > 1 ? arguments[1] : undefined;
-    var mapping = mapfn !== undefined;
-    var index = 0;
-    var iterFn = getIterFn(O);
-    var length, result, step, iterator;
-    if (mapping) mapfn = ctx(mapfn, aLen > 2 ? arguments[2] : undefined, 2);
-    // if object isn't iterable or it's array with default iterator - use simple case
-    if (iterFn != undefined && !(C == Array && isArrayIter(iterFn))) {
-      for (iterator = iterFn.call(O), result = new C(); !(step = iterator.next()).done; index++) {
-        createProperty(result, index, mapping ? call(iterator, mapfn, [step.value, index], true) : step.value);
-      }
-    } else {
-      length = toLength(O.length);
-      for (result = new C(length); length > index; index++) {
-        createProperty(result, index, mapping ? mapfn(O[index], index) : O[index]);
-      }
-    }
-    result.length = index;
-    return result;
-  }
-});
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/es6.array.iterator.js":
-/*!********************************************************************!*\
-  !*** ./node_modules/core-js/library/modules/es6.array.iterator.js ***!
-  \********************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var addToUnscopables = __webpack_require__(/*! ./_add-to-unscopables */ "./node_modules/core-js/library/modules/_add-to-unscopables.js");
-var step = __webpack_require__(/*! ./_iter-step */ "./node_modules/core-js/library/modules/_iter-step.js");
-var Iterators = __webpack_require__(/*! ./_iterators */ "./node_modules/core-js/library/modules/_iterators.js");
-var toIObject = __webpack_require__(/*! ./_to-iobject */ "./node_modules/core-js/library/modules/_to-iobject.js");
-
-// 22.1.3.4 Array.prototype.entries()
-// 22.1.3.13 Array.prototype.keys()
-// 22.1.3.29 Array.prototype.values()
-// 22.1.3.30 Array.prototype[@@iterator]()
-module.exports = __webpack_require__(/*! ./_iter-define */ "./node_modules/core-js/library/modules/_iter-define.js")(Array, 'Array', function (iterated, kind) {
-  this._t = toIObject(iterated); // target
-  this._i = 0;                   // next index
-  this._k = kind;                // kind
-// 22.1.5.2.1 %ArrayIteratorPrototype%.next()
-}, function () {
-  var O = this._t;
-  var kind = this._k;
-  var index = this._i++;
-  if (!O || index >= O.length) {
-    this._t = undefined;
-    return step(1);
-  }
-  if (kind == 'keys') return step(0, index);
-  if (kind == 'values') return step(0, O[index]);
-  return step(0, [index, O[index]]);
-}, 'values');
-
-// argumentsList[@@iterator] is %ArrayProto_values% (9.4.4.6, 9.4.4.7)
-Iterators.Arguments = Iterators.Array;
-
-addToUnscopables('keys');
-addToUnscopables('values');
-addToUnscopables('entries');
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/es6.object.assign.js":
-/*!*******************************************************************!*\
-  !*** ./node_modules/core-js/library/modules/es6.object.assign.js ***!
-  \*******************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-// 19.1.3.1 Object.assign(target, source)
-var $export = __webpack_require__(/*! ./_export */ "./node_modules/core-js/library/modules/_export.js");
-
-$export($export.S + $export.F, 'Object', { assign: __webpack_require__(/*! ./_object-assign */ "./node_modules/core-js/library/modules/_object-assign.js") });
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/es6.object.create.js":
-/*!*******************************************************************!*\
-  !*** ./node_modules/core-js/library/modules/es6.object.create.js ***!
-  \*******************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-var $export = __webpack_require__(/*! ./_export */ "./node_modules/core-js/library/modules/_export.js");
-// 19.1.2.2 / 15.2.3.5 Object.create(O [, Properties])
-$export($export.S, 'Object', { create: __webpack_require__(/*! ./_object-create */ "./node_modules/core-js/library/modules/_object-create.js") });
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/es6.object.define-property.js":
-/*!****************************************************************************!*\
-  !*** ./node_modules/core-js/library/modules/es6.object.define-property.js ***!
-  \****************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-var $export = __webpack_require__(/*! ./_export */ "./node_modules/core-js/library/modules/_export.js");
-// 19.1.2.4 / 15.2.3.6 Object.defineProperty(O, P, Attributes)
-$export($export.S + $export.F * !__webpack_require__(/*! ./_descriptors */ "./node_modules/core-js/library/modules/_descriptors.js"), 'Object', { defineProperty: __webpack_require__(/*! ./_object-dp */ "./node_modules/core-js/library/modules/_object-dp.js").f });
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/es6.object.get-prototype-of.js":
-/*!*****************************************************************************!*\
-  !*** ./node_modules/core-js/library/modules/es6.object.get-prototype-of.js ***!
-  \*****************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-// 19.1.2.9 Object.getPrototypeOf(O)
-var toObject = __webpack_require__(/*! ./_to-object */ "./node_modules/core-js/library/modules/_to-object.js");
-var $getPrototypeOf = __webpack_require__(/*! ./_object-gpo */ "./node_modules/core-js/library/modules/_object-gpo.js");
-
-__webpack_require__(/*! ./_object-sap */ "./node_modules/core-js/library/modules/_object-sap.js")('getPrototypeOf', function () {
-  return function getPrototypeOf(it) {
-    return $getPrototypeOf(toObject(it));
-  };
-});
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/es6.object.keys.js":
-/*!*****************************************************************!*\
-  !*** ./node_modules/core-js/library/modules/es6.object.keys.js ***!
-  \*****************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-// 19.1.2.14 Object.keys(O)
-var toObject = __webpack_require__(/*! ./_to-object */ "./node_modules/core-js/library/modules/_to-object.js");
-var $keys = __webpack_require__(/*! ./_object-keys */ "./node_modules/core-js/library/modules/_object-keys.js");
-
-__webpack_require__(/*! ./_object-sap */ "./node_modules/core-js/library/modules/_object-sap.js")('keys', function () {
-  return function keys(it) {
-    return $keys(toObject(it));
-  };
-});
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/es6.object.set-prototype-of.js":
-/*!*****************************************************************************!*\
-  !*** ./node_modules/core-js/library/modules/es6.object.set-prototype-of.js ***!
-  \*****************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-// 19.1.3.19 Object.setPrototypeOf(O, proto)
-var $export = __webpack_require__(/*! ./_export */ "./node_modules/core-js/library/modules/_export.js");
-$export($export.S, 'Object', { setPrototypeOf: __webpack_require__(/*! ./_set-proto */ "./node_modules/core-js/library/modules/_set-proto.js").set });
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/es6.object.to-string.js":
-/*!**********************************************************************!*\
-  !*** ./node_modules/core-js/library/modules/es6.object.to-string.js ***!
-  \**********************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/es6.promise.js":
-/*!*************************************************************!*\
-  !*** ./node_modules/core-js/library/modules/es6.promise.js ***!
-  \*************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var LIBRARY = __webpack_require__(/*! ./_library */ "./node_modules/core-js/library/modules/_library.js");
-var global = __webpack_require__(/*! ./_global */ "./node_modules/core-js/library/modules/_global.js");
-var ctx = __webpack_require__(/*! ./_ctx */ "./node_modules/core-js/library/modules/_ctx.js");
-var classof = __webpack_require__(/*! ./_classof */ "./node_modules/core-js/library/modules/_classof.js");
-var $export = __webpack_require__(/*! ./_export */ "./node_modules/core-js/library/modules/_export.js");
-var isObject = __webpack_require__(/*! ./_is-object */ "./node_modules/core-js/library/modules/_is-object.js");
-var aFunction = __webpack_require__(/*! ./_a-function */ "./node_modules/core-js/library/modules/_a-function.js");
-var anInstance = __webpack_require__(/*! ./_an-instance */ "./node_modules/core-js/library/modules/_an-instance.js");
-var forOf = __webpack_require__(/*! ./_for-of */ "./node_modules/core-js/library/modules/_for-of.js");
-var speciesConstructor = __webpack_require__(/*! ./_species-constructor */ "./node_modules/core-js/library/modules/_species-constructor.js");
-var task = __webpack_require__(/*! ./_task */ "./node_modules/core-js/library/modules/_task.js").set;
-var microtask = __webpack_require__(/*! ./_microtask */ "./node_modules/core-js/library/modules/_microtask.js")();
-var newPromiseCapabilityModule = __webpack_require__(/*! ./_new-promise-capability */ "./node_modules/core-js/library/modules/_new-promise-capability.js");
-var perform = __webpack_require__(/*! ./_perform */ "./node_modules/core-js/library/modules/_perform.js");
-var userAgent = __webpack_require__(/*! ./_user-agent */ "./node_modules/core-js/library/modules/_user-agent.js");
-var promiseResolve = __webpack_require__(/*! ./_promise-resolve */ "./node_modules/core-js/library/modules/_promise-resolve.js");
-var PROMISE = 'Promise';
-var TypeError = global.TypeError;
-var process = global.process;
-var versions = process && process.versions;
-var v8 = versions && versions.v8 || '';
-var $Promise = global[PROMISE];
-var isNode = classof(process) == 'process';
-var empty = function () { /* empty */ };
-var Internal, newGenericPromiseCapability, OwnPromiseCapability, Wrapper;
-var newPromiseCapability = newGenericPromiseCapability = newPromiseCapabilityModule.f;
-
-var USE_NATIVE = !!function () {
-  try {
-    // correct subclassing with @@species support
-    var promise = $Promise.resolve(1);
-    var FakePromise = (promise.constructor = {})[__webpack_require__(/*! ./_wks */ "./node_modules/core-js/library/modules/_wks.js")('species')] = function (exec) {
-      exec(empty, empty);
-    };
-    // unhandled rejections tracking support, NodeJS Promise without it fails @@species test
-    return (isNode || typeof PromiseRejectionEvent == 'function')
-      && promise.then(empty) instanceof FakePromise
-      // v8 6.6 (Node 10 and Chrome 66) have a bug with resolving custom thenables
-      // https://bugs.chromium.org/p/chromium/issues/detail?id=830565
-      // we can't detect it synchronously, so just check versions
-      && v8.indexOf('6.6') !== 0
-      && userAgent.indexOf('Chrome/66') === -1;
-  } catch (e) { /* empty */ }
-}();
-
-// helpers
-var isThenable = function (it) {
-  var then;
-  return isObject(it) && typeof (then = it.then) == 'function' ? then : false;
-};
-var notify = function (promise, isReject) {
-  if (promise._n) return;
-  promise._n = true;
-  var chain = promise._c;
-  microtask(function () {
-    var value = promise._v;
-    var ok = promise._s == 1;
-    var i = 0;
-    var run = function (reaction) {
-      var handler = ok ? reaction.ok : reaction.fail;
-      var resolve = reaction.resolve;
-      var reject = reaction.reject;
-      var domain = reaction.domain;
-      var result, then, exited;
-      try {
-        if (handler) {
-          if (!ok) {
-            if (promise._h == 2) onHandleUnhandled(promise);
-            promise._h = 1;
-          }
-          if (handler === true) result = value;
-          else {
-            if (domain) domain.enter();
-            result = handler(value); // may throw
-            if (domain) {
-              domain.exit();
-              exited = true;
-            }
-          }
-          if (result === reaction.promise) {
-            reject(TypeError('Promise-chain cycle'));
-          } else if (then = isThenable(result)) {
-            then.call(result, resolve, reject);
-          } else resolve(result);
-        } else reject(value);
-      } catch (e) {
-        if (domain && !exited) domain.exit();
-        reject(e);
-      }
-    };
-    while (chain.length > i) run(chain[i++]); // variable length - can't use forEach
-    promise._c = [];
-    promise._n = false;
-    if (isReject && !promise._h) onUnhandled(promise);
-  });
-};
-var onUnhandled = function (promise) {
-  task.call(global, function () {
-    var value = promise._v;
-    var unhandled = isUnhandled(promise);
-    var result, handler, console;
-    if (unhandled) {
-      result = perform(function () {
-        if (isNode) {
-          process.emit('unhandledRejection', value, promise);
-        } else if (handler = global.onunhandledrejection) {
-          handler({ promise: promise, reason: value });
-        } else if ((console = global.console) && console.error) {
-          console.error('Unhandled promise rejection', value);
-        }
-      });
-      // Browsers should not trigger `rejectionHandled` event if it was handled here, NodeJS - should
-      promise._h = isNode || isUnhandled(promise) ? 2 : 1;
-    } promise._a = undefined;
-    if (unhandled && result.e) throw result.v;
-  });
-};
-var isUnhandled = function (promise) {
-  return promise._h !== 1 && (promise._a || promise._c).length === 0;
-};
-var onHandleUnhandled = function (promise) {
-  task.call(global, function () {
-    var handler;
-    if (isNode) {
-      process.emit('rejectionHandled', promise);
-    } else if (handler = global.onrejectionhandled) {
-      handler({ promise: promise, reason: promise._v });
-    }
-  });
-};
-var $reject = function (value) {
-  var promise = this;
-  if (promise._d) return;
-  promise._d = true;
-  promise = promise._w || promise; // unwrap
-  promise._v = value;
-  promise._s = 2;
-  if (!promise._a) promise._a = promise._c.slice();
-  notify(promise, true);
-};
-var $resolve = function (value) {
-  var promise = this;
-  var then;
-  if (promise._d) return;
-  promise._d = true;
-  promise = promise._w || promise; // unwrap
-  try {
-    if (promise === value) throw TypeError("Promise can't be resolved itself");
-    if (then = isThenable(value)) {
-      microtask(function () {
-        var wrapper = { _w: promise, _d: false }; // wrap
-        try {
-          then.call(value, ctx($resolve, wrapper, 1), ctx($reject, wrapper, 1));
-        } catch (e) {
-          $reject.call(wrapper, e);
-        }
-      });
-    } else {
-      promise._v = value;
-      promise._s = 1;
-      notify(promise, false);
-    }
-  } catch (e) {
-    $reject.call({ _w: promise, _d: false }, e); // wrap
-  }
-};
-
-// constructor polyfill
-if (!USE_NATIVE) {
-  // 25.4.3.1 Promise(executor)
-  $Promise = function Promise(executor) {
-    anInstance(this, $Promise, PROMISE, '_h');
-    aFunction(executor);
-    Internal.call(this);
-    try {
-      executor(ctx($resolve, this, 1), ctx($reject, this, 1));
-    } catch (err) {
-      $reject.call(this, err);
-    }
-  };
-  // eslint-disable-next-line no-unused-vars
-  Internal = function Promise(executor) {
-    this._c = [];             // <- awaiting reactions
-    this._a = undefined;      // <- checked in isUnhandled reactions
-    this._s = 0;              // <- state
-    this._d = false;          // <- done
-    this._v = undefined;      // <- value
-    this._h = 0;              // <- rejection state, 0 - default, 1 - handled, 2 - unhandled
-    this._n = false;          // <- notify
-  };
-  Internal.prototype = __webpack_require__(/*! ./_redefine-all */ "./node_modules/core-js/library/modules/_redefine-all.js")($Promise.prototype, {
-    // 25.4.5.3 Promise.prototype.then(onFulfilled, onRejected)
-    then: function then(onFulfilled, onRejected) {
-      var reaction = newPromiseCapability(speciesConstructor(this, $Promise));
-      reaction.ok = typeof onFulfilled == 'function' ? onFulfilled : true;
-      reaction.fail = typeof onRejected == 'function' && onRejected;
-      reaction.domain = isNode ? process.domain : undefined;
-      this._c.push(reaction);
-      if (this._a) this._a.push(reaction);
-      if (this._s) notify(this, false);
-      return reaction.promise;
-    },
-    // 25.4.5.1 Promise.prototype.catch(onRejected)
-    'catch': function (onRejected) {
-      return this.then(undefined, onRejected);
-    }
-  });
-  OwnPromiseCapability = function () {
-    var promise = new Internal();
-    this.promise = promise;
-    this.resolve = ctx($resolve, promise, 1);
-    this.reject = ctx($reject, promise, 1);
-  };
-  newPromiseCapabilityModule.f = newPromiseCapability = function (C) {
-    return C === $Promise || C === Wrapper
-      ? new OwnPromiseCapability(C)
-      : newGenericPromiseCapability(C);
-  };
-}
-
-$export($export.G + $export.W + $export.F * !USE_NATIVE, { Promise: $Promise });
-__webpack_require__(/*! ./_set-to-string-tag */ "./node_modules/core-js/library/modules/_set-to-string-tag.js")($Promise, PROMISE);
-__webpack_require__(/*! ./_set-species */ "./node_modules/core-js/library/modules/_set-species.js")(PROMISE);
-Wrapper = __webpack_require__(/*! ./_core */ "./node_modules/core-js/library/modules/_core.js")[PROMISE];
-
-// statics
-$export($export.S + $export.F * !USE_NATIVE, PROMISE, {
-  // 25.4.4.5 Promise.reject(r)
-  reject: function reject(r) {
-    var capability = newPromiseCapability(this);
-    var $$reject = capability.reject;
-    $$reject(r);
-    return capability.promise;
-  }
-});
-$export($export.S + $export.F * (LIBRARY || !USE_NATIVE), PROMISE, {
-  // 25.4.4.6 Promise.resolve(x)
-  resolve: function resolve(x) {
-    return promiseResolve(LIBRARY && this === Wrapper ? $Promise : this, x);
-  }
-});
-$export($export.S + $export.F * !(USE_NATIVE && __webpack_require__(/*! ./_iter-detect */ "./node_modules/core-js/library/modules/_iter-detect.js")(function (iter) {
-  $Promise.all(iter)['catch'](empty);
-})), PROMISE, {
-  // 25.4.4.1 Promise.all(iterable)
-  all: function all(iterable) {
-    var C = this;
-    var capability = newPromiseCapability(C);
-    var resolve = capability.resolve;
-    var reject = capability.reject;
-    var result = perform(function () {
-      var values = [];
-      var index = 0;
-      var remaining = 1;
-      forOf(iterable, false, function (promise) {
-        var $index = index++;
-        var alreadyCalled = false;
-        values.push(undefined);
-        remaining++;
-        C.resolve(promise).then(function (value) {
-          if (alreadyCalled) return;
-          alreadyCalled = true;
-          values[$index] = value;
-          --remaining || resolve(values);
-        }, reject);
-      });
-      --remaining || resolve(values);
-    });
-    if (result.e) reject(result.v);
-    return capability.promise;
-  },
-  // 25.4.4.4 Promise.race(iterable)
-  race: function race(iterable) {
-    var C = this;
-    var capability = newPromiseCapability(C);
-    var reject = capability.reject;
-    var result = perform(function () {
-      forOf(iterable, false, function (promise) {
-        C.resolve(promise).then(capability.resolve, reject);
-      });
-    });
-    if (result.e) reject(result.v);
-    return capability.promise;
-  }
-});
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/es6.string.iterator.js":
-/*!*********************************************************************!*\
-  !*** ./node_modules/core-js/library/modules/es6.string.iterator.js ***!
-  \*********************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-var $at = __webpack_require__(/*! ./_string-at */ "./node_modules/core-js/library/modules/_string-at.js")(true);
-
-// 21.1.3.27 String.prototype[@@iterator]()
-__webpack_require__(/*! ./_iter-define */ "./node_modules/core-js/library/modules/_iter-define.js")(String, 'String', function (iterated) {
-  this._t = String(iterated); // target
-  this._i = 0;                // next index
-// 21.1.5.2.1 %StringIteratorPrototype%.next()
-}, function () {
-  var O = this._t;
-  var index = this._i;
-  var point;
-  if (index >= O.length) return { value: undefined, done: true };
-  point = $at(O, index);
-  this._i += point.length;
-  return { value: point, done: false };
-});
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/es6.symbol.js":
-/*!************************************************************!*\
-  !*** ./node_modules/core-js/library/modules/es6.symbol.js ***!
-  \************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-// ECMAScript 6 symbols shim
-var global = __webpack_require__(/*! ./_global */ "./node_modules/core-js/library/modules/_global.js");
-var has = __webpack_require__(/*! ./_has */ "./node_modules/core-js/library/modules/_has.js");
-var DESCRIPTORS = __webpack_require__(/*! ./_descriptors */ "./node_modules/core-js/library/modules/_descriptors.js");
-var $export = __webpack_require__(/*! ./_export */ "./node_modules/core-js/library/modules/_export.js");
-var redefine = __webpack_require__(/*! ./_redefine */ "./node_modules/core-js/library/modules/_redefine.js");
-var META = __webpack_require__(/*! ./_meta */ "./node_modules/core-js/library/modules/_meta.js").KEY;
-var $fails = __webpack_require__(/*! ./_fails */ "./node_modules/core-js/library/modules/_fails.js");
-var shared = __webpack_require__(/*! ./_shared */ "./node_modules/core-js/library/modules/_shared.js");
-var setToStringTag = __webpack_require__(/*! ./_set-to-string-tag */ "./node_modules/core-js/library/modules/_set-to-string-tag.js");
-var uid = __webpack_require__(/*! ./_uid */ "./node_modules/core-js/library/modules/_uid.js");
-var wks = __webpack_require__(/*! ./_wks */ "./node_modules/core-js/library/modules/_wks.js");
-var wksExt = __webpack_require__(/*! ./_wks-ext */ "./node_modules/core-js/library/modules/_wks-ext.js");
-var wksDefine = __webpack_require__(/*! ./_wks-define */ "./node_modules/core-js/library/modules/_wks-define.js");
-var enumKeys = __webpack_require__(/*! ./_enum-keys */ "./node_modules/core-js/library/modules/_enum-keys.js");
-var isArray = __webpack_require__(/*! ./_is-array */ "./node_modules/core-js/library/modules/_is-array.js");
-var anObject = __webpack_require__(/*! ./_an-object */ "./node_modules/core-js/library/modules/_an-object.js");
-var isObject = __webpack_require__(/*! ./_is-object */ "./node_modules/core-js/library/modules/_is-object.js");
-var toObject = __webpack_require__(/*! ./_to-object */ "./node_modules/core-js/library/modules/_to-object.js");
-var toIObject = __webpack_require__(/*! ./_to-iobject */ "./node_modules/core-js/library/modules/_to-iobject.js");
-var toPrimitive = __webpack_require__(/*! ./_to-primitive */ "./node_modules/core-js/library/modules/_to-primitive.js");
-var createDesc = __webpack_require__(/*! ./_property-desc */ "./node_modules/core-js/library/modules/_property-desc.js");
-var _create = __webpack_require__(/*! ./_object-create */ "./node_modules/core-js/library/modules/_object-create.js");
-var gOPNExt = __webpack_require__(/*! ./_object-gopn-ext */ "./node_modules/core-js/library/modules/_object-gopn-ext.js");
-var $GOPD = __webpack_require__(/*! ./_object-gopd */ "./node_modules/core-js/library/modules/_object-gopd.js");
-var $GOPS = __webpack_require__(/*! ./_object-gops */ "./node_modules/core-js/library/modules/_object-gops.js");
-var $DP = __webpack_require__(/*! ./_object-dp */ "./node_modules/core-js/library/modules/_object-dp.js");
-var $keys = __webpack_require__(/*! ./_object-keys */ "./node_modules/core-js/library/modules/_object-keys.js");
-var gOPD = $GOPD.f;
-var dP = $DP.f;
-var gOPN = gOPNExt.f;
-var $Symbol = global.Symbol;
-var $JSON = global.JSON;
-var _stringify = $JSON && $JSON.stringify;
-var PROTOTYPE = 'prototype';
-var HIDDEN = wks('_hidden');
-var TO_PRIMITIVE = wks('toPrimitive');
-var isEnum = {}.propertyIsEnumerable;
-var SymbolRegistry = shared('symbol-registry');
-var AllSymbols = shared('symbols');
-var OPSymbols = shared('op-symbols');
-var ObjectProto = Object[PROTOTYPE];
-var USE_NATIVE = typeof $Symbol == 'function' && !!$GOPS.f;
-var QObject = global.QObject;
-// Don't use setters in Qt Script, https://github.com/zloirock/core-js/issues/173
-var setter = !QObject || !QObject[PROTOTYPE] || !QObject[PROTOTYPE].findChild;
-
-// fallback for old Android, https://code.google.com/p/v8/issues/detail?id=687
-var setSymbolDesc = DESCRIPTORS && $fails(function () {
-  return _create(dP({}, 'a', {
-    get: function () { return dP(this, 'a', { value: 7 }).a; }
-  })).a != 7;
-}) ? function (it, key, D) {
-  var protoDesc = gOPD(ObjectProto, key);
-  if (protoDesc) delete ObjectProto[key];
-  dP(it, key, D);
-  if (protoDesc && it !== ObjectProto) dP(ObjectProto, key, protoDesc);
-} : dP;
-
-var wrap = function (tag) {
-  var sym = AllSymbols[tag] = _create($Symbol[PROTOTYPE]);
-  sym._k = tag;
-  return sym;
-};
-
-var isSymbol = USE_NATIVE && typeof $Symbol.iterator == 'symbol' ? function (it) {
-  return typeof it == 'symbol';
-} : function (it) {
-  return it instanceof $Symbol;
-};
-
-var $defineProperty = function defineProperty(it, key, D) {
-  if (it === ObjectProto) $defineProperty(OPSymbols, key, D);
-  anObject(it);
-  key = toPrimitive(key, true);
-  anObject(D);
-  if (has(AllSymbols, key)) {
-    if (!D.enumerable) {
-      if (!has(it, HIDDEN)) dP(it, HIDDEN, createDesc(1, {}));
-      it[HIDDEN][key] = true;
-    } else {
-      if (has(it, HIDDEN) && it[HIDDEN][key]) it[HIDDEN][key] = false;
-      D = _create(D, { enumerable: createDesc(0, false) });
-    } return setSymbolDesc(it, key, D);
-  } return dP(it, key, D);
-};
-var $defineProperties = function defineProperties(it, P) {
-  anObject(it);
-  var keys = enumKeys(P = toIObject(P));
-  var i = 0;
-  var l = keys.length;
-  var key;
-  while (l > i) $defineProperty(it, key = keys[i++], P[key]);
-  return it;
-};
-var $create = function create(it, P) {
-  return P === undefined ? _create(it) : $defineProperties(_create(it), P);
-};
-var $propertyIsEnumerable = function propertyIsEnumerable(key) {
-  var E = isEnum.call(this, key = toPrimitive(key, true));
-  if (this === ObjectProto && has(AllSymbols, key) && !has(OPSymbols, key)) return false;
-  return E || !has(this, key) || !has(AllSymbols, key) || has(this, HIDDEN) && this[HIDDEN][key] ? E : true;
-};
-var $getOwnPropertyDescriptor = function getOwnPropertyDescriptor(it, key) {
-  it = toIObject(it);
-  key = toPrimitive(key, true);
-  if (it === ObjectProto && has(AllSymbols, key) && !has(OPSymbols, key)) return;
-  var D = gOPD(it, key);
-  if (D && has(AllSymbols, key) && !(has(it, HIDDEN) && it[HIDDEN][key])) D.enumerable = true;
-  return D;
-};
-var $getOwnPropertyNames = function getOwnPropertyNames(it) {
-  var names = gOPN(toIObject(it));
-  var result = [];
-  var i = 0;
-  var key;
-  while (names.length > i) {
-    if (!has(AllSymbols, key = names[i++]) && key != HIDDEN && key != META) result.push(key);
-  } return result;
-};
-var $getOwnPropertySymbols = function getOwnPropertySymbols(it) {
-  var IS_OP = it === ObjectProto;
-  var names = gOPN(IS_OP ? OPSymbols : toIObject(it));
-  var result = [];
-  var i = 0;
-  var key;
-  while (names.length > i) {
-    if (has(AllSymbols, key = names[i++]) && (IS_OP ? has(ObjectProto, key) : true)) result.push(AllSymbols[key]);
-  } return result;
-};
-
-// 19.4.1.1 Symbol([description])
-if (!USE_NATIVE) {
-  $Symbol = function Symbol() {
-    if (this instanceof $Symbol) throw TypeError('Symbol is not a constructor!');
-    var tag = uid(arguments.length > 0 ? arguments[0] : undefined);
-    var $set = function (value) {
-      if (this === ObjectProto) $set.call(OPSymbols, value);
-      if (has(this, HIDDEN) && has(this[HIDDEN], tag)) this[HIDDEN][tag] = false;
-      setSymbolDesc(this, tag, createDesc(1, value));
-    };
-    if (DESCRIPTORS && setter) setSymbolDesc(ObjectProto, tag, { configurable: true, set: $set });
-    return wrap(tag);
-  };
-  redefine($Symbol[PROTOTYPE], 'toString', function toString() {
-    return this._k;
-  });
-
-  $GOPD.f = $getOwnPropertyDescriptor;
-  $DP.f = $defineProperty;
-  __webpack_require__(/*! ./_object-gopn */ "./node_modules/core-js/library/modules/_object-gopn.js").f = gOPNExt.f = $getOwnPropertyNames;
-  __webpack_require__(/*! ./_object-pie */ "./node_modules/core-js/library/modules/_object-pie.js").f = $propertyIsEnumerable;
-  $GOPS.f = $getOwnPropertySymbols;
-
-  if (DESCRIPTORS && !__webpack_require__(/*! ./_library */ "./node_modules/core-js/library/modules/_library.js")) {
-    redefine(ObjectProto, 'propertyIsEnumerable', $propertyIsEnumerable, true);
-  }
-
-  wksExt.f = function (name) {
-    return wrap(wks(name));
-  };
-}
-
-$export($export.G + $export.W + $export.F * !USE_NATIVE, { Symbol: $Symbol });
-
-for (var es6Symbols = (
-  // 19.4.2.2, 19.4.2.3, 19.4.2.4, 19.4.2.6, 19.4.2.8, 19.4.2.9, 19.4.2.10, 19.4.2.11, 19.4.2.12, 19.4.2.13, 19.4.2.14
-  'hasInstance,isConcatSpreadable,iterator,match,replace,search,species,split,toPrimitive,toStringTag,unscopables'
-).split(','), j = 0; es6Symbols.length > j;)wks(es6Symbols[j++]);
-
-for (var wellKnownSymbols = $keys(wks.store), k = 0; wellKnownSymbols.length > k;) wksDefine(wellKnownSymbols[k++]);
-
-$export($export.S + $export.F * !USE_NATIVE, 'Symbol', {
-  // 19.4.2.1 Symbol.for(key)
-  'for': function (key) {
-    return has(SymbolRegistry, key += '')
-      ? SymbolRegistry[key]
-      : SymbolRegistry[key] = $Symbol(key);
-  },
-  // 19.4.2.5 Symbol.keyFor(sym)
-  keyFor: function keyFor(sym) {
-    if (!isSymbol(sym)) throw TypeError(sym + ' is not a symbol!');
-    for (var key in SymbolRegistry) if (SymbolRegistry[key] === sym) return key;
-  },
-  useSetter: function () { setter = true; },
-  useSimple: function () { setter = false; }
-});
-
-$export($export.S + $export.F * !USE_NATIVE, 'Object', {
-  // 19.1.2.2 Object.create(O [, Properties])
-  create: $create,
-  // 19.1.2.4 Object.defineProperty(O, P, Attributes)
-  defineProperty: $defineProperty,
-  // 19.1.2.3 Object.defineProperties(O, Properties)
-  defineProperties: $defineProperties,
-  // 19.1.2.6 Object.getOwnPropertyDescriptor(O, P)
-  getOwnPropertyDescriptor: $getOwnPropertyDescriptor,
-  // 19.1.2.7 Object.getOwnPropertyNames(O)
-  getOwnPropertyNames: $getOwnPropertyNames,
-  // 19.1.2.8 Object.getOwnPropertySymbols(O)
-  getOwnPropertySymbols: $getOwnPropertySymbols
-});
-
-// Chrome 38 and 39 `Object.getOwnPropertySymbols` fails on primitives
-// https://bugs.chromium.org/p/v8/issues/detail?id=3443
-var FAILS_ON_PRIMITIVES = $fails(function () { $GOPS.f(1); });
-
-$export($export.S + $export.F * FAILS_ON_PRIMITIVES, 'Object', {
-  getOwnPropertySymbols: function getOwnPropertySymbols(it) {
-    return $GOPS.f(toObject(it));
-  }
-});
-
-// 24.3.2 JSON.stringify(value [, replacer [, space]])
-$JSON && $export($export.S + $export.F * (!USE_NATIVE || $fails(function () {
-  var S = $Symbol();
-  // MS Edge converts symbol values to JSON as {}
-  // WebKit converts symbol values to JSON as null
-  // V8 throws on boxed symbols
-  return _stringify([S]) != '[null]' || _stringify({ a: S }) != '{}' || _stringify(Object(S)) != '{}';
-})), 'JSON', {
-  stringify: function stringify(it) {
-    var args = [it];
-    var i = 1;
-    var replacer, $replacer;
-    while (arguments.length > i) args.push(arguments[i++]);
-    $replacer = replacer = args[1];
-    if (!isObject(replacer) && it === undefined || isSymbol(it)) return; // IE8 returns string on undefined
-    if (!isArray(replacer)) replacer = function (key, value) {
-      if (typeof $replacer == 'function') value = $replacer.call(this, key, value);
-      if (!isSymbol(value)) return value;
-    };
-    args[1] = replacer;
-    return _stringify.apply($JSON, args);
-  }
-});
-
-// 19.4.3.4 Symbol.prototype[@@toPrimitive](hint)
-$Symbol[PROTOTYPE][TO_PRIMITIVE] || __webpack_require__(/*! ./_hide */ "./node_modules/core-js/library/modules/_hide.js")($Symbol[PROTOTYPE], TO_PRIMITIVE, $Symbol[PROTOTYPE].valueOf);
-// 19.4.3.5 Symbol.prototype[@@toStringTag]
-setToStringTag($Symbol, 'Symbol');
-// 20.2.1.9 Math[@@toStringTag]
-setToStringTag(Math, 'Math', true);
-// 24.3.3 JSON[@@toStringTag]
-setToStringTag(global.JSON, 'JSON', true);
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/es7.promise.finally.js":
-/*!*********************************************************************!*\
-  !*** ./node_modules/core-js/library/modules/es7.promise.finally.js ***!
-  \*********************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-// https://github.com/tc39/proposal-promise-finally
-
-var $export = __webpack_require__(/*! ./_export */ "./node_modules/core-js/library/modules/_export.js");
-var core = __webpack_require__(/*! ./_core */ "./node_modules/core-js/library/modules/_core.js");
-var global = __webpack_require__(/*! ./_global */ "./node_modules/core-js/library/modules/_global.js");
-var speciesConstructor = __webpack_require__(/*! ./_species-constructor */ "./node_modules/core-js/library/modules/_species-constructor.js");
-var promiseResolve = __webpack_require__(/*! ./_promise-resolve */ "./node_modules/core-js/library/modules/_promise-resolve.js");
-
-$export($export.P + $export.R, 'Promise', { 'finally': function (onFinally) {
-  var C = speciesConstructor(this, core.Promise || global.Promise);
-  var isFunction = typeof onFinally == 'function';
-  return this.then(
-    isFunction ? function (x) {
-      return promiseResolve(C, onFinally()).then(function () { return x; });
-    } : onFinally,
-    isFunction ? function (e) {
-      return promiseResolve(C, onFinally()).then(function () { throw e; });
-    } : onFinally
-  );
-} });
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/es7.promise.try.js":
-/*!*****************************************************************!*\
-  !*** ./node_modules/core-js/library/modules/es7.promise.try.js ***!
-  \*****************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-// https://github.com/tc39/proposal-promise-try
-var $export = __webpack_require__(/*! ./_export */ "./node_modules/core-js/library/modules/_export.js");
-var newPromiseCapability = __webpack_require__(/*! ./_new-promise-capability */ "./node_modules/core-js/library/modules/_new-promise-capability.js");
-var perform = __webpack_require__(/*! ./_perform */ "./node_modules/core-js/library/modules/_perform.js");
-
-$export($export.S, 'Promise', { 'try': function (callbackfn) {
-  var promiseCapability = newPromiseCapability.f(this);
-  var result = perform(callbackfn);
-  (result.e ? promiseCapability.reject : promiseCapability.resolve)(result.v);
-  return promiseCapability.promise;
-} });
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/es7.symbol.async-iterator.js":
-/*!***************************************************************************!*\
-  !*** ./node_modules/core-js/library/modules/es7.symbol.async-iterator.js ***!
-  \***************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-__webpack_require__(/*! ./_wks-define */ "./node_modules/core-js/library/modules/_wks-define.js")('asyncIterator');
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/es7.symbol.observable.js":
-/*!***********************************************************************!*\
-  !*** ./node_modules/core-js/library/modules/es7.symbol.observable.js ***!
-  \***********************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-__webpack_require__(/*! ./_wks-define */ "./node_modules/core-js/library/modules/_wks-define.js")('observable');
-
-
-/***/ }),
-
-/***/ "./node_modules/core-js/library/modules/web.dom.iterable.js":
-/*!******************************************************************!*\
-  !*** ./node_modules/core-js/library/modules/web.dom.iterable.js ***!
-  \******************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-__webpack_require__(/*! ./es6.array.iterator */ "./node_modules/core-js/library/modules/es6.array.iterator.js");
-var global = __webpack_require__(/*! ./_global */ "./node_modules/core-js/library/modules/_global.js");
-var hide = __webpack_require__(/*! ./_hide */ "./node_modules/core-js/library/modules/_hide.js");
-var Iterators = __webpack_require__(/*! ./_iterators */ "./node_modules/core-js/library/modules/_iterators.js");
-var TO_STRING_TAG = __webpack_require__(/*! ./_wks */ "./node_modules/core-js/library/modules/_wks.js")('toStringTag');
-
-var DOMIterables = ('CSSRuleList,CSSStyleDeclaration,CSSValueList,ClientRectList,DOMRectList,DOMStringList,' +
-  'DOMTokenList,DataTransferItemList,FileList,HTMLAllCollection,HTMLCollection,HTMLFormElement,HTMLSelectElement,' +
-  'MediaList,MimeTypeArray,NamedNodeMap,NodeList,PaintRequestList,Plugin,PluginArray,SVGLengthList,SVGNumberList,' +
-  'SVGPathSegList,SVGPointList,SVGStringList,SVGTransformList,SourceBufferList,StyleSheetList,TextTrackCueList,' +
-  'TextTrackList,TouchList').split(',');
-
-for (var i = 0; i < DOMIterables.length; i++) {
-  var NAME = DOMIterables[i];
-  var Collection = global[NAME];
-  var proto = Collection && Collection.prototype;
-  if (proto && !proto[TO_STRING_TAG]) hide(proto, TO_STRING_TAG, NAME);
-  Iterators[NAME] = Iterators.Array;
-}
-
 
 /***/ }),
 
@@ -141756,790 +138330,6 @@ function applyMiddleware() {
 
 /***/ }),
 
-/***/ "./node_modules/regenerator-runtime/runtime-module.js":
-/*!************************************************************!*\
-  !*** ./node_modules/regenerator-runtime/runtime-module.js ***!
-  \************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-/**
- * Copyright (c) 2014-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
-
-// This method of obtaining a reference to the global object needs to be
-// kept identical to the way it is obtained in runtime.js
-var g = (function() { return this })() || Function("return this")();
-
-// Use `getOwnPropertyNames` because not all browsers support calling
-// `hasOwnProperty` on the global `self` object in a worker. See #183.
-var hadRuntime = g.regeneratorRuntime &&
-  Object.getOwnPropertyNames(g).indexOf("regeneratorRuntime") >= 0;
-
-// Save the old regeneratorRuntime in case it needs to be restored later.
-var oldRuntime = hadRuntime && g.regeneratorRuntime;
-
-// Force reevalutation of runtime.js.
-g.regeneratorRuntime = undefined;
-
-module.exports = __webpack_require__(/*! ./runtime */ "./node_modules/regenerator-runtime/runtime.js");
-
-if (hadRuntime) {
-  // Restore the original runtime.
-  g.regeneratorRuntime = oldRuntime;
-} else {
-  // Remove the global property added by runtime.js.
-  try {
-    delete g.regeneratorRuntime;
-  } catch(e) {
-    g.regeneratorRuntime = undefined;
-  }
-}
-
-
-/***/ }),
-
-/***/ "./node_modules/regenerator-runtime/runtime.js":
-/*!*****************************************************!*\
-  !*** ./node_modules/regenerator-runtime/runtime.js ***!
-  \*****************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-/**
- * Copyright (c) 2014-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
-
-!(function(global) {
-  "use strict";
-
-  var Op = Object.prototype;
-  var hasOwn = Op.hasOwnProperty;
-  var undefined; // More compressible than void 0.
-  var $Symbol = typeof Symbol === "function" ? Symbol : {};
-  var iteratorSymbol = $Symbol.iterator || "@@iterator";
-  var asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator";
-  var toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag";
-
-  var inModule = typeof module === "object";
-  var runtime = global.regeneratorRuntime;
-  if (runtime) {
-    if (inModule) {
-      // If regeneratorRuntime is defined globally and we're in a module,
-      // make the exports object identical to regeneratorRuntime.
-      module.exports = runtime;
-    }
-    // Don't bother evaluating the rest of this file if the runtime was
-    // already defined globally.
-    return;
-  }
-
-  // Define the runtime globally (as expected by generated code) as either
-  // module.exports (if we're in a module) or a new, empty object.
-  runtime = global.regeneratorRuntime = inModule ? module.exports : {};
-
-  function wrap(innerFn, outerFn, self, tryLocsList) {
-    // If outerFn provided and outerFn.prototype is a Generator, then outerFn.prototype instanceof Generator.
-    var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator;
-    var generator = Object.create(protoGenerator.prototype);
-    var context = new Context(tryLocsList || []);
-
-    // The ._invoke method unifies the implementations of the .next,
-    // .throw, and .return methods.
-    generator._invoke = makeInvokeMethod(innerFn, self, context);
-
-    return generator;
-  }
-  runtime.wrap = wrap;
-
-  // Try/catch helper to minimize deoptimizations. Returns a completion
-  // record like context.tryEntries[i].completion. This interface could
-  // have been (and was previously) designed to take a closure to be
-  // invoked without arguments, but in all the cases we care about we
-  // already have an existing method we want to call, so there's no need
-  // to create a new function object. We can even get away with assuming
-  // the method takes exactly one argument, since that happens to be true
-  // in every case, so we don't have to touch the arguments object. The
-  // only additional allocation required is the completion record, which
-  // has a stable shape and so hopefully should be cheap to allocate.
-  function tryCatch(fn, obj, arg) {
-    try {
-      return { type: "normal", arg: fn.call(obj, arg) };
-    } catch (err) {
-      return { type: "throw", arg: err };
-    }
-  }
-
-  var GenStateSuspendedStart = "suspendedStart";
-  var GenStateSuspendedYield = "suspendedYield";
-  var GenStateExecuting = "executing";
-  var GenStateCompleted = "completed";
-
-  // Returning this object from the innerFn has the same effect as
-  // breaking out of the dispatch switch statement.
-  var ContinueSentinel = {};
-
-  // Dummy constructor functions that we use as the .constructor and
-  // .constructor.prototype properties for functions that return Generator
-  // objects. For full spec compliance, you may wish to configure your
-  // minifier not to mangle the names of these two functions.
-  function Generator() {}
-  function GeneratorFunction() {}
-  function GeneratorFunctionPrototype() {}
-
-  // This is a polyfill for %IteratorPrototype% for environments that
-  // don't natively support it.
-  var IteratorPrototype = {};
-  IteratorPrototype[iteratorSymbol] = function () {
-    return this;
-  };
-
-  var getProto = Object.getPrototypeOf;
-  var NativeIteratorPrototype = getProto && getProto(getProto(values([])));
-  if (NativeIteratorPrototype &&
-      NativeIteratorPrototype !== Op &&
-      hasOwn.call(NativeIteratorPrototype, iteratorSymbol)) {
-    // This environment has a native %IteratorPrototype%; use it instead
-    // of the polyfill.
-    IteratorPrototype = NativeIteratorPrototype;
-  }
-
-  var Gp = GeneratorFunctionPrototype.prototype =
-    Generator.prototype = Object.create(IteratorPrototype);
-  GeneratorFunction.prototype = Gp.constructor = GeneratorFunctionPrototype;
-  GeneratorFunctionPrototype.constructor = GeneratorFunction;
-  GeneratorFunctionPrototype[toStringTagSymbol] =
-    GeneratorFunction.displayName = "GeneratorFunction";
-
-  // Helper for defining the .next, .throw, and .return methods of the
-  // Iterator interface in terms of a single ._invoke method.
-  function defineIteratorMethods(prototype) {
-    ["next", "throw", "return"].forEach(function(method) {
-      prototype[method] = function(arg) {
-        return this._invoke(method, arg);
-      };
-    });
-  }
-
-  runtime.isGeneratorFunction = function(genFun) {
-    var ctor = typeof genFun === "function" && genFun.constructor;
-    return ctor
-      ? ctor === GeneratorFunction ||
-        // For the native GeneratorFunction constructor, the best we can
-        // do is to check its .name property.
-        (ctor.displayName || ctor.name) === "GeneratorFunction"
-      : false;
-  };
-
-  runtime.mark = function(genFun) {
-    if (Object.setPrototypeOf) {
-      Object.setPrototypeOf(genFun, GeneratorFunctionPrototype);
-    } else {
-      genFun.__proto__ = GeneratorFunctionPrototype;
-      if (!(toStringTagSymbol in genFun)) {
-        genFun[toStringTagSymbol] = "GeneratorFunction";
-      }
-    }
-    genFun.prototype = Object.create(Gp);
-    return genFun;
-  };
-
-  // Within the body of any async function, `await x` is transformed to
-  // `yield regeneratorRuntime.awrap(x)`, so that the runtime can test
-  // `hasOwn.call(value, "__await")` to determine if the yielded value is
-  // meant to be awaited.
-  runtime.awrap = function(arg) {
-    return { __await: arg };
-  };
-
-  function AsyncIterator(generator) {
-    function invoke(method, arg, resolve, reject) {
-      var record = tryCatch(generator[method], generator, arg);
-      if (record.type === "throw") {
-        reject(record.arg);
-      } else {
-        var result = record.arg;
-        var value = result.value;
-        if (value &&
-            typeof value === "object" &&
-            hasOwn.call(value, "__await")) {
-          return Promise.resolve(value.__await).then(function(value) {
-            invoke("next", value, resolve, reject);
-          }, function(err) {
-            invoke("throw", err, resolve, reject);
-          });
-        }
-
-        return Promise.resolve(value).then(function(unwrapped) {
-          // When a yielded Promise is resolved, its final value becomes
-          // the .value of the Promise<{value,done}> result for the
-          // current iteration. If the Promise is rejected, however, the
-          // result for this iteration will be rejected with the same
-          // reason. Note that rejections of yielded Promises are not
-          // thrown back into the generator function, as is the case
-          // when an awaited Promise is rejected. This difference in
-          // behavior between yield and await is important, because it
-          // allows the consumer to decide what to do with the yielded
-          // rejection (swallow it and continue, manually .throw it back
-          // into the generator, abandon iteration, whatever). With
-          // await, by contrast, there is no opportunity to examine the
-          // rejection reason outside the generator function, so the
-          // only option is to throw it from the await expression, and
-          // let the generator function handle the exception.
-          result.value = unwrapped;
-          resolve(result);
-        }, reject);
-      }
-    }
-
-    var previousPromise;
-
-    function enqueue(method, arg) {
-      function callInvokeWithMethodAndArg() {
-        return new Promise(function(resolve, reject) {
-          invoke(method, arg, resolve, reject);
-        });
-      }
-
-      return previousPromise =
-        // If enqueue has been called before, then we want to wait until
-        // all previous Promises have been resolved before calling invoke,
-        // so that results are always delivered in the correct order. If
-        // enqueue has not been called before, then it is important to
-        // call invoke immediately, without waiting on a callback to fire,
-        // so that the async generator function has the opportunity to do
-        // any necessary setup in a predictable way. This predictability
-        // is why the Promise constructor synchronously invokes its
-        // executor callback, and why async functions synchronously
-        // execute code before the first await. Since we implement simple
-        // async functions in terms of async generators, it is especially
-        // important to get this right, even though it requires care.
-        previousPromise ? previousPromise.then(
-          callInvokeWithMethodAndArg,
-          // Avoid propagating failures to Promises returned by later
-          // invocations of the iterator.
-          callInvokeWithMethodAndArg
-        ) : callInvokeWithMethodAndArg();
-    }
-
-    // Define the unified helper method that is used to implement .next,
-    // .throw, and .return (see defineIteratorMethods).
-    this._invoke = enqueue;
-  }
-
-  defineIteratorMethods(AsyncIterator.prototype);
-  AsyncIterator.prototype[asyncIteratorSymbol] = function () {
-    return this;
-  };
-  runtime.AsyncIterator = AsyncIterator;
-
-  // Note that simple async functions are implemented on top of
-  // AsyncIterator objects; they just return a Promise for the value of
-  // the final result produced by the iterator.
-  runtime.async = function(innerFn, outerFn, self, tryLocsList) {
-    var iter = new AsyncIterator(
-      wrap(innerFn, outerFn, self, tryLocsList)
-    );
-
-    return runtime.isGeneratorFunction(outerFn)
-      ? iter // If outerFn is a generator, return the full iterator.
-      : iter.next().then(function(result) {
-          return result.done ? result.value : iter.next();
-        });
-  };
-
-  function makeInvokeMethod(innerFn, self, context) {
-    var state = GenStateSuspendedStart;
-
-    return function invoke(method, arg) {
-      if (state === GenStateExecuting) {
-        throw new Error("Generator is already running");
-      }
-
-      if (state === GenStateCompleted) {
-        if (method === "throw") {
-          throw arg;
-        }
-
-        // Be forgiving, per 25.3.3.3.3 of the spec:
-        // https://people.mozilla.org/~jorendorff/es6-draft.html#sec-generatorresume
-        return doneResult();
-      }
-
-      context.method = method;
-      context.arg = arg;
-
-      while (true) {
-        var delegate = context.delegate;
-        if (delegate) {
-          var delegateResult = maybeInvokeDelegate(delegate, context);
-          if (delegateResult) {
-            if (delegateResult === ContinueSentinel) continue;
-            return delegateResult;
-          }
-        }
-
-        if (context.method === "next") {
-          // Setting context._sent for legacy support of Babel's
-          // function.sent implementation.
-          context.sent = context._sent = context.arg;
-
-        } else if (context.method === "throw") {
-          if (state === GenStateSuspendedStart) {
-            state = GenStateCompleted;
-            throw context.arg;
-          }
-
-          context.dispatchException(context.arg);
-
-        } else if (context.method === "return") {
-          context.abrupt("return", context.arg);
-        }
-
-        state = GenStateExecuting;
-
-        var record = tryCatch(innerFn, self, context);
-        if (record.type === "normal") {
-          // If an exception is thrown from innerFn, we leave state ===
-          // GenStateExecuting and loop back for another invocation.
-          state = context.done
-            ? GenStateCompleted
-            : GenStateSuspendedYield;
-
-          if (record.arg === ContinueSentinel) {
-            continue;
-          }
-
-          return {
-            value: record.arg,
-            done: context.done
-          };
-
-        } else if (record.type === "throw") {
-          state = GenStateCompleted;
-          // Dispatch the exception by looping back around to the
-          // context.dispatchException(context.arg) call above.
-          context.method = "throw";
-          context.arg = record.arg;
-        }
-      }
-    };
-  }
-
-  // Call delegate.iterator[context.method](context.arg) and handle the
-  // result, either by returning a { value, done } result from the
-  // delegate iterator, or by modifying context.method and context.arg,
-  // setting context.delegate to null, and returning the ContinueSentinel.
-  function maybeInvokeDelegate(delegate, context) {
-    var method = delegate.iterator[context.method];
-    if (method === undefined) {
-      // A .throw or .return when the delegate iterator has no .throw
-      // method always terminates the yield* loop.
-      context.delegate = null;
-
-      if (context.method === "throw") {
-        if (delegate.iterator.return) {
-          // If the delegate iterator has a return method, give it a
-          // chance to clean up.
-          context.method = "return";
-          context.arg = undefined;
-          maybeInvokeDelegate(delegate, context);
-
-          if (context.method === "throw") {
-            // If maybeInvokeDelegate(context) changed context.method from
-            // "return" to "throw", let that override the TypeError below.
-            return ContinueSentinel;
-          }
-        }
-
-        context.method = "throw";
-        context.arg = new TypeError(
-          "The iterator does not provide a 'throw' method");
-      }
-
-      return ContinueSentinel;
-    }
-
-    var record = tryCatch(method, delegate.iterator, context.arg);
-
-    if (record.type === "throw") {
-      context.method = "throw";
-      context.arg = record.arg;
-      context.delegate = null;
-      return ContinueSentinel;
-    }
-
-    var info = record.arg;
-
-    if (! info) {
-      context.method = "throw";
-      context.arg = new TypeError("iterator result is not an object");
-      context.delegate = null;
-      return ContinueSentinel;
-    }
-
-    if (info.done) {
-      // Assign the result of the finished delegate to the temporary
-      // variable specified by delegate.resultName (see delegateYield).
-      context[delegate.resultName] = info.value;
-
-      // Resume execution at the desired location (see delegateYield).
-      context.next = delegate.nextLoc;
-
-      // If context.method was "throw" but the delegate handled the
-      // exception, let the outer generator proceed normally. If
-      // context.method was "next", forget context.arg since it has been
-      // "consumed" by the delegate iterator. If context.method was
-      // "return", allow the original .return call to continue in the
-      // outer generator.
-      if (context.method !== "return") {
-        context.method = "next";
-        context.arg = undefined;
-      }
-
-    } else {
-      // Re-yield the result returned by the delegate method.
-      return info;
-    }
-
-    // The delegate iterator is finished, so forget it and continue with
-    // the outer generator.
-    context.delegate = null;
-    return ContinueSentinel;
-  }
-
-  // Define Generator.prototype.{next,throw,return} in terms of the
-  // unified ._invoke helper method.
-  defineIteratorMethods(Gp);
-
-  Gp[toStringTagSymbol] = "Generator";
-
-  // A Generator should always return itself as the iterator object when the
-  // @@iterator function is called on it. Some browsers' implementations of the
-  // iterator prototype chain incorrectly implement this, causing the Generator
-  // object to not be returned from this call. This ensures that doesn't happen.
-  // See https://github.com/facebook/regenerator/issues/274 for more details.
-  Gp[iteratorSymbol] = function() {
-    return this;
-  };
-
-  Gp.toString = function() {
-    return "[object Generator]";
-  };
-
-  function pushTryEntry(locs) {
-    var entry = { tryLoc: locs[0] };
-
-    if (1 in locs) {
-      entry.catchLoc = locs[1];
-    }
-
-    if (2 in locs) {
-      entry.finallyLoc = locs[2];
-      entry.afterLoc = locs[3];
-    }
-
-    this.tryEntries.push(entry);
-  }
-
-  function resetTryEntry(entry) {
-    var record = entry.completion || {};
-    record.type = "normal";
-    delete record.arg;
-    entry.completion = record;
-  }
-
-  function Context(tryLocsList) {
-    // The root entry object (effectively a try statement without a catch
-    // or a finally block) gives us a place to store values thrown from
-    // locations where there is no enclosing try statement.
-    this.tryEntries = [{ tryLoc: "root" }];
-    tryLocsList.forEach(pushTryEntry, this);
-    this.reset(true);
-  }
-
-  runtime.keys = function(object) {
-    var keys = [];
-    for (var key in object) {
-      keys.push(key);
-    }
-    keys.reverse();
-
-    // Rather than returning an object with a next method, we keep
-    // things simple and return the next function itself.
-    return function next() {
-      while (keys.length) {
-        var key = keys.pop();
-        if (key in object) {
-          next.value = key;
-          next.done = false;
-          return next;
-        }
-      }
-
-      // To avoid creating an additional object, we just hang the .value
-      // and .done properties off the next function object itself. This
-      // also ensures that the minifier will not anonymize the function.
-      next.done = true;
-      return next;
-    };
-  };
-
-  function values(iterable) {
-    if (iterable) {
-      var iteratorMethod = iterable[iteratorSymbol];
-      if (iteratorMethod) {
-        return iteratorMethod.call(iterable);
-      }
-
-      if (typeof iterable.next === "function") {
-        return iterable;
-      }
-
-      if (!isNaN(iterable.length)) {
-        var i = -1, next = function next() {
-          while (++i < iterable.length) {
-            if (hasOwn.call(iterable, i)) {
-              next.value = iterable[i];
-              next.done = false;
-              return next;
-            }
-          }
-
-          next.value = undefined;
-          next.done = true;
-
-          return next;
-        };
-
-        return next.next = next;
-      }
-    }
-
-    // Return an iterator with no values.
-    return { next: doneResult };
-  }
-  runtime.values = values;
-
-  function doneResult() {
-    return { value: undefined, done: true };
-  }
-
-  Context.prototype = {
-    constructor: Context,
-
-    reset: function(skipTempReset) {
-      this.prev = 0;
-      this.next = 0;
-      // Resetting context._sent for legacy support of Babel's
-      // function.sent implementation.
-      this.sent = this._sent = undefined;
-      this.done = false;
-      this.delegate = null;
-
-      this.method = "next";
-      this.arg = undefined;
-
-      this.tryEntries.forEach(resetTryEntry);
-
-      if (!skipTempReset) {
-        for (var name in this) {
-          // Not sure about the optimal order of these conditions:
-          if (name.charAt(0) === "t" &&
-              hasOwn.call(this, name) &&
-              !isNaN(+name.slice(1))) {
-            this[name] = undefined;
-          }
-        }
-      }
-    },
-
-    stop: function() {
-      this.done = true;
-
-      var rootEntry = this.tryEntries[0];
-      var rootRecord = rootEntry.completion;
-      if (rootRecord.type === "throw") {
-        throw rootRecord.arg;
-      }
-
-      return this.rval;
-    },
-
-    dispatchException: function(exception) {
-      if (this.done) {
-        throw exception;
-      }
-
-      var context = this;
-      function handle(loc, caught) {
-        record.type = "throw";
-        record.arg = exception;
-        context.next = loc;
-
-        if (caught) {
-          // If the dispatched exception was caught by a catch block,
-          // then let that catch block handle the exception normally.
-          context.method = "next";
-          context.arg = undefined;
-        }
-
-        return !! caught;
-      }
-
-      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
-        var entry = this.tryEntries[i];
-        var record = entry.completion;
-
-        if (entry.tryLoc === "root") {
-          // Exception thrown outside of any try block that could handle
-          // it, so set the completion value of the entire function to
-          // throw the exception.
-          return handle("end");
-        }
-
-        if (entry.tryLoc <= this.prev) {
-          var hasCatch = hasOwn.call(entry, "catchLoc");
-          var hasFinally = hasOwn.call(entry, "finallyLoc");
-
-          if (hasCatch && hasFinally) {
-            if (this.prev < entry.catchLoc) {
-              return handle(entry.catchLoc, true);
-            } else if (this.prev < entry.finallyLoc) {
-              return handle(entry.finallyLoc);
-            }
-
-          } else if (hasCatch) {
-            if (this.prev < entry.catchLoc) {
-              return handle(entry.catchLoc, true);
-            }
-
-          } else if (hasFinally) {
-            if (this.prev < entry.finallyLoc) {
-              return handle(entry.finallyLoc);
-            }
-
-          } else {
-            throw new Error("try statement without catch or finally");
-          }
-        }
-      }
-    },
-
-    abrupt: function(type, arg) {
-      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
-        var entry = this.tryEntries[i];
-        if (entry.tryLoc <= this.prev &&
-            hasOwn.call(entry, "finallyLoc") &&
-            this.prev < entry.finallyLoc) {
-          var finallyEntry = entry;
-          break;
-        }
-      }
-
-      if (finallyEntry &&
-          (type === "break" ||
-           type === "continue") &&
-          finallyEntry.tryLoc <= arg &&
-          arg <= finallyEntry.finallyLoc) {
-        // Ignore the finally entry if control is not jumping to a
-        // location outside the try/catch block.
-        finallyEntry = null;
-      }
-
-      var record = finallyEntry ? finallyEntry.completion : {};
-      record.type = type;
-      record.arg = arg;
-
-      if (finallyEntry) {
-        this.method = "next";
-        this.next = finallyEntry.finallyLoc;
-        return ContinueSentinel;
-      }
-
-      return this.complete(record);
-    },
-
-    complete: function(record, afterLoc) {
-      if (record.type === "throw") {
-        throw record.arg;
-      }
-
-      if (record.type === "break" ||
-          record.type === "continue") {
-        this.next = record.arg;
-      } else if (record.type === "return") {
-        this.rval = this.arg = record.arg;
-        this.method = "return";
-        this.next = "end";
-      } else if (record.type === "normal" && afterLoc) {
-        this.next = afterLoc;
-      }
-
-      return ContinueSentinel;
-    },
-
-    finish: function(finallyLoc) {
-      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
-        var entry = this.tryEntries[i];
-        if (entry.finallyLoc === finallyLoc) {
-          this.complete(entry.completion, entry.afterLoc);
-          resetTryEntry(entry);
-          return ContinueSentinel;
-        }
-      }
-    },
-
-    "catch": function(tryLoc) {
-      for (var i = this.tryEntries.length - 1; i >= 0; --i) {
-        var entry = this.tryEntries[i];
-        if (entry.tryLoc === tryLoc) {
-          var record = entry.completion;
-          if (record.type === "throw") {
-            var thrown = record.arg;
-            resetTryEntry(entry);
-          }
-          return thrown;
-        }
-      }
-
-      // The context.catch method must only be called with a location
-      // argument that corresponds to a known catch block.
-      throw new Error("illegal catch attempt");
-    },
-
-    delegateYield: function(iterable, resultName, nextLoc) {
-      this.delegate = {
-        iterator: values(iterable),
-        resultName: resultName,
-        nextLoc: nextLoc
-      };
-
-      if (this.method === "next") {
-        // Deliberately forget the last sent value so that we don't
-        // accidentally pass it on to the delegate.
-        this.arg = undefined;
-      }
-
-      return ContinueSentinel;
-    }
-  };
-})(
-  // In sloppy mode, unbound `this` refers to the global object, fallback to
-  // Function constructor if we're in global strict mode. That is sadly a form
-  // of indirect eval which violates Content Security Policy.
-  (function() { return this })() || Function("return this")()
-);
-
-
-/***/ }),
-
 /***/ "./node_modules/scheduler/cjs/scheduler-tracing.development.js":
 /*!*********************************************************************!*\
   !*** ./node_modules/scheduler/cjs/scheduler-tracing.development.js ***!
@@ -144470,97 +140260,83 @@ module.exports = function(module) {
 /*!*****************************************!*\
   !*** ./sources/js/jquery-weekpicker.js ***!
   \*****************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/*! no exports provided */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(jQuery) {
-
-var _moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
-
-var _moment2 = _interopRequireDefault(_moment);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+__webpack_require__.r(__webpack_exports__);
+/* WEBPACK VAR INJECTION */(function(jQuery) {/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_0__);
 
 (function ($) {
-    $.widget('lugolabs.weekpicker', {
-        _weekOptions: {
-            showOtherMonths: true,
-            selectOtherMonths: true
+  $.widget('lugolabs.weekpicker', {
+    _weekOptions: {
+      showOtherMonths: true,
+      selectOtherMonths: true
+    },
+    _create: function () {
+      let self = this;
+      this._dateFormat = this.options.dateFormat || $.datepicker._defaults.dateFormat;
+      const date = this._initialDate();
+      this._setWeek(date);
+      let onSelect = this.options.onSelect;
+      this._picker = $(this.element).datepicker($.extend(this.options, this._weekOptions, {
+        onSelect: function (dateText, inst) {
+          self._select(dateText, inst, onSelect);
         },
-
-        _create: function _create() {
-            var self = this;
-            this._dateFormat = this.options.dateFormat || $.datepicker._defaults.dateFormat;
-            var date = this._initialDate();
-            this._setWeek(date);
-            var _onSelect = this.options.onSelect;
-            this._picker = $(this.element).datepicker($.extend(this.options, this._weekOptions, {
-                onSelect: function onSelect(dateText, inst) {
-                    self._select(dateText, inst, _onSelect);
-                },
-                beforeShowDay: function beforeShowDay(date) {
-                    return self._showDay(date);
-                },
-                onChangeMonthYear: function onChangeMonthYear(year, month, inst) {
-                    self._selectCurrentWeek();
-                }
-            }));
-
-            $(document).on('mousemove', '.ui-datepicker-calendar tr', function () {
-                $(this).find('td a').addClass('ui-state-hover');
-            }).on('mouseleave', '.ui-datepicker-calendar tr', function () {
-                $(this).find('td a').removeClass('ui-state-hover');
-            });
-            this._select((0, _moment2.default)(date).format('MM/DD/YYYY'), this._picker, _onSelect);
+        beforeShowDay: function (date) {
+          return self._showDay(date);
         },
-
-        _initialDate: function _initialDate() {
-            if (this.options.currentText) {
-                return $.datepicker.parseDate(this._dateFormat, this.options.currentText);
-            } else {
-                return new Date();
-            }
-        },
-
-        _select: function _select(dateText, inst, onSelect) {
-            this._setWeek(this._picker.datepicker('getDate'));
-            var startDateText = $.datepicker.formatDate(this._dateFormat, this._startDate, inst.settings);
-            this._picker.val(startDateText);
-            if (onSelect) {
-                onSelect(dateText, startDateText, this._startDate, this._endDate, inst);
-            }
-        },
-
-        _showDay: function _showDay(date) {
-            var cssClass = date >= this._startDate && date <= this._endDate ? 'ui-datepicker-current-day' : '';
-            return [true, cssClass];
-        },
-
-        _setWeek: function _setWeek(date) {
-            var selected = (0, _moment2.default)(date, 'YYYY-MM-DD');
-
-            var fromDateClone = selected.clone();
-            var from_date = fromDateClone.startOf('isoWeek'); // why use isoWeek - https://en.wikipedia.org/wiki/ISO_8601#Week_dates
-            this._startDate = from_date.toDate();
-
-            var toDateClone = selected.clone();
-            var to_date = toDateClone.endOf('isoWeek');
-            this._endDate = to_date.toDate();
-        },
-
-        _selectCurrentWeek: function _selectCurrentWeek() {
-            $('.ui-datepicker-calendar').find('.ui-datepicker-current-day a').addClass('ui-state-active');
-        },
-
-        setDate: function setDate(date) {
-            this._setWeek(date);
-            this._picker.datepicker('setDate', $.datepicker.formatDate(this._dateFormat, date));
-            this._picker.hide();
-            var onSelect = this.options.onSelect;
-            this._select((0, _moment2.default)(date).format('DD/MM/YYYY'), this._picker, onSelect);
+        onChangeMonthYear: function (year, month, inst) {
+          self._selectCurrentWeek();
         }
-    });
+      }));
+      $(document).on('mousemove', '.ui-datepicker-calendar tr', function () {
+        $(this).find('td a').addClass('ui-state-hover');
+      }).on('mouseleave', '.ui-datepicker-calendar tr', function () {
+        $(this).find('td a').removeClass('ui-state-hover');
+      });
+      this._select(moment__WEBPACK_IMPORTED_MODULE_0___default()(date).format('MM/DD/YYYY'), this._picker, onSelect);
+    },
+    _initialDate: function () {
+      if (this.options.currentText) {
+        return $.datepicker.parseDate(this._dateFormat, this.options.currentText);
+      } else {
+        return new Date();
+      }
+    },
+    _select: function (dateText, inst, onSelect) {
+      this._setWeek(this._picker.datepicker('getDate'));
+      const startDateText = $.datepicker.formatDate(this._dateFormat, this._startDate, inst.settings);
+      this._picker.val(startDateText);
+      if (onSelect) {
+        onSelect(dateText, startDateText, this._startDate, this._endDate, inst);
+      }
+    },
+    _showDay: function (date) {
+      const cssClass = date >= this._startDate && date <= this._endDate ? 'ui-datepicker-current-day' : '';
+      return [true, cssClass];
+    },
+    _setWeek: function (date) {
+      const selected = moment__WEBPACK_IMPORTED_MODULE_0___default()(date, 'YYYY-MM-DD');
+      const fromDateClone = selected.clone();
+      const from_date = fromDateClone.startOf('isoWeek'); // why use isoWeek - https://en.wikipedia.org/wiki/ISO_8601#Week_dates
+      this._startDate = from_date.toDate();
+      const toDateClone = selected.clone();
+      const to_date = toDateClone.endOf('isoWeek');
+      this._endDate = to_date.toDate();
+    },
+    _selectCurrentWeek: function () {
+      $('.ui-datepicker-calendar').find('.ui-datepicker-current-day a').addClass('ui-state-active');
+    },
+    setDate: function (date) {
+      this._setWeek(date);
+      this._picker.datepicker('setDate', $.datepicker.formatDate(this._dateFormat, date));
+      this._picker.hide();
+      let onSelect = this.options.onSelect;
+      this._select(moment__WEBPACK_IMPORTED_MODULE_0___default()(date).format('DD/MM/YYYY'), this._picker, onSelect);
+    }
+  });
 })(jQuery);
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js")))
 
@@ -144570,262 +140346,131 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 /*!******************************************************!*\
   !*** ./sources/js/pages/schedule-arrange/Search.jsx ***!
   \******************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Search; });
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "./node_modules/@babel/runtime/helpers/defineProperty.js");
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/es/index.js");
+/* harmony import */ var _shared_components_Autocomplete__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../shared/components/Autocomplete */ "./sources/js/shared/components/Autocomplete.jsx");
+/* harmony import */ var _shared_components_react_tree_multiselect_TreeMultiselect__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../shared/components/react-tree-multiselect/TreeMultiselect */ "./sources/js/shared/components/react-tree-multiselect/TreeMultiselect.js");
+/* harmony import */ var _shared_components_WeekPicker__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../shared/components/WeekPicker */ "./sources/js/shared/components/WeekPicker.jsx");
 
 
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
 
-var _getPrototypeOf = __webpack_require__(/*! babel-runtime/core-js/object/get-prototype-of */ "./node_modules/babel-runtime/core-js/object/get-prototype-of.js");
 
-var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
 
-var _classCallCheck2 = __webpack_require__(/*! babel-runtime/helpers/classCallCheck */ "./node_modules/babel-runtime/helpers/classCallCheck.js");
 
-var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
-
-var _createClass2 = __webpack_require__(/*! babel-runtime/helpers/createClass */ "./node_modules/babel-runtime/helpers/createClass.js");
-
-var _createClass3 = _interopRequireDefault(_createClass2);
-
-var _possibleConstructorReturn2 = __webpack_require__(/*! babel-runtime/helpers/possibleConstructorReturn */ "./node_modules/babel-runtime/helpers/possibleConstructorReturn.js");
-
-var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
-
-var _inherits2 = __webpack_require__(/*! babel-runtime/helpers/inherits */ "./node_modules/babel-runtime/helpers/inherits.js");
-
-var _inherits3 = _interopRequireDefault(_inherits2);
-
-var _react = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-
-var _react2 = _interopRequireDefault(_react);
-
-var _reactBootstrap = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/es/index.js");
-
-var _Autocomplete = __webpack_require__(/*! ../../shared/components/Autocomplete */ "./sources/js/shared/components/Autocomplete.jsx");
-
-var _Autocomplete2 = _interopRequireDefault(_Autocomplete);
-
-var _TreeMultiselect = __webpack_require__(/*! ../../shared/components/react-tree-multiselect/TreeMultiselect */ "./sources/js/shared/components/react-tree-multiselect/TreeMultiselect.js");
-
-var _TreeMultiselect2 = _interopRequireDefault(_TreeMultiselect);
-
-var _WeekPicker = __webpack_require__(/*! ../../shared/components/WeekPicker */ "./sources/js/shared/components/WeekPicker.jsx");
-
-var _WeekPicker2 = _interopRequireDefault(_WeekPicker);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var Search = function (_Component) {
-    (0, _inherits3.default)(Search, _Component);
-
-    function Search() {
-        var _ref;
-
-        var _temp, _this, _ret;
-
-        (0, _classCallCheck3.default)(this, Search);
-
-        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-            args[_key] = arguments[_key];
-        }
-
-        return _ret = (_temp = (_this = (0, _possibleConstructorReturn3.default)(this, (_ref = Search.__proto__ || (0, _getPrototypeOf2.default)(Search)).call.apply(_ref, [this].concat(args))), _this), _this.handleTeamChange = function (selectedItems) {
-            var ids = selectedItems.map(function (item) {
-                return item.id;
-            });
-            _this.props.onChange('teamIds', ids.join(','));
-        }, _this.handleEmployeeChange = function (value) {
-            _this.props.onChange('employee', value);
-        }, _this.handleDateChange = function (fromDate, toDate) {
-            _this.props.onChange('fromDate', fromDate);
-            _this.props.onChange('toDate', toDate);
-        }, _this.handleCategoryChange = function (e) {
-            _this.props.onChange('isLocal', e.target.value);
-        }, _this.handleSubmit = function (event) {
-            _this.props.onSubmit(event.target.name === 'currentWeek');
-        }, _temp), (0, _possibleConstructorReturn3.default)(_this, _ret);
-    }
-
-    (0, _createClass3.default)(Search, [{
-        key: 'render',
-        value: function render() {
-            return _react2.default.createElement(
-                'div',
-                { className: 'filter' },
-                _react2.default.createElement(
-                    'div',
-                    { className: 'form-horizontal clearfix' },
-                    _react2.default.createElement(
-                        'div',
-                        { className: 'form-group form-group--l' },
-                        _react2.default.createElement(
-                            'div',
-                            { className: 'label-form' },
-                            _react2.default.createElement(
-                                'label',
-                                { className: 'control-label' },
-                                'Week'
-                            )
-                        ),
-                        _react2.default.createElement(
-                            'div',
-                            { className: 'calendar-form' },
-                            _react2.default.createElement(_WeekPicker2.default, {
-                                fromDate: this.props.filter.fromDate,
-                                toDate: this.props.filter.toDate,
-                                onChange: this.handleDateChange
-                            })
-                        )
-                    ),
-                    _react2.default.createElement(
-                        'div',
-                        { className: 'form-group form-group--m' },
-                        _react2.default.createElement(
-                            'div',
-                            { className: 'label-form' },
-                            _react2.default.createElement(
-                                'label',
-                                { className: 'control-label' },
-                                'Team'
-                            )
-                        ),
-                        _react2.default.createElement(
-                            'div',
-                            { className: 'select-form' },
-                            _react2.default.createElement(_TreeMultiselect2.default, {
-                                data: this.props.teamOptions,
-                                isSelectedAll: true,
-                                onChange: this.handleTeamChange
-                            })
-                        )
-                    ),
-                    _react2.default.createElement(
-                        'div',
-                        { className: 'form-group form-group--m' },
-                        _react2.default.createElement(
-                            'div',
-                            { className: 'label-form' },
-                            _react2.default.createElement(
-                                'label',
-                                { className: 'control-label' },
-                                'Category'
-                            )
-                        ),
-                        _react2.default.createElement(
-                            'div',
-                            { className: 'select-form' },
-                            _react2.default.createElement(
-                                'select',
-                                {
-                                    className: 'form-control',
-                                    value: this.props.filter.isLocal,
-                                    onChange: this.handleCategoryChange },
-                                _react2.default.createElement(
-                                    'option',
-                                    { value: true },
-                                    'All'
-                                ),
-                                _react2.default.createElement(
-                                    'option',
-                                    { value: '0' },
-                                    'Expat'
-                                ),
-                                _react2.default.createElement(
-                                    'option',
-                                    { value: '1' },
-                                    'Local'
-                                )
-                            )
-                        )
-                    ),
-                    _react2.default.createElement(
-                        'div',
-                        { className: 'form-group form-group--m' },
-                        _react2.default.createElement(
-                            'div',
-                            { className: 'label-form' },
-                            _react2.default.createElement(
-                                'label',
-                                { className: 'control-label' },
-                                'Employee'
-                            )
-                        ),
-                        _react2.default.createElement(
-                            'div',
-                            { className: 'select-form' },
-                            _react2.default.createElement(_Autocomplete2.default, {
-                                className: 'form-control',
-                                sources: this.props.employeeOptions,
-                                onInput: this.props.onSearchEmployees,
-                                onChange: this.handleEmployeeChange
-                            })
-                        )
-                    )
-                ),
-                _react2.default.createElement(
-                    'div',
-                    { className: 'form-horizontal clearfix' },
-                    _react2.default.createElement(
-                        'div',
-                        { className: 'button-group' },
-                        _react2.default.createElement(
-                            'button',
-                            {
-                                className: 'btn btn-primary',
-                                onClick: this.handleSubmit },
-                            'Submit'
-                        ),
-                        _react2.default.createElement(
-                            'button',
-                            {
-                                className: 'btn btn-primary',
-                                name: 'currentWeek',
-                                onClick: this.handleSubmit },
-                            'Current Week'
-                        ),
-                        this.props.showExportExcel && _react2.default.createElement(
-                            _reactBootstrap.Dropdown,
-                            {
-                                id: 'dropdownExportExcel',
-                                componentClass: 'div' },
-                            _react2.default.createElement(
-                                _reactBootstrap.Dropdown.Toggle,
-                                {
-                                    useAnchor: true,
-                                    className: 'btn btn-excel' },
-                                'Excel'
-                            ),
-                            _react2.default.createElement(
-                                _reactBootstrap.Dropdown.Menu,
-                                null,
-                                _react2.default.createElement(
-                                    _reactBootstrap.MenuItem,
-                                    {
-                                        onClick: this.props.onExportExcel },
-                                    'Upload'
-                                ),
-                                _react2.default.createElement(
-                                    _reactBootstrap.MenuItem,
-                                    {
-                                        onClick: this.props.onExportExcelDriverPickup },
-                                    'Driver Pickup'
-                                )
-                            )
-                        )
-                    )
-                )
-            );
-        }
-    }]);
-    return Search;
-}(_react.Component);
-
-exports.default = Search;
+class Search extends react__WEBPACK_IMPORTED_MODULE_1__["Component"] {
+  constructor(...args) {
+    super(...args);
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleTeamChange", selectedItems => {
+      const ids = selectedItems.map(item => item.id);
+      this.props.onChange('teamIds', ids.join(','));
+    });
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleEmployeeChange", value => {
+      this.props.onChange('employee', value);
+    });
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleDateChange", (fromDate, toDate) => {
+      this.props.onChange('fromDate', fromDate);
+      this.props.onChange('toDate', toDate);
+    });
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleCategoryChange", e => {
+      this.props.onChange('isLocal', e.target.value);
+    });
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleSubmit", event => {
+      this.props.onSubmit(event.target.name === 'currentWeek');
+    });
+  }
+  render() {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: "filter"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: "form-horizontal clearfix"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: "form-group form-group--l"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: "label-form"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", {
+      className: "control-label"
+    }, "Week")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: "calendar-form"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_shared_components_WeekPicker__WEBPACK_IMPORTED_MODULE_5__["default"], {
+      fromDate: this.props.filter.fromDate,
+      toDate: this.props.filter.toDate,
+      onChange: this.handleDateChange
+    }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: "form-group form-group--m"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: "label-form"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", {
+      className: "control-label"
+    }, "Team")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: "select-form"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_shared_components_react_tree_multiselect_TreeMultiselect__WEBPACK_IMPORTED_MODULE_4__["default"], {
+      data: this.props.teamOptions,
+      isSelectedAll: true,
+      onChange: this.handleTeamChange
+    }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: "form-group form-group--m"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: "label-form"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", {
+      className: "control-label"
+    }, "Category")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: "select-form"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("select", {
+      className: "form-control",
+      value: this.props.filter.isLocal,
+      onChange: this.handleCategoryChange
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("option", {
+      value: true
+    }, "All"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("option", {
+      value: "0"
+    }, "Expat"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("option", {
+      value: "1"
+    }, "Local")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: "form-group form-group--m"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: "label-form"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", {
+      className: "control-label"
+    }, "Employee")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: "select-form"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_shared_components_Autocomplete__WEBPACK_IMPORTED_MODULE_3__["default"], {
+      className: "form-control",
+      sources: this.props.employeeOptions,
+      onInput: this.props.onSearchEmployees,
+      onChange: this.handleEmployeeChange
+    })))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: "form-horizontal clearfix"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: "button-group"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
+      className: "btn btn-primary",
+      onClick: this.handleSubmit
+    }, "Submit"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
+      className: "btn btn-primary",
+      name: "currentWeek",
+      onClick: this.handleSubmit
+    }, "Current Week"), this.props.showExportExcel && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Dropdown"], {
+      id: `dropdownExportExcel`,
+      componentClass: "div"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Dropdown"].Toggle, {
+      useAnchor: true,
+      className: "btn btn-excel"
+    }, "Excel"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Dropdown"].Menu, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["MenuItem"], {
+      onClick: this.props.onExportExcel
+    }, "Upload"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["MenuItem"], {
+      onClick: this.props.onExportExcelDriverPickup
+    }, "Driver Pickup"))))));
+  }
+}
 
 /***/ }),
 
@@ -144833,215 +140478,163 @@ exports.default = Search;
 /*!*****************************************************************!*\
   !*** ./sources/js/pages/schedule-arrange/ShiftAutocomplete.jsx ***!
   \*****************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return ShiftAutocomplete; });
+/* harmony import */ var _babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/extends */ "./node_modules/@babel/runtime/helpers/extends.js");
+/* harmony import */ var _babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "./node_modules/@babel/runtime/helpers/defineProperty.js");
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var react_autocomplete__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react-autocomplete */ "./node_modules/react-autocomplete/build/lib/Autocomplete.js");
+/* harmony import */ var react_autocomplete__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(react_autocomplete__WEBPACK_IMPORTED_MODULE_4__);
 
 
-Object.defineProperty(exports, "__esModule", {
-    value: true
+
+
+
+class ShiftAutocomplete extends react__WEBPACK_IMPORTED_MODULE_2__["PureComponent"] {
+  constructor(props) {
+    super(props);
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_1___default()(this, "handleChange", event => {
+      const value = event.target.value;
+      const isPasted = this.state.isPasted;
+      const shiftOptions = this.props.shiftOptions;
+      let options = [];
+      if (value.trim().length > 0) {
+        if (isPasted) {
+          const trimvalue = value.trim().toLowerCase().replace(/ /g, '');
+          const index = this.props.shiftOptions.findIndex(item => item.code.toLowerCase().replace(/ /g, '') === trimvalue);
+          if (index >= 0) {
+            this.props.onChange(this.props.name, this.props.shiftOptions[index]);
+          }
+        } else {
+          options = shiftOptions.filter(item => item.code.toLowerCase().replace(/ /g, '').startsWith(value.trim().toLowerCase().replace(/ /g, '')));
+        }
+      }
+      this.setState({
+        value,
+        options,
+        isPasted: false
+      });
+    });
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_1___default()(this, "handleSelect", (value, item) => {
+      this.setState({
+        value
+      });
+      this.props.onChange(this.props.name, item);
+    });
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_1___default()(this, "handleInputFocus", event => {
+      event.target.select();
+      this.setState({
+        options: []
+      });
+    });
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_1___default()(this, "handleInputPaste", () => {
+      this.setState({
+        isPasted: true
+      });
+    });
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_1___default()(this, "handleInputBlur", event => {
+      if (this.props.isDisabled) {
+        return;
+      }
+      const value = event.target.value.trim().toLowerCase().replace(/ /g, '');
+      if (value.length > 0) {
+        const index = this.props.shiftOptions.findIndex(item => item.code.toLowerCase().replace(/ /g, '') === value);
+        if (index >= 0) {
+          this.props.onChange(this.props.name, this.props.shiftOptions[index]);
+        } else {
+          this.setState({
+            value: ''
+          }, () => this.props.onChange(this.props.name, null));
+        }
+      } else {
+        this.props.onChange(this.props.name, null);
+      }
+    });
+    this.state = {
+      value: props.shift === null ? '' : props.shift.code,
+      options: [],
+      isPasted: false
+    };
+  }
+  componentDidUpdate(prevProps) {
+    if (this.props.shift !== prevProps.shift) {
+      this.setState({
+        value: this.props.shift === null ? '' : this.props.shift.code
+      });
+    }
+  }
+  render() {
+    const {
+      name,
+      className,
+      isDisabled,
+      placeholder
+    } = this.props;
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement(react_autocomplete__WEBPACK_IMPORTED_MODULE_4___default.a, {
+      items: this.state.options,
+      shouldItemRender: (item, value) => item.code.toLowerCase().replace(/ /g, '').startsWith(value.trim().toLowerCase().replace(/ /g, '')),
+      getItemValue: item => item.code,
+      wrapperProps: {
+        className: 'react-autocomplete-wrapper'
+      },
+      wrapperStyle: {
+        display: 'block'
+      },
+      renderInput: props => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("input", _babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_0___default()({
+        type: "text"
+      }, props)),
+      renderMenu: items => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
+        className: "items",
+        children: items
+      }),
+      renderItem: (item, isHighlighted) => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
+        className: `item ${isHighlighted ? 'highlighted' : ''}`,
+        key: item.id
+      }, item.code),
+      inputProps: {
+        name: name,
+        className: className,
+        placeholder: placeholder,
+        disabled: isDisabled,
+        onFocus: this.handleInputFocus,
+        onPaste: this.handleInputPaste,
+        onBlur: this.handleInputBlur
+      },
+      value: this.state.value,
+      onChange: this.handleChange,
+      onSelect: this.handleSelect
+    });
+  }
+}
+_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_1___default()(ShiftAutocomplete, "propTypes", {
+  shift: prop_types__WEBPACK_IMPORTED_MODULE_3___default.a.object,
+  shiftOptions: prop_types__WEBPACK_IMPORTED_MODULE_3___default.a.arrayOf(prop_types__WEBPACK_IMPORTED_MODULE_3___default.a.object),
+  name: prop_types__WEBPACK_IMPORTED_MODULE_3___default.a.string,
+  className: prop_types__WEBPACK_IMPORTED_MODULE_3___default.a.string,
+  placeholder: prop_types__WEBPACK_IMPORTED_MODULE_3___default.a.string,
+  isDisabled: prop_types__WEBPACK_IMPORTED_MODULE_3___default.a.bool,
+  onChange: prop_types__WEBPACK_IMPORTED_MODULE_3___default.a.func
 });
-
-var _extends2 = __webpack_require__(/*! babel-runtime/helpers/extends */ "./node_modules/babel-runtime/helpers/extends.js");
-
-var _extends3 = _interopRequireDefault(_extends2);
-
-var _getPrototypeOf = __webpack_require__(/*! babel-runtime/core-js/object/get-prototype-of */ "./node_modules/babel-runtime/core-js/object/get-prototype-of.js");
-
-var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
-
-var _classCallCheck2 = __webpack_require__(/*! babel-runtime/helpers/classCallCheck */ "./node_modules/babel-runtime/helpers/classCallCheck.js");
-
-var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
-
-var _createClass2 = __webpack_require__(/*! babel-runtime/helpers/createClass */ "./node_modules/babel-runtime/helpers/createClass.js");
-
-var _createClass3 = _interopRequireDefault(_createClass2);
-
-var _possibleConstructorReturn2 = __webpack_require__(/*! babel-runtime/helpers/possibleConstructorReturn */ "./node_modules/babel-runtime/helpers/possibleConstructorReturn.js");
-
-var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
-
-var _inherits2 = __webpack_require__(/*! babel-runtime/helpers/inherits */ "./node_modules/babel-runtime/helpers/inherits.js");
-
-var _inherits3 = _interopRequireDefault(_inherits2);
-
-var _react = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-
-var _react2 = _interopRequireDefault(_react);
-
-var _propTypes = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
-
-var _propTypes2 = _interopRequireDefault(_propTypes);
-
-var _reactAutocomplete = __webpack_require__(/*! react-autocomplete */ "./node_modules/react-autocomplete/build/lib/Autocomplete.js");
-
-var _reactAutocomplete2 = _interopRequireDefault(_reactAutocomplete);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var ShiftAutocomplete = function (_PureComponent) {
-    (0, _inherits3.default)(ShiftAutocomplete, _PureComponent);
-
-    function ShiftAutocomplete(props) {
-        (0, _classCallCheck3.default)(this, ShiftAutocomplete);
-
-        var _this = (0, _possibleConstructorReturn3.default)(this, (ShiftAutocomplete.__proto__ || (0, _getPrototypeOf2.default)(ShiftAutocomplete)).call(this, props));
-
-        _this.handleChange = function (event) {
-            var value = event.target.value;
-            var isPasted = _this.state.isPasted;
-            var shiftOptions = _this.props.shiftOptions;
-            var options = [];
-
-            if (value.trim().length > 0) {
-                if (isPasted) {
-                    var trimvalue = value.trim().toLowerCase().replace(/ /g, '');
-                    var index = _this.props.shiftOptions.findIndex(function (item) {
-                        return item.code.toLowerCase().replace(/ /g, '') === trimvalue;
-                    });
-                    if (index >= 0) {
-                        _this.props.onChange(_this.props.name, _this.props.shiftOptions[index]);
-                    }
-                } else {
-                    options = shiftOptions.filter(function (item) {
-                        return item.code.toLowerCase().replace(/ /g, '').startsWith(value.trim().toLowerCase().replace(/ /g, ''));
-                    });
-                }
-            }
-
-            _this.setState({
-                value: value,
-                options: options,
-                isPasted: false
-            });
-        };
-
-        _this.handleSelect = function (value, item) {
-            _this.setState({ value: value });
-
-            _this.props.onChange(_this.props.name, item);
-        };
-
-        _this.handleInputFocus = function (event) {
-            event.target.select();
-            _this.setState({ options: [] });
-        };
-
-        _this.handleInputPaste = function () {
-            _this.setState({ isPasted: true });
-        };
-
-        _this.handleInputBlur = function (event) {
-            if (_this.props.isDisabled) {
-                return;
-            }
-
-            var value = event.target.value.trim().toLowerCase().replace(/ /g, '');
-            if (value.length > 0) {
-                var index = _this.props.shiftOptions.findIndex(function (item) {
-                    return item.code.toLowerCase().replace(/ /g, '') === value;
-                });
-                if (index >= 0) {
-                    _this.props.onChange(_this.props.name, _this.props.shiftOptions[index]);
-                } else {
-                    _this.setState({ value: '' }, function () {
-                        return _this.props.onChange(_this.props.name, null);
-                    });
-                }
-            } else {
-                _this.props.onChange(_this.props.name, null);
-            }
-        };
-
-        _this.state = {
-            value: props.shift === null ? '' : props.shift.code,
-            options: [],
-            isPasted: false
-        };
-        return _this;
-    }
-
-    (0, _createClass3.default)(ShiftAutocomplete, [{
-        key: 'componentDidUpdate',
-        value: function componentDidUpdate(prevProps) {
-            if (this.props.shift !== prevProps.shift) {
-                this.setState({ value: this.props.shift === null ? '' : this.props.shift.code });
-            }
-        }
-    }, {
-        key: 'render',
-        value: function render() {
-            var _props = this.props,
-                name = _props.name,
-                className = _props.className,
-                isDisabled = _props.isDisabled,
-                placeholder = _props.placeholder;
-
-
-            return _react2.default.createElement(_reactAutocomplete2.default, {
-                items: this.state.options,
-                shouldItemRender: function shouldItemRender(item, value) {
-                    return item.code.toLowerCase().replace(/ /g, '').startsWith(value.trim().toLowerCase().replace(/ /g, ''));
-                },
-                getItemValue: function getItemValue(item) {
-                    return item.code;
-                },
-                wrapperProps: { className: 'react-autocomplete-wrapper' },
-                wrapperStyle: { display: 'block' },
-                renderInput: function renderInput(props) {
-                    return _react2.default.createElement('input', (0, _extends3.default)({ type: 'text' }, props));
-                },
-                renderMenu: function renderMenu(items) {
-                    return _react2.default.createElement('div', { className: 'items', children: items });
-                },
-                renderItem: function renderItem(item, isHighlighted) {
-                    return _react2.default.createElement(
-                        'div',
-                        { className: 'item ' + (isHighlighted ? 'highlighted' : ''), key: item.id },
-                        item.code
-                    );
-                },
-                inputProps: {
-                    name: name,
-                    className: className,
-                    placeholder: placeholder,
-                    disabled: isDisabled,
-                    onFocus: this.handleInputFocus,
-                    onPaste: this.handleInputPaste,
-                    onBlur: this.handleInputBlur
-                },
-                value: this.state.value,
-                onChange: this.handleChange,
-                onSelect: this.handleSelect
-            });
-        }
-    }]);
-    return ShiftAutocomplete;
-}(_react.PureComponent);
-
-ShiftAutocomplete.propTypes = {
-    shift: _propTypes2.default.object,
-    shiftOptions: _propTypes2.default.arrayOf(_propTypes2.default.object),
-    name: _propTypes2.default.string,
-    className: _propTypes2.default.string,
-    placeholder: _propTypes2.default.string,
-    isDisabled: _propTypes2.default.bool,
-    onChange: _propTypes2.default.func
-};
-ShiftAutocomplete.defaultProps = {
-    shift: null,
-    shiftOptions: [],
-    name: '',
-    className: '',
-    placeholder: '',
-    isDisabled: false,
-    onChange: function onChange() {
-        // This is intentional
-    }
-};
-exports.default = ShiftAutocomplete;
+_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_1___default()(ShiftAutocomplete, "defaultProps", {
+  shift: null,
+  shiftOptions: [],
+  name: '',
+  className: '',
+  placeholder: '',
+  isDisabled: false,
+  onChange: function () {
+    // This is intentional
+  }
+});
 
 /***/ }),
 
@@ -145049,197 +140642,126 @@ exports.default = ShiftAutocomplete;
 /*!******************************************************************!*\
   !*** ./sources/js/pages/schedule-arrange/ShiftMultipleModal.jsx ***!
   \******************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return ShiftMultipleModal; });
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "./node_modules/@babel/runtime/helpers/defineProperty.js");
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/es/index.js");
+/* harmony import */ var _ShiftAutocomplete__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./ShiftAutocomplete */ "./sources/js/pages/schedule-arrange/ShiftAutocomplete.jsx");
 
 
-Object.defineProperty(exports, "__esModule", {
-    value: true
+
+
+
+class ShiftMultipleModal extends react__WEBPACK_IMPORTED_MODULE_1__["Component"] {
+  constructor(props) {
+    super(props);
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleSubmit", event => {
+      event.preventDefault();
+      const {
+        shift,
+        isOffDay
+      } = this.state;
+      if (shift === null) {
+        this.setState({
+          isValid: false
+        });
+      } else {
+        this.props.onSubmit(shift, isOffDay);
+      }
+    });
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleChangeShift", (name, shift) => {
+      const isValid = shift !== null;
+      this.setState({
+        shift,
+        isValid
+      });
+    });
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleChangeOffDay", event => {
+      this.setState({
+        isOffDay: event.target.checked
+      });
+    });
+    this.state = {
+      shift: null,
+      isOffDay: false,
+      isValid: true
+    };
+  }
+  render() {
+    const {
+      shift,
+      isOffDay,
+      isValid
+    } = this.state;
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_3__["Modal"], {
+      keyboard: false,
+      backdrop: "static",
+      show: this.props.show,
+      onHide: this.props.onHide,
+      dialogClassName: "modal-shift-multiple modal-dialog-centered"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_3__["Modal"].Header, {
+      closeButton: true
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_3__["Modal"].Title, null, "Shift Multiple")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_3__["Form"], {
+      id: "shift-multiple-form",
+      horizontal: true,
+      onSubmit: this.handleSubmit
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_3__["Modal"].Body, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: "form-group"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: "label-form"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", {
+      className: "control-label"
+    }, "Shift")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: "input-form"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_ShiftAutocomplete__WEBPACK_IMPORTED_MODULE_4__["default"], {
+      className: `form-control ${isValid ? '' : 'input-validation-error'}`,
+      shift: shift,
+      shiftOptions: this.props.shiftOptions,
+      onChange: this.handleChangeShift
+    }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: "form-group"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: "checkbox"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
+      type: "checkbox",
+      className: `checkbox-custom`,
+      id: `ckb-isOffDay`,
+      checked: isOffDay,
+      onChange: this.handleChangeOffDay
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", {
+      htmlFor: `ckb-isOffDay`
+    }, " Is Off Day")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_3__["Modal"].Footer, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_3__["Button"], {
+      type: "submit",
+      bsStyle: "primary"
+    }, "Ok"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_3__["Button"], {
+      onClick: this.props.onHide,
+      className: "btn-cancel"
+    }, "Cancel"))));
+  }
+}
+_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(ShiftMultipleModal, "propTypes", {
+  show: prop_types__WEBPACK_IMPORTED_MODULE_2___default.a.bool,
+  onHide: prop_types__WEBPACK_IMPORTED_MODULE_2___default.a.func,
+  onSubmit: prop_types__WEBPACK_IMPORTED_MODULE_2___default.a.func
 });
-
-var _getPrototypeOf = __webpack_require__(/*! babel-runtime/core-js/object/get-prototype-of */ "./node_modules/babel-runtime/core-js/object/get-prototype-of.js");
-
-var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
-
-var _classCallCheck2 = __webpack_require__(/*! babel-runtime/helpers/classCallCheck */ "./node_modules/babel-runtime/helpers/classCallCheck.js");
-
-var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
-
-var _createClass2 = __webpack_require__(/*! babel-runtime/helpers/createClass */ "./node_modules/babel-runtime/helpers/createClass.js");
-
-var _createClass3 = _interopRequireDefault(_createClass2);
-
-var _possibleConstructorReturn2 = __webpack_require__(/*! babel-runtime/helpers/possibleConstructorReturn */ "./node_modules/babel-runtime/helpers/possibleConstructorReturn.js");
-
-var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
-
-var _inherits2 = __webpack_require__(/*! babel-runtime/helpers/inherits */ "./node_modules/babel-runtime/helpers/inherits.js");
-
-var _inherits3 = _interopRequireDefault(_inherits2);
-
-var _react = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-
-var _react2 = _interopRequireDefault(_react);
-
-var _propTypes = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
-
-var _propTypes2 = _interopRequireDefault(_propTypes);
-
-var _reactBootstrap = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/es/index.js");
-
-var _ShiftAutocomplete = __webpack_require__(/*! ./ShiftAutocomplete */ "./sources/js/pages/schedule-arrange/ShiftAutocomplete.jsx");
-
-var _ShiftAutocomplete2 = _interopRequireDefault(_ShiftAutocomplete);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var ShiftMultipleModal = function (_Component) {
-    (0, _inherits3.default)(ShiftMultipleModal, _Component);
-
-    function ShiftMultipleModal(props) {
-        (0, _classCallCheck3.default)(this, ShiftMultipleModal);
-
-        var _this = (0, _possibleConstructorReturn3.default)(this, (ShiftMultipleModal.__proto__ || (0, _getPrototypeOf2.default)(ShiftMultipleModal)).call(this, props));
-
-        _this.handleSubmit = function (event) {
-            event.preventDefault();
-
-            var _this$state = _this.state,
-                shift = _this$state.shift,
-                isOffDay = _this$state.isOffDay;
-
-
-            if (shift === null) {
-                _this.setState({ isValid: false });
-            } else {
-                _this.props.onSubmit(shift, isOffDay);
-            }
-        };
-
-        _this.handleChangeShift = function (name, shift) {
-            var isValid = shift !== null;
-
-            _this.setState({ shift: shift, isValid: isValid });
-        };
-
-        _this.handleChangeOffDay = function (event) {
-            _this.setState({ isOffDay: event.target.checked });
-        };
-
-        _this.state = {
-            shift: null,
-            isOffDay: false,
-            isValid: true
-        };
-        return _this;
-    }
-
-    (0, _createClass3.default)(ShiftMultipleModal, [{
-        key: 'render',
-        value: function render() {
-            var _state = this.state,
-                shift = _state.shift,
-                isOffDay = _state.isOffDay,
-                isValid = _state.isValid;
-
-
-            return _react2.default.createElement(
-                _reactBootstrap.Modal,
-                { keyboard: false, backdrop: 'static',
-                    show: this.props.show, onHide: this.props.onHide,
-                    dialogClassName: 'modal-shift-multiple modal-dialog-centered'
-                },
-                _react2.default.createElement(
-                    _reactBootstrap.Modal.Header,
-                    { closeButton: true },
-                    _react2.default.createElement(
-                        _reactBootstrap.Modal.Title,
-                        null,
-                        'Shift Multiple'
-                    )
-                ),
-                _react2.default.createElement(
-                    _reactBootstrap.Form,
-                    { id: 'shift-multiple-form', horizontal: true, onSubmit: this.handleSubmit },
-                    _react2.default.createElement(
-                        _reactBootstrap.Modal.Body,
-                        null,
-                        _react2.default.createElement(
-                            'div',
-                            { className: 'form-group' },
-                            _react2.default.createElement(
-                                'div',
-                                { className: 'label-form' },
-                                _react2.default.createElement(
-                                    'label',
-                                    { className: 'control-label' },
-                                    'Shift'
-                                )
-                            ),
-                            _react2.default.createElement(
-                                'div',
-                                { className: 'input-form' },
-                                _react2.default.createElement(_ShiftAutocomplete2.default, { className: 'form-control ' + (isValid ? '' : 'input-validation-error'),
-                                    shift: shift, shiftOptions: this.props.shiftOptions,
-                                    onChange: this.handleChangeShift
-                                })
-                            )
-                        ),
-                        _react2.default.createElement(
-                            'div',
-                            { className: 'form-group' },
-                            _react2.default.createElement(
-                                'div',
-                                { className: 'checkbox' },
-                                _react2.default.createElement('input', { type: 'checkbox', className: 'checkbox-custom', id: 'ckb-isOffDay',
-                                    checked: isOffDay, onChange: this.handleChangeOffDay
-                                }),
-                                _react2.default.createElement(
-                                    'label',
-                                    { htmlFor: 'ckb-isOffDay' },
-                                    ' Is Off Day'
-                                )
-                            )
-                        )
-                    ),
-                    _react2.default.createElement(
-                        _reactBootstrap.Modal.Footer,
-                        null,
-                        _react2.default.createElement(
-                            _reactBootstrap.Button,
-                            { type: 'submit', bsStyle: 'primary' },
-                            'Ok'
-                        ),
-                        _react2.default.createElement(
-                            _reactBootstrap.Button,
-                            { onClick: this.props.onHide, className: 'btn-cancel' },
-                            'Cancel'
-                        )
-                    )
-                )
-            );
-        }
-    }]);
-    return ShiftMultipleModal;
-}(_react.Component);
-
-ShiftMultipleModal.propTypes = {
-    show: _propTypes2.default.bool,
-    onHide: _propTypes2.default.func,
-    onSubmit: _propTypes2.default.func
-};
-ShiftMultipleModal.defaultProps = {
-    show: false,
-    onHide: function onHide() {
-        // This is intentional
-    },
-    onSubmit: function onSubmit() {
-        // This is intentional
-    }
-};
-exports.default = ShiftMultipleModal;
+_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(ShiftMultipleModal, "defaultProps", {
+  show: false,
+  onHide: function () {
+    // This is intentional
+  },
+  onSubmit: function () {
+    // This is intentional
+  }
+});
 
 /***/ }),
 
@@ -145247,325 +140769,218 @@ exports.default = ShiftMultipleModal;
 /*!***********************************************************************!*\
   !*** ./sources/js/pages/schedule-arrange/WeeklyDefaultShiftModal.jsx ***!
   \***********************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return WeeklyDefaultShiftModal; });
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "./node_modules/@babel/runtime/helpers/defineProperty.js");
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/es/index.js");
+/* harmony import */ var _shared_constants__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../shared/constants */ "./sources/js/shared/constants.js");
+/* harmony import */ var _ShiftAutocomplete__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./ShiftAutocomplete */ "./sources/js/pages/schedule-arrange/ShiftAutocomplete.jsx");
+
+function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
 
 
-Object.defineProperty(exports, "__esModule", {
-    value: true
+
+
+
+class WeeklyDefaultShiftModal extends react__WEBPACK_IMPORTED_MODULE_1__["Component"] {
+  constructor(props) {
+    super(props);
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleSubmit", event => {
+      event.preventDefault();
+      const {
+        data,
+        isUsedWeeklyDefaultShift
+      } = this.state;
+      this.props.onSubmit(data, isUsedWeeklyDefaultShift);
+    });
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleChangeShift", (name, shift) => {
+      const offday = {
+          id: -1,
+          code: 'Off'
+        },
+        data = _objectSpread(_objectSpread({}, this.state.data), {}, {
+          [name + 'Shift']: shift !== null ? shift : offday
+        });
+      this.setState({
+        data
+      });
+    });
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleChangeCheckbox", event => {
+      this.setState({
+        isUsedWeeklyDefaultShift: event.target.checked
+      });
+    });
+    this.state = {
+      data: props.data,
+      isUsedWeeklyDefaultShift: props.isUsedWeeklyDefaultShift
+    };
+  }
+  render() {
+    const {
+      isUsedWeeklyDefaultShift,
+      data
+    } = this.state;
+    const {
+      isHost,
+      show,
+      nickname,
+      shiftOptions
+    } = this.props;
+    const getShiftClassName = function (objAttr) {
+      return data !== null && data[objAttr].id === _shared_constants__WEBPACK_IMPORTED_MODULE_4__["OffDayShiftId"] ? 'offday' : '';
+    };
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_3__["Modal"], {
+      keyboard: false,
+      backdrop: "static",
+      show: show,
+      onHide: this.props.onHide,
+      dialogClassName: "modal-dialog-centered modal-weekly-default-shift"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_3__["Modal"].Header, {
+      closeButton: true
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_3__["Modal"].Title, null, "Weekly default shift: ", nickname)), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_3__["Modal"].Body, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: "table-weekly-default-shift"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: "table-header"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: "header"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: "table-cell cell-shift"
+    }, "Mon"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: "table-cell cell-shift"
+    }, "Tue"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: "table-cell cell-shift"
+    }, "Wed"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: "table-cell cell-shift"
+    }, "Thu"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: "table-cell cell-shift"
+    }, "Fri"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: "table-cell cell-shift"
+    }, "Sat"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: "table-cell cell-shift"
+    }, "Sun"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: "table-body"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: "table-row"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: "table-cell cell-shift"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_ShiftAutocomplete__WEBPACK_IMPORTED_MODULE_5__["default"], {
+      isDisabled: !this.props.isHost,
+      className: getShiftClassName('monShift'),
+      name: "mon",
+      shift: data !== null ? data.monShift : null,
+      shiftOptions: shiftOptions,
+      onChange: this.handleChangeShift
+    })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: "table-cell cell-shift"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_ShiftAutocomplete__WEBPACK_IMPORTED_MODULE_5__["default"], {
+      isDisabled: !isHost,
+      className: getShiftClassName('tueShift'),
+      name: "tue",
+      shift: data !== null ? data.tueShift : null,
+      shiftOptions: shiftOptions,
+      onChange: this.handleChangeShift
+    })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: "table-cell cell-shift"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_ShiftAutocomplete__WEBPACK_IMPORTED_MODULE_5__["default"], {
+      isDisabled: !isHost,
+      className: getShiftClassName('wedShift'),
+      name: "wed",
+      shift: data !== null ? data.wedShift : null,
+      shiftOptions: shiftOptions,
+      onChange: this.handleChangeShift
+    })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: "table-cell cell-shift"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_ShiftAutocomplete__WEBPACK_IMPORTED_MODULE_5__["default"], {
+      isDisabled: !isHost,
+      className: getShiftClassName('thuShift'),
+      name: "thu",
+      shift: data !== null ? data.thuShift : null,
+      shiftOptions: shiftOptions,
+      onChange: this.handleChangeShift
+    })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: "table-cell cell-shift"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_ShiftAutocomplete__WEBPACK_IMPORTED_MODULE_5__["default"], {
+      isDisabled: !isHost,
+      className: getShiftClassName('friShift'),
+      name: "fri",
+      shift: data !== null ? data.friShift : null,
+      shiftOptions: shiftOptions,
+      onChange: this.handleChangeShift
+    })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: "table-cell cell-shift"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_ShiftAutocomplete__WEBPACK_IMPORTED_MODULE_5__["default"], {
+      isDisabled: !isHost,
+      className: getShiftClassName('satShift'),
+      name: "sat",
+      shift: data !== null ? data.satShift : null,
+      shiftOptions: shiftOptions,
+      onChange: this.handleChangeShift
+    })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: "table-cell cell-shift"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_ShiftAutocomplete__WEBPACK_IMPORTED_MODULE_5__["default"], {
+      isDisabled: !isHost,
+      className: getShiftClassName('sunShift'),
+      name: "sun",
+      shift: data !== null ? data.sunShift : null,
+      shiftOptions: shiftOptions,
+      onChange: this.handleChangeShift
+    }))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: "checkbox"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
+      type: "checkbox",
+      className: `checkbox-custom`,
+      id: `ckb-weeklyDefaultShift`,
+      checked: isUsedWeeklyDefaultShift,
+      disabled: !isHost,
+      onChange: this.handleChangeCheckbox
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", {
+      htmlFor: `ckb-weeklyDefaultShift`
+    }, " Use weekly default shift (apply from ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("strong", null, this.props.fromDate), ")."))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_3__["Modal"].Footer, null, this.props.isHost && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_3__["Button"], {
+      type: "button",
+      bsStyle: "primary",
+      onClick: this.handleSubmit
+    }, "Save"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_3__["Button"], {
+      onClick: this.props.onHide,
+      className: "btn-cancel"
+    }, "Cancel")));
+  }
+}
+_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(WeeklyDefaultShiftModal, "propTypes", {
+  show: prop_types__WEBPACK_IMPORTED_MODULE_2___default.a.bool,
+  isHost: prop_types__WEBPACK_IMPORTED_MODULE_2___default.a.bool,
+  nickname: prop_types__WEBPACK_IMPORTED_MODULE_2___default.a.string,
+  data: prop_types__WEBPACK_IMPORTED_MODULE_2___default.a.object,
+  isUsedWeeklyDefaultShift: prop_types__WEBPACK_IMPORTED_MODULE_2___default.a.bool,
+  fromDate: prop_types__WEBPACK_IMPORTED_MODULE_2___default.a.string,
+  shiftOptions: prop_types__WEBPACK_IMPORTED_MODULE_2___default.a.arrayOf(prop_types__WEBPACK_IMPORTED_MODULE_2___default.a.object),
+  onHide: prop_types__WEBPACK_IMPORTED_MODULE_2___default.a.func,
+  onSubmit: prop_types__WEBPACK_IMPORTED_MODULE_2___default.a.func
 });
-
-var _defineProperty2 = __webpack_require__(/*! babel-runtime/helpers/defineProperty */ "./node_modules/babel-runtime/helpers/defineProperty.js");
-
-var _defineProperty3 = _interopRequireDefault(_defineProperty2);
-
-var _extends3 = __webpack_require__(/*! babel-runtime/helpers/extends */ "./node_modules/babel-runtime/helpers/extends.js");
-
-var _extends4 = _interopRequireDefault(_extends3);
-
-var _getPrototypeOf = __webpack_require__(/*! babel-runtime/core-js/object/get-prototype-of */ "./node_modules/babel-runtime/core-js/object/get-prototype-of.js");
-
-var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
-
-var _classCallCheck2 = __webpack_require__(/*! babel-runtime/helpers/classCallCheck */ "./node_modules/babel-runtime/helpers/classCallCheck.js");
-
-var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
-
-var _createClass2 = __webpack_require__(/*! babel-runtime/helpers/createClass */ "./node_modules/babel-runtime/helpers/createClass.js");
-
-var _createClass3 = _interopRequireDefault(_createClass2);
-
-var _possibleConstructorReturn2 = __webpack_require__(/*! babel-runtime/helpers/possibleConstructorReturn */ "./node_modules/babel-runtime/helpers/possibleConstructorReturn.js");
-
-var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
-
-var _inherits2 = __webpack_require__(/*! babel-runtime/helpers/inherits */ "./node_modules/babel-runtime/helpers/inherits.js");
-
-var _inherits3 = _interopRequireDefault(_inherits2);
-
-var _react = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-
-var _react2 = _interopRequireDefault(_react);
-
-var _propTypes = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
-
-var _propTypes2 = _interopRequireDefault(_propTypes);
-
-var _reactBootstrap = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/es/index.js");
-
-var _constants = __webpack_require__(/*! ../../shared/constants */ "./sources/js/shared/constants.js");
-
-var _ShiftAutocomplete = __webpack_require__(/*! ./ShiftAutocomplete */ "./sources/js/pages/schedule-arrange/ShiftAutocomplete.jsx");
-
-var _ShiftAutocomplete2 = _interopRequireDefault(_ShiftAutocomplete);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var WeeklyDefaultShiftModal = function (_Component) {
-    (0, _inherits3.default)(WeeklyDefaultShiftModal, _Component);
-
-    function WeeklyDefaultShiftModal(props) {
-        (0, _classCallCheck3.default)(this, WeeklyDefaultShiftModal);
-
-        var _this = (0, _possibleConstructorReturn3.default)(this, (WeeklyDefaultShiftModal.__proto__ || (0, _getPrototypeOf2.default)(WeeklyDefaultShiftModal)).call(this, props));
-
-        _this.handleSubmit = function (event) {
-            event.preventDefault();
-
-            var _this$state = _this.state,
-                data = _this$state.data,
-                isUsedWeeklyDefaultShift = _this$state.isUsedWeeklyDefaultShift;
-
-
-            _this.props.onSubmit(data, isUsedWeeklyDefaultShift);
-        };
-
-        _this.handleChangeShift = function (name, shift) {
-            var offday = { id: -1, code: 'Off' },
-                data = (0, _extends4.default)({}, _this.state.data, (0, _defineProperty3.default)({}, name + 'Shift', shift !== null ? shift : offday));
-
-            _this.setState({ data: data });
-        };
-
-        _this.handleChangeCheckbox = function (event) {
-            _this.setState({ isUsedWeeklyDefaultShift: event.target.checked });
-        };
-
-        _this.state = {
-            data: props.data,
-            isUsedWeeklyDefaultShift: props.isUsedWeeklyDefaultShift
-        };
-        return _this;
-    }
-
-    (0, _createClass3.default)(WeeklyDefaultShiftModal, [{
-        key: 'render',
-        value: function render() {
-            var _state = this.state,
-                isUsedWeeklyDefaultShift = _state.isUsedWeeklyDefaultShift,
-                data = _state.data;
-            var _props = this.props,
-                isHost = _props.isHost,
-                show = _props.show,
-                nickname = _props.nickname,
-                shiftOptions = _props.shiftOptions;
-
-            var getShiftClassName = function getShiftClassName(objAttr) {
-                return data !== null && data[objAttr].id === _constants.OffDayShiftId ? 'offday' : '';
-            };
-
-            return _react2.default.createElement(
-                _reactBootstrap.Modal,
-                { keyboard: false, backdrop: 'static',
-                    show: show, onHide: this.props.onHide,
-                    dialogClassName: 'modal-dialog-centered modal-weekly-default-shift'
-                },
-                _react2.default.createElement(
-                    _reactBootstrap.Modal.Header,
-                    { closeButton: true },
-                    _react2.default.createElement(
-                        _reactBootstrap.Modal.Title,
-                        null,
-                        'Weekly default shift: ',
-                        nickname
-                    )
-                ),
-                _react2.default.createElement(
-                    _reactBootstrap.Modal.Body,
-                    null,
-                    _react2.default.createElement(
-                        'div',
-                        { className: 'table-weekly-default-shift' },
-                        _react2.default.createElement(
-                            'div',
-                            { className: 'table-header' },
-                            _react2.default.createElement(
-                                'div',
-                                { className: 'header' },
-                                _react2.default.createElement(
-                                    'div',
-                                    { className: 'table-cell cell-shift' },
-                                    'Mon'
-                                ),
-                                _react2.default.createElement(
-                                    'div',
-                                    { className: 'table-cell cell-shift' },
-                                    'Tue'
-                                ),
-                                _react2.default.createElement(
-                                    'div',
-                                    { className: 'table-cell cell-shift' },
-                                    'Wed'
-                                ),
-                                _react2.default.createElement(
-                                    'div',
-                                    { className: 'table-cell cell-shift' },
-                                    'Thu'
-                                ),
-                                _react2.default.createElement(
-                                    'div',
-                                    { className: 'table-cell cell-shift' },
-                                    'Fri'
-                                ),
-                                _react2.default.createElement(
-                                    'div',
-                                    { className: 'table-cell cell-shift' },
-                                    'Sat'
-                                ),
-                                _react2.default.createElement(
-                                    'div',
-                                    { className: 'table-cell cell-shift' },
-                                    'Sun'
-                                )
-                            )
-                        ),
-                        _react2.default.createElement(
-                            'div',
-                            { className: 'table-body' },
-                            _react2.default.createElement(
-                                'div',
-                                { className: 'table-row' },
-                                _react2.default.createElement(
-                                    'div',
-                                    { className: 'table-cell cell-shift' },
-                                    _react2.default.createElement(_ShiftAutocomplete2.default, { isDisabled: !this.props.isHost,
-                                        className: getShiftClassName('monShift'), name: 'mon',
-                                        shift: data !== null ? data.monShift : null,
-                                        shiftOptions: shiftOptions,
-                                        onChange: this.handleChangeShift
-                                    })
-                                ),
-                                _react2.default.createElement(
-                                    'div',
-                                    { className: 'table-cell cell-shift' },
-                                    _react2.default.createElement(_ShiftAutocomplete2.default, { isDisabled: !isHost,
-                                        className: getShiftClassName('tueShift'), name: 'tue',
-                                        shift: data !== null ? data.tueShift : null,
-                                        shiftOptions: shiftOptions,
-                                        onChange: this.handleChangeShift
-                                    })
-                                ),
-                                _react2.default.createElement(
-                                    'div',
-                                    { className: 'table-cell cell-shift' },
-                                    _react2.default.createElement(_ShiftAutocomplete2.default, { isDisabled: !isHost,
-                                        className: getShiftClassName('wedShift'), name: 'wed',
-                                        shift: data !== null ? data.wedShift : null,
-                                        shiftOptions: shiftOptions,
-                                        onChange: this.handleChangeShift
-                                    })
-                                ),
-                                _react2.default.createElement(
-                                    'div',
-                                    { className: 'table-cell cell-shift' },
-                                    _react2.default.createElement(_ShiftAutocomplete2.default, { isDisabled: !isHost,
-                                        className: getShiftClassName('thuShift'), name: 'thu',
-                                        shift: data !== null ? data.thuShift : null,
-                                        shiftOptions: shiftOptions,
-                                        onChange: this.handleChangeShift
-                                    })
-                                ),
-                                _react2.default.createElement(
-                                    'div',
-                                    { className: 'table-cell cell-shift' },
-                                    _react2.default.createElement(_ShiftAutocomplete2.default, { isDisabled: !isHost,
-                                        className: getShiftClassName('friShift'), name: 'fri',
-                                        shift: data !== null ? data.friShift : null,
-                                        shiftOptions: shiftOptions,
-                                        onChange: this.handleChangeShift
-                                    })
-                                ),
-                                _react2.default.createElement(
-                                    'div',
-                                    { className: 'table-cell cell-shift' },
-                                    _react2.default.createElement(_ShiftAutocomplete2.default, { isDisabled: !isHost,
-                                        className: getShiftClassName('satShift'), name: 'sat',
-                                        shift: data !== null ? data.satShift : null,
-                                        shiftOptions: shiftOptions,
-                                        onChange: this.handleChangeShift
-                                    })
-                                ),
-                                _react2.default.createElement(
-                                    'div',
-                                    { className: 'table-cell cell-shift' },
-                                    _react2.default.createElement(_ShiftAutocomplete2.default, { isDisabled: !isHost,
-                                        className: getShiftClassName('sunShift'), name: 'sun',
-                                        shift: data !== null ? data.sunShift : null,
-                                        shiftOptions: shiftOptions,
-                                        onChange: this.handleChangeShift
-                                    })
-                                )
-                            )
-                        )
-                    ),
-                    _react2.default.createElement(
-                        'div',
-                        { className: 'checkbox' },
-                        _react2.default.createElement('input', { type: 'checkbox', className: 'checkbox-custom', id: 'ckb-weeklyDefaultShift',
-                            checked: isUsedWeeklyDefaultShift, disabled: !isHost, onChange: this.handleChangeCheckbox
-                        }),
-                        _react2.default.createElement(
-                            'label',
-                            { htmlFor: 'ckb-weeklyDefaultShift' },
-                            ' Use weekly default shift (apply from ',
-                            _react2.default.createElement(
-                                'strong',
-                                null,
-                                this.props.fromDate
-                            ),
-                            ').'
-                        )
-                    )
-                ),
-                _react2.default.createElement(
-                    _reactBootstrap.Modal.Footer,
-                    null,
-                    this.props.isHost && _react2.default.createElement(
-                        _reactBootstrap.Button,
-                        { type: 'button', bsStyle: 'primary', onClick: this.handleSubmit },
-                        'Save'
-                    ),
-                    _react2.default.createElement(
-                        _reactBootstrap.Button,
-                        { onClick: this.props.onHide, className: 'btn-cancel' },
-                        'Cancel'
-                    )
-                )
-            );
-        }
-    }]);
-    return WeeklyDefaultShiftModal;
-}(_react.Component);
-
-WeeklyDefaultShiftModal.propTypes = {
-    show: _propTypes2.default.bool,
-    isHost: _propTypes2.default.bool,
-    nickname: _propTypes2.default.string,
-    data: _propTypes2.default.object,
-    isUsedWeeklyDefaultShift: _propTypes2.default.bool,
-    fromDate: _propTypes2.default.string,
-    shiftOptions: _propTypes2.default.arrayOf(_propTypes2.default.object),
-    onHide: _propTypes2.default.func,
-    onSubmit: _propTypes2.default.func
-};
-WeeklyDefaultShiftModal.defaultProps = {
-    show: false,
-    isHost: false,
-    nickname: '',
-    data: null,
-    isUsedWeeklyDefaultShift: false,
-    fromDate: '',
-    shiftOptions: [],
-    onHide: function onHide() {
-        // This is intentional
-    },
-    onSubmit: function onSubmit() {
-        // This is intentional
-    }
-};
-exports.default = WeeklyDefaultShiftModal;
+_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(WeeklyDefaultShiftModal, "defaultProps", {
+  show: false,
+  isHost: false,
+  nickname: '',
+  data: null,
+  isUsedWeeklyDefaultShift: false,
+  fromDate: '',
+  shiftOptions: [],
+  onHide: function () {
+    // This is intentional
+  },
+  onSubmit: function () {
+    // This is intentional
+  }
+});
 
 /***/ }),
 
@@ -145573,165 +140988,143 @@ exports.default = WeeklyDefaultShiftModal;
 /*!***************************************************************!*\
   !*** ./sources/js/pages/schedule-arrange/common.functions.js ***!
   \***************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/*! exports provided: getColumnShiftInfo, getTotalOffDays */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getColumnShiftInfo", function() { return getColumnShiftInfo; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getTotalOffDays", function() { return getTotalOffDays; });
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _shared_constants__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../shared/constants */ "./sources/js/shared/constants.js");
 
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.getTotalOffDays = exports.getColumnShiftInfo = undefined;
-
-var _moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
-
-var _moment2 = _interopRequireDefault(_moment);
-
-var _constants = __webpack_require__(/*! ../../shared/constants */ "./sources/js/shared/constants.js");
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function getColumnShiftInfo(dailySchedule, isHost, defaultShift, isUsedWeeklyDefaultShift) {
-    var shift = {
-        class: '',
-        value: '',
-        classOfLeave: '',
-        leaveCode: '',
-        placeholder: '',
-        details: '',
-        isDisabled: !isHost || dailySchedule.isDisabled,
-        isShowCheckBox: isHost && !dailySchedule.isDisabled
-    };
-    var moveOffDate = dailySchedule.moveOffFromDate !== null ? (0, _moment2.default)(dailySchedule.moveOffFromDate).format('DD MMM, YYYY') : (0, _moment2.default)(dailySchedule.moveOffToDate).format('DD MMM, YYYY');
-
-    if (dailySchedule.isLeaveOffDay) {
-        shift.value = 'Off';
-        shift.class = 'leave offday';
-    } else if (dailySchedule.isLeaveDay) {
-        if (dailySchedule.isHoliday) {
-            shift.value = 'PH';
-            shift.class = 'holiday';
-        } else if (dailySchedule.isOffDay) {
-            shift.value = 'Off';
-            shift.class = 'offday';
-        } else {
-            if (dailySchedule.leaveType !== null && (dailySchedule.leaveType2 === null || dailySchedule.leaveType.code === dailySchedule.leaveType2.code)) {
-                switch (dailySchedule.leaveType.id) {
-                    case _constants.LeaveType.AnnualLeave:
-                        shift.classOfLeave = 'annualleave';
-                        break;
-                    case _constants.LeaveType.UnpaidLeave:
-                        shift.classOfLeave = 'unpaidleave';
-                        break;
-                    case _constants.LeaveType.BusinessTrip:
-                        shift.classOfLeave = 'businesstrip';
-                        break;
-                    case _constants.LeaveType.WeddingLeave:
-                        shift.classOfLeave = 'weddingleave';
-                        break;
-                    default:
-                        shift.classOfLeave = 'leaveday';
-                        break;
-                }
-            }
-
-            if (dailySchedule.isLeaveHalfDay) {
-                var fromTime = (0, _moment2.default)(dailySchedule.leaveType.fromTime).format('DD MMM, YYYY HH:mm');
-                var toTime = (0, _moment2.default)(dailySchedule.leaveType.toTime).format('DD MMM, YYYY HH:mm');
-                shift.leaveCode = dailySchedule.leaveType.code + ' ½';
-                shift.details = 'From: ' + fromTime + '\r\nTo: ' + toTime;
-
-                if (dailySchedule.shift !== null) {
-                    shift.value = dailySchedule.shift.code;
-                }
-
-                if (dailySchedule.isChangeShift) {
-                    shift.class = 'changeshift';
-                }
-            } else {
-                shift.value = dailySchedule.leaveType.code;
-                shift.class = shift.classOfLeave;
-
-                if (dailySchedule.leaveType2 !== null && dailySchedule.leaveType.code !== dailySchedule.leaveType2.code) {
-                    shift.class = 'leaveday leavehalfday2';
-                    shift.value = dailySchedule.leaveType.code + ' / ' + dailySchedule.leaveType2.code;
-                }
-            }
-        }
-    } else if (dailySchedule.isHoliday) {
-        shift.class = 'holiday';
-        if (dailySchedule.isOffDay) {
-            shift.value = 'Off';
-        } else {
-            shift.value = dailySchedule.shift !== null ? dailySchedule.shift.code : 'PH';
-        }
-
-        if (dailySchedule.isChangeShift) {
-            shift.details = 'Change shift' + (dailySchedule.changeShiftTypeId === _constants.ChangeShiftType.MoveOffDay ? ' - Move off day (' + moveOffDate + ')' : '');
-        } else if (dailySchedule.isOvertime) {
-            shift.details = 'Overtime';
-        } else if (dailySchedule.isKeepInView) {
-            shift.details = 'CL';
-        }
+  let shift = {
+    class: '',
+    value: '',
+    classOfLeave: '',
+    leaveCode: '',
+    placeholder: '',
+    details: '',
+    isDisabled: !isHost || dailySchedule.isDisabled,
+    isShowCheckBox: isHost && !dailySchedule.isDisabled
+  };
+  const moveOffDate = dailySchedule.moveOffFromDate !== null ? moment__WEBPACK_IMPORTED_MODULE_0___default()(dailySchedule.moveOffFromDate).format('DD MMM, YYYY') : moment__WEBPACK_IMPORTED_MODULE_0___default()(dailySchedule.moveOffToDate).format('DD MMM, YYYY');
+  if (dailySchedule.isLeaveOffDay) {
+    shift.value = 'Off';
+    shift.class = 'leave offday';
+  } else if (dailySchedule.isLeaveDay) {
+    if (dailySchedule.isHoliday) {
+      shift.value = 'PH';
+      shift.class = 'holiday';
     } else if (dailySchedule.isOffDay) {
-        shift.class = 'offday';
-        shift.value = dailySchedule.shift !== null ? dailySchedule.shift.code : 'Off';
-        if (dailySchedule.isFixedOffDay) {
-            shift.details = 'Off Day OT Fixed';
-        } else if (dailySchedule.isChangeShift) {
-            shift.details = 'Change shift' + (dailySchedule.changeShiftTypeId === _constants.ChangeShiftType.MoveOffDay ? ' - Move off day (' + moveOffDate + ')' : '');
-        } else if (dailySchedule.isOvertime) {
-            shift.details = 'Overtime';
-        } else if (dailySchedule.isKeepInView) {
-            shift.details = 'CL';
-        }
-    } else if (dailySchedule.isKeepInView) {
-        shift.class = 'keepinviewday';
-        shift.value = dailySchedule.shift !== null ? dailySchedule.shift.code : '';
-    } else if (dailySchedule.isChangeShift) {
-        shift.class = 'changeshift';
-        shift.value = dailySchedule.shift !== null ? dailySchedule.shift.code : '';
-        shift.details = dailySchedule.changeShiftTypeId === _constants.ChangeShiftType.MoveOffDay ? 'Move off day to ' + moveOffDate : '';
-    } else if (dailySchedule.isOvertime) {
-        shift.class = 'overtime';
-        shift.value = dailySchedule.shift !== null ? dailySchedule.shift.code : '';
+      shift.value = 'Off';
+      shift.class = 'offday';
     } else {
-        shift.value = dailySchedule.shift !== null ? dailySchedule.shift.code : '';
-    }
-
-    if (dailySchedule.shift !== null && defaultShift !== null && shift.value === dailySchedule.shift.code && shift.value === defaultShift.code && !isUsedWeeklyDefaultShift) {
-        shift.placeholder = shift.value;
-        shift.class += ' same-default-shift';
-    }
-
-    if (dailySchedule.isOffDayReplacement) {
-        shift.class += ' offdayreplacement';
-    }
-
-    if (!dailySchedule.isModified && dailySchedule.shift !== null) {
-        shift.class += ' is-default-shift';
-    }
-
-    return shift;
-}
-
-function getTotalOffDays(dailySchedule) {
-    var attrNames = ['mondaySchedule', 'tuesdaySchedule', 'wednesdaySchedule', 'thursdaySchedule', 'fridaySchedule', 'saturdaySchedule', 'sundaySchedule'];
-
-    var totalOffDays = 0;
-    attrNames.forEach(function (attrName) {
-        var isMoveOffDay = dailySchedule[attrName].changeShiftTypeId === _constants.ChangeShiftType.MoveOffDay;
-        if (!dailySchedule[attrName].isHoliday && !(isMoveOffDay && dailySchedule[attrName].moveOffFromDate !== null) && (dailySchedule[attrName].isOffDay || dailySchedule[attrName].isLeaveOffDay || isMoveOffDay && dailySchedule[attrName].moveOffToDate !== null)) {
-            totalOffDays++;
+      if (dailySchedule.leaveType !== null && (dailySchedule.leaveType2 === null || dailySchedule.leaveType.code === dailySchedule.leaveType2.code)) {
+        switch (dailySchedule.leaveType.id) {
+          case _shared_constants__WEBPACK_IMPORTED_MODULE_1__["LeaveType"].AnnualLeave:
+            shift.classOfLeave = 'annualleave';
+            break;
+          case _shared_constants__WEBPACK_IMPORTED_MODULE_1__["LeaveType"].UnpaidLeave:
+            shift.classOfLeave = 'unpaidleave';
+            break;
+          case _shared_constants__WEBPACK_IMPORTED_MODULE_1__["LeaveType"].BusinessTrip:
+            shift.classOfLeave = 'businesstrip';
+            break;
+          case _shared_constants__WEBPACK_IMPORTED_MODULE_1__["LeaveType"].WeddingLeave:
+            shift.classOfLeave = 'weddingleave';
+            break;
+          default:
+            shift.classOfLeave = 'leaveday';
+            break;
         }
-    });
-
-    return totalOffDays;
+      }
+      if (dailySchedule.isLeaveHalfDay) {
+        const fromTime = moment__WEBPACK_IMPORTED_MODULE_0___default()(dailySchedule.leaveType.fromTime).format('DD MMM, YYYY HH:mm');
+        const toTime = moment__WEBPACK_IMPORTED_MODULE_0___default()(dailySchedule.leaveType.toTime).format('DD MMM, YYYY HH:mm');
+        shift.leaveCode = dailySchedule.leaveType.code + ' ½';
+        shift.details = `From: ${fromTime}\r\nTo: ${toTime}`;
+        if (dailySchedule.shift !== null) {
+          shift.value = dailySchedule.shift.code;
+        }
+        if (dailySchedule.isChangeShift) {
+          shift.class = 'changeshift';
+        }
+      } else {
+        shift.value = dailySchedule.leaveType.code;
+        shift.class = shift.classOfLeave;
+        if (dailySchedule.leaveType2 !== null && dailySchedule.leaveType.code !== dailySchedule.leaveType2.code) {
+          shift.class = 'leaveday leavehalfday2';
+          shift.value = dailySchedule.leaveType.code + ' / ' + dailySchedule.leaveType2.code;
+        }
+      }
+    }
+  } else if (dailySchedule.isHoliday) {
+    shift.class = 'holiday';
+    if (dailySchedule.isOffDay) {
+      shift.value = 'Off';
+    } else {
+      shift.value = dailySchedule.shift !== null ? dailySchedule.shift.code : 'PH';
+    }
+    if (dailySchedule.isChangeShift) {
+      shift.details = `Change shift${dailySchedule.changeShiftTypeId === _shared_constants__WEBPACK_IMPORTED_MODULE_1__["ChangeShiftType"].MoveOffDay ? ` - Move off day (${moveOffDate})` : ''}`;
+    } else if (dailySchedule.isOvertime) {
+      shift.details = 'Overtime';
+    } else if (dailySchedule.isKeepInView) {
+      shift.details = 'CL';
+    }
+  } else if (dailySchedule.isOffDay) {
+    shift.class = 'offday';
+    shift.value = dailySchedule.shift !== null ? dailySchedule.shift.code : 'Off';
+    if (dailySchedule.isFixedOffDay) {
+      shift.details = 'Off Day OT Fixed';
+    } else if (dailySchedule.isChangeShift) {
+      shift.details = `Change shift${dailySchedule.changeShiftTypeId === _shared_constants__WEBPACK_IMPORTED_MODULE_1__["ChangeShiftType"].MoveOffDay ? ` - Move off day (${moveOffDate})` : ''}`;
+    } else if (dailySchedule.isOvertime) {
+      shift.details = 'Overtime';
+    } else if (dailySchedule.isKeepInView) {
+      shift.details = 'CL';
+    }
+  } else if (dailySchedule.isKeepInView) {
+    shift.class = 'keepinviewday';
+    shift.value = dailySchedule.shift !== null ? dailySchedule.shift.code : '';
+  } else if (dailySchedule.isChangeShift) {
+    shift.class = 'changeshift';
+    shift.value = dailySchedule.shift !== null ? dailySchedule.shift.code : '';
+    shift.details = dailySchedule.changeShiftTypeId === _shared_constants__WEBPACK_IMPORTED_MODULE_1__["ChangeShiftType"].MoveOffDay ? `Move off day to ${moveOffDate}` : '';
+  } else if (dailySchedule.isOvertime) {
+    shift.class = 'overtime';
+    shift.value = dailySchedule.shift !== null ? dailySchedule.shift.code : '';
+  } else {
+    shift.value = dailySchedule.shift !== null ? dailySchedule.shift.code : '';
+  }
+  if (dailySchedule.shift !== null && defaultShift !== null && shift.value === dailySchedule.shift.code && shift.value === defaultShift.code && !isUsedWeeklyDefaultShift) {
+    shift.placeholder = shift.value;
+    shift.class += ' same-default-shift';
+  }
+  if (dailySchedule.isOffDayReplacement) {
+    shift.class += ' offdayreplacement';
+  }
+  if (!dailySchedule.isModified && dailySchedule.shift !== null) {
+    shift.class += ' is-default-shift';
+  }
+  return shift;
+}
+function getTotalOffDays(dailySchedule) {
+  const attrNames = ['mondaySchedule', 'tuesdaySchedule', 'wednesdaySchedule', 'thursdaySchedule', 'fridaySchedule', 'saturdaySchedule', 'sundaySchedule'];
+  let totalOffDays = 0;
+  attrNames.forEach(attrName => {
+    const isMoveOffDay = dailySchedule[attrName].changeShiftTypeId === _shared_constants__WEBPACK_IMPORTED_MODULE_1__["ChangeShiftType"].MoveOffDay;
+    if (!dailySchedule[attrName].isHoliday && !(isMoveOffDay && dailySchedule[attrName].moveOffFromDate !== null) && (dailySchedule[attrName].isOffDay || dailySchedule[attrName].isLeaveOffDay || isMoveOffDay && dailySchedule[attrName].moveOffToDate !== null)) {
+      totalOffDays++;
+    }
+  });
+  return totalOffDays;
 }
 
-exports.getColumnShiftInfo = getColumnShiftInfo;
-exports.getTotalOffDays = getTotalOffDays;
 
 /***/ }),
 
@@ -145739,1568 +141132,1379 @@ exports.getTotalOffDays = getTotalOffDays;
 /*!*****************************************************!*\
   !*** ./sources/js/pages/schedule-arrange/index.jsx ***!
   \*****************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return App; });
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "./node_modules/@babel/runtime/helpers/defineProperty.js");
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var jquery_ui_bundle_jquery_ui__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! jquery-ui-bundle/jquery-ui */ "./node_modules/jquery-ui-bundle/jquery-ui.js");
+/* harmony import */ var jquery_ui_bundle_jquery_ui__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(jquery_ui_bundle_jquery_ui__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _jquery_weekpicker__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../jquery-weekpicker */ "./sources/js/jquery-weekpicker.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
+/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var react_toastify__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react-toastify */ "./node_modules/react-toastify/esm/react-toastify.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_7__);
+/* harmony import */ var qs__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! qs */ "./node_modules/qs/index.js");
+/* harmony import */ var qs__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(qs__WEBPACK_IMPORTED_MODULE_8__);
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_9__);
+/* harmony import */ var _shared_common_functions__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../shared/common.functions */ "./sources/js/shared/common.functions.js");
+/* harmony import */ var _common_functions__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./common.functions */ "./sources/js/pages/schedule-arrange/common.functions.js");
+/* harmony import */ var _shared_constants__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../../shared/constants */ "./sources/js/shared/constants.js");
+/* harmony import */ var _shared_layouts_ToastLayout__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../../shared/layouts/ToastLayout */ "./sources/js/shared/layouts/ToastLayout.jsx");
+/* harmony import */ var _shared_components_react_tree_multiselect_buildData__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ../../shared/components/react-tree-multiselect/buildData */ "./sources/js/shared/components/react-tree-multiselect/buildData.js");
+/* harmony import */ var _shared_components_SweetModalDialog__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ../../shared/components/SweetModalDialog */ "./sources/js/shared/components/SweetModalDialog.jsx");
+/* harmony import */ var _shared_components_CompanySelect__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ../../shared/components/CompanySelect */ "./sources/js/shared/components/CompanySelect.jsx");
+/* harmony import */ var _ShiftMultipleModal__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./ShiftMultipleModal */ "./sources/js/pages/schedule-arrange/ShiftMultipleModal.jsx");
+/* harmony import */ var _WeeklyDefaultShiftModal__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./WeeklyDefaultShiftModal */ "./sources/js/pages/schedule-arrange/WeeklyDefaultShiftModal.jsx");
+/* harmony import */ var _Search__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./Search */ "./sources/js/pages/schedule-arrange/Search.jsx");
+/* harmony import */ var _table_table__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./table/table */ "./sources/js/pages/schedule-arrange/table/table.jsx");
 
+function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
 
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
 
-var _assign = __webpack_require__(/*! babel-runtime/core-js/object/assign */ "./node_modules/babel-runtime/core-js/object/assign.js");
 
-var _assign2 = _interopRequireDefault(_assign);
 
-var _toConsumableArray2 = __webpack_require__(/*! babel-runtime/helpers/toConsumableArray */ "./node_modules/babel-runtime/helpers/toConsumableArray.js");
 
-var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
 
-var _keys = __webpack_require__(/*! babel-runtime/core-js/object/keys */ "./node_modules/babel-runtime/core-js/object/keys.js");
 
-var _keys2 = _interopRequireDefault(_keys);
 
-var _defineProperty2 = __webpack_require__(/*! babel-runtime/helpers/defineProperty */ "./node_modules/babel-runtime/helpers/defineProperty.js");
 
-var _defineProperty3 = _interopRequireDefault(_defineProperty2);
 
-var _extends10 = __webpack_require__(/*! babel-runtime/helpers/extends */ "./node_modules/babel-runtime/helpers/extends.js");
 
-var _extends11 = _interopRequireDefault(_extends10);
 
-var _getPrototypeOf = __webpack_require__(/*! babel-runtime/core-js/object/get-prototype-of */ "./node_modules/babel-runtime/core-js/object/get-prototype-of.js");
 
-var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
 
-var _classCallCheck2 = __webpack_require__(/*! babel-runtime/helpers/classCallCheck */ "./node_modules/babel-runtime/helpers/classCallCheck.js");
 
-var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
 
-var _createClass2 = __webpack_require__(/*! babel-runtime/helpers/createClass */ "./node_modules/babel-runtime/helpers/createClass.js");
 
-var _createClass3 = _interopRequireDefault(_createClass2);
 
-var _possibleConstructorReturn2 = __webpack_require__(/*! babel-runtime/helpers/possibleConstructorReturn */ "./node_modules/babel-runtime/helpers/possibleConstructorReturn.js");
 
-var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
 
-var _inherits2 = __webpack_require__(/*! babel-runtime/helpers/inherits */ "./node_modules/babel-runtime/helpers/inherits.js");
-
-var _inherits3 = _interopRequireDefault(_inherits2);
-
-__webpack_require__(/*! jquery-ui-bundle/jquery-ui */ "./node_modules/jquery-ui-bundle/jquery-ui.js");
-
-__webpack_require__(/*! ../../jquery-weekpicker */ "./sources/js/jquery-weekpicker.js");
-
-var _react = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-
-var _react2 = _interopRequireDefault(_react);
-
-var _reactDom = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
-
-var _reactDom2 = _interopRequireDefault(_reactDom);
-
-var _reactToastify = __webpack_require__(/*! react-toastify */ "./node_modules/react-toastify/esm/react-toastify.js");
-
-var _axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-
-var _axios2 = _interopRequireDefault(_axios);
-
-var _moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
-
-var _moment2 = _interopRequireDefault(_moment);
-
-var _qs = __webpack_require__(/*! qs */ "./node_modules/qs/index.js");
-
-var _lodash = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
-
-var _common = __webpack_require__(/*! ../../shared/common.functions */ "./sources/js/shared/common.functions.js");
-
-var _common2 = __webpack_require__(/*! ./common.functions */ "./sources/js/pages/schedule-arrange/common.functions.js");
-
-var _constants = __webpack_require__(/*! ../../shared/constants */ "./sources/js/shared/constants.js");
-
-var _ToastLayout = __webpack_require__(/*! ../../shared/layouts/ToastLayout */ "./sources/js/shared/layouts/ToastLayout.jsx");
-
-var _ToastLayout2 = _interopRequireDefault(_ToastLayout);
-
-var _buildData2 = __webpack_require__(/*! ../../shared/components/react-tree-multiselect/buildData */ "./sources/js/shared/components/react-tree-multiselect/buildData.js");
-
-var _buildData3 = _interopRequireDefault(_buildData2);
-
-var _SweetModalDialog = __webpack_require__(/*! ../../shared/components/SweetModalDialog */ "./sources/js/shared/components/SweetModalDialog.jsx");
-
-var _SweetModalDialog2 = _interopRequireDefault(_SweetModalDialog);
-
-var _CompanySelect = __webpack_require__(/*! ../../shared/components/CompanySelect */ "./sources/js/shared/components/CompanySelect.jsx");
-
-var _CompanySelect2 = _interopRequireDefault(_CompanySelect);
-
-var _ShiftMultipleModal = __webpack_require__(/*! ./ShiftMultipleModal */ "./sources/js/pages/schedule-arrange/ShiftMultipleModal.jsx");
-
-var _ShiftMultipleModal2 = _interopRequireDefault(_ShiftMultipleModal);
-
-var _WeeklyDefaultShiftModal = __webpack_require__(/*! ./WeeklyDefaultShiftModal */ "./sources/js/pages/schedule-arrange/WeeklyDefaultShiftModal.jsx");
-
-var _WeeklyDefaultShiftModal2 = _interopRequireDefault(_WeeklyDefaultShiftModal);
-
-var _Search = __webpack_require__(/*! ./Search */ "./sources/js/pages/schedule-arrange/Search.jsx");
-
-var _Search2 = _interopRequireDefault(_Search);
-
-var _table = __webpack_require__(/*! ./table/table */ "./sources/js/pages/schedule-arrange/table/table.jsx");
-
-var _table2 = _interopRequireDefault(_table);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var App = function (_Component) {
-    (0, _inherits3.default)(App, _Component);
-
-    function App(props) {
-        (0, _classCallCheck3.default)(this, App);
-
-        var _this = (0, _possibleConstructorReturn3.default)(this, (App.__proto__ || (0, _getPrototypeOf2.default)(App)).call(this, props));
-
-        _initialiseProps.call(_this);
-
-        var fromDate = (0, _moment2.default)().day('Monday').format(_constants.DateFormat),
-            toDate = (0, _moment2.default)(fromDate).add(6, 'days').format(_constants.DateFormat);
-        var companyElement = document.getElementById('CompanyId');
-        var roleElement = document.getElementById('RoleId');
-        var defaultCompanyId = companyElement ? companyElement.value : '';
-        var defaultRoleId = roleElement ? roleElement.value : '';
-
-        _this.state = {
-            isHost: false,
-            filter: {
-                fromDate: fromDate,
-                toDate: toDate,
-                teamIds: '',
-                companyId: defaultCompanyId,
-                employee: { value: 0, label: '' }
-            },
-            schedules: [],
-            employeeOptions: [],
-            selectedEmployeeIds: [],
-            showShiftMultipleModal: false,
-            showConfirmRefreshDataModal: false,
-            showConfirmSyncDataModalDialog: false,
-            showRemarkPopover: false,
-            editWeeklyDefaultShift: {
-                show: false,
-                teamId: 0,
-                employeeId: 0,
-                nickname: '',
-                data: null,
-                isUsedWeeklyDefaultShift: false
-            },
-            enableSyncWorkingShift: false
-        };
-
-        _this.originalSchedules = [];
-        _this.teamOptions = [];
-        _this.shiftOptions = [];
-        _this.currentWeek = { fromDate: fromDate, toDate: toDate };
-        _this.selectedWeek = { fromDate: fromDate, toDate: toDate };
-        _this.defaultRoleId = defaultRoleId;
-        _this.scheduleAttrNames = ['mondaySchedule', 'tuesdaySchedule', 'wednesdaySchedule', 'thursdaySchedule', 'fridaySchedule', 'saturdaySchedule', 'sundaySchedule'];
-        return _this;
-    }
-
-    (0, _createClass3.default)(App, [{
-        key: 'componentDidMount',
-        value: function componentDidMount() {
-            (0, _CompanySelect.renderCompanySelect)({
-                defaultCompanyId: this.state.filter.companyId,
-                roleId: this.defaultRoleId,
-                onChange: this.handleCompanyChange
-            });
-
-            var companyElement = document.getElementById('CompanyId');
-            var defaultCompanyId = companyElement ? companyElement.value : '';
-            this.loadShifts(defaultCompanyId);
-
-            window.addEventListener('beforeunload', this.onLeavingPageEventListener);
+class App extends react__WEBPACK_IMPORTED_MODULE_3__["Component"] {
+  constructor(props) {
+    super(props);
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "loadTeams", companyId => {
+      Object(axios__WEBPACK_IMPORTED_MODULE_6__["default"])({
+        url: Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_10__["resolveClientUrl"])('Team/GetOrgChart'),
+        method: 'GET',
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest'
+        },
+        params: {
+          companyId: companyId || null
         }
-    }, {
-        key: 'componentWillUnmount',
-        value: function componentWillUnmount() {
-            window.removeEventListener('beforeunload', this.onLeavingPageEventListener);
-        }
-    }, {
-        key: 'render',
-        value: function render() {
-            var _state = this.state,
-                isHost = _state.isHost,
-                enableSyncWorkingShift = _state.enableSyncWorkingShift,
-                schedules = _state.schedules,
-                showShiftMultipleModal = _state.showShiftMultipleModal,
-                showConfirmRefreshDataModal = _state.showConfirmRefreshDataModal,
-                showRemarkPopover = _state.showRemarkPopover,
-                editWeeklyDefaultShift = _state.editWeeklyDefaultShift,
-                showConfirmSyncDataModalDialog = _state.showConfirmSyncDataModalDialog;
-
-
-            return _react2.default.createElement(
-                _react.Fragment,
-                null,
-                _react2.default.createElement(_ToastLayout2.default, null),
-                _react2.default.createElement(_Search2.default, {
-                    showExportExcel: true,
-                    teamOptions: this.teamOptions,
-                    employeeOptions: this.state.employeeOptions,
-                    filter: this.state.filter,
-                    onSearchEmployees: this.getEmployees,
-                    onChange: this.handleFilterChange,
-                    onSubmit: this.handleGetWeeklyShedules,
-                    onExportExcel: this.handleExportExcel,
-                    onExportExcelDriverPickup: this.handleExportExcelDriverPickup
-                }),
-                _react2.default.createElement(_table2.default, {
-                    isHost: isHost,
-                    fromDate: this.selectedWeek.fromDate,
-                    toDate: this.selectedWeek.toDate,
-                    data: schedules,
-                    shiftOptions: this.shiftOptions,
-                    showRemarkPopover: showRemarkPopover,
-                    onPrevious: this.handleGetPreviousWeekSchedule,
-                    onNext: this.handleGetNextWeekSchedule,
-                    onChangeSelectWeekDay: this.handleChangeSelectWeekDay,
-                    onChangeSelectWeekDays: this.handleChangeSelectWeekDays,
-                    onChangeShift: this.handleChangeShift,
-                    onChangeDefaultShift: this.handleChangeDefaultShift,
-                    onChangePublics: this.handleChangePublics,
-                    onChangeOffNoShift: this.handleChangeOffNoShift,
-                    onChangeOffdayOT: this.handleChangeOffDayOT,
-                    onChangeWorkday: this.handleChangeWorkday,
-                    onShiftMultiple: this.handleShiftMultiple,
-                    onFixedOffDay: this.handleFixedOffDay,
-                    onChangeShowRemarkPopover: this.handleChangeShowRemarkPopover,
-                    onShowWeeklyDefaultShift: this.handleShowWeeklyDefaultShiftModal,
-                    onUpdateRemark: this.handleUpdateRemark,
-                    onDragEnd: this.handleDragEnd,
-                    onChangeTeamOrder: this.handleChangeTeamOrder,
-                    onChangeOrder: this.handleChangeOrder,
-                    onSelectEmployeeOfTeam: this.handleSelectEmployeeOfTeam,
-                    onSyncData: this.handleSyncData,
-                    onSave: this.handleSave,
-                    enableSyncWorkingShift: this.state.enableSyncWorkingShift
-                }),
-                showShiftMultipleModal && _react2.default.createElement(_ShiftMultipleModal2.default, {
-                    show: showShiftMultipleModal,
-                    onHide: this.handleCloseShiftMultipleModal,
-                    shiftOptions: this.shiftOptions.filter(function (shift) {
-                        return shift.id !== _constants.OffDayShiftId;
-                    }),
-                    onSubmit: this.handleChangeMultipleShift
-                }),
-                editWeeklyDefaultShift.show && _react2.default.createElement(_WeeklyDefaultShiftModal2.default, {
-                    show: editWeeklyDefaultShift.show,
-                    isHost: isHost,
-                    nickname: editWeeklyDefaultShift.nickname,
-                    data: editWeeklyDefaultShift.data,
-                    isUsedWeeklyDefaultShift: editWeeklyDefaultShift.isUsedWeeklyDefaultShift,
-                    fromDate: (0, _moment2.default)(this.currentWeek.toDate).add(1, 'days').format(_constants.DateFormat),
-                    shiftOptions: this.shiftOptions,
-                    onHide: this.handleCloseWeeklyDefaultShiftModal,
-                    onSubmit: this.handleChangeWeeklyDefaultShift
-                }),
-                showConfirmRefreshDataModal && _react2.default.createElement(_SweetModalDialog2.default, {
-                    show: showConfirmRefreshDataModal,
-                    contents: _react2.default.createElement(
-                        'p',
-                        null,
-                        'It looks like you have been editing something. If you refresh before saving, your changes will be lost.'
-                    ),
-                    onHide: this.handleCloseConfirmRefreshDataModal,
-                    onSubmit: this.handleSubmitRefreshData
-                }),
-                showConfirmSyncDataModalDialog && _react2.default.createElement(_SweetModalDialog2.default, {
-                    show: showConfirmSyncDataModalDialog,
-                    contents: _react2.default.createElement(
-                        'p',
-                        null,
-                        'Are you sure you want to sync data from OWP?'
-                    ),
-                    onHide: this.handleCloseConfirmSyncDataModalDialog,
-                    onSubmit: this.handleSubmitSyncData
-                })
-            );
-        }
-    }]);
-    return App;
-}(_react.Component);
-
-var _initialiseProps = function _initialiseProps() {
-    var _this2 = this;
-
-    this.loadTeams = function (companyId) {
-        (0, _axios2.default)({
-            url: (0, _common.resolveClientUrl)('Team/GetOrgChart'),
-            method: 'GET',
-            headers: { 'X-Requested-With': 'XMLHttpRequest' },
-            params: {
-                companyId: companyId || null
-            }
-        }).then(function (response) {
-            _this2.teamOptions = response.data;
-
-            var _buildData = (0, _buildData3.default)(response.data),
-                floatData = _buildData.floatData;
-
-            var filter = (0, _extends11.default)({}, _this2.state.filter, {
-                teamIds: floatData.filter(function (item) {
-                    return item.isLeaf;
-                }).map(function (item) {
-                    return item.id;
-                }).join(',')
-            });
-
-            _this2.setState({ filter: filter });
-
-            _this2.getWeeklyShedules(filter);
-        }).catch(_common.axiosError);
-    };
-
-    this.loadShifts = function (companyId) {
-        (0, _axios2.default)({
-            url: (0, _common.resolveClientUrl)('Calendar/GetShift'),
-            method: 'GET',
-            headers: { 'X-Requested-With': 'XMLHttpRequest' },
-            params: {
-                query: '',
-                isShowOff: true,
-                companyId: companyId
-            }
-        }).then(function (response) {
-            _this2.shiftOptions = response.data.map(function (shift) {
-                return { id: shift.id, code: shift.code, name: shift.name };
-            });
-        }).catch(_common.axiosError);
-    };
-
-    this.handleCompanyChange = function (companyId) {
-        _this2.setState({
-            filter: (0, _extends11.default)({}, _this2.state.filter, {
-                companyId: companyId,
-                employee: { value: 0, label: '' }
-            }),
-            employeeOptions: []
+      }).then(response => {
+        this.teamOptions = response.data;
+        const {
+          floatData
+        } = Object(_shared_components_react_tree_multiselect_buildData__WEBPACK_IMPORTED_MODULE_14__["default"])(response.data);
+        const filter = _objectSpread(_objectSpread({}, this.state.filter), {}, {
+          teamIds: floatData.filter(item => item.isLeaf).map(item => item.id).join(',')
         });
-
-        _this2.loadTeams(companyId);
-        _this2.loadShifts(companyId);
-    };
-
-    this.onLeavingPageEventListener = function (event) {
-        if (!_this2.isDirtyData()) {
-            return undefined;
+        this.setState({
+          filter: filter
+        });
+        this.getWeeklyShedules(filter);
+      }).catch(_shared_common_functions__WEBPACK_IMPORTED_MODULE_10__["axiosError"]);
+    });
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "loadShifts", companyId => {
+      Object(axios__WEBPACK_IMPORTED_MODULE_6__["default"])({
+        url: Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_10__["resolveClientUrl"])('Calendar/GetShift'),
+        method: 'GET',
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest'
+        },
+        params: {
+          query: '',
+          isShowOff: true,
+          companyId: companyId
         }
-
-        var confirmationMessage = 'It looks like you have been editing something. ' + 'If you leave before saving, your changes will be lost.';
-
-        (event || window.event).returnValue = confirmationMessage;
-
-        return confirmationMessage;
-    };
-
-    this.isDirtyData = function () {
-        var isDirty = false;
-        var schedules = (0, _lodash.cloneDeep)(_this2.state.schedules),
-            originalSchedules = (0, _lodash.cloneDeep)(_this2.originalSchedules),
-            totalItems = schedules.length;
-
-        outerloop: for (var gindex = 0; gindex < totalItems; gindex++) {
-            var totalSubItems = schedules[gindex].members.length;
-            for (var eindex = 0; eindex < totalSubItems; eindex++) {
-                var schedule = schedules[gindex].members[eindex],
-                    originalSchedule = originalSchedules[gindex].members[eindex];
-                (0, _lodash.unset)(schedule, 'selectWeekDays');
-                (0, _lodash.unset)(originalSchedule, 'selectWeekDays');
-
-                if (!(0, _lodash.isEqual)(schedule, originalSchedule)) {
-                    isDirty = true;
-                    break outerloop;
-                }
-            }
-        }
-
-        return isDirty;
-    };
-
-    this.handleFilterChange = function (name, value) {
-        _this2.setState({ filter: (0, _extends11.default)({}, _this2.state.filter, (0, _defineProperty3.default)({}, name, value)) });
-    };
-
-    this.getEmployees = function (query) {
-        if (!_this2.state.filter.teamIds) {
-            _this2.setState({ employeeOptions: [] });
-            return;
-        }
-
-        (0, _axios2.default)({
-            url: (0, _common.resolveClientUrl)('ScheduleArrange/GetEmployees'),
-            method: 'GET',
-            headers: { 'X-Requested-With': 'XMLHttpRequest' },
-            params: {
-                teamIds: _this2.state.filter.teamIds,
-                query: query
-            }
-        }).then(function (response) {
-            var employeeOptions = response.data.map(function (item) {
-                return {
-                    id: item.employeeId,
-                    value: item.nickname + ' (' + item.fullName + ')'
-                };
-            });
-
-            _this2.setState({ employeeOptions: employeeOptions });
-        }).catch(_common.axiosError);
-    };
-
-    this.getWeeklyShedules = function (filter) {
-        var fromDate = (0, _moment2.default)(filter.fromDate).format(_constants.DateFormat),
-            toDate = (0, _moment2.default)(filter.toDate).format(_constants.DateFormat);
-        (0, _common.blockUI)();
-
-        (0, _axios2.default)({
-            url: (0, _common.resolveClientUrl)('ScheduleArrange/GetWeeklySchedule'),
-            method: 'GET',
-            headers: { 'X-Requested-With': 'XMLHttpRequest' },
-            params: {
-                fromDate: fromDate,
-                toDate: toDate,
-                teamIds: filter.teamIds,
-                companyId: filter.companyId,
-                isLocal: filter.isLocal,
-                employeeId: filter.employee.value === 0 ? null : filter.employee.value
-            }
-        }).then(function (response) {
-            _this2.selectedWeek = { fromDate: fromDate, toDate: toDate };
-            var _response$data = response.data,
-                isHost = _response$data.isHost,
-                enableSyncWorkingShift = _response$data.enableSyncWorkingShift,
-                schedules = _response$data.schedules;
-
-
-            _this2.originalSchedules = schedules.map(function (team) {
-                team.members.map(function (schedule) {
-                    schedule.selectWeekDays = {
-                        mondaySchedule: false,
-                        tuesdaySchedule: false,
-                        wednesdaySchedule: false,
-                        thursdaySchedule: false,
-                        fridaySchedule: false,
-                        saturdaySchedule: false,
-                        sundaySchedule: false
-                    };
-                    schedule.totalOffDayReplacement = 0;
-
-                    (0, _keys2.default)(schedule.selectWeekDays).forEach(function (objectKey) {
-                        if (schedule[objectKey].isOffDayReplacement) {
-                            schedule.totalOffDayReplacement = schedule.totalOffDayReplacement + 1;
-                        }
-                    });
-
-                    return schedule;
-                });
-
-                return team;
-            });
-
-            _this2.setState({
-                filter: (0, _extends11.default)({}, _this2.state.filter, { fromDate: fromDate, toDate: toDate }),
-                isHost: isHost,
-                enableSyncWorkingShift: enableSyncWorkingShift,
-                schedules: (0, _lodash.cloneDeep)(_this2.originalSchedules)
-            });
-        }).catch(_common.axiosError).then(function () {
-            return (0, _common.unblockUI)();
+      }).then(response => {
+        this.shiftOptions = response.data.map(shift => {
+          return {
+            id: shift.id,
+            code: shift.code,
+            name: shift.name
+          };
         });
-    };
-
-    this.handleExportExcel = function () {
-        var filter = _this2.state.filter,
-            fromDate = (0, _moment2.default)(filter.fromDate).format('DD-MMM-YYYY'),
-            toDate = (0, _moment2.default)(filter.toDate).format('DD-MMM-YYYY');
-
-        (0, _common.blockUI)();
-        (0, _axios2.default)({
-            url: (0, _common.resolveClientUrl)('ScheduleArrange/ExportExcel'),
-            method: 'GET',
-            headers: { 'X-Requested-With': 'XMLHttpRequest' },
-            params: {
-                fromDate: fromDate,
-                toDate: toDate,
-                teamIds: filter.teamIds,
-                companyId: filter.companyId,
-                isLocal: filter.isLocal,
-                employeeId: filter.employee.value === 0 ? null : filter.employee.value
-            },
-            responseType: 'blob'
-        }).then(function (response) {
-            var fileName = response.headers['content-disposition'].match(/filename="(.+)"/)[1];
-            (0, _common.downloadFile)(response.data, fileName);
-        }).catch(_common.axiosError).then(function () {
-            return (0, _common.unblockUI)();
-        });
-    };
-
-    this.handleExportExcelDriverPickup = function () {
-        var filter = _this2.state.filter,
-            fromDate = (0, _moment2.default)(filter.fromDate).format('DD-MMM-YYYY'),
-            toDate = (0, _moment2.default)(filter.toDate).format('DD-MMM-YYYY');
-
-        (0, _common.blockUI)();
-        (0, _axios2.default)({
-            url: (0, _common.resolveClientUrl)('ScheduleArrange/ExportExcelDriverPickup'),
-            method: 'GET',
-            headers: { 'X-Requested-With': 'XMLHttpRequest' },
-            params: {
-                fromDate: fromDate,
-                toDate: toDate,
-                teamIds: filter.teamIds,
-                companyId: filter.companyId,
-                isLocal: filter.isLocal,
-                employeeId: filter.employee.value === 0 ? null : filter.employee.value
-            },
-            responseType: 'blob'
-        }).then(function (response) {
-            var fileName = response.headers['content-disposition'].match(/filename="(.+)"/)[1];
-            (0, _common.downloadFile)(response.data, fileName);
-        }).catch(_common.axiosError).then(function () {
-            return (0, _common.unblockUI)();
-        });
-    };
-
-    this.handleGetWeeklyShedules = function (isCurrentWeek) {
-        if (_this2.isDirtyData()) {
-            _this2.handleShowConfirmRefreshDataModal();
-        } else {
-            var filter = isCurrentWeek ? (0, _extends11.default)({}, _this2.state.filter, {
-                fromDate: _this2.currentWeek.fromDate,
-                toDate: _this2.currentWeek.toDate
-            }) : _this2.state.filter;
-
-            _this2.setState({ filter: filter });
-
-            _this2.getWeeklyShedules(filter);
-        }
-    };
-
-    this.handleGetPreviousWeekSchedule = function () {
-        var fromDate = (0, _moment2.default)(_this2.selectedWeek.fromDate).add(-7, 'days').format(_constants.DateFormat),
-            toDate = (0, _moment2.default)(_this2.selectedWeek.toDate).add(-7, 'days').format(_constants.DateFormat),
-            filter = (0, _extends11.default)({}, _this2.state.filter, { fromDate: fromDate, toDate: toDate });
-        _this2.setState({ filter: filter });
-
-        if (_this2.isDirtyData()) {
-            _this2.handleShowConfirmRefreshDataModal();
-        } else {
-            _this2.getWeeklyShedules(filter);
-        }
-    };
-
-    this.handleGetNextWeekSchedule = function () {
-        var fromDate = (0, _moment2.default)(_this2.selectedWeek.fromDate).add(7, 'days').format(_constants.DateFormat),
-            toDate = (0, _moment2.default)(_this2.selectedWeek.toDate).add(7, 'days').format(_constants.DateFormat),
-            filter = (0, _extends11.default)({}, _this2.state.filter, { fromDate: fromDate, toDate: toDate });
-        _this2.setState({ filter: filter });
-
-        if (_this2.isDirtyData()) {
-            _this2.handleShowConfirmRefreshDataModal();
-        } else {
-            _this2.getWeeklyShedules(filter);
-        }
-    };
-
-    this.handleChangeSelectWeekDay = function (teamId, employeeId, scheduleAttrName, isChecked) {
-        var schedules = [].concat((0, _toConsumableArray3.default)(_this2.state.schedules));
-        var gindex = schedules.findIndex(function (item) {
-            return item.teamId === teamId;
-        });
-        var members = [].concat((0, _toConsumableArray3.default)(schedules[gindex].members));
-        var eindex = members.findIndex(function (item) {
-            return item.employeeId === employeeId;
-        });
-        members[eindex] = (0, _assign2.default)({}, members[eindex], {
-            selectWeekDays: (0, _extends11.default)({}, members[eindex].selectWeekDays, (0, _defineProperty3.default)({}, scheduleAttrName, isChecked))
-        });
-        schedules[gindex] = (0, _extends11.default)({}, schedules[gindex], { members: members });
-
-        _this2.setState({ schedules: schedules });
-    };
-
-    this.handleChangeSelectWeekDays = function (scheduleAttrName, isChecked) {
-        var schedules = [].concat((0, _toConsumableArray3.default)(_this2.state.schedules));
-        var totalItems = schedules.length;
-
-        if (scheduleAttrName !== null) {
-            for (var gindex = 0; gindex < totalItems; gindex++) {
-                var members = [].concat((0, _toConsumableArray3.default)(schedules[gindex].members));
-                var totalSubItems = members.length;
-                for (var subindex = 0; subindex < totalSubItems; subindex++) {
-                    members[subindex] = (0, _assign2.default)({}, members[subindex], {
-                        selectWeekDays: (0, _extends11.default)({}, members[subindex].selectWeekDays, (0, _defineProperty3.default)({}, scheduleAttrName, isChecked))
-                    });
-                }
-                schedules[gindex] = (0, _extends11.default)({}, schedules[gindex], { members: members });
-            }
-        } else {
-            for (var _gindex = 0; _gindex < totalItems; _gindex++) {
-                var _members = [].concat((0, _toConsumableArray3.default)(schedules[_gindex].members));
-                var _totalSubItems = _members.length;
-                for (var _subindex = 0; _subindex < _totalSubItems; _subindex++) {
-                    _members[_subindex] = (0, _assign2.default)({}, _members[_subindex], {
-                        selectWeekDays: {
-                            mondaySchedule: isChecked,
-                            tuesdaySchedule: isChecked,
-                            wednesdaySchedule: isChecked,
-                            thursdaySchedule: isChecked,
-                            fridaySchedule: isChecked,
-                            saturdaySchedule: isChecked,
-                            sundaySchedule: isChecked
-                        }
-                    });
-                }
-                schedules[_gindex] = (0, _extends11.default)({}, schedules[_gindex], { members: _members });
-            }
-        }
-
-        _this2.setState({ schedules: schedules });
-    };
-
-    this.handleChangeShift = function (teamId, employeeId, attrName, shift) {
-        var schedules = [].concat((0, _toConsumableArray3.default)(_this2.state.schedules));
-        var gindex = schedules.findIndex(function (item) {
-            return item.teamId === teamId;
-        });
-        var members = [].concat((0, _toConsumableArray3.default)(schedules[gindex].members));
-        var eindex = members.findIndex(function (item) {
-            return item.employeeId === employeeId;
-        });
-        var member = (0, _extends11.default)({}, members[eindex]);
-
-        if (shift !== null && (0, _lodash.isEqual)(member[attrName].shift, shift)) {
-            return;
-        }
-
-        var defaultShift = member.defaultShift !== null ? (0, _extends11.default)({}, member.defaultShift) : null;
-        if (member.isUsedWeeklyDefaultShift) {
-            defaultShift = member.weeklyDefaultShift[attrName.substring(0, 3) + 'Shift'];
-        }
-
-        shift = shift === null && !member[attrName].isHoliday ? defaultShift : shift;
-        var isOffDay = shift !== null && shift.id === _constants.OffDayShiftId;
-        shift = shift !== null && shift.id === _constants.OffDayShiftId ? null : shift;
-        var originalSchedule = _this2.originalSchedules[gindex].members[eindex][attrName];
-
-        member[attrName] = (0, _extends11.default)({}, member[attrName], {
-            isOffDay: isOffDay,
-            isOffDayReplacement: false,
-            shift: shift,
-            isModified: !(0, _lodash.isEqual)(shift, originalSchedule.shift) ? true : originalSchedule.isModified
-        });
-
-        members[eindex] = member;
-        schedules[gindex] = (0, _extends11.default)({}, schedules[gindex], { members: members });
-        _this2.setState({ schedules: schedules });
-    };
-
-    this.handleChangeDefaultShift = function (teamId, employeeId, defaultShift) {
-        var schedules = [].concat((0, _toConsumableArray3.default)(_this2.state.schedules));
-        var gindex = schedules.findIndex(function (item) {
-            return item.teamId === teamId;
-        });
-        var members = [].concat((0, _toConsumableArray3.default)(schedules[gindex].members));
-        var eindex = members.findIndex(function (item) {
-            return item.employeeId === employeeId;
+      }).catch(_shared_common_functions__WEBPACK_IMPORTED_MODULE_10__["axiosError"]);
+    });
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleCompanyChange", companyId => {
+      this.setState({
+        filter: _objectSpread(_objectSpread({}, this.state.filter), {}, {
+          companyId: companyId,
+          employee: {
+            value: 0,
+            label: ''
+          }
         }),
-            originalDefaultShift = members[eindex].defaultShift;
-
-        if (defaultShift !== null) {
-            _this2.scheduleAttrNames.forEach(function (attrName) {
-                if (!members[eindex][attrName].isDisabled) {
-                    var shift = members[eindex][attrName].shift;
-                    if (members[eindex][attrName].isHoliday || members[eindex][attrName].isOffDay) {
-                        if (shift !== null && (0, _lodash.isEqual)(originalDefaultShift, shift)) {
-                            var originalSchedule = _this2.originalSchedules[gindex].members[eindex][attrName],
-                                isModified = !(0, _lodash.isEqual)(defaultShift, originalSchedule.shift) ? true : originalSchedule.isModified;
-                            members[eindex][attrName] = (0, _extends11.default)({}, members[eindex][attrName], {
-                                shift: defaultShift,
-                                isModified: isModified
-                            });
-                        }
-                    } else {
-                        if (shift === null || (0, _lodash.isEqual)(originalDefaultShift, shift)) {
-                            var _originalSchedule = _this2.originalSchedules[gindex].members[eindex][attrName],
-                                _isModified = !(0, _lodash.isEqual)(defaultShift, _originalSchedule.shift) ? true : _originalSchedule.isModified;
-                            members[eindex][attrName] = (0, _extends11.default)({}, members[eindex][attrName], {
-                                shift: defaultShift,
-                                isModified: _isModified
-                            });
-                        }
-                    }
-                }
-            });
-        } else {
-            _this2.scheduleAttrNames.forEach(function (attrName) {
-                var shift = members[eindex][attrName].shift;
-                if (!members[eindex][attrName].isModified && shift !== null && (0, _lodash.isEqual)(originalDefaultShift, shift)) {
-                    var originalSchedule = _this2.originalSchedules[gindex].members[eindex][attrName],
-                        isModified = !(0, _lodash.isEqual)(defaultShift, originalSchedule.shift) ? true : originalSchedule.isModified;
-                    members[eindex][attrName] = (0, _extends11.default)({}, members[eindex][attrName], {
-                        shift: defaultShift,
-                        isModified: isModified
-                    });
-                }
-            });
+        employeeOptions: []
+      });
+      this.loadTeams(companyId);
+      this.loadShifts(companyId);
+    });
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "onLeavingPageEventListener", event => {
+      if (!this.isDirtyData()) {
+        return undefined;
+      }
+      const confirmationMessage = 'It looks like you have been editing something. ' + 'If you leave before saving, your changes will be lost.';
+      (event || window.event).returnValue = confirmationMessage;
+      return confirmationMessage;
+    });
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "isDirtyData", () => {
+      let isDirty = false;
+      const schedules = Object(lodash__WEBPACK_IMPORTED_MODULE_9__["cloneDeep"])(this.state.schedules),
+        originalSchedules = Object(lodash__WEBPACK_IMPORTED_MODULE_9__["cloneDeep"])(this.originalSchedules),
+        totalItems = schedules.length;
+      outerloop: for (let gindex = 0; gindex < totalItems; gindex++) {
+        const totalSubItems = schedules[gindex].members.length;
+        for (let eindex = 0; eindex < totalSubItems; eindex++) {
+          let schedule = schedules[gindex].members[eindex],
+            originalSchedule = originalSchedules[gindex].members[eindex];
+          Object(lodash__WEBPACK_IMPORTED_MODULE_9__["unset"])(schedule, 'selectWeekDays');
+          Object(lodash__WEBPACK_IMPORTED_MODULE_9__["unset"])(originalSchedule, 'selectWeekDays');
+          if (!Object(lodash__WEBPACK_IMPORTED_MODULE_9__["isEqual"])(schedule, originalSchedule)) {
+            isDirty = true;
+            break outerloop;
+          }
         }
-
-        members[eindex] = (0, _extends11.default)({}, members[eindex], { defaultShift: defaultShift });
-        schedules[gindex] = (0, _extends11.default)({}, schedules[gindex], { members: members });
-
-        _this2.setState({ schedules: schedules });
-    };
-
-    this.handleChangePublics = function (teamId, isChecked) {
-        var schedules = [].concat((0, _toConsumableArray3.default)(_this2.state.schedules));
-        var gindex = schedules.findIndex(function (item) {
-            return item.teamId === teamId;
+      }
+      return isDirty;
+    });
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleFilterChange", (name, value) => {
+      this.setState({
+        filter: _objectSpread(_objectSpread({}, this.state.filter), {}, {
+          [name]: value
+        })
+      });
+    });
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "getEmployees", query => {
+      if (!this.state.filter.teamIds) {
+        this.setState({
+          employeeOptions: []
         });
-        var members = [].concat((0, _toConsumableArray3.default)(schedules[gindex].members));
-        var totalItems = members.length;
-        for (var index = 0; index < totalItems; index++) {
-            members[index] = (0, _extends11.default)({}, members[index], { isPublic: isChecked });
+        return;
+      }
+      Object(axios__WEBPACK_IMPORTED_MODULE_6__["default"])({
+        url: Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_10__["resolveClientUrl"])('ScheduleArrange/GetEmployees'),
+        method: 'GET',
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest'
+        },
+        params: {
+          teamIds: this.state.filter.teamIds,
+          query: query
         }
-        schedules[gindex] = (0, _extends11.default)({}, schedules[gindex], {
-            isPublic: isChecked,
-            members: members
+      }).then(response => {
+        const employeeOptions = response.data.map(item => {
+          return {
+            id: item.employeeId,
+            value: `${item.nickname} (${item.fullName})`
+          };
         });
-
-        _this2.setState({ schedules: schedules });
-    };
-
-    this.getSelectedMembers = function (schedules) {
-        var selectedMembers = [];
-        var totalItems = schedules.length;
-
-        var _loop = function _loop(gindex) {
-            var totalSubItems = schedules[gindex].members.length;
-
-            var _loop2 = function _loop2(eindex) {
-                if (_this2.scheduleAttrNames.filter(function (attrName) {
-                    return schedules[gindex].members[eindex].selectWeekDays[attrName];
-                }).length > 0) {
-                    selectedMembers.push({ gindex: gindex, eindex: eindex });
-                }
-            };
-
-            for (var eindex = 0; eindex < totalSubItems; eindex++) {
-                _loop2(eindex);
-            }
+        this.setState({
+          employeeOptions: employeeOptions
+        });
+      }).catch(_shared_common_functions__WEBPACK_IMPORTED_MODULE_10__["axiosError"]);
+    });
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "getWeeklyShedules", filter => {
+      const fromDate = moment__WEBPACK_IMPORTED_MODULE_7___default()(filter.fromDate).format(_shared_constants__WEBPACK_IMPORTED_MODULE_12__["DateFormat"]),
+        toDate = moment__WEBPACK_IMPORTED_MODULE_7___default()(filter.toDate).format(_shared_constants__WEBPACK_IMPORTED_MODULE_12__["DateFormat"]);
+      Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_10__["blockUI"])();
+      Object(axios__WEBPACK_IMPORTED_MODULE_6__["default"])({
+        url: Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_10__["resolveClientUrl"])('ScheduleArrange/GetWeeklySchedule'),
+        method: 'GET',
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest'
+        },
+        params: {
+          fromDate: fromDate,
+          toDate: toDate,
+          teamIds: filter.teamIds,
+          companyId: filter.companyId,
+          isLocal: filter.isLocal,
+          employeeId: filter.employee.value === 0 ? null : filter.employee.value
+        }
+      }).then(response => {
+        this.selectedWeek = {
+          fromDate,
+          toDate
         };
-
-        for (var gindex = 0; gindex < totalItems; gindex++) {
-            _loop(gindex);
-        }
-
-        return selectedMembers;
-    };
-
-    this.isChangeOffDayKIV = function (item) {
-        if (item.isKeepInView) {
-            return !item.isOffDay;
-        } else return true;
-    };
-
-    this.handleChangeOffNoShift = function () {
-        var schedules = [].concat((0, _toConsumableArray3.default)(_this2.state.schedules));
-        var selectedMembers = _this2.getSelectedMembers(schedules),
-            totalItems = selectedMembers.length;
-
-        if (totalItems > 0) {
-            var _loop3 = function _loop3(index) {
-                var _selectedMembers$inde = selectedMembers[index],
-                    gindex = _selectedMembers$inde.gindex,
-                    eindex = _selectedMembers$inde.eindex;
-
-                var members = [].concat((0, _toConsumableArray3.default)(schedules[gindex].members));
-                var member = (0, _extends11.default)({}, members[eindex]);
-                var selectWeekDays = member.selectWeekDays;
-                _this2.scheduleAttrNames.forEach(function (attrName) {
-                    if (selectWeekDays[attrName]) {
-                        member.selectWeekDays = (0, _extends11.default)({}, member.selectWeekDays, (0, _defineProperty3.default)({}, attrName, false));
-                        if (!member[attrName].isHoliday && !member[attrName].isChangeShift && _this2.isChangeOffDayKIV(member[attrName])) {
-                            member[attrName] = (0, _extends11.default)({}, member[attrName], {
-                                isOffDay: true,
-                                isFixedOffDay: false,
-                                isOffDayReplacement: false,
-                                shift: null
-                            });
-                        }
-                    }
-                });
-
-                members[eindex] = member;
-                schedules[gindex] = (0, _extends11.default)({}, schedules[gindex], { members: members });
+        let {
+          isHost,
+          enableSyncWorkingShift,
+          schedules
+        } = response.data;
+        this.originalSchedules = schedules.map(team => {
+          team.members.map(schedule => {
+            schedule.selectWeekDays = {
+              mondaySchedule: false,
+              tuesdaySchedule: false,
+              wednesdaySchedule: false,
+              thursdaySchedule: false,
+              fridaySchedule: false,
+              saturdaySchedule: false,
+              sundaySchedule: false
             };
-
-            for (var index = 0; index < totalItems; index++) {
-                _loop3(index);
-            }
-
-            _this2.setState({ schedules: schedules });
-        } else {
-            _reactToastify.toast.warn('Please choose at least one day to off!');
-        }
-    };
-
-    this.handleChangeOffDayOT = function () {
-        var schedules = [].concat((0, _toConsumableArray3.default)(_this2.state.schedules));
-        var selectedMembers = _this2.getSelectedMembers(schedules),
-            totalItems = selectedMembers.length;
-
-        if (totalItems > 0) {
-            var _loop4 = function _loop4(index) {
-                var _selectedMembers$inde2 = selectedMembers[index],
-                    gindex = _selectedMembers$inde2.gindex,
-                    eindex = _selectedMembers$inde2.eindex;
-
-                var members = [].concat((0, _toConsumableArray3.default)(schedules[gindex].members));
-                var member = (0, _extends11.default)({}, members[eindex]);
-                var selectWeekDays = member.selectWeekDays;
-
-                _this2.scheduleAttrNames.forEach(function (attrName) {
-                    if (selectWeekDays[attrName]) {
-                        member.selectWeekDays = (0, _extends11.default)({}, member.selectWeekDays, (0, _defineProperty3.default)({}, attrName, false));
-                        if (!member[attrName].isHoliday && !member[attrName].isChangeShift && member[attrName].shift !== null && _this2.isChangeOffDayKIV(member[attrName])) {
-                            var originalSchedule = _this2.originalSchedules[gindex].members[eindex][attrName];
-                            member[attrName] = (0, _extends11.default)({}, member[attrName], {
-                                isOffDay: true,
-                                isFixedOffDay: false,
-                                isOffDayReplacement: false,
-                                isModified: !originalSchedule.isOffDay ? true : originalSchedule.isModified
-                            });
-                        }
-                    }
-                });
-
-                members[eindex] = member;
-                schedules[gindex] = (0, _extends11.default)({}, schedules[gindex], { members: members });
-            };
-
-            for (var index = 0; index < totalItems; index++) {
-                _loop4(index);
-            }
-
-            _this2.setState({ schedules: schedules });
-        } else {
-            _reactToastify.toast.warn('Please choose at least one day to off!');
-        }
-    };
-
-    this.handleChangeWorkday = function () {
-        var schedules = [].concat((0, _toConsumableArray3.default)(_this2.state.schedules));
-        var selectedMembers = _this2.getSelectedMembers(schedules),
-            totalItems = selectedMembers.length;
-
-        if (totalItems > 0) {
-            var _loop5 = function _loop5(index) {
-                var _selectedMembers$inde3 = selectedMembers[index],
-                    gindex = _selectedMembers$inde3.gindex,
-                    eindex = _selectedMembers$inde3.eindex;
-
-                var members = [].concat((0, _toConsumableArray3.default)(schedules[gindex].members));
-                var member = (0, _extends11.default)({}, members[eindex]);
-                var selectWeekDays = member.selectWeekDays;
-
-                _this2.scheduleAttrNames.forEach(function (attrName) {
-                    if (selectWeekDays[attrName]) {
-                        member.selectWeekDays = (0, _extends11.default)({}, member.selectWeekDays, (0, _defineProperty3.default)({}, attrName, false));
-                        if (!member[attrName].isHoliday && member[attrName].shift !== null) {
-                            var originalSchedule = _this2.originalSchedules[gindex].members[eindex][attrName];
-                            selectWeekDays[attrName] = false;
-                            member[attrName] = (0, _extends11.default)({}, member[attrName], {
-                                isOffDay: false,
-                                isFixedOffDay: false,
-                                isOffDayReplacement: false,
-                                isModified: originalSchedule.isOffDay ? true : originalSchedule.isModified
-                            });
-                        }
-                    }
-                });
-
-                members[eindex] = member;
-                schedules[gindex] = (0, _extends11.default)({}, schedules[gindex], { members: members });
-            };
-
-            for (var index = 0; index < totalItems; index++) {
-                _loop5(index);
-            }
-
-            _this2.setState({ schedules: schedules });
-        } else {
-            _reactToastify.toast.warn('Please choose at least one day to work!');
-        }
-    };
-
-    this.handleShiftMultiple = function () {
-        var selectedMembers = _this2.getSelectedMembers(_this2.state.schedules),
-            totalItems = selectedMembers.length;
-
-        if (totalItems > 0) {
-            _this2.setState({ showShiftMultipleModal: true });
-        } else {
-            _reactToastify.toast.warn('Please choose at least one day to continue!');
-        }
-    };
-
-    this.handleChangeMultipleShift = function (shift, isOffDay) {
-        var schedules = [].concat((0, _toConsumableArray3.default)(_this2.state.schedules));
-        var selectedMembers = _this2.getSelectedMembers(schedules),
-            totalItems = selectedMembers.length;
-
-        if (totalItems > 0) {
-            var _loop6 = function _loop6(index) {
-                var _selectedMembers$inde4 = selectedMembers[index],
-                    gindex = _selectedMembers$inde4.gindex,
-                    eindex = _selectedMembers$inde4.eindex;
-
-                var members = [].concat((0, _toConsumableArray3.default)(schedules[gindex].members));
-                var member = (0, _extends11.default)({}, members[eindex]);
-                var selectWeekDays = member.selectWeekDays;
-
-                _this2.scheduleAttrNames.forEach(function (attrName) {
-                    if (selectWeekDays[attrName]) {
-                        member.selectWeekDays = (0, _extends11.default)({}, member.selectWeekDays, (0, _defineProperty3.default)({}, attrName, false));
-                        if (!member[attrName].isHoliday) {
-                            var originalSchedule = _this2.originalSchedules[gindex].members[eindex][attrName];
-                            var isModified = !(0, _lodash.isEqual)(shift, originalSchedule.shift) || originalSchedule.isOffDay !== isOffDay ? true : originalSchedule.isModified;
-                            member[attrName] = (0, _extends11.default)({}, member[attrName], {
-                                isOffDay: isOffDay && !member[attrName].isChangeShift,
-                                isFixedOffDay: isOffDay ? member[attrName].isFixedOffDay : false,
-                                shift: shift,
-                                isModified: isModified
-                            });
-                        }
-                    }
-                });
-
-                members[eindex] = member;
-                schedules[gindex] = (0, _extends11.default)({}, schedules[gindex], { members: members });
-            };
-
-            for (var index = 0; index < totalItems; index++) {
-                _loop6(index);
-            }
-
-            _this2.setState({ schedules: schedules });
-        }
-
-        _this2.handleCloseShiftMultipleModal();
-    };
-
-    this.handleFixedOffDay = function () {
-        var schedules = [].concat((0, _toConsumableArray3.default)(_this2.state.schedules));
-        var selectedMembers = _this2.getSelectedMembers(schedules),
-            totalItems = selectedMembers.length;
-
-        if (totalItems > 0) {
-            var _loop7 = function _loop7(index) {
-                var _selectedMembers$inde5 = selectedMembers[index],
-                    gindex = _selectedMembers$inde5.gindex,
-                    eindex = _selectedMembers$inde5.eindex;
-
-                var members = [].concat((0, _toConsumableArray3.default)(schedules[gindex].members));
-                var member = (0, _extends11.default)({}, members[eindex]);
-                var selectWeekDays = member.selectWeekDays;
-
-                _this2.scheduleAttrNames.forEach(function (attrName) {
-                    if (selectWeekDays[attrName]) {
-                        member.selectWeekDays = (0, _extends11.default)({}, member.selectWeekDays, (0, _defineProperty3.default)({}, attrName, false));
-                        if (!member[attrName].isHoliday && !member[attrName].isChangeShift && member[attrName].shift !== null && _this2.isChangeOffDayKIV(member[attrName])) {
-                            var originalSchedule = _this2.originalSchedules[gindex].members[eindex][attrName];
-                            member[attrName] = (0, _extends11.default)({}, member[attrName], {
-                                isOffDay: true,
-                                isFixedOffDay: true,
-                                isOffDayReplacement: false,
-                                isModified: !originalSchedule.isOffDay || !originalSchedule.isFixedOffDay ? true : originalSchedule.isModified
-                            });
-                        }
-                    }
-                });
-
-                members[eindex] = member;
-                schedules[gindex] = (0, _extends11.default)({}, schedules[gindex], { members: members });
-            };
-
-            for (var index = 0; index < totalItems; index++) {
-                _loop7(index);
-            }
-
-            _this2.setState({ schedules: schedules });
-        } else {
-            _reactToastify.toast.warn('Please choose at least one day to continue!');
-        }
-    };
-
-    this.handleSave = function () {
-        var isValidData = true,
-            weeklySchedules = [],
-            defaultShifts = [],
-            schedules = (0, _lodash.cloneDeep)(_this2.state.schedules),
-            originalSchedules = (0, _lodash.cloneDeep)(_this2.originalSchedules);
-        var totalItems = schedules.length,
-            _selectedWeek = _this2.selectedWeek,
-            fromDate = _selectedWeek.fromDate,
-            toDate = _selectedWeek.toDate;
-
-
-        outerloop: for (var _gindex2 = 0; _gindex2 < totalItems; _gindex2++) {
-            var _totalSubItems2 = schedules[_gindex2].members.length;
-
-            var _loop8 = function _loop8(_eindex) {
-                var schedule = schedules[_gindex2].members[_eindex],
-                    originalSchedule = originalSchedules[_gindex2].members[_eindex];
-                (0, _lodash.unset)(schedule, 'selectWeekDays');
-                (0, _lodash.unset)(originalSchedule, 'selectWeekDays');
-
-                if (!(0, _lodash.isEqual)(schedule, originalSchedule)) {
-                    var totalOffDaysDefault = schedule.offDaysbyWeek + schedule.totalOffDayReplacement,
-                        totalOffDays = (0, _common2.getTotalOffDays)(schedule);
-
-                    if (totalOffDaysDefault < totalOffDays) {
-                        isValidData = false;
-                        return 'break|outerloop';
-                    }
-
-                    if (!(0, _lodash.isEqual)(originalSchedule.defaultShift, schedule.defaultShift)) {
-                        defaultShifts.push({
-                            employeeId: schedule.employeeId,
-                            fromDate: schedule.mondaySchedule.workDate,
-                            shiftId: schedule.defaultShift !== null ? schedule.defaultShift.id : null
-                        });
-                    }
-                    _this2.scheduleAttrNames.forEach(function (attrName) {
-                        if (!(0, _lodash.isEqual)(originalSchedule[attrName], schedule[attrName]) || originalSchedule.isPublic !== schedule.isPublic) {
-                            weeklySchedules.push({
-                                employeeId: schedule.employeeId,
-                                workDate: schedule[attrName].workDate,
-                                shiftId: schedule[attrName].shift !== null ? schedule[attrName].shift.id : null,
-                                isHoliday: schedule[attrName].isHoliday,
-                                isOffDay: schedule[attrName].isOffDay,
-                                isFixedOffDay: schedule[attrName].isFixedOffDay,
-                                isPublic: schedule.isPublic
-                            });
-                        }
-                    });
-                }
-            };
-
-            for (var _eindex = 0; _eindex < _totalSubItems2; _eindex++) {
-                var _ret8 = _loop8(_eindex);
-
-                if (_ret8 === 'break|outerloop') break outerloop;
-            }
-        }
-
-        if (!isValidData) {
-            _reactToastify.toast.error('Some employees have a larger number of days off during the week according to the setting.');
-
-            return;
-        }
-        if (weeklySchedules.length > 0 || defaultShifts.length > 0) {
-            (0, _common.blockUI)();
-
-            (0, _axios2.default)({
-                url: (0, _common.resolveClientUrl)('ScheduleArrange/EditWeekly'),
-                method: 'POST',
-                data: (0, _qs.stringify)({
-                    fromDate: fromDate,
-                    toDate: toDate,
-                    weeklySchedules: weeklySchedules.length > 0 ? weeklySchedules : null,
-                    defaultShifts: defaultShifts
-                }),
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                }
-            }).then(function (response) {
-                var data = response.data;
-                if (data.isSuccessful) {
-                    _reactToastify.toast.success('Updated Successfully!');
-
-                    _this2.getWeeklyShedules(_this2.state.filter);
-                } else {
-                    _reactToastify.toast.error(data.message);
-                }
-            }).catch(_common.axiosError).then(function () {
-                return (0, _common.unblockUI)();
+            schedule.totalOffDayReplacement = 0;
+            Object.keys(schedule.selectWeekDays).forEach(objectKey => {
+              if (schedule[objectKey].isOffDayReplacement) {
+                schedule.totalOffDayReplacement = schedule.totalOffDayReplacement + 1;
+              }
             });
-        }
-    };
-
-    this.handleCloseShiftMultipleModal = function () {
-        _this2.setState({ showShiftMultipleModal: false });
-    };
-
-    this.handleShowConfirmRefreshDataModal = function () {
-        _this2.setState({ showConfirmRefreshDataModal: true });
-    };
-
-    this.handleCloseConfirmRefreshDataModal = function () {
-        var fromDate = (0, _moment2.default)(_this2.selectedWeek.fromDate).format(_constants.DateFormat),
-            toDate = (0, _moment2.default)(_this2.selectedWeek.toDate).format(_constants.DateFormat),
-            filter = (0, _extends11.default)({}, _this2.state.filter, { fromDate: fromDate, toDate: toDate });
-
-        _this2.setState({ filter: filter, showConfirmRefreshDataModal: false });
-    };
-
-    this.handleSubmitRefreshData = function () {
-        _this2.getWeeklyShedules(_this2.state.filter);
-        _this2.handleCloseConfirmRefreshDataModal();
-    };
-
-    this.handleChangeShowRemarkPopover = function (show) {
-        _this2.setState({ showRemarkPopover: show });
-    };
-
-    this.handleShowWeeklyDefaultShiftModal = function (teamId, employeeId) {
-        var schedules = _this2.state.schedules,
-            gindex = schedules.findIndex(function (item) {
-            return item.teamId === teamId;
-        }),
-            eindex = schedules[gindex].members.findIndex(function (item) {
-            return item.employeeId === employeeId;
+            return schedule;
+          });
+          return team;
         });
-
-        _this2.setState({
-            editWeeklyDefaultShift: {
-                show: true,
-                teamId: teamId,
-                employeeId: employeeId,
-                nickname: schedules[gindex].members[eindex].nickname,
-                data: schedules[gindex].members[eindex].weeklyDefaultShift,
-                isUsedWeeklyDefaultShift: schedules[gindex].members[eindex].isUsedWeeklyDefaultShift
-            }
+        this.setState({
+          filter: _objectSpread(_objectSpread({}, this.state.filter), {}, {
+            fromDate,
+            toDate
+          }),
+          isHost,
+          enableSyncWorkingShift,
+          schedules: Object(lodash__WEBPACK_IMPORTED_MODULE_9__["cloneDeep"])(this.originalSchedules)
         });
-    };
-
-    this.handleCloseWeeklyDefaultShiftModal = function () {
-        _this2.setState({
-            editWeeklyDefaultShift: {
-                show: false,
-                teamId: 0,
-                employeeId: 0,
-                nickname: '',
-                data: null,
-                isUsedWeeklyDefaultShift: false
-            }
+      }).catch(_shared_common_functions__WEBPACK_IMPORTED_MODULE_10__["axiosError"]).then(() => Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_10__["unblockUI"])());
+    });
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleExportExcel", () => {
+      const filter = this.state.filter,
+        fromDate = moment__WEBPACK_IMPORTED_MODULE_7___default()(filter.fromDate).format('DD-MMM-YYYY'),
+        toDate = moment__WEBPACK_IMPORTED_MODULE_7___default()(filter.toDate).format('DD-MMM-YYYY');
+      Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_10__["blockUI"])();
+      Object(axios__WEBPACK_IMPORTED_MODULE_6__["default"])({
+        url: Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_10__["resolveClientUrl"])('ScheduleArrange/ExportExcel'),
+        method: 'GET',
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest'
+        },
+        params: {
+          fromDate: fromDate,
+          toDate: toDate,
+          teamIds: filter.teamIds,
+          companyId: filter.companyId,
+          isLocal: filter.isLocal,
+          employeeId: filter.employee.value === 0 ? null : filter.employee.value
+        },
+        responseType: 'blob'
+      }).then(response => {
+        const fileName = response.headers['content-disposition'].match(/filename="(.+)"/)[1];
+        Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_10__["downloadFile"])(response.data, fileName);
+      }).catch(_shared_common_functions__WEBPACK_IMPORTED_MODULE_10__["axiosError"]).then(() => Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_10__["unblockUI"])());
+    });
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleExportExcelDriverPickup", () => {
+      const filter = this.state.filter,
+        fromDate = moment__WEBPACK_IMPORTED_MODULE_7___default()(filter.fromDate).format('DD-MMM-YYYY'),
+        toDate = moment__WEBPACK_IMPORTED_MODULE_7___default()(filter.toDate).format('DD-MMM-YYYY');
+      Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_10__["blockUI"])();
+      Object(axios__WEBPACK_IMPORTED_MODULE_6__["default"])({
+        url: Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_10__["resolveClientUrl"])('ScheduleArrange/ExportExcelDriverPickup'),
+        method: 'GET',
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest'
+        },
+        params: {
+          fromDate: fromDate,
+          toDate: toDate,
+          teamIds: filter.teamIds,
+          companyId: filter.companyId,
+          isLocal: filter.isLocal,
+          employeeId: filter.employee.value === 0 ? null : filter.employee.value
+        },
+        responseType: 'blob'
+      }).then(response => {
+        const fileName = response.headers['content-disposition'].match(/filename="(.+)"/)[1];
+        Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_10__["downloadFile"])(response.data, fileName);
+      }).catch(_shared_common_functions__WEBPACK_IMPORTED_MODULE_10__["axiosError"]).then(() => Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_10__["unblockUI"])());
+    });
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleGetWeeklyShedules", isCurrentWeek => {
+      if (this.isDirtyData()) {
+        this.handleShowConfirmRefreshDataModal();
+      } else {
+        const filter = isCurrentWeek ? _objectSpread(_objectSpread({}, this.state.filter), {}, {
+          fromDate: this.currentWeek.fromDate,
+          toDate: this.currentWeek.toDate
+        }) : this.state.filter;
+        this.setState({
+          filter
         });
-    };
-
-    this.updateWeeklyDefaultShift = function (teamId, employeeId, weeklyDefaultShift, isUsedWeeklyDefaultShift) {
-        var schedules = [].concat((0, _toConsumableArray3.default)(_this2.state.schedules));
-        var gindex = schedules.findIndex(function (item) {
-            return item.teamId === teamId;
+        this.getWeeklyShedules(filter);
+      }
+    });
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleGetPreviousWeekSchedule", () => {
+      const fromDate = moment__WEBPACK_IMPORTED_MODULE_7___default()(this.selectedWeek.fromDate).add(-7, 'days').format(_shared_constants__WEBPACK_IMPORTED_MODULE_12__["DateFormat"]),
+        toDate = moment__WEBPACK_IMPORTED_MODULE_7___default()(this.selectedWeek.toDate).add(-7, 'days').format(_shared_constants__WEBPACK_IMPORTED_MODULE_12__["DateFormat"]),
+        filter = _objectSpread(_objectSpread({}, this.state.filter), {}, {
+          fromDate,
+          toDate
         });
-        var members = [].concat((0, _toConsumableArray3.default)(schedules[gindex].members));
-        var eindex = members.findIndex(function (item) {
-            return item.employeeId === employeeId;
+      this.setState({
+        filter
+      });
+      if (this.isDirtyData()) {
+        this.handleShowConfirmRefreshDataModal();
+      } else {
+        this.getWeeklyShedules(filter);
+      }
+    });
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleGetNextWeekSchedule", () => {
+      const fromDate = moment__WEBPACK_IMPORTED_MODULE_7___default()(this.selectedWeek.fromDate).add(7, 'days').format(_shared_constants__WEBPACK_IMPORTED_MODULE_12__["DateFormat"]),
+        toDate = moment__WEBPACK_IMPORTED_MODULE_7___default()(this.selectedWeek.toDate).add(7, 'days').format(_shared_constants__WEBPACK_IMPORTED_MODULE_12__["DateFormat"]),
+        filter = _objectSpread(_objectSpread({}, this.state.filter), {}, {
+          fromDate,
+          toDate
         });
-        members[eindex] = (0, _extends11.default)({}, members[eindex], {
-            weeklyDefaultShift: weeklyDefaultShift,
-            isUsedWeeklyDefaultShift: isUsedWeeklyDefaultShift
-        });
-        _this2.originalSchedules[gindex].members[eindex] = (0, _extends11.default)({}, _this2.originalSchedules[gindex].members[eindex], {
-            weeklyDefaultShift: weeklyDefaultShift,
-            isUsedWeeklyDefaultShift: isUsedWeeklyDefaultShift
-        });
-        var fromDate = (0, _moment2.default)(_this2.currentWeek.toDate).add(1, 'days').format(_constants.DateFormat);
-
-        if (isUsedWeeklyDefaultShift) {
-            _this2.scheduleAttrNames.forEach(function (attrName) {
-                var shiftId = weeklyDefaultShift[attrName.substring(0, 3) + 'Shift'].id,
-                    isOffDay = shiftId === _constants.OffDayShiftId,
-                    shift = isOffDay ? null : weeklyDefaultShift[attrName.substring(0, 3) + 'Shift'],
-                    workDate = (0, _moment2.default)(members[eindex][attrName].workDate);
-
-                if (workDate.isSameOrAfter(fromDate) && !members[eindex][attrName].isDisabled) {
-                    members[eindex][attrName] = (0, _extends11.default)({}, members[eindex][attrName], {
-                        shift: shift,
-                        isOffDay: isOffDay
-                    });
-                    _this2.originalSchedules[gindex].members[eindex][attrName] = (0, _extends11.default)({}, _this2.originalSchedules[gindex].members[eindex][attrName], {
-                        shift: shift,
-                        isOffDay: isOffDay
-                    });
-                }
+      this.setState({
+        filter
+      });
+      if (this.isDirtyData()) {
+        this.handleShowConfirmRefreshDataModal();
+      } else {
+        this.getWeeklyShedules(filter);
+      }
+    });
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleChangeSelectWeekDay", (teamId, employeeId, scheduleAttrName, isChecked) => {
+      let schedules = [...this.state.schedules];
+      const gindex = schedules.findIndex(item => item.teamId === teamId);
+      let members = [...schedules[gindex].members];
+      const eindex = members.findIndex(item => item.employeeId === employeeId);
+      members[eindex] = Object.assign({}, members[eindex], {
+        selectWeekDays: _objectSpread(_objectSpread({}, members[eindex].selectWeekDays), {}, {
+          [scheduleAttrName]: isChecked
+        })
+      });
+      schedules[gindex] = _objectSpread(_objectSpread({}, schedules[gindex]), {}, {
+        members
+      });
+      this.setState({
+        schedules
+      });
+    });
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleChangeSelectWeekDays", (scheduleAttrName, isChecked) => {
+      let schedules = [...this.state.schedules];
+      const totalItems = schedules.length;
+      if (scheduleAttrName !== null) {
+        for (let gindex = 0; gindex < totalItems; gindex++) {
+          let members = [...schedules[gindex].members];
+          const totalSubItems = members.length;
+          for (let subindex = 0; subindex < totalSubItems; subindex++) {
+            members[subindex] = Object.assign({}, members[subindex], {
+              selectWeekDays: _objectSpread(_objectSpread({}, members[subindex].selectWeekDays), {}, {
+                [scheduleAttrName]: isChecked
+              })
             });
-        } else {
-            var defaultShift = members[eindex].defaultShift;
-
-            if (defaultShift !== null) {
-                _this2.scheduleAttrNames.forEach(function (attrName) {
-                    var workDate = (0, _moment2.default)(members[eindex][attrName].workDate);
-                    if (workDate.isSameOrAfter(fromDate) && !members[eindex][attrName].isDisabled && !members[eindex][attrName].isHoliday && !members[eindex][attrName].isOffDay && members[eindex][attrName].shift === null) {
-                        members[eindex][attrName] = (0, _extends11.default)({}, members[eindex][attrName], {
-                            shift: defaultShift
-                        });
-                    }
+          }
+          schedules[gindex] = _objectSpread(_objectSpread({}, schedules[gindex]), {}, {
+            members
+          });
+        }
+      } else {
+        for (let gindex = 0; gindex < totalItems; gindex++) {
+          let members = [...schedules[gindex].members];
+          const totalSubItems = members.length;
+          for (let subindex = 0; subindex < totalSubItems; subindex++) {
+            members[subindex] = Object.assign({}, members[subindex], {
+              selectWeekDays: {
+                mondaySchedule: isChecked,
+                tuesdaySchedule: isChecked,
+                wednesdaySchedule: isChecked,
+                thursdaySchedule: isChecked,
+                fridaySchedule: isChecked,
+                saturdaySchedule: isChecked,
+                sundaySchedule: isChecked
+              }
+            });
+          }
+          schedules[gindex] = _objectSpread(_objectSpread({}, schedules[gindex]), {}, {
+            members
+          });
+        }
+      }
+      this.setState({
+        schedules
+      });
+    });
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleChangeShift", (teamId, employeeId, attrName, shift) => {
+      let schedules = [...this.state.schedules];
+      const gindex = schedules.findIndex(item => item.teamId === teamId);
+      let members = [...schedules[gindex].members];
+      const eindex = members.findIndex(item => item.employeeId === employeeId);
+      let member = _objectSpread({}, members[eindex]);
+      if (shift !== null && Object(lodash__WEBPACK_IMPORTED_MODULE_9__["isEqual"])(member[attrName].shift, shift)) {
+        return;
+      }
+      let defaultShift = member.defaultShift !== null ? _objectSpread({}, member.defaultShift) : null;
+      if (member.isUsedWeeklyDefaultShift) {
+        defaultShift = member.weeklyDefaultShift[`${attrName.substring(0, 3)}Shift`];
+      }
+      shift = shift === null && !member[attrName].isHoliday ? defaultShift : shift;
+      const isOffDay = shift !== null && shift.id === _shared_constants__WEBPACK_IMPORTED_MODULE_12__["OffDayShiftId"];
+      shift = shift !== null && shift.id === _shared_constants__WEBPACK_IMPORTED_MODULE_12__["OffDayShiftId"] ? null : shift;
+      const originalSchedule = this.originalSchedules[gindex].members[eindex][attrName];
+      member[attrName] = _objectSpread(_objectSpread({}, member[attrName]), {}, {
+        isOffDay,
+        isOffDayReplacement: false,
+        shift,
+        isModified: !Object(lodash__WEBPACK_IMPORTED_MODULE_9__["isEqual"])(shift, originalSchedule.shift) ? true : originalSchedule.isModified
+      });
+      members[eindex] = member;
+      schedules[gindex] = _objectSpread(_objectSpread({}, schedules[gindex]), {}, {
+        members
+      });
+      this.setState({
+        schedules
+      });
+    });
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleChangeDefaultShift", (teamId, employeeId, defaultShift) => {
+      let schedules = [...this.state.schedules];
+      const gindex = schedules.findIndex(item => item.teamId === teamId);
+      let members = [...schedules[gindex].members];
+      const eindex = members.findIndex(item => item.employeeId === employeeId),
+        originalDefaultShift = members[eindex].defaultShift;
+      if (defaultShift !== null) {
+        this.scheduleAttrNames.forEach(attrName => {
+          if (!members[eindex][attrName].isDisabled) {
+            const shift = members[eindex][attrName].shift;
+            if (members[eindex][attrName].isHoliday || members[eindex][attrName].isOffDay) {
+              if (shift !== null && Object(lodash__WEBPACK_IMPORTED_MODULE_9__["isEqual"])(originalDefaultShift, shift)) {
+                const originalSchedule = this.originalSchedules[gindex].members[eindex][attrName],
+                  isModified = !Object(lodash__WEBPACK_IMPORTED_MODULE_9__["isEqual"])(defaultShift, originalSchedule.shift) ? true : originalSchedule.isModified;
+                members[eindex][attrName] = _objectSpread(_objectSpread({}, members[eindex][attrName]), {}, {
+                  shift: defaultShift,
+                  isModified
                 });
-            }
-        }
-
-        schedules[gindex] = (0, _extends11.default)({}, schedules[gindex], { members: members });
-        _this2.setState({ schedules: schedules });
-    };
-
-    this.handleChangeWeeklyDefaultShift = function (weeklyDefaultShift, isUsedWeeklyDefaultShift) {
-        var _state$editWeeklyDefa = _this2.state.editWeeklyDefaultShift,
-            teamId = _state$editWeeklyDefa.teamId,
-            employeeId = _state$editWeeklyDefa.employeeId;
-
-        var schedules = _this2.state.schedules;
-        var gindex = schedules.findIndex(function (item) {
-            return item.teamId === teamId;
-        });
-        var members = schedules[gindex].members;
-        var eindex = members.findIndex(function (item) {
-            return item.employeeId === employeeId;
-        });
-
-        var totalOffDays = 0;
-        _this2.scheduleAttrNames.forEach(function (attrName) {
-            var shiftId = weeklyDefaultShift[attrName.substring(0, 3) + 'Shift'].id,
-                isOffDay = shiftId === _constants.OffDayShiftId;
-
-            if (isOffDay) {
-                totalOffDays++;
-            }
-        });
-
-        if (totalOffDays > members[eindex].offDaysbyWeek) {
-            _reactToastify.toast.error('Employee has a larger number of days off during the week according to the setting.');
-
-            return;
-        }
-
-        (0, _axios2.default)({
-            url: (0, _common.resolveClientUrl)('ScheduleArrange/EditWeeklyDefaultShift'),
-            method: 'POST',
-            data: (0, _qs.stringify)({ weeklyDefaultShift: weeklyDefaultShift, isUsedWeeklyDefaultShift: isUsedWeeklyDefaultShift }),
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest',
-                'Content-Type': 'application/x-www-form-urlencoded'
-            }
-        }).then(function (response) {
-            var data = response.data;
-            if (data.isSuccessful) {
-                _reactToastify.toast.success('Updated Successfully!');
-                _this2.updateWeeklyDefaultShift(teamId, employeeId, weeklyDefaultShift, isUsedWeeklyDefaultShift);
-
-                _this2.handleCloseWeeklyDefaultShiftModal();
+              }
             } else {
-                _reactToastify.toast.error(data.message);
+              if (shift === null || Object(lodash__WEBPACK_IMPORTED_MODULE_9__["isEqual"])(originalDefaultShift, shift)) {
+                const originalSchedule = this.originalSchedules[gindex].members[eindex][attrName],
+                  isModified = !Object(lodash__WEBPACK_IMPORTED_MODULE_9__["isEqual"])(defaultShift, originalSchedule.shift) ? true : originalSchedule.isModified;
+                members[eindex][attrName] = _objectSpread(_objectSpread({}, members[eindex][attrName]), {}, {
+                  shift: defaultShift,
+                  isModified
+                });
+              }
             }
-        }).catch(_common.axiosError);
-    };
-
-    this.handleUpdateRemark = function (teamId, employeeId, remark) {
-        var schedules = [].concat((0, _toConsumableArray3.default)(_this2.state.schedules));
-        var gindex = schedules.findIndex(function (item) {
-            return item.teamId === teamId;
+          }
         });
-        var members = [].concat((0, _toConsumableArray3.default)(schedules[gindex].members));
-        var eindex = members.findIndex(function (item) {
-            return item.employeeId === employeeId;
+      } else {
+        this.scheduleAttrNames.forEach(attrName => {
+          const shift = members[eindex][attrName].shift;
+          if (!members[eindex][attrName].isModified && shift !== null && Object(lodash__WEBPACK_IMPORTED_MODULE_9__["isEqual"])(originalDefaultShift, shift)) {
+            const originalSchedule = this.originalSchedules[gindex].members[eindex][attrName],
+              isModified = !Object(lodash__WEBPACK_IMPORTED_MODULE_9__["isEqual"])(defaultShift, originalSchedule.shift) ? true : originalSchedule.isModified;
+            members[eindex][attrName] = _objectSpread(_objectSpread({}, members[eindex][attrName]), {}, {
+              shift: defaultShift,
+              isModified
+            });
+          }
         });
-
-        if (!(0, _lodash.isEqual)(remark, _this2.originalSchedules[gindex].members[eindex].remark)) {
-            (0, _axios2.default)({
-                url: (0, _common.resolveClientUrl)('ScheduleArrange/EditRemark'),
-                method: 'POST',
-                data: (0, _qs.stringify)({ employeeId: employeeId, remark: remark }),
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                }
-            }).then(function (response) {
-                var data = response.data;
-                if (data.isSuccessful) {
-                    _reactToastify.toast.success('Updated Successfully!');
-
-                    members[eindex] = (0, _extends11.default)({}, members[eindex], { remark: remark });
-                    schedules[gindex] = (0, _extends11.default)({}, schedules[gindex], { members: members });
-                    _this2.originalSchedules[gindex].members[eindex].remark = remark;
-
-                    _this2.setState({ schedules: schedules });
-                } else {
-                    _reactToastify.toast.error(data.message);
-                }
-            }).catch(_common.axiosError);
-        }
-    };
-
-    this.handleEditTeamOrder = function () {
-        var displayOrders = [];
-        var schedules = _this2.state.schedules,
-            totalItems = schedules.length;
-
-        for (var index = 0; index < totalItems; index++) {
-            displayOrders.push({
-                teamId: schedules[index].teamId,
-                displayOrder: index + 1
+      }
+      members[eindex] = _objectSpread(_objectSpread({}, members[eindex]), {}, {
+        defaultShift
+      });
+      schedules[gindex] = _objectSpread(_objectSpread({}, schedules[gindex]), {}, {
+        members
+      });
+      this.setState({
+        schedules
+      });
+    });
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleChangePublics", (teamId, isChecked) => {
+      let schedules = [...this.state.schedules];
+      const gindex = schedules.findIndex(item => item.teamId === teamId);
+      let members = [...schedules[gindex].members];
+      const totalItems = members.length;
+      for (let index = 0; index < totalItems; index++) {
+        members[index] = _objectSpread(_objectSpread({}, members[index]), {}, {
+          isPublic: isChecked
+        });
+      }
+      schedules[gindex] = _objectSpread(_objectSpread({}, schedules[gindex]), {}, {
+        isPublic: isChecked,
+        members
+      });
+      this.setState({
+        schedules
+      });
+    });
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "getSelectedMembers", schedules => {
+      let selectedMembers = [];
+      const totalItems = schedules.length;
+      for (let gindex = 0; gindex < totalItems; gindex++) {
+        const totalSubItems = schedules[gindex].members.length;
+        for (let eindex = 0; eindex < totalSubItems; eindex++) {
+          if (this.scheduleAttrNames.filter(attrName => schedules[gindex].members[eindex].selectWeekDays[attrName]).length > 0) {
+            selectedMembers.push({
+              gindex,
+              eindex
             });
+          }
         }
-
-        if (displayOrders.length > 0) {
-            (0, _axios2.default)({
-                url: (0, _common.resolveClientUrl)('ScheduleArrange/EditTeamOrder'),
-                method: 'POST',
-                data: (0, _qs.stringify)({ displayOrders: displayOrders }),
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                }
-            }).then(function (response) {
-                var data = response.data;
-                if (!data.isSuccessful) {
-                    _reactToastify.toast.error(data.message);
-                }
-            }).catch(_common.axiosError);
+      }
+      return selectedMembers;
+    });
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "isChangeOffDayKIV", item => {
+      if (item.isKeepInView) {
+        return !item.isOffDay;
+      } else return true;
+    });
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleChangeOffNoShift", () => {
+      let schedules = [...this.state.schedules];
+      const selectedMembers = this.getSelectedMembers(schedules),
+        totalItems = selectedMembers.length;
+      if (totalItems > 0) {
+        for (let index = 0; index < totalItems; index++) {
+          const {
+            gindex,
+            eindex
+          } = selectedMembers[index];
+          let members = [...schedules[gindex].members];
+          let member = _objectSpread({}, members[eindex]);
+          const selectWeekDays = member.selectWeekDays;
+          this.scheduleAttrNames.forEach(attrName => {
+            if (selectWeekDays[attrName]) {
+              member.selectWeekDays = _objectSpread(_objectSpread({}, member.selectWeekDays), {}, {
+                [attrName]: false
+              });
+              if (!member[attrName].isHoliday && !member[attrName].isChangeShift && this.isChangeOffDayKIV(member[attrName])) {
+                member[attrName] = _objectSpread(_objectSpread({}, member[attrName]), {}, {
+                  isOffDay: true,
+                  isFixedOffDay: false,
+                  isOffDayReplacement: false,
+                  shift: null
+                });
+              }
+            }
+          });
+          members[eindex] = member;
+          schedules[gindex] = _objectSpread(_objectSpread({}, schedules[gindex]), {}, {
+            members
+          });
         }
-    };
-
-    this.handleEditDisplayOrder = function (gindex) {
-        var displayOrders = [];
-        var members = _this2.state.schedules[gindex].members,
-            totalItems = members.length;
-
-        for (var index = 0; index < totalItems; index++) {
-            displayOrders.push({
-                employeeId: members[index].employeeId,
-                displayOrder: index + 1
+        this.setState({
+          schedules
+        });
+      } else {
+        react_toastify__WEBPACK_IMPORTED_MODULE_5__["toast"].warn('Please choose at least one day to off!');
+      }
+    });
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleChangeOffDayOT", () => {
+      let schedules = [...this.state.schedules];
+      const selectedMembers = this.getSelectedMembers(schedules),
+        totalItems = selectedMembers.length;
+      if (totalItems > 0) {
+        for (let index = 0; index < totalItems; index++) {
+          const {
+            gindex,
+            eindex
+          } = selectedMembers[index];
+          let members = [...schedules[gindex].members];
+          let member = _objectSpread({}, members[eindex]);
+          const selectWeekDays = member.selectWeekDays;
+          this.scheduleAttrNames.forEach(attrName => {
+            if (selectWeekDays[attrName]) {
+              member.selectWeekDays = _objectSpread(_objectSpread({}, member.selectWeekDays), {}, {
+                [attrName]: false
+              });
+              if (!member[attrName].isHoliday && !member[attrName].isChangeShift && member[attrName].shift !== null && this.isChangeOffDayKIV(member[attrName])) {
+                const originalSchedule = this.originalSchedules[gindex].members[eindex][attrName];
+                member[attrName] = _objectSpread(_objectSpread({}, member[attrName]), {}, {
+                  isOffDay: true,
+                  isFixedOffDay: false,
+                  isOffDayReplacement: false,
+                  isModified: !originalSchedule.isOffDay ? true : originalSchedule.isModified
+                });
+              }
+            }
+          });
+          members[eindex] = member;
+          schedules[gindex] = _objectSpread(_objectSpread({}, schedules[gindex]), {}, {
+            members
+          });
+        }
+        this.setState({
+          schedules
+        });
+      } else {
+        react_toastify__WEBPACK_IMPORTED_MODULE_5__["toast"].warn('Please choose at least one day to off!');
+      }
+    });
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleChangeWorkday", () => {
+      let schedules = [...this.state.schedules];
+      const selectedMembers = this.getSelectedMembers(schedules),
+        totalItems = selectedMembers.length;
+      if (totalItems > 0) {
+        for (let index = 0; index < totalItems; index++) {
+          const {
+            gindex,
+            eindex
+          } = selectedMembers[index];
+          let members = [...schedules[gindex].members];
+          let member = _objectSpread({}, members[eindex]);
+          const selectWeekDays = member.selectWeekDays;
+          this.scheduleAttrNames.forEach(attrName => {
+            if (selectWeekDays[attrName]) {
+              member.selectWeekDays = _objectSpread(_objectSpread({}, member.selectWeekDays), {}, {
+                [attrName]: false
+              });
+              if (!member[attrName].isHoliday && member[attrName].shift !== null) {
+                const originalSchedule = this.originalSchedules[gindex].members[eindex][attrName];
+                selectWeekDays[attrName] = false;
+                member[attrName] = _objectSpread(_objectSpread({}, member[attrName]), {}, {
+                  isOffDay: false,
+                  isFixedOffDay: false,
+                  isOffDayReplacement: false,
+                  isModified: originalSchedule.isOffDay ? true : originalSchedule.isModified
+                });
+              }
+            }
+          });
+          members[eindex] = member;
+          schedules[gindex] = _objectSpread(_objectSpread({}, schedules[gindex]), {}, {
+            members
+          });
+        }
+        this.setState({
+          schedules
+        });
+      } else {
+        react_toastify__WEBPACK_IMPORTED_MODULE_5__["toast"].warn('Please choose at least one day to work!');
+      }
+    });
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleShiftMultiple", () => {
+      const selectedMembers = this.getSelectedMembers(this.state.schedules),
+        totalItems = selectedMembers.length;
+      if (totalItems > 0) {
+        this.setState({
+          showShiftMultipleModal: true
+        });
+      } else {
+        react_toastify__WEBPACK_IMPORTED_MODULE_5__["toast"].warn('Please choose at least one day to continue!');
+      }
+    });
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleChangeMultipleShift", (shift, isOffDay) => {
+      let schedules = [...this.state.schedules];
+      const selectedMembers = this.getSelectedMembers(schedules),
+        totalItems = selectedMembers.length;
+      if (totalItems > 0) {
+        for (let index = 0; index < totalItems; index++) {
+          const {
+            gindex,
+            eindex
+          } = selectedMembers[index];
+          let members = [...schedules[gindex].members];
+          let member = _objectSpread({}, members[eindex]);
+          const selectWeekDays = member.selectWeekDays;
+          this.scheduleAttrNames.forEach(attrName => {
+            if (selectWeekDays[attrName]) {
+              member.selectWeekDays = _objectSpread(_objectSpread({}, member.selectWeekDays), {}, {
+                [attrName]: false
+              });
+              if (!member[attrName].isHoliday) {
+                const originalSchedule = this.originalSchedules[gindex].members[eindex][attrName];
+                const isModified = !Object(lodash__WEBPACK_IMPORTED_MODULE_9__["isEqual"])(shift, originalSchedule.shift) || originalSchedule.isOffDay !== isOffDay ? true : originalSchedule.isModified;
+                member[attrName] = _objectSpread(_objectSpread({}, member[attrName]), {}, {
+                  isOffDay: isOffDay && !member[attrName].isChangeShift,
+                  isFixedOffDay: isOffDay ? member[attrName].isFixedOffDay : false,
+                  shift,
+                  isModified
+                });
+              }
+            }
+          });
+          members[eindex] = member;
+          schedules[gindex] = _objectSpread(_objectSpread({}, schedules[gindex]), {}, {
+            members
+          });
+        }
+        this.setState({
+          schedules
+        });
+      }
+      this.handleCloseShiftMultipleModal();
+    });
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleFixedOffDay", () => {
+      let schedules = [...this.state.schedules];
+      const selectedMembers = this.getSelectedMembers(schedules),
+        totalItems = selectedMembers.length;
+      if (totalItems > 0) {
+        for (let index = 0; index < totalItems; index++) {
+          const {
+            gindex,
+            eindex
+          } = selectedMembers[index];
+          let members = [...schedules[gindex].members];
+          let member = _objectSpread({}, members[eindex]);
+          const selectWeekDays = member.selectWeekDays;
+          this.scheduleAttrNames.forEach(attrName => {
+            if (selectWeekDays[attrName]) {
+              member.selectWeekDays = _objectSpread(_objectSpread({}, member.selectWeekDays), {}, {
+                [attrName]: false
+              });
+              if (!member[attrName].isHoliday && !member[attrName].isChangeShift && member[attrName].shift !== null && this.isChangeOffDayKIV(member[attrName])) {
+                const originalSchedule = this.originalSchedules[gindex].members[eindex][attrName];
+                member[attrName] = _objectSpread(_objectSpread({}, member[attrName]), {}, {
+                  isOffDay: true,
+                  isFixedOffDay: true,
+                  isOffDayReplacement: false,
+                  isModified: !originalSchedule.isOffDay || !originalSchedule.isFixedOffDay ? true : originalSchedule.isModified
+                });
+              }
+            }
+          });
+          members[eindex] = member;
+          schedules[gindex] = _objectSpread(_objectSpread({}, schedules[gindex]), {}, {
+            members
+          });
+        }
+        this.setState({
+          schedules
+        });
+      } else {
+        react_toastify__WEBPACK_IMPORTED_MODULE_5__["toast"].warn('Please choose at least one day to continue!');
+      }
+    });
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleSave", () => {
+      let isValidData = true,
+        weeklySchedules = [],
+        defaultShifts = [],
+        schedules = Object(lodash__WEBPACK_IMPORTED_MODULE_9__["cloneDeep"])(this.state.schedules),
+        originalSchedules = Object(lodash__WEBPACK_IMPORTED_MODULE_9__["cloneDeep"])(this.originalSchedules);
+      const totalItems = schedules.length,
+        {
+          fromDate,
+          toDate
+        } = this.selectedWeek;
+      outerloop: for (let gindex = 0; gindex < totalItems; gindex++) {
+        const totalSubItems = schedules[gindex].members.length;
+        for (let eindex = 0; eindex < totalSubItems; eindex++) {
+          let schedule = schedules[gindex].members[eindex],
+            originalSchedule = originalSchedules[gindex].members[eindex];
+          Object(lodash__WEBPACK_IMPORTED_MODULE_9__["unset"])(schedule, 'selectWeekDays');
+          Object(lodash__WEBPACK_IMPORTED_MODULE_9__["unset"])(originalSchedule, 'selectWeekDays');
+          if (!Object(lodash__WEBPACK_IMPORTED_MODULE_9__["isEqual"])(schedule, originalSchedule)) {
+            const totalOffDaysDefault = schedule.offDaysbyWeek + schedule.totalOffDayReplacement,
+              totalOffDays = Object(_common_functions__WEBPACK_IMPORTED_MODULE_11__["getTotalOffDays"])(schedule);
+            if (totalOffDaysDefault < totalOffDays) {
+              isValidData = false;
+              break outerloop;
+            }
+            if (!Object(lodash__WEBPACK_IMPORTED_MODULE_9__["isEqual"])(originalSchedule.defaultShift, schedule.defaultShift)) {
+              defaultShifts.push({
+                employeeId: schedule.employeeId,
+                fromDate: schedule.mondaySchedule.workDate,
+                shiftId: schedule.defaultShift !== null ? schedule.defaultShift.id : null
+              });
+            }
+            this.scheduleAttrNames.forEach(attrName => {
+              if (!Object(lodash__WEBPACK_IMPORTED_MODULE_9__["isEqual"])(originalSchedule[attrName], schedule[attrName]) || originalSchedule.isPublic !== schedule.isPublic) {
+                weeklySchedules.push({
+                  employeeId: schedule.employeeId,
+                  workDate: schedule[attrName].workDate,
+                  shiftId: schedule[attrName].shift !== null ? schedule[attrName].shift.id : null,
+                  isHoliday: schedule[attrName].isHoliday,
+                  isOffDay: schedule[attrName].isOffDay,
+                  isFixedOffDay: schedule[attrName].isFixedOffDay,
+                  isPublic: schedule.isPublic
+                });
+              }
             });
+          }
         }
-
-        if (displayOrders.length > 0) {
-            (0, _axios2.default)({
-                url: (0, _common.resolveClientUrl)('ScheduleArrange/EditDisplayOrder'),
-                method: 'POST',
-                data: (0, _qs.stringify)({ displayOrders: displayOrders }),
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                }
-            }).then(function (response) {
-                var data = response.data;
-                if (!data.isSuccessful) {
-                    _reactToastify.toast.error(data.message);
-                }
-            }).catch(_common.axiosError);
+      }
+      if (!isValidData) {
+        react_toastify__WEBPACK_IMPORTED_MODULE_5__["toast"].error('Some employees have a larger number of days off during the week according to the setting.');
+        return;
+      }
+      if (weeklySchedules.length > 0 || defaultShifts.length > 0) {
+        Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_10__["blockUI"])();
+        Object(axios__WEBPACK_IMPORTED_MODULE_6__["default"])({
+          url: Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_10__["resolveClientUrl"])('ScheduleArrange/EditWeekly'),
+          method: 'POST',
+          data: Object(qs__WEBPACK_IMPORTED_MODULE_8__["stringify"])({
+            fromDate,
+            toDate,
+            weeklySchedules: weeklySchedules.length > 0 ? weeklySchedules : null,
+            defaultShifts
+          }),
+          headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            'Content-Type': 'application/x-www-form-urlencoded'
+          }
+        }).then(response => {
+          const data = response.data;
+          if (data.isSuccessful) {
+            react_toastify__WEBPACK_IMPORTED_MODULE_5__["toast"].success('Updated Successfully!');
+            this.getWeeklyShedules(this.state.filter);
+          } else {
+            react_toastify__WEBPACK_IMPORTED_MODULE_5__["toast"].error(data.message);
+          }
+        }).catch(_shared_common_functions__WEBPACK_IMPORTED_MODULE_10__["axiosError"]).then(() => Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_10__["unblockUI"])());
+      }
+    });
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleCloseShiftMultipleModal", () => {
+      this.setState({
+        showShiftMultipleModal: false
+      });
+    });
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleShowConfirmRefreshDataModal", () => {
+      this.setState({
+        showConfirmRefreshDataModal: true
+      });
+    });
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleCloseConfirmRefreshDataModal", () => {
+      const fromDate = moment__WEBPACK_IMPORTED_MODULE_7___default()(this.selectedWeek.fromDate).format(_shared_constants__WEBPACK_IMPORTED_MODULE_12__["DateFormat"]),
+        toDate = moment__WEBPACK_IMPORTED_MODULE_7___default()(this.selectedWeek.toDate).format(_shared_constants__WEBPACK_IMPORTED_MODULE_12__["DateFormat"]),
+        filter = _objectSpread(_objectSpread({}, this.state.filter), {}, {
+          fromDate,
+          toDate
+        });
+      this.setState({
+        filter,
+        showConfirmRefreshDataModal: false
+      });
+    });
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleSubmitRefreshData", () => {
+      this.getWeeklyShedules(this.state.filter);
+      this.handleCloseConfirmRefreshDataModal();
+    });
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleChangeShowRemarkPopover", show => {
+      this.setState({
+        showRemarkPopover: show
+      });
+    });
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleShowWeeklyDefaultShiftModal", (teamId, employeeId) => {
+      const schedules = this.state.schedules,
+        gindex = schedules.findIndex(item => item.teamId === teamId),
+        eindex = schedules[gindex].members.findIndex(item => item.employeeId === employeeId);
+      this.setState({
+        editWeeklyDefaultShift: {
+          show: true,
+          teamId,
+          employeeId,
+          nickname: schedules[gindex].members[eindex].nickname,
+          data: schedules[gindex].members[eindex].weeklyDefaultShift,
+          isUsedWeeklyDefaultShift: schedules[gindex].members[eindex].isUsedWeeklyDefaultShift
         }
-    };
-
-    this.handleDragEnd = function (result) {
-        if (!result.destination || result.source.index === result.destination.index) {
-            return;
+      });
+    });
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleCloseWeeklyDefaultShiftModal", () => {
+      this.setState({
+        editWeeklyDefaultShift: {
+          show: false,
+          teamId: 0,
+          employeeId: 0,
+          nickname: '',
+          data: null,
+          isUsedWeeklyDefaultShift: false
         }
-
-        var resultType = result.type,
-            sourceIndex = result.source.index,
-            destinationIndex = result.destination.index;
-        var schedules = [].concat((0, _toConsumableArray3.default)(_this2.state.schedules));
-        if (resultType === 'droppableTeam') {
-            schedules = (0, _common.reorder)(schedules, sourceIndex, destinationIndex);
-            _this2.originalSchedules = (0, _common.reorder)(schedules, sourceIndex, destinationIndex);
-            _this2.setState({ schedules: schedules }, function () {
-                return _this2.handleEditTeamOrder();
+      });
+    });
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "updateWeeklyDefaultShift", (teamId, employeeId, weeklyDefaultShift, isUsedWeeklyDefaultShift) => {
+      let schedules = [...this.state.schedules];
+      const gindex = schedules.findIndex(item => item.teamId === teamId);
+      let members = [...schedules[gindex].members];
+      const eindex = members.findIndex(item => item.employeeId === employeeId);
+      members[eindex] = _objectSpread(_objectSpread({}, members[eindex]), {}, {
+        weeklyDefaultShift,
+        isUsedWeeklyDefaultShift
+      });
+      this.originalSchedules[gindex].members[eindex] = _objectSpread(_objectSpread({}, this.originalSchedules[gindex].members[eindex]), {}, {
+        weeklyDefaultShift,
+        isUsedWeeklyDefaultShift
+      });
+      const fromDate = moment__WEBPACK_IMPORTED_MODULE_7___default()(this.currentWeek.toDate).add(1, 'days').format(_shared_constants__WEBPACK_IMPORTED_MODULE_12__["DateFormat"]);
+      if (isUsedWeeklyDefaultShift) {
+        this.scheduleAttrNames.forEach(attrName => {
+          const shiftId = weeklyDefaultShift[`${attrName.substring(0, 3)}Shift`].id,
+            isOffDay = shiftId === _shared_constants__WEBPACK_IMPORTED_MODULE_12__["OffDayShiftId"],
+            shift = isOffDay ? null : weeklyDefaultShift[`${attrName.substring(0, 3)}Shift`],
+            workDate = moment__WEBPACK_IMPORTED_MODULE_7___default()(members[eindex][attrName].workDate);
+          if (workDate.isSameOrAfter(fromDate) && !members[eindex][attrName].isDisabled) {
+            members[eindex][attrName] = _objectSpread(_objectSpread({}, members[eindex][attrName]), {}, {
+              shift,
+              isOffDay
             });
-        } else if (resultType.includes('droppableMember')) {
-            var teamId = parseInt(resultType.split('-')[1], 10),
-                index = schedules.findIndex(function (x) {
-                return x.teamId === teamId;
+            this.originalSchedules[gindex].members[eindex][attrName] = _objectSpread(_objectSpread({}, this.originalSchedules[gindex].members[eindex][attrName]), {}, {
+              shift,
+              isOffDay
             });
-            _this2.originalSchedules[index].members = (0, _common.reorder)(_this2.originalSchedules[index].members, sourceIndex, destinationIndex);
-            schedules[index].members = (0, _common.reorder)(schedules[index].members, sourceIndex, destinationIndex);
-            _this2.setState({ schedules: schedules }, function () {
-                return _this2.handleEditDisplayOrder(index);
-            });
+          }
+        });
+      } else {
+        const defaultShift = members[eindex].defaultShift;
+        if (defaultShift !== null) {
+          this.scheduleAttrNames.forEach(attrName => {
+            const workDate = moment__WEBPACK_IMPORTED_MODULE_7___default()(members[eindex][attrName].workDate);
+            if (workDate.isSameOrAfter(fromDate) && !members[eindex][attrName].isDisabled && !members[eindex][attrName].isHoliday && !members[eindex][attrName].isOffDay && members[eindex][attrName].shift === null) {
+              members[eindex][attrName] = _objectSpread(_objectSpread({}, members[eindex][attrName]), {}, {
+                shift: defaultShift
+              });
+            }
+          });
         }
-    };
-
-    this.handleChangeTeamOrder = function (key, teamId) {
-        var schedules = [].concat((0, _toConsumableArray3.default)(_this2.state.schedules));
-        var sourceIndex = schedules.findIndex(function (x) {
-            return x.teamId === teamId;
+      }
+      schedules[gindex] = _objectSpread(_objectSpread({}, schedules[gindex]), {}, {
+        members
+      });
+      this.setState({
+        schedules
+      });
+    });
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleChangeWeeklyDefaultShift", (weeklyDefaultShift, isUsedWeeklyDefaultShift) => {
+      const {
+        teamId,
+        employeeId
+      } = this.state.editWeeklyDefaultShift;
+      let schedules = this.state.schedules;
+      const gindex = schedules.findIndex(item => item.teamId === teamId);
+      let members = schedules[gindex].members;
+      const eindex = members.findIndex(item => item.employeeId === employeeId);
+      let totalOffDays = 0;
+      this.scheduleAttrNames.forEach(attrName => {
+        const shiftId = weeklyDefaultShift[`${attrName.substring(0, 3)}Shift`].id,
+          isOffDay = shiftId === _shared_constants__WEBPACK_IMPORTED_MODULE_12__["OffDayShiftId"];
+        if (isOffDay) {
+          totalOffDays++;
+        }
+      });
+      if (totalOffDays > members[eindex].offDaysbyWeek) {
+        react_toastify__WEBPACK_IMPORTED_MODULE_5__["toast"].error('Employee has a larger number of days off during the week according to the setting.');
+        return;
+      }
+      Object(axios__WEBPACK_IMPORTED_MODULE_6__["default"])({
+        url: Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_10__["resolveClientUrl"])('ScheduleArrange/EditWeeklyDefaultShift'),
+        method: 'POST',
+        data: Object(qs__WEBPACK_IMPORTED_MODULE_8__["stringify"])({
+          weeklyDefaultShift,
+          isUsedWeeklyDefaultShift
         }),
-            totalItems = schedules.length;
-        var destinationIndex = 0;
-
-        switch (key) {
-            case 'up':
-                destinationIndex = sourceIndex - 1;
-                break;
-            case 'down':
-                destinationIndex = sourceIndex + 1;
-                break;
-            case 'bottom':
-                destinationIndex = totalItems;
-                break;
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest',
+          'Content-Type': 'application/x-www-form-urlencoded'
         }
-
-        if (destinationIndex < 0 || destinationIndex > totalItems || sourceIndex === destinationIndex) {
-            return;
+      }).then(response => {
+        const data = response.data;
+        if (data.isSuccessful) {
+          react_toastify__WEBPACK_IMPORTED_MODULE_5__["toast"].success('Updated Successfully!');
+          this.updateWeeklyDefaultShift(teamId, employeeId, weeklyDefaultShift, isUsedWeeklyDefaultShift);
+          this.handleCloseWeeklyDefaultShiftModal();
+        } else {
+          react_toastify__WEBPACK_IMPORTED_MODULE_5__["toast"].error(data.message);
         }
-
-        schedules = (0, _common.reorder)(schedules, sourceIndex, destinationIndex);
-        _this2.originalSchedules = (0, _common.reorder)(_this2.originalSchedules, sourceIndex, destinationIndex);
-        _this2.setState({ schedules: schedules }, function () {
-            return _this2.handleEditTeamOrder();
+      }).catch(_shared_common_functions__WEBPACK_IMPORTED_MODULE_10__["axiosError"]);
+    });
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleUpdateRemark", (teamId, employeeId, remark) => {
+      let schedules = [...this.state.schedules];
+      const gindex = schedules.findIndex(item => item.teamId === teamId);
+      let members = [...schedules[gindex].members];
+      const eindex = members.findIndex(item => item.employeeId === employeeId);
+      if (!Object(lodash__WEBPACK_IMPORTED_MODULE_9__["isEqual"])(remark, this.originalSchedules[gindex].members[eindex].remark)) {
+        Object(axios__WEBPACK_IMPORTED_MODULE_6__["default"])({
+          url: Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_10__["resolveClientUrl"])('ScheduleArrange/EditRemark'),
+          method: 'POST',
+          data: Object(qs__WEBPACK_IMPORTED_MODULE_8__["stringify"])({
+            employeeId,
+            remark
+          }),
+          headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            'Content-Type': 'application/x-www-form-urlencoded'
+          }
+        }).then(response => {
+          const data = response.data;
+          if (data.isSuccessful) {
+            react_toastify__WEBPACK_IMPORTED_MODULE_5__["toast"].success('Updated Successfully!');
+            members[eindex] = _objectSpread(_objectSpread({}, members[eindex]), {}, {
+              remark
+            });
+            schedules[gindex] = _objectSpread(_objectSpread({}, schedules[gindex]), {}, {
+              members
+            });
+            this.originalSchedules[gindex].members[eindex].remark = remark;
+            this.setState({
+              schedules
+            });
+          } else {
+            react_toastify__WEBPACK_IMPORTED_MODULE_5__["toast"].error(data.message);
+          }
+        }).catch(_shared_common_functions__WEBPACK_IMPORTED_MODULE_10__["axiosError"]);
+      }
+    });
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleEditTeamOrder", () => {
+      let displayOrders = [];
+      const schedules = this.state.schedules,
+        totalItems = schedules.length;
+      for (let index = 0; index < totalItems; index++) {
+        displayOrders.push({
+          teamId: schedules[index].teamId,
+          displayOrder: index + 1
         });
-    };
-
-    this.handleChangeOrder = function (key, teamId, employeeId) {
-        var schedules = [].concat((0, _toConsumableArray3.default)(_this2.state.schedules));
-        var index = schedules.findIndex(function (x) {
-            return x.teamId === teamId;
+      }
+      if (displayOrders.length > 0) {
+        Object(axios__WEBPACK_IMPORTED_MODULE_6__["default"])({
+          url: Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_10__["resolveClientUrl"])('ScheduleArrange/EditTeamOrder'),
+          method: 'POST',
+          data: Object(qs__WEBPACK_IMPORTED_MODULE_8__["stringify"])({
+            displayOrders
+          }),
+          headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            'Content-Type': 'application/x-www-form-urlencoded'
+          }
+        }).then(response => {
+          const data = response.data;
+          if (!data.isSuccessful) {
+            react_toastify__WEBPACK_IMPORTED_MODULE_5__["toast"].error(data.message);
+          }
+        }).catch(_shared_common_functions__WEBPACK_IMPORTED_MODULE_10__["axiosError"]);
+      }
+    });
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleEditDisplayOrder", gindex => {
+      let displayOrders = [];
+      const members = this.state.schedules[gindex].members,
+        totalItems = members.length;
+      for (let index = 0; index < totalItems; index++) {
+        displayOrders.push({
+          employeeId: members[index].employeeId,
+          displayOrder: index + 1
+        });
+      }
+      if (displayOrders.length > 0) {
+        Object(axios__WEBPACK_IMPORTED_MODULE_6__["default"])({
+          url: Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_10__["resolveClientUrl"])('ScheduleArrange/EditDisplayOrder'),
+          method: 'POST',
+          data: Object(qs__WEBPACK_IMPORTED_MODULE_8__["stringify"])({
+            displayOrders
+          }),
+          headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            'Content-Type': 'application/x-www-form-urlencoded'
+          }
+        }).then(response => {
+          const data = response.data;
+          if (!data.isSuccessful) {
+            react_toastify__WEBPACK_IMPORTED_MODULE_5__["toast"].error(data.message);
+          }
+        }).catch(_shared_common_functions__WEBPACK_IMPORTED_MODULE_10__["axiosError"]);
+      }
+    });
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleDragEnd", result => {
+      if (!result.destination || result.source.index === result.destination.index) {
+        return;
+      }
+      const resultType = result.type,
+        sourceIndex = result.source.index,
+        destinationIndex = result.destination.index;
+      let schedules = [...this.state.schedules];
+      if (resultType === 'droppableTeam') {
+        schedules = Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_10__["reorder"])(schedules, sourceIndex, destinationIndex);
+        this.originalSchedules = Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_10__["reorder"])(schedules, sourceIndex, destinationIndex);
+        this.setState({
+          schedules
+        }, () => this.handleEditTeamOrder());
+      } else if (resultType.includes('droppableMember')) {
+        const teamId = parseInt(resultType.split('-')[1], 10),
+          index = schedules.findIndex(x => x.teamId === teamId);
+        this.originalSchedules[index].members = Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_10__["reorder"])(this.originalSchedules[index].members, sourceIndex, destinationIndex);
+        schedules[index].members = Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_10__["reorder"])(schedules[index].members, sourceIndex, destinationIndex);
+        this.setState({
+          schedules
+        }, () => this.handleEditDisplayOrder(index));
+      }
+    });
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleChangeTeamOrder", (key, teamId) => {
+      let schedules = [...this.state.schedules];
+      const sourceIndex = schedules.findIndex(x => x.teamId === teamId),
+        totalItems = schedules.length;
+      let destinationIndex = 0;
+      switch (key) {
+        case 'up':
+          destinationIndex = sourceIndex - 1;
+          break;
+        case 'down':
+          destinationIndex = sourceIndex + 1;
+          break;
+        case 'bottom':
+          destinationIndex = totalItems;
+          break;
+      }
+      if (destinationIndex < 0 || destinationIndex > totalItems || sourceIndex === destinationIndex) {
+        return;
+      }
+      schedules = Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_10__["reorder"])(schedules, sourceIndex, destinationIndex);
+      this.originalSchedules = Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_10__["reorder"])(this.originalSchedules, sourceIndex, destinationIndex);
+      this.setState({
+        schedules
+      }, () => this.handleEditTeamOrder());
+    });
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleChangeOrder", (key, teamId, employeeId) => {
+      let schedules = [...this.state.schedules];
+      const index = schedules.findIndex(x => x.teamId === teamId),
+        totalItems = schedules[index].members.length,
+        sourceIndex = schedules[index].members.findIndex(schedule => schedule.employeeId === employeeId);
+      let destinationIndex = 0;
+      switch (key) {
+        case 'up':
+          destinationIndex = sourceIndex - 1;
+          break;
+        case 'down':
+          destinationIndex = sourceIndex + 1;
+          break;
+        case 'bottom':
+          destinationIndex = totalItems;
+          break;
+      }
+      if (destinationIndex < 0 || destinationIndex > totalItems || sourceIndex === destinationIndex) {
+        return;
+      }
+      schedules[index].members = Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_10__["reorder"])(schedules[index].members, sourceIndex, destinationIndex);
+      this.originalSchedules[index].members = Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_10__["reorder"])(this.originalSchedules[index].members, sourceIndex, destinationIndex);
+      this.setState({
+        schedules
+      }, () => this.handleEditDisplayOrder(index));
+    });
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleSelectEmployeeOfTeam", (teamId, employeeId, isSelected) => {
+      let schedules = [...this.state.schedules];
+      const gindex = schedules.findIndex(item => item.teamId === teamId);
+      let members = [...schedules[gindex].members];
+      if (employeeId !== null) {
+        const eindex = members.findIndex(item => item.employeeId === employeeId);
+        members[eindex] = _objectSpread(_objectSpread({}, members[eindex]), {}, {
+          isSelected
+        });
+        schedules[gindex] = _objectSpread(_objectSpread({}, schedules[gindex]), {}, {
+          isSelected: members.findIndex(item => !item.isSelected) < 0
+        });
+      } else {
+        schedules[gindex] = _objectSpread(_objectSpread({}, schedules[gindex]), {}, {
+          isSelected
+        });
+        const totalItems = members.length;
+        for (let eindex = 0; eindex < totalItems; eindex++) {
+          members[eindex] = _objectSpread(_objectSpread({}, members[eindex]), {}, {
+            isSelected
+          });
+        }
+      }
+      schedules[gindex] = _objectSpread(_objectSpread({}, schedules[gindex]), {}, {
+        members
+      });
+      this.setState({
+        schedules
+      });
+    });
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleSyncData", () => {
+      const employeeIds = [];
+      const schedules = this.state.schedules,
+        totalItems = schedules.length;
+      for (let gindex = 0; gindex < totalItems; gindex++) {
+        const totalMembers = schedules[gindex].members.length;
+        for (let eindex = 0; eindex < totalMembers; eindex++) {
+          if (schedules[gindex].members[eindex].isSelected) {
+            employeeIds.push(schedules[gindex].members[eindex].employeeId);
+          }
+        }
+      }
+      if (employeeIds.length > 0) {
+        this.setState({
+          selectedEmployeeIds: employeeIds,
+          showConfirmSyncDataModalDialog: true
+        });
+      } else {
+        react_toastify__WEBPACK_IMPORTED_MODULE_5__["toast"].warn('Please select at least a employee to continue!');
+      }
+    });
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleCloseConfirmSyncDataModalDialog", () => {
+      this.setState({
+        selectedEmployeeIds: [],
+        showConfirmSyncDataModalDialog: false
+      });
+    });
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleSubmitSyncData", () => {
+      Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_10__["blockUI"])();
+      const {
+        fromDate,
+        toDate
+      } = this.selectedWeek;
+      Object(axios__WEBPACK_IMPORTED_MODULE_6__["default"])({
+        url: Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_10__["resolveClientUrl"])('ScheduleArrange/SyncWorkingShift'),
+        method: 'POST',
+        data: Object(qs__WEBPACK_IMPORTED_MODULE_8__["stringify"])({
+          fromDate,
+          toDate,
+          employeeIds: this.state.selectedEmployeeIds.join(','),
+          companyId: this.state.filter.companyId
         }),
-            totalItems = schedules[index].members.length,
-            sourceIndex = schedules[index].members.findIndex(function (schedule) {
-            return schedule.employeeId === employeeId;
-        });
-        var destinationIndex = 0;
-
-        switch (key) {
-            case 'up':
-                destinationIndex = sourceIndex - 1;
-                break;
-            case 'down':
-                destinationIndex = sourceIndex + 1;
-                break;
-            case 'bottom':
-                destinationIndex = totalItems;
-                break;
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest',
+          'Content-Type': 'application/x-www-form-urlencoded'
         }
-
-        if (destinationIndex < 0 || destinationIndex > totalItems || sourceIndex === destinationIndex) {
-            return;
-        }
-
-        schedules[index].members = (0, _common.reorder)(schedules[index].members, sourceIndex, destinationIndex);
-        _this2.originalSchedules[index].members = (0, _common.reorder)(_this2.originalSchedules[index].members, sourceIndex, destinationIndex);
-        _this2.setState({ schedules: schedules }, function () {
-            return _this2.handleEditDisplayOrder(index);
-        });
-    };
-
-    this.handleSelectEmployeeOfTeam = function (teamId, employeeId, isSelected) {
-        var schedules = [].concat((0, _toConsumableArray3.default)(_this2.state.schedules));
-        var gindex = schedules.findIndex(function (item) {
-            return item.teamId === teamId;
-        });
-        var members = [].concat((0, _toConsumableArray3.default)(schedules[gindex].members));
-
-        if (employeeId !== null) {
-            var _eindex2 = members.findIndex(function (item) {
-                return item.employeeId === employeeId;
-            });
-            members[_eindex2] = (0, _extends11.default)({}, members[_eindex2], { isSelected: isSelected });
-            schedules[gindex] = (0, _extends11.default)({}, schedules[gindex], {
-                isSelected: members.findIndex(function (item) {
-                    return !item.isSelected;
-                }) < 0
-            });
-        } else {
-            schedules[gindex] = (0, _extends11.default)({}, schedules[gindex], { isSelected: isSelected });
-            var totalItems = members.length;
-            for (var _eindex3 = 0; _eindex3 < totalItems; _eindex3++) {
-                members[_eindex3] = (0, _extends11.default)({}, members[_eindex3], { isSelected: isSelected });
-            }
-        }
-
-        schedules[gindex] = (0, _extends11.default)({}, schedules[gindex], { members: members });
-        _this2.setState({ schedules: schedules });
-    };
-
-    this.handleSyncData = function () {
-        var employeeIds = [];
-        var schedules = _this2.state.schedules,
-            totalItems = schedules.length;
-        for (var _gindex3 = 0; _gindex3 < totalItems; _gindex3++) {
-            var totalMembers = schedules[_gindex3].members.length;
-            for (var _eindex4 = 0; _eindex4 < totalMembers; _eindex4++) {
-                if (schedules[_gindex3].members[_eindex4].isSelected) {
-                    employeeIds.push(schedules[_gindex3].members[_eindex4].employeeId);
-                }
-            }
-        }
-
-        if (employeeIds.length > 0) {
-            _this2.setState({
-                selectedEmployeeIds: employeeIds,
-                showConfirmSyncDataModalDialog: true
-            });
-        } else {
-            _reactToastify.toast.warn('Please select at least a employee to continue!');
-        }
-    };
-
-    this.handleCloseConfirmSyncDataModalDialog = function () {
-        _this2.setState({
+      }).then(response => {
+        const data = response.data;
+        if (data.isSuccessful) {
+          react_toastify__WEBPACK_IMPORTED_MODULE_5__["toast"].success('Synced successfully!');
+          this.setState({
             selectedEmployeeIds: [],
             showConfirmSyncDataModalDialog: false
-        });
+          });
+          this.getWeeklyShedules(this.state.filter);
+        } else {
+          react_toastify__WEBPACK_IMPORTED_MODULE_5__["toast"].error(data.message);
+        }
+      }).catch(_shared_common_functions__WEBPACK_IMPORTED_MODULE_10__["axiosError"]).then(() => Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_10__["unblockUI"])());
+    });
+    const _fromDate = moment__WEBPACK_IMPORTED_MODULE_7___default()().day('Monday').format(_shared_constants__WEBPACK_IMPORTED_MODULE_12__["DateFormat"]),
+      _toDate = moment__WEBPACK_IMPORTED_MODULE_7___default()(_fromDate).add(6, 'days').format(_shared_constants__WEBPACK_IMPORTED_MODULE_12__["DateFormat"]);
+    const companyElement = document.getElementById('CompanyId');
+    const roleElement = document.getElementById('RoleId');
+    const defaultCompanyId = companyElement ? companyElement.value : '';
+    const defaultRoleId = roleElement ? roleElement.value : '';
+    this.state = {
+      isHost: false,
+      filter: {
+        fromDate: _fromDate,
+        toDate: _toDate,
+        teamIds: '',
+        companyId: defaultCompanyId,
+        employee: {
+          value: 0,
+          label: ''
+        }
+      },
+      schedules: [],
+      employeeOptions: [],
+      selectedEmployeeIds: [],
+      showShiftMultipleModal: false,
+      showConfirmRefreshDataModal: false,
+      showConfirmSyncDataModalDialog: false,
+      showRemarkPopover: false,
+      editWeeklyDefaultShift: {
+        show: false,
+        teamId: 0,
+        employeeId: 0,
+        nickname: '',
+        data: null,
+        isUsedWeeklyDefaultShift: false
+      },
+      enableSyncWorkingShift: false
     };
-
-    this.handleSubmitSyncData = function () {
-        (0, _common.blockUI)();
-        var _selectedWeek2 = _this2.selectedWeek,
-            fromDate = _selectedWeek2.fromDate,
-            toDate = _selectedWeek2.toDate;
-
-
-        (0, _axios2.default)({
-            url: (0, _common.resolveClientUrl)('ScheduleArrange/SyncWorkingShift'),
-            method: 'POST',
-            data: (0, _qs.stringify)({
-                fromDate: fromDate,
-                toDate: toDate,
-                employeeIds: _this2.state.selectedEmployeeIds.join(','),
-                companyId: _this2.state.filter.companyId
-            }),
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest',
-                'Content-Type': 'application/x-www-form-urlencoded'
-            }
-        }).then(function (response) {
-            var data = response.data;
-            if (data.isSuccessful) {
-                _reactToastify.toast.success('Synced successfully!');
-
-                _this2.setState({
-                    selectedEmployeeIds: [],
-                    showConfirmSyncDataModalDialog: false
-                });
-
-                _this2.getWeeklyShedules(_this2.state.filter);
-            } else {
-                _reactToastify.toast.error(data.message);
-            }
-        }).catch(_common.axiosError).then(function () {
-            return (0, _common.unblockUI)();
-        });
+    this.originalSchedules = [];
+    this.teamOptions = [];
+    this.shiftOptions = [];
+    this.currentWeek = {
+      fromDate: _fromDate,
+      toDate: _toDate
     };
-};
-
-exports.default = App;
-
-
-_reactDom2.default.render(_react2.default.createElement(App, null), document.getElementById('schedule-wrapper'));
+    this.selectedWeek = {
+      fromDate: _fromDate,
+      toDate: _toDate
+    };
+    this.defaultRoleId = defaultRoleId;
+    this.scheduleAttrNames = ['mondaySchedule', 'tuesdaySchedule', 'wednesdaySchedule', 'thursdaySchedule', 'fridaySchedule', 'saturdaySchedule', 'sundaySchedule'];
+  }
+  componentDidMount() {
+    Object(_shared_components_CompanySelect__WEBPACK_IMPORTED_MODULE_16__["renderCompanySelect"])({
+      defaultCompanyId: this.state.filter.companyId,
+      roleId: this.defaultRoleId,
+      onChange: this.handleCompanyChange
+    });
+    const companyElement = document.getElementById('CompanyId');
+    const defaultCompanyId = companyElement ? companyElement.value : '';
+    this.loadShifts(defaultCompanyId);
+    window.addEventListener('beforeunload', this.onLeavingPageEventListener);
+  }
+  componentWillUnmount() {
+    window.removeEventListener('beforeunload', this.onLeavingPageEventListener);
+  }
+  render() {
+    const {
+      isHost,
+      enableSyncWorkingShift,
+      schedules,
+      showShiftMultipleModal,
+      showConfirmRefreshDataModal,
+      showRemarkPopover,
+      editWeeklyDefaultShift,
+      showConfirmSyncDataModalDialog
+    } = this.state;
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_3__["Fragment"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_shared_layouts_ToastLayout__WEBPACK_IMPORTED_MODULE_13__["default"], null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_Search__WEBPACK_IMPORTED_MODULE_19__["default"], {
+      showExportExcel: true,
+      teamOptions: this.teamOptions,
+      employeeOptions: this.state.employeeOptions,
+      filter: this.state.filter,
+      onSearchEmployees: this.getEmployees,
+      onChange: this.handleFilterChange,
+      onSubmit: this.handleGetWeeklyShedules,
+      onExportExcel: this.handleExportExcel,
+      onExportExcelDriverPickup: this.handleExportExcelDriverPickup
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_table_table__WEBPACK_IMPORTED_MODULE_20__["default"], {
+      isHost: isHost,
+      fromDate: this.selectedWeek.fromDate,
+      toDate: this.selectedWeek.toDate,
+      data: schedules,
+      shiftOptions: this.shiftOptions,
+      showRemarkPopover: showRemarkPopover,
+      onPrevious: this.handleGetPreviousWeekSchedule,
+      onNext: this.handleGetNextWeekSchedule,
+      onChangeSelectWeekDay: this.handleChangeSelectWeekDay,
+      onChangeSelectWeekDays: this.handleChangeSelectWeekDays,
+      onChangeShift: this.handleChangeShift,
+      onChangeDefaultShift: this.handleChangeDefaultShift,
+      onChangePublics: this.handleChangePublics,
+      onChangeOffNoShift: this.handleChangeOffNoShift,
+      onChangeOffdayOT: this.handleChangeOffDayOT,
+      onChangeWorkday: this.handleChangeWorkday,
+      onShiftMultiple: this.handleShiftMultiple,
+      onFixedOffDay: this.handleFixedOffDay,
+      onChangeShowRemarkPopover: this.handleChangeShowRemarkPopover,
+      onShowWeeklyDefaultShift: this.handleShowWeeklyDefaultShiftModal,
+      onUpdateRemark: this.handleUpdateRemark,
+      onDragEnd: this.handleDragEnd,
+      onChangeTeamOrder: this.handleChangeTeamOrder,
+      onChangeOrder: this.handleChangeOrder,
+      onSelectEmployeeOfTeam: this.handleSelectEmployeeOfTeam,
+      onSyncData: this.handleSyncData,
+      onSave: this.handleSave,
+      enableSyncWorkingShift: this.state.enableSyncWorkingShift
+    }), showShiftMultipleModal && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_ShiftMultipleModal__WEBPACK_IMPORTED_MODULE_17__["default"], {
+      show: showShiftMultipleModal,
+      onHide: this.handleCloseShiftMultipleModal,
+      shiftOptions: this.shiftOptions.filter(shift => shift.id !== _shared_constants__WEBPACK_IMPORTED_MODULE_12__["OffDayShiftId"]),
+      onSubmit: this.handleChangeMultipleShift
+    }), editWeeklyDefaultShift.show && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_WeeklyDefaultShiftModal__WEBPACK_IMPORTED_MODULE_18__["default"], {
+      show: editWeeklyDefaultShift.show,
+      isHost: isHost,
+      nickname: editWeeklyDefaultShift.nickname,
+      data: editWeeklyDefaultShift.data,
+      isUsedWeeklyDefaultShift: editWeeklyDefaultShift.isUsedWeeklyDefaultShift,
+      fromDate: moment__WEBPACK_IMPORTED_MODULE_7___default()(this.currentWeek.toDate).add(1, 'days').format(_shared_constants__WEBPACK_IMPORTED_MODULE_12__["DateFormat"]),
+      shiftOptions: this.shiftOptions,
+      onHide: this.handleCloseWeeklyDefaultShiftModal,
+      onSubmit: this.handleChangeWeeklyDefaultShift
+    }), showConfirmRefreshDataModal && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_shared_components_SweetModalDialog__WEBPACK_IMPORTED_MODULE_15__["default"], {
+      show: showConfirmRefreshDataModal,
+      contents: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement("p", null, "It looks like you have been editing something. If you refresh before saving, your changes will be lost."),
+      onHide: this.handleCloseConfirmRefreshDataModal,
+      onSubmit: this.handleSubmitRefreshData
+    }), showConfirmSyncDataModalDialog && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_shared_components_SweetModalDialog__WEBPACK_IMPORTED_MODULE_15__["default"], {
+      show: showConfirmSyncDataModalDialog,
+      contents: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement("p", null, "Are you sure you want to sync data from OWP?"),
+      onHide: this.handleCloseConfirmSyncDataModalDialog,
+      onSubmit: this.handleSubmitSyncData
+    }));
+  }
+}
+react_dom__WEBPACK_IMPORTED_MODULE_4___default.a.render(/*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(App, null), document.getElementById('schedule-wrapper'));
 
 /***/ }),
 
@@ -147308,93 +142512,48 @@ _reactDom2.default.render(_react2.default.createElement(App, null), document.get
 /*!*********************************************************************!*\
   !*** ./sources/js/pages/schedule-arrange/table/ColDefaultShift.jsx ***!
   \*********************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return ColDefaultShift; });
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "./node_modules/@babel/runtime/helpers/defineProperty.js");
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _ShiftAutocomplete__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../ShiftAutocomplete */ "./sources/js/pages/schedule-arrange/ShiftAutocomplete.jsx");
 
 
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
 
-var _getPrototypeOf = __webpack_require__(/*! babel-runtime/core-js/object/get-prototype-of */ "./node_modules/babel-runtime/core-js/object/get-prototype-of.js");
-
-var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
-
-var _classCallCheck2 = __webpack_require__(/*! babel-runtime/helpers/classCallCheck */ "./node_modules/babel-runtime/helpers/classCallCheck.js");
-
-var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
-
-var _createClass2 = __webpack_require__(/*! babel-runtime/helpers/createClass */ "./node_modules/babel-runtime/helpers/createClass.js");
-
-var _createClass3 = _interopRequireDefault(_createClass2);
-
-var _possibleConstructorReturn2 = __webpack_require__(/*! babel-runtime/helpers/possibleConstructorReturn */ "./node_modules/babel-runtime/helpers/possibleConstructorReturn.js");
-
-var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
-
-var _inherits2 = __webpack_require__(/*! babel-runtime/helpers/inherits */ "./node_modules/babel-runtime/helpers/inherits.js");
-
-var _inherits3 = _interopRequireDefault(_inherits2);
-
-var _react = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-
-var _react2 = _interopRequireDefault(_react);
-
-var _ShiftAutocomplete = __webpack_require__(/*! ../ShiftAutocomplete */ "./sources/js/pages/schedule-arrange/ShiftAutocomplete.jsx");
-
-var _ShiftAutocomplete2 = _interopRequireDefault(_ShiftAutocomplete);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var ColDefaultShift = function (_PureComponent) {
-    (0, _inherits3.default)(ColDefaultShift, _PureComponent);
-
-    function ColDefaultShift() {
-        var _ref;
-
-        var _temp, _this, _ret;
-
-        (0, _classCallCheck3.default)(this, ColDefaultShift);
-
-        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-            args[_key] = arguments[_key];
-        }
-
-        return _ret = (_temp = (_this = (0, _possibleConstructorReturn3.default)(this, (_ref = ColDefaultShift.__proto__ || (0, _getPrototypeOf2.default)(ColDefaultShift)).call.apply(_ref, [this].concat(args))), _this), _this.handleChangeDefaultShift = function (name, shift) {
-            var _this$props = _this.props,
-                teamId = _this$props.teamId,
-                employeeId = _this$props.employeeId;
-
-            _this.props.onChangeDefaultShift(teamId, employeeId, shift);
-        }, _temp), (0, _possibleConstructorReturn3.default)(_this, _ret);
-    }
-
-    (0, _createClass3.default)(ColDefaultShift, [{
-        key: 'render',
-        value: function render() {
-            var _props = this.props,
-                isHost = _props.isHost,
-                shiftOptions = _props.shiftOptions,
-                data = _props.data,
-                isUsedWeeklyDefaultShift = _props.isUsedWeeklyDefaultShift;
-
-
-            return _react2.default.createElement(
-                'div',
-                { className: 'table-cell cell-shift cell-default-shift ' + (isUsedWeeklyDefaultShift ? 'is-weekly' : '') },
-                !isUsedWeeklyDefaultShift && _react2.default.createElement(_ShiftAutocomplete2.default, { isDisabled: !isHost,
-                    shift: data, shiftOptions: shiftOptions,
-                    onChange: this.handleChangeDefaultShift
-                })
-            );
-        }
-    }]);
-    return ColDefaultShift;
-}(_react.PureComponent);
-
-exports.default = ColDefaultShift;
+class ColDefaultShift extends react__WEBPACK_IMPORTED_MODULE_1__["PureComponent"] {
+  constructor(...args) {
+    super(...args);
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleChangeDefaultShift", (name, shift) => {
+      const {
+        teamId,
+        employeeId
+      } = this.props;
+      this.props.onChangeDefaultShift(teamId, employeeId, shift);
+    });
+  }
+  render() {
+    const {
+      isHost,
+      shiftOptions,
+      data,
+      isUsedWeeklyDefaultShift
+    } = this.props;
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: `table-cell cell-shift cell-default-shift ${isUsedWeeklyDefaultShift ? 'is-weekly' : ''}`
+    }, !isUsedWeeklyDefaultShift && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_ShiftAutocomplete__WEBPACK_IMPORTED_MODULE_2__["default"], {
+      isDisabled: !isHost,
+      shift: data,
+      shiftOptions: shiftOptions,
+      onChange: this.handleChangeDefaultShift
+    }));
+  }
+}
 
 /***/ }),
 
@@ -147402,71 +142561,31 @@ exports.default = ColDefaultShift;
 /*!**************************************************************!*\
   !*** ./sources/js/pages/schedule-arrange/table/ColIndex.jsx ***!
   \**************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return ColIndex; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _common_functions__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../common.functions */ "./sources/js/pages/schedule-arrange/common.functions.js");
 
 
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _getPrototypeOf = __webpack_require__(/*! babel-runtime/core-js/object/get-prototype-of */ "./node_modules/babel-runtime/core-js/object/get-prototype-of.js");
-
-var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
-
-var _classCallCheck2 = __webpack_require__(/*! babel-runtime/helpers/classCallCheck */ "./node_modules/babel-runtime/helpers/classCallCheck.js");
-
-var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
-
-var _createClass2 = __webpack_require__(/*! babel-runtime/helpers/createClass */ "./node_modules/babel-runtime/helpers/createClass.js");
-
-var _createClass3 = _interopRequireDefault(_createClass2);
-
-var _possibleConstructorReturn2 = __webpack_require__(/*! babel-runtime/helpers/possibleConstructorReturn */ "./node_modules/babel-runtime/helpers/possibleConstructorReturn.js");
-
-var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
-
-var _inherits2 = __webpack_require__(/*! babel-runtime/helpers/inherits */ "./node_modules/babel-runtime/helpers/inherits.js");
-
-var _inherits3 = _interopRequireDefault(_inherits2);
-
-var _react = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-
-var _react2 = _interopRequireDefault(_react);
-
-var _common = __webpack_require__(/*! ../common.functions */ "./sources/js/pages/schedule-arrange/common.functions.js");
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var ColIndex = function (_PureComponent) {
-    (0, _inherits3.default)(ColIndex, _PureComponent);
-
-    function ColIndex() {
-        (0, _classCallCheck3.default)(this, ColIndex);
-        return (0, _possibleConstructorReturn3.default)(this, (ColIndex.__proto__ || (0, _getPrototypeOf2.default)(ColIndex)).apply(this, arguments));
-    }
-
-    (0, _createClass3.default)(ColIndex, [{
-        key: 'render',
-        value: function render() {
-            var data = this.props.data;
-
-            var totalOffDaysDefault = data.offDaysbyWeek + data.totalOffDayReplacement,
-                totalOffDays = (0, _common.getTotalOffDays)(data);
-
-            return _react2.default.createElement(
-                'div',
-                { className: 'table-cell cell-index' },
-                totalOffDaysDefault < totalOffDays ? _react2.default.createElement('i', { className: 'fa fa-exclamation-triangle' }) : ''
-            );
-        }
-    }]);
-    return ColIndex;
-}(_react.PureComponent);
-
-exports.default = ColIndex;
+class ColIndex extends react__WEBPACK_IMPORTED_MODULE_0__["PureComponent"] {
+  render() {
+    const {
+      data
+    } = this.props;
+    const totalOffDaysDefault = data.offDaysbyWeek + data.totalOffDayReplacement,
+      totalOffDays = Object(_common_functions__WEBPACK_IMPORTED_MODULE_1__["getTotalOffDays"])(data);
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+      className: "table-cell cell-index"
+    }, totalOffDaysDefault < totalOffDays ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+      className: "fa fa-exclamation-triangle"
+    }) : '');
+  }
+}
 
 /***/ }),
 
@@ -147474,233 +142593,159 @@ exports.default = ColIndex;
 /*!*****************************************************************!*\
   !*** ./sources/js/pages/schedule-arrange/table/ColNickname.jsx ***!
   \*****************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return ColNickname; });
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "./node_modules/@babel/runtime/helpers/defineProperty.js");
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/es/index.js");
+/* harmony import */ var _shared_components_DropdownOrder__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../shared/components/DropdownOrder */ "./sources/js/shared/components/DropdownOrder.jsx");
 
 
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _getPrototypeOf = __webpack_require__(/*! babel-runtime/core-js/object/get-prototype-of */ "./node_modules/babel-runtime/core-js/object/get-prototype-of.js");
-
-var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
-
-var _classCallCheck2 = __webpack_require__(/*! babel-runtime/helpers/classCallCheck */ "./node_modules/babel-runtime/helpers/classCallCheck.js");
-
-var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
-
-var _createClass2 = __webpack_require__(/*! babel-runtime/helpers/createClass */ "./node_modules/babel-runtime/helpers/createClass.js");
-
-var _createClass3 = _interopRequireDefault(_createClass2);
-
-var _possibleConstructorReturn2 = __webpack_require__(/*! babel-runtime/helpers/possibleConstructorReturn */ "./node_modules/babel-runtime/helpers/possibleConstructorReturn.js");
-
-var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
-
-var _inherits2 = __webpack_require__(/*! babel-runtime/helpers/inherits */ "./node_modules/babel-runtime/helpers/inherits.js");
-
-var _inherits3 = _interopRequireDefault(_inherits2);
-
-var _react = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-
-var _react2 = _interopRequireDefault(_react);
-
-var _reactBootstrap = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/es/index.js");
-
-var _DropdownOrder = __webpack_require__(/*! ../../../shared/components/DropdownOrder */ "./sources/js/shared/components/DropdownOrder.jsx");
-
-var _DropdownOrder2 = _interopRequireDefault(_DropdownOrder);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var ColNickname = function (_PureComponent) {
-    (0, _inherits3.default)(ColNickname, _PureComponent);
-
-    function ColNickname(props) {
-        (0, _classCallCheck3.default)(this, ColNickname);
-
-        var _this = (0, _possibleConstructorReturn3.default)(this, (ColNickname.__proto__ || (0, _getPrototypeOf2.default)(ColNickname)).call(this, props));
-
-        _this.handleShowPopover = function () {
-            var _this$props = _this.props,
-                isHost = _this$props.isHost,
-                showRemarkPopover = _this$props.showRemarkPopover;
 
 
-            if (isHost && !_this.state.showPopover && !showRemarkPopover) {
-                _this.setState({ showPopover: true });
-                _this.props.onChangeShowRemarkPopover(true);
-            }
-        };
-
-        _this.handleHidePopover = function () {
-            _this.setState({ showPopover: false });
-            _this.props.onChangeShowRemarkPopover(false);
-        };
-
-        _this.handleShowWeeklyDefaultShiftModal = function () {
-            var _this$props2 = _this.props,
-                teamId = _this$props2.teamId,
-                employeeId = _this$props2.employeeId;
-
-            _this.props.onShowWeeklyDefaultShift(teamId, employeeId);
-        };
-
-        _this.handleChangeRemark = function (event) {
-            _this.setState({ remark: event.target.value });
-        };
-
-        _this.handleUpdateRemark = function () {
-            var remark = _this.state.remark.trim();
-            var _this$props3 = _this.props,
-                teamId = _this$props3.teamId,
-                employeeId = _this$props3.employeeId;
-
-
-            _this.handleHidePopover();
-            _this.props.onChangeShowRemarkPopover(false);
-            _this.props.onUpdateRemark(teamId, employeeId, remark);
-        };
-
-        _this.handleMoveUp = function () {
-            var _this$props4 = _this.props,
-                teamId = _this$props4.teamId,
-                employeeId = _this$props4.employeeId;
-
-            _this.props.onChangeOrder('up', teamId, employeeId);
-        };
-
-        _this.handleMoveDown = function () {
-            var _this$props5 = _this.props,
-                teamId = _this$props5.teamId,
-                employeeId = _this$props5.employeeId;
-
-            _this.props.onChangeOrder('down', teamId, employeeId);
-        };
-
-        _this.handleMoveTop = function () {
-            var _this$props6 = _this.props,
-                teamId = _this$props6.teamId,
-                employeeId = _this$props6.employeeId;
-
-            _this.props.onChangeOrder('top', teamId, employeeId);
-        };
-
-        _this.handleMoveBottom = function () {
-            var _this$props7 = _this.props,
-                teamId = _this$props7.teamId,
-                employeeId = _this$props7.employeeId;
-
-            _this.props.onChangeOrder('bottom', teamId, employeeId);
-        };
-
-        _this.state = {
-            remark: props.remark !== null ? props.remark : '',
-            showPopover: false
-        };
-        return _this;
-    }
-
-    (0, _createClass3.default)(ColNickname, [{
-        key: 'render',
-        value: function render() {
-            var _props = this.props,
-                isHost = _props.isHost,
-                employeeId = _props.employeeId,
-                nickname = _props.nickname,
-                remark = _props.remark;
-
-
-            return _react2.default.createElement(
-                'div',
-                { className: 'table-cell cell-nickname' },
-                _react2.default.createElement(
-                    'div',
-                    { className: 'cell-nickname-wrapper' },
-                    _react2.default.createElement(
-                        'div',
-                        { className: 'info' },
-                        _react2.default.createElement(
-                            'div',
-                            { className: 'nickname' },
-                            nickname
-                        ),
-                        _react2.default.createElement(
-                            'div',
-                            { className: 'remark-wrapper' },
-                            _react2.default.createElement('i', { className: 'icon-remark ' + (remark !== null && remark.length > 0 ? 'has-remark' : '') + ' fa fa-commenting-o',
-                                title: 'Remark',
-                                onClick: this.handleShowPopover
-                            }),
-                            _react2.default.createElement(
-                                _reactBootstrap.OverlayTrigger,
-                                { trigger: ['hover'], placement: 'top',
-                                    overlay: _react2.default.createElement(
-                                        _reactBootstrap.Tooltip,
-                                        { id: 'remark' + employeeId },
-                                        remark
-                                    )
-                                },
-                                _react2.default.createElement(
-                                    'span',
-                                    { className: 'remark' },
-                                    remark
-                                )
-                            ),
-                            this.state.showPopover && _react2.default.createElement(
-                                'div',
-                                { className: 'remark-popover' },
-                                _react2.default.createElement(
-                                    'div',
-                                    { className: 'input-field' },
-                                    _react2.default.createElement(
-                                        'label',
-                                        null,
-                                        'Remark'
-                                    ),
-                                    _react2.default.createElement('textarea', { maxLength: '200', autoFocus: true, value: this.state.remark, onChange: this.handleChangeRemark })
-                                ),
-                                _react2.default.createElement(
-                                    'div',
-                                    { className: 'btn-control' },
-                                    _react2.default.createElement(
-                                        'a',
-                                        { className: 'btn btn-primary', onClick: this.handleUpdateRemark },
-                                        'Save'
-                                    ),
-                                    _react2.default.createElement(
-                                        'a',
-                                        { className: 'btn btn-default', onClick: this.handleHidePopover },
-                                        'Cancel'
-                                    )
-                                )
-                            )
-                        )
-                    ),
-                    _react2.default.createElement(
-                        'div',
-                        { className: 'action' },
-                        _react2.default.createElement('i', { className: 'icon icon-default-shift', title: 'Weekly default shift',
-                            onClick: this.handleShowWeeklyDefaultShiftModal
-                        }),
-                        isHost && _react2.default.createElement(_DropdownOrder2.default, { id: 'dropdown' + employeeId,
-                            onMoveUp: this.handleMoveUp,
-                            onMoveDown: this.handleMoveDown,
-                            onMoveTop: this.handleMoveTop,
-                            onMoveBottom: this.handleMoveBottom
-                        })
-                    )
-                )
-            );
-        }
-    }]);
-    return ColNickname;
-}(_react.PureComponent);
-
-exports.default = ColNickname;
+class ColNickname extends react__WEBPACK_IMPORTED_MODULE_1__["PureComponent"] {
+  constructor(props) {
+    super(props);
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleShowPopover", () => {
+      const {
+        isHost,
+        showRemarkPopover
+      } = this.props;
+      if (isHost && !this.state.showPopover && !showRemarkPopover) {
+        this.setState({
+          showPopover: true
+        });
+        this.props.onChangeShowRemarkPopover(true);
+      }
+    });
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleHidePopover", () => {
+      this.setState({
+        showPopover: false
+      });
+      this.props.onChangeShowRemarkPopover(false);
+    });
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleShowWeeklyDefaultShiftModal", () => {
+      const {
+        teamId,
+        employeeId
+      } = this.props;
+      this.props.onShowWeeklyDefaultShift(teamId, employeeId);
+    });
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleChangeRemark", event => {
+      this.setState({
+        remark: event.target.value
+      });
+    });
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleUpdateRemark", () => {
+      const remark = this.state.remark.trim();
+      const {
+        teamId,
+        employeeId
+      } = this.props;
+      this.handleHidePopover();
+      this.props.onChangeShowRemarkPopover(false);
+      this.props.onUpdateRemark(teamId, employeeId, remark);
+    });
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleMoveUp", () => {
+      const {
+        teamId,
+        employeeId
+      } = this.props;
+      this.props.onChangeOrder('up', teamId, employeeId);
+    });
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleMoveDown", () => {
+      const {
+        teamId,
+        employeeId
+      } = this.props;
+      this.props.onChangeOrder('down', teamId, employeeId);
+    });
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleMoveTop", () => {
+      const {
+        teamId,
+        employeeId
+      } = this.props;
+      this.props.onChangeOrder('top', teamId, employeeId);
+    });
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleMoveBottom", () => {
+      const {
+        teamId,
+        employeeId
+      } = this.props;
+      this.props.onChangeOrder('bottom', teamId, employeeId);
+    });
+    this.state = {
+      remark: props.remark !== null ? props.remark : '',
+      showPopover: false
+    };
+  }
+  render() {
+    const {
+      isHost,
+      employeeId,
+      nickname,
+      remark
+    } = this.props;
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: "table-cell cell-nickname"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: "cell-nickname-wrapper"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: "info"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: "nickname"
+    }, nickname), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: "remark-wrapper"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("i", {
+      className: `icon-remark ${remark !== null && remark.length > 0 ? 'has-remark' : ''} fa fa-commenting-o`,
+      title: "Remark",
+      onClick: this.handleShowPopover
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["OverlayTrigger"], {
+      trigger: ['hover'],
+      placement: 'top',
+      overlay: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Tooltip"], {
+        id: `remark${employeeId}`
+      }, remark)
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("span", {
+      className: "remark"
+    }, remark)), this.state.showPopover && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: "remark-popover"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: "input-field"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", null, "Remark"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("textarea", {
+      maxLength: "200",
+      autoFocus: true,
+      value: this.state.remark,
+      onChange: this.handleChangeRemark
+    })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: "btn-control"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("a", {
+      className: "btn btn-primary",
+      onClick: this.handleUpdateRemark
+    }, "Save"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("a", {
+      className: "btn btn-default",
+      onClick: this.handleHidePopover
+    }, "Cancel"))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: "action"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("i", {
+      className: "icon icon-default-shift",
+      title: "Weekly default shift",
+      onClick: this.handleShowWeeklyDefaultShiftModal
+    }), isHost && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_shared_components_DropdownOrder__WEBPACK_IMPORTED_MODULE_3__["default"], {
+      id: `dropdown${employeeId}`,
+      onMoveUp: this.handleMoveUp,
+      onMoveDown: this.handleMoveDown,
+      onMoveTop: this.handleMoveTop,
+      onMoveBottom: this.handleMoveBottom
+    }))));
+  }
+}
 
 /***/ }),
 
@@ -147708,163 +142753,121 @@ exports.default = ColNickname;
 /*!**************************************************************!*\
   !*** ./sources/js/pages/schedule-arrange/table/ColShift.jsx ***!
   \**************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return ColShift; });
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "./node_modules/@babel/runtime/helpers/defineProperty.js");
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _shared_constants__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../shared/constants */ "./sources/js/shared/constants.js");
+/* harmony import */ var _common_functions__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../common.functions */ "./sources/js/pages/schedule-arrange/common.functions.js");
+/* harmony import */ var _ShiftAutocomplete__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../ShiftAutocomplete */ "./sources/js/pages/schedule-arrange/ShiftAutocomplete.jsx");
+/* harmony import */ var _TooltipRequestInfo__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./TooltipRequestInfo */ "./sources/js/pages/schedule-arrange/table/TooltipRequestInfo.jsx");
+
+function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
 
 
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
 
-var _extends2 = __webpack_require__(/*! babel-runtime/helpers/extends */ "./node_modules/babel-runtime/helpers/extends.js");
 
-var _extends3 = _interopRequireDefault(_extends2);
 
-var _getPrototypeOf = __webpack_require__(/*! babel-runtime/core-js/object/get-prototype-of */ "./node_modules/babel-runtime/core-js/object/get-prototype-of.js");
-
-var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
-
-var _classCallCheck2 = __webpack_require__(/*! babel-runtime/helpers/classCallCheck */ "./node_modules/babel-runtime/helpers/classCallCheck.js");
-
-var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
-
-var _createClass2 = __webpack_require__(/*! babel-runtime/helpers/createClass */ "./node_modules/babel-runtime/helpers/createClass.js");
-
-var _createClass3 = _interopRequireDefault(_createClass2);
-
-var _possibleConstructorReturn2 = __webpack_require__(/*! babel-runtime/helpers/possibleConstructorReturn */ "./node_modules/babel-runtime/helpers/possibleConstructorReturn.js");
-
-var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
-
-var _inherits2 = __webpack_require__(/*! babel-runtime/helpers/inherits */ "./node_modules/babel-runtime/helpers/inherits.js");
-
-var _inherits3 = _interopRequireDefault(_inherits2);
-
-var _react = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-
-var _react2 = _interopRequireDefault(_react);
-
-var _constants = __webpack_require__(/*! ../../../shared/constants */ "./sources/js/shared/constants.js");
-
-var _common = __webpack_require__(/*! ../common.functions */ "./sources/js/pages/schedule-arrange/common.functions.js");
-
-var _ShiftAutocomplete = __webpack_require__(/*! ../ShiftAutocomplete */ "./sources/js/pages/schedule-arrange/ShiftAutocomplete.jsx");
-
-var _ShiftAutocomplete2 = _interopRequireDefault(_ShiftAutocomplete);
-
-var _TooltipRequestInfo = __webpack_require__(/*! ./TooltipRequestInfo */ "./sources/js/pages/schedule-arrange/table/TooltipRequestInfo.jsx");
-
-var _TooltipRequestInfo2 = _interopRequireDefault(_TooltipRequestInfo);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var ColShift = function (_PureComponent) {
-    (0, _inherits3.default)(ColShift, _PureComponent);
-
-    function ColShift(props) {
-        (0, _classCallCheck3.default)(this, ColShift);
-
-        var _this = (0, _possibleConstructorReturn3.default)(this, (ColShift.__proto__ || (0, _getPrototypeOf2.default)(ColShift)).call(this, props));
-
-        _this.handleChangeSelectWeekDay = function (event) {
-            _this.props.onChangeSelectWeekDay(_this.props.scheduleAttrName, event.target.checked);
-        };
-
-        _this.handleChangeShift = function (scheduleAttrName, shift) {
-            _this.props.onChangeShift(scheduleAttrName, shift);
-        };
-
-        _this.handleMouseOver = function () {
-            if (!_this.state.isShowCheckbox) {
-                _this.setState({ isShowCheckbox: true });
-            }
-        };
-
-        _this.handleMouseLeave = function () {
-            if (_this.state.isShowCheckbox && !_this.props.isChecked) {
-                _this.setState({ isShowCheckbox: false });
-            }
-        };
-
-        _this.isSkipOffDay = function (data) {
-            return data.isLeaveHalfDay || data.isChangeShift || data.isKeepInView && data.isOffDay;
-        };
-
-        _this.state = {
-            isShowCheckbox: props.isChecked
-        };
-        return _this;
+class ColShift extends react__WEBPACK_IMPORTED_MODULE_1__["PureComponent"] {
+  constructor(props) {
+    super(props);
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleChangeSelectWeekDay", event => {
+      this.props.onChangeSelectWeekDay(this.props.scheduleAttrName, event.target.checked);
+    });
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleChangeShift", (scheduleAttrName, shift) => {
+      this.props.onChangeShift(scheduleAttrName, shift);
+    });
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleMouseOver", () => {
+      if (!this.state.isShowCheckbox) {
+        this.setState({
+          isShowCheckbox: true
+        });
+      }
+    });
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleMouseLeave", () => {
+      if (this.state.isShowCheckbox && !this.props.isChecked) {
+        this.setState({
+          isShowCheckbox: false
+        });
+      }
+    });
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "isSkipOffDay", data => {
+      return data.isLeaveHalfDay || data.isChangeShift || data.isKeepInView && data.isOffDay;
+    });
+    this.state = {
+      isShowCheckbox: props.isChecked
+    };
+  }
+  componentDidUpdate(prevProps) {
+    if (this.props.isChecked !== prevProps.isChecked) {
+      this.setState({
+        isShowCheckbox: this.props.isChecked
+      });
     }
-
-    (0, _createClass3.default)(ColShift, [{
-        key: 'componentDidUpdate',
-        value: function componentDidUpdate(prevProps) {
-            if (this.props.isChecked !== prevProps.isChecked) {
-                this.setState({ isShowCheckbox: this.props.isChecked });
-            }
-        }
-    }, {
-        key: 'render',
-        value: function render() {
-            var _props = this.props,
-                employeeId = _props.employeeId,
-                data = _props.data,
-                isHost = _props.isHost,
-                scheduleAttrName = _props.scheduleAttrName,
-                defaultShift = _props.defaultShift,
-                shiftOptions = _props.shiftOptions,
-                isUsedWeeklyDefaultShift = _props.isUsedWeeklyDefaultShift;
-
-            var shiftInfo = (0, _common.getColumnShiftInfo)(data, isHost, defaultShift, isUsedWeeklyDefaultShift);
-
-            var shift = void 0;
-            if (data.shift === null) {
-                shift = { code: shiftInfo.value, name: shiftInfo.value };
-            } else if (data.shift.code !== shiftInfo.value) {
-                shift = (0, _extends3.default)({}, data.shift, { code: shiftInfo.value, name: shiftInfo.value });
-            } else {
-                shift = data.shift;
-            }
-
-            return _react2.default.createElement(
-                'div',
-                { className: 'table-cell cell-shift', onMouseOver: this.handleMouseOver, onMouseLeave: this.handleMouseLeave },
-                _react2.default.createElement(
-                    'div',
-                    { className: 'cell-shift-wrapper ' + (data.isLeaveHalfDay ? 'leavehalfday' : '') },
-                    shiftInfo.details !== '' && _react2.default.createElement(_TooltipRequestInfo2.default, { id: 'moreInfo-' + scheduleAttrName + employeeId,
-                        requestInfo: shiftInfo,
-                        isLeaveHalfDay: data.isLeaveHalfDay
-                    }),
-                    _react2.default.createElement(_ShiftAutocomplete2.default, {
-                        shift: shift,
-                        name: scheduleAttrName,
-                        className: shiftInfo.class,
-                        placeholder: shiftInfo.placeholder,
-                        isDisabled: shiftInfo.isDisabled,
-                        shiftOptions: this.isSkipOffDay(data) ? shiftOptions.filter(function (item) {
-                            return item.id !== _constants.OffDayShiftId;
-                        }) : shiftOptions,
-                        onChange: this.handleChangeShift
-                    }),
-                    _react2.default.createElement(
-                        'div',
-                        { className: 'checkbox ' + (shiftInfo.isShowCheckBox && this.state.isShowCheckbox ? '' : 'hidden') },
-                        _react2.default.createElement('input', { type: 'checkbox', className: 'checkbox-custom ' + scheduleAttrName, checked: this.props.isChecked,
-                            id: 'ckb-' + scheduleAttrName + employeeId, onChange: this.handleChangeSelectWeekDay
-                        }),
-                        _react2.default.createElement('label', { htmlFor: 'ckb-' + scheduleAttrName + employeeId })
-                    )
-                )
-            );
-        }
-    }]);
-    return ColShift;
-}(_react.PureComponent);
-
-exports.default = ColShift;
+  }
+  render() {
+    const {
+      employeeId,
+      data,
+      isHost,
+      scheduleAttrName,
+      defaultShift,
+      shiftOptions,
+      isUsedWeeklyDefaultShift
+    } = this.props;
+    const shiftInfo = Object(_common_functions__WEBPACK_IMPORTED_MODULE_3__["getColumnShiftInfo"])(data, isHost, defaultShift, isUsedWeeklyDefaultShift);
+    let shift;
+    if (data.shift === null) {
+      shift = {
+        code: shiftInfo.value,
+        name: shiftInfo.value
+      };
+    } else if (data.shift.code !== shiftInfo.value) {
+      shift = _objectSpread(_objectSpread({}, data.shift), {}, {
+        code: shiftInfo.value,
+        name: shiftInfo.value
+      });
+    } else {
+      shift = data.shift;
+    }
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: "table-cell cell-shift",
+      onMouseOver: this.handleMouseOver,
+      onMouseLeave: this.handleMouseLeave
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: `cell-shift-wrapper ${data.isLeaveHalfDay ? 'leavehalfday' : ''}`
+    }, shiftInfo.details !== '' && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_TooltipRequestInfo__WEBPACK_IMPORTED_MODULE_5__["default"], {
+      id: `moreInfo-${scheduleAttrName}${employeeId}`,
+      requestInfo: shiftInfo,
+      isLeaveHalfDay: data.isLeaveHalfDay
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_ShiftAutocomplete__WEBPACK_IMPORTED_MODULE_4__["default"], {
+      shift: shift,
+      name: scheduleAttrName,
+      className: shiftInfo.class,
+      placeholder: shiftInfo.placeholder,
+      isDisabled: shiftInfo.isDisabled,
+      shiftOptions: this.isSkipOffDay(data) ? shiftOptions.filter(item => item.id !== _shared_constants__WEBPACK_IMPORTED_MODULE_2__["OffDayShiftId"]) : shiftOptions,
+      onChange: this.handleChangeShift
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: `checkbox ${shiftInfo.isShowCheckBox && this.state.isShowCheckbox ? '' : 'hidden'}`
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
+      type: "checkbox",
+      className: `checkbox-custom ${scheduleAttrName}`,
+      checked: this.props.isChecked,
+      id: `ckb-${scheduleAttrName}${employeeId}`,
+      onChange: this.handleChangeSelectWeekDay
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", {
+      htmlFor: `ckb-${scheduleAttrName}${employeeId}`
+    }))));
+  }
+}
 
 /***/ }),
 
@@ -147872,146 +142875,56 @@ exports.default = ColShift;
 /*!**********************************************************************!*\
   !*** ./sources/js/pages/schedule-arrange/table/ColorDescription.jsx ***!
   \**********************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return ColorDescription; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/es/index.js");
 
 
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _getPrototypeOf = __webpack_require__(/*! babel-runtime/core-js/object/get-prototype-of */ "./node_modules/babel-runtime/core-js/object/get-prototype-of.js");
-
-var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
-
-var _classCallCheck2 = __webpack_require__(/*! babel-runtime/helpers/classCallCheck */ "./node_modules/babel-runtime/helpers/classCallCheck.js");
-
-var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
-
-var _createClass2 = __webpack_require__(/*! babel-runtime/helpers/createClass */ "./node_modules/babel-runtime/helpers/createClass.js");
-
-var _createClass3 = _interopRequireDefault(_createClass2);
-
-var _possibleConstructorReturn2 = __webpack_require__(/*! babel-runtime/helpers/possibleConstructorReturn */ "./node_modules/babel-runtime/helpers/possibleConstructorReturn.js");
-
-var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
-
-var _inherits2 = __webpack_require__(/*! babel-runtime/helpers/inherits */ "./node_modules/babel-runtime/helpers/inherits.js");
-
-var _inherits3 = _interopRequireDefault(_inherits2);
-
-var _react = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-
-var _react2 = _interopRequireDefault(_react);
-
-var _reactBootstrap = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/es/index.js");
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var ColorDescription = function (_PureComponent) {
-    (0, _inherits3.default)(ColorDescription, _PureComponent);
-
-    function ColorDescription() {
-        (0, _classCallCheck3.default)(this, ColorDescription);
-        return (0, _possibleConstructorReturn3.default)(this, (ColorDescription.__proto__ || (0, _getPrototypeOf2.default)(ColorDescription)).apply(this, arguments));
-    }
-
-    (0, _createClass3.default)(ColorDescription, [{
-        key: 'render',
-        value: function render() {
-            return _react2.default.createElement(
-                _reactBootstrap.Dropdown,
-                { id: 'dropdownColorDescription', componentClass: 'span', className: 'dropdown-color' },
-                _react2.default.createElement(
-                    _reactBootstrap.Dropdown.Toggle,
-                    { noCaret: true, className: 'btn' },
-                    _react2.default.createElement('img', { src: '../sources/styles/images/pantone.svg', width: '17' })
-                ),
-                _react2.default.createElement(
-                    _reactBootstrap.Dropdown.Menu,
-                    null,
-                    _react2.default.createElement(
-                        _reactBootstrap.MenuItem,
-                        null,
-                        _react2.default.createElement('span', { className: 'holiday' }),
-                        'Public Holiday'
-                    ),
-                    _react2.default.createElement(
-                        _reactBootstrap.MenuItem,
-                        null,
-                        _react2.default.createElement('span', { className: 'offday' }),
-                        'Off Day'
-                    ),
-                    _react2.default.createElement(
-                        _reactBootstrap.MenuItem,
-                        null,
-                        _react2.default.createElement('span', { className: 'offdayreplacement' }),
-                        'Off Replacement'
-                    ),
-                    _react2.default.createElement(
-                        _reactBootstrap.MenuItem,
-                        null,
-                        _react2.default.createElement('span', { className: 'keepinviewday' }),
-                        'Compensation Leave'
-                    ),
-                    _react2.default.createElement(
-                        _reactBootstrap.MenuItem,
-                        null,
-                        _react2.default.createElement('span', { className: 'changeshift' }),
-                        'Change Shift'
-                    ),
-                    _react2.default.createElement(
-                        _reactBootstrap.MenuItem,
-                        null,
-                        _react2.default.createElement('span', { className: 'overtime' }),
-                        'Overtime'
-                    ),
-                    _react2.default.createElement(
-                        _reactBootstrap.MenuItem,
-                        null,
-                        _react2.default.createElement('span', { className: 'annualleave' }),
-                        'Annual Leave'
-                    ),
-                    _react2.default.createElement(
-                        _reactBootstrap.MenuItem,
-                        null,
-                        _react2.default.createElement('span', { className: 'unpaidleave' }),
-                        'Unpaid Leave'
-                    ),
-                    _react2.default.createElement(
-                        _reactBootstrap.MenuItem,
-                        null,
-                        _react2.default.createElement('span', { className: 'businesstrip' }),
-                        'Business Trip'
-                    ),
-                    _react2.default.createElement(
-                        _reactBootstrap.MenuItem,
-                        null,
-                        _react2.default.createElement('span', { className: 'weddingleave' }),
-                        'Wedding Leave'
-                    ),
-                    _react2.default.createElement(
-                        _reactBootstrap.MenuItem,
-                        null,
-                        _react2.default.createElement('span', { className: 'leavehalfday2' }),
-                        '2 Leaves Half Day'
-                    ),
-                    _react2.default.createElement(
-                        _reactBootstrap.MenuItem,
-                        null,
-                        _react2.default.createElement('span', { className: 'leaveday' }),
-                        'Others Leave'
-                    )
-                )
-            );
-        }
-    }]);
-    return ColorDescription;
-}(_react.PureComponent);
-
-exports.default = ColorDescription;
+class ColorDescription extends react__WEBPACK_IMPORTED_MODULE_0__["PureComponent"] {
+  render() {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Dropdown"], {
+      id: `dropdownColorDescription`,
+      componentClass: "span",
+      className: "dropdown-color"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Dropdown"].Toggle, {
+      noCaret: true,
+      className: "btn"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("img", {
+      src: "../sources/styles/images/pantone.svg",
+      width: "17"
+    })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Dropdown"].Menu, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["MenuItem"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+      className: "holiday"
+    }), "Public Holiday"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["MenuItem"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+      className: "offday"
+    }), "Off Day"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["MenuItem"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+      className: "offdayreplacement"
+    }), "Off Replacement"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["MenuItem"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+      className: "keepinviewday"
+    }), "Compensation Leave"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["MenuItem"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+      className: "changeshift"
+    }), "Change Shift"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["MenuItem"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+      className: "overtime"
+    }), "Overtime"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["MenuItem"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+      className: "annualleave"
+    }), "Annual Leave"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["MenuItem"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+      className: "unpaidleave"
+    }), "Unpaid Leave"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["MenuItem"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+      className: "businesstrip"
+    }), "Business Trip"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["MenuItem"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+      className: "weddingleave"
+    }), "Wedding Leave"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["MenuItem"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+      className: "leavehalfday2"
+    }), "2 Leaves Half Day"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["MenuItem"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+      className: "leaveday"
+    }), "Others Leave")));
+  }
+}
 
 /***/ }),
 
@@ -148019,118 +142932,61 @@ exports.default = ColorDescription;
 /*!*********************************************************************!*\
   !*** ./sources/js/pages/schedule-arrange/table/DroppableMember.jsx ***!
   \*********************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return DroppableMember; });
+/* harmony import */ var _babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/extends */ "./node_modules/@babel/runtime/helpers/extends.js");
+/* harmony import */ var _babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var react_beautiful_dnd__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-beautiful-dnd */ "./node_modules/react-beautiful-dnd/dist/react-beautiful-dnd.esm.js");
+/* harmony import */ var _Row__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Row */ "./sources/js/pages/schedule-arrange/table/Row.jsx");
 
 
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _extends2 = __webpack_require__(/*! babel-runtime/helpers/extends */ "./node_modules/babel-runtime/helpers/extends.js");
-
-var _extends3 = _interopRequireDefault(_extends2);
-
-var _getPrototypeOf = __webpack_require__(/*! babel-runtime/core-js/object/get-prototype-of */ "./node_modules/babel-runtime/core-js/object/get-prototype-of.js");
-
-var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
-
-var _classCallCheck2 = __webpack_require__(/*! babel-runtime/helpers/classCallCheck */ "./node_modules/babel-runtime/helpers/classCallCheck.js");
-
-var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
-
-var _createClass2 = __webpack_require__(/*! babel-runtime/helpers/createClass */ "./node_modules/babel-runtime/helpers/createClass.js");
-
-var _createClass3 = _interopRequireDefault(_createClass2);
-
-var _possibleConstructorReturn2 = __webpack_require__(/*! babel-runtime/helpers/possibleConstructorReturn */ "./node_modules/babel-runtime/helpers/possibleConstructorReturn.js");
-
-var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
-
-var _inherits2 = __webpack_require__(/*! babel-runtime/helpers/inherits */ "./node_modules/babel-runtime/helpers/inherits.js");
-
-var _inherits3 = _interopRequireDefault(_inherits2);
-
-var _react = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-
-var _react2 = _interopRequireDefault(_react);
-
-var _reactBeautifulDnd = __webpack_require__(/*! react-beautiful-dnd */ "./node_modules/react-beautiful-dnd/dist/react-beautiful-dnd.esm.js");
-
-var _Row = __webpack_require__(/*! ./Row */ "./sources/js/pages/schedule-arrange/table/Row.jsx");
-
-var _Row2 = _interopRequireDefault(_Row);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var DroppableMember = function (_PureComponent) {
-    (0, _inherits3.default)(DroppableMember, _PureComponent);
-
-    function DroppableMember() {
-        (0, _classCallCheck3.default)(this, DroppableMember);
-        return (0, _possibleConstructorReturn3.default)(this, (DroppableMember.__proto__ || (0, _getPrototypeOf2.default)(DroppableMember)).apply(this, arguments));
-    }
-
-    (0, _createClass3.default)(DroppableMember, [{
-        key: 'render',
-        value: function render() {
-            var _this2 = this;
-
-            var _props = this.props,
-                isHost = _props.isHost,
-                shiftOptions = _props.shiftOptions,
-                teamId = _props.teamId,
-                data = _props.data;
 
 
-            return _react2.default.createElement(
-                _reactBeautifulDnd.Droppable,
-                { droppableId: 'dropable' + teamId, isDropDisabled: !isHost, type: 'droppableMember-' + teamId },
-                function (provided) {
-                    return _react2.default.createElement(
-                        'div',
-                        (0, _extends3.default)({ ref: provided.innerRef }, provided.droppableProps),
-                        data.map(function (member, eindex) {
-                            return _react2.default.createElement(
-                                _reactBeautifulDnd.Draggable,
-                                { key: 'member' + member.employeeId, draggableId: 'member' + member.employeeId,
-                                    index: eindex, isDragDisabled: !isHost
-                                },
-                                function (memberProvided, memberSnapshot) {
-                                    return _react2.default.createElement(
-                                        'div',
-                                        null,
-                                        _react2.default.createElement(_Row2.default, { draggableProvided: memberProvided,
-                                            isHost: isHost, teamId: teamId, data: member,
-                                            shiftOptions: shiftOptions, isDragging: memberSnapshot.isDragging,
-                                            showRemarkPopover: _this2.props.showRemarkPopover,
-                                            onChangeSelectWeekDay: _this2.props.onChangeSelectWeekDay,
-                                            onChangeShift: _this2.props.onChangeShift,
-                                            onChangeDefaultShift: _this2.props.onChangeDefaultShift,
-                                            onChangeShowRemarkPopover: _this2.props.onChangeShowRemarkPopover,
-                                            onShowWeeklyDefaultShift: _this2.props.onShowWeeklyDefaultShift,
-                                            onUpdateRemark: _this2.props.onUpdateRemark,
-                                            onChangeOrder: _this2.props.onChangeOrder,
-                                            onSelectEmployeeOfTeam: _this2.props.onSelectEmployeeOfTeam,
-                                            enableSyncWorkingShift: _this2.props.enableSyncWorkingShift
-                                        }),
-                                        memberProvided.placeholder
-                                    );
-                                }
-                            );
-                        }),
-                        provided.placeholder
-                    );
-                }
-            );
-        }
-    }]);
-    return DroppableMember;
-}(_react.PureComponent);
-
-exports.default = DroppableMember;
+class DroppableMember extends react__WEBPACK_IMPORTED_MODULE_1__["PureComponent"] {
+  render() {
+    const {
+      isHost,
+      shiftOptions,
+      teamId,
+      data
+    } = this.props;
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_beautiful_dnd__WEBPACK_IMPORTED_MODULE_2__["Droppable"], {
+      droppableId: `dropable${teamId}`,
+      isDropDisabled: !isHost,
+      type: `droppableMember-${teamId}`
+    }, provided => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", _babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_0___default()({
+      ref: provided.innerRef
+    }, provided.droppableProps), data.map((member, eindex) => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_beautiful_dnd__WEBPACK_IMPORTED_MODULE_2__["Draggable"], {
+      key: `member${member.employeeId}`,
+      draggableId: `member${member.employeeId}`,
+      index: eindex,
+      isDragDisabled: !isHost
+    }, (memberProvided, memberSnapshot) => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_Row__WEBPACK_IMPORTED_MODULE_3__["default"], {
+      draggableProvided: memberProvided,
+      isHost: isHost,
+      teamId: teamId,
+      data: member,
+      shiftOptions: shiftOptions,
+      isDragging: memberSnapshot.isDragging,
+      showRemarkPopover: this.props.showRemarkPopover,
+      onChangeSelectWeekDay: this.props.onChangeSelectWeekDay,
+      onChangeShift: this.props.onChangeShift,
+      onChangeDefaultShift: this.props.onChangeDefaultShift,
+      onChangeShowRemarkPopover: this.props.onChangeShowRemarkPopover,
+      onShowWeeklyDefaultShift: this.props.onShowWeeklyDefaultShift,
+      onUpdateRemark: this.props.onUpdateRemark,
+      onChangeOrder: this.props.onChangeOrder,
+      onSelectEmployeeOfTeam: this.props.onSelectEmployeeOfTeam,
+      enableSyncWorkingShift: this.props.enableSyncWorkingShift
+    }), memberProvided.placeholder))), provided.placeholder));
+  }
+}
 
 /***/ }),
 
@@ -148138,118 +142994,61 @@ exports.default = DroppableMember;
 /*!*******************************************************************!*\
   !*** ./sources/js/pages/schedule-arrange/table/DroppableTeam.jsx ***!
   \*******************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return DroppableTeam; });
+/* harmony import */ var _babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/extends */ "./node_modules/@babel/runtime/helpers/extends.js");
+/* harmony import */ var _babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var react_beautiful_dnd__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-beautiful-dnd */ "./node_modules/react-beautiful-dnd/dist/react-beautiful-dnd.esm.js");
+/* harmony import */ var _RowTeam__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./RowTeam */ "./sources/js/pages/schedule-arrange/table/RowTeam.jsx");
 
 
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
 
-var _extends2 = __webpack_require__(/*! babel-runtime/helpers/extends */ "./node_modules/babel-runtime/helpers/extends.js");
 
-var _extends3 = _interopRequireDefault(_extends2);
-
-var _getPrototypeOf = __webpack_require__(/*! babel-runtime/core-js/object/get-prototype-of */ "./node_modules/babel-runtime/core-js/object/get-prototype-of.js");
-
-var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
-
-var _classCallCheck2 = __webpack_require__(/*! babel-runtime/helpers/classCallCheck */ "./node_modules/babel-runtime/helpers/classCallCheck.js");
-
-var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
-
-var _createClass2 = __webpack_require__(/*! babel-runtime/helpers/createClass */ "./node_modules/babel-runtime/helpers/createClass.js");
-
-var _createClass3 = _interopRequireDefault(_createClass2);
-
-var _possibleConstructorReturn2 = __webpack_require__(/*! babel-runtime/helpers/possibleConstructorReturn */ "./node_modules/babel-runtime/helpers/possibleConstructorReturn.js");
-
-var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
-
-var _inherits2 = __webpack_require__(/*! babel-runtime/helpers/inherits */ "./node_modules/babel-runtime/helpers/inherits.js");
-
-var _inherits3 = _interopRequireDefault(_inherits2);
-
-var _react = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-
-var _react2 = _interopRequireDefault(_react);
-
-var _reactBeautifulDnd = __webpack_require__(/*! react-beautiful-dnd */ "./node_modules/react-beautiful-dnd/dist/react-beautiful-dnd.esm.js");
-
-var _RowTeam = __webpack_require__(/*! ./RowTeam */ "./sources/js/pages/schedule-arrange/table/RowTeam.jsx");
-
-var _RowTeam2 = _interopRequireDefault(_RowTeam);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var DroppableTeam = function (_PureComponent) {
-    (0, _inherits3.default)(DroppableTeam, _PureComponent);
-
-    function DroppableTeam() {
-        (0, _classCallCheck3.default)(this, DroppableTeam);
-        return (0, _possibleConstructorReturn3.default)(this, (DroppableTeam.__proto__ || (0, _getPrototypeOf2.default)(DroppableTeam)).apply(this, arguments));
-    }
-
-    (0, _createClass3.default)(DroppableTeam, [{
-        key: 'render',
-        value: function render() {
-            var _this2 = this;
-
-            var _props = this.props,
-                isHost = _props.isHost,
-                shiftOptions = _props.shiftOptions,
-                data = _props.data;
-
-            return _react2.default.createElement(
-                _reactBeautifulDnd.Droppable,
-                { droppableId: 'droppable', isDropDisabled: !isHost, type: 'droppableTeam' },
-                function (provided) {
-                    return _react2.default.createElement(
-                        'div',
-                        (0, _extends3.default)({ ref: provided.innerRef }, provided.droppableProps),
-                        data.map(function (team, gindex) {
-                            return _react2.default.createElement(
-                                _reactBeautifulDnd.Draggable,
-                                { key: team.teamId, draggableId: team.teamId,
-                                    index: gindex, isDragDisabled: !isHost
-                                },
-                                function (teamProvided, teamSnapshot) {
-                                    return _react2.default.createElement(
-                                        'div',
-                                        null,
-                                        _react2.default.createElement(_RowTeam2.default, { draggableProvided: teamProvided,
-                                            isHost: isHost, data: team,
-                                            shiftOptions: shiftOptions, isDragging: teamSnapshot.isDragging,
-                                            showRemarkPopover: _this2.props.showRemarkPopover,
-                                            onChangeSelectWeekDay: _this2.props.onChangeSelectWeekDay,
-                                            onChangePublics: _this2.props.onChangePublics,
-                                            onChangeTeamOrder: _this2.props.onChangeTeamOrder,
-                                            onChangeShowRemarkPopover: _this2.props.onChangeShowRemarkPopover,
-                                            onChangeShift: _this2.props.onChangeShift,
-                                            onChangeDefaultShift: _this2.props.onChangeDefaultShift,
-                                            onShowWeeklyDefaultShift: _this2.props.onShowWeeklyDefaultShift,
-                                            onUpdateRemark: _this2.props.onUpdateRemark,
-                                            onChangeOrder: _this2.props.onChangeOrder,
-                                            onSelectEmployeeOfTeam: _this2.props.onSelectEmployeeOfTeam,
-                                            enableSyncWorkingShift: _this2.props.enableSyncWorkingShift
-                                        }),
-                                        teamProvided.placeholder
-                                    );
-                                }
-                            );
-                        }),
-                        provided.placeholder
-                    );
-                }
-            );
-        }
-    }]);
-    return DroppableTeam;
-}(_react.PureComponent);
-
-exports.default = DroppableTeam;
+class DroppableTeam extends react__WEBPACK_IMPORTED_MODULE_1__["PureComponent"] {
+  render() {
+    const {
+      isHost,
+      shiftOptions,
+      data
+    } = this.props;
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_beautiful_dnd__WEBPACK_IMPORTED_MODULE_2__["Droppable"], {
+      droppableId: "droppable",
+      isDropDisabled: !isHost,
+      type: "droppableTeam"
+    }, provided => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", _babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_0___default()({
+      ref: provided.innerRef
+    }, provided.droppableProps), data.map((team, gindex) => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_beautiful_dnd__WEBPACK_IMPORTED_MODULE_2__["Draggable"], {
+      key: team.teamId,
+      draggableId: team.teamId,
+      index: gindex,
+      isDragDisabled: !isHost
+    }, (teamProvided, teamSnapshot) => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_RowTeam__WEBPACK_IMPORTED_MODULE_3__["default"], {
+      draggableProvided: teamProvided,
+      isHost: isHost,
+      data: team,
+      shiftOptions: shiftOptions,
+      isDragging: teamSnapshot.isDragging,
+      showRemarkPopover: this.props.showRemarkPopover,
+      onChangeSelectWeekDay: this.props.onChangeSelectWeekDay,
+      onChangePublics: this.props.onChangePublics,
+      onChangeTeamOrder: this.props.onChangeTeamOrder,
+      onChangeShowRemarkPopover: this.props.onChangeShowRemarkPopover,
+      onChangeShift: this.props.onChangeShift,
+      onChangeDefaultShift: this.props.onChangeDefaultShift,
+      onShowWeeklyDefaultShift: this.props.onShowWeeklyDefaultShift,
+      onUpdateRemark: this.props.onUpdateRemark,
+      onChangeOrder: this.props.onChangeOrder,
+      onSelectEmployeeOfTeam: this.props.onSelectEmployeeOfTeam,
+      enableSyncWorkingShift: this.props.enableSyncWorkingShift
+    }), teamProvided.placeholder))), provided.placeholder));
+  }
+}
 
 /***/ }),
 
@@ -148257,271 +143056,193 @@ exports.default = DroppableTeam;
 /*!*********************************************************!*\
   !*** ./sources/js/pages/schedule-arrange/table/Row.jsx ***!
   \*********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Row; });
+/* harmony import */ var _babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/extends */ "./node_modules/@babel/runtime/helpers/extends.js");
+/* harmony import */ var _babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "./node_modules/@babel/runtime/helpers/defineProperty.js");
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _shared_constants__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../shared/constants */ "./sources/js/shared/constants.js");
+/* harmony import */ var _ColIndex__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./ColIndex */ "./sources/js/pages/schedule-arrange/table/ColIndex.jsx");
+/* harmony import */ var _ColNickname__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./ColNickname */ "./sources/js/pages/schedule-arrange/table/ColNickname.jsx");
+/* harmony import */ var _ColDefaultShift__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./ColDefaultShift */ "./sources/js/pages/schedule-arrange/table/ColDefaultShift.jsx");
+/* harmony import */ var _ColShift__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./ColShift */ "./sources/js/pages/schedule-arrange/table/ColShift.jsx");
 
 
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _extends2 = __webpack_require__(/*! babel-runtime/helpers/extends */ "./node_modules/babel-runtime/helpers/extends.js");
-
-var _extends3 = _interopRequireDefault(_extends2);
-
-var _getPrototypeOf = __webpack_require__(/*! babel-runtime/core-js/object/get-prototype-of */ "./node_modules/babel-runtime/core-js/object/get-prototype-of.js");
-
-var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
-
-var _classCallCheck2 = __webpack_require__(/*! babel-runtime/helpers/classCallCheck */ "./node_modules/babel-runtime/helpers/classCallCheck.js");
-
-var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
-
-var _createClass2 = __webpack_require__(/*! babel-runtime/helpers/createClass */ "./node_modules/babel-runtime/helpers/createClass.js");
-
-var _createClass3 = _interopRequireDefault(_createClass2);
-
-var _possibleConstructorReturn2 = __webpack_require__(/*! babel-runtime/helpers/possibleConstructorReturn */ "./node_modules/babel-runtime/helpers/possibleConstructorReturn.js");
-
-var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
-
-var _inherits2 = __webpack_require__(/*! babel-runtime/helpers/inherits */ "./node_modules/babel-runtime/helpers/inherits.js");
-
-var _inherits3 = _interopRequireDefault(_inherits2);
-
-var _react = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-
-var _react2 = _interopRequireDefault(_react);
-
-var _moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
-
-var _moment2 = _interopRequireDefault(_moment);
-
-var _constants = __webpack_require__(/*! ../../../shared/constants */ "./sources/js/shared/constants.js");
-
-var _ColIndex = __webpack_require__(/*! ./ColIndex */ "./sources/js/pages/schedule-arrange/table/ColIndex.jsx");
-
-var _ColIndex2 = _interopRequireDefault(_ColIndex);
-
-var _ColNickname = __webpack_require__(/*! ./ColNickname */ "./sources/js/pages/schedule-arrange/table/ColNickname.jsx");
-
-var _ColNickname2 = _interopRequireDefault(_ColNickname);
-
-var _ColDefaultShift = __webpack_require__(/*! ./ColDefaultShift */ "./sources/js/pages/schedule-arrange/table/ColDefaultShift.jsx");
-
-var _ColDefaultShift2 = _interopRequireDefault(_ColDefaultShift);
-
-var _ColShift = __webpack_require__(/*! ./ColShift */ "./sources/js/pages/schedule-arrange/table/ColShift.jsx");
-
-var _ColShift2 = _interopRequireDefault(_ColShift);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var Row = function (_PureComponent) {
-    (0, _inherits3.default)(Row, _PureComponent);
-
-    function Row() {
-        var _ref;
-
-        var _temp, _this, _ret;
-
-        (0, _classCallCheck3.default)(this, Row);
-
-        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-            args[_key] = arguments[_key];
-        }
-
-        return _ret = (_temp = (_this = (0, _possibleConstructorReturn3.default)(this, (_ref = Row.__proto__ || (0, _getPrototypeOf2.default)(Row)).call.apply(_ref, [this].concat(args))), _this), _this.handleChangeSelectWeekDay = function (attrName, isChecked) {
-            var _this$props = _this.props,
-                teamId = _this$props.teamId,
-                data = _this$props.data;
-
-            var employeeId = data.employeeId;
-
-            _this.props.onChangeSelectWeekDay(teamId, employeeId, attrName, isChecked);
-        }, _this.handleChangeShift = function (name, shift) {
-            var _this$props2 = _this.props,
-                teamId = _this$props2.teamId,
-                data = _this$props2.data;
-
-            var employeeId = data.employeeId;
-
-            _this.props.onChangeShift(teamId, employeeId, name, shift);
-        }, _this.handleSelectEmployee = function (event) {
-            var _this$props3 = _this.props,
-                teamId = _this$props3.teamId,
-                data = _this$props3.data;
-
-            var employeeId = data.employeeId;
-            _this.props.onSelectEmployeeOfTeam(teamId, employeeId, event.target.checked);
-        }, _temp), (0, _possibleConstructorReturn3.default)(_this, _ret);
-    }
-
-    (0, _createClass3.default)(Row, [{
-        key: 'render',
-        value: function render() {
-            var _props = this.props,
-                isHost = _props.isHost,
-                enableSyncWorkingShift = _props.enableSyncWorkingShift,
-                shiftOptions = _props.shiftOptions,
-                teamId = _props.teamId,
-                data = _props.data,
-                showRemarkPopover = _props.showRemarkPopover,
-                draggableProvided = _props.draggableProvided,
-                isDragging = _props.isDragging;
 
 
-            return _react2.default.createElement(
-                'div',
-                (0, _extends3.default)({
-                    className: 'table-row ' + (isDragging ? 'dragging' : ''),
-                    ref: draggableProvided.innerRef
-                }, draggableProvided.draggableProps, draggableProvided.dragHandleProps),
-                _react2.default.createElement(_ColIndex2.default, { data: data }),
-                _react2.default.createElement(_ColNickname2.default, {
-                    isHost: isHost,
-                    teamId: teamId,
-                    employeeId: data.employeeId,
-                    nickname: data.nickname,
-                    remark: data.remark,
-                    showRemarkPopover: showRemarkPopover,
-                    onChangeShowRemarkPopover: this.props.onChangeShowRemarkPopover,
-                    onShowWeeklyDefaultShift: this.props.onShowWeeklyDefaultShift,
-                    onUpdateRemark: this.props.onUpdateRemark,
-                    onChangeOrder: this.props.onChangeOrder
-                }),
-                _react2.default.createElement(_ColDefaultShift2.default, {
-                    isHost: isHost,
-                    teamId: teamId,
-                    employeeId: data.employeeId,
-                    isUsedWeeklyDefaultShift: data.isUsedWeeklyDefaultShift,
-                    data: data.defaultShift,
-                    shiftOptions: shiftOptions.filter(function (shift) {
-                        return shift.id !== _constants.OffDayShiftId;
-                    }),
-                    onChangeDefaultShift: this.props.onChangeDefaultShift
-                }),
-                _react2.default.createElement(_ColShift2.default, {
-                    isHost: isHost,
-                    shiftOptions: shiftOptions,
-                    isUsedWeeklyDefaultShift: data.isUsedWeeklyDefaultShift,
-                    employeeId: data.employeeId,
-                    defaultShift: data.defaultShift,
-                    data: data.mondaySchedule,
-                    scheduleAttrName: 'mondaySchedule',
-                    isChecked: data.selectWeekDays.mondaySchedule,
-                    onChangeShift: this.handleChangeShift,
-                    onChangeSelectWeekDay: this.handleChangeSelectWeekDay
-                }),
-                _react2.default.createElement(_ColShift2.default, {
-                    isHost: isHost,
-                    shiftOptions: shiftOptions,
-                    isUsedWeeklyDefaultShift: data.isUsedWeeklyDefaultShift,
-                    employeeId: data.employeeId,
-                    defaultShift: data.defaultShift,
-                    data: data.tuesdaySchedule,
-                    scheduleAttrName: 'tuesdaySchedule',
-                    isChecked: data.selectWeekDays.tuesdaySchedule,
-                    onChangeShift: this.handleChangeShift,
-                    onChangeSelectWeekDay: this.handleChangeSelectWeekDay
-                }),
-                _react2.default.createElement(_ColShift2.default, {
-                    isHost: isHost,
-                    shiftOptions: shiftOptions,
-                    isUsedWeeklyDefaultShift: data.isUsedWeeklyDefaultShift,
-                    employeeId: data.employeeId,
-                    defaultShift: data.defaultShift,
-                    data: data.wednesdaySchedule,
-                    scheduleAttrName: 'wednesdaySchedule',
-                    isChecked: data.selectWeekDays.wednesdaySchedule,
-                    onChangeShift: this.handleChangeShift,
-                    onChangeSelectWeekDay: this.handleChangeSelectWeekDay
-                }),
-                _react2.default.createElement(_ColShift2.default, {
-                    isHost: isHost,
-                    shiftOptions: shiftOptions,
-                    isUsedWeeklyDefaultShift: data.isUsedWeeklyDefaultShift,
-                    employeeId: data.employeeId,
-                    defaultShift: data.defaultShift,
-                    data: data.thursdaySchedule,
-                    scheduleAttrName: 'thursdaySchedule',
-                    isChecked: data.selectWeekDays.thursdaySchedule,
-                    onChangeShift: this.handleChangeShift,
-                    onChangeSelectWeekDay: this.handleChangeSelectWeekDay
-                }),
-                _react2.default.createElement(_ColShift2.default, {
-                    isHost: isHost,
-                    shiftOptions: shiftOptions,
-                    isUsedWeeklyDefaultShift: data.isUsedWeeklyDefaultShift,
-                    employeeId: data.employeeId,
-                    defaultShift: data.defaultShift,
-                    data: data.fridaySchedule,
-                    scheduleAttrName: 'fridaySchedule',
-                    isChecked: data.selectWeekDays.fridaySchedule,
-                    onChangeShift: this.handleChangeShift,
-                    onChangeSelectWeekDay: this.handleChangeSelectWeekDay
-                }),
-                _react2.default.createElement(_ColShift2.default, {
-                    isHost: isHost,
-                    shiftOptions: shiftOptions,
-                    isUsedWeeklyDefaultShift: data.isUsedWeeklyDefaultShift,
-                    employeeId: data.employeeId,
-                    defaultShift: data.defaultShift,
-                    data: data.saturdaySchedule,
-                    scheduleAttrName: 'saturdaySchedule',
-                    isChecked: data.selectWeekDays.saturdaySchedule,
-                    onChangeShift: this.handleChangeShift,
-                    onChangeSelectWeekDay: this.handleChangeSelectWeekDay
-                }),
-                _react2.default.createElement(_ColShift2.default, {
-                    isHost: isHost,
-                    shiftOptions: shiftOptions,
-                    isUsedWeeklyDefaultShift: data.isUsedWeeklyDefaultShift,
-                    employeeId: data.employeeId,
-                    defaultShift: data.defaultShift,
-                    data: data.sundaySchedule,
-                    scheduleAttrName: 'sundaySchedule',
-                    isChecked: data.selectWeekDays.sundaySchedule,
-                    onChangeShift: this.handleChangeShift,
-                    onChangeSelectWeekDay: this.handleChangeSelectWeekDay
-                }),
-                isHost && enableSyncWorkingShift && _react2.default.createElement(
-                    'div',
-                    { className: 'table-cell cell-syncdata' },
-                    _react2.default.createElement(
-                        'div',
-                        { className: 'checkbox' },
-                        _react2.default.createElement('input', {
-                            type: 'checkbox',
-                            className: 'checkbox-custom',
-                            id: 'ckb-syncdata-emp' + data.employeeId,
-                            checked: data.isSelected,
-                            onChange: this.handleSelectEmployee
-                        }),
-                        _react2.default.createElement('label', {
-                            htmlFor: 'ckb-syncdata-emp' + data.employeeId
-                        })
-                    )
-                ),
-                _react2.default.createElement(
-                    'div',
-                    { className: 'table-cell cell-modifier' },
-                    data.modifier && _react2.default.createElement(
-                        'span',
-                        {
-                            title: (0, _moment2.default)(data.modifiedDate).format(_constants.DateTimeFormat) },
-                        data.modifier
-                    )
-                )
-            );
-        }
-    }]);
-    return Row;
-}(_react.PureComponent);
 
-exports.default = Row;
+
+
+
+
+class Row extends react__WEBPACK_IMPORTED_MODULE_2__["PureComponent"] {
+  constructor(...args) {
+    super(...args);
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_1___default()(this, "handleChangeSelectWeekDay", (attrName, isChecked) => {
+      const {
+        teamId,
+        data
+      } = this.props;
+      const employeeId = data.employeeId;
+      this.props.onChangeSelectWeekDay(teamId, employeeId, attrName, isChecked);
+    });
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_1___default()(this, "handleChangeShift", (name, shift) => {
+      const {
+        teamId,
+        data
+      } = this.props;
+      const employeeId = data.employeeId;
+      this.props.onChangeShift(teamId, employeeId, name, shift);
+    });
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_1___default()(this, "handleSelectEmployee", event => {
+      const {
+        teamId,
+        data
+      } = this.props;
+      const employeeId = data.employeeId;
+      this.props.onSelectEmployeeOfTeam(teamId, employeeId, event.target.checked);
+    });
+  }
+  render() {
+    const {
+      isHost,
+      enableSyncWorkingShift,
+      shiftOptions,
+      teamId,
+      data,
+      showRemarkPopover,
+      draggableProvided,
+      isDragging
+    } = this.props;
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", _babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_0___default()({
+      className: `table-row ${isDragging ? 'dragging' : ''}`,
+      ref: draggableProvided.innerRef
+    }, draggableProvided.draggableProps, draggableProvided.dragHandleProps), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement(_ColIndex__WEBPACK_IMPORTED_MODULE_5__["default"], {
+      data: data
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement(_ColNickname__WEBPACK_IMPORTED_MODULE_6__["default"], {
+      isHost: isHost,
+      teamId: teamId,
+      employeeId: data.employeeId,
+      nickname: data.nickname,
+      remark: data.remark,
+      showRemarkPopover: showRemarkPopover,
+      onChangeShowRemarkPopover: this.props.onChangeShowRemarkPopover,
+      onShowWeeklyDefaultShift: this.props.onShowWeeklyDefaultShift,
+      onUpdateRemark: this.props.onUpdateRemark,
+      onChangeOrder: this.props.onChangeOrder
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement(_ColDefaultShift__WEBPACK_IMPORTED_MODULE_7__["default"], {
+      isHost: isHost,
+      teamId: teamId,
+      employeeId: data.employeeId,
+      isUsedWeeklyDefaultShift: data.isUsedWeeklyDefaultShift,
+      data: data.defaultShift,
+      shiftOptions: shiftOptions.filter(shift => shift.id !== _shared_constants__WEBPACK_IMPORTED_MODULE_4__["OffDayShiftId"]),
+      onChangeDefaultShift: this.props.onChangeDefaultShift
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement(_ColShift__WEBPACK_IMPORTED_MODULE_8__["default"], {
+      isHost: isHost,
+      shiftOptions: shiftOptions,
+      isUsedWeeklyDefaultShift: data.isUsedWeeklyDefaultShift,
+      employeeId: data.employeeId,
+      defaultShift: data.defaultShift,
+      data: data.mondaySchedule,
+      scheduleAttrName: 'mondaySchedule',
+      isChecked: data.selectWeekDays.mondaySchedule,
+      onChangeShift: this.handleChangeShift,
+      onChangeSelectWeekDay: this.handleChangeSelectWeekDay
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement(_ColShift__WEBPACK_IMPORTED_MODULE_8__["default"], {
+      isHost: isHost,
+      shiftOptions: shiftOptions,
+      isUsedWeeklyDefaultShift: data.isUsedWeeklyDefaultShift,
+      employeeId: data.employeeId,
+      defaultShift: data.defaultShift,
+      data: data.tuesdaySchedule,
+      scheduleAttrName: 'tuesdaySchedule',
+      isChecked: data.selectWeekDays.tuesdaySchedule,
+      onChangeShift: this.handleChangeShift,
+      onChangeSelectWeekDay: this.handleChangeSelectWeekDay
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement(_ColShift__WEBPACK_IMPORTED_MODULE_8__["default"], {
+      isHost: isHost,
+      shiftOptions: shiftOptions,
+      isUsedWeeklyDefaultShift: data.isUsedWeeklyDefaultShift,
+      employeeId: data.employeeId,
+      defaultShift: data.defaultShift,
+      data: data.wednesdaySchedule,
+      scheduleAttrName: 'wednesdaySchedule',
+      isChecked: data.selectWeekDays.wednesdaySchedule,
+      onChangeShift: this.handleChangeShift,
+      onChangeSelectWeekDay: this.handleChangeSelectWeekDay
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement(_ColShift__WEBPACK_IMPORTED_MODULE_8__["default"], {
+      isHost: isHost,
+      shiftOptions: shiftOptions,
+      isUsedWeeklyDefaultShift: data.isUsedWeeklyDefaultShift,
+      employeeId: data.employeeId,
+      defaultShift: data.defaultShift,
+      data: data.thursdaySchedule,
+      scheduleAttrName: 'thursdaySchedule',
+      isChecked: data.selectWeekDays.thursdaySchedule,
+      onChangeShift: this.handleChangeShift,
+      onChangeSelectWeekDay: this.handleChangeSelectWeekDay
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement(_ColShift__WEBPACK_IMPORTED_MODULE_8__["default"], {
+      isHost: isHost,
+      shiftOptions: shiftOptions,
+      isUsedWeeklyDefaultShift: data.isUsedWeeklyDefaultShift,
+      employeeId: data.employeeId,
+      defaultShift: data.defaultShift,
+      data: data.fridaySchedule,
+      scheduleAttrName: 'fridaySchedule',
+      isChecked: data.selectWeekDays.fridaySchedule,
+      onChangeShift: this.handleChangeShift,
+      onChangeSelectWeekDay: this.handleChangeSelectWeekDay
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement(_ColShift__WEBPACK_IMPORTED_MODULE_8__["default"], {
+      isHost: isHost,
+      shiftOptions: shiftOptions,
+      isUsedWeeklyDefaultShift: data.isUsedWeeklyDefaultShift,
+      employeeId: data.employeeId,
+      defaultShift: data.defaultShift,
+      data: data.saturdaySchedule,
+      scheduleAttrName: 'saturdaySchedule',
+      isChecked: data.selectWeekDays.saturdaySchedule,
+      onChangeShift: this.handleChangeShift,
+      onChangeSelectWeekDay: this.handleChangeSelectWeekDay
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement(_ColShift__WEBPACK_IMPORTED_MODULE_8__["default"], {
+      isHost: isHost,
+      shiftOptions: shiftOptions,
+      isUsedWeeklyDefaultShift: data.isUsedWeeklyDefaultShift,
+      employeeId: data.employeeId,
+      defaultShift: data.defaultShift,
+      data: data.sundaySchedule,
+      scheduleAttrName: 'sundaySchedule',
+      isChecked: data.selectWeekDays.sundaySchedule,
+      onChangeShift: this.handleChangeShift,
+      onChangeSelectWeekDay: this.handleChangeSelectWeekDay
+    }), isHost && enableSyncWorkingShift && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
+      className: "table-cell cell-syncdata"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
+      className: "checkbox"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("input", {
+      type: "checkbox",
+      className: `checkbox-custom`,
+      id: `ckb-syncdata-emp${data.employeeId}`,
+      checked: data.isSelected,
+      onChange: this.handleSelectEmployee
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("label", {
+      htmlFor: `ckb-syncdata-emp${data.employeeId}`
+    }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
+      className: "table-cell cell-modifier"
+    }, data.modifier && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("span", {
+      title: moment__WEBPACK_IMPORTED_MODULE_3___default()(data.modifiedDate).format(_shared_constants__WEBPACK_IMPORTED_MODULE_4__["DateTimeFormat"])
+    }, data.modifier)));
+  }
+}
 
 /***/ }),
 
@@ -148529,205 +143250,138 @@ exports.default = Row;
 /*!*************************************************************!*\
   !*** ./sources/js/pages/schedule-arrange/table/RowTeam.jsx ***!
   \*************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return RowTeam; });
+/* harmony import */ var _babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/extends */ "./node_modules/@babel/runtime/helpers/extends.js");
+/* harmony import */ var _babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "./node_modules/@babel/runtime/helpers/defineProperty.js");
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _DroppableMember__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./DroppableMember */ "./sources/js/pages/schedule-arrange/table/DroppableMember.jsx");
+/* harmony import */ var _shared_components_DropdownOrder__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../shared/components/DropdownOrder */ "./sources/js/shared/components/DropdownOrder.jsx");
 
 
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _extends2 = __webpack_require__(/*! babel-runtime/helpers/extends */ "./node_modules/babel-runtime/helpers/extends.js");
-
-var _extends3 = _interopRequireDefault(_extends2);
-
-var _getPrototypeOf = __webpack_require__(/*! babel-runtime/core-js/object/get-prototype-of */ "./node_modules/babel-runtime/core-js/object/get-prototype-of.js");
-
-var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
-
-var _classCallCheck2 = __webpack_require__(/*! babel-runtime/helpers/classCallCheck */ "./node_modules/babel-runtime/helpers/classCallCheck.js");
-
-var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
-
-var _createClass2 = __webpack_require__(/*! babel-runtime/helpers/createClass */ "./node_modules/babel-runtime/helpers/createClass.js");
-
-var _createClass3 = _interopRequireDefault(_createClass2);
-
-var _possibleConstructorReturn2 = __webpack_require__(/*! babel-runtime/helpers/possibleConstructorReturn */ "./node_modules/babel-runtime/helpers/possibleConstructorReturn.js");
-
-var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
-
-var _inherits2 = __webpack_require__(/*! babel-runtime/helpers/inherits */ "./node_modules/babel-runtime/helpers/inherits.js");
-
-var _inherits3 = _interopRequireDefault(_inherits2);
-
-var _react = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-
-var _react2 = _interopRequireDefault(_react);
-
-var _DroppableMember = __webpack_require__(/*! ./DroppableMember */ "./sources/js/pages/schedule-arrange/table/DroppableMember.jsx");
-
-var _DroppableMember2 = _interopRequireDefault(_DroppableMember);
-
-var _DropdownOrder = __webpack_require__(/*! ../../../shared/components/DropdownOrder */ "./sources/js/shared/components/DropdownOrder.jsx");
-
-var _DropdownOrder2 = _interopRequireDefault(_DropdownOrder);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var RowTeam = function (_PureComponent) {
-    (0, _inherits3.default)(RowTeam, _PureComponent);
-
-    function RowTeam() {
-        var _ref;
-
-        var _temp, _this, _ret;
-
-        (0, _classCallCheck3.default)(this, RowTeam);
-
-        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-            args[_key] = arguments[_key];
-        }
-
-        return _ret = (_temp = (_this = (0, _possibleConstructorReturn3.default)(this, (_ref = RowTeam.__proto__ || (0, _getPrototypeOf2.default)(RowTeam)).call.apply(_ref, [this].concat(args))), _this), _this.handleMoveUp = function () {
-            var teamId = _this.props.data.teamId;
-
-            _this.props.onChangeTeamOrder('up', teamId);
-        }, _this.handleMoveDown = function () {
-            var teamId = _this.props.data.teamId;
-
-            _this.props.onChangeTeamOrder('down', teamId);
-        }, _this.handleMoveTop = function () {
-            var teamId = _this.props.data.teamId;
-
-            _this.props.onChangeTeamOrder('top', teamId);
-        }, _this.handleMoveBottom = function () {
-            var teamId = _this.props.data.teamId;
-
-            _this.props.onChangeTeamOrder('bottom', teamId);
-        }, _this.handleChangePublic = function (event) {
-            var teamId = _this.props.data.teamId;
-
-            _this.props.onChangePublics(teamId, event.target.checked);
-        }, _this.handleSelectEmployeeOfTeam = function (event) {
-            var teamId = _this.props.data.teamId;
-
-            _this.props.onSelectEmployeeOfTeam(teamId, null, event.target.checked);
-        }, _temp), (0, _possibleConstructorReturn3.default)(_this, _ret);
-    }
-
-    (0, _createClass3.default)(RowTeam, [{
-        key: 'render',
-        value: function render() {
-            var _props = this.props,
-                isHost = _props.isHost,
-                draggableProvided = _props.draggableProvided,
-                isDragging = _props.isDragging,
-                shiftOptions = _props.shiftOptions,
-                enableSyncWorkingShift = _props.enableSyncWorkingShift;
-            var _props$data = this.props.data,
-                teamId = _props$data.teamId,
-                name = _props$data.name,
-                isPublic = _props$data.isPublic,
-                isSelected = _props$data.isSelected,
-                members = _props$data.members;
 
 
-            return _react2.default.createElement(
-                'div',
-                (0, _extends3.default)({
-                    className: '' + (isDragging ? 'dragging' : ''),
-                    ref: draggableProvided.innerRef
-                }, draggableProvided.draggableProps, draggableProvided.dragHandleProps),
-                _react2.default.createElement(
-                    'div',
-                    { className: 'row-team' },
-                    _react2.default.createElement(
-                        'div',
-                        { className: 'team-name' },
-                        _react2.default.createElement(
-                            'div',
-                            null,
-                            name
-                        ),
-                        isHost && _react2.default.createElement(_DropdownOrder2.default, {
-                            id: 'dropdownTeam' + teamId,
-                            onMoveUp: this.handleMoveUp,
-                            onMoveDown: this.handleMoveDown,
-                            onMoveTop: this.handleMoveTop,
-                            onMoveBottom: this.handleMoveBottom
-                        })
-                    ),
-                    _react2.default.createElement(
-                        'div',
-                        { className: 'right-container' },
-                        isHost && enableSyncWorkingShift && _react2.default.createElement(
-                            'div',
-                            { className: 'cell-syncdata' },
-                            _react2.default.createElement(
-                                'div',
-                                { className: 'checkbox' },
-                                _react2.default.createElement('input', {
-                                    type: 'checkbox',
-                                    className: 'checkbox-custom',
-                                    id: 'ckb-syncdata-team' + teamId,
-                                    checked: isSelected,
-                                    onChange: this.handleSelectEmployeeOfTeam
-                                }),
-                                _react2.default.createElement('label', {
-                                    htmlFor: 'ckb-syncdata-team' + teamId
-                                })
-                            )
-                        ),
-                        _react2.default.createElement(
-                            'div',
-                            { className: 'cell-public' },
-                            _react2.default.createElement(
-                                'div',
-                                { className: 'checkbox' },
-                                _react2.default.createElement('input', {
-                                    type: 'checkbox',
-                                    className: 'checkbox-custom',
-                                    id: 'ckb-public-team' + teamId,
-                                    checked: isPublic,
-                                    disabled: !isHost,
-                                    onChange: this.handleChangePublic
-                                }),
-                                _react2.default.createElement(
-                                    'label',
-                                    { htmlFor: 'ckb-public-team' + teamId },
-                                    ' ',
-                                    'Publish'
-                                )
-                            )
-                        )
-                    )
-                ),
-                _react2.default.createElement(_DroppableMember2.default, {
-                    isHost: isHost,
-                    teamId: teamId,
-                    data: members,
-                    shiftOptions: shiftOptions,
-                    showRemarkPopover: this.props.showRemarkPopover,
-                    onChangeSelectWeekDay: this.props.onChangeSelectWeekDay,
-                    onChangeShift: this.props.onChangeShift,
-                    onChangeDefaultShift: this.props.onChangeDefaultShift,
-                    onChangeShowRemarkPopover: this.props.onChangeShowRemarkPopover,
-                    onShowWeeklyDefaultShift: this.props.onShowWeeklyDefaultShift,
-                    onUpdateRemark: this.props.onUpdateRemark,
-                    onChangeOrder: this.props.onChangeOrder,
-                    onSelectEmployeeOfTeam: this.props.onSelectEmployeeOfTeam,
-                    enableSyncWorkingShift: this.props.enableSyncWorkingShift
-                })
-            );
-        }
-    }]);
-    return RowTeam;
-}(_react.PureComponent);
 
-exports.default = RowTeam;
+class RowTeam extends react__WEBPACK_IMPORTED_MODULE_2__["PureComponent"] {
+  constructor(...args) {
+    super(...args);
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_1___default()(this, "handleMoveUp", () => {
+      const {
+        teamId
+      } = this.props.data;
+      this.props.onChangeTeamOrder('up', teamId);
+    });
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_1___default()(this, "handleMoveDown", () => {
+      const {
+        teamId
+      } = this.props.data;
+      this.props.onChangeTeamOrder('down', teamId);
+    });
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_1___default()(this, "handleMoveTop", () => {
+      const {
+        teamId
+      } = this.props.data;
+      this.props.onChangeTeamOrder('top', teamId);
+    });
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_1___default()(this, "handleMoveBottom", () => {
+      const {
+        teamId
+      } = this.props.data;
+      this.props.onChangeTeamOrder('bottom', teamId);
+    });
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_1___default()(this, "handleChangePublic", event => {
+      const {
+        teamId
+      } = this.props.data;
+      this.props.onChangePublics(teamId, event.target.checked);
+    });
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_1___default()(this, "handleSelectEmployeeOfTeam", event => {
+      const {
+        teamId
+      } = this.props.data;
+      this.props.onSelectEmployeeOfTeam(teamId, null, event.target.checked);
+    });
+  }
+  render() {
+    const {
+      isHost,
+      draggableProvided,
+      isDragging,
+      shiftOptions,
+      enableSyncWorkingShift
+    } = this.props;
+    const {
+      teamId,
+      name,
+      isPublic,
+      isSelected,
+      members
+    } = this.props.data;
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", _babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_0___default()({
+      className: `${isDragging ? 'dragging' : ''}`,
+      ref: draggableProvided.innerRef
+    }, draggableProvided.draggableProps, draggableProvided.dragHandleProps), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
+      className: "row-team"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
+      className: "team-name"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", null, name), isHost && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement(_shared_components_DropdownOrder__WEBPACK_IMPORTED_MODULE_4__["default"], {
+      id: `dropdownTeam${teamId}`,
+      onMoveUp: this.handleMoveUp,
+      onMoveDown: this.handleMoveDown,
+      onMoveTop: this.handleMoveTop,
+      onMoveBottom: this.handleMoveBottom
+    })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
+      className: "right-container"
+    }, isHost && enableSyncWorkingShift && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
+      className: "cell-syncdata"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
+      className: "checkbox"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("input", {
+      type: "checkbox",
+      className: `checkbox-custom`,
+      id: `ckb-syncdata-team${teamId}`,
+      checked: isSelected,
+      onChange: this.handleSelectEmployeeOfTeam
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("label", {
+      htmlFor: `ckb-syncdata-team${teamId}`
+    }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
+      className: "cell-public"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("div", {
+      className: "checkbox"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("input", {
+      type: "checkbox",
+      className: `checkbox-custom`,
+      id: `ckb-public-team${teamId}`,
+      checked: isPublic,
+      disabled: !isHost,
+      onChange: this.handleChangePublic
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement("label", {
+      htmlFor: `ckb-public-team${teamId}`
+    }, ' ', "Publish"))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_2___default.a.createElement(_DroppableMember__WEBPACK_IMPORTED_MODULE_3__["default"], {
+      isHost: isHost,
+      teamId: teamId,
+      data: members,
+      shiftOptions: shiftOptions,
+      showRemarkPopover: this.props.showRemarkPopover,
+      onChangeSelectWeekDay: this.props.onChangeSelectWeekDay,
+      onChangeShift: this.props.onChangeShift,
+      onChangeDefaultShift: this.props.onChangeDefaultShift,
+      onChangeShowRemarkPopover: this.props.onChangeShowRemarkPopover,
+      onShowWeeklyDefaultShift: this.props.onShowWeeklyDefaultShift,
+      onUpdateRemark: this.props.onUpdateRemark,
+      onChangeOrder: this.props.onChangeOrder,
+      onSelectEmployeeOfTeam: this.props.onSelectEmployeeOfTeam,
+      enableSyncWorkingShift: this.props.enableSyncWorkingShift
+    }));
+  }
+}
 
 /***/ }),
 
@@ -148735,246 +143389,141 @@ exports.default = RowTeam;
 /*!***********************************************************!*\
   !*** ./sources/js/pages/schedule-arrange/table/THead.jsx ***!
   \***********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return THead; });
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "./node_modules/@babel/runtime/helpers/defineProperty.js");
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _ColorDescription__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./ColorDescription */ "./sources/js/pages/schedule-arrange/table/ColorDescription.jsx");
 
 
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
 
-var _getPrototypeOf = __webpack_require__(/*! babel-runtime/core-js/object/get-prototype-of */ "./node_modules/babel-runtime/core-js/object/get-prototype-of.js");
 
-var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
-
-var _classCallCheck2 = __webpack_require__(/*! babel-runtime/helpers/classCallCheck */ "./node_modules/babel-runtime/helpers/classCallCheck.js");
-
-var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
-
-var _createClass2 = __webpack_require__(/*! babel-runtime/helpers/createClass */ "./node_modules/babel-runtime/helpers/createClass.js");
-
-var _createClass3 = _interopRequireDefault(_createClass2);
-
-var _possibleConstructorReturn2 = __webpack_require__(/*! babel-runtime/helpers/possibleConstructorReturn */ "./node_modules/babel-runtime/helpers/possibleConstructorReturn.js");
-
-var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
-
-var _inherits2 = __webpack_require__(/*! babel-runtime/helpers/inherits */ "./node_modules/babel-runtime/helpers/inherits.js");
-
-var _inherits3 = _interopRequireDefault(_inherits2);
-
-var _react = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-
-var _react2 = _interopRequireDefault(_react);
-
-var _moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
-
-var _moment2 = _interopRequireDefault(_moment);
-
-var _ColorDescription = __webpack_require__(/*! ./ColorDescription */ "./sources/js/pages/schedule-arrange/table/ColorDescription.jsx");
-
-var _ColorDescription2 = _interopRequireDefault(_ColorDescription);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var THead = function (_PureComponent) {
-    (0, _inherits3.default)(THead, _PureComponent);
-
-    function THead() {
-        var _ref;
-
-        var _temp, _this, _ret;
-
-        (0, _classCallCheck3.default)(this, THead);
-
-        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-            args[_key] = arguments[_key];
-        }
-
-        return _ret = (_temp = (_this = (0, _possibleConstructorReturn3.default)(this, (_ref = THead.__proto__ || (0, _getPrototypeOf2.default)(THead)).call.apply(_ref, [this].concat(args))), _this), _this.dayOfWeeks = [{ name: 'mondaySchedule', value: 0 }, { name: 'tuesdaySchedule', value: 1 }, { name: 'wednesdaySchedule', value: 2 }, { name: 'thursdaySchedule', value: 3 }, { name: 'fridaySchedule', value: 4 }, { name: 'saturdaySchedule', value: 5 }, { name: 'sundaySchedule', value: 6 }], _temp), (0, _possibleConstructorReturn3.default)(_this, _ret);
-    }
-
-    (0, _createClass3.default)(THead, [{
-        key: 'render',
-        value: function render() {
-            var _this2 = this;
-
-            var _props = this.props,
-                isHost = _props.isHost,
-                enableSyncWorkingShift = _props.enableSyncWorkingShift,
-                fromDate = _props.fromDate,
-                toDate = _props.toDate;
-
-            var isSystemAdmin = document.getElementById('IsSystemAdmin').checked;
-
-            return _react2.default.createElement(
-                _react.Fragment,
-                null,
-                _react2.default.createElement(
-                    'div',
-                    { className: 'header-control' },
-                    _react2.default.createElement(
-                        'div',
-                        null,
-                        _react2.default.createElement('button', {
-                            className: 'btn save fa fa-floppy-o',
-                            title: 'Save',
-                            onClick: this.props.onSave,
-                            disabled: !isHost
-                        }),
-                        _react2.default.createElement(
-                            'div',
-                            { className: 'btn checkAllWeekDays' },
-                            _react2.default.createElement(
-                                'div',
-                                { className: 'checkbox' },
-                                _react2.default.createElement('input', {
-                                    type: 'checkbox',
-                                    className: 'checkbox-custom',
-                                    id: 'ckb-checkAllWeekDays',
-                                    disabled: !isHost,
-                                    onChange: function onChange(event) {
-                                        return _this2.props.onChangeSelectWeekDays(null, event.target.checked);
-                                    }
-                                }),
-                                _react2.default.createElement(
-                                    'label',
-                                    { htmlFor: 'ckb-checkAllWeekDays' },
-                                    ' ',
-                                    'Check/Uncheck all'
-                                )
-                            )
-                        ),
-                        _react2.default.createElement(
-                            'button',
-                            {
-                                className: 'btn offNoshift',
-                                onClick: this.props.onChangeOffNoShift,
-                                disabled: !isHost },
-                            'Off No Shift'
-                        ),
-                        _react2.default.createElement(
-                            'button',
-                            {
-                                className: 'btn offdayOT',
-                                onClick: this.props.onChangeOffdayOT,
-                                disabled: !isHost },
-                            'Off Day OT'
-                        ),
-                        _react2.default.createElement(
-                            'button',
-                            {
-                                className: 'btn workday',
-                                onClick: this.props.onChangeWorkday,
-                                disabled: !isHost },
-                            'Workday'
-                        ),
-                        _react2.default.createElement(
-                            'button',
-                            {
-                                className: 'btn shiftMultiple',
-                                onClick: this.props.onShiftMultiple,
-                                disabled: !isHost },
-                            'Shift Multiple'
-                        ),
-                        isSystemAdmin && _react2.default.createElement(
-                            'button',
-                            {
-                                className: 'btn fixedOffday',
-                                onClick: this.props.onFixedOffDay },
-                            'Off Day OT Fixed'
-                        )
-                    ),
-                    _react2.default.createElement(
-                        'div',
-                        null,
-                        _react2.default.createElement('button', {
-                            className: 'btn prev-week fa fa-chevron-left',
-                            onClick: this.props.onPrevious,
-                            title: 'Prev'
-                        }),
-                        _react2.default.createElement('button', {
-                            className: 'btn next-week fa fa-chevron-right',
-                            onClick: this.props.onNext,
-                            title: 'Next'
-                        }),
-                        _react2.default.createElement(
-                            'span',
-                            { className: 'label-week' },
-                            fromDate + ' - ' + toDate
-                        ),
-                        _react2.default.createElement(_ColorDescription2.default, null)
-                    )
-                ),
-                _react2.default.createElement(
-                    'div',
-                    { className: 'header' },
-                    _react2.default.createElement('div', { className: 'table-cell cell-index' }),
-                    _react2.default.createElement(
-                        'div',
-                        { className: 'table-cell cell-nickname' },
-                        'Nickname'
-                    ),
-                    _react2.default.createElement(
-                        'div',
-                        { className: 'table-cell cell-shift' },
-                        'Default Shift'
-                    ),
-                    this.dayOfWeeks.map(function (item) {
-                        return _react2.default.createElement(
-                            'div',
-                            {
-                                className: 'table-cell cell-shift',
-                                key: 'dayOfWeeks' + item.value },
-                            _react2.default.createElement(
-                                'div',
-                                { className: 'cell-control-wrapper' },
-                                _react2.default.createElement(
-                                    'div',
-                                    null,
-                                    (0, _moment2.default)(fromDate).add(item.value, 'days').format('D MMM, ddd')
-                                ),
-                                _react2.default.createElement(
-                                    'div',
-                                    { className: 'checkbox' },
-                                    _react2.default.createElement('input', {
-                                        type: 'checkbox',
-                                        className: 'checkbox-custom',
-                                        id: 'ckb-' + item.name,
-                                        disabled: !isHost,
-                                        onChange: function onChange(event) {
-                                            return _this2.props.onChangeSelectWeekDays(item.name, event.target.checked);
-                                        }
-                                    }),
-                                    _react2.default.createElement('label', { htmlFor: 'ckb-' + item.name })
-                                )
-                            )
-                        );
-                    }),
-                    isHost && enableSyncWorkingShift && _react2.default.createElement(
-                        'div',
-                        { className: 'table-cell cell-syncdata' },
-                        _react2.default.createElement('span', {
-                            className: 'fa fa-refresh',
-                            title: 'Sync data from OWP',
-                            onClick: this.props.onSyncData
-                        })
-                    ),
-                    _react2.default.createElement(
-                        'div',
-                        { className: 'table-cell cell-modifier' },
-                        'Modified by'
-                    )
-                )
-            );
-        }
+class THead extends react__WEBPACK_IMPORTED_MODULE_1__["PureComponent"] {
+  constructor(...args) {
+    super(...args);
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "dayOfWeeks", [{
+      name: 'mondaySchedule',
+      value: 0
+    }, {
+      name: 'tuesdaySchedule',
+      value: 1
+    }, {
+      name: 'wednesdaySchedule',
+      value: 2
+    }, {
+      name: 'thursdaySchedule',
+      value: 3
+    }, {
+      name: 'fridaySchedule',
+      value: 4
+    }, {
+      name: 'saturdaySchedule',
+      value: 5
+    }, {
+      name: 'sundaySchedule',
+      value: 6
     }]);
-    return THead;
-}(_react.PureComponent);
-
-exports.default = THead;
+  }
+  render() {
+    const {
+      isHost,
+      enableSyncWorkingShift,
+      fromDate,
+      toDate
+    } = this.props;
+    const isSystemAdmin = document.getElementById('IsSystemAdmin').checked;
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_1__["Fragment"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: "header-control"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
+      className: "btn save fa fa-floppy-o",
+      title: "Save",
+      onClick: this.props.onSave,
+      disabled: !isHost
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: "btn checkAllWeekDays"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: "checkbox"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
+      type: "checkbox",
+      className: `checkbox-custom`,
+      id: `ckb-checkAllWeekDays`,
+      disabled: !isHost,
+      onChange: event => this.props.onChangeSelectWeekDays(null, event.target.checked)
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", {
+      htmlFor: `ckb-checkAllWeekDays`
+    }, ' ', "Check/Uncheck all"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
+      className: "btn offNoshift",
+      onClick: this.props.onChangeOffNoShift,
+      disabled: !isHost
+    }, "Off No Shift"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
+      className: "btn offdayOT",
+      onClick: this.props.onChangeOffdayOT,
+      disabled: !isHost
+    }, "Off Day OT"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
+      className: "btn workday",
+      onClick: this.props.onChangeWorkday,
+      disabled: !isHost
+    }, "Workday"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
+      className: "btn shiftMultiple",
+      onClick: this.props.onShiftMultiple,
+      disabled: !isHost
+    }, "Shift Multiple"), isSystemAdmin && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
+      className: "btn fixedOffday",
+      onClick: this.props.onFixedOffDay
+    }, "Off Day OT Fixed")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
+      className: "btn prev-week fa fa-chevron-left",
+      onClick: this.props.onPrevious,
+      title: "Prev"
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("button", {
+      className: "btn next-week fa fa-chevron-right",
+      onClick: this.props.onNext,
+      title: "Next"
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("span", {
+      className: "label-week"
+    }, `${fromDate} - ${toDate}`), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_ColorDescription__WEBPACK_IMPORTED_MODULE_3__["default"], null))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: "header"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: "table-cell cell-index"
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: "table-cell cell-nickname"
+    }, "Nickname"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: "table-cell cell-shift"
+    }, "Default Shift"), this.dayOfWeeks.map(item => {
+      return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+        className: "table-cell cell-shift",
+        key: `dayOfWeeks${item.value}`
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+        className: "cell-control-wrapper"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", null, moment__WEBPACK_IMPORTED_MODULE_2___default()(fromDate).add(item.value, 'days').format('D MMM, ddd')), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+        className: "checkbox"
+      }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
+        type: "checkbox",
+        className: `checkbox-custom`,
+        id: `ckb-${item.name}`,
+        disabled: !isHost,
+        onChange: event => this.props.onChangeSelectWeekDays(item.name, event.target.checked)
+      }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", {
+        htmlFor: `ckb-${item.name}`
+      }))));
+    }), isHost && enableSyncWorkingShift && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: "table-cell cell-syncdata"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("span", {
+      className: "fa fa-refresh",
+      title: "Sync data from OWP",
+      onClick: this.props.onSyncData
+    })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: "table-cell cell-modifier"
+    }, "Modified by")));
+  }
+}
 
 /***/ }),
 
@@ -148982,47 +143531,34 @@ exports.default = THead;
 /*!************************************************************************!*\
   !*** ./sources/js/pages/schedule-arrange/table/TooltipRequestInfo.jsx ***!
   \************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/es/index.js");
 
 
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _react = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-
-var _react2 = _interopRequireDefault(_react);
-
-var _reactBootstrap = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/es/index.js");
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var TooltipRequestInfo = function TooltipRequestInfo(_ref) {
-    var id = _ref.id,
-        requestInfo = _ref.requestInfo,
-        isLeaveHalfDay = _ref.isLeaveHalfDay;
-
-    return _react2.default.createElement(
-        _reactBootstrap.OverlayTrigger,
-        { trigger: ['hover'], placement: 'top',
-            overlay: _react2.default.createElement(
-                _reactBootstrap.Tooltip,
-                { id: id },
-                requestInfo.details
-            )
-        },
-        isLeaveHalfDay ? _react2.default.createElement(
-            'span',
-            { className: 'halfdaycode ' + requestInfo.classOfLeave },
-            requestInfo.leaveCode
-        ) : _react2.default.createElement('i', { className: 'fa fa-info-circle' })
-    );
+const TooltipRequestInfo = ({
+  id,
+  requestInfo,
+  isLeaveHalfDay
+}) => {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["OverlayTrigger"], {
+    trigger: ['hover'],
+    placement: 'top',
+    overlay: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Tooltip"], {
+      id: id
+    }, requestInfo.details)
+  }, isLeaveHalfDay ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
+    className: `halfdaycode ${requestInfo.classOfLeave}`
+  }, requestInfo.leaveCode) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+    className: "fa fa-info-circle"
+  }));
 };
-
-exports.default = TooltipRequestInfo;
+/* harmony default export */ __webpack_exports__["default"] = (TooltipRequestInfo);
 
 /***/ }),
 
@@ -149030,169 +143566,107 @@ exports.default = TooltipRequestInfo;
 /*!***********************************************************!*\
   !*** ./sources/js/pages/schedule-arrange/table/table.jsx ***!
   \***********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Table; });
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "./node_modules/@babel/runtime/helpers/defineProperty.js");
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var react_beautiful_dnd__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-beautiful-dnd */ "./node_modules/react-beautiful-dnd/dist/react-beautiful-dnd.esm.js");
+/* harmony import */ var _THead__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./THead */ "./sources/js/pages/schedule-arrange/table/THead.jsx");
+/* harmony import */ var _DroppableTeam__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./DroppableTeam */ "./sources/js/pages/schedule-arrange/table/DroppableTeam.jsx");
 
 
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
 
-var _getPrototypeOf = __webpack_require__(/*! babel-runtime/core-js/object/get-prototype-of */ "./node_modules/babel-runtime/core-js/object/get-prototype-of.js");
 
-var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
 
-var _classCallCheck2 = __webpack_require__(/*! babel-runtime/helpers/classCallCheck */ "./node_modules/babel-runtime/helpers/classCallCheck.js");
-
-var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
-
-var _createClass2 = __webpack_require__(/*! babel-runtime/helpers/createClass */ "./node_modules/babel-runtime/helpers/createClass.js");
-
-var _createClass3 = _interopRequireDefault(_createClass2);
-
-var _possibleConstructorReturn2 = __webpack_require__(/*! babel-runtime/helpers/possibleConstructorReturn */ "./node_modules/babel-runtime/helpers/possibleConstructorReturn.js");
-
-var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
-
-var _inherits2 = __webpack_require__(/*! babel-runtime/helpers/inherits */ "./node_modules/babel-runtime/helpers/inherits.js");
-
-var _inherits3 = _interopRequireDefault(_inherits2);
-
-var _react = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-
-var _react2 = _interopRequireDefault(_react);
-
-var _reactBeautifulDnd = __webpack_require__(/*! react-beautiful-dnd */ "./node_modules/react-beautiful-dnd/dist/react-beautiful-dnd.esm.js");
-
-var _THead = __webpack_require__(/*! ./THead */ "./sources/js/pages/schedule-arrange/table/THead.jsx");
-
-var _THead2 = _interopRequireDefault(_THead);
-
-var _DroppableTeam = __webpack_require__(/*! ./DroppableTeam */ "./sources/js/pages/schedule-arrange/table/DroppableTeam.jsx");
-
-var _DroppableTeam2 = _interopRequireDefault(_DroppableTeam);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var Table = function (_PureComponent) {
-    (0, _inherits3.default)(Table, _PureComponent);
-
-    function Table(props) {
-        (0, _classCallCheck3.default)(this, Table);
-
-        var _this = (0, _possibleConstructorReturn3.default)(this, (Table.__proto__ || (0, _getPrototypeOf2.default)(Table)).call(this, props));
-
-        _this.handleScroll = function (event) {
-            var scrollTop = event.srcElement.scrollTop;
-            if (scrollTop > 70) {
-                if (!_this.state.isFixedHeader) {
-                    _this.setState({ isFixedHeader: true });
-                }
-            } else {
-                if (_this.state.isFixedHeader) {
-                    _this.setState({ isFixedHeader: false });
-                }
-            }
-        };
-
-        _this.state = {
+class Table extends react__WEBPACK_IMPORTED_MODULE_1__["PureComponent"] {
+  constructor(props) {
+    super(props);
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleScroll", event => {
+      const scrollTop = event.srcElement.scrollTop;
+      if (scrollTop > 70) {
+        if (!this.state.isFixedHeader) {
+          this.setState({
+            isFixedHeader: true
+          });
+        }
+      } else {
+        if (this.state.isFixedHeader) {
+          this.setState({
             isFixedHeader: false
-        };
-
-        _this.contentScrollElement = document.getElementsByClassName('content_scroll')[0];
-        return _this;
-    }
-
-    (0, _createClass3.default)(Table, [{
-        key: 'componentDidMount',
-        value: function componentDidMount() {
-            this.contentScrollElement.addEventListener('scroll', this.handleScroll);
+          });
         }
-    }, {
-        key: 'componentWillUnmount',
-        value: function componentWillUnmount() {
-            this.contentScrollElement.removeEventListener('scroll', this.handleScroll);
-        }
-    }, {
-        key: 'render',
-        value: function render() {
-            var _props = this.props,
-                isHost = _props.isHost,
-                fromDate = _props.fromDate,
-                toDate = _props.toDate,
-                shiftOptions = _props.shiftOptions,
-                data = _props.data,
-                enableSyncWorkingShift = _props.enableSyncWorkingShift;
-
-
-            return _react2.default.createElement(
-                _react.Fragment,
-                null,
-                _react2.default.createElement(
-                    'div',
-                    {
-                        className: 'table-wrapper ' + (isHost && enableSyncWorkingShift ? 'has-syncdata' : '') },
-                    _react2.default.createElement(
-                        'div',
-                        {
-                            className: 'table-header ' + (this.state.isFixedHeader ? 'fixed' : '') },
-                        _react2.default.createElement(_THead2.default, {
-                            fromDate: fromDate,
-                            toDate: toDate,
-                            isHost: isHost,
-                            onSave: this.props.onSave,
-                            onChangeSelectWeekDays: this.props.onChangeSelectWeekDays,
-                            onChangeOffNoShift: this.props.onChangeOffNoShift,
-                            onChangeOffdayOT: this.props.onChangeOffdayOT,
-                            onChangeWorkday: this.props.onChangeWorkday,
-                            onShiftMultiple: this.props.onShiftMultiple,
-                            onFixedOffDay: this.props.onFixedOffDay,
-                            onPrevious: this.props.onPrevious,
-                            onNext: this.props.onNext,
-                            onSyncData: this.props.onSyncData,
-                            enableSyncWorkingShift: enableSyncWorkingShift
-                        })
-                    ),
-                    _react2.default.createElement(
-                        'div',
-                        { className: 'table-body' },
-                        data.length === 0 && _react2.default.createElement(
-                            'div',
-                            { className: 'nodata' },
-                            'No information available'
-                        ),
-                        data.length > 0 && _react2.default.createElement(
-                            _reactBeautifulDnd.DragDropContext,
-                            { onDragEnd: this.props.onDragEnd },
-                            _react2.default.createElement(_DroppableTeam2.default, {
-                                isHost: isHost,
-                                data: data,
-                                shiftOptions: shiftOptions,
-                                enableSyncWorkingShift: enableSyncWorkingShift,
-                                showRemarkPopover: this.props.showRemarkPopover,
-                                onChangeSelectWeekDay: this.props.onChangeSelectWeekDay,
-                                onChangeShift: this.props.onChangeShift,
-                                onChangeDefaultShift: this.props.onChangeDefaultShift,
-                                onChangePublics: this.props.onChangePublics,
-                                onChangeShowRemarkPopover: this.props.onChangeShowRemarkPopover,
-                                onShowWeeklyDefaultShift: this.props.onShowWeeklyDefaultShift,
-                                onUpdateRemark: this.props.onUpdateRemark,
-                                onChangeTeamOrder: this.props.onChangeTeamOrder,
-                                onChangeOrder: this.props.onChangeOrder,
-                                onSelectEmployeeOfTeam: this.props.onSelectEmployeeOfTeam
-                            })
-                        )
-                    )
-                )
-            );
-        }
-    }]);
-    return Table;
-}(_react.PureComponent);
-
-exports.default = Table;
+      }
+    });
+    this.state = {
+      isFixedHeader: false
+    };
+    this.contentScrollElement = document.getElementsByClassName('content_scroll')[0];
+  }
+  componentDidMount() {
+    this.contentScrollElement.addEventListener('scroll', this.handleScroll);
+  }
+  componentWillUnmount() {
+    this.contentScrollElement.removeEventListener('scroll', this.handleScroll);
+  }
+  render() {
+    const {
+      isHost,
+      fromDate,
+      toDate,
+      shiftOptions,
+      data,
+      enableSyncWorkingShift
+    } = this.props;
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_1__["Fragment"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: `table-wrapper ${isHost && enableSyncWorkingShift ? 'has-syncdata' : ''}`
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: `table-header ${this.state.isFixedHeader ? 'fixed' : ''}`
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_THead__WEBPACK_IMPORTED_MODULE_3__["default"], {
+      fromDate: fromDate,
+      toDate: toDate,
+      isHost: isHost,
+      onSave: this.props.onSave,
+      onChangeSelectWeekDays: this.props.onChangeSelectWeekDays,
+      onChangeOffNoShift: this.props.onChangeOffNoShift,
+      onChangeOffdayOT: this.props.onChangeOffdayOT,
+      onChangeWorkday: this.props.onChangeWorkday,
+      onShiftMultiple: this.props.onShiftMultiple,
+      onFixedOffDay: this.props.onFixedOffDay,
+      onPrevious: this.props.onPrevious,
+      onNext: this.props.onNext,
+      onSyncData: this.props.onSyncData,
+      enableSyncWorkingShift: enableSyncWorkingShift
+    })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: "table-body"
+    }, data.length === 0 && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: "nodata"
+    }, "No information available"), data.length > 0 && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react_beautiful_dnd__WEBPACK_IMPORTED_MODULE_2__["DragDropContext"], {
+      onDragEnd: this.props.onDragEnd
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_DroppableTeam__WEBPACK_IMPORTED_MODULE_4__["default"], {
+      isHost: isHost,
+      data: data,
+      shiftOptions: shiftOptions,
+      enableSyncWorkingShift: enableSyncWorkingShift,
+      showRemarkPopover: this.props.showRemarkPopover,
+      onChangeSelectWeekDay: this.props.onChangeSelectWeekDay,
+      onChangeShift: this.props.onChangeShift,
+      onChangeDefaultShift: this.props.onChangeDefaultShift,
+      onChangePublics: this.props.onChangePublics,
+      onChangeShowRemarkPopover: this.props.onChangeShowRemarkPopover,
+      onShowWeeklyDefaultShift: this.props.onShowWeeklyDefaultShift,
+      onUpdateRemark: this.props.onUpdateRemark,
+      onChangeTeamOrder: this.props.onChangeTeamOrder,
+      onChangeOrder: this.props.onChangeOrder,
+      onSelectEmployeeOfTeam: this.props.onSelectEmployeeOfTeam
+    })))));
+  }
+}
 
 /***/ }),
 
@@ -149200,493 +143674,405 @@ exports.default = Table;
 /*!***********************************************!*\
   !*** ./sources/js/shared/common.functions.js ***!
   \***********************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/*! exports provided: showMessage, fadeOutMessage, confirm, blockUI, alert, unblockUI, toastOptions, axiosError, reorder, floatThead, initDatepicker, initFromDateOnChange, setDateRange, getParam, showValidationSummaryErrors, hideValidationSummaryErrors, autoIndex, resolveClientUrl, initTooltip, downloadFile, sortTable, showFullAvatar, debounce */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function($) {
+__webpack_require__.r(__webpack_exports__);
+/* WEBPACK VAR INJECTION */(function($) {/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "showMessage", function() { return showMessage; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "fadeOutMessage", function() { return fadeOutMessage; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "confirm", function() { return confirm; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "blockUI", function() { return blockUI; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "alert", function() { return alert; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "unblockUI", function() { return unblockUI; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "toastOptions", function() { return toastOptions; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "axiosError", function() { return axiosError; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "reorder", function() { return reorder; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "floatThead", function() { return floatThead; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "initDatepicker", function() { return initDatepicker; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "initFromDateOnChange", function() { return initFromDateOnChange; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "setDateRange", function() { return setDateRange; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getParam", function() { return getParam; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "showValidationSummaryErrors", function() { return showValidationSummaryErrors; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "hideValidationSummaryErrors", function() { return hideValidationSummaryErrors; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "autoIndex", function() { return autoIndex; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "resolveClientUrl", function() { return resolveClientUrl; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "initTooltip", function() { return initTooltip; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "downloadFile", function() { return downloadFile; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "sortTable", function() { return sortTable; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "showFullAvatar", function() { return showFullAvatar; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "debounce", function() { return debounce; });
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var jquery_ui_bundle_jquery_ui__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! jquery-ui-bundle/jquery-ui */ "./node_modules/jquery-ui-bundle/jquery-ui.js");
+/* harmony import */ var jquery_ui_bundle_jquery_ui__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(jquery_ui_bundle_jquery_ui__WEBPACK_IMPORTED_MODULE_1__);
 
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.debounce = exports.showFullAvatar = exports.sortTable = exports.downloadFile = exports.initTooltip = exports.resolveClientUrl = exports.autoIndex = exports.hideValidationSummaryErrors = exports.showValidationSummaryErrors = exports.getParam = exports.setDateRange = exports.initFromDateOnChange = exports.initDatepicker = exports.floatThead = exports.reorder = exports.axiosError = exports.toastOptions = exports.unblockUI = exports.alert = exports.blockUI = exports.confirm = exports.fadeOutMessage = exports.showMessage = undefined;
 
-var _typeof2 = __webpack_require__(/*! babel-runtime/helpers/typeof */ "./node_modules/babel-runtime/helpers/typeof.js");
-
-var _typeof3 = _interopRequireDefault(_typeof2);
-
-var _toConsumableArray2 = __webpack_require__(/*! babel-runtime/helpers/toConsumableArray */ "./node_modules/babel-runtime/helpers/toConsumableArray.js");
-
-var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
-
-var _slicedToArray2 = __webpack_require__(/*! babel-runtime/helpers/slicedToArray */ "./node_modules/babel-runtime/helpers/slicedToArray.js");
-
-var _slicedToArray3 = _interopRequireDefault(_slicedToArray2);
-
-var _moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
-
-var _moment2 = _interopRequireDefault(_moment);
-
-__webpack_require__(/*! jquery-ui-bundle/jquery-ui */ "./node_modules/jquery-ui-bundle/jquery-ui.js");
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var _rootUrl = document.getElementById('RootURL').value ? document.getElementById('RootURL').value : '/';
-
+const _rootUrl = document.getElementById('RootURL').value ? document.getElementById('RootURL').value : '/';
 $.extend({
-    getOrCreateDialog: function getOrCreateDialog(id) {
-        var $box = $('#' + id);
-        if (!$box.length) {
-            $box = $('<div id="' + id + '"><p></p></div>').hide().appendTo('body');
-        }
-
-        return $box;
+  getOrCreateDialog: function (id) {
+    var $box = $('#' + id);
+    if (!$box.length) {
+      $box = $('<div id="' + id + '"><p></p></div>').hide().appendTo('body');
     }
+    return $box;
+  }
 });
-
 function showMessage(message) {
-    $('#message').html(message + ' <img src="/images/ajax-loader.gif" />').css('left', $(window).width() / 2);
-    $('#message').slideDown();
+  $('#message').html(message + ' <img src="/images/ajax-loader.gif" />').css('left', $(window).width() / 2);
+  $('#message').slideDown();
 }
-
 function fadeOutMessage() {
-    $('#message').fadeOut(500);
+  $('#message').fadeOut(500);
 }
-
 function confirm(message, callback, options) {
-    var defaults = {
-        title: 'HRM',
-        modal: true,
-        resizable: false,
-        buttons: [{
-            text: 'OK',
-            class: 'btn btn-primary',
-            click: function click() {
-                $(this).dialog('close');
-                if (callback !== null) {
-                    callback();
-                }
-
-                return true;
-            }
-        }, {
-            text: 'Cancel',
-            class: 'btn btn-default',
-            click: function click() {
-                $(this).dialog('close');
-                return false;
-            }
-        }],
-        minWidth: 300,
-        minHeight: 100,
-        dialogClass: 'modal-shadow'
-    };
-
-    var $confirm = $.getOrCreateDialog('confirm');
-    // set message
-    $('p', $confirm).html(message);
-    // init dialog
-    $confirm.dialog($.extend({}, defaults, options));
+  const defaults = {
+    title: 'HRM',
+    modal: true,
+    resizable: false,
+    buttons: [{
+      text: 'OK',
+      class: 'btn btn-primary',
+      click: function () {
+        $(this).dialog('close');
+        if (callback !== null) {
+          callback();
+        }
+        return true;
+      }
+    }, {
+      text: 'Cancel',
+      class: 'btn btn-default',
+      click: function () {
+        $(this).dialog('close');
+        return false;
+      }
+    }],
+    minWidth: 300,
+    minHeight: 100,
+    dialogClass: 'modal-shadow'
+  };
+  let $confirm = $.getOrCreateDialog('confirm');
+  // set message
+  $('p', $confirm).html(message);
+  // init dialog
+  $confirm.dialog($.extend({}, defaults, options));
 }
-
 function showFullAvatar(code, nickname) {
-    var defaults = {
-        title: nickname,
-        modal: true,
-        resizable: false,
-        dialogClass: 'popup-avatar'
-    };
-
-    $.get('/employee/avatar/' + code).done(function (avatarUrl) {
-        var avatarHtml = '<img src="' + avatarUrl + '" style="width: 100%; height: 100%" />';
-
-        var $confirm = $.getOrCreateDialog('fullAvatar');
-        $confirm.html(avatarHtml);
-        $confirm.dialog($.extend({}, defaults));
-    });
+  const defaults = {
+    title: nickname,
+    modal: true,
+    resizable: false,
+    dialogClass: 'popup-avatar'
+  };
+  $.get(`/employee/avatar/${code}`).done(function (avatarUrl) {
+    const avatarHtml = `<img src="${avatarUrl}" style="width: 100%; height: 100%" />`;
+    const $confirm = $.getOrCreateDialog('fullAvatar');
+    $confirm.html(avatarHtml);
+    $confirm.dialog($.extend({}, defaults));
+  });
 }
-
 function getParam(name) {
-    name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
-    var regexS = "[\\?&]" + name + "=([^&#]*)";
-    var regex = new RegExp(regexS);
-    var results = regex.exec(window.location.href);
-    if (results === null) return null;else return results[1];
+  name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+  var regexS = "[\\?&]" + name + "=([^&#]*)";
+  var regex = new RegExp(regexS);
+  var results = regex.exec(window.location.href);
+  if (results === null) return null;else return results[1];
 }
-
 function alert(message, callback) {
-    var defaults = {
-        title: 'HRM',
-        modal: true,
-        resizable: false,
-        buttons: [{
-            text: 'OK',
-            class: 'btn btn-primary',
-            click: function click() {
-                $(this).dialog('close');
-                if (callback) {
-                    callback();
-                }
-
-                return false;
-            }
-        }],
-        minHeight: 50,
-        width: 680,
-        dialogClass: 'modal-shadow'
-    };
-
-    var $alert = $.getOrCreateDialog('alert');
-    // set message
-    $('p', $alert).html(message);
-    // init dialog
-    $alert.dialog($.extend({}, defaults));
+  const defaults = {
+    title: 'HRM',
+    modal: true,
+    resizable: false,
+    buttons: [{
+      text: 'OK',
+      class: 'btn btn-primary',
+      click: function () {
+        $(this).dialog('close');
+        if (callback) {
+          callback();
+        }
+        return false;
+      }
+    }],
+    minHeight: 50,
+    width: 680,
+    dialogClass: 'modal-shadow'
+  };
+  let $alert = $.getOrCreateDialog('alert');
+  // set message
+  $('p', $alert).html(message);
+  // init dialog
+  $alert.dialog($.extend({}, defaults));
 }
-
 function blockUI() {
-    document.getElementById('loadingProcess').style.display = 'block';
+  document.getElementById('loadingProcess').style.display = 'block';
 }
-
 function unblockUI() {
-    document.getElementById('loadingProcess').style.display = 'none';
+  document.getElementById('loadingProcess').style.display = 'none';
 }
-
 function toastOptions() {
-    return {
-        tapToDismiss: false,
-        closeButton: true,
-        progressBar: true,
-        positionClass: 'toast-top-center',
-        showDuration: 0,
-        hideDuration: 0,
-        timeOut: 3000,
-        extendedTimeOut: 0,
-        closeOnHover: false,
-        preventDuplicates: true,
-        closeHtml: '<button type="button">x</button>'
-    };
+  return {
+    tapToDismiss: false,
+    closeButton: true,
+    progressBar: true,
+    positionClass: 'toast-top-center',
+    showDuration: 0,
+    hideDuration: 0,
+    timeOut: 3000,
+    extendedTimeOut: 0,
+    closeOnHover: false,
+    preventDuplicates: true,
+    closeHtml: '<button type="button">x</button>'
+  };
 }
-
 function axiosError(error) {
-    if (error.response) {
-        var url = void 0;
-
-        switch (error.response.status) {
-            case 401:
-                url = 'auth/login';
-                break;
-
-            case 404:
-                url = 'error/PageNotFound';
-                break;
-
-            case 403:
-            case 405:
-                url = 'error/AccessDenied';
-                break;
-
-            case 500:
-                url = 'error/InternalError';
-                break;
-        }
-
-        window.location = resolveClientUrl(url);
+  if (error.response) {
+    let url;
+    switch (error.response.status) {
+      case 401:
+        url = 'auth/login';
+        break;
+      case 404:
+        url = 'error/PageNotFound';
+        break;
+      case 403:
+      case 405:
+        url = 'error/AccessDenied';
+        break;
+      case 500:
+        url = 'error/InternalError';
+        break;
     }
+    window.location = resolveClientUrl(url);
+  }
 }
-
 function reorder(items, startIndex, endIndex) {
-    var _items$splice = items.splice(startIndex, 1),
-        _items$splice2 = (0, _slicedToArray3.default)(_items$splice, 1),
-        removed = _items$splice2[0];
-
-    items.splice(endIndex, 0, removed);
-
-    return [].concat((0, _toConsumableArray3.default)(items));
+  const [removed] = items.splice(startIndex, 1);
+  items.splice(endIndex, 0, removed);
+  return [...items];
 }
-
 function floatThead(el) {
-    $(el).floatThead({
-        scrollContainer: function scrollContainer($table) {
-            return $table.closest('.content_scroll');
-        },
-        position: 'fixed',
-        top: 72
-    });
-
-    $('#toggle-left-navigation').on('click', function () {
-        $(el).floatThead('reflow');
-    });
+  $(el).floatThead({
+    scrollContainer: function ($table) {
+      return $table.closest('.content_scroll');
+    },
+    position: 'fixed',
+    top: 72
+  });
+  $('#toggle-left-navigation').on('click', function () {
+    $(el).floatThead('reflow');
+  });
 }
-
 function initFromDateOnChange($fromDate, $toDate) {
-    if ($fromDate && $toDate) {
-        $fromDate.on("change", function () {
-            var toMonth = new Date($toDate.val()).getMonth();
-            var fromMonth = new Date($fromDate.val()).getMonth();
-            if (fromMonth !== toMonth) {
-                $toDate.val($(this).val());
-            }
-        });
-    }
+  if ($fromDate && $toDate) {
+    $fromDate.on("change", function () {
+      let toMonth = new Date($toDate.val()).getMonth();
+      let fromMonth = new Date($fromDate.val()).getMonth();
+      if (fromMonth !== toMonth) {
+        $toDate.val($(this).val());
+      }
+    });
+  }
 }
-
 function initDatepicker() {
-    $('.datepicker').each(function () {
-        var $this = $(this);
-
-        var beforeShowDayHandler = function beforeShowDayHandler(mydate) {
-            var isEnable = true;
-            var disabledDates = $this.attr('disabledDate');
-            if (disabledDates && disabledDates.length > 0) {
-                var checkdate = (0, _moment2.default)(mydate),
-                    myBadDates = disabledDates.split(',');
-                for (var i = 0; i < myBadDates.length; i++) {
-                    var date = (0, _moment2.default)(myBadDates[i]);
-                    if (date.isSame(checkdate)) {
-                        isEnable = false;
-                    }
-                }
-            }
-
-            return [isEnable];
-        };
-        $this.datepicker({
-            dateFormat: 'dd M, yy',
-            beforeShowDay: beforeShowDayHandler,
-            changeMonth: true,
-            changeYear: true
-        });
-
-        var mindate = $this.attr('mindate'),
-            maxdate = $this.attr('maxdate');
-        if (mindate && mindate !== 'null') {
-            mindate = mindate.split('/');
-            $this.datepicker('option', 'minDate', new Date(mindate[0], mindate[1] - 1, mindate[2]));
+  $('.datepicker').each(function () {
+    let $this = $(this);
+    let beforeShowDayHandler = function (mydate) {
+      let isEnable = true;
+      const disabledDates = $this.attr('disabledDate');
+      if (disabledDates && disabledDates.length > 0) {
+        const checkdate = moment__WEBPACK_IMPORTED_MODULE_0___default()(mydate),
+          myBadDates = disabledDates.split(',');
+        for (let i = 0; i < myBadDates.length; i++) {
+          const date = moment__WEBPACK_IMPORTED_MODULE_0___default()(myBadDates[i]);
+          if (date.isSame(checkdate)) {
+            isEnable = false;
+          }
         }
-
-        if (maxdate && maxdate !== 'null') {
-            maxdate = maxdate.split('/');
-            $this.datepicker('option', 'maxDate', new Date(maxdate[0], maxdate[1] - 1, maxdate[2]));
-        }
-
-        $this.attr('readonly', 'readonly');
-        $this.keydown(function (e) {
-            var tab = 9,
-                enter = 13;
-            if (e.keyCode === tab || e.keyCode === enter) {
-                return true;
-            }
-
-            return false;
-        });
-
-        $this.closest('.calendar-form').find('.icon-calendar:not(.disabled)').off('click').on('click', function () {
-            if ($this.datepicker('widget').is(':visible')) {
-                $this.datepicker('hide');
-            } else {
-                $this.datepicker('show');
-            }
-        });
+      }
+      return [isEnable];
+    };
+    $this.datepicker({
+      dateFormat: 'dd M, yy',
+      beforeShowDay: beforeShowDayHandler,
+      changeMonth: true,
+      changeYear: true
     });
+    let mindate = $this.attr('mindate'),
+      maxdate = $this.attr('maxdate');
+    if (mindate && mindate !== 'null') {
+      mindate = mindate.split('/');
+      $this.datepicker('option', 'minDate', new Date(mindate[0], mindate[1] - 1, mindate[2]));
+    }
+    if (maxdate && maxdate !== 'null') {
+      maxdate = maxdate.split('/');
+      $this.datepicker('option', 'maxDate', new Date(maxdate[0], maxdate[1] - 1, maxdate[2]));
+    }
+    $this.attr('readonly', 'readonly');
+    $this.keydown(function (e) {
+      const tab = 9,
+        enter = 13;
+      if (e.keyCode === tab || e.keyCode === enter) {
+        return true;
+      }
+      return false;
+    });
+    $this.closest('.calendar-form').find('.icon-calendar:not(.disabled)').off('click').on('click', function () {
+      if ($this.datepicker('widget').is(':visible')) {
+        $this.datepicker('hide');
+      } else {
+        $this.datepicker('show');
+      }
+    });
+  });
 }
-
 function setDateRange(selectedIndex) {
-    var fromDate = new Date($('#FromDate').val()).toString('dd MMM, yyyy');
-    var toDate = new Date($('#ToDate').val()).toString('dd MMM, yyyy');
-    var now = $('#Today').val();
-
-    switch (parseInt(selectedIndex, 10)) {
-        case 0:
-            //default
-            break;
-
-        case 1:
-            //today
-            toDate = fromDate = Date.parse(now).toString('dd MMM, yyyy');
-            break;
-
-        case 2:
-            // yesterday
-            toDate = fromDate = Date.parse(now).add(-1).days().toString('dd MMM, yyyy');
-            break;
-
-        case 3:
-            //current week
-            fromDate = Date.parse(now).moveToDayOfWeek(0, -1).toString('dd MMM, yyyy');
-            toDate = Date.parse(now).toString('dd MMM, yyyy');
-            break;
-
-        case 4:
-            //last week
-            fromDate = Date.parse(now).moveToDayOfWeek(0, -1).add(-7).days().toString('dd MMM, yyyy');
-            toDate = Date.parse(now).moveToDayOfWeek(0, -1).add(-1).days().toString('dd MMM, yyyy');
-            break;
-
-        case 5:
-            //current month
-            fromDate = Date.parse(now).moveToFirstDayOfMonth().toString('dd MMM, yyyy');
-            toDate = Date.parse(now).toString('dd MMM, yyyy');
-            break;
-
-        case 6:
-            //last month
-            fromDate = Date.parse(now).add(-1).months().moveToFirstDayOfMonth().toString('dd MMM, yyyy');
-            toDate = Date.parse(now).add(-1).months().moveToLastDayOfMonth().toString('dd MMM, yyyy');
-            break;
-
-        case 7:
-            //since last month
-            fromDate = Date.parse(now).add(-1).months().moveToFirstDayOfMonth().toString('dd MMM, yyyy');
-            toDate = Date.parse(now).toString('dd MMM, yyyy');
-            break;
-    }
-
-    $('#FromDate').val(fromDate);
-    $('#ToDate').val(toDate);
+  let fromDate = new Date($('#FromDate').val()).toString('dd MMM, yyyy');
+  let toDate = new Date($('#ToDate').val()).toString('dd MMM, yyyy');
+  let now = $('#Today').val();
+  switch (parseInt(selectedIndex, 10)) {
+    case 0:
+      //default
+      break;
+    case 1:
+      //today
+      toDate = fromDate = Date.parse(now).toString('dd MMM, yyyy');
+      break;
+    case 2:
+      // yesterday
+      toDate = fromDate = Date.parse(now).add(-1).days().toString('dd MMM, yyyy');
+      break;
+    case 3:
+      //current week
+      fromDate = Date.parse(now).moveToDayOfWeek(0, -1).toString('dd MMM, yyyy');
+      toDate = Date.parse(now).toString('dd MMM, yyyy');
+      break;
+    case 4:
+      //last week
+      fromDate = Date.parse(now).moveToDayOfWeek(0, -1).add(-7).days().toString('dd MMM, yyyy');
+      toDate = Date.parse(now).moveToDayOfWeek(0, -1).add(-1).days().toString('dd MMM, yyyy');
+      break;
+    case 5:
+      //current month
+      fromDate = Date.parse(now).moveToFirstDayOfMonth().toString('dd MMM, yyyy');
+      toDate = Date.parse(now).toString('dd MMM, yyyy');
+      break;
+    case 6:
+      //last month
+      fromDate = Date.parse(now).add(-1).months().moveToFirstDayOfMonth().toString('dd MMM, yyyy');
+      toDate = Date.parse(now).add(-1).months().moveToLastDayOfMonth().toString('dd MMM, yyyy');
+      break;
+    case 7:
+      //since last month
+      fromDate = Date.parse(now).add(-1).months().moveToFirstDayOfMonth().toString('dd MMM, yyyy');
+      toDate = Date.parse(now).toString('dd MMM, yyyy');
+      break;
+  }
+  $('#FromDate').val(fromDate);
+  $('#ToDate').val(toDate);
 }
-
 function showValidationSummaryErrors(messages) {
-    $('.validation-summary-valid').show();
-    $('.validation-summary-valid').addClass('validation-summary-errors');
-    var msgWrp = $('.validation-summary-valid').find('ul:first');
-    messages.forEach(function (msg) {
-        msgWrp.append('<li>' + msg + '</li>');
-    });
+  $('.validation-summary-valid').show();
+  $('.validation-summary-valid').addClass('validation-summary-errors');
+  let msgWrp = $('.validation-summary-valid').find('ul:first');
+  messages.forEach(function (msg) {
+    msgWrp.append('<li>' + msg + '</li>');
+  });
 }
-
 function hideValidationSummaryErrors(isReset) {
-    if (isReset) {
-        $('.validation-summary-errors').addClass('validation-summary-valid').removeClass('validation-summary-errors');
-    }
-    var msgWrp = $('.validation-summary-valid').removeClass('validation-summary-errors');
-    msgWrp.find('ul:first').html('');
-    $('.validation-summary-valid').hide();
+  if (isReset) {
+    $('.validation-summary-errors').addClass('validation-summary-valid').removeClass('validation-summary-errors');
+  }
+  let msgWrp = $('.validation-summary-valid').removeClass('validation-summary-errors');
+  msgWrp.find('ul:first').html('');
+  $('.validation-summary-valid').hide();
 }
-
 function autoIndex() {
-    var index = 0;
-    $('tr').each(function () {
-        $(this).children("td").eq(0).html(index);
-        index = index + 1;
-    });
+  var index = 0;
+  $('tr').each(function () {
+    $(this).children("td").eq(0).html(index);
+    index = index + 1;
+  });
 }
-
 function resolveClientUrl(relativePath) {
-    return _rootUrl + relativePath;
+  return _rootUrl + relativePath;
 }
-
 function initTooltip() {
-    $('.tooltip-tipsy').tipsy({
-        html: true,
-        gravity: 'e'
-    });
+  $('.tooltip-tipsy').tipsy({
+    html: true,
+    gravity: 'e'
+  });
 }
-
 function downloadFile(data, fileName) {
-    var url = window.URL.createObjectURL(new Blob([data]));
-    var link = document.createElement('a');
-    link.href = url;
-    link.setAttribute('download', fileName);
-    document.body.appendChild(link);
-    link.click();
-    link.parentNode.removeChild(link);
-    window.URL.revokeObjectURL(url);
+  const url = window.URL.createObjectURL(new Blob([data]));
+  const link = document.createElement('a');
+  link.href = url;
+  link.setAttribute('download', fileName);
+  document.body.appendChild(link);
+  link.click();
+  link.parentNode.removeChild(link);
+  window.URL.revokeObjectURL(url);
 }
-
 function sortTable(table, th) {
-    var getCellValue = function getCellValue(row, index) {
-        var $td = $(row).children('td').eq(index);
-        var datetimeAttr = $td.attr('data-datetime');
-
-        if ((typeof datetimeAttr === 'undefined' ? 'undefined' : (0, _typeof3.default)(datetimeAttr)) !== ( true ? 'undefined' : undefined) && datetimeAttr !== false) {
-            return $td.data('datetime');
-        }
-
-        return $td.text().trim().toLowerCase();
-    };
-    var refreshSorting = function refreshSorting() {
-        $('th.col-sorter').each(function () {
-            $(this).find('div.fa').removeClass('fa-sort-asc').removeClass('fa-sort-desc');
-        });
-    };
-
-    var $icon = $(th).find('div.fa');
-    if ($icon.hasClass('fa-sort-desc')) {
-        $icon.removeClass('fa-sort-desc').addClass('fa-sort-asc');
-    } else if ($icon.hasClass('fa-sort-asc')) {
-        $icon.removeClass('fa-sort-asc').addClass('fa-sort-desc');
-    } else {
-        refreshSorting();
-        $icon.addClass('fa-sort-desc');
+  let getCellValue = function (row, index) {
+    let $td = $(row).children('td').eq(index);
+    let datetimeAttr = $td.attr('data-datetime');
+    if (typeof datetimeAttr !== typeof undefined && datetimeAttr !== false) {
+      return $td.data('datetime');
     }
-
-    var colIndex = $(th).index();
-    var rows = $(table).find('tbody tr').toArray().sort(function (a, b) {
-        var valA = getCellValue(a, colIndex),
-            valB = getCellValue(b, colIndex);
-
-        if ($.isNumeric(valA) && $.isNumeric(valB)) {
-            return valA - valB;
-        } else if ((0, _moment2.default)(valA).isValid() && (0, _moment2.default)(valB).isValid()) {
-            var dateA = new Date(valA),
-                dateB = new Date(valB);
-            return dateA - dateB;
-        } else {
-            return valA.localeCompare(valB, 'vi', { sensitivity: 'base' });
-        }
+    return $td.text().trim().toLowerCase();
+  };
+  let refreshSorting = function () {
+    $('th.col-sorter').each(function () {
+      $(this).find('div.fa').removeClass('fa-sort-asc').removeClass('fa-sort-desc');
     });
-
-    if (!$icon.hasClass('fa-sort-asc')) {
-        rows = rows.reverse();
+  };
+  let $icon = $(th).find('div.fa');
+  if ($icon.hasClass('fa-sort-desc')) {
+    $icon.removeClass('fa-sort-desc').addClass('fa-sort-asc');
+  } else if ($icon.hasClass('fa-sort-asc')) {
+    $icon.removeClass('fa-sort-asc').addClass('fa-sort-desc');
+  } else {
+    refreshSorting();
+    $icon.addClass('fa-sort-desc');
+  }
+  const colIndex = $(th).index();
+  let rows = $(table).find('tbody tr').toArray().sort(function (a, b) {
+    let valA = getCellValue(a, colIndex),
+      valB = getCellValue(b, colIndex);
+    if ($.isNumeric(valA) && $.isNumeric(valB)) {
+      return valA - valB;
+    } else if (moment__WEBPACK_IMPORTED_MODULE_0___default()(valA).isValid() && moment__WEBPACK_IMPORTED_MODULE_0___default()(valB).isValid()) {
+      const dateA = new Date(valA),
+        dateB = new Date(valB);
+      return dateA - dateB;
+    } else {
+      return valA.localeCompare(valB, 'vi', {
+        sensitivity: 'base'
+      });
     }
-
-    for (var i = 0; i < rows.length; i++) {
-        $(table).append(rows[i]);
-    }
+  });
+  if (!$icon.hasClass('fa-sort-asc')) {
+    rows = rows.reverse();
+  }
+  for (let i = 0; i < rows.length; i++) {
+    $(table).append(rows[i]);
+  }
 }
-
 function debounce(func, wait) {
-    var timeout = void 0;
-    return function () {
-        for (var _len = arguments.length, theArgs = Array(_len), _key = 0; _key < _len; _key++) {
-            theArgs[_key] = arguments[_key];
-        }
-
-        var context = this,
-            args = theArgs;
-
-        var later = function later() {
-            func.apply(context, args);
-        };
-
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait || 500);
+  let timeout;
+  return function (...theArgs) {
+    const context = this,
+      args = theArgs;
+    const later = () => {
+      func.apply(context, args);
     };
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait || 500);
+  };
 }
 
-exports.showMessage = showMessage;
-exports.fadeOutMessage = fadeOutMessage;
-exports.confirm = confirm;
-exports.blockUI = blockUI;
-exports.alert = alert;
-exports.unblockUI = unblockUI;
-exports.toastOptions = toastOptions;
-exports.axiosError = axiosError;
-exports.reorder = reorder;
-exports.floatThead = floatThead;
-exports.initDatepicker = initDatepicker;
-exports.initFromDateOnChange = initFromDateOnChange;
-exports.setDateRange = setDateRange;
-exports.getParam = getParam;
-exports.showValidationSummaryErrors = showValidationSummaryErrors;
-exports.hideValidationSummaryErrors = hideValidationSummaryErrors;
-exports.autoIndex = autoIndex;
-exports.resolveClientUrl = resolveClientUrl;
-exports.initTooltip = initTooltip;
-exports.downloadFile = downloadFile;
-exports.sortTable = sortTable;
-exports.showFullAvatar = showFullAvatar;
-exports.debounce = debounce;
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js")))
 
 /***/ }),
@@ -149695,148 +144081,90 @@ exports.debounce = debounce;
 /*!*******************************************************!*\
   !*** ./sources/js/shared/components/Autocomplete.jsx ***!
   \*******************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function($) {
+__webpack_require__.r(__webpack_exports__);
+/* WEBPACK VAR INJECTION */(function($) {/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return Autocomplete; });
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "./node_modules/@babel/runtime/helpers/defineProperty.js");
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_2__);
 
-Object.defineProperty(exports, "__esModule", {
-    value: true
+
+
+class Autocomplete extends react__WEBPACK_IMPORTED_MODULE_1__["Component"] {
+  constructor(...args) {
+    super(...args);
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "updateAutocomplete", () => {
+      const sources = this.props.sources;
+      this.$el.autocomplete({
+        source: sources,
+        minLength: 2,
+        select: (event, ui) => this.handleChange(event, ui),
+        change: (event, ui) => this.handleChange(event, ui)
+      });
+    });
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleInput", event => {
+      this.props.onInput(event.target.value);
+    });
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleChange", (event, ui) => {
+      let value = 0,
+        label = '';
+      if (ui && ui.item) {
+        label = ui.item.value;
+        value = ui.item.id;
+      } else {
+        if (this.$el.value === '') {
+          value = '';
+        }
+      }
+      this.props.onChange({
+        value,
+        label
+      });
+    });
+  }
+  componentDidMount() {
+    this.$el = $(this.el);
+    this.updateAutocomplete();
+  }
+  shouldComponentUpdate(nextProps) {
+    return this.props.sources !== nextProps.sources || this.props.className !== nextProps.className || this.props.isDisabled !== nextProps.isDisabled;
+  }
+  componentDidUpdate() {
+    this.updateAutocomplete();
+  }
+  componentWillUnmount() {
+    this.$el.autocomplete('destroy');
+  }
+  render() {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_1__["Fragment"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
+      ref: el => this.el = el,
+      type: "text",
+      className: this.props.className,
+      disabled: this.props.isDisabled,
+      onInput: this.handleInput
+    }));
+  }
+}
+_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(Autocomplete, "propTypes", {
+  sources: prop_types__WEBPACK_IMPORTED_MODULE_2___default.a.arrayOf(prop_types__WEBPACK_IMPORTED_MODULE_2___default.a.object),
+  className: prop_types__WEBPACK_IMPORTED_MODULE_2___default.a.string,
+  isDisabled: prop_types__WEBPACK_IMPORTED_MODULE_2___default.a.bool,
+  onInput: prop_types__WEBPACK_IMPORTED_MODULE_2___default.a.func,
+  onChange: prop_types__WEBPACK_IMPORTED_MODULE_2___default.a.func
 });
-
-var _getPrototypeOf = __webpack_require__(/*! babel-runtime/core-js/object/get-prototype-of */ "./node_modules/babel-runtime/core-js/object/get-prototype-of.js");
-
-var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
-
-var _classCallCheck2 = __webpack_require__(/*! babel-runtime/helpers/classCallCheck */ "./node_modules/babel-runtime/helpers/classCallCheck.js");
-
-var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
-
-var _createClass2 = __webpack_require__(/*! babel-runtime/helpers/createClass */ "./node_modules/babel-runtime/helpers/createClass.js");
-
-var _createClass3 = _interopRequireDefault(_createClass2);
-
-var _possibleConstructorReturn2 = __webpack_require__(/*! babel-runtime/helpers/possibleConstructorReturn */ "./node_modules/babel-runtime/helpers/possibleConstructorReturn.js");
-
-var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
-
-var _inherits2 = __webpack_require__(/*! babel-runtime/helpers/inherits */ "./node_modules/babel-runtime/helpers/inherits.js");
-
-var _inherits3 = _interopRequireDefault(_inherits2);
-
-var _react = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-
-var _react2 = _interopRequireDefault(_react);
-
-var _propTypes = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
-
-var _propTypes2 = _interopRequireDefault(_propTypes);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var Autocomplete = function (_Component) {
-    (0, _inherits3.default)(Autocomplete, _Component);
-
-    function Autocomplete() {
-        var _ref;
-
-        var _temp, _this, _ret;
-
-        (0, _classCallCheck3.default)(this, Autocomplete);
-
-        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-            args[_key] = arguments[_key];
-        }
-
-        return _ret = (_temp = (_this = (0, _possibleConstructorReturn3.default)(this, (_ref = Autocomplete.__proto__ || (0, _getPrototypeOf2.default)(Autocomplete)).call.apply(_ref, [this].concat(args))), _this), _this.updateAutocomplete = function () {
-            var sources = _this.props.sources;
-            _this.$el.autocomplete({
-                source: sources,
-                minLength: 2,
-                select: function select(event, ui) {
-                    return _this.handleChange(event, ui);
-                },
-                change: function change(event, ui) {
-                    return _this.handleChange(event, ui);
-                }
-            });
-        }, _this.handleInput = function (event) {
-            _this.props.onInput(event.target.value);
-        }, _this.handleChange = function (event, ui) {
-            var value = 0,
-                label = '';
-            if (ui && ui.item) {
-                label = ui.item.value;
-                value = ui.item.id;
-            } else {
-                if (_this.$el.value === '') {
-                    value = '';
-                }
-            }
-            _this.props.onChange({ value: value, label: label });
-        }, _temp), (0, _possibleConstructorReturn3.default)(_this, _ret);
-    }
-
-    (0, _createClass3.default)(Autocomplete, [{
-        key: 'componentDidMount',
-        value: function componentDidMount() {
-            this.$el = $(this.el);
-            this.updateAutocomplete();
-        }
-    }, {
-        key: 'shouldComponentUpdate',
-        value: function shouldComponentUpdate(nextProps) {
-            return this.props.sources !== nextProps.sources || this.props.className !== nextProps.className || this.props.isDisabled !== nextProps.isDisabled;
-        }
-    }, {
-        key: 'componentDidUpdate',
-        value: function componentDidUpdate() {
-            this.updateAutocomplete();
-        }
-    }, {
-        key: 'componentWillUnmount',
-        value: function componentWillUnmount() {
-            this.$el.autocomplete('destroy');
-        }
-    }, {
-        key: 'render',
-        value: function render() {
-            var _this2 = this;
-
-            return _react2.default.createElement(
-                _react.Fragment,
-                null,
-                _react2.default.createElement('input', {
-                    ref: function ref(el) {
-                        return _this2.el = el;
-                    },
-                    type: 'text',
-                    className: this.props.className,
-                    disabled: this.props.isDisabled,
-                    onInput: this.handleInput
-                })
-            );
-        }
-    }]);
-    return Autocomplete;
-}(_react.Component);
-
-Autocomplete.propTypes = {
-    sources: _propTypes2.default.arrayOf(_propTypes2.default.object),
-    className: _propTypes2.default.string,
-    isDisabled: _propTypes2.default.bool,
-    onInput: _propTypes2.default.func,
-    onChange: _propTypes2.default.func
-};
-Autocomplete.defaultProps = {
-    sources: [],
-    className: '',
-    isDisabled: false,
-    onInput: function onInput() {},
-    onChange: function onChange() {}
-};
-exports.default = Autocomplete;
+_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(Autocomplete, "defaultProps", {
+  sources: [],
+  className: '',
+  isDisabled: false,
+  onInput: function () {},
+  onChange: function () {}
+});
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js")))
 
 /***/ }),
@@ -149845,184 +144173,102 @@ exports.default = Autocomplete;
 /*!********************************************************!*\
   !*** ./sources/js/shared/components/CompanySelect.jsx ***!
   \********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/*! exports provided: renderCompanySelect, default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "renderCompanySelect", function() { return renderCompanySelect; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
+/* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var _common_functions__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../common.functions */ "./sources/js/shared/common.functions.js");
 
 
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.renderCompanySelect = undefined;
-
-var _regenerator = __webpack_require__(/*! babel-runtime/regenerator */ "./node_modules/babel-runtime/regenerator/index.js");
-
-var _regenerator2 = _interopRequireDefault(_regenerator);
-
-var _asyncToGenerator2 = __webpack_require__(/*! babel-runtime/helpers/asyncToGenerator */ "./node_modules/babel-runtime/helpers/asyncToGenerator.js");
-
-var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
-
-var _slicedToArray2 = __webpack_require__(/*! babel-runtime/helpers/slicedToArray */ "./node_modules/babel-runtime/helpers/slicedToArray.js");
-
-var _slicedToArray3 = _interopRequireDefault(_slicedToArray2);
-
-var _react = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-
-var _react2 = _interopRequireDefault(_react);
-
-var _reactDom = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
-
-var _reactDom2 = _interopRequireDefault(_reactDom);
-
-var _axios = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-
-var _axios2 = _interopRequireDefault(_axios);
-
-var _common = __webpack_require__(/*! ../common.functions */ "./sources/js/shared/common.functions.js");
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var CompanySelect = function CompanySelect(_ref) {
-    var _ref$defaultCompanyId = _ref.defaultCompanyId,
-        defaultCompanyId = _ref$defaultCompanyId === undefined ? '' : _ref$defaultCompanyId,
-        _ref$roleId = _ref.roleId,
-        roleId = _ref$roleId === undefined ? '' : _ref$roleId,
-        onChange = _ref.onChange;
-
-    var _useState = (0, _react.useState)([]),
-        _useState2 = (0, _slicedToArray3.default)(_useState, 2),
-        companyOptions = _useState2[0],
-        setCompanyOptions = _useState2[1];
-
-    var _useState3 = (0, _react.useState)(defaultCompanyId),
-        _useState4 = (0, _slicedToArray3.default)(_useState3, 2),
-        selectedCompanyId = _useState4[0],
-        setSelectedCompanyId = _useState4[1];
-
-    var _useState5 = (0, _react.useState)(true),
-        _useState6 = (0, _slicedToArray3.default)(_useState5, 2),
-        isLoading = _useState6[0],
-        setIsLoading = _useState6[1];
-
-    var _useState7 = (0, _react.useState)(false),
-        _useState8 = (0, _slicedToArray3.default)(_useState7, 2),
-        hasNotifiedInitialValue = _useState8[0],
-        setHasNotifiedInitialValue = _useState8[1];
-
-    var loadCompanies = function () {
-        var _ref2 = (0, _asyncToGenerator3.default)( /*#__PURE__*/_regenerator2.default.mark(function _callee() {
-            var response, companies;
-            return _regenerator2.default.wrap(function _callee$(_context) {
-                while (1) {
-                    switch (_context.prev = _context.next) {
-                        case 0:
-                            _context.next = 2;
-                            return (0, _axios2.default)({
-                                url: (0, _common.resolveClientUrl)('Team/GetCompaniesByRoleIdForEmployee'),
-                                method: 'GET',
-                                headers: { 'X-Requested-With': 'XMLHttpRequest' },
-                                params: {
-                                    roleId: roleId
-                                }
-                            });
-
-                        case 2:
-                            response = _context.sent;
-                            companies = response.data.map(function (company) {
-                                return {
-                                    id: company.companyId,
-                                    name: company.name
-                                };
-                            });
 
 
-                            setCompanyOptions(companies);
-                            setIsLoading(false);
-
-                        case 6:
-                        case 'end':
-                            return _context.stop();
-                    }
-                }
-            }, _callee, undefined);
-        }));
-
-        return function loadCompanies() {
-            return _ref2.apply(this, arguments);
-        };
-    }();
-
-    var handleCompanyChange = function handleCompanyChange(e) {
-        var companyId = e.target.value;
-        setSelectedCompanyId(companyId);
-
-        if (onChange) {
-            onChange(companyId);
-        }
-    };
-
-    (0, _react.useEffect)(function () {
-        loadCompanies();
-    }, [roleId]);
-
-    (0, _react.useEffect)(function () {
-        setSelectedCompanyId(defaultCompanyId);
-    }, [defaultCompanyId]);
-
-    (0, _react.useEffect)(function () {
-        if (!isLoading && selectedCompanyId && onChange && !hasNotifiedInitialValue) {
-            onChange(selectedCompanyId);
-            setHasNotifiedInitialValue(true);
-        }
-    }, [isLoading, selectedCompanyId, onChange, hasNotifiedInitialValue]);
-
-    if (isLoading || companyOptions.length <= 1) {
-        return null;
+const CompanySelect = ({
+  defaultCompanyId = '',
+  roleId = '',
+  onChange
+}) => {
+  const [companyOptions, setCompanyOptions] = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])([]);
+  const [selectedCompanyId, setSelectedCompanyId] = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(defaultCompanyId);
+  const [isLoading, setIsLoading] = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(true);
+  const [hasNotifiedInitialValue, setHasNotifiedInitialValue] = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(false);
+  const loadCompanies = async () => {
+    const response = await Object(axios__WEBPACK_IMPORTED_MODULE_2__["default"])({
+      url: Object(_common_functions__WEBPACK_IMPORTED_MODULE_3__["resolveClientUrl"])('Team/GetCompaniesByRoleIdForEmployee'),
+      method: 'GET',
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest'
+      },
+      params: {
+        roleId: roleId
+      }
+    });
+    const companies = response.data.map(company => ({
+      id: company.companyId,
+      name: company.name
+    }));
+    setCompanyOptions(companies);
+    setIsLoading(false);
+  };
+  const handleCompanyChange = e => {
+    const companyId = e.target.value;
+    setSelectedCompanyId(companyId);
+    if (onChange) {
+      onChange(companyId);
     }
-
-    return _react2.default.createElement(
-        'select',
-        {
-            className: 'form-control',
-            value: selectedCompanyId,
-            onChange: handleCompanyChange,
-            style: {
-                display: 'inline-block',
-                width: 'auto',
-                fontSize: '13px',
-                marginLeft: '15px',
-                padding: '4px 8px',
-                fontWeight: 'bold',
-                border: '2px solid #337ab7',
-                borderRadius: '4px',
-                boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
-                cursor: 'pointer',
-                transition: 'all 0.2s ease'
-            } },
-        companyOptions.map(function (company) {
-            return _react2.default.createElement(
-                'option',
-                { key: company.id, value: company.id },
-                company.name
-            );
-        })
-    );
-};
-
-var renderCompanySelect = exports.renderCompanySelect = function renderCompanySelect() {
-    var props = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-
-    var element = document.getElementById('company-list');
-    if (element) {
-        _reactDom2.default.render(_react2.default.createElement(CompanySelect, props), element);
-        return true;
+  };
+  Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(() => {
+    loadCompanies();
+  }, [roleId]);
+  Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(() => {
+    setSelectedCompanyId(defaultCompanyId);
+  }, [defaultCompanyId]);
+  Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(() => {
+    if (!isLoading && selectedCompanyId && onChange && !hasNotifiedInitialValue) {
+      onChange(selectedCompanyId);
+      setHasNotifiedInitialValue(true);
     }
-    return false;
+  }, [isLoading, selectedCompanyId, onChange, hasNotifiedInitialValue]);
+  if (isLoading || companyOptions.length <= 1) {
+    return null;
+  }
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("select", {
+    className: "form-control",
+    value: selectedCompanyId,
+    onChange: handleCompanyChange,
+    style: {
+      display: 'inline-block',
+      width: 'auto',
+      fontSize: '13px',
+      marginLeft: '15px',
+      padding: '4px 8px',
+      fontWeight: 'bold',
+      border: '2px solid #337ab7',
+      borderRadius: '4px',
+      boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+      cursor: 'pointer',
+      transition: 'all 0.2s ease'
+    }
+  }, companyOptions.map(company => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
+    key: company.id,
+    value: company.id
+  }, company.name)));
 };
-
-exports.default = CompanySelect;
+const renderCompanySelect = (props = {}) => {
+  const element = document.getElementById('company-list');
+  if (element) {
+    react_dom__WEBPACK_IMPORTED_MODULE_1___default.a.render(/*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(CompanySelect, props), element);
+    return true;
+  }
+  return false;
+};
+/* harmony default export */ __webpack_exports__["default"] = (CompanySelect);
 
 /***/ }),
 
@@ -150030,94 +144276,40 @@ exports.default = CompanySelect;
 /*!********************************************************!*\
   !*** ./sources/js/shared/components/DropdownOrder.jsx ***!
   \********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return DropdownOrder; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/es/index.js");
 
 
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _getPrototypeOf = __webpack_require__(/*! babel-runtime/core-js/object/get-prototype-of */ "./node_modules/babel-runtime/core-js/object/get-prototype-of.js");
-
-var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
-
-var _classCallCheck2 = __webpack_require__(/*! babel-runtime/helpers/classCallCheck */ "./node_modules/babel-runtime/helpers/classCallCheck.js");
-
-var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
-
-var _createClass2 = __webpack_require__(/*! babel-runtime/helpers/createClass */ "./node_modules/babel-runtime/helpers/createClass.js");
-
-var _createClass3 = _interopRequireDefault(_createClass2);
-
-var _possibleConstructorReturn2 = __webpack_require__(/*! babel-runtime/helpers/possibleConstructorReturn */ "./node_modules/babel-runtime/helpers/possibleConstructorReturn.js");
-
-var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
-
-var _inherits2 = __webpack_require__(/*! babel-runtime/helpers/inherits */ "./node_modules/babel-runtime/helpers/inherits.js");
-
-var _inherits3 = _interopRequireDefault(_inherits2);
-
-var _react = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-
-var _react2 = _interopRequireDefault(_react);
-
-var _reactBootstrap = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/es/index.js");
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var DropdownOrder = function (_PureComponent) {
-    (0, _inherits3.default)(DropdownOrder, _PureComponent);
-
-    function DropdownOrder() {
-        (0, _classCallCheck3.default)(this, DropdownOrder);
-        return (0, _possibleConstructorReturn3.default)(this, (DropdownOrder.__proto__ || (0, _getPrototypeOf2.default)(DropdownOrder)).apply(this, arguments));
-    }
-
-    (0, _createClass3.default)(DropdownOrder, [{
-        key: 'render',
-        value: function render() {
-            return _react2.default.createElement(
-                _reactBootstrap.Dropdown,
-                { id: this.props.id, componentClass: 'div', className: 'customize-order' },
-                _react2.default.createElement(
-                    _reactBootstrap.Dropdown.Toggle,
-                    { noCaret: true, useAnchor: true },
-                    _react2.default.createElement('i', { className: 'icon icon-sortable', title: 'Customize order' })
-                ),
-                _react2.default.createElement(
-                    _reactBootstrap.Dropdown.Menu,
-                    null,
-                    _react2.default.createElement(
-                        _reactBootstrap.MenuItem,
-                        { onClick: this.props.onMoveUp },
-                        'Up'
-                    ),
-                    _react2.default.createElement(
-                        _reactBootstrap.MenuItem,
-                        { onClick: this.props.onMoveDown },
-                        'Down'
-                    ),
-                    _react2.default.createElement(
-                        _reactBootstrap.MenuItem,
-                        { onClick: this.props.onMoveTop },
-                        'Top'
-                    ),
-                    _react2.default.createElement(
-                        _reactBootstrap.MenuItem,
-                        { onClick: this.props.onMoveBottom },
-                        'Bottom'
-                    )
-                )
-            );
-        }
-    }]);
-    return DropdownOrder;
-}(_react.PureComponent);
-
-exports.default = DropdownOrder;
+class DropdownOrder extends react__WEBPACK_IMPORTED_MODULE_0__["PureComponent"] {
+  render() {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Dropdown"], {
+      id: this.props.id,
+      componentClass: "div",
+      className: "customize-order"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Dropdown"].Toggle, {
+      noCaret: true,
+      useAnchor: true
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+      className: "icon icon-sortable",
+      title: "Customize order"
+    })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["Dropdown"].Menu, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["MenuItem"], {
+      onClick: this.props.onMoveUp
+    }, "Up"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["MenuItem"], {
+      onClick: this.props.onMoveDown
+    }, "Down"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["MenuItem"], {
+      onClick: this.props.onMoveTop
+    }, "Top"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_1__["MenuItem"], {
+      onClick: this.props.onMoveBottom
+    }, "Bottom")));
+  }
+}
 
 /***/ }),
 
@@ -150125,95 +144317,60 @@ exports.default = DropdownOrder;
 /*!***********************************************************!*\
   !*** ./sources/js/shared/components/SweetModalDialog.jsx ***!
   \***********************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/es/index.js");
+/* harmony import */ var react_draggable__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-draggable */ "./node_modules/react-draggable/build/cjs/cjs.js");
+/* harmony import */ var react_draggable__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(react_draggable__WEBPACK_IMPORTED_MODULE_3__);
 
 
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
 
-var _react = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 
-var _react2 = _interopRequireDefault(_react);
-
-var _propTypes = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
-
-var _propTypes2 = _interopRequireDefault(_propTypes);
-
-var _reactBootstrap = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/es/index.js");
-
-var _reactDraggable = __webpack_require__(/*! react-draggable */ "./node_modules/react-draggable/build/cjs/cjs.js");
-
-var _reactDraggable2 = _interopRequireDefault(_reactDraggable);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var SweetModalDialog = function SweetModalDialog(_ref) {
-    var show = _ref.show,
-        contents = _ref.contents,
-        onSubmit = _ref.onSubmit,
-        onHide = _ref.onHide;
-
-    return _react2.default.createElement(
-        _reactDraggable2.default,
-        { handle: '.modal-header' },
-        _react2.default.createElement(
-            _reactBootstrap.Modal,
-            { keyboard: false, backdrop: 'static', show: show, onHide: onHide },
-            _react2.default.createElement(
-                _reactBootstrap.Modal.Header,
-                null,
-                _react2.default.createElement(
-                    _reactBootstrap.Modal.Title,
-                    null,
-                    'HRM'
-                )
-            ),
-            _react2.default.createElement(
-                _reactBootstrap.Modal.Body,
-                null,
-                contents
-            ),
-            _react2.default.createElement(
-                _reactBootstrap.Modal.Footer,
-                null,
-                _react2.default.createElement(
-                    _reactBootstrap.Button,
-                    { bsStyle: 'primary', onClick: onSubmit },
-                    ' OK '
-                ),
-                _react2.default.createElement(
-                    _reactBootstrap.Button,
-                    { className: 'btn-cancel', onClick: onHide },
-                    ' Cancel '
-                )
-            )
-        )
-    );
+const SweetModalDialog = ({
+  show,
+  contents,
+  onSubmit,
+  onHide
+}) => {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_draggable__WEBPACK_IMPORTED_MODULE_3___default.a, {
+    handle: ".modal-header"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Modal"], {
+    keyboard: false,
+    backdrop: "static",
+    show: show,
+    onHide: onHide
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Modal"].Header, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Modal"].Title, null, "HRM")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Modal"].Body, null, contents), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Modal"].Footer, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Button"], {
+    bsStyle: "primary",
+    onClick: onSubmit
+  }, " OK "), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Button"], {
+    className: "btn-cancel",
+    onClick: onHide
+  }, " Cancel "))));
 };
-
 SweetModalDialog.propTypes = {
-    show: _propTypes2.default.bool,
-    contents: _propTypes2.default.element.isRequired,
-    onHide: _propTypes2.default.func,
-    onSubmit: _propTypes2.default.func
+  show: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.bool,
+  contents: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.element.isRequired,
+  onHide: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.func,
+  onSubmit: prop_types__WEBPACK_IMPORTED_MODULE_1___default.a.func
 };
-
 SweetModalDialog.defaultProps = {
-    show: false,
-    contents: _react2.default.createElement(_react.Fragment, null),
-    onHide: function onHide() {
-        // This is intentional
-    },
-    onSubmit: function onSubmit() {
-        // This is intentional
-    }
+  show: false,
+  contents: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null),
+  onHide: function () {
+    // This is intentional
+  },
+  onSubmit: function () {
+    // This is intentional
+  }
 };
-
-exports.default = SweetModalDialog;
+/* harmony default export */ __webpack_exports__["default"] = (SweetModalDialog);
 
 /***/ }),
 
@@ -150221,134 +144378,83 @@ exports.default = SweetModalDialog;
 /*!*****************************************************!*\
   !*** ./sources/js/shared/components/WeekPicker.jsx ***!
   \*****************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function($) {
+__webpack_require__.r(__webpack_exports__);
+/* WEBPACK VAR INJECTION */(function($) {/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return WeekPicker; });
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "./node_modules/@babel/runtime/helpers/defineProperty.js");
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../constants */ "./sources/js/shared/constants.js");
 
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
 
-var _getPrototypeOf = __webpack_require__(/*! babel-runtime/core-js/object/get-prototype-of */ "./node_modules/babel-runtime/core-js/object/get-prototype-of.js");
 
-var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
 
-var _classCallCheck2 = __webpack_require__(/*! babel-runtime/helpers/classCallCheck */ "./node_modules/babel-runtime/helpers/classCallCheck.js");
-
-var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
-
-var _createClass2 = __webpack_require__(/*! babel-runtime/helpers/createClass */ "./node_modules/babel-runtime/helpers/createClass.js");
-
-var _createClass3 = _interopRequireDefault(_createClass2);
-
-var _possibleConstructorReturn2 = __webpack_require__(/*! babel-runtime/helpers/possibleConstructorReturn */ "./node_modules/babel-runtime/helpers/possibleConstructorReturn.js");
-
-var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
-
-var _inherits2 = __webpack_require__(/*! babel-runtime/helpers/inherits */ "./node_modules/babel-runtime/helpers/inherits.js");
-
-var _inherits3 = _interopRequireDefault(_inherits2);
-
-var _react = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-
-var _react2 = _interopRequireDefault(_react);
-
-var _moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
-
-var _moment2 = _interopRequireDefault(_moment);
-
-var _constants = __webpack_require__(/*! ../constants */ "./sources/js/shared/constants.js");
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var WeekPicker = function (_PureComponent) {
-    (0, _inherits3.default)(WeekPicker, _PureComponent);
-
-    function WeekPicker() {
-        var _ref;
-
-        var _temp, _this, _ret;
-
-        (0, _classCallCheck3.default)(this, WeekPicker);
-
-        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-            args[_key] = arguments[_key];
+class WeekPicker extends react__WEBPACK_IMPORTED_MODULE_1__["PureComponent"] {
+  constructor(...args) {
+    super(...args);
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleClickOutside", event => {
+      if (this.wrapperRef && !this.wrapperRef.contains(event.target)) {
+        this.$el.hide();
+      }
+    });
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "updateWeekPicker", () => {
+      const vm = this;
+      this.$el.weekpicker({
+        firstDay: 1,
+        onSelect: function (dateText, startDateText, startDate, endDate) {
+          vm.props.onChange(moment__WEBPACK_IMPORTED_MODULE_2___default()(startDate).format(_constants__WEBPACK_IMPORTED_MODULE_3__["DateFormat"]), moment__WEBPACK_IMPORTED_MODULE_2___default()(endDate).format(_constants__WEBPACK_IMPORTED_MODULE_3__["DateFormat"]));
+          vm.$el.hide();
         }
-
-        return _ret = (_temp = (_this = (0, _possibleConstructorReturn3.default)(this, (_ref = WeekPicker.__proto__ || (0, _getPrototypeOf2.default)(WeekPicker)).call.apply(_ref, [this].concat(args))), _this), _this.handleClickOutside = function (event) {
-            if (_this.wrapperRef && !_this.wrapperRef.contains(event.target)) {
-                _this.$el.hide();
-            }
-        }, _this.updateWeekPicker = function () {
-            var vm = _this;
-
-            _this.$el.weekpicker({
-                firstDay: 1,
-                onSelect: function onSelect(dateText, startDateText, startDate, endDate) {
-                    vm.props.onChange((0, _moment2.default)(startDate).format(_constants.DateFormat), (0, _moment2.default)(endDate).format(_constants.DateFormat));
-                    vm.$el.hide();
-                }
-            });
-
-            _this.$el.weekpicker('setDate', new Date(new Date(_this.props.fromDate)));
-        }, _this.handleShowCalendar = function () {
-            _this.$el.toggle();
-        }, _temp), (0, _possibleConstructorReturn3.default)(_this, _ret);
+      });
+      this.$el.weekpicker('setDate', new Date(new Date(this.props.fromDate)));
+    });
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleShowCalendar", () => {
+      this.$el.toggle();
+    });
+  }
+  componentDidMount() {
+    this.$el = $(this.el);
+    this.updateWeekPicker();
+    document.addEventListener('mousedown', this.handleClickOutside);
+  }
+  componentDidUpdate(prevProps) {
+    if (this.props.fromDate !== prevProps.fromDate || this.props.toDate !== prevProps.toDate) {
+      this.updateWeekPicker();
     }
-
-    (0, _createClass3.default)(WeekPicker, [{
-        key: 'componentDidMount',
-        value: function componentDidMount() {
-            this.$el = $(this.el);
-            this.updateWeekPicker();
-
-            document.addEventListener('mousedown', this.handleClickOutside);
-        }
-    }, {
-        key: 'componentDidUpdate',
-        value: function componentDidUpdate(prevProps) {
-            if (this.props.fromDate !== prevProps.fromDate || this.props.toDate !== prevProps.toDate) {
-                this.updateWeekPicker();
-            }
-        }
-    }, {
-        key: 'componentWillUnmount',
-        value: function componentWillUnmount() {
-            this.$el.weekpicker('destroy');
-            document.removeEventListener('mousedown', this.handleClickOutside);
-        }
-    }, {
-        key: 'render',
-        value: function render() {
-            var _this2 = this;
-
-            return _react2.default.createElement(
-                'div',
-                { className: 'weekpicker-wrapper', ref: function ref(node) {
-                        return _this2.wrapperRef = node;
-                    } },
-                _react2.default.createElement('input', {
-                    value: this.props.fromDate,
-                    onClick: this.handleShowCalendar,
-                    className: 'fromDate form-control', readOnly: true
-                }),
-                _react2.default.createElement('input', { value: this.props.toDate,
-                    onClick: this.handleShowCalendar,
-                    className: 'toDate form-control', readOnly: true
-                }),
-                _react2.default.createElement('div', { className: 'calendar', ref: function ref(node) {
-                        return _this2.el = node;
-                    } }),
-                _react2.default.createElement('i', { className: 'icon-calendar fa fa-calendar', onClick: this.handleShowCalendar })
-            );
-        }
-    }]);
-    return WeekPicker;
-}(_react.PureComponent);
-
-exports.default = WeekPicker;
+  }
+  componentWillUnmount() {
+    this.$el.weekpicker('destroy');
+    document.removeEventListener('mousedown', this.handleClickOutside);
+  }
+  render() {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: "weekpicker-wrapper",
+      ref: node => this.wrapperRef = node
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
+      value: this.props.fromDate,
+      onClick: this.handleShowCalendar,
+      className: "fromDate form-control",
+      readOnly: true
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
+      value: this.props.toDate,
+      onClick: this.handleShowCalendar,
+      className: "toDate form-control",
+      readOnly: true
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: "calendar",
+      ref: node => this.el = node
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("i", {
+      className: "icon-calendar fa fa-calendar",
+      onClick: this.handleShowCalendar
+    }));
+  }
+}
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js")))
 
 /***/ }),
@@ -150357,283 +144463,188 @@ exports.default = WeekPicker;
 /*!********************************************************************************!*\
   !*** ./sources/js/shared/components/react-tree-multiselect/TreeMultiselect.js ***!
   \********************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return TreeMultiselect; });
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "./node_modules/@babel/runtime/helpers/defineProperty.js");
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
+/* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _buildData__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./buildData */ "./sources/js/shared/components/react-tree-multiselect/buildData.js");
+/* harmony import */ var _TreeNode__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./TreeNode */ "./sources/js/shared/components/react-tree-multiselect/TreeNode.js");
+
+function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
 
 
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
 
-var _toConsumableArray2 = __webpack_require__(/*! babel-runtime/helpers/toConsumableArray */ "./node_modules/babel-runtime/helpers/toConsumableArray.js");
 
-var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);
-
-var _getPrototypeOf = __webpack_require__(/*! babel-runtime/core-js/object/get-prototype-of */ "./node_modules/babel-runtime/core-js/object/get-prototype-of.js");
-
-var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
-
-var _classCallCheck2 = __webpack_require__(/*! babel-runtime/helpers/classCallCheck */ "./node_modules/babel-runtime/helpers/classCallCheck.js");
-
-var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
-
-var _possibleConstructorReturn2 = __webpack_require__(/*! babel-runtime/helpers/possibleConstructorReturn */ "./node_modules/babel-runtime/helpers/possibleConstructorReturn.js");
-
-var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
-
-var _createClass2 = __webpack_require__(/*! babel-runtime/helpers/createClass */ "./node_modules/babel-runtime/helpers/createClass.js");
-
-var _createClass3 = _interopRequireDefault(_createClass2);
-
-var _inherits2 = __webpack_require__(/*! babel-runtime/helpers/inherits */ "./node_modules/babel-runtime/helpers/inherits.js");
-
-var _inherits3 = _interopRequireDefault(_inherits2);
-
-var _extends2 = __webpack_require__(/*! babel-runtime/helpers/extends */ "./node_modules/babel-runtime/helpers/extends.js");
-
-var _extends3 = _interopRequireDefault(_extends2);
-
-var _react = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-
-var _react2 = _interopRequireDefault(_react);
-
-var _propTypes = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
-
-var _propTypes2 = _interopRequireDefault(_propTypes);
-
-var _buildData = __webpack_require__(/*! ./buildData */ "./sources/js/shared/components/react-tree-multiselect/buildData.js");
-
-var _buildData2 = _interopRequireDefault(_buildData);
-
-var _TreeNode = __webpack_require__(/*! ./TreeNode */ "./sources/js/shared/components/react-tree-multiselect/TreeNode.js");
-
-var _TreeNode2 = _interopRequireDefault(_TreeNode);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var updateParent = function updateParent(floatData, parentKey, isChecked) {
-    var index = floatData.findIndex(function (item) {
-        return item.key === parentKey;
-    }),
-        siblings = floatData.filter(function (item) {
-        return item.parentKey === parentKey;
-    }),
-        selected = siblings.filter(function (item) {
-        return item.checked;
+const updateParent = (floatData, parentKey, isChecked) => {
+  const index = floatData.findIndex(item => item.key === parentKey),
+    siblings = floatData.filter(item => item.parentKey === parentKey),
+    selected = siblings.filter(item => item.checked);
+  floatData[index] = _objectSpread(_objectSpread({}, floatData[index]), {}, {
+    checked: siblings.length === selected.length
+  });
+  if (floatData[index].parentKey !== null && floatData[index].parentKey !== '') {
+    updateParent(floatData, floatData[index].parentKey, isChecked);
+  }
+};
+const updateChild = (floatData, itemkey, isChecked) => {
+  const totalItems = floatData.length;
+  for (let i = 0; i < totalItems; i++) {
+    if (floatData[i].parentKey === itemkey) {
+      floatData[i] = _objectSpread(_objectSpread({}, floatData[i]), {}, {
+        checked: isChecked
+      });
+      updateChild(floatData, floatData[i].key, isChecked);
+    }
+  }
+};
+const getSelectedText = floatData => {
+  const items = floatData.filter(item => item.isLeaf),
+    selected = items.filter(item => item.checked);
+  let text = '';
+  if (selected.length === 0) {
+    text = 'Select options';
+  } else if (items.length === selected.length) {
+    text = 'All selected';
+  } else {
+    text = `${selected.length} selected`;
+  }
+  return text;
+};
+const getSelectedItems = floatData => {
+  return floatData.filter(item => item.isLeaf && item.checked);
+};
+let id = 1;
+class TreeMultiselect extends react__WEBPACK_IMPORTED_MODULE_1___default.a.Component {
+  static getDerivedStateFromProps(props, state) {
+    if (state.original === props.data) {
+      return null;
+    }
+    return _objectSpread(_objectSpread({}, Object(_buildData__WEBPACK_IMPORTED_MODULE_3__["default"])(props.data || [], props.isSelectedAll)), {}, {
+      original: props.data
     });
-    floatData[index] = (0, _extends3.default)({}, floatData[index], { checked: siblings.length === selected.length });
-
-    if (floatData[index].parentKey !== null && floatData[index].parentKey !== '') {
+  }
+  constructor(props) {
+    super(props);
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleDocumentClick", event => {
+      const clickOutside = this.wrapper && !this.wrapper.contains(event.target);
+      if (clickOutside && this.state.opened) {
+        this.setState({
+          opened: false
+        });
+      }
+    });
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "onToggle", () => {
+      this.setState(prevState => {
+        return {
+          opened: !prevState.opened
+        };
+      });
+    });
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleSelectAll", event => {
+      let floatData = [...this.state.floatData];
+      const totalItems = floatData.length;
+      for (let i = 0; i < totalItems; i++) {
+        floatData[i] = _objectSpread(_objectSpread({}, floatData[i]), {}, {
+          checked: event.target.checked
+        });
+      }
+      this.props.onChange && this.props.onChange(getSelectedItems(floatData));
+      this.setState({
+        floatData
+      });
+    });
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleSelect", (itemkey, isChecked) => {
+      let floatData = [...this.state.floatData];
+      const index = floatData.findIndex(item => item.key === itemkey);
+      floatData[index] = _objectSpread(_objectSpread({}, floatData[index]), {}, {
+        checked: isChecked
+      });
+      updateChild(floatData, itemkey, isChecked);
+      if (floatData[index].parentKey !== null && floatData[index].parentKey !== '') {
         updateParent(floatData, floatData[index].parentKey, isChecked);
-    }
-};
-
-var updateChild = function updateChild(floatData, itemkey, isChecked) {
-    var totalItems = floatData.length;
-    for (var i = 0; i < totalItems; i++) {
-        if (floatData[i].parentKey === itemkey) {
-            floatData[i] = (0, _extends3.default)({}, floatData[i], { checked: isChecked });
-            updateChild(floatData, floatData[i].key, isChecked);
-        }
-    }
-};
-
-var getSelectedText = function getSelectedText(floatData) {
-    var items = floatData.filter(function (item) {
-        return item.isLeaf;
-    }),
-        selected = items.filter(function (item) {
-        return item.checked;
+      }
+      this.props.onChange && this.props.onChange(getSelectedItems(floatData));
+      this.setState({
+        floatData
+      });
     });
-    var text = '';
-
-    if (selected.length === 0) {
-        text = 'Select options';
-    } else if (items.length === selected.length) {
-        text = 'All selected';
-    } else {
-        text = selected.length + ' selected';
-    }
-
-    return text;
-};
-
-var getSelectedItems = function getSelectedItems(floatData) {
-    return floatData.filter(function (item) {
-        return item.isLeaf && item.checked;
-    });
-};
-
-var id = 1;
-
-var TreeMultiselect = function (_React$Component) {
-    (0, _inherits3.default)(TreeMultiselect, _React$Component);
-    (0, _createClass3.default)(TreeMultiselect, null, [{
-        key: 'getDerivedStateFromProps',
-        value: function getDerivedStateFromProps(props, state) {
-            if (state.original === props.data) {
-                return null;
-            }
-
-            return (0, _extends3.default)({}, (0, _buildData2.default)(props.data || [], props.isSelectedAll), { original: props.data });
-        }
-    }]);
-
-    function TreeMultiselect(props) {
-        (0, _classCallCheck3.default)(this, TreeMultiselect);
-
-        var _this = (0, _possibleConstructorReturn3.default)(this, (TreeMultiselect.__proto__ || (0, _getPrototypeOf2.default)(TreeMultiselect)).call(this, props));
-
-        _this.handleDocumentClick = function (event) {
-            var clickOutside = _this.wrapper && !_this.wrapper.contains(event.target);
-            if (clickOutside && _this.state.opened) {
-                _this.setState({ opened: false });
-            }
-        };
-
-        _this.onToggle = function () {
-            _this.setState(function (prevState) {
-                return { opened: !prevState.opened };
-            });
-        };
-
-        _this.handleSelectAll = function (event) {
-            var floatData = [].concat((0, _toConsumableArray3.default)(_this.state.floatData));
-            var totalItems = floatData.length;
-            for (var i = 0; i < totalItems; i++) {
-                floatData[i] = (0, _extends3.default)({}, floatData[i], { checked: event.target.checked });
-            }
-
-            _this.props.onChange && _this.props.onChange(getSelectedItems(floatData));
-            _this.setState({ floatData: floatData });
-        };
-
-        _this.handleSelect = function (itemkey, isChecked) {
-            var floatData = [].concat((0, _toConsumableArray3.default)(_this.state.floatData));
-            var index = floatData.findIndex(function (item) {
-                return item.key === itemkey;
-            });
-            floatData[index] = (0, _extends3.default)({}, floatData[index], { checked: isChecked });
-
-            updateChild(floatData, itemkey, isChecked);
-            if (floatData[index].parentKey !== null && floatData[index].parentKey !== '') {
-                updateParent(floatData, floatData[index].parentKey, isChecked);
-            }
-
-            _this.props.onChange && _this.props.onChange(getSelectedItems(floatData));
-            _this.setState({ floatData: floatData });
-        };
-
-        _this.id = 'multiselect-treeview-' + (props.id || id++);
-        _this.state = {
-            selectedText: 'Select options',
-            opened: false
-        };
-        return _this;
-    }
-
-    (0, _createClass3.default)(TreeMultiselect, [{
-        key: 'componentDidMount',
-        value: function componentDidMount() {
-            document.addEventListener('click', this.handleDocumentClick);
-        }
-    }, {
-        key: 'componentWillUnmount',
-        value: function componentWillUnmount() {
-            document.removeEventListener('click', this.handleDocumentClick);
-        }
-    }, {
-        key: 'render',
-        value: function render() {
-            var _this2 = this;
-
-            var _state = this.state,
-                floatData = _state.floatData,
-                data = _state.data;
-
-            var selected = floatData.filter(function (item) {
-                return item.checked;
-            });
-            var selectedText = getSelectedText(floatData);
-
-            return _react2.default.createElement(
-                'div',
-                { id: this.id, className: 'multiselect-treeview', ref: function ref(element) {
-                        return _this2.wrapper = element;
-                    } },
-                _react2.default.createElement(
-                    'div',
-                    { className: 'multiselect-treeview-dropdown-button', onClick: this.onToggle },
-                    _react2.default.createElement(
-                        'span',
-                        { className: 'selected-text' },
-                        selectedText
-                    ),
-                    _react2.default.createElement(
-                        'span',
-                        { className: 'up-down-icon' },
-                        _react2.default.createElement('span', { className: this.state.opened ? 'up' : 'down' })
-                    )
-                ),
-                _react2.default.createElement(
-                    'div',
-                    { className: 'multiselect-treeview-dropdown-list ' + (this.state.opened ? '' : 'hidden') },
-                    _react2.default.createElement(
-                        'div',
-                        { className: 'multiselect-treeview-select-all' },
-                        _react2.default.createElement(
-                            'div',
-                            { className: 'checkbox-wrapper' },
-                            _react2.default.createElement('input', { type: 'checkbox', id: 'selectAll',
-                                checked: floatData.length === selected.length,
-                                onChange: this.handleSelectAll
-                            }),
-                            _react2.default.createElement(
-                                'label',
-                                { htmlFor: 'selectAll' },
-                                ' Select all'
-                            )
-                        )
-                    ),
-                    _react2.default.createElement(
-                        'div',
-                        { className: 'multiselect-treeview-items' },
-                        data.map(function (item) {
-                            return _react2.default.createElement(
-                                'ul',
-                                { key: item.key },
-                                _react2.default.createElement(
-                                    'li',
-                                    { className: 'multiselect-treeview-item' },
-                                    _react2.default.createElement(_TreeNode2.default, {
-                                        data: item,
-                                        floatData: floatData,
-                                        onSelect: _this2.handleSelect
-                                    })
-                                )
-                            );
-                        })
-                    )
-                )
-            );
-        }
-    }]);
-    return TreeMultiselect;
-}(_react2.default.Component);
-
-TreeMultiselect.propTypes = {
-    data: _propTypes2.default.arrayOf(_propTypes2.default.object).isRequired,
-    isSelectedAll: _propTypes2.default.bool,
-    onChange: _propTypes2.default.func
-};
-TreeMultiselect.defaultProps = {
-    data: [],
-    isSelectedAll: false,
-    onChange: function onChange() {}
-};
-exports.default = TreeMultiselect;
+    this.id = `multiselect-treeview-${props.id || id++}`;
+    this.state = {
+      selectedText: 'Select options',
+      opened: false
+    };
+  }
+  componentDidMount() {
+    document.addEventListener('click', this.handleDocumentClick);
+  }
+  componentWillUnmount() {
+    document.removeEventListener('click', this.handleDocumentClick);
+  }
+  render() {
+    const {
+      floatData,
+      data
+    } = this.state;
+    const selected = floatData.filter(item => item.checked);
+    const selectedText = getSelectedText(floatData);
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      id: this.id,
+      className: "multiselect-treeview",
+      ref: element => this.wrapper = element
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: "multiselect-treeview-dropdown-button",
+      onClick: this.onToggle
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("span", {
+      className: "selected-text"
+    }, selectedText), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("span", {
+      className: "up-down-icon"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("span", {
+      className: this.state.opened ? 'up' : 'down'
+    }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: `multiselect-treeview-dropdown-list ${this.state.opened ? '' : 'hidden'}`
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: "multiselect-treeview-select-all"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: "checkbox-wrapper"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
+      type: "checkbox",
+      id: "selectAll",
+      checked: floatData.length === selected.length,
+      onChange: this.handleSelectAll
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", {
+      htmlFor: "selectAll"
+    }, " Select all"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: "multiselect-treeview-items"
+    }, data.map(item => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("ul", {
+      key: item.key
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", {
+      className: "multiselect-treeview-item"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_TreeNode__WEBPACK_IMPORTED_MODULE_4__["default"], {
+      data: item,
+      floatData: floatData,
+      onSelect: this.handleSelect
+    })))))));
+  }
+}
+_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(TreeMultiselect, "propTypes", {
+  data: prop_types__WEBPACK_IMPORTED_MODULE_2___default.a.arrayOf(prop_types__WEBPACK_IMPORTED_MODULE_2___default.a.object).isRequired,
+  isSelectedAll: prop_types__WEBPACK_IMPORTED_MODULE_2___default.a.bool,
+  onChange: prop_types__WEBPACK_IMPORTED_MODULE_2___default.a.func
+});
+_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(TreeMultiselect, "defaultProps", {
+  data: [],
+  isSelectedAll: false,
+  onChange: function () {}
+});
 
 /***/ }),
 
@@ -150641,111 +144652,51 @@ exports.default = TreeMultiselect;
 /*!*************************************************************************!*\
   !*** ./sources/js/shared/components/react-tree-multiselect/TreeNode.js ***!
   \*************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return TreeNode; });
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "./node_modules/@babel/runtime/helpers/defineProperty.js");
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
 
 
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _getPrototypeOf = __webpack_require__(/*! babel-runtime/core-js/object/get-prototype-of */ "./node_modules/babel-runtime/core-js/object/get-prototype-of.js");
-
-var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
-
-var _classCallCheck2 = __webpack_require__(/*! babel-runtime/helpers/classCallCheck */ "./node_modules/babel-runtime/helpers/classCallCheck.js");
-
-var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
-
-var _createClass2 = __webpack_require__(/*! babel-runtime/helpers/createClass */ "./node_modules/babel-runtime/helpers/createClass.js");
-
-var _createClass3 = _interopRequireDefault(_createClass2);
-
-var _possibleConstructorReturn2 = __webpack_require__(/*! babel-runtime/helpers/possibleConstructorReturn */ "./node_modules/babel-runtime/helpers/possibleConstructorReturn.js");
-
-var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
-
-var _inherits2 = __webpack_require__(/*! babel-runtime/helpers/inherits */ "./node_modules/babel-runtime/helpers/inherits.js");
-
-var _inherits3 = _interopRequireDefault(_inherits2);
-
-var _react = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-
-var _react2 = _interopRequireDefault(_react);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var TreeNode = function (_PureComponent) {
-    (0, _inherits3.default)(TreeNode, _PureComponent);
-
-    function TreeNode() {
-        var _ref;
-
-        var _temp, _this, _ret;
-
-        (0, _classCallCheck3.default)(this, TreeNode);
-
-        for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-            args[_key] = arguments[_key];
-        }
-
-        return _ret = (_temp = (_this = (0, _possibleConstructorReturn3.default)(this, (_ref = TreeNode.__proto__ || (0, _getPrototypeOf2.default)(TreeNode)).call.apply(_ref, [this].concat(args))), _this), _this.handleChange = function (event) {
-            var itemkey = _this.props.data.key;
-            _this.props.onSelect(itemkey, event.target.checked);
-        }, _temp), (0, _possibleConstructorReturn3.default)(_this, _ret);
-    }
-
-    (0, _createClass3.default)(TreeNode, [{
-        key: "render",
-        value: function render() {
-            var _this2 = this;
-
-            var _props = this.props,
-                data = _props.data,
-                floatData = _props.floatData;
-
-            var itemIndex = floatData.findIndex(function (item) {
-                return item.key === data.key;
-            });
-
-            return _react2.default.createElement(
-                _react.Fragment,
-                null,
-                _react2.default.createElement(
-                    "div",
-                    { className: "checkbox-wrapper" },
-                    _react2.default.createElement("input", { type: "checkbox", id: data.key, checked: floatData[itemIndex].checked, onChange: this.handleChange }),
-                    _react2.default.createElement(
-                        "label",
-                        { htmlFor: data.key },
-                        " ",
-                        data.text
-                    )
-                ),
-                data.items && data.items.length > 0 && _react2.default.createElement(
-                    "ul",
-                    null,
-                    data.items.map(function (item) {
-                        return _react2.default.createElement(
-                            "li",
-                            { key: item.key, className: "multiselect-treeview-item is-child" },
-                            _react2.default.createElement(TreeNode, {
-                                data: item,
-                                floatData: floatData,
-                                onSelect: _this2.props.onSelect
-                            })
-                        );
-                    })
-                )
-            );
-        }
-    }]);
-    return TreeNode;
-}(_react.PureComponent);
-
-exports.default = TreeNode;
+class TreeNode extends react__WEBPACK_IMPORTED_MODULE_1__["PureComponent"] {
+  constructor(...args) {
+    super(...args);
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleChange", event => {
+      const itemkey = this.props.data.key;
+      this.props.onSelect(itemkey, event.target.checked);
+    });
+  }
+  render() {
+    const {
+      data,
+      floatData
+    } = this.props;
+    const itemIndex = floatData.findIndex(item => item.key === data.key);
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_1__["Fragment"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+      className: "checkbox-wrapper"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("input", {
+      type: "checkbox",
+      id: data.key,
+      checked: floatData[itemIndex].checked,
+      onChange: this.handleChange
+    }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("label", {
+      htmlFor: data.key
+    }, " ", data.text)), data.items && data.items.length > 0 && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("ul", null, data.items.map(item => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("li", {
+      key: item.key,
+      className: "multiselect-treeview-item is-child"
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(TreeNode, {
+      data: item,
+      floatData: floatData,
+      onSelect: this.props.onSelect
+    })))));
+  }
+}
 
 /***/ }),
 
@@ -150753,54 +144704,57 @@ exports.default = TreeNode;
 /*!**************************************************************************!*\
   !*** ./sources/js/shared/components/react-tree-multiselect/buildData.js ***!
   \**************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "./node_modules/@babel/runtime/helpers/defineProperty.js");
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__);
 
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
+function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+const getChilds = (floatData, data, parentKey, isChecked = false) => {
+  const totalItems = data.length;
+  for (let i = 0; i < totalItems; i++) {
+    const key = parentKey + '-' + i;
+    floatData.push(_objectSpread(_objectSpread({}, data[i]), {}, {
+      checked: isChecked,
+      key: key,
+      parentKey: parentKey
+    }));
+    data[i] = _objectSpread(_objectSpread({}, data[i]), {}, {
+      checked: isChecked,
+      key: key
+    });
+    if (data[i].items && data[i].items.length > 0) {
+      getChilds(floatData, data[i].items, key, isChecked);
+    }
+  }
+};
+/* harmony default export */ __webpack_exports__["default"] = ((data, isChecked = false) => {
+  let floatData = [];
+  const totalItems = data.length;
+  for (let i = 0; i < totalItems; i++) {
+    const key = 'item-' + i;
+    floatData.push(_objectSpread(_objectSpread({}, data[i]), {}, {
+      checked: isChecked,
+      key: key,
+      parentKey: ''
+    }));
+    data[i] = _objectSpread(_objectSpread({}, data[i]), {}, {
+      checked: isChecked,
+      key: key
+    });
+    if (data[i].items && data[i].items.length > 0) {
+      getChilds(floatData, data[i].items, key, isChecked);
+    }
+  }
+  return {
+    data,
+    floatData
+  };
 });
-
-var _extends2 = __webpack_require__(/*! babel-runtime/helpers/extends */ "./node_modules/babel-runtime/helpers/extends.js");
-
-var _extends3 = _interopRequireDefault(_extends2);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var getChilds = function getChilds(floatData, data, parentKey) {
-    var isChecked = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
-
-    var totalItems = data.length;
-    for (var i = 0; i < totalItems; i++) {
-        var key = parentKey + '-' + i;
-
-        floatData.push((0, _extends3.default)({}, data[i], { checked: isChecked, key: key, parentKey: parentKey }));
-        data[i] = (0, _extends3.default)({}, data[i], { checked: isChecked, key: key });
-        if (data[i].items && data[i].items.length > 0) {
-            getChilds(floatData, data[i].items, key, isChecked);
-        }
-    }
-};
-
-exports.default = function (data) {
-    var isChecked = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
-
-    var floatData = [];
-    var totalItems = data.length;
-    for (var i = 0; i < totalItems; i++) {
-        var key = 'item-' + i;
-
-        floatData.push((0, _extends3.default)({}, data[i], { checked: isChecked, key: key, parentKey: '' }));
-        data[i] = (0, _extends3.default)({}, data[i], { checked: isChecked, key: key });
-        if (data[i].items && data[i].items.length > 0) {
-            getChilds(floatData, data[i].items, key, isChecked);
-        }
-    }
-
-    return { data: data, floatData: floatData };
-};
 
 /***/ }),
 
@@ -150808,115 +144762,125 @@ exports.default = function (data) {
 /*!****************************************!*\
   !*** ./sources/js/shared/constants.js ***!
   \****************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/*! exports provided: DateFormat, DateTimeFormat, OffDayShiftId, RequestType, LeaveType, RoleSystem, RequestCommand, CurrentRequestStatus, ChangeShiftType, KeepInViewType, DisciplineType, Messages, PayrollType, PageType */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-var DateFormat = exports.DateFormat = 'DD MMM, YYYY';
-var DateTimeFormat = exports.DateTimeFormat = 'DD MMM, YYYY HH:mm';
-var OffDayShiftId = exports.OffDayShiftId = -1;
-var RequestType = exports.RequestType = {
-    CheckIn: 1,
-    CheckOut: 2,
-    LateIn: 3,
-    EarlyOut: 4,
-    ChangeShift: 5,
-    Leave: 6,
-    KeepInView: 7,
-    Overtime: 8
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DateFormat", function() { return DateFormat; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DateTimeFormat", function() { return DateTimeFormat; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "OffDayShiftId", function() { return OffDayShiftId; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RequestType", function() { return RequestType; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LeaveType", function() { return LeaveType; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RoleSystem", function() { return RoleSystem; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "RequestCommand", function() { return RequestCommand; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "CurrentRequestStatus", function() { return CurrentRequestStatus; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ChangeShiftType", function() { return ChangeShiftType; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "KeepInViewType", function() { return KeepInViewType; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "DisciplineType", function() { return DisciplineType; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Messages", function() { return Messages; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PayrollType", function() { return PayrollType; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PageType", function() { return PageType; });
+const DateFormat = 'DD MMM, YYYY';
+const DateTimeFormat = 'DD MMM, YYYY HH:mm';
+const OffDayShiftId = -1;
+const RequestType = {
+  CheckIn: 1,
+  CheckOut: 2,
+  LateIn: 3,
+  EarlyOut: 4,
+  ChangeShift: 5,
+  Leave: 6,
+  KeepInView: 7,
+  Overtime: 8
 };
-var LeaveType = exports.LeaveType = {
-    GeneralLeave: 0,
-    AnnualLeave: 2,
-    WeddingLeave: 6,
-    BusinessTrip: 9,
-    KeepInViewByDay: 10,
-    MaternityLeave: 12,
-    PublicHoliday: 13,
-    PaternityLeave: 14,
-    BereavementLeave: 21,
-    UnpaidLeave: 25,
-    BusinessDuringWorking: 26,
-    OffsetLeave: 27,
-    UnpaidLeaveInsurance: 41,
-    KeepInViewByHour: 48,
-    HospitalizationLeave: 39
+const LeaveType = {
+  GeneralLeave: 0,
+  AnnualLeave: 2,
+  WeddingLeave: 6,
+  BusinessTrip: 9,
+  KeepInViewByDay: 10,
+  MaternityLeave: 12,
+  PublicHoliday: 13,
+  PaternityLeave: 14,
+  BereavementLeave: 21,
+  UnpaidLeave: 25,
+  BusinessDuringWorking: 26,
+  OffsetLeave: 27,
+  UnpaidLeaveInsurance: 41,
+  KeepInViewByHour: 48,
+  HospitalizationLeave: 39
 };
-var RoleSystem = exports.RoleSystem = {
-    Member: 1,
-    Verifier: 2,
-    Approver: 3,
-    ShiftManager: 4,
-    OnBehalfRequest: 5,
-    HR: 6,
-    SystemAdmin: 7,
-    DisciplineManager: 8,
-    ShiftManager2: 9,
-    LocalHR: 10,
-    ExpatHR: 11
+const RoleSystem = {
+  Member: 1,
+  Verifier: 2,
+  Approver: 3,
+  ShiftManager: 4,
+  OnBehalfRequest: 5,
+  HR: 6,
+  SystemAdmin: 7,
+  DisciplineManager: 8,
+  ShiftManager2: 9,
+  LocalHR: 10,
+  ExpatHR: 11
 };
-var RequestCommand = exports.RequestCommand = {
-    Accept: 1,
-    NotAccept: 2,
-    Approve: 3,
-    Reject: 4,
-    Process: 5,
-    Void: 6,
-    Reset: 7,
-    VoidBySA: 8
+const RequestCommand = {
+  Accept: 1,
+  NotAccept: 2,
+  Approve: 3,
+  Reject: 4,
+  Process: 5,
+  Void: 6,
+  Reset: 7,
+  VoidBySA: 8
 };
-var CurrentRequestStatus = exports.CurrentRequestStatus = {
-    Pending: 1,
-    Verified: 2,
-    NotVerified: 3,
-    Approved: 4,
-    Rejected: 5,
-    Processed: 6,
-    Void: 7
+const CurrentRequestStatus = {
+  Pending: 1,
+  Verified: 2,
+  NotVerified: 3,
+  Approved: 4,
+  Rejected: 5,
+  Processed: 6,
+  Void: 7
 };
-var ChangeShiftType = exports.ChangeShiftType = {
-    ChangeShift: 1,
-    MoveOffDay: 2
+const ChangeShiftType = {
+  ChangeShift: 1,
+  MoveOffDay: 2
 };
-var KeepInViewType = exports.KeepInViewType = {
-    KeepInViewByDay: 1,
-    KeepInViewByHour: 2
+const KeepInViewType = {
+  KeepInViewByDay: 1,
+  KeepInViewByHour: 2
 };
-var DisciplineType = exports.DisciplineType = {
-    ChangeShift: 1,
-    MissingCheckInOut: 2,
-    LateIn: 3,
-    EarlyOut: 4,
-    Absent: 5,
-    UnpaidLeave: 6,
-    WorkingUnderTime: 7,
-    UnpaidLeaveAbsent: 8,
-    UnplannedLeave: 9,
-    WeekendLeave: 10,
-    SevenDaysLeave: 11
+const DisciplineType = {
+  ChangeShift: 1,
+  MissingCheckInOut: 2,
+  LateIn: 3,
+  EarlyOut: 4,
+  Absent: 5,
+  UnpaidLeave: 6,
+  WorkingUnderTime: 7,
+  UnpaidLeaveAbsent: 8,
+  UnplannedLeave: 9,
+  WeekendLeave: 10,
+  SevenDaysLeave: 11
 };
-var Messages = exports.Messages = {
-    notAvailable: 'Not available',
-    invalidInputData: 'Invalid input data',
-    errorTryAgain: 'An error occurred while processing your request. Please try again!',
-    confirmDelete: 'Are you sure you want to delete this?',
-    requireResignedDate: 'Please input the resigned date first!',
-    hostileInput: 'You have input data that could be considered hostile. Please change data!'
+const Messages = {
+  notAvailable: 'Not available',
+  invalidInputData: 'Invalid input data',
+  errorTryAgain: 'An error occurred while processing your request. Please try again!',
+  confirmDelete: 'Are you sure you want to delete this?',
+  requireResignedDate: 'Please input the resigned date first!',
+  hostileInput: 'You have input data that could be considered hostile. Please change data!'
 };
-var PayrollType = exports.PayrollType = {
-    FirstHalf: 1,
-    SecondHalf: 2,
-    FullMonth: 3
+const PayrollType = {
+  FirstHalf: 1,
+  SecondHalf: 2,
+  FullMonth: 3
 };
-var PageType = exports.PageType = {
-    Team: 1,
-    Employee: 2,
-    GroupTeam: 3
+const PageType = {
+  Team: 1,
+  Employee: 2,
+  GroupTeam: 3
 };
 
 /***/ }),
@@ -150925,73 +144889,29 @@ var PageType = exports.PageType = {
 /*!***************************************************!*\
   !*** ./sources/js/shared/layouts/ToastLayout.jsx ***!
   \***************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return ToastLayout; });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_toastify__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-toastify */ "./node_modules/react-toastify/esm/react-toastify.js");
 
 
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _getPrototypeOf = __webpack_require__(/*! babel-runtime/core-js/object/get-prototype-of */ "./node_modules/babel-runtime/core-js/object/get-prototype-of.js");
-
-var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
-
-var _classCallCheck2 = __webpack_require__(/*! babel-runtime/helpers/classCallCheck */ "./node_modules/babel-runtime/helpers/classCallCheck.js");
-
-var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
-
-var _createClass2 = __webpack_require__(/*! babel-runtime/helpers/createClass */ "./node_modules/babel-runtime/helpers/createClass.js");
-
-var _createClass3 = _interopRequireDefault(_createClass2);
-
-var _possibleConstructorReturn2 = __webpack_require__(/*! babel-runtime/helpers/possibleConstructorReturn */ "./node_modules/babel-runtime/helpers/possibleConstructorReturn.js");
-
-var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
-
-var _inherits2 = __webpack_require__(/*! babel-runtime/helpers/inherits */ "./node_modules/babel-runtime/helpers/inherits.js");
-
-var _inherits3 = _interopRequireDefault(_inherits2);
-
-var _react = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-
-var _react2 = _interopRequireDefault(_react);
-
-var _reactToastify = __webpack_require__(/*! react-toastify */ "./node_modules/react-toastify/esm/react-toastify.js");
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var ToastLayout = function (_PureComponent) {
-    (0, _inherits3.default)(ToastLayout, _PureComponent);
-
-    function ToastLayout() {
-        (0, _classCallCheck3.default)(this, ToastLayout);
-        return (0, _possibleConstructorReturn3.default)(this, (ToastLayout.__proto__ || (0, _getPrototypeOf2.default)(ToastLayout)).apply(this, arguments));
-    }
-
-    (0, _createClass3.default)(ToastLayout, [{
-        key: 'render',
-        value: function render() {
-            return _react2.default.createElement(
-                _reactToastify.ToastContainer,
-                {
-                    position: 'top-center',
-                    autoClose: 3000,
-                    hideProgressBar: false,
-                    transition: _reactToastify.Slide,
-                    closeOnClick: false,
-                    draggable: false
-                },
-                this.props.children
-            );
-        }
-    }]);
-    return ToastLayout;
-}(_react.PureComponent);
-
-exports.default = ToastLayout;
+class ToastLayout extends react__WEBPACK_IMPORTED_MODULE_0__["PureComponent"] {
+  render() {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_toastify__WEBPACK_IMPORTED_MODULE_1__["ToastContainer"], {
+      position: "top-center",
+      autoClose: 3000,
+      hideProgressBar: false,
+      transition: react_toastify__WEBPACK_IMPORTED_MODULE_1__["Slide"],
+      closeOnClick: false,
+      draggable: false
+    }, this.props.children);
+  }
+}
 
 /***/ })
 

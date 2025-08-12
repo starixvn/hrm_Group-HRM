@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text;
 using System.Text.Json;
+using System.Threading.Tasks;
 using GO.UserControl.Client.Core.Session;
 using HRM.Core;
 using HRM.Core.Constants;
@@ -29,7 +29,9 @@ using IEmployeeService = HRM.Services.Interfaces.IEmployeeService;
 
 namespace HRM.Services.Implement.Request;
 
+#pragma warning disable S107 // Methods should not have too many parameters
 public class RequestService(
+    IHttpClientFactory clientFactory,
     IRequestRepository requestRepository,
     IBaseService baseService,
     ICheckInOutRequestService checkInOutRequestService,
@@ -41,6 +43,7 @@ public class RequestService(
     IEmployeeService employeeService,
     ICompanyService companyService,
     NexConfig nexConfig) : IRequestService
+#pragma warning restore S107 // Methods should not have too many parameters
 {
     public static string ToRequestMessage(RequestEntity request, bool isNoFormat = false)
     {
@@ -60,7 +63,7 @@ public class RequestService(
 
     public static string GetReasonRequest(short requestTypeId, byte reasonId)
     {
-        return requestTypeId == (byte)RequestType.CheckIn || requestTypeId == (byte)RequestType.CheckOut
+        return requestTypeId is (byte)RequestType.CheckIn or (byte)RequestType.CheckOut
             ? GetCheckInOutReason(reasonId)
             : GetLateInEarlyOutReason(reasonId);
     }
@@ -237,13 +240,11 @@ public class RequestService(
     private async Task<T> SendAsync<T>(Uri baseUrl, string pathUrl, HttpMethod method)
     {
         var token = await GetTokenAsync(baseUrl);
-        var handler = new HttpClientHandler { ServerCertificateCustomValidationCallback = (_, _, _, _) => true };
-
-        using var httpClient = new HttpClient(handler);
-        httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        var client = clientFactory.CreateClient();
+        client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
         var url = new Uri($"{baseUrl}{pathUrl}");
         using var request = new HttpRequestMessage(method, url);
-        using var response = await httpClient.SendAsync(request);
+        using var response = await client.SendAsync(request);
         response.EnsureSuccessStatusCode();
         var jsonResult = await response.Content.ReadAsStringAsync();
         return JsonSerializer.Deserialize<T>(jsonResult);
@@ -252,11 +253,10 @@ public class RequestService(
     private async Task<string> GetTokenAsync(Uri baseUrl)
     {
         var url = new Uri($"{baseUrl}Token/GetToken?username={nexConfig.NexHRId}&password={nexConfig.NexHRPassword}");
-        var handler = new HttpClientHandler { ServerCertificateCustomValidationCallback = (_, _, _, _) => true };
 
-        using var httpClient = new HttpClient(handler);
+        var client = clientFactory.CreateClient();
         using var request = new HttpRequestMessage(HttpMethod.Post, url);
-        using var response = await httpClient.SendAsync(request);
+        using var response = await client.SendAsync(request);
         return await response.Content.ReadAsStringAsync();
     }
 

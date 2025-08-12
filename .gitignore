@@ -43,7 +43,7 @@ node_modules/
 */CoverageReports/
 */wwwroot/css/dev/
 */wwwroot/js/dev/
-*/coverage/
+*/wwwroot/coverage/
 *.cobertura.xml
 *.pubxml
 __snapshots__/

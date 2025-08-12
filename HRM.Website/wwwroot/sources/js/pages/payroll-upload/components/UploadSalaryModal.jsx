@@ -1,32 +1,32 @@
-import React, { useState } from "react";
-import axios from "axios";
-import toastr from "toastr";
-import { Modal, ModalBody, ModalFooter, ModalHeader } from "react-bootstrap";
+import React, { useState } from 'react';
+import axios from 'axios';
+import toastr from 'toastr';
+import { Modal, ModalBody, ModalFooter, ModalHeader } from 'react-bootstrap';
 import {
     resolveClientUrl,
     toastOptions,
-} from "../../../shared/common.functions";
+} from '../../../shared/common.functions';
 import {
     PERIOD_TYPES,
     PeriodType,
     PeriodTypeLabel,
-} from "../constants/periodType";
-import salaryService from "../Service";
+} from '../constants/periodType';
+import salaryService from '../Service';
 
 const UploadSalaryModal = ({ onSuccess }) => {
     const [show, setShow] = useState(false);
-    const [month, setMonth] = useState("");
+    const [month, setMonth] = useState('');
     const [periodType, setPeriodType] = useState(PeriodType.FULL_MONTH);
     const [file, setFile] = useState(null);
     const [isDragging, setIsDragging] = useState(false);
     const [isUploading, setIsUploading] = useState(false);
     const [showConfirm, setShowConfirm] = useState(false);
-    const [confirmMessage, setConfirmMessage] = useState("");
+    const [confirmMessage, setConfirmMessage] = useState('');
     const [pendingFormData, setPendingFormData] = useState(null);
 
     const handleClose = () => {
         setShow(false);
-        setMonth("");
+        setMonth('');
         setPeriodType(PeriodType.FULL_MONTH);
         setFile(null);
     };
@@ -35,7 +35,7 @@ const UploadSalaryModal = ({ onSuccess }) => {
         const now = new Date();
         const currentMonth = `${now.getFullYear()}-${String(
             now.getMonth() + 1
-        ).padStart(2, "0")}`;
+        ).padStart(2, '0')}`;
         setMonth(currentMonth);
         setShow(true);
     };
@@ -66,11 +66,11 @@ const UploadSalaryModal = ({ onSuccess }) => {
     const processUpload = async (formData) => {
         try {
             await salaryService.uploadPayroll(formData);
-            toastr.success("Payroll uploaded successfully", "", toastOptions());
+            toastr.success('Payroll uploaded successfully', '', toastOptions());
             onSuccess();
             handleClose();
         } catch (error) {
-            toastr.error("Failed to upload Payroll", "", toastOptions());
+            toastr.error('Failed to upload Payroll', '', toastOptions());
         } finally {
             setIsUploading(false);
             setShowConfirm(false);
@@ -80,7 +80,7 @@ const UploadSalaryModal = ({ onSuccess }) => {
 
     const handleSubmit = async () => {
         if (!file || !month || !periodType) {
-            toastr.error("Please fill all required fields", "", toastOptions());
+            toastr.error('Please fill all required fields', '', toastOptions());
             return;
         }
 
@@ -88,9 +88,9 @@ const UploadSalaryModal = ({ onSuccess }) => {
 
         try {
             const formData = new FormData();
-            formData.append("file", file);
-            formData.append("month", month);
-            formData.append("periodType", periodType);
+            formData.append('file', file);
+            formData.append('month', month);
+            formData.append('periodType', periodType);
 
             const confirmResult = await salaryService.confirmUpload(formData);
 
@@ -100,13 +100,13 @@ const UploadSalaryModal = ({ onSuccess }) => {
                 setPendingFormData(formData);
                 setConfirmMessage(
                     confirmResult.message ||
-                        "Are you sure you want to proceed with the upload?"
+                        'Are you sure you want to proceed with the upload?'
                 );
                 setShowConfirm(true);
                 setIsUploading(false);
             }
         } catch (error) {
-            toastr.error("Failed to upload salary", "", toastOptions());
+            toastr.error('Failed to upload salary', '', toastOptions());
             setIsUploading(false);
         }
     };
@@ -169,7 +169,7 @@ const UploadSalaryModal = ({ onSuccess }) => {
                         </label>
                         <div
                             className={`file-upload-area ${
-                                isDragging ? "dragging" : ""
+                                isDragging ? 'dragging' : ''
                             }`}
                             onDragOver={handleDragOver}
                             onDragLeave={handleDragLeave}
@@ -184,7 +184,7 @@ const UploadSalaryModal = ({ onSuccess }) => {
                             <div className="upload-text">
                                 {file
                                     ? file.name
-                                    : "Drag and drop file here or click to browse"}
+                                    : 'Drag and drop file here or click to browse'}
                                 {!file && (
                                     <div className="upload-text-small">
                                         Support single Excel file (.xlsx, .xls)
@@ -199,7 +199,7 @@ const UploadSalaryModal = ({ onSuccess }) => {
                         className="btn btn-primary"
                         onClick={handleSubmit}
                         disabled={isUploading}>
-                        {isUploading ? "Uploading..." : "Upload"}
+                        {isUploading ? 'Uploading...' : 'Upload'}
                     </button>
                     <button className="btn btn-default" onClick={handleClose}>
                         Cancel

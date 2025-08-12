@@ -31,6 +31,7 @@ using Newtonsoft.Json.Serialization;
 
 namespace HRM.Controllers;
 
+#pragma warning disable S107 // Methods should not have too many parameters
 public class EmployeeController(
     IUserControlSession session,
     IEmployeeService employeeService,
@@ -46,6 +47,7 @@ public class EmployeeController(
     IMinIOService minIOService,
     ICompanyService companyService,
     ISalaryStructureService salaryStructureService) : BaseController(session)
+#pragma warning restore S107 // Methods should not have too many parameters
 {
     [HrmPermission(Policy.Read, FunctionKey.ContactList)]
     public async Task<IActionResult> Index()

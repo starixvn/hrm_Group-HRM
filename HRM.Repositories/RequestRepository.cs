@@ -98,7 +98,7 @@ public class RequestRepository : IRequestRepository
         List<RequestEntity> responseRequests = [];
         foreach (var requestInfo in requests)
         {
-            var toDate = requestInfo.ToDate != DateTimeOffset.MinValue
+            var toDate = requestInfo.ToDate != DateTimeOffset.MinValue.DateTime
                 ? requestInfo.ToDate.ConvertToClientTimeZone(Constants.NexTimezone)
                 : requestInfo.ToDate;
             var entity = new RequestEntity

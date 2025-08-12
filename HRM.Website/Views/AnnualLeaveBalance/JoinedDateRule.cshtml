@@ -122,7 +122,7 @@
                     <td class="align-left">@leave.Team</td>
                     <td class="align-left">@leave.FullName</td>
                     <td>@leave.Nickname</td>
-                    <td>@(leave.FromDate == DateTime.MinValue ? "" : leave.FromDate.ToString("dd MMM yyyy"))</td>
+                    <td>@(leave.FromDate == DateTimeOffset.MinValue.DateTime ? "" : leave.FromDate.ToString("dd MMM yyyy"))</td>
                     <td>
                         @if (leave.AnnualLeaveCurrentYear != 0)
                         {
