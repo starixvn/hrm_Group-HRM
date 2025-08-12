@@ -43,7 +43,7 @@ public class ShiftController(
     {
         if (model != null && ModelState.IsValid)
         {
-            var commandResult = await shiftService.CreateAsync(session.UserId, model);
+            var commandResult = await shiftService.CreateAsync(EmployeeSession.EmpId, model);
             if (commandResult.IsSuccessful)
             {
                 return RedirectToAction("Index", "Shift");
@@ -92,7 +92,7 @@ public class ShiftController(
     {
         if (model != null && ModelState.IsValid)
         {
-            var commandResult = await shiftService.EditAsync(session.UserId, model);
+            var commandResult = await shiftService.EditAsync(EmployeeSession.EmpId, model);
             if (commandResult.IsSuccessful)
             {
                 return RedirectToAction("Index", "Shift");

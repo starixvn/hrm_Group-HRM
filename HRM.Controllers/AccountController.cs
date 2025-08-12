@@ -34,8 +34,8 @@ public class AccountController(
     {
         var viewModel = new AccountViewModel
         {
-            Employee = await employeeService.GetEmployeeByIdAsync(session.UserId) ?? new Employee(),
-            Logs = await employeeLogService.GetLogDetailByIdAsync(session.UserId) ?? new List<LogObjectDetail>()
+            Employee = await employeeService.GetEmployeeByIdAsync(EmployeeSession.EmpId) ?? new Employee(),
+            Logs = await employeeLogService.GetLogDetailByIdAsync(EmployeeSession.EmpId) ?? new List<LogObjectDetail>()
         };
         ViewBag.EnableGroupDate = await commonDataService.IsEnableGroupDateAsync();
         ViewBag.Avatar = await GetAvatarUrl(viewModel.Employee.Code);
@@ -49,7 +49,7 @@ public class AccountController(
     {
         model.Password = Encryptor.ComputeHash("123456");
         model.IsReset = true;
-        var commandResult = await employeeService.EditPasswordAsync(session.UserId, model);
+        var commandResult = await employeeService.EditPasswordAsync(EmployeeSession.EmpId, model);
         if (!commandResult.IsSuccessful)
         {
             return Json(commandResult);
@@ -87,10 +87,10 @@ public class AccountController(
         {
             var param = new EditPassword
             {
-                EmployeeId = session.UserId,
+                EmployeeId = EmployeeSession.EmpId,
                 Password = Encryptor.ComputeHash(model.NewPassword)
             };
-            var commandResult = await employeeService.EditPasswordAsync(session.UserId, param);
+            var commandResult = await employeeService.EditPasswordAsync(EmployeeSession.EmpId, param);
             switch (commandResult.Code)
             {
                 case (short)ValidateUserStatus.Success: // OK

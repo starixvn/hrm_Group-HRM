@@ -43,7 +43,7 @@ public class HolidayController(
     {
         if (ModelState.IsValid)
         {
-            var commandResult = await holidayService.EditAsync(session.UserId, model);
+            var commandResult = await holidayService.EditAsync(EmployeeSession.EmpId, model);
             ViewBag.Updated = commandResult.IsSuccessful;
 
             if (!commandResult.IsSuccessful)
@@ -75,7 +75,7 @@ public class HolidayController(
     {
         if (ModelState.IsValid)
         {
-            var commandResult = await holidayService.CreateAsync(session.UserId, model);
+            var commandResult = await holidayService.CreateAsync(EmployeeSession.EmpId, model);
             ViewBag.Updated = commandResult.IsSuccessful;
 
             if (!commandResult.IsSuccessful)
@@ -91,7 +91,7 @@ public class HolidayController(
     [HrmPermission(Policy.Host, FunctionKey.Holiday)]
     public async Task<IActionResult> Delete(int id)
     {
-        var commandResult = await holidayService.DeleteAsync(session.UserId, id);
+        var commandResult = await holidayService.DeleteAsync(EmployeeSession.EmpId, id);
 
         return Json(commandResult);
     }

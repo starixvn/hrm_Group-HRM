@@ -55,7 +55,7 @@ public class ScheduleArrangeController(
     public async Task<IActionResult> GetEmployees(GetEmployeeFilter filter)
     {
         filter.IsEditScheduleUnlimited = session.HasPermissionOnFunction(FunctionKey.EditScheduleUnlimited, Policy.Host);
-        filter.ActorId = session.UserId;
+        filter.ActorId = EmployeeSession.EmpId;
         var employees = await scheduleArrangeService.GetEmployeesAsync(filter);
 
         return Json(employees);
@@ -65,7 +65,7 @@ public class ScheduleArrangeController(
     public async Task<IActionResult> GetWeeklySchedule(WeeklyScheduleFilter filter)
     {
         filter.IsEditScheduleUnlimited = session.HasPermissionOnFunction(FunctionKey.EditScheduleUnlimited, Policy.Host);
-        filter.ActorId = session.UserId;
+        filter.ActorId = EmployeeSession.EmpId;
         filter.CompanyId ??= CurrentCompanyId;
 
         var weeklySchedules = await scheduleArrangeService.GetWeeklyScheduleAsync(filter);
@@ -96,7 +96,7 @@ public class ScheduleArrangeController(
         var criteria = new EditWeeklyScheduleCriteria
         {
             CompanyId = CurrentCompanyId,
-            ActorId = session.UserId,
+            ActorId = EmployeeSession.EmpId,
             FromDate = fromDate,
             ToDate = toDate,
             WeeklyScheduleXml = weeklySchedules.ToXML().ToString(),
@@ -114,7 +114,7 @@ public class ScheduleArrangeController(
         var command = new SyncWorkingShiftCommand
         {
             CompanyId = companyId ?? CurrentCompanyId,
-            ActorId = session.UserId,
+            ActorId = EmployeeSession.EmpId,
             FromDate = fromDate,
             ToDate = toDate,
             EmployeeIds = employeeIds
@@ -128,7 +128,7 @@ public class ScheduleArrangeController(
     [HrmPermission(Policy.Host, FunctionKey.ScheduleArrange)]
     public async Task<IActionResult> EditRemark(EditRemark model)
     {
-        var commandResult = await scheduleArrangeService.EditRemarkAsync(session.UserId, model);
+        var commandResult = await scheduleArrangeService.EditRemarkAsync(EmployeeSession.EmpId, model);
 
         return Json(commandResult);
     }
@@ -137,7 +137,7 @@ public class ScheduleArrangeController(
     [HrmPermission(Policy.Host, FunctionKey.ScheduleArrange)]
     public async Task<IActionResult> EditDisplayOrder(IEnumerable<EditDisplayOrder> displayOrders)
     {
-        var commandResult = await scheduleArrangeService.EditDisplayOrderAsync(session.UserId, displayOrders);
+        var commandResult = await scheduleArrangeService.EditDisplayOrderAsync(EmployeeSession.EmpId, displayOrders);
 
         return Json(commandResult);
     }
@@ -146,7 +146,7 @@ public class ScheduleArrangeController(
     [HrmPermission(Policy.Host, FunctionKey.ScheduleArrange)]
     public async Task<IActionResult> EditTeamOrder(IEnumerable<EditTeamOrder> displayOrders)
     {
-        var commandResult = await scheduleArrangeService.EditTeamOrderAsync(session.UserId, displayOrders);
+        var commandResult = await scheduleArrangeService.EditTeamOrderAsync(EmployeeSession.EmpId, displayOrders);
 
         return Json(commandResult);
     }
@@ -155,7 +155,7 @@ public class ScheduleArrangeController(
     [HrmPermission(Policy.Host, FunctionKey.ScheduleArrange)]
     public async Task<IActionResult> EditWeeklyDefaultShift(WeeklyDefaultShift weeklyDefaultShift, bool isUsedWeeklyDefaultShift)
     {
-        var commandResult = await scheduleArrangeService.EditWeeklyDefaultShiftAsync(session.UserId, weeklyDefaultShift, isUsedWeeklyDefaultShift);
+        var commandResult = await scheduleArrangeService.EditWeeklyDefaultShiftAsync(EmployeeSession.EmpId, weeklyDefaultShift, isUsedWeeklyDefaultShift);
 
         return Json(commandResult);
     }
@@ -165,7 +165,7 @@ public class ScheduleArrangeController(
     public async Task<IActionResult> ExportExcel(WeeklyScheduleFilter filter)
     {
         filter.IsEditScheduleUnlimited = session.HasPermissionOnFunction(FunctionKey.EditScheduleUnlimited, Policy.Host);
-        filter.ActorId = session.UserId;
+        filter.ActorId = EmployeeSession.EmpId;
 
         if (!filter.CompanyId.HasValue)
         {
@@ -185,12 +185,12 @@ public class ScheduleArrangeController(
     {
         var actor = new Actor
         {
-            ActorId = session.UserId,
+            ActorId = EmployeeSession.EmpId,
             Nickname = EmployeeSession.Nickname,
             FullName = EmployeeSession.FullName
         };
         filter.IsEditScheduleUnlimited = session.HasPermissionOnFunction(FunctionKey.EditScheduleUnlimited, Policy.Host);
-        filter.ActorId = session.UserId;
+        filter.ActorId = EmployeeSession.EmpId;
 
         if (!filter.CompanyId.HasValue)
         {

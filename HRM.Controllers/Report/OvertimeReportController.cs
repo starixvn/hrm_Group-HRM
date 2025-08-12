@@ -40,7 +40,7 @@ public class OvertimeReportController(
         var param = new GetMonthlyOvertimeParam
         {
             CompanyId = CurrentCompanyId,
-            ActorId = session.UserId,
+            ActorId = EmployeeSession.EmpId,
             FromDate = model.FromDate,
             ToDate = model.ToDate,
             Employee = model.Employee,
@@ -61,7 +61,7 @@ public class OvertimeReportController(
         var param = new GetYearlyOvertimeParam
         {
             CompanyId = CurrentCompanyId,
-            ActorId = session.UserId,
+            ActorId = EmployeeSession.EmpId,
             Year = model.Year,
             Calendar = model.Calendar,
             TeamIds = model.TeamIds,
@@ -92,7 +92,7 @@ public class OvertimeReportController(
         var param = new GetDailyOvertimeDetailsParam
         {
             CompanyId = CurrentCompanyId,
-            ActorId = session.UserId,
+            ActorId = EmployeeSession.EmpId,
             FromDate = model.FromDate,
             ToDate = model.ToDate,
             TeamIds = model.TeamIds,
@@ -111,7 +111,7 @@ public class OvertimeReportController(
         var param = new GetMonthlyOvertimeParam
         {
             CompanyId = CurrentCompanyId,
-            ActorId = session.UserId,
+            ActorId = EmployeeSession.EmpId,
             FromDate = model.FromDate,
             ToDate = model.ToDate,
             Employee = model.Employee,
@@ -133,7 +133,7 @@ public class OvertimeReportController(
         var param = new GetYearlyOvertimeParam
         {
             CompanyId = CurrentCompanyId,
-            ActorId = session.UserId,
+            ActorId = EmployeeSession.EmpId,
             Year = model.Year,
             Calendar = model.Calendar,
             TeamIds = model.TeamIds,
@@ -154,7 +154,7 @@ public class OvertimeReportController(
         var param = new GetDailyOvertimeDetailsParam
         {
             CompanyId = CurrentCompanyId,
-            ActorId = session.UserId,
+            ActorId = EmployeeSession.EmpId,
             FromDate = model.FromDate,
             ToDate = model.ToDate,
             TeamIds = model.TeamIds,

@@ -73,7 +73,7 @@ public class DisciplineSummaryPerYearController(
             TeamIds = model.TeamId,
             IsLocal = model.IsLocal,
             EmployeeId = model.EmployeeId,
-            ApproverId = session.UserId,
+            ApproverId = EmployeeSession.EmpId,
             IsShowAll = model.IsShowAll,
             RoleIds = string.Join(",", roles.Select(x => x.RoleId))
         };

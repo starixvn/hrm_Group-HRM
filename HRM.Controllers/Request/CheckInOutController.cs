@@ -37,7 +37,7 @@ public class CheckInOutController(
         var fromDate = new DateTimeOffset(tempYear, 1, 1, 0, 0, 0, TimeSpan.Zero).Date;
         var criteria = new GetCheckInOutRequestByDateCriteria
         {
-            EmpId = session.UserId,
+            EmpId = EmployeeSession.EmpId,
             FromDate = fromDate,
             ToDate = fromDate.AddYears(1).AddDays(-1),
             CompanyId = CurrentCompanyId
@@ -57,11 +57,11 @@ public class CheckInOutController(
     public async Task<IActionResult> Create()
     {
         var today = DateTimeOffset.Now.DateTime.ToClientTimeZone();
-        var supervisor = await requestService.GetVerifierAndApproverAsync(session.UserId, RequestType.CheckIn);
+        var supervisor = await requestService.GetVerifierAndApproverAsync(EmployeeSession.EmpId, RequestType.CheckIn);
         var viewModel = new CheckInOutRequestViewModel
         {
             Employee = EmployeeSession.DisplayName,
-            EmployeeId = session.UserId,
+            EmployeeId = EmployeeSession.EmpId,
             ForDate = today.Date,
             AttendantDate = today.Date,
             Hour = today.Hour,
@@ -71,7 +71,7 @@ public class CheckInOutController(
             Approvers = supervisor.Approvers
         };
 
-        var shift = await shiftService.GetByDateAsync(session.UserId, today.Date);
+        var shift = await shiftService.GetByDateAsync(EmployeeSession.EmpId, today.Date);
         CheckShiftFromToFormat(viewModel, shift);
         viewModel.Shift = shift == null ? string.Empty : shift.Name;
         ViewBag.Shift = shift;
@@ -97,7 +97,7 @@ public class CheckInOutController(
             ReasonId = model.ReasonId,
             RefNo = model.RefNO,
             Remark = model.Remark,
-            CreatedBy = session.UserId,
+            CreatedBy = EmployeeSession.EmpId,
             VerifierId = model.VerifierId,
             ApproverId = model.ApproverId
         };
@@ -116,7 +116,7 @@ public class CheckInOutController(
     {
         var request = await checkInOutRequestService.GetByIdAsync(id);
         if (request == null
-            || !Utilities.CheckUserCanEditRequest(session.UserId, request.Requester.EmpId)
+            || !Utilities.CheckUserCanEditRequest(EmployeeSession.EmpId, request.Requester.EmpId)
             || request.Status.Id != (byte)CurrentRequestStatus.Pending)
         {
             return RedirectToAction("AccessDenied", "Error");
@@ -132,7 +132,7 @@ public class CheckInOutController(
             RequestTypeId = request.RequestTypeId
         };
         var disabledDates = await checkInOutRequestService.GetDisabledDateAsync(param);
-        var shift = await shiftService.GetByDateAsync(session.UserId, request.OnDate);
+        var shift = await shiftService.GetByDateAsync(EmployeeSession.EmpId, request.OnDate);
         request.RequestTime = request.RequestTime.ToClientTimeZone();
         var viewModel = new CheckInOutRequestViewModel
         {
@@ -179,7 +179,7 @@ public class CheckInOutController(
             ReasonId = model.ReasonId,
             RefNo = model.RefNO,
             Remark = model.Remark,
-            ModifiedBy = session.UserId,
+            ModifiedBy = EmployeeSession.EmpId,
             VerifierId = model.VerifierId,
             ApproverId = model.ApproverId
         };

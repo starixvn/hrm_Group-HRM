@@ -44,7 +44,7 @@ public class ReportController(
         var model = new TimesheetViewModel
         {
             Year = DateTimeOffset.Now.DateTime.ToClientTimeZone().Year,
-            EmpId = session.UserId
+            EmpId = EmployeeSession.EmpId
         };
         var clientIp = IPAddress.Parse(hrmAuthService.GetClientIp(HttpContext));
         var isWhitelisted = false;
@@ -110,7 +110,7 @@ public class ReportController(
     {
         model.CurrentPage = Constants.CurrentPage;
         model.ItemsPerPage = Constants.ItemsPerPage;
-        var supervisors = await teamService.GetBySupervisorAsync(session.UserId);
+        var supervisors = await teamService.GetBySupervisorAsync(EmployeeSession.EmpId);
         model.TeamIds = string.Join(",", supervisors.Select(x => x.Id));
 
         ViewBag.HasPermission = session.HasPermissionOnFunction(FunctionKey.TimeRecord, Policy.Read)
@@ -126,7 +126,7 @@ public class ReportController(
         if (!session.HasPermissionOnFunction(FunctionKey.TimeRecord, Policy.Read)
             && !session.HasPermissionOnFunction(FunctionKey.TimeRecord, Policy.Host))
         {
-            employeeId = session.UserId;
+            employeeId = EmployeeSession.EmpId;
         }
         var criteria = new GetTimeRecordCriteria
         {
@@ -137,7 +137,7 @@ public class ReportController(
             IsLocal = model.IsLocal,
             PageIndex = model.CurrentPage - 1,
             ItemsPerPage = model.ItemsPerPage,
-            SupervisorId = session.UserId
+            SupervisorId = EmployeeSession.EmpId
         };
         var records = await reportService.GetTimeRecordAsync(criteria);
         ViewBag.HasPermission = session.HasPermissionOnFunction(FunctionKey.TimeRecord, Policy.Host);
@@ -174,7 +174,7 @@ public class ReportController(
             IsLocal = model.IsLocal,
             EmployeeId = model.EmployeeId,
             MinTotalLeave = model.MinTotalLeave,
-            SupervisorId = session.UserId
+            SupervisorId = EmployeeSession.EmpId
         };
 
         var weekendLeaves = await reportService.GetWeekendLeaveSummaryAsync(criteria);
@@ -203,7 +203,7 @@ public class ReportController(
             IsLocal = model.IsLocal,
             EmployeeId = model.EmployeeId,
             LeaveTypeId = model.LeaveTypeId,
-            SupervisorId = session.UserId
+            SupervisorId = EmployeeSession.EmpId
         };
 
         var weekendLeaveDetails = await reportService.GetWeekendLeaveDetailAsync(criteria);
@@ -237,7 +237,7 @@ public class ReportController(
             EmpId = model.EmployeeId > 0 ? new int?(model.EmployeeId) : null,
             TeamIds = model.TeamIds,
             IsLocal = (byte?)model.Category,
-            SupervisorId = session.UserId,
+            SupervisorId = EmployeeSession.EmpId,
             LeaveType = model.LeaveType,
             CompanyId = CurrentCompanyId
         };
@@ -316,7 +316,7 @@ public class ReportController(
     {
         var criteria = new GetPrivilegeCreateCheckInOutRecordCriteria
         {
-            EmpId = session.UserId
+            EmpId = EmployeeSession.EmpId
         };
 
         return await reportService.GetIsPrivilegeCreateCheckInOutAsync(criteria);

@@ -30,7 +30,7 @@ public class WorkingHoursSummaryReportController(
         var param = new GetWorkingHoursSummaryParam
         {
             CompanyId = CurrentCompanyId,
-            ActorId = session.UserId,
+            ActorId = EmployeeSession.EmpId,
             FromDate = model.FromDate,
             ToDate = model.ToDate,
             TeamIds = model.TeamIds,
@@ -51,7 +51,7 @@ public class WorkingHoursSummaryReportController(
         var param = new GetWorkingHoursSummaryParam
         {
             CompanyId = CurrentCompanyId,
-            ActorId = session.UserId,
+            ActorId = EmployeeSession.EmpId,
             FromDate = model.FromDate,
             ToDate = model.ToDate,
             TeamIds = model.TeamIds,
@@ -71,7 +71,7 @@ public class WorkingHoursSummaryReportController(
         var param = new GetDailyOvertimeDetailsParam
         {
             CompanyId = CurrentCompanyId,
-            ActorId = session.UserId,
+            ActorId = EmployeeSession.EmpId,
             FromDate = model.FromDate,
             ToDate = model.ToDate,
             TeamIds = model.TeamIds,
