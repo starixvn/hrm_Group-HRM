@@ -142342,7 +142342,8 @@ class App extends react__WEBPACK_IMPORTED_MODULE_3__["Component"] {
         data: Object(qs__WEBPACK_IMPORTED_MODULE_8__["stringify"])({
           fromDate,
           toDate,
-          employeeIds: this.state.selectedEmployeeIds.join(',')
+          employeeIds: this.state.selectedEmployeeIds.join(','),
+          companyId: this.state.filter.companyId
         }),
         headers: {
           'X-Requested-With': 'XMLHttpRequest',
