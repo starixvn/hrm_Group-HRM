@@ -17,14 +17,14 @@ const AppContainer = () => {
     const [allUnits, setAllUnits] = useState([]);
     const [filterParams, setFilterParams] = useState({
         isActive: true,
-        unitId: "",
+        unitId: '',
     });
     const [deleteModalDialog, setDeleteModalDialog] = useState({ show: false });
 
     const getDepartments = params => {
         const processedParams = {
             ...params,
-            unitId: params.unitId === "" ? null : params.unitId,
+            unitId: params.unitId === '' ? null : params.unitId,
         };
         setFilterParams(processedParams);
         axios
@@ -79,10 +79,10 @@ const AppContainer = () => {
             .then(response => {
                 const { data } = response;
                 if (data.isSuccessful) {
-                    toastr.success("Deleted successfully!", "", toastOptions());
+                    toastr.success("Deleted successfully!", '', toastOptions());
                     getDepartments(filterParams);
                 } else {
-                    toastr.error(data.message, "", toastOptions());
+                    toastr.error(data.message, '', toastOptions());
                 }
             })
             .catch(axiosError);

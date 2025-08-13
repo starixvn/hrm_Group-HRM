@@ -58,9 +58,9 @@ export default class Supervisor extends Component {
               id: item.empId,
               nickname: item.nickName,
               fullName: item.fullName,
-              teamCode: item.teamCode !== null ? item.teamCode : "",
+              teamCode: item.teamCode !== null ? item.teamCode : '',
               value: `${item.nickName} (${item.company})`,
-              companyName: item.company !== null ? item.company : "",
+              companyName: item.company !== null ? item.company : '',
             };
           });
           this.setState({ employeeOptions: employeeOptions });

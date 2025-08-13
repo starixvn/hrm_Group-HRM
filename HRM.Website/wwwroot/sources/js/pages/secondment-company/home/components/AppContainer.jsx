@@ -55,10 +55,10 @@ const AppContainer = () => {
             .then(response => {
                 const { data } = response;
                 if (data.isSuccessful) {
-                    toastr.success("Deleted successfully!", "", toastOptions());
+                    toastr.success("Deleted successfully!", '', toastOptions());
                     getSecondmentCompanyList(filterParams);
                 } else {
-                    toastr.error(data.message, "", toastOptions());
+                    toastr.error(data.message, '', toastOptions());
                 }
             })
             .catch(axiosError);

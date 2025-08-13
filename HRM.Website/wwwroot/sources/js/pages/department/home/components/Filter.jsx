@@ -5,7 +5,7 @@ import { resolveClientUrl } from "../../../../shared/common.functions";
 const Filter = ({ onSubmit, exportExcel, allUnits }) => {
     const [filterParams, setFilterParams] = useState({
         isActive: true,
-        unitId: "",
+        unitId: '',
     });
 
     const handleCreate = () => {
@@ -25,8 +25,8 @@ const Filter = ({ onSubmit, exportExcel, allUnits }) => {
     };
 
     const sortedUnits = allUnits.sort((a, b) => {
-        const nameA = (a.name || "").toLowerCase();
-        const nameB = (b.name || "").toLowerCase();
+        const nameA = (a.name || '').toLowerCase();
+        const nameB = (b.name || '').toLowerCase();
         return nameA.localeCompare(nameB);
     });
 
@@ -43,7 +43,7 @@ const Filter = ({ onSubmit, exportExcel, allUnits }) => {
                             name="isActive"
                             defaultValue={filterParams.isActive}
                             onChange={handleChange}>
-                            <option value="">All</option>
+                            <option value=''>All</option>
                             <option value="true">Active</option>
                             <option value="false">Inactive</option>
                         </select>
@@ -60,7 +60,7 @@ const Filter = ({ onSubmit, exportExcel, allUnits }) => {
                             defaultValue={filterParams.unitId}
                             onChange={handleChange}
                             style={{ minWidth: "100px" }}>
-                            <option value="">All</option>
+                            <option value=''>All</option>
                             {sortedUnits.map((unit =>(
                                 <option key={unit.id} value={unit.id}>
                                     {unit.code}

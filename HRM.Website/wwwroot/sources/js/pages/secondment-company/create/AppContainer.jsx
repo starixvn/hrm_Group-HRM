@@ -98,13 +98,13 @@ const AppContainer = () => {
             .then(response => {
                 const { data } = response;
                 if (data.isSuccessful) {
-                    toastr.success("Created successfully!", "", toastOptions());
+                    toastr.success("Created successfully!", '', toastOptions());
                     setTimeout(function () {
                         document.location =
                             resolveClientUrl("secondmentcompany/index");
                     }, 3000);
                 } else {
-                    toastr.error(data.message, "", toastOptions());
+                    toastr.error(data.message, '', toastOptions());
                     setSubmitting(false);
                 }
             })
@@ -147,14 +147,14 @@ const AppContainer = () => {
                                 name="companyId"
                                 as="select"
                                 className="form-control">
-                                <option value="" />
+                                <option value='' />
                                 {companies
                                     ? companies.map(company =>(
                                           <option key={company.id} value={company.id}>
                                               {company.text}
                                           </option>
                                       ))
-                                    : ""}
+                                    : ''}
                             </Field>
                         </div>
                     </div>

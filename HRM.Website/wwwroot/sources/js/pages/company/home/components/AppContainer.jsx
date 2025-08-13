@@ -49,7 +49,7 @@ const AppContainer = () => {
             currency: company.currency ? 
                 company.currency.split(',').map(id => id.trim()).filter(id => id)
                     .map(id => currencyMap[id] || id).join(', ') 
-                : ""
+                : ''
         }));
     };
 

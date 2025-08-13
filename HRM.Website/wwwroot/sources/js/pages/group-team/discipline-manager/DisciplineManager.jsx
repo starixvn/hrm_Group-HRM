@@ -39,7 +39,7 @@ export default class DisciplineManager extends Component {
                         nickname: item.nickName,
                         fullName: item.fullName,
                         value: `${item.nickName} (${item.companyName})`,
-                        companyName: item.companyName !== null ? item.companyName : "",
+                        companyName: item.companyName !== null ? item.companyName : '',
                     };
                 });
 

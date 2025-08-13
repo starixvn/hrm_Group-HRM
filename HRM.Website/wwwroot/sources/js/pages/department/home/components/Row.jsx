@@ -16,7 +16,7 @@ const Row = ({ rowIndex, item, onDelete }) => {
             <td>{rowIndex}</td>
             <td>{item.groupDeptId}</td>
             <td>{item.code}</td>
-            <td>{item.unit ? item.unit.code : ""}</td>
+            <td>{item.unit ? item.unit.code : ''}</td>
             <td>{item.name}</td>
             <td>{item.accountableArea}</td>
             <td>{item.picEmployeeName}</td>

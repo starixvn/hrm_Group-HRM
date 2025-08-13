@@ -128,7 +128,7 @@ const AppContainer = () => {
             </div>
             <div className="select-form">
               <Field name="picEmpId" as="select" className="form-control">
-                <option value="" />
+                <option value='' />
                 {employees &&
                   employees.map((emp =>(
                     <option key={emp.id} value={emp.id}>

@@ -18,12 +18,12 @@ const AppContainer = () => {
 
     const [initialValues, setInitialValues] = useState({
         departmentId: 0,
-        code: "",
-        name: "",
+        code: '',
+        name: '',
         isActive: true,
-        unit: "",
-        accountableArea: "",
-        picEmpId: "",
+        unit: '',
+        accountableArea: '',
+        picEmpId: '',
         groupDeptId: 0,
         units: [],
     });
@@ -106,13 +106,13 @@ const AppContainer = () => {
             .then(response => {
                 const { data } = response;
                 if (data.isSuccessful) {
-                    toastr.success("Updated successfully!", "", toastOptions());
+                    toastr.success("Updated successfully!", '', toastOptions());
                     setTimeout(function () {
                         document.location =
                             resolveClientUrl("Department/Index");
                     }, 3000);
                 } else {
-                    toastr.error(data.message, "", toastOptions());
+                    toastr.error(data.message, '', toastOptions());
                     setSubmitting(false);
                 }
             })
@@ -150,14 +150,14 @@ const AppContainer = () => {
                                 name="unit"
                                 as="select"
                                 className="form-control">
-                                <option value="" />
+                                <option value='' />
                                 {initialValues.units
                                     ? initialValues.units.map((unit =>(
                                           <option key={unit.id} value={unit.id}>
                                               {unit.code}-{unit.accountableArea}
                                           </option>
                                       ))
-                                    : ""}
+                                    : ''}
                             </Field>
                         </div>
                     </div>
@@ -216,7 +216,7 @@ const AppContainer = () => {
                                 name="picEmpId"
                                 as="select"
                                 className="form-control">
-                                <option value="" />
+                                <option value='' />
                                 {prepareData &&
                                     prepareData.employees &&
                                     prepareData.employees.map(emp =>(

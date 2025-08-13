@@ -17,8 +17,8 @@ const AppContainer = () => {
     const [formKey, setFormKey] = useState(0);
 
     const [initialValues, setInitialValues] = useState({
-        code: "",
-        name: "",
+        code: '',
+        name: '',
         isActive: true,
         units: [],
         groupDeptId: 0,
@@ -84,13 +84,13 @@ const AppContainer = () => {
             .then(response => {
                 const { data } = response;
                 if (data.isSuccessful) {
-                    toastr.success("Created successfully!", "", toastOptions());
+                    toastr.success("Created successfully!", '', toastOptions());
                     setTimeout(function () {
                         document.location =
                             resolveClientUrl("Department/Index");
                     }, 3000);
                 } else {
-                    toastr.error(data.message, "", toastOptions());
+                    toastr.error(data.message, '', toastOptions());
                     setSubmitting(false);
                 }
             })
@@ -128,14 +128,14 @@ const AppContainer = () => {
                                 name="unit"
                                 as="select"
                                 className="form-control">
-                                <option value="" />
+                                <option value='' />
                                 {initialValues.units
                                     ? initialValues.units.map((unit =>(
                                           <option key={unit.id} value={unit.id}>
                                               {unit.code}-{unit.accountableArea}
                                           </option>
                                       ))
-                                    : ""}
+                                    : ''}
                             </Field>
                         </div>
                     </div>
@@ -194,7 +194,7 @@ const AppContainer = () => {
                                 name="picEmpId"
                                 as="select"
                                 className="form-control">
-                                <option value="" />
+                                <option value='' />
                                 {prepareData &&
                                     prepareData.employees &&
                                     prepareData.employees.map(emp =>(

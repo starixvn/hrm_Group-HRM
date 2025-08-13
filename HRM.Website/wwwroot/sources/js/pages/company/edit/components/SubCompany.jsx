@@ -26,7 +26,7 @@ const SubCompany = ({ companyId, initialTags = [], onTagsChange, validTags = [] 
   const [isLoading, setIsLoading] = useState(false);
   const inputRef = useRef(null);
 
-  const clearInput = useCallback( => {
+  const clearInput = useCallback(() => {
     setInputValue('');
   }, []);
 
@@ -36,7 +36,9 @@ const SubCompany = ({ companyId, initialTags = [], onTagsChange, validTags = [] 
   }, [clearInput]);
 
   const handleAddTag = useCallbackasync (trimmedValue => {
-    if (!trimmedValue) return;
+    if (!trimmedValue) {
+      return;
+    }
 
     setIsLoading(true);
 
@@ -44,12 +46,12 @@ const SubCompany = ({ companyId, initialTags = [], onTagsChange, validTags = [] 
       const exists = await checkTagExists(trimmedValue, validTags, null);
 
       if (exists) {
-        toastr.warning(`Sub Company "${trimmedValue}" has already exists!`,"", toastOptions());
+        toastr.warning(`Sub Company "${trimmedValue}" has already exists!`,'', toastOptions());
         return;
       }
 
       if (tags.some(tag => tag.name.toLowerCase() === trimmedValue.toLowerCase())) {
-        toastr.warning(`Sub company "${trimmedValue}" has already exists!`, "", toastOptions());
+        toastr.warning(`Sub company "${trimmedValue}" has already exists!`, '', toastOptions());
         return;
       }
 
@@ -81,12 +83,12 @@ const SubCompany = ({ companyId, initialTags = [], onTagsChange, validTags = [] 
       const exists = await checkTagExists(trimmedValue, validTags, companyId);
 
       if (exists) {
-        toastr.warning(`"${trimmedValue}" has already exists!`, "", toastOptions());
+        toastr.warning(`"${trimmedValue}" has already exists!`, '', toastOptions());
         return;
       }
 
       if (tags.some((tag, index) => index !== editingIndex && tag.name.toLowerCase() === trimmedValue.toLowerCase())) {
-        toastr.warning(`"${trimmedValue}" has already exists!`, "", toastOptions());
+        toastr.warning(`"${trimmedValue}" has already exists!`, '', toastOptions());
         return;
       }
 
@@ -137,7 +139,7 @@ const SubCompany = ({ companyId, initialTags = [], onTagsChange, validTags = [] 
     const tagToRemove = tags[index];
     
     if (tagToRemove.subCompanyId && tagToRemove.employeeCount > 0) {
-      toastr.error("The sub Company cannot be deleted because it is already in use", "", toastOptions());
+      toastr.error("The sub Company cannot be deleted because it is already in use", '', toastOptions());
       return;
     }
     
