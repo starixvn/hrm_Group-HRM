@@ -12,7 +12,7 @@ export const PeriodTypeLabel = {
     [PeriodType.ALL]: '-- All --',
 };
 
-export const getPeriodTypeLabel = (type) => {
+export const getPeriodTypeLabel = type => {
     return PeriodTypeLabel[type] || 'Unknown';
 };
 

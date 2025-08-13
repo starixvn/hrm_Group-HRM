@@ -11,7 +11,7 @@ const AppContainer = () => {
         setSalaryData(data);
     };
 
-    const handleSearch = async (filters) => {
+    const handleSearch = async filters => {
         await fetchSalaryData(filters);
     };
 

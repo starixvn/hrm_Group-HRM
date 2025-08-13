@@ -24,7 +24,7 @@ function deleteTeam(id) {
                 "Content-Type": "application/x-www-form-urlencoded",
             },
         })
-            .then((response) => {
+            .then(response => {
                 let data = response.data;
                 if (data.isSuccessful) {
                     alert("Delete successfully!");
@@ -122,7 +122,7 @@ $(document).ready(function () {
         method: "GET",
         headers: { "X-Requested-With": "XMLHttpRequest" },
     })
-        .then((response) => {
+        .then(response => {
             $("#GroupTeam").multiSelectTreeView({
                 data: response.data.data,
                 selectedItems: response.data.teamIds,

@@ -30,7 +30,7 @@ const MonthPicker = ({
         }
     }, [value]);
 
-    const handleDateChange = (date) => {
+    const handleDateChange = date => {
         setSelectedDate(date);
 
         if (date && onChange) {

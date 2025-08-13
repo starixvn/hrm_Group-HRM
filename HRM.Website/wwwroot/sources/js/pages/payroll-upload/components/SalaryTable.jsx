@@ -2,7 +2,7 @@ import React from 'react';
 import { getPeriodTypeLabel } from '../constants/periodType';
 
 const SalaryTable = ({ data }) => {
-    const formatNumber = (number) => {
+    const formatNumber = number => {
         return new Intl.NumberFormat('en-US').format(number || 0);
     };
 

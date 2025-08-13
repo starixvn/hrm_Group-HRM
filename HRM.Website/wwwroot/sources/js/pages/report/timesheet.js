@@ -18,7 +18,7 @@ const timesheetModule = (function ($) {
             placement: 'auto',
             allowHTML: true,
             appendTo: document.getElementById('tippy-request'),
-            content: (reference) => {
+            content: reference => {
                 const object = $(reference),
                     result = $('<div/>').html(object.data('requestdetail')).text(),
                     leavetype = object.data('leavetype');

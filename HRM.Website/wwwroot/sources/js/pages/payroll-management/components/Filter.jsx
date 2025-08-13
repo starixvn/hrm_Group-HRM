@@ -24,7 +24,7 @@ const Filter = ({ onSearch }) => {
         });
     };
 
-    const handleGenerateSuccess = (generatedMonth) => {
+    const handleGenerateSuccess = generatedMonth => {
         setMonth(generatedMonth);
         onSearch({
             month: `${generatedMonth}-01`,
@@ -56,10 +56,10 @@ const Filter = ({ onSearch }) => {
                         <select
                             className="form-control"
                             value={category}
-                            onChange={(e) =>
+                            onChange={e =>
                                 setCategory(Number(e.target.value))
                             }>
-                            {CATEGORY.map((type) => (
+                            {CATEGORY.map(type => (
                                 <option key={type} value={type}>
                                     {CategoryLabel[type]}
                                 </option>

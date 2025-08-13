@@ -179,7 +179,7 @@ const SubCompany = ({ companyId, initialTags = [], onTagsChange, validTags = [] 
       className={`tag-item ${editingIndex === index ? 'editing' : ''}`}
     >
       <span 
-        onClick={(e => {
+        onClick={e => {
           e.preventDefault();
           e.stopPropagation();
           handleEdit(index);

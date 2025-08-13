@@ -28,7 +28,7 @@ const Filter = ({ onSearch }) => {
         });
     };
 
-    const handleMonthClick = (e) => {
+    const handleMonthClick = e => {
         e.target.showPicker();
     };
 
@@ -43,7 +43,7 @@ const Filter = ({ onSearch }) => {
                         type="month"
                         className="form-control"
                         value={month}
-                        onChange={(e) => setMonth(e.target.value)}
+                        onChange={e => setMonth(e.target.value)}
                         onClick={handleMonthClick}
                     />
                 </div>
@@ -56,11 +56,11 @@ const Filter = ({ onSearch }) => {
                     <select
                         className="form-control"
                         value={periodType}
-                        onChange={(e) => setPeriodType(e.target.value)}>
+                        onChange={e => setPeriodType(e.target.value)}>
                         <option key={PeriodType.ALL} value={null}>
                             {PeriodTypeLabel[PeriodType.ALL]}
                         </option>
-                        {PERIOD_TYPES.map((type) => (
+                        {PERIOD_TYPES.map(type => (
                             <option key={type} value={type}>
                                 {PeriodTypeLabel[type]}
                             </option>

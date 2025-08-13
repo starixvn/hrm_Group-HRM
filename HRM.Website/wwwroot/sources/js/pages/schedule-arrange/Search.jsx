@@ -7,7 +7,7 @@ import WeekPicker from '../../shared/components/WeekPicker';
 
 export default class Search extends Component {
     handleTeamChange = selectedItems => {
-        const ids = selectedItems.map(item =>item.id);
+        const ids = selectedItems.map(item => item.id);
         this.props.onChange('teamIds', ids.join(','));
     };
 
