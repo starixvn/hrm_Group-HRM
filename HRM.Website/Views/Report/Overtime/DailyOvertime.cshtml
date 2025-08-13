@@ -1,4 +1,5 @@
 ﻿@using HRM.Core
+@using HRM.Core.Constants
 @using HRM.Core.Enums
 @using HRM.Resources
 @using HRM.Website.Helper
@@ -30,7 +31,7 @@
                 @Html.TextBox("FromDate", Model.FromDate.ToDateMonthYearFormatedDate(),
                     new {
                         @class = "datepicker form-control",
-                        mindate = new DateTime(2010, 1, 1).ToString("yyyy/MM/dd"),
+                        mindate = Constants.MinDate.ToString("yyyy/MM/dd"),
                         maxdate = DateTimeOffset.Now.DateTime.ToClientTimeZone().ToString("yyyy/MM/dd"),
                         disabledDate = string.Empty
                     })
@@ -45,7 +46,7 @@
                 @Html.TextBox("ToDate", Model.ToDate.ToDateMonthYearFormatedDate(),
                     new {
                         @class = "datepicker form-control",
-                        mindate = new DateTime(2010, 1, 1).ToString("yyyy/MM/dd"),
+                        mindate = Constants.MinDate.ToString("yyyy/MM/dd"),
                         maxdate = DateTimeOffset.Now.DateTime.ToClientTimeZone().ToString("yyyy/MM/dd"),
                         disabledDate = string.Empty
                     })

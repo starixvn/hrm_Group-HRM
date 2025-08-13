@@ -50,4 +50,6 @@ public static class Constants
     public static readonly int[] NexCompanyIds = [NexCompanyId, LumiCompanyId, NexVisionCompanyId];
 
     public const string AllIp = "0.0.0.0";
+
+    public static DateTime MinDate = new DateTimeOffset(2010, 1, 1, 0, 0, 0, TimeSpan.Zero).DateTime;
 }
