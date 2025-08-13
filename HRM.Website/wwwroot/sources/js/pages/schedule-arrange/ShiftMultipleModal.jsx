@@ -43,7 +43,7 @@ export default class ShiftMultipleModal extends Component {
         }
     };
 
-    handleChangeShift = (name, shift) => {
+    handleChangeShift = (_, shift) => {
         const isValid = shift !== null;
 
         this.setState({ shift, isValid });

@@ -53,7 +53,7 @@ export default class Autocomplete extends Component {
         this.props.onInput(event.target.value);
     };
 
-    handleChange = (event, ui) => {
+    handleChange = (_, ui) => {
         let value = 0,
             label = '';
         if (ui && ui.item) {
