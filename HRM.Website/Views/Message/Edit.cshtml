@@ -57,11 +57,11 @@
             <div class="input-form">
                 @{
                     var categories = new List<SelectListItem>
-                                                                                                                    {
+                    {
                         new() {Text = "Notification", Value = "0"},
                         new() {Text = "Warning", Value = "1"},
                         new() {Text = "Discipline", Value = "2"}
-                                                                                                                    };
+                    };
                 }
                 @Html.DropDownListFor(model => model.Category, categories, new { @class = "category form-control" })
             </div>
@@ -102,7 +102,7 @@
             </div>
             <div class="calendar-form">
                 @{
-                    var defaultFromDate = message.FromDate ?? DateTimeOffset.Now.DateTime;
+                    var defaultFromDate = message.FromDate ?? DateTimeOffset.Now.DateTime.ToClientTimeZone();
                 }
                 @Html.TextBox(Html.NameFor(model => model.FromDate), defaultFromDate.ToString("dd MMM, yyyy"),
                     new { @class = "datepicker form-control", mindate = Constants.MinDate.ToString("yyyy/MM/dd"), maxdate = "null", disabledDate = "" })
@@ -115,7 +115,7 @@
             </div>
             <div class="calendar-form">
                 @{
-                    var defaultToDate = message.ToDate ?? DateTimeOffset.Now.DateTime;
+                    var defaultToDate = message.ToDate ?? DateTimeOffset.Now.DateTime.ToClientTimeZone();
                 }
                 @Html.TextBox(Html.NameFor(model => model.ToDate), defaultToDate.ToString("dd MMM, yyyy"),
                     new { @class = "datepicker form-control", mindate = Constants.MinDate.ToString("yyyy/MM/dd"), maxdate = "null", disabledDate = "" })

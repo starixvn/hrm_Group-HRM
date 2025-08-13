@@ -58,7 +58,7 @@
                     @for (var i = (int)ViewBag.ToYear; i >= (int)ViewBag.FromYear; i--)
                     {
                         <td>
-                            @if (item.JoinedDate.HasValue && item.JoinedDate.Value.Date < new DateTime(i, 7, 1))
+                            @if (item.JoinedDate.HasValue && item.JoinedDate.Value.Date < new DateTimeOffset(i, 7, 1, 0, 0, 0, TimeSpan.Zero))
                             {
                                 var discipline = item.Disciplines.Where(x => x.Year == i).Sum(x => x.ApproverSubtractScore);
                                 if (discipline > 0)
