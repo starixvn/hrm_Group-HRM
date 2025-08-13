@@ -54,6 +54,9 @@
                     </th>
                 </tr>
                 break;
+            default:
+                // do nothing
+                break;
         }
             <tr>
                 @if (Model.ViewType is RequestViewType.PersonalSpace or RequestViewType.HRSpace)
@@ -197,6 +200,9 @@
                                 </td>
                                 break;
                             }
+                            default:
+                                // do nothing
+                                break;
                         }
                         <td>@(index++)</td>
                         <td class="align-left">@request.Requester.UnitCode</td>
@@ -231,7 +237,6 @@
                                 default:
                                     @request.RequestType.Name
                                     break;
-                                    ;
                             }
                         </td>
                         <td class="align-left">

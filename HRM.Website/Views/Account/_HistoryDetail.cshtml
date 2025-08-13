@@ -30,18 +30,7 @@
                     }
                     @foreach (var item in teams)
                     {
-                        foreach (var field in item.Fields)
-                        {
-                            if (field.DisplayName == Labels.Team)
-                            {
-                                <tr>
-                                    <td>@item.LogDate.ToDetailFormatedDate()</td>
-                                    <td>@item.Nickname</td>
-                                    <td class="align-left">@field.OldValue</td>
-                                    <td class="align-left">@field.Value</td>
-                                </tr>
-                            }
-                        }
+                        RenderTeamHistory(item);
                     }
                     @if (jobTitles.Any())
                     {
@@ -53,21 +42,43 @@
                     }
                     @foreach (var item in jobTitles)
                     {
-                        foreach (var field in item.Fields)
-                        {
-                            if (field.DisplayName == Labels.JobTitle)
-                            {
-                                <tr>
-                                    <td>@item.LogDate.ToDetailFormatedDate()</td>
-                                    <td>@item.Nickname</td>
-                                    <td class="align-left">@field.OldValue</td>
-                                    <td class="align-left">@field.Value</td>
-                                </tr>
-                            }
-                        }
+                        RenderJobTitleHistory(item);
                     }
                 </tbody>
             </table>
         </div>
     }
+}
+@{
+    void RenderTeamHistory(LogObjectDetail item)
+    {
+        foreach (var field in item.Fields)
+        {
+            if (field.DisplayName == Labels.Team)
+            {
+                <tr>
+                    <td>@item.LogDate.ToDetailFormatedDate()</td>
+                    <td>@item.Nickname</td>
+                    <td class="align-left">@field.OldValue</td>
+                    <td class="align-left">@field.Value</td>
+                </tr>
+            }
+        }
+    }
+
+    void RenderJobTitleHistory(LogObjectDetail item)
+    {
+        foreach (var field in item.Fields)
+        {
+            if (field.DisplayName == Labels.JobTitle)
+            {
+                <tr>
+                    <td>@item.LogDate.ToDetailFormatedDate()</td>
+                    <td>@item.Nickname</td>
+                    <td class="align-left">@field.OldValue</td>
+                    <td class="align-left">@field.Value</td>
+                </tr>
+            }
+        }
+    }   
 }

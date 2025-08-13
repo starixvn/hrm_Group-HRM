@@ -113,15 +113,7 @@
                     <td>
                         @employee.ExtensionNo
                     </td>
-                    @if (enableGroupDate)
-                    {
-                        <td>
-                            @if (employee.JoinedDate.HasValue)
-                            {
-                                @employee.JoinedDate.Value.ToDateMonthYearFormatedDate()
-                            }
-                        </td>
-                    }
+                    @{RenderGroupDate(employee);}
                     <td>
                         <a href="javascript:;" class="xicon avatar fullSizeAvatar" data-code="@employee.Code" data-nickName="@employee.NickName"></a>
                     </td>
@@ -159,3 +151,18 @@
         </tr>
     </tfoot>
 </table>
+
+@{
+    void RenderGroupDate(Employee employee)
+    {
+        if (enableGroupDate)
+        {
+            <td>
+                @if (employee.JoinedDate.HasValue)
+                {
+                    @employee.JoinedDate.Value.ToDateMonthYearFormatedDate()
+                }
+            </td>
+        }
+    }
+}

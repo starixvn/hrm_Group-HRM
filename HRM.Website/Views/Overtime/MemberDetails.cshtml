@@ -56,6 +56,9 @@
                 case (byte)CurrentRequestStatus.Approved:
                     <input type="button" class="btn btn-primary" id="btnResetByApprover" value="@Labels.Reset" />
                     break;
+                default:
+                    // do nothing
+                    break;
             }
         }
         else if (Model.Verifier != null && Model.Verifier.EmpId == currentUserId)
@@ -69,6 +72,9 @@
                 case (byte)CurrentRequestStatus.Verified:
                 case (byte)CurrentRequestStatus.NotVerified:
                     <input type="button" class="btn btn-primary" id="btnResetByVerifier" value="@Labels.Reset" />
+                    break;
+                default:
+                    // do nothing
                     break;
             }
         }

@@ -1,8 +1,6 @@
 @using HRM.Core.Enums
 @using HRM.Resources
 @model HRM.Models.Request.RequestEntity
-@{
-}
 
 @switch (Model.RequestType.Id)
 {
@@ -22,5 +20,8 @@
         break;
     case (byte)RequestType.KeepInView:
         <a class="viewhistory" href="javascript:;" id="/keepinview/viewhistory/@Model.Id">@Labels.View</a>
+        break;
+    default:
+        // do nothing
         break;
 }

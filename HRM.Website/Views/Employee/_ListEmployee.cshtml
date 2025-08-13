@@ -1,8 +1,9 @@
 ﻿@using HRM.Core
+@using HRM.Models
 @using HRM.Resources
 @using HRM.ViewModels
 @using HRM.Website.Helper
-@model IList<HRM.Models.Employee>
+@model IList<Employee>
 @{
     var pagerOption = (PagerOptionModel)ViewBag.PagerOption;
     var hasPermissionToEdit = (bool)ViewBag.HasPermissionToEdit;
@@ -105,15 +106,7 @@
                     <td>
                         <a class="avatar-tooltip" data-code="@employee.Code" href="@Url.Action("detail", "employee", new { id = employee.Id })">@employee.NickName</a>
                     </td>
-                    @if (enableGroupDate)
-                    {
-                        <td>
-                            @if (employee.JoinedDate.HasValue)
-                            {
-                                @employee.JoinedDate.Value.ToDateMonthYearFormatedDate()
-                            }
-                        </td>
-                    }
+                    @{RenderGroupDate(employee);}
                     <td class="align-left">@employee.JobLevel</td>
                     <td class="align-left">@employee.ManagementLevel</td>
                     <td class="align-left">@employee.Roles2String</td>
@@ -176,3 +169,18 @@
         </tfoot>
     }
 </table>
+
+@{
+    void RenderGroupDate(Employee employee)
+    {
+        if (enableGroupDate)
+        {
+            <td>
+                @if (employee.JoinedDate.HasValue)
+                {
+                    @employee.JoinedDate.Value.ToDateMonthYearFormatedDate()
+                }
+            </td>
+        }
+    }
+}

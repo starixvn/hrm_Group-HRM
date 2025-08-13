@@ -114,8 +114,8 @@
 @{
     void RenderColShift(DailySchedule schedule)
     {
-        string shift;
         var className = string.Empty;
+        var shift = string.Empty;
         if (schedule.IsLeaveOffDay)
         {
             shift = Labels.Off;
@@ -135,32 +135,9 @@
             }
             else
             {
-                if (schedule.LeaveType != null && (schedule.LeaveType2 == null || schedule.LeaveType.Code == schedule.LeaveType2.Code))
-                {
-                    className = schedule.LeaveType.Id switch
-                    {
-                        (byte)LeaveTypes.AnnualLeave => "annualleave",
-                        (byte)LeaveTypes.UnpaidLeave => "unpaidleave",
-                        (byte)LeaveTypes.BusinessTrip => "businesstrip",
-                        (byte)LeaveTypes.WeddingLeave or (byte)LeaveTypes.WeddingOfEmployeeChildren => "weddingleave",
-                        _ => "leaveday"
-                    };
-                }
-
-                if (schedule.IsLeaveHalfDay)
-                {
-                    shift = $"{schedule.LeaveType.Code} ½";
-                }
-                else
-                {
-                    shift = schedule.LeaveType.Code;
-
-                    if (schedule.LeaveType2 != null && schedule.LeaveType.Code != schedule.LeaveType2.Code)
-                    {
-                        className = "leaveday leavehalfday2";
-                        shift = $"{schedule.LeaveType.Code} / {schedule.LeaveType2.Code}";
-                    }
-                }
+                var (classNameLeave, shiftLeave) = RenderLeave(schedule);
+                className = classNameLeave;
+                shift = shiftLeave;
             }
         }
         else if (schedule.IsHoliday)
@@ -179,5 +156,40 @@
         }
 
         <td class="@className">@shift</td>
+    }
+
+    (string className, string shift) RenderLeave(DailySchedule schedule)
+    {
+        var className = string.Empty;
+        var shift = string.Empty;
+
+        if (schedule.LeaveType != null && (schedule.LeaveType2 == null || schedule.LeaveType.Code == schedule.LeaveType2.Code))
+        {
+            className = schedule.LeaveType.Id switch
+            {
+                (byte)LeaveTypes.AnnualLeave => "annualleave",
+                (byte)LeaveTypes.UnpaidLeave => "unpaidleave",
+                (byte)LeaveTypes.BusinessTrip => "businesstrip",
+                (byte)LeaveTypes.WeddingLeave or (byte)LeaveTypes.WeddingOfEmployeeChildren => "weddingleave",
+                _ => "leaveday"
+            };
+        }
+
+        if (schedule.IsLeaveHalfDay)
+        {
+            shift = $"{schedule.LeaveType.Code} ½";
+        }
+        else
+        {
+            shift = schedule.LeaveType.Code;
+
+            if (schedule.LeaveType2 != null && schedule.LeaveType.Code != schedule.LeaveType2.Code)
+            {
+                className = "leaveday leavehalfday2";
+                shift = $"{schedule.LeaveType.Code} / {schedule.LeaveType2.Code}";
+            }
+        }
+
+        return (className, shift);
     }
 }

@@ -219,21 +219,7 @@
                         }
                     </td>
                     <td class="approverSubtractScore">
-                        @if (item.ApproverSubtractScore > 0)
-                        {
-                            if (item.ApproverSubtractScore <= item.SystemSubtractScore)
-                            {
-                                <span style="color: red">-@item.ApproverSubtractScore.ToString("0.0")</span>
-                            }
-                            else
-                            {
-                                <span style="color: red">-@item.SystemSubtractScore.ToString("0.0")</span>
-                            }
-                        }
-                        else
-                        {
-                            <span>@item.ApproverSubtractScore.ToString("0.0")</span>
-                        }
+                        @{RenderApproverSubtractScore(item);}
                     </td>
                     @if (!string.IsNullOrEmpty(item.ApproverComment))
                     {
@@ -264,3 +250,24 @@
         @Html.Raw(RazorHelpers.DisplayNoInformation(colspan: 24))
     }
 </table>
+
+@{
+    void RenderApproverSubtractScore(DisciplineDetailModel item)
+    {
+        if (item.ApproverSubtractScore > 0)
+        {
+            if (item.ApproverSubtractScore <= item.SystemSubtractScore)
+            {
+                <span style="color: red">-@item.ApproverSubtractScore.ToString("0.0")</span>
+            }
+            else
+            {
+                <span style="color: red">-@item.SystemSubtractScore.ToString("0.0")</span>
+            }
+        }
+        else
+        {
+            <span>@item.ApproverSubtractScore.ToString("0.0")</span>
+        }
+    }
+}

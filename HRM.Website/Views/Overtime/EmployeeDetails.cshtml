@@ -49,6 +49,9 @@
             case (byte)CurrentRequestStatus.Void:
                 <input type="button" class="btn btn-primary" id="btnReset" value="@Labels.Reset" />
                 break;
+            default:
+                // do nothing
+                break;
         }
 
         <button type="button" class="btn btn-default" onclick="window.history.back()">@Labels.Back</button>
