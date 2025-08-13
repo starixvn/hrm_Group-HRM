@@ -255,14 +255,12 @@ export default class App extends Component {
                 teamIds: filter.teamIds,
                 companyId: filter.companyId,
                 isLocal: filter.isLocal,
-                employeeId:
-                    filter.employee.value === 0 ? null : filter.employee.value,
+                employeeId: filter.employee.value === 0 ? null : filter.employee.value,
             },
         })
             .then(response => {
                 this.selectedWeek = { fromDate, toDate };
-                const { isHost, enableSyncWorkingShift, schedules } =
-                    response.data;
+                const { isHost, enableSyncWorkingShift, schedules } = response.data;
 
                 this.originalSchedules = schedules.map(team => {
                     team.members.map(schedule => {
@@ -277,11 +275,9 @@ export default class App extends Component {
                         };
                         schedule.totalOffDayReplacement = 0;
 
-                        Object.keys(schedule.selectWeekDays).forEach
-                            (objectKey => {
+                        Object.keys(schedule.selectWeekDays).forEach(objectKey => {
                                 if (schedule[objectKey].isOffDayReplacement) {
-                                    schedule.totalOffDayReplacement =
-                                        schedule.totalOffDayReplacement + 1;
+                                    schedule.totalOffDayReplacement = schedule.totalOffDayReplacement + 1;
                                 }
                             }
                         );
@@ -351,16 +347,12 @@ export default class App extends Component {
                 teamIds: filter.teamIds,
                 companyId: filter.companyId,
                 isLocal: filter.isLocal,
-                employeeId:
-                    filter.employee.value === 0 ? null : filter.employee.value,
+                employeeId: filter.employee.value === 0 ? null : filter.employee.value,
             },
             responseType: 'blob',
         })
             .then(response => {
-                const fileName =
-                    response.headers['content-disposition'].match(
-                        /filename="(.+)"/
-                    )[1];
+                const fileName = response.headers['content-disposition'].match(/filename="(.+)"/)[1];
                 downloadFile(response.data, fileName);
             })
             .catch(axiosError)
@@ -426,11 +418,9 @@ export default class App extends Component {
         isChecked
     ) => {
         const schedules = [...this.state.schedules];
-        const gindex = schedules.findIndex(item =>item.teamId === teamId);
+        const gindex = schedules.findIndex(item => item.teamId === teamId);
         const members = [...schedules[gindex].members];
-        const eindex = members.findIndex
-            (item =>item.employeeId === employeeId
-        );
+        const eindex = members.findIndex(item => item.employeeId === employeeId);
         members[eindex] = Object.assign({}, members[eindex], {
             selectWeekDays: {
                 ...members[eindex].selectWeekDays,
@@ -486,41 +476,31 @@ export default class App extends Component {
 
     handleChangeShift = (teamId, employeeId, attrName, shift) => {
         const schedules = [...this.state.schedules];
-        const gindex = schedules.findIndex(item =>item.teamId === teamId);
+        const gindex = schedules.findIndex(item => item.teamId === teamId);
         const members = [...schedules[gindex].members];
-        const eindex = members.findIndex
-            (item =>item.employeeId === employeeId
-        );
+        const eindex = members.findIndex(item => item.employeeId === employeeId);
         const member = { ...members[eindex] };
 
         if (shift !== null && isEqual(member[attrName].shift, shift)) {
             return;
         }
 
-        let defaultShift =
-            member.defaultShift !== null ? { ...member.defaultShift } : null;
+        let defaultShift = member.defaultShift !== null ? { ...member.defaultShift } : null;
         if (member.isUsedWeeklyDefaultShift) {
-            defaultShift =
-                member.weeklyDefaultShift[`${attrName.substring(0, 3)}Shift`];
+            defaultShift = member.weeklyDefaultShift[`${attrName.substring(0, 3)}Shift`];
         }
 
-        shift =
-            shift === null && !member[attrName].isHoliday
-                ? defaultShift
-                : shift;
+        shift = shift === null && !member[attrName].isHoliday ? defaultShift : shift;
         const isOffDay = shift !== null && shift.id === OffDayShiftId;
         shift = shift !== null && shift.id === OffDayShiftId ? null : shift;
-        const originalSchedule =
-            this.originalSchedules[gindex].members[eindex][attrName];
+        const originalSchedule = this.originalSchedules[gindex].members[eindex][attrName];
 
         member[attrName] = {
             ...member[attrName],
             isOffDay,
             isOffDayReplacement: false,
             shift,
-            isModified: !isEqual(shift, originalSchedule.shift)
-                ? true
-                : originalSchedule.isModified,
+            isModified: !isEqual(shift, originalSchedule.shift) ? true : originalSchedule.isModified,
         };
 
         members[eindex] = member;
@@ -532,9 +512,7 @@ export default class App extends Component {
         const schedules = [...this.state.schedules];
         const gindex = schedules.findIndex(item =>item.teamId === teamId);
         const members = [...schedules[gindex].members];
-        const eindex = members.findIndex
-                (item =>item.employeeId === employeeId
-            ),
+        const eindex = members.findIndex(item => item.employeeId === employeeId),
             originalDefaultShift = members[eindex].defaultShift;
 
         if (defaultShift !== null) {
@@ -940,8 +918,7 @@ export default class App extends Component {
 
             for (let eindex = 0; eindex < totalSubItems; eindex++) {
                 const schedule = schedules[gindex].members[eindex],
-                    originalSchedule =
-                        originalSchedules[gindex].members[eindex];
+                    originalSchedule = originalSchedules[gindex].members[eindex];
                 unset(schedule, 'selectWeekDays');
                 unset(originalSchedule, 'selectWeekDays');
 
@@ -1013,8 +990,7 @@ export default class App extends Component {
                 data: stringify({
                     fromDate,
                     toDate,
-                    weeklySchedules:
-                        weeklySchedules.length > 0 ? weeklySchedules : null,
+                    weeklySchedules: weeklySchedules.length > 0 ? weeklySchedules : null,
                     defaultShifts,
                 }),
                 headers: {
@@ -1065,9 +1041,7 @@ export default class App extends Component {
     handleShowWeeklyDefaultShiftModal = (teamId, employeeId) => {
         const schedules = this.state.schedules,
             gindex = schedules.findIndex(item =>item.teamId === teamId),
-            eindex = schedules[gindex].members.findIndex
-                (item =>item.employeeId === employeeId
-            );
+            eindex = schedules[gindex].members.findIndex(item => item.employeeId === employeeId);
 
         this.setState({
             editWeeklyDefaultShift: {
@@ -1076,8 +1050,7 @@ export default class App extends Component {
                 employeeId,
                 nickname: schedules[gindex].members[eindex].nickname,
                 data: schedules[gindex].members[eindex].weeklyDefaultShift,
-                isUsedWeeklyDefaultShift:
-                    schedules[gindex].members[eindex].isUsedWeeklyDefaultShift,
+                isUsedWeeklyDefaultShift: schedules[gindex].members[eindex].isUsedWeeklyDefaultShift,
             },
         });
     };
@@ -1104,9 +1077,7 @@ export default class App extends Component {
         const schedules = [...this.state.schedules];
         const gindex = schedules.findIndex(item =>item.teamId === teamId);
         const members = [...schedules[gindex].members];
-        const eindex = members.findIndex
-            (item =>item.employeeId === employeeId
-        );
+        const eindex = members.findIndex(item =>item.employeeId === employeeId);
         members[eindex] = {
             ...members[eindex],
             weeklyDefaultShift,
@@ -1123,15 +1094,11 @@ export default class App extends Component {
 
         if (isUsedWeeklyDefaultShift) {
             this.scheduleAttrNames.forEach(attrName => {
-                const shiftId =
-                        weeklyDefaultShift[`${attrName.substring(0, 3)}Shift`]
-                            .id,
+                const shiftId = weeklyDefaultShift[`${attrName.substring(0, 3)}Shift`].id,
                     isOffDay = shiftId === OffDayShiftId,
                     shift = isOffDay
                         ? null
-                        : weeklyDefaultShift[
-                              `${attrName.substring(0, 3)}Shift`
-                          ],
+                        : weeklyDefaultShift[`${attrName.substring(0, 3)}Shift`],
                     workDate = moment(members[eindex][attrName].workDate);
 
                 if (
@@ -1144,9 +1111,7 @@ export default class App extends Component {
                         isOffDay,
                     };
                     this.originalSchedules[gindex].members[eindex][attrName] = {
-                        ...this.originalSchedules[gindex].members[eindex][
-                            attrName
-                        ],
+                        ...this.originalSchedules[gindex].members[eindex][attrName],
                         shift,
                         isOffDay,
                     };
@@ -1186,9 +1151,7 @@ export default class App extends Component {
         const schedules = this.state.schedules;
         const gindex = schedules.findIndex(item =>item.teamId === teamId);
         const members = schedules[gindex].members;
-        const eindex = members.findIndex
-            (item =>item.employeeId === employeeId
-        );
+        const eindex = members.findIndex(item =>item.employeeId === employeeId);
 
         let totalOffDays = 0;
         this.scheduleAttrNames.forEach(attrName => {
@@ -1241,9 +1204,7 @@ export default class App extends Component {
         const schedules = [...this.state.schedules];
         const gindex = schedules.findIndex(item =>item.teamId === teamId);
         const members = [...schedules[gindex].members];
-        const eindex = members.findIndex
-            (item =>item.employeeId === employeeId
-        );
+        const eindex = members.findIndex(item =>item.employeeId === employeeId);
 
         if (
             !isEqual(
@@ -1267,8 +1228,7 @@ export default class App extends Component {
 
                         members[eindex] = { ...members[eindex], remark };
                         schedules[gindex] = { ...schedules[gindex], members };
-                        this.originalSchedules[gindex].members[eindex].remark =
-                            remark;
+                        this.originalSchedules[gindex].members[eindex].remark = remark;
 
                         this.setState({ schedules });
                     } else {
@@ -1421,9 +1381,7 @@ export default class App extends Component {
         const schedules = [...this.state.schedules];
         const index = schedules.findIndex(x =>x.teamId === teamId),
             totalItems = schedules[index].members.length,
-            sourceIndex = schedules[index].members.findIndex
-                (schedule =>schedule.employeeId === employeeId
-            );
+            sourceIndex = schedules[index].members.findIndex(schedule =>schedule.employeeId === employeeId);
         let destinationIndex = 0;
 
         switch (key) {
@@ -1465,9 +1423,7 @@ export default class App extends Component {
         const members = [...schedules[gindex].members];
 
         if (employeeId !== null) {
-            const eindex = members.findIndex
-                (item =>item.employeeId === employeeId
-            );
+            const eindex = members.findIndex(item =>item.employeeId === employeeId);
             members[eindex] = { ...members[eindex], isSelected };
             schedules[gindex] = {
                 ...schedules[gindex],

@@ -67,8 +67,7 @@ export default class ShiftManager extends Component {
                         return {
                             key: id,
                             id: id,
-                            teamCode:
-                                item.teamCode !== null ? item.teamCode : '',
+                            teamCode: item.teamCode !== null ? item.teamCode : '',
                             value:
                                 this.props.pageType === PageType.GroupTeam
                                     ? `${item.nickName} (${item.company})`
@@ -126,9 +125,7 @@ export default class ShiftManager extends Component {
     };
 
     handleAddEmployee = employee => {
-        const index = this.state.managers.findIndex
-            (item =>item.ownerId === employee.id
-        );
+        const index = this.state.managers.findIndex(item =>item.ownerId === employee.id);
         this.setState({ employeeOptions: [] });
         if (index < 0) {
             const managers = [

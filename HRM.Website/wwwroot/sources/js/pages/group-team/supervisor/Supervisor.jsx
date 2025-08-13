@@ -116,9 +116,7 @@ export default class Supervisor extends Component {
   };
 
   handleAddEmployee = employee => {
-    const index = this.state.supervisors.findIndex
-      (item =>item.ownerId === employee.id
-    );
+    const index = this.state.supervisors.findIndex(item => item.ownerId === employee.id);
     this.setState({ employeeOptions: [] });
     if (index < 0) {
       const supervisors = [
