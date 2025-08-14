@@ -30,6 +30,10 @@ import WeeklyDefaultShiftModal from './WeeklyDefaultShiftModal';
 import Search from './Search';
 import Table from './table/table';
 
+const EXPORT_DATE_FORMAT = 'DD-MMM-YYYY';
+const FORM_URLENCODED_HEADER = 'application/x-www-form-urlencoded';
+const SUCCESS_MESSAGE = 'Updated Successfully!';
+
 export default class App extends Component {
     constructor(props) {
         super(props);
@@ -301,8 +305,8 @@ export default class App extends Component {
 
     handleExportExcel = () => {
         const filter = this.state.filter,
-            fromDate = moment(filter.fromDate).format('DD-MMM-YYYY'),
-            toDate = moment(filter.toDate).format('DD-MMM-YYYY');
+            fromDate = moment(filter.fromDate).format(EXPORT_DATE_FORMAT),
+            toDate = moment(filter.toDate).format(EXPORT_DATE_FORMAT);
 
         blockUI();
         axios({
@@ -333,8 +337,8 @@ export default class App extends Component {
 
     handleExportExcelDriverPickup = () => {
         const filter = this.state.filter,
-            fromDate = moment(filter.fromDate).format('DD-MMM-YYYY'),
-            toDate = moment(filter.toDate).format('DD-MMM-YYYY');
+            fromDate = moment(filter.fromDate).format(EXPORT_DATE_FORMAT),
+            toDate = moment(filter.toDate).format(EXPORT_DATE_FORMAT);
 
         blockUI();
         axios({
@@ -995,13 +999,13 @@ export default class App extends Component {
                 }),
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest',
-                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Content-Type': FORM_URLENCODED_HEADER,
                 },
             })
                 .then(response => {
                     const data = response.data;
                     if (data.isSuccessful) {
-                        toast.success('Updated Successfully!');
+                        toast.success(SUCCESS_MESSAGE);
 
                         this.getWeeklyShedules(this.state.filter);
                     } else {
@@ -1178,13 +1182,13 @@ export default class App extends Component {
             data: stringify({ weeklyDefaultShift, isUsedWeeklyDefaultShift }),
             headers: {
                 'X-Requested-With': 'XMLHttpRequest',
-                'Content-Type': 'application/x-www-form-urlencoded',
+                'Content-Type': FORM_URLENCODED_HEADER,
             },
         })
             .then(response => {
                 const data = response.data;
                 if (data.isSuccessful) {
-                    toast.success('Updated Successfully!');
+                    toast.success(SUCCESS_MESSAGE);
                     this.updateWeeklyDefaultShift(
                         teamId,
                         employeeId,
@@ -1218,13 +1222,13 @@ export default class App extends Component {
                 data: stringify({ employeeId, remark }),
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest',
-                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Content-Type': FORM_URLENCODED_HEADER,
                 },
             })
                 .then(response => {
                     const data = response.data;
                     if (data.isSuccessful) {
-                        toast.success('Updated Successfully!');
+                        toast.success(SUCCESS_MESSAGE);
 
                         members[eindex] = { ...members[eindex], remark };
                         schedules[gindex] = { ...schedules[gindex], members };
@@ -1258,7 +1262,7 @@ export default class App extends Component {
                 data: stringify({ displayOrders }),
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest',
-                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Content-Type': FORM_URLENCODED_HEADER,
                 },
             })
                 .then(response => {
@@ -1290,7 +1294,7 @@ export default class App extends Component {
                 data: stringify({ displayOrders }),
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest',
-                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Content-Type': FORM_URLENCODED_HEADER,
                 },
             })
                 .then(response => {
@@ -1488,7 +1492,7 @@ export default class App extends Component {
             }),
             headers: {
                 'X-Requested-With': 'XMLHttpRequest',
-                'Content-Type': 'application/x-www-form-urlencoded',
+                'Content-Type': FORM_URLENCODED_HEADER,
             },
         })
             .then(response => {

@@ -16,8 +16,7 @@ import { validationSchema } from "../common.functions";
 const AppContainer = () => {
     const [companies, setCompanies] = useState(null);
     const [employees, setEmployees] = useState([]);
-    const [selectEmployee, setSelectEmployee] = useState(null);
-    const [formKey, setFormKey] = useState(0);
+    const [formKey] = useState(0);
     const [initialValues, setInitialValues] = useState({
         empId: 0,
         employee: '',
@@ -70,8 +69,6 @@ const AppContainer = () => {
     }, []);
 
     const handleSelectEmployee = selectedItem => {
-        setSelectEmployee(selectedItem);
-        
         setInitialValues(prev => ({
             ...prev,
             empId: selectedItem.id,

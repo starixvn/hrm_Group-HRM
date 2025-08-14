@@ -38,7 +38,79 @@
     </div>
 
     <div>
-        @if (Model.Approver != null && Model.Approver.EmpId == currentUserId)
+        @{RenderActionButtons();}
+        <button type="button" class="btn btn-default" onclick="window.history.back()">@Labels.Back</button>
+    </div>
+</div>
+<table class="table table-custom" id="data">
+    <thead>
+        <tr>
+            <th>@Labels.Date</th>
+            <th>@Labels.Shift</th>
+            <th>@Labels.TimeIn</th>
+            <th>@Labels.TimeOut</th>
+            <th>@Labels.TotalHours</th>
+            <th>@Labels.NormalDay</th>
+            <th>@Labels.OffDay</th>
+            <th>@Labels.PublicHoliday</th>
+            <th>@Labels.SpecialOT</th>
+            <th>@Labels.Remark</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.DailyOvertimes.Any())
+        {
+            foreach (var request in Model.DailyOvertimes)
+            {
+                <tr>
+                    @{RenderDateCell(request);}
+                    @{RenderShiftCell(request);}
+                    <td>@request.TimeIn</td>
+                    <td>@request.TimeOut</td>
+                    <td>
+                        @{RenderHours(request.ActualWorkingHours);}
+                    </td>
+                    <td>
+                        @{RenderHours(request.NormalHours);}
+                    </td>
+                    <td>
+                        @{RenderHours(request.OffHours);}
+                    </td>
+                    <td>
+                        @{RenderHours(request.PublicHours);}
+                    </td>
+                    <td>
+                        @{RenderHours(request.SpecialHours);}
+                    </td>
+                    <td class="align-left">@request.Remark</td>
+                    @{RenderWarningCell(request);}
+                </tr>
+            }
+        }
+        else
+        {
+            @Html.Raw(RazorHelpers.DisplayNoInformation(colspan: 11))
+        }
+    </tbody>
+    <tfoot>
+        <tr class="summary">
+            <td class="align-right" colspan="5">@Labels.TotalOvertimeHours:</td>
+            <td>@Model.DailyOvertimes.Sum(t => t.NormalHours).ToString("0.00")</td>
+            <td>@Model.DailyOvertimes.Sum(t => t.OffHours).ToString("0.00")</td>
+            <td>@Model.DailyOvertimes.Sum(t => t.PublicHours).ToString("0.00")</td>
+            <td>@Model.DailyOvertimes.Sum(t => t.SpecialHours).ToString("0.00")</td>
+            <td></td>
+            <td></td>
+        </tr>
+    </tfoot>
+</table>
+@await Html.PartialAsync("_ConfirmModal")
+
+@{
+    void RenderActionButtons()
+    {
+        if (Model.Approver != null && Model.Approver.EmpId == currentUserId)
         {
             switch (Model.Status.Id)
             {
@@ -78,114 +150,61 @@
                     break;
             }
         }
+    }
 
-        <button type="button" class="btn btn-default" onclick="window.history.back()">@Labels.Back</button>
-    </div>
-</div>
-<table class="table table-custom" id="data">
-    <thead>
-        <tr>
-            <th>@Labels.Date</th>
-            <th>@Labels.Shift</th>
-            <th>@Labels.TimeIn</th>
-            <th>@Labels.TimeOut</th>
-            <th>@Labels.TotalHours</th>
-            <th>@Labels.NormalDay</th>
-            <th>@Labels.OffDay</th>
-            <th>@Labels.PublicHoliday</th>
-            <th>@Labels.SpecialOT</th>
-            <th>@Labels.Remark</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @if (Model.DailyOvertimes.Any())
+    void RenderDateCell(dynamic request)
+    {
+        var className = string.Empty;
+        if (request.IsHoliday)
         {
-            foreach (var request in Model.DailyOvertimes)
-            {
-                <tr>
-                    @{
-                        var className = string.Empty;
-                        if (request.IsHoliday)
-                        {
-                            className = "holiday";
-                        }
-                        else if (request.WorkDate.DayOfWeek is DayOfWeek.Saturday or DayOfWeek.Sunday)
-                        {
-                            className = "weekend";
-                        }
-                    }
-                    <td class="@className">
-                        @request.WorkDate.ToString("dd-MMM-yyyy (ddd)")
-                    </td>
-                    <td>
-                        @if (!string.IsNullOrWhiteSpace(request.ShiftCode))
-                        {
-                            @request.ShiftCode
-                        }
-                        else if (request.IsHoliday)
-                        {
-                            @Labels.Holiday
-                        }
-                        else if (request.IsOffDay)
-                        {
-                            @Labels.Off
-                        }
-                    </td>
-                    <td>@request.TimeIn</td>
-                    <td>@request.TimeOut</td>
-                    <td>
-                        @{RenderHours(request.ActualWorkingHours);}
-                    </td>
-                    <td>
-                        @{RenderHours(request.NormalHours);}
-                    </td>
-                    <td>
-                        @{RenderHours(request.OffHours);}
-                    </td>
-                    <td>
-                        @{RenderHours(request.PublicHours);}
-                    </td>
-                    <td>
-                        @{RenderHours(request.SpecialHours);}
-                    </td>
-                    <td class="align-left">@request.Remark</td>
-                    @if (request.TotalShiftHours != 0 && (request.ActualWorkingHours >= request.TotalShiftHours + 1
-                        || (request.NormalHours > request.ActualWorkingHours - Model.Requester.WorkingHours
-                            && request.ActualWorkingHours >= Model.Requester.WorkingHours)))
-                    {
-                        var tooltip = "[Total Working Hours]/[Shift Hours]: " + request.ActualWorkingHours + " / " + request.TotalShiftHours;
-                        <td class="tooltip-tipsy" title="@tooltip">
-                            <i class="fa fa-exclamation-triangle"></i>
-                        </td>
-                    }
-                    else
-                    {
-                        <td></td>
-                    }
-                </tr>
-            }
+            className = "holiday";
+        }
+        else if (request.WorkDate.DayOfWeek is DayOfWeek.Saturday or DayOfWeek.Sunday)
+        {
+            className = "weekend";
+        }
+        <td class="@className">
+            @request.WorkDate.ToString("dd-MMM-yyyy (ddd)")
+        </td>
+    }
+
+    void RenderShiftCell(dynamic request)
+    {
+        if (!string.IsNullOrWhiteSpace(request.ShiftCode))
+        {
+            <td>@request.ShiftCode</td>
+        }
+        else if (request.IsHoliday)
+        {
+            <td>@Labels.Holiday</td>
+        }
+        else if (request.IsOffDay)
+        {
+            <td>@Labels.Off</td>
         }
         else
         {
-            @Html.Raw(RazorHelpers.DisplayNoInformation(colspan: 11))
+            <td></td>
         }
-    </tbody>
-    <tfoot>
-        <tr class="summary">
-            <td class="align-right" colspan="5">@Labels.TotalOvertimeHours:</td>
-            <td>@Model.DailyOvertimes.Sum(t => t.NormalHours).ToString("0.00")</td>
-            <td>@Model.DailyOvertimes.Sum(t => t.OffHours).ToString("0.00")</td>
-            <td>@Model.DailyOvertimes.Sum(t => t.PublicHours).ToString("0.00")</td>
-            <td>@Model.DailyOvertimes.Sum(t => t.SpecialHours).ToString("0.00")</td>
-            <td></td>
-            <td></td>
-        </tr>
-    </tfoot>
-</table>
-@await Html.PartialAsync("_ConfirmModal")
+    }
 
-@{
+    void RenderWarningCell(dynamic request)
+    {
+        if (request.TotalShiftHours != 0 && (request.ActualWorkingHours >= request.TotalShiftHours + 1
+            || (request.NormalHours > request.ActualWorkingHours - Model.Requester.WorkingHours
+                && request.ActualWorkingHours >= Model.Requester.WorkingHours)))
+        {
+            var tooltip = "[Total Working Hours]/[Shift Hours]: " + request.ActualWorkingHours + " / " + request.TotalShiftHours;
+            <td class="tooltip-tipsy" title="@tooltip">
+                <i class="fa fa-exclamation-triangle"></i>
+            </td>
+        }
+        else
+        {
+            <td></td>
+        }
+    }
+
     void RenderHours(decimal hours)
     {
         if (hours > 0)

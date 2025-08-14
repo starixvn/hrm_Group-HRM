@@ -2,9 +2,7 @@
 import { EmploymentStatusColor } from '../constants/constants';
 
 const SalaryTable = ({ data }) => {
-    const formatNumber = number => {
-        return new Intl.NumberFormat('en-US').format(number || 0);
-    };
+    const formatNumber = number => new Intl.NumberFormat('en-US').format(number || 0);
 
     const getRowStyle = employmentStatus => {
         const color = EmploymentStatusColor[employmentStatus];
