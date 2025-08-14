@@ -49,7 +49,7 @@ public class DisciplineController(
     [HrmPermission(Policy.Read, FunctionKey.Discipline)]
     public async Task<IActionResult> GetDisciplineSummaryGrid(DisciplineSummaryViewModel model, int? companyId = null)
     {
-        var roles = await roleService.GetByUserIdAsync(EmployeeSession.EmpId);
+        var roles = await roleService.GetByUserIdAsync(session.UserId);
         var criteria = new GetDisciplineSummaryCriteria
         {
             FromDate = model.FromDate,
