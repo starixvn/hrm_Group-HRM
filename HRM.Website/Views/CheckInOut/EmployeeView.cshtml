@@ -148,7 +148,7 @@
         </a>
     }
 
-    void RenderStatusWithTooltip(CheckInOutRequest request, string actorName, DateTime? actionDate)
+    void RenderStatusWithTooltip(CheckInOutRequest request, string actorName, DateTime actionDate)
     {
         <a requestid="@request.RequestId" href="javascript:;" class="tooltip-tipsy"
            title="@request.Status.Name by @actorName (@actionDate.ToShortFormatedDate())">

@@ -42,12 +42,11 @@
         @switch (Model.Status.Id)
         {
             case (byte)CurrentRequestStatus.Approved:
-                <input type="button" class="btn btn-primary" id="btnProcess" value="@Labels.Process" />
-                <input type="button" class="btn btn-primary" id="btnVoid" value="@Labels.Void" />
+                RenderApprovedButtons();
                 break;
             case (byte)CurrentRequestStatus.Processed:
             case (byte)CurrentRequestStatus.Void:
-                <input type="button" class="btn btn-primary" id="btnReset" value="@Labels.Reset" />
+                RenderResetButton();
                 break;
             default:
                 // do nothing
@@ -167,5 +166,16 @@
         {
             @hours
         }
+    }
+
+    void RenderApprovedButtons()
+    {
+        <input type="button" class="btn btn-primary" id="btnProcess" value="@Labels.Process" />
+        <input type="button" class="btn btn-primary" id="btnVoid" value="@Labels.Void" />
+    }
+
+    void RenderResetButton()
+    {
+        <input type="button" class="btn btn-primary" id="btnReset" value="@Labels.Reset" />
     }
 }
