@@ -110,34 +110,19 @@
                     <td>@request.TimeIn</td>
                     <td>@request.TimeOut</td>
                     <td>
-                        @if (request.ActualWorkingHours > 0)
-                        {
-                            @request.ActualWorkingHours
-                        }
+                        @{RenderHours(request.ActualWorkingHours);}
                     </td>
                     <td>
-                        @if (request.NormalHours > 0)
-                        {
-                            @request.NormalHours
-                        }
+                        @{RenderHours(request.NormalHours);}
                     </td>
                     <td>
-                        @if (request.OffHours > 0)
-                        {
-                            @request.OffHours
-                        }
+                        @{RenderHours(request.OffHours);}
                     </td>
                     <td>
-                        @if (request.PublicHours > 0)
-                        {
-                            @request.PublicHours
-                        }
+                        @{RenderHours(request.PublicHours);}
                     </td>
                     <td>
-                        @if (request.SpecialHours > 0)
-                        {
-                            @request.SpecialHours
-                        }
+                        @{RenderHours(request.SpecialHours);}
                     </td>
                     <td class="align-left">@request.Remark</td>
                     @if (request.TotalShiftHours != 0 && (request.ActualWorkingHours >= request.TotalShiftHours + 1
@@ -174,3 +159,13 @@
     </tfoot>
 </table>
 @await Html.PartialAsync("_ConfirmModal")
+
+@{
+    void RenderHours(decimal hours)
+    {
+        if (hours > 0)
+        {
+            @hours
+        }
+    }
+}

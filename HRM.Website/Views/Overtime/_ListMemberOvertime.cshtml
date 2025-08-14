@@ -38,28 +38,16 @@
         <td>@request.Requester.Nickname</td>
         <td data-datetime="@request.Month">@request.Month.ToString("MMM-yyyy")</td>
         <td>
-            @if (request.NormalHours > 0)
-            {
-                @request.NormalHours
-            }
+            @{RenderHours(request.NormalHours);}
         </td>
         <td>
-            @if (request.OffHours > 0)
-            {
-                @request.OffHours
-            }
+            @{RenderHours(request.OffHours);}
         </td>
         <td>
-            @if (request.PublicHours > 0)
-            {
-                @request.PublicHours
-            }
+            @{RenderHours(request.PublicHours);}
         </td>
         <td>
-            @if (request.SpecialHours > 0)
-            {
-                @request.SpecialHours
-            }
+            @{RenderHours(request.SpecialHours);}
         </td>
         <td>@request.VerifierNickname</td>
         <td>@request.ApproverNickname</td>
@@ -145,6 +133,14 @@ else
         else
         {
             @request.Status
+        }
+    }
+
+    void RenderHours(decimal hours)
+    {
+        if (hours > 0)
+        {
+            @hours
         }
     }
 }
