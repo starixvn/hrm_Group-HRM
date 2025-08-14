@@ -134,7 +134,7 @@ public class DisciplineController(
         };
 
         var otherDisciplines = await disciplineService.GetOtherDisciplineAsync(criteria);
-        var members = await disciplineService.GetMemberToAddOtherDisciplineAsync(EmployeeSession.EmpId, null, companyId);
+        var members = await disciplineService.GetMemberToAddOtherDisciplineAsync(EmployeeSession.EmpId, companyId: companyId);
         ViewBag.IsHost = members.Any(x => x.EmployeeId == employeeId)
             && session.HasPermissionOnFunction(FunctionKey.Discipline, Policy.Host);
 
