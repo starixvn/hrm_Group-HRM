@@ -59,7 +59,7 @@ public class PaternityController(
                 EmpId = model.EmployeeId,
                 ChildBornDate = model.ChildBornDate,
                 LeaveDay = model.LeaveDay,
-                CreatedBy = session.UserId,
+                CreatedBy = EmployeeSession.EmpId,
                 Remark = model.Remark
             };
 
@@ -103,7 +103,7 @@ public class PaternityController(
                 EmpId = model.EmployeeId,
                 ChildBornDate = model.ChildBornDate,
                 LeaveDay = model.LeaveDay,
-                ModifiedBy = session.UserId,
+                ModifiedBy = EmployeeSession.EmpId,
                 Remark = model.Remark
             };
 

@@ -165,7 +165,7 @@ public class MessageController(
     {
         if (param != null)
         {
-            param.EmployeeId = session.UserId;
+            param.EmployeeId = EmployeeSession.EmpId;
         }
 
         ViewBag.Messages = await messageService.GetMessageByEmployee(param);

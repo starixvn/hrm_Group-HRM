@@ -258,7 +258,7 @@ public class GroupEmployeeListController(
             {
                 EmpId = model.EmpId,
                 CtrId = model.CtrId,
-                ModifiedBy = session.UserId
+                ModifiedBy = EmployeeSession.EmpId
             };
             var result = await baseService.ExecuteNonQueryAsync(command);
             if (result.IsSuccessful)

@@ -431,9 +431,10 @@ public class EmployeeService(
 
     public async Task<IEnumerable<int>> GetCompaniesBelongToSupervisor()
     {
+        var employeeSession = session.Get<EmployeeSession>(SessionKey.Employee);
         var supervisorCompanyCriteria = new GetSupervisorCompaniesCriteria
         {
-            EmpId = session.UserId
+            EmpId = employeeSession.EmpId
         };
         var supervisorCompanyIds = await baseService.GetDataAsync<int>(supervisorCompanyCriteria);
 

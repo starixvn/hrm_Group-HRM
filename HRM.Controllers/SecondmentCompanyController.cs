@@ -45,7 +45,7 @@ public class SecondmentCompanyController(
             return new JsonResult(commandResult);
         }
 
-        commandResult = await secondCompanyEmployeeService.CreateAsync(session.UserId, model.EmpId, model.CompanyId);
+        commandResult = await secondCompanyEmployeeService.CreateAsync(EmployeeSession.EmpId, model.EmpId, model.CompanyId);
 
         return new JsonResult(commandResult);
     }
@@ -73,7 +73,7 @@ public class SecondmentCompanyController(
         {
             return new JsonResult(commandResult);
         }
-        commandResult = await secondCompanyEmployeeService.UpdateAsync(session.UserId, model.OldEmpId, model.EmpId, model.CompanyId);
+        commandResult = await secondCompanyEmployeeService.UpdateAsync(EmployeeSession.EmpId, model.OldEmpId, model.EmpId, model.CompanyId);
 
         return new JsonResult(commandResult);
     }
@@ -82,7 +82,7 @@ public class SecondmentCompanyController(
     [HrmPermission(Policy.Host, FunctionKey.SecondmentCompanyList)]
     public async Task<IActionResult> Delete([FromBody] DeleteCompanySecondEmployeeViewModel request)
     {
-        var commandResult = await secondCompanyEmployeeService.DeleteAsync(request.EmpId, session.UserId);
+        var commandResult = await secondCompanyEmployeeService.DeleteAsync(request.EmpId, EmployeeSession.EmpId);
 
         return new JsonResult(commandResult);
     }

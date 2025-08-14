@@ -34,7 +34,7 @@ public class JobLevelController(
         var criteria = new InsertJobLevelCriteria
         {
             Name = model.Name,
-            ModifiedBy = session.UserId
+            ModifiedBy = EmployeeSession.EmpId
         };
 
         var result = await jobLevelService.Insert(criteria);
@@ -50,7 +50,7 @@ public class JobLevelController(
         {
             JobLevelId = model.Id,
             Name = model.Name,
-            ModifiedBy = session.UserId
+            ModifiedBy = EmployeeSession.EmpId
         };
         var result = await jobLevelService.Update(criteria);
 
@@ -61,7 +61,7 @@ public class JobLevelController(
     [HrmPermission(Policy.Host, FunctionKey.JobLevelManagement)]
     public async Task<IActionResult> Delete([FromBody] JobLevelDeleteModel model)
     {
-        var result = await jobLevelService.Delete(model.Id, session.UserId);
+        var result = await jobLevelService.Delete(model.Id, EmployeeSession.EmpId);
 
         return Json(result);
     }

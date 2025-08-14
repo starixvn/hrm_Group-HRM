@@ -88,7 +88,7 @@ public class ExportLeaveSummaryController(
             EmpId = model.EmployeeId > 0 ? new int?(model.EmployeeId) : null,
             TeamIds = model.TeamIds,
             IsLocal = (byte?)model.Category,
-            SupervisorId = session.UserId,
+            SupervisorId = EmployeeSession.EmpId,
             LeaveType = model.LeaveType,
             CompanyId = CurrentCompanyId
         };

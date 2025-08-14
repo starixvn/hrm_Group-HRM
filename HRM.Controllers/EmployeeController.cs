@@ -250,7 +250,7 @@ public class EmployeeController(
             Nickname = model.Nickname,
             TeamId = model.TeamId,
             DomainUsername = model.DomainUsername,
-            ActorId = session.UserId
+            ActorId = EmployeeSession.EmpId
         };
         var commandResult = await employeeService.CreateAsync(param);
         if (commandResult.IsSuccessful)
@@ -301,7 +301,7 @@ public class EmployeeController(
         if (ModelState.IsValid)
         {
             var param = MappingEditEmployeeParam(model);
-            var commandResult = await employeeService.EditAsync(session.UserId, param, CurrentCompanyId);
+            var commandResult = await employeeService.EditAsync(EmployeeSession.EmpId, param, CurrentCompanyId);
             if (commandResult.IsSuccessful)
             {
                 await UpdateUserInfo(model.UserId, param);
@@ -332,7 +332,7 @@ public class EmployeeController(
     [HrmPermission(Policy.Host, FunctionKey.EmployeeManagement)]
     public async Task<ActionResult> Delete(DeleteEmployeeParam param)
     {
-        var commandResult = await employeeService.DeleteAsync(session.UserId, param);
+        var commandResult = await employeeService.DeleteAsync(EmployeeSession.EmpId, param);
         if (!commandResult.IsSuccessful)
         {
             Json(commandResult);
@@ -395,7 +395,7 @@ public class EmployeeController(
     [HttpPost]
     public async Task<JsonResult> EditEmployeeSupervisor(int employeeId, short roleId, IEnumerable<EditTeamSupervisor> supervisors)
     {
-        var commandResult = await employeeService.EditEmployeeSupervisorAsync(session.UserId, employeeId, roleId, supervisors);
+        var commandResult = await employeeService.EditEmployeeSupervisorAsync(EmployeeSession.EmpId, employeeId, roleId, supervisors);
 
         return new JsonResult(commandResult);
     }
@@ -443,7 +443,7 @@ public class EmployeeController(
     {
         var criteria = new GetMemberByManagerCriteria
         {
-            SupervisorId = session.UserId,
+            SupervisorId = EmployeeSession.EmpId,
             Query = keyword,
             ExcludedManager = false,
             CompanyId = companyId ?? CurrentCompanyId
@@ -554,7 +554,7 @@ public class EmployeeController(
 
     private async Task UpdateUserSession(int employeeId)
     {
-        if (session.UserId == employeeId)
+        if (EmployeeSession.EmpId == employeeId)
         {
             session.Set(SessionKey.Employee, await authService.GetByUserIdAsync(session.UserId));
         }

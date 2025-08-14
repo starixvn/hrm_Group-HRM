@@ -21,7 +21,7 @@ public class ExportTimeRecordController(
         var criteria = new GetTimeRecordCriteria
         {
             EmpId = model.EmployeeId == 0 ? null : model.EmployeeId,
-            SupervisorId = session.UserId,
+            SupervisorId = EmployeeSession.EmpId,
             TeamIds = model.TeamIds,
             FromDate = model.FromDate.ToServerTimeZone(),
             ToDate = model.ToDate.ToEndOfDay().ToServerTimeZone(),

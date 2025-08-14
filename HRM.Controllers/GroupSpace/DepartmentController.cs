@@ -75,7 +75,7 @@ public class DepartmentController(
             AccountableArea = model.AccountableArea,
             IsActive = model.IsActive,
             UnitId = model.UnitId,
-            ModifiedBy = session.UserId
+            ModifiedBy = EmployeeSession.EmpId
         };
         commandResult = await baseService.ExecuteNonQueryAsync(criteria);
 
@@ -128,7 +128,7 @@ public class DepartmentController(
             AccountableArea = model.AccountableArea,
             IsActive = model.IsActive,
             UnitId = model.UnitId,
-            ModifiedBy = session.UserId
+            ModifiedBy = EmployeeSession.EmpId
         };
         commandResult = await baseService.ExecuteNonQueryAsync(criteria);
 
@@ -139,7 +139,7 @@ public class DepartmentController(
     [HrmPermission(Policy.Host, FunctionKey.DepartmentManagement)]
     public async Task<IActionResult> Delete([FromBody] DeleteDepartmentViewModel request)
     {
-        var commandResult = await departmentService.DeleteAsync(session.UserId, request.Id);
+        var commandResult = await departmentService.DeleteAsync(EmployeeSession.EmpId, request.Id);
 
         return Json(commandResult);
     }

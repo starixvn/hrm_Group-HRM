@@ -106,7 +106,7 @@ public class TeamController(
                     PICEmpId = team.PICEmpId,
                     AccountableArea = team.AccountableArea,
                     GroupTeamId = team.GroupTeamId,
-                    ModifiedBy = session.UserId,
+                    ModifiedBy = EmployeeSession.EmpId,
                     MailGroup = model.MailGroup,
                     LocalBasicAnnualLeaveBalance = GetValue(model.LocalBasicAnnualLeaveBalance),
                     LocalWorkingDays = GetValue(model.LocalWorkingDays),
@@ -212,7 +212,7 @@ public class TeamController(
     [HrmPermission(Policy.Host, FunctionKey.TeamManagement)]
     public async Task<IActionResult> EditTeamSupervisor(int teamId, short roleId, IEnumerable<EditTeamSupervisor> supervisors)
     {
-        var commandResult = await teamService.EditTeamSupervisor(session.UserId, teamId, roleId, supervisors);
+        var commandResult = await teamService.EditTeamSupervisor(EmployeeSession.EmpId, teamId, roleId, supervisors);
 
         return Json(commandResult);
     }
@@ -240,7 +240,7 @@ public class TeamController(
     [HrmPermission(Policy.Host, FunctionKey.TeamManagement)]
     public async Task<IActionResult> EditDisciplineRule(int teamId, IEnumerable<DisciplineRule> disciplineRules)
     {
-        var commandResult = await teamService.EditDisciplineRule(session.UserId, teamId, disciplineRules);
+        var commandResult = await teamService.EditDisciplineRule(EmployeeSession.EmpId, teamId, disciplineRules);
 
         return Json(commandResult);
     }

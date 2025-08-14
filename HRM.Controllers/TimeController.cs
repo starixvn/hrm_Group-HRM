@@ -154,7 +154,7 @@ public class TimeController(
     {
         if (criteria != null)
         {
-            criteria.ModifiedBy = session.UserId;
+            criteria.ModifiedBy = EmployeeSession.EmpId;
             criteria.ModifiedDate = DateTimeOffset.Now.DateTime;
         }
 
@@ -168,7 +168,7 @@ public class TimeController(
     {
         var criteria = new InsertCheckInOutRecordCriteria
         {
-            EmpId = session.UserId,
+            EmpId = EmployeeSession.EmpId,
             RecordTime = DateTimeOffset.Now.DateTime,
             ClientRecordTime = DateTimeOffset.Now.DateTime.ToClientTimeZone(),
             InOutType = 0,
@@ -184,7 +184,7 @@ public class TimeController(
     {
         var criteria = new InsertCheckInOutRecordCriteria
         {
-            EmpId = session.UserId,
+            EmpId = EmployeeSession.EmpId,
             RecordTime = DateTimeOffset.Now.DateTime,
             ClientRecordTime = DateTimeOffset.Now.DateTime.ToClientTimeZone(),
             InOutType = 1,
