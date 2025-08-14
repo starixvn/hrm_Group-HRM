@@ -1,6 +1,7 @@
-@model IEnumerable<HRM.Models.Group.GroupTeamModel>
+@using HRM.Models.Group
 @using HRM.Resources
 @using HRM.Website.Helper
+@model IEnumerable<GroupTeamModel>
 
 @{
     var hasPermission = (bool)ViewBag.HasPermission;
@@ -122,16 +123,7 @@
                             <a href="@Url.Action("TeamSupervisor", "GroupTeam", new { team.Id })">Manage</a>
                         </td>
                         <td>
-                            @if (team.NoOfMembers > 0)
-                            {
-                                <i class="fa fa-times fa-lg fa-disabled icon-delete"></i>
-                            }
-                            else
-                            {
-                                <a href="javascript:;" class="deleteTeam" data-team-id="@team.Id">
-                                    <i class="fa fa-times fa-lg icon-delete"></i>
-                                </a>
-                            }
+                            @{RenderDeleteColumn(team);}
                         </td>
                     }
                 </tr>
@@ -142,4 +134,19 @@
     {
         @Html.Raw(RazorHelpers.DisplayNoInformation(colspan: 25))
     }
-</table> 
+</table>
+@{
+    void RenderDeleteColumn(GroupTeamModel team)
+    {
+        @if (team.NoOfMembers > 0)
+        {
+            <i class="fa fa-times fa-lg fa-disabled icon-delete"></i>
+        }
+        else
+        {
+            <a href="javascript:;" class="deleteTeam" data-team-id="@team.Id">
+                <i class="fa fa-times fa-lg icon-delete"></i>
+            </a>
+        }
+    }
+}

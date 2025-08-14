@@ -73,40 +73,22 @@
                     {
                         balance = item.Jan + item.Feb + item.Mar + item.Apr + item.May + item.Jun;
                         <td>
-                            @if (item.Jan > 0)
-                            {
-                                @item.Jan.ToString("0.0")
-                            }
+                            @{RenderLeaveDays(item.Jan);}
                         </td>
                         <td>
-                            @if (item.Feb > 0)
-                            {
-                                @item.Feb.ToString("0.0")
-                            }
+                            @{RenderLeaveDays(item.Feb);}
                         </td>
                         <td>
-                            @if (item.Mar > 0)
-                            {
-                                @item.Mar.ToString("0.0")
-                            }
+                            @{RenderLeaveDays(item.Mar);}
                         </td>
                         <td>
-                            @if (item.Apr > 0)
-                            {
-                                @item.Apr.ToString("0.0")
-                            }
+                            @{RenderLeaveDays(item.Apr);}
                         </td>
                         <td>
-                            @if (item.May > 0)
-                            {
-                                @item.May.ToString("0.0")
-                            }
+                            @{RenderLeaveDays(item.May);}
                         </td>
                         <td>
-                            @if (item.Jun > 0)
-                            {
-                                @item.Jun.ToString("0.0")
-                            }
+                            @{RenderLeaveDays(item.Jun);}
                         </td>
                         break;
                     }
@@ -114,40 +96,22 @@
                     {
                         balance = item.Jul + item.Aug + item.Sep + item.Oct + item.Nov + item.Dec;
                         <td>
-                            @if (item.Jul > 0)
-                            {
-                                @item.Jul.ToString("0.0")
-                            }
+                            @{RenderLeaveDays(item.Jul);}
                         </td>
                         <td>
-                            @if (item.Aug > 0)
-                            {
-                                @item.Aug.ToString("0.0")
-                            }
+                            @{RenderLeaveDays(item.Aug);}
                         </td>
                         <td>
-                            @if (item.Sep > 0)
-                            {
-                                @item.Sep.ToString("0.0")
-                            }
+                            @{RenderLeaveDays(item.Sep);}
                         </td>
                         <td>
-                            @if (item.Oct > 0)
-                            {
-                                @item.Oct.ToString("0.0")
-                            }
+                            @{RenderLeaveDays(item.Oct);}
                         </td>
                         <td>
-                            @if (item.Nov > 0)
-                            {
-                                @item.Nov.ToString("0.0")
-                            }
+                            @{RenderLeaveDays(item.Nov);}
                         </td>
                         <td>
-                            @if (item.Dec > 0)
-                            {
-                                @item.Dec.ToString("0.0")
-                            }
+                            @{RenderLeaveDays(item.Dec);}
                         </td>
                         break;
                     }
@@ -155,76 +119,40 @@
                     {
                         balance = item.LeaveBalance;
                         <td>
-                            @if (item.Jan > 0)
-                            {
-                                @item.Jan.ToString("0.0")
-                            }
+                            @{RenderLeaveDays(item.Jan);}
                         </td>
                         <td>
-                            @if (item.Feb > 0)
-                            {
-                                @item.Feb.ToString("0.0")
-                            }
+                            @{RenderLeaveDays(item.Feb);}
                         </td>
                         <td>
-                            @if (item.Mar > 0)
-                            {
-                                @item.Mar.ToString("0.0")
-                            }
+                            @{RenderLeaveDays(item.Mar);}
                         </td>
                         <td>
-                            @if (item.Apr > 0)
-                            {
-                                @item.Apr.ToString("0.0")
-                            }
+                            @{RenderLeaveDays(item.Apr);}
                         </td>
                         <td>
-                            @if (item.May > 0)
-                            {
-                                @item.May.ToString("0.0")
-                            }
+                            @{RenderLeaveDays(item.May);}
                         </td>
                         <td>
-                            @if (item.Jun > 0)
-                            {
-                                @item.Jun.ToString("0.0")
-                            }
+                            @{RenderLeaveDays(item.Jun);}
                         </td>
                         <td>
-                            @if (item.Jul > 0)
-                            {
-                                @item.Jul.ToString("0.0")
-                            }
+                            @{RenderLeaveDays(item.Jul);}
                         </td>
                         <td>
-                            @if (item.Aug > 0)
-                            {
-                                @item.Aug.ToString("0.0")
-                            }
+                            @{RenderLeaveDays(item.Aug);}
                         </td>
                         <td>
-                            @if (item.Sep > 0)
-                            {
-                                @item.Sep.ToString("0.0")
-                            }
+                            @{RenderLeaveDays(item.Sep);}
                         </td>
                         <td>
-                            @if (item.Oct > 0)
-                            {
-                                @item.Oct.ToString("0.0")
-                            }
+                            @{RenderLeaveDays(item.Oct);}
                         </td>
                         <td>
-                            @if (item.Nov > 0)
-                            {
-                                @item.Nov.ToString("0.0")
-                            }
+                            @{RenderLeaveDays(item.Nov);}
                         </td>
                         <td>
-                            @if (item.Dec > 0)
-                            {
-                                @item.Dec.ToString("0.0")
-                            }
+                            @{RenderLeaveDays(item.Dec);}
                         </td>
                         break;
                     }
@@ -242,3 +170,12 @@
         @Html.Raw(RazorHelpers.DisplayNoInformation(colspan: 18))
     }
 </table>
+@{
+    void RenderLeaveDays(float days)
+    {
+        if (days > 0)
+        {
+            @days.ToString("0.0")
+        }
+    }
+}

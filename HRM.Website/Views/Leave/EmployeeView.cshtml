@@ -95,23 +95,7 @@
                             : request.ToDate.ToDateMonthYearFormatedDate())
                     </td>
                     <td>
-                        @{ var totaldays = string.Empty; }
-                        @switch (request.LeaveType.Id)
-                        {
-                            case (ushort)LeaveTypes.KeepInViewByHour:
-                            case (ushort)LeaveTypes.BusinessDuringWorking:
-                                var detail = request.LeaveDetail.FirstOrDefault();
-                                if (detail != null)
-                                {
-                                    var minutes = (detail.ToTime - detail.FromTime).TotalMinutes;
-                                    totaldays = (minutes / Constants.TotalMinuteInHour).ToString("0.#") + " hour(s)";
-                                }
-                                break;
-                            default:
-                                totaldays = request.TotalDays.ToString("0.0");
-                                break;
-                        }
-                        @totaldays
+                        @{RenderTotalDays(request);}
                     </td>
                     <td>
                         @if (!string.IsNullOrWhiteSpace(request.Remark))
@@ -197,5 +181,26 @@
                 break;
         }
     }
-    
+
+    void RenderTotalDays(LeaveRequest request)
+    {
+        var totaldays = string.Empty;
+        switch (request.LeaveType.Id)
+        {
+            case (ushort)LeaveTypes.KeepInViewByHour:
+            case (ushort)LeaveTypes.BusinessDuringWorking:
+                var detail = request.LeaveDetail.FirstOrDefault();
+                if (detail != null)
+                {
+                    var minutes = (detail.ToTime - detail.FromTime).TotalMinutes;
+                    totaldays = (minutes / Constants.TotalMinuteInHour).ToString("0.#") + " hour(s)";
+                }
+                break;
+            default:
+                totaldays = request.TotalDays.ToString("0.0");
+                break;
+        }
+
+        @totaldays;
+    }
 }
