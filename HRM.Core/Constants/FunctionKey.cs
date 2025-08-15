@@ -89,6 +89,8 @@ public static class FunctionKey
     public const string GroupTeamManagement = "GroupTeamManagement";
 
     public const string GroupEmployeeList = "GroupEmployeeList";
+    public const string GroupEmployeeList_MyMember = "GroupEmployeeList-MyMember";
+    public const string GroupEmployeeList_AllEmployee = "GroupEmployeeList-AllEmployee";
     public const string SecondmentCompanyList = "SecondmentCompanyList";
     public const string HeadcountReport = "HeadcountReport";
     public const string CompanyManagement = "CompanyManagement";

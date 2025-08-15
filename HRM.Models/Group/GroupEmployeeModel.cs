@@ -28,18 +28,17 @@ public class GroupEmployeeModel
     public string UnitId { get; set; }
 
     public string UnitCode { get; set; }
-
+    public int UnitPICEmpId { get; set; }
     public string UnitPIC { get; set; }
 
     public string DepartmentName { get; set; }
-    
+    public int DepartmentPICEmpId { get; set; }
     public string DepartmentPIC { get; set; }
-    
-    public string TeamName { get; set; }
-    
-    public string TeamPIC { get; set; }
 
-    public string TeamCode{ get; set; }
+    public string TeamCode { get; set; }
+    public string TeamName { get; set; }
+    public int TeamPICEmpId { get; set; }
+    public string TeamPIC { get; set; }
 
     public DateTime? JoinedDate { get; set; }
 

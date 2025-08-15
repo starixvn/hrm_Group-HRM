@@ -2,11 +2,11 @@
 @using HRM.Resources
 @using HRM.ViewModels
 @using HRM.Website.Helper
-@model IList<HRM.Models.Group.GroupEmployeeModel>
+@model IEnumerable<HRM.Models.Group.GroupEmployeeModel>
 @{
     var pagerOption = (PagerOptionModel)ViewBag.PagerOption;
     const byte totalColumn = 24;
-    var hasPermissionToEdit = ViewBag.HasPermissionToEdit;
+    var hasPermissionToEdit = (bool)ViewBag.HasPermissionToEdit;
 }
 @section css {
     <link href="~/dist/styles/group.employee.list.index.css" rel="stylesheet" asp-append-version="true" />
@@ -169,8 +169,8 @@
                 <td colspan="@totalColumn" id="pagination">
                     @{
                         var from = (pagerOption.CurrentPage - 1) * pagerOption.ItemsPerPage + 1;
-                        var to = from + (Model.Count - 1);
-                        IList<SelectListItem> itemsPerPageArray = pagerOption.ItemsPerPageArray.Select(x => new SelectListItem
+                        var to = from + (Model.Count() - 1);
+                        var itemsPerPageArray = pagerOption.ItemsPerPageArray.Select(x => new SelectListItem
                         {
                             Text = x.Text,
                             Value = x.Value,

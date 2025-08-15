@@ -1,5 +1,4 @@
-﻿
-namespace HRM.Controllers;
+﻿namespace HRM.Controllers;
 
 using System;
 using System.Threading.Tasks;
@@ -35,13 +34,13 @@ public class DepartmentController(
     public async Task<IActionResult> GetDepartments([FromBody] GetDepartmentViewModel request)
     {
         var departments = await departmentService.GetDepartmentAsync(request.IsActive, request.UnitId);
-        return new JsonResult(departments);
+        return Json(departments);
     }
 
     public async Task<IActionResult> GetUnits()
     {
         var units = await unitService.GetUnitAsync();
-        return new JsonResult(units);
+        return Json(units);
     }
 
     [HrmPermission(Policy.Host, FunctionKey.DepartmentManagement)]
@@ -57,7 +56,7 @@ public class DepartmentController(
         var commandResult = new CommandResult();
         if (model == null || !ModelState.IsValid)
         {
-            return new JsonResult(commandResult);
+            return Json(commandResult);
         }
 
         var criteria = new InsertDepartmentCriteria
@@ -73,7 +72,7 @@ public class DepartmentController(
         };
         commandResult = await baseService.ExecuteNonQueryAsync(criteria);
 
-        return new JsonResult(commandResult);
+        return Json(commandResult);
     }
 
     [HrmPermission(Policy.Host, FunctionKey.DepartmentManagement)]
@@ -94,7 +93,7 @@ public class DepartmentController(
             Units = units
         };
 
-        return new JsonResult(model);
+        return Json(model);
     }
 
     [HrmPermission(Policy.Host, FunctionKey.DepartmentManagement)]
@@ -110,7 +109,7 @@ public class DepartmentController(
         var commandResult = new CommandResult();
         if (model == null || !ModelState.IsValid)
         {
-            return new JsonResult(commandResult);
+            return Json(commandResult);
         }
         var criteria = new UpdateDepartmentCriteria
         {
@@ -126,7 +125,7 @@ public class DepartmentController(
         };
         commandResult = await baseService.ExecuteNonQueryAsync(criteria);
 
-        return new JsonResult(commandResult);
+        return Json(commandResult);
     }
 
     [HttpPost]
@@ -135,7 +134,7 @@ public class DepartmentController(
     {
         var commandResult = await departmentService.DeleteAsync(session.UserId, request.Id);
 
-        return new JsonResult(commandResult);
+        return Json(commandResult);
     }
 
     [HttpGet]
