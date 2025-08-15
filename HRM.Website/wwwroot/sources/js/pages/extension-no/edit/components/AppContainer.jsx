@@ -1,6 +1,6 @@
 ﻿import 'jquery-ui-bundle/jquery-ui';
 import React, { useEffect, useState } from 'react';
-import * as Yup from 'yup';
+import { object, string } from 'yup'
 import axios from 'axios';
 import toastr from 'toastr';
 import { Formik } from 'formik';
@@ -17,11 +17,11 @@ const AppContainer = () => {
     const [selectEmployee, setSelectEmployee] = useState(null);
     const [selectGroup, setSelectGroup] = useState('');
 
-    const editExtensionSchema = Yup.object({
-        ExtensionNo: Yup.string()
+    const editExtensionSchema = object({
+        ExtensionNo: string()
             .trim()
             .required('Extension No field is required!'),
-        Employee: isInternal && extensionDetail && extensionDetail.empId === 0 ? Yup.string()
+        Employee: isInternal && extensionDetail && extensionDetail.empId === 0 ? string()
             .trim()
             .required('Employee field is required!') : false,
     });

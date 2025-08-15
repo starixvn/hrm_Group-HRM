@@ -10,7 +10,7 @@ const Filter = () => {
     );
 
     const handleYearChange = e => {
-        setSelectedYear(parseInt(e.target.value));
+        setSelectedYear(parseInt(e.target.value, 10));
     };
 
     const handleExport = () => {

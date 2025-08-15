@@ -9,7 +9,7 @@ const Filter = ({ onSubmit }) => {
         window.location = resolveClientUrl('secondmentcompany/create');
     };
 
-    const handleSubmit = (event) => {
+    const handleSubmit = event => {
         event.preventDefault();
         onSubmit(filterParams);
     };

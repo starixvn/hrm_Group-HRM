@@ -16,7 +16,7 @@ const MonthPicker = ({
     const [selectedDate, setSelectedDate] = useState(() => {
         if (value) {
             const [year, month] = value.split('-');
-            return new Date(parseInt(year), parseInt(month) - 1, 1);
+            return new Date(parseInt(year, 10), parseInt(month, 10) - 1, 1);
         }
         return null;
     });
@@ -24,7 +24,7 @@ const MonthPicker = ({
     useEffect(() => {
         if (value) {
             const [year, month] = value.split('-');
-            setSelectedDate(new Date(parseInt(year), parseInt(month) - 1, 1));
+            setSelectedDate(new Date(parseInt(year, 10), parseInt(month, 10) - 1, 1));
         } else {
             setSelectedDate(null);
         }

@@ -62,16 +62,16 @@
                     var empId = item.Employee.EmployeeId;
                     var employee = item.Employee.NickName + " (" + item.Employee.FullName + ")";
                 }
-                @switch (item.Permission)
+
+                @if (item.Permission == (int)Permission.Host)
                 {
-                    case (int)Permission.Host:
-                        <a href="javascript:;" class="viewDisciplineDetail" data-empid="@empId" data-employee="@employee">
-                            <i class="fa fa-pencil fa-lg icon-edit"></i>
-                        </a>
-                        break;
-                    default:
-                        <a href="javascript:;" class="fa fa-search fa-lg icon-edit viewDisciplineDetail" data-empid="@empId" data-employee="@employee"></a>
-                        break;
+                    <a href="javascript:;" class="viewDisciplineDetail" data-empid="@empId" data-employee="@employee">
+                        <i class="fa fa-pencil fa-lg icon-edit"></i>
+                    </a>
+                }
+                else
+                {
+                    <a href="javascript:;" class="fa fa-search fa-lg icon-edit viewDisciplineDetail" data-empid="@empId" data-employee="@employee"></a>
                 }
             </td>
         </tr>
