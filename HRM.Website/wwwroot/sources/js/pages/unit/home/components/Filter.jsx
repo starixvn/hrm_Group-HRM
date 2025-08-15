@@ -42,7 +42,7 @@ const Filter = ({ onSubmit }) => {
                         window.hasPermission === 'True' &&
                         <a className="btn btn-request" onClick={handleCreate}>
                             <span className="fa fa-plus" />
-                            &nbsp;New Unit
+                            &nbsp;New BU
                         </a>
                     }
                 </div>

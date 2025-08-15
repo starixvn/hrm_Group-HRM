@@ -40,12 +40,6 @@
                     <div class="fa fa-sort cell-right-div"></div>
                 </div>
             </th>
-            <th class="col-sorter col-150">
-                <div class="cell-control-wrapper">
-                    @Labels.UnitCode
-                    <div class="fa fa-sort cell-right-div"></div>
-                </div>
-            </th>
             <th class="col-sorter col-250">
                 <div class="cell-control-wrapper">
                     @Labels.BUPIC
@@ -117,11 +111,10 @@
                 var cssClass = employee.Enabled ? "" : "disabled";
                 <tr class="@cssClass">
                     <td>@index</td>
-                    <td>@employee.CtrId</td>
+                    <td>@employee.CtrIdFormatted</td>
                     <td class="align-left">@employee.EmployeeCode</td>
                     <td class="align-left">@employee.NickName</td>
-                    <td class="align-left bu-highlight">@employee.UnitId</td>
-                    <td class="align-left bu-highlight">@employee.UnitCode</td>
+                    <td class="align-left bu-highlight">@employee.UnitId - @employee.UnitCode</td>
                     <td class="align-left bu-highlight">@employee.UnitPIC</td>
                     <td class="align-left dept-highlight">@employee.DepartmentName</td>
                     <td class="align-left dept-highlight">@employee.DepartmentPIC</td>

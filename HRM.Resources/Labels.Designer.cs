@@ -655,11 +655,20 @@ namespace HRM.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to BU ID.
+        ///   Looks up a localized string similar to BU.
         /// </summary>
         public static string BUIdShort {
             get {
                 return ResourceManager.GetString("BUIdShort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to BU Management.
+        /// </summary>
+        public static string BUManagement {
+            get {
+                return ResourceManager.GetString("BUManagement", resourceCulture);
             }
         }
         
@@ -5502,15 +5511,6 @@ namespace HRM.Resources {
         public static string UnitHead {
             get {
                 return ResourceManager.GetString("UnitHead", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Unit Management.
-        /// </summary>
-        public static string UnitManagement {
-            get {
-                return ResourceManager.GetString("UnitManagement", resourceCulture);
             }
         }
         

@@ -293,7 +293,7 @@ public class ExportExcelEmployeeInfoService(
             template.Cells[RowStartBody, 1, RowStartBody, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
 
             worksheet.Cells[rowIndex, colIndex++].Value = rowNum++;
-            worksheet.Cells[rowIndex, colIndex++].Value = employee.CtrId;
+            worksheet.Cells[rowIndex, colIndex++].Value = employee.CtrIdFormatted;
             worksheet.Cells[rowIndex, colIndex++].Value = employee.EmployeeCode;
             worksheet.Cells[rowIndex, colIndex++].Value = employee.FullName;
             worksheet.Cells[rowIndex, colIndex++].Value = employee.NickName;
@@ -407,7 +407,7 @@ public class ExportExcelEmployeeInfoService(
             .Copy(worksheet.Cells[rowIndex, 1, rowIndex, TotalColumnsProfitCenter]);
 
         worksheet.Cells[rowIndex, colIndex++].Value = rowNum;
-        worksheet.Cells[rowIndex, colIndex++].Value = employee.CtrId;
+        worksheet.Cells[rowIndex, colIndex++].Value = employee.CtrIdFormatted;
         worksheet.Cells[rowIndex, colIndex++].Value = $"{employee.DepartmentCode}-{employee.TeamCode}";
         worksheet.Cells[rowIndex, colIndex++].Value = employee.UnitId;
         worksheet.Cells[rowIndex, colIndex++].Value = employee.UnitCode;

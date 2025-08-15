@@ -6,6 +6,8 @@ public class GroupEmployeeModel
 {
     public int? CtrId { get; set; }
 
+    public string CtrIdFormatted => CtrId is not null ? CtrId.ToString().PadLeft(6, '0') : string.Empty;
+
     public int EmpId { get; set; }
 
     public string EmployeeCode { get; set; }
