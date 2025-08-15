@@ -82,7 +82,7 @@ public class GroupEmployeeListController(
 
             Parallel.ForEach(employees, e =>
             {
-                e.BasicSalary = payrollManagementService.DecryptSalary(e.Salary);
+                e.BasicSalary = e.Salary != null ? payrollManagementService.DecryptSalary(e.Salary) : null;
             });
 
         var pagerOption = new PagerOptionModel
