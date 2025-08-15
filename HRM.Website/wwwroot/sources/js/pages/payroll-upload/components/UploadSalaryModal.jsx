@@ -1,15 +1,11 @@
 ﻿import React, { useState } from 'react';
-import axios from 'axios';
 import toastr from 'toastr';
 import { Modal, ModalBody, ModalFooter, ModalHeader } from 'react-bootstrap';
-import {
-    resolveClientUrl,
-    toastOptions,
-} from '../../../shared/common.functions';
+import { toastOptions } from '../../../shared/common.functions';
 import {
     PERIOD_TYPES,
     PeriodType,
-    PeriodTypeLabel,
+    PeriodTypeLabel
 } from '../constants/periodType';
 import salaryService from '../Service';
 
@@ -119,7 +115,7 @@ const UploadSalaryModal = { onSuccess } => {
     };
 
     return 
-        <React.Fragment>
+        <>
             <button className="btn btn-upload" onClick={handleOpen}>
                 Upload Payroll
             </button>
@@ -226,7 +222,7 @@ const UploadSalaryModal = { onSuccess } => {
                     </button>
                 </ModalFooter>
             </Modal>
-        </React.Fragment>
+        </>
     );
 };
 

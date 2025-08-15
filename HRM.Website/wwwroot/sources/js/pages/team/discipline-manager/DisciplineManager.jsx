@@ -7,14 +7,14 @@ import {
     axiosError,
     blockUI,
     unblockUI,
-    resolveClientUrl,
+    resolveClientUrl
 } from '../../../shared/common.functions';
 import {
     getSupervisors,
     getGroupTeamEmployees,
     editTeamSupervisor,
     editEmployeeSupervisor,
-    reorderSupervisor,
+    reorderSupervisor
 } from '../supervisor/common.functions';
 import ToastLayout from '../../../shared/layouts/ToastLayout';
 import Table from './table/table';
@@ -22,7 +22,7 @@ import Table from './table/table';
 const PageType = {
     Team: 1,
     Employee: 2,
-    GroupTeam: 3,
+    GroupTeam: 3
 };
 
 export default class DisciplineManager extends Component {
@@ -60,14 +60,12 @@ export default class DisciplineManager extends Component {
             apiCall
                 .then(response => {
                     const employeeOptions = response.data.map(item => {
-                    var id = isGroupTeam ? item.empId : item.id;
+                        const id = isGroupTeam ? item.empId : item.id;
                         return {
                             key: id,
                             id: id,
-                            teamCode:
-                                item.teamCode !== null ? item.teamCode : '',
-                            value:
-                                this.props.pageType === PageType.GroupTeam
+                            teamCode: item.teamCode !== null ? item.teamCode : '',
+                            value: this.props.pageType === PageType.GroupTeam
                                     ? `${item.nickName} (${item.company})`
                                     : item.nickName,
                         };

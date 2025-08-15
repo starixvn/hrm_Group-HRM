@@ -1,13 +1,6 @@
-import React, { Fragment } from "react";
-import Filter from "./Filter";
-import { resolveClientUrl } from "../../../../shared/common.functions";
+import React, { Fragment } from 'react';
+import Filter from './Filter';
 
-const HeadcountReport = () => {
-    return (
-        <Fragment>
-            <Filter />
-        </Fragment>
-    );
-};
+const HeadcountReport = () => <Filter />;
 
 export default HeadcountReport;

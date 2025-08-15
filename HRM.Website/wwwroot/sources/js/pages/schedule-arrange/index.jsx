@@ -15,16 +15,14 @@ import {
     unblockUI,
     reorder,
     resolveClientUrl,
-    downloadFile,
+    downloadFile
 } from '../../shared/common.functions';
 import { getTotalOffDays } from './common.functions';
 import { DateFormat, OffDayShiftId } from '../../shared/constants';
 import ToastLayout from '../../shared/layouts/ToastLayout';
 import buildData from '../../shared/components/react-tree-multiselect/buildData';
 import SweetModalDialog from '../../shared/components/SweetModalDialog';
-import CompanySelect, {
-    renderCompanySelect,
-} from '../../shared/components/CompanySelect';
+import { renderCompanySelect } from '../../shared/components/CompanySelect';
 import ShiftMultipleModal from './ShiftMultipleModal';
 import WeeklyDefaultShiftModal from './WeeklyDefaultShiftModal';
 import Search from './Search';
