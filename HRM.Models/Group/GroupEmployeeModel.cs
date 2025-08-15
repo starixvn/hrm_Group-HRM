@@ -77,5 +77,5 @@ public class GroupEmployeeModel
 
     public Gender Gender { get; set; }
 
-    public string DOB { get; set; }
+    public DateTime DOB { get; set; }
 }

@@ -299,7 +299,7 @@ public class ExportExcelEmployeeInfoService(
             worksheet.Cells[rowIndex, colIndex++].Value = employee.EmployeeCode;
             worksheet.Cells[rowIndex, colIndex++].Value = employee.FullName;
             worksheet.Cells[rowIndex, colIndex++].Value = employee.NickName;
-            worksheet.Cells[rowIndex, colIndex++].Value = employee.DOB;
+            worksheet.Cells[rowIndex, colIndex++].Value = FormatDate(employee.DOB);
             worksheet.Cells[rowIndex, colIndex++].Value = EnumHelper.GetDisplayName(employee.Gender);
             worksheet.Cells[rowIndex, colIndex++].Value = employee.CountryName;
             worksheet.Cells[rowIndex, colIndex++].Value = employee.UnitId;
