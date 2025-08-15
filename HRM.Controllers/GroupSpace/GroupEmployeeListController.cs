@@ -71,14 +71,14 @@ public class GroupEmployeeListController(
         {
             Query = model.Keyword,
             TeamIds = model.TeamIds,
-            EnableUser = model.IsEnable,
-            IsDeleteUser = model.IsDelete,
+            EnableUser = enableUser,
+            IsDeleteUser = isDeleteUser,
             TitleId = model.JobTitleId,
             PageNumber = model.CurrentPage,
             PageSize = model.ItemsPerPage,
             CompanyIds = model.CompanyIds,
             HasPermissionViewAll = hasPermissionViewAll,
-            ActorId = session.UserId
+            ActorId = session.UserId,
             IsCtrID = ParseBool(model.CtrIDs),
             IsOutsource = ParseBool(model.Outsources)
         };
@@ -126,16 +126,20 @@ public class GroupEmployeeListController(
     public async Task<IActionResult> ExportExcel(GroupEmployeeViewModel model, bool isEmployeeListExport)
     {
         var hasPermissionViewAll = session.HasPermissionOnFunction(FunctionKey.GroupEmployeeList_AllEmployee, Policy.Read);
+        var (enableUser, isDeleteUser) = ParseEmployeeStatus(model.EmployeeStatuses);
+
         var criteria = new GetEmployeesInGroupScopeCriteria
         {
             Query = model.Keyword,
             TeamIds = model.TeamIds,
-            EnableUser = model.IsEnable,
-            IsDeleteUser = model.IsDelete,
+            EnableUser = enableUser,
+            IsDeleteUser = isDeleteUser,
             TitleId = model.JobTitleId,
             CompanyIds = model.CompanyIds,
             HasPermissionViewAll = hasPermissionViewAll,
-            ActorId = session.UserId
+            ActorId = session.UserId,
+            IsCtrID = ParseBool(model.CtrIDs),
+            IsOutsource = ParseBool(model.Outsources)
         };
 
         var profiles = await baseService.GetDataAsync<GroupEmployeeModel>(criteria);
@@ -193,8 +197,6 @@ public class GroupEmployeeListController(
         return await baseService.GetDataAsync<EmployeeWorkFromHome>(criteria);
     }
 
-                //IsCtrID = model.IsCtrID,
-                //IsOutsource = model.IsOutsource
     [HrmPermission(Policy.Host, FunctionKey.GroupEmployeeList)]
     public async Task<IActionResult> EditInfo(int id)
     {
