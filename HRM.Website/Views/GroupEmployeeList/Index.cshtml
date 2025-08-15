@@ -20,14 +20,15 @@
 	    @Html.HiddenFor(model => model.JobTitleId)
         @Html.HiddenFor(model => model.TeamIds)
         @Html.HiddenFor(model => model.CompanyIds)
-	    @Html.HiddenFor(model => model.IsEnable)
-	    @Html.HiddenFor(model => model.IsDelete)
-	    @Html.HiddenFor(model => model.IsAll)
+	    @Html.HiddenFor(model => model.EmployeeStatuses)
 	    @Html.HiddenFor(model => model.CurrentPage)
 	    @Html.HiddenFor(model => model.ItemsPerPage)
+        @Html.HiddenFor(model => model.CtrIDs)
+        @Html.HiddenFor(model => model.Outsources)
+
         <div class="form-group form-group--m">
             <div class="label-form">
-                @Html.LabelFor(model => model.Keyword, Labels.Keyword, new { @class = "control-label" })
+                @Html.LabelFor(model => model.Keyword, Labels.NickName, new { @class = "control-label" })
             </div>
             <div class="input-form">
                 @Html.TextBoxFor(model => model.Keyword,
@@ -48,19 +49,26 @@
         </div>
     </div>
     <div class="form-horizontal clearfix">
-	    <div class="form-group user-status" id="usertype">
-		    <input type="radio" id="all"/>
-		    <label for="enabled">@Labels.All</label>
+        <div class="form-group form-group--m">
+        <div class="label-form">
+                <label class="control-label">@Labels.EmployeeStatus</label>
+            </div>
+            <div class="input-form" id="EmployeeStatus"></div>
+        </div>
 
-		    <input type="radio" id="enabled" checked="checked" />
-		    <label for="enabled">@Labels.Active</label>
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                <label class="control-label">@Labels.AccountType</label>
+            </div>
+            <div class="input-form" id="IsCtrID"></div>
+        </div>
 
-		    <input type="radio" id="disabled" />
-		    <label for="disabled">@Labels.Disabled</label>
-
-		    <input type="radio" id="deleted" />
-		    <label for="deleted">@Labels.Deleted</label>
-	    </div>
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                <label class="control-label">@Labels.OutSourcedEmployee</label>
+            </div>
+            <div class="input-form" id="IsOutsource"></div>
+        </div>
     </div>
     <div class="form-horizontal clearfix">
         <div class="form-group">

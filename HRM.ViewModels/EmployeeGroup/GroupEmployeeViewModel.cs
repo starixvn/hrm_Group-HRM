@@ -24,4 +24,10 @@ public class GroupEmployeeViewModel : PagerOptionModel
     public IEnumerable<SelectListItem> JobTitles { get; set; }
 
     public bool IsShowDropdownCategory { get; set; }
+
+    public string CtrIDs { get; set; } = "";
+
+    public string Outsources { get; set; } = "";
+
+    public string EmployeeStatuses { get; set; } = "";
 }

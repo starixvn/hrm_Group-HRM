@@ -97,6 +97,15 @@ namespace HRM.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Account Type.
+        /// </summary>
+        public static string AccountType {
+            get {
+                return ResourceManager.GetString("AccountType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Per 5 Years Accumulation Leave.
         /// </summary>
         public static string AccumulationLeave {
@@ -1929,6 +1938,15 @@ namespace HRM.Resources {
         public static string EmployeeShift {
             get {
                 return ResourceManager.GetString("EmployeeShift", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Employee Status.
+        /// </summary>
+        public static string EmployeeStatus {
+            get {
+                return ResourceManager.GetString("EmployeeStatus", resourceCulture);
             }
         }
         
@@ -3891,6 +3909,15 @@ namespace HRM.Resources {
         public static string OutOfControlReason {
             get {
                 return ResourceManager.GetString("OutOfControlReason", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to OutSourced Employee.
+        /// </summary>
+        public static string OutSourcedEmployee {
+            get {
+                return ResourceManager.GetString("OutSourcedEmployee", resourceCulture);
             }
         }
         

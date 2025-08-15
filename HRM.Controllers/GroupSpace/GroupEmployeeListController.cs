@@ -65,6 +65,8 @@ public class GroupEmployeeListController(
     public async Task<IActionResult> ListEmployee(GroupEmployeeViewModel model)
     {
         var hasPermissionViewAll = session.HasPermissionOnFunction(FunctionKey.GroupEmployeeList_AllEmployee, Policy.Read);
+        var (enableUser, isDeleteUser) = ParseEmployeeStatus(model.EmployeeStatuses);
+
         var criteria = new GetEmployeesInGroupScopeCriteria
         {
             Query = model.Keyword,
@@ -77,6 +79,8 @@ public class GroupEmployeeListController(
             CompanyIds = model.CompanyIds,
             HasPermissionViewAll = hasPermissionViewAll,
             ActorId = session.UserId
+            IsCtrID = ParseBool(model.CtrIDs),
+            IsOutsource = ParseBool(model.Outsources)
         };
         var employees = await baseService.GetDataAsync<GroupEmployeeModel>(criteria);
 
@@ -97,6 +101,26 @@ public class GroupEmployeeListController(
 
         return PartialView("_ListEmployee", employees);
     }
+
+    private static (bool? enableUser, bool? isDeleteUser) ParseEmployeeStatus(string employeeStatuses)
+    {
+        return employeeStatuses switch
+        {
+            "1" => (true, null),
+            "2" => (false, null),
+            "3" => (null, true),
+            _ => (null, null)
+        };
+    }
+
+    private static bool? ParseBool(string value) =>
+        value switch
+        {
+            "1" => true,
+            "0" => false,
+            _ => null
+        };
+
 
     [HrmPermission(Policy.Read, FunctionKey.GroupEmployeeList)]
     public async Task<IActionResult> ExportExcel(GroupEmployeeViewModel model, bool isEmployeeListExport)
@@ -169,6 +193,8 @@ public class GroupEmployeeListController(
         return await baseService.GetDataAsync<EmployeeWorkFromHome>(criteria);
     }
 
+                //IsCtrID = model.IsCtrID,
+                //IsOutsource = model.IsOutsource
     [HrmPermission(Policy.Host, FunctionKey.GroupEmployeeList)]
     public async Task<IActionResult> EditInfo(int id)
     {

@@ -2136,4 +2136,13 @@
   <data name="Currency" xml:space="preserve">
     <value>Currency</value>
   </data>
+  <data name="AccountType" xml:space="preserve">
+    <value>Account Type</value>
+  </data>
+  <data name="OutSourcedEmployee" xml:space="preserve">
+    <value>OutSourced Employee</value>
+  </data>
+  <data name="EmployeeStatus" xml:space="preserve">
+    <value>Employee Status</value>
+  </data>
 </root>

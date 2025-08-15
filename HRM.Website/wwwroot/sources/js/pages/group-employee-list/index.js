@@ -52,14 +52,28 @@ import {
         }
     }
 
+    function setEmployeeStatusValue() {
+        $("#EmployeeStatuses").val($("#EmployeeStatus select").val());
+    }
+
     function query() {
         $("#TeamIds").val(
             getParam("teamIds") ||
-                $("#GroupTeam").multiSelectTreeView("getSelectedItems")
+            $("#GroupTeam").multiSelectTreeView("getSelectedItems")
         );
 
         $("#CompanyIds").val(
             $("#Company").multiSelectTreeView("getSelectedItems")
+        );
+
+        setEmployeeStatusValue();
+
+        $("#CtrIDs").val(
+            $("#IsCtrID").multiSelectTreeView("getSelectedItems")
+        );
+
+        $("#Outsources").val(
+            $("#IsOutsource").multiSelectTreeView("getSelectedItems")
         );
 
         blockUI();
@@ -118,10 +132,7 @@ import {
     }
 
     function exportExcel(object, type) {
-        var url = null,
-            controllerPath;
-
-            controllerPath = "GroupEmployeeList/ExportExcel?";
+        let controllerPath = "GroupEmployeeList/ExportExcel?";
 
         $("#TeamIds").val(
             $("#GroupTeam").multiSelectTreeView("getSelectedItems")
@@ -129,13 +140,22 @@ import {
         $("#CompanyIds").val(
             $("#Company").multiSelectTreeView("getSelectedItems")
         );
-        
-        var formData = $("form.filter").serialize();
+
+        setEmployeeStatusValue();
+
+        $("#CtrIDs").val(
+            $("#IsCtrID").multiSelectTreeView("getSelectedItems")
+        );
+        $("#Outsources").val(
+            $("#IsOutsource").multiSelectTreeView("getSelectedItems")
+        );
+
+        let formData = $("form.filter").serialize();
         if (type === "EmployeeList") {
             formData += "&isEmployeeListExport=true";
         }
-        
-        url = resolveClientUrl(controllerPath + formData);
+
+        let url = resolveClientUrl(controllerPath + formData);
         location.href = url;
     }
 
@@ -149,6 +169,63 @@ import {
         });
     }
 
+    function initMultiSelectTreeView(elementId, data, selectedItemsId, hasSearchBox = true, isSingleSelect = false) {
+        if ($(elementId).length > 0) {
+            $(elementId).multiSelectTreeView({
+                data: data,
+                selectedItems: $(selectedItemsId).val(),
+                hasSearchBox: hasSearchBox,
+                singleSelect: isSingleSelect,
+            });
+        }
+    }
+
+    function initSingleSelectDropdown(elementId, data, selectedItemsId) {
+        if ($(elementId).length > 0) {
+            const html = `
+                <div class="select-form">
+                    <select class="form-control">
+                        ${data.map(item =>
+                            `<option value="${item.value}" ${item.checked ? 'selected' : ''}>
+                                ${item.text}
+                            </option>`
+                        ).join("")}
+                    </select>
+                </div>
+            `;
+
+            $(elementId).html(html);
+
+            const currentValue = $(selectedItemsId).val();
+            if (currentValue) {
+                $(`${elementId} select`).val(currentValue);
+            }
+        }
+    }
+
+    function getEmployeeStatusData() {
+        return [
+            { value: "", text: "All", checked: false },
+            { value: "1", text: "Active", checked: true },
+            { value: "2", text: "Disabled", checked: false },
+            { value: "3", text: "Deleted", checked: false }
+        ];
+    }
+
+    function getCtrIDData() {
+        return [
+            { id: 1, text: "Main Account", checked: true, enable: true, parentId: null, isLeaf: true, items: [] },
+            { id: 0, text: "Shadow Account", checked: false, enable: true, parentId: null, isLeaf: true, items: [] }
+        ];
+    }
+
+    function getOutsourceData() {
+        return [
+            { id: 1, text: "Yes", checked: false, enable: true, parentId: null, isLeaf: true, items: [] },
+            { id: 0, text: "No", checked: true, enable: true, parentId: null, isLeaf: true, items: [] }
+        ];
+    }
+
     $(document).ready(function () {
         axios({
             url: resolveClientUrl("GroupEmployeeList/GetOrgChart"),
@@ -159,31 +236,28 @@ import {
                 $("#GroupTeam")
                     .multiSelectTreeView({
                         data: response.data.data,
-                        selectedItems:
-                            getParam("teamIds") || response.data.teamIds,
+                        selectedItems: getParam("teamIds") || response.data.teamIds,
                         hasSearchBox: true,
                     })
                     .on("change", function () {
                         if (window.history && window.history.replaceState) {
-                            var url = new URL(window.location);
+                            const url = new URL(window.location);
                             url.searchParams.delete("teamIds");
                             window.history.replaceState({}, "", url);
                         }
                     });
 
+                initSingleSelectDropdown("#EmployeeStatus", getEmployeeStatusData(), "#EmployeeStatuses");
+                initMultiSelectTreeView("#IsCtrID", getCtrIDData(), "#CtrIDs");
+                initMultiSelectTreeView("#IsOutsource", getOutsourceData(), "#Outsources");
+
                 axios({
-                    url: resolveClientUrl(
-                        "GroupEmployeeList/GetCompanyDropdownList"
-                    ),
+                    url: resolveClientUrl("GroupEmployeeList/GetCompanyDropdownList"),
                     method: "GET",
                     headers: { "X-Requested-With": "XMLHttpRequest" },
                 })
                     .then((companyResponse) => {
-                        $("#Company").multiSelectTreeView({
-                            data: companyResponse.data,
-                            selectedItems: $("#CompanyIds").val(),
-                            hasSearchBox: true,
-                        });
+                        initMultiSelectTreeView("#Company", companyResponse.data, "#CompanyIds");
                         query();
                     })
                     .catch(axiosError);
@@ -196,47 +270,10 @@ import {
             }
         });
 
-        var q = getParam("query");
+        const q = getParam("query");
         if (q !== null) {
-            var decode = decodeURIComponent(q);
-            $("#Keyword").val(decode);
+            $("#Keyword").val(decodeURIComponent(q));
         }
-
-        $("#all").on("click", function () {
-            $("#IsAll").val(true);
-            $("#IsEnable").val(null);
-            $("#IsDelete").val(null);
-            $("#enabled").prop("checked", false);
-            $("#deleted").prop("checked", false);
-            $("#disabled").prop("checked", false);
-        });
-
-        $("#enabled").on("click", function () {
-            $("#IsAll").val(null);
-            $("#IsEnable").val(true);
-            $("#IsDelete").val(null);
-            $("#all").prop("checked", false);
-            $("#deleted").prop("checked", false);
-            $("#disabled").prop("checked", false);
-        });
-
-        $("#disabled").on("click", function () {
-            $("#IsAll").val(null);
-            $("#IsEnable").val(false);
-            $("#IsDelete").val(null);
-            $("#all").prop("checked", false);
-            $("#deleted").prop("checked", false);
-            $("#enabled").prop("checked", false);
-        });
-
-        $("#deleted").on("click", function () {
-            $("#IsAll").val(null);
-            $("#IsDelete").val(true);
-            $("#IsEnable").val(null);
-            $("#all").prop("checked", false);
-            $("#enabled").prop("checked", false);
-            $("#disabled").prop("checked", false);
-        });
 
         $("#query").on("click", function (evt) {
             evt.preventDefault();

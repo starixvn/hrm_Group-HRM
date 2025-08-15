@@ -16,6 +16,18 @@
     }
 }
 
+.filter .form-horizontal
+{ 
+    .control-label {
+    text-align: left !important;
+    }
+
+    #EmployeeStatus .select-form {
+        width: 100% !important;
+    }
+}
+
+
 .tippy-avatar .tippy-box {
     background-color: #fff;
     @include border-radius(0);
