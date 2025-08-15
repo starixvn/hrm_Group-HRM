@@ -38,7 +38,8 @@ public class GroupEmployeeListController(
     IExportExcelEmployeeInfoService excelService,
     IBaseService baseService,
     IEmployeeService employeeService,
-    ISecondCompanyEmployeeService secondCompanyEmployeeService ) : BaseController(session)
+    ISecondCompanyEmployeeService secondCompanyEmployeeService,
+    IPayrollManagementService payrollManagementService) : BaseController(session)
 #pragma warning restore S107 // Methods should not have too many parameters
 {
     [HrmPermission(Policy.Read, FunctionKey.GroupEmployeeList)]
@@ -80,6 +81,11 @@ public class GroupEmployeeListController(
                 CompanyIds = model.CompanyIds
             };
             employees = (await baseService.GetDataAsync<GroupEmployeeModel>(criteria)).ToList();
+
+            Parallel.ForEach(employees, e =>
+            {
+                e.BasicSalary = payrollManagementService.DecryptSalary(e.Salary);
+            });
 
             var pagerOption = new PagerOptionModel
             {

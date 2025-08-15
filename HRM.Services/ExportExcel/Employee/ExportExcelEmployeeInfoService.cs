@@ -10,6 +10,7 @@ using Core;
 using Core.Constants;
 using Core.Enums;
 using GO.UserControl.Client.Core.Session;
+using HRM.Core.Helpers;
 using Implement;
 using Interfaces;
 using Microsoft.AspNetCore.Hosting;
@@ -26,14 +27,15 @@ public class ExportExcelEmployeeInfoService(
     IEmployeeService employeeService,
     ICommonDataService commonDataService,
     IWebHostEnvironment hostingEnvironment,
-    ICompanyService companyService) : IExportExcelEmployeeInfoService
+    ICompanyService companyService,
+    IPayrollManagementService payrollManagementService) : IExportExcelEmployeeInfoService
 {
     private const string EmployeeBasicInfoTemplatePath = "ExcelTemplates/EmployeeBasicInfoTemplate.xls";
     private const string EmployeeFullInfoTemplatePath = "ExcelTemplates/EmployeeFullProfileInfoTemplate.xls";
     private const string GroupEmployeeListTemplatePath = "ExcelTemplates/GroupEmployeeList.xlsx";
     private const string ProfitCenterReportTemplatePath = "ExcelTemplates/ProfitCenterReport.xlsx";
 
-    private const byte TotalColumns = 23;
+    private const byte TotalColumns = 30;
     private const byte RowStartBody = 3;
     private const byte MinimumWidth = 5;
     private const byte MaximumWidth = 50;
@@ -297,6 +299,9 @@ public class ExportExcelEmployeeInfoService(
             worksheet.Cells[rowIndex, colIndex++].Value = employee.EmployeeCode;
             worksheet.Cells[rowIndex, colIndex++].Value = employee.FullName;
             worksheet.Cells[rowIndex, colIndex++].Value = employee.NickName;
+            worksheet.Cells[rowIndex, colIndex++].Value = employee.DOB;
+            worksheet.Cells[rowIndex, colIndex++].Value = EnumHelper.GetDisplayName(employee.Gender);
+            worksheet.Cells[rowIndex, colIndex++].Value = employee.CountryName;
             worksheet.Cells[rowIndex, colIndex++].Value = employee.UnitId;
             worksheet.Cells[rowIndex, colIndex++].Value = employee.UnitCode;
             worksheet.Cells[rowIndex, colIndex++].Value = employee.UnitPIC;
@@ -307,6 +312,8 @@ public class ExportExcelEmployeeInfoService(
             worksheet.Cells[rowIndex, colIndex++].Value = employee.JobLevel;
             worksheet.Cells[rowIndex, colIndex++].Value = employee.ManagementLevel;
             worksheet.Cells[rowIndex, colIndex++].Value = FormatDate(employee.JoinedDate);
+            worksheet.Cells[rowIndex, colIndex++].Value = payrollManagementService.DecryptSalary(employee.Salary);
+            worksheet.Cells[rowIndex, colIndex++].Value = employee.Currency;
             worksheet.Cells[rowIndex, colIndex++].Value = employee.Company;
             worksheet.Cells[rowIndex, colIndex++].Value = employee.SubCompany;
             worksheet.Cells[rowIndex, colIndex++].Value = FormatDate(employee.CompanyDate);

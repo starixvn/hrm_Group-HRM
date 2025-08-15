@@ -1,4 +1,5 @@
 ﻿using System;
+using HRM.Core.Enums;
 
 namespace HRM.Models.Group;
 
@@ -65,4 +66,16 @@ public class GroupEmployeeModel
     public string LocalCurrency { get; set; }
 
     public string Location { get; set; }
+
+    public string Salary { get; set; }
+
+    public string Currency { get; set; }
+
+    public decimal? BasicSalary { get; set; }
+
+    public string CountryName { get; set; }
+
+    public Gender Gender { get; set; }
+
+    public string DOB { get; set; }
 }

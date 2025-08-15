@@ -60,7 +60,7 @@ public class SMSPayrollManagementService(
         return await baseService.GetDataAsync<PayrollEmployeeAttendant>(criteria);
     }
 
-    private static PayrollEmployeeResult CalculatePayrollResult(PayrollEmployeeAttendant employeeAttendant, DateTime date)
+    private PayrollEmployeeResult CalculatePayrollResult(PayrollEmployeeAttendant employeeAttendant, DateTime date)
     {
         var paidDays = CalculateActualPaidDays(employeeAttendant, date);
         var payrollResult = new PayrollEmployeeResult
@@ -103,7 +103,7 @@ public class SMSPayrollManagementService(
         return payrollResult;
     }
 
-    private static decimal DecryptSalary(string salary)
+    public decimal DecryptSalary(string salary)
     {
         if (string.IsNullOrEmpty(salary))
         {

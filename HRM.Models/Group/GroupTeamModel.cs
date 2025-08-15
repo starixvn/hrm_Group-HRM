@@ -14,11 +14,15 @@ public class GroupTeamModel
 
     public int PICEmpId { get; set; }
 
+    public int? DepartmentPICCtrId { get; set; }
+
     public string DepartmentName { get; set; }
 
     public string DepartmentCode { get; set; }
 
     public string DepartmentPIC { get; set; }
+    
+    public int? TeamPICCtrId { get; set; }
 
     public string TeamName { get; set; }
 

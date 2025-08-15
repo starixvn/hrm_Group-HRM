@@ -188,7 +188,7 @@ public class TeamService(
 
     public async Task<byte[]> GenerateGroupTeamExcel(IEnumerable<GroupTeamModel> teams)
     {
-        const int totalColumns = 14;
+        const int totalColumns = 16;
         const int rowStartBody = 3;
         var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, GroupTeamTemplatePath);
 
@@ -227,11 +227,13 @@ public class TeamService(
             worksheet.Cells[rowIndex, colIndex++].Value = team.UnitCode;
             worksheet.Cells[rowIndex, colIndex++].Value = team.DepartmentName;
             worksheet.Cells[rowIndex, colIndex++].Value = team.DepartmentCode;
+            worksheet.Cells[rowIndex, colIndex++].Value = team.DepartmentPICCtrId is not null ? team.DepartmentPICCtrId.ToString().PadLeft(6, '0') : string.Empty;
             worksheet.Cells[rowIndex, colIndex++].Value = team.DepartmentPIC;
             worksheet.Cells[rowIndex, colIndex++].Value = team.TeamName;
             worksheet.Cells[rowIndex, colIndex++].Value = team.TeamCode;
-            worksheet.Cells[rowIndex, colIndex++].Value = team.PICDisplayName;
             worksheet.Cells[rowIndex, colIndex++].Value = team.AccountableArea;
+            worksheet.Cells[rowIndex, colIndex++].Value = team.TeamPICCtrId is not null ? team.TeamPICCtrId.ToString().PadLeft(6, '0') : string.Empty;
+            worksheet.Cells[rowIndex, colIndex++].Value = team.PICDisplayName;
             worksheet.Cells[rowIndex, colIndex++].Value = team.CompanyName;
             worksheet.Cells[rowIndex, colIndex++].Value = team.IsOutsource ? Constants.Yes : Constants.No;
             worksheet.Cells[rowIndex, colIndex].Value = team.NoOfMembers.ToString();
