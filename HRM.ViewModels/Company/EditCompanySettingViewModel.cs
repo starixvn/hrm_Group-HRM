@@ -1,9 +1,8 @@
 ﻿namespace HRM.ViewModels.Company;
 
-using HRM.Models;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
+using HRM.Models;
 
 public class EditCompanySettingViewModel
 {
@@ -22,5 +21,5 @@ public class EditCompanySettingViewModel
 
     public string SettingsJson { get; set; }
 
-    public List<SubCompany> SubCompanies { get; set; }
+    public IList<SubCompany> SubCompanies { get; set; }
 }

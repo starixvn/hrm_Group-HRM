@@ -224,7 +224,7 @@ const AppContainer = () => {
                         <Currency
                             options={currencyOptions || []}
                             value={values.currency || []}
-                            onChange={(selectedValues) => setFieldValue('currency', selectedValues)}
+                            onChange={selectedValues => setFieldValue('currency', selectedValues)}
                             isDisabled={isSubmitting}
                         />
                     </div>
