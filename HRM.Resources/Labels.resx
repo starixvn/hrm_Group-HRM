@@ -2139,8 +2139,8 @@
   <data name="AccountType" xml:space="preserve">
     <value>Account Type</value>
   </data>
-  <data name="OutSourcedEmployee" xml:space="preserve">
-    <value>OutSourced Employee</value>
+  <data name="OutsourcedEmployee" xml:space="preserve">
+    <value>Outsourced Employee</value>
   </data>
   <data name="EmployeeStatus" xml:space="preserve">
     <value>Employee Status</value>

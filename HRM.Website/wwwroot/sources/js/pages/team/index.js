@@ -10,8 +10,7 @@ import {
     confirm,
     resolveClientUrl,
     alert,
-    sortTable,
-    stringify,
+    sortTable
 } from '../../shared/common.functions';
 
 function deleteTeam(id) {
@@ -70,71 +69,4 @@ $(document).ready(function () {
         const teamId = $(this).data('team-id');
         deleteTeam(teamId);
     });
-});
-
-$(document).ready(function () {
-    // Initialize company dropdown
-    console.log('Document ready, calling loadCompanies');
-    loadCompanies();
-
-    // Handle company selection change
-    $('#companySelect').change(function () {
-        const selectedCompanyId = $(this).val();
-        console.log('Selected company ID:', selectedCompanyId);
-
-        // Trigger custom event for parent page to handle
-        $(document).trigger('companyChanged', [selectedCompanyId]);
-    });
-});
-
-function loadCompanies() {
-    // Hardcode for testing
-    const employeeId = 424;
-    const roleId = 4;
-
-    axios({
-        url: resolveClientUrl(
-            `Team/GetCompaniesByRoleIdForEmployee?employeeId=${employeeId}&roleId=${roleId}`
-        ),
-        method: 'GET',
-        headers: {
-            'X-Requested-With': 'XMLHttpRequest',
-        },
-    })
-        .then((response) => {
-            console.log('API response received:', response.data);
-            const companies = response.data;
-            const select = $('#companySelect');
-            select.empty();
-            select.append('<option value="">-- Select Company --</option>');
-
-            if (companies && companies.length > 0) {
-                companies.forEach(function (company) {
-                    console.log('Adding company:', company);
-                    select.append(
-                        '<option value="' +
-                            company.companyId +
-                            '">' +
-                            company.name +
-                            '</option>'
-                    );
-                });
-            } else {
-                console.warn('No companies returned from API');
-                select.append(
-                    '<option value="">No companies available</option>'
-                );
-            }
-        })
-        .catch(axiosError);
-}
-
-// Listen for company filter changes
-$(document).on('companyChanged', function (event, companyId) {
-    console.log('Company filter changed to:', companyId);
-    // Add logic to filter team data by company
-    if (companyId) {
-        // You can add filtering logic here
-        console.log('Filtering teams by company:', companyId);
-    }
 });

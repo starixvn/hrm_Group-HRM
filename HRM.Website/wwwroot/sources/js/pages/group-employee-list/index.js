@@ -52,10 +52,6 @@ import {
         }
     }
 
-    function setEmployeeStatusValue() {
-        $("#EmployeeStatuses").val($("#EmployeeStatus select").val());
-    }
-
     function query() {
         $("#TeamIds").val(
             getParam("teamIds") ||
@@ -65,8 +61,6 @@ import {
         $("#CompanyIds").val(
             $("#Company").multiSelectTreeView("getSelectedItems")
         );
-
-        setEmployeeStatusValue();
 
         $("#CtrIDs").val(
             $("#IsCtrID").multiSelectTreeView("getSelectedItems")
@@ -141,8 +135,6 @@ import {
             $("#Company").multiSelectTreeView("getSelectedItems")
         );
 
-        setEmployeeStatusValue();
-
         $("#CtrIDs").val(
             $("#IsCtrID").multiSelectTreeView("getSelectedItems")
         );
@@ -180,38 +172,6 @@ import {
         }
     }
 
-    function initSingleSelectDropdown(elementId, data, selectedItemsId) {
-        if ($(elementId).length > 0) {
-            const html = `
-                <div class="select-form">
-                    <select class="form-control">
-                        ${data.map(item =>
-                            `<option value="${item.value}" ${item.checked ? 'selected' : ''}>
-                                ${item.text}
-                            </option>`
-                        ).join("")}
-                    </select>
-                </div>
-            `;
-
-            $(elementId).html(html);
-
-            const currentValue = $(selectedItemsId).val();
-            if (currentValue) {
-                $(`${elementId} select`).val(currentValue);
-            }
-        }
-    }
-
-    function getEmployeeStatusData() {
-        return [
-            { value: "", text: "All", checked: false },
-            { value: "1", text: "Active", checked: true },
-            { value: "2", text: "Disabled", checked: false },
-            { value: "3", text: "Deleted", checked: false }
-        ];
-    }
-
     function getCtrIDData() {
         return [
             { id: 1, text: "Main Account", checked: true, enable: true, parentId: null, isLeaf: true, items: [] },
@@ -247,7 +207,6 @@ import {
                         }
                     });
 
-                initSingleSelectDropdown("#EmployeeStatus", getEmployeeStatusData(), "#EmployeeStatuses");
                 initMultiSelectTreeView("#IsCtrID", getCtrIDData(), "#CtrIDs");
                 initMultiSelectTreeView("#IsOutsource", getOutsourceData(), "#Outsources");
 

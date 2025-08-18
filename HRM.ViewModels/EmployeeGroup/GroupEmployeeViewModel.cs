@@ -7,9 +7,9 @@ public class GroupEmployeeViewModel : PagerOptionModel
 {
     public string Keyword { get; set; }
 
-    public string TeamIds { get; set; } = "";
+    public string TeamIds { get; set; } = string.Empty;
 
-    public string CompanyIds { get; set; } = "";
+    public string CompanyIds { get; set; } = string.Empty;
 
     public int? JobTitleId { get; set; }
 
@@ -25,9 +25,7 @@ public class GroupEmployeeViewModel : PagerOptionModel
 
     public bool IsShowDropdownCategory { get; set; }
 
-    public string CtrIDs { get; set; } = "";
-
-    public string Outsources { get; set; } = "";
-
-    public string EmployeeStatuses { get; set; } = "";
+    public string CtrIDs { get; set; } = string.Empty;
+    public string Outsources { get; set; } = string.Empty;
+    public string EmployeeStatus { get; set; } = string.Empty;
 }

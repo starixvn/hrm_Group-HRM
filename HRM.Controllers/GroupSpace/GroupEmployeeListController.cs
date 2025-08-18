@@ -65,7 +65,7 @@ public class GroupEmployeeListController(
     public async Task<IActionResult> ListEmployee(GroupEmployeeViewModel model)
     {
         var hasPermissionViewAll = session.HasPermissionOnFunction(FunctionKey.GroupEmployeeList_AllEmployee, Policy.Read);
-        var (enableUser, isDeleteUser) = ParseEmployeeStatus(model.EmployeeStatuses);
+        var (enableUser, isDeleteUser) = ParseEmployeeStatus(model.EmployeeStatus);
 
         var criteria = new GetEmployeesInGroupScopeCriteria
         {
@@ -84,10 +84,10 @@ public class GroupEmployeeListController(
         };
         var employees = await baseService.GetDataAsync<GroupEmployeeModel>(criteria);
 
-            Parallel.ForEach(employees, e =>
-            {
-                e.BasicSalary = e.Salary != null ? payrollManagementService.DecryptSalary(e.Salary) : null;
-            });
+        Parallel.ForEach(employees, e =>
+        {
+            e.BasicSalary = e.Salary != null ? payrollManagementService.DecryptSalary(e.Salary) : null;
+        });
 
         var pagerOption = new PagerOptionModel
         {
@@ -121,12 +121,11 @@ public class GroupEmployeeListController(
             _ => null
         };
 
-
     [HrmPermission(Policy.Read, FunctionKey.GroupEmployeeList)]
     public async Task<IActionResult> ExportExcel(GroupEmployeeViewModel model, bool isEmployeeListExport)
     {
         var hasPermissionViewAll = session.HasPermissionOnFunction(FunctionKey.GroupEmployeeList_AllEmployee, Policy.Read);
-        var (enableUser, isDeleteUser) = ParseEmployeeStatus(model.EmployeeStatuses);
+        var (enableUser, isDeleteUser) = ParseEmployeeStatus(model.EmployeeStatus);
 
         var criteria = new GetEmployeesInGroupScopeCriteria
         {
@@ -246,7 +245,6 @@ public class GroupEmployeeListController(
                 ViewBag.Updated = false;
                 ModelState.AddModelError(string.Empty, result.Message);
             }
-
         }
 
         return View(model);

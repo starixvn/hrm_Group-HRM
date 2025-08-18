@@ -3913,11 +3913,11 @@ namespace HRM.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to OutSourced Employee.
+        ///   Looks up a localized string similar to Outsourced Employee.
         /// </summary>
-        public static string OutSourcedEmployee {
+        public static string OutsourcedEmployee {
             get {
-                return ResourceManager.GetString("OutSourcedEmployee", resourceCulture);
+                return ResourceManager.GetString("OutsourcedEmployee", resourceCulture);
             }
         }
         

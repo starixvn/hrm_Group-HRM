@@ -302,17 +302,14 @@ public class GroupTeamController(
     [HrmPermission(Policy.Read, FunctionKey.GroupTeamManagement, FunctionKey.GroupEmployeeList)]
     public async Task<IActionResult> GetEmployees(GroupEmployeeViewModel model)
     {
-        var employees = new List<GroupEmployeeModel>();
-        if (model != null)
+        var criteria = new GetEmployeesInGroupScopeCriteria
         {
-            var criteria = new GetEmployeesInGroupScopeCriteria
-            {
-                Query = model.Keyword,
-                IsDeleteUser = model.IsDelete,
-                EnableUser = model.IsEnable
-            };
-            employees = (await baseService.GetDataAsync<GroupEmployeeModel>(criteria)).ToList();
-        }
+            Query = model.Keyword,
+            IsDeleteUser = model.IsDelete,
+            EnableUser = model.IsEnable,
+            HasPermissionViewAll = true
+        };
+        var employees = await baseService.GetDataAsync<GroupEmployeeModel>(criteria);
 
         return Ok(employees);
     }

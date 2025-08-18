@@ -17,12 +17,11 @@
 <h2 class="page-title">@ViewBag.Title</h2>
 <form class="filter">
     <div class="form-horizontal clearfix">
-	    @Html.HiddenFor(model => model.JobTitleId)
+        @Html.HiddenFor(model => model.JobTitleId)
         @Html.HiddenFor(model => model.TeamIds)
         @Html.HiddenFor(model => model.CompanyIds)
-	    @Html.HiddenFor(model => model.EmployeeStatuses)
-	    @Html.HiddenFor(model => model.CurrentPage)
-	    @Html.HiddenFor(model => model.ItemsPerPage)
+        @Html.HiddenFor(model => model.CurrentPage)
+        @Html.HiddenFor(model => model.ItemsPerPage)
         @Html.HiddenFor(model => model.CtrIDs)
         @Html.HiddenFor(model => model.Outsources)
 
@@ -34,18 +33,18 @@
                 @Html.TextBoxFor(model => model.Keyword,
                          new { placeholder = Messages.SearchNickName, @class = "form-control", autocomplete = "off" })
             </div>
-		</div>
-		<div class="form-group form-group--m">
-			<div class="label-form">
-				<label class="control-label">@Labels.Team</label>
-			</div>
-			<div class="input-form" id="GroupTeam"></div>
-		</div>
-	    <div class="form-group form-group--m">
-		    <div class="label-form">
-			    <label class="control-label">@Labels.Company</label>
-		    </div>
-		    <div class="input-form" id="Company"></div>
+        </div>
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                <label class="control-label">@Labels.Team</label>
+            </div>
+            <div class="input-form" id="GroupTeam"></div>
+        </div>
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                <label class="control-label">@Labels.Company</label>
+            </div>
+            <div class="input-form" id="Company"></div>
         </div>
     </div>
     <div class="form-horizontal clearfix">
@@ -53,7 +52,14 @@
         <div class="label-form">
                 <label class="control-label">@Labels.EmployeeStatus</label>
             </div>
-            <div class="input-form" id="EmployeeStatus"></div>
+            <div class="select-form">
+                <select class="form-control" id="EmployeeStatus" name="EmployeeStatus">
+                    <option value="">@Labels.All</option>
+                    <option value="1" selected>Active</option>
+                    <option value="2">Disabled</option>
+                    <option value="3">Deleted</option>
+                </select>
+            </div>
         </div>
 
         <div class="form-group form-group--m">
@@ -65,7 +71,7 @@
 
         <div class="form-group form-group--m">
             <div class="label-form">
-                <label class="control-label">@Labels.OutSourcedEmployee</label>
+                <label class="control-label">@Labels.OutsourcedEmployee</label>
             </div>
             <div class="input-form" id="IsOutsource"></div>
         </div>
@@ -74,7 +80,7 @@
         <div class="form-group">
             <button id="query" type="button" class="btn btn-primary">@Labels.Submit</button>
             <button type="button" id="exportExcel" class="btn btn-excel">Excel - Employee List</button>
-			<button type="button" id="exportExcelProfitCenter" class="btn btn-excel">Excel - Profit Center Report</button>
+            <button type="button" id="exportExcelProfitCenter" class="btn btn-excel">Excel - Profit Center Report</button>
         </div>
     </div>
 </form>
