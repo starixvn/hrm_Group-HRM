@@ -1,6 +1,7 @@
 ﻿namespace HRM.Controllers;
 
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
@@ -30,12 +31,19 @@ public class CompanyController(
     {
         var companies = await companyService.GetSettingCompanyAsync();
         var subCompanies = await companyService.GetSubCompanies(null);
+        var domains = await companyService.GetAllDomainAsync();
 
         foreach (var company in companies)
         {
             company.SubCompanyList = subCompanies
                 .Where(sub => sub.CompanyId == company.CompanyId)
                 .ToList();
+
+            company.Urls = JsonSerializer.Serialize(
+                domains.Where(d => d.CompanyId == company.CompanyId && !string.IsNullOrWhiteSpace(d.Domain))
+                    .Select(s => s.Domain)
+                    .Distinct()
+            );
         }
 
         return Json(companies);
@@ -47,15 +55,14 @@ public class CompanyController(
         return Json(currencies);
     }
 
-    public async Task<IActionResult> GetCompanyById(int Id)
+    public async Task<IActionResult> GetCompanyById(short id)
     {
-        var company = await companyService.GetByIdAsync(Id);
-        var subCompanies = await companyService.GetSubCompanies(Id);
-        var countEmployee = await companyService.CountEmployeeById(Id);
+        var company = await companyService.GetByIdAsync(id);
+        var subCompanies = await companyService.GetSubCompanies(id);
 
         foreach (var sub in subCompanies)
         {
-            var countItem = countEmployee.Find(x => x.SubCompanyId == sub.SubCompanyId);
+            var countItem = company.SubCompanyEmployees.FirstOrDefault(x => x.SubCompanyId == sub.SubCompanyId && x.CompanyId == sub.CompanyId);
             sub.EmployeeCount = countItem?.EmployeeCount ?? 0;
         }
 
@@ -65,7 +72,6 @@ public class CompanyController(
             Name = company.Name,
             HasBIO = company.HasBIO,
             WhitelistIPs = company.WhitelistIPs,
-            Urls = company.Urls,
             Currency = company.Currency,
             EnableLetstalk = company.EnableLetstalk,
             SubCompanies = subCompanies.ToList()
@@ -75,9 +81,9 @@ public class CompanyController(
     }
 
     [HrmPermission(Policy.Host, FunctionKey.CompanyManagement)]
-    public ActionResult Edit(int Id)
+    public ActionResult Edit(int id)
     {
-        return View(Id);
+        return View(id);
     }
 
     [HttpPost]

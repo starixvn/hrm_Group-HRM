@@ -16,9 +16,6 @@ public class EditCompanySettingViewModel
 
     public string WhitelistIPs { get; set; }
 
-    [JsonPropertyName("urls")]
-    public string Urls { get; set; }
-
     public string Currency { get; set; }
 
     public string EnableLetstalk { get; set; }
