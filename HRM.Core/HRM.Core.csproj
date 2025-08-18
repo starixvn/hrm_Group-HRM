@@ -6,7 +6,7 @@
     <ProjectReference Include="..\HRM.Resources\HRM.Resources.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="AWSSDK.S3" Version="4.0.6.5" />
+    <PackageReference Include="AWSSDK.S3" Version="3.7.416.6" />
     <PackageReference Include="EPPlus" Version="7.6.1" />
     <PackageReference Include="Fanex.Caching.Redis" Version="2.2.8" />
     <PackageReference Include="Fanex.Common" Version="1.1.2.1" />
