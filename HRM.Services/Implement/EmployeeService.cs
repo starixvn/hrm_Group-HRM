@@ -256,7 +256,6 @@ public class EmployeeService(
             Nickname = param.Nickname,
             TeamId = param.TeamId,
             Password = Encryptor.ComputeHash(param.Code),
-            DomainUsername = param.DomainUsername,
             CreatedDate = DateTimeOffset.Now.DateTime,
             JoinDate = DateTimeOffset.Now.DateTime.ToClientTimeZone()
         };

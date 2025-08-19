@@ -208,6 +208,7 @@ public class EmployeeController(
         {
             return await CreateUserAsync(model);
         }
+
         ModelState.AddModelError(string.Empty, commandResult.Message);
 
         return View(model);
@@ -222,6 +223,7 @@ public class EmployeeController(
 
         var param = new CreateUserParam
         {
+            Username = model.Username,
             Code = model.Code,
             Nickname = model.Nickname,
             FullName = model.FullName,
@@ -243,13 +245,12 @@ public class EmployeeController(
     {
         var param = new CreateEmployeeParam
         {
-            CompanyId = session.Get<short>(SessionKey.CurrentCompanyId),
+            CompanyId = CurrentCompanyId,
             UserId = userId,
             Code = model.Code,
             FullName = model.FullName,
             Nickname = model.Nickname,
             TeamId = model.TeamId,
-            DomainUsername = model.DomainUsername,
             ActorId = EmployeeSession.EmpId
         };
         var commandResult = await employeeService.CreateAsync(param);
