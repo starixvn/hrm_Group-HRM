@@ -174,7 +174,7 @@ import {
 
     function getCtrIDData() {
         return [
-            { id: 1, text: "Main Account", checked: true, enable: true, parentId: null, isLeaf: true, items: [] },
+            { id: 1, text: "Headcount", checked: true, enable: true, parentId: null, isLeaf: true, items: [] },
             { id: 0, text: "Shadow Account", checked: false, enable: true, parentId: null, isLeaf: true, items: [] }
         ];
     }
