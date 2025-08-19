@@ -25,6 +25,18 @@
     #EmployeeStatus .select-form {
         width: 100% !important;
     }
+
+    .label-form {
+        width: 13.5rem !important;
+    }
+
+    .input-form {
+        width: calc(100% - 13.5rem) !important;
+    }
+
+    .form-group.form-group--m {
+        width: 320px !important;
+    }
 }
 
 
