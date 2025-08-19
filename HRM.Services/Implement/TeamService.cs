@@ -84,9 +84,8 @@ public class TeamService(
         {
             TeamIds = teamIds
         };
-        var teams = await baseService.GetDataAsync<GroupTeamModel>(criteria);
 
-        return teams ?? new List<GroupTeamModel>();
+        return await baseService.GetDataAsync<GroupTeamModel>(criteria);
     }
 
     public async Task<CommandResult> Delete(int actorId, int id)

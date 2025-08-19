@@ -1,16 +1,17 @@
-﻿namespace HRM.Controllers;
+﻿namespace HRM.Controllers.GroupSpace;
 
 using System;
+using System.Linq;
 using System.Threading.Tasks;
-using Core.Constants;
 using Core;
+using Core.Constants;
 using Core.Filters;
 using Criteria.Department;
+using Criteria.Employee;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
 using HRM.Core.Models;
 using HRM.Core.Services;
-using Criteria.Employee;
 using Microsoft.AspNetCore.Mvc;
 using Services.Interfaces;
 using ViewModels.Department;
@@ -33,7 +34,13 @@ public class DepartmentController(
     [HrmPermission(Policy.Read, FunctionKey.DepartmentManagement)]
     public async Task<IActionResult> GetDepartments([FromBody] GetDepartmentViewModel request)
     {
+        var hasPermissionViewAll = session.HasPermissionOnFunction(FunctionKey.DepartmentManagement_AllDepartment, Policy.Read);
         var departments = await departmentService.GetDepartmentAsync(request.IsActive, request.UnitId);
+        if (!hasPermissionViewAll)
+        {
+            departments = departments.Where(x => x.PICEmpId == EmployeeSession.EmpId).ToList();
+        }
+
         return Json(departments);
     }
 

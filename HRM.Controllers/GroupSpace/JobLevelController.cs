@@ -7,7 +7,7 @@ using HRM.Criteria.JobLevel;
 using HRM.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
-namespace HRM.Controllers;
+namespace HRM.Controllers.GroupSpace;
 
 public class JobLevelController(
     IUserControlSession session,

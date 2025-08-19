@@ -39,9 +39,16 @@ public class GroupTeamController(
     [HttpPost]
     public async Task<IActionResult> GetTeamList(string teamIds = null)
     {
+        var hasPermissionViewAll = session.HasPermissionOnFunction(FunctionKey.GroupTeamManagement_AllTeam, Policy.Read);
         var teams = await teamService.GetAllTeamByUnitScopeAsync(teamIds);
+        if (!hasPermissionViewAll)
+        {
+            teams = teams.Where(x => x.PICEmpId == EmployeeSession.EmpId).ToList();
+        }
+
         ViewBag.HasPermission = session.HasPermissionOnFunction(FunctionKey.GroupTeamManagement, Policy.Host);
-        ViewBag.HasPermissionToViewEmployee = session.HasPermissionOnFunction(FunctionKey.GroupEmployeeList_AllEmployee, Policy.Read);
+        ViewBag.HasPermissionToViewEmployee = session.HasPermissionOnFunction(FunctionKey.GroupEmployeeList, Policy.Read);
+
         return PartialView("_TeamList", teams);
     }
 
