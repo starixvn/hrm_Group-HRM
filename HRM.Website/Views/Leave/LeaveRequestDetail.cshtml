@@ -29,23 +29,15 @@
             {
                 if (!item.IsOffOrHoliday)
                 {
-                    switch (item.LeaveTypeId)
+                    var leaveAmount = item.IsHalfDay ? 0.5 : 1.0;
+
+                    if ((LeaveTypes)item.LeaveTypeId == LeaveTypes.AnnualLeave)
                     {
-                        case (ushort)LeaveTypes.AnnualLeave when item.IsHalfDay:
-                            totalAnnualLeave += 0.5;
-                            break;
-                        case (ushort)LeaveTypes.AnnualLeave:
-                            totalAnnualLeave += 1;
-                            break;
-                        case (ushort)LeaveTypes.UnpaidLeave when item.IsHalfDay:
-                            totalUnpaidLeave += 0.5;
-                            break;
-                        case (ushort)LeaveTypes.UnpaidLeave:
-                            totalUnpaidLeave += 1;
-                            break;
-                        default:
-                            // do nothing
-                            break;
+                        totalAnnualLeave += leaveAmount;
+                    }
+                    else if ((LeaveTypes)item.LeaveTypeId == LeaveTypes.UnpaidLeave)
+                    {
+                        totalUnpaidLeave += leaveAmount;
                     }
                 }
                 <tr>
