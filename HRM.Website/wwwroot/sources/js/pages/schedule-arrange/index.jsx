@@ -510,6 +510,32 @@ export default class App extends Component {
         this.setState({ schedules });
     };
 
+    updateMemberSchedule = (members, eindex, attrName, originalDefaultShift, defaultShift, gindex) => {
+        if (members[eindex][attrName].isDisabled) {
+            return;
+        }
+
+        const schedule = members[eindex][attrName];
+        const shift = schedule.shift;
+        const isHolidayOrOffDay = schedule.isHoliday || schedule.isOffDay;
+        const shouldUpdate = isHolidayOrOffDay 
+            ? (shift !== null && isEqual(originalDefaultShift, shift))
+            : (shift === null || isEqual(originalDefaultShift, shift));
+
+        if (shouldUpdate) {
+            const originalSchedule = this.originalSchedules[gindex].members[eindex][attrName];
+            const isModified = !isEqual(defaultShift, originalSchedule.shift) 
+                ? true 
+                : originalSchedule.isModified;
+
+            members[eindex][attrName] = {
+                ...schedule,
+                shift: defaultShift,
+                isModified,
+            };
+        }
+    };
+
     handleChangeDefaultShift = (teamId, employeeId, defaultShift) => {
         const schedules = [...this.state.schedules];
         const gindex = schedules.findIndex(item =>item.teamId === teamId);
@@ -519,55 +545,7 @@ export default class App extends Component {
 
         if (defaultShift !== null) {
             this.scheduleAttrNames.forEach(attrName => {
-                if (!members[eindex][attrName].isDisabled) {
-                    const shift = members[eindex][attrName].shift;
-                    if (
-                        members[eindex][attrName].isHoliday ||
-                        members[eindex][attrName].isOffDay
-                    ) {
-                        if (
-                            shift !== null &&
-                            isEqual(originalDefaultShift, shift)
-                        ) {
-                            const originalSchedule =
-                                    this.originalSchedules[gindex].members[
-                                        eindex
-                                    ][attrName],
-                                isModified = !isEqual(
-                                    defaultShift,
-                                    originalSchedule.shift
-                                )
-                                    ? true
-                                    : originalSchedule.isModified;
-                            members[eindex][attrName] = {
-                                ...members[eindex][attrName],
-                                shift: defaultShift,
-                                isModified,
-                            };
-                        }
-                    } else {
-                        if (
-                            shift === null ||
-                            isEqual(originalDefaultShift, shift)
-                        ) {
-                            const originalSchedule =
-                                    this.originalSchedules[gindex].members[
-                                        eindex
-                                    ][attrName],
-                                isModified = !isEqual(
-                                    defaultShift,
-                                    originalSchedule.shift
-                                )
-                                    ? true
-                                    : originalSchedule.isModified;
-                            members[eindex][attrName] = {
-                                ...members[eindex][attrName],
-                                shift: defaultShift,
-                                isModified,
-                            };
-                        }
-                    }
-                }
+                this.updateMemberSchedule(members, eindex, attrName, originalDefaultShift, defaultShift, gindex);
             });
         } else {
             this.scheduleAttrNames.forEach(attrName => {
@@ -906,86 +884,41 @@ export default class App extends Component {
         }
     };
 
-    handleSave = () => {
-        let isValidData = true;
-        const weeklySchedules = [],
-            defaultShifts = [],
-            schedules = cloneDeep(this.state.schedules),
-            originalSchedules = cloneDeep(this.originalSchedules);
-        const totalItems = schedules.length,
-            { fromDate, toDate } = this.selectedWeek;
+    validateScheduleChanges = (schedule, totalOffDaysDefault) => {
+        const totalOffDays = getTotalOffDays(schedule);
+        return totalOffDaysDefault >= totalOffDays;
+    };
 
-        outerloop: for (let gindex = 0; gindex < totalItems; gindex++) {
-            const totalSubItems = schedules[gindex].members.length;
-
-            for (let eindex = 0; eindex < totalSubItems; eindex++) {
-                const schedule = schedules[gindex].members[eindex],
-                    originalSchedule = originalSchedules[gindex].members[eindex];
-                unset(schedule, 'selectWeekDays');
-                unset(originalSchedule, 'selectWeekDays');
-
-                if (!isEqual(schedule, originalSchedule)) {
-                    const totalOffDaysDefault =
-                            schedule.offDaysbyWeek +
-                            schedule.totalOffDayReplacement,
-                        totalOffDays = getTotalOffDays(schedule);
-
-                    if (totalOffDaysDefault < totalOffDays) {
-                        isValidData = false;
-                        break outerloop;
-                    }
-
-                    if (
-                        !isEqual(
-                            originalSchedule.defaultShift,
-                            schedule.defaultShift
-                        )
-                    ) {
-                        defaultShifts.push({
-                            employeeId: schedule.employeeId,
-                            fromDate: schedule.mondaySchedule.workDate,
-                            shiftId:
-                                schedule.defaultShift !== null
-                                    ? schedule.defaultShift.id
-                                    : null,
-                        });
-                    }
-                    this.scheduleAttrNames.forEach(attrName => {
-                        if (
-                            !isEqual(
-                                originalSchedule[attrName],
-                                schedule[attrName]
-                            ) ||
-                            originalSchedule.isPublic !== schedule.isPublic
-                        ) {
-                            weeklySchedules.push({
-                                employeeId: schedule.employeeId,
-                                workDate: schedule[attrName].workDate,
-                                shiftId:
-                                    schedule[attrName].shift !== null
-                                        ? schedule[attrName].shift.id
-                                        : null,
-                                isHoliday: schedule[attrName].isHoliday,
-                                isOffDay: schedule[attrName].isOffDay,
-                                isFixedOffDay: schedule[attrName].isFixedOffDay,
-                                isPublic: schedule.isPublic,
-                            });
-                        }
-                    });
-                }
-            }
+    collectDefaultShiftChanges = (schedule, originalSchedule) => {
+        if (!isEqual(originalSchedule.defaultShift, schedule.defaultShift)) {
+            return {
+                employeeId: schedule.employeeId,
+                fromDate: schedule.mondaySchedule.workDate,
+                shiftId: schedule.defaultShift !== null ? schedule.defaultShift.id : null,
+            };
         }
+        return null;
+    };
 
-        if (!isValidData) {
-            toast.error(
-                'Some employees have a larger number of days off during the week according to the setting.'
-            );
-
-            return;
+    collectWeeklyScheduleChanges = (schedule, originalSchedule, attrName) => {
+        if (!isEqual(originalSchedule[attrName], schedule[attrName]) || 
+            originalSchedule.isPublic !== schedule.isPublic) {
+            return {
+                employeeId: schedule.employeeId,
+                workDate: schedule[attrName].workDate,
+                shiftId: schedule[attrName].shift !== null ? schedule[attrName].shift.id : null,
+                isHoliday: schedule[attrName].isHoliday,
+                isOffDay: schedule[attrName].isOffDay,
+                isFixedOffDay: schedule[attrName].isFixedOffDay,
+                isPublic: schedule.isPublic,
+            };
         }
+        return null;
+    };
+
+    saveScheduleChanges = (weeklySchedules, defaultShifts, fromDate, toDate) => {
         if (weeklySchedules.length > 0 || defaultShifts.length > 0) {
             blockUI();
-
             axios({
                 url: resolveClientUrl('ScheduleArrange/EditWeekly'),
                 method: 'POST',
@@ -1004,15 +937,53 @@ export default class App extends Component {
                     const data = response.data;
                     if (data.isSuccessful) {
                         toast.success(SUCCESS_MESSAGE);
-
                         this.getWeeklyShedules(this.state.filter);
                     } else {
                         toast.error(data.message);
                     }
                 })
                 .catch(axiosError)
-                .then( =>unblockUI());
+                .then(() => unblockUI());
         }
+    };
+
+    handleSave = () => {
+        const weeklySchedules = [];
+        const defaultShifts = [];
+        const schedules = cloneDeep(this.state.schedules);
+        const originalSchedules = cloneDeep(this.originalSchedules);
+        const { fromDate, toDate } = this.selectedWeek;
+
+        for (let gindex = 0; gindex < schedules.length; gindex++) {
+            const members = schedules[gindex].members;
+            
+            for (let eindex = 0; eindex < members.length; eindex++) {
+                const schedule = members[eindex];
+                const originalSchedule = originalSchedules[gindex].members[eindex];
+                
+                unset(schedule, 'selectWeekDays');
+                unset(originalSchedule, 'selectWeekDays');
+
+                if (!isEqual(schedule, originalSchedule)) {
+                    const totalOffDaysDefault = schedule.offDaysbyWeek + schedule.totalOffDayReplacement;
+                    
+                    if (!this.validateScheduleChanges(schedule, totalOffDaysDefault)) {
+                        toast.error('Some employees have a larger number of days off during the week according to the setting.');
+                        return;
+                    }
+
+                    const defaultShift = this.collectDefaultShiftChanges(schedule, originalSchedule);
+                    if (defaultShift) defaultShifts.push(defaultShift);
+
+                    this.scheduleAttrNames.forEach(attrName => {
+                        const weeklySchedule = this.collectWeeklyScheduleChanges(schedule, originalSchedule, attrName);
+                        if (weeklySchedule) weeklySchedules.push(weeklySchedule);
+                    });
+                }
+            }
+        }
+
+        this.saveScheduleChanges(weeklySchedules, defaultShifts, fromDate, toDate);
     };
 
     handleCloseShiftMultipleModal = () => {
