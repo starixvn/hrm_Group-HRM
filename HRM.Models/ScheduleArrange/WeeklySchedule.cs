@@ -36,11 +36,11 @@ public class WeeklySchedule
 
     public bool IsSelected { get; set; }
 
-    public DailySchedule MondaySchedule { get; set; }
-    public DailySchedule TuesdaySchedule { get; set; }
-    public DailySchedule WednesdaySchedule { get; set; }
-    public DailySchedule ThursdaySchedule { get; set; }
-    public DailySchedule FridaySchedule { get; set; }
-    public DailySchedule SaturdaySchedule { get; set; }
-    public DailySchedule SundaySchedule { get; set; }
+    public DailySchedule MondaySchedule { get; set; } = new();
+    public DailySchedule TuesdaySchedule { get; set; } = new();
+    public DailySchedule WednesdaySchedule { get; set; } = new();
+    public DailySchedule ThursdaySchedule { get; set; } = new();
+    public DailySchedule FridaySchedule { get; set; } = new();
+    public DailySchedule SaturdaySchedule { get; set; } = new();
+    public DailySchedule SundaySchedule { get; set; } = new();
 }
