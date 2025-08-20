@@ -16,20 +16,17 @@
     {
         index++;
     <tr>
-        @if (showCheckAll)
-        {
-            <td>
-                @if (request.IsHost)
-                {
-                    <div class="checkbox">
-                        <input type="checkbox" class="checkbox-custom" id="ckb@(request.RequestId)"
-                               data-requestid="@request.RequestId" data-statusid="@request.Status.Id"
-                               data-verifierid="@request.VerifierId" data-approverid="@request.ApproverId" />
-                        <label for="ckb@(request.RequestId)"></label>
-                    </div>
-                }
-            </td>
-        }
+        <td>
+            @if (showCheckAll && request.IsHost)
+            {
+                <div class="checkbox">
+                    <input type="checkbox" class="checkbox-custom" id="ckb@(request.RequestId)"
+                            data-requestid="@request.RequestId" data-statusid="@request.Status.Id"
+                            data-verifierid="@request.VerifierId" data-approverid="@request.ApproverId" />
+                    <label for="ckb@(request.RequestId)"></label>
+                </div>
+            }
+        </td>
         <td>@index</td>
         <td class="align-left">@request.UnitCode</td>
         <td class="align-left">@request.DepartmentName</td>
