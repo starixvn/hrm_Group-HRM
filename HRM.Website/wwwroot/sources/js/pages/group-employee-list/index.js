@@ -173,16 +173,27 @@ import {
     }
 
     function getCtrIDData() {
+        let ctrIDsParam = getParam("ctrIDs");
+        if (ctrIDsParam === null || ctrIDsParam === undefined) {
+            ctrIDsParam = "1";
+        }
+
         return [
-            { id: 1, text: "Headcount", checked: true, enable: true, parentId: null, isLeaf: true, items: [] },
-            { id: 0, text: "Shadow Account", checked: false, enable: true, parentId: null, isLeaf: true, items: [] }
+            { id: 1, text: "Headcount", checked: ctrIDsParam.split(",").includes("1"), enable: true, parentId: null, isLeaf: true, items: [] },
+            { id: 0, text: "Shadow Account", checked: ctrIDsParam.split(",").includes("0"), enable: true, parentId: null, isLeaf: true, items: [] }
         ];
     }
+    
 
     function getOutsourceData() {
+        let outsourcesParam = getParam("outsources");
+        if (outsourcesParam === null || outsourcesParam === undefined) {
+            outsourcesParam = "0"; 
+        }
+    
         return [
-            { id: 1, text: "Yes", checked: false, enable: true, parentId: null, isLeaf: true, items: [] },
-            { id: 0, text: "No", checked: true, enable: true, parentId: null, isLeaf: true, items: [] }
+            { id: 1, text: "Yes", checked: outsourcesParam.split(",").includes("1"), enable: true, parentId: null, isLeaf: true, items: [] },
+            { id: 0, text: "No", checked: outsourcesParam.split(",").includes("0"), enable: true, parentId: null, isLeaf: true, items: [] }
         ];
     }
 
