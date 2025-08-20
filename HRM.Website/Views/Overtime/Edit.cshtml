@@ -121,13 +121,7 @@
                             }
                         </td>
                         <td class="cell-overtime">
-                            @if (request.ActualWorkingHours > 0
-                                && !request.IsKeepInView
-                                && !request.IsOffDay && !request.IsHoliday
-                                && request.ActualWorkingHours > Model.MonthlyRequest.Requester.WorkingHours)
-                            {
-                                @Html.TextBoxFor(model => request.NormalHours, new { @class = "normalHours form-control", maxlength = 5, autocomplete = "off" })
-                            }
+                            @{ RenderNormalHours(request); }
                         </td>
                         <td class="cell-overtime">
                             @if (request.ActualWorkingHours > 0 && !request.IsKeepInView && request.IsOffDay && !request.IsHoliday)
@@ -146,11 +140,7 @@
                             @{ RenderSpecialHours(request); }
                         </td>
                         <td>
-                            @if (request.ActualWorkingHours > 0 && !request.IsKeepInView
-                                && (request.IsOffDay || request.IsHoliday || request.ActualWorkingHours > Model.MonthlyRequest.Requester.WorkingHours))
-                            {
-                                @Html.TextBoxFor(model => request.Remark, new { @class = "remark form-control", maxlength = 2000, autocomplete = "off" })
-                            }
+                            @{ RenderRemark(request); }
                         </td>
                     </tr>
                 }
@@ -188,6 +178,18 @@
 </form>
 
 @{
+#pragma warning disable S1067 // Expressions should not be too complex
+    void RenderNormalHours(DailyOvertimeRequest request)
+    {
+        if (request.ActualWorkingHours > 0
+            && !request.IsKeepInView
+            && !request.IsOffDay && !request.IsHoliday
+            && request.ActualWorkingHours > Model.MonthlyRequest.Requester.WorkingHours)
+        {
+            @Html.TextBoxFor(model => request.NormalHours, new { @class = "normalHours form-control", maxlength = 5, autocomplete = "off" })
+        }
+    }
+
     void RenderSpecialHours(DailyOvertimeRequest request)
     {
         var className = $"specialHours form-control {(request.IsHoliday && request.HolidayTypeId == (byte)HolidayType.Special ? "specialPH" : string.Empty)}";
@@ -206,6 +208,15 @@
             {
                 @Html.TextBoxFor(model => request.SpecialHours, new { @class = className, maxlength = 5, autocomplete = "off", @readonly = "readonly" })
             }
+        }
+    }
+
+    void RenderRemark(DailyOvertimeRequest request)
+    {
+        if (request.ActualWorkingHours > 0 && !request.IsKeepInView
+            && (request.IsOffDay || request.IsHoliday || request.ActualWorkingHours > Model.MonthlyRequest.Requester.WorkingHours))
+        {
+            @Html.TextBoxFor(model => request.Remark, new { @class = "remark form-control", maxlength = 2000, autocomplete = "off" })
         }
     }
 }
