@@ -30,14 +30,12 @@
                     @Html.Label(Labels.Verifier, Labels.Verifier, new { @class = "control-label" })
                 </div>
                 <div class="select-form">
-                    @if (Model.Verifiers.Count() > 1 || Model.AutoApproveRequest)
-                    {
-                        @Html.DropDownListFor(model => model.VerifierId, new SelectList(Model.Verifiers, "OwnerId", "NickName"), Labels.SelectVerifier, new { @class = "form-control" })
-                    }
-                    else
-                    {
-                        @Html.DropDownListFor(model => model.VerifierId, new SelectList(Model.Verifiers, "OwnerId", "NickName"), new { @class = "form-control" })
-                    }
+                    @Html.DropDownListFor(
+                        x => x.VerifierId,
+                        new SelectList(Model.Verifiers, "OwnerId", "NickName"),
+                        Model.Verifiers.Count() > 1 || Model.AutoApproveRequest ? Labels.SelectVerifier : null,
+                        new { @class = "form-control" }
+                    )
                 </div>
             </div>
             <div class="form-group form-group--m">
@@ -45,14 +43,12 @@
                     @Html.Label(Labels.Approver, Labels.Approver, new { @class = "control-label" })
                 </div>
                 <div class="select-form">
-                    @if (Model.Approvers.Count() > 1 || Model.AutoApproveRequest)
-                    {
-                        @Html.DropDownListFor(model => model.ApproverId, new SelectList(Model.Approvers, "OwnerId", "NickName"), Labels.SelectApprover, new { @class = "form-control" })
-                    }
-                    else
-                    {
-                        @Html.DropDownListFor(model => model.ApproverId, new SelectList(Model.Approvers, "OwnerId", "NickName"), new { @class = "form-control" })
-                    }
+                    @Html.DropDownListFor(
+                        x => x.ApproverId,
+                        new SelectList(Model.Approvers, "OwnerId", "NickName"),
+                        Model.Approvers.Count() > 1 || Model.AutoApproveRequest ? Labels.SelectApprover : null,
+                        new { @class = "form-control" }
+                    )
                 </div>
             </div>
             <div class="form-group form-group--m">
@@ -150,12 +146,10 @@
                             @{ RenderSpecialHours(request); }
                         </td>
                         <td>
-                            @if (request.ActualWorkingHours > 0 && !request.IsKeepInView)
+                            @if (request.ActualWorkingHours > 0 && !request.IsKeepInView
+                                && (request.IsOffDay || request.IsHoliday || request.ActualWorkingHours > Model.MonthlyRequest.Requester.WorkingHours))
                             {
-                                if (request.IsOffDay || request.IsHoliday || request.ActualWorkingHours > Model.MonthlyRequest.Requester.WorkingHours)
-                                {
-                                    @Html.TextBoxFor(model => request.Remark, new { @class = "remark form-control", maxlength = 2000, autocomplete = "off" })
-                                }
+                                @Html.TextBoxFor(model => request.Remark, new { @class = "remark form-control", maxlength = 2000, autocomplete = "off" })
                             }
                         </td>
                     </tr>
