@@ -38,7 +38,7 @@ public class DepartmentController(
         var departments = await departmentService.GetDepartmentAsync(request.IsActive, request.UnitId);
         if (!hasPermissionViewAll)
         {
-            departments = departments.Where(x => x.PICEmpId == EmployeeSession.EmpId).ToList();
+            departments = departments.Where(x => x.PICEmpId == EmployeeSession.EmpId || x.Unit?.PICEmpId == EmployeeSession.EmpId).ToList();
         }
 
         return Json(departments);

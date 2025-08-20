@@ -43,7 +43,9 @@ public class GroupTeamController(
         var teams = await teamService.GetAllTeamByUnitScopeAsync(teamIds);
         if (!hasPermissionViewAll)
         {
-            teams = teams.Where(x => x.PICEmpId == EmployeeSession.EmpId).ToList();
+            teams = teams.Where(x => x.PICEmpId == EmployeeSession.EmpId
+                 || x.DepartmentPICEmpId == EmployeeSession.EmpId
+                 || x.UnitPICEmpId == EmployeeSession.EmpId).ToList();
         }
 
         ViewBag.HasPermission = session.HasPermissionOnFunction(FunctionKey.GroupTeamManagement, Policy.Host);
