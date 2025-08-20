@@ -232,6 +232,13 @@ public class GroupTeamController(
     public async Task<IActionResult> ExportGroupTeamList(string keyword = null)
     {
         var teams = await teamService.GetAllTeamByUnitScopeAsync(keyword);
+        var hasPermissionViewAll = session.HasPermissionOnFunction(FunctionKey.GroupTeamManagement_AllTeam, Policy.Read);
+        if (!hasPermissionViewAll)
+        {
+            teams = teams.Where(x => x.PICEmpId == EmployeeSession.EmpId
+                 || x.DepartmentPICEmpId == EmployeeSession.EmpId
+                 || x.UnitPICEmpId == EmployeeSession.EmpId).ToList();
+        }
         var bytes = await teamService.GenerateGroupTeamExcel(teams);
         var fileName = $"GroupTeam_{DateTimeOffset.Now.DateTime.ToClientTimeZone():yyyyMMdd}.xlsx";
 
