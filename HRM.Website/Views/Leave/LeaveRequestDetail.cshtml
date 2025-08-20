@@ -27,18 +27,16 @@
         <tbody>
             @foreach (var item in Model.LeaveRequestDetail)
             {
-                if (!item.IsOffOrHoliday)
-                {
-                    var leaveAmount = item.IsHalfDay ? 0.5 : 1.0;
+                var leaveAmount = item.IsHalfDay ? 0.5 : 1.0;
 
-                    if ((LeaveTypes)item.LeaveTypeId == LeaveTypes.AnnualLeave)
-                    {
-                        totalAnnualLeave += leaveAmount;
-                    }
-                    else if ((LeaveTypes)item.LeaveTypeId == LeaveTypes.UnpaidLeave)
-                    {
-                        totalUnpaidLeave += leaveAmount;
-                    }
+                if (!item.IsOffOrHoliday && (LeaveTypes)item.LeaveTypeId == LeaveTypes.AnnualLeave)
+                {
+                    totalAnnualLeave += leaveAmount;
+                }
+
+                if (!item.IsOffOrHoliday && (LeaveTypes)item.LeaveTypeId == LeaveTypes.UnpaidLeave)
+                {
+                    totalUnpaidLeave += leaveAmount;
                 }
                 <tr>
                     <td class="tdleavedate" data-date="@item.OnDate.ToDateMonthYearFormatedDate()">
