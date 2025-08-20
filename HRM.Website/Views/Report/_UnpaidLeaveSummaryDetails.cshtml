@@ -1,5 +1,7 @@
 ﻿@using HRM.Resources
 @using HRM.Website.Helper
+@using Microsoft.AspNetCore.Html
+@using System.Web
 @model HRM.ViewModels.AnnualLeave.LeaveSummaryViewModel
 
 <table class="table table-custom" id="data">
@@ -18,40 +20,7 @@
             </th>
         </tr>
         <tr>
-            @switch (Model.Period)
-            {
-                case "1":
-                    <th>@Labels.Jan</th>
-                    <th>@Labels.Feb</th>
-                    <th>@Labels.Mar</th>
-                    <th>@Labels.Apr</th>
-                    <th>@Labels.May</th>
-                    <th>@Labels.Jun</th>
-                    break;
-                case "2":
-                    <th>@Labels.Jul</th>
-                    <th>@Labels.Aug</th>
-                    <th>@Labels.Sep</th>
-                    <th>@Labels.Oct</th>
-                    <th>@Labels.Nov</th>
-                    <th>@Labels.Dec</th>
-                    break;
-                default:
-                    <th>@Labels.Jan</th>
-                    <th>@Labels.Feb</th>
-                    <th>@Labels.Mar</th>
-                    <th>@Labels.Apr</th>
-                    <th>@Labels.May</th>
-                    <th>@Labels.Jun</th>
-                    <th>@Labels.Jul</th>
-                    <th>@Labels.Aug</th>
-                    <th>@Labels.Sep</th>
-                    <th>@Labels.Oct</th>
-                    <th>@Labels.Nov</th>
-                    <th>@Labels.Dec</th>
-                    break;
-            }
-
+            @RenderMonthHeaders(Model.Period)
         </tr>
     </thead>
     @if (Model.LeaveSumaries != null)
@@ -177,5 +146,47 @@
         {
             @days.ToString("0.0")
         }
+    }
+
+    IHtmlContent RenderMonthHeaders(string period)
+    {
+        switch (period)
+        {
+            case "1":
+                return RenderFirstHalfMonths();
+            case "2":
+                return RenderSecondHalfMonths();
+            default:
+                return RenderAllMonths();
+        }
+    }
+
+    IHtmlContent RenderFirstHalfMonths()
+    {
+        return new HtmlString($@"
+            <th>{Labels.Jan}</th>
+            <th>{Labels.Feb}</th>
+            <th>{Labels.Mar}</th>
+            <th>{Labels.Apr}</th>
+            <th>{Labels.May}</th>
+            <th>{Labels.Jun}</th>
+        ");
+    }
+
+    IHtmlContent RenderSecondHalfMonths()
+    {
+        return new HtmlString($@"
+            <th>{Labels.Jul}</th>
+            <th>{Labels.Aug}</th>
+            <th>{Labels.Sep}</th>
+            <th>{Labels.Oct}</th>
+            <th>{Labels.Nov}</th>
+            <th>{Labels.Dec}</th>
+        ");
+    }
+
+    IHtmlContent RenderAllMonths()
+    {
+        return new HtmlString(RenderFirstHalfMonths().ToString() + RenderSecondHalfMonths().ToString());
     }
 }
