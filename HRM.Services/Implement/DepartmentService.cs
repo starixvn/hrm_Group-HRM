@@ -5,13 +5,13 @@ namespace HRM.Services.Implement;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Criteria.Department;
 using HRM.Core.Models;
 using HRM.Core.Services;
 using HRM.Repositories.Interfaces;
 using Interfaces;
-using System.Linq;
 using Microsoft.AspNetCore.Hosting;
 using Models;
 using OfficeOpenXml;
@@ -62,7 +62,7 @@ public class DepartmentService(
 
     public async Task<byte[]> GenerateExcelAsync(IEnumerable<Department> departments)
     {
-        const int totalColumns = 8;
+        const int totalColumns = 9;
         const int rowStartBody = 3;
         var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, DepartmentTemplatePath);
 
@@ -101,6 +101,7 @@ public class DepartmentService(
             worksheet.Cells[rowIndex, colIndex++].Value = department.Unit?.Code;
             worksheet.Cells[rowIndex, colIndex++].Value = department.Name;
             worksheet.Cells[rowIndex, colIndex++].Value = department.AccountableArea;
+            worksheet.Cells[rowIndex, colIndex++].Value = department.PICCtrId is not null ? department.PICCtrId.ToString().PadLeft(6, '0') : string.Empty;
             worksheet.Cells[rowIndex, colIndex++].Value = department.PICEmployeeName;
             worksheet.Cells[rowIndex, colIndex].Value = department.IsActive ? Constants.Yes : Constants.No;
 

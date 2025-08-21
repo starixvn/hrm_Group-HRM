@@ -106,7 +106,7 @@
                     <td>
                         @if (team.NoOfMembers > 0 && hasPermissionToViewEmployee)
                         {
-                            <a href="@Url.Action("Index", "GroupEmployeeList", new { teamIds = team.Id })">@team.NoOfMembers</a>
+                            <a href="@Url.Action("Index", "GroupEmployeeList", new { teamIds = team.Id, ctrIDs = "1,0", outsources = "1,0" })">@team.NoOfMembers</a>
                         }
                         else
                         {

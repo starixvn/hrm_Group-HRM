@@ -578,13 +578,13 @@
     <Function Name="Company">
         <Setting Key="Company_GetAll" SpName="Company_GetAll" DbName="bodb_HRM" Plain="0" />
         <Setting Key="Domain_ByCompanyId_Get" SpName="Domain_ByCompanyId_Get" DbName="bodb_HRM" />
+        <Setting Key="Company_GetDomain" SpName="Company_GetDomain" DbName="bodb_HRM" />
     </Function>
     <Function Name="SubCompany">
         <Setting Key="SubCompanies_ByCompanyId_Get" SpName="SubCompanies_ByCompanyId_Get" DbName="bodb_HRM" />
         <Setting Key="SubCompany_Insert" SpName="SubCompany_Insert" DbName="bodb_HRM" />
         <Setting Key="SubCompany_Update" SpName="SubCompany_Update" DbName="bodb_HRM" />
         <Setting Key="SubCompany_Delete" SpName="SubCompany_Delete" DbName="bodb_HRM" />
-        <Setting Key="SubCompany_CountEmployeeById" SpName="SubCompany_CountEmployeeById" DbName="bodb_HRM" />
     </Function>
     <Function Name="CompanySetting">
         <Setting Key="CompanySetting_Get" SpName="CompanySetting_Get" DbName="bodb_HRM" Plain="0" />

@@ -39,9 +39,18 @@ public class GroupTeamController(
     [HttpPost]
     public async Task<IActionResult> GetTeamList(string teamIds = null)
     {
+        var hasPermissionViewAll = session.HasPermissionOnFunction(FunctionKey.GroupTeamManagement_AllTeam, Policy.Read);
         var teams = await teamService.GetAllTeamByUnitScopeAsync(teamIds);
+        if (!hasPermissionViewAll)
+        {
+            teams = teams.Where(x => x.PICEmpId == EmployeeSession.EmpId
+                 || x.DepartmentPICEmpId == EmployeeSession.EmpId
+                 || x.UnitPICEmpId == EmployeeSession.EmpId).ToList();
+        }
+
         ViewBag.HasPermission = session.HasPermissionOnFunction(FunctionKey.GroupTeamManagement, Policy.Host);
         ViewBag.HasPermissionToViewEmployee = session.HasPermissionOnFunction(FunctionKey.GroupEmployeeList, Policy.Read);
+
         return PartialView("_TeamList", teams);
     }
 
@@ -223,6 +232,13 @@ public class GroupTeamController(
     public async Task<IActionResult> ExportGroupTeamList(string keyword = null)
     {
         var teams = await teamService.GetAllTeamByUnitScopeAsync(keyword);
+        var hasPermissionViewAll = session.HasPermissionOnFunction(FunctionKey.GroupTeamManagement_AllTeam, Policy.Read);
+        if (!hasPermissionViewAll)
+        {
+            teams = teams.Where(x => x.PICEmpId == EmployeeSession.EmpId
+                 || x.DepartmentPICEmpId == EmployeeSession.EmpId
+                 || x.UnitPICEmpId == EmployeeSession.EmpId).ToList();
+        }
         var bytes = await teamService.GenerateGroupTeamExcel(teams);
         var fileName = $"GroupTeam_{DateTimeOffset.Now.DateTime.ToClientTimeZone():yyyyMMdd}.xlsx";
 
@@ -302,17 +318,14 @@ public class GroupTeamController(
     [HrmPermission(Policy.Read, FunctionKey.GroupTeamManagement, FunctionKey.GroupEmployeeList)]
     public async Task<IActionResult> GetEmployees(GroupEmployeeViewModel model)
     {
-        var employees = new List<GroupEmployeeModel>();
-        if (model != null)
+        var criteria = new GetEmployeesInGroupScopeCriteria
         {
-            var criteria = new GetEmployeesInGroupScopeCriteria
-            {
-                Query = model.Keyword,
-                IsDeleteUser = model.IsDelete,
-                EnableUser = model.IsEnable
-            };
-            employees = (await baseService.GetDataAsync<GroupEmployeeModel>(criteria)).ToList();
-        }
+            Query = model.Keyword,
+            IsDeleteUser = model.IsDelete,
+            EnableUser = model.IsEnable,
+            HasPermissionViewAll = true
+        };
+        var employees = await baseService.GetDataAsync<GroupEmployeeModel>(criteria);
 
         return Ok(employees);
     }

@@ -97,6 +97,15 @@ namespace HRM.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Account Type.
+        /// </summary>
+        public static string AccountType {
+            get {
+                return ResourceManager.GetString("AccountType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Per 5 Years Accumulation Leave.
         /// </summary>
         public static string AccumulationLeave {
@@ -655,11 +664,20 @@ namespace HRM.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to BU ID.
+        ///   Looks up a localized string similar to BU.
         /// </summary>
         public static string BUIdShort {
             get {
                 return ResourceManager.GetString("BUIdShort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to BU Management.
+        /// </summary>
+        public static string BUManagement {
+            get {
+                return ResourceManager.GetString("BUManagement", resourceCulture);
             }
         }
         
@@ -1209,6 +1227,15 @@ namespace HRM.Resources {
         public static string CtrID {
             get {
                 return ResourceManager.GetString("CtrID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Currency.
+        /// </summary>
+        public static string Currency {
+            get {
+                return ResourceManager.GetString("Currency", resourceCulture);
             }
         }
         
@@ -1911,6 +1938,15 @@ namespace HRM.Resources {
         public static string EmployeeShift {
             get {
                 return ResourceManager.GetString("EmployeeShift", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Employee Status.
+        /// </summary>
+        public static string EmployeeStatus {
+            get {
+                return ResourceManager.GetString("EmployeeStatus", resourceCulture);
             }
         }
         
@@ -3877,6 +3913,15 @@ namespace HRM.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Outsourced Employee.
+        /// </summary>
+        public static string OutsourcedEmployee {
+            get {
+                return ResourceManager.GetString("OutsourcedEmployee", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Override.
         /// </summary>
         public static string Override {
@@ -4521,6 +4566,15 @@ namespace HRM.Resources {
         public static string Roles {
             get {
                 return ResourceManager.GetString("Roles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Salary.
+        /// </summary>
+        public static string Salary {
+            get {
+                return ResourceManager.GetString("Salary", resourceCulture);
             }
         }
         
@@ -5502,15 +5556,6 @@ namespace HRM.Resources {
         public static string UnitHead {
             get {
                 return ResourceManager.GetString("UnitHead", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Unit Management.
-        /// </summary>
-        public static string UnitManagement {
-            get {
-                return ResourceManager.GetString("UnitManagement", resourceCulture);
             }
         }
         

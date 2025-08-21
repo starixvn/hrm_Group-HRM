@@ -7,8 +7,8 @@
     <Compile Remove="OvertimeReportController.cs" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Fanex.Data" Version="4.3.3" />
-    <PackageReference Include="Fanex.Data.Repository" Version="4.3.3" />
+    <PackageReference Include="Fanex.Data" Version="4.3.4.5" />
+    <PackageReference Include="Fanex.Data.Repository" Version="4.3.4.5" />
     <PackageReference Include="IPAddressRange" Version="6.2.0" />
   </ItemGroup>
   <ItemGroup>

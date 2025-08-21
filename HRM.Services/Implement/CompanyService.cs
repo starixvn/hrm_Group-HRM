@@ -35,18 +35,16 @@ public class CompanyService(
         return await baseService.GetDataAsync<Company>(criteria);
     }
 
-    public async Task<string> GetDomain(int companyId)
+    public async Task<string> GetDomain(short companyId)
     {
-        GetDomainByCompanyIdCriteria criteria = new()
+        var criteria = new GetDomainByCompanyIdCriteria
         {
             CompanyId = companyId
         };
-        var mailConfig = await baseService.GetDataEntityAsync<string>(criteria);
-
-        return mailConfig;
+        return await baseService.GetDataEntityAsync<string>(criteria);
     }
 
-    public async Task<IEnumerable<SubCompany>> GetSubCompanies(int? companyId)
+    public async Task<IEnumerable<SubCompany>> GetSubCompanies(short? companyId)
     {
         var criteria = new GetSubCompaniesCriteria
         {
@@ -80,43 +78,49 @@ public class CompanyService(
         return await baseService.GetDataEntityAsync<string>(criteria);
     }
 
-    public string GetDomainName()
-    {
-        var httpContext = httpContextAccessor.HttpContext
-                          ?? throw new InvalidOperationException("HttpContext is unavailable.");
-        var protocol = httpContext.Request.Headers["x-forwarded-proto"].ToString();
-        return $"{(!string.IsNullOrWhiteSpace(protocol) ? protocol : httpContext.Request.Scheme)}://{httpContext.Request.Host.Value}";
-    }
-
     public async Task<IEnumerable<CompanySetting>> GetSettingCompanyAsync()
     {
         var criteria = new GetCompanyCriteria();
         return await baseService.GetDataAsync<CompanySetting>(criteria);
     }
 
-    public async Task<List<Currency>> GetCurrencyAsync()
+    public async Task<IEnumerable<Currency>> GetCurrencyAsync()
     {
         var criteria = new GetCurrencyCriteria();
-        var result = await baseService.GetDataAsync<Currency>(criteria);
-        return result.ToList();
+        return await baseService.GetDataAsync<Currency>(criteria);
     }
 
-    public async Task<CompanySetting> GetByIdAsync(int companyId)
+    public async Task<CompanySetting> GetByIdAsync(short companyId)
     {
         var criteria = new GetByIdCriteria
         {
             CompanyId = companyId
         };
-        return await baseService.GetDataEntityAsync<CompanySetting>(criteria);
+        var (companies, subCompanyEmployees) = await baseService.FetchMultipleAsync<CompanySetting, SubCompanyEmployee>(criteria);
+        var company = companies.FirstOrDefault();
+        if (company != null)
+        {
+            company.SubCompanyEmployees = subCompanyEmployees.ToList() ?? [];
+
+        }
+
+        return company;
     }
 
-    public async Task<List<SubCompanyEmployee>> CountEmployeeById(int companyId)
+    public async Task<IEnumerable<CompanySite>> GetAllDomainAsync(short? companyId = null)
     {
-        var criteria = new CountEmployeeByIdCriteria
+        var criteria = new GetDomainCriteria
         {
             CompanyId = companyId
         };
-        var result = await baseService.GetDataAsync<SubCompanyEmployee>(criteria);
-        return result.ToList();
+        return await baseService.GetDataAsync<CompanySite>(criteria);
+    }
+
+    private string GetDomainName()
+    {
+        var httpContext = httpContextAccessor.HttpContext
+                          ?? throw new InvalidOperationException("HttpContext is unavailable.");
+        var protocol = httpContext.Request.Headers["x-forwarded-proto"].ToString();
+        return $"{(!string.IsNullOrWhiteSpace(protocol) ? protocol : httpContext.Request.Scheme)}://{httpContext.Request.Host.Value}";
     }
 }

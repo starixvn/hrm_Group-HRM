@@ -10,22 +10,20 @@ namespace HRM.Services.Interfaces
 
         Task<IEnumerable<Company>> GetAllCompany();
 
-        Task<string> GetDomain(int companyId);
+        Task<string> GetDomain(short companyId);
 
-        Task<IEnumerable<SubCompany>> GetSubCompanies(int? companyId);
-
-        Task<List<SubCompanyEmployee>> CountEmployeeById(int companyId);
+        Task<IEnumerable<SubCompany>> GetSubCompanies(short? companyId);
 
         Task<bool> GetIsShowSubCompanyValue();
 
         Task<IEnumerable<CompanySetting>> GetSettingCompanyAsync();
 
-        Task<List<Currency>> GetCurrencyAsync();
+        Task<IEnumerable<Currency>> GetCurrencyAsync();
 
-        Task<CompanySetting> GetByIdAsync(int companyId);
+        Task<CompanySetting> GetByIdAsync(short companyId);
 
         Task<string> GetWhitelistIps();
-        
-        string GetDomainName();
+
+        Task<IEnumerable<CompanySite>> GetAllDomainAsync(short? companyId = null);
     }
 }

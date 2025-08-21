@@ -52,7 +52,6 @@ public static class FunctionKey
     public const string WorkingCalendarReport = "WorkingCalendarReport";
     public const string ManpowerReport = "ManpowerReport";
     public const string ManpowerCategoryReport = "ManpowerCategoryReport";
-    public const string DepartmentManagement = "DepartmentManagement";
     public const string MealAllowanceReport = "MealAllowanceReport";
     public const string DisciplineSummaryPerYear = "DisciplineSummaryPerYear";
 
@@ -86,9 +85,18 @@ public static class FunctionKey
     public const string PayrollManagement = "PayrollManagement";
 
     //Group Space
+    public const string DepartmentManagement = "DepartmentManagement";
+
+    public const string DepartmentManagement_MyDepartment = "DepartmentManagement-MyDepartment";
+    public const string DepartmentManagement_AllDepartment = "DepartmentManagement-AllDepartment";
+
     public const string GroupTeamManagement = "GroupTeamManagement";
+    public const string GroupTeamManagement_MyTeam = "GroupTeamManagement-MyTeam";
+    public const string GroupTeamManagement_AllTeam = "GroupTeamManagement-AllTeam";
 
     public const string GroupEmployeeList = "GroupEmployeeList";
+    public const string GroupEmployeeList_MyMember = "GroupEmployeeList-MyMember";
+    public const string GroupEmployeeList_AllEmployee = "GroupEmployeeList-AllEmployee";
     public const string SecondmentCompanyList = "SecondmentCompanyList";
     public const string HeadcountReport = "HeadcountReport";
     public const string CompanyManagement = "CompanyManagement";

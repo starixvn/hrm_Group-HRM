@@ -8,10 +8,10 @@ const Table = ({ data, onDelete }) => {
             <thead>
                 <tr>
                     <th>#</th>
-                    <th>Unit ID</th>
-                    <th>Unit Code</th>
-                    <th>Unit Category</th>
-                    <th>Unit Type</th>
+                    <th>BU ID</th>
+                    <th>BU Code</th>
+                    <th>BU Category</th>
+                    <th>BU Type</th>
                     <th>Accountable Area</th>
                     <th>Personal In Charge</th>
                     <th>Active</th>

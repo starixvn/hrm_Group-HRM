@@ -1431,8 +1431,8 @@
   <data name="Unit" xml:space="preserve">
     <value>Unit</value>
   </data>
-  <data name="UnitManagement" xml:space="preserve">
-    <value>Unit Management</value>
+  <data name="BUManagement" xml:space="preserve">
+    <value>BU Management</value>
   </data>
   <data name="EditUnit" xml:space="preserve">
     <value>Edit Unit</value>
@@ -2080,7 +2080,7 @@
     <value>M Grade</value>
   </data>
   <data name="BUIdShort" xml:space="preserve">
-    <value>BU ID</value>
+    <value>BU</value>
   </data>
   <data name="GroupEmployee" xml:space="preserve">
     <value>Group Employee</value>
@@ -2129,5 +2129,20 @@
   </data>
   <data name="AutoApproved" xml:space="preserve">
     <value>Auto-Approved</value>
+  </data>
+  <data name="Salary" xml:space="preserve">
+    <value>Salary</value>
+  </data>
+  <data name="Currency" xml:space="preserve">
+    <value>Currency</value>
+  </data>
+  <data name="AccountType" xml:space="preserve">
+    <value>Account Type</value>
+  </data>
+  <data name="OutsourcedEmployee" xml:space="preserve">
+    <value>Outsourced Employee</value>
+  </data>
+  <data name="EmployeeStatus" xml:space="preserve">
+    <value>Employee Status</value>
   </data>
 </root>

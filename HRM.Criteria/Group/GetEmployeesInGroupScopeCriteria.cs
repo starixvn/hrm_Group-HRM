@@ -55,11 +55,14 @@ public class GetEmployeesInGroupScopeCriteria : CriteriaBase
     public bool? IsAllUser { get; set; }
 
     public string CompanyIds { get; set; }
+    public bool HasPermissionViewAll { get; set; }
+    public int? ActorId { get; set; }
 
-    public override string GetSettingKey()
-    {
-        return "Employee_GroupScope_Get";
-    }
+    public bool? IsCtrID { get; set; }
+
+    public bool? IsOutsource { get; set; }
+
+    public override string GetSettingKey() => "Employee_GroupScope_Get";
 
     public override bool IsValid() => true;
 }

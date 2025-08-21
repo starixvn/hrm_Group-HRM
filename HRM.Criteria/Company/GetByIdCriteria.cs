@@ -4,7 +4,7 @@ using Fanex.Data.Repository;
 
 public class GetByIdCriteria : CriteriaBase
 {
-    public int CompanyId { get; set; }
+    public short CompanyId { get; set; }
 
     public override string GetSettingKey() => "CompanySetting_GetById";
 

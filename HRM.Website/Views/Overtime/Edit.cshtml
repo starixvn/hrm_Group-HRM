@@ -1,4 +1,5 @@
 ﻿@using HRM.Core.Enums
+@using HRM.Models.Overtime
 @using HRM.Resources
 @using HRM.Website.Helper
 @using Microsoft.AspNetCore.Mvc.TagHelpers
@@ -29,14 +30,12 @@
                     @Html.Label(Labels.Verifier, Labels.Verifier, new { @class = "control-label" })
                 </div>
                 <div class="select-form">
-                    @if (Model.Verifiers.Count() > 1 || Model.AutoApproveRequest)
-                    {
-                        @Html.DropDownListFor(model => model.VerifierId, new SelectList(Model.Verifiers, "OwnerId", "NickName"), Labels.SelectVerifier, new { @class = "form-control" })
-                    }
-                    else
-                    {
-                        @Html.DropDownListFor(model => model.VerifierId, new SelectList(Model.Verifiers, "OwnerId", "NickName"), new { @class = "form-control" })
-                    }
+                    @Html.DropDownListFor(
+                        x => x.VerifierId,
+                        new SelectList(Model.Verifiers, "OwnerId", "NickName"),
+                        Model.Verifiers.Count() > 1 || Model.AutoApproveRequest ? Labels.SelectVerifier : null,
+                        new { @class = "form-control" }
+                    )
                 </div>
             </div>
             <div class="form-group form-group--m">
@@ -44,14 +43,12 @@
                     @Html.Label(Labels.Approver, Labels.Approver, new { @class = "control-label" })
                 </div>
                 <div class="select-form">
-                    @if (Model.Approvers.Count() > 1 || Model.AutoApproveRequest)
-                    {
-                        @Html.DropDownListFor(model => model.ApproverId, new SelectList(Model.Approvers, "OwnerId", "NickName"), Labels.SelectApprover, new { @class = "form-control" })
-                    }
-                    else
-                    {
-                        @Html.DropDownListFor(model => model.ApproverId, new SelectList(Model.Approvers, "OwnerId", "NickName"), new { @class = "form-control" })
-                    }
+                    @Html.DropDownListFor(
+                        x => x.ApproverId,
+                        new SelectList(Model.Approvers, "OwnerId", "NickName"),
+                        Model.Approvers.Count() > 1 || Model.AutoApproveRequest ? Labels.SelectApprover : null,
+                        new { @class = "form-control" }
+                    )
                 </div>
             </div>
             <div class="form-group form-group--m">
@@ -124,13 +121,7 @@
                             }
                         </td>
                         <td class="cell-overtime">
-                            @if (request.ActualWorkingHours > 0
-                                && !request.IsKeepInView
-                                && !request.IsOffDay && !request.IsHoliday
-                                && request.ActualWorkingHours > Model.MonthlyRequest.Requester.WorkingHours)
-                            {
-                                @Html.TextBoxFor(model => request.NormalHours, new { @class = "normalHours form-control", maxlength = 5, autocomplete = "off" })
-                            }
+                            @{ RenderNormalHours(request); }
                         </td>
                         <td class="cell-overtime">
                             @if (request.ActualWorkingHours > 0 && !request.IsKeepInView && request.IsOffDay && !request.IsHoliday)
@@ -140,40 +131,16 @@
                         </td>
                         <td class="cell-overtime">
                             @if (request.ActualWorkingHours > 0 && !request.IsKeepInView
-                                && request.IsHoliday && request.HolidayTypeId == (byte)HolidayType.Regular)
+                                                               && request.IsHoliday && request.HolidayTypeId == (byte)HolidayType.Regular)
                             {
                                 @Html.TextBoxFor(model => request.PublicHours, new { @class = "publicHours form-control", maxlength = 5, autocomplete = "off" })
                             }
                         </td>
                         <td class="cell-overtime">
-                            @{ 
-                                className = $"specialHours form-control {(request.IsHoliday && request.HolidayTypeId == (byte)HolidayType.Special ? "specialPH" : string.Empty)}";
-                            }
-                            @if ((Model.MonthlyRequest.Requester.SpecialOT > 0
-                                && request.ActualWorkingHours > 0
-                                && !request.IsKeepInView
-                                && !request.IsOffDay && !request.IsHoliday
-                                && request.ActualWorkingHours >= Model.MonthlyRequest.Requester.WorkingHours + Model.MonthlyRequest.Requester.SpecialOT)
-                                || request.IsHoliday && request.HolidayTypeId == (byte)HolidayType.Special)
-                            {
-                                @Html.TextBoxFor(model => request.SpecialHours, new { @class = className, maxlength = 5, autocomplete = "off" })
-                            }
-                            else
-                            {
-                                if (request.SpecialHours > 0)
-                                {
-                                    @Html.TextBoxFor(model => request.SpecialHours, new { @class = className, maxlength = 5, autocomplete = "off", @readonly = "readonly" })
-                                }
-                            }
+                            @{ RenderSpecialHours(request); }
                         </td>
                         <td>
-                            @if (request.ActualWorkingHours > 0 && !request.IsKeepInView)
-                            {
-                                if (request.IsOffDay || request.IsHoliday || request.ActualWorkingHours > Model.MonthlyRequest.Requester.WorkingHours)
-                                {
-                                    @Html.TextBoxFor(model => request.Remark, new { @class = "remark form-control", maxlength = 2000, autocomplete = "off" })
-                                }
-                            }
+                            @{ RenderRemark(request); }
                         </td>
                     </tr>
                 }
@@ -209,3 +176,45 @@
         </tfoot>
     </table>
 </form>
+@{
+    void RenderNormalHours(DailyOvertimeRequest request)
+    {
+        if (request.ActualWorkingHours > 0
+            && !request.IsKeepInView
+            && !request.IsOffDay && !request.IsHoliday
+            && request.ActualWorkingHours > Model.MonthlyRequest.Requester.WorkingHours)
+        {
+            @Html.TextBoxFor(model => request.NormalHours, new { @class = "normalHours form-control", maxlength = 5, autocomplete = "off" })
+        }
+    }
+
+    void RenderSpecialHours(DailyOvertimeRequest request)
+    {
+        var className = $"specialHours form-control {(request.IsHoliday && request.HolidayTypeId == (byte)HolidayType.Special ? "specialPH" : string.Empty)}";
+        if ((Model.MonthlyRequest.Requester.SpecialOT > 0
+              && request.ActualWorkingHours > 0
+              && !request.IsKeepInView
+              && !request.IsOffDay && !request.IsHoliday
+              && request.ActualWorkingHours >= Model.MonthlyRequest.Requester.WorkingHours + Model.MonthlyRequest.Requester.SpecialOT)
+             || request.IsHoliday && request.HolidayTypeId == (byte)HolidayType.Special)
+        {
+            @Html.TextBoxFor(model => request.SpecialHours, new { @class = className, maxlength = 5, autocomplete = "off" })
+        }
+        else
+        {
+            if (request.SpecialHours > 0)
+            {
+                @Html.TextBoxFor(model => request.SpecialHours, new { @class = className, maxlength = 5, autocomplete = "off", @readonly = "readonly" })
+            }
+        }
+    }
+
+    void RenderRemark(DailyOvertimeRequest request)
+    {
+        if (request.ActualWorkingHours > 0 && !request.IsKeepInView
+            && (request.IsOffDay || request.IsHoliday || request.ActualWorkingHours > Model.MonthlyRequest.Requester.WorkingHours))
+        {
+            @Html.TextBoxFor(model => request.Remark, new { @class = "remark form-control", maxlength = 2000, autocomplete = "off" })
+        }
+    }
+}

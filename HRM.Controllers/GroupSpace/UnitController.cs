@@ -10,7 +10,7 @@ using HRM.Services.Interfaces;
 using HRM.ViewModels.Unit;
 using Microsoft.AspNetCore.Mvc;
 
-namespace HRM.Controllers;
+namespace HRM.Controllers.GroupSpace;
 
 public class UnitController(
     IUserControlSession session,

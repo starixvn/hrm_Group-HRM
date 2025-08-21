@@ -1,17 +1,17 @@
-﻿
-namespace HRM.Controllers;
+﻿namespace HRM.Controllers.GroupSpace;
 
 using System;
+using System.Linq;
 using System.Threading.Tasks;
-using Core.Constants;
 using Core;
+using Core.Constants;
 using Core.Filters;
 using Criteria.Department;
+using Criteria.Employee;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
 using HRM.Core.Models;
 using HRM.Core.Services;
-using Criteria.Employee;
 using Microsoft.AspNetCore.Mvc;
 using Services.Interfaces;
 using ViewModels.Department;
@@ -34,14 +34,20 @@ public class DepartmentController(
     [HrmPermission(Policy.Read, FunctionKey.DepartmentManagement)]
     public async Task<IActionResult> GetDepartments([FromBody] GetDepartmentViewModel request)
     {
+        var hasPermissionViewAll = session.HasPermissionOnFunction(FunctionKey.DepartmentManagement_AllDepartment, Policy.Read);
         var departments = await departmentService.GetDepartmentAsync(request.IsActive, request.UnitId);
-        return new JsonResult(departments);
+        if (!hasPermissionViewAll)
+        {
+            departments = departments.Where(x => x.PICEmpId == EmployeeSession.EmpId || x.Unit?.PICEmpId == EmployeeSession.EmpId).ToList();
+        }
+
+        return Json(departments);
     }
 
     public async Task<IActionResult> GetUnits()
     {
         var units = await unitService.GetUnitAsync();
-        return new JsonResult(units);
+        return Json(units);
     }
 
     [HrmPermission(Policy.Host, FunctionKey.DepartmentManagement)]
@@ -57,7 +63,7 @@ public class DepartmentController(
         var commandResult = new CommandResult();
         if (model == null || !ModelState.IsValid)
         {
-            return new JsonResult(commandResult);
+            return Json(commandResult);
         }
 
         var criteria = new InsertDepartmentCriteria
@@ -73,7 +79,7 @@ public class DepartmentController(
         };
         commandResult = await baseService.ExecuteNonQueryAsync(criteria);
 
-        return new JsonResult(commandResult);
+        return Json(commandResult);
     }
 
     [HrmPermission(Policy.Host, FunctionKey.DepartmentManagement)]
@@ -94,7 +100,7 @@ public class DepartmentController(
             Units = units
         };
 
-        return new JsonResult(model);
+        return Json(model);
     }
 
     [HrmPermission(Policy.Host, FunctionKey.DepartmentManagement)]
@@ -110,7 +116,7 @@ public class DepartmentController(
         var commandResult = new CommandResult();
         if (model == null || !ModelState.IsValid)
         {
-            return new JsonResult(commandResult);
+            return Json(commandResult);
         }
         var criteria = new UpdateDepartmentCriteria
         {
@@ -126,7 +132,7 @@ public class DepartmentController(
         };
         commandResult = await baseService.ExecuteNonQueryAsync(criteria);
 
-        return new JsonResult(commandResult);
+        return Json(commandResult);
     }
 
     [HttpPost]
@@ -135,7 +141,7 @@ public class DepartmentController(
     {
         var commandResult = await departmentService.DeleteAsync(session.UserId, request.Id);
 
-        return new JsonResult(commandResult);
+        return Json(commandResult);
     }
 
     [HttpGet]

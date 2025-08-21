@@ -1,10 +1,13 @@
 ﻿using System;
+using HRM.Core.Enums;
 
 namespace HRM.Models.Group;
 
 public class GroupEmployeeModel
 {
     public int? CtrId { get; set; }
+
+    public string CtrIdFormatted => CtrId is not null ? CtrId.ToString().PadLeft(6, '0') : string.Empty;
 
     public int EmpId { get; set; }
 
@@ -25,18 +28,17 @@ public class GroupEmployeeModel
     public string UnitId { get; set; }
 
     public string UnitCode { get; set; }
-
+    public int UnitPICEmpId { get; set; }
     public string UnitPIC { get; set; }
 
     public string DepartmentName { get; set; }
-    
+    public int DepartmentPICEmpId { get; set; }
     public string DepartmentPIC { get; set; }
-    
-    public string TeamName { get; set; }
-    
-    public string TeamPIC { get; set; }
 
-    public string TeamCode{ get; set; }
+    public string TeamCode { get; set; }
+    public string TeamName { get; set; }
+    public int TeamPICEmpId { get; set; }
+    public string TeamPIC { get; set; }
 
     public DateTime? JoinedDate { get; set; }
 
@@ -63,4 +65,16 @@ public class GroupEmployeeModel
     public string LocalCurrency { get; set; }
 
     public string Location { get; set; }
+
+    public string Salary { get; set; }
+
+    public string Currency { get; set; }
+
+    public decimal? BasicSalary { get; set; }
+
+    public string CountryName { get; set; }
+
+    public Gender Gender { get; set; }
+
+    public DateTime DOB { get; set; }
 }

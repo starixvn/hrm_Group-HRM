@@ -2,11 +2,11 @@
 @using HRM.Resources
 @using HRM.ViewModels
 @using HRM.Website.Helper
-@model IList<HRM.Models.Group.GroupEmployeeModel>
+@model IEnumerable<HRM.Models.Group.GroupEmployeeModel>
 @{
     var pagerOption = (PagerOptionModel)ViewBag.PagerOption;
     const byte totalColumn = 24;
-    var hasPermissionToEdit = ViewBag.HasPermissionToEdit;
+    var hasPermissionToEdit = (bool)ViewBag.HasPermissionToEdit;
 }
 @section css {
     <link href="~/dist/styles/group.employee.list.index.css" rel="stylesheet" asp-append-version="true" />
@@ -37,12 +37,6 @@
             <th class="col-sorter col-150">
                 <div class="cell-control-wrapper">
                     @Labels.BUIdShort
-                    <div class="fa fa-sort cell-right-div"></div>
-                </div>
-            </th>
-            <th class="col-sorter col-150">
-                <div class="cell-control-wrapper">
-                    @Labels.UnitCode
                     <div class="fa fa-sort cell-right-div"></div>
                 </div>
             </th>
@@ -96,6 +90,18 @@
             </th>
             <th class="col-sorter col-150">
                 <div class="cell-control-wrapper">
+                    @Labels.Salary
+                    <div class="fa fa-sort cell-right-div"></div>
+                </div>
+            </th>
+            <th class="col-sorter col-150">
+                <div class="cell-control-wrapper">
+                    @Labels.Currency
+                    <div class="fa fa-sort cell-right-div"></div>
+                </div>
+            </th>
+            <th class="col-sorter col-150">
+                <div class="cell-control-wrapper">
                     @Labels.Company
                     <div class="fa fa-sort cell-right-div"></div>
                 </div>
@@ -117,11 +123,10 @@
                 var cssClass = employee.Enabled ? "" : "disabled";
                 <tr class="@cssClass">
                     <td>@index</td>
-                    <td>@employee.CtrId</td>
+                    <td>@employee.CtrIdFormatted</td>
                     <td class="align-left">@employee.EmployeeCode</td>
                     <td class="align-left">@employee.NickName</td>
-                    <td class="align-left bu-highlight">@employee.UnitId</td>
-                    <td class="align-left bu-highlight">@employee.UnitCode</td>
+                    <td class="align-left bu-highlight">@employee.UnitId - @employee.UnitCode</td>
                     <td class="align-left bu-highlight">@employee.UnitPIC</td>
                     <td class="align-left dept-highlight">@employee.DepartmentName</td>
                     <td class="align-left dept-highlight">@employee.DepartmentPIC</td>
@@ -135,6 +140,8 @@
                             @employee.JoinedDate.Value.ToDateMonthYearFormatedDate()
                         }
                     </td>
+                    <td class="align-right">@(employee.BasicSalary != null ? string.Format("{0:N0}", employee.BasicSalary) : "")</td>
+                    <td class="align-left">@employee.Currency</td>
                     <td class="align-left">@employee.Company</td>
                     @if (hasPermissionToEdit)
                     {
@@ -162,8 +169,8 @@
                 <td colspan="@totalColumn" id="pagination">
                     @{
                         var from = (pagerOption.CurrentPage - 1) * pagerOption.ItemsPerPage + 1;
-                        var to = from + (Model.Count - 1);
-                        IList<SelectListItem> itemsPerPageArray = pagerOption.ItemsPerPageArray.Select(x => new SelectListItem
+                        var to = from + (Model.Count() - 1);
+                        var itemsPerPageArray = pagerOption.ItemsPerPageArray.Select(x => new SelectListItem
                         {
                             Text = x.Text,
                             Value = x.Value,

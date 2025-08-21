@@ -17,7 +17,7 @@ public class CompanySetting : Company
 
     public string Currency { get; set; }
 
-    public List<string> WhitelistIPList
+    public IList<string> WhitelistIPList
     {
         get
         {
@@ -25,7 +25,7 @@ public class CompanySetting : Company
             {
                 return string.IsNullOrWhiteSpace(WhitelistIPs)
                     ? []
-                    : JsonSerializer.Deserialize<List<string>>(WhitelistIPs) ?? [];
+                    : JsonSerializer.Deserialize<IList<string>>(WhitelistIPs) ?? [];
             }
             catch
             {
@@ -34,7 +34,7 @@ public class CompanySetting : Company
         }
     }
 
-    public List<string> URLList
+    public IList<string> URLList
     {
         get
         {
@@ -51,5 +51,6 @@ public class CompanySetting : Company
         }
     }
 
-    public List<SubCompany> SubCompanyList { get; set; }
+    public IList<SubCompany> SubCompanyList { get; set; }
+    public IList<SubCompanyEmployee> SubCompanyEmployees { get; set; }
 }

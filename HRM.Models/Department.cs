@@ -6,6 +6,8 @@ public class Department : EntityBase<int>
 
     public int GroupDeptId { get; set; }
 
+    public int? PICCtrId { get; set; }
+
     public int PICEmpId { get; set; }
 
     public string PICEmployeeName { get; set; }
