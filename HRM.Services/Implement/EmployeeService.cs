@@ -236,7 +236,7 @@ public class EmployeeService(
     {
         var criteria = new EditPasswordCriteria
         {
-            EmpId = model.EmployeeId,
+            EmpId = model.UserId,
             Password = model.Password,
             PasswordReset = model.IsReset,
             ModifiedBy = actorId
