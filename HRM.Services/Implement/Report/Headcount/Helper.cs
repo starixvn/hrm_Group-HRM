@@ -55,7 +55,7 @@ public static class Helper
 
         if (year == currentDate.Year)
         {
-            return currentDate.Month - 1;
+            return currentDate.Month;
         }
 
         return 0;
