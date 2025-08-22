@@ -164,28 +164,37 @@ const AppContainer = () => {
   }
 
   return (
-    <Formik
-      validateOnBlur={false}
-      validateOnChange={false}
-      enableReinitialize={true}
-      initialValues={{
-        id: unit.id || '',
-        code: unit.code || '',
-        name: unit.name || '',
-        groupUnitId: unit.groupUnitId || 0,
-        category: unit.category || '',
-        type: unit.type || '',
-        accountableArea: unit.accountableArea || '',
-        picEmpId: unit.picEmpId || 0,
-        isActive: unit.isActive || false
-      }}
+    <CustomFormik 
+      unit={unit}
       validationSchema={validationSchema}
-      onSubmit={handleSubmit}
-    >
-      {renderForm}
-    </Formik>
+      handleSubmit={handleSubmit}
+      renderForm={renderForm}
+    />
   );
 };
+
+const CustomFormik = ({unit, validationSchema, handleSubmit, renderForm}) => {
+  return <Formik
+            validateOnBlur={false}
+            validateOnChange={false}
+            enableReinitialize={true}
+            initialValues={{
+              id: unit.id || '',
+              code: unit.code || '',
+              name: unit.name || '',
+              groupUnitId: unit.groupUnitId || 0,
+              category: unit.category || '',
+              type: unit.type || '',
+              accountableArea: unit.accountableArea || '',
+              picEmpId: unit.picEmpId || 0,
+              isActive: unit.isActive || false
+            }}
+            validationSchema={validationSchema}
+            onSubmit={handleSubmit}
+          >
+          {renderForm}
+        </Formik>
+}
 
 export default AppContainer;
 
