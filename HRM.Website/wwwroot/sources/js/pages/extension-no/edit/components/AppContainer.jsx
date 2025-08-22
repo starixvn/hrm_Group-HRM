@@ -3,11 +3,10 @@ import React, { useEffect, useState } from 'react';
 import { object, string } from 'yup'
 import axios from 'axios';
 import toastr from 'toastr';
-import { Formik } from 'formik';
-
-import RenderForm from '../../RenderForm';
 
 import { axiosError, resolveClientUrl, toastOptions } from '../../../../shared/common.functions';
+import { Formik } from 'formik';
+import RenderForm from '../../RenderForm';
 
 const AppContainer = () => {
     const [extensionDetail, setExtensionDetail] = useState(null);
@@ -143,13 +142,34 @@ const AppContainer = () => {
     if (extensionDetail == null) {
         return null;
     };
+
+    return (
+        <CustomFormik
+            selectEmployee={selectEmployee}            
+            extensionDetail={extensionDetail}          
+            selectGroup={selectGroup}                  
+            employees={employees}                      
+            isInternal={isInternal}                    
+            selectExtension={selectExtension}          
+            handleSubmit={handleSubmit}                
+            handleChangeInternal={handleChangeInternal} 
+            handleSelectEmployee={handleSelectEmployee}
+            setSelectGroup={setSelectGroup}            
+            getEmployees={getEmployees}    
+            editExtensionSchema={editExtensionSchema}          
+        />
+    );
+};
+
+const CustomFormik = ({ selectEmployee, extensionDetail, selectGroup, employees, isInternal, 
+    selectExtension, handleSubmit, handleChangeInternal, handleSelectEmployee, setSelectGroup, getEmployees,
+    editExtensionSchema }) => {
     const empId = selectEmployee && selectEmployee.id || extensionDetail.empId;
     const emPloyee = selectEmployee && selectEmployee.value || '';
     const fullName = selectEmployee && selectEmployee.fullName || extensionDetail.fullName || '';
     const teamId = selectGroup || extensionDetail.teamId;
     const nickName = selectEmployee && selectEmployee.nickName || extensionDetail.nickName || '';
     const extensionNo = extensionDetail.extensionNo || '';
-
     return (
         <Formik
             validateOnBlur={false}
@@ -183,6 +203,7 @@ const AppContainer = () => {
             )}
         </Formik>
     );
-};
+}
+
 
 export default AppContainer;
