@@ -23,9 +23,10 @@ import ToastLayout from '../../shared/layouts/ToastLayout';
 import buildData from '../../shared/components/react-tree-multiselect/buildData';
 import SweetModalDialog from '../../shared/components/SweetModalDialog';
 import { renderCompanySelect } from '../../shared/components/CompanySelect';
+import ShiftMultipleModal from './ShiftMultipleModal';
+import WeeklyDefaultShiftModal from './WeeklyDefaultShiftModal';
 import Search from './Search';
-import ScheduleTable from './ScheduleTable';
-import ScheduleModals from './ScheduleModals';
+import Table from './table/table';
 
 const EXPORT_DATE_FORMAT = 'DD-MMM-YYYY';
 const FORM_URLENCODED_HEADER = 'application/x-www-form-urlencoded';
@@ -1510,7 +1511,7 @@ export default class App extends Component {
                         this.handleExportExcelDriverPickup
                     }
                 />
-                <ScheduleTable
+                <Table
                     isHost={isHost}
                     fromDate={this.selectedWeek.fromDate}
                     toDate={this.selectedWeek.toDate}
@@ -1544,24 +1545,57 @@ export default class App extends Component {
                     onSave={this.handleSave}
                     enableSyncWorkingShift={this.state.enableSyncWorkingShift}
                 />
-                <ScheduleModals
-                    showShiftMultipleModal={showShiftMultipleModal}
-                    showConfirmRefreshDataModal={showConfirmRefreshDataModal}
-                    showConfirmSyncDataModalDialog={showConfirmSyncDataModalDialog}
-                    editWeeklyDefaultShift={editWeeklyDefaultShift}
-                    shiftOptions={this.shiftOptions}
-                    OffDayShiftId={OffDayShiftId}
-                    isHost={isHost}
-                    currentWeek={this.currentWeek}
-                    onCloseShiftMultipleModal={this.handleCloseShiftMultipleModal}
-                    onCloseWeeklyDefaultShiftModal={this.handleCloseWeeklyDefaultShiftModal}
-                    onChangeMultipleShift={this.handleChangeMultipleShift}
-                    onChangeWeeklyDefaultShift={this.handleChangeWeeklyDefaultShift}
-                    onCloseConfirmRefreshDataModal={this.handleCloseConfirmRefreshDataModal}
-                    onSubmitRefreshData={this.handleSubmitRefreshData}
-                    onCloseConfirmSyncDataModalDialog={this.handleCloseConfirmSyncDataModalDialog}
-                    onSubmitSyncData={this.handleSubmitSyncData}
-                />
+                {showShiftMultipleModal && (
+                    <ShiftMultipleModal
+                        show={showShiftMultipleModal}
+                        onHide={this.handleCloseShiftMultipleModal}
+                        shiftOptions={this.shiftOptions.filter(
+                            shift =>shift.id !== OffDayShiftId
+                        )}
+                        onSubmit={this.handleChangeMultipleShift}
+                    />
+                )}
+                {editWeeklyDefaultShift.show && (
+                    <WeeklyDefaultShiftModal
+                        show={editWeeklyDefaultShift.show}
+                        isHost={isHost}
+                        nickname={editWeeklyDefaultShift.nickname}
+                        data={editWeeklyDefaultShift.data}
+                        isUsedWeeklyDefaultShift={
+                            editWeeklyDefaultShift.isUsedWeeklyDefaultShift
+                        }
+                        fromDate={moment(this.currentWeek.toDate)
+                            .add(1, 'days')
+                            .format(DateFormat)}
+                        shiftOptions={this.shiftOptions}
+                        onHide={this.handleCloseWeeklyDefaultShiftModal}
+                        onSubmit={this.handleChangeWeeklyDefaultShift}
+                    />
+                )}
+                {showConfirmRefreshDataModal && (
+                    <SweetModalDialog
+                        show={showConfirmRefreshDataModal}
+                        contents={
+                            <p>
+                                It looks like you have been editing something.
+                                If you refresh before saving, your changes will
+                                be lost.
+                            </p>
+                        }
+                        onHide={this.handleCloseConfirmRefreshDataModal}
+                        onSubmit={this.handleSubmitRefreshData}
+                    />
+                )}
+                {showConfirmSyncDataModalDialog && (
+                    <SweetModalDialog
+                        show={showConfirmSyncDataModalDialog}
+                        contents={
+                            <p>Are you sure you want to sync data from OWP?</p>
+                        }
+                        onHide={this.handleCloseConfirmSyncDataModalDialog}
+                        onSubmit={this.handleSubmitSyncData}
+                    />
+                )}
             </Fragment>
         );
     }
