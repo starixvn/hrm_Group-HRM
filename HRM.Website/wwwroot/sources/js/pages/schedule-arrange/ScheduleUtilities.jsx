@@ -65,13 +65,12 @@ export const createScheduleUtilities = (component) => /* NOSONAR */ ({
             if (defaultShift !== null) {
                 component.scheduleAttrNames.forEach(attrName => {
                     const workDate = moment(members[eindex][attrName].workDate);
-                    if (
-                        workDate.isSameOrAfter(fromDate) &&
-                        !members[eindex][attrName].isDisabled &&
-                        !members[eindex][attrName].isHoliday &&
-                        !members[eindex][attrName].isOffDay &&
-                        members[eindex][attrName].shift === null
-                    ) {
+                    const isDateValid = workDate.isSameOrAfter(fromDate);
+                    const isScheduleValid = !members[eindex][attrName].isDisabled && 
+                                          !members[eindex][attrName].isHoliday && 
+                                          !members[eindex][attrName].isOffDay;
+                    
+                    if (isDateValid && isScheduleValid && members[eindex][attrName].shift === null) {
                         members[eindex][attrName] = {
                             ...members[eindex][attrName],
                             shift: defaultShift,
