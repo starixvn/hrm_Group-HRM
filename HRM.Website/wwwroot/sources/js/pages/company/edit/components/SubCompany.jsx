@@ -112,7 +112,7 @@ const SubCompany = ({ companyId, initialTags = [], onTagsChange, validTags = [] 
     });
   }, [tags, editingIndex, onTagsChange, resetEditing, validTags, companyId]);
 
-  const handleKeyDown = useCallback((e) => {
+  const handleKeyDown = useCallback(e => {
     if (e.key === 'Enter' && inputValue.trim() !== '' && !isLoading) {
       e.preventDefault();
       const trimmed = inputValue.trim();
@@ -127,7 +127,7 @@ const SubCompany = ({ companyId, initialTags = [], onTagsChange, validTags = [] 
     }
   }, [inputValue, editingIndex, isLoading, handleAddTag, handleEditTag, resetEditing]);
 
-  const handleChange = useCallback((e) => {
+  const handleChange = useCallback(e => {
     setInputValue(e.target.value);
   }, []);
 

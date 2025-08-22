@@ -29,15 +29,24 @@ const Table = ({ rolePermission, onChangePermission }) => {
     const updateParents = (permissions, parentId, target, checked) => {
         let isChecked = checked;
         const pindex = functions.findIndex(item => item.functionId === parentId);
-        if (permissions.findIndex(item => item.functionId === parentId) === - 1) {
+
+        if (permissions.findIndex(item => item.functionId === parentId) === -1) {
             permissions.push({ ...functions[pindex], isRead: false, isHost: false });
         }
 
         if (!checked) {
-            const childs = functions.filter(child => child.parentId === parentId
-                && permissions.filter(item => item.functionId === child.functionId
-                    && ((target === 'funcRead' && item.isRead) || (target === 'funcHost' && item.isHost))).length > 0);
-            isChecked = childs.length === 0 ? false : true;
+            const hasTarget = (child, item) => {
+                if (item.functionId !== child.functionId) return false;
+                if (target === "funcRead") return item.isRead;
+                if (target === "funcHost") return item.isHost;
+                return false;
+            };
+
+            const childs = functions.filter(child =>
+                permissions.some(item => hasTarget(child, item))
+            );
+
+            isChecked = childs.length > 0;
         }
 
         updatePermission(permissions, functions[pindex].functionId, target, isChecked);

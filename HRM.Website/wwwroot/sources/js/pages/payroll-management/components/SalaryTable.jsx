@@ -18,11 +18,11 @@ const SalaryTable = ({ data }) => {
     ];
 
     const totals = data.reduce((acc, item) => {
-        keys.forEach((key) => {
+        keys.forEach(key => {
             acc[key] += item[key] || 0;
         });
         return acc;
-    }, Object.fromEntries(keys.map((k) => [k, 0])));
+    }, Object.fromEntries(keys.map(k => [k, 0])));
 
     return (
         <div className="salary-table-section">
