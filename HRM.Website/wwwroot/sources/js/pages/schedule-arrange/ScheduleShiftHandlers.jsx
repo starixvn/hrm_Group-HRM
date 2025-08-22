@@ -1,36 +1,59 @@
 import { isEqual } from 'lodash';
 import { OffDayShiftId } from '../../shared/constants';
 
+const findIndices = (schedules, teamId, employeeId) => {
+    const gindex = schedules.findIndex(item => item.teamId === teamId);
+    const members = [...schedules[gindex].members];
+    const eindex = members.findIndex(item => item.employeeId === employeeId);
+    return { gindex, members, eindex };
+};
+
+const determineEffectiveShift = (member, attrName, shift) => {
+    if (shift !== null) return shift;
+    
+    if (member[attrName].isHoliday) return null;
+    
+    if (member.isUsedWeeklyDefaultShift) {
+        return member.weeklyDefaultShift[`${attrName.substring(0, 3)}Shift`];
+    }
+    
+    return member.defaultShift !== null ? { ...member.defaultShift } : null;
+};
+
+const processOffDayShift = (shift) => {
+    const isOffDay = shift !== null && shift.id === OffDayShiftId;
+    const processedShift = shift !== null && shift.id === OffDayShiftId ? null : shift;
+    return { isOffDay, processedShift };
+};
+
+const updateMemberSchedule = (member, attrName, shift, isOffDay, originalSchedule) => {
+    member[attrName] = {
+        ...member[attrName],
+        isOffDay,
+        isOffDayReplacement: false,
+        shift,
+        isModified: !isEqual(shift, originalSchedule.shift) ? true : originalSchedule.isModified,
+    };
+};
+
 export const createScheduleShiftHandlers = component => ({
     handleChangeShift: (teamId, employeeId, attrName, shift) => {
         const schedules = [...component.state.schedules];
-        const gindex = schedules.findIndex(item => item.teamId === teamId);
-        const members = [...schedules[gindex].members];
-        const eindex = members.findIndex(item => item.employeeId === employeeId);
+        const { gindex, members, eindex } = findIndices(schedules, teamId, employeeId);
         const member = { ...members[eindex] };
 
         if (shift !== null && isEqual(member[attrName].shift, shift)) {
             return;
         }
 
-        let defaultShift = member.defaultShift !== null ? { ...member.defaultShift } : null;
-        if (member.isUsedWeeklyDefaultShift) {
-            defaultShift = member.weeklyDefaultShift[`${attrName.substring(0, 3)}Shift`];
-        }
-
-        shift = shift === null && !member[attrName].isHoliday ? defaultShift : shift;
-        const isOffDay = shift !== null && shift.id === OffDayShiftId;
-        shift = shift !== null && shift.id === OffDayShiftId ? null : shift;
+        const effectiveShift = determineEffectiveShift(member, attrName, shift);
+        
+        const { isOffDay, processedShift } = processOffDayShift(effectiveShift);
+        
         const originalSchedule = component.originalSchedules[gindex].members[eindex][attrName];
-
-        member[attrName] = {
-            ...member[attrName],
-            isOffDay,
-            isOffDayReplacement: false,
-            shift,
-            isModified: !isEqual(shift, originalSchedule.shift) ? true : originalSchedule.isModified,
-        };
-
+        
+        updateMemberSchedule(member, attrName, processedShift, isOffDay, originalSchedule);
+        
         members[eindex] = member;
         schedules[gindex] = { ...schedules[gindex], members };
         component.setState({ schedules });
