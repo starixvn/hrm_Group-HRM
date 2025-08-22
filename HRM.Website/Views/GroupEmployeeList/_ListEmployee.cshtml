@@ -162,32 +162,4 @@
             @Html.Raw(RazorHelpers.DisplayNoInformation(totalColumn))
         }
     </tbody>
-    @if (Model.Any())
-    {
-        <tfoot>
-            <tr>
-                <td colspan="@totalColumn" id="pagination">
-                    @{
-                        var from = (pagerOption.CurrentPage - 1) * pagerOption.ItemsPerPage + 1;
-                        var to = from + (Model.Count() - 1);
-                        var itemsPerPageArray = pagerOption.ItemsPerPageArray.Select(x => new SelectListItem
-                        {
-                            Text = x.Text,
-                            Value = x.Value,
-                            Selected = x.Value == pagerOption.ItemsPerPage.ToString()
-                        }).ToList();
-                    }
-
-                    @Html.Hidden("CurrentPage", pagerOption.CurrentPage)
-                    @Html.Hidden("ItemsPerPage", pagerOption.ItemsPerPage)
-                    @Html.Hidden("TotalItem", pagerOption.TotalItem)
-                    @Html.DropDownList("ItemsPerPageOption", itemsPerPageArray, new { @class = "itemsPerPageOption form-control" })
-                    <div class="detailtext">
-                        Showing <strong>@from</strong> to <strong>@to</strong> of <strong>@pagerOption.TotalItem</strong> entries
-                    </div>
-                    <ul id="numberlist" class="pagination"></ul>
-                </td>
-            </tr>
-        </tfoot>
-    }
 </table>

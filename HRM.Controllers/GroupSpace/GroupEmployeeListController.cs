@@ -75,7 +75,7 @@ public class GroupEmployeeListController(
             IsDeleteUser = isDeleteUser,
             TitleId = model.JobTitleId,
             PageNumber = model.CurrentPage,
-            PageSize = model.ItemsPerPage,
+            PageSize = 5000,
             CompanyIds = model.CompanyIds,
             HasPermissionViewAll = hasPermissionViewAll,
             ActorId = session.UserId,
