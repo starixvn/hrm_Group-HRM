@@ -34,7 +34,7 @@ const SubCompany = ({ companyId, initialTags = [], onTagsChange, validTags = [] 
     clearInput();
   }, [clearInput]);
 
-  const handleAddTag = useCallback((trimmedValue) => {
+  const handleAddTag = useCallback(trimmedValue => {
     if (!trimmedValue) {
       return;
     }
@@ -71,7 +71,7 @@ const SubCompany = ({ companyId, initialTags = [], onTagsChange, validTags = [] 
     });
   }, [tags, onTagsChange, clearInput, validTags, companyId]);
 
-  const handleEditTag = useCallback((trimmedValue) => {
+  const handleEditTag = useCallback(trimmedValue => {
     if (!trimmedValue) {
       resetEditing();
       return;
@@ -131,12 +131,12 @@ const SubCompany = ({ companyId, initialTags = [], onTagsChange, validTags = [] 
     setInputValue(e.target.value);
   }, []);
 
-  const handleEdit = useCallback((index) => {
+  const handleEdit = useCallback(index => {
     setEditingIndex(index);
     setInputValue(tags[index].name);
   }, [tags]);
 
-  const handleRemove = useCallback((index) => {
+  const handleRemove = useCallback(index => {
     const tagToRemove = tags[index];
     
     if (tagToRemove.subCompanyId && tagToRemove.employeeCount > 0) {
@@ -182,7 +182,7 @@ const SubCompany = ({ companyId, initialTags = [], onTagsChange, validTags = [] 
       className={`tag-item ${editingIndex === index ? 'editing' : ''}`}
     >
       <span 
-        onClick={(e) => {
+        onClick={e => {
           e.preventDefault();
           e.stopPropagation();
           handleEdit(index);
@@ -208,7 +208,7 @@ const SubCompany = ({ companyId, initialTags = [], onTagsChange, validTags = [] 
       </span>
       <button
         type="button"
-        onClick={(e) => {
+        onClick={e => {
           e.preventDefault();
           e.stopPropagation();
           handleRemove(index);

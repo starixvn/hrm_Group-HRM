@@ -130,7 +130,7 @@ const AppContainer = () => {
                                 className="form-control">
                                 <option value='' />
                                 {initialValues.units
-                                    ? initialValues.units.map((unit) => (
+                                    ? initialValues.units.map(unit => (
                                           <option key={unit.id} value={unit.id}>
                                               {unit.code}-{unit.accountableArea}
                                           </option>

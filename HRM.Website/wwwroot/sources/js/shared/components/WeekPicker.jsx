@@ -33,7 +33,7 @@ export default class WeekPicker extends PureComponent {
 
         this.$el.weekpicker({
             firstDay: 1,
-            onSelect: function (unused1, unused2, startDate, endDate) {
+            onSelect: function (_unused1, _unused2, startDate, endDate) {
                 vm.props.onChange(moment(startDate).format(DateFormat), moment(endDate).format(DateFormat));
                 vm.$el.hide();
             }

@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import Filter from './Filter';
 
 const HeadcountReport = () => <Filter />;

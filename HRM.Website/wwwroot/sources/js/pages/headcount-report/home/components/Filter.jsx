@@ -19,7 +19,7 @@ const Filter = () => {
         );
     };
 
-    return 
+    return (
         <form className="filter">
             <div className="form-horizontal clearfix">
                 <div className="form-group">
@@ -50,7 +50,7 @@ const Filter = () => {
                 </div>
             </div>
         </form>
-    ;
+    );
 };
 
 export default Filter;

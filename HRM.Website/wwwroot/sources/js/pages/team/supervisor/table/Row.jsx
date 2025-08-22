@@ -19,7 +19,7 @@ export default class Row extends PureComponent {
   };
   render() {
     const { data, companyId } = this.props;
-    const isSameCompany = companyId == data.companyId;
+    const isSameCompany = companyId === data.companyId;
     return (
       <tr>
         <td className="align-left cell-name">

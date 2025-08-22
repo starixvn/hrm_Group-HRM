@@ -35,7 +35,7 @@ export default class THead extends PureComponent {
                                     className={`checkbox-custom`}
                                     id={`ckb-checkAllWeekDays`}
                                     disabled={!isHost}
-                                    onChange={(event) => this.props.onChangeSelectWeekDays(
+                                    onChange={event => this.props.onChangeSelectWeekDays(
                                             null,
                                             event.target.checked
                                         )}
@@ -114,7 +114,7 @@ export default class THead extends PureComponent {
                                             className={`checkbox-custom`}
                                             id={`ckb-${item.name}`}
                                             disabled={!isHost}
-                                            onChange={(event) => this.props.onChangeSelectWeekDays(
+                                            onChange={event => this.props.onChangeSelectWeekDays(
                                                     item.name,
                                                     event.target.checked
                                                 )}

@@ -4,7 +4,7 @@ import { Form, Field } from 'formik';
 import Errors from '../../shared/components/Errors';
 import EmployeeAutocomplete from './EmployeeAutocomplete';
 
-const RenderFrom = ({ errors, isInternal, onChangeInternal, selectExtension, employees, onSearchEmployee, onSelectEmployee, isSubmitting, title, setSelectGroup }) => {
+const RenderForm = ({ errors, isInternal, onChangeInternal, selectExtension, employees, onSearchEmployee, onSelectEmployee, isSubmitting, title, setSelectGroup }) => {
     const handleGoBack = () => {
         history.back();
     };
@@ -127,4 +127,4 @@ const RenderFrom = ({ errors, isInternal, onChangeInternal, selectExtension, emp
     );
 };
 
-export default RenderFrom;
+export default RenderForm;

@@ -74,7 +74,7 @@ const AppContainer = () => {
   };
 
   const renderForm = ({ errors, isSubmitting }) => {
-    return 
+    return (
       <div className="card">
         <Errors errors={errors} />
         <Form className="form-horizontal">
@@ -156,7 +156,7 @@ const AppContainer = () => {
           </div>
         </Form>
       </div>
-    ;
+    );
   };
 
   if (unit === null) {

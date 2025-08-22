@@ -11,7 +11,7 @@ import {
     toastOptions
 } from '../../../../shared/common.functions';
 
-import Currency from './Currency';
+import CurrencyMultiSelect from './CurrencyMultiSelect';
 import SubCompany from './SubCompany';
 
 const AppContainer = () => {
@@ -187,7 +187,7 @@ const AppContainer = () => {
                                     type='checkbox'
                                     className='checkbox'
                                     checked={field.value}
-                                    onChange={(e) => setFieldValue("hasBIO", e.target.checked)}
+                                    onChange={e => setFieldValue("hasBIO", e.target.checked)}
                                 />
                             )}
                         </Field>
@@ -205,7 +205,7 @@ const AppContainer = () => {
                                     type='checkbox'
                                     className='checkbox'
                                     checked={field.value}
-                                    onChange={(e) => setFieldValue("enableLetstalk", e.target.checked)}
+                                    onChange={e => setFieldValue("enableLetstalk", e.target.checked)}
                                 />
                             )}
                         </Field>
@@ -217,7 +217,7 @@ const AppContainer = () => {
                         <label className='control-label'>Currency</label>
                     </div>
                     <div className='input-form'>
-                        <Currency
+                        <CurrencyMultiSelect
                             options={currencyOptions || []}
                             value={values.currency || []}
                             onChange={selectedValues => setFieldValue('currency', selectedValues)}

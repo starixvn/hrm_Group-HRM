@@ -12,7 +12,7 @@ const AppContainer = () => {
     const [companies, setCompanies] = useState([]);
     const [currencyMapping, setCurrencyMapping] = useState({});
 
-    const getCompanies = params = ({}) => {
+    const getCompanies = (params = {}) => {
         axios
             .post(resolveClientUrl("Company/GetSettingCompany"), params, {
                 headers: { "X-Requested-With": "XMLHttpRequest" },
