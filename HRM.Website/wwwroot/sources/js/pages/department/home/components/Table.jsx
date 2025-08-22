@@ -51,11 +51,15 @@ const Table = ({ data, onDelete }) => {
     };
 
     const sortedData = React.useMemo(() => {
-        if (!sortConfig.key) return data;
+        if (!sortConfig.key) {
+            return data;
+        }
 
         const compareValues = (valA, valB) => {
             if (valA === '' || valB === '') {
-                if (valA === '' && valB === '') return 0;
+                if (valA === '' && valB === '') {
+                    return 0;
+                }
                 return valA === '' ? 1 : -1;
             }
 
