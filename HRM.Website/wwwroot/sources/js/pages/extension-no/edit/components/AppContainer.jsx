@@ -142,6 +142,8 @@ const AppContainer = () => {
     if (extensionDetail == null) {
         return null;
     };
+    const empId = selectEmployee && selectEmployee.id || extensionDetail.empId;
+    const extensionNo = extensionDetail.extensionNo || '';
 
     return (
         <CustomFormik
@@ -156,20 +158,20 @@ const AppContainer = () => {
             handleSelectEmployee={handleSelectEmployee}
             setSelectGroup={setSelectGroup}            
             getEmployees={getEmployees}    
-            editExtensionSchema={editExtensionSchema}          
+            editExtensionSchema={editExtensionSchema}
+            empId={empId}
+            extensionNo={extensionNo}       
         />
     );
 };
 
 const CustomFormik = ({ selectEmployee, extensionDetail, selectGroup, employees, isInternal, 
     selectExtension, handleSubmit, handleChangeInternal, handleSelectEmployee, setSelectGroup, getEmployees,
-    editExtensionSchema }) => {
-    const empId = selectEmployee && selectEmployee.id || extensionDetail.empId;
+    editExtensionSchema, empId, extensionNo }) => {
     const emPloyee = selectEmployee && selectEmployee.value || '';
     const fullName = selectEmployee && selectEmployee.fullName || extensionDetail.fullName || '';
     const teamId = selectGroup || extensionDetail.teamId;
     const nickName = selectEmployee && selectEmployee.nickName || extensionDetail.nickName || '';
-    const extensionNo = extensionDetail.extensionNo || '';
     return (
         <Formik
             validateOnBlur={false}
