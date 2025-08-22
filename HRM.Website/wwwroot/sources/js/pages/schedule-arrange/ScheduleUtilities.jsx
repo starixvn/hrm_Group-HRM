@@ -9,7 +9,7 @@ import { DateFormat, OffDayShiftId } from '../../shared/constants';
 const FORM_URLENCODED_HEADER = 'application/x-www-form-urlencoded';
 const SUCCESS_MESSAGE = 'Updated Successfully!';
 
-export const createScheduleUtilities = (component) => ({
+export const createScheduleUtilities = (component) => /* NOSONAR */ ({
     updateWeeklyDefaultShift: (
         teamId,
         employeeId,

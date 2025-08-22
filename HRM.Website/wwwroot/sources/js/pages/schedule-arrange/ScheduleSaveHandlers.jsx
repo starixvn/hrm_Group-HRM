@@ -7,6 +7,46 @@ import { axiosError, blockUI, resolveClientUrl, unblockUI } from '../../shared/c
 const FORM_URLENCODED_HEADER = 'application/x-www-form-urlencoded';
 const SUCCESS_MESSAGE = 'Updated Successfully!';
 
+const processScheduleMember = (schedule, originalSchedule, weeklySchedules, defaultShifts, component) => {
+    unset(schedule, 'selectWeekDays');
+    unset(originalSchedule, 'selectWeekDays');
+
+    if (!isEqual(schedule, originalSchedule)) {
+        const totalOffDaysDefault = schedule.offDaysbyWeek + schedule.totalOffDayReplacement;
+        
+        if (!component.validateScheduleChanges(schedule, totalOffDaysDefault)) {
+            toast.error('Some employees have a larger number of days off during the week according to the setting.');
+            return false;
+        }
+
+        const defaultShift = component.collectDefaultShiftChanges(schedule, originalSchedule);
+        if (defaultShift) {
+            defaultShifts.push(defaultShift);
+        }
+
+        component.scheduleAttrNames.forEach(attrName => {
+            const weeklySchedule = component.collectWeeklyScheduleChanges(schedule, originalSchedule, attrName);
+            if (weeklySchedule) {
+                weeklySchedules.push(weeklySchedule);
+            }
+        });
+    }
+    return true;
+};
+
+const processScheduleTeam = (members, originalMembers, weeklySchedules, defaultShifts, component) => {
+    for (let eindex = 0; eindex < members.length; eindex++) {
+        const schedule = members[eindex];
+        const originalSchedule = originalMembers[eindex];
+        
+        const success = processScheduleMember(schedule, originalSchedule, weeklySchedules, defaultShifts, component);
+        if (!success) {
+            return false;
+        }
+    }
+    return true;
+};
+
 export const createScheduleSaveHandlers = component => ({
     collectDefaultShiftChanges: (schedule, originalSchedule) => {
         if (!isEqual(originalSchedule.defaultShift, schedule.defaultShift)) {
@@ -75,32 +115,11 @@ export const createScheduleSaveHandlers = component => ({
 
         for (let gindex = 0; gindex < schedules.length; gindex++) {
             const members = schedules[gindex].members;
+            const originalMembers = originalSchedules[gindex].members;
             
-            for (let eindex = 0; eindex < members.length; eindex++) {
-                const schedule = members[eindex];
-                const originalSchedule = originalSchedules[gindex].members[eindex];
-                
-                unset(schedule, 'selectWeekDays');
-                unset(originalSchedule, 'selectWeekDays');
-
-                if (!isEqual(schedule, originalSchedule)) {
-                    const totalOffDaysDefault = schedule.offDaysbyWeek + schedule.totalOffDayReplacement;
-                    
-                    if (!component.validateScheduleChanges(schedule, totalOffDaysDefault)) {
-                        toast.error('Some employees have a larger number of days off during the week according to the setting.');
-                        return;
-                    }
-
-                    const defaultShift = component.collectDefaultShiftChanges(schedule, originalSchedule);
-                    if (defaultShift) defaultShifts.push(defaultShift);
-
-                    component.scheduleAttrNames.forEach(attrName => {
-                        const weeklySchedule = component.collectWeeklyScheduleChanges(schedule, originalSchedule, attrName);
-                        if (weeklySchedule) {
-                            weeklySchedules.push(weeklySchedule);
-                        }
-                    });
-                }
+            const success = processScheduleTeam(members, originalMembers, weeklySchedules, defaultShifts, component);
+            if (!success) {
+                return;
             }
         }
 
