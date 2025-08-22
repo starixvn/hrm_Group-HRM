@@ -93,7 +93,7 @@ const Table = ({ rolePermission, onChangePermission }) => {
             }
         }
 
-        const rows = [
+        let rows = [
             <tr key={`row-${func.functionId}`} className={func.level === 0 ? 'root-row' : 'child-row'}>
                 <td className="align-left">
                     {trees.map(item => item)}
@@ -122,15 +122,25 @@ const Table = ({ rolePermission, onChangePermission }) => {
             </tr>
         ];
 
-        if (func.childs && func.childs.length > 0) {
-            const totalChilds = func.childs.length;
-            for (let i = 0; i < totalChilds; i++) {
-                rows.push(...renderRow(func.childs[i]));
-            }
-        }
+        rows = attachChildToRow(func, rows);
 
         return rows;
     };
+
+    const attachChildToRow = (func, rows) => {
+
+        if (!func.childs || func.childs.length <= 0) {
+            return rows;
+        }
+
+        const totalChilds = func.childs.length;
+        for (let i = 0; i < totalChilds; i++) {
+            rows.push(...renderRow(func.childs[i]));
+        }
+
+        return rows;
+
+    }
 
     const buildBody = () => {
         const totalItems = hierarchyFunctions.length;
