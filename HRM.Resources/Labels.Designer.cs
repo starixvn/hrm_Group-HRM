@@ -2302,7 +2302,7 @@ namespace HRM.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Group Employee.
+        ///   Looks up a localized string similar to Employee Info.
         /// </summary>
         public static string GroupEmployee {
             get {
