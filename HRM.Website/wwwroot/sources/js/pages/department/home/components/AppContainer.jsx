@@ -52,7 +52,7 @@ const AppContainer = () => {
             .catch(axiosError);
     };
 
-    useEffect( => {
+    useEffect(() => {
         loadAllUnits();
         getDepartments(filterParams);
     }, []);

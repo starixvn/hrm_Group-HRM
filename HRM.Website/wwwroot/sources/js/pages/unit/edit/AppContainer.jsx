@@ -16,7 +16,7 @@ const AppContainer = () => {
     history.back();
   };
 
-  useEffect( => {
+  useEffect(() => {
     axios({
       url: resolveClientUrl(`Unit/getById/${window.unitId}`),
       method: 'GET',
@@ -130,7 +130,7 @@ const AppContainer = () => {
               <Field name="picEmpId" as="select" className="form-control">
                 <option value='' />
                 {employees &&
-                  employees.map((emp =>(
+                  employees.map(emp =>(
                     <option key={emp.id} value={emp.id}>
                       {emp.displayNameWithCompany}
                     </option>
@@ -156,7 +156,7 @@ const AppContainer = () => {
           </div>
         </Form>
       </div>
-    );
+    ;
   };
 
   if (unit === null) {

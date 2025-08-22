@@ -59,7 +59,7 @@ const AppContainer = () => {
         }
     };
 
-    useEffect( => {
+    useEffect(() => {
         getCompanies();
         getInitialData();
     }, []);
@@ -99,7 +99,7 @@ const AppContainer = () => {
     };
 
     const renderForm = ({ errors, isSubmitting }) => {
-        return 
+        return (
             <div className="card">
                 <Errors errors={errors} />
                 <Form className="form-horizontal">
@@ -128,7 +128,7 @@ const AppContainer = () => {
                                 className="form-control">
                                 <option value='' />
                                 {companies
-                                    ? companies.map((company =>(
+                                    ? companies.map(company =>(
                                           <option key={company.id} value={company.id}>
                                               {company.text}
                                           </option>

@@ -21,7 +21,7 @@ const AppContainer = () => {
         history.back();
     };
 
-    useEffect( => {
+    useEffect(() => {
         axios({
             url: resolveClientUrl(`salarystructure/getById/${window.salaryStructureId}`),
             method: 'GET',
@@ -93,7 +93,7 @@ const AppContainer = () => {
         setJobLevels(tmpJobLevels);
     };
 
-    const renderForm = { isSubmitting } => {
+    const renderForm = ({ isSubmitting }) => {
         return (
             <div className='card'>
                 <Form className='form-horizontal'>

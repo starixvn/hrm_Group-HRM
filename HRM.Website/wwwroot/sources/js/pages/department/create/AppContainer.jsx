@@ -28,7 +28,7 @@ const AppContainer = () => {
         history.back();
     };
 
-    useEffect( => {
+    useEffect(() => {
         axios({
             url: resolveClientUrl(`Department/GetUnits`),
             method: "GET",
@@ -43,7 +43,7 @@ const AppContainer = () => {
             .catch(axiosError);
     }, []);
 
-    useEffect( => {
+    useEffect(() => {
         axios({
             url: resolveClientUrl(`Department/GetPrepareDataForUnit`),
             method: "GET",
@@ -98,7 +98,7 @@ const AppContainer = () => {
     };
 
     const renderForm = ({ errors, isSubmitting }) => {
-        return 
+        return (
             <div className="card">
                 <Errors errors={errors} />
                 <Form className="form-horizontal">
@@ -130,7 +130,7 @@ const AppContainer = () => {
                                 className="form-control">
                                 <option value='' />
                                 {initialValues.units
-                                    ? initialValues.units.map((unit =>(
+                                    ? initialValues.units.map((unit) => (
                                           <option key={unit.id} value={unit.id}>
                                               {unit.code}-{unit.accountableArea}
                                           </option>

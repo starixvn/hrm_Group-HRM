@@ -104,7 +104,7 @@ export default class DisciplineManager extends Component {
                 this.setState({ managers: response.data });
             })
             .catch(axiosError)
-            .then( =>unblockUI());
+            .then(() => unblockUI());
     };
 
     handleAddEmployee = employee => {

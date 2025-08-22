@@ -39,7 +39,7 @@ const AppContainer = () => {
         history.back();
     };
 
-    useEffect( => {
+    useEffect(() => {
         axios({
             url: resolveClientUrl(`Company/GetCurrency`),
             method: 'GET',
@@ -51,7 +51,7 @@ const AppContainer = () => {
         .catch(axiosError);
     }, []);
 
-    useEffect( => {
+    useEffect(() => {
         axios({
             url: resolveClientUrl(`Company/GetCompanyById/${window.companyId}`),
             method: 'GET',
@@ -147,7 +147,7 @@ const AppContainer = () => {
                 const { data } = response;
                 if (data.isSuccessful) {
                     toastr.success('Updated successfully!', '', toastOptions());
-                    setTimeout( => {
+                    setTimeout(() => {
                         document.location = resolveClientUrl('company/index');
                     }, 3000);
                 } else {
@@ -158,7 +158,7 @@ const AppContainer = () => {
             .catch(axiosError);
     }, [whitelistIPs, subCompanies]);
 
-    const renderForm = ({ errors, isSubmitting, values, setFieldValue }) => 
+    const renderForm = ({ errors, isSubmitting, values, setFieldValue }) => (
         <div className='card'>
             <Errors errors={errors} />
             <Form className='form-horizontal'>
@@ -182,13 +182,12 @@ const AppContainer = () => {
                     </div>
                     <div className='input-form'>
                         <Field name='hasBIO'>
-                            {({ field } =>
+                            {({ field }) => (
                                 <input
                                     type='checkbox'
                                     className='checkbox'
                                     checked={field.value}
-                                    onChange={(e =>setFieldValue("hasBIO", e.target.checked)
-                                    }
+                                    onChange={(e) => setFieldValue("hasBIO", e.target.checked)}
                                 />
                             )}
                         </Field>
@@ -201,13 +200,12 @@ const AppContainer = () => {
                     </div>
                     <div className='input-form'>
                         <Field name='enableLetstalk'>
-                            {{ field } =>
+                            {({ field }) => (
                                 <input
                                     type='checkbox'
                                     className='checkbox'
                                     checked={field.value}
-                                    onChange={(e =>setFieldValue("enableLetstalk", e.target.checked)
-                                    }
+                                    onChange={(e) => setFieldValue("enableLetstalk", e.target.checked)}
                                 />
                             )}
                         </Field>

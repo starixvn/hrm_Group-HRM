@@ -29,7 +29,7 @@ const AppContainer = () => {
             .catch(axiosError);
     };
 
-    useEffect( => {
+    useEffect(() => {
         getSecondmentCompanyList(filterParams);
     }, []);
 

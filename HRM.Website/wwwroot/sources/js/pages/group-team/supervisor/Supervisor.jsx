@@ -100,7 +100,7 @@ export default class Supervisor extends Component {
         this.setState({ supervisors: response.data });
       })
       .catch(axiosError)
-      .then( =>unblockUI());
+      .then(() =>unblockUI());
   };
 
   handleChangeOrder = (key, employeeId) => {

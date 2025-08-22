@@ -32,7 +32,7 @@ const Filter = () => {
                             className="form-control"
                             value={selectedYear}
                             onChange={handleYearChange}>
-                            {years.map((year =>(
+                            {years.map(year =>(
                                 <option key={year} value={year}>
                                     {year}
                                 </option>
@@ -50,7 +50,7 @@ const Filter = () => {
                 </div>
             </div>
         </form>
-    );
+    ;
 };
 
 export default Filter;

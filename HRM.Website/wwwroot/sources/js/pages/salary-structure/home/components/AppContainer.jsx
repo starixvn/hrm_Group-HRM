@@ -27,7 +27,7 @@ const AppContainer = () => {
             .catch(axiosError);
     };
 
-    useEffect( => {
+    useEffect(() => {
         getSalaryStructures();
     }, []);
 

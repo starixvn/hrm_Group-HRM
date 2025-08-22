@@ -56,7 +56,7 @@ const AppContainer = () => {
         history.back();
     };
 
-    useEffect( => {
+    useEffect(() => {
         axios({
             url: resolveClientUrl(`GroupEmployeeList/GetCompanyDropdownList`),
             method: "GET",
@@ -109,7 +109,7 @@ const AppContainer = () => {
     };
 
     const renderForm = ({ errors, isSubmitting }) => {
-        return 
+        return (
             <div className="card">
                 <Errors errors={errors} />
                 <Form className="form-horizontal">
@@ -122,7 +122,7 @@ const AppContainer = () => {
                         </div>
                         <div className="select-form">
                             <Field type="text" name="employee" className="form-control">
-                                {({ field } =>(
+                                {({ field }) => (
                                     <EmployeeAutocomplete
                                         options={employees}
                                         onChange={getEmployees}

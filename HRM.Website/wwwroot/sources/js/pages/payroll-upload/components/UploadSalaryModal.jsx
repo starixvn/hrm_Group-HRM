@@ -9,7 +9,7 @@ import {
 } from '../constants/periodType';
 import salaryService from '../Service';
 
-const UploadSalaryModal = { onSuccess } => {
+const UploadSalaryModal = ({ onSuccess }) => {
     const [show, setShow] = useState(false);
     const [month, setMonth] = useState('');
     const [periodType, setPeriodType] = useState(PeriodType.FULL_MONTH);
@@ -114,7 +114,7 @@ const UploadSalaryModal = { onSuccess } => {
         }
     };
 
-    return 
+    return (
         <>
             <button className="btn btn-upload" onClick={handleOpen}>
                 Upload Payroll
@@ -138,7 +138,7 @@ const UploadSalaryModal = { onSuccess } => {
                             type="month"
                             className="form-control"
                             value={month}
-                            onChange={(e =>setMonth(e.target.value)}
+                            onChange={e =>setMonth(e.target.value)}
                             required
                             onClick={handleMonthClick}
                         />

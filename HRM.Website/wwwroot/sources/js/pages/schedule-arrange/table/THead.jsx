@@ -18,7 +18,7 @@ export default class THead extends PureComponent {
         const { isHost, enableSyncWorkingShift, fromDate, toDate } = this.props;
         const isSystemAdmin = document.getElementById('IsSystemAdmin').checked;
 
-        return 
+        return (
             <Fragment>
                 <div className="header-control">
                     <div>
@@ -35,11 +35,10 @@ export default class THead extends PureComponent {
                                     className={`checkbox-custom`}
                                     id={`ckb-checkAllWeekDays`}
                                     disabled={!isHost}
-                                    onChange={(event =>this.props.onChangeSelectWeekDays(
+                                    onChange={(event) => this.props.onChangeSelectWeekDays(
                                             null,
                                             event.target.checked
-                                        )
-                                    }
+                                        )}
                                 />
                                 <label htmlFor={`ckb-checkAllWeekDays`}>
                                     {' '}
@@ -115,11 +114,10 @@ export default class THead extends PureComponent {
                                             className={`checkbox-custom`}
                                             id={`ckb-${item.name}`}
                                             disabled={!isHost}
-                                            onChange={event =>this.props.onChangeSelectWeekDays(
+                                            onChange={(event) => this.props.onChangeSelectWeekDays(
                                                     item.name,
                                                     event.target.checked
-                                                )
-                                            }
+                                                )}
                                         />
                                         <label htmlFor={`ckb-${item.name}`} />
                                     </div>

@@ -39,11 +39,11 @@ const ViewUploadHistoryModal = () => {
         }
     };
 
-    return 
+    return (
         <React.Fragment>
             <button
                 className="btn btn-default"
-                onClick={( => {
+                onClick={() => {
                     setShow(true);
                     fetchHistory();
                 }}>

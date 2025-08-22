@@ -49,7 +49,7 @@ export default class Row extends PureComponent {
             isDragging,
         } = this.props;
 
-        return 
+        return (
             <div
                 className={`table-row ${isDragging ? 'dragging' : ''}`}
                 ref={draggableProvided.innerRef}
@@ -79,7 +79,7 @@ export default class Row extends PureComponent {
                     isUsedWeeklyDefaultShift={data.isUsedWeeklyDefaultShift}
                     data={data.defaultShift}
                     shiftOptions={shiftOptions.filter(
-                        (shift =>shift.id !== OffDayShiftId
+                        shift =>shift.id !== OffDayShiftId
                     )}
                     onChangeDefaultShift={this.props.onChangeDefaultShift}
                 />

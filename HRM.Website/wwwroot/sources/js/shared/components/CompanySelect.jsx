@@ -39,15 +39,15 @@ const CompanySelect = ({ defaultCompanyId = '', roleId = '', onChange }) => {
         }
     };
 
-    useEffect( => {
+    useEffect(() => {
         loadCompanies();
     }, [roleId]);
 
-    useEffect( => {
+    useEffect(() => {
         setSelectedCompanyId(defaultCompanyId);
     }, [defaultCompanyId]);
 
-    useEffect( => {
+    useEffect(() => {
         if (
             !isLoading &&
             selectedCompanyId &&
@@ -90,7 +90,7 @@ const CompanySelect = ({ defaultCompanyId = '', roleId = '', onChange }) => {
     );
 };
 
-export const renderCompanySelect = props = {} => {
+export const renderCompanySelect = (props = {}) => {
     const element = document.getElementById('company-list');
     if (element) {
         ReactDOM.render(<CompanySelect {...props} />, element);

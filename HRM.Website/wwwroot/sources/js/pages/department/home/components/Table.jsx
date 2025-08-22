@@ -50,7 +50,7 @@ const Table = ({ data, onDelete }) => {
         return value;
     };
 
-    const sortedData = React.useMemo( => {
+    const sortedData = React.useMemo(() => {
         if (!sortConfig.key) {
             return data;
         }
@@ -118,7 +118,7 @@ const Table = ({ data, onDelete }) => {
                         <th
                             key={label}
                             className={sortable ? "col-sorter" : ''}
-                            onClick={( =>onSort(key)}
+                            onClick={() => onSort(key)}
                             style={{
                                 cursor: sortable ? "pointer" : "default",
                             }}>
@@ -131,7 +131,7 @@ const Table = ({ data, onDelete }) => {
                                 )}
                             </div>
                         </th>
-                    ))}
+                    )}
                 </tr>
             </thead>
             <tbody>

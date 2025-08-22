@@ -298,7 +298,7 @@ export default class App extends Component {
                 });
             })
             .catch(axiosError)
-            .then( =>unblockUI());
+            .then(() => unblockUI());
     };
 
     handleExportExcel = () => {
@@ -330,7 +330,7 @@ export default class App extends Component {
                 downloadFile(response.data, fileName);
             })
             .catch(axiosError)
-            .then( =>unblockUI());
+            .then(() => unblockUI());
     };
 
     handleExportExcelDriverPickup = () => {
@@ -358,7 +358,7 @@ export default class App extends Component {
                 downloadFile(response.data, fileName);
             })
             .catch(axiosError)
-            .then( =>unblockUI());
+            .then(() => unblockUI());
     };
 
     handleGetWeeklyShedules = isCurrentWeek => {
@@ -603,11 +603,11 @@ export default class App extends Component {
         for (let gindex = 0; gindex < totalItems; gindex++) {
             const totalSubItems = schedules[gindex].members.length;
             for (let eindex = 0; eindex < totalSubItems; eindex++) {
-                if 
-                    this.scheduleAttrNames.filter(
-                        (attrName =>schedules[gindex].members[eindex].selectWeekDays[
-                                attrName
-                            ]
+                if (
+                    this.scheduleAttrNames.filter(attrName =>
+                        schedules[gindex].members[eindex].selectWeekDays[
+                            attrName
+                        ]
                     ).length > 0
                 ) {
                     selectedMembers.push({ gindex, eindex });
@@ -1480,7 +1480,7 @@ export default class App extends Component {
                 }
             })
             .catch(axiosError)
-            .then( =>unblockUI());
+            .then(() => unblockUI());
     };
 
     render() {
@@ -1495,7 +1495,7 @@ export default class App extends Component {
             showConfirmSyncDataModalDialog,
         } = this.state;
 
-        return 
+        return (
             <Fragment>
                 <ToastLayout />
                 <Search
@@ -1550,7 +1550,7 @@ export default class App extends Component {
                         show={showShiftMultipleModal}
                         onHide={this.handleCloseShiftMultipleModal}
                         shiftOptions={this.shiftOptions.filter(
-                            (shift =>shift.id !== OffDayShiftId
+                            shift =>shift.id !== OffDayShiftId
                         )}
                         onSubmit={this.handleChangeMultipleShift}
                     />
@@ -1601,5 +1601,7 @@ export default class App extends Component {
     }
 }
 
-ReactDOM.render(<App />, document.getElementById('schedule-wrapper'));
-
+ReactDOM.render(
+    <App />,
+    document.getElementById('schedule-wrapper')
+);

@@ -24,7 +24,7 @@ const CurrencyMultiSelect = ({
         onChange(selectedValues);
     };
 
-    return 
+    return (
         <div className="react-select-container">
             <Select
                 isMulti
@@ -36,7 +36,7 @@ const CurrencyMultiSelect = ({
                 hideSelectedOptions={false}
                 isClearable={true}
                 isSearchable={true}
-                noOptionsMessage={( =>"No currencies found"}
+                noOptionsMessage={() => "No currencies found"}
                 classNamePrefix="react-select"
             />
         </div>
