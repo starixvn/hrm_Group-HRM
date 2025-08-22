@@ -9,9 +9,15 @@ import { renderCompanySelect } from '../../shared/components/CompanySelect';
 import SweetModalDialog from '../../shared/components/SweetModalDialog';
 import { DateFormat, OffDayShiftId } from '../../shared/constants';
 import ToastLayout from '../../shared/layouts/ToastLayout';
+import createScheduleSelectionHandlers from './ScheduleSelectionHandlers';
+import createScheduleShiftHandlers from './ScheduleShiftHandlers';
+import createScheduleOffDayHandlers from './ScheduleOffDayHandlers';
+import createScheduleMultipleShiftHandlers from './ScheduleMultipleShiftHandlers';
+import createScheduleSaveHandlers from './ScheduleSaveHandlers';
 import createScheduleActions from './ScheduleActions';
-import createScheduleHandlers from './ScheduleHandlers';
 import createScheduleUtilities from './ScheduleUtilities';
+import createScheduleHandlers from './ScheduleHandlers';
+import createScheduleDataExportHandlers from './ScheduleDataExportHandlers';
 import Search from './Search';
 import ShiftMultipleModal from './ShiftMultipleModal';
 import Table from './table/table';
@@ -72,10 +78,16 @@ export default class App extends Component {
         ];
 
         // Initialize handlers, actions, and utilities from external files
-        const handlers = createScheduleHandlers(this);
+        const selectionHandlers = createScheduleSelectionHandlers(this);
+        const shiftHandlers = createScheduleShiftHandlers(this);
+        const offDayHandlers = createScheduleOffDayHandlers(this);
+        const multipleShiftHandlers = createScheduleMultipleShiftHandlers(this);
+        const saveHandlers = createScheduleSaveHandlers(this);
         const actions = createScheduleActions(this);
         const utilities = createScheduleUtilities(this);
-        Object.assign(this, handlers, actions, utilities);
+        const handlers = createScheduleHandlers(this);
+        const dataExportHandlers = createScheduleDataExportHandlers(this);
+        Object.assign(this, selectionHandlers, shiftHandlers, offDayHandlers, multipleShiftHandlers, saveHandlers, actions, utilities, handlers, dataExportHandlers);
     }
 
     componentDidMount() {

@@ -40,7 +40,10 @@ export default class Search extends Component {
                             <WeekPicker
                                 fromDate={this.props.filter.fromDate}
                                 toDate={this.props.filter.toDate}
-                                onChange={this.handleDateChange}
+                                onChange={(fromDate, toDate) => {
+                                    this.props.onChange('fromDate', fromDate);
+                                    this.props.onChange('toDate', toDate);
+                                }}
                             />
                         </div>
                     </div>

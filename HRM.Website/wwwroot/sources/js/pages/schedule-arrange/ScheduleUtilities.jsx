@@ -6,6 +6,9 @@ import { toast } from 'react-toastify';
 import { axiosError, blockUI, reorder, resolveClientUrl, unblockUI } from '../../shared/common.functions';
 import { DateFormat, OffDayShiftId } from '../../shared/constants';
 
+const FORM_URLENCODED_HEADER = 'application/x-www-form-urlencoded';
+const SUCCESS_MESSAGE = 'Updated Successfully!';
+
 export const createScheduleUtilities = (component) => ({
     updateWeeklyDefaultShift: (
         teamId,
