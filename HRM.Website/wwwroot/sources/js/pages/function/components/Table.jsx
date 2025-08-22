@@ -36,9 +36,15 @@ const Table = ({ rolePermission, onChangePermission }) => {
 
         if (!checked) {
             const hasTarget = (child, item) => {
-                if (item.functionId !== child.functionId) return false;
-                if (target === "funcRead") return item.isRead;
-                if (target === "funcHost") return item.isHost;
+                if (item.functionId !== child.functionId) {
+                    return false
+                };
+                if (target === "funcRead") {
+                    return item.isRead
+                };
+                if (target === "funcHost") {
+                    return item.isHost
+                };
                 return false;
             };
 
