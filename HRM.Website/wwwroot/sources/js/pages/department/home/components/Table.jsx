@@ -51,40 +51,30 @@ const Table = ({ data, onDelete }) => {
     };
 
     const sortedData = React.useMemo(() => {
-        if (!sortConfig.key) {
-            return data;
-        }
+        if (!sortConfig.key) return data;
 
-        const sorted = [...data].sort((a, b) => {
-            const valA = getCellValue(a, sortConfig.key);
-            const valB = getCellValue(b, sortConfig.key);
-
-            if (valA === '' && valB !== '') {
-                return 1;
-            }
-            if (valB === '' && valA !== '') {
-                return -1;
-            }
-            if (valA === '' && valB === '') {
-                return 0;
+        const compareValues = (valA, valB) => {
+            if (valA === '' || valB === '') {
+                if (valA === '' && valB === '') return 0;
+                return valA === '' ? 1 : -1;
             }
 
             if (!isNaN(valA) && !isNaN(valB)) {
-                return valA - valB;
+                return Number(valA) - Number(valB);
             }
 
             if (moment(valA).isValid() && moment(valB).isValid()) {
-                return new Date(valA) - new Date(valB);
+                return new Date(valA).getTime() - new Date(valB).getTime();
             }
 
-            return valA.localeCompare(valB, "vi", { sensitivity: "base" });
-        });
+            return String(valA).localeCompare(String(valB), "vi", { sensitivity: "base" });
+        };
 
-        if (sortConfig.direction === "desc") {
-            sorted.reverse();
-        }
+        const sorted = [...data].sort((a, b) =>
+            compareValues(getCellValue(a, sortConfig.key), getCellValue(b, sortConfig.key))
+        );
 
-        return sorted;
+        return sortConfig.direction === "desc" ? sorted.reverse() : sorted;
     }, [data, sortConfig]);
 
     const onSort = key => {
