@@ -9,9 +9,13 @@ const findIndices = (schedules, teamId, employeeId) => {
 };
 
 const determineEffectiveShift = (member, attrName, shift) => {
-    if (shift !== null) return shift;
+    if (shift !== null) {
+        return shift;
+    };
     
-    if (member[attrName].isHoliday) return null;
+    if (member[attrName].isHoliday) {
+        return null;
+    };
     
     if (member.isUsedWeeklyDefaultShift) {
         return member.weeklyDefaultShift[`${attrName.substring(0, 3)}Shift`];
@@ -20,7 +24,7 @@ const determineEffectiveShift = (member, attrName, shift) => {
     return member.defaultShift !== null ? { ...member.defaultShift } : null;
 };
 
-const processOffDayShift = (shift) => {
+const processOffDayShift = shift => {
     const isOffDay = shift !== null && shift.id === OffDayShiftId;
     const processedShift = shift !== null && shift.id === OffDayShiftId ? null : shift;
     return { isOffDay, processedShift };
