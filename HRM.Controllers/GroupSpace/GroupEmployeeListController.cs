@@ -102,6 +102,31 @@ public class GroupEmployeeListController(
         return PartialView("_ListEmployee", employees);
     }
 
+    public async Task<IActionResult> GroupEmployeeList(GroupEmployeeViewModel model)
+    {
+        var hasPermissionViewAll = session.HasPermissionOnFunction(FunctionKey.GroupEmployeeList_AllEmployee, Policy.Read);
+        var employees = new List<GroupEmployeeModel>();
+        if (model != null)
+        {
+            var criteria = new GetEmployeesInGroupScopeCriteria
+            {
+                Query = model.Keyword,
+                TeamIds = model.TeamIds,
+                EnableUser = model.IsEnable,
+                IsDeleteUser = model.IsDelete,
+                TitleId = model.JobTitleId,
+                PageNumber = model.CurrentPage,
+                PageSize = model.ItemsPerPage,
+                CompanyIds = model.CompanyIds,
+                HasPermissionViewAll = hasPermissionViewAll
+            };
+            employees = (await baseService.GetDataAsync<GroupEmployeeModel>(criteria)).ToList();
+
+        }
+
+        return Json(employees);
+    }
+
     private static (bool? enableUser, bool? isDeleteUser) ParseEmployeeStatus(string employeeStatuses)
     {
         return employeeStatuses switch
