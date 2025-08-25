@@ -45,6 +45,8 @@ public static class Constants
 
     public const int NexVisionCompanyId = 34;
 
+    public const int GroupCompanyId = 7;
+
     public static readonly TimeSpan NexTimezone = TimeSpan.FromHours(7);
 
     public static readonly int[] NexCompanyIds = [NexCompanyId, LumiCompanyId, NexVisionCompanyId];
