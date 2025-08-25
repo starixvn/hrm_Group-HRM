@@ -300,50 +300,62 @@
                 me.$searchInput.off('keyup').on('keyup', function () {
                     var $this = $(this);
                     var filterVal = $this.val().toLowerCase();
+                    
                     if (filterVal !== '') {
-                        var matcher = new RegExp(filterVal, 'gi');
-
-                        me.$groupitems.find('li.multiselect-treeview-item').removeClass('show')
-                            .find('input').removeClass('show');
-                        var showElements = me.$groupitems.find('li.multiselect-treeview-item').filter(function () {
-                            if (matcher.test($(this).find('> .checkbox-wrapper label').text())) {
-                                return $(this);
-                            };
-                        }).removeClass('hide').addClass('show');
-
-                        if (showElements.length > 0) {
+                        // First, hide all items
+                        me.$groupitems.find('li.multiselect-treeview-item').addClass('hide');
+                        me.$groupitems.find('input').addClass('hide');
+                        
+                        // Find all items that match the search
+                        var matchingItems = [];
+                        me.$groupitems.find('li.multiselect-treeview-item').each(function() {
+                            var $item = $(this);
+                            var labelText = $item.find('> .checkbox-wrapper label').text().toLowerCase();
+                            if (labelText.indexOf(filterVal) !== -1) {
+                                matchingItems.push($item);
+                            }
+                        });
+                        
+                        if (matchingItems.length > 0) {
                             me.$header.show();
-
-                            showElements.each(function () {
-                                var showElement = $(this);
-                                var prevParent = showElement.parent().prev();
-                                var grandParent = showElement.parent().parent();
-
-                                while (grandParent.hasClass('multiselect-treeview-item')) {
-                                    prevParent.find('input').addClass('show');
-                                    prevParent = grandParent.parent().prev();
-
-                                    grandParent.removeClass('hide').addClass('show');
-                                    grandParent = grandParent.parent().parent();
+                            
+                            // Show all matching items and their complete parent hierarchy
+                            matchingItems.forEach(function($item) {
+                                // Show the matching item
+                                $item.removeClass('hide');
+                                $item.find('> .checkbox-wrapper input').removeClass('hide');
+                                
+                                // Show all parent items up to the root
+                                var $currentParent = $item.parent();
+                                while ($currentParent.hasClass('multiselect-treeview-group-items')) {
+                                    var $grandParent = $currentParent.parent();
+                                    if ($grandParent.hasClass('multiselect-treeview-item')) {
+                                        $grandParent.removeClass('hide');
+                                        $grandParent.find('> .checkbox-wrapper input').removeClass('hide');
+                                        $currentParent = $grandParent.parent();
+                                    } else {
+                                        break;
+                                    }
                                 }
-
-                                showElement.find('li.multiselect-treeview-item')
-                                    .removeClass('hide').addClass('show')
-                                    .find('input').addClass('show');
+                                
+                                // Show all child items of the matching item
+                                var childItems = $item.find('li.multiselect-treeview-item');
+                                if (childItems.length > 0) {
+                                    childItems.removeClass('hide');
+                                    childItems.find('input').removeClass('hide');
+                                }
                             });
                         } else {
                             me.$header.hide();
                         }
-
-                        me.$groupitems.find('li.multiselect-treeview-item').not('.show').addClass('hide')
-                            .find('input').addClass('hide');
                     } else {
+                        // Show all items when search is empty
                         me.$header.show();
-                        me.$groupitems.find('li.multiselect-treeview-item')
-                            .removeClass('hide').addClass('show')
-                            .find('input').removeClass('hide').addClass('show');
+                        me.$groupitems.find('li.multiselect-treeview-item').removeClass('hide');
+                        me.$groupitems.find('input').removeClass('hide');
                     }
-
+                    
+                    // Update checkbox states
                     me.$checkboxes.not('.hide').filter('[data-is-leaf=true]').each(function () {
                         $(this).change();
                     });
