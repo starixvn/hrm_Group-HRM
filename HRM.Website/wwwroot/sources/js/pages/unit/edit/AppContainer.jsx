@@ -1,6 +1,5 @@
 ﻿import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import toastr from 'toastr';
 import { Formik, Form, Field } from 'formik';
 
 import Errors from '../../../shared/components/Errors';

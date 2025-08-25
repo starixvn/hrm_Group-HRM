@@ -98088,12 +98088,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var formik__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! formik */ "./node_modules/formik/dist/formik.esm.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var toastr__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! toastr */ "./node_modules/toastr/toastr.js");
-/* harmony import */ var toastr__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(toastr__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _shared_components_Errors__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../shared/components/Errors */ "./sources/js/shared/components/Errors.jsx");
-/* harmony import */ var _shared_common_functions__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../shared/common.functions */ "./sources/js/shared/common.functions.js");
-/* harmony import */ var _common_functions__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../common.functions */ "./sources/js/pages/secondment-company/common.functions.js");
-
+/* harmony import */ var _shared_components_Errors__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../shared/components/Errors */ "./sources/js/shared/components/Errors.jsx");
+/* harmony import */ var _shared_common_functions__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../shared/common.functions */ "./sources/js/shared/common.functions.js");
+/* harmony import */ var _common_functions__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../common.functions */ "./sources/js/pages/secondment-company/common.functions.js");
 
 
 
@@ -98114,7 +98111,7 @@ const AppContainer = () => {
   const getCompanies = async () => {
     try {
       const response = await Object(axios__WEBPACK_IMPORTED_MODULE_2__["default"])({
-        url: Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_5__["resolveClientUrl"])(`GroupEmployeeList/GetCompanyDropdownList`),
+        url: Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_4__["resolveClientUrl"])(`GroupEmployeeList/GetCompanyDropdownList`),
         method: "GET",
         headers: {
           "X-Requested-With": "XMLHttpRequest"
@@ -98122,13 +98119,13 @@ const AppContainer = () => {
       });
       setCompanies(response.data);
     } catch (error) {
-      Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_5__["axiosError"])(error);
+      Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_4__["axiosError"])(error);
     }
   };
   const getInitialData = async () => {
     try {
       const response = await Object(axios__WEBPACK_IMPORTED_MODULE_2__["default"])({
-        url: Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_5__["resolveClientUrl"])(`SecondmentCompany/GetById/${window.empId}`),
+        url: Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_4__["resolveClientUrl"])(`SecondmentCompany/GetById/${window.empId}`),
         method: "GET",
         headers: {
           "X-Requested-With": "XMLHttpRequest"
@@ -98142,7 +98139,7 @@ const AppContainer = () => {
       });
       setFormKey(prev => prev + 1);
     } catch (error) {
-      Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_5__["axiosError"])(error);
+      Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_4__["axiosError"])(error);
     }
   };
   Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(() => {
@@ -98158,7 +98155,7 @@ const AppContainer = () => {
       empId: isNaN(parseInt(values.empId, 10)) ? 0 : values.empId,
       companyId: values.companyId
     };
-    Object(_common_functions__WEBPACK_IMPORTED_MODULE_6__["submitSecondmentCompany"])("SecondmentCompany/Edit", model, setSubmitting);
+    Object(_common_functions__WEBPACK_IMPORTED_MODULE_5__["submitSecondmentCompany"])("SecondmentCompany/Edit", model, setSubmitting);
   };
   const renderForm = ({
     errors,
@@ -98166,7 +98163,7 @@ const AppContainer = () => {
   }) => {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
       className: "card"
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_shared_components_Errors__WEBPACK_IMPORTED_MODULE_4__["default"], {
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_shared_components_Errors__WEBPACK_IMPORTED_MODULE_3__["default"], {
       errors: errors
     }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(formik__WEBPACK_IMPORTED_MODULE_1__["Form"], {
       className: "form-horizontal"
@@ -98226,7 +98223,7 @@ const AppContainer = () => {
       companyId: initialValues.companyId
     },
     enableReinitialize: true,
-    validationSchema: _common_functions__WEBPACK_IMPORTED_MODULE_6__["validationSchema"],
+    validationSchema: _common_functions__WEBPACK_IMPORTED_MODULE_5__["validationSchema"],
     onSubmit: handleSubmit
   }, renderForm);
 };

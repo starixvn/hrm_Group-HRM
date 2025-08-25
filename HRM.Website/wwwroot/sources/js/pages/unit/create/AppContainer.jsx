@@ -1,11 +1,10 @@
 ﻿import React, { useState, useEffect } from 'react';
 import { Formik, Form, Field } from 'formik';
 import axios from 'axios';
-import toastr from 'toastr';
 
 import Errors from '../../../shared/components/Errors';
 
-import { resolveClientUrl, axiosError, toastOptions } from '../../../shared/common.functions';
+import { resolveClientUrl, axiosError } from '../../../shared/common.functions';
 import { validationSchema, submitUnit } from '../common.functions';
 
 const AppContainer = ({ nextId }) => {
