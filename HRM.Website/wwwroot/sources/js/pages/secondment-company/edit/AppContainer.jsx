@@ -10,7 +10,7 @@ import {
     axiosError,
     toastOptions,
 } from "../../../shared/common.functions";
-import { validationSchema } from "../common.functions";
+import { validationSchema, submitSecondmentCompany } from "../common.functions";
 
 const AppContainer = () => {
     const [companies, setCompanies] = useState(null);
@@ -74,28 +74,7 @@ const AppContainer = () => {
             companyId: values.companyId
         };
 
-        axios
-            .post(
-                resolveClientUrl("SecondmentCompany/Edit"),
-                model,
-                {
-                    headers: { "X-Requested-With": "XMLHttpRequest" },
-                }
-            )
-            .then(response => {
-                const { data } = response;
-                if (data.isSuccessful) {
-                    toastr.success("Updated successfully!", '', toastOptions());
-                    setTimeout(function () {
-                        document.location =
-                            resolveClientUrl("secondmentcompany/index");
-                    }, 3000);
-                } else {
-                    toastr.error(data.message, '', toastOptions());
-                    setSubmitting(false);
-                }
-            })
-            .catch(axiosError);
+        submitSecondmentCompany("SecondmentCompany/Edit", model, setSubmitting);
     };
 
     const renderForm = ({ errors, isSubmitting }) => {

@@ -153,41 +153,21 @@ export const createScheduleDataExportHandlers = component => ({
     },
 
     handleExportExcel: () => {
-        const filter = component.state.filter,
-            fromDate = moment(filter.fromDate).format(EXPORT_DATE_FORMAT),
-            toDate = moment(filter.toDate).format(EXPORT_DATE_FORMAT);
-
-        blockUI();
-        axios({
-            url: resolveClientUrl('ScheduleArrange/ExportExcel'),
-            method: 'GET',
-            headers: { 'X-Requested-With': 'XMLHttpRequest' },
-            params: {
-                fromDate: fromDate,
-                toDate: toDate,
-                teamIds: filter.teamIds,
-                companyId: filter.companyId,
-                isLocal: filter.isLocal,
-                employeeId: filter.employee.value === 0 ? null : filter.employee.value,
-            },
-            responseType: 'blob',
-        })
-            .then(response => {
-                const fileName = response.headers['content-disposition'].match(/filename="(.+)"/)[1];
-                downloadFile(response.data, fileName);
-            })
-            .catch(axiosError)
-            .then(() => unblockUI());
+        component.exportScheduleData('ScheduleArrange/ExportExcel');
     },
 
     handleExportExcelDriverPickup: () => {
+        component.exportScheduleData('ScheduleArrange/ExportExcelDriverPickup');
+    },
+
+    exportScheduleData: endpoint => {
         const filter = component.state.filter,
             fromDate = moment(filter.fromDate).format(EXPORT_DATE_FORMAT),
             toDate = moment(filter.toDate).format(EXPORT_DATE_FORMAT);
 
         blockUI();
         axios({
-            url: resolveClientUrl('ScheduleArrange/ExportExcelDriverPickup'),
+            url: resolveClientUrl(endpoint),
             method: 'GET',
             headers: { 'X-Requested-With': 'XMLHttpRequest' },
             params: {
@@ -195,7 +175,7 @@ export const createScheduleDataExportHandlers = component => ({
                 toDate: toDate,
                 teamIds: filter.teamIds,
                 companyId: filter.companyId,
-                isLocal: filter.isLocal,
+                isLocal: filter.isLocal,  
                 employeeId: filter.employee.value === 0 ? null : filter.employee.value,
             },
             responseType: 'blob',

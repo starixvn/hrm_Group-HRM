@@ -1,4 +1,4 @@
-﻿import React, { Fragment } from "react";
+﻿import React from "react";
 
 import Row from "./Row";
 
@@ -9,18 +9,16 @@ const Table = ({ data, onDelete }) => {
         <table className="table table-custom">
             <thead>
                 <tr>
-                    <th>#</th>
-                    <th>Employee Code</th>
-                    <th>Full Name</th>
-                    <th>Nick Name</th>
-                    <th>Current Company</th>
-                    <th>Second Company</th>
-                    {window.hasPermission === "True" && (
-                        <Fragment>
-                            <th>Edit</th>
-                            <th>Delete</th>
-                        </Fragment>
-                    )}
+                    <th key="index">#</th>
+                    <th key="employeeCode">Employee Code</th>
+                    <th key="fullName">Full Name</th>
+                    <th key="nickName">Nick Name</th>
+                    <th key="currentCompany">Current Company</th>
+                    <th key="secondCompany">Second Company</th>
+                    {window.hasPermission === "True" && [
+                        <th key="edit">Edit</th>,
+                        <th key="delete">Delete</th>
+                    ]}
                 </tr>
             </thead>
             <tbody>
@@ -34,7 +32,7 @@ const Table = ({ data, onDelete }) => {
                         />
                     ))
                 ) : (
-                    <tr>
+                    <tr key="no-data">
                         <td colSpan={colSpan}>No information available</td>
                     </tr>
                 )}

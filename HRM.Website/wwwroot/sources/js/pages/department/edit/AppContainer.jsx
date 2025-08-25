@@ -4,17 +4,17 @@ import toastr from "toastr";
 import { Formik, Form, Field } from "formik";
 
 import Errors from "../../../shared/components/Errors";
-
 import {
     resolveClientUrl,
     axiosError,
     toastOptions,
 } from "../../../shared/common.functions";
-import { validationSchema } from "../common.functions";
+import { validationSchema, useDepartmentUnits } from "../common.functions";
 
 const AppContainer = () => {
     const [prepareData, setPrepareData] = useState(null);
     const [formKey, setFormKey] = useState(0);
+    const units = useDepartmentUnits();
 
     const [initialValues, setInitialValues] = useState({
         departmentId: 0,
@@ -25,7 +25,6 @@ const AppContainer = () => {
         accountableArea: '',
         picEmpId: '',
         groupDeptId: 0,
-        units: [],
     });
 
     const handleGoBack = () => {
@@ -58,21 +57,6 @@ const AppContainer = () => {
 
     useEffect(() => {
         axios({
-            url: resolveClientUrl(`Department/GetUnits`),
-            method: "GET",
-            headers: { "X-Requested-With": "XMLHttpRequest" },
-        })
-            .then(response => {
-                setInitialValues(prev =>({
-                    ...prev,
-                    units: response.data,
-                }));
-            })
-            .catch(axiosError);
-    }, []);
-
-    useEffect(() => {
-        axios({
             url: resolveClientUrl(`Department/GetPrepareDataForUnit`),
             method: "GET",
             headers: { "X-Requested-With": "XMLHttpRequest" },
@@ -86,19 +70,27 @@ const AppContainer = () => {
     const handleSubmit = (values, { setSubmitting }) => {
         setSubmitting(true);
 
+        const submitData = {
+            code: values.code.trim(),
+            name: values.name.trim(),
+            isActive: values.isActive,
+            unitId: values.unit,
+            groupDeptId: values.groupDeptId,
+            accountableArea: values.accountableArea,
+            picEmpId: values.picEmpId,
+        };
+
+        if (values.departmentId) {
+            submitData.departmentId = values.departmentId;
+        }
+
+        const endpoint = values.departmentId ? "Department/Edit" : "Department/Create";
+        const successMessage = values.departmentId ? "Updated successfully!" : "Created successfully!";
+
         axios
             .post(
-                resolveClientUrl("Department/Edit"),
-                {
-                    departmentId: values.departmentId,
-                    code: values.code.trim(),
-                    name: values.name.trim(),
-                    isActive: values.isActive,
-                    unitId: values.unit,
-                    groupDeptId: values.groupDeptId,
-                    accountableArea: values.accountableArea,
-                    picEmpId: values.picEmpId,
-                },
+                resolveClientUrl(endpoint),
+                submitData,
                 {
                     headers: { "X-Requested-With": "XMLHttpRequest" },
                 }
@@ -106,7 +98,7 @@ const AppContainer = () => {
             .then(response => {
                 const { data } = response;
                 if (data.isSuccessful) {
-                    toastr.success("Updated successfully!", '', toastOptions());
+                    toastr.success(successMessage, '', toastOptions());
                     setTimeout(function () {
                         document.location =
                             resolveClientUrl("Department/Index");
@@ -151,8 +143,8 @@ const AppContainer = () => {
                                 as="select"
                                 className="form-control">
                                 <option value='' />
-                                {initialValues.units
-                                    ? initialValues.units.map(unit => (
+                                {units
+                                    ? units.map(unit => (
                                           <option key={unit.id} value={unit.id}>
                                               {unit.code}-{unit.accountableArea}
                                           </option>

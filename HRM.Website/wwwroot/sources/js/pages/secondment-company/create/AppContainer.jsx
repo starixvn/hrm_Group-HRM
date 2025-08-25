@@ -1,17 +1,14 @@
 ﻿import React, { useState, useEffect } from "react";
 import { Formik, Form, Field } from "formik";
 import axios from "axios";
-import toastr from "toastr";
-
 import Errors from "../../../shared/components/Errors";
 import EmployeeAutocomplete from '../../extension-no/EmployeeAutocomplete';
 
 import {
     resolveClientUrl,
     axiosError,
-    toastOptions,
 } from "../../../shared/common.functions";
-import { validationSchema } from "../common.functions";
+import { validationSchema, submitSecondmentCompany } from "../common.functions";
 
 const AppContainer = () => {
     const [companies, setCompanies] = useState(null);
@@ -84,28 +81,7 @@ const AppContainer = () => {
             companyId: values.companyId
         };
 
-        axios
-            .post(
-                resolveClientUrl("SecondmentCompany/Create"),
-                model,
-                {
-                    headers: { "X-Requested-With": "XMLHttpRequest" },
-                }
-            )
-            .then(response => {
-                const { data } = response;
-                if (data.isSuccessful) {
-                    toastr.success("Created successfully!", '', toastOptions());
-                    setTimeout(function () {
-                        document.location =
-                            resolveClientUrl("secondmentcompany/index");
-                    }, 3000);
-                } else {
-                    toastr.error(data.message, '', toastOptions());
-                    setSubmitting(false);
-                }
-            })
-            .catch(axiosError);
+        submitSecondmentCompany("SecondmentCompany/Create", model, setSubmitting);
     };
 
     const renderForm = ({ errors, isSubmitting }) => {

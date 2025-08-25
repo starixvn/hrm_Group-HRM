@@ -5,8 +5,8 @@ import { Formik, Form, Field } from 'formik';
 
 import Errors from '../../../shared/components/Errors';
 
-import { resolveClientUrl, axiosError, toastOptions } from '../../../shared/common.functions';
-import { validationSchema } from '../common.functions';
+import { resolveClientUrl, axiosError } from '../../../shared/common.functions';
+import { validationSchema, submitUnit } from '../common.functions';
 
 const AppContainer = () => {
   const [unit, setUnit] = useState(null);
@@ -41,36 +41,18 @@ const AppContainer = () => {
   const handleSubmit = (values, { setSubmitting }) => {
     setSubmitting(true);
 
-    axios
-      .post(
-        resolveClientUrl('Unit/Edit'),
-        {
-          unitId: values.id,
-          code: values.code.trim(),
-          groupUnitId: parseInt(values.groupUnitId, 10),
-          category: values.category,
-          type: values.type,
-          accountableArea: values.accountableArea,
-          picEmpId: parseInt(values.picEmpId, 10) || 0,
-          isActive: values.isActive
-        },
-        {
-          headers: { 'X-Requested-With': 'XMLHttpRequest' }
-        }
-      )
-      .then(response => {
-        const { data } = response;
-        if (data.isSuccessful) {
-          toastr.success('Updated successfully!', '', toastOptions());
-          setTimeout(function () {
-            document.location = resolveClientUrl('Unit/Index');
-          }, 3000);
-        } else {
-          toastr.error(data.message, '', toastOptions());
-          setSubmitting(false);
-        }
-      })
-      .catch(axiosError);
+    const model = {
+      unitId: values.id,
+      code: values.code.trim(),
+      groupUnitId: parseInt(values.groupUnitId, 10),
+      category: values.category,
+      type: values.type,
+      accountableArea: values.accountableArea,
+      picEmpId: parseInt(values.picEmpId, 10) || 0,
+      isActive: values.isActive
+    };
+
+    submitUnit('Unit/Edit', model, setSubmitting);
   };
 
   const renderForm = ({ errors, isSubmitting }) => {

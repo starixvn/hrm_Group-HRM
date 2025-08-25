@@ -1,47 +1,35 @@
-﻿import React, { useState, useEffect } from "react";
+﻿import React, { useEffect, useState } from "react";
 import { Formik, Form, Field } from "formik";
 import axios from "axios";
 import toastr from "toastr";
 
 import Errors from "../../../shared/components/Errors";
+import { useDepartmentUnits, validationSchema } from "../common.functions";
 
 import {
     resolveClientUrl,
     axiosError,
     toastOptions,
 } from "../../../shared/common.functions";
-import { validationSchema } from "../common.functions";
 
 const AppContainer = () => {
     const [prepareData, setPrepareData] = useState(null);
     const [formKey, setFormKey] = useState(0);
+    const units = useDepartmentUnits();
 
     const [initialValues, setInitialValues] = useState({
         code: '',
         name: '',
         isActive: true,
-        units: [],
+        unit: '',
+        accountableArea: '',
+        picEmpId: '',
         groupDeptId: 0,
     });
 
     const handleGoBack = () => {
         history.back();
     };
-
-    useEffect(() => {
-        axios({
-            url: resolveClientUrl(`Department/GetUnits`),
-            method: "GET",
-            headers: { "X-Requested-With": "XMLHttpRequest" },
-        })
-            .then(response => {
-                setInitialValues(prev =>({
-                    ...prev,
-                    units: response.data,
-                }));
-            })
-            .catch(axiosError);
-    }, []);
 
     useEffect(() => {
         axios({
@@ -129,8 +117,8 @@ const AppContainer = () => {
                                 as="select"
                                 className="form-control">
                                 <option value='' />
-                                {initialValues.units
-                                    ? initialValues.units.map(unit => (
+                                {units
+                                    ? units.map(unit => (
                                           <option key={unit.id} value={unit.id}>
                                               {unit.code}-{unit.accountableArea}
                                           </option>
