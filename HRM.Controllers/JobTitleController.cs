@@ -98,18 +98,17 @@ public class JobTitleController(
         return Json(result);
     }
 
-    private static IList<SelectListItem> GetJobCategories() =>
-        new List<SelectListItem>
-        {
-            new() { Text = Labels.Worker, Value = ((int)JobTitleCategory.Worker).ToString() },
-            new() { Text = Labels.Staff, Value = ((int)JobTitleCategory.Staff).ToString() },
-            new() { Text = Labels.Executive, Value = ((int)JobTitleCategory.Executive).ToString() },
-            new() { Text = Labels.ExecutiveWithPosition, Value = ((int)JobTitleCategory.ExecutiveWithPosition).ToString() },
-            new() { Text = Labels.Management, Value = ((int)JobTitleCategory.Management).ToString() },
-            new() { Text = Labels.PD, Value = ((int)JobTitleCategory.PD).ToString() },
-            new() { Text = Labels.Product, Value = ((int)JobTitleCategory.Product).ToString() },
-            new() { Text = Labels.Support, Value = ((int)JobTitleCategory.Support).ToString() }
-        };
+    private static List<SelectListItem> GetJobCategories() =>
+    [
+        new() { Text = Labels.Worker, Value = ((byte)JobTitleCategory.Worker).ToString() },
+        new() { Text = Labels.Staff, Value = ((byte)JobTitleCategory.Staff).ToString() },
+        new() { Text = Labels.Executive, Value = ((byte)JobTitleCategory.Executive).ToString() },
+        new() { Text = Labels.ExecutiveWithPosition, Value = ((byte)JobTitleCategory.ExecutiveWithPosition).ToString() },
+        new() { Text = Labels.Management, Value = ((byte)JobTitleCategory.Management).ToString() },
+        new() { Text = Labels.PD, Value = ((byte)JobTitleCategory.PD).ToString() },
+        new() { Text = Labels.Product, Value = ((byte)JobTitleCategory.Product).ToString() },
+        new() { Text = Labels.Support, Value = ((byte)JobTitleCategory.Support).ToString() }
+    ];
 }
 
 public class JobTitleUpdateModel

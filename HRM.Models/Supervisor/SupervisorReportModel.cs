@@ -18,17 +18,11 @@ public class SupervisorReportModel
     public List<Role> Roles { get; set; }
 
     public string Roles2String
-    {
-        get
-        {
-            return Roles == null || !Roles.Any() ? string.Empty : string.Join(", ", Roles.Select(i => i.Name));
-        }
-    }
+        => Roles == null || Roles.Count == 0 ? string.Empty : string.Join(", ", Roles.Select(i => i.Name));
 
     public TeamModel Team { get; set; }
 
     public IList<SupervisorModel> Supervisors { get; set; } = new List<SupervisorModel>();
 
     public string Department { get; set; }
-
 }

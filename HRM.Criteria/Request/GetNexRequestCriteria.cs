@@ -1,10 +1,9 @@
-﻿using HRM.Core.Constants;
-
-namespace HRM.Criteria.Request;
+﻿namespace HRM.Criteria.Request;
 
 using System;
 using Fanex.Data;
 using Fanex.Data.Repository;
+using HRM.Core.Constants;
 
 public class GetNexRequestCriteria : CriteriaBase
 {
@@ -20,7 +19,7 @@ public class GetNexRequestCriteria : CriteriaBase
 
     public string RequestType { get; set; }
 
-    public bool isFilterByEffectedDate { get; set; }
+    public bool IsFilterByEffectedDate { get; set; }
 
     public int? LeaveTypeId { get; set; }
 

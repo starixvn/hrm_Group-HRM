@@ -2,7 +2,7 @@
 
 using System.ComponentModel;
 
-public enum JobTitleCategory
+public enum JobTitleCategory : byte
 {
     [Description("Default")]
     Default = 0,

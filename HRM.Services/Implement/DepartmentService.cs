@@ -27,7 +27,7 @@ public class DepartmentService(
     {
         var criteria = new DeleteDepartmentCriteria
         {
-            departmentId = id,
+            DepartmentId = id,
             ModifiedBy = actorId
         };
         return await baseService.ExecuteNonQueryAsync(criteria);

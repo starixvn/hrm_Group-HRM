@@ -24,9 +24,12 @@ public class TimeRecordController(
             ToDate = toDate
         };
         var records = await baseService.GetDataAsync<TimeRecord>(criteria);
-        foreach (var record in records)
+        if (!string.IsNullOrWhiteSpace(company))
         {
-            record.Company = company;
+            foreach (var record in records)
+            {
+                record.Company = company;
+            }
         }
 
         return Ok(records);
