@@ -260,6 +260,7 @@ public class EmployeeService(
             JoinDate = DateTimeOffset.Now.DateTime.ToClientTimeZone()
         };
         var commandResult = await baseService.ExecuteNonQueryAsync(criteria);
+        commandResult.OutputId = criteria.EmpId;
 
         return commandResult;
     }

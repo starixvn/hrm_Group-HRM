@@ -256,7 +256,7 @@ public class EmployeeController(
         var commandResult = await employeeService.CreateAsync(param);
         if (commandResult.IsSuccessful)
         {
-            return RedirectToAction("Edit", new { id = userId });
+            return RedirectToAction("Edit", new { id = commandResult.OutputId });
         }
 
         ModelState.AddModelError(string.Empty, commandResult.Message);

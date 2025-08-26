@@ -1,11 +1,11 @@
-﻿
-namespace HRM.Criteria.Employee;
+﻿namespace HRM.Criteria.Employee;
 
 using System;
 using Fanex.Data.Repository;
 
 public class InsertEmployeeCriteria : CriteriaBase
 {
+    public int EmpId { get; set; }
     public short CompanyId { get; set; }
     public int UserId { get; set; }
     public string FullName { get; set; }
