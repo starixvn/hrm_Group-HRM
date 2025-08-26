@@ -96,6 +96,25 @@ public class OvertimeController(
 
     private async Task<IEnumerable<MonthlyOvertimeRequest>> GetMemberOvertimeRequestAsync(MemberMonthlyOvertimeRequestViewModel model)
     {
+        var param = CreateOvertimeRequestParam(model);
+        param.IsShowCrossCompany = model.IsShowCrossCompany;
+        model.MemberRequests = await overtimeService.GetMemberMonthlyRequestAsync(param);
+
+        return model.MemberRequests;
+    }
+
+    private async Task<IEnumerable<MonthlyOvertimeRequest>> GetEmployeeOvertimeRequestAsync(MemberMonthlyOvertimeRequestViewModel model)
+    {
+        var param = CreateOvertimeRequestParam(model);
+        param.IsProcessor = true;
+        param.OvertimeType = model.OvertimeType;
+        model.MemberRequests = await overtimeService.GetMemberMonthlyRequestAsync(param);
+
+        return model.MemberRequests;
+    }
+
+    private GetMonthlyOvertimeRequestParam CreateOvertimeRequestParam(MemberMonthlyOvertimeRequestViewModel model)
+    {
         var requestStatusIds = Enum.GetValues<CurrentRequestStatus>().Cast<int>().Where(x => x > 0);
         var statusIds = model.StatusId switch
         {
@@ -112,12 +131,10 @@ public class OvertimeController(
             EmployeeId = model.EmployeeId,
             StatusIds = statusIds,
             IsLocal = model.IsLocal,
-            CompanyId = CurrentCompanyId,
-            IsShowCrossCompany = model.IsShowCrossCompany
+            CompanyId = CurrentCompanyId
         };
-        model.MemberRequests = await overtimeService.GetMemberMonthlyRequestAsync(param);
 
-        return model.MemberRequests;
+        return param;
     }
 
     public async Task<IActionResult> MemberDetails(long id)
@@ -141,33 +158,6 @@ public class OvertimeController(
         model.MemberRequests = await GetEmployeeOvertimeRequestAsync(model);
 
         return PartialView("_ListEmployeeOvertime", model);
-    }
-
-    private async Task<IEnumerable<MonthlyOvertimeRequest>> GetEmployeeOvertimeRequestAsync(MemberMonthlyOvertimeRequestViewModel model)
-    {
-        var requestStatusIds = Enum.GetValues<CurrentRequestStatus>().Cast<int>().Where(x => x > 0);
-        var statusIds = model.StatusId switch
-        {
-            -1 => $"{(byte)CurrentRequestStatus.Pending},{(byte)CurrentRequestStatus.Verified}",
-            0 => string.Join(",", requestStatusIds),
-            _ => model.StatusId.ToString()
-        };
-
-        var param = new GetMonthlyOvertimeRequestParam
-        {
-            ActorId = EmployeeSession.EmpId,
-            Month = model.Month,
-            TeamIds = model.TeamIds,
-            EmployeeId = model.EmployeeId,
-            StatusIds = statusIds,
-            IsProcessor = true,
-            OvertimeType = model.OvertimeType,
-            IsLocal = model.IsLocal,
-            CompanyId = CurrentCompanyId
-        };
-        model.MemberRequests = await overtimeService.GetMemberMonthlyRequestAsync(param);
-
-        return model.MemberRequests;
     }
 
     public async Task<IActionResult> EmployeeDetails(long id)
