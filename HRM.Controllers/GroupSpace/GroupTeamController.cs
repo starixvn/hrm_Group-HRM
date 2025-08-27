@@ -229,9 +229,9 @@ public class GroupTeamController(
     }
 
     [HrmPermission(Policy.Read, FunctionKey.GroupTeamManagement)]
-    public async Task<IActionResult> ExportGroupTeamList(string keyword = null)
+    public async Task<IActionResult> ExportGroupTeamList(string teamIds = null)
     {
-        var teams = await teamService.GetAllTeamByUnitScopeAsync(keyword);
+        var teams = await teamService.GetAllTeamByUnitScopeAsync(teamIds);
         var hasPermissionViewAll = session.HasPermissionOnFunction(FunctionKey.GroupTeamManagement_AllTeam, Policy.Read);
         if (!hasPermissionViewAll)
         {
