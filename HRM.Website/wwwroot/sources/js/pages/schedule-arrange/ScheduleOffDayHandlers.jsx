@@ -1,6 +1,6 @@
 import { toast } from 'react-toastify';
 
-const processMemberOffDay = (member, attrName, component) => {
+const processMemberOffDay = (member, attrName, _gindex, _eindex, component) => {
     member.selectWeekDays = {
         ...member.selectWeekDays,
         [attrName]: false,
@@ -21,7 +21,7 @@ const processMemberOffDay = (member, attrName, component) => {
     }
 };
 
-const processMemberOffDayOT = (member, attrName, component, gindex, eindex) => {
+const processMemberOffDayOT = (member, attrName, gindex, eindex, component) => {
     member.selectWeekDays = {
         ...member.selectWeekDays,
         [attrName]: false,
@@ -104,7 +104,7 @@ const processSelectedMembers = (schedules, selectedMembers, processFunction, com
         
         component.scheduleAttrNames.forEach(attrName => {
             if (member.selectWeekDays[attrName]) {
-                processFunction(member, attrName, component, gindex, eindex);
+                processFunction(member, attrName, gindex, eindex, component);
             }
         });
         

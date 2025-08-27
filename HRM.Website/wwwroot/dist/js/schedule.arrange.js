@@ -144662,7 +144662,7 @@ __webpack_require__.r(__webpack_exports__);
 function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
 function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
 
-const processMemberOffDay = (member, attrName, component) => {
+const processMemberOffDay = (member, attrName, _gindex, _eindex, component) => {
   member.selectWeekDays = _objectSpread(_objectSpread({}, member.selectWeekDays), {}, {
     [attrName]: false
   });
@@ -144675,7 +144675,7 @@ const processMemberOffDay = (member, attrName, component) => {
     });
   }
 };
-const processMemberOffDayOT = (member, attrName, component, gindex, eindex) => {
+const processMemberOffDayOT = (member, attrName, gindex, eindex, component) => {
   member.selectWeekDays = _objectSpread(_objectSpread({}, member.selectWeekDays), {}, {
     [attrName]: false
   });
@@ -144728,7 +144728,7 @@ const processSelectedMembers = (schedules, selectedMembers, processFunction, com
     const member = _objectSpread({}, members[eindex]);
     component.scheduleAttrNames.forEach(attrName => {
       if (member.selectWeekDays[attrName]) {
-        processFunction(member, attrName, component, gindex, eindex);
+        processFunction(member, attrName, gindex, eindex, component);
       }
     });
     members[eindex] = member;
