@@ -88,7 +88,8 @@ public class AccountController(
             var param = new EditPassword
             {
                 EmployeeId = EmployeeSession.EmpId,
-                Password = Encryptor.ComputeHash(model.NewPassword)
+                Password = Encryptor.ComputeHash(model.NewPassword),
+                UserId = session.UserId
             };
             var commandResult = await employeeService.EditPasswordAsync(EmployeeSession.EmpId, param);
             switch (commandResult.Code)
