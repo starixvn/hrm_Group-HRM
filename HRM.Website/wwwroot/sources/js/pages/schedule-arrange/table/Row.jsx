@@ -27,7 +27,7 @@ export default class Row extends PureComponent {
         this.props.onChangeShift(teamId, employeeId, name, shift);
     };
 
-    handleSelectEmployee = (event) => {
+    handleSelectEmployee = event => {
         const { teamId, data } = this.props;
         const employeeId = data.employeeId;
         this.props.onSelectEmployeeOfTeam(
@@ -79,7 +79,7 @@ export default class Row extends PureComponent {
                     isUsedWeeklyDefaultShift={data.isUsedWeeklyDefaultShift}
                     data={data.defaultShift}
                     shiftOptions={shiftOptions.filter(
-                        (shift) => shift.id !== OffDayShiftId
+                        shift =>shift.id !== OffDayShiftId
                     )}
                     onChangeDefaultShift={this.props.onChangeDefaultShift}
                 />
@@ -197,3 +197,4 @@ export default class Row extends PureComponent {
         );
     }
 }
+

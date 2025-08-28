@@ -80109,7 +80109,7 @@ const Filter = () => {
     length: currentYear - 2011 + 1
   }, (_, i) => currentYear - i);
   const handleYearChange = e => {
-    setSelectedYear(parseInt(e.target.value));
+    setSelectedYear(parseInt(e.target.value, 10));
   };
   const handleExport = () => {
     window.location.href = Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_1__["resolveClientUrl"])(`HeadcountReport/ExportExcel?year=${selectedYear}`);
@@ -80161,13 +80161,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _Filter__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Filter */ "./sources/js/pages/headcount-report/home/components/Filter.jsx");
-/* harmony import */ var _shared_common_functions__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../shared/common.functions */ "./sources/js/shared/common.functions.js");
 
 
-
-const HeadcountReport = () => {
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Filter__WEBPACK_IMPORTED_MODULE_1__["default"], null));
-};
+const HeadcountReport = () => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Filter__WEBPACK_IMPORTED_MODULE_1__["default"], null);
 /* harmony default export */ __webpack_exports__["default"] = (HeadcountReport);
 
 /***/ }),

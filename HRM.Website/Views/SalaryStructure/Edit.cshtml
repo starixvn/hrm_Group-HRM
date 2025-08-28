@@ -2,19 +2,19 @@
 @model int
 
 @{
-	ViewBag.Title = Labels.EditSalaryStructure;
+    ViewBag.Title = Labels.EditSalaryStructure;
 }
 @section css{
     <link href="~/dist/styles/salary-structure.create.css" rel="stylesheet" asp-append-version="true" />
 }
 @section js{
-	<script>window.salaryStructureId = @Model;</script>
+    <script>window.salaryStructureId = @Model;</script>
     <script src="~/dist/js/salary-structure.edit.js" asp-append-version="true"></script>
 }
 @section Breadcrumb {
-	<a class="step">@Labels.HRSpace</a>
-	<a class="step" href="@Url.Action("index", "SalaryStructure")">@Labels.SalaryStructure</a>
-	<span class="step">@ViewBag.Title</span>
+    <a class="step">@Labels.HRSpace</a>
+    <a class="step" href="@Url.Action("index", "SalaryStructure")">@Labels.SalaryStructure</a>
+    <span class="step">@ViewBag.Title</span>
 }
 
 <h2 class="page-title">@Labels.Edit</h2>

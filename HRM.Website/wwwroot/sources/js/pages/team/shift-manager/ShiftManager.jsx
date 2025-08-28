@@ -7,13 +7,13 @@ import {
     axiosError,
     blockUI,
     unblockUI,
-    resolveClientUrl,
+    resolveClientUrl
 } from '../../../shared/common.functions';
 import {
     editTeamSupervisor,
     editEmployeeSupervisor,
     reorderSupervisor,
-    getGroupTeamEmployees,
+    getGroupTeamEmployees
 } from '../supervisor/common.functions';
 import ToastLayout from '../../../shared/layouts/ToastLayout';
 import Table from '../discipline-manager/table/table';
@@ -21,7 +21,7 @@ import Table from '../discipline-manager/table/table';
 const PageType = {
     Team: 1,
     Employee: 2,
-    GroupTeam: 3,
+    GroupTeam: 3
 };
 
 export default class ShiftManager extends Component {
@@ -41,10 +41,10 @@ export default class ShiftManager extends Component {
     componentDidMount() {
         this.getShiftManagers();
     }
-    getEmployees = (query) => {
+    getEmployees = query => {
         if (query.trim().length > 1) {
             let apiCall;
-            let isGroupTeam = this.props.pageType === PageType.GroupTeam;
+            const isGroupTeam = this.props.pageType === PageType.GroupTeam;
             if (isGroupTeam) {
                 apiCall = getGroupTeamEmployees(query);
             } else {
@@ -61,14 +61,13 @@ export default class ShiftManager extends Component {
             }
 
             apiCall
-                .then((response) => {
-                    const employeeOptions = response.data.map((item) => {
-                        var id = isGroupTeam ? item.empId : item.id;
+                .then(response => {
+                    const employeeOptions = response.data.map(item => {
+                        const id = isGroupTeam ? item.empId : item.id;
                         return {
                             key: id,
                             id: id,
-                            teamCode:
-                                item.teamCode !== null ? item.teamCode : '',
+                            teamCode: item.teamCode !== null ? item.teamCode : '',
                             value:
                                 this.props.pageType === PageType.GroupTeam
                                     ? `${item.nickName} (${item.company})`
@@ -106,7 +105,7 @@ export default class ShiftManager extends Component {
             headers: { 'X-Requested-With': 'XMLHttpRequest' },
             params: params,
         })
-            .then((response) => {
+            .then(response => {
                 this.setState({ managers: response.data });
             })
             .catch(axiosError)
@@ -125,10 +124,8 @@ export default class ShiftManager extends Component {
         );
     };
 
-    handleAddEmployee = (employee) => {
-        const index = this.state.managers.findIndex(
-            (item) => item.ownerId === employee.id
-        );
+    handleAddEmployee = employee => {
+        const index = this.state.managers.findIndex(item =>item.ownerId === employee.id);
         this.setState({ employeeOptions: [] });
         if (index < 0) {
             const managers = [
@@ -143,9 +140,9 @@ export default class ShiftManager extends Component {
         }
     };
 
-    handleRemoveEmployee = (employeeId) => {
+    handleRemoveEmployee = employeeId => {
         const managers = [...this.state.managers],
-            index = managers.findIndex((item) => item.ownerId === employeeId);
+            index = managers.findIndex(item =>item.ownerId === employeeId);
         managers.splice(index, 1);
         this.setState({ managers });
     };
@@ -222,3 +219,4 @@ export default class ShiftManager extends Component {
         }
     };
 }
+

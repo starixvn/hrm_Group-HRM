@@ -109330,7 +109330,10 @@ class Search extends react__WEBPACK_IMPORTED_MODULE_1__["Component"] {
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_shared_components_WeekPicker__WEBPACK_IMPORTED_MODULE_5__["default"], {
       fromDate: this.props.filter.fromDate,
       toDate: this.props.filter.toDate,
-      onChange: this.handleDateChange
+      onChange: (fromDate, toDate) => {
+        this.props.onChange('fromDate', fromDate);
+        this.props.onChange('toDate', toDate);
+      }
     }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
       className: "form-group form-group--m"
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
@@ -110835,7 +110838,7 @@ class Autocomplete extends react__WEBPACK_IMPORTED_MODULE_1__["Component"] {
     _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleInput", event => {
       this.props.onInput(event.target.value);
     });
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleChange", (event, ui) => {
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleChange", (_, ui) => {
       let value = 0,
         label = '';
       if (ui && ui.item) {
@@ -110926,7 +110929,7 @@ class WeekPicker extends react__WEBPACK_IMPORTED_MODULE_1__["PureComponent"] {
       const vm = this;
       this.$el.weekpicker({
         firstDay: 1,
-        onSelect: function (dateText, startDateText, startDate, endDate) {
+        onSelect: function (_unused1, _unused2, startDate, endDate) {
           vm.props.onChange(moment__WEBPACK_IMPORTED_MODULE_2___default()(startDate).format(_constants__WEBPACK_IMPORTED_MODULE_3__["DateFormat"]), moment__WEBPACK_IMPORTED_MODULE_2___default()(endDate).format(_constants__WEBPACK_IMPORTED_MODULE_3__["DateFormat"]));
           vm.$el.hide();
         }

@@ -61,7 +61,7 @@ public class UnitController(
             Type = model.Type,
             AccountableArea = model.AccountableArea,
             IsActive = model.IsActive,
-            CreatedBy = session.UserId
+            CreatedBy = EmployeeSession.EmpId
         };
         commandResult = await unitService.CreateAsync(criteria);
         return new JsonResult(commandResult);
@@ -101,7 +101,7 @@ public class UnitController(
             Type = model.Type,
             AccountableArea = model.AccountableArea,
             IsActive = model.IsActive,
-            ModifiedBy = session.UserId
+            ModifiedBy = EmployeeSession.EmpId
         };
         commandResult = await unitService.EditAsync(criteria);
         return new JsonResult(commandResult);
@@ -111,7 +111,7 @@ public class UnitController(
     [HrmPermission(Policy.Host, FunctionKey.UnitManagement)]
     public async Task<IActionResult> Delete([FromBody] DeleteUnitCriteria criteria)
     {
-        criteria.ModifiedBy = session.UserId;
+        criteria.ModifiedBy = EmployeeSession.EmpId;
         var commandResult = await unitService.DeleteAsync(criteria);
 
         return new JsonResult(commandResult);

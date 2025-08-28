@@ -78,7 +78,7 @@ import {
             responseType: "text",
             data: $("form.filter").serialize(),
         })
-            .then((response) => {
+            .then(response => {
                 unblockUI();
                 $("#group-employee-list").html(response.data);
                 checkDisabledUser();
@@ -94,8 +94,8 @@ import {
                     onShow(instance) {
                         const code = $(instance.reference).attr("data-code");
                         fetch(`/employee/avatar/${code}`)
-                            .then((response) => response.text())
-                            .then((avatarUrl) => {
+                            .then(response => response.text())
+                            .then(avatarUrl => {
                                 instance.setContent(
                                     `<img src="${avatarUrl}" style="max-width: 100px; max-height: 100px;" />`
                                 );
@@ -203,7 +203,7 @@ import {
             method: "GET",
             headers: { "X-Requested-With": "XMLHttpRequest" },
         })
-            .then((response) => {
+            .then(response => {
                 $("#GroupTeam")
                     .multiSelectTreeView({
                         data: response.data.data,
@@ -226,7 +226,7 @@ import {
                     method: "GET",
                     headers: { "X-Requested-With": "XMLHttpRequest" },
                 })
-                    .then((companyResponse) => {
+                    .then(companyResponse => {
                         initMultiSelectTreeView("#Company", companyResponse.data, "#CompanyIds");
                         query();
                     })

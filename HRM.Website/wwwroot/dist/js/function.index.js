@@ -88175,8 +88175,23 @@ const Table = ({
       }));
     }
     if (!checked) {
-      const childs = functions.filter(child => child.parentId === parentId && permissions.filter(item => item.functionId === child.functionId && (target === 'funcRead' && item.isRead || target === 'funcHost' && item.isHost)).length > 0);
-      isChecked = childs.length === 0 ? false : true;
+      const hasTarget = (child, item) => {
+        if (item.functionId !== child.functionId) {
+          return false;
+        }
+        ;
+        if (target === "funcRead") {
+          return item.isRead;
+        }
+        ;
+        if (target === "funcHost") {
+          return item.isHost;
+        }
+        ;
+        return false;
+      };
+      const childs = functions.filter(child => permissions.some(item => hasTarget(child, item)));
+      isChecked = childs.length > 0;
     }
     updatePermission(permissions, functions[pindex].functionId, target, isChecked);
     if (functions[pindex].parentId) {
@@ -88244,7 +88259,7 @@ const Table = ({
         }, "\u2514\u2500\u2500"));
       }
     }
-    const rows = [/*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("tr", {
+    let rows = [/*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("tr", {
       key: `row-${func.functionId}`,
       className: func.level === 0 ? 'root-row' : 'child-row'
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("td", {
@@ -88266,11 +88281,16 @@ const Table = ({
       disabled: !isHost,
       onChange: event => handleChangePermission(func, event)
     })))];
-    if (func.childs && func.childs.length > 0) {
-      const totalChilds = func.childs.length;
-      for (let i = 0; i < totalChilds; i++) {
-        rows.push(...renderRow(func.childs[i]));
-      }
+    rows = attachChildToRow(func, rows);
+    return rows;
+  };
+  const attachChildToRow = (func, rows) => {
+    if (!func.childs || func.childs.length <= 0) {
+      return rows;
+    }
+    const totalChilds = func.childs.length;
+    for (let i = 0; i < totalChilds; i++) {
+      rows.push(...renderRow(func.childs[i]));
     }
     return rows;
   };

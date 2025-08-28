@@ -1,33 +1,28 @@
-import React from 'react';
+﻿import React from 'react';
 import { EmploymentStatusColor } from '../constants/constants';
 
 const SalaryTable = ({ data }) => {
-    const formatNumber = (number) => {
-        return new Intl.NumberFormat('en-US').format(number || 0);
-    };
+    const formatNumber = number => new Intl.NumberFormat('en-US').format(number || 0);
 
-    const getRowStyle = (employmentStatus) => {
+    const getRowStyle = employmentStatus => {
         const color = EmploymentStatusColor[employmentStatus];
         return color ? { color: color } : {};
     };
 
-    const totals = data.reduce(
-        (acc, item) => ({
-            basicSalary: (acc.basicSalary || 0) + (item.basicSalary || 0),
-            standardWorkingDay:
-                (acc.standardWorkingDay || 0) + (item.standardWorkingDay || 0),
-            unpaidLeave: (acc.unpaidLeave || 0) + (item.unpaidLeave || 0),
-            paidDay: (acc.paidDay || 0) + (item.paidDay || 0),
-            grossSalary: (acc.grossSalary || 0) + (item.grossSalary || 0),
-        }),
-        {
-            basicSalary: 0,
-            standardWorkingDay: 0,
-            unpaidLeave: 0,
-            paidDay: 0,
-            grossSalary: 0,
-        }
-    );
+    const keys = [
+        "basicSalary",
+        "standardWorkingDay",
+        "unpaidLeave",
+        "paidDay",
+        "grossSalary",
+    ];
+
+    const totals = data.reduce((acc, item) => {
+        keys.forEach(key => {
+            acc[key] += item[key] || 0;
+        });
+        return acc;
+    }, Object.fromEntries(keys.map(k => [k, 0])));
 
     return (
         <div className="salary-table-section">

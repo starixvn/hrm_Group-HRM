@@ -144160,6 +144160,1431 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./sources/js/pages/schedule-arrange/ScheduleActions.jsx":
+/*!***************************************************************!*\
+  !*** ./sources/js/pages/schedule-arrange/ScheduleActions.jsx ***!
+  \***************************************************************/
+/*! exports provided: createScheduleActions, default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createScheduleActions", function() { return createScheduleActions; });
+/* harmony import */ var _common_functions__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./common.functions */ "./sources/js/pages/schedule-arrange/common.functions.js");
+
+const createScheduleActions = () => ({
+  validateScheduleChanges: (schedule, totalOffDaysDefault) => {
+    const totalOffDays = Object(_common_functions__WEBPACK_IMPORTED_MODULE_0__["getTotalOffDays"])(schedule);
+    return totalOffDaysDefault >= totalOffDays;
+  }
+});
+/* harmony default export */ __webpack_exports__["default"] = (createScheduleActions);
+
+/***/ }),
+
+/***/ "./sources/js/pages/schedule-arrange/ScheduleDataExportHandlers.jsx":
+/*!**************************************************************************!*\
+  !*** ./sources/js/pages/schedule-arrange/ScheduleDataExportHandlers.jsx ***!
+  \**************************************************************************/
+/*! exports provided: createScheduleDataExportHandlers, default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createScheduleDataExportHandlers", function() { return createScheduleDataExportHandlers; });
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "./node_modules/@babel/runtime/helpers/defineProperty.js");
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _shared_common_functions__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../shared/common.functions */ "./sources/js/shared/common.functions.js");
+/* harmony import */ var _shared_constants__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../shared/constants */ "./sources/js/shared/constants.js");
+
+function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+
+
+
+
+
+const EXPORT_DATE_FORMAT = 'DD-MMM-YYYY';
+const createScheduleDataExportHandlers = component => ({
+  loadTeams: companyId => {
+    Object(axios__WEBPACK_IMPORTED_MODULE_1__["default"])({
+      url: Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_4__["resolveClientUrl"])('Team/GetOrgChart'),
+      method: 'GET',
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest'
+      },
+      params: {
+        companyId: companyId || null
+      }
+    }).then(response => {
+      component.teamOptions = response.data;
+      const {
+        floatData
+      } = __webpack_require__(/*! ../../shared/components/react-tree-multiselect/buildData */ "./sources/js/shared/components/react-tree-multiselect/buildData.js").default(response.data);
+      const filter = _objectSpread(_objectSpread({}, component.state.filter), {}, {
+        teamIds: floatData.filter(item => item.isLeaf).map(item => item.id).join(',')
+      });
+      component.setState({
+        filter: filter
+      });
+      component.getWeeklyShedules(filter);
+    }).catch(_shared_common_functions__WEBPACK_IMPORTED_MODULE_4__["axiosError"]);
+  },
+  loadShifts: companyId => {
+    Object(axios__WEBPACK_IMPORTED_MODULE_1__["default"])({
+      url: Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_4__["resolveClientUrl"])('Calendar/GetShift'),
+      method: 'GET',
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest'
+      },
+      params: {
+        query: '',
+        isShowOff: true,
+        companyId: companyId
+      }
+    }).then(response => {
+      component.shiftOptions = response.data.map(shift => {
+        return {
+          id: shift.id,
+          code: shift.code,
+          name: shift.name
+        };
+      });
+    }).catch(_shared_common_functions__WEBPACK_IMPORTED_MODULE_4__["axiosError"]);
+  },
+  handleCompanyChange: companyId => {
+    component.setState({
+      filter: _objectSpread(_objectSpread({}, component.state.filter), {}, {
+        companyId: companyId,
+        employee: {
+          value: 0,
+          label: ''
+        }
+      }),
+      employeeOptions: []
+    });
+    component.loadTeams(companyId);
+    component.loadShifts(companyId);
+  },
+  getEmployees: query => {
+    if (!component.state.filter.teamIds) {
+      component.setState({
+        employeeOptions: []
+      });
+      return;
+    }
+    Object(axios__WEBPACK_IMPORTED_MODULE_1__["default"])({
+      url: Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_4__["resolveClientUrl"])('ScheduleArrange/GetEmployees'),
+      method: 'GET',
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest'
+      },
+      params: {
+        teamIds: component.state.filter.teamIds,
+        query: query
+      }
+    }).then(response => {
+      const employeeOptions = response.data.map(item => {
+        return {
+          id: item.employeeId,
+          value: `${item.nickname} (${item.fullName})`
+        };
+      });
+      component.setState({
+        employeeOptions: employeeOptions
+      });
+    }).catch(_shared_common_functions__WEBPACK_IMPORTED_MODULE_4__["axiosError"]);
+  },
+  getWeeklyShedules: filter => {
+    const fromDate = moment__WEBPACK_IMPORTED_MODULE_3___default()(filter.fromDate).format(_shared_constants__WEBPACK_IMPORTED_MODULE_5__["DateFormat"]),
+      toDate = moment__WEBPACK_IMPORTED_MODULE_3___default()(filter.toDate).format(_shared_constants__WEBPACK_IMPORTED_MODULE_5__["DateFormat"]);
+    Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_4__["blockUI"])();
+    Object(axios__WEBPACK_IMPORTED_MODULE_1__["default"])({
+      url: Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_4__["resolveClientUrl"])('ScheduleArrange/GetWeeklySchedule'),
+      method: 'GET',
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest'
+      },
+      params: {
+        fromDate: fromDate,
+        toDate: toDate,
+        teamIds: filter.teamIds,
+        companyId: filter.companyId,
+        isLocal: filter.isLocal,
+        employeeId: filter.employee.value === 0 ? null : filter.employee.value
+      }
+    }).then(response => {
+      component.selectedWeek = {
+        fromDate,
+        toDate
+      };
+      const {
+        isHost,
+        enableSyncWorkingShift,
+        schedules
+      } = response.data;
+      component.originalSchedules = schedules.map(team => {
+        team.members.map(schedule => {
+          schedule.selectWeekDays = {
+            mondaySchedule: false,
+            tuesdaySchedule: false,
+            wednesdaySchedule: false,
+            thursdaySchedule: false,
+            fridaySchedule: false,
+            saturdaySchedule: false,
+            sundaySchedule: false
+          };
+          schedule.totalOffDayReplacement = 0;
+          Object.keys(schedule.selectWeekDays).forEach(objectKey => {
+            if (schedule[objectKey].isOffDayReplacement) {
+              schedule.totalOffDayReplacement = schedule.totalOffDayReplacement + 1;
+            }
+          });
+          return schedule;
+        });
+        return team;
+      });
+      component.setState({
+        filter: _objectSpread(_objectSpread({}, component.state.filter), {}, {
+          fromDate,
+          toDate
+        }),
+        isHost,
+        enableSyncWorkingShift,
+        schedules: Object(lodash__WEBPACK_IMPORTED_MODULE_2__["cloneDeep"])(component.originalSchedules)
+      });
+    }).catch(_shared_common_functions__WEBPACK_IMPORTED_MODULE_4__["axiosError"]).then(() => Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_4__["unblockUI"])());
+  },
+  handleExportExcel: () => {
+    component.exportScheduleData('ScheduleArrange/ExportExcel');
+  },
+  handleExportExcelDriverPickup: () => {
+    component.exportScheduleData('ScheduleArrange/ExportExcelDriverPickup');
+  },
+  exportScheduleData: endpoint => {
+    const filter = component.state.filter,
+      fromDate = moment__WEBPACK_IMPORTED_MODULE_3___default()(filter.fromDate).format(EXPORT_DATE_FORMAT),
+      toDate = moment__WEBPACK_IMPORTED_MODULE_3___default()(filter.toDate).format(EXPORT_DATE_FORMAT);
+    Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_4__["blockUI"])();
+    Object(axios__WEBPACK_IMPORTED_MODULE_1__["default"])({
+      url: Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_4__["resolveClientUrl"])(endpoint),
+      method: 'GET',
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest'
+      },
+      params: {
+        fromDate: fromDate,
+        toDate: toDate,
+        teamIds: filter.teamIds,
+        companyId: filter.companyId,
+        isLocal: filter.isLocal,
+        employeeId: filter.employee.value === 0 ? null : filter.employee.value
+      },
+      responseType: 'blob'
+    }).then(response => {
+      const fileName = response.headers['content-disposition'].match(/filename="(.+)"/)[1];
+      Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_4__["downloadFile"])(response.data, fileName);
+    }).catch(_shared_common_functions__WEBPACK_IMPORTED_MODULE_4__["axiosError"]).then(() => Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_4__["unblockUI"])());
+  }
+});
+/* harmony default export */ __webpack_exports__["default"] = (createScheduleDataExportHandlers);
+
+/***/ }),
+
+/***/ "./sources/js/pages/schedule-arrange/ScheduleHandlers.jsx":
+/*!****************************************************************!*\
+  !*** ./sources/js/pages/schedule-arrange/ScheduleHandlers.jsx ***!
+  \****************************************************************/
+/*! exports provided: createScheduleHandlers, default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createScheduleHandlers", function() { return createScheduleHandlers; });
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "./node_modules/@babel/runtime/helpers/defineProperty.js");
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _shared_constants__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../shared/constants */ "./sources/js/shared/constants.js");
+
+function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+
+
+
+const createScheduleHandlers = component => ({
+  onLeavingPageEventListener: event => {
+    if (!component.isDirtyData()) {
+      return undefined;
+    }
+    const confirmationMessage = 'It looks like you have been editing something. ' + 'If you leave before saving, your changes will be lost.';
+    (event || window.event).returnValue = confirmationMessage;
+    return confirmationMessage;
+  },
+  isDirtyData: () => {
+    const schedules = component.state.schedules,
+      originalSchedules = component.originalSchedules;
+    for (let gindex = 0; gindex < schedules.length; gindex++) {
+      const totalSubItems = schedules[gindex].members.length;
+      for (let eindex = 0; eindex < totalSubItems; eindex++) {
+        const schedule = schedules[gindex].members[eindex],
+          originalSchedule = originalSchedules[gindex].members[eindex];
+        Object(lodash__WEBPACK_IMPORTED_MODULE_1__["unset"])(schedule, 'selectWeekDays');
+        Object(lodash__WEBPACK_IMPORTED_MODULE_1__["unset"])(originalSchedule, 'selectWeekDays');
+        if (!Object(lodash__WEBPACK_IMPORTED_MODULE_1__["isEqual"])(schedule, originalSchedule)) {
+          return true;
+        }
+      }
+    }
+    return false;
+  },
+  handleFilterChange: (name, value) => {
+    component.setState({
+      filter: _objectSpread(_objectSpread({}, component.state.filter), {}, {
+        [name]: value
+      })
+    });
+  },
+  handleGetWeeklyShedules: isCurrentWeek => {
+    if (component.isDirtyData()) {
+      component.handleShowConfirmRefreshDataModal();
+    } else {
+      const filter = isCurrentWeek ? _objectSpread(_objectSpread({}, component.state.filter), {}, {
+        fromDate: component.currentWeek.fromDate,
+        toDate: component.currentWeek.toDate
+      }) : component.state.filter;
+      component.setState({
+        filter
+      });
+      component.getWeeklyShedules(filter);
+    }
+  },
+  handleGetPreviousWeekSchedule: () => {
+    const fromDate = moment__WEBPACK_IMPORTED_MODULE_2___default()(component.selectedWeek.fromDate).add(-7, 'days').format(_shared_constants__WEBPACK_IMPORTED_MODULE_3__["DateFormat"]),
+      toDate = moment__WEBPACK_IMPORTED_MODULE_2___default()(component.selectedWeek.toDate).add(-7, 'days').format(_shared_constants__WEBPACK_IMPORTED_MODULE_3__["DateFormat"]),
+      filter = _objectSpread(_objectSpread({}, component.state.filter), {}, {
+        fromDate,
+        toDate
+      });
+    component.setState({
+      filter
+    });
+    if (component.isDirtyData()) {
+      component.handleShowConfirmRefreshDataModal();
+    } else {
+      component.getWeeklyShedules(filter);
+    }
+  },
+  handleGetNextWeekSchedule: () => {
+    const fromDate = moment__WEBPACK_IMPORTED_MODULE_2___default()(component.selectedWeek.fromDate).add(7, 'days').format(_shared_constants__WEBPACK_IMPORTED_MODULE_3__["DateFormat"]),
+      toDate = moment__WEBPACK_IMPORTED_MODULE_2___default()(component.selectedWeek.toDate).add(7, 'days').format(_shared_constants__WEBPACK_IMPORTED_MODULE_3__["DateFormat"]),
+      filter = _objectSpread(_objectSpread({}, component.state.filter), {}, {
+        fromDate,
+        toDate
+      });
+    component.setState({
+      filter
+    });
+    if (component.isDirtyData()) {
+      component.handleShowConfirmRefreshDataModal();
+    } else {
+      component.getWeeklyShedules(filter);
+    }
+  },
+  // Modal handlers
+  handleShowConfirmRefreshDataModal: () => {
+    component.setState({
+      showConfirmRefreshDataModal: true
+    });
+  },
+  handleCloseConfirmRefreshDataModal: () => {
+    const fromDate = moment__WEBPACK_IMPORTED_MODULE_2___default()(component.selectedWeek.fromDate).format(_shared_constants__WEBPACK_IMPORTED_MODULE_3__["DateFormat"]),
+      toDate = moment__WEBPACK_IMPORTED_MODULE_2___default()(component.selectedWeek.toDate).format(_shared_constants__WEBPACK_IMPORTED_MODULE_3__["DateFormat"]),
+      filter = _objectSpread(_objectSpread({}, component.state.filter), {}, {
+        fromDate,
+        toDate
+      });
+    component.setState({
+      filter,
+      showConfirmRefreshDataModal: false
+    });
+  },
+  handleSubmitRefreshData: () => {
+    component.getWeeklyShedules(component.state.filter);
+    component.handleCloseConfirmRefreshDataModal();
+  },
+  handleCloseShiftMultipleModal: () => {
+    component.setState({
+      showShiftMultipleModal: false
+    });
+  },
+  handleChangeShowRemarkPopover: show => {
+    component.setState({
+      showRemarkPopover: show
+    });
+  },
+  handleShowWeeklyDefaultShiftModal: (teamId, employeeId) => {
+    const schedules = component.state.schedules,
+      gindex = schedules.findIndex(item => item.teamId === teamId),
+      eindex = schedules[gindex].members.findIndex(item => item.employeeId === employeeId);
+    component.setState({
+      editWeeklyDefaultShift: {
+        show: true,
+        teamId,
+        employeeId,
+        nickname: schedules[gindex].members[eindex].nickname,
+        data: schedules[gindex].members[eindex].weeklyDefaultShift,
+        isUsedWeeklyDefaultShift: schedules[gindex].members[eindex].isUsedWeeklyDefaultShift
+      }
+    });
+  },
+  handleCloseWeeklyDefaultShiftModal: () => {
+    component.setState({
+      editWeeklyDefaultShift: {
+        show: false,
+        teamId: 0,
+        employeeId: 0,
+        nickname: '',
+        data: null,
+        isUsedWeeklyDefaultShift: false
+      }
+    });
+  }
+});
+/* harmony default export */ __webpack_exports__["default"] = (createScheduleHandlers);
+
+/***/ }),
+
+/***/ "./sources/js/pages/schedule-arrange/ScheduleMultipleShiftHandlers.jsx":
+/*!*****************************************************************************!*\
+  !*** ./sources/js/pages/schedule-arrange/ScheduleMultipleShiftHandlers.jsx ***!
+  \*****************************************************************************/
+/*! exports provided: createScheduleMultipleShiftHandlers, default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createScheduleMultipleShiftHandlers", function() { return createScheduleMultipleShiftHandlers; });
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "./node_modules/@babel/runtime/helpers/defineProperty.js");
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var react_toastify__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-toastify */ "./node_modules/react-toastify/esm/react-toastify.js");
+
+function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+
+
+const processMemberShift = (member, attrName, shift, isOffDay, gindex, eindex, component) => {
+  member.selectWeekDays = _objectSpread(_objectSpread({}, member.selectWeekDays), {}, {
+    [attrName]: false
+  });
+  if (!member[attrName].isHoliday) {
+    const originalSchedule = component.originalSchedules[gindex].members[eindex][attrName];
+    const isModified = !Object(lodash__WEBPACK_IMPORTED_MODULE_1__["isEqual"])(shift, originalSchedule.shift) || originalSchedule.isOffDay !== isOffDay ? true : originalSchedule.isModified;
+    member[attrName] = _objectSpread(_objectSpread({}, member[attrName]), {}, {
+      isOffDay: isOffDay && !member[attrName].isChangeShift,
+      isFixedOffDay: isOffDay ? member[attrName].isFixedOffDay : false,
+      shift,
+      isModified
+    });
+  }
+};
+const processSelectedMembersShift = (schedules, selectedMembers, shift, isOffDay, component) => {
+  for (let index = 0; index < selectedMembers.length; index++) {
+    const {
+      gindex,
+      eindex
+    } = selectedMembers[index];
+    const members = [...schedules[gindex].members];
+    const member = _objectSpread({}, members[eindex]);
+    component.scheduleAttrNames.forEach(attrName => {
+      if (member.selectWeekDays[attrName]) {
+        processMemberShift(member, attrName, shift, isOffDay, gindex, eindex, component);
+      }
+    });
+    members[eindex] = member;
+    schedules[gindex] = _objectSpread(_objectSpread({}, schedules[gindex]), {}, {
+      members
+    });
+  }
+};
+const createScheduleMultipleShiftHandlers = component => ({
+  handleShiftMultiple: () => {
+    const selectedMembers = component.getSelectedMembers(component.state.schedules);
+    if (selectedMembers.length === 0) {
+      react_toastify__WEBPACK_IMPORTED_MODULE_2__["toast"].warn('Please choose at least one day to continue!');
+      return;
+    }
+    component.setState({
+      showShiftMultipleModal: true
+    });
+  },
+  handleChangeMultipleShift: (shift, isOffDay) => {
+    const schedules = [...component.state.schedules];
+    const selectedMembers = component.getSelectedMembers(schedules);
+    if (selectedMembers.length === 0) {
+      component.handleCloseShiftMultipleModal();
+      return;
+    }
+    processSelectedMembersShift(schedules, selectedMembers, shift, isOffDay, component);
+    component.setState({
+      schedules
+    });
+    component.handleCloseShiftMultipleModal();
+  }
+});
+/* harmony default export */ __webpack_exports__["default"] = (createScheduleMultipleShiftHandlers);
+
+/***/ }),
+
+/***/ "./sources/js/pages/schedule-arrange/ScheduleOffDayHandlers.jsx":
+/*!**********************************************************************!*\
+  !*** ./sources/js/pages/schedule-arrange/ScheduleOffDayHandlers.jsx ***!
+  \**********************************************************************/
+/*! exports provided: createScheduleOffDayHandlers, default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createScheduleOffDayHandlers", function() { return createScheduleOffDayHandlers; });
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "./node_modules/@babel/runtime/helpers/defineProperty.js");
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_toastify__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-toastify */ "./node_modules/react-toastify/esm/react-toastify.js");
+
+function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+
+const processMemberOffDay = (member, attrName, _gindex, _eindex, component) => {
+  member.selectWeekDays = _objectSpread(_objectSpread({}, member.selectWeekDays), {}, {
+    [attrName]: false
+  });
+  if (!member[attrName].isHoliday && !member[attrName].isChangeShift && component.isChangeOffDayKIV(member[attrName])) {
+    member[attrName] = _objectSpread(_objectSpread({}, member[attrName]), {}, {
+      isOffDay: true,
+      isFixedOffDay: false,
+      isOffDayReplacement: false,
+      shift: null
+    });
+  }
+};
+const processMemberOffDayOT = (member, attrName, gindex, eindex, component) => {
+  member.selectWeekDays = _objectSpread(_objectSpread({}, member.selectWeekDays), {}, {
+    [attrName]: false
+  });
+  if (!member[attrName].isHoliday && !member[attrName].isChangeShift && member[attrName].shift !== null && component.isChangeOffDayKIV(member[attrName])) {
+    const originalSchedule = component.originalSchedules[gindex].members[eindex][attrName];
+    member[attrName] = _objectSpread(_objectSpread({}, member[attrName]), {}, {
+      isOffDay: true,
+      isFixedOffDay: false,
+      isOffDayReplacement: false,
+      isModified: !originalSchedule.isOffDay ? true : originalSchedule.isModified
+    });
+  }
+};
+const processMemberWorkday = (member, attrName, gindex, eindex, component) => {
+  member.selectWeekDays = _objectSpread(_objectSpread({}, member.selectWeekDays), {}, {
+    [attrName]: false
+  });
+  if (!member[attrName].isHoliday && member[attrName].shift !== null) {
+    const originalSchedule = component.originalSchedules[gindex].members[eindex][attrName];
+    member.selectWeekDays[attrName] = false;
+    member[attrName] = _objectSpread(_objectSpread({}, member[attrName]), {}, {
+      isOffDay: false,
+      isFixedOffDay: false,
+      isOffDayReplacement: false,
+      isModified: originalSchedule.isOffDay ? true : originalSchedule.isModified
+    });
+  }
+};
+const processMemberFixedOffDay = (member, attrName, gindex, eindex, component) => {
+  member.selectWeekDays = _objectSpread(_objectSpread({}, member.selectWeekDays), {}, {
+    [attrName]: false
+  });
+  if (!member[attrName].isHoliday && !member[attrName].isChangeShift && member[attrName].shift !== null && component.isChangeOffDayKIV(member[attrName])) {
+    const originalSchedule = component.originalSchedules[gindex].members[eindex][attrName];
+    member[attrName] = _objectSpread(_objectSpread({}, member[attrName]), {}, {
+      isOffDay: true,
+      isFixedOffDay: true,
+      isOffDayReplacement: false,
+      isModified: !originalSchedule.isOffDay || !originalSchedule.isFixedOffDay ? true : originalSchedule.isModified
+    });
+  }
+};
+const processSelectedMembers = (schedules, selectedMembers, processFunction, component) => {
+  for (let index = 0; index < selectedMembers.length; index++) {
+    const {
+      gindex,
+      eindex
+    } = selectedMembers[index];
+    const members = [...schedules[gindex].members];
+    const member = _objectSpread({}, members[eindex]);
+    component.scheduleAttrNames.forEach(attrName => {
+      if (member.selectWeekDays[attrName]) {
+        processFunction(member, attrName, gindex, eindex, component);
+      }
+    });
+    members[eindex] = member;
+    schedules[gindex] = _objectSpread(_objectSpread({}, schedules[gindex]), {}, {
+      members
+    });
+  }
+};
+const createScheduleOffDayHandlers = component => ({
+  isChangeOffDayKIV: item => {
+    if (item.isKeepInView) {
+      return !item.isOffDay;
+    } else {
+      return true;
+    }
+  },
+  handleChangeOffNoShift: () => {
+    const schedules = [...component.state.schedules];
+    const selectedMembers = component.getSelectedMembers(schedules);
+    if (selectedMembers.length === 0) {
+      react_toastify__WEBPACK_IMPORTED_MODULE_1__["toast"].warn('Please choose at least one day to off!');
+      return;
+    }
+    processSelectedMembers(schedules, selectedMembers, processMemberOffDay, component);
+    component.setState({
+      schedules
+    });
+  },
+  handleChangeOffDayOT: () => {
+    const schedules = [...component.state.schedules];
+    const selectedMembers = component.getSelectedMembers(schedules);
+    if (selectedMembers.length === 0) {
+      react_toastify__WEBPACK_IMPORTED_MODULE_1__["toast"].warn('Please choose at least one day to off!');
+      return;
+    }
+    processSelectedMembers(schedules, selectedMembers, processMemberOffDayOT, component);
+    component.setState({
+      schedules
+    });
+  },
+  handleChangeWorkday: () => {
+    const schedules = [...component.state.schedules];
+    const selectedMembers = component.getSelectedMembers(schedules);
+    if (selectedMembers.length === 0) {
+      react_toastify__WEBPACK_IMPORTED_MODULE_1__["toast"].warn('Please choose at least one day to work!');
+      return;
+    }
+    processSelectedMembers(schedules, selectedMembers, processMemberWorkday, component);
+    component.setState({
+      schedules
+    });
+  },
+  handleFixedOffDay: () => {
+    const schedules = [...component.state.schedules];
+    const selectedMembers = component.getSelectedMembers(schedules);
+    if (selectedMembers.length === 0) {
+      react_toastify__WEBPACK_IMPORTED_MODULE_1__["toast"].warn('Please choose at least one day to continue!');
+      return;
+    }
+    processSelectedMembers(schedules, selectedMembers, processMemberFixedOffDay, component);
+    component.setState({
+      schedules
+    });
+  }
+});
+/* harmony default export */ __webpack_exports__["default"] = (createScheduleOffDayHandlers);
+
+/***/ }),
+
+/***/ "./sources/js/pages/schedule-arrange/ScheduleSaveHandlers.jsx":
+/*!********************************************************************!*\
+  !*** ./sources/js/pages/schedule-arrange/ScheduleSaveHandlers.jsx ***!
+  \********************************************************************/
+/*! exports provided: createScheduleSaveHandlers, default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createScheduleSaveHandlers", function() { return createScheduleSaveHandlers; });
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var qs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! qs */ "./node_modules/qs/index.js");
+/* harmony import */ var qs__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(qs__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var react_toastify__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-toastify */ "./node_modules/react-toastify/esm/react-toastify.js");
+/* harmony import */ var _shared_common_functions__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../shared/common.functions */ "./sources/js/shared/common.functions.js");
+
+
+
+
+
+const FORM_URLENCODED_HEADER = 'application/x-www-form-urlencoded';
+const SUCCESS_MESSAGE = 'Updated Successfully!';
+const processScheduleMember = (schedule, originalSchedule, weeklySchedules, defaultShifts, component) => {
+  Object(lodash__WEBPACK_IMPORTED_MODULE_1__["unset"])(schedule, 'selectWeekDays');
+  Object(lodash__WEBPACK_IMPORTED_MODULE_1__["unset"])(originalSchedule, 'selectWeekDays');
+  if (!Object(lodash__WEBPACK_IMPORTED_MODULE_1__["isEqual"])(schedule, originalSchedule)) {
+    const totalOffDaysDefault = schedule.offDaysbyWeek + schedule.totalOffDayReplacement;
+    if (!component.validateScheduleChanges(schedule, totalOffDaysDefault)) {
+      react_toastify__WEBPACK_IMPORTED_MODULE_3__["toast"].error('Some employees have a larger number of days off during the week according to the setting.');
+      return false;
+    }
+    const defaultShift = component.collectDefaultShiftChanges(schedule, originalSchedule);
+    if (defaultShift) {
+      defaultShifts.push(defaultShift);
+    }
+    component.scheduleAttrNames.forEach(attrName => {
+      const weeklySchedule = component.collectWeeklyScheduleChanges(schedule, originalSchedule, attrName);
+      if (weeklySchedule) {
+        weeklySchedules.push(weeklySchedule);
+      }
+    });
+  }
+  return true;
+};
+const processScheduleTeam = (members, originalMembers, weeklySchedules, defaultShifts, component) => {
+  for (let eindex = 0; eindex < members.length; eindex++) {
+    const schedule = members[eindex];
+    const originalSchedule = originalMembers[eindex];
+    const success = processScheduleMember(schedule, originalSchedule, weeklySchedules, defaultShifts, component);
+    if (!success) {
+      return false;
+    }
+  }
+  return true;
+};
+const createScheduleSaveHandlers = component => ({
+  collectDefaultShiftChanges: (schedule, originalSchedule) => {
+    if (!Object(lodash__WEBPACK_IMPORTED_MODULE_1__["isEqual"])(originalSchedule.defaultShift, schedule.defaultShift)) {
+      return {
+        employeeId: schedule.employeeId,
+        fromDate: schedule.mondaySchedule.workDate,
+        shiftId: schedule.defaultShift !== null ? schedule.defaultShift.id : null
+      };
+    }
+    return null;
+  },
+  collectWeeklyScheduleChanges: (schedule, originalSchedule, attrName) => {
+    if (!Object(lodash__WEBPACK_IMPORTED_MODULE_1__["isEqual"])(originalSchedule[attrName], schedule[attrName]) || originalSchedule.isPublic !== schedule.isPublic) {
+      return {
+        employeeId: schedule.employeeId,
+        workDate: schedule[attrName].workDate,
+        shiftId: schedule[attrName].shift !== null ? schedule[attrName].shift.id : null,
+        isHoliday: schedule[attrName].isHoliday,
+        isOffDay: schedule[attrName].isOffDay,
+        isFixedOffDay: schedule[attrName].isFixedOffDay,
+        isPublic: schedule.isPublic
+      };
+    }
+    return null;
+  },
+  saveScheduleChanges: (weeklySchedules, defaultShifts, fromDate, toDate) => {
+    if (weeklySchedules.length > 0 || defaultShifts.length > 0) {
+      Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_4__["blockUI"])();
+      Object(axios__WEBPACK_IMPORTED_MODULE_0__["default"])({
+        url: Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_4__["resolveClientUrl"])('ScheduleArrange/EditWeekly'),
+        method: 'POST',
+        data: Object(qs__WEBPACK_IMPORTED_MODULE_2__["stringify"])({
+          fromDate,
+          toDate,
+          weeklySchedules: weeklySchedules.length > 0 ? weeklySchedules : null,
+          defaultShifts
+        }),
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest',
+          'Content-Type': FORM_URLENCODED_HEADER
+        }
+      }).then(response => {
+        const data = response.data;
+        if (data.isSuccessful) {
+          react_toastify__WEBPACK_IMPORTED_MODULE_3__["toast"].success(SUCCESS_MESSAGE);
+          component.getWeeklyShedules(component.state.filter);
+        } else {
+          react_toastify__WEBPACK_IMPORTED_MODULE_3__["toast"].error(data.message);
+        }
+      }).catch(_shared_common_functions__WEBPACK_IMPORTED_MODULE_4__["axiosError"]).then(() => Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_4__["unblockUI"])());
+    }
+  },
+  handleSave: () => {
+    const weeklySchedules = [];
+    const defaultShifts = [];
+    const schedules = Object(lodash__WEBPACK_IMPORTED_MODULE_1__["cloneDeep"])(component.state.schedules);
+    const originalSchedules = Object(lodash__WEBPACK_IMPORTED_MODULE_1__["cloneDeep"])(component.originalSchedules);
+    const {
+      fromDate,
+      toDate
+    } = component.selectedWeek;
+    for (let gindex = 0; gindex < schedules.length; gindex++) {
+      const members = schedules[gindex].members;
+      const originalMembers = originalSchedules[gindex].members;
+      const success = processScheduleTeam(members, originalMembers, weeklySchedules, defaultShifts, component);
+      if (!success) {
+        return;
+      }
+    }
+    component.saveScheduleChanges(weeklySchedules, defaultShifts, fromDate, toDate);
+  }
+});
+/* harmony default export */ __webpack_exports__["default"] = (createScheduleSaveHandlers);
+
+/***/ }),
+
+/***/ "./sources/js/pages/schedule-arrange/ScheduleSelectionHandlers.jsx":
+/*!*************************************************************************!*\
+  !*** ./sources/js/pages/schedule-arrange/ScheduleSelectionHandlers.jsx ***!
+  \*************************************************************************/
+/*! exports provided: createScheduleSelectionHandlers, default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createScheduleSelectionHandlers", function() { return createScheduleSelectionHandlers; });
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "./node_modules/@babel/runtime/helpers/defineProperty.js");
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__);
+
+function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+const createScheduleSelectionHandlers = component => ({
+  handleChangeSelectWeekDay: (teamId, employeeId, scheduleAttrName, isChecked) => {
+    const schedules = [...component.state.schedules];
+    const gindex = schedules.findIndex(item => item.teamId === teamId);
+    const members = [...schedules[gindex].members];
+    const eindex = members.findIndex(item => item.employeeId === employeeId);
+    members[eindex] = Object.assign({}, members[eindex], {
+      selectWeekDays: _objectSpread(_objectSpread({}, members[eindex].selectWeekDays), {}, {
+        [scheduleAttrName]: isChecked
+      })
+    });
+    schedules[gindex] = _objectSpread(_objectSpread({}, schedules[gindex]), {}, {
+      members
+    });
+    component.setState({
+      schedules
+    });
+  },
+  handleChangeSelectWeekDays: (scheduleAttrName, isChecked) => {
+    const schedules = [...component.state.schedules];
+    const totalItems = schedules.length;
+    if (scheduleAttrName !== null) {
+      for (let gindex = 0; gindex < totalItems; gindex++) {
+        const members = [...schedules[gindex].members];
+        const totalSubItems = members.length;
+        for (let subindex = 0; subindex < totalSubItems; subindex++) {
+          members[subindex] = Object.assign({}, members[subindex], {
+            selectWeekDays: _objectSpread(_objectSpread({}, members[subindex].selectWeekDays), {}, {
+              [scheduleAttrName]: isChecked
+            })
+          });
+        }
+        schedules[gindex] = _objectSpread(_objectSpread({}, schedules[gindex]), {}, {
+          members
+        });
+      }
+    } else {
+      for (let gindex = 0; gindex < totalItems; gindex++) {
+        const members = [...schedules[gindex].members];
+        const totalSubItems = members.length;
+        for (let subindex = 0; subindex < totalSubItems; subindex++) {
+          members[subindex] = Object.assign({}, members[subindex], {
+            selectWeekDays: {
+              mondaySchedule: isChecked,
+              tuesdaySchedule: isChecked,
+              wednesdaySchedule: isChecked,
+              thursdaySchedule: isChecked,
+              fridaySchedule: isChecked,
+              saturdaySchedule: isChecked,
+              sundaySchedule: isChecked
+            }
+          });
+        }
+        schedules[gindex] = _objectSpread(_objectSpread({}, schedules[gindex]), {}, {
+          members
+        });
+      }
+    }
+    component.setState({
+      schedules
+    });
+  },
+  getSelectedMembers: schedules => {
+    const selectedMembers = [];
+    const totalItems = schedules.length;
+    for (let gindex = 0; gindex < totalItems; gindex++) {
+      const totalSubItems = schedules[gindex].members.length;
+      for (let eindex = 0; eindex < totalSubItems; eindex++) {
+        if (component.scheduleAttrNames.filter(attrName => schedules[gindex].members[eindex].selectWeekDays[attrName]).length > 0) {
+          selectedMembers.push({
+            gindex,
+            eindex
+          });
+        }
+      }
+    }
+    return selectedMembers;
+  }
+});
+/* harmony default export */ __webpack_exports__["default"] = (createScheduleSelectionHandlers);
+
+/***/ }),
+
+/***/ "./sources/js/pages/schedule-arrange/ScheduleShiftHandlers.jsx":
+/*!*********************************************************************!*\
+  !*** ./sources/js/pages/schedule-arrange/ScheduleShiftHandlers.jsx ***!
+  \*********************************************************************/
+/*! exports provided: createScheduleShiftHandlers, default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createScheduleShiftHandlers", function() { return createScheduleShiftHandlers; });
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "./node_modules/@babel/runtime/helpers/defineProperty.js");
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _shared_constants__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../shared/constants */ "./sources/js/shared/constants.js");
+
+function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+
+
+const findIndices = (schedules, teamId, employeeId) => {
+  const gindex = schedules.findIndex(item => item.teamId === teamId);
+  const members = [...schedules[gindex].members];
+  const eindex = members.findIndex(item => item.employeeId === employeeId);
+  return {
+    gindex,
+    members,
+    eindex
+  };
+};
+const determineEffectiveShift = (member, attrName, shift) => {
+  if (shift !== null) {
+    return shift;
+  }
+  ;
+  if (member[attrName].isHoliday) {
+    return null;
+  }
+  ;
+  if (member.isUsedWeeklyDefaultShift) {
+    return member.weeklyDefaultShift[`${attrName.substring(0, 3)}Shift`];
+  }
+  return member.defaultShift !== null ? _objectSpread({}, member.defaultShift) : null;
+};
+const processOffDayShift = shift => {
+  const isOffDay = shift !== null && shift.id === _shared_constants__WEBPACK_IMPORTED_MODULE_2__["OffDayShiftId"];
+  const processedShift = shift !== null && shift.id === _shared_constants__WEBPACK_IMPORTED_MODULE_2__["OffDayShiftId"] ? null : shift;
+  return {
+    isOffDay,
+    processedShift
+  };
+};
+const updateMemberSchedule = (member, attrName, shift, isOffDay, originalSchedule) => {
+  member[attrName] = _objectSpread(_objectSpread({}, member[attrName]), {}, {
+    isOffDay,
+    isOffDayReplacement: false,
+    shift,
+    isModified: !Object(lodash__WEBPACK_IMPORTED_MODULE_1__["isEqual"])(shift, originalSchedule.shift) ? true : originalSchedule.isModified
+  });
+};
+const createScheduleShiftHandlers = component => ({
+  handleChangeShift: (teamId, employeeId, attrName, shift) => {
+    const schedules = [...component.state.schedules];
+    const {
+      gindex,
+      members,
+      eindex
+    } = findIndices(schedules, teamId, employeeId);
+    const member = _objectSpread({}, members[eindex]);
+    if (shift !== null && Object(lodash__WEBPACK_IMPORTED_MODULE_1__["isEqual"])(member[attrName].shift, shift)) {
+      return;
+    }
+    const effectiveShift = determineEffectiveShift(member, attrName, shift);
+    const {
+      isOffDay,
+      processedShift
+    } = processOffDayShift(effectiveShift);
+    const originalSchedule = component.originalSchedules[gindex].members[eindex][attrName];
+    updateMemberSchedule(member, attrName, processedShift, isOffDay, originalSchedule);
+    members[eindex] = member;
+    schedules[gindex] = _objectSpread(_objectSpread({}, schedules[gindex]), {}, {
+      members
+    });
+    component.setState({
+      schedules
+    });
+  },
+  updateMemberSchedule: (members, eindex, attrName, originalDefaultShift, defaultShift, gindex) => {
+    if (members[eindex][attrName].isDisabled) {
+      return;
+    }
+    const schedule = members[eindex][attrName];
+    const shift = schedule.shift;
+    const isHolidayOrOffDay = schedule.isHoliday || schedule.isOffDay;
+    const shouldUpdate = isHolidayOrOffDay ? shift !== null && Object(lodash__WEBPACK_IMPORTED_MODULE_1__["isEqual"])(originalDefaultShift, shift) : shift === null || Object(lodash__WEBPACK_IMPORTED_MODULE_1__["isEqual"])(originalDefaultShift, shift);
+    if (shouldUpdate) {
+      const originalSchedule = component.originalSchedules[gindex].members[eindex][attrName];
+      const isModified = !Object(lodash__WEBPACK_IMPORTED_MODULE_1__["isEqual"])(defaultShift, originalSchedule.shift) ? true : originalSchedule.isModified;
+      members[eindex][attrName] = _objectSpread(_objectSpread({}, schedule), {}, {
+        shift: defaultShift,
+        isModified
+      });
+    }
+  },
+  handleChangeDefaultShift: (teamId, employeeId, defaultShift) => {
+    const schedules = [...component.state.schedules];
+    const gindex = schedules.findIndex(item => item.teamId === teamId);
+    const members = [...schedules[gindex].members];
+    const eindex = members.findIndex(item => item.employeeId === employeeId),
+      originalDefaultShift = members[eindex].defaultShift;
+    if (defaultShift !== null) {
+      component.scheduleAttrNames.forEach(attrName => {
+        component.updateMemberSchedule(members, eindex, attrName, originalDefaultShift, defaultShift, gindex);
+      });
+    } else {
+      component.scheduleAttrNames.forEach(attrName => {
+        const shift = members[eindex][attrName].shift;
+        if (!members[eindex][attrName].isModified && shift !== null && Object(lodash__WEBPACK_IMPORTED_MODULE_1__["isEqual"])(originalDefaultShift, shift)) {
+          const originalSchedule = component.originalSchedules[gindex].members[eindex][attrName],
+            isModified = !Object(lodash__WEBPACK_IMPORTED_MODULE_1__["isEqual"])(defaultShift, originalSchedule.shift) ? true : originalSchedule.isModified;
+          members[eindex][attrName] = _objectSpread(_objectSpread({}, members[eindex][attrName]), {}, {
+            shift: defaultShift,
+            isModified
+          });
+        }
+      });
+    }
+    members[eindex] = _objectSpread(_objectSpread({}, members[eindex]), {}, {
+      defaultShift
+    });
+    schedules[gindex] = _objectSpread(_objectSpread({}, schedules[gindex]), {}, {
+      members
+    });
+    component.setState({
+      schedules
+    });
+  },
+  handleChangePublics: (teamId, isChecked) => {
+    const schedules = [...component.state.schedules];
+    const gindex = schedules.findIndex(item => item.teamId === teamId);
+    const members = [...schedules[gindex].members];
+    const totalItems = members.length;
+    for (let index = 0; index < totalItems; index++) {
+      members[index] = _objectSpread(_objectSpread({}, members[index]), {}, {
+        isPublic: isChecked
+      });
+    }
+    schedules[gindex] = _objectSpread(_objectSpread({}, schedules[gindex]), {}, {
+      isPublic: isChecked,
+      members
+    });
+    component.setState({
+      schedules
+    });
+  }
+});
+/* harmony default export */ __webpack_exports__["default"] = (createScheduleShiftHandlers);
+
+/***/ }),
+
+/***/ "./sources/js/pages/schedule-arrange/ScheduleUtilities.jsx":
+/*!*****************************************************************!*\
+  !*** ./sources/js/pages/schedule-arrange/ScheduleUtilities.jsx ***!
+  \*****************************************************************/
+/*! exports provided: createScheduleUtilities, default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createScheduleUtilities", function() { return createScheduleUtilities; });
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "./node_modules/@babel/runtime/helpers/defineProperty.js");
+/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var qs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! qs */ "./node_modules/qs/index.js");
+/* harmony import */ var qs__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(qs__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var react_toastify__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react-toastify */ "./node_modules/react-toastify/esm/react-toastify.js");
+/* harmony import */ var _shared_common_functions__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../shared/common.functions */ "./sources/js/shared/common.functions.js");
+/* harmony import */ var _shared_constants__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../shared/constants */ "./sources/js/shared/constants.js");
+
+function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+
+
+
+
+
+
+
+const FORM_URLENCODED_HEADER = 'application/x-www-form-urlencoded';
+const SUCCESS_MESSAGE = 'Updated Successfully!';
+const createScheduleUtilities = component => (/* NOSONAR */{
+  updateWeeklyDefaultShift: (teamId, employeeId, weeklyDefaultShift, isUsedWeeklyDefaultShift) => {
+    const schedules = [...component.state.schedules];
+    const gindex = schedules.findIndex(item => item.teamId === teamId);
+    const members = [...schedules[gindex].members];
+    const eindex = members.findIndex(item => item.employeeId === employeeId);
+    members[eindex] = _objectSpread(_objectSpread({}, members[eindex]), {}, {
+      weeklyDefaultShift,
+      isUsedWeeklyDefaultShift
+    });
+    component.originalSchedules[gindex].members[eindex] = _objectSpread(_objectSpread({}, component.originalSchedules[gindex].members[eindex]), {}, {
+      weeklyDefaultShift,
+      isUsedWeeklyDefaultShift
+    });
+    const fromDate = moment__WEBPACK_IMPORTED_MODULE_3___default()(component.currentWeek.toDate).add(1, 'days').format(_shared_constants__WEBPACK_IMPORTED_MODULE_7__["DateFormat"]);
+    if (isUsedWeeklyDefaultShift) {
+      component.scheduleAttrNames.forEach(attrName => {
+        const shiftId = weeklyDefaultShift[`${attrName.substring(0, 3)}Shift`].id,
+          isOffDay = shiftId === _shared_constants__WEBPACK_IMPORTED_MODULE_7__["OffDayShiftId"],
+          shift = isOffDay ? null : weeklyDefaultShift[`${attrName.substring(0, 3)}Shift`],
+          workDate = moment__WEBPACK_IMPORTED_MODULE_3___default()(members[eindex][attrName].workDate);
+        if (workDate.isSameOrAfter(fromDate) && !members[eindex][attrName].isDisabled) {
+          members[eindex][attrName] = _objectSpread(_objectSpread({}, members[eindex][attrName]), {}, {
+            shift,
+            isOffDay
+          });
+          component.originalSchedules[gindex].members[eindex][attrName] = _objectSpread(_objectSpread({}, component.originalSchedules[gindex].members[eindex][attrName]), {}, {
+            shift,
+            isOffDay
+          });
+        }
+      });
+    } else {
+      const defaultShift = members[eindex].defaultShift;
+      if (defaultShift !== null) {
+        component.scheduleAttrNames.forEach(attrName => {
+          const workDate = moment__WEBPACK_IMPORTED_MODULE_3___default()(members[eindex][attrName].workDate);
+          const isDateValid = workDate.isSameOrAfter(fromDate);
+          const isScheduleValid = !members[eindex][attrName].isDisabled && !members[eindex][attrName].isHoliday && !members[eindex][attrName].isOffDay;
+          if (isDateValid && isScheduleValid && members[eindex][attrName].shift === null) {
+            members[eindex][attrName] = _objectSpread(_objectSpread({}, members[eindex][attrName]), {}, {
+              shift: defaultShift
+            });
+          }
+        });
+      }
+    }
+    schedules[gindex] = _objectSpread(_objectSpread({}, schedules[gindex]), {}, {
+      members
+    });
+    component.setState({
+      schedules
+    });
+  },
+  handleChangeWeeklyDefaultShift: (weeklyDefaultShift, isUsedWeeklyDefaultShift) => {
+    const {
+      teamId,
+      employeeId
+    } = component.state.editWeeklyDefaultShift;
+    const schedules = component.state.schedules;
+    const gindex = schedules.findIndex(item => item.teamId === teamId);
+    const members = schedules[gindex].members;
+    const eindex = members.findIndex(item => item.employeeId === employeeId);
+    let totalOffDays = 0;
+    component.scheduleAttrNames.forEach(attrName => {
+      const shiftId = weeklyDefaultShift[`${attrName.substring(0, 3)}Shift`].id,
+        isOffDay = shiftId === _shared_constants__WEBPACK_IMPORTED_MODULE_7__["OffDayShiftId"];
+      if (isOffDay) {
+        totalOffDays++;
+      }
+    });
+    if (totalOffDays > members[eindex].offDaysbyWeek) {
+      react_toastify__WEBPACK_IMPORTED_MODULE_5__["toast"].error('Employee has a larger number of days off during the week according to the setting.');
+      return;
+    }
+    Object(axios__WEBPACK_IMPORTED_MODULE_1__["default"])({
+      url: Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_6__["resolveClientUrl"])('ScheduleArrange/EditWeeklyDefaultShift'),
+      method: 'POST',
+      data: Object(qs__WEBPACK_IMPORTED_MODULE_4__["stringify"])({
+        weeklyDefaultShift,
+        isUsedWeeklyDefaultShift
+      }),
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest',
+        'Content-Type': FORM_URLENCODED_HEADER
+      }
+    }).then(response => {
+      const data = response.data;
+      if (data.isSuccessful) {
+        react_toastify__WEBPACK_IMPORTED_MODULE_5__["toast"].success(SUCCESS_MESSAGE);
+        component.updateWeeklyDefaultShift(teamId, employeeId, weeklyDefaultShift, isUsedWeeklyDefaultShift);
+        component.handleCloseWeeklyDefaultShiftModal();
+      } else {
+        react_toastify__WEBPACK_IMPORTED_MODULE_5__["toast"].error(data.message);
+      }
+    }).catch(_shared_common_functions__WEBPACK_IMPORTED_MODULE_6__["axiosError"]);
+  },
+  handleUpdateRemark: (teamId, employeeId, remark) => {
+    const schedules = [...component.state.schedules];
+    const gindex = schedules.findIndex(item => item.teamId === teamId);
+    const members = [...schedules[gindex].members];
+    const eindex = members.findIndex(item => item.employeeId === employeeId);
+    if (!Object(lodash__WEBPACK_IMPORTED_MODULE_2__["isEqual"])(remark, component.originalSchedules[gindex].members[eindex].remark)) {
+      Object(axios__WEBPACK_IMPORTED_MODULE_1__["default"])({
+        url: Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_6__["resolveClientUrl"])('ScheduleArrange/EditRemark'),
+        method: 'POST',
+        data: Object(qs__WEBPACK_IMPORTED_MODULE_4__["stringify"])({
+          employeeId,
+          remark
+        }),
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest',
+          'Content-Type': FORM_URLENCODED_HEADER
+        }
+      }).then(response => {
+        const data = response.data;
+        if (data.isSuccessful) {
+          react_toastify__WEBPACK_IMPORTED_MODULE_5__["toast"].success(SUCCESS_MESSAGE);
+          members[eindex] = _objectSpread(_objectSpread({}, members[eindex]), {}, {
+            remark
+          });
+          schedules[gindex] = _objectSpread(_objectSpread({}, schedules[gindex]), {}, {
+            members
+          });
+          component.originalSchedules[gindex].members[eindex].remark = remark;
+          component.setState({
+            schedules
+          });
+        } else {
+          react_toastify__WEBPACK_IMPORTED_MODULE_5__["toast"].error(data.message);
+        }
+      }).catch(_shared_common_functions__WEBPACK_IMPORTED_MODULE_6__["axiosError"]);
+    }
+  },
+  handleEditTeamOrder: () => {
+    const displayOrders = [];
+    const schedules = component.state.schedules,
+      totalItems = schedules.length;
+    for (let index = 0; index < totalItems; index++) {
+      displayOrders.push({
+        teamId: schedules[index].teamId,
+        displayOrder: index + 1
+      });
+    }
+    if (displayOrders.length > 0) {
+      Object(axios__WEBPACK_IMPORTED_MODULE_1__["default"])({
+        url: Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_6__["resolveClientUrl"])('ScheduleArrange/EditTeamOrder'),
+        method: 'POST',
+        data: Object(qs__WEBPACK_IMPORTED_MODULE_4__["stringify"])({
+          displayOrders
+        }),
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest',
+          'Content-Type': FORM_URLENCODED_HEADER
+        }
+      }).then(response => {
+        const data = response.data;
+        if (!data.isSuccessful) {
+          react_toastify__WEBPACK_IMPORTED_MODULE_5__["toast"].error(data.message);
+        }
+      }).catch(_shared_common_functions__WEBPACK_IMPORTED_MODULE_6__["axiosError"]);
+    }
+  },
+  handleEditDisplayOrder: gindex => {
+    const displayOrders = [];
+    const members = component.state.schedules[gindex].members,
+      totalItems = members.length;
+    for (let index = 0; index < totalItems; index++) {
+      displayOrders.push({
+        employeeId: members[index].employeeId,
+        displayOrder: index + 1
+      });
+    }
+    if (displayOrders.length > 0) {
+      Object(axios__WEBPACK_IMPORTED_MODULE_1__["default"])({
+        url: Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_6__["resolveClientUrl"])('ScheduleArrange/EditDisplayOrder'),
+        method: 'POST',
+        data: Object(qs__WEBPACK_IMPORTED_MODULE_4__["stringify"])({
+          displayOrders
+        }),
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest',
+          'Content-Type': FORM_URLENCODED_HEADER
+        }
+      }).then(response => {
+        const data = response.data;
+        if (!data.isSuccessful) {
+          react_toastify__WEBPACK_IMPORTED_MODULE_5__["toast"].error(data.message);
+        }
+      }).catch(_shared_common_functions__WEBPACK_IMPORTED_MODULE_6__["axiosError"]);
+    }
+  },
+  handleDragEnd: result => {
+    if (!result.destination || result.source.index === result.destination.index) {
+      return;
+    }
+    const resultType = result.type,
+      sourceIndex = result.source.index,
+      destinationIndex = result.destination.index;
+    let schedules = [...component.state.schedules];
+    if (resultType === 'droppableTeam') {
+      schedules = Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_6__["reorder"])(schedules, sourceIndex, destinationIndex);
+      component.originalSchedules = Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_6__["reorder"])(component.originalSchedules, sourceIndex, destinationIndex);
+      component.setState({
+        schedules
+      }, () => component.handleEditTeamOrder());
+    } else if (resultType.includes('droppableMember')) {
+      const teamId = parseInt(resultType.split('-')[1], 10),
+        index = schedules.findIndex(x => x.teamId === teamId);
+      component.originalSchedules[index].members = Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_6__["reorder"])(component.originalSchedules[index].members, sourceIndex, destinationIndex);
+      schedules[index].members = Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_6__["reorder"])(schedules[index].members, sourceIndex, destinationIndex);
+      component.setState({
+        schedules
+      }, () => component.handleEditDisplayOrder(index));
+    }
+  },
+  handleChangeTeamOrder: (key, teamId) => {
+    let schedules = [...component.state.schedules];
+    const sourceIndex = schedules.findIndex(x => x.teamId === teamId),
+      totalItems = schedules.length;
+    let destinationIndex = 0;
+    switch (key) {
+      case 'up':
+        destinationIndex = sourceIndex - 1;
+        break;
+      case 'down':
+        destinationIndex = sourceIndex + 1;
+        break;
+      case 'bottom':
+        destinationIndex = totalItems;
+        break;
+    }
+    if (destinationIndex < 0 || destinationIndex > totalItems || sourceIndex === destinationIndex) {
+      return;
+    }
+    schedules = Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_6__["reorder"])(schedules, sourceIndex, destinationIndex);
+    component.originalSchedules = Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_6__["reorder"])(component.originalSchedules, sourceIndex, destinationIndex);
+    component.setState({
+      schedules
+    }, () => component.handleEditTeamOrder());
+  },
+  handleChangeOrder: (key, teamId, employeeId) => {
+    const schedules = [...component.state.schedules];
+    const index = schedules.findIndex(x => x.teamId === teamId),
+      totalItems = schedules[index].members.length,
+      sourceIndex = schedules[index].members.findIndex(schedule => schedule.employeeId === employeeId);
+    let destinationIndex = 0;
+    switch (key) {
+      case 'up':
+        destinationIndex = sourceIndex - 1;
+        break;
+      case 'down':
+        destinationIndex = sourceIndex + 1;
+        break;
+      case 'bottom':
+        destinationIndex = totalItems;
+        break;
+    }
+    if (destinationIndex < 0 || destinationIndex > totalItems || sourceIndex === destinationIndex) {
+      return;
+    }
+    schedules[index].members = Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_6__["reorder"])(schedules[index].members, sourceIndex, destinationIndex);
+    component.originalSchedules[index].members = Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_6__["reorder"])(component.originalSchedules[index].members, sourceIndex, destinationIndex);
+    component.setState({
+      schedules
+    }, () => component.handleEditDisplayOrder(index));
+  },
+  handleSelectEmployeeOfTeam: (teamId, employeeId, isSelected) => {
+    const schedules = [...component.state.schedules];
+    const gindex = schedules.findIndex(item => item.teamId === teamId);
+    const members = [...schedules[gindex].members];
+    if (employeeId !== null) {
+      const eindex = members.findIndex(item => item.employeeId === employeeId);
+      members[eindex] = _objectSpread(_objectSpread({}, members[eindex]), {}, {
+        isSelected
+      });
+      schedules[gindex] = _objectSpread(_objectSpread({}, schedules[gindex]), {}, {
+        isSelected: members.findIndex(item => !item.isSelected) < 0
+      });
+    } else {
+      schedules[gindex] = _objectSpread(_objectSpread({}, schedules[gindex]), {}, {
+        isSelected
+      });
+      const totalItems = members.length;
+      for (let eindex = 0; eindex < totalItems; eindex++) {
+        members[eindex] = _objectSpread(_objectSpread({}, members[eindex]), {}, {
+          isSelected
+        });
+      }
+    }
+    schedules[gindex] = _objectSpread(_objectSpread({}, schedules[gindex]), {}, {
+      members
+    });
+    component.setState({
+      schedules
+    });
+  },
+  handleSyncData: () => {
+    const employeeIds = [];
+    const schedules = component.state.schedules,
+      totalItems = schedules.length;
+    for (let gindex = 0; gindex < totalItems; gindex++) {
+      const totalMembers = schedules[gindex].members.length;
+      for (let eindex = 0; eindex < totalMembers; eindex++) {
+        if (schedules[gindex].members[eindex].isSelected) {
+          employeeIds.push(schedules[gindex].members[eindex].employeeId);
+        }
+      }
+    }
+    if (employeeIds.length > 0) {
+      component.setState({
+        selectedEmployeeIds: employeeIds,
+        showConfirmSyncDataModalDialog: true
+      });
+    } else {
+      react_toastify__WEBPACK_IMPORTED_MODULE_5__["toast"].warn('Please select at least a employee to continue!');
+    }
+  },
+  handleCloseConfirmSyncDataModalDialog: () => {
+    component.setState({
+      selectedEmployeeIds: [],
+      showConfirmSyncDataModalDialog: false
+    });
+  },
+  handleSubmitSyncData: () => {
+    Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_6__["blockUI"])();
+    const {
+      fromDate,
+      toDate
+    } = component.selectedWeek;
+    Object(axios__WEBPACK_IMPORTED_MODULE_1__["default"])({
+      url: Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_6__["resolveClientUrl"])('ScheduleArrange/SyncWorkingShift'),
+      method: 'POST',
+      data: Object(qs__WEBPACK_IMPORTED_MODULE_4__["stringify"])({
+        fromDate,
+        toDate,
+        employeeIds: component.state.selectedEmployeeIds.join(','),
+        companyId: component.state.filter.companyId
+      }),
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest',
+        'Content-Type': FORM_URLENCODED_HEADER
+      }
+    }).then(response => {
+      const data = response.data;
+      if (data.isSuccessful) {
+        react_toastify__WEBPACK_IMPORTED_MODULE_5__["toast"].success('Synced successfully!');
+        component.setState({
+          selectedEmployeeIds: [],
+          showConfirmSyncDataModalDialog: false
+        });
+        component.getWeeklyShedules(component.state.filter);
+      } else {
+        react_toastify__WEBPACK_IMPORTED_MODULE_5__["toast"].error(data.message);
+      }
+    }).catch(_shared_common_functions__WEBPACK_IMPORTED_MODULE_6__["axiosError"]).then(() => Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_6__["unblockUI"])());
+  }
+});
+/* harmony default export */ __webpack_exports__["default"] = (createScheduleUtilities);
+
+/***/ }),
+
 /***/ "./sources/js/pages/schedule-arrange/Search.jsx":
 /*!******************************************************!*\
   !*** ./sources/js/pages/schedule-arrange/Search.jsx ***!
@@ -144221,7 +145646,10 @@ class Search extends react__WEBPACK_IMPORTED_MODULE_1__["Component"] {
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_shared_components_WeekPicker__WEBPACK_IMPORTED_MODULE_5__["default"], {
       fromDate: this.props.filter.fromDate,
       toDate: this.props.filter.toDate,
-      onChange: this.handleDateChange
+      onChange: (fromDate, toDate) => {
+        this.props.onChange('fromDate', fromDate);
+        this.props.onChange('toDate', toDate);
+      }
     }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
       className: "form-group form-group--m"
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
@@ -144496,7 +145924,7 @@ class ShiftMultipleModal extends react__WEBPACK_IMPORTED_MODULE_1__["Component"]
         this.props.onSubmit(shift, isOffDay);
       }
     });
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleChangeShift", (name, shift) => {
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleChangeShift", (_, shift) => {
       const isValid = shift !== null;
       this.setState({
         shift,
@@ -144956,37 +146384,34 @@ function getTotalOffDays(dailySchedule) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return App; });
-/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "./node_modules/@babel/runtime/helpers/defineProperty.js");
-/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var jquery_ui_bundle_jquery_ui__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! jquery-ui-bundle/jquery-ui */ "./node_modules/jquery-ui-bundle/jquery-ui.js");
-/* harmony import */ var jquery_ui_bundle_jquery_ui__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(jquery_ui_bundle_jquery_ui__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _jquery_weekpicker__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../jquery-weekpicker */ "./sources/js/jquery-weekpicker.js");
+/* harmony import */ var jquery_ui_bundle_jquery_ui__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jquery-ui-bundle/jquery-ui */ "./node_modules/jquery-ui-bundle/jquery-ui.js");
+/* harmony import */ var jquery_ui_bundle_jquery_ui__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jquery_ui_bundle_jquery_ui__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _jquery_weekpicker__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../jquery-weekpicker */ "./sources/js/jquery-weekpicker.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
+/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var react_toastify__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react-toastify */ "./node_modules/react-toastify/esm/react-toastify.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
-/* harmony import */ var moment__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(moment__WEBPACK_IMPORTED_MODULE_7__);
-/* harmony import */ var qs__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! qs */ "./node_modules/qs/index.js");
-/* harmony import */ var qs__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(qs__WEBPACK_IMPORTED_MODULE_8__);
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
-/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_9__);
-/* harmony import */ var _shared_common_functions__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../shared/common.functions */ "./sources/js/shared/common.functions.js");
-/* harmony import */ var _common_functions__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./common.functions */ "./sources/js/pages/schedule-arrange/common.functions.js");
-/* harmony import */ var _shared_constants__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ../../shared/constants */ "./sources/js/shared/constants.js");
-/* harmony import */ var _shared_layouts_ToastLayout__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ../../shared/layouts/ToastLayout */ "./sources/js/shared/layouts/ToastLayout.jsx");
-/* harmony import */ var _shared_components_react_tree_multiselect_buildData__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ../../shared/components/react-tree-multiselect/buildData */ "./sources/js/shared/components/react-tree-multiselect/buildData.js");
-/* harmony import */ var _shared_components_SweetModalDialog__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ../../shared/components/SweetModalDialog */ "./sources/js/shared/components/SweetModalDialog.jsx");
-/* harmony import */ var _shared_components_CompanySelect__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ../../shared/components/CompanySelect */ "./sources/js/shared/components/CompanySelect.jsx");
-/* harmony import */ var _ShiftMultipleModal__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./ShiftMultipleModal */ "./sources/js/pages/schedule-arrange/ShiftMultipleModal.jsx");
-/* harmony import */ var _WeeklyDefaultShiftModal__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./WeeklyDefaultShiftModal */ "./sources/js/pages/schedule-arrange/WeeklyDefaultShiftModal.jsx");
-/* harmony import */ var _Search__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./Search */ "./sources/js/pages/schedule-arrange/Search.jsx");
+/* harmony import */ var _shared_components_CompanySelect__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../shared/components/CompanySelect */ "./sources/js/shared/components/CompanySelect.jsx");
+/* harmony import */ var _shared_components_SweetModalDialog__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../shared/components/SweetModalDialog */ "./sources/js/shared/components/SweetModalDialog.jsx");
+/* harmony import */ var _shared_constants__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../shared/constants */ "./sources/js/shared/constants.js");
+/* harmony import */ var _shared_layouts_ToastLayout__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../shared/layouts/ToastLayout */ "./sources/js/shared/layouts/ToastLayout.jsx");
+/* harmony import */ var _ScheduleSelectionHandlers__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./ScheduleSelectionHandlers */ "./sources/js/pages/schedule-arrange/ScheduleSelectionHandlers.jsx");
+/* harmony import */ var _ScheduleShiftHandlers__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./ScheduleShiftHandlers */ "./sources/js/pages/schedule-arrange/ScheduleShiftHandlers.jsx");
+/* harmony import */ var _ScheduleOffDayHandlers__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./ScheduleOffDayHandlers */ "./sources/js/pages/schedule-arrange/ScheduleOffDayHandlers.jsx");
+/* harmony import */ var _ScheduleMultipleShiftHandlers__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./ScheduleMultipleShiftHandlers */ "./sources/js/pages/schedule-arrange/ScheduleMultipleShiftHandlers.jsx");
+/* harmony import */ var _ScheduleSaveHandlers__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! ./ScheduleSaveHandlers */ "./sources/js/pages/schedule-arrange/ScheduleSaveHandlers.jsx");
+/* harmony import */ var _ScheduleActions__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ./ScheduleActions */ "./sources/js/pages/schedule-arrange/ScheduleActions.jsx");
+/* harmony import */ var _ScheduleUtilities__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ./ScheduleUtilities */ "./sources/js/pages/schedule-arrange/ScheduleUtilities.jsx");
+/* harmony import */ var _ScheduleHandlers__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./ScheduleHandlers */ "./sources/js/pages/schedule-arrange/ScheduleHandlers.jsx");
+/* harmony import */ var _ScheduleDataExportHandlers__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./ScheduleDataExportHandlers */ "./sources/js/pages/schedule-arrange/ScheduleDataExportHandlers.jsx");
+/* harmony import */ var _Search__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(/*! ./Search */ "./sources/js/pages/schedule-arrange/Search.jsx");
+/* harmony import */ var _ShiftMultipleModal__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(/*! ./ShiftMultipleModal */ "./sources/js/pages/schedule-arrange/ShiftMultipleModal.jsx");
 /* harmony import */ var _table_table__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(/*! ./table/table */ "./sources/js/pages/schedule-arrange/table/table.jsx");
+/* harmony import */ var _WeeklyDefaultShiftModal__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(/*! ./WeeklyDefaultShiftModal */ "./sources/js/pages/schedule-arrange/WeeklyDefaultShiftModal.jsx");
 
-function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
-function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+
 
 
 
@@ -145010,1179 +146435,8 @@ function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t =
 class App extends react__WEBPACK_IMPORTED_MODULE_3__["Component"] {
   constructor(props) {
     super(props);
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "loadTeams", companyId => {
-      Object(axios__WEBPACK_IMPORTED_MODULE_6__["default"])({
-        url: Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_10__["resolveClientUrl"])('Team/GetOrgChart'),
-        method: 'GET',
-        headers: {
-          'X-Requested-With': 'XMLHttpRequest'
-        },
-        params: {
-          companyId: companyId || null
-        }
-      }).then(response => {
-        this.teamOptions = response.data;
-        const {
-          floatData
-        } = Object(_shared_components_react_tree_multiselect_buildData__WEBPACK_IMPORTED_MODULE_14__["default"])(response.data);
-        const filter = _objectSpread(_objectSpread({}, this.state.filter), {}, {
-          teamIds: floatData.filter(item => item.isLeaf).map(item => item.id).join(',')
-        });
-        this.setState({
-          filter: filter
-        });
-        this.getWeeklyShedules(filter);
-      }).catch(_shared_common_functions__WEBPACK_IMPORTED_MODULE_10__["axiosError"]);
-    });
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "loadShifts", companyId => {
-      Object(axios__WEBPACK_IMPORTED_MODULE_6__["default"])({
-        url: Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_10__["resolveClientUrl"])('Calendar/GetShift'),
-        method: 'GET',
-        headers: {
-          'X-Requested-With': 'XMLHttpRequest'
-        },
-        params: {
-          query: '',
-          isShowOff: true,
-          companyId: companyId
-        }
-      }).then(response => {
-        this.shiftOptions = response.data.map(shift => {
-          return {
-            id: shift.id,
-            code: shift.code,
-            name: shift.name
-          };
-        });
-      }).catch(_shared_common_functions__WEBPACK_IMPORTED_MODULE_10__["axiosError"]);
-    });
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleCompanyChange", companyId => {
-      this.setState({
-        filter: _objectSpread(_objectSpread({}, this.state.filter), {}, {
-          companyId: companyId,
-          employee: {
-            value: 0,
-            label: ''
-          }
-        }),
-        employeeOptions: []
-      });
-      this.loadTeams(companyId);
-      this.loadShifts(companyId);
-    });
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "onLeavingPageEventListener", event => {
-      if (!this.isDirtyData()) {
-        return undefined;
-      }
-      const confirmationMessage = 'It looks like you have been editing something. ' + 'If you leave before saving, your changes will be lost.';
-      (event || window.event).returnValue = confirmationMessage;
-      return confirmationMessage;
-    });
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "isDirtyData", () => {
-      let isDirty = false;
-      const schedules = Object(lodash__WEBPACK_IMPORTED_MODULE_9__["cloneDeep"])(this.state.schedules),
-        originalSchedules = Object(lodash__WEBPACK_IMPORTED_MODULE_9__["cloneDeep"])(this.originalSchedules),
-        totalItems = schedules.length;
-      outerloop: for (let gindex = 0; gindex < totalItems; gindex++) {
-        const totalSubItems = schedules[gindex].members.length;
-        for (let eindex = 0; eindex < totalSubItems; eindex++) {
-          let schedule = schedules[gindex].members[eindex],
-            originalSchedule = originalSchedules[gindex].members[eindex];
-          Object(lodash__WEBPACK_IMPORTED_MODULE_9__["unset"])(schedule, 'selectWeekDays');
-          Object(lodash__WEBPACK_IMPORTED_MODULE_9__["unset"])(originalSchedule, 'selectWeekDays');
-          if (!Object(lodash__WEBPACK_IMPORTED_MODULE_9__["isEqual"])(schedule, originalSchedule)) {
-            isDirty = true;
-            break outerloop;
-          }
-        }
-      }
-      return isDirty;
-    });
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleFilterChange", (name, value) => {
-      this.setState({
-        filter: _objectSpread(_objectSpread({}, this.state.filter), {}, {
-          [name]: value
-        })
-      });
-    });
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "getEmployees", query => {
-      if (!this.state.filter.teamIds) {
-        this.setState({
-          employeeOptions: []
-        });
-        return;
-      }
-      Object(axios__WEBPACK_IMPORTED_MODULE_6__["default"])({
-        url: Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_10__["resolveClientUrl"])('ScheduleArrange/GetEmployees'),
-        method: 'GET',
-        headers: {
-          'X-Requested-With': 'XMLHttpRequest'
-        },
-        params: {
-          teamIds: this.state.filter.teamIds,
-          query: query
-        }
-      }).then(response => {
-        const employeeOptions = response.data.map(item => {
-          return {
-            id: item.employeeId,
-            value: `${item.nickname} (${item.fullName})`
-          };
-        });
-        this.setState({
-          employeeOptions: employeeOptions
-        });
-      }).catch(_shared_common_functions__WEBPACK_IMPORTED_MODULE_10__["axiosError"]);
-    });
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "getWeeklyShedules", filter => {
-      const fromDate = moment__WEBPACK_IMPORTED_MODULE_7___default()(filter.fromDate).format(_shared_constants__WEBPACK_IMPORTED_MODULE_12__["DateFormat"]),
-        toDate = moment__WEBPACK_IMPORTED_MODULE_7___default()(filter.toDate).format(_shared_constants__WEBPACK_IMPORTED_MODULE_12__["DateFormat"]);
-      Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_10__["blockUI"])();
-      Object(axios__WEBPACK_IMPORTED_MODULE_6__["default"])({
-        url: Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_10__["resolveClientUrl"])('ScheduleArrange/GetWeeklySchedule'),
-        method: 'GET',
-        headers: {
-          'X-Requested-With': 'XMLHttpRequest'
-        },
-        params: {
-          fromDate: fromDate,
-          toDate: toDate,
-          teamIds: filter.teamIds,
-          companyId: filter.companyId,
-          isLocal: filter.isLocal,
-          employeeId: filter.employee.value === 0 ? null : filter.employee.value
-        }
-      }).then(response => {
-        this.selectedWeek = {
-          fromDate,
-          toDate
-        };
-        let {
-          isHost,
-          enableSyncWorkingShift,
-          schedules
-        } = response.data;
-        this.originalSchedules = schedules.map(team => {
-          team.members.map(schedule => {
-            schedule.selectWeekDays = {
-              mondaySchedule: false,
-              tuesdaySchedule: false,
-              wednesdaySchedule: false,
-              thursdaySchedule: false,
-              fridaySchedule: false,
-              saturdaySchedule: false,
-              sundaySchedule: false
-            };
-            schedule.totalOffDayReplacement = 0;
-            Object.keys(schedule.selectWeekDays).forEach(objectKey => {
-              if (schedule[objectKey].isOffDayReplacement) {
-                schedule.totalOffDayReplacement = schedule.totalOffDayReplacement + 1;
-              }
-            });
-            return schedule;
-          });
-          return team;
-        });
-        this.setState({
-          filter: _objectSpread(_objectSpread({}, this.state.filter), {}, {
-            fromDate,
-            toDate
-          }),
-          isHost,
-          enableSyncWorkingShift,
-          schedules: Object(lodash__WEBPACK_IMPORTED_MODULE_9__["cloneDeep"])(this.originalSchedules)
-        });
-      }).catch(_shared_common_functions__WEBPACK_IMPORTED_MODULE_10__["axiosError"]).then(() => Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_10__["unblockUI"])());
-    });
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleExportExcel", () => {
-      const filter = this.state.filter,
-        fromDate = moment__WEBPACK_IMPORTED_MODULE_7___default()(filter.fromDate).format('DD-MMM-YYYY'),
-        toDate = moment__WEBPACK_IMPORTED_MODULE_7___default()(filter.toDate).format('DD-MMM-YYYY');
-      Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_10__["blockUI"])();
-      Object(axios__WEBPACK_IMPORTED_MODULE_6__["default"])({
-        url: Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_10__["resolveClientUrl"])('ScheduleArrange/ExportExcel'),
-        method: 'GET',
-        headers: {
-          'X-Requested-With': 'XMLHttpRequest'
-        },
-        params: {
-          fromDate: fromDate,
-          toDate: toDate,
-          teamIds: filter.teamIds,
-          companyId: filter.companyId,
-          isLocal: filter.isLocal,
-          employeeId: filter.employee.value === 0 ? null : filter.employee.value
-        },
-        responseType: 'blob'
-      }).then(response => {
-        const fileName = response.headers['content-disposition'].match(/filename="(.+)"/)[1];
-        Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_10__["downloadFile"])(response.data, fileName);
-      }).catch(_shared_common_functions__WEBPACK_IMPORTED_MODULE_10__["axiosError"]).then(() => Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_10__["unblockUI"])());
-    });
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleExportExcelDriverPickup", () => {
-      const filter = this.state.filter,
-        fromDate = moment__WEBPACK_IMPORTED_MODULE_7___default()(filter.fromDate).format('DD-MMM-YYYY'),
-        toDate = moment__WEBPACK_IMPORTED_MODULE_7___default()(filter.toDate).format('DD-MMM-YYYY');
-      Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_10__["blockUI"])();
-      Object(axios__WEBPACK_IMPORTED_MODULE_6__["default"])({
-        url: Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_10__["resolveClientUrl"])('ScheduleArrange/ExportExcelDriverPickup'),
-        method: 'GET',
-        headers: {
-          'X-Requested-With': 'XMLHttpRequest'
-        },
-        params: {
-          fromDate: fromDate,
-          toDate: toDate,
-          teamIds: filter.teamIds,
-          companyId: filter.companyId,
-          isLocal: filter.isLocal,
-          employeeId: filter.employee.value === 0 ? null : filter.employee.value
-        },
-        responseType: 'blob'
-      }).then(response => {
-        const fileName = response.headers['content-disposition'].match(/filename="(.+)"/)[1];
-        Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_10__["downloadFile"])(response.data, fileName);
-      }).catch(_shared_common_functions__WEBPACK_IMPORTED_MODULE_10__["axiosError"]).then(() => Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_10__["unblockUI"])());
-    });
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleGetWeeklyShedules", isCurrentWeek => {
-      if (this.isDirtyData()) {
-        this.handleShowConfirmRefreshDataModal();
-      } else {
-        const filter = isCurrentWeek ? _objectSpread(_objectSpread({}, this.state.filter), {}, {
-          fromDate: this.currentWeek.fromDate,
-          toDate: this.currentWeek.toDate
-        }) : this.state.filter;
-        this.setState({
-          filter
-        });
-        this.getWeeklyShedules(filter);
-      }
-    });
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleGetPreviousWeekSchedule", () => {
-      const fromDate = moment__WEBPACK_IMPORTED_MODULE_7___default()(this.selectedWeek.fromDate).add(-7, 'days').format(_shared_constants__WEBPACK_IMPORTED_MODULE_12__["DateFormat"]),
-        toDate = moment__WEBPACK_IMPORTED_MODULE_7___default()(this.selectedWeek.toDate).add(-7, 'days').format(_shared_constants__WEBPACK_IMPORTED_MODULE_12__["DateFormat"]),
-        filter = _objectSpread(_objectSpread({}, this.state.filter), {}, {
-          fromDate,
-          toDate
-        });
-      this.setState({
-        filter
-      });
-      if (this.isDirtyData()) {
-        this.handleShowConfirmRefreshDataModal();
-      } else {
-        this.getWeeklyShedules(filter);
-      }
-    });
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleGetNextWeekSchedule", () => {
-      const fromDate = moment__WEBPACK_IMPORTED_MODULE_7___default()(this.selectedWeek.fromDate).add(7, 'days').format(_shared_constants__WEBPACK_IMPORTED_MODULE_12__["DateFormat"]),
-        toDate = moment__WEBPACK_IMPORTED_MODULE_7___default()(this.selectedWeek.toDate).add(7, 'days').format(_shared_constants__WEBPACK_IMPORTED_MODULE_12__["DateFormat"]),
-        filter = _objectSpread(_objectSpread({}, this.state.filter), {}, {
-          fromDate,
-          toDate
-        });
-      this.setState({
-        filter
-      });
-      if (this.isDirtyData()) {
-        this.handleShowConfirmRefreshDataModal();
-      } else {
-        this.getWeeklyShedules(filter);
-      }
-    });
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleChangeSelectWeekDay", (teamId, employeeId, scheduleAttrName, isChecked) => {
-      let schedules = [...this.state.schedules];
-      const gindex = schedules.findIndex(item => item.teamId === teamId);
-      let members = [...schedules[gindex].members];
-      const eindex = members.findIndex(item => item.employeeId === employeeId);
-      members[eindex] = Object.assign({}, members[eindex], {
-        selectWeekDays: _objectSpread(_objectSpread({}, members[eindex].selectWeekDays), {}, {
-          [scheduleAttrName]: isChecked
-        })
-      });
-      schedules[gindex] = _objectSpread(_objectSpread({}, schedules[gindex]), {}, {
-        members
-      });
-      this.setState({
-        schedules
-      });
-    });
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleChangeSelectWeekDays", (scheduleAttrName, isChecked) => {
-      let schedules = [...this.state.schedules];
-      const totalItems = schedules.length;
-      if (scheduleAttrName !== null) {
-        for (let gindex = 0; gindex < totalItems; gindex++) {
-          let members = [...schedules[gindex].members];
-          const totalSubItems = members.length;
-          for (let subindex = 0; subindex < totalSubItems; subindex++) {
-            members[subindex] = Object.assign({}, members[subindex], {
-              selectWeekDays: _objectSpread(_objectSpread({}, members[subindex].selectWeekDays), {}, {
-                [scheduleAttrName]: isChecked
-              })
-            });
-          }
-          schedules[gindex] = _objectSpread(_objectSpread({}, schedules[gindex]), {}, {
-            members
-          });
-        }
-      } else {
-        for (let gindex = 0; gindex < totalItems; gindex++) {
-          let members = [...schedules[gindex].members];
-          const totalSubItems = members.length;
-          for (let subindex = 0; subindex < totalSubItems; subindex++) {
-            members[subindex] = Object.assign({}, members[subindex], {
-              selectWeekDays: {
-                mondaySchedule: isChecked,
-                tuesdaySchedule: isChecked,
-                wednesdaySchedule: isChecked,
-                thursdaySchedule: isChecked,
-                fridaySchedule: isChecked,
-                saturdaySchedule: isChecked,
-                sundaySchedule: isChecked
-              }
-            });
-          }
-          schedules[gindex] = _objectSpread(_objectSpread({}, schedules[gindex]), {}, {
-            members
-          });
-        }
-      }
-      this.setState({
-        schedules
-      });
-    });
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleChangeShift", (teamId, employeeId, attrName, shift) => {
-      let schedules = [...this.state.schedules];
-      const gindex = schedules.findIndex(item => item.teamId === teamId);
-      let members = [...schedules[gindex].members];
-      const eindex = members.findIndex(item => item.employeeId === employeeId);
-      let member = _objectSpread({}, members[eindex]);
-      if (shift !== null && Object(lodash__WEBPACK_IMPORTED_MODULE_9__["isEqual"])(member[attrName].shift, shift)) {
-        return;
-      }
-      let defaultShift = member.defaultShift !== null ? _objectSpread({}, member.defaultShift) : null;
-      if (member.isUsedWeeklyDefaultShift) {
-        defaultShift = member.weeklyDefaultShift[`${attrName.substring(0, 3)}Shift`];
-      }
-      shift = shift === null && !member[attrName].isHoliday ? defaultShift : shift;
-      const isOffDay = shift !== null && shift.id === _shared_constants__WEBPACK_IMPORTED_MODULE_12__["OffDayShiftId"];
-      shift = shift !== null && shift.id === _shared_constants__WEBPACK_IMPORTED_MODULE_12__["OffDayShiftId"] ? null : shift;
-      const originalSchedule = this.originalSchedules[gindex].members[eindex][attrName];
-      member[attrName] = _objectSpread(_objectSpread({}, member[attrName]), {}, {
-        isOffDay,
-        isOffDayReplacement: false,
-        shift,
-        isModified: !Object(lodash__WEBPACK_IMPORTED_MODULE_9__["isEqual"])(shift, originalSchedule.shift) ? true : originalSchedule.isModified
-      });
-      members[eindex] = member;
-      schedules[gindex] = _objectSpread(_objectSpread({}, schedules[gindex]), {}, {
-        members
-      });
-      this.setState({
-        schedules
-      });
-    });
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleChangeDefaultShift", (teamId, employeeId, defaultShift) => {
-      let schedules = [...this.state.schedules];
-      const gindex = schedules.findIndex(item => item.teamId === teamId);
-      let members = [...schedules[gindex].members];
-      const eindex = members.findIndex(item => item.employeeId === employeeId),
-        originalDefaultShift = members[eindex].defaultShift;
-      if (defaultShift !== null) {
-        this.scheduleAttrNames.forEach(attrName => {
-          if (!members[eindex][attrName].isDisabled) {
-            const shift = members[eindex][attrName].shift;
-            if (members[eindex][attrName].isHoliday || members[eindex][attrName].isOffDay) {
-              if (shift !== null && Object(lodash__WEBPACK_IMPORTED_MODULE_9__["isEqual"])(originalDefaultShift, shift)) {
-                const originalSchedule = this.originalSchedules[gindex].members[eindex][attrName],
-                  isModified = !Object(lodash__WEBPACK_IMPORTED_MODULE_9__["isEqual"])(defaultShift, originalSchedule.shift) ? true : originalSchedule.isModified;
-                members[eindex][attrName] = _objectSpread(_objectSpread({}, members[eindex][attrName]), {}, {
-                  shift: defaultShift,
-                  isModified
-                });
-              }
-            } else {
-              if (shift === null || Object(lodash__WEBPACK_IMPORTED_MODULE_9__["isEqual"])(originalDefaultShift, shift)) {
-                const originalSchedule = this.originalSchedules[gindex].members[eindex][attrName],
-                  isModified = !Object(lodash__WEBPACK_IMPORTED_MODULE_9__["isEqual"])(defaultShift, originalSchedule.shift) ? true : originalSchedule.isModified;
-                members[eindex][attrName] = _objectSpread(_objectSpread({}, members[eindex][attrName]), {}, {
-                  shift: defaultShift,
-                  isModified
-                });
-              }
-            }
-          }
-        });
-      } else {
-        this.scheduleAttrNames.forEach(attrName => {
-          const shift = members[eindex][attrName].shift;
-          if (!members[eindex][attrName].isModified && shift !== null && Object(lodash__WEBPACK_IMPORTED_MODULE_9__["isEqual"])(originalDefaultShift, shift)) {
-            const originalSchedule = this.originalSchedules[gindex].members[eindex][attrName],
-              isModified = !Object(lodash__WEBPACK_IMPORTED_MODULE_9__["isEqual"])(defaultShift, originalSchedule.shift) ? true : originalSchedule.isModified;
-            members[eindex][attrName] = _objectSpread(_objectSpread({}, members[eindex][attrName]), {}, {
-              shift: defaultShift,
-              isModified
-            });
-          }
-        });
-      }
-      members[eindex] = _objectSpread(_objectSpread({}, members[eindex]), {}, {
-        defaultShift
-      });
-      schedules[gindex] = _objectSpread(_objectSpread({}, schedules[gindex]), {}, {
-        members
-      });
-      this.setState({
-        schedules
-      });
-    });
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleChangePublics", (teamId, isChecked) => {
-      let schedules = [...this.state.schedules];
-      const gindex = schedules.findIndex(item => item.teamId === teamId);
-      let members = [...schedules[gindex].members];
-      const totalItems = members.length;
-      for (let index = 0; index < totalItems; index++) {
-        members[index] = _objectSpread(_objectSpread({}, members[index]), {}, {
-          isPublic: isChecked
-        });
-      }
-      schedules[gindex] = _objectSpread(_objectSpread({}, schedules[gindex]), {}, {
-        isPublic: isChecked,
-        members
-      });
-      this.setState({
-        schedules
-      });
-    });
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "getSelectedMembers", schedules => {
-      let selectedMembers = [];
-      const totalItems = schedules.length;
-      for (let gindex = 0; gindex < totalItems; gindex++) {
-        const totalSubItems = schedules[gindex].members.length;
-        for (let eindex = 0; eindex < totalSubItems; eindex++) {
-          if (this.scheduleAttrNames.filter(attrName => schedules[gindex].members[eindex].selectWeekDays[attrName]).length > 0) {
-            selectedMembers.push({
-              gindex,
-              eindex
-            });
-          }
-        }
-      }
-      return selectedMembers;
-    });
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "isChangeOffDayKIV", item => {
-      if (item.isKeepInView) {
-        return !item.isOffDay;
-      } else return true;
-    });
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleChangeOffNoShift", () => {
-      let schedules = [...this.state.schedules];
-      const selectedMembers = this.getSelectedMembers(schedules),
-        totalItems = selectedMembers.length;
-      if (totalItems > 0) {
-        for (let index = 0; index < totalItems; index++) {
-          const {
-            gindex,
-            eindex
-          } = selectedMembers[index];
-          let members = [...schedules[gindex].members];
-          let member = _objectSpread({}, members[eindex]);
-          const selectWeekDays = member.selectWeekDays;
-          this.scheduleAttrNames.forEach(attrName => {
-            if (selectWeekDays[attrName]) {
-              member.selectWeekDays = _objectSpread(_objectSpread({}, member.selectWeekDays), {}, {
-                [attrName]: false
-              });
-              if (!member[attrName].isHoliday && !member[attrName].isChangeShift && this.isChangeOffDayKIV(member[attrName])) {
-                member[attrName] = _objectSpread(_objectSpread({}, member[attrName]), {}, {
-                  isOffDay: true,
-                  isFixedOffDay: false,
-                  isOffDayReplacement: false,
-                  shift: null
-                });
-              }
-            }
-          });
-          members[eindex] = member;
-          schedules[gindex] = _objectSpread(_objectSpread({}, schedules[gindex]), {}, {
-            members
-          });
-        }
-        this.setState({
-          schedules
-        });
-      } else {
-        react_toastify__WEBPACK_IMPORTED_MODULE_5__["toast"].warn('Please choose at least one day to off!');
-      }
-    });
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleChangeOffDayOT", () => {
-      let schedules = [...this.state.schedules];
-      const selectedMembers = this.getSelectedMembers(schedules),
-        totalItems = selectedMembers.length;
-      if (totalItems > 0) {
-        for (let index = 0; index < totalItems; index++) {
-          const {
-            gindex,
-            eindex
-          } = selectedMembers[index];
-          let members = [...schedules[gindex].members];
-          let member = _objectSpread({}, members[eindex]);
-          const selectWeekDays = member.selectWeekDays;
-          this.scheduleAttrNames.forEach(attrName => {
-            if (selectWeekDays[attrName]) {
-              member.selectWeekDays = _objectSpread(_objectSpread({}, member.selectWeekDays), {}, {
-                [attrName]: false
-              });
-              if (!member[attrName].isHoliday && !member[attrName].isChangeShift && member[attrName].shift !== null && this.isChangeOffDayKIV(member[attrName])) {
-                const originalSchedule = this.originalSchedules[gindex].members[eindex][attrName];
-                member[attrName] = _objectSpread(_objectSpread({}, member[attrName]), {}, {
-                  isOffDay: true,
-                  isFixedOffDay: false,
-                  isOffDayReplacement: false,
-                  isModified: !originalSchedule.isOffDay ? true : originalSchedule.isModified
-                });
-              }
-            }
-          });
-          members[eindex] = member;
-          schedules[gindex] = _objectSpread(_objectSpread({}, schedules[gindex]), {}, {
-            members
-          });
-        }
-        this.setState({
-          schedules
-        });
-      } else {
-        react_toastify__WEBPACK_IMPORTED_MODULE_5__["toast"].warn('Please choose at least one day to off!');
-      }
-    });
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleChangeWorkday", () => {
-      let schedules = [...this.state.schedules];
-      const selectedMembers = this.getSelectedMembers(schedules),
-        totalItems = selectedMembers.length;
-      if (totalItems > 0) {
-        for (let index = 0; index < totalItems; index++) {
-          const {
-            gindex,
-            eindex
-          } = selectedMembers[index];
-          let members = [...schedules[gindex].members];
-          let member = _objectSpread({}, members[eindex]);
-          const selectWeekDays = member.selectWeekDays;
-          this.scheduleAttrNames.forEach(attrName => {
-            if (selectWeekDays[attrName]) {
-              member.selectWeekDays = _objectSpread(_objectSpread({}, member.selectWeekDays), {}, {
-                [attrName]: false
-              });
-              if (!member[attrName].isHoliday && member[attrName].shift !== null) {
-                const originalSchedule = this.originalSchedules[gindex].members[eindex][attrName];
-                selectWeekDays[attrName] = false;
-                member[attrName] = _objectSpread(_objectSpread({}, member[attrName]), {}, {
-                  isOffDay: false,
-                  isFixedOffDay: false,
-                  isOffDayReplacement: false,
-                  isModified: originalSchedule.isOffDay ? true : originalSchedule.isModified
-                });
-              }
-            }
-          });
-          members[eindex] = member;
-          schedules[gindex] = _objectSpread(_objectSpread({}, schedules[gindex]), {}, {
-            members
-          });
-        }
-        this.setState({
-          schedules
-        });
-      } else {
-        react_toastify__WEBPACK_IMPORTED_MODULE_5__["toast"].warn('Please choose at least one day to work!');
-      }
-    });
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleShiftMultiple", () => {
-      const selectedMembers = this.getSelectedMembers(this.state.schedules),
-        totalItems = selectedMembers.length;
-      if (totalItems > 0) {
-        this.setState({
-          showShiftMultipleModal: true
-        });
-      } else {
-        react_toastify__WEBPACK_IMPORTED_MODULE_5__["toast"].warn('Please choose at least one day to continue!');
-      }
-    });
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleChangeMultipleShift", (shift, isOffDay) => {
-      let schedules = [...this.state.schedules];
-      const selectedMembers = this.getSelectedMembers(schedules),
-        totalItems = selectedMembers.length;
-      if (totalItems > 0) {
-        for (let index = 0; index < totalItems; index++) {
-          const {
-            gindex,
-            eindex
-          } = selectedMembers[index];
-          let members = [...schedules[gindex].members];
-          let member = _objectSpread({}, members[eindex]);
-          const selectWeekDays = member.selectWeekDays;
-          this.scheduleAttrNames.forEach(attrName => {
-            if (selectWeekDays[attrName]) {
-              member.selectWeekDays = _objectSpread(_objectSpread({}, member.selectWeekDays), {}, {
-                [attrName]: false
-              });
-              if (!member[attrName].isHoliday) {
-                const originalSchedule = this.originalSchedules[gindex].members[eindex][attrName];
-                const isModified = !Object(lodash__WEBPACK_IMPORTED_MODULE_9__["isEqual"])(shift, originalSchedule.shift) || originalSchedule.isOffDay !== isOffDay ? true : originalSchedule.isModified;
-                member[attrName] = _objectSpread(_objectSpread({}, member[attrName]), {}, {
-                  isOffDay: isOffDay && !member[attrName].isChangeShift,
-                  isFixedOffDay: isOffDay ? member[attrName].isFixedOffDay : false,
-                  shift,
-                  isModified
-                });
-              }
-            }
-          });
-          members[eindex] = member;
-          schedules[gindex] = _objectSpread(_objectSpread({}, schedules[gindex]), {}, {
-            members
-          });
-        }
-        this.setState({
-          schedules
-        });
-      }
-      this.handleCloseShiftMultipleModal();
-    });
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleFixedOffDay", () => {
-      let schedules = [...this.state.schedules];
-      const selectedMembers = this.getSelectedMembers(schedules),
-        totalItems = selectedMembers.length;
-      if (totalItems > 0) {
-        for (let index = 0; index < totalItems; index++) {
-          const {
-            gindex,
-            eindex
-          } = selectedMembers[index];
-          let members = [...schedules[gindex].members];
-          let member = _objectSpread({}, members[eindex]);
-          const selectWeekDays = member.selectWeekDays;
-          this.scheduleAttrNames.forEach(attrName => {
-            if (selectWeekDays[attrName]) {
-              member.selectWeekDays = _objectSpread(_objectSpread({}, member.selectWeekDays), {}, {
-                [attrName]: false
-              });
-              if (!member[attrName].isHoliday && !member[attrName].isChangeShift && member[attrName].shift !== null && this.isChangeOffDayKIV(member[attrName])) {
-                const originalSchedule = this.originalSchedules[gindex].members[eindex][attrName];
-                member[attrName] = _objectSpread(_objectSpread({}, member[attrName]), {}, {
-                  isOffDay: true,
-                  isFixedOffDay: true,
-                  isOffDayReplacement: false,
-                  isModified: !originalSchedule.isOffDay || !originalSchedule.isFixedOffDay ? true : originalSchedule.isModified
-                });
-              }
-            }
-          });
-          members[eindex] = member;
-          schedules[gindex] = _objectSpread(_objectSpread({}, schedules[gindex]), {}, {
-            members
-          });
-        }
-        this.setState({
-          schedules
-        });
-      } else {
-        react_toastify__WEBPACK_IMPORTED_MODULE_5__["toast"].warn('Please choose at least one day to continue!');
-      }
-    });
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleSave", () => {
-      let isValidData = true,
-        weeklySchedules = [],
-        defaultShifts = [],
-        schedules = Object(lodash__WEBPACK_IMPORTED_MODULE_9__["cloneDeep"])(this.state.schedules),
-        originalSchedules = Object(lodash__WEBPACK_IMPORTED_MODULE_9__["cloneDeep"])(this.originalSchedules);
-      const totalItems = schedules.length,
-        {
-          fromDate,
-          toDate
-        } = this.selectedWeek;
-      outerloop: for (let gindex = 0; gindex < totalItems; gindex++) {
-        const totalSubItems = schedules[gindex].members.length;
-        for (let eindex = 0; eindex < totalSubItems; eindex++) {
-          let schedule = schedules[gindex].members[eindex],
-            originalSchedule = originalSchedules[gindex].members[eindex];
-          Object(lodash__WEBPACK_IMPORTED_MODULE_9__["unset"])(schedule, 'selectWeekDays');
-          Object(lodash__WEBPACK_IMPORTED_MODULE_9__["unset"])(originalSchedule, 'selectWeekDays');
-          if (!Object(lodash__WEBPACK_IMPORTED_MODULE_9__["isEqual"])(schedule, originalSchedule)) {
-            const totalOffDaysDefault = schedule.offDaysbyWeek + schedule.totalOffDayReplacement,
-              totalOffDays = Object(_common_functions__WEBPACK_IMPORTED_MODULE_11__["getTotalOffDays"])(schedule);
-            if (totalOffDaysDefault < totalOffDays) {
-              isValidData = false;
-              break outerloop;
-            }
-            if (!Object(lodash__WEBPACK_IMPORTED_MODULE_9__["isEqual"])(originalSchedule.defaultShift, schedule.defaultShift)) {
-              defaultShifts.push({
-                employeeId: schedule.employeeId,
-                fromDate: schedule.mondaySchedule.workDate,
-                shiftId: schedule.defaultShift !== null ? schedule.defaultShift.id : null
-              });
-            }
-            this.scheduleAttrNames.forEach(attrName => {
-              if (!Object(lodash__WEBPACK_IMPORTED_MODULE_9__["isEqual"])(originalSchedule[attrName], schedule[attrName]) || originalSchedule.isPublic !== schedule.isPublic) {
-                weeklySchedules.push({
-                  employeeId: schedule.employeeId,
-                  workDate: schedule[attrName].workDate,
-                  shiftId: schedule[attrName].shift !== null ? schedule[attrName].shift.id : null,
-                  isHoliday: schedule[attrName].isHoliday,
-                  isOffDay: schedule[attrName].isOffDay,
-                  isFixedOffDay: schedule[attrName].isFixedOffDay,
-                  isPublic: schedule.isPublic
-                });
-              }
-            });
-          }
-        }
-      }
-      if (!isValidData) {
-        react_toastify__WEBPACK_IMPORTED_MODULE_5__["toast"].error('Some employees have a larger number of days off during the week according to the setting.');
-        return;
-      }
-      if (weeklySchedules.length > 0 || defaultShifts.length > 0) {
-        Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_10__["blockUI"])();
-        Object(axios__WEBPACK_IMPORTED_MODULE_6__["default"])({
-          url: Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_10__["resolveClientUrl"])('ScheduleArrange/EditWeekly'),
-          method: 'POST',
-          data: Object(qs__WEBPACK_IMPORTED_MODULE_8__["stringify"])({
-            fromDate,
-            toDate,
-            weeklySchedules: weeklySchedules.length > 0 ? weeklySchedules : null,
-            defaultShifts
-          }),
-          headers: {
-            'X-Requested-With': 'XMLHttpRequest',
-            'Content-Type': 'application/x-www-form-urlencoded'
-          }
-        }).then(response => {
-          const data = response.data;
-          if (data.isSuccessful) {
-            react_toastify__WEBPACK_IMPORTED_MODULE_5__["toast"].success('Updated Successfully!');
-            this.getWeeklyShedules(this.state.filter);
-          } else {
-            react_toastify__WEBPACK_IMPORTED_MODULE_5__["toast"].error(data.message);
-          }
-        }).catch(_shared_common_functions__WEBPACK_IMPORTED_MODULE_10__["axiosError"]).then(() => Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_10__["unblockUI"])());
-      }
-    });
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleCloseShiftMultipleModal", () => {
-      this.setState({
-        showShiftMultipleModal: false
-      });
-    });
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleShowConfirmRefreshDataModal", () => {
-      this.setState({
-        showConfirmRefreshDataModal: true
-      });
-    });
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleCloseConfirmRefreshDataModal", () => {
-      const fromDate = moment__WEBPACK_IMPORTED_MODULE_7___default()(this.selectedWeek.fromDate).format(_shared_constants__WEBPACK_IMPORTED_MODULE_12__["DateFormat"]),
-        toDate = moment__WEBPACK_IMPORTED_MODULE_7___default()(this.selectedWeek.toDate).format(_shared_constants__WEBPACK_IMPORTED_MODULE_12__["DateFormat"]),
-        filter = _objectSpread(_objectSpread({}, this.state.filter), {}, {
-          fromDate,
-          toDate
-        });
-      this.setState({
-        filter,
-        showConfirmRefreshDataModal: false
-      });
-    });
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleSubmitRefreshData", () => {
-      this.getWeeklyShedules(this.state.filter);
-      this.handleCloseConfirmRefreshDataModal();
-    });
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleChangeShowRemarkPopover", show => {
-      this.setState({
-        showRemarkPopover: show
-      });
-    });
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleShowWeeklyDefaultShiftModal", (teamId, employeeId) => {
-      const schedules = this.state.schedules,
-        gindex = schedules.findIndex(item => item.teamId === teamId),
-        eindex = schedules[gindex].members.findIndex(item => item.employeeId === employeeId);
-      this.setState({
-        editWeeklyDefaultShift: {
-          show: true,
-          teamId,
-          employeeId,
-          nickname: schedules[gindex].members[eindex].nickname,
-          data: schedules[gindex].members[eindex].weeklyDefaultShift,
-          isUsedWeeklyDefaultShift: schedules[gindex].members[eindex].isUsedWeeklyDefaultShift
-        }
-      });
-    });
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleCloseWeeklyDefaultShiftModal", () => {
-      this.setState({
-        editWeeklyDefaultShift: {
-          show: false,
-          teamId: 0,
-          employeeId: 0,
-          nickname: '',
-          data: null,
-          isUsedWeeklyDefaultShift: false
-        }
-      });
-    });
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "updateWeeklyDefaultShift", (teamId, employeeId, weeklyDefaultShift, isUsedWeeklyDefaultShift) => {
-      let schedules = [...this.state.schedules];
-      const gindex = schedules.findIndex(item => item.teamId === teamId);
-      let members = [...schedules[gindex].members];
-      const eindex = members.findIndex(item => item.employeeId === employeeId);
-      members[eindex] = _objectSpread(_objectSpread({}, members[eindex]), {}, {
-        weeklyDefaultShift,
-        isUsedWeeklyDefaultShift
-      });
-      this.originalSchedules[gindex].members[eindex] = _objectSpread(_objectSpread({}, this.originalSchedules[gindex].members[eindex]), {}, {
-        weeklyDefaultShift,
-        isUsedWeeklyDefaultShift
-      });
-      const fromDate = moment__WEBPACK_IMPORTED_MODULE_7___default()(this.currentWeek.toDate).add(1, 'days').format(_shared_constants__WEBPACK_IMPORTED_MODULE_12__["DateFormat"]);
-      if (isUsedWeeklyDefaultShift) {
-        this.scheduleAttrNames.forEach(attrName => {
-          const shiftId = weeklyDefaultShift[`${attrName.substring(0, 3)}Shift`].id,
-            isOffDay = shiftId === _shared_constants__WEBPACK_IMPORTED_MODULE_12__["OffDayShiftId"],
-            shift = isOffDay ? null : weeklyDefaultShift[`${attrName.substring(0, 3)}Shift`],
-            workDate = moment__WEBPACK_IMPORTED_MODULE_7___default()(members[eindex][attrName].workDate);
-          if (workDate.isSameOrAfter(fromDate) && !members[eindex][attrName].isDisabled) {
-            members[eindex][attrName] = _objectSpread(_objectSpread({}, members[eindex][attrName]), {}, {
-              shift,
-              isOffDay
-            });
-            this.originalSchedules[gindex].members[eindex][attrName] = _objectSpread(_objectSpread({}, this.originalSchedules[gindex].members[eindex][attrName]), {}, {
-              shift,
-              isOffDay
-            });
-          }
-        });
-      } else {
-        const defaultShift = members[eindex].defaultShift;
-        if (defaultShift !== null) {
-          this.scheduleAttrNames.forEach(attrName => {
-            const workDate = moment__WEBPACK_IMPORTED_MODULE_7___default()(members[eindex][attrName].workDate);
-            if (workDate.isSameOrAfter(fromDate) && !members[eindex][attrName].isDisabled && !members[eindex][attrName].isHoliday && !members[eindex][attrName].isOffDay && members[eindex][attrName].shift === null) {
-              members[eindex][attrName] = _objectSpread(_objectSpread({}, members[eindex][attrName]), {}, {
-                shift: defaultShift
-              });
-            }
-          });
-        }
-      }
-      schedules[gindex] = _objectSpread(_objectSpread({}, schedules[gindex]), {}, {
-        members
-      });
-      this.setState({
-        schedules
-      });
-    });
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleChangeWeeklyDefaultShift", (weeklyDefaultShift, isUsedWeeklyDefaultShift) => {
-      const {
-        teamId,
-        employeeId
-      } = this.state.editWeeklyDefaultShift;
-      let schedules = this.state.schedules;
-      const gindex = schedules.findIndex(item => item.teamId === teamId);
-      let members = schedules[gindex].members;
-      const eindex = members.findIndex(item => item.employeeId === employeeId);
-      let totalOffDays = 0;
-      this.scheduleAttrNames.forEach(attrName => {
-        const shiftId = weeklyDefaultShift[`${attrName.substring(0, 3)}Shift`].id,
-          isOffDay = shiftId === _shared_constants__WEBPACK_IMPORTED_MODULE_12__["OffDayShiftId"];
-        if (isOffDay) {
-          totalOffDays++;
-        }
-      });
-      if (totalOffDays > members[eindex].offDaysbyWeek) {
-        react_toastify__WEBPACK_IMPORTED_MODULE_5__["toast"].error('Employee has a larger number of days off during the week according to the setting.');
-        return;
-      }
-      Object(axios__WEBPACK_IMPORTED_MODULE_6__["default"])({
-        url: Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_10__["resolveClientUrl"])('ScheduleArrange/EditWeeklyDefaultShift'),
-        method: 'POST',
-        data: Object(qs__WEBPACK_IMPORTED_MODULE_8__["stringify"])({
-          weeklyDefaultShift,
-          isUsedWeeklyDefaultShift
-        }),
-        headers: {
-          'X-Requested-With': 'XMLHttpRequest',
-          'Content-Type': 'application/x-www-form-urlencoded'
-        }
-      }).then(response => {
-        const data = response.data;
-        if (data.isSuccessful) {
-          react_toastify__WEBPACK_IMPORTED_MODULE_5__["toast"].success('Updated Successfully!');
-          this.updateWeeklyDefaultShift(teamId, employeeId, weeklyDefaultShift, isUsedWeeklyDefaultShift);
-          this.handleCloseWeeklyDefaultShiftModal();
-        } else {
-          react_toastify__WEBPACK_IMPORTED_MODULE_5__["toast"].error(data.message);
-        }
-      }).catch(_shared_common_functions__WEBPACK_IMPORTED_MODULE_10__["axiosError"]);
-    });
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleUpdateRemark", (teamId, employeeId, remark) => {
-      let schedules = [...this.state.schedules];
-      const gindex = schedules.findIndex(item => item.teamId === teamId);
-      let members = [...schedules[gindex].members];
-      const eindex = members.findIndex(item => item.employeeId === employeeId);
-      if (!Object(lodash__WEBPACK_IMPORTED_MODULE_9__["isEqual"])(remark, this.originalSchedules[gindex].members[eindex].remark)) {
-        Object(axios__WEBPACK_IMPORTED_MODULE_6__["default"])({
-          url: Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_10__["resolveClientUrl"])('ScheduleArrange/EditRemark'),
-          method: 'POST',
-          data: Object(qs__WEBPACK_IMPORTED_MODULE_8__["stringify"])({
-            employeeId,
-            remark
-          }),
-          headers: {
-            'X-Requested-With': 'XMLHttpRequest',
-            'Content-Type': 'application/x-www-form-urlencoded'
-          }
-        }).then(response => {
-          const data = response.data;
-          if (data.isSuccessful) {
-            react_toastify__WEBPACK_IMPORTED_MODULE_5__["toast"].success('Updated Successfully!');
-            members[eindex] = _objectSpread(_objectSpread({}, members[eindex]), {}, {
-              remark
-            });
-            schedules[gindex] = _objectSpread(_objectSpread({}, schedules[gindex]), {}, {
-              members
-            });
-            this.originalSchedules[gindex].members[eindex].remark = remark;
-            this.setState({
-              schedules
-            });
-          } else {
-            react_toastify__WEBPACK_IMPORTED_MODULE_5__["toast"].error(data.message);
-          }
-        }).catch(_shared_common_functions__WEBPACK_IMPORTED_MODULE_10__["axiosError"]);
-      }
-    });
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleEditTeamOrder", () => {
-      let displayOrders = [];
-      const schedules = this.state.schedules,
-        totalItems = schedules.length;
-      for (let index = 0; index < totalItems; index++) {
-        displayOrders.push({
-          teamId: schedules[index].teamId,
-          displayOrder: index + 1
-        });
-      }
-      if (displayOrders.length > 0) {
-        Object(axios__WEBPACK_IMPORTED_MODULE_6__["default"])({
-          url: Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_10__["resolveClientUrl"])('ScheduleArrange/EditTeamOrder'),
-          method: 'POST',
-          data: Object(qs__WEBPACK_IMPORTED_MODULE_8__["stringify"])({
-            displayOrders
-          }),
-          headers: {
-            'X-Requested-With': 'XMLHttpRequest',
-            'Content-Type': 'application/x-www-form-urlencoded'
-          }
-        }).then(response => {
-          const data = response.data;
-          if (!data.isSuccessful) {
-            react_toastify__WEBPACK_IMPORTED_MODULE_5__["toast"].error(data.message);
-          }
-        }).catch(_shared_common_functions__WEBPACK_IMPORTED_MODULE_10__["axiosError"]);
-      }
-    });
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleEditDisplayOrder", gindex => {
-      let displayOrders = [];
-      const members = this.state.schedules[gindex].members,
-        totalItems = members.length;
-      for (let index = 0; index < totalItems; index++) {
-        displayOrders.push({
-          employeeId: members[index].employeeId,
-          displayOrder: index + 1
-        });
-      }
-      if (displayOrders.length > 0) {
-        Object(axios__WEBPACK_IMPORTED_MODULE_6__["default"])({
-          url: Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_10__["resolveClientUrl"])('ScheduleArrange/EditDisplayOrder'),
-          method: 'POST',
-          data: Object(qs__WEBPACK_IMPORTED_MODULE_8__["stringify"])({
-            displayOrders
-          }),
-          headers: {
-            'X-Requested-With': 'XMLHttpRequest',
-            'Content-Type': 'application/x-www-form-urlencoded'
-          }
-        }).then(response => {
-          const data = response.data;
-          if (!data.isSuccessful) {
-            react_toastify__WEBPACK_IMPORTED_MODULE_5__["toast"].error(data.message);
-          }
-        }).catch(_shared_common_functions__WEBPACK_IMPORTED_MODULE_10__["axiosError"]);
-      }
-    });
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleDragEnd", result => {
-      if (!result.destination || result.source.index === result.destination.index) {
-        return;
-      }
-      const resultType = result.type,
-        sourceIndex = result.source.index,
-        destinationIndex = result.destination.index;
-      let schedules = [...this.state.schedules];
-      if (resultType === 'droppableTeam') {
-        schedules = Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_10__["reorder"])(schedules, sourceIndex, destinationIndex);
-        this.originalSchedules = Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_10__["reorder"])(schedules, sourceIndex, destinationIndex);
-        this.setState({
-          schedules
-        }, () => this.handleEditTeamOrder());
-      } else if (resultType.includes('droppableMember')) {
-        const teamId = parseInt(resultType.split('-')[1], 10),
-          index = schedules.findIndex(x => x.teamId === teamId);
-        this.originalSchedules[index].members = Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_10__["reorder"])(this.originalSchedules[index].members, sourceIndex, destinationIndex);
-        schedules[index].members = Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_10__["reorder"])(schedules[index].members, sourceIndex, destinationIndex);
-        this.setState({
-          schedules
-        }, () => this.handleEditDisplayOrder(index));
-      }
-    });
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleChangeTeamOrder", (key, teamId) => {
-      let schedules = [...this.state.schedules];
-      const sourceIndex = schedules.findIndex(x => x.teamId === teamId),
-        totalItems = schedules.length;
-      let destinationIndex = 0;
-      switch (key) {
-        case 'up':
-          destinationIndex = sourceIndex - 1;
-          break;
-        case 'down':
-          destinationIndex = sourceIndex + 1;
-          break;
-        case 'bottom':
-          destinationIndex = totalItems;
-          break;
-      }
-      if (destinationIndex < 0 || destinationIndex > totalItems || sourceIndex === destinationIndex) {
-        return;
-      }
-      schedules = Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_10__["reorder"])(schedules, sourceIndex, destinationIndex);
-      this.originalSchedules = Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_10__["reorder"])(this.originalSchedules, sourceIndex, destinationIndex);
-      this.setState({
-        schedules
-      }, () => this.handleEditTeamOrder());
-    });
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleChangeOrder", (key, teamId, employeeId) => {
-      let schedules = [...this.state.schedules];
-      const index = schedules.findIndex(x => x.teamId === teamId),
-        totalItems = schedules[index].members.length,
-        sourceIndex = schedules[index].members.findIndex(schedule => schedule.employeeId === employeeId);
-      let destinationIndex = 0;
-      switch (key) {
-        case 'up':
-          destinationIndex = sourceIndex - 1;
-          break;
-        case 'down':
-          destinationIndex = sourceIndex + 1;
-          break;
-        case 'bottom':
-          destinationIndex = totalItems;
-          break;
-      }
-      if (destinationIndex < 0 || destinationIndex > totalItems || sourceIndex === destinationIndex) {
-        return;
-      }
-      schedules[index].members = Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_10__["reorder"])(schedules[index].members, sourceIndex, destinationIndex);
-      this.originalSchedules[index].members = Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_10__["reorder"])(this.originalSchedules[index].members, sourceIndex, destinationIndex);
-      this.setState({
-        schedules
-      }, () => this.handleEditDisplayOrder(index));
-    });
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleSelectEmployeeOfTeam", (teamId, employeeId, isSelected) => {
-      let schedules = [...this.state.schedules];
-      const gindex = schedules.findIndex(item => item.teamId === teamId);
-      let members = [...schedules[gindex].members];
-      if (employeeId !== null) {
-        const eindex = members.findIndex(item => item.employeeId === employeeId);
-        members[eindex] = _objectSpread(_objectSpread({}, members[eindex]), {}, {
-          isSelected
-        });
-        schedules[gindex] = _objectSpread(_objectSpread({}, schedules[gindex]), {}, {
-          isSelected: members.findIndex(item => !item.isSelected) < 0
-        });
-      } else {
-        schedules[gindex] = _objectSpread(_objectSpread({}, schedules[gindex]), {}, {
-          isSelected
-        });
-        const totalItems = members.length;
-        for (let eindex = 0; eindex < totalItems; eindex++) {
-          members[eindex] = _objectSpread(_objectSpread({}, members[eindex]), {}, {
-            isSelected
-          });
-        }
-      }
-      schedules[gindex] = _objectSpread(_objectSpread({}, schedules[gindex]), {}, {
-        members
-      });
-      this.setState({
-        schedules
-      });
-    });
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleSyncData", () => {
-      const employeeIds = [];
-      const schedules = this.state.schedules,
-        totalItems = schedules.length;
-      for (let gindex = 0; gindex < totalItems; gindex++) {
-        const totalMembers = schedules[gindex].members.length;
-        for (let eindex = 0; eindex < totalMembers; eindex++) {
-          if (schedules[gindex].members[eindex].isSelected) {
-            employeeIds.push(schedules[gindex].members[eindex].employeeId);
-          }
-        }
-      }
-      if (employeeIds.length > 0) {
-        this.setState({
-          selectedEmployeeIds: employeeIds,
-          showConfirmSyncDataModalDialog: true
-        });
-      } else {
-        react_toastify__WEBPACK_IMPORTED_MODULE_5__["toast"].warn('Please select at least a employee to continue!');
-      }
-    });
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleCloseConfirmSyncDataModalDialog", () => {
-      this.setState({
-        selectedEmployeeIds: [],
-        showConfirmSyncDataModalDialog: false
-      });
-    });
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleSubmitSyncData", () => {
-      Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_10__["blockUI"])();
-      const {
-        fromDate,
-        toDate
-      } = this.selectedWeek;
-      Object(axios__WEBPACK_IMPORTED_MODULE_6__["default"])({
-        url: Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_10__["resolveClientUrl"])('ScheduleArrange/SyncWorkingShift'),
-        method: 'POST',
-        data: Object(qs__WEBPACK_IMPORTED_MODULE_8__["stringify"])({
-          fromDate,
-          toDate,
-          employeeIds: this.state.selectedEmployeeIds.join(','),
-          companyId: this.state.filter.companyId
-        }),
-        headers: {
-          'X-Requested-With': 'XMLHttpRequest',
-          'Content-Type': 'application/x-www-form-urlencoded'
-        }
-      }).then(response => {
-        const data = response.data;
-        if (data.isSuccessful) {
-          react_toastify__WEBPACK_IMPORTED_MODULE_5__["toast"].success('Synced successfully!');
-          this.setState({
-            selectedEmployeeIds: [],
-            showConfirmSyncDataModalDialog: false
-          });
-          this.getWeeklyShedules(this.state.filter);
-        } else {
-          react_toastify__WEBPACK_IMPORTED_MODULE_5__["toast"].error(data.message);
-        }
-      }).catch(_shared_common_functions__WEBPACK_IMPORTED_MODULE_10__["axiosError"]).then(() => Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_10__["unblockUI"])());
-    });
-    const _fromDate = moment__WEBPACK_IMPORTED_MODULE_7___default()().day('Monday').format(_shared_constants__WEBPACK_IMPORTED_MODULE_12__["DateFormat"]),
-      _toDate = moment__WEBPACK_IMPORTED_MODULE_7___default()(_fromDate).add(6, 'days').format(_shared_constants__WEBPACK_IMPORTED_MODULE_12__["DateFormat"]);
+    const fromDate = moment__WEBPACK_IMPORTED_MODULE_2___default()().day('Monday').format(_shared_constants__WEBPACK_IMPORTED_MODULE_7__["DateFormat"]),
+      toDate = moment__WEBPACK_IMPORTED_MODULE_2___default()(fromDate).add(6, 'days').format(_shared_constants__WEBPACK_IMPORTED_MODULE_7__["DateFormat"]);
     const companyElement = document.getElementById('CompanyId');
     const roleElement = document.getElementById('RoleId');
     const defaultCompanyId = companyElement ? companyElement.value : '';
@@ -146190,8 +146444,8 @@ class App extends react__WEBPACK_IMPORTED_MODULE_3__["Component"] {
     this.state = {
       isHost: false,
       filter: {
-        fromDate: _fromDate,
-        toDate: _toDate,
+        fromDate: fromDate,
+        toDate: toDate,
         teamIds: '',
         companyId: defaultCompanyId,
         employee: {
@@ -146220,18 +146474,30 @@ class App extends react__WEBPACK_IMPORTED_MODULE_3__["Component"] {
     this.teamOptions = [];
     this.shiftOptions = [];
     this.currentWeek = {
-      fromDate: _fromDate,
-      toDate: _toDate
+      fromDate,
+      toDate
     };
     this.selectedWeek = {
-      fromDate: _fromDate,
-      toDate: _toDate
+      fromDate,
+      toDate
     };
     this.defaultRoleId = defaultRoleId;
     this.scheduleAttrNames = ['mondaySchedule', 'tuesdaySchedule', 'wednesdaySchedule', 'thursdaySchedule', 'fridaySchedule', 'saturdaySchedule', 'sundaySchedule'];
+
+    // Initialize handlers, actions, and utilities from external files
+    const selectionHandlers = Object(_ScheduleSelectionHandlers__WEBPACK_IMPORTED_MODULE_9__["default"])(this);
+    const shiftHandlers = Object(_ScheduleShiftHandlers__WEBPACK_IMPORTED_MODULE_10__["default"])(this);
+    const offDayHandlers = Object(_ScheduleOffDayHandlers__WEBPACK_IMPORTED_MODULE_11__["default"])(this);
+    const multipleShiftHandlers = Object(_ScheduleMultipleShiftHandlers__WEBPACK_IMPORTED_MODULE_12__["default"])(this);
+    const saveHandlers = Object(_ScheduleSaveHandlers__WEBPACK_IMPORTED_MODULE_13__["default"])(this);
+    const actions = Object(_ScheduleActions__WEBPACK_IMPORTED_MODULE_14__["default"])(this);
+    const utilities = Object(_ScheduleUtilities__WEBPACK_IMPORTED_MODULE_15__["default"])(this);
+    const handlers = Object(_ScheduleHandlers__WEBPACK_IMPORTED_MODULE_16__["default"])(this);
+    const dataExportHandlers = Object(_ScheduleDataExportHandlers__WEBPACK_IMPORTED_MODULE_17__["default"])(this);
+    Object.assign(this, selectionHandlers, shiftHandlers, offDayHandlers, multipleShiftHandlers, saveHandlers, actions, utilities, handlers, dataExportHandlers);
   }
   componentDidMount() {
-    Object(_shared_components_CompanySelect__WEBPACK_IMPORTED_MODULE_16__["renderCompanySelect"])({
+    Object(_shared_components_CompanySelect__WEBPACK_IMPORTED_MODULE_5__["renderCompanySelect"])({
       defaultCompanyId: this.state.filter.companyId,
       roleId: this.defaultRoleId,
       onChange: this.handleCompanyChange
@@ -146247,7 +146513,6 @@ class App extends react__WEBPACK_IMPORTED_MODULE_3__["Component"] {
   render() {
     const {
       isHost,
-      enableSyncWorkingShift,
       schedules,
       showShiftMultipleModal,
       showConfirmRefreshDataModal,
@@ -146255,7 +146520,7 @@ class App extends react__WEBPACK_IMPORTED_MODULE_3__["Component"] {
       editWeeklyDefaultShift,
       showConfirmSyncDataModalDialog
     } = this.state;
-    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_3__["Fragment"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_shared_layouts_ToastLayout__WEBPACK_IMPORTED_MODULE_13__["default"], null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_Search__WEBPACK_IMPORTED_MODULE_19__["default"], {
+    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_3__["Fragment"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_shared_layouts_ToastLayout__WEBPACK_IMPORTED_MODULE_8__["default"], null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_Search__WEBPACK_IMPORTED_MODULE_18__["default"], {
       showExportExcel: true,
       teamOptions: this.teamOptions,
       employeeOptions: this.state.employeeOptions,
@@ -146294,27 +146559,27 @@ class App extends react__WEBPACK_IMPORTED_MODULE_3__["Component"] {
       onSyncData: this.handleSyncData,
       onSave: this.handleSave,
       enableSyncWorkingShift: this.state.enableSyncWorkingShift
-    }), showShiftMultipleModal && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_ShiftMultipleModal__WEBPACK_IMPORTED_MODULE_17__["default"], {
+    }), showShiftMultipleModal && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_ShiftMultipleModal__WEBPACK_IMPORTED_MODULE_19__["default"], {
       show: showShiftMultipleModal,
       onHide: this.handleCloseShiftMultipleModal,
-      shiftOptions: this.shiftOptions.filter(shift => shift.id !== _shared_constants__WEBPACK_IMPORTED_MODULE_12__["OffDayShiftId"]),
+      shiftOptions: this.shiftOptions.filter(shift => shift.id !== _shared_constants__WEBPACK_IMPORTED_MODULE_7__["OffDayShiftId"]),
       onSubmit: this.handleChangeMultipleShift
-    }), editWeeklyDefaultShift.show && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_WeeklyDefaultShiftModal__WEBPACK_IMPORTED_MODULE_18__["default"], {
+    }), editWeeklyDefaultShift.show && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_WeeklyDefaultShiftModal__WEBPACK_IMPORTED_MODULE_21__["default"], {
       show: editWeeklyDefaultShift.show,
       isHost: isHost,
       nickname: editWeeklyDefaultShift.nickname,
       data: editWeeklyDefaultShift.data,
       isUsedWeeklyDefaultShift: editWeeklyDefaultShift.isUsedWeeklyDefaultShift,
-      fromDate: moment__WEBPACK_IMPORTED_MODULE_7___default()(this.currentWeek.toDate).add(1, 'days').format(_shared_constants__WEBPACK_IMPORTED_MODULE_12__["DateFormat"]),
+      fromDate: moment__WEBPACK_IMPORTED_MODULE_2___default()(this.currentWeek.toDate).add(1, 'days').format(_shared_constants__WEBPACK_IMPORTED_MODULE_7__["DateFormat"]),
       shiftOptions: this.shiftOptions,
       onHide: this.handleCloseWeeklyDefaultShiftModal,
       onSubmit: this.handleChangeWeeklyDefaultShift
-    }), showConfirmRefreshDataModal && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_shared_components_SweetModalDialog__WEBPACK_IMPORTED_MODULE_15__["default"], {
+    }), showConfirmRefreshDataModal && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_shared_components_SweetModalDialog__WEBPACK_IMPORTED_MODULE_6__["default"], {
       show: showConfirmRefreshDataModal,
       contents: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement("p", null, "It looks like you have been editing something. If you refresh before saving, your changes will be lost."),
       onHide: this.handleCloseConfirmRefreshDataModal,
       onSubmit: this.handleSubmitRefreshData
-    }), showConfirmSyncDataModalDialog && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_shared_components_SweetModalDialog__WEBPACK_IMPORTED_MODULE_15__["default"], {
+    }), showConfirmSyncDataModalDialog && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement(_shared_components_SweetModalDialog__WEBPACK_IMPORTED_MODULE_6__["default"], {
       show: showConfirmSyncDataModalDialog,
       contents: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_3___default.a.createElement("p", null, "Are you sure you want to sync data from OWP?"),
       onHide: this.handleCloseConfirmSyncDataModalDialog,
@@ -146335,43 +146600,33 @@ react_dom__WEBPACK_IMPORTED_MODULE_4___default.a.render(/*#__PURE__*/react__WEBP
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return ColDefaultShift; });
-/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "./node_modules/@babel/runtime/helpers/defineProperty.js");
-/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _ShiftAutocomplete__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../ShiftAutocomplete */ "./sources/js/pages/schedule-arrange/ShiftAutocomplete.jsx");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _ShiftAutocomplete__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../ShiftAutocomplete */ "./sources/js/pages/schedule-arrange/ShiftAutocomplete.jsx");
 
 
-
-class ColDefaultShift extends react__WEBPACK_IMPORTED_MODULE_1__["PureComponent"] {
-  constructor(...args) {
-    super(...args);
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleChangeDefaultShift", (name, shift) => {
-      const {
-        teamId,
-        employeeId
-      } = this.props;
-      this.props.onChangeDefaultShift(teamId, employeeId, shift);
-    });
-  }
-  render() {
-    const {
-      isHost,
-      shiftOptions,
-      data,
-      isUsedWeeklyDefaultShift
-    } = this.props;
-    return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
-      className: `table-cell cell-shift cell-default-shift ${isUsedWeeklyDefaultShift ? 'is-weekly' : ''}`
-    }, !isUsedWeeklyDefaultShift && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_ShiftAutocomplete__WEBPACK_IMPORTED_MODULE_2__["default"], {
-      isDisabled: !isHost,
-      shift: data,
-      shiftOptions: shiftOptions,
-      onChange: this.handleChangeDefaultShift
-    }));
-  }
-}
+const ColDefaultShift = ({
+  teamId,
+  employeeId,
+  isHost,
+  shiftOptions,
+  data,
+  isUsedWeeklyDefaultShift,
+  onChangeDefaultShift
+}) => {
+  const handleChangeDefaultShift = (_, shift) => {
+    onChangeDefaultShift(teamId, employeeId, shift);
+  };
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: `table-cell cell-shift cell-default-shift ${isUsedWeeklyDefaultShift ? 'is-weekly' : ''}`
+  }, !isUsedWeeklyDefaultShift && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_ShiftAutocomplete__WEBPACK_IMPORTED_MODULE_1__["default"], {
+    isDisabled: !isHost,
+    shift: data,
+    shiftOptions: shiftOptions,
+    onChange: handleChangeDefaultShift
+  }));
+};
+/* harmony default export */ __webpack_exports__["default"] = (ColDefaultShift);
 
 /***/ }),
 
@@ -146616,9 +146871,7 @@ class ColShift extends react__WEBPACK_IMPORTED_MODULE_1__["PureComponent"] {
         });
       }
     });
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "isSkipOffDay", data => {
-      return data.isLeaveHalfDay || data.isChangeShift || data.isKeepInView && data.isOffDay;
-    });
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "isSkipOffDay", data => data.isLeaveHalfDay || data.isChangeShift || data.isKeepInView && data.isOffDay);
     this.state = {
       isShowCheckbox: props.isChecked
     };
@@ -147929,7 +148182,7 @@ class Autocomplete extends react__WEBPACK_IMPORTED_MODULE_1__["Component"] {
     _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleInput", event => {
       this.props.onInput(event.target.value);
     });
-    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleChange", (event, ui) => {
+    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "handleChange", (_, ui) => {
       let value = 0,
         label = '';
       if (ui && ui.item) {
@@ -148225,7 +148478,7 @@ class WeekPicker extends react__WEBPACK_IMPORTED_MODULE_1__["PureComponent"] {
       const vm = this;
       this.$el.weekpicker({
         firstDay: 1,
-        onSelect: function (dateText, startDateText, startDate, endDate) {
+        onSelect: function (_unused1, _unused2, startDate, endDate) {
           vm.props.onChange(moment__WEBPACK_IMPORTED_MODULE_2___default()(startDate).format(_constants__WEBPACK_IMPORTED_MODULE_3__["DateFormat"]), moment__WEBPACK_IMPORTED_MODULE_2___default()(endDate).format(_constants__WEBPACK_IMPORTED_MODULE_3__["DateFormat"]));
           vm.$el.hide();
         }

@@ -4,28 +4,27 @@ import toastr from "toastr";
 import { Formik, Form, Field } from "formik";
 
 import Errors from "../../../shared/components/Errors";
-
 import {
     resolveClientUrl,
     axiosError,
     toastOptions,
 } from "../../../shared/common.functions";
-import { validationSchema } from "../common.functions";
+import { validationSchema, useDepartmentUnits } from "../common.functions";
 
 const AppContainer = () => {
     const [prepareData, setPrepareData] = useState(null);
     const [formKey, setFormKey] = useState(0);
+    const units = useDepartmentUnits();
 
     const [initialValues, setInitialValues] = useState({
         departmentId: 0,
-        code: "",
-        name: "",
+        code: '',
+        name: '',
         isActive: true,
-        unit: "",
-        accountableArea: "",
-        picEmpId: "",
+        unit: '',
+        accountableArea: '',
+        picEmpId: '',
         groupDeptId: 0,
-        units: [],
     });
 
     const handleGoBack = () => {
@@ -38,9 +37,9 @@ const AppContainer = () => {
             method: "GET",
             headers: { "X-Requested-With": "XMLHttpRequest" },
         })
-            .then((response) => {
+            .then(response => {
                 const data = response.data;
-                setInitialValues((prev) => ({
+                setInitialValues(prev =>({
                     ...prev,
                     departmentId: data.departmentId,
                     code: data.code,
@@ -51,22 +50,7 @@ const AppContainer = () => {
                     picEmpId: data.picEmpId,
                     groupDeptId: data.groupDeptId,
                 }));
-                setFormKey((prev) => prev + 1);
-            })
-            .catch(axiosError);
-    }, []);
-
-    useEffect(() => {
-        axios({
-            url: resolveClientUrl(`Department/GetUnits`),
-            method: "GET",
-            headers: { "X-Requested-With": "XMLHttpRequest" },
-        })
-            .then((response) => {
-                setInitialValues((prev) => ({
-                    ...prev,
-                    units: response.data,
-                }));
+                setFormKey(prev =>prev + 1);
             })
             .catch(axiosError);
     }, []);
@@ -77,7 +61,7 @@ const AppContainer = () => {
             method: "GET",
             headers: { "X-Requested-With": "XMLHttpRequest" },
         })
-            .then((response) => {
+            .then(response => {
                 setPrepareData(response.data);
             })
             .catch(axiosError);
@@ -86,33 +70,41 @@ const AppContainer = () => {
     const handleSubmit = (values, { setSubmitting }) => {
         setSubmitting(true);
 
+        const submitData = {
+            code: values.code.trim(),
+            name: values.name.trim(),
+            isActive: values.isActive,
+            unitId: values.unit,
+            groupDeptId: values.groupDeptId,
+            accountableArea: values.accountableArea,
+            picEmpId: values.picEmpId,
+        };
+
+        if (values.departmentId) {
+            submitData.departmentId = values.departmentId;
+        }
+
+        const endpoint = values.departmentId ? "Department/Edit" : "Department/Create";
+        const successMessage = values.departmentId ? "Updated successfully!" : "Created successfully!";
+
         axios
             .post(
-                resolveClientUrl("Department/Edit"),
-                {
-                    departmentId: values.departmentId,
-                    code: values.code.trim(),
-                    name: values.name.trim(),
-                    isActive: values.isActive,
-                    unitId: values.unit,
-                    groupDeptId: values.groupDeptId,
-                    accountableArea: values.accountableArea,
-                    picEmpId: values.picEmpId,
-                },
+                resolveClientUrl(endpoint),
+                submitData,
                 {
                     headers: { "X-Requested-With": "XMLHttpRequest" },
                 }
             )
-            .then((response) => {
+            .then(response => {
                 const { data } = response;
                 if (data.isSuccessful) {
-                    toastr.success("Updated successfully!", "", toastOptions());
+                    toastr.success(successMessage, '', toastOptions());
                     setTimeout(function () {
                         document.location =
                             resolveClientUrl("Department/Index");
                     }, 3000);
                 } else {
-                    toastr.error(data.message, "", toastOptions());
+                    toastr.error(data.message, '', toastOptions());
                     setSubmitting(false);
                 }
             })
@@ -150,14 +142,14 @@ const AppContainer = () => {
                                 name="unit"
                                 as="select"
                                 className="form-control">
-                                <option value="" />
-                                {initialValues.units
-                                    ? initialValues.units.map((unit) => (
+                                <option value='' />
+                                {units
+                                    ? units.map(unit => (
                                           <option key={unit.id} value={unit.id}>
                                               {unit.code}-{unit.accountableArea}
                                           </option>
                                       ))
-                                    : ""}
+                                    : ''}
                             </Field>
                         </div>
                     </div>
@@ -216,10 +208,10 @@ const AppContainer = () => {
                                 name="picEmpId"
                                 as="select"
                                 className="form-control">
-                                <option value="" />
+                                <option value='' />
                                 {prepareData &&
                                     prepareData.employees &&
-                                    prepareData.employees.map((emp) => (
+                                    prepareData.employees.map(emp =>(
                                         <option key={emp.id} value={emp.id}>
                                             {emp.displayNameWithCompany}
                                         </option>
@@ -270,3 +262,4 @@ const AppContainer = () => {
 };
 
 export default AppContainer;
+

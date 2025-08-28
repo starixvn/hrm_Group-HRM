@@ -272,7 +272,7 @@ import { DisciplineType } from '../../shared/constants';
                                     'application/x-www-form-urlencoded',
                             },
                         })
-                            .then((response) => {
+                            .then(response => {
                                 const data = response.data;
                                 if (data.isSuccessful) {
                                     toastr.success(
@@ -375,7 +375,7 @@ import { DisciplineType } from '../../shared/constants';
             params: formData,
             responseType: 'text',
         })
-            .then((response) => {
+            .then(response => {
                 $('#discipline-detail').html(response.data);
                 floatThead('table#data');
                 initEventForIgnoreDiscipline();
@@ -395,10 +395,10 @@ import { DisciplineType } from '../../shared/constants';
         renderCompanySelect({
             defaultCompanyId: defaultCompanyId,
             roleId: roleId,
-            onChange: (companyId) => {
+            onChange: companyId => {
                 $('#CompanyId').val(companyId);
                 getOrgChart(companyId)
-                    .then((response) => {
+                    .then(response => {
                         $('#Team').multiSelectTreeView({
                             data: response.data,
                             isSelectedAll: true,
@@ -446,7 +446,7 @@ import { DisciplineType } from '../../shared/constants';
                 params: formData,
                 responseType: 'blob',
             })
-                .then((response) => {
+                .then(response => {
                     const fileName =
                         response.headers['content-disposition'].match(
                             /filename=([^;]+)/

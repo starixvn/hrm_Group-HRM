@@ -87529,7 +87529,7 @@ const AppContainer = () => {
       return companiesData;
     }
     return companiesData.map(company => _objectSpread(_objectSpread({}, company), {}, {
-      currency: company.currency ? company.currency.split(',').map(id => id.trim()).filter(id => id).map(id => currencyMap[id] || id).join(', ') : ""
+      currency: company.currency ? company.currency.split(',').map(id => id.trim()).filter(id => id).map(id => currencyMap[id] || id).join(', ') : ''
     }));
   };
   Object(react__WEBPACK_IMPORTED_MODULE_1__["useEffect"])(() => {
@@ -87566,8 +87566,8 @@ const Row = ({
   const handleEdit = () => {
     window.location = Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_1__["resolveClientUrl"])(`company/edit?Id=${item.companyId}`);
   };
-  const isBooleanString = val => val && ['true', 'false'].includes(val.toLowerCase());
-  const isTrue = val => val && val.toLowerCase() === 'true';
+  const isBooleanString = val => val && ["true", "false"].includes(val.toLowerCase());
+  const isTrue = val => val && val.toLowerCase() === "true";
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", {
     id: `row_${item.companyId}`
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, rowIndex), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {

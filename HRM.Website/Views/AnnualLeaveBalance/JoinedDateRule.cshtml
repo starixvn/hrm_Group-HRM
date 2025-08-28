@@ -7,6 +7,7 @@
 @{
     ViewBag.Title = Labels.AnualLeaveBalance;
     var hasPermissionToEdit = (bool)ViewBag.HasPermissionToEdit;
+    const double epsilon = 0.0001;
 }
 @section css{
     <link href="~/dist/styles/annual.leavebalance.index.css" rel="stylesheet" asp-append-version="true" />
@@ -124,19 +125,19 @@
                     <td>@leave.Nickname</td>
                     <td>@(leave.FromDate == DateTimeOffset.MinValue.DateTime ? "" : leave.FromDate.ToString("dd MMM yyyy"))</td>
                     <td>
-                        @if (leave.AnnualLeaveCurrentYear != 0)
+                        @if (Math.Abs(leave.AnnualLeaveCurrentYear) > epsilon)
                         {
                             <span class="@(leave.AnnualLeaveCurrentYear < 0 ? "red" : string.Empty)">@leave.AnnualLeaveCurrentYear.ToString("0.0")</span>
                         }
                     </td>
                     <td>
-                        @if (leave.ExtraLeave != 0)
+                        @if (Math.Abs(leave.ExtraLeave) > epsilon)
                         {
                             <span class="@(leave.ExtraLeave < 0 ? "red" : string.Empty)">@leave.ExtraLeave.ToString("0.0")</span>
                         }
                     </td>
                     <td>
-                        @if (leave.DeductDays != 0)
+                        @if (Math.Abs(leave.DeductDays) > epsilon)
                         {
                             <span>@leave.DeductDays.ToString("0.0")</span>
                         }

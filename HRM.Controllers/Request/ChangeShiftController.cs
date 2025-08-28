@@ -38,7 +38,7 @@ public class ChangeShiftController(
         var toDate = fromDate.AddYears(1).AddDays(-1).Date.ToEndOfDay();
         var criteria = new GetChangeShiftRequestByEmployeeCriteria
         {
-            EmployeeId = session.UserId,
+            EmployeeId = EmployeeSession.EmpId,
             FromDate = fromDate,
             ToDate = toDate,
             CompanyId = CurrentCompanyId
@@ -57,11 +57,11 @@ public class ChangeShiftController(
     public async Task<IActionResult> Create()
     {
         var today = DateTimeOffset.Now.DateTime.ToClientTimeZone().Date;
-        var supervisor = await GetVerifierApprover(session.UserId);
+        var supervisor = await GetVerifierApprover(EmployeeSession.EmpId);
         var model = new ChangeShiftViewModel
         {
             Employee = EmployeeSession.DisplayName,
-            EmployeeId = session.UserId,
+            EmployeeId = EmployeeSession.EmpId,
             FromDate = today,
             ToDate = today,
             Verifiers = supervisor.Verifiers,
@@ -81,7 +81,7 @@ public class ChangeShiftController(
         var requestDetail = JsonConvert.DeserializeObject<List<ChangeShiftDetail>>(details);
         criteria.Details = requestDetail;
 
-        var commandResult = await changeShiftService.CreateAsync(session.UserId, criteria);
+        var commandResult = await changeShiftService.CreateAsync(EmployeeSession.EmpId, criteria);
 
         if (commandResult.IsSuccessful)
         {
@@ -96,7 +96,7 @@ public class ChangeShiftController(
     {
         var request = await changeShiftService.GetByIdAsync(id);
         if (request == null
-            || !Utilities.CheckUserCanEditRequest(session.UserId, request.Requester.EmpId)
+            || !Utilities.CheckUserCanEditRequest(EmployeeSession.EmpId, request.Requester.EmpId)
             || request.Status.Id != (byte)CurrentRequestStatus.Pending)
         {
             return RedirectToAction("AccessDenied", "Error");
@@ -144,7 +144,7 @@ public class ChangeShiftController(
         var requestDetail = JsonConvert.DeserializeObject<List<ChangeShiftDetail>>(details);
         criteria.Details = requestDetail;
 
-        var commandResult = await changeShiftService.EditAsync(session.UserId, criteria);
+        var commandResult = await changeShiftService.EditAsync(EmployeeSession.EmpId, criteria);
         if (commandResult.IsSuccessful)
         {
             await changeShiftService.SendMailEditRequestAsync(criteria.RequestId);
@@ -161,7 +161,7 @@ public class ChangeShiftController(
     public async Task<IActionResult> Delete(long id)
     {
         await changeShiftService.SendMailDeleteRequestAsync(id);
-        var commandResult = await changeShiftService.DeleteAsync(session.UserId, id);
+        var commandResult = await changeShiftService.DeleteAsync(EmployeeSession.EmpId, id);
 
         if (commandResult.IsSuccessful)
         {

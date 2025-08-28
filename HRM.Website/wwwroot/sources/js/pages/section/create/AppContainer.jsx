@@ -85,7 +85,7 @@ const AppContainer = () => {
                             <Field name="department" as="select" className="form-control">
                                 <option defaultChecked></option>
                                 {
-                                    deparments.map((item, i) => (
+                                    deparments.map(item => (
                                         <option value={item.id} key={item.id}>{item.name}</option>
                                     ))
                                 }

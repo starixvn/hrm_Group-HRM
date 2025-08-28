@@ -100,7 +100,7 @@ public class CompanyController(
         {
             CompanyId = model.CompanyId,
             SettingsJson = model.SettingsJson,
-            ModifiedBy = session.UserId
+            ModifiedBy = EmployeeSession.EmpId
         };
         commandResult = await baseService.ExecuteNonQueryAsync(criteria);
 
@@ -118,7 +118,7 @@ public class CompanyController(
                     {
                         CompanyId = sub.CompanyId,
                         Name = sub.Name,
-                        CreatedBy = session.UserId
+                        CreatedBy = EmployeeSession.EmpId
                     };
                     commandResult = await baseService.ExecuteNonQueryAsync(insertCriteria);
                     break;
@@ -129,7 +129,7 @@ public class CompanyController(
                         SubCompanyId = sub.SubCompanyId,
                         CompanyId = sub.CompanyId,
                         Name = sub.Name,
-                        ModifiedBy = session.UserId
+                        ModifiedBy = EmployeeSession.EmpId
                     };
                     commandResult = await baseService.ExecuteNonQueryAsync(updateCriteria);
                     break;
@@ -138,7 +138,7 @@ public class CompanyController(
                     var deleteCriteria = new DeleteSubCompanyCriteria
                     {
                         SubCompanyId = sub.SubCompanyId,
-                        DeletedBy = session.UserId
+                        DeletedBy = EmployeeSession.EmpId
                     };
                     commandResult = await baseService.ExecuteNonQueryAsync(deleteCriteria);
                     break;

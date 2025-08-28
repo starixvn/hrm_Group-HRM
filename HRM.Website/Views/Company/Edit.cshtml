@@ -2,19 +2,19 @@
 @model int
 
 @{
-	ViewBag.Title = Labels.EditCompanyManagement;
+    ViewBag.Title = Labels.EditCompanyManagement;
 }
 @section css{
     <link href="~/dist/styles/company.edit.css" rel="stylesheet" asp-append-version="true" />
 }
 @section js{
-	<script>window.companyId = @Model;</script>
+    <script>window.companyId = @Model;</script>
     <script src="~/dist/js/company.edit.js" asp-append-version="true"></script>
 }
 @section Breadcrumb {
-	<a class="step">@Labels.GroupSpace</a>
-	<a class="step" href="@Url.Action("index", "Company")">@Labels.CompanyManagement</a>
-	<span class="step">@ViewBag.Title</span>
+    <a class="step">@Labels.GroupSpace</a>
+    <a class="step" href="@Url.Action("index", "Company")">@Labels.CompanyManagement</a>
+    <span class="step">@ViewBag.Title</span>
 }
 
 <h2 class="page-title">@Labels.Edit</h2>

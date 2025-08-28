@@ -113,7 +113,7 @@ import { getOrgChart } from '../group-team/supervisor/common.functions';
                             companyId: $('#CompanyId').val(),
                         },
                     })
-                        .then((res) => {
+                        .then(res => {
                             response(
                                 $.map(res.data, function (item) {
                                     return {
@@ -194,7 +194,7 @@ import { getOrgChart } from '../group-team/supervisor/common.functions';
                                 },
                                 data: $('#frmAddOtherDiscipline').serialize(),
                             })
-                                .then((response) => {
+                                .then(response => {
                                     if (response.data.isSuccessful) {
                                         showSuccessMsg(
                                             $dialogAddOtherDiscipline,
@@ -261,7 +261,7 @@ import { getOrgChart } from '../group-team/supervisor/common.functions';
                             companyId: $('#CompanyId').val(),
                         },
                     })
-                        .then((response) => {
+                        .then(response => {
                             $dialogViewOtherDiscipline.html(response.data);
                             initEventForDeleteOtherDiscipline();
                             $dialogViewOtherDiscipline.dialog({
@@ -360,7 +360,7 @@ import { getOrgChart } from '../group-team/supervisor/common.functions';
                                 disciplineTypeId: disciplineTypeId,
                             },
                         })
-                            .then((response) => {
+                            .then(response => {
                                 $dialogViewOtherDiscipline
                                     .find('#IsSuccessful')
                                     .prop('checked', true);
@@ -426,7 +426,7 @@ import { getOrgChart } from '../group-team/supervisor/common.functions';
                 headers: { 'X-Requested-With': 'XMLHttpRequest' },
                 responseType: 'text',
             })
-                .then((response) => {
+                .then(response => {
                     $dialogAddOtherDiscipline.html(response.data);
                     initAddOtherDisciplineDialog();
                 })
@@ -477,7 +477,7 @@ import { getOrgChart } from '../group-team/supervisor/common.functions';
             data: queryString,
             responseType: 'text',
         })
-            .then((response) => {
+            .then(response => {
                 $disciplineTableBody.html(response.data);
                 $('.tooltip-tipsy').tipsy({ html: true, gravity: 'w' });
                 initEventViewOtherDiscipline();
@@ -501,10 +501,10 @@ import { getOrgChart } from '../group-team/supervisor/common.functions';
         renderCompanySelect({
             defaultCompanyId: defaultCompanyId,
             roleId: roleId,
-            onChange: (companyId) => {
+            onChange: companyId => {
                 $('#CompanyId').val(companyId);
                 getOrgChart(companyId)
-                    .then((response) => {
+                    .then(response => {
                         $('#Team').multiSelectTreeView({
                             data: response.data,
                             isSelectedAll: true,
@@ -552,7 +552,7 @@ import { getOrgChart } from '../group-team/supervisor/common.functions';
                 params: formData,
                 responseType: 'blob',
             })
-                .then((response) => {
+                .then(response => {
                     const fileName =
                         response.headers['content-disposition'].match(
                             /filename=([^;]+)/

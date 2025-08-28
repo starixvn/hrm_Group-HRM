@@ -108,16 +108,10 @@
                     }
                 </td>
                 <td>
-                    @if (request.Verifier != null)
-                    {
-                        @request.Verifier.Nickname
-                    }
+                    @GetNickname(request.Verifier)
                 </td>
                 <td>
-                    @if (request.Approver != null)
-                    {
-                        @request.Approver.Nickname
-                    }
+                    @GetNickname(request.Approver)
                 </td>
                 <td>@request.CreatedDate.ToShortFormatedDate()</td>
                 <td>@{RenderStatus(request);}</td>
@@ -136,43 +130,45 @@
 @{
     void RenderStatus(LateInEarlyOutRequest request)
     {
-        var verifier = request.Verifier != null ? request.Verifier.Nickname : string.Empty;
-        var approver = request.ApprovedBy != null ? request.ApprovedBy.Nickname : string.Empty;
-        var processor = request.HR != null ? request.HR.Nickname : string.Empty;
         switch (request.Status.Id)
         {
             case (byte)CurrentRequestStatus.Pending:
-                <a requestid="@request.RequestId" class="menu-actions" href="javascript:;">
-                    @request.Status.ToString()
-                    <span class="caret"></span>
-                </a>
+                RenderPendingStatus(request);
                 break;
             case (byte)CurrentRequestStatus.Verified:
             case (byte)CurrentRequestStatus.NotVerified:
-                <a requestid="@request.RequestId" href="javascript:;" class="tooltip-tipsy"
-                   title="@request.Status.Name by @verifier (@request.VerifiedDate.ToShortFormatedDate())">
-                    @request.Status.ToString()
-                </a>
+                RenderStatusWithTooltip(request, GetNickname(request.Verifier), request.VerifiedDate);
                 break;
             case (byte)CurrentRequestStatus.Approved:
             case (byte)CurrentRequestStatus.Rejected:
-                <a requestid="@request.RequestId" href="javascript:;" class="tooltip-tipsy"
-                   title="@request.Status.Name by @approver (@request.ApprovedDate.ToShortFormatedDate())">
-                    @request.Status.ToString()
-                </a>
+                RenderStatusWithTooltip(request, GetNickname(request.ApprovedBy), request.ApprovedDate);
                 break;
             case (byte)CurrentRequestStatus.Processed:
             case (byte)CurrentRequestStatus.Void:
-                <a requestid="@request.RequestId" href="javascript:;" class="tooltip-tipsy"
-                   title="@request.Status.Name by @processor (@request.ProcessedDate.ToShortFormatedDate())">
-                    @request.Status.ToString()
-                </a>
+                RenderStatusWithTooltip(request, GetNickname(request.HR), request.ProcessedDate);
                 break;
             default:
                 <a href="javascript:;">@request.Status.ToString()</a>
                 break;
         }
     }
-    
+
+    void RenderPendingStatus(LateInEarlyOutRequest request)
+    {
+        <a requestid="@request.RequestId" class="menu-actions" href="javascript:;">
+            @request.Status.ToString()
+            <span class="caret"></span>
+        </a>
+    }
+
+    void RenderStatusWithTooltip(LateInEarlyOutRequest request, string actorName, DateTime actionDate)
+    {
+        <a requestid="@request.RequestId" href="javascript:;" class="tooltip-tipsy"
+           title="@request.Status.Name by @actorName (@actionDate.ToShortFormatedDate())">
+            @request.Status.ToString()
+        </a>
+    }
+
+    string GetNickname(Requester requester) => requester != null ? requester.Nickname : string.Empty;
 }
 <div id="dialoghistorycontent"></div>

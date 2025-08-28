@@ -1,6 +1,7 @@
 ﻿namespace HRM.MailDeliver;
 
 using System;
+using System.Linq;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
@@ -27,10 +28,10 @@ public class BaseMailService(IBaseService baseService) : IBaseMailService
 
     private async Task<bool> SendByMailKitAsync(MailRecord email)
     {
-         var isSuccessful = false;
+        var isSuccessful = false;
         var message = GetMessageContent(email);
         using var mailClient = new SmtpClient();
-       
+
         mailClient.ServerCertificateValidationCallback += RemoteCertificateValidationCallback;
 
         try
@@ -59,13 +60,10 @@ public class BaseMailService(IBaseService baseService) : IBaseMailService
         if (!string.IsNullOrWhiteSpace(mailString))
         {
             var emails = RemoveDoubleComma(mailString);
-            var mailArrays = emails.Split(';');
+            var mailArrays = emails.Split(';').Where(x => !string.IsNullOrWhiteSpace(x));
             foreach (var mail in mailArrays)
             {
-                if (!string.IsNullOrEmpty(mail))
-                {
-                    mails.Add(new MailboxAddress(string.Empty, mail));
-                }
+                mails.Add(new MailboxAddress(string.Empty, mail));
             }
         }
     }

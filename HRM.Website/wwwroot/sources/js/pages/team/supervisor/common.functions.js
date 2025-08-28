@@ -44,7 +44,7 @@ function editEmployeeSupervisor(employeeId, roleId, supervisors, toastObj) {
             'Content-Type': 'application/x-www-form-urlencoded',
         },
     })
-        .then((response) => {
+        .then(response => {
             const data = response.data;
             if (data.isSuccessful) {
                 toastObj.success('Updated Successfully!');
@@ -75,7 +75,7 @@ function editTeamSupervisor(
             'Content-Type': 'application/x-www-form-urlencoded',
         },
     })
-        .then((response) => {
+        .then(response => {
             const data = response.data;
             if (data.isSuccessful) {
                 toastObj.success('Updated Successfully!');
@@ -89,7 +89,7 @@ function editTeamSupervisor(
 function reorderSupervisor(key, employeeId, supervisors, callback) {
     const totalItems = supervisors.length,
         sourceIndex = supervisors.findIndex(
-            (item) => item.ownerId === employeeId
+            item => item.ownerId === employeeId
         );
     let destinationIndex = 0;
 

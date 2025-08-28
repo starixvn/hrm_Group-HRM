@@ -43,7 +43,7 @@ public class PayrollManagementController(
     [HrmPermission(Policy.Host, FunctionKey.PayrollManagement)]
     public async Task<IActionResult> GeneratePayroll(DateTime month)
     {
-        var actorId = session.UserId;
+        var actorId = EmployeeSession.EmpId;
         var result = await payrollService.GeneratePayroll(month, actorId);
         return Json(result);
     }

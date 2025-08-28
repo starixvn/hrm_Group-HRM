@@ -74,7 +74,9 @@ app.MapControllerRoute(
     "default",
     "{controller=Home}/{action=Index}/{id?}");
 
-ThreadPool.SetMinThreads(100, 100);
+const byte MinThreads = 100;
+
+ThreadPool.SetMinThreads(MinThreads, MinThreads);
 
 await app.RunAsync();
 return;

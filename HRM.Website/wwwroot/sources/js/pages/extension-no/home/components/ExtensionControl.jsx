@@ -1,10 +1,9 @@
-﻿import React, { Fragment, useState } from 'react';
+﻿import React, { useState } from 'react';
 import toastr from 'toastr';
 import axios from 'axios';
 import { resolveClientUrl, toastOptions, axiosError } from '../../../../shared/common.functions';
 
-const ExtensionControl = ({ data }) => {
-
+const ExtensionControl = () => {
     const [selectExtension, setSelectExtension] = useState(null);
     const getGroupExtension = isInternal => {
         axios({
@@ -39,7 +38,7 @@ const ExtensionControl = ({ data }) => {
     };
 
     return (
-        <Fragment>
+        <>
             {
                 window.hasPermission &&
                 <div className="gap-btn">
@@ -49,7 +48,7 @@ const ExtensionControl = ({ data }) => {
                     <a className="btn btn-primary" onClick={handleCreateExtensionGroup}> Manage External Group</a>
                 </div>
             }
-        </Fragment>
+        </>
     );
 };
 

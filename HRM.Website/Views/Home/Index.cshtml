@@ -62,6 +62,9 @@
                             case (ushort)RequestType.Overtime:
                                 @Html.ActionLink(item.TotalPending.ToString(), "employeeview", "overtime", new { }, new { @class = "pending" })
                                 break;
+                            default:
+                                // do nothing
+                                break;
                         }
                     }
                     else
@@ -91,6 +94,9 @@
                             break;
                         case (ushort)RequestType.Overtime:
                             @Html.ActionLink(Labels.Request, "employeeView", "overtime")
+                            break;
+                        default:
+                            // do nothing
                             break;
                     }
                 </td>

@@ -50,7 +50,7 @@ const PayrollService = {
      * @param {FormData} formData - Form data containing file, month and periodType
      * @returns {Promise} Promise with upload result
      */
-    uploadPayroll: async (formData) => {
+    uploadPayroll: async formData => {
         try {
             const response = await axios.post(
                 resolveClientUrl('PayrollUpload/UploadPayroll'),
@@ -73,7 +73,7 @@ const PayrollService = {
      * @param {FormData} formData - Form data containing month and periodType
      * @returns {Promise} Promise with confirmation result
      */
-    confirmUpload: async (formData) => {
+    confirmUpload: async formData => {
         try {
             const response = await axios.post(
                 resolveClientUrl('PayrollUpload/ConfirmUpload'),

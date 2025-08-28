@@ -37,7 +37,7 @@ public class LateInEarlyOutController(
         var fromDate = new DateTimeOffset(tempYear, 1, 1, 0, 0, 0, TimeSpan.Zero).Date;
         var criteria = new GetLateInEarlyOutRequestByDateCriteria
         {
-            EmpId = session.UserId,
+            EmpId = EmployeeSession.EmpId,
             FromDate = fromDate,
             ToDate = fromDate.AddYears(1).AddDays(-1),
             CompanyId = CurrentCompanyId
@@ -54,11 +54,11 @@ public class LateInEarlyOutController(
 
     public async Task<IActionResult> Create()
     {
-        var supervisor = await requestService.GetVerifierAndApproverAsync(session.UserId, RequestType.LateIn);
+        var supervisor = await requestService.GetVerifierAndApproverAsync(EmployeeSession.EmpId, RequestType.LateIn);
         var viewModel = new LateInEarlyOutRequestViewModel
         {
             Employee = EmployeeSession.DisplayName,
-            EmployeeId = session.UserId,
+            EmployeeId = EmployeeSession.EmpId,
             OnDate = DateTimeOffset.Now.DateTime.ToClientTimeZone().Date,
             Minute = DefaultMinutes,
             ReasonId = (byte)LateInEarlyOutReason.Other,
@@ -88,7 +88,7 @@ public class LateInEarlyOutController(
             ReasonId = model.ReasonId,
             VerifierId = model.VerifierId,
             ApproverId = model.ApproverId,
-            CreatedBy = session.UserId,
+            CreatedBy = EmployeeSession.EmpId,
             CompanyId = CurrentCompanyId
         };
         var commandResult = await baseService.ExecuteNonQueryAsync(criteria);
@@ -105,7 +105,7 @@ public class LateInEarlyOutController(
     {
         var request = await lateInEarlyOutRequestService.GetByIdAsync(id);
         if (request == null
-            || !Utilities.CheckUserCanEditRequest(session.UserId, request.Requester.EmpId)
+            || !Utilities.CheckUserCanEditRequest(EmployeeSession.EmpId, request.Requester.EmpId)
             || request.Status.Id != (byte)CurrentRequestStatus.Pending)
         {
             return RedirectToAction("AccessDenied", "Error");
@@ -163,7 +163,7 @@ public class LateInEarlyOutController(
             EarlyOutMins = model.RequestType == (short)RequestType.EarlyOut ? model.Minute : 0,
             VerifierId = model.VerifierId,
             ApproverId = model.ApproverId,
-            ModifiedBy = session.UserId,
+            ModifiedBy = EmployeeSession.EmpId,
             CompanyId = CurrentCompanyId
         };
 

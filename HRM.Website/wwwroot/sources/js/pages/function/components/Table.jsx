@@ -29,15 +29,30 @@ const Table = ({ rolePermission, onChangePermission }) => {
     const updateParents = (permissions, parentId, target, checked) => {
         let isChecked = checked;
         const pindex = functions.findIndex(item => item.functionId === parentId);
-        if (permissions.findIndex(item => item.functionId === parentId) === - 1) {
+
+        if (permissions.findIndex(item => item.functionId === parentId) === -1) {
             permissions.push({ ...functions[pindex], isRead: false, isHost: false });
         }
 
         if (!checked) {
-            const childs = functions.filter(child => child.parentId === parentId
-                && permissions.filter(item => item.functionId === child.functionId
-                    && ((target === 'funcRead' && item.isRead) || (target === 'funcHost' && item.isHost))).length > 0);
-            isChecked = childs.length === 0 ? false : true;
+            const hasTarget = (child, item) => {
+                if (item.functionId !== child.functionId) {
+                    return false
+                };
+                if (target === "funcRead") {
+                    return item.isRead
+                };
+                if (target === "funcHost") {
+                    return item.isHost
+                };
+                return false;
+            };
+
+            const childs = functions.filter(child =>
+                permissions.some(item => hasTarget(child, item))
+            );
+
+            isChecked = childs.length > 0;
         }
 
         updatePermission(permissions, functions[pindex].functionId, target, isChecked);
@@ -93,7 +108,7 @@ const Table = ({ rolePermission, onChangePermission }) => {
             }
         }
 
-        const rows = [
+        let rows = [
             <tr key={`row-${func.functionId}`} className={func.level === 0 ? 'root-row' : 'child-row'}>
                 <td className="align-left">
                     {trees.map(item => item)}
@@ -122,15 +137,25 @@ const Table = ({ rolePermission, onChangePermission }) => {
             </tr>
         ];
 
-        if (func.childs && func.childs.length > 0) {
-            const totalChilds = func.childs.length;
-            for (let i = 0; i < totalChilds; i++) {
-                rows.push(...renderRow(func.childs[i]));
-            }
-        }
+        rows = attachChildToRow(func, rows);
 
         return rows;
     };
+
+    const attachChildToRow = (func, rows) => {
+
+        if (!func.childs || func.childs.length <= 0) {
+            return rows;
+        }
+
+        const totalChilds = func.childs.length;
+        for (let i = 0; i < totalChilds; i++) {
+            rows.push(...renderRow(func.childs[i]));
+        }
+
+        return rows;
+
+    }
 
     const buildBody = () => {
         const totalItems = hierarchyFunctions.length;

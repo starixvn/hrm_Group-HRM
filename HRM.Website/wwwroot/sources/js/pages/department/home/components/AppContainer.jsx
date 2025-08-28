@@ -1,41 +1,41 @@
-﻿import React, { Fragment, useEffect, useState } from "react";
-import axios from "axios";
-import toastr from "toastr";
+﻿import React, { Fragment, useEffect, useState } from 'react';
+import axios from 'axios';
+import toastr from 'toastr';
 
-import Table from "./Table";
-import Filter from "./Filter";
-import SweetModalDialog from "../../../../shared/components/SweetModalDialog";
+import Table from './Table';
+import Filter from './Filter';
+import SweetModalDialog from '../../../../shared/components/SweetModalDialog';
 
 import {
     axiosError,
     resolveClientUrl,
     toastOptions,
-} from "../../../../shared/common.functions";
+} from '../../../../shared/common.functions';
 
 const AppContainer = () => {
     const [departments, setDepartments] = useState([]);
     const [allUnits, setAllUnits] = useState([]);
     const [filterParams, setFilterParams] = useState({
         isActive: true,
-        unitId: "",
+        unitId: '',
     });
     const [deleteModalDialog, setDeleteModalDialog] = useState({ show: false });
 
-    const getDepartments = (params) => {
+    const getDepartments = params => {
         const processedParams = {
             ...params,
-            unitId: params.unitId === "" ? null : params.unitId,
+            unitId: params.unitId === '' ? null : params.unitId,
         };
         setFilterParams(processedParams);
         axios
             .post(
-                resolveClientUrl("Department/GetDepartments"),
+                resolveClientUrl('Department/GetDepartments'),
                 processedParams,
                 {
-                    headers: { "X-Requested-With": "XMLHttpRequest" },
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' },
                 }
             )
-            .then((response) => {
+            .then(response => {
                 setDepartments(response.data);
             })
             .catch(axiosError);
@@ -43,10 +43,10 @@ const AppContainer = () => {
 
     const loadAllUnits = () => {
         axios
-            .get(resolveClientUrl("Department/GetUnits"), {
-                headers: { "X-Requested-With": "XMLHttpRequest" },
+            .get(resolveClientUrl('Department/GetUnits'), {
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
             })
-            .then((response) => {
+            .then(response => {
                 setAllUnits(response.data);
             })
             .catch(axiosError);
@@ -57,7 +57,7 @@ const AppContainer = () => {
         getDepartments(filterParams);
     }, []);
 
-    const handleDelete = (department) => {
+    const handleDelete = department => {
         setDeleteModalDialog({
             show: true,
             department,
@@ -68,21 +68,21 @@ const AppContainer = () => {
         setDeleteModalDialog({ show: false });
         axios
             .post(
-                resolveClientUrl("Department/Delete"),
+                resolveClientUrl('Department/Delete'),
                 {
                     id: deleteModalDialog.department.id,
                 },
                 {
-                    headers: { "X-Requested-With": "XMLHttpRequest" },
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' },
                 }
             )
-            .then((response) => {
+            .then(response => {
                 const { data } = response;
                 if (data.isSuccessful) {
-                    toastr.success("Deleted successfully!", "", toastOptions());
+                    toastr.success('Deleted successfully!', '', toastOptions());
                     getDepartments(filterParams);
                 } else {
-                    toastr.error(data.message, "", toastOptions());
+                    toastr.error(data.message, '', toastOptions());
                 }
             })
             .catch(axiosError);
@@ -93,18 +93,12 @@ const AppContainer = () => {
     };
 
     function exportExcel() {
-        var url = null,
-            controllerPath;
-
-        controllerPath = "Department/ExportDepartmentList?";
-
-        var query = "isActive=" + filterParams.isActive;
+        let query = 'isActive=' + filterParams.isActive;
         if (filterParams.unitId) {
-            query += "&unitId=" + filterParams.unitId;
+            query += '&unitId=' + filterParams.unitId;
         }
 
-        url = resolveClientUrl(controllerPath + query);
-        location.href = url;
+        location.href = resolveClientUrl('Department/ExportDepartmentList?' + query);
     }
 
     return (
@@ -120,7 +114,7 @@ const AppContainer = () => {
                     show={deleteModalDialog.show}
                     contents={
                         <p>
-                            Are you sure you want to delete{" "}
+                            Are you sure you want to delete{' '}
                             <strong>{deleteModalDialog.department.name}</strong>
                             ?
                         </p>
@@ -134,3 +128,4 @@ const AppContainer = () => {
 };
 
 export default AppContainer;
+

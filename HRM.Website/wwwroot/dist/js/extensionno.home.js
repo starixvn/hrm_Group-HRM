@@ -110664,9 +110664,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const ExtensionControl = ({
-  data
-}) => {
+const ExtensionControl = () => {
   const [selectExtension, setSelectExtension] = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(null);
   const getGroupExtension = isInternal => {
     Object(axios__WEBPACK_IMPORTED_MODULE_2__["default"])({
@@ -110700,7 +110698,7 @@ const ExtensionControl = ({
   const handleCreateExtensionGroup = () => {
     window.location = Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_3__["resolveClientUrl"])('ExtensionNo/ExternalGroup');
   };
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null, window.hasPermission && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, window.hasPermission && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "gap-btn"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
     className: "btn btn-request",

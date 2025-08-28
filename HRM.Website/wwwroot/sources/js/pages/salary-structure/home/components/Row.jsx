@@ -9,7 +9,7 @@ const Row = ({ rowIndex, item, onDelete }) => {
 
     const handleDelete = () => onDelete(item);;
 
-    const formatSalary = (value) => {
+    const formatSalary = value => {
         if (value === null || value === undefined || value === '') {
             return '';
         }

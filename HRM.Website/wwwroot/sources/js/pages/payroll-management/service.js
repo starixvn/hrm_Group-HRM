@@ -20,11 +20,11 @@ const PayrollService = {
             },
             responseType: 'json',
         })
-            .then((response) => response.data)
+            .then(response => response.data)
             .finally(() => unblockUI());
     },
 
-    generatePayroll: (month) => {
+    generatePayroll: month => {
         blockUI();
         return axios({
             url: resolveClientUrl('PayrollManagement/GeneratePayroll'),
@@ -35,7 +35,7 @@ const PayrollService = {
             },
             responseType: 'json',
         })
-            .then((response) => response.data)
+            .then(response => response.data)
             .finally(() => unblockUI());
     },
 };

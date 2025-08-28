@@ -58,7 +58,7 @@ public class AnnualLeaveBalanceController(
     [HrmPermission(Policy.Read, FunctionKey.AnnualLeaveBalance)]
     public async Task<IActionResult> GetYearlyRuleData(string view, LeaveSummaryViewModel model)
     {
-        model.Teams = await teamService.GetBySupervisorAsync(session.UserId);
+        model.Teams = await teamService.GetBySupervisorAsync(EmployeeSession.EmpId);
         model.TeamIds = !string.IsNullOrWhiteSpace(model.TeamIds) ? model.TeamIds : string.Join(",", model.Teams.Select(x => x.Id));
         model.IsShowCloseBalance = appSettings.IsShowCloseBalance;
         model.LeaveSumaries = await GetAnnualLeaveBalanceAsync(model);
@@ -70,7 +70,7 @@ public class AnnualLeaveBalanceController(
     [HrmPermission(Policy.Read, FunctionKey.AnnualLeaveBalance)]
     public async Task<IActionResult> GetJoinedDateRuleData(string view, LeaveSummaryViewModel model)
     {
-        model.Teams = await teamService.GetBySupervisorAsync(session.UserId);
+        model.Teams = await teamService.GetBySupervisorAsync(EmployeeSession.EmpId);
         model.TeamIds = !string.IsNullOrWhiteSpace(model.TeamIds) ? model.TeamIds : string.Join(",", model.Teams.Select(x => x.Id));
         model.IsShowCloseBalance = false;
         model.LeaveSumariesForJoinedDate = await GetAnnualLeaveBalanceForJoinedDateAsync(model);
@@ -91,7 +91,7 @@ public class AnnualLeaveBalanceController(
             DeductDays = model.DeductDays,
             AffectedFrom = model.AffectedFrom
         };
-        var commandResult = await annualLeaveBalanceService.AdjustAsync(session.UserId, annualLeave);
+        var commandResult = await annualLeaveBalanceService.AdjustAsync(EmployeeSession.EmpId, annualLeave);
 
         return Json(commandResult);
     }
@@ -101,7 +101,7 @@ public class AnnualLeaveBalanceController(
     public async Task<IActionResult> Reset(int minBalance, string descriptionReset)
     {
         var date = new DateTimeOffset(DateTimeOffset.Now.Year, 1, 1, 0, 0, 0, TimeSpan.Zero).AddDays(-1).DateTime;
-        var teams = await teamService.GetBySupervisorAsync(session.UserId);
+        var teams = await teamService.GetBySupervisorAsync(EmployeeSession.EmpId);
         var criteria = new GetAnnualLeaveBalanceCriteria
         {
             Year = date.Year,
@@ -115,7 +115,7 @@ public class AnnualLeaveBalanceController(
         var entityList = await reportService.GetAnnualLeaveBalanceReportAsync(criteria);
         var resetAnnualLeaveCriteria = new ResetAnnualLeaveCriteria
         {
-            ActorId = session.UserId,
+            ActorId = EmployeeSession.EmpId,
             Description = descriptionReset,
             AnnualLeaves = entityList.Where(m => m.LeaveBalance > minBalance).ToList(),
             FromDate = date,
@@ -206,7 +206,7 @@ public class AnnualLeaveBalanceController(
                 DeductDays = model.DeductDays,
                 CreditDays = model.CreditDays,
                 CreatedDate = DateTimeOffset.Now.DateTime,
-                CreatedBy = session.UserId
+                CreatedBy = EmployeeSession.EmpId
             };
             var result = await baseService.ExecuteNonQueryAsync(criteria);
 
@@ -230,7 +230,7 @@ public class AnnualLeaveBalanceController(
             TeamIds = model.TeamIds,
             IsLocal = (byte?)model.Category,
             Role = string.Empty,
-            SupervisorId = session.UserId,
+            SupervisorId = EmployeeSession.EmpId,
             CompanyId = CurrentCompanyId
         };
         return await reportService.GetAnnualLeaveBalanceReportAsync(criteria);
@@ -245,7 +245,7 @@ public class AnnualLeaveBalanceController(
             TeamIds = model.TeamIds,
             IsLocal = (byte?)model.Category,
             Role = string.Empty,
-            SupervisorId = session.UserId,
+            SupervisorId = EmployeeSession.EmpId,
             CompanyId = CurrentCompanyId
         };
         return await reportService.GetAnnualLeaveBalanceForJoinedDateReportAsync(criteria);
@@ -275,7 +275,7 @@ public class AnnualLeaveBalanceController(
                 DeductDays = model.DeductDays,
                 CreditDays = model.CreditDays,
                 ModifiedDate = DateTimeOffset.Now.DateTime,
-                ModifiedBy = session.UserId
+                ModifiedBy = EmployeeSession.EmpId
             };
             var result = await baseService.ExecuteNonQueryAsync(criteria);
 
@@ -302,7 +302,7 @@ public class AnnualLeaveBalanceController(
         {
             LeaveTransId = model.LeaveTransId,
             ModifiedDate = DateTimeOffset.Now.DateTime,
-            ModifiedBy = session.UserId
+            ModifiedBy = EmployeeSession.EmpId
         };
         var result = await baseService.ExecuteNonQueryAsync(criteria);
 

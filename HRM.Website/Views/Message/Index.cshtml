@@ -1,4 +1,6 @@
-﻿@using HRM.Resources
+﻿@using HRM.Core
+@using HRM.Core.Constants
+@using HRM.Resources
 @using HRM.Website.Helper
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @model HRM.Models.Message.GetMessageByCreatorParam
@@ -25,10 +27,10 @@
             </div>
             <div class="calendar-form">
                 @{
-                    var defaultFromDate = Model.FromDate ?? new DateTime();
+                    var defaultFromDate = Model.FromDate ?? DateTimeOffset.Now.DateTime.ToClientTimeZone();
                 }
-
-                @Html.TextBox(Html.NameFor(model => model.FromDate).ToString(), defaultFromDate.ToString("dd MMM, yyyy"), new { @class = "datepicker form-control", mindate = new DateTime(2010, 1, 1).ToString("yyyy/MM/dd"), maxdate = "null", disabledDate = "" })
+                @Html.TextBox(Html.NameFor(model => model.FromDate), defaultFromDate.ToString("dd MMM, yyyy"),
+                    new { @class = "datepicker form-control", mindate = Constants.MinDate.ToString("yyyy/MM/dd"), maxdate = "null", disabledDate = "" })
                 <i class="icon-calendar fa fa-calendar"></i>
             </div>
         </div>
@@ -38,10 +40,10 @@
             </div>
             <div class="calendar-form">
                 @{
-                    var defaultToDate = Model.ToDate ?? new DateTime();
+                    var defaultToDate = Model.ToDate ?? DateTimeOffset.Now.DateTime.ToClientTimeZone();
                 }
-
-                @Html.TextBox(Html.NameFor(model => model.ToDate).ToString(), defaultToDate.ToString("dd MMM, yyyy"), new { @class = "datepicker form-control", mindate = new DateTime(2010, 1, 1).ToString("yyyy/MM/dd"), maxdate = "null", disabledDate = "" })
+                @Html.TextBox(Html.NameFor(model => model.ToDate), defaultToDate.ToString("dd MMM, yyyy"),
+                    new { @class = "datepicker form-control", mindate = Constants.MinDate.ToString("yyyy/MM/dd"), maxdate = "null", disabledDate = "" })
                 <i class="icon-calendar fa fa-calendar"></i>
             </div>
         </div>

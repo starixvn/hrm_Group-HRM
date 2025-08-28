@@ -1,26 +1,29 @@
-﻿import React, { useState, useEffect } from "react";
+﻿import React, { useEffect, useState } from "react";
 import { Formik, Form, Field } from "formik";
 import axios from "axios";
 import toastr from "toastr";
 
 import Errors from "../../../shared/components/Errors";
+import { useDepartmentUnits, validationSchema } from "../common.functions";
 
 import {
     resolveClientUrl,
     axiosError,
     toastOptions,
 } from "../../../shared/common.functions";
-import { validationSchema } from "../common.functions";
 
 const AppContainer = () => {
     const [prepareData, setPrepareData] = useState(null);
     const [formKey, setFormKey] = useState(0);
+    const units = useDepartmentUnits();
 
     const [initialValues, setInitialValues] = useState({
-        code: "",
-        name: "",
+        code: '',
+        name: '',
         isActive: true,
-        units: [],
+        unit: '',
+        accountableArea: '',
+        picEmpId: '',
         groupDeptId: 0,
     });
 
@@ -30,33 +33,18 @@ const AppContainer = () => {
 
     useEffect(() => {
         axios({
-            url: resolveClientUrl(`Department/GetUnits`),
-            method: "GET",
-            headers: { "X-Requested-With": "XMLHttpRequest" },
-        })
-            .then((response) => {
-                setInitialValues((prev) => ({
-                    ...prev,
-                    units: response.data,
-                }));
-            })
-            .catch(axiosError);
-    }, []);
-
-    useEffect(() => {
-        axios({
             url: resolveClientUrl(`Department/GetPrepareDataForUnit`),
             method: "GET",
             headers: { "X-Requested-With": "XMLHttpRequest" },
         })
-            .then((response) => {
+            .then(response => {
                 setPrepareData(response.data);
                 if (response.data && response.data.nextId) {
-                    setInitialValues((prev) => ({
+                    setInitialValues(prev =>({
                         ...prev,
                         groupDeptId: response.data.nextId.toString(),
                     }));
-                    setFormKey((prev) => prev + 1);
+                    setFormKey(prev =>prev + 1);
                 }
             })
             .catch(axiosError);
@@ -81,16 +69,16 @@ const AppContainer = () => {
                     headers: { "X-Requested-With": "XMLHttpRequest" },
                 }
             )
-            .then((response) => {
+            .then(response => {
                 const { data } = response;
                 if (data.isSuccessful) {
-                    toastr.success("Created successfully!", "", toastOptions());
+                    toastr.success("Created successfully!", '', toastOptions());
                     setTimeout(function () {
                         document.location =
                             resolveClientUrl("Department/Index");
                     }, 3000);
                 } else {
-                    toastr.error(data.message, "", toastOptions());
+                    toastr.error(data.message, '', toastOptions());
                     setSubmitting(false);
                 }
             })
@@ -128,14 +116,14 @@ const AppContainer = () => {
                                 name="unit"
                                 as="select"
                                 className="form-control">
-                                <option value="" />
-                                {initialValues.units
-                                    ? initialValues.units.map((unit) => (
+                                <option value='' />
+                                {units
+                                    ? units.map(unit => (
                                           <option key={unit.id} value={unit.id}>
                                               {unit.code}-{unit.accountableArea}
                                           </option>
                                       ))
-                                    : ""}
+                                    : ''}
                             </Field>
                         </div>
                     </div>
@@ -194,10 +182,10 @@ const AppContainer = () => {
                                 name="picEmpId"
                                 as="select"
                                 className="form-control">
-                                <option value="" />
+                                <option value='' />
                                 {prepareData &&
                                     prepareData.employees &&
-                                    prepareData.employees.map((emp) => (
+                                    prepareData.employees.map(emp =>(
                                         <option key={emp.id} value={emp.id}>
                                             {emp.displayNameWithCompany}
                                         </option>
@@ -248,3 +236,4 @@ const AppContainer = () => {
 };
 
 export default AppContainer;
+

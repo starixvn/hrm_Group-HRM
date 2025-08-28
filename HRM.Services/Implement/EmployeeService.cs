@@ -236,7 +236,7 @@ public class EmployeeService(
     {
         var criteria = new EditPasswordCriteria
         {
-            EmpId = model.EmployeeId,
+            EmpId = model.UserId,
             Password = model.Password,
             PasswordReset = model.IsReset,
             ModifiedBy = actorId
@@ -256,11 +256,11 @@ public class EmployeeService(
             Nickname = param.Nickname,
             TeamId = param.TeamId,
             Password = Encryptor.ComputeHash(param.Code),
-            DomainUsername = param.DomainUsername,
             CreatedDate = DateTimeOffset.Now.DateTime,
             JoinDate = DateTimeOffset.Now.DateTime.ToClientTimeZone()
         };
         var commandResult = await baseService.ExecuteNonQueryAsync(criteria);
+        commandResult.OutputId = criteria.EmpId;
 
         return commandResult;
     }
@@ -431,9 +431,10 @@ public class EmployeeService(
 
     public async Task<IEnumerable<int>> GetCompaniesBelongToSupervisor()
     {
+        var employeeSession = session.Get<EmployeeSession>(SessionKey.Employee);
         var supervisorCompanyCriteria = new GetSupervisorCompaniesCriteria
         {
-            EmpId = session.UserId
+            EmpId = employeeSession.EmpId
         };
         var supervisorCompanyIds = await baseService.GetDataAsync<int>(supervisorCompanyCriteria);
 

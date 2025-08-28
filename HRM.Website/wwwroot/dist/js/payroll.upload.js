@@ -108601,9 +108601,7 @@ __webpack_require__.r(__webpack_exports__);
 const SalaryTable = ({
   data
 }) => {
-  const formatNumber = number => {
-    return new Intl.NumberFormat('en-US').format(number || 0);
-  };
+  const formatNumber = number => new Intl.NumberFormat('en-US').format(number || 0);
   const totals = data.reduce((acc, item) => ({
     personalCost: (acc.personalCost || 0) + (item.personalCost || 0),
     extraPayment: (acc.extraPayment || 0) + (item.extraPayment || 0)
@@ -108639,14 +108637,12 @@ const SalaryTable = ({
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var toastr__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! toastr */ "./node_modules/toastr/toastr.js");
-/* harmony import */ var toastr__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(toastr__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/es/index.js");
-/* harmony import */ var _shared_common_functions__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../shared/common.functions */ "./sources/js/shared/common.functions.js");
-/* harmony import */ var _constants_periodType__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../constants/periodType */ "./sources/js/pages/payroll-upload/constants/periodType.js");
-/* harmony import */ var _Service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../Service */ "./sources/js/pages/payroll-upload/Service.js");
-
+/* harmony import */ var toastr__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! toastr */ "./node_modules/toastr/toastr.js");
+/* harmony import */ var toastr__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(toastr__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var react_bootstrap__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-bootstrap */ "./node_modules/react-bootstrap/es/index.js");
+/* harmony import */ var _shared_common_functions__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../shared/common.functions */ "./sources/js/shared/common.functions.js");
+/* harmony import */ var _constants_periodType__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../constants/periodType */ "./sources/js/pages/payroll-upload/constants/periodType.js");
+/* harmony import */ var _Service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../Service */ "./sources/js/pages/payroll-upload/Service.js");
 
 
 
@@ -108658,7 +108654,7 @@ const UploadSalaryModal = ({
 }) => {
   const [show, setShow] = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(false);
   const [month, setMonth] = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])('');
-  const [periodType, setPeriodType] = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(_constants_periodType__WEBPACK_IMPORTED_MODULE_5__["PeriodType"].FULL_MONTH);
+  const [periodType, setPeriodType] = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(_constants_periodType__WEBPACK_IMPORTED_MODULE_4__["PeriodType"].FULL_MONTH);
   const [file, setFile] = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(null);
   const [isDragging, setIsDragging] = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(false);
   const [isUploading, setIsUploading] = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(false);
@@ -108668,7 +108664,7 @@ const UploadSalaryModal = ({
   const handleClose = () => {
     setShow(false);
     setMonth('');
-    setPeriodType(_constants_periodType__WEBPACK_IMPORTED_MODULE_5__["PeriodType"].FULL_MONTH);
+    setPeriodType(_constants_periodType__WEBPACK_IMPORTED_MODULE_4__["PeriodType"].FULL_MONTH);
     setFile(null);
   };
   const handleOpen = () => {
@@ -108697,12 +108693,12 @@ const UploadSalaryModal = ({
   };
   const processUpload = async formData => {
     try {
-      await _Service__WEBPACK_IMPORTED_MODULE_6__["default"].uploadPayroll(formData);
-      toastr__WEBPACK_IMPORTED_MODULE_2___default.a.success('Payroll uploaded successfully', '', Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_4__["toastOptions"])());
+      await _Service__WEBPACK_IMPORTED_MODULE_5__["default"].uploadPayroll(formData);
+      toastr__WEBPACK_IMPORTED_MODULE_1___default.a.success('Payroll uploaded successfully', '', Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_3__["toastOptions"])());
       onSuccess();
       handleClose();
     } catch (error) {
-      toastr__WEBPACK_IMPORTED_MODULE_2___default.a.error('Failed to upload Payroll', '', Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_4__["toastOptions"])());
+      toastr__WEBPACK_IMPORTED_MODULE_1___default.a.error('Failed to upload Payroll', '', Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_3__["toastOptions"])());
     } finally {
       setIsUploading(false);
       setShowConfirm(false);
@@ -108711,7 +108707,7 @@ const UploadSalaryModal = ({
   };
   const handleSubmit = async () => {
     if (!file || !month || !periodType) {
-      toastr__WEBPACK_IMPORTED_MODULE_2___default.a.error('Please fill all required fields', '', Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_4__["toastOptions"])());
+      toastr__WEBPACK_IMPORTED_MODULE_1___default.a.error('Please fill all required fields', '', Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_3__["toastOptions"])());
       return;
     }
     setIsUploading(true);
@@ -108720,7 +108716,7 @@ const UploadSalaryModal = ({
       formData.append('file', file);
       formData.append('month', month);
       formData.append('periodType', periodType);
-      const confirmResult = await _Service__WEBPACK_IMPORTED_MODULE_6__["default"].confirmUpload(formData);
+      const confirmResult = await _Service__WEBPACK_IMPORTED_MODULE_5__["default"].confirmUpload(formData);
       if (confirmResult.isSuccessful) {
         await processUpload(formData);
       } else {
@@ -108730,7 +108726,7 @@ const UploadSalaryModal = ({
         setIsUploading(false);
       }
     } catch (error) {
-      toastr__WEBPACK_IMPORTED_MODULE_2___default.a.error('Failed to upload salary', '', Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_4__["toastOptions"])());
+      toastr__WEBPACK_IMPORTED_MODULE_1___default.a.error('Failed to upload salary', '', Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_3__["toastOptions"])());
       setIsUploading(false);
     }
   };
@@ -108743,15 +108739,15 @@ const UploadSalaryModal = ({
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0___default.a.Fragment, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
     className: "btn btn-upload",
     onClick: handleOpen
-  }, "Upload Payroll"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_3__["Modal"], {
+  }, "Upload Payroll"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Modal"], {
     show: show,
     onHide: handleClose,
     centered: "true",
     backdrop: !showConfirm,
     className: "upload-salary-modal"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_3__["ModalHeader"], {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["ModalHeader"], {
     closeButton: true
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_3__["Modal"].Title, null, "Upload Payroll")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_3__["ModalBody"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Modal"].Title, null, "Upload Payroll")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["ModalBody"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "form-group"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "Month", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
     className: "required"
@@ -108771,10 +108767,10 @@ const UploadSalaryModal = ({
     value: periodType,
     onChange: e => setPeriodType(e.target.value),
     required: true
-  }, _constants_periodType__WEBPACK_IMPORTED_MODULE_5__["PERIOD_TYPES"].map(type => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
+  }, _constants_periodType__WEBPACK_IMPORTED_MODULE_4__["PERIOD_TYPES"].map(type => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("option", {
     key: type,
     value: type
-  }, _constants_periodType__WEBPACK_IMPORTED_MODULE_5__["PeriodTypeLabel"][type])))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+  }, _constants_periodType__WEBPACK_IMPORTED_MODULE_4__["PeriodTypeLabel"][type])))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "form-group"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("label", null, "File", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("span", {
     className: "required"
@@ -108793,20 +108789,20 @@ const UploadSalaryModal = ({
     className: "upload-text"
   }, file ? file.name : 'Drag and drop file here or click to browse', !file && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "upload-text-small"
-  }, "Support single Excel file (.xlsx, .xls)"))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_3__["ModalFooter"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+  }, "Support single Excel file (.xlsx, .xls)"))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["ModalFooter"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
     className: "btn btn-primary",
     onClick: handleSubmit,
     disabled: isUploading
   }, isUploading ? 'Uploading...' : 'Upload'), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
     className: "btn btn-default",
     onClick: handleClose
-  }, "Cancel"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_3__["Modal"], {
+  }, "Cancel"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Modal"], {
     show: showConfirm,
     onHide: () => setShowConfirm(false),
     zIndex: 1050
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_3__["ModalHeader"], {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["ModalHeader"], {
     closeButton: true
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_3__["Modal"].Title, null, "Confirm Upload")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_3__["ModalBody"], null, confirmMessage), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_3__["ModalFooter"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["Modal"].Title, null, "Confirm Upload")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["ModalBody"], null, confirmMessage), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_2__["ModalFooter"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {
     className: "btn btn-primary",
     onClick: handleConfirm
   }, "OK"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("button", {

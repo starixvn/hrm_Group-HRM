@@ -5,6 +5,7 @@
 @model HRM.ViewModels.Report.Overtime.YearlyOvertimeViewModel
 @{
     ViewBag.Title = Labels.YearlyOvertimeReport;
+    const double epsilon = 0.0001;
 }
 @section css{
     <link href="~/dist/styles/report.yearlyovertime.css" rel="stylesheet" asp-append-version="true" />
@@ -142,7 +143,7 @@
                     <td class="align-left">@overtime.FullName</td>
                     <td class="align-left">@overtime.Nickname</td>
                     <td class="align-right">
-                        @if (overtime.Jan != 0)
+                        @if (Math.Abs(overtime.Jan) > epsilon)
                         {
                             <a href="@Url.Action("MonthlyOvertimeDetails", "OvertimeReport",
                                             new { employeeId = overtime.EmpId, month = 1, year = Model.Year, calendar = Model.Calendar })">
@@ -151,7 +152,7 @@
                         }
                     </td>
                     <td class="align-right">
-                        @if (overtime.Feb != 0)
+                        @if (Math.Abs(overtime.Feb) > epsilon)
                         {
                             <a href="@Url.Action("MonthlyOvertimeDetails", "OvertimeReport",
                                             new { employeeId = overtime.EmpId, month = 2, year = Model.Year, calendar = Model.Calendar })">
@@ -160,7 +161,7 @@
                         }
                     </td>
                     <td class="align-right">
-                        @if (overtime.Mar != 0)
+                        @if (Math.Abs(overtime.Mar) > epsilon)
                         {
                             <a href="@Url.Action("MonthlyOvertimeDetails", "OvertimeReport",
                                             new { employeeId = overtime.EmpId, month = 3, year = Model.Year, calendar = Model.Calendar })">
@@ -169,7 +170,7 @@
                         }
                     </td>
                     <td class="align-right">
-                        @if (overtime.Apr != 0)
+                        @if (Math.Abs(overtime.Apr) > epsilon)
                         {
                             <a href="@Url.Action("MonthlyOvertimeDetails", "OvertimeReport",
                                             new { employeeId = overtime.EmpId, month = 4, year = Model.Year, calendar = Model.Calendar })">
@@ -178,7 +179,7 @@
                         }
                     </td>
                     <td class="align-right">
-                        @if (overtime.May != 0)
+                        @if (Math.Abs(overtime.May) > epsilon)
                         {
                             <a href="@Url.Action("MonthlyOvertimeDetails", "OvertimeReport",
                                             new { employeeId = overtime.EmpId, month = 5, year = Model.Year, calendar = Model.Calendar })">
@@ -187,7 +188,7 @@
                         }
                     </td>
                     <td class="align-right">
-                        @if (overtime.Jun != 0)
+                        @if (Math.Abs(overtime.Jun) > epsilon)
                         {
                             <a href="@Url.Action("MonthlyOvertimeDetails", "OvertimeReport",
                                             new { employeeId = overtime.EmpId, month = 6, year = Model.Year, calendar = Model.Calendar })">
@@ -196,7 +197,7 @@
                         }
                     </td>
                     <td class="align-right">
-                        @if (overtime.Jul != 0)
+                        @if (Math.Abs(overtime.Jul) > epsilon)
                         {
                             <a href="@Url.Action("MonthlyOvertimeDetails", "OvertimeReport",
                                             new { employeeId = overtime.EmpId, month = 7, year = Model.Year, calendar = Model.Calendar })">
@@ -205,7 +206,7 @@
                         }
                     </td>
                     <td class="align-right">
-                        @if (overtime.Aug != 0)
+                        @if (Math.Abs(overtime.Aug) > epsilon)
                         {
                             <a href="@Url.Action("MonthlyOvertimeDetails", "OvertimeReport",
                                             new { employeeId = overtime.EmpId, month = 8, year = Model.Year, calendar = Model.Calendar })">
@@ -214,7 +215,7 @@
                         }
                     </td>
                     <td class="align-right">
-                        @if (overtime.Sep != 0)
+                        @if (Math.Abs(overtime.Sep) > epsilon)
                         {
                             <a href="@Url.Action("MonthlyOvertimeDetails", "OvertimeReport",
                                             new { employeeId = overtime.EmpId, month = 9, year = Model.Year, calendar = Model.Calendar })">
@@ -223,7 +224,7 @@
                         }
                     </td>
                     <td class="align-right">
-                        @if (overtime.Oct != 0)
+                        @if (Math.Abs(overtime.Oct) > epsilon)
                         {
                             <a href="@Url.Action("MonthlyOvertimeDetails", "OvertimeReport",
                                             new { employeeId = overtime.EmpId, month = 10, year = Model.Year, calendar = Model.Calendar })">
@@ -232,7 +233,7 @@
                         }
                     </td>
                     <td class="align-right">
-                        @if (overtime.Nov != 0)
+                        @if (Math.Abs(overtime.Nov) > epsilon)
                         {
                             <a href="@Url.Action("MonthlyOvertimeDetails", "OvertimeReport",
                                             new { employeeId = overtime.EmpId, month = 11, year = Model.Year, calendar = Model.Calendar })">
@@ -241,7 +242,7 @@
                         }
                     </td>
                     <td class="align-right">
-                        @if (overtime.Dec != 0)
+                        @if (Math.Abs(overtime.Dec) > epsilon)
                         {
                             <a href="@Url.Action("MonthlyOvertimeDetails", "OvertimeReport",
                                             new { employeeId = overtime.EmpId, month = 12, year = Model.Year, calendar = Model.Calendar })">
@@ -250,7 +251,7 @@
                         }
                     </td>
                     <td class="align-right">
-                        @if (overtime.Total != 0)
+                        @if (Math.Abs(overtime.Total) > epsilon)
                         {
                             @overtime.Total
                         }

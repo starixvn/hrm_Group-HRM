@@ -1,4 +1,4 @@
-﻿@using HRM.Core.Enums
+@using HRM.Core.Enums
 @using HRM.Resources
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @model HRM.ViewModels.Request.ProcessRequestViewModel
@@ -26,20 +26,23 @@
             case (byte)RequestType.EarlyOut:
                 if (Model.LateInEarlyOutDetail != null)
                 {
-	                @await Html.PartialAsync("ProcessRequest/_LateInEarlyOutRequestDetail", Model.LateInEarlyOutDetail)
+                    @await Html.PartialAsync("ProcessRequest/_LateInEarlyOutRequestDetail", Model.LateInEarlyOutDetail)
                 }
                 break;
             case (byte)RequestType.ChangeShift:
                 if (Model.ChangeShiftDetails != null && Model.ChangeShiftDetails.Any())
                 {
-	                @await Html.PartialAsync("ProcessRequest/_ChangeShiftRequestDetail", Model.ChangeShiftDetails)
+                    @await Html.PartialAsync("ProcessRequest/_ChangeShiftRequestDetail", Model.ChangeShiftDetails)
                 }
                 break;
             case (byte)RequestType.Leave:
                 if (Model.LeaveDisciplines != null && Model.LeaveDisciplines.Any())
                 {
-	                @await Html.PartialAsync("ProcessRequest/_LeaveRequestDetail", Model.LeaveDisciplines)
+                    @await Html.PartialAsync("ProcessRequest/_LeaveRequestDetail", Model.LeaveDisciplines)
                 }
+                break;
+            default:
+                // do nothing
                 break;
         }
     </div>

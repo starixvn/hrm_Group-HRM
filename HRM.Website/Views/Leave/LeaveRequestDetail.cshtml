@@ -1,5 +1,6 @@
 ﻿@using HRM.Core
 @using HRM.Core.Enums
+@using HRM.Models.Request.Leave
 @using HRM.Resources
 @model HRM.ViewModels.Request.LeaveDetailViewModel
 @{
@@ -26,23 +27,16 @@
         <tbody>
             @foreach (var item in Model.LeaveRequestDetail)
             {
-                if (!item.IsOffOrHoliday)
+                var leaveAmount = item.IsHalfDay ? 0.5 : 1.0;
+
+                if (!item.IsOffOrHoliday && (LeaveTypes)item.LeaveTypeId == LeaveTypes.AnnualLeave)
                 {
-                    switch (item.LeaveTypeId)
-                    {
-                        case (ushort)LeaveTypes.AnnualLeave when item.IsHalfDay:
-                            totalAnnualLeave += 0.5;
-                            break;
-                        case (ushort)LeaveTypes.AnnualLeave:
-                            totalAnnualLeave += 1;
-                            break;
-                        case (ushort)LeaveTypes.UnpaidLeave when item.IsHalfDay:
-                            totalUnpaidLeave += 0.5;
-                            break;
-                        case (ushort)LeaveTypes.UnpaidLeave:
-                            totalUnpaidLeave += 1;
-                            break;
-                    }
+                    totalAnnualLeave += leaveAmount;
+                }
+
+                if (!item.IsOffOrHoliday && (LeaveTypes)item.LeaveTypeId == LeaveTypes.UnpaidLeave)
+                {
+                    totalUnpaidLeave += leaveAmount;
                 }
                 <tr>
                     <td class="tdleavedate" data-date="@item.OnDate.ToDateMonthYearFormatedDate()">
@@ -53,31 +47,8 @@
                     </td>
                     @if (!item.IsOffOrHoliday)
                     {
-                        var leaveSelected = string.Empty;
-                        var offSelected = string.Empty;
-                        var workSelected = string.Empty;
-                        switch (item.WorkType)
-                        {
-                            case (int)WorkType.Leave:
-                                leaveSelected = "selected";
-                                break;
-                            case (int)WorkType.Off:
-                                offSelected = "selected";
-                                break;
-                            default:
-                                workSelected = "selected";
-                                break;
-                        }
-
                         <td>
-                            <select class="ddlWorkType form-control">
-                                <!option value="2" @leaveSelected>@Labels.Leave</!option>
-                                <!option value="3" @workSelected>@Labels.OnDuty</!option>
-                                @if (string.Equals(item.ScheduleStatus, Labels.NA, StringComparison.CurrentCultureIgnoreCase) || item.WorkType == (int)WorkType.Off)
-                                {
-                                    <!option value="1" @offSelected>@Labels.Off</!option>
-                                }
-                            </select>
+                            @{RenderWorkType(item);}
                         </td>
                         <td>
                             @Html.DropDownListFor(m => item.LeaveTypeId, new SelectList(Model.LeaveTypeList, "Id", "Name", item.LeaveTypeId),
@@ -90,34 +61,10 @@
                             <span class="tdnumberleaves">@(item.IsHalfDay ? "0.5" : "1")</span>
                         </td>
                         <td>
-                            <div class="timehalfday">
-                                @{
-                                    var fromTime = Utilities.TimeSteps(30, item.FromTime.ToShortTime());
-                                    <select class="ddlfromtime form-control" name="item.FromTime" id="item.FromTime">
-                                        @foreach (var time in fromTime)
-                                        {
-                                            <!option value="@time.Value" @(time.Selected ? "selected" : "")>@time.Value</!option>
-                                        }
-                                    </select>
-                                }
-                                @Html.CheckBoxFor(m => item.IsFromAfterday, new { @class = "chkIsFromAfterday", title = "Is after day" })
-                                *
-                            </div>
+                            @{RenderFromTime(item);}
                         </td>
                         <td>
-                            <div class="timehalfday">
-                                @{
-                                    var toTime = Utilities.TimeSteps(30, item.ToTime.ToShortTime());
-                                    <select class="ddltotime form-control" name="item.ToTime" id="item.ToTime">
-                                        @foreach (var time in toTime)
-                                        {
-                                            <!option value="@time.Value" @(time.Selected ? "selected" : "")>@time.Value</!option>
-                                        }
-                                    </select>
-                                }
-                                @Html.CheckBoxFor(m => item.IsToAfterday, new { @class = "chkIsToAfterday", title = "Is after day" })
-                                *
-                            </div>
+                            @{RenderToTime(item);}
                         </td>
                         <td class="tdhalfday"><a class="addhalfday" href="javascript:;"></a></td>
                     }
@@ -157,3 +104,67 @@
     }
 </table>
 <script src="~/dist/js/leave.request.detail.js" asp-append-version="true"></script>
+
+@{
+    void RenderWorkType(LeaveRequestDetail item)
+    {
+        var leaveSelected = string.Empty;
+        var offSelected = string.Empty;
+        var workSelected = string.Empty;
+        switch (item.WorkType)
+        {
+            case (int)WorkType.Leave:
+                leaveSelected = "selected";
+                break;
+            case (int)WorkType.Off:
+                offSelected = "selected";
+                break;
+            default:
+                workSelected = "selected";
+                break;
+        }
+
+        <select class="ddlWorkType form-control">
+            <!option value="2" @leaveSelected>@Labels.Leave</!option>
+            <!option value="3" @workSelected>@Labels.OnDuty</!option>
+            @if (string.Equals(item.ScheduleStatus, Labels.NA, StringComparison.CurrentCultureIgnoreCase) || item.WorkType == (int)WorkType.Off)
+            {
+                <!option value="1" @offSelected>@Labels.Off</!option>
+            }
+        </select>
+    }
+
+    void RenderFromTime(LeaveRequestDetail item)
+    {
+        <div class="timehalfday">
+            @{
+                var fromTime = Utilities.TimeSteps(30, item.FromTime.ToShortTime());
+                <select class="ddlfromtime form-control" name="item.FromTime" id="item.FromTime">
+                    @foreach (var time in fromTime)
+                    {
+                        <!option value="@time.Value" @(time.Selected ? "selected" : "")>@time.Value</!option>
+                    }
+                </select>
+            }
+            @Html.CheckBoxFor(m => item.IsFromAfterday, new { @class = "chkIsFromAfterday", title = "Is after day" })
+            *
+        </div>
+    }
+
+    void RenderToTime(LeaveRequestDetail item)
+    {
+        <div class="timehalfday">
+            @{
+                var toTime = Utilities.TimeSteps(30, item.ToTime.ToShortTime());
+                <select class="ddltotime form-control" name="item.ToTime" id="item.ToTime">
+                    @foreach (var time in toTime)
+                    {
+                        <!option value="@time.Value" @(time.Selected ? "selected" : "")>@time.Value</!option>
+                    }
+                </select>
+            }
+            @Html.CheckBoxFor(m => item.IsToAfterday, new { @class = "chkIsToAfterday", title = "Is after day" })
+            *
+        </div>
+    }
+}

@@ -110616,10 +110616,10 @@ const AppContainer = () => {
         data
       } = response;
       if (data.isSuccessful) {
-        toastr__WEBPACK_IMPORTED_MODULE_2___default.a.success("Deleted successfully!", "", Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_6__["toastOptions"])());
+        toastr__WEBPACK_IMPORTED_MODULE_2___default.a.success("Deleted successfully!", '', Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_6__["toastOptions"])());
         getSalaryStructures();
       } else {
-        toastr__WEBPACK_IMPORTED_MODULE_2___default.a.error(data.message, "", Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_6__["toastOptions"])());
+        toastr__WEBPACK_IMPORTED_MODULE_2___default.a.error(data.message, '', Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_6__["toastOptions"])());
       }
     }).catch(_shared_common_functions__WEBPACK_IMPORTED_MODULE_6__["axiosError"]);
   };
@@ -110840,21 +110840,37 @@ const Table = ({
     });
   }
   const getCellValue = (item, key) => {
-    if (!key) return '';
-    let value = item[key];
-    if (value === null || value === undefined) return '';
-    if (typeof value === 'string') return value.trim().toLowerCase();
-    if (typeof value === 'boolean') return value ? 'true' : 'false';
+    if (!key) {
+      return '';
+    }
+    const value = item[key];
+    if (value === null || value === undefined) {
+      return '';
+    }
+    if (typeof value === 'string') {
+      return value.trim().toLowerCase();
+    }
+    if (typeof value === 'boolean') {
+      return value ? 'true' : 'false';
+    }
     return value;
   };
   const sortedData = react__WEBPACK_IMPORTED_MODULE_0___default.a.useMemo(() => {
-    if (!sortConfig.key) return data;
+    if (!sortConfig.key) {
+      return data;
+    }
     const sorted = [...data].sort((a, b) => {
-      let valA = getCellValue(a, sortConfig.key);
-      let valB = getCellValue(b, sortConfig.key);
-      if (valA === '' && valB !== '') return 1;
-      if (valB === '' && valA !== '') return -1;
-      if (valA === '' && valB === '') return 0;
+      const valA = getCellValue(a, sortConfig.key);
+      const valB = getCellValue(b, sortConfig.key);
+      if (valA === '' && valB !== '') {
+        return 1;
+      }
+      if (valB === '' && valA !== '') {
+        return -1;
+      }
+      if (valA === '' && valB === '') {
+        return 0;
+      }
       if (!isNaN(valA) && !isNaN(valB)) {
         return valA - valB;
       }
@@ -110862,11 +110878,15 @@ const Table = ({
         sensitivity: 'base'
       });
     });
-    if (sortConfig.direction === 'desc') sorted.reverse();
+    if (sortConfig.direction === 'desc') {
+      sorted.reverse();
+    }
     return sorted;
   }, [data, sortConfig]);
   const onSort = key => {
-    if (!key) return;
+    if (!key) {
+      return;
+    }
     let direction = 'asc';
     if (sortConfig.key === key && sortConfig.direction === 'asc') {
       direction = 'desc';
@@ -110877,7 +110897,9 @@ const Table = ({
     });
   };
   const renderSortIcon = key => {
-    if (sortConfig.key !== key) return 'fa fa-sort';
+    if (sortConfig.key !== key) {
+      return 'fa fa-sort';
+    }
     return sortConfig.direction === 'asc' ? 'fa fa-sort-asc' : 'fa fa-sort-desc';
   };
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("table", {
@@ -110889,7 +110911,9 @@ const Table = ({
   }) => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", {
     key: label,
     className: sortable ? 'col-sorter' : '',
-    onClick: () => onSort(key),
+    onClick: () => {
+      onSort(key);
+    },
     style: {
       cursor: sortable ? 'pointer' : 'default'
     }

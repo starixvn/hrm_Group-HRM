@@ -6,12 +6,12 @@ import TreeMultiselect from '../../shared/components/react-tree-multiselect/Tree
 import WeekPicker from '../../shared/components/WeekPicker';
 
 export default class Search extends Component {
-    handleTeamChange = (selectedItems) => {
-        const ids = selectedItems.map((item) => item.id);
+    handleTeamChange = selectedItems => {
+        const ids = selectedItems.map(item => item.id);
         this.props.onChange('teamIds', ids.join(','));
     };
 
-    handleEmployeeChange = (value) => {
+    handleEmployeeChange = value => {
         this.props.onChange('employee', value);
     };
 
@@ -20,11 +20,11 @@ export default class Search extends Component {
         this.props.onChange('toDate', toDate);
     };
 
-    handleCategoryChange = (e) => {
+    handleCategoryChange = e => {
         this.props.onChange('isLocal', e.target.value);
     };
 
-    handleSubmit = (event) => {
+    handleSubmit = event => {
         this.props.onSubmit(event.target.name === 'currentWeek');
     };
 
@@ -40,7 +40,10 @@ export default class Search extends Component {
                             <WeekPicker
                                 fromDate={this.props.filter.fromDate}
                                 toDate={this.props.filter.toDate}
-                                onChange={this.handleDateChange}
+                                onChange={(fromDate, toDate) => {
+                                    this.props.onChange('fromDate', fromDate);
+                                    this.props.onChange('toDate', toDate);
+                                }}
                             />
                         </div>
                     </div>
@@ -129,3 +132,4 @@ export default class Search extends Component {
         );
     }
 }
+

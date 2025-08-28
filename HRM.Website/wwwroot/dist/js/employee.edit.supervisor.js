@@ -113537,7 +113537,7 @@ class Row extends react__WEBPACK_IMPORTED_MODULE_1__["PureComponent"] {
       data,
       companyId
     } = this.props;
-    const isSameCompany = companyId == data.companyId;
+    const isSameCompany = companyId === data.companyId;
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("td", {
       className: "align-left cell-name"
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {

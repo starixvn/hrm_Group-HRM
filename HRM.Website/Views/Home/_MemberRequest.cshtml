@@ -47,21 +47,7 @@
                     <tr>
                         <td class="align-left">@item.RequestType</td>
                         <td>
-                            @if (item.TotalPending > 0)
-                            {
-                                if (item.RequestTypeId == (ushort)RequestType.Overtime)
-                                {
-                                    @Html.ActionLink(item.TotalPending.ToString(), "memberovertime", "overtime", new { }, new { @class = "pending" })
-                                }
-                                else
-                                {
-                                    <a href="@Url.Action("member", "request", requestModel)" class="pending">@item.TotalPending.ToString()</a>
-                                }
-                            }
-                            else
-                            {
-                                <span>-</span>
-                            }
+                            @{RenderPendingColumn(item.TotalPending, item.RequestTypeId, requestModel);}
                         </td>
                         <td>@Html.Raw(RazorHelpers.DisplayZeroCell(item.TotalApproved))</td>
                         <td>@Html.Raw(RazorHelpers.DisplayZeroCell(item.TotalRejected))</td>
@@ -105,21 +91,7 @@
                     <tr>
                         <td class="align-left">@item.RequestType</td>
                         <td>
-                            @if (item.TotalPending > 0)
-                            {
-                                if (item.RequestTypeId == (ushort)RequestType.Overtime)
-                                {
-                                    @Html.ActionLink(item.TotalPending.ToString(), "memberovertime", "overtime", new { }, new { @class = "pending" })
-                                }
-                                else
-                                {
-                                    <a href="@Url.Action("member", "request", requestModel)" class="pending">@item.TotalPending.ToString()</a>
-                                }
-                            }
-                            else
-                            {
-                                <span>-</span>
-                            }
+                            @{RenderPendingColumn(item.TotalPending, item.RequestTypeId, requestModel);}
                         </td>
                         <td>@Html.Raw(RazorHelpers.DisplayZeroCell(item.TotalApproved))</td>
                         <td>@Html.Raw(RazorHelpers.DisplayZeroCell(item.TotalRejected))</td>
@@ -127,5 +99,25 @@
                 }
             </tbody>
         </table>
+    }
+}
+@{
+    void RenderPendingColumn(int totalPending, ushort requestTypeId, RequestViewModel requestModel)
+    {
+        @if (totalPending > 0)
+        {
+            if (requestTypeId == (ushort)RequestType.Overtime)
+            {
+                @Html.ActionLink(totalPending.ToString(), "memberovertime", "overtime", new { }, new { @class = "pending" })
+            }
+            else
+            {
+                <a href="@Url.Action("member", "request", requestModel)" class="pending">@totalPending.ToString()</a>
+            }
+        }
+        else
+        {
+            <span>-</span>
+        }
     }
 }

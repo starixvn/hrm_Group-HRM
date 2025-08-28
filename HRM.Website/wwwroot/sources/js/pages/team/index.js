@@ -23,7 +23,7 @@ function deleteTeam(id) {
                 'Content-Type': 'application/x-www-form-urlencoded',
             },
         })
-            .then((response) => {
+            .then(response => {
                 let data = response.data;
                 if (data.isSuccessful) {
                     alert('Delete successfully!');

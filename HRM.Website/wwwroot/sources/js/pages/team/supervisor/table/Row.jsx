@@ -9,7 +9,7 @@ export default class Row extends PureComponent {
     this.props.onRemoveEmployee(ownerId);
   };
 
-  handleChangePermissionOnRequest = (event) => {
+  handleChangePermissionOnRequest = event => {
     const { ownerId } = this.props.data;
     this.props.onChangePermissionOnRequest(
       ownerId,
@@ -19,7 +19,7 @@ export default class Row extends PureComponent {
   };
   render() {
     const { data, companyId } = this.props;
-    const isSameCompany = companyId == data.companyId;
+    const isSameCompany = companyId === data.companyId;
     return (
       <tr>
         <td className="align-left cell-name">
@@ -122,6 +122,7 @@ export default class Row extends PureComponent {
           )}
         </td>
       </tr>
-    );
+    );  
   }
 }
+

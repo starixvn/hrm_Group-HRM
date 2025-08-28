@@ -4,6 +4,7 @@
 @using HRM.Models.Shifts
 @using HRM.Resources
 @using HRM.Services.Implement.Request
+@using HRM.ViewModels.Report
 @using HRM.Website.Helper
 @model IEnumerable<HRM.ViewModels.Report.EmployeeAttendanceModel>
 
@@ -125,16 +126,12 @@
                     else
                     {
                         var title = !string.IsNullOrEmpty(item.ShiftCode) && !string.IsNullOrEmpty(item.ExpectedInTime) ? item.ExpectedInTime + "-" + item.ExpectedOutTime : string.Empty;
-                        var className = $" {(item.IsPublicHoliday & !string.IsNullOrEmpty(item.ShiftCode) ? "holiday" : "")}";
+                        var className = $" {(item.IsPublicHoliday && !string.IsNullOrEmpty(item.ShiftCode) ? "holiday" : "")}";
                         <td class="@className">
-                            @if (!string.IsNullOrEmpty(title))
-                            {
-                                <span class="tooltip-tippy" data-tippy-content="@title">@item.ShiftCode</span>
-                            }
-                            else
-                            {
-                                <span>@item.ShiftCode</span>
-                            }
+                            <span class="@(string.IsNullOrEmpty(title) ? "" : "tooltip-tippy")"
+                                  data-tippy-content="@(string.IsNullOrEmpty(title) ? "" : title)">
+                                @item.ShiftCode
+                            </span>
                         </td>
                     }
                     <td>
@@ -173,40 +170,37 @@
                         }
                     </td>
                     <td>
-                        @if (item.RequestList != null && item.RequestList.Any())
+                        @foreach (var request in item.RequestList ?? new List<EmployeeAttendanceRequest>())
                         {
-                            foreach (var request in item.RequestList)
+                            var statusClass = request.CurrentStatus is (byte)CurrentRequestStatus.Pending or (byte)CurrentRequestStatus.Verified
+                                ? " pending-request" : string.Empty;
+                            var className = "tooltip-request req" + statusClass;
+                            var requestEntity = new RequestEntity
                             {
-                                var statusClass = request.CurrentStatus is (byte)CurrentRequestStatus.Pending or (byte)CurrentRequestStatus.Verified
-                                    ? " pending-request" : string.Empty;
-                                var className = "tooltip-request req" + statusClass;
-                                var requestEntity = new RequestEntity
-                                {
-                                    RequestType = request.RequestType,
-                                    TotalDays = request.TotalDays ?? 0,
-                                    TotalMins = request.TotalMins ?? 0,
-                                    FromDate = request.FromDate.Value,
-                                    ToDate = request.ToDate.Value,
-                                    FromTime = request.FromTime ?? request.FromDate.Value,
-                                    ToTime = request.ToTime ?? request.ToDate.Value,
-                                    RequestedDate = request.RequestDate,
-                                    CreatedDate = request.CreatedDate,
-                                    FromShift = new Shift { Name = request.FromShift },
-                                    ToShift = new Shift { Name = request.ToShift },
-                                    LeaveType = request.LeaveType,
-                                    ActualLateInEarlyOut = request.RequestType.Id == (byte)RequestType.LateIn ? item.LateIn : item.EarlyOut,
-                                    KeepInViewType = request.KeepInViewTypeId ?? 0
-                                };
-                                var requestDetail = RequestService.ToRequestMessage(requestEntity);
-                                <div class="@className"
-                                     data-requestdetail="@Html.Encode(requestDetail)"
-                                     data-leavetype="@(request.LeaveType != null ? request.LeaveType.Name : string.Empty)"
-                                     data-createddate="@(request.CreatedDate.ToShortFormatedDate())"
-                                     data-remark='@request.Remark'
-                                     data-currentStatus="@request.CurrentStatus">
-                                    @request.RequestType.Name
-                                </div>
-                            }
+                                RequestType = request.RequestType,
+                                TotalDays = request.TotalDays ?? 0,
+                                TotalMins = request.TotalMins ?? 0,
+                                FromDate = request.FromDate.Value,
+                                ToDate = request.ToDate.Value,
+                                FromTime = request.FromTime ?? request.FromDate.Value,
+                                ToTime = request.ToTime ?? request.ToDate.Value,
+                                RequestedDate = request.RequestDate,
+                                CreatedDate = request.CreatedDate,
+                                FromShift = new Shift { Name = request.FromShift },
+                                ToShift = new Shift { Name = request.ToShift },
+                                LeaveType = request.LeaveType,
+                                ActualLateInEarlyOut = request.RequestType.Id == (byte)RequestType.LateIn ? item.LateIn : item.EarlyOut,
+                                KeepInViewType = request.KeepInViewTypeId ?? 0
+                            };
+                            var requestDetail = RequestService.ToRequestMessage(requestEntity);
+                            <div class="@className"
+                                    data-requestdetail="@Html.Encode(requestDetail)"
+                                    data-leavetype="@(request.LeaveType != null ? request.LeaveType.Name : string.Empty)"
+                                    data-createddate="@(request.CreatedDate.ToShortFormatedDate())"
+                                    data-remark='@request.Remark'
+                                    data-currentStatus="@request.CurrentStatus">
+                                @request.RequestType.Name
+                            </div>
                         }
                     </td>
                     <td>

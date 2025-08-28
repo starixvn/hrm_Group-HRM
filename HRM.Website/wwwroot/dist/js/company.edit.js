@@ -105140,7 +105140,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_tag_input_component__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react-tag-input-component */ "./node_modules/react-tag-input-component/dist/esm/index.js");
 /* harmony import */ var _shared_components_Errors__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../../shared/components/Errors */ "./sources/js/shared/components/Errors.jsx");
 /* harmony import */ var _shared_common_functions__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../../../shared/common.functions */ "./sources/js/shared/common.functions.js");
-/* harmony import */ var _Currency__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./Currency */ "./sources/js/pages/company/edit/components/Currency.jsx");
+/* harmony import */ var _CurrencyMultiSelect__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./CurrencyMultiSelect */ "./sources/js/pages/company/edit/components/CurrencyMultiSelect.jsx");
 /* harmony import */ var _SubCompany__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./SubCompany */ "./sources/js/pages/company/edit/components/SubCompany.jsx");
 
 
@@ -105317,7 +105317,7 @@ const AppContainer = () => {
     type: "checkbox",
     className: "checkbox",
     checked: field.value,
-    onChange: e => setFieldValue('hasBIO', e.target.checked)
+    onChange: e => setFieldValue("hasBIO", e.target.checked)
   })))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "form-group"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -105334,7 +105334,7 @@ const AppContainer = () => {
     type: "checkbox",
     className: "checkbox",
     checked: field.value,
-    onChange: e => setFieldValue('enableLetstalk', e.target.checked)
+    onChange: e => setFieldValue("enableLetstalk", e.target.checked)
   })))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "form-group"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
@@ -105343,7 +105343,7 @@ const AppContainer = () => {
     className: "control-label"
   }, "Currency")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "input-form"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Currency__WEBPACK_IMPORTED_MODULE_7__["default"], {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_CurrencyMultiSelect__WEBPACK_IMPORTED_MODULE_7__["default"], {
     options: currencyOptions || [],
     value: values.currency || [],
     onChange: selectedValues => setFieldValue('currency', selectedValues),
@@ -105403,10 +105403,10 @@ const AppContainer = () => {
 
 /***/ }),
 
-/***/ "./sources/js/pages/company/edit/components/Currency.jsx":
-/*!***************************************************************!*\
-  !*** ./sources/js/pages/company/edit/components/Currency.jsx ***!
-  \***************************************************************/
+/***/ "./sources/js/pages/company/edit/components/CurrencyMultiSelect.jsx":
+/*!**************************************************************************!*\
+  !*** ./sources/js/pages/company/edit/components/CurrencyMultiSelect.jsx ***!
+  \**************************************************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -105480,7 +105480,7 @@ function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t =
 
 
 
-const checkTagExists = async (tag, validTags = [], excludeCompanyId = null) => {
+const checkTagExists = (tag, validTags = [], excludeCompanyId = null) => {
   return new Promise(resolve => {
     const existsInSystem = validTags.some(validTag => validTag.name && validTag.name.toLowerCase() === tag.toLowerCase() && (!excludeCompanyId || validTag.companyId !== excludeCompanyId));
     resolve(existsInSystem);
@@ -105507,17 +105507,20 @@ const SubCompany = ({
     setEditingIndex(null);
     clearInput();
   }, [clearInput]);
-  const handleAddTag = Object(react__WEBPACK_IMPORTED_MODULE_1__["useCallback"])(async trimmedValue => {
-    if (!trimmedValue) return;
+  const handleAddTag = Object(react__WEBPACK_IMPORTED_MODULE_1__["useCallback"])(trimmedValue => {
+    if (!trimmedValue) {
+      return;
+    }
     setIsLoading(true);
-    try {
-      const exists = await checkTagExists(trimmedValue, validTags, null);
+    checkTagExists(trimmedValue, validTags, null).then(exists => {
       if (exists) {
-        toastr__WEBPACK_IMPORTED_MODULE_2___default.a.warning(`Sub Company "${trimmedValue}" has already exists!`, "", Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_3__["toastOptions"])());
+        toastr__WEBPACK_IMPORTED_MODULE_2___default.a.warning(`Sub Company "${trimmedValue}" has already exists!`, '', Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_3__["toastOptions"])());
+        setIsLoading(false);
         return;
       }
       if (tags.some(tag => tag.name.toLowerCase() === trimmedValue.toLowerCase())) {
-        toastr__WEBPACK_IMPORTED_MODULE_2___default.a.warning(`Sub company "${trimmedValue}" has already exists!`, "", Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_3__["toastOptions"])());
+        toastr__WEBPACK_IMPORTED_MODULE_2___default.a.warning(`Sub company "${trimmedValue}" has already exists!`, '', Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_3__["toastOptions"])());
+        setIsLoading(false);
         return;
       }
       const updatedTags = [...tags, {
@@ -105531,24 +105534,26 @@ const SubCompany = ({
         onTagsChange(updatedTags);
       }
       clearInput();
-    } finally {
       setIsLoading(false);
-    }
-  }, [tags, onTagsChange, clearInput, validTags]);
-  const handleEditTag = Object(react__WEBPACK_IMPORTED_MODULE_1__["useCallback"])(async trimmedValue => {
+    }).catch(() => {
+      setIsLoading(false);
+    });
+  }, [tags, onTagsChange, clearInput, validTags, companyId]);
+  const handleEditTag = Object(react__WEBPACK_IMPORTED_MODULE_1__["useCallback"])(trimmedValue => {
     if (!trimmedValue) {
       resetEditing();
       return;
     }
     setIsLoading(true);
-    try {
-      const exists = await checkTagExists(trimmedValue, validTags, companyId);
+    checkTagExists(trimmedValue, validTags, companyId).then(exists => {
       if (exists) {
-        toastr__WEBPACK_IMPORTED_MODULE_2___default.a.warning(`"${trimmedValue}" has already exists!`, "", Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_3__["toastOptions"])());
+        toastr__WEBPACK_IMPORTED_MODULE_2___default.a.warning(`"${trimmedValue}" has already exists!`, '', Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_3__["toastOptions"])());
+        setIsLoading(false);
         return;
       }
       if (tags.some((tag, index) => index !== editingIndex && tag.name.toLowerCase() === trimmedValue.toLowerCase())) {
-        toastr__WEBPACK_IMPORTED_MODULE_2___default.a.warning(`"${trimmedValue}" has already exists!`, "", Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_3__["toastOptions"])());
+        toastr__WEBPACK_IMPORTED_MODULE_2___default.a.warning(`"${trimmedValue}" has already exists!`, '', Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_3__["toastOptions"])());
+        setIsLoading(false);
         return;
       }
       const updatedTags = [...tags];
@@ -105563,18 +105568,19 @@ const SubCompany = ({
         onTagsChange(updatedTags);
       }
       resetEditing();
-    } finally {
       setIsLoading(false);
-    }
-  }, [tags, editingIndex, onTagsChange, resetEditing, validTags]);
-  const handleKeyDown = Object(react__WEBPACK_IMPORTED_MODULE_1__["useCallback"])(async e => {
+    }).catch(() => {
+      setIsLoading(false);
+    });
+  }, [tags, editingIndex, onTagsChange, resetEditing, validTags, companyId]);
+  const handleKeyDown = Object(react__WEBPACK_IMPORTED_MODULE_1__["useCallback"])(e => {
     if (e.key === 'Enter' && inputValue.trim() !== '' && !isLoading) {
       e.preventDefault();
       const trimmed = inputValue.trim();
       if (editingIndex !== null) {
-        await handleEditTag(trimmed);
+        handleEditTag(trimmed);
       } else {
-        await handleAddTag(trimmed);
+        handleAddTag(trimmed);
       }
     } else if (e.key === 'Escape') {
       resetEditing();
@@ -105590,7 +105596,7 @@ const SubCompany = ({
   const handleRemove = Object(react__WEBPACK_IMPORTED_MODULE_1__["useCallback"])(index => {
     const tagToRemove = tags[index];
     if (tagToRemove.subCompanyId && tagToRemove.employeeCount > 0) {
-      toastr__WEBPACK_IMPORTED_MODULE_2___default.a.error("The sub Company cannot be deleted because it is already in use", "", Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_3__["toastOptions"])());
+      toastr__WEBPACK_IMPORTED_MODULE_2___default.a.error("The sub Company cannot be deleted because it is already in use", '', Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_3__["toastOptions"])());
       return;
     }
     const updatedTags = [...tags];

@@ -98030,21 +98030,51 @@ function addMethod(schemaType, name, fn) {
 /*!***************************************************!*\
   !*** ./sources/js/pages/unit/common.functions.js ***!
   \***************************************************/
-/*! exports provided: validationSchema */
+/*! exports provided: validationSchema, submitUnit */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "validationSchema", function() { return validationSchema; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "submitUnit", function() { return submitUnit; });
 /* harmony import */ var yup__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! yup */ "./node_modules/yup/index.esm.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var toastr__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! toastr */ "./node_modules/toastr/toastr.js");
+/* harmony import */ var toastr__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(toastr__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _shared_common_functions__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../shared/common.functions */ "./sources/js/shared/common.functions.js");
 
-const validationSchema = yup__WEBPACK_IMPORTED_MODULE_0__["object"]({
-  code: yup__WEBPACK_IMPORTED_MODULE_0__["string"]().trim().max(50, 'Business Unit Code field must not over 50 characters long!').required('Business Unit Code field is required!'),
-  groupUnitId: yup__WEBPACK_IMPORTED_MODULE_0__["number"]().required('Business Unit ID field is required!'),
-  category: yup__WEBPACK_IMPORTED_MODULE_0__["string"]().max(200, 'Business Unit Category field must not over 200 characters long!'),
-  type: yup__WEBPACK_IMPORTED_MODULE_0__["string"]().max(200, 'Business Unit Type field must not over 200 characters long!'),
-  accountableArea: yup__WEBPACK_IMPORTED_MODULE_0__["string"]().max(200, 'Accountable Area field must not over 200 characters long!')
+
+
+
+const validationSchema = Object(yup__WEBPACK_IMPORTED_MODULE_0__["object"])({
+  code: Object(yup__WEBPACK_IMPORTED_MODULE_0__["string"])().trim().max(50, 'Business Unit Code field must not over 50 characters long!').required('Business Unit Code field is required!'),
+  groupUnitId: Object(yup__WEBPACK_IMPORTED_MODULE_0__["number"])().required('Business Unit ID field is required!'),
+  category: Object(yup__WEBPACK_IMPORTED_MODULE_0__["string"])().max(200, 'Business Unit Category field must not over 200 characters long!'),
+  type: Object(yup__WEBPACK_IMPORTED_MODULE_0__["string"])().max(200, 'Business Unit Type field must not over 200 characters long!'),
+  accountableArea: Object(yup__WEBPACK_IMPORTED_MODULE_0__["string"])().max(200, 'Accountable Area field must not over 200 characters long!')
 });
+const submitUnit = (endpoint, model, setSubmitting) => {
+  setSubmitting(true);
+  axios__WEBPACK_IMPORTED_MODULE_1__["default"].post(Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_3__["resolveClientUrl"])(endpoint), model, {
+    headers: {
+      'X-Requested-With': 'XMLHttpRequest'
+    }
+  }).then(response => {
+    const {
+      data
+    } = response;
+    if (data.isSuccessful) {
+      const successMessage = endpoint.includes('Create') ? "Created successfully!" : "Updated successfully!";
+      toastr__WEBPACK_IMPORTED_MODULE_2___default.a.success(successMessage, '', Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_3__["toastOptions"])());
+      setTimeout(function () {
+        document.location = Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_3__["resolveClientUrl"])('Unit/Index');
+      }, 3000);
+    } else {
+      toastr__WEBPACK_IMPORTED_MODULE_2___default.a.error(data.message, '', Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_3__["toastOptions"])());
+      setSubmitting(false);
+    }
+  }).catch(_shared_common_functions__WEBPACK_IMPORTED_MODULE_3__["axiosError"]);
+};
 
 /***/ }),
 
@@ -98061,12 +98091,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var formik__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! formik */ "./node_modules/formik/dist/formik.esm.js");
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var toastr__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! toastr */ "./node_modules/toastr/toastr.js");
-/* harmony import */ var toastr__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(toastr__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _shared_components_Errors__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../shared/components/Errors */ "./sources/js/shared/components/Errors.jsx");
-/* harmony import */ var _shared_common_functions__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../shared/common.functions */ "./sources/js/shared/common.functions.js");
-/* harmony import */ var _common_functions__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../common.functions */ "./sources/js/pages/unit/common.functions.js");
-
+/* harmony import */ var _shared_components_Errors__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../shared/components/Errors */ "./sources/js/shared/components/Errors.jsx");
+/* harmony import */ var _shared_common_functions__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../shared/common.functions */ "./sources/js/shared/common.functions.js");
+/* harmony import */ var _common_functions__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../common.functions */ "./sources/js/pages/unit/common.functions.js");
 
 
 
@@ -98079,14 +98106,14 @@ const AppContainer = ({
   const [employees, setEmployees] = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(null);
   Object(react__WEBPACK_IMPORTED_MODULE_0__["useEffect"])(() => {
     Object(axios__WEBPACK_IMPORTED_MODULE_2__["default"])({
-      url: Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_5__["resolveClientUrl"])(`Unit/GetEmployeeForPIC`),
+      url: Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_4__["resolveClientUrl"])(`Unit/GetEmployeeForPIC`),
       method: 'GET',
       headers: {
         'X-Requested-With': 'XMLHttpRequest'
       }
     }).then(response => {
       setEmployees(response.data);
-    }).catch(_shared_common_functions__WEBPACK_IMPORTED_MODULE_5__["axiosError"]);
+    }).catch(_shared_common_functions__WEBPACK_IMPORTED_MODULE_4__["axiosError"]);
   }, []);
   const handleGoBack = () => {
     history.back();
@@ -98095,7 +98122,7 @@ const AppContainer = ({
     setSubmitting
   }) => {
     setSubmitting(true);
-    axios__WEBPACK_IMPORTED_MODULE_2__["default"].post(Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_5__["resolveClientUrl"])('Unit/Create'), {
+    const model = {
       code: values.code.trim(),
       groupUnitId: parseInt(values.groupUnitId, 10),
       category: values.category,
@@ -98103,24 +98130,8 @@ const AppContainer = ({
       accountableArea: values.accountableArea,
       picEmpId: parseInt(values.picEmpId, 10) || 0,
       isActive: values.isActive
-    }, {
-      headers: {
-        'X-Requested-With': 'XMLHttpRequest'
-      }
-    }).then(response => {
-      const {
-        data
-      } = response;
-      if (data.isSuccessful) {
-        toastr__WEBPACK_IMPORTED_MODULE_3___default.a.success('Created successfully!', '', Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_5__["toastOptions"])());
-        setTimeout(function () {
-          document.location = Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_5__["resolveClientUrl"])('Unit/Index');
-        }, 3000);
-      } else {
-        toastr__WEBPACK_IMPORTED_MODULE_3___default.a.error(data.message, '', Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_5__["toastOptions"])());
-        setSubmitting(false);
-      }
-    }).catch(_shared_common_functions__WEBPACK_IMPORTED_MODULE_5__["axiosError"]);
+    };
+    Object(_common_functions__WEBPACK_IMPORTED_MODULE_5__["submitUnit"])('Unit/Create', model, setSubmitting);
   };
   const renderForm = ({
     errors,
@@ -98128,7 +98139,7 @@ const AppContainer = ({
   }) => {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
       className: "card"
-    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_shared_components_Errors__WEBPACK_IMPORTED_MODULE_4__["default"], {
+    }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_shared_components_Errors__WEBPACK_IMPORTED_MODULE_3__["default"], {
       errors: errors
     }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(formik__WEBPACK_IMPORTED_MODULE_1__["Form"], {
       className: "form-horizontal"
@@ -98249,7 +98260,7 @@ const AppContainer = ({
       picEmpId: 0,
       isActive: true
     },
-    validationSchema: _common_functions__WEBPACK_IMPORTED_MODULE_6__["validationSchema"],
+    validationSchema: _common_functions__WEBPACK_IMPORTED_MODULE_5__["validationSchema"],
     onSubmit: handleSubmit
   }, renderForm);
 };

@@ -38,41 +38,7 @@
     </div>
 
     <div>
-        @if (Model.Approver != null && Model.Approver.EmpId == currentUserId)
-        {
-            switch (Model.Status.Id)
-            {
-                case (byte)CurrentRequestStatus.Pending:
-                    if (Model.Verifier.EmpId == currentUserId)
-                    {
-                        <input type="button" class="btn btn-primary" id="btnApprove" value="@Labels.Approve" />
-                        <input type="button" class="btn btn-primary" id="btnReject" value="@Labels.Reject" />
-                    }
-                    break;
-                case (byte)CurrentRequestStatus.Verified:
-                    <input type="button" class="btn btn-primary" id="btnApprove" value="@Labels.Approve" />
-                    <input type="button" class="btn btn-primary" id="btnReject" value="@Labels.Reject" />
-                    break;
-                case (byte)CurrentRequestStatus.Approved:
-                    <input type="button" class="btn btn-primary" id="btnResetByApprover" value="@Labels.Reset" />
-                    break;
-            }
-        }
-        else if (Model.Verifier != null && Model.Verifier.EmpId == currentUserId)
-        {
-            switch (Model.Status.Id)
-            {
-                case (byte)CurrentRequestStatus.Pending:
-                    <input type="button" class="btn btn-primary" id="btnVerify" value="@Labels.Verify" />
-                    <input type="button" class="btn btn-primary" id="btnNotVerify" value="@Labels.NotVerify" />
-                    break;
-                case (byte)CurrentRequestStatus.Verified:
-                case (byte)CurrentRequestStatus.NotVerified:
-                    <input type="button" class="btn btn-primary" id="btnResetByVerifier" value="@Labels.Reset" />
-                    break;
-            }
-        }
-
+        @{RenderActionButtons();}
         <button type="button" class="btn btn-default" onclick="window.history.back()">@Labels.Back</button>
     </div>
 </div>
@@ -98,80 +64,27 @@
             foreach (var request in Model.DailyOvertimes)
             {
                 <tr>
-                    @{
-                        var className = string.Empty;
-                        if (request.IsHoliday)
-                        {
-                            className = "holiday";
-                        }
-                        else if (request.WorkDate.DayOfWeek is DayOfWeek.Saturday or DayOfWeek.Sunday)
-                        {
-                            className = "weekend";
-                        }
-                    }
-                    <td class="@className">
-                        @request.WorkDate.ToString("dd-MMM-yyyy (ddd)")
-                    </td>
-                    <td>
-                        @if (!string.IsNullOrWhiteSpace(request.ShiftCode))
-                        {
-                            @request.ShiftCode
-                        }
-                        else if (request.IsHoliday)
-                        {
-                            @Labels.Holiday
-                        }
-                        else if (request.IsOffDay)
-                        {
-                            @Labels.Off
-                        }
-                    </td>
+                    @{RenderDateCell(request);}
+                    @{RenderShiftCell(request);}
                     <td>@request.TimeIn</td>
                     <td>@request.TimeOut</td>
                     <td>
-                        @if (request.ActualWorkingHours > 0)
-                        {
-                            @request.ActualWorkingHours
-                        }
+                        @{RenderHours(request.ActualWorkingHours);}
                     </td>
                     <td>
-                        @if (request.NormalHours > 0)
-                        {
-                            @request.NormalHours
-                        }
+                        @{RenderHours(request.NormalHours);}
                     </td>
                     <td>
-                        @if (request.OffHours > 0)
-                        {
-                            @request.OffHours
-                        }
+                        @{RenderHours(request.OffHours);}
                     </td>
                     <td>
-                        @if (request.PublicHours > 0)
-                        {
-                            @request.PublicHours
-                        }
+                        @{RenderHours(request.PublicHours);}
                     </td>
                     <td>
-                        @if (request.SpecialHours > 0)
-                        {
-                            @request.SpecialHours
-                        }
+                        @{RenderHours(request.SpecialHours);}
                     </td>
                     <td class="align-left">@request.Remark</td>
-                    @if (request.TotalShiftHours != 0 && (request.ActualWorkingHours >= request.TotalShiftHours + 1
-                        || (request.NormalHours > request.ActualWorkingHours - Model.Requester.WorkingHours
-                            && request.ActualWorkingHours >= Model.Requester.WorkingHours)))
-                    {
-                        var tooltip = "[Total Working Hours]/[Shift Hours]: " + request.ActualWorkingHours + " / " + request.TotalShiftHours;
-                        <td class="tooltip-tipsy" title="@tooltip">
-                            <i class="fa fa-exclamation-triangle"></i>
-                        </td>
-                    }
-                    else
-                    {
-                        <td></td>
-                    }
+                    @{RenderWarningCell(request);}
                 </tr>
             }
         }
@@ -193,3 +106,110 @@
     </tfoot>
 </table>
 @await Html.PartialAsync("_ConfirmModal")
+
+@{
+    void RenderActionButtons()
+    {
+        if (Model.Approver != null && Model.Approver.EmpId == currentUserId)
+        {
+            switch (Model.Status.Id)
+            {
+                case (byte)CurrentRequestStatus.Pending:
+                    if (Model.Verifier.EmpId == currentUserId)
+                    {
+                        <input type="button" class="btn btn-primary" id="btnApprove" value="@Labels.Approve" />
+                        <input type="button" class="btn btn-primary" id="btnReject" value="@Labels.Reject" />
+                    }
+                    break;
+                case (byte)CurrentRequestStatus.Verified:
+                    <input type="button" class="btn btn-primary" id="btnApprove" value="@Labels.Approve" />
+                    <input type="button" class="btn btn-primary" id="btnReject" value="@Labels.Reject" />
+                    break;
+                case (byte)CurrentRequestStatus.Approved:
+                    <input type="button" class="btn btn-primary" id="btnResetByApprover" value="@Labels.Reset" />
+                    break;
+                default:
+                    // do nothing
+                    break;
+            }
+        }
+        else if (Model.Verifier != null && Model.Verifier.EmpId == currentUserId)
+        {
+            switch (Model.Status.Id)
+            {
+                case (byte)CurrentRequestStatus.Pending:
+                    <input type="button" class="btn btn-primary" id="btnVerify" value="@Labels.Verify" />
+                    <input type="button" class="btn btn-primary" id="btnNotVerify" value="@Labels.NotVerify" />
+                    break;
+                case (byte)CurrentRequestStatus.Verified:
+                case (byte)CurrentRequestStatus.NotVerified:
+                    <input type="button" class="btn btn-primary" id="btnResetByVerifier" value="@Labels.Reset" />
+                    break;
+                default:
+                    // do nothing
+                    break;
+            }
+        }
+    }
+
+    void RenderDateCell(dynamic request)
+    {
+        var className = string.Empty;
+        if (request.IsHoliday)
+        {
+            className = "holiday";
+        }
+        else if (request.WorkDate.DayOfWeek is DayOfWeek.Saturday or DayOfWeek.Sunday)
+        {
+            className = "weekend";
+        }
+        <td class="@className">
+            @request.WorkDate.ToString("dd-MMM-yyyy (ddd)")
+        </td>
+    }
+
+    void RenderShiftCell(dynamic request)
+    {
+        if (!string.IsNullOrWhiteSpace(request.ShiftCode))
+        {
+            <td>@request.ShiftCode</td>
+        }
+        else if (request.IsHoliday)
+        {
+            <td>@Labels.Holiday</td>
+        }
+        else if (request.IsOffDay)
+        {
+            <td>@Labels.Off</td>
+        }
+        else
+        {
+            <td></td>
+        }
+    }
+
+    void RenderWarningCell(dynamic request)
+    {
+        if (request.TotalShiftHours != 0 && (request.ActualWorkingHours >= request.TotalShiftHours + 1
+            || (request.NormalHours > request.ActualWorkingHours - Model.Requester.WorkingHours
+                && request.ActualWorkingHours >= Model.Requester.WorkingHours)))
+        {
+            var tooltip = "[Total Working Hours]/[Shift Hours]: " + request.ActualWorkingHours + " / " + request.TotalShiftHours;
+            <td class="tooltip-tipsy" title="@tooltip">
+                <i class="fa fa-exclamation-triangle"></i>
+            </td>
+        }
+        else
+        {
+            <td></td>
+        }
+    }
+
+    void RenderHours(decimal hours)
+    {
+        if (hours > 0)
+        {
+            @hours
+        }
+    }
+}

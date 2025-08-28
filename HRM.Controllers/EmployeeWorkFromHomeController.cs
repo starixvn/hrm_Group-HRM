@@ -93,7 +93,7 @@ public class EmployeeWorkFromHomeController : BaseController
                 EmpId = model.EmployeeId,
                 FromDate = model.FromDate,
                 ToDate = model.ToDate,
-                CreatedBy = session.UserId,
+                CreatedBy = EmployeeSession.EmpId,
                 Remark = model.Remark
             };
 
@@ -145,7 +145,7 @@ public class EmployeeWorkFromHomeController : BaseController
                 EmpId = model.EmployeeId,
                 FromDate = model.FromDate,
                 ToDate = model.ToDate,
-                ModifiedBy = session.UserId,
+                ModifiedBy = EmployeeSession.EmpId,
                 Remark = model.Remark
             };
 

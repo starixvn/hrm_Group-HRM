@@ -1,26 +1,27 @@
-﻿@using HRM.Core.Enums
+@using HRM.Core.Enums
 @using HRM.Resources
 @model HRM.Models.Request.RequestEntity
-@{
-}
 
 @switch (Model.RequestType.Id)
 {
-	case (byte)RequestType.CheckIn:
-	case (byte)RequestType.CheckOut:
-		<a class="viewhistory" href="javascript:;" id="/checkinout/viewhistory/@Model.Id">@Labels.View</a>
-		break;
-	case (byte)RequestType.LateIn:
-	case (byte)RequestType.EarlyOut:
-		<a class="viewhistory" href="javascript:;" id="/lateinearlyout/viewhistory/@Model.Id">@Labels.View</a>
-		break;
-	case (byte)RequestType.ChangeShift:
-		<a class="viewhistory" href="javascript:;" id="/changeshift/viewhistory/@Model.Id">@Labels.View</a>
-		break;
-	case (byte)RequestType.Leave:
-		<a class="viewhistory" href="javascript:;" id="/leave/viewhistory/@Model.Id">@Labels.View</a>
-		break;
-	case (byte)RequestType.KeepInView:
-		<a class="viewhistory" href="javascript:;" id="/keepinview/viewhistory/@Model.Id">@Labels.View</a>
-		break;
+    case (byte)RequestType.CheckIn:
+    case (byte)RequestType.CheckOut:
+        <a class="viewhistory" href="javascript:;" id="/checkinout/viewhistory/@Model.Id">@Labels.View</a>
+        break;
+    case (byte)RequestType.LateIn:
+    case (byte)RequestType.EarlyOut:
+        <a class="viewhistory" href="javascript:;" id="/lateinearlyout/viewhistory/@Model.Id">@Labels.View</a>
+        break;
+    case (byte)RequestType.ChangeShift:
+        <a class="viewhistory" href="javascript:;" id="/changeshift/viewhistory/@Model.Id">@Labels.View</a>
+        break;
+    case (byte)RequestType.Leave:
+        <a class="viewhistory" href="javascript:;" id="/leave/viewhistory/@Model.Id">@Labels.View</a>
+        break;
+    case (byte)RequestType.KeepInView:
+        <a class="viewhistory" href="javascript:;" id="/keepinview/viewhistory/@Model.Id">@Labels.View</a>
+        break;
+    default:
+        // do nothing
+        break;
 }

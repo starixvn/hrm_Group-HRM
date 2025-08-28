@@ -1,9 +1,9 @@
-import React, { useState, useRef, useCallback } from 'react';
+﻿import React, { useState, useRef, useCallback } from 'react';
 import toastr from 'toastr';
 import { toastOptions } from '../../../../shared/common.functions';
 
-const checkTagExists = async (tag, validTags = [], excludeCompanyId = null) => {
-  return new Promise((resolve) => {
+const checkTagExists = (tag, validTags = [], excludeCompanyId = null) => {
+  return new Promise(resolve => {
       const existsInSystem = validTags.some(validTag => 
         validTag.name && 
         validTag.name.toLowerCase() === tag.toLowerCase() &&
@@ -22,7 +22,6 @@ const SubCompany = ({ companyId, initialTags = [], onTagsChange, validTags = [] 
   const [tags, setTags] = useState(initialTagsWithAction);
   const [inputValue, setInputValue] = useState('');
   const [editingIndex, setEditingIndex] = useState(null);
-
   const [isLoading, setIsLoading] = useState(false);
   const inputRef = useRef(null);
 
@@ -35,21 +34,23 @@ const SubCompany = ({ companyId, initialTags = [], onTagsChange, validTags = [] 
     clearInput();
   }, [clearInput]);
 
-  const handleAddTag = useCallback(async (trimmedValue) => {
-    if (!trimmedValue) return;
+  const handleAddTag = useCallback(trimmedValue => {
+    if (!trimmedValue) {
+      return;
+    }
 
     setIsLoading(true);
 
-    try {
-      const exists = await checkTagExists(trimmedValue, validTags, null);
-
+    checkTagExists(trimmedValue, validTags, null).then(exists => {
       if (exists) {
-        toastr.warning(`Sub Company "${trimmedValue}" has already exists!`,"", toastOptions());
+        toastr.warning(`Sub Company "${trimmedValue}" has already exists!`,'', toastOptions());
+        setIsLoading(false);
         return;
       }
 
       if (tags.some(tag => tag.name.toLowerCase() === trimmedValue.toLowerCase())) {
-        toastr.warning(`Sub company "${trimmedValue}" has already exists!`, "", toastOptions());
+        toastr.warning(`Sub company "${trimmedValue}" has already exists!`, '', toastOptions());
+        setIsLoading(false);
         return;
       }
 
@@ -64,12 +65,13 @@ const SubCompany = ({ companyId, initialTags = [], onTagsChange, validTags = [] 
         onTagsChange(updatedTags);
       }
       clearInput();
-    } finally {
       setIsLoading(false);
-    }
-  }, [tags, onTagsChange, clearInput, validTags]);
+    }).catch(() => {
+      setIsLoading(false);
+    });
+  }, [tags, onTagsChange, clearInput, validTags, companyId]);
 
-  const handleEditTag = useCallback(async (trimmedValue) => {
+  const handleEditTag = useCallback(trimmedValue => {
     if (!trimmedValue) {
       resetEditing();
       return;
@@ -77,16 +79,16 @@ const SubCompany = ({ companyId, initialTags = [], onTagsChange, validTags = [] 
 
     setIsLoading(true);
 
-    try {
-      const exists = await checkTagExists(trimmedValue, validTags, companyId);
-
+    checkTagExists(trimmedValue, validTags, companyId).then(exists => {
       if (exists) {
-        toastr.warning(`"${trimmedValue}" has already exists!`, "", toastOptions());
+        toastr.warning(`"${trimmedValue}" has already exists!`, '', toastOptions());
+        setIsLoading(false);
         return;
       }
 
       if (tags.some((tag, index) => index !== editingIndex && tag.name.toLowerCase() === trimmedValue.toLowerCase())) {
-        toastr.warning(`"${trimmedValue}" has already exists!`, "", toastOptions());
+        toastr.warning(`"${trimmedValue}" has already exists!`, '', toastOptions());
+        setIsLoading(false);
         return;
       }
 
@@ -104,40 +106,41 @@ const SubCompany = ({ companyId, initialTags = [], onTagsChange, validTags = [] 
         onTagsChange(updatedTags);
       }
       resetEditing();
-    } finally {
       setIsLoading(false);
-    }
-  }, [tags, editingIndex, onTagsChange, resetEditing, validTags]);
+    }).catch(() => {
+      setIsLoading(false);
+    });
+  }, [tags, editingIndex, onTagsChange, resetEditing, validTags, companyId]);
 
-  const handleKeyDown = useCallback(async (e) => {
+  const handleKeyDown = useCallback(e => {
     if (e.key === 'Enter' && inputValue.trim() !== '' && !isLoading) {
       e.preventDefault();
       const trimmed = inputValue.trim();
 
       if (editingIndex !== null) {
-        await handleEditTag(trimmed);
+        handleEditTag(trimmed);
       } else {
-        await handleAddTag(trimmed);
+        handleAddTag(trimmed);
       }
     } else if (e.key === 'Escape') {
       resetEditing();
     }
   }, [inputValue, editingIndex, isLoading, handleAddTag, handleEditTag, resetEditing]);
 
-  const handleChange = useCallback((e) => {
+  const handleChange = useCallback(e => {
     setInputValue(e.target.value);
   }, []);
 
-  const handleEdit = useCallback((index) => {
+  const handleEdit = useCallback(index => {
     setEditingIndex(index);
     setInputValue(tags[index].name);
   }, [tags]);
 
-  const handleRemove = useCallback((index) => {
+  const handleRemove = useCallback(index => {
     const tagToRemove = tags[index];
     
     if (tagToRemove.subCompanyId && tagToRemove.employeeCount > 0) {
-      toastr.error("The sub Company cannot be deleted because it is already in use", "", toastOptions());
+      toastr.error("The sub Company cannot be deleted because it is already in use", '', toastOptions());
       return;
     }
     
@@ -179,7 +182,7 @@ const SubCompany = ({ companyId, initialTags = [], onTagsChange, validTags = [] 
       className={`tag-item ${editingIndex === index ? 'editing' : ''}`}
     >
       <span 
-        onClick={(e) => {
+        onClick={e => {
           e.preventDefault();
           e.stopPropagation();
           handleEdit(index);
@@ -205,7 +208,7 @@ const SubCompany = ({ companyId, initialTags = [], onTagsChange, validTags = [] 
       </span>
       <button
         type="button"
-        onClick={(e) => {
+        onClick={e => {
           e.preventDefault();
           e.stopPropagation();
           handleRemove(index);
@@ -226,20 +229,20 @@ const SubCompany = ({ companyId, initialTags = [], onTagsChange, validTags = [] 
           .filter(({ tag }) => tag.actionType !== 'delete')
           .map(({ tag, originalIndex }) => renderTag(tag, originalIndex))}
         {editingIndex === null && (
-        <div className="input-field-wrapper">
+          <div className="input-field-wrapper">
             <input
-            ref={inputRef}
-            id="sub-company-input"
-            name="sub-company-input"
-            value={inputValue}
-            onChange={handleChange}
-            onKeyDown={handleKeyDown}
-            placeholder= "Enter sub company name and press Enter"
-            disabled={isLoading}
-            className="tag-input-field"
-            autoComplete="off"
+              ref={inputRef}
+              id="sub-company-input"
+              name="sub-company-input"
+              value={inputValue}
+              onChange={handleChange}
+              onKeyDown={handleKeyDown}
+              placeholder="Enter sub company name and press Enter"
+              disabled={isLoading}
+              className="tag-input-field"
+              autoComplete="off"
             />
-        </div>
+          </div>
         )}
       </div>
     </div>

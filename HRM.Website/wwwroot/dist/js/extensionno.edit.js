@@ -100018,7 +100018,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const RenderFrom = ({
+const RenderForm = ({
   errors,
   isInternal,
   onChangeInternal,
@@ -100161,7 +100161,7 @@ const RenderFrom = ({
     onClick: handleGoBack
   }, "Back"))));
 };
-/* harmony default export */ __webpack_exports__["default"] = (RenderFrom);
+/* harmony default export */ __webpack_exports__["default"] = (RenderForm);
 
 /***/ }),
 
@@ -100182,9 +100182,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
 /* harmony import */ var toastr__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! toastr */ "./node_modules/toastr/toastr.js");
 /* harmony import */ var toastr__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(toastr__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var formik__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! formik */ "./node_modules/formik/dist/formik.esm.js");
-/* harmony import */ var _RenderForm__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../RenderForm */ "./sources/js/pages/extension-no/RenderForm.jsx");
-/* harmony import */ var _shared_common_functions__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../../shared/common.functions */ "./sources/js/shared/common.functions.js");
+/* harmony import */ var _shared_common_functions__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../../../shared/common.functions */ "./sources/js/shared/common.functions.js");
+/* harmony import */ var formik__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! formik */ "./node_modules/formik/dist/formik.esm.js");
+/* harmony import */ var _RenderForm__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../RenderForm */ "./sources/js/pages/extension-no/RenderForm.jsx");
 
 
 
@@ -100200,13 +100200,13 @@ const AppContainer = () => {
   const [employees, setEmployees] = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])([]);
   const [selectEmployee, setSelectEmployee] = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])(null);
   const [selectGroup, setSelectGroup] = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])('');
-  const editExtensionSchema = yup__WEBPACK_IMPORTED_MODULE_2__["object"]({
-    ExtensionNo: yup__WEBPACK_IMPORTED_MODULE_2__["string"]().trim().required('Extension No field is required!'),
-    Employee: isInternal && extensionDetail && extensionDetail.empId === 0 ? yup__WEBPACK_IMPORTED_MODULE_2__["string"]().trim().required('Employee field is required!') : false
+  const editExtensionSchema = Object(yup__WEBPACK_IMPORTED_MODULE_2__["object"])({
+    ExtensionNo: Object(yup__WEBPACK_IMPORTED_MODULE_2__["string"])().trim().required('Extension No field is required!'),
+    Employee: isInternal && extensionDetail && extensionDetail.empId === 0 ? Object(yup__WEBPACK_IMPORTED_MODULE_2__["string"])().trim().required('Employee field is required!') : false
   });
   const getExtentionById = (isInternal, id) => {
     Object(axios__WEBPACK_IMPORTED_MODULE_3__["default"])({
-      url: Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_7__["resolveClientUrl"])('ExtensionNo/GetExtenstionById'),
+      url: Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_5__["resolveClientUrl"])('ExtensionNo/GetExtenstionById'),
       method: 'GET',
       headers: {
         'X-Requested-With': 'XMLHttpRequest'
@@ -100217,12 +100217,12 @@ const AppContainer = () => {
       }
     }).then(response => {
       setExtensionDetail(response.data);
-    }).catch(_shared_common_functions__WEBPACK_IMPORTED_MODULE_7__["axiosError"]);
+    }).catch(_shared_common_functions__WEBPACK_IMPORTED_MODULE_5__["axiosError"]);
   };
   const getEmployees = query => {
     if (query.trim().length >= 2) {
       Object(axios__WEBPACK_IMPORTED_MODULE_3__["default"])({
-        url: Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_7__["resolveClientUrl"])('employee/getemployees'),
+        url: Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_5__["resolveClientUrl"])('employee/getemployees'),
         method: 'GET',
         headers: {
           'X-Requested-With': 'XMLHttpRequest'
@@ -100243,14 +100243,14 @@ const AppContainer = () => {
           };
         });
         setEmployees(employeeOptions);
-      }).catch(_shared_common_functions__WEBPACK_IMPORTED_MODULE_7__["axiosError"]);
+      }).catch(_shared_common_functions__WEBPACK_IMPORTED_MODULE_5__["axiosError"]);
     } else {
       setEmployees([]);
     }
   };
   const getGroupExtension = isInternal => {
     Object(axios__WEBPACK_IMPORTED_MODULE_3__["default"])({
-      url: Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_7__["resolveClientUrl"])('ExtensionNo/GetGroupExtension'),
+      url: Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_5__["resolveClientUrl"])('ExtensionNo/GetGroupExtension'),
       method: 'GET',
       headers: {
         'X-Requested-With': 'XMLHttpRequest'
@@ -100260,7 +100260,7 @@ const AppContainer = () => {
       }
     }).then(response => {
       setSelectExtension(response.data);
-    }).catch(_shared_common_functions__WEBPACK_IMPORTED_MODULE_7__["axiosError"]);
+    }).catch(_shared_common_functions__WEBPACK_IMPORTED_MODULE_5__["axiosError"]);
   };
   const handleSelectEmployee = selectedItem => {
     setSelectEmployee(selectedItem);
@@ -100274,7 +100274,7 @@ const AppContainer = () => {
   const handleChangeInternal = event => {
     setIsInternal(event.target.checked);
     Object(axios__WEBPACK_IMPORTED_MODULE_3__["default"])({
-      url: Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_7__["resolveClientUrl"])('ExtensionNo/GetGroupExtension'),
+      url: Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_5__["resolveClientUrl"])('ExtensionNo/GetGroupExtension'),
       method: 'GET',
       headers: {
         'X-Requested-With': 'XMLHttpRequest'
@@ -100294,7 +100294,7 @@ const AppContainer = () => {
         employee: extensionDetail.employee
       });
       setSelectGroup(response.data[0].value);
-    }).catch(_shared_common_functions__WEBPACK_IMPORTED_MODULE_7__["axiosError"]);
+    }).catch(_shared_common_functions__WEBPACK_IMPORTED_MODULE_5__["axiosError"]);
   };
   const handleSubmit = (values, {
     setSubmitting
@@ -100311,7 +100311,7 @@ const AppContainer = () => {
     };
     Object(axios__WEBPACK_IMPORTED_MODULE_3__["default"])({
       method: 'POST',
-      url: Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_7__["resolveClientUrl"])('ExtensionNo/Edit'),
+      url: Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_5__["resolveClientUrl"])('ExtensionNo/Edit'),
       headers: {
         'X-Requested-With': 'XMLHttpRequest'
       },
@@ -100321,27 +100321,60 @@ const AppContainer = () => {
         data
       } = response;
       if (data.isSuccessful) {
-        toastr__WEBPACK_IMPORTED_MODULE_4___default.a.success('Updated successfully!', '', Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_7__["toastOptions"])());
+        toastr__WEBPACK_IMPORTED_MODULE_4___default.a.success('Updated successfully!', '', Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_5__["toastOptions"])());
         setTimeout(function () {
-          document.location = Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_7__["resolveClientUrl"])('ExtensionNo/Index');
+          document.location = Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_5__["resolveClientUrl"])('ExtensionNo/Index');
         }, 3000);
       } else {
-        toastr__WEBPACK_IMPORTED_MODULE_4___default.a.error(data.message, '', Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_7__["toastOptions"])());
+        toastr__WEBPACK_IMPORTED_MODULE_4___default.a.error(data.message, '', Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_5__["toastOptions"])());
         setSubmitting(false);
       }
-    }).catch(_shared_common_functions__WEBPACK_IMPORTED_MODULE_7__["axiosError"]);
+    }).catch(_shared_common_functions__WEBPACK_IMPORTED_MODULE_5__["axiosError"]);
   };
   if (extensionDetail == null) {
     return null;
   }
   ;
   const empId = selectEmployee && selectEmployee.id || extensionDetail.empId;
+  const extensionNo = extensionDetail.extensionNo || '';
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(CustomFormik, {
+    selectEmployee: selectEmployee,
+    extensionDetail: extensionDetail,
+    selectGroup: selectGroup,
+    employees: employees,
+    isInternal: isInternal,
+    selectExtension: selectExtension,
+    handleSubmit: handleSubmit,
+    handleChangeInternal: handleChangeInternal,
+    handleSelectEmployee: handleSelectEmployee,
+    setSelectGroup: setSelectGroup,
+    getEmployees: getEmployees,
+    editExtensionSchema: editExtensionSchema,
+    empId: empId,
+    extensionNo: extensionNo
+  });
+};
+const CustomFormik = ({
+  selectEmployee,
+  extensionDetail,
+  selectGroup,
+  employees,
+  isInternal,
+  selectExtension,
+  handleSubmit,
+  handleChangeInternal,
+  handleSelectEmployee,
+  setSelectGroup,
+  getEmployees,
+  editExtensionSchema,
+  empId,
+  extensionNo
+}) => {
   const emPloyee = selectEmployee && selectEmployee.value || '';
   const fullName = selectEmployee && selectEmployee.fullName || extensionDetail.fullName || '';
   const teamId = selectGroup || extensionDetail.teamId;
   const nickName = selectEmployee && selectEmployee.nickName || extensionDetail.nickName || '';
-  const extensionNo = extensionDetail.extensionNo || '';
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(formik__WEBPACK_IMPORTED_MODULE_5__["Formik"], {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(formik__WEBPACK_IMPORTED_MODULE_6__["Formik"], {
     validateOnBlur: false,
     validateOnChange: false,
     initialValues: {
@@ -100359,7 +100392,7 @@ const AppContainer = () => {
   }, ({
     errors,
     isSubmitting
-  }) => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_RenderForm__WEBPACK_IMPORTED_MODULE_6__["default"], {
+  }) => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_RenderForm__WEBPACK_IMPORTED_MODULE_7__["default"], {
     errors: errors,
     isInternal: isInternal,
     onChangeInternal: handleChangeInternal,

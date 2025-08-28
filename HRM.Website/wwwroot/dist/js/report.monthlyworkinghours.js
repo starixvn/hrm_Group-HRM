@@ -61173,8 +61173,11 @@ function debounce(func, wait) {
                 }
 
                 // Show all child items of the matching item
-                $item.find('li.multiselect-treeview-item').removeClass('hide');
-                $item.find('input').removeClass('hide');
+                var childItems = $item.find('li.multiselect-treeview-item');
+                if (childItems.length > 0) {
+                  childItems.removeClass('hide');
+                  childItems.find('input').removeClass('hide');
+                }
               });
             } else {
               me.$header.hide();

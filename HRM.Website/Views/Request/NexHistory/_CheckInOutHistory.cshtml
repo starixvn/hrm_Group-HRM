@@ -24,17 +24,17 @@
             <tbody>
                 @foreach (var history in Model)
                 {
-					var requestType = new RequestTypeModel { Id = (short)history.RequestType };
-					var typeText = requestType.Name;
-	                var requestStatus = new RequestStatus { Id = history.Status };
-	                var statusText = requestStatus.Name;
+                    var requestType = new RequestTypeModel { Id = (short)history.RequestType };
+                    var typeText = requestType.Name;
+                    var requestStatus = new RequestStatus { Id = history.Status };
+                    var statusText = requestStatus.Name;
                     <tr>
                         <td>@(index++)</td>
-						<td>@history.Team</td>
+                        <td>@history.Team</td>
                         <td>
-							<span class="tooltip-tipsy" title="@history.FullNameRequester">@history.Requester</span>
+                            <span class="tooltip-tipsy" title="@history.FullNameRequester">@history.Requester</span>
                         </td>
-						<td>@typeText</td>
+                        <td>@typeText</td>
                         <td>@history.FromShift</td>
                         <td>
                             @history.FromDate
@@ -44,9 +44,9 @@
                         </td>
                         <td>@statusText</td>
                         <td>
-	                        @(history.ProcessedDate != null
-		                        ? string.Format(Messages.LogDate, history.ProcessedBy, history.ProcessedDate?.ToShortFormatedDate())
-		                        : string.Empty)
+                            @(history.ProcessedDate != null
+                                ? string.Format(Messages.LogDate, history.ProcessedBy, history.ProcessedDate?.ToShortFormatedDate())
+                                : string.Empty)
                         </td>
                     </tr>
                 }

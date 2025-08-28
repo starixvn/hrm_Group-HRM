@@ -27,7 +27,7 @@ export default class Table extends PureComponent {
         );
     }
 
-    handleScroll = (event) => {
+    handleScroll = event => {
         const scrollTop = event.srcElement.scrollTop;
         if (scrollTop > 70) {
             if (!this.state.isFixedHeader) {
@@ -128,3 +128,4 @@ export default class Table extends PureComponent {
         );
     }
 }
+

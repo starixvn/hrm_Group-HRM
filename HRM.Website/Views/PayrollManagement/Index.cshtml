@@ -1,20 +1,20 @@
 @using HRM.Resources
 @model bool
 @{
-	ViewData["Title"] = "Payroll Management";
-	Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Payroll Management";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @section css{
     <link href="~/dist/styles/payroll.management.css" rel="stylesheet" asp-append-version="true" />
 }
 @section js{
-	<script>
-		window.hasPermissionToUpload = '@ViewBag.HasPermissionToUpload';
-	</script>
+    <script>
+        window.hasPermissionToUpload = '@ViewBag.HasPermissionToUpload';
+    </script>
     <script src="~/dist/js/payroll.management.js" asp-append-version="true"></script>
 }
 @section Breadcrumb {
-	<a class="step">@Labels.HRSpace</a><span class="step">@ViewData["Title"]</span>
+    <a class="step">@Labels.HRSpace</a><span class="step">@ViewData["Title"]</span>
 }
 
 <h2 class="page-title">@ViewData["Title"]</h2>

@@ -53,8 +53,8 @@
                             <input type="text" class="datepicker form-control moveToDate" value="@toDate"
                                 @(!isHost ? "disabled" : string.Empty)
                                 requestdate="@item.OnDate.ToDateMonthYearFormatedDate()"
-                                mindate="@(new DateTime(item.OnDate.Year, 1, 1).ToString("yyyy/MM/dd"))"
-                                maxdate="@(new DateTime(item.OnDate.Year, 12, 31).ToString("yyyy/MM/dd"))"
+                                mindate="@(new DateTimeOffset(item.OnDate.Year, 1, 1, 0, 0, 0, TimeSpan.Zero).DateTime.ToString("yyyy/MM/dd"))"
+                                maxdate="@(new DateTimeOffset(item.OnDate.Year, 12, 31, 0, 0, 0, TimeSpan.Zero).ToString("yyyy/MM/dd"))"
                                 original-disabledDate="@disableDates"
                                 disabledDate="@disableDates" />
                             <i class="icon-calendar fa fa-calendar"></i>
@@ -84,14 +84,12 @@
                     }
                 }
                 <td>
-                    @if (isHost)
-                    {
-                        @Html.TextBoxFor(model => item.Remark, new { @class = "form-control remark" })
-                    }
-                    else
-                    {
-                        @Html.TextBoxFor(model => item.Remark, new { @class = "form-control remark", disabled = "disabled" })
-                    }
+                    @Html.TextBoxFor(
+                             model => item.Remark,
+                             isHost
+                             ? new { @class = "form-control remark" }
+                             : new { @class = "form-control remark", disabled = "disabled" }
+                             )
                 </td>
             </tr>
         }

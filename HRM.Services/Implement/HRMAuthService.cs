@@ -18,7 +18,11 @@ public class HRMAuthService(
 {
     public async Task<EmployeeSession> GetByUserIdAsync(int userId)
     {
-        var companyId = session.Get<short>(SessionKey.CurrentCompanyId);
+        var companyId = session.Get<short?>(SessionKey.CurrentCompanyId);
+        if(companyId == Constants.GroupCompanyId)
+        {
+            companyId = null;
+        }
         var criteria = new GetEmployeeLoginByUserIdCriteria
         {
             UserId = userId,

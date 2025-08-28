@@ -78,7 +78,7 @@ public class GroupEmployeeListController(
             PageSize = 5000,
             CompanyIds = model.CompanyIds,
             HasPermissionViewAll = hasPermissionViewAll,
-            ActorId = session.UserId,
+            ActorId = EmployeeSession.EmpId,
             IsCtrID = ParseBool(model.CtrIDs),
             IsOutsource = ParseBool(model.Outsources)
         };
@@ -161,7 +161,7 @@ public class GroupEmployeeListController(
             TitleId = model.JobTitleId,
             CompanyIds = model.CompanyIds,
             HasPermissionViewAll = hasPermissionViewAll,
-            ActorId = session.UserId,
+            ActorId = EmployeeSession.EmpId,
             IsCtrID = ParseBool(model.CtrIDs),
             IsOutsource = ParseBool(model.Outsources)
         };
@@ -258,7 +258,7 @@ public class GroupEmployeeListController(
             {
                 EmpId = model.EmpId,
                 CtrId = model.CtrId,
-                ModifiedBy = session.UserId
+                ModifiedBy = EmployeeSession.EmpId
             };
             var result = await baseService.ExecuteNonQueryAsync(command);
             if (result.IsSuccessful)

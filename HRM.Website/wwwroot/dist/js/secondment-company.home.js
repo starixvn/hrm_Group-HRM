@@ -110620,10 +110620,10 @@ const AppContainer = () => {
         data
       } = response;
       if (data.isSuccessful) {
-        toastr__WEBPACK_IMPORTED_MODULE_2___default.a.success("Deleted successfully!", "", Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_6__["toastOptions"])());
+        toastr__WEBPACK_IMPORTED_MODULE_2___default.a.success("Deleted successfully!", '', Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_6__["toastOptions"])());
         getSecondmentCompanyList(filterParams);
       } else {
-        toastr__WEBPACK_IMPORTED_MODULE_2___default.a.error(data.message, "", Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_6__["toastOptions"])());
+        toastr__WEBPACK_IMPORTED_MODULE_2___default.a.error(data.message, '', Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_6__["toastOptions"])());
       }
     }).catch(_shared_common_functions__WEBPACK_IMPORTED_MODULE_6__["axiosError"]);
   };
@@ -110665,7 +110665,7 @@ __webpack_require__.r(__webpack_exports__);
 const Filter = ({
   onSubmit
 }) => {
-  const [filterParams, setFilterParams] = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])({
+  const [filterParams] = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])({
     isActive: true
   });
   const handleCreate = () => {
@@ -110720,17 +110720,31 @@ const Row = ({
   };
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", {
     id: `row_${item.empId}`
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, rowIndex), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+    key: "rowIndex"
+  }, rowIndex), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+    key: "empCode",
     className: "align-left"
   }, item.empCode), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+    key: "fullName",
     className: "align-left"
-  }, item.fullName), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, item.nickName), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, item.currentCompanyName), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, item.secondCompanyName), window.hasPermission === "True" && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+  }, item.fullName), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+    key: "nickName"
+  }, item.nickName), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+    key: "currentCompanyName"
+  }, item.currentCompanyName), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+    key: "secondCompanyName"
+  }, item.secondCompanyName), window.hasPermission === "True" && [/*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+    key: "editCell"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
     onClick: handleEdit,
     className: "fa fa-pencil fa-lg icon-edit"
-  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
+  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+    key: "deleteCell"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
     onClick: handleDelete,
     className: "fa fa-times fa-lg icon-delete"
-  }))));
+  }))]);
 };
 /* harmony default export */ __webpack_exports__["default"] = (Row);
 
@@ -110757,12 +110771,30 @@ const Table = ({
   const colSpan = window.hasPermission === "True" ? 10 : 8;
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("table", {
     className: "table table-custom"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("thead", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "#"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Employee Code"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Full Name"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Nick Name"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Current Company"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Second Company"), window.hasPermission === "True" && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Edit"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", null, "Delete")))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tbody", null, data.length > 0 ? data.map((item, index) => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Row__WEBPACK_IMPORTED_MODULE_1__["default"], {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("thead", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", {
+    key: "index"
+  }, "#"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", {
+    key: "employeeCode"
+  }, "Employee Code"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", {
+    key: "fullName"
+  }, "Full Name"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", {
+    key: "nickName"
+  }, "Nick Name"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", {
+    key: "currentCompany"
+  }, "Current Company"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", {
+    key: "secondCompany"
+  }, "Second Company"), window.hasPermission === "True" && [/*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", {
+    key: "edit"
+  }, "Edit"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", {
+    key: "delete"
+  }, "Delete")])), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tbody", null, data.length > 0 ? data.map((item, index) => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_Row__WEBPACK_IMPORTED_MODULE_1__["default"], {
     key: item.id,
     rowIndex: index + 1,
     item: item,
     onDelete: onDelete
-  })) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
+  })) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", {
+    key: "no-data"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", {
     colSpan: colSpan
   }, "No information available"))));
 };

@@ -224,12 +224,9 @@
         {
             display = value.ToString();
         }
-        else if (today.Year == year)
+        else if (today.Year == year && today.Month >= month)
         {
-            if (today.Month >= month)
-            {
-                display = value.ToString();
-            }
+            display = value.ToString();
         }
 
         <td class="align-right">

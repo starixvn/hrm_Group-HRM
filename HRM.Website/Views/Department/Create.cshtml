@@ -1,6 +1,6 @@
 ﻿@using HRM.Resources
 @{
-	ViewBag.Title = Labels.AddDepartment;
+    ViewBag.Title = Labels.AddDepartment;
 }
 @section css{
     <link href="~/dist/styles/department.create.css" rel="stylesheet" asp-append-version="true" />
@@ -9,9 +9,9 @@
     <script src="~/dist/js/department.create.js" asp-append-version="true"></script>
 }
 @section Breadcrumb {
-	<a class="step">@Labels.GroupSpace</a>
-	<a class="step" href="@Url.Action("index", "department")">@Labels.DepartmentManagement</a>
-	<span class="step">@ViewBag.Title</span>
+    <a class="step">@Labels.GroupSpace</a>
+    <a class="step" href="@Url.Action("index", "department")">@Labels.DepartmentManagement</a>
+    <span class="step">@ViewBag.Title</span>
 }
 
 <h2 class="page-title">@Labels.Create</h2>

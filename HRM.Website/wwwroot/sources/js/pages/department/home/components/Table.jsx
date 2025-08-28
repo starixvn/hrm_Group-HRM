@@ -26,49 +26,65 @@ const Table = ({ data, onDelete }) => {
     }
 
     const getCellValue = (item, key) => {
-        if (!key) return "";
+        if (!key) {
+            return '';
+        }
         let value = item[key];
 
-        if (key === "buCode") value = item.unit ? item.unit.code : "";
+        if (key === "buCode") {
+            value = item.unit ? item.unit.code : '';
+        }
 
-        if (value === null || value === undefined) return "";
+        if (value === null || value === undefined) {
+            return '';
+        }
 
-        if (typeof value === "string") return value.trim().toLowerCase();
+        if (typeof value === "string") {
+            return value.trim().toLowerCase();
+        }
 
-        if (typeof value === "boolean") return value ? "true" : "false";
+        if (typeof value === "boolean") {
+            return value ? "true" : "false";
+        }
 
         return value;
     };
 
     const sortedData = React.useMemo(() => {
-        if (!sortConfig.key) return data;
+        if (!sortConfig.key) {
+            return data;
+        }
 
-        const sorted = [...data].sort((a, b) => {
-            let valA = getCellValue(a, sortConfig.key);
-            let valB = getCellValue(b, sortConfig.key);
-
-            if (valA === "" && valB !== "") return 1;
-            if (valB === "" && valA !== "") return -1;
-            if (valA === "" && valB === "") return 0;
+        const compareValues = (valA, valB) => {
+            if (valA === '' || valB === '') {
+                if (valA === '' && valB === '') {
+                    return 0;
+                }
+                return valA === '' ? 1 : -1;
+            }
 
             if (!isNaN(valA) && !isNaN(valB)) {
-                return valA - valB;
+                return Number(valA) - Number(valB);
             }
 
             if (moment(valA).isValid() && moment(valB).isValid()) {
-                return new Date(valA) - new Date(valB);
+                return new Date(valA).getTime() - new Date(valB).getTime();
             }
 
-            return valA.localeCompare(valB, "vi", { sensitivity: "base" });
-        });
+            return String(valA).localeCompare(String(valB), "vi", { sensitivity: "base" });
+        };
 
-        if (sortConfig.direction === "desc") sorted.reverse();
+        const sorted = [...data].sort((a, b) =>
+            compareValues(getCellValue(a, sortConfig.key), getCellValue(b, sortConfig.key))
+        );
 
-        return sorted;
+        return sortConfig.direction === "desc" ? sorted.reverse() : sorted;
     }, [data, sortConfig]);
 
-    const onSort = (key) => {
-        if (!key) return;
+    const onSort = key => {
+        if (!key) {
+            return;
+        }
 
         let direction = "asc";
         if (sortConfig.key === key && sortConfig.direction === "asc") {
@@ -78,8 +94,10 @@ const Table = ({ data, onDelete }) => {
         setSortConfig({ key, direction });
     };
 
-    const renderSortIcon = (key) => {
-        if (sortConfig.key !== key) return "fa fa-sort";
+    const renderSortIcon = key => {
+        if (sortConfig.key !== key) {
+            return "fa fa-sort";
+        }
 
         return sortConfig.direction === "asc"
             ? "fa fa-sort-asc"
@@ -90,10 +108,10 @@ const Table = ({ data, onDelete }) => {
         <table className="table table-custom">
             <thead>
                 <tr>
-                    {columns.map(({ label, key, sortable }) => (
+                    {columns.map(({ label, key, sortable }) => 
                         <th
                             key={label}
-                            className={sortable ? "col-sorter" : ""}
+                            className={sortable ? "col-sorter" : ''}
                             onClick={() => onSort(key)}
                             style={{
                                 cursor: sortable ? "pointer" : "default",
@@ -107,7 +125,7 @@ const Table = ({ data, onDelete }) => {
                                 )}
                             </div>
                         </th>
-                    ))}
+                    )}
                 </tr>
             </thead>
             <tbody>
@@ -131,3 +149,4 @@ const Table = ({ data, onDelete }) => {
 };
 
 export default Table;
+

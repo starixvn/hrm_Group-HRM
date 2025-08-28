@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { Modal, ModalBody, ModalHeader, ModalTitle } from 'react-bootstrap';
 import toastr from 'toastr';
 import { toastOptions } from '../../../shared/common.functions';
@@ -16,10 +16,10 @@ const ViewUploadHistoryModal = () => {
     const fetchHistory = () => {
         salaryService
             .getUploadHistory()
-            .then((data) => {
+            .then(data => {
                 setHistory(data);
             })
-            .catch((_) => {
+            .catch(_ => {
                 toastr.error(
                     'Failed to fetch upload history',
                     '',
@@ -82,7 +82,7 @@ const ViewUploadHistoryModal = () => {
                                         <td>
                                             <a
                                                 href="#"
-                                                onClick={(e) => {
+                                                onClick={e => {
                                                     e.preventDefault();
                                                     handleDownload(
                                                         item.savedFileName,
@@ -107,3 +107,4 @@ const ViewUploadHistoryModal = () => {
 };
 
 export default ViewUploadHistoryModal;
+

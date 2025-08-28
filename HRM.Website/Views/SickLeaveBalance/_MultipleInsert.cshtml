@@ -1,4 +1,5 @@
 ﻿@using HRM.Core
+@using HRM.Core.Constants
 @using HRM.ViewModels.AnnualLeave
 @model AnnualLeaveBalanceMultiViewModel
 
@@ -29,10 +30,10 @@
                 @Html.LabelFor(model => model.AffectedFrom, new { @class = "control-label" })
             </div>
             <div class="calendar-form">
-                @Html.TextBox(Html.NameFor(model => model.AffectedFrom).ToString(), Model.AffectedFrom.ToDateMonthYearFormatedDate(),
+                @Html.TextBox(Html.NameFor(model => model.AffectedFrom), Model.AffectedFrom.ToDateMonthYearFormatedDate(),
                     new {
                         @class = "datepicker form-control",
-                        mindate = new DateTime(2010, 1, 1).ToString("yyyy/MM/dd")
+                        mindate = Constants.MinDate.ToString("yyyy/MM/dd")
                     })
                 <i class="icon-calendar fa fa-calendar"></i>
             </div>

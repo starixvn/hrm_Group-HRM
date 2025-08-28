@@ -27,9 +27,9 @@ const AppContainer = () => {
             method: 'GET',
             headers: { 'X-Requested-With': 'XMLHttpRequest' },
         })
-            .then((response) => {
+            .then(response => {
                 const data = response.data;
-                setInitialValues((prev) => ({
+                setInitialValues(prev =>({
                     ...prev,
                     salaryStructureId: data.salaryStructureId,
                     name: data.name
@@ -67,7 +67,7 @@ const AppContainer = () => {
                     headers: { 'X-Requested-With': 'XMLHttpRequest' },
                 }
             )
-            .then((response) => {
+            .then(response => {
                 const { data } = response;
                 if (data.isSuccessful) {
                     toastr.success('Updated successfully!', '', toastOptions());
@@ -153,7 +153,7 @@ const AppContainer = () => {
         );
     };
 
-    const validateFormValues = (values) => {
+    const validateFormValues = values => {
         if (!values.name.trim()) {
             toastr.error('Salary Structure field is required!', '', toastOptions());
             return {

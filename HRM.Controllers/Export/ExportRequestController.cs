@@ -40,7 +40,7 @@ public class ExportRequestController(
             RequestType = request.RequestType,
             IsQueryByCreatedDate = !request.IsFilterByAffectedDate,
             RequestViewType = request.ViewType,
-            SupervisorId = session.UserId,
+            SupervisorId = EmployeeSession.EmpId,
             IsLocal = request.IsLocal.HasValue ? request.IsLocal.Value == 1 : null,
             CompanyId = CurrentCompanyId
         };
@@ -75,7 +75,7 @@ public class ExportRequestController(
             RequestType = model.RequestType,
             IsQueryByCreatedDate = !model.IsFilterByAffectedDate,
             RequestViewType = model.ViewType,
-            SupervisorId = session.UserId,
+            SupervisorId = EmployeeSession.EmpId,
             IsLocal = model.IsLocal.HasValue ? model.IsLocal.Value == 1 : null,
             LeaveTypeId = model.LeaveType,
             CompanyId = CurrentCompanyId
@@ -107,7 +107,7 @@ public class ExportRequestController(
             RequestType = model.RequestType,
             IsQueryByCreatedDate = !model.IsFilterByAffectedDate,
             RequestViewType = model.ViewType,
-            SupervisorId = session.UserId,
+            SupervisorId = EmployeeSession.EmpId,
             IsLocal = model.IsLocal.HasValue ? model.IsLocal.Value == 1 : null,
             CompanyId = CurrentCompanyId,
             IsShowCrossCompany = model.IsShowCrossCompany
@@ -117,7 +117,7 @@ public class ExportRequestController(
         var isLocal = model.IsLocal != 0;
         if (isLocal && model.IsShowCrossCompany && model.ViewType == RequestViewType.PersonalSpace)
         {
-            model.CurrentUserId = session.UserId;
+            model.CurrentUserId = EmployeeSession.EmpId;
             var nexRequest = (await requestService.GetNexRequests(model, EmployeeSession)).ToList();
             requests = requests.Concat(nexRequest).ToList();
         }

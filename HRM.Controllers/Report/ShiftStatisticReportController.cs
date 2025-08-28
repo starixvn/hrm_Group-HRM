@@ -40,7 +40,7 @@ public class ShiftStatisticReportController(
     {
         var param = new GetShiftStatisticParam
         {
-            SupervisorId = session.UserId,
+            SupervisorId = EmployeeSession.EmpId,
             FromDate = model.FromDate,
             ToDate = model.ToDate,
             TeamIds = model.TeamIds,
@@ -63,7 +63,7 @@ public class ShiftStatisticReportController(
         var teams = await teamService.GetAllAsync();
         var param = new GetShiftStatisticDetailParam
         {
-            SupervisorId = session.UserId,
+            SupervisorId = EmployeeSession.EmpId,
             WorkDate = model.WorkDate,
             ShiftId = model.ShiftId,
             EmployeeId = model.EmployeeId,
@@ -80,7 +80,7 @@ public class ShiftStatisticReportController(
     {
         var param = new GetShiftStatisticDetailParam
         {
-            SupervisorId = session.UserId,
+            SupervisorId = EmployeeSession.EmpId,
             WorkDate = model.WorkDate,
             ShiftId = model.ShiftId,
             EmployeeId = model.EmployeeId,
@@ -100,7 +100,7 @@ public class ShiftStatisticReportController(
     {
         var param = new GetShiftStatisticParam
         {
-            SupervisorId = session.UserId,
+            SupervisorId = EmployeeSession.EmpId,
             FromDate = model.FromDate,
             ToDate = model.ToDate,
             TeamIds = model.TeamIds,

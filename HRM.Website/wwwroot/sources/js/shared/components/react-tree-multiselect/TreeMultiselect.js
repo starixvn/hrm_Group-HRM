@@ -25,7 +25,7 @@ const updateChild = (floatData, itemkey, isChecked) => {
     }
 };
 
-const getSelectedText = (floatData) => {
+const getSelectedText = floatData => {
     const items = floatData.filter(item => item.isLeaf),
         selected = items.filter(item => item.checked);
     let text = '';
@@ -41,7 +41,7 @@ const getSelectedText = (floatData) => {
     return text;
 };
 
-const getSelectedItems = (floatData) => {
+const getSelectedItems = floatData => {
     return floatData.filter(item => item.isLeaf && item.checked);
 };
 
@@ -85,7 +85,7 @@ export default class TreeMultiselect extends React.Component {
         document.removeEventListener('click', this.handleDocumentClick);
     }
 
-    handleDocumentClick = (event) => {
+    handleDocumentClick = event => {
         const clickOutside = this.wrapper && !this.wrapper.contains(event.target);
         if (clickOutside && this.state.opened) {
             this.setState({ opened: false });
@@ -93,7 +93,7 @@ export default class TreeMultiselect extends React.Component {
     }
 
     onToggle = () => {
-        this.setState((prevState) => { return { opened: !prevState.opened }; });
+        this.setState(prevState => { return { opened: !prevState.opened }; });
     }
 
     handleSelectAll = event => {

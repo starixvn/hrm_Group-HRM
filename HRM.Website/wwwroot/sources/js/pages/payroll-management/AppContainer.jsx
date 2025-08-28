@@ -1,7 +1,5 @@
-import React from 'react';
-import toastr from 'toastr';
+﻿import React from 'react';
 import SalaryTable from './components/SalaryTable';
-import { toastOptions } from '../../shared/common.functions';
 import Filter from './components/Filter';
 import PayrollService from './Service';
 
@@ -13,7 +11,7 @@ const AppContainer = () => {
         setSalaryData(data);
     };
 
-    const handleSearch = async (filters) => {
+    const handleSearch = async filters => {
         await fetchSalaryData(filters);
     };
 

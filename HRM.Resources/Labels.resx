@@ -2145,4 +2145,7 @@
   <data name="EmployeeStatus" xml:space="preserve">
     <value>Employee Status</value>
   </data>
+  <data name="Username" xml:space="preserve">
+    <value>Username</value>
+  </data>
 </root>

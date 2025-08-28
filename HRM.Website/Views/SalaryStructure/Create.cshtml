@@ -1,6 +1,6 @@
 ﻿@using HRM.Resources
 @{
-	ViewBag.Title = Labels.CreateSalaryStructure;
+    ViewBag.Title = Labels.CreateSalaryStructure;
 }
 @section css{
     <link href="~/dist/styles/salary-structure.create.css" rel="stylesheet" asp-append-version="true" />
@@ -9,9 +9,9 @@
     <script src="~/dist/js/salary-structure.create.js" asp-append-version="true"></script>
 }
 @section Breadcrumb {
-	<a class="step">@Labels.HRSpace</a>
-	<a class="step" href="@Url.Action("index", "SalaryStructure")">@Labels.SalaryStructure</a>
-	<span class="step">@ViewBag.Title</span>
+    <a class="step">@Labels.HRSpace</a>
+    <a class="step" href="@Url.Action("index", "SalaryStructure")">@Labels.SalaryStructure</a>
+    <span class="step">@ViewBag.Title</span>
 }
 
 <h2 class="page-title">@Labels.Create</h2>

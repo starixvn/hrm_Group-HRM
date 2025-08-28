@@ -75,7 +75,7 @@ public class PayrollUploadController(
             SavedFileName = savedFileName,
             PeriodType = short.Parse(request.PeriodType, CultureInfo.InvariantCulture),
             CompanyId = CurrentCompanyId,
-            ActorId = session.UserId,
+            ActorId = EmployeeSession.EmpId,
             Month = DateTime.Parse(request.Month, CultureInfo.InvariantCulture)
         };
 

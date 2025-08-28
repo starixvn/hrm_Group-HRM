@@ -67,7 +67,7 @@ public class SalaryStructureController(
             CompanyId = CurrentCompanyId,
             Name = model.Name,
             Details = JsonConvert.SerializeObject(model.Details),
-            CreatedBy = session.UserId
+            CreatedBy = EmployeeSession.EmpId
         };
         commandResult = await baseService.ExecuteNonQueryAsync(criteria);
 
@@ -116,7 +116,7 @@ public class SalaryStructureController(
             SalaryStructureId = model.SalaryStructureId,
             Name = model.Name,
             Details = JsonConvert.SerializeObject(model.Details),
-            ModifiedBy = session.UserId
+            ModifiedBy = EmployeeSession.EmpId
         };
         commandResult = await baseService.ExecuteNonQueryAsync(criteria);
 
@@ -127,7 +127,7 @@ public class SalaryStructureController(
     [HrmPermission(Policy.Host, FunctionKey.SalaryStructureConfiguration)]
     public async Task<IActionResult> Delete([FromBody] DeleteSalaryStructureViewModel model)
     {
-        var commandResult = await salaryStructureService.DeleteAsync(session.UserId, model.Id);
+        var commandResult = await salaryStructureService.DeleteAsync(EmployeeSession.EmpId, model.Id);
 
         return new JsonResult(commandResult);
     }

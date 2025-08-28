@@ -45,7 +45,7 @@ public class LeaveController(
         var fromDate = new DateTimeOffset(tempYear, 1, 1, 0, 0, 0, TimeSpan.Zero).Date;
         var criteria = new GetLeaveRequestByDateCriteria
         {
-            EmpId = session.UserId,
+            EmpId = EmployeeSession.EmpId,
             FromDate = fromDate,
             ToDate = fromDate.AddYears(1).AddDays(-1),
             CompanyId = CurrentCompanyId
@@ -58,13 +58,13 @@ public class LeaveController(
             request.CreatedDate = request.CreatedDate.ToClientTimeZone();
         }
         ViewBag.Year = tempYear;
-        ViewBag.EmployeeBalance = await leaveRequestService.GetLeaveBalance(session.UserId, null, year);
+        ViewBag.EmployeeBalance = await leaveRequestService.GetLeaveBalance(EmployeeSession.EmpId, null, year);
         return View(leaves);
     }
 
     public async Task<ActionResult> Create()
     {
-        var supervisor = await requestService.GetVerifierAndApproverAsync(session.UserId, RequestType.Leave);
+        var supervisor = await requestService.GetVerifierAndApproverAsync(EmployeeSession.EmpId, RequestType.Leave);
         var setting = await commonDataService.GetSystemSettingAsync();
         var today = DateTimeOffset.Now.DateTime.ToClientTimeZone().Date;
         var minDate = await GetEmployeeMinDate();
@@ -73,12 +73,12 @@ public class LeaveController(
         {
             LeaveTypeId = (ushort)LeaveTypes.GeneralLeave,
             Employee = EmployeeSession.DisplayName,
-            EmployeeId = session.UserId,
+            EmployeeId = EmployeeSession.EmpId,
             FromDate = today,
             ToDate = today,
             TotalDays = 1,
             LeaveTypeList = await commonDataService.GetLeaveTypeAsync(),
-            EmployeeLeaveBalance = await leaveRequestService.GetLeaveBalance(session.UserId, null, null),
+            EmployeeLeaveBalance = await leaveRequestService.GetLeaveBalance(EmployeeSession.EmpId, null, null),
             Verifiers = supervisor.Verifiers,
             Approvers = supervisor.Approvers,
             MinDate = minDate,
@@ -111,7 +111,7 @@ public class LeaveController(
         }
 
         criteria.RequestDetail = leaveRequestDetail;
-        criteria.CreatedBy = session.UserId;
+        criteria.CreatedBy = EmployeeSession.EmpId;
         criteria.CompanyId = CurrentCompanyId;
 
         var startTime = DateTimeOffset.Now;
@@ -144,7 +144,7 @@ public class LeaveController(
     {
         var request = await leaveRequestService.GetByIdAsync(id);
         if (request == null
-            || !Utilities.CheckUserCanEditRequest(session.UserId, request.Requester.EmpId)
+            || !Utilities.CheckUserCanEditRequest(EmployeeSession.EmpId, request.Requester.EmpId)
             || request.Status.Id != (byte)CurrentRequestStatus.Pending)
         {
             return RedirectToAction("AccessDenied", "Error");
@@ -160,7 +160,7 @@ public class LeaveController(
             LeaveTypeId = model.LeaveTypeId
         });
         model.LeaveTypeList = await commonDataService.GetLeaveTypeAsync();
-        model.EmployeeLeaveBalance = await leaveRequestService.GetLeaveBalance(session.UserId, id, null);
+        model.EmployeeLeaveBalance = await leaveRequestService.GetLeaveBalance(EmployeeSession.EmpId, id, null);
 
         var supervisor = await requestService.GetVerifierAndApproverAsync(model.EmployeeId, RequestType.Leave);
         var setting = await commonDataService.GetSystemSettingAsync();
@@ -187,7 +187,7 @@ public class LeaveController(
         var criteria = JsonConvert.DeserializeObject<UpdateLeaveRequestCriteria>(request);
         var leaveRequestDetail = JsonConvert.DeserializeObject<List<LeaveRequestDetail>>(requestDetails);
         criteria.RequestDetail = leaveRequestDetail;
-        criteria.ModifiedBy = session.UserId;
+        criteria.ModifiedBy = EmployeeSession.EmpId;
         criteria.CompanyId = CurrentCompanyId;
         if (leaveRequestDetail is { Count: > 0 })
         {
@@ -524,7 +524,7 @@ public class LeaveController(
     private async Task<DateTime> GetEmployeeMinDate()
     {
         var today = DateTimeOffset.Now.DateTime.ToClientTimeZone().Date;
-        var employee = await employeeService.GetEmployeeByIdAsync(session.UserId);
+        var employee = await employeeService.GetEmployeeByIdAsync(EmployeeSession.EmpId);
 
         if (employee != null)
         {

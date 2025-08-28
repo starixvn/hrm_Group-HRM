@@ -17,7 +17,7 @@ const AppContainer = () => {
             .post(resolveClientUrl("Company/GetSettingCompany"), params, {
                 headers: { "X-Requested-With": "XMLHttpRequest" },
             })
-            .then((response) => {
+            .then(response => {
                 setCompanies(response.data);
             })
             .catch(axiosError);
@@ -28,7 +28,7 @@ const AppContainer = () => {
             .get(resolveClientUrl("Company/GetCurrency"), {
                 headers: { "X-Requested-With": "XMLHttpRequest" },
             })
-            .then((response) => {
+            .then(response => {
                 const currencies = response.data;
                 const mapping = {};
                 currencies.forEach(currency => {
@@ -49,7 +49,7 @@ const AppContainer = () => {
             currency: company.currency ? 
                 company.currency.split(',').map(id => id.trim()).filter(id => id)
                     .map(id => currencyMap[id] || id).join(', ') 
-                : ""
+                : ''
         }));
     };
 
@@ -68,3 +68,4 @@ const AppContainer = () => {
 };
 
 export default AppContainer;
+

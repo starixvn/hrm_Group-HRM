@@ -40,9 +40,7 @@ export default class ColShift extends PureComponent {
         }
     };
 
-    isSkipOffDay = data => {
-        return data.isLeaveHalfDay || data.isChangeShift || (data.isKeepInView && data.isOffDay);
-    };
+    isSkipOffDay = data => data.isLeaveHalfDay || data.isChangeShift || (data.isKeepInView && data.isOffDay);
 
     render() {
         const { employeeId, data, isHost, scheduleAttrName, defaultShift, shiftOptions, isUsedWeeklyDefaultShift } = this.props;

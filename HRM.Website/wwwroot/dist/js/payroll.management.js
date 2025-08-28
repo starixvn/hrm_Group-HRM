@@ -123436,14 +123436,9 @@ module.exports = function(module) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var toastr__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! toastr */ "./node_modules/toastr/toastr.js");
-/* harmony import */ var toastr__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(toastr__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _components_SalaryTable__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/SalaryTable */ "./sources/js/pages/payroll-management/components/SalaryTable.jsx");
-/* harmony import */ var _shared_common_functions__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../shared/common.functions */ "./sources/js/shared/common.functions.js");
-/* harmony import */ var _components_Filter__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./components/Filter */ "./sources/js/pages/payroll-management/components/Filter.jsx");
-/* harmony import */ var _Service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./Service */ "./sources/js/pages/payroll-management/Service.js");
-
-
+/* harmony import */ var _components_SalaryTable__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/SalaryTable */ "./sources/js/pages/payroll-management/components/SalaryTable.jsx");
+/* harmony import */ var _components_Filter__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./components/Filter */ "./sources/js/pages/payroll-management/components/Filter.jsx");
+/* harmony import */ var _Service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Service */ "./sources/js/pages/payroll-management/Service.js");
 
 
 
@@ -123451,7 +123446,7 @@ __webpack_require__.r(__webpack_exports__);
 const AppContainer = () => {
   const [salaryData, setSalaryData] = react__WEBPACK_IMPORTED_MODULE_0___default.a.useState([]);
   const fetchSalaryData = async (filters = {}) => {
-    const data = await _Service__WEBPACK_IMPORTED_MODULE_5__["default"].getSalaryData(filters);
+    const data = await _Service__WEBPACK_IMPORTED_MODULE_3__["default"].getSalaryData(filters);
     setSalaryData(data);
   };
   const handleSearch = async filters => {
@@ -123461,11 +123456,11 @@ const AppContainer = () => {
     className: "salary-management-container"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "filter"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_Filter__WEBPACK_IMPORTED_MODULE_4__["default"], {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_Filter__WEBPACK_IMPORTED_MODULE_2__["default"], {
     onSearch: handleSearch
   })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "salary-table"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_SalaryTable__WEBPACK_IMPORTED_MODULE_2__["default"], {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_components_SalaryTable__WEBPACK_IMPORTED_MODULE_1__["default"], {
     data: salaryData
   })));
 };
@@ -123759,28 +123754,20 @@ __webpack_require__.r(__webpack_exports__);
 const SalaryTable = ({
   data
 }) => {
-  const formatNumber = number => {
-    return new Intl.NumberFormat('en-US').format(number || 0);
-  };
+  const formatNumber = number => new Intl.NumberFormat('en-US').format(number || 0);
   const getRowStyle = employmentStatus => {
     const color = _constants_constants__WEBPACK_IMPORTED_MODULE_1__["EmploymentStatusColor"][employmentStatus];
     return color ? {
       color: color
     } : {};
   };
-  const totals = data.reduce((acc, item) => ({
-    basicSalary: (acc.basicSalary || 0) + (item.basicSalary || 0),
-    standardWorkingDay: (acc.standardWorkingDay || 0) + (item.standardWorkingDay || 0),
-    unpaidLeave: (acc.unpaidLeave || 0) + (item.unpaidLeave || 0),
-    paidDay: (acc.paidDay || 0) + (item.paidDay || 0),
-    grossSalary: (acc.grossSalary || 0) + (item.grossSalary || 0)
-  }), {
-    basicSalary: 0,
-    standardWorkingDay: 0,
-    unpaidLeave: 0,
-    paidDay: 0,
-    grossSalary: 0
-  });
+  const keys = ["basicSalary", "standardWorkingDay", "unpaidLeave", "paidDay", "grossSalary"];
+  const totals = data.reduce((acc, item) => {
+    keys.forEach(key => {
+      acc[key] += item[key] || 0;
+    });
+    return acc;
+  }, Object.fromEntries(keys.map(k => [k, 0])));
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
     className: "salary-table-section"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("table", {
@@ -124308,14 +124295,14 @@ const MonthPicker = _ref => {
   const [selectedDate, setSelectedDate] = Object(react__WEBPACK_IMPORTED_MODULE_3__["useState"])(() => {
     if (value) {
       const [year, month] = value.split('-');
-      return new Date(parseInt(year), parseInt(month) - 1, 1);
+      return new Date(parseInt(year, 10), parseInt(month, 10) - 1, 1);
     }
     return null;
   });
   Object(react__WEBPACK_IMPORTED_MODULE_3__["useEffect"])(() => {
     if (value) {
       const [year, month] = value.split('-');
-      setSelectedDate(new Date(parseInt(year), parseInt(month) - 1, 1));
+      setSelectedDate(new Date(parseInt(year, 10), parseInt(month, 10) - 1, 1));
     } else {
       setSelectedDate(null);
     }

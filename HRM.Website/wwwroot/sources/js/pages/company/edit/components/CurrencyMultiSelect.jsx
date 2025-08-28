@@ -19,7 +19,7 @@ const CurrencyMultiSelect = ({
         })
         : [];
 
-    const handleChange = (selectedOptions) => {
+    const handleChange = selectedOptions => {
         const selectedValues = selectedOptions ? selectedOptions.map(option => option.value) : [];
         onChange(selectedValues);
     };
@@ -44,3 +44,4 @@ const CurrencyMultiSelect = ({
 };
 
 export default CurrencyMultiSelect;
+

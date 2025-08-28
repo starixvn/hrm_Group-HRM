@@ -41,5 +41,5 @@ public interface ILeaveRequestService
 
     Task SendMailProcessRequest(long requestId, EmployeeSession actor, RequestCommand command);
 
-    Task<EmployeeLeaveBalance> GetLeaveBalance(int userId, long? requestId, int? year);
+    Task<EmployeeLeaveBalance> GetLeaveBalance(int empId, long? requestId, int? year);
 }

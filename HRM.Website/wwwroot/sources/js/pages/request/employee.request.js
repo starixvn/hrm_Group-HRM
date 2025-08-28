@@ -56,7 +56,7 @@ $(function () {
                 "Content-Type": "application/x-www-form-urlencoded",
             },
         })
-            .then((response) => {
+            .then(response => {
                 unblockUI();
                 const data = response.data;
                 if (data.isSuccessful) {
@@ -179,7 +179,7 @@ $(function () {
             params: model,
             responseType: "text",
         })
-            .then((response) => {
+            .then(response => {
                 $("#dialogProcessRequest").html(response.data);
                 $(".tooltip-tipsy").tipsy({
                     html: true,
@@ -669,7 +669,7 @@ $(function () {
                 "Content-Type": "application/x-www-form-urlencoded",
             },
         })
-            .then((response) => {
+            .then(response => {
                 unblockUI();
                 const data = response.data;
                 if (data.isSuccessful) {
@@ -802,7 +802,7 @@ $(function () {
             method: "GET",
             headers: { "X-Requested-With": "XMLHttpRequest" },
         })
-            .then((response) => {
+            .then(response => {
                 $("#Team").multiSelectTreeView({
                     data: response.data,
                     selectedItems: $("#TeamIds").val(),
@@ -827,7 +827,7 @@ $(function () {
                 headers: { "X-Requested-With": "XMLHttpRequest" },
                 responseType: "text",
             })
-                .then((response) => {
+                .then(response => {
                     $("#dialoghistorycontent").html(response.data);
                     $(".tooltip-tipsy").tipsy({
                         html: true,

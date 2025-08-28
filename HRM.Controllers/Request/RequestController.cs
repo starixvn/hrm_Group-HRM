@@ -52,7 +52,7 @@ public class RequestController(
         var isLocal = request.IsLocal != 0;
         if (isLocal && request.IsShowCrossCompany)
         {
-            request.CurrentUserId = session.UserId;
+            request.CurrentUserId = EmployeeSession.EmpId;
             var nexRequest = (await requestService.GetNexRequests(request, EmployeeSession)).ToList();
             request.Requests = nexRequest;
         }
@@ -82,7 +82,7 @@ public class RequestController(
             h.CreatedDate = h.CreatedDate.ConvertToClientTimeZone(Constants.NexTimezone);
             h.ProcessedDate = h.ProcessedDate?.ConvertToClientTimeZone(Constants.NexTimezone);
             h.FromDate = h.FromDate.ConvertToClientTimeZone(Constants.NexTimezone);
-            h.ToDate = h.ToDate != DateTimeOffset.MinValue ? h.ToDate.ConvertToClientTimeZone(Constants.NexTimezone) : h.ToDate;
+            h.ToDate = h.ToDate != DateTimeOffset.MinValue.DateTime ? h.ToDate.ConvertToClientTimeZone(Constants.NexTimezone) : h.ToDate;
         });
         var requestType = history.FirstOrDefault()?.RequestType;
         var isCheckInOutType = requestType is (int)RequestType.CheckIn or (int)RequestType.CheckOut;
@@ -141,7 +141,7 @@ public class RequestController(
         var criteria = new GetEmployeeSupervisorByQueryCriteria
         {
             CompanyId = CurrentCompanyId,
-            EmpId = session.UserId,
+            EmpId = EmployeeSession.EmpId,
             Role = role,
             RequestType = requestType,
             Query = query.Trim(),
@@ -205,7 +205,7 @@ public class RequestController(
         CommandResult commandResult;
         if (Constants.NexCompanyIds.Contains(model.RequesterCompanyId))
         {
-            commandResult = await requestService.SendNexHrmProcessRequest(session.UserId, model);
+            commandResult = await requestService.SendNexHrmProcessRequest(EmployeeSession.EmpId, model);
         }
         else
         {
@@ -225,11 +225,11 @@ public class RequestController(
         return model.Command switch
         {
             RequestCommand.Accept or RequestCommand.Approve or RequestCommand.Process => await requestService
-                .ApproveRequest(session.UserId, model),
-            RequestCommand.Reset => await requestService.ResetRequest(session.UserId, model),
+                .ApproveRequest(EmployeeSession.EmpId, model),
+            RequestCommand.Reset => await requestService.ResetRequest(EmployeeSession.EmpId, model),
             RequestCommand.NotAccept or RequestCommand.Reject or RequestCommand.Void => await requestService
-                .RejectRequest(session.UserId, model),
-            _ => await requestService.VoidRequest(session.UserId, model)
+                .RejectRequest(EmployeeSession.EmpId, model),
+            _ => await requestService.VoidRequest(EmployeeSession.EmpId, model)
         };
     }
 
@@ -237,7 +237,7 @@ public class RequestController(
     [HrmPermission(Policy.Host, FunctionKey.VerifyRequest, FunctionKey.ApproveRequest, FunctionKey.ProcessRequest, FunctionKey.VoidRequest)]
     public async Task<IActionResult> ProcessMultipleRequests(ApproveRequestsParam model)
     {
-        model.ActorId = session.UserId;
+        model.ActorId = EmployeeSession.EmpId;
         var nexCompanyRequests = model.Requests.Where(r => Constants.NexCompanyIds.Contains(r.RequesterCompanyId)).ToList();
         var localRequests = model.Requests.Where(r => !Constants.NexCompanyIds.Contains(r.RequesterCompanyId)).ToList();
 
@@ -245,7 +245,7 @@ public class RequestController(
         if (nexCompanyRequests.Count > 0)
         {
             model.Requests = nexCompanyRequests;
-            var nexCommandResults = await requestService.SendNexHrmMultipleProcessRequest(session.UserId, model);
+            var nexCommandResults = await requestService.SendNexHrmMultipleProcessRequest(EmployeeSession.EmpId, model);
             commandResults.AddRange(nexCommandResults);
         }
         model.Requests = localRequests;
@@ -308,7 +308,7 @@ public class RequestController(
             RequestType = request.RequestType,
             IsQueryByCreatedDate = !request.IsFilterByAffectedDate,
             RequestViewType = request.ViewType,
-            SupervisorId = session.UserId,
+            SupervisorId = EmployeeSession.EmpId,
             IsLocal = request.IsLocal.HasValue ? request.IsLocal.Value == 1 : null,
             LeaveTypeId = request.LeaveType,
             CompanyId = CurrentCompanyId,
@@ -327,7 +327,7 @@ public class RequestController(
         {
             request.Requests.Add(item);
         });
-        request.CurrentUserId = session.UserId;
+        request.CurrentUserId = EmployeeSession.EmpId;
         request.Requests = request.Requests
             .OrderByDescending(r => r.CreatedDate)
             .ToList();
@@ -342,8 +342,8 @@ public class RequestController(
     private bool SortRequestValidate(RequestEntity t)
     {
         var pending = t.Status.Id == (byte)CurrentRequestStatus.Pending
-                      && (t.ApproverId == session.UserId || t.VerifierId == session.UserId);
-        var verified = t.Status.Id == (byte)CurrentRequestStatus.Verified && t.ApproverId == session.UserId;
+                      && (t.ApproverId == EmployeeSession.EmpId || t.VerifierId == EmployeeSession.EmpId);
+        var verified = t.Status.Id == (byte)CurrentRequestStatus.Verified && t.ApproverId == EmployeeSession.EmpId;
         return pending || verified;
     }
 }

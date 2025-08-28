@@ -87,7 +87,7 @@ public class GroupTeamController(
                 PICEmpId = model.PICEmpId,
                 GroupTeamId = model.GroupTeamId,
                 AccountableArea = model.AccountableArea,
-                CreatedBy = session.UserId,
+                CreatedBy = EmployeeSession.EmpId,
                 CompanyId = (short)model.CompanyId,
                 IsOutsource = model.IsOutsource
             };
@@ -128,7 +128,7 @@ public class GroupTeamController(
             });
         }
 
-        await teamService.InsertTeamSupervisorByPIC(session.UserId, groupId, supervisorFunctions);
+        await teamService.InsertTeamSupervisorByPIC(EmployeeSession.EmpId, groupId, supervisorFunctions);
     }
 
     [HrmPermission(Policy.Host, FunctionKey.GroupTeamManagement)]
@@ -182,7 +182,7 @@ public class GroupTeamController(
                     DepartmentId = model.DepartmentId ?? 0,
                     PICEmpId = model.PICEmpId,
                     AccountableArea = model.AccountableArea,
-                    ModifiedBy = session.UserId,
+                    ModifiedBy = EmployeeSession.EmpId,
                     GroupTeamId = model.GroupTeamId,
                     MailGroup = team.MailGroup,
                     LocalBasicAnnualLeaveBalance = GetValue(team.LocalBasicAnnualLeaveBalance),
@@ -223,15 +223,15 @@ public class GroupTeamController(
     [HrmPermission(Policy.Host, FunctionKey.GroupTeamManagement)]
     public async Task<IActionResult> Delete(int id)
     {
-        var commandResult = await teamService.Delete(session.UserId, id);
+        var commandResult = await teamService.Delete(EmployeeSession.EmpId, id);
 
         return Json(commandResult);
     }
 
     [HrmPermission(Policy.Read, FunctionKey.GroupTeamManagement)]
-    public async Task<IActionResult> ExportGroupTeamList(string keyword = null)
+    public async Task<IActionResult> ExportGroupTeamList(string teamIds = null)
     {
-        var teams = await teamService.GetAllTeamByUnitScopeAsync(keyword);
+        var teams = await teamService.GetAllTeamByUnitScopeAsync(teamIds);
         var hasPermissionViewAll = session.HasPermissionOnFunction(FunctionKey.GroupTeamManagement_AllTeam, Policy.Read);
         if (!hasPermissionViewAll)
         {
@@ -310,7 +310,7 @@ public class GroupTeamController(
     [HrmPermission(Policy.Host, FunctionKey.GroupTeamManagement)]
     public async Task<IActionResult> EditTeamSupervisor(int teamId, short roleId, IEnumerable<EditTeamSupervisor> supervisors)
     {
-        var commandResult = await teamService.EditTeamSupervisor(session.UserId, teamId, roleId, supervisors);
+        var commandResult = await teamService.EditTeamSupervisor(EmployeeSession.EmpId, teamId, roleId, supervisors);
 
         return Json(commandResult);
     }

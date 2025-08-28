@@ -110667,28 +110667,28 @@ const AppContainer = () => {
   const [allUnits, setAllUnits] = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])([]);
   const [filterParams, setFilterParams] = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])({
     isActive: true,
-    unitId: ""
+    unitId: ''
   });
   const [deleteModalDialog, setDeleteModalDialog] = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])({
     show: false
   });
   const getDepartments = params => {
     const processedParams = _objectSpread(_objectSpread({}, params), {}, {
-      unitId: params.unitId === "" ? null : params.unitId
+      unitId: params.unitId === '' ? null : params.unitId
     });
     setFilterParams(processedParams);
-    axios__WEBPACK_IMPORTED_MODULE_2__["default"].post(Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_7__["resolveClientUrl"])("Department/GetDepartments"), processedParams, {
+    axios__WEBPACK_IMPORTED_MODULE_2__["default"].post(Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_7__["resolveClientUrl"])('Department/GetDepartments'), processedParams, {
       headers: {
-        "X-Requested-With": "XMLHttpRequest"
+        'X-Requested-With': 'XMLHttpRequest'
       }
     }).then(response => {
       setDepartments(response.data);
     }).catch(_shared_common_functions__WEBPACK_IMPORTED_MODULE_7__["axiosError"]);
   };
   const loadAllUnits = () => {
-    axios__WEBPACK_IMPORTED_MODULE_2__["default"].get(Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_7__["resolveClientUrl"])("Department/GetUnits"), {
+    axios__WEBPACK_IMPORTED_MODULE_2__["default"].get(Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_7__["resolveClientUrl"])('Department/GetUnits'), {
       headers: {
-        "X-Requested-With": "XMLHttpRequest"
+        'X-Requested-With': 'XMLHttpRequest'
       }
     }).then(response => {
       setAllUnits(response.data);
@@ -110708,21 +110708,21 @@ const AppContainer = () => {
     setDeleteModalDialog({
       show: false
     });
-    axios__WEBPACK_IMPORTED_MODULE_2__["default"].post(Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_7__["resolveClientUrl"])("Department/Delete"), {
+    axios__WEBPACK_IMPORTED_MODULE_2__["default"].post(Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_7__["resolveClientUrl"])('Department/Delete'), {
       id: deleteModalDialog.department.id
     }, {
       headers: {
-        "X-Requested-With": "XMLHttpRequest"
+        'X-Requested-With': 'XMLHttpRequest'
       }
     }).then(response => {
       const {
         data
       } = response;
       if (data.isSuccessful) {
-        toastr__WEBPACK_IMPORTED_MODULE_3___default.a.success("Deleted successfully!", "", Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_7__["toastOptions"])());
+        toastr__WEBPACK_IMPORTED_MODULE_3___default.a.success('Deleted successfully!', '', Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_7__["toastOptions"])());
         getDepartments(filterParams);
       } else {
-        toastr__WEBPACK_IMPORTED_MODULE_3___default.a.error(data.message, "", Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_7__["toastOptions"])());
+        toastr__WEBPACK_IMPORTED_MODULE_3___default.a.error(data.message, '', Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_7__["toastOptions"])());
       }
     }).catch(_shared_common_functions__WEBPACK_IMPORTED_MODULE_7__["axiosError"]);
   };
@@ -110732,15 +110732,11 @@ const AppContainer = () => {
     });
   };
   function exportExcel() {
-    var url = null,
-      controllerPath;
-    controllerPath = "Department/ExportDepartmentList?";
-    var query = "isActive=" + filterParams.isActive;
+    let query = 'isActive=' + filterParams.isActive;
     if (filterParams.unitId) {
-      query += "&unitId=" + filterParams.unitId;
+      query += '&unitId=' + filterParams.unitId;
     }
-    url = Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_7__["resolveClientUrl"])(controllerPath + query);
-    location.href = url;
+    location.href = Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_7__["resolveClientUrl"])('Department/ExportDepartmentList?' + query);
   }
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_1__["Fragment"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_Filter__WEBPACK_IMPORTED_MODULE_5__["default"], {
     onSubmit: getDepartments,
@@ -110751,7 +110747,7 @@ const AppContainer = () => {
     onDelete: handleDelete
   }), deleteModalDialog.show && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement(_shared_components_SweetModalDialog__WEBPACK_IMPORTED_MODULE_6__["default"], {
     show: deleteModalDialog.show,
-    contents: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("p", null, "Are you sure you want to delete", " ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("strong", null, deleteModalDialog.department.name), "?"),
+    contents: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("p", null, "Are you sure you want to delete", ' ', /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("strong", null, deleteModalDialog.department.name), "?"),
     onSubmit: handleConfirmDelete,
     onHide: handleCancel
   }));
@@ -110786,7 +110782,7 @@ const Filter = ({
 }) => {
   const [filterParams, setFilterParams] = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])({
     isActive: true,
-    unitId: ""
+    unitId: ''
   });
   const handleCreate = () => {
     window.location = Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_2__["resolveClientUrl"])("Department/Create");
@@ -110801,8 +110797,8 @@ const Filter = ({
     }));
   };
   const sortedUnits = allUnits.sort((a, b) => {
-    const nameA = (a.name || "").toLowerCase();
-    const nameB = (b.name || "").toLowerCase();
+    const nameA = (a.name || '').toLowerCase();
+    const nameB = (b.name || '').toLowerCase();
     return nameA.localeCompare(nameB);
   });
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("form", {
@@ -110903,7 +110899,7 @@ const Row = ({
   };
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("tr", {
     id: `row_${item.id}`
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, rowIndex), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, item.groupDeptId), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, item.code), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, item.unit ? item.unit.code : ""), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, item.name), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, item.accountableArea), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, item.picEmployeeName), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, item.isActive && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, rowIndex), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, item.groupDeptId), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, item.code), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, item.unit ? item.unit.code : ''), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, item.name), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, item.accountableArea), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, item.picEmployeeName), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, item.isActive && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("i", {
     className: "fa fa-check fa-lg icon-check"
   })), window.hasPermission === "True" && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react__WEBPACK_IMPORTED_MODULE_0__["Fragment"], null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("td", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("a", {
     onClick: handleEdit,
@@ -110989,37 +110985,52 @@ const Table = ({
     });
   }
   const getCellValue = (item, key) => {
-    if (!key) return "";
+    if (!key) {
+      return '';
+    }
     let value = item[key];
-    if (key === "buCode") value = item.unit ? item.unit.code : "";
-    if (value === null || value === undefined) return "";
-    if (typeof value === "string") return value.trim().toLowerCase();
-    if (typeof value === "boolean") return value ? "true" : "false";
+    if (key === "buCode") {
+      value = item.unit ? item.unit.code : '';
+    }
+    if (value === null || value === undefined) {
+      return '';
+    }
+    if (typeof value === "string") {
+      return value.trim().toLowerCase();
+    }
+    if (typeof value === "boolean") {
+      return value ? "true" : "false";
+    }
     return value;
   };
   const sortedData = react__WEBPACK_IMPORTED_MODULE_0___default.a.useMemo(() => {
-    if (!sortConfig.key) return data;
-    const sorted = [...data].sort((a, b) => {
-      let valA = getCellValue(a, sortConfig.key);
-      let valB = getCellValue(b, sortConfig.key);
-      if (valA === "" && valB !== "") return 1;
-      if (valB === "" && valA !== "") return -1;
-      if (valA === "" && valB === "") return 0;
+    if (!sortConfig.key) {
+      return data;
+    }
+    const compareValues = (valA, valB) => {
+      if (valA === '' || valB === '') {
+        if (valA === '' && valB === '') {
+          return 0;
+        }
+        return valA === '' ? 1 : -1;
+      }
       if (!isNaN(valA) && !isNaN(valB)) {
-        return valA - valB;
+        return Number(valA) - Number(valB);
       }
       if (moment__WEBPACK_IMPORTED_MODULE_1___default()(valA).isValid() && moment__WEBPACK_IMPORTED_MODULE_1___default()(valB).isValid()) {
-        return new Date(valA) - new Date(valB);
+        return new Date(valA).getTime() - new Date(valB).getTime();
       }
-      return valA.localeCompare(valB, "vi", {
+      return String(valA).localeCompare(String(valB), "vi", {
         sensitivity: "base"
       });
-    });
-    if (sortConfig.direction === "desc") sorted.reverse();
-    return sorted;
+    };
+    const sorted = [...data].sort((a, b) => compareValues(getCellValue(a, sortConfig.key), getCellValue(b, sortConfig.key)));
+    return sortConfig.direction === "desc" ? sorted.reverse() : sorted;
   }, [data, sortConfig]);
   const onSort = key => {
-    if (!key) return;
+    if (!key) {
+      return;
+    }
     let direction = "asc";
     if (sortConfig.key === key && sortConfig.direction === "asc") {
       direction = "desc";
@@ -111030,7 +111041,9 @@ const Table = ({
     });
   };
   const renderSortIcon = key => {
-    if (sortConfig.key !== key) return "fa fa-sort";
+    if (sortConfig.key !== key) {
+      return "fa fa-sort";
+    }
     return sortConfig.direction === "asc" ? "fa fa-sort-asc" : "fa fa-sort-desc";
   };
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("table", {
@@ -111041,7 +111054,7 @@ const Table = ({
     sortable
   }) => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("th", {
     key: label,
-    className: sortable ? "col-sorter" : "",
+    className: sortable ? "col-sorter" : '',
     onClick: () => onSort(key),
     style: {
       cursor: sortable ? "pointer" : "default"

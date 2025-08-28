@@ -26,17 +26,17 @@
             <tbody>
                 @foreach (var history in Model)
                 {
-	                var requestStatus = new RequestStatus { Id = history.Status };
-	                var statusText = requestStatus.Name;
+                    var requestStatus = new RequestStatus { Id = history.Status };
+                    var statusText = requestStatus.Name;
                     <tr>
                         <td>@(index++)</td>
-						<td>@history.Team</td>
+                        <td>@history.Team</td>
                         <td>
-							<span class="tooltip-tipsy" title="@history.FullNameRequester">@history.Requester</span>
+                            <span class="tooltip-tipsy" title="@history.FullNameRequester">@history.Requester</span>
                         </td>
-						<td>@history.LeaveTypeName</td>
+                        <td>@history.LeaveTypeName</td>
                         <td>@history.FromDate.ToDateMonthYearFormatedDate()</td>
-						<td>@history.ToDate.ToDateMonthYearFormatedDate()</td>
+                        <td>@history.ToDate.ToDateMonthYearFormatedDate()</td>
                         <td>
                         @{
                             var totaldays = history.TotalDays.HasValue ? history.TotalDays.Value.ToString("0.0") : string.Empty;
@@ -46,7 +46,7 @@
                         <td>
                         @if (!string.IsNullOrWhiteSpace(history.Remark))
                             {
-								<span class="fa fa-comment tooltip-tipsy" title="@history.Remark"></span>
+                                <span class="fa fa-comment tooltip-tipsy" title="@history.Remark"></span>
                             }
                             else
                             {
@@ -56,10 +56,10 @@
                         <td>
                             @if (history.Requester != history.ProcessedBy)
                             {
-	                            @history.ProcessedBy
+                                @history.ProcessedBy
                             }
                         </td>
-						<td>@statusText</td>
+                        <td>@statusText</td>
                         <td class="align-left">
                         @(history.ProcessedDate != null
                             ? string.Format(Messages.LogDate, history.ProcessedBy, history.ProcessedDate?.ToShortFormatedDate())

@@ -15,12 +15,9 @@
 @using (Html.BeginForm("EditInfo", "GroupEmployeeList", FormMethod.Post, new { id = "formEditUser", @class = "form-edit-user form-horizontal" }))
 {
     @Html.ValidationSummary(false)
-    if (ViewBag.Updated != null)
+    if (ViewBag.Updated != null && (bool)ViewBag.Updated)
     {
-        if ((bool)ViewBag.Updated)
-        {
-            <div class="success flash">@Messages.UpdatedSuccessfully</div>
-        }
+        <div class="success flash">@Messages.UpdatedSuccessfully</div>
     }
     <div class="panel panel-default">
         <div class="panel-heading">

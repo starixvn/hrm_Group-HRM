@@ -1,13 +1,12 @@
 ﻿import 'jquery-ui-bundle/jquery-ui';
 import React, { useEffect, useState } from 'react';
-import * as Yup from 'yup';
+import { object, string } from 'yup'
 import axios from 'axios';
 import toastr from 'toastr';
-import { Formik } from 'formik';
-
-import RenderForm from '../../RenderForm';
 
 import { axiosError, resolveClientUrl, toastOptions } from '../../../../shared/common.functions';
+import { Formik } from 'formik';
+import RenderForm from '../../RenderForm';
 
 const AppContainer = () => {
     const [extensionDetail, setExtensionDetail] = useState(null);
@@ -17,11 +16,11 @@ const AppContainer = () => {
     const [selectEmployee, setSelectEmployee] = useState(null);
     const [selectGroup, setSelectGroup] = useState('');
 
-    const editExtensionSchema = Yup.object({
-        ExtensionNo: Yup.string()
+    const editExtensionSchema = object({
+        ExtensionNo: string()
             .trim()
             .required('Extension No field is required!'),
-        Employee: isInternal && extensionDetail && extensionDetail.empId === 0 ? Yup.string()
+        Employee: isInternal && extensionDetail && extensionDetail.empId === 0 ? string()
             .trim()
             .required('Employee field is required!') : false,
     });
@@ -144,12 +143,35 @@ const AppContainer = () => {
         return null;
     };
     const empId = selectEmployee && selectEmployee.id || extensionDetail.empId;
+    const extensionNo = extensionDetail.extensionNo || '';
+
+    return (
+        <CustomFormik
+            selectEmployee={selectEmployee}            
+            extensionDetail={extensionDetail}          
+            selectGroup={selectGroup}                  
+            employees={employees}                      
+            isInternal={isInternal}                    
+            selectExtension={selectExtension}          
+            handleSubmit={handleSubmit}                
+            handleChangeInternal={handleChangeInternal} 
+            handleSelectEmployee={handleSelectEmployee}
+            setSelectGroup={setSelectGroup}            
+            getEmployees={getEmployees}    
+            editExtensionSchema={editExtensionSchema}
+            empId={empId}
+            extensionNo={extensionNo}       
+        />
+    );
+};
+
+const CustomFormik = ({ selectEmployee, extensionDetail, selectGroup, employees, isInternal, 
+    selectExtension, handleSubmit, handleChangeInternal, handleSelectEmployee, setSelectGroup, getEmployees,
+    editExtensionSchema, empId, extensionNo }) => {
     const emPloyee = selectEmployee && selectEmployee.value || '';
     const fullName = selectEmployee && selectEmployee.fullName || extensionDetail.fullName || '';
     const teamId = selectGroup || extensionDetail.teamId;
     const nickName = selectEmployee && selectEmployee.nickName || extensionDetail.nickName || '';
-    const extensionNo = extensionDetail.extensionNo || '';
-
     return (
         <Formik
             validateOnBlur={false}
@@ -183,6 +205,7 @@ const AppContainer = () => {
             )}
         </Formik>
     );
-};
+}
+
 
 export default AppContainer;

@@ -6,7 +6,7 @@
 @{
     ViewBag.Title = Labels.EmployeeWorkFromHome;
     var today = DateTimeOffset.Now.DateTime.ToClientTimeZone().Date;
-    var maxDate = new DateTime(today.Year + 2, 1, 1).AddDays(-1);
+    var maxDate = new DateTimeOffset(today.Year + 2, 1, 1, 0, 0, 0, TimeSpan.Zero).AddDays(-1);
 }
 @section css{
     <link href="~/dist/styles/employee.workfromhome.css" rel="stylesheet" asp-append-version="true" />
@@ -29,7 +29,7 @@
                     @Html.LabelFor(model => model.FromDateFilter, Labels.FromDate, new { @class = "control-label" })
                 </div>
                 <div class="calendar-form">
-                    @Html.TextBox(Html.NameFor(model => model.FromDateFilter).ToString(),
+                    @Html.TextBox(Html.NameFor(model => model.FromDateFilter),
                         Model.FromDateFilter.ToDateMonthYearFormatedDate(),
                         new
                              {
@@ -45,7 +45,7 @@
                     @Html.LabelFor(model => model.ToDateFilter, Labels.ToDate, new { @class = "control-label" })
                 </div>
                 <div class="calendar-form">
-                    @Html.TextBox(Html.NameFor(model => model.ToDateFilter).ToString(),
+                    @Html.TextBox(Html.NameFor(model => model.ToDateFilter),
                         Model.ToDateFilter.ToDateMonthYearFormatedDate(),
                         new
                              {

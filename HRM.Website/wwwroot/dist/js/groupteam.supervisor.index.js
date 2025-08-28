@@ -113091,9 +113091,9 @@ class Supervisor extends react__WEBPACK_IMPORTED_MODULE_1__["Component"] {
               id: item.empId,
               nickname: item.nickName,
               fullName: item.fullName,
-              teamCode: item.teamCode !== null ? item.teamCode : "",
+              teamCode: item.teamCode !== null ? item.teamCode : '',
               value: `${item.nickName} (${item.company})`,
-              companyName: item.company !== null ? item.company : ""
+              companyName: item.company !== null ? item.company : ''
             };
           });
           this.setState({

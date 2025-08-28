@@ -71,14 +71,9 @@
                 <td>@(index++)</td>
                 <td><a href="@Url.Action("details", "changeshift", new { id = request.RequestId })">@request.RequestId</a></td>
                     <td>
-                        @if (request.TypeId == (byte)ChangeShiftType.ChangeShift)
-                        {
-                            @Labels.ChangeShift
-                        }
-                        else
-                        {
-                            @Labels.MoveOffDayToAnotherWeek
-                        }
+                        @(request.TypeId == (byte)ChangeShiftType.ChangeShift
+                            ? Labels.ChangeShift
+                            : Labels.MoveOffDayToAnotherWeek)
                     </td>
                 <td>@request.FromDate.ToDateMonthYearFormatedDate()</td>
                 <td>@request.ToDate.ToDateMonthYearFormatedDate()</td>
@@ -130,41 +125,66 @@
 @{
     void RenderStatus(ChangeShiftRequest request) 
     {
-        var verifier = request.Verifier != null ? request.Verifier.Nickname : string.Empty;
-        var approver = request.ApprovedBy != null ? request.ApprovedBy.Nickname : string.Empty;
-        var processor = request.HR != null ? request.HR.Nickname : string.Empty;
         switch (request.Status.Id)
         {
             case (byte)CurrentRequestStatus.Pending:
-                <a requestid="@request.RequestId" class="menu-actions" href="javascript:;">
-                    @request.Status.ToString()
-                    <span class="caret"></span>
-                </a>
+                RenderPendingStatus(request);
                 break;
             case (byte)CurrentRequestStatus.Verified:
             case (byte)CurrentRequestStatus.NotVerified:
-                <a requestid="@request.RequestId" href="javascript:;" class="tooltip-tipsy"
-                   title="@request.Status.Name by @verifier (@request.VerifiedDate.ToShortFormatedDate())">
-                    @request.Status.ToString()
-                </a>
+                RenderVerifiedStatus(request);
                 break;
             case (byte)CurrentRequestStatus.Approved:
             case (byte)CurrentRequestStatus.Rejected:
-                <a requestid="@request.RequestId" href="javascript:;" class="tooltip-tipsy"
-                   title="@request.Status.Name by @approver (@request.ApprovedDate.ToShortFormatedDate())">
-                    @request.Status.ToString()
-                </a>
+                RenderApprovedStatus(request);
                 break;
             case (byte)CurrentRequestStatus.Processed:
             case (byte)CurrentRequestStatus.Void:
-                <a requestid="@request.RequestId" href="javascript:;" class="tooltip-tipsy"
-                   title="@request.Status.Name by @processor (@request.ProcessedDate.ToShortFormatedDate())">
-                    @request.Status.ToString()
-                </a>
+                RenderProcessedStatus(request);
                 break;
             default:
-                <a href="javascript:;">@request.Status.ToString()</a>
+                RenderDefaultStatus(request);
                 break;
         }
+    }
+
+    void RenderPendingStatus(ChangeShiftRequest request)
+    {
+        <a requestid="@request.RequestId" class="menu-actions" href="javascript:;">
+            @request.Status.ToString()
+            <span class="caret"></span>
+        </a>
+    }
+
+    void RenderVerifiedStatus(ChangeShiftRequest request)
+    {
+        var verifier = request.Verifier?.Nickname ?? string.Empty;
+        <a requestid="@request.RequestId" href="javascript:;" class="tooltip-tipsy"
+           title="@request.Status.Name by @verifier (@request.VerifiedDate.ToShortFormatedDate())">
+            @request.Status.ToString()
+        </a>
+    }
+
+    void RenderApprovedStatus(ChangeShiftRequest request)
+    {
+        var approver = request.ApprovedBy?.Nickname ?? string.Empty;
+        <a requestid="@request.RequestId" href="javascript:;" class="tooltip-tipsy"
+           title="@request.Status.Name by @approver (@request.ApprovedDate.ToShortFormatedDate())">
+            @request.Status.ToString()
+        </a>
+    }
+
+    void RenderProcessedStatus(ChangeShiftRequest request)
+    {
+        var processor = request.HR?.Nickname ?? string.Empty;
+        <a requestid="@request.RequestId" href="javascript:;" class="tooltip-tipsy"
+           title="@request.Status.Name by @processor (@request.ProcessedDate.ToShortFormatedDate())">
+            @request.Status.ToString()
+        </a>
+    }
+
+    void RenderDefaultStatus(ChangeShiftRequest request)
+    {
+        <a href="javascript:;">@request.Status.ToString()</a>
     }
 }

@@ -7,7 +7,7 @@ jest.mock('toastr');
 jest.mock('../../../shared/common.functions', () => ({
     blockUI: jest.fn(),
     unblockUI: jest.fn(),
-    resolveClientUrl: jest.fn((url) => `/api/${url}`),
+    resolveClientUrl: jest.fn(url => `/api/${url}`),
     toastOptions: jest.fn(() => ({ timeout: 3000 })),
 }));
 

@@ -7,6 +7,7 @@
 @model HospitalizationLeaveBalanceViewModel
 @{
     ViewBag.Title = Labels.SickLeaveBalance;
+    const double epsilon = 0.0001;
 }
 @section Breadcrumb {
     <a class="step">@Labels.CompanySpace</a> <a class="step">@ViewBag.Title</a>
@@ -142,79 +143,79 @@
                     <td class="align-left">@employee.FullName</td>
                     <td>@employee.Nickname</td>
                     <td>
-                        @if (employee.Balance != 0)
+                        @if (Math.Abs(employee.Balance) > epsilon)
                         {
                             <span class="@(employee.Balance < 0 ? "red" : string.Empty)">@employee.Balance.ToString("0.0")</span>
                         }
                     </td>
                     <td>
-                        @if (employee.Jan != 0)
+                        @if (Math.Abs(employee.Jan) > epsilon)
                         {
                             <span class="@(employee.Jan < 0 ? "red" : string.Empty)">@employee.Jan.ToString("0.0")</span>
                         }
                     </td>
                     <td>
-                        @if (employee.Feb != 0)
+                        @if (Math.Abs(employee.Feb) > epsilon)
                         {
                             <span class="@(employee.Feb < 0 ? "red" : string.Empty)">@employee.Feb.ToString("0.0")</span>
                         }
                     </td>
                     <td>
-                        @if (employee.Mar != 0)
+                        @if (Math.Abs(employee.Mar) > epsilon)
                         {
                             <span class="@(employee.Mar < 0 ? "red" : string.Empty)">@employee.Mar.ToString("0.0")</span>
                         }
                     </td>
                     <td>
-                        @if (employee.Apr != 0)
+                        @if (Math.Abs(employee.Apr) > epsilon)
                         {
                             <span class="@(employee.Apr < 0 ? "red" : string.Empty)">@employee.Apr.ToString("0.0")</span>
                         }
                     </td>
                     <td>
-                        @if (employee.May != 0)
+                        @if (Math.Abs(employee.May) > epsilon)
                         {
                             <span class="@(employee.May < 0 ? "red" : string.Empty)">@employee.May.ToString("0.0")</span>
                         }
                     </td>
                     <td>
-                        @if (employee.Jun != 0)
+                        @if (Math.Abs(employee.Jun) > epsilon)
                         {
                             <span class="@(employee.Jun < 0 ? "red" : string.Empty)">@employee.Jun.ToString("0.0")</span>
                         }
                     </td>
                     <td>
-                        @if (employee.Jul != 0)
+                        @if (Math.Abs(employee.Jul) > epsilon)
                         {
                             <span class="@(employee.Jul < 0 ? "red" : string.Empty)">@employee.Jul.ToString("0.0")</span>
                         }
                     </td>
                     <td>
-                        @if (employee.Aug != 0)
+                        @if (Math.Abs(employee.Aug) > epsilon)
                         {
                             <span class="@(employee.Aug < 0 ? "red" : string.Empty)">@employee.Aug.ToString("0.0")</span>
                         }
                     </td>
                     <td>
-                        @if (employee.Sep != 0)
+                        @if (Math.Abs(employee.Sep) > epsilon)
                         {
                             <span class="@(employee.Sep < 0 ? "red" : string.Empty)">@employee.Sep.ToString("0.0")</span>
                         }
                     </td>
                     <td>
-                        @if (employee.Oct != 0)
+                        @if (Math.Abs(employee.Oct) > epsilon)
                         {
                             <span class="@(employee.Oct < 0 ? "red" : string.Empty)">@employee.Oct.ToString("0.0")</span>
                         }
                     </td>
                     <td>
-                        @if (employee.Nov != 0)
+                        @if (Math.Abs(employee.Nov) > epsilon)
                         {
                             <span class="@(employee.Nov < 0 ? "red" : string.Empty)">@employee.Nov.ToString("0.0")</span>
                         }
                     </td>
                     <td>
-                        @if (employee.Dec != 0)
+                        @if (Math.Abs(employee.Dec) > epsilon)
                         {
                             <span class="@(employee.Dec < 0 ? "red" : string.Empty)">@employee.Dec.ToString("0.0")</span>
                         }

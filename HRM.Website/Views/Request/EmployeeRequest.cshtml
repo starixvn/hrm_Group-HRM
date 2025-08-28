@@ -1,4 +1,4 @@
-﻿@using HRM.Core
+@using HRM.Core
 @using HRM.Core.Enums
 @using HRM.Resources
 @using HRM.Services.Implement.Request
@@ -54,6 +54,9 @@
                     </th>
                 </tr>
                 break;
+            default:
+                // do nothing
+                break;
         }
             <tr>
                 @if (Model.ViewType is RequestViewType.PersonalSpace or RequestViewType.HRSpace)
@@ -67,10 +70,10 @@
                 }
                 <th>@Labels.SymbolCount</th>
                 <th class="col-sorter">
-	                <div class="cell-control-wrapper">
-		                @Labels.BusinessUnit
-		                <div class="fa fa-sort cell-right-div"></div>
-	                </div>
+                    <div class="cell-control-wrapper">
+                        @Labels.BusinessUnit
+                        <div class="fa fa-sort cell-right-div"></div>
+                    </div>
                 </th>
                 <th class="col-sorter">
                     <div class="cell-control-wrapper">
@@ -137,8 +140,8 @@
             <tbody id="employee-request-body" class="@hasCheckBoxColumn">
                 @foreach (var request in Model.Requests)
                 {
-	                var requestCompanyId = request.CompanyId;
-	                var isInNexCompany = nexCompanyIds != null && nexCompanyIds.Contains(requestCompanyId);
+                    var requestCompanyId = request.CompanyId;
+                    var isInNexCompany = nexCompanyIds != null && nexCompanyIds.Contains(requestCompanyId);
 
                     <tr id="row@(request.Id)">
                         @switch (Model.ViewType)
@@ -197,6 +200,9 @@
                                 </td>
                                 break;
                             }
+                            default:
+                                // do nothing
+                                break;
                         }
                         <td>@(index++)</td>
                         <td class="align-left">@request.Requester.UnitCode</td>
@@ -208,7 +214,7 @@
                         <td>
                             @switch (request.RequestType.Id)
                             {
-	                            case (byte)RequestType.Leave:
+                                case (byte)RequestType.Leave:
                                     @if (isInNexCompany)
                                     {
                                         @request.LeaveType.Name
@@ -217,21 +223,20 @@
                                     {
                                         <a href="@Url.Action("Detail", "Leave", new { id = request.Id })">@request.LeaveType.Name</a>
                                     }
-		                            break;
-	                            case (byte)RequestType.ChangeShift:
-		                            @if (isInNexCompany)
-		                            {
+                                    break;
+                                case (byte)RequestType.ChangeShift:
+                                    @if (isInNexCompany)
+                                    {
                                         @request.RequestType.Name
-		                            }
-		                            else
-		                            {
+                                    }
+                                    else
+                                    {
                                         <a href="@Url.Action("Details", "ChangeShift", new { id = request.Id })">@request.RequestType.Name</a>
                                     }
-		                            break;
-	                            default:
-		                            @request.RequestType.Name
-		                            break;
-		                            ;
+                                    break;
+                                default:
+                                    @request.RequestType.Name
+                                    break;
                             }
                         </td>
                         <td class="align-left">
@@ -244,14 +249,14 @@
                             <span class="tooltip-tipsy" title="@request.VerifierFullName">@request.VerifierNickName</span>
                         </td>
                         <td>
-	                        @if (isInNexCompany)
-	                        {
+                            @if (isInNexCompany)
+                            {
                                 <span class="tooltip-tipsy" title="@request.ProcessedByFullName">@request.ProcessedByNickName</span>
-	                        }
-	                        else
-	                        {
+                            }
+                            else
+                            {
                                 <span class="tooltip-tipsy" title="@request.ApproverFullName">@request.ApproverNickName</span>
-	                        }
+                            }
                         </td>
                         <td>
                             @if (!string.IsNullOrWhiteSpace(request.Remark))
@@ -280,17 +285,17 @@
                         }
                         else
                         {
-	                        <td data-datetime="@request.CreatedDate">@request.CreatedDate.ToDetailFormatedDate()</td>
+                            <td data-datetime="@request.CreatedDate">@request.CreatedDate.ToDetailFormatedDate()</td>
                         }
                         <td class="status">@await Html.PartialAsync("_RenderStatus", (Model, request))</td>
                         <td>
                             @if (isInNexCompany)
                             {
-	                            <a class="viewhistory" href="javascript:;" id="/request/viewhistory/@request.CustomId">@Labels.View</a>
+                                <a class="viewhistory" href="javascript:;" id="/request/viewhistory/@request.CustomId">@Labels.View</a>
                             }
                             else
                             {
-	                            @await Html.PartialAsync("_RenderHistoryLink", request)
+                                @await Html.PartialAsync("_RenderHistoryLink", request)
                             }
                         </td>
                         <td class="td-warning">

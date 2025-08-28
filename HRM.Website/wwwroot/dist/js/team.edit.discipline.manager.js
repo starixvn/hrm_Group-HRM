@@ -113072,7 +113072,7 @@ class DisciplineManager extends react__WEBPACK_IMPORTED_MODULE_1__["Component"] 
       if (query.trim().length > 1) {
         const excludeIds = this.state.managers.map(item => item.ownerId).join(',');
         let apiCall;
-        let isGroupTeam = this.props.pageType === PageType.GroupTeam;
+        const isGroupTeam = this.props.pageType === PageType.GroupTeam;
         if (isGroupTeam) {
           apiCall = Object(_supervisor_common_functions__WEBPACK_IMPORTED_MODULE_6__["getGroupTeamEmployees"])(query);
         } else {
@@ -113080,7 +113080,7 @@ class DisciplineManager extends react__WEBPACK_IMPORTED_MODULE_1__["Component"] 
         }
         apiCall.then(response => {
           const employeeOptions = response.data.map(item => {
-            var id = isGroupTeam ? item.empId : item.id;
+            const id = isGroupTeam ? item.empId : item.id;
             return {
               key: id,
               id: id,

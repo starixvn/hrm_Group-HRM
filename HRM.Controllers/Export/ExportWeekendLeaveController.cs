@@ -26,7 +26,7 @@ public class ExportWeekendLeaveController(
             IsLocal = model.IsLocal,
             EmployeeId = model.EmployeeId,
             MinTotalLeave = model.MinTotalLeave,
-            SupervisorId = session.UserId
+            SupervisorId = EmployeeSession.EmpId
         };
 
         var weekendLeaves = await reportService.GetWeekendLeaveSummaryAsync(criteria);

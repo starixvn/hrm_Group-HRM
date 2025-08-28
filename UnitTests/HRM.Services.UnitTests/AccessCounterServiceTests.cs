@@ -2,6 +2,7 @@
 using GO.UserControl.Client.Core.Session;
 using HRM.Core;
 using HRM.Core.Constants;
+using HRM.Core.Models;
 using HRM.Core.Services;
 using HRM.Criteria.AccessCounter;
 using HRM.Services.Implement;
@@ -15,18 +16,24 @@ public class AccessCounterServiceTests
     private IUserControlSession session;
     private IBaseService baseService;
 
+    public AccessCounterServiceTests()
+    {
+        FakeSession();
+        GetAccessCounterService();
+    }
+
     [Fact]
     public async Task UpdateCounterAsync_ShouldCallBaseServiceWithCorrectCommand()
     {
         // Arrange
-        var service = GetAccessCounterService();
+        var service = new AccessCounterService(session, baseService);
         const string functionName = "TestFunction";
 
         // Act
         await service.UpdateCounterAsync(functionName);
 
         // Assert
-        await baseService!.Received(1).ExecuteNonQueryAsync(Arg.Is<UpdateAccessCounterCommand>(command =>
+        await baseService.Received(1).ExecuteNonQueryAsync(Arg.Is<UpdateAccessCounterCommand>(command =>
             command.EmpId == session.UserId &&
             command.FunctionName == functionName));
     }
@@ -36,22 +43,20 @@ public class AccessCounterServiceTests
     private static IUserControlSession FakeSession()
     {
         var session = Substitute.For<IUserControlSession>();
+        session.Get<EmployeeSession>(Arg.Any<string>()).Returns(new EmployeeSession { EmpId = 1 });
         session.UserId.Returns(1);
         session.Get<float>(SessionKey.CurrentTimeZone).Returns(7);
+        session.UserId.Returns(1);
 
         return session;
     }
 
-    private AccessCounterService GetAccessCounterService()
+    private void GetAccessCounterService()
     {
         session = FakeSession();
         baseService = Substitute.For<IBaseService>();
 
         DateTimeExtensions.Configure(session);
-
-        var service = new AccessCounterService(session, baseService);
-
-        return service;
     }
 
     #endregion Helpers

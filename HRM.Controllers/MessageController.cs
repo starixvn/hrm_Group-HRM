@@ -31,7 +31,7 @@ public class MessageController(
             ToDate = currentDateTime,
             FromDate = currentDateTime.AddMonths(-3),
             IsDisabled = 0,
-            CreatedBy = session.UserId,
+            CreatedBy = EmployeeSession.EmpId,
             CompanyId = CurrentCompanyId
         };
 
@@ -47,7 +47,7 @@ public class MessageController(
     {
         if (param != null)
         {
-            param.CreatedBy = session.UserId;
+            param.CreatedBy = EmployeeSession.EmpId;
             param.CompanyId = CurrentCompanyId;
         }
 
@@ -86,7 +86,7 @@ public class MessageController(
 
         if (model != null && ModelState.IsValid)
         {
-            commandResult = await messageService.Create(session.UserId, model, CurrentCompanyId);
+            commandResult = await messageService.Create(EmployeeSession.EmpId, model, CurrentCompanyId);
             commandResult.CompanyId = CurrentCompanyId;
             if (model.HasSendEmail && commandResult.IsSuccessful)
             {
@@ -126,7 +126,7 @@ public class MessageController(
 
         if (model != null && ModelState.IsValid)
         {
-            commandResult = await messageService.Edit(session.UserId, model);
+            commandResult = await messageService.Edit(EmployeeSession.EmpId, model);
             if (model.HasSendEmail && commandResult.IsSuccessful)
             {
                 await messageService.SendMailToStaff(model);
@@ -140,7 +140,7 @@ public class MessageController(
     [HrmPermission(Policy.Host, FunctionKey.Message)]
     public async Task<JsonResult> Delete(int id)
     {
-        var commandResult = await messageService.Delete(session.UserId, id);
+        var commandResult = await messageService.Delete(EmployeeSession.EmpId, id);
 
         return new JsonResult(commandResult, new JsonSerializerSettings { ContractResolver = new DefaultContractResolver() });
     }
@@ -153,7 +153,7 @@ public class MessageController(
             FromDate = currentDateTime,
             ToDate = currentDateTime,
             IsDisabled = 0,
-            EmployeeId = session.UserId
+            EmployeeId = EmployeeSession.EmpId
         };
         ViewBag.Messages = await messageService.GetMessageByEmployee(param);
 
@@ -165,7 +165,7 @@ public class MessageController(
     {
         if (param != null)
         {
-            param.EmployeeId = session.UserId;
+            param.EmployeeId = EmployeeSession.EmpId;
         }
 
         ViewBag.Messages = await messageService.GetMessageByEmployee(param);
@@ -176,7 +176,7 @@ public class MessageController(
     [HttpPost]
     public async Task<JsonResult> DeleteMessageByEmployee(int id)
     {
-        var commandResult = await messageService.DeleteMessageByEmployee(session.UserId, id);
+        var commandResult = await messageService.DeleteMessageByEmployee(EmployeeSession.EmpId, id);
 
         return Json(commandResult);
     }
@@ -196,7 +196,7 @@ public class MessageController(
 
     public async Task<JsonResult> EditMessageStatus(int id)
     {
-        var commandResult = await messageService.EditStatus(session.UserId, id);
+        var commandResult = await messageService.EditStatus(EmployeeSession.EmpId, id);
 
         return Json(commandResult);
     }

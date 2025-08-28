@@ -14,7 +14,7 @@ $(document).ready(function () {
                     companyId: $('#CompanyId').val() || null,
                 },
             })
-                .then((res) => {
+                .then(res => {
                     response($.map(res.data, function (item) {
                             return {
                                 label:

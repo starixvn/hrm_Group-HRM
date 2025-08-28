@@ -98109,20 +98109,43 @@ function addMethod(schemaType, name, fn) {
 /*!*********************************************************!*\
   !*** ./sources/js/pages/department/common.functions.js ***!
   \*********************************************************/
-/*! exports provided: validationSchema */
+/*! exports provided: useDepartmentUnits, validationSchema */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "useDepartmentUnits", function() { return useDepartmentUnits; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "validationSchema", function() { return validationSchema; });
 /* harmony import */ var yup__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! yup */ "./node_modules/yup/index.esm.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var _shared_common_functions__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../shared/common.functions */ "./sources/js/shared/common.functions.js");
 
-const validationSchema = yup__WEBPACK_IMPORTED_MODULE_0__["object"]({
-  groupDeptId: yup__WEBPACK_IMPORTED_MODULE_0__["number"]().required('Department ID field is required!'),
-  unit: yup__WEBPACK_IMPORTED_MODULE_0__["string"]().required('Business Unit field is required!'),
-  code: yup__WEBPACK_IMPORTED_MODULE_0__["string"]().trim().max(50, 'Department Code field must not over 50 characters long!').required('Department Code field is required!'),
-  name: yup__WEBPACK_IMPORTED_MODULE_0__["string"]().trim().max(200, 'Department Name field must not over 200 characters long!').required('Department Name field is required!'),
-  accountableArea: yup__WEBPACK_IMPORTED_MODULE_0__["string"]().max(100, 'Accountable Area field must not over 100 characters long!')
+
+
+
+const useDepartmentUnits = () => {
+  const [units, setUnits] = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])([]);
+  Object(react__WEBPACK_IMPORTED_MODULE_1__["useEffect"])(() => {
+    Object(axios__WEBPACK_IMPORTED_MODULE_2__["default"])({
+      url: Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_3__["resolveClientUrl"])(`Department/GetUnits`),
+      method: "GET",
+      headers: {
+        "X-Requested-With": "XMLHttpRequest"
+      }
+    }).then(response => {
+      setUnits(response.data);
+    }).catch(_shared_common_functions__WEBPACK_IMPORTED_MODULE_3__["axiosError"]);
+  }, []);
+  return units;
+};
+const validationSchema = Object(yup__WEBPACK_IMPORTED_MODULE_0__["object"])({
+  groupDeptId: Object(yup__WEBPACK_IMPORTED_MODULE_0__["number"])().required('Department ID field is required!'),
+  unit: Object(yup__WEBPACK_IMPORTED_MODULE_0__["string"])().required('Business Unit field is required!'),
+  code: Object(yup__WEBPACK_IMPORTED_MODULE_0__["string"])().trim().max(50, 'Department Code field must not over 50 characters long!').required('Department Code field is required!'),
+  name: Object(yup__WEBPACK_IMPORTED_MODULE_0__["string"])().trim().max(200, 'Department Name field must not over 200 characters long!').required('Department Name field is required!'),
+  accountableArea: Object(yup__WEBPACK_IMPORTED_MODULE_0__["string"])().max(100, 'Accountable Area field must not over 100 characters long!')
 });
 
 /***/ }),
@@ -98160,16 +98183,16 @@ function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t =
 const AppContainer = () => {
   const [prepareData, setPrepareData] = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])(null);
   const [formKey, setFormKey] = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])(0);
+  const units = Object(_common_functions__WEBPACK_IMPORTED_MODULE_7__["useDepartmentUnits"])();
   const [initialValues, setInitialValues] = Object(react__WEBPACK_IMPORTED_MODULE_1__["useState"])({
     departmentId: 0,
-    code: "",
-    name: "",
+    code: '',
+    name: '',
     isActive: true,
-    unit: "",
-    accountableArea: "",
-    picEmpId: "",
-    groupDeptId: 0,
-    units: []
+    unit: '',
+    accountableArea: '',
+    picEmpId: '',
+    groupDeptId: 0
   });
   const handleGoBack = () => {
     history.back();
@@ -98198,19 +98221,6 @@ const AppContainer = () => {
   }, []);
   Object(react__WEBPACK_IMPORTED_MODULE_1__["useEffect"])(() => {
     Object(axios__WEBPACK_IMPORTED_MODULE_2__["default"])({
-      url: Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_6__["resolveClientUrl"])(`Department/GetUnits`),
-      method: "GET",
-      headers: {
-        "X-Requested-With": "XMLHttpRequest"
-      }
-    }).then(response => {
-      setInitialValues(prev => _objectSpread(_objectSpread({}, prev), {}, {
-        units: response.data
-      }));
-    }).catch(_shared_common_functions__WEBPACK_IMPORTED_MODULE_6__["axiosError"]);
-  }, []);
-  Object(react__WEBPACK_IMPORTED_MODULE_1__["useEffect"])(() => {
-    Object(axios__WEBPACK_IMPORTED_MODULE_2__["default"])({
       url: Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_6__["resolveClientUrl"])(`Department/GetPrepareDataForUnit`),
       method: "GET",
       headers: {
@@ -98224,8 +98234,7 @@ const AppContainer = () => {
     setSubmitting
   }) => {
     setSubmitting(true);
-    axios__WEBPACK_IMPORTED_MODULE_2__["default"].post(Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_6__["resolveClientUrl"])("Department/Edit"), {
-      departmentId: values.departmentId,
+    const submitData = {
       code: values.code.trim(),
       name: values.name.trim(),
       isActive: values.isActive,
@@ -98233,7 +98242,13 @@ const AppContainer = () => {
       groupDeptId: values.groupDeptId,
       accountableArea: values.accountableArea,
       picEmpId: values.picEmpId
-    }, {
+    };
+    if (values.departmentId) {
+      submitData.departmentId = values.departmentId;
+    }
+    const endpoint = values.departmentId ? "Department/Edit" : "Department/Create";
+    const successMessage = values.departmentId ? "Updated successfully!" : "Created successfully!";
+    axios__WEBPACK_IMPORTED_MODULE_2__["default"].post(Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_6__["resolveClientUrl"])(endpoint), submitData, {
       headers: {
         "X-Requested-With": "XMLHttpRequest"
       }
@@ -98242,12 +98257,12 @@ const AppContainer = () => {
         data
       } = response;
       if (data.isSuccessful) {
-        toastr__WEBPACK_IMPORTED_MODULE_3___default.a.success("Updated successfully!", "", Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_6__["toastOptions"])());
+        toastr__WEBPACK_IMPORTED_MODULE_3___default.a.success(successMessage, '', Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_6__["toastOptions"])());
         setTimeout(function () {
           document.location = Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_6__["resolveClientUrl"])("Department/Index");
         }, 3000);
       } else {
-        toastr__WEBPACK_IMPORTED_MODULE_3___default.a.error(data.message, "", Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_6__["toastOptions"])());
+        toastr__WEBPACK_IMPORTED_MODULE_3___default.a.error(data.message, '', Object(_shared_common_functions__WEBPACK_IMPORTED_MODULE_6__["toastOptions"])());
         setSubmitting(false);
       }
     }).catch(_shared_common_functions__WEBPACK_IMPORTED_MODULE_6__["axiosError"]);
@@ -98292,10 +98307,10 @@ const AppContainer = () => {
       className: "form-control"
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("option", {
       value: ""
-    }), initialValues.units ? initialValues.units.map(unit => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("option", {
+    }), units ? units.map(unit => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("option", {
       key: unit.id,
       value: unit.id
-    }, unit.code, "-", unit.accountableArea)) : ""))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
+    }, unit.code, "-", unit.accountableArea)) : ''))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
       className: "form-group"
     }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default.a.createElement("div", {
       className: "label-form"

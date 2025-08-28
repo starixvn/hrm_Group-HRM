@@ -561,7 +561,7 @@ public class RequestService(
                 ToDate = model.ToDate.ToEndOfDay(),
                 Status = status,
                 RequestType = requestType,
-                isFilterByEffectedDate = model.IsFilterByAffectedDate,
+                IsFilterByEffectedDate = model.IsFilterByAffectedDate,
                 ActorId = model.CurrentUserId,
                 LeaveTypeId = leaveType,
                 Role = AssistantLeader,

@@ -1,8 +1,8 @@
-﻿@using GO.UserControl.Client.Core.Enumerables
+@using GO.UserControl.Client.Core.Enumerables
 @using HRM.Resources
 @using Microsoft.AspNetCore.Mvc.TagHelpers
 @{
-	ViewBag.Title = Labels.FunctionManagement;
+    ViewBag.Title = Labels.FunctionManagement;
     const byte read = (byte)Policy.Read;
     const byte host = (byte)Policy.Host;
 }
@@ -10,14 +10,14 @@
     <link href="~/dist/styles/function.index.css" rel="stylesheet" asp-append-version="true" />
 }
 @section js{
-	<script type="text/javascript">
+    <script type="text/javascript">
         window.read = "@read",
             window.host = "@host";
     </script>
     <script src="~/dist/js/function.index.js" asp-append-version="true"></script>
 }
 @section Breadcrumb {
-	<a class="step">@ViewBag.Title</a>
+    <a class="step">@ViewBag.Title</a>
 }
 <h2 class="page-title">@ViewBag.Title</h2>
 <div id="function"></div>

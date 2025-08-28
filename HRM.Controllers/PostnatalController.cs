@@ -60,7 +60,7 @@ public class PostnatalController(
                 EmpId = model.EmployeeId,
                 FromDate = model.FromDate,
                 ToDate = model.ToDate,
-                CreatedBy = session.UserId,
+                CreatedBy = EmployeeSession.EmpId,
                 Remark = model.Remark,
                 WorkingHours = model.WorkingHours ?? 0
             };
@@ -105,7 +105,7 @@ public class PostnatalController(
                 EmpId = model.EmployeeId,
                 FromDate = model.FromDate,
                 ToDate = model.ToDate,
-                ModifiedBy = session.UserId,
+                ModifiedBy = EmployeeSession.EmpId,
                 Remark = model.Remark,
                 WorkingHours = model.WorkingHours ?? 0
             };

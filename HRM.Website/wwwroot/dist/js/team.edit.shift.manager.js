@@ -113242,7 +113242,7 @@ class ShiftManager extends react__WEBPACK_IMPORTED_MODULE_1__["Component"] {
     _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "getEmployees", query => {
       if (query.trim().length > 1) {
         let apiCall;
-        let isGroupTeam = this.props.pageType === PageType.GroupTeam;
+        const isGroupTeam = this.props.pageType === PageType.GroupTeam;
         if (isGroupTeam) {
           apiCall = Object(_supervisor_common_functions__WEBPACK_IMPORTED_MODULE_6__["getGroupTeamEmployees"])(query);
         } else {
@@ -113261,7 +113261,7 @@ class ShiftManager extends react__WEBPACK_IMPORTED_MODULE_1__["Component"] {
         }
         apiCall.then(response => {
           const employeeOptions = response.data.map(item => {
-            var id = isGroupTeam ? item.empId : item.id;
+            const id = isGroupTeam ? item.empId : item.id;
             return {
               key: id,
               id: id,

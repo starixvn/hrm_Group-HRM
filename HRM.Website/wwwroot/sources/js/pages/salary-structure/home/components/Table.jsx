@@ -19,25 +19,41 @@ const Table = ({ data, onDelete }) => {
     }
 
     const getCellValue = (item, key) => {
-        if (!key) return '';
-        let value = item[key];
-        if (value === null || value === undefined) return '';
-        if (typeof value === 'string') return value.trim().toLowerCase();
-        if (typeof value === 'boolean') return value ? 'true' : 'false';
+        if (!key) {
+            return '';
+        }
+        const value = item[key];
+        if (value === null || value === undefined) {
+            return '';
+        }
+        if (typeof value === 'string') {
+            return value.trim().toLowerCase();
+        }
+        if (typeof value === 'boolean') {
+            return value ? 'true' : 'false';
+        }
 
         return value;
     };
 
     const sortedData = React.useMemo(() => {
-        if (!sortConfig.key) return data;
+        if (!sortConfig.key) {
+            return data;
+        }
 
         const sorted = [...data].sort((a, b) => {
-            let valA = getCellValue(a, sortConfig.key);
-            let valB = getCellValue(b, sortConfig.key);
+            const valA = getCellValue(a, sortConfig.key);
+            const valB = getCellValue(b, sortConfig.key);
 
-            if (valA === '' && valB !== '') return 1;
-            if (valB === '' && valA !== '') return -1;
-            if (valA === '' && valB === '') return 0;
+            if (valA === '' && valB !== '') {
+                return 1;
+            }
+            if (valB === '' && valA !== '') {
+                return -1;
+            }
+            if (valA === '' && valB === '') {
+                return 0;
+            }
 
             if (!isNaN(valA) && !isNaN(valB)) {
                 return valA - valB;
@@ -46,13 +62,17 @@ const Table = ({ data, onDelete }) => {
             return valA.localeCompare(valB, 'vi', { sensitivity: 'base' });
         });
 
-        if (sortConfig.direction === 'desc') sorted.reverse();
+        if (sortConfig.direction === 'desc') {
+            sorted.reverse();
+        }
 
         return sorted;
     }, [data, sortConfig]);
 
-    const onSort = (key) => {
-        if (!key) return;
+    const onSort = key => {
+        if (!key) {
+            return;
+        }
 
         let direction = 'asc';
         if (sortConfig.key === key && sortConfig.direction === 'asc') {
@@ -62,8 +82,10 @@ const Table = ({ data, onDelete }) => {
         setSortConfig({ key, direction });
     };
 
-    const renderSortIcon = (key) => {
-        if (sortConfig.key !== key) return 'fa fa-sort';
+    const renderSortIcon = key => {
+        if (sortConfig.key !== key) {
+            return 'fa fa-sort';
+        }
 
         return sortConfig.direction === 'asc'
             ? 'fa fa-sort-asc'
@@ -74,11 +96,11 @@ const Table = ({ data, onDelete }) => {
         <table className='table table-custom'>
             <thead>
                 <tr>
-                    {columns.map(({ label, key, sortable }) => (
+                    {columns.map(({ label, key, sortable }) => 
                         <th
                             key={label}
                             className={sortable ? 'col-sorter' : ''}
-                            onClick={() => onSort(key)}
+                            onClick={() => {onSort(key)}}
                             style={{ cursor: sortable ? 'pointer' : 'default' }}
                         >
                             <div className='cell-control-wrapper'>
@@ -86,7 +108,7 @@ const Table = ({ data, onDelete }) => {
                                 {sortable && <div className={renderSortIcon(key)}></div>}
                             </div>
                         </th>
-                    ))}
+                    )}
                 </tr>
             </thead>
             <tbody>

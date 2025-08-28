@@ -113101,7 +113101,7 @@ class DisciplineManager extends react__WEBPACK_IMPORTED_MODULE_1__["Component"] 
               nickname: item.nickName,
               fullName: item.fullName,
               value: `${item.nickName} (${item.companyName})`,
-              companyName: item.companyName !== null ? item.companyName : ""
+              companyName: item.companyName !== null ? item.companyName : ''
             };
           });
           this.setState({

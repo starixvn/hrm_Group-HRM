@@ -9,8 +9,8 @@ const Filter = () => {
         (_, i) => currentYear - i
     );
 
-    const handleYearChange = (e) => {
-        setSelectedYear(parseInt(e.target.value));
+    const handleYearChange = e => {
+        setSelectedYear(parseInt(e.target.value, 10));
     };
 
     const handleExport = () => {
@@ -32,7 +32,7 @@ const Filter = () => {
                             className="form-control"
                             value={selectedYear}
                             onChange={handleYearChange}>
-                            {years.map((year) => (
+                            {years.map(year =>(
                                 <option key={year} value={year}>
                                     {year}
                                 </option>
@@ -54,3 +54,4 @@ const Filter = () => {
 };
 
 export default Filter;
+
