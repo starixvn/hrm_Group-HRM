@@ -34,7 +34,6 @@
             <Mapping DataField="EmpId" ObjectProperty="Id" />
         </Setting>
         <Setting Key="Support_TimeSheetInput" SpName="Support_TimeSheetInput" DbName="bodb_HRM" Plain="0" />
-        <Setting Key="TimeRecord_Insert" SpName="TimeRecord_Insert" DbName="bodb_HRM" Plain="0" />
         <Setting Key="TimeRecord_InsertCheckInOutTime" SpName="TimeRecord_InsertCheckInOutTime" DbName="bodb_HRM" Plain="0" />
         <Setting Key="TimeRecord_GetPrivilegeCreateCheckInOut" SpName="TimeRecord_GetPrivilegeCreateCheckInOut" DbName="bodb_HRM" Plain="0" />
         <Setting Key="Country_GetAll" SpName="Country_GetAll" DbName="bodb_HRM" Plain="0" />
