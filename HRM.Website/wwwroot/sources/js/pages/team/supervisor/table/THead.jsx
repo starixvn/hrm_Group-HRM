@@ -1,7 +1,7 @@
 ﻿import React, { PureComponent } from 'react';
 
 import { RoleSystem } from '../../../../shared/constants';
-import EmployeeAutocomplete from './EmployeeAutocomplete';
+import EmployeeAutocomplete from '../../../../shared/components/EmployeeAutocomplete';
 
 export default class THead extends PureComponent {
     constructor(props) {

@@ -1,6 +1,6 @@
 ﻿import React, { PureComponent } from 'react';
 
-import EmployeeAutocomplete from '../../supervisor/table/EmployeeAutocomplete';
+import EmployeeAutocomplete from '../../../../shared/components/EmployeeAutocomplete';
 
 export default class THead extends PureComponent {
     constructor(props) {
