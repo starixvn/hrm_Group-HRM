@@ -75,7 +75,6 @@ public class AuthController(
         var loginResult = await authService.LoginAsync(loginParam);
         if (loginResult.IsSuccessfull)
         {
-            var employee = await hrmAuthService.GetByUserIdAsync(loginResult.UserId);
 
             session.UserId = loginResult.UserId;
             session.JwtToken = loginResult.JwtToken;
@@ -84,11 +83,13 @@ public class AuthController(
             session.Functions = await userService.GetFunctionPermissionAsync(session.SiteId, session.UserId);
 
             session.Set(SessionKey.IsShowLeftNavigation, true);
-            session.Set(SessionKey.Employee, employee);
             session.Set(SessionKey.CurrentTimeZone, await GetClientTimeZoneAsync());
             session.Set(SessionKey.CurrentDomain, GetDomainName(HttpContext));
             session.Set(SessionKey.MailSetting, await GetMailSettingAsync());
             session.Set(SessionKey.AnnualLeaveRule, await GetAnnualLeaveRuleAsync());
+
+            var employee = await hrmAuthService.GetByUserIdAsync(loginResult.UserId);
+            session.Set(SessionKey.Employee, employee);
 
             await DoLoginAsync(loginResult.UserId);
         }

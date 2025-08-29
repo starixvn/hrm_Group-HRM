@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using GO.UserControl.Client.Core.Services;
 using GO.UserControl.Client.Core.Session;
 using HRM.Core.Constants;
 using HRM.Core.Enums;
@@ -14,21 +15,31 @@ namespace HRM.Services.Implement;
 
 public class HRMAuthService(
     IUserControlSession session,
+    IUserService userService,
     IBaseService baseService) : IHRMAuthService
 {
     public async Task<EmployeeSession> GetByUserIdAsync(int userId)
     {
         var companyId = session.Get<short?>(SessionKey.CurrentCompanyId);
-        if(companyId == Constants.GroupCompanyId)
-        {
-            companyId = null;
-        }
         var criteria = new GetEmployeeLoginByUserIdCriteria
         {
             UserId = userId,
             CompanyId = companyId
         };
-        return await baseService.GetDataEntityAsync<EmployeeSession>(criteria);
+        var employee = await baseService.GetDataEntityAsync<EmployeeSession>(criteria);
+
+        if (employee == null)
+        {
+            var user = await userService.GetByIdAsync(userId);
+            employee = new EmployeeSession
+            {
+                EmpId = user.UserId,
+                Nickname = user.Nickname,
+                FullName = user.FullName
+            };
+        }
+
+        return employee;
     }
 
     public int Validate(EmployeeSession employee, string password)
