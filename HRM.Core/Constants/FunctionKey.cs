@@ -101,4 +101,6 @@ public static class FunctionKey
     public const string HeadcountReport = "HeadcountReport";
     public const string CompanyManagement = "CompanyManagement";
     public const string JobLevelManagement = "JobLevelManagement";
+
+    public const string ShowSalaryCurrencyInfo = "ShowSalaryCurrencyInfo";
 }

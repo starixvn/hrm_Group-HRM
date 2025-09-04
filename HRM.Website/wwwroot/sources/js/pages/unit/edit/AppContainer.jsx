@@ -48,6 +48,7 @@ const AppContainer = () => {
       type: values.type,
       accountableArea: values.accountableArea,
       picEmpId: parseInt(values.picEmpId, 10) || 0,
+      supporterEmpId: parseInt(values.supporterEmpId, 10) || 0,
       isActive: values.isActive
     };
 
@@ -121,6 +122,22 @@ const AppContainer = () => {
           </div>
           <div className="form-group">
             <div className="label-form">
+              <label className="control-label">BU Support</label>
+            </div>
+            <div className="select-form">
+              <Field name="supporterEmpId" as="select" className="form-control">
+                <option value='' />
+                {employees &&
+                  employees.map(emp =>(
+                    <option key={emp.id} value={emp.id}>
+                      {emp.displayNameWithCompany}
+                    </option>
+                  ))}
+              </Field>
+            </div>
+          </div>
+          <div className="form-group">
+            <div className="label-form">
               <label className="control-label">Is Active</label>
             </div>
             <div className="input-form">
@@ -168,6 +185,7 @@ const CustomFormik = ({unit, validationSchema, handleSubmit, renderForm}) => {
               type: unit.type || '',
               accountableArea: unit.accountableArea || '',
               picEmpId: unit.picEmpId || 0,
+              supporterEmpId: unit.supporterEmpId || 0,
               isActive: unit.isActive || false
             }}
             validationSchema={validationSchema}

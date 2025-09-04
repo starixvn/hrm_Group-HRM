@@ -14,6 +14,8 @@ public class UpdateDepartmentCriteria : CriteriaBase
 
     public int? PICEmpId { get; set; }
 
+    public int? SupporterEmpId { get; set; }
+
     public string AccountableArea { get; set; }
 
     public bool IsActive { get; set; }

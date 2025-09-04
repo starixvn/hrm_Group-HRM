@@ -18,6 +18,9 @@ using HRM.ViewModels.EmployeeGroup;
 using Microsoft.AspNetCore.Mvc;
 using HRM.Models.Group;
 using HRM.Core.Enums;
+using GO.UserControl.Client.Core.Services;
+using HRM.Criteria.Unit;
+using NPOI.Util;
 
 namespace HRM.Controllers.GroupSpace;
 
@@ -27,7 +30,8 @@ public class GroupTeamController(
     IDepartmentService departmentService,
     IBaseService baseService,
     IEmployeeService employeeService,
-    ICompanyService companyService) : BaseController(userControlSession)
+    ICompanyService companyService,
+    IRoleService roleService) : BaseController(userControlSession)
 {
     [HrmPermission(Policy.Read, FunctionKey.GroupTeamManagement)]
     public IActionResult Index()
@@ -46,6 +50,47 @@ public class GroupTeamController(
             teams = teams.Where(x => x.PICEmpId == EmployeeSession.EmpId
                  || x.DepartmentPICEmpId == EmployeeSession.EmpId
                  || x.UnitPICEmpId == EmployeeSession.EmpId).ToList();
+        }
+
+        var userRoles = await roleService.GetByUserIdAsync(session.UserId);
+        var criteria = new GetUnitDepartmentIdsByEmpIdCriteria
+        {
+            EmpId = EmployeeSession.EmpId
+        };
+        var response = await baseService.GetDataAsync<KeyValuePair<string, int>>(criteria);
+        var isHighLevelRole = userRoles.Any(r => r.RoleId == (short)RoleSystem.SystemAdmin
+                || r.RoleId == (short)RoleSystem.GroupHR);
+        if (!isHighLevelRole && userRoles.Any(r => r.RoleId == (short)RoleSystem.BUHead))
+        {
+
+            List<int> unitIds = response
+                .Where(r => r.Key == Constants.UnitKey)
+                .Select(r => r.Value)
+                .ToList();
+
+            teams = teams
+                    .Where(x => unitIds.Contains(x.UnitId))
+                    .ToList();
+            teams = unitIds.Count != 0
+                ? teams.Where(x => unitIds.Contains(x.UnitId))
+                : [];
+        }
+
+        if(!isHighLevelRole && userRoles.Any(r => r.RoleId == (short)RoleSystem.DeptPIC))
+        {
+
+            List<int> departmentIds = response
+                .Where(r => r.Key == Constants.DepartmentKey)
+                .Select(r => r.Value)
+                .ToList();
+
+            teams = teams
+                    .Where(x => departmentIds.Contains(x.DepartmentId))
+                    .ToList();
+
+            teams = departmentIds.Count != 0
+                ? teams.Where(x => departmentIds.Contains(x.DepartmentId))
+                : [];
         }
 
         ViewBag.HasPermission = session.HasPermissionOnFunction(FunctionKey.GroupTeamManagement, Policy.Host);

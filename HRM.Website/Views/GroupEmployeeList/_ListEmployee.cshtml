@@ -7,6 +7,8 @@
     var pagerOption = (PagerOptionModel)ViewBag.PagerOption;
     const byte totalColumn = 24;
     var hasPermissionToEdit = (bool)ViewBag.HasPermissionToEdit;
+    var showSalaryCurrency = (bool)ViewBag.ShowSalaryCurrency;
+    var showResignedDate = (bool)ViewBag.ShowResignedDate;
 }
 @section css {
     <link href="~/dist/styles/group.employee.list.index.css" rel="stylesheet" asp-append-version="true" />
@@ -88,18 +90,30 @@
                     <div class="fa fa-sort cell-right-div"></div>
                 </div>
             </th>
-            <th class="col-sorter col-150">
-                <div class="cell-control-wrapper">
-                    @Labels.Salary
-                    <div class="fa fa-sort cell-right-div"></div>
-                </div>
-            </th>
-            <th class="col-sorter col-150">
-                <div class="cell-control-wrapper">
-                    @Labels.Currency
-                    <div class="fa fa-sort cell-right-div"></div>
-                </div>
-            </th>
+            @if (showResignedDate)
+            {
+                <th class="col-sorter col-150">
+                    <div class="cell-control-wrapper">
+                        @Labels.ResignedDate
+                        <div class="fa fa-sort cell-right-div"></div>
+                    </div>
+                </th>
+            }
+            @if (showSalaryCurrency)
+            {
+                <th class="col-sorter col-150">
+                    <div class="cell-control-wrapper">
+                        @Labels.Salary
+                        <div class="fa fa-sort cell-right-div"></div>
+                    </div>
+                </th>
+                <th class="col-sorter col-150">
+                    <div class="cell-control-wrapper">
+                        @Labels.Currency
+                        <div class="fa fa-sort cell-right-div"></div>
+                    </div>
+                </th>
+            }
             <th class="col-sorter col-150">
                 <div class="cell-control-wrapper">
                     @Labels.Company
@@ -126,7 +140,7 @@
                     <td>@employee.CtrIdFormatted</td>
                     <td class="align-left">@employee.EmployeeCode</td>
                     <td class="align-left">@employee.NickName</td>
-                    <td class="align-left bu-highlight">@employee.UnitId - @employee.UnitCode</td>
+                    <td class="align-left bu-highlight">@employee.GroupUnitId - @employee.UnitCode</td>
                     <td class="align-left bu-highlight">@employee.UnitPIC</td>
                     <td class="align-left dept-highlight">@employee.DepartmentName</td>
                     <td class="align-left dept-highlight">@employee.DepartmentPIC</td>
@@ -140,8 +154,15 @@
                             @employee.JoinedDate.Value.ToDateMonthYearFormatedDate()
                         }
                     </td>
-                    <td class="align-right">@(employee.BasicSalary != null ? string.Format("{0:N0}", employee.BasicSalary) : "")</td>
-                    <td class="align-left">@employee.Currency</td>
+                    @if (showResignedDate)
+                    {
+                        <td class="align-left">@(employee.ResignedDate.HasValue ? employee.ResignedDate.Value.ToDateMonthYearFormatedDate() : "")</td>
+                    }
+                    @if (showSalaryCurrency)
+                    {
+                        <td class="align-right">@(employee.BasicSalary != null ? string.Format("{0:N0}", employee.BasicSalary) : "")</td>
+                        <td class="align-left">@employee.Currency</td>
+                    }
                     <td class="align-left">@employee.Company</td>
                     @if (hasPermissionToEdit)
                     {

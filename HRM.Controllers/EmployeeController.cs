@@ -631,7 +631,10 @@ public class EmployeeController(
         var subCompanies = await companyService.GetSubCompanies(CurrentCompanyId);
         if (userRoles.All(r => r.RoleId != (short)RoleSystem.SystemAdmin))
         {
-            roles = roles.Where(r => r.RoleId != (short)RoleSystem.SystemAdmin).ToList();
+            var excludedRoles = new[] { (short)RoleSystem.SystemAdmin, (short)RoleSystem.PayrollAdmin };
+            roles = roles
+                .Where(r => !excludedRoles.Contains(r.RoleId))
+                .ToList();
         }
 
         ViewBag.IsShowSubCompanyConfig = subCompanies != null && subCompanies.Any();

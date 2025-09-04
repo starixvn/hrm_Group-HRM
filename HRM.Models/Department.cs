@@ -12,6 +12,8 @@ public class Department : EntityBase<int>
 
     public string PICEmployeeName { get; set; }
 
+    public int SupporterEmpId { get; set; }
+
     public string AccountableArea { get; set; }
 
     public bool IsActive { get; set; }

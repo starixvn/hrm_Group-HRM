@@ -2148,4 +2148,10 @@
   <data name="Username" xml:space="preserve">
     <value>Username</value>
   </data>
+  <data name="BUSupport" xml:space="preserve">
+    <value>BU Support</value>
+  </data>
+  <data name="DepartmentSupport" xml:space="preserve">
+    <value>Department Support</value>
+  </data>
 </root>

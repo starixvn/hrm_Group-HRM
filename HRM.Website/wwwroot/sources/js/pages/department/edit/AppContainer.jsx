@@ -24,6 +24,7 @@ const AppContainer = () => {
         unit: '',
         accountableArea: '',
         picEmpId: '',
+        supporterEmpId: '',
         groupDeptId: 0,
     });
 
@@ -48,6 +49,7 @@ const AppContainer = () => {
                     unit: data.unitId,
                     accountableArea: data.accountableArea,
                     picEmpId: data.picEmpId,
+                    supporterEmpId: data.supporterEmpId,
                     groupDeptId: data.groupDeptId,
                 }));
                 setFormKey(prev =>prev + 1);
@@ -77,6 +79,7 @@ const AppContainer = () => {
             unitId: values.unit,
             groupDeptId: values.groupDeptId,
             accountableArea: values.accountableArea,
+            supporterEmpId: values.supporterEmpId,
             picEmpId: values.picEmpId,
         };
 
@@ -206,6 +209,28 @@ const AppContainer = () => {
                         <div className="select-form">
                             <Field
                                 name="picEmpId"
+                                as="select"
+                                className="form-control">
+                                <option value='' />
+                                {prepareData &&
+                                    prepareData.employees &&
+                                    prepareData.employees.map(emp =>(
+                                        <option key={emp.id} value={emp.id}>
+                                            {emp.displayNameWithCompany}
+                                        </option>
+                                    ))}
+                            </Field>
+                        </div>
+                    </div>
+                    <div className="form-group">
+                        <div className="label-form">
+                            <label className="control-label">
+                                Department Support
+                            </label>
+                        </div>
+                        <div className="select-form">
+                            <Field
+                                name="supporterEmpId"
                                 as="select"
                                 className="form-control">
                                 <option value='' />

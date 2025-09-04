@@ -709,6 +709,15 @@ namespace HRM.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to BU Support.
+        /// </summary>
+        public static string BUSupport {
+            get {
+                return ResourceManager.GetString("BUSupport", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Business Unit Type.
         /// </summary>
         public static string BUType {
@@ -1443,6 +1452,15 @@ namespace HRM.Resources {
         public static string DepartmentPICShort {
             get {
                 return ResourceManager.GetString("DepartmentPICShort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Department Support.
+        /// </summary>
+        public static string DepartmentSupport {
+            get {
+                return ResourceManager.GetString("DepartmentSupport", resourceCulture);
             }
         }
         

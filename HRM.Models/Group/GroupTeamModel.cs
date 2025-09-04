@@ -8,6 +8,8 @@ public class GroupTeamModel
 
     public int GroupTeamId { get; set; }
 
+    public int UnitId { get; set; }
+
     public string UnitCode { get; set; }
     public int UnitPICEmpId { get; set; }
 

@@ -8,6 +8,10 @@ public class Unit : EntityBase<int>
 
     public string PICNickName { get; set; }
 
+    public int SupporterEmpId { get; set; }
+
+    public string SupporterNickName { get; set; }
+
     public string Category { get; set; }
 
     public string Type { get; set; }

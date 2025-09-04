@@ -1,6 +1,7 @@
 ﻿namespace HRM.Controllers.GroupSpace;
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Core;
@@ -9,9 +10,13 @@ using Core.Filters;
 using Criteria.Department;
 using Criteria.Employee;
 using GO.UserControl.Client.Core.Enumerables;
+using GO.UserControl.Client.Core.Services;
 using GO.UserControl.Client.Core.Session;
+using HRM.Core.Enums;
 using HRM.Core.Models;
 using HRM.Core.Services;
+using HRM.Criteria.Unit;
+using HRM.Models;
 using Microsoft.AspNetCore.Mvc;
 using Services.Interfaces;
 using ViewModels.Department;
@@ -21,7 +26,8 @@ public class DepartmentController(
     IDepartmentService departmentService,
     IUnitService unitService,
     IEmployeeService employeeService,
-    IBaseService baseService) : BaseController(session)
+    IBaseService baseService,
+    IRoleService roleService) : BaseController(session)
 {
     [HrmPermission(Policy.Read, FunctionKey.DepartmentManagement)]
     public ActionResult Index()
@@ -39,6 +45,29 @@ public class DepartmentController(
         if (!hasPermissionViewAll)
         {
             departments = departments.Where(x => x.PICEmpId == EmployeeSession.EmpId || x.Unit?.PICEmpId == EmployeeSession.EmpId).ToList();
+        }
+        var userRoles = await roleService.GetByUserIdAsync(session.UserId);
+        var isHighLevelRole = userRoles.Any(r => r.RoleId == (short)RoleSystem.SystemAdmin
+                || r.RoleId == (short)RoleSystem.GroupHR);
+        if (!isHighLevelRole
+            && userRoles.Any(r => r.RoleId == (short)RoleSystem.BUHead 
+                || r.RoleId == (short)RoleSystem.DeptPIC))
+        {
+            var criteria = new GetUnitDepartmentIdsByEmpIdCriteria
+            {
+                EmpId = EmployeeSession.EmpId
+            };
+
+            List<int> unitIds = [];
+            var response = await baseService.GetDataAsync<KeyValuePair<string, int>>(criteria);
+            unitIds = response
+                .Where(r => r.Key == Constants.UnitKey)
+                .Select(r => r.Value)
+                .ToList();
+
+            departments = unitIds.Count != 0
+                ? departments.Where(x => x.Unit != null && unitIds.Contains(x.Unit.Id)).ToList()
+                : [];
         }
 
         return Json(departments);
@@ -94,6 +123,7 @@ public class DepartmentController(
             Name = department.Name,
             GroupDeptId = department.GroupDeptId,
             PICEmpId = department.PICEmpId,
+            SupporterEmpId = department.SupporterEmpId,
             AccountableArea = department.AccountableArea,
             IsActive = department.IsActive,
             UnitId = department.Unit?.Id ?? 0,
@@ -125,6 +155,7 @@ public class DepartmentController(
             Name = model.Name,
             GroupDeptId = model.GroupDeptId,
             PICEmpId = model.PICEmpId,
+            SupporterEmpId = model.SupporterEmpId,
             AccountableArea = model.AccountableArea,
             IsActive = model.IsActive,
             UnitId = model.UnitId,

@@ -48,7 +48,7 @@ public class DepartmentService(
         };
         var departments = await departmentRepository.GetByActiveAsync(criteria);
 
-        return departments ?? new List<Department>();
+        return departments ?? [];
     }
 
     public async Task<Department> GetByIdAsync(int departmentId)

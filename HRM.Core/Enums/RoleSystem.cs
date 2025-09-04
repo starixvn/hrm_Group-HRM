@@ -41,5 +41,14 @@ public enum RoleSystem
     HRAssistant,
 
     [Description("Payroll Admin")]
-    PayrollAdmin
+    PayrollAdmin,
+
+    [Description("BU Head")]
+    BUHead = 4,
+
+    [Description("Dept PIC")]
+    DeptPIC = 14,
+
+    [Description("Group HR")]
+    GroupHR = 6
 }

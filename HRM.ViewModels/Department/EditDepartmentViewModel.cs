@@ -6,4 +6,6 @@ public class EditDepartmentViewModel : CreateDepartmentViewModel
 {
     [Required]
     public int DepartmentId { get; set; }
+
+    public int SupporterEmpId { get; set; }
 }
