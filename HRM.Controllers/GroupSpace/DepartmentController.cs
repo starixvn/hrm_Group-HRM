@@ -10,12 +10,9 @@ using Core.Filters;
 using Criteria.Department;
 using Criteria.Employee;
 using GO.UserControl.Client.Core.Enumerables;
-using GO.UserControl.Client.Core.Services;
 using GO.UserControl.Client.Core.Session;
-using HRM.Core.Enums;
 using HRM.Core.Models;
 using HRM.Core.Services;
-using HRM.Criteria.Unit;
 using HRM.Models;
 using Microsoft.AspNetCore.Mvc;
 using Services.Interfaces;
@@ -26,8 +23,7 @@ public class DepartmentController(
     IDepartmentService departmentService,
     IUnitService unitService,
     IEmployeeService employeeService,
-    IBaseService baseService,
-    IRoleService roleService) : BaseController(session)
+    IBaseService baseService) : BaseController(session)
 {
     [HrmPermission(Policy.Read, FunctionKey.DepartmentManagement)]
     public ActionResult Index()
@@ -40,35 +36,8 @@ public class DepartmentController(
     [HrmPermission(Policy.Read, FunctionKey.DepartmentManagement)]
     public async Task<IActionResult> GetDepartments([FromBody] GetDepartmentViewModel request)
     {
-        var hasPermissionViewAll = session.HasPermissionOnFunction(FunctionKey.DepartmentManagement_AllDepartment, Policy.Read);
         var departments = await departmentService.GetDepartmentAsync(request.IsActive, request.UnitId);
-        if (!hasPermissionViewAll)
-        {
-            departments = departments.Where(x => x.PICEmpId == EmployeeSession.EmpId || x.Unit?.PICEmpId == EmployeeSession.EmpId).ToList();
-        }
-        var userRoles = await roleService.GetByUserIdAsync(session.UserId);
-        var isHighLevelRole = userRoles.Any(r => r.RoleId == (short)RoleSystem.SystemAdmin
-                || r.RoleId == (short)RoleSystem.GroupHR);
-        if (!isHighLevelRole
-            && userRoles.Any(r => r.RoleId == (short)RoleSystem.BUHead 
-                || r.RoleId == (short)RoleSystem.DeptPIC))
-        {
-            var criteria = new GetUnitDepartmentIdsByEmpIdCriteria
-            {
-                EmpId = EmployeeSession.EmpId
-            };
-
-            List<int> unitIds = [];
-            var response = await baseService.GetDataAsync<KeyValuePair<string, int>>(criteria);
-            unitIds = response
-                .Where(r => r.Key == Constants.UnitKey)
-                .Select(r => r.Value)
-                .ToList();
-
-            departments = unitIds.Count != 0
-                ? departments.Where(x => x.Unit != null && unitIds.Contains(x.Unit.Id)).ToList()
-                : [];
-        }
+        departments = GetDepartmentEmployeeBelongsTo(departments);
 
         return Json(departments);
     }
@@ -188,9 +157,25 @@ public class DepartmentController(
     public async Task<IActionResult> ExportDepartmentList(GetDepartmentViewModel request)
     {
         var departments = await departmentService.GetDepartmentAsync(request.IsActive, request.UnitId);
+        departments = GetDepartmentEmployeeBelongsTo(departments);
         var bytes = await departmentService.GenerateExcelAsync(departments);
         var fileName = $"Departments_{DateTimeOffset.Now.DateTime.ToClientTimeZone():yyyyMMdd}.xlsx";
 
         return File(bytes, MimeType.XLS, fileName);
+    }
+
+    private IList<Department> GetDepartmentEmployeeBelongsTo(IList<Department> departments)
+    {
+        var hasPermissionViewAll = session.HasPermissionOnFunction(FunctionKey.DepartmentManagement_AllDepartment, Policy.Read);
+        if (!hasPermissionViewAll)
+        {
+            var unitIds = departments.Where(x => x.Unit != null
+                    && (x.Unit.PICEmpId == EmployeeSession.EmpId || x.Unit.SupporterEmpId == EmployeeSession.EmpId)).Select(x => x.Id).ToList();
+            departments = departments.Where(x => x.PICEmpId == EmployeeSession.EmpId
+                    || x.SupporterEmpId == EmployeeSession.EmpId
+                    || x.Unit != null && unitIds.Contains(x.Unit.Id)).ToList();
+        }
+
+        return departments;
     }
 }

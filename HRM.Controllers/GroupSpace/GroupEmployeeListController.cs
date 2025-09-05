@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using GO.UserControl.Client.Core.Enumerables;
-using GO.UserControl.Client.Core.Services;
 using GO.UserControl.Client.Core.Session;
 using HRM.Core;
 using HRM.Core.Constants;
@@ -38,8 +37,7 @@ public class GroupEmployeeListController(
     IBaseService baseService,
     IEmployeeService employeeService,
     ISecondCompanyEmployeeService secondCompanyEmployeeService,
-    IPayrollManagementService payrollManagementService,
-    IRoleService roleService) : BaseController(session)
+    IPayrollManagementService payrollManagementService) : BaseController(session)
 #pragma warning restore S107 // Methods should not have too many parameters
 {
     [HrmPermission(Policy.Read, FunctionKey.GroupEmployeeList)]
@@ -85,40 +83,6 @@ public class GroupEmployeeListController(
             IsOutsource = ParseBool(model.Outsources)
         };
         var employees = await baseService.GetDataAsync<GroupEmployeeModel>(criteria);
-
-        var userRoles = await roleService.GetByUserIdAsync(session.UserId);
-        var unitDepartmentsCriteria = new GetUnitDepartmentIdsByEmpIdCriteria
-        {
-            EmpId = EmployeeSession.EmpId
-        };
-        var response = await baseService.GetDataAsync<KeyValuePair<string, int>>(unitDepartmentsCriteria);
-        var isHighLevelRole = userRoles.Any(r => r.RoleId == (short)RoleSystem.SystemAdmin
-                || r.RoleId == (short)RoleSystem.GroupHR);
-        if (!isHighLevelRole && userRoles.Any(r => r.RoleId == (short)RoleSystem.BUHead))
-        {
-
-            List<int> unitIds = response
-                .Where(r => r.Key == Constants.UnitKey)
-                .Select(r => r.Value)
-                .ToList();
-
-            employees = employees
-                    .Where(e => unitIds.Contains(int.Parse(e.UnitId)))
-                    .ToList();
-        }
-
-        if (!isHighLevelRole && userRoles.Any(r => r.RoleId == (short)RoleSystem.DeptPIC))
-        {
-
-            List<int> departmentIds = response
-                .Where(r => r.Key == Constants.DepartmentKey)
-                .Select(r => r.Value)
-                .ToList();
-
-            employees = employees
-                    .Where(e => departmentIds.Contains(e.DepartmentId))
-                    .ToList();
-        }
 
         Parallel.ForEach(employees, e =>
         {
