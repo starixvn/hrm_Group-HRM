@@ -1,15 +1,15 @@
-﻿import React, { useEffect, useState } from "react";
-import axios from "axios";
-import toastr from "toastr";
-import { Formik, Form, Field } from "formik";
+﻿import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import toastr from 'toastr';
+import { Formik, Form, Field } from 'formik';
 
-import Errors from "../../../shared/components/Errors";
+import Errors from '../../../shared/components/Errors';
 import {
     resolveClientUrl,
     axiosError,
     toastOptions,
-} from "../../../shared/common.functions";
-import { validationSchema, useDepartmentUnits } from "../common.functions";
+} from '../../../shared/common.functions';
+import { validationSchema, useDepartmentUnits } from '../common.functions';
 
 const AppContainer = () => {
     const [prepareData, setPrepareData] = useState(null);
@@ -35,12 +35,12 @@ const AppContainer = () => {
     useEffect(() => {
         axios({
             url: resolveClientUrl(`Department/getById/${window.departmentId}`),
-            method: "GET",
-            headers: { "X-Requested-With": "XMLHttpRequest" },
+            method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
         })
             .then(response => {
                 const data = response.data;
-                setInitialValues(prev =>({
+                setInitialValues(prev => ({
                     ...prev,
                     departmentId: data.departmentId,
                     code: data.code,
@@ -52,7 +52,7 @@ const AppContainer = () => {
                     supporterEmpId: data.supporterEmpId,
                     groupDeptId: data.groupDeptId,
                 }));
-                setFormKey(prev =>prev + 1);
+                setFormKey(prev => prev + 1);
             })
             .catch(axiosError);
     }, []);
@@ -60,8 +60,8 @@ const AppContainer = () => {
     useEffect(() => {
         axios({
             url: resolveClientUrl(`Department/GetPrepareDataForUnit`),
-            method: "GET",
-            headers: { "X-Requested-With": "XMLHttpRequest" },
+            method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
         })
             .then(response => {
                 setPrepareData(response.data);
@@ -87,15 +87,15 @@ const AppContainer = () => {
             submitData.departmentId = values.departmentId;
         }
 
-        const endpoint = values.departmentId ? "Department/Edit" : "Department/Create";
-        const successMessage = values.departmentId ? "Updated successfully!" : "Created successfully!";
+        const endpoint = values.departmentId ? 'Department/Edit' : 'Department/Create';
+        const successMessage = values.departmentId ? 'Updated successfully!' : 'Created successfully!';
 
         axios
             .post(
                 resolveClientUrl(endpoint),
                 submitData,
                 {
-                    headers: { "X-Requested-With": "XMLHttpRequest" },
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' },
                 }
             )
             .then(response => {
@@ -104,7 +104,7 @@ const AppContainer = () => {
                     toastr.success(successMessage, '', toastOptions());
                     setTimeout(function () {
                         document.location =
-                            resolveClientUrl("Department/Index");
+                            resolveClientUrl('Department/Index');
                     }, 3000);
                 } else {
                     toastr.error(data.message, '', toastOptions());
@@ -116,105 +116,80 @@ const AppContainer = () => {
 
     const renderForm = ({ errors, isSubmitting }) => {
         return (
-            <div className="card">
+            <div className='card'>
                 <Errors errors={errors} />
-                <Form className="form-horizontal">
-                    <div className="form-group">
-                        <div className="label-form">
-                            <label className="control-label">
+                <Form className='form-horizontal'>
+                    <div className='form-group'>
+                        <div className='label-form'>
+                            <label className='control-label'>
                                 Department ID
-                                <span className="require">*</span>
+                                <span className='require'>*</span>
                             </label>
                         </div>
-                        <div className="input-form">
-                            <Field
-                                name="groupDeptId"
-                                className="form-control"
-                                autoComplete="off"
-                            />
+                        <div className='input-form'>
+                            <Field name='groupDeptId' className='form-control' autoComplete='off' />
                         </div>
                     </div>
-                    <div className="form-group">
-                        <div className="label-form">
-                            <label className="control-label">
-                                Business Unit<span className="require">*</span>
+                    <div className='form-group'>
+                        <div className='label-form'>
+                            <label className='control-label'>
+                                Business Unit
+                                <span className='require'>*</span>
                             </label>
                         </div>
-                        <div className="select-form">
-                            <Field
-                                name="unit"
-                                as="select"
-                                className="form-control">
+                        <div className='select-form'>
+                            <Field name='unit' as='select' className='form-control'>
                                 <option value='' />
-                                {units
-                                    ? units.map(unit => (
-                                          <option key={unit.id} value={unit.id}>
-                                              {unit.code}-{unit.accountableArea}
-                                          </option>
-                                      ))
-                                    : ''}
+                                {
+                                    units ? units.map(unit => (
+                                        <option key={unit.id} value={unit.id}>
+                                            {unit.code}-{unit.accountableArea}
+                                        </option>
+                                    )) : ''
+                                }
                             </Field>
                         </div>
                     </div>
-                    <div className="form-group">
-                        <div className="label-form">
-                            <label className="control-label">
+                    <div className='form-group'>
+                        <div className='label-form'>
+                            <label className='control-label'>
                                 Department Code
-                                <span className="require">*</span>
+                                <span className='require'>*</span>
                             </label>
                         </div>
-                        <div className="input-form">
-                            <Field
-                                name="code"
-                                className="form-control"
-                                autoComplete="off"
-                            />
+                        <div className='input-form'>
+                            <Field name='code' className='form-control' autoComplete='off' />
                         </div>
                     </div>
-                    <div className="form-group">
-                        <div className="label-form">
-                            <label className="control-label">
+                    <div className='form-group'>
+                        <div className='label-form'>
+                            <label className='control-label'>
                                 Department Name
-                                <span className="require">*</span>
+                                <span className='require'>*</span>
                             </label>
                         </div>
-                        <div className="input-form">
-                            <Field
-                                name="name"
-                                className="form-control"
-                                autoComplete="off"
-                            />
+                        <div className='input-form'>
+                            <Field name='name' className='form-control' autoComplete='off' />
                         </div>
                     </div>
-                    <div className="form-group">
-                        <div className="label-form">
-                            <label className="control-label">
-                                Accountable Area
-                            </label>
+                    <div className='form-group'>
+                        <div className='label-form'>
+                            <label className='control-label'>Accountable Area</label>
                         </div>
-                        <div className="input-form">
-                            <Field
-                                name="accountableArea"
-                                className="form-control"
-                                autoComplete="off"
-                            />
+                        <div className='input-form'>
+                            <Field name='accountableArea' className='form-control' autoComplete='off' />
                         </div>
                     </div>
-                    <div className="form-group">
-                        <div className="label-form">
-                            <label className="control-label">
-                                Personal In Charge
-                            </label>
+                    <div className='form-group'>
+                        <div className='label-form'>
+                            <label className='control-label'>Personal In Charge</label>
                         </div>
-                        <div className="select-form">
-                            <Field
-                                name="picEmpId"
-                                as="select"
-                                className="form-control">
+                        <div className='select-form'>
+                            <Field name='picEmpId' as='select' className='form-control'>
                                 <option value='' />
                                 {prepareData &&
                                     prepareData.employees &&
-                                    prepareData.employees.map(emp =>(
+                                    prepareData.employees.map(emp => (
                                         <option key={emp.id} value={emp.id}>
                                             {emp.displayNameWithCompany}
                                         </option>
@@ -222,51 +197,36 @@ const AppContainer = () => {
                             </Field>
                         </div>
                     </div>
-                    <div className="form-group">
-                        <div className="label-form">
-                            <label className="control-label">
-                                Department Support
-                            </label>
+                    <div className='form-group'>
+                        <div className='label-form'>
+                            <label className='control-label'>Department Support</label>
                         </div>
-                        <div className="select-form">
-                            <Field
-                                name="supporterEmpId"
-                                as="select"
-                                className="form-control">
+                        <div className='select-form'>
+                            <Field name='supporterEmpId' as='select' className='form-control'>
                                 <option value='' />
-                                {prepareData &&
+                                {
+                                    prepareData &&
                                     prepareData.employees &&
-                                    prepareData.employees.map(emp =>(
+                                    prepareData.employees.map(emp => (
                                         <option key={emp.id} value={emp.id}>
                                             {emp.displayNameWithCompany}
                                         </option>
-                                    ))}
+                                    ))
+                                }
                             </Field>
                         </div>
                     </div>
-                    <div className="form-group">
-                        <div className="label-form">
-                            <label className="control-label">Is Active</label>
+                    <div className='form-group'>
+                        <div className='label-form'>
+                            <label className='control-label'>Is Active</label>
                         </div>
-                        <div className="input-form">
-                            <Field
-                                type="checkbox"
-                                name="isActive"
-                                style={{ cursor: "pointer" }}
-                            />
+                        <div className='input-form'>
+                            <Field type='checkbox' name='isActive' style={{ cursor: 'pointer' }} />
                         </div>
                     </div>
-                    <div className="form-group">
-                        <button
-                            type="submit"
-                            className="btn btn-primary"
-                            id="btnSubmit"
-                            disabled={isSubmitting}>
-                            Update
-                        </button>
-                        <a className="btn btn-default" onClick={handleGoBack}>
-                            Back
-                        </a>
+                    <div className='form-group'>
+                        <button type='submit' className='btn btn-primary' id='btnSubmit' disabled={isSubmitting}>Update</button>
+                        <a className='btn btn-default' onClick={handleGoBack}>Back</a>
                     </div>
                 </Form>
             </div>
@@ -287,4 +247,3 @@ const AppContainer = () => {
 };
 
 export default AppContainer;
-
