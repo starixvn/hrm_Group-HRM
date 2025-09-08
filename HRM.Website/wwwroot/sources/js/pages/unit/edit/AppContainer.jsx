@@ -67,7 +67,7 @@ const AppContainer = () => {
                             </label>
                         </div>
                         <div className='input-form'>
-                            <Field name='groupUnitId' type='number' className='form-control' autoComplete='off' />
+                            <Field name='groupUnitId' className='form-control' type='number' autoComplete='off' />
                         </div>
                     </div>
                     <div className='form-group'>
@@ -77,7 +77,7 @@ const AppContainer = () => {
                             </label>
                         </div>
                         <div className='input-form'>
-                            <Field name='code' className='form-control' autoComplete='off' />
+                            <Field className='form-control' name='code' autoComplete='off' />
                         </div>
                     </div>
                     <div className='form-group'>
@@ -85,7 +85,7 @@ const AppContainer = () => {
                             <label className='control-label'>Business Unit Category</label>
                         </div>
                         <div className='input-form'>
-                            <Field name='category' className='form-control' autoComplete='off' />
+                            <Field className='form-control' name='category' autoComplete='off' />
                         </div>
                     </div>
                     <div className='form-group'>
@@ -93,7 +93,7 @@ const AppContainer = () => {
                             <label className='control-label'>Business Unit Type</label>
                         </div>
                         <div className='input-form'>
-                            <Field name='type' className='form-control' autoComplete='off' />
+                            <Field className='form-control' name='type' autoComplete='off' />
                         </div>
                     </div>
                     <div className='form-group'>
@@ -101,7 +101,7 @@ const AppContainer = () => {
                             <label className='control-label'>Accountable Area</label>
                         </div>
                         <div className='input-form'>
-                            <Field name='accountableArea' className='form-control' autoComplete='off' />
+                            <Field className='form-control' name='accountableArea' autoComplete='off' />
                         </div>
                     </div>
                     <div className='form-group'>
@@ -109,7 +109,7 @@ const AppContainer = () => {
                             <label className='control-label'>Personal In Charge</label>
                         </div>
                         <div className='select-form'>
-                            <Field name='picEmpId' as='select' className='form-control'>
+                            <Field name='picEmpId' className='form-control' as='select'>
                                 <option value='' />
                                 {
                                     employees && employees.map(emp => (
@@ -126,7 +126,7 @@ const AppContainer = () => {
                             <label className='control-label'>BU Support</label>
                         </div>
                         <div className='select-form'>
-                            <Field name='supporterEmpId' as='select' className='form-control'>
+                            <Field name='supporterEmpId' className='form-control' as='select'>
                                 <option value='' />
                                 {employees &&
                                     employees.map(emp => (
