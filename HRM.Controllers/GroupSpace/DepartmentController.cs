@@ -170,10 +170,16 @@ public class DepartmentController(
         if (!hasPermissionViewAll)
         {
             var unitIds = departments.Where(x => x.Unit != null
-                    && (x.Unit.PICEmpId == EmployeeSession.EmpId || x.Unit.SupporterEmpId == EmployeeSession.EmpId)).Select(x => x.Id).ToList();
+                    && (x.Unit.PICEmpId == EmployeeSession.EmpId || x.Unit.SupporterEmpId == EmployeeSession.EmpId))
+                .Select(x => x.Id).ToList();
+            var buIdsByDepartment = departments.Where(x => x.PICEmpId == EmployeeSession.EmpId
+                    || x.SupporterEmpId == EmployeeSession.EmpId)
+                .Select(d => d.Unit.Id);
             departments = departments.Where(x => x.PICEmpId == EmployeeSession.EmpId
                     || x.SupporterEmpId == EmployeeSession.EmpId
-                    || x.Unit != null && unitIds.Contains(x.Unit.Id)).ToList();
+                    || x.Unit != null && unitIds.Contains(x.Unit.Id)
+                    || x.Unit != null && buIdsByDepartment.Contains(x.Unit.Id))
+                .ToList();
         }
 
         return departments;

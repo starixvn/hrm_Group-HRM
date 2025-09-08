@@ -185,7 +185,7 @@ const CustomFormik = ({unit, validationSchema, handleSubmit, renderForm}) => {
               type: unit.type || '',
               accountableArea: unit.accountableArea || '',
               picEmpId: unit.picEmpId || 0,
-              supporterEmpId: unit.supporterEmpId || 0,
+              supporterEmpId: unit.supporterEmpId,
               isActive: unit.isActive || false
             }}
             validationSchema={validationSchema}
