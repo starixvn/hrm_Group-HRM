@@ -13,31 +13,28 @@ public class TeamRepository : ITeamRepository
     public async Task<Team> GetById(ICriteria criteria)
     {
         using var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey());
-        using var multi = await db.QueryMultipleAsync(criteria);
-        var team = multi.Read<Team, Department, Team>(
+        var teams = await db.QueryAsync<Team, Department, Team>(
             (t, d) =>
             {
                 t.Department = d;
                 return t;
             },
-            "DepartmentId").FirstOrDefault();
+            splitOn: "DepartmentId",
+            parameterSet: criteria);
 
-        return team;
+        return teams.FirstOrDefault();
     }
 
     public async Task<IEnumerable<Team>> GetAllAsync(ICriteria criteria)
     {
         using var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey());
-        using var multi = await db.QueryMultipleAsync(criteria);
-        var teams = multi.Read<Team, Department, Team>(
+        return await db.QueryAsync<Team, Department, Team>(
             (t, d) =>
             {
                 t.Department = d;
                 return t;
             },
-            "DepartmentId"
-        ).ToList();
-
-        return teams;
+            splitOn: "DepartmentId",
+            parameterSet: criteria);
     }
 }
