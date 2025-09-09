@@ -43,7 +43,7 @@ public class GroupTeamController(
         var teams = await teamService.GetAllTeamByUnitScopeAsync(teamIds);
         var isActived = true;
         var departments = await departmentService.GetDepartmentAsync(isActived);
-        var hasPermissionViewAllDepartment = session.HasPermissionOnFunction(FunctionKey.DepartmentManagement_AllDepartment, Policy.Read);
+        var hasPermissionViewAllDepartment = session.HasPermissionOnFunction(FunctionKey.DepartmentManagement_SAView, Policy.Read);
         departments = departmentService.GetDepartmentEmployeeBelongsTo(departments, hasPermissionViewAllDepartment, EmployeeSession.EmpId);
         var departmentIds = departments.Select(d => d.Id).ToList();
         teams = teams.Where(x => departmentIds.Contains(x.DepartmentId))
@@ -235,7 +235,7 @@ public class GroupTeamController(
         var teams = await teamService.GetAllTeamByUnitScopeAsync(teamIds);
         var isActived = true;
         var departments = await departmentService.GetDepartmentAsync(isActived);
-        var hasPermissionViewAllDepartment = session.HasPermissionOnFunction(FunctionKey.DepartmentManagement_AllDepartment, Policy.Read);
+        var hasPermissionViewAllDepartment = session.HasPermissionOnFunction(FunctionKey.DepartmentManagement_SAView, Policy.Read);
         departments = departmentService.GetDepartmentEmployeeBelongsTo(departments, hasPermissionViewAllDepartment, EmployeeSession.EmpId);
         var departmentIds = departments.Select(d => d.Id).ToList();
         teams = teams.Where(x => departmentIds.Contains(x.DepartmentId))

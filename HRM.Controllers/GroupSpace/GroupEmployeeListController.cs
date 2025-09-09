@@ -64,7 +64,7 @@ public class GroupEmployeeListController(
     [HrmPermission(Policy.Read, FunctionKey.GroupEmployeeList)]
     public async Task<IActionResult> ListEmployee(GroupEmployeeViewModel model)
     {
-        var hasPermissionViewAll = session.HasPermissionOnFunction(FunctionKey.GroupEmployeeList_AllEmployee, Policy.Read);
+        var hasPermissionViewAll = session.HasPermissionOnFunction(FunctionKey.GroupEmployeeList_SAView, Policy.Read);
         var (enableUser, isDeleteUser) = ParseEmployeeStatus(model.EmployeeStatus);
 
         var criteria = new GetEmployeesInGroupScopeCriteria
@@ -109,7 +109,7 @@ public class GroupEmployeeListController(
 
     public async Task<IActionResult> GroupEmployeeList(GroupEmployeeViewModel model)
     {
-        var hasPermissionViewAll = session.HasPermissionOnFunction(FunctionKey.GroupEmployeeList_AllEmployee, Policy.Read);
+        var hasPermissionViewAll = session.HasPermissionOnFunction(FunctionKey.GroupEmployeeList_SAView, Policy.Read);
         var employees = new List<GroupEmployeeModel>();
         if (model != null)
         {
@@ -154,7 +154,7 @@ public class GroupEmployeeListController(
     [HrmPermission(Policy.Read, FunctionKey.GroupEmployeeList)]
     public async Task<IActionResult> ExportExcel(GroupEmployeeViewModel model, bool isEmployeeListExport)
     {
-        var hasPermissionViewAll = session.HasPermissionOnFunction(FunctionKey.GroupEmployeeList_AllEmployee, Policy.Read);
+        var hasPermissionViewAll = session.HasPermissionOnFunction(FunctionKey.GroupEmployeeList_SAView, Policy.Read);
         var (enableUser, isDeleteUser) = ParseEmployeeStatus(model.EmployeeStatus);
 
         var criteria = new GetEmployeesInGroupScopeCriteria

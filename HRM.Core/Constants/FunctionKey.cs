@@ -10,8 +10,6 @@ public static class FunctionKey
 
     public const string CreateAccount = "CreateAccount";
 
-    public const string UnitManagement = "UnitManagement";
-
     public const string MenuManagement = "MenuManagement";
 
     public const string FunctionManagement = "FunctionManagement";
@@ -85,18 +83,23 @@ public static class FunctionKey
     public const string PayrollManagement = "PayrollManagement";
 
     //Group Space
-    public const string DepartmentManagement = "DepartmentManagement";
+    public const string UnitManagement = "UnitManagement";
 
-    public const string DepartmentManagement_MyDepartment = "DepartmentManagement-MyDepartment";
-    public const string DepartmentManagement_AllDepartment = "DepartmentManagement-AllDepartment";
+    public const string DepartmentManagement = "DepartmentManagement";
+    public const string DepartmentManagement_SAView = "DepartmentManagement-SAView";
+    public const string DepartmentManagement_BUView = "DepartmentManagement-BUView";
+    public const string DepartmentManagement_DeptView = "DepartmentManagement-DeptView";
 
     public const string GroupTeamManagement = "GroupTeamManagement";
-    public const string GroupTeamManagement_MyTeam = "GroupTeamManagement-MyTeam";
-    public const string GroupTeamManagement_AllTeam = "GroupTeamManagement-AllTeam";
+    public const string UnitManagement_SAView = "UnitManagement-SAView";
+    public const string UnitManagement_BUView = "UnitManagement-BUView";
+    public const string UnitManagement_DeptView = "UnitManagement-DeptView";
 
     public const string GroupEmployeeList = "GroupEmployeeList";
-    public const string GroupEmployeeList_MyMember = "GroupEmployeeList-MyMember";
-    public const string GroupEmployeeList_AllEmployee = "GroupEmployeeList-AllEmployee";
+    public const string GroupEmployeeList_SAView = "GroupEmployeeList-SAView";
+    public const string GroupEmployeeList_BUView = "GroupEmployeeList-BUView";
+    public const string GroupEmployeeList_DeptView = "GroupEmployeeList-DeptView";
+
     public const string SecondmentCompanyList = "SecondmentCompanyList";
     public const string HeadcountReport = "HeadcountReport";
     public const string CompanyManagement = "CompanyManagement";
