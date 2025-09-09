@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
 using HRM.Core.Constants;
 using HRM.Core.Models;
@@ -21,16 +22,16 @@ using OfficeOpenXml;
 namespace HRM.Services.Implement;
 
 public class TeamService(
+    IUserControlSession session,
     ITeamRepository teamRepository,
     IBaseService baseService,
-    IUserControlSession userControlSession,
     IWebHostEnvironment hostingEnvironment) : ITeamService
 {
     private const string GroupTeamTemplatePath = "ExcelTemplates/GroupTeams.xlsx";
 
     public async Task<Team> GetById(int id)
     {
-        var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
+        var companyId = session.Get<short>(SessionKey.CurrentCompanyId);
         var criteria = new GetGroupByIdCriteria
         {
             TeamId = id,
@@ -52,7 +53,6 @@ public class TeamService(
             TeamId = id
         };
         return await baseService.GetDataEntityAsync<GroupTeamModel>(criteria);
-
     }
 
     public async Task<int> GetGroupIdByGroupTeamId(int groupTeamId)
@@ -66,7 +66,7 @@ public class TeamService(
 
     public async Task<IEnumerable<Team>> GetAllAsync(bool isDeleted = false, string keyword = null, bool isGroup = false, short? companyId = null)
     {
-        var currentCompanyId = isGroup ? (short?)null : companyId ?? userControlSession.Get<short>(SessionKey.CurrentCompanyId);
+        var currentCompanyId = isGroup ? (short?)null : companyId ?? session.Get<short>(SessionKey.CurrentCompanyId);
         var criteria = new GetAllGroupCriteria
         {
             IsDeleted = isDeleted,
@@ -113,7 +113,7 @@ public class TeamService(
         {
             TeamId = teamId,
             Role = roleId,
-            CompanyId = isGroup ? null : userControlSession.Get<short>(SessionKey.CurrentCompanyId)
+            CompanyId = isGroup ? null : session.Get<short>(SessionKey.CurrentCompanyId)
         };
         return (await baseService.GetDataAsync<SupervisorModel>(criteria)).ToList();
     }
@@ -123,7 +123,7 @@ public class TeamService(
         int? companyId = null;
         if (!isGroupSpace)
         {
-            companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
+            companyId = session.Get<short>(SessionKey.CurrentCompanyId);
         }
 
         var criteria = new GetSupervisorByTeamIdCriteria
@@ -140,9 +140,9 @@ public class TeamService(
         var criteria = new GetDisciplineManagerByTeamIdCriteria
         {
             TeamId = teamId,
-            CompanyId = isGroup ? null : userControlSession.Get<short>(SessionKey.CurrentCompanyId)
+            CompanyId = isGroup ? null : session.Get<short>(SessionKey.CurrentCompanyId)
         };
-        return (await baseService.GetDataAsync<Supervisor>(criteria)).ToList();
+        return await baseService.GetDataAsync<Supervisor>(criteria);
     }
 
     public async Task<CommandResult> EditTeamSupervisor(int actorId, int teamId, short roleId, IEnumerable<EditTeamSupervisor> supervisors)
@@ -254,5 +254,24 @@ public class TeamService(
             RoleId = roleId
         };
         return await baseService.GetDataAsync<Company>(criteria);
+    }
+
+    public IEnumerable<GroupTeamModel> GetTeamEmployeeBelongsTo(IEnumerable<GroupTeamModel> teams, int empId)
+    {
+        if (session.HasPermissionOnFunction(FunctionKey.GroupTeamManagement_BUView, Policy.Read))
+        {
+            var unitIds = teams.Where(x => x.UnitPICEmpId == empId || x.UnitSupporterEmpId == empId)
+                .Select(x => x.Id).ToList();
+            return teams.Where(x => unitIds.Contains(x.UnitId)).ToList();
+        }
+
+        if (session.HasPermissionOnFunction(FunctionKey.GroupTeamManagement_DeptView, Policy.Read))
+        {
+            var deptIds = teams.Where(x => x.DepartmentPICEmpId == empId || x.DepartmentSupporterEmpId == empId)
+                .Select(x => x.DepartmentId).ToList();
+            return teams.Where(x => deptIds.Contains(x.DepartmentId)).ToList();
+        }
+
+        return teams;
     }
 }

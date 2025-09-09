@@ -91,9 +91,9 @@ public static class FunctionKey
     public const string DepartmentManagement_DeptView = "DepartmentManagement-DeptView";
 
     public const string GroupTeamManagement = "GroupTeamManagement";
-    public const string UnitManagement_SAView = "UnitManagement-SAView";
-    public const string UnitManagement_BUView = "UnitManagement-BUView";
-    public const string UnitManagement_DeptView = "UnitManagement-DeptView";
+    public const string GroupTeamManagement_SAView = "GroupTeamManagement-SAView";
+    public const string GroupTeamManagement_BUView = "GroupTeamManagement-BUView";
+    public const string GroupTeamManagement_DeptView = "GroupTeamManagement-DeptView";
 
     public const string GroupEmployeeList = "GroupEmployeeList";
     public const string GroupEmployeeList_SAView = "GroupEmployeeList-SAView";

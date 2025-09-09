@@ -245,9 +245,8 @@
             <Mapping DataField="UnitId" ObjectProperty="Id" Class="Unit" />
         </Setting>
         <Setting Key="Unit_Delete" SpName="Unit_Delete" DbName="bodb_HRM" Plain="0" />
-		<Setting Key="Unit_GetNextGroupUnitId" SpName="Unit_GetNextGroupUnitId" DbName="bodb_HRM" Plain="0" />
-		<Setting Key="UnitDepartmentIds_EmpBelongTo_Get" SpName="UnitDepartmentIds_EmpBelongTo_Get" DbName="bodb_HRM" Plain="0" />
-	</Function>
+        <Setting Key="Unit_GetNextGroupUnitId" SpName="Unit_GetNextGroupUnitId" DbName="bodb_HRM" Plain="0" />
+    </Function>
     <Function Name="Discipline">
         <Setting Key="OtherDiscipline_Get" SpName="OtherDiscipline_Get" DbName="bodb_HRM" Plain="0" />
         <Setting Key="OtherDiscipline_Insert" SpName="OtherDiscipline_Insert" DbName="bodb_HRM" Plain="0" />
@@ -618,8 +617,8 @@
     <Function Name="Currency">
         <Setting Key="Currency_Get" SpName="Currency_Get" DbName="bodb_HRM" Plain="0" />
     </Function>
-	<Function Name="PayrollManagement">
-		<Setting Key="Payroll_GetAttendantEmployee" SpName="Payroll_GetAttendantEmployee" DbName="bodb_HRM" Plain="0" />
-		<Setting Key="Payroll_Calculate" SpName="Payroll_Calculate" DbName="bodb_HRM" Plain="0" />
-	</Function>
+    <Function Name="PayrollManagement">
+        <Setting Key="Payroll_GetAttendantEmployee" SpName="Payroll_GetAttendantEmployee" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Payroll_Calculate" SpName="Payroll_Calculate" DbName="bodb_HRM" Plain="0" />
+    </Function>
 </Functions>

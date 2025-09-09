@@ -18,7 +18,6 @@ using HRM.Resources;
 using HRM.Services.Interfaces;
 using HRM.ViewModels.EmployeeGroup;
 using Microsoft.AspNetCore.Mvc;
-using Org.BouncyCastle.Asn1.Ocsp;
 
 namespace HRM.Controllers.GroupSpace;
 
@@ -41,13 +40,7 @@ public class GroupTeamController(
     public async Task<IActionResult> GetTeamList(string teamIds = null)
     {
         var teams = await teamService.GetAllTeamByUnitScopeAsync(teamIds);
-        var isActived = true;
-        var departments = await departmentService.GetDepartmentAsync(isActived);
-        var hasPermissionViewAllDepartment = session.HasPermissionOnFunction(FunctionKey.DepartmentManagement_SAView, Policy.Read);
-        departments = departmentService.GetDepartmentEmployeeBelongsTo(departments, hasPermissionViewAllDepartment, EmployeeSession.EmpId);
-        var departmentIds = departments.Select(d => d.Id).ToList();
-        teams = teams.Where(x => departmentIds.Contains(x.DepartmentId))
-            .ToList();
+        teams = teamService.GetTeamEmployeeBelongsTo(teams, EmployeeSession.EmpId);
 
         ViewBag.HasPermission = session.HasPermissionOnFunction(FunctionKey.GroupTeamManagement, Policy.Host);
         ViewBag.HasPermissionToViewEmployee = session.HasPermissionOnFunction(FunctionKey.GroupEmployeeList, Policy.Read);
@@ -233,13 +226,7 @@ public class GroupTeamController(
     public async Task<IActionResult> ExportGroupTeamList(string teamIds = null)
     {
         var teams = await teamService.GetAllTeamByUnitScopeAsync(teamIds);
-        var isActived = true;
-        var departments = await departmentService.GetDepartmentAsync(isActived);
-        var hasPermissionViewAllDepartment = session.HasPermissionOnFunction(FunctionKey.DepartmentManagement_SAView, Policy.Read);
-        departments = departmentService.GetDepartmentEmployeeBelongsTo(departments, hasPermissionViewAllDepartment, EmployeeSession.EmpId);
-        var departmentIds = departments.Select(d => d.Id).ToList();
-        teams = teams.Where(x => departmentIds.Contains(x.DepartmentId))
-            .ToList();
+        teams = teamService.GetTeamEmployeeBelongsTo(teams, EmployeeSession.EmpId);
         var bytes = await teamService.GenerateGroupTeamExcel(teams);
         var fileName = $"GroupTeam_{DateTimeOffset.Now.DateTime.ToClientTimeZone():yyyyMMdd}.xlsx";
 

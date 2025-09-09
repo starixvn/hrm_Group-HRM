@@ -37,8 +37,7 @@ public class DepartmentController(
     public async Task<IActionResult> GetDepartments([FromBody] GetDepartmentViewModel request)
     {
         var departments = await departmentService.GetDepartmentAsync(request.IsActive, request.UnitId);
-        var hasPermissionViewAllDepartment = session.HasPermissionOnFunction(FunctionKey.DepartmentManagement_SAView, Policy.Read);
-        departments = departmentService.GetDepartmentEmployeeBelongsTo(departments, hasPermissionViewAllDepartment, EmployeeSession.EmpId);
+        departments = departmentService.GetDepartmentEmployeeBelongsTo(departments, EmployeeSession.EmpId);
 
         return Json(departments);
     }
@@ -158,8 +157,7 @@ public class DepartmentController(
     public async Task<IActionResult> ExportDepartmentList(GetDepartmentViewModel request)
     {
         var departments = await departmentService.GetDepartmentAsync(request.IsActive, request.UnitId);
-        var hasPermissionViewAllDepartment = session.HasPermissionOnFunction(FunctionKey.DepartmentManagement_SAView, Policy.Read);
-        departments = departmentService.GetDepartmentEmployeeBelongsTo(departments, hasPermissionViewAllDepartment, EmployeeSession.EmpId);
+        departments = departmentService.GetDepartmentEmployeeBelongsTo(departments, EmployeeSession.EmpId);
         var bytes = await departmentService.GenerateExcelAsync(departments);
         var fileName = $"Departments_{DateTimeOffset.Now.DateTime.ToClientTimeZone():yyyyMMdd}.xlsx";
 

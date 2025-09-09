@@ -43,4 +43,6 @@ public interface ITeamService
         IEnumerable<EditTeamSupervisor> supervisors);
 
     Task<IEnumerable<Company>> GetCompaniesByRoleIdForEmployee(int employeeId, int roleId);
+
+    IEnumerable<GroupTeamModel> GetTeamEmployeeBelongsTo(IEnumerable<GroupTeamModel> teams, int empId);
 }

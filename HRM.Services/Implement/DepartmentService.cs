@@ -1,6 +1,4 @@
-﻿using HRM.Core.Constants;
-
-namespace HRM.Services.Implement;
+﻿namespace HRM.Services.Implement;
 
 using System;
 using System.Collections.Generic;
@@ -8,6 +6,9 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Criteria.Department;
+using GO.UserControl.Client.Core.Enumerables;
+using GO.UserControl.Client.Core.Session;
+using HRM.Core.Constants;
 using HRM.Core.Models;
 using HRM.Core.Services;
 using HRM.Repositories.Interfaces;
@@ -17,6 +18,7 @@ using Models;
 using OfficeOpenXml;
 
 public class DepartmentService(
+    IUserControlSession session,
     IDepartmentRepository departmentRepository,
     IBaseService baseService,
     IWebHostEnvironment hostingEnvironment) : IDepartmentService
@@ -50,29 +52,21 @@ public class DepartmentService(
 
         return departments ?? [];
     }
-    public IList<Department> GetDepartmentEmployeeBelongsTo(IList<Department> departments, bool hasPermissionViewAll, int empId)
+
+    public IList<Department> GetDepartmentEmployeeBelongsTo(IList<Department> departments, int empId)
     {
-        if (!hasPermissionViewAll)
+        if (session.HasPermissionOnFunction(FunctionKey.DepartmentManagement_BUView, Policy.Read))
         {
-            var unitIds = departments.Where(x => x.Unit != null
-                    && (x.Unit.PICEmpId == empId || x.Unit.SupporterEmpId == empId))
+            var unitIds = departments.Where(x => x.Unit.PICEmpId == empId || x.Unit.SupporterEmpId == empId)
                 .Select(x => x.Id).ToList();
-            var buIdsByDepartment = departments.Where(x => x.PICEmpId == empId
-                    || x.SupporterEmpId == empId)
-                .Select(d => d.Unit.Id);
-            departments = departments
-                .Where(x =>
-                {
-                    bool isPicOrSupporter = x.PICEmpId == empId
-                                            || x.SupporterEmpId == empId;
+            return departments.Where(x => unitIds.Contains(x.Unit.Id)).ToList();
+        }
 
-                    bool isInUnit = x.Unit != null &&
-                                    (unitIds.Contains(x.Unit.Id) ||
-                                     buIdsByDepartment.Contains(x.Unit.Id));
-
-                    return isPicOrSupporter || isInUnit;
-                })
-                .ToList();
+        if (session.HasPermissionOnFunction(FunctionKey.DepartmentManagement_DeptView, Policy.Read))
+        {
+            var unitIds = departments.Where(x => x.PICEmpId == empId || x.SupporterEmpId == empId)
+                .Select(x => x.Unit.Id).ToList();
+            return departments.Where(x => unitIds.Contains(x.Unit.Id)).ToList();
         }
 
         return departments;
