@@ -37,7 +37,8 @@ public class DepartmentController(
     public async Task<IActionResult> GetDepartments([FromBody] GetDepartmentViewModel request)
     {
         var departments = await departmentService.GetDepartmentAsync(request.IsActive, request.UnitId);
-        departments = GetDepartmentEmployeeBelongsTo(departments);
+        var hasPermissionViewAllDepartment = session.HasPermissionOnFunction(FunctionKey.DepartmentManagement_AllDepartment, Policy.Read);
+        departments = departmentService.GetDepartmentEmployeeBelongsTo(departments, hasPermissionViewAllDepartment, EmployeeSession.EmpId);
 
         return Json(departments);
     }
@@ -157,31 +158,11 @@ public class DepartmentController(
     public async Task<IActionResult> ExportDepartmentList(GetDepartmentViewModel request)
     {
         var departments = await departmentService.GetDepartmentAsync(request.IsActive, request.UnitId);
-        departments = GetDepartmentEmployeeBelongsTo(departments);
+        var hasPermissionViewAllDepartment = session.HasPermissionOnFunction(FunctionKey.DepartmentManagement_AllDepartment, Policy.Read);
+        departments = departmentService.GetDepartmentEmployeeBelongsTo(departments, hasPermissionViewAllDepartment, EmployeeSession.EmpId);
         var bytes = await departmentService.GenerateExcelAsync(departments);
         var fileName = $"Departments_{DateTimeOffset.Now.DateTime.ToClientTimeZone():yyyyMMdd}.xlsx";
 
         return File(bytes, MimeType.XLS, fileName);
-    }
-
-    private IList<Department> GetDepartmentEmployeeBelongsTo(IList<Department> departments)
-    {
-        var hasPermissionViewAll = session.HasPermissionOnFunction(FunctionKey.DepartmentManagement_AllDepartment, Policy.Read);
-        if (!hasPermissionViewAll)
-        {
-            var unitIds = departments.Where(x => x.Unit != null
-                    && (x.Unit.PICEmpId == EmployeeSession.EmpId || x.Unit.SupporterEmpId == EmployeeSession.EmpId))
-                .Select(x => x.Id).ToList();
-            var buIdsByDepartment = departments.Where(x => x.PICEmpId == EmployeeSession.EmpId
-                    || x.SupporterEmpId == EmployeeSession.EmpId)
-                .Select(d => d.Unit.Id);
-            departments = departments.Where(x => x.PICEmpId == EmployeeSession.EmpId
-                    || x.SupporterEmpId == EmployeeSession.EmpId
-                    || x.Unit != null && unitIds.Contains(x.Unit.Id)
-                    || x.Unit != null && buIdsByDepartment.Contains(x.Unit.Id))
-                .ToList();
-        }
-
-        return departments;
     }
 }

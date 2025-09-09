@@ -50,6 +50,33 @@ public class DepartmentService(
 
         return departments ?? [];
     }
+    public IList<Department> GetDepartmentEmployeeBelongsTo(IList<Department> departments, bool hasPermissionViewAll, int empId)
+    {
+        if (!hasPermissionViewAll)
+        {
+            var unitIds = departments.Where(x => x.Unit != null
+                    && (x.Unit.PICEmpId == empId || x.Unit.SupporterEmpId == empId))
+                .Select(x => x.Id).ToList();
+            var buIdsByDepartment = departments.Where(x => x.PICEmpId == empId
+                    || x.SupporterEmpId == empId)
+                .Select(d => d.Unit.Id);
+            departments = departments
+                .Where(x =>
+                {
+                    bool isPicOrSupporter = x.PICEmpId == empId
+                                            || x.SupporterEmpId == empId;
+
+                    bool isInUnit = x.Unit != null &&
+                                    (unitIds.Contains(x.Unit.Id) ||
+                                     buIdsByDepartment.Contains(x.Unit.Id));
+
+                    return isPicOrSupporter || isInUnit;
+                })
+                .ToList();
+        }
+
+        return departments;
+    }
 
     public async Task<Department> GetByIdAsync(int departmentId)
     {

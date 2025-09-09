@@ -18,6 +18,7 @@ using HRM.Resources;
 using HRM.Services.Interfaces;
 using HRM.ViewModels.EmployeeGroup;
 using Microsoft.AspNetCore.Mvc;
+using Org.BouncyCastle.Asn1.Ocsp;
 
 namespace HRM.Controllers.GroupSpace;
 
@@ -39,14 +40,14 @@ public class GroupTeamController(
     [HttpPost]
     public async Task<IActionResult> GetTeamList(string teamIds = null)
     {
-        var hasPermissionViewAll = session.HasPermissionOnFunction(FunctionKey.GroupTeamManagement_AllTeam, Policy.Read);
         var teams = await teamService.GetAllTeamByUnitScopeAsync(teamIds);
-        if (!hasPermissionViewAll)
-        {
-            teams = teams.Where(x => x.PICEmpId == EmployeeSession.EmpId
-                 || x.DepartmentPICEmpId == EmployeeSession.EmpId
-                 || x.UnitPICEmpId == EmployeeSession.EmpId).ToList();
-        }
+        var isActived = true;
+        var departments = await departmentService.GetDepartmentAsync(isActived);
+        var hasPermissionViewAllDepartment = session.HasPermissionOnFunction(FunctionKey.DepartmentManagement_AllDepartment, Policy.Read);
+        departments = departmentService.GetDepartmentEmployeeBelongsTo(departments, hasPermissionViewAllDepartment, EmployeeSession.EmpId);
+        var departmentIds = departments.Select(d => d.Id).ToList();
+        teams = teams.Where(x => departmentIds.Contains(x.DepartmentId))
+            .ToList();
 
         ViewBag.HasPermission = session.HasPermissionOnFunction(FunctionKey.GroupTeamManagement, Policy.Host);
         ViewBag.HasPermissionToViewEmployee = session.HasPermissionOnFunction(FunctionKey.GroupEmployeeList, Policy.Read);
@@ -232,13 +233,13 @@ public class GroupTeamController(
     public async Task<IActionResult> ExportGroupTeamList(string teamIds = null)
     {
         var teams = await teamService.GetAllTeamByUnitScopeAsync(teamIds);
-        var hasPermissionViewAll = session.HasPermissionOnFunction(FunctionKey.GroupTeamManagement_AllTeam, Policy.Read);
-        if (!hasPermissionViewAll)
-        {
-            teams = teams.Where(x => x.PICEmpId == EmployeeSession.EmpId
-                 || x.DepartmentPICEmpId == EmployeeSession.EmpId
-                 || x.UnitPICEmpId == EmployeeSession.EmpId).ToList();
-        }
+        var isActived = true;
+        var departments = await departmentService.GetDepartmentAsync(isActived);
+        var hasPermissionViewAllDepartment = session.HasPermissionOnFunction(FunctionKey.DepartmentManagement_AllDepartment, Policy.Read);
+        departments = departmentService.GetDepartmentEmployeeBelongsTo(departments, hasPermissionViewAllDepartment, EmployeeSession.EmpId);
+        var departmentIds = departments.Select(d => d.Id).ToList();
+        teams = teams.Where(x => departmentIds.Contains(x.DepartmentId))
+            .ToList();
         var bytes = await teamService.GenerateGroupTeamExcel(teams);
         var fileName = $"GroupTeam_{DateTimeOffset.Now.DateTime.ToClientTimeZone():yyyyMMdd}.xlsx";
 

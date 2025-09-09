@@ -9,6 +9,8 @@ public interface IDepartmentService
 {
     Task<IList<Department>> GetDepartmentAsync(bool? isActive = true, int? unitId = null);
 
+    IList<Department> GetDepartmentEmployeeBelongsTo(IList<Department> departments, bool hasPermissionViewAll, int empId);
+
     Task<int> GetNextGroupDeptIdAsync();
 
     Task<Department> GetByIdAsync(int departmentId);
