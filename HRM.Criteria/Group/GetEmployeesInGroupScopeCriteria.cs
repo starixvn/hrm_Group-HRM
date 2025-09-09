@@ -55,7 +55,6 @@ public class GetEmployeesInGroupScopeCriteria : CriteriaBase
     public bool? IsAllUser { get; set; }
 
     public string CompanyIds { get; set; }
-    public bool HasPermissionViewAll { get; set; }
     public int? ActorId { get; set; }
 
     public bool? IsCtrID { get; set; }

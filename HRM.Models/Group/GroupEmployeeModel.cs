@@ -32,14 +32,17 @@ public class GroupEmployeeModel
     public string GroupUnitId { get; set; }
 
     public string UnitCode { get; set; }
-    public int UnitPICEmpId { get; set; }
     public string UnitPIC { get; set; }
+    public int UnitPICEmpId { get; set; }
+    public int UnitSupporterEmpId { get; set; }
 
     public int DepartmentId { get; set; }
 
     public string DepartmentName { get; set; }
     public int DepartmentPICEmpId { get; set; }
     public string DepartmentPIC { get; set; }
+    public int DepartmentPICId { get; set; }
+    public int DepartmentSupporterEmpId { get; set; }
 
     public string TeamCode { get; set; }
     public string TeamName { get; set; }

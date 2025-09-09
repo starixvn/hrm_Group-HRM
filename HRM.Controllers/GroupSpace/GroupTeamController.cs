@@ -323,8 +323,7 @@ public class GroupTeamController(
         {
             Query = model.Keyword,
             IsDeleteUser = model.IsDelete,
-            EnableUser = model.IsEnable,
-            HasPermissionViewAll = true
+            EnableUser = model.IsEnable
         };
         var employees = await baseService.GetDataAsync<GroupEmployeeModel>(criteria);
 
