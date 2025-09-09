@@ -37,10 +37,6 @@ public class GetEmployeesInGroupScopeCriteria : CriteriaBase
         }
     }
 
-    public int? PageNumber { get; set; }
-
-    public int? PageSize { get; set; }
-
     public int? TotalRow { get; set; }
 
     public int? TitleId { get; set; }

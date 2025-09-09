@@ -74,8 +74,6 @@ public class GroupEmployeeListController(
             EnableUser = enableUser,
             IsDeleteUser = isDeleteUser,
             TitleId = model.JobTitleId,
-            PageNumber = model.CurrentPage,
-            PageSize = 5000,
             CompanyIds = model.CompanyIds,
             ActorId = EmployeeSession.EmpId,
             IsCtrID = ParseBool(model.CtrIDs),
@@ -139,8 +137,6 @@ public class GroupEmployeeListController(
                 EnableUser = model.IsEnable,
                 IsDeleteUser = model.IsDelete,
                 TitleId = model.JobTitleId,
-                PageNumber = model.CurrentPage,
-                PageSize = model.ItemsPerPage,
                 CompanyIds = model.CompanyIds,
             };
             employees = (await baseService.GetDataAsync<GroupEmployeeModel>(criteria)).ToList();
