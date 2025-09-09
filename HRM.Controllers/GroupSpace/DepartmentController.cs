@@ -1,8 +1,6 @@
 ﻿namespace HRM.Controllers.GroupSpace;
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Core;
 using Core.Constants;
@@ -13,7 +11,6 @@ using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
 using HRM.Core.Models;
 using HRM.Core.Services;
-using HRM.Models;
 using Microsoft.AspNetCore.Mvc;
 using Services.Interfaces;
 using ViewModels.Department;

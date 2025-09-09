@@ -27,6 +27,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace HRM.Controllers.GroupSpace;
 
 #pragma warning disable S107 // Methods should not have too many parameters
+
 public class GroupEmployeeListController(
     IUserControlSession session,
     ITeamService teamService,
@@ -83,7 +84,6 @@ public class GroupEmployeeListController(
         var employees = await baseService.GetDataAsync<GroupEmployeeModel>(criteria);
         employees = FilterEmployeeByView(employees);
 
-
         Parallel.ForEach(employees, e =>
         {
             e.BasicSalary = e.Salary != null ? payrollManagementService.DecryptSalary(e.Salary) : null;
@@ -112,9 +112,9 @@ public class GroupEmployeeListController(
         var isBUView = session.HasPermissionOnFunction(FunctionKey.GroupEmployeeList_BUView, Policy.Read);
         var isDeptView = session.HasPermissionOnFunction(FunctionKey.GroupEmployeeList_DeptView, Policy.Read);
 
-        if (isBUView) 
+        if (isBUView)
         {
-            employees = employees.Where(e => e.UnitPICEmpId == EmployeeSession.EmpId  
+            employees = employees.Where(e => e.UnitPICEmpId == EmployeeSession.EmpId
                 && e.UnitSupporterEmpId == EmployeeSession.EmpId);
             return employees;
         }
@@ -146,7 +146,6 @@ public class GroupEmployeeListController(
             employees = (await baseService.GetDataAsync<GroupEmployeeModel>(criteria)).ToList();
             employees = FilterEmployeeByView(employees)
                 .ToList();
-
         }
 
         return Json(employees);
@@ -174,7 +173,6 @@ public class GroupEmployeeListController(
     [HrmPermission(Policy.Read, FunctionKey.GroupEmployeeList)]
     public async Task<IActionResult> ExportExcel(GroupEmployeeViewModel model, bool isEmployeeListExport)
     {
-        var hasPermissionViewAll = session.HasPermissionOnFunction(FunctionKey.GroupEmployeeList_SAView, Policy.Read);
         var (enableUser, isDeleteUser) = ParseEmployeeStatus(model.EmployeeStatus);
 
         var criteria = new GetEmployeesInGroupScopeCriteria
