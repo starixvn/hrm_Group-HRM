@@ -86,17 +86,17 @@ public static class FunctionKey
     public const string UnitManagement = "UnitManagement";
 
     public const string DepartmentManagement = "DepartmentManagement";
-    public const string DepartmentManagement_SAView = "DepartmentManagement-SAView";
+    public const string DepartmentManagement_SAView = "DepartmentManagement-ViewAll";
     public const string DepartmentManagement_BUView = "DepartmentManagement-BUView";
     public const string DepartmentManagement_DeptView = "DepartmentManagement-DeptView";
 
     public const string GroupTeamManagement = "GroupTeamManagement";
-    public const string GroupTeamManagement_SAView = "GroupTeamManagement-SAView";
+    public const string GroupTeamManagement_SAView = "GroupTeamManagement-ViewAll";
     public const string GroupTeamManagement_BUView = "GroupTeamManagement-BUView";
     public const string GroupTeamManagement_DeptView = "GroupTeamManagement-DeptView";
 
     public const string GroupEmployeeList = "GroupEmployeeList";
-    public const string GroupEmployeeList_SAView = "GroupEmployeeList-SAView";
+    public const string GroupEmployeeList_SAView = "GroupEmployeeList-ViewAll";
     public const string GroupEmployeeList_BUView = "GroupEmployeeList-BUView";
     public const string GroupEmployeeList_DeptView = "GroupEmployeeList-DeptView";
 
