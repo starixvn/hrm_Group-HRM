@@ -45,18 +45,20 @@ const AppContainer = ({ nextId }) => {
     submitUnit('Unit/Create', model, setSubmitting);
   };
 
-  const getEmployees = (keyword) => {
-    if (!employees) return;
+  const getEmployees = keyword => {
+    if (!employees) {
+        return;
+    }
 
     if (keyword.trim().length > 1) {
       const filtered = employees
-        .filter((emp) =>
+        .filter(emp =>
           emp.nickName &&
           emp.nickName
             .toLowerCase()
             .includes(keyword.toLowerCase())
         )
-        .map((emp) => ({
+        .map(emp => ({
           key: emp.id,
           id: emp.id,
           nickname: emp.nickName,
@@ -70,17 +72,16 @@ const AppContainer = ({ nextId }) => {
   };
 
   const renderForm = ({ errors, isSubmitting, setFieldValue }) => {
-    const handleSelectPic = (_value = "", item) => {
+    const handleSelectPic = (_value, item) => {
       setFieldValue("picEmpId", item.id);
     };
 
-    const handleChangePic = (value) => {
+    const handleChangePic = value => {
         setSearchPic(value);
         if (value.trim() === "") {
             setFieldValue("picEmpId", 0);
         } else {
-            var isPic = true;
-            getEmployees(value, isPic);
+            getEmployees(value);
         }
     };
     return (

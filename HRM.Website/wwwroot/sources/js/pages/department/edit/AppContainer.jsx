@@ -76,11 +76,11 @@ const AppContainer = () => {
     
       useEffect(() => {
         if (prepareData && initialValues.departmentId !== 0) {
-          var employeePic =
-            prepareData.employees && prepareData.employees.find((e) => e.id === initialValues.picEmpId);
+          const employeePic =
+            prepareData.employees && prepareData.employees.find(e => e.id === initialValues.picEmpId);
           employeePic && setSearchPic(employeePic.displayNameWithCompany);
-          var supporter =
-            prepareData.employees && prepareData.employees.find((e) => e.id === initialValues.supporterEmpId);
+          const supporter =
+            prepareData.employees && prepareData.employees.find(e => e.id === initialValues.supporterEmpId);
           supporter && setSearchSupporter(supporter.displayNameWithCompany);
         }
       }, [prepareData, initialValues]);
@@ -131,17 +131,19 @@ const AppContainer = () => {
     };
 
   const getEmployees = (keyword, isPic) => {
-    var employees = prepareData.employees;
-    if (!employees) return;
+    const employees = prepareData.employees;
+    if (!employees) {
+        return;
+    }
     if (keyword.trim().length > 1) {
       const filtered = employees
-        .filter((emp) =>
+        .filter(emp =>
             emp.nickName &&
             emp.nickName
             .toLowerCase()
             .includes(keyword.toLowerCase())
         )
-        .map((emp) => ({
+        .map(emp => ({
           key: emp.id,
           id: emp.id,
           nickname: emp.nickName,
@@ -155,30 +157,30 @@ const AppContainer = () => {
   };
 
     const renderForm = ({ errors, isSubmitting, setFieldValue }) => {
-        const handleSelectPic = (_value = "", item) => {
+        const handleSelectPic = (_value, item) => {
             setFieldValue("picEmpId", item.id);
         };
 
-        const handleChangePic = (value) => {
+        const handleChangePic = value => {
             setSearchPic(value);
             if (value.trim() === "") {
                 setFieldValue("picEmpId", 0);
             } else {
-                var isPic = true;
+                const isPic = true;
                 getEmployees(value, isPic);
             }
         };
 
-        const handleSelectSupporter = (_value = "", item) => {
+        const handleSelectSupporter = (_value, item) => {
         setFieldValue("supporterEmpId", item.id);
         };
 
-        const handleChangeSupporter = (value) => {
+        const handleChangeSupporter = value => {
             setSearchSupporter(value);
             if (value.trim() === "") {
                 setFieldValue("supporterEmpId", 0);
             } else {
-                var isPic = false;
+                const isPic = false;
                 getEmployees(value, isPic);
             }
         };

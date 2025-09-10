@@ -41,7 +41,6 @@ export default class THead extends PureComponent {
                 roleName = 'Approver';
                 break;
         }
-    console.log('this.state.value', this.state.value)
 
         return (
             <thead>
