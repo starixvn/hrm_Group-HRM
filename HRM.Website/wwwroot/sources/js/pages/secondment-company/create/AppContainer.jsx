@@ -66,7 +66,7 @@ const AppContainer = () => {
             .catch(axiosError);
     }, []);
 
-    const handleSelectEmployee = selectedItem => {
+    const handleSelectEmployee = (value, selectedItem) => {
         setInitialValues(prev => ({
             ...prev,
             empId: selectedItem.id,

@@ -18,7 +18,7 @@ const EmployeeAutocomplete = ({ options, onChange, onSelect, value }) => {
 
     const handleSelect = (selectedKeyword, selectedItem) => {
         setKeyword(selectedKeyword);
-        onSelect(selectedItem);
+        onSelect(selectedKeyword, selectedItem);
     };
 
     return (
