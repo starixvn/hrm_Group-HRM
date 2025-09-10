@@ -10,11 +10,16 @@ import {
     toastOptions,
 } from '../../../shared/common.functions';
 import { validationSchema, useDepartmentUnits } from '../common.functions';
+import EmployeeAutocomplete from '../../../shared/components/EmployeeAutocomplete';
 
 const AppContainer = () => {
     const [prepareData, setPrepareData] = useState(null);
     const [formKey, setFormKey] = useState(0);
     const units = useDepartmentUnits();
+    const [searchPic, setSearchPic] = useState("");
+    const [picOptions, setPicOptions] = useState([]);
+    const [searchSupporter, setSearchSupporter] = useState("");
+    const [supporterOptions, setSupporterOptions] = useState([]);
 
     const [initialValues, setInitialValues] = useState({
         departmentId: 0,
@@ -68,6 +73,17 @@ const AppContainer = () => {
             })
             .catch(axiosError);
     }, []);
+    
+      useEffect(() => {
+        if (prepareData && initialValues.departmentId !== 0) {
+          var employeePic =
+            prepareData.employees && prepareData.employees.find((e) => e.id === initialValues.picEmpId);
+          employeePic && setSearchPic(employeePic.displayNameWithCompany);
+          var supporter =
+            prepareData.employees && prepareData.employees.find((e) => e.id === initialValues.supporterEmpId);
+          supporter && setSearchSupporter(supporter.displayNameWithCompany);
+        }
+      }, [prepareData, initialValues]);
 
     const handleSubmit = (values, { setSubmitting }) => {
         setSubmitting(true);
@@ -89,7 +105,7 @@ const AppContainer = () => {
 
         const endpoint = values.departmentId ? 'Department/Edit' : 'Department/Create';
         const successMessage = values.departmentId ? 'Updated successfully!' : 'Created successfully!';
-
+        
         axios
             .post(
                 resolveClientUrl(endpoint),
@@ -114,7 +130,58 @@ const AppContainer = () => {
             .catch(axiosError);
     };
 
-    const renderForm = ({ errors, isSubmitting }) => {
+  const getEmployees = (keyword, isPic) => {
+    var employees = prepareData.employees;
+    if (!employees) return;
+    if (keyword.trim().length > 1) {
+      const filtered = employees
+        .filter((emp) =>
+            emp.nickName &&
+            emp.nickName
+            .toLowerCase()
+            .includes(keyword.toLowerCase())
+        )
+        .map((emp) => ({
+          key: emp.id,
+          id: emp.id,
+          nickname: emp.nickName,
+          value: emp.displayNameWithCompany,
+          companyName: emp.company || "",
+        }));
+      isPic ? setPicOptions(filtered) : setSupporterOptions(filtered);
+    } else {
+      isPic ? setPicOptions([]) : setSupporterOptions([]);
+    }
+  };
+
+    const renderForm = ({ errors, isSubmitting, setFieldValue }) => {
+        const handleSelectPic = (_value = "", item) => {
+            setFieldValue("picEmpId", item.id);
+        };
+
+        const handleChangePic = (value) => {
+            setSearchPic(value);
+            if (value.trim() === "") {
+                setFieldValue("picEmpId", 0);
+            } else {
+                var isPic = true;
+                getEmployees(value, isPic);
+            }
+        };
+
+        const handleSelectSupporter = (_value = "", item) => {
+        setFieldValue("supporterEmpId", item.id);
+        };
+
+        const handleChangeSupporter = (value) => {
+            setSearchSupporter(value);
+            if (value.trim() === "") {
+                setFieldValue("supporterEmpId", 0);
+            } else {
+                var isPic = false;
+                getEmployees(value, isPic);
+            }
+        };
         return (
             <div className='card'>
                 <Errors errors={errors} />
@@ -185,16 +252,12 @@ const AppContainer = () => {
                             <label className='control-label'>Personal In Charge</label>
                         </div>
                         <div className='select-form'>
-                            <Field name='picEmpId' as='select' className='form-control'>
-                                <option value='' />
-                                {prepareData &&
-                                    prepareData.employees &&
-                                    prepareData.employees.map(emp => (
-                                        <option key={emp.id} value={emp.id}>
-                                            {emp.displayNameWithCompany}
-                                        </option>
-                                    ))}
-                            </Field>
+                            <EmployeeAutocomplete
+                                value={searchPic}
+                                options={picOptions}
+                                onChange={handleChangePic}
+                                onSelect={handleSelectPic}
+                            />
                         </div>
                     </div>
                     <div className='form-group'>
@@ -202,18 +265,12 @@ const AppContainer = () => {
                             <label className='control-label'>Department Support</label>
                         </div>
                         <div className='select-form'>
-                            <Field name='supporterEmpId' as='select' className='form-control'>
-                                <option value='' />
-                                {
-                                    prepareData &&
-                                    prepareData.employees &&
-                                    prepareData.employees.map(emp => (
-                                        <option key={emp.id} value={emp.id}>
-                                            {emp.displayNameWithCompany}
-                                        </option>
-                                    ))
-                                }
-                            </Field>
+                            <EmployeeAutocomplete
+                                value={searchSupporter}
+                                options={supporterOptions}
+                                onChange={handleChangeSupporter}
+                                onSelect={handleSelectSupporter}
+                            />
                         </div>
                     </div>
                     <div className='form-group'>

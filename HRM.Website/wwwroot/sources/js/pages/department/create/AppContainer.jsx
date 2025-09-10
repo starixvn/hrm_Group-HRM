@@ -11,11 +11,14 @@ import {
     axiosError,
     toastOptions,
 } from "../../../shared/common.functions";
+import EmployeeAutocomplete from "../../../shared/components/EmployeeAutocomplete";
 
 const AppContainer = () => {
     const [prepareData, setPrepareData] = useState(null);
     const [formKey, setFormKey] = useState(0);
     const units = useDepartmentUnits();
+    const [searchPic, setSearchPic] = useState("");
+    const [picOptions, setPicOptions] = useState([]);
 
     const [initialValues, setInitialValues] = useState({
         code: '',
@@ -85,7 +88,43 @@ const AppContainer = () => {
             .catch(axiosError);
     };
 
-    const renderForm = ({ errors, isSubmitting }) => {
+  const getEmployees = (keyword) => {
+    var employees = prepareData.employees;
+    if (!employees) return;
+    if (keyword.trim().length > 1) {
+      const filtered = employees
+        .filter((emp) =>
+            emp.nickName &&
+            emp.nickName
+            .toLowerCase()
+            .includes(keyword.toLowerCase())
+        )
+        .map((emp) => ({
+          key: emp.id,
+          id: emp.id,
+          nickname: emp.nickName,
+          value: emp.displayNameWithCompany,
+          companyName: emp.company || "",
+        }));
+      setPicOptions(filtered);
+    } else {
+      setPicOptions([]);
+    }
+  };
+
+    const renderForm = ({ errors, isSubmitting, setFieldValue }) => {
+        const handleSelectPic = (_value = "", item) => {
+            setFieldValue("picEmpId", item.id);
+        };
+
+        const handleChangePic = (value) => {
+            setSearchPic(value);
+            if (value.trim() === "") {
+                setFieldValue("picEmpId", 0);
+            } else {
+                getEmployees(value);
+            }
+        };
         return (
             <div className="card">
                 <Errors errors={errors} />
@@ -178,19 +217,12 @@ const AppContainer = () => {
                             </label>
                         </div>
                         <div className="select-form">
-                            <Field
-                                name="picEmpId"
-                                as="select"
-                                className="form-control">
-                                <option value='' />
-                                {prepareData &&
-                                    prepareData.employees &&
-                                    prepareData.employees.map(emp =>(
-                                        <option key={emp.id} value={emp.id}>
-                                            {emp.displayNameWithCompany}
-                                        </option>
-                                    ))}
-                            </Field>
+                            <EmployeeAutocomplete
+                                value={searchPic}
+                                options={picOptions}
+                                onChange={handleChangePic}
+                                onSelect={handleSelectPic}
+                            />
                         </div>
                     </div>
                     <div className="form-group">

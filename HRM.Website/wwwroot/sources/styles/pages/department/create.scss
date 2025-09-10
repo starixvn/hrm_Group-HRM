@@ -6,6 +6,7 @@
 @import "../../components/_validation.scss";
 @import "../../layout/_toastr.scss";
 @import "../../components/_checkbox.scss";
+@import '../../components/react-autocomplete-wrapper';
 
 .btn {
     margin-right: 5px;
@@ -31,4 +32,8 @@
 
 span.require {
     color: red;
+}
+
+.react-autocomplete-wrapper{
+    width: 100%;
 }
