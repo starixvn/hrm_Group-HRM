@@ -261,7 +261,7 @@ public class TeamService(
         if (session.HasPermissionOnFunction(FunctionKey.GroupTeamManagement_BUView, Policy.Read))
         {
             var unitIds = teams.Where(x => x.UnitPICEmpId == empId || x.UnitSupporterEmpId == empId)
-                .Select(x => x.Id).ToList();
+                .Select(x => x.UnitId).ToList();
             return teams.Where(x => unitIds.Contains(x.UnitId)).ToList();
         }
 

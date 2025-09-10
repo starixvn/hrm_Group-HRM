@@ -58,7 +58,7 @@ public class DepartmentService(
         if (session.HasPermissionOnFunction(FunctionKey.DepartmentManagement_BUView, Policy.Read))
         {
             var unitIds = departments.Where(x => x.Unit.PICEmpId == empId || x.Unit.SupporterEmpId == empId)
-                .Select(x => x.Id).ToList();
+                .Select(x => x.Unit.Id).ToList();
             return departments.Where(x => unitIds.Contains(x.Unit.Id)).ToList();
         }
 
