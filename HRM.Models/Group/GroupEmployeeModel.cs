@@ -39,7 +39,6 @@ public class GroupEmployeeModel
     public int DepartmentId { get; set; }
 
     public string DepartmentName { get; set; }
-    public int DepartmentPICEmpId { get; set; }
     public string DepartmentPIC { get; set; }
     public int DepartmentPICId { get; set; }
     public int DepartmentSupporterEmpId { get; set; }

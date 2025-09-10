@@ -113,14 +113,14 @@ public class GroupEmployeeListController(
         if (isBUView)
         {
             employees = employees.Where(e => e.UnitPICEmpId == EmployeeSession.EmpId
-                && e.UnitSupporterEmpId == EmployeeSession.EmpId);
+                || e.UnitSupporterEmpId == EmployeeSession.EmpId);
             return employees;
         }
 
         if (isDeptView)
         {
-            employees = employees.Where(e => e.DepartmentPICEmpId == EmployeeSession.EmpId
-                && e.DepartmentSupporterEmpId == EmployeeSession.EmpId);
+            employees = employees.Where(e => e.DepartmentPICId == EmployeeSession.EmpId
+                || e.DepartmentSupporterEmpId == EmployeeSession.EmpId);
         }
         return employees;
     }
