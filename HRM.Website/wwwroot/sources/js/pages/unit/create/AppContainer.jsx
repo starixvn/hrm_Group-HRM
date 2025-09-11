@@ -99,7 +99,7 @@ const AppContainer = ({ nextId }) => {
             <div className="select-form">
               <PICAutocomplete
                 data={employees}
-                onChange={value => { value == "" && setFieldValue("picEmpId", 0); }}
+                onChange={value => { value === "" && setFieldValue("picEmpId", 0); }}
                 onSelect={item => { setFieldValue("picEmpId", item.id); }}
               />
             </div>

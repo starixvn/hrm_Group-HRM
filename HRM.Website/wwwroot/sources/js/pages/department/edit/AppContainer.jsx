@@ -116,6 +116,14 @@ const AppContainer = () => {
     };
 
     const renderForm = ({ errors, isSubmitting, setFieldValue }) => {
+        let picValue = "";
+        let supporterValue = "";
+        if (initialValues.departmentId !== 0 && prepareData && prepareData.employees) {
+            const pic = prepareData.employees.find(e => e.id === initialValues.picEmpId);
+            picValue = pic ? pic.displayNameWithCompany : "";
+            const sup = prepareData.employees.find(e => e.id === initialValues.supporterEmpId);
+            supporterValue = sup ? sup.displayNameWithCompany : "";
+        }
         return (
             <div className='card'>
                 <Errors errors={errors} />
@@ -188,8 +196,8 @@ const AppContainer = () => {
                         <div className='select-form'>
                             <PICAutocomplete
                                 data={prepareData && prepareData.employees}
-                                value={initialValues ? initialValues.picEmpId ? prepareData && prepareData.employees && prepareData.employees.find(e => e.id === initialValues.picEmpId).displayNameWithCompany : "" : ""}
-                                onChange={value => { value == "" && setFieldValue("picEmpId", 0); }}
+                                value={picValue}
+                                onChange={value => { value === "" && setFieldValue("picEmpId", 0); }}
                                 onSelect={item => { setFieldValue("picEmpId", item.id); }}
                             />
                         </div>
@@ -201,8 +209,8 @@ const AppContainer = () => {
                         <div className='select-form'>
                             <PICAutocomplete
                                 data={prepareData && prepareData.employees}
-                                value={initialValues ? initialValues.supporterEmpId ? prepareData &&  prepareData.employees && prepareData.employees.find(e => e.id === initialValues.supporterEmpId).displayNameWithCompany : "" : ""}
-                                onChange={value => { value == "" && setFieldValue("supporterEmpId", 0); }}
+                                value={supporterValue}
+                                onChange={value => { value === "" && setFieldValue("supporterEmpId", 0); }}
                                 onSelect={item => { setFieldValue("supporterEmpId", item.id); }}
                             />
                         </div>

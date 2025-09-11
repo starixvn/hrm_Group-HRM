@@ -56,6 +56,14 @@ const AppContainer = () => {
   };
 
   const renderForm = ({ errors, isSubmitting, setFieldValue }) => {
+      let picValue = "";
+      let supporterValue = "";
+      if (unit && employees) {
+          const pic = employees.find(e => e.id === unit.picEmpId);
+          picValue = pic ? pic.displayNameWithCompany : "";
+          const sup = employees.find(e => e.id === unit.supporterEmpId);
+          supporterValue = sup ? sup.displayNameWithCompany : "";
+      }
     return (
       <div className="card">
         <Errors errors={errors} />
@@ -124,8 +132,8 @@ const AppContainer = () => {
             <div className="select-form">
               <PICAutocomplete
                 data={employees}
-                value={unit ? unit.picEmpId ? employees && employees.find(e => e.id === unit.picEmpId).displayNameWithCompany : "" : ""}
-                onChange={value => { value == "" && setFieldValue("picEmpId", 0); }}
+                value={picValue}
+                onChange={value => { value === "" && setFieldValue("picEmpId", 0); }}
                 onSelect={item => { setFieldValue("picEmpId", item.id); }}
               />
             </div>
@@ -137,8 +145,8 @@ const AppContainer = () => {
             <div className="select-form">
               <PICAutocomplete
                 data={employees}
-                value={unit ? unit.supporterEmpId ? employees && employees.find(e => e.id === unit.supporterEmpId).displayNameWithCompany : "" : ""}
-                onChange={value => { value == "" && setFieldValue("supporterEmpId", 0); }}
+                value={supporterValue}
+                onChange={value => { value === "" && setFieldValue("supporterEmpId", 0); }}
                 onSelect={item => { setFieldValue("supporterEmpId", item.id); }}
               />
             </div>

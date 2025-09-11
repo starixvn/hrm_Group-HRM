@@ -181,8 +181,7 @@ const AppContainer = () => {
                         <div className="select-form">
                             <PICAutocomplete
                                 data={prepareData && prepareData.employees}
-                                value={initialValues ? initialValues.picEmpId ? prepareData && prepareData.employees && prepareData.employees.find(e => e.id === initialValues.picEmpId).displayNameWithCompany : "" : ""}
-                                onChange={value => { value == "" && setFieldValue("picEmpId", 0); }}
+                                onChange={value => { value === "" && setFieldValue("picEmpId", 0); }}
                                 onSelect={item => { setFieldValue("picEmpId", item.id); }}
                             />
                         </div>
