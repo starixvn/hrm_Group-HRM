@@ -51,12 +51,14 @@ export default class TreeMultiselect extends React.Component {
     static propTypes = {
         data: PropTypes.arrayOf(PropTypes.object).isRequired,
         isSelectedAll: PropTypes.bool,
-        onChange: PropTypes.func
+        onChange: PropTypes.func,
+        hasSearchBox: PropTypes.bool,
     }
 
     static defaultProps = {
         data: [],
         isSelectedAll: false,
+        hasSearchBox: false,
         onChange: function () { }
     }
 
@@ -64,7 +66,6 @@ export default class TreeMultiselect extends React.Component {
         if (state.original === props.data) {
             return null;
         }
-
         return { ...buildData(props.data || [], props.isSelectedAll), original: props.data };
     }
 
@@ -73,7 +74,8 @@ export default class TreeMultiselect extends React.Component {
         this.id = `multiselect-treeview-${props.id || id++}`;
         this.state = {
             selectedText: 'Select options',
-            opened: false
+            opened: false,
+            searchText: ''
         };
     }
 
@@ -121,6 +123,31 @@ export default class TreeMultiselect extends React.Component {
         this.setState({ floatData });
     }
 
+    renderNodes = (data, floatData, searchText) => {
+        const filter = (node) => {
+            if (!searchText) return true;
+            if (node.text.toLowerCase().includes(searchText.toLowerCase())) return true;
+            if (node.items && node.items.some(filter)) return true;
+            return false;
+        };
+
+        const renderRecursive = (nodes) => (
+            nodes.filter(filter).map(item => (
+                <ul key={item.key}>
+                    <li className="multiselect-treeview-item">
+                        <TreeNode
+                            data={item}
+                            floatData={floatData}
+                            onSelect={this.handleSelect}
+                        />
+                    </li>
+                </ul>
+            ))
+        );
+
+        return renderRecursive(data);
+    };
+
     render() {
         const { floatData, data } = this.state;
         const selected = floatData.filter(item => item.checked);
@@ -133,6 +160,17 @@ export default class TreeMultiselect extends React.Component {
                     <span className="up-down-icon"><span className={this.state.opened ? 'up' : 'down'} /></span>
                 </div>
                 <div className={`multiselect-treeview-dropdown-list ${this.state.opened ? '' : 'hidden'}`}>
+                    {this.props.hasSearchBox && (
+                        <div className="multiselect-treeview-search">
+                            <input
+                                type="text"
+                                placeholder="Search..."
+                                className="form-control"
+                                value={this.state.searchText}
+                                onChange={e => this.setState({ searchText: e.target.value })}
+                            />
+                        </div>
+                    )}
                     <div className="multiselect-treeview-select-all">
                         <div className="checkbox-wrapper">
                             <input type="checkbox" id="selectAll"
@@ -143,19 +181,7 @@ export default class TreeMultiselect extends React.Component {
                         </div>
                     </div>
                     <div className="multiselect-treeview-items">
-                        {
-                            data.map(item =>
-                                <ul key={item.key}>
-                                    <li className="multiselect-treeview-item">
-                                        <TreeNode
-                                            data={item}
-                                            floatData={floatData}
-                                            onSelect={this.handleSelect}
-                                        />
-                                    </li>
-                                </ul>
-                            )
-                        }
+                        {this.renderNodes(data, floatData, this.state.searchText)}
                     </div>
                 </div>
             </div>

@@ -7,10 +7,12 @@ import Errors from "../../../shared/components/Errors";
 import { resolveClientUrl, axiosError } from "../../../shared/common.functions";
 import { validationSchema, submitUnit } from "../common.functions";
 import PICAutocomplete from "../../../shared/components/PICAutocomplete";
+import TreeMultiselect from "../../../shared/components/react-tree-multiselect/TreeMultiselect";
 
 const AppContainer = () => {
   const [unit, setUnit] = useState(null);
   const [employees, setEmployees] = useState(null);
+    const [multiSelectSupporter, setMultiSelectSupporter] = useState([]);
 
   const handleGoBack = () => {
     history.back();
@@ -37,6 +39,26 @@ const AppContainer = () => {
       })
       .catch(axiosError);
   }, []);
+  
+    useEffect(() => {
+      if (employees && unit) {
+        const supporterIds = String(unit.supporterEmpId ? unit.supporterEmpId : "")
+          .split(",")
+          .map((x) => x.trim());
+        var mapEmployees = employees.map((e) => {
+          const isChecked = supporterIds.includes(e.id.toString());
+          return {
+            id: e.id,
+            text: e.displayNameWithCompany,
+            enabled: true,
+            isLeaf: true,
+            parentId: null,
+            checked: isChecked,
+          };
+        });
+        setMultiSelectSupporter(mapEmployees);
+      }
+    }, [employees, unit]);
 
   const handleSubmit = (values, { setSubmitting }) => {
     setSubmitting(true);
@@ -57,13 +79,15 @@ const AppContainer = () => {
 
   const renderForm = ({ errors, isSubmitting, setFieldValue }) => {
       let picValue = "";
-      let supporterValue = "";
       if (unit && employees) {
           const pic = employees.find(e => e.id === unit.picEmpId);
           picValue = pic ? pic.displayNameWithCompany : "";
-          const sup = employees.find(e => e.id === unit.supporterEmpId);
-          supporterValue = sup ? sup.displayNameWithCompany : "";
       }
+
+    const handleSupporter = (value) => {
+      var ids = value.map((v) => v.id);
+      setFieldValue("supporterEmpId", ids.join(","));
+    };
     return (
       <div className="card">
         <Errors errors={errors} />
@@ -143,12 +167,12 @@ const AppContainer = () => {
               <label className="control-label">BU Support</label>
             </div>
             <div className="select-form">
-              <PICAutocomplete
-                data={employees}
-                value={supporterValue}
-                onChange={value => { value === "" && setFieldValue("supporterEmpId", 0); }}
-                onSelect={item => { setFieldValue("supporterEmpId", item.id); }}
-              />
+                <TreeMultiselect
+                  data={multiSelectSupporter}
+                  isSelectedAll={false}
+                  onChange={handleSupporter}
+                  hasSearchBox={true}
+                />
             </div>
           </div>
           <div className="form-group">
