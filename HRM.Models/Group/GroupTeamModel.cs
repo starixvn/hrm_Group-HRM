@@ -12,7 +12,7 @@ public class GroupTeamModel
 
     public string UnitCode { get; set; }
     public int UnitPICEmpId { get; set; }
-    public int UnitSupporterEmpId { get; set; }
+    public string UnitSupporterEmpId { get; set; }
 
     public int DepartmentId { get; set; }
 
@@ -20,7 +20,7 @@ public class GroupTeamModel
 
     public int? DepartmentPICCtrId { get; set; }
     public int DepartmentPICEmpId { get; set; }
-    public int DepartmentSupporterEmpId { get; set; }
+    public string DepartmentSupporterEmpId { get; set; }
 
     public string DepartmentName { get; set; }
 

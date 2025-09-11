@@ -64,7 +64,8 @@ public class DepartmentService(
 
         if (session.HasPermissionOnFunction(FunctionKey.DepartmentManagement_DeptView, Policy.Read))
         {
-            var unitIds = departments.Where(x => x.PICEmpId == empId || x.SupporterEmpId == empId)
+            var unitIds = departments.Where(x => x.PICEmpId == empId ||
+                    (x.SupporterEmpId != null && x.SupporterEmpId.Split(',').Any(id => id.Trim() == empId.ToString())))
                 .Select(x => x.Unit.Id).ToList();
             return departments.Where(x => unitIds.Contains(x.Unit.Id)).ToList();
         }
