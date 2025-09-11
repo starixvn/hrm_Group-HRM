@@ -39,7 +39,7 @@ public class RequestService(
     IChangeShiftRequestService changeShiftRequestService,
     ILeaveRequestService leaveRequestService,
     IKeepInViewRequestService keepInViewRequestService,
-    IUserControlSession userControlSession,
+    IUserControlSession session,
     IEmployeeService employeeService,
     ICompanyService companyService,
     NexConfig nexConfig) : IRequestService
@@ -97,7 +97,7 @@ public class RequestService(
 
     public async Task<VerifierAndApproverForRequest> GetVerifierAndApproverAsync(int employeeId, RequestType requestType)
     {
-        var companyId = userControlSession.Get<int>(SessionKey.CurrentCompanyId);
+        var companyId = session.Get<int>(SessionKey.CurrentCompanyId);
         var criteria = new GetVerifierAndApproverCriteria
         {
             EmpId = employeeId,
@@ -140,7 +140,16 @@ public class RequestService(
         {
             RequestId = requestId
         };
-        return await requestRepository.GetLeaveRequestToReviewDiscipline(criteria);
+        var requests = await requestRepository.GetLeaveRequestToReviewDiscipline(criteria);
+        foreach (var request in requests)
+        {
+            foreach (var detail in request.LeaveDetail)
+            {
+                detail.FromTime = detail.FromTime.ToClientTimeZone();
+                detail.ToTime = detail.ToTime.ToClientTimeZone();
+            }
+        }
+        return requests;
     }
 
     public async Task<CommandResult> ApproveRequest(int actorId, ProcessRequestParam param)
@@ -173,7 +182,7 @@ public class RequestService(
 
     public async Task<CommandResult> RejectRequest(int actorId, ProcessRequestParam param)
     {
-        var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
+        var companyId = session.Get<short>(SessionKey.CurrentCompanyId);
         if (companyId == 0)
         {
             var company = await companyService.GetCompanySiteByDomainAsync();
@@ -193,7 +202,7 @@ public class RequestService(
 
     public async Task<CommandResult> ResetRequest(int actorId, ProcessRequestParam param)
     {
-        var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
+        var companyId = session.Get<short>(SessionKey.CurrentCompanyId);
         if (companyId == 0)
         {
             var company = await companyService.GetCompanySiteByDomainAsync();
@@ -212,7 +221,7 @@ public class RequestService(
 
     public async Task<CommandResult> VoidRequest(int actorId, ProcessRequestParam param)
     {
-        var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
+        var companyId = session.Get<short>(SessionKey.CurrentCompanyId);
         if (companyId == 0)
         {
             var company = await companyService.GetCompanySiteByDomainAsync();
