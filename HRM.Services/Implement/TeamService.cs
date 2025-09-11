@@ -258,6 +258,9 @@ public class TeamService(
 
     public IEnumerable<GroupTeamModel> GetTeamEmployeeBelongsTo(IEnumerable<GroupTeamModel> teams, int empId)
     {
+        if (session.HasPermissionOnFunction(FunctionKey.GroupTeamManagement_SAView, Policy.Read){
+            return teams;
+        }
         string empIdStr = empId.ToString();
 
         if (session.HasPermissionOnFunction(FunctionKey.GroupTeamManagement_BUView, Policy.Read))

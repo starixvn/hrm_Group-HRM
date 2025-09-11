@@ -107,6 +107,9 @@ public class GroupEmployeeListController(
 
     private IEnumerable<GroupEmployeeModel> FilterEmployeeByView(IEnumerable<GroupEmployeeModel> employees)
     {
+        if (session.HasPermissionOnFunction(FunctionKey.GroupEmployeeList_SAView, Policy.Read){
+            return employees;
+        }
         var isBUView = session.HasPermissionOnFunction(FunctionKey.GroupEmployeeList_BUView, Policy.Read);
         var isDeptView = session.HasPermissionOnFunction(FunctionKey.GroupEmployeeList_DeptView, Policy.Read);
 
