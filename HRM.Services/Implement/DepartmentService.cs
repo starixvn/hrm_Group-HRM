@@ -55,7 +55,8 @@ public class DepartmentService(
 
     public IList<Department> GetDepartmentEmployeeBelongsTo(IList<Department> departments, int empId)
     {
-        if (session.HasPermissionOnFunction(FunctionKey.DepartmentManagement_SAView, Policy.Read){
+        if (session.HasPermissionOnFunction(FunctionKey.DepartmentManagement_SAView, Policy.Read))
+        {
             return departments;
         }
         string empIdStr = empId.ToString();
