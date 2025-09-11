@@ -6,12 +6,10 @@ import Errors from '../../../shared/components/Errors';
 
 import { resolveClientUrl, axiosError } from '../../../shared/common.functions';
 import { validationSchema, submitUnit } from '../common.functions';
-import EmployeeAutocomplete from '../../../shared/components/EmployeeAutocomplete';
+import PICAutocomplete from '../../../shared/components/PICAutocomplete';
 
 const AppContainer = ({ nextId }) => {
   const [employees, setEmployees] = useState(null);
-    const [searchPic, setSearchPic] = useState("");
-    const [picOptions, setPicOptions] = useState([]);
 
   useEffect(() => {
     axios({
@@ -45,45 +43,7 @@ const AppContainer = ({ nextId }) => {
     submitUnit('Unit/Create', model, setSubmitting);
   };
 
-  const getEmployees = keyword => {
-    if (!employees) {
-        return;
-    }
-
-    if (keyword.trim().length > 1) {
-      const filtered = employees
-        .filter(emp =>
-          emp.nickName &&
-          emp.nickName
-            .toLowerCase()
-            .includes(keyword.toLowerCase())
-        )
-        .map(emp => ({
-          key: emp.id,
-          id: emp.id,
-          nickname: emp.nickName,
-          value: emp.displayNameWithCompany,
-          companyName: emp.company || "",
-        }));
-      setPicOptions(filtered);
-    } else {
-      setPicOptions([]);
-    }
-  };
-
   const renderForm = ({ errors, isSubmitting, setFieldValue }) => {
-    const handleSelectPic = (_value, item) => {
-      setFieldValue("picEmpId", item.id);
-    };
-
-    const handleChangePic = value => {
-        setSearchPic(value);
-        if (value.trim() === "") {
-            setFieldValue("picEmpId", 0);
-        } else {
-            getEmployees(value);
-        }
-    };
     return (
       <div className="card">
         <Errors errors={errors} />
@@ -137,11 +97,10 @@ const AppContainer = ({ nextId }) => {
               <label className="control-label">Personal In Charge</label>
             </div>
             <div className="select-form">
-              <EmployeeAutocomplete
-                value={searchPic}
-                options={picOptions}
-                onChange={handleChangePic}
-                onSelect={handleSelectPic}
+              <PICAutocomplete
+                data={employees}
+                onChange={value => { value == "" && setFieldValue("picEmpId", 0); }}
+                onSelect={item => { setFieldValue("picEmpId", item.id); }}
               />
             </div>
           </div>

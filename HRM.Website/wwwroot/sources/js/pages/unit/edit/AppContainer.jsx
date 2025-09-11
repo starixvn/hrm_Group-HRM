@@ -6,15 +6,11 @@ import Errors from "../../../shared/components/Errors";
 
 import { resolveClientUrl, axiosError } from "../../../shared/common.functions";
 import { validationSchema, submitUnit } from "../common.functions";
-import EmployeeAutocomplete from "../../../shared/components/EmployeeAutocomplete";
+import PICAutocomplete from "../../../shared/components/PICAutocomplete";
 
 const AppContainer = () => {
   const [unit, setUnit] = useState(null);
   const [employees, setEmployees] = useState(null);
-  const [searchPic, setSearchPic] = useState("");
-  const [picOptions, setPicOptions] = useState([]);
-  const [searchSupporter, setSearchSupporter] = useState("");
-  const [supporterOptions, setSupporterOptions] = useState([]);
 
   const handleGoBack = () => {
     history.back();
@@ -42,17 +38,6 @@ const AppContainer = () => {
       .catch(axiosError);
   }, []);
 
-  useEffect(() => {
-    if (unit && employees) {
-      const employeePic =
-        employees && employees.find(e => e.id === unit.picEmpId);
-      employeePic && setSearchPic(employeePic.displayNameWithCompany);
-      const supporter =
-        employees && employees.find(e => e.id === unit.supporterEmpId);
-      supporter && setSearchSupporter(supporter.displayNameWithCompany);
-    }
-  }, [unit, employees]);
-
   const handleSubmit = (values, { setSubmitting }) => {
     setSubmitting(true);
 
@@ -70,60 +55,7 @@ const AppContainer = () => {
     submitUnit("Unit/Edit", model, setSubmitting);
   };
 
-  const getEmployees = (keyword, isPic) => {
-    if (!employees) {
-        return;
-    }
-
-    if (keyword.trim().length > 1) {
-      const filtered = employees
-        .filter(emp =>
-            emp.nickName &&
-            emp.nickName
-            .toLowerCase()
-            .includes(keyword.toLowerCase())
-        )
-        .map(emp => ({
-          key: emp.id,
-          id: emp.id,
-          nickname: emp.nickName,
-          value: emp.displayNameWithCompany,
-          companyName: emp.company || "",
-        }));
-      isPic ? setPicOptions(filtered) : setSupporterOptions(filtered);
-    } else {
-      isPic ? setPicOptions([]) : setSupporterOptions([]);
-    }
-  };
-
   const renderForm = ({ errors, isSubmitting, setFieldValue }) => {
-    const handleSelectPic = (_value, item) => {
-      setFieldValue("picEmpId", item.id);
-    };
-
-    const handleChangePic = value => {
-        setSearchPic(value);
-        if (value.trim() === "") {
-            setFieldValue("picEmpId", 0);
-        } else {
-            const isPic = true;
-            getEmployees(value, isPic);
-        }
-    };
-
-    const handleSelectSupporter = (_value, item) => {
-      setFieldValue("supporterEmpId", item.id);
-    };
-
-    const handleChangeSupporter = value => {
-        setSearchSupporter(value);
-        if (value.trim() === "") {
-            setFieldValue("supporterEmpId", 0);
-        } else {
-            const isPic = false;
-            getEmployees(value, isPic);
-        }
-    };
     return (
       <div className="card">
         <Errors errors={errors} />
@@ -190,11 +122,11 @@ const AppContainer = () => {
               <label className="control-label">Personal In Charge</label>
             </div>
             <div className="select-form">
-              <EmployeeAutocomplete
-                value={searchPic}
-                options={picOptions}
-                onChange={handleChangePic}
-                onSelect={handleSelectPic}
+              <PICAutocomplete
+                data={employees}
+                value={unit ? unit.picEmpId ? employees && employees.find(e => e.id === unit.picEmpId).displayNameWithCompany : "" : ""}
+                onChange={value => { value == "" && setFieldValue("picEmpId", 0); }}
+                onSelect={item => { setFieldValue("picEmpId", item.id); }}
               />
             </div>
           </div>
@@ -203,11 +135,11 @@ const AppContainer = () => {
               <label className="control-label">BU Support</label>
             </div>
             <div className="select-form">
-              <EmployeeAutocomplete
-                value={searchSupporter}
-                options={supporterOptions}
-                onChange={handleChangeSupporter}
-                onSelect={handleSelectSupporter}
+              <PICAutocomplete
+                data={employees}
+                value={unit ? unit.supporterEmpId ? employees && employees.find(e => e.id === unit.supporterEmpId).displayNameWithCompany : "" : ""}
+                onChange={value => { value == "" && setFieldValue("supporterEmpId", 0); }}
+                onSelect={item => { setFieldValue("supporterEmpId", item.id); }}
               />
             </div>
           </div>
