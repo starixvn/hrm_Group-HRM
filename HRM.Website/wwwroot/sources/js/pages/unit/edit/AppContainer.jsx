@@ -71,7 +71,7 @@ const AppContainer = () => {
       type: values.type,
       accountableArea: values.accountableArea,
       picEmpId: parseInt(values.picEmpId, 10) || 0,
-      supporterEmpId: parseInt(values.supporterEmpId, 10) || 0,
+      supporterEmpId: values.supporterEmpId,
       isActive: values.isActive,
     };
     submitUnit("Unit/Edit", model, setSubmitting);
