@@ -55,18 +55,29 @@ public class DepartmentService(
 
     public IList<Department> GetDepartmentEmployeeBelongsTo(IList<Department> departments, int empId)
     {
+        string empIdStr = empId.ToString();
+
         if (session.HasPermissionOnFunction(FunctionKey.DepartmentManagement_BUView, Policy.Read))
         {
-            var unitIds = departments.Where(x => x.Unit.PICEmpId == empId || x.Unit.SupporterEmpId == empId)
-                .Select(x => x.Unit.Id).ToList();
+            var unitIds = departments
+                .Where(x => x.Unit.PICEmpId == empId ||
+                            (x.Unit.SupporterEmpId != null &&
+                             x.Unit.SupporterEmpId.Split(',').ToList().Exists(id => id.Trim() == empIdStr)))
+                .Select(x => x.Unit.Id)
+                .ToList();
+
             return departments.Where(x => unitIds.Contains(x.Unit.Id)).ToList();
         }
 
         if (session.HasPermissionOnFunction(FunctionKey.DepartmentManagement_DeptView, Policy.Read))
         {
-            var unitIds = departments.Where(x => x.PICEmpId == empId ||
-                    (x.SupporterEmpId != null && x.SupporterEmpId.Split(',').Any(id => id.Trim() == empId.ToString())))
-                .Select(x => x.Unit.Id).ToList();
+            var unitIds = departments
+                .Where(x => x.PICEmpId == empId ||
+                            (x.SupporterEmpId != null &&
+                             x.SupporterEmpId.Split(',').ToList().Exists(id => id.Trim() == empIdStr)))
+                .Select(x => x.Unit.Id)
+                .ToList();
+
             return departments.Where(x => unitIds.Contains(x.Unit.Id)).ToList();
         }
 

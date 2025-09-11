@@ -113,14 +113,16 @@ public class GroupEmployeeListController(
         if (isBUView)
         {
             employees = employees.Where(e => e.UnitPICEmpId == EmployeeSession.EmpId ||
-                (e.UnitSupporterEmpId != null && e.UnitSupporterEmpId.Split(',').Any(id => id.Trim() == EmployeeSession.EmpId.ToString())));
+                (e.UnitSupporterEmpId != null &&
+                 e.UnitSupporterEmpId.Split(',').ToList().Exists(id => id.Trim() == EmployeeSession.EmpId.ToString())));
             return employees;
         }
 
         if (isDeptView)
         {
             employees = employees.Where(e => e.DepartmentPICId == EmployeeSession.EmpId ||
-                (e.DepartmentSupporterEmpId != null && e.DepartmentSupporterEmpId.Split(',').Any(id => id.Trim() == EmployeeSession.EmpId.ToString())));
+                (e.DepartmentSupporterEmpId != null &&
+                 e.DepartmentSupporterEmpId.Split(',').ToList().Exists(id => id.Trim() == EmployeeSession.EmpId.ToString())));
         }
         return employees;
     }
