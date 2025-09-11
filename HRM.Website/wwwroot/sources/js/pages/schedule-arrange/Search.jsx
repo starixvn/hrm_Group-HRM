@@ -28,7 +28,6 @@ export default class Search extends Component {
         this.props.onSubmit(event.target.name === 'currentWeek');
     };
     render() {
-    console.log('this.props.teamOptions', this.props.teamOptions)
         return (
             <div className="filter">
                 <div className="form-horizontal clearfix">

@@ -41,9 +41,9 @@ const AppContainer = () => {
       method: "GET",
       headers: { "X-Requested-With": "XMLHttpRequest" },
     })
-      .then((response) => {
+      .then(response => {
         const data = response.data;
-        setInitialValues((prev) => ({
+        setInitialValues(prev => ({
           ...prev,
           departmentId: data.departmentId,
           code: data.code,
@@ -55,7 +55,7 @@ const AppContainer = () => {
           supporterEmpId: data.supporterEmpId,
           groupDeptId: data.groupDeptId,
         }));
-        setFormKey((prev) => prev + 1);
+        setFormKey(prev => prev + 1);
       })
       .catch(axiosError);
   }, []);
@@ -66,8 +66,8 @@ const AppContainer = () => {
         initialValues.supporterEmpId ? initialValues.supporterEmpId : ""
       )
         .split(",")
-        .map((x) => x.trim());
-      var mapEmployees = prepareData.employees.map((e) => {
+        .map(x => x.trim());
+      const mapEmployees = prepareData.employees.map(e => {
         const isChecked = supporterIds.includes(e.id.toString());
         return {
           id: e.id,
@@ -88,7 +88,7 @@ const AppContainer = () => {
       method: "GET",
       headers: { "X-Requested-With": "XMLHttpRequest" },
     })
-      .then((response) => {
+      .then(response => {
         setPrepareData(response.data);
       })
       .catch(axiosError);
@@ -123,7 +123,7 @@ const AppContainer = () => {
       .post(resolveClientUrl(endpoint), submitData, {
         headers: { "X-Requested-With": "XMLHttpRequest" },
       })
-      .then((response) => {
+      .then(response => {
         const { data } = response;
         if (data.isSuccessful) {
           toastr.success(successMessage, "", toastOptions());
@@ -146,13 +146,13 @@ const AppContainer = () => {
       prepareData.employees
     ) {
       const pic = prepareData.employees.find(
-        (e) => e.id === initialValues.picEmpId
+        e => e.id === initialValues.picEmpId
       );
       picValue = pic ? pic.displayNameWithCompany : "";
     }
 
-    const handleSupporter = (value) => {
-      var ids = value.map((v) => v.id);
+    const handleSupporter = value => {
+      const ids = value.map(v => v.id);
       setFieldValue("supporterEmpId", ids.join(","));
     };
     return (
@@ -185,7 +185,7 @@ const AppContainer = () => {
               <Field name="unit" as="select" className="form-control">
                 <option value="" />
                 {units
-                  ? units.map((unit) => (
+                  ? units.map(unit => (
                       <option key={unit.id} value={unit.id}>
                         {unit.code}-{unit.accountableArea}
                       </option>
@@ -236,10 +236,10 @@ const AppContainer = () => {
               <PICAutocomplete
                 data={prepareData && prepareData.employees}
                 value={picValue}
-                onChange={(value) => {
+                onChange={value => {
                   value === "" && setFieldValue("picEmpId", 0);
                 }}
-                onSelect={(item) => {
+                onSelect={item => {
                   setFieldValue("picEmpId", item.id);
                 }}
               />

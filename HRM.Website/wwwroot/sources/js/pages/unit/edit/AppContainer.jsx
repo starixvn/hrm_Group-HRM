@@ -44,8 +44,8 @@ const AppContainer = () => {
       if (employees && unit) {
         const supporterIds = String(unit.supporterEmpId ? unit.supporterEmpId : "")
           .split(",")
-          .map((x) => x.trim());
-        var mapEmployees = employees.map((e) => {
+          .map(x => x.trim());
+        const mapEmployees = employees.map(e => {
           const isChecked = supporterIds.includes(e.id.toString());
           return {
             id: e.id,
@@ -84,8 +84,8 @@ const AppContainer = () => {
           picValue = pic ? pic.displayNameWithCompany : "";
       }
 
-    const handleSupporter = (value) => {
-      var ids = value.map((v) => v.id);
+    const handleSupporter = value => {
+      const ids = value.map(v => v.id);
       setFieldValue("supporterEmpId", ids.join(","));
     };
     return (
