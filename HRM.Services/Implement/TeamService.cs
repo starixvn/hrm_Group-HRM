@@ -263,30 +263,31 @@ public class TeamService(
             return teams;
         }
 
+        List<int> unitIds = [];
+        List<int> deptIds = [];
+
         if (session.HasPermissionOnFunction(FunctionKey.GroupTeamManagement_BUView, Policy.Read))
         {
-            var unitIds = teams
+            unitIds = teams
                 .Where(x => x.UnitPICEmpId == empId ||
                             (x.UnitSupporterEmpId != null &&
                              x.UnitSupporterEmpId.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).ToList().Exists(id => id == empId.ToString())))
                 .Select(x => x.UnitId)
+                .Distinct()
                 .ToList();
-
-            return teams.Where(x => unitIds.Contains(x.UnitId)).ToList();
         }
 
         if (session.HasPermissionOnFunction(FunctionKey.GroupTeamManagement_DeptView, Policy.Read))
         {
-            var deptIds = teams
+            deptIds = teams
                 .Where(x => x.DepartmentPICEmpId == empId ||
                             (x.DepartmentSupporterEmpId != null &&
                              x.DepartmentSupporterEmpId.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).ToList().Exists(id => id == empId.ToString())))
                 .Select(x => x.DepartmentId)
+                .Distinct()
                 .ToList();
-
-            return teams.Where(x => deptIds.Contains(x.DepartmentId)).ToList();
         }
 
-        return teams;
+        return teams.Where(x => unitIds.Contains(x.UnitId) || deptIds.Contains(x.DepartmentId)).ToList();
     }
 }

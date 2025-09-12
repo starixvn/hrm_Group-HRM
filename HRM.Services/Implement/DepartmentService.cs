@@ -59,32 +59,30 @@ public class DepartmentService(
         {
             return departments;
         }
+        List<int> unitIds = [];
 
         if (session.HasPermissionOnFunction(FunctionKey.DepartmentManagement_BUView, Policy.Read))
         {
-            var unitIds = departments
+            unitIds.AddRange(departments
                 .Where(x => x.Unit.PICEmpId == empId ||
                             (!string.IsNullOrWhiteSpace(x.Unit.SupporterEmpId) &&
                              x.Unit.SupporterEmpId.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).ToList().Exists(id => id == empId.ToString())))
                 .Select(x => x.Unit.Id)
-                .ToList();
-
-            return departments.Where(x => unitIds.Contains(x.Unit.Id)).ToList();
+                .ToList());
         }
 
         if (session.HasPermissionOnFunction(FunctionKey.DepartmentManagement_DeptView, Policy.Read))
         {
-            var unitIds = departments
+            unitIds.AddRange(departments
                 .Where(x => x.PICEmpId == empId ||
                             (!string.IsNullOrWhiteSpace(x.SupporterEmpId) &&
                              x.SupporterEmpId.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).ToList().Exists(id => id == empId.ToString())))
                 .Select(x => x.Unit.Id)
-                .ToList();
-
-            return departments.Where(x => unitIds.Contains(x.Unit.Id)).ToList();
+                .ToList());
         }
 
-        return departments;
+        var distinctUnitIds = unitIds.Distinct().ToList();
+        return departments.Where(x => distinctUnitIds.Contains(x.Unit.Id)).ToList();
     }
 
     public async Task<Department> GetByIdAsync(int departmentId)

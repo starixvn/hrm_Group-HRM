@@ -112,22 +112,29 @@ public class GroupEmployeeListController(
             return employees;
         }
 
+        List<int> empIds = [];
+
         if (session.HasPermissionOnFunction(FunctionKey.GroupEmployeeList_BUView, Policy.Read))
         {
-            employees = employees.Where(e => e.UnitPICEmpId == EmployeeSession.EmpId ||
-                (!string.IsNullOrWhiteSpace(e.UnitSupporterEmpId) &&
-                 e.UnitSupporterEmpId.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).ToList().Exists(id => id == EmployeeSession.EmpId.ToString())));
-            return employees;
+            empIds.AddRange(employees.Where(e => e.UnitPICEmpId == EmployeeSession.EmpId ||
+                    (!string.IsNullOrWhiteSpace(e.UnitSupporterEmpId) &&
+                     e.UnitSupporterEmpId.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).ToList().Exists(id => id == EmployeeSession.EmpId.ToString())))
+                .Select(e => e.EmpId)
+                .ToList());
         }
 
         if (session.HasPermissionOnFunction(FunctionKey.GroupEmployeeList_DeptView, Policy.Read))
         {
-            employees = employees.Where(e => e.DepartmentPICId == EmployeeSession.EmpId ||
+            empIds.AddRange(employees.Where(e => e.DepartmentPICId == EmployeeSession.EmpId ||
                 (!string.IsNullOrWhiteSpace(e.DepartmentSupporterEmpId) &&
-                 e.DepartmentSupporterEmpId.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).ToList().Exists(id => id == EmployeeSession.EmpId.ToString())));
+                 e.DepartmentSupporterEmpId.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).ToList().Exists(id => id == EmployeeSession.EmpId.ToString())))
+                .Select(e => e.EmpId)
+                .ToList());
         }
 
-        return employees;
+        var distinctEmpIds = empIds.Distinct().ToList();
+
+        return employees.Where(e => distinctEmpIds.Contains(e.EmpId));
     }
 
     public async Task<IActionResult> GroupEmployeeList(GroupEmployeeViewModel model)
