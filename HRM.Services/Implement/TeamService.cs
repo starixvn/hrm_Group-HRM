@@ -258,18 +258,17 @@ public class TeamService(
 
     public IEnumerable<GroupTeamModel> GetTeamEmployeeBelongsTo(IEnumerable<GroupTeamModel> teams, int empId)
     {
-        if (session.HasPermissionOnFunction(FunctionKey.GroupTeamManagement_SAView, Policy.Read))
+        if (session.HasPermissionOnFunction(FunctionKey.GroupTeamManagement_ViewAll, Policy.Read))
         {
             return teams;
         }
-        string empIdStr = empId.ToString();
 
         if (session.HasPermissionOnFunction(FunctionKey.GroupTeamManagement_BUView, Policy.Read))
         {
             var unitIds = teams
                 .Where(x => x.UnitPICEmpId == empId ||
                             (x.UnitSupporterEmpId != null &&
-                             x.UnitSupporterEmpId.Split(',').ToList().Exists(id => id.Trim() == empIdStr)))
+                             x.UnitSupporterEmpId.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).ToList().Exists(id => id == empId.ToString())))
                 .Select(x => x.UnitId)
                 .ToList();
 
@@ -281,7 +280,7 @@ public class TeamService(
             var deptIds = teams
                 .Where(x => x.DepartmentPICEmpId == empId ||
                             (x.DepartmentSupporterEmpId != null &&
-                             x.DepartmentSupporterEmpId.Split(',').ToList().Exists(id => id.Trim() == empIdStr)))
+                             x.DepartmentSupporterEmpId.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).ToList().Exists(id => id == empId.ToString())))
                 .Select(x => x.DepartmentId)
                 .ToList();
 

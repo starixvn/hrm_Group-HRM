@@ -97,8 +97,8 @@ public class GroupEmployeeListController(
 
         ViewBag.HasPermissionToEdit = session.HasPermissionOnFunction(FunctionKey.GroupEmployeeList, Policy.Host);
         ViewBag.ShowSalaryCurrency = session.HasPermissionOnFunction(FunctionKey.ShowSalaryCurrencyInfo, Policy.Read);
-        var isDisabled = enableUser.HasValue && enableUser == false;
-        var isDeleted = isDeleteUser.HasValue && isDeleteUser == true;
+        var isDisabled = enableUser is false;
+        var isDeleted = isDeleteUser is true;
         var isAll = !enableUser.HasValue && !isDeleteUser.HasValue;
         ViewBag.ShowResignedDate = isAll || isDisabled || isDeleted;
 
@@ -107,27 +107,26 @@ public class GroupEmployeeListController(
 
     private IEnumerable<GroupEmployeeModel> FilterEmployeeByView(IEnumerable<GroupEmployeeModel> employees)
     {
-        if (session.HasPermissionOnFunction(FunctionKey.GroupEmployeeList_SAView, Policy.Read))
+        if (session.HasPermissionOnFunction(FunctionKey.GroupEmployeeList_ViewAll, Policy.Read))
         {
             return employees;
         }
-        var isBUView = session.HasPermissionOnFunction(FunctionKey.GroupEmployeeList_BUView, Policy.Read);
-        var isDeptView = session.HasPermissionOnFunction(FunctionKey.GroupEmployeeList_DeptView, Policy.Read);
 
-        if (isBUView)
+        if (session.HasPermissionOnFunction(FunctionKey.GroupEmployeeList_BUView, Policy.Read))
         {
             employees = employees.Where(e => e.UnitPICEmpId == EmployeeSession.EmpId ||
-                (e.UnitSupporterEmpId != null &&
-                 e.UnitSupporterEmpId.Split(',').ToList().Exists(id => id.Trim() == EmployeeSession.EmpId.ToString())));
+                (!string.IsNullOrWhiteSpace(e.UnitSupporterEmpId) &&
+                 e.UnitSupporterEmpId.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).ToList().Exists(id => id == EmployeeSession.EmpId.ToString())));
             return employees;
         }
 
-        if (isDeptView)
+        if (session.HasPermissionOnFunction(FunctionKey.GroupEmployeeList_DeptView, Policy.Read))
         {
             employees = employees.Where(e => e.DepartmentPICId == EmployeeSession.EmpId ||
-                (e.DepartmentSupporterEmpId != null &&
-                 e.DepartmentSupporterEmpId.Split(',').ToList().Exists(id => id.Trim() == EmployeeSession.EmpId.ToString())));
+                (!string.IsNullOrWhiteSpace(e.DepartmentSupporterEmpId) &&
+                 e.DepartmentSupporterEmpId.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).ToList().Exists(id => id == EmployeeSession.EmpId.ToString())));
         }
+
         return employees;
     }
 

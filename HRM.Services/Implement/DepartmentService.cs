@@ -55,18 +55,17 @@ public class DepartmentService(
 
     public IList<Department> GetDepartmentEmployeeBelongsTo(IList<Department> departments, int empId)
     {
-        if (session.HasPermissionOnFunction(FunctionKey.DepartmentManagement_SAView, Policy.Read))
+        if (session.HasPermissionOnFunction(FunctionKey.DepartmentManagement_ViewAll, Policy.Read))
         {
             return departments;
         }
-        string empIdStr = empId.ToString();
 
         if (session.HasPermissionOnFunction(FunctionKey.DepartmentManagement_BUView, Policy.Read))
         {
             var unitIds = departments
                 .Where(x => x.Unit.PICEmpId == empId ||
-                            (x.Unit.SupporterEmpId != null &&
-                             x.Unit.SupporterEmpId.Split(',').ToList().Exists(id => id.Trim() == empIdStr)))
+                            (!string.IsNullOrWhiteSpace(x.Unit.SupporterEmpId) &&
+                             x.Unit.SupporterEmpId.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).ToList().Exists(id => id == empId.ToString())))
                 .Select(x => x.Unit.Id)
                 .ToList();
 
@@ -77,8 +76,8 @@ public class DepartmentService(
         {
             var unitIds = departments
                 .Where(x => x.PICEmpId == empId ||
-                            (x.SupporterEmpId != null &&
-                             x.SupporterEmpId.Split(',').ToList().Exists(id => id.Trim() == empIdStr)))
+                            (!string.IsNullOrWhiteSpace(x.SupporterEmpId) &&
+                             x.SupporterEmpId.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).ToList().Exists(id => id == empId.ToString())))
                 .Select(x => x.Unit.Id)
                 .ToList();
 
