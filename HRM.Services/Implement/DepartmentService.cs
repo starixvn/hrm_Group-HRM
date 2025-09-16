@@ -1,6 +1,4 @@
-﻿using HRM.Core.Constants;
-
-namespace HRM.Services.Implement;
+﻿namespace HRM.Services.Implement;
 
 using System;
 using System.Collections.Generic;
@@ -8,6 +6,9 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Criteria.Department;
+using GO.UserControl.Client.Core.Enumerables;
+using GO.UserControl.Client.Core.Session;
+using HRM.Core.Constants;
 using HRM.Core.Models;
 using HRM.Core.Services;
 using HRM.Repositories.Interfaces;
@@ -17,6 +18,7 @@ using Models;
 using OfficeOpenXml;
 
 public class DepartmentService(
+    IUserControlSession session,
     IDepartmentRepository departmentRepository,
     IBaseService baseService,
     IWebHostEnvironment hostingEnvironment) : IDepartmentService
@@ -48,7 +50,39 @@ public class DepartmentService(
         };
         var departments = await departmentRepository.GetByActiveAsync(criteria);
 
-        return departments ?? new List<Department>();
+        return departments ?? [];
+    }
+
+    public IList<Department> GetDepartmentEmployeeBelongsTo(IList<Department> departments, int empId)
+    {
+        if (session.HasPermissionOnFunction(FunctionKey.DepartmentManagement_ViewAll, Policy.Read))
+        {
+            return departments;
+        }
+        List<int> unitIds = [];
+
+        if (session.HasPermissionOnFunction(FunctionKey.DepartmentManagement_BUView, Policy.Read))
+        {
+            unitIds.AddRange(departments
+                .Where(x => x.Unit.PICEmpId == empId ||
+                            (!string.IsNullOrWhiteSpace(x.Unit.SupporterEmpId) &&
+                             x.Unit.SupporterEmpId.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).ToList().Exists(id => id == empId.ToString())))
+                .Select(x => x.Unit.Id)
+                .ToList());
+        }
+
+        if (session.HasPermissionOnFunction(FunctionKey.DepartmentManagement_DeptView, Policy.Read))
+        {
+            unitIds.AddRange(departments
+                .Where(x => x.PICEmpId == empId ||
+                            (!string.IsNullOrWhiteSpace(x.SupporterEmpId) &&
+                             x.SupporterEmpId.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).ToList().Exists(id => id == empId.ToString())))
+                .Select(x => x.Unit.Id)
+                .ToList());
+        }
+
+        var distinctUnitIds = unitIds.Distinct().ToList();
+        return departments.Where(x => distinctUnitIds.Contains(x.Unit.Id)).ToList();
     }
 
     public async Task<Department> GetByIdAsync(int departmentId)

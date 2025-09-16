@@ -27,7 +27,6 @@ export default class Search extends Component {
     handleSubmit = event => {
         this.props.onSubmit(event.target.name === 'currentWeek');
     };
-
     render() {
         return (
             <div className="filter">

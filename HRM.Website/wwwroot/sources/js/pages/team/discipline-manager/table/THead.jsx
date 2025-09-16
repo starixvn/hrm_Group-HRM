@@ -1,6 +1,6 @@
 ﻿import React, { PureComponent } from 'react';
 
-import EmployeeAutocomplete from '../../supervisor/table/EmployeeAutocomplete';
+import EmployeeAutocomplete from '../../../../shared/components/EmployeeAutocomplete';
 
 export default class THead extends PureComponent {
     constructor(props) {
@@ -12,9 +12,7 @@ export default class THead extends PureComponent {
         };
     }
 
-    handleChange = event => {
-        const value = event.target.value;
-
+    handleChange = value => {
         this.setState({ value });
         this.props.onSearchEmployees(value);
     };

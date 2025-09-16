@@ -14,6 +14,8 @@ public class UpdateUnitCriteria : CriteriaBase
 
     public int? PICEmpId { get; set; }
 
+    public string SupporterEmpId { get; set; }
+
     public string Category { get; set; }
 
     public string Type { get; set; }

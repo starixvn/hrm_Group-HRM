@@ -35,7 +35,7 @@ public class ExportExcelEmployeeInfoService(
     private const string GroupEmployeeListTemplatePath = "ExcelTemplates/GroupEmployeeList.xlsx";
     private const string ProfitCenterReportTemplatePath = "ExcelTemplates/ProfitCenterReport.xlsx";
 
-    private const byte TotalColumns = 30;
+    private const byte TotalColumns = 31;
     private const byte RowStartBody = 3;
     private const byte MinimumWidth = 5;
     private const byte MaximumWidth = 50;
@@ -302,7 +302,7 @@ public class ExportExcelEmployeeInfoService(
             worksheet.Cells[rowIndex, colIndex++].Value = FormatDate(employee.DOB);
             worksheet.Cells[rowIndex, colIndex++].Value = EnumHelper.GetDisplayName(employee.Gender);
             worksheet.Cells[rowIndex, colIndex++].Value = employee.CountryName;
-            worksheet.Cells[rowIndex, colIndex++].Value = employee.UnitId;
+            worksheet.Cells[rowIndex, colIndex++].Value = employee.GroupUnitId;
             worksheet.Cells[rowIndex, colIndex++].Value = employee.UnitCode;
             worksheet.Cells[rowIndex, colIndex++].Value = employee.UnitPIC;
             worksheet.Cells[rowIndex, colIndex++].Value = employee.DepartmentName;
@@ -318,6 +318,7 @@ public class ExportExcelEmployeeInfoService(
             worksheet.Cells[rowIndex, colIndex++].Value = employee.SubCompany;
             worksheet.Cells[rowIndex, colIndex++].Value = FormatDate(employee.CompanyDate);
             worksheet.Cells[rowIndex, colIndex++].Value = FormatDate(employee.ResignedDate);
+            worksheet.Cells[rowIndex, colIndex++].Value = employee.ResignedReason;
             worksheet.Cells[rowIndex, colIndex++].Value = FormatBoolean(employee.IsLocal);
             worksheet.Cells[rowIndex, colIndex++].Value = FormatBoolean(employee.IsSpecial);
             worksheet.Cells[rowIndex, colIndex++].Value = FormatBoolean(employee.Enabled);
@@ -416,7 +417,7 @@ public class ExportExcelEmployeeInfoService(
         worksheet.Cells[rowIndex, colIndex++].Value = rowNum;
         worksheet.Cells[rowIndex, colIndex++].Value = employee.CtrIdFormatted;
         worksheet.Cells[rowIndex, colIndex++].Value = $"{employee.DepartmentCode}-{employee.TeamCode}";
-        worksheet.Cells[rowIndex, colIndex++].Value = employee.UnitId;
+        worksheet.Cells[rowIndex, colIndex++].Value = employee.GroupUnitId;
         worksheet.Cells[rowIndex, colIndex++].Value = employee.UnitCode;
         worksheet.Cells[rowIndex, colIndex++].Value = employee.DepartmentName;
         worksheet.Cells[rowIndex, colIndex++].Value = employee.DepartmentCode;

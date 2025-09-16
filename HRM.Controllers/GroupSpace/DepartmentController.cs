@@ -1,7 +1,6 @@
 ﻿namespace HRM.Controllers.GroupSpace;
 
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 using Core;
 using Core.Constants;
@@ -34,12 +33,8 @@ public class DepartmentController(
     [HrmPermission(Policy.Read, FunctionKey.DepartmentManagement)]
     public async Task<IActionResult> GetDepartments([FromBody] GetDepartmentViewModel request)
     {
-        var hasPermissionViewAll = session.HasPermissionOnFunction(FunctionKey.DepartmentManagement_AllDepartment, Policy.Read);
         var departments = await departmentService.GetDepartmentAsync(request.IsActive, request.UnitId);
-        if (!hasPermissionViewAll)
-        {
-            departments = departments.Where(x => x.PICEmpId == EmployeeSession.EmpId || x.Unit?.PICEmpId == EmployeeSession.EmpId).ToList();
-        }
+        departments = departmentService.GetDepartmentEmployeeBelongsTo(departments, EmployeeSession.EmpId);
 
         return Json(departments);
     }
@@ -94,6 +89,7 @@ public class DepartmentController(
             Name = department.Name,
             GroupDeptId = department.GroupDeptId,
             PICEmpId = department.PICEmpId,
+            SupporterEmpId = department.SupporterEmpId,
             AccountableArea = department.AccountableArea,
             IsActive = department.IsActive,
             UnitId = department.Unit?.Id ?? 0,
@@ -125,6 +121,7 @@ public class DepartmentController(
             Name = model.Name,
             GroupDeptId = model.GroupDeptId,
             PICEmpId = model.PICEmpId,
+            SupporterEmpId = model.SupporterEmpId,
             AccountableArea = model.AccountableArea,
             IsActive = model.IsActive,
             UnitId = model.UnitId,
@@ -157,6 +154,7 @@ public class DepartmentController(
     public async Task<IActionResult> ExportDepartmentList(GetDepartmentViewModel request)
     {
         var departments = await departmentService.GetDepartmentAsync(request.IsActive, request.UnitId);
+        departments = departmentService.GetDepartmentEmployeeBelongsTo(departments, EmployeeSession.EmpId);
         var bytes = await departmentService.GenerateExcelAsync(departments);
         var fileName = $"Departments_{DateTimeOffset.Now.DateTime.ToClientTimeZone():yyyyMMdd}.xlsx";
 

@@ -6,6 +6,7 @@ import Errors from '../../../shared/components/Errors';
 
 import { resolveClientUrl, axiosError } from '../../../shared/common.functions';
 import { validationSchema, submitUnit } from '../common.functions';
+import PICAutocomplete from '../../../shared/components/PICAutocomplete';
 
 const AppContainer = ({ nextId }) => {
   const [employees, setEmployees] = useState(null);
@@ -42,7 +43,7 @@ const AppContainer = ({ nextId }) => {
     submitUnit('Unit/Create', model, setSubmitting);
   };
 
-  const renderForm = ({ errors, isSubmitting }) => {
+  const renderForm = ({ errors, isSubmitting, setFieldValue }) => {
     return (
       <div className="card">
         <Errors errors={errors} />
@@ -96,15 +97,11 @@ const AppContainer = ({ nextId }) => {
               <label className="control-label">Personal In Charge</label>
             </div>
             <div className="select-form">
-              <Field name="picEmpId" as="select" className="form-control">
-                <option value='' />
-                {employees &&
-                  employees.map(emp =>(
-                    <option key={emp.id} value={emp.id}>
-                      {emp.displayNameWithCompany}
-                    </option>
-                  ))}
-              </Field>
+              <PICAutocomplete
+                data={employees}
+                onChange={value => { value === "" && setFieldValue("picEmpId", 0); }}
+                onSelect={item => { setFieldValue("picEmpId", item.id); }}
+              />
             </div>
           </div>
           <div className="form-group">

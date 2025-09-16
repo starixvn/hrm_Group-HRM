@@ -22,6 +22,9 @@ public class AddUnitViewModel
     [Display(Name = nameof(Labels.PersonalInCharge), ResourceType = typeof(Labels))]
     public int? PICEmpId { get; set; }
 
+    [Display(Name = nameof(Labels.BUSupport), ResourceType = typeof(Labels))]
+    public string SupporterEmpId { get; set; }
+
     [StringLength(MaxSizeName, ErrorMessageResourceType = typeof(Messages), ErrorMessageResourceName = nameof(Messages.StringLengthErrorMessage))]
     [Display(Name = nameof(Labels.BUCategory), ResourceType = typeof(Labels))]
     public string Category { get; set; }

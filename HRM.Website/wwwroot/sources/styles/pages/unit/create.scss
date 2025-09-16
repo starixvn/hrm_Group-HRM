@@ -7,6 +7,8 @@
 @import '../../layout/_toastr.scss';
 @import '../../vendors/_autocomplete.scss';
 @import '../../components/_checkbox.scss';
+@import '../../components/react-autocomplete-wrapper';
+@import '../../components/multiselect-treeview';
 
 /* Hide number input spinners */
 input[type="number"]::-webkit-outer-spin-button,
@@ -34,4 +36,8 @@ input[type="number"] {
 
 span.require {
     color: red;
+}
+
+.react-autocomplete-wrapper{
+    width: 100%;
 }

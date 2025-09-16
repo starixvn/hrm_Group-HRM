@@ -16,11 +16,12 @@ export default (data, isChecked = false) => {
     const totalItems = data.length;
     for (let i = 0; i < totalItems; i++) {
         const key = 'item-' + i;
+        const checked = data[i].checked ? data[i].checked : isChecked;
 
-        floatData.push({ ...data[i], checked: isChecked, key: key, parentKey: '' });
-        data[i] = { ...data[i], checked: isChecked, key: key };
+        floatData.push({ ...data[i], checked: checked, key: key, parentKey: '' });
+        data[i] = { ...data[i], checked: checked, key: key };
         if (data[i].items && data[i].items.length > 0) {
-            getChilds(floatData, data[i].items, key, isChecked);
+            getChilds(floatData, data[i].items, key, checked);
         }
     }
 

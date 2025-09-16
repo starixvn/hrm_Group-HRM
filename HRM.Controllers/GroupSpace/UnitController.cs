@@ -97,6 +97,7 @@ public class UnitController(
             Name = model.Code,
             GroupUnitId = model.GroupUnitId,
             PICEmpId = model.PICEmpId,
+            SupporterEmpId = model.SupporterEmpId,
             Category = model.Category,
             Type = model.Type,
             AccountableArea = model.AccountableArea,

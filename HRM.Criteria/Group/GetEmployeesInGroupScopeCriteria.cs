@@ -37,10 +37,6 @@ public class GetEmployeesInGroupScopeCriteria : CriteriaBase
         }
     }
 
-    public int? PageNumber { get; set; }
-
-    public int? PageSize { get; set; }
-
     public int? TotalRow { get; set; }
 
     public int? TitleId { get; set; }
@@ -55,7 +51,6 @@ public class GetEmployeesInGroupScopeCriteria : CriteriaBase
     public bool? IsAllUser { get; set; }
 
     public string CompanyIds { get; set; }
-    public bool HasPermissionViewAll { get; set; }
     public int? ActorId { get; set; }
 
     public bool? IsCtrID { get; set; }

@@ -39,6 +39,10 @@ public static class Constants
 
     public const string No = "No";
 
+    public const string UnitKey = "Unit";
+
+    public const string DepartmentKey = "Department";
+
     public const int NexCompanyId = 1;
 
     public const int LumiCompanyId = 2;

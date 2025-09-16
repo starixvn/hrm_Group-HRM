@@ -2,9 +2,12 @@
 import { Form, Field } from 'formik';
 
 import Errors from '../../shared/components/Errors';
-import EmployeeAutocomplete from './EmployeeAutocomplete';
+import EmployeeAutocomplete from '../../shared/components/EmployeeAutocomplete';
 
-const RenderForm = ({ errors, isInternal, onChangeInternal, selectExtension, employees, onSearchEmployee, onSelectEmployee, isSubmitting, title, setSelectGroup }) => {
+const RenderForm = ({
+    errors, isInternal, onChangeInternal, selectExtension, employees,
+    onSearchEmployee, onSelectEmployee, isSubmitting, title, setSelectGroup
+}) => {
     const handleGoBack = () => {
         history.back();
     };

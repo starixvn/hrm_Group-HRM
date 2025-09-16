@@ -369,7 +369,14 @@ function sortTable(table, th) {
             return $td.data('datetime');
         }
 
-        return $td.text().trim().toLowerCase();
+        let text = $td.text().trim();
+
+        let numeric = text.replace(/,/g, "");
+        if ($.isNumeric(numeric)) {
+            return parseFloat(numeric);
+        }
+
+        return text.toLowerCase();
     };
     let refreshSorting = function () {
         $('th.col-sorter').each(function () {
@@ -391,7 +398,6 @@ function sortTable(table, th) {
     let rows = $(table).find('tbody tr').toArray().sort(function (a, b) {
         let valA = getCellValue(a, colIndex),
             valB = getCellValue(b, colIndex);
-
         if ($.isNumeric(valA) && $.isNumeric(valB)) {
             return valA - valB;
         } else if (moment(valA).isValid() && moment(valB).isValid()) {
@@ -399,7 +405,7 @@ function sortTable(table, th) {
                 dateB = new Date(valB);
             return dateA - dateB;
         } else {
-            return valA.localeCompare(valB, 'vi', { sensitivity: 'base' });
+            return String(valA).localeCompare(String(valB), 'vi', { sensitivity: 'base' });
         }
     });
 

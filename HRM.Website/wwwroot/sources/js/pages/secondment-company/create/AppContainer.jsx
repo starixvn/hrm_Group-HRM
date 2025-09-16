@@ -1,14 +1,15 @@
-﻿import React, { useState, useEffect } from "react";
-import { Formik, Form, Field } from "formik";
-import axios from "axios";
-import Errors from "../../../shared/components/Errors";
-import EmployeeAutocomplete from '../../extension-no/EmployeeAutocomplete';
+﻿import React, { useState, useEffect } from 'react';
+import { Formik, Form, Field } from 'formik';
+import axios from 'axios';
+
+import Errors from '../../../shared/components/Errors';
+import EmployeeAutocomplete from '../../../shared/components/EmployeeAutocomplete';
 
 import {
     resolveClientUrl,
     axiosError,
-} from "../../../shared/common.functions";
-import { validationSchema, submitSecondmentCompany } from "../common.functions";
+} from '../../../shared/common.functions';
+import { validationSchema, submitSecondmentCompany } from '../common.functions';
 
 const AppContainer = () => {
     const [companies, setCompanies] = useState(null);
@@ -56,8 +57,8 @@ const AppContainer = () => {
     useEffect(() => {
         axios({
             url: resolveClientUrl(`GroupEmployeeList/GetCompanyDropdownList`),
-            method: "GET",
-            headers: { "X-Requested-With": "XMLHttpRequest" },
+            method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
         })
             .then(response => {
                 setCompanies(response.data);
@@ -65,7 +66,7 @@ const AppContainer = () => {
             .catch(axiosError);
     }, []);
 
-    const handleSelectEmployee = selectedItem => {
+    const handleSelectEmployee = (_value, selectedItem) => {
         setInitialValues(prev => ({
             ...prev,
             empId: selectedItem.id,
@@ -81,23 +82,23 @@ const AppContainer = () => {
             companyId: values.companyId
         };
 
-        submitSecondmentCompany("SecondmentCompany/Create", model, setSubmitting);
+        submitSecondmentCompany('SecondmentCompany/Create', model, setSubmitting);
     };
 
     const renderForm = ({ errors, isSubmitting }) => {
         return (
-            <div className="card">
+            <div className='card'>
                 <Errors errors={errors} />
-                <Form className="form-horizontal">
-                    <div className="form-group">
-                        <div className="label-form">
-                            <label className="control-label">
+                <Form className='form-horizontal'>
+                    <div className='form-group'>
+                        <div className='label-form'>
+                            <label className='control-label'>
                                 Employee
-                                <span className="require">*</span>
+                                <span className='require'>*</span>
                             </label>
                         </div>
-                        <div className="select-form">
-                            <Field type="text" name="employee" className="form-control">
+                        <div className='select-form'>
+                            <Field type='text' name='employee' className='form-control'>
                                 {({ field }) => (
                                     <EmployeeAutocomplete
                                         options={employees}
@@ -109,17 +110,17 @@ const AppContainer = () => {
                             </Field>
                         </div>
                     </div>
-                    <div className="form-group">
-                        <div className="label-form">
-                            <label className="control-label">
-                                Company<span className="require">*</span>
+                    <div className='form-group'>
+                        <div className='label-form'>
+                            <label className='control-label'>
+                                Company<span className='require'>*</span>
                             </label>
                         </div>
-                        <div className="select-form">
+                        <div className='select-form'>
                             <Field
-                                name="companyId"
-                                as="select"
-                                className="form-control">
+                                name='companyId'
+                                as='select'
+                                className='form-control'>
                                 <option value='' />
                                 {companies
                                     ? companies.map(company =>(
@@ -131,15 +132,15 @@ const AppContainer = () => {
                             </Field>
                         </div>
                     </div>
-                    <div className="form-group">
+                    <div className='form-group'>
                         <button
-                            type="submit"
-                            className="btn btn-primary"
-                            id="btnSubmit"
+                            type='submit'
+                            className='btn btn-primary'
+                            id='btnSubmit'
                             disabled={isSubmitting}>
                             Add
                         </button>
-                        <a className="btn btn-default" onClick={handleGoBack}>
+                        <a className='btn btn-default' onClick={handleGoBack}>
                             Back
                         </a>
                     </div>

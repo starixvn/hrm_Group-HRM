@@ -66,7 +66,7 @@ const AppContainer = () => {
         getGroupExtension(isInternal);
     }, [isInternal]);
 
-    const handleSelectEmployee = selectedItem => {
+    const handleSelectEmployee = (_value, selectedItem) => {
         setSelectEmployee(selectedItem);
     };
 

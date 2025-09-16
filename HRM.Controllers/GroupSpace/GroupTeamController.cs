@@ -6,18 +6,18 @@ using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
 using HRM.Core;
 using HRM.Core.Constants;
+using HRM.Core.Enums;
 using HRM.Core.Filters;
 using HRM.Core.Services;
 using HRM.Criteria.Employee;
 using HRM.Criteria.Group;
 using HRM.Models;
+using HRM.Models.Group;
 using HRM.Models.Supervisor;
 using HRM.Resources;
 using HRM.Services.Interfaces;
 using HRM.ViewModels.EmployeeGroup;
 using Microsoft.AspNetCore.Mvc;
-using HRM.Models.Group;
-using HRM.Core.Enums;
 
 namespace HRM.Controllers.GroupSpace;
 
@@ -39,14 +39,8 @@ public class GroupTeamController(
     [HttpPost]
     public async Task<IActionResult> GetTeamList(string teamIds = null)
     {
-        var hasPermissionViewAll = session.HasPermissionOnFunction(FunctionKey.GroupTeamManagement_AllTeam, Policy.Read);
         var teams = await teamService.GetAllTeamByUnitScopeAsync(teamIds);
-        if (!hasPermissionViewAll)
-        {
-            teams = teams.Where(x => x.PICEmpId == EmployeeSession.EmpId
-                 || x.DepartmentPICEmpId == EmployeeSession.EmpId
-                 || x.UnitPICEmpId == EmployeeSession.EmpId).ToList();
-        }
+        teams = teamService.GetTeamEmployeeBelongsTo(teams, EmployeeSession.EmpId);
 
         ViewBag.HasPermission = session.HasPermissionOnFunction(FunctionKey.GroupTeamManagement, Policy.Host);
         ViewBag.HasPermissionToViewEmployee = session.HasPermissionOnFunction(FunctionKey.GroupEmployeeList, Policy.Read);
@@ -232,13 +226,7 @@ public class GroupTeamController(
     public async Task<IActionResult> ExportGroupTeamList(string teamIds = null)
     {
         var teams = await teamService.GetAllTeamByUnitScopeAsync(teamIds);
-        var hasPermissionViewAll = session.HasPermissionOnFunction(FunctionKey.GroupTeamManagement_AllTeam, Policy.Read);
-        if (!hasPermissionViewAll)
-        {
-            teams = teams.Where(x => x.PICEmpId == EmployeeSession.EmpId
-                 || x.DepartmentPICEmpId == EmployeeSession.EmpId
-                 || x.UnitPICEmpId == EmployeeSession.EmpId).ToList();
-        }
+        teams = teamService.GetTeamEmployeeBelongsTo(teams, EmployeeSession.EmpId);
         var bytes = await teamService.GenerateGroupTeamExcel(teams);
         var fileName = $"GroupTeam_{DateTimeOffset.Now.DateTime.ToClientTimeZone():yyyyMMdd}.xlsx";
 
@@ -302,7 +290,7 @@ public class GroupTeamController(
     {
         IEnumerable<SupervisorModel> supervisors = await teamService.GetTeamSupervisorByRoleId(teamId, (short)RoleSystem.ShiftManager, true);
         var result = supervisors.Select(x => new Supervisor
-        { OwnerId = x.OwnerId, Nickname = x.NickName, FullName = x.FullName, CanRemove = x.CanRemove});
+        { OwnerId = x.OwnerId, Nickname = x.NickName, FullName = x.FullName, CanRemove = x.CanRemove });
         return Json(result);
     }
 
@@ -322,8 +310,7 @@ public class GroupTeamController(
         {
             Query = model.Keyword,
             IsDeleteUser = model.IsDelete,
-            EnableUser = model.IsEnable,
-            HasPermissionViewAll = true
+            EnableUser = model.IsEnable
         };
         var employees = await baseService.GetDataAsync<GroupEmployeeModel>(criteria);
 
@@ -343,5 +330,6 @@ public class GroupTeamController(
 
         return employees;
     }
+
     private static byte GetValue(byte? value) => value ?? 0;
 }

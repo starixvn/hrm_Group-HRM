@@ -1,15 +1,18 @@
-﻿import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { Formik, Form, Field } from 'formik';
+﻿import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { Formik, Form, Field } from "formik";
 
-import Errors from '../../../shared/components/Errors';
+import Errors from "../../../shared/components/Errors";
 
-import { resolveClientUrl, axiosError } from '../../../shared/common.functions';
-import { validationSchema, submitUnit } from '../common.functions';
+import { resolveClientUrl, axiosError } from "../../../shared/common.functions";
+import { validationSchema, submitUnit } from "../common.functions";
+import PICAutocomplete from "../../../shared/components/PICAutocomplete";
+import TreeMultiselect from "../../../shared/components/react-tree-multiselect/TreeMultiselect";
 
 const AppContainer = () => {
   const [unit, setUnit] = useState(null);
   const [employees, setEmployees] = useState(null);
+    const [multiSelectSupporter, setMultiSelectSupporter] = useState([]);
 
   const handleGoBack = () => {
     history.back();
@@ -18,8 +21,8 @@ const AppContainer = () => {
   useEffect(() => {
     axios({
       url: resolveClientUrl(`Unit/getById/${window.unitId}`),
-      method: 'GET',
-      headers: { 'X-Requested-With': 'XMLHttpRequest' }
+      method: "GET",
+      headers: { "X-Requested-With": "XMLHttpRequest" },
     })
       .then(response => {
         setUnit(response.data);
@@ -28,14 +31,34 @@ const AppContainer = () => {
 
     axios({
       url: resolveClientUrl(`Unit/GetEmployeeForPIC`),
-      method: 'GET',
-      headers: { 'X-Requested-With': 'XMLHttpRequest' }
+      method: "GET",
+      headers: { "X-Requested-With": "XMLHttpRequest" },
     })
       .then(response => {
         setEmployees(response.data);
       })
       .catch(axiosError);
   }, []);
+  
+    useEffect(() => {
+      if (employees && unit) {
+        const supporterIds = String(unit.supporterEmpId ? unit.supporterEmpId : "")
+          .split(",")
+          .map(x => x.trim());
+        const mapEmployees = employees.map(e => {
+          const isChecked = supporterIds.includes(e.id.toString());
+          return {
+            id: e.id,
+            text: e.displayNameWithCompany,
+            enabled: true,
+            isLeaf: true,
+            parentId: null,
+            checked: isChecked,
+          };
+        });
+        setMultiSelectSupporter(mapEmployees);
+      }
+    }, [employees, unit]);
 
   const handleSubmit = (values, { setSubmitting }) => {
     setSubmitting(true);
@@ -48,13 +71,23 @@ const AppContainer = () => {
       type: values.type,
       accountableArea: values.accountableArea,
       picEmpId: parseInt(values.picEmpId, 10) || 0,
-      isActive: values.isActive
+      supporterEmpId: values.supporterEmpId,
+      isActive: values.isActive,
     };
-
-    submitUnit('Unit/Edit', model, setSubmitting);
+    submitUnit("Unit/Edit", model, setSubmitting);
   };
 
-  const renderForm = ({ errors, isSubmitting }) => {
+  const renderForm = ({ errors, isSubmitting, setFieldValue }) => {
+      let picValue = "";
+      if (unit && employees) {
+          const pic = employees.find(e => e.id === unit.picEmpId);
+          picValue = pic ? pic.displayNameWithCompany : "";
+      }
+
+    const handleSupporter = value => {
+      const ids = value.map(v => v.id);
+      setFieldValue("supporterEmpId", ids.join(","));
+    };
     return (
       <div className="card">
         <Errors errors={errors} />
@@ -66,7 +99,12 @@ const AppContainer = () => {
               </label>
             </div>
             <div className="input-form">
-              <Field name="groupUnitId" type="number" className="form-control" autoComplete="off" />
+              <Field
+                name="groupUnitId"
+                className="form-control"
+                type="number"
+                autoComplete="off"
+              />
             </div>
           </div>
           <div className="form-group">
@@ -76,7 +114,7 @@ const AppContainer = () => {
               </label>
             </div>
             <div className="input-form">
-              <Field name="code" className="form-control" autoComplete="off" />
+              <Field className="form-control" name="code" autoComplete="off" />
             </div>
           </div>
           <div className="form-group">
@@ -84,7 +122,11 @@ const AppContainer = () => {
               <label className="control-label">Business Unit Category</label>
             </div>
             <div className="input-form">
-              <Field name="category" className="form-control" autoComplete="off" />
+              <Field
+                className="form-control"
+                name="category"
+                autoComplete="off"
+              />
             </div>
           </div>
           <div className="form-group">
@@ -92,7 +134,7 @@ const AppContainer = () => {
               <label className="control-label">Business Unit Type</label>
             </div>
             <div className="input-form">
-              <Field name="type" className="form-control" autoComplete="off" />
+              <Field className="form-control" name="type" autoComplete="off" />
             </div>
           </div>
           <div className="form-group">
@@ -100,7 +142,11 @@ const AppContainer = () => {
               <label className="control-label">Accountable Area</label>
             </div>
             <div className="input-form">
-              <Field name="accountableArea" className="form-control" autoComplete="off" />
+              <Field
+                className="form-control"
+                name="accountableArea"
+                autoComplete="off"
+              />
             </div>
           </div>
           <div className="form-group">
@@ -108,15 +154,25 @@ const AppContainer = () => {
               <label className="control-label">Personal In Charge</label>
             </div>
             <div className="select-form">
-              <Field name="picEmpId" as="select" className="form-control">
-                <option value='' />
-                {employees &&
-                  employees.map(emp =>(
-                    <option key={emp.id} value={emp.id}>
-                      {emp.displayNameWithCompany}
-                    </option>
-                  ))}
-              </Field>
+              <PICAutocomplete
+                data={employees}
+                value={picValue}
+                onChange={value => { value === "" && setFieldValue("picEmpId", 0); }}
+                onSelect={item => { setFieldValue("picEmpId", item.id); }}
+              />
+            </div>
+          </div>
+          <div className="form-group">
+            <div className="label-form">
+              <label className="control-label">BU Support</label>
+            </div>
+            <div className="select-form">
+                <TreeMultiselect
+                  data={multiSelectSupporter}
+                  isSelectedAll={false}
+                  onChange={handleSupporter}
+                  hasSearchBox={true}
+                />
             </div>
           </div>
           <div className="form-group">
@@ -128,7 +184,12 @@ const AppContainer = () => {
             </div>
           </div>
           <div className="form-group">
-            <button type="submit" className="btn btn-primary" id="btnSubmit" disabled={isSubmitting}>
+            <button
+              type="submit"
+              className="btn btn-primary"
+              id="btnSubmit"
+              disabled={isSubmitting}
+            >
               Update
             </button>
             <a className="btn btn-default" onClick={handleGoBack}>
@@ -145,7 +206,7 @@ const AppContainer = () => {
   }
 
   return (
-    <CustomFormik 
+    <CustomFormik
       unit={unit}
       validationSchema={validationSchema}
       handleSubmit={handleSubmit}
@@ -154,28 +215,30 @@ const AppContainer = () => {
   );
 };
 
-const CustomFormik = ({unit, validationSchema, handleSubmit, renderForm}) => {
-  return <Formik
-            validateOnBlur={false}
-            validateOnChange={false}
-            enableReinitialize={true}
-            initialValues={{
-              id: unit.id || '',
-              code: unit.code || '',
-              name: unit.name || '',
-              groupUnitId: unit.groupUnitId || 0,
-              category: unit.category || '',
-              type: unit.type || '',
-              accountableArea: unit.accountableArea || '',
-              picEmpId: unit.picEmpId || 0,
-              isActive: unit.isActive || false
-            }}
-            validationSchema={validationSchema}
-            onSubmit={handleSubmit}
-          >
-          {renderForm}
-        </Formik>
-}
+const CustomFormik = ({ unit, validationSchema, handleSubmit, renderForm }) => {
+  return (
+    <Formik
+      validateOnBlur={false}
+      validateOnChange={false}
+      enableReinitialize={true}
+      initialValues={{
+        id: unit.id || "",
+        code: unit.code || "",
+        name: unit.name || "",
+        groupUnitId: unit.groupUnitId || 0,
+        category: unit.category || "",
+        type: unit.type || "",
+        accountableArea: unit.accountableArea || "",
+        picEmpId: unit.picEmpId || 0,
+        supporterEmpId: unit.supporterEmpId,
+        isActive: unit.isActive || false,
+      }}
+      validationSchema={validationSchema}
+      onSubmit={handleSubmit}
+    >
+      {renderForm}
+    </Formik>
+  );
+};
 
 export default AppContainer;
-

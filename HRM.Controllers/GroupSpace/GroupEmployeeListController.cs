@@ -27,6 +27,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace HRM.Controllers.GroupSpace;
 
 #pragma warning disable S107 // Methods should not have too many parameters
+
 public class GroupEmployeeListController(
     IUserControlSession session,
     ITeamService teamService,
@@ -64,7 +65,6 @@ public class GroupEmployeeListController(
     [HrmPermission(Policy.Read, FunctionKey.GroupEmployeeList)]
     public async Task<IActionResult> ListEmployee(GroupEmployeeViewModel model)
     {
-        var hasPermissionViewAll = session.HasPermissionOnFunction(FunctionKey.GroupEmployeeList_AllEmployee, Policy.Read);
         var (enableUser, isDeleteUser) = ParseEmployeeStatus(model.EmployeeStatus);
 
         var criteria = new GetEmployeesInGroupScopeCriteria
@@ -74,15 +74,13 @@ public class GroupEmployeeListController(
             EnableUser = enableUser,
             IsDeleteUser = isDeleteUser,
             TitleId = model.JobTitleId,
-            PageNumber = model.CurrentPage,
-            PageSize = 5000,
             CompanyIds = model.CompanyIds,
-            HasPermissionViewAll = hasPermissionViewAll,
             ActorId = EmployeeSession.EmpId,
             IsCtrID = ParseBool(model.CtrIDs),
             IsOutsource = ParseBool(model.Outsources)
         };
         var employees = await baseService.GetDataAsync<GroupEmployeeModel>(criteria);
+        employees = FilterEmployeeByView(employees);
 
         Parallel.ForEach(employees, e =>
         {
@@ -98,13 +96,49 @@ public class GroupEmployeeListController(
         ViewBag.PagerOption = pagerOption;
 
         ViewBag.HasPermissionToEdit = session.HasPermissionOnFunction(FunctionKey.GroupEmployeeList, Policy.Host);
+        ViewBag.ShowSalaryCurrency = session.HasPermissionOnFunction(FunctionKey.ShowSalaryCurrencyInfo, Policy.Read);
+        var isDisabled = enableUser is false;
+        var isDeleted = isDeleteUser is true;
+        var isAll = !enableUser.HasValue && !isDeleteUser.HasValue;
+        ViewBag.ShowResignedDate = isAll || isDisabled || isDeleted;
 
         return PartialView("_ListEmployee", employees);
     }
 
+    private IEnumerable<GroupEmployeeModel> FilterEmployeeByView(IEnumerable<GroupEmployeeModel> employees)
+    {
+        if (session.HasPermissionOnFunction(FunctionKey.GroupEmployeeList_ViewAll, Policy.Read))
+        {
+            return employees;
+        }
+
+        List<int> empIds = [];
+
+        if (session.HasPermissionOnFunction(FunctionKey.GroupEmployeeList_BUView, Policy.Read))
+        {
+            empIds.AddRange(employees.Where(e => e.UnitPICEmpId == EmployeeSession.EmpId ||
+                    (!string.IsNullOrWhiteSpace(e.UnitSupporterEmpId) &&
+                     e.UnitSupporterEmpId.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).ToList().Exists(id => id == EmployeeSession.EmpId.ToString())))
+                .Select(e => e.EmpId)
+                .ToList());
+        }
+
+        if (session.HasPermissionOnFunction(FunctionKey.GroupEmployeeList_DeptView, Policy.Read))
+        {
+            empIds.AddRange(employees.Where(e => e.DepartmentPICId == EmployeeSession.EmpId ||
+                (!string.IsNullOrWhiteSpace(e.DepartmentSupporterEmpId) &&
+                 e.DepartmentSupporterEmpId.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).ToList().Exists(id => id == EmployeeSession.EmpId.ToString())))
+                .Select(e => e.EmpId)
+                .ToList());
+        }
+
+        var distinctEmpIds = empIds.Distinct().ToList();
+
+        return employees.Where(e => distinctEmpIds.Contains(e.EmpId));
+    }
+
     public async Task<IActionResult> GroupEmployeeList(GroupEmployeeViewModel model)
     {
-        var hasPermissionViewAll = session.HasPermissionOnFunction(FunctionKey.GroupEmployeeList_AllEmployee, Policy.Read);
         var employees = new List<GroupEmployeeModel>();
         if (model != null)
         {
@@ -115,13 +149,11 @@ public class GroupEmployeeListController(
                 EnableUser = model.IsEnable,
                 IsDeleteUser = model.IsDelete,
                 TitleId = model.JobTitleId,
-                PageNumber = model.CurrentPage,
-                PageSize = model.ItemsPerPage,
                 CompanyIds = model.CompanyIds,
-                HasPermissionViewAll = hasPermissionViewAll
             };
             employees = (await baseService.GetDataAsync<GroupEmployeeModel>(criteria)).ToList();
-
+            employees = FilterEmployeeByView(employees)
+                .ToList();
         }
 
         return Json(employees);
@@ -149,7 +181,6 @@ public class GroupEmployeeListController(
     [HrmPermission(Policy.Read, FunctionKey.GroupEmployeeList)]
     public async Task<IActionResult> ExportExcel(GroupEmployeeViewModel model, bool isEmployeeListExport)
     {
-        var hasPermissionViewAll = session.HasPermissionOnFunction(FunctionKey.GroupEmployeeList_AllEmployee, Policy.Read);
         var (enableUser, isDeleteUser) = ParseEmployeeStatus(model.EmployeeStatus);
 
         var criteria = new GetEmployeesInGroupScopeCriteria
@@ -160,13 +191,13 @@ public class GroupEmployeeListController(
             IsDeleteUser = isDeleteUser,
             TitleId = model.JobTitleId,
             CompanyIds = model.CompanyIds,
-            HasPermissionViewAll = hasPermissionViewAll,
             ActorId = EmployeeSession.EmpId,
             IsCtrID = ParseBool(model.CtrIDs),
             IsOutsource = ParseBool(model.Outsources)
         };
 
         var profiles = await baseService.GetDataAsync<GroupEmployeeModel>(criteria);
+        profiles = FilterEmployeeByView(profiles);
 
         if (!isEmployeeListExport)
         {

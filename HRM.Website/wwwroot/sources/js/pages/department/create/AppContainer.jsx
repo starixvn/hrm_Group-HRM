@@ -11,6 +11,7 @@ import {
     axiosError,
     toastOptions,
 } from "../../../shared/common.functions";
+import PICAutocomplete from "../../../shared/components/PICAutocomplete";
 
 const AppContainer = () => {
     const [prepareData, setPrepareData] = useState(null);
@@ -85,7 +86,7 @@ const AppContainer = () => {
             .catch(axiosError);
     };
 
-    const renderForm = ({ errors, isSubmitting }) => {
+    const renderForm = ({ errors, isSubmitting, setFieldValue }) => {
         return (
             <div className="card">
                 <Errors errors={errors} />
@@ -178,19 +179,11 @@ const AppContainer = () => {
                             </label>
                         </div>
                         <div className="select-form">
-                            <Field
-                                name="picEmpId"
-                                as="select"
-                                className="form-control">
-                                <option value='' />
-                                {prepareData &&
-                                    prepareData.employees &&
-                                    prepareData.employees.map(emp =>(
-                                        <option key={emp.id} value={emp.id}>
-                                            {emp.displayNameWithCompany}
-                                        </option>
-                                    ))}
-                            </Field>
+                            <PICAutocomplete
+                                data={prepareData && prepareData.employees}
+                                onChange={value => { value === "" && setFieldValue("picEmpId", 0); }}
+                                onSelect={item => { setFieldValue("picEmpId", item.id); }}
+                            />
                         </div>
                     </div>
                     <div className="form-group">
