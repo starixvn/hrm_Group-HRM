@@ -12,7 +12,7 @@ public class GetEmployeeRequestCriteria : CriteriaBase
     public string TeamIds { get; set; }
     public string Employee { get; set; }
     public byte? IsLocal { get; set; }
-    public byte? EmployeeStatusId { get; set; }
+    public string EmployeeStatusIds { get; set; }
 
     public override string GetSettingKey() => "Report_MonthlyWorkingHours_EmployeeRequest";
 

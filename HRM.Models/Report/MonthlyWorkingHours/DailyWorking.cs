@@ -5,7 +5,7 @@ using Core.Constants;
 
 public class DailyWorking
 {
-    public int EmployeeId { get; set; }
+    public int EmpId { get; set; }
     public DateTime WorkDate { get; set; }
     public float TotalWorkingHours { get; set; }
     public bool IsMissingCheckIn { get; set; }
@@ -16,8 +16,14 @@ public class DailyWorking
     public bool IsLeaveDay { get; set; }
     public decimal LeaveDay { get; set; }
 
-    public EntityBase<int> LeaveType { get; set; }
-    public EntityBase<int> LeaveType2 { get; set; }
+    public int LeaveTypeId { get; set; }
+    public string LeaveTypeCode { get; set; }
+    public string LeaveTypeName { get; set; }
+
+    public int? LeaveTypeId2 { get; set; }
+    public string LeaveTypeCode2 { get; set; }
+    public string LeaveTypeName2 { get; set; }
+
     public byte RequestStatusId { get; set; }
 
     public bool IsLeaveHalfDay => IsLeaveDay && LeaveDay == Constants.HalfDayOffValue;

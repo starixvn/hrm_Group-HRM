@@ -66,13 +66,23 @@ $(document).ready(function () {
         });
     }).catch(axiosError);
 
+    $('#EmployeeStatus').multiSelectTreeView({
+        data: [
+            { id: 1, text: 'Enable', enable: true, checked: true, isLeaf: true },
+            { id: 2, text: 'Disabled', enable: true, checked: false, isLeaf: true },
+            { id: 3, text: 'Deleted', enable: true, checked: false, isLeaf: true }
+        ]
+    });
+
     $('#btnSearch').on('click', function () {
         $('#TeamIds').val($('#Team').multiSelectTreeView('getSelectedItems'));
+        $('#EmployeeStatusIds').val($('#EmployeeStatus').multiSelectTreeView('getSelectedItems'));
         query();
     });
 
     $('#btnExcel').on('click', function () {
         $('#TeamIds').val($('#Team').multiSelectTreeView('getSelectedItems'));
+        $('#EmployeeStatusIds').val($('#EmployeeStatus').multiSelectTreeView('getSelectedItems'));
 
         blockUI();
         axios({

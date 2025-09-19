@@ -5,11 +5,13 @@ using Core.Constants;
 
 public class MonthlyWorking
 {
-    public int EmployeeId { get; set; }
+    public int EmpId { get; set; }
     public string Code { get; set; }
     public string Nickname { get; set; }
     public string FullName { get; set; }
     public int WorkingDays { get; set; }
+    public bool Enabled { get; set; }
+    public bool IsDeleted { get; set; }
 
     public string UnitCode { get; set; }
     public string DepartmentCode { get; set; }
@@ -37,6 +39,8 @@ public class MonthlyWorking
         }
     }
 
-    public EntityBase<int> Team { get; set; }
+    public int TeamId { get; set; }
+    public string TeamCode { get; set; }
+    public string TeamName { get; set; }
     public IEnumerable<DailyWorking> DailyWorkings { get; set; }
 }

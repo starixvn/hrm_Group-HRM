@@ -68,7 +68,7 @@ public partial class EmployeeWorkingHoursService : IEmployeeWorkingHoursService
 
             worksheet.Cells[rowIndex, colIndex++].Value = rowIndex - 2;
             worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.DepartmentName;
-            worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Team.Name;
+            worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.TeamName;
             worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Code;
             worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.FullName;
             worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Nickname;
@@ -121,7 +121,7 @@ public partial class EmployeeWorkingHoursService : IEmployeeWorkingHoursService
 
             worksheet.Cells[rowIndex, colIndex++].Value = rowIndex - 2;
             worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.DepartmentName;
-            worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Team.Name;
+            worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.TeamName;
             worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Code;
             worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.FullName;
             worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Nickname;
@@ -208,10 +208,10 @@ public partial class EmployeeWorkingHoursService : IEmployeeWorkingHoursService
             }
             else
             {
-                value = dailyWorking.LeaveType.Code;
-                if (dailyWorking.LeaveType2 != null && dailyWorking.LeaveType.Id != dailyWorking.LeaveType2.Id)
+                value = dailyWorking.LeaveTypeCode;
+                if (dailyWorking.LeaveTypeId2.HasValue && dailyWorking.LeaveTypeId != dailyWorking.LeaveTypeId2.Value)
                 {
-                    value = $"{dailyWorking.LeaveType.Code}½/{dailyWorking.LeaveType2.Code}½";
+                    value = $"{dailyWorking.LeaveTypeCode}½/{dailyWorking.LeaveTypeCode2}½";
                 }
             }
         }
@@ -226,27 +226,23 @@ public partial class EmployeeWorkingHoursService : IEmployeeWorkingHoursService
 
     private static string GetLeaveHalfDay(DailyWorking dailyWorking)
     {
-        return dailyWorking.LeaveType.Id != (byte)Core.Enums.LeaveTypes.KeepInViewByHour
-            ? $"{dailyWorking.LeaveType.Code}½"
+        return dailyWorking.LeaveTypeId != (byte)Core.Enums.LeaveTypes.KeepInViewByHour
+            ? $"{dailyWorking.LeaveTypeCode}½"
             : string.Empty;
     }
 
     public static bool IsUnpaidLeave(DailyWorking dailyWorking)
     {
-        var isUnpaidLeave = dailyWorking.LeaveType.Id is
+        return dailyWorking.LeaveTypeId is
             (byte)Core.Enums.LeaveTypes.UnpaidLeave
             or (byte)Core.Enums.LeaveTypes.UnpaidLeaveInsurance
             or (byte)Core.Enums.LeaveTypes.MaternityLeave
             or (byte)Core.Enums.LeaveTypes.PaternityLeave
-                            || dailyWorking.LeaveType2 is
-                            {
-                                Id:
-            (byte)Core.Enums.LeaveTypes.UnpaidLeave
-            or (byte)Core.Enums.LeaveTypes.UnpaidLeaveInsurance
-            or (byte)Core.Enums.LeaveTypes.MaternityLeave
-            or (byte)Core.Enums.LeaveTypes.PaternityLeave
-                            };
-
-        return isUnpaidLeave;
+                || dailyWorking.LeaveTypeId2 is
+                    (byte)Core.Enums.LeaveTypes.UnpaidLeave
+                    or (byte)Core.Enums.LeaveTypes.UnpaidLeaveInsurance
+                    or (byte)Core.Enums.LeaveTypes.MaternityLeave
+                    or (byte)Core.Enums.LeaveTypes.PaternityLeave
+        ;
     }
 }

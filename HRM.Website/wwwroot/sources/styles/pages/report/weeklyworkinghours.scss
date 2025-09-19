@@ -29,4 +29,16 @@ form.filter {
     .unpaidleave {
         background-color: #f8f89c;
     }
+
+    .row-enable {
+        background: #fff !important;
+    }
+
+    .row-disabled {
+        background: #ececec !important;
+    }
+
+    .row-deleted {
+        background: #c8c8c8 !important;
+    }
 }

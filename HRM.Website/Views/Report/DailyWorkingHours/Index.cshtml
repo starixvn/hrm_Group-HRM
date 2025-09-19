@@ -21,6 +21,7 @@
 <h2 class="page-title">@ViewBag.Title</h2>
 <form class="filter">
     @Html.HiddenFor(model => model.TeamIds)
+    @Html.HiddenFor(model => model.EmployeeStatusIds)
     <div class="form-horizontal clearfix">
         <div class="form-group form-group--m">
             <div class="label-form">
@@ -66,9 +67,7 @@
             <div class="label-form">
                 @Html.Label(Labels.UserStatus, Labels.UserStatus, new { @class = "control-label" })
             </div>
-            <div class="input-form">
-                @Html.Raw(RazorHelpers.UserStatusDropDownList("EmployeeStatusId", classHTML: "form-control", selectedId: Model.EmployeeStatusId))
-            </div>
+            <div class="select-form" id="EmployeeStatus"></div>
         </div>
         <div class="form-group form-group--m">
             <button type="button" class="btn btn-primary" id="btnSearch">@Labels.Search</button>

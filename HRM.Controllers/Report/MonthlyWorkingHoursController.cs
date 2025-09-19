@@ -4,7 +4,6 @@ using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
 using HRM.Core;
 using HRM.Core.Constants;
-using HRM.Core.Enums;
 using HRM.Core.Filters;
 using HRM.Models.Report.MonthlyWorkingHours;
 using HRM.Resources;
@@ -26,8 +25,7 @@ public class MonthlyWorkingHoursController(
         var model = new MonthlyFilterViewModel
         {
             FromDate = today.FirstDayOfMonth(),
-            ToDate = today.LastDayOfMonth(),
-            EmployeeStatusId = (byte)EmployeeStatus.Enabled
+            ToDate = today.LastDayOfMonth()
         };
 
         return View("~/Views/Report/MonthlyWorkingHours/Index.cshtml", model);
@@ -45,7 +43,7 @@ public class MonthlyWorkingHoursController(
             TeamIds = model.TeamIds,
             Employee = model.Employee,
             IsLocal = model.IsLocal,
-            EmployeeStatusId = model.EmployeeStatusId
+            EmployeeStatusIds = model.EmployeeStatusIds
         };
         var monthlyWorkings = await workingHoursService.GetMonthlyWorkingHoursAsync(param);
         ViewBag.FromDate = param.FromDate;
@@ -66,7 +64,7 @@ public class MonthlyWorkingHoursController(
             TeamIds = model.TeamIds,
             Employee = model.Employee,
             IsLocal = model.IsLocal,
-            EmployeeStatusId = model.EmployeeStatusId
+            EmployeeStatusIds = model.EmployeeStatusIds
         };
         var bytes = await workingHoursService.ExportMonthlyWorkingHours(param);
 

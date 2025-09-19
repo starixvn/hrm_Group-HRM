@@ -189,7 +189,6 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<ILateInEarlyOutRequestRepository, LateInEarlyOutRequestRepository>();
         services.AddSingleton<IChangeShiftRequestRepository, ChangeShiftRequestRepository>();
         services.AddSingleton<IKeepInViewRequestRepository, KeepInViewRequestRepository>();
-        services.AddSingleton<IEmployeeWorkingHoursRepository, EmployeeWorkingHoursRepository>();
         services.AddSingleton<IScheduleArrangeRepository, ScheduleArrangeRepository>();
         services.AddSingleton<IWorkingCalendarRepository, WorkingCalendarRepository>();
         services.AddSingleton<IOvertimeRequestRepository, OvertimeRequestRepository>();
