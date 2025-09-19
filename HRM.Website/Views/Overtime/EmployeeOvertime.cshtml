@@ -25,7 +25,7 @@
 
 @Html.Hidden("MinDate", Constants.MinDate.ToDateMonthYearFormatedDate())
 @Html.Hidden("MaxDate", DateTimeOffset.Now.DateTime.ToClientTimeZone().AddYears(1).ToDateMonthYearFormatedDate())
-<form class="filter"><script src="~/sources/js/shared/common.functions.js"></script>
+<form class="filter">
     @Html.HiddenFor(model => model.TeamIds)
     @Html.HiddenFor(model => model.Month)
     <div class="form-horizontal clearfix">
