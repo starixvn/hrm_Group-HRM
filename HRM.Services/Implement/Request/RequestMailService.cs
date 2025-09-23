@@ -242,6 +242,8 @@ public class RequestMailService(IRequestRepository requestRepository, LetstalkSe
 
         var roleId = isApprover ? "3" : "2";
         var textAccept = isApprover ? "Approve" : "Verify";
+        var command = isApprover ? RequestCommand.Approve : RequestCommand.Accept;
+
         var param = BuildRequestParameters(emailModel, supervisor, roleId);
         return new LetsTalkActor
         {
@@ -250,7 +252,7 @@ public class RequestMailService(IRequestRepository requestRepository, LetstalkSe
             {
                 Actions =
                 {
-                    new ReplyAction { ActionType = ReplyActionType.PostBack, Label = textAccept, Data = $"{emailModel.CallbackUrl}api/request/process?command={RequestCommand.Approve}{param}" },
+                    new ReplyAction { ActionType = ReplyActionType.PostBack, Label = textAccept, Data = $"{emailModel.CallbackUrl}api/request/process?command={command}{param}" },
                     new ReplyAction { ActionType = ReplyActionType.PostBack, Label = "Reject", Data = $"{emailModel.CallbackUrl}api/request/process?command={RequestCommand.Reject}{param}" },
                     new ReplyAction { ActionType = ReplyActionType.Uri, Label = "View detail", Uri = $"{emailModel.CallbackUrl}request/member" }
                 }
