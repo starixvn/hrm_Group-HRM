@@ -9,7 +9,6 @@ using HRM.Core.Constants;
 using HRM.Core.Enums;
 using HRM.Core.Services;
 using HRM.Criteria.Report.Overtime;
-using HRM.Models.Report.MonthlyWorkingHours;
 using HRM.Models.Report.Overtime;
 using HRM.Services.Interfaces.Report;
 using Microsoft.AspNetCore.Hosting;
@@ -49,7 +48,7 @@ public class OvertimeReportService(
             ActorId = param.ActorId,
             TeamIds = param.TeamIds,
             Employee = param.Employee,
-            EmployeeStatusId = param.EmployeeStatusId,
+            EmployeeStatusIds = param.EmployeeStatusIds,
             IsLocal = param.IsLocal,
             MonthXml = monthXml.ToString()
         };
@@ -113,10 +112,11 @@ public class OvertimeReportService(
     public byte[] ExportYearlyOvertime(IEnumerable<YearlyOvertime> overtimes, GetYearlyOvertimeParam param)
     {
         var templatePath = Path.Combine(env.ContentRootPath, "ExcelTemplates/YearlyOvertime.xlsx");
-        const byte TotalColumns = 18;
-        const byte TotalHeaderRows = 2;
-        const byte StartMonthColumn = 6;
-        const byte StartBodyRow = 4;
+        const byte totalColumns = 18;
+        const byte totalHeaderRows = 2;
+        const byte startMonthColumn = 6;
+        const byte startBodyRow = 4;
+        const byte totalRowIndex = 7;
         using var templatePackage = new ExcelPackage(new FileInfo(templatePath));
         using var xlPackage = new ExcelPackage();
         var templateWorksheet = templatePackage.Workbook.Worksheets[0];
@@ -125,21 +125,23 @@ public class OvertimeReportService(
         var colIndex = 1;
 
         // title
-        templateWorksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
+        templateWorksheet.Cells[rowIndex, colIndex, rowIndex, totalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, totalColumns]);
         rowIndex++;
 
         // header
-        templateWorksheet.Cells[rowIndex, colIndex, rowIndex + 1, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex + 1, TotalColumns]);
+        templateWorksheet.Cells[rowIndex, colIndex, rowIndex + 1, totalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex + 1, totalColumns]);
         var calendarType = param.Calendar == (byte)CalendarType.Fiscal ? "Fiscal Calendar" : "Normal Calendar";
-        worksheet.Cells[rowIndex, StartMonthColumn].Value = $"Overtime Summary In {param.Year} ({calendarType})";
-        rowIndex += TotalHeaderRows;
+        worksheet.Cells[rowIndex, startMonthColumn].Value = $"Overtime Summary In {param.Year} ({calendarType})";
+        rowIndex += totalHeaderRows;
 
         // data
         var rowNum = 1;
         foreach (var overtime in overtimes)
         {
+            var templateRowIndex = GetTemplateRowIndex(overtime);
+
             colIndex = 1;
-            templateWorksheet.Cells[StartBodyRow, 1, StartBodyRow, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
+            templateWorksheet.Cells[templateRowIndex, 1, templateRowIndex, totalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, totalColumns]);
 
             worksheet.Cells[rowIndex, colIndex++].Value = rowNum++;
             worksheet.Cells[rowIndex, colIndex++].Value = overtime.DepartmentName;
@@ -164,17 +166,17 @@ public class OvertimeReportService(
         }
 
         // summary
-        templateWorksheet.Cells[StartMonthColumn, 1, StartMonthColumn, TotalColumns].Copy(worksheet.Cells[rowIndex, 1, rowIndex, TotalColumns]);
-        const byte TotalMonths = 12;
-        for (var i = 0; i <= TotalMonths; i++)
+        templateWorksheet.Cells[totalRowIndex, 1, totalRowIndex, totalColumns].Copy(worksheet.Cells[rowIndex, 1, rowIndex, totalColumns]);
+        const byte totalMonths = 12;
+        for (var i = 0; i <= totalMonths; i++)
         {
-            colIndex = StartMonthColumn + i;
-            var excelAddress = $"{worksheet.Cells[StartBodyRow, colIndex].Address}:{worksheet.Cells[rowIndex - 1, colIndex].Address}";
+            colIndex = startMonthColumn + i;
+            var excelAddress = $"{worksheet.Cells[startBodyRow, colIndex].Address}:{worksheet.Cells[rowIndex - 1, colIndex].Address}";
             worksheet.Cells[rowIndex, colIndex].Formula = string.Format(Constants.SummaryFormula, excelAddress);
         }
 
         worksheet.Cells.AutoFitColumns(MinimumWidth, MaximumWidth);
-        worksheet.View.FreezePanes(StartBodyRow, 1);
+        worksheet.View.FreezePanes(startBodyRow, 1);
 
         return xlPackage.GetAsByteArray();
     }
@@ -349,6 +351,20 @@ public class OvertimeReportService(
         }
 
         return isEnable ? normalRowIndex : disabledRowIndex;
+    }
+
+    private static byte GetTemplateRowIndex(YearlyOvertime record)
+    {
+        const byte normalRowIndex = 4;
+        const byte disabledRowIndex = 5;
+        const byte deletedRowIndex = 6;
+
+        if (record.IsDeleted)
+        {
+            return deletedRowIndex;
+        }
+
+        return record.Enabled ? normalRowIndex : disabledRowIndex;
     }
 
     private static void WriteOvertimeRecord(

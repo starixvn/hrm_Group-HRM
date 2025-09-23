@@ -27,7 +27,7 @@ public class WeeklyWorkingHoursController(
         {
             FromDate = today.FirstDayOfWeek(),
             ToDate = today.LastDayOfWeek(),
-            EmployeeStatusIds = $"{EmployeeStatus.Enabled}"
+            EmployeeStatusIds = $"{(byte)EmployeeStatus.Enabled}"
         };
 
         return View("~/Views/Report/WeeklyWorkingHours/Index.cshtml", model);

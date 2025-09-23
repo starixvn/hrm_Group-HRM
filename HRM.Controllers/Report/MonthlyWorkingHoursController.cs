@@ -27,7 +27,7 @@ public class MonthlyWorkingHoursController(
         {
             FromDate = today.FirstDayOfMonth(),
             ToDate = today.LastDayOfMonth(),
-            EmployeeStatusIds = $"{EmployeeStatus.Enabled}"
+            EmployeeStatusIds = $"{(byte)EmployeeStatus.Enabled}"
         };
 
         return View("~/Views/Report/MonthlyWorkingHours/Index.cshtml", model);

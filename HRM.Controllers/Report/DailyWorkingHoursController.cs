@@ -25,7 +25,7 @@ public class DailyWorkingHoursController(
         var model = new WeeklyFilterViewModel
         {
             FromDate = DateTimeOffset.Now.DateTime.ToClientTimeZone().Date,
-            EmployeeStatusIds = $"{EmployeeStatus.Enabled}"
+            EmployeeStatusIds = $"{(byte)EmployeeStatus.Enabled}"
         };
 
         return View("~/Views/Report/DailyWorkingHours/Index.cshtml", model);
