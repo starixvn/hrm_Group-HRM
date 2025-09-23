@@ -42,7 +42,7 @@
         <tbody>
             @foreach (var monthlyWorking in Model)
             {
-                var rowClass = monthlyWorking.IsDeleted ? "row-deleted" : monthlyWorking.Enabled ? "row-enable" : "row-disabled";
+                var rowClass = monthlyWorking.IsDeleted ? "deleted-user-row" : monthlyWorking.Enabled ? "enable-user-row" : "disabled-user-row";
                 index++;
                 <tr class="@rowClass">
                     <td>@index</td>

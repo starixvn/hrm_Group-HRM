@@ -28,7 +28,7 @@ public class OvertimeReportController(
         {
             FromDate = today.FirstDayOfMonth(),
             ToDate = today.LastDayOfMonth(),
-            EmployeeStatusId = (byte)EmployeeStatus.Enabled
+            EmployeeStatusIds = $"{EmployeeStatus.Enabled}"
         };
 
         return View("~/Views/Report/Overtime/MonthlyOvertime.cshtml", model);
@@ -44,7 +44,7 @@ public class OvertimeReportController(
             FromDate = model.FromDate,
             ToDate = model.ToDate,
             Employee = model.Employee,
-            EmployeeStatusId = model.EmployeeStatusId,
+            EmployeeStatusIds = model.EmployeeStatusIds,
             TeamIds = model.TeamIds,
             IsLocal = model.IsLocal
         };
@@ -115,7 +115,7 @@ public class OvertimeReportController(
             FromDate = model.FromDate,
             ToDate = model.ToDate,
             Employee = model.Employee,
-            EmployeeStatusId = model.EmployeeStatusId,
+            EmployeeStatusIds = model.EmployeeStatusIds,
             TeamIds = model.TeamIds,
             IsLocal = model.IsLocal
         };

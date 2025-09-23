@@ -9,8 +9,8 @@ using HRM.Core.Constants;
 using HRM.Core.Enums;
 using HRM.Core.Services;
 using HRM.Criteria.Report.Overtime;
+using HRM.Models.Report.MonthlyWorkingHours;
 using HRM.Models.Report.Overtime;
-using HRM.Repositories.Interfaces;
 using HRM.Services.Interfaces.Report;
 using Microsoft.AspNetCore.Hosting;
 using OfficeOpenXml;
@@ -19,8 +19,7 @@ namespace HRM.Services.Implement.Report;
 
 public class OvertimeReportService(
     IWebHostEnvironment env,
-    IBaseService baseService,
-    IOvertimeReportRepository overtimeReportRepository) : IOvertimeReportService
+    IBaseService baseService) : IOvertimeReportService
 {
     private const string DateFormat = "dd-MMM-yyyy";
     private const byte MinimumWidth = 5;
@@ -86,11 +85,13 @@ public class OvertimeReportService(
             FromDate = param.FromDate,
             ToDate = param.ToDate,
             Employee = param.Employee,
-            EmployeeStatusId = param.EmployeeStatusId,
+            EmployeeStatusIds = param.EmployeeStatusIds,
             TeamIds = param.TeamIds,
             IsLocal = param.IsLocal
         };
-        return await overtimeReportRepository.GetMonthlyOvertimeAsync(criteria);
+        var (dateRanges, dailyOvertimes) = await baseService.FetchMultipleAsync<DateRange, DailyOvertimeDetails>(criteria);
+        dailyOvertimes = dailyOvertimes.OrderBy(x => x.WorkDate).ThenByDescending(x => x.TeamName);
+        return new Tuple<IEnumerable<DateRange>, IEnumerable<DailyOvertimeDetails>>(dateRanges, dailyOvertimes);
     }
 
     public async Task<IEnumerable<DailyOvertimeDetails>> GetDailyOvertimeDetailsAsync(GetDailyOvertimeDetailsParam param)
@@ -267,7 +268,7 @@ public class OvertimeReportService(
         var templateIndex = new
         {
             bodyRow = 3,
-            summaryRow = 4,
+            summaryRow = 6,
             startSummaryColumn = 13
         };
         var fromDate = dateRanges.Min(x => x.Date);
@@ -293,7 +294,8 @@ public class OvertimeReportService(
         {
             var status = (CurrentRequestStatus)overtime.StatusId;
             colIndex = 1;
-            template.Cells[templateIndex.bodyRow, 1, templateIndex.bodyRow, TotalColumns]
+            var templateRowIndex = GetTemplateRowIndex(overtime.Enabled, overtime.IsDeleted);
+            template.Cells[templateRowIndex, 1, templateRowIndex, TotalColumns]
                 .Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
 
             worksheet.Cells[rowIndex, colIndex++].Value = rowNum++;
@@ -335,6 +337,20 @@ public class OvertimeReportService(
         worksheet.View.FreezePanes(templateIndex.bodyRow, 1);
     }
 
+    private static byte GetTemplateRowIndex(bool isEnable, bool isDeleted)
+    {
+        const byte normalRowIndex = 3;
+        const byte disabledRowIndex = 4;
+        const byte deletedRowIndex = 5;
+
+        if (isDeleted)
+        {
+            return deletedRowIndex;
+        }
+
+        return isEnable ? normalRowIndex : disabledRowIndex;
+    }
+
     private static void WriteOvertimeRecord(
         ExcelWorksheet template,
         ExcelWorksheet worksheet,
@@ -346,7 +362,7 @@ public class OvertimeReportService(
         {
             headerRow = 2,
             bodyRow = 3,
-            summaryRow = 4,
+            summaryRow = 6,
             startSummaryColumn = 8,
             startNormalDayColumn = 12,
             endNormalDayColumn = 14,
@@ -366,7 +382,8 @@ public class OvertimeReportService(
         {
             var overtimes = dailyOvertimes.Where(x => x.EmpId == employee.EmpId);
             colIndex = 1;
-            template.Cells[templateIndex.bodyRow, 1, templateIndex.bodyRow, totalFixedColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, totalFixedColumns]);
+            var templateRowIndex = GetTemplateRowIndex(employee.Enabled, employee.IsDeleted);
+            template.Cells[templateRowIndex, 1, templateRowIndex, totalFixedColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, totalFixedColumns]);
 
             worksheet.Cells[rowIndex, colIndex++].Value = rowNum++;
             worksheet.Cells[rowIndex, colIndex++].Value = employee.UnitCode;
@@ -385,13 +402,13 @@ public class OvertimeReportService(
                 var overtime = overtimes.FirstOrDefault(x => x.WorkDate.Date == date.Date.Date);
                 if (date.IsHoliday)
                 {
-                    template.Cells[templateIndex.bodyRow, templateIndex.startNormalDayColumn].Copy(worksheet.Cells[rowIndex, colIndex]);
+                    template.Cells[templateRowIndex, templateIndex.startNormalDayColumn].Copy(worksheet.Cells[rowIndex, colIndex]);
                     worksheet.Cells[rowIndex, colIndex++].Value = overtime?.PublicHours;
                 }
                 else
                 {
                     var toColumn = colIndex + 3;
-                    template.Cells[templateIndex.bodyRow, templateIndex.startNormalDayColumn, templateIndex.bodyRow, templateIndex.endNormalDayColumn]
+                    template.Cells[templateRowIndex, templateIndex.startNormalDayColumn, templateRowIndex, templateIndex.endNormalDayColumn]
                         .Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, toColumn]);
                     worksheet.Cells[rowIndex, colIndex++].Value = overtime?.NormalHours;
                     worksheet.Cells[rowIndex, colIndex++].Value = overtime?.OffHours;

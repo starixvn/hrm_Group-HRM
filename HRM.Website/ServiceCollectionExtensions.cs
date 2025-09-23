@@ -199,7 +199,6 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddDIReportServices(this IServiceCollection services)
     {
         services.AddSingleton<IReportRepository, ReportRepository>();
-        services.AddSingleton<IOvertimeReportRepository, OvertimeReportRepository>();
         services.AddSingleton<IWorkingCalendarSummaryReportRepository, WorkingCalendarSummaryReportRepository>();
 
         services.AddSingleton<IReportService, ReportService>();

@@ -4,6 +4,7 @@ using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
 using HRM.Core;
 using HRM.Core.Constants;
+using HRM.Core.Enums;
 using HRM.Core.Filters;
 using HRM.Models.Report.MonthlyWorkingHours;
 using HRM.Resources;
@@ -25,7 +26,8 @@ public class MonthlyWorkingHoursController(
         var model = new MonthlyFilterViewModel
         {
             FromDate = today.FirstDayOfMonth(),
-            ToDate = today.LastDayOfMonth()
+            ToDate = today.LastDayOfMonth(),
+            EmployeeStatusIds = $"{EmployeeStatus.Enabled}"
         };
 
         return View("~/Views/Report/MonthlyWorkingHours/Index.cshtml", model);

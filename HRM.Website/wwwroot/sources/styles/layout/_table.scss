@@ -87,16 +87,28 @@ table.table.table-custom {
 
     tbody {
         tr {
-            &:hover {
-                background: #e3eceb !important;
-            }
-
             &:nth-child(odd) {
                 background: #ececec;
             }
 
             &.summary {
                 background-color: #bbf8f2;
+            }
+
+            &.enable-user-row {
+                background: #fff !important;
+            }
+
+            &.disabled-user-row {
+                background: #ddd !important;
+            }
+
+            &.deleted-user-row {
+                background: #c8c8c8 !important;
+            }
+
+            &:hover {
+                background: #e3eceb !important;
             }
 
             input {

@@ -4,6 +4,7 @@ using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
 using HRM.Core;
 using HRM.Core.Constants;
+using HRM.Core.Enums;
 using HRM.Core.Filters;
 using HRM.Models.Report.MonthlyWorkingHours;
 using HRM.Resources;
@@ -23,7 +24,8 @@ public class DailyWorkingHoursController(
     {
         var model = new WeeklyFilterViewModel
         {
-            FromDate = DateTimeOffset.Now.DateTime.ToClientTimeZone().Date
+            FromDate = DateTimeOffset.Now.DateTime.ToClientTimeZone().Date,
+            EmployeeStatusIds = $"{EmployeeStatus.Enabled}"
         };
 
         return View("~/Views/Report/DailyWorkingHours/Index.cshtml", model);

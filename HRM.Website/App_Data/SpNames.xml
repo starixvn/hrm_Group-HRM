@@ -68,13 +68,7 @@
             <Mapping DataField="LeaveTypeId2" ObjectProperty="Id" />
         </Setting>
         <Setting Key="Report_EmployeeCalendarByDateRange" SpName="Report_EmployeeCalendarByDateRange" DbName="bodb_HRM" Plain="0" />
-        <Setting Key="Report_MonthlyWorkingHours" SpName="Report_MonthlyWorkingHours" DbName="bodb_HRM" Plain="0">
-            <Mapping DataField="GroupId" ObjectProperty="Id" />
-            <Mapping DataField="LeaveTypeId" ObjectProperty="Id" />
-            <Mapping DataField="LeaveTypeId2" ObjectProperty="Id" />
-            <Mapping DataField="LeaveCode" ObjectProperty="Code" />
-            <Mapping DataField="LeaveName" ObjectProperty="Name" />
-        </Setting>
+        <Setting Key="Report_MonthlyWorkingHours" SpName="Report_MonthlyWorkingHours" DbName="bodb_HRM" Plain="0" />
         <Setting Key="Report_MonthlyWorkingHours_EmployeeRequest" SpName="Report_MonthlyWorkingHours_EmployeeRequest" DbName="bodb_HRM" Plain="0" />
         <Setting Key="Report_ShiftStatistic" SpName="Report_ShiftStatistic" DbName="bodb_HRM" Plain="0" />
         <Setting Key="Report_ShiftStatisticDetail" SpName="Report_ShiftStatisticDetail" DbName="bodb_HRM" Plain="0" />
