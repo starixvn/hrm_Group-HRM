@@ -19,7 +19,8 @@ export default class Row extends PureComponent {
   };
   render() {
     const { data, companyId } = this.props;
-    const isSameCompany = companyId === data.companyId;
+    const isSameCompany = parseInt(companyId, 10) === parseInt(data.companyId, 10);
+    
     return (
       <tr>
         <td className="align-left cell-name">
