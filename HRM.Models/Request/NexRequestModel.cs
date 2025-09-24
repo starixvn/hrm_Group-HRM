@@ -65,4 +65,8 @@ public class NexRequestModel
     public DateTime? ProcessedDate { get; set; }
 
     public string FullNameProcessedBy { get; set; }
+
+    public bool EmpEnabled { get; set; }
+
+    public bool IsEmpDeleted { get; set; }
 }

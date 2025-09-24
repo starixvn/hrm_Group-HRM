@@ -50,6 +50,8 @@ public class GetRequestCriteria : CriteriaBase
 
     public int? LeaveTypeId { get; set; }
 
+    public string EmployeeStatusIds { get; set; } 
+
     public override string GetSettingKey()
     {
         return IsQueryByCreatedDate ? "WorkingTimeRequest_GetRequestByCreateDate_AllType" : "WorkingTimeRequest_GetRequestByRequestDate_AllType";

@@ -51,6 +51,9 @@ public class RequestViewModel
 
     public RequestViewType ViewType { get; set; }
 
+    public string EmployeeStatusIds { get; set; } = $"{(byte)EmployeeStatus.Enabled}";
+
+
     public string StatusIds
     {
         get
