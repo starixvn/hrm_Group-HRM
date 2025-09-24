@@ -19,7 +19,7 @@ export default class Row extends PureComponent {
   };
   render() {
     const { data, companyId } = this.props;
-    const isSameCompany = parseInt(companyId) === parseInt(data.companyId);
+    const isSameCompany = parseInt(companyId, 10) === parseInt(data.companyId, 10);
     
     return (
       <tr>
