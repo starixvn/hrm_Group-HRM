@@ -85,7 +85,6 @@ public class ReportController(
             Totime = toDate,
             AttendanceType = 0, //show All
             EmpId = model.EmpId,
-            ExcludeUserDelete = 1,
             CompanyId = CurrentCompanyId
         };
 

@@ -108,7 +108,15 @@ public class ExportExcelAttendanceReportService(IWebHostEnvironment hostingEnvir
             rowIndex = RowStartBody;
         }
 
-        return rowIndex;
+        const byte disabledRowIndex = 8;
+        const byte deletedRowIndex = 9;
+
+        if (attendance.IsDeleted)
+        {
+            return deletedRowIndex;
+        }
+
+        return attendance.Enabled ? rowIndex : disabledRowIndex;
     }
 
     private static string RequestsRemark(EmployeeAttendanceModel attendance)

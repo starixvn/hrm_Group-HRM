@@ -11,7 +11,8 @@ public class EmployeeAttendanceModel
     public string Code { get; set; }
     public string FullName { get; set; }
     public string NickName { get; set; }
-
+    public bool Enabled { get; set; }
+    public bool IsDeleted { get; set; }
     public string UnitCode { get; set; }
     public string DepartmentCode { get; set; }
     public string DepartmentName { get; set; }
