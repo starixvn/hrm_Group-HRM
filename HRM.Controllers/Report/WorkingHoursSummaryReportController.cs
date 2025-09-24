@@ -36,7 +36,7 @@ public class WorkingHoursSummaryReportController(
             TeamIds = model.TeamIds,
             Employee = model.Employee,
             IsLocal = model.IsLocal,
-            EmployeeStatusId = model.EmployeeStatusId
+            EmployeeStatusIds = model.EmployeeStatusIds
         };
         model.WorkingHours = await reportService.GetWorkingHoursSummaryAsync(param);
 
@@ -57,7 +57,7 @@ public class WorkingHoursSummaryReportController(
             TeamIds = model.TeamIds,
             Employee = model.Employee,
             IsLocal = model.IsLocal,
-            EmployeeStatusId = model.EmployeeStatusId
+            EmployeeStatusIds = model.EmployeeStatusIds
         };
         var workingHours = await reportService.GetWorkingHoursSummaryAsync(param);
         var overtimes = await GetOvertimeDetailAsync(model);
@@ -77,7 +77,7 @@ public class WorkingHoursSummaryReportController(
             TeamIds = model.TeamIds,
             Employee = model.Employee,
             IsLocal = model.IsLocal,
-            EmployeeStatusId = model.EmployeeStatusId
+            EmployeeStatusIds = model.EmployeeStatusIds
         };
         return await overtimeReportService.GetDailyOvertimeDetailsAsync(param);
     }

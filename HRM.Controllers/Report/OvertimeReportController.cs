@@ -98,7 +98,7 @@ public class OvertimeReportController(
             TeamIds = model.TeamIds,
             Employee = model.Employee,
             IsLocal = model.IsLocal,
-            EmployeeStatusId = model.EmployeeStatusId
+            EmployeeStatusIds = model.EmployeeStatusIds
         };
         model.Overtimes = await overtimeReportService.GetDailyOvertimeDetailsAsync(param);
 
@@ -160,7 +160,7 @@ public class OvertimeReportController(
             TeamIds = model.TeamIds,
             Employee = model.Employee,
             IsLocal = model.IsLocal,
-            EmployeeStatusId = model.EmployeeStatusId
+            EmployeeStatusIds = model.EmployeeStatusIds
         };
         var overtimes = await overtimeReportService.GetDailyOvertimeDetailsAsync(param);
         var bytes = overtimeReportService.ExportDailyOvertimeDetails(overtimes, param);

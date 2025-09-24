@@ -37,7 +37,7 @@ public class WorkingHoursSummaryReportService(
             IsLocal = param.IsLocal,
             TeamIds = param.TeamIds,
             Employee = param.Employee,
-            EmployeeStatusId = param.EmployeeStatusId
+            EmployeeStatusIds = param.EmployeeStatusIds
         };
         return await baseService.GetDataAsync<WorkingHoursSummary>(criteria);
     }

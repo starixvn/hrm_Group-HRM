@@ -26,8 +26,7 @@ public class WorkingCalendarSummaryReportController(
         var model = new WorkingCalendarSummaryViewModel
         {
             FromDate = today,
-            ToDate = today,
-            EmployeeStatusId = (byte)EmployeeStatus.Enabled
+            ToDate = today
         };
 
         return View("~/Views/Report/WorkingCalendarSummary.cshtml", model);
@@ -45,7 +44,7 @@ public class WorkingCalendarSummaryReportController(
             TeamIds = model.TeamIds,
             Employee = model.Employee,
             IsLocal = model.IsLocal,
-            EmployeeStatusId = model.EmployeeStatusId
+            EmployeeStatusIds = model.EmployeeStatusIds
         };
         var calendars = await reportService.GetWorkingCalendarSummaryAsync(param);
         ViewBag.FromDate = param.FromDate;
@@ -67,7 +66,7 @@ public class WorkingCalendarSummaryReportController(
             TeamIds = model.TeamIds,
             Employee = model.Employee,
             IsLocal = model.IsLocal,
-            EmployeeStatusId = model.EmployeeStatusId
+            EmployeeStatusIds = model.EmployeeStatusIds
         };
         var calendars = await reportService.GetWorkingCalendarSummaryAsync(param);
         var bytes = reportService.Export(param, calendars);

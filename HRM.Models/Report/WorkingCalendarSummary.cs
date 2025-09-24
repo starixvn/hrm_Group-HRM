@@ -12,4 +12,7 @@ public class WorkingCalendarSummary : DailySchedule
     public string TeamName { get; set; }
     public string DepartmentCode { get; set; }
     public string DepartmentName { get; set; }
+    public bool Enabled { get; set; }
+
+    public bool IsDeleted { get; set; }
 }

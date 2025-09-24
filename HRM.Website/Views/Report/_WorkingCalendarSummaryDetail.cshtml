@@ -62,8 +62,9 @@
             }
             @foreach (var employee in employees)
             {
+                var rowClass = employee.IsDeleted ? "deleted-user-row" : employee.Enabled ? "enable-user-row" : "disabled-user-row";
                 index++;
-                <tr>
+                <tr class="@rowClass">
                     <td>@index</td>
                     <td class="align-left">@employee.DepartmentName</td>
                     <td class="align-left">@employee.TeamName</td>

@@ -104,7 +104,7 @@ public class OvertimeReportService(
             TeamIds = param.TeamIds,
             Employee = param.Employee,
             IsLocal = param.IsLocal,
-            EmployeeStatusId = param.EmployeeStatusId
+            EmployeeStatusIds = param.EmployeeStatusIds
         };
         return await baseService.GetDataAsync<DailyOvertimeDetails>(criteria);
     }

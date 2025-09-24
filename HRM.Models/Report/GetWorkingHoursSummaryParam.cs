@@ -11,5 +11,5 @@ public class GetWorkingHoursSummaryParam
     public byte? IsLocal { get; set; }
     public string TeamIds { get; set; }
     public string Employee { get; set; }
-    public byte? EmployeeStatusId { get; set; }
+    public string EmployeeStatusIds { get; set; }
 }
