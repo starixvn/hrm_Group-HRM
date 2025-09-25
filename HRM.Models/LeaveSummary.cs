@@ -7,6 +7,9 @@ public class LeaveSummary
     public string Nickname { get; set; }
     public string FullName { get; set; }
     public string Email { get; set; }
+
+    public bool Enabled { get; set; }
+    public bool IsDeleted { get; set; }
     public int TeamId { get; set; }
     public string Team { get; set; }
     public string Department { get; set; }

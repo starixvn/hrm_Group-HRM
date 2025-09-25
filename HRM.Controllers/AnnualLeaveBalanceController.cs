@@ -35,6 +35,7 @@ public class AnnualLeaveBalanceController(
         string employee,
         int? year = null,
         int? employeeId = null,
+        string employeeStatusIds = "1",
         int? category = null)
     {
         var isJoinedDateRule = session.Get<short>(SessionKey.AnnualLeaveRule) == (short)AnnualLeaveRuleType.JoinedDate;
@@ -47,7 +48,8 @@ public class AnnualLeaveBalanceController(
             Employee = employee,
             EmployeeId = employeeId ?? -1,
             Category = category,
-            IsShowCloseBalance = appSettings.IsShowCloseBalance
+            IsShowCloseBalance = appSettings.IsShowCloseBalance,
+            EmployeeStatusIds = employeeStatusIds
         };
         return isJoinedDateRule 
             ? await GetJoinedDateRuleData("JoinedDateRule", model)
@@ -231,7 +233,8 @@ public class AnnualLeaveBalanceController(
             IsLocal = (byte?)model.Category,
             Role = string.Empty,
             SupervisorId = EmployeeSession.EmpId,
-            CompanyId = CurrentCompanyId
+            CompanyId = CurrentCompanyId,
+            EmployeeStatusIds = model.EmployeeStatusIds
         };
         return await reportService.GetAnnualLeaveBalanceReportAsync(criteria);
     }
@@ -246,7 +249,8 @@ public class AnnualLeaveBalanceController(
             IsLocal = (byte?)model.Category,
             Role = string.Empty,
             SupervisorId = EmployeeSession.EmpId,
-            CompanyId = CurrentCompanyId
+            CompanyId = CurrentCompanyId,
+            EmployeeStatusIds = model.EmployeeStatusIds
         };
         return await reportService.GetAnnualLeaveBalanceForJoinedDateReportAsync(criteria);
     }

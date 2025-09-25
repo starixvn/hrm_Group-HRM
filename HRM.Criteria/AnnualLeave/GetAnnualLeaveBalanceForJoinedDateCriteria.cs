@@ -19,6 +19,8 @@ public class GetAnnualLeaveBalanceForJoinedDateCriteria : CriteriaBase
 
     public int CompanyId { get; set; }
 
+    public string EmployeeStatusIds { get; set; }
+
     public override string GetSettingKey()
     {
         return "Report_LeaveSummaryForJoinedDate";
