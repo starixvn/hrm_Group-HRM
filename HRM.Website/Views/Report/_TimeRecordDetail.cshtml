@@ -28,7 +28,8 @@
             @foreach (var item in Model)
             {
                 index++;
-            <tr>
+                var rowClass = item.IsDeleted ? "deleted-user-row" : item.Enabled ? "enable-user-row" : "disabled-user-row";
+            <tr class="@rowClass">
                 <td>@index</td>
                 <td class="align-left">@item.DepartmentCode</td>
                 <td class="align-left">@item.Team</td>

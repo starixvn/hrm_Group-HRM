@@ -13,4 +13,5 @@ public class TimeRecordViewModel : PagerOptionModel
     public string TeamIds { get; set; }
     public IList<Models.Team> Teams { get; set; }
     public byte? IsLocal { get; set; }
+    public string EmployeeStatusIds { get; set; }
 }

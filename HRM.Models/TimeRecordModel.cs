@@ -14,6 +14,8 @@ public class TimeRecordModel
     public string Nickname { get; set; }
     public string FullName { get; set; }
     public string Team { get; set; }
+    public bool Enabled { get; set; }
+    public bool IsDeleted { get; set; }
 
     public DateTime RecordTime
     {

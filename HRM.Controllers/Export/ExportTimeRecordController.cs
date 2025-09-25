@@ -14,7 +14,8 @@ namespace HRM.Controllers.Export;
 public class ExportTimeRecordController(
     IUserControlSession session,
     IReportService reportService,
-    IExportExcelTimeRecordService exportTimeRecordService) : BaseController(session)
+    IExportExcelTimeRecordService exportTimeRecordService
+) : BaseController(session)
 {
     public async Task<FileContentResult> Export(TimeRecordViewModel model)
     {
@@ -25,7 +26,8 @@ public class ExportTimeRecordController(
             TeamIds = model.TeamIds,
             FromDate = model.FromDate.ToServerTimeZone(),
             ToDate = model.ToDate.ToEndOfDay().ToServerTimeZone(),
-            IsLocal = model.IsLocal
+            IsLocal = model.IsLocal,
+            EmployeeStatusIds = model.EmployeeStatusIds
         };
 
         var records = await reportService.GetTimeRecordAsync(criteria);
