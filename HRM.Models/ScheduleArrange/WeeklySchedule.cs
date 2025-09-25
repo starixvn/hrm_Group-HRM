@@ -9,6 +9,8 @@ public class WeeklySchedule
     public string Code { get; set; }
     public string Nickname { get; set; }
     public string FullName { get; set; }
+    public bool Enabled { get; set; }
+    public bool IsDeleted { get; set; }
     public EntityBase<int> Team { get; set; }
     public string Remark { get; set; }
 

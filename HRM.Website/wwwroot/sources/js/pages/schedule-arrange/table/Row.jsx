@@ -49,9 +49,11 @@ export default class Row extends PureComponent {
             isDragging,
         } = this.props;
 
+        var rowClass = data.isDeleted ? 'deleted-user-row' : data.enabled ? 'enable-user-row' : 'disabled-user-row';
+
         return (
             <div
-                className={`table-row ${isDragging ? 'dragging' : ''}`}
+                className={`table-row ${isDragging ? 'dragging' : ''} ${rowClass}`}
                 ref={draggableProvided.innerRef}
                 {...draggableProvided.draggableProps}
                 {...draggableProvided.dragHandleProps}>

@@ -42,6 +42,7 @@ export default class App extends Component {
                 teamIds: '',
                 companyId: defaultCompanyId,
                 employee: { value: 0, label: '' },
+                employeeStatusIds: '1'
             },
             schedules: [],
             employeeOptions: [],

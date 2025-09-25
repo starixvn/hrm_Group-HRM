@@ -52,7 +52,8 @@ public class ScheduleArrangeService(
             IsLocal = filter.IsLocal.HasValue ? filter.IsLocal.Value == 1 : null,
             CompanyId = companyId,
             CurrentCompanyId = currentCompanyId,
-            IsEditScheduleUnlimited = filter.IsEditScheduleUnlimited
+            IsEditScheduleUnlimited = filter.IsEditScheduleUnlimited,
+            EmployeeStatusIds = filter.EmployeeStatusIds
         };
 
         var weeklySchedules = await scheduleArrangeRepository.GetWeeklyScheduleAsync(criteria);

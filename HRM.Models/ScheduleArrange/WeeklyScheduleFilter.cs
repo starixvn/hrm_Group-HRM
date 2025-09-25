@@ -13,4 +13,5 @@ public class WeeklyScheduleFilter
     public byte? IsLocal { get; set; }
     public bool IsEditScheduleUnlimited { get; set; }
     public short? CompanyId { get; set; }
+    public string EmployeeStatusIds { get; set; }
 }
