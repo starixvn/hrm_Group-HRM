@@ -5,7 +5,6 @@ using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
 using HRM.Core;
 using HRM.Core.Constants;
-using HRM.Core.Enums;
 using HRM.Core.Filters;
 using HRM.Models.Report;
 using HRM.Services.Implement.Report;
