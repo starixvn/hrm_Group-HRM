@@ -12,10 +12,10 @@
     var isApprover = (bool)ViewBag.IsApprover;
     var hasCheckBoxColumn = showCheckAll ? "has-check-box-column" : "";
 }
-@section css{
+@section css {
     <link href="~/dist/styles/overtime.member.index.css" rel="stylesheet" asp-append-version="true" />
 }
-@section js{
+@section js {
     <script src="~/dist/js/overtime.member.index.js" asp-append-version="true"></script>
 }
 @section Breadcrumb {
@@ -28,6 +28,7 @@
 <form class="filter">
     @Html.HiddenFor(model => model.TeamIds)
     @Html.HiddenFor(model => model.Month)
+    @Html.HiddenFor(model => model.EmployeeStatusIds)
     <div class="form-horizontal clearfix">
         <div class="form-group form-group--m">
             <div class="label-form">
@@ -52,7 +53,7 @@
             <div class="select-form">
                 @Html.Raw(RazorHelpers.CategoryDropDownList("IsLocal",
                     classHTML: "form-control",
-                    selectedId: Model.IsLocal.HasValue ? Model.IsLocal.Value.ToString() : string.Empty))
+                    selectedId: Model.IsLocal.HasValue? Model.IsLocal.Value.ToString() : string.Empty))
             </div>
         </div>
     </div>
@@ -73,10 +74,16 @@
             </div>
         </div>
         <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.Label(Labels.UserStatus, Labels.UserStatus, new { @class = "control-label" })
+            </div>
+            <div class="select-form" id="EmployeeStatus"></div>
+        </div>
+        <div class="form-group form-group--m">
             <div class="checkbox-form">
                 <div class="checkbox">
                     <input type="checkbox" class="checkbox-custom" id="IsShowCrossCompany" name="IsShowCrossCompany"
-                           @(Model.IsShowCrossCompany ? "checked" : string.Empty) />
+                        @(Model.IsShowCrossCompany ? "checked" : string.Empty) />
                     <label for="IsShowCrossCompany">@Labels.ShowCrossCompany</label>
                 </div>
             </div>
@@ -108,72 +115,72 @@
                 </th>
             </tr>
         }
-            <tr>
-                @if (showCheckAll)
-                {
-                    <th>
-                        <div class="checkbox">
-                            <input type="checkbox" class="checkbox-custom" id="ckbAll" />
-                            <label for="ckbAll"></label>
-                        </div>
-                    </th>
-                }
-                <th>@Labels.SymbolCount</th>
-                <th class="col-sorter">
-                    @Labels.BusinessUnit
-                    <div class="fa fa-sort"></div>
+        <tr>
+            @if (showCheckAll)
+            {
+                <th>
+                    <div class="checkbox">
+                        <input type="checkbox" class="checkbox-custom" id="ckbAll" />
+                        <label for="ckbAll"></label>
+                    </div>
                 </th>
-                <th class="col-sorter">
-                    @Labels.Department
-                    <div class="fa fa-sort"></div>
-                </th>
-                <th class="col-sorter">
-                    @Labels.Team
-                    <div class="fa fa-sort"></div>
-                </th>
-                <th class="col-sorter">
-                    @Labels.FullName
-                    <div class="fa fa-sort"></div>
-                </th>
-                <th class="col-sorter">
-                    @Labels.NickName
-                    <div class="fa fa-sort"></div>
-                </th>
-                <th class="col-sorter">
-                    @Labels.Month
-                    <div class="fa fa-sort"></div>
-                </th>
-                <th class="col-sorter">
-                    @Labels.NormalDay
-                    <div class="fa fa-sort"></div>
-                </th>
-                <th class="col-sorter">
-                    @Labels.OffDay
-                    <div class="fa fa-sort"></div>
-                </th>
-                <th class="col-sorter">
-                    @Labels.PublicHoliday
-                    <div class="fa fa-sort"></div>
-                </th>
-                <th class="col-sorter">
-                    @Labels.SpecialOT
-                    <div class="fa fa-sort"></div>
-                </th>
-                <th class="col-sorter">
-                    @Labels.Verifier
-                    <div class="fa fa-sort"></div>
-                </th>
-                <th class="col-sorter">
-                    @Labels.Approver
-                    <div class="fa fa-sort"></div>
-                </th>
-                <th class="col-sorter">
-                    @Labels.Status
-                    <div class="fa fa-sort"></div>
-                </th>
-                <th>@Labels.Details</th>
-                <th></th>
-            </tr>
+            }
+            <th>@Labels.SymbolCount</th>
+            <th class="col-sorter">
+                @Labels.BusinessUnit
+                <div class="fa fa-sort"></div>
+            </th>
+            <th class="col-sorter">
+                @Labels.Department
+                <div class="fa fa-sort"></div>
+            </th>
+            <th class="col-sorter">
+                @Labels.Team
+                <div class="fa fa-sort"></div>
+            </th>
+            <th class="col-sorter">
+                @Labels.FullName
+                <div class="fa fa-sort"></div>
+            </th>
+            <th class="col-sorter">
+                @Labels.NickName
+                <div class="fa fa-sort"></div>
+            </th>
+            <th class="col-sorter">
+                @Labels.Month
+                <div class="fa fa-sort"></div>
+            </th>
+            <th class="col-sorter">
+                @Labels.NormalDay
+                <div class="fa fa-sort"></div>
+            </th>
+            <th class="col-sorter">
+                @Labels.OffDay
+                <div class="fa fa-sort"></div>
+            </th>
+            <th class="col-sorter">
+                @Labels.PublicHoliday
+                <div class="fa fa-sort"></div>
+            </th>
+            <th class="col-sorter">
+                @Labels.SpecialOT
+                <div class="fa fa-sort"></div>
+            </th>
+            <th class="col-sorter">
+                @Labels.Verifier
+                <div class="fa fa-sort"></div>
+            </th>
+            <th class="col-sorter">
+                @Labels.Approver
+                <div class="fa fa-sort"></div>
+            </th>
+            <th class="col-sorter">
+                @Labels.Status
+                <div class="fa fa-sort"></div>
+            </th>
+            <th>@Labels.Details</th>
+            <th></th>
+        </tr>
     </thead>
     <tbody id="listMemberOvertime" class="@hasCheckBoxColumn">
         @await Html.PartialAsync("_ListMemberOvertime", Model.MemberRequests)

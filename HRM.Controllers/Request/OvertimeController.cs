@@ -98,6 +98,7 @@ public class OvertimeController(
     {
         var param = CreateOvertimeRequestParam(model);
         param.IsShowCrossCompany = model.IsShowCrossCompany;
+        param.EmployeeStatusIds = model.EmployeeStatusIds;
         model.MemberRequests = await overtimeService.GetMemberMonthlyRequestAsync(param);
 
         return model.MemberRequests;
@@ -131,7 +132,8 @@ public class OvertimeController(
             EmployeeId = model.EmployeeId,
             StatusIds = statusIds,
             IsLocal = model.IsLocal,
-            CompanyId = CurrentCompanyId
+            CompanyId = CurrentCompanyId,
+            EmployeeStatusIds = model.EmployeeStatusIds
         };
 
         return param;
