@@ -37,6 +37,14 @@ export default class Row extends PureComponent {
         );
     };
 
+    getRowClass = data => {
+        if (data.isDeleted) {
+            return 'deleted-user-row';
+        }
+
+        return data.enabled ? 'enable-user-row' : 'disabled-user-row';
+    };
+
     render() {
         const {
             isHost,
@@ -49,11 +57,9 @@ export default class Row extends PureComponent {
             isDragging,
         } = this.props;
 
-        var rowClass = data.isDeleted ? 'deleted-user-row' : data.enabled ? 'enable-user-row' : 'disabled-user-row';
-
         return (
             <div
-                className={`table-row ${isDragging ? 'dragging' : ''} ${rowClass}`}
+                className={`table-row ${isDragging ? 'dragging' : ''} ${this.getRowClass(data)}`}
                 ref={draggableProvided.innerRef}
                 {...draggableProvided.draggableProps}
                 {...draggableProvided.dragHandleProps}>
@@ -199,4 +205,3 @@ export default class Row extends PureComponent {
         );
     }
 }
-
