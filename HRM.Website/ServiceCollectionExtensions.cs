@@ -128,7 +128,6 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IEmailService, EmailService>();
         services.AddSingleton<IMessageService, MessageService>();
         services.AddSingleton<IDashboardService, DashboardService>();
-        services.AddSingleton<IAnnualLeaveBalanceService, AnnualLeaveBalanceService>();
         services.AddSingleton<IEmployeeService, EmployeeService>();
         services.AddSingleton<IUnitService, UnitService>();
         services.AddSingleton<IDepartmentService, DepartmentService>();

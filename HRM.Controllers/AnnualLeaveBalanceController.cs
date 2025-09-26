@@ -15,7 +15,6 @@ using GO.UserControl.Client.Core.Session;
 using HRM.Core.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Models;
-using Models.AnnualLeaveBalance;
 using Resources;
 using Services.Interfaces;
 using ViewModels.AnnualLeave;
@@ -26,8 +25,7 @@ public class AnnualLeaveBalanceController(
     IEmployeeService employeeService,
     ITeamService teamService,
     IReportService reportService,
-    IBaseService baseService,
-    IAnnualLeaveBalanceService annualLeaveBalanceService) : BaseController(session)
+    IBaseService baseService) : BaseController(session)
 {
     [HrmPermission(Policy.Read, FunctionKey.AnnualLeaveBalance)]
     public async Task<IActionResult> Index(
@@ -84,16 +82,18 @@ public class AnnualLeaveBalanceController(
     [HrmPermission(Policy.Host, FunctionKey.AnnualLeaveBalance)]
     public async Task<IActionResult> Adjust([FromBody] AnnualLeaveBalanceMultiViewModel model)
     {
-        var annualLeave = new AdjustAnnualLeaveBalance
+        var criteria = new AdjustEmployeeAnnualLeaveCriteria
         {
             CompanyId = CurrentCompanyId,
             EmployeeIds = model.EmpIds,
             Description = model.Description,
             CreditDays = model.CreditDays,
             DeductDays = model.DeductDays,
-            AffectedFrom = model.AffectedFrom
+            FromDate = model.AffectedFrom,
+            ActorId = EmployeeSession.EmpId
         };
-        var commandResult = await annualLeaveBalanceService.AdjustAsync(EmployeeSession.EmpId, annualLeave);
+
+        var commandResult = await baseService.ExecuteNonQueryAsync(criteria);
 
         return Json(commandResult);
     }
