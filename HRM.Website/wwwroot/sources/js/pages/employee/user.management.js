@@ -36,10 +36,10 @@ import { axiosError, blockUI, floatThead, unblockUI, getParam, resolveClientUrl,
     }
 
     function checkDisabledUser() {
-        if ($("#disabled").prop("checked")) {
-            $('table#data .resignedDate').show();
-        } else {
+        if ($("#enabled").prop("checked")) {
             $('table#data .resignedDate').hide();
+        } else {
+            $('table#data .resignedDate').show();
         }
     }
 
