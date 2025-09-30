@@ -22,8 +22,6 @@ public class EmployeeAttendanceViewModel
 
     public int DateOption { get; set; }
 
-    public bool ExcludeDeletedUsers { get; set; }
-
     public bool IsMember { get; set; }
 
     public string TeamName { get; set; }
@@ -35,4 +33,6 @@ public class EmployeeAttendanceViewModel
     public int SupervisorId { get; set; }
 
     public string Sort { get; set; }
+
+    public string EmployeeStatusIds { get; set; }
 }

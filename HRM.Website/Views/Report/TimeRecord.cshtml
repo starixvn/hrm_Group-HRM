@@ -92,6 +92,14 @@
                          )
             </div>
         </div>
+
+        <div class="form-group form-group--m">
+            <div class="label-form">
+                @Html.Label(Labels.UserStatus, Labels.UserStatus, new { @class = "control-label" })
+            </div>
+            <div class="select-form" id="EmployeeStatus"></div>
+        </div>
+
         <div class="form-group form-group--m">
             <button id="btnSubmit" type="button" class="btn btn-primary">@Labels.Submit</button>
             <button id="btnExcel" type="button" class="btn btn-excel @(!hasPermission ? "hidden" : string.Empty)">@Labels.Excel</button>
@@ -100,6 +108,7 @@
     @Html.HiddenFor(model => model.ItemsPerPage)
     @Html.HiddenFor(model => model.CurrentPage)
     @Html.HiddenFor(model => model.TeamIds)
+    @Html.HiddenFor(model => model.EmployeeStatusIds)
 </form>
 
 <div id="TimeRecordContent"></div>

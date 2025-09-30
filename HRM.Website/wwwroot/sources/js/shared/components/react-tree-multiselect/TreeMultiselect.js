@@ -135,7 +135,7 @@ export default class TreeMultiselect extends React.Component {
             nodes.filter(filter).map(item => (
                 <ul key={item.key}>
                     <li className="multiselect-treeview-item">
-                        <TreeNode
+                        <TreeNode id={this.id}
                             data={item}
                             floatData={floatData}
                             onSelect={this.handleSelect}
@@ -152,6 +152,7 @@ export default class TreeMultiselect extends React.Component {
         const { floatData, data } = this.state;
         const selected = floatData.filter(item => item.checked);
         const selectedText = getSelectedText(floatData);
+        const checkboxAllElementId = `${this.id}-selectAll`;
 
         return (
             <div id={this.id} className="multiselect-treeview" ref={element => this.wrapper = element}>
@@ -173,11 +174,11 @@ export default class TreeMultiselect extends React.Component {
                     )}
                     <div className="multiselect-treeview-select-all">
                         <div className="checkbox-wrapper">
-                            <input type="checkbox" id="selectAll"
+                            <input type="checkbox" id={checkboxAllElementId}
                                 checked={floatData.length === selected.length}
                                 onChange={this.handleSelectAll}
                             />
-                            <label htmlFor="selectAll"> Select all</label>
+                            <label htmlFor={checkboxAllElementId}> Select all</label>
                         </div>
                     </div>
                     <div className="multiselect-treeview-items">

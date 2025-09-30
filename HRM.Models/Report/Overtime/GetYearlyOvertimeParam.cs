@@ -8,6 +8,6 @@ public class GetYearlyOvertimeParam
     public string Employee { get; set; }
     public string TeamIds { get; set; }
     public byte Calendar { get; set; }
-    public byte? EmployeeStatusId { get; set; }
+    public string EmployeeStatusIds { get; set; }
     public byte? IsLocal { get; set; }
 }

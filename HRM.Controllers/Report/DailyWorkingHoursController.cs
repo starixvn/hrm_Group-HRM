@@ -25,7 +25,7 @@ public class DailyWorkingHoursController(
         var model = new WeeklyFilterViewModel
         {
             FromDate = DateTimeOffset.Now.DateTime.ToClientTimeZone().Date,
-            EmployeeStatusId = (byte)EmployeeStatus.Enabled
+            EmployeeStatusIds = $"{(byte)EmployeeStatus.Enabled}"
         };
 
         return View("~/Views/Report/DailyWorkingHours/Index.cshtml", model);
@@ -43,7 +43,7 @@ public class DailyWorkingHoursController(
             TeamIds = model.TeamIds,
             Employee = model.Employee,
             IsLocal = model.IsLocal,
-            EmployeeStatusId = model.EmployeeStatusId
+            EmployeeStatusIds = model.EmployeeStatusIds
         };
         ViewBag.FromDate = param.FromDate;
         var monthlyWorkings = await workingHoursService.GetMonthlyWorkingHoursAsync(param);
@@ -63,7 +63,7 @@ public class DailyWorkingHoursController(
             TeamIds = model.TeamIds,
             Employee = model.Employee,
             IsLocal = model.IsLocal,
-            EmployeeStatusId = model.EmployeeStatusId
+            EmployeeStatusIds = model.EmployeeStatusIds
         };
         var monthlyWorkings = await workingHoursService.GetMonthlyWorkingHoursAsync(param);
         var bytes = workingHoursService.ExportDailyWorkingHours(param.FromDate, monthlyWorkings);

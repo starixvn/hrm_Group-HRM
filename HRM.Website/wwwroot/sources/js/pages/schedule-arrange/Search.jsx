@@ -27,7 +27,15 @@ export default class Search extends Component {
     handleSubmit = event => {
         this.props.onSubmit(event.target.name === 'currentWeek');
     };
+
+    handleChangeEmployeeStatus = selectedItems => {
+        const ids = selectedItems.map(item => item.id);
+        this.props.onChange('employeeStatusIds', ids.join(','));
+    };
+
     render() {
+        const employeeStatusIds = (this.props.filter.employeeStatusIds || '').split(',').map(id => parseInt(id, 10));
+
         return (
             <div className="filter">
                 <div className="form-horizontal clearfix">
@@ -51,7 +59,7 @@ export default class Search extends Component {
                             <label className="control-label">Team</label>
                         </div>
                         <div className="select-form">
-                            <TreeMultiselect
+                            <TreeMultiselect id='teamIds'
                                 data={this.props.teamOptions}
                                 isSelectedAll
                                 onChange={this.handleTeamChange}
@@ -90,6 +98,21 @@ export default class Search extends Component {
                     </div>
                 </div>
                 <div className="form-horizontal clearfix">
+                    <div className='form-group form-group--m'>
+                        <div className='label-form'>
+                            <label className='control-label'>User Status</label>
+                        </div>
+                        <div className='select-form'>
+                            <TreeMultiselect id='employeeStatusIds'
+                                data={[
+                                    { id: 1, text: 'Enable', enable: true, checked: employeeStatusIds.indexOf(1) !== -1, isLeaf: true },
+                                    { id: 2, text: 'Disabled', enable: true, checked: employeeStatusIds.indexOf(2) !== -1, isLeaf: true },
+                                    { id: 3, text: 'Deleted', enable: true, checked: employeeStatusIds.indexOf(3) !== -1, isLeaf: true }
+                                ]}
+                                onChange={this.handleChangeEmployeeStatus}
+                            />
+                        </div>
+                    </div>
                     <div className="button-group">
                         <button
                             className="btn btn-primary"

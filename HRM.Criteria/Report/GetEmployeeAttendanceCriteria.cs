@@ -16,8 +16,6 @@ public class GetEmployeeAttendanceCriteria : CriteriaBase
 
     public string TeamIds { get; set; }
 
-    public int? ExcludeUserDelete { get; set; }
-
     public byte? IsLocal { get; set; }
 
     public bool? IsRealDate { get; set; }
@@ -26,6 +24,8 @@ public class GetEmployeeAttendanceCriteria : CriteriaBase
     public short AttendanceType { get; set; }
 
     public short CompanyId { get; set; }
+
+    public string EmployeeStatusIds { get; set; }
 
     public override string GetSettingKey() => "EmployeeAttendance_GetByType";
 

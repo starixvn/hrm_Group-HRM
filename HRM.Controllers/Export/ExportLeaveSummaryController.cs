@@ -35,7 +35,8 @@ public class ExportLeaveSummaryController(
             IsLocal = isLocal,
             Role = string.Empty,
             SupervisorId = null,
-            CompanyId = CurrentCompanyId
+            CompanyId = CurrentCompanyId,
+            EmployeeStatusIds = model.EmployeeStatusIds
         };
         var leaveSummary = await reportService.GetAnnualLeaveBalanceReportAsync(criteria);
 
@@ -61,7 +62,8 @@ public class ExportLeaveSummaryController(
             IsLocal = isLocal,
             Role = string.Empty,
             SupervisorId = null,
-            CompanyId = CurrentCompanyId
+            CompanyId = CurrentCompanyId,
+            EmployeeStatusIds = model.EmployeeStatusIds
         };
         var leaveSummary = await reportService.GetAnnualLeaveBalanceForJoinedDateReportAsync(criteria);
 

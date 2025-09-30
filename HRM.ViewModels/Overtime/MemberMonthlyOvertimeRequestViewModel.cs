@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using Models;
 using HRM.Models.Overtime;
+using HRM.Core.Enums;
 
 public class MemberMonthlyOvertimeRequestViewModel
 {
@@ -18,5 +19,6 @@ public class MemberMonthlyOvertimeRequestViewModel
     public string Sort { get; set; }
     public short OvertimeType { get; set; }
     public bool IsShowCrossCompany { get; set; }
+    public string EmployeeStatusIds { get; set; } = $"{(byte)EmployeeStatus.Enabled}";
 }
 

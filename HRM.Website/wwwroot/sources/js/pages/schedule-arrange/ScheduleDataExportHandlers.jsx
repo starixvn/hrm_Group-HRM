@@ -110,6 +110,7 @@ export const createScheduleDataExportHandlers = component => ({
                 companyId: filter.companyId,
                 isLocal: filter.isLocal,
                 employeeId: filter.employee.value === 0 ? null : filter.employee.value,
+                employeeStatusIds: filter.employeeStatusIds
             },
         })
             .then(response => {
@@ -175,8 +176,9 @@ export const createScheduleDataExportHandlers = component => ({
                 toDate: toDate,
                 teamIds: filter.teamIds,
                 companyId: filter.companyId,
-                isLocal: filter.isLocal,  
+                isLocal: filter.isLocal,
                 employeeId: filter.employee.value === 0 ? null : filter.employee.value,
+                employeeStatusIds: filter.employeeStatusIds
             },
             responseType: 'blob',
         })

@@ -128,7 +128,6 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IEmailService, EmailService>();
         services.AddSingleton<IMessageService, MessageService>();
         services.AddSingleton<IDashboardService, DashboardService>();
-        services.AddSingleton<IAnnualLeaveBalanceService, AnnualLeaveBalanceService>();
         services.AddSingleton<IEmployeeService, EmployeeService>();
         services.AddSingleton<IUnitService, UnitService>();
         services.AddSingleton<IDepartmentService, DepartmentService>();
@@ -189,7 +188,6 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<ILateInEarlyOutRequestRepository, LateInEarlyOutRequestRepository>();
         services.AddSingleton<IChangeShiftRequestRepository, ChangeShiftRequestRepository>();
         services.AddSingleton<IKeepInViewRequestRepository, KeepInViewRequestRepository>();
-        services.AddSingleton<IEmployeeWorkingHoursRepository, EmployeeWorkingHoursRepository>();
         services.AddSingleton<IScheduleArrangeRepository, ScheduleArrangeRepository>();
         services.AddSingleton<IWorkingCalendarRepository, WorkingCalendarRepository>();
         services.AddSingleton<IOvertimeRequestRepository, OvertimeRequestRepository>();
@@ -200,7 +198,6 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddDIReportServices(this IServiceCollection services)
     {
         services.AddSingleton<IReportRepository, ReportRepository>();
-        services.AddSingleton<IOvertimeReportRepository, OvertimeReportRepository>();
         services.AddSingleton<IWorkingCalendarSummaryReportRepository, WorkingCalendarSummaryReportRepository>();
 
         services.AddSingleton<IReportService, ReportService>();

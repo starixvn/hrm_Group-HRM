@@ -35,7 +35,8 @@ public class WorkingCalendarSummaryReportService(
             ToDate = param.ToDate,
             IsLocal = param.IsLocal,
             TeamIds = param.TeamIds,
-            Employee = param.Employee
+            Employee = param.Employee,
+            EmployeeStatusIds = param.EmployeeStatusIds
         };
         return await repository.GetWorkingCalendarSummaryAsync(criteria);
     }

@@ -136,6 +136,8 @@ public class RequestRepository : IRequestRepository
                     NickName = requestInfo.Requester,
                     FullName = requestInfo.FullNameRequester,
                     UnitCode = requestInfo.UnitCode,
+                    Enabled = requestInfo.EmpEnabled,
+                    IsDeleted = requestInfo.IsEmpDeleted,
                     Team = new Team
                     {
                         Name = requestInfo.Team,
@@ -356,6 +358,8 @@ public class RequestRepository : IRequestRepository
             FullName = requestInfo.RequesterFullName,
             AnnualLeaveBalance = requestInfo.AnnualLeaveBalance,
             UnitCode = requestInfo.UnitCode,
+            Enabled = requestInfo.EmpEnabled,
+            IsDeleted = requestInfo.IsEmpDeleted,
             Team = new Team
             {
                 Id = requestInfo.TeamId,

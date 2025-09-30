@@ -25,6 +25,17 @@ logs/
 # Ignore Docker files that shouldn't be in context
 Dockerfile*
 
+# Ignore JavaScript source files
+HRM.Website/wwwroot/sources/js/
+HRM.Website/wwwroot/sources/libs/
+HRM.Website/wwwroot/sources/styles/abstracts/
+HRM.Website/wwwroot/sources/styles/base/
+HRM.Website/wwwroot/sources/styles/components/
+HRM.Website/wwwroot/sources/styles/fonts/
+HRM.Website/wwwroot/sources/styles/layout/
+HRM.Website/wwwroot/sources/styles/pages/
+HRM.Website/wwwroot/sources/styles/vendors/
+
 # Ignore other unnecessary files
 *.md
 *.DS_Store

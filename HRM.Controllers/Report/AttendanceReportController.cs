@@ -1,4 +1,5 @@
-﻿using HRM.Services.ExportExcel;
+﻿using HRM.Core.Enums;
+using HRM.Services.ExportExcel;
 using HRM.ViewModels.Report;
 
 namespace HRM.Controllers.Report;
@@ -32,8 +33,8 @@ public class AttendanceReportController(
             ToDate = currentDateTime,
             TeamIds = string.Join(",", teams.Select(x => x.Id)),
             DateOption = 0,
-            ExcludeDeletedUsers = true,
-            SupervisorId = EmployeeSession.EmpId
+            SupervisorId = EmployeeSession.EmpId,
+            EmployeeStatusIds = $"{(byte)EmployeeStatus.Enabled}"
         };
 
         return View("~/Views/Report/Attendance/Index.cshtml", model);
@@ -50,10 +51,10 @@ public class AttendanceReportController(
             AttendanceType = model.AttendanceType,
             EmpId = model.EmployeeId,
             TeamIds = model.TeamIds,
-            ExcludeUserDelete = model.ExcludeDeletedUsers ? 1 : 0,
             IsLocal = model.IsLocal,
             IsRealDate = model.IsRealDate,
-            CompanyId = CurrentCompanyId
+            CompanyId = CurrentCompanyId,
+            EmployeeStatusIds = model.EmployeeStatusIds
         };
         var employeeAttendances = await reportService.GetEmployeeAttendanceReportAsync(criteria);
 
@@ -71,10 +72,10 @@ public class AttendanceReportController(
             AttendanceType = model.AttendanceType,
             EmpId = model.EmployeeId,
             TeamIds = model.TeamIds,
-            ExcludeUserDelete = model.ExcludeDeletedUsers ? 1 : 0,
             IsLocal = model.IsLocal,
             IsRealDate = model.IsRealDate,
-            CompanyId = CurrentCompanyId
+            CompanyId = CurrentCompanyId,
+            EmployeeStatusIds = model.EmployeeStatusIds
         };
         var employeeAttendances = await reportService.GetEmployeeAttendanceReportAsync(criteria);
         var bytes = excelService.Export(employeeAttendances, model.FromDate, model.ToDate);

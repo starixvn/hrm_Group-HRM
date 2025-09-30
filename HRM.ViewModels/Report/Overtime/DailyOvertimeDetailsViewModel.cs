@@ -14,6 +14,6 @@ public class DailyOvertimeDetailsViewModel
     public IEnumerable<EntityBase<int>> Teams { get; set; }
     public string Employee { get; set; }
     public byte? IsLocal { get; set; }
-    public byte? EmployeeStatusId { get; set; } = (byte)EmployeeStatus.Enabled;
+    public string EmployeeStatusIds { get; set; } = $"{(byte)EmployeeStatus.Enabled}";
     public IEnumerable<DailyOvertimeDetails> Overtimes { get; set; } = new List<DailyOvertimeDetails>();
 }

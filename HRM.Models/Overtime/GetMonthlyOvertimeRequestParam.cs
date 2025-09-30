@@ -14,4 +14,5 @@ public class GetMonthlyOvertimeRequestParam
     public byte? IsLocal { get; set; }
     public int CompanyId { get; set; }
     public bool IsShowCrossCompany { get; set; }
+    public string EmployeeStatusIds { get; set; }
 }

@@ -15,7 +15,6 @@ public class ExportExcelTimeRecordService(IWebHostEnvironment hostingEnvironment
 {
     public byte[] Export(IEnumerable<TimeRecordModel> timeRecords)
     {
-        const byte startBodyRow = 4;
         const byte totalColumns = 10;
         const byte headerAndTitleRow = 2;
         var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, "ExcelTemplates/TimeRecordTemplate.xlsx");
@@ -38,7 +37,8 @@ public class ExportExcelTimeRecordService(IWebHostEnvironment hostingEnvironment
 
         foreach (var detail in timeRecords)
         {
-            templateWorksheet.Cells[startBodyRow, 1, startBodyRow, totalColumns].Copy(workSheet.Cells[rowIndex, colIndex, rowIndex, totalColumns]);
+            var templateRowIndex = GetTemplateRowIndex(detail);
+            templateWorksheet.Cells[templateRowIndex, 1, templateRowIndex, totalColumns].Copy(workSheet.Cells[rowIndex, colIndex, rowIndex, totalColumns]);
 
             workSheet.Cells[rowIndex, colIndex++].Value = count;
             workSheet.Cells[rowIndex, colIndex++].Value = detail.DepartmentCode;
@@ -56,5 +56,19 @@ public class ExportExcelTimeRecordService(IWebHostEnvironment hostingEnvironment
 
         workSheet.Cells.AutoFitColumns();
         return xlPackage.GetAsByteArray();
+    }
+
+    private static byte GetTemplateRowIndex(TimeRecordModel attendance)
+    {
+        const byte normalRowIndex = 4;
+        const byte disabledRowIndex = 5;
+        const byte deletedRowIndex = 6;
+
+        if (attendance.IsDeleted)
+        {
+            return deletedRowIndex;
+        }
+
+        return attendance.Enabled ? normalRowIndex : disabledRowIndex;
     }
 }

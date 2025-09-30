@@ -12,7 +12,7 @@ public class GetDailyOvertimeReportCriteria : CriteriaBase
     public string Employee { get; set; }
     public string TeamIds { get; set; }
     public byte? IsLocal { get; set; }
-    public byte? EmployeeStatusId { get; set; }
+    public string EmployeeStatusIds { get; set; }
 
     public override string GetSettingKey() => "Report_DailyOvertime";
 

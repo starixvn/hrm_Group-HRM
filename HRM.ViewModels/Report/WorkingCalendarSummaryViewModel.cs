@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using HRM.Core.Enums;
 using Models;
 
 public class WorkingCalendarSummaryViewModel
@@ -11,7 +12,7 @@ public class WorkingCalendarSummaryViewModel
     public byte? IsLocal { get; set; }
     public string TeamIds { get; set; }
     public string Employee { get; set; }
-    public byte? EmployeeStatusId { get; set; }
+    public string EmployeeStatusIds { get; set; } = $"{(byte)EmployeeStatus.Enabled}";
 
     public IEnumerable<EntityBase<int>> Teams { get; set; }
 }

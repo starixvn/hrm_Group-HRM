@@ -312,7 +312,8 @@ public class RequestController(
             IsLocal = request.IsLocal.HasValue ? request.IsLocal.Value == 1 : null,
             LeaveTypeId = request.LeaveType,
             CompanyId = CurrentCompanyId,
-            IsShowCrossCompany = request.IsShowCrossCompany
+            IsShowCrossCompany = request.IsShowCrossCompany,
+            EmployeeStatusIds = request.EmployeeStatusIds
         };
 
         var requests = await requestService.GetRequestAsync(criteria);

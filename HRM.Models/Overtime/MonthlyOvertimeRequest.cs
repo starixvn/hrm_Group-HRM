@@ -38,6 +38,8 @@ public class MonthlyOvertimeRequest
     public int ApproverId { get; set; }
     public string ApproverNickname { get; set; }
     public string ApproverFullName { get; set; }
+    public bool Enabled { get; set; }
+    public bool IsDeleted { get; set; }
 
     public IEnumerable<DailyOvertimeRequest> DailyOvertimes { get; set; } = new List<DailyOvertimeRequest>();
 }

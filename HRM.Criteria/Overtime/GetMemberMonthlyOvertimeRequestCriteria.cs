@@ -15,7 +15,7 @@ public class GetMemberMonthlyOvertimeRequestCriteria : CriteriaBase
     public byte? IsLocal { get; set; }
     public int CompanyId { get; set; }
     public bool IsShowCrossCompany { get; set; }
-
+    public string EmployeeStatusIds { get; set; }
     public override string GetSettingKey() => "Overtime_GetMemberMonthlyRequest";
 
     public override bool IsValid() => true;

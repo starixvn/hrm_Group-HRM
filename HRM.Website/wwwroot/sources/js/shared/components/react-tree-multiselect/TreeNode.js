@@ -9,12 +9,13 @@ export default class TreeNode extends PureComponent {
     render() {
         const { data, floatData } = this.props;
         const itemIndex = floatData.findIndex(item => item.key === data.key);
+        const checkboxElementId = `${this.props.id}-${data.key}`;
 
         return (
             <Fragment>
                 <div className="checkbox-wrapper">
-                    <input type="checkbox" id={data.key} checked={floatData[itemIndex].checked} onChange={this.handleChange} />
-                    <label htmlFor={data.key}> {data.text}</label>
+                    <input type="checkbox" id={checkboxElementId} checked={floatData[itemIndex].checked} onChange={this.handleChange} />
+                    <label htmlFor={checkboxElementId}> {data.text}</label>
                 </div>
                 {
                     data.items && data.items.length > 0 &&

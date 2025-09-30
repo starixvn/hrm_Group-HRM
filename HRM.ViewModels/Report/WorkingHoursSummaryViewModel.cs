@@ -17,7 +17,7 @@ public class WorkingHoursSummaryViewModel
     public byte? IsLocal { get; set; }
     public string TeamIds { get; set; }
     public string Employee { get; set; }
-    public byte? EmployeeStatusId { get; set; } = (byte)EmployeeStatus.Enabled;
+    public string EmployeeStatusIds { get; set; } = $"{(byte)EmployeeStatus.Enabled}";
 
     public IEnumerable<EntityBase<int>> Teams { get; set; }
     public IEnumerable<WorkingHoursSummary> WorkingHours { get; set; } = new List<WorkingHoursSummary>();

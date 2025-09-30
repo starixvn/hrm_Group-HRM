@@ -14,53 +14,54 @@
     var index = 0;
     foreach (var request in Model)
     {
+        var rowClass = request.IsDeleted ? "deleted-user-row" : request.Enabled ? "enable-user-row" : "disabled-user-row";
         index++;
-    <tr>
-        <td>
-            @if (showCheckAll && request.IsHost)
-            {
-                <div class="checkbox">
-                    <input type="checkbox" class="checkbox-custom" id="ckb@(request.RequestId)"
-                            data-requestid="@request.RequestId" data-statusid="@request.Status.Id"
-                            data-verifierid="@request.VerifierId" data-approverid="@request.ApproverId" />
-                    <label for="ckb@(request.RequestId)"></label>
-                </div>
-            }
-        </td>
-        <td>@index</td>
-        <td class="align-left">@request.UnitCode</td>
-        <td class="align-left">@request.DepartmentName</td>
-        <td class="align-left">@request.TeamName</td>
-        <td class="align-left">@request.Requester.FullName</td>
-        <td>@request.Requester.Nickname</td>
-        <td data-datetime="@request.Month">@request.Month.ToString("MMM-yyyy")</td>
-        <td>
-            @{RenderHours(request.NormalHours);}
-        </td>
-        <td>
-            @{RenderHours(request.OffHours);}
-        </td>
-        <td>
-            @{RenderHours(request.PublicHours);}
-        </td>
-        <td>
-            @{RenderHours(request.SpecialHours);}
-        </td>
-        <td>@request.VerifierNickname</td>
-        <td>@request.ApproverNickname</td>
-        <td>@{RenderStatus(request);}</td>
-        <td>
-            <a href="@Url.Action("MemberDetails", "Overtime", new { id = request.RequestId })">
-                @Labels.View
-            </a>
-        </td>
-        <td>
-            @if (request.IsWarning)
-            {
-                <i class="fa fa-exclamation-triangle"></i>
-            }
-        </td>
-    </tr>
+        <tr class="@rowClass">
+            <td>
+                @if (showCheckAll && request.IsHost)
+                {
+                    <div class="checkbox">
+                        <input type="checkbox" class="checkbox-custom" id="ckb@(request.RequestId)"
+                                data-requestid="@request.RequestId" data-statusid="@request.Status.Id"
+                                data-verifierid="@request.VerifierId" data-approverid="@request.ApproverId" />
+                        <label for="ckb@(request.RequestId)"></label>
+                    </div>
+                }
+            </td>
+            <td>@index</td>
+            <td class="align-left">@request.UnitCode</td>
+            <td class="align-left">@request.DepartmentName</td>
+            <td class="align-left">@request.TeamName</td>
+            <td class="align-left">@request.Requester.FullName</td>
+            <td>@request.Requester.Nickname</td>
+            <td data-datetime="@request.Month">@request.Month.ToString("MMM-yyyy")</td>
+            <td>
+                @{RenderHours(request.NormalHours);}
+            </td>
+            <td>
+                @{RenderHours(request.OffHours);}
+            </td>
+            <td>
+                @{RenderHours(request.PublicHours);}
+            </td>
+            <td>
+                @{RenderHours(request.SpecialHours);}
+            </td>
+            <td>@request.VerifierNickname</td>
+            <td>@request.ApproverNickname</td>
+            <td>@{RenderStatus(request);}</td>
+            <td>
+                <a href="@Url.Action("MemberDetails", "Overtime", new { id = request.RequestId })">
+                    @Labels.View
+                </a>
+            </td>
+            <td>
+                @if (request.IsWarning)
+                {
+                    <i class="fa fa-exclamation-triangle"></i>
+                }
+            </td>
+        </tr>
     }
 }
 else

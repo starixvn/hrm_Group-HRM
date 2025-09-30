@@ -15,7 +15,6 @@ using GO.UserControl.Client.Core.Session;
 using HRM.Core.Enums;
 using Microsoft.AspNetCore.Mvc;
 using Models;
-using Models.AnnualLeaveBalance;
 using Resources;
 using Services.Interfaces;
 using ViewModels.AnnualLeave;
@@ -26,8 +25,7 @@ public class AnnualLeaveBalanceController(
     IEmployeeService employeeService,
     ITeamService teamService,
     IReportService reportService,
-    IBaseService baseService,
-    IAnnualLeaveBalanceService annualLeaveBalanceService) : BaseController(session)
+    IBaseService baseService) : BaseController(session)
 {
     [HrmPermission(Policy.Read, FunctionKey.AnnualLeaveBalance)]
     public async Task<IActionResult> Index(
@@ -35,6 +33,7 @@ public class AnnualLeaveBalanceController(
         string employee,
         int? year = null,
         int? employeeId = null,
+        string employeeStatusIds = "1",
         int? category = null)
     {
         var isJoinedDateRule = session.Get<short>(SessionKey.AnnualLeaveRule) == (short)AnnualLeaveRuleType.JoinedDate;
@@ -47,7 +46,8 @@ public class AnnualLeaveBalanceController(
             Employee = employee,
             EmployeeId = employeeId ?? -1,
             Category = category,
-            IsShowCloseBalance = appSettings.IsShowCloseBalance
+            IsShowCloseBalance = appSettings.IsShowCloseBalance,
+            EmployeeStatusIds = employeeStatusIds
         };
         return isJoinedDateRule 
             ? await GetJoinedDateRuleData("JoinedDateRule", model)
@@ -82,16 +82,18 @@ public class AnnualLeaveBalanceController(
     [HrmPermission(Policy.Host, FunctionKey.AnnualLeaveBalance)]
     public async Task<IActionResult> Adjust([FromBody] AnnualLeaveBalanceMultiViewModel model)
     {
-        var annualLeave = new AdjustAnnualLeaveBalance
+        var criteria = new AdjustEmployeeAnnualLeaveCriteria
         {
             CompanyId = CurrentCompanyId,
             EmployeeIds = model.EmpIds,
             Description = model.Description,
             CreditDays = model.CreditDays,
             DeductDays = model.DeductDays,
-            AffectedFrom = model.AffectedFrom
+            FromDate = model.AffectedFrom,
+            ActorId = EmployeeSession.EmpId
         };
-        var commandResult = await annualLeaveBalanceService.AdjustAsync(EmployeeSession.EmpId, annualLeave);
+
+        var commandResult = await baseService.ExecuteNonQueryAsync(criteria);
 
         return Json(commandResult);
     }
@@ -231,7 +233,8 @@ public class AnnualLeaveBalanceController(
             IsLocal = (byte?)model.Category,
             Role = string.Empty,
             SupervisorId = EmployeeSession.EmpId,
-            CompanyId = CurrentCompanyId
+            CompanyId = CurrentCompanyId,
+            EmployeeStatusIds = model.EmployeeStatusIds
         };
         return await reportService.GetAnnualLeaveBalanceReportAsync(criteria);
     }
@@ -246,7 +249,8 @@ public class AnnualLeaveBalanceController(
             IsLocal = (byte?)model.Category,
             Role = string.Empty,
             SupervisorId = EmployeeSession.EmpId,
-            CompanyId = CurrentCompanyId
+            CompanyId = CurrentCompanyId,
+            EmployeeStatusIds = model.EmployeeStatusIds
         };
         return await reportService.GetAnnualLeaveBalanceForJoinedDateReportAsync(criteria);
     }

@@ -12,7 +12,6 @@ using HRM.Models;
 using HRM.Models.Report.MonthlyWorkingHours;
 using HRM.Models.Request;
 using HRM.Models.Shifts;
-using HRM.Repositories.Interfaces;
 using HRM.Services.Implement.Request;
 using Microsoft.AspNetCore.Hosting;
 using OfficeOpenXml;
@@ -28,7 +27,6 @@ public partial interface IEmployeeWorkingHoursService
 
 public partial class EmployeeWorkingHoursService(
     IWebHostEnvironment env,
-    IEmployeeWorkingHoursRepository repository,
     IBaseService baseService,
     ICommonDataService commonDataService)
 {
@@ -54,10 +52,16 @@ public partial class EmployeeWorkingHoursService(
             TeamIds = param.TeamIds,
             Employee = param.Employee,
             IsLocal = param.IsLocal,
-            EmployeeStatusId = param.EmployeeStatusId
+            EmployeeStatusIds = param.EmployeeStatusIds
         };
 
-        return await repository.GetMonthlyWorkingHoursAsync(criteria);
+        var (monthlyWorkings, dailyWorkings) = await baseService.FetchMultipleAsync<MonthlyWorking, DailyWorking>(criteria);
+        foreach (var monthlyWorking in monthlyWorkings)
+        {
+            monthlyWorking.DailyWorkings = dailyWorkings.Where(x => x.EmpId == monthlyWorking.EmpId).OrderBy(x => x.WorkDate);
+        }
+
+        return monthlyWorkings;
     }
 
     private async Task<IEnumerable<EmployeeRequest>> GetEmployeeRequestAsync(GetMonthlyWorkingHoursParam param)
@@ -71,7 +75,7 @@ public partial class EmployeeWorkingHoursService(
             TeamIds = param.TeamIds,
             Employee = param.Employee,
             IsLocal = param.IsLocal,
-            EmployeeStatusId = param.EmployeeStatusId
+            EmployeeStatusIds = param.EmployeeStatusIds
         };
 
         return await baseService.GetDataAsync<EmployeeRequest>(criteria);
@@ -129,7 +133,7 @@ public partial class EmployeeWorkingHoursService(
         // summary
         if (monthlyWorkings.Any())
         {
-            const byte summaryRowIndex = 5;
+            const byte summaryRowIndex = 7;
             TotalColumns = TotalFixedColumns + months.Count() * TotalUplColumns;
             template.Cells[summaryRowIndex, 1, summaryRowIndex, 8].Copy(worksheet.Cells[rowIndex, 1, rowIndex, 8]);
             for (var i = 9; i <= TotalColumns; i++)
@@ -186,13 +190,14 @@ public partial class EmployeeWorkingHoursService(
         foreach (var monthlyWorking in monthlyWorkings)
         {
             var colIndex = 1;
-            template.Cells[StartBodyRowIndex, 1, StartBodyRowIndex, TotalFixedColumns]
+            var templateRowIndex = GetTemplateRowIndex(monthlyWorking);
+            template.Cells[templateRowIndex, 1, templateRowIndex, TotalFixedColumns]
                 .Copy(worksheet.Cells[rowIndex, 1, rowIndex, TotalFixedColumns]);
 
             worksheet.Cells[rowIndex, colIndex++].Value = rowNum++;
             worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.UnitCode;
             worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.DepartmentName;
-            worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Team.Name;
+            worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.TeamName;
             worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Code;
             worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.FullName;
             worksheet.Cells[rowIndex, colIndex++].Value = monthlyWorking.Nickname;
@@ -287,6 +292,20 @@ public partial class EmployeeWorkingHoursService(
         }
     }
 
+    private static byte GetTemplateRowIndex(MonthlyWorking monthlyWorking)
+    {
+        const byte normalRowIndex = 4;
+        const byte disabledRowIndex = 5;
+        const byte deletedRowIndex = 6;
+
+        if (monthlyWorking.IsDeleted)
+        {
+            return deletedRowIndex;
+        }
+
+        return monthlyWorking.Enabled ? normalRowIndex : disabledRowIndex;
+    }
+
     private void WriteSummarySheet(
         ExcelWorksheet template,
         ExcelWorksheet worksheet,
@@ -368,8 +387,8 @@ public partial class EmployeeWorkingHoursService(
         dynamic templateIndex)
     {
         rowIndex = templateIndex.bodyRow;
-        var teams = monthlyWorkings.GroupBy(x => new { x.Team.Id, x.Team.Name, x.UnitCode, x.DepartmentName })
-            .Select(x => new { x.Key.UnitCode, x.Key.DepartmentName, Team = x.Key.Name, Members = x.ToList() })
+        var teams = monthlyWorkings.GroupBy(x => new { x.TeamId, x.TeamName, x.UnitCode, x.DepartmentName })
+            .Select(x => new { x.Key.UnitCode, x.Key.DepartmentName, Team = x.Key.TeamName, Members = x.ToList() })
             .OrderBy(x => x.UnitCode).ThenBy(x => x.DepartmentName).ThenBy(x => x.Team).ToList();
         foreach (var team in teams)
         {
@@ -503,11 +522,11 @@ public partial class EmployeeWorkingHoursService(
         foreach (var dailyWorking in dailyWorkings)
         {
             if (dailyWorking.IsLeaveDay
-                && (dailyWorking.LeaveType.Id == (short)leaveType
-                    || (dailyWorking.LeaveType2 != null && dailyWorking.LeaveType2.Id == (short)leaveType)))
+                && (dailyWorking.LeaveTypeId == (short)leaveType
+                    || (dailyWorking.LeaveTypeId2.HasValue && dailyWorking.LeaveTypeId2.Value == (short)leaveType)))
             {
                 if (dailyWorking.IsLeaveHalfDay
-                    || (dailyWorking.LeaveType2 != null && dailyWorking.LeaveType.Id != dailyWorking.LeaveType2.Id))
+                    || (dailyWorking.LeaveTypeId2.HasValue && dailyWorking.LeaveTypeId != dailyWorking.LeaveTypeId2.Value))
                 {
                     totals += Constants.HalfDayOffValue;
                 }

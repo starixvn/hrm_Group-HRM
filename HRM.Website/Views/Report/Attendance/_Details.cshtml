@@ -7,7 +7,9 @@
 @using HRM.ViewModels.Report
 @using HRM.Website.Helper
 @model IEnumerable<HRM.ViewModels.Report.EmployeeAttendanceModel>
-
+@{
+    
+}
 <table id="data" class="table table-custom">
     <thead>
         <tr>
@@ -97,8 +99,9 @@
             {
                 index++;
                 var trClass = item.LateIn > 0 || item.EarlyOut > 30 ? "highlight" : string.Empty;
+                var rowClass = item.IsDeleted ? "deleted-user-row" : item.Enabled ? "enable-user-row" : "disabled-user-row";
 
-                <tr class="@trClass">
+                <tr class="@trClass @rowClass">
                     <td>@index</td> 
                     @if (item.IsWeekend)
                     {

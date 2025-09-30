@@ -12,7 +12,7 @@ public class GetEmployeeWorkingCalendarByDateCriteria : CriteriaBase
     public string TeamIds { get; set; }
     public string Employee { get; set; }
     public byte? IsLocal { get; set; }
-    public byte? EmployeeStatusId { get; set; }
+    public string EmployeeStatusIds { get; set; }
 
     public override bool IsValid() => CompanyId > 0 && ActorId > 0;
 

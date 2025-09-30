@@ -14,6 +14,7 @@ public class GetTimeRecordCriteria : CriteriaBase
     public int? ItemsPerPage { get; set; }
     public int? TotalItem { get; set; }
     public int SupervisorId { get; set; }
+    public string EmployeeStatusIds { get; set; }
 
     public override string GetSettingKey() => "TimeRecord_Get";
 

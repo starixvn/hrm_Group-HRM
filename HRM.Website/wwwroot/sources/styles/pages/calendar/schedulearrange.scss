@@ -464,6 +464,18 @@ input[type="text"] {
                     }
                 }
             }
+
+            &.disabled-user-row {
+                .cell-index, .cell-nickname {
+                    background-color: #ddd;
+                }
+            }
+
+            &.deleted-user-row {
+                .cell-index, .cell-nickname {
+                    background-color: #c8c8c8;
+                }
+            }
         }
     }
 }

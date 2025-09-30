@@ -21,10 +21,10 @@
                 </div>
             </th>
             <th class="col-sorter">
-	            <div class="cell-control-wrapper">
-		            @Labels.BusinessUnit
-		            <div class="fa fa-sort cell-right-div"></div>
-	            </div>
+                <div class="cell-control-wrapper">
+                    @Labels.BusinessUnit
+                    <div class="fa fa-sort cell-right-div"></div>
+                </div>
             </th>
             <th class="col-sorter">
                 <div class="cell-control-wrapper">
@@ -106,12 +106,13 @@
         {
             foreach (var request in Model.MemberRequests)
             {
-                <tr>
+                var rowClass = request.IsDeleted ? "deleted-user-row" : request.Enabled ? "enable-user-row" : "disabled-user-row";
+                <tr class="@rowClass">
                     <td>
                         <div class="checkbox">
                             <input type="checkbox" class="checkbox-custom" id="ckb@(request.RequestId)"
-                                   data-requestid="@request.RequestId" data-statusid="@request.Status.Id"
-                                   data-verifierid="@request.VerifierId" data-approverid="@request.ApproverId" />
+                                data-requestid="@request.RequestId" data-statusid="@request.Status.Id"
+                                data-verifierid="@request.VerifierId" data-approverid="@request.ApproverId" />
                             <label for="ckb@(request.RequestId)"></label>
                         </div>
                     </td>

@@ -21,9 +21,6 @@ public interface IExportExcelAttendanceReportService
 public class ExportExcelAttendanceReportService(IWebHostEnvironment hostingEnvironment) : IExportExcelAttendanceReportService
 {
     private const byte RowStartBody = 3;
-    private const byte RowHighlight = 4;
-    private const byte RowOffDate = 5;
-    private const byte RowWeekend = 6;
     private const byte TotalColumns = 17;
     private const byte MinimumWidth = 5;
     private const byte MaximumWidth = 50;
@@ -60,7 +57,8 @@ public class ExportExcelAttendanceReportService(IWebHostEnvironment hostingEnvir
             var totalWorkHours = attendance.TotalWorkHours != 0 ? Utilities.TotalHoursToTime((float)attendance.TotalWorkHours) : string.Empty;
             var overtime = attendance.IsOvertime ? attendance.FormattedOvertimeStatus + " (" + attendance.OvertimeHours + ")" : string.Empty;
 
-            worksheet.Cells[rowIndex, colIndex++].Value = rowNum++;
+            worksheet.Cells[rowIndex, colIndex++].Value = rowNum;
+            SetWeekendBackgroundColor(worksheet, rowIndex, colIndex, attendance);
             worksheet.Cells[rowIndex, colIndex++].Value = attendance.AttendanceDate;
             worksheet.Cells[rowIndex, colIndex++].Value = attendance.UnitCode;
             worksheet.Cells[rowIndex, colIndex++].Value = attendance.DepartmentName;
@@ -68,6 +66,7 @@ public class ExportExcelAttendanceReportService(IWebHostEnvironment hostingEnvir
             worksheet.Cells[rowIndex, colIndex++].Value = attendance.Code;
             worksheet.Cells[rowIndex, colIndex++].Value = attendance.FullName;
             worksheet.Cells[rowIndex, colIndex++].Value = attendance.NickName;
+            SetShiftBackgroundColor(worksheet, rowIndex, colIndex, attendance);
             worksheet.Cells[rowIndex, colIndex++].Value = shiftCode;
             worksheet.Cells[rowIndex, colIndex++].Value = attendance.InFixed.HasValue ? attendance.InFixed.Value.ToClientTimeZone() : "";
             worksheet.Cells[rowIndex, colIndex++].Value = attendance.OutFixed.HasValue ? attendance.OutFixed.Value.ToClientTimeZone() : "";
@@ -88,27 +87,45 @@ public class ExportExcelAttendanceReportService(IWebHostEnvironment hostingEnvir
         return xlPackage.GetAsByteArray();
     }
 
-    private static byte GetTemplateRowIndex(EmployeeAttendanceModel attendance)
+    private static void SetShiftBackgroundColor(ExcelWorksheet worksheet, int rowIndex, int colIndex, EmployeeAttendanceModel attendance)
     {
-        byte rowIndex;
         if (attendance.IsOffdayOT)
         {
-            rowIndex = RowHighlight;
+            worksheet.Cells[rowIndex, colIndex].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+            worksheet.Cells[rowIndex, colIndex].Style.Fill.BackgroundColor.SetColor(System.Drawing.ColorTranslator.FromHtml("#E6E6FF"));
         }
         else if (attendance.IsPublicHoliday && !string.IsNullOrEmpty(attendance.ShiftCode))
         {
-            rowIndex = RowOffDate;
-        }
-        else if (attendance.IsWeekend)
-        {
-            rowIndex = RowWeekend;
+            worksheet.Cells[rowIndex, colIndex].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+            worksheet.Cells[rowIndex, colIndex].Style.Fill.BackgroundColor.SetColor(System.Drawing.ColorTranslator.FromHtml("#FFFFCC"));
         }
         else
         {
-            rowIndex = RowStartBody;
+            // No special background color needed for normal shifts
+        }
+    }
+
+    private static void SetWeekendBackgroundColor(ExcelWorksheet worksheet, int rowIndex, int colIndex, EmployeeAttendanceModel attendance)
+    {
+        if (attendance.IsWeekend)
+        {
+            worksheet.Cells[rowIndex, colIndex].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+            worksheet.Cells[rowIndex, colIndex].Style.Fill.BackgroundColor.SetColor(System.Drawing.ColorTranslator.FromHtml("#FFCC99"));
+        }
+    }
+
+    private static byte GetTemplateRowIndex(EmployeeAttendanceModel attendance)
+    {
+        const byte normalRowIndex = 3;
+        const byte disabledRowIndex = 4;
+        const byte deletedRowIndex = 5;
+
+        if (attendance.IsDeleted)
+        {
+            return deletedRowIndex;
         }
 
-        return rowIndex;
+        return attendance.Enabled ? normalRowIndex : disabledRowIndex;
     }
 
     private static string RequestsRemark(EmployeeAttendanceModel attendance)

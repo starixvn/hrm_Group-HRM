@@ -27,7 +27,7 @@ public class MonthlyWorkingHoursController(
         {
             FromDate = today.FirstDayOfMonth(),
             ToDate = today.LastDayOfMonth(),
-            EmployeeStatusId = (byte)EmployeeStatus.Enabled
+            EmployeeStatusIds = $"{(byte)EmployeeStatus.Enabled}"
         };
 
         return View("~/Views/Report/MonthlyWorkingHours/Index.cshtml", model);
@@ -45,7 +45,7 @@ public class MonthlyWorkingHoursController(
             TeamIds = model.TeamIds,
             Employee = model.Employee,
             IsLocal = model.IsLocal,
-            EmployeeStatusId = model.EmployeeStatusId
+            EmployeeStatusIds = model.EmployeeStatusIds
         };
         var monthlyWorkings = await workingHoursService.GetMonthlyWorkingHoursAsync(param);
         ViewBag.FromDate = param.FromDate;
@@ -66,7 +66,7 @@ public class MonthlyWorkingHoursController(
             TeamIds = model.TeamIds,
             Employee = model.Employee,
             IsLocal = model.IsLocal,
-            EmployeeStatusId = model.EmployeeStatusId
+            EmployeeStatusIds = model.EmployeeStatusIds
         };
         var bytes = await workingHoursService.ExportMonthlyWorkingHours(param);
 

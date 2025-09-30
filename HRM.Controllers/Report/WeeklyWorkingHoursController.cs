@@ -27,7 +27,7 @@ public class WeeklyWorkingHoursController(
         {
             FromDate = today.FirstDayOfWeek(),
             ToDate = today.LastDayOfWeek(),
-            EmployeeStatusId = (byte)EmployeeStatus.Enabled
+            EmployeeStatusIds = $"{(byte)EmployeeStatus.Enabled}"
         };
 
         return View("~/Views/Report/WeeklyWorkingHours/Index.cshtml", model);
@@ -45,7 +45,7 @@ public class WeeklyWorkingHoursController(
             TeamIds = model.TeamIds,
             Employee = model.Employee,
             IsLocal = model.IsLocal,
-            EmployeeStatusId = model.EmployeeStatusId
+            EmployeeStatusIds = model.EmployeeStatusIds
         };
         var monthlyWorkings = await workingHoursService.GetMonthlyWorkingHoursAsync(param);
         ViewBag.FromDate = param.FromDate;
@@ -66,7 +66,7 @@ public class WeeklyWorkingHoursController(
             TeamIds = model.TeamIds,
             Employee = model.Employee,
             IsLocal = model.IsLocal,
-            EmployeeStatusId = model.EmployeeStatusId
+            EmployeeStatusIds = model.EmployeeStatusIds
         };
         var monthlyWorkings = await workingHoursService.GetMonthlyWorkingHoursAsync(param);
         var bytes = workingHoursService.ExportWeeklyWorkingHours(param.FromDate, param.ToDate, monthlyWorkings);

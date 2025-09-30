@@ -1,7 +1,8 @@
 ﻿@using HRM.Core.Enums
+@using HRM.Models.Report.MonthlyWorkingHours
 @using HRM.Resources
 @using HRM.Website.Helper
-@model IEnumerable<HRM.Models.Report.MonthlyWorkingHours.MonthlyWorking>
+@model IEnumerable<MonthlyWorking>
     @{
         var fromDate = (DateTime)ViewBag.FromDate;
         var toDate = (DateTime)ViewBag.ToDate;
@@ -35,11 +36,12 @@
             <tbody>
                 @foreach (var monthlyWorking in Model)
                 {
+                    var rowClass = monthlyWorking.IsDeleted ? "deleted-user-row" : monthlyWorking.Enabled ? "enable-user-row" : "disabled-user-row";
                     index++;
-                    <tr>
+                    <tr class="@rowClass">
                         <td>@index</td>
                         <td class="align-left">@monthlyWorking.DepartmentName</td>
-                        <td class="align-left">@monthlyWorking.Team.Name</td>
+                        <td class="align-left">@monthlyWorking.TeamName</td>
                         <td class="align-left">@monthlyWorking.Code</td>
                         <td class="align-left">@monthlyWorking.FullName</td>
                         <td class="align-left">@monthlyWorking.Nickname</td>
@@ -65,25 +67,22 @@
                                         className = "pending";
                                     }
 
-                                    if (dailyWorking.LeaveType.Id == (int)LeaveTypes.UnpaidLeave
-                                        || dailyWorking.LeaveType.Id == (int)LeaveTypes.UnpaidLeaveInsurance
-                                        || dailyWorking.LeaveType.Id == (int)LeaveTypes.MaternityLeave
-                                        || dailyWorking.LeaveType.Id == (int)LeaveTypes.PaternityLeave
-                                        || dailyWorking.LeaveType2 is { Id: (int)LeaveTypes.UnpaidLeave or (int)LeaveTypes.UnpaidLeaveInsurance or (int)LeaveTypes.MaternityLeave or (int)LeaveTypes.PaternityLeave })
+                                    if (dailyWorking.LeaveTypeId is (byte)LeaveTypes.UnpaidLeave or (byte)LeaveTypes.UnpaidLeaveInsurance or (byte)LeaveTypes.MaternityLeave or (byte)LeaveTypes.PaternityLeave
+                                        || dailyWorking.LeaveTypeId2 is (byte)LeaveTypes.UnpaidLeave or (byte)LeaveTypes.UnpaidLeaveInsurance or (byte)LeaveTypes.MaternityLeave or (byte)LeaveTypes.PaternityLeave)
                                     {
                                         className += " unpaidleave";
                                     }
 
                                     if (dailyWorking.IsLeaveHalfDay)
                                     {
-                                        value = $"{dailyWorking.LeaveType.Code}½";
+                                        value = $"{dailyWorking.LeaveTypeCode}½";
                                     }
                                     else
                                     {
-                                        value = dailyWorking.LeaveType.Code;
-                                        if (dailyWorking.LeaveType2 != null && dailyWorking.LeaveType.Id != dailyWorking.LeaveType2.Id)
+                                        value = dailyWorking.LeaveTypeCode;
+                                        if (dailyWorking.LeaveTypeId2.HasValue && dailyWorking.LeaveTypeId != dailyWorking.LeaveTypeId2.Value)
                                         {
-                                            value = $"{dailyWorking.LeaveType.Code}½/{dailyWorking.LeaveType2.Code}½";
+                                            value = $"{dailyWorking.LeaveTypeCode}½/{dailyWorking.LeaveTypeCode2}½";
                                         }
                                     }
                                 }

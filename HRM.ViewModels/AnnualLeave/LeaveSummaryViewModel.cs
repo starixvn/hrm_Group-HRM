@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using HRM.Core.Enums;
 using HRM.Models;
 
 namespace HRM.ViewModels.AnnualLeave;
@@ -15,6 +16,7 @@ public class LeaveSummaryViewModel
     public int? Category { get; set; }
     public string LeaveType { get; set; }
     public bool IsShowCloseBalance { get; set; }
+    public string EmployeeStatusIds { get; set; } = $"{(byte)EmployeeStatus.Enabled}";
     public IEnumerable<LeaveSummary> LeaveSumaries { get; set; }
     public IEnumerable<LeaveSummaryForJoinedDate> LeaveSumariesForJoinedDate { get; set; }
 }
