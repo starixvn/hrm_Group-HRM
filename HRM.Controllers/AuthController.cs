@@ -6,6 +6,7 @@ using System.Globalization;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using Core.Constants;
 using Criteria.SystemSetting;
 using Fanex.Data;
@@ -105,6 +106,13 @@ public class AuthController(
         await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
         return RedirectToAction("Login");
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetTimeSSO()
+    {
+        var time = HttpUtility.UrlEncode(Cryptography.EncryptPassword(await authService.SSOGetTimeAsync()));
+        return Json(time);
     }
 
     private async Task DoLoginAsync(int userId)

@@ -89,4 +89,18 @@ $(document).ready(function () {
             $(this).find('.hoveraction').hide();
         }
     );
+
+    $('.quick-access-link').on('click', function(e) {
+        e.preventDefault();
+        const siteUrl = $(this).attr('data-site-url');
+        
+        axios({
+            url: resolveClientUrl('Auth/GetTimeSSO'),
+            method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        }).then(response => {
+            const finalUrl = siteUrl + '&time=' + response.data;
+            window.open(finalUrl, '_blank');
+        }).catch(axiosError);
+    });
 });

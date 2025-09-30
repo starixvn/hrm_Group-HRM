@@ -21,12 +21,13 @@
         <div class="quick-access dropdown-container">
             <button class="dropdown-toggle">Quick Access</button>
             <ul class="dropdown-list">
-                <li><a asp-controller="dashboard" asp-action="index">EPA</a></li>
-                <li><a asp-controller="employee" asp-action="index">EPA</a></li>
-                <li><a asp-controller="attendance" asp-action="index">EPA</a></li>
-                <li><a asp-controller="leave" asp-action="index">EPA</a></li>
-                <li><a asp-controller="payroll" asp-action="index">EPA</a></li>
-                <li><a asp-controller="report" asp-action="index">EPA Test 12345</a></li>
+                @if (Model.UserSites != null)
+                {
+                    @foreach (var site in Model.UserSites)
+                    {
+                        <li><a href="javascript:void(0);" data-site-url="@site.SiteURL" class="quick-access-link">@site.SiteName</a></li>
+                    }
+                }
             </ul>
         </div>
 
