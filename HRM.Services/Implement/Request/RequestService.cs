@@ -611,7 +611,7 @@ public class RequestService(
 
         return requests.Where(i =>
             !selectedStatuses.Any() ||
-            selectedStatuses.Any(s => MatchStatus(i, s))
+            selectedStatuses.Exists(s => MatchStatus(i, s))
         );
     }
 
