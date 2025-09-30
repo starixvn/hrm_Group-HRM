@@ -160,7 +160,7 @@ public class AuthController(
                     return RedirectToAction("Login");
                 }
 
-                session.UserId = loginResult.UserId;
+                session.UserId = tmpUserId;
                 session.JwtToken = loginResult.JwtToken;
                 session.OnUserId = loginResult.OnUserId;
                 session.MenuItems = await userService.GetMenuItemAsync();
@@ -171,7 +171,7 @@ public class AuthController(
                 session.Set(SessionKey.CurrentDomain, GetDomainName(HttpContext));
                 session.Set(SessionKey.MailSetting, await GetMailSettingAsync());
 
-                await DoLoginAsync(loginResult.UserId);
+                await DoLoginAsync(session.UserId);
 
                 return !string.IsNullOrWhiteSpace(redirectUrl) && Url.IsLocalUrl(redirectUrl) ? Redirect(redirectUrl) : Redirect("~/Home/Index");
             }
