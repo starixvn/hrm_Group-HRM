@@ -78,7 +78,8 @@ public class ExportRequestController(
             SupervisorId = EmployeeSession.EmpId,
             IsLocal = model.IsLocal.HasValue ? model.IsLocal.Value == 1 : null,
             LeaveTypeId = model.LeaveType,
-            CompanyId = CurrentCompanyId
+            CompanyId = CurrentCompanyId,
+            EmployeeStatusIds = model.EmployeeStatusIds
         };
 
         var requests = await requestService.GetRequestAsync(criteria);
@@ -110,7 +111,8 @@ public class ExportRequestController(
             SupervisorId = EmployeeSession.EmpId,
             IsLocal = model.IsLocal.HasValue ? model.IsLocal.Value == 1 : null,
             CompanyId = CurrentCompanyId,
-            IsShowCrossCompany = model.IsShowCrossCompany
+            IsShowCrossCompany = model.IsShowCrossCompany,
+            EmployeeStatusIds = model.EmployeeStatusIds
         };
 
         var requests = await requestService.GetRequestAsync(criteria);

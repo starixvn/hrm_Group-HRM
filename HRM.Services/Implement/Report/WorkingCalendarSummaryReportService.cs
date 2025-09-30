@@ -6,6 +6,7 @@ using HRM.Core;
 using HRM.Criteria.Report;
 using HRM.Models.Report;
 using HRM.Repositories;
+using HRM.Services.ExportExcel;
 using Microsoft.AspNetCore.Hosting;
 using OfficeOpenXml;
 
@@ -20,7 +21,8 @@ public interface IWorkingCalendarSummaryReportService
 
 public class WorkingCalendarSummaryReportService(
     IWebHostEnvironment env,
-    IWorkingCalendarSummaryReportRepository repository) : IWorkingCalendarSummaryReportService
+    IWorkingCalendarSummaryReportRepository repository,
+    IExportExcelService exportExcelService) : IWorkingCalendarSummaryReportService
 {
     private const byte MinimumWidth = 5;
     private const byte MaximumWidth = 50;
@@ -83,7 +85,8 @@ public class WorkingCalendarSummaryReportService(
         {
             var items = workingCalendarSummaries.Where(x => x.EmployeeId == employee.EmployeeId).ToList();
             colIndex = 1;
-            template.Cells[startBodyRow, 1, startBodyRow, totalFixedColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, totalFixedColumns]);
+            var templateRowIndex = exportExcelService.GetTemplateRowIndex(startBodyRow, employee.Enabled, employee.IsDeleted);
+            template.Cells[templateRowIndex, 1, templateRowIndex, totalFixedColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, totalFixedColumns]);
 
             worksheet.Cells[rowIndex, colIndex++].Value = rowNum++;
             worksheet.Cells[rowIndex, colIndex++].Value = employee.DepartmentName;

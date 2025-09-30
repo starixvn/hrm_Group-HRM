@@ -593,8 +593,25 @@ public class RequestService(
             requests.AddRange(mappedData);
         }
 
+        const byte Enable = 1;
+        const byte Disabled = 2;
+        const byte Deleted = 3;
+
+        var selectedStatuses = (model.EmployeeStatusIds ?? "")
+            .Split(',', StringSplitOptions.RemoveEmptyEntries)
+            .Select(byte.Parse)
+            .ToList();
+
         responseRequests = requestRepository
             .MappingNexRequestToGroupRequest(requests, employeeSession)
+            .Where(i =>
+                !selectedStatuses.Any() ||
+                selectedStatuses.Any(s =>
+                    (s == Enable && i.Requester.Enabled && !i.Requester.IsDeleted) ||
+                    (s == Disabled && !i.Requester.Enabled && !i.Requester.IsDeleted) ||
+                    (s == Deleted && i.Requester.IsDeleted)
+                )
+            )
             .OrderByDescending(item => item.CreatedDate)
             .ToList();
 

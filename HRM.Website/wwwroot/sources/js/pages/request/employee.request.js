@@ -745,6 +745,8 @@ $(function () {
         $("#btnExcel").click(function () {
             const action = $("#ActionName").val() + "WorkingTimeRequest";
             const teamIds = $("#Team").multiSelectTreeView("getSelectedItems");
+            $('#EmployeeStatusIds').val($('#EmployeeStatus').multiSelectTreeView('getSelectedItems'));
+            const statusIds = $('#EmployeeStatusIds').val().split(',');
 
             const url = resolveClientUrl(
                 "ExportRequest/" +
@@ -755,6 +757,8 @@ $(function () {
                     (teamIds !== "" ? teamIds : " ") +
                     "&Employee=" +
                     $("#Employee").val() +
+                    "&EmployeeStatusIds=" +
+                    statusIds +
                     "&EmployeeId=" +
                     $("#EmployeeId").val() +
                     "&FromDate=" +
