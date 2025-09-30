@@ -593,28 +593,40 @@ public class RequestService(
             requests.AddRange(mappedData);
         }
 
-        const byte Enable = 1;
-        const byte Disabled = 2;
-        const byte Deleted = 3;
-
-        var selectedStatuses = (model.EmployeeStatusIds ?? "")
-            .Split(',', StringSplitOptions.RemoveEmptyEntries)
-            .Select(byte.Parse)
-            .ToList();
-
-        responseRequests = requestRepository
-            .MappingNexRequestToGroupRequest(requests, employeeSession)
-            .Where(i =>
-                !selectedStatuses.Any() ||
-                selectedStatuses.Any(s =>
-                    (s == Enable && i.Requester.Enabled && !i.Requester.IsDeleted) ||
-                    (s == Disabled && !i.Requester.Enabled && !i.Requester.IsDeleted) ||
-                    (s == Deleted && i.Requester.IsDeleted)
-                )
-            )
+        responseRequests = FilterByEmployeeStatus(requestRepository.MappingNexRequestToGroupRequest(requests, employeeSession), model.EmployeeStatusIds)
             .OrderByDescending(item => item.CreatedDate)
             .ToList();
 
         return responseRequests;
+    }
+
+    private static IEnumerable<RequestEntity> FilterByEmployeeStatus(
+    IEnumerable<RequestEntity> requests,
+    string employeeStatusIds)
+    {
+        var selectedStatuses = (employeeStatusIds ?? "")
+            .Split(',', StringSplitOptions.RemoveEmptyEntries)
+            .Select(byte.Parse)
+            .ToList();
+
+        return requests.Where(i =>
+            !selectedStatuses.Any() ||
+            selectedStatuses.Any(s => MatchStatus(i, s))
+        );
+    }
+
+    private static bool MatchStatus(RequestEntity request, byte status)
+    {
+        const byte Enable = 1;
+        const byte Disabled = 2;
+        const byte Deleted = 3;
+
+        return status switch
+        {
+            Enable => request.Requester.Enabled && !request.Requester.IsDeleted,
+            Disabled => !request.Requester.Enabled && !request.Requester.IsDeleted,
+            Deleted => request.Requester.IsDeleted,                               
+            _ => false
+        };
     }
 }
