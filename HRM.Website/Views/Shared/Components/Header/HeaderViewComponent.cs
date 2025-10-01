@@ -28,7 +28,7 @@ public class HeaderViewComponent(IUserControlSession userControlSession) : ViewC
             new() {
                 Username = "test",
                 SiteName = "WGI HRM",
-                SSOUrl = "https://hrm.ghrworld.com/auth/sso"
+                SSOUrl = "https://hrm-wgi.klc.nexdev.net/auth/sso"
             },
             new() {
                 Username = "test",
@@ -49,11 +49,6 @@ public class HeaderViewComponent(IUserControlSession userControlSession) : ViewC
                 Username = "test",
                 SiteName = "Tunnel3",
                 SSOUrl = "https://tunnel3.dearhoney.cloud/auth/sso"
-            },
-            new() {
-                Username = "test",
-                SiteName = "FnB",
-                SSOUrl = "http://10.18.200.114:8181/auth/sso"
             }
         };
         foreach (var userSite in userSites)
