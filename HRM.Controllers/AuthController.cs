@@ -10,7 +10,6 @@ using System.Web;
 using Core.Constants;
 using Criteria.SystemSetting;
 using Fanex.Data;
-using Fanex.Logging;
 using GO.UserControl.Client.Core.Models.Auth;
 using GO.UserControl.Client.Core.Services;
 using GO.UserControl.Client.Core.Session;
