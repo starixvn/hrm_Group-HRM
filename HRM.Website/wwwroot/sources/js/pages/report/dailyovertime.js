@@ -32,6 +32,7 @@ function getOrgChart() {
 function searchKeyWord() {
     $('#btnSearch').on('click', function () {
         $('#TeamIds').val($('#Team').multiSelectTreeView('getSelectedItems'));
+        $('#EmployeeStatusIds').val($('#EmployeeStatus').multiSelectTreeView('getSelectedItems'));
         $('form.filter').submit();
     });
 }
@@ -54,6 +55,15 @@ function exportExcel() {
     });
 }
 $(document).ready(function () {
+    const statusIds = $('#EmployeeStatusIds').val().split(',');
+    $('#EmployeeStatus').multiSelectTreeView({
+        data: [
+            { id: 1, text: 'Enable', enable: true, checked: statusIds.indexOf('1') !== -1, isLeaf: true },
+            { id: 2, text: 'Disabled', enable: true, checked: statusIds.indexOf('2') !== -1, isLeaf: true },
+            { id: 3, text: 'Deleted', enable: true, checked: statusIds.indexOf('3') !== -1, isLeaf: true }
+        ]
+    });
+
     initDatepicker();
     floatThead('table#data');
     initSortTable();
