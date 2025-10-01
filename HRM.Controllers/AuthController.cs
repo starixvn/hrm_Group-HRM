@@ -24,7 +24,7 @@ using Models;
 using Newtonsoft.Json;
 using Services.Interfaces;
 using ViewModels.Employee;
-
+#pragma warning disable S107 // Methods should not have too many parameters
 public class AuthController(
     IHRMAuthService hrmAuthService,
     IUserControlSession session,
@@ -35,6 +35,7 @@ public class AuthController(
     ILogger logger,
     ICompanyService companyService) : Controller
 {
+#pragma warning restore S107 // Methods should not have too many parameters
     public async Task<IActionResult> Login()
     {
         var companySite = await companyService.GetCompanySiteByDomainAsync();
