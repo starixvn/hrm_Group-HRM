@@ -28,7 +28,7 @@ public class HeaderViewComponent(IUserControlSession userControlSession) : ViewC
             new() {
                 Username = "test",
                 SiteName = "WGI HRM",
-                SSOUrl = "https://hrm-wgi.klc.nexdev.net/auth/sso"
+                SSOUrl = "https://hrm.ghrworld.com/auth/sso"
             },
             new() {
                 Username = "test",
