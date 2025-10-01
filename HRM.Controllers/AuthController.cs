@@ -79,7 +79,6 @@ public class AuthController(
         var loginResult = await authService.LoginAsync(loginParam);
         if (loginResult.IsSuccessfull)
         {
-
             session.UserId = loginResult.UserId;
             session.JwtToken = loginResult.JwtToken;
             session.OnUserId = loginResult.OnUserId;
@@ -166,23 +165,20 @@ public class AuthController(
             await logger.InfoAsync("SSO Site" + companySite.Domain + "\nSSO Params: " + JsonConvert.SerializeObject(ssoParam) + "\nLogin Result: " + JsonConvert.SerializeObject(loginResult));
             if (loginResult.IsSuccessfull)
             {
-                var employee = await hrmAuthService.GetByUserIdAsync(tmpUserId);
-                if (employee == null)
-                {
-                    return RedirectToAction("Login");
-                }
-                await logger.InfoAsync("SSO Employee" + JsonConvert.SerializeObject(employee));
 
                 session.UserId = tmpUserId;
                 session.JwtToken = loginResult.JwtToken;
                 session.OnUserId = loginResult.OnUserId;
                 session.MenuItems = await userService.GetMenuItemAsync();
                 session.Functions = await userService.GetFunctionPermissionAsync(session.SiteId, session.UserId);
+
                 session.Set(SessionKey.IsShowLeftNavigation, true);
-                session.Set(SessionKey.Employee, employee);
                 session.Set(SessionKey.CurrentTimeZone, await GetClientTimeZoneAsync());
                 session.Set(SessionKey.CurrentDomain, GetDomainName(HttpContext));
                 session.Set(SessionKey.MailSetting, await GetMailSettingAsync());
+
+                var employee = await hrmAuthService.GetByUserIdAsync(tmpUserId);
+                session.Set(SessionKey.Employee, employee);
 
                 await DoLoginAsync(session.UserId);
 
