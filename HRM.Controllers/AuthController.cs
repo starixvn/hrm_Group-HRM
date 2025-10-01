@@ -10,6 +10,7 @@ using System.Web;
 using Core.Constants;
 using Criteria.SystemSetting;
 using Fanex.Data;
+using Fanex.Logging;
 using GO.UserControl.Client.Core.Models.Auth;
 using GO.UserControl.Client.Core.Services;
 using GO.UserControl.Client.Core.Session;
@@ -31,6 +32,7 @@ public class AuthController(
     IAuthService authService,
     ICryptoService cryptoService,
     IBaseService baseService,
+    ILogger logger,
     ICompanyService companyService) : Controller
 {
     public async Task<IActionResult> Login()
@@ -160,6 +162,7 @@ public class AuthController(
                 NetSessionId = HttpContext.Session.Id
             };
             var loginResult = await authService.SSOLoginAsync(ssoParam);
+            await logger.InfoAsync("SSO Site" + companySite.Domain + "\nSSO Params: " + JsonConvert.SerializeObject(ssoParam) + "\nLogin Result: " + JsonConvert.SerializeObject(loginResult));
             if (loginResult.IsSuccessfull)
             {
                 var employee = await hrmAuthService.GetByUserIdAsync(tmpUserId);
@@ -167,6 +170,7 @@ public class AuthController(
                 {
                     return RedirectToAction("Login");
                 }
+                await logger.InfoAsync("SSO Employee" + companySite.Domain + "\nSSO Params: " + JsonConvert.SerializeObject(ssoParam) + "\nLogin Result: " + JsonConvert.SerializeObject(loginResult));
 
                 session.UserId = tmpUserId;
                 session.JwtToken = loginResult.JwtToken;
