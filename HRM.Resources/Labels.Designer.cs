@@ -2824,6 +2824,15 @@ namespace HRM.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Leader Takeover Manager .
+        /// </summary>
+        public static string LeaderTakeoverManager {
+            get {
+                return ResourceManager.GetString("LeaderTakeoverManager", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Leader&apos;s View Request Change Shift.
         /// </summary>
         public static string LeaderViewChangeShift {

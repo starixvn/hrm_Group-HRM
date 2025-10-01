@@ -118,6 +118,7 @@ module.exports = {
         [`${jsDistPath}/groupteam.edit.shift.manager`]: `${jsSourcePath}/group-team/shift-manager/index.jsx`,
         [`${jsDistPath}/team.discipline.rule`]: `${jsSourcePath}/team/discipline.rule.js`,
         [`${jsDistPath}/employee.edit.supervisor`]: `${jsSourcePath}/employee/supervisor/index.jsx`,
+        [`${jsDistPath}/team.edit.leadertakeover.manager`]: `${jsSourcePath}/team/leader-takeover-manager/index.jsx`,
         [`${jsDistPath}/employee.edit.discipline.manager`]: `${jsSourcePath}/employee/discipline-manager/index.jsx`,
         [`${jsDistPath}/employee.edit.shift.manager`]: `${jsSourcePath}/employee/shift-manager/index.jsx`,
         [`${jsDistPath}/employee.create`]: `${jsSourcePath}/employee/create.js`,

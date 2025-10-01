@@ -2154,4 +2154,7 @@
   <data name="DepartmentSupport" xml:space="preserve">
     <value>Department Support</value>
   </data>
+  <data name="LeaderTakeoverManager" xml:space="preserve">
+    <value>Leader Takeover Manager </value>
+  </data>
 </root>

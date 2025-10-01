@@ -41,5 +41,8 @@ public enum RoleSystem
     HRAssistant,
 
     [Description("Payroll Admin")]
-    PayrollAdmin
+    PayrollAdmin,
+
+    [Description("LeaderTakeover")]
+    LeaderTakeover,
 }

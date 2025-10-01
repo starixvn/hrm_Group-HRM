@@ -142,8 +142,6 @@ public class TeamController(
         return View(model);
     }
 
-
-
     [HrmPermission(Policy.Read, FunctionKey.TeamManagement)]
     public async Task<IActionResult> TeamSupervisor(int id)
     {
@@ -199,6 +197,23 @@ public class TeamController(
         ViewBag.RoleId = (short)RoleSystem.DisciplineManager;
         ViewBag.CompanyId = CurrentCompanyId;
         return View();
+    }
+
+    [HrmPermission(Policy.Host, FunctionKey.TeamManagement)]
+    public IActionResult LeaderTakeoverManager(int id)
+    {
+        ViewBag.TeamId = id;
+        ViewBag.RoleId = (short)RoleSystem.LeaderTakeover;
+        ViewBag.CompanyId = CurrentCompanyId;
+
+        return View();
+    }
+
+    [HrmPermission(Policy.Read, FunctionKey.TeamManagement, FunctionKey.GroupTeamManagement)]
+    public async Task<IActionResult> GetLeaderTakeoverManagerByTeamId(int teamId)
+    {
+        var leaderTakeovers = await teamService.GetLeaderTakeoverManagerByTeamId(teamId);
+        return Json(leaderTakeovers);
     }
 
     [HrmPermission(Policy.Read, FunctionKey.TeamManagement, FunctionKey.GroupTeamManagement)]
