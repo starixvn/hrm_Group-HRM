@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
+using System.Diagnostics.CodeAnalysis;
 using System.Web;
 using Fanex.Data;
 using GO.UserControl.Client.Core.Enumerables;
@@ -14,6 +15,11 @@ namespace HRM.Website.Views.Shared.Components.Header;
 public class HeaderViewComponent(
     IUserService userService, IUserControlSession userControlSession) : ViewComponent
 {
+    [SuppressMessage(
+        "Security",
+        "S5332:Using http protocol is insecure. Use https instead.",
+        Justification = "Internal system over intranet, HTTPS not available"
+    )]
     public async Task<IViewComponentResult> InvokeAsync()
     {
         var userId = HttpUtility.UrlEncode(Cryptography.EncryptPassword(userControlSession.UserId.ToString()));
