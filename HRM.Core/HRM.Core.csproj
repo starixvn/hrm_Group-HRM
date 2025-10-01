@@ -13,7 +13,7 @@
     <PackageReference Include="Fanex.Data" Version="4.3.4.5" />
     <PackageReference Include="Fanex.Data.Repository" Version="4.3.4.5" />
     <PackageReference Include="Fanex.Logging.Sentry.RavenClient" Version="2.0.2" />
-    <PackageReference Include="GO.UserControl.Client.Core" Version="1.0.5" />
+    <PackageReference Include="GO.UserControl.Client.Core" Version="1.0.9" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="NLog.Web.AspNetCore" Version="6.0.3" />
     <PackageReference Include="NPOI" Version="2.7.4" />

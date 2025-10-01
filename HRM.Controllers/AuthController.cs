@@ -171,7 +171,7 @@ public class AuthController(
                 {
                     return RedirectToAction("Login");
                 }
-                await logger.InfoAsync("SSO Employee" + companySite.Domain + "\nSSO Params: " + JsonConvert.SerializeObject(ssoParam) + "\nLogin Result: " + JsonConvert.SerializeObject(loginResult));
+                await logger.InfoAsync("SSO Employee" + JsonConvert.SerializeObject(employee));
 
                 session.UserId = tmpUserId;
                 session.JwtToken = loginResult.JwtToken;

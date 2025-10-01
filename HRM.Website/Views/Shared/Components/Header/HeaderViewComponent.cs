@@ -1,67 +1,27 @@
-﻿using System.Collections.Generic;
+﻿using System.Threading.Tasks;
 using System.Web;
 using Fanex.Data;
 using GO.UserControl.Client.Core.Enumerables;
+using GO.UserControl.Client.Core.Services;
 using GO.UserControl.Client.Core.Session;
 using HRM.Core.Constants;
 using HRM.Core.Models;
 using HRM.ViewModels.UI;
-using HRM.ViewModels.UserSite;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HRM.Website.Views.Shared.Components.Header;
 
-public class HeaderViewComponent(IUserControlSession userControlSession) : ViewComponent
+public class HeaderViewComponent(
+    IUserService userService, IUserControlSession userControlSession) : ViewComponent
 {
-    public IViewComponentResult Invoke()
+    public async Task<IViewComponentResult> InvokeAsync()
     {
         var userId = HttpUtility.UrlEncode(Cryptography.EncryptPassword(userControlSession.UserId.ToString()));
         var onUserId = HttpUtility.UrlEncode(Cryptography.EncryptPassword(userControlSession.OnUserId.ToString()));
-
-        var userSites = new List<UserSite>
-        {
-            new() {
-                Username = "test",
-                SiteName = "SMS HRM",
-                SSOUrl = "https://hrm-sms.nexdev.net/auth/sso"
-            },
-            new() {
-                Username = "test",
-                SiteName = "WGI HRM",
-                SSOUrl = "https://hrm-wgi.klc.nexdev.net/auth/sso"
-            },
-            new() {
-                Username = "test",
-                SiteName = "Group HRM",
-                SSOUrl = "https://group-hrm.klc.nexdev.net/auth/sso"
-            },
-            new() {
-                Username = "test",
-                SiteName = "FMS",
-                SSOUrl = "https://fpp.klc.nexdev.net/auth/sso"
-            },
-            new() {
-                Username = "test",
-                SiteName = "Group EPA",
-                SSOUrl = "https://group-epa.klc.nexdev.net/auth/sso"
-            },
-            new() {
-                Username = "test",
-                SiteName = "Tunnel3",
-                SSOUrl = "https://tunnel3.dearhoney.cloud/auth/sso"
-            },
-            new() {
-                Username = "test",
-                SiteName = "FnB",
-                SSOUrl = "http://10.18.200.114:8181/auth/sso"
-            }
-        };
+        var userSites = await userService.GetSiteAsync(userControlSession.UserId);
         foreach (var userSite in userSites)
         {
-            var username = !string.IsNullOrWhiteSpace(userSite.Username) ? userSite.Username : userSite.Code;
-            username = !string.IsNullOrWhiteSpace(username) ? HttpUtility.UrlEncode(Cryptography.EncryptPassword(username)) : string.Empty;
-            var siteUrl = !string.IsNullOrWhiteSpace(userSite.SSOUrl) ? userSite.SSOUrl : userSite.SiteURL;
-            userSite.SiteURL = $"{siteUrl}?userId={userId}&onUserId={onUserId}&username={username}";
+            userSite.SiteUrl = $"{userSite.SiteUrl}/auth/sso?userId={userId}&onUserId={onUserId}";
         }
 
         var viewModel = new HeaderViewModel
