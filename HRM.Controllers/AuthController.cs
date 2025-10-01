@@ -32,7 +32,6 @@ public class AuthController(
     IAuthService authService,
     ICryptoService cryptoService,
     IBaseService baseService,
-    ILogger logger,
     ICompanyService companyService) : Controller
 {
     public async Task<IActionResult> Login()
@@ -162,7 +161,6 @@ public class AuthController(
                 NetSessionId = HttpContext.Session.Id
             };
             var loginResult = await authService.SSOLoginAsync(ssoParam);
-            await logger.InfoAsync("Site" + companySite.Domain + "\nSSO Params: " + JsonConvert.SerializeObject(ssoParam) + "\nLogin Result: " + JsonConvert.SerializeObject(loginResult));
             if (loginResult.IsSuccessfull)
             {
                 var employee = await hrmAuthService.GetByUserIdAsync(tmpUserId);

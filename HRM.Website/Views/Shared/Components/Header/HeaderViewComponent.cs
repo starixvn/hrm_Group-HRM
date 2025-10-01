@@ -44,6 +44,11 @@ public class HeaderViewComponent(IUserControlSession userControlSession) : ViewC
                 Username = "test",
                 SiteName = "Group EPA",
                 SSOUrl = "https://group-epa.klc.nexdev.net/auth/sso"
+            },
+            new() {
+                Username = "test",
+                SiteName = "Tunnel3",
+                SSOUrl = "https://tunnel3.dearhoney.cloud/auth/sso"
             }
         };
         foreach (var userSite in userSites)
