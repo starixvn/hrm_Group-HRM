@@ -13,8 +13,7 @@ import {
     getSupervisors,
     getGroupTeamEmployees,
     editTeamSupervisor,
-    editEmployeeSupervisor,
-    reorderSupervisor
+    editEmployeeSupervisor
 } from '../supervisor/common.functions';
 import ToastLayout from '../../../shared/layouts/ToastLayout';
 import Table from './table/table';
@@ -44,18 +43,23 @@ export default class LeaderTakeoverManager extends Component {
 
     getEmployees = query => {
         if (query.trim().length > 1) {
-            const excludeIds = this.state.managers
-                .map(item =>item.ownerId)
-                .join(',');
-
             let apiCall;
             const isGroupTeam = this.props.pageType === PageType.GroupTeam;
             if (isGroupTeam) {
                 apiCall = getGroupTeamEmployees(query);
             } else {
-                apiCall = getSupervisors(query, this.roleId, excludeIds);
+                apiCall = axios({
+                    url: resolveClientUrl('employee/getemployees'),
+                    method: 'GET',
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                    params: {
+                        query,
+                        enable: true,
+                        isDelete: false,
+                    },
+                });
             }
-            
+
             apiCall
                 .then(response => {
                     const employeeOptions = response.data.map(item => {
@@ -64,7 +68,8 @@ export default class LeaderTakeoverManager extends Component {
                             key: id,
                             id: id,
                             teamCode: item.teamCode !== null ? item.teamCode : '',
-                            value: this.props.pageType === PageType.GroupTeam
+                            value:
+                                this.props.pageType === PageType.GroupTeam
                                     ? `${item.nickName} (${item.company})`
                                     : item.nickName,
                         };
@@ -117,21 +122,9 @@ export default class LeaderTakeoverManager extends Component {
 
     handleRemoveEmployee = employeeId => {
         const managers = [...this.state.managers],
-            index = managers.findIndex(item =>item.ownerId === employeeId);
+            index = managers.findIndex(item => item.ownerId === employeeId);
         managers.splice(index, 1);
         this.setState({ managers });
-    };
-
-    handleChangeOrder = (key, employeeId) => {
-        const vm = this;
-        reorderSupervisor(
-            key,
-            employeeId,
-            [...this.state.managers],
-            function (managers) {
-                vm.setState({ managers });
-            }
-        );
     };
 
     handleSave = () => {
@@ -179,7 +172,6 @@ export default class LeaderTakeoverManager extends Component {
                     onSearchEmployees={this.getEmployees}
                     onAddEmployee={this.handleAddEmployee}
                     onRemoveEmployee={this.handleRemoveEmployee}
-                    onChangeOrder={this.handleChangeOrder}
                     companyId={this.companyId}
                 />
                 <Button onClick={this.handleSave} bsStyle="primary">

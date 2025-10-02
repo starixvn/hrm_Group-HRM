@@ -23,7 +23,6 @@ export default class Table extends PureComponent {
                         data.map((manager, index) =>
                             <Row key={`row${index}`} data={manager}
                                 onRemoveEmployee={this.props.onRemoveEmployee}
-                                onChangeOrder={this.props.onChangeOrder}
                                 companyId={companyId}
                             />
                         )
