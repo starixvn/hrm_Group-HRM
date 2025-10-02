@@ -1,6 +1,8 @@
 ﻿import React from 'react';
 import SupervisorTHead from '../../../../shared/components/SupervisorTHead';
 
-export default function THead(props) {
+const THead = (props) => {
     return <SupervisorTHead {...props} />;
-}
+};
+
+export default THead;

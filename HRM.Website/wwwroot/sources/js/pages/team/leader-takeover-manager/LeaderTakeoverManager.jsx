@@ -10,7 +10,6 @@ import {
     resolveClientUrl
 } from '../../../shared/common.functions';
 import {
-    getSupervisors,
     getGroupTeamEmployees,
     editTeamSupervisor,
     editEmployeeSupervisor
