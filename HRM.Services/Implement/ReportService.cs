@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using HRM.Core;
+using HRM.Core.Enums;
 using HRM.Core.Services;
 using HRM.Criteria.AnnualLeave;
 using HRM.Criteria.Report;
@@ -19,6 +20,7 @@ namespace HRM.Services.Implement;
 
 public class ReportService(
     IReportRepository reportRepository,
+    IEmployeeService employeeService,
     IBaseService baseService) : IReportService
 {
     public async Task<IEnumerable<EmployeeAttendanceModel>> GetEmployeeAttendanceReportAsync(GetEmployeeAttendanceCriteria criteria)
@@ -44,12 +46,16 @@ public class ReportService(
 
     public async Task<IEnumerable<LeaveSummary>> GetAnnualLeaveBalanceReportAsync(GetAnnualLeaveBalanceCriteria criteria)
     {
-        return await baseService.GetDataAsync<LeaveSummary>(criteria);
+        var employeeAttendances = await baseService.GetDataAsync<LeaveSummary>(criteria);
+        var filteredEmployees = await employeeService.FilterByEmployeeDataPermission(employeeAttendances, e => e.EmpId, (short)SupervisorActionType.LeaderTakeover);
+        return filteredEmployees;
     }
 
     public async Task<IEnumerable<LeaveSummaryForJoinedDate>> GetAnnualLeaveBalanceForJoinedDateReportAsync(GetAnnualLeaveBalanceForJoinedDateCriteria criteria)
     {
-        return await baseService.GetDataAsync<LeaveSummaryForJoinedDate>(criteria);
+        var employeeAttendances = await baseService.GetDataAsync<LeaveSummaryForJoinedDate>(criteria);
+        var filteredEmployees = await employeeService.FilterByEmployeeDataPermission(employeeAttendances, e => e.EmpId, (short)SupervisorActionType.LeaderTakeover);
+        return filteredEmployees;
     }
 
     public async Task<IEnumerable<LeaveSummary>> GetUnpaidLeaveAsync(GetUnpaidLeaveCriteria criteria, string period)

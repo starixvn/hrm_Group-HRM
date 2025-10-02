@@ -71,4 +71,9 @@ public interface IEmployeeService
     Task<EmployeeBioInfoModel> GetEmployeeBioInfoAsync(int employeeId);
 
     Task<IEnumerable<int>> GetCompaniesBelongToSupervisor();
+
+    Task<IEnumerable<T>> FilterByEmployeeDataPermission<T>(
+        IEnumerable<T> data,
+        Func<T, int> employeeIdSelector,
+        short actionType);
 }

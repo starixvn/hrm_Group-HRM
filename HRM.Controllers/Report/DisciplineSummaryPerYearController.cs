@@ -10,14 +10,16 @@ using Core.Filters;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Services;
 using GO.UserControl.Client.Core.Session;
+using HRM.Core.Enums;
+using HRM.Core.Models;
 using HRM.Core.Services;
 using HRM.Criteria.Report;
 using HRM.Models.Report.DisciplineSummaryPerYear;
+using HRM.Services.Interfaces;
 using HRM.ViewModels.Report;
 using Microsoft.AspNetCore.Mvc;
 using Services.ExportExcel;
 using Services.Implement;
-using Services.Interfaces;
 
 [HrmPermission(Policy.Read, FunctionKey.DisciplineSummaryPerYear)]
 public class DisciplineSummaryPerYearController(
@@ -77,15 +79,17 @@ public class DisciplineSummaryPerYearController(
             IsShowAll = model.IsShowAll,
             RoleIds = string.Join(",", roles.Select(x => x.RoleId))
         };
+
         var (employees, disciplines) = await baseService.FetchMultipleAsync<DisciplineSummaryPerYear, DisciplineSummaryPerYearDetail>(criteria);
-        var disciplineSummaryPerYears = employees.ToList();
-        foreach (var employee in disciplineSummaryPerYears)
+        var filteredEmployees = await employeeService.FilterByEmployeeDataPermission( employees, e => e.EmployeeId, (short)SupervisorActionType.LeaderTakeover); // TODO
+        foreach (var employee in filteredEmployees)
         {
             var date = model.LengthOfService ? employee.CompanyDate : employee.JoinedDate;
             employee.LengthOfService = employeeService.CalculateLengthOfService(date, employee.MilitaryFromDate, employee.MilitaryToDate);
             employee.Disciplines = disciplines.Where(x => x.EmployeeId == employee.EmployeeId).ToList();
         }
 
-        return disciplineSummaryPerYears.ToList();
+        return filteredEmployees.ToList();
     }
+
 }

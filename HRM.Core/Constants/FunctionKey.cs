@@ -106,4 +106,8 @@ public static class FunctionKey
     public const string JobLevelManagement = "JobLevelManagement";
 
     public const string ShowSalaryCurrencyInfo = "ShowSalaryCurrencyInfo";
+
+    // Data permission
+    public const string DataPermission_AllEmployees = "AllEmployees";
+    public const string DataPermission_EmployeesAssigned = "EmployeesAssigned";
 }
