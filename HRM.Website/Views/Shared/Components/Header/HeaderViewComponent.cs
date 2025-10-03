@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using Fanex.Data;
@@ -19,7 +20,11 @@ public class HeaderViewComponent(
         var userId = HttpUtility.UrlEncode(Cryptography.EncryptPassword(userControlSession.UserId.ToString()));
         var onUserId = HttpUtility.UrlEncode(Cryptography.EncryptPassword(userControlSession.OnUserId.ToString()));
         var userSites = await userService.GetSiteAsync(userControlSession.UserId);
-        foreach (var userSite in userSites)
+        var currentSiteId = userControlSession.SiteId;
+
+        var filteredUserSites = userSites.Where(site => site.SiteId != currentSiteId);
+
+        foreach (var userSite in filteredUserSites)
         {
             userSite.SiteUrl = $"{userSite.SiteUrl}/auth/sso?userId={userId}&onUserId={onUserId}";
         }
@@ -28,7 +33,7 @@ public class HeaderViewComponent(
         {
             Employee = userControlSession.Get<EmployeeSession>(SessionKey.Employee) ?? new EmployeeSession(),
             IsShowSearchBox = userControlSession.HasPermissionOnFunction(FunctionKey.ContactList, Policy.Read),
-            UserSites = userSites
+            UserSites = filteredUserSites
         };
         ViewBag.IsShowLeftNavigation = userControlSession.Get<bool>(SessionKey.IsShowLeftNavigation);
 
