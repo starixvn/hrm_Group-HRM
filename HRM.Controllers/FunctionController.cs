@@ -36,7 +36,7 @@ public class FunctionController(
         return new JsonResult(functionTrees);
     }
 
-    [HrmPermission(Policy.Host, FunctionKey.FunctionManagement)]
+    [HrmPermission(Policy.Read, FunctionKey.FunctionManagement)]
     public async Task<IActionResult> GetSystemRoles()
     {
         var systemRoles = await roleService.GetBySiteIdAsync(session.SiteId);
