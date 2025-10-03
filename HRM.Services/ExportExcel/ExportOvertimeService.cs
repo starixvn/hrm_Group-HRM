@@ -15,14 +15,15 @@ public interface IExportOvertimeService
 }
 
 [SuppressMessage("Major Code Smell", "S109:Magic numbers should not be used", Justification = "Pending")]
-public class ExportOvertimeService(IWebHostEnvironment hostingEnvironment) : IExportOvertimeService
+public class ExportOvertimeService(IWebHostEnvironment hostingEnvironment,
+    IExportExcelService exportExcelService) : IExportOvertimeService
 {
     public byte[] Export(IEnumerable<MonthlyOvertimeRequest> memberRequests, bool isMemberOvertime)
     {
         const byte totalColumns = 14;
         const byte startBodyRow = 3;
         const byte startTotal = 8;
-        const byte lineOfTotal = 4;
+        const byte lineOfTotal = 6;
 
         var sheetName = "Employee Overtime Report";
         var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, "ExcelTemplates/EmployeeOvertimeTemplate.xlsx");
@@ -52,7 +53,8 @@ public class ExportOvertimeService(IWebHostEnvironment hostingEnvironment) : IEx
         var monthlyOvertimeRequests = memberRequests.ToList();
         foreach (var detail in monthlyOvertimeRequests)
         {
-            templateWorksheet.Cells[startBodyRow, 1, startBodyRow, totalColumns].Copy(workSheet.Cells[rowIndex, colIndex, rowIndex, totalColumns]);
+            var templateRowIndex = exportExcelService.GetTemplateRowIndex(startBodyRow, detail.Enabled, detail.IsDeleted);
+            templateWorksheet.Cells[templateRowIndex, 1, templateRowIndex, totalColumns].Copy(workSheet.Cells[rowIndex, colIndex, rowIndex, totalColumns]);
 
             workSheet.Cells[rowIndex, colIndex++].Value = count;
             workSheet.Cells[rowIndex, colIndex++].Value = detail.UnitCode;

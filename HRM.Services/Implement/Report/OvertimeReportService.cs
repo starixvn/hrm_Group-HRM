@@ -10,6 +10,7 @@ using HRM.Core.Enums;
 using HRM.Core.Services;
 using HRM.Criteria.Report.Overtime;
 using HRM.Models.Report.Overtime;
+using HRM.Services.ExportExcel;
 using HRM.Services.Interfaces.Report;
 using Microsoft.AspNetCore.Hosting;
 using OfficeOpenXml;
@@ -18,7 +19,8 @@ namespace HRM.Services.Implement.Report;
 
 public class OvertimeReportService(
     IWebHostEnvironment env,
-    IBaseService baseService) : IOvertimeReportService
+    IBaseService baseService,
+    IExportExcelService exportExcelService) : IOvertimeReportService
 {
     private const string DateFormat = "dd-MMM-yyyy";
     private const byte MinimumWidth = 5;
@@ -231,7 +233,8 @@ public class OvertimeReportService(
         {
             var status = (CurrentRequestStatus)overtime.StatusId;
             colIndex = 1;
-            templateWorksheet.Cells[StartBodyRow, 1, StartBodyRow, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
+            var templateRowIndex = exportExcelService.GetTemplateRowIndex(StartBodyRow, overtime.Enabled, overtime.IsDeleted);
+            templateWorksheet.Cells[templateRowIndex, 1, templateRowIndex, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
 
             worksheet.Cells[rowIndex, colIndex++].Value = rowNum++;
             worksheet.Cells[rowIndex, colIndex++].Value = overtime.WorkDate;

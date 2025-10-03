@@ -17,4 +17,6 @@ public interface IExportExcelService
     HSSFWorkbook ExportHospitalizationLeaveSummary(IEnumerable<HospitalizationLeaveBalanceSummaryReport> employees, int year);
 
     HSSFWorkbook ExportSickLeaveSummary(IEnumerable<HospitalizationLeaveBalanceSummaryReport> employees, int year);
+
+    byte GetTemplateRowIndex(int startRow, bool enabled, bool isDeleted);
 }

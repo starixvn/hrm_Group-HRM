@@ -593,11 +593,40 @@ public class RequestService(
             requests.AddRange(mappedData);
         }
 
-        responseRequests = requestRepository
-            .MappingNexRequestToGroupRequest(requests, employeeSession)
+        responseRequests = FilterByEmployeeStatus(requestRepository.MappingNexRequestToGroupRequest(requests, employeeSession), model.EmployeeStatusIds)
             .OrderByDescending(item => item.CreatedDate)
             .ToList();
 
         return responseRequests;
+    }
+
+    private static IEnumerable<RequestEntity> FilterByEmployeeStatus(
+    IEnumerable<RequestEntity> requests,
+    string employeeStatusIds)
+    {
+        var selectedStatuses = (employeeStatusIds ?? "")
+            .Split(',', StringSplitOptions.RemoveEmptyEntries)
+            .Select(byte.Parse)
+            .ToList();
+
+        return requests.Where(i =>
+            !selectedStatuses.Any() ||
+            selectedStatuses.Exists(s => MatchStatus(i, s))
+        );
+    }
+
+    private static bool MatchStatus(RequestEntity request, byte status)
+    {
+        const byte Enable = 1;
+        const byte Disabled = 2;
+        const byte Deleted = 3;
+
+        return status switch
+        {
+            Enable => request.Requester.Enabled && !request.Requester.IsDeleted,
+            Disabled => !request.Requester.Enabled && !request.Requester.IsDeleted,
+            Deleted => request.Requester.IsDeleted,                               
+            _ => false
+        };
     }
 }

@@ -20,7 +20,6 @@ public class ExportExcelService(IWebHostEnvironment hostingEnvironment) : IExpor
     private const string DefaultSheetName = "sheet1";
     private const int RowStartBodyLeaveSummary = 4;
     private const int RowStartBodyWorkingTimeRequest = 3;
-    private const int RowStartBodyWorkingCalendar = 5;
 
     private const string LeaveSummaryFilePathExcelTemplate = "ExcelTemplates/LeaveSummaryTemplate.xls";
     private const string LeaveSummaryForJoinedDateFilePathExcelTemplate = "ExcelTemplates/LeaveSummaryForJoinedDateTemplate.xls";
@@ -106,8 +105,8 @@ public class ExportExcelService(IWebHostEnvironment hostingEnvironment) : IExpor
 
         foreach (var item in leaveSummaryList)
         {
-            var rowCopy = RowStartBodyWorkingCalendar + index % 2;
-            sheet.CopyRow(templateSheet, rowCopy, rowIndex);
+            var templateRowIndex = GetTemplateRowIndex(RowStartBodyLeaveSummary, item.Enabled, item.IsDeleted);
+            sheet.CopyRow(templateSheet, templateRowIndex, rowIndex);
             var row = sheet.GetRow(rowIndex);
             row.Height = height;
 
@@ -162,8 +161,8 @@ public class ExportExcelService(IWebHostEnvironment hostingEnvironment) : IExpor
 
         foreach (var item in leaveSummaryList)
         {
-            var rowCopy = RowStartBodyWorkingCalendar + index % 2;
-            sheet.CopyRow(templateSheet, rowCopy, rowIndex);
+            var templateRowIndex = GetTemplateRowIndex(RowStartBodyLeaveSummary, item.Enabled, item.IsDeleted);
+            sheet.CopyRow(templateSheet, templateRowIndex, rowIndex);
             var row = sheet.GetRow(rowIndex);
             row.Height = height;
 
@@ -206,8 +205,8 @@ public class ExportExcelService(IWebHostEnvironment hostingEnvironment) : IExpor
         cellTitle.SetCellValue(title);
         foreach (var item in requestList)
         {
-            var rowCopy = RowStartBodyWorkingTimeRequest + rowIndex % 2;
-            sheet.CopyRow(templateSheet, rowCopy, rowIndex);
+            var templateRowIndex = GetTemplateRowIndex(RowStartBodyWorkingTimeRequest, item.Requester.Enabled, item.Requester.IsDeleted);
+            sheet.CopyRow(templateSheet, templateRowIndex, rowIndex);
             var row = sheet.GetRow(rowIndex);
             row.Height = height;
             RenderBodyWorkingTimeRequest(rowIndex, item, row);
@@ -389,5 +388,19 @@ public class ExportExcelService(IWebHostEnvironment hostingEnvironment) : IExpor
     {
         var rowStart = rowIndex % 2 != 0 ? rowStartBody : rowStartBody + 1;
         writer.WriteRow(rowStart, record);
+    }
+
+    public byte GetTemplateRowIndex(int startRow, bool enabled, bool isDeleted)
+    {
+        int normalRowIndex = startRow;
+        int disabledRowIndex = startRow + 1;
+        int deletedRowIndex = startRow + 2;
+
+        if (isDeleted)
+        {
+            return (byte)deletedRowIndex;
+        }
+
+        return enabled ? (byte)normalRowIndex : (byte)disabledRowIndex;
     }
 }
