@@ -219,7 +219,7 @@ export const initializeComponent = () => {
 };
 
 // Common table component to reduce duplicate code
-export const CommonTable = ({ 
+const CommonTable = ({ 
     data = [], 
     employeeOptions, 
     companyId, 
@@ -263,3 +263,6 @@ export const CommonTable = ({
         </table>
     );
 };
+
+// Export CommonTable
+export { CommonTable };
