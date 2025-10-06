@@ -1,5 +1,5 @@
 ﻿import React from 'react';
-import EmployeeTHead from '../../../../shared/components/EmployeeTHead';
+import EmployeeTHead from '../../shared/EmployeeTHead';
 
 const THead = props => <EmployeeTHead {...props} title="Employee" />;
 

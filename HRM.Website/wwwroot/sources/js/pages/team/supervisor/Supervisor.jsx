@@ -8,11 +8,7 @@ import { RequestType } from '../../../shared/constants';
 import { editTeamSupervisor, editEmployeeSupervisor, reorderSupervisor } from '../supervisor/common.functions';
 import ToastLayout from '../../../shared/layouts/ToastLayout';
 import Table from './table/table';
-
-const PageType = {
-    Team: 1,
-    Employee: 2
-};
+import { PageType } from '../../../shared/constants';
 
 export default class Supervisor extends Component {
     constructor(props) {

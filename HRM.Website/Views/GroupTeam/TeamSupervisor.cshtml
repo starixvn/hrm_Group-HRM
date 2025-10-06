@@ -55,6 +55,11 @@
                                     <i class="fa fa-pencil fa-lg icon-edit"></i>
                                 </a>
                                 break;
+                            case (short)RoleSystem.LeaderTakeover:
+                                <a href="@Url.Action("LeaderTakeoverManager", "GroupTeam", new { id = teamId })">
+                                    <i class="fa fa-pencil fa-lg icon-edit"></i>
+                                </a>
+                                break;
                             default:
                                 // do nothing
                                 break;

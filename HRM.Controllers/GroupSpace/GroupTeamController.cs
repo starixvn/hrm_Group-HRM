@@ -262,6 +262,22 @@ public class GroupTeamController(
     }
 
     [HrmPermission(Policy.Host, FunctionKey.GroupTeamManagement)]
+    public IActionResult LeaderTakeoverManager(int id)
+    {
+        ViewBag.TeamId = id;
+        ViewBag.RoleId = (short)RoleSystem.LeaderTakeover;
+
+        return View();
+    }
+
+    [HrmPermission(Policy.Read, FunctionKey.GroupTeamManagement)]
+    public async Task<IActionResult> GetLeaderTakeoverManagerByTeamId(int teamId)
+    {
+        var leaderTakeovers = await teamService.GetLeaderTakeoverManagerByTeamId(teamId);
+        return Json(leaderTakeovers);
+    }
+
+    [HrmPermission(Policy.Host, FunctionKey.GroupTeamManagement)]
     public IActionResult ManageSupervisor(int id, short roleId)
     {
         ViewBag.TeamId = id;

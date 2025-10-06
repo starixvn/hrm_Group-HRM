@@ -1,4 +1,5 @@
 ﻿import React, { PureComponent } from "react";
+import { PageType } from "../../../../shared/constants";
 
 export default class Row extends PureComponent {
     handleRemoveEmployee = () => {
@@ -7,7 +8,10 @@ export default class Row extends PureComponent {
     };
 
     render() {
-        const { data } = this.props;
+        const { data, pageType } = this.props;
+        const isTeam = pageType === PageType.Team;
+        const isGroup = pageType === PageType.GroupTeam;
+        
         return (
             <tr>
                 <td className="align-left cell-name">
@@ -16,7 +20,7 @@ export default class Row extends PureComponent {
                     </div>
                 </td>
                 <td>
-                    {data.canRemove && (
+                    {(isGroup || (isTeam && data.canRemove)) && (
                         <button
                             type="button"
                             className="fa fa-times fa-lg icon-delete btn-link"

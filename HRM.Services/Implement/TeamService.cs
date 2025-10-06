@@ -154,7 +154,6 @@ public class TeamService(
         };
         return await baseService.GetDataAsync<Supervisor>(criteria);
     }
-    
 
     public async Task<CommandResult> EditTeamSupervisor(int actorId, int teamId, short roleId, IEnumerable<EditTeamSupervisor> supervisors)
     {

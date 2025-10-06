@@ -115,9 +115,9 @@ export default class Row extends PureComponent {
         </td>
         <td>
           {isSameCompany && (
-            <a
-              className={`fa fa-times fa-lg icon-delete`}
-              href="javascript:;"
+            <button
+              type="button"
+              className={`fa fa-times fa-lg icon-delete btn btn-link`}
               onClick={this.handleRemoveEmployee}
             />
           )}

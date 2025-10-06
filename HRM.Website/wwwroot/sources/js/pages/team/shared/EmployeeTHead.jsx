@@ -1,8 +1,7 @@
 import React, { PureComponent } from 'react';
-import { RoleSystem } from '../constants';
-import EmployeeAutocomplete from './EmployeeAutocomplete';
+import EmployeeAutocomplete from '../../../shared/components/EmployeeAutocomplete';
 
-export default class SupervisorTHead extends PureComponent {
+export default class EmployeeTHead extends PureComponent {
     constructor(props) {
         super(props);
 
@@ -12,13 +11,13 @@ export default class SupervisorTHead extends PureComponent {
         };
     }
 
-    handleSelect = (value, item) => {
-        this.setState({ value, employee: item });
-    };
-
     handleChange = value => {
         this.setState({ value });
         this.props.onSearchEmployees(value);
+    };
+
+    handleSelect = (value, item) => {
+        this.setState({ value, employee: item });
     };
 
     handleAddEmployee = () => {
@@ -30,26 +29,14 @@ export default class SupervisorTHead extends PureComponent {
     };
 
     render() {
-        const { employeeOptions, roleId } = this.props;
-        let roleName = '';
-        switch (roleId) {
-            case RoleSystem.Verifier:
-                roleName = 'Verifier';
-                break;
-            case RoleSystem.Approver:
-                roleName = 'Approver';
-                break;
-            case RoleSystem.OnBehalfRequest:
-                roleName = 'Employee';
-                break;
-        }
+        const { employeeOptions, title = 'Employee' } = this.props;
 
         return (
             <thead>
                 <tr>
-                    <th colSpan={9}>
+                    <th colSpan={2}>
                         <div className="header-control">
-                            <div>{roleName}</div>
+                            <div>{title}</div>
                             <EmployeeAutocomplete value={this.state.value}
                                 options={employeeOptions}
                                 onChange={this.handleChange}
@@ -60,17 +47,8 @@ export default class SupervisorTHead extends PureComponent {
                     </th>
                 </tr>
                 <tr>
-                    <th rowSpan={2}>{roleName}</th>
-                    <th colSpan={6}>Request</th>
-                    <th rowSpan={2} />
-                </tr>
-                <tr>
-                    <th>Leave</th>
-                    <th>Change Shift</th>
-                    <th>Late In/Early Out</th>
-                    <th>Check in/out</th>
-                    <th>Overtime</th>
-                    <th>Compensation Leave</th>
+                    <th>{title}</th>
+                    <th />
                 </tr>
             </thead>
         );

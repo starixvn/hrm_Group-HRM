@@ -1,7 +1,8 @@
 import React, { PureComponent } from 'react';
-import EmployeeAutocomplete from './EmployeeAutocomplete';
+import { RoleSystem } from '../../../shared/constants';
+import EmployeeAutocomplete from '../../../shared/components/EmployeeAutocomplete';
 
-export default class EmployeeTHead extends PureComponent {
+export default class SupervisorTHead extends PureComponent {
     constructor(props) {
         super(props);
 
@@ -11,13 +12,13 @@ export default class EmployeeTHead extends PureComponent {
         };
     }
 
+    handleSelect = (value, item) => {
+        this.setState({ value, employee: item });
+    };
+
     handleChange = value => {
         this.setState({ value });
         this.props.onSearchEmployees(value);
-    };
-
-    handleSelect = (value, item) => {
-        this.setState({ value, employee: item });
     };
 
     handleAddEmployee = () => {
@@ -29,14 +30,26 @@ export default class EmployeeTHead extends PureComponent {
     };
 
     render() {
-        const { employeeOptions, title = 'Employee' } = this.props;
+        const { employeeOptions, roleId } = this.props;
+        let roleName = '';
+        switch (roleId) {
+            case RoleSystem.Verifier:
+                roleName = 'Verifier';
+                break;
+            case RoleSystem.Approver:
+                roleName = 'Approver';
+                break;
+            case RoleSystem.OnBehalfRequest:
+                roleName = 'Employee';
+                break;
+        }
 
         return (
             <thead>
                 <tr>
-                    <th colSpan={2}>
+                    <th colSpan={9}>
                         <div className="header-control">
-                            <div>{title}</div>
+                            <div>{roleName}</div>
                             <EmployeeAutocomplete value={this.state.value}
                                 options={employeeOptions}
                                 onChange={this.handleChange}
@@ -47,8 +60,17 @@ export default class EmployeeTHead extends PureComponent {
                     </th>
                 </tr>
                 <tr>
-                    <th>{title}</th>
-                    <th />
+                    <th rowSpan={2}>{roleName}</th>
+                    <th colSpan={6}>Request</th>
+                    <th rowSpan={2} />
+                </tr>
+                <tr>
+                    <th>Leave</th>
+                    <th>Change Shift</th>
+                    <th>Late In/Early Out</th>
+                    <th>Check in/out</th>
+                    <th>Overtime</th>
+                    <th>Compensation Leave</th>
                 </tr>
             </thead>
         );

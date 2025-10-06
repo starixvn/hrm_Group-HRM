@@ -1,5 +1,5 @@
 ﻿import React from 'react';
-import SupervisorTHead from '../../../../shared/components/SupervisorTHead';
+import SupervisorTHead from '../../shared/SupervisorTHead';
 
 const THead = props => <SupervisorTHead {...props} />;
 
