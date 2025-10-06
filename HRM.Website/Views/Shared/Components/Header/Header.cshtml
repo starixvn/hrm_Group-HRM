@@ -18,18 +18,18 @@
     </div>
 
     <div>
-        <div class="quick-access dropdown-container">
-            <button class="dropdown-toggle">Quick Access</button>
-            <ul class="dropdown-list">
-                @if (Model.UserSites != null)
-                {
+        @if (Model.UserSites != null && Model.UserSites.Any())
+        {
+            <div class="quick-access dropdown-container">
+                <button class="dropdown-toggle">Quick Access</button>
+                <ul class="dropdown-list">
                     @foreach (var site in Model.UserSites)
                     {
                         <li><a href="javascript:void(0);" data-site-url="@site.SiteUrl" class="quick-access-link">@site.SiteName</a></li>
                     }
-                }
-            </ul>
-        </div>
+                </ul>
+            </div>
+        }
 
         <div id="user_utilities" class="dropdown_navigation" style="z-index: 1000;">
             <h2>
