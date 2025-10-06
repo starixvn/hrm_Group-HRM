@@ -3,12 +3,12 @@ import { CommonTable } from '../../shared/teamManagerHelpers';
 import THead from './THead';
 import Row from './Row';
 
-export default function Table(props) {
-    return (
-        <CommonTable
-            {...props}
-            THeadComponent={THead}
-            RowComponent={Row}
-        />
-    );
-}
+const Table = props => (
+    <CommonTable
+        {...props}
+        THeadComponent={THead}
+        RowComponent={Row}
+    />
+);
+
+export default Table;
