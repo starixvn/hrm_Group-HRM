@@ -1,3 +1,4 @@
+import React from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import {
@@ -215,4 +216,50 @@ export const initializeComponent = () => {
             employeeOptions: [],
         }
     };
+};
+
+// Common table component to reduce duplicate code
+export const CommonTable = ({ 
+    data = [], 
+    employeeOptions, 
+    companyId, 
+    pageType,
+    roleId,
+    onSearchEmployees,
+    onAddEmployee,
+    onRemoveEmployee,
+    onChangeOrder,
+    onChangePermissionOnRequest,
+    THeadComponent,
+    RowComponent,
+    colSpan = 2
+}) => {
+    return (
+        <table className="table table-custom">
+            <THeadComponent 
+                employeeOptions={employeeOptions}
+                roleId={roleId}
+                onSearchEmployees={onSearchEmployees}
+                onAddEmployee={onAddEmployee}
+            />
+            <tbody>
+                {data.length === 0 && (
+                    <tr className="nodata">
+                        <td colSpan={colSpan}>No information available</td>
+                    </tr>
+                )}
+                {data.length > 0 && data.map((manager, index) => (
+                    <RowComponent 
+                        key={`row${index}`} 
+                        data={manager}
+                        onRemoveEmployee={onRemoveEmployee}
+                        onChangeOrder={onChangeOrder}
+                        onChangePermissionOnRequest={onChangePermissionOnRequest}
+                        companyId={companyId}
+                        pageType={pageType}
+                    />
+                ))}
+            </tbody>
+        </table>
+    );
 };
