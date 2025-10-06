@@ -67,9 +67,6 @@ public class LateInEarlyOutController(
             Approvers = supervisor.Approvers
         };
         ViewBag.AutoApproveRequest = EmployeeSession.AutoApproveRequest;
-        ViewBag.HasOnBehalfRequestPermission = session.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
-            || session.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);
-
         return View(viewModel);
     }
 
