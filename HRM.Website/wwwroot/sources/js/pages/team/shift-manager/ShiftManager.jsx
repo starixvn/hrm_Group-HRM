@@ -13,6 +13,7 @@ import {
     getBackUrl,
     initializeComponent
 } from '../shared/teamManagerHelpers';
+import { PageType } from '../../../shared/constants';
 
 export default class ShiftManager extends Component {
     constructor(props) {
@@ -37,7 +38,8 @@ export default class ShiftManager extends Component {
     };
 
     getShiftManagers = () => {
-        getManagers(this.props.pageType, this.props.objectId, 'GetShiftManagerByTeamId')
+        const apiEndpoint = this.props.pageType === PageType.Employee ? 'GetShiftManagerByEmployeeId' : 'GetShiftManagerByTeamId';
+        getManagers(this.props.pageType, this.props.objectId, apiEndpoint)
             .then(managers => {
                 this.setState({ managers });
             });

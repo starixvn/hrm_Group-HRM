@@ -13,6 +13,7 @@ import {
     getBackUrl,
     initializeComponent
 } from '../shared/teamManagerHelpers';
+import { PageType } from '../../../shared/constants';
 
 export default class DisciplineManager extends Component {
     constructor(props) {
@@ -42,7 +43,8 @@ export default class DisciplineManager extends Component {
     };
 
     getDisciplineManagers = () => {
-        getManagers(this.props.pageType, this.props.objectId, 'GetDisciplineManagerByTeamId')
+        const apiEndpoint = this.props.pageType === PageType.Employee ? 'GetDisciplineManagerByEmployeeId' : 'GetDisciplineManagerByTeamId';
+        getManagers(this.props.pageType, this.props.objectId, apiEndpoint)
             .then(managers => {
                 this.setState({ managers });
             });

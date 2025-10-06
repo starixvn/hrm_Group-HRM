@@ -91,7 +91,7 @@ export const getEmployeesWithExclude = (query, pageType, roleId, excludeIds) => 
 };
 
 // Common get managers logic
-export const getManagers = (pageType, objectId, apiEndpoint) => {
+export const getManagers = async (pageType, objectId, apiEndpoint) => {
     blockUI();
     let url, params;
 
@@ -106,21 +106,20 @@ export const getManagers = (pageType, objectId, apiEndpoint) => {
         params = { employeeId: objectId };
     }
 
-    return axios({
-        url: resolveClientUrl(url),
-        method: 'GET',
-        headers: { 'X-Requested-With': 'XMLHttpRequest' },
-        params: params,
-    })
-        .then(response => {
-            unblockUI();
-            return response.data;
-        })
-        .catch(error => {
-            unblockUI();
-            axiosError(error);
-            return [];
+    try {
+        const response = await axios({
+            url: resolveClientUrl(url),
+            method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
+            params: params,
         });
+        unblockUI();
+        return response.data;
+    } catch (error) {
+        unblockUI();
+        axiosError(error);
+        return [];
+    }
 };
 
 // Common add employee logic
