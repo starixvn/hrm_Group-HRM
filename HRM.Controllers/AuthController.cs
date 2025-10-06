@@ -6,9 +6,11 @@ using System.Globalization;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using Core.Constants;
 using Criteria.SystemSetting;
 using Fanex.Data;
+using Fanex.Logging;
 using GO.UserControl.Client.Core.Models.Auth;
 using GO.UserControl.Client.Core.Services;
 using GO.UserControl.Client.Core.Session;
@@ -22,7 +24,7 @@ using Models;
 using Newtonsoft.Json;
 using Services.Interfaces;
 using ViewModels.Employee;
-
+#pragma warning disable S107 // Methods should not have too many parameters
 public class AuthController(
     IHRMAuthService hrmAuthService,
     IUserControlSession session,
@@ -30,8 +32,10 @@ public class AuthController(
     IAuthService authService,
     ICryptoService cryptoService,
     IBaseService baseService,
+    ILogger logger,
     ICompanyService companyService) : Controller
 {
+#pragma warning restore S107 // Methods should not have too many parameters
     public async Task<IActionResult> Login()
     {
         var companySite = await companyService.GetCompanySiteByDomainAsync();
@@ -75,7 +79,6 @@ public class AuthController(
         var loginResult = await authService.LoginAsync(loginParam);
         if (loginResult.IsSuccessfull)
         {
-
             session.UserId = loginResult.UserId;
             session.JwtToken = loginResult.JwtToken;
             session.OnUserId = loginResult.OnUserId;
@@ -105,6 +108,13 @@ public class AuthController(
         await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
         return RedirectToAction("Login");
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetTimeSSO()
+    {
+        var time = HttpUtility.UrlEncode(Cryptography.EncryptPassword(await authService.SSOGetTimeAsync()));
+        return Json(time);
     }
 
     private async Task DoLoginAsync(int userId)
@@ -152,26 +162,25 @@ public class AuthController(
                 NetSessionId = HttpContext.Session.Id
             };
             var loginResult = await authService.SSOLoginAsync(ssoParam);
+            await logger.InfoAsync("SSO Site" + companySite.Domain + "\nSSO Params: " + JsonConvert.SerializeObject(ssoParam) + "\nLogin Result: " + JsonConvert.SerializeObject(loginResult));
             if (loginResult.IsSuccessfull)
             {
-                var employee = await hrmAuthService.GetByUserIdAsync(tmpUserId);
-                if (employee == null)
-                {
-                    return RedirectToAction("Login");
-                }
 
-                session.UserId = loginResult.UserId;
+                session.UserId = tmpUserId;
                 session.JwtToken = loginResult.JwtToken;
                 session.OnUserId = loginResult.OnUserId;
                 session.MenuItems = await userService.GetMenuItemAsync();
                 session.Functions = await userService.GetFunctionPermissionAsync(session.SiteId, session.UserId);
+
                 session.Set(SessionKey.IsShowLeftNavigation, true);
-                session.Set(SessionKey.Employee, employee);
                 session.Set(SessionKey.CurrentTimeZone, await GetClientTimeZoneAsync());
                 session.Set(SessionKey.CurrentDomain, GetDomainName(HttpContext));
                 session.Set(SessionKey.MailSetting, await GetMailSettingAsync());
 
-                await DoLoginAsync(loginResult.UserId);
+                var employee = await hrmAuthService.GetByUserIdAsync(tmpUserId);
+                session.Set(SessionKey.Employee, employee);
+
+                await DoLoginAsync(session.UserId);
 
                 return !string.IsNullOrWhiteSpace(redirectUrl) && Url.IsLocalUrl(redirectUrl) ? Redirect(redirectUrl) : Redirect("~/Home/Index");
             }
