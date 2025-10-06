@@ -15,6 +15,7 @@ using HRM.ViewModels.Request;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Org.BouncyCastle.Crypto;
 using Services.Interfaces;
 
 public class LateInEarlyOutController(
@@ -52,18 +53,24 @@ public class LateInEarlyOutController(
 
     public async Task<IActionResult> Create()
     {
-        var supervisor = await requestService.GetVerifierAndApproverAsync(EmployeeSession.EmpId, RequestType.LateIn);
         var viewModel = new LateInEarlyOutRequestViewModel
         {
-            Employee = EmployeeSession.DisplayName,
             EmployeeId = EmployeeSession.EmpId,
             OnDate = DateTimeOffset.Now.DateTime.ToClientTimeZone().Date,
             Minute = DefaultMinutes,
             ReasonId = (byte)LateInEarlyOutReason.Other,
             RequestType = (byte)RequestType.LateIn,
-            Verifiers = supervisor.Verifiers,
-            Approvers = supervisor.Approvers
+
         };
+
+        if (EmployeeSession.CompanyId != 0)
+        {
+            var supervisor = await requestService.GetVerifierAndApproverAsync(EmployeeSession.EmpId, RequestType.LateIn);
+            viewModel.Employee = EmployeeSession.DisplayName;
+            viewModel.Verifiers = supervisor.Verifiers;
+            viewModel.Approvers = supervisor.Approvers;
+        }
+
         ViewBag.AutoApproveRequest = EmployeeSession.AutoApproveRequest;
         return View(viewModel);
     }

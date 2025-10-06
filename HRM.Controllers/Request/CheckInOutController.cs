@@ -55,19 +55,23 @@ public class CheckInOutController(
     public async Task<IActionResult> Create()
     {
         var today = DateTimeOffset.Now.DateTime.ToClientTimeZone();
-        var supervisor = await requestService.GetVerifierAndApproverAsync(EmployeeSession.EmpId, RequestType.CheckIn);
         var viewModel = new CheckInOutRequestViewModel
         {
-            Employee = EmployeeSession.DisplayName,
             EmployeeId = EmployeeSession.EmpId,
             ForDate = today.Date,
             AttendantDate = today.Date,
             Hour = today.Hour,
             Minute = today.Minute,
             RequestTypeId = (byte)RequestType.CheckIn,
-            Verifiers = supervisor.Verifiers,
-            Approvers = supervisor.Approvers
         };
+
+        if (EmployeeSession.CompanyId != 0)
+        {
+            var supervisor = await requestService.GetVerifierAndApproverAsync(EmployeeSession.EmpId, RequestType.CheckIn);
+            viewModel.Employee = EmployeeSession.DisplayName;
+            viewModel.Verifiers = supervisor.Verifiers;
+            viewModel.Approvers = supervisor.Approvers;
+        }
 
         var shift = await shiftService.GetByDateAsync(EmployeeSession.EmpId, today.Date);
         CheckShiftFromToFormat(viewModel, shift);
