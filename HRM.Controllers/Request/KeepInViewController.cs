@@ -8,7 +8,6 @@ using HRM.Core;
 using HRM.Core.Enums;
 using HRM.Core.Services;
 using HRM.Criteria.Request.KeepInView;
-using HRM.Models;
 using HRM.Models.Request;
 using HRM.Services.Interfaces;
 using HRM.Services.Interfaces.Request;
@@ -16,7 +15,6 @@ using HRM.ViewModels.Request;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using Org.BouncyCastle.Crypto;
 
 namespace HRM.Controllers.Request;
 
