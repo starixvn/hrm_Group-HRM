@@ -14,6 +14,7 @@ using GO.UserControl.Client.Core.Session;
 using HRM.Core.Services;
 using HRM.Criteria.Request;
 using HRM.Criteria.Request.Leave;
+using HRM.Models;
 using HRM.Models.Request;
 using HRM.Models.Request.Leave;
 using HRM.Services.Interfaces.Request;
@@ -64,7 +65,6 @@ public class LeaveController(
 
     public async Task<ActionResult> Create()
     {
-        var supervisor = await requestService.GetVerifierAndApproverAsync(EmployeeSession.EmpId, RequestType.Leave);
         var setting = await commonDataService.GetSystemSettingAsync();
         var today = DateTimeOffset.Now.DateTime.ToClientTimeZone().Date;
         var minDate = await GetEmployeeMinDate();
@@ -72,20 +72,26 @@ public class LeaveController(
         var model = new LeaveRequestViewModel
         {
             LeaveTypeId = (ushort)LeaveTypes.GeneralLeave,
-            Employee = EmployeeSession.DisplayName,
             EmployeeId = EmployeeSession.EmpId,
             FromDate = today,
             ToDate = today,
             TotalDays = 1,
             LeaveTypeList = await commonDataService.GetLeaveTypeAsync(),
-            EmployeeLeaveBalance = await leaveRequestService.GetLeaveBalance(EmployeeSession.EmpId, null, null),
-            Verifiers = supervisor.Verifiers,
-            Approvers = supervisor.Approvers,
             MinDate = minDate,
             EnableHospitalizationLeaveBalance = setting.EnableHospitalizationLeaveBalance,
             EnableSickLeaveBalance = setting.EnableSickLeaveBalance,
             EnableLimitUseAnnualLeaveBalance = setting.EnableLimitUseAnnualLeaveBalance
         };
+        if (EmployeeSession.CompanyId != 0)
+        {
+            var supervisor = await requestService.GetVerifierAndApproverAsync(EmployeeSession.EmpId, RequestType.CheckIn);
+            model.EmployeeLeaveBalance = await leaveRequestService.GetLeaveBalance(EmployeeSession.EmpId, null, null);
+            model.Employee = EmployeeSession.DisplayName;
+            model.EmployeeId = EmployeeSession.EmpId;
+            model.Verifiers = supervisor.Verifiers;
+            model.Approvers = supervisor.Approvers;
+        }
+
         ViewBag.AutoApproveRequest = EmployeeSession.AutoApproveRequest;
         ViewBag.HasOnBehalfOthersPermission = session.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
             || session.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);

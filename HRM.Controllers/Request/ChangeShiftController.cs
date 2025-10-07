@@ -10,6 +10,7 @@ using Core.Enums;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
 using HRM.Criteria.Request.ChangeShift;
+using HRM.Models;
 using HRM.Models.Request;
 using HRM.Models.Request.ChangeShift;
 using HRM.Services.Interfaces.Request;
@@ -57,16 +58,21 @@ public class ChangeShiftController(
     public async Task<IActionResult> Create()
     {
         var today = DateTimeOffset.Now.DateTime.ToClientTimeZone().Date;
-        var supervisor = await GetVerifierApprover(EmployeeSession.EmpId);
         var model = new ChangeShiftViewModel
         {
-            Employee = EmployeeSession.DisplayName,
-            EmployeeId = EmployeeSession.EmpId,
             FromDate = today,
             ToDate = today,
-            Verifiers = supervisor.Verifiers,
-            Approvers = supervisor.Approvers
+            EmployeeId = EmployeeSession.EmpId
         };
+
+        if (EmployeeSession.CompanyId != 0)
+        {
+            var supervisor = await GetVerifierApprover(EmployeeSession.EmpId);
+            model.Verifiers = supervisor.Verifiers;
+            model.Approvers = supervisor.Approvers;
+            model.Employee = EmployeeSession.DisplayName;
+        }
+
         ViewBag.IsHost = true;
         ViewBag.AutoApproveRequest = EmployeeSession.AutoApproveRequest;
         ViewBag.HasOnBehalfRequestPermission = session.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
