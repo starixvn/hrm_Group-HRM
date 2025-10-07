@@ -3,13 +3,12 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
-using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
 using HRM.Core;
-using HRM.Core.Constants;
 using HRM.Core.Enums;
 using HRM.Core.Services;
 using HRM.Criteria.Request.KeepInView;
+using HRM.Models;
 using HRM.Models.Request;
 using HRM.Services.Interfaces;
 using HRM.Services.Interfaces.Request;
@@ -17,6 +16,7 @@ using HRM.ViewModels.Request;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Org.BouncyCastle.Crypto;
 
 namespace HRM.Controllers.Request;
 
@@ -58,21 +58,24 @@ public class KeepInViewController(
     public async Task<IActionResult> Create()
     {
         var today = DateTimeOffset.Now.DateTime.ToClientTimeZone().Date;
-        var supervisor = await requestService.GetVerifierAndApproverAsync(EmployeeSession.EmpId, RequestType.KeepInView);
         var model = new KeepInViewRequestViewModel
         {
-            Employee = EmployeeSession.DisplayName,
             EmployeeId = EmployeeSession.EmpId,
             Date = today,
             KeepInViewType = (byte)KeepInViewTypes.KeepInViewByDay,
-            Verifiers = supervisor.Verifiers,
-            Approvers = supervisor.Approvers,
             MinDate = today.FirstDayOfMonth().AddMonths(-1),
             MaxDate = today.FirstDayOfMonth().AddMonths(2).AddDays(-1)
         };
+
+        if (EmployeeSession.CompanyId != 0)
+        {
+            var supervisor = await requestService.GetVerifierAndApproverAsync(EmployeeSession.EmpId, RequestType.KeepInView);
+            model.Employee = EmployeeSession.DisplayName;
+            model.Verifiers = supervisor.Verifiers;
+            model.Approvers = supervisor.Approvers;
+        }
+
         ViewBag.AutoApproveRequest = EmployeeSession.AutoApproveRequest;
-        ViewBag.HasOnBehalfRequestPermission = session.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
-            || session.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);
 
         return View(model);
     }
