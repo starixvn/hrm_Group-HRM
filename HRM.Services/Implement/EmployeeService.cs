@@ -448,19 +448,17 @@ public class EmployeeService(
 
     public async Task<IEnumerable<T>> FilterByEmployeeDataPermission<T>(
         IEnumerable<T> data,
-        Func<T, int> employeeIdSelector,
-        short actionType)
+        Func<T, int> employeeIdSelector)
     {
         var canViewAllEmployees = session.HasPermissionOnFunction(FunctionKey.DataPermission_AllEmployees, Policy.Read);
         var canViewEmployeesAssigned = session.HasPermissionOnFunction(FunctionKey.DataPermission_EmployeesAssigned, Policy.Read);
         var currentCompanyId = session.Get<short>(SessionKey.CurrentCompanyId);
         var employeeSessionEmpId = session.Get<EmployeeSession>(SessionKey.Employee)?.EmpId ?? 0;
-        
+
         var assignedEmpCriteria = new GetEmployeeByDataPermissionCriteria
         {
             CompanyId = currentCompanyId,
             EmpId = employeeSessionEmpId,
-            ActionType = actionType,
             IsViewAll = canViewAllEmployees,
             IsViewEmployeeAssigned = canViewEmployeesAssigned
         };

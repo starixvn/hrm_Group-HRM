@@ -58,8 +58,6 @@ public class AnnualLeaveBalanceController(
     [HrmPermission(Policy.Read, FunctionKey.AnnualLeaveBalance)]
     public async Task<IActionResult> GetYearlyRuleData(string view, LeaveSummaryViewModel model)
     {
-        model.Teams = await teamService.GetBySupervisorAsync(EmployeeSession.EmpId);
-        model.TeamIds = !string.IsNullOrWhiteSpace(model.TeamIds) ? model.TeamIds : string.Join(",", model.Teams.Select(x => x.Id));
         model.IsShowCloseBalance = appSettings.IsShowCloseBalance;
         model.LeaveSumaries = await GetAnnualLeaveBalanceAsync(model);
 
@@ -70,8 +68,6 @@ public class AnnualLeaveBalanceController(
     [HrmPermission(Policy.Read, FunctionKey.AnnualLeaveBalance)]
     public async Task<IActionResult> GetJoinedDateRuleData(string view, LeaveSummaryViewModel model)
     {
-        model.Teams = await teamService.GetBySupervisorAsync(EmployeeSession.EmpId);
-        model.TeamIds = !string.IsNullOrWhiteSpace(model.TeamIds) ? model.TeamIds : string.Join(",", model.Teams.Select(x => x.Id));
         model.IsShowCloseBalance = false;
         model.LeaveSumariesForJoinedDate = await GetAnnualLeaveBalanceForJoinedDateAsync(model);
 

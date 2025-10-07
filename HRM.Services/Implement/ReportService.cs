@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using HRM.Core;
-using HRM.Core.Enums;
 using HRM.Core.Services;
 using HRM.Criteria.AnnualLeave;
 using HRM.Criteria.Report;
@@ -47,14 +46,14 @@ public class ReportService(
     public async Task<IEnumerable<LeaveSummary>> GetAnnualLeaveBalanceReportAsync(GetAnnualLeaveBalanceCriteria criteria)
     {
         var employeeAttendances = await baseService.GetDataAsync<LeaveSummary>(criteria);
-        var filteredEmployees = await employeeService.FilterByEmployeeDataPermission(employeeAttendances, e => e.EmpId, (short)SupervisorActionType.LeaderTakeover);
+        var filteredEmployees = await employeeService.FilterByEmployeeDataPermission(employeeAttendances, e => e.EmpId);
         return filteredEmployees;
     }
 
     public async Task<IEnumerable<LeaveSummaryForJoinedDate>> GetAnnualLeaveBalanceForJoinedDateReportAsync(GetAnnualLeaveBalanceForJoinedDateCriteria criteria)
     {
         var employeeAttendances = await baseService.GetDataAsync<LeaveSummaryForJoinedDate>(criteria);
-        var filteredEmployees = await employeeService.FilterByEmployeeDataPermission(employeeAttendances, e => e.EmpId, (short)SupervisorActionType.LeaderTakeover);
+        var filteredEmployees = await employeeService.FilterByEmployeeDataPermission(employeeAttendances, e => e.EmpId);
         return filteredEmployees;
     }
 

@@ -72,8 +72,5 @@ public interface IEmployeeService
 
     Task<IEnumerable<int>> GetCompaniesBelongToSupervisor();
 
-    Task<IEnumerable<T>> FilterByEmployeeDataPermission<T>(
-        IEnumerable<T> data,
-        Func<T, int> employeeIdSelector,
-        short actionType);
+    Task<IEnumerable<T>> FilterByEmployeeDataPermission<T>(IEnumerable<T> data, Func<T, int> employeeIdSelector);
 }

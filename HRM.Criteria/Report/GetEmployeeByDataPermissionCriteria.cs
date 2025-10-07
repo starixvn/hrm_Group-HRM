@@ -6,8 +6,6 @@ public class GetEmployeeByDataPermissionCriteria : CriteriaBase
 {
     public int EmpId { get; set; }
 
-    public short ActionType { get; set; }
-
     public short CompanyId { get; set; }
 
     public bool IsViewAll { get; set; }

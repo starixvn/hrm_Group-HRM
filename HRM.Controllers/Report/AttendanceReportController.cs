@@ -76,6 +76,6 @@ public class AttendanceReportController(
         };
         
         var employeeAttendances = await reportService.GetEmployeeAttendanceReportAsync(criteria);
-        return await employeeService.FilterByEmployeeDataPermission(employeeAttendances, e => e.EmpId, (short)SupervisorActionType.LeaderTakeover);
+        return await employeeService.FilterByEmployeeDataPermission(employeeAttendances, e => e.EmpId);
     }
 }

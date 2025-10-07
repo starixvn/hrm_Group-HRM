@@ -10,8 +10,6 @@ using Core.Filters;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Services;
 using GO.UserControl.Client.Core.Session;
-using HRM.Core.Enums;
-using HRM.Core.Models;
 using HRM.Core.Services;
 using HRM.Criteria.Report;
 using HRM.Models.Report.DisciplineSummaryPerYear;
@@ -81,7 +79,7 @@ public class DisciplineSummaryPerYearController(
         };
 
         var (employees, disciplines) = await baseService.FetchMultipleAsync<DisciplineSummaryPerYear, DisciplineSummaryPerYearDetail>(criteria);
-        var filteredEmployees = await employeeService.FilterByEmployeeDataPermission( employees, e => e.EmployeeId, (short)SupervisorActionType.LeaderTakeover); // TODO
+        var filteredEmployees = await employeeService.FilterByEmployeeDataPermission( employees, e => e.EmployeeId);
         foreach (var employee in filteredEmployees)
         {
             var date = model.LengthOfService ? employee.CompanyDate : employee.JoinedDate;
