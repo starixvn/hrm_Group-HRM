@@ -63,7 +63,6 @@ public class AttendanceReportController(
     {
         var criteria = new GetEmployeeAttendanceCriteria
         {
-            SupervisorId = model.SupervisorId,
             Fromtime = model.FromDate,
             Totime = model.ToDate,
             AttendanceType = model.AttendanceType,

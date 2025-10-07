@@ -7,7 +7,7 @@ import '../../date';
 import '../../shared/multiselect-tree-view';
 import '../../shared/employee.search.in.team';
 
-import { axiosError, alert, initDatepicker, resolveClientUrl, floatThead } from '../../shared/common.functions';
+import { axiosError, alert, initDatepicker, resolveClientUrl, floatThead, blockUI, unblockUI } from '../../shared/common.functions';
 
 const sickLeaveBalance = (function ($) {
     function getOrgChart() {
@@ -18,10 +18,34 @@ const sickLeaveBalance = (function ($) {
         }).then(response => {
             $('#Team').multiSelectTreeView({
                 data: response.data,
-                selectedItems: $('#TeamIds').val(),
+                isSelectedAll: true,
                 hasSearchBox: true
             });
+            loadTableData();
+
         }).catch(axiosError);
+    }
+
+    function loadTableData() {
+        var url = submitData('SickLeaveBalance/index?year=');
+        blockUI();
+        axios({
+            url: url,
+            method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        }).then(response => {
+            if (response.data) {
+                var $response = $(response.data);
+                var $newTable = $response.find('table#data');
+                if ($newTable.length > 0) {
+                    $('table#data').replaceWith($newTable);
+                    floatThead('table#data');
+                    $('.tooltip-tipsy').tipsy({ html: true, gravity: $.fn.tipsy.autoWE });
+                    initCheckAllEvent();
+                    initCheckSingleRowEvent();
+                }
+            }
+        }).catch(axiosError).then(() => unblockUI());
     }
 
     function submitData(postToUrl) {
@@ -36,8 +60,7 @@ const sickLeaveBalance = (function ($) {
     function initSubmitFilterEvent() {
         $('.filter form').submit(function (event) {
             event.preventDefault();
-            const postToUrl = 'SickLeaveBalance/index?year=';
-            location.href = submitData(postToUrl);
+            loadTableData();
         });
     }
 

@@ -106,8 +106,6 @@ public class AnnualLeaveBalanceController(
             EmpId = null,
             TeamIds = string.Join(",", teams.Select(x => x.Id)),
             IsLocal = null,
-            Role = string.Empty,
-            SupervisorId = null,
             CompanyId = CurrentCompanyId
         };
         var entityList = await reportService.GetAnnualLeaveBalanceReportAsync(criteria);
@@ -227,8 +225,6 @@ public class AnnualLeaveBalanceController(
             EmpId = model.EmployeeId != -1 ? new int?(model.EmployeeId) : null,
             TeamIds = model.TeamIds,
             IsLocal = (byte?)model.Category,
-            Role = string.Empty,
-            SupervisorId = EmployeeSession.EmpId,
             CompanyId = CurrentCompanyId,
             EmployeeStatusIds = model.EmployeeStatusIds
         };
@@ -243,8 +239,6 @@ public class AnnualLeaveBalanceController(
             EmpId = model.EmployeeId != -1 ? new int?(model.EmployeeId) : null,
             TeamIds = model.TeamIds,
             IsLocal = (byte?)model.Category,
-            Role = string.Empty,
-            SupervisorId = EmployeeSession.EmpId,
             CompanyId = CurrentCompanyId,
             EmployeeStatusIds = model.EmployeeStatusIds
         };

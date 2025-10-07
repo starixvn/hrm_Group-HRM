@@ -64,7 +64,6 @@ public class DisciplineSummaryPerYearController(
 
     private async Task<IList<DisciplineSummaryPerYear>> GetDisciplineSummaryAsync(DisciplineSummaryPerYearViewModel model)
     {
-        var roles = await roleService.GetByUserIdAsync(session.UserId);
         var criteria = new GetDisciplineSummaryPerYearCriteria
         {
             CompanyId = CurrentCompanyId,
@@ -73,9 +72,7 @@ public class DisciplineSummaryPerYearController(
             TeamIds = model.TeamId,
             IsLocal = model.IsLocal,
             EmployeeId = model.EmployeeId,
-            ApproverId = EmployeeSession.EmpId,
             IsShowAll = model.IsShowAll,
-            RoleIds = string.Join(",", roles.Select(x => x.RoleId))
         };
 
         var (employees, disciplines) = await baseService.FetchMultipleAsync<DisciplineSummaryPerYear, DisciplineSummaryPerYearDetail>(criteria);

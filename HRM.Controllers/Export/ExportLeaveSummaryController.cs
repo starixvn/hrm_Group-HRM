@@ -33,8 +33,6 @@ public class ExportLeaveSummaryController(
             EmpId = model.EmployeeId > 0 ? new int?(model.EmployeeId) : null,
             TeamIds = model.TeamIds,
             IsLocal = isLocal,
-            Role = string.Empty,
-            SupervisorId = null,
             CompanyId = CurrentCompanyId,
             EmployeeStatusIds = model.EmployeeStatusIds
         };
@@ -60,8 +58,6 @@ public class ExportLeaveSummaryController(
             EmpId = model.EmployeeId > 0 ? new int?(model.EmployeeId) : null,
             TeamIds = model.TeamIds,
             IsLocal = isLocal,
-            Role = string.Empty,
-            SupervisorId = null,
             CompanyId = CurrentCompanyId,
             EmployeeStatusIds = model.EmployeeStatusIds
         };

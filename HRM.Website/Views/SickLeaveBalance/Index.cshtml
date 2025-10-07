@@ -20,8 +20,7 @@
 }
 
 <h2 class="page-title">@ViewBag.Title</h2>
-@if (Model.IsHost)
-{
+
     <div class="filter">
         @using (Html.BeginForm())
         {
@@ -73,19 +72,21 @@
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary">@Labels.Submit</button>
                     <button type="button" class="btn btn-excel" id="btnExcel">@Labels.Excel</button>
-                    <a href="javascript:;" class="btn btn-request" id="btnReset">
-                        <span class="fa fa-plus"></span>
-                        @Labels.CloseBalance
-                    </a>
-                    <a href="javascript:;" class="btn btn-request" id="btnAdjustment">
-                        <span class="fa fa-plus"></span>
-                        @Labels.Adjustment
-                    </a>
+                    @if (Model.IsHost)
+                    {
+                        <a href="javascript:;" class="btn btn-request" id="btnReset">
+                            <span class="fa fa-plus"></span>
+                            @Labels.CloseBalance
+                        </a>
+                        <a href="javascript:;" class="btn btn-request" id="btnAdjustment">
+                            <span class="fa fa-plus"></span>
+                            @Labels.Adjustment
+                        </a>
+                    }
                 </div>
             </div>
         }
     </div>
-}
 
 <table class="table table-custom" id="data">
     <thead>

@@ -2,7 +2,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Core;
 using Core.Constants;
@@ -24,7 +23,6 @@ using ViewModels.HospitalizationLeave;
 public class SickLeaveBalanceController(
     IUserControlSession session,
     IEmployeeService employeeService,
-    ITeamService teamService,
     IBaseService baseService,
     IExportExcelService exportExcelService) : BaseExportController(session)
 {
@@ -51,20 +49,23 @@ public class SickLeaveBalanceController(
     [HttpPost]
     public async Task<IActionResult> Index(HospitalizationLeaveBalanceViewModel model)
     {
-        model.Teams = await teamService.GetBySupervisorAsync(EmployeeSession.EmpId);
-        model.TeamIds = !string.IsNullOrWhiteSpace(model.TeamIds) ? model.TeamIds : string.Join(",", model.Teams.Select(x => x.Id));
         var criteria = new GetSummaryReportCriteria
         {
             Year = model.Year,
             EmployeeId = model.EmployeeId,
             TeamIds = model.TeamIds,
             IsLocal = model.IsLocal,
-            SupervisorId = EmployeeSession.EmpId,
             CompanyId = CurrentCompanyId
         };
-        model.Employees = await baseService.GetDataAsync<HospitalizationLeaveBalanceSummaryReport>(criteria);
+        model.Employees = await GetData(criteria);
 
         return View(model);
+    }
+
+    private async Task<IEnumerable<HospitalizationLeaveBalanceSummaryReport>> GetData(GetSummaryReportCriteria criteria)
+    {
+        var results = await baseService.GetDataAsync<HospitalizationLeaveBalanceSummaryReport>(criteria);
+        return await employeeService.FilterByEmployeeDataPermission(results, e => e.EmpId);
     }
 
     [HttpPost]
@@ -207,10 +208,9 @@ public class SickLeaveBalanceController(
             EmployeeId = model.EmployeeId,
             TeamIds = model.TeamIds,
             IsLocal = model.IsLocal,
-            SupervisorId = EmployeeSession.EmpId,
             CompanyId = CurrentCompanyId
         };
-        var employees = await baseService.GetDataAsync<HospitalizationLeaveBalanceSummaryReport>(criteria);
+        var employees = await GetData(criteria);
         var workbook = exportExcelService.ExportSickLeaveSummary(employees, model.Year);
 
         return ExcelFile(workbook, fileName);
