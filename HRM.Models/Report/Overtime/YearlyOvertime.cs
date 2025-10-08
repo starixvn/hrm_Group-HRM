@@ -1,6 +1,8 @@
 ﻿namespace HRM.Models.Report.Overtime;
 
-public class YearlyOvertime
+using HRM.Models.Common;
+
+public class YearlyOvertime : MonthlyDataBase
 {
     public int EmpId { get; set; }
     public string FullName { get; set; }
@@ -11,17 +13,4 @@ public class YearlyOvertime
     public string TeamName { get; set; }
     public string DepartmentCode { get; set; }
     public string DepartmentName { get; set; }
-    public float Jan { get; set; }
-    public float Feb { get; set; }
-    public float Mar { get; set; }
-    public float Apr { get; set; }
-    public float May { get; set; }
-    public float Jun { get; set; }
-    public float Jul { get; set; }
-    public float Aug { get; set; }
-    public float Sep { get; set; }
-    public float Oct { get; set; }
-    public float Nov { get; set; }
-    public float Dec { get; set; }
-    public float Total => Jan + Feb + Mar + Apr + May + Jun + Jul + Aug + Sep + Oct + Nov + Dec;
 }
