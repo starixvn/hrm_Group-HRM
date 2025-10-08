@@ -196,7 +196,7 @@ public static class Utilities
             return false;
         }
 
-        var regex = new Regex(@"\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*");
+        var regex = new Regex(@"\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*", RegexOptions.None, TimeSpan.FromMilliseconds(100));
         return regex.IsMatch(email);
     }
 
