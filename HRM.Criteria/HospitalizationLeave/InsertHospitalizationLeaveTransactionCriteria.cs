@@ -3,7 +3,7 @@
 using System;
 using Fanex.Data.Repository;
 
-public class InsertTransactionCriteria : CriteriaBase
+public class InsertHospitalizationLeaveTransactionCriteria : CriteriaBase
 {
     public int? RequestId { get; set; }
     public int EmpId { get; set; }

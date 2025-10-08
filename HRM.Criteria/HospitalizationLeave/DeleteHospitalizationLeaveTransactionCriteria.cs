@@ -3,7 +3,7 @@
 using System;
 using Fanex.Data.Repository;
 
-public class DeleteTransactionCriteria : CriteriaBase
+public class DeleteHospitalizationLeaveTransactionCriteria : CriteriaBase
 {
     public long TransId { get; set; }
     public DateTime ModifiedDate { get; set; }

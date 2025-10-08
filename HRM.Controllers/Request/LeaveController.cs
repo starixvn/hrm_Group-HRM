@@ -103,18 +103,7 @@ public class LeaveController(
     {
         var criteria = JsonConvert.DeserializeObject<InsertLeaveRequestCriteria>(request);
         var leaveRequestDetail = JsonConvert.DeserializeObject<List<LeaveRequestDetail>>(requestDetails);
-        if (leaveRequestDetail is { Count: > 0 })
-        {
-            criteria.TotalDays = leaveRequestDetail.Where(x => x.WorkType == (byte)WorkType.Leave)
-                .Sum(x => x.IsHalfDay ? Constants.HalfDayOffValue : 1);
-
-            Parallel.ForEach(leaveRequestDetail, item =>
-            {
-                item.FromTime = item.IsHalfDay ? item.FromTime.ToServerTimeZone() : item.FromTime;
-                item.ToTime = item.IsHalfDay ? item.ToTime.ToServerTimeZone() : item.ToTime;
-            });
-        }
-
+        ProcessLeaveRequestDetails(leaveRequestDetail, criteria);
         criteria.RequestDetail = leaveRequestDetail;
         criteria.CreatedBy = EmployeeSession.EmpId;
         criteria.CompanyId = CurrentCompanyId;
@@ -194,17 +183,7 @@ public class LeaveController(
         criteria.RequestDetail = leaveRequestDetail;
         criteria.ModifiedBy = EmployeeSession.EmpId;
         criteria.CompanyId = CurrentCompanyId;
-        if (leaveRequestDetail is { Count: > 0 })
-        {
-            criteria.TotalDays = leaveRequestDetail.Where(x => x.WorkType == (byte)WorkType.Leave)
-                .Sum(x => x.IsHalfDay ? Constants.HalfDayOffValue : 1);
-
-            Parallel.ForEach(leaveRequestDetail, item =>
-            {
-                item.FromTime = item.IsHalfDay ? item.FromTime.ToServerTimeZone() : item.FromTime;
-                item.ToTime = item.IsHalfDay ? item.ToTime.ToServerTimeZone() : item.ToTime;
-            });
-        }
+        ProcessLeaveRequestDetails(leaveRequestDetail, criteria);
 
         var startTime = DateTimeOffset.Now;
         var result = await baseService.ExecuteNonQueryAsync(criteria);
@@ -542,5 +521,20 @@ public class LeaveController(
         }
 
         return today;
+    }
+
+    private static void ProcessLeaveRequestDetails(List<LeaveRequestDetail> leaveRequestDetail, BaseLeaveRequestCriteria criteria)
+    {
+        if (leaveRequestDetail is { Count: > 0 })
+        {
+            criteria.TotalDays = leaveRequestDetail.Where(x => x.WorkType == (byte)WorkType.Leave)
+                .Sum(x => x.IsHalfDay ? Constants.HalfDayOffValue : 1);
+
+            Parallel.ForEach(leaveRequestDetail, item =>
+            {
+                item.FromTime = item.IsHalfDay ? item.FromTime.ToServerTimeZone() : item.FromTime;
+                item.ToTime = item.IsHalfDay ? item.ToTime.ToServerTimeZone() : item.ToTime;
+            });
+        }
     }
 }

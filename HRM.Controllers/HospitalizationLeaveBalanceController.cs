@@ -149,7 +149,7 @@ public class HospitalizationLeaveBalanceController(
     {
         if (ModelState.IsValid)
         {
-            var criteria = new InsertTransactionCriteria
+            var criteria = new InsertHospitalizationLeaveTransactionCriteria
             {
                 EmpId = model.EmpId,
                 Description = model.Description,
@@ -221,7 +221,7 @@ public class HospitalizationLeaveBalanceController(
 
     private async Task<IEnumerable<HospitalizationLeaveTransaction>> GetHospitalizationLeaveTransactionAsync(int employeeId, int year, bool includedRequestTrans = true)
     {
-        var criteria = new GetTransactionByEmployeeIdCriteria
+        var criteria = new GetHospitalizationLeaveTransactionByEmployeeIdCriteria
         {
             EmployeeId = employeeId,
             IncludedRequestTrans = includedRequestTrans,
@@ -233,7 +233,7 @@ public class HospitalizationLeaveBalanceController(
 
     private async Task<IActionResult> EditAsync(HospitalizationLeaveTransaction model)
     {
-        var criteria = new UpdateTransactionCriteria
+        var criteria = new UpdateHospitalizationTransactionCriteria
         {
             TransId = model.TransId,
             Description = model.Description,
@@ -258,7 +258,7 @@ public class HospitalizationLeaveBalanceController(
 
     private async Task<IActionResult> DeleteAsync(HospitalizationLeaveTransaction model)
     {
-        var criteria = new DeleteTransactionCriteria
+        var criteria = new DeleteHospitalizationLeaveTransactionCriteria
         {
             TransId = model.TransId,
             ModifiedDate = DateTimeOffset.Now.DateTime,
