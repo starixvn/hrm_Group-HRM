@@ -7,7 +7,7 @@ import {
     PeriodType,
     PeriodTypeLabel
 } from '../constants/periodType';
-import salaryService from '../Service';
+import salaryService from '../service';
 
 const UploadSalaryModal = ({ onSuccess }) => {
     const [show, setShow] = useState(false);

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import toastr from 'toastr';
 import { Modal, ModalBody, ModalFooter, ModalHeader } from 'react-bootstrap';
 import { toastOptions } from '../../../shared/common.functions';
-import salaryService from '../Service';
+import salaryService from '../service';
 import MonthPicker from '../../../shared/components/MonthPicker';
 
 const GenerateSalaryModal = ({ onSuccess }) => {

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testExecutions version="1">
+  <file path="D:\Project\HRM\Group-HRM\Group-HRM\HRM.Website\wwwroot\sources\js\pages\payroll-management\__test__\AppContainer.test.jsx">
+    <testCase name="AppContainer Component should render components and pass onSearch callback" duration="36"/>
+    <testCase name="AppContainer Component should fetch salary data successfully" duration="4"/>
+  </file>
+</testExecutions>

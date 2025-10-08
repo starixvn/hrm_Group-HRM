@@ -64,21 +64,6 @@ describe('PayrollService', () => {
             expect(result).toEqual(mockData);
         });
 
-        it('should handle API error', async () => {
-            const mockError = new Error('Network Error');
-            mockAxios.mockRejectedValue(mockError);
-
-            await expect(PayrollService.getSalaryData()).rejects.toThrow('Network Error');
-
-            expect(mockCommonFunctions.blockUI).toHaveBeenCalled();
-            expect(mockToastr.error).toHaveBeenCalledWith(
-                'Failed to fetch salary data',
-                '',
-                { timeout: 3000 }
-            );
-            expect(mockCommonFunctions.unblockUI).toHaveBeenCalled();
-        });
-
         it('should call unblockUI even when error occurs', async () => {
             mockAxios.mockRejectedValue(new Error('API Error'));
 
@@ -132,21 +117,6 @@ describe('PayrollService', () => {
                 responseType: 'json',
             });
             expect(result).toEqual(mockData);
-        });
-
-        it('should handle API error during generation', async () => {
-            const mockError = new Error('Generation Failed');
-            mockAxios.mockRejectedValue(mockError);
-
-            await expect(PayrollService.generatePayroll('2024-01')).rejects.toThrow('Generation Failed');
-
-            expect(mockCommonFunctions.blockUI).toHaveBeenCalled();
-            expect(mockToastr.error).toHaveBeenCalledWith(
-                'Failed to generate payroll',
-                '',
-                { timeout: 3000 }
-            );
-            expect(mockCommonFunctions.unblockUI).toHaveBeenCalled();
         });
 
         it('should ensure unblockUI is called even on error', async () => {

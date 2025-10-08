@@ -1,7 +1,7 @@
 ﻿import React from 'react';
 import SalaryTable from './components/SalaryTable';
 import Filter from './components/Filter';
-import PayrollService from './Service';
+import PayrollService from './service';
 
 const AppContainer = () => {
     const [salaryData, setSalaryData] = React.useState([]);
