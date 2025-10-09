@@ -43,8 +43,7 @@ public interface ICommonDataService
 public class CommonDataService(
     IUserControlSession session,
     IBaseService baseService,
-    ITeamService teamService,
-    IUserControlSession userControlSession) : ICommonDataService
+    ITeamService teamService) : ICommonDataService
 {
     public async Task<IEnumerable<LookupData>> GetLookupDataByCodeAsync(string code, int companyId)
     {
@@ -68,7 +67,7 @@ public class CommonDataService(
 
     public async Task<IList<LeaveType>> GetLeaveTypeAsync(bool excludeNotShown = true)
     {
-        var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
+        var companyId = session.Get<short>(SessionKey.CurrentCompanyId);
 
         var criteria = new GetLeaveTypeCriteria
         {
