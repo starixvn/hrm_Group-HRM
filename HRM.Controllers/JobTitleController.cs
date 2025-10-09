@@ -41,14 +41,14 @@ public class JobTitleController(
     [HrmPermission(Policy.Read, FunctionKey.JobTitleManagement)]
     public async Task<IActionResult> GetJobTitles([FromBody] JobTitleModel model)
     {
-        var jobTitles = await commonDataService.GetJobTitle(model.JobTitle, CurrentCompanyId);
+        var jobTitles = await commonDataService.GetJobTitleAsync(model.JobTitle, CurrentCompanyId);
         return Json(jobTitles);
     }
 
     [HrmPermission(Policy.Host, FunctionKey.JobTitleManagement)]
     public async Task<IActionResult> ExportExcel(string jobTitle)
     {
-        var jobTitles = await commonDataService.GetJobTitle(jobTitle, CurrentCompanyId);
+        var jobTitles = await commonDataService.GetJobTitleAsync(jobTitle, CurrentCompanyId);
         var bytes = jobTitleExportService.Export(jobTitles);
 
         return File(bytes, MimeType.XLSX, $"JobTitle_{DateTimeOffset.Now:yyyyMMdd}.xlsx");
