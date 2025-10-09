@@ -7,10 +7,8 @@ using System.Threading.Tasks;
 using Core;
 using Core.Constants;
 using Core.Enums;
-using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
 using HRM.Criteria.Request.ChangeShift;
-using HRM.Models;
 using HRM.Models.Request;
 using HRM.Models.Request.ChangeShift;
 using HRM.Services.Interfaces.Request;
@@ -75,8 +73,6 @@ public class ChangeShiftController(
 
         ViewBag.IsHost = true;
         ViewBag.AutoApproveRequest = EmployeeSession.AutoApproveRequest;
-        ViewBag.HasOnBehalfRequestPermission = session.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
-            || session.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);
         return View(model);
     }
 

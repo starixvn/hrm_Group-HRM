@@ -9,12 +9,10 @@ using Core;
 using Core.Constants;
 using Core.Enums;
 using Fanex.Logging;
-using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
 using HRM.Core.Services;
 using HRM.Criteria.Request;
 using HRM.Criteria.Request.Leave;
-using HRM.Models;
 using HRM.Models.Request;
 using HRM.Models.Request.Leave;
 using HRM.Services.Interfaces.Request;
@@ -92,8 +90,6 @@ public class LeaveController(
         }
 
         ViewBag.AutoApproveRequest = EmployeeSession.AutoApproveRequest;
-        ViewBag.HasOnBehalfOthersPermission = session.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
-            || session.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);
 
         return View(model);
     }
@@ -167,8 +163,6 @@ public class LeaveController(
 
         ViewBag.IsView = false;
         ViewBag.AutoApproveRequest = request.Requester.AutoApproveRequest;
-        ViewBag.HasOnBehalfOthersPermission = session.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
-            || session.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);
 
         return View(model);
     }
@@ -233,8 +227,6 @@ public class LeaveController(
         model.Approvers = await employeeService.CheckAndAddMissingSupervisor(supervisor.Approvers, model.ApproverId);
 
         ViewBag.IsView = true;
-        ViewBag.HasOnBehalfOthersPermission = session.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
-            || session.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);
 
         return View(model);
     }
