@@ -79,7 +79,7 @@ public class LeaveRequestViewModel : IValidatableObject
 
     public IList<LeaveType> LeaveTypeList { get; set; }
 
-    public EmployeeLeaveBalance EmployeeLeaveBalance { get; set; }
+    public EmployeeLeaveBalance EmployeeLeaveBalance { get; set; } = new ();
 
     public RequestStatus Status { get; set; }
 

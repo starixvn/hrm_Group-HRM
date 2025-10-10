@@ -145,6 +145,16 @@ public class TeamService(
         return await baseService.GetDataAsync<Supervisor>(criteria);
     }
 
+    public async Task<IEnumerable<Supervisor>> GetLeaderTakeoverManagerByTeamId(int teamId, bool isGroup = false)
+    {
+        var criteria = new GetLeaderTakeoverByTeamIdCriteria
+        {
+            TeamId = teamId,
+            CompanyId = isGroup ? null : session.Get<short>(SessionKey.CurrentCompanyId)
+        };
+        return await baseService.GetDataAsync<Supervisor>(criteria);
+    }
+
     public async Task<CommandResult> EditTeamSupervisor(int actorId, int teamId, short roleId, IEnumerable<EditTeamSupervisor> supervisors)
     {
         var criteria = new EditTeamSupervisorCriteria

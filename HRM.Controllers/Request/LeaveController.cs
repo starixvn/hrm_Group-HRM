@@ -9,7 +9,6 @@ using Core;
 using Core.Constants;
 using Core.Enums;
 using Fanex.Logging;
-using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
 using HRM.Core.Services;
 using HRM.Criteria.Request;
@@ -64,7 +63,6 @@ public class LeaveController(
 
     public async Task<ActionResult> Create()
     {
-        var supervisor = await requestService.GetVerifierAndApproverAsync(EmployeeSession.EmpId, RequestType.Leave);
         var setting = await commonDataService.GetSystemSettingAsync();
         var today = DateTimeOffset.Now.DateTime.ToClientTimeZone().Date;
         var minDate = await GetEmployeeMinDate();
@@ -72,23 +70,26 @@ public class LeaveController(
         var model = new LeaveRequestViewModel
         {
             LeaveTypeId = (ushort)LeaveTypes.GeneralLeave,
-            Employee = EmployeeSession.DisplayName,
             EmployeeId = EmployeeSession.EmpId,
             FromDate = today,
             ToDate = today,
             TotalDays = 1,
             LeaveTypeList = await commonDataService.GetLeaveTypeAsync(),
-            EmployeeLeaveBalance = await leaveRequestService.GetLeaveBalance(EmployeeSession.EmpId, null, null),
-            Verifiers = supervisor.Verifiers,
-            Approvers = supervisor.Approvers,
             MinDate = minDate,
             EnableHospitalizationLeaveBalance = setting.EnableHospitalizationLeaveBalance,
             EnableSickLeaveBalance = setting.EnableSickLeaveBalance,
             EnableLimitUseAnnualLeaveBalance = setting.EnableLimitUseAnnualLeaveBalance
         };
+        if (EmployeeSession.CompanyId != 0)
+        {
+            var supervisor = await requestService.GetVerifierAndApproverAsync(EmployeeSession.EmpId, RequestType.CheckIn);
+            model.EmployeeLeaveBalance = await leaveRequestService.GetLeaveBalance(EmployeeSession.EmpId, null, null);
+            model.Employee = EmployeeSession.DisplayName;
+            model.Verifiers = supervisor.Verifiers;
+            model.Approvers = supervisor.Approvers;
+        }
+
         ViewBag.AutoApproveRequest = EmployeeSession.AutoApproveRequest;
-        ViewBag.HasOnBehalfOthersPermission = session.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
-            || session.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);
 
         return View(model);
     }
@@ -98,18 +99,7 @@ public class LeaveController(
     {
         var criteria = JsonConvert.DeserializeObject<InsertLeaveRequestCriteria>(request);
         var leaveRequestDetail = JsonConvert.DeserializeObject<List<LeaveRequestDetail>>(requestDetails);
-        if (leaveRequestDetail is { Count: > 0 })
-        {
-            criteria.TotalDays = leaveRequestDetail.Where(x => x.WorkType == (byte)WorkType.Leave)
-                .Sum(x => x.IsHalfDay ? Constants.HalfDayOffValue : 1);
-
-            Parallel.ForEach(leaveRequestDetail, item =>
-            {
-                item.FromTime = item.IsHalfDay ? item.FromTime.ToServerTimeZone() : item.FromTime;
-                item.ToTime = item.IsHalfDay ? item.ToTime.ToServerTimeZone() : item.ToTime;
-            });
-        }
-
+        ProcessLeaveRequestDetails(leaveRequestDetail, criteria);
         criteria.RequestDetail = leaveRequestDetail;
         criteria.CreatedBy = EmployeeSession.EmpId;
         criteria.CompanyId = CurrentCompanyId;
@@ -173,8 +163,6 @@ public class LeaveController(
 
         ViewBag.IsView = false;
         ViewBag.AutoApproveRequest = request.Requester.AutoApproveRequest;
-        ViewBag.HasOnBehalfOthersPermission = session.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
-            || session.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);
 
         return View(model);
     }
@@ -189,17 +177,7 @@ public class LeaveController(
         criteria.RequestDetail = leaveRequestDetail;
         criteria.ModifiedBy = EmployeeSession.EmpId;
         criteria.CompanyId = CurrentCompanyId;
-        if (leaveRequestDetail is { Count: > 0 })
-        {
-            criteria.TotalDays = leaveRequestDetail.Where(x => x.WorkType == (byte)WorkType.Leave)
-                .Sum(x => x.IsHalfDay ? Constants.HalfDayOffValue : 1);
-
-            Parallel.ForEach(leaveRequestDetail, item =>
-            {
-                item.FromTime = item.IsHalfDay ? item.FromTime.ToServerTimeZone() : item.FromTime;
-                item.ToTime = item.IsHalfDay ? item.ToTime.ToServerTimeZone() : item.ToTime;
-            });
-        }
+        ProcessLeaveRequestDetails(leaveRequestDetail, criteria);
 
         var startTime = DateTimeOffset.Now;
         var result = await baseService.ExecuteNonQueryAsync(criteria);
@@ -249,8 +227,6 @@ public class LeaveController(
         model.Approvers = await employeeService.CheckAndAddMissingSupervisor(supervisor.Approvers, model.ApproverId);
 
         ViewBag.IsView = true;
-        ViewBag.HasOnBehalfOthersPermission = session.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
-            || session.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);
 
         return View(model);
     }
@@ -537,5 +513,20 @@ public class LeaveController(
         }
 
         return today;
+    }
+
+    private static void ProcessLeaveRequestDetails(List<LeaveRequestDetail> leaveRequestDetail, BaseLeaveRequestCriteria criteria)
+    {
+        if (leaveRequestDetail is { Count: > 0 })
+        {
+            criteria.TotalDays = leaveRequestDetail.Where(x => x.WorkType == (byte)WorkType.Leave)
+                .Sum(x => x.IsHalfDay ? Constants.HalfDayOffValue : 1);
+
+            Parallel.ForEach(leaveRequestDetail, item =>
+            {
+                item.FromTime = item.IsHalfDay ? item.FromTime.ToServerTimeZone() : item.FromTime;
+                item.ToTime = item.IsHalfDay ? item.ToTime.ToServerTimeZone() : item.ToTime;
+            });
+        }
     }
 }

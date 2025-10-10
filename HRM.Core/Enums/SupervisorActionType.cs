@@ -17,5 +17,8 @@ public enum SupervisorActionType
     OnBehalfRequest = 5,
 
     [Description("Discipline Manager")]
-    DisciplineManager = 8
+    DisciplineManager = 8,
+
+    [Description("Leader Takeover")]
+    LeaderTakeover = 14
 }

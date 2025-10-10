@@ -5,7 +5,6 @@
 @{
     ViewBag.Title = Labels.KeepCompensationLeave;
     var autoApproveRequest = (bool)ViewBag.AutoApproveRequest;
-    var hasOnBehalfRequestPermission = (bool)ViewBag.HasOnBehalfRequestPermission;
 }
 @section css{
     <link href="~/dist/styles/keepinview.create.css" rel="stylesheet" asp-append-version="true" />
@@ -47,14 +46,7 @@
                 @Html.LabelFor(model => model.Employee, new { @class = "control-label" })
             </div>
             <div class="input-form">
-                @if (hasOnBehalfRequestPermission)
-                {
-                    @Html.TextBoxFor(model => model.Employee, new { @class = "form-control", autocomplete = "off" })
-                }
-                else
-                {
-                    <strong>@Html.DisplayFor(model => model.Employee)</strong>
-                }
+                @Html.TextBoxFor(model => model.Employee, new { @class = "form-control", autocomplete = "off" })
             </div>
         </div>
         <div id="groupHalfDay" class="form-group">

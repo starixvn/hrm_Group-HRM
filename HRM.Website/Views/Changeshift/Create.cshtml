@@ -5,7 +5,6 @@
 @{
     ViewBag.Title = Labels.Create;
     var autoApproveRequest = (bool)ViewBag.AutoApproveRequest;
-    var hasOnBehalfRequestPermission = (bool)ViewBag.HasOnBehalfRequestPermission;
     var today = DateTimeOffset.Now.DateTime.ToClientTimeZone().Date;
 }
 @section css{
@@ -32,14 +31,7 @@
                 @Html.LabelFor(model => model.Employee, new { @class = "control-label" })
             </div>
             <div class="input-form">
-                @if (hasOnBehalfRequestPermission)
-                {
-                    @Html.TextBoxFor(model => model.Employee, new { @class = "form-control", autocomplete = "off" })
-                }
-                else
-                {
-                    <strong>@Html.DisplayFor(model => model.Employee)</strong>
-                }
+                @Html.TextBoxFor(model => model.Employee, new { @class = "form-control", autocomplete = "off" })
             </div>
             @Html.ValidationMessageFor(model => model.Employee)
         </div>

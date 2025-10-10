@@ -22,8 +22,6 @@
     <a class="step">@Labels.CompanySpace</a> <a class="step">@ViewBag.Title</a>
 }
 <h2 class="page-title">@ViewBag.Title</h2>
-@if (hasPermissionToEdit)
-{
     <div class="filter">
         @using (Html.BeginForm())
         {
@@ -71,23 +69,24 @@
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary">@Labels.Submit</button>
                     <button type="button" class="btn btn-excel" id="btnExcel">@Labels.Excel</button>
-                    @if (Model.IsShowCloseBalance)
+                    @if (hasPermissionToEdit)
                     {
-                        <a href="javascript:;" class="btn btn-request" id="resetblc">
+                        @if (Model.IsShowCloseBalance)
+                        {
+                            <a href="javascript:;" class="btn btn-request" id="resetblc">
+                                <span class="fa fa-plus"></span>
+                                @Labels.CloseBalance
+                            </a>
+                        }
+                        <a href="javascript:;" class="btn btn-request" id="addadj">
                             <span class="fa fa-plus"></span>
-                            @Labels.CloseBalance
+                            @Labels.Adjustment
                         </a>
                     }
-                    
-                    <a href="javascript:;" class="btn btn-request" id="addadj">
-                        <span class="fa fa-plus"></span>
-                        @Labels.Adjustment
-                    </a>
                 </div>
             </div>
         }
     </div>
-}
 
 <table class="table table-custom" id="data">
     <thead>

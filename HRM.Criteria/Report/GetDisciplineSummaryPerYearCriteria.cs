@@ -11,11 +11,9 @@ public class GetDisciplineSummaryPerYearCriteria : CriteriaBase
     public string TeamIds { get; set; }
     public int? EmployeeId { get; set; }
     public bool? IsLocal { get; set; }
-    public int ApproverId { get; set; }
     public bool IsShowAll { get; set; }
-    public string RoleIds { get; set; }
 
-    public override bool IsValid() => CompanyId > 0 && FromDate <= ToDate && ApproverId > 0;
+    public override bool IsValid() => CompanyId > 0 && FromDate <= ToDate;
 
     public override string GetSettingKey() => "Report_DisciplineSummaryPerYear";
 }

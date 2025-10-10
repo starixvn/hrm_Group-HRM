@@ -32,6 +32,7 @@ table.table.table-custom {
         color: #fff;
         position: sticky;
         top: -10px;
+        z-index: 1;
 
         tr {
             input {
@@ -128,6 +129,9 @@ table.table.table-custom {
                 .icon-delete {
                     color: #da5350;
                     cursor: pointer;
+                    text-decoration: none;
+                    outline: 0;
+                    font-size: 17px;
                 }
 
                 .icon-delete.fa-disabled {

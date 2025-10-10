@@ -3,7 +3,7 @@
 using Fanex.Data;
 using Fanex.Data.Repository;
 
-public class GetTransactionByEmployeeIdCriteria : CriteriaBase
+public class GetHospitalizationLeaveTransactionByEmployeeIdCriteria : CriteriaBase
 {
     [SpParam(SqlParamName = "EmpId")]
     public int EmployeeId { get; set; }

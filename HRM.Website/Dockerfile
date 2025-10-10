@@ -21,8 +21,18 @@ RUN dotnet nuget add source https://nuget.nexdev.net/api/v2
 RUN --mount=type=cache,target=/root/.nuget/packages \
     dotnet restore -v n -r linux-x64 HRM.Website/HRM.Website.csproj
 
-# Copy source codes
-COPY . .
+# Copy source codes (only necessary directories)
+COPY HRM.Website/ HRM.Website/
+COPY HRM.Criteria/ HRM.Criteria/
+COPY HRM.Letstalk.Core/ HRM.Letstalk.Core/
+COPY HRM.Models/ HRM.Models/
+COPY HRM.Services/ HRM.Services/
+COPY HRM.Core/ HRM.Core/
+COPY HRM.MailDeliver/ HRM.MailDeliver/
+COPY HRM.Resources/ HRM.Resources/
+COPY HRM.Repositories/ HRM.Repositories/
+COPY HRM.Controllers/ HRM.Controllers/
+COPY HRM.ViewModels/ HRM.ViewModels/
 
 WORKDIR /src/HRM.Website
 RUN --mount=type=cache,target=/root/.nuget/packages \

@@ -3,7 +3,7 @@ import 'tipsy/src/javascripts/jquery.tipsy';
 import 'floatthead/dist/jquery.floatThead';
 import axios from 'axios';
 
-import { axiosError, alert, initDatepicker, resolveClientUrl, floatThead } from '../../shared/common.functions';
+import { axiosError, alert, initDatepicker, resolveClientUrl, floatThead, blockUI, unblockUI } from '../../shared/common.functions';
 import '../../date';
 import '../../shared/multiselect-tree-view';
 import '../../shared/employee.search.in.team';
@@ -17,9 +17,12 @@ const annualLeaveBalance = (function ($) {
         }).then(response => {
             $('#Team').multiSelectTreeView({
                 data: response.data,
-                selectedItems: $('#TeamIds').val(),
+                isSelectedAll: true,
                 hasSearchBox: true
             });
+
+            loadTableData();
+            
         }).catch(axiosError);
     }
 
@@ -36,12 +39,32 @@ const annualLeaveBalance = (function ($) {
             + '&Category=' + $('#Category').val());
     }
 
+    function loadTableData() {
+        var url = submitData('AnnualLeaveBalance/index?year=');
+        blockUI();
+        axios({
+            url: url,
+            method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        }).then(response => {
+            if (response.data) {
+                var $response = $(response.data);
+                var $newTable = $response.find('table#data');
+                if ($newTable.length > 0) {
+                    $('table#data').replaceWith($newTable);
+                    floatThead('table#data');
+                    $('.tooltip-tipsy').tipsy({ html: true, gravity: $.fn.tipsy.autoWE });
+                    initCheckAllEvent();
+                    initCheckSingleRowEvent();
+                }
+            }
+        }).catch(axiosError).then(() => unblockUI());
+    }
+
     function initSubmitFilterEvent() {
         $('.filter form').submit(function (e) {
             e.preventDefault();
-            var postToUrl = 'AnnualLeaveBalance/index?year=';
-            var url = submitData(postToUrl);
-            location.href = url;
+            loadTableData();
         });
     }
 
@@ -131,8 +154,8 @@ const annualLeaveBalance = (function ($) {
                             }).then(response => {
                                 if (response.data.isSuccessful) {
                                     alert('Adjust successfully.');
-                                    setInterval(function () {
-                                        document.location = resolveClientUrl('annualleavebalance/index');
+                                    setTimeout(function () {
+                                        loadTableData();
                                     }, 3000);
                                 } else {
                                     showErrorMsg($form, response.data.message);

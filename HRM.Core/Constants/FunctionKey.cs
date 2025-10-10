@@ -20,8 +20,6 @@ public static class FunctionKey
 
     public const string CanFilterUnpaidLeaveSummary = "CanFilterUnpaidLeaveSummary";
 
-    public const string CanOnBehalfOthers = "CanOnBehalfOthers";
-
     public const string VerifyRequest = "VerifyRequest";
     public const string ApproveRequest = "ApproveRequest";
     public const string ProcessRequest = "ProcessRequest";
@@ -106,4 +104,8 @@ public static class FunctionKey
     public const string JobLevelManagement = "JobLevelManagement";
 
     public const string ShowSalaryCurrencyInfo = "ShowSalaryCurrencyInfo";
+
+    // Data permission
+    public const string DataPermission_AllEmployees = "AllEmployees";
+    public const string DataPermission_EmployeesAssigned = "EmployeesAssigned";
 }

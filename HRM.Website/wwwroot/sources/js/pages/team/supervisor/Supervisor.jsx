@@ -4,15 +4,10 @@ import { toast } from 'react-toastify';
 import axios from 'axios';
 
 import { axiosError, blockUI, unblockUI, resolveClientUrl } from '../../../shared/common.functions';
-import { RequestType } from '../../../shared/constants';
+import { RequestType, PageType } from '../../../shared/constants';
 import { editTeamSupervisor, editEmployeeSupervisor, reorderSupervisor } from '../supervisor/common.functions';
 import ToastLayout from '../../../shared/layouts/ToastLayout';
 import Table from './table/table';
-
-const PageType = {
-    Team: 1,
-    Employee: 2
-};
 
 export default class Supervisor extends Component {
     constructor(props) {

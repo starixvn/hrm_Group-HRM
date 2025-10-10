@@ -32,8 +32,11 @@ public class OvertimeController(
     [HttpGet]
     public async Task<IActionResult> EmployeeView(MonthlyOvertimeRequestViewModel model)
     {
-        model.Employee ??= EmployeeSession.DisplayName;
-        model.EmployeeId = model.EmployeeId <= 0 ? EmployeeSession.EmpId : model.EmployeeId;
+        if (EmployeeSession.CompanyId != 0)
+        {
+            model.Employee ??= EmployeeSession.DisplayName;
+            model.EmployeeId = model.EmployeeId <= 0 ? EmployeeSession.EmpId : model.EmployeeId;
+        }
         model.OvertimeRequests = await overtimeService.GetMonthlyRequestByEmployeeId(model.EmployeeId, model.Year);
 
         Parallel.ForEach(model.OvertimeRequests, overTimeRequest =>

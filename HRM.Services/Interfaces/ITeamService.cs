@@ -31,6 +31,8 @@ public interface ITeamService
 
     Task<IEnumerable<Supervisor>> GetDisciplineManagerByTeamId(int teamId, bool isGroup = false);
 
+    Task<IEnumerable<Supervisor>> GetLeaderTakeoverManagerByTeamId(int teamId, bool isGroup = false);
+
     Task<CommandResult> EditTeamSupervisor(int actorId, int teamId, short roleId, IEnumerable<EditTeamSupervisor> supervisors);
 
     Task<IEnumerable<DisciplineRule>> GetDisciplineRuleByTeam(int teamId);

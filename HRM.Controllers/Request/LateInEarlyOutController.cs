@@ -5,9 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Core;
-using Core.Constants;
 using Core.Enums;
-using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
 using HRM.Core.Services;
 using HRM.Criteria.Request.LateInEarlyOut;
@@ -54,22 +52,25 @@ public class LateInEarlyOutController(
 
     public async Task<IActionResult> Create()
     {
-        var supervisor = await requestService.GetVerifierAndApproverAsync(EmployeeSession.EmpId, RequestType.LateIn);
         var viewModel = new LateInEarlyOutRequestViewModel
         {
-            Employee = EmployeeSession.DisplayName,
             EmployeeId = EmployeeSession.EmpId,
             OnDate = DateTimeOffset.Now.DateTime.ToClientTimeZone().Date,
             Minute = DefaultMinutes,
             ReasonId = (byte)LateInEarlyOutReason.Other,
             RequestType = (byte)RequestType.LateIn,
-            Verifiers = supervisor.Verifiers,
-            Approvers = supervisor.Approvers
-        };
-        ViewBag.AutoApproveRequest = EmployeeSession.AutoApproveRequest;
-        ViewBag.HasOnBehalfRequestPermission = session.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
-            || session.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);
 
+        };
+
+        if (EmployeeSession.CompanyId != 0)
+        {
+            var supervisor = await requestService.GetVerifierAndApproverAsync(EmployeeSession.EmpId, RequestType.LateIn);
+            viewModel.Employee = EmployeeSession.DisplayName;
+            viewModel.Verifiers = supervisor.Verifiers;
+            viewModel.Approvers = supervisor.Approvers;
+        }
+
+        ViewBag.AutoApproveRequest = EmployeeSession.AutoApproveRequest;
         return View(viewModel);
     }
 

@@ -13,11 +13,11 @@ using GO.UserControl.Client.Core.Session;
 using HRM.Core.Services;
 using HRM.Criteria.Report;
 using HRM.Models.Report.DisciplineSummaryPerYear;
+using HRM.Services.Interfaces;
 using HRM.ViewModels.Report;
 using Microsoft.AspNetCore.Mvc;
 using Services.ExportExcel;
 using Services.Implement;
-using Services.Interfaces;
 
 [HrmPermission(Policy.Read, FunctionKey.DisciplineSummaryPerYear)]
 public class DisciplineSummaryPerYearController(
@@ -64,7 +64,6 @@ public class DisciplineSummaryPerYearController(
 
     private async Task<IList<DisciplineSummaryPerYear>> GetDisciplineSummaryAsync(DisciplineSummaryPerYearViewModel model)
     {
-        var roles = await roleService.GetByUserIdAsync(session.UserId);
         var criteria = new GetDisciplineSummaryPerYearCriteria
         {
             CompanyId = CurrentCompanyId,
@@ -73,19 +72,19 @@ public class DisciplineSummaryPerYearController(
             TeamIds = model.TeamId,
             IsLocal = model.IsLocal,
             EmployeeId = model.EmployeeId,
-            ApproverId = EmployeeSession.EmpId,
             IsShowAll = model.IsShowAll,
-            RoleIds = string.Join(",", roles.Select(x => x.RoleId))
         };
+
         var (employees, disciplines) = await baseService.FetchMultipleAsync<DisciplineSummaryPerYear, DisciplineSummaryPerYearDetail>(criteria);
-        var disciplineSummaryPerYears = employees.ToList();
-        foreach (var employee in disciplineSummaryPerYears)
+        var filteredEmployees = await employeeService.FilterByEmployeeDataPermission( employees, e => e.EmployeeId);
+        foreach (var employee in filteredEmployees)
         {
             var date = model.LengthOfService ? employee.CompanyDate : employee.JoinedDate;
             employee.LengthOfService = employeeService.CalculateLengthOfService(date, employee.MilitaryFromDate, employee.MilitaryToDate);
             employee.Disciplines = disciplines.Where(x => x.EmployeeId == employee.EmployeeId).ToList();
         }
 
-        return disciplineSummaryPerYears.ToList();
+        return filteredEmployees.ToList();
     }
+
 }

@@ -13,10 +13,6 @@ public class GetAnnualLeaveBalanceForJoinedDateCriteria : CriteriaBase
 
     public byte? IsLocal { get; set; }
 
-    public int? SupervisorId { get; set; }
-
-    public string Role { get; set; }
-
     public int CompanyId { get; set; }
 
     public string EmployeeStatusIds { get; set; }

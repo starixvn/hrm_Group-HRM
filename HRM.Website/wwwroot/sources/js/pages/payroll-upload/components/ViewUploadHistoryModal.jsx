@@ -3,7 +3,7 @@ import { Modal, ModalBody, ModalHeader, ModalTitle } from 'react-bootstrap';
 import toastr from 'toastr';
 import { toastOptions } from '../../../shared/common.functions';
 import { getPeriodTypeLabel } from '../constants/periodType';
-import salaryService from '../Service';
+import salaryService from '../service';
 
 const ViewUploadHistoryModal = () => {
     const [show, setShow] = useState(false);

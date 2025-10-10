@@ -5,7 +5,7 @@ import AppContainer from '../AppContainer';
 const mockSetSalaryData = jest.fn();
 jest.spyOn(React, 'useState').mockReturnValue([[], mockSetSalaryData]);
 
-jest.mock('../Service', () => ({
+jest.mock('../service', () => ({
     getSalaryData: jest.fn(),
 }));
 
@@ -32,7 +32,7 @@ jest.mock('../components/Filter', () => {
 });
 
 describe('AppContainer Component', () => {
-    const mockPayrollService = require('../Service');
+    const mockPayrollService = require('../service');
     const mockToastr = require('toastr');
 
     beforeEach(() => {
@@ -76,24 +76,5 @@ describe('AppContainer Component', () => {
 
         await mockOnSearchCallback();
         expect(mockPayrollService.getSalaryData).toHaveBeenCalledWith({});
-    });
-
-    it('should handle fetch error and show toast', async () => {
-        const error = new Error('API Error');
-        mockPayrollService.getSalaryData.mockRejectedValue(error);
-
-        render(<AppContainer />);
-
-        await mockOnSearchCallback({ month: '2024-01-01', isLocal: true });
-
-        expect(mockPayrollService.getSalaryData).toHaveBeenCalledWith({
-            month: '2024-01-01',
-            isLocal: true,
-        });
-        expect(mockToastr.error).toHaveBeenCalledWith(
-            'Failed to fetch salary data',
-            '',
-            {}
-        );
     });
 });

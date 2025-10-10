@@ -5,9 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Core;
-using Core.Constants;
 using Core.Enums;
-using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
 using HRM.Core.Services;
 using HRM.Criteria.Request.CheckInOut;
@@ -57,28 +55,29 @@ public class CheckInOutController(
     public async Task<IActionResult> Create()
     {
         var today = DateTimeOffset.Now.DateTime.ToClientTimeZone();
-        var supervisor = await requestService.GetVerifierAndApproverAsync(EmployeeSession.EmpId, RequestType.CheckIn);
         var viewModel = new CheckInOutRequestViewModel
         {
-            Employee = EmployeeSession.DisplayName,
             EmployeeId = EmployeeSession.EmpId,
             ForDate = today.Date,
             AttendantDate = today.Date,
             Hour = today.Hour,
             Minute = today.Minute,
             RequestTypeId = (byte)RequestType.CheckIn,
-            Verifiers = supervisor.Verifiers,
-            Approvers = supervisor.Approvers
         };
+
+        if (EmployeeSession.CompanyId != 0)
+        {
+            var supervisor = await requestService.GetVerifierAndApproverAsync(EmployeeSession.EmpId, RequestType.CheckIn);
+            viewModel.Employee = EmployeeSession.DisplayName;
+            viewModel.Verifiers = supervisor.Verifiers;
+            viewModel.Approvers = supervisor.Approvers;
+        }
 
         var shift = await shiftService.GetByDateAsync(EmployeeSession.EmpId, today.Date);
         CheckShiftFromToFormat(viewModel, shift);
         viewModel.Shift = shift == null ? string.Empty : shift.Name;
         ViewBag.Shift = shift;
         ViewBag.AutoApproveRequest = EmployeeSession.AutoApproveRequest;
-        ViewBag.HasOnBehalfRequestPermission = session.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Read)
-            || session.HasPermissionOnFunction(FunctionKey.CanOnBehalfOthers, Policy.Host);
-
         return View(viewModel);
     }
 
