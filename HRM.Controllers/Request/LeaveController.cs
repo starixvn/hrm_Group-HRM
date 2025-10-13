@@ -82,7 +82,7 @@ public class LeaveController(
         };
         if (EmployeeSession.CompanyId != 0)
         {
-            var supervisor = await requestService.GetVerifierAndApproverAsync(EmployeeSession.EmpId, RequestType.CheckIn);
+            var supervisor = await requestService.GetVerifierAndApproverAsync(EmployeeSession.EmpId, RequestType.Leave);
             model.EmployeeLeaveBalance = await leaveRequestService.GetLeaveBalance(EmployeeSession.EmpId, null, null);
             model.Employee = EmployeeSession.DisplayName;
             model.Verifiers = supervisor.Verifiers;
