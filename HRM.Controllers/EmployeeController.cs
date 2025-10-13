@@ -314,18 +314,7 @@ public class EmployeeController(
             }
         }
 
-        model.Coutries = await commonDataService.GetAllCountry();
-        var supervisors = (await GetSupervisors(model.Id)).ToList();
-        model.Verifier = GetVerifiers(supervisors);
-        model.Approver = GetApproverList(supervisors);
-        model.Disciplinarian = GetDisciplineSupervisors(supervisors);
-        model.EmpShiftList = GetShiftMonitors(supervisors);
-        model.ActingEmpList = GetActingSupervisors(supervisors);
-        ViewBag.EnableGroupDate = await commonDataService.IsEnableGroupDateAsync();
-        ViewBag.Avatar = await GetAvatarUrl(model.Code);
-
-        await ComposeViewBagsForEditEmployee();
-
+        await PrepareEmployeeModelForView(model);
         return View(model);
     }
 
@@ -356,6 +345,21 @@ public class EmployeeController(
         var avatarPath = $"{CurrentCompanyId}/{avatarName}";
         var avatarUrl = await minIOService.GetFilePath(Bucket.Avatar, avatarPath, "default-avatar.jpg");
         return avatarUrl;
+    }
+
+    private async Task PrepareEmployeeModelForView(Employee model)
+    {
+        model.Coutries = await commonDataService.GetAllCountry();
+        var supervisors = (await GetSupervisors(model.Id)).ToList();
+        model.Verifier = GetVerifiers(supervisors);
+        model.Approver = GetApproverList(supervisors);
+        model.Disciplinarian = GetDisciplineSupervisors(supervisors);
+        model.EmpShiftList = GetShiftMonitors(supervisors);
+        model.ActingEmpList = GetActingSupervisors(supervisors);
+        ViewBag.EnableGroupDate = await commonDataService.IsEnableGroupDateAsync();
+        ViewBag.Avatar = await GetAvatarUrl(model.Code);
+
+        await ComposeViewBagsForEditEmployee();
     }
 
     [HttpPost]
@@ -748,5 +752,29 @@ public class EmployeeController(
         }
 
         return category;
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    [HrmPermission(Policy.Host, FunctionKey.EmployeeManagement)]
+    public async Task<IActionResult> Transfer(EmployeeTransfer model)
+    {
+        var newEmpId = await employeeService.TransferEmployee(model);
+        var param = MappingEditEmployeeParam(model);
+        param.EmployeeId = newEmpId;
+
+        var commandResult = await employeeService.EditAsync(EmployeeSession.EmpId, param, model.TargetCompanyId);
+        if (commandResult.IsSuccessful)
+        {
+            await UpdateUserInfo(model.UserId, param);
+        }
+        else
+        {
+            ViewBag.Updated = false;
+            ModelState.AddModelError(string.Empty, commandResult.Message);
+        }
+
+        await PrepareEmployeeModelForView(model);
+        return View(model);
     }
 }

@@ -466,4 +466,21 @@ public class EmployeeService(
 
         return data.Where(item => assignedEmployeeIds.Contains(employeeIdSelector(item)));
     }
+
+    public async Task<int> TransferEmployee(EmployeeTransfer model)
+    {
+        var criteria = new EmployeeTransferCriteria
+        {
+            EmpId = model.Id,
+            GroupId = model.Team.Id,
+            TargetCompanyId = model.TargetCompanyId,
+            Remark = model.Remark,
+            CreatedBy = session.Get<EmployeeSession>(SessionKey.Employee).EmpId,
+            TransferInDate = model.TransferInDate
+        };
+        var result = await baseService.GetDataAsync<int>(criteria);
+        var newEmpId = result.First();
+
+        return newEmpId;
+    }
 }
