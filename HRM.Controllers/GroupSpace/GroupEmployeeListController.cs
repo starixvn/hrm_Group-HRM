@@ -206,6 +206,14 @@ public class GroupEmployeeListController(
         return View();
     }
 
+    [HttpGet]
+    [HrmPermission(Policy.Host, FunctionKey.GroupEmployeeList)]
+    public async Task<IActionResult> GetInfoEmployeeTransfer(int id, short companyId)
+    {
+        var employee = await employeeService.GetEmployeeTransferByIdAsync(id, companyId);
+        return Json(employee);
+    }
+
     public async Task<IActionResult> GroupEmployeeList(GroupEmployeeViewModel model)
     {
         var employees = new List<GroupEmployeeModel>();

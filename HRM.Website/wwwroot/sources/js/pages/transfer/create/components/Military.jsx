@@ -1,9 +1,9 @@
 import React from 'react';
 import { Field } from 'formik';
 
-const Military = ({ isOpen, onToggle }) => {
+const Military = ({ isOpen, onToggle, employeeData }) => {
     return (
-        <div className='panel-group'>
+        <div className={`panel-group ${!isOpen ? 'collapsed' : ''}`}>
             <div className='panel-heading' onClick={onToggle}>
                 <h4 className='panel-title'>
                     <i className={`fa fa-chevron-${isOpen ? 'down' : 'right'}`}></i>
@@ -11,36 +11,37 @@ const Military = ({ isOpen, onToggle }) => {
                 </h4>
             </div>
             <div className={`panel-body ${!isOpen ? 'collapsed' : ''}`}>
-                    <div className='form-group'>
-                        <div className='label-form'>
-                            <label className='control-label'>
-                                Military Service
-                            </label>
-                        </div>
-                        <div className='select-form'>
-                            <Field
-                                name='militaryService'
-                                as='select'
-                                className='form-control'
-                            >
-                            </Field>
-                        </div>
+                <div className='form-group'>
+                    <div className='label-form'>
+                        <label className='control-label'>
+                            From
+                        </label>
                     </div>
-                    <div className='form-group'>
-                        <div className='label-form'>
-                            <label className='control-label'>
-                                Military ID
-                            </label>
-                        </div>
-                        <div className='select-form'>
-                            <Field
-                                name='militaryId'
-                                type='text'
-                                className='form-control'
-                            />
-                        </div>
+                    <div className='calendar-form'>
+                        <Field
+                            name='militaryFrom'
+                            type='date'
+                            className='form-control'
+                            value={employeeData && employeeData.militaryFrom || ''}
+                        />
                     </div>
                 </div>
+                <div className='form-group'>
+                    <div className='label-form'>
+                        <label className='control-label'>
+                            To
+                        </label>
+                    </div>
+                    <div className='calendar-form'>
+                        <Field
+                            name='militaryTo'
+                            type='date'
+                            className='form-control'
+                            value={employeeData && employeeData.militaryTo || ''}
+                        />
+                    </div>
+                </div>
+            </div>
         </div>
     );
 };

@@ -24,6 +24,7 @@ const AppContainer = () => {
     const [employees, setEmployees] = useState([]);
     const [teams, setTeams] = useState([]);
     const [selectedTeam, setSelectedTeam] = useState(null);
+    const [employeeData, setEmployeeData] = useState(null);
     const [formKey] = useState(0);
     const [currentStep, setCurrentStep] = useState(1);
     const [panelStates, setPanelStates] = useState({
@@ -178,8 +179,8 @@ const AppContainer = () => {
         if (!values.teamId || values.teamId === '') {
             errors.teamId = 'Team is required';
         }
-        
-        if (values.transferOutCompanyId && values.transferInCompanyId && 
+
+        if (values.transferOutCompanyId && values.transferInCompanyId &&
             String(values.transferOutCompanyId) === String(values.transferInCompanyId)) {
             errors.transferInCompanyId = 'Target Company must be different from current company';
         }
@@ -198,8 +199,116 @@ const AppContainer = () => {
             return;
         }
         
+        axios({
+            url: resolveClientUrl(`GroupEmployeeList/GetInfoEmployeeTransfer`),
+            method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
+            params: {
+                id: values.empId,
+                companyId: values.transferOutCompanyId ? parseInt(values.transferOutCompanyId, 10) : null
+            }
+        })
+            .then(response => {
+                console.log('Employee data:', response.data);
+
+                // Map employee data to form fields
+                const employee = response.data;
+                const mappedData = {
+                    // Personal Info
+                    employeeId: employee.code || '',
+                    fullName: employee.fullName || '',
+                    nickName: employee.nickName || '',
+                    employeeCard: employee.employeeCard || '',
+                    domainUsername: employee.domainUsername || '',
+                    gender: employee.gender || '',
+                    dateOfBirth: employee.dateOfBirth || '',
+                    placeOfBirth: employee.placeOfBirth || '',
+                    ethnic: employee.ethnic || '',
+                    native: employee.native || '',
+                    maritalStatus: employee.marriage || '',
+                    nationality: employee.countryCode || '',
+                    religion: employee.religion || '',
+                    idCardNumber: employee.cardNo || '',
+                    idCardIssueDate: employee.dateOfIdCard || '',
+                    idCardIssuePlace: employee.placeOfIdCard || '',
+                    passportNumber: employee.passportNo || '',
+                    passportIssueDate: employee.passportExp || '',
+                    passportExpiryDate: employee.passportExp || '',
+                    passportIssuePlace: employee.passportExp || '',
+                    taxCode: employee.taxCode || '',
+                    socialInsuranceNumber: employee.socialInsuranceNumber || '',
+                    healthInsuranceNumber: employee.healthInsuranceNumber || '',
+                    bankAccountNumber: employee.bankAccountNumber || '',
+                    bankName: employee.bankName || '',
+                    bankBranch: employee.bankBranch || '',
+                    qualification: employee.qualification || '',
+                    major: employee.major || '',
+
+                    // Military Info
+                    militaryFrom: employee.militaryFrom || '',
+                    militaryTo: employee.militaryTo || '',
+
+                    // Contact Info
+                    cellphone: employee.cellphone || '',
+                    homePhone: employee.homePhone || '',
+                    workEmail: employee.workEmail || '',
+                    permanentAddress: employee.permanentAddress || '',
+                    currentAddress: employee.currentAddress || '',
+                    pickupRemark: employee.pickupRemark || '',
+                    letstalk: employee.letstalk || '',
+
+                    // Information
+                    subCompany: employee.subCompany || '',
+                    team: employee.team || '',
+                    teamDate: employee.teamDate || '',
+                    jobTitle: employee.jobTitle || '',
+                    jobLevel: employee.jobLevel || '',
+                    managementGrade: employee.managementGrade || '',
+                    salaryStructure: employee.salaryStructure || '',
+                    promotionDate: employee.promotionDate || '',
+                    groupDate: employee.groupDate || '',
+                    companyDate: employee.companyDate || '',
+                    confirmedDate: employee.confirmedDate || '',
+                    resignedDate: employee.resignedDate || '',
+                    resignedReason: employee.resignedReason || '',
+                    lengthOfServiceByGroup: employee.lengthOfServiceByGroup || '',
+                    lengthOfServiceByCompany: employee.lengthOfServiceByCompany || '',
+
+                    // Policy
+                    allowClaimOT: employee.allowClaimOT || false,
+                    specialOT: employee.specialOT || '',
+                    workingDaysPerMonth: employee.workingDaysPerMonth || '',
+                    workingHoursPerWeek: employee.workingHoursPerWeek || '',
+                    workingHoursPerDay: employee.workingHoursPerDay || '',
+                    numberOfOffday: employee.numberOfOffday || '',
+                    leaveBalance: employee.leaveBalance || '',
+                    compensationLeaveBalance: employee.compensationLeaveBalance || '',
+
+                    // Permission
+                    member: employee.member || true,
+                    verifier: employee.verifier || true,
+                    approver: employee.approver || false,
+                    shiftCurrentWeekEditor: employee.shiftCurrentWeekEditor || true,
+                    onBehalf: employee.onBehalf || true,
+                    hr: employee.hr || true,
+                    disciplineManager: employee.disciplineManager || true,
+                    shiftArrange: employee.shiftArrange || true,
+                    localHr: employee.localHr || true,
+                    expatHr: employee.expatHr || true,
+                    hrAssistant: employee.hrAssistant || false
+                };
+
+                console.log('Mapped data:', mappedData);
+                setEmployeeData(mappedData);
+
         setCurrentStep(2);
         setSubmitting(false);
+            })
+            .catch(error => {
+                console.error('Error fetching employee data:', error);
+                setErrors({ general: 'Failed to load employee data' });
+                setSubmitting(false);
+            });
     };
 
     const handleSubmit = (values, { setSubmitting }) => {
@@ -227,12 +336,11 @@ const AppContainer = () => {
                 <Errors errors={errors} />
                 <Form className='form-horizontal'>
                     {currentStep === 1 && (
-                    <div className='transfer-step-1 transfer-info'>
+                        <div className='transfer-step-1 transfer-info'>
                         <div className='form-group'>
                             <div className='label-form'>
                                 <label className='control-label'>
                                     Employee
-                                    <span className='require'>*</span>
                                 </label>
                             </div>
                             <div className='select-form'>
@@ -251,15 +359,15 @@ const AppContainer = () => {
                         <div className='form-group'>
                             <div className='label-form'>
                                 <label className='control-label'>
-                                    Target Company<span className='require'>*</span>
+                                        Target Company
                                 </label>
                             </div>
                             <div className='select-form'>
                                 <Field
-                                    name='transferInCompanyId'
+                                        name='transferInCompanyId'
                                     as='select'
                                     className='form-control'
-                                    value={initialValues.transferInCompanyId}
+                                        value={initialValues.transferInCompanyId}
                                     onChange={(e) => handleCompanyChange(e.target.value)}>
                                     <option value='' />
                                     {companies
@@ -275,7 +383,7 @@ const AppContainer = () => {
                         <div className='form-group'>
                             <div className='label-form'>
                                 <label className='control-label'>
-                                    Team<span className='require'>*</span>
+                                        Team
                                 </label>
                             </div>
                             <div className='select-form'>
@@ -283,7 +391,7 @@ const AppContainer = () => {
                                     data={teams}
                                     isSelectedAll={false}
                                     hasSearchBox={true}
-                                    leafOnly={true}
+                                        leafOnly={true}
                                     onChange={handleTeamChange}
                                 />
                             </div>
@@ -311,7 +419,7 @@ const AppContainer = () => {
                                 type='button'
                                 className='btn btn-primary'
                                 id='btnNext'
-                                onClick={() => handleNext(values, { setErrors, setSubmitting: () => {} })}>
+                                    onClick={() => handleNext(values, { setErrors, setSubmitting: () => { } })}>
                                 Next
                             </button>
                             <a className='btn btn-default' onClick={handleGoBack}>
@@ -322,7 +430,7 @@ const AppContainer = () => {
                     )}
 
                     {currentStep === 2 && (
-                    <div className='transfer-info'>
+                        <div className='transfer-info'>
                         <div className='form-group'>
                             <button
                                 type='button'
@@ -332,30 +440,40 @@ const AppContainer = () => {
                             </button>
                         </div>
                         <div className='transfer-step-2'>
-                            <Personal 
-                                isOpen={panelStates.personal} 
-                                onToggle={() => togglePanel('personal')} 
-                            />
-                            <Military 
-                                isOpen={panelStates.military} 
-                                onToggle={() => togglePanel('military')} 
-                            />
-                            <Contact 
-                                isOpen={panelStates.contact} 
-                                onToggle={() => togglePanel('contact')} 
-                            />
-                            <Information 
-                                isOpen={panelStates.information} 
-                                onToggle={() => togglePanel('information')} 
-                            />
-                            <Policy 
-                                isOpen={panelStates.policy} 
-                                onToggle={() => togglePanel('policy')} 
-                            />
-                            <Permission 
-                                isOpen={panelStates.permission} 
-                                onToggle={() => togglePanel('permission')} 
-                            />
+                                <div>
+                                    <Personal
+                                        isOpen={panelStates.personal}
+                                        onToggle={() => togglePanel('personal')}
+                                        employeeData={employeeData}
+                                    />
+                                    <Military
+                                        isOpen={panelStates.military}
+                                        onToggle={() => togglePanel('military')}
+                                        employeeData={employeeData}
+                                    />
+                                    <Contact
+                                        isOpen={panelStates.contact}
+                                        onToggle={() => togglePanel('contact')}
+                                        employeeData={employeeData}
+                                    />
+                                </div>
+                                <div>
+                                    <Information
+                                        isOpen={panelStates.information}
+                                        onToggle={() => togglePanel('information')}
+                                        employeeData={employeeData}
+                                    />
+                                    <Policy
+                                        isOpen={panelStates.policy}
+                                        onToggle={() => togglePanel('policy')}
+                                        employeeData={employeeData}
+                                    />
+                                    <Permission
+                                        isOpen={panelStates.permission}
+                                        onToggle={() => togglePanel('permission')}
+                                        employeeData={employeeData}
+                                    />
+                        </div>
                         </div>
                         
                         <div className='form-group'>
