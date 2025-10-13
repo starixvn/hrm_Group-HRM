@@ -53,12 +53,14 @@ export default class TreeMultiselect extends React.Component {
         isSelectedAll: PropTypes.bool,
         onChange: PropTypes.func,
         hasSearchBox: PropTypes.bool,
+        leafOnly: PropTypes.bool,
     }
 
     static defaultProps = {
         data: [],
         isSelectedAll: false,
         hasSearchBox: false,
+        leafOnly: false,
         onChange: function () { }
     }
 
@@ -139,6 +141,7 @@ export default class TreeMultiselect extends React.Component {
                             data={item}
                             floatData={floatData}
                             onSelect={this.handleSelect}
+                            leafOnly={this.props.leafOnly}
                         />
                     </li>
                 </ul>

@@ -96,6 +96,7 @@ module.exports = {
         [`${styleDistPath}/salary-structure.create`]: `${styleSourcePath}/pages/salary-structure/create.scss`,
         [`${styleDistPath}/company.index`]: `${styleSourcePath}/pages/company/index.scss`,
         [`${styleDistPath}/company.edit`]: `${styleSourcePath}/pages/company/edit.scss`,
+        [`${styleDistPath}/transfer.create`]: `${styleSourcePath}/pages/transfer/create.scss`,
 
         //
         [`${jsDistPath}/main`]: "./sources/js/main.js",
@@ -223,5 +224,6 @@ module.exports = {
         [`${jsDistPath}/salary-structure.edit`]: `${jsSourcePath}/salary-structure/edit/index.jsx`,
         [`${jsDistPath}/company.home`]: `${jsSourcePath}/company/home/index.jsx`,
         [`${jsDistPath}/company.edit`]: `${jsSourcePath}/company/edit/index.jsx`,
+        [`${jsDistPath}/transfer.create`]: `${jsSourcePath}/transfer/create/index.jsx`,
     },
 };

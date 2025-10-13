@@ -14,7 +14,9 @@ export default class TreeNode extends PureComponent {
         return (
             <Fragment>
                 <div className="checkbox-wrapper">
-                    <input type="checkbox" id={checkboxElementId} checked={floatData[itemIndex].checked} onChange={this.handleChange} />
+                    {(data.isLeaf || !this.props.leafOnly) && (
+                        <input type="checkbox" id={checkboxElementId} checked={floatData[itemIndex].checked} onChange={this.handleChange} />
+                    )}
                     <label htmlFor={checkboxElementId}> {data.text}</label>
                 </div>
                 {

@@ -2157,4 +2157,7 @@
   <data name="LeaderTakeoverManager" xml:space="preserve">
     <value>Leader Takeover Manager </value>
   </data>
+  <data name="EmployeeTransfer" xml:space="preserve">
+     <value>Employee Transfer</value>
+  </data>
 </root>

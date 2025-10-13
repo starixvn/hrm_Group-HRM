@@ -38,7 +38,8 @@ public class GroupEmployeeListController(
     IBaseService baseService,
     IEmployeeService employeeService,
     ISecondCompanyEmployeeService secondCompanyEmployeeService,
-    IPayrollManagementService payrollManagementService) : BaseController(session)
+    IPayrollManagementService payrollManagementService
+) : BaseController(session)
 #pragma warning restore S107 // Methods should not have too many parameters
 {
     [HrmPermission(Policy.Read, FunctionKey.GroupEmployeeList)]
@@ -47,7 +48,9 @@ public class GroupEmployeeListController(
         var teams = await teamService.GetAllAsync();
         var companies = await companyService.GetAllCompany();
 
-        var selectedTeamIds = !string.IsNullOrEmpty(teamIds) ? teamIds : string.Join(",", teams.Select(x => x.Id));
+        var selectedTeamIds = !string.IsNullOrEmpty(teamIds)
+            ? teamIds
+            : string.Join(",", teams.Select(x => x.Id));
 
         var model = new GroupEmployeeViewModel
         {
@@ -55,7 +58,7 @@ public class GroupEmployeeListController(
             CurrentPage = Constants.CurrentPage,
             ItemsPerPage = Constants.ItemsPerPage,
             TeamIds = selectedTeamIds,
-            CompanyIds = string.Join(",", companies.Select(c => c.CompanyId))
+            CompanyIds = string.Join(",", companies.Select(c => c.CompanyId)),
         };
 
         return View(model);
@@ -77,26 +80,36 @@ public class GroupEmployeeListController(
             CompanyIds = model.CompanyIds,
             ActorId = EmployeeSession.EmpId,
             IsCtrID = ParseBool(model.CtrIDs),
-            IsOutsource = ParseBool(model.Outsources)
+            IsOutsource = ParseBool(model.Outsources),
         };
         var employees = await baseService.GetDataAsync<GroupEmployeeModel>(criteria);
         employees = FilterEmployeeByView(employees);
 
-        Parallel.ForEach(employees, e =>
-        {
-            e.BasicSalary = e.Salary != null ? payrollManagementService.DecryptSalary(e.Salary) : null;
-        });
+        Parallel.ForEach(
+            employees,
+            e =>
+            {
+                e.BasicSalary =
+                    e.Salary != null ? payrollManagementService.DecryptSalary(e.Salary) : null;
+            }
+        );
 
         var pagerOption = new PagerOptionModel
         {
             CurrentPage = model.CurrentPage,
             ItemsPerPage = model.ItemsPerPage,
-            TotalItem = criteria.TotalRow ?? 0
+            TotalItem = criteria.TotalRow ?? 0,
         };
         ViewBag.PagerOption = pagerOption;
 
-        ViewBag.HasPermissionToEdit = session.HasPermissionOnFunction(FunctionKey.GroupEmployeeList, Policy.Host);
-        ViewBag.ShowSalaryCurrency = session.HasPermissionOnFunction(FunctionKey.ShowSalaryCurrencyInfo, Policy.Read);
+        ViewBag.HasPermissionToEdit = session.HasPermissionOnFunction(
+            FunctionKey.GroupEmployeeList,
+            Policy.Host
+        );
+        ViewBag.ShowSalaryCurrency = session.HasPermissionOnFunction(
+            FunctionKey.ShowSalaryCurrencyInfo,
+            Policy.Read
+        );
         var isDisabled = enableUser is false;
         var isDeleted = isDeleteUser is true;
         var isAll = !enableUser.HasValue && !isDeleteUser.HasValue;
@@ -105,7 +118,9 @@ public class GroupEmployeeListController(
         return PartialView("_ListEmployee", employees);
     }
 
-    private IEnumerable<GroupEmployeeModel> FilterEmployeeByView(IEnumerable<GroupEmployeeModel> employees)
+    private IEnumerable<GroupEmployeeModel> FilterEmployeeByView(
+        IEnumerable<GroupEmployeeModel> employees
+    )
     {
         if (session.HasPermissionOnFunction(FunctionKey.GroupEmployeeList_ViewAll, Policy.Read))
         {
@@ -116,25 +131,58 @@ public class GroupEmployeeListController(
 
         if (session.HasPermissionOnFunction(FunctionKey.GroupEmployeeList_BUView, Policy.Read))
         {
-            empIds.AddRange(employees.Where(e => e.UnitPICEmpId == EmployeeSession.EmpId ||
-                    (!string.IsNullOrWhiteSpace(e.UnitSupporterEmpId) &&
-                     e.UnitSupporterEmpId.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).ToList().Exists(id => id == EmployeeSession.EmpId.ToString())))
-                .Select(e => e.EmpId)
-                .ToList());
+            empIds.AddRange(
+                employees
+                    .Where(e =>
+                        e.UnitPICEmpId == EmployeeSession.EmpId
+                        || (
+                            !string.IsNullOrWhiteSpace(e.UnitSupporterEmpId)
+                            && e.UnitSupporterEmpId.Split(
+                                    ',',
+                                    StringSplitOptions.RemoveEmptyEntries
+                                        | StringSplitOptions.TrimEntries
+                                )
+                                .ToList()
+                                .Exists(id => id == EmployeeSession.EmpId.ToString())
+                        )
+                    )
+                    .Select(e => e.EmpId)
+                    .ToList()
+            );
         }
 
         if (session.HasPermissionOnFunction(FunctionKey.GroupEmployeeList_DeptView, Policy.Read))
         {
-            empIds.AddRange(employees.Where(e => e.DepartmentPICId == EmployeeSession.EmpId ||
-                (!string.IsNullOrWhiteSpace(e.DepartmentSupporterEmpId) &&
-                 e.DepartmentSupporterEmpId.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries).ToList().Exists(id => id == EmployeeSession.EmpId.ToString())))
-                .Select(e => e.EmpId)
-                .ToList());
+            empIds.AddRange(
+                employees
+                    .Where(e =>
+                        e.DepartmentPICId == EmployeeSession.EmpId
+                        || (
+                            !string.IsNullOrWhiteSpace(e.DepartmentSupporterEmpId)
+                            && e.DepartmentSupporterEmpId.Split(
+                                    ',',
+                                    StringSplitOptions.RemoveEmptyEntries
+                                        | StringSplitOptions.TrimEntries
+                                )
+                                .ToList()
+                                .Exists(id => id == EmployeeSession.EmpId.ToString())
+                        )
+                    )
+                    .Select(e => e.EmpId)
+                    .ToList()
+            );
         }
 
         var distinctEmpIds = empIds.Distinct().ToList();
 
         return employees.Where(e => distinctEmpIds.Contains(e.EmpId));
+    }
+
+    [HttpGet]
+    [HrmPermission(Policy.Host, FunctionKey.GroupEmployeeList)]
+    public IActionResult Transfer()
+    {
+        return View();
     }
 
     public async Task<IActionResult> GroupEmployeeList(GroupEmployeeViewModel model)
@@ -152,21 +200,22 @@ public class GroupEmployeeListController(
                 CompanyIds = model.CompanyIds,
             };
             employees = (await baseService.GetDataAsync<GroupEmployeeModel>(criteria)).ToList();
-            employees = FilterEmployeeByView(employees)
-                .ToList();
+            employees = FilterEmployeeByView(employees).ToList();
         }
 
         return Json(employees);
     }
 
-    private static (bool? enableUser, bool? isDeleteUser) ParseEmployeeStatus(string employeeStatuses)
+    private static (bool? enableUser, bool? isDeleteUser) ParseEmployeeStatus(
+        string employeeStatuses
+    )
     {
         return employeeStatuses switch
         {
             "1" => (true, null),
             "2" => (false, null),
             "3" => (null, true),
-            _ => (null, null)
+            _ => (null, null),
         };
     }
 
@@ -175,11 +224,14 @@ public class GroupEmployeeListController(
         {
             "1" => true,
             "0" => false,
-            _ => null
+            _ => null,
         };
 
     [HrmPermission(Policy.Read, FunctionKey.GroupEmployeeList)]
-    public async Task<IActionResult> ExportExcel(GroupEmployeeViewModel model, bool isEmployeeListExport)
+    public async Task<IActionResult> ExportExcel(
+        GroupEmployeeViewModel model,
+        bool isEmployeeListExport
+    )
     {
         var (enableUser, isDeleteUser) = ParseEmployeeStatus(model.EmployeeStatus);
 
@@ -193,7 +245,7 @@ public class GroupEmployeeListController(
             CompanyIds = model.CompanyIds,
             ActorId = EmployeeSession.EmpId,
             IsCtrID = ParseBool(model.CtrIDs),
-            IsOutsource = ParseBool(model.Outsources)
+            IsOutsource = ParseBool(model.Outsources),
         };
 
         var profiles = await baseService.GetDataAsync<GroupEmployeeModel>(criteria);
@@ -246,7 +298,7 @@ public class GroupEmployeeListController(
         {
             FromDate = DateTimeOffset.Now.DateTime.ToClientTimeZone(),
             ToDate = DateTimeOffset.Now.DateTime.ToClientTimeZone(),
-            TeamIds = teamIds
+            TeamIds = teamIds,
         };
 
         return await baseService.GetDataAsync<EmployeeWorkFromHome>(criteria);
@@ -265,7 +317,7 @@ public class GroupEmployeeListController(
                 Code = employee.Code,
                 FullName = employee.FullName,
                 NickName = employee.NickName,
-                CompanyName = employee.CompanyName
+                CompanyName = employee.CompanyName,
             };
             return View(model);
         }
@@ -282,14 +334,17 @@ public class GroupEmployeeListController(
         {
             if (model.CtrId is < 1 or > int.MaxValue)
             {
-                ModelState.AddModelError(nameof(model.CtrId), $"Ctr ID must be between 1 and {int.MaxValue}.");
+                ModelState.AddModelError(
+                    nameof(model.CtrId),
+                    $"Ctr ID must be between 1 and {int.MaxValue}."
+                );
             }
 
             var command = new UpdateEmployeeCommand
             {
                 EmpId = model.EmpId,
                 CtrId = model.CtrId,
-                ModifiedBy = EmployeeSession.EmpId
+                ModifiedBy = EmployeeSession.EmpId,
             };
             var result = await baseService.ExecuteNonQueryAsync(command);
             if (result.IsSuccessful)
@@ -354,7 +409,7 @@ public class GroupEmployeeListController(
         {
             EmpId = empId,
             Role = null,
-            RequestType = null
+            RequestType = null,
         };
         return await employeeService.GetListSupervisorNameAsync(criteria);
     }
@@ -382,7 +437,7 @@ public class GroupEmployeeListController(
         {
             ExcludeIds = excludeIds ?? string.Empty,
             Query = query.Trim(),
-            RoleIds = roleIds
+            RoleIds = roleIds,
         };
         var employees = await employeeService.GetEmployeesByRoleAsync(criteria);
 
@@ -417,7 +472,7 @@ public class GroupEmployeeListController(
         {
             Id = c.CompanyId,
             Text = c.Name,
-            IsLeaf = true
+            IsLeaf = true,
         });
 
         return Json(dropdownList);
@@ -433,11 +488,7 @@ public class GroupEmployeeListController(
         var orgchart = GetOrgChart(units, departments, teams);
         var teamIds = string.Join(",", teams?.Select(t => t.Id));
 
-        var response = new GroupTeamMultiSelectViewModel
-        {
-            Data = orgchart,
-            TeamIds = teamIds
-        };
+        var response = new GroupTeamMultiSelectViewModel { Data = orgchart, TeamIds = teamIds };
 
         return Json(response);
     }
@@ -445,28 +496,37 @@ public class GroupEmployeeListController(
     private static IEnumerable<MultiSelectViewModel> GetOrgChart(
         IEnumerable<Unit> units,
         IEnumerable<Department> departments,
-        IEnumerable<GroupTeamModel> teams)
+        IEnumerable<GroupTeamModel> teams
+    )
     {
         departments = departments.Where(d => teams.Any(t => t.DepartmentId == d.Id));
-        units = units.Where(u => departments.Any(d => d.Unit != null && d.Unit.Id == u.Id)).ToList();
+        units = units
+            .Where(u => departments.Any(d => d.Unit != null && d.Unit.Id == u.Id))
+            .ToList();
 
         var orgCharts = units.Select(u => new MultiSelectViewModel
         {
             Id = u.Id,
             Text = u.Code,
-            Items = departments.Where(d => d.Unit != null && d.Unit.Id == u.Id).Select(d => new MultiSelectViewModel
-            {
-                Id = d.Id,
-                Text = d.Name,
-                ParentId = u.Id,
-                Items = teams.Where(t => t.DepartmentId == d.Id).Select(s => new MultiSelectViewModel
+            Items = departments
+                .Where(d => d.Unit != null && d.Unit.Id == u.Id)
+                .Select(d => new MultiSelectViewModel
                 {
-                    Id = s.Id,
-                    Text = s.TeamName,
-                    ParentId = d.Id,
-                    IsLeaf = true
-                }).ToList()
-            }).ToList()
+                    Id = d.Id,
+                    Text = d.Name,
+                    ParentId = u.Id,
+                    Items = teams
+                        .Where(t => t.DepartmentId == d.Id)
+                        .Select(s => new MultiSelectViewModel
+                        {
+                            Id = s.Id,
+                            Text = s.TeamName,
+                            ParentId = d.Id,
+                            IsLeaf = true,
+                        })
+                        .ToList(),
+                })
+                .ToList(),
         });
 
         return orgCharts;
