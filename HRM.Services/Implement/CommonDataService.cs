@@ -19,7 +19,7 @@ using Resources;
 
 public interface ICommonDataService
 {
-    Task<IEnumerable<LookupData>> GetLookupDataByCodeAsync(string code, int companyId);
+    Task<IEnumerable<LookupData>> GetLookupDataByCodeAsync(string code, int? companyId);
 
     Task<IEnumerable<LookupData>> GetJobTitleAsync(string jobTitle, int companyId);
 
@@ -45,7 +45,7 @@ public class CommonDataService(
     IBaseService baseService,
     ITeamService teamService) : ICommonDataService
 {
-    public async Task<IEnumerable<LookupData>> GetLookupDataByCodeAsync(string code, int companyId)
+    public async Task<IEnumerable<LookupData>> GetLookupDataByCodeAsync(string code, int? companyId)
     {
         var criteria = new GetAllLookupDataCriteria
         {

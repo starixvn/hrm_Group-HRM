@@ -10,6 +10,8 @@ using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Models.Role;
 using GO.UserControl.Client.Core.Services;
 using GO.UserControl.Client.Core.Session;
+using HRM.Core.Services;
+using HRM.Criteria.Employee;
 using HRM.Models.SalaryStructure;
 using Interfaces;
 using Models;
@@ -19,6 +21,8 @@ using Resources;
 public interface IEmployeeLogService
 {
     Task<IEnumerable<LogObjectDetail>> GetLogDetailByIdAsync(int employeeId);
+
+    Task<IEnumerable<LogObjectDetail>> GetTransferHistoryWork(int empId);
 }
 
 public class EmployeeLogService(
@@ -28,7 +32,8 @@ public class EmployeeLogService(
     IJobLevelService jobLevelService,
     IManagementLevelService managementLevelService,
     IRoleService roleService,
-    ISalaryStructureService salaryStructureService) : IEmployeeLogService
+    ISalaryStructureService salaryStructureService,
+    IBaseService baseService) : IEmployeeLogService
 {
     private IEnumerable<MappingFieldConfig> mappingFields = new List<MappingFieldConfig>
     {
@@ -88,7 +93,9 @@ public class EmployeeLogService(
         new() { FieldName = "WorkingHoursbyWeek", DisplayName = Labels.WorkingHoursPerWeek },
         new() { FieldName = "SalaryStructureId", DisplayName = Labels.SalaryStructure },
         new() { FieldName = "SubCompanyName", DisplayName = Labels.SubCompany },
-        new() { FieldName = "AutoApproveRequest", DisplayName = Labels.AutoApproved }
+        new() { FieldName = "AutoApproveRequest", DisplayName = Labels.AutoApproved },
+        new() { FieldName = "Salary", DisplayName = Labels.Salary }
+
     };
 
     private IEnumerable<Team> Teams { get; set; }
@@ -103,7 +110,11 @@ public class EmployeeLogService(
 
     public async Task<IEnumerable<LogObjectDetail>> GetLogDetailByIdAsync(int employeeId)
     {
-        var companyId = session.Get<int>(SessionKey.CurrentCompanyId);
+        var companyId = session.Get<int?>(SessionKey.CurrentCompanyId);
+        if(companyId == Constants.GroupCompanyId)
+        {
+            companyId = null;
+        }
         Teams = await commonDataService.GetAllTeamAsync();
         JobTitles = await commonDataService.GetLookupDataByCodeAsync(Constants.JobTitle, companyId);
         JobLevels = await jobLevelService.GetJobLevel();
@@ -118,6 +129,28 @@ public class EmployeeLogService(
         MappingField(logs);
 
         return logs;
+    }
+
+    public async Task<IEnumerable<LogObjectDetail>> GetTransferHistoryWork(int empId)
+    {
+        var criteria = new GetTransferHistoryWorkCriteria
+        {
+            EmpId = empId
+        };
+
+        var historyWork = await baseService.GetDataAsync<LogObjectDetail>(criteria);
+
+        Parallel.ForEach(historyWork, hw =>
+        {
+            hw.Fields.Add(new FieldValue
+            {
+                DisplayName = Constants.Company,
+                OldValue = hw.OldData,
+                Value = hw.Data
+            });
+        });
+
+        return historyWork;
     }
 
     private void MappingField(IEnumerable<LogObjectDetail> logs)
@@ -192,6 +225,10 @@ public class EmployeeLogService(
                 MappingSalary(field);
                 break;
 
+            case "AutoApproveRequest":
+                MappingAutoApproved(field);
+                break;
+
             default:
                 // Handle other fields
                 break;
@@ -206,6 +243,23 @@ public class EmployeeLogService(
 
         _ = int.TryParse(field.Value, out teamId);
         field.Value = Teams.FirstOrDefault(x => x.Id == teamId)?.Name;
+    }
+
+    private static void MappingAutoApproved(FieldValue field)
+    {
+        field.OldValue = GetYesNoEmptyValue(field.OldValue);
+
+        field.Value = GetYesNoEmptyValue(field.Value);
+    }
+
+    private static string GetYesNoEmptyValue(string value)
+    {
+        return value switch
+        {
+            "0" => Constants.No,
+            "1" => Constants.Yes,
+            _ => "",
+        };
     }
 
     private void MappingRole(FieldValue field)

@@ -67,17 +67,17 @@ public static class ServiceCollectionExtensions
         services.AddRedisCache(configuration.GetSection("fanex.caching.redis"));
 
         var redisConfig = configuration.GetSection("AuthSettings:RedisConfig").Value;
-        var redisMultiplexer = ConnectionMultiplexer.Connect(redisConfig);
+        //var redisMultiplexer = ConnectionMultiplexer.Connect(redisConfig);
 
-        services.AddDataProtection().PersistKeysToStackExchangeRedis(redisMultiplexer, "HRM.Website:ProtectionKeys");
+        //services.AddDataProtection().PersistKeysToStackExchangeRedis(redisMultiplexer, "HRM.Website:ProtectionKeys");
 
-        services.AddSingleton(redisMultiplexer);
+        //services.AddSingleton(redisMultiplexer);
 
-        services.AddStackExchangeRedisCache(options =>
-        {
-            options.Configuration = redisConfig;
-            options.InstanceName = "HRM.Website:Session:";
-        });
+        //services.AddStackExchangeRedisCache(options =>
+        //{
+        //    options.Configuration = redisConfig;
+        //    options.InstanceName = "HRM.Website:Session:";
+        //});
 
         return services;
     }

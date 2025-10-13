@@ -12,7 +12,7 @@ namespace HRM.Services.Implement;
 
 public class SalaryStructureService(IBaseService baseService) : ISalaryStructureService
 {
-    public async Task<IEnumerable<SalaryStructure>> GetSalaryStructureAsync(int companyId)
+    public async Task<IEnumerable<SalaryStructure>> GetSalaryStructureAsync(int? companyId)
     {
         var criteria = new GetSalaryStructureCriteria
         {

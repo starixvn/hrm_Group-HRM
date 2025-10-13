@@ -58,4 +58,8 @@ public static class Constants
     public const string AllIp = "0.0.0.0";
 
     public static readonly DateTime MinDate = new DateTimeOffset(2010, 1, 1, 0, 0, 0, TimeSpan.Zero).DateTime;
+
+    public const string UpdateProfile = "Update Profile";
+
+    public const string Company = "Company";
 }
