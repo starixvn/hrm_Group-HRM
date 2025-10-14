@@ -17,7 +17,6 @@ public class LogObjectDetail
     public string Nickname { get; set; }
     public string OldData { get; set; }
     public string Data { get; set; }
-    public string Action { get; set; }
 
     public IList<FieldValue> Fields { get; set; } = new List<FieldValue>();
 }

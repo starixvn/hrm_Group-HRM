@@ -104,9 +104,9 @@
         <Setting Key="NexVision_WorkingTimeRequest_GetRequestByDate" SpName="WorkingTimeRequest_GetRequestByDate" DbName="nexvision_HRM" Plain="0" />
         <Setting Key="Nex_WorkingTimeRequest_GetRequestHistory" SpName="WorkingTimeRequest_GetRequestHistory" DbName="nex_HRM" Plain="0" />
         <Setting Key="Lumi_WorkingTimeRequest_GetRequestHistory" SpName="WorkingTimeRequest_GetRequestHistory" DbName="lumi_HRM" Plain="0" />
-		<Setting Key="Employee_GroupScope_Update" SpName="Employee_GroupScope_Update" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="NexVision_WorkingTimeRequest_GetRequestHistory" SpName="WorkingTimeRequest_GetRequestHistory" DbName="nexvision_HRM" Plain="0" />
+        <Setting Key="Employee_GroupScope_Update" SpName="Employee_GroupScope_Update" DbName="bodb_HRM" Plain="0" />
         <Setting Key="Employee_Transfer" SpName="Employee_Transfer" DbName="bodb_HRM" Plain="0" />
-		<Setting Key="Transfer_HistoryWork_Get" SpName="Transfer_HistoryWork_Get" DbName="bodb_HRM" Plain="0" />
     </Function>
     <Function Name="Group">
         <Setting Key="EmployeeGroup_GetGroup" SpName="EmployeeGroup_GetGroup" DbName="bodb_HRM" Plain="0" />

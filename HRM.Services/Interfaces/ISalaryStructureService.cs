@@ -7,7 +7,7 @@ using HRM.Models.SalaryStructure;
 
 public interface ISalaryStructureService
 {
-    Task<IEnumerable<SalaryStructure>> GetSalaryStructureAsync(int? companyId);
+    Task<IEnumerable<SalaryStructure>> GetSalaryStructureAsync(int companyId);
 
     Task<SalaryStructure> GetByIdAsync(int salaryStructureId);
 

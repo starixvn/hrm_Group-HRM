@@ -39,8 +39,7 @@ public class GroupEmployeeListController(
     IBaseService baseService,
     IEmployeeService employeeService,
     ISecondCompanyEmployeeService secondCompanyEmployeeService,
-    IPayrollManagementService payrollManagementService,
-    IEmployeeLogService employeeLogService
+    IPayrollManagementService payrollManagementService
 ) : BaseController(session)
 #pragma warning restore S107 // Methods should not have too many parameters
 {
@@ -118,24 +117,6 @@ public class GroupEmployeeListController(
         ViewBag.ShowResignedDate = isAll || isDisabled || isDeleted;
 
         return PartialView("_ListEmployee", employees);
-    }
-
-    [HrmPermission(Policy.Read, FunctionKey.GroupEmployeeList)]
-    public async Task<IActionResult> ActivityLog(int id)
-    {
-        var logs = await employeeLogService.GetLogDetailByIdAsync(id);
-        Parallel.ForEach(logs, log =>
-        {
-            log.Action = Constants.UpdateProfile;
-        });
-
-        var transferlogs = await employeeLogService.GetTransferHistoryWork(id);
-
-        var combinedLogs = logs.Concat(transferlogs)
-                          .OrderByDescending(l => l.LogDate)
-                          .ToList();
-
-        return View("ActivityLog", combinedLogs);
     }
 
     private IEnumerable<GroupEmployeeModel> FilterEmployeeByView(
