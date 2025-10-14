@@ -242,6 +242,7 @@ const LeaveRequest = (function ($) {
             LeaveRequest.getLeaveBalance();
             LeaveRequest.getDisableDate();
             LeaveRequest.getLeaveDetail();
+            LeaveRequest.getMinDate();
         },
         showLeaveDetail: function (employeeId, fromDate, toDate, requestId) {
             var leaveDetailContainer = $('#leaveDetails');
@@ -771,6 +772,19 @@ const LeaveRequest = (function ($) {
                     LeaveRequest.toDate.attr('disabledDate', '2010-01-01');
                 }
             }).catch(axiosError).then(() => unblockUI());
+        },
+        getMinDate: function () {
+            axios({
+                url: resolveClientUrl('leave/getMinDate'),
+                method: 'GET',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                params: {
+                    empId: LeaveRequest.employeeId.val()
+                }
+            }).then(response => {
+                LeaveRequest.fromDate.datepicker('option', 'minDate', new Date(response.data));
+                LeaveRequest.toDate.datepicker('option', 'minDate', new Date(response.data));
+            });
         },
         getDisableDate: function () {
             var minDate = new Date(LeaveRequest.fromDate.attr('minDate'));
