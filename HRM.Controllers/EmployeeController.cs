@@ -17,6 +17,7 @@ using HRM.Criteria.Supervisor;
 using HRM.Models;
 using HRM.Models.Group;
 using HRM.Models.Supervisor;
+using HRM.Services.Helper;
 using HRM.Services.Implement;
 using HRM.Services.Implement.ActionLog;
 using HRM.Services.Interfaces;
@@ -199,13 +200,7 @@ public class EmployeeController(
             return View(model);
         }
 
-        var param = new CreateEmployeeParam
-        {
-            Code = model.Code,
-            Nickname = model.Nickname
-        };
-
-        var commandResult = await employeeService.CheckExistAsync(param);
+        var commandResult = await employeeService.CheckExistAsync(model.Code, model.Nickname);
         if (commandResult.IsSuccessful)
         {
             return await CreateUserAsync(model);
@@ -303,7 +298,8 @@ public class EmployeeController(
     {
         if (ModelState.IsValid)
         {
-            var param = MappingEditEmployeeParam(model);
+            var roles = BuildRole(model.Roles);
+            var param = EmployeeHelper.MappingEditEmployeeParam(model, roles);
             var commandResult = await employeeService.EditAsync(EmployeeSession.EmpId, param, CurrentCompanyId);
             if (commandResult.IsSuccessful)
             {
@@ -523,34 +519,11 @@ public class EmployeeController(
 
     private async Task UpdateUserInfo(int userId, EditEmployeeParam param)
     {
-        var result = await userService.UpdateInfoAsync(new UpdateUserInfoParam
-        {
-            RefId = param.EmployeeId,
-            UserId = userId,
-            Code = param.Code,
-            Nickname = param.Nickname,
-            FullName = param.FullName,
-            Email = param.Email,
-            IsActive = param.Enabled
-        });
+        var result = await employeeService.UpdateUserInfo(userId, param);
         if (result.IsSuccessful)
         {
-            result = await userService.AssignRoleAsync(new AssignRoleParam
-            {
-                UserId = userId,
-                RoleIds = param.Roles
-            });
-
-            if (result.IsSuccessful)
-            {
-                ViewBag.Updated = true;
-                await UpdateUserSession(param.EmployeeId);
-            }
-            else
-            {
-                ViewBag.Updated = false;
-                ModelState.AddModelError(string.Empty, result.Message);
-            }
+            ViewBag.Updated = true;
+            await UpdateUserSession(param.EmployeeId);
         }
         else
         {
@@ -656,69 +629,6 @@ public class EmployeeController(
         ViewBag.SalaryStructures = await salaryStructureService.GetSalaryStructureAsync(CurrentCompanyId);
     }
 
-    private EditEmployeeParam MappingEditEmployeeParam(Employee model)
-    {
-        return new EditEmployeeParam
-        {
-            EmployeeId = model.Id,
-            Code = model.Code.Trim(),
-            DomainUsername = model.DomainUsername,
-            FullName = model.FullName,
-            Nickname = model.NickName,
-            EmployeeCard = model.EmployeeCard,
-            DateOfBirth = model.DateOfBirth,
-            Email = model.Email,
-            JobTitleId = model.JobTitleId,
-            JobLevelId = model.JobLevelId,
-            ManagementLevelId = model.ManagementLevelId,
-            Enabled = model.Enabled,
-            Phone = model.Phone,
-            Gender = model.Gender,
-            Roles = BuildRole(model.Roles),
-            JoinedDate = model.JoinedDate,
-            CompanyDate = model.CompanyDate,
-            ConfirmedDate = model.ConfirmedDate,
-            ResignedDate = model.ResignedDate,
-            ResignedReason = model.ResignedReason,
-            LetsTalk = model.LetsTalk,
-            Marriage = model.Marriage,
-            PermanentAddress = model.Address,
-            CurrentAddress = model.CurrentAddress,
-            IdCardNumber = model.CardNo,
-            PassportNo = model.PassportNo,
-            PassportExp = model.PassportExp,
-            TeamId = model.Team.Id,
-            IsLocal = model.IsLocal,
-            CountryCode = model.CountryCode,
-            CanOT = model.CanOT,
-            SpecialOT = model.SpecialOT,
-            WorkingDays = model.WorkingDays,
-            WorkingHours = model.WorkingHours,
-            WorkingHoursbyWeek = model.WorkingHoursbyWeek,
-            IsTopManager = model.IsTopManager,
-            OffDaysbyWeek = model.OffDaysbyWeek,
-            PlaceOfBirth = model.PlaceOfBirth,
-            Ethnic = model.Ethnic,
-            Native = model.Native,
-            Religion = model.Religion,
-            DateOfIdCard = model.DateOfIdCard,
-            PlaceOfIdCard = model.PlaceOfIdCard,
-            HomePhone = model.HomePhone,
-            Qualification = model.Qualification,
-            Major = model.Major,
-            IsExpatUseHoliday = !model.IsLocal && model.IsExpatUseHoliday,
-            PickupRemark = model.PickupRemark,
-            PromotionDate = model.PromotionDate,
-            TeamDate = model.TeamDate,
-            MilitaryFromDate = model.MilitaryFromDate,
-            MilitaryToDate = model.MilitaryToDate,
-            SubCompanyId = model.SubCompanyId,
-            SalaryStructureId = model.SalaryStructureId,
-            Salary = !string.IsNullOrWhiteSpace(model.Salary) ? Cryptography.EncryptPassword(model.Salary) : model.Salary,
-            AutoApproveRequest = model.AutoApproveRequest
-        };
-    }
-
     private string BuildRole(IList<Role> roles)
     {
         var systemRoles = roleService.GetBySiteId(session.SiteId);
@@ -754,29 +664,5 @@ public class EmployeeController(
         }
 
         return category;
-    }
-
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    [HrmPermission(Policy.Host, FunctionKey.EmployeeManagement)]
-    public async Task<IActionResult> Transfer(EmployeeTransfer model)
-    {
-        var newEmpId = await employeeService.TransferEmployee(model);
-        var param = MappingEditEmployeeParam(model);
-        param.EmployeeId = newEmpId;
-
-        var commandResult = await employeeService.EditAsync(EmployeeSession.EmpId, param, model.TargetCompanyId);
-        if (commandResult.IsSuccessful)
-        {
-            await UpdateUserInfo(model.UserId, param);
-        }
-        else
-        {
-            ViewBag.Updated = false;
-            ModelState.AddModelError(string.Empty, commandResult.Message);
-        }
-
-        await PrepareEmployeeModelForView(model);
-        return View(model);
     }
 }

@@ -58,7 +58,7 @@ public interface IEmployeeService
 
     Task<CommandResult> EditPasswordAsync(int actorId, EditPassword model);
 
-    Task<CommandResult> CheckExistAsync(CreateEmployeeParam param);
+    Task<CommandResult> CheckExistAsync(string code, string nickname);
 
     Task<CommandResult> CreateAsync(CreateEmployeeParam param);
 
@@ -75,6 +75,8 @@ public interface IEmployeeService
     Task<IEnumerable<int>> GetCompaniesBelongToSupervisor();
 
     Task<IEnumerable<T>> FilterByEmployeeDataPermission<T>(IEnumerable<T> data, Func<T, int> employeeIdSelector);
+
+    Task<GO.UserControl.Client.Core.Models.CommandResult> UpdateUserInfo(int userId, EditEmployeeParam param);
 
     Task<int> TransferEmployee(EmployeeTransfer model);
 }

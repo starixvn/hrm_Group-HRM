@@ -27,11 +27,13 @@ using Models.Group;
 using Models.Supervisor;
 using Resources;
 using ViewModels.AnnualLeave;
+using GO.UserControl.Client.Core.Models.User;
 
 public class EmployeeService(
     IEmployeeRepository employeeRepository,
     IBaseService baseService,
     IRoleService roleService,
+    IUserService userService,
     IUserControlSession session) : IEmployeeService
 {
     public async Task<string> GenerateEmployeeCode()
@@ -283,14 +285,13 @@ public class EmployeeService(
         return commandResult;
     }
 
-    public async Task<CommandResult> CheckExistAsync(CreateEmployeeParam param)
+    public async Task<CommandResult> CheckExistAsync(string code, string nickname)
     {
         var companyId = session.Get<short>(SessionKey.CurrentCompanyId);
-
         var criteria = new CheckExistEmployeeCriteria
         {
-            Code = param.Code,
-            Nickname = param.Nickname,
+            Code = code,
+            Nickname = nickname,
             CompanyId = companyId
         };
         return await baseService.GetDataEntityAsync<CommandResult>(criteria);
@@ -483,6 +484,32 @@ public class EmployeeService(
         return data.Where(item => assignedEmployeeIds.Contains(employeeIdSelector(item)));
     }
 
+    public async Task<GO.UserControl.Client.Core.Models.CommandResult> UpdateUserInfo(int userId, EditEmployeeParam param)
+    {
+        var result = await userService.UpdateInfoAsync(new UpdateUserInfoParam
+        {
+            RefId = param.EmployeeId,
+            UserId = userId,
+            Code = param.Code,
+            Nickname = param.Nickname,
+            FullName = param.FullName,
+            Email = param.Email,
+            IsActive = param.Enabled
+        });
+        if (result.IsSuccessful)
+        {
+            result = await userService.AssignRoleAsync(new AssignRoleParam
+            {
+                UserId = userId,
+                RoleIds = param.Roles
+            });
+
+            return result;
+        }
+
+        return result;
+    }
+
     public async Task<int> TransferEmployee(EmployeeTransfer model)
     {
         var criteria = new EmployeeTransferCriteria
@@ -490,7 +517,7 @@ public class EmployeeService(
             EmpId = model.Id,
             GroupId = model.Team.Id,
             TargetCompanyId = model.TargetCompanyId,
-            Remark = model.Remark,
+            Remark = model.TransferRemark,
             CreatedBy = session.Get<EmployeeSession>(SessionKey.Employee).EmpId,
             TransferInDate = model.TransferInDate
         };

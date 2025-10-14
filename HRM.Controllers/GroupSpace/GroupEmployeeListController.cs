@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using GO.UserControl.Client.Core.Enumerables;
+using GO.UserControl.Client.Core.Models.User;
+using GO.UserControl.Client.Core.Services;
 using GO.UserControl.Client.Core.Session;
 using HRM.Core;
 using HRM.Core.Constants;
@@ -19,7 +21,7 @@ using HRM.Models.Group;
 using HRM.Models.Supervisor;
 using HRM.Models.Unit;
 using HRM.Services.ExportExcel.Employee;
-using HRM.Services.Implement.ActionLog;
+using HRM.Services.Helper;
 using HRM.Services.Interfaces;
 using HRM.ViewModels;
 using HRM.ViewModels.EmployeeGroup;
@@ -39,7 +41,8 @@ public class GroupEmployeeListController(
     IBaseService baseService,
     IEmployeeService employeeService,
     ISecondCompanyEmployeeService secondCompanyEmployeeService,
-    IPayrollManagementService payrollManagementService
+    IPayrollManagementService payrollManagementService,
+    IUserService userService
 ) : BaseController(session)
 #pragma warning restore S107 // Methods should not have too many parameters
 {
@@ -181,9 +184,31 @@ public class GroupEmployeeListController(
 
     [HttpGet]
     [HrmPermission(Policy.Host, FunctionKey.GroupEmployeeList)]
-    public IActionResult Transfer()
+    public async Task<IActionResult> Transfer(EmployeeTransfer model)
     {
-        return View();
+        var result = await employeeService.CheckExistAsync(model.Code, model.NickName);
+        if (!result.IsSuccessful)
+        {
+            return Json(result);
+        }
+
+        var newEmpId = await employeeService.TransferEmployee(model);
+        var param = EmployeeHelper.MappingEditEmployeeParam(model, $"{(int)RoleSystem.Member}");
+        param.EmployeeId = newEmpId;
+
+        var commandResult = await employeeService.EditAsync(EmployeeSession.EmpId, param, model.TargetCompanyId);
+        if (commandResult.IsSuccessful)
+        {
+            await employeeService.UpdateUserInfo(model.UserId, param);
+            await userService.UpdateUserSiteAsync(new UpdateUserSiteParam
+            {
+                UserId = model.UserId,
+                SiteId = session.SiteId,
+                IsActive = true
+            });
+        }
+
+        return Json(commandResult);
     }
 
     [HttpGet]
