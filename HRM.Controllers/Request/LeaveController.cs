@@ -65,8 +65,7 @@ public class LeaveController(
     {
         var setting = await commonDataService.GetSystemSettingAsync();
         var today = DateTimeOffset.Now.DateTime.ToClientTimeZone().Date;
-        var minDate = await GetEmployeeMinDate();
-
+        var minDate = await GetMinDateCreateRequestAsync(EmployeeSession.EmpId);
         var model = new LeaveRequestViewModel
         {
             LeaveTypeId = (ushort)LeaveTypes.GeneralLeave,
@@ -322,6 +321,12 @@ public class LeaveController(
         return Json(totalDays);
     }
 
+    public async Task<IActionResult> GetMinDate(int empId)
+    {
+        var minDate = await GetMinDateCreateRequestAsync(empId);
+        return Json(minDate);
+    }
+
     private static List<LeaveRequestDetail> ConvertToLeaveRequestDetail(
         IEnumerable<Models.ScheduleArrange.DailySchedule> calendars,
         IList<LeaveRequestDetail> leaveDetails,
@@ -467,7 +472,7 @@ public class LeaveController(
         }
 
         var today = DateTimeOffset.Now.Date;
-        var minDate = await GetEmployeeMinDate();
+        var minDate = await GetMinDateCreateRequestAsync(EmployeeSession.EmpId);
         var maxDate = today.FirstDayOfMonth().AddMonths(Constants.NumberMonthsInFutureCanLeaveRequest).AddDays(-1);
         if (model.LeaveTypeId == (ushort)LeaveTypes.MaternityLeave)
         {
@@ -497,10 +502,10 @@ public class LeaveController(
         model.IsToTimeAfterDay = fromTime.Date != toTime.Date || request.ToDate.Date != toTime.Date;
     }
 
-    private async Task<DateTime> GetEmployeeMinDate()
+    private async Task<DateTime> GetMinDateCreateRequestAsync(int empId)
     {
         var today = DateTimeOffset.Now.DateTime.ToClientTimeZone().Date;
-        var employee = await employeeService.GetEmployeeByIdAsync(EmployeeSession.EmpId);
+        var employee = await employeeService.GetEmployeeByIdAsync(empId);
 
         if (employee != null)
         {
