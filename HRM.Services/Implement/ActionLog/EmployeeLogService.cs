@@ -25,6 +25,7 @@ public interface IEmployeeLogService
     Task<IEnumerable<LogObjectDetail>> GetTransferHistoryWork(int empId);
 }
 
+#pragma warning disable S107 // Methods should not have too many parameters
 public class EmployeeLogService(
     IUserControlSession session,
     ICommonDataService commonDataService,
@@ -34,6 +35,7 @@ public class EmployeeLogService(
     IRoleService roleService,
     ISalaryStructureService salaryStructureService,
     IBaseService baseService) : IEmployeeLogService
+#pragma warning restore S107 // Methods should not have too many parameters
 {
     private IEnumerable<MappingFieldConfig> mappingFields = new List<MappingFieldConfig>
     {
