@@ -8,6 +8,30 @@
 @import "../../components/_checkbox.scss";
 @import '../../components/react-autocomplete-wrapper';
 @import '../../components/multiselect-treeview';
+@import '../../vendors/react-datepicker';
+@import '../../components/_react-datepicker';
+
+.date-picker-wrapper {
+    position: relative;
+    
+    .calendar-icon {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #2b7bc0;
+        pointer-events: none;
+        font-size: 14px;
+    }
+    
+    .react-datepicker__input-container {
+        position: relative;
+    }
+    
+    .react-datepicker__input-container input {
+        padding-right: 30px;
+    }
+}
 
 .btn {
     margin-right: 5px;
@@ -16,6 +40,10 @@
     &:active {
         outline: none;
     }
+}
+
+#btnSubmit, .btnCancel {
+    margin-top: 15px;
 }
 
 .validation-summary-errors ul {
@@ -39,10 +67,14 @@ span.require {
 }
 
 .card {
-    max-width: 100%;
+    // max-width: 100%;
     padding: 20px;
     border: 1px solid #ddd;
     border-radius: 4px;
+}
+
+.btn-primary {
+    background-color: #0a5494;
 }
 
 .transfer-info {
@@ -54,10 +86,14 @@ span.require {
             border-radius: 4px;
             background-color: #f9f9f9;
 
+            &:last-child {
+                margin-top: 15px;
+            }
+
             .form-control {
                 border: 1px solid #ccc;
                 border-radius: 3px;
-                padding: 8px;
+                padding: 0 8px;
                 font-size: 14px;
 
                 &:focus {
@@ -67,13 +103,13 @@ span.require {
             }
 
             .label-form {
-                width: 120px;
+                width: 146px !important;
                 padding-right: 10px;
 
                 .control-label {
                     font-weight: 500;
                     color: #333;
-                    font-size: 14px;
+                    font-size: 13px;
                 }
             }
 
@@ -118,14 +154,15 @@ span.require {
         border: 1px solid #ddd;
         border-radius: 4px;
         background-color: #fff;
-        transition: margin-bottom 0.3s ease;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        overflow: hidden;
 
         &.collapsed {
             margin-bottom: 5px;
         }
 
         .panel-heading {
-            background: #cee6ff;
+            background: #3d598a;
             border-bottom: 1px solid #ddd;
             padding: 10px 15px;
             cursor: pointer;
@@ -134,36 +171,51 @@ span.require {
                 margin: 0;
                 font-size: 16px;
                 font-weight: 500;
-                color: #333;
+                color: #fff;
+                text-transform: uppercase;
                 display: flex;
                 align-items: center;
 
                 i {
                     margin-right: 8px;
                     font-size: 14px;
-                    color: #666;
+                    color: #fff;
+                    transition: transform 0.3s ease;
                 }
             }
         }
 
         .panel-body {
-            padding: 15px;
+            padding: 0;
             background-color: #fff;
             overflow: hidden;
-            transition: max-height 0.3s ease, padding 0.3s ease;
-            max-height: 2000px;
+            transition: all 0.5s ease-in-out;
+            max-height: 0;
+            opacity: 0;
+            transform: scaleY(0);
+            transform-origin: top;
+
+            &:not(.collapsed) {
+                max-height: 10000px;
+                opacity: 1;
+                transform: scaleY(1);
+            }
 
             &.collapsed {
                 max-height: 0;
-                padding: 0 15px;
+                padding: 0;
+                opacity: 0;
+                transform: scaleY(0);
             }
 
             .form-group {
-                margin-bottom: 15px;
-                padding: 10px;
+                margin-bottom: 0;
+                padding: 12px 16px;
+                border-bottom: 1px solid #ddd;
 
                 &:last-child {
                     margin-bottom: 0;
+                    border-bottom: none;
                 }
 
                 .label-form {
@@ -171,7 +223,6 @@ span.require {
                         color: #333;
                         font-weight: 500;
                         font-size: 14px;
-                        margin-bottom: 5px;
                         display: block;
                     }
                 }
@@ -179,8 +230,8 @@ span.require {
                 .form-control {
                     border: 1px solid #ccc;
                     border-radius: 3px;
-                    padding: 8px;
-                    font-size: 14px;
+                    padding: 4px 8px;
+                    font-size: 13px;
                     width: 100%;
 
                     &:focus {
@@ -251,4 +302,16 @@ span.require {
             }
         }
     }
+}
+
+.read-only-field {
+    padding: 8px;
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    color: #6c757d;
+    font-size: 13px;
+    min-height: 34px;
+    display: flex;
+    align-items: center;
 }

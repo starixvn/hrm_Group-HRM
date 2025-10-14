@@ -1,7 +1,45 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Field } from 'formik';
+import DatePicker from 'react-datepicker';
 
 const Personal = ({ isOpen, onToggle, employeeData }) => {
+    const [nationalityOptions] = useState([
+        { id: 'VN', text: 'Vietnam' },
+        { id: 'US', text: 'United States' },
+        { id: 'UK', text: 'United Kingdom' },
+        { id: 'JP', text: 'Japan' },
+        { id: 'KR', text: 'South Korea' },
+        { id: 'CN', text: 'China' },
+        { id: 'TH', text: 'Thailand' },
+        { id: 'SG', text: 'Singapore' },
+        { id: 'MY', text: 'Malaysia' },
+        { id: 'ID', text: 'Indonesia' },
+        { id: 'PH', text: 'Philippines' },
+        { id: 'IN', text: 'India' },
+        { id: 'AU', text: 'Australia' },
+        { id: 'CA', text: 'Canada' },
+        { id: 'FR', text: 'France' },
+        { id: 'DE', text: 'Germany' },
+        { id: 'IT', text: 'Italy' },
+        { id: 'ES', text: 'Spain' },
+        { id: 'NL', text: 'Netherlands' },
+        { id: 'BE', text: 'Belgium' }
+    ]);
+    const [nationalitySearch, setNationalitySearch] = useState('');
+    const [filteredNationalities, setFilteredNationalities] = useState(nationalityOptions);
+
+    const handleNationalitySearch = (searchTerm) => {
+        setNationalitySearch(searchTerm);
+        if (searchTerm === '') {
+            setFilteredNationalities(nationalityOptions);
+        } else {
+            const filtered = nationalityOptions.filter(option =>
+                option.text.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+            setFilteredNationalities(filtered);
+        }
+    };
+
     return (
         <div className={`panel-group ${!isOpen ? 'collapsed' : ''}`}>
             <div className='panel-heading' onClick={onToggle}>
@@ -22,7 +60,6 @@ const Personal = ({ isOpen, onToggle, employeeData }) => {
                             name='employeeId'
                             type='text'
                             className='form-control'
-                            value={employeeData && employeeData.employeeId || ''}
                         />
                     </div>
                 </div>
@@ -38,7 +75,6 @@ const Personal = ({ isOpen, onToggle, employeeData }) => {
                             name='employeeCard'
                             type='text'
                             className='form-control'
-                            value={employeeData && employeeData.employeeCard || ''}
                         />
                     </div>
                 </div>
@@ -54,7 +90,6 @@ const Personal = ({ isOpen, onToggle, employeeData }) => {
                             name='domainUsername'
                             type='text'
                             className='form-control'
-                            value={employeeData && employeeData.domainUsername || ''}
                         />
                     </div>
                 </div>
@@ -70,7 +105,6 @@ const Personal = ({ isOpen, onToggle, employeeData }) => {
                             name='fullName'
                             type='text'
                             className='form-control'
-                            value={employeeData && employeeData.fullName || ''}
                         />
                     </div>
                 </div>
@@ -86,7 +120,6 @@ const Personal = ({ isOpen, onToggle, employeeData }) => {
                             name='nickName'
                             type='text'
                             className='form-control'
-                            value={employeeData && employeeData.nickName || ''}
                         />
                     </div>
                 </div>
@@ -98,13 +131,25 @@ const Personal = ({ isOpen, onToggle, employeeData }) => {
                         </label>
                     </div>
                     <div className='calendar-form'>
-                        <Field
-                            name='dateOfBirth'
-                            type='date'
-                            className='form-control'
-                            value={employeeData && employeeData.dateOfBirth || ''}
-                        />
+                        <div className='date-picker-wrapper'>
+                            <Field name='dateOfBirth'>
+                                {({ field, form }) => (
+                                    <DatePicker
+                                        selected={field.value && field.value !== '' ? new Date(field.value) : null}
+                                        onChange={(date) => form.setFieldValue(field.name, date)}
+                                        dateFormat="dd MMM, yyyy"
+                                        className='form-control'
+                                        placeholderText=""
+                                        showYearDropdown
+                                        showMonthDropdown
+                                        dropdownMode="select"
+                                    />
+                                )}
+                            </Field>
+                            <i className="fa fa-calendar calendar-icon" />
+                        </div>
                     </div>
+
                 </div>
 
                 <div className='form-group'>
@@ -118,7 +163,6 @@ const Personal = ({ isOpen, onToggle, employeeData }) => {
                             name='placeOfBirth'
                             type='text'
                             className='form-control'
-                            value={employeeData && employeeData.placeOfBirth || ''}
                         />
                     </div>
                 </div>
@@ -134,7 +178,6 @@ const Personal = ({ isOpen, onToggle, employeeData }) => {
                             name='ethnic'
                             type='text'
                             className='form-control'
-                            value={employeeData && employeeData.ethnic || ''}
                         />
                     </div>
                 </div>
@@ -150,7 +193,21 @@ const Personal = ({ isOpen, onToggle, employeeData }) => {
                             name='native'
                             type='text'
                             className='form-control'
-                            value={employeeData && employeeData.native || ''}
+                        />
+                    </div>
+                </div>
+
+                <div className='form-group'>
+                    <div className='label-form'>
+                        <label className='control-label'>
+                            Religion
+                        </label>
+                    </div>
+                    <div className='input-form'>
+                        <Field
+                            name='religion'
+                            type='text'
+                            className='form-control'
                         />
                     </div>
                 </div>
@@ -166,21 +223,18 @@ const Personal = ({ isOpen, onToggle, employeeData }) => {
                             name='gender'
                             as='select'
                             className='form-control'
-                            value={employeeData && employeeData.gender || ''}
                         >
-                            <option value=''>Select Gender</option>
-                            <option value='Male'>Male</option>
-                            <option value='Female'>Female</option>
+                            <option value='2'>Unknown</option>
+                            <option value='0'>Female</option>
+                            <option value='1'>Male</option>
                         </Field>
                     </div>
                 </div>
 
-                
-
                 <div className='form-group'>
                     <div className='label-form'>
                         <label className='control-label'>
-                            Marital Status
+                            Marriage
                         </label>
                     </div>
                     <div className='select-form'>
@@ -188,7 +242,6 @@ const Personal = ({ isOpen, onToggle, employeeData }) => {
                             name='maritalStatus'
                             as='select'
                             className='form-control'
-                            value={employeeData && employeeData.maritalStatus || ''}
                         >
                             <option value=''>Select Status</option>
                             <option value='Single'>Single</option>
@@ -206,35 +259,27 @@ const Personal = ({ isOpen, onToggle, employeeData }) => {
                         </label>
                     </div>
                     <div className='input-form'>
-                        <Field
-                            name='nationality'
-                            type='text'
-                            className='form-control'
-                            value={employeeData && employeeData.nationality || ''}
-                        />
+                        <div className='searchable-select'>
+                            <Field
+                                name='nationality'
+                                as='select'
+                                className='form-control'
+                            >
+                                <option value=''>Select Nationality</option>
+                                {filteredNationalities.map(option => (
+                                    <option key={option.id} value={option.id}>
+                                        {option.text}
+                                    </option>
+                                ))}
+                            </Field>
+                        </div>
                     </div>
                 </div>
 
                 <div className='form-group'>
                     <div className='label-form'>
                         <label className='control-label'>
-                            Religion
-                        </label>
-                    </div>
-                    <div className='input-form'>
-                        <Field
-                            name='religion'
-                            type='text'
-                            className='form-control'
-                            value={employeeData && employeeData.religion || ''}
-                        />
-                    </div>
-                </div>
-
-                <div className='form-group'>
-                    <div className='label-form'>
-                        <label className='control-label'>
-                            ID Card Number
+                            ID Card No
                         </label>
                     </div>
                     <div className='input-form'>
@@ -242,7 +287,6 @@ const Personal = ({ isOpen, onToggle, employeeData }) => {
                             name='idCardNumber'
                             type='text'
                             className='form-control'
-                            value={employeeData && employeeData.idCardNumber || ''}
                         />
                     </div>
                 </div>
@@ -254,19 +298,30 @@ const Personal = ({ isOpen, onToggle, employeeData }) => {
                         </label>
                     </div>
                     <div className='calendar-form'>
-                        <Field
-                            name='idCardIssueDate'
-                            type='date'
-                            className='form-control'
-                            value={employeeData && employeeData.idCardIssueDate || ''}
-                        />
+                        <div className='date-picker-wrapper'>
+                            <Field name='idCardIssueDate'>
+                                {({ field, form }) => (
+                                    <DatePicker
+                                        selected={field.value && field.value !== '' ? new Date(field.value) : null}
+                                        onChange={(date) => form.setFieldValue(field.name, date)}
+                                        dateFormat="dd MMM, yyyy"
+                                        className='form-control'
+                                        placeholderText=""
+                                        showYearDropdown
+                                        showMonthDropdown
+                                        dropdownMode="select"
+                                    />
+                                )}
+                            </Field>
+                            <i className="fa fa-calendar calendar-icon" />
+                        </div>
                     </div>
                 </div>
 
                 <div className='form-group'>
                     <div className='label-form'>
                         <label className='control-label'>
-                            ID Card Issue Place
+                            ID Card Place Of Issue
                         </label>
                     </div>
                     <div className='input-form'>
@@ -274,7 +329,6 @@ const Personal = ({ isOpen, onToggle, employeeData }) => {
                             name='idCardIssuePlace'
                             type='text'
                             className='form-control'
-                            value={employeeData && employeeData.idCardIssuePlace || ''}
                         />
                     </div>
                 </div>
@@ -282,7 +336,7 @@ const Personal = ({ isOpen, onToggle, employeeData }) => {
                 <div className='form-group'>
                     <div className='label-form'>
                         <label className='control-label'>
-                            Passport Number
+                            Passport No
                         </label>
                     </div>
                     <div className='input-form'>
@@ -290,152 +344,35 @@ const Personal = ({ isOpen, onToggle, employeeData }) => {
                             name='passportNumber'
                             type='text'
                             className='form-control'
-                            value={employeeData && employeeData.passportNumber || ''}
                         />
                     </div>
                 </div>
 
+
                 <div className='form-group'>
                     <div className='label-form'>
                         <label className='control-label'>
-                            Passport Issue Date
+                            Passport Exp
                         </label>
                     </div>
                     <div className='calendar-form'>
-                        <Field
-                            name='passportIssueDate'
-                            type='date'
-                            className='form-control'
-                            value={employeeData && employeeData.passportIssueDate || ''}
-                        />
-                    </div>
-                </div>
-
-                <div className='form-group'>
-                    <div className='label-form'>
-                        <label className='control-label'>
-                            Passport Expiry Date
-                        </label>
-                    </div>
-                    <div className='calendar-form'>
-                        <Field
-                            name='passportExpiryDate'
-                            type='date'
-                            className='form-control'
-                            value={employeeData && employeeData.passportExpiryDate || ''}
-                        />
-                    </div>
-                </div>
-
-                <div className='form-group'>
-                    <div className='label-form'>
-                        <label className='control-label'>
-                            Passport Issue Place
-                        </label>
-                    </div>
-                    <div className='input-form'>
-                        <Field
-                            name='passportIssuePlace'
-                            type='text'
-                            className='form-control'
-                            value={employeeData && employeeData.passportIssuePlace || ''}
-                        />
-                    </div>
-                </div>
-
-                <div className='form-group'>
-                    <div className='label-form'>
-                        <label className='control-label'>
-                            Tax Code
-                        </label>
-                    </div>
-                    <div className='input-form'>
-                        <Field
-                            name='taxCode'
-                            type='text'
-                            className='form-control'
-                            value={employeeData && employeeData.taxCode || ''}
-                        />
-                    </div>
-                </div>
-
-                <div className='form-group'>
-                    <div className='label-form'>
-                        <label className='control-label'>
-                            Social Insurance Number
-                        </label>
-                    </div>
-                    <div className='input-form'>
-                        <Field
-                            name='socialInsuranceNumber'
-                            type='text'
-                            className='form-control'
-                            value={employeeData && employeeData.socialInsuranceNumber || ''}
-                        />
-                    </div>
-                </div>
-
-                <div className='form-group'>
-                    <div className='label-form'>
-                        <label className='control-label'>
-                            Health Insurance Number
-                        </label>
-                    </div>
-                    <div className='input-form'>
-                        <Field
-                            name='healthInsuranceNumber'
-                            type='text'
-                            className='form-control'
-                            value={employeeData && employeeData.healthInsuranceNumber || ''}
-                        />
-                    </div>
-                </div>
-
-                <div className='form-group'>
-                    <div className='label-form'>
-                        <label className='control-label'>
-                            Bank Account Number
-                        </label>
-                    </div>
-                    <div className='input-form'>
-                        <Field
-                            name='bankAccountNumber'
-                            type='text'
-                            className='form-control'
-                            value={employeeData && employeeData.bankAccountNumber || ''}
-                        />
-                    </div>
-                </div>
-
-                <div className='form-group'>
-                    <div className='label-form'>
-                        <label className='control-label'>
-                            Bank Name
-                        </label>
-                    </div>
-                    <div className='input-form'>
-                        <Field
-                            name='bankName'
-                            type='text'
-                            className='form-control'
-                            value={employeeData && employeeData.bankName || ''}
-                        />
-                    </div>
-                </div>
-
-                <div className='form-group'>
-                    <div className='label-form'>
-                        <label className='control-label'>
-                            Bank Branch
-                        </label>
-                    </div>
-                    <div className='input-form'>
-                        <Field
-                            name='bankBranch'
-                            type='text'
-                            className='form-control'
-                            value={employeeData && employeeData.bankBranch || ''}
-                        />
+                        <div className='date-picker-wrapper'>
+                            <Field name='passportExpiryDate'>
+                                {({ field, form }) => (
+                                    <DatePicker
+                                        selected={field.value && field.value !== '' ? new Date(field.value) : null}
+                                        onChange={(date) => form.setFieldValue(field.name, date)}
+                                        dateFormat="dd MMM, yyyy"
+                                        className='form-control'
+                                        placeholderText=""
+                                        showYearDropdown
+                                        showMonthDropdown
+                                        dropdownMode="select"
+                                    />
+                                )}
+                            </Field>
+                            <i className="fa fa-calendar calendar-icon" />
+                        </div>
                     </div>
                 </div>
 
@@ -450,7 +387,6 @@ const Personal = ({ isOpen, onToggle, employeeData }) => {
                             name='qualification'
                             type='text'
                             className='form-control'
-                            value={employeeData && employeeData.qualification || ''}
                         />
                     </div>
                 </div>
@@ -466,7 +402,6 @@ const Personal = ({ isOpen, onToggle, employeeData }) => {
                             name='major'
                             type='text'
                             className='form-control'
-                            value={employeeData && employeeData.major || ''}
                         />
                     </div>
                 </div>

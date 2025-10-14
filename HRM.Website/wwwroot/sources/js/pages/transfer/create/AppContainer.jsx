@@ -11,7 +11,6 @@ import Military from './components/Military';
 import Contact from './components/Contact';
 import Information from './components/Information';
 import Policy from './components/Policy';
-import Permission from './components/Permission';
 
 import {
     resolveClientUrl,
@@ -32,8 +31,7 @@ const AppContainer = () => {
         military: true,
         contact: true,
         information: true,
-        policy: true,
-        permission: true
+        policy: true
     });
     const [initialValues, setInitialValues] = useState({
         empId: 0,
@@ -41,7 +39,61 @@ const AppContainer = () => {
         transferOutCompanyId: '',
         transferInCompanyId: '',
         teamId: '',
-        remark: ''
+        remark: '',
+        // Personal Info
+        employeeId: '',
+        fullName: '',
+        nickName: '',
+        employeeCard: '',
+        domainUsername: '',
+        gender: '',
+        dateOfBirth: '',
+        placeOfBirth: '',
+        ethnic: '',
+        native: '',
+        maritalStatus: '',
+        nationality: '',
+        religion: '',
+        idCardNumber: '',
+        idCardIssueDate: '',
+        idCardIssuePlace: '',
+        passportNumber: '',
+        passportExpiryDate: '',
+        qualification: '',
+        major: '',
+        // Military Info
+        militaryFrom: '',
+        militaryTo: '',
+        // Contact Info
+        cellphone: '',
+        homePhone: '',
+        workEmail: '',
+        permanentAddress: '',
+        currentAddress: '',
+        pickupRemark: '',
+        letstalk: '',
+        // Information
+        subCompany: '',
+        team: '',
+        teamDate: '',
+        jobTitle: '',
+        jobLevel: '',
+        managementGrade: '',
+        salaryStructure: '',
+        promotionDate: '',
+        groupDate: '',
+        companyDate: '',
+        confirmedDate: '',
+        lengthOfServiceByGroup: '',
+        // Policy
+        allowClaimOT: false,
+        specialOT: '',
+        workingDays: '',
+        workingHoursbyWeek: '',
+        workingHours: '',
+        offDaysbyWeek: '',
+        leaveBalance: '',
+        compensationLeaveBalance: ''
     });
 
     const getEmployees = query => {
@@ -211,7 +263,6 @@ const AppContainer = () => {
             .then(response => {
                 console.log('Employee data:', response.data);
 
-                // Map employee data to form fields
                 const employee = response.data;
                 const mappedData = {
                     // Personal Info
@@ -232,30 +283,22 @@ const AppContainer = () => {
                     idCardIssueDate: employee.dateOfIdCard || '',
                     idCardIssuePlace: employee.placeOfIdCard || '',
                     passportNumber: employee.passportNo || '',
-                    passportIssueDate: employee.passportExp || '',
                     passportExpiryDate: employee.passportExp || '',
-                    passportIssuePlace: employee.passportExp || '',
-                    taxCode: employee.taxCode || '',
-                    socialInsuranceNumber: employee.socialInsuranceNumber || '',
-                    healthInsuranceNumber: employee.healthInsuranceNumber || '',
-                    bankAccountNumber: employee.bankAccountNumber || '',
-                    bankName: employee.bankName || '',
-                    bankBranch: employee.bankBranch || '',
                     qualification: employee.qualification || '',
                     major: employee.major || '',
 
                     // Military Info
-                    militaryFrom: employee.militaryFrom || '',
-                    militaryTo: employee.militaryTo || '',
+                    militaryFrom: employee.militaryFromDate || '',
+                    militaryTo: employee.militaryToDate || '',
 
                     // Contact Info
-                    cellphone: employee.cellphone || '',
+                    cellphone: employee.phone || '',
                     homePhone: employee.homePhone || '',
-                    workEmail: employee.workEmail || '',
-                    permanentAddress: employee.permanentAddress || '',
+                    workEmail: employee.email || '',
+                    permanentAddress: employee.address || '',
                     currentAddress: employee.currentAddress || '',
                     pickupRemark: employee.pickupRemark || '',
-                    letstalk: employee.letstalk || '',
+                    letstalk: employee.letsTalk || '',
 
                     // Information
                     subCompany: employee.subCompany || '',
@@ -266,40 +309,28 @@ const AppContainer = () => {
                     managementGrade: employee.managementGrade || '',
                     salaryStructure: employee.salaryStructure || '',
                     promotionDate: employee.promotionDate || '',
-                    groupDate: employee.groupDate || '',
+                    groupDate: employee.joinedDate || '',
                     companyDate: employee.companyDate || '',
                     confirmedDate: employee.confirmedDate || '',
-                    resignedDate: employee.resignedDate || '',
-                    resignedReason: employee.resignedReason || '',
                     lengthOfServiceByGroup: employee.lengthOfServiceByGroup || '',
-                    lengthOfServiceByCompany: employee.lengthOfServiceByCompany || '',
 
                     // Policy
                     allowClaimOT: employee.allowClaimOT || false,
                     specialOT: employee.specialOT || '',
-                    workingDaysPerMonth: employee.workingDaysPerMonth || '',
-                    workingHoursPerWeek: employee.workingHoursPerWeek || '',
-                    workingHoursPerDay: employee.workingHoursPerDay || '',
-                    numberOfOffday: employee.numberOfOffday || '',
+                    workingDays: employee.workingDays || '',
+                    workingHoursbyWeek: employee.workingHoursbyWeek || '',
+                    workingHours: employee.workingHours || '',
+                    offDaysbyWeek: employee.offDaysbyWeek || '',
                     leaveBalance: employee.leaveBalance || '',
                     compensationLeaveBalance: employee.compensationLeaveBalance || '',
 
-                    // Permission
-                    member: employee.member || true,
-                    verifier: employee.verifier || true,
-                    approver: employee.approver || false,
-                    shiftCurrentWeekEditor: employee.shiftCurrentWeekEditor || true,
-                    onBehalf: employee.onBehalf || true,
-                    hr: employee.hr || true,
-                    disciplineManager: employee.disciplineManager || true,
-                    shiftArrange: employee.shiftArrange || true,
-                    localHr: employee.localHr || true,
-                    expatHr: employee.expatHr || true,
-                    hrAssistant: employee.hrAssistant || false
                 };
 
-                console.log('Mapped data:', mappedData);
                 setEmployeeData(mappedData);
+                setInitialValues(prev => ({
+                    ...prev,
+                    ...mappedData
+                }));
 
         setCurrentStep(2);
         setSubmitting(false);
@@ -469,11 +500,6 @@ const AppContainer = () => {
                                         onToggle={() => togglePanel('policy')}
                                         employeeData={employeeData}
                                     />
-                                    <Permission
-                                        isOpen={panelStates.permission}
-                                        onToggle={() => togglePanel('permission')}
-                                        employeeData={employeeData}
-                                    />
                         </div>
                         </div>
                         
@@ -485,7 +511,7 @@ const AppContainer = () => {
                                 disabled={isSubmitting}>
                                 Submit
                             </button>
-                            <a className='btn btn-default' onClick={handleGoBack}>
+                            <a className='btn btnCancel btn-default' onClick={handleGoBack}>
                                 Cancel
                             </a>
                         </div>

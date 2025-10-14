@@ -1,5 +1,6 @@
 import React from 'react';
 import { Field } from 'formik';
+import DatePicker from 'react-datepicker';
 
 const Information = ({ isOpen, onToggle, employeeData }) => {
     return (
@@ -22,13 +23,11 @@ const Information = ({ isOpen, onToggle, employeeData }) => {
                             name='subCompany'
                             as='select'
                             className='form-control'
-                            value={employeeData && employeeData.subCompany || ''}
                         >
                             <option value=''>--Select a Sub Company--</option>
                         </Field>
                     </div>
                 </div>
-
                 <div className='form-group'>
                     <div className='label-form'>
                         <label className='control-label'>
@@ -40,13 +39,11 @@ const Information = ({ isOpen, onToggle, employeeData }) => {
                             name='team'
                             as='select'
                             className='form-control'
-                            value={employeeData && employeeData.team || ''}
                         >
-                            <option value=''>--Select a Team--</option>
+                            <option value=''>Select Team</option>
                         </Field>
                     </div>
                 </div>
-
                 <div className='form-group'>
                     <div className='label-form'>
                         <label className='control-label'>
@@ -54,15 +51,22 @@ const Information = ({ isOpen, onToggle, employeeData }) => {
                         </label>
                     </div>
                     <div className='calendar-form'>
-                        <Field
-                            name='teamDate'
-                            type='date'
-                            className='form-control'
-                            value={employeeData && employeeData.teamDate || ''}
-                        />
+                        <div className='date-picker-wrapper'>
+                            <Field name='teamDate'>
+                                {({ field, form }) => (
+                                    <DatePicker
+                                        selected={field.value ? new Date(field.value) : new Date()}
+                                        onChange={(date) => form.setFieldValue(field.name, date)}
+                                        dateFormat="dd MMM, yyyy"
+                                        className='form-control'
+                                        placeholderText=""
+                                    />
+                                )}
+                            </Field>
+                            <i className='fa fa-calendar calendar-icon'></i>
+                        </div>
                     </div>
                 </div>
-
                 <div className='form-group'>
                     <div className='label-form'>
                         <label className='control-label'>
@@ -74,13 +78,11 @@ const Information = ({ isOpen, onToggle, employeeData }) => {
                             name='jobTitle'
                             as='select'
                             className='form-control'
-                            value={employeeData && employeeData.jobTitle || ''}
                         >
-                            <option value=''>--Select a Job Title--</option>
+                            <option value=''>Select Job Title</option>
                         </Field>
                     </div>
                 </div>
-
                 <div className='form-group'>
                     <div className='label-form'>
                         <label className='control-label'>
@@ -92,13 +94,11 @@ const Information = ({ isOpen, onToggle, employeeData }) => {
                             name='jobLevel'
                             as='select'
                             className='form-control'
-                            value={employeeData && employeeData.jobLevel || ''}
                         >
-                            <option value=''>--Select a Job Level--</option>
+                            <option value=''>Select Job Level</option>
                         </Field>
                     </div>
                 </div>
-
                 <div className='form-group'>
                     <div className='label-form'>
                         <label className='control-label'>
@@ -110,31 +110,11 @@ const Information = ({ isOpen, onToggle, employeeData }) => {
                             name='managementGrade'
                             as='select'
                             className='form-control'
-                            value={employeeData && employeeData.managementGrade || ''}
                         >
-                            <option value=''>--Select a M Grade--</option>
+                            <option value=''>Select Management Grade</option>
                         </Field>
                     </div>
                 </div>
-
-                <div className='form-group'>
-                    <div className='label-form'>
-                        <label className='control-label'>
-                            Salary Structure
-                        </label>
-                    </div>
-                    <div className='select-form'>
-                        <Field
-                            name='salaryStructure'
-                            as='select'
-                            className='form-control'
-                            value={employeeData && employeeData.salaryStructure || ''}
-                        >
-                            <option value=''>--Select a Salary Structure--</option>
-                        </Field>
-                    </div>
-                </div>
-
                 <div className='form-group'>
                     <div className='label-form'>
                         <label className='control-label'>
@@ -142,15 +122,22 @@ const Information = ({ isOpen, onToggle, employeeData }) => {
                         </label>
                     </div>
                     <div className='calendar-form'>
-                        <Field
-                            name='promotionDate'
-                            type='date'
-                            className='form-control'
-                            value={employeeData && employeeData.promotionDate || ''}
-                        />
+                        <div className='date-picker-wrapper'>
+                            <Field name='promotionDate'>
+                                {({ field, form }) => (
+                                    <DatePicker
+                                        selected={field.value && field.value !== '' ? new Date(field.value) : null}
+                                        onChange={(date) => form.setFieldValue(field.name, date)}
+                                        dateFormat="dd MMM, yyyy"
+                                        className='form-control'
+                                        placeholderText=""
+                                    />
+                                )}
+                            </Field>
+                            <i className='fa fa-calendar calendar-icon'></i>
+                        </div>
                     </div>
                 </div>
-
                 <div className='form-group'>
                     <div className='label-form'>
                         <label className='control-label'>
@@ -158,15 +145,22 @@ const Information = ({ isOpen, onToggle, employeeData }) => {
                         </label>
                     </div>
                     <div className='calendar-form'>
-                        <Field
-                            name='groupDate'
-                            type='date'
-                            className='form-control'
-                            value={employeeData && employeeData.groupDate || ''}
-                        />
+                        <div className='date-picker-wrapper'>
+                            <Field name='groupDate'>
+                                {({ field, form }) => (
+                                    <DatePicker
+                                        selected={field.value && field.value !== '' ? new Date(field.value) : null}
+                                        onChange={(date) => form.setFieldValue(field.name, date)}
+                                        dateFormat="dd MMM, yyyy"
+                                        className='form-control'
+                                        placeholderText=""
+                                    />
+                                )}
+                            </Field>
+                            <i className='fa fa-calendar calendar-icon'></i>
+                        </div>
                     </div>
                 </div>
-
                 <div className='form-group'>
                     <div className='label-form'>
                         <label className='control-label'>
@@ -174,15 +168,22 @@ const Information = ({ isOpen, onToggle, employeeData }) => {
                         </label>
                     </div>
                     <div className='calendar-form'>
-                        <Field
-                            name='companyDate'
-                            type='date'
-                            className='form-control'
-                            value={employeeData && employeeData.companyDate || ''}
-                        />
+                        <div className='date-picker-wrapper'>
+                            <Field name='companyDate'>
+                                {({ field, form }) => (
+                                    <DatePicker
+                                        selected={field.value ? new Date(field.value) : new Date()}
+                                        onChange={(date) => form.setFieldValue(field.name, date)}
+                                        dateFormat="dd MMM, yyyy"
+                                        className='form-control'
+                                        placeholderText=""
+                                    />
+                                )}
+                            </Field>
+                            <i className='fa fa-calendar calendar-icon'></i>
+                        </div>
                     </div>
                 </div>
-
                 <div className='form-group'>
                     <div className='label-form'>
                         <label className='control-label'>
@@ -190,69 +191,39 @@ const Information = ({ isOpen, onToggle, employeeData }) => {
                         </label>
                     </div>
                     <div className='calendar-form'>
-                        <Field
-                            name='confirmedDate'
-                            type='date'
-                            className='form-control'
-                            value={employeeData && employeeData.confirmedDate || ''}
-                        />
+                        <div className='date-picker-wrapper'>
+                            <Field name='confirmedDate'>
+                                {({ field, form }) => (
+                                    <DatePicker
+                                        selected={field.value && field.value !== '' ? new Date(field.value) : null}
+                                        onChange={(date) => form.setFieldValue(field.name, date)}
+                                        dateFormat="dd MMM, yyyy"
+                                        className='form-control'
+                                        placeholderText=""
+                                    />
+                                )}
+                            </Field>
+                            <i className='fa fa-calendar calendar-icon'></i>
+                        </div>
                     </div>
                 </div>
-
-                <div className='form-group'>
-                    <div className='label-form'>
-                        <label className='control-label'>
-                            Resigned Date
-                        </label>
-                    </div>
-                    <div className='calendar-form'>
-                        <Field
-                            name='resignedDate'
-                            type='date'
-                            className='form-control'
-                            value={employeeData && employeeData.resignedDate || ''}
-                        />
-                    </div>
-                </div>
-
-                <div className='form-group'>
-                    <div className='label-form'>
-                        <label className='control-label'>
-                            Resigned Reason
-                        </label>
-                    </div>
-                    <div className='input-form'>
-                        <Field
-                            name='resignedReason'
-                            as='textarea'
-                            className='form-control'
-                            rows='3'
-                            value={employeeData && employeeData.resignedReason || ''}
-                        />
-                    </div>
-                </div>
-
-                {/* Read-only Length of Service section */}
                 <div className='form-group'>
                     <div className='label-form'>
                         <label className='control-label'>
                             Length of Service
                         </label>
                     </div>
-                    <div className='input-form'>
-                        <div style={{ display: 'flex', gap: '20px' }}>
-                            <div>
-                                <label style={{ fontSize: '12px', color: '#666' }}>By Group Date:</label>
-                                <div style={{ padding: '8px', backgroundColor: '#f8f9fa', border: '1px solid #dee2e6', borderRadius: '4px' }}>
-                                    {employeeData && employeeData.lengthOfServiceByGroup || '21 YEARS 0 MONTHS'}
+                    <div className='select-form'>
+                        <div>
+                            <div style={{ marginBottom: '5px', fontSize: '12px', color: '#666' }}>
+                                By Group Date
+                            </div>
+                            <div className='input-form'>
+                                <div className='read-only-field'>
+                                    {employeeData && employeeData.lengthOfServiceByGroup}
                                 </div>
                             </div>
-                            <div>
-                                <label style={{ fontSize: '12px', color: '#666' }}>By Company Date:</label>
-                                <div style={{ padding: '8px', backgroundColor: '#f8f9fa', border: '1px solid #dee2e6', borderRadius: '4px' }}>
-                                    {employeeData && employeeData.lengthOfServiceByCompany || '21 YEARS 0 MONTHS'}
-                                </div>
-                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -260,5 +231,6 @@ const Information = ({ isOpen, onToggle, employeeData }) => {
         </div>
     );
 };
+
 
 export default Information;

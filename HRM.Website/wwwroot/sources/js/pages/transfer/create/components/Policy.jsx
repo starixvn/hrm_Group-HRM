@@ -21,8 +21,6 @@ const Policy = ({ isOpen, onToggle, employeeData }) => {
                         <Field
                             name='allowClaimOT'
                             type='checkbox'
-                            className='form-control'
-                            checked={employeeData && employeeData.allowClaimOT || false}
                         />
                     </div>
                 </div>
@@ -38,7 +36,6 @@ const Policy = ({ isOpen, onToggle, employeeData }) => {
                             name='specialOT'
                             type='text'
                             className='form-control'
-                            value={employeeData && employeeData.specialOT || ''}
                         />
                     </div>
                 </div>
@@ -51,10 +48,9 @@ const Policy = ({ isOpen, onToggle, employeeData }) => {
                     </div>
                     <div className='input-form'>
                         <Field
-                            name='workingDaysPerMonth'
+                            name='workingDays'
                             type='text'
                             className='form-control'
-                            value={employeeData && employeeData.workingDaysPerMonth || ''}
                         />
                     </div>
                 </div>
@@ -67,10 +63,9 @@ const Policy = ({ isOpen, onToggle, employeeData }) => {
                     </div>
                     <div className='input-form'>
                         <Field
-                            name='workingHoursPerWeek'
+                            name='workingHoursbyWeek'
                             type='text'
                             className='form-control'
-                            value={employeeData && employeeData.workingHoursPerWeek || ''}
                         />
                     </div>
                 </div>
@@ -83,10 +78,9 @@ const Policy = ({ isOpen, onToggle, employeeData }) => {
                     </div>
                     <div className='input-form'>
                         <Field
-                            name='workingHoursPerDay'
+                            name='workingHours'
                             type='text'
                             className='form-control'
-                            value={employeeData && employeeData.workingHoursPerDay || ''}
                         />
                     </div>
                 </div>
@@ -99,10 +93,9 @@ const Policy = ({ isOpen, onToggle, employeeData }) => {
                     </div>
                     <div className='input-form'>
                         <Field
-                            name='numberOfOffday'
+                            name='offDaysbyWeek'
                             type='text'
                             className='form-control'
-                            value={employeeData && employeeData.numberOfOffday || ''}
                         />
                     </div>
                 </div>
@@ -115,12 +108,9 @@ const Policy = ({ isOpen, onToggle, employeeData }) => {
                         </label>
                     </div>
                     <div className='input-form'>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                            <span style={{ padding: '8px', backgroundColor: '#f8f9fa', border: '1px solid #dee2e6', borderRadius: '4px', flex: 1 }}>
-                                {employeeData && employeeData.leaveBalance || '25.00 day(s)'}
-                            </span>
-                            <a href="#" style={{ color: '#007bff', textDecoration: 'none', fontSize: '14px' }}>Update</a>
-                        </div>
+                        <span className='read-only-field'>
+                            {employeeData && employeeData.leaveBalance || '25.00 day(s)'}
+                        </span>
                     </div>
                 </div>
 
@@ -131,7 +121,7 @@ const Policy = ({ isOpen, onToggle, employeeData }) => {
                         </label>
                     </div>
                     <div className='input-form'>
-                        <div style={{ padding: '8px', backgroundColor: '#f8f9fa', border: '1px solid #dee2e6', borderRadius: '4px' }}>
+                        <div className='read-only-field'>
                             {employeeData && employeeData.compensationLeaveBalance || '0.00 day(s)'}
                         </div>
                     </div>

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Field } from 'formik';
+import DatePicker from 'react-datepicker';
 
 const Military = ({ isOpen, onToggle, employeeData }) => {
     return (
@@ -18,12 +19,23 @@ const Military = ({ isOpen, onToggle, employeeData }) => {
                         </label>
                     </div>
                     <div className='calendar-form'>
-                        <Field
-                            name='militaryFrom'
-                            type='date'
-                            className='form-control'
-                            value={employeeData && employeeData.militaryFrom || ''}
-                        />
+                        <div className='date-picker-wrapper'>
+                            <Field name='militaryFrom'>
+                                {({ field, form }) => (
+                                    <DatePicker
+                                        selected={field.value && field.value !== '' ? new Date(field.value) : null}
+                                        onChange={(date) => form.setFieldValue(field.name, date)}
+                                        dateFormat="dd MMM, yyyy"
+                                        className='form-control'
+                                        placeholderText=""
+                                        showYearDropdown
+                                        showMonthDropdown
+                                        dropdownMode="select"
+                                    />
+                                )}
+                            </Field>
+                            <i className="fa fa-calendar calendar-icon" />
+                        </div>
                     </div>
                 </div>
                 <div className='form-group'>
@@ -33,12 +45,23 @@ const Military = ({ isOpen, onToggle, employeeData }) => {
                         </label>
                     </div>
                     <div className='calendar-form'>
-                        <Field
-                            name='militaryTo'
-                            type='date'
-                            className='form-control'
-                            value={employeeData && employeeData.militaryTo || ''}
-                        />
+                        <div className='date-picker-wrapper'>
+                            <Field name='militaryTo'>
+                                {({ field, form }) => (
+                                    <DatePicker
+                                        selected={field.value && field.value !== '' ? new Date(field.value) : null}
+                                        onChange={(date) => form.setFieldValue(field.name, date)}
+                                        dateFormat="dd MMM, yyyy"
+                                        className='form-control'
+                                        placeholderText=""
+                                        showYearDropdown
+                                        showMonthDropdown
+                                        dropdownMode="select"
+                                    />
+                                )}
+                            </Field>
+                            <i className="fa fa-calendar calendar-icon" />
+                        </div>
                     </div>
                 </div>
             </div>

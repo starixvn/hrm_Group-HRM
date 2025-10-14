@@ -22,7 +22,6 @@ const Contact = ({ isOpen, onToggle, employeeData }) => {
                             name='cellphone'
                             type='text'
                             className='form-control'
-                            value={employeeData && employeeData.cellphone || ''}
                         />
                     </div>
                 </div>
@@ -38,7 +37,6 @@ const Contact = ({ isOpen, onToggle, employeeData }) => {
                             name='homePhone'
                             type='text'
                             className='form-control'
-                            value={employeeData && employeeData.homePhone || ''}
                         />
                     </div>
                 </div>
@@ -54,7 +52,6 @@ const Contact = ({ isOpen, onToggle, employeeData }) => {
                             name='workEmail'
                             type='email'
                             className='form-control'
-                            value={employeeData && employeeData.workEmail || ''}
                         />
                     </div>
                 </div>
@@ -71,7 +68,6 @@ const Contact = ({ isOpen, onToggle, employeeData }) => {
                             as='textarea'
                             className='form-control'
                             rows='3'
-                            value={employeeData && employeeData.permanentAddress || ''}
                         />
                     </div>
                 </div>
@@ -88,7 +84,6 @@ const Contact = ({ isOpen, onToggle, employeeData }) => {
                             as='textarea'
                             className='form-control'
                             rows='3'
-                            value={employeeData && employeeData.currentAddress || ''}
                         />
                     </div>
                 </div>
@@ -105,7 +100,6 @@ const Contact = ({ isOpen, onToggle, employeeData }) => {
                             as='textarea'
                             className='form-control'
                             rows='3'
-                            value={employeeData && employeeData.pickupRemark || ''}
                         />
                     </div>
                 </div>
@@ -121,7 +115,6 @@ const Contact = ({ isOpen, onToggle, employeeData }) => {
                             name='letstalk'
                             type='text'
                             className='form-control'
-                            value={employeeData && employeeData.letstalk || ''}
                         />
                     </div>
                 </div>
