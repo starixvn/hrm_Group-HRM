@@ -391,7 +391,8 @@ const AppContainer = () => {
                                     data={teams}
                                     isSelectedAll={false}
                                     hasSearchBox={true}
-                                        leafOnly={true}
+                                    leafOnly={true}
+                                    singleSelect={true}
                                     onChange={handleTeamChange}
                                 />
                             </div>
