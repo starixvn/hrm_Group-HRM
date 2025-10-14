@@ -18,5 +18,7 @@ public class LogObjectDetail
     public string OldData { get; set; }
     public string Data { get; set; }
 
+    public string Field { get; set; }
+
     public IList<FieldValue> Fields { get; set; } = new List<FieldValue>();
 }

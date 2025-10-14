@@ -10,6 +10,8 @@ using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Models.Role;
 using GO.UserControl.Client.Core.Services;
 using GO.UserControl.Client.Core.Session;
+using HRM.Core.Services;
+using HRM.Criteria.Employee;
 using HRM.Models.SalaryStructure;
 using Interfaces;
 using Models;
@@ -19,6 +21,8 @@ using Resources;
 public interface IEmployeeLogService
 {
     Task<IEnumerable<LogObjectDetail>> GetLogDetailByIdAsync(int employeeId);
+
+    Task<IEnumerable<LogObjectDetail>> GetTransferHistoryWork(int empId);
 }
 
 #pragma warning disable S107 // Methods should not have too many parameters
@@ -29,7 +33,8 @@ public class EmployeeLogService(
     IJobLevelService jobLevelService,
     IManagementLevelService managementLevelService,
     IRoleService roleService,
-    ISalaryStructureService salaryStructureService) : IEmployeeLogService
+    ISalaryStructureService salaryStructureService,
+    IBaseService baseService) : IEmployeeLogService
 #pragma warning restore S107 // Methods should not have too many parameters
 {
     private IEnumerable<MappingFieldConfig> mappingFields = new List<MappingFieldConfig>
@@ -120,6 +125,18 @@ public class EmployeeLogService(
         MappingField(logs);
 
         return logs;
+    }
+
+    public async Task<IEnumerable<LogObjectDetail>> GetTransferHistoryWork(int empId)
+    {
+        var criteria = new GetTransferHistoryWorkCriteria
+        {
+            EmpId = empId
+        };
+
+        var historyWork = await baseService.GetDataAsync<LogObjectDetail>(criteria);
+
+        return historyWork;
     }
 
     private void MappingField(IEnumerable<LogObjectDetail> logs)

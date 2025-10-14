@@ -168,6 +168,8 @@ public class EmployeeController(
     {
         var model = await employeeService.GetEmployeeByIdAsync(id);
         var employeeShift = await employeeService.GetShiftByEmployeeId(id);
+        var historyWork = await employeeLogService.GetTransferHistoryWork(id);
+        model.HistoryWork = historyWork;
 
         ViewBag.Sun = employeeShift.SunShiftName;
         ViewBag.Mon = employeeShift.MonShiftName;
