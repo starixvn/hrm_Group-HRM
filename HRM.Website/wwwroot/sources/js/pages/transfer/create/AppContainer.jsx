@@ -259,6 +259,58 @@ const AppContainer = () => {
         return errors;
     };
 
+    function mapEmployeeResponse(employee) {
+        return {
+          code: employee.code || '',
+          fullName: employee.fullName || '',
+          nickName: employee.nickName || '',
+          employeeCard: employee.employeeCard || '',
+          domainUsername: employee.domainUsername || '',
+          gender: employee.gender || '',
+          dateOfBirth: employee.dateOfBirth || '',
+          placeOfBirth: employee.placeOfBirth || '',
+          ethnic: employee.ethnic || '',
+          native: employee.native || '',
+          maritalStatus: employee.marriage || '',
+          countryCode: employee.countryCode || '',
+          religion: employee.religion || '',
+          idCardNumber: employee.cardNo || '',
+          idCardIssueDate: employee.dateOfIdCard || '',
+          idCardIssuePlace: employee.placeOfIdCard || '',
+          passportNumber: employee.passportNo || '',
+          passportExpiryDate: employee.passportExp || '',
+          qualification: employee.qualification || '',
+          major: employee.major || '',
+          cellphone: employee.phone || '',
+          homePhone: employee.homePhone || '',
+          workEmail: employee.email || '',
+          permanentAddress: employee.address || '',
+          currentAddress: employee.currentAddress || '',
+          pickupRemark: employee.pickupRemark || '',
+          letstalk: employee.letsTalk || '',
+          subCompanyId: employee.subCompanyId || '',
+          team: employee.team || '',
+          teamDate: employee.teamDate || '',
+          jobTitle: employee.jobTitleId || '',
+          jobLevel: employee.jobLevelId || '',
+          managementGrade: employee.managementLevelId || '',
+          salaryStructure: employee.salaryStructure || '',
+          promotionDate: employee.promotionDate || '',
+          groupDate: employee.joinedDate || '',
+          companyDate: employee.companyDate || '',
+          confirmedDate: employee.confirmedDate || '',
+          lengthOfServiceByGroup: employee.lengthOfServiceByGroupDate || '',
+          canOT: employee.canOT || false,
+          specialOT: employee.specialOT || '',
+          workingDays: employee.workingDays || '',
+          workingHoursbyWeek: employee.workingHoursbyWeek || '',
+          workingHours: employee.workingHours || '',
+          offDaysbyWeek: employee.offDaysbyWeek || '',
+          annualLeaveBalance: employee.annualLeaveBalance || '',
+          keepInViewBalance: employee.keepInViewBalance || '',
+        };
+      }
+
     const handleNext = (values, { setErrors, setSubmitting }) => {
         setSubmitting(true);
 
@@ -280,61 +332,9 @@ const AppContainer = () => {
             }
         })
             .then(response => {
-                console.log('Employee data:', response.data);
 
                 const employee = response.data;
-                const mappedData = {
-                    code: employee.code || '',
-                    fullName: employee.fullName || '',
-                    nickName: employee.nickName || '',
-                    employeeCard: employee.employeeCard || '',
-                    domainUsername: employee.domainUsername || '',
-                    gender: employee.gender || '',
-                    dateOfBirth: employee.dateOfBirth || '',
-                    placeOfBirth: employee.placeOfBirth || '',
-                    ethnic: employee.ethnic || '',
-                    native: employee.native || '',
-                    maritalStatus: employee.marriage || '',
-                    countryCode: employee.countryCode || '',
-                    religion: employee.religion || '',
-                    idCardNumber: employee.cardNo || '',
-                    idCardIssueDate: employee.dateOfIdCard || '',
-                    idCardIssuePlace: employee.placeOfIdCard || '',
-                    passportNumber: employee.passportNo || '',
-                    passportExpiryDate: employee.passportExp || '',
-                    qualification: employee.qualification || '',
-                    major: employee.major || '',
-
-                    cellphone: employee.phone || '',
-                    homePhone: employee.homePhone || '',
-                    workEmail: employee.email || '',
-                    permanentAddress: employee.address || '',
-                    currentAddress: employee.currentAddress || '',
-                    pickupRemark: employee.pickupRemark || '',
-                    letstalk: employee.letsTalk || '',
-
-                    subCompanyId: employee.subCompanyId || '',
-                    team: employee.team || '',
-                    teamDate: employee.teamDate || '',
-                    jobTitle: employee.jobTitleId || '',
-                    jobLevel: employee.jobLevelId || '',
-                    managementGrade: employee.managementLevelId || '',
-                    salaryStructure: employee.salaryStructure || '',
-                    promotionDate: employee.promotionDate || '',
-                    groupDate: employee.joinedDate || '',
-                    companyDate: employee.companyDate || '',
-                    confirmedDate: employee.confirmedDate || '',
-                    lengthOfServiceByGroup: employee.lengthOfServiceByGroupDate || '',
-
-                    canOT: employee.canOT || false,
-                    specialOT: employee.specialOT || '',
-                    workingDays: employee.workingDays || '',
-                    workingHoursbyWeek: employee.workingHoursbyWeek || '',
-                    workingHours: employee.workingHours || '',
-                    offDaysbyWeek: employee.offDaysbyWeek || '',
-                    annualLeaveBalance: employee.annualLeaveBalance || '',
-                    keepInViewBalance: employee.keepInViewBalance || '',
-                };
+                const mappedData = mapEmployeeResponse(employee);
 
                 setEmployeeData(mappedData);
                 setInitialValues(prev => ({
