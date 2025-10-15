@@ -1,27 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Field } from 'formik';
-import DatePicker from 'react-datepicker';
+import DatePickerField from '../../../../shared/components/DatePickerField';
 
 const Personal = ({ isOpen, onToggle, employeeData, countries, onGenerateEmployeeId }) => {
-    const [countryCodeOptions] = useState(countries || []);
-    const [countryCodeSearch, setCountryCodeSearch] = useState('');
     const [filteredCountryCodes, setFilteredCountryCodes] = useState(countries || []);
 
     useEffect(() => {
         setFilteredCountryCodes(countries || []);
     }, [countries]);
-
-    const handleCountryCodeSearch = searchTerm => {
-        setCountryCodeSearch(searchTerm);
-        if (searchTerm === '') {
-            setFilteredCountryCodes(countryCodeOptions);
-        } else {
-            const filtered = countryCodeOptions.filter(option =>
-                option.countryName.toLowerCase().includes(searchTerm.toLowerCase())
-            );
-            setFilteredCountryCodes(filtered);
-        }
-    };
 
     return (
         <div className={`panel-group ${!isOpen ? 'collapsed' : ''}`}>
@@ -124,25 +110,8 @@ const Personal = ({ isOpen, onToggle, employeeData, countries, onGenerateEmploye
                         </label>
                     </div>
                     <div className='calendar-form'>
-                        <div className='date-picker-wrapper'>
-                            <Field name='dateOfBirth'>
-                                {({ field, form }) => (
-                                    <DatePicker
-                                        selected={field.value && field.value !== '' ? new Date(field.value) : null}
-                                        onChange={date => form.setFieldValue(field.name, date)}
-                                        dateFormat="dd MMM, yyyy"
-                                        className='form-control'
-                                        placeholderText=""
-                                        showYearDropdown
-                                        showMonthDropdown
-                                        dropdownMode="select"
-                                    />
-                                )}
-                            </Field>
-                            <i className="fa fa-calendar calendar-icon" />
-                        </div>
+                        <DatePickerField name='dateOfBirth' />
                     </div>
-
                 </div>
 
                 <div className='form-group'>
@@ -292,23 +261,7 @@ const Personal = ({ isOpen, onToggle, employeeData, countries, onGenerateEmploye
                         </label>
                     </div>
                     <div className='calendar-form'>
-                        <div className='date-picker-wrapper'>
-                            <Field name='idCardIssueDate'>
-                                {({ field, form }) => (
-                                    <DatePicker
-                                        selected={field.value && field.value !== '' ? new Date(field.value) : null}
-                                        onChange={date => form.setFieldValue(field.name, date)}
-                                        dateFormat="dd MMM, yyyy"
-                                        className='form-control'
-                                        placeholderText=""
-                                        showYearDropdown
-                                        showMonthDropdown
-                                        dropdownMode="select"
-                                    />
-                                )}
-                            </Field>
-                            <i className="fa fa-calendar calendar-icon" />
-                        </div>
+                        <DatePickerField name='idCardIssueDate' />
                     </div>
                 </div>
 
@@ -350,23 +303,7 @@ const Personal = ({ isOpen, onToggle, employeeData, countries, onGenerateEmploye
                         </label>
                     </div>
                     <div className='calendar-form'>
-                        <div className='date-picker-wrapper'>
-                            <Field name='passportExpiryDate'>
-                                {({ field, form }) => (
-                                    <DatePicker
-                                        selected={field.value && field.value !== '' ? new Date(field.value) : null}
-                                        onChange={date => form.setFieldValue(field.name, date)}
-                                        dateFormat="dd MMM, yyyy"
-                                        className='form-control'
-                                        placeholderText=""
-                                        showYearDropdown
-                                        showMonthDropdown
-                                        dropdownMode="select"
-                                    />
-                                )}
-                            </Field>
-                            <i className="fa fa-calendar calendar-icon" />
-                        </div>
+                        <DatePickerField name='passportExpiryDate' />
                     </div>
                 </div>
 

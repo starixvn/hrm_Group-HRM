@@ -7,7 +7,6 @@ import EmployeeAutocomplete from '../../../shared/components/EmployeeAutocomplet
 import TreeMultiselect from '../../../shared/components/react-tree-multiselect/TreeMultiselect';
 
 import Personal from './components/Personal';
-import Military from './components/Military';
 import Contact from './components/Contact';
 import Information from './components/Information';
 import Policy from './components/Policy';
@@ -33,7 +32,6 @@ const AppContainer = () => {
     const [currentStep, setCurrentStep] = useState(1);
     const [panelStates, setPanelStates] = useState({
         personal: true,
-        military: true,
         contact: true,
         information: true,
         policy: true
@@ -65,8 +63,6 @@ const AppContainer = () => {
         passportExpiryDate: '',
         qualification: '',
         major: '',
-        militaryFrom: '',
-        militaryTo: '',
         cellphone: '',
         homePhone: '',
         workEmail: '',
@@ -309,9 +305,6 @@ const AppContainer = () => {
                     qualification: employee.qualification || '',
                     major: employee.major || '',
 
-                    militaryFrom: employee.militaryFromDate || '',
-                    militaryTo: employee.militaryToDate || '',
-
                     cellphone: employee.phone || '',
                     homePhone: employee.homePhone || '',
                     workEmail: employee.email || '',
@@ -504,11 +497,6 @@ const AppContainer = () => {
                                     />
                                 </div>
                                 <div>
-                                    <Military
-                                        isOpen={panelStates.military}
-                                        onToggle={() => togglePanel('military')}
-                                        employeeData={employeeData}
-                                    />
                                     <Information
                                         isOpen={panelStates.information}
                                         onToggle={() => togglePanel('information')}

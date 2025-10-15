@@ -1,6 +1,6 @@
 import React from 'react';
 import { Field } from 'formik';
-import DatePicker from 'react-datepicker';
+import DatePickerField from '../../../../shared/components/DatePickerField';
 import TreeMultiselect from '../../../../shared/components/react-tree-multiselect/TreeMultiselect';
 
 const Information = ({ isOpen, onToggle, employeeData, teams, onTeamChange, selectedTeam, jobLevels, managementLevels, subCompanies, jobTitles }) => {
@@ -60,20 +60,7 @@ const Information = ({ isOpen, onToggle, employeeData, teams, onTeamChange, sele
                         </label>
                     </div>
                     <div className='calendar-form'>
-                        <div className='date-picker-wrapper'>
-                            <Field name='teamDate'>
-                                {({ field, form }) => (
-                                    <DatePicker
-                                        selected={field.value ? new Date(field.value) : new Date()}
-                                        onChange={date => form.setFieldValue(field.name, date)}
-                                        dateFormat="dd MMM, yyyy"
-                                        className='form-control'
-                                        placeholderText=""
-                                    />
-                                )}
-                            </Field>
-                            <i className='fa fa-calendar calendar-icon'></i>
-                        </div>
+                        <DatePickerField name='teamDate' />
                     </div>
                 </div>
                 <div className='form-group'>
@@ -149,20 +136,7 @@ const Information = ({ isOpen, onToggle, employeeData, teams, onTeamChange, sele
                         </label>
                     </div>
                     <div className='calendar-form'>
-                        <div className='date-picker-wrapper'>
-                            <Field name='promotionDate'>
-                                {({ field, form }) => (
-                                    <DatePicker
-                                        selected={field.value && field.value !== '' ? new Date(field.value) : null}
-                                        onChange={date => form.setFieldValue(field.name, date)}
-                                        dateFormat="dd MMM, yyyy"
-                                        className='form-control'
-                                        placeholderText=""
-                                    />
-                                )}
-                            </Field>
-                            <i className='fa fa-calendar calendar-icon'></i>
-                        </div>
+                        <DatePickerField name='promotionDate' />
                     </div>
                 </div>
                 <div className='form-group'>
@@ -172,20 +146,7 @@ const Information = ({ isOpen, onToggle, employeeData, teams, onTeamChange, sele
                         </label>
                     </div>
                     <div className='calendar-form'>
-                        <div className='date-picker-wrapper'>
-                            <Field name='groupDate'>
-                                {({ field, form }) => (
-                                    <DatePicker
-                                        selected={field.value && field.value !== '' ? new Date(field.value) : null}
-                                        onChange={date => form.setFieldValue(field.name, date)}
-                                        dateFormat="dd MMM, yyyy"
-                                        className='form-control'
-                                        placeholderText=""
-                                    />
-                                )}
-                            </Field>
-                            <i className='fa fa-calendar calendar-icon'></i>
-                        </div>
+                        <DatePickerField name='groupDate' />
                     </div>
                 </div>
                 <div className='form-group'>
@@ -195,20 +156,7 @@ const Information = ({ isOpen, onToggle, employeeData, teams, onTeamChange, sele
                         </label>
                     </div>
                     <div className='calendar-form'>
-                        <div className='date-picker-wrapper'>
-                            <Field name='companyDate'>
-                                {({ field, form }) => (
-                                    <DatePicker
-                                        selected={field.value ? new Date(field.value) : new Date()}
-                                        onChange={date => form.setFieldValue(field.name, date)}
-                                        dateFormat="dd MMM, yyyy"
-                                        className='form-control'
-                                        placeholderText=""
-                                    />
-                                )}
-                            </Field>
-                            <i className='fa fa-calendar calendar-icon'></i>
-                        </div>
+                        '<DatePickerField name='companyDate' />
                     </div>
                 </div>
                 <div className='form-group'>
@@ -218,20 +166,7 @@ const Information = ({ isOpen, onToggle, employeeData, teams, onTeamChange, sele
                         </label>
                     </div>
                     <div className='calendar-form'>
-                        <div className='date-picker-wrapper'>
-                            <Field name='confirmedDate'>
-                                {({ field, form }) => (
-                                    <DatePicker
-                                        selected={field.value && field.value !== '' ? new Date(field.value) : null}
-                                        onChange={date => form.setFieldValue(field.name, date)}
-                                        dateFormat="dd MMM, yyyy"
-                                        className='form-control'
-                                        placeholderText=""
-                                    />
-                                )}
-                            </Field>
-                            <i className='fa fa-calendar calendar-icon'></i>
-                        </div>
+                        <DatePickerField name='confirmedDate' />
                     </div>
                 </div>
                 <div className='form-group'>
