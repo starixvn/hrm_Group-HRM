@@ -117,8 +117,8 @@ const SelectField = ({
       >
         <option value="">--{placeholder || `Select ${label}`}--</option>
         {options
-          ?.filter((opt) => opt[valueKey])
-          .map((opt) => (
+          ?.filter(opt => opt[valueKey])
+          .map(opt => (
             <option key={`${name}-${opt[valueKey]}`} value={opt[valueKey]}>
               {opt[textKey] || opt.name || opt.text}
             </option>

@@ -269,24 +269,33 @@ const AppContainer = () => {
         };
       }
       
-      function mapDemographics(employee) {
+      function mapBasicDemographics(e) {
         return {
-          gender: employee.gender || '',
-          dateOfBirth: employee.dateOfBirth || '',
-          placeOfBirth: employee.placeOfBirth || '',
-          ethnic: employee.ethnic || '',
-          native: employee.native || '',
-          maritalStatus: employee.marriage || '',
-          countryCode: employee.countryCode || '',
-          religion: employee.religion || '',
-          idCardNumber: employee.cardNo || '',
-          idCardIssueDate: employee.dateOfIdCard || '',
-          idCardIssuePlace: employee.placeOfIdCard || '',
-          passportNumber: employee.passportNo || '',
-          passportExpiryDate: employee.passportExp || '',
-          qualification: employee.qualification || '',
-          major: employee.major || '',
+          gender: e.gender || '',
+          dateOfBirth: e.dateOfBirth || '',
+          placeOfBirth: e.placeOfBirth || '',
+          ethnic: e.ethnic || '',
+          native: e.native || '',
+          maritalStatus: e.marriage || '',
         };
+      }
+      
+      function mapGovernmentInfo(e) {
+        return {
+          countryCode: e.countryCode || '',
+          religion: e.religion || '',
+          idCardNumber: e.cardNo || '',
+          idCardIssueDate: e.dateOfIdCard || '',
+          idCardIssuePlace: e.placeOfIdCard || '',
+          passportNumber: e.passportNo || '',
+          passportExpiryDate: e.passportExp || '',
+          qualification: e.qualification || '',
+          major: e.major || '',
+        };
+      }
+      
+      function mapDemographics(employee) {
+        return { ...mapBasicDemographics(employee), ...mapGovernmentInfo(employee) };
       }
       
       function mapPersonal(employee) {
