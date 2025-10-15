@@ -1,8 +1,9 @@
 import React from 'react';
 import { Field } from 'formik';
 import DatePicker from 'react-datepicker';
+import TreeMultiselect from '../../../../shared/components/react-tree-multiselect/TreeMultiselect';
 
-const Information = ({ isOpen, onToggle, employeeData }) => {
+const Information = ({ isOpen, onToggle, employeeData, teams, onTeamChange, selectedTeam, jobLevels, managementLevels, subCompanies, jobTitles }) => {
     return (
         <div className={`panel-group ${!isOpen ? 'collapsed' : ''}`}>
             <div className='panel-heading' onClick={onToggle}>
@@ -20,11 +21,17 @@ const Information = ({ isOpen, onToggle, employeeData }) => {
                     </div>
                     <div className='select-form'>
                         <Field
-                            name='subCompany'
+                            name='subCompanyId'
                             as='select'
                             className='form-control'
+                            value={employeeData && employeeData.subCompanyId}
                         >
                             <option value=''>--Select a Sub Company--</option>
+                            {subCompanies && subCompanies.filter(company => company.id).map(company => (
+                                <option key={`subcompany-${company.id}`} value={company.id}>
+                                    {company.name || company.text}
+                                </option>
+                            ))}
                         </Field>
                     </div>
                 </div>
@@ -35,13 +42,15 @@ const Information = ({ isOpen, onToggle, employeeData }) => {
                         </label>
                     </div>
                     <div className='select-form'>
-                        <Field
-                            name='team'
-                            as='select'
-                            className='form-control'
-                        >
-                            <option value=''>Select Team</option>
-                        </Field>
+                        <TreeMultiselect
+                            data={teams || []}
+                            isSelectedAll={false}
+                            hasSearchBox={true}
+                            leafOnly={true}
+                            singleSelect={true}
+                            onChange={onTeamChange}
+                            selectedItems={selectedTeam ? [selectedTeam] : []}
+                        />
                     </div>
                 </div>
                 <div className='form-group'>
@@ -78,8 +87,14 @@ const Information = ({ isOpen, onToggle, employeeData }) => {
                             name='jobTitle'
                             as='select'
                             className='form-control'
+                            value={employeeData && employeeData.jobTitle}
                         >
-                            <option value=''>Select Job Title</option>
+                            <option value=''>--Select a Job Title--</option>
+                            {jobTitles && jobTitles.filter(jobTitle => jobTitle.id).map(jobTitle => (
+                                <option key={`jobtitle-${jobTitle.id}`} value={jobTitle.id}>
+                                    {jobTitle.text || jobTitle.name}
+                                </option>
+                            ))}
                         </Field>
                     </div>
                 </div>
@@ -94,8 +109,14 @@ const Information = ({ isOpen, onToggle, employeeData }) => {
                             name='jobLevel'
                             as='select'
                             className='form-control'
+                            value={employeeData && employeeData.jobLevel}
                         >
-                            <option value=''>Select Job Level</option>
+                            <option value=''>--Select a Job Level--</option>
+                            {jobLevels && jobLevels.filter(jobLevel => jobLevel.id).map(jobLevel => (
+                                <option key={`joblevel-${jobLevel.id}`} value={jobLevel.id}>
+                                    {jobLevel.name || jobLevel.text}
+                                </option>
+                            ))}
                         </Field>
                     </div>
                 </div>
@@ -110,8 +131,14 @@ const Information = ({ isOpen, onToggle, employeeData }) => {
                             name='managementGrade'
                             as='select'
                             className='form-control'
+                            value={employeeData && employeeData.managementGrade}
                         >
-                            <option value=''>Select Management Grade</option>
+                            <option value=''>--Select a M Grade--</option>
+                            {managementLevels && managementLevels.filter(level => level.id).map(level => (
+                                <option key={`mgmtlevel-${level.id}`} value={level.id}>
+                                    {level.name || level.text}
+                                </option>
+                            ))}
                         </Field>
                     </div>
                 </div>

@@ -500,9 +500,9 @@ public class EmployeeController(
         return new JsonResult(employees, new JsonSerializerSettings { ContractResolver = new DefaultContractResolver() });
     }
 
-    public async Task<JsonResult> GenerateEmployeeCode()
+    public async Task<JsonResult> GenerateEmployeeCode(short? companyId)
     {
-        var newCode = await employeeService.GenerateEmployeeCode();
+        var newCode = await employeeService.GenerateEmployeeCode(companyId);
         return Json(newCode);
     }
 

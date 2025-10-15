@@ -1,42 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Field } from 'formik';
 import DatePicker from 'react-datepicker';
 
-const Personal = ({ isOpen, onToggle, employeeData }) => {
-    const [nationalityOptions] = useState([
-        { id: 'VN', text: 'Vietnam' },
-        { id: 'US', text: 'United States' },
-        { id: 'UK', text: 'United Kingdom' },
-        { id: 'JP', text: 'Japan' },
-        { id: 'KR', text: 'South Korea' },
-        { id: 'CN', text: 'China' },
-        { id: 'TH', text: 'Thailand' },
-        { id: 'SG', text: 'Singapore' },
-        { id: 'MY', text: 'Malaysia' },
-        { id: 'ID', text: 'Indonesia' },
-        { id: 'PH', text: 'Philippines' },
-        { id: 'IN', text: 'India' },
-        { id: 'AU', text: 'Australia' },
-        { id: 'CA', text: 'Canada' },
-        { id: 'FR', text: 'France' },
-        { id: 'DE', text: 'Germany' },
-        { id: 'IT', text: 'Italy' },
-        { id: 'ES', text: 'Spain' },
-        { id: 'NL', text: 'Netherlands' },
-        { id: 'BE', text: 'Belgium' }
-    ]);
-    const [nationalitySearch, setNationalitySearch] = useState('');
-    const [filteredNationalities, setFilteredNationalities] = useState(nationalityOptions);
+const Personal = ({ isOpen, onToggle, employeeData, countries, onGenerateEmployeeId }) => {
+    const [countryCodeOptions] = useState(countries || []);
+    const [countryCodeSearch, setCountryCodeSearch] = useState('');
+    const [filteredCountryCodes, setFilteredCountryCodes] = useState(countries || []);
 
-    const handleNationalitySearch = (searchTerm) => {
-        setNationalitySearch(searchTerm);
+    useEffect(() => {
+        setFilteredCountryCodes(countries || []);
+    }, [countries]);
+
+    const handleCountryCodeSearch = searchTerm => {
+        setCountryCodeSearch(searchTerm);
         if (searchTerm === '') {
-            setFilteredNationalities(nationalityOptions);
+            setFilteredCountryCodes(countryCodeOptions);
         } else {
-            const filtered = nationalityOptions.filter(option =>
-                option.text.toLowerCase().includes(searchTerm.toLowerCase())
+            const filtered = countryCodeOptions.filter(option =>
+                option.countryName.toLowerCase().includes(searchTerm.toLowerCase())
             );
-            setFilteredNationalities(filtered);
+            setFilteredCountryCodes(filtered);
         }
     };
 
@@ -55,12 +38,22 @@ const Personal = ({ isOpen, onToggle, employeeData }) => {
                             Employee ID
                         </label>
                     </div>
-                    <div className='select-form'>
-                        <Field
-                            name='employeeId'
-                            type='text'
-                            className='form-control'
-                        />
+                    <div className='input-form'>
+                        <div className='input-group-generate'>
+                            <Field
+                                name='employeeId'
+                                type='text'
+                                className='form-control'
+                                value={employeeData && employeeData.employeeId}
+                            />
+                            <button
+                                type='button'
+                                className='btn btn-primary btn-generate'
+                                onClick={onGenerateEmployeeId}
+                            >
+                                Generate
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -224,9 +217,9 @@ const Personal = ({ isOpen, onToggle, employeeData }) => {
                             as='select'
                             className='form-control'
                         >
-                            <option value='2'>Unknown</option>
-                            <option value='0'>Female</option>
-                            <option value='1'>Male</option>
+                            <option key='gender-2' value='2'>Unknown</option>
+                            <option key='gender-0' value='0'>Female</option>
+                            <option key='gender-1' value='1'>Male</option>
                         </Field>
                     </div>
                 </div>
@@ -239,15 +232,16 @@ const Personal = ({ isOpen, onToggle, employeeData }) => {
                     </div>
                     <div className='select-form'>
                         <Field
-                            name='maritalStatus'
+                            name='marriage'
                             as='select'
                             className='form-control'
+                            value={employeeData && employeeData.marriage}
                         >
-                            <option value=''>Select Status</option>
-                            <option value='Single'>Single</option>
-                            <option value='Married'>Married</option>
-                            <option value='Divorced'>Divorced</option>
-                            <option value='Widowed'>Widowed</option>
+                            <option key='marriage-0' value='0'>--Select Marriage Status--</option>
+                            <option key='marriage-1' value='1'>Married</option>
+                            <option key='marriage-2' value='2'>Divorced</option>
+                            <option key='marriage-3' value='3'>Single</option>
+                            <option key='marriage-4' value='4'>Widow</option>
                         </Field>
                     </div>
                 </div>
@@ -261,14 +255,14 @@ const Personal = ({ isOpen, onToggle, employeeData }) => {
                     <div className='input-form'>
                         <div className='searchable-select'>
                             <Field
-                                name='nationality'
+                                name='countryCode'
                                 as='select'
                                 className='form-control'
                             >
                                 <option value=''>Select Nationality</option>
-                                {filteredNationalities.map(option => (
-                                    <option key={option.id} value={option.id}>
-                                        {option.text}
+                                {filteredCountryCodes.map(option => (
+                                    <option key={option.countryCode} value={option.countryCode}>
+                                        {option.countryName}
                                     </option>
                                 ))}
                             </Field>

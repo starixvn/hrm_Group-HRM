@@ -22,6 +22,7 @@ using HRM.Models.Supervisor;
 using HRM.Models.Unit;
 using HRM.Services.ExportExcel.Employee;
 using HRM.Services.Helper;
+using HRM.Services.Implement;
 using HRM.Services.Interfaces;
 using HRM.ViewModels;
 using HRM.ViewModels.EmployeeGroup;
@@ -42,7 +43,10 @@ public class GroupEmployeeListController(
     IEmployeeService employeeService,
     ISecondCompanyEmployeeService secondCompanyEmployeeService,
     IPayrollManagementService payrollManagementService,
-    IUserService userService
+    IUserService userService,
+    ICommonDataService commonDataService,
+    IJobLevelService jobLevelService,
+    IManagementLevelService managementLevelService
 ) : BaseController(session)
 #pragma warning restore S107 // Methods should not have too many parameters
 {
@@ -184,6 +188,13 @@ public class GroupEmployeeListController(
 
     [HttpGet]
     [HrmPermission(Policy.Host, FunctionKey.GroupEmployeeList)]
+    public IActionResult Transfer()
+    {
+        return View();
+    }
+
+    [HttpPost]
+    [HrmPermission(Policy.Host, FunctionKey.GroupEmployeeList)]
     public async Task<IActionResult> Transfer(EmployeeTransfer model)
     {
         var result = await employeeService.CheckExistAsync(model.Code, model.NickName);
@@ -196,16 +207,22 @@ public class GroupEmployeeListController(
         var param = EmployeeHelper.MappingEditEmployeeParam(model, $"{(int)RoleSystem.Member}");
         param.EmployeeId = newEmpId;
 
-        var commandResult = await employeeService.EditAsync(EmployeeSession.EmpId, param, model.TargetCompanyId);
+        var commandResult = await employeeService.EditAsync(
+            EmployeeSession.EmpId,
+            param,
+            model.TargetCompanyId
+        );
         if (commandResult.IsSuccessful)
         {
             await employeeService.UpdateUserInfo(model.UserId, param);
-            await userService.UpdateUserSiteAsync(new UpdateUserSiteParam
-            {
-                UserId = model.UserId,
-                SiteId = session.SiteId,
-                IsActive = true
-            });
+            await userService.UpdateUserSiteAsync(
+                new UpdateUserSiteParam
+                {
+                    UserId = model.UserId,
+                    SiteId = session.SiteId,
+                    IsActive = true,
+                }
+            );
         }
 
         return Json(commandResult);
@@ -216,6 +233,21 @@ public class GroupEmployeeListController(
     public async Task<IActionResult> GetInfoEmployeeTransfer(int id, short companyId)
     {
         var employee = await employeeService.GetEmployeeTransferByIdAsync(id, companyId);
+
+        if (employee != null)
+        {
+            employee.Coutries = await commonDataService.GetAllCountry();
+            employee.LengthOfServiceByGroupDate = employeeService.CalculateLengthOfService(
+                employee.JoinedDate,
+                employee.MilitaryFromDate,
+                employee.MilitaryToDate
+            );
+            employee.JobLevels = (await jobLevelService.GetJobLevel()).ToList();
+            employee.ManagementLevels = (await managementLevelService.GetManagementLevel()).ToList();
+            employee.SubCompanies = (await companyService.GetSubCompanies(companyId)).ToList();
+            employee.JobTitles = (await commonDataService.GetLookupDataByCodeAsync(Constants.JobTitle, companyId)).ToList();
+        }
+
         return Json(employee);
     }
 

@@ -241,4 +241,14 @@ public class Employee : EntityBase<int>
     public IEnumerable<LogObjectDetail> HistoryWork { get; set; }
 
     private string[] GetRoles2Array() => Roles?.Select(i => i.RoleId.ToString()).ToArray();
+
+    public string LengthOfServiceByGroupDate { get; set; }
+
+    public IList<JobLevel> JobLevels { get; set; }
+
+    public IList<ManagementLevel> ManagementLevels { get; set; }
+
+    public IList<SubCompany> SubCompanies { get; set; }
+
+    public IList<LookupData> JobTitles { get; set; }
 }

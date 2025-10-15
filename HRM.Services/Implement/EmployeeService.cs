@@ -36,12 +36,13 @@ public class EmployeeService(
     IUserService userService,
     IUserControlSession session) : IEmployeeService
 {
-    public async Task<string> GenerateEmployeeCode()
+    public async Task<string> GenerateEmployeeCode(short? companyId)
     {
-        var companyId = session.Get<short>(SessionKey.CurrentCompanyId);
+        var effectiveCompanyId = companyId ?? session.Get<short>(SessionKey.CurrentCompanyId);
+
         var criteria = new GenerateEmployeeCodeCriteria
         {
-            CompanyId = companyId
+            CompanyId = effectiveCompanyId
         };
         return await baseService.GetDataEntityAsync<string>(criteria);
     }

@@ -19,7 +19,7 @@ const Policy = ({ isOpen, onToggle, employeeData }) => {
                     </div>
                     <div className='input-form'>
                         <Field
-                            name='allowClaimOT'
+                            name='canOT'
                             type='checkbox'
                         />
                     </div>
@@ -100,7 +100,6 @@ const Policy = ({ isOpen, onToggle, employeeData }) => {
                     </div>
                 </div>
 
-                {/* Read-only Leave Balance fields */}
                 <div className='form-group'>
                     <div className='label-form'>
                         <label className='control-label'>
@@ -109,7 +108,7 @@ const Policy = ({ isOpen, onToggle, employeeData }) => {
                     </div>
                     <div className='input-form'>
                         <span className='read-only-field'>
-                            {employeeData && employeeData.leaveBalance || '25.00 day(s)'}
+                            {(employeeData && employeeData.annualLeaveBalance || 0) + ' day(s)'}
                         </span>
                     </div>
                 </div>
@@ -122,7 +121,7 @@ const Policy = ({ isOpen, onToggle, employeeData }) => {
                     </div>
                     <div className='input-form'>
                         <div className='read-only-field'>
-                            {employeeData && employeeData.compensationLeaveBalance || '0.00 day(s)'}
+                            {(employeeData && employeeData.keepInViewBalance || 0) + ' day(s)'}
                         </div>
                     </div>
                 </div>

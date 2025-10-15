@@ -16,7 +16,7 @@ namespace HRM.Services.Interfaces;
 
 public interface IEmployeeService
 {
-    Task<string> GenerateEmployeeCode();
+    Task<string> GenerateEmployeeCode(short? companyId);
 
     Task<IEnumerable<SupervisorNameModel>> GetListSupervisorNameAsync(GetListSupervisorNameCriteria criteria);
 
