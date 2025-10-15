@@ -169,16 +169,10 @@ public class OvertimeReportService(
 
         // summary
         templateWorksheet.Cells[totalRowIndex, 1, totalRowIndex, totalColumns].Copy(worksheet.Cells[rowIndex, 1, rowIndex, totalColumns]);
-        const byte totalMonths = 12;
-        for (var i = 0; i <= totalMonths; i++)
-        {
-            colIndex = startMonthColumn + i;
-            var excelAddress = $"{worksheet.Cells[startBodyRow, colIndex].Address}:{worksheet.Cells[rowIndex - 1, colIndex].Address}";
-            worksheet.Cells[rowIndex, colIndex].Formula = string.Format(Constants.SummaryFormula, excelAddress);
-        }
+        const byte totalMonths = 13; // 12 months + total column
+        WriteSummaryFormulas(worksheet, rowIndex, startMonthColumn, startBodyRow, totalMonths);
 
-        worksheet.Cells.AutoFitColumns(MinimumWidth, MaximumWidth);
-        worksheet.View.FreezePanes(startBodyRow, 1);
+        FinalizeWorksheet(worksheet, startBodyRow);
 
         return xlPackage.GetAsByteArray();
     }
@@ -257,8 +251,7 @@ public class OvertimeReportService(
             rowIndex++;
         }
 
-        worksheet.Cells.AutoFitColumns(MinimumWidth, MaximumWidth);
-        worksheet.View.FreezePanes(StartBodyRow, 1);
+        FinalizeWorksheet(worksheet, StartBodyRow);
 
         return xlPackage.GetAsByteArray();
     }
@@ -276,17 +269,11 @@ public class OvertimeReportService(
             summaryRow = 6,
             startSummaryColumn = 13
         };
-        var fromDate = dateRanges.Min(x => x.Date);
-        var toDate = dateRanges.Max(x => x.Date);
         var rowIndex = 1;
         var colIndex = 1;
 
         // title
-        template.Cells[rowIndex, colIndex, rowIndex, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
-        worksheet.Cells[rowIndex, colIndex].Value = string.Format(
-            worksheet.Cells[rowIndex, colIndex].Value.ToString(),
-            fromDate.ToString(DateFormat),
-            toDate.ToString(DateFormat));
+        CopyTitleWithDateRange(template, worksheet, dateRanges, rowIndex, TotalColumns);
         rowIndex++;
 
         // header
@@ -330,44 +317,29 @@ public class OvertimeReportService(
         {
             template.Cells[templateIndex.summaryRow, 1, templateIndex.summaryRow, TotalColumns].Copy(worksheet.Cells[rowIndex, 1, rowIndex, TotalColumns]);
             const byte TotalSummaryColumns = 4;
-            for (var i = 0; i < TotalSummaryColumns; i++)
-            {
-                colIndex = templateIndex.startSummaryColumn + i;
-                var excelAddress = $"{worksheet.Cells[templateIndex.bodyRow, colIndex].Address}:{worksheet.Cells[rowIndex - 1, colIndex].Address}";
-                worksheet.Cells[rowIndex, colIndex].Formula = string.Format(Constants.SummaryFormula, excelAddress);
-            }
+            WriteSummaryFormulas(worksheet, rowIndex, templateIndex.startSummaryColumn, templateIndex.bodyRow, TotalSummaryColumns);
         }
 
-        worksheet.Cells.AutoFitColumns(MinimumWidth, MaximumWidth);
-        worksheet.View.FreezePanes(templateIndex.bodyRow, 1);
+        FinalizeWorksheet(worksheet, templateIndex.bodyRow);
     }
 
-    private static byte GetTemplateRowIndex(bool isEnable, bool isDeleted)
+    private static byte GetTemplateRowIndex(bool isEnable, bool isDeleted, byte baseRowIndex = 3)
     {
-        const byte normalRowIndex = 3;
-        const byte disabledRowIndex = 4;
-        const byte deletedRowIndex = 5;
+        const byte rowOffset = 0;
+        const byte disabledOffset = 1;
+        const byte deletedOffset = 2;
 
         if (isDeleted)
         {
-            return deletedRowIndex;
+            return (byte)(baseRowIndex + deletedOffset);
         }
 
-        return isEnable ? normalRowIndex : disabledRowIndex;
+        return isEnable ? (byte)(baseRowIndex + rowOffset) : (byte)(baseRowIndex + disabledOffset);
     }
 
     private static byte GetTemplateRowIndex(YearlyOvertime record)
     {
-        const byte normalRowIndex = 4;
-        const byte disabledRowIndex = 5;
-        const byte deletedRowIndex = 6;
-
-        if (record.IsDeleted)
-        {
-            return deletedRowIndex;
-        }
-
-        return record.Enabled ? normalRowIndex : disabledRowIndex;
+        return GetTemplateRowIndex(record.Enabled, record.IsDeleted, 4);
     }
 
     private static void WriteOvertimeRecord(
@@ -444,16 +416,10 @@ public class OvertimeReportService(
             const byte TotalSummaryColumns = 4;
             template.Cells[templateIndex.summaryRow, 1, templateIndex.summaryRow, totalFixedColumns]
                 .Copy(worksheet.Cells[rowIndex, 1, rowIndex, totalFixedColumns]);
-            for (var i = 0; i < TotalSummaryColumns; i++)
-            {
-                colIndex = templateIndex.startSummaryColumn + i;
-                var excelAddress = $"{worksheet.Cells[templateIndex.bodyRow, colIndex].Address}:{worksheet.Cells[rowIndex - 1, colIndex].Address}";
-                worksheet.Cells[rowIndex, colIndex].Formula = string.Format(Constants.SummaryFormula, excelAddress);
-            }
+            WriteSummaryFormulas(worksheet, rowIndex, templateIndex.startSummaryColumn, templateIndex.bodyRow, TotalSummaryColumns);
         }
 
-        worksheet.Cells.AutoFitColumns(MinimumWidth, MaximumWidth);
-        worksheet.View.FreezePanes(templateIndex.bodyRow, templateIndex.startNormalDayColumn);
+        FinalizeWorksheet(worksheet, templateIndex.bodyRow, templateIndex.startNormalDayColumn);
     }
 
     private static void WriteHeaderOvertimeRecord(
@@ -465,13 +431,11 @@ public class OvertimeReportService(
         const byte TotalFixedColumns = 11;
         const byte TotalNormalDayColumns = 3;
         var colIndex = 1;
-        var fromDate = dateRanges.Min(x => x.Date);
-        var toDate = dateRanges.Max(x => x.Date);
-        template.Cells[1, colIndex, templateIndex.headerRow, TotalFixedColumns].Copy(worksheet.Cells[1, colIndex, templateIndex.headerRow, TotalFixedColumns]);
-        worksheet.Cells[1, colIndex].Value = string.Format(
-            worksheet.Cells[1, colIndex].Value.ToString(),
-            fromDate.ToString(DateFormat),
-            toDate.ToString(DateFormat));
+        
+        // Copy title with date range
+        CopyTitleWithDateRange(template, worksheet, dateRanges, 1, TotalFixedColumns);
+        template.Cells[2, colIndex, templateIndex.headerRow, TotalFixedColumns].Copy(worksheet.Cells[2, colIndex, templateIndex.headerRow, TotalFixedColumns]);
+        
         colIndex = templateIndex.startNormalDayColumn;
         foreach (var date in dateRanges)
         {
@@ -508,17 +472,11 @@ public class OvertimeReportService(
             summaryRow = 4,
             startSummaryColumn = 2
         };
-        var fromDate = dateRanges.Min(x => x.Date);
-        var toDate = dateRanges.Max(x => x.Date);
         var rowIndex = 1;
         var colIndex = 1;
 
         // title
-        template.Cells[rowIndex, colIndex, rowIndex, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
-        worksheet.Cells[rowIndex, colIndex].Value = string.Format(
-            worksheet.Cells[rowIndex, colIndex].Value.ToString(),
-            fromDate.ToString(DateFormat),
-            toDate.ToString(DateFormat));
+        CopyTitleWithDateRange(template, worksheet, dateRanges, rowIndex, TotalColumns);
         rowIndex++;
 
         // header
@@ -547,16 +505,47 @@ public class OvertimeReportService(
         {
             template.Cells[templateIndex.summaryRow, 1, templateIndex.summaryRow, TotalColumns].Copy(worksheet.Cells[rowIndex, 1, rowIndex, TotalColumns]);
             const byte TotalSummaryColumns = 4;
-            for (var i = 0; i < TotalSummaryColumns; i++)
-            {
-                colIndex = templateIndex.startSummaryColumn + i;
-                var excelAddress = $"{worksheet.Cells[templateIndex.bodyRow, colIndex].Address}:{worksheet.Cells[rowIndex - 1, colIndex].Address}";
-                worksheet.Cells[rowIndex, colIndex].Formula = string.Format(Constants.SummaryFormula, excelAddress);
-            }
+            WriteSummaryFormulas(worksheet, rowIndex, templateIndex.startSummaryColumn, templateIndex.bodyRow, TotalSummaryColumns);
         }
 
+        FinalizeWorksheet(worksheet, templateIndex.bodyRow);
+    }
+
+    private static void CopyTitleWithDateRange(
+        ExcelWorksheet template,
+        ExcelWorksheet worksheet,
+        IEnumerable<DateRange> dateRanges,
+        int rowIndex,
+        int totalColumns)
+    {
+        var fromDate = dateRanges.Min(x => x.Date);
+        var toDate = dateRanges.Max(x => x.Date);
+        template.Cells[rowIndex, 1, rowIndex, totalColumns].Copy(worksheet.Cells[rowIndex, 1, rowIndex, totalColumns]);
+        worksheet.Cells[rowIndex, 1].Value = string.Format(
+            worksheet.Cells[rowIndex, 1].Value.ToString(),
+            fromDate.ToString(DateFormat),
+            toDate.ToString(DateFormat));
+    }
+
+    private static void WriteSummaryFormulas(
+        ExcelWorksheet worksheet,
+        int rowIndex,
+        int startColumn,
+        int bodyRowIndex,
+        int totalColumns)
+    {
+        for (var i = 0; i < totalColumns; i++)
+        {
+            var colIndex = startColumn + i;
+            var excelAddress = $"{worksheet.Cells[bodyRowIndex, colIndex].Address}:{worksheet.Cells[rowIndex - 1, colIndex].Address}";
+            worksheet.Cells[rowIndex, colIndex].Formula = string.Format(Constants.SummaryFormula, excelAddress);
+        }
+    }
+
+    private static void FinalizeWorksheet(ExcelWorksheet worksheet, int freezeRow, int freezeColumn = 1)
+    {
         worksheet.Cells.AutoFitColumns(MinimumWidth, MaximumWidth);
-        worksheet.View.FreezePanes(templateIndex.bodyRow, 1);
+        worksheet.View.FreezePanes(freezeRow, freezeColumn);
     }
 
     private static ValueTuple<DateTime, DateTime> GetDateRange(DateTime month)
