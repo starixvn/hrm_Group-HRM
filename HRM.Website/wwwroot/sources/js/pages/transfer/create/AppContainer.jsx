@@ -259,13 +259,18 @@ const AppContainer = () => {
         return errors;
     };
 
-    function mapEmployeeResponse(employee) {
+    function mapIdentity(employee) {
         return {
           code: employee.code || '',
           fullName: employee.fullName || '',
           nickName: employee.nickName || '',
           employeeCard: employee.employeeCard || '',
           domainUsername: employee.domainUsername || '',
+        };
+      }
+      
+      function mapDemographics(employee) {
+        return {
           gender: employee.gender || '',
           dateOfBirth: employee.dateOfBirth || '',
           placeOfBirth: employee.placeOfBirth || '',
@@ -281,6 +286,15 @@ const AppContainer = () => {
           passportExpiryDate: employee.passportExp || '',
           qualification: employee.qualification || '',
           major: employee.major || '',
+        };
+      }
+      
+      function mapPersonal(employee) {
+        return { ...mapIdentity(employee), ...mapDemographics(employee) };
+      }
+      
+      function mapContact(employee) {
+        return {
           cellphone: employee.phone || '',
           homePhone: employee.homePhone || '',
           workEmail: employee.email || '',
@@ -288,18 +302,37 @@ const AppContainer = () => {
           currentAddress: employee.currentAddress || '',
           pickupRemark: employee.pickupRemark || '',
           letstalk: employee.letsTalk || '',
+        };
+      }
+      
+      function mapJobStructure(employee) {
+        return {
           subCompanyId: employee.subCompanyId || '',
           team: employee.team || '',
           teamDate: employee.teamDate || '',
           jobTitle: employee.jobTitleId || '',
           jobLevel: employee.jobLevelId || '',
           managementGrade: employee.managementLevelId || '',
+        };
+      }
+      
+      function mapJobTimeline(employee) {
+        return {
           salaryStructure: employee.salaryStructure || '',
           promotionDate: employee.promotionDate || '',
           groupDate: employee.joinedDate || '',
           companyDate: employee.companyDate || '',
           confirmedDate: employee.confirmedDate || '',
           lengthOfServiceByGroup: employee.lengthOfServiceByGroupDate || '',
+        };
+      }
+      
+      function mapJob(employee) {
+        return { ...mapJobStructure(employee), ...mapJobTimeline(employee) };
+      }
+      
+      function mapPolicy(employee) {
+        return {
           canOT: employee.canOT || false,
           specialOT: employee.specialOT || '',
           workingDays: employee.workingDays || '',
@@ -308,6 +341,15 @@ const AppContainer = () => {
           offDaysbyWeek: employee.offDaysbyWeek || '',
           annualLeaveBalance: employee.annualLeaveBalance || '',
           keepInViewBalance: employee.keepInViewBalance || '',
+        };
+      }
+      
+      function mapEmployeeResponse(employee) {
+        return {
+          ...mapPersonal(employee),
+          ...mapContact(employee),
+          ...mapJob(employee),
+          ...mapPolicy(employee),
         };
       }
 
@@ -352,7 +394,7 @@ const AppContainer = () => {
                 setCurrentStep(2);
                 setSubmitting(false);
             })
-            .catch(error => {
+            .catch(_error => {
                 setErrors({ general: 'Failed to load employee data' });
                 setSubmitting(false);
             });
@@ -416,7 +458,7 @@ const AppContainer = () => {
                                         as='select'
                                         className='form-control'
                                         value={initialValues.transferInCompanyId}
-                                        onChange={(e) => handleCompanyChange(e.target.value)}>
+                                        onChange={e => handleCompanyChange(e.target.value)}>
                                         <option value='' />
                                         {companies
                                             ? companies.map(company => (
@@ -458,7 +500,7 @@ const AppContainer = () => {
                                         className='form-control'
                                         rows='3'
                                         value={initialValues.transferRemark}
-                                        onChange={(e) => handleTransferRemarkChange(e.target.value)}
+                                        onChange={e => handleTransferRemarkChange(e.target.value)}
                                     />
                                 </div>
                             </div>

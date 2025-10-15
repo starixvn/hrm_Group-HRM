@@ -1,7 +1,7 @@
 import React from 'react';
 import { Field } from 'formik';
 
-const Contact = ({ isOpen, onToggle, employeeData }) => {
+const Contact = ({ isOpen, onToggle }) => {
     return (
         <div className={`panel-group ${!isOpen ? 'collapsed' : ''}`}>
             <div className='panel-heading' onClick={onToggle}>
