@@ -353,7 +353,6 @@ const AppContainer = () => {
                 setSubmitting(false);
             })
             .catch(error => {
-                console.error('Error fetching employee data:', error);
                 setErrors({ general: 'Failed to load employee data' });
                 setSubmitting(false);
             });
@@ -369,7 +368,10 @@ const AppContainer = () => {
             const model = {
                 ...values,
                 empId: isNaN(parseInt(values.empId, 10)) ? 0 : values.empId,
-                transferInDate: values.companyDate
+                transferInDate: values.companyDate,
+                team: selectedTeam ? {
+                    id: selectedTeam.id,
+                } : null
             };
 
             submitTransfer('GroupEmployeeList/Transfer', model, setSubmitting);

@@ -4,12 +4,6 @@ import toastr from 'toastr';
 import { resolveClientUrl, axiosError, toastOptions } from '../../shared/common.functions';
 
 export const validationSchema = object({
-    employee: string()
-        .required('Employee field is required!'),
-    companyId: string()
-        .required('Company field is required!'),
-    teamId: string()
-        .required('Team field is required!'),
     fullName: string()
         .required('Full Name field is required!'),
     code: string()
