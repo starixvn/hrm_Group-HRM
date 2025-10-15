@@ -211,6 +211,10 @@ const AppContainer = () => {
                     ...prev,
                     code: newEmployeeId
                 }));
+                setEmployeeData(prev => ({
+                    ...prev,
+                    code: newEmployeeId
+                }));
             }
         } catch (error) {
             axiosError(error);
