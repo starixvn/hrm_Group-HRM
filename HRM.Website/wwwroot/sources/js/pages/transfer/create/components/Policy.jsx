@@ -19,7 +19,7 @@ const Policy = ({ isOpen, onToggle, employeeData }) => {
                     </div>
                     <div className='input-form'>
                         <Field
-                            name='canOT'
+                            name='CanOT'
                             type='checkbox'
                         />
                     </div>
@@ -33,7 +33,7 @@ const Policy = ({ isOpen, onToggle, employeeData }) => {
                     </div>
                     <div className='input-form'>
                         <Field
-                            name='specialOT'
+                            name='SpecialOT'
                             type='text'
                             className='form-control'
                         />
@@ -48,7 +48,7 @@ const Policy = ({ isOpen, onToggle, employeeData }) => {
                     </div>
                     <div className='input-form'>
                         <Field
-                            name='workingDays'
+                            name='WorkingDays'
                             type='text'
                             className='form-control'
                         />
@@ -63,7 +63,7 @@ const Policy = ({ isOpen, onToggle, employeeData }) => {
                     </div>
                     <div className='input-form'>
                         <Field
-                            name='workingHoursbyWeek'
+                            name='WorkingHoursbyWeek'
                             type='text'
                             className='form-control'
                         />
@@ -78,7 +78,7 @@ const Policy = ({ isOpen, onToggle, employeeData }) => {
                     </div>
                     <div className='input-form'>
                         <Field
-                            name='workingHours'
+                            name='WorkingHours'
                             type='text'
                             className='form-control'
                         />
@@ -93,7 +93,7 @@ const Policy = ({ isOpen, onToggle, employeeData }) => {
                     </div>
                     <div className='input-form'>
                         <Field
-                            name='offDaysbyWeek'
+                            name='OffDaysbyWeek'
                             type='text'
                             className='form-control'
                         />
@@ -108,7 +108,7 @@ const Policy = ({ isOpen, onToggle, employeeData }) => {
                     </div>
                     <div className='input-form'>
                         <span className='read-only-field'>
-                            {(employeeData && employeeData.annualLeaveBalance || 0) + ' day(s)'}
+                            {(employeeData && employeeData.AnnualLeaveBalance || 0) + ' day(s)'}
                         </span>
                     </div>
                 </div>
@@ -121,7 +121,7 @@ const Policy = ({ isOpen, onToggle, employeeData }) => {
                     </div>
                     <div className='input-form'>
                         <div className='read-only-field'>
-                            {(employeeData && employeeData.keepInViewBalance || 0) + ' day(s)'}
+                            {(employeeData && employeeData.KeepInViewBalance || 0) + ' day(s)'}
                         </div>
                     </div>
                 </div>

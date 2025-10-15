@@ -37,59 +37,58 @@ const AppContainer = () => {
         policy: true
     });
     const [initialValues, setInitialValues] = useState({
-        empId: 0,
-        employee: '',
-        transferOutCompanyId: '',
-        transferInCompanyId: '',
-        teamId: '',
-        transferRemark: '',
-        code: '',
-        fullName: '',
-        nickName: '',
-        employeeCard: '',
-        domainUsername: '',
-        gender: '',
-        dateOfBirth: '',
-        placeOfBirth: '',
-        ethnic: '',
-        native: '',
-        maritalStatus: '',
-        countryCode: '',
-        religion: '',
-        idCardNumber: '',
-        idCardIssueDate: '',
-        idCardIssuePlace: '',
-        passportNumber: '',
-        passportExpiryDate: '',
-        qualification: '',
-        major: '',
-        cellphone: '',
-        homePhone: '',
-        workEmail: '',
-        permanentAddress: '',
-        currentAddress: '',
-        pickupRemark: '',
-        letstalk: '',
-        subCompanyId: '',
-        team: '',
-        teamDate: '',
-        jobTitle: '',
-        jobLevel: '',
-        managementGrade: '',
-        salaryStructure: '',
-        promotionDate: '',
-        groupDate: '',
-        companyDate: '',
-        confirmedDate: '',
-        lengthOfServiceByGroup: '',
-        canOT: false,
-        specialOT: '',
-        workingDays: '',
-        workingHoursbyWeek: '',
-        workingHours: '',
-        offDaysbyWeek: '',
-        annualLeaveBalance: '',
-        keepInViewBalance: ''
+        EmpId: 0,
+        Employee: '',
+        TransferOutCompanyId: 0,
+        TransferInCompanyId: 0,
+        TeamId: 0,
+        TransferRemark: '',
+        Code: '',
+        FullName: '',
+        NickName: '',
+        EmployeeCard: '',
+        DomainUsername: '',
+        Gender: null,
+        DateOfBirth: '',
+        PlaceOfBirth: '',
+        Ethnic: '',
+        Native: '',
+        Marriage: 0,
+        CountryCode: '',
+        Religion: '',
+        CardNo: '',
+        DateOfIdCard: '',
+        PlaceOfIdCard: '',
+        PassportNo: '',
+        PassportExp: '',
+        Qualification: '',
+        Major: '',
+        Phone: '',
+        HomePhone: '',
+        Email: '',
+        Address: '',
+        CurrentAddress: '',
+        PickupRemark: '',
+        LetsTalk: '',
+        SubCompanyId: 0,
+        Team: '',
+        TeamDate: '',
+        JobTitleId: 0,
+        JobLevelId: 0,
+        ManagementLevelId: null,
+        PromotionDate: '',
+        JoinedDate: '',
+        CompanyDate: '',
+        ConfirmedDate: '',
+        LengthOfServiceByGroup: '',
+        CanOT: false,
+        SpecialOT: null,
+        WorkingDays: 0,
+        WorkingHoursbyWeek: null,
+        WorkingHours: 0,
+        OffDaysbyWeek: 0,
+        AnnualLeaveBalance: 0,
+        KeepInViewBalance: 0
     });
 
     const getEmployees = query => {
@@ -137,17 +136,17 @@ const AppContainer = () => {
     const handleSelectEmployee = (_value, selectedItem) => {
         setInitialValues(prev => ({
             ...prev,
-            empId: selectedItem.id,
-            employee: selectedItem.value,
-            transferOutCompanyId: selectedItem.companyId
+            EmpId: selectedItem.id,
+            Employee: selectedItem.value,
+            TransferOutCompanyId: selectedItem.companyId
         }));
     };
 
     const handleCompanyChange = value => {
         setInitialValues(prev => ({
             ...prev,
-            transferInCompanyId: value,
-            teamId: ''
+            TransferInCompanyId: value,
+            TeamId: 0
         }));
 
         if (value) {
@@ -189,14 +188,14 @@ const AppContainer = () => {
         setSelectedTeam(team);
         setInitialValues(prev => ({
             ...prev,
-            teamId: team ? team.id : ''
+            TeamId: team ? team.id : 0
         }));
     };
 
     const handleGenerateEmployeeId = async () => {
         try {
-            const companyId = initialValues.transferInCompanyId;
-            if (!companyId) {
+            const companyId = initialValues.TransferInCompanyId;
+            if (!companyId || companyId === 0) {
                 return;
             }
 
@@ -205,11 +204,11 @@ const AppContainer = () => {
                 const newEmployeeId = response.data;
                 setInitialValues(prev => ({
                     ...prev,
-                    code: newEmployeeId
+                    Code: newEmployeeId
                 }));
                 setEmployeeData(prev => ({
                     ...prev,
-                    code: newEmployeeId
+                    Code: newEmployeeId
                 }));
             }
         } catch (error) {
@@ -220,10 +219,9 @@ const AppContainer = () => {
     const handleTransferRemarkChange = value => {
         setInitialValues(prev => ({
             ...prev,
-            transferRemark: value
+            TransferRemark: value
         }));
     };
-
 
     const togglePanel = panelName => {
         setPanelStates(prev => ({
@@ -232,28 +230,24 @@ const AppContainer = () => {
         }));
     };
 
-    const goToStep1 = () => {
-        setCurrentStep(1);
-    };
-
     const validateStep1 = values => {
         const errors = {};
 
-        if (!values.employee || values.employee.trim() === '') {
-            errors.employee = 'Employee is required!';
+        if (!values.Employee || values.Employee.trim() === '') {
+            errors.Employee = 'Employee is required!';
         }
 
-        if (!values.transferInCompanyId || values.transferInCompanyId === '') {
-            errors.transferInCompanyId = 'Target Company is required!';
+        if (!values.TransferInCompanyId || values.TransferInCompanyId === 0) {
+            errors.TransferInCompanyId = 'Target Company is required!';
         }
 
-        if (!values.teamId || values.teamId === '') {
-            errors.teamId = 'Team is required!';
+        if (!values.TeamId || values.TeamId === 0) {
+            errors.TeamId = 'Team is required!';
         }
 
-        if (values.transferOutCompanyId && values.transferInCompanyId &&
-            String(values.transferOutCompanyId) === String(values.transferInCompanyId)) {
-            errors.transferInCompanyId = 'Target Company must be different from current company';
+        if (values.TransferOutCompanyId && values.TransferInCompanyId &&
+            values.TransferOutCompanyId === values.TransferInCompanyId) {
+            errors.TransferInCompanyId = 'Target Company must be different from current company';
         }
 
         return errors;
@@ -261,106 +255,105 @@ const AppContainer = () => {
 
     function mapIdentity(employee) {
         return {
-          code: employee.code || '',
-          fullName: employee.fullName || '',
-          nickName: employee.nickName || '',
-          employeeCard: employee.employeeCard || '',
-          domainUsername: employee.domainUsername || '',
+            Code: employee.code || '',
+            FullName: employee.fullName || '',
+            NickName: employee.nickName || '',
+            EmployeeCard: employee.employeeCard || '',
+            DomainUsername: employee.domainUsername || '',
         };
-      }
-      
-      function mapBasicDemographics(e) {
+    }
+
+    function mapBasicDemographics(e) {
         return {
-          gender: e.gender || '',
-          dateOfBirth: e.dateOfBirth || '',
-          placeOfBirth: e.placeOfBirth || '',
-          ethnic: e.ethnic || '',
-          native: e.native || '',
-          maritalStatus: e.marriage || '',
+            Gender: e.gender || null,
+            DateOfBirth: e.dateOfBirth || '',
+            PlaceOfBirth: e.placeOfBirth || '',
+            Ethnic: e.ethnic || '',
+            Native: e.native || '',
+            Marriage: e.marriage || 0,
         };
-      }
-      
-      function mapGovernmentInfo(e) {
+    }
+
+    function mapGovernmentInfo(e) {
         return {
-          countryCode: e.countryCode || '',
-          religion: e.religion || '',
-          idCardNumber: e.cardNo || '',
-          idCardIssueDate: e.dateOfIdCard || '',
-          idCardIssuePlace: e.placeOfIdCard || '',
-          passportNumber: e.passportNo || '',
-          passportExpiryDate: e.passportExp || '',
-          qualification: e.qualification || '',
-          major: e.major || '',
+            CountryCode: e.countryCode || '',
+            Religion: e.religion || '',
+            CardNo: e.cardNo || '',
+            DateOfIdCard: e.dateOfIdCard || '',
+            PlaceOfIdCard: e.placeOfIdCard || '',
+            PassportNo: e.passportNo || '',
+            PassportExp: e.passportExp || '',
+            Qualification: e.qualification || '',
+            Major: e.major || '',
         };
-      }
-      
-      function mapDemographics(employee) {
+    }
+
+    function mapDemographics(employee) {
         return { ...mapBasicDemographics(employee), ...mapGovernmentInfo(employee) };
-      }
-      
-      function mapPersonal(employee) {
+    }
+
+    function mapPersonal(employee) {
         return { ...mapIdentity(employee), ...mapDemographics(employee) };
-      }
-      
-      function mapContact(employee) {
+    }
+
+    function mapContact(employee) {
         return {
-          cellphone: employee.phone || '',
-          homePhone: employee.homePhone || '',
-          workEmail: employee.email || '',
-          permanentAddress: employee.address || '',
-          currentAddress: employee.currentAddress || '',
-          pickupRemark: employee.pickupRemark || '',
-          letstalk: employee.letsTalk || '',
+            Phone: employee.phone || '',
+            HomePhone: employee.homePhone || '',
+            Email: employee.email || '',
+            Address: employee.address || '',
+            CurrentAddress: employee.currentAddress || '',
+            PickupRemark: employee.pickupRemark || '',
+            LetsTalk: employee.letsTalk || '',
         };
-      }
-      
-      function mapJobStructure(employee) {
+    }
+
+    function mapJobStructure(employee) {
         return {
-          subCompanyId: employee.subCompanyId || '',
-          team: employee.team || '',
-          teamDate: employee.teamDate || '',
-          jobTitle: employee.jobTitleId || '',
-          jobLevel: employee.jobLevelId || '',
-          managementGrade: employee.managementLevelId || '',
+            SubCompanyId: employee.subCompanyId || 0,
+            Team: employee.team || '',
+            TeamDate: new Date().toISOString().split('T')[0],
+            JobTitleId: employee.jobTitleId || 0,
+            JobLevelId: employee.jobLevelId || 0,
+            ManagementLevelId: employee.managementLevelId || null,
         };
-      }
-      
-      function mapJobTimeline(employee) {
+    }
+
+    function mapJobTimeline(employee) {
         return {
-          salaryStructure: employee.salaryStructure || '',
-          promotionDate: employee.promotionDate || '',
-          groupDate: employee.joinedDate || '',
-          companyDate: employee.companyDate || '',
-          confirmedDate: employee.confirmedDate || '',
-          lengthOfServiceByGroup: employee.lengthOfServiceByGroupDate || '',
+            PromotionDate: employee.promotionDate || '',
+            JoinedDate: employee.joinedDate || '',
+            CompanyDate: new Date().toISOString().split('T')[0],
+            ConfirmedDate: employee.confirmedDate || '',
+            LengthOfServiceByGroup: employee.lengthOfServiceByGroupDate || '',
         };
-      }
-      
-      function mapJob(employee) {
+    }
+
+    function mapJob(employee) {
         return { ...mapJobStructure(employee), ...mapJobTimeline(employee) };
-      }
-      
-      function mapPolicy(employee) {
+    }
+
+    function mapPolicy(employee) {
         return {
-          canOT: employee.canOT || false,
-          specialOT: employee.specialOT || '',
-          workingDays: employee.workingDays || '',
-          workingHoursbyWeek: employee.workingHoursbyWeek || '',
-          workingHours: employee.workingHours || '',
-          offDaysbyWeek: employee.offDaysbyWeek || '',
-          annualLeaveBalance: employee.annualLeaveBalance || '',
-          keepInViewBalance: employee.keepInViewBalance || '',
+            CanOT: employee.canOT || false,
+            SpecialOT: employee.specialOT || null,
+            WorkingDays: employee.workingDays || 0,
+            WorkingHoursbyWeek: employee.workingHoursbyWeek || null,
+            WorkingHours: employee.workingHours || 0,
+            OffDaysbyWeek: employee.offDaysbyWeek || 0,
+            AnnualLeaveBalance: employee.annualLeaveBalance || 0,
+            KeepInViewBalance: employee.keepInViewBalance || 0,
         };
-      }
-      
-      function mapEmployeeResponse(employee) {
+    }
+
+    function mapEmployeeResponse(employee) {
         return {
-          ...mapPersonal(employee),
-          ...mapContact(employee),
-          ...mapJob(employee),
-          ...mapPolicy(employee),
+            ...mapPersonal(employee),
+            ...mapContact(employee),
+            ...mapJob(employee),
+            ...mapPolicy(employee),
         };
-      }
+    }
 
     const handleNext = (values, { setErrors, setSubmitting }) => {
         setSubmitting(true);
@@ -378,8 +371,9 @@ const AppContainer = () => {
             method: 'GET',
             headers: { 'X-Requested-With': 'XMLHttpRequest' },
             params: {
-                id: values.empId,
-                companyId: values.transferOutCompanyId ? parseInt(values.transferOutCompanyId, 10) : null
+                id: values.EmpId,
+                transferInCompanyId: values.TransferInCompanyId || 0,
+                transferOutCompanyId: values.TransferOutCompanyId || 0
             }
         })
             .then(response => {
@@ -391,7 +385,7 @@ const AppContainer = () => {
                 setInitialValues(prev => ({
                     ...prev,
                     ...mappedData,
-                    teamId: prev.teamId
+                    TeamId: prev.TeamId
                 }));
 
                 setJobLevels(employee.jobLevels || []);
@@ -412,21 +406,18 @@ const AppContainer = () => {
     const handleSubmit = (values, { setSubmitting }) => {
         setSubmitting(true);
 
-        if (currentStep === 1) {
-            setCurrentStep(2);
-            setSubmitting(false);
-        } else {
-            const model = {
-                ...values,
-                empId: isNaN(parseInt(values.empId, 10)) ? 0 : values.empId,
-                transferInDate: values.companyDate,
-                team: selectedTeam ? {
-                    id: selectedTeam.id,
-                } : null
-            };
+        const model = {
+            ...values,
+            TransferInCompanyId: 2, 
+            Id: isNaN(parseInt(values.EmpId, 10)) ? 0 : values.EmpId,
+            TargetCompanyId: values.TransferInCompanyId || 0,
+            TransferInDate: new Date().toISOString().split('T')[0],
+            Team: selectedTeam ? {
+                id: selectedTeam.id,
+            } : null
+        };
 
-            submitTransfer('GroupEmployeeList/Transfer', model, setSubmitting);
-        }
+        submitTransfer('GroupEmployeeList/Transfer', model, setSubmitting);
     };
 
     const renderForm = ({ errors, isSubmitting, values, setErrors }) => {
@@ -443,7 +434,7 @@ const AppContainer = () => {
                                     </label>
                                 </div>
                                 <div className='select-form'>
-                                    <Field type='text' name='employee' className='form-control'>
+                                    <Field type='text' name='Employee' className='form-control'>
                                         {({ field }) => (
                                             <EmployeeAutocomplete
                                                 options={employees}
@@ -463,10 +454,10 @@ const AppContainer = () => {
                                 </div>
                                 <div className='select-form'>
                                     <Field
-                                        name='transferInCompanyId'
+                                        name='TransferInCompanyId'
                                         as='select'
                                         className='form-control'
-                                        value={initialValues.transferInCompanyId}
+                                        value={initialValues.TransferInCompanyId}
                                         onChange={e => handleCompanyChange(e.target.value)}>
                                         <option value='' />
                                         {companies
@@ -504,11 +495,11 @@ const AppContainer = () => {
                                 </div>
                                 <div className='select-form'>
                                     <Field
-                                        name='transferRemark'
+                                        name='TransferRemark'
                                         as='textarea'
                                         className='form-control'
                                         rows='3'
-                                        value={initialValues.transferRemark}
+                                        value={initialValues.TransferRemark}
                                         onChange={e => handleTransferRemarkChange(e.target.value)}
                                     />
                                 </div>
@@ -531,14 +522,6 @@ const AppContainer = () => {
 
                     {currentStep === 2 && (
                         <div className='transfer-info'>
-                            <div className='form-group'>
-                                <button
-                                    type='button'
-                                    className='btn btn-default'
-                                    onClick={goToStep1}>
-                                    Back
-                                </button>
-                            </div>
                             <div className='transfer-step-2'>
                                 <div>
                                     <Personal
@@ -554,25 +537,22 @@ const AppContainer = () => {
                                         isOpen={panelStates.information}
                                         onToggle={() => togglePanel('information')}
                                         employeeData={employeeData}
-                                        teams={teams}
-                                        onTeamChange={handleTeamChange}
-                                        selectedTeam={selectedTeam}
                                         jobLevels={jobLevels}
                                         managementLevels={managementLevels}
                                         subCompanies={subCompanies}
                                         jobTitles={jobTitles}
                                     />
 
+                                    <Policy
+                                        isOpen={panelStates.policy}
+                                        onToggle={() => togglePanel('policy')}
+                                        employeeData={employeeData}
+                                    />
                                 </div>
                                 <div>
                                     <Contact
                                         isOpen={panelStates.contact}
                                         onToggle={() => togglePanel('contact')}
-                                        employeeData={employeeData}
-                                    />
-                                    <Policy
-                                        isOpen={panelStates.policy}
-                                        onToggle={() => togglePanel('policy')}
                                         employeeData={employeeData}
                                     />
                                 </div>

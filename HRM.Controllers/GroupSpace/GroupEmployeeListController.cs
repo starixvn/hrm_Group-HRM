@@ -195,7 +195,7 @@ public class GroupEmployeeListController(
 
     [HttpPost]
     [HrmPermission(Policy.Host, FunctionKey.GroupEmployeeList)]
-    public async Task<IActionResult> Transfer(EmployeeTransfer model)
+    public async Task<IActionResult> Transfer([FromBody]EmployeeTransfer model)
     {
         var result = await employeeService.CheckExistAsync(model.Code, model.NickName);
         if (!result.IsSuccessful)
@@ -230,9 +230,9 @@ public class GroupEmployeeListController(
 
     [HttpGet]
     [HrmPermission(Policy.Host, FunctionKey.GroupEmployeeList)]
-    public async Task<IActionResult> GetInfoEmployeeTransfer(int id, short companyId)
+    public async Task<IActionResult> GetInfoEmployeeTransfer(int id, short transferInCompanyId, short transferOutCompanyId)
     {
-        var employee = await employeeService.GetEmployeeTransferByIdAsync(id, companyId);
+        var employee = await employeeService.GetEmployeeTransferByIdAsync(id, transferOutCompanyId);
 
         if (employee != null)
         {
@@ -244,8 +244,8 @@ public class GroupEmployeeListController(
             );
             employee.JobLevels = (await jobLevelService.GetJobLevel()).ToList();
             employee.ManagementLevels = (await managementLevelService.GetManagementLevel()).ToList();
-            employee.SubCompanies = (await companyService.GetSubCompanies(companyId)).ToList();
-            employee.JobTitles = (await commonDataService.GetLookupDataByCodeAsync(Constants.JobTitle, companyId)).ToList();
+            employee.SubCompanies = (await companyService.GetSubCompanies(transferInCompanyId)).ToList();
+            employee.JobTitles = (await commonDataService.GetLookupDataByCodeAsync(Constants.JobTitle, transferInCompanyId)).ToList();
         }
 
         return Json(employee);

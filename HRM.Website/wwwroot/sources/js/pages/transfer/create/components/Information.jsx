@@ -1,22 +1,18 @@
 import React from "react";
 import { Field } from "formik";
 import DatePickerField from "../../../../shared/components/DatePickerField";
-import TreeMultiselect from "../../../../shared/components/react-tree-multiselect/TreeMultiselect";
 
 const Information = ({
   isOpen,
   onToggle,
   employeeData,
-  teams,
-  onTeamChange,
-  selectedTeam,
   jobLevels,
   managementLevels,
   subCompanies,
   jobTitles,
 }) => {
   return (
-    <div className={`panel-group ${!isOpen ? "collapsed" : ""}`}>
+    <div className={`panel-group panel-body-information ${!isOpen ? "collapsed" : ""}`}>
       <div className="panel-heading" onClick={onToggle}>
         <h4 className="panel-title">
           <i className={`fa fa-chevron-${isOpen ? "down" : "right"}`}></i>
@@ -26,52 +22,38 @@ const Information = ({
 
       <div className={`panel-body ${!isOpen ? "collapsed" : ""}`}>
         <SelectField
-          name="subCompanyId"
+          name="SubCompanyId"
           label="Sub Company"
           options={subCompanies}
-          employeeValue={employeeData?.subCompanyId}
+          valueKey="subCompanyId"
+          textKey="name"
+          employeeValue={employeeData && employeeData.SubCompanyId}
         />
 
-        <div className="form-group">
-          <div className="label-form">
-            <label className="control-label">Team</label>
-          </div>
-          <div className="select-form">
-            <TreeMultiselect
-              data={teams || []}
-              leafOnly
-              singleSelect
-              hasSearchBox
-              onChange={onTeamChange}
-              selectedItems={selectedTeam ? [selectedTeam] : []}
-            />
-          </div>
-        </div>
-
-        <DateFieldGroup name="teamDate" label="Team Date" />
+        <DateFieldGroup name="TeamDate" label="Team Date" />
         <SelectField
-          name="jobTitle"
+          name="JobTitleId"
           label="Job Title"
           options={jobTitles}
-          employeeValue={employeeData?.jobTitle}
+          employeeValue={employeeData && employeeData.JobTitleId}
         />
         <SelectField
-          name="jobLevel"
+          name="JobLevelId"
           label="Job Level"
           options={jobLevels}
-          employeeValue={employeeData?.jobLevel}
+          employeeValue={employeeData && employeeData.JobLevelId}
         />
         <SelectField
-          name="managementGrade"
+          name="ManagementLevelId"
           label="Management Grade"
           options={managementLevels}
-          employeeValue={employeeData?.managementGrade}
+          employeeValue={employeeData && employeeData.ManagementLevelId}
         />
 
-        <DateFieldGroup name="promotionDate" label="Promotion Date" />
-        <DateFieldGroup name="groupDate" label="Group Date" />
-        <DateFieldGroup name="companyDate" label="Company Date" />
-        <DateFieldGroup name="confirmedDate" label="Confirmed Date" />
+        <DateFieldGroup name="PromotionDate" label="Promotion Date" />
+        <DateFieldGroup name="JoinedDate" label="Group Date" />
+        <DateFieldGroup name="CompanyDate" label="Company Date" />
+        <DateFieldGroup name="ConfirmedDate" label="Confirmed Date" />
 
         <div className="form-group">
           <div className="label-form">
@@ -85,7 +67,7 @@ const Information = ({
             </div>
             <div className="input-form">
               <div className="read-only-field">
-                {employeeData?.lengthOfServiceByGroup}
+                {employeeData && employeeData.LengthOfServiceByGroup}
               </div>
             </div>
           </div>
@@ -116,8 +98,8 @@ const SelectField = ({
         value={employeeValue}
       >
         <option value="">--{placeholder || `Select ${label}`}--</option>
-        {options
-          ?.filter(opt => opt[valueKey])
+        {options && options
+          .filter(opt => opt[valueKey])
           .map(opt => (
             <option key={`${name}-${opt[valueKey]}`} value={opt[valueKey]}>
               {opt[textKey] || opt.name || opt.text}

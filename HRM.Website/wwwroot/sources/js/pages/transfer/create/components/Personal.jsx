@@ -27,10 +27,10 @@ const Personal = ({ isOpen, onToggle, employeeData, countries, onGenerateEmploye
                     <div className='input-form'>
                         <div className='input-group-generate'>
                             <Field
-                                name='code'
+                                name='Code'
                                 type='text'
                                 className='form-control'
-                                value={employeeData && employeeData.code}
+                                value={employeeData && employeeData.Code}
                             />
                             <button
                                 type='button'
@@ -51,7 +51,7 @@ const Personal = ({ isOpen, onToggle, employeeData, countries, onGenerateEmploye
                     </div>
                     <div className='input-form'>
                         <Field
-                            name='employeeCard'
+                            name='EmployeeCard'
                             type='text'
                             className='form-control'
                         />
@@ -66,7 +66,7 @@ const Personal = ({ isOpen, onToggle, employeeData, countries, onGenerateEmploye
                     </div>
                     <div className='input-form'>
                         <Field
-                            name='domainUsername'
+                            name='DomainUsername'
                             type='text'
                             className='form-control'
                         />
@@ -81,7 +81,7 @@ const Personal = ({ isOpen, onToggle, employeeData, countries, onGenerateEmploye
                     </div>
                     <div className='input-form'>
                         <Field
-                            name='fullName'
+                            name='FullName'
                             type='text'
                             className='form-control'
                         />
@@ -96,7 +96,7 @@ const Personal = ({ isOpen, onToggle, employeeData, countries, onGenerateEmploye
                     </div>
                     <div className='input-form'>
                         <Field
-                            name='nickName'
+                            name='NickName'
                             type='text'
                             className='form-control'
                         />
@@ -110,7 +110,7 @@ const Personal = ({ isOpen, onToggle, employeeData, countries, onGenerateEmploye
                         </label>
                     </div>
                     <div className='calendar-form'>
-                        <DatePickerField name='dateOfBirth' />
+                        <DatePickerField name='DateOfBirth' />
                     </div>
                 </div>
 
@@ -122,7 +122,7 @@ const Personal = ({ isOpen, onToggle, employeeData, countries, onGenerateEmploye
                     </div>
                     <div className='input-form'>
                         <Field
-                            name='placeOfBirth'
+                            name='PlaceOfBirth'
                             type='text'
                             className='form-control'
                         />
@@ -137,7 +137,7 @@ const Personal = ({ isOpen, onToggle, employeeData, countries, onGenerateEmploye
                     </div>
                     <div className='input-form'>
                         <Field
-                            name='ethnic'
+                            name='Ethnic'
                             type='text'
                             className='form-control'
                         />
@@ -152,7 +152,7 @@ const Personal = ({ isOpen, onToggle, employeeData, countries, onGenerateEmploye
                     </div>
                     <div className='input-form'>
                         <Field
-                            name='native'
+                            name='Native'
                             type='text'
                             className='form-control'
                         />
@@ -167,7 +167,7 @@ const Personal = ({ isOpen, onToggle, employeeData, countries, onGenerateEmploye
                     </div>
                     <div className='input-form'>
                         <Field
-                            name='religion'
+                            name='Religion'
                             type='text'
                             className='form-control'
                         />
@@ -182,7 +182,7 @@ const Personal = ({ isOpen, onToggle, employeeData, countries, onGenerateEmploye
                     </div>
                     <div className='select-form'>
                         <Field
-                            name='gender'
+                            name='Gender'
                             as='select'
                             className='form-control'
                         >
@@ -201,10 +201,10 @@ const Personal = ({ isOpen, onToggle, employeeData, countries, onGenerateEmploye
                     </div>
                     <div className='select-form'>
                         <Field
-                            name='marriage'
+                            name='Marriage'
                             as='select'
                             className='form-control'
-                            value={employeeData && employeeData.marriage}
+                            value={employeeData && employeeData.Marriage}
                         >
                             <option key='marriage-0' value='0'>--Select Marriage Status--</option>
                             <option key='marriage-1' value='1'>Married</option>
@@ -224,7 +224,7 @@ const Personal = ({ isOpen, onToggle, employeeData, countries, onGenerateEmploye
                     <div className='input-form'>
                         <div className='searchable-select'>
                             <Field
-                                name='countryCode'
+                                name='CountryCode'
                                 as='select'
                                 className='form-control'
                             >
@@ -247,7 +247,7 @@ const Personal = ({ isOpen, onToggle, employeeData, countries, onGenerateEmploye
                     </div>
                     <div className='input-form'>
                         <Field
-                            name='idCardNumber'
+                            name='CardNo'
                             type='text'
                             className='form-control'
                         />
@@ -261,7 +261,7 @@ const Personal = ({ isOpen, onToggle, employeeData, countries, onGenerateEmploye
                         </label>
                     </div>
                     <div className='calendar-form'>
-                        <DatePickerField name='idCardIssueDate' />
+                        <DatePickerField name='DateOfIdCard' />
                     </div>
                 </div>
 
@@ -273,7 +273,7 @@ const Personal = ({ isOpen, onToggle, employeeData, countries, onGenerateEmploye
                     </div>
                     <div className='input-form'>
                         <Field
-                            name='idCardIssuePlace'
+                            name='PlaceOfIdCard'
                             type='text'
                             className='form-control'
                         />
@@ -288,7 +288,7 @@ const Personal = ({ isOpen, onToggle, employeeData, countries, onGenerateEmploye
                     </div>
                     <div className='input-form'>
                         <Field
-                            name='passportNumber'
+                            name='PassportNo'
                             type='text'
                             className='form-control'
                         />
@@ -303,7 +303,7 @@ const Personal = ({ isOpen, onToggle, employeeData, countries, onGenerateEmploye
                         </label>
                     </div>
                     <div className='calendar-form'>
-                        <DatePickerField name='passportExpiryDate' />
+                        <DatePickerField name='PassportExp' />
                     </div>
                 </div>
 
@@ -315,7 +315,7 @@ const Personal = ({ isOpen, onToggle, employeeData, countries, onGenerateEmploye
                     </div>
                     <div className='input-form'>
                         <Field
-                            name='qualification'
+                            name='Qualification'
                             type='text'
                             className='form-control'
                         />
@@ -330,7 +330,7 @@ const Personal = ({ isOpen, onToggle, employeeData, countries, onGenerateEmploye
                     </div>
                     <div className='input-form'>
                         <Field
-                            name='major'
+                            name='Major'
                             type='text'
                             className='form-control'
                         />

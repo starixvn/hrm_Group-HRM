@@ -4,9 +4,9 @@ import toastr from 'toastr';
 import { resolveClientUrl, axiosError, toastOptions } from '../../shared/common.functions';
 
 export const validationSchema = object({
-    fullName: string()
+    FullName: string()
         .required('Full Name field is required!'),
-    code: string()
+    Code: string()
         .required('Employee ID field is required!')
 });
 
@@ -18,14 +18,18 @@ export const submitTransfer = (endpoint, model, setSubmitting) => {
             resolveClientUrl(endpoint),
             model,
             {
-                headers: { "X-Requested-With": "XMLHttpRequest" },
+                headers: { 
+                    "X-Requested-With": "XMLHttpRequest",
+                    "Content-Type": "application/json"
+                },
             }
         )
         .then(response => {
             const { data } = response;
             if (data.isSuccessful) {
-                const successMessage = endpoint.includes('Create') ? "Transfer successfully!" : "Updated successfully!";
+                const successMessage = "Transfer successfully!";
                 toastr.success(successMessage, '', toastOptions());
+                setSubmitting(false);
             } else {
                 toastr.error(data.message, '', toastOptions());
                 setSubmitting(false);

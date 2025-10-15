@@ -19,7 +19,7 @@ const Contact = ({ isOpen, onToggle }) => {
                     </div>
                     <div className='input-form'>
                         <Field
-                            name='cellphone'
+                            name='Phone'
                             type='text'
                             className='form-control'
                         />
@@ -34,7 +34,7 @@ const Contact = ({ isOpen, onToggle }) => {
                     </div>
                     <div className='input-form'>
                         <Field
-                            name='homePhone'
+                            name='HomePhone'
                             type='text'
                             className='form-control'
                         />
@@ -49,7 +49,7 @@ const Contact = ({ isOpen, onToggle }) => {
                     </div>
                     <div className='input-form'>
                         <Field
-                            name='workEmail'
+                            name='Email'
                             type='email'
                             className='form-control'
                         />
@@ -64,7 +64,7 @@ const Contact = ({ isOpen, onToggle }) => {
                     </div>
                     <div className='input-form'>
                         <Field
-                            name='permanentAddress'
+                            name='Address'
                             as='textarea'
                             className='form-control'
                             rows='3'
@@ -80,7 +80,7 @@ const Contact = ({ isOpen, onToggle }) => {
                     </div>
                     <div className='input-form'>
                         <Field
-                            name='currentAddress'
+                            name='CurrentAddress'
                             as='textarea'
                             className='form-control'
                             rows='3'
@@ -96,7 +96,7 @@ const Contact = ({ isOpen, onToggle }) => {
                     </div>
                     <div className='input-form'>
                         <Field
-                            name='pickupRemark'
+                            name='PickupRemark'
                             as='textarea'
                             className='form-control'
                             rows='3'
@@ -112,7 +112,7 @@ const Contact = ({ isOpen, onToggle }) => {
                     </div>
                     <div className='input-form'>
                         <Field
-                            name='letstalk'
+                            name='LetsTalk'
                             type='text'
                             className='form-control'
                         />
