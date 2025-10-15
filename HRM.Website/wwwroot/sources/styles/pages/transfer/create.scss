@@ -88,6 +88,16 @@ span.require {
     background-color: #0a5494;
 }
 
+.validation-summary-errors {
+    max-width: 452px;
+}
+
+@media (max-width: 1600px) {
+    .form-horizontal .form-group .input-form {
+        width: 200px !important;
+    }
+}
+
 .transfer-info {
     .form-horizontal {
         .form-group {

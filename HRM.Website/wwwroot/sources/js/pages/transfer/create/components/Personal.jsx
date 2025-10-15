@@ -41,10 +41,10 @@ const Personal = ({ isOpen, onToggle, employeeData, countries, onGenerateEmploye
                     <div className='input-form'>
                         <div className='input-group-generate'>
                             <Field
-                                name='employeeId'
+                                name='code'
                                 type='text'
                                 className='form-control'
-                                value={employeeData && employeeData.employeeId}
+                                value={employeeData && employeeData.code}
                             />
                             <button
                                 type='button'
@@ -129,7 +129,7 @@ const Personal = ({ isOpen, onToggle, employeeData, countries, onGenerateEmploye
                                 {({ field, form }) => (
                                     <DatePicker
                                         selected={field.value && field.value !== '' ? new Date(field.value) : null}
-                                        onChange={(date) => form.setFieldValue(field.name, date)}
+                                        onChange={date => form.setFieldValue(field.name, date)}
                                         dateFormat="dd MMM, yyyy"
                                         className='form-control'
                                         placeholderText=""
@@ -297,7 +297,7 @@ const Personal = ({ isOpen, onToggle, employeeData, countries, onGenerateEmploye
                                 {({ field, form }) => (
                                     <DatePicker
                                         selected={field.value && field.value !== '' ? new Date(field.value) : null}
-                                        onChange={(date) => form.setFieldValue(field.name, date)}
+                                        onChange={date => form.setFieldValue(field.name, date)}
                                         dateFormat="dd MMM, yyyy"
                                         className='form-control'
                                         placeholderText=""
@@ -355,7 +355,7 @@ const Personal = ({ isOpen, onToggle, employeeData, countries, onGenerateEmploye
                                 {({ field, form }) => (
                                     <DatePicker
                                         selected={field.value && field.value !== '' ? new Date(field.value) : null}
-                                        onChange={(date) => form.setFieldValue(field.name, date)}
+                                        onChange={date => form.setFieldValue(field.name, date)}
                                         dateFormat="dd MMM, yyyy"
                                         className='form-control'
                                         placeholderText=""

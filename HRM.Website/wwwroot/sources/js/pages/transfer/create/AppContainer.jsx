@@ -45,7 +45,7 @@ const AppContainer = () => {
         transferInCompanyId: '',
         teamId: '',
         transferRemark: '',
-        employeeId: '',
+        code: '',
         fullName: '',
         nickName: '',
         employeeCard: '',
@@ -203,17 +203,13 @@ const AppContainer = () => {
             if (!companyId) {
                 return;
             }
-            
+
             const response = await axios.get(resolveClientUrl(`employee/GenerateEmployeeCode?companyId=${companyId}`));
-            if (response.data && response.data.success) {
-                const newEmployeeId = response.data.data;
+            if (response.data) {
+                const newEmployeeId = response.data;
                 setInitialValues(prev => ({
                     ...prev,
-                    employeeId: newEmployeeId
-                }));
-                setEmployeeData(prev => ({
-                    ...prev,
-                    employeeId: newEmployeeId
+                    code: newEmployeeId
                 }));
             }
         } catch (error) {
@@ -288,7 +284,7 @@ const AppContainer = () => {
 
                 const employee = response.data;
                 const mappedData = {
-                    employeeId: employee.code || '',
+                    code: employee.code || '',
                     fullName: employee.fullName || '',
                     nickName: employee.nickName || '',
                     employeeCard: employee.employeeCard || '',

@@ -65,7 +65,7 @@ const Information = ({ isOpen, onToggle, employeeData, teams, onTeamChange, sele
                                 {({ field, form }) => (
                                     <DatePicker
                                         selected={field.value ? new Date(field.value) : new Date()}
-                                        onChange={(date) => form.setFieldValue(field.name, date)}
+                                        onChange={date => form.setFieldValue(field.name, date)}
                                         dateFormat="dd MMM, yyyy"
                                         className='form-control'
                                         placeholderText=""
@@ -154,7 +154,7 @@ const Information = ({ isOpen, onToggle, employeeData, teams, onTeamChange, sele
                                 {({ field, form }) => (
                                     <DatePicker
                                         selected={field.value && field.value !== '' ? new Date(field.value) : null}
-                                        onChange={(date) => form.setFieldValue(field.name, date)}
+                                        onChange={date => form.setFieldValue(field.name, date)}
                                         dateFormat="dd MMM, yyyy"
                                         className='form-control'
                                         placeholderText=""
@@ -177,7 +177,7 @@ const Information = ({ isOpen, onToggle, employeeData, teams, onTeamChange, sele
                                 {({ field, form }) => (
                                     <DatePicker
                                         selected={field.value && field.value !== '' ? new Date(field.value) : null}
-                                        onChange={(date) => form.setFieldValue(field.name, date)}
+                                        onChange={date => form.setFieldValue(field.name, date)}
                                         dateFormat="dd MMM, yyyy"
                                         className='form-control'
                                         placeholderText=""
@@ -200,7 +200,7 @@ const Information = ({ isOpen, onToggle, employeeData, teams, onTeamChange, sele
                                 {({ field, form }) => (
                                     <DatePicker
                                         selected={field.value ? new Date(field.value) : new Date()}
-                                        onChange={(date) => form.setFieldValue(field.name, date)}
+                                        onChange={date => form.setFieldValue(field.name, date)}
                                         dateFormat="dd MMM, yyyy"
                                         className='form-control'
                                         placeholderText=""
@@ -223,7 +223,7 @@ const Information = ({ isOpen, onToggle, employeeData, teams, onTeamChange, sele
                                 {({ field, form }) => (
                                     <DatePicker
                                         selected={field.value && field.value !== '' ? new Date(field.value) : null}
-                                        onChange={(date) => form.setFieldValue(field.name, date)}
+                                        onChange={date => form.setFieldValue(field.name, date)}
                                         dateFormat="dd MMM, yyyy"
                                         className='form-control'
                                         placeholderText=""
