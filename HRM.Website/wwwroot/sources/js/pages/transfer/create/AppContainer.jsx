@@ -330,16 +330,16 @@ const AppContainer = () => {
             TeamDate: new Date().toISOString().split('T')[0],
             JobTitleId: 0,
             JobLevelId: employee.jobLevelId || 0,
-            ManagementLevelId: employee.managementLevelId || null,
+            ManagementLevelId: 0,
         };
     }
 
     function mapJobTimeline(employee) {
         return {
-            PromotionDate: employee.promotionDate ? new Date(employee.promotionDate) : null,
-            JoinedDate: employee.joinedDate ? new Date(employee.joinedDate) : null,
+            PromotionDate: null,
+            JoinedDate: employee.joinedDate || null,
             CompanyDate: new Date().toISOString().split('T')[0],
-            ConfirmedDate: employee.confirmedDate ? new Date(employee.confirmedDate) : null,
+            ConfirmedDate: employee.confirmedDate || null,
             LengthOfServiceByGroup: employee.lengthOfServiceByGroupDate || '',
         };
     }
