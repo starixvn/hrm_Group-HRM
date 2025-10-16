@@ -8,7 +8,7 @@ const DatePickerField = ({ name, ...props }) => (
             {({ field, form }) => (
                 <DatePicker
                     selected={field.value && field.value !== '' ? new Date(field.value) : null}
-                    onChange={date => form.setFieldValue(field.name, date)}
+                    onChange={date => form.setFieldValue(field.name, date ? date.toISOString().split('T')[0] : null)}
                     dateFormat="dd MMM, yyyy"
                     className='form-control'
                     placeholderText=""

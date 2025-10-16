@@ -59,7 +59,7 @@ const AppContainer = () => {
         EmployeeCard: '',
         DomainUsername: '',
         Gender: null,
-        DateOfBirth: '',
+        DateOfBirth: null,
         PlaceOfBirth: '',
         Ethnic: '',
         Native: '',
@@ -67,10 +67,10 @@ const AppContainer = () => {
         CountryCode: '',
         Religion: '',
         CardNo: '',
-        DateOfIdCard: '',
+        DateOfIdCard: null,
         PlaceOfIdCard: '',
         PassportNo: '',
-        PassportExp: '',
+        PassportExp: null,
         Qualification: '',
         Major: '',
         Phone: '',
@@ -82,14 +82,14 @@ const AppContainer = () => {
         LetsTalk: '',
         SubCompanyId: 0,
         Team: '',
-        TeamDate: '',
+        TeamDate: new Date(),
         JobTitleId: 0,
         JobLevelId: 0,
         ManagementLevelId: null,
-        PromotionDate: '',
-        JoinedDate: '',
-        CompanyDate: '',
-        ConfirmedDate: '',
+        PromotionDate: null,
+        JoinedDate: null,
+        CompanyDate: new Date(),
+        ConfirmedDate: null,
         LengthOfServiceByGroup: '',
         CanOT: false,
         SpecialOT: null,
@@ -275,13 +275,12 @@ const AppContainer = () => {
             FullName: employee.fullName || '',
             NickName: employee.nickName || '',
             EmployeeCard: employee.employeeCard || '',
-            DomainUsername: employee.domainUsername || '',
         };
     }
 
     function mapBasicDemographics(e) {
         return {
-            Gender: e.gender || null,
+            Gender: e.gender !== undefined ? e.gender : null,
             DateOfBirth: e.dateOfBirth || null,
             PlaceOfBirth: e.placeOfBirth || '',
             Ethnic: e.ethnic || '',
@@ -337,10 +336,10 @@ const AppContainer = () => {
 
     function mapJobTimeline(employee) {
         return {
-            PromotionDate: employee.promotionDate || null,
-            JoinedDate: employee.joinedDate || null,
+            PromotionDate: employee.promotionDate ? new Date(employee.promotionDate) : null,
+            JoinedDate: employee.joinedDate ? new Date(employee.joinedDate) : null,
             CompanyDate: new Date().toISOString().split('T')[0],
-            ConfirmedDate: employee.confirmedDate || null,
+            ConfirmedDate: employee.confirmedDate ? new Date(employee.confirmedDate) : null,
             LengthOfServiceByGroup: employee.lengthOfServiceByGroupDate || '',
         };
     }
