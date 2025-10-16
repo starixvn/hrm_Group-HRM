@@ -511,7 +511,7 @@ public class LeaveController(
         {
             var employeeJoinDate = employee.JoinedDate;
 
-            var defaultMinDate = today.FirstDayOfMonth().AddMonths(-5);
+            var defaultMinDate = today.FirstDayOfMonth().AddMonths(-12);
             return employeeJoinDate.HasValue && employeeJoinDate.Value > defaultMinDate
                     ? employeeJoinDate.Value.Date
                     : defaultMinDate;
