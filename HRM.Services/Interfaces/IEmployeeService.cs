@@ -76,7 +76,7 @@ public interface IEmployeeService
 
     Task<IEnumerable<T>> FilterByEmployeeDataPermission<T>(IEnumerable<T> data, Func<T, int> employeeIdSelector);
 
-    Task<GO.UserControl.Client.Core.Models.CommandResult> UpdateUserInfo(int userId, EditEmployeeParam param);
+    Task<GO.UserControl.Client.Core.Models.CommandResult> UpdateUserInfoAsync(int userId, EditEmployeeParam param);
 
     Task<int> TransferEmployee(EmployeeTransfer model);
 }

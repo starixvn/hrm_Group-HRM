@@ -3,9 +3,12 @@
     <Function Name="AccessCounter">
         <Setting Key="AccessCounter_Update" SpName="AccessCounter_Update" DbName="bodb_HRM" Plain="0" />
     </Function>
+    <Function Name="CompanySite">
+        <Setting Key="CompanySite_GetAll" SpName="CompanySite_GetAll" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="CompanySite_GetByDomain" SpName="CompanySite_GetByDomain" DbName="bodb_HRM" Plain="0" />
+    </Function>
     <Function Name="Auth">
         <Setting Key="Employee_GetByUserId" SpName="Employee_GetByUserId" DbName="bodb_HRM" Plain="0" />
-        <Setting Key="CompanySite_GetByDomain" SpName="CompanySite_GetByDomain" DbName="bodb_HRM" Plain="0" />
     </Function>
     <Function Name="Dashboard">
         <Setting Key="Dashboard_Get" SpName="Dashboard_Get" DbName="bodb_HRM" Plain="0" />

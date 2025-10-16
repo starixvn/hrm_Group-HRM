@@ -46,8 +46,7 @@ public class GroupEmployeeListController(
     IUserService userService,
     ICommonDataService commonDataService,
     IJobLevelService jobLevelService,
-    IManagementLevelService managementLevelService
-) : BaseController(session)
+    IManagementLevelService managementLevelService) : BaseController(session)
 #pragma warning restore S107 // Methods should not have too many parameters
 {
     [HrmPermission(Policy.Read, FunctionKey.GroupEmployeeList)]
@@ -214,15 +213,29 @@ public class GroupEmployeeListController(
         );
         if (commandResult.IsSuccessful)
         {
-            await employeeService.UpdateUserInfo(model.UserId, param);
-            await userService.UpdateUserSiteAsync(
-                new UpdateUserSiteParam
+            await employeeService.UpdateUserInfoAsync(model.UserId, param);
+
+            var companySites = await companyService.GetAllCompanySiteAsync();
+            var site = companySites.FirstOrDefault(c => c.CompanyId == model.TargetCompanyId);
+
+            if (site != null)
+            {
+                await userService.UpdateUserSiteAsync(
+                    new UpdateUserSiteParam
+                    {
+                        UserId = model.UserId,
+                        SiteId = site.SiteId,
+                        IsActive = true
+                    }
+                );
+
+                await userService.AssignRoleAsync(new AssignRoleParam
                 {
+                    SiteId = site.SiteId,
                     UserId = model.UserId,
-                    SiteId = session.SiteId,
-                    IsActive = true,
-                }
-            );
+                    RoleIds = param.Roles
+                });
+            }
         }
 
         return Json(commandResult);

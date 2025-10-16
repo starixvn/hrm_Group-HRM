@@ -485,9 +485,9 @@ public class EmployeeService(
         return data.Where(item => assignedEmployeeIds.Contains(employeeIdSelector(item)));
     }
 
-    public async Task<GO.UserControl.Client.Core.Models.CommandResult> UpdateUserInfo(int userId, EditEmployeeParam param)
+    public async Task<GO.UserControl.Client.Core.Models.CommandResult> UpdateUserInfoAsync(int userId, EditEmployeeParam param)
     {
-        var result = await userService.UpdateInfoAsync(new UpdateUserInfoParam
+        return await userService.UpdateInfoAsync(new UpdateUserInfoParam
         {
             RefId = param.EmployeeId,
             UserId = userId,
@@ -497,18 +497,6 @@ public class EmployeeService(
             Email = param.Email,
             IsActive = param.Enabled
         });
-        if (result.IsSuccessful)
-        {
-            result = await userService.AssignRoleAsync(new AssignRoleParam
-            {
-                UserId = userId,
-                RoleIds = param.Roles
-            });
-
-            return result;
-        }
-
-        return result;
     }
 
     public async Task<int> TransferEmployee(EmployeeTransfer model)

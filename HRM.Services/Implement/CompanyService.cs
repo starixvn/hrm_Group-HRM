@@ -17,8 +17,14 @@ namespace HRM.Services.Implement;
 public class CompanyService(
     IBaseService baseService,
     IHttpContextAccessor httpContextAccessor,
-    IUserControlSession userControlSession) : ICompanyService
+    IUserControlSession session) : ICompanyService
 {
+    public async Task<IEnumerable<CompanySite>> GetAllCompanySiteAsync()
+    {
+        var criteria = new GetAllCompanySiteCriteria();
+        return await baseService.GetDataAsync<CompanySite>(criteria);
+    }
+
     public async Task<CompanySite> GetCompanySiteByDomainAsync()
     {
         var domainName = GetDomainName();
@@ -62,7 +68,7 @@ public class CompanyService(
 
     public async Task<bool> GetIsShowSubCompanyValue()
     {
-        var currentCompanyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
+        var currentCompanyId = session.Get<short>(SessionKey.CurrentCompanyId);
         var criteria = new GetSystemConfigsByKeyCriteria
         {
             CompanyId = currentCompanyId,
@@ -74,7 +80,7 @@ public class CompanyService(
 
     public async Task<string> GetWhitelistIps()
     {
-        var currentCompanyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
+        var currentCompanyId = session.Get<short>(SessionKey.CurrentCompanyId);
         var criteria = new GetSystemConfigsByKeyCriteria
         {
             CompanyId = currentCompanyId,

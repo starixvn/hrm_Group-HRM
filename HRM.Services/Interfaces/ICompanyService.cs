@@ -2,28 +2,29 @@
 using System.Threading.Tasks;
 using HRM.Models;
 
-namespace HRM.Services.Interfaces
+namespace HRM.Services.Interfaces;
+
+public interface ICompanyService
 {
-    public interface ICompanyService
-    {
-        Task<CompanySite> GetCompanySiteByDomainAsync();
+    Task<IEnumerable<CompanySite>> GetAllCompanySiteAsync();
 
-        Task<IEnumerable<Company>> GetAllCompany();
+    Task<CompanySite> GetCompanySiteByDomainAsync();
 
-        Task<string> GetDomain(short companyId);
+    Task<IEnumerable<Company>> GetAllCompany();
 
-        Task<IEnumerable<SubCompany>> GetSubCompanies(short? companyId);
+    Task<string> GetDomain(short companyId);
 
-        Task<bool> GetIsShowSubCompanyValue();
+    Task<IEnumerable<SubCompany>> GetSubCompanies(short? companyId);
 
-        Task<IEnumerable<CompanySetting>> GetSettingCompanyAsync();
+    Task<bool> GetIsShowSubCompanyValue();
 
-        Task<IEnumerable<Currency>> GetCurrencyAsync();
+    Task<IEnumerable<CompanySetting>> GetSettingCompanyAsync();
 
-        Task<CompanySetting> GetByIdAsync(short companyId);
+    Task<IEnumerable<Currency>> GetCurrencyAsync();
 
-        Task<string> GetWhitelistIps();
+    Task<CompanySetting> GetByIdAsync(short companyId);
 
-        Task<IEnumerable<CompanySite>> GetAllDomainAsync(short? companyId = null);
-    }
+    Task<string> GetWhitelistIps();
+
+    Task<IEnumerable<CompanySite>> GetAllDomainAsync(short? companyId = null);
 }

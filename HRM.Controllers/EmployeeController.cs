@@ -519,9 +519,16 @@ public class EmployeeController(
 
     private async Task UpdateUserInfo(int userId, EditEmployeeParam param)
     {
-        var result = await employeeService.UpdateUserInfo(userId, param);
+        var result = await employeeService.UpdateUserInfoAsync(userId, param);
         if (result.IsSuccessful)
         {
+            await userService.AssignRoleAsync(new AssignRoleParam
+            {
+                SiteId = session.SiteId,
+                UserId = userId,
+                RoleIds = param.Roles
+            });
+
             ViewBag.Updated = true;
             await UpdateUserSession(param.EmployeeId);
         }
