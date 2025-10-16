@@ -1,7 +1,4 @@
-﻿using Fanex.Logging;
-using Newtonsoft.Json;
-
-namespace HRM.Services.Implement;
+﻿namespace HRM.Services.Implement;
 
 using System;
 using System.Collections.Generic;
@@ -10,17 +7,18 @@ using System.Threading.Tasks;
 using Core;
 using Core.Constants;
 using Core.Security;
-using HRM.Models.Employees;
 using Core.XMLExtensions;
 using Criteria.AnnualLeave;
 using Criteria.Employee;
 using Criteria.Shift;
 using Criteria.Supervisor;
+using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Services;
 using GO.UserControl.Client.Core.Session;
 using HRM.Core.Models;
 using HRM.Core.Services;
 using HRM.Criteria.Report;
+using HRM.Models.Employees;
 using HRM.Repositories.Interfaces;
 using Interfaces;
 using Models;
@@ -29,10 +27,8 @@ using Models.Group;
 using Models.Supervisor;
 using Resources;
 using ViewModels.AnnualLeave;
-using GO.UserControl.Client.Core.Enumerables;
 
 public class EmployeeService(
-    ILogger logger,
     IEmployeeRepository employeeRepository,
     IBaseService baseService,
     IRoleService roleService,
@@ -468,8 +464,6 @@ public class EmployeeService(
         };
 
         var assignedEmployeeIds = await baseService.GetDataAsync<int>(criteria);
-
-        await logger.InfoAsync($"criteria: {JsonConvert.SerializeObject(criteria)}, data: {JsonConvert.SerializeObject(data)}");
 
         return data.Where(item => assignedEmployeeIds.Contains(employeeIdSelector(item)));
     }
