@@ -176,6 +176,7 @@ public class AuthController(
                 session.Set(SessionKey.CurrentTimeZone, await GetClientTimeZoneAsync());
                 session.Set(SessionKey.CurrentDomain, GetDomainName(HttpContext));
                 session.Set(SessionKey.MailSetting, await GetMailSettingAsync());
+                session.Set(SessionKey.AnnualLeaveRule, await GetAnnualLeaveRuleAsync());
 
                 var employee = await hrmAuthService.GetByUserIdAsync(tmpUserId);
                 session.Set(SessionKey.Employee, employee);
