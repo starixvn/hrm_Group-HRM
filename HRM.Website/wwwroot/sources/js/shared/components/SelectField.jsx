@@ -22,8 +22,10 @@ const SelectField = ({
       {({ field, form }) => (
         <Select
           options={selectOptions}
-          value={selectOptions.find(option => option.value == field.value) || null}
-          onChange={(selectedOption) => {
+          value={selectOptions.find(option =>
+            String(option.value) === String(field.value)
+          ) || null}
+          onChange={selectedOption => {
             const value = selectedOption ? selectedOption.value : null;
             form.setFieldValue(name, value);
             if (onChange) {

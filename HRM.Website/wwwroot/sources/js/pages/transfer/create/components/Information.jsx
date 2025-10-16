@@ -77,7 +77,7 @@ const InformationSelectField = ({
   name,
   label,
   options,
-  placeholder = "",
+  _placeholder = "",
   valueKey = "id",
   textKey = "name",
 }) => {

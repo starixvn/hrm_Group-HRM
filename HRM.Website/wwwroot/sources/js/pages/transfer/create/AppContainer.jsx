@@ -18,6 +18,14 @@ import {
 import { validationSchema, submitTransfer } from '../common.functions';
 
 const AppContainer = () => {
+
+    const EXCLUDED_COMPANIES = [
+        { id: 1, name: 'NexCompanyId' },
+        { id: 2, name: 'LumiCompanyId' },
+        { id: 34, name: 'NexVisionCompanyId' }
+    ];
+    const EXCLUDED_COMPANY_IDS = EXCLUDED_COMPANIES.map(company => company.id);
+
     const [companies, setCompanies] = useState(null);
     const [targetCompanyIds, setTargetCompanyIds] = useState([]);
     const [employees, setEmployees] = useState([]);
@@ -131,7 +139,7 @@ const AppContainer = () => {
         })
             .then(response => {
                 const filteredCompanies = response.data.filter(company =>
-                    !company.text || !company.text.toLowerCase().includes('nexcel')
+                    !EXCLUDED_COMPANY_IDS.includes(company.id)
                 );
                 const companyIds = filteredCompanies.map(company => company.id).join(',');
                 setCompanies(filteredCompanies);
@@ -274,11 +282,11 @@ const AppContainer = () => {
     function mapBasicDemographics(e) {
         return {
             Gender: e.gender || null,
-            DateOfBirth: e.dateOfBirth || '',
+            DateOfBirth: e.dateOfBirth || null,
             PlaceOfBirth: e.placeOfBirth || '',
             Ethnic: e.ethnic || '',
             Native: e.native || '',
-            Marriage: e.marriage || null,
+            Marriage: e.marriage || 0,
         };
     }
 
@@ -287,10 +295,10 @@ const AppContainer = () => {
             CountryCode: e.countryCode || '',
             Religion: e.religion || '',
             CardNo: e.cardNo || '',
-            DateOfIdCard: e.dateOfIdCard || '',
+            DateOfIdCard: e.dateOfIdCard || null,
             PlaceOfIdCard: e.placeOfIdCard || '',
             PassportNo: e.passportNo || '',
-            PassportExp: e.passportExp || '',
+            PassportExp: e.passportExp || null,
             Qualification: e.qualification || '',
             Major: e.major || '',
         };
@@ -329,10 +337,10 @@ const AppContainer = () => {
 
     function mapJobTimeline(employee) {
         return {
-            PromotionDate: employee.promotionDate || '',
-            JoinedDate: employee.joinedDate || '',
+            PromotionDate: employee.promotionDate || null,
+            JoinedDate: employee.joinedDate || null,
             CompanyDate: new Date().toISOString().split('T')[0],
-            ConfirmedDate: employee.confirmedDate || '',
+            ConfirmedDate: employee.confirmedDate || null,
             LengthOfServiceByGroup: employee.lengthOfServiceByGroupDate || '',
         };
     }
@@ -418,7 +426,7 @@ const AppContainer = () => {
         const model = {
             ...values,
             Id: isNaN(parseInt(values.EmpId, 10)) ? 0 : values.EmpId,
-            TargetCompanyId: values.TransferInCompanyId || 0,
+            TargetCompanyId: parseInt(values.TransferInCompanyId) || 0,
             TransferInDate: new Date().toISOString().split('T')[0],
             Team: selectedTeam ? {
                 id: selectedTeam.id,
