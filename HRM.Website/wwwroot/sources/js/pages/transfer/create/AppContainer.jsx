@@ -261,7 +261,7 @@ const AppContainer = () => {
         }
 
         if (values.TransferOutCompanyId && values.TransferInCompanyId &&
-            values.TransferOutCompanyId === values.TransferInCompanyId) {
+            values.TransferOutCompanyId === parseInt(values.TransferInCompanyId, 10)) {
             errors.TransferInCompanyId = 'Target Company must be different from current company';
         }
 
