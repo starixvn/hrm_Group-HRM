@@ -1,6 +1,6 @@
 import React from "react";
-import { Field } from "formik";
 import DatePickerField from "../../../../shared/components/DatePickerField";
+import SelectField from "../../../../shared/components/SelectField";
 
 const Information = ({
   isOpen,
@@ -21,33 +21,29 @@ const Information = ({
       </div>
 
       <div className={`panel-body ${!isOpen ? "collapsed" : ""}`}>
-        <SelectField
+        <InformationSelectField
           name="SubCompanyId"
           label="Sub Company"
           options={subCompanies}
           valueKey="subCompanyId"
           textKey="name"
-          employeeValue={employeeData && employeeData.SubCompanyId}
         />
 
         <DateFieldGroup name="TeamDate" label="Team Date" />
-        <SelectField
+        <InformationSelectField
           name="JobTitleId"
           label="Job Title"
           options={jobTitles}
-          employeeValue={employeeData && employeeData.JobTitleId}
         />
-        <SelectField
+        <InformationSelectField
           name="JobLevelId"
           label="Job Level"
           options={jobLevels}
-          employeeValue={employeeData && employeeData.JobLevelId}
         />
-        <SelectField
+        <InformationSelectField
           name="ManagementLevelId"
           label="Management Grade"
           options={managementLevels}
-          employeeValue={employeeData && employeeData.ManagementLevelId}
         />
 
         <DateFieldGroup name="PromotionDate" label="Promotion Date" />
@@ -77,38 +73,37 @@ const Information = ({
   );
 };
 
-const SelectField = ({
+const InformationSelectField = ({
   name,
   label,
   options,
   placeholder = "",
   valueKey = "id",
   textKey = "name",
-  employeeValue,
-}) => (
-  <div className="form-group">
-    <div className="label-form">
-      <label className="control-label">{label}</label>
+}) => {
+  const selectOptions = options ? options
+    .filter(opt => opt[valueKey])
+    .map(opt => ({
+      value: opt[valueKey],
+      label: opt[textKey] || opt.name || opt.text
+    })) : [];
+
+  return (
+    <div className="form-group">
+      <div className="label-form">
+        <label className="control-label">{label}</label>
+      </div>
+      <div className="select-form">
+         <SelectField
+           name={name}
+           options={selectOptions}
+           isSearchable={true}
+           isClearable={true}
+         />
+      </div>
     </div>
-    <div className="select-form">
-      <Field
-        name={name}
-        as="select"
-        className="form-control"
-        value={employeeValue}
-      >
-        <option value="">--{placeholder || `Select ${label}`}--</option>
-        {options && options
-          .filter(opt => opt[valueKey])
-          .map(opt => (
-            <option key={`${name}-${opt[valueKey]}`} value={opt[valueKey]}>
-              {opt[textKey] || opt.name || opt.text}
-            </option>
-          ))}
-      </Field>
-    </div>
-  </div>
-);
+  );
+};
 
 const DateFieldGroup = ({ name, label }) => (
   <div className="form-group">

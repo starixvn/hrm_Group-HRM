@@ -19,6 +19,7 @@ import { validationSchema, submitTransfer } from '../common.functions';
 
 const AppContainer = () => {
     const [companies, setCompanies] = useState(null);
+    const [targetCompanyIds, setTargetCompanyIds] = useState([]);
     const [employees, setEmployees] = useState([]);
     const [teams, setTeams] = useState([]);
     const [selectedTeam, setSelectedTeam] = useState(null);
@@ -45,6 +46,7 @@ const AppContainer = () => {
         TransferRemark: '',
         Code: '',
         FullName: '',
+        UserId: 0,
         NickName: '',
         EmployeeCard: '',
         DomainUsername: '',
@@ -97,7 +99,7 @@ const AppContainer = () => {
                 url: resolveClientUrl('GroupEmployeeList/GroupEmployeeList'),
                 method: 'GET',
                 headers: { 'X-Requested-With': 'XMLHttpRequest' },
-                params: { keyword: query, isDelete: false, isEnable: true }
+                params: { keyword: query, isDelete: false, isEnable: true, companyIds: targetCompanyIds }
             }).then(response => {
                 const { data } = response;
                 const employeeOptions = data.map(item => {
@@ -128,7 +130,12 @@ const AppContainer = () => {
             headers: { 'X-Requested-With': 'XMLHttpRequest' },
         })
             .then(response => {
-                setCompanies(response.data);
+                const filteredCompanies = response.data.filter(company =>
+                    !company.text || !company.text.toLowerCase().includes('nexcel')
+                );
+                const companyIds = filteredCompanies.map(company => company.id).join(',');
+                setCompanies(filteredCompanies);
+                setTargetCompanyIds(companyIds);
             })
             .catch(axiosError);
     }, []);
@@ -255,6 +262,7 @@ const AppContainer = () => {
 
     function mapIdentity(employee) {
         return {
+            UserId: employee.userId || 0,
             Code: employee.code || '',
             FullName: employee.fullName || '',
             NickName: employee.nickName || '',
@@ -270,7 +278,7 @@ const AppContainer = () => {
             PlaceOfBirth: e.placeOfBirth || '',
             Ethnic: e.ethnic || '',
             Native: e.native || '',
-            Marriage: e.marriage || 0,
+            Marriage: e.marriage || null,
         };
     }
 
@@ -310,10 +318,10 @@ const AppContainer = () => {
 
     function mapJobStructure(employee) {
         return {
-            SubCompanyId: employee.subCompanyId || 0,
+            SubCompanyId: 0,
             Team: employee.team || '',
             TeamDate: new Date().toISOString().split('T')[0],
-            JobTitleId: employee.jobTitleId || 0,
+            JobTitleId: 0,
             JobLevelId: employee.jobLevelId || 0,
             ManagementLevelId: employee.managementLevelId || null,
         };
@@ -352,6 +360,7 @@ const AppContainer = () => {
             ...mapContact(employee),
             ...mapJob(employee),
             ...mapPolicy(employee),
+            ...mapDemographics(employee),
         };
     }
 
@@ -408,7 +417,6 @@ const AppContainer = () => {
 
         const model = {
             ...values,
-            TransferInCompanyId: 2, 
             Id: isNaN(parseInt(values.EmpId, 10)) ? 0 : values.EmpId,
             TargetCompanyId: values.TransferInCompanyId || 0,
             TransferInDate: new Date().toISOString().split('T')[0],

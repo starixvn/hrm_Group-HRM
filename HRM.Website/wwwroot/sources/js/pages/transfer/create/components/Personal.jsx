@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Field } from 'formik';
 import DatePickerField from '../../../../shared/components/DatePickerField';
+import SelectField from '../../../../shared/components/SelectField';
 
 const Personal = ({ isOpen, onToggle, employeeData, countries, onGenerateEmployeeId }) => {
     const [filteredCountryCodes, setFilteredCountryCodes] = useState(countries || []);
@@ -8,6 +9,24 @@ const Personal = ({ isOpen, onToggle, employeeData, countries, onGenerateEmploye
     useEffect(() => {
         setFilteredCountryCodes(countries || []);
     }, [countries]);
+
+    const countryOptions = filteredCountryCodes.map(option => ({
+        value: option.countryCode,
+        label: option.countryName
+    }));
+
+    const genderOptions = [
+        { value: 2, label: 'Unknown' },
+        { value: 0, label: 'Female' },
+        { value: 1, label: 'Male' }
+    ];
+
+    const marriageOptions = [
+        { value: 1, label: 'Married' },
+        { value: 2, label: 'Divorced' },
+        { value: 3, label: 'Single' },
+        { value: 4, label: 'Widow' }
+    ];
 
     return (
         <div className={`panel-group ${!isOpen ? 'collapsed' : ''}`}>
@@ -181,15 +200,12 @@ const Personal = ({ isOpen, onToggle, employeeData, countries, onGenerateEmploye
                         </label>
                     </div>
                     <div className='select-form'>
-                        <Field
-                            name='Gender'
-                            as='select'
-                            className='form-control'
-                        >
-                            <option key='gender-2' value='2'>Unknown</option>
-                            <option key='gender-0' value='0'>Female</option>
-                            <option key='gender-1' value='1'>Male</option>
-                        </Field>
+                        <SelectField
+                            name="Gender"
+                            options={genderOptions}
+                            isSearchable={false}
+                            isClearable={true}
+                        />
                     </div>
                 </div>
 
@@ -200,18 +216,12 @@ const Personal = ({ isOpen, onToggle, employeeData, countries, onGenerateEmploye
                         </label>
                     </div>
                     <div className='select-form'>
-                        <Field
-                            name='Marriage'
-                            as='select'
-                            className='form-control'
-                            value={employeeData && employeeData.Marriage}
-                        >
-                            <option key='marriage-0' value='0'>--Select Marriage Status--</option>
-                            <option key='marriage-1' value='1'>Married</option>
-                            <option key='marriage-2' value='2'>Divorced</option>
-                            <option key='marriage-3' value='3'>Single</option>
-                            <option key='marriage-4' value='4'>Widow</option>
-                        </Field>
+                        <SelectField
+                            name="Marriage"
+                            options={marriageOptions}
+                            isSearchable={false}
+                            isClearable={true}
+                        />
                     </div>
                 </div>
 
@@ -222,20 +232,12 @@ const Personal = ({ isOpen, onToggle, employeeData, countries, onGenerateEmploye
                         </label>
                     </div>
                     <div className='input-form'>
-                        <div className='searchable-select'>
-                            <Field
-                                name='CountryCode'
-                                as='select'
-                                className='form-control'
-                            >
-                                <option value=''>Select Nationality</option>
-                                {filteredCountryCodes.map(option => (
-                                    <option key={option.countryCode} value={option.countryCode}>
-                                        {option.countryName}
-                                    </option>
-                                ))}
-                            </Field>
-                        </div>
+                        <SelectField
+                            name="CountryCode"
+                            options={countryOptions}
+                            isSearchable={true}
+                            isClearable={true}
+                        />
                     </div>
                 </div>
 

@@ -173,7 +173,9 @@ span.require {
     }
 
     .panel-body-information:not(.collapsed) {
-        margin-bottom: 30px;
+        position: relative;
+        z-index: 4;
+        margin-bottom: 23px;
     }
 
     .panel-group {
@@ -182,7 +184,6 @@ span.require {
         border-radius: 4px;
         background-color: #fff;
         transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        overflow: hidden;
 
         &.collapsed {
             margin-bottom: 5px;
@@ -215,7 +216,6 @@ span.require {
         .panel-body {
             padding: 0;
             background-color: #fff;
-            overflow: hidden;
             transition: all 0.5s ease-in-out;
             max-height: 0;
             opacity: 0;
