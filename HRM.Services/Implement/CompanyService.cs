@@ -37,11 +37,17 @@ public class CompanyService(
 
     public async Task<string> GetDomain(short companyId)
     {
-        var criteria = new GetDomainByCompanyIdCriteria
+        var criteria = new GetDomainCriteria
         {
             CompanyId = companyId
         };
-        return await baseService.GetDataEntityAsync<string>(criteria);
+
+        var companySites = await baseService.GetDataAsync<CompanySite>(criteria);
+
+        var domain = companySites.FirstOrDefault()
+            ?.Domain;
+
+        return domain;
     }
 
     public async Task<IEnumerable<SubCompany>> GetSubCompanies(short? companyId)
