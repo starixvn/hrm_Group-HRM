@@ -429,10 +429,11 @@ const AppContainer = () => {
             TransferInDate: new Date().toISOString().split('T')[0],
             Team: selectedTeam ? {
                 id: selectedTeam.id,
-            } : null
+            } : null,
+            Enabled: true
         };
 
-        submitTransfer('GroupEmployeeList/Transfer', model, setSubmitting);
+        submitTransfer('GroupEmployeeList/Transfer', model, setSubmitting, 'GroupEmployeeList/Index');
     };
 
     const renderForm = ({ errors, isSubmitting, values, setErrors }) => {

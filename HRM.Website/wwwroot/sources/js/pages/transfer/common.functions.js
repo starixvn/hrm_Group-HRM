@@ -10,7 +10,7 @@ export const validationSchema = object({
         .required('Employee ID field is required!')
 });
 
-export const submitTransfer = (endpoint, model, setSubmitting) => {
+export const submitTransfer = (endpoint, model, setSubmitting, redirectUrl = null) => {
     setSubmitting(true);
 
     axios
@@ -30,6 +30,11 @@ export const submitTransfer = (endpoint, model, setSubmitting) => {
                 const successMessage = "Transfer successfully!";
                 toastr.success(successMessage, '', toastOptions());
                 setSubmitting(false);
+                if (redirectUrl) {
+                    setTimeout(() => {
+                        window.location.href = resolveClientUrl(redirectUrl);
+                    }, 3000);
+                }
             } else {
                 toastr.error(data.message, '', toastOptions());
                 setSubmitting(false);
