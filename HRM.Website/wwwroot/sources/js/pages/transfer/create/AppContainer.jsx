@@ -426,7 +426,7 @@ const AppContainer = () => {
         const model = {
             ...values,
             Id: isNaN(parseInt(values.EmpId, 10)) ? 0 : values.EmpId,
-            TargetCompanyId: parseInt(values.TransferInCompanyId) || 0,
+            TargetCompanyId: parseInt(values.TransferInCompanyId, 10) || 0,
             TransferInDate: new Date().toISOString().split('T')[0],
             Team: selectedTeam ? {
                 id: selectedTeam.id,
