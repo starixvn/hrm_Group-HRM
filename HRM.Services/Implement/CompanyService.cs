@@ -41,21 +41,6 @@ public class CompanyService(
         return await baseService.GetDataAsync<Company>(criteria);
     }
 
-    public async Task<string> GetDomain(short companyId)
-    {
-        var criteria = new GetDomainCriteria
-        {
-            CompanyId = companyId
-        };
-
-        var companySites = await baseService.GetDataAsync<CompanySite>(criteria);
-
-        var domain = companySites.FirstOrDefault()
-            ?.Domain;
-
-        return domain;
-    }
-
     public async Task<IEnumerable<SubCompany>> GetSubCompanies(short? companyId)
     {
         var criteria = new GetSubCompaniesCriteria
@@ -64,18 +49,6 @@ public class CompanyService(
         };
 
         return await baseService.GetDataAsync<SubCompany>(criteria);
-    }
-
-    public async Task<bool> GetIsShowSubCompanyValue()
-    {
-        var currentCompanyId = session.Get<short>(SessionKey.CurrentCompanyId);
-        var criteria = new GetSystemConfigsByKeyCriteria
-        {
-            CompanyId = currentCompanyId,
-            Key = SystemConfigKey.IsShowSubCompany
-        };
-
-        return await baseService.GetDataEntityAsync<bool>(criteria);
     }
 
     public async Task<string> GetWhitelistIps()

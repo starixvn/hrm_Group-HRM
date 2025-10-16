@@ -202,7 +202,7 @@ public class GroupEmployeeListController(
             return Json(result);
         }
 
-        var newEmpId = await employeeService.TransferEmployee(model);
+        var newEmpId = await employeeService.TransferEmployeeAsync(model);
         var param = EmployeeHelper.MappingEditEmployeeParam(model, $"{(int)RoleSystem.Member}");
         param.EmployeeId = newEmpId;
 

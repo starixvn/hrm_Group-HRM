@@ -78,5 +78,5 @@ public interface IEmployeeService
 
     Task<GO.UserControl.Client.Core.Models.CommandResult> UpdateUserInfoAsync(int userId, EditEmployeeParam param);
 
-    Task<int> TransferEmployee(EmployeeTransfer model);
+    Task<int> TransferEmployeeAsync(EmployeeTransfer model);
 }

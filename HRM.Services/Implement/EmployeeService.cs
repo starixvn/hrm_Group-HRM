@@ -452,16 +452,14 @@ public class EmployeeService(
     public async Task<IEnumerable<int>> GetCompaniesBelongToSupervisor()
     {
         var employeeSession = session.Get<EmployeeSession>(SessionKey.Employee);
-        var supervisorCompanyCriteria = new GetSupervisorCompaniesCriteria
+        var criteria = new GetSupervisorCompaniesCriteria
         {
             EmpId = employeeSession.EmpId
         };
-        var supervisorCompanyIds = await baseService.GetDataAsync<int>(supervisorCompanyCriteria);
+        var supervisorCompanyIds = await baseService.GetDataAsync<int>(criteria);
 
-        var nexCompanies = supervisorCompanyIds
+        return supervisorCompanyIds
             .Where(s => Constants.NexCompanyIds.Contains(s));
-
-        return nexCompanies;
     }
 
     public async Task<IEnumerable<T>> FilterByEmployeeDataPermission<T>(
@@ -499,7 +497,7 @@ public class EmployeeService(
         });
     }
 
-    public async Task<int> TransferEmployee(EmployeeTransfer model)
+    public async Task<int> TransferEmployeeAsync(EmployeeTransfer model)
     {
         var criteria = new EmployeeTransferCriteria
         {
@@ -510,9 +508,7 @@ public class EmployeeService(
             CreatedBy = session.Get<EmployeeSession>(SessionKey.Employee).EmpId,
             TransferInDate = model.TransferInDate
         };
-        var result = await baseService.GetDataAsync<int>(criteria);
-        var newEmpId = result.First();
 
-        return newEmpId;
+        return await baseService.GetDataEntityAsync<int>(criteria);
     }
 }

@@ -12,11 +12,7 @@ public interface ICompanyService
 
     Task<IEnumerable<Company>> GetAllCompany();
 
-    Task<string> GetDomain(short companyId);
-
     Task<IEnumerable<SubCompany>> GetSubCompanies(short? companyId);
-
-    Task<bool> GetIsShowSubCompanyValue();
 
     Task<IEnumerable<CompanySetting>> GetSettingCompanyAsync();
 
