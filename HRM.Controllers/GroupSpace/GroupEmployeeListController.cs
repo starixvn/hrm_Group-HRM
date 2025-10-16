@@ -205,6 +205,7 @@ public class GroupEmployeeListController(
         var newEmpId = await employeeService.TransferEmployeeAsync(model);
         var param = EmployeeHelper.MappingEditEmployeeParam(model, $"{(int)RoleSystem.Member}");
         param.EmployeeId = newEmpId;
+        param.Enabled = true;
 
         var commandResult = await employeeService.EditAsync(
             EmployeeSession.EmpId,
