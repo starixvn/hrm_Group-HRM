@@ -95,7 +95,6 @@ public class EmployeeLogService(
         new() { FieldName = "ChineseName", DisplayName = Labels.ChineseName },
         new() { FieldName = "WorkingHoursbyWeek", DisplayName = Labels.WorkingHoursPerWeek },
         new() { FieldName = "SalaryStructureId", DisplayName = Labels.SalaryStructure },
-        new() { FieldName = "SubCompanyName", DisplayName = Labels.SubCompany },
         new() { FieldName = "SubCompanyId", DisplayName = Labels.SubCompany },
         new() { FieldName = "AutoApproveRequest", DisplayName = Labels.AutoApproved }
     };
