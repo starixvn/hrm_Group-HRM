@@ -35,8 +35,6 @@ public class ActionLogService(IBaseService baseService) : IActionLogService
     {
         foreach (var log in logs)
         {
-            log.LogDate = log.LogDate.ToClientTimeZone();
-
             var oldValues = ReadXmlString(log.OldData);
             var newValues = ReadXmlString(log.Data);
             var fieldNames = oldValues.Select(x => x.FieldName).Union(newValues.Select(x => x.FieldName));
