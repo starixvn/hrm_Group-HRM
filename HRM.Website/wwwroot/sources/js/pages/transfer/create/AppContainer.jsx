@@ -410,7 +410,7 @@ const AppContainer = () => {
                 setSubCompanies(employee.subCompanies || []);
                 setJobTitles(employee.jobTitles || []);
                 setCountries(employee.coutries || []);
-                setIsLocal(employee.IsLocal || false);
+                setIsLocal(employee.isLocal || false);
 
                 setCurrentStep(2);
                 setSubmitting(false);
@@ -428,6 +428,7 @@ const AppContainer = () => {
             ...values,
             Id: isNaN(parseInt(values.EmpId, 10)) ? 0 : values.EmpId,
             TargetCompanyId: parseInt(values.TransferInCompanyId, 10) || 0,
+            TransferOutCompanyId: parseInt(values.TransferOutCompanyId, 10) || 0,
             TransferInDate: new Date().toISOString().split('T')[0],
             Team: selectedTeam ? {
                 id: selectedTeam.id,

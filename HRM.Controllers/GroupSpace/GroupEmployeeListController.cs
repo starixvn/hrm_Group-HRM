@@ -224,13 +224,13 @@ public class GroupEmployeeListController(
     private async Task UpdateUserSiteAndRoles(EmployeeTransfer model, EditEmployeeParam param)
     {
         var companySites = await companyService.GetAllCompanySiteAsync();
-        var targetSite = companySites.FirstOrDefault(c => c.CompanyId == model.TargetCompanyId);        
+        var targetSite = companySites.FirstOrDefault(c => c.CompanyId == model.TargetCompanyId);
         if (targetSite == null)
         {
             return;
         }
 
-        var oldSite = companySites.FirstOrDefault(c => c.CompanyId == model.CompanyId);      
+        var oldSite = companySites.FirstOrDefault(c => c.CompanyId == model.TransferOutCompanyId);
         if (oldSite != null) // Deactivate old site
         {
             await userService.UpdateUserSiteAsync(new UpdateUserSiteParam
