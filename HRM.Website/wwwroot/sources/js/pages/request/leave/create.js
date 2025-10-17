@@ -787,8 +787,8 @@ const LeaveRequest = (function ($) {
             });
         },
         getDisableDate: function () {
-            var minDate = new Date(LeaveRequest.fromDate.attr('minDate'));
-            var tempDate = new Date(new Date(minDate).setMonth(minDate.getMonth() + 12));
+            var currentDate = new Date();
+            var tempDate = new Date(currentDate.setMonth(currentDate.getMonth() + 12));
             const leaveTypeId = parseInt(LeaveRequest.leaveTypeId.val(), 10);
 
             if (leaveTypeId === LeaveType.GeneralLeave) {
@@ -814,7 +814,7 @@ const LeaveRequest = (function ($) {
                 }
 
                 if (leaveTypeId === LeaveType.MaternityLeave) {
-                    tempDate = new Date(new Date(minDate).setMonth(minDate.getMonth() + 12));
+                    tempDate = new Date(currentDate.setMonth(currentDate.getMonth() + 12));
                     LeaveRequest.fromDate.attr('disabledDate', '2010-01-01');
                     LeaveRequest.toDate.attr('disabledDate', '2010-01-01');
                     LeaveRequest.getUnavailableDate();
@@ -822,7 +822,7 @@ const LeaveRequest = (function ($) {
                     LeaveRequest.fromDate.attr('disabledDate', '2010-01-01');
                     LeaveRequest.toDate.attr('disabledDate', '2010-01-01');
                 } else if (leaveTypeId === LeaveType.OffsetLeave) {
-                    tempDate = new Date(new Date(minDate).setMonth(minDate.getMonth() + 13));
+                    tempDate = new Date(currentDate.setMonth(currentDate.getMonth() + 13));
                     LeaveRequest.fromDate.attr('disabledDate', '2010-01-01');
                     LeaveRequest.toDate.attr('disabledDate', '2010-01-01');
                 } else {
@@ -830,7 +830,7 @@ const LeaveRequest = (function ($) {
                 }
             }
 
-            var maxDate = new Date(1900 + tempDate.getYear(), tempDate.getMonth(), 0);
+            const maxDate = new Date(1900 + tempDate.getYear(), tempDate.getMonth(), 0);
             LeaveRequest.fromDate.datepicker('option', 'maxDate', maxDate);
             LeaveRequest.toDate.datepicker('option', 'maxDate', maxDate);
         },
