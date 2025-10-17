@@ -7,17 +7,18 @@ using System.Threading.Tasks;
 using Core;
 using Core.Constants;
 using Core.Security;
-using HRM.Models.Employees;
 using Core.XMLExtensions;
 using Criteria.AnnualLeave;
 using Criteria.Employee;
 using Criteria.Shift;
 using Criteria.Supervisor;
+using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Services;
 using GO.UserControl.Client.Core.Session;
 using HRM.Core.Models;
 using HRM.Core.Services;
 using HRM.Criteria.Report;
+using HRM.Models.Employees;
 using HRM.Repositories.Interfaces;
 using Interfaces;
 using Models;
@@ -26,7 +27,6 @@ using Models.Group;
 using Models.Supervisor;
 using Resources;
 using ViewModels.AnnualLeave;
-using GO.UserControl.Client.Core.Enumerables;
 
 public class EmployeeService(
     IEmployeeRepository employeeRepository,
@@ -453,17 +453,17 @@ public class EmployeeService(
         var canViewAllEmployees = session.HasPermissionOnFunction(FunctionKey.DataPermission_AllEmployees, Policy.Read);
         var canViewEmployeesAssigned = session.HasPermissionOnFunction(FunctionKey.DataPermission_EmployeesAssigned, Policy.Read);
         var currentCompanyId = session.Get<short>(SessionKey.CurrentCompanyId);
-        var employeeSessionEmpId = session.Get<EmployeeSession>(SessionKey.Employee)?.EmpId ?? 0;
 
-        var assignedEmpCriteria = new GetEmployeeByDataPermissionCriteria
+        var criteria = new GetEmployeeByDataPermissionCriteria
         {
             CompanyId = currentCompanyId,
-            EmpId = employeeSessionEmpId,
+            UserId = session.UserId,
             IsViewAll = canViewAllEmployees,
             IsViewEmployeeAssigned = canViewEmployeesAssigned
         };
 
-        var assignedEmployeeIds = await baseService.GetDataAsync<int>(assignedEmpCriteria);
+        var assignedEmployeeIds = await baseService.GetDataAsync<int>(criteria);
+
         return data.Where(item => assignedEmployeeIds.Contains(employeeIdSelector(item)));
     }
 }

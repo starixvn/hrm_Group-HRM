@@ -2,7 +2,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 using Core;
@@ -167,8 +166,6 @@ public class LeaveController(
     }
 
     [HttpPost]
-    [SuppressMessage("CognitiveComplexity", "CA1522:AvoidExcessiveCognitiveComplexity", Justification = "Complex business logic for leave request update is necessary and well-structured")]
-    [SuppressMessage("SonarQube", "S3776:Cognitive Complexity of methods should not be too high", Justification = "Complex business logic for leave request update is necessary and well-structured")]
     public async Task<IActionResult> Update(string request, string requestDetails, IList<IFormFile> files, string filesRemove)
     {
         var criteria = JsonConvert.DeserializeObject<UpdateLeaveRequestCriteria>(request);
@@ -511,7 +508,7 @@ public class LeaveController(
         {
             var employeeJoinDate = employee.JoinedDate;
 
-            var defaultMinDate = today.FirstDayOfMonth().AddMonths(-5);
+            var defaultMinDate = today.FirstDayOfMonth().AddMonths(-12);
             return employeeJoinDate.HasValue && employeeJoinDate.Value > defaultMinDate
                     ? employeeJoinDate.Value.Date
                     : defaultMinDate;

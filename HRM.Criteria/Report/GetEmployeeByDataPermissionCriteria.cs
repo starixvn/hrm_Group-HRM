@@ -4,7 +4,7 @@ using Fanex.Data.Repository;
 
 public class GetEmployeeByDataPermissionCriteria : CriteriaBase
 {
-    public int EmpId { get; set; }
+    public int UserId { get; set; }
 
     public short CompanyId { get; set; }
 
@@ -14,7 +14,7 @@ public class GetEmployeeByDataPermissionCriteria : CriteriaBase
 
     public bool IsShowUserInTeam { get; set; }
 
-    public override bool IsValid() => CompanyId > 0 && EmpId > 0;
+    public override bool IsValid() => CompanyId > 0 && UserId > 0;
 
-    public override string GetSettingKey() => "GetEmployeeByDataPermission";
+    public override string GetSettingKey() => "Employee_GetByDataPermission";
 }
