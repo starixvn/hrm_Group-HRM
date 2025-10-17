@@ -215,31 +215,44 @@ public class GroupEmployeeListController(
         if (commandResult.IsSuccessful)
         {
             await employeeService.UpdateUserInfoAsync(model.UserId, param);
-
-            var companySites = await companyService.GetAllCompanySiteAsync();
-            var site = companySites.FirstOrDefault(c => c.CompanyId == model.TargetCompanyId);
-
-            if (site != null)
-            {
-                await userService.UpdateUserSiteAsync(
-                    new UpdateUserSiteParam
-                    {
-                        UserId = model.UserId,
-                        SiteId = site.SiteId,
-                        IsActive = true
-                    }
-                );
-
-                await userService.AssignRoleAsync(new AssignRoleParam
-                {
-                    SiteId = site.SiteId,
-                    UserId = model.UserId,
-                    RoleIds = param.Roles
-                });
-            }
+            await UpdateUserSiteAndRoles(model, param);
         }
 
         return Json(commandResult);
+    }
+
+    private async Task UpdateUserSiteAndRoles(EmployeeTransfer model, EditEmployeeParam param)
+    {
+        var companySites = await companyService.GetAllCompanySiteAsync();
+        var targetSite = companySites.FirstOrDefault(c => c.CompanyId == model.TargetCompanyId);        
+        if (targetSite == null)
+        {
+            return;
+        }
+
+        var oldSite = companySites.FirstOrDefault(c => c.CompanyId == model.CompanyId);      
+        if (oldSite != null) // Deactivate old site
+        {
+            await userService.UpdateUserSiteAsync(new UpdateUserSiteParam
+            {
+                UserId = model.UserId,
+                SiteId = oldSite.SiteId,
+                IsActive = false
+            });
+        }
+
+        await userService.UpdateUserSiteAsync(new UpdateUserSiteParam
+        {
+            UserId = model.UserId,
+            SiteId = targetSite.SiteId,
+            IsActive = true
+        });
+        await userService.AssignRoleAsync(new AssignRoleParam
+        {
+            SiteId = targetSite.SiteId,
+            UserId = model.UserId,
+            RoleIds = param.Roles
+        });
     }
 
     [HttpGet]
