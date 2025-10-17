@@ -34,7 +34,8 @@ public class EmployeeLogService(
     IManagementLevelService managementLevelService,
     IRoleService roleService,
     ISalaryStructureService salaryStructureService,
-    IBaseService baseService) : IEmployeeLogService
+    IBaseService baseService,
+    ICompanyService companyService) : IEmployeeLogService
 #pragma warning restore S107 // Methods should not have too many parameters
 {
     private IEnumerable<MappingFieldConfig> mappingFields = new List<MappingFieldConfig>
@@ -95,6 +96,7 @@ public class EmployeeLogService(
         new() { FieldName = "WorkingHoursbyWeek", DisplayName = Labels.WorkingHoursPerWeek },
         new() { FieldName = "SalaryStructureId", DisplayName = Labels.SalaryStructure },
         new() { FieldName = "SubCompanyName", DisplayName = Labels.SubCompany },
+        new() { FieldName = "SubCompanyId", DisplayName = Labels.SubCompany },
         new() { FieldName = "AutoApproveRequest", DisplayName = Labels.AutoApproved }
     };
 
@@ -107,6 +109,7 @@ public class EmployeeLogService(
     private IEnumerable<EntityBase<byte>> Genders { get; set; }
     private IEnumerable<EntityBase<byte>> MarriageStatuses { get; set; }
     private IEnumerable<SalaryStructure> SalaryStructures { get; set; }
+    private IEnumerable<SubCompany> SubCompanies { get; set; }
 
     public async Task<IEnumerable<LogObjectDetail>> GetLogDetailByIdAsync(int employeeId)
     {
@@ -120,6 +123,7 @@ public class EmployeeLogService(
         Genders = commonDataService.GetGender();
         MarriageStatuses = commonDataService.GetMarriageStatus();
         SalaryStructures = await salaryStructureService.GetSalaryStructureAsync(companyId);
+        SubCompanies = await companyService.GetSubCompanies((short)companyId);
 
         var logs = await actionLogService.GetLogDetailByIdAsync(LogObjectType.Employee, employeeId);
         MappingField(logs);
@@ -211,6 +215,10 @@ public class EmployeeLogService(
                 MappingSalary(field);
                 break;
 
+            case "SubCompanyId":
+                MappingSubCompany(field);
+                break;
+
             default:
                 // Handle other fields
                 break;
@@ -225,6 +233,15 @@ public class EmployeeLogService(
 
         _ = int.TryParse(field.Value, out teamId);
         field.Value = Teams.FirstOrDefault(x => x.Id == teamId)?.Name;
+    }
+
+    private void MappingSubCompany(FieldValue field)
+    {
+        _ = int.TryParse(field.OldValue, out var id);
+        field.OldValue = SubCompanies.FirstOrDefault(x => x.SubCompanyId == id)?.Name;
+
+        _ = int.TryParse(field.Value, out id);
+        field.Value = SubCompanies.FirstOrDefault(x => x.SubCompanyId == id)?.Name;
     }
 
     private void MappingRole(FieldValue field)

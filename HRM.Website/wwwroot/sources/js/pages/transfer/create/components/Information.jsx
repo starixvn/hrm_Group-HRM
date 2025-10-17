@@ -47,7 +47,6 @@ const Information = ({
         />
 
         <DateFieldGroup name="PromotionDate" label="Promotion Date" />
-        <DateFieldGroup name="JoinedDate" label="Group Date" />
         <DateFieldGroup name="CompanyDate" label="Company Date" />
         <DateFieldGroup name="ConfirmedDate" label="Confirmed Date" />
 

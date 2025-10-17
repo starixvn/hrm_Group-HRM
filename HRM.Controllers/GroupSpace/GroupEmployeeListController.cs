@@ -203,6 +203,7 @@ public class GroupEmployeeListController(
         }
 
         var newEmpId = await employeeService.TransferEmployeeAsync(model);
+        model.SubCompanyId = null;
         var param = EmployeeHelper.MappingEditEmployeeParam(model, $"{(int)RoleSystem.Member}");
         param.EmployeeId = newEmpId;
         param.Enabled = true;

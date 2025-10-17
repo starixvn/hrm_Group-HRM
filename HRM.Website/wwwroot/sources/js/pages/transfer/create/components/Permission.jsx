@@ -7,7 +7,7 @@ const Permission = ({ isOpen, onToggle }) => {
             <div className='panel-heading' onClick={onToggle}>
                 <h4 className='panel-title'>
                     <i className={`fa fa-chevron-${isOpen ? 'down' : 'right'}`}></i>
-                    Contact
+                    PERMISSION
                 </h4>
             </div>
             <div className={`panel-body ${!isOpen ? 'collapsed' : ''}`}>
