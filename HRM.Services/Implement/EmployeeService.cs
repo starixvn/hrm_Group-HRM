@@ -453,12 +453,11 @@ public class EmployeeService(
         var canViewAllEmployees = session.HasPermissionOnFunction(FunctionKey.DataPermission_AllEmployees, Policy.Read);
         var canViewEmployeesAssigned = session.HasPermissionOnFunction(FunctionKey.DataPermission_EmployeesAssigned, Policy.Read);
         var currentCompanyId = session.Get<short>(SessionKey.CurrentCompanyId);
-        var employeeSessionEmpId = session.Get<EmployeeSession>(SessionKey.Employee)?.EmpId ?? 0;
 
         var criteria = new GetEmployeeByDataPermissionCriteria
         {
             CompanyId = currentCompanyId,
-            EmpId = employeeSessionEmpId,
+            UserId = session.UserId,
             IsViewAll = canViewAllEmployees,
             IsViewEmployeeAssigned = canViewEmployeesAssigned
         };

@@ -8,7 +8,6 @@ using Core;
 using Core.Constants;
 using Core.Filters;
 using GO.UserControl.Client.Core.Enumerables;
-using GO.UserControl.Client.Core.Services;
 using GO.UserControl.Client.Core.Session;
 using HRM.Core.Services;
 using HRM.Criteria.Report;
@@ -22,7 +21,6 @@ using Services.Implement;
 [HrmPermission(Policy.Read, FunctionKey.DisciplineSummaryPerYear)]
 public class DisciplineSummaryPerYearController(
     IUserControlSession session,
-    IRoleService roleService,
     IBaseService baseService,
     IEmployeeService employeeService,
     IExportDisciplineSummaryPerYearService exportService,
