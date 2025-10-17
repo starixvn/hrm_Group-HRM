@@ -16,6 +16,7 @@ import {
     axiosError,
 } from '../../../shared/common.functions';
 import { validationSchema, submitTransfer } from '../common.functions';
+import Permission from './components/Permission';
 
 const AppContainer = () => {
 
@@ -37,14 +38,14 @@ const AppContainer = () => {
     const [subCompanies, setSubCompanies] = useState([]);
     const [jobTitles, setJobTitles] = useState([]);
     const [countries, setCountries] = useState([]);
-    const [isLocal, setIsLocal] = useState(false);
     const [formKey] = useState(0);
     const [currentStep, setCurrentStep] = useState(1);
     const [panelStates, setPanelStates] = useState({
         personal: true,
         contact: true,
         information: true,
-        policy: true
+        policy: true,
+        permission: true
     });
     const [initialValues, setInitialValues] = useState({
         EmpId: 0,
@@ -99,7 +100,8 @@ const AppContainer = () => {
         WorkingHours: 0,
         OffDaysbyWeek: 0,
         AnnualLeaveBalance: 0,
-        KeepInViewBalance: 0
+        KeepInViewBalance: 0,
+        IsLocal: true,
     });
 
     const getEmployees = query => {
@@ -111,6 +113,7 @@ const AppContainer = () => {
                 params: { keyword: query, isDelete: false, isEnable: true, companyIds: targetCompanyIds }
             }).then(response => {
                 const { data } = response;
+                
                 const employeeOptions = data.map(item => {
                     return {
                         id: item.empId,
@@ -369,6 +372,7 @@ const AppContainer = () => {
             ...mapJob(employee),
             ...mapPolicy(employee),
             ...mapDemographics(employee),
+            IsLocal: initialValues.IsLocal,
         };
     }
 
@@ -410,7 +414,6 @@ const AppContainer = () => {
                 setSubCompanies(employee.subCompanies || []);
                 setJobTitles(employee.jobTitles || []);
                 setCountries(employee.coutries || []);
-                setIsLocal(employee.isLocal || false);
 
                 setCurrentStep(2);
                 setSubmitting(false);
@@ -433,7 +436,6 @@ const AppContainer = () => {
             Team: selectedTeam ? {
                 id: selectedTeam.id,
             } : null,
-            IsLocal: isLocal,
             Enabled: true
         };
 
@@ -574,6 +576,10 @@ const AppContainer = () => {
                                         isOpen={panelStates.contact}
                                         onToggle={() => togglePanel('contact')}
                                         employeeData={employeeData}
+                                    />
+                                    <Permission
+                                        isOpen={panelStates.permission}
+                                        onToggle={() => togglePanel('permission')}
                                     />
                                 </div>
                             </div>

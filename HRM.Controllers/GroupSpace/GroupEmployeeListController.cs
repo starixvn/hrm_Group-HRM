@@ -194,7 +194,7 @@ public class GroupEmployeeListController(
 
     [HttpPost]
     [HrmPermission(Policy.Host, FunctionKey.GroupEmployeeList)]
-    public async Task<IActionResult> Transfer([FromBody]EmployeeTransfer model)
+    public async Task<IActionResult> Transfer([FromBody] EmployeeTransfer model)
     {
         var result = await employeeService.CheckExistAsync(model.Code, model.NickName);
         if (!result.IsSuccessful)

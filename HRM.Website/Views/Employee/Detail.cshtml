@@ -317,7 +317,7 @@
                 @foreach (var item in Model.HistoryWork)
                 {
                     <tr>
-                        <td>@item.LogDate.ToDetailFormatedDate()</td>
+                        <td>@item.LogDate.ToDateMonthYearFormatedDate()</td>
                         <td>@item.Nickname</td>
                         <td>@item.Field</td>
                         <td class="align-left">@item.OldData</td>
