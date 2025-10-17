@@ -37,6 +37,7 @@ const AppContainer = () => {
     const [subCompanies, setSubCompanies] = useState([]);
     const [jobTitles, setJobTitles] = useState([]);
     const [countries, setCountries] = useState([]);
+    const [isLocal, setIsLocal] = useState(false);
     const [formKey] = useState(0);
     const [currentStep, setCurrentStep] = useState(1);
     const [panelStates, setPanelStates] = useState({
@@ -409,6 +410,7 @@ const AppContainer = () => {
                 setSubCompanies(employee.subCompanies || []);
                 setJobTitles(employee.jobTitles || []);
                 setCountries(employee.coutries || []);
+                setIsLocal(employee.IsLocal || false);
 
                 setCurrentStep(2);
                 setSubmitting(false);
@@ -430,6 +432,7 @@ const AppContainer = () => {
             Team: selectedTeam ? {
                 id: selectedTeam.id,
             } : null,
+            IsLocal: isLocal,
             Enabled: true
         };
 
