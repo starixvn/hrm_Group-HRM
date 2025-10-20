@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Xml;
-using HRM.Core;
 using HRM.Core.Services;
 using HRM.Criteria.Log;
 using HRM.Models.Log;
