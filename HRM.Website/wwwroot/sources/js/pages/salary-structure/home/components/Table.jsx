@@ -9,7 +9,7 @@ const Table = ({ data, onDelete }) => {
         { label: '#', key: null, sortable: false },
         { label: 'Salary Structure', key: 'name', sortable: true },
         { label: 'Job Level', key: 'jobLevelName', sortable: false },
-        { label: 'Local Salary', key: 'localSalary', sortable: false },
+        { label: 'Basic Salary', key: 'basicSalary', sortable: false },
         { label: 'Expat Salary', key: 'expatSalary', sortable: false },
     ];
 

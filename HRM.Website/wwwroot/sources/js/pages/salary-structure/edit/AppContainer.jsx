@@ -38,7 +38,7 @@ const AppContainer = () => {
                     return {
                         id: item.jobLevelId,
                         name: item.name,
-                        localSalary: item.localSalary,
+                        basicSalary: item.basicSalary,
                         expatSalary: item.expatSalary
                     };
                 }));
@@ -55,10 +55,10 @@ const AppContainer = () => {
                 {
                     salaryStructureId: values.salaryStructureId,
                     name: values.name.trim(),
-                    details: jobLevels.filter(x => x.localSalary || x.expatSalary).map(x => {
+                    details: jobLevels.filter(x => x.basicSalary || x.expatSalary).map(x => {
                         return {
                             jobLevelId: x.id,
-                            localSalary: x.localSalary,
+                            basicSalary: x.basicSalary,
                             expatSalary: x.expatSalary
                         }
                     })
@@ -128,8 +128,8 @@ const AppContainer = () => {
                                         <td>
                                             <input type='number' min='0' step='0.01'
                                                 className='form-control' autoComplete='off'
-                                                value={jobLevel.localSalary}
-                                                onChange={e => handleChangeSalary(jobLevel.id, 'localSalary', e.target.value)}
+                                                value={jobLevel.basicSalary}
+                                                onChange={e => handleChangeSalary(jobLevel.id, 'basicSalary', e.target.value)}
                                             />
                                         </td>
                                         <td>

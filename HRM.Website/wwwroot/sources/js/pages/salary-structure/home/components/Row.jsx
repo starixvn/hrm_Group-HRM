@@ -85,7 +85,7 @@ const Row = ({ rowIndex, item, onDelete }) => {
                         </Fragment>
                     )}
                     <td>{detail.name}</td>
-                    <td className="text-right">{formatSalary(detail.localSalary)}</td>
+                    <td className="text-right">{formatSalary(detail.basicSalary)}</td>
                     <td className="text-right">{formatSalary(detail.expatSalary)}</td>
                     {
                         index === 0 &&

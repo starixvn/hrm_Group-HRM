@@ -21,8 +21,8 @@ public class SalaryStructureService(IBaseService baseService) : ISalaryStructure
         var (salaryStructures, details) = await baseService.FetchMultipleAsync<SalaryStructure, SalaryStructureDetail>(criteria);
         foreach (var item in details)
         {
-            item.LocalSalary = !string.IsNullOrWhiteSpace(item.LocalSalary)
-                ? Cryptography.DecryptPassword(item.LocalSalary)
+            item.BasicSalary = !string.IsNullOrWhiteSpace(item.BasicSalary)
+                ? Cryptography.DecryptPassword(item.BasicSalary)
                 : null;
 
             item.ExpatSalary = !string.IsNullOrWhiteSpace(item.ExpatSalary)
@@ -50,8 +50,8 @@ public class SalaryStructureService(IBaseService baseService) : ISalaryStructure
         {
             foreach (var item in details)
             {
-                item.LocalSalary = !string.IsNullOrWhiteSpace(item.LocalSalary)
-                    ? Cryptography.DecryptPassword(item.LocalSalary)
+                item.BasicSalary = !string.IsNullOrWhiteSpace(item.BasicSalary)
+                    ? Cryptography.DecryptPassword(item.BasicSalary)
                     : null;
 
                 item.ExpatSalary = !string.IsNullOrWhiteSpace(item.ExpatSalary)

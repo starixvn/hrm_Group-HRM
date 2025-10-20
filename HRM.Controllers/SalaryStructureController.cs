@@ -19,18 +19,24 @@ public class SalaryStructureController(
     IUserControlSession session,
     IJobLevelService jobLevelService,
     ISalaryStructureService salaryStructureService,
-    IBaseService baseService) : BaseController(session)
+    IBaseService baseService
+) : BaseController(session)
 {
     public ActionResult Index()
     {
-        var hasPermission = session.HasPermissionOnFunction(FunctionKey.SalaryStructureConfiguration, Policy.Host);
+        var hasPermission = session.HasPermissionOnFunction(
+            FunctionKey.SalaryStructureConfiguration,
+            Policy.Host
+        );
         return View(hasPermission);
     }
 
     [HttpPost]
     public async Task<IActionResult> GetSalaryStructures()
     {
-        var salaryStructures = await salaryStructureService.GetSalaryStructureAsync(CurrentCompanyId);
+        var salaryStructures = await salaryStructureService.GetSalaryStructureAsync(
+            CurrentCompanyId
+        );
         return Json(salaryStructures);
     }
 
@@ -58,8 +64,12 @@ public class SalaryStructureController(
 
         foreach (var item in model.Details)
         {
-            item.LocalSalary = !string.IsNullOrWhiteSpace(item.LocalSalary) ? Cryptography.EncryptPassword(item.LocalSalary) : null;
-            item.ExpatSalary = !string.IsNullOrWhiteSpace(item.ExpatSalary) ? Cryptography.EncryptPassword(item.ExpatSalary) : null;
+            item.BasicSalary = !string.IsNullOrWhiteSpace(item.BasicSalary)
+                ? Cryptography.EncryptPassword(item.BasicSalary)
+                : null;
+            item.ExpatSalary = !string.IsNullOrWhiteSpace(item.ExpatSalary)
+                ? Cryptography.EncryptPassword(item.ExpatSalary)
+                : null;
         }
 
         var criteria = new InsertSalaryStructureCriteria
@@ -67,7 +77,7 @@ public class SalaryStructureController(
             CompanyId = CurrentCompanyId,
             Name = model.Name,
             Details = JsonConvert.SerializeObject(model.Details),
-            CreatedBy = EmployeeSession.EmpId
+            CreatedBy = EmployeeSession.EmpId,
         };
         commandResult = await baseService.ExecuteNonQueryAsync(criteria);
 
@@ -82,7 +92,7 @@ public class SalaryStructureController(
         {
             SalaryStructureId = salaryStructure.SalaryStructureId,
             Name = salaryStructure.Name,
-            Details = salaryStructure.Details
+            Details = salaryStructure.Details,
         };
 
         return new JsonResult(model);
@@ -106,8 +116,12 @@ public class SalaryStructureController(
 
         foreach (var item in model.Details)
         {
-            item.LocalSalary = !string.IsNullOrWhiteSpace(item.LocalSalary) ? Cryptography.EncryptPassword(item.LocalSalary) : null;
-            item.ExpatSalary = !string.IsNullOrWhiteSpace(item.ExpatSalary) ? Cryptography.EncryptPassword(item.ExpatSalary) : null;
+            item.BasicSalary = !string.IsNullOrWhiteSpace(item.BasicSalary)
+                ? Cryptography.EncryptPassword(item.BasicSalary)
+                : null;
+            item.ExpatSalary = !string.IsNullOrWhiteSpace(item.ExpatSalary)
+                ? Cryptography.EncryptPassword(item.ExpatSalary)
+                : null;
         }
 
         var criteria = new UpdateSalaryStructureCriteria
@@ -116,7 +130,7 @@ public class SalaryStructureController(
             SalaryStructureId = model.SalaryStructureId,
             Name = model.Name,
             Details = JsonConvert.SerializeObject(model.Details),
-            ModifiedBy = EmployeeSession.EmpId
+            ModifiedBy = EmployeeSession.EmpId,
         };
         commandResult = await baseService.ExecuteNonQueryAsync(criteria);
 
@@ -127,7 +141,10 @@ public class SalaryStructureController(
     [HrmPermission(Policy.Host, FunctionKey.SalaryStructureConfiguration)]
     public async Task<IActionResult> Delete([FromBody] DeleteSalaryStructureViewModel model)
     {
-        var commandResult = await salaryStructureService.DeleteAsync(EmployeeSession.EmpId, model.Id);
+        var commandResult = await salaryStructureService.DeleteAsync(
+            EmployeeSession.EmpId,
+            model.Id
+        );
 
         return new JsonResult(commandResult);
     }

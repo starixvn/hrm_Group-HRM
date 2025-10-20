@@ -11,6 +11,6 @@ public class SalaryStructureDetail
 
     public string Name { get; set; }
 
-    public string LocalSalary { get; set; }
+    public string BasicSalary { get; set; }
     public string ExpatSalary { get; set; }
 }
