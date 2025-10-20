@@ -329,12 +329,12 @@ const AppContainer = () => {
 
     function mapJobStructure(employee) {
         return {
-            SubCompanyId: 0,
+            SubCompanyId: null,
             Team: employee.team || '',
             TeamDate: new Date().toISOString().split('T')[0],
-            JobTitleId: 0,
-            JobLevelId: employee.jobLevelId || 0,
-            ManagementLevelId: 0,
+            JobTitleId: null,
+            JobLevelId: employee.jobLevelId || null,
+            ManagementLevelId: null,
         };
     }
 
@@ -408,7 +408,6 @@ const AppContainer = () => {
                     ...mappedData,
                     TeamId: prev.TeamId
                 }));
-
                 setJobLevels(employee.jobLevels || []);
                 setManagementLevels(employee.managementLevels || []);
                 setSubCompanies(employee.subCompanies || []);
@@ -426,7 +425,6 @@ const AppContainer = () => {
 
     const handleSubmit = (values, { setSubmitting }) => {
         setSubmitting(true);
-
         const model = {
             ...values,
             Id: isNaN(parseInt(values.EmpId, 10)) ? 0 : values.EmpId,
@@ -438,7 +436,6 @@ const AppContainer = () => {
             } : null,
             Enabled: true
         };
-
         submitTransfer('GroupEmployeeList/Transfer', model, setSubmitting, 'GroupEmployeeList/Index');
     };
 
