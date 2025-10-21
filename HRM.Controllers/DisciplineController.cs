@@ -10,7 +10,6 @@ using Core.Filters;
 using Core.XMLExtensions;
 using Criteria.Discipline;
 using GO.UserControl.Client.Core.Enumerables;
-using GO.UserControl.Client.Core.Services;
 using GO.UserControl.Client.Core.Session;
 using HRM.Core.Enums;
 using HRM.Core.Services;
@@ -23,7 +22,6 @@ using ViewModels.Discipline;
 
 public class DisciplineController(
     IUserControlSession session,
-    IRoleService roleService,
     IDisciplineService disciplineService,
     IBaseService baseService) : BaseController(session)
 {

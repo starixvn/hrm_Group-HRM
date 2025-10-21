@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using GO.UserControl.Client.Core.Services;
 using GO.UserControl.Client.Core.Session;
 using HRM.Core.Constants;
 using HRM.Criteria.Discipline;
@@ -12,7 +11,6 @@ namespace HRM.Controllers.Export;
 
 public class ExportDisciplineController(
     IUserControlSession session,
-    IRoleService roleService,
     IDisciplineService disciplineService,
     IExportDisciplineSummaryService exportDisciplineSummaryService,
     IExportDisciplineDetailService exportDisciplineDetailService) : BaseController(session)
