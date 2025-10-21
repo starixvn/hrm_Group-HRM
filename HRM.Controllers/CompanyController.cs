@@ -96,7 +96,7 @@ public class CompanyController(
             return Json(commandResult);
         }
 
-        var criteria = new UpdateCompanySettingCriteria
+        var criteria = new UpdateSystemConfigsCriteria
         {
             CompanyId = model.CompanyId,
             SettingsJson = model.SettingsJson,

@@ -9,6 +9,7 @@ using HRM.Core.Constants;
 using HRM.Core.Filters;
 using HRM.Core.Models;
 using HRM.Core.Services;
+using HRM.Criteria.Company;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Services.Interfaces;
@@ -153,5 +154,39 @@ public class SalaryStructureController(
         );
 
         return new JsonResult(commandResult);
+    }
+
+    [HttpGet]
+    [HrmPermission(Policy.Host, FunctionKey.SalaryStructureConfiguration)]
+    public async Task<IActionResult> GetBasicSalaryConfig()
+    {
+        var currentConfig = await salaryStructureService.GetBasicSalaryConfigAsync(
+            CurrentCompanyId
+        );
+
+        return Json(currentConfig);
+    }
+
+    [HttpPost]
+    [HrmPermission(Policy.Host, FunctionKey.SalaryStructureConfiguration)]
+    public async Task<IActionResult> EditBasicSalaryConfig([FromBody] object configData)
+    {
+        var commandResult = new CommandResult();
+        if (configData == null)
+        {
+            return Json(commandResult);
+        }
+
+        var settingsJson = JsonConvert.SerializeObject(configData);
+
+        var criteria = new UpdateSystemConfigsCriteria
+        {
+            CompanyId = CurrentCompanyId,
+            SettingsJson = settingsJson,
+            ModifiedBy = EmployeeSession.EmpId,
+        };
+        commandResult = await baseService.ExecuteNonQueryAsync(criteria);
+
+        return Json(commandResult);
     }
 }

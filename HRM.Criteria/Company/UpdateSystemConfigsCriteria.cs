@@ -2,7 +2,7 @@
 
 namespace HRM.Criteria.Company;
 
-public class UpdateCompanySettingCriteria : CriteriaBase
+public class UpdateSystemConfigsCriteria : CriteriaBase
 {
     public int CompanyId { get; set; }
 
