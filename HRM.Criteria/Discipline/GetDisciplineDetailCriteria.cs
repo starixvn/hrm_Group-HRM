@@ -18,7 +18,7 @@ public class GetDisciplineDetailCriteria : CriteriaBase
 
     public int? ReasonId { get; set; }
 
-    public int ApproverId { get; set; }
+    public int ApproverUserId { get; set; }
 
     public bool? HasIgnored { get; set; }
 
@@ -29,9 +29,8 @@ public class GetDisciplineDetailCriteria : CriteriaBase
     public string TeamName { get; set; }
 
     public short CompanyId { get; set; }
-    public string RoleIds { get; set; }
 
-    public override bool IsValid() => FromDate <= ToDate && ApproverId > 0;
+    public override bool IsValid() => FromDate <= ToDate && ApproverUserId > 0;
 
     public override string GetSettingKey() => "Report_DisciplineDetail";
 }

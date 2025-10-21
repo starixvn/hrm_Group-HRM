@@ -12,9 +12,8 @@ public class GetDisciplineSummaryCriteria : CriteriaBase
     public int? EmployeeId { get; set; }
     public bool? IsLocal { get; set; }
     public int? ReasonId { get; set; }
-    public int ApproverId { get; set; }
+    public int ApproverUserId { get; set; }
     public bool IsShowAll { get; set; }
-    public string RoleIds { get; set; }
 
     [SpParam(Ignored = true)]
     public string EmployeeName { get; set; }
@@ -24,7 +23,7 @@ public class GetDisciplineSummaryCriteria : CriteriaBase
 
     public short CompanyId { get; set; }
 
-    public override bool IsValid() => FromDate <= ToDate && ApproverId > 0;
+    public override bool IsValid() => FromDate <= ToDate && ApproverUserId > 0;
 
     public override string GetSettingKey() => "Report_DisciplineSummary";
 }

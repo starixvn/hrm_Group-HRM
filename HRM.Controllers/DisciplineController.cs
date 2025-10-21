@@ -47,9 +47,8 @@ public class DisciplineController(
 
     [HttpPost]
     [HrmPermission(Policy.Read, FunctionKey.Discipline)]
-    public async Task<IActionResult> GetDisciplineSummaryGrid(DisciplineSummaryViewModel model, int? companyId = null)
+    public async Task<IActionResult> GetDisciplineSummaryGrid(DisciplineSummaryViewModel model)
     {
-        var roles = await roleService.GetByUserIdAsync(session.UserId);
         var criteria = new GetDisciplineSummaryCriteria
         {
             FromDate = model.FromDate,
@@ -58,21 +57,19 @@ public class DisciplineController(
             IsLocal = model.IsLocal,
             EmployeeId = model.EmployeeId,
             ReasonId = model.ReasonId,
-            ApproverId = EmployeeSession.EmpId,
+            ApproverUserId = session.UserId,
             IsShowAll = model.IsShowAll,
-            CompanyId = (short)(companyId ?? CurrentCompanyId),
-            RoleIds = string.Join(",", roles.Select(x => x.RoleId))
+            CompanyId = CurrentCompanyId,
         };
 
         var disciplines = await disciplineService.GetDisciplineSummaryAsync(criteria);
-
         ViewBag.IsHost = session.HasPermissionOnFunction(FunctionKey.Discipline, Policy.Host);
 
-        return PartialView("_DisciplineSummaryGrid", disciplines);
+        return PartialView("_DisciplineSummaryGrid", disciplines.ToList());
     }
 
     [HrmPermission(Policy.Read, FunctionKey.Discipline)]
-    public async Task<IActionResult> DisciplineDetail(DisciplineSummaryViewModel model, short? companyId = null)
+    public async Task<IActionResult> DisciplineDetail(DisciplineSummaryViewModel model)
     {
         if (model != null)
         {
@@ -92,16 +89,15 @@ public class DisciplineController(
         }
 
         ViewBag.RoleId = (short)RoleSystem.DisciplineManager;
-        ViewBag.CompanyId = companyId ?? CurrentCompanyId;
+        ViewBag.CompanyId = CurrentCompanyId;
         ViewBag.IsHost = session.HasPermissionOnFunction(FunctionKey.Discipline, Policy.Host);
 
         return View(model);
     }
 
     [HrmPermission(Policy.Read, FunctionKey.Discipline)]
-    public async Task<IActionResult> GetDisciplineDetailGrid(DisciplineSummaryViewModel model, short? companyId = null)
+    public async Task<IActionResult> GetDisciplineDetailGrid(DisciplineSummaryViewModel model)
     {
-        var roles = await roleService.GetByUserIdAsync(session.UserId);
         var criteria = new GetDisciplineDetailCriteria
         {
             FromDate = model.FromDate,
@@ -111,20 +107,19 @@ public class DisciplineController(
             EmployeeId = model.EmployeeId,
             ReasonId = model.ReasonId,
             HasIgnored = model.HasIgnored,
-            ApproverId = EmployeeSession.EmpId,
-            CompanyId = companyId ?? CurrentCompanyId,
-            RoleIds = string.Join(",", roles.Select(x => x.RoleId))
+            ApproverUserId = session.UserId,
+            CompanyId = CurrentCompanyId,
         };
 
         var disciplines = await disciplineService.GetDisciplineDetailAsync(criteria);
         ViewBag.HasPermissionToEdit = session.HasPermissionOnFunction(FunctionKey.Discipline, Policy.Host);
         ViewBag.HasPermissionToUpdateOutOfControlReason = session.HasPermissionOnFunction(FunctionKey.UpdateOutOfControlReason, Policy.Host);
 
-        return PartialView("_DisciplineDetailGrid", disciplines);
+        return PartialView("_DisciplineDetailGrid", disciplines.ToList());
     }
 
     [HrmPermission(Policy.Read, FunctionKey.Discipline)]
-    public async Task<IActionResult> ViewOtherDiscipline(int employeeId, DateTime fromDate, DateTime toDate, short? companyId = null)
+    public async Task<IActionResult> ViewOtherDiscipline(int employeeId, DateTime fromDate, DateTime toDate)
     {
         var criteria = new GetOtherDisciplineOfEmployeeCriteria
         {
@@ -134,7 +129,7 @@ public class DisciplineController(
         };
 
         var otherDisciplines = await disciplineService.GetOtherDisciplineAsync(criteria);
-        var members = await disciplineService.GetMemberToAddOtherDisciplineAsync(EmployeeSession.EmpId, companyId: companyId);
+        var members = await disciplineService.GetMemberToAddOtherDisciplineAsync(EmployeeSession.EmpId);
         ViewBag.IsHost = members.Any(x => x.EmployeeId == employeeId)
             && session.HasPermissionOnFunction(FunctionKey.Discipline, Policy.Host);
 
@@ -204,9 +199,9 @@ public class DisciplineController(
         return Json(commandResult);
     }
 
-    public async Task<IActionResult> GetMemberToAddOtherDiscipline(string keyword, short? companyId = null)
+    public async Task<IActionResult> GetMemberToAddOtherDiscipline(string keyword)
     {
-        var employees = await disciplineService.GetMemberToAddOtherDisciplineAsync(EmployeeSession.EmpId, keyword, companyId);
+        var employees = await disciplineService.GetMemberToAddOtherDisciplineAsync(EmployeeSession.EmpId, keyword);
 
         return Json(employees);
     }

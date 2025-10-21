@@ -2,13 +2,39 @@
 @import '../../abstracts/mixins';
 @import '../../components/multiselect-treeview';
 @import '../../components/icon';
-@import '../../layout/filter';
-@import '../../layout/table';
 @import '../../vendors/autocomplete';
 @import '../../components/buttons-new';
 @import '../../components/validation';
 @import '../../components/checkbox';
 @import '../../components/jquery-ui-dialog';
+@import '../../layout/filter';
+@import '../../layout/table';
+
+// Fix breadcrumb overlap issue - ensure breadcrumb stays above floating table header
+.section_breadcrumb {
+    position: relative;
+    z-index: 1001;
+    background: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-bottom: 1px solid #e0e0e0;
+}
+
+// Ensure floating table header stays below breadcrumb
+.floatThead-wrapper {
+    z-index: 1000 !important;
+}
+
+.floatThead-container {
+    z-index: 1000 !important;
+}
+
+// Regular table elements should have lower z-index
+.table-custom.discipline-summary,
+#discipline-summary,
+table#data.discipline-summary {
+    position: relative;
+    z-index: 1;
+}
 
 #dialogAddOtherDiscipline,
 #dialogViewOtherDiscipline {

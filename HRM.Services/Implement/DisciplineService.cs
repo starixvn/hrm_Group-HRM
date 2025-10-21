@@ -15,6 +15,7 @@ namespace HRM.Services.Implement;
 public class DisciplineService(
     IDisciplineRepository disciplineRepository,
     IBaseService baseService,
+    IEmployeeService employeeService,
     IUserControlSession userControlSession) : IDisciplineService
 {
     public async Task<IList<DisciplineSummaryModel>> GetDisciplineSummaryAsync(GetDisciplineSummaryCriteria criteria)
@@ -26,7 +27,9 @@ public class DisciplineService(
             disciplines = await disciplineRepository.GetDisciplineSummaryAsync(criteria);
         }
 
-        return disciplines;
+        var filteredEmployees = await employeeService.FilterByEmployeeDataPermission(disciplines, e => e.Employee.EmployeeId);
+
+        return filteredEmployees.ToList();
     }
 
     public async Task<IList<DisciplineDetailModel>> GetDisciplineDetailAsync(GetDisciplineDetailCriteria criteria)
@@ -43,7 +46,9 @@ public class DisciplineService(
             }
         }
 
-        return disciplines;
+        var filteredEmployees = await employeeService.FilterByEmployeeDataPermission(disciplines, e => e.Employee.EmployeeId);
+
+        return filteredEmployees.ToList();
     }
 
     public async Task<IEnumerable<EmployeeInfoModel>> GetMemberToAddOtherDisciplineAsync(int supervisorId, string query = null, short? companyId = null)

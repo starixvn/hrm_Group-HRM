@@ -7,7 +7,6 @@ import { parse } from 'qs';
 import '../../date';
 import '../../shared/multiselect-tree-view';
 import '../../shared/employee.search.in.team';
-import { renderCompanySelect } from '../../shared/components/CompanySelect';
 import {
     axiosError,
     blockUI,
@@ -110,7 +109,6 @@ import { getOrgChart } from '../group-team/supervisor/common.functions';
                         headers: { 'X-Requested-With': 'XMLHttpRequest' },
                         params: {
                             keyword: request.term,
-                            companyId: $('#CompanyId').val(),
                         },
                     })
                         .then(res => {
@@ -258,7 +256,6 @@ import { getOrgChart } from '../group-team/supervisor/common.functions';
                             toDate: $('form.form-filter #ToDate')
                                 .datepicker({ dateFormat: 'dd M, yy' })
                                 .val(),
-                            companyId: $('#CompanyId').val(),
                         },
                     })
                         .then(response => {
@@ -293,7 +290,6 @@ import { getOrgChart } from '../group-team/supervisor/common.functions';
                     teamId = $('form.form-filter #TeamId').val(),
                     isLocal = $('form.form-filter #IsLocal').val(),
                     reasonId = $('form.form-filter #ReasonId').val(),
-                    companyId = $('#CompanyId').val(),
                     fromDate = $('form.form-filter #FromDate')
                         .datepicker({ dateFormat: 'dd M, yy' })
                         .val(),
@@ -317,8 +313,6 @@ import { getOrgChart } from '../group-team/supervisor/common.functions';
                             isLocal +
                             '&reasonId=' +
                             reasonId +
-                            '&companyId=' +
-                            companyId +
                             '&fromSummaryPage=true'
                     ),
                     '_blank'
@@ -466,9 +460,7 @@ import { getOrgChart } from '../group-team/supervisor/common.functions';
     function query() {
         blockUI();
         const formData = $('form.form-filter').serialize();
-        const companyId = $('#CompanyId').val();
-        const queryString =
-            formData + (companyId ? '&companyId=' + companyId : '');
+        const queryString = formData;
 
         axios({
             method: 'POST',
@@ -495,30 +487,17 @@ import { getOrgChart } from '../group-team/supervisor/common.functions';
         initDatepicker();
         initEventForDateRangeDropdown();
 
-        // Initialize company filter
-        const roleId = $('#RoleId').val();
-        const defaultCompanyId = $('#CompanyId').val();
-        renderCompanySelect({
-            defaultCompanyId: defaultCompanyId,
-            roleId: roleId,
-            onChange: companyId => {
-                $('#CompanyId').val(companyId);
-                getOrgChart(companyId)
-                    .then(response => {
-                        $('#Team').multiSelectTreeView({
-                            data: response.data,
-                            isSelectedAll: true,
-                            hasSearchBox: true,
-                        });
-                        $('#TeamId').val(
-                            $('#Team').multiSelectTreeView('getSelectedItems')
-                        );
-                        query();
-                    })
-                    .catch(axiosError);
-            },
-        });
+        getOrgChart().then(response => {
+            $('#Team').multiSelectTreeView({
+                data: response.data,
+                isSelectedAll: true,
+                hasSearchBox: true
+            });
+            $('#TeamId').val($('#Team').multiSelectTreeView('getSelectedItems'));
 
+            query();
+        }).catch(axiosError);
+        
         $('form.form-filter #FromDate, form.form-filter #ToDate').on(
             'change',
             function () {
@@ -538,10 +517,6 @@ import { getOrgChart } from '../group-team/supervisor/common.functions';
 
             blockUI();
             const formData = parse($('form.form-filter').serialize());
-            const companyId = $('#CompanyId').val();
-            if (companyId) {
-                formData.companyId = companyId;
-            }
 
             axios({
                 url: resolveClientUrl(
