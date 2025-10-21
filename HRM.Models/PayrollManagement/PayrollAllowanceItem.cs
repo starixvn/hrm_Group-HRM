@@ -10,7 +10,7 @@ public class PayrollSetting
 
     public bool Taxable { get; set; }
 
-    public string Category { get; set; }
+    public int Category { get; set; }
 
     public bool IsMultiSelect { get; set; }
 

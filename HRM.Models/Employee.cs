@@ -8,7 +8,6 @@ using Core.Enums;
 using Resources;
 using GO.UserControl.Client.Core.Models.Role;
 using HRM.Models.Log;
-using HRM.Models.PayrollManagement;
 
 public class Employee : EntityBase<int>
 {
@@ -246,6 +245,12 @@ public class Employee : EntityBase<int>
 
     [Display(Name = "Auto-Approved")]
     public bool AutoApproveRequest { get; set; }
+
+    public string AllowanceItemSettingIds { get; set; }
+
+    public int[] AllowanceItemSettingIdsArray {
+        get => AllowanceItemSettingIds?.Split(',').Select(x => int.TryParse(x, out var id) ? id : 0).Where(x => x > 0).ToArray() ?? [];
+    }
 
     public IEnumerable<LogObjectDetail> HistoryWork { get; set; }
 

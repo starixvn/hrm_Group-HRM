@@ -524,11 +524,7 @@ public class EmployeeService(
             return string.Empty;
         }
 
-        var encryptedSalary = Cryptography.DecryptPassword(salary);
-        var formattedSalary = decimal.TryParse(encryptedSalary, out var salaryValue) 
-            ? salaryValue.ToString("#,##0.##") 
-            : encryptedSalary;
-        return formattedSalary;
+        return Cryptography.DecryptPassword(salary);
     }
 
     public async Task<int> TransferEmployeeAsync(EmployeeTransfer model)

@@ -3,6 +3,7 @@
 @using HRM.Core.Enums
 @using HRM.Models.SalaryStructure
 @using HRM.Resources
+@using HRM.Models.PayrollManagement
 @model HRM.Models.Employee
 @{
     ViewBag.Title = Labels.Edit;
@@ -10,8 +11,10 @@
     var roleItems = roles.Select(r => new SelectListItem { Value = r.RoleId.ToString(), Text = r.Name });
     var enableGroupDate = (bool)ViewBag.EnableGroupDate;
     var salaryStructures = (IEnumerable<SalaryStructure>)ViewBag.SalaryStructures;
+    var allowanceItemSettings = (IEnumerable<PayrollSetting>)ViewBag.AllowanceItemSettings;
     var hasHostPermissionOnPayrollInfoOnly = (bool)ViewBag.HasHostPermissionOnPayrollInfoOnly;
     var hasHostPermissionOnPayrollInfoWithAmount = (bool)ViewBag.HasHostPermissionOnPayrollInfoWithAmount;
+    var allowanceItemSettingIds = Model.AllowanceItemSettingIdsArray;
 }
 @section css {
     <link href="~/dist/vendors/chosen.css" rel="stylesheet" asp-append-version="true" />
@@ -502,7 +505,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <td rowspan="1" class="group-cell">@Labels.SalaryStructure</td>
+                            <td rowspan="2" class="group-cell">@Labels.SalaryStructure</td>
                             <td>
                                 <div class="type-row">
                                     <span class="type-label">@Labels.SalaryStructure</span>
@@ -523,89 +526,83 @@
                             </td>
                         </tr>
                         <tr>
-                            <td rowspan="1" class="group-cell">Special Subsidy</td>
                             <td>
                                 <div class="type-row">
-                                    <span class="type-label">Special Subsidy</span>
+                                    <span class="type-label">@Labels.SpecialSubsidy</span>
                                     <div class="type-control">
-                                        @Html.TextBoxFor(model => model.SpecialSubsidy, new { @class = "form-control" })
+                                        @if (hasHostPermissionOnPayrollInfoWithAmount)
+                                        {
+                                            @Html.TextBoxFor(model => model.SpecialSubsidy, new { @class = "form-control" })
+                                        }
+                                        else
+                                        {
+                                            <input type="text" class="form-control" value="*****" readonly />
+                                            @Html.HiddenFor(model => model.SpecialSubsidy)
+                                        }
                                     </div>
                                 </div>
                             </td>
                         </tr>
-                        <tr>
-                            <td rowspan="5" class="group-cell">@Labels.Allowance</td>
-                            <td>
-                                <div class="type-row">
-                                    <span class="type-label">Management Allowance</span>
-                                    <div class="type-control select-form">
-                                        <select class="form-control allowance-select" data-amount-id="mgmtAmount">
-                                    <option value="">-- Select Management Allowance --</option>
-                                    <option value="1">None</option>
-                                    <option value="2">M1-A</option>
-                                    <option value="3">M1-B</option>
-                                    <option value="4">M2-A</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="type-row">
-                                    <span class="type-label">Overseas Allowance</span>
-                                    <div class="type-control select-form">
-                                        <select class="form-control allowance-select" data-amount-id="overseasAmount">
-                                    <option value="">-- Select Overseas Allowance --</option>
-                                    <option value="1">Overseas 0</option>
-                                    <option value="2">Overseas 1</option>
-                                    <option value="3">Overseas 2</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="type-row">
-                                    <span class="type-label">Skill Set Add-On</span>
-                                    <div class="type-control select-form">
-                                        <select id="skillsetSelect" class="form-control allowance-select" data-amount-id="skillsetAmount" multiple data-placeholder="-- Select Skill Set Add-On --">
-                                    <option value="1">Languages</option>
-                                    <option value="2">IT Certification</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="type-row">
-                                    <span class="type-label">Transportation Allowance</span>
-                                    <div class="type-control select-form">
-                                        <select class="form-control allowance-select" data-amount-id="transportAmount">
-                                    <option value="">-- Select Transportation Allowance --</option>
-                                    <option value="1">Petrol 1</option>
-                                    <option value="2">Petrol 2</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                <div class="type-row">
-                                    <span class="type-label">Mobilephone Allowance</span>
-                                    <div class="type-control select-form">
-                                        <select class="form-control allowance-select" data-amount-id="mobileAmount">
-                                    <option value="">-- Select Mobilephone Allowance --</option>
-                                    <option value="1">Phone 1</option>
-                                    <option value="2">Phone 2</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
+                        @if (allowanceItemSettings != null && allowanceItemSettings.Any())
+                        {
+                            var allowanceList = allowanceItemSettings.ToList();
+                            for (int i = 0; i < allowanceList.Count; i++)
+                            {
+                                var allowanceSetting = allowanceList[i];
+                                <tr>
+                                    @if (i == 0)
+                                    {
+                                        <td rowspan="@allowanceList.Count" class="group-cell">@Labels.Allowance</td>
+                                    }
+                                    <td>
+                                        <div class="type-row">
+                                            <span class="type-label">@allowanceSetting.Type</span>
+                                            <div class="type-control select-form">
+                                                @if (allowanceSetting.IsMultiSelect)
+                                                {
+                                                    <select class="form-control allowance-select allowance-multiselect" 
+                                                            data-setting-id="@allowanceSetting.PayrollItemSettingId"
+                                                            multiple 
+                                                            data-placeholder="-- Select @allowanceSetting.Type --">
+                                                        @foreach (var item in allowanceSetting.PayrollAllowanceItems)
+                                                        {
+                                                            var isSelected = allowanceItemSettingIds.Contains(item.AllowanceItemSettingId);
+                                                            if (isSelected)
+                                                            {
+                                                                <option value="@item.AllowanceItemSettingId" selected>@item.ItemName</option>
+                                                            }
+                                                            else
+                                                            {
+                                                                <option value="@item.AllowanceItemSettingId">@item.ItemName</option>
+                                                            }
+                                                        }
+                                                    </select>
+                                                }
+                                                else
+                                                {
+                                                    <select class="form-control allowance-select" 
+                                                            data-setting-id="@allowanceSetting.PayrollItemSettingId">
+                                                        <option value="">-- Select @allowanceSetting.Type --</option>
+                                                        @foreach (var item in allowanceSetting.PayrollAllowanceItems)
+                                                        {
+                                                            var isSelected = allowanceItemSettingIds.Contains(item.AllowanceItemSettingId);
+                                                            if (isSelected)
+                                                            {
+                                                                <option value="@item.AllowanceItemSettingId" selected>@item.ItemName</option>
+                                                            }
+                                                            else
+                                                            {
+                                                                <option value="@item.AllowanceItemSettingId">@item.ItemName</option>
+                                                            }
+                                                        }
+                                                    </select>
+                                                }
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
                     </tbody>
                 </table>
             </div>
@@ -784,6 +781,7 @@
         @Html.AntiForgeryToken()
         @Html.HiddenFor(model => model.Id)
         @Html.HiddenFor(model => model.UserId)
+        <input type="hidden" id="AllowanceItemSettingIds" name="AllowanceItemSettingIds" value="" />
         <input type="button" value="@Labels.Save" id="postform" class="btn btn-primary" />
         <input type="button" id="delete" value="@Labels.Delete" class="btn btn-danger" />
         <input type="button" id="resetpassword" value="Reset Password" class="btn btn-primary" />

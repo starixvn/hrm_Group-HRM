@@ -18,8 +18,10 @@ namespace HRM.Repositories
             var flatRows = multi.Read<PayrollSetting, PayrollAllowanceItem, PayrollSetting>(
             (setting, item) =>
             {
-                if (item != null)
+                if (item != null) 
+                {
                     setting.PayrollAllowanceItems.Add(item);
+                }
 
                 return setting;
             },

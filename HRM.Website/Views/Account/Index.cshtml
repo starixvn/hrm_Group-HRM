@@ -1,6 +1,8 @@
 ﻿@using HRM.Core
 @using HRM.Resources
 @using HRM.ViewModels.Employee
+@using HRM.Website.Helper
+
 @model AccountViewModel
 @{
     ViewBag.Title = Labels.MyProfile;
@@ -183,17 +185,17 @@
                 </li>
                 <li class="list-group-item">
                     <div class="plabel">@Labels.BasicSalary:</div>
-                    <div class="pcontent bold">@Model.Employee.BasicSalary</div>
+                    <div class="pcontent bold">@RazorHelpers.FormatThousandSeparator(Model.Employee.BasicSalary)</div>
                 </li>
                 <li class="list-group-item">
                     <div class="plabel">@Labels.JobLevelAddOn:</div>
-                    <div class="pcontent bold">@Model.Employee.JobLevelAddOn</div>
+                    <div class="pcontent bold">@RazorHelpers.FormatThousandSeparator(Model.Employee.JobLevelAddOn)</div>
                 </li>
                 @if (!string.IsNullOrEmpty(Model.Employee.SpecialSubsidy))
                 {
                     <li class="list-group-item">
                         <div class="plabel">@Labels.SpecialSubsidy:</div>
-                        <div class="pcontent bold">@Model.Employee.SpecialSubsidy</div>
+                        <div class="pcontent bold">@RazorHelpers.FormatThousandSeparator(Model.Employee.SpecialSubsidy)</div>
                     </li>
                 }
                 @if (Model.EmployeePayrollAllowances != null)
@@ -201,6 +203,7 @@
                     string previousAllowanceName = null;
                     foreach (var allowance in Model.EmployeePayrollAllowances)
                     {
+                        var amount = RazorHelpers.FormatThousandSeparator(allowance.Amount);
                         <li class="list-group-item">
                             <div class="plabel">
                                 @if (previousAllowanceName != allowance.AllowanceName)
@@ -212,11 +215,11 @@
                             <div class="pcontent bold">
                                 @if (allowance.IsMultiSelect)
                                 {
-                                    @allowance.Amount <text> (@allowance.ItemName)</text>
+                                    @amount <text> (@allowance.ItemName)</text>
                                 }
                                 else
                                 {
-                                    @allowance.Amount
+                                    @amount
                                 }
                             </div>
                         </li>
