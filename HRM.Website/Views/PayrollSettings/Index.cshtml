@@ -1,0 +1,70 @@
+﻿@using HRM.Models.PayrollManagement
+@using HRM.Resources
+@using HRM.Website.Helper
+@model IEnumerable<PayrollSetting>
+@{
+    ViewData["Title"] = "Payroll Settings";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section css {
+    <link href="~/dist/styles/payroll.management.css" rel="stylesheet" asp-append-version="true" />
+}
+@section js {
+    <script src="~/dist/js/payroll.management.js" asp-append-version="true"></script>
+}
+@section Breadcrumb {
+    <a class="step">@Labels.HRSpace</a><span class="step">@ViewData["Title"]</span>
+}
+
+<h2 class="page-title">@ViewData["Title"]</h2>
+<div class="filter">
+    <a>Allowances</a>
+    <a>Others</a>
+</div>
+<table class="table table-custom" id="data">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>@Labels.Type</th>
+            <th>@Labels.Items</th>
+            <th>@Labels.AmountPercent</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Any())
+        {
+            var index = 0;
+            foreach (var item in Model)
+            {
+                index++;
+                <tr id="row@(index)">
+                    <td>
+                        @index
+                    </td>
+                    <td>
+                        @item.Type
+                    </td>
+                    @foreach (var allowance in item.PayrollAllowanceItems)
+                    {
+                        <td>@allowance.ItemName</td>
+                        <td class="text-end">
+                                @if (allowance.IsPercent)
+                                {
+                                    @($"{allowance.Amount:0.#}%")
+                                }
+                                else
+                                {
+                                    @allowance.Amount
+                                }
+                        </td>
+                    }
+                </tr>
+            }
+
+        }
+        else
+        {
+            @Html.Raw(RazorHelpers.DisplayNoInformation(colspan: 13))
+        }
+    </tbody>
+</table>

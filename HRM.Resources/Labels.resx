@@ -2160,4 +2160,10 @@
   <data name="EmployeeTransfer" xml:space="preserve">
      <value>Employee Transfer</value>
   </data>
+  <data name="Items" xml:space="preserve">
+    <value>Items</value>
+  </data>
+  <data name="AmountPercent" xml:space="preserve">
+    <value>Amount/Percent</value>
+  </data>
 </root>

@@ -403,6 +403,15 @@ namespace HRM.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Amount/Percent.
+        /// </summary>
+        public static string AmountPercent {
+            get {
+                return ResourceManager.GetString("AmountPercent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Annual Leave.
         /// </summary>
         public static string AnnualLeave {
@@ -2649,6 +2658,15 @@ namespace HRM.Resources {
         public static string IsRealDate {
             get {
                 return ResourceManager.GetString("IsRealDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Items.
+        /// </summary>
+        public static string Items {
+            get {
+                return ResourceManager.GetString("Items", resourceCulture);
             }
         }
         

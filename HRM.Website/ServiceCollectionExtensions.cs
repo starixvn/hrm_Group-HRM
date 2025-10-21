@@ -192,6 +192,7 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IWorkingCalendarRepository, WorkingCalendarRepository>();
         services.AddSingleton<IOvertimeRequestRepository, OvertimeRequestRepository>();
         services.AddSingleton<IDisciplineRepository, DisciplineRepository>();
+        services.AddSingleton<IPayrollSettingRepository, PayrollSettingRepository>();
         return services;
     }
 
