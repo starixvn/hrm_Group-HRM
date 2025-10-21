@@ -27,19 +27,22 @@ using Models.Group;
 using Models.Supervisor;
 using Resources;
 using ViewModels.AnnualLeave;
+using GO.UserControl.Client.Core.Models.User;
 
 public class EmployeeService(
     IEmployeeRepository employeeRepository,
     IBaseService baseService,
     IRoleService roleService,
+    IUserService userService,
     IUserControlSession session) : IEmployeeService
 {
-    public async Task<string> GenerateEmployeeCode()
+    public async Task<string> GenerateEmployeeCode(short? companyId)
     {
-        var companyId = session.Get<short>(SessionKey.CurrentCompanyId);
+        var effectiveCompanyId = companyId ?? session.Get<short>(SessionKey.CurrentCompanyId);
+
         var criteria = new GenerateEmployeeCodeCriteria
         {
-            CompanyId = companyId
+            CompanyId = effectiveCompanyId
         };
         return await baseService.GetDataEntityAsync<string>(criteria);
     }
@@ -47,6 +50,22 @@ public class EmployeeService(
     public async Task<Employee> GetEmployeeByIdAsync(int id)
     {
         var companyId = session.Get<short>(SessionKey.CurrentCompanyId);
+        var criteria = new GetEmployeeByIdCriteria
+        {
+            CompanyId = companyId,
+            EmpId = id
+        };
+        var employee = await employeeRepository.GetEmployeeByIdAsync(criteria);
+        if (employee != null)
+        {
+            employee.Roles = await roleService.GetByUserIdAsync(employee.UserId);
+        }
+
+        return employee;
+    }
+
+    public async Task<Employee> GetEmployeeTransferByIdAsync(int id, short companyId)
+    {
         var criteria = new GetEmployeeByIdCriteria
         {
             CompanyId = companyId,
@@ -267,14 +286,13 @@ public class EmployeeService(
         return commandResult;
     }
 
-    public async Task<CommandResult> CheckExistAsync(CreateEmployeeParam param)
+    public async Task<CommandResult> CheckExistAsync(string code, string nickname)
     {
         var companyId = session.Get<short>(SessionKey.CurrentCompanyId);
-
         var criteria = new CheckExistEmployeeCriteria
         {
-            Code = param.Code,
-            Nickname = param.Nickname,
+            Code = code,
+            Nickname = nickname,
             CompanyId = companyId
         };
         return await baseService.GetDataEntityAsync<CommandResult>(criteria);
@@ -434,16 +452,14 @@ public class EmployeeService(
     public async Task<IEnumerable<int>> GetCompaniesBelongToSupervisor()
     {
         var employeeSession = session.Get<EmployeeSession>(SessionKey.Employee);
-        var supervisorCompanyCriteria = new GetSupervisorCompaniesCriteria
+        var criteria = new GetSupervisorCompaniesCriteria
         {
             EmpId = employeeSession.EmpId
         };
-        var supervisorCompanyIds = await baseService.GetDataAsync<int>(supervisorCompanyCriteria);
+        var supervisorCompanyIds = await baseService.GetDataAsync<int>(criteria);
 
-        var nexCompanies = supervisorCompanyIds
+        return supervisorCompanyIds
             .Where(s => Constants.NexCompanyIds.Contains(s));
-
-        return nexCompanies;
     }
 
     public async Task<IEnumerable<T>> FilterByEmployeeDataPermission<T>(
@@ -465,5 +481,36 @@ public class EmployeeService(
         var assignedEmployeeIds = await baseService.GetDataAsync<int>(criteria);
 
         return data.Where(item => assignedEmployeeIds.Contains(employeeIdSelector(item)));
+    }
+
+    public async Task<GO.UserControl.Client.Core.Models.CommandResult> UpdateUserInfoAsync(int userId, EditEmployeeParam param)
+    {
+        return await userService.UpdateInfoAsync(new UpdateUserInfoParam
+        {
+            RefId = param.EmployeeId,
+            UserId = userId,
+            Code = param.Code,
+            Nickname = param.Nickname,
+            FullName = param.FullName,
+            Email = param.Email,
+            IsActive = param.Enabled
+        });
+    }
+
+    public async Task<int> TransferEmployeeAsync(EmployeeTransfer model)
+    {
+        var criteria = new EmployeeTransferCriteria
+        {
+            EmpId = model.Id,
+            GroupId = model.Team.Id,
+            TargetCompanyId = model.TargetCompanyId,
+            Remark = model.TransferRemark,
+            CreatedBy = session.Get<EmployeeSession>(SessionKey.Employee).EmpId,
+            TransferInDate = model.TransferInDate,
+            AnnualLeaveBalance = model.AnnualLeaveBalance,
+            CompensationLeaveBalance = model.KeepInViewBalance
+        };
+
+        return await baseService.GetDataEntityAsync<int>(criteria);
     }
 }

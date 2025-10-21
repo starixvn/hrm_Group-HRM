@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using Core;
 using Core.Constants;
 using Core.Enums;
-using Fanex.Logging;
 using GO.UserControl.Client.Core.Session;
 using HRM.Core.Services;
 using HRM.Criteria.Request;
@@ -25,7 +24,6 @@ using Services.Interfaces;
 
 #pragma warning disable S107 // Methods should not have too many parameters
 public class LeaveController(
-    ILogger logger,
     IUserControlSession session,
     ILeaveRequestService leaveRequestService,
     IRequestService requestService,
@@ -102,10 +100,7 @@ public class LeaveController(
         criteria.CreatedBy = EmployeeSession.EmpId;
         criteria.CompanyId = CurrentCompanyId;
 
-        var startTime = DateTimeOffset.Now;
         var result = await baseService.ExecuteNonQueryAsync(criteria);
-        var endTime = DateTimeOffset.Now;
-        await logger.InfoAsync($"Create leave request took {(endTime - startTime).TotalSeconds} s");
 
         if (result.IsSuccessful)
         {
@@ -121,8 +116,8 @@ public class LeaveController(
                 return new JsonResult(result);
             }
 
-            var domain = await companyService.GetDomain(leaveRequest.Approver.CompanyId);
-            leaveRequestService.SendMailAndSendLetstalkCreateRequest(criteria, domain, leaveRequest.Approver.CompanyId);
+            var domains = await companyService.GetAllDomainAsync(leaveRequest.Approver.CompanyId);
+            leaveRequestService.SendMailAndSendLetstalkCreateRequest(criteria, domains.FirstOrDefault()?.Domain, leaveRequest.Approver.CompanyId);
         }
 
         return new JsonResult(result);
@@ -175,10 +170,7 @@ public class LeaveController(
         criteria.CompanyId = CurrentCompanyId;
         ProcessLeaveRequestDetails(leaveRequestDetail, criteria);
 
-        var startTime = DateTimeOffset.Now;
         var result = await baseService.ExecuteNonQueryAsync(criteria);
-        var endTime = DateTimeOffset.Now;
-        await logger.InfoAsync($"Update leave request took {(endTime - startTime).TotalSeconds} s");
 
         if (result.IsSuccessful)
         {
@@ -199,8 +191,8 @@ public class LeaveController(
                 return new JsonResult(result);
             }
 
-            var domain = await companyService.GetDomain(leaveRequest.Approver.CompanyId);
-            leaveRequestService.SendMailEditRequest(criteria, domain, leaveRequest.Approver.CompanyId);
+            var domains = await companyService.GetAllDomainAsync(leaveRequest.Approver.CompanyId);
+            leaveRequestService.SendMailEditRequest(criteria, domains.FirstOrDefault()?.Domain, leaveRequest.Approver.CompanyId);
         }
 
         return Json(result);

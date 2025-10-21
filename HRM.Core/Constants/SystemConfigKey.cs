@@ -10,7 +10,5 @@ public static class SystemConfigKey
 
     public const string AnnualLeaveResetTimeLine = "AnnualLeaveResetTimeLine";
 
-    public const string IsShowSubCompany = "IsShowSubCompany";
-
     public const string WhitelistIPs = "WhitelistIPs";
 }

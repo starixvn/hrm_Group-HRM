@@ -24,7 +24,8 @@ public class DisciplineSummaryPerYearController(
     IBaseService baseService,
     IEmployeeService employeeService,
     IExportDisciplineSummaryPerYearService exportService,
-    ICommonDataService commonDataService) : BaseController(session)
+    ICommonDataService commonDataService
+) : BaseController(session)
 {
     public async Task<IActionResult> Index(DisciplineSummaryPerYearViewModel model)
     {
@@ -41,7 +42,9 @@ public class DisciplineSummaryPerYearController(
     }
 
     [HttpPost]
-    public async Task<IActionResult> GetDisciplineSummaryGrid(DisciplineSummaryPerYearViewModel model)
+    public async Task<IActionResult> GetDisciplineSummaryGrid(
+        DisciplineSummaryPerYearViewModel model
+    )
     {
         var employees = await GetDisciplineSummaryAsync(model);
         ViewBag.FromYear = model.FromYear;
@@ -60,29 +63,44 @@ public class DisciplineSummaryPerYearController(
         return File(bytes, MimeType.XLSX, "5_Years_Discipline_Summary.xlsx");
     }
 
-    private async Task<IList<DisciplineSummaryPerYear>> GetDisciplineSummaryAsync(DisciplineSummaryPerYearViewModel model)
+    private async Task<IList<DisciplineSummaryPerYear>> GetDisciplineSummaryAsync(
+        DisciplineSummaryPerYearViewModel model
+    )
     {
         var criteria = new GetDisciplineSummaryPerYearCriteria
         {
             CompanyId = CurrentCompanyId,
             FromDate = new DateTimeOffset(model.FromYear, 1, 1, 0, 0, 0, TimeSpan.Zero).DateTime,
-            ToDate = new DateTimeOffset(model.ToYear + 1, 1, 1, 0, 0, 0, TimeSpan.Zero).AddDays(-1).DateTime,
+            ToDate = new DateTimeOffset(model.ToYear + 1, 1, 1, 0, 0, 0, TimeSpan.Zero)
+                .AddDays(-1)
+                .DateTime,
             TeamIds = model.TeamId,
             IsLocal = model.IsLocal,
             EmployeeId = model.EmployeeId,
             IsShowAll = model.IsShowAll,
         };
 
-        var (employees, disciplines) = await baseService.FetchMultipleAsync<DisciplineSummaryPerYear, DisciplineSummaryPerYearDetail>(criteria);
-        var filteredEmployees = await employeeService.FilterByEmployeeDataPermission( employees, e => e.EmployeeId);
+        var (employees, disciplines) = await baseService.FetchMultipleAsync<
+            DisciplineSummaryPerYear,
+            DisciplineSummaryPerYearDetail
+        >(criteria);
+        var filteredEmployees = await employeeService.FilterByEmployeeDataPermission(
+            employees,
+            e => e.EmployeeId
+        );
         foreach (var employee in filteredEmployees)
         {
             var date = model.LengthOfService ? employee.CompanyDate : employee.JoinedDate;
-            employee.LengthOfService = employeeService.CalculateLengthOfService(date, employee.MilitaryFromDate, employee.MilitaryToDate);
-            employee.Disciplines = disciplines.Where(x => x.EmployeeId == employee.EmployeeId).ToList();
+            employee.LengthOfService = employeeService.CalculateLengthOfService(
+                date,
+                employee.MilitaryFromDate,
+                employee.MilitaryToDate
+            );
+            employee.Disciplines = disciplines
+                .Where(x => x.EmployeeId == employee.EmployeeId)
+                .ToList();
         }
 
         return filteredEmployees.ToList();
     }
-
 }

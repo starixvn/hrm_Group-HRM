@@ -10,6 +10,8 @@ using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Models.Role;
 using GO.UserControl.Client.Core.Services;
 using GO.UserControl.Client.Core.Session;
+using HRM.Core.Services;
+using HRM.Criteria.Employee;
 using HRM.Models.SalaryStructure;
 using Interfaces;
 using Models;
@@ -19,8 +21,11 @@ using Resources;
 public interface IEmployeeLogService
 {
     Task<IEnumerable<LogObjectDetail>> GetLogDetailByIdAsync(int employeeId);
+
+    Task<IEnumerable<LogObjectDetail>> GetTransferHistoryWork(int empId);
 }
 
+#pragma warning disable S107 // Methods should not have too many parameters
 public class EmployeeLogService(
     IUserControlSession session,
     ICommonDataService commonDataService,
@@ -28,7 +33,10 @@ public class EmployeeLogService(
     IJobLevelService jobLevelService,
     IManagementLevelService managementLevelService,
     IRoleService roleService,
-    ISalaryStructureService salaryStructureService) : IEmployeeLogService
+    ISalaryStructureService salaryStructureService,
+    IBaseService baseService,
+    ICompanyService companyService) : IEmployeeLogService
+#pragma warning restore S107 // Methods should not have too many parameters
 {
     private IEnumerable<MappingFieldConfig> mappingFields = new List<MappingFieldConfig>
     {
@@ -87,7 +95,7 @@ public class EmployeeLogService(
         new() { FieldName = "ChineseName", DisplayName = Labels.ChineseName },
         new() { FieldName = "WorkingHoursbyWeek", DisplayName = Labels.WorkingHoursPerWeek },
         new() { FieldName = "SalaryStructureId", DisplayName = Labels.SalaryStructure },
-        new() { FieldName = "SubCompanyName", DisplayName = Labels.SubCompany },
+        new() { FieldName = "SubCompanyId", DisplayName = Labels.SubCompany },
         new() { FieldName = "AutoApproveRequest", DisplayName = Labels.AutoApproved }
     };
 
@@ -100,6 +108,7 @@ public class EmployeeLogService(
     private IEnumerable<EntityBase<byte>> Genders { get; set; }
     private IEnumerable<EntityBase<byte>> MarriageStatuses { get; set; }
     private IEnumerable<SalaryStructure> SalaryStructures { get; set; }
+    private IEnumerable<SubCompany> SubCompanies { get; set; }
 
     public async Task<IEnumerable<LogObjectDetail>> GetLogDetailByIdAsync(int employeeId)
     {
@@ -113,11 +122,24 @@ public class EmployeeLogService(
         Genders = commonDataService.GetGender();
         MarriageStatuses = commonDataService.GetMarriageStatus();
         SalaryStructures = await salaryStructureService.GetSalaryStructureAsync(companyId);
+        SubCompanies = await companyService.GetSubCompanies((short)companyId);
 
         var logs = await actionLogService.GetLogDetailByIdAsync(LogObjectType.Employee, employeeId);
         MappingField(logs);
 
         return logs;
+    }
+
+    public async Task<IEnumerable<LogObjectDetail>> GetTransferHistoryWork(int empId)
+    {
+        var criteria = new GetTransferHistoryWorkCriteria
+        {
+            EmpId = empId
+        };
+
+        var historyWork = await baseService.GetDataAsync<LogObjectDetail>(criteria);
+
+        return historyWork;
     }
 
     private void MappingField(IEnumerable<LogObjectDetail> logs)
@@ -192,6 +214,10 @@ public class EmployeeLogService(
                 MappingSalary(field);
                 break;
 
+            case "SubCompanyId":
+                MappingSubCompany(field);
+                break;
+
             default:
                 // Handle other fields
                 break;
@@ -206,6 +232,15 @@ public class EmployeeLogService(
 
         _ = int.TryParse(field.Value, out teamId);
         field.Value = Teams.FirstOrDefault(x => x.Id == teamId)?.Name;
+    }
+
+    private void MappingSubCompany(FieldValue field)
+    {
+        _ = int.TryParse(field.OldValue, out var id);
+        field.OldValue = SubCompanies.FirstOrDefault(x => x.SubCompanyId == id)?.Name;
+
+        _ = int.TryParse(field.Value, out id);
+        field.Value = SubCompanies.FirstOrDefault(x => x.SubCompanyId == id)?.Name;
     }
 
     private void MappingRole(FieldValue field)

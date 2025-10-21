@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using GO.UserControl.Client.Core.Session;
 using HRM.Core;
@@ -104,7 +105,7 @@ public class LateInEarlyOutRequestService(
                 return;
             }
 
-            var domain = await companyService.GetDomain(request.Approver.CompanyId);
+            var domains = await companyService.GetAllDomainAsync(request.Approver.CompanyId);
             var emailTemplatePath = Path.Combine(env.ContentRootPath, EmailTemplatePathForRequest);
             var email = await requestMailService.GetMailToMailCcAndLetStalk(requestId, (byte)SettingsSendMail.New);
             email.Subject =
@@ -119,7 +120,7 @@ public class LateInEarlyOutRequestService(
                 request.OnDate.ToDateMonthYearFormatedDate(),
                 request.RequestTypeId == (short)RequestType.LateIn ? request.LateInMins : request.EarlyOutMins,
                 request.Remark,
-                domain);
+                domains.FirstOrDefault()?.Domain);
 
             await emailService.SendEmailAsync(
                 email.SendTo,
@@ -140,7 +141,7 @@ public class LateInEarlyOutRequestService(
                 return;
             }
 
-            var domain = await companyService.GetDomain(request.Approver.CompanyId);
+            var domains = await companyService.GetAllDomainAsync(request.Approver.CompanyId);
             var emailTemplatePath = Path.Combine(env.ContentRootPath, EmailTemplatePathForRequest);
             var email = await requestMailService.GetMailToMailCcAndLetStalk(requestId, (byte)SettingsSendMail.Edit);
             email.Subject =
@@ -155,7 +156,7 @@ public class LateInEarlyOutRequestService(
                 request.OnDate.ToDateMonthYearFormatedDate(),
                 request.RequestTypeId == (short)RequestType.LateIn ? request.LateInMins : request.EarlyOutMins,
                 request.Remark,
-                domain);
+                domains.FirstOrDefault()?.Domain);
 
             await emailService.SendEmailAsync(
                 email.SendTo,

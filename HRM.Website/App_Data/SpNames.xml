@@ -3,9 +3,12 @@
     <Function Name="AccessCounter">
         <Setting Key="AccessCounter_Update" SpName="AccessCounter_Update" DbName="bodb_HRM" Plain="0" />
     </Function>
+    <Function Name="CompanySite">
+        <Setting Key="CompanySite_GetAll" SpName="CompanySite_GetAll" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="CompanySite_GetByDomain" SpName="CompanySite_GetByDomain" DbName="bodb_HRM" Plain="0" />
+    </Function>
     <Function Name="Auth">
         <Setting Key="Employee_GetByUserId" SpName="Employee_GetByUserId" DbName="bodb_HRM" Plain="0" />
-        <Setting Key="CompanySite_GetByDomain" SpName="CompanySite_GetByDomain" DbName="bodb_HRM" Plain="0" />
     </Function>
     <Function Name="Dashboard">
         <Setting Key="Dashboard_Get" SpName="Dashboard_Get" DbName="bodb_HRM" Plain="0" />
@@ -105,7 +108,9 @@
         <Setting Key="Nex_WorkingTimeRequest_GetRequestHistory" SpName="WorkingTimeRequest_GetRequestHistory" DbName="nex_HRM" Plain="0" />
         <Setting Key="Lumi_WorkingTimeRequest_GetRequestHistory" SpName="WorkingTimeRequest_GetRequestHistory" DbName="lumi_HRM" Plain="0" />
         <Setting Key="NexVision_WorkingTimeRequest_GetRequestHistory" SpName="WorkingTimeRequest_GetRequestHistory" DbName="nexvision_HRM" Plain="0" />
-        <Setting Key="Employee_GroupScope_Update" SpName="Employee_GroupScope_Update" DbName="bodb_HRM" Plain="0" />
+		<Setting Key="Employee_GroupScope_Update" SpName="Employee_GroupScope_Update" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Employee_Transfer" SpName="Employee_Transfer" DbName="bodb_HRM" Plain="0" />
+		<Setting Key="Transfer_HistoryWork_Get" SpName="Transfer_HistoryWork_Get" DbName="bodb_HRM" Plain="0" />
     </Function>
     <Function Name="Group">
         <Setting Key="EmployeeGroup_GetGroup" SpName="EmployeeGroup_GetGroup" DbName="bodb_HRM" Plain="0" />
@@ -572,7 +577,6 @@
     </Function>
     <Function Name="Company">
         <Setting Key="Company_GetAll" SpName="Company_GetAll" DbName="bodb_HRM" Plain="0" />
-        <Setting Key="Domain_ByCompanyId_Get" SpName="Domain_ByCompanyId_Get" DbName="bodb_HRM" />
         <Setting Key="Company_GetDomain" SpName="Company_GetDomain" DbName="bodb_HRM" />
     </Function>
     <Function Name="SubCompany">

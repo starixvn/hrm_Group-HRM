@@ -21,7 +21,7 @@ public interface ICommonDataService
 {
     Task<IEnumerable<LookupData>> GetLookupDataByCodeAsync(string code, int companyId);
 
-    Task<List<LookupData>> GetJobTitle(string jobTitle, int companyId);
+    Task<IEnumerable<LookupData>> GetJobTitleAsync(string jobTitle, int companyId);
 
     Task<IList<LeaveType>> GetLeaveTypeAsync( bool excludeNotShown = true);
 
@@ -43,8 +43,7 @@ public interface ICommonDataService
 public class CommonDataService(
     IUserControlSession session,
     IBaseService baseService,
-    ITeamService teamService,
-    IUserControlSession userControlSession) : ICommonDataService
+    ITeamService teamService) : ICommonDataService
 {
     public async Task<IEnumerable<LookupData>> GetLookupDataByCodeAsync(string code, int companyId)
     {
@@ -56,19 +55,19 @@ public class CommonDataService(
         return await baseService.GetDataAsync<LookupData>(criteria);
     }
 
-    public async Task<List<LookupData>> GetJobTitle(string jobTitle, int companyId)
+    public async Task<IEnumerable<LookupData>> GetJobTitleAsync(string jobTitle, int companyId)
     {
         var criteria = new GetJobTitleCriteria
         {
             JobTitle = jobTitle,
             CompanyId = companyId
         };
-        return (await baseService.GetDataAsync<LookupData>(criteria)).ToList();
+        return await baseService.GetDataAsync<LookupData>(criteria);
     }
 
     public async Task<IList<LeaveType>> GetLeaveTypeAsync(bool excludeNotShown = true)
     {
-        var companyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
+        var companyId = session.Get<short>(SessionKey.CurrentCompanyId);
 
         var criteria = new GetLeaveTypeCriteria
         {

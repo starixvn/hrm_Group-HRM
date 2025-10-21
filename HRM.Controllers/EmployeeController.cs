@@ -17,6 +17,7 @@ using HRM.Criteria.Supervisor;
 using HRM.Models;
 using HRM.Models.Group;
 using HRM.Models.Supervisor;
+using HRM.Services.Helper;
 using HRM.Services.Implement;
 using HRM.Services.Implement.ActionLog;
 using HRM.Services.Interfaces;
@@ -168,6 +169,8 @@ public class EmployeeController(
     {
         var model = await employeeService.GetEmployeeByIdAsync(id);
         var employeeShift = await employeeService.GetShiftByEmployeeId(id);
+        var historyWork = await employeeLogService.GetTransferHistoryWork(id);
+        model.HistoryWork = historyWork;
 
         ViewBag.Sun = employeeShift.SunShiftName;
         ViewBag.Mon = employeeShift.MonShiftName;
@@ -197,13 +200,7 @@ public class EmployeeController(
             return View(model);
         }
 
-        var param = new CreateEmployeeParam
-        {
-            Code = model.Code,
-            Nickname = model.Nickname
-        };
-
-        var commandResult = await employeeService.CheckExistAsync(param);
+        var commandResult = await employeeService.CheckExistAsync(model.Code, model.Nickname);
         if (commandResult.IsSuccessful)
         {
             return await CreateUserAsync(model);
@@ -301,7 +298,8 @@ public class EmployeeController(
     {
         if (ModelState.IsValid)
         {
-            var param = MappingEditEmployeeParam(model);
+            var roles = BuildRole(model.Roles);
+            var param = EmployeeHelper.MappingEditEmployeeParam(model, roles);
             var commandResult = await employeeService.EditAsync(EmployeeSession.EmpId, param, CurrentCompanyId);
             if (commandResult.IsSuccessful)
             {
@@ -314,18 +312,7 @@ public class EmployeeController(
             }
         }
 
-        model.Coutries = await commonDataService.GetAllCountry();
-        var supervisors = (await GetSupervisors(model.Id)).ToList();
-        model.Verifier = GetVerifiers(supervisors);
-        model.Approver = GetApproverList(supervisors);
-        model.Disciplinarian = GetDisciplineSupervisors(supervisors);
-        model.EmpShiftList = GetShiftMonitors(supervisors);
-        model.ActingEmpList = GetActingSupervisors(supervisors);
-        ViewBag.EnableGroupDate = await commonDataService.IsEnableGroupDateAsync();
-        ViewBag.Avatar = await GetAvatarUrl(model.Code);
-
-        await ComposeViewBagsForEditEmployee();
-
+        await PrepareEmployeeModelForView(model);
         return View(model);
     }
 
@@ -356,6 +343,21 @@ public class EmployeeController(
         var avatarPath = $"{CurrentCompanyId}/{avatarName}";
         var avatarUrl = await minIOService.GetFilePath(Bucket.Avatar, avatarPath, "default-avatar.jpg");
         return avatarUrl;
+    }
+
+    private async Task PrepareEmployeeModelForView(Employee model)
+    {
+        model.Coutries = await commonDataService.GetAllCountry();
+        var supervisors = (await GetSupervisors(model.Id)).ToList();
+        model.Verifier = GetVerifiers(supervisors);
+        model.Approver = GetApproverList(supervisors);
+        model.Disciplinarian = GetDisciplineSupervisors(supervisors);
+        model.EmpShiftList = GetShiftMonitors(supervisors);
+        model.ActingEmpList = GetActingSupervisors(supervisors);
+        ViewBag.EnableGroupDate = await commonDataService.IsEnableGroupDateAsync();
+        ViewBag.Avatar = await GetAvatarUrl(model.Code);
+
+        await ComposeViewBagsForEditEmployee();
     }
 
     [HttpPost]
@@ -498,9 +500,9 @@ public class EmployeeController(
         return new JsonResult(employees, new JsonSerializerSettings { ContractResolver = new DefaultContractResolver() });
     }
 
-    public async Task<JsonResult> GenerateEmployeeCode()
+    public async Task<JsonResult> GenerateEmployeeCode(short? companyId)
     {
-        var newCode = await employeeService.GenerateEmployeeCode();
+        var newCode = await employeeService.GenerateEmployeeCode(companyId);
         return Json(newCode);
     }
 
@@ -517,34 +519,18 @@ public class EmployeeController(
 
     private async Task UpdateUserInfo(int userId, EditEmployeeParam param)
     {
-        var result = await userService.UpdateInfoAsync(new UpdateUserInfoParam
-        {
-            RefId = param.EmployeeId,
-            UserId = userId,
-            Code = param.Code,
-            Nickname = param.Nickname,
-            FullName = param.FullName,
-            Email = param.Email,
-            IsActive = param.Enabled
-        });
+        var result = await employeeService.UpdateUserInfoAsync(userId, param);
         if (result.IsSuccessful)
         {
-            result = await userService.AssignRoleAsync(new AssignRoleParam
+            await userService.AssignRoleAsync(new AssignRoleParam
             {
+                SiteId = session.SiteId,
                 UserId = userId,
                 RoleIds = param.Roles
             });
 
-            if (result.IsSuccessful)
-            {
-                ViewBag.Updated = true;
-                await UpdateUserSession(param.EmployeeId);
-            }
-            else
-            {
-                ViewBag.Updated = false;
-                ModelState.AddModelError(string.Empty, result.Message);
-            }
+            ViewBag.Updated = true;
+            await UpdateUserSession(param.EmployeeId);
         }
         else
         {
@@ -648,69 +634,6 @@ public class EmployeeController(
         ViewBag.Roles = roles;
         ViewBag.SubCompanies = subCompanies;
         ViewBag.SalaryStructures = await salaryStructureService.GetSalaryStructureAsync(CurrentCompanyId);
-    }
-
-    private EditEmployeeParam MappingEditEmployeeParam(Employee model)
-    {
-        return new EditEmployeeParam
-        {
-            EmployeeId = model.Id,
-            Code = model.Code.Trim(),
-            DomainUsername = model.DomainUsername,
-            FullName = model.FullName,
-            Nickname = model.NickName,
-            EmployeeCard = model.EmployeeCard,
-            DateOfBirth = model.DateOfBirth,
-            Email = model.Email,
-            JobTitleId = model.JobTitleId,
-            JobLevelId = model.JobLevelId,
-            ManagementLevelId = model.ManagementLevelId,
-            Enabled = model.Enabled,
-            Phone = model.Phone,
-            Gender = model.Gender,
-            Roles = BuildRole(model.Roles),
-            JoinedDate = model.JoinedDate,
-            CompanyDate = model.CompanyDate,
-            ConfirmedDate = model.ConfirmedDate,
-            ResignedDate = model.ResignedDate,
-            ResignedReason = model.ResignedReason,
-            LetsTalk = model.LetsTalk,
-            Marriage = model.Marriage,
-            PermanentAddress = model.Address,
-            CurrentAddress = model.CurrentAddress,
-            IdCardNumber = model.CardNo,
-            PassportNo = model.PassportNo,
-            PassportExp = model.PassportExp,
-            TeamId = model.Team.Id,
-            IsLocal = model.IsLocal,
-            CountryCode = model.CountryCode,
-            CanOT = model.CanOT,
-            SpecialOT = model.SpecialOT,
-            WorkingDays = model.WorkingDays,
-            WorkingHours = model.WorkingHours,
-            WorkingHoursbyWeek = model.WorkingHoursbyWeek,
-            IsTopManager = model.IsTopManager,
-            OffDaysbyWeek = model.OffDaysbyWeek,
-            PlaceOfBirth = model.PlaceOfBirth,
-            Ethnic = model.Ethnic,
-            Native = model.Native,
-            Religion = model.Religion,
-            DateOfIdCard = model.DateOfIdCard,
-            PlaceOfIdCard = model.PlaceOfIdCard,
-            HomePhone = model.HomePhone,
-            Qualification = model.Qualification,
-            Major = model.Major,
-            IsExpatUseHoliday = !model.IsLocal && model.IsExpatUseHoliday,
-            PickupRemark = model.PickupRemark,
-            PromotionDate = model.PromotionDate,
-            TeamDate = model.TeamDate,
-            MilitaryFromDate = model.MilitaryFromDate,
-            MilitaryToDate = model.MilitaryToDate,
-            SubCompanyId = model.SubCompanyId,
-            SalaryStructureId = model.SalaryStructureId,
-            Salary = !string.IsNullOrWhiteSpace(model.Salary) ? Cryptography.EncryptPassword(model.Salary) : model.Salary,
-            AutoApproveRequest = model.AutoApproveRequest
-        };
     }
 
     private string BuildRole(IList<Role> roles)

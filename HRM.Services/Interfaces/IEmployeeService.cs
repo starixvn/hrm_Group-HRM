@@ -16,13 +16,15 @@ namespace HRM.Services.Interfaces;
 
 public interface IEmployeeService
 {
-    Task<string> GenerateEmployeeCode();
+    Task<string> GenerateEmployeeCode(short? companyId);
 
     Task<IEnumerable<SupervisorNameModel>> GetListSupervisorNameAsync(GetListSupervisorNameCriteria criteria);
 
     Task<IEnumerable<SupervisorModel>> GetEmployeeSupervisorByRoleIdAsync(int employeeId, short roleId);
 
     Task<Employee> GetEmployeeByIdAsync(int id);
+
+    Task<Employee> GetEmployeeTransferByIdAsync(int id, short companyId);
 
     Task<Employee> GetEmployeeByIdInGroupScopeAsync(int id);
 
@@ -56,7 +58,7 @@ public interface IEmployeeService
 
     Task<CommandResult> EditPasswordAsync(int actorId, EditPassword model);
 
-    Task<CommandResult> CheckExistAsync(CreateEmployeeParam param);
+    Task<CommandResult> CheckExistAsync(string code, string nickname);
 
     Task<CommandResult> CreateAsync(CreateEmployeeParam param);
 
@@ -73,4 +75,8 @@ public interface IEmployeeService
     Task<IEnumerable<int>> GetCompaniesBelongToSupervisor();
 
     Task<IEnumerable<T>> FilterByEmployeeDataPermission<T>(IEnumerable<T> data, Func<T, int> employeeIdSelector);
+
+    Task<GO.UserControl.Client.Core.Models.CommandResult> UpdateUserInfoAsync(int userId, EditEmployeeParam param);
+
+    Task<int> TransferEmployeeAsync(EmployeeTransfer model);
 }

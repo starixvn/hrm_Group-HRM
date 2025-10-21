@@ -190,7 +190,7 @@ public class ChangeShiftRequestService(
                 return;
             }
 
-            var domain = await companyService.GetDomain(request.Approver.CompanyId);
+            var domains = await companyService.GetAllDomainAsync(request.Approver.CompanyId);
 
             var emailTemplatePath = Path.Combine(env.ContentRootPath, EmailTemplatePathForRequest);
             var email = await requestMailService.GetMailToMailCcAndLetStalk(requestId, (byte)SettingsSendMail.New);
@@ -204,7 +204,7 @@ public class ChangeShiftRequestService(
                 request.Requester.Nickname,
                 forDate,
                 request.Remark,
-                domain);
+                domains.FirstOrDefault()?.Domain);
 
             await Task.WhenAll(
                 emailService.SendEmailAsync(email.SendTo, email.SendCC, email.Subject, email.Body, request.Approver.CompanyId)
@@ -222,7 +222,7 @@ public class ChangeShiftRequestService(
                 return;
             }
 
-            var domain = await companyService.GetDomain(request.Approver.CompanyId);
+            var domains = await companyService.GetAllDomainAsync(request.Approver.CompanyId);
             var emailTemplatePath = Path.Combine(env.ContentRootPath, EmailTemplatePathForRequest);
             var email = await requestMailService.GetMailToMailCcAndLetStalk(requestId, (byte)SettingsSendMail.Edit);
             var forDate = Utilities.GetMessageDateString(request.FromDate, request.ToDate);
@@ -235,7 +235,7 @@ public class ChangeShiftRequestService(
                 request.Requester.Nickname,
                 forDate,
                 request.Remark,
-                domain);
+                domains.FirstOrDefault()?.Domain);
 
             await Task.WhenAll(
                 emailService.SendEmailAsync(email.SendTo, email.SendCC, email.Subject, email.Body, request.Approver.CompanyId)

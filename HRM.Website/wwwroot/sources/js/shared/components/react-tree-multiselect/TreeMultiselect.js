@@ -25,13 +25,15 @@ const updateChild = (floatData, itemkey, isChecked) => {
     }
 };
 
-const getSelectedText = floatData => {
+const getSelectedText = (floatData, singleSelect = false) => {
     const items = floatData.filter(item => item.isLeaf),
         selected = items.filter(item => item.checked);
     let text = '';
 
     if (selected.length === 0) {
         text = 'Select options';
+    } else if (singleSelect && selected.length === 1) {
+        text = selected[0].text;
     } else if (items.length === selected.length) {
         text = 'All selected';
     } else {
@@ -53,12 +55,16 @@ export default class TreeMultiselect extends React.Component {
         isSelectedAll: PropTypes.bool,
         onChange: PropTypes.func,
         hasSearchBox: PropTypes.bool,
+        leafOnly: PropTypes.bool,
+        singleSelect: PropTypes.bool,
     }
 
     static defaultProps = {
         data: [],
         isSelectedAll: false,
         hasSearchBox: false,
+        leafOnly: false,
+        singleSelect: false,
         onChange: function () { }
     }
 
@@ -112,11 +118,22 @@ export default class TreeMultiselect extends React.Component {
     handleSelect = (itemkey, isChecked) => {
         let floatData = [...this.state.floatData];
         const index = floatData.findIndex(item => item.key === itemkey);
+        
+        // If singleSelect mode, uncheck all other items
+        if (this.props.singleSelect && isChecked) {
+            const totalItems = floatData.length;
+            for (let i = 0; i < totalItems; i++) {
+                floatData[i] = { ...floatData[i], checked: false };
+            }
+        }
+        
         floatData[index] = { ...floatData[index], checked: isChecked };
 
-        updateChild(floatData, itemkey, isChecked);
-        if (floatData[index].parentKey !== null && floatData[index].parentKey !== '') {
-            updateParent(floatData, floatData[index].parentKey, isChecked);
+        if (!this.props.singleSelect) {
+            updateChild(floatData, itemkey, isChecked);
+            if (floatData[index].parentKey !== null && floatData[index].parentKey !== '') {
+                updateParent(floatData, floatData[index].parentKey, isChecked);
+            }
         }
 
         this.props.onChange && this.props.onChange(getSelectedItems(floatData));
@@ -139,6 +156,8 @@ export default class TreeMultiselect extends React.Component {
                             data={item}
                             floatData={floatData}
                             onSelect={this.handleSelect}
+                            leafOnly={this.props.leafOnly}
+                            singleSelect={this.props.singleSelect}
                         />
                     </li>
                 </ul>
@@ -151,7 +170,7 @@ export default class TreeMultiselect extends React.Component {
     render() {
         const { floatData, data } = this.state;
         const selected = floatData.filter(item => item.checked);
-        const selectedText = getSelectedText(floatData);
+        const selectedText = getSelectedText(floatData, this.props.singleSelect);
         const checkboxAllElementId = `${this.id}-selectAll`;
 
         return (
@@ -172,15 +191,17 @@ export default class TreeMultiselect extends React.Component {
                             />
                         </div>
                     )}
-                    <div className="multiselect-treeview-select-all">
-                        <div className="checkbox-wrapper">
-                            <input type="checkbox" id={checkboxAllElementId}
-                                checked={floatData.length === selected.length}
-                                onChange={this.handleSelectAll}
-                            />
-                            <label htmlFor={checkboxAllElementId}> Select all</label>
+                    {!this.props.singleSelect && (
+                        <div className="multiselect-treeview-select-all">
+                            <div className="checkbox-wrapper">
+                                <input type="checkbox" id={checkboxAllElementId}
+                                    checked={floatData.length === selected.length}
+                                    onChange={this.handleSelectAll}
+                                />
+                                <label htmlFor={checkboxAllElementId}> Select all</label>
+                            </div>
                         </div>
-                    </div>
+                    )}
                     <div className="multiselect-treeview-items">
                         {this.renderNodes(data, floatData, this.state.searchText)}
                     </div>

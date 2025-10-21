@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Core;
 using Core.Constants;
@@ -103,7 +104,7 @@ public class KeepInViewRequestService(
                 return;
             }
 
-            var domain = await companyService.GetDomain(request.Approver.CompanyId);
+            var domains = await companyService.GetAllDomainAsync(request.Approver.CompanyId);
             var emailTemplatePath = Path.Combine(env.ContentRootPath, EmailTemplatePathForRequest);
             var email = await requestMailService.GetMailToMailCcAndLetStalk(requestId, (byte)SettingsSendMail.New);
 
@@ -117,7 +118,7 @@ public class KeepInViewRequestService(
                 request.Requester.Nickname,
                 request.OnDate.ToDateMonthYearFormatedDate(),
                 request.Remark,
-                domain);
+                domains.FirstOrDefault()?.Domain);
 
             await emailService.SendEmailAsync(
                 email.SendTo,
@@ -138,7 +139,7 @@ public class KeepInViewRequestService(
                 return;
             }
 
-            var domain = await companyService.GetDomain(request.Approver.CompanyId);
+            var domains = await companyService.GetAllDomainAsync(request.Approver.CompanyId);
             var emailTemplatePath = Path.Combine(env.ContentRootPath, EmailTemplatePathForRequest);
             var email = await requestMailService.GetMailToMailCcAndLetStalk(requestId, (byte)SettingsSendMail.Edit);
             email.Subject =
@@ -151,7 +152,7 @@ public class KeepInViewRequestService(
                 request.Requester.Nickname,
                 request.OnDate.ToDateMonthYearFormatedDate(),
                 request.Remark,
-                domain);
+                domains.FirstOrDefault()?.Domain);
 
             await emailService.SendEmailAsync(
                 email.SendTo,

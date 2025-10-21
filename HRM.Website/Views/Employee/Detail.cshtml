@@ -9,6 +9,7 @@
 }
 @section css{
     <link href="~/dist/styles/employee.details.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/dist/styles/account.index.css" rel="stylesheet" asp-append-version="true" />
 }
 @section js{
 }
@@ -299,5 +300,31 @@
                 </li>
             }
         </ul>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">HISTORY WORK</div>
+        <table class="table table-custom" id="data" style="margin: 0">
+            <thead>
+                <tr>
+                    <th>@Labels.Date</th>
+                    <th>@Labels.Actor</th>
+                    <th>@Labels.Field</th>
+                    <th>@Labels.OldValue</th>
+                    <th>@Labels.NewValue</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.HistoryWork)
+                {
+                    <tr>
+                        <td>@item.LogDate.ToDateMonthYearFormatedDate()</td>
+                        <td>@item.Nickname</td>
+                        <td>@item.Field</td>
+                        <td class="align-left">@item.OldData</td>
+                        <td class="align-left">@item.Data</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
     </div>
 </div>

@@ -7,6 +7,7 @@ using System.Linq;
 using Core.Enums;
 using Resources;
 using GO.UserControl.Client.Core.Models.Role;
+using HRM.Models.Log;
 
 public class Employee : EntityBase<int>
 {
@@ -237,5 +238,17 @@ public class Employee : EntityBase<int>
     [Display(Name = "Auto-Approved")]
     public bool AutoApproveRequest { get; set; }
 
+    public IEnumerable<LogObjectDetail> HistoryWork { get; set; }
+
     private string[] GetRoles2Array() => Roles?.Select(i => i.RoleId.ToString()).ToArray();
+
+    public string LengthOfServiceByGroupDate { get; set; }
+
+    public IList<JobLevel> JobLevels { get; set; }
+
+    public IList<ManagementLevel> ManagementLevels { get; set; }
+
+    public IList<SubCompany> SubCompanies { get; set; }
+
+    public IList<LookupData> JobTitles { get; set; }
 }

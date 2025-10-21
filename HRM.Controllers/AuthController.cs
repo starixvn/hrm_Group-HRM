@@ -10,7 +10,6 @@ using System.Web;
 using Core.Constants;
 using Criteria.SystemSetting;
 using Fanex.Data;
-using Fanex.Logging;
 using GO.UserControl.Client.Core.Models.Auth;
 using GO.UserControl.Client.Core.Services;
 using GO.UserControl.Client.Core.Session;
@@ -24,7 +23,7 @@ using Models;
 using Newtonsoft.Json;
 using Services.Interfaces;
 using ViewModels.Employee;
-#pragma warning disable S107 // Methods should not have too many parameters
+
 public class AuthController(
     IHRMAuthService hrmAuthService,
     IUserControlSession session,
@@ -32,10 +31,8 @@ public class AuthController(
     IAuthService authService,
     ICryptoService cryptoService,
     IBaseService baseService,
-    ILogger logger,
     ICompanyService companyService) : Controller
 {
-#pragma warning restore S107 // Methods should not have too many parameters
     public async Task<IActionResult> Login()
     {
         var companySite = await companyService.GetCompanySiteByDomainAsync();
@@ -162,10 +159,9 @@ public class AuthController(
                 NetSessionId = HttpContext.Session.Id
             };
             var loginResult = await authService.SSOLoginAsync(ssoParam);
-            await logger.InfoAsync("SSO Site" + companySite.Domain + "\nSSO Params: " + JsonConvert.SerializeObject(ssoParam) + "\nLogin Result: " + JsonConvert.SerializeObject(loginResult));
+
             if (loginResult.IsSuccessfull)
             {
-
                 session.UserId = tmpUserId;
                 session.JwtToken = loginResult.JwtToken;
                 session.OnUserId = loginResult.OnUserId;

@@ -17,8 +17,14 @@ namespace HRM.Services.Implement;
 public class CompanyService(
     IBaseService baseService,
     IHttpContextAccessor httpContextAccessor,
-    IUserControlSession userControlSession) : ICompanyService
+    IUserControlSession session) : ICompanyService
 {
+    public async Task<IEnumerable<CompanySite>> GetAllCompanySiteAsync()
+    {
+        var criteria = new GetAllCompanySiteCriteria();
+        return await baseService.GetDataAsync<CompanySite>(criteria);
+    }
+
     public async Task<CompanySite> GetCompanySiteByDomainAsync()
     {
         var domainName = GetDomainName();
@@ -35,15 +41,6 @@ public class CompanyService(
         return await baseService.GetDataAsync<Company>(criteria);
     }
 
-    public async Task<string> GetDomain(short companyId)
-    {
-        var criteria = new GetDomainByCompanyIdCriteria
-        {
-            CompanyId = companyId
-        };
-        return await baseService.GetDataEntityAsync<string>(criteria);
-    }
-
     public async Task<IEnumerable<SubCompany>> GetSubCompanies(short? companyId)
     {
         var criteria = new GetSubCompaniesCriteria
@@ -54,21 +51,9 @@ public class CompanyService(
         return await baseService.GetDataAsync<SubCompany>(criteria);
     }
 
-    public async Task<bool> GetIsShowSubCompanyValue()
-    {
-        var currentCompanyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
-        var criteria = new GetSystemConfigsByKeyCriteria
-        {
-            CompanyId = currentCompanyId,
-            Key = SystemConfigKey.IsShowSubCompany
-        };
-
-        return await baseService.GetDataEntityAsync<bool>(criteria);
-    }
-
     public async Task<string> GetWhitelistIps()
     {
-        var currentCompanyId = userControlSession.Get<short>(SessionKey.CurrentCompanyId);
+        var currentCompanyId = session.Get<short>(SessionKey.CurrentCompanyId);
         var criteria = new GetSystemConfigsByKeyCriteria
         {
             CompanyId = currentCompanyId,

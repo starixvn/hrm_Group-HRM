@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Xml;
-using HRM.Core;
 using HRM.Core.Services;
 using HRM.Criteria.Log;
 using HRM.Models.Log;
@@ -35,8 +34,6 @@ public class ActionLogService(IBaseService baseService) : IActionLogService
     {
         foreach (var log in logs)
         {
-            log.LogDate = log.LogDate.ToClientTimeZone();
-
             var oldValues = ReadXmlString(log.OldData);
             var newValues = ReadXmlString(log.Data);
             var fieldNames = oldValues.Select(x => x.FieldName).Union(newValues.Select(x => x.FieldName));
