@@ -13,4 +13,5 @@ public class SalaryStructureDetail
 
     public string BasicSalary { get; set; }
     public string ExpatSalary { get; set; }
+    public string JobLevelAddOn { get; set; }
 }

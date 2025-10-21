@@ -30,7 +30,8 @@ const AppContainer = () => {
                 return {
                     ...item,
                     basicSalary: '',
-                    expatSalary: ''
+                    expatSalary: '',
+                    jobLevelAddOn: ''
                 };
             }));
         }).catch(axiosError);
@@ -44,11 +45,12 @@ const AppContainer = () => {
                 resolveClientUrl('SalaryStructure/Create'),
                 {
                     name: values.name.trim(),
-                    details: jobLevels.filter(x => x.basicSalary || x.expatSalary).map(x => {
+                    details: jobLevels.filter(x => x.basicSalary || x.expatSalary || x.jobLevelAddOn).map(x => {
                         return {
                             jobLevelId: x.id,
                             basicSalary: x.basicSalary,
-                            expatSalary: x.expatSalary
+                            expatSalary: x.expatSalary,
+                            jobLevelAddOn: x.jobLevelAddOn
                         }
                     })
                 },
@@ -101,7 +103,8 @@ const AppContainer = () => {
                         <thead>
                             <tr>
                                 <th>Job Level</th>
-                                <th>Local Salary</th>
+                                <th>Basic Salary</th>
+                                <th>Job Level Add-On</th>
                                 <th>Expat Salary</th>
                             </tr>
                         </thead>
@@ -115,6 +118,13 @@ const AppContainer = () => {
                                                 className='form-control' autoComplete='off'
                                                 value={jobLevel.basicSalary}
                                                 onChange={e => handleChangeSalary(jobLevel.id, 'basicSalary', e.target.value)}
+                                            />
+                                        </td>
+                                        <td>
+                                            <input type='number' min='0' step='0.01'
+                                                className='form-control' autoComplete='off'
+                                                value={jobLevel.jobLevelAddOn}
+                                                onChange={e => handleChangeSalary(jobLevel.id, 'jobLevelAddOn', e.target.value)}
                                             />
                                         </td>
                                         <td>

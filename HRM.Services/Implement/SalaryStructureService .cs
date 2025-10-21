@@ -28,6 +28,10 @@ public class SalaryStructureService(IBaseService baseService) : ISalaryStructure
             item.ExpatSalary = !string.IsNullOrWhiteSpace(item.ExpatSalary)
                 ? Cryptography.DecryptPassword(item.ExpatSalary)
                 : null;
+
+            item.JobLevelAddOn = !string.IsNullOrWhiteSpace(item.JobLevelAddOn)
+               ? Cryptography.DecryptPassword(item.JobLevelAddOn)
+               : null;
         }
 
         foreach (var structure in salaryStructures)
@@ -56,6 +60,10 @@ public class SalaryStructureService(IBaseService baseService) : ISalaryStructure
 
                 item.ExpatSalary = !string.IsNullOrWhiteSpace(item.ExpatSalary)
                     ? Cryptography.DecryptPassword(item.ExpatSalary)
+                    : null;
+
+                item.JobLevelAddOn = !string.IsNullOrWhiteSpace(item.JobLevelAddOn)
+                    ? Cryptography.DecryptPassword(item.JobLevelAddOn)
                     : null;
             }
 

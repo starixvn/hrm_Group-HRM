@@ -37,7 +37,8 @@ const Row = ({ rowIndex, item, onDelete }) => {
     const getRows = () => {
         if (item.details.length === 0){
             return (
-                <tr id={`row_${item.salaryStructureId}`}
+                <tr key={`row_${item.salaryStructureId}`}
+                    id={`row_${item.salaryStructureId}`}
                     className={`row-group-${item.salaryStructureId} ${rowIndex % 2 === 0 ? 'odd-row' : 'even-row'}`}
                     onMouseEnter={handleMouseEnter}
                     onMouseLeave={handleMouseLeave}
@@ -45,6 +46,7 @@ const Row = ({ rowIndex, item, onDelete }) => {
                     <td>{rowIndex}</td>
                     <td className="text-left">{item.name}</td>
                     <td></td>
+                    <td className="text-right"></td>
                     <td className="text-right"></td>
                     <td className="text-right"></td>
                     {
@@ -73,7 +75,8 @@ const Row = ({ rowIndex, item, onDelete }) => {
 
         item.details.forEach((detail, index) => {
             rows.push(
-                <tr id={`row_${item.salaryStructureId}_${index}`}
+                <tr key={`row_${item.salaryStructureId}_${index}`}
+                    id={`row_${item.salaryStructureId}_${index}`}
                     className={`row-group-${item.salaryStructureId} ${rowIndex % 2 === 0 ? 'odd-row' : 'even-row'}`}
                     onMouseEnter={handleMouseEnter}
                     onMouseLeave={handleMouseLeave}
@@ -86,6 +89,7 @@ const Row = ({ rowIndex, item, onDelete }) => {
                     )}
                     <td>{detail.name}</td>
                     <td className="text-right">{formatSalary(detail.basicSalary)}</td>
+                    <td className="text-right">{formatSalary(detail.jobLevelAddOn)}</td>
                     <td className="text-right">{formatSalary(detail.expatSalary)}</td>
                     {
                         index === 0 &&
