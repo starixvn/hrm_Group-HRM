@@ -98,7 +98,8 @@ $(document).ready(function () {
 
     initDatepicker();
     let $uploadButton = $('#upload');
-    $('#CountryCode, #JobTitleId, #JobLevelId, #ManagementLevelId, #SubCompanyId, select#SalaryStructureId').chosen();
+    $('#CountryCode, #JobTitleId, #ManagementLevelId, #SubCompanyId').chosen();
+    $('#skillsetSelect').chosen({ width: '100%' });
 
     bindDisciplineRole(true);
     $('#Roles2Array8').click(function () {

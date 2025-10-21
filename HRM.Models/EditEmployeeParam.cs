@@ -59,6 +59,8 @@ public class EditEmployeeParam
     public string LetsTalk { get; set; }
     public int? SubCompanyId { get; set; }
     public int? SalaryStructureId { get; set; }
-    public string Salary { get; set; }
+    public string SpecialSubsidy { get; set; }
     public bool AutoApproveRequest { get; set; }
+    public string AllowanceItemSettingIds { get; set; }
+
 }

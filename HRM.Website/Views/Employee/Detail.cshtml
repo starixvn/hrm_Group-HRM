@@ -1,17 +1,22 @@
 ﻿@using HRM.Core
 @using HRM.Core.Enums
 @using HRM.Resources
+@using HRM.Models.PayrollManagement
 @model HRM.Models.Employee
 @{
     ViewBag.Title = Model.NickName + " (" + Model.FullName + ") 's Personal Information";
     var hasPermission = (bool)ViewBag.HasPermission;
     bool enableGroupDate = ViewBag.EnableGroupDate;
+    var hasReadPermissionOnPayrollInfoOnly = (bool)ViewBag.HasReadPermissionOnPayrollInfoOnly;
+    var hasReadPermissionOnPayrollInfoWithAmount = (bool)ViewBag.HasReadPermissionOnPayrollInfoWithAmount;
+    var employeePayrollAllowances = (IEnumerable<EmployeePayrollAllowance>)ViewBag.EmployeePayrollAllowances;
 }
 @section css{
     <link href="~/dist/styles/employee.details.css" rel="stylesheet" asp-append-version="true" />
     <link href="~/dist/styles/account.index.css" rel="stylesheet" asp-append-version="true" />
 }
 @section js{
+    <script src="~/dist/js/employee.detail.js" asp-append-version="true"></script>
 }
 @section Breadcrumb {
     <a class="step">Personal</a>
@@ -246,6 +251,79 @@
             }
         </ul>
     </div>
+    @if (hasReadPermissionOnPayrollInfoOnly || hasReadPermissionOnPayrollInfoWithAmount) 
+    {
+        <div class="panel panel-default panel-payroll">
+            <div class="panel-heading">
+                @Labels.Payroll
+                <div class="toggle-all-amounts" onclick="toggleAllAmounts()">
+                    <span class="eye-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                            <path d="M13.359 11.238C15.06 9.72 16 8 16 8s-3-5.5-8-5.5a7.028 7.028 0 0 0-2.79.588l.77.771A5.944 5.944 0 0 1 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.134 13.134 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755-.165.165-.337.328-.517.486l.708.709z"/>
+                            <path d="M11.297 9.176a3.5 3.5 0 0 0-4.474-4.474l.823.823a2.5 2.5 0 0 1 2.829 2.829l.822.822zm-2.943 1.299.822.822a3.5 3.5 0 0 1-4.474-4.474l.823.823a2.5 2.5 0 0 0 2.829 2.829z"/>
+                            <path d="M3.35 5.47c-.18.16-.353.322-.518.487A13.134 13.134 0 0 0 1.172 8l.195.288c.335.48.83 1.12 1.465 1.755C4.121 11.332 5.881 12.5 8 12.5c.716 0 1.39-.133 2.02-.36l.77.772A7.029 7.029 0 0 1 8 13.5C3 13.5 0 8 0 8s.939-1.721 2.641-3.238l.708.709zm10.296 8.884-12-12 .708-.708 12 12-.708.708z"/>
+                        </svg>
+                    </span>
+                </div>
+            </div>
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <div class="plabel">@Labels.SalaryStructure:</div>
+                    <div class="pcontent bold">@Model.SalaryStructure</div>
+                </li>
+                <li class="list-group-item">
+                    <div class="plabel">@Labels.JobLevel:</div>
+                    <div class="pcontent bold">@Model.JobLevel</div>
+                </li>
+                @if (hasReadPermissionOnPayrollInfoWithAmount)
+                {
+                    <li class="list-group-item">
+                        <div class="plabel">@Labels.BasicSalary:</div>
+                        @if (!string.IsNullOrEmpty(Model.BasicSalary))
+                        {
+                            <div class="pamount amount-hidden" data-amount="@Model.BasicSalary"></div>
+                        }
+                    </li>
+                    <li class="list-group-item">
+                        <div class="plabel">@Labels.JobLevelAddOn:</div>
+
+                        @if (!string.IsNullOrEmpty(Model.JobLevelAddOn))
+                        {
+                            <div class="pamount amount-hidden" data-amount="@Model.JobLevelAddOn"></div>
+                        }
+                    </li>
+                    @if (!string.IsNullOrEmpty(Model.SpecialSubsidy))
+                    {
+                        <li class="list-group-item">
+                            <div class="plabel">@Labels.SpecialSubsidy:</div>
+                            <div class="pamount amount-hidden" data-amount="@Model.SpecialSubsidy"></div>
+                        </li>
+                    }
+                }
+                @if (employeePayrollAllowances != null)
+                {
+                    string previousAllowanceName = null;
+                    foreach (var allowance in employeePayrollAllowances)
+                    {
+                        <li class="list-group-item">
+                            <div class="plabel">
+                                @if (previousAllowanceName != allowance.AllowanceName)
+                                {
+                                    @(allowance.AllowanceName + ":")
+                                    previousAllowanceName = allowance.AllowanceName;
+                                }
+                            </div>
+                            <div class="pcontent bold">@allowance.ItemName</div>
+                            @if (hasReadPermissionOnPayrollInfoWithAmount)
+                            {
+                                <div class="pamount amount-hidden" data-amount="@allowance.Amount"></div>
+                            }
+                        </li>
+                    }
+                }
+            </ul>
+        </div>
+    }
     <div class="panel panel-default">
         <div class="panel-heading">ATTENDANCE REPORT</div>
         <ul class="list-group attendance">

@@ -168,6 +168,62 @@
             </li>
         </ul>
     </div>
+    <div class="panel panel-default panel-payroll">
+            <div class="panel-heading">
+                PAYROLL
+            </div>
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <div class="plabel">@Labels.SalaryStructure:</div>
+                    <div class="pcontent bold">@Model.Employee.SalaryStructure</div>
+                </li>
+                <li class="list-group-item">
+                    <div class="plabel">@Labels.JobLevel:</div>
+                    <div class="pcontent bold">@Model.Employee.JobLevel</div>
+                </li>
+                <li class="list-group-item">
+                    <div class="plabel">@Labels.BasicSalary:</div>
+                    <div class="pcontent bold">@Model.Employee.BasicSalary</div>
+                </li>
+                <li class="list-group-item">
+                    <div class="plabel">@Labels.JobLevelAddOn:</div>
+                    <div class="pcontent bold">@Model.Employee.JobLevelAddOn</div>
+                </li>
+                @if (!string.IsNullOrEmpty(Model.Employee.SpecialSubsidy))
+                {
+                    <li class="list-group-item">
+                        <div class="plabel">@Labels.SpecialSubsidy:</div>
+                        <div class="pcontent bold">@Model.Employee.SpecialSubsidy</div>
+                    </li>
+                }
+                @if (Model.EmployeePayrollAllowances != null)
+                {
+                    string previousAllowanceName = null;
+                    foreach (var allowance in Model.EmployeePayrollAllowances)
+                    {
+                        <li class="list-group-item">
+                            <div class="plabel">
+                                @if (previousAllowanceName != allowance.AllowanceName)
+                                {
+                                    @(allowance.AllowanceName + ":")
+                                    previousAllowanceName = allowance.AllowanceName;
+                                }
+                            </div>
+                            <div class="pcontent bold">
+                                @if (allowance.IsMultiSelect)
+                                {
+                                    @allowance.Amount <text> (@allowance.ItemName)</text>
+                                }
+                                else
+                                {
+                                    @allowance.Amount
+                                }
+                            </div>
+                        </li>
+                    }
+                }
+            </ul>
+        </div>
     <div class="panel panel-default">
         <div class="panel-heading">JOB INFORMATION</div>
         <ul class="list-group">

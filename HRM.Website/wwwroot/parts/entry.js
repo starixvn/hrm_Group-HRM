@@ -124,6 +124,7 @@ module.exports = {
         [`${jsDistPath}/employee.edit.shift.manager`]: `${jsSourcePath}/employee/shift-manager/index.jsx`,
         [`${jsDistPath}/employee.create`]: `${jsSourcePath}/employee/create.js`,
         [`${jsDistPath}/employee.edit`]: `${jsSourcePath}/employee/edit.js`,
+        [`${jsDistPath}/employee.detail`]: `${jsSourcePath}/employee/detail.js`,
         [`${jsDistPath}/employee.index`]: `${jsSourcePath}/employee/index.js`,
         [`${jsDistPath}/employee.postnatal`]: `${jsSourcePath}/postnatal/index.js`,
         [`${jsDistPath}/employee.paternity`]: `${jsSourcePath}/paternity/index.js`,

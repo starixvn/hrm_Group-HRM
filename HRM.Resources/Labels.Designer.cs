@@ -367,6 +367,15 @@ namespace HRM.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Allowance.
+        /// </summary>
+        public static string Allowance {
+            get {
+                return ResourceManager.GetString("Allowance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Allow Claim OT.
         /// </summary>
         public static string AllowClaimOT {
@@ -624,6 +633,15 @@ namespace HRM.Resources {
         public static string BasicAnnualLeaveBalance {
             get {
                 return ResourceManager.GetString("BasicAnnualLeaveBalance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Basic Salary.
+        /// </summary>
+        public static string BasicSalary {
+            get {
+                return ResourceManager.GetString("BasicSalary", resourceCulture);
             }
         }
         
@@ -1987,6 +2005,15 @@ namespace HRM.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Employee Transfer.
+        /// </summary>
+        public static string EmployeeTransfer {
+            get {
+                return ResourceManager.GetString("EmployeeTransfer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Employee&apos;s view.
         /// </summary>
         public static string EmployeeView {
@@ -2316,6 +2343,15 @@ namespace HRM.Resources {
         public static string GeneralLeave {
             get {
                 return ResourceManager.GetString("GeneralLeave", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Grade.
+        /// </summary>
+        public static string Grade {
+            get {
+                return ResourceManager.GetString("Grade", resourceCulture);
             }
         }
         
@@ -2694,6 +2730,15 @@ namespace HRM.Resources {
         public static string JobLevel {
             get {
                 return ResourceManager.GetString("JobLevel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Job Level Add-On.
+        /// </summary>
+        public static string JobLevelAddOn {
+            get {
+                return ResourceManager.GetString("JobLevelAddOn", resourceCulture);
             }
         }
         
@@ -4048,6 +4093,15 @@ namespace HRM.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Payroll.
+        /// </summary>
+        public static string Payroll {
+            get {
+                return ResourceManager.GetString("Payroll", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to PD.
         /// </summary>
         public static string PD {
@@ -4998,6 +5052,15 @@ namespace HRM.Resources {
         public static string SpecialOT {
             get {
                 return ResourceManager.GetString("SpecialOT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Special Subsidy.
+        /// </summary>
+        public static string SpecialSubsidy {
+            get {
+                return ResourceManager.GetString("SpecialSubsidy", resourceCulture);
             }
         }
         

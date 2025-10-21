@@ -58,6 +58,9 @@ public static class FunctionKey
     public const string ManageLocalEmployee = "ManageLocalEmployee";
     public const string ManageExpatEmployee = "ManageExpatEmployee";
 
+    public const string PayrollInfoOnly = "PayrollInfoOnly";
+    public const string PayrollInfoWithAmount = "PayrollInfoWithAmount";
+
     public const string TeamManagement = "TeamManagement";
     public const string JobTitleManagement = "JobTitleManagement";
     public const string TimeRecord = "TimeRecord";

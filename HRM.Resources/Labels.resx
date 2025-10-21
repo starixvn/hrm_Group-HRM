@@ -2166,4 +2166,25 @@
   <data name="AmountPercent" xml:space="preserve">
     <value>Amount/Percent</value>
   </data>
+  <data name="EmployeeTransfer" xml:space="preserve">
+    <value>Employee Transfer</value>
+  </data>
+  <data name="Payroll" xml:space="preserve">
+    <value>Payroll</value>
+  </data>
+  <data name="Allowance" xml:space="preserve">
+    <value>Allowance</value>
+  </data>
+  <data name="Grade" xml:space="preserve">
+    <value>Grade</value>
+  </data>
+  <data name="SpecialSubsidy" xml:space="preserve">
+    <value>Special Subsidy</value>
+  </data>
+  <data name="JobLevelAddOn" xml:space="preserve">
+    <value>Job Level Add-On</value>
+  </data>
+  <data name="BasicSalary" xml:space="preserve">
+    <value>Basic Salary</value>
+  </data>
 </root>

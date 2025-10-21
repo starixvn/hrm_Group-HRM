@@ -180,8 +180,10 @@ public class EmployeeController(
         ViewBag.Fri = employeeShift.FriShiftName;
         ViewBag.Sat = employeeShift.SatShiftName;
         ViewBag.HasPermission = session.HasPermissionOnFunction(FunctionKey.EmployeeManagement, Policy.Host);
+        ViewBag.HasReadPermissionOnPayrollInfoOnly = session.HasPermissionOnFunction(FunctionKey.PayrollInfoOnly, Policy.Read);
+        ViewBag.HasReadPermissionOnPayrollInfoWithAmount = session.HasPermissionOnFunction(FunctionKey.PayrollInfoWithAmount, Policy.Read);
         ViewBag.EnableGroupDate = await commonDataService.IsEnableGroupDateAsync();
-
+        ViewBag.EmployeePayrollAllowances = await employeeService.GetEmployeePayrollAllowanceByEmpIdAsync(id);
         return View(model);
     }
 
@@ -271,8 +273,7 @@ public class EmployeeController(
             {
                 return RedirectToAction("AccessDenied", "Error");
             }
-
-            employee.Salary = !string.IsNullOrWhiteSpace(employee.Salary) ? Cryptography.DecryptPassword(employee.Salary) : string.Empty;
+            
             employee.Coutries = await commonDataService.GetAllCountry();
             var supervisors = (await GetSupervisors(id)).ToList();
             employee.Verifier = GetVerifiers(supervisors);
@@ -284,6 +285,7 @@ public class EmployeeController(
             ViewBag.LengthOfServiceByCompanyDate = employeeService.CalculateLengthOfService(employee.CompanyDate, employee.MilitaryFromDate, employee.MilitaryToDate);
             ViewBag.EnableGroupDate = await commonDataService.IsEnableGroupDateAsync();
             ViewBag.Avatar = await GetAvatarUrl(employee.Code);
+            ViewBag.EmployeePayrollAllowances = await employeeService.GetEmployeePayrollAllowanceByEmpIdAsync(id);
             await ComposeViewBagsForEditEmployee();
             return View(employee);
         }
@@ -624,8 +626,8 @@ public class EmployeeController(
         }
 
         ViewBag.IsShowSubCompanyConfig = subCompanies != null && subCompanies.Any();
-        ViewBag.HasReadPermissionOnSalaryStructure = session.HasPermissionOnFunction(FunctionKey.SalaryStructureConfiguration, Policy.Read);
-        ViewBag.HasHostPermissionOnSalaryStructure = session.HasPermissionOnFunction(FunctionKey.SalaryStructureConfiguration, Policy.Host);
+        ViewBag.HasHostPermissionOnPayrollInfoOnly = session.HasPermissionOnFunction(FunctionKey.PayrollInfoOnly, Policy.Host);
+        ViewBag.HasHostPermissionOnPayrollInfoWithAmount = session.HasPermissionOnFunction(FunctionKey.PayrollInfoWithAmount, Policy.Host);
 
         ViewBag.JobTitles = await commonDataService.GetLookupDataByCodeAsync(Constants.JobTitle, session.Get<int>(SessionKey.CurrentCompanyId));
         ViewBag.JobLevel = jobLevels;

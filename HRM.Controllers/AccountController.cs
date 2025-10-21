@@ -35,6 +35,7 @@ public class AccountController(
         var viewModel = new AccountViewModel
         {
             Employee = await employeeService.GetEmployeeByIdAsync(EmployeeSession.EmpId) ?? new Employee(),
+            EmployeePayrollAllowances = await employeeService.GetEmployeePayrollAllowanceByEmpIdAsync(EmployeeSession.EmpId),
             Logs = await employeeLogService.GetLogDetailByIdAsync(EmployeeSession.EmpId) ?? new List<LogObjectDetail>()
         };
         ViewBag.EnableGroupDate = await commonDataService.IsEnableGroupDateAsync();

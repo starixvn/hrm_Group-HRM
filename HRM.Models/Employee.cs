@@ -8,6 +8,7 @@ using Core.Enums;
 using Resources;
 using GO.UserControl.Client.Core.Models.Role;
 using HRM.Models.Log;
+using HRM.Models.PayrollManagement;
 
 public class Employee : EntityBase<int>
 {
@@ -60,8 +61,16 @@ public class Employee : EntityBase<int>
     public int? JobLevelId { get; set; }
 
     public short? ManagementLevelId { get; set; }
+
     public int? SalaryStructureId { get; set; }
-    public string Salary { get; set; }
+
+    public string SalaryStructure { get; set; }
+
+    public string BasicSalary { get; set; }
+
+    public string SpecialSubsidy { get; set; }
+
+    public string JobLevelAddOn { get; set; }
 
     public bool Enabled { get; set; }
 

@@ -66,8 +66,9 @@ public class UpdateEmployeeCriteria : CriteriaBase
     public short CompanyId { get; set; }
     public int? SubCompanyId { get; set; }
     public int? SalaryStructureId { get; set; }
-    public string Salary { get; set; }
+    public string SpecialSubsidy { get; set; }
     public bool AutoApproveRequest { get; set; }
+    public string AllowanceItemSettingIds { get; set; }
 
     public override string GetSettingKey() => "Employee_UpdateEmployee";
 

@@ -10,8 +10,8 @@
     var roleItems = roles.Select(r => new SelectListItem { Value = r.RoleId.ToString(), Text = r.Name });
     var enableGroupDate = (bool)ViewBag.EnableGroupDate;
     var salaryStructures = (IEnumerable<SalaryStructure>)ViewBag.SalaryStructures;
-    var hasReadPermissionOnSalaryStructure = (bool)ViewBag.HasReadPermissionOnSalaryStructure;
-    var hasHostPermissionOnSalaryStructure = (bool)ViewBag.HasHostPermissionOnSalaryStructure;
+    var hasHostPermissionOnPayrollInfoOnly = (bool)ViewBag.HasHostPermissionOnPayrollInfoOnly;
+    var hasHostPermissionOnPayrollInfoWithAmount = (bool)ViewBag.HasHostPermissionOnPayrollInfoWithAmount;
 }
 @section css {
     <link href="~/dist/vendors/chosen.css" rel="stylesheet" asp-append-version="true" />
@@ -385,61 +385,12 @@
             </li>
             <li class="list-group-item form-group">
                 <div class="label-form">
-                    @Html.LabelFor(model => model.JobLevelId, Labels.JobLevel, new { @class = "control-label" })
-                </div>
-                <div class="select-form">
-                    @Html.DropDownListFor(model => model.JobLevelId, new SelectList(ViewBag.JobLevel, "Id", "Name"), "--Select a Job Level--", new { @class = "form-control" })
-                </div>
-            </li>
-            <li class="list-group-item form-group">
-                <div class="label-form">
                     @Html.LabelFor(model => model.ManagementLevelId, Labels.ManagementGrade, new { @class = "control-label" })
                 </div>
                 <div class="select-form">
                     @Html.DropDownListFor(model => model.ManagementLevelId, new SelectList(ViewBag.Grades, "Id", "Name"), "--Select a M Grade--", new { @class = "form-control" })
                 </div>
             </li>
-            <li class="list-group-item form-group">
-                <div class="label-form">
-                    @Html.LabelFor(model => model.SalaryStructureId, Labels.SalaryStructure, new { @class = "control-label" })
-                </div>
-                <div class="select-form">
-                    @{
-                        var items = salaryStructures.Select(x => new SelectListItem
-                {
-                    Value = x.SalaryStructureId.ToString(),
-                    Text = x.Name
-                });
-                        @Html.DropDownListFor(model => model.SalaryStructureId,
-                             items,
-                             "--Select a Salary Structure--",
-                             new { @class = "form-control" })
-                    }
-                </div>
-            </li>
-            @if (hasReadPermissionOnSalaryStructure || hasHostPermissionOnSalaryStructure)
-            {
-                <li class="list-group-item form-group">
-                    <div class="label-form">
-                        @Html.LabelFor(model => model.Salary, Labels.NonStandardSalaryStructure, new { @class = "control-label" })
-                    </div>
-                    <div class="select-form">
-                        @if (!hasHostPermissionOnSalaryStructure)
-                        {
-                            <span>@Model.Salary</span>
-                            @Html.HiddenFor(model => model.Salary)
-                        }
-                        else
-                        {
-                            @Html.TextBoxFor(model => model.Salary, new { @class = "form-control", @type = "number", @min = "0", @step = "0.01" })
-                        }
-                    </div>
-                </li>
-            }
-            else
-            {
-                @Html.HiddenFor(model => model.Salary)
-            }
             <li class="list-group-item form-group">
                 <div class="label-form">
                     @Html.LabelFor(model => model.PromotionDate, Labels.PromotionDate, new { @class = "control-label" })
@@ -524,6 +475,148 @@
             </li>
         </ul>
     </div>
+    @if (hasHostPermissionOnPayrollInfoOnly || hasHostPermissionOnPayrollInfoWithAmount) 
+    {
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <span class="fa fa-chevron-down"></span>
+                <span>@Labels.Payroll</span>
+            </div>
+            <div>
+                <table class="table table-bordered table-striped salary-structure @(!hasHostPermissionOnPayrollInfoWithAmount ? "hide-amount-column" : "")">
+                    <colgroup>
+                        <col />
+                        <col />
+                    </colgroup>
+                    
+                    <tbody>
+                        <tr>
+                            <td rowspan="1" class="group-cell">@Labels.Grade</td>
+                            <td>
+                                <div class="type-row">
+                                    <span class="type-label">@Labels.JobLevel</span>
+                                    <div class="type-control select-form">
+                                        @Html.DropDownListFor(model => model.JobLevelId, new SelectList(ViewBag.JobLevel, "Id", "Name"), "--Select a Job Level--", new { @class = "form-control" })
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td rowspan="1" class="group-cell">@Labels.SalaryStructure</td>
+                            <td>
+                                <div class="type-row">
+                                    <span class="type-label">@Labels.SalaryStructure</span>
+                                    <div class="type-control select-form">
+                                    @{
+                                        var items = salaryStructures.Select(x => new SelectListItem
+                                        {
+                                            Value = x.SalaryStructureId.ToString(),
+                                            Text = x.Name
+                                        });
+                                        @Html.DropDownListFor(model => model.SalaryStructureId,
+                                            items,
+                                            "--Select a Salary Structure--",
+                                            new { @class = "form-control" })
+                                    }
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td rowspan="1" class="group-cell">Special Subsidy</td>
+                            <td>
+                                <div class="type-row">
+                                    <span class="type-label">Special Subsidy</span>
+                                    <div class="type-control">
+                                        @Html.TextBoxFor(model => model.SpecialSubsidy, new { @class = "form-control" })
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td rowspan="5" class="group-cell">@Labels.Allowance</td>
+                            <td>
+                                <div class="type-row">
+                                    <span class="type-label">Management Allowance</span>
+                                    <div class="type-control select-form">
+                                        <select class="form-control allowance-select" data-amount-id="mgmtAmount">
+                                    <option value="">-- Select Management Allowance --</option>
+                                    <option value="1">None</option>
+                                    <option value="2">M1-A</option>
+                                    <option value="3">M1-B</option>
+                                    <option value="4">M2-A</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="type-row">
+                                    <span class="type-label">Overseas Allowance</span>
+                                    <div class="type-control select-form">
+                                        <select class="form-control allowance-select" data-amount-id="overseasAmount">
+                                    <option value="">-- Select Overseas Allowance --</option>
+                                    <option value="1">Overseas 0</option>
+                                    <option value="2">Overseas 1</option>
+                                    <option value="3">Overseas 2</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="type-row">
+                                    <span class="type-label">Skill Set Add-On</span>
+                                    <div class="type-control select-form">
+                                        <select id="skillsetSelect" class="form-control allowance-select" data-amount-id="skillsetAmount" multiple data-placeholder="-- Select Skill Set Add-On --">
+                                    <option value="1">Languages</option>
+                                    <option value="2">IT Certification</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="type-row">
+                                    <span class="type-label">Transportation Allowance</span>
+                                    <div class="type-control select-form">
+                                        <select class="form-control allowance-select" data-amount-id="transportAmount">
+                                    <option value="">-- Select Transportation Allowance --</option>
+                                    <option value="1">Petrol 1</option>
+                                    <option value="2">Petrol 2</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="type-row">
+                                    <span class="type-label">Mobilephone Allowance</span>
+                                    <div class="type-control select-form">
+                                        <select class="form-control allowance-select" data-amount-id="mobileAmount">
+                                    <option value="">-- Select Mobilephone Allowance --</option>
+                                    <option value="1">Phone 1</option>
+                                    <option value="2">Phone 2</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+    else 
+    {
+        <input type="hidden" name="SalaryStructureId" value="@Model.SalaryStructureId" />
+        <input type="hidden" name="JobLevelId" value="@Model.JobLevelId" />
+    }
+
     <div class="panel panel-default">
         <div class="panel-heading">
             <span class="fa fa-chevron-down"></span>
