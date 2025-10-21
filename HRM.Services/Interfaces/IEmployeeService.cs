@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.Design;
 using System.Threading.Tasks;
 using HRM.Core.Models;
 using HRM.Criteria.AnnualLeave;

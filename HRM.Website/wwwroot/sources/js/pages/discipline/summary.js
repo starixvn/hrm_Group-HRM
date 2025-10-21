@@ -537,8 +537,7 @@ import { getOrgChart } from '../group-team/supervisor/common.functions';
                 .catch(axiosError)
                 .then(() => unblockUI());
         });
-
-        floatThead('table#data');
+        
         initEventAddOtherDiscipline();
     });
 })();
