@@ -8,6 +8,8 @@ public class GetPayrollItemSettingsCriteria : CriteriaBase
 
     public int? PayrollItemSettingId { get; set; }
 
+    public int? Category { get; set; }
+
     public override string GetSettingKey()
     {
         return "PayrollItemSettings_Get";

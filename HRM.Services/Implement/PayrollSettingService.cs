@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using HRM.Core.Services;
 using HRM.Criteria.PayrollManagement;
@@ -13,9 +12,7 @@ public class PayrollSettingService(IPayrollSettingRepository payrollSettingRepos
 {
     public async Task<IEnumerable<PayrollSetting>> GetPayrollItemSettingsAsync(GetPayrollItemSettingsCriteria criteria)
     {
-        var flatRows = await payrollSettingRepository.GetPayrollItemSettings(criteria);
-        
-        return flatRows;
+        return await payrollSettingRepository.GetPayrollItemSettings(criteria);
     }
 
     public async Task<IEnumerable<PayrollAllowanceItem>> GetAllAllowanceItemSettingsAsync(int companyId)

@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Fanex.Data;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Models.Role;
 using GO.UserControl.Client.Core.Models.User;
@@ -13,6 +12,7 @@ using HRM.Core.Enums;
 using HRM.Core.Filters;
 using HRM.Core.Services;
 using HRM.Criteria.Employee;
+using HRM.Criteria.PayrollManagement;
 using HRM.Criteria.Supervisor;
 using HRM.Models;
 using HRM.Models.Group;
@@ -636,7 +636,7 @@ public class EmployeeController(
         ViewBag.Roles = roles;
         ViewBag.SubCompanies = subCompanies;
         ViewBag.SalaryStructures = await salaryStructureService.GetSalaryStructureAsync(CurrentCompanyId);
-        ViewBag.AllowanceItemSettings = await payrollSettingService.GetPayrollItemSettingsAsync(new Criteria.PayrollManagement.GetPayrollItemSettingsCriteria { CompanyId = CurrentCompanyId });
+        ViewBag.AllowanceItemSettings = await payrollSettingService.GetPayrollItemSettingsAsync(new GetPayrollItemSettingsCriteria { CompanyId = CurrentCompanyId, Category = (int)PayrollSettingType.Allowance });
     }
 
     private string BuildRole(IList<Role> roles)
