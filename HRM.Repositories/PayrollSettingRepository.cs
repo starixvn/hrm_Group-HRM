@@ -12,9 +12,8 @@ namespace HRM.Repositories
     {
         public async Task<IEnumerable<PayrollSetting>> GetPayrollItemSettings(GetPayrollItemSettingsCriteria criteria)
         {
-            using var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey());
+            using var db = ObjectDbFactory.CreateInstance(criteria.GetSettingKey()); 
             using var multi = await db.QueryMultipleAsync(criteria);
-
             var flatRows = multi.Read<PayrollSetting, PayrollAllowanceItem, PayrollSetting>(
             (setting, item) =>
             {
@@ -23,12 +22,26 @@ namespace HRM.Repositories
                     setting.PayrollAllowanceItems.Add(item);
                 }
 
-                return setting;
-            },
-            splitOn: "AllowanceItemSettingId"
+                    return setting;
+                },
+                splitOn: "AllowanceItemSettingId"
             ).ToList();
 
-            return flatRows;
+            // ✅ Group by unique setting
+            var grouped = flatRows
+                .GroupBy(s => s.PayrollItemSettingId)
+                .Select(g =>
+                {
+                    var setting = g.First();
+                    setting.PayrollAllowanceItems = g
+                        .SelectMany(x => x.PayrollAllowanceItems)
+                        .DistinctBy(x => x.AllowanceItemSettingId)
+                        .ToList();
+                    return setting;
+                })
+                .ToList();
+
+            return grouped;
         }
     }
 }
