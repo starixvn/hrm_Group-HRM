@@ -27,7 +27,7 @@ const Filter = () => {
             });
     };
 
-    const handleConfigSubmit = (config) => {
+    const handleConfigSubmit = config => {
         const configValue = config ? String(config) : null;
 
         const configData = {
@@ -60,7 +60,7 @@ const Filter = () => {
         setSelectedConfig('');
     };
 
-    const handleConfigChange = (value) => {
+    const handleConfigChange = value => {
         setSelectedConfig(value);
     };
 

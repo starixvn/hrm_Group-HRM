@@ -17,11 +17,11 @@ const BasicSalaryConfigModal = ({
         onSubmit(selectedConfig || null);
     };
 
-    const handleRadioChange = (value) => {
+    const handleRadioChange = value => {
         onConfigChange(value);
     };
 
-    const renderRadioOption = (option) => (
+    const renderRadioOption = option => (
         <div key={option.value} className="radio-option">
             <label>
                 <input
