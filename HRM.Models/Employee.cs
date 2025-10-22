@@ -248,8 +248,9 @@ public class Employee : EntityBase<int>
 
     public string AllowanceItemSettingIds { get; set; }
 
-    public int[] AllowanceItemSettingIdsArray {
-        get => AllowanceItemSettingIds?.Split(',').Select(x => int.TryParse(x, out var id) ? id : 0).Where(x => x > 0).ToArray() ?? [];
+    public int[] GetAllowanceItemSettingIdsArray()
+    {
+        return AllowanceItemSettingIds?.Split(',').Select(x => int.TryParse(x, out var id) ? id : 0).Where(x => x > 0).ToArray() ?? [];
     }
 
     public IEnumerable<LogObjectDetail> HistoryWork { get; set; }

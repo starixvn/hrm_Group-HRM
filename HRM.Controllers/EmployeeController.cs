@@ -47,6 +47,7 @@ public class EmployeeController(
     IRoleService roleService,
     IMinIOService minIOService,
     ICompanyService companyService,
+    IPayrollSettingService payrollSettingService,
     ISalaryStructureService salaryStructureService) : BaseController(session)
 #pragma warning restore S107 // Methods should not have too many parameters
 {
@@ -285,7 +286,6 @@ public class EmployeeController(
             ViewBag.LengthOfServiceByCompanyDate = employeeService.CalculateLengthOfService(employee.CompanyDate, employee.MilitaryFromDate, employee.MilitaryToDate);
             ViewBag.EnableGroupDate = await commonDataService.IsEnableGroupDateAsync();
             ViewBag.Avatar = await GetAvatarUrl(employee.Code);
-            ViewBag.EmployeePayrollAllowances = await employeeService.GetEmployeePayrollAllowanceByEmpIdAsync(id);
             await ComposeViewBagsForEditEmployee();
             return View(employee);
         }
@@ -636,6 +636,7 @@ public class EmployeeController(
         ViewBag.Roles = roles;
         ViewBag.SubCompanies = subCompanies;
         ViewBag.SalaryStructures = await salaryStructureService.GetSalaryStructureAsync(CurrentCompanyId);
+        ViewBag.AllowanceItemSettings = await payrollSettingService.GetPayrollItemSettingsAsync(new Criteria.PayrollManagement.GetPayrollItemSettingsCriteria { CompanyId = CurrentCompanyId });
     }
 
     private string BuildRole(IList<Role> roles)

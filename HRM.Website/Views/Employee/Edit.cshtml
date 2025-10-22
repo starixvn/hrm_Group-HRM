@@ -14,7 +14,7 @@
     var allowanceItemSettings = (IEnumerable<PayrollSetting>)ViewBag.AllowanceItemSettings;
     var hasHostPermissionOnPayrollInfoOnly = (bool)ViewBag.HasHostPermissionOnPayrollInfoOnly;
     var hasHostPermissionOnPayrollInfoWithAmount = (bool)ViewBag.HasHostPermissionOnPayrollInfoWithAmount;
-    var allowanceItemSettingIds = Model.AllowanceItemSettingIdsArray;
+    var allowanceItemSettingIds = Model.GetAllowanceItemSettingIdsArray();
 }
 @section css {
     <link href="~/dist/vendors/chosen.css" rel="stylesheet" asp-append-version="true" />
@@ -560,7 +560,8 @@
                                             <div class="type-control select-form">
                                                 @if (allowanceSetting.IsMultiSelect)
                                                 {
-                                                    <select class="form-control allowance-select allowance-multiselect" 
+                                                    <select id="allowance-@allowanceSetting.PayrollItemSettingId"
+                                                            class="form-control allowance-select allowance-multiselect" 
                                                             data-setting-id="@allowanceSetting.PayrollItemSettingId"
                                                             multiple 
                                                             data-placeholder="-- Select @allowanceSetting.Type --">
@@ -580,7 +581,8 @@
                                                 }
                                                 else
                                                 {
-                                                    <select class="form-control allowance-select" 
+                                                    <select id="allowance-@allowanceSetting.PayrollItemSettingId"
+                                                            class="form-control allowance-select" 
                                                             data-setting-id="@allowanceSetting.PayrollItemSettingId">
                                                         <option value="">-- Select @allowanceSetting.Type --</option>
                                                         @foreach (var item in allowanceSetting.PayrollAllowanceItems)

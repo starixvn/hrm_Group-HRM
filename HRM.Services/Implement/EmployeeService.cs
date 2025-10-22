@@ -381,7 +381,8 @@ public class EmployeeService(
             SubCompanyId = param.SubCompanyId,
             SalaryStructureId = param.SalaryStructureId,
             SpecialSubsidy = param.SpecialSubsidy,
-            AutoApproveRequest = param.AutoApproveRequest
+            AutoApproveRequest = param.AutoApproveRequest,
+            AllowanceItemSettingIds = param.AllowanceItemSettingIds
         };
         return await baseService.ExecuteNonQueryAsync(criteria);
     }

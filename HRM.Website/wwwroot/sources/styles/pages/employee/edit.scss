@@ -122,6 +122,17 @@
 
     .type-control {
         flex: 1;
+        max-width: 300px;
+
+        .form-control {
+            font-size: 1.3rem;
+            height: 27px;
+            padding: 0 5px;
+        }
+
+        .chosen-choices {
+            border-radius: 4px;
+        }
     }
 
     .select-form {
@@ -139,11 +150,11 @@
 
     colgroup col {
         &:first-child {
-            width: 40%;
+            width: 20%;
         }
 
         &:nth-child(2) {
-            width: 60%;
+            width: 80%;
         }
     }
 }

@@ -166,6 +166,7 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IMinIOService, MinIOService>();
         services.AddSingleton<IUploadPayrollService, UploadPayrollService>();
         services.AddSingleton<IPayrollService, PayrollService>();
+        services.AddSingleton<IPayrollSettingService, PayrollSettingService>();
         services.AddSingleton<ISecondCompanyEmployeeService, SecondCompanyEmployeeService>();
         services.AddSingleton<IPayrollManagementService, SMSPayrollManagementService>();
         services.AddDIReportServices();
