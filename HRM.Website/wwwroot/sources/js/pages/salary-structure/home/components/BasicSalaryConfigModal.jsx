@@ -15,11 +15,9 @@ const BasicSalaryConfigModal = ({
     selectedConfigs = [],
     onConfigChange
 }) => {
-    const isOptionSelected = (value) => {
-        return selectedConfigs.includes(value);
-    };
+    const isOptionSelected = value => selectedConfigs.includes(value);
 
-    const toggleOption = (value) => {
+    const toggleOption = value => {
         const isSelected = isOptionSelected(value);
         
         if (isSelected) {
@@ -35,7 +33,7 @@ const BasicSalaryConfigModal = ({
 
     const isSubmitDisabled = selectedConfigs.length === 0;
 
-    const renderOption = (option) => (
+    const renderOption = option => (
         <div key={option.value} className="checkbox-option">
             <label>
                 <input

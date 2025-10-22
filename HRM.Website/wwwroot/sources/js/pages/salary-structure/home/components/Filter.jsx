@@ -22,7 +22,7 @@ const Filter = () => {
     const [showConfigModal, setShowConfigModal] = useState(false);
     const [selectedConfigs, setSelectedConfigs] = useState([]);
 
-    const parseConfigValue = (configValue) => {
+    const parseConfigValue = configValue => {
         if (Array.isArray(configValue)) {
             return configValue;
         }
@@ -37,9 +37,7 @@ const Filter = () => {
             .filter(item => item);
     };
 
-    const formatConfigForSubmit = (configs) => {
-        return Array.isArray(configs) ? configs.join(',') : '';
-    };
+    const formatConfigForSubmit = configs => Array.isArray(configs) ? configs.join(',') : '';
 
     const resetModal = () => {
         setShowConfigModal(false);
@@ -66,7 +64,7 @@ const Filter = () => {
         }
     };
 
-    const handleConfigSubmit = async (configs) => {
+    const handleConfigSubmit = async configs => {
         const configData = {
             BasicSalaryConfig: formatConfigForSubmit(configs)
         };
