@@ -215,7 +215,7 @@ public class CheckInOutRequestService(
                 request.RequestTypeName,
                 request.OnDate.ToDateMonthYearFormatedDate(),
                 request.ShiftName,
-                request.RequestTime.ToShortTime(),
+                request.RequestTime.ToClientTimeZone().ToShortTime(),
                 request.Remark);
 
             await emailService.SendEmailAsync(

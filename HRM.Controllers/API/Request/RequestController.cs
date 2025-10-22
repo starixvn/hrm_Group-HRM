@@ -20,11 +20,11 @@ public class RequestController(IRequestService requestService, ILogger logger, I
         userControlSession.Set(SessionKey.CurrentCompanyId, employee.CompanyId);
         var commandResult = request.Command switch
         {
-            RequestCommand.Accept or RequestCommand.Approve or RequestCommand.Process => await requestService
-                .ApproveRequest(employee.EmpId, request),
+            RequestCommand.Accept or RequestCommand.Approve or RequestCommand.Process
+                => await requestService.ApproveRequest(employee.EmpId, request),
             RequestCommand.Reset => await requestService.ResetRequest(employee.EmpId, request),
-            RequestCommand.NotAccept or RequestCommand.Reject or RequestCommand.Void => await requestService
-                .RejectRequest(employee.EmpId, request),
+            RequestCommand.NotAccept or RequestCommand.Reject or RequestCommand.Void
+                => await requestService.RejectRequest(employee.EmpId, request),
             _ => await requestService.VoidRequest(employee.EmpId, request)
         };
 
