@@ -223,6 +223,7 @@ module.exports = {
         [`${jsDistPath}/salary-structure.home`]: `${jsSourcePath}/salary-structure/home/index.jsx`,
         [`${jsDistPath}/salary-structure.create`]: `${jsSourcePath}/salary-structure/create/index.jsx`,
         [`${jsDistPath}/salary-structure.edit`]: `${jsSourcePath}/salary-structure/edit/index.jsx`,
+        [`${jsDistPath}/payroll-setting.home`]: `${jsSourcePath}/payroll-setting/home/index.jsx`,
         [`${jsDistPath}/company.home`]: `${jsSourcePath}/company/home/index.jsx`,
         [`${jsDistPath}/company.edit`]: `${jsSourcePath}/company/edit/index.jsx`,
         [`${jsDistPath}/transfer.create`]: `${jsSourcePath}/transfer/create/index.jsx`,

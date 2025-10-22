@@ -1,16 +1,20 @@
 ﻿@using HRM.Models.PayrollManagement
 @using HRM.Resources
 @using HRM.Website.Helper
-@model IEnumerable<PayrollSetting>
+@model bool
 @{
     ViewData["Title"] = "Payroll Settings";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 @section css {
-    <link href="~/dist/styles/payroll.management.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/dist/styles/salary-structure.index.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/dist/styles/employee.workfromhome.css" rel="stylesheet" asp-append-version="true" />
 }
 @section js {
-    <script src="~/dist/js/payroll.management.js" asp-append-version="true"></script>
+    <script type="text/javascript">
+        window.hasPermission = "@Model";
+    </script>
+    <script src="~/dist/js/payroll-setting.home.js" asp-append-version="true"></script>
 }
 @section Breadcrumb {
     <a class="step">@Labels.HRSpace</a><span class="step">@ViewData["Title"]</span>
@@ -21,50 +25,4 @@
     <a>Allowances</a>
     <a>Others</a>
 </div>
-<table class="table table-custom" id="data">
-    <thead>
-        <tr>
-            <th>#</th>
-            <th>@Labels.Type</th>
-            <th>@Labels.Items</th>
-            <th>@Labels.AmountPercent</th>
-        </tr>
-    </thead>
-    <tbody>
-        @if (Model.Any())
-        {
-            var index = 0;
-            foreach (var item in Model)
-            {
-                index++;
-                <tr id="row@(index)">
-                    <td>
-                        @index
-                    </td>
-                    <td>
-                        @item.Type
-                    </td>
-                    @foreach (var allowance in item.PayrollAllowanceItems)
-                    {
-                        <td>@allowance.ItemName</td>
-                        <td class="text-end">
-                                @if (allowance.IsPercent)
-                                {
-                                    @($"{allowance.Amount:0.#}%")
-                                }
-                                else
-                                {
-                                    @allowance.Amount
-                                }
-                        </td>
-                    }
-                </tr>
-            }
-
-        }
-        else
-        {
-            @Html.Raw(RazorHelpers.DisplayNoInformation(colspan: 13))
-        }
-    </tbody>
-</table>
+<div id="payroll-setting"></div>

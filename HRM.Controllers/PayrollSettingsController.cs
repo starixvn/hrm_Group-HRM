@@ -3,6 +3,7 @@ using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
 using HRM.Core.Constants;
 using HRM.Core.Filters;
+using HRM.Core.Services;
 using HRM.Criteria.PayrollManagement;
 using HRM.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -11,10 +12,19 @@ namespace HRM.Controllers;
 
 public class PayrollSettingsController(
     IUserControlSession session,
-    IPayrollSettingService payrollSettingService) : BaseController(session)
+    IPayrollSettingRepository repository,
+    IBaseService baseService) : BaseController(session)
 {
     [HrmPermission(Policy.Read, FunctionKey.PayrollManagement)]
     public async Task<IActionResult> Index()
+    {
+        var hasPermission = session.HasPermissionOnFunction(FunctionKey.SalaryStructureConfiguration, Policy.Host);
+        return View(hasPermission);
+    }
+
+    //[HrmPermission(Policy.Read, FunctionKey.PayrollManagement)]
+    [HttpGet]
+    public async Task<IActionResult> GetPayrollSettings()
     {
         var criteria = new GetPayrollItemSettingsCriteria
         {
@@ -23,6 +33,19 @@ public class PayrollSettingsController(
 
         var result = await payrollSettingService.GetPayrollItemSettingsAsync(criteria);
 
-        return View(result);
+        return Ok(result);
+    }
+
+    [HttpDelete]
+    public async Task<IActionResult> Delete([FromRoute] int id)
+    {
+        var criteria = new DeleteAllowanceItemCriteria
+        {
+            AllowanceItemSettingId = id
+        };
+
+        var result = await baseService.ExecuteNonQueryAsync(criteria);
+
+        return Ok(result);
     }
 }
