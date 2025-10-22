@@ -1,4 +1,6 @@
-﻿namespace HRM.Services.Implement.ActionLog;
+﻿using HRM.Criteria.Employee;
+
+namespace HRM.Services.Implement.ActionLog;
 
 using System;
 using System.Collections.Generic;
