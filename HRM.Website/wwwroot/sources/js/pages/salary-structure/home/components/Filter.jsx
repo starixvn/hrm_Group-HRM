@@ -4,65 +4,95 @@ import toastr from 'toastr';
 import { resolveClientUrl, axiosError, toastOptions } from '../../../../shared/common.functions';
 import BasicSalaryConfigModal from './BasicSalaryConfigModal';
 
+const API_ENDPOINTS = {
+    GET_CONFIG: 'SalaryStructure/GetBasicSalaryConfig',
+    UPDATE_CONFIG: 'SalaryStructure/EditBasicSalaryConfig',
+    CREATE: 'salarystructure/create'
+};
+
+const HTTP_HEADERS = {
+    XML_REQUEST: { "X-Requested-With": "XMLHttpRequest" },
+    JSON_REQUEST: {
+        "X-Requested-With": "XMLHttpRequest",
+        "Content-Type": "application/json"
+    }
+};
+
 const Filter = () => {
     const [showConfigModal, setShowConfigModal] = useState(false);
-    const [selectedConfig, setSelectedConfig] = useState('');
+    const [selectedConfigs, setSelectedConfigs] = useState([]);
+
+    const parseConfigValue = (configValue) => {
+        if (Array.isArray(configValue)) {
+            return configValue;
+        }
+        
+        if (!configValue) {
+            return [];
+        }
+        
+        return String(configValue)
+            .split(',')
+            .map(item => item.trim())
+            .filter(item => item);
+    };
+
+    const formatConfigForSubmit = (configs) => {
+        return Array.isArray(configs) ? configs.join(',') : '';
+    };
+
+    const resetModal = () => {
+        setShowConfigModal(false);
+        setSelectedConfigs([]);
+    };
 
     const handleCreate = () => {
-        window.location.href = resolveClientUrl('salarystructure/create');
+        window.location.href = resolveClientUrl(API_ENDPOINTS.CREATE);
     };
 
-    const handleConfig = () => {
-        axios
-            .get(resolveClientUrl("SalaryStructure/GetBasicSalaryConfig"), {
-                headers: { "X-Requested-With": "XMLHttpRequest" },
-            })
-            .then(response => {
-                const configValue = response.data ? String(response.data) : null;
-                setSelectedConfig(configValue || '');
-            })
-            .catch(axiosError)
-            .finally(() => {
-                setShowConfigModal(true);
-            });
+    const handleConfig = async () => {
+        try {
+            const response = await axios.get(
+                resolveClientUrl(API_ENDPOINTS.GET_CONFIG),
+                { headers: HTTP_HEADERS.XML_REQUEST }
+            );
+            
+            const parsedConfigs = parseConfigValue(response.data);
+            setSelectedConfigs(parsedConfigs);
+        } catch (error) {
+            axiosError(error);
+        } finally {
+            setShowConfigModal(true);
+        }
     };
 
-    const handleConfigSubmit = config => {
-        const configValue = config ? String(config) : null;
-
+    const handleConfigSubmit = async (configs) => {
         const configData = {
-            BasicSalaryConfig: configValue
+            BasicSalaryConfig: formatConfigForSubmit(configs)
         };
 
-        axios
-            .post(resolveClientUrl("SalaryStructure/EditBasicSalaryConfig"), configData, {
-                headers: {
-                    "X-Requested-With": "XMLHttpRequest",
-                    "Content-Type": "application/json"
-                },
-            })
-            .then(response => {
-                const { data } = response;
-                if (data.isSuccessful) {
-                    toastr.success("Updated successfully!", '', toastOptions());
-                } else {
-                    toastr.error(data.message);
-                }
-            })
-            .catch(axiosError);
+        try {
+            const response = await axios.post(
+                resolveClientUrl(API_ENDPOINTS.UPDATE_CONFIG),
+                configData,
+                { headers: HTTP_HEADERS.JSON_REQUEST }
+            );
 
-        setShowConfigModal(false);
-        setSelectedConfig('');
+            const { data } = response;
+            if (data.isSuccessful) {
+                toastr.success("Updated successfully!", '', toastOptions());
+            } else {
+                toastr.error(data.message);
+            }
+        } catch (error) {
+            axiosError(error);
+        } finally {
+            resetModal();
+        }
     };
 
-    const handleConfigClose = () => {
-        setShowConfigModal(false);
-        setSelectedConfig('');
-    };
-
-    const handleConfigChange = value => {
-        setSelectedConfig(value);
-    };
+    const handleConfigClose = resetModal;
+    const handleConfigChange = setSelectedConfigs;
 
     return (
         <div className="filter">
@@ -93,7 +123,7 @@ const Filter = () => {
                 show={showConfigModal}
                 onClose={handleConfigClose}
                 onSubmit={handleConfigSubmit}
-                selectedConfig={selectedConfig}
+                selectedConfigs={selectedConfigs}
                 onConfigChange={handleConfigChange}
             />
         </div>

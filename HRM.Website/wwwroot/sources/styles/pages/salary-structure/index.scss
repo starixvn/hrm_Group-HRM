@@ -95,35 +95,36 @@
         display: block;
     }
 
-    .radio-option {
+    .checkbox-option {
         margin-bottom: 8px;
 
         label {
-            display: flex;
+            display: inline-flex;
             align-items: center;
             cursor: pointer;
             font-weight: normal;
             margin: 0;
             padding: 8px 0;
-            width: 100%;
+            width: auto;
 
-            input[type="radio"] {
+            input[type="checkbox"] {
                 margin-right: 10px;
                 transform: scale(1.1);
                 accent-color: #007bff;
                 margin-top: 0;
+                cursor: pointer;
             }
 
-            .radio-label {
+            .checkbox-label {
                 user-select: none;
                 font-size: 14px;
                 color: #333;
-                flex: 1;
                 line-height: 1.4;
+                cursor: pointer;
             }
 
             &:has(input:checked) {
-                .radio-label {
+                .checkbox-label {
                     color: #007bff;
                     font-weight: 500;
                 }

@@ -3,35 +3,48 @@ import { Modal, ModalBody, ModalFooter, ModalHeader } from 'react-bootstrap';
 
 const CONFIG_OPTIONS = [
     { value: "1", label: 'Basic Salary' },
-    { value: "2", label: 'Basic Salary + Job Level Add-On' }
+    { value: "2", label: 'Job Level Add-On' },
+    { value: "3", label: 'Special Subsidy' },
+    { value: "4", label: 'Management Allowance' }
 ];
 
-const BasicSalaryConfigModal = ({ 
-    show, 
-    onClose, 
-    onSubmit, 
-    selectedConfig, 
-    onConfigChange 
+const BasicSalaryConfigModal = ({
+    show,
+    onClose,
+    onSubmit,
+    selectedConfigs = [],
+    onConfigChange
 }) => {
+    const isOptionSelected = (value) => {
+        return selectedConfigs.includes(value);
+    };
+
+    const toggleOption = (value) => {
+        const isSelected = isOptionSelected(value);
+        
+        if (isSelected) {
+            onConfigChange(selectedConfigs.filter(config => config !== value));
+        } else {
+            onConfigChange([...selectedConfigs, value]);
+        }
+    };
+
     const handleSubmit = () => {
-        onSubmit(selectedConfig || null);
+        onSubmit(selectedConfigs);
     };
 
-    const handleRadioChange = value => {
-        onConfigChange(value);
-    };
+    const isSubmitDisabled = selectedConfigs.length === 0;
 
-    const renderRadioOption = option => (
-        <div key={option.value} className="radio-option">
+    const renderOption = (option) => (
+        <div key={option.value} className="checkbox-option">
             <label>
                 <input
-                    type="radio"
-                    name="config"
+                    type="checkbox"
                     value={option.value}
-                    checked={selectedConfig === option.value}
-                    onChange={() => handleRadioChange(option.value)}
+                    checked={isOptionSelected(option.value)}
+                    onChange={() => toggleOption(option.value)}
                 />
-                <span className="radio-label">{option.label}</span>
+                <span className="checkbox-label">{option.label}</span>
             </label>
         </div>
     );
@@ -45,23 +58,23 @@ const BasicSalaryConfigModal = ({
             <ModalHeader closeButton>
                 <Modal.Title>Basic Salary Configuration</Modal.Title>
             </ModalHeader>
-            
+
             <ModalBody>
                 <div className="form-group">
-                    {CONFIG_OPTIONS.map(renderRadioOption)}
+                    {CONFIG_OPTIONS.map(renderOption)}
                 </div>
             </ModalBody>
-            
+
             <ModalFooter>
                 <button
                     className="btn btn-primary"
                     onClick={handleSubmit}
-                    disabled={!selectedConfig}
+                    disabled={isSubmitDisabled}
                 >
                     Submit
                 </button>
-                <button 
-                    className="btn btn-default" 
+                <button
+                    className="btn btn-default"
                     onClick={onClose}
                 >
                     Cancel
