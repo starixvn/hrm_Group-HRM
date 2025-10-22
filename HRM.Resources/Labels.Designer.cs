@@ -6260,16 +6260,5 @@ namespace HRM.Resources {
                 return ResourceManager.GetString("Yesterday", resourceCulture);
             }
         }
-
-        /// <summary>
-        ///   Looks up a localized string similar to EmployeeTransfer.
-        /// </summary>
-        public static string EmployeeTransfer
-        {
-            get
-            {
-                return ResourceManager.GetString("EmployeeTransfer", resourceCulture);
-            }
-        }
     }
 }
