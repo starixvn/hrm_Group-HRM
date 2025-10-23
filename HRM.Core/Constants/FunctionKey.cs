@@ -82,6 +82,7 @@ public static class FunctionKey
     public const string Memo = "Memo";
     public const string ShiftStatisticReport = "ShiftStatisticReport";
     public const string PayrollManagement = "PayrollManagement";
+    public const string PayrollSetting = "PayrollSetting";
 
     //Group Space
     public const string UnitManagement = "UnitManagement";

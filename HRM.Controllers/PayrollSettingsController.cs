@@ -18,15 +18,15 @@ public class PayrollSettingsController(
     IBaseService baseService,
     IPayrollSettingService payrollSettingService) : BaseController(session)
 {
-    [HrmPermission(Policy.Read, FunctionKey.PayrollManagement)]
+    [HrmPermission(Policy.Read, FunctionKey.PayrollSetting)]
     public async Task<IActionResult> Index()
     {
-        var hasPermission = session.HasPermissionOnFunction(FunctionKey.SalaryStructureConfiguration, Policy.Host);
+        var hasPermission = session.HasPermissionOnFunction(FunctionKey.PayrollSetting, Policy.Host);
         return View(hasPermission);
     }
 
-    //[HrmPermission(Policy.Read, FunctionKey.PayrollManagement)]
     [HttpGet]
+    [HrmPermission(Policy.Read, FunctionKey.PayrollSetting)]
     public async Task<IActionResult> GetPayrollSettings()
     {
         var criteria = new GetPayrollItemSettingsCriteria
@@ -40,6 +40,7 @@ public class PayrollSettingsController(
     }
 
     [HttpPost]
+    [HrmPermission(Policy.Host, FunctionKey.PayrollSetting)]
     public async Task<IActionResult> Create([FromBody] PayrollAllowanceCreateRequest request)
     {
         var criteria = new CreateAllowanceItemCriteria
@@ -59,6 +60,7 @@ public class PayrollSettingsController(
     }
 
     [HttpPut]
+    [HrmPermission(Policy.Host, FunctionKey.PayrollSetting)]
     public async Task<IActionResult> Edit([FromBody] PayrollAllowanceEditRequest request)
     {
         var criteria = new EditAllowanceItemCriteria
@@ -78,6 +80,7 @@ public class PayrollSettingsController(
     }
 
     [HttpDelete]
+    [HrmPermission(Policy.Host, FunctionKey.PayrollSetting)]
     public async Task<IActionResult> Delete([FromRoute] int id)
     {
         var criteria = new DeleteAllowanceItemCriteria
