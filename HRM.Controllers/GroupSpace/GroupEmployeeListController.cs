@@ -42,7 +42,6 @@ public class GroupEmployeeListController(
     IBaseService baseService,
     IEmployeeService employeeService,
     ISecondCompanyEmployeeService secondCompanyEmployeeService,
-    IPayrollManagementService payrollManagementService,
     IUserService userService,
     ICommonDataService commonDataService,
     IJobLevelService jobLevelService,
