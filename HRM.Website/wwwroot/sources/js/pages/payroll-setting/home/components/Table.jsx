@@ -1,7 +1,7 @@
 ﻿import React, { useState } from 'react';
 import Row from './Row';
 
-const Table = ({ data, onDelete }) => {
+const Table = ({ data, saveEditData, onDelete }) => {
     const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
     const colSpan = window.hasPermission === 'True' ? 7 : 5;
 
@@ -10,6 +10,7 @@ const Table = ({ data, onDelete }) => {
         { label: 'Type', key: 'type', sortable: true },
         { label: 'Items', key: 'items', sortable: false },
         { label: 'Amount/Percent', key: 'amountPercent', sortable: false },
+        { label: 'IsActive', key: 'isActive', sortable: false },
     ];
 
     if (window.hasPermission === 'True') {
@@ -117,6 +118,7 @@ const Table = ({ data, onDelete }) => {
                             key={item.payrollItemSettingId}
                             rowIndex={index + 1}
                             item={item}
+                            saveEditData={saveEditData}
                             onDelete={onDelete}
                         />
                     ))

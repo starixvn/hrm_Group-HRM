@@ -1,17 +1,23 @@
+using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
+using Fanex.Data;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
 using HRM.Core.Constants;
 using HRM.Core.Filters;
 using HRM.Core.Services;
 using HRM.Criteria.PayrollManagement;
+using HRM.Models.PayrollManagement;
+using HRM.Repositories.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HRM.Controllers;
 
 public class PayrollSettingsController(
     IUserControlSession session,
-    IBaseService baseService) : BaseController(session)
+    IBaseService baseService,
+    IPayrollSettingService payrollSettingService) : BaseController(session)
 {
     [HrmPermission(Policy.Read, FunctionKey.PayrollManagement)]
     public async Task<IActionResult> Index()
@@ -21,15 +27,53 @@ public class PayrollSettingsController(
     }
 
     //[HrmPermission(Policy.Read, FunctionKey.PayrollManagement)]
-    //[HttpGet]
-    //public async Task<IActionResult> GetPayrollSettings()
-    //{
-    //    var criteria = new GetPayrollItemSettingsCriteria
-    //    {
-    //        CompanyId = CurrentCompanyId
-    //    };
+    [HttpGet]
+    public async Task<IActionResult> GetPayrollSettings()
+    {
+        var criteria = new GetPayrollItemSettingsCriteria
+        {
+            CompanyId = CurrentCompanyId
+        };
+            
+        var result = await payrollSettingService.GetPayrollItemSettings(criteria);
 
-    //    var result = await payrollSettingService.GetPayrollItemSettingsAsync(criteria);
+        return Ok(result);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Create([FromBody] PayrollAllowanceCreateRequest request)
+    {
+        var criteria = new CreateAllowanceItemCriteria
+        {
+            PayrollItemSettingId = request.PayrollItemSettingId,
+            Amount = request.Amount,
+            IsActive = request.IsActive,
+            IsPercent = request.IsPercent,
+            ItemName = request.ItemName,
+            ModifiedBy = EmployeeSession.EmpId
+        };
+        criteria.Amount = Cryptography.EncryptPassword(request.Amount.ToString(CultureInfo.InvariantCulture));
+
+        var result = await baseService.ExecuteNonQueryAsync(criteria);
+
+        return Ok(result);
+    }
+
+    [HttpPut]
+    public async Task<IActionResult> Edit([FromBody] PayrollAllowanceEditRequest request)
+    {
+        var criteria = new EditAllowanceItemCriteria
+        {
+            AllowanceItemSettingId = request.AllowanceItemSettingId,
+            Amount = request.Amount,
+            IsActive = request.IsActive,
+            IsPercent = request.IsPercent,
+            ItemName = request.ItemName,
+            ModifiedBy = EmployeeSession.EmpId
+        };
+        criteria.Amount = Cryptography.EncryptPassword(request.Amount.ToString(CultureInfo.InvariantCulture));
+
+        var result = await baseService.ExecuteNonQueryAsync(criteria);
 
     //    return Ok(result);
     //}

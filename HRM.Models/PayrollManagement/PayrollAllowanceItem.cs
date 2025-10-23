@@ -26,5 +26,7 @@ public class PayrollAllowanceItem
     public string Amount { get; set; }
 
     public bool IsPercent { get; set; }
+
+    public bool IsActive { get; set; }
 }
 

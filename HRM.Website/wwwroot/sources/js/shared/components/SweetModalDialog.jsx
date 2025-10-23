@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Modal, Button } from 'react-bootstrap';
 import Draggable from 'react-draggable';
 
-const SweetModalDialog = ({ show, contents, onSubmit, onHide, title = "HRM" }) => {
+const SweetModalDialog = ({ show, contents, onSubmit, onHide, title = "HRM", submitText = "OK" }) => {
     return (
         <Draggable handle=".modal-header" >
             <Modal keyboard={false} backdrop="static" show={show} onHide={onHide}>
@@ -12,7 +12,7 @@ const SweetModalDialog = ({ show, contents, onSubmit, onHide, title = "HRM" }) =
                 </Modal.Header>
                 <Modal.Body>{contents}</Modal.Body>
                 <Modal.Footer>
-                    <Button bsStyle="primary" onClick={onSubmit}> OK </Button>
+                    <Button bsStyle="primary" onClick={onSubmit}> {submitText} </Button>
                     <Button className="btn-cancel" onClick={onHide}> Cancel </Button>
                 </Modal.Footer>
             </Modal>

@@ -1,14 +1,31 @@
 ﻿import React, { Fragment, useState } from "react";
 
-import { resolveClientUrl } from "../../../../shared/common.functions";
 import SweetModalDialog from "../../../../shared/components/SweetModalDialog";
-import { Formik, Form, Field } from "formik";
+import AddEditAllowanceItemContent from "./AddEditAllowanceItemContent";
 
-const Row = ({ rowIndex, item, onDelete }) => {
+const Row = ({ rowIndex, item, saveEditData, onDelete }) => {
   const [editModalDialog, setEditModalDialog] = useState(false);
-  const handleEdit = () => {
+  const [editData, setEditData] = useState({
+    payrollItemSettingId: "",
+    allowanceItemSettingId: "",
+    type: "",
+    itemName: "",
+    amount: "",
+    isPercent: false,
+    isActive: true,
+  });
+
+  const handleEdit = (item, allowance) => {
+    setEditData({
+      payrollItemSettingId: item.payrollItemSettingId,
+      allowanceItemSettingId: allowance.allowanceItemSettingId,
+      type: item.type,
+      itemName: allowance.itemName,
+      amount: allowance.amount,
+      isPercent: allowance.isPercent,
+      isActive: allowance.isActive,
+    });
     setEditModalDialog(true);
-    // window.location = resolveClientUrl(`salarystructure/edit/${item.salaryStructureId}`);
   };
 
   const handleDelete = (allowance) => onDelete(allowance);
@@ -42,6 +59,13 @@ const Row = ({ rowIndex, item, onDelete }) => {
       });
   };
 
+  const editAllowanceItem = async () => {
+    const result = await saveEditData(editData);
+    if (result) {
+      setEditModalDialog(false);
+    }
+  };
+
   const getRows = () => {
     if (item.payrollAllowanceItems.length === 0) {
       return (
@@ -55,6 +79,7 @@ const Row = ({ rowIndex, item, onDelete }) => {
         >
           <td>{rowIndex}</td>
           <td className="text-left">{item.type}</td>
+          <td></td>
           <td></td>
           <td></td>
           {window.hasPermission === "True" && (
@@ -92,12 +117,13 @@ const Row = ({ rowIndex, item, onDelete }) => {
             </Fragment>
           )}
           <td>{allowance.itemName}</td>
-          <td className="text-right">{allowance.amount}</td>
+          <td className="text-right">{allowance.isPercent ? allowance.amount + "%" : formatSalary(allowance.amount)}</td>
+          <td>{allowance.isActive ? 'Yes' : 'No'}</td>
           {window.hasPermission === "True" && (
             <Fragment>
               <td>
                 <a
-                  onClick={handleEdit}
+                  onClick={() => handleEdit(item, allowance)}
                   className="fa fa-pencil fa-lg icon-edit"
                 />
               </td>
@@ -116,67 +142,17 @@ const Row = ({ rowIndex, item, onDelete }) => {
     return rows;
   };
 
-  const editContent = () => {
-    return (
-      <div style={{display: 'flex', flexDirection: 'column', gap: '10px'}}>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            gap: "10px",
-          }}
-        >
-          Type:
-          <div style={{ flex: 1 }}>
-            <input
-              type="text"
-              disabled
-              value="Bui Van A"
-              className="form-control"
-            />
-          </div>
-        </div>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            gap: "10px",
-          }}
-        >
-          Item Name:
-          <div style={{ flex: 1 }}>
-            <input type="text" value="Bui Van A" className="form-control" />
-          </div>
-        </div>
-      </div>
-      // <div className='form-horizontal'>
-      //     <div className='form-group'>
-      //         <div className='label-form'>
-      //             <div className='control-label'>
-      //                 Employee
-      //                 <span className='require'>*</span>
-      //             </div>
-      //         </div>
-      //         {/* <div className='select-form'>
-      //             <input type='text' name='itemName' className='form-control' value={""} />
-      //         </div> */}
-      //     </div>
-      // </div>
-    );
-  };
-
   return (
     <>
       {getRows()}
 
       <SweetModalDialog
         show={editModalDialog}
-        contents={editContent()}
-        onSubmit={() => {}}
+        contents={<AddEditAllowanceItemContent editData={editData} setEditData={setEditData} />}
+        onSubmit={editAllowanceItem}
         onHide={() => setEditModalDialog(false)}
         title="Edit Allowance Item"
+        submitText="Save"
       />
     </>
   );

@@ -15,6 +15,7 @@ import {
 const AppContainer = () => {
     const [payrollSettings, setPayrollSettings] = useState([]);
     const [deleteModalDialog, setDeleteModalDialog] = useState({ show: false });
+    const [types, setTypes] = useState([]);
 
     const getPayrollSettings = () => {
         axios
@@ -23,6 +24,8 @@ const AppContainer = () => {
             })
             .then(response => {
                 setPayrollSettings(response.data);
+                var types = response.data.map(item => ({ id: item.payrollItemSettingId, name: item.type }));
+                setTypes(types);
             })
             .catch(axiosError);
     };
@@ -63,13 +66,57 @@ const AppContainer = () => {
         setDeleteModalDialog({ show: false });
     };
 
+    const checkValidation = (isEdit, data) => {
+        if (data.itemName === "") {
+            toastr.error("Item name is required", '', toastOptions());
+            return false;
+        }
+        if (data.amount === "") {
+            toastr.error("Amount is required", '', toastOptions());
+            return false;
+        }
+        if (!isEdit && data.payrollItemSettingId === null) {
+            toastr.error("Type is required", '', toastOptions());
+            return false;
+        }
+        return true;
+    };
+
+    const saveEditData = async (data) => {
+        const isEdit = data.allowanceItemSettingId !== null;
+        const isValid = checkValidation(isEdit, data);
+        if (!isValid) {
+            return false;
+        }
+        try {
+            const response = await axios({
+                url: resolveClientUrl(`PayrollSettings/${isEdit ? 'Edit' : 'Create'}`),
+                method: isEdit ? 'PUT' : 'POST',
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                data
+            });
+    
+            const { data: result } = response;
+            if (result.isSuccessful) {
+                toastr.success("Saved successfully!", '', toastOptions());
+                getPayrollSettings();
+                return true;
+            } else {
+                toastr.error(result.message, '', toastOptions());
+                return false;
+            }
+        } catch (error) {
+            toastr.error("Error saving data", '', toastOptions());
+            return false;
+        }
+    };
 
     return (
         <Fragment>
             {window.hasPermission === 'True' && (
-                <Filter/>
+                <Filter saveEditData={saveEditData} types={types} />
             )}
-            <Table data={payrollSettings} onDelete={handleDelete} />
+            <Table data={payrollSettings} saveEditData={saveEditData} onDelete={handleDelete} />
             {deleteModalDialog.show && (
                 <SweetModalDialog
                     show={deleteModalDialog.show}
@@ -82,6 +129,7 @@ const AppContainer = () => {
                     }
                     onSubmit={handleConfirmDelete}
                     onHide={handleCancel}
+                    title="Notify"
                 />
             )}
         </Fragment>

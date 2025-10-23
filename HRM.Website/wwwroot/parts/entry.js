@@ -94,6 +94,7 @@ module.exports = {
         [`${styleDistPath}/headcount-report.index`]: `${styleSourcePath}/pages/headcount-report/index.scss`,
         [`${styleDistPath}/salary-structure.index`]: `${styleSourcePath}/pages/salary-structure/index.scss`,
         [`${styleDistPath}/salary-structure.create`]: `${styleSourcePath}/pages/salary-structure/create.scss`,
+        [`${styleDistPath}/payroll-setting.index`]: `${styleSourcePath}/pages/payroll-setting/payroll.setting.scss`,
         [`${styleDistPath}/company.index`]: `${styleSourcePath}/pages/company/index.scss`,
         [`${styleDistPath}/company.edit`]: `${styleSourcePath}/pages/company/edit.scss`,
         [`${styleDistPath}/transfer.create`]: `${styleSourcePath}/pages/transfer/create.scss`,
