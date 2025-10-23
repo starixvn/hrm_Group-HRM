@@ -24,7 +24,7 @@ const AppContainer = () => {
             })
             .then(response => {
                 setPayrollSettings(response.data);
-                var types = response.data.map(item => ({ id: item.payrollItemSettingId, name: item.type }));
+                const types = response.data.map(item => ({ id: item.payrollItemSettingId, name: item.type }));
                 setTypes(types);
             })
             .catch(axiosError);
@@ -82,7 +82,7 @@ const AppContainer = () => {
         return true;
     };
 
-    const saveEditData = async (data) => {
+    const saveEditData = async data => {
         const isEdit = data.allowanceItemSettingId !== null;
         const isValid = checkValidation(isEdit, data);
         if (!isValid) {

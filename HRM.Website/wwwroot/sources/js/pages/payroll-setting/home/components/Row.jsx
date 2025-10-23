@@ -28,9 +28,9 @@ const Row = ({ rowIndex, item, saveEditData, onDelete }) => {
     setEditModalDialog(true);
   };
 
-  const handleDelete = (allowance) => onDelete(allowance);
+  const handleDelete = allowance => onDelete(allowance);
 
-  const formatSalary = (value) => {
+  const formatSalary = value => {
     if (value === null || value === undefined || value === "") {
       return "";
     }
@@ -46,7 +46,7 @@ const Row = ({ rowIndex, item, saveEditData, onDelete }) => {
   const handleMouseEnter = () => {
     document
       .querySelectorAll(`.row-group-${item.payrollItemSettingId}`)
-      .forEach((tr) => {
+      .forEach(tr => {
         tr.classList.add("hovered-row");
       });
   };
@@ -54,7 +54,7 @@ const Row = ({ rowIndex, item, saveEditData, onDelete }) => {
   const handleMouseLeave = () => {
     document
       .querySelectorAll(`.row-group-${item.payrollItemSettingId}`)
-      .forEach((tr) => {
+      .forEach(tr => {
         tr.classList.remove("hovered-row");
       });
   };

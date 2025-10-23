@@ -1,11 +1,9 @@
 import React from "react";
 
 const AddEditAllowanceItemContent = ({ editData, setEditData, types }) => {
-  if (editData.allowanceItemSettingId !== null) {
-    if (types == null) {
-      types = [];
-      types.push({ id: editData.payrollItemSettingId, name: editData.type });
-    }
+  if (editData.allowanceItemSettingId !== null && types == null) {
+    types = [];
+    types.push({ id: editData.payrollItemSettingId, name: editData.type });
   }
   return (
     <div className="add-edit-allowance-item-content">
@@ -15,7 +13,7 @@ const AddEditAllowanceItemContent = ({ editData, setEditData, types }) => {
           <select
             className="form-control"
             value={editData.payrollItemSettingId}
-            onChange={(e) =>
+            onChange={e =>
               setEditData({ ...editData, payrollItemSettingId: e.target.value })
             }
             disabled={editData.allowanceItemSettingId !== null}
@@ -31,7 +29,7 @@ const AddEditAllowanceItemContent = ({ editData, setEditData, types }) => {
             }}
           >
             {types &&
-              types.map((item) => (
+              types.map(item => (
                 <option key={item.id} value={item.id}>
                   {item.name}
                 </option>
@@ -49,7 +47,7 @@ const AddEditAllowanceItemContent = ({ editData, setEditData, types }) => {
             type="text"
             value={editData.itemName}
             className="form-control"
-            onChange={(e) =>
+            onChange={e =>
               setEditData({ ...editData, itemName: e.target.value })
             }
           />
@@ -61,7 +59,7 @@ const AddEditAllowanceItemContent = ({ editData, setEditData, types }) => {
           <input
             type="checkbox"
             checked={editData.isPercent}
-            onChange={(e) =>
+            onChange={e =>
               setEditData({ ...editData, isPercent: e.target.checked })
             }
           />
@@ -78,7 +76,7 @@ const AddEditAllowanceItemContent = ({ editData, setEditData, types }) => {
             value={editData.amount}
             min="0"
             className="form-control no-spinner"
-            onChange={(e) =>
+            onChange={e =>
               setEditData({ ...editData, amount: e.target.value })
             }
             style={{ paddingRight: "25px" }}
@@ -104,7 +102,7 @@ const AddEditAllowanceItemContent = ({ editData, setEditData, types }) => {
           <input
             type="checkbox"
             checked={editData.isActive}
-            onChange={(e) =>
+            onChange={e =>
               setEditData({ ...editData, isActive: e.target.checked })
             }
           />
