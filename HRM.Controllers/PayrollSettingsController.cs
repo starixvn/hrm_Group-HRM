@@ -1,5 +1,4 @@
 using System.Globalization;
-using System.Linq;
 using System.Threading.Tasks;
 using Fanex.Data;
 using GO.UserControl.Client.Core.Enumerables;
@@ -9,7 +8,7 @@ using HRM.Core.Filters;
 using HRM.Core.Services;
 using HRM.Criteria.PayrollManagement;
 using HRM.Models.PayrollManagement;
-using HRM.Repositories.Interfaces;
+using HRM.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HRM.Controllers;
@@ -75,8 +74,8 @@ public class PayrollSettingsController(
 
         var result = await baseService.ExecuteNonQueryAsync(criteria);
 
-    //    return Ok(result);
-    //}
+        return Ok(result);
+    }
 
     [HttpDelete]
     public async Task<IActionResult> Delete([FromRoute] int id)
