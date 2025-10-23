@@ -169,6 +169,7 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IPayrollSettingService, PayrollSettingService>();
         services.AddSingleton<ISecondCompanyEmployeeService, SecondCompanyEmployeeService>();
         services.AddSingleton<IPayrollManagementService, SMSPayrollManagementService>();
+        services.AddScoped<ILocalPayrollService, LocalPayrollService>();
         services.AddDIReportServices();
         services.AddDIExcelServices();
         services.AddSyncFnBService();

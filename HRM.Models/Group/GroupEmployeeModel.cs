@@ -74,11 +74,9 @@ public class GroupEmployeeModel
 
     public string Location { get; set; }
 
-    public string Salary { get; set; }
-
     public string Currency { get; set; }
 
-    public decimal? BasicSalary { get; set; }
+    public decimal? Salary { get; set; }
 
     public string CountryName { get; set; }
 

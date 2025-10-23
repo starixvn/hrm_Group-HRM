@@ -312,7 +312,7 @@ public class ExportExcelEmployeeInfoService(
             worksheet.Cells[rowIndex, colIndex++].Value = employee.JobLevel;
             worksheet.Cells[rowIndex, colIndex++].Value = employee.ManagementLevel;
             worksheet.Cells[rowIndex, colIndex++].Value = FormatDate(employee.JoinedDate);
-            worksheet.Cells[rowIndex, colIndex++].Value = employee.Salary != null ? payrollManagementService.DecryptSalary(employee.Salary) : "";
+            worksheet.Cells[rowIndex, colIndex++].Value = employee.Salary != null ? employee.Salary : "";
             worksheet.Cells[rowIndex, colIndex++].Value = employee.Currency;
             worksheet.Cells[rowIndex, colIndex++].Value = employee.Company;
             worksheet.Cells[rowIndex, colIndex++].Value = employee.SubCompany;

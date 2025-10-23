@@ -130,7 +130,7 @@
     <tbody>
         @if (Model != null && Model.Any())
         {
-            var index = (pagerOption.CurrentPage - 1) * pagerOption.ItemsPerPage;
+            var index = 0;
             foreach (var employee in Model)
             {
                 index++;
@@ -160,7 +160,7 @@
                     }
                     @if (showSalaryCurrency)
                     {
-                        <td class="align-right">@(employee.BasicSalary != null ? string.Format("{0:N0}", employee.BasicSalary) : "")</td>
+                        <td class="align-right">@(employee.Salary != null ? string.Format("{0:N0}", employee.Salary) : "")</td>
                         <td class="align-left">@employee.Currency</td>
                     }
                     <td class="align-left">@employee.Company</td>
