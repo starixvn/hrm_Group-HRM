@@ -636,7 +636,12 @@ public class EmployeeController(
         ViewBag.Roles = roles;
         ViewBag.SubCompanies = subCompanies;
         ViewBag.SalaryStructures = await salaryStructureService.GetSalaryStructureAsync(CurrentCompanyId);
-        ViewBag.AllowanceItemSettings = await payrollSettingService.GetPayrollItemSettingsAsync(new GetPayrollItemSettingsCriteria { CompanyId = CurrentCompanyId, Category = (int)PayrollSettingType.Allowance });
+        ViewBag.AllowanceItemSettings = await payrollSettingService.GetPayrollItemSettingsAsync(
+            new GetPayrollItemSettingsCriteria
+            {
+                CompanyId = CurrentCompanyId, Category = (int)PayrollSettingType.Allowance
+
+            });
     }
 
     private string BuildRole(IList<Role> roles)
