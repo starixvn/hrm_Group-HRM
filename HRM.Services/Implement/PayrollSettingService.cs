@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Fanex.Data;
 using HRM.Core.Services;
 using HRM.Criteria.PayrollManagement;
 using HRM.Models.PayrollManagement;
-using HRM.Repositories.Interfaces;
 using HRM.Services.Interfaces;
 
 namespace HRM.Services.Implement;
@@ -29,7 +29,6 @@ public class PayrollSettingService(IPayrollManagementService payrollManagementSe
             splitOn: "AllowanceItemSettingId"
         ).ToList();
 
-        // ✅ Group by unique setting
         var grouped = flatRows
             .GroupBy(s => s.PayrollItemSettingId)
             .Select(g =>
@@ -40,7 +39,9 @@ public class PayrollSettingService(IPayrollManagementService payrollManagementSe
                     .DistinctBy(x => x.AllowanceItemSettingId)
                     .Select(item =>
                     {
-                        item.Amount = payrollManagementService.DecryptSalary(item.Amount).ToString();
+                        item.Amount = payrollManagementService
+                            .DecryptSalary(item.Amount)
+                            .ToString(CultureInfo.InvariantCulture);
                         return item;
                     })
                     .ToList();

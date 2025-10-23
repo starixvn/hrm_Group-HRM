@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace HRM.Models.PayrollManagement;
+﻿namespace HRM.Models.PayrollManagement;
 
 public class PayrollAllowanceCreateRequest
 {
