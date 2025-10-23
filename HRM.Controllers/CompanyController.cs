@@ -100,7 +100,8 @@ public class CompanyController(
         {
             CompanyId = model.CompanyId,
             SettingsJson = model.SettingsJson,
-            ModifiedBy = EmployeeSession.EmpId
+            ModifiedBy = EmployeeSession.EmpId,
+            ObjectTypeId = LogObjectType.Company
         };
         commandResult = await baseService.ExecuteNonQueryAsync(criteria);
 

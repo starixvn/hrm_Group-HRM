@@ -184,6 +184,7 @@ public class SalaryStructureController(
             CompanyId = CurrentCompanyId,
             SettingsJson = settingsJson,
             ModifiedBy = EmployeeSession.EmpId,
+            ObjectTypeId = LogObjectType.SalaryStructure,
         };
         commandResult = await baseService.ExecuteNonQueryAsync(criteria);
 

@@ -10,6 +10,8 @@ public class UpdateSystemConfigsCriteria : CriteriaBase
 
     public int ModifiedBy { get; set; }
 
+    public int ObjectTypeId { get; set; }
+
     public override string GetSettingKey() => "SystemConfigs_Update";
 
     public override bool IsValid() =>
