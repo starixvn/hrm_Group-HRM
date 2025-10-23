@@ -2166,9 +2166,6 @@
   <data name="AmountPercent" xml:space="preserve">
     <value>Amount/Percent</value>
   </data>
-  <data name="EmployeeTransfer" xml:space="preserve">
-    <value>Employee Transfer</value>
-  </data>
   <data name="Payroll" xml:space="preserve">
     <value>Payroll</value>
   </data>
