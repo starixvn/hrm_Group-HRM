@@ -40,7 +40,7 @@ export default class DisciplineManager extends Component {
 
     getDisciplineManagers = () => {
         blockUI();
-        if (this.props.pageType === PageType.Team) {
+        if (this.props.pageType === PageType.Team || this.props.pageType === PageType.GroupTeam) {
             axios({
                 url: resolveClientUrl('Team/GetDisciplineManagerByTeamId'),
                 method: 'GET',
@@ -99,7 +99,7 @@ export default class DisciplineManager extends Component {
                 displayOrder: i + 1
             });
         }
-        if (this.props.pageType === PageType.Team) {
+        if (this.props.pageType === PageType.Team || this.props.pageType === PageType.GroupTeam) {
             editTeamSupervisor(this.props.objectId, this.roleId, supervisors, toast);
         } else {
             editEmployeeSupervisor(this.props.objectId, this.roleId, supervisors, toast);
@@ -121,7 +121,7 @@ export default class DisciplineManager extends Component {
                 />
                 <Button onClick={this.handleSave} bsStyle="primary">Save</Button>
                 <a className="btn btn-default"
-                    href={resolveClientUrl(`${this.props.pageType === PageType.Team ? 
+                    href={resolveClientUrl(`${this.props.pageType === PageType.Team || this.props.pageType === PageType.GroupTeam ? 
                         "GroupTeam/TeamSupervisor"
                         : "GroupEmployeeList/Edit"}/${this.props.objectId}`)
                     }
