@@ -386,14 +386,7 @@
                     @Html.DropDownListFor(model => model.JobTitleId, new SelectList(ViewBag.JobTitles, "Id", "Name"), "--Select a Job Title--", new { @class = "form-control" })
                 </div>
             </li>
-            <li class="list-group-item form-group">
-                <div class="label-form">
-                    @Html.LabelFor(model => model.ManagementLevelId, Labels.ManagementGrade, new { @class = "control-label" })
-                </div>
-                <div class="select-form">
-                    @Html.DropDownListFor(model => model.ManagementLevelId, new SelectList(ViewBag.Grades, "Id", "Name"), "--Select a M Grade--", new { @class = "form-control" })
-                </div>
-            </li>
+            @Html.HiddenFor(model => model.ManagementLevelId)
             <li class="list-group-item form-group">
                 <div class="label-form">
                     @Html.LabelFor(model => model.PromotionDate, Labels.PromotionDate, new { @class = "control-label" })

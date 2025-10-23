@@ -98,9 +98,7 @@ $(document).ready(function () {
 
     initDatepicker();
     let $uploadButton = $('#upload');
-    $('#CountryCode, #JobTitleId, #ManagementLevelId, #SubCompanyId, #JobLevelId, #SalaryStructureId, .allowance-select').chosen();
-    
-    $('.allowance-multiselect').chosen({ width: '100%' });
+    $('#CountryCode, #JobTitleId, #SubCompanyId, #JobLevelId, #SalaryStructureId, .allowance-select').chosen();
     
     // Function to collect all selected allowance IDs
     function collectAllowanceIds() {

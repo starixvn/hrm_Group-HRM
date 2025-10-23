@@ -294,7 +294,7 @@
                             <div class="pamount amount-hidden" data-amount="@RazorHelpers.FormatThousandSeparator(Model.JobLevelAddOn)"></div>
                         }
                     </li>
-                    @if (!string.IsNullOrEmpty(Model.SpecialSubsidy))
+                    @if (!string.IsNullOrEmpty(Model.SpecialSubsidy) && Model.SpecialSubsidy != "0")
                     {
                         <li class="list-group-item">
                             <div class="plabel">@Labels.SpecialSubsidy:</div>

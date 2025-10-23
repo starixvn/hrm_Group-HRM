@@ -10,7 +10,7 @@ public class GetAllowanceItemSettingCriteria : CriteriaBase
 
     public override string GetSettingKey()
     {
-        return "AllowanceItemSetting_Get";
+        return "AllowanceItem_Get";
     }
 
     public override bool IsValid() => true;

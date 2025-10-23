@@ -600,7 +600,8 @@
         <Setting Key="EmployeePayroll_ConfirmUpload" SpName="EmployeePayroll_ConfirmUpload" DbName="bodb_HRM" Plain="0" />
 		<Setting Key="PayrollManagement_GetByMonth" SpName="PayrollManagement_GetByMonth" DbName="bodb_HRM" Plain="0" />
 		<Setting Key="PayrollItemSettings_Get" SpName="PayrollItemSettings_Get" DbName="bodb_HRM" Plain="0" />
-		<Setting Key="AllowanceItem_Create" SpName="AllowanceItem_Create" DbName="bodb_HRM" Plain="0" />
+		<Setting Key="AllowanceItem_Get" SpName="AllowanceItem_Get" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="AllowanceItem_Create" SpName="AllowanceItem_Create" DbName="bodb_HRM" Plain="0" />
 		<Setting Key="AllowanceItem_Edit" SpName="AllowanceItem_Edit" DbName="bodb_HRM" Plain="0" />
 		<Setting Key="AllowanceItem_Delete" SpName="AllowanceItem_Delete" DbName="bodb_HRM" Plain="0" />
 	</Function>
