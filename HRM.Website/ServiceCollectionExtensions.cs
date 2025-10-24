@@ -112,6 +112,7 @@ public static class ServiceCollectionExtensions
 
         services.AddDIRepositories();
 
+        services.AddSingleton<IObjectDbFactory, ObjectDbFactoryWrapper>();
         services.AddSingleton<IUserControlSession, UserControlSession>();
         services.AddSingleton<IAuthService, AuthService>();
         services.AddSingleton<ICryptoService, CryptoService>();

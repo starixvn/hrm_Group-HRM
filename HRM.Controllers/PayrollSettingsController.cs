@@ -5,7 +5,6 @@ using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
 using HRM.Core.Constants;
 using HRM.Core.Filters;
-using HRM.Core.Services;
 using HRM.Criteria.PayrollManagement;
 using HRM.Models.PayrollManagement;
 using HRM.Services.Interfaces;
@@ -15,7 +14,6 @@ namespace HRM.Controllers;
 
 public class PayrollSettingsController(
     IUserControlSession session,
-    IBaseService baseService,
     IPayrollSettingService payrollSettingService) : BaseController(session)
 {
     [HrmPermission(Policy.Read, FunctionKey.PayrollSetting)]
@@ -54,7 +52,7 @@ public class PayrollSettingsController(
         };
         criteria.Amount = Cryptography.EncryptPassword(request.Amount.ToString(CultureInfo.InvariantCulture));
 
-        var result = await baseService.ExecuteNonQueryAsync(criteria);
+        var result = await payrollSettingService.CreateAllowanceItem(criteria);
 
         return Ok(result);
     }
@@ -74,7 +72,7 @@ public class PayrollSettingsController(
         };
         criteria.Amount = Cryptography.EncryptPassword(request.Amount.ToString(CultureInfo.InvariantCulture));
 
-        var result = await baseService.ExecuteNonQueryAsync(criteria);
+        var result = await payrollSettingService.EditAllowanceItem(criteria);
 
         return Ok(result);
     }
@@ -88,7 +86,7 @@ public class PayrollSettingsController(
             AllowanceItemSettingId = id
         };
 
-        var result = await baseService.ExecuteNonQueryAsync(criteria);
+        var result = await payrollSettingService.DeleteAllowanceItem(criteria);
 
         return Ok(result);
     }

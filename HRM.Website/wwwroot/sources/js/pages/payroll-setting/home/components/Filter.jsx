@@ -10,7 +10,7 @@ const Filter = ({ saveEditData, types }) => {
     itemName: "",
     amount: "",
     isPercent: false,
-    isActive: false,
+    isActive: true,
   };
 
   const [open, setOpen] = useState(false);
