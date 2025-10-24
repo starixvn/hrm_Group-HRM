@@ -12,4 +12,6 @@ public interface ISalaryStructureService
     Task<SalaryStructure> GetByIdAsync(int salaryStructureId);
 
     Task<CommandResult> DeleteAsync(int actorId, int id);
+
+    Task<string> GetBasicSalaryConfigAsync(short companyId);
 }

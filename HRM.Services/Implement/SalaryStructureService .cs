@@ -2,9 +2,11 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Fanex.Data;
+using HRM.Core.Constants;
 using HRM.Core.Models;
 using HRM.Core.Services;
 using HRM.Criteria.SalaryStructure;
+using HRM.Criteria.SystemSetting;
 using HRM.Models.SalaryStructure;
 using HRM.Services.Interfaces;
 
@@ -21,12 +23,16 @@ public class SalaryStructureService(IBaseService baseService) : ISalaryStructure
         var (salaryStructures, details) = await baseService.FetchMultipleAsync<SalaryStructure, SalaryStructureDetail>(criteria);
         foreach (var item in details)
         {
-            item.LocalSalary = !string.IsNullOrWhiteSpace(item.LocalSalary)
-                ? Cryptography.DecryptPassword(item.LocalSalary)
+            item.BasicSalary = !string.IsNullOrWhiteSpace(item.BasicSalary)
+                ? Cryptography.DecryptPassword(item.BasicSalary)
                 : null;
 
             item.ExpatSalary = !string.IsNullOrWhiteSpace(item.ExpatSalary)
                 ? Cryptography.DecryptPassword(item.ExpatSalary)
+                : null;
+
+            item.JobLevelAddOn = !string.IsNullOrWhiteSpace(item.JobLevelAddOn)
+                ? Cryptography.DecryptPassword(item.JobLevelAddOn)
                 : null;
         }
 
@@ -50,12 +56,16 @@ public class SalaryStructureService(IBaseService baseService) : ISalaryStructure
         {
             foreach (var item in details)
             {
-                item.LocalSalary = !string.IsNullOrWhiteSpace(item.LocalSalary)
-                    ? Cryptography.DecryptPassword(item.LocalSalary)
+                item.BasicSalary = !string.IsNullOrWhiteSpace(item.BasicSalary)
+                    ? Cryptography.DecryptPassword(item.BasicSalary)
                     : null;
 
                 item.ExpatSalary = !string.IsNullOrWhiteSpace(item.ExpatSalary)
                     ? Cryptography.DecryptPassword(item.ExpatSalary)
+                    : null;
+
+                item.JobLevelAddOn = !string.IsNullOrWhiteSpace(item.JobLevelAddOn)
+                    ? Cryptography.DecryptPassword(item.JobLevelAddOn)
                     : null;
             }
 
@@ -73,5 +83,16 @@ public class SalaryStructureService(IBaseService baseService) : ISalaryStructure
             DeletedBy = actorId
         };
         return await baseService.ExecuteNonQueryAsync(criteria);
+    }
+
+    public async Task<string> GetBasicSalaryConfigAsync(short companyId)
+    {
+        var criteria = new GetSystemConfigsByKeyCriteria
+        {
+            CompanyId = companyId,
+            Key = SystemConfigKey.BasicSalaryConfig,
+        };
+
+        return await baseService.GetDataEntityAsync<string>(criteria);
     }
 }

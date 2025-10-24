@@ -10,7 +10,7 @@ export const validationSchema = Yup.object({
     .typeError('Job Level field is required !')
     .required('Job Level field is required !'),
 
-  localSalary: Yup.number()
+  basicSalary: Yup.number()
     .nullable()
     .transform((value, originalValue) => (originalValue === '' ? null : value)),
 
@@ -22,11 +22,11 @@ export const validationSchema = Yup.object({
   'Local Salary or Expat Salary is required !',
   function (values) {
     if (!values) return false;
-    const { localSalary, expatSalary } = values;
+    const { basicSalary, expatSalary } = values;
 
-    const isLocalFilled = typeof localSalary === 'number' && !isNaN(localSalary);
+    const isBasicFilled = typeof basicSalary === 'number' && !isNaN(basicSalary);
     const isExpatFilled = typeof expatSalary === 'number' && !isNaN(expatSalary);
 
-    return isLocalFilled || isExpatFilled;
+    return isBasicFilled || isExpatFilled;
   }
 );

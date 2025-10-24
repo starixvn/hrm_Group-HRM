@@ -6,11 +6,28 @@
 @import "../../layout/table";
 @import "../../components/sweet-modal";
 
-.filter, .table-custom {
+.filter,
+.table-custom {
     max-width: 992px;
 }
 
+.filter {
+    .form-horizontal {
+        .form-group {
+            &.form-group--m {
+                width: unset;
+                margin: 0;
+            }
+        }
+
+        .filter-right-button {
+            float: right;
+        }
+    }
+}
+
 .btn {
+
     &:focus,
     &:active {
         outline: none;
@@ -34,6 +51,14 @@
 }
 
 .table.table-custom {
+    border-left: 1px solid #d2d2d2;
+
+    thead {
+        tr th:first-child {
+            border-left: none !important;
+        }
+    }
+
     tbody {
         tr.even-row {
             background: #ececec !important;
@@ -45,6 +70,65 @@
 
         tr.hovered-row {
             background: #e3eceb !important;
+        }
+
+        tr {
+            td:first-child {
+                border-left: 1px solid #d2d2d2;
+            }
+        }
+
+        tr[id*="_"] {
+            td:first-child {
+                border-left: none;
+            }
+        }
+    }
+}
+
+.config-modal {
+    .modal-dialog .modal-content {
+        width: 500px;
+    }
+
+    .form-group {
+        display: block;
+    }
+
+    .checkbox-option {
+        margin-bottom: 8px;
+
+        label {
+            display: inline-flex;
+            align-items: center;
+            cursor: pointer;
+            font-weight: normal;
+            margin: 0;
+            padding: 8px 0;
+            width: auto;
+
+            input[type="checkbox"] {
+                margin-right: 10px;
+                transform: scale(1.1);
+                accent-color: #007bff;
+                margin-top: 0;
+                cursor: pointer;
+            }
+
+            .checkbox-label {
+                user-select: none;
+                font-size: 14px;
+                color: #333;
+                line-height: 1.4;
+                cursor: pointer;
+            }
+
+            &:has(input:checked) {
+                .checkbox-label {
+                    color: #007bff;
+                    font-weight: 500;
+                }
+            }
         }
     }
 }
