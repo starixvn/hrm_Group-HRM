@@ -308,9 +308,8 @@ public class ExportExcelEmployeeInfoService(
             worksheet.Cells[rowIndex, colIndex++].Value = employee.TeamName;
             worksheet.Cells[rowIndex, colIndex++].Value = employee.TeamPIC;
             worksheet.Cells[rowIndex, colIndex++].Value = employee.JobLevel;
-            worksheet.Cells[rowIndex, colIndex++].Value = employee.ManagementLevel;
             worksheet.Cells[rowIndex, colIndex++].Value = FormatDate(employee.JoinedDate);
-            worksheet.Cells[rowIndex, colIndex++].Value = employee.Salary?.ToString();
+            worksheet.Cells[rowIndex, colIndex++].Value = $"{employee.Salary:N0}";
             worksheet.Cells[rowIndex, colIndex++].Value = employee.Currency;
             worksheet.Cells[rowIndex, colIndex++].Value = employee.Company;
             worksheet.Cells[rowIndex, colIndex++].Value = employee.SubCompany;
@@ -421,7 +420,6 @@ public class ExportExcelEmployeeInfoService(
         worksheet.Cells[rowIndex, colIndex++].Value = employee.EmployeeCode;
         worksheet.Cells[rowIndex, colIndex++].Value = employee.NickName;
         worksheet.Cells[rowIndex, colIndex++].Value = employee.JobLevel;
-        worksheet.Cells[rowIndex, colIndex++].Value = employee.ManagementLevel;
         worksheet.Cells[rowIndex, colIndex++].Value = paymaster;
 
         var joinedDateCol = colIndex;
