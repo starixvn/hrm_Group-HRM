@@ -12,8 +12,13 @@
     var enableGroupDate = (bool)ViewBag.EnableGroupDate;
     var salaryStructures = (IEnumerable<SalaryStructure>)ViewBag.SalaryStructures;
     var allowanceItemSettings = (IEnumerable<PayrollSetting>)ViewBag.AllowanceItemSettings;
+    var hasReadPermissionOnPayrollInfoOnly = (bool)ViewBag.HasReadPermissionOnPayrollInfoOnly;
+    var hasReadPermissionOnPayrollInfoWithAmount = (bool)ViewBag.HasReadPermissionOnPayrollInfoWithAmount;
     var hasHostPermissionOnPayrollInfoOnly = (bool)ViewBag.HasHostPermissionOnPayrollInfoOnly;
     var hasHostPermissionOnPayrollInfoWithAmount = (bool)ViewBag.HasHostPermissionOnPayrollInfoWithAmount;
+    var allowEditPayrollInfo = hasHostPermissionOnPayrollInfoOnly || hasHostPermissionOnPayrollInfoWithAmount;
+    var allowViewPayrollInfo = hasReadPermissionOnPayrollInfoOnly || hasReadPermissionOnPayrollInfoWithAmount || allowEditPayrollInfo;
+    var allowViewAmount = hasReadPermissionOnPayrollInfoWithAmount || hasHostPermissionOnPayrollInfoWithAmount;
     var allowanceItemSettingIds = Model.GetAllowanceItemSettingIdsArray();
 }
 @section css {
@@ -471,7 +476,7 @@
             </li>
         </ul>
     </div>
-    @if (hasHostPermissionOnPayrollInfoOnly || hasHostPermissionOnPayrollInfoWithAmount) 
+    @if (allowViewPayrollInfo) 
     {
         <div class="panel panel-default">
             <div class="panel-heading">
@@ -479,7 +484,7 @@
                 <span>@Labels.Payroll</span>
             </div>
             <div>
-                <table class="table table-bordered table-striped salary-structure @(!hasHostPermissionOnPayrollInfoWithAmount ? "hide-amount-column" : "")">
+                <table class="table table-bordered table-striped salary-structure @(!allowViewAmount ? "hide-amount-column" : "")">
                     <colgroup>
                         <col />
                         <col />
@@ -492,7 +497,7 @@
                                 <div class="type-row">
                                     <span class="type-label">@Labels.JobLevel</span>
                                     <div class="type-control select-form">
-                                        @Html.DropDownListFor(model => model.JobLevelId, new SelectList(ViewBag.JobLevel, "Id", "Name"), "--Select a Job Level--", new { @class = "form-control" })
+                                        @Html.DropDownListFor(model => model.JobLevelId, new SelectList(ViewBag.JobLevel, "Id", "Name"), "--Select a Job Level--", new { @class = "form-control", disabled = !allowEditPayrollInfo })
                                     </div>
                                 </div>
                             </td>
@@ -512,7 +517,7 @@
                                         @Html.DropDownListFor(model => model.SalaryStructureId,
                                             items,
                                             "--Select a Salary Structure--",
-                                            new { @class = "form-control" })
+                                            new { @class = "form-control", disabled = !allowEditPayrollInfo })
                                     }
                                     </div>
                                 </div>
@@ -529,7 +534,7 @@
                                         }
                                         else
                                         {
-                                            <input type="text" class="form-control" value="*****" readonly />
+                                            <input type="text" class="form-control" value="@(hasReadPermissionOnPayrollInfoWithAmount ? Model.SpecialSubsidy : "*****")" disabled />
                                             @Html.HiddenFor(model => model.SpecialSubsidy)
                                         }
                                     </div>
@@ -557,7 +562,8 @@
                                                             class="form-control allowance-select allowance-multiselect" 
                                                             data-setting-id="@allowanceSetting.PayrollItemSettingId"
                                                             multiple 
-                                                            data-placeholder="-- Select @allowanceSetting.Type --">
+                                                            data-placeholder="-- Select @allowanceSetting.Type --"
+                                                            @(!allowEditPayrollInfo ? "disabled" : "")>
                                                         @foreach (var item in allowanceSetting.PayrollAllowanceItems)
                                                         {
                                                             var isSelected = allowanceItemSettingIds.Contains(item.AllowanceItemSettingId);
@@ -576,7 +582,8 @@
                                                 {
                                                     <select id="allowance-@allowanceSetting.PayrollItemSettingId"
                                                             class="form-control allowance-select" 
-                                                            data-setting-id="@allowanceSetting.PayrollItemSettingId">
+                                                            data-setting-id="@allowanceSetting.PayrollItemSettingId"
+                                                            @(!allowEditPayrollInfo ? "disabled" : "")>
                                                         <option value="">-- Select @allowanceSetting.Type --</option>
                                                         @foreach (var item in allowanceSetting.PayrollAllowanceItems)
                                                         {
@@ -607,6 +614,8 @@
     {
         <input type="hidden" name="SalaryStructureId" value="@Model.SalaryStructureId" />
         <input type="hidden" name="JobLevelId" value="@Model.JobLevelId" />
+        <input type="hidden" name="SpecialSubsidy" value="@Model.SpecialSubsidy" />
+        <input type="hidden" name="AllowanceItemSettingIds" value="@Model.AllowanceItemSettingIds" />
     }
 
     <div class="panel panel-default">

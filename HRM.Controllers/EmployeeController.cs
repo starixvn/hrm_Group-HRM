@@ -626,6 +626,8 @@ public class EmployeeController(
         }
 
         ViewBag.IsShowSubCompanyConfig = subCompanies != null && subCompanies.Any();
+        ViewBag.HasReadPermissionOnPayrollInfoOnly = session.HasPermissionOnFunction(FunctionKey.PayrollInfoOnly, Policy.Read);
+        ViewBag.HasReadPermissionOnPayrollInfoWithAmount = session.HasPermissionOnFunction(FunctionKey.PayrollInfoWithAmount, Policy.Read);
         ViewBag.HasHostPermissionOnPayrollInfoOnly = session.HasPermissionOnFunction(FunctionKey.PayrollInfoOnly, Policy.Host);
         ViewBag.HasHostPermissionOnPayrollInfoWithAmount = session.HasPermissionOnFunction(FunctionKey.PayrollInfoWithAmount, Policy.Host);
 

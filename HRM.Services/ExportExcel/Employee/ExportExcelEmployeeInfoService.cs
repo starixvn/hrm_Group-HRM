@@ -152,7 +152,7 @@ public class ExportExcelEmployeeInfoService(
         writer.CopyRows(2, 2);
 
         WriteFullProfileBody(writer, profiles);
-        writer.SyncColumnsWidth(57);
+        writer.SyncColumnsWidth(56);
         writer.CreateFreezePane(0, 4);
         if (!enableGroupDate)
         {
@@ -203,7 +203,6 @@ public class ExportExcelEmployeeInfoService(
             LengthOfServiceByCompanyDate = employeeService.CalculateLengthOfService(p.CompanyDate, p.MilitaryFromDate, p.MilitaryToDate),
             p.JobTitle,
             p.JobLevel,
-            p.ManagementLevel,
             TeamDate = FormatDate(p.TeamDate),
             DOB = FormatDate(p.DateOfBirth),
             p.PlaceOfBirth,
