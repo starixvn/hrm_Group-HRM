@@ -117,7 +117,7 @@ const Row = ({ rowIndex, item, saveEditData, onDelete }) => {
             </Fragment>
           )}
           <td>{allowance.itemName}</td>
-          <td className="text-right">{allowance.isPercent ? allowance.amount + "%" : formatSalary(allowance.amount)}</td>
+          <td className="text-right">{formatSalary(allowance.amount)}</td>
           <td>{allowance.isActive ? 'Yes' : 'No'}</td>
           {window.hasPermission === "True" && (
             <Fragment>

@@ -54,23 +54,11 @@ const AddEditAllowanceItemContent = ({ editData, setEditData, types }) => {
         </div>
       </div>
       <div className="content-line">
-        <div>Is Percent</div>
         <div>
-          <input
-            type="checkbox"
-            checked={editData.isPercent}
-            onChange={e =>
-              setEditData({ ...editData, isPercent: e.target.checked })
-            }
-          />
-        </div>
-      </div>
-      <div className="content-line">
-        <div>
-          {editData.isPercent ? "Percent" : "Amount"}
+          Amount
           <span style={{ color: "red", marginLeft: "5px" }}>*</span>
         </div>
-        <div style={{ position: "relative" }}>
+        <div>
           <input
             type="number"
             value={editData.amount}
@@ -81,19 +69,6 @@ const AddEditAllowanceItemContent = ({ editData, setEditData, types }) => {
             }
             style={{ paddingRight: "25px" }}
           />
-          {editData.isPercent && (
-            <span
-              style={{
-                position: "absolute",
-                right: "10px",
-                top: "50%",
-                transform: "translateY(-50%)",
-                color: "#888",
-              }}
-            >
-              %
-            </span>
-          )}
         </div>
       </div>
       <div className="content-line">

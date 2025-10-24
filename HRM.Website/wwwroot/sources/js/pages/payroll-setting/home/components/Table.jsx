@@ -8,8 +8,8 @@ const Table = ({ data, saveEditData, onDelete }) => {
         { label: '#', key: null },
         { label: 'Type', key: 'type' },
         { label: 'Items', key: 'items' },
-        { label: 'Amount/Percent', key: 'amountPercent' },
-        { label: 'IsActive', key: 'isActive' },
+        { label: 'Amount', key: 'amount' },
+        { label: 'Is Active', key: 'isActive' },
     ];
 
     if (window.hasPermission === 'True') {
