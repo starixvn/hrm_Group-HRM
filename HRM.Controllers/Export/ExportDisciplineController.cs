@@ -1,6 +1,4 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-using GO.UserControl.Client.Core.Services;
+﻿using System.Threading.Tasks;
 using GO.UserControl.Client.Core.Session;
 using HRM.Core.Constants;
 using HRM.Criteria.Discipline;
@@ -13,14 +11,12 @@ namespace HRM.Controllers.Export;
 
 public class ExportDisciplineController(
     IUserControlSession session,
-    IRoleService roleService,
     IDisciplineService disciplineService,
     IExportDisciplineSummaryService exportDisciplineSummaryService,
     IExportDisciplineDetailService exportDisciplineDetailService) : BaseController(session)
 {
-    public async Task<IActionResult> ExportDisciplineSummaryReport(DisciplineSummaryViewModel model, short? companyId = null)
+    public async Task<IActionResult> ExportDisciplineSummaryReport(DisciplineSummaryViewModel model)
     {
-        var roles = await roleService.GetByUserIdAsync(session.UserId);
         var criteria = new GetDisciplineSummaryCriteria
         {
             FromDate = model.FromDate,
@@ -29,11 +25,10 @@ public class ExportDisciplineController(
             IsLocal = model.IsLocal,
             EmployeeId = model.EmployeeId,
             ReasonId = model.ReasonId,
-            ApproverId = EmployeeSession.EmpId,
+            ApproverUserId = EmployeeSession.EmpId,
             EmployeeName = model.Employee,
             TeamName = model.TeamName,
-            CompanyId = companyId ?? CurrentCompanyId,
-            RoleIds = string.Join(",", roles.Select(x => x.RoleId))
+            CompanyId = CurrentCompanyId,
         };
 
         var disciplines = await disciplineService.GetDisciplineSummaryAsync(criteria);
@@ -41,9 +36,8 @@ public class ExportDisciplineController(
         return File(data, MimeType.XLS, "DisciplineSummaryReport.xls");
     }
 
-    public async Task<ActionResult> ExportDisciplineDetailReport(DisciplineSummaryViewModel model, short? companyId = null)
+    public async Task<ActionResult> ExportDisciplineDetailReport(DisciplineSummaryViewModel model)
     {
-        var roles = await roleService.GetByUserIdAsync(session.UserId);
         var criteria = new GetDisciplineDetailCriteria
         {
             FromDate = model.FromDate,
@@ -52,11 +46,10 @@ public class ExportDisciplineController(
             IsLocal = model.IsLocal,
             EmployeeId = model.EmployeeId,
             ReasonId = model.ReasonId,
-            ApproverId = EmployeeSession.EmpId,
+            ApproverUserId = session.UserId,
             EmployeeName = model.Employee,
             TeamName = model.TeamName,
-            CompanyId = companyId ?? CurrentCompanyId,
-            RoleIds = string.Join(",", roles.Select(x => x.RoleId))
+            CompanyId = CurrentCompanyId,
         };
 
         var disciplines = await disciplineService.GetDisciplineDetailAsync(criteria);

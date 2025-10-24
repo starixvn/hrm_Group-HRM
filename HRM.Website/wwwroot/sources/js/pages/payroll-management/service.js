@@ -3,9 +3,7 @@ import {
     blockUI,
     unblockUI,
     resolveClientUrl,
-    toastOptions,
 } from '../../shared/common.functions';
-import toastr from 'toastr';
 
 const PayrollService = {
     getSalaryData: (filters = {}) => {

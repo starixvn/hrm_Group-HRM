@@ -224,11 +224,11 @@ public class RequestController(
     {
         return model.Command switch
         {
-            RequestCommand.Accept or RequestCommand.Approve or RequestCommand.Process => await requestService
-                .ApproveRequest(EmployeeSession.EmpId, model),
+            RequestCommand.Accept or RequestCommand.Approve or RequestCommand.Process
+                => await requestService.ApproveRequest(EmployeeSession.EmpId, model),
             RequestCommand.Reset => await requestService.ResetRequest(EmployeeSession.EmpId, model),
-            RequestCommand.NotAccept or RequestCommand.Reject or RequestCommand.Void => await requestService
-                .RejectRequest(EmployeeSession.EmpId, model),
+            RequestCommand.NotAccept or RequestCommand.Reject or RequestCommand.Void
+                => await requestService.RejectRequest(EmployeeSession.EmpId, model),
             _ => await requestService.VoidRequest(EmployeeSession.EmpId, model)
         };
     }

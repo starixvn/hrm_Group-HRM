@@ -22,14 +22,24 @@ export const getEmployees = (query, pageType) => {
         return Promise.resolve([]);
     }
 
-    let apiCall;
     const isGroupTeam = pageType === PageType.GroupTeam;
     
     if (isGroupTeam) {
-        apiCall = getGroupTeamEmployees(query);
+        return getGroupTeamEmployees(query).then(response => {
+            return response.data.map(item => {
+                return {
+                    id: item.empId,
+                    nickname: item.nickName,
+                    fullName: item.fullName,
+                    value: `${item.nickName} (${item.company})`,
+                    companyName: item.company !== null ? item.company : '',
+                };
+            });
+        }).catch(axiosError);
+
     } else {
         // For basic managers - use employee/getemployees API
-        apiCall = axios({
+        return axios({
             url: resolveClientUrl('employee/getemployees'),
             method: 'GET',
             headers: { 'X-Requested-With': 'XMLHttpRequest' },
@@ -38,24 +48,17 @@ export const getEmployees = (query, pageType) => {
                 enable: true,
                 isDelete: false,
             },
-        });
-    }
-
-    return apiCall
-        .then(response => {
+        }).then(response => {
             return response.data.map(item => {
-                const id = isGroupTeam ? item.empId : item.id;
                 return {
-                    key: id,
-                    id: id,
+                    key: item.id,
+                    id: item.id,
                     teamCode: item.teamCode !== null ? item.teamCode : '',
-                    value: pageType === PageType.GroupTeam
-                        ? `${item.nickName} (${item.company})`
-                        : item.nickName,
+                    value: item.nickName,
                 };
             });
-        })
-        .catch(axiosError);
+        }).catch(axiosError);
+    }
 };
 
 // Employee search logic for discipline managers (with excludeIds)

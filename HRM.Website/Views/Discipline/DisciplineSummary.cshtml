@@ -17,13 +17,10 @@
 }
 <div class="title">
     <h2 class="page-title">@Labels.DisciplineSummary</h2>
-    <div id="company-list"></div>
 </div>
 <form class="form-filter filter">
     @Html.HiddenFor(model => model.TeamId)
     @Html.HiddenFor(model => model.TeamName)
-    <input type="hidden" id="CompanyId" name="CompanyId" value="@ViewBag.CompanyId" />
-    <input type="hidden" id="RoleId" value="@ViewBag.RoleId" />
     <div class="form-horizontal clearfix">
         <div class="form-group form-group--m">
             <div class="label-form">

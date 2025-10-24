@@ -2,13 +2,13 @@
 @import '../../abstracts/mixins';
 @import '../../components/multiselect-treeview';
 @import '../../components/icon';
-@import '../../layout/filter';
-@import '../../layout/table';
 @import '../../vendors/autocomplete';
 @import '../../components/buttons-new';
 @import '../../components/validation';
 @import '../../components/checkbox';
 @import '../../components/jquery-ui-dialog';
+@import '../../layout/filter';
+@import '../../layout/table';
 
 #dialogAddOtherDiscipline,
 #dialogViewOtherDiscipline {

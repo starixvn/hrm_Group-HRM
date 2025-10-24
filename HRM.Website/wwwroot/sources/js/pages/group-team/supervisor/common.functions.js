@@ -17,12 +17,11 @@ function getSupervisors(query, roleIds, excludeIds) {
     });
 }
 
-function getOrgChart(companyId = null) {
+function getOrgChart() {
     return axios({
         method: 'GET',
         url: resolveClientUrl('Team/GetOrgChart'),
         headers: { 'X-Requested-With': 'XMLHttpRequest' },
-        params: companyId ? { companyId } : {},
     });
 }
 

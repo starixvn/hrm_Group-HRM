@@ -64,7 +64,7 @@ public class RequestMailService(IRequestRepository requestRepository, LetstalkSe
                 toDate.ToDateMonthYearFormatedDate(), totalDays),
             1 => string.Format(MailContentLeaveOneDay, fromDate.ToDateMonthYearFormatedDate()),
             _ => string.Format(MailContentLeaveHalfDay, requestedDate.ToDateMonthYearFormatedDate(),
-                fromDate.ToShortTime(), toDate.ToShortTime())
+                fromDate.ToClientTimeZone().ToShortTime(), toDate.ToClientTimeZone().ToShortTime())
         };
     }
 

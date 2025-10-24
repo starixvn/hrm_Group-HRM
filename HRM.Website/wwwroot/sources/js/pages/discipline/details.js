@@ -7,7 +7,6 @@ import toastr from 'toastr';
 import '../../date';
 import '../../shared/multiselect-tree-view';
 import '../../shared/employee.search.in.team';
-import { renderCompanySelect } from '../../shared/components/CompanySelect';
 import {
     axiosError,
     blockUI,
@@ -363,10 +362,6 @@ import { DisciplineType } from '../../shared/constants';
     function query() {
         blockUI();
         const formData = parse($('form.form-filter').serialize());
-        const companyId = $('#CompanyId').val();
-        if (companyId) {
-            formData.companyId = companyId;
-        }
 
         axios({
             url: resolveClientUrl('discipline/getDisciplineDetailGrid'),
@@ -390,28 +385,16 @@ import { DisciplineType } from '../../shared/constants';
         initEventForDateRangeDropdown();
         initDatepicker();
 
-        const roleId = $('#RoleId').val();
-        const defaultCompanyId = $('#CompanyId').val();
-        renderCompanySelect({
-            defaultCompanyId: defaultCompanyId,
-            roleId: roleId,
-            onChange: companyId => {
-                $('#CompanyId').val(companyId);
-                getOrgChart(companyId)
-                    .then(response => {
-                        $('#Team').multiSelectTreeView({
-                            data: response.data,
-                            isSelectedAll: true,
-                            hasSearchBox: true,
-                        });
-                        $('#TeamId').val(
-                            $('#Team').multiSelectTreeView('getSelectedItems')
-                        );
-                        query();
-                    })
-                    .catch(axiosError);
-            },
-        });
+        getOrgChart().then(response => {
+            $('#Team').multiSelectTreeView({
+                data: response.data,
+                isSelectedAll: true,
+                hasSearchBox: true
+            });
+            $('#TeamId').val($('#Team').multiSelectTreeView('getSelectedItems'));
+
+            query();
+        }).catch(axiosError);
 
         $('form.form-filter #FromDate, form.form-filter #ToDate').on(
             'change',
@@ -432,10 +415,6 @@ import { DisciplineType } from '../../shared/constants';
 
             blockUI();
             const formData = parse($('form.form-filter').serialize());
-            const companyId = $('#CompanyId').val();
-            if (companyId) {
-                formData.companyId = companyId;
-            }
 
             axios({
                 url: resolveClientUrl(

@@ -4,14 +4,14 @@ import { resolveClientUrl } from '../../../shared/common.functions';
 import ToastLayout from '../../../shared/layouts/ToastLayout';
 import Table from './table/table';
 import {
-    getEmployeesWithExclude,
     getManagers,
     addEmployee,
     removeEmployee,
     changeOrder,
     saveManagers,
     getBackUrl,
-    initializeComponent
+    initializeComponent,
+    getEmployees
 } from '../shared/teamManagerHelpers';
 import { PageType } from '../../../shared/constants';
 
@@ -29,13 +29,9 @@ export default class DisciplineManager extends Component {
     }
 
     getEmployees = query => {
-        const excludeIds = this.state.managers
-            .map(item => item.ownerId)
-            .join(',');
-            
-        getEmployeesWithExclude(query, this.props.pageType, this.roleId, excludeIds)
+        getEmployees(query, this.props.pageType)
             .then(employeeOptions => {
-                this.setState({ employeeOptions });
+                this.setState({ employeeOptions: employeeOptions || [] });
             })
             .catch(() => {
                 this.setState({ employeeOptions: [] });

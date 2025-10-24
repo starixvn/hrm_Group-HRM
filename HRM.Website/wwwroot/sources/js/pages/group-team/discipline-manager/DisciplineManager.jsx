@@ -4,14 +4,11 @@ import { toast } from 'react-toastify';
 import axios from 'axios';
 
 import { axiosError, blockUI, unblockUI, resolveClientUrl } from '../../../shared/common.functions';
-import { getSupervisors, editTeamSupervisor, editEmployeeSupervisor, reorderSupervisor } from '../supervisor/common.functions';
+import { editTeamSupervisor, editEmployeeSupervisor, reorderSupervisor } from '../supervisor/common.functions';
 import ToastLayout from '../../../shared/layouts/ToastLayout';
 import Table from './table/table';
-
-const PageType = {
-    Team: 1,
-    Employee: 2
-};
+import { PageType } from '../../../shared/constants';
+import { getEmployees } from '../../team/shared/teamManagerHelpers';
 
 export default class DisciplineManager extends Component {
     constructor(props) {
@@ -31,20 +28,11 @@ export default class DisciplineManager extends Component {
 
     getEmployees = query => {
         if (query.trim().length > 1) {
-            const excludeIds = this.state.managers.map(item => item.ownerId).join(',');
-            getSupervisors(query, this.roleId, excludeIds).then(response => {
-                const employeeOptions = response.data.map(item => {
-                    return {
-                        id: item.id,
-                        nickname: item.nickName,
-                        fullName: item.fullName,
-                        value: `${item.nickName} (${item.companyName})`,
-                        companyName: item.companyName !== null ? item.companyName : '',
-                    };
-                });
-
-                this.setState({ employeeOptions: employeeOptions });
-            }).catch(axiosError);
+            getEmployees(query, this.props.pageType)
+                .then(response => {
+                    const employeeOptions = response || [];
+                    this.setState({ employeeOptions: employeeOptions });
+                }).catch(axiosError);
         } else {
             this.setState({ employeeOptions: [] });
         }
@@ -52,7 +40,7 @@ export default class DisciplineManager extends Component {
 
     getDisciplineManagers = () => {
         blockUI();
-        if (this.props.pageType === PageType.Team) {
+        if (this.props.pageType === PageType.Team || this.props.pageType === PageType.GroupTeam) {
             axios({
                 url: resolveClientUrl('Team/GetDisciplineManagerByTeamId'),
                 method: 'GET',
@@ -111,7 +99,7 @@ export default class DisciplineManager extends Component {
                 displayOrder: i + 1
             });
         }
-        if (this.props.pageType === PageType.Team) {
+        if (this.props.pageType === PageType.Team || this.props.pageType === PageType.GroupTeam) {
             editTeamSupervisor(this.props.objectId, this.roleId, supervisors, toast);
         } else {
             editEmployeeSupervisor(this.props.objectId, this.roleId, supervisors, toast);
@@ -133,7 +121,7 @@ export default class DisciplineManager extends Component {
                 />
                 <Button onClick={this.handleSave} bsStyle="primary">Save</Button>
                 <a className="btn btn-default"
-                    href={resolveClientUrl(`${this.props.pageType === PageType.Team ? 
+                    href={resolveClientUrl(`${this.props.pageType === PageType.Team || this.props.pageType === PageType.GroupTeam ? 
                         "GroupTeam/TeamSupervisor"
                         : "GroupEmployeeList/Edit"}/${this.props.objectId}`)
                     }
