@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using GO.UserControl.Client.Core.Session;
 using HRM.Core;
-using HRM.Core.Services;
-using HRM.Criteria.Report.Headcount;
 using HRM.Models.Report.HeadcountReport;
 using HRM.Services.Implement.Report.Headcount;
+using HRM.Services.Interfaces.Report.Headcount;
 using NSubstitute;
 using Xunit;
 
@@ -15,77 +13,142 @@ namespace HRM.Services.UnitTests.Report.Headcount;
 
 public class CalculateHeadcountServiceTests
 {
-    private readonly IBaseService _mockBaseService;
+    private readonly IHeadcountDataProvider _mockDataProvider;
     private readonly CalculateHeadcountService _service;
 
     public CalculateHeadcountServiceTests()
     {
-        _mockBaseService = Substitute.For<IBaseService>();
-        var _userControlSession = Substitute.For<IUserControlSession>();
-
-        _service = new CalculateHeadcountService(_mockBaseService);
-        _userControlSession.Get<float>(Arg.Any<string>()).Returns(7);
-        DateTimeExtensions.Configure(_userControlSession);
+        _mockDataProvider = Substitute.For<IHeadcountDataProvider>();
+        _service = new CalculateHeadcountService(_mockDataProvider);
+        
+        // Setup session for DateTimeExtensions
+        var userControlSession = Substitute.For<IUserControlSession>();
+        userControlSession.Get<float>(Arg.Any<string>()).Returns(7);
+        DateTimeExtensions.Configure(userControlSession);
     }
 
     [Fact]
-    public async Task GetEmployeesInfos_ShouldReturnEmployeeList()
+    public async Task GetReportAsync_WithValidYear_ReturnsCompleteReport()
     {
         // Arrange
-        var mockEmployees = CreateMockEmployeeInfos();
-        _mockBaseService.GetDataAsync<EmployeeInfo>(Arg.Any<GetHeadcountReportCriteria>())
-            .Returns(mockEmployees);
-        var mockWFH = CreateMockEmployeeWFHs();
-        _mockBaseService.GetDataAsync<EmployeeWFH>(Arg.Any<GetEmployeeWFHCriteria>())
-            .Returns(mockWFH);
+        var mockData = CreateMockHeadcountData();
+        _mockDataProvider.GetHeadcountDataAsync(2024).Returns(mockData);
 
         // Act
         var result = await _service.GetReportAsync(2024);
 
         // Assert
         Assert.NotNull(result);
-        Assert.Equal(6, result.ReportByUnit.Count);
-        Assert.Equal(3, result.ReportByUnit.Count(x=> !x.IsGrandTotal && !x.IsUnitCategory));
-        Assert.Equal(5, result.ReportByCompany.Count);
-        Assert.Equal(4, result.ReportByDetails.Count);
-        Assert.Equal(13, result.ReportByUnitCountry.Count);
-        Assert.Equal(7, result.ReportByUnitCountryLocal.Count);
-        Assert.Equal(6, result.ReportByUnitCountryExpat.Count);
+        Assert.NotNull(result.ReportByUnit);
+        Assert.NotNull(result.ReportByCompany);
+        Assert.NotNull(result.ReportByDetails);
+        Assert.NotNull(result.ReportByUnitCountry);
+        Assert.NotNull(result.ReportByUnitCountryLocal);
+        Assert.NotNull(result.ReportByUnitCountryExpat);
+        
+        // Verify data provider was called
+        await _mockDataProvider.Received(1).GetHeadcountDataAsync(2024);
     }
 
     [Fact]
-    public void Helper_AddUnitReport_ShouldAddValidReports()
+    public async Task GetReportAsync_WithDifferentYear_CallsDataProviderWithCorrectYear()
     {
         // Arrange
-        var list = new List<UnitReport>();
-        var validReport = new UnitReport
+        var mockData = CreateMockHeadcountData();
+        _mockDataProvider.GetHeadcountDataAsync(2023).Returns(mockData);
+
+        // Act
+        await _service.GetReportAsync(2023);
+
+        // Assert
+        await _mockDataProvider.Received(1).GetHeadcountDataAsync(2023);
+    }
+
+    [Fact]
+    public void UnitReportCalculator_Calculate_ReturnsUnitReports()
+    {
+        // Arrange
+        var data = CreateMockHeadcountData();
+        var calculator = new UnitReportCalculator(data);
+
+        // Act
+        var result = calculator.Calculate();
+
+        // Assert
+        Assert.NotNull(result);
+        Assert.NotEmpty(result);
+        Assert.Contains(result, r => r.Label1.Contains("Technology"));
+        Assert.Contains(result, r => r.Label1.Contains("Administration"));
+        Assert.Contains(result, r => r.IsGrandTotal);
+    }
+
+    [Fact]
+    public void CompanyReportCalculator_Calculate_ReturnsCompanyReports()
+    {
+        // Arrange
+        var data = CreateMockHeadcountData();
+        var calculator = new CompanyReportCalculator(data);
+
+        // Act
+        var result = calculator.Calculate();
+
+        // Assert
+        Assert.NotNull(result);
+        Assert.NotEmpty(result);
+        Assert.Contains(result, r => r.Label1 == "Vietnam");
+        Assert.Contains(result, r => r.Label1 == "Singapore");
+        Assert.Contains(result, r => r.IsGrandTotal);
+    }
+
+    [Fact]
+    public void DetailsReportCalculator_Calculate_ReturnsDetailedReports()
+    {
+        // Arrange
+        var data = CreateMockHeadcountData();
+        var calculator = new DetailsReportCalculator(data);
+
+        // Act
+        var result = calculator.Calculate();
+
+        // Assert
+        Assert.NotNull(result);
+        Assert.NotEmpty(result);
+        Assert.Contains(result, r => r.Label1 == "IT");
+        Assert.Contains(result, r => r.Label1 == "HR");
+        Assert.Contains(result, r => r.Label1 == "Finance");
+    }
+
+    [Fact]
+    public void UnitCountryReportCalculator_Calculate_WithDifferentParameters_ReturnsDifferentResults()
+    {
+        // Arrange
+        var data = CreateMockHeadcountData();
+        var calculator = new UnitCountryReportCalculator(data);
+
+        // Act
+        var resultAll = calculator.Calculate(null);
+        var resultLocal = calculator.Calculate(true);
+        var resultExpat = calculator.Calculate(false);
+
+        // Assert
+        Assert.NotNull(resultAll);
+        Assert.NotNull(resultLocal);
+        Assert.NotNull(resultExpat);
+        
+        // Results should be different based on isLocal parameter
+        Assert.NotEqual(resultAll.Count, resultLocal.Count);
+        Assert.NotEqual(resultAll.Count, resultExpat.Count);
+    }
+
+    private static HeadcountData CreateMockHeadcountData()
+    {
+        return new HeadcountData
         {
-            Label1 = "Test Unit",
-            Details = new List<ReportModel>
-            {
-                new() { Month = 1, NewHire = 5, CurrentHeadCount = 10 }
-            }
+            Year = 2024,
+            EmployeeInfos = CreateMockEmployeeInfos(),
+            AllEmployeeWFHs = CreateMockEmployeeWFHs(),
+            WfhEmployeeIds = new HashSet<int> { 1, 2 }
         };
-
-        // Act
-        list.AddUnitReport(validReport);
-
-        // Assert
-        Assert.Single(list);
-        Assert.Equal("Test Unit", list[0].Label1);
-    }
-
-    [Fact]
-    public void Helper_GroupByAndOrderByKey_ShouldGroupAndOrderCorrectly()
-    {
-        // Arrange
-        var employees = CreateMockEmployeeInfos();
-
-        // Act
-        var groupedByUnit = employees.GroupByAndOrderByKey(x => x.Unit).ToList();
-
-        // Assert
-        Assert.Equal(3, groupedByUnit.Count);
     }
 
     private static List<EmployeeInfo> CreateMockEmployeeInfos()

@@ -8,6 +8,7 @@ using HRM.Services.Interfaces.Report.Headcount;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
 using System.Globalization;
+using HRM.Services.Helper;
 
 namespace HRM.Services.Implement.Report.Headcount;
 
@@ -25,7 +26,7 @@ public class HeadcountExportService : IHeadcountExportService
     public byte[] Export(string templatePath, HeadcountReportModel headcountData, int selectedYear)
     {
         data = headcountData;
-        maxMonth = Helper.GetMaxMonth(selectedYear);
+        maxMonth = HeadcountReportHelper.GetMaxMonth(selectedYear);
         using var package = new ExcelPackage(new FileInfo(templatePath));
         var worksheet1 = package.Workbook.Worksheets[0];
         var worksheet2 = package.Workbook.Worksheets[1];

@@ -8,9 +8,9 @@ using HRM.Models.Report.HeadcountReport;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
 
-namespace HRM.Services.Implement.Report.Headcount;
+namespace HRM.Services.Helper;
 
-public static class Helper
+public static class HeadcountReportHelper
 {
     public static void WriteDataToCell(this ExcelRange cell, dynamic value, Color backgroundColor, bool isBold = false)
     {
