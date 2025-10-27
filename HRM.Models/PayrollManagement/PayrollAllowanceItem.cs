@@ -19,6 +19,10 @@ public class PayrollSetting
 
 public class PayrollAllowanceItem
 {
+    public int PayrollItemSettingId { get; set; }
+
+    public string Type { get; set; }
+
     public int AllowanceItemSettingId { get; set; }
 
     public string ItemName { get; set; }
