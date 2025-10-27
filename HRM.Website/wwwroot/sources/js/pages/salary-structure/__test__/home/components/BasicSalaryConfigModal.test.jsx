@@ -16,11 +16,21 @@ describe('BasicSalaryConfigModal Component', () => {
     });
 
     beforeAll(() => {
-        jest.spyOn(console, 'error').mockImplementation(() => {});
+        // Suppress React lifecycle warnings from react-bootstrap Modal
+        jest.spyOn(console, 'warn').mockImplementation((message) => {
+            if (
+                typeof message === 'string' &&
+                (message.includes('componentWillReceiveProps') || 
+                 message.includes('componentWillUpdate'))
+            ) {
+                return;
+            }
+            console.warn(message);
+        });
     });
     
     afterAll(() => {
-        console.error.mockRestore();
+        console.warn.mockRestore();
     });
     
 

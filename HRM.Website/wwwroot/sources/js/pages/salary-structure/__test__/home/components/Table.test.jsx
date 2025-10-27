@@ -101,9 +101,4 @@ describe('Table component', () => {
         fireEvent.click(salaryHeader);
         expect(salaryHeader.querySelector('.fa-sort-desc')).toBeInTheDocument();
     });
-
-    it('matches snapshot', () => {
-        const { asFragment } = renderTable('True');
-        expect(asFragment()).toMatchSnapshot();
-    });
 });

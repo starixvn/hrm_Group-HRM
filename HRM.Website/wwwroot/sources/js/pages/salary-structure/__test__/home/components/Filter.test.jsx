@@ -17,6 +17,24 @@ const mockAxios = axios;
 const mockToastr = toastr;
 
 describe('Filter Component', () => {
+    beforeAll(() => {
+        // Suppress React lifecycle warnings from react-bootstrap Modal
+        jest.spyOn(console, 'warn').mockImplementation((message) => {
+            if (
+                typeof message === 'string' &&
+                (message.includes('componentWillReceiveProps') || 
+                 message.includes('componentWillUpdate'))
+            ) {
+                return;
+            }
+            console.warn(message);
+        });
+    });
+    
+    afterAll(() => {
+        console.warn.mockRestore();
+    });
+
     beforeEach(() => {
         jest.clearAllMocks();
         delete window.location;
