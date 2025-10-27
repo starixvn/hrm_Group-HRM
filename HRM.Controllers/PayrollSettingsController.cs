@@ -83,7 +83,8 @@ public class PayrollSettingsController(
     {
         var criteria = new DeleteAllowanceItemCriteria
         {
-            AllowanceItemSettingId = id
+            AllowanceItemSettingId = id,
+            ModifiedBy = EmployeeSession.EmpId
         };
 
         var result = await payrollSettingService.DeleteAllowanceItem(criteria);

@@ -9,4 +9,5 @@ public static class LogObjectType
     public const byte Company = 5;
     public const byte SubCompany = 6;
     public const byte Payroll = 7;
+    public const byte AllowanceItem = 8;
 }
