@@ -26,7 +26,7 @@ public class LocalPayrollServiceTests
     {
         // Arrange
         var empIds = new[] { 1 };
-        var payrolls = new List<LocalPayroll>
+        var payrolls = new List<Payroll>
         {
             new()
             {
@@ -38,7 +38,7 @@ public class LocalPayrollServiceTests
         };
         var allowances = new List<LocalPayrollAllowance>();
 
-        _baseService.FetchMultipleAsync<LocalPayroll, LocalPayrollAllowance>(Arg.Any<GetPayrollInfoCriteria>())
+        _baseService.FetchMultipleAsync<Payroll, LocalPayrollAllowance>(Arg.Any<GetPayrollInfoCriteria>())
             .Returns((payrolls, allowances));
 
         // Act
@@ -54,7 +54,7 @@ public class LocalPayrollServiceTests
     {
         // Arrange
         var empIds = new[] { 1 };
-        var payrolls = new List<LocalPayroll>
+        var payrolls = new List<Payroll>
         {
             new()
             {
@@ -70,7 +70,7 @@ public class LocalPayrollServiceTests
             new() { EmpId = 1, EncryptAmount = Cryptography.EncryptPassword("150") }
         };
 
-        _baseService.FetchMultipleAsync<LocalPayroll, LocalPayrollAllowance>(Arg.Any<GetPayrollInfoCriteria>())
+        _baseService.FetchMultipleAsync<Payroll, LocalPayrollAllowance>(Arg.Any<GetPayrollInfoCriteria>())
             .Returns((payrolls, allowances));
 
         // Act
@@ -86,7 +86,7 @@ public class LocalPayrollServiceTests
     {
         // Arrange
         var empIds = new[] { 1 };
-        var payrolls = new List<LocalPayroll>
+        var payrolls = new List<Payroll>
         {
             new()
             {
@@ -98,7 +98,7 @@ public class LocalPayrollServiceTests
         };
         var allowances = new List<LocalPayrollAllowance>();
 
-        _baseService.FetchMultipleAsync<LocalPayroll, LocalPayrollAllowance>(Arg.Any<GetPayrollInfoCriteria>())
+        _baseService.FetchMultipleAsync<Payroll, LocalPayrollAllowance>(Arg.Any<GetPayrollInfoCriteria>())
             .Returns((payrolls, allowances));
 
         // Act

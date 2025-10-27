@@ -19,7 +19,7 @@ public class LocalPayrollService(IBaseService baseService): ILocalPayrollService
             EmpIds = string.Join(",", empIds),
         };
 
-        var (payrolls, payrollAllowances) = await baseService.FetchMultipleAsync<LocalPayroll, LocalPayrollAllowance>(criteria);        
+        var (payrolls, payrollAllowances) = await baseService.FetchMultipleAsync<Payroll, LocalPayrollAllowance>(criteria);
         var allowancesByEmpId = payrollAllowances.ToLookup(x => x.EmpId);
         var decryptionCache = BatchDecryptSalaries(payrolls, payrollAllowances);
 
@@ -42,14 +42,13 @@ public class LocalPayrollService(IBaseService baseService): ILocalPayrollService
         return result;
     }
 
-    private static Dictionary<string, decimal> BatchDecryptSalaries(IEnumerable<LocalPayroll> payrolls, IEnumerable<LocalPayrollAllowance> allowances)
+    private static Dictionary<string, decimal> BatchDecryptSalaries(IEnumerable<Payroll> payrolls, IEnumerable<LocalPayrollAllowance> allowances)
     {
         var cache = new ConcurrentDictionary<string, decimal>();
         var encryptedValues = payrolls
             .SelectMany(p => new[]
             {
                 p.EncryptBasicSalary,
-                p.EncryptExpatSalary,
                 p.EncryptJobLevelAddOn,
                 p.EncryptSpecialSubsidy
             })

@@ -1,6 +1,6 @@
 namespace HRM.Models.PayrollManagement;
 
-public class LocalPayroll
+public class Payroll
 {
     public int EmpId { get; set; }
     public string EncryptBasicSalary { get; set; }

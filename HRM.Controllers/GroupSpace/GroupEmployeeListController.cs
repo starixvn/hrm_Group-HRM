@@ -45,7 +45,7 @@ public class GroupEmployeeListController(
     IUserService userService,
     ICommonDataService commonDataService,
     IJobLevelService jobLevelService,
-    ILocalPayrollService localPayrollService,
+    IMonthlyPayrollService payrollService,
     IManagementLevelService managementLevelService) : BaseController(session)
 #pragma warning restore S107 // Methods should not have too many parameters
 {
@@ -102,11 +102,7 @@ public class GroupEmployeeListController(
         employees = FilterEmployeeByView(employees);
         if (isShowSalary)
         {
-            var payrolls = await localPayrollService.CalculateMonthlySalary(employees.Select(x => x.EmpId));
-            foreach (var employee in employees)
-            {
-                employee.Salary = payrolls.GetValueOrDefault(employee.EmpId);
-            }
+            await payrollService.CalculateMonthlySalary(employees);
         }
 
         ViewBag.ShowSalaryCurrency = isShowSalary;
