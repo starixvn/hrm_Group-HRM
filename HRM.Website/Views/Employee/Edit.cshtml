@@ -497,7 +497,14 @@
                                 <div class="type-row">
                                     <span class="type-label">@Labels.JobLevel</span>
                                     <div class="type-control select-form">
-                                        @Html.DropDownListFor(model => model.JobLevelId, new SelectList(ViewBag.JobLevel, "Id", "Name"), "--Select a Job Level--", new { @class = "form-control", disabled = !allowEditPayrollInfo })
+                                        @if (allowEditPayrollInfo)
+                                        {
+                                            @Html.DropDownListFor(model => model.JobLevelId, new SelectList(ViewBag.JobLevel, "Id", "Name"), "--Select a Job Level--", new { @class = "form-control" })
+                                        }
+                                        else
+                                        {
+                                            @Html.DropDownListFor(model => model.JobLevelId, new SelectList(ViewBag.JobLevel, "Id", "Name"), "--Select a Job Level--", new { @class = "form-control", disabled = "disabled" })
+                                        }
                                     </div>
                                 </div>
                             </td>
@@ -514,10 +521,20 @@
                                             Value = x.SalaryStructureId.ToString(),
                                             Text = x.Name
                                         });
-                                        @Html.DropDownListFor(model => model.SalaryStructureId,
-                                            items,
-                                            "--Select a Salary Structure--",
-                                            new { @class = "form-control", disabled = !allowEditPayrollInfo })
+                                        if (allowEditPayrollInfo)
+                                        {
+                                            @Html.DropDownListFor(model => model.SalaryStructureId,
+                                                items,
+                                                "--Select a Salary Structure--",
+                                                new { @class = "form-control" })
+                                        }
+                                        else
+                                        {
+                                            @Html.DropDownListFor(model => model.SalaryStructureId,
+                                                items,
+                                                "--Select a Salary Structure--",
+                                                new { @class = "form-control", disabled = "disabled" })
+                                        }
                                     }
                                     </div>
                                 </div>
