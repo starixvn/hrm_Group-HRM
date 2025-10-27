@@ -25,6 +25,7 @@ public static class HeadcountReportHelper
         cell.Style.Fill.PatternType = ExcelFillStyle.Solid;
         cell.Style.Fill.BackgroundColor.SetColor(backgroundColor);
         cell.Style.Font.Bold = isBold;
+        cell.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
     }
 
     public static void WriteDataToCell(this ExcelRange cell, dynamic value, bool isBold = false)

@@ -1,18 +1,16 @@
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using HRM.Models.Report.HeadcountReport;
+using HRM.Repositories.HeadcountReport;
 using HRM.Services.Interfaces.Report.Headcount;
 
 namespace HRM.Services.Implement.Report.Headcount;
 
-public class CalculateHeadcountService(IHeadcountDataProvider dataProvider) : IHeadcountReportService
+public class CalculateHeadcountService(IHeadcountReportRepository reportRepository) : IHeadcountReportService
 {
     public async Task<HeadcountReportModel> GetReportAsync(int selectedYear)
     {
-        var data = await dataProvider.GetHeadcountDataAsync(selectedYear);
+        var data = await reportRepository.GetHeadcountDataAsync(selectedYear);
         
-        // Use concrete classes - simplest approach
         var unitCalculator = new UnitReportCalculator(data);
         var companyCalculator = new CompanyReportCalculator(data);
         var detailsCalculator = new DetailsReportCalculator(data);

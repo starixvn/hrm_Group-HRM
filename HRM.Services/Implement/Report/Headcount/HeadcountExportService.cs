@@ -9,6 +9,7 @@ using OfficeOpenXml;
 using OfficeOpenXml.Style;
 using System.Globalization;
 using HRM.Services.Helper;
+using NPOI.SS.Formula.Functions;
 
 namespace HRM.Services.Implement.Report.Headcount;
 
@@ -159,10 +160,16 @@ public class HeadcountExportService : IHeadcountExportService
             var alternatingColor = MonthColors[month];
             var (isBold, backgroundColor) = GetCellStyle(unitData, alternatingColor);
 
-            worksheet.Cells[rowIdx + 0, colIdx].WriteDataToCell(dataByMonth.NewHire, backgroundColor, isBold);
-            worksheet.Cells[rowIdx + 1, colIdx].WriteDataToCell(dataByMonth.ProbationResign, backgroundColor, isBold);
-            worksheet.Cells[rowIdx + 2, colIdx].WriteDataToCell(dataByMonth.ConfirmedResign, backgroundColor, isBold);
-            worksheet.Cells[rowIdx + 3, colIdx].WriteDataToCell(dataByMonth.CurrentHeadCount, backgroundColor, isBold);
+            worksheet.Cells[rowIdx++, colIdx].WriteDataToCell(dataByMonth.NewHire, backgroundColor, isBold);
+            worksheet.Cells[rowIdx++, colIdx].WriteDataToCell(dataByMonth.ProbationResign, backgroundColor, isBold);
+            worksheet.Cells[rowIdx++, colIdx].WriteDataToCell(dataByMonth.ConfirmedResign, backgroundColor, isBold);
+            if (dataByMonth.Transfer != 0)
+            {
+                worksheet.Cells[rowIdx, colIdx].AddComment($"in: {string.Join(", ", dataByMonth.TransferInEmpIds)}\nout: {string.Join(", ", dataByMonth.TransferOutEmpIds)}", "System"); //
+            }
+            worksheet.Cells[rowIdx++, colIdx].WriteDataToCell(dataByMonth.Transfer, backgroundColor, isBold);
+            worksheet.Cells[rowIdx, colIdx].WriteDataToCell(dataByMonth.CurrentHeadCount, backgroundColor, isBold);
+            worksheet.Cells[rowIdx, colIdx].AddComment($"{string.Join(", ", dataByMonth.CurrentHeadCountEmpIds)}", "System"); //
         }
     }
 

@@ -1,4 +1,6 @@
-﻿namespace HRM.Website;
+﻿using HRM.Repositories.HeadcountReport;
+
+namespace HRM.Website;
 
 using System;
 using System.Threading.Tasks;
@@ -214,7 +216,7 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IWorkingCalendarSummaryReportService, WorkingCalendarSummaryReportService>();
         services.AddSingleton<IMealAllowanceSummaryService, MealAllowanceSummaryService>();
         services.AddSingleton<IHeadcountReportService, CalculateHeadcountService>();
-        services.AddSingleton<IHeadcountDataProvider, HeadcountDataProvider>();
+        services.AddSingleton<IHeadcountReportRepository, HeadcountReportRepository>();
         services.AddSingleton<IHeadcountExportService, HeadcountExportService>();
 
         return services;
