@@ -117,7 +117,7 @@ public class LeaveController(
             }
 
             var domains = await companyService.GetAllDomainAsync(leaveRequest.Approver.CompanyId);
-            leaveRequestService.SendMailAndSendLetstalkCreateRequest(criteria, domains.FirstOrDefault()?.Domain, leaveRequest.Approver.CompanyId);
+            await leaveRequestService.SendMailAndLetstalkCreateRequestAsync(criteria, domains.FirstOrDefault()?.Domain, leaveRequest.Approver.CompanyId);
         }
 
         return new JsonResult(result);
@@ -192,7 +192,7 @@ public class LeaveController(
             }
 
             var domains = await companyService.GetAllDomainAsync(leaveRequest.Approver.CompanyId);
-            leaveRequestService.SendMailEditRequest(criteria, domains.FirstOrDefault()?.Domain, leaveRequest.Approver.CompanyId);
+            await leaveRequestService.SendMailAndLetstalkEditRequestAsync(criteria, domains.FirstOrDefault()?.Domain, leaveRequest.Approver.CompanyId);
         }
 
         return Json(result);

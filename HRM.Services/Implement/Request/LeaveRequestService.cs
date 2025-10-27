@@ -149,17 +149,7 @@ public class LeaveRequestService(
         return await baseService.ExecuteNonQueryAsync(criteria);
     }
 
-    public void SendMailAndSendLetstalkCreateRequest(InsertLeaveRequestCriteria criteria, string domain, short companyId)
-    {
-        Task.Run(() => SendMailForInsertSuccessfully(criteria, domain, companyId));
-    }
-
-    public void SendMailEditRequest(UpdateLeaveRequestCriteria criteria, string domain, short companyId)
-    {
-        Task.Run(() => SendMailForUpdateSuccessfully(criteria, domain, companyId));
-    }
-
-    private async Task SendMailForInsertSuccessfully(InsertLeaveRequestCriteria criteria, string domain, short companyId)
+    public async Task SendMailAndLetstalkCreateRequestAsync(InsertLeaveRequestCriteria criteria, string domain, short companyId)
     {
         try
         {
@@ -169,11 +159,11 @@ public class LeaveRequestService(
         }
         catch (Exception e)
         {
-            await logger.ErrorAsync($"Send Email + Letstalk insert fail: {e.Message});");
+            await logger.ErrorAsync($"Send Email + Letstalk insert fail: {e.Message}");
         }
     }
 
-    private async Task SendMailForUpdateSuccessfully(UpdateLeaveRequestCriteria criteria, string domain, short companyId)
+    public async Task SendMailAndLetstalkEditRequestAsync(UpdateLeaveRequestCriteria criteria, string domain, short companyId)
     {
         try
         {
@@ -183,7 +173,7 @@ public class LeaveRequestService(
         }
         catch (Exception e)
         {
-            await logger.ErrorAsync($"Send Email + Letstalk update fail: {e.Message});");
+            await logger.ErrorAsync($"Send Email + Letstalk update fail: {e.Message}");
         }
     }
 
