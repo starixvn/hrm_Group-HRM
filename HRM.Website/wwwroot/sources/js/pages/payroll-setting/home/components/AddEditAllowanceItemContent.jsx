@@ -71,18 +71,6 @@ const AddEditAllowanceItemContent = ({ editData, setEditData, types }) => {
           />
         </div>
       </div>
-      <div className="content-line">
-        <div>Is Active</div>
-        <div>
-          <input
-            type="checkbox"
-            checked={editData.isActive}
-            onChange={e =>
-              setEditData({ ...editData, isActive: e.target.checked })
-            }
-          />
-        </div>
-      </div>
     </div>
   );
 };

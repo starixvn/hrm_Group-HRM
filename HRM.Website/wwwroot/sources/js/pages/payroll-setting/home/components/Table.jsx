@@ -9,7 +9,6 @@ const Table = ({ data, saveEditData, onDelete }) => {
         { label: 'Type', key: 'type' },
         { label: 'Items', key: 'items' },
         { label: 'Amount', key: 'amount' },
-        { label: 'Is Active', key: 'isActive' },
     ];
 
     if (window.hasPermission === 'True') {
