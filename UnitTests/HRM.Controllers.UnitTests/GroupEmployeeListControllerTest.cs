@@ -27,7 +27,7 @@ namespace HRM.Controllers.UnitTests;
 public class GroupEmployeeListControllerTest : BaseControllerTest
 {
     private readonly IBaseService _baseService;
-    private readonly ILocalPayrollService _localPayrollService;
+    private readonly IMonthlyPayrollService _monthlyPayrollService;
     private readonly GroupEmployeeListController _controller;
 
     public GroupEmployeeListControllerTest()
@@ -43,7 +43,7 @@ public class GroupEmployeeListControllerTest : BaseControllerTest
         var userService = Substitute.For<IUserService>();
         var commonDataService = Substitute.For<ICommonDataService>();
         var jobLevelService = Substitute.For<IJobLevelService>();
-        _localPayrollService = Substitute.For<ILocalPayrollService>();
+        _monthlyPayrollService = Substitute.For<IMonthlyPayrollService>();
         var managementLevelService = Substitute.For<IManagementLevelService>();
 
         _controller = new GroupEmployeeListController(
@@ -59,7 +59,7 @@ public class GroupEmployeeListControllerTest : BaseControllerTest
             userService,
             commonDataService,
             jobLevelService,
-            _localPayrollService,
+            _monthlyPayrollService,
             managementLevelService);
     }
 
@@ -114,16 +114,26 @@ public class GroupEmployeeListControllerTest : BaseControllerTest
             new() { EmpId = 2, FullName = "Jane Smith", EmployeeCode = "EMP002" }
         };
 
-        var payrollData = new Dictionary<int, decimal>
-        {
-            { 1, 5000m },
-            { 2, 6000m }
-        };
-
         _baseService.GetDataAsync<GroupEmployeeModel>(Arg.Any<GetEmployeesInGroupScopeCriteria>())
             .Returns(employees);
-        _localPayrollService.CalculateMonthlySalary(Arg.Any<IEnumerable<int>>())
-            .Returns(payrollData);
+        
+        // Set up the mock to set salaries on the employees
+        _monthlyPayrollService
+            .When(x => x.CalculateMonthlySalary(Arg.Any<IEnumerable<GroupEmployeeModel>>()))
+            .Do(call =>
+            {
+                var emps = call.Arg<IEnumerable<GroupEmployeeModel>>().ToList();
+                var emp1 = emps.Find(e => e.EmpId == 1);
+                var emp2 = emps.Find(e => e.EmpId == 2);
+                if (emp1 != null)
+                {
+                    emp1.Salary = 5000m;
+                }
+                if (emp2 != null)
+                {
+                    emp2.Salary = 6000m;
+                }
+            });
 
         SetupPermission(FunctionKey.GroupEmployeeList_ViewAll, Policy.Read, true);
         SetupPermission(FunctionKey.ShowSalaryCurrencyInfo, Policy.Read, true);
@@ -132,8 +142,8 @@ public class GroupEmployeeListControllerTest : BaseControllerTest
         var result = await _controller.ListEmployee(model);
 
         // Assert
-        await _localPayrollService.Received(1).CalculateMonthlySalary(Arg.Is<IEnumerable<int>>(ids => 
-            ids.Contains(1) && ids.Contains(2)));
+        await _monthlyPayrollService.Received(1).CalculateMonthlySalary(Arg.Is<IEnumerable<GroupEmployeeModel>>(emps => 
+            emps.Any(e => e.EmpId == 1) && emps.Any(e => e.EmpId == 2)));
 
         var partialViewResult = Assert.IsType<PartialViewResult>(result);
         var returnedEmployees = Assert.IsAssignableFrom<IEnumerable<GroupEmployeeModel>>(partialViewResult.Model);
@@ -362,7 +372,7 @@ public class GroupEmployeeListControllerTest : BaseControllerTest
             Substitute.For<IDepartmentService>(), Substitute.For<IExportExcelEmployeeInfoService>(),
             _baseService, Substitute.For<IEmployeeService>(), Substitute.For<ISecondCompanyEmployeeService>(),
             Substitute.For<IUserService>(), Substitute.For<ICommonDataService>(),
-            Substitute.For<IJobLevelService>(), _localPayrollService, Substitute.For<IManagementLevelService>());
+            Substitute.For<IJobLevelService>(), _monthlyPayrollService, Substitute.For<IManagementLevelService>());
 
         // Act
         var result = await controller.Index("1,2");
@@ -394,7 +404,7 @@ public class GroupEmployeeListControllerTest : BaseControllerTest
             Substitute.For<IDepartmentService>(), Substitute.For<IExportExcelEmployeeInfoService>(),
             _baseService, Substitute.For<IEmployeeService>(), Substitute.For<ISecondCompanyEmployeeService>(),
             Substitute.For<IUserService>(), Substitute.For<ICommonDataService>(),
-            Substitute.For<IJobLevelService>(), _localPayrollService, Substitute.For<IManagementLevelService>());
+            Substitute.For<IJobLevelService>(), _monthlyPayrollService, Substitute.For<IManagementLevelService>());
 
         // Act
         var result = await controller.Index();
@@ -423,7 +433,7 @@ public class GroupEmployeeListControllerTest : BaseControllerTest
             Substitute.For<IDepartmentService>(), Substitute.For<IExportExcelEmployeeInfoService>(),
             _baseService, Substitute.For<IEmployeeService>(), Substitute.For<ISecondCompanyEmployeeService>(),
             Substitute.For<IUserService>(), Substitute.For<ICommonDataService>(),
-            Substitute.For<IJobLevelService>(), _localPayrollService, Substitute.For<IManagementLevelService>());
+            Substitute.For<IJobLevelService>(), _monthlyPayrollService, Substitute.For<IManagementLevelService>());
 
         // Act
         var result = await controller.GetCompanyDropdownList();
@@ -454,7 +464,7 @@ public class GroupEmployeeListControllerTest : BaseControllerTest
             departmentService, Substitute.For<IExportExcelEmployeeInfoService>(),
             _baseService, Substitute.For<IEmployeeService>(), Substitute.For<ISecondCompanyEmployeeService>(),
             Substitute.For<IUserService>(), Substitute.For<ICommonDataService>(),
-            Substitute.For<IJobLevelService>(), _localPayrollService, Substitute.For<IManagementLevelService>());
+            Substitute.For<IJobLevelService>(), _monthlyPayrollService, Substitute.For<IManagementLevelService>());
 
         // Act
         var result = await controller.GetOrgChart();
@@ -487,7 +497,7 @@ public class GroupEmployeeListControllerTest : BaseControllerTest
             departmentService, Substitute.For<IExportExcelEmployeeInfoService>(),
             _baseService, Substitute.For<IEmployeeService>(), Substitute.For<ISecondCompanyEmployeeService>(),
             Substitute.For<IUserService>(), Substitute.For<ICommonDataService>(),
-            Substitute.For<IJobLevelService>(), _localPayrollService, Substitute.For<IManagementLevelService>());
+            Substitute.For<IJobLevelService>(), _monthlyPayrollService, Substitute.For<IManagementLevelService>());
 
         // Act
         var result = await controller.GetOrgChart(true);
@@ -512,7 +522,7 @@ public class GroupEmployeeListControllerTest : BaseControllerTest
             Substitute.For<IDepartmentService>(), Substitute.For<IExportExcelEmployeeInfoService>(),
             _baseService, employeeService, Substitute.For<ISecondCompanyEmployeeService>(),
             Substitute.For<IUserService>(), Substitute.For<ICommonDataService>(),
-            Substitute.For<IJobLevelService>(), _localPayrollService, Substitute.For<IManagementLevelService>());
+            Substitute.For<IJobLevelService>(), _monthlyPayrollService, Substitute.For<IManagementLevelService>());
 
         SetupPermission(FunctionKey.GroupEmployeeList, Policy.Host, true);
 
@@ -537,7 +547,7 @@ public class GroupEmployeeListControllerTest : BaseControllerTest
             Substitute.For<IDepartmentService>(), Substitute.For<IExportExcelEmployeeInfoService>(),
             _baseService, employeeService, Substitute.For<ISecondCompanyEmployeeService>(),
             Substitute.For<IUserService>(), Substitute.For<ICommonDataService>(),
-            Substitute.For<IJobLevelService>(), _localPayrollService, Substitute.For<IManagementLevelService>());
+            Substitute.For<IJobLevelService>(), _monthlyPayrollService, Substitute.For<IManagementLevelService>());
 
         SetupPermission(FunctionKey.GroupEmployeeList, Policy.Host, true);
 
@@ -589,7 +599,7 @@ public class GroupEmployeeListControllerTest : BaseControllerTest
             Substitute.For<IDepartmentService>(), Substitute.For<IExportExcelEmployeeInfoService>(),
             _baseService, employeeService, Substitute.For<ISecondCompanyEmployeeService>(),
             userService, Substitute.For<ICommonDataService>(),
-            Substitute.For<IJobLevelService>(), _localPayrollService, Substitute.For<IManagementLevelService>());
+            Substitute.For<IJobLevelService>(), _monthlyPayrollService, Substitute.For<IManagementLevelService>());
 
         SetupPermission(FunctionKey.GroupEmployeeList, Policy.Host, true);
 
@@ -630,7 +640,7 @@ public class GroupEmployeeListControllerTest : BaseControllerTest
             Substitute.For<IDepartmentService>(), Substitute.For<IExportExcelEmployeeInfoService>(),
             _baseService, employeeService, Substitute.For<ISecondCompanyEmployeeService>(),
             Substitute.For<IUserService>(), Substitute.For<ICommonDataService>(),
-            Substitute.For<IJobLevelService>(), _localPayrollService, Substitute.For<IManagementLevelService>());
+            Substitute.For<IJobLevelService>(), _monthlyPayrollService, Substitute.For<IManagementLevelService>());
 
         SetupPermission(FunctionKey.GroupEmployeeList, Policy.Host, true);
 
@@ -673,7 +683,7 @@ public class GroupEmployeeListControllerTest : BaseControllerTest
             Substitute.For<IDepartmentService>(), Substitute.For<IExportExcelEmployeeInfoService>(),
             _baseService, employeeService, Substitute.For<ISecondCompanyEmployeeService>(),
             Substitute.For<IUserService>(), Substitute.For<ICommonDataService>(),
-            Substitute.For<IJobLevelService>(), _localPayrollService, Substitute.For<IManagementLevelService>());
+            Substitute.For<IJobLevelService>(), _monthlyPayrollService, Substitute.For<IManagementLevelService>());
 
         SetupPermission(FunctionKey.GroupEmployeeList, Policy.Host, true);
 
@@ -721,7 +731,7 @@ public class GroupEmployeeListControllerTest : BaseControllerTest
             Substitute.For<IDepartmentService>(), excelService,
             _baseService, Substitute.For<IEmployeeService>(), Substitute.For<ISecondCompanyEmployeeService>(),
             Substitute.For<IUserService>(), Substitute.For<ICommonDataService>(),
-            Substitute.For<IJobLevelService>(), _localPayrollService, Substitute.For<IManagementLevelService>());
+            Substitute.For<IJobLevelService>(), _monthlyPayrollService, Substitute.For<IManagementLevelService>());
 
         SetupPermission(FunctionKey.GroupEmployeeList, Policy.Read, true);
         SetupPermission(FunctionKey.GroupEmployeeList_ViewAll, Policy.Read, true);
@@ -787,7 +797,7 @@ public class GroupEmployeeListControllerTest : BaseControllerTest
             Substitute.For<IDepartmentService>(), excelService,
             _baseService, Substitute.For<IEmployeeService>(), secondCompanyEmployeeService,
             Substitute.For<IUserService>(), Substitute.For<ICommonDataService>(),
-            Substitute.For<IJobLevelService>(), _localPayrollService, Substitute.For<IManagementLevelService>());
+            Substitute.For<IJobLevelService>(), _monthlyPayrollService, Substitute.For<IManagementLevelService>());
 
         SetupPermission(FunctionKey.GroupEmployeeList, Policy.Read, true);
         SetupPermission(FunctionKey.GroupEmployeeList_ViewAll, Policy.Read, true);
@@ -854,7 +864,7 @@ public class GroupEmployeeListControllerTest : BaseControllerTest
             Substitute.For<IDepartmentService>(), excelService,
             _baseService, Substitute.For<IEmployeeService>(), secondCompanyEmployeeService,
             Substitute.For<IUserService>(), Substitute.For<ICommonDataService>(),
-            Substitute.For<IJobLevelService>(), _localPayrollService, Substitute.For<IManagementLevelService>());
+            Substitute.For<IJobLevelService>(), _monthlyPayrollService, Substitute.For<IManagementLevelService>());
 
         SetupPermission(FunctionKey.GroupEmployeeList, Policy.Read, true);
         SetupPermission(FunctionKey.GroupEmployeeList_ViewAll, Policy.Read, true);
@@ -905,7 +915,7 @@ public class GroupEmployeeListControllerTest : BaseControllerTest
             Substitute.For<IDepartmentService>(), Substitute.For<IExportExcelEmployeeInfoService>(),
             _baseService, employeeService, Substitute.For<ISecondCompanyEmployeeService>(),
             Substitute.For<IUserService>(), commonDataService,
-            jobLevelService, _localPayrollService, managementLevelService);
+            jobLevelService, _monthlyPayrollService, managementLevelService);
 
         SetupPermission(FunctionKey.GroupEmployeeList, Policy.Host, true);
 
@@ -967,7 +977,7 @@ public class GroupEmployeeListControllerTest : BaseControllerTest
             Substitute.For<IDepartmentService>(), Substitute.For<IExportExcelEmployeeInfoService>(),
             _baseService, employeeService, Substitute.For<ISecondCompanyEmployeeService>(),
             Substitute.For<IUserService>(), Substitute.For<ICommonDataService>(),
-            Substitute.For<IJobLevelService>(), _localPayrollService, Substitute.For<IManagementLevelService>());
+            Substitute.For<IJobLevelService>(), _monthlyPayrollService, Substitute.For<IManagementLevelService>());
 
         SetupPermission(FunctionKey.GroupEmployeeList, Policy.Host, true);
 
@@ -991,7 +1001,7 @@ public class GroupEmployeeListControllerTest : BaseControllerTest
             Substitute.For<IDepartmentService>(), Substitute.For<IExportExcelEmployeeInfoService>(),
             _baseService, employeeService, Substitute.For<ISecondCompanyEmployeeService>(),
             Substitute.For<IUserService>(), Substitute.For<ICommonDataService>(),
-            Substitute.For<IJobLevelService>(), _localPayrollService, Substitute.For<IManagementLevelService>());
+            Substitute.For<IJobLevelService>(), _monthlyPayrollService, Substitute.For<IManagementLevelService>());
 
         SetupPermission(FunctionKey.GroupEmployeeList, Policy.Host, true);
 
@@ -1063,7 +1073,7 @@ public class GroupEmployeeListControllerTest : BaseControllerTest
             Substitute.For<IDepartmentService>(), Substitute.For<IExportExcelEmployeeInfoService>(),
             _baseService, employeeService, Substitute.For<ISecondCompanyEmployeeService>(),
             Substitute.For<IUserService>(), Substitute.For<ICommonDataService>(),
-            Substitute.For<IJobLevelService>(), _localPayrollService, Substitute.For<IManagementLevelService>());
+            Substitute.For<IJobLevelService>(), _monthlyPayrollService, Substitute.For<IManagementLevelService>());
 
         // Act
         var result = await controller.GetSupervisors(roleIds, query, excludeIds);
