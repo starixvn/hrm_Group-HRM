@@ -22,7 +22,7 @@ export const getEmployees = (query, pageType) => {
         return Promise.resolve([]);
     }
 
-    const isGroupTeam = pageType === PageType.GroupTeam;
+    const isGroupTeam = pageType === PageType.GroupTeam || pageType === PageType.GroupEmployee;
     
     if (isGroupTeam) {
         return getGroupTeamEmployees(query).then(response => {
