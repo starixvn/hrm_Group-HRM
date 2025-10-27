@@ -40,6 +40,7 @@ public class GroupEmployeeListController(
     IBaseService baseService,
     IEmployeeService employeeService,
     ISecondCompanyEmployeeService secondCompanyEmployeeService,
+    IPayrollManagementService payrollManagementService) : BaseController(session)
     IUserService userService,
     ICommonDataService commonDataService,
     IJobLevelService jobLevelService,

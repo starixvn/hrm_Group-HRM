@@ -33,7 +33,7 @@ public class EmployeeTransferController(
     IManagementLevelService managementLevelService,
     IBaseService baseService) : BaseController(session)
 {
-    [HrmPermission(Policy.Read, FunctionKey.EmployeeTransfer)]
+    [HrmPermission(Policy.Read, FunctionKey.EmployeeTransfer_All, FunctionKey.EmployeeTransfer_BU)]
     public IActionResult Index()
     {
         var hasPermission = session.HasPermissionOnFunction(FunctionKey.EmployeeTransfer, Policy.Host);
@@ -60,7 +60,7 @@ public class EmployeeTransferController(
     }
 
     [HttpGet]
-    [HrmPermission(Policy.Host, FunctionKey.EmployeeTransfer)]
+    [HrmPermission(Policy.Host, FunctionKey.EmployeeTransfer_All, FunctionKey.EmployeeTransfer_BU)]
     public async Task<IActionResult> GroupEmployeeListCanTransfer(GroupEmployeeViewModel model)
     {
         var employees = new List<GroupEmployeeModel>();
