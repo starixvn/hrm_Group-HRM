@@ -109,6 +109,12 @@ public static class FunctionKey
 
     public const string ShowSalaryCurrencyInfo = "ShowSalaryCurrencyInfo";
 
+    public const string EmployeeTransfer = "EmployeeTransfer";
+
+    public const string EmployeeTransfer_All = "EmployeeTransfer-All";
+
+    public const string EmployeeTransfer_BU = "EmployeeTransfer-BU";
+
     // Data permission
     public const string DataPermission_AllEmployees = "AllEmployees";
     public const string DataPermission_EmployeesAssigned = "EmployeesAssigned";

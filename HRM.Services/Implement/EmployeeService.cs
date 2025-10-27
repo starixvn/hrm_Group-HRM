@@ -544,4 +544,9 @@ public class EmployeeService(
 
         return await baseService.GetDataEntityAsync<int>(criteria);
     }
+
+    public async Task<IEnumerable<EmployeeTransferModel>> GetEmployeeTransferListAsync(GetEmployeeTransferCriteria criteria)
+    {
+        return await baseService.GetDataAsync<EmployeeTransferModel>(criteria);
+    }
 }

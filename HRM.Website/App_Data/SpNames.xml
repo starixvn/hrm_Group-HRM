@@ -111,6 +111,7 @@
 		<Setting Key="Employee_GroupScope_Update" SpName="Employee_GroupScope_Update" DbName="bodb_HRM" Plain="0" />
         <Setting Key="Employee_Transfer" SpName="Employee_Transfer" DbName="bodb_HRM" Plain="0" />
 		<Setting Key="Transfer_HistoryWork_Get" SpName="Transfer_HistoryWork_Get" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="EmployeeTransfer_GetList" SpName="EmployeeTransfer_GetList" DbName="bodb_HRM" Plain="0" />
     </Function>
     <Function Name="EmployeePayrollSetting">
 		<Setting Key="EmployeePayrollAllowance_GetByEmpId" SpName="EmployeePayrollAllowance_GetByEmpId" DbName="bodb_HRM" Plain="0" />
