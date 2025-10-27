@@ -133,7 +133,7 @@ public class EmployeeTransferController(
 
     [HttpPost]
     [HrmPermission(Policy.Host, FunctionKey.EmployeeTransfer_All, FunctionKey.EmployeeTransfer_BU)]
-    public async Task<IActionResult> Transfer([FromBody] EmployeeTransfer model)
+    public async Task<IActionResult> TransferEmployee([FromBody] EmployeeTransfer model)
     {
         var result = await employeeService.CheckExistAsync(model.Code, model.NickName);
         if (!result.IsSuccessful)
