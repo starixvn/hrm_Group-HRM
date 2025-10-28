@@ -2,7 +2,7 @@
 import moment from "moment";
 
 const Row = ({ rowIndex, item }) => {
-  var transferredCompany = item.transferredByCompany ? `(${item.transferredByCompany})` : "";
+  const transferredCompany = item.transferredByCompany ? `(${item.transferredByCompany})` : "";
   return (
     <tr
       key={`row_${item.ctrId}`}
