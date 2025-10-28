@@ -268,4 +268,6 @@ public class Employee : EntityBase<int>
     public IList<SubCompany> SubCompanies { get; set; }
 
     public IList<LookupData> JobTitles { get; set; }
+
+    public bool EnableSickLeaveBalance { get; set; }
 }

@@ -54,10 +54,8 @@ public class EmployeeTransferController(
     }
 
     [HrmPermission(Policy.Host, FunctionKey.EmployeeTransfer)]
-    public async Task<IActionResult> Transfer()
+    public IActionResult Transfer()
     {
-        var setting = await commonDataService.GetSystemSettingAsync();
-        ViewBag.EnableSickLeaveBalance = setting.EnableSickLeaveBalance;
         return View();
     }
 
@@ -215,6 +213,8 @@ public class EmployeeTransferController(
             employee.ManagementLevels = (await managementLevelService.GetManagementLevel()).ToList();
             employee.SubCompanies = (await companyService.GetSubCompanies(transferInCompanyId)).ToList();
             employee.JobTitles = (await commonDataService.GetLookupDataByCodeAsync(Constants.JobTitle, transferInCompanyId)).ToList();
+            var settings = await commonDataService.GetSystemSettingAsync(transferOutCompanyId);
+            employee.EnableSickLeaveBalance = settings.EnableSickLeaveBalance;
         }
 
         return Json(employee);
