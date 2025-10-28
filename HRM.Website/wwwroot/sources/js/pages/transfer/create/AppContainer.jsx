@@ -101,6 +101,8 @@ const AppContainer = () => {
         OffDaysbyWeek: 0,
         AnnualLeaveBalance: 0,
         KeepInViewBalance: 0,
+        SickLeaveBalance: 0,
+        EnableSickLeaveBalance: false,
         IsLocal: true,
     });
 
@@ -362,6 +364,8 @@ const AppContainer = () => {
             OffDaysbyWeek: employee.offDaysbyWeek || 0,
             AnnualLeaveBalance: employee.annualLeaveBalance || 0,
             KeepInViewBalance: employee.keepInViewBalance || 0,
+            SickLeaveBalance: employee.sickLeaveBalance || 0,
+            EnableSickLeaveBalance: employee.enableSickLeaveBalance || false,
         };
     }
 

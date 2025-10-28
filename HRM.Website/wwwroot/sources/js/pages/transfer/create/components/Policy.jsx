@@ -92,7 +92,7 @@ const Policy = ({ isOpen, onToggle, employeeData }) => {
             </div>
           </div>
         </div>
-        {window.enableSickLeaveBalance && (
+        {employeeData && employeeData.EnableSickLeaveBalance && (
           <div className="form-group">
             <div className="label-form">
               <label className="control-label">Sick Leave Balance</label>
