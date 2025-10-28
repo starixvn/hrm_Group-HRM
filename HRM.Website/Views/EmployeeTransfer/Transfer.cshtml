@@ -5,7 +5,10 @@
 @section css{
     <link href="~/dist/styles/transfer.create.css" rel="stylesheet" asp-append-version="true" />
 }
-@section js{
+@section js {
+    <script type="text/javascript">
+        window.enableSickLeaveBalance = ViewBag.EnableSickLeaveBalance;
+    </script>
     <script src="~/dist/js/transfer.create.index.js" asp-append-version="true"></script>
 }
 @section Breadcrumb {
