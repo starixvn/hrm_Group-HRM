@@ -2,6 +2,7 @@
 import moment from "moment";
 
 const Row = ({ rowIndex, item }) => {
+  var transferredCompany = item.transferredByCompany ? `(${item.transferredByCompany})` : "";
   return (
     <tr
       key={`row_${item.ctrId}`}
@@ -34,7 +35,7 @@ const Row = ({ rowIndex, item }) => {
         )}
       </td>
       <td className="text-left">{moment(item.transferredDatetime).format("MMM DD YYYY")}</td>
-      <td className="text-left">{item.transferredByNickName}</td>
+      <td className="text-left">{`${item.transferredByNickName} ${transferredCompany}`}</td>
     </tr>
   );
 };
