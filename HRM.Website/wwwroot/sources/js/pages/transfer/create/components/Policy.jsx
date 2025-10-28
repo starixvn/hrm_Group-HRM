@@ -68,45 +68,52 @@ const Policy = ({ isOpen, onToggle, employeeData }) => {
             <Field name="OffDaysbyWeek" type="text" className="form-control" />
           </div>
         </div>
+        <LeaveBalance employeeData={employeeData} />
+      </div>
+    </div>
+  );
+};
 
-        <div className="form-group">
-          <div className="label-form">
-            <label className="control-label">Leave Balance</label>
-          </div>
-          <div className="input-form">
-            <span className="read-only-field">
-              {((employeeData && employeeData.AnnualLeaveBalance) || 0) +
-                " day(s)"}
-            </span>
+const LeaveBalance = ({ employeeData }) => {
+  return (
+    <>
+      <div className="form-group">
+        <div className="label-form">
+          <label className="control-label">Leave Balance</label>
+        </div>
+        <div className="input-form">
+          <span className="read-only-field">
+            {((employeeData && employeeData.AnnualLeaveBalance) || 0) +
+              " day(s)"}
+          </span>
+        </div>
+      </div>
+
+      <div className="form-group">
+        <div className="label-form">
+          <label className="control-label">Compensation Leave Balance</label>
+        </div>
+        <div className="input-form">
+          <div className="read-only-field">
+            {((employeeData && employeeData.KeepInViewBalance) || 0) +
+              " day(s)"}
           </div>
         </div>
-
+      </div>
+      {employeeData && employeeData.EnableSickLeaveBalance && (
         <div className="form-group">
           <div className="label-form">
-            <label className="control-label">Compensation Leave Balance</label>
+            <label className="control-label">Sick Leave Balance</label>
           </div>
           <div className="input-form">
             <div className="read-only-field">
-              {((employeeData && employeeData.KeepInViewBalance) || 0) +
+              {((employeeData && employeeData.SickLeaveBalance) || 0) +
                 " day(s)"}
             </div>
           </div>
         </div>
-        {employeeData && employeeData.EnableSickLeaveBalance && (
-          <div className="form-group">
-            <div className="label-form">
-              <label className="control-label">Sick Leave Balance</label>
-            </div>
-            <div className="input-form">
-              <div className="read-only-field">
-                {((employeeData && employeeData.SickLeaveBalance) || 0) +
-                  " day(s)"}
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
-    </div>
+      )}
+    </>
   );
 };
 
