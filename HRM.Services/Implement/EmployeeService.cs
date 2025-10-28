@@ -539,7 +539,8 @@ public class EmployeeService(
             CreatedBy = session.Get<EmployeeSession>(SessionKey.Employee).EmpId,
             TransferInDate = model.TransferInDate,
             AnnualLeaveBalance = model.AnnualLeaveBalance,
-            CompensationLeaveBalance = model.KeepInViewBalance
+            CompensationLeaveBalance = model.KeepInViewBalance,
+            SickLeaveBalance = model.SickLeaveBalance
         };
 
         return await baseService.GetDataEntityAsync<int>(criteria);

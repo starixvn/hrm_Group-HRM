@@ -117,6 +117,8 @@ public class Employee : EntityBase<int>
 
     public decimal AnnualLeaveBalance { get; set; }
 
+    public decimal SickLeaveBalance { get; set; }
+
     public string JobTitle { get; set; }
 
     public string JobLevel { get; set; }

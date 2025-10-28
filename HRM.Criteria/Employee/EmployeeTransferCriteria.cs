@@ -21,6 +21,8 @@ public class EmployeeTransferCriteria : CriteriaBase
 
     public decimal CompensationLeaveBalance { get; set; }
 
+    public decimal SickLeaveBalance { get; set; }
+
     public override string GetSettingKey() => "Employee_Transfer";
 
     public override bool IsValid() => EmpId > 0 && GroupId > 0 && TargetCompanyId > 0;
