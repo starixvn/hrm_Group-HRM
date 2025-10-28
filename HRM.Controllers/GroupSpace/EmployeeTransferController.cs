@@ -54,8 +54,10 @@ public class EmployeeTransferController(
     }
 
     [HrmPermission(Policy.Host, FunctionKey.EmployeeTransfer)]
-    public IActionResult Transfer()
+    public async Task<IActionResult> Transfer()
     {
+        var setting = await commonDataService.GetSystemSettingAsync();
+        ViewBag.EnableSickLeaveBalance = setting.EnableSickLeaveBalance;
         return View();
     }
 
