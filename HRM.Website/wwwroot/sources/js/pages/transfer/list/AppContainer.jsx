@@ -11,7 +11,7 @@ const AppContainer = () => {
       .get(resolveClientUrl("EmployeeTransfer/GetEmployeeTransferList"), {
         headers: { "X-Requested-With": "XMLHttpRequest" },
       })
-      .then((response) => {
+      .then(response => {
         setData(response.data);
       })
       .catch(axiosError);

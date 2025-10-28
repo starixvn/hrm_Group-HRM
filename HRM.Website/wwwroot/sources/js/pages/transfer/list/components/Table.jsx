@@ -45,7 +45,7 @@ const Table = ({ data }) => {
     },
   ];
   const childrenSpan = columns
-    .flatMap((col) => (col.children ? col.children.length : 0))
+    .flatMap(col => (col.children ? col.children.length : 0))
     .reduce((acc, curr) => acc + curr, 0);
   const colSpan = columns.length + childrenSpan;
 
@@ -100,7 +100,7 @@ const Table = ({ data }) => {
     return sorted;
   }, [data, sortConfig]);
 
-  const onSort = (key) => {
+  const onSort = key => {
     if (!key) {
       return;
     }
@@ -113,7 +113,7 @@ const Table = ({ data }) => {
     setSortConfig({ key, direction });
   };
 
-  const renderSortIcon = (key) => {
+  const renderSortIcon = key => {
     if (sortConfig.key !== key) {
       return "fa fa-sort";
     }
@@ -127,7 +127,7 @@ const Table = ({ data }) => {
     <table className="table table-custom">
       <thead>
         <tr>
-          {columns.map((col) => (
+          {columns.map(col => (
             <th
               key={col.key}
               colSpan={col.children ? col.children.length : 1}
@@ -150,9 +150,9 @@ const Table = ({ data }) => {
         </tr>
 
         <tr>
-          {columns.flatMap((col) =>
+          {columns.flatMap(col =>
             col.children
-              ? col.children.map((child) => (
+              ? col.children.map(child => (
                   <th
                     key={child.key}
                     onClick={() => child.sortable && onSort(child.key)}
