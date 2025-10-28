@@ -361,7 +361,12 @@ const AppContainer = () => {
             WorkingDays: employee.workingDays || 0,
             WorkingHoursbyWeek: employee.workingHoursbyWeek || null,
             WorkingHours: employee.workingHours || 0,
-            OffDaysbyWeek: employee.offDaysbyWeek || 0,
+            OffDaysbyWeek: employee.offDaysbyWeek || 0
+        };
+    }
+
+    const mapLeaveBalance = employee => {
+        return {
             AnnualLeaveBalance: employee.annualLeaveBalance || 0,
             KeepInViewBalance: employee.keepInViewBalance || 0,
             SickLeaveBalance: employee.sickLeaveBalance || 0,
@@ -375,6 +380,7 @@ const AppContainer = () => {
             ...mapContact(employee),
             ...mapJob(employee),
             ...mapPolicy(employee),
+            ...mapLeaveBalance(employee),
             ...mapDemographics(employee),
             IsLocal: initialValues.IsLocal,
         };
