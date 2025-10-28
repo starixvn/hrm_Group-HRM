@@ -98,6 +98,7 @@ module.exports = {
         [`${styleDistPath}/company.index`]: `${styleSourcePath}/pages/company/index.scss`,
         [`${styleDistPath}/company.edit`]: `${styleSourcePath}/pages/company/edit.scss`,
         [`${styleDistPath}/transfer.create`]: `${styleSourcePath}/pages/transfer/create.scss`,
+        [`${styleDistPath}/transfer.list`]: `${styleSourcePath}/pages/transfer/list.scss`,
 
         //
         [`${jsDistPath}/main`]: "./sources/js/main.js",
@@ -227,6 +228,7 @@ module.exports = {
         [`${jsDistPath}/payroll-setting.home`]: `${jsSourcePath}/payroll-setting/home/index.jsx`,
         [`${jsDistPath}/company.home`]: `${jsSourcePath}/company/home/index.jsx`,
         [`${jsDistPath}/company.edit`]: `${jsSourcePath}/company/edit/index.jsx`,
-        [`${jsDistPath}/transfer.create`]: `${jsSourcePath}/transfer/create/index.jsx`,
+        [`${jsDistPath}/transfer.list.index`]: `${jsSourcePath}/transfer/list/index.jsx`,
+        [`${jsDistPath}/transfer.create.index`]: `${jsSourcePath}/transfer/create/index.jsx`,
     },
 };

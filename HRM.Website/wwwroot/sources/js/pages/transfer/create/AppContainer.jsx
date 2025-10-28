@@ -107,7 +107,7 @@ const AppContainer = () => {
     const getEmployees = query => {
         if (query.trim().length >= 2) {
             axios({
-                url: resolveClientUrl('GroupEmployeeList/GroupEmployeeList'),
+                url: resolveClientUrl('EmployeeTransfer/GroupEmployeeListCanTransfer'),
                 method: 'GET',
                 headers: { 'X-Requested-With': 'XMLHttpRequest' },
                 params: { keyword: query, isDelete: false, isEnable: true, companyIds: targetCompanyIds }
@@ -388,7 +388,7 @@ const AppContainer = () => {
         }
 
         axios({
-            url: resolveClientUrl(`GroupEmployeeList/GetInfoEmployeeTransfer`),
+            url: resolveClientUrl(`EmployeeTransfer/GetInfoEmployeeTransfer`),
             method: 'GET',
             headers: { 'X-Requested-With': 'XMLHttpRequest' },
             params: {
@@ -436,7 +436,7 @@ const AppContainer = () => {
             } : null,
             Enabled: true
         };
-        submitTransfer('GroupEmployeeList/Transfer', model, setSubmitting, 'GroupEmployeeList/Index');
+        submitTransfer('EmployeeTransfer/TransferEmployee', model, setSubmitting, 'EmployeeTransfer/Index');
     };
 
     const renderForm = ({ errors, isSubmitting, values, setErrors }) => {

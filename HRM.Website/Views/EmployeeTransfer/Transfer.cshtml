@@ -6,11 +6,10 @@
     <link href="~/dist/styles/transfer.create.css" rel="stylesheet" asp-append-version="true" />
 }
 @section js{
-    <script src="~/dist/js/transfer.create.js" asp-append-version="true"></script>
+    <script src="~/dist/js/transfer.create.index.js" asp-append-version="true"></script>
 }
 @section Breadcrumb {
     <a class="step">@Labels.GroupSpace</a>
-    <a class="step" href="@Url.Action("index", "GroupEmployeeList")">@Labels.GroupEmployee</a>
     <span class="step">@ViewBag.Title</span>
 }
 
