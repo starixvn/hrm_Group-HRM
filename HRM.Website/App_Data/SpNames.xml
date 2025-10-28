@@ -615,7 +615,7 @@
         <Setting Key="CompanySecondmentEmployee_GetByEmpId" SpName="CompanySecondmentEmployee_GetByEmpId" DbName="bodb_HRM" Plain="0" />
     </Function>
     <Function Name="HeadcountReport">
-        <Setting Key="Report_HeadcountGet" SpName="Report_HeadcountGet" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Report_HeadcountGet" SpName="Report_HeadcountGet_xtest" DbName="bodb_HRM" Plain="0" />
         <Setting Key="Report_HeadcountGetWFH" SpName="Report_HeadcountGetWFH" DbName="bodb_HRM" Plain="0" />
         <Setting Key="Report_HeadcountGetTransferInfo" SpName="Report_HeadcountGetTransferInfo" DbName="bodb_HRM" Plain="0" />
     </Function>

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using HRM.Services.Implement.Report.Headcount;
 using HRM.Models.Report.HeadcountReport;
 using Xunit;
@@ -48,7 +49,7 @@ public class HeadcountExportServiceTests
         }
 
         using var package = new OfficeOpenXml.ExcelPackage();
-        for (int i = 0; i < 6; i++)
+        for (var i = 0; i < 6; i++)
         {
             var worksheet = package.Workbook.Worksheets.Add($"Sheet{i + 1}");
             worksheet.Cells[1, 1].Value = "Test Header";
@@ -73,10 +74,12 @@ public class HeadcountExportServiceTests
                         new()
                         {
                             Month = 1,
-                            NewHire = 5,
-                            ProbationResign = 1,
-                            ConfirmedResign = 2,
-                            CurrentHeadCount = 100
+                            NewHireEmpIds = Enumerable.Range(1, 5),
+                            ProbationResignEmpIds = [101],
+                            ConfirmedResignEmpIds = [201, 202],
+                            CurrentHeadCountEmpIds = Enumerable.Range(1, 100),
+                            TransferInEmpIds = [],
+                            TransferOutEmpIds = []
                         }
                     }
                 }
@@ -93,10 +96,12 @@ public class HeadcountExportServiceTests
                         new()
                         {
                             Month = 1,
-                            NewHire = 10,
-                            ProbationResign = 2,
-                            ConfirmedResign = 3,
-                            CurrentHeadCount = 200
+                            NewHireEmpIds = Enumerable.Range(301, 10),
+                            ProbationResignEmpIds = [401, 402],
+                            ConfirmedResignEmpIds = [501, 502, 503],
+                            CurrentHeadCountEmpIds = Enumerable.Range(1, 200),
+                            TransferInEmpIds = [],
+                            TransferOutEmpIds = []
                         }
                     }
                 }
@@ -114,10 +119,12 @@ public class HeadcountExportServiceTests
                         new()
                         {
                             Month = 1,
-                            NewHire = 3,
-                            ProbationResign = 0,
-                            ConfirmedResign = 1,
-                            CurrentHeadCount = 50
+                            NewHireEmpIds = [601, 602, 603],
+                            ProbationResignEmpIds = [],
+                            ConfirmedResignEmpIds = [701],
+                            CurrentHeadCountEmpIds = Enumerable.Range(1, 50),
+                            TransferInEmpIds = [],
+                            TransferOutEmpIds = []
                         }
                     }
                 }
@@ -133,7 +140,12 @@ public class HeadcountExportServiceTests
                         new()
                         {
                             Month = 1,
-                            CurrentHeadCount = 75
+                            CurrentHeadCountEmpIds = Enumerable.Range(1, 75),
+                            NewHireEmpIds = [],
+                            ProbationResignEmpIds = [],
+                            ConfirmedResignEmpIds = [],
+                            TransferInEmpIds = [],
+                            TransferOutEmpIds = []
                         }
                     }
                 }
@@ -149,7 +161,12 @@ public class HeadcountExportServiceTests
                         new()
                         {
                             Month = 1,
-                            CurrentHeadCount = 60
+                            CurrentHeadCountEmpIds = Enumerable.Range(1, 60),
+                            NewHireEmpIds = [],
+                            ProbationResignEmpIds = [],
+                            ConfirmedResignEmpIds = [],
+                            TransferInEmpIds = [],
+                            TransferOutEmpIds = []
                         }
                     }
                 }
@@ -165,7 +182,12 @@ public class HeadcountExportServiceTests
                         new()
                         {
                             Month = 1,
-                            CurrentHeadCount = 15
+                            CurrentHeadCountEmpIds = Enumerable.Range(1, 15),
+                            NewHireEmpIds = [],
+                            ProbationResignEmpIds = [],
+                            ConfirmedResignEmpIds = [],
+                            TransferInEmpIds = [],
+                            TransferOutEmpIds = []
                         }
                     }
                 }

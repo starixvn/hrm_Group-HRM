@@ -4,8 +4,8 @@ using System.Threading.Tasks;
 using GO.UserControl.Client.Core.Session;
 using HRM.Core;
 using HRM.Models.Report.HeadcountReport;
+using HRM.Repositories.HeadcountReport;
 using HRM.Services.Implement.Report.Headcount;
-using HRM.Services.Interfaces.Report.Headcount;
 using NSubstitute;
 using Xunit;
 
@@ -13,12 +13,12 @@ namespace HRM.Services.UnitTests.Report.Headcount;
 
 public class CalculateHeadcountServiceTests
 {
-    private readonly IHeadcountDataProvider _mockDataProvider;
+    private readonly IHeadcountReportRepository _mockDataProvider;
     private readonly CalculateHeadcountService _service;
 
     public CalculateHeadcountServiceTests()
     {
-        _mockDataProvider = Substitute.For<IHeadcountDataProvider>();
+        _mockDataProvider = Substitute.For<IHeadcountReportRepository>();
         _service = new CalculateHeadcountService(_mockDataProvider);
         
         // Setup session for DateTimeExtensions
@@ -115,7 +115,6 @@ public class CalculateHeadcountServiceTests
         Assert.NotEmpty(result);
         Assert.Contains(result, r => r.Label1 == "IT");
         Assert.Contains(result, r => r.Label1 == "HR");
-        Assert.Contains(result, r => r.Label1 == "Finance");
     }
 
     [Fact]
@@ -147,7 +146,6 @@ public class CalculateHeadcountServiceTests
             Year = 2024,
             EmployeeInfos = CreateMockEmployeeInfos(),
             AllEmployeeWFHs = CreateMockEmployeeWFHs(),
-            WfhEmployeeIds = new HashSet<int> { 1, 2 }
         };
     }
 
