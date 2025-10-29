@@ -31,7 +31,8 @@ public class PayrollSettingsController(
     {
         var criteria = new GetPayrollItemSettingsCriteria
         {
-            CompanyId = CurrentCompanyId
+            CompanyId = CurrentCompanyId,
+            Category = ((int)PayrollSettingType.Allowance)
         };
             
         var result = await payrollSettingService.GetPayrollItemSettings(criteria);
