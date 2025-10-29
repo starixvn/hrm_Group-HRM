@@ -13,11 +13,11 @@ const Table = ({ data }) => {
       key: "fromCompany",
       sortable: false,
       children: [
-        { label: "Nickname", key: "f_nickname", sortable: false },
-        { label: "BU", key: "f_bu", sortable: false },
-        { label: "Dept", key: "f_dept", sortable: false },
-        { label: "Team", key: "f_team", sortable: false },
-        { label: "Company", key: "f_company", sortable: false },
+        { label: "Nickname", key: "fromNickName", sortable: true },
+        { label: "BU", key: "fromBUName", sortable: true },
+        { label: "Dept", key: "fromDeptName", sortable: true },
+        { label: "Team", key: "fromTeamName", sortable: true },
+        { label: "Company", key: "fromCompanyName", sortable: true },
       ],
     },
     {
@@ -25,23 +25,23 @@ const Table = ({ data }) => {
       key: "toCompany",
       sortable: false,
       children: [
-        { label: "Nickname", key: "t_nickname", sortable: false },
-        { label: "BU", key: "t_bu", sortable: false },
-        { label: "Dept", key: "t_dept", sortable: false },
-        { label: "Team", key: "t_team", sortable: false },
-        { label: "Company", key: "t_company", sortable: false },
+        { label: "Nickname", key: "toNickName", sortable: true },
+        { label: "BU", key: "toBUName", sortable: true },
+        { label: "Dept", key: "toDeptName", sortable: true },
+        { label: "Team", key: "toTeamName", sortable: true },
+        { label: "Company", key: "toCompanyName", sortable: true },
       ],
     },
     { label: "Remark", key: "remark", sortable: false, children: null },
     {
       label: "Transferred Date",
       key: "transferredDate",
-      sortable: false,
+      sortable: true,
     },
     {
       label: "Transferred By",
       key: "transferredBy",
-      sortable: false,
+      sortable: true,
     },
   ];
   const childrenSpan = columns
