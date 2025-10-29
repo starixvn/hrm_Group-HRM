@@ -59,7 +59,7 @@ public class HeadcountExportService : IHeadcountExportService
 
     private void RenderDetailSheet(ExcelWorksheet worksheet)
     {
-        string[] headers = [HeadcountConstants.PropertyNames.Label1, HeadcountConstants.PropertyNames.Label3, HeadcountConstants.PropertyNames.Label2];
+        string[] headers = [HeadcountConstants.PropertyNames.Label1, HeadcountConstants.PropertyNames.Label2, HeadcountConstants.PropertyNames.Label3];
         RenderSheet(worksheet, data.ReportByDetails, headers);
     }
 

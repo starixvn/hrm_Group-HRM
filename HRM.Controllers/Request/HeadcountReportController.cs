@@ -25,6 +25,13 @@ public class HeadcountReportController(
     }
 
     [HttpGet]
+    public async Task<IActionResult> GetData(int year)
+    {
+        var data = await service.GetReportAsync(year);
+        return Json(data);
+    }
+
+    [HttpGet]
     public async Task<IActionResult> ExportExcel(int year)
     {
         var data = await service.GetReportAsync(year);

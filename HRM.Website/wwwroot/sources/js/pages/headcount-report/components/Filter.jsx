@@ -1,17 +1,12 @@
-﻿import React, { useState } from "react";
-import { resolveClientUrl } from "../../../../shared/common.functions";
+﻿import React from "react";
+import { resolveClientUrl } from "../../../shared/common.functions";
 
-const Filter = () => {
-    const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+const Filter = ({ selectedYear, onYearChange, onSearch }) => {
     const currentYear = new Date().getFullYear();
     const years = Array.from(
         { length: currentYear - 2011 + 1 },
         (_, i) => currentYear - i
     );
-
-    const handleYearChange = e => {
-        setSelectedYear(parseInt(e.target.value, 10));
-    };
 
     const handleExport = () => {
         window.location.href = resolveClientUrl(
@@ -31,7 +26,7 @@ const Filter = () => {
                             id="yearSelect"
                             className="form-control"
                             value={selectedYear}
-                            onChange={handleYearChange}>
+                            onChange={e => onYearChange(parseInt(e.target.value, 10))}>
                             {years.map(year =>(
                                 <option key={year} value={year}>
                                     {year}
@@ -43,9 +38,17 @@ const Filter = () => {
                 <div className="form-group" style={{ width: "unset" }}>
                     <button
                         type="button"
+                        className="btn btn-primary"
+                        onClick={onSearch}>
+                        Search
+                    </button>
+                </div>
+                <div className="form-group" style={{ width: "unset" }}>
+                    <button
+                        type="button"
                         className="btn btn-excel"
                         onClick={handleExport}>
-                        Export
+                        Export All
                     </button>
                 </div>
             </div>
