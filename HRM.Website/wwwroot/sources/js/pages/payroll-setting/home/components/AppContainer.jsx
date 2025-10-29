@@ -24,8 +24,6 @@ const AppContainer = () => {
             })
             .then(response => {
                 setPayrollSettings(response.data);
-                const types = response.data.map(item => ({ id: item.payrollItemSettingId, name: item.type }));
-                setTypes(types);
             })
             .catch(axiosError);
     };
@@ -36,7 +34,8 @@ const AppContainer = () => {
                 headers: { "X-Requested-With": "XMLHttpRequest" },
             })
             .then(response => {
-                setTypes(response.data);
+                const types = response.data.map(item => ({ id: item.payrollItemSettingId, name: item.type }));
+                setTypes(types);
             })
             .catch(axiosError);
     };
