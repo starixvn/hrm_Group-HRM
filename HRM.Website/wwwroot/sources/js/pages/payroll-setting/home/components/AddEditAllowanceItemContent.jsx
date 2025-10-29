@@ -1,10 +1,6 @@
 import React from "react";
 
 const AddEditAllowanceItemContent = ({ editData, setEditData, types }) => {
-  if (editData.allowanceItemSettingId !== null && types == null) {
-    types = [];
-    types.push({ id: editData.payrollItemSettingId, name: editData.type });
-  }
   return (
     <div className="add-edit-allowance-item-content">
       <div className="content-line">
@@ -30,7 +26,7 @@ const AddEditAllowanceItemContent = ({ editData, setEditData, types }) => {
           >
             {types &&
               types.map(item => (
-                <option key={item.id} value={item.id}>
+                <option key={`allowance-item-setting-${item.id}`} value={item.id}>
                   {item.name}
                 </option>
               ))}

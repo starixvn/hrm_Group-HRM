@@ -1,7 +1,7 @@
 ﻿import React from 'react';
 import Row from './Row';
 
-const Table = ({ data, saveEditData, onDelete }) => {
+const Table = ({ data, saveEditData, onDelete, types }) => {
     const colSpan = window.hasPermission === 'True' ? 7 : 5;
 
     const columns = [
@@ -40,6 +40,7 @@ const Table = ({ data, saveEditData, onDelete }) => {
                             item={item}
                             saveEditData={saveEditData}
                             onDelete={onDelete}
+                            types={types}
                         />
                     ))
                 ) : (

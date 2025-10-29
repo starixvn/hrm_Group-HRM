@@ -113,7 +113,8 @@
 		<Setting Key="Transfer_HistoryWork_Get" SpName="Transfer_HistoryWork_Get" DbName="bodb_HRM" Plain="0" />
     </Function>
     <Function Name="EmployeePayrollSetting">
-        <Setting Key="EmployeePayrollAllowance_GetByEmpId" SpName="EmployeePayrollAllowance_GetByEmpId" DbName="bodb_HRM" Plain="0" />
+		<Setting Key="EmployeePayrollAllowance_GetByEmpId" SpName="EmployeePayrollAllowance_GetByEmpId" DbName="bodb_HRM" Plain="0" />
+		<Setting Key="PayrollItemSettingType_Get" SpName="PayrollItemSettingType_Get" DbName="bodb_HRM" Plain="0" />
     </Function>
     <Function Name="Group">
         <Setting Key="EmployeeGroup_GetGroup" SpName="EmployeeGroup_GetGroup" DbName="bodb_HRM" Plain="0" />

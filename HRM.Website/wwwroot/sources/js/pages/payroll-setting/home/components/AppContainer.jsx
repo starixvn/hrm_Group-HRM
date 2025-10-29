@@ -30,8 +30,20 @@ const AppContainer = () => {
             .catch(axiosError);
     };
 
+    const getPayrollSettingTypes = () => {
+        axios
+            .get(resolveClientUrl("PayrollSettings/GetPayrollSettingTypes"), {
+                headers: { "X-Requested-With": "XMLHttpRequest" },
+            })
+            .then(response => {
+                setTypes(response.data);
+            })
+            .catch(axiosError);
+    };
+
     useEffect(() => {
         getPayrollSettings();
+        getPayrollSettingTypes();
     }, []);
 
     const handleDelete = item => {
@@ -116,7 +128,7 @@ const AppContainer = () => {
             {window.hasPermission === 'True' && (
                 <Filter saveEditData={saveEditData} types={types} />
             )}
-            <Table data={payrollSettings} saveEditData={saveEditData} onDelete={handleDelete} />
+            <Table data={payrollSettings} saveEditData={saveEditData} onDelete={handleDelete} types={types} />
             {deleteModalDialog.show && (
                 <SweetModalDialog
                     show={deleteModalDialog.show}
