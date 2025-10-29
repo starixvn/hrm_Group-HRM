@@ -10,7 +10,7 @@ using Core;
 using Core.Constants;
 using Core.Enums;
 using GO.UserControl.Client.Core.Session;
-using HRM.Core.Helpers;
+using Core.Helpers;
 using Implement;
 using Interfaces;
 using Microsoft.AspNetCore.Hosting;
@@ -27,8 +27,7 @@ public class ExportExcelEmployeeInfoService(
     IEmployeeService employeeService,
     ICommonDataService commonDataService,
     IWebHostEnvironment hostingEnvironment,
-    ICompanyService companyService,
-    IPayrollManagementService payrollManagementService) : IExportExcelEmployeeInfoService
+    ICompanyService companyService) : IExportExcelEmployeeInfoService
 {
     private const string EmployeeBasicInfoTemplatePath = "ExcelTemplates/EmployeeBasicInfoTemplate.xls";
     private const string EmployeeFullInfoTemplatePath = "ExcelTemplates/EmployeeFullProfileInfoTemplate.xls";
@@ -41,7 +40,6 @@ public class ExportExcelEmployeeInfoService(
     private const byte MaximumWidth = 50;
     private const byte RowStartBodyProfitCenter = 4;
     private const byte TotalColumnsProfitCenter = 20;
-
 
     private enum BasicInfo
     {
@@ -154,7 +152,7 @@ public class ExportExcelEmployeeInfoService(
         writer.CopyRows(2, 2);
 
         WriteFullProfileBody(writer, profiles);
-        writer.SyncColumnsWidth(57);
+        writer.SyncColumnsWidth(56);
         writer.CreateFreezePane(0, 4);
         if (!enableGroupDate)
         {
@@ -205,7 +203,6 @@ public class ExportExcelEmployeeInfoService(
             LengthOfServiceByCompanyDate = employeeService.CalculateLengthOfService(p.CompanyDate, p.MilitaryFromDate, p.MilitaryToDate),
             p.JobTitle,
             p.JobLevel,
-            p.ManagementLevel,
             TeamDate = FormatDate(p.TeamDate),
             DOB = FormatDate(p.DateOfBirth),
             p.PlaceOfBirth,
@@ -300,7 +297,7 @@ public class ExportExcelEmployeeInfoService(
             worksheet.Cells[rowIndex, colIndex++].Value = employee.FullName;
             worksheet.Cells[rowIndex, colIndex++].Value = employee.NickName;
             worksheet.Cells[rowIndex, colIndex++].Value = FormatDate(employee.DOB);
-            worksheet.Cells[rowIndex, colIndex++].Value = EnumHelper.GetDisplayName(employee.Gender);
+            worksheet.Cells[rowIndex, colIndex++].Value = employee.Gender.GetDisplayName();
             worksheet.Cells[rowIndex, colIndex++].Value = employee.CountryName;
             worksheet.Cells[rowIndex, colIndex++].Value = employee.GroupUnitId;
             worksheet.Cells[rowIndex, colIndex++].Value = employee.UnitCode;
@@ -310,9 +307,8 @@ public class ExportExcelEmployeeInfoService(
             worksheet.Cells[rowIndex, colIndex++].Value = employee.TeamName;
             worksheet.Cells[rowIndex, colIndex++].Value = employee.TeamPIC;
             worksheet.Cells[rowIndex, colIndex++].Value = employee.JobLevel;
-            worksheet.Cells[rowIndex, colIndex++].Value = employee.ManagementLevel;
             worksheet.Cells[rowIndex, colIndex++].Value = FormatDate(employee.JoinedDate);
-            worksheet.Cells[rowIndex, colIndex++].Value = employee.Salary != null ? payrollManagementService.DecryptSalary(employee.Salary) : "";
+            worksheet.Cells[rowIndex, colIndex++].Value = $"{employee.Salary:N0}";
             worksheet.Cells[rowIndex, colIndex++].Value = employee.Currency;
             worksheet.Cells[rowIndex, colIndex++].Value = employee.Company;
             worksheet.Cells[rowIndex, colIndex++].Value = employee.SubCompany;
@@ -362,10 +358,10 @@ public class ExportExcelEmployeeInfoService(
 
     private static void SetupWorksheetHeaders(ExcelWorksheet template, ExcelWorksheet worksheet)
     {
-        int rowIndex = 1;
+        var rowIndex = 1;
         const int colIndex = 1;
 
-        for (int i = 0; i < 3; i++)
+        for (var i = 0; i < 3; i++)
         {
             template.Cells[rowIndex, colIndex, rowIndex, TotalColumnsProfitCenter]
                 .Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumnsProfitCenter]);
@@ -397,14 +393,8 @@ public class ExportExcelEmployeeInfoService(
         {
             return "Nexcel";
         }
-        else if (!string.IsNullOrWhiteSpace(employee.SubCompany))
-        {
-            return employee.SubCompany;
-        }
-        else
-        {
-            return employee.Company;
-        }
+
+        return !string.IsNullOrWhiteSpace(employee.SubCompany) ? employee.SubCompany : employee.Company;
     }
 
     private static int FillEmployeeRow(GroupEmployeeModel employee, ExcelWorksheet template, ExcelWorksheet worksheet, int rowIndex, int rowNum, string paymaster)
@@ -429,7 +419,6 @@ public class ExportExcelEmployeeInfoService(
         worksheet.Cells[rowIndex, colIndex++].Value = employee.EmployeeCode;
         worksheet.Cells[rowIndex, colIndex++].Value = employee.NickName;
         worksheet.Cells[rowIndex, colIndex++].Value = employee.JobLevel;
-        worksheet.Cells[rowIndex, colIndex++].Value = employee.ManagementLevel;
         worksheet.Cells[rowIndex, colIndex++].Value = paymaster;
 
         var joinedDateCol = colIndex;
@@ -448,7 +437,7 @@ public class ExportExcelEmployeeInfoService(
         worksheet.Cells.AutoFitColumns(MinimumWidth, MaximumWidth);
         worksheet.View.FreezePanes(RowStartBodyProfitCenter, 1);
 
-        for (int col = 1; col <= TotalColumnsProfitCenter; col++)
+        for (var col = 1; col <= TotalColumnsProfitCenter; col++)
         {
             worksheet.Column(col).Style.HorizontalAlignment =
                 (col == joinedDateCol) ? ExcelHorizontalAlignment.Right : ExcelHorizontalAlignment.Left;

@@ -42,10 +42,10 @@ public class GroupEmployeeListController(
     IBaseService baseService,
     IEmployeeService employeeService,
     ISecondCompanyEmployeeService secondCompanyEmployeeService,
-    IPayrollManagementService payrollManagementService,
     IUserService userService,
     ICommonDataService commonDataService,
     IJobLevelService jobLevelService,
+    IMonthlyPayrollService payrollService,
     IManagementLevelService managementLevelService) : BaseController(session)
 #pragma warning restore S107 // Methods should not have too many parameters
 {
@@ -75,7 +75,16 @@ public class GroupEmployeeListController(
     [HrmPermission(Policy.Read, FunctionKey.GroupEmployeeList)]
     public async Task<IActionResult> ListEmployee(GroupEmployeeViewModel model)
     {
+        ViewBag.HasPermissionToEdit = session.HasPermissionOnFunction(FunctionKey.GroupEmployeeList, Policy.Host);
+        var employees = await GetGroupEmployeeList(model);
+
+        return PartialView("_ListEmployee", employees);
+    }
+
+    private async Task<IEnumerable<GroupEmployeeModel>> GetGroupEmployeeList(GroupEmployeeViewModel model)
+    {
         var (enableUser, isDeleteUser) = ParseEmployeeStatus(model.EmployeeStatus);
+        var isShowSalary = session.HasPermissionOnFunction(FunctionKey.ShowSalaryCurrencyInfo, Policy.Read);
 
         var criteria = new GetEmployeesInGroupScopeCriteria
         {
@@ -87,42 +96,20 @@ public class GroupEmployeeListController(
             CompanyIds = model.CompanyIds,
             ActorId = EmployeeSession.EmpId,
             IsCtrID = ParseBool(model.CtrIDs),
-            IsOutsource = ParseBool(model.Outsources),
+            IsOutsource = ParseBool(model.Outsources)
         };
         var employees = await baseService.GetDataAsync<GroupEmployeeModel>(criteria);
         employees = FilterEmployeeByView(employees);
-
-        Parallel.ForEach(
-            employees,
-            e =>
-            {
-                e.BasicSalary =
-                    e.Salary != null ? payrollManagementService.DecryptSalary(e.Salary) : null;
-            }
-        );
-
-        var pagerOption = new PagerOptionModel
+        if (isShowSalary)
         {
-            CurrentPage = model.CurrentPage,
-            ItemsPerPage = model.ItemsPerPage,
-            TotalItem = criteria.TotalRow ?? 0,
-        };
-        ViewBag.PagerOption = pagerOption;
+            await payrollService.CalculateMonthlySalary(employees);
+        }
 
-        ViewBag.HasPermissionToEdit = session.HasPermissionOnFunction(
-            FunctionKey.GroupEmployeeList,
-            Policy.Host
-        );
-        ViewBag.ShowSalaryCurrency = session.HasPermissionOnFunction(
-            FunctionKey.ShowSalaryCurrencyInfo,
-            Policy.Read
-        );
-        var isDisabled = enableUser is false;
-        var isDeleted = isDeleteUser is true;
-        var isAll = !enableUser.HasValue && !isDeleteUser.HasValue;
-        ViewBag.ShowResignedDate = isAll || isDisabled || isDeleted;
+        ViewBag.ShowSalaryCurrency = isShowSalary;
+        ViewBag.ShowResignedDate = enableUser is false || isDeleteUser is true ||
+                                   (!enableUser.HasValue && !isDeleteUser.HasValue);
 
-        return PartialView("_ListEmployee", employees);
+        return employees;
     }
 
     private IEnumerable<GroupEmployeeModel> FilterEmployeeByView(
@@ -323,26 +310,9 @@ public class GroupEmployeeListController(
     [HrmPermission(Policy.Read, FunctionKey.GroupEmployeeList)]
     public async Task<IActionResult> ExportExcel(
         GroupEmployeeViewModel model,
-        bool isEmployeeListExport
-    )
+        bool isEmployeeListExport)
     {
-        var (enableUser, isDeleteUser) = ParseEmployeeStatus(model.EmployeeStatus);
-
-        var criteria = new GetEmployeesInGroupScopeCriteria
-        {
-            Query = model.Keyword,
-            TeamIds = model.TeamIds,
-            EnableUser = enableUser,
-            IsDeleteUser = isDeleteUser,
-            TitleId = model.JobTitleId,
-            CompanyIds = model.CompanyIds,
-            ActorId = EmployeeSession.EmpId,
-            IsCtrID = ParseBool(model.CtrIDs),
-            IsOutsource = ParseBool(model.Outsources),
-        };
-
-        var profiles = await baseService.GetDataAsync<GroupEmployeeModel>(criteria);
-        profiles = FilterEmployeeByView(profiles);
+        var employees = await GetGroupEmployeeList(model);
 
         if (!isEmployeeListExport)
         {
@@ -353,7 +323,7 @@ public class GroupEmployeeListController(
                 .GroupBy(e => e.EmpId)
                 .ToDictionary(g => g.Key, g => g.First().Location);
 
-            foreach (var profile in profiles)
+            foreach (var profile in employees)
             {
                 string location;
                 if (employeesWFH.Any(x => x.EmpId == profile.EmpId))
@@ -374,8 +344,8 @@ public class GroupEmployeeListController(
         }
 
         var bytes = isEmployeeListExport
-            ? await excelService.ExportGroupEmployeesAsync(profiles)
-            : await excelService.ExportProfitCenterReportAsync(profiles);
+            ? await excelService.ExportGroupEmployeesAsync(employees)
+            : await excelService.ExportProfitCenterReportAsync(employees);
 
         var exportDate = DateTimeOffset.Now.DateTime.ToClientTimeZone().ToString("yyyyMMdd");
         var fileName = isEmployeeListExport

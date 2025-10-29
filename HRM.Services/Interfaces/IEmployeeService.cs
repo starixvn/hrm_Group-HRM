@@ -9,6 +9,7 @@ using HRM.Models;
 using HRM.Models.EmployeeInformation;
 using HRM.Models.Employees;
 using HRM.Models.Group;
+using HRM.Models.PayrollManagement;
 using HRM.Models.Supervisor;
 using HRM.ViewModels.AnnualLeave;
 
@@ -27,6 +28,8 @@ public interface IEmployeeService
     Task<Employee> GetEmployeeTransferByIdAsync(int id, short companyId);
 
     Task<Employee> GetEmployeeByIdInGroupScopeAsync(int id);
+
+    Task<IEnumerable<EmployeePayrollAllowance>> GetEmployeePayrollAllowanceByEmpIdAsync(int empId);
 
     Task<IEnumerable<Employee>> GetEmployeeAsync(GetAllEmployeeCriteria criteria);
 

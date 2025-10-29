@@ -1,4 +1,6 @@
-﻿namespace HRM.Services.Implement.ActionLog;
+﻿using HRM.Criteria.Employee;
+
+namespace HRM.Services.Implement.ActionLog;
 
 using System;
 using System.Collections.Generic;
@@ -11,7 +13,7 @@ using GO.UserControl.Client.Core.Models.Role;
 using GO.UserControl.Client.Core.Services;
 using GO.UserControl.Client.Core.Session;
 using HRM.Core.Services;
-using HRM.Criteria.Employee;
+using HRM.Models.PayrollManagement;
 using HRM.Models.SalaryStructure;
 using Interfaces;
 using Models;
@@ -35,7 +37,8 @@ public class EmployeeLogService(
     IRoleService roleService,
     ISalaryStructureService salaryStructureService,
     IBaseService baseService,
-    ICompanyService companyService) : IEmployeeLogService
+    ICompanyService companyService,
+    IPayrollSettingService payrollSettingService) : IEmployeeLogService
 #pragma warning restore S107 // Methods should not have too many parameters
 {
     private IEnumerable<MappingFieldConfig> mappingFields = new List<MappingFieldConfig>
@@ -95,6 +98,7 @@ public class EmployeeLogService(
         new() { FieldName = "ChineseName", DisplayName = Labels.ChineseName },
         new() { FieldName = "WorkingHoursbyWeek", DisplayName = Labels.WorkingHoursPerWeek },
         new() { FieldName = "SalaryStructureId", DisplayName = Labels.SalaryStructure },
+        new() { FieldName = "AllowanceItemSettingIds", DisplayName = Labels.Allowance },
         new() { FieldName = "SubCompanyId", DisplayName = Labels.SubCompany },
         new() { FieldName = "AutoApproveRequest", DisplayName = Labels.AutoApproved }
     };
@@ -109,6 +113,7 @@ public class EmployeeLogService(
     private IEnumerable<EntityBase<byte>> MarriageStatuses { get; set; }
     private IEnumerable<SalaryStructure> SalaryStructures { get; set; }
     private IEnumerable<SubCompany> SubCompanies { get; set; }
+    private IEnumerable<PayrollAllowanceItem> PayrollAllowanceItems { get; set; }
 
     public async Task<IEnumerable<LogObjectDetail>> GetLogDetailByIdAsync(int employeeId)
     {
@@ -123,7 +128,8 @@ public class EmployeeLogService(
         MarriageStatuses = commonDataService.GetMarriageStatus();
         SalaryStructures = await salaryStructureService.GetSalaryStructureAsync(companyId);
         SubCompanies = await companyService.GetSubCompanies((short)companyId);
-
+        PayrollAllowanceItems = await payrollSettingService.GetAllAllowanceItemSettingsAsync(companyId);
+        
         var logs = await actionLogService.GetLogDetailByIdAsync(LogObjectType.Employee, employeeId);
         MappingField(logs);
 
@@ -144,14 +150,17 @@ public class EmployeeLogService(
 
     private void MappingField(IEnumerable<LogObjectDetail> logs)
     {
-        if (session.HasPermissionOnFunction(FunctionKey.SalaryStructureConfiguration, Policy.Read))
+        if (session.HasPermissionOnFunction(FunctionKey.PayrollInfoWithAmount, Policy.Read))
         {
-            mappingFields = mappingFields.Append(new MappingFieldConfig { FieldName = "Salary", DisplayName = Labels.NonStandardSalaryStructure });
+            mappingFields = mappingFields.Append(new MappingFieldConfig { FieldName = "SpecialSubsidy", DisplayName = Labels.SpecialSubsidy });
         }
 
         foreach (var log in logs)
         {
             log.Fields = log.Fields.Where(x => !x.FieldName.Equals("CtrId", StringComparison.OrdinalIgnoreCase)).ToList();
+            
+            var newFields = new List<FieldValue>();
+            
             foreach (var field in log.Fields)
             {
                 var mappingField = mappingFields.FirstOrDefault(x => string.Equals(x.FieldName, field.FieldName, StringComparison.OrdinalIgnoreCase));
@@ -160,8 +169,19 @@ public class EmployeeLogService(
                     field.DisplayName = mappingField.DisplayName;
                 }
 
-                MappingValue(field);
+                if (field.FieldName.Equals("AllowanceItemSettingIds", StringComparison.OrdinalIgnoreCase))
+                {
+                    var typeFields = MappingAllowanceItemSettingByType(field);
+                    newFields.AddRange(typeFields);
+                }
+                else
+                {
+                    MappingValue(field);
+                    newFields.Add(field);
+                }
             }
+
+            log.Fields = newFields;
         }
     }
 
@@ -210,7 +230,7 @@ public class EmployeeLogService(
                 MappingSalaryStructure(field);
                 break;
 
-            case "Salary":
+            case "SpecialSubsidy":
                 MappingSalary(field);
                 break;
 
@@ -322,10 +342,74 @@ public class EmployeeLogService(
 
     private void MappingSalary(FieldValue field)
     {
-        if (session.HasPermissionOnFunction(FunctionKey.SalaryStructureConfiguration, Policy.Read))
+        if (session.HasPermissionOnFunction(FunctionKey.PayrollInfoWithAmount, Policy.Read))
         {
             field.OldValue = !string.IsNullOrWhiteSpace(field.OldValue) ? Cryptography.DecryptPassword(field.OldValue) : string.Empty;
             field.Value = !string.IsNullOrWhiteSpace(field.Value) ? Cryptography.DecryptPassword(field.Value) : string.Empty;
         }
+    }
+
+    private List<FieldValue> MappingAllowanceItemSettingByType(FieldValue field)
+    {
+        var result = new List<FieldValue>();
+        
+        var oldItemsByType = GetAllowanceItemsByType(field.OldValue);
+        var newItemsByType = GetAllowanceItemsByType(field.Value);
+
+        var allTypes = oldItemsByType.Keys.Union(newItemsByType.Keys).Distinct();
+
+        foreach (var type in allTypes)
+        {
+            var oldItemIds = oldItemsByType.GetValueOrDefault(type, []);
+            var newItemIds = newItemsByType.GetValueOrDefault(type, []);
+
+            if (oldItemIds.SetEquals(newItemIds))
+            {
+                continue;
+            }
+
+            var removedNames = GetItemNamesByIds(oldItemIds.Except(newItemIds));
+            var addedNames = GetItemNamesByIds(newItemIds.Except(oldItemIds));
+
+            result.Add(new FieldValue
+            {
+                FieldName = $"AllowanceItemSettingIds_{type}",
+                DisplayName = type,
+                OldValue = removedNames,
+                Value = addedNames
+            });
+        }
+
+        return result;
+    }
+
+    private Dictionary<string, HashSet<string>> GetAllowanceItemsByType(string value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            return new Dictionary<string, HashSet<string>>();
+        }
+
+        var ids = value.Split(',');
+        return PayrollAllowanceItems
+            .Where(x => ids.Contains(x.AllowanceItemSettingId.ToString()))
+            .GroupBy(x => x.Type)
+            .ToDictionary(
+                g => g.Key,
+                g => g.Select(x => x.AllowanceItemSettingId.ToString()).ToHashSet()
+            );
+    }
+
+    private string GetItemNamesByIds(IEnumerable<string> ids)
+    {
+        var idArray = ids.ToArray();
+        if (idArray.Length == 0)
+        {
+            return string.Empty;
+        }
+
+        return string.Join(", ", PayrollAllowanceItems
+            .Where(x => idArray.Contains(x.AllowanceItemSettingId.ToString()))
+            .Select(x => x.ItemName));
     }
 }

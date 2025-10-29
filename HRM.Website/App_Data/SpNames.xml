@@ -112,6 +112,9 @@
         <Setting Key="Employee_Transfer" SpName="Employee_Transfer" DbName="bodb_HRM" Plain="0" />
 		<Setting Key="Transfer_HistoryWork_Get" SpName="Transfer_HistoryWork_Get" DbName="bodb_HRM" Plain="0" />
     </Function>
+    <Function Name="EmployeePayrollSetting">
+        <Setting Key="EmployeePayrollAllowance_GetByEmpId" SpName="EmployeePayrollAllowance_GetByEmpId" DbName="bodb_HRM" Plain="0" />
+    </Function>
     <Function Name="Group">
         <Setting Key="EmployeeGroup_GetGroup" SpName="EmployeeGroup_GetGroup" DbName="bodb_HRM" Plain="0" />
         <Setting Key="GetGroupOfEmployee" SpName="EmployeeGroup_GetGroupOfEmployee" DbName="bodb_HRM" Plain="0" />
@@ -146,6 +149,7 @@
         <Setting Key="GroupId_ByGroupTeamId_Get" SpName="GroupId_ByGroupTeamId_Get" DbName="bodb_HRM" Plain="0" />
         <Setting Key="GroupSupervisor_GetCompaniesByRoleIdForEmployee" SpName="GroupSupervisor_GetCompaniesByRoleIdForEmployee" DbName="bodb_HRM" Plain="0" />
         <Setting Key="Employee_GetByDataPermission" SpName="Employee_GetByDataPermission" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Employee_GroupScope_GetPayrollInfo" SpName="Employee_GroupScope_GetPayrollInfo" DbName="bodb_HRM" Plain="0" />
     </Function>
     <Function Name="Lookup">
         <Setting Key="Lookup_GetLookupData" SpName="Lookup_GetLookupData" DbName="bodb_HRM" Plain="0" />
@@ -594,8 +598,13 @@
         <Setting Key="EmployeePayroll_Get" SpName="EmployeePayroll_Get" DbName="bodb_HRM" Plain="0" />
         <Setting Key="SalaryUploadHistory_Get" SpName="SalaryUploadHistory_Get" DbName="bodb_HRM" Plain="0" />
         <Setting Key="EmployeePayroll_ConfirmUpload" SpName="EmployeePayroll_ConfirmUpload" DbName="bodb_HRM" Plain="0" />
-        <Setting Key="PayrollManagement_GetByMonth" SpName="PayrollManagement_GetByMonth" DbName="bodb_HRM" Plain="0" />
-    </Function>
+		<Setting Key="PayrollManagement_GetByMonth" SpName="PayrollManagement_GetByMonth" DbName="bodb_HRM" Plain="0" />
+		<Setting Key="PayrollItemSettings_Get" SpName="PayrollItemSettings_Get" DbName="bodb_HRM" Plain="0" />
+		<Setting Key="AllowanceItem_Get" SpName="AllowanceItem_Get" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="AllowanceItem_Create" SpName="AllowanceItem_Create" DbName="bodb_HRM" Plain="0" />
+		<Setting Key="AllowanceItem_Edit" SpName="AllowanceItem_Edit" DbName="bodb_HRM" Plain="0" />
+		<Setting Key="AllowanceItem_Delete" SpName="AllowanceItem_Delete" DbName="bodb_HRM" Plain="0" />
+	</Function>
     <Function Name="CompanySecondmentEmployee">
         <Setting Key="CompanySecondmentEmployee_Get" SpName="CompanySecondmentEmployee_Get" DbName="bodb_HRM" Plain="0" />
         <Setting Key="CompanySecondmentEmployee_Insert" SpName="CompanySecondmentEmployee_Insert" DbName="bodb_HRM" Plain="0" />

@@ -60,8 +60,16 @@ public class Employee : EntityBase<int>
     public int? JobLevelId { get; set; }
 
     public short? ManagementLevelId { get; set; }
+
     public int? SalaryStructureId { get; set; }
-    public string Salary { get; set; }
+
+    public string SalaryStructure { get; set; }
+
+    public string BasicSalary { get; set; }
+
+    public string SpecialSubsidy { get; set; }
+
+    public string JobLevelAddOn { get; set; }
 
     public bool Enabled { get; set; }
 
@@ -237,6 +245,13 @@ public class Employee : EntityBase<int>
 
     [Display(Name = "Auto-Approved")]
     public bool AutoApproveRequest { get; set; }
+
+    public string AllowanceItemSettingIds { get; set; }
+
+    public int[] GetAllowanceItemSettingIdsArray()
+    {
+        return AllowanceItemSettingIds?.Split(',').Select(x => int.TryParse(x, out var id) ? id : 0).Where(x => x > 0).ToArray() ?? [];
+    }
 
     public IEnumerable<LogObjectDetail> HistoryWork { get; set; }
 

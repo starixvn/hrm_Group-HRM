@@ -150,4 +150,12 @@ public static class RazorHelpers
                 </select>
             """;
     }
+
+    public static string FormatThousandSeparator(string value)
+    {
+       var formattedValue = decimal.TryParse(value, out var salaryValue) 
+            ? salaryValue.ToString("#,##0.##")
+            : value;
+        return formattedValue;
+    }
 }

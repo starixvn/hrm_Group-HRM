@@ -1,0 +1,91 @@
+@import "../../abstracts/mixins";
+@import "../../abstracts/variables";
+@import "../../components/buttons-new";
+@import "../../layout/toastr";
+@import "../../layout/filter";
+@import "../../layout/table";
+@import "../../vendors/react-datepicker";
+
+.filter,
+.table-custom {
+  max-width: 992px;
+}
+
+.modal-dialog {
+  position: fixed !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  margin: 0 !important;
+}
+
+.btn {
+  &:focus,
+  &:active {
+    outline: none;
+  }
+}
+
+.btn-request {
+  margin-left: 5px;
+}
+
+.form-group {
+  margin-bottom: 0 !important;
+}
+
+.text-left {
+  text-align: left !important;
+}
+
+.text-right {
+  text-align: right !important;
+}
+
+.table.table-custom {
+  tbody {
+    tr.even-row {
+      background: #ececec !important;
+    }
+
+    tr.odd-row {
+      background: #fff !important;
+    }
+
+    tr.hovered-row {
+      background: #e3eceb !important;
+    }
+  }
+}
+
+.add-edit-allowance-item-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  .content-line {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+
+    div:first-child {
+      flex: 1;
+    }
+
+    div:last-child {
+      flex: 4;
+    }
+  }
+
+  .no-spinner::-webkit-outer-spin-button,
+  .no-spinner::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  .no-spinner[type="number"] {
+    -moz-appearance: textfield;
+    appearance: textfield;
+  }
+}

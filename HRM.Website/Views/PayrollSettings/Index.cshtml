@@ -1,0 +1,23 @@
+﻿@using HRM.Models.PayrollManagement
+@using HRM.Resources
+@using HRM.Website.Helper
+@model bool
+@{
+    ViewData["Title"] = "Payroll Settings";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section css {
+    <link href="~/dist/styles/payroll-setting.index.css" rel="stylesheet" asp-append-version="true" />
+}
+@section js {
+    <script type="text/javascript">
+        window.hasPermission = "@Model";
+    </script>
+    <script src="~/dist/js/payroll-setting.home.js" asp-append-version="true"></script>
+}
+@section Breadcrumb {
+    <a class="step">@Labels.HRSpace</a><span class="step">@ViewData["Title"]</span>
+}
+
+<h2 class="page-title">@ViewData["Title"]</h2>
+<div id="payroll-setting"></div>

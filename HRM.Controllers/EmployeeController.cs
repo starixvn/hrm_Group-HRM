@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Fanex.Data;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Models.Role;
 using GO.UserControl.Client.Core.Models.User;
@@ -13,6 +12,7 @@ using HRM.Core.Enums;
 using HRM.Core.Filters;
 using HRM.Core.Services;
 using HRM.Criteria.Employee;
+using HRM.Criteria.PayrollManagement;
 using HRM.Criteria.Supervisor;
 using HRM.Models;
 using HRM.Models.Group;
@@ -47,6 +47,7 @@ public class EmployeeController(
     IRoleService roleService,
     IMinIOService minIOService,
     ICompanyService companyService,
+    IPayrollSettingService payrollSettingService,
     ISalaryStructureService salaryStructureService) : BaseController(session)
 #pragma warning restore S107 // Methods should not have too many parameters
 {
@@ -180,8 +181,10 @@ public class EmployeeController(
         ViewBag.Fri = employeeShift.FriShiftName;
         ViewBag.Sat = employeeShift.SatShiftName;
         ViewBag.HasPermission = session.HasPermissionOnFunction(FunctionKey.EmployeeManagement, Policy.Host);
+        ViewBag.HasReadPermissionOnPayrollInfoOnly = session.HasPermissionOnFunction(FunctionKey.PayrollInfoOnly, Policy.Read);
+        ViewBag.HasReadPermissionOnPayrollInfoWithAmount = session.HasPermissionOnFunction(FunctionKey.PayrollInfoWithAmount, Policy.Read);
         ViewBag.EnableGroupDate = await commonDataService.IsEnableGroupDateAsync();
-
+        ViewBag.EmployeePayrollAllowances = await employeeService.GetEmployeePayrollAllowanceByEmpIdAsync(id);
         return View(model);
     }
 
@@ -271,8 +274,7 @@ public class EmployeeController(
             {
                 return RedirectToAction("AccessDenied", "Error");
             }
-
-            employee.Salary = !string.IsNullOrWhiteSpace(employee.Salary) ? Cryptography.DecryptPassword(employee.Salary) : string.Empty;
+            
             employee.Coutries = await commonDataService.GetAllCountry();
             var supervisors = (await GetSupervisors(id)).ToList();
             employee.Verifier = GetVerifiers(supervisors);
@@ -624,8 +626,10 @@ public class EmployeeController(
         }
 
         ViewBag.IsShowSubCompanyConfig = subCompanies != null && subCompanies.Any();
-        ViewBag.HasReadPermissionOnSalaryStructure = session.HasPermissionOnFunction(FunctionKey.SalaryStructureConfiguration, Policy.Read);
-        ViewBag.HasHostPermissionOnSalaryStructure = session.HasPermissionOnFunction(FunctionKey.SalaryStructureConfiguration, Policy.Host);
+        ViewBag.HasReadPermissionOnPayrollInfoOnly = session.HasPermissionOnFunction(FunctionKey.PayrollInfoOnly, Policy.Read);
+        ViewBag.HasReadPermissionOnPayrollInfoWithAmount = session.HasPermissionOnFunction(FunctionKey.PayrollInfoWithAmount, Policy.Read);
+        ViewBag.HasHostPermissionOnPayrollInfoOnly = session.HasPermissionOnFunction(FunctionKey.PayrollInfoOnly, Policy.Host);
+        ViewBag.HasHostPermissionOnPayrollInfoWithAmount = session.HasPermissionOnFunction(FunctionKey.PayrollInfoWithAmount, Policy.Host);
 
         ViewBag.JobTitles = await commonDataService.GetLookupDataByCodeAsync(Constants.JobTitle, session.Get<int>(SessionKey.CurrentCompanyId));
         ViewBag.JobLevel = jobLevels;
@@ -634,6 +638,12 @@ public class EmployeeController(
         ViewBag.Roles = roles;
         ViewBag.SubCompanies = subCompanies;
         ViewBag.SalaryStructures = await salaryStructureService.GetSalaryStructureAsync(CurrentCompanyId);
+        ViewBag.AllowanceItemSettings = await payrollSettingService.GetPayrollItemSettingsAsync(
+            new GetPayrollItemSettingsCriteria
+            {
+                CompanyId = CurrentCompanyId, Category = (int)PayrollSettingType.Allowance
+
+            });
     }
 
     private string BuildRole(IList<Role> roles)

@@ -62,8 +62,9 @@ public static class EmployeeHelper
             MilitaryToDate = model.MilitaryToDate,
             SubCompanyId = model.SubCompanyId,
             SalaryStructureId = model.SalaryStructureId,
-            Salary = !string.IsNullOrWhiteSpace(model.Salary) ? Cryptography.EncryptPassword(model.Salary) : model.Salary,
-            AutoApproveRequest = model.AutoApproveRequest
+            SpecialSubsidy = !string.IsNullOrWhiteSpace(model.SpecialSubsidy) ? Cryptography.EncryptPassword(model.SpecialSubsidy) : model.SpecialSubsidy,
+            AutoApproveRequest = model.AutoApproveRequest,
+            AllowanceItemSettingIds = model.AllowanceItemSettingIds
         };
     }
 }

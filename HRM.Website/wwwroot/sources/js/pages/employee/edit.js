@@ -98,7 +98,33 @@ $(document).ready(function () {
 
     initDatepicker();
     let $uploadButton = $('#upload');
-    $('#CountryCode, #JobTitleId, #JobLevelId, #ManagementLevelId, #SubCompanyId, select#SalaryStructureId').chosen();
+    $('#CountryCode, #JobTitleId, #SubCompanyId, #JobLevelId, #SalaryStructureId, .allowance-select').chosen();
+    
+    // Function to collect all selected allowance IDs
+    function collectAllowanceIds() {
+        const selectedIds = [];
+        $('.allowance-select').each(function() {
+            const value = $(this).val();
+            if (value) {
+                if (Array.isArray(value)) {
+                    // Multi-select: add all selected values
+                    selectedIds.push(...value);
+                } else if (value !== '') {
+                    // Single select: add the value if not empty
+                    selectedIds.push(value);
+                }
+            }
+        });
+        return selectedIds.join(',');
+    }
+    
+    // Update hidden field when allowance selections change
+    $('.allowance-select').on('change', function() {
+        $('#AllowanceItemSettingIds').val(collectAllowanceIds());
+    });
+    
+    // Initialize the hidden field with current selections
+    $('#AllowanceItemSettingIds').val(collectAllowanceIds());
 
     bindDisciplineRole(true);
     $('#Roles2Array8').click(function () {

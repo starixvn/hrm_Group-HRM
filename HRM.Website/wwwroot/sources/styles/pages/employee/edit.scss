@@ -105,3 +105,57 @@
 #WorkingDays, #WorkingHours, #OffDaysbyWeek, #SpecialOT, #WorkingHoursbyWeek {
     width: 90px;
 }
+
+.salary-structure {
+    margin-bottom: 0;
+
+    .type-row {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .type-label {
+        width: 180px;
+        min-width: 180px;
+    }
+
+    .type-control {
+        flex: 1;
+        max-width: 300px;
+
+        .form-control {
+            font-size: 1.3rem;
+            height: 27px;
+            padding: 0 5px;
+        }
+
+        .chosen-choices {
+            border-radius: 4px;
+        }
+    }
+
+    .select-form {
+        margin: 0;
+    }
+
+    td.group-cell {
+        vertical-align: middle;
+        white-space: nowrap;
+    }
+
+    .text-right {
+        text-align: right;
+    }
+
+    colgroup col {
+        &:first-child {
+            width: 20%;
+        }
+
+        &:nth-child(2) {
+            width: 80%;
+        }
+    }
+}
+

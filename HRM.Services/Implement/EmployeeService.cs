@@ -12,13 +12,16 @@ using Criteria.AnnualLeave;
 using Criteria.Employee;
 using Criteria.Shift;
 using Criteria.Supervisor;
+using Fanex.Data;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Services;
 using GO.UserControl.Client.Core.Session;
 using HRM.Core.Models;
 using HRM.Core.Services;
+using HRM.Criteria.EmployeePayrollSetting;
 using HRM.Criteria.Report;
 using HRM.Models.Employees;
+using HRM.Models.PayrollManagement;
 using HRM.Repositories.Interfaces;
 using Interfaces;
 using Models;
@@ -59,6 +62,9 @@ public class EmployeeService(
         if (employee != null)
         {
             employee.Roles = await roleService.GetByUserIdAsync(employee.UserId);
+            employee.BasicSalary = EncryptSalary(employee.BasicSalary);
+            employee.JobLevelAddOn = EncryptSalary(employee.JobLevelAddOn);
+            employee.SpecialSubsidy = EncryptSalary(employee.SpecialSubsidy);
         }
 
         return employee;
@@ -78,6 +84,22 @@ public class EmployeeService(
         }
 
         return employee;
+    }
+    
+     public async Task<IEnumerable<EmployeePayrollAllowance>> GetEmployeePayrollAllowanceByEmpIdAsync(int empId)
+    {
+        var criteria = new GetEmployeePayrollAllowanceByEmpIdCriteria
+        {
+            EmpId = empId
+        };
+        var allowances = await baseService.GetDataAsync<EmployeePayrollAllowance>(criteria);
+        
+        foreach (var allowance in allowances)
+        {
+            allowance.Amount = EncryptSalary(allowance.Amount);
+        }
+        
+        return allowances;
     }
 
     public async Task<Employee> GetEmployeeByIdInGroupScopeAsync(int id)
@@ -358,8 +380,9 @@ public class EmployeeService(
             CompanyId = companyId,
             SubCompanyId = param.SubCompanyId,
             SalaryStructureId = param.SalaryStructureId,
-            Salary = param.Salary,
-            AutoApproveRequest = param.AutoApproveRequest
+            SpecialSubsidy = param.SpecialSubsidy,
+            AutoApproveRequest = param.AutoApproveRequest,
+            AllowanceItemSettingIds = param.AllowanceItemSettingIds
         };
         return await baseService.ExecuteNonQueryAsync(criteria);
     }
@@ -495,6 +518,14 @@ public class EmployeeService(
             Email = param.Email,
             IsActive = param.Enabled
         });
+    }
+    
+    private static string EncryptSalary(string salary) {
+        if (string.IsNullOrWhiteSpace(salary)) {
+            return string.Empty;
+        }
+
+        return Cryptography.DecryptPassword(salary);
     }
 
     public async Task<int> TransferEmployeeAsync(EmployeeTransfer model)
