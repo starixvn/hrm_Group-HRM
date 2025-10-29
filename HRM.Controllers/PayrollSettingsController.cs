@@ -4,6 +4,7 @@ using Fanex.Data;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
 using HRM.Core.Constants;
+using HRM.Core.Enums;
 using HRM.Core.Filters;
 using HRM.Criteria.EmployeePayrollSetting;
 using HRM.Criteria.PayrollManagement;
@@ -44,7 +45,8 @@ public class PayrollSettingsController(
     {
         var criteria = new GetPayrollSettingTypeCriteria
         {
-            CompanyId = CurrentCompanyId
+            CompanyId = CurrentCompanyId,
+            PayrollSettingCategory = PayrollSettingType.Allowance
         };
 
         var result = await payrollSettingService.GetPayrollItemSettingTypes(criteria);
