@@ -69,3 +69,13 @@ table.table.table-custom thead tr th:first-child {
   }
 }
 
+table.table.table-custom.transfer-list-table {
+  tbody tr td {
+    &.text-left {
+      text-align: left;
+    }
+    &.text-center {
+      text-align: center;
+    }
+  }
+}

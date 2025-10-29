@@ -12,7 +12,7 @@ const Row = ({ rowIndex, item }) => {
       }`}
     >
       <td>{rowIndex}</td>
-      <td className="text-left">{item.ctrId}</td>
+      <td>{item.ctrId}</td>
       <td className="text-left">{item.fullName}</td>
       <td className="text-left">{item.fromNickName}</td>
       <td className="text-left">{item.fromBUName}</td>
@@ -24,7 +24,7 @@ const Row = ({ rowIndex, item }) => {
       <td className="text-left">{item.toDeptName}</td>
       <td className="text-left">{item.toTeamName}</td>
       <td className="text-left">{item.toCompanyName}</td>
-      <td className="text-left">
+      <td>
         {item.remark ? (
           <div className="tooltip-container">
             <i className="fa fa-comment" />

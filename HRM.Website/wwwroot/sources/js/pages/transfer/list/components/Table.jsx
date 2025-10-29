@@ -124,7 +124,7 @@ const Table = ({ data }) => {
   };
 
   return (
-    <table className="table table-custom">
+    <table className="table table-custom transfer-list-table">
       <thead>
         <tr>
           {columns.map(col => (
