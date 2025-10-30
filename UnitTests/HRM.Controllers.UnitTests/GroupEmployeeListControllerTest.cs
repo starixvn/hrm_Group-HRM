@@ -1,10 +1,7 @@
 ﻿using GO.UserControl.Client.Core.Enumerables;
-using GO.UserControl.Client.Core.Models.User;
-using GO.UserControl.Client.Core.Services;
 using HRM.Controllers.GroupSpace;
 using HRM.Core.Constants;
 using HRM.Core.Enums;
-using HRM.Core.Models;
 using HRM.Core.Services;
 using HRM.Criteria.Employee;
 using HRM.Criteria.EmployeeWorkFromHome;
@@ -15,7 +12,6 @@ using HRM.Models.Group;
 using HRM.Models.Supervisor;
 using HRM.Models.Unit;
 using HRM.Services.ExportExcel.Employee;
-using HRM.Services.Implement;
 using HRM.Services.Interfaces;
 using HRM.ViewModels.EmployeeGroup;
 using Microsoft.AspNetCore.Mvc;
@@ -40,11 +36,7 @@ public class GroupEmployeeListControllerTest : BaseControllerTest
         _baseService = Substitute.For<IBaseService>();
         var employeeService = Substitute.For<IEmployeeService>();
         var secondCompanyEmployeeService = Substitute.For<ISecondCompanyEmployeeService>();
-        var userService = Substitute.For<IUserService>();
-        var commonDataService = Substitute.For<ICommonDataService>();
-        var jobLevelService = Substitute.For<IJobLevelService>();
         _monthlyPayrollService = Substitute.For<IMonthlyPayrollService>();
-        var managementLevelService = Substitute.For<IManagementLevelService>();
 
         _controller = new GroupEmployeeListController(
             _session,
@@ -56,11 +48,7 @@ public class GroupEmployeeListControllerTest : BaseControllerTest
             _baseService,
             employeeService,
             secondCompanyEmployeeService,
-            userService,
-            commonDataService,
-            jobLevelService,
-            _monthlyPayrollService,
-            managementLevelService);
+            _monthlyPayrollService);
     }
 
     [Fact]
@@ -371,8 +359,7 @@ public class GroupEmployeeListControllerTest : BaseControllerTest
             _session, teamService, companyService, Substitute.For<IUnitService>(),
             Substitute.For<IDepartmentService>(), Substitute.For<IExportExcelEmployeeInfoService>(),
             _baseService, Substitute.For<IEmployeeService>(), Substitute.For<ISecondCompanyEmployeeService>(),
-            Substitute.For<IUserService>(), Substitute.For<ICommonDataService>(),
-            Substitute.For<IJobLevelService>(), _monthlyPayrollService, Substitute.For<IManagementLevelService>());
+            _monthlyPayrollService);
 
         // Act
         var result = await controller.Index("1,2");
@@ -403,8 +390,7 @@ public class GroupEmployeeListControllerTest : BaseControllerTest
             _session, teamService, companyService, Substitute.For<IUnitService>(),
             Substitute.For<IDepartmentService>(), Substitute.For<IExportExcelEmployeeInfoService>(),
             _baseService, Substitute.For<IEmployeeService>(), Substitute.For<ISecondCompanyEmployeeService>(),
-            Substitute.For<IUserService>(), Substitute.For<ICommonDataService>(),
-            Substitute.For<IJobLevelService>(), _monthlyPayrollService, Substitute.For<IManagementLevelService>());
+            _monthlyPayrollService);
 
         // Act
         var result = await controller.Index();
@@ -432,8 +418,7 @@ public class GroupEmployeeListControllerTest : BaseControllerTest
             _session, Substitute.For<ITeamService>(), companyService, Substitute.For<IUnitService>(),
             Substitute.For<IDepartmentService>(), Substitute.For<IExportExcelEmployeeInfoService>(),
             _baseService, Substitute.For<IEmployeeService>(), Substitute.For<ISecondCompanyEmployeeService>(),
-            Substitute.For<IUserService>(), Substitute.For<ICommonDataService>(),
-            Substitute.For<IJobLevelService>(), _monthlyPayrollService, Substitute.For<IManagementLevelService>());
+            _monthlyPayrollService);
 
         // Act
         var result = await controller.GetCompanyDropdownList();
@@ -463,8 +448,7 @@ public class GroupEmployeeListControllerTest : BaseControllerTest
             _session, teamService, Substitute.For<ICompanyService>(), unitService,
             departmentService, Substitute.For<IExportExcelEmployeeInfoService>(),
             _baseService, Substitute.For<IEmployeeService>(), Substitute.For<ISecondCompanyEmployeeService>(),
-            Substitute.For<IUserService>(), Substitute.For<ICommonDataService>(),
-            Substitute.For<IJobLevelService>(), _monthlyPayrollService, Substitute.For<IManagementLevelService>());
+            _monthlyPayrollService);
 
         // Act
         var result = await controller.GetOrgChart();
@@ -496,8 +480,7 @@ public class GroupEmployeeListControllerTest : BaseControllerTest
             _session, teamService, Substitute.For<ICompanyService>(), unitService,
             departmentService, Substitute.For<IExportExcelEmployeeInfoService>(),
             _baseService, Substitute.For<IEmployeeService>(), Substitute.For<ISecondCompanyEmployeeService>(),
-            Substitute.For<IUserService>(), Substitute.For<ICommonDataService>(),
-            Substitute.For<IJobLevelService>(), _monthlyPayrollService, Substitute.For<IManagementLevelService>());
+            _monthlyPayrollService);
 
         // Act
         var result = await controller.GetOrgChart(true);
@@ -521,8 +504,7 @@ public class GroupEmployeeListControllerTest : BaseControllerTest
             _session, Substitute.For<ITeamService>(), Substitute.For<ICompanyService>(), Substitute.For<IUnitService>(),
             Substitute.For<IDepartmentService>(), Substitute.For<IExportExcelEmployeeInfoService>(),
             _baseService, employeeService, Substitute.For<ISecondCompanyEmployeeService>(),
-            Substitute.For<IUserService>(), Substitute.For<ICommonDataService>(),
-            Substitute.For<IJobLevelService>(), _monthlyPayrollService, Substitute.For<IManagementLevelService>());
+            _monthlyPayrollService);
 
         SetupPermission(FunctionKey.GroupEmployeeList, Policy.Host, true);
 
@@ -546,8 +528,7 @@ public class GroupEmployeeListControllerTest : BaseControllerTest
             _session, Substitute.For<ITeamService>(), Substitute.For<ICompanyService>(), Substitute.For<IUnitService>(),
             Substitute.For<IDepartmentService>(), Substitute.For<IExportExcelEmployeeInfoService>(),
             _baseService, employeeService, Substitute.For<ISecondCompanyEmployeeService>(),
-            Substitute.For<IUserService>(), Substitute.For<ICommonDataService>(),
-            Substitute.For<IJobLevelService>(), _monthlyPayrollService, Substitute.For<IManagementLevelService>());
+            _monthlyPayrollService);
 
         SetupPermission(FunctionKey.GroupEmployeeList, Policy.Host, true);
 
@@ -558,145 +539,6 @@ public class GroupEmployeeListControllerTest : BaseControllerTest
         var redirectResult = Assert.IsType<RedirectToActionResult>(result);
         Assert.Equal("PageNotFound", redirectResult.ActionName);
         Assert.Equal("Error", redirectResult.ControllerName);
-    }
-
-    [Fact]
-    public async Task Transfer_WithValidModel_ReturnsSuccessfulResult()
-    {
-        // Arrange
-        var model = new EmployeeTransfer
-        {
-            Code = "EMP001",
-            NickName = "John",
-            TargetCompanyId = 2,
-            TransferOutCompanyId = 1,
-            UserId = 100
-        };
-
-        var checkResult = new CommandResult { Code = 0 };
-        var editResult = new CommandResult { Code = 0 };
-        var companySites = new List<Models.CompanySite>
-        {
-            new() { CompanyId = 1, SiteId = 1 },
-            new() { CompanyId = 2, SiteId = 2 }
-        };
-
-        var employeeService = Substitute.For<IEmployeeService>();
-        var companyService = Substitute.For<ICompanyService>();
-        var userService = Substitute.For<IUserService>();
-
-        employeeService.CheckExistAsync(model.Code, model.NickName).Returns(checkResult);
-        employeeService.TransferEmployeeAsync(model).Returns(123);
-        employeeService.EditAsync(Arg.Any<int>(), Arg.Any<EditEmployeeParam>(), model.TargetCompanyId).Returns(editResult);
-        employeeService.UpdateUserInfoAsync(model.UserId, Arg.Any<EditEmployeeParam>()).Returns(new GO.UserControl.Client.Core.Models.CommandResult());
-
-        companyService.GetAllCompanySiteAsync().Returns(companySites);
-        userService.UpdateUserSiteAsync(Arg.Any<UpdateUserSiteParam>()).Returns(new GO.UserControl.Client.Core.Models.CommandResult());
-        userService.AssignRoleAsync(Arg.Any<AssignRoleParam>()).Returns(new GO.UserControl.Client.Core.Models.CommandResult());
-
-        var controller = new GroupEmployeeListController(
-            _session, Substitute.For<ITeamService>(), companyService, Substitute.For<IUnitService>(),
-            Substitute.For<IDepartmentService>(), Substitute.For<IExportExcelEmployeeInfoService>(),
-            _baseService, employeeService, Substitute.For<ISecondCompanyEmployeeService>(),
-            userService, Substitute.For<ICommonDataService>(),
-            Substitute.For<IJobLevelService>(), _monthlyPayrollService, Substitute.For<IManagementLevelService>());
-
-        SetupPermission(FunctionKey.GroupEmployeeList, Policy.Host, true);
-
-        // Act
-        var result = await controller.Transfer(model);
-
-        // Assert
-        var jsonResult = Assert.IsType<JsonResult>(result);
-        var commandResult = Assert.IsType<CommandResult>(jsonResult.Value);
-        Assert.True(commandResult.IsSuccessful);
-
-        await employeeService.Received(1).CheckExistAsync(model.Code, model.NickName);
-        await employeeService.Received(1).TransferEmployeeAsync(model);
-        await employeeService.Received(1).EditAsync(Arg.Any<int>(), Arg.Any<EditEmployeeParam>(), model.TargetCompanyId);
-        await employeeService.Received(1).UpdateUserInfoAsync(model.UserId, Arg.Any<EditEmployeeParam>());
-    }
-
-    [Fact]
-    public async Task Transfer_WithCheckExistFailure_ReturnsFailureResult()
-    {
-        // Arrange
-        var model = new EmployeeTransfer
-        {
-            Code = "EMP001",
-            NickName = "John",
-            TargetCompanyId = 2,
-            TransferOutCompanyId = 1,
-            UserId = 100
-        };
-
-        var checkResult = new CommandResult { Code = 1, Message = "Employee already exists" };
-
-        var employeeService = Substitute.For<IEmployeeService>();
-        employeeService.CheckExistAsync(model.Code, model.NickName).Returns(checkResult);
-
-        var controller = new GroupEmployeeListController(
-            _session, Substitute.For<ITeamService>(), Substitute.For<ICompanyService>(), Substitute.For<IUnitService>(),
-            Substitute.For<IDepartmentService>(), Substitute.For<IExportExcelEmployeeInfoService>(),
-            _baseService, employeeService, Substitute.For<ISecondCompanyEmployeeService>(),
-            Substitute.For<IUserService>(), Substitute.For<ICommonDataService>(),
-            Substitute.For<IJobLevelService>(), _monthlyPayrollService, Substitute.For<IManagementLevelService>());
-
-        SetupPermission(FunctionKey.GroupEmployeeList, Policy.Host, true);
-
-        // Act
-        var result = await controller.Transfer(model);
-
-        // Assert
-        var jsonResult = Assert.IsType<JsonResult>(result);
-        var commandResult = Assert.IsType<CommandResult>(jsonResult.Value);
-        Assert.False(commandResult.IsSuccessful);
-        Assert.Equal("Employee already exists", commandResult.Message);
-
-        await employeeService.Received(1).CheckExistAsync(model.Code, model.NickName);
-        await employeeService.DidNotReceive().TransferEmployeeAsync(Arg.Any<EmployeeTransfer>());
-    }
-
-    [Fact]
-    public async Task Transfer_WithEditFailure_DoesNotUpdateUserInfo()
-    {
-        // Arrange
-        var model = new EmployeeTransfer
-        {
-            Code = "EMP001",
-            NickName = "John",
-            TargetCompanyId = 2,
-            TransferOutCompanyId = 1,
-            UserId = 100
-        };
-
-        var checkResult = new CommandResult { Code = 0 };
-        var editResult = new CommandResult { Code = 1, Message = "Edit failed" };
-
-        var employeeService = Substitute.For<IEmployeeService>();
-        employeeService.CheckExistAsync(model.Code, model.NickName).Returns(checkResult);
-        employeeService.TransferEmployeeAsync(model).Returns(123);
-        employeeService.EditAsync(Arg.Any<int>(), Arg.Any<EditEmployeeParam>(), model.TargetCompanyId).Returns(editResult);
-
-        var controller = new GroupEmployeeListController(
-            _session, Substitute.For<ITeamService>(), Substitute.For<ICompanyService>(), Substitute.For<IUnitService>(),
-            Substitute.For<IDepartmentService>(), Substitute.For<IExportExcelEmployeeInfoService>(),
-            _baseService, employeeService, Substitute.For<ISecondCompanyEmployeeService>(),
-            Substitute.For<IUserService>(), Substitute.For<ICommonDataService>(),
-            Substitute.For<IJobLevelService>(), _monthlyPayrollService, Substitute.For<IManagementLevelService>());
-
-        SetupPermission(FunctionKey.GroupEmployeeList, Policy.Host, true);
-
-        // Act
-        var result = await controller.Transfer(model);
-
-        // Assert
-        var jsonResult = Assert.IsType<JsonResult>(result);
-        var commandResult = Assert.IsType<CommandResult>(jsonResult.Value);
-        Assert.False(commandResult.IsSuccessful);
-
-        await employeeService.Received(1).EditAsync(Arg.Any<int>(), Arg.Any<EditEmployeeParam>(), model.TargetCompanyId);
-        await employeeService.DidNotReceive().UpdateUserInfoAsync(Arg.Any<int>(), Arg.Any<EditEmployeeParam>());
     }
 
     [Fact]
@@ -730,8 +572,7 @@ public class GroupEmployeeListControllerTest : BaseControllerTest
             _session, Substitute.For<ITeamService>(), Substitute.For<ICompanyService>(), Substitute.For<IUnitService>(),
             Substitute.For<IDepartmentService>(), excelService,
             _baseService, Substitute.For<IEmployeeService>(), Substitute.For<ISecondCompanyEmployeeService>(),
-            Substitute.For<IUserService>(), Substitute.For<ICommonDataService>(),
-            Substitute.For<IJobLevelService>(), _monthlyPayrollService, Substitute.For<IManagementLevelService>());
+            _monthlyPayrollService);
 
         SetupPermission(FunctionKey.GroupEmployeeList, Policy.Read, true);
         SetupPermission(FunctionKey.GroupEmployeeList_ViewAll, Policy.Read, true);
@@ -796,8 +637,7 @@ public class GroupEmployeeListControllerTest : BaseControllerTest
             _session, Substitute.For<ITeamService>(), Substitute.For<ICompanyService>(), Substitute.For<IUnitService>(),
             Substitute.For<IDepartmentService>(), excelService,
             _baseService, Substitute.For<IEmployeeService>(), secondCompanyEmployeeService,
-            Substitute.For<IUserService>(), Substitute.For<ICommonDataService>(),
-            Substitute.For<IJobLevelService>(), _monthlyPayrollService, Substitute.For<IManagementLevelService>());
+            _monthlyPayrollService);
 
         SetupPermission(FunctionKey.GroupEmployeeList, Policy.Read, true);
         SetupPermission(FunctionKey.GroupEmployeeList_ViewAll, Policy.Read, true);
@@ -863,8 +703,7 @@ public class GroupEmployeeListControllerTest : BaseControllerTest
             _session, Substitute.For<ITeamService>(), Substitute.For<ICompanyService>(), Substitute.For<IUnitService>(),
             Substitute.For<IDepartmentService>(), excelService,
             _baseService, Substitute.For<IEmployeeService>(), secondCompanyEmployeeService,
-            Substitute.For<IUserService>(), Substitute.For<ICommonDataService>(),
-            Substitute.For<IJobLevelService>(), _monthlyPayrollService, Substitute.For<IManagementLevelService>());
+            _monthlyPayrollService);
 
         SetupPermission(FunctionKey.GroupEmployeeList, Policy.Read, true);
         SetupPermission(FunctionKey.GroupEmployeeList_ViewAll, Policy.Read, true);
@@ -883,48 +722,6 @@ public class GroupEmployeeListControllerTest : BaseControllerTest
                 emps.Any(e => e.EmpId == 1 && e.Location == "WFH") &&
                 emps.Any(e => e.EmpId == 2 && e.Location == "Remote Office") &&
                 emps.Any(e => e.EmpId == 3 && e.Location == "Office")));
-    }
-
-    [Fact]
-    public async Task GetInfoEmployeeTransfer_WithValidId_ReturnsEmployeeData()
-    {
-        // Arrange
-        var employee = new EmployeeTransfer { Id = 1, FullName = "John Doe" };
-        var countries = new List<Country> { new() { Id = 1, Name = "Vietnam" } };
-        var jobLevels = new List<JobLevel> { new() { Id = 1, Name = "Senior" } };
-        var managementLevels = new List<ManagementLevel> { new() { Id = 1, Name = "Manager" } };
-        var subCompanies = new List<SubCompany> { new() { SubCompanyId = 1, Name = "SubCompany1" } };
-        var jobTitles = new List<LookupData> { new() { Id = 1, Name = "Developer" } };
-
-        var employeeService = Substitute.For<IEmployeeService>();
-        var commonDataService = Substitute.For<ICommonDataService>();
-        var jobLevelService = Substitute.For<IJobLevelService>();
-        var managementLevelService = Substitute.For<IManagementLevelService>();
-        var companyService = Substitute.For<ICompanyService>();
-
-        employeeService.GetEmployeeTransferByIdAsync(1, 1).Returns(employee);
-        employeeService.CalculateLengthOfService(Arg.Any<DateTime?>(), Arg.Any<DateTime?>(), Arg.Any<DateTime?>()).Returns("2 years");
-        commonDataService.GetAllCountry().Returns(countries);
-        commonDataService.GetLookupDataByCodeAsync(Arg.Any<string>(), Arg.Any<int>()).Returns(jobTitles);
-        jobLevelService.GetJobLevel().Returns(jobLevels);
-        managementLevelService.GetManagementLevel().Returns(managementLevels);
-        companyService.GetSubCompanies(Arg.Any<short>()).Returns(subCompanies);
-
-        var controller = new GroupEmployeeListController(
-            _session, Substitute.For<ITeamService>(), companyService, Substitute.For<IUnitService>(),
-            Substitute.For<IDepartmentService>(), Substitute.For<IExportExcelEmployeeInfoService>(),
-            _baseService, employeeService, Substitute.For<ISecondCompanyEmployeeService>(),
-            Substitute.For<IUserService>(), commonDataService,
-            jobLevelService, _monthlyPayrollService, managementLevelService);
-
-        SetupPermission(FunctionKey.GroupEmployeeList, Policy.Host, true);
-
-        // Act
-        var result = await controller.GetInfoEmployeeTransfer(1, 2, 1);
-
-        // Assert
-        var jsonResult = Assert.IsType<JsonResult>(result);
-        Assert.Equal(employee, jsonResult.Value);
     }
 
     [Fact]
@@ -976,8 +773,7 @@ public class GroupEmployeeListControllerTest : BaseControllerTest
             _session, Substitute.For<ITeamService>(), Substitute.For<ICompanyService>(), Substitute.For<IUnitService>(),
             Substitute.For<IDepartmentService>(), Substitute.For<IExportExcelEmployeeInfoService>(),
             _baseService, employeeService, Substitute.For<ISecondCompanyEmployeeService>(),
-            Substitute.For<IUserService>(), Substitute.For<ICommonDataService>(),
-            Substitute.For<IJobLevelService>(), _monthlyPayrollService, Substitute.For<IManagementLevelService>());
+            _monthlyPayrollService);
 
         SetupPermission(FunctionKey.GroupEmployeeList, Policy.Host, true);
 
@@ -1000,8 +796,7 @@ public class GroupEmployeeListControllerTest : BaseControllerTest
             _session, Substitute.For<ITeamService>(), Substitute.For<ICompanyService>(), Substitute.For<IUnitService>(),
             Substitute.For<IDepartmentService>(), Substitute.For<IExportExcelEmployeeInfoService>(),
             _baseService, employeeService, Substitute.For<ISecondCompanyEmployeeService>(),
-            Substitute.For<IUserService>(), Substitute.For<ICommonDataService>(),
-            Substitute.For<IJobLevelService>(), _monthlyPayrollService, Substitute.For<IManagementLevelService>());
+            _monthlyPayrollService);
 
         SetupPermission(FunctionKey.GroupEmployeeList, Policy.Host, true);
 
@@ -1072,8 +867,7 @@ public class GroupEmployeeListControllerTest : BaseControllerTest
             _session, Substitute.For<ITeamService>(), Substitute.For<ICompanyService>(), Substitute.For<IUnitService>(),
             Substitute.For<IDepartmentService>(), Substitute.For<IExportExcelEmployeeInfoService>(),
             _baseService, employeeService, Substitute.For<ISecondCompanyEmployeeService>(),
-            Substitute.For<IUserService>(), Substitute.For<ICommonDataService>(),
-            Substitute.For<IJobLevelService>(), _monthlyPayrollService, Substitute.For<IManagementLevelService>());
+            _monthlyPayrollService);
 
         // Act
         var result = await controller.GetSupervisors(roleIds, query, excludeIds);
