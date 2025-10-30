@@ -38,12 +38,7 @@ public class GroupEmployeeListController(
     IBaseService baseService,
     IEmployeeService employeeService,
     ISecondCompanyEmployeeService secondCompanyEmployeeService,
-    IPayrollManagementService payrollManagementService) : BaseController(session)
-    IUserService userService,
-    ICommonDataService commonDataService,
-    IJobLevelService jobLevelService,
-    IMonthlyPayrollService payrollService,
-    IManagementLevelService managementLevelService) : BaseController(session)
+    IMonthlyPayrollService payrollService) : BaseController(session)
 #pragma warning restore S107 // Methods should not have too many parameters
 {
     [HrmPermission(Policy.Read, FunctionKey.GroupEmployeeList)]
