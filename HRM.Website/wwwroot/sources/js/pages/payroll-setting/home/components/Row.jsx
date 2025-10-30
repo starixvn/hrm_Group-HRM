@@ -3,7 +3,7 @@
 import SweetModalDialog from "../../../../shared/components/SweetModalDialog";
 import AddEditAllowanceItemContent from "./AddEditAllowanceItemContent";
 
-const Row = ({ rowIndex, item, saveEditData, onDelete }) => {
+const Row = ({ rowIndex, item, saveEditData, onDelete, types }) => {
   const [editModalDialog, setEditModalDialog] = useState(false);
   const [editData, setEditData] = useState({
     payrollItemSettingId: "",
@@ -147,7 +147,7 @@ const Row = ({ rowIndex, item, saveEditData, onDelete }) => {
 
       <SweetModalDialog
         show={editModalDialog}
-        contents={<AddEditAllowanceItemContent editData={editData} setEditData={setEditData} />}
+        contents={<AddEditAllowanceItemContent editData={editData} setEditData={setEditData} types={types} />}
         onSubmit={editAllowanceItem}
         onHide={() => setEditModalDialog(false)}
         title="Edit Allowance Item"

@@ -4,7 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using HRM.Core.Models;
 using HRM.Core.Services;
+using HRM.Criteria.EmployeePayrollSetting;
 using HRM.Criteria.PayrollManagement;
+using HRM.Models;
 using HRM.Models.PayrollManagement;
 using HRM.Services.Interfaces;
 
@@ -52,6 +54,11 @@ public class PayrollSettingService(IPayrollManagementService payrollManagementSe
             .ToList();
 
         return grouped;
+    }
+
+    public async Task<IEnumerable<PayrollItemSettingType>> GetPayrollItemSettingTypes(GetPayrollSettingTypeCriteria criteria)
+    {
+        return await baseService.GetDataAsync<PayrollItemSettingType>(criteria);
     }
 
     public async Task<CommandResult> CreateAllowanceItem(CreateAllowanceItemCriteria criteria)

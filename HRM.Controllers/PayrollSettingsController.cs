@@ -4,7 +4,9 @@ using Fanex.Data;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
 using HRM.Core.Constants;
+using HRM.Core.Enums;
 using HRM.Core.Filters;
+using HRM.Criteria.EmployeePayrollSetting;
 using HRM.Criteria.PayrollManagement;
 using HRM.Models.PayrollManagement;
 using HRM.Services.Interfaces;
@@ -29,10 +31,26 @@ public class PayrollSettingsController(
     {
         var criteria = new GetPayrollItemSettingsCriteria
         {
-            CompanyId = CurrentCompanyId
+            CompanyId = CurrentCompanyId,
+            Category = ((int)PayrollSettingType.Allowance)
         };
             
         var result = await payrollSettingService.GetPayrollItemSettings(criteria);
+
+        return Ok(result);
+    }
+
+    [HttpGet]
+    [HrmPermission(Policy.Read, FunctionKey.PayrollSetting)]
+    public async Task<IActionResult> GetPayrollSettingTypes()
+    {
+        var criteria = new GetPayrollSettingTypeCriteria
+        {
+            CompanyId = CurrentCompanyId,
+            PayrollSettingCategory = PayrollSettingType.Allowance
+        };
+
+        var result = await payrollSettingService.GetPayrollItemSettingTypes(criteria);
 
         return Ok(result);
     }

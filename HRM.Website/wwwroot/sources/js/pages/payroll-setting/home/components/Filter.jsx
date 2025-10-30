@@ -23,7 +23,7 @@ const Filter = ({ saveEditData, types }) => {
   };
 
   const handleOpen = () => {
-    const defaultId = types ? types[0].id : null;
+    const defaultId = types && types.length > 0 ? types[0].id : null;
     setData({
       ...initialData,
       payrollItemSettingId: defaultId,
