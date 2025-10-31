@@ -1,8 +1,8 @@
 import React from 'react';
 import { resolveClientUrl } from '../../../../shared/common.functions';
-import { monthNames, categories, getValue } from '../../utils/tableUtils';
+import { monthNames, categories, getValue, getUniqueLabel3Values, getValueByLabel3 } from '../../utils/tableUtils';
 
-const TableBody = ({ data, columns, maxMonth }) => {
+const TableBody = ({ data, columns, maxMonth, useLabel3ForCategory = false }) => {
     const handleCellClick = (e, empIds) => {
         if (empIds && empIds.length > 0) {
             e.preventDefault();
@@ -14,13 +14,17 @@ const TableBody = ({ data, columns, maxMonth }) => {
         }
     };
 
+    const label3Categories = useLabel3ForCategory ? getUniqueLabel3Values(columns) : null;
+    const displayCategories = useLabel3ForCategory ? label3Categories : categories;
+
     return (
         <tbody>
             {Array.from({ length: maxMonth }).map((_, monthIdx) => (
                 <React.Fragment key={monthIdx}>
-                    {categories.map((category, catIdx) => {
+                    {displayCategories.map((category, catIdx) => {
                         const isMonthEven = monthIdx % 2 === 0;
                         const isFirstCategory = catIdx === 0;
+                        
                         return (
                             <tr 
                                 key={`${monthIdx}-${catIdx}`} 
@@ -29,14 +33,24 @@ const TableBody = ({ data, columns, maxMonth }) => {
                                 {isFirstCategory ? (
                                     <td 
                                         className='month-label' 
-                                        rowSpan={categories.length}
+                                        rowSpan={displayCategories.length}
                                     >
                                         {monthNames[monthIdx]}
                                     </td>
                                 ) : null}
                                 <td className='category-label'>{category}</td>
                                 {columns.map((col, colIdx) => {
-                                    const { value, empIds } = getValue(data[colIdx], monthIdx, catIdx);
+                                    let value, empIds;
+                                    if (useLabel3ForCategory) {
+                                        const result = getValueByLabel3(col, monthIdx, category);
+                                        value = result.value;
+                                        empIds = result.empIds;
+                                    } else {
+                                        const result = getValue(data[colIdx], monthIdx, catIdx);
+                                        value = result.value;
+                                        empIds = result.empIds;
+                                    }
+                                    
                                     return (
                                         <td 
                                             key={colIdx}
