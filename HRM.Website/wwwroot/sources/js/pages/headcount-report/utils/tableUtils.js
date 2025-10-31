@@ -8,7 +8,6 @@ export const processColumns = (data) => {
         label2: item.label2 || '',
         label3: item.label3 || '',
         key: item.label1 || '',
-        isUnit: item.isUnitCategory,
         isUnitCategory: item.isUnitCategory,
         isGrandTotal: item.isGrandTotal
     }));
@@ -31,15 +30,24 @@ export const getValue = (unitData, month, categoryIndex) => {
     const detail = (details && details.find)
         ? details.find(d => d.month === month + 1)
         : null;
-    if (!detail) return 0;
+
+    if (!detail) {
+        return { value: 0, empIds: [] };
+    }
 
     switch (categoryIndex) {
-        case 0: return detail.newHire || 0;
-        case 1: return detail.probationResign || 0;
-        case 2: return detail.confirmedResign || 0;
-        case 3: return detail.transfer || 0;
-        case 4: return detail.currentHeadCount || 0;
-        default: return 0;
+        case 0:
+            return { value: detail.newHire || 0, empIds: detail.newHireEmpIds || [] };
+        case 1:
+            return { value: detail.probationResign || 0, empIds: detail.probationResignEmpIds || [] };
+        case 2:
+            return { value: detail.confirmedResign || 0, empIds: detail.confirmedResignEmpIds || [] };
+        case 3:
+            return { value: detail.transfer || 0, empIds: [...(detail.transferInEmpIds || []), ...(detail.transferOutEmpIds || [])] };
+        case 4:
+            return { value: detail.currentHeadCount || 0, empIds: detail.currentHeadCountEmpIds || [] };
+        default:
+            return { value: 0, empIds: [] };
     }
 };
 

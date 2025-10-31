@@ -20,9 +20,9 @@ const AppContainer = () => {
     });
 
     const tabs = [
-        { id: 0, label: 'Headcount by Unit', data: reportData.reportByUnit },
+        { id: 0, label: 'Headcount by BU', data: reportData.reportByUnit },
         { id: 1, label: 'Headcount by Company', data: reportData.reportByCompany },
-        { id: 2, label: 'Headcount by Details', data: reportData.reportByDetails },
+        { id: 2, label: 'Headcount Details', data: reportData.reportByDetails },
         { id: 3, label: 'Headcount by Country - Unit', data: reportData.reportByUnitCountry },
         { id: 4, label: 'Headcount by Country - Local', data: reportData.reportByUnitCountryLocal },
         { id: 5, label: 'Headcount by Country - Expat', data: reportData.reportByUnitCountryExpat }

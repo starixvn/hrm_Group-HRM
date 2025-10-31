@@ -10,6 +10,7 @@ namespace HRM.Repositories.HeadcountReport;
 public interface IHeadcountReportRepository
 {
     Task<HeadcountData> GetHeadcountDataAsync(int year);
+    Task<List<HeadcountDetailModel>> GetDetailAsync(string empIds);
 }
 
 public class HeadcountReportRepository(IBaseService baseService) : IHeadcountReportRepository
@@ -50,6 +51,15 @@ public class HeadcountReportRepository(IBaseService baseService) : IHeadcountRep
         var criteria = new GetEmployeeTransferCriteria { Year = year };
         var (transferIns, transferOuts) = await baseService.FetchMultipleAsync<EmployeeTransferData, EmployeeTransferData>(criteria);
         return (transferIns.ToList(), transferOuts.ToList());
+    }
+
+    public async Task<List<HeadcountDetailModel>> GetDetailAsync(string empIds)
+    {
+        var criteria = new GetHeadcountDetailCriteria 
+        { 
+            EmpIds = empIds 
+        };
+        return (await baseService.GetDataAsync<HeadcountDetailModel>(criteria)).ToList();
     }
 }
 

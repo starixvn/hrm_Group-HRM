@@ -75,7 +75,6 @@
     max-height: calc(100vh - 250px);
     position: relative;
     width: 100%;
-    //-webkit-overflow-scrolling: touch;
     margin-top: 0;
     & > .table {
         margin-top: 0 !important;
@@ -84,6 +83,9 @@
 .table.table.table-custom {
     margin: 0 !important;
     margin-top: 0 !important;
+    tbody tr {
+        background: none;
+    }
 }
 .table.table.table-custom tr th, td {
     &:first-child {
@@ -135,12 +137,14 @@
     }
     
     tbody tr.month-even td:first-child,
-    tbody tr.month-even td.month-label {
+    tbody tr.month-even td.month-label,
+    tbody tr.month-even {
         background-color: #FFFFFF !important;
     }
     
     tbody tr.month-odd td:first-child,
-    tbody tr.month-odd td.month-label {
+    tbody tr.month-odd td.month-label,
+    tbody tr.month-odd {
         background-color: #EBEDEC !important;
     }
     

@@ -27,7 +27,7 @@ const HeadcountTableByCompany = ({ data }) => {
             <TableBody 
                 data={data} 
                 columns={columns} 
-                maxMonth={maxMonth} 
+                maxMonth={maxMonth}
             />
         </TableWrapper>
     );
