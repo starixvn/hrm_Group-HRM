@@ -100,19 +100,16 @@ const LeaveBalance = ({ employeeData }) => {
           </div>
         </div>
       </div>
-      {employeeData && employeeData.EnableSickLeaveBalance && (
-        <div className="form-group">
-          <div className="label-form">
-            <label className="control-label">Sick Leave Balance</label>
-          </div>
-          <div className="input-form">
-            <div className="read-only-field">
-              {((employeeData && employeeData.SickLeaveBalance) || 0) +
-                " day(s)"}
-            </div>
+      <div className="form-group">
+        <div className="label-form">
+          <label className="control-label">Sick Leave Balance</label>
+        </div>
+        <div className="input-form">
+          <div className="read-only-field">
+            {((employeeData && employeeData.SickLeaveBalance) || 0) + " day(s)"}
           </div>
         </div>
-      )}
+      </div>
     </>
   );
 };
