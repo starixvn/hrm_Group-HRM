@@ -4,7 +4,6 @@ import TableBody from './shared/TableBody';
 import { renderFixedHeaders, renderGroupedHeaders } from './shared/TableHeaders';
 import { 
     processColumns, 
-    getMaxMonth, 
     groupByLabel1, 
     groupByLabel3, 
     groupByLabel2,
@@ -12,7 +11,6 @@ import {
 
 const HeadcountTableByDetails = ({ data }) => {
     const columns = processColumns(data);
-    const maxMonth = getMaxMonth(data);
 
     return (
         <TableWrapper>
@@ -31,7 +29,6 @@ const HeadcountTableByDetails = ({ data }) => {
             <TableBody 
                 data={data} 
                 columns={columns} 
-                maxMonth={maxMonth}
             />
         </TableWrapper>
     );

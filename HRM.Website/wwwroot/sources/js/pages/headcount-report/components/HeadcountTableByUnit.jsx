@@ -2,7 +2,7 @@ import React from 'react';
 import TableWrapper from './shared/TableWrapper';
 import TableBody from './shared/TableBody';
 import { renderFixedHeaders, renderGroupedHeaders } from './shared/TableHeaders';
-import { processColumns, getMaxMonth, groupByLabel1 } from '../utils/tableUtils';
+import { processColumns, groupByLabel1 } from '../utils/tableUtils';
 
 const HeadcountTableByUnit = ({ data }) => {
     if (!data || data.length === 0) {
@@ -10,7 +10,6 @@ const HeadcountTableByUnit = ({ data }) => {
     }
 
     const columns = processColumns(data);
-    const maxMonth = getMaxMonth(data);
 
     return (
         <TableWrapper>
@@ -23,7 +22,6 @@ const HeadcountTableByUnit = ({ data }) => {
             <TableBody 
                 data={data} 
                 columns={columns} 
-                maxMonth={maxMonth}
             />
         </TableWrapper>
     );

@@ -16,23 +16,20 @@ export const processColumns = (data) => {
 // Helper to get unique columns by label1 (only one column per label1)
 export const getUniqueColumnsByLabel1 = (data) => {
     const uniqueMap = new Map();
-    const uniqueData = [];
     const uniqueColumns = [];
     
     data.forEach((item, index) => {
-        const label1 = item.label1 || '';
+        const label1 = item.label1;
         if (!uniqueMap.has(label1)) {
             uniqueMap.set(label1, true);
-            uniqueData.push(item);
             uniqueColumns.push({
-                label: item.label1 || '',
-                label2: item.label2 || '',
-                label3: item.label3 || '',
-                key: item.label1 || '',
+                label: item.label1,
+                label2: item.label2,
+                label3: item.label3,
+                key: item.label1,
                 isUnitCategory: item.isUnitCategory,
                 isGrandTotal: item.isGrandTotal,
                 originalIndices: [index], // Store original indices for data aggregation
-                allData: data // Store reference to all data for aggregation
             });
         } else {
             // Add index to existing column's originalIndices for aggregation
@@ -43,7 +40,7 @@ export const getUniqueColumnsByLabel1 = (data) => {
         }
     });
     
-    return { columns: uniqueColumns, data: uniqueData };
+    return { columns: uniqueColumns };
 };
 
 // Get max month from data
@@ -82,27 +79,27 @@ export const getValue = (unitData, month, categoryIndex) => {
 
     switch (categoryIndex) {
         case 0:
-            return { value: detail.newHire || 0, empIds: detail.newHireEmpIds || [] };
+            return { value: detail.newHire, empIds: detail.newHireEmpIds };
         case 1:
-            return { value: detail.probationResign || 0, empIds: detail.probationResignEmpIds || [] };
+            return { value: detail.probationResign, empIds: detail.probationResignEmpIds };
         case 2:
-            return { value: detail.confirmedResign || 0, empIds: detail.confirmedResignEmpIds || [] };
+            return { value: detail.confirmedResign, empIds: detail.confirmedResignEmpIds };
         case 3:
-            return { value: detail.transfer || 0, empIds: [...(detail.transferInEmpIds || []), ...(detail.transferOutEmpIds || [])] };
+            return { value: detail.transfer, empIds: [...detail.transferInEmpIds, ...detail.transferOutEmpIds] };
         case 4:
-            return { value: detail.currentHeadCount || 0, empIds: detail.currentHeadCountEmpIds || [] };
+            return { value: detail.currentHeadCount, empIds: detail.currentHeadCountEmpIds };
         default:
             return { value: 0, empIds: [] };
     }
 };
 
 // Helper to get total value for a label3 by month
-export const getValueByLabel3 = (column, month, label3) => {
+export const getValueByLabel3 = (allData, column, month, label3) => {
     let total = 0;
     const allEmpIds = [];
     
     column.originalIndices.forEach(idx => {
-        const dataItem = column.allData[idx];
+        const dataItem = allData[idx];
         if (dataItem && dataItem.label3 === label3) {
             const details = dataItem.details;
             const detail = details
@@ -126,14 +123,14 @@ export const groupByLabel3 = (columns) => {
     const groups = [];
     let i = 0;
     while (i < columns.length) {
-        const currentLabel1 = columns[i].label || '';
-        const currentLabel2 = columns[i].label2 || '';
-        const currentLabel3 = columns[i].label3 || '';
+        const currentLabel1 = columns[i].label;
+        const currentLabel2 = columns[i].label2;
+        const currentLabel3 = columns[i].label3;
         let count = 1;
         while (i + count < columns.length && 
-               (columns[i + count].label3 || '') === currentLabel3 &&
-               (columns[i + count].label2 || '') === currentLabel2 &&
-               (columns[i + count].label || '') === currentLabel1)
+               columns[i + count].label3 === currentLabel3 &&
+               columns[i + count].label2 === currentLabel2 &&
+               columns[i + count].label === currentLabel1)
         {
             count++;
         }
@@ -154,8 +151,8 @@ export const groupByLabel2 = (columns) => {
     let i = 0;
 
     while (i < columns.length) {
-        const currentLabel1 = columns[i].label || '';
-        const currentLabel2 = columns[i].label2 || '';
+        const currentLabel1 = columns[i].label;
+        const currentLabel2 = columns[i].label2;
         let count = 1;
         while (
             i + count < columns.length &&
@@ -178,15 +175,14 @@ export const groupByLabel2 = (columns) => {
     return groups;
 };
 
-// Helper to group columns by label1 (simple)
 export const groupByLabel1 = (columns) => {
     const groups = [];
     let i = 0;
     while (i < columns.length) {
-        const currentLabel = columns[i].label || '';
+        const currentLabel = columns[i].label;
         let count = 1;
         while (i + count < columns.length && 
-               (columns[i + count].label || '') === currentLabel) {
+               columns[i + count].label === currentLabel) {
             count++;
         }
         groups.push({ 

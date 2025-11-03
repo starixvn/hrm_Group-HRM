@@ -3,15 +3,12 @@ import TableWrapper from './shared/TableWrapper';
 import TableBody from './shared/TableBody';
 import { renderFixedHeaders, renderGroupedHeaders } from './shared/TableHeaders';
 import { 
-    getMaxMonth, 
     groupByLabel1, 
     getUniqueColumnsByLabel1,
 } from '../utils/tableUtils';
 
 const HeadcountTableSummary = ({ data }) => {
-    // Get unique columns by label1 (only one column per label1)
-    const { columns: uniqueColumns, data: uniqueData } = getUniqueColumnsByLabel1(data);
-    const maxMonth = getMaxMonth(data);
+    const { columns: uniqueColumns } = getUniqueColumnsByLabel1(data);
 
     return (
         <TableWrapper>
@@ -22,9 +19,8 @@ const HeadcountTableSummary = ({ data }) => {
                 </tr> 
             </thead>
             <TableBody 
-                data={uniqueData} 
+                data={data} 
                 columns={uniqueColumns} 
-                maxMonth={maxMonth}
                 useLabel3ForCategory={true}
             />
         </TableWrapper>

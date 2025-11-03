@@ -1,8 +1,8 @@
 import React from 'react';
 import { resolveClientUrl } from '../../../../shared/common.functions';
-import { monthNames, categories, getValue, getUniqueLabel3Values, getValueByLabel3 } from '../../utils/tableUtils';
+import { monthNames, categories, getValue, getUniqueLabel3Values, getValueByLabel3, getMaxMonth } from '../../utils/tableUtils';
 
-const TableBody = ({ data, columns, maxMonth, useLabel3ForCategory = false }) => {
+const TableBody = ({ data, columns, useLabel3ForCategory = false }) => {
     const handleCellClick = (e, empIds) => {
         if (empIds && empIds.length > 0) {
             e.preventDefault();
@@ -13,8 +13,8 @@ const TableBody = ({ data, columns, maxMonth, useLabel3ForCategory = false }) =>
             window.open(detailUrl, '_blank');
         }
     };
-
-    const label3Categories = useLabel3ForCategory ? getUniqueLabel3Values(columns) : null;
+    const maxMonth = getMaxMonth(data);
+    const label3Categories = useLabel3ForCategory ? getUniqueLabel3Values(data) : null;
     const displayCategories = useLabel3ForCategory ? label3Categories : categories;
 
     return (
@@ -30,19 +30,16 @@ const TableBody = ({ data, columns, maxMonth, useLabel3ForCategory = false }) =>
                                 key={`${monthIdx}-${catIdx}`} 
                                 className={`month-${isMonthEven ? 'even' : 'odd'}`}
                             >
-                                {isFirstCategory ? (
-                                    <td 
-                                        className='month-label' 
-                                        rowSpan={displayCategories.length}
-                                    >
+                                {isFirstCategory && (
+                                    <td className='month-label' rowSpan={displayCategories.length}>
                                         {monthNames[monthIdx]}
                                     </td>
-                                ) : null}
+                                )}
                                 <td className='category-label'>{category}</td>
                                 {columns.map((col, colIdx) => {
                                     let value, empIds;
                                     if (useLabel3ForCategory) {
-                                        const result = getValueByLabel3(col, monthIdx, category);
+                                        const result = getValueByLabel3(data, col, monthIdx, category);
                                         value = result.value;
                                         empIds = result.empIds;
                                     } else {
@@ -57,10 +54,7 @@ const TableBody = ({ data, columns, maxMonth, useLabel3ForCategory = false }) =>
                                             className={col.isGrandTotal || col.isUnitCategory ? 'bold-cell' : ''}
                                         >
                                             {empIds && empIds.length > 0 ? (
-                                                <a 
-                                                    href={`#`}
-                                                    onClick={e => handleCellClick(e, empIds)}
-                                                >
+                                                <a href={`#`} onClick={e => handleCellClick(e, empIds)}>
                                                     {value}
                                                 </a>
                                             ) : (
