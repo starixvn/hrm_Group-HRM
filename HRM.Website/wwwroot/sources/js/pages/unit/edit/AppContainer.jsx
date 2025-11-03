@@ -172,6 +172,7 @@ const AppContainer = () => {
                   isSelectedAll={false}
                   onChange={handleSupporter}
                   hasSearchBox={true}
+                  isShowSelectedName={true}
                 />
             </div>
           </div>

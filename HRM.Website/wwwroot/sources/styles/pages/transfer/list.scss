@@ -1,0 +1,81 @@
+@import "../../abstracts/_variables.scss";
+@import "../../abstracts/_mixins.scss";
+@import "../../components/_buttons-new.scss";
+@import "../../components/_card.scss";
+@import "../../components/_form-horizontal.scss";
+@import "../../components/_validation.scss";
+@import "../../layout/_toastr.scss";
+@import "../../components/_checkbox.scss";
+@import "../../components/react-autocomplete-wrapper";
+@import "../../components/multiselect-treeview";
+@import "../../vendors/react-datepicker";
+@import "../../components/_react-datepicker";
+@import "../../layout/filter";
+@import "../../layout/table";
+
+table.table.table-custom thead tr th:first-child {
+  border-left: none;
+}
+
+.tooltip-container {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip-text {
+  visibility: hidden;
+  opacity: 0;
+  background-color: #333;
+  color: #fff;
+  text-align: left;
+  border-radius: 6px;
+  padding: 6px 10px;
+  position: absolute;
+  z-index: 10;
+  bottom: 125%; /* position above the icon */
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: pre-wrap; /* allows multi-line text */
+  width: max-content;
+  max-width: 220px;
+  transition: opacity 0.2s ease-in-out;
+  font-size: 13px;
+}
+
+/* Tooltip arrow */
+.tooltip-text::after {
+  content: "";
+  position: absolute;
+  top: 100%; /* arrow below tooltip box */
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #333 transparent transparent transparent;
+}
+
+/* Hover effect */
+.tooltip-container:hover .tooltip-text {
+  visibility: visible;
+  opacity: 1;
+}
+
+.btn {
+  margin-right: 5px;
+
+  &:focus,
+  &:active {
+    outline: none;
+  }
+}
+
+table.table.table-custom.transfer-list-table {
+  tbody tr td {
+    &.text-left {
+      text-align: left;
+    }
+    &.text-center {
+      text-align: center;
+    }
+  }
+}

@@ -138,9 +138,12 @@ public class EmployeeLogService(
 
     public async Task<IEnumerable<LogObjectDetail>> GetTransferHistoryWork(int empId)
     {
+        var companyId = session.Get<int>(SessionKey.CurrentCompanyId);
+
         var criteria = new GetTransferHistoryWorkCriteria
         {
-            EmpId = empId
+            EmpId = empId,
+            CompanyId = companyId
         };
 
         var historyWork = await baseService.GetDataAsync<LogObjectDetail>(criteria);

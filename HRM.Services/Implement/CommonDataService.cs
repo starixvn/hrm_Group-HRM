@@ -35,7 +35,7 @@ public interface ICommonDataService
 
     IEnumerable<EntityBase<byte>> GetGender();
 
-    Task<SystemSetting> GetSystemSettingAsync();
+    Task<SystemSetting> GetSystemSettingAsync(short? companyId = null);
 
     Task<bool> IsEnableGroupDateAsync();
 }
@@ -152,11 +152,11 @@ public class CommonDataService(
         };
     }
 
-    public async Task<SystemSetting> GetSystemSettingAsync()
+    public async Task<SystemSetting> GetSystemSettingAsync(short? companyId = null)
     {
         var criteria = new GetSystemSettingCriteria
         {
-            CompanyId = session.Get<short>(SessionKey.CurrentCompanyId)
+            CompanyId = companyId ?? session.Get<short>(SessionKey.CurrentCompanyId)
         };
         return await baseService.GetDataEntityAsync<SystemSetting>(criteria);
     }

@@ -57,6 +57,7 @@ export default class TreeMultiselect extends React.Component {
         hasSearchBox: PropTypes.bool,
         leafOnly: PropTypes.bool,
         singleSelect: PropTypes.bool,
+        isShowSelectedName: PropTypes.bool,
     }
 
     static defaultProps = {
@@ -65,6 +66,7 @@ export default class TreeMultiselect extends React.Component {
         hasSearchBox: false,
         leafOnly: false,
         singleSelect: false,
+        isShowSelectedName: false,
         onChange: function () { }
     }
 
@@ -171,12 +173,13 @@ export default class TreeMultiselect extends React.Component {
         const { floatData, data } = this.state;
         const selected = floatData.filter(item => item.checked);
         const selectedText = getSelectedText(floatData, this.props.singleSelect);
+        const selectedName = this.props.isShowSelectedName ? selected.map(item => item.text).join('\n') : selectedText;
         const checkboxAllElementId = `${this.id}-selectAll`;
 
         return (
             <div id={this.id} className="multiselect-treeview" ref={element => this.wrapper = element}>
                 <div className="multiselect-treeview-dropdown-button" onClick={this.onToggle}>
-                    <span className="selected-text">{selectedText}</span>
+                    <span className="selected-text" style={{ whiteSpace: 'pre-wrap' }}>{selectedName}</span>
                     <span className="up-down-icon"><span className={this.state.opened ? 'up' : 'down'} /></span>
                 </div>
                 <div className={`multiselect-treeview-dropdown-list ${this.state.opened ? '' : 'hidden'}`}>

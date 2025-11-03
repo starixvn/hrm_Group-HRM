@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using GO.UserControl.Client.Core.Enumerables;
-using GO.UserControl.Client.Core.Models.User;
-using GO.UserControl.Client.Core.Services;
 using GO.UserControl.Client.Core.Session;
 using HRM.Core;
 using HRM.Core.Constants;
@@ -21,8 +19,6 @@ using HRM.Models.Group;
 using HRM.Models.Supervisor;
 using HRM.Models.Unit;
 using HRM.Services.ExportExcel.Employee;
-using HRM.Services.Helper;
-using HRM.Services.Implement;
 using HRM.Services.Interfaces;
 using HRM.ViewModels;
 using HRM.ViewModels.EmployeeGroup;
@@ -42,11 +38,7 @@ public class GroupEmployeeListController(
     IBaseService baseService,
     IEmployeeService employeeService,
     ISecondCompanyEmployeeService secondCompanyEmployeeService,
-    IUserService userService,
-    ICommonDataService commonDataService,
-    IJobLevelService jobLevelService,
-    IMonthlyPayrollService payrollService,
-    IManagementLevelService managementLevelService) : BaseController(session)
+    IMonthlyPayrollService payrollService) : BaseController(session)
 #pragma warning restore S107 // Methods should not have too many parameters
 {
     [HrmPermission(Policy.Read, FunctionKey.GroupEmployeeList)]
@@ -172,98 +164,6 @@ public class GroupEmployeeListController(
         return employees.Where(e => distinctEmpIds.Contains(e.EmpId));
     }
 
-    [HttpGet]
-    [HrmPermission(Policy.Host, FunctionKey.GroupEmployeeList)]
-    public IActionResult Transfer()
-    {
-        return View();
-    }
-
-    [HttpPost]
-    [HrmPermission(Policy.Host, FunctionKey.GroupEmployeeList)]
-    public async Task<IActionResult> Transfer([FromBody] EmployeeTransfer model)
-    {
-        var result = await employeeService.CheckExistAsync(model.Code, model.NickName);
-        if (!result.IsSuccessful)
-        {
-            return Json(result);
-        }
-
-        var newEmpId = await employeeService.TransferEmployeeAsync(model);
-        var param = EmployeeHelper.MappingEditEmployeeParam(model, $"{(int)RoleSystem.Member}");
-        param.EmployeeId = newEmpId;
-        param.Enabled = true;
-
-        var commandResult = await employeeService.EditAsync(
-            EmployeeSession.EmpId,
-            param,
-            model.TargetCompanyId
-        );
-        if (commandResult.IsSuccessful)
-        {
-            await employeeService.UpdateUserInfoAsync(model.UserId, param);
-            await UpdateUserSiteAndRoles(model, param);
-        }
-
-        return Json(commandResult);
-    }
-
-    private async Task UpdateUserSiteAndRoles(EmployeeTransfer model, EditEmployeeParam param)
-    {
-        var companySites = await companyService.GetAllCompanySiteAsync();
-        var targetSite = companySites.FirstOrDefault(c => c.CompanyId == model.TargetCompanyId);
-        if (targetSite == null)
-        {
-            return;
-        }
-
-        var oldSite = companySites.FirstOrDefault(c => c.CompanyId == model.TransferOutCompanyId);
-        if (oldSite != null) // Deactivate old site
-        {
-            await userService.UpdateUserSiteAsync(new UpdateUserSiteParam
-            {
-                UserId = model.UserId,
-                SiteId = oldSite.SiteId,
-                IsActive = false
-            });
-        }
-
-        await userService.UpdateUserSiteAsync(new UpdateUserSiteParam
-        {
-            UserId = model.UserId,
-            SiteId = targetSite.SiteId,
-            IsActive = true
-        });
-        await userService.AssignRoleAsync(new AssignRoleParam
-        {
-            SiteId = targetSite.SiteId,
-            UserId = model.UserId,
-            RoleIds = param.Roles
-        });
-    }
-
-    [HttpGet]
-    [HrmPermission(Policy.Host, FunctionKey.GroupEmployeeList)]
-    public async Task<IActionResult> GetInfoEmployeeTransfer(int id, short transferInCompanyId, short transferOutCompanyId)
-    {
-        var employee = await employeeService.GetEmployeeTransferByIdAsync(id, transferOutCompanyId);
-
-        if (employee != null)
-        {
-            employee.Coutries = await commonDataService.GetAllCountry();
-            employee.LengthOfServiceByGroupDate = employeeService.CalculateLengthOfService(
-                employee.JoinedDate,
-                employee.MilitaryFromDate,
-                employee.MilitaryToDate
-            );
-            employee.JobLevels = (await jobLevelService.GetJobLevel()).ToList();
-            employee.ManagementLevels = (await managementLevelService.GetManagementLevel()).ToList();
-            employee.SubCompanies = (await companyService.GetSubCompanies(transferInCompanyId)).ToList();
-            employee.JobTitles = (await commonDataService.GetLookupDataByCodeAsync(Constants.JobTitle, transferInCompanyId)).ToList();
-        }
-
-        return Json(employee);
-    }
 
     public async Task<IActionResult> GroupEmployeeList(GroupEmployeeViewModel model)
     {

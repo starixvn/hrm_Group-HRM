@@ -6,7 +6,7 @@ public static class HeadcountConstants
 {
     public const int StartColumn = 3; // C column
     public const int StartRow = 2;
-    public const int PropertyNumber = 4;
+    public const int PropertyNumber = 5;
     public const int TotalMonths = 12;
 
     public const string GrandTotalLabel = "GRAND TOTAL";

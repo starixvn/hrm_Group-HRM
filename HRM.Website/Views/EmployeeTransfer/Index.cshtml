@@ -1,0 +1,22 @@
+﻿@using HRM.Resources
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model bool
+@{
+    ViewBag.Title = Labels.EmployeeTransfer;
+}
+@section css {
+    <link href="~/dist/styles/transfer.list.css" rel="stylesheet" asp-append-version="true" />
+}
+@section js {
+    <script type="text/javascript">
+        window.hasPermission = "@Model";
+    </script>
+    <script src="~/dist/js/transfer.list.index.js" asp-append-version="true"></script>
+}
+@section Breadcrumb {
+    <a class="step">@Labels.GroupSpace</a><span class="step">@ViewBag.Title</span>
+}
+
+<h2 class="page-title">@ViewBag.Title</h2>
+<div id="transfer-employee-list"></div>
+<div id="tippy-avatar" class="tippy-avatar"></div>
