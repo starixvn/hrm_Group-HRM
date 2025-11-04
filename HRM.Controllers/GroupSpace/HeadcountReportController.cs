@@ -11,7 +11,7 @@ using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
-namespace HRM.Controllers.Request;
+namespace HRM.Controllers.GroupSpace;
 
 [HrmPermission(Policy.Read, FunctionKey.HeadcountReport)]
 public class HeadcountReportController(

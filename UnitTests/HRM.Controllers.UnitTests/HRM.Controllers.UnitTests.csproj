@@ -33,4 +33,8 @@
     <ProjectReference Include="..\..\HRM.ViewModels\HRM.ViewModels.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="GroupSpace\" />
+  </ItemGroup>
+
 </Project>
