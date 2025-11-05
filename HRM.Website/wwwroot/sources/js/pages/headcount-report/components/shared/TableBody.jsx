@@ -58,7 +58,7 @@ const TableBody = ({ data, columns, useLabel3ForCategory = false }) => {
                                                     {value}
                                                 </a>
                                             ) : (
-                                                value
+                                                value || '-'
                                             )}
                                         </td>
                                     );
