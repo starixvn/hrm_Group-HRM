@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using HRM.Models.Report.HeadcountReport;
 using HRM.Repositories.HeadcountReport;
@@ -36,5 +37,10 @@ public class CalculateHeadcountService(IHeadcountReportRepository reportReposito
             ReportByUnitCountryLocal = results[4],
             ReportByUnitCountryExpat = results[5]
         };
+    }
+
+    public async Task<List<HeadcountDetailModel>> GetDetailAsync(string empIds)
+    {
+        return await reportRepository.GetDetailAsync(empIds);
     }
 }

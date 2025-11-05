@@ -23,8 +23,8 @@ public class DetailsReportCalculator(HeadcountData data) : BaseReportCalculator(
                         .Select(companyGroup => new UnitReport
                         {
                             Label1 = unitGroup.Key,
-                            Label2 = companyGroup.Key,
-                            Label3 = countryGroup.Key,
+                            Label3 = companyGroup.Key,
+                            Label2 = countryGroup.Key,
                             Details = CountByMonth(companyGroup, Data.AllEmployeeWFHs)
                         }));
 
@@ -33,8 +33,8 @@ public class DetailsReportCalculator(HeadcountData data) : BaseReportCalculator(
                     .Select(companyGroup => new UnitReport
                     {
                         Label1 = unitGroup.Key,
-                        Label2 = companyGroup.Key,
-                        Label3 = "WFH",
+                        Label3 = companyGroup.Key,
+                        Label2 = "WFH",
                         Details = CountByMonth(companyGroup, Data.AllEmployeeWFHs, true)
                     });
 

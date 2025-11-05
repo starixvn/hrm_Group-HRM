@@ -8,8 +8,10 @@ using HRM.Core.Filters;
 using HRM.Services.Interfaces.Report.Headcount;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
-namespace HRM.Controllers.Request;
+namespace HRM.Controllers.GroupSpace;
 
 [HrmPermission(Policy.Read, FunctionKey.HeadcountReport)]
 public class HeadcountReportController(
@@ -21,6 +23,33 @@ public class HeadcountReportController(
 {
     public IActionResult Index()
     {
+        return View();
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetData(int year)
+    {
+        var data = await service.GetReportAsync(year);
+        return Json(data);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetDetail(string empIds)
+    {
+        var data = await service.GetDetailAsync(empIds);
+        var settings = new JsonSerializerSettings
+        {
+            DateFormatString = "yyyy-MM-dd",
+            ContractResolver = new CamelCasePropertyNamesContractResolver()
+        };
+
+        return Json(data, settings);
+    }
+
+    [HttpGet]
+    public IActionResult Detail(string empIds)
+    {
+        ViewBag.EmpIds = empIds;
         return View();
     }
 

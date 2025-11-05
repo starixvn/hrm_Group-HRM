@@ -1,0 +1,18 @@
+@using HRM.Resources
+@{
+    ViewData["Title"] = "Headcount Report Detail";
+}
+
+@section Breadcrumb {
+    <a class="step">@Labels.HeadcountReport</a><span class="step">@ViewBag.Title</span>
+}
+
+@section css {
+    <link rel="stylesheet" href="~/dist/styles/headcount-report.detail.css" asp-append-version="true" />
+}
+
+@section js {
+    <script src="~/dist/js/headcount-report.detail.js" asp-append-version="true"></script>
+}
+
+<div id="headcount-report-detail"></div>

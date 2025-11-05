@@ -618,6 +618,7 @@
         <Setting Key="Report_HeadcountGet" SpName="Report_HeadcountGet" DbName="bodb_HRM" Plain="0" />
         <Setting Key="Report_HeadcountGetWFH" SpName="Report_HeadcountGetWFH" DbName="bodb_HRM" Plain="0" />
         <Setting Key="Report_HeadcountGetTransferInfo" SpName="Report_HeadcountGetTransferInfo" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Report_HeadcountGet_GetDetail" SpName="Report_HeadcountGet_GetDetail" DbName="bodb_HRM" Plain="0" />
     </Function>
     <Function Name="SalaryStructure">
         <Setting Key="SalaryStructure_Get" SpName="SalaryStructure_Get" DbName="bodb_HRM" Plain="0" />
