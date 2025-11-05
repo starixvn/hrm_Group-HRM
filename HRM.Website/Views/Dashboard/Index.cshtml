@@ -1,0 +1,20 @@
+@using HRM.Resources
+@{
+    ViewData["Title"] = "Human Resource Analysis";
+}
+
+@section Breadcrumb {
+    <a class="step">@Labels.GroupSpace</a><span class="step">@ViewBag.Title</span>
+}
+
+@section css {
+    <link rel="stylesheet" href="~/dist/styles/dashboard.index.css" asp-append-version="true" />
+}
+
+@section js {
+    <script src="~/dist/js/dashboard.index.js" asp-append-version="true"></script>
+}
+
+<h2 class="page-title">@ViewBag.Title</h2>
+<div id="dashboard"></div>
+
