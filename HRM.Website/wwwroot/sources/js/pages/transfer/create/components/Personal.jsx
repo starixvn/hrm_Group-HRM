@@ -3,7 +3,7 @@ import { Field } from 'formik';
 import DatePickerField from '../../../../shared/components/DatePickerField';
 import SelectField from '../../../../shared/components/SelectField';
 
-const Personal = ({ isOpen, onToggle, employeeData, countries, onGenerateEmployeeId }) => {
+const Personal = ({ isOpen, onToggle, countries, onGenerateEmployeeId }) => {
     const [filteredCountryCodes, setFilteredCountryCodes] = useState(countries || []);
 
     useEffect(() => {
@@ -49,7 +49,6 @@ const Personal = ({ isOpen, onToggle, employeeData, countries, onGenerateEmploye
                                 name='Code'
                                 type='text'
                                 className='form-control'
-                                value={employeeData && employeeData.Code}
                             />
                             <button
                                 type='button'

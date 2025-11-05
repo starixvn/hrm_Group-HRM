@@ -554,7 +554,6 @@ const AppContainer = () => {
                                     <Personal
                                         isOpen={panelStates.personal}
                                         onToggle={() => togglePanel('personal')}
-                                        employeeData={employeeData}
                                         countries={countries}
                                         onGenerateEmployeeId={handleGenerateEmployeeId}
                                     />
