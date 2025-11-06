@@ -1,6 +1,7 @@
 using HRM.Core.Services;
 using HRM.Criteria.Group;
 using HRM.Models.PayrollManagement;
+using HRM.Services.Helper;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,7 +27,7 @@ public class ExpatPayrollService(IBaseService baseService): IExpatPayrollService
         foreach (var payroll in payrolls)
         {
             var total = GetDecryptedValue(decryptionCache, payroll.EncryptExpatSalary);
-            result[payroll.EmpId] = total;
+            result[payroll.EmpId] = ConvertToUsd(total, payroll.CurrencyCode);
         }
 
         return result;
@@ -54,5 +55,7 @@ public class ExpatPayrollService(IBaseService baseService): IExpatPayrollService
     }
 
     private static decimal GetDecryptedValue(Dictionary<string, decimal> cache, string encryptedValue) => string.IsNullOrEmpty(encryptedValue) ? 0 : cache.GetValueOrDefault(encryptedValue, 0);
+
+    private static decimal ConvertToUsd(decimal amount, string currencyCode) => CurrencyConverter.ConvertToUsd(amount, currencyCode);
 }
 

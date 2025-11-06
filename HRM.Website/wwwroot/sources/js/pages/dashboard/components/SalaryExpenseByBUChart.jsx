@@ -9,6 +9,7 @@ import {
     Legend,
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 
 ChartJS.register(
     CategoryScale,
@@ -16,7 +17,8 @@ ChartJS.register(
     BarElement,
     Title,
     Tooltip,
-    Legend
+    Legend,
+    ChartDataLabels
 );
 
 const SalaryExpenseByBUChart = ({ data }) => {
@@ -25,14 +27,16 @@ const SalaryExpenseByBUChart = ({ data }) => {
     }
 
     const chartData = {
-        labels: data.map(item => item.buCode || item.buName || item.label1 || ''),
+        labels: data.map(item => item.label || ''),
         datasets: [
             {
                 label: 'Salary Expense',
-                data: data.map(item => item.salaryExpense || item.amount || 0),
+                data: data.map(item => item.value || 0),
                 backgroundColor: 'rgba(54, 162, 235, 0.6)',
                 borderColor: 'rgba(54, 162, 235, 1)',
                 borderWidth: 1,
+                categoryPercentage: 1.0,
+                barPercentage: 1.0,
             },
         ],
     };
@@ -40,8 +44,18 @@ const SalaryExpenseByBUChart = ({ data }) => {
     const options = {
         responsive: true,
         maintainAspectRatio: false,
+        layout: {
+            padding: {
+                left: 10,
+                right: 10,
+                bottom: 20,
+            }
+        },
         plugins: {
             legend: {
+                display: false,
+            },
+            datalabels: {
                 display: false,
             },
             tooltip: {
@@ -56,6 +70,19 @@ const SalaryExpenseByBUChart = ({ data }) => {
             y: {
                 beginAtZero: true,
             },
+            x: {
+                ticks: {
+                    autoSkip: false,
+                    maxRotation: 45,
+                    minRotation: 45,
+                    font: {
+                        size: 11
+                    },
+                },
+                grid: {
+                    display: false,
+                }
+            }
         },
     };
 

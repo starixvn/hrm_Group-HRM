@@ -1,14 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using HRM.Models.Group;
 using HRM.Models.GroupDashboard;
 using HRM.Models.Report.HeadcountReport;
 using HRM.Services.Interfaces;
 using HRM.Services.Interfaces.Report.Headcount;
-using MathNet.Numerics;
 
 namespace HRM.Services.Implement;
 
@@ -22,6 +20,7 @@ public class GroupDashboardService(
         var data = await headcountReportService.GetReportAsync(year);
         var grandTotalUnit = data.ReportByUnit.Find(x => x.IsGrandTotal);
         var employees = await employeeService.GetEmployeesInGroupAsync();
+        var salaryByEmpDict = await GetSalaryExpense(grandTotalUnit);
         var currentHeadcountEmpIds = GetCurrentHeadcountEmpIds(grandTotalUnit);
 
         var filteredEmployees = employees
@@ -42,7 +41,8 @@ public class GroupDashboardService(
             HeadcountByCountry = GetHeadcountByCountry(data.ReportByUnitCountry),
             BuCategory = GetBuCategory(data.ReportByUnit),
             EmployeeByAge = AgeRanges,
-            SalaryExpenseByBU = GetSalaryExpenseByBU(data.ReportByUnit)
+            SalaryExpenseByBU = GetSalaryExpenseByBU(data.ReportByUnit, salaryByEmpDict),
+            SalaryExpenseByBUCategory = GetSalaryExpenseByBUCategory(data.ReportByUnit, salaryByEmpDict)
         };
     }
     private static IEnumerable<int> GetCurrentHeadcountEmpIds(UnitReport grandTotalUnit) => grandTotalUnit?.Details?.LastOrDefault()?.CurrentHeadCountEmpIds ?? [];
@@ -98,11 +98,50 @@ public class GroupDashboardService(
             .OrderBy(x => x.Category);
     }
 
-    private IEnumerable<HeadcountModel> GetSalaryExpenseByBU(IEnumerable<UnitReport> reportByUnit)
+    private async Task<Dictionary<int, decimal>> GetSalaryExpense(UnitReport grandTotalUnit)
     {
-        return reportByUnit
-            .Where(x => !x.IsGrandTotal && !x.IsUnitCategory)
-            .Select(_ => new HeadcountModel());
+        var allEmployees = grandTotalUnit.Details?.LastOrDefault()?.CurrentHeadCountEmpInfo.ToList();
+        await payrollService.CalculateMonthlySalary(allEmployees);
+
+        return allEmployees
+            .Where(x => x.Salary.HasValue)
+            .GroupBy(x => x.EmpId)
+            .ToDictionary(g => g.Key, g => g.First().Salary.Value);
+    }
+
+    private static IEnumerable<HeadcountModel> GetSalaryExpenseByBUCategory(IEnumerable<UnitReport> reportByUnit, Dictionary<int, decimal> salaryByEmpDict)
+    {
+        return reportByUnit.Where(x => x.IsUnitCategory)
+            .GroupBy(x =>
+            {
+                var text = x.Label1?.Replace(" TOTAL", "") ?? string.Empty;
+                var index = text.IndexOf('(');
+                return index > 0 ? text[..index].Trim() : text.Trim();
+            })
+            .Select(g => new HeadcountModel
+            {
+                Label = g.Key,
+                Value = (decimal)g.First().Details?.LastOrDefault()?.CurrentHeadCountEmpInfo
+                    .Where(x => salaryByEmpDict.ContainsKey(x.EmpId))
+                    .Sum(x => salaryByEmpDict[x.EmpId])
+            });
+    }
+
+    private static IEnumerable<HeadcountModel> GetSalaryExpenseByBU(IEnumerable<UnitReport> reportByUnit, Dictionary<int, decimal> salaryByEmpDict)
+    {
+        var unitEmployeesList = reportByUnit.Where(x => !x.IsGrandTotal && !x.IsUnitCategory).ToList();
+
+        foreach (var unitEmp in unitEmployeesList)
+        {
+            var employeesByUnit = unitEmp.Details?.LastOrDefault()?.CurrentHeadCountEmpInfo.ToList();
+            yield return new HeadcountModel
+            {
+                Label = unitEmp.Label1,
+                Value = employeesByUnit
+                    .Where(x => salaryByEmpDict.ContainsKey(x.EmpId))
+                    .Sum(x => salaryByEmpDict[x.EmpId])
+            };
+        }
     }
 
     private int GetAverageTenure(IEnumerable<GroupEmployeeModel> employees)

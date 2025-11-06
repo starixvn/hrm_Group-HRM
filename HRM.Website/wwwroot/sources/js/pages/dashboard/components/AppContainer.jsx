@@ -35,39 +35,32 @@ const AppContainer = () => {
 
     const fetchDashboardData = async year => {
         blockUI();
-        try {
-            const response = await axios.get(
-                resolveClientUrl(`Dashboard/GetDashboardData?year=${year}`),
-            );
-            const data = await response.data;
-            unblockUI();
-            
-            // Transform data based on actual API response structure
-            // This will need to be adjusted based on the actual API response
-            setDashboardData({
-                kpis: {
-                    currentHeadcount: data.currentHeadcount || 0,
-                    recruitment: data.recruitment || 0,
-                    probationResign: data.probationResign || 0,
-                    confirmedResign: data.confirmedResign || 0,
-                    companies: data.companies || 0,
-                    avgAge: data.avgAge || 0,
-                    avgYrsTenure: data.avgYrsTenure || 0,
-                    countries: data.countries || 0,
-                    businessUnits: data.businessUnits || 0
-                },
-                headcountByBU: data.headcountByBU || [],
-                headcountByCountry: data.headcountByCountry || [],
-                buCategory: data.buCategory || [],
-                salaryExpenseByBUCategory: data.salaryExpenseByBUCategory || [],
-                salaryExpenseByBU: data.salaryExpenseByBU || [],
-                employeeByAge: data.employeeByAge || [],
-                salaryExpenseByCountryByBU: data.salaryExpenseByCountryByBU || []
-            });
-        } catch (error) {
-            unblockUI();
-            console.error('Error fetching dashboard data:', error);
-        }
+        const response = await axios.get(
+            resolveClientUrl(`Dashboard/GetDashboardData?year=${year}`),
+        );
+        const data = await response.data;
+        unblockUI();
+
+        setDashboardData({
+            kpis: {
+                currentHeadcount: data.currentHeadcount,
+                recruitment: data.recruitment,
+                probationResign: data.probationResign,
+                confirmedResign: data.confirmedResign,
+                companies: data.companies,
+                avgAge: data.avgAge,
+                avgYrsTenure: data.avgYrsTenure,
+                countries: data.countries,
+                businessUnits: data.businessUnits,
+            },
+            headcountByBU: data.headcountByBU,
+            headcountByCountry: data.headcountByCountry,
+            buCategory: data.buCategory,
+            salaryExpenseByBUCategory: data.salaryExpenseByBUCategory,
+            salaryExpenseByBU: data.salaryExpenseByBU,
+            employeeByAge: data.employeeByAge,
+            salaryExpenseByCountryByBU: data.salaryExpenseByCountryByBU
+        });
     };
 
     useEffect(() => {
@@ -79,9 +72,9 @@ const AppContainer = () => {
             <div className="dashboard-header-kpi-row">
                 <div className="dashboard-header-right">
                     <KPICard label="Current Headcount" value={dashboardData.kpis.currentHeadcount} icon="users" />
-                    <KPICard label="Recruitment" value={dashboardData.kpis.recruitment} icon="users" />
-                    <KPICard label="Probation Resign" value={dashboardData.kpis.probationResign || 0} icon="users" />
-                    <KPICard label="Confirmed Resign" value={dashboardData.kpis.confirmedResign || 0} icon="users" />
+                    <KPICard label={`Recruitment ${selectedYear}`} value={dashboardData.kpis.recruitment} icon="users" />
+                    <KPICard label={`Probation Resign ${selectedYear}`} value={dashboardData.kpis.probationResign || 0} icon="users" />
+                    <KPICard label={`Confirmed Resign ${selectedYear}`} value={dashboardData.kpis.confirmedResign || 0} icon="users" />
                     <KPICard label="Companies" value={dashboardData.kpis.companies} icon="users" />
                     <KPICard label="Avg. Age" value={dashboardData.kpis.avgAge} icon="user" />
                     <KPICard label="Avg. Yrs Tenure" value={dashboardData.kpis.avgYrsTenure} icon="clock-o" />
@@ -109,17 +102,17 @@ const AppContainer = () => {
                         <HeadcountByBUChart data={dashboardData.headcountByBU} />
                     </div>
 
-                    {/* <div className="chart-card">
+                    <div className="chart-card">
                         <h3>Salary Expense By Business Unit</h3>
                         <SalaryExpenseByBUChart data={dashboardData.salaryExpenseByBU} />
-                    </div> */}
+                    </div>
                 </div>
 
                 <div className="dashboard-column">
-                    {/* <div className="chart-card">
+                    <div className="chart-card">
                         <h3>Salary Expense By Business Unit Category</h3>
                         <SalaryExpenseByBUCategoryChart data={dashboardData.salaryExpenseByBUCategory} />
-                    </div> */}
+                    </div>
 
                     <div className="chart-card">
                         <h3>Number Of Employees By Age</h3>

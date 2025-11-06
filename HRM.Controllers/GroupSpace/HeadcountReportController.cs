@@ -34,15 +34,6 @@ public class HeadcountReportController(
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetDashboardData(int year)
-    {
-        var data = await service.GetReportAsync(year);
-        // TODO: Get dashboard data
-        //
-        return Json(data);
-    }
-
-    [HttpGet]
     public async Task<IActionResult> GetDetail(string empIds)
     {
         var data = await service.GetDetailAsync(empIds);

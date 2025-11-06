@@ -66,7 +66,21 @@ const BUCategoryBreakdown = ({ data }) => {
                 display: false
             },
             datalabels: {
-                display: false
+                display: true,
+                color: '#ffffff',
+                font: {
+                    size: 11,
+                    weight: 'bold'
+                },
+                formatter: function(value, context) {
+                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                    const percentage = total > 0 ? ((value / total) * 100).toFixed(1) : 0;
+                    return `${percentage}%`;
+                },
+                anchor: 'center',
+                align: 'center',
+                offset: 0,
+                clip: false
             },
             tooltip: {
                 callbacks: {

@@ -23,11 +23,11 @@ const SalaryExpenseByBUCategoryChart = ({ data }) => {
     ];
 
     const chartData = {
-        labels: data.map(item => item.category || item.label1 || ''),
+        labels: data.map(item => item.label),
         datasets: [
             {
                 label: 'Salary Expense',
-                data: data.map(item => item.salaryExpense || item.amount || 0),
+                data: data.map(item => item.value),
                 backgroundColor: colors.slice(0, data.length),
                 borderWidth: 1,
             },
@@ -47,22 +47,24 @@ const SalaryExpenseByBUCategoryChart = ({ data }) => {
         },
         plugins: {
             legend: {
-                display: false,
+                display: true,
+                position: 'right',
             },
             datalabels: {
                 display: true,
-                color: '#2c3e50',
+                color: '#ffffff',
                 font: {
-                    size: 11,
+                    size: 12,
                     weight: 'bold'
                 },
                 formatter: function(value, context) {
-                    const label = context.chart.data.labels[context.dataIndex];
-                    return label;
+                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                    const percentage = total > 0 ? ((value / total) * 100).toFixed(1) : 0;
+                    return `${percentage}%`;
                 },
-                anchor: 'end',
-                align: 'end',
-                offset: 5,
+                anchor: 'center',
+                align: 'center',
+                offset: 0,
                 clip: false
             },
             tooltip: {
@@ -80,7 +82,7 @@ const SalaryExpenseByBUCategoryChart = ({ data }) => {
     };
 
     return (
-        <div className="chart-wrapper" style={{ height: '250px', maxWidth: '350px', margin: '0 auto', padding: '10px' }}>
+        <div className="chart-wrapper" style={{ height: '300px'}}>
             <Doughnut data={chartData} options={options} />
         </div>
     );

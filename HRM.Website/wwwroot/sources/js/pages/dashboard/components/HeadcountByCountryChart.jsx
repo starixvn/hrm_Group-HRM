@@ -16,8 +16,8 @@ const HeadcountByCountryChart = ({ data }) => {
     }
 
     const colors = [
-        'rgba(201, 203, 207, 0.8)',
         'rgba(54, 162, 235, 0.8)',
+        'rgba(0, 0, 0, 0.8)',
         'rgba(255, 99, 132, 0.8)',
         'rgba(75, 192, 192, 0.8)',
         'rgba(153, 102, 255, 0.8)',
@@ -60,9 +60,11 @@ const HeadcountByCountryChart = ({ data }) => {
                     size: 11,
                     weight: 'bold'
                 },
-                formatter: function(_, context) {
+                formatter: function(value, context) {
                     const label = context.chart.data.labels[context.dataIndex];
-                    return label;
+                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                    const percentage = total > 0 ? ((value / total) * 100).toFixed(1) : 0;
+                    return `${label} (${percentage}%)`;
                 },
                 anchor: 'end',
                 align: 'end',
@@ -84,7 +86,7 @@ const HeadcountByCountryChart = ({ data }) => {
     };
 
     return (
-        <div className="chart-wrapper" style={{ height: '300px', maxWidth: '350px', margin: '0 auto', padding: '10px' }}>
+        <div className="chart-wrapper" style={{ height: '300px' }}>
             <Doughnut data={chartData} options={options} />
         </div>
     );

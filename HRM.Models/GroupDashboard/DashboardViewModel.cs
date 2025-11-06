@@ -19,12 +19,13 @@ public class DashboardViewModel
     public IEnumerable<CategoryModel> BuCategory { get; set; }
     public IEnumerable<HeadcountModel> EmployeeByAge { get; set; }
     public IEnumerable<HeadcountModel> SalaryExpenseByBU { get; set; }
+    public IEnumerable<HeadcountModel> SalaryExpenseByBUCategory { get; set; }
 }
 
 public class HeadcountModel
 {
     public string Label { get; set; }
-    public int Value { get; set; }
+    public decimal Value { get; set; }
 }
 
 public class CategoryModel
