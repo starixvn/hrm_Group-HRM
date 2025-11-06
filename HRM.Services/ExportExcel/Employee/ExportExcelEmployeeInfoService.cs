@@ -275,13 +275,14 @@ public class ExportExcelEmployeeInfoService(
         var worksheet = xlPackage.Workbook.Worksheets.Add("Group Employee List");
         var rowIndex = 1;
         var colIndex = 1;
+        const int totalColumns = 30;
 
         // title
-        template.Cells[rowIndex, colIndex, rowIndex, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
+        template.Cells[rowIndex, colIndex, rowIndex, totalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, totalColumns]);
         rowIndex++;
 
         // header
-        template.Cells[rowIndex, colIndex, rowIndex, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
+        template.Cells[rowIndex, colIndex, rowIndex, totalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, totalColumns]);
         rowIndex++;
 
         // data
@@ -289,7 +290,7 @@ public class ExportExcelEmployeeInfoService(
         foreach (var employee in employees)
         {
             colIndex = 1;
-            template.Cells[RowStartBody, 1, RowStartBody, TotalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumns]);
+            template.Cells[RowStartBody, 1, RowStartBody, totalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, totalColumns]);
 
             worksheet.Cells[rowIndex, colIndex++].Value = rowNum++;
             worksheet.Cells[rowIndex, colIndex++].Value = employee.CtrIdFormatted;
@@ -309,7 +310,6 @@ public class ExportExcelEmployeeInfoService(
             worksheet.Cells[rowIndex, colIndex++].Value = employee.JobLevel;
             worksheet.Cells[rowIndex, colIndex++].Value = FormatDate(employee.JoinedDate);
             worksheet.Cells[rowIndex, colIndex++].Value = $"{employee.Salary:N0}";
-            worksheet.Cells[rowIndex, colIndex++].Value = employee.Currency;
             worksheet.Cells[rowIndex, colIndex++].Value = employee.Company;
             worksheet.Cells[rowIndex, colIndex++].Value = employee.SubCompany;
             worksheet.Cells[rowIndex, colIndex++].Value = FormatDate(employee.CompanyDate);
