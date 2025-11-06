@@ -1,21 +1,33 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
+using HRM.Models.Group;
 using HRM.Models.GroupDashboard;
 using HRM.Models.Report.HeadcountReport;
 using HRM.Services.Interfaces;
 using HRM.Services.Interfaces.Report.Headcount;
+using MathNet.Numerics;
 
 namespace HRM.Services.Implement;
 
 public class GroupDashboardService(
     IHeadcountReportService headcountReportService,
-    IMonthlyPayrollService payrollService) : IGroupDashboardService
+    IMonthlyPayrollService payrollService,
+    IEmployeeService employeeService) : IGroupDashboardService
 {
     public async Task<DashboardViewModel> GetDashboardDataAsync(int year)
     {
         var data = await headcountReportService.GetReportAsync(year);
         var grandTotalUnit = data.ReportByUnit.Find(x => x.IsGrandTotal);
+        var employees = await employeeService.GetEmployeesInGroupAsync();
+        var currentHeadcountEmpIds = GetCurrentHeadcountEmpIds(grandTotalUnit);
+
+        var filteredEmployees = employees
+            .Where(e => currentHeadcountEmpIds.Contains(e.EmpId));
+
+        var (AverageAge, AgeRanges) = GetEmployeeByAge(filteredEmployees);
 
         return new DashboardViewModel
         {
@@ -24,15 +36,16 @@ public class GroupDashboardService(
             ProbationResign = GetProbationResign(grandTotalUnit),
             ConfirmedResign = GetConfirmedResign(grandTotalUnit),
             Companies = GetCompanyCount(data.ReportByCompany),
-            AvgAge = 35,
-            AvgYrsTenure = 10,
+            AvgAge = AverageAge,
+            AvgYrsTenure = GetAverageTenure(filteredEmployees),
             HeadcountByBU = GetHeadcountByBU(data.ReportByUnit),
             HeadcountByCountry = GetHeadcountByCountry(data.ReportByUnitCountry),
             BuCategory = GetBuCategory(data.ReportByUnit),
-            EmployeeByAge = GetEmployeeByAge(),
+            EmployeeByAge = AgeRanges,
             SalaryExpenseByBU = GetSalaryExpenseByBU(data.ReportByUnit)
         };
     }
+    private static IEnumerable<int> GetCurrentHeadcountEmpIds(UnitReport grandTotalUnit) => grandTotalUnit?.Details?.LastOrDefault()?.CurrentHeadCountEmpIds ?? [];
 
     private static int GetCurrentHeadcount(UnitReport grandTotalUnit) => grandTotalUnit?.Details?.LastOrDefault()?.CurrentHeadCount ?? 0;
 
@@ -92,19 +105,57 @@ public class GroupDashboardService(
             .Select(_ => new HeadcountModel());
     }
 
-    private static IEnumerable<HeadcountModel> GetEmployeeByAge()
+    private int GetAverageTenure(IEnumerable<GroupEmployeeModel> employees)
     {
-        return new List<HeadcountModel>
+        var averageServiceYear = employees
+            .Select(e => employeeService.CalculateLengthOfService(
+                e.JoinedDate,
+                e.MilitaryFromDate,
+                e.MilitaryToDate).Years)
+            .Average();
+
+        return (int)Math.Floor(averageServiceYear);
+    }
+
+    private static (int AverageAge, IEnumerable<HeadcountModel> AgeRanges) GetEmployeeByAge(IEnumerable<GroupEmployeeModel> employees)
+    {
+        if (employees == null)
+            return (0, []);
+
+        var today = DateTime.Today;
+
+        var ageBuckets = new List<(int Min, int Max, string Label)>
         {
-            new() { Label = "20-24", Value = 180 },
-            new() { Label = "25-29", Value = 320 },
-            new() { Label = "30-34", Value = 430 },
-            new() { Label = "35-39", Value = 380 },
-            new() { Label = "40-44", Value = 280 },
-            new() { Label = "45-49", Value = 180 },
-            new() { Label = "50-54", Value = 120 },
-            new() { Label = "55-59", Value = 80 }
+            (20, 24, "20-24"),
+            (25, 29, "25-29"),
+            (30, 34, "30-34"),
+            (35, 39, "35-39"),
+            (40, 44, "40-44"),
+            (45, 49, "45-49"),
+            (50, 54, "50-54"),
+            (55, 59, "55-59"),
+            (60, 200, "60+")
         };
+
+        var ages = employees
+            .Where(e => e.DOB != DateTime.MinValue)
+            .Select(e =>
+            {
+                var age = today.Year - e.DOB.Year;
+                if (e.DOB.Date > today.AddYears(-age)) age--;
+                return age;
+            });
+
+        var averageAge = (int)Math.Floor(ages.Average());
+
+        var grouped = ageBuckets
+            .Select(bucket => new HeadcountModel
+            {
+                Label = bucket.Label,
+                Value = ages.Count(age => age >= bucket.Min && age <= bucket.Max)
+            });
+
+        return (averageAge, grouped);
     }
 }
 

@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using HRM.Core.Models;
 using HRM.Criteria.AnnualLeave;
 using HRM.Criteria.Employee;
+using HRM.Criteria.Group;
 using HRM.Criteria.Supervisor;
 using HRM.Models;
 using HRM.Models.EmployeeInformation;
@@ -32,6 +33,8 @@ public interface IEmployeeService
     Task<IEnumerable<EmployeePayrollAllowance>> GetEmployeePayrollAllowanceByEmpIdAsync(int empId);
 
     Task<IEnumerable<Employee>> GetEmployeeAsync(GetAllEmployeeCriteria criteria);
+
+    Task<IEnumerable<GroupEmployeeModel>> GetEmployeesInGroupAsync();
 
     Task<IEnumerable<Employee>> GetMemberByManagerAsync(GetMemberByManagerCriteria criteria);
 
@@ -69,7 +72,7 @@ public interface IEmployeeService
 
     Task<CommandResult> DeleteAsync(int actorId, DeleteEmployeeParam param);
 
-    string CalculateLengthOfService(DateTime? joinedDate, DateTime? militaryFromDate, DateTime? militaryToDate);
+    (double Years, string LengthOfServiceText) CalculateLengthOfService(DateTime? joinedDate, DateTime? militaryFromDate, DateTime? militaryToDate);
 
     Task<IList<SupervisorNameModel>> CheckAndAddMissingSupervisor(IList<SupervisorNameModel> supervisors, int? supervisorId);
 

@@ -95,7 +95,7 @@ public class DisciplineSummaryPerYearController(
                 date,
                 employee.MilitaryFromDate,
                 employee.MilitaryToDate
-            );
+            ).LengthOfServiceText;
             employee.Disciplines = disciplines
                 .Where(x => x.EmployeeId == employee.EmployeeId)
                 .ToList();

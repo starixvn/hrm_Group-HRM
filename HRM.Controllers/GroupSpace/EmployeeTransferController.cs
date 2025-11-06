@@ -208,7 +208,7 @@ public class EmployeeTransferController(
                 employee.JoinedDate,
                 employee.MilitaryFromDate,
                 employee.MilitaryToDate
-            );
+            ).LengthOfServiceText;
             employee.JobLevels = (await jobLevelService.GetJobLevel()).ToList();
             employee.ManagementLevels = (await managementLevelService.GetManagementLevel()).ToList();
             employee.SubCompanies = (await companyService.GetSubCompanies(transferInCompanyId)).ToList();
