@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using HRM.Core.Models;
 using HRM.Criteria.AnnualLeave;
 using HRM.Criteria.Employee;
-using HRM.Criteria.Group;
 using HRM.Criteria.Supervisor;
 using HRM.Models;
 using HRM.Models.EmployeeInformation;

@@ -25,14 +25,16 @@ const HeadcountByBUChart = ({ data }) => {
     }
 
     const chartData = {
-        labels: data.map(item => item.label || ''),
+        labels: data.map(item => item.label),
         datasets: [
             {
                 label: 'Headcount',
-                data: data.map(item => item.value || 0),
-                backgroundColor: 'rgba(54, 162, 235, 0.6)',
-                borderColor: 'rgba(54, 162, 235, 1)',
-                borderWidth: 1,
+                data: data.map(item => item.value),
+                backgroundColor: 'rgba(126, 198, 247, 0.6)',
+                borderColor: 'rgb(117, 183, 228)',
+                borderWidth: 0.5,
+                categoryPercentage: 1.0,
+                barPercentage: 1.0,
             },
         ],
     };
@@ -74,6 +76,9 @@ const HeadcountByBUChart = ({ data }) => {
                         const label = this.getLabelForValue(value);
                         return label;
                     }
+                },
+                grid: {
+                    display: false,
                 }
             }
         },

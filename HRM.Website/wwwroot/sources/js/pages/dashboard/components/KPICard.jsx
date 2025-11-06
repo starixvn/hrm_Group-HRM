@@ -2,13 +2,15 @@ import React from 'react';
 
 const KPICard = ({ label, value, icon, dark }) => {
     const getIconClass = () => {
-        if (!icon) return null;
         const iconMap = {
             'users': 'fa fa-users',
-            'user': 'fa fa-user',
+            'user-plus': 'fa fa-user-plus',
+            'user-times': 'fa fa-user-times',
             'clock-o': 'fa fa-clock-o',
             'building': 'fa fa-building',
-            'briefcase': 'fa fa-briefcase'
+            'briefcase': 'fa fa-briefcase',
+            'birthday-cake': 'fa fa-birthday-cake',
+            'globe': 'fa fa-globe'
         };
         return iconMap[icon] || null;
     };

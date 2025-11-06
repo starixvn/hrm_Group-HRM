@@ -8,10 +8,9 @@ import BUCategoryBreakdown from './BUCategoryBreakdown';
 import SalaryExpenseByBUCategoryChart from './SalaryExpenseByBUCategoryChart';
 import SalaryExpenseByBUChart from './SalaryExpenseByBUChart';
 import EmployeeByAgeChart from './EmployeeByAgeChart';
-import SalaryExpenseByCountryByBU from './SalaryExpenseByCountryByBU';
 
 const AppContainer = () => {
-    const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+    const [selectedYear, _] = useState(new Date().getFullYear());
     const [dashboardData, setDashboardData] = useState({
         kpis: {
             currentHeadcount: 0,
@@ -72,58 +71,52 @@ const AppContainer = () => {
             <div className="dashboard-header-kpi-row">
                 <div className="dashboard-header-right">
                     <KPICard label="Current Headcount" value={dashboardData.kpis.currentHeadcount} icon="users" />
-                    <KPICard label={`Recruitment ${selectedYear}`} value={dashboardData.kpis.recruitment} icon="users" />
-                    <KPICard label={`Probation Resign ${selectedYear}`} value={dashboardData.kpis.probationResign || 0} icon="users" />
-                    <KPICard label={`Confirmed Resign ${selectedYear}`} value={dashboardData.kpis.confirmedResign || 0} icon="users" />
-                    <KPICard label="Companies" value={dashboardData.kpis.companies} icon="users" />
-                    <KPICard label="Avg. Age" value={dashboardData.kpis.avgAge} icon="user" />
+                    <KPICard label={`Recruitment ${selectedYear}`} value={dashboardData.kpis.recruitment} icon="user-plus" />
+                    <KPICard label={`Probation Resign ${selectedYear}`} value={dashboardData.kpis.probationResign || 0} icon="user-times" />
+                    <KPICard label={`Confirmed Resign ${selectedYear}`} value={dashboardData.kpis.confirmedResign || 0} icon="user-times" />
+                    <KPICard label="Companies" value={dashboardData.kpis.companies} icon="building" />
+                    <KPICard label="Avg. Age" value={dashboardData.kpis.avgAge} icon="birthday-cake" />
                     <KPICard label="Avg. Yrs Tenure" value={dashboardData.kpis.avgYrsTenure} icon="clock-o" />
-                    <KPICard label="Countries" value={dashboardData.kpis.countries} icon="building" />
+                    <KPICard label="Countries" value={dashboardData.kpis.countries} icon="globe" />
                     <KPICard label="Business Units" value={dashboardData.kpis.businessUnits} icon="briefcase" />
                 </div>
             </div>
 
             <div className="dashboard-content">
-                <div className="dashboard-column">
-                    <div className="chart-card">
-                        <h3>Business Unit Category</h3>
-                        <BUCategoryBreakdown data={dashboardData.buCategory} />
-                    </div>
-
-                    <div className="chart-card">
-                        <h3>Headcount By Country</h3>
-                        <HeadcountByCountryChart data={dashboardData.headcountByCountry} />
-                    </div>
+                <div className="chart-card">
+                    <h3>Business Unit Category</h3>
+                    <BUCategoryBreakdown data={dashboardData.buCategory} />
                 </div>
 
-                <div className="dashboard-column">
-                    <div className="chart-card">
-                        <h3>Headcount By Business Unit</h3>
-                        <HeadcountByBUChart data={dashboardData.headcountByBU} />
-                    </div>
-
-                    <div className="chart-card">
-                        <h3>Salary Expense By Business Unit</h3>
-                        <SalaryExpenseByBUChart data={dashboardData.salaryExpenseByBU} />
-                    </div>
+                <div className="chart-card">
+                    <h3>Headcount By Country</h3>
+                    <HeadcountByCountryChart data={dashboardData.headcountByCountry} />
                 </div>
 
-                <div className="dashboard-column">
-                    <div className="chart-card">
-                        <h3>Salary Expense By Business Unit Category</h3>
-                        <SalaryExpenseByBUCategoryChart data={dashboardData.salaryExpenseByBUCategory} />
-                    </div>
+                <div className="chart-card">
+                    <h3>Headcount By Business Unit</h3>
+                    <HeadcountByBUChart data={dashboardData.headcountByBU} />
+                </div>
 
-                    <div className="chart-card">
-                        <h3>Number Of Employees By Age</h3>
-                        <EmployeeByAgeChart data={dashboardData.employeeByAge} />
-                    </div>
+                <div className="chart-card">
+                    <h3>Salary Expense By Business Unit (USD)</h3>
+                    <SalaryExpenseByBUChart data={dashboardData.salaryExpenseByBU} />
+                </div>
+
+                <div className="chart-card">
+                    <h3>Salary Expense By Business Unit Category (USD)</h3>
+                    <SalaryExpenseByBUCategoryChart data={dashboardData.salaryExpenseByBUCategory} />
+                </div>
+
+                <div className="chart-card">
+                    <h3>Number Of Employees By Age</h3>
+                    <EmployeeByAgeChart data={dashboardData.employeeByAge} />
+                </div>
 
                     {/* <div className="chart-card">
                         <h3>Salary Expense By Country By Business Unit</h3>
                         <SalaryExpenseByCountryByBU data={dashboardData.salaryExpenseByCountryByBU} />
                     </div> */}
-                </div>
             </div>
         </div>
     );

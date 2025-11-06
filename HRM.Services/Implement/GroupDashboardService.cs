@@ -159,9 +159,11 @@ public class GroupDashboardService(
     private static (int AverageAge, IEnumerable<HeadcountModel> AgeRanges) GetEmployeeByAge(IEnumerable<GroupEmployeeModel> employees)
     {
         if (employees == null)
+        {
             return (0, []);
+        }
 
-        var today = DateTime.Today;
+        var today = DateTimeOffset.Now.Date;
 
         var ageBuckets = new List<(int Min, int Max, string Label)>
         {
@@ -181,7 +183,10 @@ public class GroupDashboardService(
             .Select(e =>
             {
                 var age = today.Year - e.DOB.Year;
-                if (e.DOB.Date > today.AddYears(-age)) age--;
+                if (e.DOB.Date > today.AddYears(-age))
+                {
+                    age--;
+                }
                 return age;
             });
 

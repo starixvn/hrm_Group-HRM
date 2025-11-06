@@ -47,15 +47,21 @@ const EmployeeByAgeChart = ({ data }) => {
             tooltip: {
                 callbacks: {
                     label: function(context) {
-                        return `Employees: ${context.parsed.y.toLocaleString()}`;
+                        return `Employees: ${context.parsed.x.toLocaleString()}`;
                     }
                 }
             }
         },
+        indexAxis: 'y',
         scales: {
-            y: {
+            x: {
                 beginAtZero: true,
             },
+            y: {
+                grid: {
+                    display: false,
+                }
+            }
         },
     };
 

@@ -44,7 +44,7 @@ public static class CurrencyConverter
 
         var convertedAmount = amount * rate;
         
-        if (CurrencyRoundingRules.TryGetValue(normalizedCode, out var roundingValue))
+        if (CurrencyRoundingRules.TryGetValue("USD", out var roundingValue))
         {
             convertedAmount = RoundAmount(convertedAmount, roundingValue);
         }
