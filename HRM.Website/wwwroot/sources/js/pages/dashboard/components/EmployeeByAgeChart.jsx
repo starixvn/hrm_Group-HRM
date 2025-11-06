@@ -20,19 +20,16 @@ ChartJS.register(
 );
 
 const EmployeeByAgeChart = ({ data }) => {
-    if (!data || data.length === 0) {
+    if (!data || !Array.isArray(data) || data.length === 0) {
         return <div className="chart-placeholder">No data available</div>;
     }
 
-    // Age ranges: 20-24, 25-29, 30-34, 35-39, 40-44, 45-49, 50-54, 55-59
-    const ageRanges = data.map(item => item.ageRange || `${item.minAge || 0}-${item.maxAge || 0}`);
-
     const chartData = {
-        labels: ageRanges,
+        labels: data.map(item => item.label || ''),
         datasets: [
             {
                 label: 'Number of Employees',
-                data: data.map(item => item.count || item.employeeCount || 0),
+                data: data.map(item => item.value || 0),
                 backgroundColor: 'rgba(75, 192, 192, 0.6)',
                 borderColor: 'rgba(75, 192, 192, 1)',
                 borderWidth: 1,

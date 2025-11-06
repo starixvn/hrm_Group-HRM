@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using HRM.Models.Group;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace HRM.Models.Report.HeadcountReport;
@@ -18,4 +19,11 @@ public class ReportModel
     public IEnumerable<int> TransferInEmpIds { get; set; } = [];
     public IEnumerable<int> TransferOutEmpIds { get; set; } = [];
     public IEnumerable<int> CurrentHeadCountEmpIds { get; set; } = [];
+    public IEnumerable<GroupEmployeeModel> CurrentHeadCountEmpInfo { get; set; } = [];
+}
+
+public class EmpInfo
+{
+    public int EmpId { get; set; }
+    public bool IsLocal { get; set; }
 }

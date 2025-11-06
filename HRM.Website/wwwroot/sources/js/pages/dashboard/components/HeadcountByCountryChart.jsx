@@ -66,7 +66,7 @@ const HeadcountByCountryChart = ({ data }) => {
                 },
                 anchor: 'end',
                 align: 'end',
-                offset: 15,
+                offset: 5,
                 clip: false
             },
             tooltip: {
@@ -84,7 +84,7 @@ const HeadcountByCountryChart = ({ data }) => {
     };
 
     return (
-        <div className="chart-wrapper" style={{ height: '250px', maxWidth: '350px', margin: '0 auto', padding: '10px' }}>
+        <div className="chart-wrapper" style={{ height: '300px', maxWidth: '350px', margin: '0 auto', padding: '10px' }}>
             <Doughnut data={chartData} options={options} />
         </div>
     );

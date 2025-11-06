@@ -62,7 +62,7 @@ const SalaryExpenseByBUCategoryChart = ({ data }) => {
                 },
                 anchor: 'end',
                 align: 'end',
-                offset: 15,
+                offset: 5,
                 clip: false
             },
             tooltip: {

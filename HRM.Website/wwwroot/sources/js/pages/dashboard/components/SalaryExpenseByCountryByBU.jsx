@@ -66,7 +66,7 @@ const SalaryExpenseByCountryByBU = ({ data }) => {
                             },
                             anchor: 'end',
                             align: 'end',
-                            offset: 12,
+                            offset: 5,
                             clip: false
                         },
                         tooltip: {

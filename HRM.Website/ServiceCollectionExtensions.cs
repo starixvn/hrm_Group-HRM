@@ -175,6 +175,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<ILocalPayrollService, LocalPayrollService>();
         services.AddScoped<IExpatPayrollService, ExpatPayrollService>();
         services.AddScoped<IMonthlyPayrollService, MonthlyPayrollService>();
+        services.AddScoped<IGroupDashboardService, GroupDashboardService>();
         services.AddDIReportServices();
         services.AddDIExcelServices();
         services.AddSyncFnBService();

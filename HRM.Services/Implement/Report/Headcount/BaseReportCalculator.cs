@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using HRM.Models.Group;
 using HRM.Models.Report.HeadcountReport;
 using HRM.Services.Helper;
 
@@ -38,7 +39,7 @@ public class BaseReportCalculator(HeadcountData data)
         var newHireEmployees = employees.Where(e => IsInRange(e.JoinedDate)).Select(e => e.EmpId).ToList();
         var probationResignEmployees = employees.Where(e => IsInRange(e.ResignedDate) && (e.ConfirmedDate == null || e.ResignedDate <= e.ConfirmedDate)).Select(e => e.EmpId);
         var confirmedResignEmployees = employees.Where(e => IsInRange(e.ResignedDate) && e.ResignedDate > e.ConfirmedDate).Select(e => e.EmpId).ToList();
-        var currentHeadCountEmployees = employees.Where(e => e.JoinedDate <= toDate && ((e.ResignedDate == null && e.Enabled) || e.ResignedDate > toDate)).Select(e => e.EmpId).Distinct().ToList();
+        var currentHeadCountEmployees = employees.Where(e => e.JoinedDate <= toDate && ((e.ResignedDate == null && e.Enabled) || e.ResignedDate > toDate));
 
         return new ReportModel
         {
@@ -48,7 +49,8 @@ public class BaseReportCalculator(HeadcountData data)
             ConfirmedResignEmpIds = confirmedResignEmployees,
             TransferInEmpIds = transferInList,
             TransferOutEmpIds = transferOutList,
-            CurrentHeadCountEmpIds = currentHeadCountEmployees
+            CurrentHeadCountEmpIds = currentHeadCountEmployees.Select(e => e.EmpId).Distinct().ToList(),
+            CurrentHeadCountEmpInfo = currentHeadCountEmployees.Select(x => new GroupEmployeeModel { EmpId = x.EmpId, IsLocal = x.IsLocal})
         };
 
         bool IsInRange(DateTime? date) => date != null && IsInMonth(date.Value, fromDate, toDate);

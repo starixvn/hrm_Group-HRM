@@ -26,7 +26,7 @@ const AppContainer = () => {
         },
         headcountByBU: [],
         headcountByCountry: [],
-        buCategoryBreakdown: [],
+        buCategory: [],
         salaryExpenseByBUCategory: [],
         salaryExpenseByBU: [],
         employeeByAge: [],
@@ -58,7 +58,7 @@ const AppContainer = () => {
                 },
                 headcountByBU: data.headcountByBU || [],
                 headcountByCountry: data.headcountByCountry || [],
-                buCategoryBreakdown: data.buCategoryBreakdown || [],
+                buCategory: data.buCategory || [],
                 salaryExpenseByBUCategory: data.salaryExpenseByBUCategory || [],
                 salaryExpenseByBU: data.salaryExpenseByBU || [],
                 employeeByAge: data.employeeByAge || [],
@@ -93,8 +93,8 @@ const AppContainer = () => {
             <div className="dashboard-content">
                 <div className="dashboard-column">
                     <div className="chart-card">
-                        <h3>Business Unit Category Breakdown</h3>
-                        <BUCategoryBreakdown data={dashboardData.buCategoryBreakdown} />
+                        <h3>Business Unit Category</h3>
+                        <BUCategoryBreakdown data={dashboardData.buCategory} />
                     </div>
 
                     <div className="chart-card">
@@ -109,27 +109,27 @@ const AppContainer = () => {
                         <HeadcountByBUChart data={dashboardData.headcountByBU} />
                     </div>
 
-                    <div className="chart-card">
+                    {/* <div className="chart-card">
                         <h3>Salary Expense By Business Unit</h3>
                         <SalaryExpenseByBUChart data={dashboardData.salaryExpenseByBU} />
-                    </div>
+                    </div> */}
                 </div>
 
                 <div className="dashboard-column">
-                    <div className="chart-card">
+                    {/* <div className="chart-card">
                         <h3>Salary Expense By Business Unit Category</h3>
                         <SalaryExpenseByBUCategoryChart data={dashboardData.salaryExpenseByBUCategory} />
-                    </div>
+                    </div> */}
 
                     <div className="chart-card">
                         <h3>Number Of Employees By Age</h3>
                         <EmployeeByAgeChart data={dashboardData.employeeByAge} />
                     </div>
 
-                    <div className="chart-card">
+                    {/* <div className="chart-card">
                         <h3>Salary Expense By Country By Business Unit</h3>
                         <SalaryExpenseByCountryByBU data={dashboardData.salaryExpenseByCountryByBU} />
-                    </div>
+                    </div> */}
                 </div>
             </div>
         </div>

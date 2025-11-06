@@ -80,7 +80,7 @@ const HeadcountByBUChart = ({ data }) => {
     };
 
     return (
-        <div className="chart-wrapper" style={{ height: '400px', overflowY: 'auto' }}>
+        <div className="chart-wrapper" style={{ height: '300px', overflowY: 'auto' }}>
             <Bar data={chartData} options={options} />
         </div>
     );
