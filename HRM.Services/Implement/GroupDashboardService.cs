@@ -53,7 +53,7 @@ public class GroupDashboardService(
 
     private static int GetCurrentHeadcount(UnitReport grandTotalUnit) => GetLastMonthReport(grandTotalUnit)?.CurrentHeadCount ?? 0;
 
-    private static int GetRecruitment(UnitReport grandTotalUnit) => GetLastMonthReport(grandTotalUnit)?.NewHire ?? 0;
+    private static int GetRecruitment(UnitReport grandTotalUnit) => grandTotalUnit?.Details?.Sum(x => x.NewHire) ?? 0;
 
     private static int GetProbationResign(UnitReport grandTotalUnit) => grandTotalUnit?.Details?.Sum(x => x.ProbationResign) ?? 0;
 
@@ -98,8 +98,8 @@ public class GroupDashboardService(
             .Select(g => new CategoryModel
             {
                 Category = g.Key,
-                EmployeeCount = GetLastMonthReport(g.First())?.CurrentHeadCount ?? 0,
-                BUCount = g.First().BUCount
+                EmployeeCount = g.Sum(x => GetLastMonthReport(x)?.CurrentHeadCount ?? 0),
+                BUCount = g.Sum(x => x.BUCount)
             })
             .OrderBy(x => x.Category);
     }
@@ -132,7 +132,7 @@ public class GroupDashboardService(
             .GroupBy(x => HeadcountReportHelper.ExtractCategoryName(x.Label1))
             .Select(g =>
             {
-                var employees = GetLastMonthReport(g.First())?.CurrentHeadCountEmpInfo ?? [];
+                var employees = g.SelectMany(unit => GetLastMonthReport(unit)?.CurrentHeadCountEmpInfo ?? []);
                 return new HeadcountModel
                 {
                     Label = g.Key,

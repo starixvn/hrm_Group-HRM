@@ -31,19 +31,17 @@ public static class CurrencyConverter
 
     public static decimal ConvertToUsd(decimal amount, string currencyCode)
     {
-        if (string.IsNullOrWhiteSpace(currencyCode))
+        var convertedAmount = amount;
+
+        if (!string.IsNullOrWhiteSpace(currencyCode))
         {
-            return amount;
+            var normalizedCode = currencyCode.ToUpperInvariant();
+            if (CurrencyToUsdRates.TryGetValue(normalizedCode, out var rate))
+            {
+                convertedAmount = amount * rate;
+            }
         }
 
-        var normalizedCode = currencyCode.ToUpperInvariant();
-        if (!CurrencyToUsdRates.TryGetValue(normalizedCode, out var rate))
-        {
-            return amount;
-        }
-
-        var convertedAmount = amount * rate;
-        
         if (CurrencyRoundingRules.TryGetValue("USD", out var roundingValue))
         {
             convertedAmount = RoundAmount(convertedAmount, roundingValue);

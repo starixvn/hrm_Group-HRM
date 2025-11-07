@@ -75,7 +75,7 @@ const BUCategoryBreakdown = ({ data }) => {
                 formatter: function(value, context) {
                     const total = context.dataset.data.reduce((a, b) => a + b, 0);
                     const percentage = total > 0 ? ((value / total) * 100).toFixed(1) : 0;
-                    return `${percentage}%`;
+                    return percentage > 0 ? `${percentage}%` : '';
                 },
                 anchor: 'center',
                 align: 'center',
