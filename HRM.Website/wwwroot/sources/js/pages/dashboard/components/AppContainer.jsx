@@ -10,7 +10,7 @@ import SalaryExpenseByBUChart from './SalaryExpenseByBUChart';
 import EmployeeByAgeChart from './EmployeeByAgeChart';
 
 const AppContainer = () => {
-    const [selectedYear, _] = useState(new Date().getFullYear());
+    const selectedYear = new Date().getFullYear();
     const [dashboardData, setDashboardData] = useState({
         kpis: {
             currentHeadcount: 0,

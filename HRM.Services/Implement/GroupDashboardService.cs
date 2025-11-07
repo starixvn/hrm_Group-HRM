@@ -179,7 +179,7 @@ public class GroupDashboardService(
         };
 
         var ages = employees
-            .Where(e => e.DOB != DateTime.MinValue)
+            .Where(e => e.DOB != DateTimeOffset.MinValue.DateTime)
             .Select(e =>
             {
                 var age = today.Year - e.DOB.Year;
