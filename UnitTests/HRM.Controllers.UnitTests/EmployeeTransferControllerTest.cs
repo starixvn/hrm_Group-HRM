@@ -206,7 +206,11 @@ public class EmployeeTransferControllerTest : BaseControllerTest
         var companyService = Substitute.For<ICompanyService>();
 
         employeeService.GetEmployeeTransferByIdAsync(1, 1).Returns(employee);
-        employeeService.CalculateLengthOfService(Arg.Any<DateTime?>(), Arg.Any<DateTime?>(), Arg.Any<DateTime?>()).LengthOfServiceText.Returns("2 years");
+        employeeService.CalculateLengthOfService(
+            Arg.Any<DateTime?>(),
+            Arg.Any<DateTime?>(),
+            Arg.Any<DateTime?>()
+        ).Returns((2.0, "2 years"));
         commonDataService.GetAllCountry().Returns(countries);
         commonDataService.GetLookupDataByCodeAsync(Arg.Any<string>(), Arg.Any<int>()).Returns(jobTitles);
         commonDataService.GetSystemSettingAsync(Arg.Any<short>()).Returns(new SystemSetting { EnableSickLeaveBalance = true });
