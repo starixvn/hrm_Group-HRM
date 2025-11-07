@@ -5470,11 +5470,11 @@ namespace HRM.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Total Cost.
+        ///   Looks up a localized string similar to Total Cost (USD).
         /// </summary>
-        public static string TotalCost {
+        public static string TotalCostUSD {
             get {
-                return ResourceManager.GetString("TotalCost", resourceCulture);
+                return ResourceManager.GetString("TotalCostUSD", resourceCulture);
             }
         }
         

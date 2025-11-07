@@ -2184,7 +2184,7 @@
   <data name="BasicSalary" xml:space="preserve">
     <value>Basic Salary</value>
   </data>
-  <data name="TotalCost" xml:space="preserve">
-    <value>Total Cost</value>
+  <data name="TotalCostUSD" xml:space="preserve">
+    <value>Total Cost (USD)</value>
   </data>
 </root>
