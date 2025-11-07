@@ -10,7 +10,7 @@ import SalaryExpenseByBUChart from './SalaryExpenseByBUChart';
 import EmployeeByAgeChart from './EmployeeByAgeChart';
 
 const AppContainer = () => {
-    const selectedYear = new Date().getFullYear();
+    const [selectedYear] = useState(new Date().getFullYear());
     const [dashboardData, setDashboardData] = useState({
         kpis: {
             currentHeadcount: 0,
@@ -112,11 +112,6 @@ const AppContainer = () => {
                     <h3>Number Of Employees By Age</h3>
                     <EmployeeByAgeChart data={dashboardData.employeeByAge} />
                 </div>
-
-                    {/* <div className="chart-card">
-                        <h3>Salary Expense By Country By Business Unit</h3>
-                        <SalaryExpenseByCountryByBU data={dashboardData.salaryExpenseByCountryByBU} />
-                    </div> */}
             </div>
         </div>
     );
