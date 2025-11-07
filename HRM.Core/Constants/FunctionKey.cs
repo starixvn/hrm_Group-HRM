@@ -85,8 +85,8 @@ public static class FunctionKey
     public const string PayrollSetting = "PayrollSetting";
 
     //Group Space
+    public const string Dashboard = "Dashboard";
     public const string UnitManagement = "UnitManagement";
-
     public const string DepartmentManagement = "DepartmentManagement";
     public const string DepartmentManagement_ViewAll = "DepartmentManagement-ViewAll";
     public const string DepartmentManagement_BUView = "DepartmentManagement-BUView";

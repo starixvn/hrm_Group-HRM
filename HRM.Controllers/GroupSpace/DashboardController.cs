@@ -1,5 +1,8 @@
 using System.Threading.Tasks;
+using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
+using HRM.Core.Constants;
+using HRM.Core.Filters;
 using HRM.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -7,6 +10,7 @@ using Newtonsoft.Json.Serialization;
 
 namespace HRM.Controllers.GroupSpace;
 
+[HrmPermission(Policy.Read, FunctionKey.Dashboard)]
 public class DashboardController(
     IGroupDashboardService groupDashboardService,
     IUserControlSession session)

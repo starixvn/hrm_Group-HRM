@@ -26,12 +26,12 @@ public class BaseReportCalculator(HeadcountData data)
                 .Where(x => isSeparatedWFH ? wfhInMonth.Contains(x.EmpId) : !wfhInMonth.Contains(x.EmpId))
                 .ToList();
 
-            yield return CreateReportModel(month, filteredEmployees, fromDate, toDate, transferIns, transferOuts);
+            yield return CreateReportModel(month, filteredEmployees, fromDate, toDate, transferIns, transferOuts, month == maxMonth);
         }
     }
 
     protected static ReportModel CreateReportModel(int month, List<EmployeeInfo> employees, DateTime fromDate, DateTime toDate, 
-        IEnumerable<EmployeeTransferData> transferIns, IEnumerable<EmployeeTransferData> transferOuts)
+        IEnumerable<EmployeeTransferData> transferIns, IEnumerable<EmployeeTransferData> transferOuts, bool includeEmpInfo = false)
     {
         var transferInList = transferIns.Where(t => IsInRange(t.TransferDate)).Select(e => e.EmpId).ToList();
         var transferOutList = transferOuts.Where(t => IsInRange(t.TransferDate)).Select(e => e.EmpId).ToList();
@@ -39,7 +39,7 @@ public class BaseReportCalculator(HeadcountData data)
         var newHireEmployees = employees.Where(e => IsInRange(e.JoinedDate)).Select(e => e.EmpId).ToList();
         var probationResignEmployees = employees.Where(e => IsInRange(e.ResignedDate) && (e.ConfirmedDate == null || e.ResignedDate <= e.ConfirmedDate)).Select(e => e.EmpId);
         var confirmedResignEmployees = employees.Where(e => IsInRange(e.ResignedDate) && e.ResignedDate > e.ConfirmedDate).Select(e => e.EmpId).ToList();
-        var currentHeadCountEmployees = employees.Where(e => e.JoinedDate <= toDate && ((e.ResignedDate == null && e.Enabled) || e.ResignedDate > toDate));
+        var currentHeadCountEmployees = employees.Where(e => e.JoinedDate <= toDate && ((e.ResignedDate == null && e.Enabled) || e.ResignedDate > toDate)).ToList();
 
         return new ReportModel
         {
@@ -50,7 +50,9 @@ public class BaseReportCalculator(HeadcountData data)
             TransferInEmpIds = transferInList,
             TransferOutEmpIds = transferOutList,
             CurrentHeadCountEmpIds = currentHeadCountEmployees.Select(e => e.EmpId).Distinct().ToList(),
-            CurrentHeadCountEmpInfo = currentHeadCountEmployees.Select(x => new GroupEmployeeModel { EmpId = x.EmpId, IsLocal = x.IsLocal})
+            CurrentHeadCountEmpInfo = includeEmpInfo 
+                ? currentHeadCountEmployees.Select(x => new GroupEmployeeModel { EmpId = x.EmpId, IsLocal = x.IsLocal }).ToList()
+                : []
         };
 
         bool IsInRange(DateTime? date) => date != null && IsInMonth(date.Value, fromDate, toDate);
