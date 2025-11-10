@@ -167,6 +167,11 @@ public class GroupDashboardService(
 
     private int GetAverageTenure(IEnumerable<GroupEmployeeModel> employees)
     {
+        if (employees == null || !employees.Any())
+        {
+            return 0;
+        }
+
         var averageServiceYear = employees
             .Select(e => employeeService.CalculateLengthOfService(
                 e.JoinedDate,
