@@ -1279,10 +1279,10 @@
     <value>Number of Offday</value>
   </data>
   <data name="OnBehalfRequest" xml:space="preserve">
-    <value>On behalf Request</value>
+    <value>Request Submitted on Behalf by</value>
   </data>
   <data name="ShiftArrangement" xml:space="preserve">
-    <value>Shift Arrangement</value>
+    <value>Shift Arranged by</value>
   </data>
   <data name="WorkEmail" xml:space="preserve">
     <value>Work Email</value>
@@ -1321,7 +1321,7 @@
     <value>Discipline Setting</value>
   </data>
   <data name="DisciplineManager" xml:space="preserve">
-    <value>Discipline Manager</value>
+    <value>Discipline Managed by</value>
   </data>
   <data name="EmployeePersonalInformation" xml:space="preserve">
     <value>Employee Personal Information</value>

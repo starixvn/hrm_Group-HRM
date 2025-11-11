@@ -4,19 +4,19 @@ using System.ComponentModel;
 
 public enum SupervisorActionType
 {
-    [Description("Verify by")]
+    [Description("Verifed by")]
     Verifier = 2,
 
-    [Description("Approve by")]
+    [Description("Approved by")]
     Approver = 3,
 
-    [Description("Shift Arrangement")]
+    [Description("Shift Arranged by")]
     ShiftArrangement = 4,
 
-    [Description("On Behalf Request")]
+    [Description("Request Submitted on Behalf by")]
     OnBehalfRequest = 5,
 
-    [Description("Discipline Manager")]
+    [Description("Discipline Managed by")]
     DisciplineManager = 8,
 
     [Description("Leader Takeover")]

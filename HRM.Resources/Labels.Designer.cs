@@ -1618,7 +1618,7 @@ namespace HRM.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Discipline Manager.
+        ///   Looks up a localized string similar to Discipline Managed by.
         /// </summary>
         public static string DisciplineManager {
             get {
@@ -3931,7 +3931,7 @@ namespace HRM.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to On behalf Request.
+        ///   Looks up a localized string similar to Request Submitted on Behalf by.
         /// </summary>
         public static string OnBehalfRequest {
             get {
@@ -4885,7 +4885,7 @@ namespace HRM.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Shift Arrangement.
+        ///   Looks up a localized string similar to Shift Arranged by.
         /// </summary>
         public static string ShiftArrangement {
             get {
