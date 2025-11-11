@@ -76,7 +76,8 @@ public class GroupDashboardService(
             {
                 Label = x.Label1,
                 Value = GetLastMonthReport(x)?.CurrentHeadCount ?? 0
-            });
+            })
+            .OrderBy(x => x.Label);
     }
 
     private static IEnumerable<HeadcountModel> GetHeadcountByCountry(IEnumerable<UnitReport> reportByUnitCountry)
@@ -153,7 +154,8 @@ public class GroupDashboardService(
                     Label = unitEmp.Label1,
                     Value = CalculateTotalSalary(employees, salaryByEmpDict)
                 };
-            });
+            })
+            .OrderBy(x => x.Label);
     }
 
     private static decimal CalculateTotalSalary(IEnumerable<GroupEmployeeModel> employees, Dictionary<int, decimal> salaryByEmpDict) =>

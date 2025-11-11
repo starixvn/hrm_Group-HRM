@@ -16,7 +16,7 @@ ChartJS.register(
     BarElement,
     Title,
     Tooltip,
-    Legend
+    Legend,
 );
 
 const HeadcountByBUChart = ({ data }) => {
@@ -31,10 +31,11 @@ const HeadcountByBUChart = ({ data }) => {
                 label: 'Headcount',
                 data: data.map(item => item.value),
                 backgroundColor: 'rgba(126, 198, 247, 0.6)',
-                borderColor: 'rgb(117, 183, 228)',
-                borderWidth: 0.5,
-                categoryPercentage: 1.0,
-                barPercentage: 1.0,
+                borderColor: 'rgb(90, 160, 210)',
+                borderWidth: 1,
+                borderSkipped: 'bottom',
+                categoryPercentage: 0.92,
+                barPercentage: 0.92,
             },
         ],
     };
@@ -42,14 +43,11 @@ const HeadcountByBUChart = ({ data }) => {
     const options = {
         responsive: true,
         maintainAspectRatio: false,
-        layout: {
-            padding: {
-                left: 10,
-                right: 10
-            }
-        },
         plugins: {
             legend: {
+                display: false,
+            },
+            datalabels: {
                 display: false,
             },
             tooltip: {

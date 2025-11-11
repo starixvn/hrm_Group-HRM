@@ -99,12 +99,12 @@ const AppContainer = () => {
                 </div>
 
                 <div className="chart-card">
-                    <h3>Salary Expense By Business Unit (USD)</h3>
+                    <h3>Estimated Monthly Salary Expense By Business Unit (USD)</h3>
                     <SalaryExpenseByBUChart data={dashboardData.salaryExpenseByBU} />
                 </div>
 
                 <div className="chart-card">
-                    <h3>Salary Expense By Business Unit Category (USD)</h3>
+                    <h3>Estimated Monthly Salary Expense By Business Unit Category (USD)</h3>
                     <SalaryExpenseByBUCategoryChart data={dashboardData.salaryExpenseByBUCategory} />
                 </div>
 

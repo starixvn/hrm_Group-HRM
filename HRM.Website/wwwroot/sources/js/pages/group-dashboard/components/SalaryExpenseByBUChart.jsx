@@ -9,7 +9,6 @@ import {
     Legend,
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
-import ChartDataLabels from 'chartjs-plugin-datalabels';
 
 ChartJS.register(
     CategoryScale,
@@ -18,7 +17,6 @@ ChartJS.register(
     Title,
     Tooltip,
     Legend,
-    ChartDataLabels
 );
 
 const SalaryExpenseByBUChart = ({ data }) => {
@@ -34,9 +32,10 @@ const SalaryExpenseByBUChart = ({ data }) => {
                 data: data.map(item => item.value || 0),
                 backgroundColor: 'rgba(54, 162, 235, 0.6)',
                 borderColor: 'rgba(54, 162, 235, 1)',
-                borderWidth: 0.5,
-                categoryPercentage: 1.0,
-                barPercentage: 1.0,
+                borderWidth: 1,
+                borderSkipped: 'bottom',
+                categoryPercentage: 0.92,
+                barPercentage: 0.92,
             },
         ],
     };
@@ -44,13 +43,6 @@ const SalaryExpenseByBUChart = ({ data }) => {
     const options = {
         responsive: true,
         maintainAspectRatio: false,
-        layout: {
-            padding: {
-                left: 10,
-                right: 10,
-                bottom: 20,
-            }
-        },
         plugins: {
             legend: {
                 display: false,
