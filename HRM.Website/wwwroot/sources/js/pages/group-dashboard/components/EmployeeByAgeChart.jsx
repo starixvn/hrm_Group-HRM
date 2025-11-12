@@ -9,7 +9,6 @@ import {
     Legend,
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
-import { PASTEL_COLORS } from '../constants/chartColors';
 
 ChartJS.register(
     CategoryScale,
@@ -31,9 +30,7 @@ const EmployeeByAgeChart = ({ data }) => {
             {
                 label: 'Number of Employees',
                 data: data.map(item => item.value || 0),
-                backgroundColor: PASTEL_COLORS[5],
-                borderColor: 'rgba(75, 192, 192, 1)',
-                borderWidth: 1,
+                backgroundColor: 'rgb(62, 174, 243)',
             },
         ],
     };

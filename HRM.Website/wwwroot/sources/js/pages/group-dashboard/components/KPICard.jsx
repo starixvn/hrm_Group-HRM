@@ -23,8 +23,8 @@ const KPICard = ({ label, value, icon, dark }) => {
         <div className={cardClass}>
             {icon && !dark && <i className={getIconClass()}></i>}
             <div className={dark ? '' : 'kpi-content'}>
-                <div className={valueClass}>{value.toLocaleString()}</div>
                 <div className={labelClass}>{label}</div>
+                <div className={valueClass}>{value.toLocaleString()}</div>
             </div>
         </div>
     );

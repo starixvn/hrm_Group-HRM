@@ -3,146 +3,221 @@
     .dashboard-header-kpi-row {
         display: flex;
         gap: 0;
-        margin-bottom: 5px;
-        border-radius: 4px;
-        overflow: hidden;
-        box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
         align-items: stretch;
         width: 100%;
 
         .dashboard-header-right {
             flex: 1;
             display: flex;
-            gap: 0;
+            gap: 12px;
             align-items: stretch;
             height: 100%;
             flex-wrap: nowrap;
 
             @media (max-width: 1600px) {
                 flex-wrap: wrap;
+                gap: 10px;
             }
 
             @media (max-width: 1200px) {
                 flex-wrap: wrap;
+                gap: 10px;
             }
 
             @media (max-width: 768px) {
                 flex-direction: column;
                 flex-wrap: nowrap;
+                gap: 10px;
             }
 
             .kpi-card {
-                border-right: 1px solid #e0e0e0;
-                border-radius: 0;
-                flex: 1 1 0;
-                min-width: 0;
+                border-radius: 8px;
+                flex: 0 1 auto;
+                min-width: 160px;
                 max-width: none;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
                 @media (max-width: 1600px) {
-                    flex: 1 1 calc(25% - 1px);
-                    min-width: 200px;
-                    max-width: calc(25% - 1px);
+                    flex: 0 1 auto;
+                    min-width: 180px;
+                    max-width: calc(25% - 7.5px);
                 }
 
                 @media (max-width: 1200px) {
-                    flex: 1 1 calc(33.333% - 1px);
-                    min-width: 180px;
-                    max-width: calc(33.333% - 1px);
+                    flex: 0 1 auto;
+                    min-width: 160px;
+                    max-width: calc(33.333% - 6.67px);
                 }
 
                 @media (max-width: 900px) {
-                    flex: 1 1 calc(50% - 1px);
-                    min-width: 150px;
-                    max-width: calc(50% - 1px);
+                    flex: 0 1 auto;
+                    min-width: 140px;
+                    max-width: calc(50% - 5px);
                 }
 
                 @media (max-width: 768px) {
                     flex: 1 1 100%;
                     min-width: 100%;
                     max-width: 100%;
-                    border-right: none;
-                    border-bottom: 1px solid #e0e0e0;
-
-                    &:last-child {
-                        border-bottom: none;
-                    }
-                }
-
-                &:last-child {
-                    border-right: none;
-
-                    @media (max-width: 768px) {
-                        border-right: none;
-                    }
                 }
             }
         }
     }
 
     .kpi-card {
-        background-color: #f5f5f5;
-        border-radius: 0;
-        padding: 10px 5px;
-        box-shadow: none;
+        border-radius: 8px;
+        padding: 10px 14px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         display: flex;
         align-items: center;
-        gap: 12px;
-        transition: transform 0.2s, box-shadow 0.2s;
-        flex: 1 1 0;
-        min-width: 0;
+        gap: 10px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        flex: 0 1 auto;
+        min-width: 180px;
         width: auto;
+        cursor: pointer;
 
         @media (max-width: 768px) {
-            padding: 12px 10px;
+            padding: 10px 12px;
+            gap: 10px;
         }
 
         &:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+            
+            i {
+                transform: scale(1.1);
+            }
         }
 
+        &:active {
+            transform: translateY(-2px) scale(1.01);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);
+        }
+
+        // Icon container with circular background
         i {
-            font-size: 24px;
-            color: #2c3e50;
+            font-size: 16px;
+            color: #ffffff;
             flex-shrink: 0;
+            width: 38px;
+            height: 38px;
+            display: inline-block;
+            text-align: center;
+            line-height: 38px;
+            border-radius: 50%;
+            background-color: #9b59b6; // Default purple
+            vertical-align: middle;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
             @media (max-width: 768px) {
-                font-size: 20px;
+                width: 34px;
+                height: 34px;
+                line-height: 34px;
+                font-size: 14px;
+            }
+        }
+
+        // Color variations for different cards
+        &:nth-child(1) {
+            background-color: #f4e6ff; // Light lavender
+            i {
+                background-color: #9b59b6; // Purple
+            }
+        }
+
+        &:nth-child(2) {
+            background-color: #ffe6e6; // Light peach
+            i {
+                background-color: #e67e22; // Orange
+            }
+        }
+
+        &:nth-child(3) {
+            background-color: #e6ffe6; // Light mint green
+            i {
+                background-color: #27ae60; // Green
+            }
+        }
+
+        &:nth-child(4) {
+            background-color: #e6f3ff; // Light blue
+            i {
+                background-color: #3498db; // Blue
+            }
+        }
+
+        &:nth-child(5) {
+            background-color: #fff0e6; // Light orange
+            i {
+                background-color: #f39c12; // Orange-yellow
+            }
+        }
+
+        &:nth-child(6) {
+            background-color: #f0e6ff; // Light purple
+            i {
+                background-color: #8e44ad; // Dark purple
+            }
+        }
+
+        &:nth-child(7) {
+            background-color: #e6ffe6; // Light green
+            i {
+                background-color: #2ecc71; // Green
+            }
+        }
+
+        &:nth-child(8) {
+            background-color: #ffe6f0; // Light pink
+            i {
+                background-color: #e91e63; // Pink
+            }
+        }
+
+        &:nth-child(9) {
+            background-color: #e6f5ff; // Light cyan
+            i {
+                background-color: #16a085; // Teal
             }
         }
 
         .kpi-content {
-            flex: 1;
+            flex: 1 1 auto;
             min-width: 0;
-            overflow: hidden;
+            overflow: visible;
 
-            .kpi-value {
-                font-size: 20px;
-                font-weight: bold;
-                color: #2c3e50;
-                margin-bottom: 3px;
+            .kpi-label {
+                font-size: 13px;
+                color: #34495e;
+                font-weight: 500;
+                margin-bottom: 5px;
                 white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
-
-                @media (max-width: 1200px) {
-                    font-size: 18px;
-                }
+                overflow: visible;
+                text-overflow: clip;
+                line-height: 1.4;
 
                 @media (max-width: 768px) {
-                    font-size: 16px;
+                    font-size: 12px;
                 }
             }
 
-            .kpi-label {
-                font-size: 12px;
-                color: #7f8c8d;
+            .kpi-value {
+                font-size: 24px;
+                font-weight: bold;
+                color: #2c3e50;
                 white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
+                overflow: visible;
+                text-overflow: clip;
+
+                @media (max-width: 1200px) {
+                    font-size: 22px;
+                }
 
                 @media (max-width: 768px) {
-                    font-size: 11px;
+                    font-size: 20px;
                 }
             }
         }
@@ -189,10 +264,15 @@
             background-color: white;
             border-radius: 8px;
             padding: 10px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.06);
+            transition: box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
             @media (max-width: 768px) {
                 padding: 15px;
+            }
+
+            &:hover {
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.08);
             }
 
             h3 {
@@ -392,4 +472,5 @@
         }
     }
 }
+
 
