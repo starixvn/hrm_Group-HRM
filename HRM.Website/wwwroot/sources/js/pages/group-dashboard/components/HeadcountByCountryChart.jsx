@@ -49,8 +49,12 @@ const HeadcountByCountryChart = ({ data }) => {
                 position: 'right',
                 labels: {
                     usePointStyle: true,
-                    pointStyle: 'rect',
+                    pointStyle: 'rectRounded',
                     padding: 15,
+                    borderRadius: 4,
+                    font: {
+                        size: 12
+                    },
                     generateLabels: function(chart) {
                         const data = chart.data;
                         if (data.labels.length && data.datasets.length) {
@@ -58,11 +62,11 @@ const HeadcountByCountryChart = ({ data }) => {
                                 const value = data.datasets[0].data[i] || 0;
                                 const percentage = total > 0 ? ((value / total) * 100).toFixed(1) : 0;
                                 return {
-                                    text: `${label} (${percentage}%)`,
+                                    text: `${label} ${percentage}%`,
                                     fillStyle: data.datasets[0].backgroundColor[i],
                                     strokeStyle: data.datasets[0].borderColor || '#ffffff',
                                     lineWidth: data.datasets[0].borderWidth || 2,
-                                    pointStyle: 'rect',
+                                    pointStyle: 'rectRounded',
                                     hidden: false,
                                     index: i
                                 };

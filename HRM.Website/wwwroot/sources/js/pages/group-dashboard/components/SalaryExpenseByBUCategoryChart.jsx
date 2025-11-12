@@ -23,9 +23,9 @@ const SalaryExpenseByBUCategoryChart = ({ data }) => {
                 label: 'Salary Expense',
                 data: data.map(item => item.value),
                 backgroundColor: PASTEL_COLORS.slice(0, data.length),
-                borderWidth: 3,
+                borderWidth: 2,
                 borderColor: '#ffffff',
-                borderRadius: 7,
+                borderRadius: 5,
             },
         ],
     };
@@ -37,7 +37,7 @@ const SalaryExpenseByBUCategoryChart = ({ data }) => {
             padding: {
                 left: 20,
                 right: 20,
-                top: 20,
+                top: 40,
                 bottom: 20
             }
         },
@@ -46,10 +46,13 @@ const SalaryExpenseByBUCategoryChart = ({ data }) => {
                 display: true,
                 position: 'right',
                 labels: {
-                    usePointStyle: false,
-                    boxWidth: 12,
-                    boxHeight: 12,
-                    padding: 10,
+                    usePointStyle: true,
+                    pointStyle: 'rectRounded',
+                    padding: 15,
+                    borderRadius: 4,
+                    font: {
+                        size: 12
+                    },
                     generateLabels: function(chart) {
                         const data = chart.data;
                         if (data.labels.length && data.datasets.length) {
@@ -61,8 +64,9 @@ const SalaryExpenseByBUCategoryChart = ({ data }) => {
                                 return {
                                     text: `${label} ${percentage}%`,
                                     fillStyle: dataset.backgroundColor[i],
-                                    strokeStyle: 'transparent',
-                                    lineWidth: 0,
+                                    strokeStyle: dataset.borderColor || '#ffffff',
+                                    lineWidth: dataset.borderWidth || 2,
+                                    pointStyle: 'rectRounded',
                                     hidden: false,
                                     index: i
                                 };

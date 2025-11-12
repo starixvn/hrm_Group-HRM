@@ -122,30 +122,30 @@
 
         // Color variations for different cards
         &:nth-child(1) {
-            background-color: #f4e6ff; // Light lavender
+            background-color: #e6f5ff; // Light cyan
             i {
-                background-color: #9b59b6; // Purple
+                background-color: #16a085; // Teal
             }
         }
 
         &:nth-child(2) {
-            background-color: #ffe6e6; // Light peach
-            i {
-                background-color: #e67e22; // Orange
-            }
-        }
-
-        &:nth-child(3) {
             background-color: #e6ffe6; // Light mint green
             i {
                 background-color: #27ae60; // Green
             }
         }
 
-        &:nth-child(4) {
-            background-color: #e6f3ff; // Light blue
+        &:nth-child(3) {
+            background-color: #ffe6f0; // Light pink
             i {
-                background-color: #3498db; // Blue
+                background-color: #e91e63; // Pink
+            }
+        }
+
+        &:nth-child(4) {
+            background-color: #ffe6e6; // Light peach
+            i {
+                background-color: #e67e22; // Orange
             }
         }
 
@@ -171,16 +171,16 @@
         }
 
         &:nth-child(8) {
-            background-color: #ffe6f0; // Light pink
+            background-color: #e6f3ff; // Light blue
             i {
-                background-color: #e91e63; // Pink
+                background-color: #3498db; // Blue
             }
         }
 
         &:nth-child(9) {
-            background-color: #e6f5ff; // Light cyan
+            background-color: #f4e6ff; // Light lavender
             i {
-                background-color: #16a085; // Teal
+                background-color: #9b59b6; // Purple
             }
         }
 

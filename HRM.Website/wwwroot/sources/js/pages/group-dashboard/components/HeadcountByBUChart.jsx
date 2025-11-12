@@ -30,9 +30,7 @@ const HeadcountByBUChart = ({ data }) => {
             {
                 label: 'Headcount',
                 data: data.map(item => item.value),
-                backgroundColor: 'rgba(126, 198, 247, 0.6)',
-                borderColor: 'rgb(90, 160, 210)',
-                borderWidth: 1,
+                backgroundColor: '#42A5F5',
                 borderSkipped: 'bottom',
                 categoryPercentage: 0.92,
                 barPercentage: 0.92,
