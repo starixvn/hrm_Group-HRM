@@ -44,6 +44,7 @@ node_modules/
 */wwwroot/css/dev/
 */wwwroot/js/dev/
 */wwwroot/coverage/
+*/wwwroot/test-report.xml
 *.cobertura.xml
 *.pubxml
 __snapshots__/
