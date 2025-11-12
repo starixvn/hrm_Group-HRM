@@ -30,6 +30,8 @@ const HeadcountByCountryChart = ({ data }) => {
         ],
     };
 
+    const total = chartData.datasets[0].data.reduce((a, b) => a + b, 0);
+
     const options = {
         responsive: true,
         maintainAspectRatio: false,
@@ -43,25 +45,35 @@ const HeadcountByCountryChart = ({ data }) => {
         },
         plugins: {
             legend: {
-                display: false,
+                display: true,
+                position: 'right',
+                labels: {
+                    usePointStyle: true,
+                    pointStyle: 'rect',
+                    padding: 15,
+                    generateLabels: function(chart) {
+                        const data = chart.data;
+                        if (data.labels.length && data.datasets.length) {
+                            return data.labels.map((label, i) => {
+                                const value = data.datasets[0].data[i] || 0;
+                                const percentage = total > 0 ? ((value / total) * 100).toFixed(1) : 0;
+                                return {
+                                    text: `${label} (${percentage}%)`,
+                                    fillStyle: data.datasets[0].backgroundColor[i],
+                                    strokeStyle: data.datasets[0].borderColor || '#ffffff',
+                                    lineWidth: data.datasets[0].borderWidth || 2,
+                                    pointStyle: 'rect',
+                                    hidden: false,
+                                    index: i
+                                };
+                            });
+                        }
+                        return [];
+                    }
+                }
             },
             datalabels: {
-                display: true,
-                color: '#2c3e50',
-                font: {
-                    size: 11,
-                    weight: 'bold'
-                },
-                formatter: function(value, context) {
-                    const label = context.chart.data.labels[context.dataIndex];
-                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                    const percentage = total > 0 ? ((value / total) * 100).toFixed(1) : 0;
-                    return `${label} (${percentage}%)`;
-                },
-                anchor: 'end',
-                align: 'end',
-                offset: 5,
-                clip: false
+                display: false,
             },
             tooltip: {
                 callbacks: {
