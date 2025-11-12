@@ -74,11 +74,11 @@ const AppContainer = () => {
                     <KPICard label={`Recruitment ${selectedYear}`} value={dashboardData.kpis.recruitment} icon="user-plus" />
                     <KPICard label={`Probation Resign ${selectedYear}`} value={dashboardData.kpis.probationResign || 0} icon="user-times" />
                     <KPICard label={`Confirmed Resign ${selectedYear}`} value={dashboardData.kpis.confirmedResign || 0} icon="user-times" />
-                    <KPICard label="Companies" value={dashboardData.kpis.companies} icon="building" />
-                    <KPICard label="Avg. Age" value={dashboardData.kpis.avgAge} icon="birthday-cake" />
-                    <KPICard label="Avg. Yrs Tenure" value={dashboardData.kpis.avgYrsTenure} icon="clock-o" />
                     <KPICard label="Countries" value={dashboardData.kpis.countries} icon="globe" />
+                    <KPICard label="Companies" value={dashboardData.kpis.companies} icon="building" />
                     <KPICard label="Business Units" value={dashboardData.kpis.businessUnits} icon="briefcase" />
+                    <KPICard label="Avg. Age" value={dashboardData.kpis.avgAge} icon="birthday-cake" />
+                    <KPICard label="Avg. Yrs Tenure" value={dashboardData.kpis.avgYrsTenure} icon="clock-o" />                    
                 </div>
             </div>
 

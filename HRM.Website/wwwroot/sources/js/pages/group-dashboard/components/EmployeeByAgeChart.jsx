@@ -9,6 +9,7 @@ import {
     Legend,
 } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { PASTEL_COLORS } from '../constants/chartColors';
 
 ChartJS.register(
@@ -17,7 +18,8 @@ ChartJS.register(
     BarElement,
     Title,
     Tooltip,
-    Legend
+    Legend,
+    ChartDataLabels
 );
 
 const EmployeeByAgeChart = ({ data }) => {
@@ -31,7 +33,7 @@ const EmployeeByAgeChart = ({ data }) => {
             {
                 label: 'Number of Employees',
                 data: data.map(item => item.value || 0),
-                backgroundColor: '#42A5F5',
+                backgroundColor: PASTEL_COLORS[1],
             },
         ],
     };
@@ -42,6 +44,20 @@ const EmployeeByAgeChart = ({ data }) => {
         plugins: {
             legend: {
                 display: false,
+            },
+            datalabels: {
+                display: true,
+                color: '#ffffff',
+                font: {
+                    size: 12,
+                },
+                anchor: 'center',
+                align: 'center',
+                offset: 8,
+                clip: false,
+                formatter: function(value) {
+                    return value ? value.toLocaleString() : '';
+                }
             },
             tooltip: {
                 callbacks: {

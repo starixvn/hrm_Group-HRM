@@ -3,7 +3,7 @@
     .dashboard-header-kpi-row {
         display: flex;
         gap: 0;
-        margin-bottom: 20px;
+        margin-bottom: 5px;
         align-items: stretch;
         width: 100%;
 
@@ -67,7 +67,7 @@
 
     .kpi-card {
         border-radius: 8px;
-        padding: 10px 14px;
+        padding: 8px 14px;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         display: flex;
         align-items: center;
@@ -163,14 +163,14 @@
             }
         }
 
-        &:nth-child(7) {
+        &:nth-child(8) {
             background-color: #e6ffe6; // Light green
             i {
                 background-color: #2ecc71; // Green
             }
         }
 
-        &:nth-child(8) {
+        &:nth-child(7) {
             background-color: #e6f3ff; // Light blue
             i {
                 background-color: #3498db; // Blue
@@ -178,9 +178,9 @@
         }
 
         &:nth-child(9) {
-            background-color: #f4e6ff; // Light lavender
+            background-color: #fff4e6; // Light amber
             i {
-                background-color: #9b59b6; // Purple
+                background-color: #d35400; // Dark orange/red
             }
         }
 
@@ -263,7 +263,7 @@
         .chart-card {
             background-color: white;
             border-radius: 8px;
-            padding: 10px;
+            padding: 9px;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.06);
             transition: box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
