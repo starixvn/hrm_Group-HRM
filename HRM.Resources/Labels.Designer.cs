@@ -5470,6 +5470,15 @@ namespace HRM.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Total Cost (USD).
+        /// </summary>
+        public static string TotalCostUSD {
+            get {
+                return ResourceManager.GetString("TotalCostUSD", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Total days.
         /// </summary>
         public static string TotalDays {

@@ -83,4 +83,8 @@ public class GroupEmployeeModel
     public Gender Gender { get; set; }
 
     public DateTime DOB { get; set; }
+
+    public DateTime? MilitaryFromDate { get; set; }
+
+    public DateTime? MilitaryToDate { get; set; }
 }

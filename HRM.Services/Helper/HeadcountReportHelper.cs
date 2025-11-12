@@ -91,4 +91,17 @@ public static class HeadcountReportHelper
     {
         return source.GroupBy(keySelector).OrderBy(g => g.Key);
     }
+
+    public static string ExtractCategoryName(string label)
+    {
+        const string TotalSuffix = " TOTAL";
+        if (string.IsNullOrEmpty(label))
+        {
+            return string.Empty;
+        }
+
+        var text = label.Replace(TotalSuffix, string.Empty);
+        var index = text.IndexOf('(');
+        return index > 0 ? text[..index].Trim() : text.Trim();
+    }
 }

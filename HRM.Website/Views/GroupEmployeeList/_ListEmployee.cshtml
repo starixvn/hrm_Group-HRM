@@ -97,13 +97,7 @@
             {
                 <th class="col-sorter col-150">
                     <div class="cell-control-wrapper">
-                        @Labels.Salary
-                        <div class="fa fa-sort cell-right-div"></div>
-                    </div>
-                </th>
-                <th class="col-sorter col-150">
-                    <div class="cell-control-wrapper">
-                        @Labels.Currency
+                        @Labels.TotalCostUSD
                         <div class="fa fa-sort cell-right-div"></div>
                     </div>
                 </th>
@@ -154,7 +148,6 @@
                     @if (showSalaryCurrency)
                     {
                         <td class="align-right">@(employee.Salary != null ? string.Format("{0:N0}", employee.Salary) : "")</td>
-                        <td class="align-left">@employee.Currency</td>
                     }
                     <td class="align-left">@employee.Company</td>
                     @if (hasPermissionToEdit)

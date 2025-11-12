@@ -31,6 +31,7 @@ using Models.Supervisor;
 using Resources;
 using ViewModels.AnnualLeave;
 using GO.UserControl.Client.Core.Models.User;
+using HRM.Criteria.Group;
 
 public class EmployeeService(
     IEmployeeRepository employeeRepository,
@@ -135,6 +136,13 @@ public class EmployeeService(
         }
 
         return employees ?? new List<Employee>();
+    }
+
+    public async Task<IEnumerable<GroupEmployeeModel>> GetEmployeesInGroupAsync()
+    {
+        var criteria = new GetEmployeesInGroupScopeCriteria();
+
+        return await baseService.GetDataAsync<GroupEmployeeModel>(criteria);
     }
 
     public async Task<IEnumerable<Employee>> GetMemberByManagerAsync(GetMemberByManagerCriteria criteria)
@@ -398,12 +406,13 @@ public class EmployeeService(
         return await baseService.ExecuteNonQueryAsync(criteria);
     }
 
-    public string CalculateLengthOfService(DateTime? joinedDate, DateTime? militaryFromDate, DateTime? militaryToDate)
+    public (double Years, string LengthOfServiceText) CalculateLengthOfService(DateTime? joinedDate, DateTime? militaryFromDate, DateTime? militaryToDate)
     {
         const byte halfMonth = 15;
         const short dayOfYear = 365;
         const byte dayOfMonth = 30;
         const byte monthOfYear = 12;
+        double serviceYears = 0;
         var lengthOfService = string.Empty;
         if (joinedDate.HasValue)
         {
@@ -412,7 +421,7 @@ public class EmployeeService(
             {
                 totalDays -= ((TimeSpan)(militaryToDate - militaryFromDate)).Days;
             }
-            var years = totalDays / dayOfYear;
+            int years = totalDays / dayOfYear;
             var months = (totalDays - years * dayOfYear) / dayOfMonth;
             var days = totalDays - years * dayOfYear - months * dayOfMonth;
             if (days >= halfMonth)
@@ -426,10 +435,11 @@ public class EmployeeService(
                 months = 0;
             }
 
+            serviceYears = years + (double)months / monthOfYear;
             lengthOfService = string.Format(Messages.LengthOfService, years, months);
         }
 
-        return lengthOfService;
+        return (serviceYears, lengthOfService);
     }
 
     public async Task<IList<SupervisorNameModel>> CheckAndAddMissingSupervisor(IList<SupervisorNameModel> supervisors, int? supervisorId)

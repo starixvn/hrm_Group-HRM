@@ -25,7 +25,8 @@ public class UnitReportCalculator(HeadcountData data) : BaseReportCalculator(dat
                 {
                     Label1 = $"{categoryGroup.Key} {HeadcountConstants.TotalLabel}",
                     Details = CountByMonth(categoryGroup),
-                    IsUnitCategory = true
+                    IsUnitCategory = true,
+                    BUCount = unitReports.Count
                 });
 
                 return unitReports;

@@ -7,6 +7,7 @@ public class Payroll
     public string EncryptExpatSalary { get; set; }
     public string EncryptJobLevelAddOn { get; set; }
     public string EncryptSpecialSubsidy { get; set; }
+    public string CurrencyCode { get; set; }
 }
 
 public class LocalPayrollAllowance

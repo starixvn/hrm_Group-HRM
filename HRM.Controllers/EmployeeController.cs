@@ -282,8 +282,8 @@ public class EmployeeController(
             employee.Disciplinarian = GetDisciplineSupervisors(supervisors);
             employee.EmpShiftList = GetShiftMonitors(supervisors);
             employee.ActingEmpList = GetActingSupervisors(supervisors);
-            ViewBag.LengthOfServiceByGroupDate = employeeService.CalculateLengthOfService(employee.JoinedDate, employee.MilitaryFromDate, employee.MilitaryToDate);
-            ViewBag.LengthOfServiceByCompanyDate = employeeService.CalculateLengthOfService(employee.CompanyDate, employee.MilitaryFromDate, employee.MilitaryToDate);
+            ViewBag.LengthOfServiceByGroupDate = employeeService.CalculateLengthOfService(employee.JoinedDate, employee.MilitaryFromDate, employee.MilitaryToDate).LengthOfServiceText;
+            ViewBag.LengthOfServiceByCompanyDate = employeeService.CalculateLengthOfService(employee.CompanyDate, employee.MilitaryFromDate, employee.MilitaryToDate).LengthOfServiceText;
             ViewBag.EnableGroupDate = await commonDataService.IsEnableGroupDateAsync();
             ViewBag.Avatar = await GetAvatarUrl(employee.Code);
             await ComposeViewBagsForEditEmployee();

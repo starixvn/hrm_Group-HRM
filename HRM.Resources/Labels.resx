@@ -2158,7 +2158,7 @@
     <value>Leader Takeover Manager </value>
   </data>
   <data name="EmployeeTransfer" xml:space="preserve">
-     <value>Employee Transfer</value>
+    <value>Employee Transfer</value>
   </data>
   <data name="Items" xml:space="preserve">
     <value>Items</value>
@@ -2183,5 +2183,8 @@
   </data>
   <data name="BasicSalary" xml:space="preserve">
     <value>Basic Salary</value>
+  </data>
+  <data name="TotalCostUSD" xml:space="preserve">
+    <value>Total Cost (USD)</value>
   </data>
 </root>

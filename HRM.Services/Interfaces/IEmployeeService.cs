@@ -33,6 +33,8 @@ public interface IEmployeeService
 
     Task<IEnumerable<Employee>> GetEmployeeAsync(GetAllEmployeeCriteria criteria);
 
+    Task<IEnumerable<GroupEmployeeModel>> GetEmployeesInGroupAsync();
+
     Task<IEnumerable<Employee>> GetMemberByManagerAsync(GetMemberByManagerCriteria criteria);
 
     Task<IEnumerable<EmployeePIC>> GetEmployeeForPICAsync(GetEmployeeForPICCriteria criteria);
@@ -69,7 +71,7 @@ public interface IEmployeeService
 
     Task<CommandResult> DeleteAsync(int actorId, DeleteEmployeeParam param);
 
-    string CalculateLengthOfService(DateTime? joinedDate, DateTime? militaryFromDate, DateTime? militaryToDate);
+    (double Years, string LengthOfServiceText) CalculateLengthOfService(DateTime? joinedDate, DateTime? militaryFromDate, DateTime? militaryToDate);
 
     Task<IList<SupervisorNameModel>> CheckAndAddMissingSupervisor(IList<SupervisorNameModel> supervisors, int? supervisorId);
 

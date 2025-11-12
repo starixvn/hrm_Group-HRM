@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Fanex.Data;
+using HRM.Services.Helper;
 using HRM.Services.Interfaces;
 
 namespace HRM.Services.Implement.PayrollManagement;
@@ -36,7 +37,7 @@ public class LocalPayrollService(IBaseService baseService): ILocalPayrollService
                 total += GetDecryptedValue(decryptionCache, allowance.EncryptAmount);
             }
 
-            result[payroll.EmpId] = total;
+            result[payroll.EmpId] = ConvertToUsd(total, payroll.CurrencyCode);
         }
 
         return result;
@@ -67,4 +68,6 @@ public class LocalPayrollService(IBaseService baseService): ILocalPayrollService
     }
 
     private static decimal GetDecryptedValue(Dictionary<string, decimal> cache, string encryptedValue) => string.IsNullOrEmpty(encryptedValue) ? 0 : cache.GetValueOrDefault(encryptedValue, 0);
+
+    private static decimal ConvertToUsd(decimal amount, string currencyCode) => CurrencyConverter.ConvertToUsd(amount, currencyCode);
 }
