@@ -211,6 +211,65 @@
 
             .chart-wrapper {
                 position: relative;
+                overflow: hidden;
+
+                // Style for Chart.js legend - square boxes, no border
+                [class*="chartjs-legend"],
+                ul[class*="legend"],
+                canvas + div {
+                    li {
+                        span {
+                            border-radius: 2px !important;
+                            border: none !important;
+                        }
+                    }
+                }
+
+                // Style for react-canvas-treemap labels
+                [class*="cellLabel"],
+                [class*="react-canvas-tree-map-container"],
+                [class*="label"] {
+                    font-size: 12px !important;
+                    color: #fff !important;
+                    text-align: center !important;
+                    display: flex !important;
+                    align-items: center !important;
+                    justify-content: center !important;
+                }
+
+                &.treemap-wrapper {
+                    // Prevent color change on hover
+                    [class*="cell"],
+                    [class*="treemap"],
+                    canvas {
+                        &:hover {
+                            opacity: 1 !important;
+                        }
+                    }
+
+                    .treemap-tooltip {
+                        background-color: rgba(0, 0, 0, 0.85);
+                        color: white;
+                        padding: 8px 12px;
+                        border-radius: 4px;
+                        font-size: 12px;
+                        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+                        white-space: nowrap;
+
+                        .tooltip-content {
+                            .tooltip-title {
+                                font-weight: 600;
+                                margin-bottom: 4px;
+                                color: #fff;
+                            }
+
+                            .tooltip-value {
+                                color: #ecf0f1;
+                                font-size: 11px;
+                            }
+                        }
+                    }
+                }
             }
 
             .chart-placeholder {

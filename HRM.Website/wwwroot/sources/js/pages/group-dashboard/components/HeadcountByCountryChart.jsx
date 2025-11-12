@@ -7,6 +7,7 @@ import {
 } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
+import { PASTEL_COLORS } from '../constants/chartColors';
 
 ChartJS.register(ArcElement, Tooltip, Legend, ChartDataLabels);
 
@@ -15,25 +16,16 @@ const HeadcountByCountryChart = ({ data }) => {
         return <div className="chart-placeholder">No data available</div>;
     }
 
-    const colors = [
-        'rgba(54, 162, 235, 0.8)',
-        'rgba(0, 0, 0, 0.8)',
-        'rgba(255, 99, 132, 0.8)',
-        'rgba(75, 192, 192, 0.8)',
-        'rgba(153, 102, 255, 0.8)',
-        'rgba(255, 159, 64, 0.8)',
-        'rgba(199, 199, 199, 0.8)',
-        'rgba(83, 102, 255, 0.8)',
-    ];
-
     const chartData = {
         labels: data.map(item => item.label),
         datasets: [
             {
                 label: 'Headcount',
                 data: data.map(item => item.value || 0),
-                backgroundColor: colors.slice(0, data.length),
-                borderWidth: 1,
+                backgroundColor: PASTEL_COLORS.slice(0, data.length),
+                borderWidth: 2,
+                borderColor: '#ffffff',
+                borderRadius: 5,
             },
         ],
     };

@@ -99,8 +99,8 @@ const AppContainer = () => {
                 </div>
 
                 <div className="chart-card">
-                    <h3>Estimated Monthly Salary Expense By Business Unit (USD)</h3>
-                    <SalaryExpenseByBUChart data={dashboardData.salaryExpenseByBU} />
+                    <h3>Number Of Employees By Age</h3>
+                    <EmployeeByAgeChart data={dashboardData.employeeByAge} />
                 </div>
 
                 <div className="chart-card">
@@ -109,8 +109,8 @@ const AppContainer = () => {
                 </div>
 
                 <div className="chart-card">
-                    <h3>Number Of Employees By Age</h3>
-                    <EmployeeByAgeChart data={dashboardData.employeeByAge} />
+                    <h3>Estimated Monthly Salary Expense By Business Unit (USD)</h3>
+                    <SalaryExpenseByBUChart data={dashboardData.salaryExpenseByBU} />
                 </div>
             </div>
         </div>

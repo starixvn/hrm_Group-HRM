@@ -7,6 +7,7 @@ import {
 } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
+import { PASTEL_COLORS } from '../constants/chartColors';
 
 ChartJS.register(ArcElement, Tooltip, Legend, ChartDataLabels);
 
@@ -15,21 +16,16 @@ const SalaryExpenseByBUCategoryChart = ({ data }) => {
         return <div className="chart-placeholder">No data available</div>;
     }
 
-    const colors = [
-        'rgba(75, 192, 192, 0.8)', // teal
-        'rgba(0, 0, 0, 0.8)', // black
-        'rgba(153, 102, 255, 0.8)', // light purple
-        'rgba(201, 203, 207, 0.8)', // light grey
-    ];
-
     const chartData = {
         labels: data.map(item => item.label),
         datasets: [
             {
                 label: 'Salary Expense',
                 data: data.map(item => item.value),
-                backgroundColor: colors.slice(0, data.length),
-                borderWidth: 1,
+                backgroundColor: PASTEL_COLORS.slice(0, data.length),
+                borderWidth: 3,
+                borderColor: '#ffffff',
+                borderRadius: 7,
             },
         ],
     };
@@ -49,23 +45,35 @@ const SalaryExpenseByBUCategoryChart = ({ data }) => {
             legend: {
                 display: true,
                 position: 'right',
+                labels: {
+                    usePointStyle: false,
+                    boxWidth: 12,
+                    boxHeight: 12,
+                    padding: 10,
+                    generateLabels: function(chart) {
+                        const data = chart.data;
+                        if (data.labels.length && data.datasets.length) {
+                            const dataset = data.datasets[0];
+                            const total = dataset.data.reduce((a, b) => a + b, 0);
+                            return data.labels.map((label, i) => {
+                                const value = dataset.data[i];
+                                const percentage = total > 0 ? ((value / total) * 100).toFixed(1) : 0;
+                                return {
+                                    text: `${label} ${percentage}%`,
+                                    fillStyle: dataset.backgroundColor[i],
+                                    strokeStyle: 'transparent',
+                                    lineWidth: 0,
+                                    hidden: false,
+                                    index: i
+                                };
+                            });
+                        }
+                        return [];
+                    }
+                }
             },
             datalabels: {
-                display: true,
-                color: '#ffffff',
-                font: {
-                    size: 12,
-                    weight: 'bold'
-                },
-                formatter: function(value, context) {
-                    const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                    const percentage = total > 0 ? ((value / total) * 100).toFixed(1) : 0;
-                    return percentage > 0 ? `${percentage}%` : '';
-                },
-                anchor: 'center',
-                align: 'center',
-                offset: 0,
-                clip: false
+                display: false,
             },
             tooltip: {
                 callbacks: {

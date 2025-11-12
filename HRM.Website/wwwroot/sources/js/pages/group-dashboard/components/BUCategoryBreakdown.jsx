@@ -7,6 +7,7 @@ import {
 } from 'chart.js';
 import { Pie } from 'react-chartjs-2';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
+import { PASTEL_COLORS } from '../constants/chartColors';
 
 ChartJS.register(ArcElement, Tooltip, Legend, ChartDataLabels);
 
@@ -15,25 +16,16 @@ const BUCategoryBreakdown = ({ data }) => {
         return <div className="chart-placeholder">No data available</div>;
     }
 
-    const colors = [
-       'rgba(201, 203, 207, 0.8)',
-        'rgba(54, 162, 235, 0.8)',
-        'rgba(255, 99, 132, 0.8)',
-        'rgba(75, 192, 192, 0.8)',
-        'rgba(153, 102, 255, 0.8)',
-        'rgba(255, 159, 64, 0.8)',
-        'rgba(199, 199, 199, 0.8)',
-        'rgba(83, 102, 255, 0.8)',
-    ];
-
     const employeesChartData = {
         labels: data.map(item => item.category || item.label1 || ''),
         datasets: [
             {
                 label: 'Employees',
                 data: data.map(item => item.employeeCount || 0),
-                backgroundColor: colors.slice(0, data.length),
-                borderWidth: 1,
+                backgroundColor: PASTEL_COLORS.slice(0, data.length),
+                borderWidth: 3,
+                borderColor: '#ffffff',
+                borderRadius: 5,
             },
         ],
     };
@@ -44,8 +36,10 @@ const BUCategoryBreakdown = ({ data }) => {
             {
                 label: 'Business Units',
                 data: data.map(item => item.buCount || 0),
-                backgroundColor: colors.slice(0, data.length),
-                borderWidth: 1,
+                backgroundColor: PASTEL_COLORS.slice(0, data.length),
+                borderWidth: 3,
+                borderColor: '#ffffff',
+                borderRadius: 5,
             },
         ],
     };
@@ -67,7 +61,7 @@ const BUCategoryBreakdown = ({ data }) => {
             },
             datalabels: {
                 display: true,
-                color: '#ffffff',
+                color: '#2c3e50',
                 font: {
                     size: 11,
                     weight: 'bold'
@@ -117,7 +111,7 @@ const BUCategoryBreakdown = ({ data }) => {
                     <div key={index} className="legend-item">
                         <span 
                             className="legend-color" 
-                            style={{ backgroundColor: colors[index % colors.length] }}
+                            style={{ backgroundColor: PASTEL_COLORS[index % PASTEL_COLORS.length] }}
                         ></span>
                         <span className="legend-label">{item.category || item.label1 || ''}</span>
                     </div>
