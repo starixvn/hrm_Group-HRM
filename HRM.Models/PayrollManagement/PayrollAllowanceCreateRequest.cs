@@ -8,6 +8,8 @@ public class PayrollAllowanceCreateRequest
 
     public string Amount { get; set; }
 
+    public int CurrencyId { get; set; }
+
     public bool IsPercent { get; set; }
 
     public bool IsActive { get; set; }

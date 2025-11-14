@@ -29,6 +29,10 @@ public class PayrollAllowanceItem
 
     public string Amount { get; set; }
 
+    public int? CurrencyId { get; set; }
+
+    public string CurrencyCode { get; set; }
+
     public bool IsPercent { get; set; }
 
     public bool IsActive { get; set; }

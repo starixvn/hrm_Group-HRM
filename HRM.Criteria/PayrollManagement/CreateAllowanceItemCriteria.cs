@@ -7,6 +7,7 @@ public class CreateAllowanceItemCriteria : CriteriaBase
     public int PayrollItemSettingId { get; set; }
     public string ItemName { get; set; }
     public string Amount { get; set; }
+    public int CurrencyId { get; set; }
     public bool IsPercent { get; set; }
     public bool IsActive { get; set; }
     public int ModifiedBy { get; set; }

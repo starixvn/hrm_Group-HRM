@@ -9,6 +9,7 @@ using HRM.Core.Filters;
 using HRM.Criteria.EmployeePayrollSetting;
 using HRM.Criteria.PayrollManagement;
 using HRM.Models.PayrollManagement;
+using HRM.Services.Implement;
 using HRM.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,7 +17,8 @@ namespace HRM.Controllers;
 
 public class PayrollSettingsController(
     IUserControlSession session,
-    IPayrollSettingService payrollSettingService) : BaseController(session)
+    IPayrollSettingService payrollSettingService,
+    ICompanyService companyService) : BaseController(session)
 {
     [HrmPermission(Policy.Read, FunctionKey.PayrollSetting)]
     public async Task<IActionResult> Index()
@@ -55,6 +57,14 @@ public class PayrollSettingsController(
         return Ok(result);
     }
 
+    [HttpGet]
+    [HrmPermission(Policy.Read, FunctionKey.PayrollSetting)]
+    public async Task<IActionResult> GetCurrency()
+    {
+        var currencies = await companyService.GetCurrencyAsync();
+        return Json(currencies);
+    }
+
     [HttpPost]
     [HrmPermission(Policy.Host, FunctionKey.PayrollSetting)]
     public async Task<IActionResult> Create([FromBody] PayrollAllowanceCreateRequest request)
@@ -63,6 +73,7 @@ public class PayrollSettingsController(
         {
             PayrollItemSettingId = request.PayrollItemSettingId,
             Amount = request.Amount,
+            CurrencyId = request.CurrencyId,
             IsActive = request.IsActive,
             IsPercent = request.IsPercent,
             ItemName = request.ItemName,
@@ -83,6 +94,7 @@ public class PayrollSettingsController(
         {
             AllowanceItemSettingId = request.AllowanceItemSettingId,
             Amount = request.Amount,
+            CurrencyId = request.CurrencyId,
             IsActive = request.IsActive,
             IsPercent = request.IsPercent,
             ItemName = request.ItemName,

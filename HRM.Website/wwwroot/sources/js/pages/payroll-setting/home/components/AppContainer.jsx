@@ -16,6 +16,7 @@ const AppContainer = () => {
     const [payrollSettings, setPayrollSettings] = useState([]);
     const [deleteModalDialog, setDeleteModalDialog] = useState({ show: false });
     const [types, setTypes] = useState([]);
+    const [currencies, setCurrencies] = useState([]);
 
     const getPayrollSettings = () => {
         axios
@@ -40,8 +41,21 @@ const AppContainer = () => {
             .catch(axiosError);
     };
 
+    const getCurrencies = () => {
+        axios
+            .get(resolveClientUrl("PayrollSettings/GetCurrency"), {
+                headers: { "X-Requested-With": "XMLHttpRequest" },
+            })
+            .then(response => {
+                const currencies = response.data.map(item => ({ id: item.id, name: item.currencyCode }));
+                setCurrencies(currencies);
+            })
+            .catch(axiosError);
+    };
+
     useEffect(() => {
         getPayrollSettings();
+        getCurrencies();
         getPayrollSettingTypes();
     }, []);
 
@@ -125,9 +139,9 @@ const AppContainer = () => {
     return (
         <Fragment>
             {window.hasPermission === 'True' && (
-                <Filter saveEditData={saveEditData} types={types} />
+                <Filter saveEditData={saveEditData} types={types} currencies={currencies} />
             )}
-            <Table data={payrollSettings} saveEditData={saveEditData} onDelete={handleDelete} types={types} />
+            <Table data={payrollSettings} saveEditData={saveEditData} onDelete={handleDelete} types={types} currencies={currencies} />
             {deleteModalDialog.show && (
                 <SweetModalDialog
                     show={deleteModalDialog.show}

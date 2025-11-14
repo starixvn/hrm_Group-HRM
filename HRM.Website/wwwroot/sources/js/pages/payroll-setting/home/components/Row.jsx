@@ -3,7 +3,7 @@
 import SweetModalDialog from "../../../../shared/components/SweetModalDialog";
 import AddEditAllowanceItemContent from "./AddEditAllowanceItemContent";
 
-const Row = ({ rowIndex, item, saveEditData, onDelete, types }) => {
+const Row = ({ rowIndex, item, saveEditData, onDelete, types, currencies }) => {
   const [editModalDialog, setEditModalDialog] = useState(false);
   const [editData, setEditData] = useState({
     payrollItemSettingId: "",
@@ -11,17 +11,20 @@ const Row = ({ rowIndex, item, saveEditData, onDelete, types }) => {
     type: "",
     itemName: "",
     amount: "",
+    currencyId: null,
     isPercent: false,
     isActive: true,
   });
 
   const handleEdit = (item, allowance) => {
+    const defaultCurrencyId = currencies && currencies.length > 0 ? currencies[0].id : null;
     setEditData({
       payrollItemSettingId: item.payrollItemSettingId,
       allowanceItemSettingId: allowance.allowanceItemSettingId,
       type: item.type,
       itemName: allowance.itemName,
       amount: allowance.amount,
+      currencyId: allowance.currencyId || defaultCurrencyId,
       isPercent: allowance.isPercent,
       isActive: allowance.isActive,
     });
@@ -82,6 +85,7 @@ const Row = ({ rowIndex, item, saveEditData, onDelete, types }) => {
           <td></td>
           <td></td>
           <td></td>
+          <td></td>
           {window.hasPermission === "True" && (
             <Fragment>
               <td></td>
@@ -118,6 +122,7 @@ const Row = ({ rowIndex, item, saveEditData, onDelete, types }) => {
           )}
           <td>{allowance.itemName}</td>
           <td className="text-right">{formatSalary(allowance.amount)}</td>
+          <td>{allowance.currencyCode}</td>
           {window.hasPermission === "True" && (
             <Fragment>
               <td>
@@ -147,7 +152,7 @@ const Row = ({ rowIndex, item, saveEditData, onDelete, types }) => {
 
       <SweetModalDialog
         show={editModalDialog}
-        contents={<AddEditAllowanceItemContent editData={editData} setEditData={setEditData} types={types} />}
+        contents={<AddEditAllowanceItemContent editData={editData} setEditData={setEditData} types={types} currencies={currencies} />}
         onSubmit={editAllowanceItem}
         onHide={() => setEditModalDialog(false)}
         title="Edit Allowance Item"
