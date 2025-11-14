@@ -1,0 +1,207 @@
+@import '../../abstracts/mixins';
+@import '../../abstracts/variables';
+@import '../../components/buttons-new';
+@import '../../layout/toastr';
+@import '../../layout/filter';
+@import '../../layout/table';
+
+@import '../../components/validation';
+@import '../../components/sweet-modal';
+
+.required {
+    color: #dc3545;
+    font-weight: bold;
+}
+
+.filter {
+    max-width: 800px;
+    margin-bottom: 20px;
+}
+
+.exchange-rate-table-wrapper {
+    max-width: 800px;
+    margin-top: 20px;
+    background: #ffffff;
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+
+    .table-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px 20px;
+        background: #f8f9fa;
+        border-bottom: 2px solid #e9ecef;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+
+        h4 {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .info-icon {
+            font-size: 18px;
+            color: #5c85b1;
+            cursor: pointer;
+            transition: color 0.2s ease;
+
+            &:hover {
+                color: #3b5f8a;
+            }
+        }
+    }
+
+    .table-custom {
+        margin: 0 !important;
+        border: none;
+
+        thead {
+            tr {
+                background: linear-gradient(135deg, #343c4e 0%, #3b4254 100%);
+
+                th {
+                    padding: 14px 16px;
+                    font-weight: 600;
+                    font-size: 14px;
+                    text-transform: uppercase;
+                    letter-spacing: 0.5px;
+                    border: none;
+                    color: #ffffff;
+                    text-align: center;
+
+                    &:first-child {
+                        border-left: none;
+                    }
+
+                    &:last-child {
+                        border-right: none;
+                    }
+                }
+            }
+        }
+
+        tbody {
+            tr {
+                transition: background-color 0.2s ease;
+
+                &:nth-child(odd) {
+                    background: #f8f9fa;
+                }
+
+                &:nth-child(even) {
+                    background: #ffffff;
+                }
+
+                &:hover {
+                    background: #e8f4f8 !important;
+                }
+
+                td {
+                    padding: 12px 16px;
+                    border: none;
+                    border-bottom: 1px solid #e9ecef;
+                    font-size: 14px;
+                    color: #2c3e50;
+
+                    &:first-child {
+                        border-left: none;
+                    }
+
+                    &:last-child {
+                        border-right: none;
+                    }
+
+                    &.align-left {
+                        text-align: left;
+                        font-weight: 500;
+                    }
+                }
+
+                &:last-child {
+                    td {
+                        border-bottom: none;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    animation: fadeIn 0.2s ease;
+}
+
+.rounding-info-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 800px;
+    max-height: 80vh;
+    padding: 20px;
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    z-index: 1001;
+    overflow-y: auto;
+    animation: slideIn 0.3s ease;
+
+    .rounding-info-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #5c85b1;
+
+        h4 {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin: 0;
+        }
+
+        .close-icon {
+            font-size: 20px;
+            color: #666;
+            cursor: pointer;
+            transition: color 0.2s ease;
+            padding: 5px;
+
+            &:hover {
+                color: #333;
+            }
+        }
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -45%);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
+}

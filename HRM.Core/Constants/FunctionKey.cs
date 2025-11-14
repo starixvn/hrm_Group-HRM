@@ -115,6 +115,8 @@ public static class FunctionKey
 
     public const string EmployeeTransfer_BU = "EmployeeTransfer-BU";
 
+    public const string ExchangeRate = "ExchangeRate";
+
     // Data permission
     public const string DataPermission_AllEmployees = "AllEmployees";
     public const string DataPermission_EmployeesAssigned = "EmployeesAssigned";

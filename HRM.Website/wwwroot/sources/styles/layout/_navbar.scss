@@ -318,4 +318,20 @@
         margin: 4px !important;
         background-position: center;
     }
+    &.icon-exchangerate {
+        background-image: url(images/icon-exchange-rate.png);
+        background-size: contain;
+        width: 16px;
+        height: 16px;
+        margin: 4px !important;
+        background-position: center;
+    }
+    &.icon-employeetransfer {
+        background-image: url(images/icon-employee-transfer.png);
+        background-size: contain;
+        width: 16px;
+        height: 16px;
+        margin: 4px !important;
+        background-position: center;
+    }
 }

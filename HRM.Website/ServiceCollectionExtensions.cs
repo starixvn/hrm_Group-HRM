@@ -166,6 +166,7 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IPaternityService, PaternityService>();
         services.AddSingleton<IPostnatalService, PostnatalService>();
         services.AddSingleton<IHolidayService, HolidayService>();
+        services.AddSingleton<IExchangeRateService, ExchangeRateService>();
         services.AddSingleton<IMinIOService, MinIOService>();
         services.AddSingleton<IUploadPayrollService, UploadPayrollService>();
         services.AddSingleton<IPayrollService, Services.Implement.PayrollService>();

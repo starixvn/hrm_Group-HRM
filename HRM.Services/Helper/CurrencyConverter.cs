@@ -16,7 +16,7 @@ public static class CurrencyConverter
         { "EUR", 1.13825178m },
         { "PHP", 0.01725000m },
         { "SGD", 0.76986547m },
-        { "VND", 0.00004000m }
+        { "VND", 0.00004000m },
     };
 
     private static readonly Dictionary<string, int> CurrencyRoundingRules = new()
@@ -26,7 +26,7 @@ public static class CurrencyConverter
         { "PHP", -2 },
         { "SGD", -1 },
         { "MYR", -1 },
-        { "NTD", -1 }
+        { "NTD", -1 },
     };
 
     public static decimal ConvertToUsd(decimal amount, string currencyCode)
@@ -60,5 +60,50 @@ public static class CurrencyConverter
         var roundingBase = (decimal)Math.Pow(10, Math.Abs(roundingValue));
         return Math.Round(amount / roundingBase, MidpointRounding.AwayFromZero) * roundingBase;
     }
-}
 
+    public static Dictionary<string, decimal> GetExchangeRates()
+    {
+        return new Dictionary<string, decimal>(CurrencyToUsdRates);
+    }
+
+    public static List<object> GetRoundingRules()
+    {
+        var roundingRules = new List<object>();
+
+        foreach (var rule in CurrencyRoundingRules)
+        {
+            var description = GetRoundingDescription(rule.Value);
+            roundingRules.Add(
+                new
+                {
+                    Currency = rule.Key,
+                    Rounding = rule.Value,
+                    Description = description,
+                }
+            );
+        }
+
+        roundingRules.Add(
+            new
+            {
+                Currency = "Others",
+                Rounding = 0,
+                Description = "Rounded to nearest 1",
+            }
+        );
+
+        return roundingRules;
+    }
+
+    private static string GetRoundingDescription(int roundingValue)
+    {
+        return roundingValue switch
+        {
+            -4 => "Rounded to nearest 1000",
+            -2 => "Rounded to nearest 100",
+            -1 => "Rounded to nearest 10",
+            0 => "Rounded to nearest 1",
+            _ => $"Rounded to {roundingValue} decimal places",
+        };
+    }
+}
