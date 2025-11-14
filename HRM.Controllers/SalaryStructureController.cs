@@ -74,6 +74,9 @@ public class SalaryStructureController(
             item.JobLevelAddOn = !string.IsNullOrWhiteSpace(item.JobLevelAddOn)
                 ? Cryptography.EncryptPassword(item.JobLevelAddOn)
                 : null;
+            item.ExpatJobLevelAddOn = !string.IsNullOrWhiteSpace(item.ExpatJobLevelAddOn)
+                ? Cryptography.EncryptPassword(item.ExpatJobLevelAddOn)
+                : null;
         }
 
         var criteria = new InsertSalaryStructureCriteria
@@ -128,6 +131,9 @@ public class SalaryStructureController(
                 : null;
             item.JobLevelAddOn = !string.IsNullOrWhiteSpace(item.JobLevelAddOn)
                 ? Cryptography.EncryptPassword(item.JobLevelAddOn)
+                : null;
+            item.ExpatJobLevelAddOn = !string.IsNullOrWhiteSpace(item.ExpatJobLevelAddOn)
+                ? Cryptography.EncryptPassword(item.ExpatJobLevelAddOn)
                 : null;
         }
 

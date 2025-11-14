@@ -34,14 +34,16 @@ const useSalaryStructure = (isEdit = false) => {
                     name: item.name,
                     basicSalary: item.basicSalary,
                     expatSalary: item.expatSalary,
-                    jobLevelAddOn: item.jobLevelAddOn || ''
+                    jobLevelAddOn: item.jobLevelAddOn || '',
+                    expatJobLevelAddOn: item.expatJobLevelAddOn || ''
                 })));
             } else {
                 setJobLevels(response.data.map(item => ({
                     ...item,
                     basicSalary: '',
                     expatSalary: '',
-                    jobLevelAddOn: ''
+                    jobLevelAddOn: '',
+                    expatJobLevelAddOn: ''
                 })));
             }
         } catch (error) {
@@ -74,7 +76,8 @@ const useSalaryStructure = (isEdit = false) => {
                 jobLevelId: x.id,
                 basicSalary: x.basicSalary,
                 expatSalary: x.expatSalary,
-                jobLevelAddOn: x.jobLevelAddOn
+                jobLevelAddOn: x.jobLevelAddOn,
+                expatJobLevelAddOn: x.expatJobLevelAddOn
             }))
     });
 
