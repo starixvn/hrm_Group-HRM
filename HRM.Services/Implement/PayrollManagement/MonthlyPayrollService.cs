@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace HRM.Services.Implement.PayrollManagement;
 
-public class MonthlyPayrollService(ILocalPayrollService payrollService) : IMonthlyPayrollService
+public class MonthlyPayrollService(ICalculatePayrollService payrollService) : IMonthlyPayrollService
 {
     public async Task CalculateMonthlySalary(IEnumerable<GroupEmployeeModel> employees)
     {
@@ -17,12 +17,12 @@ public class MonthlyPayrollService(ILocalPayrollService payrollService) : IMonth
         var tasks = new List<Task<Dictionary<int, PayrollDetail>>>();
         if (localIds.Count > 0)
         {
-            tasks.Add(payrollService.CalculateMonthlySalaryDetail(localIds, true));
+            tasks.Add(payrollService.CalculateMonthlySalaryDetail(localIds));
         }
 
         if (expatIds.Count > 0)
         {
-            tasks.Add(payrollService.CalculateMonthlySalaryDetail(expatIds, false));
+            tasks.Add(payrollService.CalculateMonthlySalaryDetail(expatIds, isLocal: false));
         }
 
         var results = await Task.WhenAll(tasks);

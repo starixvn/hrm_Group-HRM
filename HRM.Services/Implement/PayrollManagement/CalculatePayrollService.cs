@@ -11,7 +11,7 @@ using HRM.Services.Interfaces;
 
 namespace HRM.Services.Implement.PayrollManagement;
 
-public class LocalPayrollService(IBaseService baseService): ILocalPayrollService
+public class CalculatePayrollService(IBaseService baseService): ICalculatePayrollService
 {
     public async Task<Dictionary<int, decimal>> CalculateMonthlySalary(IEnumerable<int> empIds, bool isLocal)
     {

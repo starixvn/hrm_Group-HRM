@@ -10,15 +10,15 @@ using Xunit;
 
 namespace HRM.Services.UnitTests.PayrollManagement;
 
-public class LocalPayrollServiceTests
+public class CalculatePayrollServiceTests
 {
     private readonly IBaseService _baseService;
-    private readonly LocalPayrollService _service;
+    private readonly CalculatePayrollService _service;
 
-    public LocalPayrollServiceTests()
+    public CalculatePayrollServiceTests()
     {
         _baseService = Substitute.For<IBaseService>();
-        _service = new LocalPayrollService(_baseService);
+        _service = new CalculatePayrollService(_baseService);
     }
 
     [Fact]

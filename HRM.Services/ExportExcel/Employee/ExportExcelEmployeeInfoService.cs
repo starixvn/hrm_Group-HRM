@@ -38,7 +38,8 @@ public class ExportExcelEmployeeInfoService(
     private const byte MinimumWidth = 5;
     private const byte MaximumWidth = 50;
     private const byte RowStartBodyProfitCenter = 4;
-    private const byte TotalColumnsProfitCenter = 26;
+    private const byte ColumnsSalary = 20; // Number of columns before salary columns
+    private const byte SalaryColumnsCount = 7; // Number of salary columns
 
     private enum BasicInfo
     {
@@ -257,7 +258,7 @@ public class ExportExcelEmployeeInfoService(
 
     #endregion Employee Full Profile Information
 
-    public async Task<byte[]> ExportGroupEmployeesAsync(IEnumerable<GroupEmployeeModel> employees)
+    public async Task<byte[]> ExportGroupEmployeesAsync(IEnumerable<GroupEmployeeModel> employees, bool showSalaryCurrency)
     {
         var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, GroupEmployeeListTemplatePath);
 
@@ -325,6 +326,12 @@ public class ExportExcelEmployeeInfoService(
         worksheet.Cells.AutoFitColumns(MinimumWidth, MaximumWidth);
         worksheet.View.FreezePanes(RowStartBody, 1);
 
+        if (showSalaryCurrency)
+        {
+            xlPackage.Encryption.IsEncrypted = true;
+            xlPackage.Encryption.Password = Constants.ViewSalaryExcelPassword;
+        }
+
         await using var ms = new MemoryStream();
         await xlPackage.SaveAsAsync(ms);
         return ms.ToArray();
@@ -337,9 +344,14 @@ public class ExportExcelEmployeeInfoService(
 
         var worksheet = xlPackage.Workbook.Worksheets.FirstOrDefault();
         FillEmployeeData(employees, worksheet, showSalaryCurrency);
-        if (!showSalaryCurrency)
+        if (showSalaryCurrency)
         {
-            worksheet?.DeleteColumn(19, 7);
+            xlPackage.Encryption.IsEncrypted = true;
+            xlPackage.Encryption.Password = Constants.ViewSalaryExcelPassword;
+        }
+        else
+        {
+            worksheet?.DeleteColumn(ColumnsSalary, SalaryColumnsCount);
         }
         AddTotalRow(worksheet);
 
@@ -363,7 +375,7 @@ public class ExportExcelEmployeeInfoService(
 
     private static string DeterminePaymaster(GroupEmployeeModel employee)
     {
-        if (new[] { "Nexcel", "NexVision", "Lumiplus" }.Contains(employee.Company))
+        if (Constants.NexCompanyIds.Contains(employee.CompanyId))
         {
             return "Nexcel";
         }
@@ -390,6 +402,7 @@ public class ExportExcelEmployeeInfoService(
         worksheet.Cells[rowIndex, colIndex++].Value = employee.EmployeeCode;
         worksheet.Cells[rowIndex, colIndex++].Value = employee.NickName;
         worksheet.Cells[rowIndex, colIndex++].Value = employee.JobLevel;
+        worksheet.Cells[rowIndex, colIndex++].Value = employee.ManagementLevel;
         worksheet.Cells[rowIndex, colIndex++].Value = paymaster;
         worksheet.Cells[rowIndex, colIndex++].Value = FormatDate(employee.JoinedDate);
         worksheet.Cells[rowIndex, colIndex++].Value = employee.Location;

@@ -44,9 +44,7 @@ public static class Constants
     public const string DepartmentKey = "Department";
 
     public const int NexCompanyId = 1;
-
     public const int LumiCompanyId = 2;
-
     public const int NexVisionCompanyId = 34;
 
     public const int GroupCompanyId = 7;
@@ -58,4 +56,6 @@ public static class Constants
     public const string AllIp = "0.0.0.0";
 
     public static readonly DateTime MinDate = new DateTimeOffset(2010, 1, 1, 0, 0, 0, TimeSpan.Zero).DateTime;
+
+    public const string ViewSalaryExcelPassword = "We@168";
 }

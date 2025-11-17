@@ -239,9 +239,10 @@ public class GroupEmployeeListController(
             }
         }
 
+        var showSalaryCurrency = ViewBag.ShowSalaryCurrency != null && (bool)ViewBag.ShowSalaryCurrency;
         var bytes = isEmployeeListExport
-            ? await excelService.ExportGroupEmployeesAsync(employees)
-            : await excelService.ExportProfitCenterReportAsync(employees, (bool)ViewBag.ShowSalaryCurrency);
+            ? await excelService.ExportGroupEmployeesAsync(employees, showSalaryCurrency)
+            : await excelService.ExportProfitCenterReportAsync(employees, showSalaryCurrency);
 
         var exportDate = DateTimeOffset.Now.DateTime.ToClientTimeZone().ToString("yyyyMMdd");
         var fileName = isEmployeeListExport
