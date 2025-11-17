@@ -26,8 +26,8 @@ public class ExpatPayrollService(IBaseService baseService): IExpatPayrollService
         var result = new Dictionary<int, decimal>();
         foreach (var payroll in payrolls)
         {
-            var total = GetDecryptedValue(decryptionCache, payroll.EncryptExpatSalary);
-            result[payroll.EmpId] = ConvertToUsd(total, payroll.CurrencyCode);
+            var total = GetDecryptedValue(decryptionCache, payroll.EncryptBasicSalary);
+            result[payroll.EmpId] = CurrencyConverter.ConvertToUsd(total, payroll.CurrencyCode);
         }
 
         return result;
@@ -39,7 +39,7 @@ public class ExpatPayrollService(IBaseService baseService): IExpatPayrollService
         var encryptedValues = payrolls
             .SelectMany(p => new[]
             {
-                p.EncryptExpatSalary,
+                p.EncryptBasicSalary,
             })
             .Distinct()
             .Where(s => !string.IsNullOrWhiteSpace(s))
@@ -55,7 +55,5 @@ public class ExpatPayrollService(IBaseService baseService): IExpatPayrollService
     }
 
     private static decimal GetDecryptedValue(Dictionary<string, decimal> cache, string encryptedValue) => string.IsNullOrEmpty(encryptedValue) ? 0 : cache.GetValueOrDefault(encryptedValue, 0);
-
-    private static decimal ConvertToUsd(decimal amount, string currencyCode) => CurrencyConverter.ConvertToUsd(amount, currencyCode);
 }
 

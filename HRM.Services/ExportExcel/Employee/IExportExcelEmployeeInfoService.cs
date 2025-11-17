@@ -13,5 +13,5 @@ public interface IExportExcelEmployeeInfoService
 
     Task<byte[]> ExportGroupEmployeesAsync(IEnumerable<GroupEmployeeModel> employees);
 
-    Task<byte[]> ExportProfitCenterReportAsync(IEnumerable<GroupEmployeeModel> employees);
+    Task<byte[]> ExportProfitCenterReportAsync(IEnumerable<GroupEmployeeModel> employees, bool showSalaryCurrency);
 }

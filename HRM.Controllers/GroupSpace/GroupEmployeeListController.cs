@@ -186,18 +186,14 @@ public class GroupEmployeeListController(
         return Json(employees);
     }
 
-    private static (bool? enableUser, bool? isDeleteUser) ParseEmployeeStatus(
-        string employeeStatuses
-    )
-    {
-        return employeeStatuses switch
+    private static (bool? enableUser, bool? isDeleteUser) ParseEmployeeStatus(string employeeStatuses) 
+        => employeeStatuses switch
         {
             "1" => (true, null),
             "2" => (false, null),
             "3" => (null, true),
             _ => (null, null),
         };
-    }
 
     private static bool? ParseBool(string value) =>
         value switch
@@ -245,7 +241,7 @@ public class GroupEmployeeListController(
 
         var bytes = isEmployeeListExport
             ? await excelService.ExportGroupEmployeesAsync(employees)
-            : await excelService.ExportProfitCenterReportAsync(employees);
+            : await excelService.ExportProfitCenterReportAsync(employees, (bool)ViewBag.ShowSalaryCurrency);
 
         var exportDate = DateTimeOffset.Now.DateTime.ToClientTimeZone().ToString("yyyyMMdd");
         var fileName = isEmployeeListExport

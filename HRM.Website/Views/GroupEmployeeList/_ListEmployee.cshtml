@@ -147,7 +147,7 @@
                     }
                     @if (showSalaryCurrency)
                     {
-                        <td class="align-right">@(employee.Salary != null ? string.Format("{0:N0}", employee.Salary) : "")</td>
+                        <td class="align-right">@(employee.Salary > 0 ? $"{employee.Salary:N0}" : "-")</td>
                     }
                     <td class="align-left">@employee.Company</td>
                     @if (hasPermissionToEdit)

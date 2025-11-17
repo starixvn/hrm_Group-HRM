@@ -151,7 +151,7 @@
         <Setting Key="GroupId_ByGroupTeamId_Get" SpName="GroupId_ByGroupTeamId_Get" DbName="bodb_HRM" Plain="0" />
         <Setting Key="GroupSupervisor_GetCompaniesByRoleIdForEmployee" SpName="GroupSupervisor_GetCompaniesByRoleIdForEmployee" DbName="bodb_HRM" Plain="0" />
         <Setting Key="Employee_GetByDataPermission" SpName="Employee_GetByDataPermission" DbName="bodb_HRM" Plain="0" />
-        <Setting Key="Employee_GroupScope_GetPayrollInfo" SpName="Employee_GroupScope_GetPayrollInfo" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Employee_GroupScope_GetPayrollInfo" SpName="Employee_GroupScope_GetPayrollInfo_xtest" DbName="bodb_HRM" Plain="0" />
     </Function>
     <Function Name="Lookup">
         <Setting Key="Lookup_GetLookupData" SpName="Lookup_GetLookupData" DbName="bodb_HRM" Plain="0" />

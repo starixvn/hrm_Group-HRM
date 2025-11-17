@@ -13,34 +13,73 @@ namespace HRM.Services.Implement.PayrollManagement;
 
 public class LocalPayrollService(IBaseService baseService): ILocalPayrollService
 {
-    public async Task<Dictionary<int, decimal>> CalculateMonthlySalary(IEnumerable<int> empIds)
+    public async Task<Dictionary<int, decimal>> CalculateMonthlySalary(IEnumerable<int> empIds, bool isLocal)
+    {
+        var (payrolls, allowancesByEmp, decryptionCache) = await FetchPayrollData(empIds, isLocal);
+
+        return payrolls.ToDictionary(
+            p => p.EmpId,
+            p => BuildPayrollDetail(p, allowancesByEmp[p.EmpId], decryptionCache).TotalDisplay
+        );
+    }
+
+    public async Task<Dictionary<int, PayrollDetail>> CalculateMonthlySalaryDetail(IEnumerable<int> empIds, bool isLocal)
+    {
+        var (payrolls, allowancesByEmp, decryptionCache) = await FetchPayrollData(empIds, isLocal);
+
+        return payrolls.ToDictionary(
+            p => p.EmpId,
+            p => BuildPayrollDetail(p, allowancesByEmp[p.EmpId], decryptionCache)
+        );
+    }
+
+    private async Task<(IEnumerable<Payroll> payrolls, ILookup<int, LocalPayrollAllowance> allowancesByEmp, Dictionary<string, decimal> decryptionCache)> 
+        FetchPayrollData(IEnumerable<int> empIds, bool isLocal)
     {
         var criteria = new GetPayrollInfoCriteria
         {
             EmpIds = string.Join(",", empIds),
+            IsLocal = isLocal
         };
-
         var (payrolls, payrollAllowances) = await baseService.FetchMultipleAsync<Payroll, LocalPayrollAllowance>(criteria);
-        var allowancesByEmpId = payrollAllowances.ToLookup(x => x.EmpId);
+
+        var allowancesByEmp = payrollAllowances.ToLookup(x => x.EmpId);
         var decryptionCache = BatchDecryptSalaries(payrolls, payrollAllowances);
 
-        var result = new Dictionary<int, decimal>();
-        foreach (var payroll in payrolls)
+        return (payrolls, allowancesByEmp, decryptionCache);
+    }
+
+    private static PayrollDetail BuildPayrollDetail(Payroll payroll, IEnumerable<LocalPayrollAllowance> allowances, Dictionary<string, decimal> cache)
+    {
+        var detail = new PayrollDetail
         {
-            var total = GetDecryptedValue(decryptionCache, payroll.EncryptBasicSalary)
-                            + GetDecryptedValue(decryptionCache, payroll.EncryptJobLevelAddOn)
-                            + GetDecryptedValue(decryptionCache, payroll.EncryptSpecialSubsidy);
+            BasicSalary = DecryptedAndExchangeRate(cache, payroll.EncryptBasicSalary, payroll.CurrencyCode),
+            JobLevelAddOn = DecryptedAndExchangeRate(cache, payroll.EncryptJobLevelAddOn, payroll.CurrencyCode),
+            Others = DecryptedAndExchangeRate(cache, payroll.EncryptSpecialSubsidy, payroll.SpecialSubsidyCurrencyCode)
+        };
 
-            var empAllowances = allowancesByEmpId[payroll.EmpId];
-            foreach (var allowance in empAllowances)
+        foreach (var a in allowances)
+        {
+            var amount = DecryptedAndExchangeRate(cache, a.EncryptAmount, a.CurrencyCode);
+            switch (a.Type?.Trim().ToLowerInvariant())
             {
-                total += GetDecryptedValue(decryptionCache, allowance.EncryptAmount);
+                case "management allowance":
+                    detail.ManagementAllowance += amount; 
+                    break;
+                case "overseas allowance":
+                    detail.OverseasAllowance += amount;
+                    break;
+                case "skill set add-on":
+                    detail.SkillSetAddOn += amount;
+                    break;
+                default:
+                    detail.Others += amount; 
+                    break;
             }
-
-            result[payroll.EmpId] = ConvertToUsd(total, payroll.CurrencyCode);
         }
 
-        return result;
+        detail.TotalDisplay = CurrencyConverter.RoundUSDAmount(detail.Total);
+        return detail;
     }
 
     private static Dictionary<string, decimal> BatchDecryptSalaries(IEnumerable<Payroll> payrolls, IEnumerable<LocalPayrollAllowance> allowances)
@@ -67,7 +106,10 @@ public class LocalPayrollService(IBaseService baseService): ILocalPayrollService
         return new Dictionary<string, decimal>(cache);
     }
 
-    private static decimal GetDecryptedValue(Dictionary<string, decimal> cache, string encryptedValue) => string.IsNullOrEmpty(encryptedValue) ? 0 : cache.GetValueOrDefault(encryptedValue, 0);
+    private static decimal DecryptedAndExchangeRate(Dictionary<string, decimal> cache, string encryptedValue, string currencyCode)
+    {
+        var decryptValue = string.IsNullOrEmpty(encryptedValue) ? 0 : cache.GetValueOrDefault(encryptedValue, 0);
 
-    private static decimal ConvertToUsd(decimal amount, string currencyCode) => CurrencyConverter.ConvertToUsd(amount, currencyCode);
+        return CurrencyConverter.ConvertToUsd(decryptValue, currencyCode);
+    }
 }

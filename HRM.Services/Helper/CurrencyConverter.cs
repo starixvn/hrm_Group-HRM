@@ -42,23 +42,25 @@ public static class CurrencyConverter
             }
         }
 
-        if (CurrencyRoundingRules.TryGetValue("USD", out var roundingValue))
-        {
-            convertedAmount = RoundAmount(convertedAmount, roundingValue);
-        }
-
         return convertedAmount;
     }
 
-    private static decimal RoundAmount(decimal amount, int roundingValue)
+    public static decimal RoundUSDAmount(decimal amount) => RoundAmount(amount, "USD");
+
+    public static decimal RoundAmount(decimal amount, string currencyCode)
     {
-        if (roundingValue >= 0)
+        if (CurrencyRoundingRules.TryGetValue(currencyCode, out var roundingValue))
         {
-            return Math.Round(amount, roundingValue, MidpointRounding.AwayFromZero);
+            if (roundingValue >= 0)
+            {
+                return Math.Round(amount, roundingValue, MidpointRounding.AwayFromZero);
+            }
+
+            var roundingBase = (decimal)Math.Pow(10, Math.Abs(roundingValue));
+            return Math.Round(amount / roundingBase, MidpointRounding.AwayFromZero) * roundingBase;
         }
 
-        var roundingBase = (decimal)Math.Pow(10, Math.Abs(roundingValue));
-        return Math.Round(amount / roundingBase, MidpointRounding.AwayFromZero) * roundingBase;
+        return amount;
     }
 
     public static Dictionary<string, decimal> GetExchangeRates()

@@ -121,9 +121,9 @@ public class GroupDashboardService(
         await payrollService.CalculateMonthlySalary(allEmployees);
 
         return allEmployees
-            .Where(x => x.Salary.HasValue)
+            .Where(x => x.Salary > 0)
             .GroupBy(x => x.EmpId)
-            .ToDictionary(g => g.Key, g => g.First().Salary.Value);
+            .ToDictionary(g => g.Key, g => g.First().Salary);
     }
 
     private static IEnumerable<HeadcountModel> GetSalaryExpenseByBUCategory(IEnumerable<UnitReport> reportByUnit, Dictionary<int, decimal> salaryByEmpDict)
