@@ -21,20 +21,21 @@ public class ExchangeRateService(IBaseService baseService) : IExchangeRateServic
 
     public async Task<IEnumerable<CurrencyRoundingRule>> GetRoundingRulesAsync()
     {
-        var roundingRulesData = CurrencyConverter.GetRoundingRules();
+        //var roundingRulesData = [];
 
-        return await Task.FromResult(
-            roundingRulesData.Select(rule =>
-            {
-                dynamic dynamicRule = rule;
-                return new CurrencyRoundingRule
-                {
-                    Currency = dynamicRule.Currency ?? dynamicRule.currency ?? "",
-                    Rounding = dynamicRule.Rounding ?? dynamicRule.rounding ?? 0,
-                    Description = dynamicRule.Description ?? dynamicRule.description ?? "",
-                };
-            })
-        );
+        //return await Task.FromResult(
+        //    roundingRulesData.Select(rule =>
+        //    {
+        //        dynamic dynamicRule = rule;
+        //        return new CurrencyRoundingRule
+        //        {
+        //            Currency = dynamicRule.Currency ?? dynamicRule.currency ?? "",
+        //            Rounding = dynamicRule.Rounding ?? dynamicRule.rounding ?? 0,
+        //            Description = dynamicRule.Description ?? dynamicRule.description ?? "",
+        //        };
+        //    })
+        //);
+        return new List<CurrencyRoundingRule>();
     }
 
     public async Task<IEnumerable<Currency>> GetCurrenciesAsync()

@@ -1,4 +1,5 @@
-﻿using HRM.Core.Services;
+﻿using System;
+using HRM.Core.Services;
 using HRM.Criteria.Group;
 using HRM.Models.PayrollManagement;
 using System.Collections.Concurrent;
@@ -13,23 +14,19 @@ namespace HRM.Services.Implement.PayrollManagement;
 
 public class CalculatePayrollService(IBaseService baseService): ICalculatePayrollService
 {
-    public async Task<Dictionary<int, decimal>> CalculateMonthlySalary(IEnumerable<int> empIds, bool isLocal)
+    public Task<Dictionary<int, PayrollDetail>> CalculateLocalMonthlySalary(IEnumerable<int> empIds, Dictionary<string, decimal> exchangeRates) 
+        => CalculateMonthlySalaryDetail(empIds, exchangeRates, true);
+
+    public Task<Dictionary<int, PayrollDetail>> CalculateExpatMonthlySalary(IEnumerable<int> empIds, Dictionary<string, decimal> exchangeRates)
+        => CalculateMonthlySalaryDetail(empIds, exchangeRates, false);
+
+    public async Task<Dictionary<int, PayrollDetail>> CalculateMonthlySalaryDetail(IEnumerable<int> empIds, Dictionary<string, decimal> exchangeRates, bool isLocal)
     {
         var (payrolls, allowancesByEmp, decryptionCache) = await FetchPayrollData(empIds, isLocal);
 
         return payrolls.ToDictionary(
             p => p.EmpId,
-            p => BuildPayrollDetail(p, allowancesByEmp[p.EmpId], decryptionCache).TotalDisplay
-        );
-    }
-
-    public async Task<Dictionary<int, PayrollDetail>> CalculateMonthlySalaryDetail(IEnumerable<int> empIds, bool isLocal)
-    {
-        var (payrolls, allowancesByEmp, decryptionCache) = await FetchPayrollData(empIds, isLocal);
-
-        return payrolls.ToDictionary(
-            p => p.EmpId,
-            p => BuildPayrollDetail(p, allowancesByEmp[p.EmpId], decryptionCache)
+            p => BuildPayrollDetail(p, allowancesByEmp[p.EmpId], decryptionCache, exchangeRates)
         );
     }
 
@@ -49,18 +46,18 @@ public class CalculatePayrollService(IBaseService baseService): ICalculatePayrol
         return (payrolls, allowancesByEmp, decryptionCache);
     }
 
-    private static PayrollDetail BuildPayrollDetail(Payroll payroll, IEnumerable<LocalPayrollAllowance> allowances, Dictionary<string, decimal> cache)
+    private static PayrollDetail BuildPayrollDetail(Payroll payroll, IEnumerable<LocalPayrollAllowance> allowances, Dictionary<string, decimal> cache, Dictionary<string, decimal> exchangeRates)
     {
         var detail = new PayrollDetail
         {
-            BasicSalary = DecryptedAndExchangeRate(cache, payroll.EncryptBasicSalary, payroll.CurrencyCode),
-            JobLevelAddOn = DecryptedAndExchangeRate(cache, payroll.EncryptJobLevelAddOn, payroll.CurrencyCode),
-            Others = DecryptedAndExchangeRate(cache, payroll.EncryptSpecialSubsidy, payroll.SpecialSubsidyCurrencyCode)
+            BasicSalary = DecryptedAndExchangeRate(cache, payroll.EncryptBasicSalary, payroll.CurrencyCode, exchangeRates),
+            JobLevelAddOn = DecryptedAndExchangeRate(cache, payroll.EncryptJobLevelAddOn, payroll.CurrencyCode, exchangeRates),
+            Others = DecryptedAndExchangeRate(cache, payroll.EncryptSpecialSubsidy, payroll.SpecialSubsidyCurrencyCode, exchangeRates)
         };
 
         foreach (var a in allowances)
         {
-            var amount = DecryptedAndExchangeRate(cache, a.EncryptAmount, a.CurrencyCode);
+            var amount = DecryptedAndExchangeRate(cache, a.EncryptAmount, a.CurrencyCode, exchangeRates);
             switch (a.Type?.Trim().ToLowerInvariant())
             {
                 case "management allowance":
@@ -78,7 +75,6 @@ public class CalculatePayrollService(IBaseService baseService): ICalculatePayrol
             }
         }
 
-        detail.TotalDisplay = CurrencyConverter.RoundUSDAmount(detail.Total);
         return detail;
     }
 
@@ -106,10 +102,10 @@ public class CalculatePayrollService(IBaseService baseService): ICalculatePayrol
         return new Dictionary<string, decimal>(cache);
     }
 
-    private static decimal DecryptedAndExchangeRate(Dictionary<string, decimal> cache, string encryptedValue, string currencyCode)
+    private static decimal DecryptedAndExchangeRate(Dictionary<string, decimal> cache, string encryptedValue, string currencyCode, Dictionary<string, decimal> exchangeRates)
     {
         var decryptValue = string.IsNullOrEmpty(encryptedValue) ? 0 : cache.GetValueOrDefault(encryptedValue, 0);
 
-        return CurrencyConverter.ConvertToUsd(decryptValue, currencyCode);
+        return CurrencyConverter.ConvertToUsd(decryptValue, currencyCode, exchangeRates);
     }
 }
