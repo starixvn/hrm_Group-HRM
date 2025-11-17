@@ -15,14 +15,6 @@ const ExchangeRateService = {
             responseType: 'json',
         })
             .then(response => {
-                // Handle both old format (array) and new format (object with ExchangeRates and RoundingRules)
-                if (Array.isArray(response.data)) {
-                    return {
-                        exchangeRates: response.data,
-                        roundingRules: []
-                    };
-                }
-                // Return data as-is (ASP.NET Core uses PascalCase by default)
                 return response.data;
             })
             .finally(() => unblockUI());
@@ -46,6 +38,46 @@ const ExchangeRateService = {
             responseType: 'json',
         })
             .finally(() => unblockUI());
+    },
+    updateExchangeRate: (currencyId, data) => {
+        blockUI();
+        return axios({
+            url: resolveClientUrl('ExchangeRate/Update'),
+            method: 'POST',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
+            data: {
+                currencyId: currencyId,
+                currencyCode: data.currencyCode,
+                exchangeRate: data.exchangeRate,
+                effectiveDate: data.effectiveDate,
+                rounding: data.rounding,
+            },
+            responseType: 'json',
+        })
+            .finally(() => unblockUI());
+    },
+    deleteExchangeRate: (currencyId, effectiveDate) => {
+        blockUI();
+        return axios({
+            url: resolveClientUrl('ExchangeRate/Delete'),
+            method: 'POST',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
+            data: { 
+                currencyId: currencyId,
+                effectiveDate: effectiveDate
+            },
+            responseType: 'json',
+        })
+            .finally(() => unblockUI());
+    },
+    getRoundingRules: () => {
+        return axios({
+            url: resolveClientUrl('ExchangeRate/GetRoundingRules'),
+            method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
+            responseType: 'json',
+        })
+            .then(response => response.data || []);
     },
 };
 

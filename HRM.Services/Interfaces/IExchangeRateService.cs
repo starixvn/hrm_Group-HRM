@@ -17,6 +17,18 @@ public interface IExchangeRateService
         string currencyCode,
         decimal exchangeRate,
         System.DateTime effectiveDate,
+        decimal rounding,
         int modifiedBy
     );
+
+    Task<CommandResult> UpdateExchangeRateAsync(
+        int currencyId,
+        System.DateTime effectiveDate,
+        string currencyCode,
+        decimal exchangeRate,
+        decimal rounding,
+        int modifiedBy
+    );
+
+    Task<CommandResult> DeleteExchangeRateAsync(string currencyCode, System.DateTime effectiveDate, int modifiedBy);
 }

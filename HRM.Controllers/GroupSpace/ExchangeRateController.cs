@@ -1,6 +1,5 @@
 namespace HRM.Controllers.GroupSpace;
 
-using System.Linq;
 using System.Threading.Tasks;
 using Core.Constants;
 using Core.Filters;
@@ -30,22 +29,15 @@ public class ExchangeRateController(
     public async Task<IActionResult> GetExchangeRates()
     {
         var exchangeRates = await exchangeRateService.GetExchangeRatesAsync();
+        return Json(exchangeRates);
+    }
+
+    [HttpGet]
+    [HrmPermission(Policy.Read, FunctionKey.ExchangeRate)]
+    public async Task<IActionResult> GetRoundingRules()
+    {
         var roundingRules = await exchangeRateService.GetRoundingRulesAsync();
-
-        var exchangeRatesList = exchangeRates
-            .Select(rate => new { rate.BaseCurrency, rate.ToUsd })
-            .ToList<object>();
-
-        var roundingRulesList = roundingRules
-            .Select(rule => new
-            {
-                rule.Currency,
-                rule.Rounding,
-                rule.Description,
-            })
-            .ToList<object>();
-
-        return Json(new { ExchangeRates = exchangeRatesList, RoundingRules = roundingRulesList });
+        return Json(roundingRules);
     }
 
     [HttpGet]
@@ -69,14 +61,31 @@ public class ExchangeRateController(
             request.CurrencyCode,
             request.ExchangeRate,
             request.EffectiveDate,
+            request.Rounding,
             EmployeeSession.EmpId
         );
 
-        if (result.IsSuccessful)
+        return Json(new { code = result.IsSuccessful ? 0 : result.Code, message = result.Message });
+    }
+
+    [HttpPost]
+    [HrmPermission(Policy.Host, FunctionKey.ExchangeRate)]
+    public async Task<IActionResult> Update([FromBody] UpdateExchangeRate request)
+    {
+        if (request == null || !ModelState.IsValid)
         {
-            return Json(new { code = 0, message = result.Message });
+            return Json(new { code = 1, message = "Invalid request" });
         }
 
-        return Json(new { code = result.Code, message = result.Message });
+        var result = await exchangeRateService.UpdateExchangeRateAsync(
+            request.CurrencyId,
+            request.EffectiveDate,
+            request.CurrencyCode,
+            request.ExchangeRate,
+            request.Rounding,
+            EmployeeSession.EmpId
+        );
+
+        return Json(new { code = result.IsSuccessful ? 0 : result.Code, message = result.Message });
     }
 }

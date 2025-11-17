@@ -11,6 +11,8 @@ public class InsertExchangeRateCriteria : CriteriaBase
 
     public DateTime EffectiveDate { get; set; }
 
+    public decimal Rounding { get; set; }
+
     public int ModifiedBy { get; set; }
 
     public override string GetSettingKey() => "CurrencyExchangeRate_Insert";

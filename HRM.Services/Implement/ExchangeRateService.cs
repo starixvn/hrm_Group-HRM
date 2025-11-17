@@ -21,21 +21,31 @@ public class ExchangeRateService(IBaseService baseService) : IExchangeRateServic
 
     public async Task<IEnumerable<CurrencyRoundingRule>> GetRoundingRulesAsync()
     {
-        //var roundingRulesData = [];
+        var criteria = new GetCurrencyCriteria();
+        var currencies = await baseService.GetDataAsync<Currency>(criteria);
 
-        //return await Task.FromResult(
-        //    roundingRulesData.Select(rule =>
-        //    {
-        //        dynamic dynamicRule = rule;
-        //        return new CurrencyRoundingRule
-        //        {
-        //            Currency = dynamicRule.Currency ?? dynamicRule.currency ?? "",
-        //            Rounding = dynamicRule.Rounding ?? dynamicRule.rounding ?? 0,
-        //            Description = dynamicRule.Description ?? dynamicRule.description ?? "",
-        //        };
-        //    })
-        //);
-        return new List<CurrencyRoundingRule>();
+        return currencies.Select(currency =>
+        {
+            var roundingValue = (int)currency.Rounding;
+            return new CurrencyRoundingRule
+            {
+                Currency = currency.CurrencyCode,
+                Rounding = roundingValue,
+                Description = GetRoundingDescription(roundingValue),
+            };
+        });
+    }
+
+    private static string GetRoundingDescription(int roundingValue)
+    {
+        return roundingValue switch
+        {
+            -4 => "Rounded to nearest 1000",
+            -2 => "Rounded to nearest 100",
+            -1 => "Rounded to nearest 10",
+            0 => "Rounded to nearest 1",
+            _ => $"Rounded to {roundingValue} decimal places",
+        };
     }
 
     public async Task<IEnumerable<Currency>> GetCurrenciesAsync()
@@ -48,6 +58,7 @@ public class ExchangeRateService(IBaseService baseService) : IExchangeRateServic
         string currencyCode,
         decimal exchangeRate,
         System.DateTime effectiveDate,
+        decimal rounding,
         int modifiedBy
     )
     {
@@ -56,8 +67,54 @@ public class ExchangeRateService(IBaseService baseService) : IExchangeRateServic
             CurrencyCode = currencyCode,
             ExchangeRate = exchangeRate,
             EffectiveDate = effectiveDate,
+            Rounding = rounding,
             ModifiedBy = modifiedBy,
         };
+        return await baseService.ExecuteNonQueryAsync(criteria);
+    }
+
+    public async Task<CommandResult> UpdateExchangeRateAsync(
+        int currencyId,
+        System.DateTime effectiveDate,
+        string currencyCode,
+        decimal exchangeRate,
+        decimal rounding,
+        int modifiedBy
+    )
+    {
+        var criteria = new UpdateExchangeRateCriteria
+        {
+            CurrencyId = currencyId,
+            EffectiveDate = effectiveDate,
+            CurrencyCode = currencyCode,
+            ExchangeRate = exchangeRate,
+            Rounding = rounding,
+            ModifiedBy = modifiedBy,
+        };
+        return await baseService.ExecuteNonQueryAsync(criteria);
+    }
+
+    public async Task<CommandResult> DeleteExchangeRateAsync(
+        string currencyCode,
+        System.DateTime effectiveDate,
+        int modifiedBy
+    )
+    {
+        var currencies = await GetCurrenciesAsync();
+        var currency = currencies.FirstOrDefault(c => c.CurrencyCode == currencyCode);
+
+        if (currency == null)
+        {
+            return new CommandResult { Code = 1, Message = "Currency not found" };
+        }
+
+        var criteria = new DeleteExchangeRateCriteria
+        {
+            CurrencyId = currency.Id,
+            EffectiveDate = effectiveDate,
+            ModifiedBy = modifiedBy,
+        };
+
         return await baseService.ExecuteNonQueryAsync(criteria);
     }
 }

@@ -633,6 +633,8 @@
     <Function Name="ExchangeRate">
         <Setting Key="CurrencyExchangeRate_Get" SpName="CurrencyExchangeRate_Get" DbName="bodb_HRM" Plain="0" />
         <Setting Key="CurrencyExchangeRate_Insert" SpName="CurrencyExchangeRate_Insert" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="CurrencyExchangeRate_Update" SpName="CurrencyExchangeRate_Update" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="CurrencyExchangeRate_Delete" SpName="CurrencyExchangeRate_Delete" DbName="bodb_HRM" Plain="0" />
     </Function>
     <Function Name="PayrollManagement">
         <Setting Key="Payroll_GetAttendantEmployee" SpName="Payroll_GetAttendantEmployee" DbName="bodb_HRM" Plain="0" />

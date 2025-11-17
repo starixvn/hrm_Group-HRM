@@ -57,6 +57,9 @@
     .table-custom {
         margin: 0 !important;
         border: none;
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 14px;
 
         thead {
             tr {
@@ -66,14 +69,13 @@
                     padding: 14px 16px;
                     font-weight: 600;
                     font-size: 14px;
-                    text-transform: uppercase;
                     letter-spacing: 0.5px;
                     border: none;
                     color: #ffffff;
-                    text-align: center;
+                    text-align: left;
 
                     &:first-child {
-                        border-left: none;
+                        border-left: none !important;
                     }
 
                     &:last-child {
@@ -87,18 +89,40 @@
             tr {
                 transition: background-color 0.2s ease;
 
-                &:nth-child(odd) {
-                    background: #f8f9fa;
+                &.history-header-row {
+                    background: #f0f4f8;
+                    border-top: 2px solid #e0e6ed;
+                    border-bottom: 1px solid #e0e6ed;
+
+                    .history-header {
+                        padding: 8px 15px;
+                        font-weight: 600;
+                        font-size: 12px;
+                        color: #5a6c7d;
+                        text-transform: uppercase;
+                        letter-spacing: 0.5px;
+
+                        .history-label {
+                            display: inline-block;
+                        }
+                    }
                 }
 
-                &:nth-child(even) {
-                    background: #ffffff;
+                &.sub-item-row {
+                    background: #f8fbff !important;
+                    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                    border-left: 1px solid #e0e6ed;
+                    animation: slideDown 0.3s ease-out;
+
+                    &:hover {
+                        background: #f0f7ff !important;
+                    }
                 }
 
-                &:hover {
-                    background: #e8f4f8 !important;
+                &:nth-child(odd):not(.sub-item-row) {
+                    background: #fff;
                 }
-
+                
                 td {
                     padding: 12px 16px;
                     border: none;
@@ -107,7 +131,7 @@
                     color: #2c3e50;
 
                     &:first-child {
-                        border-left: none;
+                        border-left: none !important;
                     }
 
                     &:last-child {
@@ -118,6 +142,93 @@
                         text-align: left;
                         font-weight: 500;
                     }
+
+                    &.currency-cell {
+                        padding: 12px 15px;
+                        display: flex;
+                        align-items: center;
+                        gap: 10px;
+                        font-weight: 600;
+                        color: #2c3e50;
+                        vertical-align: middle;
+
+                        &.has-sub-items {
+                            font-weight: 600;
+                            color: #2c3e50;
+                        }
+
+                        .expand-icon-placeholder {
+                            width: 32px;
+                            height: 32px;
+                            margin-right: 12px;
+                            flex-shrink: 0;
+                        }
+
+                        .currency-text {
+                            font-weight: 600;
+                            display: inline-block;
+                            vertical-align: middle;
+                        }
+                    }
+
+                    &.rate-cell {
+                        padding: 12px 15px;
+                        text-align: right;
+                        font-family: monospace;
+                        color: #2c3e50;
+                    }
+
+                    &.date-cell {
+                        padding: 12px 15px;
+                        color: #7f8c8d;
+                    }
+
+                    &.sub-item-currency {
+                        padding: 10px 15px 10px 30px;
+                        color: #6c757d;
+                        font-size: 13px;
+                        display: flex;
+                        align-items: center;
+                        gap: 10px;
+                        position: relative;
+
+                        .sub-item-indicator {
+                            display: block;
+                            width: 3px;
+                            height: 100%;
+                            background: linear-gradient(180deg, #52c5ff 0%, #3ab0e8 100%);
+                            position: absolute;
+                            left: 0;
+                            top: 0;
+                            border-radius: 0;
+                            opacity: 1;
+                        }
+
+                        .sub-item-text {
+                            flex: 1;
+                        }
+                    }
+
+                    &.sub-item-rate {
+                        padding: 10px 15px;
+                        text-align: right;
+                        font-family: monospace;
+                        color: #6c757d;
+                        font-size: 13px;
+                    }
+
+                    &.sub-item-date {
+                        padding: 10px 15px;
+                        color: #95a5a6;
+                        font-size: 13px;
+                    }
+
+                    &.empty-state {
+                        padding: 40px;
+                        text-align: center;
+                        color: #95a5a6;
+                        font-style: italic;
+                    }
                 }
 
                 &:last-child {
@@ -126,6 +237,114 @@
                     }
                 }
             }
+        }
+    }
+
+    .expand-icon {
+        cursor: pointer;
+        padding: 0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        color: #3498db;
+        user-select: none;
+        line-height: 1;
+        transition: all 0.2s ease;
+        width: 32px;
+        height: 32px;
+        margin-right: 12px;
+        flex-shrink: 0;
+        font-weight: 600;
+
+        i {
+            transition: transform 0.2s ease;
+            display: inline-block;
+        }
+
+        &.expanded {
+            color: #2980b9;
+
+            i {
+                transform: rotate(0deg);
+            }
+        }
+
+        &:not(.expanded) {
+            color: #3498db;
+
+            i {
+                transform: rotate(0deg);
+            }
+        }
+
+        &:hover {
+            color: #2980b9;
+            transform: scale(1.1);
+        }
+
+        &:active {
+            transform: scale(0.95);
+        }
+    }
+
+    .action-cell,
+    .sub-item-action {
+        padding: 8px 12px;
+        text-align: center;
+        white-space: nowrap;
+
+        .btn-action {
+            background: none;
+            border: none;
+            padding: 6px 10px;
+            margin: 0 3px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.2s ease;
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 32px;
+            height: 32px;
+
+            &:hover {
+                transform: scale(1.1);
+            }
+
+            &:active {
+                transform: scale(0.95);
+            }
+
+            &.btn-edit {
+                color: #3498db;
+                background-color: #e8f4f8;
+
+                &:hover {
+                    background-color: #d0e7ff;
+                    color: #2980b9;
+                }
+            }
+
+            &.btn-delete {
+                color: #e74c3c;
+                background-color: #fde8e6;
+
+                &:hover {
+                    background-color: #fadbd8;
+                    color: #c0392b;
+                }
+            }
+        }
+    }
+
+    .sub-item-action {
+        .btn-action {
+            font-size: 12px;
+            min-width: 28px;
+            height: 28px;
+            padding: 4px 8px;
         }
     }
 }
@@ -203,5 +422,18 @@
     to {
         opacity: 1;
         transform: translate(-50%, -50%);
+    }
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        max-height: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        max-height: 100px;
+        transform: translateY(0);
     }
 }

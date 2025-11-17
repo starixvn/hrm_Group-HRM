@@ -10,5 +10,7 @@ public class ExchangeRate
 
     public DateTime EffectiveDate { get; set; }
 
+    public decimal Rounding { get; set; }
+
     public DateTime ModifiedDate { get; set; }
 }

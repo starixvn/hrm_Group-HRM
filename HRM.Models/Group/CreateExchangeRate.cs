@@ -9,4 +9,6 @@ public class CreateExchangeRate
     public decimal ExchangeRate { get; set; }
 
     public DateTime EffectiveDate { get; set; }
+
+    public decimal Rounding { get; set; }
 }
