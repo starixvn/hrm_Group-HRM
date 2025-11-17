@@ -18,6 +18,8 @@ public interface ICompanyService
 
     Task<IEnumerable<Currency>> GetCurrencyAsync();
 
+    Task<string> GetCompanyCurrencyId();
+
     Task<CompanySetting> GetByIdAsync(short companyId);
 
     Task<string> GetWhitelistIps();

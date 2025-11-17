@@ -38,7 +38,8 @@ public class EmployeeService(
     IBaseService baseService,
     IRoleService roleService,
     IUserService userService,
-    IUserControlSession session) : IEmployeeService
+    IUserControlSession session,
+    ICompanyService companyService) : IEmployeeService
 {
     public async Task<string> GenerateEmployeeCode(short? companyId)
     {
@@ -62,10 +63,19 @@ public class EmployeeService(
         var employee = await employeeRepository.GetEmployeeByIdAsync(criteria);
         if (employee != null)
         {
+            var companyCurrencyId = await companyService.GetCompanyCurrencyId();
+            var currencyCode = "";
+            if (!string.IsNullOrEmpty(companyCurrencyId))
+            {
+                var currencies = await companyService.GetCurrencyAsync();
+                currencyCode = currencies.FirstOrDefault(c => c.Id == int.Parse(companyCurrencyId))?.CurrencyCode;
+            }
+
             employee.Roles = await roleService.GetByUserIdAsync(employee.UserId);
             employee.BasicSalary = EncryptSalary(employee.BasicSalary);
             employee.JobLevelAddOn = EncryptSalary(employee.JobLevelAddOn);
             employee.SpecialSubsidy = EncryptSalary(employee.SpecialSubsidy);
+            employee.EmployeeCurrencyCode = employee.IsLocal ? currencyCode : Constants.USD; 
         }
 
         return employee;
@@ -388,6 +398,7 @@ public class EmployeeService(
             CompanyId = companyId,
             SubCompanyId = param.SubCompanyId,
             SalaryStructureId = param.SalaryStructureId,
+            SpecialSubsidyCurrencyId = param.SpecialSubsidyCurrencyId,
             SpecialSubsidy = param.SpecialSubsidy,
             AutoApproveRequest = param.AutoApproveRequest,
             AllowanceItemSettingIds = param.AllowanceItemSettingIds

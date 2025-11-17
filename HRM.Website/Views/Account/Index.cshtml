@@ -196,21 +196,27 @@
                     <div class="plabel">@Labels.BasicSalary:</div>
                     @if (!string.IsNullOrEmpty(Model.Employee.BasicSalary))
                     {
-                        <div class="pamount amount-hidden" data-amount="@RazorHelpers.FormatThousandSeparator(Model.Employee.BasicSalary)"></div>
+                        <div class="pamount amount-hidden"
+                             data-amount="@($"{RazorHelpers.FormatThousandSeparator(Model.Employee.BasicSalary)} {Model.Employee.EmployeeCurrencyCode}")">
+                        </div>
                     }
                 </li>
                 <li class="list-group-item">
                     <div class="plabel">@Labels.JobLevelAddOn:</div>
                     @if (!string.IsNullOrEmpty(Model.Employee.JobLevelAddOn))
                     {
-                        <div class="pamount amount-hidden" data-amount="@RazorHelpers.FormatThousandSeparator(Model.Employee.JobLevelAddOn)"></div>
+                    <div class="pamount amount-hidden"
+                         data-amount="@($"{RazorHelpers.FormatThousandSeparator(Model.Employee.JobLevelAddOn)} {Model.Employee.EmployeeCurrencyCode}")">
+                    </div>
                     }
                 </li>
                 @if (!string.IsNullOrEmpty(Model.Employee.SpecialSubsidy) && Model.Employee.SpecialSubsidy != "0")
                 {
                     <li class="list-group-item">
                         <div class="plabel">@Labels.SpecialSubsidy:</div>
-                        <div class="pamount amount-hidden" data-amount="@RazorHelpers.FormatThousandSeparator(Model.Employee.SpecialSubsidy)"></div>
+                        <div class="pamount amount-hidden"
+                             data-amount="@($"{RazorHelpers.FormatThousandSeparator(Model.Employee.SpecialSubsidy)} {Model.Employee.SpecialSubsidyCurrency}")">
+                        </div>
                     </li>
                 }
                 @if (Model.EmployeePayrollAllowances != null)
@@ -227,7 +233,9 @@
                                 }
                             </div>
                             <div class="pcontent bold">@allowance.ItemName</div>
-                            <div class="pamount amount-hidden" data-amount="@RazorHelpers.FormatThousandSeparator(allowance.Amount)"></div>
+                            <div class="pamount amount-hidden"
+                                 data-amount="@($"{RazorHelpers.FormatThousandSeparator(allowance.Amount)} {allowance.CurrencyCode}")">
+                            </div>
                         </li>
                     }
                 }

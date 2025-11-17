@@ -49,6 +49,8 @@ public static class Constants
 
     public const int GroupCompanyId = 7;
 
+    public const string USD = "USD";
+
     public static readonly TimeSpan NexTimezone = TimeSpan.FromHours(7);
 
     public static readonly int[] NexCompanyIds = [NexCompanyId, LumiCompanyId, NexVisionCompanyId];

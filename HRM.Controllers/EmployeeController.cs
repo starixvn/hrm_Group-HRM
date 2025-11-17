@@ -638,10 +638,12 @@ public class EmployeeController(
         ViewBag.Roles = roles;
         ViewBag.SubCompanies = subCompanies;
         ViewBag.SalaryStructures = await salaryStructureService.GetSalaryStructureAsync(CurrentCompanyId);
+        ViewBag.Currencies = await companyService.GetCurrencyAsync();
         ViewBag.AllowanceItemSettings = await payrollSettingService.GetPayrollItemSettingsAsync(
             new GetPayrollItemSettingsCriteria
             {
-                CompanyId = CurrentCompanyId, Category = (int)PayrollSettingType.Allowance
+                CompanyId = CurrentCompanyId, 
+                Category = (int)PayrollSettingType.Allowance
 
             });
     }

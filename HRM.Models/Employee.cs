@@ -63,9 +63,15 @@ public class Employee : EntityBase<int>
 
     public int? SalaryStructureId { get; set; }
 
+    public int? SpecialSubsidyCurrencyId { get; set; }
+
+    public string SpecialSubsidyCurrency { get; set; }
+
     public string SalaryStructure { get; set; }
 
     public string BasicSalary { get; set; }
+
+    public string EmployeeCurrencyCode { get; set; }
 
     public string SpecialSubsidy { get; set; }
 
