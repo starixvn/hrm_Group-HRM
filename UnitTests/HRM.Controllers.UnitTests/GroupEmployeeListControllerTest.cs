@@ -48,7 +48,8 @@ public class GroupEmployeeListControllerTest : BaseControllerTest
             _baseService,
             employeeService,
             secondCompanyEmployeeService,
-            _monthlyPayrollService);
+            _monthlyPayrollService
+        );
     }
 
     [Fact]
@@ -60,16 +61,27 @@ public class GroupEmployeeListControllerTest : BaseControllerTest
             Keyword = "test",
             TeamIds = "1,2",
             CompanyIds = "1,2",
-            EmployeeStatus = "1"
+            EmployeeStatus = "1",
         };
 
         var employees = new List<GroupEmployeeModel>
         {
-            new() { EmpId = 1, FullName = "John Doe", EmployeeCode = "EMP001" },
-            new() { EmpId = 2, FullName = "Jane Smith", EmployeeCode = "EMP002" }
+            new()
+            {
+                EmpId = 1,
+                FullName = "John Doe",
+                EmployeeCode = "EMP001",
+            },
+            new()
+            {
+                EmpId = 2,
+                FullName = "Jane Smith",
+                EmployeeCode = "EMP002",
+            },
         };
 
-        _baseService.GetDataAsync<GroupEmployeeModel>(Arg.Any<GetEmployeesInGroupScopeCriteria>())
+        _baseService
+            .GetDataAsync<GroupEmployeeModel>(Arg.Any<GetEmployeesInGroupScopeCriteria>())
             .Returns(employees);
 
         SetupPermission(FunctionKey.GroupEmployeeList_ViewAll, Policy.Read, true);
@@ -93,18 +105,29 @@ public class GroupEmployeeListControllerTest : BaseControllerTest
             Keyword = "test",
             TeamIds = "1,2",
             CompanyIds = "1,2",
-            EmployeeStatus = "1"
+            EmployeeStatus = "1",
         };
 
         var employees = new List<GroupEmployeeModel>
         {
-            new() { EmpId = 1, FullName = "John Doe", EmployeeCode = "EMP001" },
-            new() { EmpId = 2, FullName = "Jane Smith", EmployeeCode = "EMP002" }
+            new()
+            {
+                EmpId = 1,
+                FullName = "John Doe",
+                EmployeeCode = "EMP001",
+            },
+            new()
+            {
+                EmpId = 2,
+                FullName = "Jane Smith",
+                EmployeeCode = "EMP002",
+            },
         };
 
-        _baseService.GetDataAsync<GroupEmployeeModel>(Arg.Any<GetEmployeesInGroupScopeCriteria>())
+        _baseService
+            .GetDataAsync<GroupEmployeeModel>(Arg.Any<GetEmployeesInGroupScopeCriteria>())
             .Returns(employees);
-        
+
         // Set up the mock to set salaries on the employees
         _monthlyPayrollService
             .When(x => x.CalculateMonthlySalary(Arg.Any<IEnumerable<GroupEmployeeModel>>()))
@@ -130,13 +153,21 @@ public class GroupEmployeeListControllerTest : BaseControllerTest
         var result = await _controller.ListEmployee(model);
 
         // Assert
-        await _monthlyPayrollService.Received(1).CalculateMonthlySalary(Arg.Is<IEnumerable<GroupEmployeeModel>>(emps => 
-            emps.Any(e => e.EmpId == 1) && emps.Any(e => e.EmpId == 2)));
+        await _monthlyPayrollService
+            .Received(1)
+            .CalculateMonthlySalary(
+                Arg.Is<IEnumerable<GroupEmployeeModel>>(emps =>
+                    emps.Any(e => e.EmpId == 1) && emps.Any(e => e.EmpId == 2)
+                )
+            );
 
         var partialViewResult = Assert.IsType<PartialViewResult>(result);
-        var returnedEmployees = Assert.IsAssignableFrom<IEnumerable<GroupEmployeeModel>>(partialViewResult.Model);
+        var returnedEmployees = Assert.IsType<IEnumerable<GroupEmployeeModel>>(
+            partialViewResult.Model,
+            exactMatch: false
+        );
         var employeeList = returnedEmployees.ToList();
-        
+
         Assert.Equal(5000m, employeeList.First(e => e.EmpId == 1).Salary);
         Assert.Equal(6000m, employeeList.First(e => e.EmpId == 2).Salary);
     }
@@ -150,17 +181,33 @@ public class GroupEmployeeListControllerTest : BaseControllerTest
             Keyword = "test",
             TeamIds = "1,2",
             CompanyIds = "1,2",
-            EmployeeStatus = "1"
+            EmployeeStatus = "1",
         };
 
         var employees = new List<GroupEmployeeModel>
         {
-            new() { EmpId = 1, FullName = "John Doe", EmployeeCode = "EMP001" },
-            new() { EmpId = 2, FullName = "Jane Smith", EmployeeCode = "EMP002" },
-            new() { EmpId = 3, FullName = "Bob Wilson", EmployeeCode = "EMP003" }
+            new()
+            {
+                EmpId = 1,
+                FullName = "John Doe",
+                EmployeeCode = "EMP001",
+            },
+            new()
+            {
+                EmpId = 2,
+                FullName = "Jane Smith",
+                EmployeeCode = "EMP002",
+            },
+            new()
+            {
+                EmpId = 3,
+                FullName = "Bob Wilson",
+                EmployeeCode = "EMP003",
+            },
         };
 
-        _baseService.GetDataAsync<GroupEmployeeModel>(Arg.Any<GetEmployeesInGroupScopeCriteria>())
+        _baseService
+            .GetDataAsync<GroupEmployeeModel>(Arg.Any<GetEmployeesInGroupScopeCriteria>())
             .Returns(employees);
 
         SetupPermission(FunctionKey.GroupEmployeeList_ViewAll, Policy.Read, true);
@@ -171,9 +218,12 @@ public class GroupEmployeeListControllerTest : BaseControllerTest
 
         // Assert
         var partialViewResult = Assert.IsType<PartialViewResult>(result);
-        var returnedEmployees = Assert.IsAssignableFrom<IEnumerable<GroupEmployeeModel>>(partialViewResult.Model);
+        var returnedEmployees = Assert.IsType<IEnumerable<GroupEmployeeModel>>(
+            partialViewResult.Model,
+            exactMatch: false
+        );
         var employeeList = returnedEmployees.ToList();
-        
+
         Assert.Equal(3, employeeList.Count);
         Assert.Contains(employeeList, e => e.EmpId == 1);
         Assert.Contains(employeeList, e => e.EmpId == 2);
@@ -189,17 +239,33 @@ public class GroupEmployeeListControllerTest : BaseControllerTest
             Keyword = "test",
             TeamIds = "1,2",
             CompanyIds = "1,2",
-            EmployeeStatus = "1"
+            EmployeeStatus = "1",
         };
 
         var employees = new List<GroupEmployeeModel>
         {
-            new() { EmpId = 1, FullName = "John Doe", UnitPICEmpId = 1 }, // Current user is Unit PIC
-            new() { EmpId = 2, FullName = "Jane Smith", UnitPICEmpId = 2 }, // Different Unit PIC
-            new() { EmpId = 3, FullName = "Bob Wilson", UnitPICEmpId = 1 } // Current user is Unit PIC
+            new()
+            {
+                EmpId = 1,
+                FullName = "John Doe",
+                UnitPICEmpId = 1,
+            }, // Current user is Unit PIC
+            new()
+            {
+                EmpId = 2,
+                FullName = "Jane Smith",
+                UnitPICEmpId = 2,
+            }, // Different Unit PIC
+            new()
+            {
+                EmpId = 3,
+                FullName = "Bob Wilson",
+                UnitPICEmpId = 1,
+            }, // Current user is Unit PIC
         };
 
-        _baseService.GetDataAsync<GroupEmployeeModel>(Arg.Any<GetEmployeesInGroupScopeCriteria>())
+        _baseService
+            .GetDataAsync<GroupEmployeeModel>(Arg.Any<GetEmployeesInGroupScopeCriteria>())
             .Returns(employees);
 
         SetupPermission(FunctionKey.GroupEmployeeList_ViewAll, Policy.Read, false);
@@ -211,9 +277,12 @@ public class GroupEmployeeListControllerTest : BaseControllerTest
 
         // Assert
         var partialViewResult = Assert.IsType<PartialViewResult>(result);
-        var returnedEmployees = Assert.IsAssignableFrom<IEnumerable<GroupEmployeeModel>>(partialViewResult.Model);
+        var returnedEmployees = Assert.IsType<IEnumerable<GroupEmployeeModel>>(
+            partialViewResult.Model,
+            exactMatch: false
+        );
         var employeeList = returnedEmployees.ToList();
-        
+
         Assert.Equal(2, employeeList.Count);
         Assert.Contains(employeeList, e => e.EmpId == 1);
         Assert.Contains(employeeList, e => e.EmpId == 3);
@@ -229,17 +298,33 @@ public class GroupEmployeeListControllerTest : BaseControllerTest
             Keyword = "test",
             TeamIds = "1,2",
             CompanyIds = "1,2",
-            EmployeeStatus = "1"
+            EmployeeStatus = "1",
         };
 
         var employees = new List<GroupEmployeeModel>
         {
-            new() { EmpId = 1, FullName = "John Doe", UnitSupporterEmpId = "1,5" }, // Current user is supporter
-            new() { EmpId = 2, FullName = "Jane Smith", UnitSupporterEmpId = "2,3" }, // Different supporters
-            new() { EmpId = 3, FullName = "Bob Wilson", UnitSupporterEmpId = "1" } // Current user is supporter
+            new()
+            {
+                EmpId = 1,
+                FullName = "John Doe",
+                UnitSupporterEmpId = "1,5",
+            }, // Current user is supporter
+            new()
+            {
+                EmpId = 2,
+                FullName = "Jane Smith",
+                UnitSupporterEmpId = "2,3",
+            }, // Different supporters
+            new()
+            {
+                EmpId = 3,
+                FullName = "Bob Wilson",
+                UnitSupporterEmpId = "1",
+            }, // Current user is supporter
         };
 
-        _baseService.GetDataAsync<GroupEmployeeModel>(Arg.Any<GetEmployeesInGroupScopeCriteria>())
+        _baseService
+            .GetDataAsync<GroupEmployeeModel>(Arg.Any<GetEmployeesInGroupScopeCriteria>())
             .Returns(employees);
 
         SetupPermission(FunctionKey.GroupEmployeeList_ViewAll, Policy.Read, false);
@@ -251,9 +336,12 @@ public class GroupEmployeeListControllerTest : BaseControllerTest
 
         // Assert
         var partialViewResult = Assert.IsType<PartialViewResult>(result);
-        var returnedEmployees = Assert.IsAssignableFrom<IEnumerable<GroupEmployeeModel>>(partialViewResult.Model);
+        var returnedEmployees = Assert.IsType<IEnumerable<GroupEmployeeModel>>(
+            partialViewResult.Model,
+            exactMatch: false
+        );
         var employeeList = returnedEmployees.ToList();
-        
+
         Assert.Equal(2, employeeList.Count);
         Assert.Contains(employeeList, e => e.EmpId == 1);
         Assert.Contains(employeeList, e => e.EmpId == 3);
@@ -269,17 +357,33 @@ public class GroupEmployeeListControllerTest : BaseControllerTest
             Keyword = "test",
             TeamIds = "1,2",
             CompanyIds = "1,2",
-            EmployeeStatus = "1"
+            EmployeeStatus = "1",
         };
 
         var employees = new List<GroupEmployeeModel>
         {
-            new() { EmpId = 1, FullName = "John Doe", DepartmentPICId = 1 }, // Current user is Dept PIC
-            new() { EmpId = 2, FullName = "Jane Smith", DepartmentPICId = 2 }, // Different Dept PIC
-            new() { EmpId = 3, FullName = "Bob Wilson", DepartmentPICId = 1 } // Current user is Dept PIC
+            new()
+            {
+                EmpId = 1,
+                FullName = "John Doe",
+                DepartmentPICId = 1,
+            }, // Current user is Dept PIC
+            new()
+            {
+                EmpId = 2,
+                FullName = "Jane Smith",
+                DepartmentPICId = 2,
+            }, // Different Dept PIC
+            new()
+            {
+                EmpId = 3,
+                FullName = "Bob Wilson",
+                DepartmentPICId = 1,
+            }, // Current user is Dept PIC
         };
 
-        _baseService.GetDataAsync<GroupEmployeeModel>(Arg.Any<GetEmployeesInGroupScopeCriteria>())
+        _baseService
+            .GetDataAsync<GroupEmployeeModel>(Arg.Any<GetEmployeesInGroupScopeCriteria>())
             .Returns(employees);
 
         SetupPermission(FunctionKey.GroupEmployeeList_ViewAll, Policy.Read, false);
@@ -291,9 +395,12 @@ public class GroupEmployeeListControllerTest : BaseControllerTest
 
         // Assert
         var partialViewResult = Assert.IsType<PartialViewResult>(result);
-        var returnedEmployees = Assert.IsAssignableFrom<IEnumerable<GroupEmployeeModel>>(partialViewResult.Model);
+        var returnedEmployees = Assert.IsType<IEnumerable<GroupEmployeeModel>>(
+            partialViewResult.Model,
+            exactMatch: false
+        );
         var employeeList = returnedEmployees.ToList();
-        
+
         Assert.Equal(2, employeeList.Count);
         Assert.Contains(employeeList, e => e.EmpId == 1);
         Assert.Contains(employeeList, e => e.EmpId == 3);
@@ -309,18 +416,41 @@ public class GroupEmployeeListControllerTest : BaseControllerTest
             Keyword = "test",
             TeamIds = "1,2",
             CompanyIds = "1,2",
-            EmployeeStatus = "1"
+            EmployeeStatus = "1",
         };
 
         var employees = new List<GroupEmployeeModel>
         {
-            new() { EmpId = 1, FullName = "John Doe", UnitPICEmpId = 1 }, // Unit PIC only
-            new() { EmpId = 2, FullName = "Jane Smith", DepartmentPICId = 1 }, // Dept PIC only
-            new() { EmpId = 3, FullName = "Bob Wilson", UnitPICEmpId = 2, DepartmentPICId = 2 }, // Neither
-            new() { EmpId = 4, FullName = "Alice Brown", UnitPICEmpId = 1, DepartmentPICId = 1 } // Both
+            new()
+            {
+                EmpId = 1,
+                FullName = "John Doe",
+                UnitPICEmpId = 1,
+            }, // Unit PIC only
+            new()
+            {
+                EmpId = 2,
+                FullName = "Jane Smith",
+                DepartmentPICId = 1,
+            }, // Dept PIC only
+            new()
+            {
+                EmpId = 3,
+                FullName = "Bob Wilson",
+                UnitPICEmpId = 2,
+                DepartmentPICId = 2,
+            }, // Neither
+            new()
+            {
+                EmpId = 4,
+                FullName = "Alice Brown",
+                UnitPICEmpId = 1,
+                DepartmentPICId = 1,
+            }, // Both
         };
 
-        _baseService.GetDataAsync<GroupEmployeeModel>(Arg.Any<GetEmployeesInGroupScopeCriteria>())
+        _baseService
+            .GetDataAsync<GroupEmployeeModel>(Arg.Any<GetEmployeesInGroupScopeCriteria>())
             .Returns(employees);
 
         SetupPermission(FunctionKey.GroupEmployeeList_ViewAll, Policy.Read, false);
@@ -333,9 +463,12 @@ public class GroupEmployeeListControllerTest : BaseControllerTest
 
         // Assert
         var partialViewResult = Assert.IsType<PartialViewResult>(result);
-        var returnedEmployees = Assert.IsAssignableFrom<IEnumerable<GroupEmployeeModel>>(partialViewResult.Model);
+        var returnedEmployees = Assert.IsType<IEnumerable<GroupEmployeeModel>>(
+            partialViewResult.Model,
+            exactMatch: false
+        );
         var employeeList = returnedEmployees.ToList();
-        
+
         Assert.Equal(3, employeeList.Count);
         Assert.Contains(employeeList, e => e.EmpId == 1); // Unit PIC
         Assert.Contains(employeeList, e => e.EmpId == 2); // Dept PIC
@@ -347,8 +480,14 @@ public class GroupEmployeeListControllerTest : BaseControllerTest
     public async Task Index_WithTeamIds_ReturnsViewWithModel()
     {
         // Arrange
-        var teams = new List<Models.Team> { new() { Id = 1, Name = "Team1" } };
-        var companies = new List<Models.Company> { new() { CompanyId = 1, Name = "Company1" } };
+        var teams = new List<Models.Team>
+        {
+            new() { Id = 1, Name = "Team1" },
+        };
+        var companies = new List<Models.Company>
+        {
+            new() { CompanyId = 1, Name = "Company1" },
+        };
 
         var teamService = Substitute.For<ITeamService>();
         var companyService = Substitute.For<ICompanyService>();
@@ -356,10 +495,17 @@ public class GroupEmployeeListControllerTest : BaseControllerTest
         companyService.GetAllCompany().Returns(companies);
 
         var controller = new GroupEmployeeListController(
-            _session, teamService, companyService, Substitute.For<IUnitService>(),
-            Substitute.For<IDepartmentService>(), Substitute.For<IExportExcelEmployeeInfoService>(),
-            _baseService, Substitute.For<IEmployeeService>(), Substitute.For<ISecondCompanyEmployeeService>(),
-            _monthlyPayrollService);
+            _session,
+            teamService,
+            companyService,
+            Substitute.For<IUnitService>(),
+            Substitute.For<IDepartmentService>(),
+            Substitute.For<IExportExcelEmployeeInfoService>(),
+            _baseService,
+            Substitute.For<IEmployeeService>(),
+            Substitute.For<ISecondCompanyEmployeeService>(),
+            _monthlyPayrollService
+        );
 
         // Act
         var result = await controller.Index("1,2");
@@ -374,12 +520,15 @@ public class GroupEmployeeListControllerTest : BaseControllerTest
     public async Task Index_WithoutTeamIds_ReturnsViewWithAllTeams()
     {
         // Arrange
-        var teams = new List<Models.Team> 
-        { 
+        var teams = new List<Models.Team>
+        {
             new() { Id = 1, Name = "Team1" },
-            new() { Id = 2, Name = "Team2" }
+            new() { Id = 2, Name = "Team2" },
         };
-        var companies = new List<Models.Company> { new() { CompanyId = 1, Name = "Company1" } };
+        var companies = new List<Models.Company>
+        {
+            new() { CompanyId = 1, Name = "Company1" },
+        };
 
         var teamService = Substitute.For<ITeamService>();
         var companyService = Substitute.For<ICompanyService>();
@@ -387,10 +536,17 @@ public class GroupEmployeeListControllerTest : BaseControllerTest
         companyService.GetAllCompany().Returns(companies);
 
         var controller = new GroupEmployeeListController(
-            _session, teamService, companyService, Substitute.For<IUnitService>(),
-            Substitute.For<IDepartmentService>(), Substitute.For<IExportExcelEmployeeInfoService>(),
-            _baseService, Substitute.For<IEmployeeService>(), Substitute.For<ISecondCompanyEmployeeService>(),
-            _monthlyPayrollService);
+            _session,
+            teamService,
+            companyService,
+            Substitute.For<IUnitService>(),
+            Substitute.For<IDepartmentService>(),
+            Substitute.For<IExportExcelEmployeeInfoService>(),
+            _baseService,
+            Substitute.For<IEmployeeService>(),
+            Substitute.For<ISecondCompanyEmployeeService>(),
+            _monthlyPayrollService
+        );
 
         // Act
         var result = await controller.Index();
@@ -405,20 +561,27 @@ public class GroupEmployeeListControllerTest : BaseControllerTest
     public async Task GetCompanyDropdownList_ReturnsJsonWithCompanies()
     {
         // Arrange
-        var companies = new List<Models.Company> 
-        { 
+        var companies = new List<Models.Company>
+        {
             new() { CompanyId = 1, Name = "Company1" },
-            new() { CompanyId = 2, Name = "Company2" }
+            new() { CompanyId = 2, Name = "Company2" },
         };
 
         var companyService = Substitute.For<ICompanyService>();
         companyService.GetAllCompany().Returns(companies);
 
         var controller = new GroupEmployeeListController(
-            _session, Substitute.For<ITeamService>(), companyService, Substitute.For<IUnitService>(),
-            Substitute.For<IDepartmentService>(), Substitute.For<IExportExcelEmployeeInfoService>(),
-            _baseService, Substitute.For<IEmployeeService>(), Substitute.For<ISecondCompanyEmployeeService>(),
-            _monthlyPayrollService);
+            _session,
+            Substitute.For<ITeamService>(),
+            companyService,
+            Substitute.For<IUnitService>(),
+            Substitute.For<IDepartmentService>(),
+            Substitute.For<IExportExcelEmployeeInfoService>(),
+            _baseService,
+            Substitute.For<IEmployeeService>(),
+            Substitute.For<ISecondCompanyEmployeeService>(),
+            _monthlyPayrollService
+        );
 
         // Act
         var result = await controller.GetCompanyDropdownList();
@@ -432,9 +595,28 @@ public class GroupEmployeeListControllerTest : BaseControllerTest
     public async Task GetOrgChart_WithDefaultParameters_ReturnsJsonWithOrgChart()
     {
         // Arrange
-        var units = new List<Unit> { new() { Id = 1, Code = "Unit1" } };
-        var departments = new List<Department> { new() { Id = 1, Name = "Dept1", Unit = units[0] } };
-        var teams = new List<GroupTeamModel> { new() { Id = 1, TeamName = "Team1", DepartmentId = 1 } };
+        var units = new List<Unit>
+        {
+            new() { Id = 1, Code = "Unit1" },
+        };
+        var departments = new List<Department>
+        {
+            new()
+            {
+                Id = 1,
+                Name = "Dept1",
+                Unit = units[0],
+            },
+        };
+        var teams = new List<GroupTeamModel>
+        {
+            new()
+            {
+                Id = 1,
+                TeamName = "Team1",
+                DepartmentId = 1,
+            },
+        };
 
         var unitService = Substitute.For<IUnitService>();
         var departmentService = Substitute.For<IDepartmentService>();
@@ -445,10 +627,17 @@ public class GroupEmployeeListControllerTest : BaseControllerTest
         teamService.GetAllTeamByUnitScopeAsync().Returns(teams);
 
         var controller = new GroupEmployeeListController(
-            _session, teamService, Substitute.For<ICompanyService>(), unitService,
-            departmentService, Substitute.For<IExportExcelEmployeeInfoService>(),
-            _baseService, Substitute.For<IEmployeeService>(), Substitute.For<ISecondCompanyEmployeeService>(),
-            _monthlyPayrollService);
+            _session,
+            teamService,
+            Substitute.For<ICompanyService>(),
+            unitService,
+            departmentService,
+            Substitute.For<IExportExcelEmployeeInfoService>(),
+            _baseService,
+            Substitute.For<IEmployeeService>(),
+            Substitute.For<ISecondCompanyEmployeeService>(),
+            _monthlyPayrollService
+        );
 
         // Act
         var result = await controller.GetOrgChart();
@@ -464,9 +653,28 @@ public class GroupEmployeeListControllerTest : BaseControllerTest
     public async Task GetOrgChart_WithIsGroupTrue_ReturnsJsonWithOrgChart()
     {
         // Arrange
-        var units = new List<Unit> { new() { Id = 1, Code = "Unit1" } };
-        var departments = new List<Department> { new() { Id = 1, Name = "Dept1", Unit = units[0] } };
-        var teams = new List<GroupTeamModel> { new() { Id = 1, TeamName = "Team1", DepartmentId = 1 } };
+        var units = new List<Unit>
+        {
+            new() { Id = 1, Code = "Unit1" },
+        };
+        var departments = new List<Department>
+        {
+            new()
+            {
+                Id = 1,
+                Name = "Dept1",
+                Unit = units[0],
+            },
+        };
+        var teams = new List<GroupTeamModel>
+        {
+            new()
+            {
+                Id = 1,
+                TeamName = "Team1",
+                DepartmentId = 1,
+            },
+        };
 
         var unitService = Substitute.For<IUnitService>();
         var departmentService = Substitute.For<IDepartmentService>();
@@ -477,10 +685,17 @@ public class GroupEmployeeListControllerTest : BaseControllerTest
         teamService.GetAllTeamByUnitScopeAsync().Returns(teams);
 
         var controller = new GroupEmployeeListController(
-            _session, teamService, Substitute.For<ICompanyService>(), unitService,
-            departmentService, Substitute.For<IExportExcelEmployeeInfoService>(),
-            _baseService, Substitute.For<IEmployeeService>(), Substitute.For<ISecondCompanyEmployeeService>(),
-            _monthlyPayrollService);
+            _session,
+            teamService,
+            Substitute.For<ICompanyService>(),
+            unitService,
+            departmentService,
+            Substitute.For<IExportExcelEmployeeInfoService>(),
+            _baseService,
+            Substitute.For<IEmployeeService>(),
+            Substitute.For<ISecondCompanyEmployeeService>(),
+            _monthlyPayrollService
+        );
 
         // Act
         var result = await controller.GetOrgChart(true);
@@ -501,10 +716,17 @@ public class GroupEmployeeListControllerTest : BaseControllerTest
         employeeService.GetEmployeeByIdInGroupScopeAsync(1).Returns(employee);
 
         var controller = new GroupEmployeeListController(
-            _session, Substitute.For<ITeamService>(), Substitute.For<ICompanyService>(), Substitute.For<IUnitService>(),
-            Substitute.For<IDepartmentService>(), Substitute.For<IExportExcelEmployeeInfoService>(),
-            _baseService, employeeService, Substitute.For<ISecondCompanyEmployeeService>(),
-            _monthlyPayrollService);
+            _session,
+            Substitute.For<ITeamService>(),
+            Substitute.For<ICompanyService>(),
+            Substitute.For<IUnitService>(),
+            Substitute.For<IDepartmentService>(),
+            Substitute.For<IExportExcelEmployeeInfoService>(),
+            _baseService,
+            employeeService,
+            Substitute.For<ISecondCompanyEmployeeService>(),
+            _monthlyPayrollService
+        );
 
         SetupPermission(FunctionKey.GroupEmployeeList, Policy.Host, true);
 
@@ -525,10 +747,17 @@ public class GroupEmployeeListControllerTest : BaseControllerTest
         employeeService.GetEmployeeByIdInGroupScopeAsync(999).Returns((Models.Employee)null);
 
         var controller = new GroupEmployeeListController(
-            _session, Substitute.For<ITeamService>(), Substitute.For<ICompanyService>(), Substitute.For<IUnitService>(),
-            Substitute.For<IDepartmentService>(), Substitute.For<IExportExcelEmployeeInfoService>(),
-            _baseService, employeeService, Substitute.For<ISecondCompanyEmployeeService>(),
-            _monthlyPayrollService);
+            _session,
+            Substitute.For<ITeamService>(),
+            Substitute.For<ICompanyService>(),
+            Substitute.For<IUnitService>(),
+            Substitute.For<IDepartmentService>(),
+            Substitute.For<IExportExcelEmployeeInfoService>(),
+            _baseService,
+            employeeService,
+            Substitute.For<ISecondCompanyEmployeeService>(),
+            _monthlyPayrollService
+        );
 
         SetupPermission(FunctionKey.GroupEmployeeList, Policy.Host, true);
 
@@ -550,33 +779,52 @@ public class GroupEmployeeListControllerTest : BaseControllerTest
             Keyword = "test",
             TeamIds = "1,2",
             CompanyIds = "1,2",
-            EmployeeStatus = "1"
+            EmployeeStatus = "1",
         };
 
         var employees = new List<GroupEmployeeModel>
         {
-            new() { EmpId = 1, FullName = "John Doe", EmployeeCode = "EMP001" },
-            new() { EmpId = 2, FullName = "Jane Smith", EmployeeCode = "EMP002" }
+            new()
+            {
+                EmpId = 1,
+                FullName = "John Doe",
+                EmployeeCode = "EMP001",
+            },
+            new()
+            {
+                EmpId = 2,
+                FullName = "Jane Smith",
+                EmployeeCode = "EMP002",
+            },
         };
 
         var excelBytes = new byte[] { 1, 2, 3, 4, 5 };
 
-        _baseService.GetDataAsync<GroupEmployeeModel>(Arg.Any<GetEmployeesInGroupScopeCriteria>())
+        _baseService
+            .GetDataAsync<GroupEmployeeModel>(Arg.Any<GetEmployeesInGroupScopeCriteria>())
             .Returns(employees);
 
         var excelService = Substitute.For<IExportExcelEmployeeInfoService>();
-        excelService.ExportGroupEmployeesAsync(Arg.Any<IEnumerable<GroupEmployeeModel>>())
+        excelService
+            .ExportGroupEmployeesAsync(Arg.Any<IEnumerable<GroupEmployeeModel>>(), Arg.Any<bool>())
             .Returns(excelBytes);
 
         var controller = new GroupEmployeeListController(
-            _session, Substitute.For<ITeamService>(), Substitute.For<ICompanyService>(), Substitute.For<IUnitService>(),
-            Substitute.For<IDepartmentService>(), excelService,
-            _baseService, Substitute.For<IEmployeeService>(), Substitute.For<ISecondCompanyEmployeeService>(),
-            _monthlyPayrollService);
+            _session,
+            Substitute.For<ITeamService>(),
+            Substitute.For<ICompanyService>(),
+            Substitute.For<IUnitService>(),
+            Substitute.For<IDepartmentService>(),
+            excelService,
+            _baseService,
+            Substitute.For<IEmployeeService>(),
+            Substitute.For<ISecondCompanyEmployeeService>(),
+            _monthlyPayrollService
+        );
 
         SetupPermission(FunctionKey.GroupEmployeeList, Policy.Read, true);
         SetupPermission(FunctionKey.GroupEmployeeList_ViewAll, Policy.Read, true);
-        SetupPermission(FunctionKey.ShowSalaryCurrencyInfo, Policy.Read, false);
+        SetupPermission(FunctionKey.ShowSalaryCurrencyInfo, Policy.Read, true);
 
         // Act
         var result = await controller.ExportExcel(model, true);
@@ -587,8 +835,18 @@ public class GroupEmployeeListControllerTest : BaseControllerTest
         Assert.Contains("GroupEmployeeList_", fileResult.FileDownloadName);
         Assert.Contains(".xlsx", fileResult.FileDownloadName);
 
-        await excelService.Received(1).ExportGroupEmployeesAsync(Arg.Any<IEnumerable<GroupEmployeeModel>>());
-        await excelService.DidNotReceive().ExportProfitCenterReportAsync(Arg.Any<IEnumerable<GroupEmployeeModel>>());
+        await excelService
+            .Received(1)
+            .ExportGroupEmployeesAsync(
+                Arg.Any<IEnumerable<GroupEmployeeModel>>(),
+                Arg.Is<bool>(b => b)
+            );
+        await excelService
+            .DidNotReceive()
+            .ExportProfitCenterReportAsync(
+                Arg.Any<IEnumerable<GroupEmployeeModel>>(),
+                Arg.Any<bool>()
+            );
     }
 
     [Fact]
@@ -600,44 +858,66 @@ public class GroupEmployeeListControllerTest : BaseControllerTest
             Keyword = "test",
             TeamIds = "1,2",
             CompanyIds = "1,2",
-            EmployeeStatus = "1"
+            EmployeeStatus = "1",
         };
 
         var employees = new List<GroupEmployeeModel>
         {
-            new() { EmpId = 1, FullName = "John Doe", EmployeeCode = "EMP001", Location = "Office" },
-            new() { EmpId = 2, FullName = "Jane Smith", EmployeeCode = "EMP002", Location = "Office" }
+            new()
+            {
+                EmpId = 1,
+                FullName = "John Doe",
+                EmployeeCode = "EMP001",
+                Location = "Office",
+            },
+            new()
+            {
+                EmpId = 2,
+                FullName = "Jane Smith",
+                EmployeeCode = "EMP002",
+                Location = "Office",
+            },
         };
 
-        var employeesWFH = new List<EmployeeWorkFromHome>
-        {
-            new() { EmpId = 1 }
-        };
+        var employeesWFH = new List<EmployeeWorkFromHome> { new() { EmpId = 1 } };
 
         var secondments = new List<CompanySecondmentEmployee>
         {
-            new() { EmpId = 2, Location = "Remote Office" }
+            new() { EmpId = 2, Location = "Remote Office" },
         };
 
         var excelBytes = new byte[] { 6, 7, 8, 9, 10 };
 
-        _baseService.GetDataAsync<GroupEmployeeModel>(Arg.Any<GetEmployeesInGroupScopeCriteria>())
+        _baseService
+            .GetDataAsync<GroupEmployeeModel>(Arg.Any<GetEmployeesInGroupScopeCriteria>())
             .Returns(employees);
-        _baseService.GetDataAsync<EmployeeWorkFromHome>(Arg.Any<GetEmployeeWorkFromHomeCriteria>())
+        _baseService
+            .GetDataAsync<EmployeeWorkFromHome>(Arg.Any<GetEmployeeWorkFromHomeCriteria>())
             .Returns(employeesWFH);
 
         var excelService = Substitute.For<IExportExcelEmployeeInfoService>();
         var secondCompanyEmployeeService = Substitute.For<ISecondCompanyEmployeeService>();
 
-        excelService.ExportProfitCenterReportAsync(Arg.Any<IEnumerable<GroupEmployeeModel>>())
+        excelService
+            .ExportProfitCenterReportAsync(
+                Arg.Any<IEnumerable<GroupEmployeeModel>>(),
+                Arg.Any<bool>()
+            )
             .Returns(excelBytes);
         secondCompanyEmployeeService.GetAllAsync().Returns(secondments);
 
         var controller = new GroupEmployeeListController(
-            _session, Substitute.For<ITeamService>(), Substitute.For<ICompanyService>(), Substitute.For<IUnitService>(),
-            Substitute.For<IDepartmentService>(), excelService,
-            _baseService, Substitute.For<IEmployeeService>(), secondCompanyEmployeeService,
-            _monthlyPayrollService);
+            _session,
+            Substitute.For<ITeamService>(),
+            Substitute.For<ICompanyService>(),
+            Substitute.For<IUnitService>(),
+            Substitute.For<IDepartmentService>(),
+            excelService,
+            _baseService,
+            Substitute.For<IEmployeeService>(),
+            secondCompanyEmployeeService,
+            _monthlyPayrollService
+        );
 
         SetupPermission(FunctionKey.GroupEmployeeList, Policy.Read, true);
         SetupPermission(FunctionKey.GroupEmployeeList_ViewAll, Policy.Read, true);
@@ -652,8 +932,17 @@ public class GroupEmployeeListControllerTest : BaseControllerTest
         Assert.Contains("Profit Center Report -", fileResult.FileDownloadName);
         Assert.Contains(".xlsx", fileResult.FileDownloadName);
 
-        await excelService.Received(1).ExportProfitCenterReportAsync(Arg.Any<IEnumerable<GroupEmployeeModel>>());
-        await excelService.DidNotReceive().ExportGroupEmployeesAsync(Arg.Any<IEnumerable<GroupEmployeeModel>>());
+        await excelService
+            .Received(1)
+            .ExportProfitCenterReportAsync(
+                Arg.Is<IEnumerable<GroupEmployeeModel>>(emps =>
+                    emps.Any(e => e.EmpId == 1) && emps.Any(e => e.EmpId == 2)
+                ),
+                Arg.Is<bool>(showSalaryCurrency => !showSalaryCurrency)
+            );
+        await excelService
+            .DidNotReceive()
+            .ExportGroupEmployeesAsync(Arg.Any<IEnumerable<GroupEmployeeModel>>(), Arg.Any<bool>());
     }
 
     [Fact]
@@ -665,45 +954,73 @@ public class GroupEmployeeListControllerTest : BaseControllerTest
             Keyword = "test",
             TeamIds = "1,2",
             CompanyIds = "1,2",
-            EmployeeStatus = "1"
+            EmployeeStatus = "1",
         };
 
         var employees = new List<GroupEmployeeModel>
         {
-            new() { EmpId = 1, FullName = "John Doe", Location = "Office" },
-            new() { EmpId = 2, FullName = "Jane Smith", Location = "Office" },
-            new() { EmpId = 3, FullName = "Bob Wilson", Location = "Office" }
+            new()
+            {
+                EmpId = 1,
+                FullName = "John Doe",
+                Location = "Office",
+            },
+            new()
+            {
+                EmpId = 2,
+                FullName = "Jane Smith",
+                Location = "Office",
+            },
+            new()
+            {
+                EmpId = 3,
+                FullName = "Bob Wilson",
+                Location = "Office",
+            },
         };
 
         var employeesWFH = new List<EmployeeWorkFromHome>
         {
-            new() { EmpId = 1 } // Employee 1 is WFH
+            new() { EmpId = 1 }, // Employee 1 is WFH
         };
 
         var secondments = new List<CompanySecondmentEmployee>
         {
-            new() { EmpId = 2, Location = "Remote Office" } // Employee 2 is on secondment
+            new() { EmpId = 2, Location = "Remote Office" }, // Employee 2 is on secondment
         };
 
         var excelBytes = new byte[] { 1, 2, 3 };
 
-        _baseService.GetDataAsync<GroupEmployeeModel>(Arg.Any<GetEmployeesInGroupScopeCriteria>())
+        _baseService
+            .GetDataAsync<GroupEmployeeModel>(Arg.Any<GetEmployeesInGroupScopeCriteria>())
             .Returns(employees);
-        _baseService.GetDataAsync<EmployeeWorkFromHome>(Arg.Any<GetEmployeeWorkFromHomeCriteria>())
+        _baseService
+            .GetDataAsync<EmployeeWorkFromHome>(Arg.Any<GetEmployeeWorkFromHomeCriteria>())
             .Returns(employeesWFH);
 
         var excelService = Substitute.For<IExportExcelEmployeeInfoService>();
         var secondCompanyEmployeeService = Substitute.For<ISecondCompanyEmployeeService>();
 
-        excelService.ExportProfitCenterReportAsync(Arg.Any<IEnumerable<GroupEmployeeModel>>())
+        excelService
+            .ExportProfitCenterReportAsync(
+                Arg.Any<IEnumerable<GroupEmployeeModel>>(),
+                Arg.Any<bool>()
+            )
             .Returns(excelBytes);
         secondCompanyEmployeeService.GetAllAsync().Returns(secondments);
 
         var controller = new GroupEmployeeListController(
-            _session, Substitute.For<ITeamService>(), Substitute.For<ICompanyService>(), Substitute.For<IUnitService>(),
-            Substitute.For<IDepartmentService>(), excelService,
-            _baseService, Substitute.For<IEmployeeService>(), secondCompanyEmployeeService,
-            _monthlyPayrollService);
+            _session,
+            Substitute.For<ITeamService>(),
+            Substitute.For<ICompanyService>(),
+            Substitute.For<IUnitService>(),
+            Substitute.For<IDepartmentService>(),
+            excelService,
+            _baseService,
+            Substitute.For<IEmployeeService>(),
+            secondCompanyEmployeeService,
+            _monthlyPayrollService
+        );
 
         SetupPermission(FunctionKey.GroupEmployeeList, Policy.Read, true);
         SetupPermission(FunctionKey.GroupEmployeeList_ViewAll, Policy.Read, true);
@@ -717,11 +1034,16 @@ public class GroupEmployeeListControllerTest : BaseControllerTest
         Assert.Equal(excelBytes, fileResult.FileContents);
 
         // Verify that the employees passed to ExcelService have updated locations
-        await excelService.Received(1).ExportProfitCenterReportAsync(
-            Arg.Is<IEnumerable<GroupEmployeeModel>>(emps => 
-                emps.Any(e => e.EmpId == 1 && e.Location == "WFH") &&
-                emps.Any(e => e.EmpId == 2 && e.Location == "Remote Office") &&
-                emps.Any(e => e.EmpId == 3 && e.Location == "Office")));
+        await excelService
+            .Received(1)
+            .ExportProfitCenterReportAsync(
+                Arg.Is<IEnumerable<GroupEmployeeModel>>(emps =>
+                    emps.Any(e => e.EmpId == 1 && e.Location == "WFH")
+                    && emps.Any(e => e.EmpId == 2 && e.Location == "Remote Office")
+                    && emps.Any(e => e.EmpId == 3 && e.Location == "Office")
+                ),
+                Arg.Is<bool>(showSalaryCurrency => !showSalaryCurrency)
+            );
     }
 
     [Fact]
@@ -732,15 +1054,16 @@ public class GroupEmployeeListControllerTest : BaseControllerTest
         {
             Keyword = "test",
             TeamIds = "1,2",
-            CompanyIds = "1,2"
+            CompanyIds = "1,2",
         };
 
         var employees = new List<GroupEmployeeModel>
         {
-            new() { EmpId = 1, FullName = "John Doe" }
+            new() { EmpId = 1, FullName = "John Doe" },
         };
 
-        _baseService.GetDataAsync<GroupEmployeeModel>(Arg.Any<GetEmployeesInGroupScopeCriteria>())
+        _baseService
+            .GetDataAsync<GroupEmployeeModel>(Arg.Any<GetEmployeesInGroupScopeCriteria>())
             .Returns(employees);
 
         SetupPermission(FunctionKey.GroupEmployeeList_ViewAll, Policy.Read, true);
@@ -750,7 +1073,10 @@ public class GroupEmployeeListControllerTest : BaseControllerTest
 
         // Assert
         var jsonResult = Assert.IsType<JsonResult>(result);
-        var returnedEmployees = Assert.IsAssignableFrom<IEnumerable<GroupEmployeeModel>>(jsonResult.Value);
+        var returnedEmployees = Assert.IsType<IEnumerable<GroupEmployeeModel>>(
+            jsonResult.Value,
+            exactMatch: false
+        );
         Assert.Single(returnedEmployees);
     }
 
@@ -762,18 +1088,27 @@ public class GroupEmployeeListControllerTest : BaseControllerTest
         var supervisors = new List<SupervisorNameModel>
         {
             new() { ActionType = (short)RoleSystem.Verifier, NickName = "Verifier1" },
-            new() { ActionType = (short)RoleSystem.Approver, NickName = "Approver1" }
+            new() { ActionType = (short)RoleSystem.Approver, NickName = "Approver1" },
         };
 
         var employeeService = Substitute.For<IEmployeeService>();
         employeeService.GetEmployeeByIdInGroupScopeAsync(1).Returns(employee);
-        employeeService.GetListSupervisorNameAsync(Arg.Any<GetListSupervisorNameCriteria>()).Returns(supervisors);
+        employeeService
+            .GetListSupervisorNameAsync(Arg.Any<GetListSupervisorNameCriteria>())
+            .Returns(supervisors);
 
         var controller = new GroupEmployeeListController(
-            _session, Substitute.For<ITeamService>(), Substitute.For<ICompanyService>(), Substitute.For<IUnitService>(),
-            Substitute.For<IDepartmentService>(), Substitute.For<IExportExcelEmployeeInfoService>(),
-            _baseService, employeeService, Substitute.For<ISecondCompanyEmployeeService>(),
-            _monthlyPayrollService);
+            _session,
+            Substitute.For<ITeamService>(),
+            Substitute.For<ICompanyService>(),
+            Substitute.For<IUnitService>(),
+            Substitute.For<IDepartmentService>(),
+            Substitute.For<IExportExcelEmployeeInfoService>(),
+            _baseService,
+            employeeService,
+            Substitute.For<ISecondCompanyEmployeeService>(),
+            _monthlyPayrollService
+        );
 
         SetupPermission(FunctionKey.GroupEmployeeList, Policy.Host, true);
 
@@ -793,10 +1128,17 @@ public class GroupEmployeeListControllerTest : BaseControllerTest
         employeeService.GetEmployeeByIdInGroupScopeAsync(999).Returns((Employee)null);
 
         var controller = new GroupEmployeeListController(
-            _session, Substitute.For<ITeamService>(), Substitute.For<ICompanyService>(), Substitute.For<IUnitService>(),
-            Substitute.For<IDepartmentService>(), Substitute.For<IExportExcelEmployeeInfoService>(),
-            _baseService, employeeService, Substitute.For<ISecondCompanyEmployeeService>(),
-            _monthlyPayrollService);
+            _session,
+            Substitute.For<ITeamService>(),
+            Substitute.For<ICompanyService>(),
+            Substitute.For<IUnitService>(),
+            Substitute.For<IDepartmentService>(),
+            Substitute.For<IExportExcelEmployeeInfoService>(),
+            _baseService,
+            employeeService,
+            Substitute.For<ISecondCompanyEmployeeService>(),
+            _monthlyPayrollService
+        );
 
         SetupPermission(FunctionKey.GroupEmployeeList, Policy.Host, true);
 
@@ -856,31 +1198,44 @@ public class GroupEmployeeListControllerTest : BaseControllerTest
         var employees = new List<Employee>
         {
             new() { FullName = "John Doe", NickName = "John" },
-            new() { FullName = "John Smith", NickName = "JohnS" }
+            new() { FullName = "John Smith", NickName = "JohnS" },
         };
 
         var employeeService = Substitute.For<IEmployeeService>();
-        employeeService.GetEmployeesByRoleAsync(Arg.Any<GetEmployeeByRoleCriteria>())
+        employeeService
+            .GetEmployeesByRoleAsync(Arg.Any<GetEmployeeByRoleCriteria>())
             .Returns(employees);
 
         var controller = new GroupEmployeeListController(
-            _session, Substitute.For<ITeamService>(), Substitute.For<ICompanyService>(), Substitute.For<IUnitService>(),
-            Substitute.For<IDepartmentService>(), Substitute.For<IExportExcelEmployeeInfoService>(),
-            _baseService, employeeService, Substitute.For<ISecondCompanyEmployeeService>(),
-            _monthlyPayrollService);
+            _session,
+            Substitute.For<ITeamService>(),
+            Substitute.For<ICompanyService>(),
+            Substitute.For<IUnitService>(),
+            Substitute.For<IDepartmentService>(),
+            Substitute.For<IExportExcelEmployeeInfoService>(),
+            _baseService,
+            employeeService,
+            Substitute.For<ISecondCompanyEmployeeService>(),
+            _monthlyPayrollService
+        );
 
         // Act
         var result = await controller.GetSupervisors(roleIds, query, excludeIds);
 
         // Assert
         var jsonResult = Assert.IsType<JsonResult>(result);
-        var returnedEmployees = Assert.IsAssignableFrom<IEnumerable<Employee>>(jsonResult.Value);
+        var returnedEmployees = Assert.IsType<IEnumerable<Employee>>(
+            jsonResult.Value,
+            exactMatch: false
+        );
         Assert.Equal(2, returnedEmployees.Count());
 
-        await employeeService.Received(1).GetEmployeesByRoleAsync(
-            Arg.Is<GetEmployeeByRoleCriteria>(c => 
-                c.RoleIds == roleIds &&
-                c.Query == query.Trim() &&
-                c.ExcludeIds == excludeIds));
+        await employeeService
+            .Received(1)
+            .GetEmployeesByRoleAsync(
+                Arg.Is<GetEmployeeByRoleCriteria>(c =>
+                    c.RoleIds == roleIds && c.Query == query.Trim() && c.ExcludeIds == excludeIds
+                )
+            );
     }
 }
