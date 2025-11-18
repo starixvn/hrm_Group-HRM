@@ -14,11 +14,13 @@ using Criteria.Shift;
 using Criteria.Supervisor;
 using Fanex.Data;
 using GO.UserControl.Client.Core.Enumerables;
+using GO.UserControl.Client.Core.Models.User;
 using GO.UserControl.Client.Core.Services;
 using GO.UserControl.Client.Core.Session;
 using HRM.Core.Models;
 using HRM.Core.Services;
 using HRM.Criteria.EmployeePayrollSetting;
+using HRM.Criteria.Group;
 using HRM.Criteria.Report;
 using HRM.Models.Employees;
 using HRM.Models.PayrollManagement;
@@ -30,9 +32,6 @@ using Models.Group;
 using Models.Supervisor;
 using Resources;
 using ViewModels.AnnualLeave;
-using GO.UserControl.Client.Core.Models.User;
-using HRM.Criteria.Group;
-using HRM.Core.Enums;
 
 public class EmployeeService(
     IEmployeeRepository employeeRepository,
@@ -41,27 +40,21 @@ public class EmployeeService(
     IUserService userService,
     IUserControlSession session,
     ICompanyService companyService,
-    CostPasswordOptions costPassword) : IEmployeeService
+    CostPasswordOptions costPassword
+) : IEmployeeService
 {
     public async Task<string> GenerateEmployeeCode(short? companyId)
     {
         var effectiveCompanyId = companyId ?? session.Get<short>(SessionKey.CurrentCompanyId);
 
-        var criteria = new GenerateEmployeeCodeCriteria
-        {
-            CompanyId = effectiveCompanyId
-        };
+        var criteria = new GenerateEmployeeCodeCriteria { CompanyId = effectiveCompanyId };
         return await baseService.GetDataEntityAsync<string>(criteria);
     }
 
     public async Task<Employee> GetEmployeeByIdAsync(int id)
     {
         var companyId = session.Get<short>(SessionKey.CurrentCompanyId);
-        var criteria = new GetEmployeeByIdCriteria
-        {
-            CompanyId = companyId,
-            EmpId = id
-        };
+        var criteria = new GetEmployeeByIdCriteria { CompanyId = companyId, EmpId = id };
         var employee = await employeeRepository.GetEmployeeByIdAsync(criteria);
         if (employee != null)
         {
@@ -70,14 +63,16 @@ public class EmployeeService(
             if (!string.IsNullOrEmpty(companyCurrencyId))
             {
                 var currencies = await companyService.GetCurrencyAsync();
-                currencyCode = currencies.FirstOrDefault(c => c.Id == int.Parse(companyCurrencyId))?.CurrencyCode;
+                currencyCode = currencies
+                    .FirstOrDefault(c => c.Id == int.Parse(companyCurrencyId))
+                    ?.CurrencyCode;
             }
 
             employee.Roles = await roleService.GetByUserIdAsync(employee.UserId);
             employee.BasicSalary = EncryptSalary(employee.BasicSalary);
             employee.JobLevelAddOn = EncryptSalary(employee.JobLevelAddOn);
             employee.SpecialSubsidy = EncryptSalary(employee.SpecialSubsidy);
-            employee.EmployeeCurrencyCode = employee.IsLocal ? currencyCode : Constants.USD; 
+            employee.EmployeeCurrencyCode = employee.IsLocal ? currencyCode : Constants.USD;
         }
 
         return employee;
@@ -95,25 +90,23 @@ public class EmployeeService(
             var decryptedPassword = Cryptography.DecryptPassword(costPassword.BUView);
             return decryptedPassword;
         }
-        else if (session.HasPermissionOnFunction(FunctionKey.GroupEmployeeList_DeptView, Policy.Read))
+        else if (
+            session.HasPermissionOnFunction(FunctionKey.GroupEmployeeList_DeptView, Policy.Read)
+        )
         {
             var decryptedPassword = Cryptography.DecryptPassword(costPassword.DeptView);
             return decryptedPassword;
         }
         else
         {
-            var nonPermissionPassword = "*@*!*#*$*~*!*@";
+            const string nonPermissionPassword = "*@*!*#*$*~*!*@";
             return nonPermissionPassword;
         }
     }
 
     public async Task<Employee> GetEmployeeTransferByIdAsync(int id, short companyId)
     {
-        var criteria = new GetEmployeeByIdCriteria
-        {
-            CompanyId = companyId,
-            EmpId = id
-        };
+        var criteria = new GetEmployeeByIdCriteria { CompanyId = companyId, EmpId = id };
         var employee = await employeeRepository.GetEmployeeByIdAsync(criteria);
         if (employee != null)
         {
@@ -122,29 +115,25 @@ public class EmployeeService(
 
         return employee;
     }
-    
-     public async Task<IEnumerable<EmployeePayrollAllowance>> GetEmployeePayrollAllowanceByEmpIdAsync(int empId)
+
+    public async Task<
+        IEnumerable<EmployeePayrollAllowance>
+    > GetEmployeePayrollAllowanceByEmpIdAsync(int empId)
     {
-        var criteria = new GetEmployeePayrollAllowanceByEmpIdCriteria
-        {
-            EmpId = empId
-        };
+        var criteria = new GetEmployeePayrollAllowanceByEmpIdCriteria { EmpId = empId };
         var allowances = await baseService.GetDataAsync<EmployeePayrollAllowance>(criteria);
-        
+
         foreach (var allowance in allowances)
         {
             allowance.Amount = EncryptSalary(allowance.Amount);
         }
-        
+
         return allowances;
     }
 
     public async Task<Employee> GetEmployeeByIdInGroupScopeAsync(int id)
     {
-        var criteria = new GetEmployeeByIdCriteria
-        {
-            EmpId = id
-        };
+        var criteria = new GetEmployeeByIdCriteria { EmpId = id };
         var employee = await employeeRepository.GetEmployeeByIdAsync(criteria);
         if (employee != null)
         {
@@ -166,7 +155,9 @@ public class EmployeeService(
             {
                 if (employee.Roles != null && employee.Roles.Any())
                 {
-                    employee.Roles = roles.Where(x => employee.Roles.Any(y => y.RoleId == x.RoleId)).ToList();
+                    employee.Roles = roles
+                        .Where(x => employee.Roles.Any(y => y.RoleId == x.RoleId))
+                        .ToList();
                 }
             }
         }
@@ -181,17 +172,23 @@ public class EmployeeService(
         return await baseService.GetDataAsync<GroupEmployeeModel>(criteria);
     }
 
-    public async Task<IEnumerable<Employee>> GetMemberByManagerAsync(GetMemberByManagerCriteria criteria)
+    public async Task<IEnumerable<Employee>> GetMemberByManagerAsync(
+        GetMemberByManagerCriteria criteria
+    )
     {
         return await baseService.GetDataAsync<Employee>(criteria);
     }
 
-    public async Task<IEnumerable<EmployeePIC>> GetEmployeeForPICAsync(GetEmployeeForPICCriteria criteria)
+    public async Task<IEnumerable<EmployeePIC>> GetEmployeeForPICAsync(
+        GetEmployeeForPICCriteria criteria
+    )
     {
         return await baseService.GetDataAsync<EmployeePIC>(criteria);
     }
 
-    public async Task<IEnumerable<Employee>> GetEmployeesByRoleAsync(GetEmployeeByRoleCriteria criteria)
+    public async Task<IEnumerable<Employee>> GetEmployeesByRoleAsync(
+        GetEmployeeByRoleCriteria criteria
+    )
     {
         if (criteria == null || !criteria.IsValid())
         {
@@ -204,7 +201,9 @@ public class EmployeeService(
         {
             if (employee.Roles != null && employee.Roles.Any())
             {
-                employee.Roles = roles.Where(x => employee.Roles.Any(y => y.RoleId == x.RoleId)).ToList();
+                employee.Roles = roles
+                    .Where(x => employee.Roles.Any(y => y.RoleId == x.RoleId))
+                    .ToList();
             }
         }
 
@@ -213,50 +212,57 @@ public class EmployeeService(
 
     public async Task<EmployeeShift> GetShiftByEmployeeId(int id)
     {
-        var criteria = new GetShiftByEmployeeIdCriteria
-        {
-            EmpId = id
-        };
+        var criteria = new GetShiftByEmployeeIdCriteria { EmpId = id };
         return await baseService.GetDataEntityAsync<EmployeeShift>(criteria);
     }
 
-    public async Task<IEnumerable<AnnualLeaveTransactionViewModel>> GetAnnualLeaveTransactionAsync(GetAnnualLeaveTransactionCriteria criteria)
+    public async Task<IEnumerable<AnnualLeaveTransactionViewModel>> GetAnnualLeaveTransactionAsync(
+        GetAnnualLeaveTransactionCriteria criteria
+    )
     {
         return await baseService.GetDataAsync<AnnualLeaveTransactionViewModel>(criteria);
     }
 
-    public async Task<AnnualLeaveTransactionViewModel> GetAnnualLeaveTransactionAsync(int leaveTransId)
+    public async Task<AnnualLeaveTransactionViewModel> GetAnnualLeaveTransactionAsync(
+        int leaveTransId
+    )
     {
-        var criteria = new GetAnnualLeaveTransactionByIdCriteria
-        {
-            LeaveTransId = leaveTransId
-        };
+        var criteria = new GetAnnualLeaveTransactionByIdCriteria { LeaveTransId = leaveTransId };
         return await baseService.GetDataEntityAsync<AnnualLeaveTransactionViewModel>(criteria);
     }
 
-    public async Task<IEnumerable<SupervisorModel>> GetEmployeeSupervisorByRoleIdAsync(int employeeId, short roleId)
+    public async Task<IEnumerable<SupervisorModel>> GetEmployeeSupervisorByRoleIdAsync(
+        int employeeId,
+        short roleId
+    )
     {
         var companyId = session.Get<short>(SessionKey.CurrentCompanyId);
         var criteria = new GetEmployeeSupervisorCriteria
         {
             EmpId = employeeId,
             Role = roleId,
-            CompanyId = companyId
+            CompanyId = companyId,
         };
         return await baseService.GetDataAsync<SupervisorModel>(criteria);
     }
 
-    public async Task<IEnumerable<SupervisorNameModel>> GetListSupervisorNameAsync(GetListSupervisorNameCriteria criteria)
+    public async Task<IEnumerable<SupervisorNameModel>> GetListSupervisorNameAsync(
+        GetListSupervisorNameCriteria criteria
+    )
     {
         return await baseService.GetDataAsync<SupervisorNameModel>(criteria);
     }
 
-    public async Task<IEnumerable<SupervisorNameModel>> GetSupervisorByRequestTypeAsync(GetSupervisorByRequestTypeCriteria criteria)
+    public async Task<IEnumerable<SupervisorNameModel>> GetSupervisorByRequestTypeAsync(
+        GetSupervisorByRequestTypeCriteria criteria
+    )
     {
         return await baseService.GetDataAsync<SupervisorNameModel>(criteria);
     }
 
-    public async Task<IEnumerable<SupervisorNameModel>> GetSupervisorByQueryAsync(GetEmployeeSupervisorByQueryCriteria criteria)
+    public async Task<IEnumerable<SupervisorNameModel>> GetSupervisorByQueryAsync(
+        GetEmployeeSupervisorByQueryCriteria criteria
+    )
     {
         return await baseService.GetDataAsync<SupervisorNameModel>(criteria);
     }
@@ -267,44 +273,54 @@ public class EmployeeService(
         var criteria = new GetDisciplineSettingByEmployeeId
         {
             EmpId = employeeId,
-            CompanyId = companyId
+            CompanyId = companyId,
         };
         return await baseService.GetDataAsync<Supervisor>(criteria);
     }
 
-    public async Task<IEnumerable<SupervisorNameModel>> GetHRAndSupervisorByEmpIdAsync(int employeeId)
+    public async Task<IEnumerable<SupervisorNameModel>> GetHRAndSupervisorByEmpIdAsync(
+        int employeeId
+    )
     {
-        var criteria = new GetHRAndSupervisorByEmpIdCriteria
-        {
-            EmpId = employeeId
-        };
+        var criteria = new GetHRAndSupervisorByEmpIdCriteria { EmpId = employeeId };
         return await baseService.GetDataAsync<SupervisorNameModel>(criteria);
     }
 
-    public async Task<CommandResult> EditEmployeeSupervisorAsync(int actorId, int employeeId, short roleId, IEnumerable<EditTeamSupervisor> supervisors)
+    public async Task<CommandResult> EditEmployeeSupervisorAsync(
+        int actorId,
+        int employeeId,
+        short roleId,
+        IEnumerable<EditTeamSupervisor> supervisors
+    )
     {
         var criteria = new EditEmployeeSupervisorCriteria
         {
             EmployeeId = employeeId,
             ActorId = actorId,
             RoleId = roleId,
-            SupervisorXml = supervisors.ToXML().ToString()
+            SupervisorXml = supervisors.ToXML().ToString(),
         };
         return await baseService.ExecuteNonQueryAsync(criteria);
     }
 
-    public async Task<IEnumerable<Employee>> GetEmployeeByGender(string query, int gender, short companyId)
+    public async Task<IEnumerable<Employee>> GetEmployeeByGender(
+        string query,
+        int gender,
+        short companyId
+    )
     {
         var criteria = new GetMemberByGenderCriteria
         {
             Query = query,
             Gender = gender,
-            CompanyId = companyId
+            CompanyId = companyId,
         };
         return await baseService.GetDataAsync<Employee>(criteria);
     }
 
-    public async Task<IEnumerable<EmployeeFullProfile>> GetEmployeeFullProfile(GetEmployeeFullProfileCriteria criteria)
+    public async Task<IEnumerable<EmployeeFullProfile>> GetEmployeeFullProfile(
+        GetEmployeeFullProfileCriteria criteria
+    )
     {
         var employees = await employeeRepository.GetEmployeeFullInformation(criteria);
         var roles = await roleService.GetBySiteIdAsync(session.SiteId);
@@ -312,7 +328,9 @@ public class EmployeeService(
         {
             if (employee.Roles != null && employee.Roles.Any())
             {
-                employee.Roles = roles.Where(x => employee.Roles.Any(y => y.RoleId == x.RoleId)).ToList();
+                employee.Roles = roles
+                    .Where(x => employee.Roles.Any(y => y.RoleId == x.RoleId))
+                    .ToList();
             }
         }
 
@@ -326,7 +344,7 @@ public class EmployeeService(
             EmpId = model.UserId,
             Password = model.Password,
             PasswordReset = model.IsReset,
-            ModifiedBy = actorId
+            ModifiedBy = actorId,
         };
         return await baseService.ExecuteNonQueryAsync(criteria);
     }
@@ -344,7 +362,7 @@ public class EmployeeService(
             TeamId = param.TeamId,
             Password = Encryptor.ComputeHash(param.Code),
             CreatedDate = DateTimeOffset.Now.DateTime,
-            JoinDate = DateTimeOffset.Now.DateTime.ToClientTimeZone()
+            JoinDate = DateTimeOffset.Now.DateTime.ToClientTimeZone(),
         };
         var commandResult = await baseService.ExecuteNonQueryAsync(criteria);
         commandResult.OutputId = criteria.EmpId;
@@ -359,12 +377,16 @@ public class EmployeeService(
         {
             Code = code,
             Nickname = nickname,
-            CompanyId = companyId
+            CompanyId = companyId,
         };
         return await baseService.GetDataEntityAsync<CommandResult>(criteria);
     }
 
-    public async Task<CommandResult> EditAsync(int actorId, EditEmployeeParam param, short companyId)
+    public async Task<CommandResult> EditAsync(
+        int actorId,
+        EditEmployeeParam param,
+        short companyId
+    )
     {
         var criteria = new UpdateEmployeeCriteria
         {
@@ -427,7 +449,7 @@ public class EmployeeService(
             SpecialSubsidyCurrencyId = param.SpecialSubsidyCurrencyId,
             SpecialSubsidy = param.SpecialSubsidy,
             AutoApproveRequest = param.AutoApproveRequest,
-            AllowanceItemSettingIds = param.AllowanceItemSettingIds
+            AllowanceItemSettingIds = param.AllowanceItemSettingIds,
         };
         return await baseService.ExecuteNonQueryAsync(criteria);
     }
@@ -438,12 +460,16 @@ public class EmployeeService(
         {
             ActorId = actorId,
             EmpId = param.EmployeeId,
-            ResignedDate = param.ResignedDate
+            ResignedDate = param.ResignedDate,
         };
         return await baseService.ExecuteNonQueryAsync(criteria);
     }
 
-    public (double Years, string LengthOfServiceText) CalculateLengthOfService(DateTime? joinedDate, DateTime? militaryFromDate, DateTime? militaryToDate)
+    public (double Years, string LengthOfServiceText) CalculateLengthOfService(
+        DateTime? joinedDate,
+        DateTime? militaryFromDate,
+        DateTime? militaryToDate
+    )
     {
         const byte halfMonth = 15;
         const short dayOfYear = 365;
@@ -479,7 +505,10 @@ public class EmployeeService(
         return (serviceYears, lengthOfService);
     }
 
-    public async Task<IList<SupervisorNameModel>> CheckAndAddMissingSupervisor(IList<SupervisorNameModel> supervisors, int? supervisorId)
+    public async Task<IList<SupervisorNameModel>> CheckAndAddMissingSupervisor(
+        IList<SupervisorNameModel> supervisors,
+        int? supervisorId
+    )
     {
         if (supervisorId is null or 0)
         {
@@ -496,7 +525,7 @@ public class EmployeeService(
                 NickName = supervisor.NickName,
                 FullName = supervisor.FullName,
                 OwnerId = supervisorId.Value,
-                Email = supervisor.Email
+                Email = supervisor.Email,
             };
 
             supervisors.Add(missingSupervisor);
@@ -514,7 +543,7 @@ public class EmployeeService(
         {
             EmpId = employeeId,
             CompanyId = companyId,
-            CurrentDate = DateTimeOffset.Now.DateTime.ToClientTimeZone().Date
+            CurrentDate = DateTimeOffset.Now.DateTime.ToClientTimeZone().Date,
         };
         return await baseService.GetDataEntityAsync<EmployeeBioInfoModel>(criteria);
     }
@@ -522,22 +551,25 @@ public class EmployeeService(
     public async Task<IEnumerable<int>> GetCompaniesBelongToSupervisor()
     {
         var employeeSession = session.Get<EmployeeSession>(SessionKey.Employee);
-        var criteria = new GetSupervisorCompaniesCriteria
-        {
-            EmpId = employeeSession.EmpId
-        };
+        var criteria = new GetSupervisorCompaniesCriteria { EmpId = employeeSession.EmpId };
         var supervisorCompanyIds = await baseService.GetDataAsync<int>(criteria);
 
-        return supervisorCompanyIds
-            .Where(s => Constants.NexCompanyIds.Contains(s));
+        return supervisorCompanyIds.Where(s => Constants.NexCompanyIds.Contains(s));
     }
 
     public async Task<IEnumerable<T>> FilterByEmployeeDataPermission<T>(
         IEnumerable<T> data,
-        Func<T, int> employeeIdSelector)
+        Func<T, int> employeeIdSelector
+    )
     {
-        var canViewAllEmployees = session.HasPermissionOnFunction(FunctionKey.DataPermission_AllEmployees, Policy.Read);
-        var canViewEmployeesAssigned = session.HasPermissionOnFunction(FunctionKey.DataPermission_EmployeesAssigned, Policy.Read);
+        var canViewAllEmployees = session.HasPermissionOnFunction(
+            FunctionKey.DataPermission_AllEmployees,
+            Policy.Read
+        );
+        var canViewEmployeesAssigned = session.HasPermissionOnFunction(
+            FunctionKey.DataPermission_EmployeesAssigned,
+            Policy.Read
+        );
         var currentCompanyId = session.Get<short>(SessionKey.CurrentCompanyId);
 
         var criteria = new GetEmployeeByDataPermissionCriteria
@@ -545,7 +577,7 @@ public class EmployeeService(
             CompanyId = currentCompanyId,
             UserId = session.UserId,
             IsViewAll = canViewAllEmployees,
-            IsViewEmployeeAssigned = canViewEmployeesAssigned
+            IsViewEmployeeAssigned = canViewEmployeesAssigned,
         };
 
         var assignedEmployeeIds = await baseService.GetDataAsync<int>(criteria);
@@ -553,22 +585,29 @@ public class EmployeeService(
         return data.Where(item => assignedEmployeeIds.Contains(employeeIdSelector(item)));
     }
 
-    public async Task<GO.UserControl.Client.Core.Models.CommandResult> UpdateUserInfoAsync(int userId, EditEmployeeParam param)
+    public async Task<GO.UserControl.Client.Core.Models.CommandResult> UpdateUserInfoAsync(
+        int userId,
+        EditEmployeeParam param
+    )
     {
-        return await userService.UpdateInfoAsync(new UpdateUserInfoParam
-        {
-            RefId = param.EmployeeId,
-            UserId = userId,
-            Code = param.Code,
-            Nickname = param.Nickname,
-            FullName = param.FullName,
-            Email = param.Email,
-            IsActive = param.Enabled
-        });
+        return await userService.UpdateInfoAsync(
+            new UpdateUserInfoParam
+            {
+                RefId = param.EmployeeId,
+                UserId = userId,
+                Code = param.Code,
+                Nickname = param.Nickname,
+                FullName = param.FullName,
+                Email = param.Email,
+                IsActive = param.Enabled,
+            }
+        );
     }
-    
-    private static string EncryptSalary(string salary) {
-        if (string.IsNullOrWhiteSpace(salary)) {
+
+    private static string EncryptSalary(string salary)
+    {
+        if (string.IsNullOrWhiteSpace(salary))
+        {
             return string.Empty;
         }
 
@@ -587,13 +626,15 @@ public class EmployeeService(
             TransferInDate = model.TransferInDate,
             AnnualLeaveBalance = model.AnnualLeaveBalance,
             CompensationLeaveBalance = model.KeepInViewBalance,
-            SickLeaveBalance = model.SickLeaveBalance
+            SickLeaveBalance = model.SickLeaveBalance,
         };
 
         return await baseService.GetDataEntityAsync<int>(criteria);
     }
 
-    public async Task<IEnumerable<EmployeeTransferModel>> GetEmployeeTransferListAsync(GetEmployeeTransferCriteria criteria)
+    public async Task<IEnumerable<EmployeeTransferModel>> GetEmployeeTransferListAsync(
+        GetEmployeeTransferCriteria criteria
+    )
     {
         return await baseService.GetDataAsync<EmployeeTransferModel>(criteria);
     }
