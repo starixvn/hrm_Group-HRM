@@ -53,7 +53,7 @@ const ExchangeRateTable = ({ data, onEdit, onDelete }) => {
         return date;
     };
 
-    const groupByCurrency = (items) => {
+    const groupByCurrency = items => {
         const groups = {};
         items.forEach(item => {
             const currency = item.baseCurrency;
@@ -65,7 +65,7 @@ const ExchangeRateTable = ({ data, onEdit, onDelete }) => {
         return groups;
     };
 
-    const parseItemsWithDates = (items) => {
+    const parseItemsWithDates = items => {
         return items
             .map(item => {
                 const dateStr = item.effectiveDate || item.EffectiveDate;

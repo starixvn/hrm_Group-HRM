@@ -20,9 +20,7 @@ const ExchangeRateModal = ({ show, onClose, onSuccess, editData, isEdit = false 
         if (typeof date === 'string' && date.includes(',')) {
             const match = date.match(/(\d+)\s+(\w+)[,\s]+(\d+)/);
             if (match) {
-                const day = match[1];
-                const month = match[2];
-                const year = match[3];
+                const [, day, month, year] = match;
                 dateMoment = moment(`${day} ${month} ${year}`, 'DD MMM YYYY', true);
             } else {
                 dateMoment = moment(date);
@@ -114,12 +112,12 @@ const ExchangeRateModal = ({ show, onClose, onSuccess, editData, isEdit = false 
         return defaultMessage;
     };
 
-    const prepareSubmitData = (validatedData) => {
+    const prepareSubmitData = validatedData => {
         const submitData = {
             currencyCode: validatedData.currencyCode.toUpperCase(),
             exchangeRate: validatedData.exchangeRate,
             effectiveDate: formatDateWithTime(validatedData.effectiveDate),
-            rounding: parseInt(formData.rounding) || 0,
+            rounding: parseInt(formData.rounding, 10) || 0,
         };
 
         if (isEdit && editData) {
@@ -132,7 +130,7 @@ const ExchangeRateModal = ({ show, onClose, onSuccess, editData, isEdit = false 
         return submitData;
     };
 
-    const performSubmit = async (submitData) => {
+    const performSubmit = async submitData => {
         if (isEdit && editData) {
             await ExchangeRateService.updateExchangeRate(editData.currencyId, submitData);
             toastr.success('Exchange Rate updated successfully', '', toastOptions());
