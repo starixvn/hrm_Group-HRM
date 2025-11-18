@@ -19,7 +19,7 @@ const AppContainer = () => {
     const [editData, setEditData] = useState(null);
     const [deleteModalDialog, setDeleteModalDialog] = useState({ show: false });
 
-    const formatDate = (date) => {
+    const formatDate = date => {
         if (!date) return '';
         const dateMoment = moment(date);
         if (!dateMoment.isValid()) return '';
@@ -63,7 +63,7 @@ const AppContainer = () => {
         fetchExchangeRates();
     };
 
-    const handleEdit = (item) => {
+    const handleEdit = item => {
         setEditData(item);
         setShowEditModal(true);
     };
@@ -78,7 +78,7 @@ const AppContainer = () => {
         handleEditClose();
     };
 
-    const handleDelete = (item) => {
+    const handleDelete = item => {
         setDeleteModalDialog({
             show: true,
             exchangeRate: item
@@ -97,7 +97,7 @@ const AppContainer = () => {
         }
 
         ExchangeRateService.deleteExchangeRate(currencyId, effectiveDate)
-            .then((response) => {
+            .then(response => {
                 const data = response.data;
                 if (data.code === 0 || data.isSuccessful) {
                     toastr.success('Exchange Rate deleted successfully', '', toastOptions());
@@ -106,7 +106,7 @@ const AppContainer = () => {
                     toastr.error(data.message || 'Failed to delete exchange Rate', '', toastOptions());
                 }
             })
-            .catch((error) => {
+            .catch(error => {
                 const errorMessage = (error.response && error.response.data && (error.response.data.message || error.response.data.Message)) || 'Failed to delete exchange rate';
                 toastr.error(errorMessage, '', toastOptions());
             });

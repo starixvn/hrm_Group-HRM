@@ -72,7 +72,7 @@ const ExchangeRateModal = ({ show, onClose, onSuccess, editData, isEdit = false 
         }
     }, [show, isEdit, editData]);
 
-    const handleChange = (e) => {
+    const handleChange = e => {
         const { name, value } = e.target;
         if (name === 'currencyCode') {
             setFormData(prev => ({
@@ -97,7 +97,7 @@ const ExchangeRateModal = ({ show, onClose, onSuccess, editData, isEdit = false 
         }
     };
 
-    const formatDateWithTime = (date) => {
+    const formatDateWithTime = date => {
         return moment(date).format('YYYY-MM-DD') + 'T12:00:00';
     };
 

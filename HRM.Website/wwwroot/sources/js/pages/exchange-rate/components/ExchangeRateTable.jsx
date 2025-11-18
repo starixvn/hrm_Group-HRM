@@ -4,7 +4,7 @@ import moment from 'moment';
 const ExchangeRateTable = ({ data, onEdit, onDelete }) => {
     const [expandedRows, setExpandedRows] = useState(new Set());
 
-    const formatRate = (rate) => {
+    const formatRate = rate => {
         if (rate === null || rate === undefined || isNaN(rate) || rate === 0) {
             return <span>N/A</span>;
         }
@@ -18,21 +18,21 @@ const ExchangeRateTable = ({ data, onEdit, onDelete }) => {
         return formatted;
     };
 
-    const isExpired = (date) => {
+    const isExpired = date => {
         if (!date) return false;
         const dateMoment = moment(date);
         if (!dateMoment.isValid()) return false;
         return dateMoment.isSameOrBefore(moment().startOf('day'));
     };
 
-    const formatDate = (date) => {
+    const formatDate = date => {
         if (!date) return '';
         const dateMoment = moment(date);
         if (!dateMoment.isValid()) return '';
         return dateMoment.format('DD MMM, YYYY');
     };
 
-    const parseDate = (dateStr) => {
+    const parseDate = dateStr => {
         if (!dateStr) return null;
         const dateMoment = moment(dateStr);
         if (!dateMoment.isValid()) return null;
@@ -45,7 +45,7 @@ const ExchangeRateTable = ({ data, onEdit, onDelete }) => {
         if (!data || data.length === 0) return [];
 
         const groups = {};
-        data.forEach((item) => {
+        data.forEach(item => {
             const key = item.baseCurrency;
             if (!groups[key]) {
                 groups[key] = [];
@@ -108,7 +108,7 @@ const ExchangeRateTable = ({ data, onEdit, onDelete }) => {
         return result;
     }, [data]);
 
-    const toggleRow = (key) => {
+    const toggleRow = key => {
         setExpandedRows(prev => {
             const newSet = new Set(prev);
             if (newSet.has(key)) {
@@ -133,7 +133,7 @@ const ExchangeRateTable = ({ data, onEdit, onDelete }) => {
                 </thead>
                 <tbody>
                     {groupedData.length > 0 ? (
-                        groupedData.map((group) => {
+                        groupedData.map(group => {
                             if (!group || !group.mainItem) {
                                 return null;
                             }
