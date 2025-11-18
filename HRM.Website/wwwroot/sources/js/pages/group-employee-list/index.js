@@ -125,12 +125,20 @@ import {
 
   function initLockCost() {
     let costUnlocked = false;
-    const COST_PASSWORD = "123456";
 
     $("#costUnlockDialog").dialog({
       autoOpen: false,
       modal: true,
       width: 350,
+      open: function () {
+        $(".ui-dialog-buttonpane button:contains('Unlock')").addClass(
+          "btn btn-primary"
+        );
+
+        $(".ui-dialog-buttonpane button:contains('Cancel')").addClass(
+          "btn btn-default"
+        );
+      },
       buttons: {
         Unlock: function () {
           let pw = $("#costPassword").val();
