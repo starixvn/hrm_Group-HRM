@@ -58,7 +58,7 @@ describe('Table component', () => {
                 'Expat Salary'
             ])
         );
-        expect(headers.length).toBe(6);
+        expect(headers.length).toBe(7);
     });
 
     it('renders all rows when data provided', () => {

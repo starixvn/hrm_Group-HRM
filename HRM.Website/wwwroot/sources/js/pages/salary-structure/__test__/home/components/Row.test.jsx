@@ -421,9 +421,11 @@ describe('Row Component', () => {
 
             const rows = screen.getAllByRole('row');
             const firstRow = rows[0];
-            const editCell = firstRow.querySelector('td:nth-child(7)');
-            const deleteCell = firstRow.querySelector('td:nth-child(8)');
+            const editCell = firstRow.querySelector('td:nth-child(8)');
+            const deleteCell = firstRow.querySelector('td:nth-child(9)');
 
+            expect(editCell).toBeTruthy();
+            expect(deleteCell).toBeTruthy();
             expect(editCell).toHaveAttribute('rowspan', '2');
             expect(deleteCell).toHaveAttribute('rowspan', '2');
         });
