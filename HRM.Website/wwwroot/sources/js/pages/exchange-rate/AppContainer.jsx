@@ -1,9 +1,10 @@
 import React, { Fragment, useState, useEffect } from 'react';
 import toastr from 'toastr';
+import moment from 'moment';
 
 import ExchangeRateTable from './components/ExchangeRateTable';
 import CurrencyRoundingTable from './components/CurrencyRoundingTable';
-import AddExchangeRateModal from './components/AddExchangeRateModal';
+import ExchangeRateModal from './components/ExchangeRateModal';
 import SweetModalDialog from '../../shared/components/SweetModalDialog';
 import ExchangeRateService from './service';
 
@@ -17,6 +18,13 @@ const AppContainer = () => {
     const [showEditModal, setShowEditModal] = useState(false);
     const [editData, setEditData] = useState(null);
     const [deleteModalDialog, setDeleteModalDialog] = useState({ show: false });
+
+    const formatDate = (date) => {
+        if (!date) return '';
+        const dateMoment = moment(date);
+        if (!dateMoment.isValid()) return '';
+        return dateMoment.format('DD MMM, YYYY');
+    };
 
     useEffect(() => {
         fetchExchangeRates();
@@ -39,11 +47,13 @@ const AppContainer = () => {
             .catch(axiosError);
     };
 
-    const toggleRoundingInfo = () => {
-        if (!showRoundingInfo && roundingRules.length === 0) {
-            fetchRoundingRules();
-        }
-        setShowRoundingInfo(!showRoundingInfo);
+    const handleShowRoundingInfo = () => {
+        fetchRoundingRules();
+        setShowRoundingInfo(true);
+    };
+
+    const handleHideRoundingInfo = () => {
+        setShowRoundingInfo(false);
     };
 
     const handleShowCreateModalDialog = () => setShowAddModal(true);
@@ -90,10 +100,10 @@ const AppContainer = () => {
             .then((response) => {
                 const data = response.data;
                 if (data.code === 0 || data.isSuccessful) {
-                    toastr.success('Exchange rate deleted successfully', '', toastOptions());
+                    toastr.success('Exchange Rate deleted successfully', '', toastOptions());
                     fetchExchangeRates();
                 } else {
-                    toastr.error(data.message || 'Failed to delete exchange rate', '', toastOptions());
+                    toastr.error(data.message || 'Failed to delete exchange Rate', '', toastOptions());
                 }
             })
             .catch((error) => {
@@ -121,7 +131,7 @@ const AppContainer = () => {
                     <h4>1 unit to USD</h4>
                     <i
                         className="fa fa-info-circle info-icon"
-                        onClick={toggleRoundingInfo}
+                        onClick={handleShowRoundingInfo}
                         title="Click to show Currency Rounding info"
                     ></i>
                 </div>
@@ -133,25 +143,25 @@ const AppContainer = () => {
             </div>
             {showRoundingInfo && (
                 <>
-                    <div className="popup-overlay" onClick={toggleRoundingInfo}></div>
+                    <div className="popup-overlay" onClick={handleHideRoundingInfo}></div>
                     <div className="rounding-info-popup">
                         <div className="rounding-info-header">
                             <h4>Currency Rounding</h4>
                             <i
                                 className="fa fa-times close-icon"
-                                onClick={toggleRoundingInfo}
+                                onClick={handleHideRoundingInfo}
                             ></i>
                         </div>
                         <CurrencyRoundingTable data={roundingRules} />
                     </div>
                 </>
             )}
-            <AddExchangeRateModal
+            <ExchangeRateModal
                 show={showAddModal}
                 onClose={handleHideCreateModalDialog}
                 onSuccess={handleAddSuccess}
             />
-            <AddExchangeRateModal
+            <ExchangeRateModal
                 show={showEditModal}
                 onClose={handleEditClose}
                 onSuccess={handleEditSuccess}
@@ -162,7 +172,10 @@ const AppContainer = () => {
                 show={deleteModalDialog.show}
                 contents={
                     <p>
-                        Are you sure you want to delete this <strong>{deleteModalDialog.exchangeRate ? deleteModalDialog.exchangeRate.baseCurrency : ''}</strong>
+                        Are you sure you want to delete <strong>{deleteModalDialog.exchangeRate ? deleteModalDialog.exchangeRate.baseCurrency : ''}</strong>
+                        {deleteModalDialog.exchangeRate && deleteModalDialog.exchangeRate.effectiveDate && (
+                            <> with effective date <strong>{formatDate(deleteModalDialog.exchangeRate.effectiveDate)}</strong></>
+                        )}
                         ?
                     </p>
                 }

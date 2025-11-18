@@ -2,17 +2,47 @@ import React, { useState, useEffect } from 'react';
 import { Modal, ModalBody, ModalFooter, ModalHeader } from 'react-bootstrap';
 import Draggable from 'react-draggable';
 import toastr from 'toastr';
+import moment from 'moment';
 import { toastOptions } from '../../../shared/common.functions';
 import ExchangeRateService from '../service';
 import { validationSchema } from '../common.functions';
 
-const AddExchangeRateModal = ({ show, onClose, onSuccess, editData, isEdit = false }) => {
+const ExchangeRateModal = ({ show, onClose, onSuccess, editData, isEdit = false }) => {
+    const getTodayDateString = () => {
+        return moment().format('YYYY-MM-DD');
+    };
+
+    const formatDateForInput = (date) => {
+        if (!date) {
+            return getTodayDateString();
+        }
+        let dateMoment;
+        if (typeof date === 'string' && date.includes(',')) {
+            const match = date.match(/(\d+)\s+(\w+)[,\s]+(\d+)/);
+            if (match) {
+                const day = match[1];
+                const month = match[2];
+                const year = match[3];
+                dateMoment = moment(`${day} ${month} ${year}`, 'DD MMM YYYY', true);
+            } else {
+                dateMoment = moment(date);
+            }
+        } else {
+            dateMoment = moment(date);
+        }
+        if (!dateMoment.isValid()) {
+            return getTodayDateString();
+        }
+        return dateMoment.format('YYYY-MM-DD');
+    };
+
     const [formData, setFormData] = useState({
         currencyCode: '',
         exchangeRate: '',
-        effectiveDate: new Date().toISOString().split('T')[0],
+        effectiveDate: getTodayDateString(),
         rounding: '0',
     });
+    const [oldEffectiveDate, setOldEffectiveDate] = useState(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     useEffect(() => {
@@ -22,50 +52,20 @@ const AddExchangeRateModal = ({ show, onClose, onSuccess, editData, isEdit = fal
                 const toUsd = editData.toUsd || '';
                 const effectiveDate = editData.effectiveDate || '';
                 const rounding = editData.rounding !== undefined ? editData.rounding : 0;
-                
-                let formattedDate = new Date().toISOString().split('T')[0];
-                if (effectiveDate) {
-                    try {
-                        if (typeof effectiveDate === 'string') {
-                            const dateStr = effectiveDate.split('T')[0].split(' ')[0].trim();
-                            const dateObj = new Date(dateStr);
-                            if (!isNaN(dateObj.getTime())) {
-                                formattedDate = dateObj.toISOString().split('T')[0];
-                            } else {
-                                console.warn('Invalid date string:', effectiveDate);
-                            }
-                        } else if (effectiveDate instanceof Date) {
-                            if (!isNaN(effectiveDate.getTime())) {
-                                formattedDate = effectiveDate.toISOString().split('T')[0];
-                            } else {
-                                console.warn('Invalid Date object:', effectiveDate);
-                            }
-                        } else {
-                            const dateObj = new Date(effectiveDate);
-                            if (!isNaN(dateObj.getTime())) {
-                                formattedDate = dateObj.toISOString().split('T')[0];
-                            } else {
-                                console.warn('Invalid date value:', effectiveDate);
-                            }
-                        }
-                    } catch (error) {
-                        console.error('Error parsing effectiveDate:', error, 'effectiveDate:', effectiveDate);
-                    }
-                } else {
-                    console.warn('effectiveDate is empty or undefined in editData:', editData);
-                }
-                
+
+                setOldEffectiveDate(effectiveDate);
                 setFormData({
                     currencyCode: baseCurrency,
                     exchangeRate: toUsd.toString(),
-                    effectiveDate: formattedDate,
+                    effectiveDate: formatDateForInput(effectiveDate),
                     rounding: rounding.toString(),
                 });
             } else {
+                setOldEffectiveDate(null);
                 setFormData({
                     currencyCode: '',
                     exchangeRate: '',
-                    effectiveDate: new Date().toISOString().split('T')[0],
+                    effectiveDate: getTodayDateString(),
                     rounding: '0',
                 });
             }
@@ -97,12 +97,15 @@ const AddExchangeRateModal = ({ show, onClose, onSuccess, editData, isEdit = fal
         }
     };
 
+    const formatDateWithTime = (date) => {
+        return moment(date).format('YYYY-MM-DD') + 'T12:00:00';
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
-
         setIsSubmitting(true);
+
         try {
-            // Validate using Yup schema
             const validatedData = await validationSchema.validate({
                 currencyCode: formData.currencyCode.trim(),
                 exchangeRate: parseFloat(formData.exchangeRate),
@@ -112,36 +115,36 @@ const AddExchangeRateModal = ({ show, onClose, onSuccess, editData, isEdit = fal
             const submitData = {
                 currencyCode: validatedData.currencyCode.toUpperCase(),
                 exchangeRate: validatedData.exchangeRate,
-                effectiveDate: validatedData.effectiveDate,
+                effectiveDate: formatDateWithTime(validatedData.effectiveDate),
+                rounding: parseInt(formData.rounding) || 0,
             };
 
-            // Add rounding (default to 0 if empty, ensure it's a smallint)
-            const roundingValue = formData.rounding !== undefined && formData.rounding !== ''
-                ? parseInt(formData.rounding, 10)
-                : 0;
-            // Ensure rounding is within smallint range (-32,768 to 32,767)
-            submitData.rounding = Math.max(-32768, Math.min(32767, roundingValue));
-
             if (isEdit && editData) {
-                const id = editData.currencyId;
-                await ExchangeRateService.updateExchangeRate(id, submitData);
-                toastr.success('Exchange rate updated successfully', '', toastOptions());
+                submitData.currencyId = editData.currencyId;
+                if (oldEffectiveDate) {
+                    submitData.oldEffectiveDate = formatDateWithTime(oldEffectiveDate);
+                }
+                await ExchangeRateService.updateExchangeRate(editData.currencyId, submitData);
+                toastr.success('Exchange Rate updated successfully', '', toastOptions());
             } else {
                 await ExchangeRateService.createExchangeRate(submitData);
-                toastr.success('Exchange rate added successfully', '', toastOptions());
+                toastr.success('Exchange Rate added successfully', '', toastOptions());
             }
+
             onSuccess();
             onClose();
         } catch (error) {
+            let errorMessage = `Failed to ${isEdit ? 'update' : 'add'} exchange rate`;
+            
             if (error.inner && error.inner.length > 0) {
-                // Yup validation errors
-                const errorMessage = error.inner.map(err => err.message).join(', ');
-                toastr.error(errorMessage, '', toastOptions());
-            } else {
-                // API errors
-                const errorMessage = (error.response && error.response.data && (error.response.data.message || error.response.data.Message)) || 'Failed to add exchange rate';
-                toastr.error(errorMessage, '', toastOptions());
+                errorMessage = error.inner.map(err => err.message).join(', ');
+            } else if (error.response && error.response.data) {
+                errorMessage = error.response.data.message || error.response.data.Message || errorMessage;
+            } else if (error.message) {
+                errorMessage = error.message;
             }
+            
+            toastr.error(errorMessage, '', toastOptions());
         } finally {
             setIsSubmitting(false);
         }
@@ -216,7 +219,7 @@ const AddExchangeRateModal = ({ show, onClose, onSuccess, editData, isEdit = fal
                     </ModalBody>
                     <ModalFooter>
                         <button type="submit" className="btn btn-primary" disabled={isSubmitting}>
-                            {isSubmitting ? (isEdit ? 'Updating...' : 'Submitting...') : (isEdit ? 'Update' : 'Submit')}
+                            {isSubmitting ? 'Submitting...' : 'Submit'}
                         </button>
                         <button type="button" className="btn btn-secondary" onClick={onClose} disabled={isSubmitting}>
                             Cancel
@@ -228,5 +231,5 @@ const AddExchangeRateModal = ({ show, onClose, onSuccess, editData, isEdit = fal
     );
 };
 
-export default AddExchangeRateModal;
+export default ExchangeRateModal;
 

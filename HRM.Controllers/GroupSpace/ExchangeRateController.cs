@@ -6,11 +6,11 @@ using Core.Filters;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
 using HRM.Models;
+using HRM.Models.Group.ExchangeRate;
 using HRM.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 
-[HrmAuthorize(AuthenticationSchemes = CookieAuthenticationDefaults.AuthenticationScheme)]
 public class ExchangeRateController(
     IUserControlSession session,
     IExchangeRateService exchangeRateService
@@ -40,28 +40,20 @@ public class ExchangeRateController(
         return Json(roundingRules);
     }
 
-    [HttpGet]
-    [HrmPermission(Policy.Read, FunctionKey.ExchangeRate)]
-    public async Task<IActionResult> GetCurrencies()
-    {
-        var currencies = await exchangeRateService.GetCurrenciesAsync();
-        return Json(currencies);
-    }
-
     [HttpPost]
     [HrmPermission(Policy.Host, FunctionKey.ExchangeRate)]
-    public async Task<IActionResult> Create([FromBody] CreateExchangeRate request)
+    public async Task<IActionResult> Create([FromBody] CreateExchangeRate model)
     {
-        if (request == null || !ModelState.IsValid)
+        if (model == null || !ModelState.IsValid)
         {
             return Json(new { code = 1, message = "Invalid request" });
         }
 
         var result = await exchangeRateService.CreateExchangeRateAsync(
-            request.CurrencyCode,
-            request.ExchangeRate,
-            request.EffectiveDate,
-            request.Rounding,
+            model.CurrencyCode,
+            model.ExchangeRate,
+            model.EffectiveDate,
+            model.Rounding,
             EmployeeSession.EmpId
         );
 
@@ -70,19 +62,38 @@ public class ExchangeRateController(
 
     [HttpPost]
     [HrmPermission(Policy.Host, FunctionKey.ExchangeRate)]
-    public async Task<IActionResult> Update([FromBody] UpdateExchangeRate request)
+    public async Task<IActionResult> Update([FromBody] UpdateExchangeRate model)
     {
-        if (request == null || !ModelState.IsValid)
+        if (model == null || !ModelState.IsValid)
         {
             return Json(new { code = 1, message = "Invalid request" });
         }
 
         var result = await exchangeRateService.UpdateExchangeRateAsync(
-            request.CurrencyId,
-            request.EffectiveDate,
-            request.CurrencyCode,
-            request.ExchangeRate,
-            request.Rounding,
+            model.CurrencyId,
+            model.EffectiveDate,
+            model.OldEffectiveDate,
+            model.CurrencyCode,
+            model.ExchangeRate,
+            model.Rounding,
+            EmployeeSession.EmpId
+        );
+
+        return Json(new { code = result.IsSuccessful ? 0 : result.Code, message = result.Message });
+    }
+
+    [HttpPost]
+    [HrmPermission(Policy.Host, FunctionKey.ExchangeRate)]
+    public async Task<IActionResult> Delete([FromBody] DeleteExchangeRate model)
+    {
+        if (model == null || !ModelState.IsValid)
+        {
+            return Json(new { code = 1, message = "Invalid request" });
+        }
+
+        var result = await exchangeRateService.DeleteExchangeRateAsync(
+            model.CurrencyId,
+            model.EffectiveDate,
             EmployeeSession.EmpId
         );
 

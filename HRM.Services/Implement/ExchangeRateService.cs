@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -57,7 +58,7 @@ public class ExchangeRateService(IBaseService baseService) : IExchangeRateServic
     public async Task<CommandResult> CreateExchangeRateAsync(
         string currencyCode,
         decimal exchangeRate,
-        System.DateTime effectiveDate,
+        DateTime effectiveDate,
         decimal rounding,
         int modifiedBy
     )
@@ -75,7 +76,8 @@ public class ExchangeRateService(IBaseService baseService) : IExchangeRateServic
 
     public async Task<CommandResult> UpdateExchangeRateAsync(
         int currencyId,
-        System.DateTime effectiveDate,
+        DateTime effectiveDate,
+        DateTime oldEffectiveDate,
         string currencyCode,
         decimal exchangeRate,
         decimal rounding,
@@ -86,6 +88,7 @@ public class ExchangeRateService(IBaseService baseService) : IExchangeRateServic
         {
             CurrencyId = currencyId,
             EffectiveDate = effectiveDate,
+            OldEffectiveDate = oldEffectiveDate,
             CurrencyCode = currencyCode,
             ExchangeRate = exchangeRate,
             Rounding = rounding,
@@ -95,22 +98,14 @@ public class ExchangeRateService(IBaseService baseService) : IExchangeRateServic
     }
 
     public async Task<CommandResult> DeleteExchangeRateAsync(
-        string currencyCode,
-        System.DateTime effectiveDate,
+        int currencyId,
+        DateTime effectiveDate,
         int modifiedBy
     )
     {
-        var currencies = await GetCurrenciesAsync();
-        var currency = currencies.FirstOrDefault(c => c.CurrencyCode == currencyCode);
-
-        if (currency == null)
-        {
-            return new CommandResult { Code = 1, Message = "Currency not found" };
-        }
-
         var criteria = new DeleteExchangeRateCriteria
         {
-            CurrencyId = currency.Id,
+            CurrencyId = currencyId,
             EffectiveDate = effectiveDate,
             ModifiedBy = modifiedBy,
         };

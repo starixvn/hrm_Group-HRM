@@ -1,7 +1,6 @@
 import React from 'react';
 
 const CurrencyRoundingTable = ({ data }) => {
-    console.log(data);
     return (
         <div className="currency-rounding-table-section">
             <table className="table table-custom">

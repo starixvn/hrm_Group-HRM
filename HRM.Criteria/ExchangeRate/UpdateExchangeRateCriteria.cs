@@ -9,6 +9,8 @@ public class UpdateExchangeRateCriteria : CriteriaBase
 
     public DateTime EffectiveDate { get; set; }
 
+    public DateTime OldEffectiveDate { get; set; }
+
     public string CurrencyCode { get; set; }
 
     public decimal ExchangeRate { get; set; }

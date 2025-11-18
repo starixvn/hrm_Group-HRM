@@ -4,6 +4,8 @@ namespace HRM.Models;
 
 public class ExchangeRate
 {
+    public int CurrencyId { get; set; }
+
     public string BaseCurrency { get; set; }
 
     public decimal ToUsd { get; set; }

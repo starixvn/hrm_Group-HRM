@@ -8,6 +8,10 @@
 @import '../../components/validation';
 @import '../../components/sweet-modal';
 
+.modal-dialog .modal-content {
+    width: 460px !important;
+}
+
 .required {
     color: #dc3545;
     font-weight: bold;
@@ -23,7 +27,7 @@
     margin-top: 20px;
     background: #ffffff;
     border-radius: 4px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 8px #888;
     overflow: hidden;
 
     .table-header {
@@ -144,7 +148,7 @@
                     }
 
                     &.currency-cell {
-                        padding: 12px 15px;
+                        padding: 6px 8px;
                         display: flex;
                         align-items: center;
                         gap: 10px;
@@ -196,7 +200,7 @@
                             display: block;
                             width: 3px;
                             height: 100%;
-                            background: linear-gradient(180deg, #52c5ff 0%, #3ab0e8 100%);
+                            background: #4e97f2;
                             position: absolute;
                             left: 0;
                             top: 0;

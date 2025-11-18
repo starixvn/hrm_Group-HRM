@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using HRM.Core.Models;
@@ -16,19 +17,24 @@ public interface IExchangeRateService
     Task<CommandResult> CreateExchangeRateAsync(
         string currencyCode,
         decimal exchangeRate,
-        System.DateTime effectiveDate,
+        DateTime effectiveDate,
         decimal rounding,
         int modifiedBy
     );
 
     Task<CommandResult> UpdateExchangeRateAsync(
         int currencyId,
-        System.DateTime effectiveDate,
+        DateTime effectiveDate,
+        DateTime oldEffectiveDate,
         string currencyCode,
         decimal exchangeRate,
         decimal rounding,
         int modifiedBy
     );
 
-    Task<CommandResult> DeleteExchangeRateAsync(string currencyCode, System.DateTime effectiveDate, int modifiedBy);
+    Task<CommandResult> DeleteExchangeRateAsync(
+        int currencyId,
+        DateTime effectiveDate,
+        int modifiedBy
+    );
 }

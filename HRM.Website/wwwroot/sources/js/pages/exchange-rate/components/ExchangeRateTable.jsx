@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import moment from 'moment';
 
 const ExchangeRateTable = ({ data, onEdit, onDelete }) => {
     const [expandedRows, setExpandedRows] = useState(new Set());
@@ -7,81 +8,37 @@ const ExchangeRateTable = ({ data, onEdit, onDelete }) => {
         if (rate === null || rate === undefined || isNaN(rate) || rate === 0) {
             return <span>N/A</span>;
         }
-        return new Intl.NumberFormat('en-US', {
-            minimumFractionDigits: 8,
-            maximumFractionDigits: 8
-        }).format(rate);
+        const num = parseFloat(rate);
+        const formatted = num.toFixed(8);
+        const decimalPart = formatted.split('.')[1];
+        if (decimalPart && decimalPart === '00000000') {
+            return num.toString();
+        }
+
+        return formatted;
     };
 
-    const isDatePassed = (date) => {
+    const isExpired = (date) => {
         if (!date) return false;
-        try {
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-
-            const dateObj = new Date(date);
-            dateObj.setHours(0, 0, 0, 0);
-
-            return dateObj < today;
-        } catch (error) {
-            return false;
-        }
+        const dateMoment = moment(date);
+        if (!dateMoment.isValid()) return false;
+        return dateMoment.isSameOrBefore(moment().startOf('day'));
     };
 
     const formatDate = (date) => {
         if (!date) return '';
+        const dateMoment = moment(date);
+        if (!dateMoment.isValid()) return '';
+        return dateMoment.format('DD MMM, YYYY');
+    };
 
-        try {
-            const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-
-            if (typeof date === 'string') {
-                let dateStr = date.split('T')[0].split(' ')[0].trim();
-                const parts = dateStr.split('-');
-                if (parts.length === 3) {
-                    const year = parseInt(parts[0], 10);
-                    const month = parseInt(parts[1], 10);
-                    const day = parseInt(parts[2], 10);
-
-                    if (!isNaN(year) && !isNaN(month) && !isNaN(day) && month >= 1 && month <= 12 && day >= 1 && day <= 31) {
-                        return `${day} ${monthNames[month - 1]}, ${year}`;
-                    }
-                }
-
-                const dateObj = new Date(date);
-                if (!isNaN(dateObj.getTime())) {
-                    const d = dateObj.getDate();
-                    const m = dateObj.getMonth();
-                    const y = dateObj.getFullYear();
-                    return `${d} ${monthNames[m]}, ${y}`;
-                }
-
-                return dateStr;
-            }
-
-            if (date instanceof Date) {
-                if (isNaN(date.getTime())) {
-                    return '';
-                }
-                const day = date.getDate();
-                const month = date.getMonth();
-                const year = date.getFullYear();
-                return `${day} ${monthNames[month]}, ${year}`;
-            }
-
-            if (typeof date === 'number') {
-                const dateObj = new Date(date);
-                if (!isNaN(dateObj.getTime())) {
-                    const day = dateObj.getDate();
-                    const month = dateObj.getMonth();
-                    const year = dateObj.getFullYear();
-                    return `${day} ${monthNames[month]}, ${year}`;
-                }
-            }
-
-            return '';
-        } catch (error) {
-            return '';
-        }
+    const parseDate = (dateStr) => {
+        if (!dateStr) return null;
+        const dateMoment = moment(dateStr);
+        if (!dateMoment.isValid()) return null;
+        const date = dateMoment.toDate();
+        date.setHours(0, 0, 0, 0);
+        return date;
     };
 
     const groupedData = useMemo(() => {
@@ -99,13 +56,16 @@ const ExchangeRateTable = ({ data, onEdit, onDelete }) => {
         const today = new Date();
         today.setHours(0, 0, 0, 0);
 
-        return Object.entries(groups).map(([key, items]) => {
+        const result = Object.entries(groups).map(([key, items]) => {
             const itemsWithDates = items.map(item => {
-                const dateStr = item.effectiveDate;
-                const date = new Date(dateStr);
-                date.setHours(0, 0, 0, 0);
-                return { ...item, _parsedDate: date };
-            });
+                const dateStr = item.effectiveDate || item.EffectiveDate;
+                const parsedDate = parseDate(dateStr);
+                return { ...item, _parsedDate: parsedDate };
+            }).filter(item => item._parsedDate !== null && !isNaN(item._parsedDate.getTime()));
+
+            if (itemsWithDates.length === 0) {
+                return null;
+            }
 
             itemsWithDates.sort((a, b) => {
                 return b._parsedDate - a._parsedDate;
@@ -127,22 +87,25 @@ const ExchangeRateTable = ({ data, onEdit, onDelete }) => {
                 mainIndex = itemsWithDates.length - 1;
             }
 
+            if (!mainItem) {
+                return null;
+            }
+
             const subItems = itemsWithDates
                 .filter((_, index) => index !== mainIndex)
                 .map(({ _parsedDate, ...item }) => item);
 
-            let finalMainItem = null;
-            if (mainItem) {
-                const { _parsedDate, ...cleanMainItem } = mainItem;
-                finalMainItem = cleanMainItem;
-            }
+            const { _parsedDate, ...cleanMainItem } = mainItem;
 
             return {
                 key,
-                mainItem: finalMainItem,
+                mainItem: cleanMainItem,
                 subItems,
             };
-        });
+        })
+            .filter(group => group !== null);
+
+        return result;
     }, [data]);
 
     const toggleRow = (key) => {
@@ -170,14 +133,16 @@ const ExchangeRateTable = ({ data, onEdit, onDelete }) => {
                 </thead>
                 <tbody>
                     {groupedData.length > 0 ? (
-                        groupedData.map((group, index) => {
+                        groupedData.map((group) => {
+                            if (!group || !group.mainItem) {
+                                return null;
+                            }
                             const isExpanded = expandedRows.has(group.key);
                             const hasSubItems = group.subItems.length > 0;
                             const mainItem = group.mainItem;
                             const baseCurrency = mainItem.baseCurrency;
                             const toUsd = mainItem.toUsd;
                             const effectiveDate = mainItem.effectiveDate;
-                            const itemId = mainItem.currencyId;
 
                             return (
                                 <React.Fragment key={group.key}>
@@ -198,7 +163,7 @@ const ExchangeRateTable = ({ data, onEdit, onDelete }) => {
                                         </td>
                                         <td className="rate-cell">{formatRate(toUsd)}</td>
                                         <td>{formatDate(effectiveDate)}</td>
-                                        {window.hasPermission === 'True' && !isDatePassed(effectiveDate) && (
+                                        {window.hasPermission === 'True' && !isExpired(effectiveDate) && (
                                             <td className="action-cell">
                                                 <button
                                                     className="btn-action btn-edit"
@@ -216,7 +181,7 @@ const ExchangeRateTable = ({ data, onEdit, onDelete }) => {
                                                 </button>
                                             </td>
                                         )}
-                                        {window.hasPermission === 'True' && isDatePassed(effectiveDate) && (
+                                        {window.hasPermission === 'True' && isExpired(effectiveDate) && (
                                             <td className="action-cell"></td>
                                         )}
                                     </tr>
@@ -229,7 +194,7 @@ const ExchangeRateTable = ({ data, onEdit, onDelete }) => {
                                                 </td>
                                                 <td className="sub-item-rate">{formatRate(subItem.toUsd)}</td>
                                                 <td className="sub-item-date">{formatDate(subItem.effectiveDate)}</td>
-                                                {window.hasPermission === 'True' && !isDatePassed(subItem.effectiveDate) && (
+                                                {window.hasPermission === 'True' && !isExpired(subItem.effectiveDate) && (
                                                     <td className="sub-item-action">
                                                         <button
                                                             className="btn-action btn-edit"
@@ -247,7 +212,7 @@ const ExchangeRateTable = ({ data, onEdit, onDelete }) => {
                                                         </button>
                                                     </td>
                                                 )}
-                                                {window.hasPermission === 'True' && isDatePassed(subItem.effectiveDate) && (
+                                                {window.hasPermission === 'True' && isExpired(subItem.effectiveDate) && (
                                                     <td className="sub-item-action"></td>
                                                 )}
                                             </tr>

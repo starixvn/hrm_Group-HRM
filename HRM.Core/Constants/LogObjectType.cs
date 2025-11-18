@@ -12,4 +12,5 @@ public static class LogObjectType
     public const byte AllowanceItem = 8;
     public const byte ExportEmployeeReport = 9;
     public const byte ExportProfitCenterReport = 10;
+    public const byte Currency = 11;
 }
