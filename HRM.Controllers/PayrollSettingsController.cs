@@ -9,7 +9,6 @@ using HRM.Core.Filters;
 using HRM.Criteria.EmployeePayrollSetting;
 using HRM.Criteria.PayrollManagement;
 using HRM.Models.PayrollManagement;
-using HRM.Services.Implement;
 using HRM.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 

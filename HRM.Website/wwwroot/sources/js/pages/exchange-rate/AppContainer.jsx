@@ -20,9 +20,13 @@ const AppContainer = () => {
     const [deleteModalDialog, setDeleteModalDialog] = useState({ show: false });
 
     const formatDate = date => {
-        if (!date) return '';
+        if (!date) {
+            return '';
+        }
         const dateMoment = moment(date);
-        if (!dateMoment.isValid()) return '';
+        if (!dateMoment.isValid()) {
+            return '';
+        }
         return dateMoment.format('DD MMM, YYYY');
     };
 
@@ -33,7 +37,12 @@ const AppContainer = () => {
     const fetchExchangeRates = () => {
         ExchangeRateService.getExchangeRates()
             .then(data => {
-                const rates = Array.isArray(data) ? data : (data && data.exchangeRates ? data.exchangeRates : []);
+                let rates = [];
+                if (Array.isArray(data)) {
+                    rates = data;
+                } else if (data && data.exchangeRates) {
+                    rates = data.exchangeRates;
+                }
                 setExchangeRates(rates);
             })
             .catch(axiosError);
@@ -88,8 +97,7 @@ const AppContainer = () => {
     const handleConfirmDelete = () => {
         setDeleteModalDialog({ show: false });
         const item = deleteModalDialog.exchangeRate;
-        const currencyId = item.currencyId;
-        const effectiveDate = item.effectiveDate;
+        const { currencyId, effectiveDate } = item;
 
         if (!currencyId || !effectiveDate) {
             toastr.error('Cannot delete: Currency ID or Effective date not found', '', toastOptions());
@@ -107,7 +115,10 @@ const AppContainer = () => {
                 }
             })
             .catch(error => {
-                const errorMessage = (error.response && error.response.data && (error.response.data.message || error.response.data.Message)) || 'Failed to delete exchange rate';
+                let errorMessage = 'Failed to delete exchange rate';
+                if (error.response && error.response.data) {
+                    errorMessage = error.response.data.message || error.response.data.Message || errorMessage;
+                }
                 toastr.error(errorMessage, '', toastOptions());
             });
     };

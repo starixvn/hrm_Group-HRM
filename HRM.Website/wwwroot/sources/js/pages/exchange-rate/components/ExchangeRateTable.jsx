@@ -19,90 +19,115 @@ const ExchangeRateTable = ({ data, onEdit, onDelete }) => {
     };
 
     const isExpired = date => {
-        if (!date) return false;
+        if (!date) {
+            return false;
+        }
         const dateMoment = moment(date);
-        if (!dateMoment.isValid()) return false;
+        if (!dateMoment.isValid()) {
+            return false;
+        }
         return dateMoment.isSameOrBefore(moment().startOf('day'));
     };
 
     const formatDate = date => {
-        if (!date) return '';
+        if (!date) {
+            return '';
+        }
         const dateMoment = moment(date);
-        if (!dateMoment.isValid()) return '';
+        if (!dateMoment.isValid()) {
+            return '';
+        }
         return dateMoment.format('DD MMM, YYYY');
     };
 
     const parseDate = dateStr => {
-        if (!dateStr) return null;
+        if (!dateStr) {
+            return null;
+        }
         const dateMoment = moment(dateStr);
-        if (!dateMoment.isValid()) return null;
+        if (!dateMoment.isValid()) {
+            return null;
+        }
         const date = dateMoment.toDate();
         date.setHours(0, 0, 0, 0);
         return date;
     };
 
-    const groupedData = useMemo(() => {
-        if (!data || data.length === 0) return [];
-
+    const groupByCurrency = (items) => {
         const groups = {};
-        data.forEach(item => {
-            const key = item.baseCurrency;
-            if (!groups[key]) {
-                groups[key] = [];
+        items.forEach(item => {
+            const currency = item.baseCurrency;
+            if (!groups[currency]) {
+                groups[currency] = [];
             }
-            groups[key].push(item);
+            groups[currency].push(item);
         });
+        return groups;
+    };
+
+    const parseItemsWithDates = (items) => {
+        return items
+            .map(item => {
+                const dateStr = item.effectiveDate || item.EffectiveDate;
+                const parsedDate = parseDate(dateStr);
+                return { ...item, _parsedDate: parsedDate };
+            })
+            .filter(item => item._parsedDate !== null && !isNaN(item._parsedDate.getTime()));
+    };
+
+    const findMainItem = (itemsWithDates, today) => {
+        itemsWithDates.sort((a, b) => b._parsedDate - a._parsedDate);
+
+        for (let i = 0; i < itemsWithDates.length; i++) {
+            if (itemsWithDates[i]._parsedDate <= today) {
+                return { item: itemsWithDates[i], index: i };
+            }
+        }
+
+        if (itemsWithDates.length > 0) {
+            const lastIndex = itemsWithDates.length - 1;
+            return { item: itemsWithDates[lastIndex], index: lastIndex };
+        }
+
+        return null;
+    };
+
+    const processCurrencyGroup = (currency, items, today) => {
+        const itemsWithDates = parseItemsWithDates(items);
+        if (itemsWithDates.length === 0) {
+            return null;
+        }
+
+        const mainResult = findMainItem(itemsWithDates, today);
+        if (!mainResult) {
+            return null;
+        }
+
+        const subItems = itemsWithDates
+            .filter((_, index) => index !== mainResult.index)
+            .map(({ _parsedDate, ...item }) => item);
+
+        const { _parsedDate, ...cleanMainItem } = mainResult.item;
+
+        return {
+            key: currency,
+            mainItem: cleanMainItem,
+            subItems,
+        };
+    };
+
+    const groupedData = useMemo(() => {
+        if (!data || data.length === 0) {
+            return [];
+        }
+
+        const groupsByCurrency = groupByCurrency(data);
 
         const today = new Date();
         today.setHours(0, 0, 0, 0);
 
-        const result = Object.entries(groups).map(([key, items]) => {
-            const itemsWithDates = items.map(item => {
-                const dateStr = item.effectiveDate || item.EffectiveDate;
-                const parsedDate = parseDate(dateStr);
-                return { ...item, _parsedDate: parsedDate };
-            }).filter(item => item._parsedDate !== null && !isNaN(item._parsedDate.getTime()));
-
-            if (itemsWithDates.length === 0) {
-                return null;
-            }
-
-            itemsWithDates.sort((a, b) => {
-                return b._parsedDate - a._parsedDate;
-            });
-
-            let mainItem = null;
-            let mainIndex = -1;
-
-            for (let i = 0; i < itemsWithDates.length; i++) {
-                if (itemsWithDates[i]._parsedDate <= today) {
-                    mainItem = itemsWithDates[i];
-                    mainIndex = i;
-                    break;
-                }
-            }
-
-            if (!mainItem && itemsWithDates.length > 0) {
-                mainItem = itemsWithDates[itemsWithDates.length - 1];
-                mainIndex = itemsWithDates.length - 1;
-            }
-
-            if (!mainItem) {
-                return null;
-            }
-
-            const subItems = itemsWithDates
-                .filter((_, index) => index !== mainIndex)
-                .map(({ _parsedDate, ...item }) => item);
-
-            const { _parsedDate, ...cleanMainItem } = mainItem;
-
-            return {
-                key,
-                mainItem: cleanMainItem,
-                subItems,
-            };
-        })
+        const result = Object.entries(groupsByCurrency)
+            .map(([currency, items]) => processCurrencyGroup(currency, items, today))
             .filter(group => group !== null);
 
         return result;
@@ -118,6 +143,74 @@ const ExchangeRateTable = ({ data, onEdit, onDelete }) => {
             }
             return newSet;
         });
+    };
+
+    const renderActionButtons = (item, className = 'action-cell') => {
+        if (window.hasPermission !== 'True') {
+            return null;
+        }
+        if (isExpired(item.effectiveDate)) {
+            return <td className={className}></td>;
+        }
+        return (
+            <td className={className}>
+                <button
+                    className="btn-action btn-edit"
+                    onClick={() => onEdit && onEdit(item)}
+                    title="Edit"
+                >
+                    <i className="fa fa-pencil"></i>
+                </button>
+                <button
+                    className="btn-action btn-delete"
+                    onClick={() => onDelete && onDelete(item)}
+                    title="Delete"
+                >
+                    <i className="fa fa-trash"></i>
+                </button>
+            </td>
+        );
+    };
+
+    const renderSubItemRow = (subItem, groupKey, subIndex) => {
+        return (
+            <tr key={`${groupKey}-sub-${subIndex}`} className="sub-item-row">
+                <td className="sub-item-currency">
+                    <span className="sub-item-indicator"></span>
+                    <span className="sub-item-text">{subItem.baseCurrency}</span>
+                </td>
+                <td className="sub-item-rate">{formatRate(subItem.toUsd)}</td>
+                <td className="sub-item-date">{formatDate(subItem.effectiveDate)}</td>
+                {renderActionButtons(subItem, 'sub-item-action')}
+            </tr>
+        );
+    };
+
+    const renderMainRow = (group, isExpanded, hasSubItems) => {
+        const mainItem = group.mainItem;
+        const { baseCurrency, toUsd, effectiveDate } = mainItem;
+
+        return (
+            <tr className={hasSubItems ? 'expandable-row' : ''}>
+                <td className={`currency-cell ${hasSubItems ? 'has-sub-items' : ''}`}>
+                    {hasSubItems ? (
+                        <span
+                            className={`expand-icon ${isExpanded ? 'expanded' : ''}`}
+                            onClick={() => toggleRow(group.key)}
+                            title={isExpanded ? 'Close History' : 'Show History'}
+                        >
+                            <i className={`fa ${isExpanded ? 'fa-angle-down' : 'fa-angle-right'}`}></i>
+                        </span>
+                    ) : (
+                        <span className="expand-icon-placeholder"></span>
+                    )}
+                    <span className="currency-text">{baseCurrency}</span>
+                </td>
+                <td className="rate-cell">{formatRate(toUsd)}</td>
+                <td>{formatDate(effectiveDate)}</td>
+                {renderActionButtons(mainItem)}
+            </tr>
+        );
     };
 
     return (
@@ -139,85 +232,13 @@ const ExchangeRateTable = ({ data, onEdit, onDelete }) => {
                             }
                             const isExpanded = expandedRows.has(group.key);
                             const hasSubItems = group.subItems.length > 0;
-                            const mainItem = group.mainItem;
-                            const baseCurrency = mainItem.baseCurrency;
-                            const toUsd = mainItem.toUsd;
-                            const effectiveDate = mainItem.effectiveDate;
 
                             return (
                                 <React.Fragment key={group.key}>
-                                    <tr className={hasSubItems ? 'expandable-row' : ''}>
-                                        <td className={`currency-cell ${hasSubItems ? 'has-sub-items' : ''}`}>
-                                            {hasSubItems ? (
-                                                <span
-                                                    className={`expand-icon ${isExpanded ? 'expanded' : ''}`}
-                                                    onClick={() => toggleRow(group.key)}
-                                                    title={isExpanded ? 'Close History' : 'Show History'}
-                                                >
-                                                    <i className={`fa ${isExpanded ? 'fa-angle-down' : 'fa-angle-right'}`}></i>
-                                                </span>
-                                            ) : (
-                                                <span className="expand-icon-placeholder"></span>
-                                            )}
-                                            <span className="currency-text">{baseCurrency}</span>
-                                        </td>
-                                        <td className="rate-cell">{formatRate(toUsd)}</td>
-                                        <td>{formatDate(effectiveDate)}</td>
-                                        {window.hasPermission === 'True' && !isExpired(effectiveDate) && (
-                                            <td className="action-cell">
-                                                <button
-                                                    className="btn-action btn-edit"
-                                                    onClick={() => onEdit && onEdit(mainItem)}
-                                                    title="Edit"
-                                                >
-                                                    <i className="fa fa-pencil"></i>
-                                                </button>
-                                                <button
-                                                    className="btn-action btn-delete"
-                                                    onClick={() => onDelete && onDelete(mainItem)}
-                                                    title="Delete"
-                                                >
-                                                    <i className="fa fa-trash"></i>
-                                                </button>
-                                            </td>
-                                        )}
-                                        {window.hasPermission === 'True' && isExpired(effectiveDate) && (
-                                            <td className="action-cell"></td>
-                                        )}
-                                    </tr>
-                                    {isExpanded && hasSubItems && group.subItems.map((subItem, subIndex) => {
-                                        return (
-                                            <tr key={`${group.key}-sub-${subIndex}`} className="sub-item-row">
-                                                <td className="sub-item-currency">
-                                                    <span className="sub-item-indicator"></span>
-                                                    <span className="sub-item-text">{subItem.baseCurrency}</span>
-                                                </td>
-                                                <td className="sub-item-rate">{formatRate(subItem.toUsd)}</td>
-                                                <td className="sub-item-date">{formatDate(subItem.effectiveDate)}</td>
-                                                {window.hasPermission === 'True' && !isExpired(subItem.effectiveDate) && (
-                                                    <td className="sub-item-action">
-                                                        <button
-                                                            className="btn-action btn-edit"
-                                                            onClick={() => onEdit && onEdit(subItem)}
-                                                            title="Edit"
-                                                        >
-                                                            <i className="fa fa-pencil"></i>
-                                                        </button>
-                                                        <button
-                                                            className="btn-action btn-delete"
-                                                            onClick={() => onDelete && onDelete(subItem)}
-                                                            title="Delete"
-                                                        >
-                                                            <i className="fa fa-trash"></i>
-                                                        </button>
-                                                    </td>
-                                                )}
-                                                {window.hasPermission === 'True' && isExpired(subItem.effectiveDate) && (
-                                                    <td className="sub-item-action"></td>
-                                                )}
-                                            </tr>
-                                        );
-                                    })}
+                                    {renderMainRow(group, isExpanded, hasSubItems)}
+                                    {isExpanded && hasSubItems && group.subItems.map((subItem, subIndex) =>
+                                        renderSubItemRow(subItem, group.key, subIndex)
+                                    )}
                                 </React.Fragment>
                             );
                         })
@@ -233,4 +254,3 @@ const ExchangeRateTable = ({ data, onEdit, onDelete }) => {
 };
 
 export default ExchangeRateTable;
-

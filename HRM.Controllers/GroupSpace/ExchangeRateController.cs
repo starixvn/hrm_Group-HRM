@@ -5,10 +5,8 @@ using Core.Constants;
 using Core.Filters;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
-using HRM.Models;
 using HRM.Models.Group.ExchangeRate;
 using HRM.Services.Interfaces;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 
 public class ExchangeRateController(

@@ -7,12 +7,12 @@ import { toastOptions } from '../../../shared/common.functions';
 import ExchangeRateService from '../service';
 import { validationSchema } from '../common.functions';
 
-const ExchangeRateModal = ({ show, onClose, onSuccess, editData, isEdit = false }) => {
-    const getTodayDateString = () => {
-        return moment().format('YYYY-MM-DD');
-    };
+const DATE_FORMAT = 'YYYY-MM-DD';
 
-    const formatDateForInput = (date) => {
+const ExchangeRateModal = ({ show, onClose, onSuccess, editData, isEdit = false }) => {
+    const getTodayDateString = () => moment().format(DATE_FORMAT);
+
+    const formatDateForInput = date => {
         if (!date) {
             return getTodayDateString();
         }
@@ -33,7 +33,7 @@ const ExchangeRateModal = ({ show, onClose, onSuccess, editData, isEdit = false 
         if (!dateMoment.isValid()) {
             return getTodayDateString();
         }
-        return dateMoment.format('YYYY-MM-DD');
+        return dateMoment.format(DATE_FORMAT);
     };
 
     const [formData, setFormData] = useState({
@@ -83,7 +83,7 @@ const ExchangeRateModal = ({ show, onClose, onSuccess, editData, isEdit = false 
             const sanitizedValue = value.replace(/[^0-9.]/g, '');
             const parts = sanitizedValue.split('.');
             const formattedValue = parts.length > 2
-                ? parts[0] + '.' + parts.slice(1).join('')
+                ? `${parts[0]}.${parts.slice(1).join('')}`
                 : sanitizedValue;
             setFormData(prev => ({
                 ...prev,
@@ -97,11 +97,52 @@ const ExchangeRateModal = ({ show, onClose, onSuccess, editData, isEdit = false 
         }
     };
 
-    const formatDateWithTime = date => {
-        return moment(date).format('YYYY-MM-DD') + 'T12:00:00';
+    const formatDateWithTime = date => `${moment(date).format(DATE_FORMAT)}T12:00:00`;
+
+    const getErrorMessage = (error, isEdit) => {
+        const defaultMessage = `Failed to ${isEdit ? 'update' : 'add'} exchange rate`;
+        
+        if (error.inner && error.inner.length > 0) {
+            return error.inner.map(err => err.message).join(', ');
+        }
+        if (error.response && error.response.data) {
+            return error.response.data.message || error.response.data.Message || defaultMessage;
+        }
+        if (error.message) {
+            return error.message;
+        }
+        return defaultMessage;
     };
 
-    const handleSubmit = async (e) => {
+    const prepareSubmitData = (validatedData) => {
+        const submitData = {
+            currencyCode: validatedData.currencyCode.toUpperCase(),
+            exchangeRate: validatedData.exchangeRate,
+            effectiveDate: formatDateWithTime(validatedData.effectiveDate),
+            rounding: parseInt(formData.rounding) || 0,
+        };
+
+        if (isEdit && editData) {
+            submitData.currencyId = editData.currencyId;
+            if (oldEffectiveDate) {
+                submitData.oldEffectiveDate = formatDateWithTime(oldEffectiveDate);
+            }
+        }
+
+        return submitData;
+    };
+
+    const performSubmit = async (submitData) => {
+        if (isEdit && editData) {
+            await ExchangeRateService.updateExchangeRate(editData.currencyId, submitData);
+            toastr.success('Exchange Rate updated successfully', '', toastOptions());
+        } else {
+            await ExchangeRateService.createExchangeRate(submitData);
+            toastr.success('Exchange Rate added successfully', '', toastOptions());
+        }
+    };
+
+    const handleSubmit = async e => {
         e.preventDefault();
         setIsSubmitting(true);
 
@@ -112,38 +153,13 @@ const ExchangeRateModal = ({ show, onClose, onSuccess, editData, isEdit = false 
                 effectiveDate: formData.effectiveDate,
             }, { abortEarly: false });
 
-            const submitData = {
-                currencyCode: validatedData.currencyCode.toUpperCase(),
-                exchangeRate: validatedData.exchangeRate,
-                effectiveDate: formatDateWithTime(validatedData.effectiveDate),
-                rounding: parseInt(formData.rounding) || 0,
-            };
-
-            if (isEdit && editData) {
-                submitData.currencyId = editData.currencyId;
-                if (oldEffectiveDate) {
-                    submitData.oldEffectiveDate = formatDateWithTime(oldEffectiveDate);
-                }
-                await ExchangeRateService.updateExchangeRate(editData.currencyId, submitData);
-                toastr.success('Exchange Rate updated successfully', '', toastOptions());
-            } else {
-                await ExchangeRateService.createExchangeRate(submitData);
-                toastr.success('Exchange Rate added successfully', '', toastOptions());
-            }
+            const submitData = prepareSubmitData(validatedData);
+            await performSubmit(submitData);
 
             onSuccess();
             onClose();
         } catch (error) {
-            let errorMessage = `Failed to ${isEdit ? 'update' : 'add'} exchange rate`;
-            
-            if (error.inner && error.inner.length > 0) {
-                errorMessage = error.inner.map(err => err.message).join(', ');
-            } else if (error.response && error.response.data) {
-                errorMessage = error.response.data.message || error.response.data.Message || errorMessage;
-            } else if (error.message) {
-                errorMessage = error.message;
-            }
-            
+            const errorMessage = getErrorMessage(error, isEdit);
             toastr.error(errorMessage, '', toastOptions());
         } finally {
             setIsSubmitting(false);

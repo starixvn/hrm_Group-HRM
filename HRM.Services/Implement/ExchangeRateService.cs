@@ -7,7 +7,6 @@ using HRM.Core.Services;
 using HRM.Criteria.Company;
 using HRM.Criteria.ExchangeRate;
 using HRM.Models;
-using HRM.Services.Helper;
 using HRM.Services.Interfaces;
 
 namespace HRM.Services.Implement;
