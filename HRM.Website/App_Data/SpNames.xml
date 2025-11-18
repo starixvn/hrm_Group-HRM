@@ -483,7 +483,8 @@
         <Setting Key="Report_DisciplineSummaryPerYear" SpName="Report_DisciplineSummaryPerYear" DbName="bodb_HRM" Plain="0" />
     </Function>
     <Function Name="Log">
-        <Setting Key="ActivityLog_GetByObjectId" SpName="ActivityLog_GetByObjectId" DbName="bodb_HRM" Plain="0" />
+		<Setting Key="ActivityLog_GetByObjectId" SpName="ActivityLog_GetByObjectId" DbName="bodb_HRM" Plain="0" />
+		<Setting Key="ActivityLog_Insert" SpName="ActivityLog_Insert" DbName="bodb_HRM" Plain="0" />
     </Function>
     <Function Name="Change Shift">
         <Setting Key="ChangeShiftRequest_GetCalendarForRequest" SpName="ChangeShiftRequest_GetCalendarForRequest" DbName="bodb_HRM" Plain="0">

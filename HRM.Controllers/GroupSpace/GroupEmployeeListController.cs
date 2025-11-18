@@ -13,6 +13,7 @@ using HRM.Criteria.Employee;
 using HRM.Criteria.EmployeeWorkFromHome;
 using HRM.Criteria.Group;
 using HRM.Criteria.GroupSpace.Employee;
+using HRM.Criteria.Log;
 using HRM.Criteria.Supervisor;
 using HRM.Models;
 using HRM.Models.Group;
@@ -244,12 +245,29 @@ public class GroupEmployeeListController(
             ? await excelService.ExportGroupEmployeesAsync(employees, showSalaryCurrency)
             : await excelService.ExportProfitCenterReportAsync(employees, showSalaryCurrency);
 
+        if (showSalaryCurrency)
+        {
+            await LogExportExcelHistory(isEmployeeListExport);
+        }
+
         var exportDate = DateTimeOffset.Now.DateTime.ToClientTimeZone().ToString("yyyyMMdd");
         var fileName = isEmployeeListExport
             ? $"GroupEmployeeList_{exportDate}.xlsx"
             : $"Profit Center Report - {exportDate}.xlsx";
 
         return File(bytes, MimeType.XLS, fileName);
+    }
+
+    private async Task LogExportExcelHistory(bool isEmployeeListExport)
+    {
+        var actionLog = new LogExportGroupEmployeeListCriteria
+        {
+            ObjectTypeId = isEmployeeListExport
+                ? LogObjectType.ExportEmployeeReport
+                : LogObjectType.ExportProfitCenterReport,
+            UserId = EmployeeSession.EmpId
+        };
+        await baseService.ExecuteNonQueryAsync(actionLog);
     }
 
     private async Task<IEnumerable<EmployeeWorkFromHome>> GetEmployeeWorkFromHome(string teamIds)
