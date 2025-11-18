@@ -10,6 +10,9 @@
     var showSalaryCurrency = (bool)ViewBag.ShowSalaryCurrency;
     var showResignedDate = (bool)ViewBag.ShowResignedDate;
 }
+@section js {
+    <script src="~/dist/js/group.employee.list.index.js" asp-append-version="true"></script>
+}
 @section css {
     <link href="~/dist/styles/group.employee.list.index.css" rel="stylesheet" asp-append-version="true" />
 }
@@ -99,6 +102,8 @@
                     <div class="cell-control-wrapper">
                         @Labels.TotalCostUSD
                         <div class="fa fa-sort cell-right-div"></div>
+                        <i id="unlockCostIcon" class="fa fa-lock cell-right-div cost-lock-icon"
+                           title="Unlock Total Cost"></i>
                     </div>
                 </th>
             }
@@ -147,7 +152,10 @@
                     }
                     @if (showSalaryCurrency)
                     {
-                        <td class="align-right">@(employee.Salary > 0 ? $"{employee.Salary:N0}" : "-")</td>
+                        @* <td class="align-right">@(employee.Salary > 0 ? $"{employee.Salary:N0}" : "-")</td> *@
+                        <td class="align-right total-cost-cell" data-amount="@(employee.Salary > 0 ? $"{employee.Salary:N0}" : "-")">
+                            *****
+                        </td>
                     }
                     <td class="align-left">@employee.Company</td>
                     @if (hasPermissionToEdit)
@@ -170,3 +178,7 @@
         }
     </tbody>
 </table>
+<div id="costUnlockDialog" title="Enter Password" style="display:none;">
+    <input id="costPassword" type="password" class="form-control" placeholder="Enter password..." autocomplete="new-password" />
+    <div id="costError" class="text-danger mt-2" style="display:none;">Wrong password.</div>
+</div>

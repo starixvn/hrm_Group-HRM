@@ -32,6 +32,7 @@ using Resources;
 using ViewModels.AnnualLeave;
 using GO.UserControl.Client.Core.Models.User;
 using HRM.Criteria.Group;
+using HRM.Core.Enums;
 
 public class EmployeeService(
     IEmployeeRepository employeeRepository,
@@ -39,7 +40,8 @@ public class EmployeeService(
     IRoleService roleService,
     IUserService userService,
     IUserControlSession session,
-    ICompanyService companyService) : IEmployeeService
+    ICompanyService companyService,
+    CostPasswordOptions costPassword) : IEmployeeService
 {
     public async Task<string> GenerateEmployeeCode(short? companyId)
     {
@@ -79,6 +81,30 @@ public class EmployeeService(
         }
 
         return employee;
+    }
+
+    public string GetTotalCostPassword()
+    {
+        if (session.HasPermissionOnFunction(FunctionKey.GroupEmployeeList_ViewAll, Policy.Read))
+        {
+            var decryptedPassword = Cryptography.DecryptPassword(costPassword.ViewAll);
+            return decryptedPassword;
+        }
+        else if (session.HasPermissionOnFunction(FunctionKey.GroupEmployeeList_BUView, Policy.Read))
+        {
+            var decryptedPassword = Cryptography.DecryptPassword(costPassword.BUView);
+            return decryptedPassword;
+        }
+        else if (session.HasPermissionOnFunction(FunctionKey.GroupEmployeeList_DeptView, Policy.Read))
+        {
+            var decryptedPassword = Cryptography.DecryptPassword(costPassword.DeptView);
+            return decryptedPassword;
+        }
+        else
+        {
+            var nonPermissionPassword = "*@*!*#*$*~*!*@";
+            return nonPermissionPassword;
+        }
     }
 
     public async Task<Employee> GetEmployeeTransferByIdAsync(int id, short companyId)

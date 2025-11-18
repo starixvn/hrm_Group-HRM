@@ -8,6 +8,7 @@ using HRM.Core;
 using HRM.Core.Constants;
 using HRM.Core.Enums;
 using HRM.Core.Filters;
+using HRM.Core.Models;
 using HRM.Core.Services;
 using HRM.Criteria.Employee;
 using HRM.Criteria.EmployeeWorkFromHome;
@@ -185,6 +186,14 @@ public class GroupEmployeeListController(
         }
 
         return Json(employees);
+    }
+
+    [HttpGet]
+    public Task<IActionResult> ValidateCostPassword(string password)
+    {
+        var result = employeeService.GetTotalCostPassword();
+
+        return Task.FromResult<IActionResult>(Ok(result == password));
     }
 
     private static (bool? enableUser, bool? isDeleteUser) ParseEmployeeStatus(string employeeStatuses) 

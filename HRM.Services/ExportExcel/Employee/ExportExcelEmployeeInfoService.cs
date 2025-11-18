@@ -329,7 +329,7 @@ public class ExportExcelEmployeeInfoService(
         if (showSalaryCurrency)
         {
             xlPackage.Encryption.IsEncrypted = true;
-            xlPackage.Encryption.Password = Constants.ViewSalaryExcelPassword;
+            xlPackage.Encryption.Password = employeeService.GetTotalCostPassword();
         }
 
         await using var ms = new MemoryStream();
@@ -347,7 +347,7 @@ public class ExportExcelEmployeeInfoService(
         if (showSalaryCurrency)
         {
             xlPackage.Encryption.IsEncrypted = true;
-            xlPackage.Encryption.Password = Constants.ViewSalaryExcelPassword;
+            xlPackage.Encryption.Password = employeeService.GetTotalCostPassword();
         }
         else
         {

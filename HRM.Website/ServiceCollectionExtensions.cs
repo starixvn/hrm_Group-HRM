@@ -101,6 +101,9 @@ public static class ServiceCollectionExtensions
         var appSettings = configuration.GetSection("AppSettings").Get<AppSettings>();
         services.AddSingleton(appSettings);
 
+        var costPassword = configuration.GetSection("CostPassword").Get<CostPasswordOptions>();
+        services.AddSingleton(costPassword);
+
         var letstalkSettings = configuration.GetSection("LetstalkSettings").Get<LetstalkSettings>();
         services.AddSingleton(letstalkSettings);
 
