@@ -8,29 +8,55 @@ import { toastOptions, resolveClientUrl, axiosError } from '../../../shared/comm
 import { validationSchema } from '../common.functions';
 
 const DATE_FORMAT = 'YYYY-MM-DD';
+const SUPPORTED_DATE_FORMATS = [
+    'YYYY-MM-DD',
+    'YYYY-MM-DDTHH:mm:ss',
+    'YYYY-MM-DDTHH:mm:ss.SSS',
+    'DD MMM YYYY',
+    'DD MMM, YYYY'
+];
 
 const ExchangeRateModal = ({ show, onClose, onSuccess, editData, isEdit = false }) => {
     const getTodayDateString = () => moment().format(DATE_FORMAT);
+
+    const parseDate = date => {
+        if (!date) {
+            return null;
+        }
+
+        if (typeof date === 'string') {
+            // Handle ISO format dates
+            if (/^\d{4}-\d{2}-\d{2}/.test(date)) {
+                const isoFormats = ['YYYY-MM-DD', 'YYYY-MM-DDTHH:mm:ss', 'YYYY-MM-DDTHH:mm:ss.SSS'];
+                return moment(date, isoFormats, true);
+            }
+            
+            // Handle "DD MMM, YYYY HH:mm:ss" format - extract date part before time
+            if (date.includes(',')) {
+                const datePart = date.split(/\s+\d{2}:\d{2}:\d{2}/)[0];
+                const match = datePart.match(/(\d+)\s+(\w+)[,\s]+(\d+)/);
+                if (match) {
+                    const [, day, month, year] = match;
+                    return moment(`${day} ${month} ${year}`, 'DD MMM YYYY', true);
+                }
+            }
+        }
+
+        // Try all supported formats explicitly
+        return moment(date, SUPPORTED_DATE_FORMATS, true);
+    };
 
     const formatDateForInput = date => {
         if (!date) {
             return getTodayDateString();
         }
-        let dateMoment;
-        if (typeof date === 'string' && date.includes(',')) {
-            const match = date.match(/(\d+)\s+(\w+)[,\s]+(\d+)/);
-            if (match) {
-                const [, day, month, year] = match;
-                dateMoment = moment(`${day} ${month} ${year}`, 'DD MMM YYYY', true);
-            } else {
-                dateMoment = moment(date);
-            }
-        } else {
-            dateMoment = moment(date);
-        }
-        if (!dateMoment.isValid()) {
+        
+        const dateMoment = parseDate(date);
+        
+        if (!dateMoment || !dateMoment.isValid()) {
             return getTodayDateString();
         }
+        
         return dateMoment.format(DATE_FORMAT);
     };
 
@@ -43,26 +69,31 @@ const ExchangeRateModal = ({ show, onClose, onSuccess, editData, isEdit = false 
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     useEffect(() => {
-        if (show) {
-            if (isEdit && editData) {
-                const baseCurrency = editData.baseCurrency || '';
-                const toUsd = editData.toUsd || '';
-                const effectiveDate = editData.effectiveDate || '';
+        if (!show) {
+            setIsSubmitting(false);
+            return;
+        }
 
-                setOldEffectiveDate(effectiveDate);
-                setFormData({
-                    currencyCode: baseCurrency,
-                    exchangeRate: toUsd.toString(),
-                    effectiveDate: formatDateForInput(effectiveDate),
-                });
-            } else {
-                setOldEffectiveDate(null);
-                setFormData({
-                    currencyCode: '',
-                    exchangeRate: '',
-                    effectiveDate: getTodayDateString(),
-                });
-            }
+        setIsSubmitting(false);
+
+        if (isEdit && editData) {
+            const baseCurrency = editData.baseCurrency || '';
+            const toUsd = editData.toUsd || '';
+            const effectiveDate = editData.effectiveDate || '';
+
+            setOldEffectiveDate(effectiveDate);
+            setFormData({
+                currencyCode: baseCurrency,
+                exchangeRate: toUsd.toString(),
+                effectiveDate: formatDateForInput(effectiveDate),
+            });
+        } else {
+            setOldEffectiveDate(null);
+            setFormData({
+                currencyCode: '',
+                exchangeRate: '',
+                effectiveDate: getTodayDateString(),
+            });
         }
     }, [show, isEdit, editData]);
 
@@ -91,7 +122,18 @@ const ExchangeRateModal = ({ show, onClose, onSuccess, editData, isEdit = false 
         }
     };
 
-    const formatDateWithTime = date => `${moment(date).format(DATE_FORMAT)}T12:00:00`;
+    const formatDateWithTime = date => {
+        if (!date) {
+            return `${getTodayDateString()}T12:00:00`;
+        }
+        
+        const dateMoment = parseDate(date);
+        if (!dateMoment || !dateMoment.isValid()) {
+            return `${getTodayDateString()}T12:00:00`;
+        }
+        
+        return `${dateMoment.format(DATE_FORMAT)}T12:00:00`;
+    };
 
     const getErrorMessage = (error, isEdit) => {
         const defaultMessage = `Failed to ${isEdit ? 'update' : 'add'} exchange rate`;
@@ -161,13 +203,17 @@ const ExchangeRateModal = ({ show, onClose, onSuccess, editData, isEdit = false 
                         '',
                         toastOptions()
                     );
+                    setIsSubmitting(false);
                     onSuccess();
                     onClose();
                 } else {
                     toastr.error(data.message, '', toastOptions());
                     setIsSubmitting(false);
                 }
-            }).catch(axiosError);
+            }).catch(error => {
+                axiosError(error);
+                setIsSubmitting(false);
+            });
         } catch (error) {
             const errorMessage = getErrorMessage(error, isEdit);
             toastr.error(errorMessage, '', toastOptions());
@@ -175,9 +221,14 @@ const ExchangeRateModal = ({ show, onClose, onSuccess, editData, isEdit = false 
         }
     };
 
+    const handleClose = () => {
+        setIsSubmitting(false);
+        onClose();
+    };
+
     return (
         <Draggable handle=".modal-header">
-            <Modal show={show} onHide={onClose} dialogClassName="modal-dialog-centered" backdrop="static" size="lg">
+            <Modal show={show} onHide={handleClose} dialogClassName="modal-dialog-centered" backdrop="static" size="lg">
                 <ModalHeader closeButton>
                     <Modal.Title>{isEdit ? 'Edit Exchange Rate' : 'Add Exchange Rate'}</Modal.Title>
                 </ModalHeader>
@@ -233,7 +284,7 @@ const ExchangeRateModal = ({ show, onClose, onSuccess, editData, isEdit = false 
                         <button type="submit" className="btn btn-primary" disabled={isSubmitting}>
                             Submit
                         </button>
-                        <button type="button" className="btn btn-secondary" onClick={onClose} disabled={isSubmitting}>
+                        <button type="button" className="btn btn-secondary" onClick={handleClose} disabled={isSubmitting}>
                             Cancel
                         </button>
                     </ModalFooter>
