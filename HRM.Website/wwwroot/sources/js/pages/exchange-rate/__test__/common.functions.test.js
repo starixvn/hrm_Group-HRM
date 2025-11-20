@@ -6,12 +6,22 @@ describe('common.functions', () => {
         describe('currencyCode validation', () => {
             it('should validate correct currency code', async () => {
                 const validData = {
-                    currencyCode: 'USD',
+                    currencyCode: 'EUR',
                     exchangeRate: 1.0,
                     effectiveDate: '2024-01-01'
                 };
 
                 await expect(validationSchema.validate(validData)).resolves.toEqual(validData);
+            });
+
+            it('should reject USD currency code', async () => {
+                const invalidData = {
+                    currencyCode: 'USD',
+                    exchangeRate: 1.0,
+                    effectiveDate: '2024-01-01'
+                };
+
+                await expect(validationSchema.validate(invalidData)).rejects.toThrow('Currency must be different from USD');
             });
 
             it('should reject empty currency code', async () => {
@@ -36,20 +46,20 @@ describe('common.functions', () => {
 
             it('should trim whitespace from currency code', async () => {
                 const data = {
-                    currencyCode: '  USD  ',
+                    currencyCode: '  EUR  ',
                     exchangeRate: 1.0,
                     effectiveDate: '2024-01-01'
                 };
 
                 const result = await validationSchema.validate(data);
-                expect(result.currencyCode).toBe('USD');
+                expect(result.currencyCode).toBe('EUR');
             });
         });
 
         describe('exchangeRate validation', () => {
             it('should validate positive exchange rate', async () => {
                 const validData = {
-                    currencyCode: 'USD',
+                    currencyCode: 'EUR',
                     exchangeRate: 1.5,
                     effectiveDate: '2024-01-01'
                 };
@@ -59,7 +69,7 @@ describe('common.functions', () => {
 
             it('should reject missing exchange rate', async () => {
                 const invalidData = {
-                    currencyCode: 'USD',
+                    currencyCode: 'EUR',
                     exchangeRate: undefined,
                     effectiveDate: '2024-01-01'
                 };
@@ -69,7 +79,7 @@ describe('common.functions', () => {
 
             it('should reject zero exchange rate', async () => {
                 const invalidData = {
-                    currencyCode: 'USD',
+                    currencyCode: 'EUR',
                     exchangeRate: 0,
                     effectiveDate: '2024-01-01'
                 };
@@ -79,7 +89,7 @@ describe('common.functions', () => {
 
             it('should reject negative exchange rate', async () => {
                 const invalidData = {
-                    currencyCode: 'USD',
+                    currencyCode: 'EUR',
                     exchangeRate: -1,
                     effectiveDate: '2024-01-01'
                 };
@@ -91,7 +101,7 @@ describe('common.functions', () => {
         describe('effectiveDate validation', () => {
             it('should validate correct date format', async () => {
                 const validData = {
-                    currencyCode: 'USD',
+                    currencyCode: 'EUR',
                     exchangeRate: 1.0,
                     effectiveDate: '2024-01-01'
                 };
@@ -101,7 +111,7 @@ describe('common.functions', () => {
 
             it('should reject missing effective date', async () => {
                 const invalidData = {
-                    currencyCode: 'USD',
+                    currencyCode: 'EUR',
                     exchangeRate: 1.0,
                     effectiveDate: undefined
                 };
@@ -111,7 +121,7 @@ describe('common.functions', () => {
 
             it('should reject invalid date format', async () => {
                 const invalidData = {
-                    currencyCode: 'USD',
+                    currencyCode: 'EUR',
                     exchangeRate: 1.0,
                     effectiveDate: '2024/01/01'
                 };
@@ -121,7 +131,7 @@ describe('common.functions', () => {
 
             it('should reject invalid date string', async () => {
                 const invalidData = {
-                    currencyCode: 'USD',
+                    currencyCode: 'EUR',
                     exchangeRate: 1.0,
                     effectiveDate: 'invalid-date'
                 };
@@ -131,7 +141,7 @@ describe('common.functions', () => {
 
             it('should accept valid date in YYYY-MM-DD format', async () => {
                 const validData = {
-                    currencyCode: 'USD',
+                    currencyCode: 'EUR',
                     exchangeRate: 1.0,
                     effectiveDate: '2024-12-31'
                 };

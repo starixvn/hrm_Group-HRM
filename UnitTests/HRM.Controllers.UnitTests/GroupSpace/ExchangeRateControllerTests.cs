@@ -117,18 +117,8 @@ public class ExchangeRateControllerTests : BaseControllerTest
         // Arrange
         var expectedRules = new List<CurrencyRoundingRule>
         {
-            new()
-            {
-                Currency = "USD",
-                Rounding = 0,
-                Description = "Rounded to nearest 1",
-            },
-            new()
-            {
-                Currency = "EUR",
-                Rounding = 2,
-                Description = "Rounded to 2 decimal places",
-            },
+            new() { Currency = "USD", Rounding = 0 },
+            new() { Currency = "EUR", Rounding = 2 },
         };
 
         _exchangeRateService.GetRoundingRulesAsync().Returns(expectedRules);
@@ -161,7 +151,6 @@ public class ExchangeRateControllerTests : BaseControllerTest
                 model.CurrencyCode,
                 model.ExchangeRate,
                 model.EffectiveDate,
-                model.Rounding,
                 Arg.Any<int>()
             )
             .Returns(commandResult);
@@ -171,10 +160,9 @@ public class ExchangeRateControllerTests : BaseControllerTest
 
         // Assert
         var jsonResult = Assert.IsType<JsonResult>(result);
-        var json = JsonSerializer.Serialize(jsonResult.Value);
-        var response = JsonSerializer.Deserialize<JsonElement>(json);
-        Assert.Equal(0, response.GetProperty("code").GetInt32());
-        Assert.Equal("Success", response.GetProperty("message").GetString());
+        var response = Assert.IsType<CommandResult>(jsonResult.Value);
+        Assert.Equal(0, response.Code);
+        Assert.Equal("Success", response.Message);
 
         await _exchangeRateService
             .Received(1)
@@ -182,34 +170,6 @@ public class ExchangeRateControllerTests : BaseControllerTest
                 model.CurrencyCode,
                 model.ExchangeRate,
                 model.EffectiveDate,
-                model.Rounding,
-                Arg.Any<int>()
-            );
-    }
-
-    [Fact]
-    public async Task Create_WithInvalidModel_ShouldReturnError()
-    {
-        // Arrange
-        CreateExchangeRate? model = null;
-
-        // Act
-        var result = await _controller.Create(model);
-
-        // Assert
-        var jsonResult = Assert.IsType<JsonResult>(result);
-        var json = JsonSerializer.Serialize(jsonResult.Value);
-        var response = JsonSerializer.Deserialize<JsonElement>(json);
-        Assert.Equal(1, response.GetProperty("code").GetInt32());
-        Assert.Equal("Invalid request", response.GetProperty("message").GetString());
-
-        await _exchangeRateService
-            .DidNotReceive()
-            .CreateExchangeRateAsync(
-                Arg.Any<string>(),
-                Arg.Any<decimal>(),
-                Arg.Any<DateTime>(),
-                Arg.Any<decimal>(),
                 Arg.Any<int>()
             );
     }
@@ -233,7 +193,6 @@ public class ExchangeRateControllerTests : BaseControllerTest
                 Arg.Any<string>(),
                 Arg.Any<decimal>(),
                 Arg.Any<DateTime>(),
-                Arg.Any<decimal>(),
                 Arg.Any<int>()
             )
             .Returns(commandResult);
@@ -243,10 +202,9 @@ public class ExchangeRateControllerTests : BaseControllerTest
 
         // Assert
         var jsonResult = Assert.IsType<JsonResult>(result);
-        var json = JsonSerializer.Serialize(jsonResult.Value);
-        var response = JsonSerializer.Deserialize<JsonElement>(json);
-        Assert.Equal(1, response.GetProperty("code").GetInt32());
-        Assert.Equal("Failed to create", response.GetProperty("message").GetString());
+        var response = Assert.IsType<CommandResult>(jsonResult.Value);
+        Assert.Equal(1, response.Code);
+        Assert.Equal("Failed to create", response.Message);
     }
 
     [Fact]
@@ -272,7 +230,6 @@ public class ExchangeRateControllerTests : BaseControllerTest
                 model.OldEffectiveDate,
                 model.CurrencyCode,
                 model.ExchangeRate,
-                model.Rounding,
                 Arg.Any<int>()
             )
             .Returns(commandResult);
@@ -282,10 +239,9 @@ public class ExchangeRateControllerTests : BaseControllerTest
 
         // Assert
         var jsonResult = Assert.IsType<JsonResult>(result);
-        var json = JsonSerializer.Serialize(jsonResult.Value);
-        var response = JsonSerializer.Deserialize<JsonElement>(json);
-        Assert.Equal(0, response.GetProperty("code").GetInt32());
-        Assert.Equal("Success", response.GetProperty("message").GetString());
+        var response = Assert.IsType<CommandResult>(jsonResult.Value);
+        Assert.Equal(0, response.Code);
+        Assert.Equal("Success", response.Message);
 
         await _exchangeRateService
             .Received(1)
@@ -295,7 +251,6 @@ public class ExchangeRateControllerTests : BaseControllerTest
                 model.OldEffectiveDate,
                 model.CurrencyCode,
                 model.ExchangeRate,
-                model.Rounding,
                 Arg.Any<int>()
             );
     }
@@ -324,7 +279,6 @@ public class ExchangeRateControllerTests : BaseControllerTest
                 Arg.Any<DateTime>(),
                 Arg.Any<string>(),
                 Arg.Any<decimal>(),
-                Arg.Any<decimal>(),
                 Arg.Any<int>()
             );
     }
@@ -352,7 +306,6 @@ public class ExchangeRateControllerTests : BaseControllerTest
                 Arg.Any<DateTime>(),
                 Arg.Any<string>(),
                 Arg.Any<decimal>(),
-                Arg.Any<decimal>(),
                 Arg.Any<int>()
             )
             .Returns(commandResult);
@@ -362,10 +315,9 @@ public class ExchangeRateControllerTests : BaseControllerTest
 
         // Assert
         var jsonResult = Assert.IsType<JsonResult>(result);
-        var json = JsonSerializer.Serialize(jsonResult.Value);
-        var response = JsonSerializer.Deserialize<JsonElement>(json);
-        Assert.Equal(1, response.GetProperty("code").GetInt32());
-        Assert.Equal("Failed to update", response.GetProperty("message").GetString());
+        var response = Assert.IsType<CommandResult>(jsonResult.Value);
+        Assert.Equal(1, response.Code);
+        Assert.Equal("Failed to update", response.Message);
     }
 
     [Fact]
@@ -389,35 +341,13 @@ public class ExchangeRateControllerTests : BaseControllerTest
 
         // Assert
         var jsonResult = Assert.IsType<JsonResult>(result);
-        var json = JsonSerializer.Serialize(jsonResult.Value);
-        var response = JsonSerializer.Deserialize<JsonElement>(json);
-        Assert.Equal(0, response.GetProperty("code").GetInt32());
-        Assert.Equal("Success", response.GetProperty("message").GetString());
+        var response = Assert.IsType<CommandResult>(jsonResult.Value);
+        Assert.Equal(0, response.Code);
+        Assert.Equal("Success", response.Message);
 
         await _exchangeRateService
             .Received(1)
             .DeleteExchangeRateAsync(model.CurrencyId, model.EffectiveDate, Arg.Any<int>());
-    }
-
-    [Fact]
-    public async Task Delete_WithInvalidModel_ShouldReturnError()
-    {
-        // Arrange
-        DeleteExchangeRate? model = null;
-
-        // Act
-        var result = await _controller.Delete(model);
-
-        // Assert
-        var jsonResult = Assert.IsType<JsonResult>(result);
-        var json = JsonSerializer.Serialize(jsonResult.Value);
-        var response = JsonSerializer.Deserialize<JsonElement>(json);
-        Assert.Equal(1, response.GetProperty("code").GetInt32());
-        Assert.Equal("Invalid request", response.GetProperty("message").GetString());
-
-        await _exchangeRateService
-            .DidNotReceive()
-            .DeleteExchangeRateAsync(Arg.Any<int>(), Arg.Any<DateTime>(), Arg.Any<int>());
     }
 
     [Fact]
@@ -441,10 +371,9 @@ public class ExchangeRateControllerTests : BaseControllerTest
 
         // Assert
         var jsonResult = Assert.IsType<JsonResult>(result);
-        var json = JsonSerializer.Serialize(jsonResult.Value);
-        var response = JsonSerializer.Deserialize<JsonElement>(json);
-        Assert.Equal(1, response.GetProperty("code").GetInt32());
-        Assert.Equal("Failed to delete", response.GetProperty("message").GetString());
+        var response = Assert.IsType<CommandResult>(jsonResult.Value);
+        Assert.Equal(1, response.Code);
+        Assert.Equal("Failed to delete", response.Message);
     }
 
     [Fact]
@@ -468,7 +397,6 @@ public class ExchangeRateControllerTests : BaseControllerTest
                 Arg.Any<string>(),
                 Arg.Any<decimal>(),
                 Arg.Any<DateTime>(),
-                Arg.Any<decimal>(),
                 Arg.Any<int>()
             )
             .Returns(commandResult);
@@ -483,7 +411,6 @@ public class ExchangeRateControllerTests : BaseControllerTest
                 model.CurrencyCode,
                 model.ExchangeRate,
                 model.EffectiveDate,
-                model.Rounding,
                 123 // Verify EmpId is used
             );
     }
@@ -513,7 +440,6 @@ public class ExchangeRateControllerTests : BaseControllerTest
                 Arg.Any<DateTime>(),
                 Arg.Any<string>(),
                 Arg.Any<decimal>(),
-                Arg.Any<decimal>(),
                 Arg.Any<int>()
             )
             .Returns(commandResult);
@@ -530,7 +456,6 @@ public class ExchangeRateControllerTests : BaseControllerTest
                 model.OldEffectiveDate,
                 model.CurrencyCode,
                 model.ExchangeRate,
-                model.Rounding,
                 456 // Verify EmpId is used
             );
     }

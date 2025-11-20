@@ -98,9 +98,9 @@ public class ExchangeRateServiceTests
         // Arrange
         var currencies = new List<Currency>
         {
-            new() { CurrencyCode = "USD", Rounding = 0 },
-            new() { CurrencyCode = "EUR", Rounding = 2 },
-            new() { CurrencyCode = "JPY", Rounding = -1 },
+            new() { Id = 1, CurrencyCode = "USD", Rounding = 0 },
+            new() { Id = 2, CurrencyCode = "EUR", Rounding = 2 },
+            new() { Id = 3, CurrencyCode = "JPY", Rounding = -1 },
         };
 
         _baseService.GetDataAsync<Currency>(Arg.Any<GetCurrencyCriteria>()).Returns(currencies);
@@ -112,17 +112,17 @@ public class ExchangeRateServiceTests
         Assert.NotNull(result);
         var resultList = result.ToList();
         Assert.Equal(3, resultList.Count);
+        Assert.Equal((short)1, resultList[0].CurrencyId);
         Assert.Equal("USD", resultList[0].Currency);
         Assert.Equal(0, resultList[0].Rounding);
-        Assert.Equal("Rounded to nearest 1", resultList[0].Description);
 
+        Assert.Equal((short)2, resultList[1].CurrencyId);
         Assert.Equal("EUR", resultList[1].Currency);
         Assert.Equal(2, resultList[1].Rounding);
-        Assert.Equal("Rounded to 2 decimal places", resultList[1].Description);
 
+        Assert.Equal((short)3, resultList[2].CurrencyId);
         Assert.Equal("JPY", resultList[2].Currency);
         Assert.Equal(-1, resultList[2].Rounding);
-        Assert.Equal("Rounded to nearest 10", resultList[2].Description);
 
         await _baseService.Received(1).GetDataAsync<Currency>(Arg.Any<GetCurrencyCriteria>());
     }
@@ -133,10 +133,10 @@ public class ExchangeRateServiceTests
         // Arrange
         var currencies = new List<Currency>
         {
-            new() { CurrencyCode = "USD", Rounding = -4 },
-            new() { CurrencyCode = "EUR", Rounding = -2 },
-            new() { CurrencyCode = "GBP", Rounding = 0 },
-            new() { CurrencyCode = "JPY", Rounding = 3 },
+            new() { Id = 1, CurrencyCode = "USD", Rounding = -4 },
+            new() { Id = 2, CurrencyCode = "EUR", Rounding = -2 },
+            new() { Id = 3, CurrencyCode = "GBP", Rounding = 0 },
+            new() { Id = 4, CurrencyCode = "JPY", Rounding = 3 },
         };
 
         _baseService.GetDataAsync<Currency>(Arg.Any<GetCurrencyCriteria>()).Returns(currencies);
@@ -148,10 +148,18 @@ public class ExchangeRateServiceTests
         Assert.NotNull(result);
         var resultList = result.ToList();
         Assert.Equal(4, resultList.Count);
-        Assert.Equal("Rounded to nearest 1000", resultList[0].Description);
-        Assert.Equal("Rounded to nearest 100", resultList[1].Description);
-        Assert.Equal("Rounded to nearest 1", resultList[2].Description);
-        Assert.Equal("Rounded to 3 decimal places", resultList[3].Description);
+        Assert.Equal((short)1, resultList[0].CurrencyId);
+        Assert.Equal("USD", resultList[0].Currency);
+        Assert.Equal(-4, resultList[0].Rounding);
+        Assert.Equal((short)2, resultList[1].CurrencyId);
+        Assert.Equal("EUR", resultList[1].Currency);
+        Assert.Equal(-2, resultList[1].Rounding);
+        Assert.Equal((short)3, resultList[2].CurrencyId);
+        Assert.Equal("GBP", resultList[2].Currency);
+        Assert.Equal(0, resultList[2].Rounding);
+        Assert.Equal((short)4, resultList[3].CurrencyId);
+        Assert.Equal("JPY", resultList[3].Currency);
+        Assert.Equal(3, resultList[3].Rounding);
 
         await _baseService.Received(1).GetDataAsync<Currency>(Arg.Any<GetCurrencyCriteria>());
     }
@@ -210,7 +218,6 @@ public class ExchangeRateServiceTests
         const string currencyCode = "USD";
         const decimal exchangeRate = 1.0m;
         var effectiveDate = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Unspecified);
-        const decimal rounding = 0;
         const int modifiedBy = 1;
 
         var expectedResult = new CommandResult { Code = 0, Message = "Success" };
@@ -224,7 +231,6 @@ public class ExchangeRateServiceTests
             currencyCode,
             exchangeRate,
             effectiveDate,
-            rounding,
             modifiedBy
         );
 
@@ -240,7 +246,6 @@ public class ExchangeRateServiceTests
                     c.CurrencyCode == currencyCode
                     && c.ExchangeRate == exchangeRate
                     && c.EffectiveDate == effectiveDate
-                    && c.Rounding == rounding
                     && c.ModifiedBy == modifiedBy
                 )
             );
@@ -253,7 +258,6 @@ public class ExchangeRateServiceTests
         const string currencyCode = "USD";
         const decimal exchangeRate = 1.0m;
         var effectiveDate = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Unspecified);
-        const decimal rounding = 0;
         const int modifiedBy = 1;
 
         var expectedResult = new CommandResult
@@ -271,7 +275,6 @@ public class ExchangeRateServiceTests
             currencyCode,
             exchangeRate,
             effectiveDate,
-            rounding,
             modifiedBy
         );
 
@@ -288,7 +291,6 @@ public class ExchangeRateServiceTests
                     c.CurrencyCode == currencyCode
                     && c.ExchangeRate == exchangeRate
                     && c.EffectiveDate == effectiveDate
-                    && c.Rounding == rounding
                     && c.ModifiedBy == modifiedBy
                 )
             );
@@ -303,7 +305,6 @@ public class ExchangeRateServiceTests
         var oldEffectiveDate = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Unspecified);
         const string currencyCode = "USD";
         const decimal exchangeRate = 1.05m;
-        const decimal rounding = 0;
         const int modifiedBy = 1;
 
         var expectedResult = new CommandResult { Code = 0, Message = "Success" };
@@ -319,7 +320,6 @@ public class ExchangeRateServiceTests
             oldEffectiveDate,
             currencyCode,
             exchangeRate,
-            rounding,
             modifiedBy
         );
 
@@ -337,7 +337,6 @@ public class ExchangeRateServiceTests
                     && c.OldEffectiveDate == oldEffectiveDate
                     && c.CurrencyCode == currencyCode
                     && c.ExchangeRate == exchangeRate
-                    && c.Rounding == rounding
                     && c.ModifiedBy == modifiedBy
                 )
             );
@@ -352,7 +351,6 @@ public class ExchangeRateServiceTests
         var oldEffectiveDate = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Unspecified);
         const string currencyCode = "USD";
         const decimal exchangeRate = 1.05m;
-        const decimal rounding = 0;
         const int modifiedBy = 1;
 
         var expectedResult = new CommandResult
@@ -372,7 +370,6 @@ public class ExchangeRateServiceTests
             oldEffectiveDate,
             currencyCode,
             exchangeRate,
-            rounding,
             modifiedBy
         );
 
@@ -391,7 +388,6 @@ public class ExchangeRateServiceTests
                     && c.OldEffectiveDate == oldEffectiveDate
                     && c.CurrencyCode == currencyCode
                     && c.ExchangeRate == exchangeRate
-                    && c.Rounding == rounding
                     && c.ModifiedBy == modifiedBy
                 )
             );

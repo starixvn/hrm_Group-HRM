@@ -22,17 +22,17 @@ describe('ExchangeRateTable Component', () => {
     const mockData = [
         {
             currencyId: 1,
-            baseCurrency: 'USD',
-            toUsd: 1.0,
-            effectiveDate: getFutureDate(),
-            rounding: 0
-        },
-        {
-            currencyId: 2,
             baseCurrency: 'EUR',
             toUsd: 1.1,
             effectiveDate: getFutureDate(),
             rounding: 2
+        },
+        {
+            currencyId: 2,
+            baseCurrency: 'GBP',
+            toUsd: 1.25,
+            effectiveDate: getFutureDate(),
+            rounding: 0
         }
     ];
 
@@ -76,15 +76,15 @@ describe('ExchangeRateTable Component', () => {
         const dataWithMultipleDetails = [
             {
                 currencyId: 1,
-                baseCurrency: 'USD',
-                toUsd: 1.0,
+                baseCurrency: 'EUR',
+                toUsd: 1.1,
                 effectiveDate: futureDate,
                 rounding: 0
             },
             {
                 currencyId: 1,
-                baseCurrency: 'USD',
-                toUsd: 1.05,
+                baseCurrency: 'EUR',
+                toUsd: 1.15,
                 effectiveDate: futureDate,
                 rounding: 0
             }
@@ -130,15 +130,15 @@ describe('ExchangeRateTable Component', () => {
         const dataWithMultipleDetails = [
             {
                 currencyId: 1,
-                baseCurrency: 'USD',
-                toUsd: 1.0,
+                baseCurrency: 'EUR',
+                toUsd: 1.1,
                 effectiveDate: futureDate,
                 rounding: 0
             },
             {
                 currencyId: 1,
-                baseCurrency: 'USD',
-                toUsd: 1.05,
+                baseCurrency: 'EUR',
+                toUsd: 1.15,
                 effectiveDate: futureDate,
                 rounding: 0
             }
@@ -172,6 +172,38 @@ describe('ExchangeRateTable Component', () => {
 
         expect(screen.queryByTitle('Edit')).not.toBeInTheDocument();
         expect(screen.queryByTitle('Delete')).not.toBeInTheDocument();
+    });
+
+    it('should filter out USD records', () => {
+        const dataWithUSD = [
+            {
+                currencyId: 1,
+                baseCurrency: 'USD',
+                toUsd: 1.0,
+                effectiveDate: getFutureDate(),
+                rounding: 0
+            },
+            {
+                currencyId: 2,
+                baseCurrency: 'EUR',
+                toUsd: 1.1,
+                effectiveDate: getFutureDate(),
+                rounding: 2
+            }
+        ];
+
+        render(
+            <ExchangeRateTable
+                data={dataWithUSD}
+                onEdit={mockOnEdit}
+                onDelete={mockOnDelete}
+            />
+        );
+
+        // USD should not be displayed
+        expect(screen.queryByText('USD')).not.toBeInTheDocument();
+        // EUR should be displayed
+        expect(screen.getByText('EUR')).toBeInTheDocument();
     });
 });
 

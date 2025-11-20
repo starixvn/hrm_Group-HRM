@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, ModalBody, ModalFooter, ModalHeader } from 'react-bootstrap';
 import Draggable from 'react-draggable';
+import axios from 'axios';
 import toastr from 'toastr';
 import moment from 'moment';
-import { toastOptions } from '../../../shared/common.functions';
-import ExchangeRateService from '../service';
+import { toastOptions, resolveClientUrl, axiosError } from '../../../shared/common.functions';
 import { validationSchema } from '../common.functions';
 
 const DATE_FORMAT = 'YYYY-MM-DD';
@@ -38,7 +38,6 @@ const ExchangeRateModal = ({ show, onClose, onSuccess, editData, isEdit = false 
         currencyCode: '',
         exchangeRate: '',
         effectiveDate: getTodayDateString(),
-        rounding: '0',
     });
     const [oldEffectiveDate, setOldEffectiveDate] = useState(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -49,14 +48,12 @@ const ExchangeRateModal = ({ show, onClose, onSuccess, editData, isEdit = false 
                 const baseCurrency = editData.baseCurrency || '';
                 const toUsd = editData.toUsd || '';
                 const effectiveDate = editData.effectiveDate || '';
-                const rounding = editData.rounding !== undefined ? editData.rounding : 0;
 
                 setOldEffectiveDate(effectiveDate);
                 setFormData({
                     currencyCode: baseCurrency,
                     exchangeRate: toUsd.toString(),
                     effectiveDate: formatDateForInput(effectiveDate),
-                    rounding: rounding.toString(),
                 });
             } else {
                 setOldEffectiveDate(null);
@@ -64,7 +61,6 @@ const ExchangeRateModal = ({ show, onClose, onSuccess, editData, isEdit = false 
                     currencyCode: '',
                     exchangeRate: '',
                     effectiveDate: getTodayDateString(),
-                    rounding: '0',
                 });
             }
         }
@@ -117,7 +113,6 @@ const ExchangeRateModal = ({ show, onClose, onSuccess, editData, isEdit = false 
             currencyCode: validatedData.currencyCode.toUpperCase(),
             exchangeRate: validatedData.exchangeRate,
             effectiveDate: formatDateWithTime(validatedData.effectiveDate),
-            rounding: parseInt(formData.rounding, 10) || 0,
         };
 
         if (isEdit && editData) {
@@ -128,16 +123,6 @@ const ExchangeRateModal = ({ show, onClose, onSuccess, editData, isEdit = false 
         }
 
         return submitData;
-    };
-
-    const performSubmit = async submitData => {
-        if (isEdit && editData) {
-            await ExchangeRateService.updateExchangeRate(editData.currencyId, submitData);
-            toastr.success('Exchange Rate updated successfully', '', toastOptions());
-        } else {
-            await ExchangeRateService.createExchangeRate(submitData);
-            toastr.success('Exchange Rate added successfully', '', toastOptions());
-        }
     };
 
     const handleSubmit = async e => {
@@ -152,14 +137,40 @@ const ExchangeRateModal = ({ show, onClose, onSuccess, editData, isEdit = false 
             }, { abortEarly: false });
 
             const submitData = prepareSubmitData(validatedData);
-            await performSubmit(submitData);
+            const url = isEdit && editData 
+                ? resolveClientUrl('ExchangeRate/Update')
+                : resolveClientUrl('ExchangeRate/Create');
+            
+            const requestData = isEdit && editData
+                ? {
+                    currencyId: editData.currencyId,
+                    currencyCode: submitData.currencyCode,
+                    exchangeRate: submitData.exchangeRate,
+                    effectiveDate: submitData.effectiveDate,
+                    oldEffectiveDate: submitData.oldEffectiveDate,
+                }
+                : submitData;
 
-            onSuccess();
-            onClose();
+            axios.post(url, requestData, {
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            }).then(response => {
+                const { data } = response;
+                if (data.isSuccessful) {
+                    toastr.success(
+                        isEdit ? 'Exchange Rate updated successfully!' : 'Exchange Rate added successfully!',
+                        '',
+                        toastOptions()
+                    );
+                    onSuccess();
+                    onClose();
+                } else {
+                    toastr.error(data.message, '', toastOptions());
+                    setIsSubmitting(false);
+                }
+            }).catch(axiosError);
         } catch (error) {
             const errorMessage = getErrorMessage(error, isEdit);
             toastr.error(errorMessage, '', toastOptions());
-        } finally {
             setIsSubmitting(false);
         }
     };
@@ -184,21 +195,8 @@ const ExchangeRateModal = ({ show, onClose, onSuccess, editData, isEdit = false 
                                 onChange={handleChange}
                                 maxLength="3"
                                 required
-                                placeholder="USD, EUR, etc."
+                                placeholder="EUR, VND, etc."
                                 style={{ textTransform: 'uppercase' }}
-                            />
-                        </div>
-                        <div className="form-group">
-                            <label>
-                                Rounding
-                            </label>
-                            <input
-                                type="number"
-                                className="form-control"
-                                name="rounding"
-                                value={formData.rounding}
-                                onChange={handleChange}
-                                placeholder="e.g., -4, -2, -1, 0, 2"
                             />
                         </div>
                         <div className="form-group">
@@ -233,7 +231,7 @@ const ExchangeRateModal = ({ show, onClose, onSuccess, editData, isEdit = false 
                     </ModalBody>
                     <ModalFooter>
                         <button type="submit" className="btn btn-primary" disabled={isSubmitting}>
-                            {isSubmitting ? 'Submitting...' : 'Submit'}
+                            Submit
                         </button>
                         <button type="button" className="btn btn-secondary" onClick={onClose} disabled={isSubmitting}>
                             Cancel

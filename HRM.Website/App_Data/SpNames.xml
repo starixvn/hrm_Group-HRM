@@ -630,6 +630,7 @@
     </Function>
     <Function Name="Currency">
         <Setting Key="Currency_Get" SpName="Currency_Get" DbName="bodb_HRM" Plain="0" />
+        <Setting Key="Currency_UpdateRounding" SpName="Currency_UpdateRounding" DbName="bodb_HRM" Plain="0" />
     </Function>
     <Function Name="ExchangeRate">
         <Setting Key="CurrencyExchangeRate_Get" SpName="CurrencyExchangeRate_Get" DbName="bodb_HRM" Plain="0" />

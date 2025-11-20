@@ -1,17 +1,19 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor, cleanup } from '@testing-library/react';
+import axios from 'axios';
 import ExchangeRateModal from '../../components/ExchangeRateModal';
-import ExchangeRateService from '../../service';
 import { validationSchema } from '../../common.functions';
 
-jest.mock('../../service');
+jest.mock('axios');
 jest.mock('../../common.functions', () => ({
     validationSchema: {
         validate: jest.fn()
     }
 }));
 jest.mock('../../../../shared/common.functions', () => ({
-    toastOptions: jest.fn(() => ({}))
+    toastOptions: jest.fn(() => ({})),
+    resolveClientUrl: jest.fn((url) => url),
+    axiosError: jest.fn()
 }));
 jest.mock('toastr', () => ({
     success: jest.fn(),
@@ -73,14 +75,11 @@ describe('ExchangeRateModal Component', () => {
 
     beforeEach(() => {
         jest.clearAllMocks();
-        ExchangeRateService.createExchangeRate = jest.fn().mockResolvedValue({
-            data: { code: 0, message: 'Success' }
-        });
-        ExchangeRateService.updateExchangeRate = jest.fn().mockResolvedValue({
-            data: { code: 0, message: 'Success' }
+        axios.post = jest.fn().mockResolvedValue({
+            data: { isSuccessful: true, message: 'Success' }
         });
         validationSchema.validate = jest.fn().mockResolvedValue({
-            currencyCode: 'USD',
+            currencyCode: 'EUR',
             exchangeRate: 1.0,
             effectiveDate: '2024-01-01'
         });
@@ -139,7 +138,7 @@ describe('ExchangeRateModal Component', () => {
                 />
             );
 
-            const currencyInput = screen.getByPlaceholderText(/USD, EUR/i);
+            const currencyInput = screen.getByPlaceholderText(/EUR, VND/i);
             const rateInput = screen.getByPlaceholderText(/0.00000000/i);
             const submitButton = screen.getByRole('button', { name: /Submit/i });
 
@@ -149,13 +148,17 @@ describe('ExchangeRateModal Component', () => {
                 expect(dateInput).toBeTruthy();
             });
 
-            fireEvent.change(currencyInput, { target: { value: 'USD' } });
+            fireEvent.change(currencyInput, { target: { value: 'EUR' } });
             fireEvent.change(rateInput, { target: { value: '1.0' } });
             fireEvent.change(dateInput, { target: { value: '2024-01-01' } });
             fireEvent.click(submitButton);
 
             await waitFor(() => {
-                expect(ExchangeRateService.createExchangeRate).toHaveBeenCalled();
+                expect(axios.post).toHaveBeenCalledWith(
+                    expect.stringContaining('Create'),
+                    expect.any(Object),
+                    expect.any(Object)
+                );
             });
         });
 
@@ -168,7 +171,7 @@ describe('ExchangeRateModal Component', () => {
                 />
             );
 
-            const currencyInput = screen.getByPlaceholderText(/USD, EUR/i);
+            const currencyInput = screen.getByPlaceholderText(/EUR, VND/i);
             fireEvent.change(currencyInput, { target: { value: 'usd' } });
 
             await waitFor(() => {
@@ -211,7 +214,7 @@ describe('ExchangeRateModal Component', () => {
                 />
             );
 
-            const currencyInput = screen.getByPlaceholderText(/USD, EUR/i);
+            const currencyInput = screen.getByPlaceholderText(/EUR, VND/i);
             expect(currencyInput).toHaveValue('EUR');
         });
 
@@ -230,11 +233,13 @@ describe('ExchangeRateModal Component', () => {
             fireEvent.click(submitButton);
 
             await waitFor(() => {
-                expect(ExchangeRateService.updateExchangeRate).toHaveBeenCalledWith(
-                    mockEditData.currencyId,
+                expect(axios.post).toHaveBeenCalledWith(
+                    expect.stringContaining('Update'),
                     expect.objectContaining({
+                        currencyId: mockEditData.currencyId,
                         currencyCode: expect.any(String)
-                    })
+                    }),
+                    expect.any(Object)
                 );
             }, { timeout: 3000 });
         });
@@ -258,7 +263,7 @@ describe('ExchangeRateModal Component', () => {
                 />
             );
 
-            const currencyInput = screen.getByPlaceholderText(/USD, EUR/i);
+            const currencyInput = screen.getByPlaceholderText(/EUR, VND/i);
             const rateInput = screen.getByPlaceholderText(/0.00000000/i);
             const submitButton = screen.getByRole('button', { name: /Submit/i });
             
@@ -268,7 +273,7 @@ describe('ExchangeRateModal Component', () => {
                 expect(dateInput).toBeTruthy();
             });
 
-            fireEvent.change(currencyInput, { target: { value: 'USD' } });
+            fireEvent.change(currencyInput, { target: { value: 'EUR' } });
             fireEvent.change(rateInput, { target: { value: '-1' } });
             fireEvent.change(dateInput, { target: { value: '2024-01-01' } });
             fireEvent.click(submitButton);

@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Core.Constants;
 using Core.Filters;
 using GO.UserControl.Client.Core.Enumerables;
+using GO.UserControl.Client.Core.Models;
 using GO.UserControl.Client.Core.Session;
 using HRM.Models.Group.ExchangeRate;
 using HRM.Services.Interfaces;
@@ -42,20 +43,20 @@ public class ExchangeRateController(
     [HrmPermission(Policy.Host, FunctionKey.ExchangeRate)]
     public async Task<IActionResult> Create([FromBody] CreateExchangeRate model)
     {
+        var commandResult = new CommandResult();
         if (model == null || !ModelState.IsValid)
         {
-            return Json(new { code = 1, message = "Invalid request" });
+            return Json(commandResult);
         }
 
         var result = await exchangeRateService.CreateExchangeRateAsync(
             model.CurrencyCode,
             model.ExchangeRate,
             model.EffectiveDate,
-            model.Rounding,
             EmployeeSession.EmpId
         );
 
-        return Json(new { code = result.IsSuccessful ? 0 : result.Code, message = result.Message });
+        return Json(result);
     }
 
     [HttpPost]
@@ -73,20 +74,20 @@ public class ExchangeRateController(
             model.OldEffectiveDate,
             model.CurrencyCode,
             model.ExchangeRate,
-            model.Rounding,
             EmployeeSession.EmpId
         );
 
-        return Json(new { code = result.IsSuccessful ? 0 : result.Code, message = result.Message });
+        return Json(result);
     }
 
     [HttpPost]
     [HrmPermission(Policy.Host, FunctionKey.ExchangeRate)]
     public async Task<IActionResult> Delete([FromBody] DeleteExchangeRate model)
     {
+        var commandResult = new CommandResult();
         if (model == null || !ModelState.IsValid)
         {
-            return Json(new { code = 1, message = "Invalid request" });
+            return Json(commandResult);
         }
 
         var result = await exchangeRateService.DeleteExchangeRateAsync(
@@ -95,6 +96,25 @@ public class ExchangeRateController(
             EmployeeSession.EmpId
         );
 
-        return Json(new { code = result.IsSuccessful ? 0 : result.Code, message = result.Message });
+        return Json(result);
+    }
+
+    [HttpPost]
+    [HrmPermission(Policy.Host, FunctionKey.ExchangeRate)]
+    public async Task<IActionResult> UpdateRounding([FromBody] UpdateCurrencyRounding model)
+    {
+        var commandResult = new CommandResult();
+        if (model == null || !ModelState.IsValid)
+        {
+            return Json(commandResult);
+        }
+
+        var result = await exchangeRateService.UpdateCurrencyRoundingAsync(
+            model.CurrencyId,
+            model.Rounding,
+            EmployeeSession.EmpId
+        );
+
+        return Json(result);
     }
 }

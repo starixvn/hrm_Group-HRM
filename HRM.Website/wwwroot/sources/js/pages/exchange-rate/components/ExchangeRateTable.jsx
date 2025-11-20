@@ -4,6 +4,14 @@ import moment from 'moment';
 const ExchangeRateTable = ({ data, onEdit, onDelete }) => {
     const [expandedRows, setExpandedRows] = useState(new Set());
 
+    const hasPermission = () => window.hasPermission === 'True';
+
+    const validateAndParseDate = date => {
+        if (!date) return null;
+        const dateMoment = moment(date);
+        return dateMoment.isValid() ? dateMoment : null;
+    };
+
     const formatRate = rate => {
         if (rate === null || rate === undefined || isNaN(rate) || rate === 0) {
             return <span>N/A</span>;
@@ -14,40 +22,24 @@ const ExchangeRateTable = ({ data, onEdit, onDelete }) => {
         if (decimalPart && decimalPart === '00000000') {
             return num.toString();
         }
-
         return formatted;
     };
 
-    const isExpired = date => {
-        if (!date) {
-            return false;
-        }
-        const dateMoment = moment(date);
-        if (!dateMoment.isValid()) {
-            return false;
-        }
-        return dateMoment.isSameOrBefore(moment().startOf('day'));
+    const isFutureDate = date => {
+        const dateMoment = validateAndParseDate(date);
+        if (!dateMoment) return false;
+        return dateMoment.isAfter(moment().startOf('day'));
     };
 
     const formatDate = date => {
-        if (!date) {
-            return '';
-        }
-        const dateMoment = moment(date);
-        if (!dateMoment.isValid()) {
-            return '';
-        }
+        const dateMoment = validateAndParseDate(date);
+        if (!dateMoment) return '';
         return dateMoment.format('DD MMM, YYYY');
     };
 
     const parseDate = dateStr => {
-        if (!dateStr) {
-            return null;
-        }
-        const dateMoment = moment(dateStr);
-        if (!dateMoment.isValid()) {
-            return null;
-        }
+        const dateMoment = validateAndParseDate(dateStr);
+        if (!dateMoment) return null;
         const date = dateMoment.toDate();
         date.setHours(0, 0, 0, 0);
         return date;
@@ -121,7 +113,13 @@ const ExchangeRateTable = ({ data, onEdit, onDelete }) => {
             return [];
         }
 
-        const groupsByCurrency = groupByCurrency(data);
+        // Filter out USD records
+        const filteredData = data.filter(item => {
+            const currency = item.baseCurrency || item.BaseCurrency;
+            return currency && currency.toUpperCase() !== 'USD';
+        });
+
+        const groupsByCurrency = groupByCurrency(filteredData);
 
         const today = new Date();
         today.setHours(0, 0, 0, 0);
@@ -145,31 +143,39 @@ const ExchangeRateTable = ({ data, onEdit, onDelete }) => {
         });
     };
 
+    const canEditOrDelete = item => {
+        const isUsed = item.isUsed === true;
+        if (!isUsed) return true;
+        return isFutureDate(item.effectiveDate);
+    };
+
+    const renderActionButtonsCell = (item, className = 'action-cell') => (
+        <td className={className}>
+            <button
+                className="btn-action btn-edit"
+                onClick={() => onEdit && onEdit(item)}
+                title="Edit"
+            >
+                <i className="fa fa-pencil"></i>
+            </button>
+            <button
+                className="btn-action btn-delete"
+                onClick={() => onDelete && onDelete(item)}
+                title="Delete"
+            >
+                <i className="fa fa-trash"></i>
+            </button>
+        </td>
+    );
+
     const renderActionButtons = (item, className = 'action-cell') => {
-        if (window.hasPermission !== 'True') {
+        if (!hasPermission()) {
             return null;
         }
-        if (isExpired(item.effectiveDate)) {
+        if (!canEditOrDelete(item)) {
             return <td className={className}></td>;
         }
-        return (
-            <td className={className}>
-                <button
-                    className="btn-action btn-edit"
-                    onClick={() => onEdit && onEdit(item)}
-                    title="Edit"
-                >
-                    <i className="fa fa-pencil"></i>
-                </button>
-                <button
-                    className="btn-action btn-delete"
-                    onClick={() => onDelete && onDelete(item)}
-                    title="Delete"
-                >
-                    <i className="fa fa-trash"></i>
-                </button>
-            </td>
-        );
+        return renderActionButtonsCell(item, className);
     };
 
     const renderSubItemRow = (subItem, groupKey, subIndex) => {
@@ -221,7 +227,7 @@ const ExchangeRateTable = ({ data, onEdit, onDelete }) => {
                         <th>Base Currency</th>
                         <th>To USD</th>
                         <th>Effective Date</th>
-                        {window.hasPermission === 'True' && <th style={{ width: '100px' }}>Actions</th>}
+                        {hasPermission() && <th style={{ width: '100px', padding: '16px' }}>Actions</th>}
                     </tr>
                 </thead>
                 <tbody>
@@ -244,7 +250,7 @@ const ExchangeRateTable = ({ data, onEdit, onDelete }) => {
                         })
                     ) : (
                         <tr>
-                            <td colSpan={window.hasPermission === 'True' ? 4 : 3} className="empty-state">No information available</td>
+                            <td colSpan={hasPermission() ? 4 : 3} className="empty-state">No information available</td>
                         </tr>
                     )}
                 </tbody>

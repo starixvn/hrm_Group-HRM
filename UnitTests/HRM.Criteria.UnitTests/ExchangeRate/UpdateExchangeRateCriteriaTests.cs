@@ -26,11 +26,10 @@ public class UpdateExchangeRateCriteriaTests
         var criteria = new UpdateExchangeRateCriteria
         {
             CurrencyId = 1,
-            EffectiveDate = new DateTime(2024, 1, 15),
-            OldEffectiveDate = new DateTime(2024, 1, 1),
+            EffectiveDate = new DateTime(2024, 1, 15, 0, 0, 0, DateTimeKind.Unspecified),
+            OldEffectiveDate = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Unspecified),
             CurrencyCode = "USD",
             ExchangeRate = 1.05m,
-            Rounding = 0,
             ModifiedBy = 1,
         };
 
@@ -48,11 +47,10 @@ public class UpdateExchangeRateCriteriaTests
         var criteria = new UpdateExchangeRateCriteria
         {
             CurrencyId = 0,
-            EffectiveDate = new DateTime(2024, 1, 15),
-            OldEffectiveDate = new DateTime(2024, 1, 1),
+            EffectiveDate = new DateTime(2024, 1, 15, 0, 0, 0, DateTimeKind.Unspecified),
+            OldEffectiveDate = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Unspecified),
             CurrencyCode = "USD",
             ExchangeRate = 1.05m,
-            Rounding = 0,
             ModifiedBy = 1,
         };
 
@@ -70,11 +68,10 @@ public class UpdateExchangeRateCriteriaTests
         var criteria = new UpdateExchangeRateCriteria
         {
             CurrencyId = -1,
-            EffectiveDate = new DateTime(2024, 1, 15),
-            OldEffectiveDate = new DateTime(2024, 1, 1),
+            EffectiveDate = new DateTime(2024, 1, 15, 0, 0, 0, DateTimeKind.Unspecified),
+            OldEffectiveDate = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Unspecified),
             CurrencyCode = "USD",
             ExchangeRate = 1.05m,
-            Rounding = 0,
             ModifiedBy = 1,
         };
 
@@ -92,11 +89,10 @@ public class UpdateExchangeRateCriteriaTests
         var criteria = new UpdateExchangeRateCriteria
         {
             CurrencyId = 1,
-            EffectiveDate = new DateTime(2024, 1, 15),
-            OldEffectiveDate = new DateTime(2024, 1, 1),
+            EffectiveDate = new DateTime(2024, 1, 15, 0, 0, 0, DateTimeKind.Unspecified),
+            OldEffectiveDate = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Unspecified),
             CurrencyCode = string.Empty,
             ExchangeRate = 1.05m,
-            Rounding = 0,
             ModifiedBy = 1,
         };
 
@@ -114,11 +110,10 @@ public class UpdateExchangeRateCriteriaTests
         var criteria = new UpdateExchangeRateCriteria
         {
             CurrencyId = 1,
-            EffectiveDate = new DateTime(2024, 1, 15),
-            OldEffectiveDate = new DateTime(2024, 1, 1),
+            EffectiveDate = new DateTime(2024, 1, 15, 0, 0, 0, DateTimeKind.Unspecified),
+            OldEffectiveDate = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Unspecified),
             CurrencyCode = "   ",
             ExchangeRate = 1.05m,
-            Rounding = 0,
             ModifiedBy = 1,
         };
 
@@ -136,11 +131,10 @@ public class UpdateExchangeRateCriteriaTests
         var criteria = new UpdateExchangeRateCriteria
         {
             CurrencyId = 1,
-            EffectiveDate = new DateTime(2024, 1, 15),
-            OldEffectiveDate = new DateTime(2024, 1, 1),
+            EffectiveDate = new DateTime(2024, 1, 15, 0, 0, 0, DateTimeKind.Unspecified),
+            OldEffectiveDate = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Unspecified),
             CurrencyCode = null,
             ExchangeRate = 1.05m,
-            Rounding = 0,
             ModifiedBy = 1,
         };
 
@@ -158,11 +152,10 @@ public class UpdateExchangeRateCriteriaTests
         var criteria = new UpdateExchangeRateCriteria
         {
             CurrencyId = 1,
-            EffectiveDate = new DateTime(2024, 1, 15),
-            OldEffectiveDate = new DateTime(2024, 1, 1),
+            EffectiveDate = new DateTime(2024, 1, 15, 0, 0, 0, DateTimeKind.Unspecified),
+            OldEffectiveDate = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Unspecified),
             CurrencyCode = "USD",
             ExchangeRate = 0m,
-            Rounding = 0,
             ModifiedBy = 1,
         };
 
@@ -180,11 +173,10 @@ public class UpdateExchangeRateCriteriaTests
         var criteria = new UpdateExchangeRateCriteria
         {
             CurrencyId = 1,
-            EffectiveDate = new DateTime(2024, 1, 15),
-            OldEffectiveDate = new DateTime(2024, 1, 1),
+            EffectiveDate = new DateTime(2024, 1, 15, 0, 0, 0, DateTimeKind.Unspecified),
+            OldEffectiveDate = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Unspecified),
             CurrencyCode = "USD",
             ExchangeRate = -1.0m,
-            Rounding = 0,
             ModifiedBy = 1,
         };
 
@@ -203,10 +195,9 @@ public class UpdateExchangeRateCriteriaTests
         {
             CurrencyId = 1,
             EffectiveDate = default,
-            OldEffectiveDate = new DateTime(2024, 1, 1),
+            OldEffectiveDate = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Unspecified),
             CurrencyCode = "USD",
             ExchangeRate = 1.05m,
-            Rounding = 0,
             ModifiedBy = 1,
         };
 
@@ -224,11 +215,10 @@ public class UpdateExchangeRateCriteriaTests
         var criteria = new UpdateExchangeRateCriteria
         {
             CurrencyId = 123,
-            EffectiveDate = new DateTime(2024, 6, 1),
-            OldEffectiveDate = new DateTime(2024, 1, 1),
+            EffectiveDate = new DateTime(2024, 6, 1, 0, 0, 0, DateTimeKind.Unspecified),
+            OldEffectiveDate = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Unspecified),
             CurrencyCode = "EUR",
             ExchangeRate = 1.2m,
-            Rounding = 2,
             ModifiedBy = 456,
         };
 
@@ -245,11 +235,10 @@ public class UpdateExchangeRateCriteriaTests
         // Arrange
         var criteria = new UpdateExchangeRateCriteria();
         const int expectedCurrencyId = 123;
-        var expectedEffectiveDate = new DateTime(2024, 6, 1);
-        var expectedOldEffectiveDate = new DateTime(2024, 1, 1);
+        var expectedEffectiveDate = new DateTime(2024, 6, 1, 0, 0, 0, DateTimeKind.Unspecified);
+        var expectedOldEffectiveDate = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Unspecified);
         const string expectedCurrencyCode = "USD";
         const decimal expectedExchangeRate = 1.5m;
-        const decimal expectedRounding = 2;
         const int expectedModifiedBy = 456;
 
         // Act
@@ -258,7 +247,6 @@ public class UpdateExchangeRateCriteriaTests
         criteria.OldEffectiveDate = expectedOldEffectiveDate;
         criteria.CurrencyCode = expectedCurrencyCode;
         criteria.ExchangeRate = expectedExchangeRate;
-        criteria.Rounding = expectedRounding;
         criteria.ModifiedBy = expectedModifiedBy;
 
         // Assert
@@ -267,7 +255,6 @@ public class UpdateExchangeRateCriteriaTests
         Assert.Equal(expectedOldEffectiveDate, criteria.OldEffectiveDate);
         Assert.Equal(expectedCurrencyCode, criteria.CurrencyCode);
         Assert.Equal(expectedExchangeRate, criteria.ExchangeRate);
-        Assert.Equal(expectedRounding, criteria.Rounding);
         Assert.Equal(expectedModifiedBy, criteria.ModifiedBy);
     }
 
@@ -292,11 +279,10 @@ public class UpdateExchangeRateCriteriaTests
         var criteria = new UpdateExchangeRateCriteria
         {
             CurrencyId = currencyId,
-            EffectiveDate = new DateTime(2024, 1, 15),
-            OldEffectiveDate = new DateTime(2024, 1, 1),
+            EffectiveDate = new DateTime(2024, 1, 15, 0, 0, 0, DateTimeKind.Unspecified),
+            OldEffectiveDate = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Unspecified),
             CurrencyCode = currencyCode,
             ExchangeRate = exchangeRate,
-            Rounding = 0,
             ModifiedBy = 1,
         };
 

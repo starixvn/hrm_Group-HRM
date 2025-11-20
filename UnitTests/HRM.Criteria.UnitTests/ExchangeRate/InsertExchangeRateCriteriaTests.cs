@@ -27,8 +27,7 @@ public class InsertExchangeRateCriteriaTests
         {
             CurrencyCode = "USD",
             ExchangeRate = 1.0m,
-            EffectiveDate = new DateTime(2024, 1, 1),
-            Rounding = 0,
+            EffectiveDate = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Unspecified),
             ModifiedBy = 1,
         };
 
@@ -47,8 +46,7 @@ public class InsertExchangeRateCriteriaTests
         {
             CurrencyCode = string.Empty,
             ExchangeRate = 1.0m,
-            EffectiveDate = new DateTime(2024, 1, 1),
-            Rounding = 0,
+            EffectiveDate = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Unspecified),
             ModifiedBy = 1,
         };
 
@@ -67,8 +65,7 @@ public class InsertExchangeRateCriteriaTests
         {
             CurrencyCode = "   ",
             ExchangeRate = 1.0m,
-            EffectiveDate = new DateTime(2024, 1, 1),
-            Rounding = 0,
+            EffectiveDate = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Unspecified),
             ModifiedBy = 1,
         };
 
@@ -87,8 +84,7 @@ public class InsertExchangeRateCriteriaTests
         {
             CurrencyCode = null,
             ExchangeRate = 1.0m,
-            EffectiveDate = new DateTime(2024, 1, 1),
-            Rounding = 0,
+            EffectiveDate = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Unspecified),
             ModifiedBy = 1,
         };
 
@@ -107,8 +103,7 @@ public class InsertExchangeRateCriteriaTests
         {
             CurrencyCode = "USD",
             ExchangeRate = 0m,
-            EffectiveDate = new DateTime(2024, 1, 1),
-            Rounding = 0,
+            EffectiveDate = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Unspecified),
             ModifiedBy = 1,
         };
 
@@ -127,8 +122,7 @@ public class InsertExchangeRateCriteriaTests
         {
             CurrencyCode = "USD",
             ExchangeRate = -1.0m,
-            EffectiveDate = new DateTime(2024, 1, 1),
-            Rounding = 0,
+            EffectiveDate = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Unspecified),
             ModifiedBy = 1,
         };
 
@@ -148,7 +142,6 @@ public class InsertExchangeRateCriteriaTests
             CurrencyCode = "USD",
             ExchangeRate = 1.0m,
             EffectiveDate = default,
-            Rounding = 0,
             ModifiedBy = 1,
         };
 
@@ -167,8 +160,7 @@ public class InsertExchangeRateCriteriaTests
         {
             CurrencyCode = "EUR",
             ExchangeRate = 1.1m,
-            EffectiveDate = new DateTime(2024, 1, 15),
-            Rounding = 2,
+            EffectiveDate = new DateTime(2024, 1, 15, 0, 0, 0, DateTimeKind.Unspecified),
             ModifiedBy = 123,
         };
 
@@ -186,22 +178,19 @@ public class InsertExchangeRateCriteriaTests
         var criteria = new InsertExchangeRateCriteria();
         const string expectedCurrencyCode = "USD";
         const decimal expectedExchangeRate = 1.5m;
-        var expectedEffectiveDate = new DateTime(2024, 6, 1);
-        const decimal expectedRounding = 2;
+        var expectedEffectiveDate = new DateTime(2024, 6, 1, 0, 0, 0, DateTimeKind.Unspecified);
         const int expectedModifiedBy = 456;
 
         // Act
         criteria.CurrencyCode = expectedCurrencyCode;
         criteria.ExchangeRate = expectedExchangeRate;
         criteria.EffectiveDate = expectedEffectiveDate;
-        criteria.Rounding = expectedRounding;
         criteria.ModifiedBy = expectedModifiedBy;
 
         // Assert
         Assert.Equal(expectedCurrencyCode, criteria.CurrencyCode);
         Assert.Equal(expectedExchangeRate, criteria.ExchangeRate);
         Assert.Equal(expectedEffectiveDate, criteria.EffectiveDate);
-        Assert.Equal(expectedRounding, criteria.Rounding);
         Assert.Equal(expectedModifiedBy, criteria.ModifiedBy);
     }
 
@@ -224,8 +213,7 @@ public class InsertExchangeRateCriteriaTests
         {
             CurrencyCode = currencyCode,
             ExchangeRate = exchangeRate,
-            EffectiveDate = new DateTime(2024, 1, 1),
-            Rounding = 0,
+            EffectiveDate = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Unspecified),
             ModifiedBy = 1,
         };
 

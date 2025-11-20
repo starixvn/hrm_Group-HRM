@@ -1,4 +1,5 @@
 import React, { Fragment, useState, useEffect } from 'react';
+import axios from 'axios';
 import toastr from 'toastr';
 import moment from 'moment';
 
@@ -6,9 +7,8 @@ import ExchangeRateTable from './components/ExchangeRateTable';
 import CurrencyRoundingTable from './components/CurrencyRoundingTable';
 import ExchangeRateModal from './components/ExchangeRateModal';
 import SweetModalDialog from '../../shared/components/SweetModalDialog';
-import ExchangeRateService from './service';
 
-import { axiosError, toastOptions } from '../../shared/common.functions';
+import { axiosError, toastOptions, resolveClientUrl } from '../../shared/common.functions';
 
 const AppContainer = () => {
     const [exchangeRates, setExchangeRates] = useState([]);
@@ -35,25 +35,33 @@ const AppContainer = () => {
     }, []);
 
     const fetchExchangeRates = () => {
-        ExchangeRateService.getExchangeRates()
-            .then(data => {
-                let rates = [];
-                if (Array.isArray(data)) {
-                    rates = data;
-                } else if (data && data.exchangeRates) {
-                    rates = data.exchangeRates;
-                }
-                setExchangeRates(rates);
-            })
-            .catch(axiosError);
+        axios({
+            url: resolveClientUrl('ExchangeRate/GetExchangeRates'),
+            method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
+            responseType: 'json',
+        }).then(response => {
+            const data = response.data;
+            let rates = [];
+            if (Array.isArray(data)) {
+                rates = data;
+            } else if (data && data.exchangeRates) {
+                rates = data.exchangeRates;
+            }
+            setExchangeRates(rates);
+        }).catch(axiosError);
     };
 
     const fetchRoundingRules = () => {
-        ExchangeRateService.getRoundingRules()
-            .then(data => {
-                setRoundingRules(data || []);
-            })
-            .catch(axiosError);
+        axios({
+            url: resolveClientUrl('ExchangeRate/GetRoundingRules'),
+            method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
+            responseType: 'json',
+        }).then(response => {
+            const data = response.data || [];
+            setRoundingRules(data);
+        }).catch(axiosError);
     };
 
     const handleShowRoundingInfo = () => {
@@ -104,27 +112,62 @@ const AppContainer = () => {
             return;
         }
 
-        ExchangeRateService.deleteExchangeRate(currencyId, effectiveDate)
-            .then(response => {
-                const data = response.data;
-                if (data.code === 0 || data.isSuccessful) {
-                    toastr.success('Exchange Rate deleted successfully', '', toastOptions());
-                    fetchExchangeRates();
-                } else {
-                    toastr.error(data.message || 'Failed to delete exchange Rate', '', toastOptions());
-                }
-            })
-            .catch(error => {
-                let errorMessage = 'Failed to delete exchange rate';
-                if (error.response && error.response.data) {
-                    errorMessage = error.response.data.message || error.response.data.Message || errorMessage;
-                }
-                toastr.error(errorMessage, '', toastOptions());
-            });
+        axios.post(
+            resolveClientUrl('ExchangeRate/Delete'),
+            {
+                currencyId: currencyId,
+                effectiveDate: effectiveDate
+            },
+            {
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            }
+        ).then(response => {
+            const { data } = response;
+            if (data.isSuccessful) {
+                toastr.success('Exchange Rate deleted successfully', '', toastOptions());
+                fetchExchangeRates();
+            } else {
+                toastr.error(data.message || 'Failed to delete exchange rate', '', toastOptions());
+            }
+        }).catch(axiosError);
     };
 
     const handleCancel = () => {
         setDeleteModalDialog({ show: false });
+    };
+
+    const handleUpdateRounding = item => {
+        const { currencyId, rounding } = item;
+
+        if (!currencyId) {
+            toastr.error('Cannot update: Currency ID not found', '', toastOptions());
+            return;
+        }
+
+        const roundingValue = parseInt(rounding, 10);
+        if (isNaN(roundingValue)) {
+            toastr.error('Rounding value must be a valid number', '', toastOptions());
+            return;
+        }
+
+        axios.post(
+            resolveClientUrl('ExchangeRate/UpdateRounding'),
+            {
+                currencyId: currencyId,
+                rounding: roundingValue
+            },
+            {
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            }
+        ).then(response => {
+            const { data } = response;
+            if (data.isSuccessful) {
+                toastr.success(data.message, '', toastOptions());
+                fetchRoundingRules();
+            } else {
+                toastr.error(data.message || 'Failed to update currency rounding', '', toastOptions());
+            }
+        }).catch(axiosError);
     };
 
     return (
@@ -141,7 +184,7 @@ const AppContainer = () => {
                 <div className="table-header">
                     <h4>1 unit to USD</h4>
                     <i
-                        className="fa fa-info-circle info-icon"
+                        className="fa fa-cog info-icon"
                         onClick={handleShowRoundingInfo}
                         title="Click to show Currency Rounding info"
                     ></i>
@@ -163,7 +206,10 @@ const AppContainer = () => {
                                 onClick={handleHideRoundingInfo}
                             ></i>
                         </div>
-                        <CurrencyRoundingTable data={roundingRules} />
+                        <CurrencyRoundingTable
+                            data={roundingRules}
+                            onEdit={handleUpdateRounding}
+                        />
                     </div>
                 </>
             )}

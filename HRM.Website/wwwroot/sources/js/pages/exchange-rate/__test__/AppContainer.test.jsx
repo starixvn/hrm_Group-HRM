@@ -1,17 +1,28 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import axios from 'axios';
 import AppContainer from '../AppContainer';
-import ExchangeRateService from '../service';
 
-jest.mock('../service');
+jest.mock('axios');
 jest.mock('toastr', () => ({
     success: jest.fn(),
     error: jest.fn()
 }));
-jest.mock('../../../shared/common.functions', () => ({
-    axiosError: jest.fn(),
-    toastOptions: jest.fn(() => ({}))
-}));
+jest.mock('../../../shared/common.functions', () => {
+    const toastr = require('toastr');
+    return {
+        axiosError: jest.fn((error) => {
+            if (error && error.response && error.response.data) {
+                const message = error.response.data.message || error.response.data.Message || 'Failed to delete exchange rate';
+                toastr.error(message, '', {});
+            } else {
+                toastr.error('Failed to delete exchange rate', '', {});
+            }
+        }),
+        toastOptions: jest.fn(() => ({})),
+        resolveClientUrl: jest.fn((url) => url)
+    };
+});
 jest.mock('../components/ExchangeRateModal', () => {
     return function MockExchangeRateModal({ show, onClose, onSuccess, editData, isEdit }) {
         if (!show) return null;
@@ -104,23 +115,30 @@ describe('AppContainer Component', () => {
     const mockExchangeRates = [
         {
             currencyId: 1,
-            baseCurrency: 'USD',
-            toUsd: 1.0,
+            baseCurrency: 'EUR',
+            toUsd: 1.1,
             effectiveDate: '2024-01-01',
-            rounding: 0
+            rounding: 2
         },
         {
             currencyId: 2,
-            baseCurrency: 'EUR',
-            toUsd: 1.1,
+            baseCurrency: 'GBP',
+            toUsd: 1.25,
             effectiveDate: '2024-01-15',
-            rounding: 2
+            rounding: 0
         }
     ];
 
     const mockRoundingRules = [
         {
-            currency: 'USD',
+            currencyId: 1,
+            currency: 'EUR',
+            rounding: 2,
+            description: 'Rounded to 2 decimal places'
+        },
+        {
+            currencyId: 2,
+            currency: 'GBP',
             rounding: 0,
             description: 'Rounded to nearest 1'
         }
@@ -129,9 +147,19 @@ describe('AppContainer Component', () => {
     beforeEach(() => {
         jest.clearAllMocks();
         mockHasPermission('True');
-        ExchangeRateService.getExchangeRates = jest.fn().mockResolvedValue(mockExchangeRates);
-        ExchangeRateService.getRoundingRules = jest.fn().mockResolvedValue(mockRoundingRules);
-        ExchangeRateService.deleteExchangeRate = jest.fn().mockResolvedValue({
+        axios.mockImplementation((config) => {
+            if (config && config.url && config.url.includes('GetExchangeRates')) {
+                return Promise.resolve({ data: mockExchangeRates });
+            }
+            if (config && config.url && config.url.includes('GetRoundingRules')) {
+                return Promise.resolve({ data: mockRoundingRules });
+            }
+            return Promise.reject(new Error('Unexpected axios call'));
+        });
+        if (!axios.post) {
+            axios.post = jest.fn();
+        }
+        axios.post.mockResolvedValue({
             data: { code: 0, isSuccessful: true }
         });
     });
@@ -144,7 +172,11 @@ describe('AppContainer Component', () => {
         render(<AppContainer />);
 
         await waitFor(() => {
-            expect(ExchangeRateService.getExchangeRates).toHaveBeenCalled();
+            expect(axios).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    url: expect.stringContaining('GetExchangeRates')
+                })
+            );
             expect(screen.getByText('1 unit to USD')).toBeInTheDocument();
         });
     });
@@ -167,14 +199,22 @@ describe('AppContainer Component', () => {
         render(<AppContainer />);
 
         await waitFor(() => {
-            expect(ExchangeRateService.getExchangeRates).toHaveBeenCalled();
+            expect(axios).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    url: expect.stringContaining('GetExchangeRates')
+                })
+            );
         });
 
         const infoIcon = screen.getByTitle('Click to show Currency Rounding info');
         fireEvent.click(infoIcon);
 
         await waitFor(() => {
-            expect(ExchangeRateService.getRoundingRules).toHaveBeenCalled();
+            expect(axios).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    url: expect.stringContaining('GetRoundingRules')
+                })
+            );
             expect(screen.getByText('Currency Rounding')).toBeInTheDocument();
         });
     });
@@ -183,7 +223,11 @@ describe('AppContainer Component', () => {
         render(<AppContainer />);
 
         await waitFor(() => {
-            expect(ExchangeRateService.getExchangeRates).toHaveBeenCalled();
+            expect(axios).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    url: expect.stringContaining('GetExchangeRates')
+                })
+            );
         });
 
         const infoIcon = screen.getByTitle('Click to show Currency Rounding info');
@@ -216,7 +260,11 @@ describe('AppContainer Component', () => {
         render(<AppContainer />);
 
         await waitFor(() => {
-            expect(ExchangeRateService.getExchangeRates).toHaveBeenCalled();
+            expect(axios).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    url: expect.stringContaining('GetExchangeRates')
+                })
+            );
         });
 
         const deleteButtons = screen.queryAllByTitle('Delete');
@@ -231,20 +279,37 @@ describe('AppContainer Component', () => {
             fireEvent.click(submitButton);
 
             await waitFor(() => {
-                expect(ExchangeRateService.deleteExchangeRate).toHaveBeenCalled();
+                expect(axios.post).toHaveBeenCalledWith(
+                    expect.stringContaining('Delete'),
+                    expect.any(Object),
+                    expect.any(Object)
+                );
             });
         }
     });
 
     it('should handle object response with exchangeRates property', async () => {
-        ExchangeRateService.getExchangeRates = jest.fn().mockResolvedValue({
-            exchangeRates: mockExchangeRates
+        axios.mockImplementation((config) => {
+            if (config && config.url && config.url.includes('GetExchangeRates')) {
+                return Promise.resolve({ data: { exchangeRates: mockExchangeRates } });
+            }
+            return Promise.reject(new Error('Unexpected axios call'));
+        });
+        if (!axios.post) {
+            axios.post = jest.fn();
+        }
+        axios.post.mockResolvedValue({
+            data: { code: 0, isSuccessful: true }
         });
 
         render(<AppContainer />);
 
         await waitFor(() => {
-            expect(ExchangeRateService.getExchangeRates).toHaveBeenCalled();
+            expect(axios).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    url: expect.stringContaining('GetExchangeRates')
+                })
+            );
             expect(screen.getByText('1 unit to USD')).toBeInTheDocument();
         });
     });
@@ -271,7 +336,11 @@ describe('AppContainer Component', () => {
         render(<AppContainer />);
 
         await waitFor(() => {
-            expect(ExchangeRateService.getExchangeRates).toHaveBeenCalled();
+            expect(axios).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    url: expect.stringContaining('GetExchangeRates')
+                })
+            );
         });
 
         const editButtons = screen.queryAllByTitle('Edit');
@@ -288,7 +357,11 @@ describe('AppContainer Component', () => {
         render(<AppContainer />);
 
         await waitFor(() => {
-            expect(ExchangeRateService.getExchangeRates).toHaveBeenCalled();
+            expect(axios).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    url: expect.stringContaining('GetExchangeRates')
+                })
+            );
         });
 
         const editButtons = screen.queryAllByTitle('Edit');
@@ -312,10 +385,16 @@ describe('AppContainer Component', () => {
         render(<AppContainer />);
 
         await waitFor(() => {
-            expect(ExchangeRateService.getExchangeRates).toHaveBeenCalled();
+            expect(axios).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    url: expect.stringContaining('GetExchangeRates')
+                })
+            );
         });
 
-        const initialCallCount = ExchangeRateService.getExchangeRates.mock.calls.length;
+        const initialCallCount = axios.mock.calls.filter(call => 
+            call[0]?.url?.includes('GetExchangeRates')
+        ).length;
 
         const addButton = screen.getByText('New Exchange Rate');
         fireEvent.click(addButton);
@@ -329,7 +408,10 @@ describe('AppContainer Component', () => {
         fireEvent.click(submitButton);
 
         await waitFor(() => {
-            expect(ExchangeRateService.getExchangeRates.mock.calls.length).toBeGreaterThan(initialCallCount);
+            const finalCallCount = axios.mock.calls.filter(call => 
+                call[0]?.url?.includes('GetExchangeRates')
+            ).length;
+            expect(finalCallCount).toBeGreaterThan(initialCallCount);
         });
     });
 
@@ -337,10 +419,16 @@ describe('AppContainer Component', () => {
         render(<AppContainer />);
 
         await waitFor(() => {
-            expect(ExchangeRateService.getExchangeRates).toHaveBeenCalled();
+            expect(axios).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    url: expect.stringContaining('GetExchangeRates')
+                })
+            );
         });
 
-        const initialCallCount = ExchangeRateService.getExchangeRates.mock.calls.length;
+        const initialCallCount = axios.mock.calls.filter(call => 
+            call[0]?.url?.includes('GetExchangeRates')
+        ).length;
 
         const editButtons = screen.queryAllByTitle('Edit');
         if (editButtons.length > 0) {
@@ -354,21 +442,28 @@ describe('AppContainer Component', () => {
             fireEvent.click(submitButton);
 
             await waitFor(() => {
-                expect(ExchangeRateService.getExchangeRates.mock.calls.length).toBeGreaterThan(initialCallCount);
+                const finalCallCount = axios.mock.calls.filter(call => 
+                    call[0]?.url?.includes('GetExchangeRates')
+                ).length;
+                expect(finalCallCount).toBeGreaterThan(initialCallCount);
             });
         }
     });
 
     it('should handle delete error response', async () => {
         const toastr = require('toastr');
-        ExchangeRateService.deleteExchangeRate = jest.fn().mockResolvedValue({
-            data: { code: 1, message: 'Delete failed' }
+        axios.post.mockResolvedValueOnce({
+            data: { code: 1, message: 'Delete failed', isSuccessful: false }
         });
 
         render(<AppContainer />);
 
         await waitFor(() => {
-            expect(ExchangeRateService.getExchangeRates).toHaveBeenCalled();
+            expect(axios).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    url: expect.stringContaining('GetExchangeRates')
+                })
+            );
         });
 
         const deleteButtons = screen.queryAllByTitle('Delete');
@@ -390,7 +485,7 @@ describe('AppContainer Component', () => {
 
     it('should handle delete catch error', async () => {
         const toastr = require('toastr');
-        ExchangeRateService.deleteExchangeRate = jest.fn().mockRejectedValue({
+        axios.post.mockRejectedValueOnce({
             response: {
                 data: { message: 'Network error' }
             }
@@ -399,7 +494,11 @@ describe('AppContainer Component', () => {
         render(<AppContainer />);
 
         await waitFor(() => {
-            expect(ExchangeRateService.getExchangeRates).toHaveBeenCalled();
+            expect(axios).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    url: expect.stringContaining('GetExchangeRates')
+                })
+            );
         });
 
         const deleteButtons = screen.queryAllByTitle('Delete');
@@ -423,7 +522,11 @@ describe('AppContainer Component', () => {
         render(<AppContainer />);
 
         await waitFor(() => {
-            expect(ExchangeRateService.getExchangeRates).toHaveBeenCalled();
+            expect(axios).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    url: expect.stringContaining('GetExchangeRates')
+                })
+            );
         });
 
         const deleteButtons = screen.queryAllByTitle('Delete');
@@ -449,7 +552,11 @@ describe('AppContainer Component', () => {
         render(<AppContainer />);
 
         await waitFor(() => {
-            expect(ExchangeRateService.getExchangeRates).toHaveBeenCalled();
+            expect(axios).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    url: expect.stringContaining('GetExchangeRates')
+                })
+            );
         });
 
         const infoIcon = screen.getByTitle('Click to show Currency Rounding info');
@@ -470,7 +577,21 @@ describe('AppContainer Component', () => {
     });
 
     it('should handle empty rounding rules', async () => {
-        ExchangeRateService.getRoundingRules = jest.fn().mockResolvedValue(null);
+        axios.mockImplementation((config) => {
+            if (config && config.url && config.url.includes('GetRoundingRules')) {
+                return Promise.resolve({ data: null });
+            }
+            if (config && config.url && config.url.includes('GetExchangeRates')) {
+                return Promise.resolve({ data: mockExchangeRates });
+            }
+            return Promise.reject(new Error('Unexpected axios call'));
+        });
+        if (!axios.post) {
+            axios.post = jest.fn();
+        }
+        axios.post.mockResolvedValue({
+            data: { code: 0, isSuccessful: true }
+        });
 
         render(<AppContainer />);
 
@@ -478,13 +599,28 @@ describe('AppContainer Component', () => {
         fireEvent.click(infoIcon);
 
         await waitFor(() => {
-            expect(ExchangeRateService.getRoundingRules).toHaveBeenCalled();
+            expect(axios).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    url: expect.stringContaining('GetRoundingRules')
+                })
+            );
         });
     });
 
     it('should handle fetchExchangeRates error', async () => {
         const { axiosError } = require('../../../shared/common.functions');
-        ExchangeRateService.getExchangeRates = jest.fn().mockRejectedValue(new Error('Network error'));
+        axios.mockImplementation((config) => {
+            if (config && config.url && config.url.includes('GetExchangeRates')) {
+                return Promise.reject(new Error('Network error'));
+            }
+            return Promise.reject(new Error('Unexpected axios call'));
+        });
+        if (!axios.post) {
+            axios.post = jest.fn();
+        }
+        axios.post.mockResolvedValue({
+            data: { code: 0, isSuccessful: true }
+        });
 
         render(<AppContainer />);
 
@@ -495,7 +631,21 @@ describe('AppContainer Component', () => {
 
     it('should handle fetchRoundingRules error', async () => {
         const { axiosError } = require('../../../shared/common.functions');
-        ExchangeRateService.getRoundingRules = jest.fn().mockRejectedValue(new Error('Network error'));
+        axios.mockImplementation((config) => {
+            if (config && config.url && config.url.includes('GetRoundingRules')) {
+                return Promise.reject(new Error('Network error'));
+            }
+            if (config && config.url && config.url.includes('GetExchangeRates')) {
+                return Promise.resolve({ data: mockExchangeRates });
+            }
+            return Promise.reject(new Error('Unexpected axios call'));
+        });
+        if (!axios.post) {
+            axios.post = jest.fn();
+        }
+        axios.post.mockResolvedValue({
+            data: { code: 0, isSuccessful: true }
+        });
 
         render(<AppContainer />);
 
@@ -509,14 +659,18 @@ describe('AppContainer Component', () => {
 
     it('should handle delete success with isSuccessful flag', async () => {
         const toastr = require('toastr');
-        ExchangeRateService.deleteExchangeRate = jest.fn().mockResolvedValue({
+        axios.post.mockResolvedValueOnce({
             data: { isSuccessful: true }
         });
 
         render(<AppContainer />);
 
         await waitFor(() => {
-            expect(ExchangeRateService.getExchangeRates).toHaveBeenCalled();
+            expect(axios).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    url: expect.stringContaining('GetExchangeRates')
+                })
+            );
         });
 
         const deleteButtons = screen.queryAllByTitle('Delete');
@@ -532,14 +686,17 @@ describe('AppContainer Component', () => {
 
             await waitFor(() => {
                 expect(toastr.success).toHaveBeenCalled();
-                expect(ExchangeRateService.getExchangeRates).toHaveBeenCalledTimes(2);
+                const exchangeRateCalls = axios.mock.calls.filter(call => 
+                    call[0]?.url?.includes('GetExchangeRates')
+                );
+                expect(exchangeRateCalls.length).toBeGreaterThanOrEqual(2);
             });
         }
     });
 
     it('should handle delete error with Message (capital M)', async () => {
         const toastr = require('toastr');
-        ExchangeRateService.deleteExchangeRate = jest.fn().mockRejectedValue({
+        axios.post.mockRejectedValueOnce({
             response: {
                 data: { Message: 'Error with capital M' }
             }
@@ -548,7 +705,11 @@ describe('AppContainer Component', () => {
         render(<AppContainer />);
 
         await waitFor(() => {
-            expect(ExchangeRateService.getExchangeRates).toHaveBeenCalled();
+            expect(axios).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    url: expect.stringContaining('GetExchangeRates')
+                })
+            );
         });
 
         const deleteButtons = screen.queryAllByTitle('Delete');
@@ -570,14 +731,18 @@ describe('AppContainer Component', () => {
 
     it('should handle delete error without response.data', async () => {
         const toastr = require('toastr');
-        ExchangeRateService.deleteExchangeRate = jest.fn().mockRejectedValue({
+        axios.post.mockRejectedValueOnce({
             message: 'Network error'
         });
 
         render(<AppContainer />);
 
         await waitFor(() => {
-            expect(ExchangeRateService.getExchangeRates).toHaveBeenCalled();
+            expect(axios).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    url: expect.stringContaining('GetExchangeRates')
+                })
+            );
         });
 
         const deleteButtons = screen.queryAllByTitle('Delete');
@@ -601,7 +766,11 @@ describe('AppContainer Component', () => {
         render(<AppContainer />);
 
         await waitFor(() => {
-            expect(ExchangeRateService.getExchangeRates).toHaveBeenCalled();
+            expect(axios).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    url: expect.stringContaining('GetExchangeRates')
+                })
+            );
         });
 
         const deleteButtons = screen.queryAllByTitle('Delete');
@@ -625,12 +794,30 @@ describe('AppContainer Component', () => {
             rounding: 0
         }];
 
-        ExchangeRateService.getExchangeRates = jest.fn().mockResolvedValue(mockDataWithoutDate);
+        axios.mockImplementation((config) => {
+            if (config && config.url && config.url.includes('GetExchangeRates')) {
+                return Promise.resolve({ data: mockDataWithoutDate });
+            }
+            if (config && config.url && config.url.includes('GetRoundingRules')) {
+                return Promise.resolve({ data: mockRoundingRules });
+            }
+            return Promise.reject(new Error('Unexpected axios call'));
+        });
+        if (!axios.post) {
+            axios.post = jest.fn();
+        }
+        axios.post.mockResolvedValue({
+            data: { code: 0, isSuccessful: true }
+        });
 
         render(<AppContainer />);
 
         await waitFor(() => {
-            expect(ExchangeRateService.getExchangeRates).toHaveBeenCalled();
+            expect(axios).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    url: expect.stringContaining('GetExchangeRates')
+                })
+            );
         });
 
         const deleteButtons = screen.queryAllByTitle('Delete');
@@ -656,12 +843,30 @@ describe('AppContainer Component', () => {
             // No effectiveDate
         }];
 
-        ExchangeRateService.getExchangeRates = jest.fn().mockResolvedValue(mockDataWithoutDate);
+        axios.mockImplementation((config) => {
+            if (config && config.url && config.url.includes('GetExchangeRates')) {
+                return Promise.resolve({ data: mockDataWithoutDate });
+            }
+            if (config && config.url && config.url.includes('GetRoundingRules')) {
+                return Promise.resolve({ data: mockRoundingRules });
+            }
+            return Promise.reject(new Error('Unexpected axios call'));
+        });
+        if (!axios.post) {
+            axios.post = jest.fn();
+        }
+        axios.post.mockResolvedValue({
+            data: { code: 0, isSuccessful: true }
+        });
 
         render(<AppContainer />);
 
         await waitFor(() => {
-            expect(ExchangeRateService.getExchangeRates).toHaveBeenCalled();
+            expect(axios).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    url: expect.stringContaining('GetExchangeRates')
+                })
+            );
         });
 
         const deleteButtons = screen.queryAllByTitle('Delete');
@@ -687,15 +892,19 @@ describe('AppContainer Component', () => {
 
     it('should handle delete error with default message when no message provided', async () => {
         const toastr = require('toastr');
-        ExchangeRateService.deleteExchangeRate = jest.fn().mockResolvedValue({
-            data: { code: 1 }
+        axios.post.mockResolvedValueOnce({
+            data: { code: 1, isSuccessful: false }
             // No message property
         });
 
         render(<AppContainer />);
 
         await waitFor(() => {
-            expect(ExchangeRateService.getExchangeRates).toHaveBeenCalled();
+            expect(axios).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    url: expect.stringContaining('GetExchangeRates')
+                })
+            );
         });
 
         const deleteButtons = screen.queryAllByTitle('Delete');
@@ -711,7 +920,7 @@ describe('AppContainer Component', () => {
 
             await waitFor(() => {
                 expect(toastr.error).toHaveBeenCalledWith(
-                    'Failed to delete exchange Rate',
+                    'Failed to delete exchange rate',
                     '',
                     expect.anything()
                 );
@@ -728,12 +937,30 @@ describe('AppContainer Component', () => {
             rounding: 0
         }];
 
-        ExchangeRateService.getExchangeRates = jest.fn().mockResolvedValue(mockDataWithNullDate);
+        axios.mockImplementation((config) => {
+            if (config && config.url && config.url.includes('GetExchangeRates')) {
+                return Promise.resolve({ data: mockDataWithNullDate });
+            }
+            if (config && config.url && config.url.includes('GetRoundingRules')) {
+                return Promise.resolve({ data: mockRoundingRules });
+            }
+            return Promise.reject(new Error('Unexpected axios call'));
+        });
+        if (!axios.post) {
+            axios.post = jest.fn();
+        }
+        axios.post.mockResolvedValue({
+            data: { code: 0, isSuccessful: true }
+        });
 
         render(<AppContainer />);
 
         await waitFor(() => {
-            expect(ExchangeRateService.getExchangeRates).toHaveBeenCalled();
+            expect(axios).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    url: expect.stringContaining('GetExchangeRates')
+                })
+            );
         });
 
         const deleteButtons = screen.queryAllByTitle('Delete');

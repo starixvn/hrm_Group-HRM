@@ -5,7 +5,11 @@ export const validationSchema = Yup.object({
     currencyCode: Yup.string()
         .trim()
         .required('Currency is required!')
-        .length(3, 'Currency must be exactly 3 characters'),
+        .length(3, 'Currency must be exactly 3 characters')
+        .test('not-usd', 'Currency must be different from USD', function(value) {
+            if (!value) return true; // Let required validation handle empty values
+            return value.toUpperCase() !== 'USD';
+        }),
     exchangeRate: Yup.number()
         .required('Exchange Rate is required!')
         .positive('Exchange Rate must be greater than 0'),

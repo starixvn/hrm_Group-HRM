@@ -18,7 +18,6 @@ public interface IExchangeRateService
         string currencyCode,
         decimal exchangeRate,
         DateTime effectiveDate,
-        decimal rounding,
         int modifiedBy
     );
 
@@ -28,7 +27,6 @@ public interface IExchangeRateService
         DateTime oldEffectiveDate,
         string currencyCode,
         decimal exchangeRate,
-        decimal rounding,
         int modifiedBy
     );
 
@@ -37,4 +35,6 @@ public interface IExchangeRateService
         DateTime effectiveDate,
         int modifiedBy
     );
+
+    Task<CommandResult> UpdateCurrencyRoundingAsync(short currencyId, int rounding, int modifiedBy);
 }

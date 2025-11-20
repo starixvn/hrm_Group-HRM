@@ -15,8 +15,6 @@ public class UpdateExchangeRateCriteria : CriteriaBase
 
     public decimal ExchangeRate { get; set; }
 
-    public decimal Rounding { get; set; }
-
     public int ModifiedBy { get; set; }
 
     public override string GetSettingKey() => "CurrencyExchangeRate_Update";

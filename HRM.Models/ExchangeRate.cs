@@ -15,4 +15,6 @@ public class ExchangeRate
     public decimal Rounding { get; set; }
 
     public DateTime ModifiedDate { get; set; }
+
+    public bool IsUsed { get; set; }
 }
