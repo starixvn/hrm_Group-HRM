@@ -160,9 +160,8 @@ import {
                   .addClass("fa-unlock")
                   .css("color", "#28a745");
                 $(".total-cost-cell").each(function () {
-                  let raw = $(this).data("amount").toString().replace(/,/g, "");
-                  let amount = Number(raw);
-                  $(this).text(amount > 0 ? amount.toLocaleString() : "-");
+                  let amount = $(this).data("amount");
+                  $(this).text(amount);
                 });
               } else {
                 $("#costError").show();
