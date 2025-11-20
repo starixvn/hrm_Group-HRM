@@ -9,7 +9,9 @@ const CurrencyRoundingTable = ({ data, onEdit }) => {
     const colSpan = 2;
 
     const handleEditStart = (item, index) => {
-        if (!hasPermission) return;
+        if (!hasPermission) {
+            return;
+        }
         setEditingIndex(index);
         setEditingValue(item.rounding !== undefined ? item.rounding.toString() : '');
     };
@@ -19,7 +21,7 @@ const CurrencyRoundingTable = ({ data, onEdit }) => {
         setEditingValue('');
     };
 
-    const handleEditSave = (item, index) => {
+    const handleEditSave = (item, _index) => {
         if (onEdit) {
             const updatedItem = {
                 ...item,

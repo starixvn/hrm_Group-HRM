@@ -7,7 +7,9 @@ const ExchangeRateTable = ({ data, onEdit, onDelete }) => {
     const hasPermission = () => window.hasPermission === 'True';
 
     const validateAndParseDate = date => {
-        if (!date) return null;
+        if (!date) {
+            return null;
+        }
         const dateMoment = moment(date);
         return dateMoment.isValid() ? dateMoment : null;
     };
@@ -27,19 +29,25 @@ const ExchangeRateTable = ({ data, onEdit, onDelete }) => {
 
     const isFutureDate = date => {
         const dateMoment = validateAndParseDate(date);
-        if (!dateMoment) return false;
+        if (!dateMoment) {
+            return false;
+        }
         return dateMoment.isAfter(moment().startOf('day'));
     };
 
     const formatDate = date => {
         const dateMoment = validateAndParseDate(date);
-        if (!dateMoment) return '';
+        if (!dateMoment) {
+            return '';
+        }
         return dateMoment.format('DD MMM, YYYY');
     };
 
     const parseDate = dateStr => {
         const dateMoment = validateAndParseDate(dateStr);
-        if (!dateMoment) return null;
+        if (!dateMoment) {
+            return null;
+        }
         const date = dateMoment.toDate();
         date.setHours(0, 0, 0, 0);
         return date;
@@ -145,7 +153,9 @@ const ExchangeRateTable = ({ data, onEdit, onDelete }) => {
 
     const canEditOrDelete = item => {
         const isUsed = item.isUsed === true;
-        if (!isUsed) return true;
+        if (!isUsed) {
+            return true;
+        }
         return isFutureDate(item.effectiveDate);
     };
 
