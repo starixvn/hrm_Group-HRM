@@ -8,10 +8,13 @@ import { toastOptions, resolveClientUrl, axiosError } from '../../../shared/comm
 import { validationSchema } from '../common.functions';
 
 const DATE_FORMAT = 'YYYY-MM-DD';
-const SUPPORTED_DATE_FORMATS = [
-    'YYYY-MM-DD',
+const ISO_DATE_FORMATS = [
+    DATE_FORMAT,
     'YYYY-MM-DDTHH:mm:ss',
-    'YYYY-MM-DDTHH:mm:ss.SSS',
+    'YYYY-MM-DDTHH:mm:ss.SSS'
+];
+const SUPPORTED_DATE_FORMATS = [
+    ...ISO_DATE_FORMATS,
     'DD MMM YYYY',
     'DD MMM, YYYY'
 ];
@@ -25,13 +28,10 @@ const ExchangeRateModal = ({ show, onClose, onSuccess, editData, isEdit = false 
         }
 
         if (typeof date === 'string') {
-            // Handle ISO format dates
             if (/^\d{4}-\d{2}-\d{2}/.test(date)) {
-                const isoFormats = ['YYYY-MM-DD', 'YYYY-MM-DDTHH:mm:ss', 'YYYY-MM-DDTHH:mm:ss.SSS'];
-                return moment(date, isoFormats, true);
+                return moment(date, ISO_DATE_FORMATS, true);
             }
             
-            // Handle "DD MMM, YYYY HH:mm:ss" format - extract date part before time
             if (date.includes(',')) {
                 const datePart = date.split(/\s+\d{2}:\d{2}:\d{2}/)[0];
                 const match = datePart.match(/(\d+)\s+(\w+)[,\s]+(\d+)/);
@@ -42,7 +42,6 @@ const ExchangeRateModal = ({ show, onClose, onSuccess, editData, isEdit = false 
             }
         }
 
-        // Try all supported formats explicitly
         return moment(date, SUPPORTED_DATE_FORMATS, true);
     };
 
