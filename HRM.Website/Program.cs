@@ -11,6 +11,7 @@ using HRM.Website;
 using HRM.Website.Middlewares;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
@@ -19,6 +20,13 @@ var builder = WebApplication.CreateBuilder(args);
 
 var services = builder.Services;
 var configuration = builder.Configuration;
+
+// Configure Kestrel to allow longer URLs
+services.Configure<KestrelServerOptions>(options =>
+{
+    options.Limits.MaxRequestLineSize = 32768; // 32KB (default is 8KB)
+    options.Limits.MaxRequestHeadersTotalSize = 32768; // 32KB (default is 32KB)
+});
 
 // Add services to the container.
 services.AddControllersWithViews()
