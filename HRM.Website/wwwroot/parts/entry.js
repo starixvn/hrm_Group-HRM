@@ -101,6 +101,7 @@ module.exports = {
         [`${styleDistPath}/company.edit`]: `${styleSourcePath}/pages/company/edit.scss`,
         [`${styleDistPath}/transfer.create`]: `${styleSourcePath}/pages/transfer/create.scss`,
         [`${styleDistPath}/transfer.list`]: `${styleSourcePath}/pages/transfer/list.scss`,
+        [`${styleDistPath}/exchange-rate`]: `${styleSourcePath}/pages/exchange-rate/index.scss`,
 
         //
         [`${jsDistPath}/main`]: "./sources/js/main.js",
@@ -234,5 +235,6 @@ module.exports = {
         [`${jsDistPath}/company.edit`]: `${jsSourcePath}/company/edit/index.jsx`,
         [`${jsDistPath}/transfer.list.index`]: `${jsSourcePath}/transfer/list/index.jsx`,
         [`${jsDistPath}/transfer.create.index`]: `${jsSourcePath}/transfer/create/index.jsx`,
+        [`${jsDistPath}/exchange-rate`]: `${jsSourcePath}/exchange-rate/index.jsx`,
     },
 };

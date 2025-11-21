@@ -19,20 +19,18 @@ const CurrencyMultiSelect = ({
         })
         : [];
 
-    const handleChange = selectedOptions => {
-        const selectedValues = selectedOptions ? selectedOptions.map(option => option.value) : [];
-        onChange(selectedValues);
+    const handleChange = selectedOption => {
+        onChange(selectedOption ? [selectedOption.value] : []);
     };
 
     return (
         <div className="react-select-container">
             <Select
-                isMulti
                 options={selectOptions}
                 value={selectValue}
                 onChange={handleChange}
                 isDisabled={isDisabled}
-                closeMenuOnSelect={false}
+                closeMenuOnSelect={true}
                 hideSelectedOptions={false}
                 isClearable={true}
                 isSearchable={true}

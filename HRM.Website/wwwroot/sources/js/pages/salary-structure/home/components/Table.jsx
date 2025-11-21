@@ -12,6 +12,7 @@ const Table = ({ data, onDelete }) => {
         { label: 'Basic Salary', key: 'basicSalary', sortable: false },
         { label: 'Job Level Add-On', key: 'jobLevelAddOn', sortable: false },
         { label: 'Expat Salary', key: 'expatSalary', sortable: false },
+        { label: 'Expat Job Level Add-On', key: 'expatJobLevelAddOn', sortable: false },
     ];
 
     if (window.hasPermission === 'True') {

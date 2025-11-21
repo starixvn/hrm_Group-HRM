@@ -63,6 +63,7 @@ public static class EmployeeHelper
             SubCompanyId = model.SubCompanyId,
             SalaryStructureId = model.SalaryStructureId,
             SpecialSubsidy = !string.IsNullOrWhiteSpace(model.SpecialSubsidy) ? Cryptography.EncryptPassword(model.SpecialSubsidy) : model.SpecialSubsidy,
+            SpecialSubsidyCurrencyId = model.SpecialSubsidyCurrencyId.HasValue ? model.SpecialSubsidyCurrencyId.Value : null,
             AutoApproveRequest = model.AutoApproveRequest,
             AllowanceItemSettingIds = model.AllowanceItemSettingIds
         };

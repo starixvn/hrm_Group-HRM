@@ -13,4 +13,6 @@ public static class SystemConfigKey
     public const string WhitelistIPs = "WhitelistIPs";
 
     public const string BasicSalaryConfig = "BasicSalaryConfig";
+
+    public const string Currency = "Currency";
 }

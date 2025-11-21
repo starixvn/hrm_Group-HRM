@@ -2,13 +2,14 @@
 import SweetModalDialog from "../../../../shared/components/SweetModalDialog";
 import AddEditAllowanceItemContent from "./AddEditAllowanceItemContent";
 
-const Filter = ({ saveEditData, types }) => {
+const Filter = ({ saveEditData, types, currencies }) => {
   const initialData = {
     payrollItemSettingId: null,
     allowanceItemSettingId: null,
     type: "",
     itemName: "",
     amount: "",
+    currencyId: null,
     isPercent: false,
     isActive: true,
   };
@@ -24,9 +25,11 @@ const Filter = ({ saveEditData, types }) => {
 
   const handleOpen = () => {
     const defaultId = types && types.length > 0 ? types[0].id : null;
+    const defaultCurrencyId = currencies && currencies.length > 0 ? currencies[0].id : null;
     setData({
       ...initialData,
       payrollItemSettingId: defaultId,
+      currencyId: defaultCurrencyId,
     });
     setOpen(true);
   };
@@ -53,6 +56,7 @@ const Filter = ({ saveEditData, types }) => {
             editData={data}
             setEditData={setData}
             types={types}
+            currencies={currencies}
           />
         }
         onSubmit={() => addAllowanceItem()}

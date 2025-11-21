@@ -27,12 +27,16 @@ public class SalaryStructureService(IBaseService baseService) : ISalaryStructure
                 ? Cryptography.DecryptPassword(item.BasicSalary)
                 : null;
 
+            item.JobLevelAddOn = !string.IsNullOrWhiteSpace(item.JobLevelAddOn)
+                ? Cryptography.DecryptPassword(item.JobLevelAddOn)
+                : null;
+
             item.ExpatSalary = !string.IsNullOrWhiteSpace(item.ExpatSalary)
                 ? Cryptography.DecryptPassword(item.ExpatSalary)
                 : null;
 
-            item.JobLevelAddOn = !string.IsNullOrWhiteSpace(item.JobLevelAddOn)
-                ? Cryptography.DecryptPassword(item.JobLevelAddOn)
+            item.ExpatJobLevelAddOn = !string.IsNullOrWhiteSpace(item.ExpatJobLevelAddOn)
+                ? Cryptography.DecryptPassword(item.ExpatJobLevelAddOn)
                 : null;
         }
 
@@ -60,12 +64,16 @@ public class SalaryStructureService(IBaseService baseService) : ISalaryStructure
                     ? Cryptography.DecryptPassword(item.BasicSalary)
                     : null;
 
+                item.JobLevelAddOn = !string.IsNullOrWhiteSpace(item.JobLevelAddOn)
+                    ? Cryptography.DecryptPassword(item.JobLevelAddOn)
+                    : null;
+
                 item.ExpatSalary = !string.IsNullOrWhiteSpace(item.ExpatSalary)
                     ? Cryptography.DecryptPassword(item.ExpatSalary)
                     : null;
 
-                item.JobLevelAddOn = !string.IsNullOrWhiteSpace(item.JobLevelAddOn)
-                    ? Cryptography.DecryptPassword(item.JobLevelAddOn)
+                item.ExpatJobLevelAddOn = !string.IsNullOrWhiteSpace(item.ExpatJobLevelAddOn)
+                    ? Cryptography.DecryptPassword(item.ExpatJobLevelAddOn)
                     : null;
             }
 

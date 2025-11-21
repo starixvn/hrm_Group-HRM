@@ -283,7 +283,9 @@
                         <div class="plabel">@Labels.BasicSalary:</div>
                         @if (!string.IsNullOrEmpty(Model.BasicSalary))
                         {
-                            <div class="pamount amount-hidden" data-amount="@RazorHelpers.FormatThousandSeparator(Model.BasicSalary)"></div>
+                            <div class="pamount amount-hidden"
+                                 data-amount="@($"{RazorHelpers.FormatThousandSeparator(Model.BasicSalary)} {Model.EmployeeCurrencyCode}")">
+                            </div>
                         }
                     </li>
                     <li class="list-group-item">
@@ -291,14 +293,18 @@
 
                         @if (!string.IsNullOrEmpty(Model.JobLevelAddOn))
                         {
-                            <div class="pamount amount-hidden" data-amount="@RazorHelpers.FormatThousandSeparator(Model.JobLevelAddOn)"></div>
+                            <div class="pamount amount-hidden"
+                                 data-amount="@($"{RazorHelpers.FormatThousandSeparator(Model.JobLevelAddOn)} {Model.EmployeeCurrencyCode}")">
+                            </div>
                         }
                     </li>
                     @if (!string.IsNullOrEmpty(Model.SpecialSubsidy) && Model.SpecialSubsidy != "0")
                     {
                         <li class="list-group-item">
                             <div class="plabel">@Labels.SpecialSubsidy:</div>
-                            <div class="pamount amount-hidden" data-amount="@RazorHelpers.FormatThousandSeparator(Model.SpecialSubsidy)"></div>
+                            <div class="pamount amount-hidden"
+                                 data-amount="@($"{RazorHelpers.FormatThousandSeparator(Model.SpecialSubsidy)} {Model.SpecialSubsidyCurrency}")">
+                            </div>
                         </li>
                     }
                 }
@@ -318,7 +324,9 @@
                             <div class="pcontent bold">@allowance.ItemName</div>
                             @if (hasReadPermissionOnPayrollInfoWithAmount)
                             {
-                                <div class="pamount amount-hidden" data-amount="@RazorHelpers.FormatThousandSeparator(allowance.Amount)"></div>
+                                <div class="pamount amount-hidden"
+                                     data-amount="@($"{RazorHelpers.FormatThousandSeparator(allowance.Amount)} {allowance.CurrencyCode}")">
+                                </div>
                             }
                         </li>
                     }

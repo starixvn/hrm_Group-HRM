@@ -72,7 +72,31 @@ public class CompanyService(
     public async Task<IEnumerable<Currency>> GetCurrencyAsync()
     {
         var criteria = new GetCurrencyCriteria();
-        return await baseService.GetDataAsync<Currency>(criteria);
+        var currencies = (await baseService.GetDataAsync<Currency>(criteria)).ToList();
+
+        var companyCurrencyId = await GetCompanyCurrencyId();
+
+        if (string.IsNullOrEmpty(companyCurrencyId))
+        {
+            return currencies;
+        }
+
+        return [.. currencies
+            .OrderBy(c => c.Id == int.Parse(companyCurrencyId) ? 0 : 1)
+            .ThenBy(c => c.Id)];
+    }
+
+    public async Task<string> GetCompanyCurrencyId()
+    {
+        var companyId = session.Get<short>(SessionKey.CurrentCompanyId);
+
+        var criteria = new GetSystemConfigsByKeyCriteria
+        {
+            CompanyId = companyId,
+            Key = SystemConfigKey.Currency
+        };
+
+        return await baseService.GetDataEntityAsync<string>(criteria);
     }
 
     public async Task<CompanySetting> GetByIdAsync(short companyId)

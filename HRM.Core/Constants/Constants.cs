@@ -44,12 +44,12 @@ public static class Constants
     public const string DepartmentKey = "Department";
 
     public const int NexCompanyId = 1;
-
     public const int LumiCompanyId = 2;
-
     public const int NexVisionCompanyId = 34;
 
     public const int GroupCompanyId = 7;
+
+    public const string USD = "USD";
 
     public static readonly TimeSpan NexTimezone = TimeSpan.FromHours(7);
 

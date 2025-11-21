@@ -101,6 +101,9 @@ public static class ServiceCollectionExtensions
         var appSettings = configuration.GetSection("AppSettings").Get<AppSettings>();
         services.AddSingleton(appSettings);
 
+        var costPassword = configuration.GetSection("CostPassword").Get<CostPasswordOptions>();
+        services.AddSingleton(costPassword);
+
         var letstalkSettings = configuration.GetSection("LetstalkSettings").Get<LetstalkSettings>();
         services.AddSingleton(letstalkSettings);
 
@@ -166,14 +169,14 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<IPaternityService, PaternityService>();
         services.AddSingleton<IPostnatalService, PostnatalService>();
         services.AddSingleton<IHolidayService, HolidayService>();
+        services.AddSingleton<IExchangeRateService, ExchangeRateService>();
         services.AddSingleton<IMinIOService, MinIOService>();
         services.AddSingleton<IUploadPayrollService, UploadPayrollService>();
-        services.AddSingleton<IPayrollService, Services.Implement.PayrollService>();
+        services.AddSingleton<IPayrollService, PayrollService>();
         services.AddSingleton<IPayrollSettingService, PayrollSettingService>();
         services.AddSingleton<ISecondCompanyEmployeeService, SecondCompanyEmployeeService>();
         services.AddSingleton<IPayrollManagementService, SMSPayrollManagementService>();
-        services.AddScoped<ILocalPayrollService, LocalPayrollService>();
-        services.AddScoped<IExpatPayrollService, ExpatPayrollService>();
+        services.AddScoped<ICalculatePayrollService, CalculatePayrollService>();
         services.AddScoped<IMonthlyPayrollService, MonthlyPayrollService>();
         services.AddScoped<IGroupDashboardService, GroupDashboardService>();
         services.AddDIReportServices();

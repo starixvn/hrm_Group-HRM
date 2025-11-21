@@ -1,6 +1,6 @@
 import React from "react";
 
-const AddEditAllowanceItemContent = ({ editData, setEditData, types }) => {
+const AddEditAllowanceItemContent = ({ editData, setEditData, types, currencies = [] }) => {
   return (
     <div className="add-edit-allowance-item-content">
       <div className="content-line">
@@ -65,6 +65,33 @@ const AddEditAllowanceItemContent = ({ editData, setEditData, types }) => {
             }
             style={{ paddingRight: "25px" }}
           />
+        </div>
+      </div>
+      <div className="content-line">
+        <div>Currency</div>
+        <div>
+          <select
+            className="form-control"
+            value={editData.currencyId}
+            onChange={e => setEditData({ ...editData, currencyId: e.target.value })}
+            style={{
+              display: "inline-block",
+              width: "100%",
+              fontSize: "13px",
+              fontWeight: "bold",
+              borderRadius: "4px",
+              boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+              cursor: "pointer",
+              transition: "all 0.2s ease",
+            }}
+          >
+            {currencies &&
+              currencies.map(item => (
+                <option key={`currency-${item.id}`} value={item.id}>
+                  {item.name}
+                </option>
+              ))}
+          </select>
         </div>
       </div>
     </div>

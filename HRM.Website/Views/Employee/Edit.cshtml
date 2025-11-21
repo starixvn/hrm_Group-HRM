@@ -1,6 +1,7 @@
 ﻿@using GO.UserControl.Client.Core.Models.Role
 @using HRM.Core
 @using HRM.Core.Enums
+@using HRM.Models
 @using HRM.Models.SalaryStructure
 @using HRM.Resources
 @using HRM.Models.PayrollManagement
@@ -12,6 +13,7 @@
     var enableGroupDate = (bool)ViewBag.EnableGroupDate;
     var salaryStructures = (IEnumerable<SalaryStructure>)ViewBag.SalaryStructures;
     var allowanceItemSettings = (IEnumerable<PayrollSetting>)ViewBag.AllowanceItemSettings;
+    var currencies = (IEnumerable<Currency>)ViewBag.Currencies;
     var hasReadPermissionOnPayrollInfoOnly = (bool)ViewBag.HasReadPermissionOnPayrollInfoOnly;
     var hasReadPermissionOnPayrollInfoWithAmount = (bool)ViewBag.HasReadPermissionOnPayrollInfoWithAmount;
     var hasHostPermissionOnPayrollInfoOnly = (bool)ViewBag.HasHostPermissionOnPayrollInfoOnly;
@@ -20,6 +22,11 @@
     var allowViewPayrollInfo = hasReadPermissionOnPayrollInfoOnly || hasReadPermissionOnPayrollInfoWithAmount || allowEditPayrollInfo;
     var allowViewAmount = hasReadPermissionOnPayrollInfoWithAmount || hasHostPermissionOnPayrollInfoWithAmount;
     var allowanceItemSettingIds = Model.GetAllowanceItemSettingIdsArray();
+    var currencyItems = currencies.Select(x => new SelectListItem
+            {
+                Value = x.Id.ToString(),
+                Text = x.CurrencyCode
+            });
 }
 @section css {
     <link href="~/dist/vendors/chosen.css" rel="stylesheet" asp-append-version="true" />
@@ -544,15 +551,24 @@
                             <td>
                                 <div class="type-row">
                                     <span class="type-label">@Labels.SpecialSubsidy</span>
-                                    <div class="type-control">
+                                    <div class="type-control subsidy">
                                         @if (hasHostPermissionOnPayrollInfoWithAmount)
                                         {
                                             @Html.TextBoxFor(model => model.SpecialSubsidy, new { @class = "form-control" })
+
+                                            @Html.DropDownListFor(model => model.SpecialSubsidyCurrencyId,
+                                                     currencyItems,
+                                                      new { @class = "form-control" })
                                         }
                                         else
                                         {
                                             <input type="text" class="form-control" value="@(hasReadPermissionOnPayrollInfoWithAmount ? Model.SpecialSubsidy : "*****")" disabled />
+
                                             @Html.HiddenFor(model => model.SpecialSubsidy)
+
+                                            @Html.DropDownListFor(model => model.SpecialSubsidyCurrencyId,
+                                                     currencyItems,
+                                                     new { @class = "form-control", disabled = "disabled" })
                                         }
                                     </div>
                                 </div>

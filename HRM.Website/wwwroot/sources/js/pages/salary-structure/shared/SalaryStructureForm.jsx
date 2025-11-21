@@ -39,6 +39,7 @@ const SalaryStructureForm = ({
                             <th>Basic Salary</th>
                             <th>Job Level Add-On</th>
                             <th>Expat Salary</th>
+                            <th>Expat Job Level Add-On</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -76,6 +77,17 @@ const SalaryStructureForm = ({
                                         autoComplete='off'
                                         value={jobLevel.expatSalary}
                                         onChange={e => handleChangeSalary(jobLevel.id, 'expatSalary', e.target.value)}
+                                    />
+                                </td>
+                                <td>
+                                    <input 
+                                        type='number' 
+                                        min='0' 
+                                        step='0.01'
+                                        className='form-control' 
+                                        autoComplete='off'
+                                        value={jobLevel.expatJobLevelAddOn}
+                                        onChange={e => handleChangeSalary(jobLevel.id, 'expatJobLevelAddOn', e.target.value)}
                                     />
                                 </td>
                             </tr>

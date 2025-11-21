@@ -8,11 +8,13 @@ using HRM.Core;
 using HRM.Core.Constants;
 using HRM.Core.Enums;
 using HRM.Core.Filters;
+using HRM.Core.Models;
 using HRM.Core.Services;
 using HRM.Criteria.Employee;
 using HRM.Criteria.EmployeeWorkFromHome;
 using HRM.Criteria.Group;
 using HRM.Criteria.GroupSpace.Employee;
+using HRM.Criteria.Log;
 using HRM.Criteria.Supervisor;
 using HRM.Models;
 using HRM.Models.Group;
@@ -186,18 +188,22 @@ public class GroupEmployeeListController(
         return Json(employees);
     }
 
-    private static (bool? enableUser, bool? isDeleteUser) ParseEmployeeStatus(
-        string employeeStatuses
-    )
+    [HttpGet]
+    public Task<IActionResult> ValidateCostPassword(string password)
     {
-        return employeeStatuses switch
+        var result = employeeService.GetTotalCostPassword();
+
+        return Task.FromResult<IActionResult>(Ok(result == password));
+    }
+
+    private static (bool? enableUser, bool? isDeleteUser) ParseEmployeeStatus(string employeeStatuses) 
+        => employeeStatuses switch
         {
             "1" => (true, null),
             "2" => (false, null),
             "3" => (null, true),
             _ => (null, null),
         };
-    }
 
     private static bool? ParseBool(string value) =>
         value switch
@@ -243,9 +249,15 @@ public class GroupEmployeeListController(
             }
         }
 
+        var showSalaryCurrency = ViewBag.ShowSalaryCurrency != null && (bool)ViewBag.ShowSalaryCurrency;
         var bytes = isEmployeeListExport
-            ? await excelService.ExportGroupEmployeesAsync(employees)
-            : await excelService.ExportProfitCenterReportAsync(employees);
+            ? await excelService.ExportGroupEmployeesAsync(employees, showSalaryCurrency)
+            : await excelService.ExportProfitCenterReportAsync(employees, showSalaryCurrency);
+
+        if (showSalaryCurrency)
+        {
+            await LogExportExcelHistory(isEmployeeListExport);
+        }
 
         var exportDate = DateTimeOffset.Now.DateTime.ToClientTimeZone().ToString("yyyyMMdd");
         var fileName = isEmployeeListExport
@@ -253,6 +265,18 @@ public class GroupEmployeeListController(
             : $"Profit Center Report - {exportDate}.xlsx";
 
         return File(bytes, MimeType.XLS, fileName);
+    }
+
+    private async Task LogExportExcelHistory(bool isEmployeeListExport)
+    {
+        var actionLog = new LogExportGroupEmployeeListCriteria
+        {
+            ObjectTypeId = isEmployeeListExport
+                ? LogObjectType.ExportEmployeeReport
+                : LogObjectType.ExportProfitCenterReport,
+            UserId = EmployeeSession.EmpId
+        };
+        await baseService.ExecuteNonQueryAsync(actionLog);
     }
 
     private async Task<IEnumerable<EmployeeWorkFromHome>> GetEmployeeWorkFromHome(string teamIds)

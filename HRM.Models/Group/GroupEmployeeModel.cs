@@ -76,7 +76,13 @@ public class GroupEmployeeModel
 
     public string Currency { get; set; }
 
-    public decimal? Salary { get; set; }
+    public decimal Salary { get; set; }
+    public decimal BasicSalary { get; set; }
+    public decimal JobLevelAddOn { get; set; }
+    public decimal ManagementAllowance { get; set; }
+    public decimal OverseasAllowance { get; set; }
+    public decimal SkillSetAddOn { get; set; }
+    public decimal Others { get; set; }
 
     public string CountryName { get; set; }
 

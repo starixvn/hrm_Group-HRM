@@ -19,6 +19,8 @@ public interface IEmployeeService
 {
     Task<string> GenerateEmployeeCode(short? companyId);
 
+    string GetTotalCostPassword();
+
     Task<IEnumerable<SupervisorNameModel>> GetListSupervisorNameAsync(GetListSupervisorNameCriteria criteria);
 
     Task<IEnumerable<SupervisorModel>> GetEmployeeSupervisorByRoleIdAsync(int employeeId, short roleId);

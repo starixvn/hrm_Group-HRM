@@ -60,6 +60,7 @@ public class EditEmployeeParam
     public int? SubCompanyId { get; set; }
     public int? SalaryStructureId { get; set; }
     public string SpecialSubsidy { get; set; }
+    public int? SpecialSubsidyCurrencyId { get; set; }
     public bool AutoApproveRequest { get; set; }
     public string AllowanceItemSettingIds { get; set; }
 

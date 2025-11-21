@@ -10,4 +10,7 @@ public static class LogObjectType
     public const byte SubCompany = 6;
     public const byte Payroll = 7;
     public const byte AllowanceItem = 8;
+    public const byte ExportEmployeeReport = 9;
+    public const byte ExportProfitCenterReport = 10;
+    public const byte Currency = 11;
 }

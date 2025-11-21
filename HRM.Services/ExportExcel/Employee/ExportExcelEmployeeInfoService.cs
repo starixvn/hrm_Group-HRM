@@ -38,7 +38,8 @@ public class ExportExcelEmployeeInfoService(
     private const byte MinimumWidth = 5;
     private const byte MaximumWidth = 50;
     private const byte RowStartBodyProfitCenter = 4;
-    private const byte TotalColumnsProfitCenter = 20;
+    private const byte ColumnsSalary = 20; // Number of columns before salary columns
+    private const byte SalaryColumnsCount = 7; // Number of salary columns
 
     private enum BasicInfo
     {
@@ -257,7 +258,7 @@ public class ExportExcelEmployeeInfoService(
 
     #endregion Employee Full Profile Information
 
-    public async Task<byte[]> ExportGroupEmployeesAsync(IEnumerable<GroupEmployeeModel> employees)
+    public async Task<byte[]> ExportGroupEmployeesAsync(IEnumerable<GroupEmployeeModel> employees, bool showSalaryCurrency)
     {
         var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, GroupEmployeeListTemplatePath);
 
@@ -308,7 +309,7 @@ public class ExportExcelEmployeeInfoService(
             worksheet.Cells[rowIndex, colIndex++].Value = employee.TeamPIC;
             worksheet.Cells[rowIndex, colIndex++].Value = employee.JobLevel;
             worksheet.Cells[rowIndex, colIndex++].Value = FormatDate(employee.JoinedDate);
-            worksheet.Cells[rowIndex, colIndex++].Value = $"{employee.Salary:N0}";
+            worksheet.Cells[rowIndex, colIndex++].Value = FormatSalary(employee.Salary);
             worksheet.Cells[rowIndex, colIndex++].Value = employee.Company;
             worksheet.Cells[rowIndex, colIndex++].Value = employee.SubCompany;
             worksheet.Cells[rowIndex, colIndex++].Value = FormatDate(employee.CompanyDate);
@@ -325,70 +326,56 @@ public class ExportExcelEmployeeInfoService(
         worksheet.Cells.AutoFitColumns(MinimumWidth, MaximumWidth);
         worksheet.View.FreezePanes(RowStartBody, 1);
 
+        if (showSalaryCurrency)
+        {
+            xlPackage.Encryption.IsEncrypted = true;
+            xlPackage.Encryption.Password = employeeService.GetTotalCostPassword();
+        }
+
         await using var ms = new MemoryStream();
         await xlPackage.SaveAsAsync(ms);
         return ms.ToArray();
     }
 
-    public async Task<byte[]> ExportProfitCenterReportAsync(IEnumerable<GroupEmployeeModel> employees)
+    public async Task<byte[]> ExportProfitCenterReportAsync(IEnumerable<GroupEmployeeModel> employees, bool showSalaryCurrency)
     {
         var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, ProfitCenterReportTemplatePath);
+        using var xlPackage = new ExcelPackage(new FileInfo(templatePath));
 
-        await using var templateStream = new FileStream(templatePath, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, useAsync: true);
-        using var templatePackage = new ExcelPackage(templateStream);
-        using var xlPackage = new ExcelPackage();
-
-        var template = templatePackage.Workbook.Worksheets.FirstOrDefault();
-        if (template == null)
+        var worksheet = xlPackage.Workbook.Worksheets.FirstOrDefault();
+        FillEmployeeData(employees, worksheet, showSalaryCurrency);
+        if (showSalaryCurrency)
         {
-            throw new InvalidOperationException("The template Excel file does not contain any worksheet.");
+            xlPackage.Encryption.IsEncrypted = true;
+            xlPackage.Encryption.Password = employeeService.GetTotalCostPassword();
         }
-
-        var worksheet = xlPackage.Workbook.Worksheets.Add("Profit Center Report");
-        
-        SetupWorksheetHeaders(template, worksheet);
-        var joinedDateCol = FillEmployeeData(employees, template, worksheet);
-        ApplyWorksheetFormatting(worksheet, joinedDateCol);
+        else
+        {
+            worksheet?.DeleteColumn(ColumnsSalary, SalaryColumnsCount);
+        }
+        AddTotalRow(worksheet);
 
         await using var ms = new MemoryStream();
         await xlPackage.SaveAsAsync(ms);
         return ms.ToArray();
     }
 
-    private static void SetupWorksheetHeaders(ExcelWorksheet template, ExcelWorksheet worksheet)
-    {
-        var rowIndex = 1;
-        const int colIndex = 1;
-
-        for (var i = 0; i < 3; i++)
-        {
-            template.Cells[rowIndex, colIndex, rowIndex, TotalColumnsProfitCenter]
-                .Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, TotalColumnsProfitCenter]);
-            rowIndex++;
-        }
-
-        worksheet.Cells[rowIndex - 1, 1, rowIndex - 1, TotalColumnsProfitCenter].AutoFilter = true;
-    }
-
-    private static int FillEmployeeData(IEnumerable<GroupEmployeeModel> employees, ExcelWorksheet template, ExcelWorksheet worksheet)
+    private static void FillEmployeeData(IEnumerable<GroupEmployeeModel> employees, ExcelWorksheet worksheet, bool showSalaryCurrency)
     {
         var rowIndex = 4;
         var rowNum = 1;
-        var joinedDateCol = 0;
 
         foreach (var employee in employees)
         {
             var paymaster = DeterminePaymaster(employee);
-            joinedDateCol = FillEmployeeRow(employee, template, worksheet, rowIndex, rowNum++, paymaster);
+            FillEmployeeRow(employee, worksheet, rowIndex, rowNum++, paymaster, showSalaryCurrency);
             rowIndex++;
         }
-
-        return joinedDateCol;
     }
 
     private static string DeterminePaymaster(GroupEmployeeModel employee)
     {
-        if (new[] { "Nexcel", "NexVision", "Lumiplus" }.Contains(employee.Company))
+        if (Constants.NexCompanyIds.Contains(employee.CompanyId))
         {
             return "Nexcel";
         }
@@ -396,12 +383,9 @@ public class ExportExcelEmployeeInfoService(
         return !string.IsNullOrWhiteSpace(employee.SubCompany) ? employee.SubCompany : employee.Company;
     }
 
-    private static int FillEmployeeRow(GroupEmployeeModel employee, ExcelWorksheet template, ExcelWorksheet worksheet, int rowIndex, int rowNum, string paymaster)
+    private static void FillEmployeeRow(GroupEmployeeModel employee, ExcelWorksheet worksheet, int rowIndex, int rowNum, string paymaster, bool showSalaryCurrency)
     {
         var colIndex = 1;
-        
-        template.Cells[RowStartBodyProfitCenter, 1, RowStartBodyProfitCenter, TotalColumnsProfitCenter]
-            .Copy(worksheet.Cells[rowIndex, 1, rowIndex, TotalColumnsProfitCenter]);
 
         worksheet.Cells[rowIndex, colIndex++].Value = rowNum;
         worksheet.Cells[rowIndex, colIndex++].Value = employee.CtrIdFormatted;
@@ -418,38 +402,26 @@ public class ExportExcelEmployeeInfoService(
         worksheet.Cells[rowIndex, colIndex++].Value = employee.EmployeeCode;
         worksheet.Cells[rowIndex, colIndex++].Value = employee.NickName;
         worksheet.Cells[rowIndex, colIndex++].Value = employee.JobLevel;
+        worksheet.Cells[rowIndex, colIndex++].Value = employee.ManagementLevel;
         worksheet.Cells[rowIndex, colIndex++].Value = paymaster;
-
-        var joinedDateCol = colIndex;
         worksheet.Cells[rowIndex, colIndex++].Value = FormatDate(employee.JoinedDate);
+        worksheet.Cells[rowIndex, colIndex++].Value = employee.Location;
 
-        worksheet.Cells[rowIndex, colIndex++].Value = employee.LocalCurrency;
-        worksheet.Cells[rowIndex, colIndex].Value = employee.Location;
-
-        return joinedDateCol;
+        if (showSalaryCurrency)
+        {
+            SetCellValueRight(worksheet, rowIndex, colIndex++, FormatSalary(employee.Salary));
+            SetCellValueRight(worksheet, rowIndex, colIndex++, FormatSalary(employee.BasicSalary));
+            SetCellValueRight(worksheet, rowIndex, colIndex++, FormatSalary(employee.JobLevelAddOn));
+            SetCellValueRight(worksheet, rowIndex, colIndex++, FormatSalary(employee.ManagementAllowance));
+            SetCellValueRight(worksheet, rowIndex, colIndex++, FormatSalary(employee.OverseasAllowance));
+            SetCellValueRight(worksheet, rowIndex, colIndex++, FormatSalary(employee.SkillSetAddOn));
+            SetCellValueRight(worksheet, rowIndex, colIndex, FormatSalary(employee.Others));
+        }
     }
 
-    private static void ApplyWorksheetFormatting(ExcelWorksheet worksheet, int joinedDateCol)
+    private static void AddTotalRow(ExcelWorksheet worksheet)
     {
         var rowEndData = worksheet.Dimension?.End.Row ?? 0;
-
-        worksheet.Cells.AutoFitColumns(MinimumWidth, MaximumWidth);
-        worksheet.View.FreezePanes(RowStartBodyProfitCenter, 1);
-
-        for (var col = 1; col <= TotalColumnsProfitCenter; col++)
-        {
-            worksheet.Column(col).Style.HorizontalAlignment =
-                (col == joinedDateCol) ? ExcelHorizontalAlignment.Right : ExcelHorizontalAlignment.Left;
-        }
-
-        worksheet.Cells[1, 1, 3, TotalColumnsProfitCenter].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
-        worksheet.Cells[1, 1, 3, TotalColumnsProfitCenter].Style.Font.Bold = true;
-
-        AddTotalRow(worksheet, rowEndData);
-    }
-
-    private static void AddTotalRow(ExcelWorksheet worksheet, int rowEndData)
-    {
         worksheet.Cells[2, 1].Value = "Total:";
         worksheet.Cells[2, 1].Style.Font.Bold = true;
         worksheet.Cells[2, 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
@@ -471,7 +443,15 @@ public class ExportExcelEmployeeInfoService(
         worksheet.Column(1).AutoFit();
     }
 
+    private static void SetCellValueRight(ExcelWorksheet worksheet, int row, int col, string value)
+    {
+        worksheet.Cells[row, col].Value = value;
+        worksheet.Cells[row, col].Style.HorizontalAlignment = ExcelHorizontalAlignment.Right;
+    }
+
     private static string FormatDate(DateTime? date) => date?.ToDateMonthYearFormatedDate();
 
     private static string FormatBoolean(bool value) => value ? Constants.Yes : Constants.No;
+
+    private static string FormatSalary(decimal value) => value == 0 ? "-" : $"{value:N0}";
 }

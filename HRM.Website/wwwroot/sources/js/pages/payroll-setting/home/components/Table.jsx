@@ -1,7 +1,7 @@
 ﻿import React from 'react';
 import Row from './Row';
 
-const Table = ({ data, saveEditData, onDelete, types }) => {
+const Table = ({ data, saveEditData, onDelete, types, currencies }) => {
     const colSpan = window.hasPermission === 'True' ? 7 : 5;
 
     const columns = [
@@ -9,6 +9,7 @@ const Table = ({ data, saveEditData, onDelete, types }) => {
         { label: 'Type', key: 'type' },
         { label: 'Items', key: 'items' },
         { label: 'Amount', key: 'amount' },
+        { label: 'Currency', key: 'currency' },
     ];
 
     if (window.hasPermission === 'True') {
@@ -41,6 +42,7 @@ const Table = ({ data, saveEditData, onDelete, types }) => {
                             saveEditData={saveEditData}
                             onDelete={onDelete}
                             types={types}
+                            currencies={currencies}
                         />
                     ))
                 ) : (

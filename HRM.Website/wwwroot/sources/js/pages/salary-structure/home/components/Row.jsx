@@ -49,6 +49,7 @@ const Row = ({ rowIndex, item, onDelete }) => {
                     <td className="text-right"></td>
                     <td className="text-right"></td>
                     <td className="text-right"></td>
+                    <td className="text-right"></td>
                     {
                         window.hasPermission === 'True' && (
                         <Fragment>
@@ -91,6 +92,7 @@ const Row = ({ rowIndex, item, onDelete }) => {
                     <td className="text-right">{formatSalary(detail.basicSalary)}</td>
                     <td className="text-right">{formatSalary(detail.jobLevelAddOn)}</td>
                     <td className="text-right">{formatSalary(detail.expatSalary)}</td>
+                    <td className="text-right">{formatSalary(detail.expatJobLevelAddOn)}</td>
                     {
                         index === 0 &&
                         window.hasPermission === 'True' && (
