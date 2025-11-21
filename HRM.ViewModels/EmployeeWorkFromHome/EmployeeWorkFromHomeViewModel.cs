@@ -19,9 +19,8 @@ public class EmployeeWorkFromHomeViewModel
     [DataType(DataType.Date)]
     public DateTime FromDate { get; set; }
 
-    [Required(ErrorMessage = "To Date is required.")]
     [DataType(DataType.Date)]
-    public DateTime ToDate { get; set; }
+    public DateTime? ToDate { get; set; }
 
     public string Remark { get; set; }
 
