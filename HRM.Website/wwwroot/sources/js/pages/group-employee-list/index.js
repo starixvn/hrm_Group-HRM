@@ -159,10 +159,9 @@ import {
                   .removeClass("fa-lock")
                   .addClass("fa-unlock")
                   .css("color", "#28a745");
-
                 $(".total-cost-cell").each(function () {
-                  let amount = Number($(this).data("amount"));
-                  $(this).text(amount > 0 ? amount.toLocaleString() : "-");
+                  let amount = $(this).data("amount");
+                  $(this).text(amount);
                 });
               } else {
                 $("#costError").show();
