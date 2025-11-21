@@ -15,9 +15,11 @@ public class UpdateEmployeeWorkFromHomeCriteria : CriteriaBase
 
     public override string GetSettingKey() => "EmployeeWorkFromHome_Update";
 
+    private bool IsToDateValid => !ToDate.HasValue || FromDate <= ToDate.Value;
+
     public override bool IsValid() =>
         EmployeeWorkFromHomeId > 0
         && EmpId > 0
         && ModifiedBy > 0
-        && (!ToDate.HasValue || FromDate <= ToDate.Value);
+        && IsToDateValid;
 }

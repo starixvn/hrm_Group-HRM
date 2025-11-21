@@ -11,7 +11,7 @@ public class InsertEmployeeWorkFromHomeCriteria : CriteriaBase
     public DateTime? ToDate { get; set; }
     public int CreatedBy { get; set; }
     public string Remark { get; set; }
-    public bool IsCountInHeadcount { get; set; } = false;
+    public bool IsCountInHeadcount { get; set; }
 
     public override string GetSettingKey() => "EmployeeWorkFromHome_Insert";
 
