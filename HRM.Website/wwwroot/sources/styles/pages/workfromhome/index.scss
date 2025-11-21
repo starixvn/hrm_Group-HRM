@@ -44,6 +44,11 @@
             }
         }
 
+        .form-group--checkbox {
+            display: flex;
+            align-items: center;
+        }
+
         .calendar-form {
             position: relative;
             width: 150px !important;

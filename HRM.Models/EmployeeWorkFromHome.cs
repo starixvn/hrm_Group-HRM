@@ -32,5 +32,6 @@ public class EmployeeWorkFromHome
     }
 
     public string Remark { get; set; }
+    public bool IsCountInHeadcount { get; set; }
     public IEnumerable<S3FileObject> AttachFiles { get; set; }
 }

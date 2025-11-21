@@ -61,8 +61,9 @@ public class ExportExcelService(IWebHostEnvironment hostingEnvironment) : IExpor
             row.GetCell(6).SetCellValue(item.FromDate.ToDateMonthYearFormatedDate());
             row.GetCell(7).SetCellValue(item.ToDate.ToDateMonthYearFormatedDate());
             row.GetCell(8).SetCellValue(item.Remark);
-            row.GetCell(9).SetCellValue(item.Modifier);
-            row.GetCell(10).SetCellValue(item.ModifiedDate.ToFormatedDate());
+            row.GetCell(9).SetCellValue(item.IsCountInHeadcount ? "Yes" : "No");
+            row.GetCell(10).SetCellValue(item.Modifier);
+            row.GetCell(11).SetCellValue(item.ModifiedDate.ToFormatedDate());
 
             index++;
             rowIndex++;

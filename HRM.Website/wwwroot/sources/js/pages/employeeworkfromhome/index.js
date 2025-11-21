@@ -26,6 +26,8 @@ const workFromHomeModule = (function ($) {
     function getEmployeeWorkFromHome() {
         blockUI();
         $('#TeamIds').val($('#Team').multiSelectTreeView('getSelectedItems'));
+        var isLocalValue = $('#IsLocal').val();
+        var isPermanentValue = $('#IsPermanent').val();
         axios({
             url: resolveClientUrl('EmployeeWorkFromHome/GetEmployeeWorkFromHomeGrid'),
             method: 'GET',
@@ -34,7 +36,8 @@ const workFromHomeModule = (function ($) {
                 fromDate: $("#FromDateFilter").val(),
                 toDate: $("#ToDateFilter").val(),
                 teamIds: $('#TeamIds').val(),
-                isLocal: $('#IsLocal').val()
+                isLocal: isLocalValue || null,
+                isPermanent: isPermanentValue || null
             },
             responseType: 'text'
         }).then(response => {
@@ -169,7 +172,8 @@ const workFromHomeModule = (function ($) {
                                 employeeId: $("#EmployeeId").val(),
                                 fromDate: $("#FromDate").val(),
                                 toDate: type === 'Permanent' ? null : $("#ToDate").val(),
-                                remark: $("#Remark").val()
+                                remark: $("#Remark").val(),
+                                isCountInHeadcount: $("#IsCountInHeadcount").is(':checked')
                             }
 
                             var files = document.getElementById('file_emp_wfh').files;
@@ -236,6 +240,7 @@ const workFromHomeModule = (function ($) {
                                 fromDate: $("#FromDate").val(),
                                 toDate: type === 'Permanent' ? null : $("#ToDate").val(),
                                 remark: $("#Remark").val(),
+                                isCountInHeadcount: $("#IsCountInHeadcount").is(':checked'),
                                 employeeWorkFromHomeId: $("#EmployeeWorkFromHomeId").val()
                             }
 
@@ -379,6 +384,8 @@ const workFromHomeModule = (function ($) {
             var postToUrl = 'ExportEmployeeWorkFromHome/EmployeeWorkFromHome?';
 
             $('#TeamIds').val($('#Team').multiSelectTreeView('getSelectedItems'));
+            var isLocalValue = $('#IsLocal').val();
+            var isPermanentValue = $('#IsPermanent').val();
             var url = resolveClientUrl(postToUrl +
                 'teamIds=' +
                 $('#TeamIds').val() +
@@ -387,7 +394,9 @@ const workFromHomeModule = (function ($) {
                 '&toDate=' +
                 $("#ToDateFilter").val() +
                 '&isLocal=' +
-                $('#IsLocal').val()
+                (isLocalValue || '') +
+                '&isPermanent=' +
+                (isPermanentValue || '')
             );
             location.href = url;
         });

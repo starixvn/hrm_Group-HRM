@@ -88,6 +88,17 @@
     </div>
 
     <div class="form-horizontal clearfix">
+        <div class="form-group form-group--m form-group--checkbox">
+            <div class="label-form">
+                <label class="control-label" for="IsCountInHeadcount">Count in HeadCount</label>
+            </div>
+            <div class="input-form">
+                @Html.CheckBoxFor(model => model.IsCountInHeadcount, new { id = "IsCountInHeadcount" })
+            </div>
+        </div>
+    </div>
+
+    <div class="form-horizontal clearfix">
         <div class="form-group form-group--m">
             <div class="label-form">
                 @Html.LabelFor(model => model.Files, Labels.UploadFile, new { @class = "control-label" })

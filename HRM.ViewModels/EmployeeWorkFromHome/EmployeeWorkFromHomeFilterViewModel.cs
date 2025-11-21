@@ -8,4 +8,5 @@ public class EmployeeWorkFromHomeFilterViewModel
     public DateTime ToDateFilter { get; set; }
     public string TeamIds { get; set; }
     public byte? IsLocal { get; set; }
+    public byte? IsPermanent { get; set; }
 }

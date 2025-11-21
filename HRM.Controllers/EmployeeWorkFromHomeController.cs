@@ -32,7 +32,9 @@ public class EmployeeWorkFromHomeController : BaseController
     public EmployeeWorkFromHomeController(
         IUserControlSession session,
         IBaseService baseService,
-        IAttachFileService attachFileService) : base(session)
+        IAttachFileService attachFileService
+    )
+        : base(session)
     {
         this.session = session;
         this.baseService = baseService;
@@ -47,23 +49,34 @@ public class EmployeeWorkFromHomeController : BaseController
         var model = new EmployeeWorkFromHomeFilterViewModel
         {
             FromDateFilter = currentDateTime,
-            ToDateFilter = currentDateTime
+            ToDateFilter = currentDateTime,
         };
 
-        ViewBag.IsHost = session.HasPermissionOnFunction(FunctionKey.EmployeeManagement, Policy.Host);
+        ViewBag.IsHost = session.HasPermissionOnFunction(
+            FunctionKey.EmployeeManagement,
+            Policy.Host
+        );
         return View(model);
     }
 
     [HrmPermission(Policy.Read, FunctionKey.EmployeeManagement)]
-    public async Task<IActionResult> GetEmployeeWorkFromHomeGrid(GetEmployeeWorkFromHomeCriteria criteria)
+    public async Task<IActionResult> GetEmployeeWorkFromHomeGrid(
+        GetEmployeeWorkFromHomeCriteria criteria
+    )
     {
         var employees = await baseService.GetDataAsync<EmployeeWorkFromHome>(criteria);
         foreach (var employee in employees)
         {
-            employee.AttachFiles = await attachFileService.GetInfoAttachFileAsync(employee.EmployeeWorkFromHomeId, uploadFolderPath);
+            employee.AttachFiles = await attachFileService.GetInfoAttachFileAsync(
+                employee.EmployeeWorkFromHomeId,
+                uploadFolderPath
+            );
         }
 
-        ViewBag.IsHost = session.HasPermissionOnFunction(FunctionKey.EmployeeManagement, Policy.Host);
+        ViewBag.IsHost = session.HasPermissionOnFunction(
+            FunctionKey.EmployeeManagement,
+            Policy.Host
+        );
         return PartialView("_EmployeeWorkFromHomeGrid", employees);
     }
 
@@ -74,7 +87,7 @@ public class EmployeeWorkFromHomeController : BaseController
         var model = new EmployeeWorkFromHomeViewModel
         {
             FromDate = currentDateTime,
-            ToDate = currentDateTime
+            ToDate = currentDateTime,
         };
         return PartialView("_Create", model);
     }
@@ -83,7 +96,10 @@ public class EmployeeWorkFromHomeController : BaseController
     [HrmPermission(Policy.Host, FunctionKey.EmployeeManagement)]
     public async Task<IActionResult> Create(string requestModel, IList<IFormFile> files)
     {
-        var model = JsonSerializer.Deserialize<EmployeeWorkFromHomeViewModel>(requestModel, JsonOptions);
+        var model = JsonSerializer.Deserialize<EmployeeWorkFromHomeViewModel>(
+            requestModel,
+            JsonOptions
+        );
         var result = new CommandResult();
 
         if (model != null && ModelState.IsValid)
@@ -94,21 +110,32 @@ public class EmployeeWorkFromHomeController : BaseController
                 FromDate = model.FromDate,
                 ToDate = model.ToDate,
                 CreatedBy = EmployeeSession.EmpId,
-                Remark = model.Remark
+                Remark = model.Remark,
+                IsCountInHeadcount = model.IsCountInHeadcount,
             };
 
             result = await baseService.ExecuteNonQueryAsync(criteria);
             if (result.IsSuccessful)
             {
-                await attachFileService.UploadFileAsync(files, criteria.RequestId, uploadFolderPath);
+                await attachFileService.UploadFileAsync(
+                    files,
+                    criteria.RequestId,
+                    uploadFolderPath
+                );
             }
         }
         else
         {
-            result.Message = ModelState.Values.FirstOrDefault(v => v.Errors.Any())?.Errors.FirstOrDefault()?.ErrorMessage;
+            result.Message = ModelState
+                .Values.FirstOrDefault(v => v.Errors.Any())
+                ?.Errors.FirstOrDefault()
+                ?.ErrorMessage;
         }
 
-        return new JsonResult(result, new JsonSerializerSettings { ContractResolver = new DefaultContractResolver() });
+        return new JsonResult(
+            result,
+            new JsonSerializerSettings { ContractResolver = new DefaultContractResolver() }
+        );
     }
 
     [HrmPermission(Policy.Read, FunctionKey.EmployeeManagement)]
@@ -125,16 +152,26 @@ public class EmployeeWorkFromHomeController : BaseController
             FromDate = employee.FromDate,
             ToDate = employee.ToDate,
             Remark = employee.Remark,
-            Files = (await attachFileService.GetInfoAttachFileAsync(id, uploadFolderPath)).Select(x => x.FileName).ToList()
+            IsCountInHeadcount = employee.IsCountInHeadcount,
+            Files = (await attachFileService.GetInfoAttachFileAsync(id, uploadFolderPath))
+                .Select(x => x.FileName)
+                .ToList(),
         };
         return PartialView("_Edit", model);
     }
 
     [HttpPost]
     [HrmPermission(Policy.Host, FunctionKey.EmployeeManagement)]
-    public async Task<IActionResult> Edit(string requestModel, IList<IFormFile> files, string filesRemove)
+    public async Task<IActionResult> Edit(
+        string requestModel,
+        IList<IFormFile> files,
+        string filesRemove
+    )
     {
-        var model = JsonSerializer.Deserialize<EmployeeWorkFromHomeViewModel>(requestModel, JsonOptions);
+        var model = JsonSerializer.Deserialize<EmployeeWorkFromHomeViewModel>(
+            requestModel,
+            JsonOptions
+        );
         var result = new CommandResult();
 
         if (model != null && ModelState.IsValid)
@@ -146,7 +183,8 @@ public class EmployeeWorkFromHomeController : BaseController
                 FromDate = model.FromDate,
                 ToDate = model.ToDate,
                 ModifiedBy = EmployeeSession.EmpId,
-                Remark = model.Remark
+                Remark = model.Remark,
+                IsCountInHeadcount = model.IsCountInHeadcount,
             };
 
             result = await baseService.ExecuteNonQueryAsync(criteria);
@@ -154,18 +192,32 @@ public class EmployeeWorkFromHomeController : BaseController
             {
                 if (!string.IsNullOrWhiteSpace(filesRemove))
                 {
-                    await attachFileService.DeleteFileAsync(JsonSerializer.Deserialize<List<string>>(filesRemove), criteria.EmployeeWorkFromHomeId, uploadFolderPath);
+                    await attachFileService.DeleteFileAsync(
+                        JsonSerializer.Deserialize<List<string>>(filesRemove),
+                        criteria.EmployeeWorkFromHomeId,
+                        uploadFolderPath
+                    );
                 }
 
-                await attachFileService.UploadFileAsync(files, criteria.EmployeeWorkFromHomeId, uploadFolderPath);
+                await attachFileService.UploadFileAsync(
+                    files,
+                    criteria.EmployeeWorkFromHomeId,
+                    uploadFolderPath
+                );
             }
         }
         else
         {
-            result.Message = ModelState.Values.FirstOrDefault(v => v.Errors.Any())?.Errors.FirstOrDefault()?.ErrorMessage;
+            result.Message = ModelState
+                .Values.FirstOrDefault(v => v.Errors.Any())
+                ?.Errors.FirstOrDefault()
+                ?.ErrorMessage;
         }
 
-        return new JsonResult(result, new JsonSerializerSettings { ContractResolver = new DefaultContractResolver() });
+        return new JsonResult(
+            result,
+            new JsonSerializerSettings { ContractResolver = new DefaultContractResolver() }
+        );
     }
 
     [HttpPost]
@@ -175,13 +227,16 @@ public class EmployeeWorkFromHomeController : BaseController
         var criteria = new DeleteEmployeeWorkFromHomeCriteria { EmployeeWorkFromHomeId = id };
         var result = await baseService.ExecuteNonQueryAsync(criteria);
 
-        return new JsonResult(result, new JsonSerializerSettings { ContractResolver = new DefaultContractResolver() });
+        return new JsonResult(
+            result,
+            new JsonSerializerSettings { ContractResolver = new DefaultContractResolver() }
+        );
     }
 
     private static readonly JsonSerializerOptions JsonOptions = new()
     {
         PropertyNameCaseInsensitive = true,
         NumberHandling = JsonNumberHandling.AllowReadingFromString,
-        Converters = { new DateTimeConverter() }
+        Converters = { new DateTimeConverter() },
     };
 }

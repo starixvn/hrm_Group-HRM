@@ -24,5 +24,7 @@ public class EmployeeWorkFromHomeViewModel
 
     public string Remark { get; set; }
 
+    public bool IsCountInHeadcount { get; set; }
+
     public List<string> Files { get; set; }
 }
