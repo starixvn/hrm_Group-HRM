@@ -40,7 +40,7 @@ const Personal = ({ isOpen, onToggle, countries, onGenerateEmployeeId }) => {
                 <div className='form-group'>
                     <div className='label-form'>
                         <label className='control-label'>
-                            Employee ID
+                            Employee ID <span style={{ color: 'red' }}>*</span>
                         </label>
                     </div>
                     <div className='input-form'>
@@ -94,7 +94,7 @@ const Personal = ({ isOpen, onToggle, countries, onGenerateEmployeeId }) => {
                 <div className='form-group'>
                     <div className='label-form'>
                         <label className='control-label'>
-                            Full Name
+                            Full Name <span style={{ color: 'red' }}>*</span>
                         </label>
                     </div>
                     <div className='input-form'>
@@ -109,7 +109,7 @@ const Personal = ({ isOpen, onToggle, countries, onGenerateEmployeeId }) => {
                 <div className='form-group'>
                     <div className='label-form'>
                         <label className='control-label'>
-                            Nickname
+                            Nickname <span style={{ color: 'red' }}>*</span>
                         </label>
                     </div>
                     <div className='input-form'>
