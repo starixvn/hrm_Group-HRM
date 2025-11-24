@@ -333,8 +333,8 @@ public class ExportExcelEmployeeInfoService(
         }
         else
         {
-            var salaryColumn = 18;
-            var numberOfColumn = 1;
+            const int salaryColumn = 18;
+            const int numberOfColumn = 1;
             worksheet?.DeleteColumn(salaryColumn, numberOfColumn);
         }
 
