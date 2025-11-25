@@ -74,6 +74,18 @@
                 </div>
                 <div class="select-form" id="Team"></div>
             </div>
+
+            <div class="form-group form-group--m">
+                <div class="label-form">
+                    @Html.Label(null, Labels.Type, new { @class = "control-label" })
+                </div>
+                <div class="select-form">
+                    @Html.Raw(RazorHelpers.WorkFromHomeTypeDropDownList("IsPermanent",
+                        classHTML: "form-control",
+                        selectedId: Model.IsPermanent.HasValue ? Model.IsPermanent.Value.ToString() : string.Empty))
+                </div>
+            </div>
+
             <div class="form-group form-group--m">
                 <input class="btn btn-primary" type="submit" id="submit" value="@Labels.Submit" />
                 <button class="btn btn-request" id="add-workfromhome" type="button">

@@ -158,4 +158,15 @@ public static class RazorHelpers
             : value;
         return formattedValue;
     }
+
+    public static string WorkFromHomeTypeDropDownList(string id, string classHTML = "", string selectedId = "")
+    {
+        return $"""
+                <select id='{id}' name='{id}' class='{classHTML}'>
+                    <option value='' {(string.IsNullOrWhiteSpace(selectedId) ? "selected" : "")}>All</option>
+                    <option value='0' {(selectedId == "0" ? "selected" : "")}>Fixed-period</option>
+                    <option value='1' {(selectedId == "1" ? "selected" : "")}>Permanent</option>
+                </select>
+            """;
+    }
 }

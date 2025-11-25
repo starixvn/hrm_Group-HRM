@@ -1,6 +1,9 @@
-﻿namespace HRM.Models;
+﻿using HRM.Core.Constants;
 
-using HRM.Models.Common;
+namespace HRM.Models;
+
+using Common;
+using System;
 
 public class LeaveSummary : MonthlyDataBase
 {
@@ -22,6 +25,7 @@ public class LeaveSummary : MonthlyDataBase
 
     public float LeaveBalance { get; set; }
     public float KIVBalance { get; set; }
-
+    public float KIVMinuteBalance { get; set; }
+    public double KIVHourBalance => Math.Round(KIVMinuteBalance / Constants.TotalMinuteInHour, 1);
     public string Remark { get; set; }
 }

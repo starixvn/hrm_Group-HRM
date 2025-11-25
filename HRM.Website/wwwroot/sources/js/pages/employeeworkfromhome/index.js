@@ -26,6 +26,8 @@ const workFromHomeModule = (function ($) {
     function getEmployeeWorkFromHome() {
         blockUI();
         $('#TeamIds').val($('#Team').multiSelectTreeView('getSelectedItems'));
+        var isLocalValue = $('#IsLocal').val();
+        var isPermanentValue = $('#IsPermanent').val();
         axios({
             url: resolveClientUrl('EmployeeWorkFromHome/GetEmployeeWorkFromHomeGrid'),
             method: 'GET',
@@ -34,7 +36,8 @@ const workFromHomeModule = (function ($) {
                 fromDate: $("#FromDateFilter").val(),
                 toDate: $("#ToDateFilter").val(),
                 teamIds: $('#TeamIds').val(),
-                isLocal: $('#IsLocal').val()
+                isLocal: isLocalValue || null,
+                isPermanent: isPermanentValue || null
             },
             responseType: 'text'
         }).then(response => {
@@ -59,6 +62,7 @@ const workFromHomeModule = (function ($) {
             empId = domElement.$dialog.find('#EmployeeId').val(),
             fromDate = domElement.$dialog.find('#FromDate').val(),
             toDate = domElement.$dialog.find('#ToDate').val(),
+            type = domElement.$dialog.find('input[name="Type"]:checked').val(),
             workingHours = domElement.$dialog.find('#WorkingHours').val();
         let files = document.getElementById('file_emp_wfh').files,
             allowedExtensions = /(\.jpg|\.png|\.jpeg|\.pdf|\.doc|\.docx|\.xls|\.xlsx|\.txt)$/i;
@@ -67,8 +71,12 @@ const workFromHomeModule = (function ($) {
             errorMsg += '<li>Employee is required.</li>';
         }
 
-        if (!moment(toDate).isSameOrAfter(moment(fromDate))) {
-            errorMsg += '<li>To Date must be greater than or equal to From Date.</li>';
+        if (type === 'Fixed-period') {
+            if (!toDate) {
+                errorMsg += '<li>To Date is required for Fixed-period.</li>';
+            } else if (!moment(toDate).isSameOrAfter(moment(fromDate))) {
+                errorMsg += '<li>To Date must be greater than or equal to From Date.</li>';
+            }
         }
 
         if (workingHours === '' || parseInt(workingHours, 10) < 1 || parseInt(workingHours, 10) > 24) {
@@ -109,6 +117,45 @@ const workFromHomeModule = (function ($) {
         });
     }
 
+    function initTypeRadioButtons() {
+        domElement.$dialog.find('input[name="Type"]').on('change', function () {
+            const type = $(this).val();
+            const $toDateInput = domElement.$dialog.find('#ToDate');
+            const $toDateIcon = $toDateInput.closest('.calendar-form').find('.icon-calendar');
+            
+            if (type === 'Permanent') {
+                $toDateInput.prop('disabled', true);
+                $toDateInput.addClass('disabled');
+                $toDateInput.val('');
+                $toDateInput.datepicker('disable');
+                $toDateIcon.addClass('disabled').off('click');
+            } else {
+                $toDateInput.prop('disabled', false);
+                $toDateInput.removeClass('disabled');
+                $toDateInput.datepicker('enable');
+                $toDateIcon.removeClass('disabled');
+                // Re-initialize icon click handler
+                $toDateIcon.off('click').on('click', function () {
+                    if ($toDateInput.datepicker('widget').is(':visible')) {
+                        $toDateInput.datepicker('hide');
+                    } else {
+                        $toDateInput.datepicker('show');
+                    }
+                });
+            }
+        });
+        
+        // Initialize on load
+        const selectedType = domElement.$dialog.find('input[name="Type"]:checked').val();
+        if (selectedType === 'Permanent') {
+            const $toDateInput = domElement.$dialog.find('#ToDate');
+            const $toDateIcon = $toDateInput.closest('.calendar-form').find('.icon-calendar');
+            $toDateInput.prop('disabled', true).addClass('disabled').val('');
+            $toDateInput.datepicker('disable');
+            $toDateIcon.addClass('disabled').off('click');
+        }
+    }
+
     function initAddEmployeeWorkFromHomeDialog() {
         domElement.$dialog.dialog({
             modal: true,
@@ -120,11 +167,13 @@ const workFromHomeModule = (function ($) {
                     click: function (e) {
                         removeMsg(domElement.$dialog);
                         if (validateAddEmployeeWorkFromHome()) {
+                            const type = domElement.$dialog.find('input[name="Type"]:checked').val();
                             const model = {
                                 employeeId: $("#EmployeeId").val(),
                                 fromDate: $("#FromDate").val(),
-                                toDate: $("#ToDate").val(),
-                                remark: $("#Remark").val()
+                                toDate: type === 'Permanent' ? null : $("#ToDate").val(),
+                                remark: $("#Remark").val(),
+                                isCountInHeadcount: $("#IsCountInHeadcount").is(':checked')
                             }
 
                             var files = document.getElementById('file_emp_wfh').files;
@@ -161,6 +210,7 @@ const workFromHomeModule = (function ($) {
             minWidth: 460,
             dialogClass: 'modal-shadow'
         });
+        initTypeRadioButtons();
     }
 
     function removeMsg($dialog) {
@@ -184,11 +234,13 @@ const workFromHomeModule = (function ($) {
                     click: function () {
                         removeMsg(domElement.$dialog);
                         if (validateAddEmployeeWorkFromHome()) {
+                            const type = domElement.$dialog.find('input[name="Type"]:checked').val();
                             const model = {
                                 employeeId: $("#EmployeeId").val(),
                                 fromDate: $("#FromDate").val(),
-                                toDate: $("#ToDate").val(),
+                                toDate: type === 'Permanent' ? null : $("#ToDate").val(),
                                 remark: $("#Remark").val(),
+                                isCountInHeadcount: $("#IsCountInHeadcount").is(':checked'),
                                 employeeWorkFromHomeId: $("#EmployeeWorkFromHomeId").val()
                             }
 
@@ -227,6 +279,7 @@ const workFromHomeModule = (function ($) {
             minWidth: 460,
             dialogClass: 'modal-shadow'
         });
+        initTypeRadioButtons();
     }
 
     function initAutoComplete() {
@@ -292,6 +345,7 @@ const workFromHomeModule = (function ($) {
                 initEventEditWorkFromHome(employeeworkfromhomeId);
                 initAutoComplete();
                 initDatepicker();
+                initTypeRadioButtons();
             }).catch(axiosError);
         });
     }
@@ -330,6 +384,8 @@ const workFromHomeModule = (function ($) {
             var postToUrl = 'ExportEmployeeWorkFromHome/EmployeeWorkFromHome?';
 
             $('#TeamIds').val($('#Team').multiSelectTreeView('getSelectedItems'));
+            var isLocalValue = $('#IsLocal').val();
+            var isPermanentValue = $('#IsPermanent').val();
             var url = resolveClientUrl(postToUrl +
                 'teamIds=' +
                 $('#TeamIds').val() +
@@ -338,7 +394,9 @@ const workFromHomeModule = (function ($) {
                 '&toDate=' +
                 $("#ToDateFilter").val() +
                 '&isLocal=' +
-                $('#IsLocal').val()
+                (isLocalValue || '') +
+                '&isPermanent=' +
+                (isPermanentValue || '')
             );
             location.href = url;
         });

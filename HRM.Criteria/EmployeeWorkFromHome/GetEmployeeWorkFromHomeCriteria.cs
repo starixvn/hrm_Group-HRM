@@ -9,6 +9,7 @@ public class GetEmployeeWorkFromHomeCriteria : CriteriaBase
     public DateTime ToDate { get; set; }
     public string TeamIds { get; set; }
     public byte? IsLocal { get; set; }
+    public byte? IsPermanent { get; set; }
 
     public override string GetSettingKey() => "EmployeeWorkFromHome_Get";
 

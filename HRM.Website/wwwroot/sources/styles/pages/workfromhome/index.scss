@@ -44,6 +44,11 @@
             }
         }
 
+        .form-group--checkbox {
+            display: flex;
+            align-items: center;
+        }
+
         .calendar-form {
             position: relative;
             width: 150px !important;
@@ -60,6 +65,23 @@
 
         .workinghours {
             width: 150px;
+        }
+
+        .request-type {
+            display: flex;
+
+            .radioButton {
+                margin-right: 40px;
+
+                input, label {
+                    cursor: pointer;
+                }
+
+                label {
+                    font-weight: normal;
+                    margin-left: 5px;
+                }
+            }
         }
 
         .delete-file {

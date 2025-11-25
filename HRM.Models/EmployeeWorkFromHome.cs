@@ -16,7 +16,7 @@ public class EmployeeWorkFromHome
     public string FullName { get; set; }
 
     public DateTime FromDate { get; set; }
-    public DateTime ToDate { get; set; }
+    public DateTime? ToDate { get; set; }
 
     public string DepartmentName { get; set; }
     public string TeamName { get; set; }
@@ -32,5 +32,6 @@ public class EmployeeWorkFromHome
     }
 
     public string Remark { get; set; }
+    public bool IsCountInHeadcount { get; set; }
     public IEnumerable<S3FileObject> AttachFiles { get; set; }
 }

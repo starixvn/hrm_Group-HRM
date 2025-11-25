@@ -25,6 +25,24 @@
     <div class="form-horizontal clearfix">
         <div class="form-group form-group--m">
             <div class="label-form">
+                <label class="control-label">Type</label>
+            </div>
+            <div class="input-form request-type">
+                <div class="radioButton">
+                    <input type="radio" id="Type_FixedPeriod" name="Type" value="Fixed-period" checked="checked" />
+                    <label for="Type_FixedPeriod">Fixed-period</label>
+                </div>
+                <div class="radioButton">
+                    <input type="radio" id="Type_Permanent" name="Type" value="Permanent" />
+                    <label for="Type_Permanent">Permanent</label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-horizontal clearfix">
+        <div class="form-group form-group--m">
+            <div class="label-form">
                 @Html.LabelFor(model => model.FromDate, new { @class = "control-label" })
             </div>
             <div class="calendar-form">
@@ -46,7 +64,7 @@
                 @Html.LabelFor(model => model.ToDate, new { @class = "control-label" })
             </div>
             <div class="calendar-form">
-                @Html.TextBox("ToDate", Model.ToDate.ToDateMonthYearFormatedDate(),
+                @Html.TextBox("ToDate", Model.ToDate.HasValue ? Model.ToDate.Value.ToDateMonthYearFormatedDate() : "",
                     new
                          {
                         @class = "datepicker form-control",
@@ -65,6 +83,17 @@
             </div>
             <div class="input-form">
                 @Html.TextAreaFor(model => model.Remark, new { @class = "form-control" })
+            </div>
+        </div>
+    </div>
+
+    <div class="form-horizontal clearfix">
+        <div class="form-group form-group--m form-group--checkbox">
+            <div class="label-form">
+                <label class="control-label" for="IsCountInHeadcount">Count in HeadCount</label>
+            </div>
+            <div class="input-form">
+                @Html.CheckBoxFor(model => model.IsCountInHeadcount, new { id = "IsCountInHeadcount" })
             </div>
         </div>
     </div>
