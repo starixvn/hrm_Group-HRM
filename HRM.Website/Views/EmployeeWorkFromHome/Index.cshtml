@@ -7,7 +7,6 @@
     ViewBag.Title = Labels.EmployeeWorkFromHome;
     var today = DateTimeOffset.Now.DateTime.ToClientTimeZone().Date;
     var maxDate = new DateTimeOffset(today.Year + 2, 1, 1, 0, 0, 0, TimeSpan.Zero).AddDays(-1);
-    var aa = Model.IsPermanent;
 }
 @section css{
     <link href="~/dist/styles/employee.workfromhome.css" rel="stylesheet" asp-append-version="true" />
