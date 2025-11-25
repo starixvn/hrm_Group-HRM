@@ -89,7 +89,10 @@ public class ExportExcelService(IWebHostEnvironment hostingEnvironment) : IExpor
         cellAnnualBalance.SetCellValue("Balance Of AL " + year);
 
         var cellKIVBalance = rowAnnualBalance.GetCell(20);
-        cellKIVBalance.SetCellValue("Balance Of CL " + year);
+        cellKIVBalance.SetCellValue($"Balance Of CL {year} + {year - 1} (Day)");
+
+        var cellKIVHourBalance = rowAnnualBalance.GetCell(21);
+        cellKIVHourBalance.SetCellValue($"Balance Of CL {year} (Hour)");
 
         //// render body
         RenderLeaveSummaryRows(templateSheet, sheet, leaveSummaryList, (row, item, index) =>
@@ -115,6 +118,7 @@ public class ExportExcelService(IWebHostEnvironment hostingEnvironment) : IExpor
             row.GetCell(18).SetCellValue(item.Dec);
             row.GetCell(19).SetCellValue(item.LeaveBalance);
             row.GetCell(20).SetCellValue(item.KIVBalance);
+            row.GetCell(21).SetCellValue(item.KIVHourBalance);
         });
 
         FinalizeWorkbook(workbook);
