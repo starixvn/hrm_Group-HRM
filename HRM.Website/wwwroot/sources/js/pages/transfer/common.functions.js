@@ -5,9 +5,11 @@ import { resolveClientUrl, axiosError, toastOptions } from '../../shared/common.
 
 export const validationSchema = object({
     FullName: string()
-        .required('Full Name field is required!'),
+        .required('Full Name is required!'),
     Code: string()
-        .required('Employee ID field is required!')
+        .required('Employee ID is required!'),
+    NickName: string()
+        .required('Nickname is required!')
 });
 
 export const submitTransfer = (endpoint, model, setSubmitting, redirectUrl = null) => {

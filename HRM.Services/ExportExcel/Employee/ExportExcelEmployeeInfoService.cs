@@ -331,6 +331,12 @@ public class ExportExcelEmployeeInfoService(
             xlPackage.Encryption.IsEncrypted = true;
             xlPackage.Encryption.Password = employeeService.GetTotalCostPassword();
         }
+        else
+        {
+            const int salaryColumn = 18;
+            const int numberOfColumn = 1;
+            worksheet?.DeleteColumn(salaryColumn, numberOfColumn);
+        }
 
         await using var ms = new MemoryStream();
         await xlPackage.SaveAsAsync(ms);
