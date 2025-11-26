@@ -219,6 +219,24 @@
                     </div>
                 </li>
             }
+            @if (Model.DateTransferIn.HasValue)
+            {
+                <li class="list-group-item">
+                    <div class="plabel">Transfer In Date:</div>
+                    <div class="pcontent bold">
+                        @Model.DateTransferIn.Value.ToDateMonthYearFormatedDate()
+                    </div>
+                </li>
+            }
+            @if (Model.DateTransferOut.HasValue)
+            {
+                <li class="list-group-item">
+                    <div class="plabel">Transfer Out Date:</div>
+                    <div class="pcontent bold">
+                        @Model.DateTransferOut.Value.ToDateMonthYearFormatedDate()
+                    </div>
+                </li>
+            }
             </ul>
     </div>
 </div>

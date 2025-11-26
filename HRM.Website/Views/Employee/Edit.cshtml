@@ -467,6 +467,24 @@
                     @Html.TextAreaFor(model => model.ResignedReason, new { @class = "form-control", maxlength = 200 })
                 </div>
             </li>
+            @if (Model.DateTransferIn.HasValue)
+            {
+                <li class="list-group-item form-group">
+                    <div class="label-form">Transfer In Date</div>
+                    <div>
+                        @Model.DateTransferIn.Value.ToDateMonthYearFormatedDate()
+                    </div>
+                </li>
+            }
+            @if (Model.DateTransferOut.HasValue)
+            {
+                <li class="list-group-item form-group">
+                    <div class="label-form">Transfer Out Date</div>
+                    <div>
+                        @Model.DateTransferOut.Value.ToDateMonthYearFormatedDate()
+                    </div>
+                </li>
+            }
             <li class="list-group-item form-group">
                 <div class="label-form">@Labels.LengthOfService:</div>
             </li>
