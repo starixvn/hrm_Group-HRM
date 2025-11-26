@@ -19,4 +19,8 @@ public class Unit : EntityBase<int>
     public string AccountableArea { get; set; }
 
     public bool IsActive { get; set; }
+
+    public string TeamIds { get; set; }
+
+    public int TotalMembers { get; set; }
 }

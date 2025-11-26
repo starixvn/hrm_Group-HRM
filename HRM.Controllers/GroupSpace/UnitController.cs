@@ -21,6 +21,7 @@ public class UnitController(
     public ActionResult Index()
     {
         var hasPermission = session.HasPermissionOnFunction(FunctionKey.UnitManagement, Policy.Host);
+        ViewBag.HasPermissionToViewEmployee = session.HasPermissionOnFunction(FunctionKey.GroupEmployeeList, Policy.Read);
         return View(hasPermission);
     }
 

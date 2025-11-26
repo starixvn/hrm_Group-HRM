@@ -23,6 +23,17 @@ const Row = ({ rowIndex, item, onDelete }) => {
             <td>
                 {item.isActive && <i className="fa fa-check fa-lg icon-check" />}
             </td>
+            <td>
+                {
+                    (item.totalMembers > 0 && window.hasPermissionToViewEmployee)
+                    ? (
+                        <a href={`/GroupEmployeeList?teamIds=${item.teamIds}&ctrIDs=1,0&outsources=1,0`}>{item.totalMembers}</a>
+                    )
+                    : (
+                        <span>{item.totalMembers}</span>
+                    )
+                }
+            </td>
             {
                 window.hasPermission === 'True' &&
                 <Fragment>
