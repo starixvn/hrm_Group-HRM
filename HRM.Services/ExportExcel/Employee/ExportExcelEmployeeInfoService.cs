@@ -308,6 +308,7 @@ public class ExportExcelEmployeeInfoService(
             worksheet.Cells[rowIndex, colIndex++].Value = employee.TeamName;
             worksheet.Cells[rowIndex, colIndex++].Value = employee.TeamPIC;
             worksheet.Cells[rowIndex, colIndex++].Value = employee.JobLevel;
+            worksheet.Cells[rowIndex, colIndex++].Value = employee.ManagementLevel;
             worksheet.Cells[rowIndex, colIndex++].Value = FormatDate(employee.JoinedDate);
             worksheet.Cells[rowIndex, colIndex++].Value = FormatSalary(employee.Salary);
             worksheet.Cells[rowIndex, colIndex++].Value = employee.Company;

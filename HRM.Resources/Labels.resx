@@ -1734,6 +1734,9 @@
   <data name="ManagementAllow" xml:space="preserve">
     <value>Management Allow</value>
   </data>
+  <data name="ManagementAllowance" xml:space="preserve">
+    <value>Management Allowance</value>
+  </data>
   <data name="NotVerify" xml:space="preserve">
     <value>Not Verify</value>
   </data>

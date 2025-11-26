@@ -3094,6 +3094,15 @@ namespace HRM.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Management Allowance.
+        /// </summary>
+        public static string ManagementAllowance {
+            get {
+                return ResourceManager.GetString("ManagementAllowance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Management Grade.
         /// </summary>
         public static string ManagementGrade {
