@@ -78,11 +78,13 @@ public class TeamService(
         return teams ?? new List<Team>();
     }
 
-    public async Task<IEnumerable<GroupTeamModel>> GetAllTeamByUnitScopeAsync(string teamIds = null)
+    public async Task<IEnumerable<GroupTeamModel>> GetAllTeamByUnitScopeAsync(string teamIds = null, string companyIds = null, string outsources = null)
     {
         var criteria = new GetTeamInUnitScopeCriteria
         {
-            TeamIds = teamIds
+            TeamIds = teamIds,
+            CompanyIds = companyIds,
+            Outsources = outsources
         };
 
         return await baseService.GetDataAsync<GroupTeamModel>(criteria);

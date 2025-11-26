@@ -37,9 +37,9 @@ public class GroupTeamController(
     }
 
     [HttpPost]
-    public async Task<IActionResult> GetTeamList(string teamIds = null)
+    public async Task<IActionResult> GetTeamList(string teamIds = null, string companyIds = null, string outsources = null)
     {
-        var teams = await teamService.GetAllTeamByUnitScopeAsync(teamIds);
+        var teams = await teamService.GetAllTeamByUnitScopeAsync(teamIds, companyIds, outsources);
         teams = teamService.GetTeamEmployeeBelongsTo(teams, EmployeeSession.EmpId);
 
         ViewBag.HasPermission = session.HasPermissionOnFunction(FunctionKey.GroupTeamManagement, Policy.Host);
@@ -223,9 +223,9 @@ public class GroupTeamController(
     }
 
     [HrmPermission(Policy.Read, FunctionKey.GroupTeamManagement)]
-    public async Task<IActionResult> ExportGroupTeamList(string teamIds = null)
+    public async Task<IActionResult> ExportGroupTeamList(string teamIds = null, string companyIds = null, string outsources = null)
     {
-        var teams = await teamService.GetAllTeamByUnitScopeAsync(teamIds);
+        var teams = await teamService.GetAllTeamByUnitScopeAsync(teamIds, companyIds, outsources);
         teams = teamService.GetTeamEmployeeBelongsTo(teams, EmployeeSession.EmpId);
         var bytes = await teamService.GenerateGroupTeamExcel(teams);
         var fileName = $"GroupTeam_{DateTimeOffset.Now.DateTime.ToClientTimeZone():yyyyMMdd}.xlsx";
