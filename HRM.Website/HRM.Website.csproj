@@ -18,6 +18,9 @@
     <None Remove="logs\log.txt" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="ExcelTemplates\GroupEmployeeTransferList.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="ExcelTemplates\ProfitCenterReport.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

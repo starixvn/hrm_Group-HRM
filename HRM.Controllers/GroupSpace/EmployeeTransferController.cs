@@ -6,6 +6,7 @@ using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Models.User;
 using GO.UserControl.Client.Core.Services;
 using GO.UserControl.Client.Core.Session;
+using HRM.Core;
 using HRM.Core.Constants;
 using HRM.Core.Enums;
 using HRM.Core.Filters;
@@ -15,6 +16,7 @@ using HRM.Criteria.Employee;
 using HRM.Criteria.Group;
 using HRM.Models;
 using HRM.Models.Group;
+using HRM.Services.ExportExcel.Employee;
 using HRM.Services.Helper;
 using HRM.Services.Implement;
 using HRM.Services.Interfaces;
@@ -31,7 +33,8 @@ public class EmployeeTransferController(
     ICompanyService companyService,
     IJobLevelService jobLevelService,
     IManagementLevelService managementLevelService,
-    IBaseService baseService) : BaseController(session)
+    IBaseService baseService,
+    IExportExcelEmployeeInfoService excelService) : BaseController(session)
 {
     [HrmPermission(Policy.Read, FunctionKey.EmployeeTransfer_All, FunctionKey.EmployeeTransfer_BU)]
     public IActionResult Index()
@@ -218,5 +221,21 @@ public class EmployeeTransferController(
         }
 
         return Json(employee);
+    }
+
+    
+    [HrmPermission(Policy.Read, FunctionKey.EmployeeTransfer)]
+    public async Task<IActionResult> ExportEmployeeTransferList()
+    {
+        var criteria = new GetEmployeeTransferCriteria
+        {
+            CurrentEmpId = session.Get<EmployeeSession>(SessionKey.Employee).EmpId,
+            IsViewAll = session.HasPermissionOnFunction(FunctionKey.EmployeeTransfer_All, Policy.Read)
+        };
+        var employees = await employeeService.GetEmployeeTransferListAsync(criteria);
+        var bytes = await excelService.ExportGroupEmployeesTransferAsync(employees);
+        var fileName = $"EmployeesTransfer_{DateTimeOffset.Now.DateTime.ToClientTimeZone():yyyyMMdd}.xlsx";
+
+        return File(bytes, MimeType.XLS, fileName);
     }
 }

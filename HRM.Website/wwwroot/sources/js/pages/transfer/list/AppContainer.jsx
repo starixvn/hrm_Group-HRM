@@ -11,7 +11,7 @@ const AppContainer = () => {
       .get(resolveClientUrl("EmployeeTransfer/GetEmployeeTransferList"), {
         headers: { "X-Requested-With": "XMLHttpRequest" },
       })
-      .then(response => {
+      .then((response) => {
         setData(response.data);
       })
       .catch(axiosError);
@@ -28,17 +28,30 @@ const AppContainer = () => {
   );
 };
 
+function exportExcel() {
+    location.href = resolveClientUrl('EmployeeTransfer/ExportEmployeeTransferList');
+}
+
 const Header = () => {
   const handleCreate = () => {
     window.location.href = resolveClientUrl("EmployeeTransfer/Transfer");
   };
   return (
-    <form class="filter">
+    <form class="filter" style={{ display: 'flex'}}>
       <div class="form-horizontal clearfix">
         <button type="button" class="btn btn-request" onClick={handleCreate}>
           Transfer Employee
         </button>
       </div>
+
+      <button
+        type="button"
+        className="btn btn-excel"
+        onClick={exportExcel}
+        style={{ marginLeft: 5 }}
+      >
+        Excel
+      </button>
     </form>
   );
 };
