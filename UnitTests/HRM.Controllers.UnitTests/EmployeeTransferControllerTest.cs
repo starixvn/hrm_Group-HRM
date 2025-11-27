@@ -6,6 +6,7 @@ using HRM.Core.Constants;
 using HRM.Core.Models;
 using HRM.Core.Services;
 using HRM.Models;
+using HRM.Services.ExportExcel.Employee;
 using HRM.Services.Implement;
 using HRM.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -27,6 +28,7 @@ public class EmployeeTransferControllerTest : BaseControllerTest
         var companyService = Substitute.For<ICompanyService>();
         var jobLevelService = Substitute.For<IJobLevelService>();
         var managementLevelService = Substitute.For<IManagementLevelService>();
+        var excelService = Substitute.For<IExportExcelEmployeeInfoService>();
         _baseService = Substitute.For<IBaseService>();
 
         _controller = new EmployeeTransferController(
@@ -37,7 +39,8 @@ public class EmployeeTransferControllerTest : BaseControllerTest
             companyService,
             jobLevelService,
             managementLevelService,
-            _baseService);
+            _baseService,
+            excelService);
     }
 
     [Fact]
