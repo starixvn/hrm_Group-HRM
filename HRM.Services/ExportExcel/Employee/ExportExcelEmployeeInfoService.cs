@@ -307,7 +307,7 @@ public class ExportExcelEmployeeInfoService(
             worksheet.Cells[rowIndex, colIndex++].Value = employee.ToCompanyName;
             worksheet.Cells[rowIndex, colIndex++].Value = employee.Remark;
             worksheet.Cells[rowIndex, colIndex++].Value = employee.TransferredDatetime;
-            worksheet.Cells[rowIndex, colIndex++].Value = employee.TransferredByNickName;
+            worksheet.Cells[rowIndex, colIndex].Value = employee.TransferredByNickName;
 
             rowIndex++;
         }
