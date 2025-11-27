@@ -275,18 +275,17 @@ public class ExportExcelEmployeeInfoService(
         }
 
         var rowIndex = 4;
-        var colIndex = 1;
 
         var templateSheet = templatePackage.Workbook.Worksheets[0];
         var worksheet = xlPackage.Workbook.Worksheets.Add("Sheet 1", templateSheet);
-        var totalColumns = 16;
+        const int totalColumns = 16;
         const int transferRowStartBody = 4;
 
         // data
         var rowNum = 1;
         foreach (var employee in employees)
         {
-            colIndex = 1;
+            var colIndex = 1;
             template.Cells[transferRowStartBody, 1, transferRowStartBody, totalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, totalColumns]);
 
             worksheet.Cells[rowIndex, colIndex++].Value = rowNum++;

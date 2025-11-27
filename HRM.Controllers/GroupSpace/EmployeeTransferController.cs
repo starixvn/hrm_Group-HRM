@@ -25,6 +25,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace HRM.Controllers.GroupSpace;
 
+#pragma warning disable S107 // Methods should not have too many parameters
 public class EmployeeTransferController(
     IUserControlSession session,
     IEmployeeService employeeService,
@@ -35,6 +36,7 @@ public class EmployeeTransferController(
     IManagementLevelService managementLevelService,
     IBaseService baseService,
     IExportExcelEmployeeInfoService excelService) : BaseController(session)
+#pragma warning restore S107 // Methods should not have too many parameters
 {
     [HrmPermission(Policy.Read, FunctionKey.EmployeeTransfer_All, FunctionKey.EmployeeTransfer_BU)]
     public IActionResult Index()
