@@ -38,7 +38,8 @@ describe('Table component', () => {
                 'Job Level',
                 'Basic Salary',
                 'Job Level Add-On',
-                'Expat Salary',
+                'Basic Salary (USD)',
+                'Job Level Add-On (USD)',
                 'Edit',
                 'Delete'
             ])
@@ -55,7 +56,8 @@ describe('Table component', () => {
                 'Job Level',
                 'Basic Salary',
                 'Job Level Add-On',
-                'Expat Salary'
+                'Basic Salary (USD)',
+                'Job Level Add-On (USD)'
             ])
         );
         expect(headers.length).toBe(7);
