@@ -10,7 +10,16 @@
 @import '../../layout/toastr';
 
 .form-edit-user {
-    max-width: 900px;
+    .info-employee-container {
+        display: flex;
+        gap: 20px;
+
+        .left-area,
+        .right-area {
+            min-width: 440px;
+        }
+
+    }
 
     .panel {
         margin-bottom: 10px;
@@ -40,12 +49,12 @@
 
                         .checkbox-custom[readonly] {
 
-                            & + label {
+                            &+label {
                                 pointer-events: none;
                                 color: #b8b8b8;
                             }
 
-                            & + label:before {
+                            &+label:before {
                                 box-shadow: none;
                                 background-color: rgb(168, 168, 168);
                                 border-color: rgb(168, 168, 168);
@@ -93,16 +102,23 @@
     }
 }
 
+.validation-summary-errors {
+    max-width: 1103px;
+}
+
 .menu {
-    text-align: center;
-    margin-top: 10px;
+    margin-top: 20px;
 }
 
 #IsLocal {
     min-width: 110px;
 }
 
-#WorkingDays, #WorkingHours, #OffDaysbyWeek, #SpecialOT, #WorkingHoursbyWeek {
+#WorkingDays,
+#WorkingHours,
+#OffDaysbyWeek,
+#SpecialOT,
+#WorkingHoursbyWeek {
     width: 90px;
 }
 
@@ -124,15 +140,15 @@
         flex: 1;
         max-width: 300px;
 
-        &.subsidy{
+        &.subsidy {
             display: flex;
             gap: 10px;
 
-            input{
+            input {
                 flex: 2;
             }
 
-            select{
+            select {
                 flex: 1;
             }
         }
@@ -171,4 +187,3 @@
         }
     }
 }
-

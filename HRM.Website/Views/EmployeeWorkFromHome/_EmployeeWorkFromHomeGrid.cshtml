@@ -7,17 +7,68 @@
     <thead>
         <tr>
             <th>@Labels.SymbolCount</th>
-            <th>@Labels.Department</th>
-            <th>@Labels.Team</th>
-            <th>@Labels.Code</th>
-            <th>@Labels.FullName</th>
-            <th>@Labels.NickName</th>
-            <th>@Labels.From</th>
-            <th>@Labels.To</th>
+            <th class="col-sorter">
+                <div class="cell-control-wrapper">
+                    @Labels.BusinessUnit
+                    <div class="fa fa-sort cell-right-div"></div>
+                </div>
+            </th>
+            <th class="col-sorter">
+                <div class="cell-control-wrapper">
+                    @Labels.Department
+                    <div class="fa fa-sort cell-right-div"></div>
+                </div>
+            </th>
+            <th class="col-sorter">
+                <div class="cell-control-wrapper">
+                    @Labels.Team
+                    <div class="fa fa-sort cell-right-div"></div>
+                </div>
+            </th>
+            <th class="col-sorter">
+                <div class="cell-control-wrapper">
+                    @Labels.Code
+                    <div class="fa fa-sort cell-right-div"></div>
+                </div>
+            </th>
+            <th class="col-sorter">
+                <div class="cell-control-wrapper">
+                    @Labels.FullName
+                    <div class="fa fa-sort cell-right-div"></div>
+                </div>
+            </th>
+            <th class="col-sorter">
+                <div class="cell-control-wrapper">
+                    @Labels.NickName
+                    <div class="fa fa-sort cell-right-div"></div>
+                </div>
+            </th>
+            <th class="col-sorter">
+                <div class="cell-control-wrapper">
+                    @Labels.From
+                    <div class="fa fa-sort cell-right-div"></div>
+                </div>
+            </th>
+            <th class="col-sorter">
+                <div class="cell-control-wrapper">
+                    @Labels.To
+                    <div class="fa fa-sort cell-right-div"></div>
+                </div>
+            </th>
             <th>@Labels.Remark</th>
             <th>@Labels.FileAttach</th>
-            <th>@Labels.CreatedBy</th>
-            <th>@Labels.CreatedDate</th>
+            <th class="col-sorter">
+                <div class="cell-control-wrapper">
+                    @Labels.CreatedBy
+                    <div class="fa fa-sort cell-right-div"></div>
+                </div>
+            </th>
+            <th class="col-sorter">
+                <div class="cell-control-wrapper">
+                    @Labels.CreatedDate
+                    <div class="fa fa-sort cell-right-div"></div>
+                </div>
+            </th>
             @if (ViewBag.IsHost)
             {
                 <th>@Labels.Action</th>
@@ -33,6 +84,7 @@
             {
                 <tr>
                     <td>@(index++)</td>
+                    <td class="align-left">@item.UnitCode</td>
                     <td class="align-left">@item.DepartmentName</td>
                     <td class="align-left">@item.TeamName</td>
                     <td>@item.Code</td>
@@ -72,7 +124,7 @@
         }
         else
         {
-            @Html.Raw(RazorHelpers.DisplayNoInformation(colspan: 14))
+            @Html.Raw(RazorHelpers.DisplayNoInformation(colspan: 15))
         }
     </tbody>
 </table>

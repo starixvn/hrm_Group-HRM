@@ -71,6 +71,12 @@ public class EmployeeFullProfile
     public string ResignedReason { get; set; }
 
     [DataType(DataType.Date)]
+    public DateTime? DateTransferIn { get; set; }
+
+    [DataType(DataType.Date)]
+    public DateTime? DateTransferOut { get; set; }
+
+    [DataType(DataType.Date)]
     public DateTime? MilitaryFromDate { get; set; }
 
     [DataType(DataType.Date)]

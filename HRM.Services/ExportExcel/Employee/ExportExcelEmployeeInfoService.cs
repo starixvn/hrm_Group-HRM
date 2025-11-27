@@ -47,7 +47,7 @@ public class ExportExcelEmployeeInfoService(
     {
         RowStartHeader = 2,
         RowStartBody = 4,
-        TotalColumns = 23
+        TotalColumns = 25
     }
 
     public async Task<byte[]> ExportEmployeeBasicInfo(IList<Employee> employees)
@@ -122,6 +122,8 @@ public class ExportExcelEmployeeInfoService(
             employee.ConfirmedDate,
             employee.ResignedDate,
             employee.ResignedReason,
+            TransferInDate = FormatDate(employee.DateTransferIn),
+            TransferOutDate = FormatDate(employee.DateTransferOut),
             LengthOfServiceByGroupDate = employeeService.CalculateLengthOfService(employee.JoinedDate, employee.MilitaryFromDate, employee.MilitaryToDate).LengthOfServiceText,
             LengthOfServiceByCompanyDate = employeeService.CalculateLengthOfService(employee.CompanyDate, employee.MilitaryFromDate, employee.MilitaryToDate).LengthOfServiceText,
             DoB = employee.DateOfBirth.ToDateMonthYearFormatedDate(),
@@ -201,6 +203,8 @@ public class ExportExcelEmployeeInfoService(
             ConfirmedDate = FormatDate(p.ConfirmedDate),
             ResignedDate = FormatDate(p.ResignedDate),
             p.ResignedReason,
+            TransferInDate = FormatDate(p.DateTransferIn),
+            TransferOutDate = FormatDate(p.DateTransferOut),
             LengthOfServiceByGroupDate = employeeService.CalculateLengthOfService(p.JoinedDate, p.MilitaryFromDate, p.MilitaryToDate).LengthOfServiceText,
             LengthOfServiceByCompanyDate = employeeService.CalculateLengthOfService(p.CompanyDate, p.MilitaryFromDate, p.MilitaryToDate).LengthOfServiceText,
             p.JobTitle,
