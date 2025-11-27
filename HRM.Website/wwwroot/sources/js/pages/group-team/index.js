@@ -54,7 +54,9 @@ function initSortTable() {
 
 function exportExcel() {
     const selectedTeamIds = $('#GroupTeam').multiSelectTreeView('getSelectedItems');
-    const query = `teamIds=${selectedTeamIds || ''}`;
+    const selectedCompanyIds = $('#CompanyIds').multiSelectTreeView('getSelectedItems');
+    const selectedOutsources = $('#Outsources').multiSelectTreeView('getSelectedItems');
+    const query = `teamIds=${selectedTeamIds || ''}&companyIds=${selectedCompanyIds || ''}&outsources=${selectedOutsources || ''}`;
 
     location.href = resolveClientUrl('GroupTeam/ExportGroupTeamList?' + query);
 }
