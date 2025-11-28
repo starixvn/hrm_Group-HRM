@@ -2190,4 +2190,7 @@
   <data name="TotalCostUSD" xml:space="preserve">
     <value>Total Cost (USD)</value>
   </data>
+  <data name="OutSourcedTeam" xml:space="preserve">
+    <value>OutSourced Team</value>
+  </data>
 </root>

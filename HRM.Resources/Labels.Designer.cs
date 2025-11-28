@@ -4021,6 +4021,15 @@ namespace HRM.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to OutSourced Team.
+        /// </summary>
+        public static string OutSourcedTeam {
+            get {
+                return ResourceManager.GetString("OutSourcedTeam", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Override.
         /// </summary>
         public static string Override {
