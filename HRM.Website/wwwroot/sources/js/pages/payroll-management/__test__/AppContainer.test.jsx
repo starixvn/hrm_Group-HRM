@@ -72,7 +72,7 @@ describe('AppContainer Component', () => {
             month: '2024-01-01',
             isLocal: true,
         });
-        expect(mockSetSalaryData).toHaveBeenCalledWith(mockData);
+        expect(mockSetSalaryData).toHaveBeenCalledWith({data: mockData});
 
         await mockOnSearchCallback();
         expect(mockPayrollService.getSalaryData).toHaveBeenCalledWith({});

@@ -40,7 +40,7 @@ describe('PayrollService', () => {
                 },
                 responseType: 'json',
             });
-            expect(result).toEqual(mockData);
+            expect(result).toEqual({data: mockData});
             expect(mockCommonFunctions.unblockUI).toHaveBeenCalled();
         });
 
