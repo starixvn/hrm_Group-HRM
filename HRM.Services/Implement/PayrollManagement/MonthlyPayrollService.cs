@@ -14,7 +14,7 @@ public class MonthlyPayrollService(ICalculatePayrollService payrollService, IExc
 {
     public async Task CalculateMonthlySalary(IEnumerable<GroupEmployeeModel> employees)
     {
-        var exchangeRates = await GetEffectiveExchangeRatesAsync();
+        var exchangeRates = await exchangeRateService.GetEffectiveExchangeRatesDictAsync();
         var roundingRules = await GetRoundingRulesAsync();
         var localIds = employees.Where(e => e.IsLocal).Select(x => x.EmpId).Distinct().ToList();
         var expatIds = employees.Where(e => !e.IsLocal).Select(x => x.EmpId).Distinct().ToList();
@@ -47,25 +47,6 @@ public class MonthlyPayrollService(ICalculatePayrollService payrollService, IExc
                 employee.Others = detail.OthersDisplay;
             }
         }
-    }
-
-    private async Task<Dictionary<string, decimal>> GetEffectiveExchangeRatesAsync()
-    {
-        var currentDate = DateTimeOffset.Now.DateTime.ToClientTimeZone().Date;
-        var exchangeRates = await exchangeRateService.GetExchangeRatesAsync();
-
-        var effectiveRates = exchangeRates
-            .Where(er => er.EffectiveDate.Date <= currentDate)
-            .GroupBy(er => er.BaseCurrency.ToUpperInvariant())
-            .Select(g => g.OrderByDescending(er => er.EffectiveDate).First())
-            .ToList();
-
-        var ratesDict = effectiveRates.ToDictionary(
-            er => er.BaseCurrency.ToUpperInvariant(),
-            er => er.ToUsd
-        );
-
-        return ratesDict;
     }
 
     private async Task<Dictionary<string, int>> GetRoundingRulesAsync()

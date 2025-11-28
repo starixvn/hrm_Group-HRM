@@ -21,6 +21,30 @@ public static class CurrencyConverter
         return convertedAmount;
     }
 
+    public static decimal ConvertCurrency(decimal amount, string fromCurrencyCode, string toCurrencyCode, Dictionary<string, decimal> exchangeRates)
+    {
+        if (string.IsNullOrWhiteSpace(fromCurrencyCode) || string.IsNullOrWhiteSpace(toCurrencyCode))
+        {
+            return amount;
+        }
+
+        var normalizedFrom = fromCurrencyCode.ToUpperInvariant();
+        var normalizedTo = toCurrencyCode.ToUpperInvariant();
+
+        if (normalizedFrom == normalizedTo)
+        {
+            return amount;
+        }
+
+        if (!exchangeRates.TryGetValue(normalizedFrom, out var fromRate) || !exchangeRates.TryGetValue(normalizedTo, out var toRate))
+        {
+            return amount;
+        }
+
+        var usdAmount = amount * fromRate;
+        return usdAmount / toRate;
+    }
+
     public static decimal RoundUSDAmount(decimal amount, Dictionary<string, int> roundingRules) => RoundAmount(amount, roundingRules, "USD");
 
     public static decimal RoundAmount(decimal amount, Dictionary<string, int> roundingRules, string currencyCode)

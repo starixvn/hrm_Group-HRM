@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using HRM.Core;
 using HRM.Core.Models;
 using HRM.Core.Services;
 using HRM.Criteria.Company;
@@ -105,5 +106,24 @@ public class ExchangeRateService(IBaseService baseService) : IExchangeRateServic
             ModifiedBy = modifiedBy,
         };
         return await baseService.ExecuteNonQueryAsync(criteria);
+    }
+
+    public async Task<Dictionary<string, decimal>> GetEffectiveExchangeRatesDictAsync()
+    {
+        var currentDate = DateTimeOffset.Now.DateTime.ToClientTimeZone().Date;
+        var exchangeRates = await GetExchangeRatesAsync();
+
+        var effectiveRates = exchangeRates
+            .Where(er => er.EffectiveDate.Date <= currentDate)
+            .GroupBy(er => er.BaseCurrency.ToUpperInvariant())
+            .Select(g => g.OrderByDescending(er => er.EffectiveDate).First())
+            .ToList();
+
+        var ratesDict = effectiveRates.ToDictionary(
+            er => er.BaseCurrency.ToUpperInvariant(),
+            er => er.ToUsd
+        );
+
+        return ratesDict;
     }
 }
