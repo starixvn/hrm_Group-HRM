@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using GO.UserControl.Client.Core.Enumerables;
 using GO.UserControl.Client.Core.Session;
@@ -6,6 +8,7 @@ using HRM.Core.Constants;
 using HRM.Core.Filters;
 using HRM.Criteria.PayrollManagement;
 using HRM.Services.Implement;
+using HRM.Services.Implement.ActionLog;
 using HRM.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,7 +17,8 @@ namespace HRM.Controllers;
 public class PayrollManagementController(
     IUserControlSession session,
     IAccessCounterService accessCounterService,
-    IPayrollManagementService payrollService) : BaseController(session)
+    IPayrollManagementService payrollService,
+    IActionLogService actionLogService) : BaseController(session)
 {
     [HrmPermission(Policy.Read, FunctionKey.PayrollManagement)]
     public async Task<IActionResult> Index()
@@ -36,7 +40,19 @@ public class PayrollManagementController(
         };
 
         var data = await payrollService.GetPayrollByMonthAsync(criteria);
-        return Json(data);
+
+        var objectId = $"{CurrentCompanyId}{month.Month}{month.Year}";
+        var logDetail = await actionLogService.GetLogDetailByIdAsync(LogObjectType.Payroll, int.Parse(objectId), false);
+        var latestLog = logDetail
+            .OrderByDescending(l => l.LogDate)
+            .Select(s => new KeyValuePair<string, DateTime>(s.Nickname, s.LogDate))
+            .FirstOrDefault();
+
+        return Json(new
+        {
+            data,
+            latestLog
+        });
     }
 
     [HttpPost]

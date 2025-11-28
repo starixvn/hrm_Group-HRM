@@ -12,12 +12,12 @@ namespace HRM.Services.Implement.ActionLog;
 
 public interface IActionLogService
 {
-    Task<IEnumerable<LogObjectDetail>> GetLogDetailByIdAsync(byte objectTypeId, int objectId);
+    Task<IEnumerable<LogObjectDetail>> GetLogDetailByIdAsync(byte objectTypeId, int objectId, bool isGetFieldChange = true);
 }
 
 public class ActionLogService(IBaseService baseService) : IActionLogService
 {
-    public async Task<IEnumerable<LogObjectDetail>> GetLogDetailByIdAsync(byte objectTypeId, int objectId)
+    public async Task<IEnumerable<LogObjectDetail>> GetLogDetailByIdAsync(byte objectTypeId, int objectId, bool isGetFieldChange = true)
     {
         var criteria = new GetLogObjectByIdCriteria
         {
@@ -25,7 +25,10 @@ public class ActionLogService(IBaseService baseService) : IActionLogService
             ObjectId = objectId
         };
         var logs = await baseService.GetDataAsync<LogObjectDetail>(criteria);
-        GetFieldChanged(logs);
+        if (isGetFieldChange)
+        {
+            GetFieldChanged(logs);
+        }
 
         return logs;
     }

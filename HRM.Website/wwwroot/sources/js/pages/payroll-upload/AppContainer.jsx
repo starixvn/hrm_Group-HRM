@@ -9,8 +9,9 @@ const AppContainer = () => {
     const [salaryData, setSalaryData] = React.useState([]);
     const fetchSalaryData = (filters = {}) => {
         PayrollService.getSalaryData(filters)
-            .then(data => {
-                setSalaryData(data);
+            .then(response => {
+                const { data } = response;
+                setSalaryData(data.data);
             })
             .catch(_ => {
                 toastr.error('Failed to fetch salary data', '', toastOptions());

@@ -108,8 +108,7 @@ public class SalaryStructureService(IBaseService baseService) : ISalaryStructure
         {
             new() { Value = "1", Label = "Basic Salary" },
             new() { Value = "2", Label = "Job Level Add-On" },
-            new() { Value = "3", Label = "Special Subsidy" },
-            new() { Value = "4", Label = "Management Allowance" }
+            new() { Value = "3", Label = "Special Subsidy" }
         };
 
         return new BasicSalaryConfigViewModel

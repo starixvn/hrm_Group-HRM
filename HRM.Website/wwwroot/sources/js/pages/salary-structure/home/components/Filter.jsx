@@ -1,7 +1,6 @@
 ﻿import React, { useState } from 'react';
 import axios from 'axios';
-import toastr from 'toastr';
-import { resolveClientUrl, axiosError, toastOptions } from '../../../../shared/common.functions';
+import { resolveClientUrl, axiosError } from '../../../../shared/common.functions';
 import BasicSalaryConfigModal from './BasicSalaryConfigModal';
 
 const API_ENDPOINTS = {
@@ -38,8 +37,6 @@ const Filter = () => {
             .filter(item => item);
     };
 
-    const formatConfigForSubmit = configs => Array.isArray(configs) ? configs.join(',') : '';
-
     const resetModal = () => {
         setShowConfigModal(false);
         setSelectedConfigs([]);
@@ -66,33 +63,7 @@ const Filter = () => {
         }
     };
 
-    const handleConfigSubmit = async configs => {
-        const configData = {
-            BasicSalaryConfig: formatConfigForSubmit(configs)
-        };
-
-        try {
-            const response = await axios.post(
-                resolveClientUrl(API_ENDPOINTS.UPDATE_CONFIG),
-                configData,
-                { headers: HTTP_HEADERS.JSON_REQUEST }
-            );
-
-            const { data } = response;
-            if (data.isSuccessful) {
-                toastr.success("Updated successfully!", '', toastOptions());
-            } else {
-                toastr.error(data.message);
-            }
-        } catch (error) {
-            axiosError(error);
-        } finally {
-            resetModal();
-        }
-    };
-
     const handleConfigClose = resetModal;
-    const handleConfigChange = setSelectedConfigs;
 
     return (
         <div className="filter">
@@ -122,9 +93,7 @@ const Filter = () => {
             <BasicSalaryConfigModal
                 show={showConfigModal}
                 onClose={handleConfigClose}
-                onSubmit={handleConfigSubmit}
                 selectedConfigs={selectedConfigs}
-                onConfigChange={handleConfigChange}
                 configOptions={configOptions}
             />
         </div>

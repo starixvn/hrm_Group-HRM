@@ -3,7 +3,7 @@ import { CATEGORY, Category, CategoryLabel } from '../constants/constants';
 import GenerateSalaryModal from './GenerateSalaryModal';
 import MonthPicker from '../../../shared/components/MonthPicker';
 
-const Filter = ({ onSearch }) => {
+const Filter = ({ onSearch, latestLog }) => {
     const [month, setMonth] = useState(() => {
         const now = new Date();
         return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(
@@ -78,6 +78,21 @@ const Filter = ({ onSearch }) => {
                 {window.hasPermissionToUpload === 'True' && (
                     <GenerateSalaryModal onSuccess={handleGenerateSuccess} />
                 )}
+                {latestLog && (() => {
+                    const formattedDate = new Date(latestLog.value).toLocaleString("en-US", {
+                        month: "short",
+                        day: "numeric",
+                        hour: "numeric",
+                        minute: "2-digit",
+                        hour12: true
+                    });
+
+                    return (
+                        <p style={{ marginBottom: 0 }}>
+                            Last generated: {formattedDate} by {latestLog.key}
+                        </p>
+                    );
+                })()}
             </div>
         </div>
     );

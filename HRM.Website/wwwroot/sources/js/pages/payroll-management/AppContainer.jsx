@@ -5,10 +5,13 @@ import PayrollService from './service';
 
 const AppContainer = () => {
     const [salaryData, setSalaryData] = React.useState([]);
+    const [latestLog, setLatestLog] = React.useState(null);
 
     const fetchSalaryData = async (filters = {}) => {
-        const data = await PayrollService.getSalaryData(filters);
+        const response = await PayrollService.getSalaryData(filters);
+        const { data, latestLog } = response;
         setSalaryData(data);
+        setLatestLog(latestLog);
     };
 
     const handleSearch = async filters => {
@@ -18,7 +21,7 @@ const AppContainer = () => {
     return (
         <div className="salary-management-container">
             <div className="filter">
-                <Filter onSearch={handleSearch} />
+                <Filter onSearch={handleSearch} latestLog={latestLog} />
             </div>
             <div className="salary-table">
                 <SalaryTable data={salaryData} />
