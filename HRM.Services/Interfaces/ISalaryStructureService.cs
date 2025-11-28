@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using HRM.Core.Models;
 using HRM.Models.SalaryStructure;
+using HRM.ViewModels.SalaryStructure;
 
 public interface ISalaryStructureService
 {
@@ -13,5 +14,5 @@ public interface ISalaryStructureService
 
     Task<CommandResult> DeleteAsync(int actorId, int id);
 
-    Task<string> GetBasicSalaryConfigAsync(short companyId);
+    Task<BasicSalaryConfigViewModel> GetBasicSalaryConfigAsync(short companyId);
 }

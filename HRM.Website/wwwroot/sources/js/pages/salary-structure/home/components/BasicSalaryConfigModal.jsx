@@ -1,19 +1,13 @@
 import React from 'react';
 import { Modal, ModalBody, ModalFooter, ModalHeader } from 'react-bootstrap';
 
-const CONFIG_OPTIONS = [
-    { value: "1", label: 'Basic Salary' },
-    { value: "2", label: 'Job Level Add-On' },
-    { value: "3", label: 'Special Subsidy' },
-    { value: "4", label: 'Management Allowance' }
-];
-
 const BasicSalaryConfigModal = ({
     show,
     onClose,
     onSubmit,
     selectedConfigs = [],
-    onConfigChange
+    onConfigChange,
+    configOptions = []
 }) => {
     const isOptionSelected = value => selectedConfigs.includes(value);
 
@@ -59,7 +53,7 @@ const BasicSalaryConfigModal = ({
 
             <ModalBody>
                 <div className="form-group">
-                    {CONFIG_OPTIONS.map(renderOption)}
+                    {configOptions.map(renderOption)}
                 </div>
             </ModalBody>
 

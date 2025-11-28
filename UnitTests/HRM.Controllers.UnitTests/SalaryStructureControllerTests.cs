@@ -411,16 +411,29 @@ public class SalaryStructureControllerTests : BaseControllerTest
     public async Task GetBasicSalaryConfig_ShouldReturnJsonResult()
     {
         // Arrange
-        var expectedConfig = "{\"config\": \"test\"}";
+        var expectedViewModel = new BasicSalaryConfigViewModel
+        {
+            Config = "{\"config\": \"test\"}",
+            ConfigOptions = new List<BasicSalaryConfigOption>
+            {
+                new BasicSalaryConfigOption { Value = "1", Label = "Basic Salary" },
+                new BasicSalaryConfigOption { Value = "2", Label = "Job Level Add-On" },
+                new BasicSalaryConfigOption { Value = "3", Label = "Special Subsidy" },
+                new BasicSalaryConfigOption { Value = "4", Label = "Management Allowance" }
+            }
+        };
         _salaryStructureService.GetBasicSalaryConfigAsync(Arg.Any<short>())
-            .Returns(expectedConfig);
+            .Returns(expectedViewModel);
 
         // Act
         var result = await _controller.GetBasicSalaryConfig();
 
         // Assert
         var jsonResult = Assert.IsType<JsonResult>(result);
-        Assert.Equal(expectedConfig, jsonResult.Value);
+        var resultViewModel = Assert.IsType<BasicSalaryConfigViewModel>(jsonResult.Value);
+        Assert.Equal(expectedViewModel.Config, resultViewModel.Config);
+        Assert.NotNull(resultViewModel.ConfigOptions);
+        Assert.Equal(4, resultViewModel.ConfigOptions.Count());
         await _salaryStructureService.Received(1).GetBasicSalaryConfigAsync(3); // From SetupCompanyId
     }
 

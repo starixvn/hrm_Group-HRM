@@ -9,6 +9,7 @@ using HRM.Criteria.SalaryStructure;
 using HRM.Criteria.SystemSetting;
 using HRM.Models.SalaryStructure;
 using HRM.Services.Implement;
+using HRM.ViewModels.SalaryStructure;
 using NSubstitute;
 using Xunit;
 
@@ -362,7 +363,7 @@ public class SalaryStructureServiceTests
     }
 
     [Fact]
-    public async Task GetBasicSalaryConfigAsync_WithValidCompanyId_ShouldReturnConfig()
+    public async Task GetBasicSalaryConfigAsync_WithValidCompanyId_ShouldReturnConfigViewModel()
     {
         // Arrange
         const short companyId = 1;
@@ -376,7 +377,14 @@ public class SalaryStructureServiceTests
         var result = await _service.GetBasicSalaryConfigAsync(companyId);
 
         // Assert
-        Assert.Equal(expectedConfig, result);
+        Assert.NotNull(result);
+        Assert.Equal(expectedConfig, result.Config);
+        Assert.NotNull(result.ConfigOptions);
+        Assert.Equal(4, result.ConfigOptions.Count());
+        Assert.Contains(result.ConfigOptions, o => o.Value == "1" && o.Label == "Basic Salary");
+        Assert.Contains(result.ConfigOptions, o => o.Value == "2" && o.Label == "Job Level Add-On");
+        Assert.Contains(result.ConfigOptions, o => o.Value == "3" && o.Label == "Special Subsidy");
+        Assert.Contains(result.ConfigOptions, o => o.Value == "4" && o.Label == "Management Allowance");
 
         // Verify that the service was called with correct criteria
         await _baseService
@@ -389,7 +397,7 @@ public class SalaryStructureServiceTests
     }
 
     [Fact]
-    public async Task GetBasicSalaryConfigAsync_ShouldReturnStringFromBaseService()
+    public async Task GetBasicSalaryConfigAsync_ShouldReturnViewModelWithConfigOptions()
     {
         // Arrange
         const short companyId = 1;
@@ -403,11 +411,14 @@ public class SalaryStructureServiceTests
         var result = await _service.GetBasicSalaryConfigAsync(companyId);
 
         // Assert
-        Assert.Equal(expectedConfig, result);
+        Assert.NotNull(result);
+        Assert.Equal(expectedConfig, result.Config);
+        Assert.NotNull(result.ConfigOptions);
+        Assert.Equal(4, result.ConfigOptions.Count());
     }
 
     [Fact]
-    public async Task GetBasicSalaryConfigAsync_WithNullResult_ShouldReturnNull()
+    public async Task GetBasicSalaryConfigAsync_WithNullResult_ShouldReturnViewModelWithNullConfig()
     {
         // Arrange
         const short companyId = 1;
@@ -420,7 +431,10 @@ public class SalaryStructureServiceTests
         var result = await _service.GetBasicSalaryConfigAsync(companyId);
 
         // Assert
-        Assert.Null(result);
+        Assert.NotNull(result);
+        Assert.Null(result.Config);
+        Assert.NotNull(result.ConfigOptions);
+        Assert.Equal(4, result.ConfigOptions.Count());
     }
 
     [Fact]

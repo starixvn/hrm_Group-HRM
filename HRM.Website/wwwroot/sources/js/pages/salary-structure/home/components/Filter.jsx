@@ -21,6 +21,7 @@ const HTTP_HEADERS = {
 const Filter = () => {
     const [showConfigModal, setShowConfigModal] = useState(false);
     const [selectedConfigs, setSelectedConfigs] = useState([]);
+    const [configOptions, setConfigOptions] = useState([]);
 
     const parseConfigValue = configValue => {
         if (Array.isArray(configValue)) {
@@ -55,8 +56,9 @@ const Filter = () => {
                 { headers: HTTP_HEADERS.XML_REQUEST }
             );
             
-            const parsedConfigs = parseConfigValue(response.data);
+            const parsedConfigs = parseConfigValue(response.data.config);
             setSelectedConfigs(parsedConfigs);
+            setConfigOptions(response.data.configOptions || []);
         } catch (error) {
             axiosError(error);
         } finally {
@@ -123,6 +125,7 @@ const Filter = () => {
                 onSubmit={handleConfigSubmit}
                 selectedConfigs={selectedConfigs}
                 onConfigChange={handleConfigChange}
+                configOptions={configOptions}
             />
         </div>
     );

@@ -166,11 +166,11 @@ public class SalaryStructureController(
     [HrmPermission(Policy.Host, FunctionKey.SalaryStructureConfiguration)]
     public async Task<IActionResult> GetBasicSalaryConfig()
     {
-        var currentConfig = await salaryStructureService.GetBasicSalaryConfigAsync(
+        var configViewModel = await salaryStructureService.GetBasicSalaryConfigAsync(
             CurrentCompanyId
         );
 
-        return Json(currentConfig);
+        return Json(configViewModel);
     }
 
     [HttpPost]

@@ -9,6 +9,7 @@ using HRM.Criteria.SalaryStructure;
 using HRM.Criteria.SystemSetting;
 using HRM.Models.SalaryStructure;
 using HRM.Services.Interfaces;
+using HRM.ViewModels.SalaryStructure;
 
 namespace HRM.Services.Implement;
 
@@ -93,7 +94,7 @@ public class SalaryStructureService(IBaseService baseService) : ISalaryStructure
         return await baseService.ExecuteNonQueryAsync(criteria);
     }
 
-    public async Task<string> GetBasicSalaryConfigAsync(short companyId)
+    public async Task<BasicSalaryConfigViewModel> GetBasicSalaryConfigAsync(short companyId)
     {
         var criteria = new GetSystemConfigsByKeyCriteria
         {
@@ -101,6 +102,20 @@ public class SalaryStructureService(IBaseService baseService) : ISalaryStructure
             Key = SystemConfigKey.BasicSalaryConfig,
         };
 
-        return await baseService.GetDataEntityAsync<string>(criteria);
+        var config = await baseService.GetDataEntityAsync<string>(criteria);
+
+        var configOptions = new List<BasicSalaryConfigOption>
+        {
+            new() { Value = "1", Label = "Basic Salary" },
+            new() { Value = "2", Label = "Job Level Add-On" },
+            new() { Value = "3", Label = "Special Subsidy" },
+            new() { Value = "4", Label = "Management Allowance" }
+        };
+
+        return new BasicSalaryConfigViewModel
+        {
+            Config = config,
+            ConfigOptions = configOptions
+        };
     }
 }
