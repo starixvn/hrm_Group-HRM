@@ -21,8 +21,8 @@ public class SMSPayrollManagementService(
     IBaseService baseService,
     IUserControlSession session,
     ISalaryStructureService salaryStructureService,
-    IExchangeRateService exchangeRateService,
-    ICalculateAllowanceService calculateAllowanceService
+    ICalculateAllowanceService calculateAllowanceService,
+    IExchangeRateService exchangeRateService
 ) : IPayrollManagementService
 {
     private const int MAX_ALLOWED_UNPAID_LEAVE_DAYS = 10;
@@ -208,14 +208,16 @@ public class SMSPayrollManagementService(
         return employeeAttendant.WorkingDays - employeeAttendant.TotalUnpaidLeaveDays;
     }
 
-    private static decimal CalculateNewHireSalary(PayrollEmployeeAttendant employeeAttendant, decimal grossSalary)
+    private static decimal CalculateNewHireSalary(
+        PayrollEmployeeAttendant employeeAttendant,
+        decimal grossSalary
+    )
     {
+        var grossSalaryPerDay =
+            employeeAttendant.WorkingDays > 0 ? grossSalary / employeeAttendant.WorkingDays : 0;
         var newHireSalary =
-            employeeAttendant.TotalNewHireWorkingDays
-            * employeeAttendant.GrossSalaryPerDay
-            * PROBATION_PERCENTAGE;
-        var confirmedSalary =
-            employeeAttendant.TotalWorkingDays * employeeAttendant.GrossSalaryPerDay;
+            employeeAttendant.TotalNewHireWorkingDays * grossSalaryPerDay * PROBATION_PERCENTAGE;
+        var confirmedSalary = employeeAttendant.TotalWorkingDays * grossSalaryPerDay;
         return newHireSalary + confirmedSalary;
     }
 
@@ -235,24 +237,28 @@ public class SMSPayrollManagementService(
             return 0;
         }
 
-        var grossSalary = grossSalaryConfig.ConfigOptions
-            .Where(option => selectedConfigValues.Contains(option.Value))
-            .Select(option => option.Value switch
-            {
-                CONFIG_BASIC_SALARY => PayrollHelper.DecryptSalary(
-                    employeeAttendant.EncryptBasicSalary
-                ),
-                CONFIG_JOB_LEVEL_ADD_ON => PayrollHelper.DecryptSalary(
-                    employeeAttendant.EncryptJobLevelAddOn
-                ),
-                CONFIG_SPECIAL_SUBSIDY => CalculateSpecialSubsidy(
-                    employeeAttendant,
-                    exchangeRatesToUSD
-                ),
-                _ => 0m,
+        var grossSalary = grossSalaryConfig
+            .ConfigOptions.Where(option => selectedConfigValues.Contains(option.Value))
+            .Select(option =>
+                option.Value switch
+                {
+                    CONFIG_BASIC_SALARY => PayrollHelper.DecryptSalary(
+                        employeeAttendant.EncryptBasicSalary
+                    ),
+                    CONFIG_JOB_LEVEL_ADD_ON => PayrollHelper.DecryptSalary(
+                        employeeAttendant.EncryptJobLevelAddOn
+                    ),
+                    CONFIG_SPECIAL_SUBSIDY => CalculateSpecialSubsidy(
+                        employeeAttendant,
+                        exchangeRatesToUSD
+                    ),
+                    _ => 0m,
+                }
+            )
+            .Sum();
 
         return employeeAttendant.IsNewHire
-            ? CalculateNewHireSalary(employeeAttendant)
+            ? CalculateNewHireSalary(employeeAttendant, grossSalary)
             : grossSalary;
     }
 
