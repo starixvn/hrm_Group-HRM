@@ -9,6 +9,9 @@ public class GeneratedPayrollDetail
 {
     public int EmpId { get; set; }
     public string Code { get; set; }
+    public string BUCode { get; set; }
+    public string DepartmentCode { get; set; }
+    public string TeamCode { get; set; }
     public string FullName { get; set; }
     public string NickName { get; set; }
     [JsonIgnore]
@@ -26,5 +29,11 @@ public class GeneratedPayrollDetail
     [JsonIgnore]
     public string GrossSalaryEncrypt { get; set; }
     public double GrossSalary => double.Parse(Cryptography.DecryptPassword(GrossSalaryEncrypt));
+    public string SpecialSubsidyEncrypt { get; set; }
+    public double SpecialSubsidy => SpecialSubsidyEncrypt == null ? 0 : double.Parse(Cryptography.DecryptPassword(SpecialSubsidyEncrypt));
+    public string TotalIncomeEncrypt { get; set; }
+    public double TotalIncome => TotalIncomeEncrypt == null ? 0 : double.Parse(Cryptography.DecryptPassword(TotalIncomeEncrypt));
+    public string JobLevelAddOnEncrypt { get; set; }
+    public double JobLevelAddOn => JobLevelAddOnEncrypt == null ? 0 : double.Parse(Cryptography.DecryptPassword(JobLevelAddOnEncrypt));
     public int EmploymentStatus { get; set; }
 }

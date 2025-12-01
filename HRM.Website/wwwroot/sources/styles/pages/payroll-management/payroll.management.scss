@@ -11,6 +11,22 @@
     justify-content: space-between;
 }
 
+.salary-table-section{
+    width: 100%;
+    overflow-x: auto;
+    max-height: 76vh;
+    margin-top: 10px;
+    
+    table.table-custom {
+        min-width: max-content;
+        margin: 0px;
+
+        thead {
+            top: 0px;
+        }
+    }
+}
+
 .salary-management-container {
     .react-datepicker-popper{
         z-index: 2;

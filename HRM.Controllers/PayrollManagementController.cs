@@ -43,10 +43,14 @@ public class PayrollManagementController(
 
         var objectId = $"{CurrentCompanyId}{month.Month}{month.Year}";
         var logDetail = await actionLogService.GetLogDetailByIdAsync(LogObjectType.Payroll, int.Parse(objectId), false);
-        var latestLog = logDetail
-            .OrderByDescending(l => l.LogDate)
-            .Select(s => new KeyValuePair<string, DateTime>(s.Nickname, s.LogDate))
-            .FirstOrDefault();
+        KeyValuePair<string, DateTime>? latestLog = null;
+        if (logDetail.Any())
+        {
+            latestLog = logDetail
+                .OrderByDescending(l => l.LogDate)
+                .Select(s => new KeyValuePair<string, DateTime>(s.Nickname, s.LogDate))
+                .FirstOrDefault();
+        }
 
         return Json(new
         {
