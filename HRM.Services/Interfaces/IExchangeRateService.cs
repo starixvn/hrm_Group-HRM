@@ -39,4 +39,6 @@ public interface IExchangeRateService
     Task<CommandResult> UpdateCurrencyRoundingAsync(short currencyId, int rounding, int modifiedBy);
 
     Task<Dictionary<string, decimal>> GetEffectiveExchangeRatesDictAsync();
+
+    Task<Dictionary<string, int>> GetRoundingRulesDictAsync();
 }

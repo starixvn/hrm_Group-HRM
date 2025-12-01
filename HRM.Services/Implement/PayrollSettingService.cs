@@ -8,6 +8,7 @@ using HRM.Criteria.EmployeePayrollSetting;
 using HRM.Criteria.PayrollManagement;
 using HRM.Models;
 using HRM.Models.PayrollManagement;
+using HRM.Services.Helper;
 using HRM.Services.Interfaces;
 
 namespace HRM.Services.Implement;
@@ -43,8 +44,7 @@ public class PayrollSettingService(IPayrollManagementService payrollManagementSe
                     .DistinctBy(x => x.AllowanceItemSettingId)
                     .Select(item =>
                     {
-                        item.Amount = payrollManagementService
-                            .DecryptSalary(item.Amount)
+                        item.Amount = PayrollHelper.DecryptSalary(item.Amount)
                             .ToString(CultureInfo.InvariantCulture);
                         return item;
                     })

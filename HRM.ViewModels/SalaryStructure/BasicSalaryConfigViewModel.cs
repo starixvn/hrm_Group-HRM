@@ -14,3 +14,4 @@ public class BasicSalaryConfigViewModel
     public IEnumerable<BasicSalaryConfigOption> ConfigOptions { get; set; }
 }
 
+

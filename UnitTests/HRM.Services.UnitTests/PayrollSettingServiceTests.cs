@@ -78,14 +78,6 @@ public class PayrollSettingServiceTests
             Arg.Any<string>()
         ).Returns(_mockData);
 
-        _payrollManagementService
-            .DecryptSalary(Arg.Any<string>())
-            .Returns(callInfo =>
-            {
-                var value = callInfo.Arg<string>();
-                return decimal.TryParse(value, out var result) ? result : 0m;
-            });
-
         // Act
         var result = (await _service.GetPayrollItemSettings(criteria)).ToList();
 

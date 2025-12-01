@@ -126,4 +126,14 @@ public class ExchangeRateService(IBaseService baseService) : IExchangeRateServic
 
         return ratesDict;
     }
+
+    public async Task<Dictionary<string, int>> GetRoundingRulesDictAsync()
+    {
+        var roundingRules = await GetRoundingRulesAsync();
+
+        return roundingRules.ToDictionary(
+            er => er.Currency.ToUpperInvariant(),
+            er => er.Rounding
+        );
+    }
 }

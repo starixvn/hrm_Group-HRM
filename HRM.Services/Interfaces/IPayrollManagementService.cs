@@ -12,6 +12,4 @@ public interface IPayrollManagementService
     Task<CommandResult> GeneratePayroll(DateTime date, int actorId);
 
     Task<IEnumerable<GeneratedPayrollDetail>> GetPayrollByMonthAsync(GetPayrollByMonthCriteria criteria);
-
-    decimal DecryptSalary(string salary);
 }
