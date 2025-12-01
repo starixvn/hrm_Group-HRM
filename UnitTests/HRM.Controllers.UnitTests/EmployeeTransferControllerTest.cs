@@ -6,6 +6,7 @@ using HRM.Core.Constants;
 using HRM.Core.Models;
 using HRM.Core.Services;
 using HRM.Models;
+using HRM.Services.ExportExcel.Employee;
 using HRM.Services.Implement;
 using HRM.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -17,27 +18,10 @@ namespace HRM.Controllers.UnitTests;
 public class EmployeeTransferControllerTest : BaseControllerTest
 {
     private readonly IBaseService _baseService;
-    private readonly EmployeeTransferController _controller;
 
     public EmployeeTransferControllerTest()
     {
-        var employeeService = Substitute.For<IEmployeeService>();
-        var userService = Substitute.For<IUserService>();
-        var commonDataService = Substitute.For<ICommonDataService>();
-        var companyService = Substitute.For<ICompanyService>();
-        var jobLevelService = Substitute.For<IJobLevelService>();
-        var managementLevelService = Substitute.For<IManagementLevelService>();
         _baseService = Substitute.For<IBaseService>();
-
-        _controller = new EmployeeTransferController(
-            _session,
-            employeeService,
-            userService,
-            commonDataService,
-            companyService,
-            jobLevelService,
-            managementLevelService,
-            _baseService);
     }
 
     [Fact]
@@ -82,7 +66,8 @@ public class EmployeeTransferControllerTest : BaseControllerTest
             companyService,
             Substitute.For<IJobLevelService>(),
             Substitute.For<IManagementLevelService>(),
-            _baseService);
+            _baseService,
+            Substitute.For<IExportExcelEmployeeInfoService>());
 
         SetupPermission(FunctionKey.EmployeeTransfer_All, Policy.Host, true);
 
@@ -126,7 +111,8 @@ public class EmployeeTransferControllerTest : BaseControllerTest
             Substitute.For<ICompanyService>(),
             Substitute.For<IJobLevelService>(),
             Substitute.For<IManagementLevelService>(),
-            _baseService);
+            _baseService,
+            Substitute.For<IExportExcelEmployeeInfoService>());
 
         SetupPermission(FunctionKey.EmployeeTransfer_All, Policy.Host, true);
 
@@ -172,7 +158,8 @@ public class EmployeeTransferControllerTest : BaseControllerTest
             Substitute.For<ICompanyService>(),
             Substitute.For<IJobLevelService>(),
             Substitute.For<IManagementLevelService>(),
-            _baseService);
+            _baseService,
+            Substitute.For<IExportExcelEmployeeInfoService>());
 
         SetupPermission(FunctionKey.EmployeeTransfer_All, Policy.Host, true);
 
@@ -226,7 +213,8 @@ public class EmployeeTransferControllerTest : BaseControllerTest
             companyService,
             jobLevelService,
             managementLevelService,
-            _baseService);
+            _baseService,
+            Substitute.For<IExportExcelEmployeeInfoService>());
 
         SetupPermission(FunctionKey.EmployeeTransfer_All, Policy.Host, true);
 

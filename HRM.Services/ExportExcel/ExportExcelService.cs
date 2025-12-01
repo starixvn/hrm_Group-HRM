@@ -53,17 +53,18 @@ public class ExportExcelService(IWebHostEnvironment hostingEnvironment) : IExpor
             var row = sheet.GetRow(rowIndex);
 
             row.GetCell(0).SetCellValue(index + 1);
-            row.GetCell(1).SetCellValue(item.DepartmentName);
-            row.GetCell(2).SetCellValue(item.TeamName);
-            row.GetCell(3).SetCellValue(item.Code);
-            row.GetCell(4).SetCellValue(item.FullName);
-            row.GetCell(5).SetCellValue(item.Nickname);
-            row.GetCell(6).SetCellValue(item.FromDate.ToDateMonthYearFormatedDate());
-            row.GetCell(7).SetCellValue(item.ToDate.ToDateMonthYearFormatedDate());
-            row.GetCell(8).SetCellValue(item.Remark);
-            row.GetCell(9).SetCellValue(item.IsCountInHeadcount ? "Yes" : "No");
-            row.GetCell(10).SetCellValue(item.Modifier);
-            row.GetCell(11).SetCellValue(item.ModifiedDate.ToFormatedDate());
+            row.GetCell(1).SetCellValue(item.UnitCode);
+            row.GetCell(2).SetCellValue(item.DepartmentName);
+            row.GetCell(3).SetCellValue(item.TeamName);
+            row.GetCell(4).SetCellValue(item.Code);
+            row.GetCell(5).SetCellValue(item.FullName);
+            row.GetCell(6).SetCellValue(item.Nickname);
+            row.GetCell(7).SetCellValue(item.FromDate.ToDateMonthYearFormatedDate());
+            row.GetCell(8).SetCellValue(item.ToDate.ToDateMonthYearFormatedDate());
+            row.GetCell(9).SetCellValue(item.Remark);
+            row.GetCell(10).SetCellValue(item.IsCountInHeadcount ? "Yes" : "No");
+            row.GetCell(11).SetCellValue(item.Modifier);
+            row.GetCell(12).SetCellValue(item.ModifiedDate.ToFormatedDate());
 
             index++;
             rowIndex++;

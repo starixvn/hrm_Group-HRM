@@ -108,7 +108,7 @@
                 @Html.LabelFor(model => model.Employee, new { @class = "control-label" })
             </div>
             <div class="input-form">
-                @Html.TextBox("Employee", Model.Employee,
+                @Html.TextBox("AllEmployee", Model.Employee,
                     new { placeholder = Messages.SearchEmployeeWatermark, @class = "form-control" })
                 @Html.HiddenFor(model => model.EmployeeId)
             </div>

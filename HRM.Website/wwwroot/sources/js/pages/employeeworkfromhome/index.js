@@ -9,7 +9,7 @@ import '../../shared/multiselect-tree-view';
 
 import {
     axiosError, floatThead, confirm, alert,
-    blockUI, unblockUI, initDatepicker, resolveClientUrl
+    blockUI, unblockUI, initDatepicker, resolveClientUrl, sortTable
 } from '../../shared/common.functions';
 
 const tempFile = [];
@@ -46,6 +46,7 @@ const workFromHomeModule = (function ($) {
             initEditEvent();
             initDeleteEvent();
             initToolTip();
+            initSortTable();
         }).catch(axiosError).then(() => unblockUI());
     }
 
@@ -53,6 +54,16 @@ const workFromHomeModule = (function ($) {
         $('.tooltip-tipsy').tipsy({
             html: true,
             gravity: 'e'
+        });
+    }
+
+    function initSortTable() {
+        $('th.col-sorter').on('click', function () {
+            sortTable('#data', this);
+            $("tbody tr").each(function (index) {
+                var initIndex = index + 1;
+                $(this).find("td:eq(0)").html(initIndex++);
+            });
         });
     }
 

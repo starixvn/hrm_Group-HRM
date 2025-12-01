@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using HRM.Models.EmployeeInformation;
+using HRM.Models.Employees;
 using HRM.Models.Group;
 
 namespace HRM.Services.ExportExcel.Employee;
@@ -14,4 +15,6 @@ public interface IExportExcelEmployeeInfoService
     Task<byte[]> ExportGroupEmployeesAsync(IEnumerable<GroupEmployeeModel> employees, bool showSalaryCurrency);
 
     Task<byte[]> ExportProfitCenterReportAsync(IEnumerable<GroupEmployeeModel> employees, bool showSalaryCurrency);
+
+    Task<byte[]> ExportGroupEmployeesTransferAsync(IEnumerable<EmployeeTransferModel> employees);
 }

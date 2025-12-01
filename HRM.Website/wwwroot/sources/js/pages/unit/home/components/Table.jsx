@@ -15,6 +15,7 @@ const Table = ({ data, onDelete }) => {
                     <th>Accountable Area</th>
                     <th>Personal In Charge</th>
                     <th>Active</th>
+                    <th>Total Members</th>
                     {
                         window.hasPermission === 'True' &&
                         <Fragment>

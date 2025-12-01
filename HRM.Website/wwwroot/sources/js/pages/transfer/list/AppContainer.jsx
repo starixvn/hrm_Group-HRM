@@ -32,13 +32,26 @@ const Header = () => {
   const handleCreate = () => {
     window.location.href = resolveClientUrl("EmployeeTransfer/Transfer");
   };
+
+  const exportExcel = () => {
+      location.href = resolveClientUrl('EmployeeTransfer/ExportEmployeeTransferList');
+  }
   return (
-    <form class="filter">
+    <form class="filter" style={{ display: 'flex'}}>
       <div class="form-horizontal clearfix">
         <button type="button" class="btn btn-request" onClick={handleCreate}>
           Transfer Employee
         </button>
       </div>
+
+      <button
+        type="button"
+        className="btn btn-excel"
+        onClick={exportExcel}
+        style={{ marginLeft: 5 }}
+      >
+        Excel
+      </button>
     </form>
   );
 };

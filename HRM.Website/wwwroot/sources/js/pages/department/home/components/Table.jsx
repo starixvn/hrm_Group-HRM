@@ -18,6 +18,7 @@ const Table = ({ data, onDelete }) => {
         { label: "Accountable Area", key: "accountableArea", sortable: true },
         { label: "Personal In Charge", key: "picEmployeeName", sortable: true },
         { label: "Active", key: "isActive", sortable: false },
+        { label: "Total Members", key: "totalMembers", sortable: true },
     ];
 
     if (window.hasPermission === "True") {

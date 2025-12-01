@@ -71,6 +71,12 @@ public class Employee : EntityBase<int>
 
     public string BasicSalary { get; set; }
 
+    [DataType(DataType.Date)]
+    public DateTime? DateTransferIn { get; set; }
+
+    [DataType(DataType.Date)]
+    public DateTime? DateTransferOut { get; set; }
+
     public string EmployeeCurrencyCode { get; set; }
 
     public string SpecialSubsidy { get; set; }

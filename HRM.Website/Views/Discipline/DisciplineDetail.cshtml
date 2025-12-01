@@ -94,12 +94,7 @@
                 @Html.LabelFor(model => model.Employee, new { @class = "control-label" })
             </div>
             <div class="input-form">
-                @Html.TextBoxFor(model => model.Employee,
-                new {
-                    placeholder = Messages.SearchEmployeeWatermark,
-                    @class = "form-control",
-                    autocomplete = "off"
-                })
+                @Html.TextBox("AllEmployee", Model.Employee, new { placeholder = Messages.SearchEmployeeWatermark, @class = "form-control", autocomplete = "off" })
                 @Html.HiddenFor(model => model.EmployeeId)
             </div>
         </div>

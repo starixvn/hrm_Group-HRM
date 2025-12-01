@@ -6,6 +6,7 @@ public class EmployeeTransferModel
 {
     // Employee Information
     public string CtrId { get; set; }
+    public string CtrIdFormatted => CtrId is not null ? CtrId.PadLeft(6, '0') : string.Empty;
     public string FullName { get; set; }
 
     // From Company Information

@@ -13,7 +13,8 @@ import {
     alert,
     sortTable,
     blockUI,
-    unblockUI
+    unblockUI,
+    getParam
 } from '../../shared/common.functions';
 
 function deleteTeam(id) {
@@ -53,7 +54,9 @@ function initSortTable() {
 
 function exportExcel() {
     const selectedTeamIds = $('#GroupTeam').multiSelectTreeView('getSelectedItems');
-    const query = `teamIds=${selectedTeamIds || ''}`;
+    const selectedCompanyIds = $('#CompanyIds').multiSelectTreeView('getSelectedItems');
+    const selectedOutsources = $('#Outsources').multiSelectTreeView('getSelectedItems');
+    const query = `teamIds=${selectedTeamIds || ''}&companyIds=${selectedCompanyIds || ''}&outsources=${selectedOutsources || ''}`;
 
     location.href = resolveClientUrl('GroupTeam/ExportGroupTeamList?' + query);
 }
@@ -65,7 +68,7 @@ function getUrlParameter(name) {
     return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
 }
 
-function loadTeamData(teamIds = null) {
+function loadTeamData(teamIds = null, companyIds = null, outsources = null) {
     blockUI();
     axios({
         url: resolveClientUrl('GroupTeam/GetTeamList'),
@@ -74,7 +77,7 @@ function loadTeamData(teamIds = null) {
             'X-Requested-With': 'XMLHttpRequest',
             'Content-Type': 'application/x-www-form-urlencoded',
         },
-        data: new URLSearchParams({ teamIds: teamIds || '' }),
+        data: new URLSearchParams({ teamIds: teamIds || '', companyIds: companyIds || '', outsources: outsources || '' }),
     })
         .then(function (response) {
             unblockUI();
@@ -105,10 +108,78 @@ function getOrgChart() {
             });
         })
         .catch(axiosError);
+    
+    axios({
+        url: resolveClientUrl('GroupEmployeeList/GetCompanyDropdownList'),
+        method: 'GET',
+        headers: { 'X-Requested-With': 'XMLHttpRequest' },
+    })
+        .then(response => {
+            unblockUI();
+            $('#CompanyIds').multiSelectTreeView({
+                data: response.data,
+                hasSearchBox: true,
+                isSelectedAll: true
+            });
+        })
+        .catch(axiosError);
+
+    
+}
+
+function getOutsourceData() {
+  let outsourcesParam = getParam("outsources");
+  if (outsourcesParam === null || outsourcesParam === undefined) {
+    outsourcesParam = "0";
+  }
+
+  return [
+    {
+      id: 1,
+      text: "Yes",
+      checked: outsourcesParam.split(",").includes("1"),
+      enable: true,
+      parentId: null,
+      isLeaf: true,
+      items: [],
+    },
+    {
+      id: 0,
+      text: "No",
+      checked: outsourcesParam.split(",").includes("0"),
+      enable: true,
+      parentId: null,
+      isLeaf: true,
+      items: [],
+    },
+  ];
+}
+
+function initMultiSelectTreeView(
+  elementId,
+  data,
+  selectedItemsId,
+  hasSearchBox = false,
+  isSingleSelect = false
+) {
+  if ($(elementId).length > 0) {
+    $(elementId).multiSelectTreeView({
+      data: data,
+      selectedItems: $(selectedItemsId).val(),
+      hasSearchBox: hasSearchBox,
+      singleSelect: isSingleSelect,
+    });
+  }
 }
 
 $(document).ready(function () {
     getOrgChart();
+
+    initMultiSelectTreeView(
+      "#Outsources",
+      getOutsourceData(),
+      "#Outsources"
+    );
 
     $('#exportExcel').on('click', function () {
         exportExcel($(this));
@@ -119,8 +190,10 @@ $(document).ready(function () {
 
         var selectedTeamIds =
             $('#GroupTeam').multiSelectTreeView('getSelectedItems');
+        var selectedCompanyIds = $('#CompanyIds').multiSelectTreeView('getSelectedItems');
+        var selectedOutsources = $('#Outsources').multiSelectTreeView('getSelectedItems');
 
-        loadTeamData(selectedTeamIds);
+        loadTeamData(selectedTeamIds, selectedCompanyIds, selectedOutsources);
     });
 
     loadTeamData();

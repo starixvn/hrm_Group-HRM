@@ -26,6 +26,7 @@ public class DepartmentController(
     public ActionResult Index()
     {
         var hasPermission = session.HasPermissionOnFunction(FunctionKey.DepartmentManagement, Policy.Host);
+        ViewBag.HasPermissionToViewEmployee = session.HasPermissionOnFunction(FunctionKey.GroupEmployeeList, Policy.Read);
         return View(hasPermission);
     }
 

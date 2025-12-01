@@ -12,7 +12,7 @@ const Row = ({ rowIndex, item }) => {
       }`}
     >
       <td>{rowIndex}</td>
-      <td>{item.ctrId}</td>
+      <td>{item.ctrIdFormatted}</td>
       <td className="text-left">{item.fullName}</td>
       <td className="text-left">{item.fromNickName}</td>
       <td className="text-left">{item.fromBUName}</td>

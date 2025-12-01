@@ -18,6 +18,7 @@ public class EmployeeWorkFromHome
     public DateTime FromDate { get; set; }
     public DateTime? ToDate { get; set; }
 
+    public string UnitCode { get; set; }
     public string DepartmentName { get; set; }
     public string TeamName { get; set; }
 

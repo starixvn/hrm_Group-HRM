@@ -15,7 +15,7 @@ public interface ITeamService
 
     Task<IEnumerable<Team>> GetAllAsync(bool isDeleted = false, string keyword = null, bool isGroup = false, short? companyId = null);
 
-    Task<IEnumerable<GroupTeamModel>> GetAllTeamByUnitScopeAsync(string teamIds = null);
+    Task<IEnumerable<GroupTeamModel>> GetAllTeamByUnitScopeAsync(string teamIds = null, string companyIds = null, string outsources = null);
 
     Task<GroupTeamModel> GetGroupTeamInUnitScopeById(int id);
 

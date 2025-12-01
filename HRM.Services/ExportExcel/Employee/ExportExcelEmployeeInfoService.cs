@@ -21,6 +21,7 @@ using Models.Supervisor;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
 using Resources;
+using HRM.Models.Employees;
 
 public class ExportExcelEmployeeInfoService(
     IUserControlSession session,
@@ -33,6 +34,7 @@ public class ExportExcelEmployeeInfoService(
     private const string EmployeeFullInfoTemplatePath = "ExcelTemplates/EmployeeFullProfileInfoTemplate.xls";
     private const string GroupEmployeeListTemplatePath = "ExcelTemplates/GroupEmployeeList.xlsx";
     private const string ProfitCenterReportTemplatePath = "ExcelTemplates/ProfitCenterReport.xlsx";
+    private const string GroupEmployeeTransferListTemplatePath = "ExcelTemplates/GroupEmployeeTransferList.xlsx";
 
     private const byte RowStartBody = 3;
     private const byte MinimumWidth = 5;
@@ -45,7 +47,7 @@ public class ExportExcelEmployeeInfoService(
     {
         RowStartHeader = 2,
         RowStartBody = 4,
-        TotalColumns = 23
+        TotalColumns = 25
     }
 
     public async Task<byte[]> ExportEmployeeBasicInfo(IList<Employee> employees)
@@ -120,6 +122,8 @@ public class ExportExcelEmployeeInfoService(
             employee.ConfirmedDate,
             employee.ResignedDate,
             employee.ResignedReason,
+            TransferInDate = FormatDate(employee.DateTransferIn),
+            TransferOutDate = FormatDate(employee.DateTransferOut),
             LengthOfServiceByGroupDate = employeeService.CalculateLengthOfService(employee.JoinedDate, employee.MilitaryFromDate, employee.MilitaryToDate).LengthOfServiceText,
             LengthOfServiceByCompanyDate = employeeService.CalculateLengthOfService(employee.CompanyDate, employee.MilitaryFromDate, employee.MilitaryToDate).LengthOfServiceText,
             DoB = employee.DateOfBirth.ToDateMonthYearFormatedDate(),
@@ -199,6 +203,8 @@ public class ExportExcelEmployeeInfoService(
             ConfirmedDate = FormatDate(p.ConfirmedDate),
             ResignedDate = FormatDate(p.ResignedDate),
             p.ResignedReason,
+            TransferInDate = FormatDate(p.DateTransferIn),
+            TransferOutDate = FormatDate(p.DateTransferOut),
             LengthOfServiceByGroupDate = employeeService.CalculateLengthOfService(p.JoinedDate, p.MilitaryFromDate, p.MilitaryToDate).LengthOfServiceText,
             LengthOfServiceByCompanyDate = employeeService.CalculateLengthOfService(p.CompanyDate, p.MilitaryFromDate, p.MilitaryToDate).LengthOfServiceText,
             p.JobTitle,
@@ -258,6 +264,62 @@ public class ExportExcelEmployeeInfoService(
 
     #endregion Employee Full Profile Information
 
+    public async Task<byte[]> ExportGroupEmployeesTransferAsync(IEnumerable<EmployeeTransferModel> employees)
+    {
+        var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, GroupEmployeeTransferListTemplatePath);
+
+        await using var templateStream = new FileStream(templatePath, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, useAsync: true);
+        using var templatePackage = new ExcelPackage(templateStream);
+        using var xlPackage = new ExcelPackage();
+
+        var template = templatePackage.Workbook.Worksheets.FirstOrDefault();
+        if (template == null)
+        {
+            throw new InvalidOperationException("The template Excel file does not contain any worksheet.");
+        }
+
+        var rowIndex = 4;
+
+        var templateSheet = templatePackage.Workbook.Worksheets[0];
+        var worksheet = xlPackage.Workbook.Worksheets.Add("Sheet 1", templateSheet);
+        const int totalColumns = 16;
+        const int transferRowStartBody = 4;
+
+        // data
+        var rowNum = 1;
+        foreach (var employee in employees)
+        {
+            var colIndex = 1;
+            template.Cells[transferRowStartBody, 1, transferRowStartBody, totalColumns].Copy(worksheet.Cells[rowIndex, colIndex, rowIndex, totalColumns]);
+
+            worksheet.Cells[rowIndex, colIndex++].Value = rowNum++;
+            worksheet.Cells[rowIndex, colIndex++].Value = employee.CtrIdFormatted;
+            worksheet.Cells[rowIndex, colIndex++].Value = employee.FullName;
+            worksheet.Cells[rowIndex, colIndex++].Value = employee.FromNickName;
+            worksheet.Cells[rowIndex, colIndex++].Value = employee.FromBUName;
+            worksheet.Cells[rowIndex, colIndex++].Value = employee.FromDeptName;
+            worksheet.Cells[rowIndex, colIndex++].Value = employee.FromTeamName;
+            worksheet.Cells[rowIndex, colIndex++].Value = employee.FromCompanyName;
+            worksheet.Cells[rowIndex, colIndex++].Value = employee.ToNickName;
+            worksheet.Cells[rowIndex, colIndex++].Value = employee.ToBUName;
+            worksheet.Cells[rowIndex, colIndex++].Value = employee.ToDeptName;
+            worksheet.Cells[rowIndex, colIndex++].Value = employee.ToTeamName;
+            worksheet.Cells[rowIndex, colIndex++].Value = employee.ToCompanyName;
+            worksheet.Cells[rowIndex, colIndex++].Value = employee.Remark;
+            worksheet.Cells[rowIndex, colIndex++].Value = employee.TransferredDatetime;
+            worksheet.Cells[rowIndex, colIndex].Value = employee.TransferredByNickName;
+
+            rowIndex++;
+        }
+
+        worksheet.Cells.AutoFitColumns(MinimumWidth, MaximumWidth);
+        worksheet.View.FreezePanes(RowStartBody + 1, 1);
+
+        await using var ms = new MemoryStream();
+        await xlPackage.SaveAsAsync(ms);
+        return ms.ToArray();
+    }
+
     public async Task<byte[]> ExportGroupEmployeesAsync(IEnumerable<GroupEmployeeModel> employees, bool showSalaryCurrency)
     {
         var templatePath = Path.Combine(hostingEnvironment.ContentRootPath, GroupEmployeeListTemplatePath);
@@ -308,6 +370,7 @@ public class ExportExcelEmployeeInfoService(
             worksheet.Cells[rowIndex, colIndex++].Value = employee.TeamName;
             worksheet.Cells[rowIndex, colIndex++].Value = employee.TeamPIC;
             worksheet.Cells[rowIndex, colIndex++].Value = employee.JobLevel;
+            worksheet.Cells[rowIndex, colIndex++].Value = employee.ManagementLevel;
             worksheet.Cells[rowIndex, colIndex++].Value = FormatDate(employee.JoinedDate);
             worksheet.Cells[rowIndex, colIndex++].Value = FormatSalary(employee.Salary);
             worksheet.Cells[rowIndex, colIndex++].Value = employee.Company;
