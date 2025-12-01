@@ -23,6 +23,9 @@ const SalaryTable = ({ data }) => {
         "unpaidLeave",
         "paidDay",
         "grossSalary",
+        "managementAllowance",
+        "transportation",
+        "mobilephoneAllowance",
         "totalIncome",
     ];
 
@@ -53,11 +56,15 @@ const SalaryTable = ({ data }) => {
                         <th rowSpan="2">Standard Working day</th>
                         <th rowSpan="2">Unpaid Leave</th>
                         <th rowSpan="2">Actual Paid Day</th>
-                        <th colSpan="1">Taxable Income</th>
+                        <th colSpan="3">Taxable Income</th>
+                        <th colSpan="1">Exempt Income</th>
                         <th rowSpan="2">Total Income</th>
                     </tr>
                     <tr>
-                        <th style={{borderLeft: 'none'}}>Gross Salary</th>
+                        <th>Gross Salary</th>
+                        <th>Management Allowance</th>
+                        <th>Transportation</th>
+                        <th>Mobilephone Allowance</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -81,6 +88,9 @@ const SalaryTable = ({ data }) => {
                             <td>{item.unpaidLeave}</td>
                             <td>{item.paidDay}</td>
                             <td>{formatNumber(item.grossSalary)}</td>
+                            <td>{formatNumber(item.managementAllowance)}</td>
+                            <td>{formatNumber(item.transportation)}</td>
+                            <td>{formatNumber(item.mobilephoneAllowance)}</td>
                             <td>{formatNumber(item.totalIncome)}</td>
                         </tr>
                     ))}
@@ -110,6 +120,15 @@ const SalaryTable = ({ data }) => {
                         </td>
                         <td>
                             <strong>{formatNumber(totals.grossSalary)}</strong>
+                        </td>
+                        <td>
+                            <strong>{formatNumber(totals.managementAllowance)}</strong>
+                        </td>
+                        <td>
+                            <strong>{formatNumber(totals.transportation)}</strong>
+                        </td>
+                        <td>
+                            <strong>{formatNumber(totals.mobilephoneAllowance)}</strong>
                         </td>
                         <td>
                             <strong>{formatNumber(totals.totalIncome)}</strong>

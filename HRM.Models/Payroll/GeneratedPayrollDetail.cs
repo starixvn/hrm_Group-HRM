@@ -35,5 +35,11 @@ public class GeneratedPayrollDetail
     public double TotalIncome => TotalIncomeEncrypt == null ? 0 : double.Parse(Cryptography.DecryptPassword(TotalIncomeEncrypt));
     public string JobLevelAddOnEncrypt { get; set; }
     public double JobLevelAddOn => JobLevelAddOnEncrypt == null ? 0 : double.Parse(Cryptography.DecryptPassword(JobLevelAddOnEncrypt));
+    public string TransportationAllowanceEncrypt { get; set; }
+    public double TransportationAllowance => TransportationAllowanceEncrypt == null ? 0 : double.Parse(Cryptography.DecryptPassword(TransportationAllowanceEncrypt));
+    public string ManagementAllowanceEncrypt { get; set; }
+    public double ManagementAllowance => ManagementAllowanceEncrypt == null ? 0 : double.Parse(Cryptography.DecryptPassword(ManagementAllowanceEncrypt));
+    public string MobilephoneAllowanceEncrypt { get; set; }
+    public double MobilephoneAllowance => MobilephoneAllowanceEncrypt == null ? 0 : double.Parse(Cryptography.DecryptPassword(MobilephoneAllowanceEncrypt));
     public int EmploymentStatus { get; set; }
 }

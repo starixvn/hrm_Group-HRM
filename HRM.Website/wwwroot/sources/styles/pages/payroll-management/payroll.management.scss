@@ -23,6 +23,12 @@
 
         thead {
             top: 0px;
+
+            tr:nth-child(2) {
+                th {
+                    border-left: none;
+                }
+            }
         }
     }
 }
