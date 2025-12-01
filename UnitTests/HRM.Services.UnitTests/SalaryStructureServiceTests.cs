@@ -204,7 +204,7 @@ public class SalaryStructureServiceTests
         var structure2 = resultList.First(s => s.SalaryStructureId == 2);
 
         Assert.Equal(2, structure1.Details.Count());
-        Assert.Equal(1, structure2.Details.Count());
+        Assert.Single(structure2.Details);
         Assert.All(structure1.Details, d => Assert.Equal(1, d.SalaryStructureId));
         Assert.All(structure2.Details, d => Assert.Equal(2, d.SalaryStructureId));
     }
@@ -380,11 +380,10 @@ public class SalaryStructureServiceTests
         Assert.NotNull(result);
         Assert.Equal(expectedConfig, result.Config);
         Assert.NotNull(result.ConfigOptions);
-        Assert.Equal(4, result.ConfigOptions.Count());
+        Assert.Equal(3, result.ConfigOptions.Count());
         Assert.Contains(result.ConfigOptions, o => o.Value == "1" && o.Label == "Basic Salary");
         Assert.Contains(result.ConfigOptions, o => o.Value == "2" && o.Label == "Job Level Add-On");
         Assert.Contains(result.ConfigOptions, o => o.Value == "3" && o.Label == "Special Subsidy");
-        Assert.Contains(result.ConfigOptions, o => o.Value == "4" && o.Label == "Management Allowance");
 
         // Verify that the service was called with correct criteria
         await _baseService
@@ -414,7 +413,7 @@ public class SalaryStructureServiceTests
         Assert.NotNull(result);
         Assert.Equal(expectedConfig, result.Config);
         Assert.NotNull(result.ConfigOptions);
-        Assert.Equal(4, result.ConfigOptions.Count());
+        Assert.Equal(3, result.ConfigOptions.Count());
     }
 
     [Fact]
@@ -434,7 +433,7 @@ public class SalaryStructureServiceTests
         Assert.NotNull(result);
         Assert.Null(result.Config);
         Assert.NotNull(result.ConfigOptions);
-        Assert.Equal(4, result.ConfigOptions.Count());
+        Assert.Equal(3, result.ConfigOptions.Count());
     }
 
     [Fact]

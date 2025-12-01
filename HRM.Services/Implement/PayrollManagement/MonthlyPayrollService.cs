@@ -1,11 +1,9 @@
 using HRM.Models.Group;
 using HRM.Models.PayrollManagement;
 using HRM.Services.Interfaces;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using HRM.Core;
 using HRM.Services.Helper;
 
 namespace HRM.Services.Implement.PayrollManagement;

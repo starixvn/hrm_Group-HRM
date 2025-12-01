@@ -96,7 +96,7 @@ public class SMSPayrollManagementService(
     {
         if (grossSalaryConfig == null || string.IsNullOrWhiteSpace(grossSalaryConfig.Config))
         {
-            return null;
+            return new HashSet<string>();
         }
 
         return grossSalaryConfig.Config
@@ -105,7 +105,8 @@ public class SMSPayrollManagementService(
             .ToHashSet();
     }
 
-    private static PayrollEmployeeResult CalculatePayrollResult(PayrollEmployeeAttendant employeeAttendant, BasicSalaryConfigViewModel grossSalaryConfig, HashSet<string> selectedConfigValues, Dictionary<string, decimal> exchangeRatesToUSD)
+    private static PayrollEmployeeResult CalculatePayrollResult(PayrollEmployeeAttendant employeeAttendant, BasicSalaryConfigViewModel grossSalaryConfig, 
+        HashSet<string> selectedConfigValues, Dictionary<string, decimal> exchangeRatesToUSD)
     {
         employeeAttendant.ActualPaidDays = CalculateActualPaidDays(employeeAttendant);
         employeeAttendant.GrossSalary = CalculateGrossSalary(employeeAttendant, grossSalaryConfig, selectedConfigValues, exchangeRatesToUSD);
@@ -122,7 +123,7 @@ public class SMSPayrollManagementService(
             CompanyDate = employeeAttendant.CompanyDate,
             ConfirmedDate = employeeAttendant.ConfirmedDate,
             EmploymentStatus = GetEmploymentStatus(employeeAttendant),
-            GrossSalary = PayrollHelper.EncryptAndRound(employeeAttendant.GrossSalary, 0),
+            GrossSalary = PayrollHelper.EncryptAndRound(employeeAttendant.GrossSalary),
         };
     }
 
@@ -142,38 +143,34 @@ public class SMSPayrollManagementService(
         return employeeAttendant.WorkingDays - employeeAttendant.TotalUnpaidLeaveDays;
     }
 
-    private static decimal CalculateNewHireSalary(PayrollEmployeeAttendant employeeAttendant)
+    private static decimal CalculateNewHireSalary(PayrollEmployeeAttendant employeeAttendant, decimal grossSalary)
     {
-        var newHireSalary = employeeAttendant.TotalNewHireWorkingDays * employeeAttendant.GrossSalaryPerDay * PROBATION_PERCENTAGE;
-        var confirmedSalary = employeeAttendant.TotalWorkingDays * employeeAttendant.GrossSalaryPerDay;
+        var grossSalaryPerDay = employeeAttendant.WorkingDays > 0 ? grossSalary / employeeAttendant.WorkingDays : 0;
+        var newHireSalary = employeeAttendant.TotalNewHireWorkingDays * grossSalaryPerDay * PROBATION_PERCENTAGE;
+        var confirmedSalary = employeeAttendant.TotalWorkingDays * grossSalaryPerDay;
         return newHireSalary + confirmedSalary;
     }
 
-    private static decimal CalculateGrossSalary(PayrollEmployeeAttendant employeeAttendant, BasicSalaryConfigViewModel grossSalaryConfig, HashSet<string> selectedConfigValues, Dictionary<string, decimal> exchangeRatesToUSD)
+    private static decimal CalculateGrossSalary(PayrollEmployeeAttendant employeeAttendant, BasicSalaryConfigViewModel grossSalaryConfig, 
+        HashSet<string> selectedConfigValues, Dictionary<string, decimal> exchangeRatesToUSD)
     {
         if (grossSalaryConfig == null || selectedConfigValues == null || selectedConfigValues.Count == 0)
         {
             return 0;
         }
 
-        var grossSalary = 0m;
-        foreach (var option in grossSalaryConfig.ConfigOptions)
-        {
-            if (!selectedConfigValues.Contains(option.Value))
-            {
-                continue;
-            }
-
-            grossSalary += option.Value switch
+        var grossSalary = grossSalaryConfig.ConfigOptions
+            .Where(option => selectedConfigValues.Contains(option.Value))
+            .Select(option => option.Value switch
             {
                 CONFIG_BASIC_SALARY => PayrollHelper.DecryptSalary(employeeAttendant.EncryptBasicSalary),
                 CONFIG_JOB_LEVEL_ADD_ON => PayrollHelper.DecryptSalary(employeeAttendant.EncryptJobLevelAddOn),
                 CONFIG_SPECIAL_SUBSIDY => CalculateSpecialSubsidy(employeeAttendant, exchangeRatesToUSD),
                 _ => 0m
-            };
-        }
+            })
+            .Sum();
 
-        return employeeAttendant.IsNewHire ? CalculateNewHireSalary(employeeAttendant) : grossSalary;
+        return employeeAttendant.IsNewHire ? CalculateNewHireSalary(employeeAttendant, grossSalary) : grossSalary;
     }
 
     private static decimal CalculateSpecialSubsidy(PayrollEmployeeAttendant employeeAttendant, Dictionary<string, decimal> exchangeRatesToUSD)
