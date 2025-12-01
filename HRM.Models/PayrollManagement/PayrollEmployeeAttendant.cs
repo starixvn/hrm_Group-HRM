@@ -6,6 +6,7 @@ public class PayrollEmployeeAttendant
 {
     public int EmpId { get; set; }
     public decimal TotalUnpaidLeaveDays { get; set; }
+    public decimal TotalCompanyEventDays { get; set; }
     public decimal TotalNewHireWorkingDays { get; set; }
     public decimal TotalWorkingDays { get; set; }
     public int WorkingDays { get; set; }
@@ -20,6 +21,7 @@ public class PayrollEmployeeAttendant
     public string EncryptJobLevelAddOn { get; set; }
     public string CurrencyCode { get; set; }
     public string EncryptSpecialSubsidy { get; set; }
+
     public string SpecialSubsidyCurrencyCode { get; set; }
 
     // Payroll Calculation (not rounded)

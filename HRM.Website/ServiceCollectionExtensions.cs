@@ -177,6 +177,7 @@ public static class ServiceCollectionExtensions
         services.AddSingleton<ISecondCompanyEmployeeService, SecondCompanyEmployeeService>();
         services.AddSingleton<IPayrollManagementService, SMSPayrollManagementService>();
         services.AddScoped<ICalculatePayrollService, CalculatePayrollService>();
+        services.AddSingleton<ICalculateAllowanceService, CalculateAllowanceService>();
         services.AddScoped<IMonthlyPayrollService, MonthlyPayrollService>();
         services.AddScoped<IGroupDashboardService, GroupDashboardService>();
         services.AddDIReportServices();

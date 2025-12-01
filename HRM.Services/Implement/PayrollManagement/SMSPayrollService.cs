@@ -21,7 +21,9 @@ public class SMSPayrollManagementService(
     IBaseService baseService,
     IUserControlSession session,
     ISalaryStructureService salaryStructureService,
-    IExchangeRateService exchangeRateService) : IPayrollManagementService
+    IExchangeRateService exchangeRateService,
+    ICalculateAllowanceService calculateAllowanceService
+) : IPayrollManagementService
 {
     private const int MAX_ALLOWED_UNPAID_LEAVE_DAYS = 10;
     private const decimal PROBATION_PERCENTAGE = 0.85m;
@@ -30,7 +32,9 @@ public class SMSPayrollManagementService(
     private const string CONFIG_JOB_LEVEL_ADD_ON = "2";
     private const string CONFIG_SPECIAL_SUBSIDY = "3";
 
-    public async Task<IEnumerable<GeneratedPayrollDetail>> GetPayrollByMonthAsync(GetPayrollByMonthCriteria criteria)
+    public async Task<IEnumerable<GeneratedPayrollDetail>> GetPayrollByMonthAsync(
+        GetPayrollByMonthCriteria criteria
+    )
     {
         return await baseService.GetDataAsync<GeneratedPayrollDetail>(criteria);
     }
@@ -51,13 +55,21 @@ public class SMSPayrollManagementService(
         return result;
     }
 
-    private async Task<IEnumerable<PayrollEmployeeResult>> GeneratePayrollResults(DateTime date, short companyId)
+    private async Task<IEnumerable<PayrollEmployeeResult>> GeneratePayrollResults(
+        DateTime date,
+        short companyId
+    )
     {
         var employeeAttendantsTask = GetPayrollEmployeeAttendant(companyId, date);
         var grossSalaryConfigTask = salaryStructureService.GetBasicSalaryConfigAsync(companyId);
         var exchangeRatesToUSDTask = exchangeRateService.GetEffectiveExchangeRatesDictAsync();
         var roundingRulesTask = exchangeRateService.GetRoundingRulesDictAsync();
-        await Task.WhenAll(employeeAttendantsTask, grossSalaryConfigTask, exchangeRatesToUSDTask, roundingRulesTask);
+        await Task.WhenAll(
+            employeeAttendantsTask,
+            grossSalaryConfigTask,
+            exchangeRatesToUSDTask,
+            roundingRulesTask
+        );
 
         var employeeAttendants = await employeeAttendantsTask;
         var grossSalaryConfig = await grossSalaryConfigTask;
@@ -68,12 +80,49 @@ public class SMSPayrollManagementService(
         var payrollResults = new List<PayrollEmployeeResult>();
         foreach (var e in employeeAttendants)
         {
-            var payrollResult = CalculatePayrollResult(e, grossSalaryConfig, selectedConfigValues, exchangeRatesToUSD);
+            var payrollResult = CalculatePayrollResult(
+                e,
+                grossSalaryConfig,
+                selectedConfigValues,
+                exchangeRatesToUSD
+            );
             payrollResult.GeneratedDate = date;
-            // Todo: Calculate Allowance
 
+            var allowance = await calculateAllowanceService.CalculateAllowanceAsync(
+                e.EmpId,
+                e.ActualPaidDays,
+                e.TotalCompanyEventDays,
+                e.WorkingDays,
+                e.IsNewHire,
+                e.IsResigned,
+                e.IsMaternity,
+                e.TotalUnpaidLeaveDays,
+                e.TotalWorkingDays
+            );
 
-            var roundedTotalIncome = CurrencyConverter.RoundAmount(e.TotalIncome, roundingRules, e.CurrencyCode);
+            payrollResult.TransportationAllowance = PayrollHelper.EncryptAndRound(
+                allowance.TransportationAllowance,
+                0
+            );
+            payrollResult.ManagementAllowance = PayrollHelper.EncryptAndRound(
+                allowance.ManagementAllowance,
+                0
+            );
+            payrollResult.MobilephoneAllowance = PayrollHelper.EncryptAndRound(
+                allowance.MobilephoneAllowance,
+                0
+            );
+
+            // Update employee attendant for TotalIncome calculation
+            e.TransportationAllowance = allowance.TransportationAllowance;
+            e.ManagementAllowance = allowance.ManagementAllowance;
+            e.MobilephoneAllowance = allowance.MobilephoneAllowance;
+
+            var roundedTotalIncome = CurrencyConverter.RoundAmount(
+                e.TotalIncome,
+                roundingRules,
+                e.CurrencyCode
+            );
             payrollResult.TotalIncome = PayrollHelper.EncryptSalary(roundedTotalIncome);
 
             payrollResults.Add(payrollResult);
@@ -82,7 +131,10 @@ public class SMSPayrollManagementService(
         return payrollResults;
     }
 
-    private async Task<IEnumerable<PayrollEmployeeAttendant>> GetPayrollEmployeeAttendant(int companyId, DateTime date)
+    private async Task<IEnumerable<PayrollEmployeeAttendant>> GetPayrollEmployeeAttendant(
+        int companyId,
+        DateTime date
+    )
     {
         var criteria = new GetPayrollAttendantEmployeeCriteria
         {
@@ -99,17 +151,26 @@ public class SMSPayrollManagementService(
             return new HashSet<string>();
         }
 
-        return grossSalaryConfig.Config
-            .Split([','], StringSplitOptions.RemoveEmptyEntries)
+        return grossSalaryConfig
+            .Config.Split([','], StringSplitOptions.RemoveEmptyEntries)
             .Select(v => v.Trim())
             .ToHashSet();
     }
 
-    private static PayrollEmployeeResult CalculatePayrollResult(PayrollEmployeeAttendant employeeAttendant, BasicSalaryConfigViewModel grossSalaryConfig, 
-        HashSet<string> selectedConfigValues, Dictionary<string, decimal> exchangeRatesToUSD)
+    private static PayrollEmployeeResult CalculatePayrollResult(
+        PayrollEmployeeAttendant employeeAttendant,
+        BasicSalaryConfigViewModel grossSalaryConfig,
+        HashSet<string> selectedConfigValues,
+        Dictionary<string, decimal> exchangeRatesToUSD
+    )
     {
         employeeAttendant.ActualPaidDays = CalculateActualPaidDays(employeeAttendant);
-        employeeAttendant.GrossSalary = CalculateGrossSalary(employeeAttendant, grossSalaryConfig, selectedConfigValues, exchangeRatesToUSD);
+        employeeAttendant.GrossSalary = CalculateGrossSalary(
+            employeeAttendant,
+            grossSalaryConfig,
+            selectedConfigValues,
+            exchangeRatesToUSD
+        );
 
         return new PayrollEmployeeResult
         {
@@ -117,6 +178,7 @@ public class SMSPayrollManagementService(
             WorkingDays = employeeAttendant.WorkingDays,
             UnpaidLeave = employeeAttendant.TotalUnpaidLeaveDays,
             PaidDays = employeeAttendant.ActualPaidDays,
+            CompanyEventLeave = employeeAttendant.TotalCompanyEventDays,
             BasicSalary = employeeAttendant.EncryptBasicSalary,
             JobLevelAddOn = employeeAttendant.EncryptJobLevelAddOn,
             SpecialSubsidy = employeeAttendant.EncryptSpecialSubsidy,
@@ -134,8 +196,11 @@ public class SMSPayrollManagementService(
             return employeeAttendant.TotalWorkingDays + employeeAttendant.TotalNewHireWorkingDays;
         }
 
-        if (employeeAttendant.IsResigned || employeeAttendant.IsMaternity || 
-            employeeAttendant.TotalUnpaidLeaveDays > MAX_ALLOWED_UNPAID_LEAVE_DAYS)
+        if (
+            employeeAttendant.IsResigned
+            || employeeAttendant.IsMaternity
+            || employeeAttendant.TotalUnpaidLeaveDays > MAX_ALLOWED_UNPAID_LEAVE_DAYS
+        )
         {
             return employeeAttendant.TotalWorkingDays;
         }
@@ -145,16 +210,27 @@ public class SMSPayrollManagementService(
 
     private static decimal CalculateNewHireSalary(PayrollEmployeeAttendant employeeAttendant, decimal grossSalary)
     {
-        var grossSalaryPerDay = employeeAttendant.WorkingDays > 0 ? grossSalary / employeeAttendant.WorkingDays : 0;
-        var newHireSalary = employeeAttendant.TotalNewHireWorkingDays * grossSalaryPerDay * PROBATION_PERCENTAGE;
-        var confirmedSalary = employeeAttendant.TotalWorkingDays * grossSalaryPerDay;
+        var newHireSalary =
+            employeeAttendant.TotalNewHireWorkingDays
+            * employeeAttendant.GrossSalaryPerDay
+            * PROBATION_PERCENTAGE;
+        var confirmedSalary =
+            employeeAttendant.TotalWorkingDays * employeeAttendant.GrossSalaryPerDay;
         return newHireSalary + confirmedSalary;
     }
 
-    private static decimal CalculateGrossSalary(PayrollEmployeeAttendant employeeAttendant, BasicSalaryConfigViewModel grossSalaryConfig, 
-        HashSet<string> selectedConfigValues, Dictionary<string, decimal> exchangeRatesToUSD)
+    private static decimal CalculateGrossSalary(
+        PayrollEmployeeAttendant employeeAttendant,
+        BasicSalaryConfigViewModel grossSalaryConfig,
+        HashSet<string> selectedConfigValues,
+        Dictionary<string, decimal> exchangeRatesToUSD
+    )
     {
-        if (grossSalaryConfig == null || selectedConfigValues == null || selectedConfigValues.Count == 0)
+        if (
+            grossSalaryConfig == null
+            || selectedConfigValues == null
+            || selectedConfigValues.Count == 0
+        )
         {
             return 0;
         }
@@ -163,27 +239,44 @@ public class SMSPayrollManagementService(
             .Where(option => selectedConfigValues.Contains(option.Value))
             .Select(option => option.Value switch
             {
-                CONFIG_BASIC_SALARY => PayrollHelper.DecryptSalary(employeeAttendant.EncryptBasicSalary),
-                CONFIG_JOB_LEVEL_ADD_ON => PayrollHelper.DecryptSalary(employeeAttendant.EncryptJobLevelAddOn),
-                CONFIG_SPECIAL_SUBSIDY => CalculateSpecialSubsidy(employeeAttendant, exchangeRatesToUSD),
-                _ => 0m
-            })
-            .Sum();
+                CONFIG_BASIC_SALARY => PayrollHelper.DecryptSalary(
+                    employeeAttendant.EncryptBasicSalary
+                ),
+                CONFIG_JOB_LEVEL_ADD_ON => PayrollHelper.DecryptSalary(
+                    employeeAttendant.EncryptJobLevelAddOn
+                ),
+                CONFIG_SPECIAL_SUBSIDY => CalculateSpecialSubsidy(
+                    employeeAttendant,
+                    exchangeRatesToUSD
+                ),
+                _ => 0m,
 
-        return employeeAttendant.IsNewHire ? CalculateNewHireSalary(employeeAttendant, grossSalary) : grossSalary;
+        return employeeAttendant.IsNewHire
+            ? CalculateNewHireSalary(employeeAttendant)
+            : grossSalary;
     }
 
-    private static decimal CalculateSpecialSubsidy(PayrollEmployeeAttendant employeeAttendant, Dictionary<string, decimal> exchangeRatesToUSD)
+    private static decimal CalculateSpecialSubsidy(
+        PayrollEmployeeAttendant employeeAttendant,
+        Dictionary<string, decimal> exchangeRatesToUSD
+    )
     {
         var specialSubsidy = PayrollHelper.DecryptSalary(employeeAttendant.EncryptSpecialSubsidy);
-        return CurrencyConverter.ConvertCurrency(specialSubsidy, employeeAttendant.SpecialSubsidyCurrencyCode, employeeAttendant.CurrencyCode, exchangeRatesToUSD);
+        return CurrencyConverter.ConvertCurrency(
+            specialSubsidy,
+            employeeAttendant.SpecialSubsidyCurrencyCode,
+            employeeAttendant.CurrencyCode,
+            exchangeRatesToUSD
+        );
     }
 
     private static EmploymentStatus GetEmploymentStatus(PayrollEmployeeAttendant e)
     {
         if (e.IsNewHire)
         {
-            return e.TotalWorkingDays == 0 ? EmploymentStatus.Probation : EmploymentStatus.Confirmed;
+            return e.TotalWorkingDays == 0
+                ? EmploymentStatus.Probation
+                : EmploymentStatus.Confirmed;
         }
 
         if (e.IsResigned)

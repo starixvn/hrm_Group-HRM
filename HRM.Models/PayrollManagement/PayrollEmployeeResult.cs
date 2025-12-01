@@ -9,6 +9,7 @@ public class PayrollEmployeeResult
     public int WorkingDays { get; set; }
     public decimal PaidDays { get; set; }
     public decimal UnpaidLeave { get; set; }
+    public decimal CompanyEventLeave { get; set; }
     public string BasicSalary { get; set; }
     public string JobLevelAddOn { get; set; }
     public string SpecialSubsidy { get; set; }
