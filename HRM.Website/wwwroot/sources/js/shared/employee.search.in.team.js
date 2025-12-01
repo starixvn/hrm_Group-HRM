@@ -61,9 +61,7 @@ $(document).ready(function () {
                 method: 'GET',
                 headers: { 'X-Requested-With': 'XMLHttpRequest' },
                 params: {
-                    query: request.term,
-                    enable: true,
-                    isDelete: false,
+                    query: request.term
                 },
             }).then(res => {
                 response($.map(res.data, function (item) {
