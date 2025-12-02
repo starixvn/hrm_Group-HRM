@@ -33,7 +33,7 @@ const Filter = ({ onSearch, latestLog }) => {
       method: "GET",
       headers: { "X-Requested-With": "XMLHttpRequest" },
     })
-      .then((response) => {
+      .then(response => {
         const { data } = response;
         const { team, department, unit } = data;
         setTeams(team);
@@ -53,7 +53,7 @@ const Filter = ({ onSearch, latestLog }) => {
     });
   };
 
-  const handleGenerateSuccess = (generatedMonth) => {
+  const handleGenerateSuccess = generatedMonth => {
     setMonth(generatedMonth);
     onSearch({
       month: `${generatedMonth}-01`,
@@ -64,18 +64,18 @@ const Filter = ({ onSearch, latestLog }) => {
     });
   };
 
-  const handleTeamChange = (selectedItems) => {
-    const ids = selectedItems.map((item) => item.id);
+  const handleTeamChange = selectedItems => {
+    const ids = selectedItems.map(item => item.id);
     setSelectedTeams(ids);
   };
 
-  const handleUnitChange = (selectedItems) => {
-    const ids = selectedItems.map((item) => item.id);
+  const handleUnitChange = selectedItems => {
+    const ids = selectedItems.map(item => item.id);
     setSelectedUnits(ids);
   };
 
-  const handleDepartmentChange = (selectedItems) => {
-    const ids = selectedItems.map((item) => item.id);
+  const handleDepartmentChange = selectedItems => {
+    const ids = selectedItems.map(item => item.id);
     setSelectedDepartments(ids);
   };
 
@@ -104,7 +104,7 @@ const Filter = ({ onSearch, latestLog }) => {
               <select
                 className="form-control"
                 value={category}
-                onChange={(e) => setCategory(Number(e.target.value))}
+                onChange={e => setCategory(Number(e.target.value))}
               >
                 {CATEGORY.map((type) => (
                   <option key={type} value={type}>
