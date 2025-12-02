@@ -34,7 +34,6 @@ public class CalculateAllowanceService(IBaseService baseService) : ICalculateAll
         )
         {
             var transportAmount = PayrollHelper.DecryptSalary(transportationAllowance.Amount);
-            // Convert currency first, then calculate prorated
             var convertedTransportAmount = CurrencyConverter.ConvertCurrency(
                 transportAmount,
                 transportationAllowance.CurrencyCode,
@@ -49,7 +48,6 @@ public class CalculateAllowanceService(IBaseService baseService) : ICalculateAll
             );
         }
 
-        // Get Management Allowance (return original value, no calculation)
         var managementAllowance = allowances?.FirstOrDefault(a =>
             a.AllowanceName?.Trim().ToLowerInvariant() == "management allowance"
         );
@@ -57,7 +55,6 @@ public class CalculateAllowanceService(IBaseService baseService) : ICalculateAll
         if (managementAllowance != null && !string.IsNullOrEmpty(managementAllowance.Amount))
         {
             var managementAmount = PayrollHelper.DecryptSalary(managementAllowance.Amount);
-            // Convert currency to employee's currency
             result.ManagementAllowance = CurrencyConverter.ConvertCurrency(
                 managementAmount,
                 managementAllowance.CurrencyCode,
@@ -66,7 +63,6 @@ public class CalculateAllowanceService(IBaseService baseService) : ICalculateAll
             );
         }
 
-        // Calculate Mobilephone Allowance
         var mobilephoneAllowance = allowances?.FirstOrDefault(a =>
             a.AllowanceName?.Trim().ToLowerInvariant() == "mobilephone allowance"
         );
@@ -74,7 +70,6 @@ public class CalculateAllowanceService(IBaseService baseService) : ICalculateAll
         if (mobilephoneAllowance != null && !string.IsNullOrEmpty(mobilephoneAllowance.Amount))
         {
             var mobilephoneAmount = PayrollHelper.DecryptSalary(mobilephoneAllowance.Amount);
-            // Convert currency first, then calculate prorated
             var convertedMobilephoneAmount = CurrencyConverter.ConvertCurrency(
                 mobilephoneAmount,
                 mobilephoneAllowance.CurrencyCode,
