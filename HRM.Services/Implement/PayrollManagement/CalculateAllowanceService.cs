@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using HRM.Core.Services;
 using HRM.Criteria.EmployeePayrollSetting;
-using HRM.Criteria.Group;
 using HRM.Models.PayrollManagement;
 using HRM.Services.Helper;
 using HRM.Services.Interfaces;

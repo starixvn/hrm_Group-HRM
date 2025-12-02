@@ -73,18 +73,9 @@ public class SMSPayrollManagementService(
 
             var allowance = await calculateAllowanceService.CalculateAllowanceAsync(e, exchangeRatesToUSD);
 
-            payrollResult.TransportationAllowance = PayrollHelper.EncryptAndRound(
-                allowance.TransportationAllowance,
-                0
-            );
-            payrollResult.ManagementAllowance = PayrollHelper.EncryptAndRound(
-                allowance.ManagementAllowance,
-                0
-            );
-            payrollResult.MobilephoneAllowance = PayrollHelper.EncryptAndRound(
-                allowance.MobilephoneAllowance,
-                0
-            );
+            payrollResult.TransportationAllowance = PayrollHelper.EncryptAndRound(allowance.TransportationAllowance);
+            payrollResult.ManagementAllowance = PayrollHelper.EncryptAndRound(allowance.ManagementAllowance);
+            payrollResult.MobilephoneAllowance = PayrollHelper.EncryptAndRound(allowance.MobilephoneAllowance);
 
             // Update employee attendant for TotalIncome calculation
             e.TransportationAllowance = allowance.TransportationAllowance;
