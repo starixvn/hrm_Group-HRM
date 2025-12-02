@@ -127,8 +127,6 @@ const Filter = ({ onSearch, latestLog }) => {
               />
             </div>
           </div>
-        </div>
-        <div className="form-horizontal clearfix">
           <div className="form-group form-group--m">
             <div className="label-form">
               <label className="control-label">Department</label>
@@ -155,6 +153,8 @@ const Filter = ({ onSearch, latestLog }) => {
               />
             </div>
           </div>
+        </div>
+        <div className="form-horizontal clearfix">
           <div className="form-group form-group--m">
             <button className="btn btn-primary" onClick={handleSearch}>
               Search
