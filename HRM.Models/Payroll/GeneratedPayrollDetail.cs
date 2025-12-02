@@ -29,23 +29,30 @@ public class GeneratedPayrollDetail
     [JsonIgnore]
     public string GrossSalaryEncrypt { get; set; }
     public double GrossSalary => double.Parse(Cryptography.DecryptPassword(GrossSalaryEncrypt));
+
     [JsonIgnore]
     public string SpecialSubsidyEncrypt { get; set; }
     public double SpecialSubsidy => SpecialSubsidyEncrypt == null ? 0 : double.Parse(Cryptography.DecryptPassword(SpecialSubsidyEncrypt));
+
+    [JsonIgnore]
     public string TotalIncomeEncrypt { get; set; }
-    [JsonIgnore]
     public double TotalIncome => TotalIncomeEncrypt == null ? 0 : double.Parse(Cryptography.DecryptPassword(TotalIncomeEncrypt));
+
+    [JsonIgnore]
     public string JobLevelAddOnEncrypt { get; set; }
-    [JsonIgnore]
     public double JobLevelAddOn => JobLevelAddOnEncrypt == null ? 0 : double.Parse(Cryptography.DecryptPassword(JobLevelAddOnEncrypt));
+
+    [JsonIgnore]
     public string TransportationAllowanceEncrypt { get; set; }
-    [JsonIgnore]
     public double TransportationAllowance => TransportationAllowanceEncrypt == null ? 0 : double.Parse(Cryptography.DecryptPassword(TransportationAllowanceEncrypt));
+
+    [JsonIgnore]
     public string ManagementAllowanceEncrypt { get; set; }
-    [JsonIgnore]
     public double ManagementAllowance => ManagementAllowanceEncrypt == null ? 0 : double.Parse(Cryptography.DecryptPassword(ManagementAllowanceEncrypt));
-    public string MobilephoneAllowanceEncrypt { get; set; }
+
     [JsonIgnore]
+    public string MobilephoneAllowanceEncrypt { get; set; }
     public double MobilephoneAllowance => MobilephoneAllowanceEncrypt == null ? 0 : double.Parse(Cryptography.DecryptPassword(MobilephoneAllowanceEncrypt));
+
     public int EmploymentStatus { get; set; }
 }

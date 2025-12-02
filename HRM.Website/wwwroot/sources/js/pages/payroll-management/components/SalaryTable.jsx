@@ -24,7 +24,7 @@ const SalaryTable = ({ data }) => {
         "paidDay",
         "grossSalary",
         "managementAllowance",
-        "transportation",
+        "transportationAllowance",
         "mobilephoneAllowance",
         "totalIncome",
     ];
@@ -89,7 +89,7 @@ const SalaryTable = ({ data }) => {
                             <td>{item.paidDay}</td>
                             <td>{formatNumber(item.grossSalary)}</td>
                             <td>{formatNumber(item.managementAllowance)}</td>
-                            <td>{formatNumber(item.transportation)}</td>
+                            <td>{formatNumber(item.transportationAllowance)}</td>
                             <td>{formatNumber(item.mobilephoneAllowance)}</td>
                             <td>{formatNumber(item.totalIncome)}</td>
                         </tr>
@@ -125,7 +125,7 @@ const SalaryTable = ({ data }) => {
                             <strong>{formatNumber(totals.managementAllowance)}</strong>
                         </td>
                         <td>
-                            <strong>{formatNumber(totals.transportation)}</strong>
+                            <strong>{formatNumber(totals.transportationAllowance)}</strong>
                         </td>
                         <td>
                             <strong>{formatNumber(totals.mobilephoneAllowance)}</strong>
