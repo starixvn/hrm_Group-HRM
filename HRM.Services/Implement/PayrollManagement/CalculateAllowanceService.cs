@@ -23,71 +23,104 @@ public class CalculateAllowanceService(IBaseService baseService) : ICalculateAll
 
         var result = new CalculatedAllowanceResult();
 
-        var transportationAllowance = allowances?.FirstOrDefault(a =>
+        CalculateTransportationAllowance(allowances, employeeAttendant, exchangeRatesToUSD, result);
+
+        CalculateManagementAllowance(allowances, employeeAttendant, exchangeRatesToUSD, result);
+
+        CalculateMobilephoneAllowance(allowances, employeeAttendant, exchangeRatesToUSD, result);
+
+        return result;
+    }
+
+    private void CalculateTransportationAllowance(
+        IEnumerable<EmployeePayrollAllowance> allowances,
+        PayrollEmployeeAttendant employeeAttendant,
+        Dictionary<string, decimal> exchangeRatesToUSD,
+        CalculatedAllowanceResult result
+    )
+    {
+        var transportationAllowance = allowances.FirstOrDefault(a =>
             a.AllowanceName?.Trim().ToLowerInvariant() == "transportation allowance"
         );
 
-        if (
-            transportationAllowance != null
-            && !string.IsNullOrEmpty(transportationAllowance.Amount)
-        )
+        if (transportationAllowance == null || string.IsNullOrEmpty(transportationAllowance.Amount))
         {
-            var transportAmount = PayrollHelper.DecryptSalary(transportationAllowance.Amount);
-            var convertedTransportAmount = CurrencyConverter.ConvertCurrency(
-                transportAmount,
-                transportationAllowance.CurrencyCode,
-                employeeAttendant.CurrencyCode,
-                exchangeRatesToUSD
-            );
-            result.TransportationAllowance = CalculateTransportationAllowance(
-                employeeAttendant.ActualPaidDays,
-                employeeAttendant.TotalCompanyEventDays,
-                convertedTransportAmount,
-                employeeAttendant.WorkingDays
-            );
+            return;
         }
 
-        var managementAllowance = allowances?.FirstOrDefault(a =>
+        var transportAmount = PayrollHelper.DecryptSalary(transportationAllowance.Amount);
+        var convertedTransportAmount = CurrencyConverter.ConvertCurrency(
+            transportAmount,
+            transportationAllowance.CurrencyCode,
+            employeeAttendant.CurrencyCode,
+            exchangeRatesToUSD
+        );
+        result.TransportationAllowance = CalculateTransportationAllowance(
+            employeeAttendant.ActualPaidDays,
+            employeeAttendant.TotalCompanyEventDays,
+            convertedTransportAmount,
+            employeeAttendant.WorkingDays
+        );
+    }
+
+    private static void CalculateManagementAllowance(
+        IEnumerable<EmployeePayrollAllowance> allowances,
+        PayrollEmployeeAttendant employeeAttendant,
+        Dictionary<string, decimal> exchangeRatesToUSD,
+        CalculatedAllowanceResult result
+    )
+    {
+        var managementAllowance = allowances.FirstOrDefault(a =>
             a.AllowanceName?.Trim().ToLowerInvariant() == "management allowance"
         );
 
-        if (managementAllowance != null && !string.IsNullOrEmpty(managementAllowance.Amount))
+        if (managementAllowance == null || string.IsNullOrEmpty(managementAllowance.Amount))
         {
-            var managementAmount = PayrollHelper.DecryptSalary(managementAllowance.Amount);
-            result.ManagementAllowance = CurrencyConverter.ConvertCurrency(
-                managementAmount,
-                managementAllowance.CurrencyCode,
-                employeeAttendant.CurrencyCode,
-                exchangeRatesToUSD
-            );
+            return;
         }
 
-        var mobilephoneAllowance = allowances?.FirstOrDefault(a =>
+        var managementAmount = PayrollHelper.DecryptSalary(managementAllowance.Amount);
+        result.ManagementAllowance = CurrencyConverter.ConvertCurrency(
+            managementAmount,
+            managementAllowance.CurrencyCode,
+            employeeAttendant.CurrencyCode,
+            exchangeRatesToUSD
+        );
+    }
+
+    private void CalculateMobilephoneAllowance(
+        IEnumerable<EmployeePayrollAllowance> allowances,
+        PayrollEmployeeAttendant employeeAttendant,
+        Dictionary<string, decimal> exchangeRatesToUSD,
+        CalculatedAllowanceResult result
+    )
+    {
+        var mobilephoneAllowance = allowances.FirstOrDefault(a =>
             a.AllowanceName?.Trim().ToLowerInvariant() == "mobilephone allowance"
         );
 
-        if (mobilephoneAllowance != null && !string.IsNullOrEmpty(mobilephoneAllowance.Amount))
+        if (mobilephoneAllowance == null || string.IsNullOrEmpty(mobilephoneAllowance.Amount))
         {
-            var mobilephoneAmount = PayrollHelper.DecryptSalary(mobilephoneAllowance.Amount);
-            var convertedMobilephoneAmount = CurrencyConverter.ConvertCurrency(
-                mobilephoneAmount,
-                mobilephoneAllowance.CurrencyCode,
-                employeeAttendant.CurrencyCode,
-                exchangeRatesToUSD
-            );
-            var isProbation = employeeAttendant.IsNewHire && employeeAttendant.TotalWorkingDays == 0;
-            result.MobilephoneAllowance = CalculateMobilephoneAllowance(
-                employeeAttendant.ActualPaidDays,
-                convertedMobilephoneAmount,
-                employeeAttendant.WorkingDays,
-                isProbation,
-                employeeAttendant.IsResigned,
-                employeeAttendant.IsMaternity,
-                employeeAttendant.TotalUnpaidLeaveDays
-            );
+            return;
         }
 
-        return result;
+        var mobilephoneAmount = PayrollHelper.DecryptSalary(mobilephoneAllowance.Amount);
+        var convertedMobilephoneAmount = CurrencyConverter.ConvertCurrency(
+            mobilephoneAmount,
+            mobilephoneAllowance.CurrencyCode,
+            employeeAttendant.CurrencyCode,
+            exchangeRatesToUSD
+        );
+        var isProbation = IsProbation(employeeAttendant);
+        result.MobilephoneAllowance = CalculateMobilephoneAllowance(
+            employeeAttendant.ActualPaidDays,
+            convertedMobilephoneAmount,
+            employeeAttendant.WorkingDays,
+            isProbation,
+            employeeAttendant.IsResigned,
+            employeeAttendant.IsMaternity,
+            employeeAttendant.TotalUnpaidLeaveDays
+        );
     }
 
     public decimal CalculateTransportationAllowance(
@@ -142,5 +175,10 @@ public class CalculateAllowanceService(IBaseService baseService) : ICalculateAll
 
         // Calculate: mobilephoneAmount / standardWorkingDays * actualPaidDays
         return mobilephoneAmount / standardWorkingDays * actualPaidDays;
+    }
+
+    private static bool IsProbation(PayrollEmployeeAttendant employeeAttendant)
+    {
+        return employeeAttendant.IsNewHire && employeeAttendant.TotalWorkingDays == 0;
     }
 }

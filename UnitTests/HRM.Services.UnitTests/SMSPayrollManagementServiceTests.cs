@@ -39,10 +39,16 @@ public class SMSPayrollManagementServiceTests
         _exchangeRateService = Substitute.For<IExchangeRateService>();
         _calculateAllowanceService = Substitute.For<ICalculateAllowanceService>();
         _session.Get<short>(SessionKey.CurrentCompanyId).Returns(TestCompanyId);
-        
+
         SetupDefaultMocks();
-        
-        _service = new SMSPayrollManagementService(_baseService, _session, _salaryStructureService, _calculateAllowanceService, _exchangeRateService);
+
+        _service = new SMSPayrollManagementService(
+            _baseService,
+            _session,
+            _salaryStructureService,
+            _calculateAllowanceService,
+            _exchangeRateService
+        );
     }
 
     private void SetupDefaultMocks()
@@ -55,18 +61,33 @@ public class SMSPayrollManagementServiceTests
                 new() { Value = "1", Label = "Basic Salary" },
                 new() { Value = "2", Label = "Job Level Add-On" },
                 new() { Value = "3", Label = "Special Subsidy" },
-                new() { Value = "4", Label = "Management Allowance" }
-            }
+                new() { Value = "4", Label = "Management Allowance" },
+            },
         };
-        
-        _salaryStructureService.GetBasicSalaryConfigAsync(Arg.Any<short>())
-            .Returns(defaultConfig);
-        
-        _exchangeRateService.GetEffectiveExchangeRatesDictAsync()
+
+        _salaryStructureService.GetBasicSalaryConfigAsync(Arg.Any<short>()).Returns(defaultConfig);
+
+        _exchangeRateService
+            .GetEffectiveExchangeRatesDictAsync()
             .Returns(new Dictionary<string, decimal> { { "USD", 1m }, { "VND", 0.00004m } });
-        
-        _exchangeRateService.GetRoundingRulesDictAsync()
+
+        _exchangeRateService
+            .GetRoundingRulesDictAsync()
             .Returns(new Dictionary<string, int> { { "USD", 2 }, { "VND", 0 } });
+
+        _calculateAllowanceService
+            .CalculateAllowanceAsync(
+                Arg.Any<PayrollEmployeeAttendant>(),
+                Arg.Any<Dictionary<string, decimal>>()
+            )
+            .Returns(
+                new CalculatedAllowanceResult
+                {
+                    TransportationAllowance = 0,
+                    ManagementAllowance = 0,
+                    MobilephoneAllowance = 0,
+                }
+            );
     }
 
     #region GetPayrollByMonthAsync Tests
@@ -79,7 +100,7 @@ public class SMSPayrollManagementServiceTests
         {
             CompanyId = TestCompanyId,
             Month = DateTime.Now,
-            IsLocal = true
+            IsLocal = true,
         };
         var expectedResult = new List<GeneratedPayrollDetail>();
 
@@ -105,9 +126,11 @@ public class SMSPayrollManagementServiceTests
         var employeeAttendants = new List<PayrollEmployeeAttendant> { CreateEmployeeAttendant() };
         var expectedCommandResult = new CommandResult { Code = 0 };
 
-        _baseService.GetDataAsync<PayrollEmployeeAttendant>(Arg.Any<GetPayrollAttendantEmployeeCriteria>())
+        _baseService
+            .GetDataAsync<PayrollEmployeeAttendant>(Arg.Any<GetPayrollAttendantEmployeeCriteria>())
             .Returns(employeeAttendants);
-        _baseService.ExecuteNonQueryAsync(Arg.Any<CalculatePayrollCriteria>())
+        _baseService
+            .ExecuteNonQueryAsync(Arg.Any<CalculatePayrollCriteria>())
             .Returns(expectedCommandResult);
 
         // Act
@@ -115,10 +138,15 @@ public class SMSPayrollManagementServiceTests
 
         // Assert
         Assert.Equal(expectedCommandResult, result);
-        await _baseService.Received(1).ExecuteNonQueryAsync(Arg.Is<CalculatePayrollCriteria>(c =>
-            c.CompanyId == TestCompanyId &&
-            c.Date == date &&
-            !string.IsNullOrEmpty(c.PayrollListJson)));
+        await _baseService
+            .Received(1)
+            .ExecuteNonQueryAsync(
+                Arg.Is<CalculatePayrollCriteria>(c =>
+                    c.CompanyId == TestCompanyId
+                    && c.Date == date
+                    && !string.IsNullOrEmpty(c.PayrollListJson)
+                )
+            );
     }
 
     [Fact]
@@ -126,24 +154,33 @@ public class SMSPayrollManagementServiceTests
     {
         // Arrange
         var date = DateTime.Now;
-        var employeeAttendants = new List<PayrollEmployeeAttendant> 
-        { 
+        var employeeAttendants = new List<PayrollEmployeeAttendant>
+        {
             CreateEmployeeAttendant(),
-            CreateEmployeeAttendant(basicSalary: 2000)
+            CreateEmployeeAttendant(basicSalary: 2000),
         };
         var expectedCommandResult = new CommandResult { Code = 0 };
 
-        _baseService.GetDataAsync<PayrollEmployeeAttendant>(Arg.Any<GetPayrollAttendantEmployeeCriteria>())
+        _baseService
+            .GetDataAsync<PayrollEmployeeAttendant>(Arg.Any<GetPayrollAttendantEmployeeCriteria>())
             .Returns(employeeAttendants);
-        _baseService.ExecuteNonQueryAsync(Arg.Any<CalculatePayrollCriteria>())
+        _baseService
+            .ExecuteNonQueryAsync(Arg.Any<CalculatePayrollCriteria>())
             .Returns(expectedCommandResult);
 
         // Act
         await _service.GeneratePayroll(date, 424);
 
         // Assert
-        await _baseService.Received(1).ExecuteNonQueryAsync(Arg.Is<CalculatePayrollCriteria>(c =>
-            JsonConvert.DeserializeObject<List<PayrollEmployeeResult>>(c.PayrollListJson).Count == employeeAttendants.Count));
+        await _baseService
+            .Received(1)
+            .ExecuteNonQueryAsync(
+                Arg.Is<CalculatePayrollCriteria>(c =>
+                    JsonConvert
+                        .DeserializeObject<List<PayrollEmployeeResult>>(c.PayrollListJson)
+                        .Count == employeeAttendants.Count
+                )
+            );
     }
 
     [Fact]
@@ -154,18 +191,24 @@ public class SMSPayrollManagementServiceTests
         var employeeAttendants = new List<PayrollEmployeeAttendant>();
         var expectedCommandResult = new CommandResult { Code = 0 };
 
-        _baseService.GetDataAsync<PayrollEmployeeAttendant>(Arg.Any<GetPayrollAttendantEmployeeCriteria>())
+        _baseService
+            .GetDataAsync<PayrollEmployeeAttendant>(Arg.Any<GetPayrollAttendantEmployeeCriteria>())
             .Returns(employeeAttendants);
-        _baseService.ExecuteNonQueryAsync(Arg.Any<CalculatePayrollCriteria>())
+        _baseService
+            .ExecuteNonQueryAsync(Arg.Any<CalculatePayrollCriteria>())
             .Returns(expectedCommandResult);
 
         // Act
         await _service.GeneratePayroll(date, 424);
 
         // Assert
-        await _baseService.Received(1).GetDataAsync<PayrollEmployeeAttendant>(Arg.Is<GetPayrollAttendantEmployeeCriteria>(c =>
-            c.CompanyId == TestCompanyId &&
-            c.Date == date));
+        await _baseService
+            .Received(1)
+            .GetDataAsync<PayrollEmployeeAttendant>(
+                Arg.Is<GetPayrollAttendantEmployeeCriteria>(c =>
+                    c.CompanyId == TestCompanyId && c.Date == date
+                )
+            );
     }
 
     #endregion
@@ -201,17 +244,20 @@ public class SMSPayrollManagementServiceTests
     {
         // Arrange
         var date = DateTime.Now;
-        _salaryStructureService.GetBasicSalaryConfigAsync(Arg.Any<short>())
-            .Returns(new BasicSalaryConfigViewModel
-            {
-                Config = "1,2,3",
-                ConfigOptions = new List<BasicSalaryConfigOption>
+        _salaryStructureService
+            .GetBasicSalaryConfigAsync(Arg.Any<short>())
+            .Returns(
+                new BasicSalaryConfigViewModel
                 {
-                    new() { Value = "1", Label = "Basic Salary" },
-                    new() { Value = "2", Label = "Job Level Add-On" },
-                    new() { Value = "3", Label = "Special Subsidy" }
+                    Config = "1,2,3",
+                    ConfigOptions = new List<BasicSalaryConfigOption>
+                    {
+                        new() { Value = "1", Label = "Basic Salary" },
+                        new() { Value = "2", Label = "Job Level Add-On" },
+                        new() { Value = "3", Label = "Special Subsidy" },
+                    },
                 }
-            });
+            );
 
         var employeeAttendant = CreateEmployeeAttendant(
             basicSalary: 1000,
@@ -236,12 +282,15 @@ public class SMSPayrollManagementServiceTests
     {
         // Arrange
         var date = DateTime.Now;
-        _exchangeRateService.GetEffectiveExchangeRatesDictAsync()
-            .Returns(new Dictionary<string, decimal> 
-            { 
-                { "USD", 1m }, 
-                { "VND", 0.00004m } // 1 VND = 0.00004 USD
-            });
+        _exchangeRateService
+            .GetEffectiveExchangeRatesDictAsync()
+            .Returns(
+                new Dictionary<string, decimal>
+                {
+                    { "USD", 1m },
+                    { "VND", 0.00004m }, // 1 VND = 0.00004 USD
+                }
+            );
 
         var employeeAttendant = CreateEmployeeAttendant(
             basicSalary: 0,
@@ -252,15 +301,18 @@ public class SMSPayrollManagementServiceTests
             isNewHire: false
         );
 
-        _salaryStructureService.GetBasicSalaryConfigAsync(Arg.Any<short>())
-            .Returns(new BasicSalaryConfigViewModel
-            {
-                Config = "3",
-                ConfigOptions = new List<BasicSalaryConfigOption>
+        _salaryStructureService
+            .GetBasicSalaryConfigAsync(Arg.Any<short>())
+            .Returns(
+                new BasicSalaryConfigViewModel
                 {
-                    new() { Value = "3", Label = "Special Subsidy" }
+                    Config = "3",
+                    ConfigOptions = new List<BasicSalaryConfigOption>
+                    {
+                        new() { Value = "3", Label = "Special Subsidy" },
+                    },
                 }
-            });
+            );
 
         var employeeAttendants = new List<PayrollEmployeeAttendant> { employeeAttendant };
         SetupMocks(employeeAttendants);
@@ -438,7 +490,8 @@ public class SMSPayrollManagementServiceTests
     {
         // Arrange
         var date = DateTime.Now;
-        _salaryStructureService.GetBasicSalaryConfigAsync(Arg.Any<short>())
+        _salaryStructureService
+            .GetBasicSalaryConfigAsync(Arg.Any<short>())
             .Returns((BasicSalaryConfigViewModel)null);
 
         var employeeAttendant = CreateEmployeeAttendant(basicSalary: 1000);
@@ -458,12 +511,15 @@ public class SMSPayrollManagementServiceTests
     {
         // Arrange
         var date = DateTime.Now;
-        _salaryStructureService.GetBasicSalaryConfigAsync(Arg.Any<short>())
-            .Returns(new BasicSalaryConfigViewModel
-            {
-                Config = "",
-                ConfigOptions = new List<BasicSalaryConfigOption>()
-            });
+        _salaryStructureService
+            .GetBasicSalaryConfigAsync(Arg.Any<short>())
+            .Returns(
+                new BasicSalaryConfigViewModel
+                {
+                    Config = "",
+                    ConfigOptions = new List<BasicSalaryConfigOption>(),
+                }
+            );
 
         var employeeAttendant = CreateEmployeeAttendant(basicSalary: 1000);
         var employeeAttendants = new List<PayrollEmployeeAttendant> { employeeAttendant };
@@ -510,6 +566,20 @@ public class SMSPayrollManagementServiceTests
             mobilephoneAllowance: 25
         );
 
+        _calculateAllowanceService
+            .CalculateAllowanceAsync(
+                Arg.Any<PayrollEmployeeAttendant>(),
+                Arg.Any<Dictionary<string, decimal>>()
+            )
+            .Returns(
+                new CalculatedAllowanceResult
+                {
+                    TransportationAllowance = 50,
+                    ManagementAllowance = 100,
+                    MobilephoneAllowance = 25,
+                }
+            );
+
         var employeeAttendants = new List<PayrollEmployeeAttendant> { employeeAttendant };
         SetupMocks(employeeAttendants);
 
@@ -535,9 +605,11 @@ public class SMSPayrollManagementServiceTests
         var employeeAttendants = new List<PayrollEmployeeAttendant>();
         var expectedCommandResult = new CommandResult { Code = 0 };
 
-        _baseService.GetDataAsync<PayrollEmployeeAttendant>(Arg.Any<GetPayrollAttendantEmployeeCriteria>())
+        _baseService
+            .GetDataAsync<PayrollEmployeeAttendant>(Arg.Any<GetPayrollAttendantEmployeeCriteria>())
             .Returns(employeeAttendants);
-        _baseService.ExecuteNonQueryAsync(Arg.Any<CalculatePayrollCriteria>())
+        _baseService
+            .ExecuteNonQueryAsync(Arg.Any<CalculatePayrollCriteria>())
             .Returns(expectedCommandResult);
 
         // Act
@@ -546,12 +618,15 @@ public class SMSPayrollManagementServiceTests
         // Assert
         Assert.Equal(expectedCommandResult, result);
         CalculatePayrollCriteria capturedCriteria = null;
-        _baseService.ExecuteNonQueryAsync(Arg.Do<CalculatePayrollCriteria>(c => capturedCriteria = c))
+        _baseService
+            .ExecuteNonQueryAsync(Arg.Do<CalculatePayrollCriteria>(c => capturedCriteria = c))
             .Returns(expectedCommandResult);
 
         await _service.GeneratePayroll(date, 424);
 
-        var payrollResults = JsonConvert.DeserializeObject<List<PayrollEmployeeResult>>(capturedCriteria.PayrollListJson);
+        var payrollResults = JsonConvert.DeserializeObject<List<PayrollEmployeeResult>>(
+            capturedCriteria.PayrollListJson
+        );
         Assert.Empty(payrollResults);
     }
 
@@ -562,7 +637,8 @@ public class SMSPayrollManagementServiceTests
         var date = DateTime.Now;
         var employeeAttendants = new List<PayrollEmployeeAttendant>
         {
-            new() {
+            new()
+            {
                 EmpId = 1,
                 EncryptBasicSalary = EncryptSalary("1000"),
                 EncryptJobLevelAddOn = EncryptSalary("0"),
@@ -576,9 +652,10 @@ public class SMSPayrollManagementServiceTests
                 IsResigned = false,
                 IsMaternity = false,
                 IsNewHire = false,
-                ConfirmedDate = DateTime.Now.AddYears(-1)
+                ConfirmedDate = DateTime.Now.AddYears(-1),
             },
-            new() {
+            new()
+            {
                 EmpId = 2,
                 EncryptBasicSalary = EncryptSalary("2000"),
                 EncryptJobLevelAddOn = EncryptSalary("0"),
@@ -592,14 +669,16 @@ public class SMSPayrollManagementServiceTests
                 IsResigned = false,
                 IsMaternity = false,
                 IsNewHire = false,
-                ConfirmedDate = DateTime.Now.AddYears(-1)
-            }
+                ConfirmedDate = DateTime.Now.AddYears(-1),
+            },
         };
         var expectedCommandResult = new CommandResult { Code = 0 };
 
-        _baseService.GetDataAsync<PayrollEmployeeAttendant>(Arg.Any<GetPayrollAttendantEmployeeCriteria>())
+        _baseService
+            .GetDataAsync<PayrollEmployeeAttendant>(Arg.Any<GetPayrollAttendantEmployeeCriteria>())
             .Returns(employeeAttendants);
-        _baseService.ExecuteNonQueryAsync(Arg.Any<CalculatePayrollCriteria>())
+        _baseService
+            .ExecuteNonQueryAsync(Arg.Any<CalculatePayrollCriteria>())
             .Returns(expectedCommandResult);
 
         // Act
@@ -607,12 +686,15 @@ public class SMSPayrollManagementServiceTests
 
         // Assert
         CalculatePayrollCriteria capturedCriteria = null;
-        _baseService.ExecuteNonQueryAsync(Arg.Do<CalculatePayrollCriteria>(c => capturedCriteria = c))
+        _baseService
+            .ExecuteNonQueryAsync(Arg.Do<CalculatePayrollCriteria>(c => capturedCriteria = c))
             .Returns(expectedCommandResult);
 
         await _service.GeneratePayroll(date, 424);
 
-        var payrollResults = JsonConvert.DeserializeObject<List<PayrollEmployeeResult>>(capturedCriteria.PayrollListJson);
+        var payrollResults = JsonConvert.DeserializeObject<List<PayrollEmployeeResult>>(
+            capturedCriteria.PayrollListJson
+        );
         Assert.Equal(2, payrollResults.Count);
         Assert.Contains(payrollResults, r => r.EmpId == 1);
         Assert.Contains(payrollResults, r => r.EmpId == 2);
@@ -638,7 +720,8 @@ public class SMSPayrollManagementServiceTests
         decimal managementAllowance = 0,
         decimal transportationAllowance = 0,
         decimal mobilephoneAllowance = 0,
-        string encryptedBasicSalary = null)
+        string encryptedBasicSalary = null
+    )
     {
         return new PayrollEmployeeAttendant
         {
@@ -658,26 +741,32 @@ public class SMSPayrollManagementServiceTests
             ManagementAllowance = managementAllowance,
             TransportationAllowance = transportationAllowance,
             MobilephoneAllowance = mobilephoneAllowance,
-            ConfirmedDate = isNewHire ? DateTime.Now : DateTime.Now.AddYears(-1)
+            ConfirmedDate = isNewHire ? DateTime.Now : DateTime.Now.AddYears(-1),
         };
     }
 
     private void SetupMocks(List<PayrollEmployeeAttendant> employeeAttendants)
     {
-        _baseService.GetDataAsync<PayrollEmployeeAttendant>(Arg.Any<GetPayrollAttendantEmployeeCriteria>())
+        _baseService
+            .GetDataAsync<PayrollEmployeeAttendant>(Arg.Any<GetPayrollAttendantEmployeeCriteria>())
             .Returns(employeeAttendants);
-        _baseService.ExecuteNonQueryAsync(Arg.Any<CalculatePayrollCriteria>())
+        _baseService
+            .ExecuteNonQueryAsync(Arg.Any<CalculatePayrollCriteria>())
             .Returns(new CommandResult { Code = 0 });
     }
 
     private PayrollEmployeeResult GetPayrollResult()
     {
-        var capturedCriteria = _baseService.ReceivedCalls()
-            .First(c => c.GetMethodInfo().Name == "ExecuteNonQueryAsync")
-            .GetArguments()
-            .First() as CalculatePayrollCriteria;
+        var capturedCriteria =
+            _baseService
+                .ReceivedCalls()
+                .First(c => c.GetMethodInfo().Name == "ExecuteNonQueryAsync")
+                .GetArguments()
+                .First() as CalculatePayrollCriteria;
 
-        var payrollResults = JsonConvert.DeserializeObject<List<PayrollEmployeeResult>>(capturedCriteria.PayrollListJson);
+        var payrollResults = JsonConvert.DeserializeObject<List<PayrollEmployeeResult>>(
+            capturedCriteria.PayrollListJson
+        );
         return payrollResults.First();
     }
 

@@ -20,7 +20,6 @@ public class PayrollSettingServiceTests
 {
     private readonly IBaseService _baseService;
     private readonly IUserControlSession _session;
-    private readonly IPayrollManagementService _payrollManagementService;
     private readonly IObjectDbFactory _objectDbFactory;
     private readonly IObjectDb _objectDb;
     private readonly IMultiResultReader _multiResultReader;
@@ -32,12 +31,11 @@ public class PayrollSettingServiceTests
     {
         _baseService = Substitute.For<IBaseService>();
         _session = Substitute.For<IUserControlSession>();
-        _payrollManagementService = Substitute.For<IPayrollManagementService>();
         _objectDbFactory = Substitute.For<IObjectDbFactory>();
         _objectDb = Substitute.For<IObjectDb>();
         _multiResultReader = Substitute.For<IMultiResultReader>();
         _session.Get<short>(SessionKey.CurrentCompanyId).Returns(TestCompanyId);
-        _service = new PayrollSettingService(_payrollManagementService, _baseService, _objectDbFactory);
+        _service = new PayrollSettingService(_baseService, _objectDbFactory);
         _mockData =
         [
             new()
