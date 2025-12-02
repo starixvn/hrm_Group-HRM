@@ -15,6 +15,9 @@ const PayrollService = {
             params: {
                 month: filters.month || null,
                 isLocal: filters.isLocal || false,
+                teamIds: filters.teamIds || null,
+                departmentIds: filters.departmentIds || null,
+                unitIds: filters.unitIds || null,
             },
             responseType: 'json',
         })

@@ -42,12 +42,12 @@ const SalaryTable = ({ data }) => {
                 <thead>
                     <tr>
                         <th rowSpan="2">No</th>
+                        <th rowSpan="2">ID Staff</th>
+                        <th rowSpan="2">Nickname</th>
                         <th rowSpan="2">BU</th>
                         <th rowSpan="2">Dept</th>
                         <th rowSpan="2">Team</th>
-                        <th rowSpan="2">ID Staff</th>
                         <th rowSpan="2">Full Name</th>
-                        <th rowSpan="2">Nickname</th>
                         <th rowSpan="2">Commencement Date</th>
                         <th rowSpan="2">Confirmation Date</th>
                         <th rowSpan="2">Basic Salary</th>
@@ -63,7 +63,7 @@ const SalaryTable = ({ data }) => {
                     <tr>
                         <th>Gross Salary</th>
                         <th>Management Allowance</th>
-                        <th>Transportation</th>
+                        <th>Transportation Allowance</th>
                         <th>Mobilephone Allowance</th>
                     </tr>
                 </thead>
@@ -73,12 +73,12 @@ const SalaryTable = ({ data }) => {
                             key={index}
                             style={getRowStyle(item.employmentStatus)}>
                             <td>{index + 1}</td>
+                            <td>{item.code}</td>
+                            <td>{item.nickName}</td>
                             <td>{item.buCode}</td>
                             <td>{item.departmentCode}</td>
                             <td>{item.teamCode}</td>
-                            <td>{item.code}</td>
                             <td>{item.fullName}</td>
-                            <td>{item.nickName}</td>
                             <td>{item.displayJoinedDate}</td>
                             <td>{item.displayConfirmedDate}</td>
                             <td>{formatNumber(item.basicSalary)}</td>

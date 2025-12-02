@@ -5,18 +5,17 @@
 @import '../../layout/filter';
 @import '../../layout/table';
 @import '../../vendors/react-datepicker';
+@import "../../components/multiselect-treeview";
 
-.flex-column {
-    display: flex;
-    justify-content: space-between;
-}
+$col1-width: 52px;
+$col2-width: 140px;
 
 .salary-table-section{
     width: 100%;
     overflow-x: auto;
-    max-height: 76vh;
+    max-height: 72vh;
     margin-top: 10px;
-    
+
     table.table-custom {
         min-width: max-content;
         margin: 0px;
@@ -24,16 +23,69 @@
         thead {
             top: 0px;
 
+            th:nth-child(1) {
+                position: sticky;
+                left: 0;
+                background-color: inherit;
+            }
+    
+            th:nth-child(2) {
+                position: sticky;
+                left: $col1-width;
+                background-color: inherit;
+            }
+    
+            th:nth-child(3) {
+                position: sticky;
+                left: $col1-width + $col2-width;
+                background-color: inherit;
+            }
+
             tr:nth-child(2) {
                 th {
                     border-left: none;
                 }
             }
         }
+
+        tbody{
+            td:nth-child(1),
+            th:nth-child(1){
+                left: 0;
+                width: $col1-width; 
+                position: sticky;
+                background-color: inherit;
+            }
+
+            td:nth-child(2),
+            th:nth-child(2){
+                left: $col1-width;
+                width: $col2-width;
+                position: sticky;
+                background-color: inherit;
+            }
+
+            td:nth-child(3),
+            th:nth-child(3){
+                left: $col1-width + $col2-width;
+                position: sticky;
+                background-color: inherit;
+            }
+
+            tr:nth-child(even) {
+                background: #ffffff;
+              }
+        }
     }
 }
 
 .salary-management-container {
+    .filter-container{
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+    }
+
     .react-datepicker-popper{
         z-index: 2;
     }
@@ -44,10 +96,11 @@
         align-items: flex-end;
         flex-direction: column;
         gap: 2px;
+        flex: 1;
+        width: 100%;
     }
 
     .filter {
-        max-width: 100%;
         padding: 15px 10px 5px 10px;
     }
 
