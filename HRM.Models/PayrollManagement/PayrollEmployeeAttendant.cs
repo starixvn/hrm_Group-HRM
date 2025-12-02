@@ -25,6 +25,7 @@ public class PayrollEmployeeAttendant
     public string SpecialSubsidyCurrencyCode { get; set; }
 
     // Payroll Calculation (not rounded)
+    public decimal SpecialSubsidy { get; set; }
     public decimal GrossSalary { get; set; }
     public decimal GrossSalaryPerDay => WorkingDays > 0 ? GrossSalary / WorkingDays : 0;
     public decimal ManagementAllowance { get; set; }
