@@ -2,8 +2,8 @@
 import { EmploymentStatusColor } from '../constants/constants';
 
 const SalaryTable = ({ data }) => {
-    const formatNumber = (number) => {
-        var formattedNumber = new Intl.NumberFormat('en-US').format(number || 0);
+    const formatNumber = number => {
+        const formattedNumber = new Intl.NumberFormat('en-US').format(number || 0);
         if(formattedNumber === '0') {
             return '-';
         }
