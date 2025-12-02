@@ -27,6 +27,7 @@ public class SMSPayrollManagementServiceTests
     private readonly IUserControlSession _session;
     private readonly ISalaryStructureService _salaryStructureService;
     private readonly IExchangeRateService _exchangeRateService;
+    private readonly ICalculateAllowanceService _calculateAllowanceService;
     private readonly SMSPayrollManagementService _service;
     private const short TestCompanyId = 1;
 
@@ -36,11 +37,12 @@ public class SMSPayrollManagementServiceTests
         _session = Substitute.For<IUserControlSession>();
         _salaryStructureService = Substitute.For<ISalaryStructureService>();
         _exchangeRateService = Substitute.For<IExchangeRateService>();
+        _calculateAllowanceService = Substitute.For<ICalculateAllowanceService>();
         _session.Get<short>(SessionKey.CurrentCompanyId).Returns(TestCompanyId);
         
         SetupDefaultMocks();
         
-        _service = new SMSPayrollManagementService(_baseService, _session, _salaryStructureService, _exchangeRateService);
+        _service = new SMSPayrollManagementService(_baseService, _session, _salaryStructureService, _calculateAllowanceService, _exchangeRateService);
     }
 
     private void SetupDefaultMocks()
