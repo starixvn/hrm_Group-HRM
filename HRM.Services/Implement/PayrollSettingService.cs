@@ -13,7 +13,7 @@ using HRM.Services.Interfaces;
 
 namespace HRM.Services.Implement;
 
-public class PayrollSettingService(IPayrollManagementService payrollManagementService, 
+public class PayrollSettingService(
     IBaseService baseService,
     IObjectDbFactory objectDbFactory) : IPayrollSettingService
 {

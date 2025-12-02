@@ -71,20 +71,7 @@ public class SMSPayrollManagementService(
             var payrollResult = CalculatePayrollResult(e, grossSalaryConfig, selectedConfigValues, exchangeRatesToUSD);
             payrollResult.GeneratedDate = date;
 
-            var allowance = await calculateAllowanceService.CalculateAllowanceAsync(
-                new CalculateAllowanceRequest
-                {
-                    EmpId = e.EmpId,
-                    ActualPaidDays = e.ActualPaidDays,
-                    CompanyEvent = e.TotalCompanyEventDays,
-                    StandardWorkingDays = e.WorkingDays,
-                    IsNewHire = e.IsNewHire,
-                    IsResigned = e.IsResigned,
-                    IsMaternity = e.IsMaternity,
-                    TotalUnpaidLeaveDays = e.TotalUnpaidLeaveDays,
-                    TotalWorkingDays = e.TotalWorkingDays,
-                }
-            );
+            var allowance = await calculateAllowanceService.CalculateAllowanceAsync(e, exchangeRatesToUSD);
 
             payrollResult.TransportationAllowance = PayrollHelper.EncryptAndRound(
                 allowance.TransportationAllowance,

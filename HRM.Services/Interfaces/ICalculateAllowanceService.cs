@@ -24,6 +24,7 @@ public interface ICalculateAllowanceService
     );
 
     Task<CalculatedAllowanceResult> CalculateAllowanceAsync(
-        CalculateAllowanceRequest request
+        PayrollEmployeeAttendant employeeAttendant,
+        Dictionary<string, decimal> exchangeRatesToUSD
     );
 }
