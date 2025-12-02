@@ -67,19 +67,11 @@ public class CalculateAllowanceService(IBaseService baseService) : ICalculateAll
     }
 
     public async Task<CalculatedAllowanceResult> CalculateAllowanceAsync(
-        int empId,
-        decimal actualPaidDays,
-        decimal companyEvent,
-        int standardWorkingDays,
-        bool isNewHire,
-        bool isResigned,
-        bool isMaternity,
-        decimal totalUnpaidLeaveDays,
-        decimal totalWorkingDays
+        CalculateAllowanceRequest request
     )
     {
         var allowances = await baseService.GetDataAsync<EmployeePayrollAllowance>(
-            new GetEmployeePayrollAllowanceByEmpIdCriteria { EmpId = empId }
+            new GetEmployeePayrollAllowanceByEmpIdCriteria { EmpId = request.EmpId }
         );
 
         var result = new CalculatedAllowanceResult();
@@ -96,10 +88,10 @@ public class CalculateAllowanceService(IBaseService baseService) : ICalculateAll
         {
             var transportAmount = PayrollHelper.DecryptSalary(transportationAllowance.Amount);
             result.TransportationAllowance = CalculateTransportationAllowance(
-                actualPaidDays,
-                companyEvent,
+                request.ActualPaidDays,
+                request.CompanyEvent,
                 transportAmount,
-                standardWorkingDays
+                request.StandardWorkingDays
             );
         }
 
@@ -123,15 +115,15 @@ public class CalculateAllowanceService(IBaseService baseService) : ICalculateAll
         if (mobilephoneAllowance != null && !string.IsNullOrEmpty(mobilephoneAllowance.Amount))
         {
             var mobilephoneAmount = PayrollHelper.DecryptSalary(mobilephoneAllowance.Amount);
-            var isProbation = isNewHire && totalWorkingDays == 0;
+            var isProbation = request.IsNewHire && request.TotalWorkingDays == 0;
             result.MobilephoneAllowance = CalculateMobilephoneAllowance(
-                actualPaidDays,
+                request.ActualPaidDays,
                 mobilephoneAmount,
-                standardWorkingDays,
+                request.StandardWorkingDays,
                 isProbation,
-                isResigned,
-                isMaternity,
-                totalUnpaidLeaveDays
+                request.IsResigned,
+                request.IsMaternity,
+                request.TotalUnpaidLeaveDays
             );
         }
 

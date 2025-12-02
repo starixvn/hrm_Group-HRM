@@ -24,14 +24,6 @@ public interface ICalculateAllowanceService
     );
 
     Task<CalculatedAllowanceResult> CalculateAllowanceAsync(
-        int empId,
-        decimal actualPaidDays,
-        decimal companyEvent,
-        int standardWorkingDays,
-        bool isNewHire,
-        bool isResigned,
-        bool isMaternity,
-        decimal totalUnpaidLeaveDays,
-        decimal totalWorkingDays
+        CalculateAllowanceRequest request
     );
 }

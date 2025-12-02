@@ -17,6 +17,4 @@ public class EmployeePayrollAllowance
     public bool Taxable { get; set; }
 
     public bool IsMultiSelect { get; set; }
-
 }
-
