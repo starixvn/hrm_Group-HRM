@@ -14,7 +14,7 @@ const AppContainer = () => {
     setLatestLog(latestLog);
   };
 
-  const handleSearch = async (filters) => {
+  const handleSearch = async filters => {
     await fetchSalaryData(filters);
   };
 

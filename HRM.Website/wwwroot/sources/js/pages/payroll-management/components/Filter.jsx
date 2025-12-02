@@ -106,7 +106,7 @@ const Filter = ({ onSearch, latestLog }) => {
                 value={category}
                 onChange={e => setCategory(Number(e.target.value))}
               >
-                {CATEGORY.map((type) => (
+                {CATEGORY.map(type => (
                   <option key={type} value={type}>
                     {CategoryLabel[type]}
                   </option>
