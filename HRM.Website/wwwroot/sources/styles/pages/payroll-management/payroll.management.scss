@@ -80,10 +80,20 @@ $col2-width: 140px;
 }
 
 .salary-management-container {
+
     .filter-container{
         display: flex;
         flex-direction: row;
         gap: 10px;
+
+        
+        .form-group--l{
+            width: 280px;
+
+            .input-form{
+                width: unset;
+            }
+        }
     }
 
     .react-datepicker-popper{

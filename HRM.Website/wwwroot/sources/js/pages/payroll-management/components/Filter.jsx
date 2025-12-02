@@ -83,7 +83,7 @@ const Filter = ({ onSearch, latestLog }) => {
     <div className="form-horizontal filter-container">
       <div>
         <div className="form-horizontal clearfix">
-          <div className="form-group form-group--m">
+          <div className="form-group form-group--l">
             <div className="label-form">
               <label className="control-label">Month</label>
             </div>
@@ -116,7 +116,7 @@ const Filter = ({ onSearch, latestLog }) => {
           </div>
         </div>
         <div className="form-horizontal clearfix">
-          <div className="form-group form-group--m">
+          <div className="form-group form-group--l">
             <div className="label-form">
               <label className="control-label">Unit</label>
             </div>
