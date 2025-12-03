@@ -311,11 +311,12 @@ public class ExportExcelService(IWebHostEnvironment hostingEnvironment) : IExpor
         var rowIndex = 4;
         var height = sheet.GetRow(4).Height;
         var index = 0;
+        const int SickLeaveStartRow = 4;
 
         foreach (var employee in employees)
         {
-            var rowCopy = 4 + index % 2;
-            sheet.CopyRow(templateSheet, rowCopy, rowIndex);
+            var copyTemplateIndex = GetTemplateRowIndex(SickLeaveStartRow, employee.Enabled, employee.IsDeleted);
+            sheet.CopyRow(templateSheet, copyTemplateIndex, rowIndex);
             var row = sheet.GetRow(rowIndex);
             row.Height = height;
 

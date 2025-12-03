@@ -1,6 +1,7 @@
 ﻿namespace HRM.ViewModels.HospitalizationLeave;
 
 using System.Collections.Generic;
+using HRM.Core.Enums;
 using HRM.Models.HospitalizationLeave;
 
 public class HospitalizationLeaveBalanceViewModel
@@ -12,5 +13,6 @@ public class HospitalizationLeaveBalanceViewModel
     public string Employee { get; set; }
     public bool? IsLocal { get; set; }
     public bool IsHost { get; set; }
+    public string EmployeeStatusIds { get; set; } = $"{(byte)EmployeeStatus.Enabled}";
     public IEnumerable<HospitalizationLeaveBalanceSummaryReport> Employees { get; set; }
 }

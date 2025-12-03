@@ -50,11 +50,13 @@ const sickLeaveBalance = (function ($) {
 
     function submitData(postToUrl) {
         const teamIds = $('#Team').multiSelectTreeView('getSelectedItems');
+        const statusIds = $('#EmployeeStatus').multiSelectTreeView('getSelectedItems');
         return resolveClientUrl(postToUrl + $('#Year').val()
             + '&teamIds=' + (teamIds !== '' ? teamIds : ' ')
             + '&employee=' + $('#Employee').val()
             + '&employeeId=' + $('#EmployeeId').val()
-            + '&isLocal=' + $('#IsLocal').val());
+            + '&isLocal=' + $('#IsLocal').val()
+            + '&employeeStatusIds=' + statusIds);
     }
 
     function initSubmitFilterEvent() {
@@ -245,6 +247,15 @@ const sickLeaveBalance = (function ($) {
     }
 
     function init() {
+
+        const statusIds = $('#EmployeeStatusIds').val().split(',');
+        $('#EmployeeStatus').multiSelectTreeView({
+            data: [
+                { id: 1, text: 'Enable', enable: true, checked: statusIds.indexOf('1') !== -1, isLeaf: true },
+                { id: 2, text: 'Disabled', enable: true, checked: statusIds.indexOf('2') !== -1, isLeaf: true },
+                { id: 3, text: 'Deleted', enable: true, checked: statusIds.indexOf('3') !== -1, isLeaf: true }
+            ]
+        });
         getOrgChart();
         initDatepicker();
         initSubmitFilterEvent();
