@@ -31,7 +31,8 @@ public class SickLeaveBalanceController(
         string employee,
         int? year = null,
         int? employeeId = null,
-        bool? isLocal = null)
+        bool? isLocal = null,
+        string employeeStatusIds = Constants.NotAvailable)
     {
         var model = new HospitalizationLeaveBalanceViewModel
         {
@@ -42,6 +43,10 @@ public class SickLeaveBalanceController(
             IsLocal = isLocal,
             IsHost = session.HasPermissionOnFunction(FunctionKey.SickLeaveBalance, Policy.Host)
         };
+        if(employeeStatusIds != Constants.NotAvailable)
+        {
+            model.EmployeeStatusIds = employeeStatusIds;
+        }
 
         return await Index(model);
     }
@@ -55,7 +60,8 @@ public class SickLeaveBalanceController(
             EmployeeId = model.EmployeeId,
             TeamIds = model.TeamIds,
             IsLocal = model.IsLocal,
-            CompanyId = CurrentCompanyId
+            CompanyId = CurrentCompanyId,
+            EmployeeStatusIds = model.EmployeeStatusIds
         };
         model.Employees = await GetData(criteria);
 
@@ -208,7 +214,8 @@ public class SickLeaveBalanceController(
             EmployeeId = model.EmployeeId,
             TeamIds = model.TeamIds,
             IsLocal = model.IsLocal,
-            CompanyId = CurrentCompanyId
+            CompanyId = CurrentCompanyId,
+            EmployeeStatusIds = model.EmployeeStatusIds
         };
         var employees = await GetData(criteria);
         var workbook = exportExcelService.ExportSickLeaveSummary(employees, model.Year);

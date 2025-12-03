@@ -25,7 +25,8 @@
         @using (Html.BeginForm())
         {
             <div class="form-horizontal clearfix">
-                @Html.HiddenFor(model => model.TeamIds)
+            @Html.HiddenFor(model => model.TeamIds)
+            @Html.HiddenFor(model => model.EmployeeStatusIds)
                 <div class="form-group form-group--m">
                     <div class="label-form">
                         <label class="control-label">@Labels.Category</label>
@@ -67,6 +68,14 @@
                         <label class="control-label">@Labels.Team</label>
                     </div>
                     <div class="input-form" id="Team"></div>
+                </div>
+
+
+                <div class="form-group form-group--m">
+                    <div class="label-form">
+                        @Html.Label(Labels.UserStatus, Labels.UserStatus, new { @class = "control-label" })
+                    </div>
+                    <div class="select-form" id="EmployeeStatus"></div>
                 </div>
 
                 <div class="form-group">
@@ -131,7 +140,8 @@
         <tbody>
             @foreach (var employee in Model.Employees)
             {
-                <tr>
+                var rowClass = employee.IsDeleted ? "deleted-user-row" : employee.Enabled ? "enable-user-row" : "disabled-user-row";
+                <tr class="@rowClass">
                     @if (Model.IsHost)
                     {
                         <td>

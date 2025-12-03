@@ -43,6 +43,8 @@ public static class Constants
 
     public const string DepartmentKey = "Department";
 
+    public const string NotAvailable = "N/A";
+
     public const int NexCompanyId = 1;
     public const int LumiCompanyId = 2;
     public const int NexVisionCompanyId = 34;
