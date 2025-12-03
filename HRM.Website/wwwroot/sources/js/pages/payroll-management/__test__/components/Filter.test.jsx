@@ -4,6 +4,12 @@ import Filter from '../../components/Filter';
 
 jest.spyOn(console, 'warn').mockImplementation(() => {});
 
+// Mock common.functions to avoid jQuery dependency
+jest.mock('../../../../shared/common.functions', () => ({
+    resolveClientUrl: jest.fn((url) => `/test${url}`),
+    axiosError: jest.fn()
+}));
+
 jest.mock('../../components/GenerateSalaryModal', () => {
     return function GenerateSalaryModal({ onSuccess }) {
         return (
@@ -64,6 +70,9 @@ describe('Filter Component', () => {
         expect(mockOnSearch).toHaveBeenCalledWith({
             month: '2024-01-01',
             isLocal: true,
+            teamIds: "",
+            departmentIds: "",
+            unitIds: ""
         });
     });
 
@@ -79,6 +88,9 @@ describe('Filter Component', () => {
         expect(mockOnSearch).toHaveBeenCalledWith({
             month: '2024-03-01',
             isLocal: true,
+            teamIds: "",
+            departmentIds: "",
+            unitIds: ""
         });
     });
 
@@ -94,6 +106,9 @@ describe('Filter Component', () => {
         expect(mockOnSearch).toHaveBeenCalledWith({
             month: '2024-01-01',
             isLocal: false,
+            teamIds: "",
+            departmentIds: "",
+            unitIds: ""
         });
     });
 
@@ -122,6 +137,9 @@ describe('Filter Component', () => {
         expect(mockOnSearch).toHaveBeenCalledWith({
             month: '2024-05-01',
             isLocal: true,
+            teamIds: "",
+            departmentIds: "",
+            unitIds: ""
         });
     });
 

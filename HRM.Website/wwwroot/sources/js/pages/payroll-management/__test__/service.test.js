@@ -22,7 +22,7 @@ describe('PayrollService', () => {
 
     describe('getSalaryData', () => {
         it('should fetch salary data successfully', async () => {
-            const mockData = [{ id: 1, name: 'Test Employee' }];
+            const mockData = { id: 1, name: 'Test Employee' };
             const mockResponse = { data: mockData };
             mockAxios.mockResolvedValue(mockResponse);
 
@@ -37,16 +37,19 @@ describe('PayrollService', () => {
                 params: {
                     month: '2024-01-01',
                     isLocal: true,
+                    teamIds: null,
+                    departmentIds: null,
+                    unitIds: null,
                 },
                 responseType: 'json',
             });
-            expect(result).toEqual({data: mockData});
+            expect(result).toEqual(mockData);
             expect(mockCommonFunctions.unblockUI).toHaveBeenCalled();
         });
 
         it('should handle empty filters with default values', async () => {
             const mockData = [];
-            const mockResponse = { data: mockData };
+            const mockResponse = { data: mockData, latestLog: null };
             mockAxios.mockResolvedValue(mockResponse);
 
             const result = await PayrollService.getSalaryData();
@@ -58,6 +61,9 @@ describe('PayrollService', () => {
                 params: {
                     month: null,
                     isLocal: false,
+                    teamIds: null,
+                    departmentIds: null,
+                    unitIds: null,
                 },
                 responseType: 'json',
             });

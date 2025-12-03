@@ -63,18 +63,31 @@ describe('AppContainer Component', () => {
                 grossSalary: 6000,
             },
         ];
-        mockPayrollService.getSalaryData.mockResolvedValue(mockData);
+        const mockResponse = {
+            data: mockData,
+            latestLog: null
+        };
+        mockPayrollService.getSalaryData.mockResolvedValue(mockResponse);
 
         render(<AppContainer />);
 
-        await mockOnSearchCallback({ month: '2024-01-01', isLocal: true });
+        await mockOnSearchCallback({ month: '2024-01-01', isLocal: true, teamIds: "", departmentIds: "", unitIds: "" });
         expect(mockPayrollService.getSalaryData).toHaveBeenCalledWith({
             month: '2024-01-01',
             isLocal: true,
+            teamIds: "",
+            departmentIds: "",
+            unitIds: ""
         });
-        expect(mockSetSalaryData).toHaveBeenCalledWith({data: mockData});
+        expect(mockSetSalaryData).toHaveBeenCalledWith(mockData);
 
-        await mockOnSearchCallback();
-        expect(mockPayrollService.getSalaryData).toHaveBeenCalledWith({});
+        await mockOnSearchCallback({ month: '2024-01-01', isLocal: true, teamIds: "", departmentIds: "", unitIds: "" });
+        expect(mockPayrollService.getSalaryData).toHaveBeenCalledWith({
+            month: '2024-01-01',
+            isLocal: true,
+            teamIds: "",
+            departmentIds: "",
+            unitIds: ""
+        });
     });
 });

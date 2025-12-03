@@ -104,6 +104,6 @@ describe('SalaryTable Component', () => {
             'table-custom'
         );
         expect(container.querySelector('thead')).toBeInTheDocument();
-        expect(container.querySelectorAll('thead th').length).toBe(11);
+        expect(container.querySelectorAll('thead th').length).toBe(22);
     });
 });
